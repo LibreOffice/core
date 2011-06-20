@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/langitem.hxx>
@@ -43,9 +42,7 @@
 #include <editeng/editeng.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
@@ -64,9 +61,7 @@
 // preview control for presentation layout
 ///////////////////////////////////////////////////////////////////////
 #include <vcl/ctrl.hxx>
-#ifndef _SV_COLOR_HXX
 #include <tools/color.hxx>
-#endif
 #include <i18npool/mslangid.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/xlndsit.hxx>
@@ -590,7 +585,7 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
     {
         String aStr( SvxDateTimeField::GetFormatted( aDate, aTime, nDateTimeFormats[nFormat], *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
         sal_uInt16 nEntry = maCBDateTimeFormat.InsertEntry( aStr );
-        maCBDateTimeFormat.SetEntryData( nEntry, (void*)nDateTimeFormats[nFormat] );
+        maCBDateTimeFormat.SetEntryData( nEntry, (void*)(sal_IntPtr)nDateTimeFormats[nFormat] );
         if( nDateTimeFormats[nFormat] == eFormat )
         {
             maCBDateTimeFormat.SelectEntryPos( nEntry );
@@ -953,3 +948,5 @@ void PresLayoutPreview::Paint( const Rectangle& )
 
     Pop();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

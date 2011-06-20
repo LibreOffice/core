@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include "glob.hxx"
 #include "pres.hxx"
 #include "cfgids.hxx"
-#ifndef _SD_VIEW_HXX
 #include "View.hxx"
-#endif
 #include "sddllapi.h"
 
 #include <com/sun/star/drawing/XDrawSubController.hpp>
@@ -533,7 +532,7 @@ protected:
 
     ::std::auto_ptr<Implementation> mpImpl;
 
-    // #96090# Support methods for centralized UNDO/REDO
+    // Support methods for centralized UNDO/REDO
     virtual ::svl::IUndoManager* ImpGetUndoManager (void) const;
     void ImpGetUndoStrings(SfxItemSet &rSet) const;
     void ImpGetRedoStrings(SfxItemSet &rSet) const;
@@ -562,6 +561,27 @@ protected:
 
     virtual void SetZoomFactor( const Fraction &rZoomX,
                                 const Fraction &rZoomY );
+
+    /**
+        This must be called after the ctor, but before anything else.
+        It's the part of construction that is dependent
+        on showing the top-level window.
+
+        Showing a window with a11y enabled causes various callbacks
+        to be triggered.
+
+        Due to the "virtual methods are not virtual during constructors"
+        problem, this is a disaster to call from the ctor
+
+        i.e. construct calls Show, and if a11y is enabled this
+        reenters the not-fully constructed object and calls
+        CreateAccessibleDocumentView, so if construct is called
+        from the ctor then if a derived class is contructed the base-cass
+        CreateAccessibleDocumentView is used, not the derived
+        CreateAccessibleDocumentView. i.e. run smoketest under a11y with
+        debugging assertions enabled
+    */
+    void doShow();
 
 private:
     ::Window* mpParentWindow;
@@ -604,3 +624,5 @@ SdrView* ViewShell::GetDrawView (void) const
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,11 +40,10 @@
 
 #include <cppuhelper/proptypehlp.hxx>
 #include <svx/unopage.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using ::rtl::OUString;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -149,44 +149,6 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage (void)
     return xPage;
 }
 
-
-
-/*
-// Return sal_True, value change
-sal_Bool SdUnoOutlineView::convertFastPropertyValue (
-    Any & rConvertedValue,
-    Any & rOldValue,
-    sal_Int32 nHandle,
-    const Any& rValue)
-    throw ( com::sun::star::lang::IllegalArgumentException)
-{
-    sal_Bool bResult = sal_False;
-
-    switch( nHandle )
-    {
-        case DrawController::PROPERTY_CURRENTPAGE:
-            {
-                Reference< drawing::XDrawPage > xOldPage( getCurrentPage() );
-                Reference< drawing::XDrawPage > xNewPage;
-                ::cppu::convertPropertyValue( xNewPage, rValue );
-                if( xOldPage != xNewPage )
-                {
-                    rConvertedValue <<= xNewPage;
-                    rOldValue <<= xOldPage;
-                    bResult = sal_True;
-                }
-            }
-            break;
-
-        default:
-            break;
-    }
-
-    return bResult;
-}
-*/
-
-
 void SdUnoOutlineView::setFastPropertyValue (
     sal_Int32 nHandle,
         const Any& rValue)
@@ -269,3 +231,5 @@ Sequence< OUString > SAL_CALL SdUnoOutlineView::getSupportedServiceNames(  ) thr
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

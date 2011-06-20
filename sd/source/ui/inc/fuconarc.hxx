@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,6 @@ public:
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 
-    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 protected:
@@ -68,3 +68,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

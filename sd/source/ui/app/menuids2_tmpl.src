@@ -24,7 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "misc.hxx"
 
 #ifndef _MENUIDS2_SRC
 #define _MENUIDS2_SRC
@@ -211,7 +210,6 @@
         Text [ en-US ] = "~Rulers" ; \
     };
 
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_NOTESMODE \
     MenuItem\
     {\
@@ -221,7 +219,6 @@
         Text [ en-US ] = "~Notes View" ; \
     };
 
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_HANDOUTMODE \
     MenuItem\
     {\
@@ -668,7 +665,6 @@
  //
  // Praesentations-Menu
  //
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_SLIDESHOW \
     Identifier = 26 ; \
     HelpID = "what a hack!" ; \
@@ -715,7 +711,6 @@
         Text [ en-US ] = "~AutoCorrect..." ; \
     };
 
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_PRESENTATION_DLG \
     MenuItem\
     {\
@@ -724,7 +719,6 @@
         Text [ en-US ] = "~Slide Show Settings..." ; \
     };
 
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_CUSTOMSHOW_DLG \
     MenuItem\
     {\

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,14 +41,9 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <svx/ShapeTypeHandler.hxx>
 #include "CustomAnimationList.hxx"
-#ifndef _SD_CUSTOMANIMATIONPANE_HRC
 #include "CustomAnimationPane.hrc"
-#endif
-#ifndef _SD_CUSTOMANIMATION_HRC
 #include "CustomAnimation.hrc"
-#endif
 #include "CustomAnimationPreset.hxx"
-#include <svtools/treelist.hxx>
 #include <vcl/svapp.hxx>
 #include "sdresid.hxx"
 
@@ -260,7 +256,6 @@ void CustomAnimationListEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* pEn
 
 void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
 {
-    const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     SvViewDataItem* pViewData = mpParent->GetViewDataItem( pEntry, this );
 
@@ -270,11 +265,11 @@ void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, sal_u
     sal_Int16 nNodeType = mpEffect->getNodeType();
     if( nNodeType == EffectNodeType::ON_CLICK )
     {
-        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_ON_CLICK, bHighContrast ) );
+        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_ON_CLICK ) );
     }
     else if( nNodeType == EffectNodeType::AFTER_PREVIOUS )
     {
-        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_AFTER_PREVIOUS, bHighContrast ) );
+        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_AFTER_PREVIOUS ) );
     }
 
     aPos.X() += 19;
@@ -301,7 +296,7 @@ void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, sal_u
 
     if( nImage != 0xffff )
     {
-        const Image& rImage = mpParent->getImage( nImage, bHighContrast );
+        const Image& rImage = mpParent->getImage( nImage );
         Point aImagePos( aPos );
         aImagePos.Y() += ( aSize.Height() - rImage.GetSizePixel().Height() ) >> 1;
         rDev.DrawImage( aImagePos, rImage );
@@ -409,12 +404,6 @@ void CustomAnimationTriggerEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* 
     if( aSize.Height() < 19 )
         aSize.Height() = 19;
     pViewData->aSize = aSize;
-
-/*
-        SvViewData* pViewData = pView->GetViewData( pEntry );
-        if( pViewData )
-            pViewData->SetSelectable(false);
-*/
 }
 
 // --------------------------------------------------------------------
@@ -487,12 +476,9 @@ CustomAnimationList::CustomAnimationList( ::Window* pParent, const ResId& rResId
 
 // --------------------------------------------------------------------
 
-const Image&  CustomAnimationList::getImage( sal_uInt16 nId, bool bHighContrast )
+const Image&  CustomAnimationList::getImage( sal_uInt16 nId )
 {
     DBG_ASSERT( (nId >= IMG_CUSTOMANIMATION_ON_CLICK) && (nId <= IMG_CUSTOMANIMATION_MEDIA_STOP), "sd::CustomAnimationList::getImage(), illegal index!" );
-
-    if( bHighContrast )
-        nId += 1;
 
     Image& rImage = maImages[nId - IMG_CUSTOMANIMATION_ON_CLICK];
 
@@ -696,31 +682,6 @@ void CustomAnimationList::update()
 
 // --------------------------------------------------------------------
 
-/*
-void CustomAnimationList::update( CustomAnimationEffectPtr pEffect )
-{
-    SvLBoxEntry* pEntry = First();
-    while( pEntry )
-    {
-        if( static_cast< CustomAnimationEffectPtr * >( pEntry->GetUserData() )->get() == pEffect.get() )
-        {
-            CustomAnimationPresetsPtr pPresets = mpController->getPresets();
-            const CustomAnimationPresetPtr pPreset = pPresets->getEffectDescriptor( pEffect->getPresetId() );
-            if( pPreset.get() )
-                pEffect->setName( pPresets->getUINameForPresetId( pPreset->getPresetId() ) );
-            else
-                pEffect->setName( pEffect->getPresetId() );
-            break;
-        }
-        pEntry = Next( pEntry );
-    }
-
-    Invalidate();
-}
-*/
-
-// --------------------------------------------------------------------
-
 void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
 {
     // create a ui description
@@ -766,34 +727,9 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationList::append(), exception catched!" );
+        OSL_FAIL("sd::CustomAnimationList::append(), exception catched!" );
     }
 }
-
-// --------------------------------------------------------------------
-
-/*
-void CustomAnimationList::remove( CustomAnimationEffectPtr pEffect )
-{
-    SvLBoxEntry* pEntry = First();
-    while( pEntry )
-    {
-        if( static_cast< CustomAnimationEffectPtr * >( pEntry->GetUserData() )->get() == pEffect.get() )
-        {
-            GetModel()->Remove( pEntry );
-            if( pEntry == mpLastParentEntry )
-            {
-                mpLastParentEntry = 0;
-                mxLastTargetShape = 0;
-            }
-            break;
-        }
-        pEntry = Next( pEntry );
-    }
-
-    Invalidate();
-}
-*/
 
 // --------------------------------------------------------------------
 
@@ -847,7 +783,7 @@ void CustomAnimationList::onSelectionChanged( Any aSelection )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationList::onSelectionChanged(), Exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationList::onSelectionChanged(), Exception catched!" );
     }
 }
 
@@ -1016,3 +952,5 @@ void CustomAnimationList::Paint( const Rectangle& rRect )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

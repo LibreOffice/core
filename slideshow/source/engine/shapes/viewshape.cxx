@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -369,7 +370,7 @@ namespace slideshow
             // nominal area for the shape (without subsetting, without
             // char scaling). NOTE: to cancel the shape translation,
             // contained in rSpriteBoundsPixel, this is _without_ any
-            // translational component (fixed along with #121921#).
+            // translational component.
             ::basegfx::B2DRectangle        aLogShapeBounds;
             const ::basegfx::B2DRectangle& rNominalShapeBoundsPixel(
                 shapeArea2AreaPixel( rCanvasTransform,
@@ -437,7 +438,7 @@ namespace slideshow
             // at the origin.
             // NOTE: As for now, sprites are always positioned on
             // integer pixel positions on screen, have to round to
-            // nearest integer here, too (fixed along with #121921#)
+            // nearest integer here, too
             mpSprite->setPixelOffset(
                 aAAOffset - ::basegfx::B2DSize(
                     ::basegfx::fround( rSpriteCorrectionOffset.getX() ),
@@ -896,3 +897,5 @@ namespace slideshow
 
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

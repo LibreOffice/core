@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "DrawViewShell.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
@@ -52,9 +51,7 @@
 #include "slideshow.hxx"
 #include "pgjump.hxx"
 #include "NavigatorChildWindow.hxx"
-#ifndef SD_NAVIGATION_HXX
 #include "navigatr.hxx"
-#endif
 #include "drawview.hxx"
 #include "slideshow.hxx"
 
@@ -257,3 +254,5 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

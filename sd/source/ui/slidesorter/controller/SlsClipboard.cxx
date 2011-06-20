@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,6 @@
 #include "DrawViewShell.hxx"
 #include "Window.hxx"
 #include "fupoor.hxx"
-#include "fuslhide.hxx"
 #include "fuzoom.hxx"
 #include "fucushow.hxx"
 #include "fusldlg.hxx"
@@ -80,7 +80,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
@@ -315,7 +315,7 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
     if (pClipTransferable->HasPageBookmarks())
     {
         const List& rBookmarkList = pClipTransferable->GetPageBookmarks();
-        const ::vos::OGuard aGuard (Application::GetSolarMutex());
+        const SolarMutexGuard aGuard;
 
         nInsertPageCount = (sal_uInt16) rBookmarkList.Count();
         rModel.GetDocument()->InsertBookmarkAsPage(
@@ -339,7 +339,7 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
         if (pDataDoc!=NULL
             && pDataDoc->GetSdPageCount(PK_STANDARD))
         {
-            const ::vos::OGuard aGuard (Application::GetSolarMutex());
+            const SolarMutexGuard aGuard;
 
             bMergeMasterPages = (pDataDoc != rModel.GetDocument());
             nInsertPageCount = pDataDoc->GetSdPageCount( PK_STANDARD );
@@ -550,7 +550,7 @@ IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData)
         PageList::iterator aDraggedPage;
         for (aDraggedPage=maPagesToRemove.begin();
              aDraggedPage!=maPagesToRemove.end();
-             aDraggedPage++)
+             ++aDraggedPage)
         {
             rSelector.SelectPage(*aDraggedPage);
         }
@@ -618,7 +618,6 @@ sal_Int8 Clipboard::AcceptDrop (
             }
 
             // Show the insertion marker and the substitution for a drop.
-            Point aPosition = pTargetWindow->PixelToLogic (rEvent.maPosPixel);
             SelectionFunction* pSelectionFunction = dynamic_cast<SelectionFunction*>(
                 mrSlideSorter.GetViewShell()->GetCurrentFunction().get());
             if (pSelectionFunction != NULL)
@@ -890,3 +889,4 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
 
 } } } // end of namespace ::sd::slidesorter::controller
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

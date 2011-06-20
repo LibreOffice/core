@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,7 +109,6 @@ namespace sd {
 |*
 \************************************************************************/
 
-// #83525#
 struct ImpRememberOrigAndClone
 {
     SdrObject*      pOrig;
@@ -125,7 +125,7 @@ SdrObject* ImpGetClone(Container& aConnectorContainer, SdrObject* pConnObj)
     return 0L;
 }
 
-// #90129# restrict movement to WorkArea
+// restrict movement to WorkArea
 void ImpCheckInsertPos(Point& rPos, const Size& rSize, const Rectangle& rWorkArea)
 {
     if(!rWorkArea.IsEmpty())
@@ -164,30 +164,6 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
     if( !rDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
         return false;
 
-/*
-SvFileStream    aSvOutputStream( String( RTL_CONSTASCII_USTRINGPARAM( "/tmp/test.png" ) ), STREAM_WRITE | STREAM_TRUNC );
-Graphic         aMtfGraphic( aMtf );
-Size            aPreviewSizePixel( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_PIXEL ) );
-
-if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
-{
-    const double fWH = static_cast< double >( aPreviewSizePixel.Width() ) / static_cast< double >( aPreviewSizePixel.Height() );
-
-    if( fWH <= 1.0 )
-        aPreviewSizePixel.Width() = static_cast< long >( 128.0 * fWH ), aPreviewSizePixel.Height() = 128;
-    else
-        aPreviewSizePixel.Width() = 128, aPreviewSizePixel.Height() = static_cast< long >( 128.0 / fWH );
-
-    if( GraphicConverter::Export( aSvOutputStream, aMtfGraphic.GetBitmapEx( &aPreviewSizePixel ), CVT_PNG ) )
-    {
-        // handle errror case here
-    }
-    else
-    {
-        // Success
-    }
-}
-*/
     bool bVector = false;
     Graphic aGraphic;
 
@@ -275,7 +251,7 @@ if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
     if( !bVector && (aGraphic.GetType() == GRAPHIC_NONE) )
         bVector = true;
 
-    // #90129# restrict movement to WorkArea
+    // restrict movement to WorkArea
     Point aInsertPos( rPos );
     Size aImageSize;
     aImageSize = bVector ? aMtf.GetPrefSize() : aGraphic.GetSizePixel();
@@ -464,7 +440,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                 pMarkList->ForceSort();
 
-                                // #83525# stuff to remember originals and clones
+                                // stuff to remember originals and clones
                                 Container   aConnectorContainer(0);
                                 sal_uInt32  a, nConnectorCount(0L);
                                 Point       aCurPos;
@@ -494,7 +470,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                     {
                                         if(!bDropOnTabBar)
                                         {
-                                            // #83525# do a NbcMove(...) instead of setting SnapRects here
+                                            // do a NbcMove(...) instead of setting SnapRects here
                                             pObj->NbcMove(aVector);
                                         }
 
@@ -507,7 +483,6 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                             EndUndo();
                                         }
 
-                                        // #83525#
                                         ImpRememberOrigAndClone* pRem = new ImpRememberOrigAndClone;
                                         pRem->pOrig = pM->GetMarkedSdrObj();
                                         pRem->pClone = pObj;
@@ -518,7 +493,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                     }
                                 }
 
-                                // #83525# try to re-establish connections at clones
+                                // try to re-establish connections at clones
                                 if(nConnectorCount)
                                 {
                                     for(a = 0; a < aConnectorContainer.Count(); a++)
@@ -597,7 +572,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                     }
                                 }
 
-                                // #83525# cleanup remember classes
+                                // cleanup remember classes
                                 for(a = 0; a < aConnectorContainer.Count(); a++)
                                     delete (ImpRememberOrigAndClone*)aConnectorContainer.GetObject(a);
 
@@ -655,7 +630,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             pWorkPage->SetRectsDirty();
 
-            // #104148# Use SnapRect, not BoundRect
+            // Use SnapRect, not BoundRect
             Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
             maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
@@ -702,7 +677,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( pModel->GetPageCount() == 0 )
             {
-                DBG_ERROR("empty or invalid drawing xml document on clipboard!" );
+                OSL_FAIL("empty or invalid drawing xml document on clipboard!" );
             }
             else
             {
@@ -808,7 +783,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( pOwnData )
                     {
-                        // #104148# Use SnapRect, not BoundRect
+                        // Use SnapRect, not BoundRect
                         Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                         maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
@@ -874,7 +849,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( pOwnData )
                     {
-                        // #104148# Use SnapRect, not BoundRect
+                        // Use SnapRect, not BoundRect
                         Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                         maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
@@ -916,17 +891,6 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     Graphic aGraphic;
                     sal_uLong nGrFormat = 0;
 
-// (wg. Selection Manager bei Trustet Solaris)
-#ifndef SOLARIS
-/*
-                    if( aDataHelper.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
-                        nGrFormat = SOT_FORMATSTR_ID_SVXB;
-                    else if( aDataHelper.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
-                        nGrFormat = SOT_FORMAT_GDIMETAFILE;
-                    else if( aDataHelper.GetGraphic( FORMAT_BITMAP, aGraphic ) )
-                        nGrFormat = SOT_FORMAT_BITMAP;
-*/
-#endif
 
                     // insert replacement image ( if there is one ) into the object helper
                     if ( nGrFormat )
@@ -1210,14 +1174,14 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 pWorkPage->SetRectsDirty();
 
-                // #104148# Use SnapRect, not BoundRect
+                // Use SnapRect, not BoundRect
                 Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
             }
 
-            // #90129# restrict movement to WorkArea
+            // restrict movement to WorkArea
             Size aImageMapSize = OutputDevice::LogicToLogic(aGraphic.GetPrefSize(),
                 aGraphic.GetPrefMapMode(), MapMode(MAP_100TH_MM));
 
@@ -1241,7 +1205,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             pWorkPage->SetRectsDirty();
 
-            // #104148# Use SnapRect, not BoundRect
+            // Use SnapRect, not BoundRect
             Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
             aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
@@ -1267,14 +1231,14 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 pWorkPage->SetRectsDirty();
 
-                // #104148# Use SnapRect, not BoundRect
+                // Use SnapRect, not BoundRect
                 Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
             }
 
-            // #90129# restrict movement to WorkArea
+            // restrict movement to WorkArea
             Size aImageMapSize(aBmp.GetPrefSize());
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
@@ -1505,3 +1469,5 @@ bool View::PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nP
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

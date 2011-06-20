@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,7 +99,7 @@ ModifyPageUndoAction::ModifyPageUndoAction(
 #include <svx/svdview.hxx>
 void ModifyPageUndoAction::Undo()
 {
-    // #94637# invalidate Selection, there could be objects deleted in tis UNDO
+    // invalidate Selection, there could be objects deleted in tis UNDO
     // which are no longer allowed to be selected then.
       SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();
@@ -147,7 +148,7 @@ void ModifyPageUndoAction::Undo()
 
 void ModifyPageUndoAction::Redo()
 {
-    // #94637# invalidate Selection, there could be objects deleted in tis UNDO
+    // invalidate Selection, there could be objects deleted in tis UNDO
     // which are no longer allowed to be selected then.
       SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();
@@ -245,3 +246,4 @@ String RenameLayoutTemplateUndoAction::GetComment() const
     return  maComment;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

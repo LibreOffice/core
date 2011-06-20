@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,22 +30,23 @@
 #define _SV_UNOWCNTR_HXX_
 
 #include <cppuhelper/weakref.hxx>
+#include <list>
 
 typedef sal_Bool (*weakref_searchfunc)( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef, void* pSearchData );
 
-class WeakRefList;
+typedef ::std::list< ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >* > WeakRefList;
 
 class SvUnoWeakContainer
 {
 private:
-    WeakRefList*    mpList;
+    WeakRefList maList;
 
 public:
     SvUnoWeakContainer() throw();
     ~SvUnoWeakContainer() throw();
 
     /** inserts the given ref into this container */
-    void    insert( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef ) throw();
+    void insert( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef ) throw();
 
     /** searches the container for a ref that returns true on the given
         search function
@@ -56,3 +58,4 @@ public:
 
 #endif // _SV_UNOWCNTR_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

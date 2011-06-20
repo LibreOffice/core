@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <vcl/wrkwin.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/outliner.hxx>
-#ifndef _EDITENG_HXX
 #include <editeng/editeng.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
@@ -412,7 +411,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
                                     bLink, bReplace, nPos,
                                     sal_False, NULL, sal_True, sal_True, sal_False );
 
-            // Loeschen der BookmarkList
+            // delete the BookmarkList
             if( pBookmarkList )
             {
                 String* pString = (String*) pBookmarkList->First();
@@ -424,7 +423,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
                 delete pBookmarkList;
                 pBookmarkList = NULL;
             }
-            // Loeschen der ExchangeList
+            // delete the ExchangeList
             if( pExchangeList )
             {
                 String* pString = (String*) pExchangeList->First();
@@ -438,7 +437,6 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             }
         }
         // Dann Objekte einfuegen
-        //pBookmarkList = pDlg->GetList( 2 ); // Objekte
         pBookmarkList = pObjectBookmarkList;
 
         // Um zu gewaehrleisten... (s.o.)
@@ -448,7 +446,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             bOK = mpDoc->InsertBookmarkAsObject( pBookmarkList, pExchangeList,
                                 bLink, NULL, NULL);
 
-        // Loeschen der BookmarkList
+        // delete the BookmarkList
         if( pBookmarkList )
         {
             String* pString = (String*) pBookmarkList->First();
@@ -460,7 +458,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             delete pBookmarkList;
             pBookmarkList = NULL;
         }
-        // Loeschen der ExchangeList
+        // delete the ExchangeList
         if( pExchangeList )
         {
             String* pString = (String*) pExchangeList->First();
@@ -513,11 +511,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         // was zeichnen muessen;
         // der globale Outliner koennte in SdPage::CreatePresObj
         // benutzt werden
-//      SfxItemPool* pPool = mpDoc->GetDrawOutliner().GetEmptyItemSet().GetPool();
         SdrOutliner* pOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
-//      pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)mpDoc->GetStyleSheetPool());
-//      pOutliner->SetEditTextObjectPool(pPool);
-//      pOutliner->SetForbiddenCharsTable( mpDoc->GetForbiddenCharsTable() );
 
         // Referenz-Device setzen
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
@@ -636,14 +630,16 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         nFormat = EE_FORMAT_HTML;
 
     ::Outliner*    pDocliner = static_cast<OutlineView*>(mpView)->GetOutliner();
-    List*          pList     = pDocliner->GetView(0)->CreateSelectionList();
-    Paragraph*     pPara     = (Paragraph*)pList->First();
+
+    std::vector<Paragraph*> aSelList;
+    pDocliner->GetView(0)->CreateSelectionList(aSelList);
+
+    Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
 
     // wo soll eingefuegt werden?
     while( !pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
-    {
         pPara = pDocliner->GetParent(pPara);
-    }
+
     sal_uLong nTargetPos = pDocliner->GetAbsPos(pPara) + 1;
 
     // Layout der Vorgaengerseite uebernehmen
@@ -822,3 +818,5 @@ void FuInsertFile::GetSupportedFilterVector( ::std::vector< String >& rFilterVec
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

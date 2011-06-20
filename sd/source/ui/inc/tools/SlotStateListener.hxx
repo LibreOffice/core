@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTIOIN_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/compbase1.hxx>
 #include <tools/link.hxx>
@@ -158,3 +157,5 @@ private:
 } } // end of namespace ::sd::tools
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

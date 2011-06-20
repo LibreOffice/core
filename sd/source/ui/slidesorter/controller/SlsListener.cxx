@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -235,7 +236,7 @@ void Listener::ConnectToController (void)
             {
                 xSet->addPropertyChangeListener(String::CreateFromAscii("CurrentPage"), this);
             }
-            catch (beans::UnknownPropertyException aEvent)
+            catch (beans::UnknownPropertyException&)
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
@@ -243,7 +244,7 @@ void Listener::ConnectToController (void)
             {
                 xSet->addPropertyChangeListener(String::CreateFromAscii("IsMasterPageMode"), this);
             }
-            catch (beans::UnknownPropertyException aEvent)
+            catch (beans::UnknownPropertyException&)
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
@@ -291,7 +292,7 @@ void Listener::DisconnectFromController (void)
                     Reference<lang::XEventListener>(
                         static_cast<XWeak*>(this), UNO_QUERY));
         }
-        catch (beans::UnknownPropertyException aEvent)
+        catch (beans::UnknownPropertyException&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -504,7 +505,7 @@ void SAL_CALL Listener::propertyChange (
                 mrController.GetPageSelector().SelectPage(nCurrentPage-1);
                 mrController.GetCurrentSlideManager()->NotifyCurrentSlideChange(nCurrentPage-1);
             }
-            catch (beans::UnknownPropertyException aEvent)
+            catch (beans::UnknownPropertyException&)
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
@@ -588,7 +589,7 @@ void Listener::UpdateEditMode (void)
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"))));
             aValue >>= bIsMasterPageMode;
         }
-        catch (beans::UnknownPropertyException e)
+        catch (beans::UnknownPropertyException&)
         {
             // When the property is not supported then the master page mode
             // is not supported, too.
@@ -696,3 +697,5 @@ void Listener::ThrowIfDisposed (void)
 
 
 } } } // end of namespace ::sd::slidesorter::controller
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

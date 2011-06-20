@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -218,7 +219,7 @@ public:
     static const size_t mnInvalidId = static_cast< size_t >( -1 );
 
     ToolPanelViewShell_Impl( ToolPanelViewShell& i_rPanelViewShell, ::Window& i_rPanelDeckParent );
-    ~ToolPanelViewShell_Impl();
+    virtual ~ToolPanelViewShell_Impl();
 
     ToolPanelViewShell& GetAntiImpl() { return m_rPanelViewShell; }
 
@@ -482,6 +483,8 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
     ,mpSubShellManager()
     ,mnMenuId(0)
 {
+    ViewShell::doShow();
+
     meShellType = ST_TASK_PANE;
 
     mpContentWindow->SetCenterAllowed( false );
@@ -553,6 +556,7 @@ ToolPanelViewShell::~ToolPanelViewShell()
     // disposed/destroyed, too
     mpImpl.reset();
     GetViewShellBase().GetViewShellManager()->RemoveSubShellFactory(this, mpSubShellManager);
+    GetFrameView()->Disconnect();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -899,3 +903,5 @@ Reference< XAccessible > ToolPanelViewShell_Impl::CreateAccessible( ::sd::Window
 }
 
 } } // end of namespace ::sd::toolpanel
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

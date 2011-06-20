@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,13 +39,9 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "View.hxx"
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
@@ -462,3 +459,5 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

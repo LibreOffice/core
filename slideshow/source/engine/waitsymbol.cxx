@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@
 #include "waitsymbol.hxx"
 #include "eventmultiplexer.hxx"
 
+#include <o3tl/compat_functional.hxx>
 #include <algorithm>
 
 
@@ -146,8 +148,7 @@ void WaitSymbol::viewAdded( const UnoViewSharedPtr& rView )
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }
@@ -164,7 +165,7 @@ void WaitSymbol::viewRemoved( const UnoViewSharedPtr& rView )
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
-                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ) ) ),
+                boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ) ) ),
         maViews.end() );
 }
 
@@ -179,7 +180,7 @@ void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
-                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ))));
+                boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ))));
 
     OSL_ASSERT( aModifiedEntry != maViews.end() );
     if( aModifiedEntry == maViews.end() )
@@ -206,3 +207,5 @@ void WaitSymbol::viewsChanged()
 
 } // namespace internal
 } // namespace presentation
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

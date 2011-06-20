@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef SD_FU_TEXT_HXX
 #define SD_FU_TEXT_HXX
 
-#ifndef _EDITDATA_HXX
 #include <editeng/editdata.hxx>
-#endif
 #include "fuconstr.hxx"
 #include <svx/svdotext.hxx>
 
@@ -75,7 +74,6 @@ public:
 
     DECL_LINK(SpellError, void* );
 
-    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
     /** is called when the currenct function should be aborted. <p>
@@ -104,7 +102,6 @@ protected:
     SfxRequest&         rRequest;
 
 private:
-    // #97016#
     void ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSize(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj);
@@ -114,3 +111,5 @@ private:
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

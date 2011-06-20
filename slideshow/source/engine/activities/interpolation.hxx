@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,8 +56,7 @@ namespace basegfx
                                                 const sal_Int16&    rTo,
                                                 double                     )
         {
-            OSL_ENSURE( false,
-                        "lerp<sal_Int16> called" );
+            OSL_FAIL( "lerp<sal_Int16> called" );
             return rTo;
         }
 
@@ -65,8 +65,7 @@ namespace basegfx
                                                             const ::rtl::OUString&  rTo,
                                                             double                       )
         {
-            OSL_ENSURE( false,
-                        "lerp<::rtl::OUString> called" );
+            OSL_FAIL( "lerp<::rtl::OUString> called" );
             return rTo;
         }
 
@@ -75,8 +74,7 @@ namespace basegfx
                                       const bool&   rTo,
                                       double             )
         {
-            OSL_ENSURE( false,
-                        "lerp<bool> called" );
+            OSL_FAIL( "lerp<bool> called" );
             return rTo;
         }
     }
@@ -192,3 +190,5 @@ namespace slideshow
 }
 
 #endif /* INCLUDED_SLIDESHOW_INTERPOLATION_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

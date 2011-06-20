@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,15 +36,6 @@
 #include <svx/svdpagv.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
-
-
-#include "misc.hxx"
-
-#ifdef STARIMAGE_AVAILABLE
-#ifndef _SIMDLL_HXX
-#include <sim2/simdll.hxx>
-#endif
-#endif
 
 #include "strings.hrc"
 #include "ViewShell.hxx"
@@ -149,12 +141,6 @@ void Client::ObjectAreaChanged()
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void Client::ViewChanged()
 {
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
@@ -231,3 +217,4 @@ void Client::MakeVisible()
 
 } // end of namespace sd
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

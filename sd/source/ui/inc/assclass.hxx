@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,19 @@
 #ifndef INC_ASSCLASS
 #define INC_ASSCLASS
 
+#include <vector>
+#include <boost/scoped_array.hpp>
+
 #include <tools/solar.h>
 #include "sddllapi.h"
 
 #define MAX_PAGES 10
 
-class List;
 class Control;
 
 class SD_DLLPUBLIC Assistent
 {
-    List* mpPages[MAX_PAGES];
+    std::vector<Control*> maPages[MAX_PAGES];
         //enthaelt fuer jede Seite die Controls die
         //korrekt geschaltet werden muessen
 
@@ -48,13 +51,13 @@ class SD_DLLPUBLIC Assistent
     int mnCurrentPage;
         //gibt die aktuelle Seite an
 
-    bool* mpPageStatus;
+    boost::scoped_array<bool> mpPageStatus;
 
 public:
 
     Assistent(int nNoOfPage);
 
-    bool IsEnabled( int nPage );
+    bool IsEnabled ( int nPage ) const;
     void EnablePage( int nPage );
     void DisablePage( int nPage );
 
@@ -70,17 +73,17 @@ public:
     bool GotoPage(const int nPageToGo);
         //springt zu einer angegebenen Seite
 
-    bool IsLastPage();
+    bool IsLastPage() const;
         //gibt an ob die aktuelle Seite die letzte ist
 
-    bool IsFirstPage();
+    bool IsFirstPage() const;
         //gibt an ob die aktuelle Seite die erste ist
 
-    int  GetCurrentPage();
+    int  GetCurrentPage() const;
         //gibt die aktuelle Seite zurueck
-
-    ~Assistent();
 };
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

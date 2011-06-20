@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,20 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
-#endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
@@ -53,12 +48,8 @@
 #include <unotools/viewoptions.hxx>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include "CustomAnimationCreateDialog.hxx"
-#ifndef _SD_CUSTOMANIMATIONCREATEDIALOG_HRC
 #include "CustomAnimationCreateDialog.hrc"
-#endif
-#ifndef _SD_CUSTOMANIMATION_HRC
 #include "CustomAnimation.hrc"
-#endif
 #include "CustomAnimationPane.hxx"
 #include "optsitem.hxx"
 #include "sddll.hxx"
@@ -239,7 +230,7 @@ ImplStlEffectCategorySortHelper::ImplStlEffectCategorySortHelper()
     uno::Reference<lang::XMultiServiceFactory> xFac( ::comphelper::getProcessServiceFactory() );
     if( xFac.is() )
     {
-        mxCollator.set( xFac->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ) ), uno::UNO_QUERY );
+        mxCollator.set( xFac->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Collator" )) ), uno::UNO_QUERY );
 
         if( mxCollator.is() )
         {
@@ -525,7 +516,9 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
 {
     mpTabControl = new TabControl( this, SdResId( 1 ) );
     mpOKButton = new OKButton(this, SdResId( 1 ) ) ;
+    mpOKButton->SetStyle(WB_DEFBUTTON);
     mpCancelButton = new CancelButton(this, SdResId( 1 ) );
+    mpCancelButton->SetStyle(WB_DEFBUTTON);
     mpHelpButton = new HelpButton(this, SdResId( 1 ) );
 
     FreeResource();
@@ -599,7 +592,6 @@ CustomAnimationCreateTabPage* CustomAnimationCreateDialog::getCurrentPage() cons
     case RID_TP_CUSTOMANIMATION_EMPHASIS:   return mpTabPages[EMPHASIS];
     case RID_TP_CUSTOMANIMATION_EXIT:       return mpTabPages[EXIT];
     case RID_TP_CUSTOMANIMATION_MISCEFFECTS:return mpTabPages[MISCEFFECTS];
-    //case RID_TP_CUSTOMANIMATION_MOTIONPATH:
     default:
                                             return mpTabPages[MOTIONPATH];
     }
@@ -711,3 +703,5 @@ void CustomAnimationCreateDialog::storePosition()
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

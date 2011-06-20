@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,6 @@ public:
     String                  maSecondSoundFile; // fuer Objekt ausblenden
     sal_Bool                    mbSecondSoundOn;    // fuer Objekt ausblenden
     sal_Bool                    mbSecondPlayFull;// fuer Objekt ausblenden
-//  String                  maBookmark;     // Sprung zu Objekt/Seite
     sal_uInt16                  mnVerb;         // fuer OLE-Objekt
     sal_uLong                   mnPresOrder;
     SdrObject&              mrObject;
@@ -87,3 +87,4 @@ public:
 
 #endif // _SD_ANMINFO_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

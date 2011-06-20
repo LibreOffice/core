@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,25 +50,11 @@
 
 namespace sd {
 
-
-/******************************************************************************/
-
-
 #define FADE_STEP   "FadeSteps"
 #define FADE_ATTRIB "FadeAttributes"
 #define FADE_ORIENT "FadeOrientation"
 #define FADE_TRUE   "true"
 #define FADE_FALSE  "false"
-
-
-/******************************************************************************/
-
-
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
 
 MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 ) :
             ModalDialog     ( pParent, SdResId( DLG_MORPH ) ),
@@ -102,23 +89,9 @@ MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* 
     }
 }
 
-
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
 MorphDlg::~MorphDlg()
 {
 }
-
-
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
 
 void MorphDlg::LoadSettings()
 {
@@ -164,3 +137,5 @@ void MorphDlg::SaveSettings() const
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

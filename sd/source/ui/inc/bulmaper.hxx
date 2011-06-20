@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,14 @@
 #ifndef INCLUDED_SD_BULMAPER_HXX
 #define INCLUDED_SD_BULMAPER_HXX
 
-#include "tools/solar.h"
+#include <sddllapi.h>
 
 class SfxItemSet;
 class SvxBulletItem;
 class SvxNumberFormat;
 class SvxNumRule;
 
-class SdBulletMapper
+class SD_DLLPUBLIC SdBulletMapper
 {
 public:
 /* #i35937#
@@ -47,3 +48,5 @@ public:
 };
 
 #endif /* INCLUDED_SD_BULMAPER_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

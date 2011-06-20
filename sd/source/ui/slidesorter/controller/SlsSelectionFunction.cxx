@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -400,7 +401,7 @@ FunctionReference SelectionFunction::Create(
 
 sal_Bool SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode (rEvent.GetButtons());
     aMDPos = rEvent.GetPosPixel();
     mbProcessingMouseButtonDown = true;
@@ -2022,3 +2023,5 @@ bool ButtonModeHandler::ProcessMotionEvent (SelectionFunction::EventDescriptor& 
 
 
 } } } // end of namespace ::sd::slidesorter::controller
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

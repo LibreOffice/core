@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,8 +44,8 @@
 #include <vcl/msgbox.hxx>
 #include <sal/types.h>
 #include <tools/urlobj.hxx>
-#include <vos/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <avmedia/mediawindow.hxx>
@@ -99,7 +100,7 @@ public:
 // ------------------------------------------------------------------------
 void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     switch( aEvent.ElementId )
     {
@@ -144,7 +145,7 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
         catch( css::lang::IllegalArgumentException )
         {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Cannot access play button" );
+            OSL_FAIL( "Cannot access play button" );
 #endif
         }
     }
@@ -178,7 +179,7 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
                 catch( css::lang::IllegalArgumentException )
                 {
 #ifdef DBG_UTIL
-                    DBG_ERROR( "Cannot access play button" );
+                    OSL_FAIL( "Cannot access play button" );
 #endif
                 }
             }
@@ -191,7 +192,7 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
 // ------------------------------------------------------------------------
 IMPL_LINK( SdFileDialog_Imp, IsMusicStoppedHdl, void *, EMPTYARG )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (
         mxPlayer.is() && mxPlayer->isPlaying() &&
@@ -214,7 +215,7 @@ IMPL_LINK( SdFileDialog_Imp, IsMusicStoppedHdl, void *, EMPTYARG )
         catch( css::lang::IllegalArgumentException )
         {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Cannot access play button" );
+            OSL_FAIL( "Cannot access play button" );
 #endif
         }
     }
@@ -239,7 +240,7 @@ void SdFileDialog_Imp::CheckSelectionState()
         catch( css::lang::IllegalArgumentException )
         {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Cannot access \"selection\" checkbox" );
+            OSL_FAIL( "Cannot access \"selection\" checkbox" );
 #endif
         }
     }
@@ -273,7 +274,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
             catch( css::lang::IllegalArgumentException )
             {
 #ifdef DBG_UTIL
-                DBG_ERROR( "Cannot set play button label" );
+                OSL_FAIL( "Cannot set play button label" );
 #endif
             }
         }
@@ -286,7 +287,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
             catch( css::lang::IllegalArgumentException )
             {
 #ifdef DBG_UTIL
-                DBG_ERROR( "Cannot disable selection checkbox" );
+                OSL_FAIL( "Cannot disable selection checkbox" );
 #endif
             }
         }
@@ -366,3 +367,5 @@ void SdOpenSoundFileDialog::SetPath( const String& rPath )
 {
     mpImpl->SetDisplayDirectory( rPath );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

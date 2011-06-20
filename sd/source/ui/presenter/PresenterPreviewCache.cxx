@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -100,7 +101,7 @@ Reference<XInterface> SAL_CALL PresenterPreviewCache_createInstance (
 
 ::rtl::OUString PresenterPreviewCache_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterPreviewCache");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterPreviewCache"));
 }
 
 
@@ -110,7 +111,7 @@ Sequence<rtl::OUString> SAL_CALL PresenterPreviewCache_getSupportedServiceNames 
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.PresenterPreviewCache"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterPreviewCache")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -387,13 +388,6 @@ void PresenterPreviewCache::PresenterCacheContext::NotifyPreviewCreation (
 bool PresenterPreviewCache::PresenterCacheContext::IsIdle (void)
 {
     return true;
-    /*
-    sal_Int32 nIdleState (tools::IdleDetection::GetIdleState(NULL));
-    if (nIdleState == tools::IdleDetection::IDET_IDLE)
-        return true;
-    else
-        return false;
-    */
 }
 
 
@@ -514,3 +508,5 @@ void PresenterPreviewCache::PresenterCacheContext::CallListeners (
 }
 
 } } // end of namespace ::sd::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

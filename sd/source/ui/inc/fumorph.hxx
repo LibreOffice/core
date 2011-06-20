@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,6 @@
 
 #include <math.h>
 
-/*************************************************************************
-|*
-\************************************************************************/
 class List;
 namespace basegfx {
     class B2DPolyPolygon;
@@ -78,3 +76,5 @@ private:
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

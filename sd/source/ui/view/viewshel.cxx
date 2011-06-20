@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "ViewShell.hxx"
 #include "ViewShellImplementation.hxx"
 
-#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATE_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
-#endif
 #include "ViewShellBase.hxx"
 #include "ShellFactory.hxx"
 #include "DrawController.hxx"
@@ -42,18 +41,12 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <svx/ruler.hxx>
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 #include <svx/fmshell.hxx>
-#ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
-#endif
 #include "GraphicViewShell.hxx"
 #include <sfx2/childwin.hxx>
 #include <sdxfer.hxx>
@@ -87,7 +80,6 @@
 #include <svx/svdoutl.hxx>
 #include <tools/diagnose_ex.h>
 
-// #96090#
 #include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>
 #include "SpellDialogChildWindow.hxx"
@@ -226,11 +218,6 @@ void ViewShell::construct(void)
     mpContentWindow->SetViewShell(this);
     mpContentWindow->SetPosSizePixel(
         GetParentWindow()->GetPosPixel(),GetParentWindow()->GetSizePixel());
-    mpContentWindow->Show();
-    static_cast< ::Window*>(mpContentWindow.get())->Resize();
-    OSL_TRACE("content window has size %d %d",
-        mpContentWindow->GetSizePixel().Width(),
-        mpContentWindow->GetSizePixel().Height());
 
     if ( ! GetDocSh()->IsPreview())
     {
@@ -239,18 +226,12 @@ void ViewShell::construct(void)
         mpHorizontalScrollBar->EnableRTL (sal_False);
         mpHorizontalScrollBar->SetRange(Range(0, 32000));
         mpHorizontalScrollBar->SetScrollHdl(LINK(this, ViewShell, HScrollHdl));
-        mpHorizontalScrollBar->Show();
 
         mpVerticalScrollBar.reset (new ScrollBar(GetParentWindow(), WinBits(WB_VSCROLL | WB_DRAG)));
         mpVerticalScrollBar->SetRange(Range(0, 32000));
         mpVerticalScrollBar->SetScrollHdl(LINK(this, ViewShell, VScrollHdl));
-        mpVerticalScrollBar->Show();
-        maScrBarWH = Size(
-            mpVerticalScrollBar->GetSizePixel().Width(),
-            mpHorizontalScrollBar->GetSizePixel().Height());
 
         mpScrollBarBox.reset(new ScrollBarBox(GetParentWindow(), WB_SIZEABLE));
-        mpScrollBarBox->Show();
     }
 
     String aName( RTL_CONSTASCII_USTRINGPARAM( "ViewShell" ));
@@ -272,12 +253,31 @@ void ViewShell::construct(void)
     // Register the sub shell factory.
     mpImpl->mpSubShellFactory.reset(new ViewShellObjectBarFactory(*this));
     GetViewShellBase().GetViewShellManager()->AddSubShellFactory(this,mpImpl->mpSubShellFactory);
+}
+
+void ViewShell::doShow(void)
+{
+    mpContentWindow->Show();
+    static_cast< ::Window*>(mpContentWindow.get())->Resize();
+    OSL_TRACE("content window has size %d %d",
+        mpContentWindow->GetSizePixel().Width(),
+        mpContentWindow->GetSizePixel().Height());
+
+    if ( ! GetDocSh()->IsPreview())
+    {
+        // Show scroll bars
+        mpHorizontalScrollBar->Show();
+
+        mpVerticalScrollBar->Show();
+        maScrBarWH = Size(
+            mpVerticalScrollBar->GetSizePixel().Width(),
+            mpHorizontalScrollBar->GetSizePixel().Height());
+
+        mpScrollBarBox->Show();
+    }
 
     GetParentWindow()->Show();
 }
-
-
-
 
 void ViewShell::Init (bool bIsMainViewShell)
 {
@@ -325,8 +325,7 @@ void ViewShell::Activate(sal_Bool bIsMDIActivate)
     // Laut MI darf keiner GrabFocus rufen, der nicht genau weiss von
     // welchem Window der Focus gegrabt wird. Da Activate() vom SFX teilweise
     // asynchron verschickt wird, kann es sein, dass ein falsches Window
-    // den Focus hat (#29682#):
-    //GetViewFrame()->GetWindow().GrabFocus();
+    // den Focus hat
 
     if (mpHorizontalRuler.get() != NULL)
         mpHorizontalRuler->SetActive(sal_True);
@@ -362,12 +361,6 @@ void ViewShell::Activate(sal_Bool bIsMDIActivate)
         if(!GetDocSh()->IsUIActive())
             UpdatePreview( GetActualPage(), sal_True );
 
-        //HMH::sd::View* pView = GetView();
-
-        //HMHif (pView)
-        //HMH{
-        //HMH   pView->ShowMarkHdl();
-        //HMH}
     }
 
     ReadFrameViewData( mpFrameView );
@@ -463,7 +456,6 @@ sal_Bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     if(!bReturn)
     {
-        // #76008#
         // give key input first to SfxViewShell to give CTRL+Key
         // (e.g. CTRL+SHIFT+'+', to front) priority.
         OSL_ASSERT (GetViewShell()!=NULL);
@@ -537,7 +529,6 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         pWin->GrabFocus();
         SetActiveWindow(pWin);
-//        GetViewFrame()->GetWindow().GrabFocus();
     }
 
     // MouseEvent in E3dView eintragen
@@ -822,7 +813,7 @@ void ViewShell::Resize (void)
         return;
 
     // Remember the new position and size.
-    maViewPos = Point(0,0); //mpParentWindow->GetPosPixel();
+    maViewPos = Point(0,0);
     maViewSize = aSize;
 
     // Rearrange the UI elements to take care of the new position and size.
@@ -830,18 +821,12 @@ void ViewShell::Resize (void)
     // end of included AdjustPosSizePixel.
 
     Size aS (GetParentWindow()->GetOutputSizePixel());
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisArea = GetParentWindow()->PixelToLogic(
-        Rectangle( Point(0,0), aVisSizePixel));
     Rectangle aCurrentVisArea (GetDocSh()->GetVisArea(ASPECT_CONTENT));
-    Rectangle aWindowRect = GetActiveWindow()->LogicToPixel(aCurrentVisArea);
     if (GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED
         && IsMainViewShell())
     {
-        //        GetDocSh()->SetVisArea(aVisArea);
-    }
 
-    //  VisAreaChanged(aVisArea);
+    }
 
     ::sd::View* pView = GetView();
 
@@ -1089,22 +1074,17 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
         if(nCount)
         {
             // prepare list
-            List aStringList;
+            ::std::vector< String > aStringList;
             sal_uInt16 a;
 
             for( a = 0; a < nCount; a++)
             {
                 // generate one String in list per undo step
-                String* pInsertString = new String(pUndoManager->GetUndoActionComment(a));
-                aStringList.Insert(pInsertString, LIST_APPEND);
+                aStringList.push_back( String(pUndoManager->GetUndoActionComment(a)) );
             }
 
             // set item
             rSet.Put(SfxStringListItem(SID_GETUNDOSTRINGS, &aStringList));
-
-            // delete Strings again
-            for(a = 0; a < nCount; a++)
-                delete (String*)aStringList.GetObject(a);
         }
         else
         {
@@ -1124,22 +1104,17 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
         if(nCount)
         {
             // prepare list
-            List aStringList;
+            ::std::vector< String > aStringList;
             sal_uInt16 a;
 
             for( a = 0; a < nCount; a++)
             {
                 // generate one String in list per undo step
-                String* pInsertString = new String(pUndoManager->GetRedoActionComment(a));
-                aStringList.Insert(pInsertString, LIST_APPEND);
+                aStringList.push_back( String(pUndoManager->GetRedoActionComment(a)) );
             }
 
             // set item
             rSet.Put(SfxStringListItem(SID_GETREDOSTRINGS, &aStringList));
-
-            // delete Strings again
-            for(a = 0; a < nCount; a++)
-                delete (String*)aStringList.GetObject(a);
         }
         else
         {
@@ -1169,7 +1144,7 @@ void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
         {
             try
             {
-                // #94637# when UndoStack is cleared by ModifyPageUndoAction
+                // when UndoStack is cleared by ModifyPageUndoAction
                 // the nCount may have changed, so test GetUndoActionCount()
                 while(nNumber-- && pUndoManager->GetUndoActionCount())
                 {
@@ -1183,7 +1158,7 @@ void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
             }
         }
 
-        // #91081# refresh rulers, maybe UNDO was move of TAB marker in ruler
+        // refresh rulers, maybe UNDO was move of TAB marker in ruler
         if (mbHasRulers)
         {
             Invalidate(SID_ATTR_TABSTOP);
@@ -1218,7 +1193,7 @@ void ViewShell::ImpSidRedo(sal_Bool, SfxRequest& rReq)
         {
             try
             {
-                // #94637# when UndoStack is cleared by ModifyPageRedoAction
+                // when UndoStack is cleared by ModifyPageRedoAction
                 // the nCount may have changed, so test GetRedoActionCount()
                 while(nNumber-- && pUndoManager->GetRedoActionCount())
                 {
@@ -1232,7 +1207,7 @@ void ViewShell::ImpSidRedo(sal_Bool, SfxRequest& rReq)
             }
         }
 
-        // #91081# refresh rulers, maybe REDO was move of TAB marker in ruler
+        // refresh rulers, maybe REDO was move of TAB marker in ruler
         if (mbHasRulers)
         {
             Invalidate(SID_ATTR_TABSTOP);
@@ -1284,8 +1259,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
 
             GetActiveWindow()->SetDrawMode( nMode );
             mpFrameView->SetDrawMode( nMode );
-// #110094#-7
-//            GetView()->ReleaseMasterPagePaintCache();
+
             GetActiveWindow()->Invalidate();
 
             Invalidate();
@@ -1305,6 +1279,8 @@ void ViewShell::ExecReq( SfxRequest& rReq )
     ::com::sun::star::accessibility::XAccessible>
 ViewShell::CreateAccessibleDocumentView (::sd::Window* )
 {
+    OSL_FAIL("ViewShell::CreateAccessibleDocumentView should not be called!, perhaps Meyers, 3rd edition, Item 9:\n");
+
     return ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> ();
 }
@@ -1427,7 +1403,6 @@ void ViewShell::DisposeFunctions()
 bool ViewShell::IsMainViewShell (void) const
 {
     return mpImpl->mbIsMainViewShell;
-    //    return GetViewShellBase().GetMainViewShell() == this;
 }
 
 void ViewShell::SetIsMainViewShell (bool bIsMainViewShell)
@@ -1634,3 +1609,5 @@ void ViewShellObjectBarFactory::ReleaseShell (SfxShell* pShell)
 }
 
 } // end of anonymous namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <rtl/instance.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace {
 
@@ -64,31 +65,23 @@ namespace sd { namespace toolpanel {
 
 
 class FocusManager::LinkMap
-    : public ::std::hash_multimap< ::Window*, EventDescriptor, WindowHash>
+    : public ::boost::unordered_multimap< ::Window*, EventDescriptor, WindowHash>
 {
 };
 
+struct FocusManagerCreator
+{
+    FocusManager m_aFocusManager;
+};
 
+namespace
+{
+    class theFocusManagerInstance : public rtl::Static< FocusManagerCreator, theFocusManagerInstance> {};
+}
 
 FocusManager& FocusManager::Instance (void)
 {
-    static FocusManager* spInstance = NULL;
-
-    if (spInstance == NULL)
-    {
-        ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
-        if (spInstance == NULL)
-        {
-            static FocusManager aInstance;
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            spInstance = &aInstance;
-        }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-    }
-    return *spInstance;
+    return theFocusManagerInstance::get().m_aFocusManager;
 }
 
 
@@ -330,3 +323,5 @@ IMPL_LINK(FocusManager, WindowEventListener, VclSimpleEvent*, pEvent)
 
 
 } } // end of namespace ::sd::toolpanel
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

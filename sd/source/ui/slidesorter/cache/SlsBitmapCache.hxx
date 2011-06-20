@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,8 +34,8 @@ class SdrPage;
 #include <vcl/bitmapex.hxx>
 #include <osl/mutex.hxx>
 #include <boost/shared_ptr.hpp>
+#include <boost/unordered_map.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <hash_map>
 
 namespace sd { namespace slidesorter { namespace cache {
 
@@ -233,3 +234,5 @@ private:
 } } } // end of namespace ::sd::slidesorter::cache
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

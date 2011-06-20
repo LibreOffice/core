@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -710,8 +711,11 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
         if (*iDescriptor!=NULL && (*iDescriptor)->mpMasterPage != NULL)
         {
             Size aPageSize ((*iDescriptor)->mpMasterPage->GetSize());
-            nWidth = aPageSize.Width();
-            nHeight = aPageSize.Height();
+            OSL_ASSERT(aPageSize.Width() > 0 && aPageSize.Height() > 0);
+            if (aPageSize.Width() > 0)
+                nWidth = aPageSize.Width();
+            if (aPageSize.Height() > 0)
+                nHeight = aPageSize.Height();
             mbFirstPageObjectSeen = true;
             break;
         }
@@ -1218,3 +1222,5 @@ void MasterPageContainer::Implementation::FillingDone (void)
 
 
 } } } // end of namespace ::sd::toolpanel::controls
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

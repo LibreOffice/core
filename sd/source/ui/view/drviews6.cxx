@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,21 +36,11 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdograf.hxx>
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
-#ifndef _FONTWORK_HXX
 #include <svx/fontwork.hxx>
-#endif
-#ifndef _BMPMASK_HXX
 #include <svx/bmpmask.hxx>
-#endif
-#ifndef _SVX_GALBRWS_HXX
 #include <svx/galbrws.hxx>
-#endif
-#ifndef _IMAPDLG_HXX
 #include <svx/imapdlg.hxx>
-#endif
 #include <svx/xftsfit.hxx>
 #include <svx/colrctrl.hxx>
 #include <svx/f3dchild.hxx>
@@ -57,9 +48,7 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/tbxcustomshapes.hxx>
-#ifndef _AVMEDIA_MEDIAPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
-#endif
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -160,8 +149,6 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
         !((SdrTextObj*) pObj)->HasText() )
     {
 // automatisches Auf/Zuklappen des FontWork-Dialog; erstmal deaktiviert
-//      if ( pDlg )
-//          pDlg->SetActive(sal_False);
 
         rSet.DisableItem(XATTR_FORMTXTSTYLE);
         rSet.DisableItem(XATTR_FORMTXTADJUST);
@@ -180,7 +167,6 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
     {
         if ( pDlg )
         {
-//          pDlg->SetActive();
             pDlg->SetColorTable(GetDoc()->GetColorTable());
         }
 
@@ -214,7 +200,6 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
         {
             AnimationWindow* pAnimWin;
             sal_uInt16 nId = AnimationChildWindow::GetChildWindowId();
-            //((const SfxUInt16Item&)(rReq.GetArgs()->Get(nSId))).GetValue();
 
             pAnimWin = static_cast<AnimationWindow*>(
                 GetViewFrame()->GetChildWindow(nId)->GetWindow());
@@ -422,12 +407,6 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
         break;
     }
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 {
@@ -744,3 +723,5 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

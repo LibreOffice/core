@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,16 +38,12 @@
 #include "helpids.h"
 #include "ViewShell.hxx"
 #include "drawview.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "View.hxx"
 #include "ClientView.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
@@ -82,11 +79,11 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 
     SdPage* pSelectedPage = NULL;
 
-    List* pFrameViewList = mpDoc->GetFrameViewList();
-    if( pFrameViewList && pFrameViewList->Count() )
+    const std::vector<sd::FrameView*> &rViews = mpDoc->GetFrameViewList();
+    if( !rViews.empty() )
     {
-        FrameView* pFrameView = (FrameView*)pFrameViewList->GetObject(0);
-        if( pFrameView && pFrameView->GetPageKind() == PK_STANDARD )
+        sd::FrameView* pFrameView = rViews[0];
+        if( pFrameView->GetPageKind() == PK_STANDARD )
         {
             sal_uInt16 nSelectedPage = pFrameView->GetSelectedPage();
             pSelectedPage = mpDoc->GetSdPage(nSelectedPage, PK_STANDARD);
@@ -96,7 +93,6 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
     if( NULL == pSelectedPage )
     {
         SdPage* pPage = NULL;
-        sal_uInt16 nSelectedPage = 0;
         sal_uInt16 nPageCnt = (sal_uInt16) mpDoc->GetSdPageCount(PK_STANDARD);
 
         for (sal_uInt16 i = 0; i < nPageCnt; i++)
@@ -104,10 +100,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
             pPage = mpDoc->GetSdPage(i, PK_STANDARD);
 
             if ( pPage->IsSelected() )
-            {
-                nSelectedPage = i;
                 pSelectedPage = pPage;
-            }
         }
 
         if( NULL == pSelectedPage )
@@ -143,32 +136,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 
     delete pView;
 
-//  Fuer Testzwecke: Bitte nicht entfernen!
-//
-//  GDIMetaFile* pMtf = pOut->GetConnectMetaFile();
-//
-//  if( pMtf )
-//  {
-//      String aURLStr;
-//
-//      if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( String( RTL_CONSTASCII_USTRINGPARAM( "d:\\gdi.mtf" ) ), aURLStr ) )
-//      {
-//          SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE | STREAM_TRUNC );
-//
-//          if( pOStm )
-//          {
-//              *pOStm << *pMtf;
-//              delete pOStm;
-//          }
-//      }
-//  }
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
 {
@@ -227,12 +195,6 @@ void DrawDocShell::Disconnect(ViewShell* pViewSh)
         mpViewShell = NULL;
     }
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 FrameView* DrawDocShell::GetFrameView()
 {
@@ -331,7 +293,6 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
             if ( pPageView->GetLockedLayers() != pFrameView->GetLockedLayers() )
                 pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
 
-    //                if ( pPageView->GetHelpLines() != pFrameView->GetHelpLines() )
                 pPageView->SetHelpLines( pFrameView->GetStandardHelpLines() );
         }
 
@@ -341,7 +302,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 
     pView->CompleteRedraw( &aVDev, Rectangle( aNullPt, aSize ) );
 
-    // #111097# IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
+    // IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
     delete pView;
 
     aVDev.SetMapMode( MapMode() );
@@ -507,3 +468,5 @@ IMPL_LINK( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
     return IsNewPageNameValid( aNewName );
 }
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

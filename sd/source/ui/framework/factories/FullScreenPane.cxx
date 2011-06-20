@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -254,7 +255,7 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas (void)
             mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
         return Reference<rendering::XCanvas>(
             xFactory->createInstanceWithArguments(
-                OUString::createFromAscii("com.sun.star.rendering.SpriteCanvas.VCL"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.SpriteCanvas.VCL")),
                 aArg),
             UNO_QUERY);
     }
@@ -292,3 +293,5 @@ void FullScreenPane::ExtractArguments (
 
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

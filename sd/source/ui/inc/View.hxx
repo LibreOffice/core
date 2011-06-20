@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,13 @@
 #ifndef SD_VIEW_HXX
 #define SD_VIEW_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include "pres.hxx"
 #include <tools/gen.hxx>
 #include <svtools/transfer.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svdmark.hxx>
-//#ifndef _SVDVMARK_HXX //autogen
-//#include <svx/svdvmark.hxx>
-//#endif
 #include <svx/svdpage.hxx>
 #include "fupoor.hxx"
 
@@ -226,7 +226,7 @@ protected:
     Timer                   maDropErrorTimer;
     Timer                   maDropInsertFileTimer;
     sal_uInt16                  mnLockRedrawSmph;
-    List*                   mpLockedRedraws;
+    boost::ptr_vector<SdViewRedrawRec> maLockedRedraws;
     bool                    mbIsDropAllowed;
 
                             DECL_LINK( DropErrorHdl, Timer* );
@@ -259,3 +259,5 @@ ViewShell* View::GetViewShell (void) const
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

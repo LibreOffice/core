@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/app.hxx>
 #include <svl/srchitem.hxx>
 #include <tools/globname.hxx>
 
-#ifndef _SO_CLSIDS_HXX //autogen
 #include <sot/clsids.hxx>
-#endif
 
 #include <sfx2/objface.hxx>
 
@@ -61,7 +58,6 @@ TYPEINIT1(GraphicDocShell, DrawDocShell);
 SFX_IMPL_INTERFACE(GraphicDocShell, SfxObjectShell, SdResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
-    SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 
 SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), SFXOBJECTSHELL_STD_NORMAL, "sdraw" )
@@ -88,3 +84,5 @@ GraphicDocShell::~GraphicDocShell()
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

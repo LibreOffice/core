@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,8 @@
 #ifndef _SD_LAYER_DLG_HXX_
 #define _SD_LAYER_DLG_HXX_
 
+#include <sddllapi.h>
+
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
@@ -39,7 +42,7 @@
 
 class SfxItemSet;
 
-class SdInsertLayerDlg : public ModalDialog
+class SD_DLLPUBLIC SdInsertLayerDlg : public ModalDialog
 {
 private:
     FixedText           maFtName;
@@ -65,3 +68,5 @@ public:
 };
 
 #endif // _SD_LAYER_DLG_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

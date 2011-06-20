@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ public:
     /** Return the icon with the given resource id.
         @return
             The returned Image may be empty when there is no icon for the
-            given id or an error occured.  Should not happen under normal
+            given id or an error occurred.  Should not happen under normal
             circumstances.
     */
     Image GetIcon (sal_uInt16 nResourceId);
@@ -77,3 +78,5 @@ private:
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

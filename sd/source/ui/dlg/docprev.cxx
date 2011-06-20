@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -237,7 +238,7 @@ void SdDocPreviewWin::updateViewSettings()
 
             aVDev.SetMapMode( aMap );
 
-            // #109058# Disable output, as we only want to record a metafile
+            // Disable output, as we only want to record a metafile
             aVDev.EnableOutput( sal_False );
 
             pMtf->Record( &aVDev );
@@ -303,3 +304,5 @@ void SdDocPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
         updateViewSettings();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

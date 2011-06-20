@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,7 +88,7 @@ Sequence<rtl::OUString> SAL_CALL BasicViewFactory_getSupportedServiceNames (void
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.BasicViewFactory"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.BasicViewFactory")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -615,3 +616,5 @@ void BasicViewFactory::ActivateCenterView (
 }
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

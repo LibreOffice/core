@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -798,7 +799,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 
             if(mrView.IsDragObj())
             {
-                FASTBOOL bWasNoSnap = mrView.GetDragStat().IsNoSnap();
+                bool bWasNoSnap = mrView.GetDragStat().IsNoSnap();
                 sal_Bool bWasSnapEnabled = mrView.IsSnapEnabled();
 
                 // switch snapping off
@@ -1128,9 +1129,6 @@ void MotionPathTag::DeleteMarkedPoints()
     {
         mrView.BrkAction();
 
-        // Description
-//      BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedPoints(),SDRREPFUNC_OBJ_DELETE);
-
         SdrUShortCont* pPts = mpMark->GetMarkedPoints();
 
         if( pPts )
@@ -1140,13 +1138,7 @@ void MotionPathTag::DeleteMarkedPoints()
             {
                 if( aEditor.GetPolyPolygon().count() )
                 {
-//                  AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath ));
                     mpPathObj->SetPathPoly( aEditor.GetPolyPolygon() );
-                }
-                else
-                {
-//                  AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pPath ) );
-//                  pM->GetPageView()->GetObjList()->RemoveObject(pObj->GetOrdNum());
                 }
 
                 mrView.UnmarkAllPoints();
@@ -1154,8 +1146,6 @@ void MotionPathTag::DeleteMarkedPoints()
                 mrView.updateHandles();
             }
         }
-
-//      EndUndo();
     }
 }
 
@@ -1201,7 +1191,6 @@ void MotionPathTag::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
             PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
             if(aEditor.SetSegmentsKind( eKind, pPts->getContainer()) )
             {
-//              AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
                 mpPathObj->SetPathPoly(aEditor.GetPolyPolygon());
                 mrView.MarkListHasChanged();
                 mrView.updateHandles();
@@ -1255,7 +1244,6 @@ void MotionPathTag::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
             PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
             if(aEditor.SetPointsSmooth( eFlags, pPts->getContainer() ) )
             {
-//              AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPath));
                 mpPathObj->SetPathPoly(aEditor.GetPolyPolygon());
                 mrView.MarkListHasChanged();
                 mrView.updateHandles();
@@ -1325,3 +1313,4 @@ void SAL_CALL MotionPathTag::release(  ) throw ()
 
 } // end of namespace sd
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

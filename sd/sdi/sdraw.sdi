@@ -2328,33 +2328,6 @@ SfxVoidItem SetFillColor SID_SETFILLCOLOR
 ]
 
 //--------------------------------------------------------------------------
-//#i80528#SfxBoolItem FillDraft SID_FILL_DRAFT
-//#i80528#
-//#i80528#[
-//#i80528#  /* flags: */
-//#i80528#  AutoUpdate = FALSE,
-//#i80528#  Cachable = Cachable,
-//#i80528#  FastCall = FALSE,
-//#i80528#  HasCoreId = FALSE,
-//#i80528#  HasDialog = FALSE,
-//#i80528#  ReadOnlyDoc = TRUE,
-//#i80528#  Toggle = FALSE,
-//#i80528#  Container = FALSE,
-//#i80528#  RecordAbsolute = FALSE,
-//#i80528#  RecordPerSet;
-//#i80528#  Synchron;
-//#i80528#
-//#i80528#  Readonly = FALSE,
-//#i80528#
-//#i80528#  /* config: */
-//#i80528#  AccelConfig = TRUE,
-//#i80528#  MenuConfig = TRUE,
-//#i80528#  StatusBarConfig = FALSE,
-//#i80528#  ToolBoxConfig = TRUE,
-//#i80528#  GroupId = GID_VIEW;
-//#i80528#]
-
-//--------------------------------------------------------------------------
 SfxVoidItem Forward SID_MOREFRONT
 ()
 [
@@ -2987,33 +2960,6 @@ SfxVoidItem GradientStartColor SID_SETGRADSTARTCOLOR
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-
-//--------------------------------------------------------------------------
-//#i80528#SfxBoolItem GraphicDraft SID_GRAPHIC_DRAFT
-//#i80528#
-//#i80528#[
-//#i80528#  /* flags: */
-//#i80528#  AutoUpdate = FALSE,
-//#i80528#  Cachable = Cachable,
-//#i80528#  FastCall = FALSE,
-//#i80528#  HasCoreId = FALSE,
-//#i80528#  HasDialog = FALSE,
-//#i80528#  ReadOnlyDoc = TRUE,
-//#i80528#  Toggle = FALSE,
-//#i80528#  Container = FALSE,
-//#i80528#  RecordAbsolute = FALSE,
-//#i80528#  RecordPerSet;
-//#i80528#  Synchron;
-//#i80528#
-//#i80528#  Readonly = FALSE,
-//#i80528#
-//#i80528#  /* config: */
-//#i80528#  AccelConfig = TRUE,
-//#i80528#  MenuConfig = TRUE,
-//#i80528#  StatusBarConfig = FALSE,
-//#i80528#  ToolBoxConfig = TRUE,
-//#i80528#  GroupId = GID_VIEW;
-//#i80528#]
 
 //--------------------------------------------------------------------------
 SfxVoidItem GraphicExport SID_GRAPHIC_EXPORT
@@ -4029,33 +3975,6 @@ SfxVoidItem LineColor SID_SETLINECOLOR
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-
-//--------------------------------------------------------------------------
-//#i80528#SfxBoolItem LineDraft SID_LINE_DRAFT
-//#i80528#
-//#i80528#[
-//#i80528#  /* flags: */
-//#i80528#  AutoUpdate = FALSE,
-//#i80528#  Cachable = Cachable,
-//#i80528#  FastCall = FALSE,
-//#i80528#  HasCoreId = FALSE,
-//#i80528#  HasDialog = FALSE,
-//#i80528#  ReadOnlyDoc = TRUE,
-//#i80528#  Toggle = FALSE,
-//#i80528#  Container = FALSE,
-//#i80528#  RecordAbsolute = FALSE,
-//#i80528#  RecordPerSet;
-//#i80528#  Synchron;
-//#i80528#
-//#i80528#  Readonly = FALSE,
-//#i80528#
-//#i80528#  /* config: */
-//#i80528#  AccelConfig = TRUE,
-//#i80528#  MenuConfig = TRUE,
-//#i80528#  StatusBarConfig = FALSE,
-//#i80528#  ToolBoxConfig = TRUE,
-//#i80528#  GroupId = GID_VIEW;
-//#i80528#]
 
 //--------------------------------------------------------------------------
 SfxVoidItem LineEndPolygon SID_LINEEND_POLYGON
@@ -6297,34 +6216,34 @@ SfxVoidItem TextAttributes SID_TEXTATTR_DLG
 ]
 
 //--------------------------------------------------------------------------
-//#i80528#SfxBoolItem TextDraft SID_TEXT_DRAFT
-//#i80528#
-//#i80528#[
-//#i80528#  /* flags: */
-//#i80528#  AutoUpdate = FALSE,
-//#i80528#  Cachable = Cachable,
-//#i80528#  FastCall = FALSE,
-//#i80528#  HasCoreId = FALSE,
-//#i80528#  HasDialog = FALSE,
-//#i80528#  ReadOnlyDoc = TRUE,
-//#i80528#  Toggle = FALSE,
-//#i80528#  Container = FALSE,
-//#i80528#  RecordAbsolute = FALSE,
-//#i80528#  RecordPerSet;
-//#i80528#  Synchron;
-//#i80528#
-//#i80528#  Readonly = FALSE,
-//#i80528#
-//#i80528#  /* config: */
-//#i80528#  AccelConfig = TRUE,
-//#i80528#  MenuConfig = TRUE,
-//#i80528#  StatusBarConfig = FALSE,
-//#i80528#  ToolBoxConfig = TRUE,
-//#i80528#  GroupId = GID_VIEW;
-//#i80528#]
+SfxBoolItem TextFitToSizeTool SID_TEXT_FITTOSIZE
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
 
 //--------------------------------------------------------------------------
-SfxBoolItem TextFitToSizeTool SID_TEXT_FITTOSIZE
+SfxBoolItem TextAutoFitToSize SID_OUTLINE_TEXT_AUTOFIT
 
 [
     /* flags: */

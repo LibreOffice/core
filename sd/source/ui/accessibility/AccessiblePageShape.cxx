@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,8 @@
 #include "AccessiblePageShape.hxx"
 #include <svx/AccessibleShapeInfo.hxx>
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_STATE_TYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -106,7 +103,7 @@ uno::Reference<XAccessible> SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString::createFromAscii ("page shape has no children"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("page shape has no children") ),
         static_cast<uno::XWeak*>(this));
 }
 
@@ -199,7 +196,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (::rtl::OUString::createFromAscii ("LineColor"));
+            aColor = aSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")));
             aColor >>= nColor;
         }
     }
@@ -250,7 +247,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
             if (xBGSet.is())
             {
                 uno::Any aColor;
-                aColor = xBGSet->getPropertyValue (::rtl::OUString::createFromAscii ("FillColor"));
+                aColor = xBGSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")));
                 aColor >>= nColor;
             }
             else
@@ -375,3 +372,4 @@ void AccessiblePageShape::dispose (void)
 } // end of namespace accessibility
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,8 +99,8 @@ OUString Configuration_getImplementationName (void) throw(RuntimeException)
 Sequence<rtl::OUString> SAL_CALL Configuration_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const OUString sServiceName(OUString::createFromAscii(
-        "com.sun.star.drawing.framework.Configuration"));
+    static const OUString sServiceName(OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.drawing.framework.Configuration")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -295,8 +296,8 @@ OUString SAL_CALL Configuration::getName (void)
     OUString aString;
 
     if (rBHelper.bDisposed || rBHelper.bInDispose)
-        aString += OUString::createFromAscii("DISPOSED ");
-    aString += OUString::createFromAscii("Configuration[");
+        aString += OUString(RTL_CONSTASCII_USTRINGPARAM("DISPOSED "));
+    aString += OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration["));
 
     ResourceContainer::const_iterator iResource;
     for (iResource=mpResourceContainer->begin();
@@ -304,10 +305,10 @@ OUString SAL_CALL Configuration::getName (void)
          ++iResource)
     {
         if (iResource != mpResourceContainer->begin())
-            aString += OUString::createFromAscii(", ");
+            aString += OUString(RTL_CONSTASCII_USTRINGPARAM(", "));
         aString += FrameworkHelper::ResourceIdToString(*iResource);
     }
-    aString += OUString::createFromAscii("]");
+    aString += OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
 
     return aString;
 }
@@ -418,3 +419,5 @@ bool AreConfigurationsEquivalent (
 }
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@ namespace {
 class AllPagesPredicate
 {
 public:
-    bool operator() (const SharedPageDescriptor& rpDescriptor)
+    bool operator() (const SharedPageDescriptor& rpDescriptor) const
     {
         (void)rpDescriptor;
         return true;
@@ -80,7 +81,6 @@ public:
 PageEnumeration PageEnumerationProvider::CreateAllPagesEnumeration (
     const SlideSorterModel& rModel)
 {
-//    AllPagesPredicate aPredicate; // spurious warning on unxsoli4 debug=t
     return PageEnumeration::Create(rModel, AllPagesPredicate());
 }
 
@@ -108,3 +108,5 @@ PageEnumeration PageEnumerationProvider::CreateVisiblePagesEnumeration (
 
 
 } } } // end of namespace ::sd::slidesorter::model
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

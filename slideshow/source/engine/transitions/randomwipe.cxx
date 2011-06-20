@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,11 +69,12 @@ RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
     m_rect.transform( aTransform );
 
     // mix up:
-    for (sal_Int32 nIndex=0; nIndex<nElements; ++nIndex)
+    for ( sal_Int32 pos1 = nElements ; pos1-- ; )
     {
-        const sal_Int32 nOtherIndex (getRandomOrdinal(nElements));
-        OSL_ASSERT(nOtherIndex>=0 && nOtherIndex<nElements);
-        ::std::swap(m_positions[nIndex], m_positions[nOtherIndex]);
+        const sal_Int32 pos2 = getRandomOrdinal(pos1+1);
+        const ::basegfx::B2DPoint point( m_positions[ pos1 ] );
+        m_positions[ pos1 ] = m_positions[ pos2 ];
+        m_positions[ pos2 ] = point;
     }
 }
 
@@ -91,3 +93,5 @@ RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
 
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

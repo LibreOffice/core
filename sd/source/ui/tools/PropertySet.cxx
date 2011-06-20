@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include "tools/PropertySet.hxx"
 #include <boost/bind.hpp>
 #include <algorithm>
-#include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -149,10 +150,10 @@ void SAL_CALL PropertySet::removePropertyChangeListener (
         ::std::find_if(
             aRange.first,
             aRange.second,
-            std::compose1(
+            o3tl::compose1(
                 std::bind1st(std::equal_to<Reference<beans::XPropertyChangeListener> >(),
                     rxListener),
-                std::select2nd<ChangeListenerContainer::value_type>())));
+                o3tl::select2nd<ChangeListenerContainer::value_type>())));
     if (iListener != mpChangeListeners->end())
     {
         mpChangeListeners->erase(iListener);
@@ -230,3 +231,5 @@ void PropertySet::ThrowIfDisposed (void)
 }
 
 } } // end of namespace ::sd::tools
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

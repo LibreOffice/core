@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -216,7 +217,7 @@ bool AnimationBaseNode::init_st()
         mpActivity = createActivity();
     }
     catch (uno::Exception const&) {
-        OSL_ENSURE( false, rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         comphelper::anyToString(cppu::getCaughtException()),
                         RTL_TEXTENCODING_UTF8 ) );
         // catch and ignore. We later handle empty activities, but for
@@ -488,3 +489,4 @@ AttributableShapeSharedPtr AnimationBaseNode::getShape() const
 } // namespace internal
 } // namespace slideshow
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

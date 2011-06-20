@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include <EffectMigration.hxx>
 #include <anminfo.hxx>
 
-using namespace ::vos;
 using namespace ::sd;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
@@ -386,29 +386,9 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-zoom", 0 },
     { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-swivel", 0 },
 
-// open
-/*
-    { AnimationEffect_ZOOM_IN_FROM_LEFT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_UPPERLEFT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_TOP, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_UPPERRIGHT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_RIGHT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_LOWERRIGHT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_BOTTOM, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_LOWERLEFT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_CENTER, "ooo-entrance-zoom","in" },
+    // still open (no matching effect: AnimationEffect_ZOOM_IN_FROM_*,
+    // AnimationEffect_ZOOM_OUT_FROM_*, AnimationEffect_PATH
 
-    { AnimationEffect_ZOOM_OUT_FROM_LEFT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_UPPERLEFT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_TOP, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_UPPERRIGHT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_RIGHT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_LOWERRIGHT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_BOTTOM, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_LOWERLEFT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_CENTER, "ooo-entrance-appear",0 },
-    { AnimationEffect_PATH, "ooo-entrance-spiral-in",0 },
-*/
     { AnimationEffect_NONE, 0, 0 }
 };
 
@@ -416,7 +396,7 @@ EffectSequence::iterator ImplFindEffect( MainSequencePtr& pMainSequence, const R
 {
     EffectSequence::iterator aIter;
 
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( (pEffect->getTargetShape() == rShape) && (pEffect->getTargetSubItem() == nSubItem) )
@@ -447,7 +427,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
 
     if( !ConvertAnimationEffect( eEffect, aPresetId, aPresetSubType ) )
     {
-        DBG_ERROR( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
+        OSL_FAIL( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
         return;
     }
 
@@ -567,7 +547,7 @@ AnimationEffect EffectMigration::GetAnimationEffect( SvxShape* pShape )
 
         EffectSequence::iterator aIter;
 
-        for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+        for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
         {
             CustomAnimationEffectPtr pEffect( (*aIter) );
             if( pEffect->getTargetShape() == xShape )
@@ -615,7 +595,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
 
     if( !ConvertAnimationEffect( eEffect, aPresetId, aPresetSubType ) )
     {
-        DBG_ERROR( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
+        OSL_FAIL( "sd::EffectMigration::SetAnimationEffect(), no mapping for given AnimationEffect value" );
         return;
     }
 
@@ -707,7 +687,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
             const EffectSequence& rEffects = pGroup->getEffects();
 
             EffectSequence::const_iterator aIter;
-            for( aIter = rEffects.begin(); aIter != rEffects.end(); aIter++ )
+            for( aIter = rEffects.begin(); aIter != rEffects.end(); ++aIter )
             {
                 // only work on paragraph targets
                 if( (*aIter)->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
@@ -828,7 +808,6 @@ double EffectMigration::ConvertAnimationSpeed( AnimationSpeed eSpeed )
     {
     case AnimationSpeed_SLOW: fDuration = 2.0; break;
     case AnimationSpeed_FAST: fDuration = 0.5; break;
-    //case AnimationSpeed_MEDIUM:
     default:
         fDuration = 1.0; break;
     }
@@ -856,7 +835,7 @@ void EffectMigration::SetAnimationSpeed( SvxShape* pShape, AnimationSpeed eSpeed
     EffectSequence::iterator aIter;
     bool bNeedRebuild = false;
 
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
@@ -884,7 +863,7 @@ AnimationSpeed EffectMigration::GetAnimationSpeed( SvxShape* pShape )
 
     double fDuration = 1.0;
 
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
@@ -936,7 +915,7 @@ void EffectMigration::SetDimColor( SvxShape* pShape, sal_Int32 nColor )
     EffectSequence::iterator aIter;
     bool bNeedRebuild = false;
 
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
@@ -967,7 +946,7 @@ sal_Int32 EffectMigration::GetDimColor( SvxShape* pShape )
             const Reference< XShape > xShape( pShape );
             EffectSequence::iterator aIter;
 
-            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter) );
                 if( (pEffect->getTargetShape() == xShape) &&
@@ -998,8 +977,6 @@ void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
     if( implIsInsideGroup( pObj ) )
         return;
 
-    Any aEmpty;
-
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
     const Reference< XShape > xShape( pShape );
@@ -1007,14 +984,16 @@ void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
     EffectSequence::iterator aIter;
     bool bNeedRebuild = false;
 
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
         {
             pEffect->setHasAfterEffect( bDimHide ? true : false );
-            if( bDimHide )
+            if( bDimHide ) {
+                Any aEmpty;
                 pEffect->setDimColor( aEmpty );
+            }
             pEffect->setAfterEffectOnNext( false );
             bNeedRebuild = true;
         }
@@ -1039,7 +1018,7 @@ sal_Bool EffectMigration::GetDimHide( SvxShape* pShape )
             const Reference< XShape > xShape( pShape );
 
             EffectSequence::iterator aIter;
-            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter) );
                 if( pEffect->getTargetShape() == xShape )
@@ -1081,7 +1060,7 @@ void EffectMigration::SetDimPrevious( SvxShape* pShape, sal_Bool bDimPrevious )
     EffectSequence::iterator aIter;
     bool bNeedRebuild = false;
 
-    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
         CustomAnimationEffectPtr pEffect( (*aIter) );
         if( pEffect->getTargetShape() == xShape )
@@ -1113,7 +1092,7 @@ sal_Bool EffectMigration::GetDimPrevious( SvxShape* pShape )
             const Reference< XShape > xShape( pShape );
 
             EffectSequence::iterator aIter;
-            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+            for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter) );
                 if( pEffect->getTargetShape() == xShape )
@@ -1152,7 +1131,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
 
         EffectSequence::iterator aIter( rSequence.begin() );
         EffectSequence::iterator aEnd( rSequence.end() );
-        for( nPos = 0; aIter != aEnd; aIter++ )
+        for( nPos = 0; aIter != aEnd; ++aIter )
         {
             CustomAnimationEffectPtr pEffect = (*aIter);
 
@@ -1180,7 +1159,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
     // check if there is at least one effect for xThis
     if( nCurrentPos == -1 )
     {
-        DBG_ERROR("sd::EffectMigration::SetPresentationOrder() failed cause this shape has no effect" );
+        OSL_FAIL("sd::EffectMigration::SetPresentationOrder() failed cause this shape has no effect" );
         return;
     }
 
@@ -1241,7 +1220,7 @@ sal_Int32 EffectMigration::GetPresentationOrder( SvxShape* pShape )
 
     EffectSequence::iterator aIter( rSequence.begin() );
     EffectSequence::iterator aEnd( rSequence.end() );
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
         CustomAnimationEffectPtr pEffect = (*aIter);
 
@@ -1280,7 +1259,7 @@ void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInf
         if( pInfo->mbSoundOn )
             aSoundFile = pInfo->maSoundFile;
 
-        for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+        for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
         {
             CustomAnimationEffectPtr pEffect( (*aIter) );
             if( pEffect->getTargetShape() == xShape )
@@ -1321,7 +1300,7 @@ OUString EffectMigration::GetSoundFile( SvxShape* pShape )
 
             for(    aIter = pMainSequence->getBegin();
                     (aSoundFile.getLength() == 0) && (aIter != pMainSequence->getEnd());
-                    aIter++ )
+                    ++aIter )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter) );
                 if( pEffect->getTargetShape() == xShape )
@@ -1342,3 +1321,4 @@ sal_Bool EffectMigration::GetSoundOn( SvxShape* pShape )
     return GetSoundFile( pShape ).getLength() != 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,9 +63,7 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "ViewShell.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "sdattr.hxx"
 #include "tpoption.hrc"
 #include "optsitem.hxx"
@@ -402,7 +401,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             }
             else
             {
-                DBG_ERROR("sd::SdModule::CalcFieldValueHdl(), unknown field type!");
+                OSL_FAIL("sd::SdModule::CalcFieldValueHdl(), unknown field type!");
             }
 
             if( aRepresentation.Len() == 0 )                // TODO: Edit engine doesn't handle empty fields?
@@ -555,7 +554,6 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     sal_Bool bNewPrintOptions = sal_False;
     sal_Bool bMiscOptions = sal_False;
 
-    ::sd::FrameView* pFrameView = NULL;
     ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
     SdDrawDocument* pDoc = NULL;
     // Hier wird der DocType vom Optionsdialog gesetzt (nicht Dokument!)
@@ -568,11 +566,6 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     if (pDocSh)
     {
         pDoc = pDocSh->GetDoc();
-
-        // Wenn der Optionsdialog zum Dokumenttyp identisch ist,
-        // kann auch die FrameView mit uebergeben werden:
-        if( pDoc && eDocType == pDoc->GetDocumentType() )
-            pFrameView = pDocSh->GetFrameView();
 
         pViewShell = pDocSh->GetViewShell();
         if (pViewShell != NULL)
@@ -621,7 +614,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
             sal_Int32 nY = ( (SfxInt32Item*) pItem )->GetValue();
             pOptions->SetScale( nX, nY );
 
-            // #92067# Apply to document only if doc type match
+            // Apply to document only if doc type match
             if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
             {
                 pDoc->SetUIScale( Fraction( nX, nY ) );
@@ -746,7 +739,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 
         if (pViewShell)
         {
-            // #74495# make sure no one is in text edit mode, cause there
+            // make sure no one is in text edit mode, cause there
             // are some pointers remembered else (!)
             if(pViewShell->GetView())
                 pViewShell->GetView()->SdrEndTextEdit();
@@ -833,3 +826,5 @@ SfxTabPage* SdModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
 
     return pRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

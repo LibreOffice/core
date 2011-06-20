@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include "fusldlg.hxx"
 #include <svl/itemset.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
@@ -111,14 +110,6 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     List* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
 
     sal_Bool bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
-/* #109180# change in behaviour, even when always start with current page is enabled, range settings are
-            still used
-    if( bStartWithActualPage )
-    {
-        aFirstPage = pViewSh->GetActualPage()->GetName();
-        pCustomShowList = NULL;
-    }
-*/
     if( !aFirstPage.Len() && pPage )
         aFirstPage = pPage->GetName();
 
@@ -263,3 +254,5 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

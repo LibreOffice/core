@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#ifndef _SALHELPER_SIMPLEREFERENCECOMPONENT_HXX_
 #include "helper/simplereferencecomponent.hxx"
-#endif
 
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "osl/diagnose.h"
@@ -76,7 +75,7 @@ void SimpleReferenceComponent::release()
         {
 #if OSL_DEBUG_LEVEL > 0
             rtl::OString msg( rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, msg.getStr() );
+            OSL_FAIL( msg.getStr() );
 #endif
         }
     }
@@ -138,3 +137,5 @@ void SimpleReferenceComponent::operator delete(void * pPtr,
     ::operator delete(pPtr, rNothrow);
 #endif // WNT
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

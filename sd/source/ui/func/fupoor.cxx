@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,17 +48,13 @@
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "app.hrc"
 #include "fusel.hxx"
 #include "sdpage.hxx"
 #include "drawview.hxx"
 #include "DrawViewShell.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "zoomlist.hxx"
@@ -67,10 +64,8 @@
 
 #include <sfx2/viewfrm.hxx>
 
-// #97016# IV
 #include <svx/svditer.hxx>
 
-// #98533#
 #include <editeng/editeng.hxx>
 
 using namespace ::com::sun::star;
@@ -105,7 +100,7 @@ FuPoor::FuPoor (
       bScrollable (sal_False),
       bDelayActive (sal_False),
       bFirstMouseMove (sal_False),
-      // #95491# remember MouseButton state
+      // remember MouseButton state
       mnCode(0)
 {
     ReceiveRequest(rReq);
@@ -186,14 +181,6 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     if ( !mpView->IsDragHelpLine() && !mpView->IsSetPageOrg() &&
             !SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) )
     {
-/*      Size aSize = mpWindow->GetSizePixel();
-        short dx = 0, dy = 0;
-
-        if ( aPixPos.X() <= 0              ) dx = -1;
-        if ( aPixPos.X() >= aSize.Width()  ) dx =  1;
-        if ( aPixPos.Y() <= 0              ) dy = -1;
-        if ( aPixPos.Y() >= aSize.Height() ) dy =  1;
-*/
         Point aPos = mpWindow->OutputToScreenPixel(aPixPos);
         const Rectangle& rRect = mpViewShell->GetAllWindowRect();
 
@@ -237,7 +224,7 @@ IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
 {
     Point aPnt(mpWindow->GetPointerPosPixel());
 
-    // #95491# use remembered MouseButton state to create correct
+    // use remembered MouseButton state to create correct
     // MouseEvents for this artifical MouseMove.
     MouseMove(MouseEvent(aPnt, 1, 0, GetMouseButtonCode()));
 
@@ -262,7 +249,6 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
     switch (nCode)
     {
-        // #97016# IV
         case KEY_RETURN:
         {
             if(rKEvt.GetKeyCode().IsMod1())
@@ -317,8 +303,8 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             }
             else
             {
-                // #98255# activate OLE object on RETURN for selected object
-                // #98198# activate text edit on RETURN for selected object
+                // activate OLE object on RETURN for selected object
+                // activate text edit on RETURN for selected object
                 const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
                 if( !mpView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
@@ -346,13 +332,12 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         }
         break;
 
-        // #97016# II
         case KEY_TAB:
         {
-            // #98994# handle Mod1 and Mod2 to get travelling running on different systems
+            // handle Mod1 and Mod2 to get travelling running on different systems
             if(rKEvt.GetKeyCode().IsMod1() || rKEvt.GetKeyCode().IsMod2())
             {
-                // #97016# II do something with a selected handle?
+                // do something with a selected handle?
                 const SdrHdlList& rHdlList = mpView->GetHdlList();
                 sal_Bool bForward(!rKEvt.GetKeyCode().IsShift());
 
@@ -586,7 +571,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         }
         break;
 
-        // #97016# II change select state when focus is on poly point
+        // change select state when focus is on poly point
         case KEY_SPACE:
         {
             const SdrHdlList& rHdlList = mpView->GetHdlList();
@@ -685,11 +670,9 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 if (mpView->AreObjectsMarked() && !rKEvt.GetKeyCode().IsMod1() &&
                     !mpDocSh->IsReadOnly())
                 {
-                    // #97016# II
                     const SdrHdlList& rHdlList = mpView->GetHdlList();
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
-                    // #109007#
                     sal_Bool bIsMoveOfConnectedHandle(sal_False);
                     sal_Bool bOldSuppress = false;
                     SdrEdgeObj* pEdgeObj = 0L;
@@ -714,7 +697,6 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         }
                     }
 
-                    // #109007#
                     if(pEdgeObj)
                     {
                         // Suppress default connects to inside object and object center
@@ -722,7 +704,6 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         pEdgeObj->SetSuppressDefaultConnect(sal_True);
                     }
 
-                    // #109007#
                     if(bIsMoveOfConnectedHandle)
                     {
                         sal_uInt16 nMarkHdSiz(mpView->GetMarkHdlSizePixel());
@@ -741,7 +722,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     }
                     else if(rKEvt.GetKeyCode().IsMod2())
                     {
-                        // #97016# move in 1 pixel distance
+                        // move in 1 pixel distance
                         Size aLogicSizeOnePixel = (mpWindow) ? mpWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
                         nX *= aLogicSizeOnePixel.Width();
                         nY *= aLogicSizeOnePixel.Height();
@@ -760,10 +741,10 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if(0L == pHdl)
                     {
-                        // #67368# only take action when move is allowed
+                        // only take action when move is allowed
                         if(mpView->IsMoveAllowed())
                         {
-                            // #90129# restrict movement to WorkArea
+                            // restrict movement to WorkArea
                             const Rectangle& rWorkArea = mpView->GetWorkArea();
 
                             if(!rWorkArea.IsEmpty())
@@ -800,7 +781,6 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                             {
                                 mpView->MoveAllMarked(Size(nX, nY));
 
-                                // #97016# II
                                 mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
                             }
                         }
@@ -820,7 +800,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                             if(mpView->IsDragObj())
                             {
-                                FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                                bool bWasNoSnap = rDragStat.IsNoSnap();
                                 sal_Bool bWasSnapEnabled = mpView->IsSnapEnabled();
 
                                 // switch snapping off
@@ -845,7 +825,6 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         }
                     }
 
-                    // #109007#
                     if(pEdgeObj)
                     {
                         // Restore original suppress value
@@ -871,7 +850,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         mpWindow->ReleaseMouse();
     }
 
-    // #98198# when a text-editable object is selected and the
+    // when a text-editable object is selected and the
     // input character is printable, activate text edit on that object
     // and feed character to object
     if(!bReturn && !mpDocSh->IsReadOnly())
@@ -886,8 +865,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                 if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit() && !pObj->ISA(SdrOle2Obj))
                 {
-                    // #98533# use common IsSimpleCharInput from
-                    // the EditEngine.
+                    // use common IsSimpleCharInput from the EditEngine.
                     sal_Bool bPrintable(EditEngine::IsSimpleCharInput(rKEvt));
 
                     if(bPrintable)
@@ -908,7 +886,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             }
             else
             {
-                // #99039# test if there is a title object there. If yes, try to
+                // test if there is a title object there. If yes, try to
                 // set it to edit mode and start typing...
                 if(mpViewShell->ISA(DrawViewShell)
                     && EditEngine::IsSimpleCharInput(rKEvt))
@@ -968,7 +946,6 @@ sal_Bool FuPoor::MouseMove(const MouseEvent& )
     return sal_False;
 }
 
-// #97016# II
 void FuPoor::SelectionHasChanged()
 {
     const SdrHdlList& rHdlList = mpView->GetHdlList();
@@ -1065,7 +1042,7 @@ IMPL_LINK_INLINE_START( FuPoor, DelayHdl, Timer *, EMPTYARG )
 
     Point aPnt(mpWindow->GetPointerPosPixel());
 
-    // #95491# use remembered MouseButton state to create correct
+    // use remembered MouseButton state to create correct
     // MouseEvents for this artifical MouseMove.
     MouseMove(MouseEvent(aPnt, 1, 0, GetMouseButtonCode()));
 
@@ -1081,7 +1058,7 @@ IMPL_LINK_INLINE_END( FuPoor, DelayHdl, Timer *, pTimer )
 
 sal_Bool FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     aDelayToScrollTimer.Stop ();
@@ -1091,7 +1068,7 @@ sal_Bool FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
 
 sal_Bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     return sal_False;
@@ -1161,12 +1138,6 @@ void FuPoor::ReceiveRequest(SfxRequest& rReq)
         }
     }
 }
-
-/*************************************************************************
-|*
-|* #97016#
-|*
-\************************************************************************/
 
 SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16, const Rectangle& )
 {
@@ -1275,3 +1246,5 @@ void FuPoor::DoExecute( SfxRequest& )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

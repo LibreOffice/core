@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,25 +31,13 @@
 #define _SD_DLGSNAP_HXX
 
 
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <tools/fract.hxx>
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include "sdenumdef.hxx"
 /************************************************************************/
 
@@ -99,3 +88,5 @@ public:
 
 
 #endif      // _SD_DLGSNAP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

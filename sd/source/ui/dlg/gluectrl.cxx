@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sd.hxx"
 
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 
 #include <svx/dialogs.hrc>
 #include <svx/svdglue.hxx>
@@ -202,12 +203,6 @@ void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
     SfxToolBoxControl::StateChanged( nSId, eState, pState );
 }
 
-/*************************************************************************
-|*
-|* No Comment
-|*
-\************************************************************************/
-
 Window* SdTbxCtlGlueEscDir::CreateItemWindow( Window *pParent )
 {
     if( GetSlotId() == SID_GLUE_ESCDIR )
@@ -234,3 +229,5 @@ sal_uInt16 SdTbxCtlGlueEscDir::GetEscDirPos( sal_uInt16 nEscDir )
     }
     return( 99 );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

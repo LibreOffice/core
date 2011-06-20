@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,12 @@ static const String pPreviewName( RTL_CONSTASCII_USTRINGPARAM( "StarDrawTemplate
 // PowerPoint-Filter
 static const String pFilterPowerPoint97( RTL_CONSTASCII_USTRINGPARAM( "MS PowerPoint 97" ));
 static const String pFilterPowerPoint97Template( RTL_CONSTASCII_USTRINGPARAM( "MS PowerPoint 97 Vorlage" ));
+static const String pFilterPowerPoint97AutoPlay( RTL_CONSTASCII_USTRINGPARAM( "MS PowerPoint 97 AutoPlay" ));
 
 // XML content stream
 static const String pStarDrawXMLContent( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ));
 static const String pStarDrawOldXMLContent( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ));
 
 #endif  // _SD_STRMNAME_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

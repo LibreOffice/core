@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -383,7 +384,6 @@ void FuConstructBezierPolygon::SetEditMode(sal_uInt16 nMode)
     rBindings.Invalidate(SID_BEZIER_INSERT);
 }
 
-// #97016#
 SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_POLYGON:
@@ -524,7 +524,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
         }
         else
         {
-            DBG_ERROR("Object is NO path object");
+            OSL_FAIL("Object is NO path object");
         }
 
         pObj->SetLogicRect(rRectangle);
@@ -536,3 +536,5 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
 } // end of namespace sd
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

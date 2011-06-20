@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,7 +105,7 @@ public:
 };
 
 class BitmapCache::CacheBitmapContainer
-    : public ::std::hash_map<CacheKey, CacheEntry, CacheHash>
+    : public ::boost::unordered_map<CacheKey, CacheEntry, CacheHash>
 {
 public:
     CacheBitmapContainer (void) {}
@@ -701,3 +702,5 @@ inline bool BitmapCache::CacheEntry::HasLosslessReplacement (void) const
 
 
 } } } // end of namespace ::sd::slidesorter::cache
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

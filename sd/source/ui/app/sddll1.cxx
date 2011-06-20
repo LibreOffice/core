@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,7 +96,7 @@ void SdDLL::RegisterFactorys()
 
 void SdDLL::RegisterInterfaces()
 {
-    // Modul
+    // Module
     SfxModule* pMod = SD_MOD();
     SdModule::RegisterInterface(pMod);
 
@@ -132,3 +133,5 @@ void SdDLL::RegisterInterfaces()
     // controls.
     ::sd::toolpanel::ToolPanelViewShell::RegisterControls();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

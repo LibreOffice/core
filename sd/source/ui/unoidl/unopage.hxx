@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 
 #include <svl/itemprop.hxx>
 
-#ifndef _SVX_UNOPAGE_HXX
 #include <svx/unopage.hxx>
-#endif
 #include <svx/fmdpage.hxx>
 #include <svx/svdpool.hxx>
 
@@ -52,10 +51,6 @@ class SdPage;
 class SvxShape;
 class SdrObject;
 struct SfxItemPropertySimpleEntry;
-
-#ifdef SVX_LIGHT
-#define SvxFmDrawPage SvxDrawPage
-#endif
 
 /***********************************************************************
 *                                                                      *
@@ -317,3 +312,5 @@ public:
 };
 
 #endif // _SD_UNOPAGE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

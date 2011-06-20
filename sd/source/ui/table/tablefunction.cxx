@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,7 +109,7 @@ static void apply_table_style( SdrTableObj* pObj, SdrModel* pModel, const OUStri
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::apply_default_table_style(), exception caught!");
+            OSL_FAIL("sd::apply_default_table_style(), exception caught!");
         }
     }
 }
@@ -268,3 +269,5 @@ void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,8 @@
 #include <svx/svxids.hrc>
 #include <svx/fmshell.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <iterator>
 
 #undef VERBOSE
 //#define VERBOSE 2
@@ -175,7 +177,7 @@ private:
     mutable ::osl::Mutex maMutex;
 
     class ShellHash{public: size_t operator()(const SfxShell* p) const { return (size_t)p;} };
-    typedef ::std::hash_multimap<const SfxShell*,SharedShellFactory,ShellHash>
+    typedef ::boost::unordered_multimap<const SfxShell*,SharedShellFactory,ShellHash>
         FactoryList;
     FactoryList maShellFactories;
 
@@ -187,7 +189,7 @@ private:
     ActiveShellList maActiveViewShells;
 
     typedef ::std::list<ShellDescriptor> SubShellSubList;
-    typedef ::std::hash_map<const SfxShell*,SubShellSubList,ShellHash> SubShellList;
+    typedef ::boost::unordered_map<const SfxShell*,SubShellSubList,ShellHash> SubShellList;
     SubShellList maActiveSubShells;
 
     /** In this member we remember what shells we have pushed on the shell
@@ -652,34 +654,30 @@ void ViewShellManager::Implementation::ActivateSubShell (
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    do
-    {
-        // Check that the given view shell is active.
-        ActiveShellList::iterator iShell (::std::find_if (
-            maActiveViewShells.begin(),
-            maActiveViewShells.end(),
-            IsShell(&rParentShell)));
-        if (iShell == maActiveViewShells.end())
-            break;
+    // Check that the given view shell is active.
+    ActiveShellList::iterator iShell (::std::find_if (
+        maActiveViewShells.begin(),
+        maActiveViewShells.end(),
+        IsShell(&rParentShell)));
+    if (iShell == maActiveViewShells.end())
+        return;
 
-        // Create the sub shell list if it does not yet exist.
-        SubShellList::iterator iList (maActiveSubShells.find(&rParentShell));
-        if (iList == maActiveSubShells.end())
-            iList = maActiveSubShells.insert(
-                SubShellList::value_type(&rParentShell,SubShellSubList())).first;
+    // Create the sub shell list if it does not yet exist.
+    SubShellList::iterator iList (maActiveSubShells.find(&rParentShell));
+    if (iList == maActiveSubShells.end())
+        iList = maActiveSubShells.insert(
+            SubShellList::value_type(&rParentShell,SubShellSubList())).first;
 
-        // Do not activate an object bar that is already active.  Requesting
-        // this is not exactly an error but may be an indication of one.
-        SubShellSubList& rList (iList->second);
-        if (::std::find_if(rList.begin(),rList.end(), IsId(nId)) != rList.end())
-            break;
+    // Do not activate an object bar that is already active.  Requesting
+    // this is not exactly an error but may be an indication of one.
+    SubShellSubList& rList (iList->second);
+    if (::std::find_if(rList.begin(),rList.end(), IsId(nId)) != rList.end())
+        return;
 
-        // Add just the id of the sub shell. The actual shell is created
-        // later in CreateShells().
-        UpdateLock aLock (*this);
-        rList.push_back(ShellDescriptor(NULL, nId));
-    }
-    while (false);
+    // Add just the id of the sub shell. The actual shell is created
+    // later in CreateShells().
+    UpdateLock aLock (*this);
+    rList.push_back(ShellDescriptor(NULL, nId));
 }
 
 
@@ -691,34 +689,30 @@ void ViewShellManager::Implementation::DeactivateSubShell (
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    do
-    {
-        // Check that the given view shell is active.
-        SubShellList::iterator iList (maActiveSubShells.find(&rParentShell));
-        if (iList == maActiveSubShells.end())
-            break;
+    // Check that the given view shell is active.
+    SubShellList::iterator iList (maActiveSubShells.find(&rParentShell));
+    if (iList == maActiveSubShells.end())
+        return;
 
-        // Look up the sub shell.
-        SubShellSubList& rList (iList->second);
-        SubShellSubList::iterator iShell (
-            ::std::find_if(rList.begin(),rList.end(), IsId(nId)));
-        if (iShell == rList.end())
-            break;
-        SfxShell* pShell = iShell->mpShell;
-        if (pShell == NULL)
-            break;
+    // Look up the sub shell.
+    SubShellSubList& rList (iList->second);
+    SubShellSubList::iterator iShell (
+        ::std::find_if(rList.begin(),rList.end(), IsId(nId)));
+    if (iShell == rList.end())
+        return;
+    SfxShell* pShell = iShell->mpShell;
+    if (pShell == NULL)
+        return;
 
-        UpdateLock aLock (*this);
+    UpdateLock aLock (*this);
 
-        ShellDescriptor aDescriptor(*iShell);
-        // Remove the sub shell from both the internal structure as well as the
-        // SFX shell stack above and including the sub shell.
-        rList.erase(iShell);
-        TakeShellsFromStack(pShell);
+    ShellDescriptor aDescriptor(*iShell);
+    // Remove the sub shell from both the internal structure as well as the
+    // SFX shell stack above and including the sub shell.
+    rList.erase(iShell);
+    TakeShellsFromStack(pShell);
 
-        DestroySubShell(rParentShell, aDescriptor);
-    }
-    while (false);
+    DestroySubShell(rParentShell, aDescriptor);
 }
 
 
@@ -947,7 +941,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
 
 
     // 4. Find the lowest shell in which the two stacks differ.
-    ShellStack::const_iterator iSfxShell (aSfxShellStack.begin());
+    ShellStack::iterator iSfxShell (aSfxShellStack.begin());
     ShellStack::iterator iTargetShell (aTargetStack.begin());
     while (iSfxShell != aSfxShellStack.end()
         && iTargetShell!=aTargetStack.end()
@@ -960,15 +954,16 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
 
     // 5. Remove all shells above and including the differing shell from the
     // SFX stack starting with the shell on top of the stack.
-    while (iSfxShell != aSfxShellStack.end())
+    for (std::reverse_iterator<ShellStack::const_iterator> i(aSfxShellStack.end()), iLast(iSfxShell);
+            i != iLast; ++i)
     {
-        SfxShell* pShell = aSfxShellStack.back();
-        aSfxShellStack.pop_back();
+        SfxShell* const pShell = *i;
 #ifdef VERBOSE
         OSL_TRACE("removing shell %p from stack\r", pShell);
 #endif
         mrBase.RemoveSubShell(pShell);
     }
+    aSfxShellStack.erase(iSfxShell, aSfxShellStack.end());
 
 
     // 6. Push shells from the given stack onto the SFX stack.
@@ -1465,3 +1460,5 @@ bool ShellDescriptor::IsMainViewShell (void) const
 } // end of anonymous namespace
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

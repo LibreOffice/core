@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -251,7 +252,7 @@ Reference<rendering::XCanvas> PresenterCanvasFactory::CreateCanvas (
             xFactory->createInstanceWithArguments(
                 rsCanvasServiceName.getLength()>0
                     ? rsCanvasServiceName
-                        : OUString::createFromAscii("com.sun.star.rendering.VCLCanvas"),
+                        : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.VCLCanvas")),
                 aArg),
             UNO_QUERY);
     }
@@ -305,3 +306,5 @@ PresenterCanvasFactory::~PresenterCanvasFactory (void)
 
 
 } } // end of namespace ::sd::presenter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

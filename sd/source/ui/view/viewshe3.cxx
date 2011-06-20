@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,9 +66,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "stlsheet.hxx"
-#ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
-#endif
 #include "DrawViewShell.hxx"
 #include "OutlineViewShell.hxx"
 #include "drawview.hxx"
@@ -84,10 +83,7 @@
 #include "optsitem.hxx"
 #include "sdresid.hxx"
 
-// #96090#
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
 #include <basic/sbstar.hxx>
@@ -136,19 +132,16 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxUInt16Item(SID_STYLE_FAMILY, nFamily ));
     }
 
-    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETUNDOSTRINGS))
     {
         ImpGetUndoStrings(rSet);
     }
 
-    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETREDOSTRINGS))
     {
         ImpGetRedoStrings(rSet);
     }
 
-    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_UNDO))
     {
         ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
@@ -164,7 +157,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 
         if(bActivate)
         {
-            // #87229# Set the necessary string like in
+            // Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
             String aTmp( SvtResId( STR_UNDO ) );
             aTmp += pUndoManager->GetUndoActionComment(0);
@@ -176,7 +169,6 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_REDO))
     {
         ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
@@ -192,7 +184,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 
         if(bActivate)
         {
-            // #87229# Set the necessary string like in
+            // Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
             String aTmp(SvtResId(STR_REDO));
             aTmp += pUndoManager->GetRedoActionComment(0);
@@ -248,19 +240,6 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     const SfxItemSet* pArgs = rRequest.GetArgs();
     if (! pArgs)
     {
-/*
-        // Make the layout menu visible in the tool pane.
-        const ViewShellBase& rBase (GetViewShellBase());
-        if (rBase.GetMainViewShell()!=NULL
-            && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_OUTLINE
-            && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_DRAW)
-        {
-            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
-                framework::FrameworkHelper::msLayoutTaskPanelURL,
-                false);
-        }
-*/
-
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
 
@@ -415,8 +394,6 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                     ePageKind,
                     aStandardPageName,
                     aNotesPageName,
-                    eStandardLayout,
-                    eNotesLayout,
                     bIsPageBack,
                     bIsPageObj,
                     nInsertPosition);
@@ -446,3 +423,5 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

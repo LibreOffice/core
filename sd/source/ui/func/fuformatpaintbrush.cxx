@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,9 +54,7 @@
 #include "Outliner.hxx"
 #include "ViewShellBase.hxx"
 
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 
 namespace sd {
 
@@ -293,3 +292,5 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

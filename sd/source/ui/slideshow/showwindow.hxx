@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/graph.hxx>
 
-#ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
 
 #include "slideshowimpl.hxx"
 
@@ -69,12 +68,10 @@ enum ShowWindowMode
     SHOWWINDOWMODE_PREVIEW = 4
 };
 
-//class ShowWindowImpl;
-
 class ShowWindow
     : public ::sd::Window
 {
-//  friend class ShowWindowImpl;
+
 public:
     ShowWindow ( const ::rtl::Reference< ::sd::SlideshowImpl >& xController, ::Window* pParent );
     virtual ~ShowWindow (void);
@@ -98,7 +95,6 @@ public:
     virtual void    Resize();
     virtual void    GetFocus();
     virtual void    LoseFocus();
-//  virtual void    GrabFocus();
 
     virtual void    KeyInput(const KeyEvent& rKEvt);
     virtual void    MouseMove(const MouseEvent& rMEvt);
@@ -142,3 +138,5 @@ private:
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

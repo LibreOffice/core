@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,18 +31,13 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svx/svdlayer.hxx>
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/msgpool.hxx>
-#include <svx/hyprlink.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hlnkitem.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -159,8 +155,6 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     }
                     else
                     {
-                        //pDlg->GetAttr( aNewAttr );
-                        //aLayerName     = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
                         aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
                         aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
                         bIsVisible   = ((SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
@@ -204,7 +198,6 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                 if ( aPrevLayer == aName )
                 {
-//                    nPrevLayer = nLayer;
                     nPrevLayer = Max(nLayer, (sal_uInt16) 4);
                 }
             }
@@ -553,8 +546,6 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     String aName;
                     if( GetDocSh()->HasName() )
                         aName = GetDocSh()->GetMedium()->GetName();
-                    //else
-                    //  aName = GetDocSh()->GetName();
                     pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
                 }
                 break;
@@ -641,7 +632,6 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     AbstractSdModifyFieldDlg* pDlg = pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() ) : 0;
                     if( pDlg && pDlg->Execute() == RET_OK )
                     {
-                        // #108538#
                         // To make a correct SetAttribs() call at the utlinerView
                         // it is necessary to split the actions here
                         SvxFieldData* pField = pDlg->GetField();
@@ -661,7 +651,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                             pOLV->InsertField( aFieldItem );
 
-                            // #108538# select again for eventual SetAttribs call
+                            // select again for eventual SetAttribs call
                             pOLV->SetSelection( aSel );
                         }
 
@@ -678,7 +668,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                         if(pField)
                         {
-                            // #108538# restore selection to original
+                            // restore selection to original
                             if(bSelectionWasModified)
                             {
                                 aSel.nEndPos--;
@@ -701,7 +691,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
         {
             try
             {
-                com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), com::sun::star::uno::UNO_QUERY);
+                com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ui.XSLTFilterDialog"))), com::sun::star::uno::UNO_QUERY);
                 if( xDialog.is() )
                 {
                     xDialog->execute();
@@ -747,7 +737,6 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const String & rName  )
         sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), sal_False );
         SetOfByte aVisibleLayers = mpActualPage->TRG_GetMasterPageVisibleLayers();
 
-        // (#67720#)
         ::svl::IUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
         ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
             GetDoc(), pUndoPage, rName, pUndoPage->GetAutoLayout(),
@@ -877,3 +866,5 @@ void DrawViewShell::ModifyLayer (
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

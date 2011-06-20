@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -249,3 +250,5 @@
 #define HID_MN_SUB_PREVIEW_OUTPUT_QUALITY                       "SD_HID_MN_SUB_PREVIEW_OUTPUT_QUALITY"
 #define HID_MN_SUB_CONVERT                                      "SD_HID_MN_SUB_CONVERT"
 #define HID_MN_SUB_MIRROR                                       "SD_HID_MN_SUB_MIRROR"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

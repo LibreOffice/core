@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include "glob.hrc"
 
 #include <svx/svdpagv.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sd {
@@ -139,54 +140,50 @@ void ViewClipboard::AssignMasterPage (
     const SdTransferable& rTransferable,
     SdPage* pMasterPage)
 {
-    do
-    {
-        if (pMasterPage == NULL)
-            return;
+    if (pMasterPage == NULL)
+        return;
 
-        // Get the target page to which the master page is assigned.
-        SdrPageView* pPageView = mrView.GetSdrPageView();
-        if (pPageView == NULL)
-            break;
+    // Get the target page to which the master page is assigned.
+    SdrPageView* pPageView = mrView.GetSdrPageView();
+    if (pPageView == NULL)
+        return;
 
-        SdPage* pPage = static_cast<SdPage*>(pPageView->GetPage());
-        if (pPage == NULL)
-            break;
+    SdPage* pPage = static_cast<SdPage*>(pPageView->GetPage());
+    if (pPage == NULL)
+        return;
 
-        SdDrawDocument* pDocument = mrView.GetDoc();
-        if (pDocument == NULL)
-            break;
+    SdDrawDocument* pDocument = mrView.GetDoc();
+    if (pDocument == NULL)
+        return;
 
-        if ( ! rTransferable.HasPageBookmarks())
-            break;
+    if ( ! rTransferable.HasPageBookmarks())
+        return;
 
-        DrawDocShell* pDataDocShell = rTransferable.GetPageDocShell();
-        if (pDataDocShell == NULL)
-            break;
+    DrawDocShell* pDataDocShell = rTransferable.GetPageDocShell();
+    if (pDataDocShell == NULL)
+        return;
 
-        SdDrawDocument* pSourceDocument = pDataDocShell->GetDoc();
-        if (pSourceDocument == NULL)
-            break;
+    SdDrawDocument* pSourceDocument = pDataDocShell->GetDoc();
+    if (pSourceDocument == NULL)
+        return;
 
-        // We have to remove the layout suffix from the layout name which is
-        // appended again by SetMasterPage() to the given name.  Don't ask.
-        String sLayoutSuffix (RTL_CONSTASCII_STRINGPARAM(SD_LT_SEPARATOR));
-        sLayoutSuffix.Append (SdResId(STR_LAYOUT_OUTLINE));
-        sal_uInt16 nLength = sLayoutSuffix.Len();
-        String sLayoutName (pMasterPage->GetLayoutName());
-        if (String(sLayoutName, sLayoutName.Len()-nLength, nLength).Equals (
-            sLayoutSuffix))
-            sLayoutName = String(sLayoutName, 0, sLayoutName.Len()-nLength);
+    // We have to remove the layout suffix from the layout name which is
+    // appended again by SetMasterPage() to the given name.  Don't ask.
+    String sLayoutSuffix (RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR));
+    sLayoutSuffix.Append (SdResId(STR_LAYOUT_OUTLINE));
+    sal_uInt16 nLength = sLayoutSuffix.Len();
+    String sLayoutName (pMasterPage->GetLayoutName());
+    if (String(sLayoutName, sLayoutName.Len()-nLength, nLength).Equals (
+        sLayoutSuffix))
+        sLayoutName = String(sLayoutName, 0, sLayoutName.Len()-nLength);
 
-        pDocument->SetMasterPage (
-            pPage->GetPageNum() / 2,
-            sLayoutName,
-            pSourceDocument,
-            sal_False, // Exchange the master page of only the target page.
-            sal_False // Keep unused master pages.
-            );
-    }
-    while (false);
+    pDocument->SetMasterPage (
+        pPage->GetPageNum() / 2,
+        sLayoutName,
+        pSourceDocument,
+        sal_False, // Exchange the master page of only the target page.
+        sal_False // Keep unused master pages.
+        );
 }
 
 
@@ -248,7 +245,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
     }
     if (nInsertPgCnt > 0)
     {
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
         ::sd::Window* pWin = mrView.GetViewShell()->GetActiveWindow();
         const sal_Bool bWait = pWin && pWin->IsWait();
 
@@ -276,3 +273,5 @@ sal_uInt16 ViewClipboard::InsertSlides (
 
 
 } // end of namespace ::sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

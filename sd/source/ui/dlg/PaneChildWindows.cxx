@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,7 +162,7 @@ ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, sal_uInt1
     // activates the task pane, so it is really filled with content (in opposite to the other SFX applications, the
     // child window registered for SID_TASKPANE is not responsible for its content, but here in SD, it's the ToolPanelViewShell
     // which has this responsibility. And this view shell is created implicitly via the resource framework.)
-    // #i113788# / 2010-09-03 / frank.schoenheit@oracle.com
+    // #i113788#
     SfxDockingWindow* pDockingWindow = dynamic_cast< SfxDockingWindow* >( GetWindow() );
     ViewShellBase* pViewShellBase = ViewShellBase::GetViewShellBase( pDockingWindow->GetBindings().GetDispatcher()->GetFrame() );
     ENSURE_OR_RETURN_VOID( pViewShellBase != NULL, "ToolPanelChildWindow::ToolPanelChildWindow: no view shell access!" );
@@ -232,3 +233,5 @@ void ToolPanelChildWindow::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL
 }
 
 } // end of namespace ::sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

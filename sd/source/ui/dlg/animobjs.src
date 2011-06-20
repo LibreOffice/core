@@ -71,7 +71,6 @@ DockingWindow FLT_WIN_ANIMATION
         Pos = MAP_APPFONT ( 6 + MIN_BUTTON_WIDTH , 100 ) ;
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_REVERSEPLAY ;
-        /* ### ACHTUNG: Neuer Text in Resource? Rückwärts : R³ckwõrts */
         QuickHelpText [ en-US ] = "Backwards" ;
     };
     ImageButton BTN_STOP
@@ -169,7 +168,6 @@ DockingWindow FLT_WIN_ANIMATION
             < "1000" ; > ;
             < "Max." ; > ;
         };
-        /* ### ACHTUNG: Neuer Text in Resource? Anzahl der Durchläufe : Anzahl der Durchlõufe */
         QuickHelpText [ en-US ] = "Loop Count" ;
     };
     ImageButton BTN_GET_ONE_OBJECT
@@ -186,7 +184,6 @@ DockingWindow FLT_WIN_ANIMATION
             MaskColor = IMAGE_MASK_STDCOLOR;
         };
         TabStop = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? Objekt übernehmen : Objekt ³bernehmen */
         QuickHelpText [ en-US ] = "Apply Object" ;
     };
     ImageButton BTN_GET_ALL_OBJECTS
@@ -203,7 +200,6 @@ DockingWindow FLT_WIN_ANIMATION
             MaskColor = IMAGE_MASK_STDCOLOR;
         };
         TabStop = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? Objekte einzeln übernehmen : Objekte einzeln ³bernehmen */
         QuickHelpText [ en-US ] = "Apply Objects Individually" ;
     };
     ImageButton BTN_REMOVE_BITMAP
@@ -220,7 +216,6 @@ DockingWindow FLT_WIN_ANIMATION
             MaskColor = IMAGE_MASK_STDCOLOR;
         };
         TabStop = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? Aktuelles Bild löschen : Aktuelles Bild l÷schen */
         QuickHelpText [ en-US ] = "Delete Current Image" ;
     };
     ImageButton BTN_REMOVE_ALL
@@ -237,7 +232,6 @@ DockingWindow FLT_WIN_ANIMATION
             MaskColor = IMAGE_MASK_STDCOLOR;
         };
         TabStop = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? Alle Bilder löschen : Alle Bilder l÷schen */
         QuickHelpText [ en-US ] = "Delete All Images" ;
     };
     FixedText FT_COUNT

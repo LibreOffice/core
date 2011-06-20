@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,9 +49,7 @@
 #include <svx/zoomslideritem.hxx>
 #include <svl/eitem.hxx>
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/clipfmtitem.hxx>
@@ -90,7 +89,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 static const ::rtl::OUString MASTER_VIEW_TOOL_BAR_NAME(
-    ::rtl::OUString::createFromAscii("masterviewtoolbar"));
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("masterviewtoolbar")));
 }
 
 namespace sd {
@@ -141,8 +140,11 @@ void SAL_CALL ScannerEventListener::disposing( const ::com::sun::star::lang::Eve
 DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
 : ViewShell (pFrame, pParentWindow, rViewShellBase)
 , maTabControl(this, pParentWindow)
+, mbIsLayerModeActive(false)
 , mbIsInSwitchPage(false)
 {
+    ViewShell::doShow();
+
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
     else
@@ -166,7 +168,7 @@ DrawViewShell::~DrawViewShell()
     if( mxScannerListener.is() )
         static_cast< ScannerEventListener* >( mxScannerListener.get() )->ParentDestroyed();
 
-    // #96642# Remove references to items within Svx3DWin
+    // Remove references to items within Svx3DWin
     // (maybe do a listening sometime in Svx3DWin)
     sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame() ? GetViewFrame()->GetChildWindow(nId) : NULL;
@@ -205,7 +207,7 @@ DrawViewShell::~DrawViewShell()
     if ( mpClipEvtLstnr )
     {
         mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), sal_False );
-        mpClipEvtLstnr->ClearCallbackLink();        // #103849# prevent callback if another thread is waiting
+        mpClipEvtLstnr->ClearCallbackLink();        // prevent callback if another thread is waiting
         mpClipEvtLstnr->release();
     }
 
@@ -392,7 +394,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     if( xMgr.is() )
     {
         mxScannerManager = ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >(
-                           xMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.scanner.ScannerManager" ) ),
+                           xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.scanner.ScannerManager" )) ),
                            ::com::sun::star::uno::UNO_QUERY );
 
         if( mxScannerManager.is() )
@@ -493,7 +495,7 @@ void DrawViewShell::CheckLineTo(SfxRequest& rReq)
     {
         if(SID_LINETO == rReq.GetSlot() || SID_BEZIERTO == rReq.GetSlot() || SID_MOVETO == rReq.GetSlot() )
         {
-            DBG_ERROR("DrawViewShell::CheckLineTo: slots SID_LINETO, SID_BEZIERTO, SID_MOVETO no longer supported.");
+            OSL_FAIL("DrawViewShell::CheckLineTo: slots SID_LINETO, SID_BEZIERTO, SID_MOVETO no longer supported.");
         }
     }
 #endif
@@ -772,7 +774,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             SdrObject* pObj = NULL;
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             sal_uLong nMarkCount = rMarkList.GetMarkCount();
-            FASTBOOL bOneLayer = sal_True;
+            bool bOneLayer = true;
 
             // Use the first ten selected shapes as a (hopefully
             // representative) sample of all shapes of the current page.
@@ -858,3 +860,5 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ namespace slideshow
             boost::shared_ptr<canvas::tools::ElapsedTime> const & pTimeBase,
             ActivitiesQueue& rActivityQueue ) :
 #if OSL_DEBUG_LEVEL > 1
-            Event(::rtl::OUString::createFromAscii("WakeupEvent")),
+            Event(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WakeupEvent"))),
 #endif
             maTimer(pTimeBase),
             mnNextTime(0.0),
@@ -97,3 +98,5 @@ namespace slideshow
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

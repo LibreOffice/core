@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <tools/ref.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svx/svdetc.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
@@ -822,7 +821,6 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
                                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
                                 pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
-//                              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, sal_True);
                                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);
                                 pAction->SetSecondEffect(pInfo->meSecondEffect, pInfo->meSecondEffect);
                                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, pInfo->meSecondSpeed);
@@ -906,7 +904,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
                                   sal_True, &aPos );
         }
 
-        // Loeschen der ExchangeList
+        // Delete the ExchangeList
         if( pExchangeList )
         {
             for( void* p = pExchangeList->First(); p; p = pExchangeList->Next() )
@@ -1036,3 +1034,5 @@ sal_Bool View::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

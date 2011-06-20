@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,6 @@ public:
     ::com::sun::star::uno::Any GetValue (const ::rtl::OUString& rName);
 
 private:
-    static ::boost::shared_ptr<CacheConfiguration> mpInstance;
     /** When a caller holds a reference after we have released ours we use
         this weak pointer to avoid creating a new instance.
     */
@@ -72,3 +72,5 @@ private:
 } } } // end of namespace ::sd::slidesorter::cache
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef _SD_INS_PASTE_HXX_
 #define _SD_INS_PASTE_HXX_
 
+#include <sddllapi.h>
+
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
@@ -37,7 +40,7 @@
 // - SdInsertPasteDlg -
 // --------------------
 
-class SdInsertPasteDlg : public ModalDialog
+class SD_DLLPUBLIC SdInsertPasteDlg : public ModalDialog
 {
 private:
 
@@ -57,3 +60,5 @@ public:
 };
 
 #endif // _SD_INS_PASTE_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

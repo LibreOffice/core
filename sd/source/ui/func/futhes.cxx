@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 
 #include "futhes.hxx"
 
-#include <tools/pstm.hxx>
 #include <editeng/outliner.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svdobj.hxx>
@@ -51,9 +51,7 @@
 #include "Outliner.hxx"
 #include "DrawViewShell.hxx"
 #include "OutlineViewShell.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "sdresid.hxx"
 
 using ::rtl::OUString;
@@ -168,3 +166,5 @@ void FuThesaurus::DoExecute( SfxRequest& )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

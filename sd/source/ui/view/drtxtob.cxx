@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -167,7 +168,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 {
     SfxWhichIter        aIter( rSet );
     sal_uInt16              nWhich = aIter.FirstWhich();
-    sal_Bool                bTemplate = sal_False;
     SfxItemSet          aAttrSet( mpView->GetDoc()->GetPool() );
     SvtLanguageOptions  aLangOpt;
     sal_Bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
@@ -195,7 +195,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                 if( (nSlotId == SID_ATTR_CHAR_FONT) || (nSlotId == SID_ATTR_CHAR_FONTHEIGHT) )
                 {
-                    // #42732# input language should be preferred over
+                    // input language should be preferred over
                     // current cursor position to detect script type
                     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
@@ -235,7 +235,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     rSet.Put( SfxTemplateItem( nWhich, String() ) );
                 }
-                bTemplate = sal_True;
             }
             break;
 
@@ -263,16 +262,17 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     // Outliner im Gliederungsmodus
                     ::Outliner* pOutl = pOLV->GetOutliner();
-                    List* pList = pOLV->CreateSelectionList();
-                    Paragraph* pPara = (Paragraph*) pList->First();
 
-                    // #96539# find out if we are a OutlineView
+                    std::vector<Paragraph*> aSelList;
+                    pOLV->CreateSelectionList(aSelList);
+                    Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
+
+                    // find out if we are a OutlineView
                     sal_Bool bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
 
-                    // #96539# This is ONLY for OutlineViews
+                    // This is ONLY for OutlineViews
                     if(bIsOutlineView)
                     {
-                        // #96250# and #78665#
                         // allow move up if position is 2 or greater OR it
                         // is a title object (and thus depth==1)
                         if(pOutl->GetAbsPos(pPara) > 1 || ( pOutl->HasParaFlag(pPara,PARAFLAG_ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
@@ -283,7 +283,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     }
                     else
                     {
-                        // #96539# old behaviour for OUTLINERMODE_OUTLINEOBJECT
+                        // old behaviour for OUTLINERMODE_OUTLINEOBJECT
                         if(pOutl->GetAbsPos(pPara) > 0)
                         {
                             // Nicht ganz oben
@@ -291,8 +291,10 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         }
                     }
 
-                    while (pPara)
+                    for (std::vector<Paragraph*>::const_iterator iter = aSelList.begin(); iter != aSelList.end(); ++iter)
                     {
+                        pPara = *iter;
+
                         sal_Int16 nDepth = pOutl->GetDepth( (sal_uInt16) pOutl->GetAbsPos( pPara ) );
 
                         if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE )) )
@@ -307,20 +309,18 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                             // Nicht maximale Tiefe und nicht ganz oben
                             bDisableRight = sal_False;
                         }
-
-                        pPara = static_cast<Paragraph*>( pList->Next() );
                     }
 
-                    if ( ( pOutl->GetAbsPos((Paragraph*) pList->Last()) < pOutl->GetParagraphCount() - 1 ) &&
+                    if ( ( pOutl->GetAbsPos(pPara) < pOutl->GetParagraphCount() - 1 ) &&
                          ( pOutl->GetParagraphCount() > 1 || !bOutlineViewSh) )
                     {
                         // Nicht letzter Absatz
                         bDisableDown = sal_False;
                     }
 
-                    // #96250# and #78665#
                     // disable when first para and 2nd is not a title
-                    pPara = static_cast< Paragraph* >( pList->First() );
+                    pPara = aSelList.empty() ? NULL : *(aSelList.begin());
+
                     if(!bDisableDown && bIsOutlineView
                         && pPara
                         && 0 == pOutl->GetAbsPos(pPara)
@@ -330,8 +330,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         // Needs to be disabled
                         bDisableDown = sal_True;
                     }
-
-                    delete pList;
                 }
 
                 if (bDisableLeft)
@@ -515,7 +513,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, sal_True ) );
                 break;
 
-                // #107865#
                 // The case for the superordinate object is missing.
                 case FRMDIR_ENVIRONMENT:
                 {
@@ -536,21 +533,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             }
         }
 
-/* #i35937#
-        if (aAttrSet.GetItemState(EE_PARA_BULLETSTATE) == SFX_ITEM_ON)
-        {
-            SfxUInt16Item aBulletState((const SfxUInt16Item&) aAttrSet.Get(EE_PARA_BULLETSTATE));
-
-            if (aBulletState.GetValue() != 0)
-            {
-                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, sal_True));
-            }
-            else
-            {
-                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, sal_False));
-            }
-        }
-*/
         sal_uInt16 nLineSpace = (sal_uInt16) ( (const SvxLineSpacingItem&) aAttrSet.
                             Get( EE_PARA_SBL ) ).GetPropLineSpace();
         switch( nLineSpace )
@@ -589,3 +571,5 @@ void TextObjectBar::Command( const CommandEvent& )
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

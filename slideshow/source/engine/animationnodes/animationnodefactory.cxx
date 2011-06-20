@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -370,8 +371,7 @@ bool implCreateIteratedNodes(
         {
             // will not animate the whole paragraph, when
             // only the paragraph is animated at all.
-            OSL_ENSURE( false,
-                        "implCreateIteratedNodes(): Ignoring paragraph iteration for paragraph master" );
+            OSL_FAIL( "implCreateIteratedNodes(): Ignoring paragraph iteration for paragraph master" );
         }
         else
         {
@@ -474,7 +474,7 @@ BaseNodeSharedPtr implCreateAnimationNode(
     switch( xNode->getType() )
     {
     case animations::AnimationNodeType::CUSTOM:
-        OSL_ENSURE( false, "implCreateAnimationNode(): "
+        OSL_FAIL( "implCreateAnimationNode(): "
                     "CUSTOM not yet implemented" );
         return pCreatedNode;
 
@@ -537,7 +537,7 @@ BaseNodeSharedPtr implCreateAnimationNode(
         break;
 
     default:
-        OSL_ENSURE( false, "implCreateAnimationNode(): "
+        OSL_FAIL( "implCreateAnimationNode(): "
                     "invalid AnimationNodeType" );
         return pCreatedNode;
     }
@@ -578,7 +578,7 @@ BaseNodeSharedPtr implCreateAnimationNode(
             NodeCreator aCreator( pCreatedContainer, rContext );
             if( !::anim::for_each_childNode( xNode, aCreator ) )
             {
-                OSL_ENSURE( false, "implCreateAnimationNode(): "
+                OSL_FAIL( "implCreateAnimationNode(): "
                             "child node creation failed" );
                 return BaseNodeSharedPtr();
             }
@@ -618,3 +618,4 @@ void AnimationNodeFactory::showTree( AnimationNodeSharedPtr& pRootNode )
 } // namespace internal
 } // namespace slideshow
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

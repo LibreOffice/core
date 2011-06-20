@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -375,7 +376,7 @@ UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation( Annotation& rAnnotat
         Reference< XAnnotation > xAnnotation( &rAnnotation );
 
         const AnnotationVector& rVec = pPage->getAnnotations();
-        for( AnnotationVector::const_iterator iter = rVec.begin(); iter != rVec.end(); iter++ )
+        for( AnnotationVector::const_iterator iter = rVec.begin(); iter != rVec.end(); ++iter )
         {
             if( (*iter) == xAnnotation )
                 break;
@@ -443,3 +444,4 @@ void UndoAnnotation::Redo()
 
 } // namespace sd
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

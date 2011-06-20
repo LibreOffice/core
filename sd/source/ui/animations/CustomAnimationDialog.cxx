@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,13 +43,9 @@
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/pathoptions.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
@@ -65,9 +62,7 @@
 #include <svtools/ctrltool.hxx>
 #include <sfx2/objsh.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/dialmgr.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
@@ -75,19 +70,13 @@
 #include <svx/xtable.hxx>
 #include <svx/gallery.hxx>
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include "sdresid.hxx"
 
 #include "glob.hrc"
 #include "CustomAnimationDialog.hxx"
-#ifndef _SD_CUSTOMANIMATIONDIALOG_HRC
 #include "CustomAnimationDialog.hrc"
-#endif
-#ifndef _SD_CUSTOMANIMATION_HRC
 #include "CustomAnimation.hrc"
-#endif
 #include "STLPropertySet.hxx"
 
 #include <avmedia/mediawindow.hxx>
@@ -1156,7 +1145,7 @@ private:
     void onSoundPreview();
 
 private:
-    List maSoundList;
+    ::std::vector< String > maSoundList;
     sal_Bool mbHasText;
     const STLPropertySet* mpSet;
 
@@ -1216,18 +1205,6 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     mpCBSmoothStart = new CheckBox( this, SdResId( CB_SMOOTH_START ) );
     mpCBSmoothEnd = new CheckBox( this, SdResId( CB_SMOOTH_END ) );
     mpCBAutoRestart = new CheckBox( this, SdResId( CB_AUTORESTART ) );
-/*
-    mpFLPlay = new FixedLine( this, SdResId( FL_PLAY ) );
-    mpRBFromStart = new RadioButton( this, SdResId( RB_FROM_START ) );
-    mpRBFromLast = new RadioButton( this, SdResId( RB_FROM_LAST ) );
-    mpRBFromTime = new RadioButton( this, SdResId( RB_FROM_TIME ) );
-    mpMFStartTime = new MetricField( this, SdResId( MF_START_TIME ) );
-    mpFLStop = new FixedLine( this, SdResId( FL_STOP ) );
-    mpRBStopOnClick = new RadioButton( this, SdResId( RB_STOP_ON_CLICK ) );
-    mpRBStopOnNextSlide = new RadioButton( this, SdResId( RB_STOP_ON_NEXT_SLIDE ) );
-    mpRBStopAfterSlides = new RadioButton( this, SdResId( RB_STOP_AFTER_N_SLIDES ) );
-    mpMFStopAfterSlides = new MetricField( this, SdResId( MF_STOP_AFTER_SLIDES ) );
-*/
     mpFLEnhancements = new FixedLine( this, SdResId( FL_ENHANCEMENTS ) );
     mpFTSound = new FixedText( this, SdResId( FT_SOUND ) );
     mpLBSound = new ListBox( this, SdResId( LB_SOUND ) );
@@ -1489,10 +1466,10 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
                 const String aTmp( aSoundURL );
 
                 sal_uLong i;
-                for( i = 0; i < maSoundList.Count(); i++ )
+                for( i = 0; i < maSoundList.size(); i++ )
                 {
-                    String* pString = (String*)maSoundList.GetObject( i );
-                    if( *pString == aTmp )
+                    String aString = maSoundList[ i ];
+                    if( aString == aTmp )
                     {
                         nPos = (sal_uInt16)i+2;
                         break;
@@ -1501,8 +1478,8 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
                 if( nPos == 0 )
                 {
-                    nPos = (sal_uInt16)maSoundList.Count()+2;
-                    maSoundList.Insert( new String( aTmp ), LIST_APPEND );
+                    nPos = (sal_uInt16)maSoundList.size()+2;
+                    maSoundList.push_back( String( aTmp ) );
                     INetURLObject aURL( aTmp );
                     nPos = mpLBSound->InsertEntry( aURL.GetBase(), nPos );
                 }
@@ -1740,7 +1717,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         }
         else
         {
-            OUString aSoundURL( *(String*)maSoundList.GetObject( nPos-2 ) );
+            OUString aSoundURL( maSoundList[ nPos-2 ] );
             aNewSoundURL = makeAny( aSoundURL );
         }
 
@@ -1759,10 +1736,10 @@ void CustomAnimationEffectTabPage::fillSoundListBox()
 
     mpLBSound->InsertEntry( String( SdResId( STR_CUSTOMANIMATION_NO_SOUND ) ) );
     mpLBSound->InsertEntry( String( SdResId( STR_CUSTOMANIMATION_STOP_PREVIOUS_SOUND ) ) );
-    for( sal_uLong i = 0; i < maSoundList.Count(); i++ )
+    for( size_t i = 0; i < maSoundList.size(); i++ )
     {
-        String* pString = (String*)maSoundList.GetObject( i );
-        INetURLObject aURL( *pString );
+        String aString = maSoundList[ i ];
+        INetURLObject aURL( aString );
         mpLBSound->InsertEntry( aURL.GetBase() );
     }
     mpLBSound->InsertEntry( String( SdResId( STR_CUSTOMANIMATION_BROWSE_SOUND ) ) );
@@ -1770,12 +1747,7 @@ void CustomAnimationEffectTabPage::fillSoundListBox()
 
 void CustomAnimationEffectTabPage::clearSoundListBox()
 {
-    const sal_uInt32 nCount = maSoundList.Count();
-    sal_uInt32 i;
-    for( i = 0; i < nCount; i++ )
-        delete (String*)maSoundList.GetObject( i );
-    maSoundList.Clear();
-
+    maSoundList.clear();
     mpLBSound->Clear();
 }
 
@@ -1784,11 +1756,11 @@ sal_Int32 CustomAnimationEffectTabPage::getSoundObject( const String& rStr )
     String aStrIn( rStr );
     aStrIn.ToLowerAscii();
 
-    sal_uInt32 i;
-    const sal_uInt32 nCount = maSoundList.Count();
+    size_t i;
+    const size_t nCount = maSoundList.size();
     for( i = 0; i < nCount; i++ )
     {
-        String aTmpStr( *(String*)maSoundList.GetObject( i ) );
+        String aTmpStr( maSoundList[ i ] );
         aTmpStr.ToLowerAscii();
 
         if( aTmpStr == aStrIn )
@@ -1859,14 +1831,14 @@ void CustomAnimationEffectTabPage::onSoundPreview()
 
     if( nPos >= 2 ) try
     {
-        const OUString aSoundURL( *(String*)maSoundList.GetObject( nPos-2 ) );
-                mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL ), uno::UNO_QUERY_THROW );
+        const OUString aSoundURL( maSoundList[ nPos-2 ] );
+        mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL ), uno::UNO_QUERY_THROW );
         mxPlayer->start();
     }
     catch( uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR("CustomAnimationEffectTabPage::onSoundPreview(), exception caught!" );
+        OSL_FAIL("CustomAnimationEffectTabPage::onSoundPreview(), exception caught!" );
     }
 }
 
@@ -2067,7 +2039,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
             String aDescription( getShapeDescription( xShape, true ) );
             sal_uInt16 nPos = mpLBTrigger->InsertEntry( aDescription );
 
-            mpLBTrigger->SetEntryData( nPos, (void*)nShape );
+            mpLBTrigger->SetEntryData( nPos, (void*)(sal_IntPtr)nShape );
             if( xShape == xTrigger )
                 mpLBTrigger->SelectEntryPos( nPos );
         }
@@ -2636,3 +2608,5 @@ PropertySubControl* PropertySubControl::create( sal_Int32 nType, Window* pParent
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

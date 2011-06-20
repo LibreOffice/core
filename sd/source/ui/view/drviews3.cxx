@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,13 +38,10 @@
 #include <editeng/protitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/ruler.hxx>
-#ifndef _SVX_RULERITEM_HXX
+#include <editeng/numitem.hxx>
 #include <svx/rulritem.hxx>
-#endif
 #include <svx/zoomitem.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdpagv.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -154,8 +152,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
     {
         case SID_SWITCHPAGE:  // BASIC
         {
-            sal_Bool bWasBasic = sal_False;
-
             // switch page in running slide show
             if(SlideShow::IsRunning(GetViewShellBase()) && rReq.GetArgs())
             {
@@ -195,7 +191,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
                         nSelectedPage = (short) nWhatPage;
                         mePageKind    = (PageKind) nWhatKind;
-                        bWasBasic     = sal_True;
                     }
                 }
                 else
@@ -373,7 +368,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
         case SID_RELOAD:
         {
-            // #83951#
             sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
             SfxViewFrame* pFrame = GetViewFrame();
 
@@ -675,7 +669,6 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 aEditAttr.Put( rItem );
                 mpDrawView->SetAttributes( aEditAttr );
 
-                // #91081# Invalidate is missing here
                 Invalidate(SID_ATTR_TABSTOP);
             }
             break;
@@ -689,16 +682,75 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&)
                             pArgs->Get( nId );
 
-                SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+                static const sal_uInt16 aWhichTable[]=
+                {
+                    EE_PARA_OUTLLEVEL, EE_PARA_OUTLLEVEL,
+                    EE_PARA_LRSPACE, EE_PARA_LRSPACE,
+                    EE_PARA_NUMBULLET, EE_PARA_NUMBULLET,
+                    0, 0
+                };
+
+                SfxItemSet aEditAttr( GetDoc()->GetPool(),
+                                      aWhichTable );
+                mpDrawView->GetAttributes( aEditAttr );
 
                 nId = EE_PARA_LRSPACE;
                 SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
                         rItem.GetRight(), rItem.GetTxtLeft(),
                         rItem.GetTxtFirstLineOfst(), nId );
-                aEditAttr.Put( aLRSpaceItem );
-                mpDrawView->SetAttributes( aEditAttr );
 
-                // #92557# Invalidate is missing here
+                const sal_Int16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
+                const SvxLRSpaceItem& rOrigLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE );
+                const SvxNumBulletItem& rNumBulletItem = (const SvxNumBulletItem&) aEditAttr.Get( EE_PARA_NUMBULLET );
+                if( nOutlineLevel != -1 &&
+                    rNumBulletItem.GetNumRule() &&
+                    rNumBulletItem.GetNumRule()->GetLevelCount() > nOutlineLevel )
+                {
+                    const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule()->GetLevel(nOutlineLevel);
+                    SvxNumberFormat aFormat(rFormat);
+
+                    // left margin always controls LRSpace item
+                    aLRSpaceItem.SetTxtLeft(rItem.GetTxtLeft() - aFormat.GetAbsLSpace());
+
+                    // negative first line indent goes to the number
+                    // format, positive to the lrSpace item
+                    if( rItem.GetTxtFirstLineOfst() < 0 )
+                    {
+                        aFormat.SetFirstLineOffset(
+                            rItem.GetTxtFirstLineOfst()
+                            - rOrigLRSpaceItem.GetTxtFirstLineOfst()
+                            + aFormat.GetCharTextDistance());
+                        aLRSpaceItem.SetTxtFirstLineOfst(0);
+                    }
+                    else
+                    {
+                        aFormat.SetFirstLineOffset(0);
+                        aLRSpaceItem.SetTxtFirstLineOfst(
+                            rItem.GetTxtFirstLineOfst()
+                            - aFormat.GetFirstLineOffset()
+                            + aFormat.GetCharTextDistance());
+                    }
+
+                    if( rFormat != aFormat )
+                    {
+                        // put all items
+                        SvxNumBulletItem aNumBulletItem(rNumBulletItem);
+                        aNumBulletItem.GetNumRule()->SetLevel(nOutlineLevel,aFormat);
+                        aEditAttr.Put( aNumBulletItem );
+                        aEditAttr.Put( aLRSpaceItem );
+                        mpDrawView->SetAttributes( aEditAttr );
+
+                        Invalidate(SID_ATTR_PARA_LRSPACE);
+                        break;
+                    }
+                }
+
+                // only put lrSpace item
+                SfxItemSet aEditAttrReduced( GetDoc()->GetPool(),
+                                             EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+                aEditAttrReduced.Put( aLRSpaceItem );
+                mpDrawView->SetAttributes( aEditAttrReduced );
+
                 Invalidate(SID_ATTR_PARA_LRSPACE);
             }
             break;
@@ -735,7 +787,6 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     if( mpDrawView->IsTextEdit() )
     {
         Point aPnt1 = GetActiveWindow()->GetWinViewPos();
-        Point aPnt2 = GetActiveWindow()->GetViewOrigin();
         Rectangle aMinMaxRect = Rectangle( aPnt1, Size(ULONG_MAX, ULONG_MAX) );
         rSet.Put( SfxRectangleItem(SID_RULER_LR_MIN_MAX, aMinMaxRect) );
     }
@@ -775,13 +826,25 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     const SvxTabStopItem& rItem = (const SvxTabStopItem&) aEditAttr.Get( EE_PARA_TABS );
                     rSet.Put( rItem );
 
-                    //Rectangle aRect = maMarkRect;
-
                     const SvxLRSpaceItem& rLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE );
                     sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
                     SvxLRSpaceItem aLRSpaceItem( rLRSpaceItem.GetLeft(),
                             rLRSpaceItem.GetRight(), rLRSpaceItem.GetTxtLeft(),
                             rLRSpaceItem.GetTxtFirstLineOfst(), nId );
+
+                    const sal_Int16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
+                    const SvxNumBulletItem& rNumBulletItem = (const SvxNumBulletItem&) aEditAttr.Get( EE_PARA_NUMBULLET );
+                    if( nOutlineLevel != -1 &&
+                        rNumBulletItem.GetNumRule() &&
+                        rNumBulletItem.GetNumRule()->GetLevelCount() > nOutlineLevel )
+                    {
+                        const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule()->GetLevel(nOutlineLevel);
+                        aLRSpaceItem.SetTxtLeft(rFormat.GetAbsLSpace() + rLRSpaceItem.GetTxtLeft());
+                        aLRSpaceItem.SetTxtFirstLineOfst(
+                            rLRSpaceItem.GetTxtFirstLineOfst() + rFormat.GetFirstLineOffset()
+                            - rFormat.GetCharTextDistance());
+                    }
+
                     rSet.Put( aLRSpaceItem );
 
                     Point aPos( aPagePos + maMarkRect.TopLeft() );
@@ -849,7 +912,6 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     {
         rSet.DisableItem( SID_RULER_OBJECT );
         rSet.DisableItem( EE_PARA_TABS );
-//      rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
     }
 
     rSet.Put( aLRSpace );
@@ -924,23 +986,10 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
     }
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void DrawViewShell::AddWindow (::sd::Window* pWin)
 {
     mpDrawView->AddWindowToPaintView(pWin);
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void DrawViewShell::RemoveWindow(::sd::Window* pWin)
 {
@@ -948,3 +997,5 @@ void DrawViewShell::RemoveWindow(::sd::Window* pWin)
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

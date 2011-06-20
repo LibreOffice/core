@@ -37,7 +37,6 @@ ModalDialog DLG_START_PRESENTATION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 256, 205 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Bildschirmpräsentation : Bildschirmprõsentation */
     Text [ en-US ] = "Slide Show" ;
     Moveable = TRUE ;
 
@@ -242,7 +241,6 @@ ModalDialog DLG_START_PRESENTATION
         HelpID = "sd:CheckBox:DLG_START_PRESENTATION:CBX_ALWAYS_ON_TOP";
         Pos = MAP_APPFONT ( 108, 156 ) ;
         Size = MAP_APPFONT ( 145, 12 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Präsentation immer im ~Vordergrund : Prõsentation immer im ~Vordergrund */
         TabStop = TRUE ;
         Text [ en-US ] = "Presentation always ~on top" ;
     };

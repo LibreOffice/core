@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,21 +29,11 @@
 #ifndef INC_DLGASS
 #define INC_DLGASS
 
-#ifndef _GROUP_HXX
 #include <vcl/group.hxx>
-#endif
-#ifndef _EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
 #include <svtools/svmedit.hxx>
 #include "assclass.hxx"
 #include <vcl/lstbox.hxx>
@@ -75,3 +66,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

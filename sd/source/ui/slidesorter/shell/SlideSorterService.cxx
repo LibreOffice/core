@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/proptypehlp.hxx>
 
@@ -79,7 +80,7 @@ Reference<XInterface> SAL_CALL SlideSorterService_createInstance (
 
 ::rtl::OUString SlideSorterService_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString::createFromAscii("com.sun.star.comp.Draw.SlideSorter");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.SlideSorter"));
 }
 
 
@@ -89,7 +90,7 @@ Sequence<rtl::OUString> SAL_CALL SlideSorterService_getSupportedServiceNames (vo
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.SlideSorter"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SlideSorter")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -175,7 +176,7 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
     else
     {
         throw RuntimeException(
-            OUString::createFromAscii("SlideSorterService: invalid number of arguments"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideSorterService: invalid number of arguments")),
             static_cast<drawing::XDrawView*>(this));
     }
 }
@@ -642,3 +643,4 @@ void SlideSorterService::ThrowIfDisposed (void)
 
 } } // end of namespace ::sd::presenter
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

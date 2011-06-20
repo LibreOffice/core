@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,7 +112,7 @@ namespace slideshow
             }
             catch (uno::Exception &)
             {
-                OSL_ENSURE( false, rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -224,7 +225,7 @@ namespace slideshow
             if( xPropSet.is() &&
                 getPropertyValue( xParentWindow,
                                   xPropSet,
-                                  ::rtl::OUString::createFromAscii( "Window" )) )
+                                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window" ))) )
             {
                 const awt::Rectangle aRect( xParentWindow->getPosSize() );
 
@@ -304,7 +305,8 @@ namespace slideshow
                             aDeviceParams[ 0 ] >>= aImplName;
 
                             if( aImplName.endsWithIgnoreAsciiCaseAsciiL(
-                                    RTL_CONSTASCII_STRINGPARAM("VCL") ))
+                                    RTL_CONSTASCII_STRINGPARAM("VCL") ) || aImplName.endsWithIgnoreAsciiCaseAsciiL(
+                                    RTL_CONSTASCII_STRINGPARAM("Cairo") ) )
                             {
                                 implInitializeVCLBasedPlayerWindow( rBounds, aDeviceParams );
                             }
@@ -326,8 +328,7 @@ namespace slideshow
                     }
                     catch( uno::Exception& )
                     {
-                        OSL_ENSURE( false,
-                                    rtl::OUStringToOString(
+                        OSL_FAIL( rtl::OUStringToOString(
                                         comphelper::anyToString( cppu::getCaughtException() ),
                                         RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
@@ -410,6 +411,7 @@ namespace slideshow
         bool ViewMediaShape::implInitializeVCLBasedPlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams)
         {
+                    OSL_TRACE( "ViewMediaShape::implInitializeVCLBasedPlayerWindow" );
             if( !mpMediaWindow.get() && !rBounds.isEmpty() )
             {
                 try
@@ -439,9 +441,15 @@ namespace slideshow
 
                             mpMediaWindow = ::std::auto_ptr< SystemChildWindow >( new
                                                 SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
+                            mpMediaWindow = ::std::auto_ptr< SystemChildWindow >( new SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
                             mpMediaWindow->SetBackground( Color( COL_BLACK ) );
                             mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
+                            mpMediaWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+                            mpMediaWindow->EnableEraseBackground( sal_False );
+                            mpMediaWindow->EnablePaint( sal_False );
+                            mpMediaWindow->SetForwardKey( sal_True );
+                            mpMediaWindow->SetMouseTransparent( sal_True );
                             mpMediaWindow->Show();
 
                             if( mxPlayer.is() )
@@ -471,8 +479,7 @@ namespace slideshow
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ENSURE( false,
-                                rtl::OUStringToOString(
+                    OSL_FAIL( rtl::OUStringToOString(
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
@@ -530,8 +537,7 @@ namespace slideshow
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ENSURE( false,
-                                rtl::OUStringToOString(
+                    OSL_FAIL( rtl::OUStringToOString(
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
@@ -541,3 +547,5 @@ namespace slideshow
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

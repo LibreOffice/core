@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -244,7 +245,7 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
     }
 
     sal_uInt16 nResult = pDlg->Execute();
-    // #96072# OJ: Inserted update to force repaint
+    // Inserted update to force repaint
     Update();
 
     String aFile;
@@ -270,9 +271,6 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
             bCancel = sal_True;
     }
     delete pDlg;
-
-//    if (!bCancel)
-//        EndDialog(RET_OK);
 
     if( !bCancel )
     {
@@ -308,12 +306,6 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
                 {
                     ::sd::DrawDocShell*  pTemplDocSh= pTemplDoc->GetDocSh();
 
-/*                  SdPage* pMaster = pTemplDoc->GetMasterSdPage( 0, PK_STANDARD );
-                    mpLayoutNames->Insert( new String( maName ), LIST_APPEND );
-
-                    Bitmap aBitmap( pTemplDocSh->GetPagePreviewBitmap( pMaster, 90 ) );
-                    maVS.InsertItem( (sal_uInt16) mpLayoutNames->Count(), aBitmap, maName);
-*/
                     sal_uInt16 nCount = pTemplDoc->GetMasterPageCount();
 
                     for (sal_uInt16 nLayout = 0; nLayout < nCount; nLayout++)
@@ -355,3 +347,5 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
 
     return( 0 );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

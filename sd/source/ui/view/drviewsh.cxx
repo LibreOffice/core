@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <svl/aeitem.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/request.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 
 #include <svx/fmshell.hxx>
@@ -86,7 +85,7 @@ sal_Bool DrawViewShell::GotoBookmark(const String& rBookmark)
 
 void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 {
-    // #98568# In older versions, if in X or Y the size of the object was
+    // In older versions, if in X or Y the size of the object was
     // smaller than the visible area, the user-defined zoom was
     // changed. This was decided to be a bug for 6.x, thus I developed a
     // version which instead handles X/Y bigger/smaller and visibility
@@ -118,7 +117,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
         }
         else
         {
-            // #98568# allow a mode for move-only visibility without zooming.
+            // allow a mode for move-only visibility without zooming.
             const sal_Int32 nPercentBorder(30);
             const Rectangle aInnerRectangle(
                 aVisArea.Left() + ((aVisAreaSize.Width() * nPercentBorder) / 200),
@@ -191,3 +190,5 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <svx/unoshape.hxx>
 #include <svx/svdpool.hxx>
@@ -36,14 +37,12 @@
 #include <editeng/unotext.hxx>
 
 #include <comphelper/extract.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 
 #include "unohelp.hxx"
 #include "unoprnms.hxx"
 #include "unosrch.hxx"
 
-using namespace ::vos;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -493,7 +492,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
     sal_Int32* pConvertPara = new sal_Int32[nTextLen+2];
 
     int ndbg = 0;
-    const sal_Unicode* pText = aText;
+    const sal_Unicode* pText = aText.getStr();
 
     sal_Int32* pPos = pConvertPos;
     sal_Int32* pPara = pConvertPara;
@@ -547,7 +546,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                                     }
                                     else
                                     {
-                                        DBG_ERROR( "array overflow while searching" );
+                                        OSL_FAIL( "array overflow while searching" );
                                     }
                                 }
 
@@ -568,7 +567,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                                     }
                                     else
                                     {
-                                        DBG_ERROR( "array overflow while searching" );
+                                        OSL_FAIL( "array overflow while searching" );
                                     }
                                 }
 
@@ -591,7 +590,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
             }
             else
             {
-                DBG_ERROR( "array overflow while searching" );
+                OSL_FAIL( "array overflow while searching" );
             }
         }
     }
@@ -627,12 +626,11 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                 xFound = (text::XText*)pRange;
                 pRange->SetSelection(aSelection);
 
-//              pDescr->SetStartPos( nEndPos );
             }
         }
         else
         {
-            DBG_ERROR("Array overflow while searching!");
+            OSL_FAIL("Array overflow while searching!");
         }
     }
 
@@ -767,14 +765,14 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setReplaceString( const ::rtl::OUStr
 uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SdUnoSearchReplaceDescriptor::getPropertySetInfo()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return mpPropSet->getPropertySetInfo();
 }
 
 void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
@@ -802,7 +800,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const ::rtl::OUStr
 uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const ::rtl::OUString& PropertyName )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Any aAny;
 
@@ -877,3 +875,4 @@ uno::Any SAL_CALL SdUnoFindAllAccess::getByIndex( sal_Int32 Index )
     return aAny;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

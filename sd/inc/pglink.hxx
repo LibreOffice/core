@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,6 @@
 #ifndef _PGLINK_HXX
 #define _PGLINK_HXX
 
-#ifndef SVX_LIGHT
-
 #include <sfx2/lnkbase.hxx>
 
 class SdPage;
@@ -45,19 +44,14 @@ public:
     virtual ~SdPageLink();
 
     virtual void Closed();
-    virtual void DataChanged( const String& ,
-                              const ::com::sun::star::uno::Any & );
-    FASTBOOL     Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
+    bool         Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
-
-#else
-
-class SdPageLink;
-
-#endif
 
 #endif     // _PGLINK_HXX
 
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

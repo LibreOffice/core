@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,21 +30,11 @@
 #define _SD_TPOPTION_HXX
 
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/optgrid.hxx>
@@ -63,8 +54,6 @@ public:
     virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
-//    virtual void ActivatePage( const SfxItemSet& rSet );
-//    virtual int  DeactivatePage( SfxItemSet* pSet );
 };
 /*************************************************************************
 |*
@@ -199,3 +188,4 @@ public:
 
 #endif // _SD_TPOPTION_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ TYPEINIT1(LeftImpressPaneShell, SfxShell);
 LeftImpressPaneShell::LeftImpressPaneShell (void)
     : SfxShell()
 {
-    SetName(rtl::OUString::createFromAscii("LeftImpressPane"));
+    SetName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LeftImpressPane")));
 }
 
 
@@ -96,7 +97,7 @@ TYPEINIT1(LeftDrawPaneShell, SfxShell);
 LeftDrawPaneShell::LeftDrawPaneShell (void)
     : SfxShell()
 {
-    SetName(rtl::OUString::createFromAscii("LeftDrawPane"));
+    SetName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LeftDrawPane")));
 }
 
 
@@ -129,7 +130,7 @@ TYPEINIT1( ToolPanelPaneShell, SfxShell );
 ToolPanelPaneShell::ToolPanelPaneShell()
     :SfxShell()
 {
-    SetName( ::rtl::OUString::createFromAscii( "ToolPanel" ) );
+    SetName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ToolPanel" )) );
 }
 
 ToolPanelPaneShell::~ToolPanelPaneShell(void)
@@ -137,3 +138,5 @@ ToolPanelPaneShell::~ToolPanelPaneShell(void)
 }
 
 } // end of namespace ::sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -100,9 +101,6 @@ sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 {
     SvxGridTabPage::FillItemSet(rAttrs);
     SdOptionsSnapItem* pOptsItem = NULL;
-//    if(SFX_ITEM_SET != rAttrs.GetItemState( ATTR_OPTIONS_SNAP, sal_False, (const SfxPoolItem**)&pOptsItem ))
-//        pExampleSet->GetItemState( ATTR_OPTIONS_SNAP, sal_False, (const SfxPoolItem**)&pOptsItem );
-
     SdOptionsSnapItem aOptsItem( ATTR_OPTIONS_SNAP );
 
     aOptsItem.GetOptionsSnap().SetSnapHelplines( aCbxSnapHelplines.IsChecked() );
@@ -187,7 +185,6 @@ sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
     if( aCbxRuler.GetSavedValue()           != aCbxRuler.IsChecked() ||
         aCbxMoveOutline.GetSavedValue()     != aCbxMoveOutline.IsChecked() ||
         aCbxDragStripes.GetSavedValue()     != aCbxDragStripes.IsChecked() ||
-        //aCbxHelplines.GetSavedValue()     != aCbxHelplines.IsChecked() ||
         aCbxHandlesBezier.GetSavedValue()   != aCbxHandlesBezier.IsChecked() )
     {
         SdOptionsLayoutItem aOptsItem( ATTR_OPTIONS_LAYOUT );
@@ -196,7 +193,6 @@ sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.GetOptionsLayout().SetMoveOutline( aCbxMoveOutline.IsChecked() );
         aOptsItem.GetOptionsLayout().SetDragStripes( aCbxDragStripes.IsChecked() );
         aOptsItem.GetOptionsLayout().SetHandlesBezier( aCbxHandlesBezier.IsChecked() );
-        //aOptsItem.GetOptionsLayout().SetHelplines( aCbxHelplines.IsChecked() );
 
         rAttrs.Put( aOptsItem );
         bModified = sal_True;
@@ -218,13 +214,11 @@ void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
     aCbxMoveOutline.Check( aLayoutItem.GetOptionsLayout().IsMoveOutline() );
     aCbxDragStripes.Check( aLayoutItem.GetOptionsLayout().IsDragStripes() );
     aCbxHandlesBezier.Check( aLayoutItem.GetOptionsLayout().IsHandlesBezier() );
-    //aCbxHelplines.Check( aLayoutItem.GetOptionsLayout().IsHelplines() );
 
     aCbxRuler.SaveValue();
     aCbxMoveOutline.SaveValue();
     aCbxDragStripes.SaveValue();
     aCbxHandlesBezier.SaveValue();
-    //aCbxHelplines.SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -556,7 +550,6 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
 
     aCbScale.SetText( GetScale( nX, nY ) );
 
-    // #92067# broken feature disabled for 6.0
     aFtOriginal.Hide();
     aFtEquivalent.Hide();
     aMtrFldOriginalWidth.Hide();
@@ -731,7 +724,7 @@ IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, EMPTYARG )
         aFract = Fraction( aFract1.GetDenominator(), aFract1.GetNumerator() );
         nValue = aFract;
 
-        // #92067# Swap nominator and denominator
+        // Swap nominator and denominator
         aCbScale.SetText( GetScale( nValue, 1 ) );
     }
     else
@@ -741,7 +734,7 @@ IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, EMPTYARG )
         if( fValue > (double)nValue )
             nValue++;
 
-        // #92067# Swap nominator and denominator
+        // Swap nominator and denominator
         aCbScale.SetText( GetScale( 1, nValue ) );
     }
     return( 0L );
@@ -804,7 +797,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
                 break;
 
             Reference<frame::XDesktop> xDesktop (xFactory->createInstance (
-                ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), UNO_QUERY);
             if ( ! xDesktop.is())
                 break;
 
@@ -856,3 +849,4 @@ void SdTpOptionsMisc::PageCreated (SfxAllItemSet aSet)
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -81,7 +81,6 @@
     {\
         Identifier = SID_CONVERT_TO_3D_LATHE_FAST ; \
         HelpId = CMD_SID_CONVERT_TO_3D_LATHE_FAST ; \
-        /* ### ACHTUNG: Neuer Text in Resource? In 3~D-Rotationskörper : In 3~D-Rotationsk÷rper */\
         Text [ en-US ] = "To 3D ~Rotation Object" ; \
     };
 

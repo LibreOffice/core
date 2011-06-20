@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,6 +73,7 @@ Window::Window(::Window* pParent)
       maWinPos(0, 0),           // vorsichtshalber; die Werte sollten aber
       maViewOrigin(0, 0),       // vom Besitzer des Fensters neu gesetzt
       maViewSize(1000, 1000),   // werden
+      maPrevSize(-1,-1),
       mnMinZoom(MIN_ZOOM),
       mnMaxZoom(MAX_ZOOM),
       mbMinZoomAutoCalc(false),
@@ -471,6 +473,9 @@ long Window::SetZoomFactor(long nZoom)
     aMap.SetScaleY(Fraction(nZoom, 100));
     SetMapMode(aMap);
 
+    // invalidate previous size - it was relative to the old scaling
+    maPrevSize = Size(-1,-1);
+
     // Update the map mode's origin (to what effect?).
     UpdateMapOrigin();
 
@@ -667,11 +672,20 @@ void Window::SetMinZoomAutoCalc (bool bAuto)
 
 void Window::UpdateMapOrigin(sal_Bool bInvalidate)
 {
-    sal_Bool    bChanged = sal_False;
-    Size    aWinSize = PixelToLogic(GetOutputSizePixel());
+    sal_Bool       bChanged = sal_False;
+    const Size aWinSize = PixelToLogic(GetOutputSizePixel());
 
     if ( mbCenterAllowed )
     {
+        if( maPrevSize != Size(-1,-1) )
+        {
+            // keep view centered around current pos, when window
+            // resizes
+            maWinPos.X() -= (aWinSize.Width() - maPrevSize.Width()) / 2;
+            maWinPos.Y() -= (aWinSize.Height() - maPrevSize.Height()) / 2;
+            bChanged = sal_True;
+        }
+
         if ( maWinPos.X() > maViewSize.Width() - aWinSize.Width() )
         {
             maWinPos.X() = maViewSize.Width() - aWinSize.Width();
@@ -696,6 +710,8 @@ void Window::UpdateMapOrigin(sal_Bool bInvalidate)
 
     UpdateMapMode ();
 
+    maPrevSize = aWinSize;
+
     if (bChanged && bInvalidate)
         Invalidate();
 }
@@ -705,7 +721,6 @@ void Window::UpdateMapOrigin(sal_Bool bInvalidate)
 
 void Window::UpdateMapMode (void)
 {
-    Size aWinSize = PixelToLogic(GetOutputSizePixel());
     maWinPos -= maViewOrigin;
     Size aPix(maWinPos.X(), maWinPos.Y());
     aPix = LogicToPixel(aPix);
@@ -717,9 +732,6 @@ void Window::UpdateMapMode (void)
 
     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
-        Size aViewSizePixel = LogicToPixel(maViewSize);
-        Size aWinSizePixel = LogicToPixel(aWinSize);
-
         // Seite soll nicht am Fensterrand "kleben"
         if (aPix.Width() == 0)
         {
@@ -793,8 +805,6 @@ void Window::SetVisibleXY(double fX, double fY)
     if ( fY >= 0 )
         maWinPos.Y() = (long) (fY * maViewSize.Height());
     UpdateMapOrigin(sal_False);
-    //  Size sz(nOldX - aWinPos.X(), nOldY - aWinPos.Y());
-    //  sz = LogicToPixel(sz);
     Scroll(nOldX - maWinPos.X(), nOldY - maWinPos.Y(), SCROLL_CHILDREN);
     Update();
 }
@@ -967,12 +977,10 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                 {
                     SetDrawMode( nOutputMode );
                     mpViewShell->GetFrameView()->SetDrawMode( nOutputMode );
-// #110094#-7
-//                  mpViewShell->GetView()->ReleaseMasterPagePaintCache();
                     Invalidate();
                 }
 
-                // #103100# Overwrite window color for OutlineView
+                // Overwrite window color for OutlineView
                 if( mpViewShell->ISA(OutlineViewShell ) )
                 {
                     svtools::ColorConfig aColorConfig;
@@ -985,7 +993,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                 mpViewShell->Invalidate();
                 mpViewShell->ArrangeGUIElements();
 
-                // #101928# re-create handles to show new outfit
+                // re-create handles to show new outfit
                 if(mpViewShell->ISA(DrawViewShell))
                 {
                     mpViewShell->GetView()->AdjustMarkHdl();
@@ -1208,3 +1216,5 @@ Selection Window::GetSurroundingTextSelection() const
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

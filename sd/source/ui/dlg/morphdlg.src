@@ -41,7 +41,6 @@ ModalDialog DLG_MORPH
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 196 , 68 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Überblenden : šberblenden */
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton BTN_OK
@@ -94,7 +93,6 @@ ModalDialog DLG_MORPH
         HelpID = "sd:CheckBox:DLG_MORPH:CBX_ATTRIBUTES";
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 121 , 12 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Attributierung überblenden : Attributierung ³berblenden */
         TabStop = TRUE ;
         Text [ en-US ] = "Cross-fade attributes" ;
     };

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include <editeng/unoedhlp.hxx>
 #include <svx/svdoutl.hxx>
 
-#ifndef SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDIT_SOURCE_HXX
 #include <AccessibleOutlineEditSource.hxx>
-#endif
 #include "OutlineView.hxx"
 #include <svx/sdrpaintwindow.hxx>
 
@@ -223,3 +222,5 @@ namespace accessibility
     }
 
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

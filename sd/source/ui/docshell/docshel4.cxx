@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/waitobj.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/flstitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/aeitem.hxx>
@@ -43,27 +42,18 @@
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#ifndef _DISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
 #include <svx/svdotext.hxx>
 #include <svl/style.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
-#ifndef _SFX_ECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>
-#endif
 #include <sot/clsids.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/request.hxx>
-#ifdef TF_STARONE
-#include "unomodel.hxx"
-#endif
-
 #include <unotools/fltrcfg.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
-//#include <svx/svxmsbas.hxx>
 #include <unotools/saveopt.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -73,9 +63,7 @@
 #include "glob.hrc"
 #include "strings.hrc"
 #include "strmname.h"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "optsitem.hxx"
 #include "Outliner.hxx"
 #include "sdattr.hxx"
@@ -197,21 +185,11 @@ void DrawDocShell::UpdateFontList()
     PutItem( aFontListItem );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 Printer* DrawDocShell::GetDocumentPrinter()
 {
     return GetPrinter(sal_False);
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
 {
     // if we already have a printer, see if its the same
@@ -237,11 +215,6 @@ void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 void DrawDocShell::UpdateRefDevice()
 {
     if( mpDoc )
@@ -348,7 +321,7 @@ sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
     {
         UpdateTablePointers();
 
-        // #108451# If we're an embedded OLE object, use tight bounds
+        // If we're an embedded OLE object, use tight bounds
         // for our visArea. No point in showing the user lots of empty
         // space. Had to remove the check for empty VisArea below,
         // since XML load always sets a VisArea before.
@@ -404,31 +377,6 @@ sal_Bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 
     sal_Bool bRet = sal_False;
 
-        /*
-        // #90691# return to old behaviour (before #80365#): construct own medium
-        SfxMedium aMedium(xStorage);
-
-        // #90691# for having a progress bar nonetheless for XML copy it
-        // from the local DocShell medium (GetMedium()) to the constructed one
-        SfxMedium* pLocalMedium = GetMedium();
-        if(pLocalMedium)
-        {
-            SfxItemSet* pLocalItemSet = pLocalMedium->GetItemSet();
-            SfxItemSet* pDestItemSet = aMedium.GetItemSet();
-
-            if(pLocalItemSet && pDestItemSet)
-            {
-                const SfxUnoAnyItem* pItem = static_cast<
-                    const SfxUnoAnyItem*>(
-                        pLocalItemSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
-
-                if(pItem)
-                {
-                    pDestItemSet->Put(*pItem);
-                }
-            }
-        }                           */
-
         mpDoc->NewOrLoadCompleted( NEW_DOC );
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();
@@ -448,6 +396,37 @@ sal_Bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
     }
 
     delete pWait;
+
+    return bRet;
+}
+
+/*************************************************************************
+|*
+|* ImportFrom: load from 3rd party format
+|*
+\************************************************************************/
+
+sal_Bool DrawDocShell::ImportFrom( SfxMedium &rMedium, bool bInsert )
+{
+    const sal_Bool bRet=SfxObjectShell::ImportFrom(rMedium, bInsert);
+
+    SfxItemSet* pSet = rMedium.GetItemSet();
+    if( pSet )
+    {
+        if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
+            ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
+        {
+            mpDoc->SetStartWithPresentation( true );
+
+            // tell SFX to change viewshell when in preview mode
+            if( IsPreview() )
+            {
+                SfxItemSet *pMediumSet = GetMedium()->GetItemSet();
+                if( pMediumSet )
+                    pMediumSet->Put( SfxUInt16Item( SID_VIEW_ID, 1 ) );
+            }
+        }
+    }
 
     return bRet;
 }
@@ -484,7 +463,9 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         }
     }
 
-    if( aFilterName == pFilterPowerPoint97 || aFilterName == pFilterPowerPoint97Template)
+    if( aFilterName == pFilterPowerPoint97
+        || aFilterName == pFilterPowerPoint97Template
+        || aFilterName == pFilterPowerPoint97AutoPlay)
     {
         mpDoc->StopWorkStartupDelay();
         bRet = SdPPTFilter( rMedium, *this, sal_True ).Import();
@@ -561,7 +542,7 @@ sal_Bool DrawDocShell::Save()
 
     if( bRet )
     {
-        // #86834# Call UpdateDocInfoForSave() before export
+        // Call UpdateDocInfoForSave() before export
         UpdateDocInfoForSave();
 
         bRet = SdXMLFilter( *GetMedium(), *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( GetMedium()->GetStorage() ) ).Export();
@@ -589,7 +570,7 @@ sal_Bool DrawDocShell::SaveAs( SfxMedium& rMedium )
 
     if( bRet )
     {
-        // #86834# Call UpdateDocInfoForSave() before export
+        // Call UpdateDocInfoForSave() before export
         UpdateDocInfoForSave();
         bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
     }
@@ -872,7 +853,7 @@ sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
                 // Make the bookmarked page the current page.  This is done
                 // by using the API because this takes care of all the
                 // little things to be done.  Especially writing the view
-                // data to the frame view (see bug #107803#).
+                // data to the frame view.
                 sal_uInt16 nSdPgNum = (nPageNumber - 1) / 2;
                 Reference<drawing::XDrawView> xController (rBase.GetController(), UNO_QUERY);
                 if (xController.is())
@@ -1027,3 +1008,5 @@ void DrawDocShell::OpenBookmark( const String& rBookmarkURL )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

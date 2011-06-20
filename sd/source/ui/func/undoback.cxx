@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,6 @@ void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
     delete mpItemSet;
     mpItemSet = pNew;
 
-    // #110094#-15
     // tell the page that it's visualization has changed
     mrPage.ActionChanged();
 }
@@ -96,3 +96,5 @@ SdUndoAction* SdBackgroundObjUndoAction::Clone() const
 {
     return new SdBackgroundObjUndoAction(*mpDoc, mrPage, *mpItemSet);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

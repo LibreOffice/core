@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <sot/storinfo.hxx>
@@ -120,7 +121,6 @@ SdFilterDetect::~SdFilterDetect()
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
     sal_Int32 nPropertyCount = lDescriptor.getLength();
-    sal_Int32 nIndexOfFilterName = -1;
     sal_Int32 nIndexOfInputStream = -1;
     sal_Int32 nIndexOfContent = -1;
     sal_Int32 nIndexOfReadOnlyFlag = -1;
@@ -149,10 +149,6 @@ SdFilterDetect::~SdFilterDetect()
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aPreselectedFilterName = sTemp;
-
-            // if the preselected filter name is not correct, it must be erased after detection
-            // remember index of property to get access to it later
-            nIndexOfFilterName = nProperty;
         }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
             nIndexOfInputStream = nProperty;
@@ -174,7 +170,7 @@ SdFilterDetect::~SdFilterDetect()
     }
 
     // can't check the type for external filters, so set the "dont" flag accordingly
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
 
     SfxApplication* pApp = SFX_APP();
@@ -350,10 +346,12 @@ SdFilterDetect::~SdFilterDetect()
                                 String aFileName(aMedium.GetName());
                                 aFileName.ToUpperAscii();
 
-                                if( aFileName.SearchAscii( ".POT" ) == STRING_NOTFOUND )
-                                    pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97);
-                                else
+                                if( aFileName.SearchAscii( ".POT" ) != STRING_NOTFOUND )
                                     pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97Template );
+                                else if( aFileName.SearchAscii( ".PPS" ) != STRING_NOTFOUND )
+                                    pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97AutoPlay );
+                                else
+                                    pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97);
                             }
                         }
                         else
@@ -363,7 +361,6 @@ SdFilterDetect::~SdFilterDetect()
 
                             const String        aFileName( aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
                             GraphicDescriptor   aDesc( *pStm, &aFileName );
-                            GraphicFilter*      pGrfFilter = GraphicFilter::GetGraphicFilter();
                             if( !aDesc.Detect( sal_False ) )
                             {
                                 pFilter = 0;
@@ -387,7 +384,8 @@ SdFilterDetect::~SdFilterDetect()
                             else
                             {
                                 String aShortName( aDesc.GetImportFormatShortName( aDesc.GetFileFormat() ) );
-                                const String aName( pGrfFilter->GetImportFormatTypeName( pGrfFilter->GetImportFormatNumberForShortName( aShortName ) ) );
+                                GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
+                                const String aName( rGrfFilter.GetImportFormatTypeName( rGrfFilter.GetImportFormatNumberForShortName( aShortName ) ) );
 
                                 if ( pFilter && aShortName.EqualsIgnoreCaseAscii( "PCD" ) )    // there is a multiple pcd selection possible
                                 {
@@ -416,7 +414,7 @@ SdFilterDetect::~SdFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("InputStream");
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
         lDescriptor[nPropertyCount].Value <<= xStream;
         nPropertyCount++;
     }
@@ -425,7 +423,7 @@ SdFilterDetect::~SdFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("UCBContent");
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent"));
         lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
@@ -435,7 +433,7 @@ SdFilterDetect::~SdFilterDetect()
         if ( nIndexOfReadOnlyFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("ReadOnly");
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
             lDescriptor[nPropertyCount].Value <<= bReadOnly;
             nPropertyCount++;
         }
@@ -446,7 +444,7 @@ SdFilterDetect::~SdFilterDetect()
     if ( !bRepairPackage && bRepairAllowed )
     {
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("RepairPackage");
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage"));
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
 
@@ -460,7 +458,7 @@ SdFilterDetect::~SdFilterDetect()
         if ( nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
             lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
             nPropertyCount++;
         }
@@ -474,7 +472,7 @@ SdFilterDetect::~SdFilterDetect()
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("DocumentTitle");
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
             lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
             nPropertyCount++;
         }
@@ -522,16 +520,15 @@ UNOSEQUENCE< UNOOUSTRING > SAL_CALL SdFilterDetect::getSupportedServiceNames() t
 /* Helper for XServiceInfo */
 UNOSEQUENCE< UNOOUSTRING > SdFilterDetect::impl_getStaticSupportedServiceNames()
 {
-    UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.ExtendedTypeDetection"  );
+    seqServiceNames.getArray() [0] = UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 UNOOUSTRING SdFilterDetect::impl_getStaticImplementationName()
 {
-    return UNOOUSTRING::createFromAscii( "com.sun.star.comp.draw.FormatDetector" );
+    return UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.draw.FormatDetector" ));
 }
 
 /* Helper for registry */
@@ -540,3 +537,4 @@ UNOREFERENCE< UNOXINTERFACE > SAL_CALL SdFilterDetect::impl_createInstance( cons
     return UNOREFERENCE< UNOXINTERFACE >( *new SdFilterDetect( xServiceManager ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,21 +32,11 @@
 #include "framework/Pane.hxx"
 #include "PaneShells.hxx"
 
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XRESOURCEID_HPP_
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
 #include <tools/link.hxx>
 #include <memory>
 
@@ -130,3 +121,5 @@ private:
 } } // end of namespace sd::framework
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

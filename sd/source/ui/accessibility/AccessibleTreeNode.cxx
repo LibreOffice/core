@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -160,7 +161,7 @@ sal_Int32 SAL_CALL AccessibleTreeNode::getAccessibleChildCount (void)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
     return mrTreeNode.GetControlContainer().GetControlCount();
 }
 
@@ -172,7 +173,7 @@ Reference<XAccessible > SAL_CALL
     throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
 
     if (nIndex<0 || (sal_uInt32)nIndex>=mrTreeNode.GetControlContainer().GetControlCount())
         throw lang::IndexOutOfBoundsException();
@@ -193,7 +194,7 @@ Reference<XAccessible > SAL_CALL AccessibleTreeNode::getAccessibleParent (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
     return mxParent;
 }
 
@@ -205,7 +206,7 @@ sal_Int32 SAL_CALL AccessibleTreeNode::getAccessibleIndexInParent (void)
 {
     OSL_ASSERT(getAccessibleParent().is());
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
     sal_Int32 nIndexInParent(-1);
 
 
@@ -274,7 +275,7 @@ Reference<XAccessibleStateSet > SAL_CALL
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
     return mrStateSet.get();
 }
 
@@ -418,7 +419,7 @@ Reference<XAccessible> SAL_CALL
 {
     ThrowIfDisposed();
     Reference<XAccessible> xChildAtPoint;
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
 
     sal_Int32 nChildCount = getAccessibleChildCount();
     for (sal_Int32 nIndex=0; nIndex<nChildCount; ++nIndex)
@@ -502,7 +503,7 @@ awt::Point SAL_CALL AccessibleTreeNode::getLocationOnScreen()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     awt::Point aLocationOnScreen;
 
     ::Window* pWindow = mrTreeNode.GetWindow();
@@ -534,7 +535,7 @@ void SAL_CALL AccessibleTreeNode::grabFocus (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
 
     if (mrTreeNode.GetWindow() != NULL)
         mrTreeNode.GetWindow()->GrabFocus();
@@ -699,3 +700,5 @@ IMPL_LINK(AccessibleTreeNode, WindowEventListener, VclWindowEvent*, pEvent)
 }
 
 } // end of namespace ::accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,22 +33,16 @@
 #include "ViewShellImplementation.hxx"
 #include <vcl/waitobj.hxx>
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/dialogs.hrc>
-#ifndef _IMAPDLG_HXX
 #include <svx/imapdlg.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svxdlg.hxx>
-#ifndef _BINDING_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <svx/svdoole2.hxx>
 #include <svl/style.hxx>
@@ -60,7 +55,6 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "helpids.h"
-#include "misc.hxx"
 #include "Window.hxx"
 #include "imapinfo.hxx"
 #include "futempl.hxx"
@@ -208,7 +202,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_COMBINE:  // BASIC
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -245,7 +239,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_MERGE:
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -266,7 +260,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_SUBSTRACT:
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -287,7 +281,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_INTERSECT:
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -368,9 +362,9 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                     SdrGrafObj*  pGraf=PTR_CAST(SdrGrafObj,pObj);
                     SdrOle2Obj*  pOle2=PTR_CAST(SdrOle2Obj,pObj);
                     if (pGraf!=NULL && pGraf->HasGDIMetaFile())
-                        nCount += pGraf->GetGraphic().GetGDIMetaFile().GetActionCount();
+                        nCount += pGraf->GetGraphic().GetGDIMetaFile().GetActionSize();
                     if(pOle2!=NULL && pOle2->GetGraphic())
-                        nCount += pOle2->GetGraphic()->GetGDIMetaFile().GetActionCount();
+                        nCount += pOle2->GetGraphic()->GetGDIMetaFile().GetActionSize();
                 }
 
                 // anhand der erm. Summe entscheiden ob mit
@@ -925,7 +919,7 @@ sal_uInt16 DrawViewShell::GetArrayId( sal_uInt16 nSId )
         if( mpSlotArray[ i ] == nSId )
             return( i );
     }
-    DBG_ERROR( "Slot im Array nicht gefunden!" );
+    OSL_FAIL( "Slot im Array nicht gefunden!" );
     return( USHRT_MAX );
 }
 
@@ -963,13 +957,8 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
         // TargetListe kann von uns wieder geloescht werden
         if ( pTargetList )
         {
-            String* pEntry = pTargetList->First();
-            while( pEntry )
-            {
-                delete pEntry;
-                pEntry = pTargetList->Next();
-            }
-
+            for ( size_t i = 0, n = pTargetList->size(); i < n; ++i )
+                delete pTargetList->at( i );
             delete pTargetList;
         }
     }
@@ -988,3 +977,5 @@ IMPL_LINK( DrawViewShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

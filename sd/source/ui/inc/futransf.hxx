@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef SD_FU_TRANSFORM_HXX
 #define SD_FU_TRANSFORM_HXX
 
-#ifndef _SVX_RETENUM_HXX
 #include <svx/rectenum.hxx>
-#endif
 #include "fupoor.hxx"
 
 namespace sd {
@@ -57,3 +56,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

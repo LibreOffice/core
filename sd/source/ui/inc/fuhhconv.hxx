@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _SD_FUHHCONV_HXX
 #define _SD_FUHHCONV_HXX
 
-#ifndef _SD_FUPOOR_HXX
 #include "fupoor.hxx"
-#endif
 
 namespace sd {
 
@@ -73,3 +72,5 @@ private:
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

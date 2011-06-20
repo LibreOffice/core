@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@ void FadeEffectLB::Fill()
 
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
     TransitionPresetList::const_iterator aIter;
-    for( aIter = rPresetList.begin(); aIter != rPresetList.end(); aIter++ )
+    for( aIter = rPresetList.begin(); aIter != rPresetList.end(); ++aIter )
     {
         pPreset = (*aIter);
         const OUString aUIName( pPreset->getUIName() );
@@ -79,23 +80,6 @@ void FadeEffectLB::Fill()
     SelectEntryPos(0);
 }
 
-// -----------------------------------------------------------------------------
-
-/*
-void FadeEffectLB::SelectEffect( presentation::FadeEffect eFE )
-{
-    sal_Bool bFound = sal_False;
-
-    for( long i = 0, nCount = sizeof( aEffects ) / sizeof( FadeEffectPair ); ( i < nCount ) && !bFound; i++ )
-    {
-        if( aEffects[ i ].meFE == eFE )
-        {
-            SelectEntryPos( (sal_uInt16) i );
-            bFound = sal_True;
-        }
-    }
-}
-*/
 
 // -----------------------------------------------------------------------------
 
@@ -120,3 +104,5 @@ void FadeEffectLB::applySelected( SdPage* pSlide ) const
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

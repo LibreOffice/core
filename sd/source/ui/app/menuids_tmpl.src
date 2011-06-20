@@ -43,7 +43,6 @@
         Text [ en-US ] = "~Distribution..." ; \
     };
 
-/* ### ACHTUNG: Neuer Text in Resource! */
 #define MN_DRAWINGMODE \
     MenuItem\
     {\
@@ -76,11 +75,7 @@
     {\
         Identifier = SID_PRESENTATION ; \
         HelpId = CMD_SID_PRESENTATION ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmpräsentation... */\
-        /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmpräsentation... */\
-        /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmprõsentation */\
         Text [ en-US ] = "Slide Sho~w" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Bildschirmpräsentation starten : Bildschirmprõsentation starten */\
     };
 
 #define MN_CAPTUREPOINT \
@@ -88,8 +83,6 @@
     {\
         Identifier = SID_CAPTUREPOINT ; \
         HelpId = CMD_SID_CAPTUREPOINT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? F~angpunkt/-linie einfügen... : F~angpunkt/-linie einf³gen... */\
-        /* ### ACHTUNG: Neuer Text in Resource? Fangpunkt oder -linie einfügen : Fangpunkt oder -linie einf³gen */\
         Text [ en-US ] = "~Insert Snap Point/Line..." ; \
     };
 
@@ -98,7 +91,6 @@
     {\
         Identifier = SID_SET_SNAPITEM ; \
         HelpId = CMD_SID_SET_SNAPITEM ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Fangobjekt bearbeiten oder löschen : Fangobjekt bearbeiten oder l÷schen */\
         Text [ en-US ] = "~Edit..." ; \
     };
 
@@ -107,8 +99,6 @@
     {\
         Identifier = SID_DELETE_SNAPITEM ; \
         HelpId = CMD_SID_DELETE_SNAPITEM ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
-        /* ### ACHTUNG: Neuer Text in Resource? Fangobjekt löschen : Fangobjekt l÷schen */\
         Text [ en-US ] = "~Delete" ; \
     };
 
@@ -126,7 +116,6 @@
     {\
         Identifier = SID_PAGESETUP ; \
         HelpId = CMD_SID_PAGESETUP ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Seitengröße, Ausrichtung, Rahmen festlegen : Seitengr÷˜e, Ausrichtung, Rahmen festlegen */\
         Text [ en-US ] = "~Page Setup..." ; \
     };
 
@@ -306,6 +295,14 @@
         Text [ en-US ] = "~Text..." ; \
     };
 
+#define MN_OUTLINE_TEXT_AUTOFIT \
+    MenuItem\
+    {\
+        Identifier = SID_OUTLINE_TEXT_AUTOFIT ; \
+        HelpID = CMD_SID_OUTLINE_TEXT_AUTOFIT ; \
+        Text [ en-US ] = "~Autofit Text" ; \
+    };
+
 #define MN_CONNECTION \
     MenuItem\
     {\
@@ -319,7 +316,6 @@
     {\
         Identifier = SID_CONNECTION_NEW_ROUTING ; \
         HelpId = CMD_SID_CONNECTION_NEW_ROUTING ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Linienverlauf ~zurücksetzen : Linienverlauf ~zur³cksetzen */\
         Text [ en-US ] = "Reset ~Routing" ; \
     };
 
@@ -328,7 +324,6 @@
     {\
         Identifier = SID_MEASURE_DLG ; \
         HelpId = CMD_SID_MEASURE_DLG ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Bema~ßung... : Bema~˜ung... */\
         Text [ en-US ] = "Dimen~sions..." ; \
     };
 
@@ -421,7 +416,6 @@
         Identifier = SID_CHAR_DLG ; \
         HelpId = CMD_SID_CHAR_DLG ; \
         Text [ en-US ] = "C~haracter..." ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Zeichenattribute für den selektierten Bereich auswählen : Zeichenattribute f³r den selektierten Bereich auswõhlen */\
     };
 
 #define MN_CHAR_PARAGRAPH \
@@ -443,7 +437,6 @@
     {\
         Identifier = SID_ATTR_CHAR_FONTHEIGHT ; \
         HelpId = CMD_SID_ATTR_CHAR_FONTHEIGHT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Größe : ~Gr÷˜e */\
         Text [ en-US ] = "~Size" ; \
     };\
     MenuItem\
@@ -646,7 +639,6 @@
     {\
         Identifier = SID_OBJECT_CLOSE ; \
         HelpId = CMD_SID_OBJECT_CLOSE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Objekt schließen : ~Objekt schlie˜en */\
         Text [ en-US ] = "Close ~Object" ; \
     };
 
@@ -668,14 +660,12 @@
     {\
         Identifier = SID_BEZIER_INSERT ; \
         HelpId = CMD_SID_BEZIER_INSERT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Punkte ~einfügen : Punkte ~einf³gen */\
         Text [ en-US ] = "Insert ~Points" ; \
     };\
     MenuItem\
     {\
         Identifier = SID_BEZIER_DELETE ; \
         HelpId = CMD_SID_BEZIER_DELETE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Punkte l~öschen : Punkte l~÷schen */\
         Text [ en-US ] = "~Delete Points" ; \
     };\
     SEPARATOR\
@@ -683,7 +673,6 @@
     {\
         Identifier = SID_BEZIER_CLOSE ; \
         HelpId = CMD_SID_BEZIER_CLOSE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Objekt schließen : ~Objekt schlie˜en */\
         Text [ en-US ] = "Close ~Object" ; \
     };\
     MenuItem\
@@ -732,7 +721,6 @@
         Identifier = SID_GROUP ; \
         HelpId = CMD_SID_GROUP ; \
         Text [ en-US ] = "~Group" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Objekte gruppieren : Ausgewõhlte Objekte gruppieren */\
     };
 
 #define MN_UNGROUP \
@@ -749,7 +737,6 @@
         Identifier = SID_COMBINE ; \
         HelpId = CMD_SID_COMBINE ; \
         Text [ en-US ] = "Comb~ine" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Objekte kombinieren : Ausgewõhlte Objekte kombinieren */\
     };
 
 #define MN_DISMANTLE \
@@ -766,7 +753,6 @@
         Identifier = SID_ENTER_GROUP ; \
         HelpId = CMD_SID_ENTER_GROUP ; \
         Text [ en-US ] = "~Enter Group" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Objekte der Gruppierung können bearbeitet werden : Objekte der Gruppierung k÷nnen bearbeitet werden */\
     };
 
 #define MN_LEAVE_GROUP \
@@ -775,7 +761,6 @@
         Identifier = SID_LEAVE_GROUP ; \
         HelpId = CMD_SID_LEAVE_GROUP ; \
         Text [ en-US ] = "E~xit Group" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Objekte der Gruppierung können nicht mehr bearbeitet werden : Objekte der Gruppierung k÷nnen nicht mehr bearbeitet werden */\
     };
 
 #define MN_NAME_GROUP \
@@ -825,8 +810,6 @@
     {\
         Identifier = SID_PRESENTATIONOBJECT ; \
         HelpId = CMD_SID_PRESENTATIONOBJECT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Präsentationsobjekt... : ~Prõsentationsobjekt... */\
-        /* ### ACHTUNG: Neuer Text in Resource? Selektiertes Präsentationsobjekt bearbeiten : Selektiertes Prõsentationsobjekt bearbeiten */\
         Text [ en-US ] = "Presentation ~Object..." ; \
     };
 
@@ -836,9 +819,7 @@
     {\
         Identifier = SID_DELETE ; \
         HelpId = CMD_SID_DELETE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? L~öschen : L~÷schen */\
         Text [ en-US ] = "~Delete" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Alle selektierten Objekte löschen : Alle selektierten Objekte l÷schen */\
     };
 
 
@@ -904,7 +885,6 @@
     {\
         Identifier = SID_GLUE_INSERT_POINT ; \
         HelpId = CMD_SID_GLUE_INSERT_POINT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Punkt einfügen : ~Punkt einf³gen */\
         Text [ en-US ] = "Insert ~Point" ; \
     };
 
@@ -1007,7 +987,7 @@
     {\
         Identifier = SID_GRID_VISIBLE ; \
         HelpId = CMD_SID_GRID_VISIBLE ; \
-        Text [ en-US ] = "~Visible Grid" ; \
+        Text [ en-US ] = "~Display Grid" ; \
     };
 
 #define MN_GRID_USE\
@@ -1048,8 +1028,7 @@
     {\
         Identifier = SID_HELPLINES_VISIBLE ; \
         HelpId = CMD_SID_HELPLINES_VISIBLE ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Fanglinien sichtbar : ~Hilfslinien sichtbar */\
-        Text [ en-US ] = "~Snap Lines Visible" ; \
+        Text [ en-US ] = "~Display Snap Lines" ; \
     };
 
 #define MN_HELPLINES_USE\
@@ -1057,7 +1036,7 @@
     {\
         Identifier = SID_HELPLINES_USE ; \
         HelpId = CMD_SID_HELPLINES_USE ; \
-        Text [ en-US ] = "Snap to Snap Lines"; \
+        Text [ en-US ] = "~Snap to Snap Lines"; \
     };
 
 #define MN_HELPLINES_FRONT\
@@ -1065,8 +1044,7 @@
     {\
         Identifier = SID_HELPLINES_FRONT ; \
         HelpId = CMD_SID_HELPLINES_FRONT ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Fanglini~en vorn : H~ilfslinien vorn */\
-        Text [ en-US ] = "Snap Lines to Front" ; \
+        Text [ en-US ] = "Snap Lines to ~Front" ; \
     };
 
 #define MN_HELPLINES \
@@ -1155,7 +1133,6 @@
     {\
         Identifier = DUMMY + 4 ; \
         Command = ".uno:ColorResMenu" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? ~Farbauflösung : ~Farbaufl÷sung */\
         SubMenu = Menu\
         {\
             ItemList = \

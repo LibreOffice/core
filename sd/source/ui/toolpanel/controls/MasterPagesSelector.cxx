@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,9 +55,7 @@
 #include <sfx2/objface.hxx>
 #include "sdresid.hxx"
 #include "TemplateScanner.hxx"
-#ifndef _SD_DRAWVIEW_HXX
 #include "drawview.hxx"
-#endif
 #include <vcl/image.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
@@ -345,34 +344,30 @@ SdPage* MasterPagesSelector::GetSelectedMasterPage (void)
 */
 void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
 {
-    do
+    if (pMasterPage == NULL)
+        return;
+
+    sal_uInt16 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
+    if (nPageCount == 0)
+        return;
+
+    // Get a list of all pages.  As a little optimization we only
+    // include pages that do not already have the given master page
+    // assigned.
+    String sFullLayoutName (pMasterPage->GetLayoutName());
+    ::sd::slidesorter::SharedPageSelection pPageList (
+        new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
+    for (sal_uInt16 nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
     {
-        if (pMasterPage == NULL)
-            break;
-
-        sal_uInt16 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
-        if (nPageCount == 0)
-            break;
-
-        // Get a list of all pages.  As a little optimization we only
-        // include pages that do not already have the given master page
-        // assigned.
-        String sFullLayoutName (pMasterPage->GetLayoutName());
-        ::sd::slidesorter::SharedPageSelection pPageList (
-            new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
-        for (sal_uInt16 nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
+        SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
+        if (pPage != NULL
+            && pPage->GetLayoutName().CompareTo(sFullLayoutName)!=0)
         {
-            SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
-            if (pPage != NULL
-                && pPage->GetLayoutName().CompareTo(sFullLayoutName)!=0)
-            {
-                pPageList->push_back (pPage);
-            }
+            pPageList->push_back (pPage);
         }
-
-        AssignMasterPageToPageList(pMasterPage, pPageList);
     }
-    while (false);
+
+    AssignMasterPageToPageList(pMasterPage, pPageList);
 }
 
 
@@ -384,31 +379,26 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
 void MasterPagesSelector::AssignMasterPageToSelectedSlides (
     SdPage* pMasterPage)
 {
-    do
-    {
-        using namespace ::std;
-        using namespace ::sd::slidesorter;
-        using namespace ::sd::slidesorter::controller;
+    using namespace ::sd::slidesorter;
+    using namespace ::sd::slidesorter::controller;
 
-        if (pMasterPage == NULL)
-            break;
+    if (pMasterPage == NULL)
+        return;
 
-        // Find a visible slide sorter.
-        SlideSorterViewShell* pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
-        if (pSlideSorter == NULL)
-            break;
+    // Find a visible slide sorter.
+    SlideSorterViewShell* pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
+    if (pSlideSorter == NULL)
+        return;
 
-        // Get a list of selected pages.
-        ::sd::slidesorter::SharedPageSelection pPageSelection = pSlideSorter->GetPageSelection();
-        if (pPageSelection->empty())
-            break;
+    // Get a list of selected pages.
+    SharedPageSelection pPageSelection = pSlideSorter->GetPageSelection();
+    if (pPageSelection->empty())
+        return;
 
-        AssignMasterPageToPageList(pMasterPage, pPageSelection);
+    AssignMasterPageToPageList(pMasterPage, pPageSelection);
 
-        // Restore the previous selection.
-        pSlideSorter->SetPageSelection(pPageSelection);
-    }
-    while (false);
+    // Restore the previous selection.
+    pSlideSorter->SetPageSelection(pPageSelection);
 }
 
 
@@ -477,7 +467,7 @@ MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) con
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    if (nIndex>0 && nIndex<=mpPageSet->GetItemCount())
+    if (nIndex>0 && static_cast<unsigned int>(nIndex)<=mpPageSet->GetItemCount())
         return reinterpret_cast<UserData*>(mpPageSet->GetItemData((sal_uInt16)nIndex));
     else
         return NULL;
@@ -490,7 +480,7 @@ void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    if (nIndex>0 && nIndex<=mpPageSet->GetItemCount())
+    if (nIndex>0 && static_cast<unsigned int>(nIndex)<=mpPageSet->GetItemCount())
     {
         UserData* pOldData = GetUserData(nIndex);
         if (pOldData!=NULL && pOldData!=pData)
@@ -852,3 +842,5 @@ void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList
 
 
 } } } // end of namespace ::sd::toolpanel::controls
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,16 +32,10 @@
 #include "DrawViewShell.hxx"
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <svl/aeitem.hxx>
-#ifndef _SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
-#ifndef _GLOBL3D_HXX //autogen
 #include <svx/globl3d.hxx>
-#endif
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
 #include <svx/svdogrp.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
@@ -103,8 +98,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_MEASURE_DLG ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONNECTION_DLG ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONNECTION_NEW_ROUTING ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_3D_LATHE ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_3D_LATHE_FAST ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_SHEAR ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_1BIT_THRESHOLD ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_1BIT_MATRIX ) ||
@@ -137,7 +130,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             pObj->TakeObjInfo( aInfoRec );
 
 
-            // #91929#; don't show original size entry if not possible
+            // don't show original size entry if not possible
             if ( pObj->ISA( SdrOle2Obj ) )
             {
                 SdrOle2Obj* pOleObj = PTR_CAST(SdrOle2Obj, pObj);
@@ -165,12 +158,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 rSet.DisableItem(SID_UNGROUP);
             }
-/*
-            if (!pObj->ISA(SdrObjGroup) && !pObj->ISA(SdrGrafObj) && !pObj->ISA(SdrOle2Obj))
-            {
-                rSet.DisableItem( SID_NAME_GROUP );
-            }
-*/
             if (!pObj->ISA(SdrGrafObj) ||
                 ((SdrGrafObj*) pObj)->GetGraphicType() != GRAPHIC_BITMAP ||
                 ((SdrGrafObj*) pObj)->IsLinkedGraphic())
@@ -207,9 +194,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 rSet.DisableItem( SID_CHANGEPOLYGON );
             }
-
-            if(nInv == SdrInventor && (nId == OBJ_TITLETEXT || nId == OBJ_OUTLINETEXT))
-                rSet.DisableItem( SID_TEXTATTR_DLG );
 
             if(nInv == SdrInventor && nId == OBJ_TABLE )
             {
@@ -303,6 +287,12 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             else
                 rSet.DisableItem( SID_MODIFY_FIELD );
         }
+        if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTLINE_TEXT_AUTOFIT ) )
+        {
+            const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            const bool bSet = ((const SdrTextFitToSizeTypeItem*)pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
+            rSet.Put(SfxBoolItem(SID_OUTLINE_TEXT_AUTOFIT, bSet));
+        }
 
         rSet.DisableItem( SID_GROUP );
         rSet.DisableItem( SID_COMBINE );
@@ -319,32 +309,14 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         if(nMarkCount <= 2)
             rSet.DisableItem(SID_DISTRIBUTE_DLG);
 
-//        rSet.ClearItem( SID_BEZIER_EDIT );
-//        rSet.DisableItem( SID_BEZIER_EDIT );
         rSet.DisableItem( SID_LINEEND_POLYGON );
         rSet.DisableItem( SID_ENTER_GROUP );
-        // Jetzt (28.10.96) muessen Namen fuer Objekte eindeutig sein
+        // Jetzt muessen Namen fuer Objekte eindeutig sein
         rSet.DisableItem( SID_NAME_GROUP );
         // #i68101#
         rSet.DisableItem( SID_OBJECT_TITLE_DESCRIPTION );
         rSet.DisableItem( SID_MODIFY_FIELD );
 
-        if( 1 )
-//      if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_STYLE ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_UNGROUP ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_MEASURE_DLG ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONNECTION_DLG ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_COMBINE ) ||
-//            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_SHEAR ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_TEXTATTR_DLG ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_3D_LATHE ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_3D_LATHE_FAST ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_LEFT ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_CENTER ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_RIGHT ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_UP ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_MIDDLE ) ||
-//          SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_DOWN ) )
         {
             sal_Bool bText = sal_False;
             sal_Bool bLine = sal_False;
@@ -352,7 +324,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             sal_Bool bGraf = sal_False;
             sal_Bool bDrawObj = sal_False;
             sal_Bool b3dObj = sal_False;
-            sal_Bool bTitOutText = sal_False;
             bool bTable = false;
             sal_Bool bMeasureObj = sal_False;
             sal_Bool bEdgeObj = sal_False; // Connector
@@ -392,8 +363,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
                         case OBJ_GRAF: bGraf = sal_True; break;
 
-                        case OBJ_TITLETEXT:
-                        case OBJ_OUTLINETEXT: bTitOutText = sal_True; break;
                         case OBJ_TABLE: bTable = true; break;
                     }
                 }
@@ -405,17 +374,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                         bE3dCompoundObject = sal_True;
                 }
             }
-            /* Kann wohl raus, da jedes(?) Objekt Text enthalten kann
-            if( !bText )
-            {
-                rSet.DisableItem( SID_CHAR_DLG );
-                rSet.DisableItem( SID_PARA_DLG );
-                rSet.DisableItem( SID_CHARMAP );
-            }
-            */
             if( bLine && !bText && !bDrawObj &&!b3dObj)
             {
-                //rSet.DisableItem( SID_ATTRIBUTES_AREA );
                 rSet.DisableItem( SID_ATTR_FILL_STYLE );
             }
             if( !bEdgeObj )
@@ -441,7 +401,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 rSet.DisableItem( SID_UNGROUP );
             }
-            if( bTitOutText || bTable )
+            if( bTable )
                 rSet.DisableItem( SID_TEXTATTR_DLG );
 
             if( !bMeasureObj )
@@ -509,8 +469,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
     // kein Objekt selektiert
     else
     {
-//        rSet.ClearItem( SID_BEZIER_EDIT );
-
         rSet.DisableItem( SID_ENTER_GROUP );
         rSet.DisableItem( SID_CUT );
         rSet.DisableItem( SID_COPY );
@@ -532,7 +490,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem( SID_BEHIND_OBJ );
         rSet.DisableItem( SID_CONVERT );
 
-//      rSet.DisableItem( SID_BEZIER_EDIT );
         rSet.DisableItem( SID_SIZE_OPTIMAL );
         rSet.DisableItem( SID_LINEEND_POLYGON );
         rSet.DisableItem( SID_COPYOBJECTS );
@@ -562,3 +519,5 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

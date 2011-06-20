@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <svx/obj3d.hxx>
 #include <svx/fmview.hxx>
 #include <editeng/outliner.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>
@@ -129,7 +128,6 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     mnDragSrcPgNum(SDRPAGE_NOTFOUND),
     mnAction(DND_ACTION_NONE),
     mnLockRedrawSmph(0),
-    mpLockedRedraws(NULL),
     mbIsDropAllowed(sal_True),
     maSmartTags(*this),
     mpClipboard (new ViewClipboard (*this))
@@ -190,18 +188,6 @@ View::~View()
     {
         // Alle angemeldeten OutDevs entfernen
         DeleteWindowFromPaintView(GetFirstOutputDevice() /*GetWin(0)*/);
-    }
-
-    // gespeicherte Redraws loeschen
-    if (mpLockedRedraws)
-    {
-        SdViewRedrawRec* pRec = (SdViewRedrawRec*)mpLockedRedraws->First();
-        while (pRec)
-        {
-            delete pRec;
-            pRec = (SdViewRedrawRec*)mpLockedRedraws->Next();
-        }
-        delete mpLockedRedraws;
     }
 }
 
@@ -544,13 +530,10 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
     // oder speichern?
     else
     {
-        if (!mpLockedRedraws)
-            mpLockedRedraws = new List;
-
         SdViewRedrawRec* pRec = new SdViewRedrawRec;
         pRec->mpOut = pOutDev;
         pRec->aRect = rReg.GetBoundRect();
-        mpLockedRedraws->Insert(pRec, LIST_APPEND);
+        maLockedRedraws.push_back(pRec);
     }
 }
 
@@ -1012,12 +995,6 @@ void View::DoConnect(SdrOle2Obj* pObj)
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool View::IsMorphingAllowed() const
 {
     const SdrMarkList&  rMarkList = GetMarkedObjectList();
@@ -1063,12 +1040,6 @@ sal_Bool View::IsMorphingAllowed() const
 
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool View::IsVectorizeAllowed() const
 {
@@ -1314,3 +1285,5 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 
 #include "fusel.hxx"
-#include <vos/process.hxx>
 #include <basic/sbstar.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
@@ -67,13 +67,9 @@
 #include "fudraw.hxx"
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "DrawViewShell.hxx"
@@ -84,7 +80,6 @@
 
 #include "slideshow.hxx"
 
-// #108981#
 #include <svx/svdundo.hxx>
 #include <avmedia/mediawindow.hxx>
 
@@ -525,7 +520,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
-                // #90239# point IS marked and NO shift is pressed. Start
+                // point IS marked and NO shift is pressed. Start
                 // dragging of selected point(s)
                 pHdl = mpView->PickHandle(aMDPos);
                 if(pHdl)
@@ -805,7 +800,6 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                             pPool->GetActualStyleSheet());
                         if (pStyleSheet != NULL && mpView->IsUndoEnabled() )
                         {
-                            // #108981#
                             // Added UNDOs for the WaterCan mode. This was never done in
                             // the past, thus it was missing all the time.
                             SdrUndoAction* pUndoAttr = mpDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pWaterCanCandidate, sal_True, sal_True);
@@ -815,7 +809,6 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                             pWaterCanCandidate->SetStyleSheet (pStyleSheet, sal_False);
 
-                            // #108981#
                             mpView->EndUndo();
                         }
                     }
@@ -987,7 +980,7 @@ void FuSelection::Activate()
     {
         case SID_OBJECT_ROTATE:
         {
-            // (gemapter) Slot wird explizit auf Rotate gesetzt #31052#
+            // (gemapter) Slot wird explizit auf Rotate gesetzt
             if( mpViewShell->ISA(DrawViewShell) )
             {
                 sal_uInt16* pSlotArray =
@@ -1504,3 +1497,5 @@ SdrObject* FuSelection::pickObject (const Point& rTestPoint)
     return pObject;
 }
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

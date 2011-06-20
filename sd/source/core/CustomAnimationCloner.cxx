@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,22 +30,12 @@
 #include "precompiled_sd.hxx"
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/Event.hpp>
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateColor_HPP_
 #include <com/sun/star/animations/XAnimateColor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateSet_HPP_
 #include <com/sun/star/animations/XAnimateSet.hpp>
-#endif
 #include <com/sun/star/animations/XCommand.hpp>
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateMotion_HPP_
 #include <com/sun/star/animations/XAnimateMotion.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateTransform_HPP_
 #include <com/sun/star/animations/XAnimateTransform.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XTransitionFilter_HPP_
 #include <com/sun/star/animations/XTransitionFilter.hpp>
-#endif
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
@@ -149,7 +140,7 @@ namespace sd
         catch( Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("sd::CustomAnimationClonerImpl::Clone(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -234,7 +225,7 @@ namespace sd
         catch( Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("sd::CustomAnimationClonerImpl::transformNode(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -309,7 +300,7 @@ namespace sd
         catch( Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("sd::CustomAnimationClonerImpl::transformValue(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -344,7 +335,9 @@ namespace sd
                 return maCloneNodeVector[nNode];
         }
 
-        DBG_ERROR( "sd::CustomAnimationClonerImpl::getClonedNode() failed!" );
+        OSL_FAIL( "sd::CustomAnimationClonerImpl::getClonedNode() failed!" );
         return xSource;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

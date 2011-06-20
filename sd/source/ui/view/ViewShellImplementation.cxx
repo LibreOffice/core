@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -115,8 +116,6 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     sal_Bool bHandoutMode = sal_False;
     SdPage* pHandoutMPage = NULL;
     String aNewName;
-
-    // #95981#
     String aOldName;
 
     AutoLayout aNewAutoLayout;
@@ -137,18 +136,6 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
         if (!pArgs || pArgs->Count() == 1 || pArgs->Count() == 2 )
         {
-            if (pArgs && pArgs->Count() == 2)
-            {
-                // We have been called with a request that contains two
-                // arguments.  One was used as preselected layout in a
-                // dialog.  We could select that layout in the
-                // layout panel instead.
-                /*
-                    SFX_REQUEST_ARG (rRequest, pNewAutoLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, sal_False);
-                    eNewAutoLayout = (AutoLayout) pNewAutoLayout->GetValue
-                    ();
-                */
-            }
 
             // Make the layout menu visible in the tool pane.
             SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, sal_True);
@@ -447,3 +434,5 @@ ViewShell::Implementation::ToolBarManagerLock::~ToolBarManagerLock (void)
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -406,7 +407,7 @@ Reference< ::com::sun::star::frame::XLayoutManager>
                 try
                 {
                     Any aValue (xFrameProperties->getPropertyValue(
-                        ::rtl::OUString::createFromAscii("LayoutManager")));
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))));
                     aValue >>= xLayoutManager;
                 }
                 catch (const beans::UnknownPropertyException& rException)
@@ -427,3 +428,5 @@ Reference< ::com::sun::star::frame::XLayoutManager>
 
 
 } // end of anonymous namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

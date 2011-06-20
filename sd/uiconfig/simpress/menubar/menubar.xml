@@ -57,6 +57,7 @@
                         <menu:menuitem menu:id=".uno:PasteSpecial"/>
             <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:CopyObjects"/>
@@ -79,14 +80,14 @@
             <menu:menuitem menu:id=".uno:NormalMultiPaneGUI" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:OutlineMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:DiaMode" menu:style="radio"/>
-            <menu:menuitem menu:id=".uno:Presentation"/>
+            <menu:menuitem menu:id=".uno:Presentation" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:NotesMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:HandoutMode" menu:style="radio"/>
                <menu:menuseparator/>
             <menu:menu menu:id=".uno:MasterPageMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:SlideMasterPage"/>
-                    <menu:menuitem menu:id=".uno:NotesMasterPage"/>
+                    <menu:menuitem menu:id=".uno:SlideMasterPage" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:NotesMasterPage" menu:style="radio"/>
                     <menu:menuseparator/>
                        <menu:menuitem menu:id=".uno:MasterLayouts"/>
                 </menu:menupopup>
@@ -297,9 +298,9 @@
             <menu:menuitem menu:id=".uno:HelpIndex"/>
             <menu:menuitem menu:id=".uno:ExtendedHelp"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:HelpSupport"/>
-            <menu:menuitem menu:id=".uno:OnlineRegistrationDlg"/>
+            <menu:menuitem menu:id=".uno:ShowLicense"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShowCredits"/>
             <menu:menuitem menu:id=".uno:About"/>
         </menu:menupopup>
     </menu:menu>

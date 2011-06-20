@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,8 +53,7 @@ void SdAnimationPrmsUndoAction::Undo()
         if( pDoc )
         {
             SdAnimationInfo* pInfo = pDoc->GetAnimationInfo( pObject );
-            // So nicht...
-            //SdAnimationInfo* pInfo = (SdAnimationInfo*)pObject->GetUserData(0);
+
             pInfo->mbActive     = bOldActive;
             pInfo->meEffect      = eOldEffect;
             pInfo->meTextEffect  = eOldTextEffect;
@@ -64,10 +64,8 @@ void SdAnimationPrmsUndoAction::Undo()
             pInfo->mbSoundOn     = bOldSoundOn;
             pInfo->maSoundFile   = aOldSoundFile;
             pInfo->mbPlayFull    = bOldPlayFull;
-//          pInfo->mSetPath(pOldPathObj);
             pInfo->meClickAction = eOldClickAction;
             pInfo->SetBookmark( aOldBookmark );
-//          pInfo->mbInvisibleInPresentation = bOldInvisibleInPres;
             pInfo->mnVerb        = nOldVerb;
             pInfo->mnPresOrder   = nOldPresOrder;
 
@@ -110,10 +108,8 @@ void SdAnimationPrmsUndoAction::Redo()
     pInfo->mbSoundOn     = bNewSoundOn;
     pInfo->maSoundFile   = aNewSoundFile;
     pInfo->mbPlayFull    = bNewPlayFull;
-//  pInfo->mSetPath(pNewPathObj);
     pInfo->meClickAction = eNewClickAction;
     pInfo->SetBookmark( aNewBookmark );
-//  pInfo->mbInvisibleInPresentation = bNewInvisibleInPres;
     pInfo->mnVerb        = nNewVerb;
     pInfo->mnPresOrder   = nNewPresOrder;
 
@@ -139,3 +135,4 @@ SdAnimationPrmsUndoAction::~SdAnimationPrmsUndoAction()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@
 
 #include "accessibility.hrc"
 #include "sdresid.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -259,7 +260,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString::createFromAscii ("no accessible child with index ")
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no accessible child with index "))
             + rtl::OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 }
@@ -403,26 +404,26 @@ void SAL_CALL
             if( aServices.getLength() >= 2 &&
                 aServices[1] == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationView")))
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
 
                 sName = String( SdResId(SID_SD_A11Y_I_DRAWVIEW_N) );
             }
             else
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
 
                 sName = String( SdResId(SID_SD_A11Y_D_DRAWVIEW_N) );
             }
         }
         else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesView")))
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             sName = String( SdResId(SID_SD_A11Y_I_NOTESVIEW_N) );
         }
         else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutView")))
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             sName = String( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_N) );
         }
@@ -460,26 +461,26 @@ void SAL_CALL
             if( aServices.getLength() >= 2 &&
                 aServices[1] == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationView")))
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
 
                 sDescription = String( SdResId(SID_SD_A11Y_I_DRAWVIEW_D) );
             }
             else
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
 
                 sDescription = String( SdResId(SID_SD_A11Y_D_DRAWVIEW_D) );
             }
         }
         else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesView")))
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             sDescription = String( SdResId(SID_SD_A11Y_I_NOTESVIEW_D) );
         }
         else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutView")))
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
 
             sDescription = String( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_D) );
         }
@@ -504,7 +505,7 @@ sal_Bool
     AccessibleDrawDocumentView::implIsSelected( sal_Int32 nAccessibleChildIndex )
     throw (uno::RuntimeException)
 {
-    const vos::OGuard                           aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     uno::Reference< view::XSelectionSupplier >  xSel( mxController, uno::UNO_QUERY );
     sal_Bool                                    bRet = sal_False;
 
@@ -549,9 +550,8 @@ void
     AccessibleDrawDocumentView::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    const vos::OGuard                           aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     uno::Reference< view::XSelectionSupplier >  xSel( mxController, uno::UNO_QUERY );
-    AccessibleShape* pAccessibleChild;
 
     if( xSel.is() )
     {
@@ -572,10 +572,7 @@ void
                     AccessibleShape* pAcc = AccessibleShape::getImplementation( getAccessibleChild( i ) );
 
                     if( pAcc && pAcc->GetXShape().is() )
-                    {
                         xShapes->add( pAcc->GetXShape() );
-                        pAccessibleChild = pAcc;
-                    }
                 }
 
                 if( xShapes->getCount() )
@@ -592,7 +589,6 @@ void
 
             AccessibleShape* pAcc = AccessibleShape::getImplementation(
                 getAccessibleChild( nAccessibleChildIndex ));
-            pAccessibleChild = pAcc;
 
             // Add or remove the shape that is made accessible from the
             // selection of the controller.
@@ -740,3 +736,5 @@ void AccessibleDrawDocumentView::UpdateAccessibleName (void)
 
 
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

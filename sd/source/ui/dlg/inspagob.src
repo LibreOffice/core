@@ -34,7 +34,6 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 128 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Seiten/Objekte einfügen : Seiten/Objekte einf³gen */
     Moveable = TRUE ;
     Text [ en-US ] = "Insert Slides/Objects" ;
     OKButton BTN_OK

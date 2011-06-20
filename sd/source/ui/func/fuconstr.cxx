@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,10 +93,6 @@ sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( mpView->IsAction() )
     {
-        // #90235# this extra triggering is an error and leads to
-        // erasing the last two points when creating a polygon.
-        // if ( rMEvt.IsRight() )
-        //  mpView->BckAction();
         return sal_True;
     }
 
@@ -452,3 +449,5 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,7 +140,7 @@ Sequence<rtl::OUString> SAL_CALL PresentationFactoryProvider_getSupportedService
 //===== PresentationFactory ===================================================
 
 const ::rtl::OUString PresentationFactory::msPresentationViewURL(
-    OUString::createFromAscii("private:resource/view/Presentation"));
+    RTL_CONSTASCII_USTRINGPARAM("private:resource/view/Presentation"));
 
 
 PresentationFactory::PresentationFactory (
@@ -321,3 +322,5 @@ void SAL_CALL PresentationFactoryProvider::initialize(
 
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

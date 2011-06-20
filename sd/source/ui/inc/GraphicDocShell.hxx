@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,13 +68,8 @@ public:
     virtual ~GraphicDocShell (void);
 };
 
-#ifndef SV_DECL_SD_GRAPHIC_DOC_SHELL_DEFINED
-#define SV_DECL_SD_GRAPHIC_DOC_SHELL_DEFINED
-SV_DECL_REF(GraphicDocShell)
-#endif
-
-SV_IMPL_REF (GraphicDocShell)
-
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

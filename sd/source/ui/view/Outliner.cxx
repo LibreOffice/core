@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -215,12 +216,12 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
             Any                     aAny;
 
             aAny = aLinguConfig.GetProperty(
-                rtl::OUString::createFromAscii( UPN_IS_SPELL_AUTO ) );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_SPELL_AUTO )) );
             aAny >>= bOnlineSpell;
         }
         catch( ... )
         {
-            DBG_ERROR( "Ill. type in linguistic property" );
+            OSL_FAIL( "Ill. type in linguistic property" );
         }
     }
 
@@ -272,8 +273,6 @@ Outliner::~Outliner (void)
 
     <li>When the current shell is a <type>SdOutlineViewShell</type> then
     directly operate on it.  No switching into other views takes place.</li>
-
-    <li>For a <type>SlideViewShell</type> no action is performed.</li>
     </ol>
 */
 void Outliner::PrepareSpelling (void)
@@ -369,7 +368,7 @@ void Outliner::EndSpelling (void)
             SetUpdateMode(sal_True);
         }
 
-        // #95811# Before clearing the modify flag use it as a hint that
+        // Before clearing the modify flag use it as a hint that
         // changes were done at SpellCheck
         if(IsModified())
         {
@@ -379,7 +378,7 @@ void Outliner::EndSpelling (void)
                 mpDrawDocument->SetChanged(sal_True);
         }
 
-        // #95811# now clear the modify flag to have a specified state of
+        // now clear the modify flag to have a specified state of
         // Outliner
         ClearModifyFlag();
 
@@ -532,7 +531,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
             {
                 RememberStartPosition ();
                 bEndOfSearch = SearchAndReplaceOnce ();
-                //#107233# restore start position if nothing was found
+                // restore start position if nothing was found
                 if(!mbStringFound)
                     RestoreStartPosition ();
                 else
@@ -1476,8 +1475,6 @@ void Outliner::SetViewShell (const ::boost::shared_ptr<ViewShell>& rpViewShell)
         // When the outline view is not owned by us then we have to clear
         // that pointer so that the current one for the new view shell will
         // be used (in ProvideOutlinerView).
-        //        if ( ! mbOwnOutlineView)
-        //            mpOutlineView = NULL;
         if (mpViewShell.get() != NULL)
         {
             mpView = mpViewShell->GetView();
@@ -1573,7 +1570,6 @@ void Outliner::PrepareConversion (void)
         mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
         // Start seach at the right end of the current object's text
         // depending on the search direction.
-//      mpOutlineView->SetSelection (GetSearchStartPosition ());
     }
     else
     {
@@ -1826,3 +1822,5 @@ void Outliner::Implementation::ReleaseOutlinerView (void)
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

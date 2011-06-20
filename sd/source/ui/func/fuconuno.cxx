@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,9 +48,7 @@ class SbModule;
 #include "glob.hrc"
 #include "ViewShell.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
 #include "drawdoc.hxx"
@@ -201,7 +200,6 @@ void FuConstructUnoControl::Deactivate()
     mpWindow->SetPointer( aOldPointer );
 }
 
-// #97016#
 SdrObject* FuConstructUnoControl::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
 {
     // case SID_FM_CREATE_CONTROL:
@@ -219,3 +217,5 @@ SdrObject* FuConstructUnoControl::CreateDefaultObject(const sal_uInt16, const Re
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

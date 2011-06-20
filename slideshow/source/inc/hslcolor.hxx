@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,22 +68,6 @@ namespace slideshow
              */
             double getLuminance() const;
 
-            /** Get the RGB red value.
-             */
-            double getRed() const;
-
-            /** Get the RGB green value.
-             */
-            double getGreen() const;
-
-            /** Get the RGB blue value.
-             */
-            double getBlue() const;
-
-            /** Create an RGB color object.
-             */
-            RGBColor getRGBColor() const;
-
             struct HSLTriple
             {
                 HSLTriple();
@@ -121,3 +106,5 @@ namespace slideshow
 }
 
 #endif /* INCLUDED_SLIDESHOW_HSLCOLOR_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

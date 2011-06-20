@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,24 +30,19 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawDocShell.hxx"
-#include <tools/pstm.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sfx2/docfac.hxx>
 #include <sfx2/objface.hxx>
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <editeng/flstitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/printer.hxx>
-#ifndef _SFX_DOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
 #include <svx/drawitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
@@ -56,9 +52,7 @@
 #include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/filter.hxx>
-#ifndef _SO_CLSIDS_HXX
 #include <sot/clsids.hxx>
-#endif
 #include <svl/cjkoptions.hxx>
 #include <svl/visitem.hxx>
 
@@ -80,13 +74,9 @@
 #include "fusearch.hxx"
 #include "ViewShell.hxx"
 #include "sdresid.hxx"
-#ifndef SD_FU_SLIDE_SHOW_DLG_HXX
 #include "slideshow.hxx"
-#endif
 #include "drawview.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "unomodel.hxx"
 #include "undo/undomanager.hxx"
 #include "undo/undofactory.hxx"
@@ -100,7 +90,6 @@ using namespace sd;
 SFX_IMPL_INTERFACE(DrawDocShell, SfxObjectShell, SdResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
-        SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_INSERT);
 }
 
 
@@ -359,44 +348,32 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
 void DrawDocShell::InPlaceActivate( sal_Bool bActive )
 {
+    ViewShell* pViewSh = NULL;
+    SfxViewShell* pSfxViewSh = NULL;
+    SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
+    std::vector<FrameView*> &rViews = mpDoc->GetFrameViewList();
+
     if( !bActive )
     {
-        FrameView* pFrameView = NULL;
-        List* pFrameViewList = mpDoc->GetFrameViewList();
+        std::vector<FrameView*>::iterator pIter;
+        for ( pIter = rViews.begin(); pIter != rViews.end(); ++pIter )
+            delete *pIter;
 
-        DBG_ASSERT( pFrameViewList, "No FrameViewList?" );
-        if( pFrameViewList )
+        rViews.clear();
+
+        while (pSfxViewFrame)
         {
-            sal_uInt32 i;
-            for ( i = 0; i < pFrameViewList->Count(); i++)
-            {
-                // Ggf. FrameViews loeschen
-                pFrameView = (FrameView*) pFrameViewList->GetObject(i);
+            // Anzahl FrameViews ermitteln
+            pSfxViewSh = pSfxViewFrame->GetViewShell();
+            pViewSh = PTR_CAST( ViewShell, pSfxViewSh );
 
-                if (pFrameView)
-                    delete pFrameView;
+            if ( pViewSh && pViewSh->GetFrameView() )
+            {
+                pViewSh->WriteFrameViewData();
+                rViews.push_back( new FrameView( mpDoc, pViewSh->GetFrameView() ) );
             }
 
-            pFrameViewList->Clear();
-
-            ViewShell* pViewSh = NULL;
-            SfxViewShell* pSfxViewSh = NULL;
-            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
-
-            while (pSfxViewFrame)
-            {
-                // Anzahl FrameViews ermitteln
-                pSfxViewSh = pSfxViewFrame->GetViewShell();
-                pViewSh = PTR_CAST( ViewShell, pSfxViewSh );
-
-                if ( pViewSh && pViewSh->GetFrameView() )
-                {
-                    pViewSh->WriteFrameViewData();
-                    pFrameViewList->Insert( new FrameView( mpDoc, pViewSh->GetFrameView() ) );
-                }
-
-                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
-            }
+            pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
         }
     }
 
@@ -404,29 +381,18 @@ void DrawDocShell::InPlaceActivate( sal_Bool bActive )
 
     if( bActive )
     {
-        List* pFrameViewList = mpDoc->GetFrameViewList();
-
-        DBG_ASSERT( pFrameViewList, "No FrameViewList?" );
-        if( pFrameViewList )
+        for( sal_uInt32 i = 0; pSfxViewFrame && (i < rViews.size()); i++ )
         {
-            ViewShell* pViewSh = NULL;
-            SfxViewShell* pSfxViewSh = NULL;
-            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
+            // Anzahl FrameViews ermitteln
+            pSfxViewSh = pSfxViewFrame->GetViewShell();
+            pViewSh = PTR_CAST( ViewShell, pSfxViewSh );
 
-            sal_uInt32 i;
-            for( i = 0; pSfxViewFrame && (i < pFrameViewList->Count()); i++ )
+            if ( pViewSh )
             {
-                // Anzahl FrameViews ermitteln
-                pSfxViewSh = pSfxViewFrame->GetViewShell();
-                pViewSh = PTR_CAST( ViewShell, pSfxViewSh );
-
-                if ( pViewSh )
-                {
-                    pViewSh->ReadFrameViewData( (FrameView*)pFrameViewList->GetObject(i) );
-                }
-
-                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
+                pViewSh->ReadFrameViewData( rViews[ i ] );
             }
+
+            pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
         }
     }
 }
@@ -487,12 +453,6 @@ void DrawDocShell::UpdateTablePointers()
     UpdateFontList();
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void DrawDocShell::CancelSearching()
 {
     if( dynamic_cast<FuSearch*>( mxDocShellFunction.get() ) )
@@ -537,8 +497,8 @@ void DrawDocShell::SetModified( sal_Bool bSet /* = sal_True */ )
 {
     SfxObjectShell::SetModified( bSet );
 
-    // #100237# change model state, too
-    // #103182# only set the changed state if modification is enabled
+    // change model state, too
+    // only set the changed state if modification is enabled
     if( IsEnableSetModified() )
     {
         if ( mpDoc )
@@ -554,7 +514,7 @@ void DrawDocShell::SetModified( sal_Bool bSet /* = sal_True */ )
 |*
 \************************************************************************/
 
-// #91457# ExecuteSpellPopup now handled by DrawDocShell. This is necessary
+// ExecuteSpellPopup now handled by DrawDocShell. This is necessary
 // to get hands on the outliner and the text object.
 IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 {
@@ -606,3 +566,5 @@ void DrawDocShell::ClearUndoBuffer()
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

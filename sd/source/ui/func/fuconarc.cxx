@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,6 @@
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
 
-// #97016#
 #include <svx/sxciaitm.hxx>
 
 namespace sd {
@@ -143,7 +143,6 @@ sal_Bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
             SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
 
-//-/            pObj->NbcSetAttributes(aAttr, sal_False);
             pObj->SetMergedItemSet(aAttr);
         }
 
@@ -261,7 +260,6 @@ void FuConstructArc::Activate()
     mpView->SetCurrentObj((sal_uInt16)aObjKind);
 
     FuConstruct::Activate();
-//  FuDraw::Activate();
 }
 
 /*************************************************************************
@@ -273,22 +271,10 @@ void FuConstructArc::Activate()
 void FuConstructArc::Deactivate()
 {
     FuConstruct::Deactivate();
-//  FuDraw::Deactivate();
 }
 
-// #97016#
 SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
-    // case SID_DRAW_ARC:
-    // case SID_DRAW_CIRCLEARC:
-    // case SID_DRAW_PIE:
-    // case SID_DRAW_PIE_NOFILL:
-    // case SID_DRAW_CIRCLEPIE:
-    // case SID_DRAW_CIRCLEPIE_NOFILL:
-    // case SID_DRAW_ELLIPSECUT:
-    // case SID_DRAW_ELLIPSECUT_NOFILL:
-    // case SID_DRAW_CIRCLECUT:
-    // case SID_DRAW_CIRCLECUT_NOFILL:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
@@ -329,7 +315,7 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
         }
         else
         {
-            DBG_ERROR("Object is NO circle object");
+            OSL_FAIL("Object is NO circle object");
         }
     }
 
@@ -337,3 +323,5 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

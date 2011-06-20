@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include "TransitionPreset.hxx"
 #include <vcl/lstbox.hxx>
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 #include "fadedef.h"
 #include "sddllapi.h"
 
@@ -60,3 +59,5 @@ public:
 };
 
 #endif // SD_DLGCTRLS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

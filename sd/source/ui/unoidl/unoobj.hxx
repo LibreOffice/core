@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,6 +72,7 @@ private:
     void SetMasterDepend( sal_Bool bDepend ) throw();
 
     SdrObject* GetSdrObject() const throw();
+    ::rtl::OUString GetPlaceholderText() const;
 
     com::sun::star::uno::Sequence< sal_Int8 >* mpImplementationId;
 
@@ -136,3 +138,4 @@ const SvEventDescription* ImplGetSupportedMacroItems();
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

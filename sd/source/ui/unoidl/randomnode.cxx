@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -193,11 +194,8 @@ OUString RandomNode__getImplementationName() throw( RuntimeException )
 
 Sequence< OUString > SAL_CALL RandomNode_getSupportedServiceNames() throw( RuntimeException )
 {
-//  static const OUString aSN1( OUString::createFromAscii( pSN1 ) );
     static const OUString aSN2( OUString::createFromAscii( pSN2 ) );
     Sequence< OUString > aSeq( &aSN2, 1 );
-//  aSeq[0] = aSN1;
-/// aSeq[1] = aSN2;
     return aSeq;
 }
 
@@ -701,3 +699,4 @@ Sequence< OUString > RandomAnimationNode::getSupportedServiceNames(void) throw()
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

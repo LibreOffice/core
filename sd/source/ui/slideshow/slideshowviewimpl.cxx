@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sd.hxx"
 #include <slideshowviewimpl.hxx>
 #include <slideshowimpl.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -319,7 +320,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
 {
     // paint background in black
     ::osl::MutexGuard aGuard( m_aMutex );
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     // fill the bounds rectangle in black
     // ----------------------------------
@@ -343,7 +344,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
 geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     const Size& rTmpSize( mrOutputWindow.GetSizePixel() );
 
@@ -352,11 +353,7 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
         return geometry::AffineMatrix2D (1,0,0,0,1,0);
     }
 
-    // Reduce available width by one, as the slides might actually
-    // render one pixel wider and higher as aPageSize below specifies
-    // (when shapes of page size have visible border lines)
-    const Size  aWindowSize( rTmpSize.Width()-1,
-                             rTmpSize.Height()-1 );
+    const Size aWindowSize( mrOutputWindow.GetSizePixel() );
     Size aOutputSize( aWindowSize );
 
     if( meAnimationMode != ANIMATIONMODE_SHOW )
@@ -382,6 +379,12 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
 
     Point aOutputOffset( ( aWindowSize.Width() - aOutputSize.Width() ) >> 1,
                             ( aWindowSize.Height() - aOutputSize.Height() ) >> 1 );
+
+    // Reduce available width by one, as the slides might actually
+    // render one pixel wider and higher as aPageSize below specifies
+    // (when shapes of page size have visible border lines)
+    aOutputSize.Width() --;
+    aOutputSize.Height() --;
 
     maPresentationArea = Rectangle( aOutputOffset, aOutputSize );
     mrOutputWindow.SetPresentationArea( maPresentationArea );
@@ -499,7 +502,17 @@ void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImp
     if( pSlideShow )
     {
         ::rtl::Reference< SlideshowImpl > aSLGuard( pSlideShow );
-        rGuard.clear();
+
+        if( mbFirstPaint )
+        {
+            mbFirstPaint = false;
+            SlideshowImpl* pTmpSlideShow = mpSlideShow;
+            rGuard.clear();
+            if( pTmpSlideShow )
+                pTmpSlideShow->onFirstPaint();
+        } else
+            rGuard.clear();
+
         pSlideShow->startUpdateTimer();
     }
 }
@@ -683,3 +696,5 @@ void SlideShowView::init()
 }
 
 } // namespace ::sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

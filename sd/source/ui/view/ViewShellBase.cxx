@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -242,7 +243,7 @@ TYPEINIT1(ViewShellBase, SfxViewShell);
 // new ViewShellBase object has been constructed.
 
 SfxViewFactory* ViewShellBase::pFactory;
-SfxViewShell* __EXPORT ViewShellBase::CreateInstance (
+SfxViewShell* ViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     ViewShellBase* pBase = new ViewShellBase(pFrame, pOldView);
@@ -481,14 +482,9 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 {
                     if( GetViewFrame() )
                     {
-                        GetDocument()->SetStartWithPresentation( false );
                         GetViewFrame()->GetDispatcher()->Execute(
                             SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON );
                     }
-                }
-                else
-                {
-                    //                    mpPaneManager->InitPanes();
                 }
                 break;
 
@@ -655,7 +651,6 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
     (void)pParent;
     (void)rOptions;
     return NULL;
-    //    return mpImpl->mpPrintManager->CreatePrintOptionsPage (pParent, rOptions);
 }
 
 
@@ -774,12 +769,6 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
 
 void ViewShellBase::GetState (SfxItemSet& rSet)
 {
-    // The full screen mode is not supported.  Disable the the slot so that
-    // it appears grayed out when somebody uses configures the menu to show
-    // an menu item for it.
-    //    if (rSet.GetItemState(SID_WIN_FULLSCREEN) == SFX_ITEM_AVAILABLE)
-    //        rSet.DisableItem(SID_WIN_FULLSCREEN);
-
     mpImpl->GetSlotState(rSet);
 
     FuBullet::GetSlotState( rSet, 0, GetViewFrame() );
@@ -974,8 +963,8 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     // made only for the main view shell.  This not only avoids unnecessary
     // calls for the views in side panes but prevents calling an already
     // dying SfxViewShell base class.
-    // For issue #140703# we have to check the existence of the window,
-    // too.  The SfxViewFrame accesses the window without checking it.
+    // We have to check the existence of the window, too.
+    // The SfxViewFrame accesses the window without checking it.
     ViewShell* pMainViewShell = GetMainViewShell().get();
     if (pMainViewShell != NULL && GetWindow()!=NULL)
     {
@@ -1194,7 +1183,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
                 {
                     for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                     {
-                        if( aPropSeq[i].Name.equalsAscii( "Name" ))
+                        if( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" ) ))
                         {
                             aPropSeq[i].Value >>= aLabel;
                             break;
@@ -1278,7 +1267,7 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
                 pHelper->GetViewURL(pFrameView->GetViewShellTypeOnLoad()),
                 FrameworkHelper::msCenterPaneURL);
             pHelper->RunOnConfigurationEvent(
-                ::rtl::OUString::createFromAscii("ConfigurationUpdateEnd"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdateEnd")),
                 CurrentPageSetter(mrBase));
         }
     }
@@ -1556,7 +1545,6 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
 {
     // Set the visibility state of the toolpanel and one of its top
     // level panels.
-    sal_Bool bShowToolPanel = sal_True;
     toolpanel::PanelId nPanelId (
         toolpanel::PID_UNKNOWN);
     bool bPanelIdGiven = false;
@@ -1565,13 +1553,6 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     const SfxItemSet* pArgs = rRequest.GetArgs();
     if (pArgs)
     {
-        if ((pArgs->Count() == 1) || (pArgs->Count() == 2))
-        {
-            SFX_REQUEST_ARG (rRequest, pIsPanelVisible,
-                SfxBoolItem, ID_VAL_ISVISIBLE, sal_False);
-            if (pIsPanelVisible != NULL)
-                bShowToolPanel = pIsPanelVisible->GetValue();
-        }
         if (pArgs->Count() == 2)
         {
             SFX_REQUEST_ARG (rRequest, pPanelId, SfxUInt32Item,
@@ -1733,3 +1714,5 @@ void FocusForwardingWindow::Command (const CommandEvent& rEvent)
 } // end of anonymouse namespace
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

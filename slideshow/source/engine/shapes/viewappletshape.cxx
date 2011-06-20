@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,7 +121,7 @@ namespace slideshow
             }
             catch (uno::Exception &)
             {
-                OSL_ENSURE( false, rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -149,7 +150,7 @@ namespace slideshow
 
                 uno::Reference< awt::XWindow2 > xParentWindow(
                     xPropSet->getPropertyValue(
-                        ::rtl::OUString::createFromAscii( "Window" )),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window" ))),
                     uno::UNO_QUERY_THROW );
 
                 uno::Reference<lang::XMultiComponentFactory> xFactory(
@@ -162,7 +163,7 @@ namespace slideshow
 
                     uno::Reference< awt::XToolkit > xToolkit(
                         xFactory->createInstanceWithContext(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.awt.Toolkit" ),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" )),
                             mxComponentContext ),
                         uno::UNO_QUERY_THROW );
 
@@ -186,7 +187,7 @@ namespace slideshow
 
                     mxFrame.set(
                         xFactory->createInstanceWithContext(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.frame.Frame" ),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Frame" )),
                             mxComponentContext ),
                         uno::UNO_QUERY_THROW );
 
@@ -298,3 +299,5 @@ namespace slideshow
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

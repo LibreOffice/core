@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,6 @@ public:
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 
-    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 private:
@@ -66,7 +66,6 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    // #97016#
     void ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene);
     E3dCompoundObject* ImpCreateBasic3DShape();
 };
@@ -75,3 +74,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

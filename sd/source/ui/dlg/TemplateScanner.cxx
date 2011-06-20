@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,13 +31,11 @@
 
 #include "TemplateScanner.hxx"
 
-#ifndef _COMPHELPER_SERVICEFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <comphelper/documentconstants.hxx>
 
 #include <tools/debug.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -52,19 +51,19 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-const ::rtl::OUString TITLE            = ::rtl::OUString::createFromAscii ("Title");
-const ::rtl::OUString TARGET_DIR_URL   = ::rtl::OUString::createFromAscii ("TargetDirURL");
-const ::rtl::OUString DESCRIPTION      = ::rtl::OUString::createFromAscii ("TypeDescription");
-const ::rtl::OUString TARGET_URL       = ::rtl::OUString::createFromAscii ("TargetURL");
+const ::rtl::OUString TITLE(RTL_CONSTASCII_USTRINGPARAM ("Title"));
+const ::rtl::OUString TARGET_DIR_URL(RTL_CONSTASCII_USTRINGPARAM ("TargetDirURL"));
+const ::rtl::OUString DESCRIPTION(RTL_CONSTASCII_USTRINGPARAM ("TypeDescription"));
+const ::rtl::OUString TARGET_URL(RTL_CONSTASCII_USTRINGPARAM ("TargetURL"));
 
-const ::rtl::OUString DOCTEMPLATES     = ::rtl::OUString::createFromAscii ("com.sun.star.frame.DocumentTemplates");
+const ::rtl::OUString DOCTEMPLATES(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.DocumentTemplates"));
 
 //  These strings are used to find impress templates in the tree of
 //  template files.  Should probably be determined dynamically.
-const ::rtl::OUString IMPRESS_BIN_TEMPLATE = ::rtl::OUString::createFromAscii ("application/vnd.stardivision.impress");
+const ::rtl::OUString IMPRESS_BIN_TEMPLATE(RTL_CONSTASCII_USTRINGPARAM ("application/vnd.stardivision.impress"));
 const ::rtl::OUString IMPRESS_XML_TEMPLATE = MIMETYPE_VND_SUN_XML_IMPRESS;
 // The following id comes from the bugdoc in #i2764#.
-const ::rtl::OUString IMPRESS_XML_TEMPLATE_B = ::rtl::OUString::createFromAscii ("Impress 2.0");
+const ::rtl::OUString IMPRESS_XML_TEMPLATE_B(RTL_CONSTASCII_USTRINGPARAM ("Impress 2.0"));
 const ::rtl::OUString IMPRESS_XML_TEMPLATE_OASIS = MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION;
 
 
@@ -90,9 +89,11 @@ public:
     //    Reference<sdbc::XResultSet> mxFolderResultSet;
     Reference<com::sun::star::ucb::XCommandEnvironment> mxFolderEnvironment;
 
-    class Comparator { public:
-        bool operator() (const FolderDescriptor& r1, const FolderDescriptor& r2)
-        { return r1.mnPriority < r2.mnPriority; }
+    class Comparator
+    {
+    public:
+        bool operator() (const FolderDescriptor& r1, const FolderDescriptor& r2) const
+            { return r1.mnPriority < r2.mnPriority; }
     };
 };
 
@@ -105,19 +106,19 @@ int Classify (const ::rtl::OUString&, const ::rtl::OUString& rsURL)
 
     if (rsURL.getLength() == 0)
         nPriority = 100;
-    else if (rsURL.indexOf(::rtl::OUString::createFromAscii("presnt"))>=0)
+    else if (rsURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("presnt")))>=0)
     {
         nPriority = 30;
     }
-    else if (rsURL.indexOf(::rtl::OUString::createFromAscii("layout"))>=0)
+    else if (rsURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("layout")))>=0)
     {
         nPriority = 20;
     }
-    else if (rsURL.indexOf(::rtl::OUString::createFromAscii("educate"))>=0)
+    else if (rsURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("educate")))>=0)
     {
         nPriority = 40;
     }
-    else if (rsURL.indexOf(::rtl::OUString::createFromAscii("finance"))>=0)
+    else if (rsURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("finance")))>=0)
     {
         nPriority = 40;
     }
@@ -170,7 +171,7 @@ TemplateScanner::~TemplateScanner (void)
     // Delete all entries of the template list that have not been
     // transferred to another object.
     std::vector<TemplateDir*>::iterator I;
-    for (I=maFolderList.begin(); I!=maFolderList.end(); I++)
+    for (I=maFolderList.begin(); I!=maFolderList.end(); ++I)
         if (*I != NULL)
             delete *I;
 }
@@ -279,7 +280,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
             }
             else
             {
-                ::vos::OGuard aGuard(Application::GetSolarMutex());
+                SolarMutexGuard aGuard;
                 maFolderList.push_back(mpTemplateDirectory);
             }
 
@@ -491,3 +492,5 @@ const TemplateEntry* TemplateScanner::GetLastAddedEntry (void) const
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

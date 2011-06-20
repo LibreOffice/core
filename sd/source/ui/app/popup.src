@@ -430,21 +430,18 @@ Menu RID_LAYERTAB_POPUP
         {
             Identifier = SID_INSERTLAYER ;
             HelpId = CMD_SID_INSERTLAYER ;
-            /* ### ACHTUNG: Neuer Text in Resource? ~Ebene einfügen... : ~Ebene einf³gen... */
             Text [ en-US ] = "~Insert Layer..." ;
         };
         MenuItem
         {
             Identifier = SID_MODIFYLAYER ;
             HelpId = CMD_SID_MODIFYLAYER ;
-            /* ### ACHTUNG: Neuer Text in Resource? E~bene ändern... : E~bene õndern... */
             Text [ en-US ] = "Modify La~yer..." ;
         };
         MenuItem
         {
             Identifier = SID_DELETE_LAYER ;
             HelpId = CMD_SID_DELETE_LAYER ;
-            /* ### ACHTUNG: Neuer Text in Resource? Ebe~ne löschen... : Ebe~ne l÷schen... */
             Text [ en-US ] = "Delete ~Layer..." ;
         };
         MN_RENAME_LAYER

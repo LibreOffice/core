@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,12 +40,8 @@
 #include "ViewShellImplementation.hxx"
 #include "FactoryIds.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
@@ -57,12 +54,9 @@
 #include <sfx2/dispatch.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/moduleoptions.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <sot/clsids.hxx>
 
-#include "misc.hxx"
 #include "strings.hrc"
 #include "app.hrc"
 #include "unokywds.hxx"
@@ -1205,9 +1199,11 @@ void ViewShell::AdaptDefaultsForChart(
         }
         catch( const uno::Exception & )
         {
-            OSL_ENSURE( false, "Exception caught in AdaptDefaultsForChart" );
+            OSL_FAIL( "Exception caught in AdaptDefaultsForChart" );
         }
     }
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,8 @@
 
 #include "app.hrc"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 
 #include <svx/ofaitem.hxx>
 #include <svx/svxerr.hxx>
@@ -126,7 +123,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             if( dynamic_cast< FuSearch* >(mxDocShellFunction.get()) )
             {
-                // Suchen&Ersetzen in allen DocShells beenden
+                // End Search&Replace in all docshells
                 SfxObjectShell* pFirstShell = SfxObjectShell::GetFirst();
                 SfxObjectShell* pShell = pFirstShell;
 
@@ -187,7 +184,6 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_CLOSEDOC:
         {
-//            SfxObjectShell::DoClose();
             ExecuteSlot(rReq, SfxObjectShell::GetStaticInterface());
         }
         break;
@@ -257,3 +253,5 @@ void DrawDocShell::SetDocShellFunction( const ::sd::FunctionReference& xFunction
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

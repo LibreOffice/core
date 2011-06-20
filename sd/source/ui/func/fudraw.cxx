@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,9 +65,7 @@
 #include "ViewShell.hxx"
 #include "FrameView.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "Client.hxx"
@@ -118,7 +117,7 @@ FuDraw::~FuDraw()
 
 sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     sal_Bool bReturn = sal_False;
@@ -131,9 +130,7 @@ sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     {
         FrameView* pFrameView = mpViewShell->GetFrameView();
 
-//        sal_Bool bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
-//        bOrtho = bOrtho != rMEvt.IsShift();
-        sal_Bool bOrtho = sal_False;
+        bool bOrtho = sal_False;
 
         sal_Bool bRestricted = sal_True;
 
@@ -221,7 +218,7 @@ sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         SdrPageView* pPV = 0;
         sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-        // #76572# look only for HelpLines when they are visible (!)
+        // look only for HelpLines when they are visible (!)
         sal_Bool bHelpLine(sal_False);
         if(mpView->IsHlplVisible())
             bHelpLine = mpView->PickHelpLine(aMDPos, nHitLog, *mpWindow, nHelpLine, pPV);
@@ -253,9 +250,7 @@ sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
     FrameView* pFrameView = mpViewShell->GetFrameView();
     Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-//    sal_Bool bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
-//    bOrtho = bOrtho != rMEvt.IsShift();
-    sal_Bool bOrtho = sal_False;
+    bool bOrtho = sal_False;
 
     sal_Bool bRestricted = sal_True;
 
@@ -439,7 +434,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     // nicht mehr versucht wird, ein Grafik-Objekt
                     // zu restaurieren, das gar nicht mehr existiert.
                     // Alle anderen OLE-Objekte sind davon nicht
-                    // betroffen (KA 06.10.95)
+                    // betroffen
                     OSL_ASSERT (mpViewShell->GetViewShell()!=NULL);
                     Client* pIPClient = static_cast<Client*>(
                         mpViewShell->GetViewShell()->GetIPClient());
@@ -462,7 +457,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             if ( !aCode.IsMod1() && !aCode.IsMod2() )
             {
-                // #105336# Moved next line which was a bugfix itself into
+                // Moved next line which was a bugfix itself into
                 // the scope which really does the object selection travel
                 // and thus is allowed to call SelectionHasChanged().
 
@@ -474,13 +469,12 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 // changeover to the next object
                 if(!mpView->MarkNextObj( !aCode.IsShift() ))
                 {
-                    // #97016# No next object: go over open end and
+                    // No next object: go over open end and
                     // get first from the other side
                     mpView->UnmarkAllObj();
                     mpView->MarkNextObj(!aCode.IsShift());
                 }
 
-                // #97016# II
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
@@ -495,11 +489,10 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             if ( aCode.IsMod1() )
             {
-                // #97016# mark last object
+                // mark last object
                 mpView->UnmarkAllObj();
                 mpView->MarkNextObj(sal_False);
 
-                // #97016# II
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
@@ -514,11 +507,10 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             if ( aCode.IsMod1() )
             {
-                // #97016# mark first object
+                // mark first object
                 mpView->UnmarkAllObj();
                 mpView->MarkNextObj(sal_True);
 
-                // #97016# II
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
@@ -844,9 +836,8 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                 if ( !pDocSh->IsUIActive() )
                 {
                     /**********************************************************
-                    * aktivate OLE-object
+                    * activate OLE-object
                     **********************************************************/
-                    //HMHmpView->HideMarkHdl();
                     mpViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0);
                 }
             }
@@ -1115,7 +1106,6 @@ bool FuDraw::cancel()
     }
     else if ( mpView->AreObjectsMarked() )
     {
-        // #97016# II
         const SdrHdlList& rHdlList = mpView->GetHdlList();
         SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
@@ -1140,3 +1130,5 @@ bool FuDraw::cancel()
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

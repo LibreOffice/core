@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************cherex
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -547,7 +548,6 @@
 #include "svl/svstdarr.hxx"
 #include "unotools/syslocale.hxx"
 #include "svtools/tabbar.hxx"
-#include "svtools/treelist.hxx"
 #include "svl/undo.hxx"
 #include "svtools/unoimap.hxx"
 #include "svl/urihelper.hxx"
@@ -620,7 +620,6 @@
 #include "svx/grafctrl.hxx"
 #include "svx/hlnkitem.hxx"
 #include "svx/hyperdlg.hxx"
-#include "svx/hyprlink.hxx"
 #include "svx/imapdlg.hxx"
 #include "svx/itemwin.hxx"
 #include "svx/langbox.hxx"
@@ -805,10 +804,8 @@
 #include "tools/gen.hxx"
 #include "tools/globname.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/multisel.hxx"
 #include "tools/poly.hxx"
-#include "tools/pstm.hxx"
 #include "tools/rc.hxx"
 #include "tools/ref.hxx"
 #include "tools/resid.hxx"
@@ -903,12 +900,12 @@
 #include "tools/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
-#include "vos/diagnose.hxx"
-#include "vos/module.hxx"
-#include "vos/mutex.hxx"
-#include "vos/process.hxx"
-#include "vos/thread.hxx"
-#include "vos/xception.hxx"
+#include "osl/diagnose.h"
+#include "osl/module.hxx"
+#include "osl/mutex.hxx"
+#include "osl/process.h"
 //---MARKER---
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

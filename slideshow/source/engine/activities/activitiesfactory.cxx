@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -660,8 +661,7 @@ AnimationActivitySharedPtr createActivity(
         catch( ParseError& )
         {
             // parse error, thus no formula
-            OSL_ENSURE( false,
-                        "createActivity(): Error parsing formula string" );
+            OSL_FAIL( "createActivity(): Error parsing formula string" );
         }
     }
 
@@ -727,7 +727,7 @@ AnimationActivitySharedPtr createActivity(
             }
 
             default:
-                OSL_ENSURE( false, "createActivity(): unexpected case" );
+                OSL_FAIL( "createActivity(): unexpected case" );
                 // FALLTHROUGH intended
             case animations::AnimationCalcMode::PACED:
                 // FALLTHROUGH intended
@@ -795,7 +795,7 @@ AnimationActivitySharedPtr createActivity(
             }
 
             default:
-                OSL_ENSURE( false, "createActivity(): unexpected case" );
+                OSL_FAIL( "createActivity(): unexpected case" );
                 // FALLTHROUGH intended
             case animations::AnimationCalcMode::PACED:
                 // FALLTHROUGH intended
@@ -985,3 +985,4 @@ AnimationActivitySharedPtr ActivitiesFactory::createSimpleActivity(
 } // namespace internal
 } // namespace presentation
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

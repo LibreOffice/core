@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -224,8 +225,8 @@ protected:
     void SetPage (sal_Int32 nPageIndex);
 
 private:
-    /// Indicates whether a page changed occured on switching to current page.
-    bool mbPageChangeOccured;
+    /// Indicates whether a page changed occurred on switching to current page.
+    bool mbPageChangeOccurred;
     /// Pointer to the page associated with the current page index. May be NULL.
     SdPage* mpPage;
     /// Iterator of all objects on the current page.
@@ -270,3 +271,5 @@ private:
 } } // end of namespace ::sd::outliner
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 
 #include <comphelper/stl_types.hxx>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace css = ::com::sun::star;
 
@@ -126,7 +127,7 @@ private:
         css::uno::Any maUserData;
     };
     typedef ::std::vector<ListenerDescriptor> ListenerList;
-    typedef ::std::hash_map
+    typedef ::boost::unordered_map
         <rtl::OUString,
          ListenerList,
          ::comphelper::UStringHash,
@@ -149,3 +150,5 @@ private:
 } } // end of namespace sd::framework
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

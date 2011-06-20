@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,6 @@
 SdHtmlAttrPreview::SdHtmlAttrPreview( Window* pParent, const ResId& rResId )
 :Control( pParent, rResId )
 {
-//    SetMapMode( MAP_100TH_MM );
 }
 
 // =====================================================================
@@ -100,3 +100,5 @@ void SdHtmlAttrPreview::SetColors( Color& aBack, Color& aText, Color& aLink,
     m_aVLinkColor = aVLink;
     m_aALinkColor = aALink;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

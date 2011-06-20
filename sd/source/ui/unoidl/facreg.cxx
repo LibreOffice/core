@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,12 +43,12 @@
 #define INCLUDED_STRING_H
 #endif
 #include <comphelper/stl_types.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
-using namespace rtl;
 using namespace com::sun::star;
 
+using ::rtl::OUString;
 
 // Forward declarations of the factories.
 
@@ -254,7 +255,7 @@ enum FactoryId
     SlideLayoutControllerFactoryId,
     InsertSlideControllerFactoryId,
 };
-typedef ::std::hash_map<OUString, FactoryId, comphelper::UStringHash, comphelper::UStringEqual> FactoryMap;
+typedef ::boost::unordered_map<OUString, FactoryId, comphelper::UStringHash, comphelper::UStringEqual> FactoryMap;
 
 
 namespace {
@@ -512,3 +513,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 }
 
 } // end of extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

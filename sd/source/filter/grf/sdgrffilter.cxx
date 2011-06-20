@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -207,18 +208,18 @@ sal_Bool SdGRFFilter::Import()
 {
     Graphic         aGraphic;
     const String    aFileName( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-    GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
-    const sal_uInt16    nFilter = pGraphicFilter->GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    const sal_uInt16 nFilter = rGraphicFilter.GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
     sal_Bool        bRet = sal_False;
 
     // ggf. Filterdialog ausfuehren
-    if ( !pGraphicFilter->HasImportDialog( nFilter ) || pGraphicFilter->DoImportDialog( NULL, nFilter ) )
+    if ( !rGraphicFilter.HasImportDialog( nFilter ) || rGraphicFilter.DoImportDialog( NULL, nFilter ) )
     {
         SvStream*       pIStm = mrMedium.GetInStream();
-        sal_uInt16          nReturn = pIStm ? pGraphicFilter->ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : 1;
+        sal_uInt16          nReturn = pIStm ? rGraphicFilter.ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : 1;
 
         if( nReturn )
-            HandleGraphicFilterError( nReturn, pGraphicFilter->GetLastError().nStreamError );
+            HandleGraphicFilterError( nReturn, rGraphicFilter.GetLastError().nStreamError );
         else
         {
             if( mrDocument.GetPageCount() == 0L )
@@ -275,7 +276,7 @@ sal_Bool SdGRFFilter::Export()
      uno::Reference< lang::XMultiServiceFactory >
         xSMgr( ::comphelper::getProcessServiceFactory() );
     uno::Reference< uno::XInterface > xComponent
-        ( xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.drawing.GraphicExportFilter" ) ),
+        ( xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicExportFilter" ) ) ),
             uno::UNO_QUERY );
     if ( xComponent.is() )
     {
@@ -309,11 +310,11 @@ sal_Bool SdGRFFilter::Export()
                 {
                     uno::Reference< lang::XComponent > xSource( pPage->getUnoPage(), uno::UNO_QUERY );
                     SfxItemSet* pSet = mrMedium.GetItemSet();
-                    GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
-                    if ( pSet && pGraphicFilter && xSource.is() )
+                    if ( pSet && xSource.is() )
                     {
                         const String aTypeName( mrMedium.GetFilter()->GetTypeName() );
-                        const sal_uInt16 nFilter = pGraphicFilter->GetExportFormatNumberForTypeName( aTypeName );
+                        GraphicFilter &rGraphicFilter = GraphicFilter::GetGraphicFilter();
+                        const sal_uInt16 nFilter = rGraphicFilter.GetExportFormatNumberForTypeName( aTypeName );
                         if ( nFilter != GRFILTER_FORMAT_NOTFOUND )
                         {
                             uno::Reference< task::XInteractionHandler > mXInteractionHandler;
@@ -323,7 +324,7 @@ sal_Bool SdGRFFilter::Export()
 
                             rtl::OUString sInteractionHandler( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
                             rtl::OUString sFilterName( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
-                            rtl::OUString sShortName( pGraphicFilter->GetExportFormatShortName( nFilter ) );
+                            rtl::OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
                             sal_Bool    bFilterNameFound = sal_False;
                             sal_Int32   i, nCount;
@@ -373,7 +374,7 @@ sal_Bool SdGRFFilter::Export()
                             if ( !bRet && mXInteractionHandler.is() )
                                 SdGRFFilter::HandleGraphicFilterError(
                                     static_cast< SdGRFFilter_ImplInteractionHdl* >( mXInteractionHandler.get() )->GetErrorCode(),
-                                                    pGraphicFilter->GetLastError().nStreamError );
+                                                    rGraphicFilter.GetLastError().nStreamError );
                         }
                      }
                 }
@@ -439,7 +440,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
             switch( nGraphicType )
             {
             case ::com::sun::star::graphic::GraphicType::VECTOR:
-                aMimeType = OUString::createFromAscii( "image/x-svm" );
+                aMimeType = OUString(RTL_CONSTASCII_USTRINGPARAM( "image/x-svm" ) );
                 break;
 
             case ::com::sun::star::graphic::GraphicType::PIXEL:
@@ -449,14 +450,12 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
 
                     if( bAnimated )
                     {
-                        aMimeType = OUString::createFromAscii( "image/gif" );
+                        aMimeType = OUString(RTL_CONSTASCII_USTRINGPARAM( "image/gif" ) );
                         break;
                     }
                 }
-                // Fallthrough!
-//          case ::com::sun::star::graphic::GraphicType::EMPTY:
             default:
-                aMimeType = OUString::createFromAscii( "image/png" );
+                aMimeType = OUString(RTL_CONSTASCII_USTRINGPARAM( "image/png" ) );
                 break;
             }
         }
@@ -477,7 +476,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
 
         // populate filter dialog filter list and select default filter to match graphic mime type
 
-        GraphicFilter& rGF = *GraphicFilter::GetGraphicFilter();
+        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
         Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
         OUString aDefaultFormatName;
         sal_uInt16 nCount = rGF.GetExportFormatCount();
@@ -548,7 +547,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
     }
     catch( Exception& )
     {
-        DBG_ERROR(
+        OSL_FAIL(
             (rtl::OString("SdGRFFilter::SaveGraphic(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -556,3 +555,5 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

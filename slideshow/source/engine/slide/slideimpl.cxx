@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,6 +74,8 @@
 #include "userpaintoverlay.hxx"
 #include "event.hxx"
 #include "tools.hxx"
+
+#include <o3tl/compat_functional.hxx>
 
 #include <boost/bind.hpp>
 #include <iterator>
@@ -174,12 +177,6 @@ private:
         otherwise
     */
     bool isAnimated();
-
-    /** Query whether this slide is currently showing.
-
-        @return true, if this slide is currently showing.
-    */
-    bool isShowing() const;
 
     /// Set all Shapes to their initial attributes for slideshow
     bool applyInitialShapeAttributes( const ::com::sun::star::uno::Reference<
@@ -633,7 +630,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
                                  rView,
                                  // select view:
                                  boost::bind(
-                                     std::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
+                                     o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
                                      _1 )))) == aEnd )
     {
         // corresponding view not found - maybe view was not
@@ -707,7 +704,7 @@ void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
                             rView,
                             // select view:
                             boost::bind(
-                                std::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
+                                o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
                                 _1 ))),
         aEnd );
 }
@@ -738,11 +735,6 @@ void SlideImpl::resetCursor()
 {
     mnCurrentCursor = awt::SystemPointer::ARROW;
     mrCursorManager.resetCursor();
-}
-
-bool SlideImpl::isShowing() const
-{
-    return meAnimationState == SHOWING_STATE;
 }
 
 bool SlideImpl::isAnimated()
@@ -851,8 +843,7 @@ bool SlideImpl::implPrefetchShow()
         {
             if( !maAnimations.importAnimations( mxRootNode ) )
             {
-                OSL_ENSURE( false,
-                            "SlideImpl::implPrefetchShow(): have animation nodes, "
+                OSL_FAIL( "SlideImpl::implPrefetchShow(): have animation nodes, "
                             "but import animations failed." );
 
                 // could not import animation framework,
@@ -882,8 +873,7 @@ bool SlideImpl::implPrefetchShow()
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE(
-            false,
+        OSL_FAIL(
             rtl::OUStringToOString(
                 comphelper::anyToString(cppu::getCaughtException()),
                 RTL_TEXTENCODING_UTF8 ) );
@@ -1010,8 +1000,7 @@ bool SlideImpl::applyInitialShapeAttributes(
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE(
-            false,
+        OSL_FAIL(
             rtl::OUStringToOString(
                 comphelper::anyToString(cppu::getCaughtException()),
                 RTL_TEXTENCODING_UTF8 ) );
@@ -1055,8 +1044,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
             if( !pShape )
             {
-                OSL_ENSURE( false,
-                            "SlideImpl::applyInitialShapeAttributes(): no shape found for given target" );
+                OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): no shape found for given target" );
                 continue;
             }
 
@@ -1065,8 +1053,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
             if( !pAttrShape )
             {
-                OSL_ENSURE( false,
-                            "SlideImpl::applyInitialShapeAttributes(): shape found does not "
+                OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): shape found does not "
                             "implement AttributableShape interface" );
                 continue;
             }
@@ -1084,8 +1071,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
                 if( !pAttrShape )
                 {
-                    OSL_ENSURE( false,
-                                "SlideImpl::applyInitialShapeAttributes(): shape found does not "
+                    OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): shape found does not "
                                 "provide a subset for requested paragraph index" );
                     continue;
                 }
@@ -1106,8 +1092,7 @@ bool SlideImpl::applyInitialShapeAttributes(
                 }
                 else
                 {
-                    OSL_ENSURE( false,
-                                "SlideImpl::applyInitialShapeAttributes(): Unexpected "
+                    OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): Unexpected "
                                 "(and unimplemented) property encountered" );
                 }
             }
@@ -1173,7 +1158,7 @@ bool SlideImpl::loadShapes()
                 }
                 addPolygons(aMPShapesFunctor.getPolygons());
 
-                nCurrCount = xMasterPageShapes->getCount() + 1;
+                nCurrCount = static_cast<sal_Int32>(aMPShapesFunctor.getImportedShapesCount());
             }
             catch( uno::RuntimeException& )
             {
@@ -1182,15 +1167,13 @@ bool SlideImpl::loadShapes()
             catch( ShapeLoadFailedException& )
             {
                 // TODO(E2): Error handling. For now, bail out
-                OSL_ENSURE( false,
-                            "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
+                OSL_FAIL( "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
                 return false;
 
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( false,
-                            rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -1227,14 +1210,12 @@ bool SlideImpl::loadShapes()
     catch( ShapeLoadFailedException& )
     {
         // TODO(E2): Error handling. For now, bail out
-        OSL_ENSURE( false,
-                    "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
+        OSL_FAIL( "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
         return false;
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -1299,3 +1280,5 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
 
 } // namespace internal
 } // namespace slideshow
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

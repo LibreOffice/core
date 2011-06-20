@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "tools/SlotStateListener.hxx"
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHP_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
-#endif
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 
@@ -223,3 +222,5 @@ void SlotStateListener::ThrowIfDisposed (void)
 
 
 } } // end of namespace ::sd::tools
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

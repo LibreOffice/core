@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,16 +32,10 @@
 
 #include "fuvect.hxx"
 #include <tools/poly.hxx>
-#ifndef _SVDOPATH_HXX //autogen
 #include <svx/svdograf.hxx>
-#endif
 #include <vcl/msgbox.hxx>
-#ifndef _SVX_SVDOGRAF_HXX //autogen
 #include <svx/svdograf.hxx>
-#endif
-#ifndef _SVX_SVDEDTV_HXX //autogen
 #include <svx/svdedtv.hxx>
-#endif
 
 
 #include "View.hxx"
@@ -95,7 +90,7 @@ void FuVectorize::DoExecute( SfxRequest& )
                 const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();
                 SdrPageView*        pPageView = mpView->GetSdrPageView();
 
-                if( pPageView && rMtf.GetActionCount() )
+                if( pPageView && rMtf.GetActionSize() )
                 {
                     SdrGrafObj* pVectObj = (SdrGrafObj*) pObj->Clone();
                     String      aStr( mpView->GetDescriptionOfMarkedObjects() );
@@ -114,3 +109,5 @@ void FuVectorize::DoExecute( SfxRequest& )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

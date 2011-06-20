@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 #include <svx/svdmodel.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// #109538#
 
 void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
 {
@@ -127,9 +127,7 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
         }
         case PK_HANDOUT:
         {
-//          #11420# for models used to transfer drawing shapes via clipboard its
-//          ok to not have a handout page
-//          DBG_ASSERT(mpHandoutPage, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
+//          #11420# for models used to transfer drawing shapes via clipboard its ok to not have a handout page
             DBG_ASSERT(nPgNum == 0L, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
             if (nPgNum == 0)
                 pRetval = mpHandoutPage;
@@ -221,3 +219,5 @@ ImpMasterPageListWatcher::ImpMasterPageListWatcher(const SdrModel& rModel)
 ImpMasterPageListWatcher::~ImpMasterPageListWatcher()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

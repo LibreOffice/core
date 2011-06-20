@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ namespace slideshow
 
             // init doctree vector
             maActionClassVector.clear();
-            maActionClassVector.reserve( mpMtf->GetActionCount() );
+            maActionClassVector.reserve( mpMtf->GetActionSize() );
 
             // search metafile for text output
             MetaAction* pCurrAct;
@@ -638,8 +639,7 @@ namespace slideshow
                     case DocTreeNode::NODETYPE_INVALID:
                         // FALLTHROUGH intended
                     default:
-                        OSL_ENSURE(false,
-                                   "DrawShapeSubsetting::mapDocTreeNode(): unexpected node type");
+                        OSL_FAIL("DrawShapeSubsetting::mapDocTreeNode(): unexpected node type");
                         return DrawShapeSubsetting::CLASS_NOOP;
 
                     case DocTreeNode::NODETYPE_LOGICAL_SHAPE:
@@ -664,7 +664,7 @@ namespace slideshow
                 };
             }
 
-            /// Counts number of class occurences
+            /// Counts number of class occurrences
             class CountClassFunctor
             {
             public:
@@ -682,7 +682,7 @@ namespace slideshow
                     if( eCurrElemClassification == meClass )
                         ++mnCurrCount;
 
-                    return true; // never stop, count all occurences
+                    return true; // never stop, count all occurrences
                 }
 
                 sal_Int32 getCount() const
@@ -707,7 +707,7 @@ namespace slideshow
             // actions
             CountClassFunctor aFunctor( eRequestedClass );
 
-            // count all occurences in the given range
+            // count all occurrences in the given range
             iterateActionClassifications( aFunctor, rBegin, rEnd );
 
             return aFunctor.getCount();
@@ -863,3 +863,5 @@ namespace slideshow
 
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

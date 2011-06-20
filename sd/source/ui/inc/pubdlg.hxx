@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,26 +31,17 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/fixed.hxx>
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include "resltn.hxx"       // enum PublishingResolution
 #include "pres.hxx"
 #include "assclass.hxx"
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #define NOOFPAGES 6
 
@@ -65,7 +57,6 @@ class Edit;
 class MultiLineEdit;
 class ValueSet;
 class SdHtmlAttrPreview;
-class List;
 class SdPublishingDesign;
 class ButtonSet;
 
@@ -147,7 +138,6 @@ private:
     FixedText*      pPage4_Titel2;
     MultiLineEdit*  pPage4_Misc;
     CheckBox*       pPage4_Download;
-//-/    CheckBox*       pPage4_Created;
 
     // page 5 controls
 
@@ -172,8 +162,6 @@ private:
 
     boost::scoped_ptr< ButtonSet > mpButtonSet;
 
-//  CheckBox*       pPage6_Sound;
-
     // standard controls
     FixedLine       aBottomLine;
     HelpButton      aHelpButton;
@@ -197,7 +185,7 @@ private:
     void    ChangePage();
     void    UpdatePage();
 
-    List*   m_pDesignList;
+    boost::ptr_vector<SdPublishingDesign>   m_aDesignList;
     sal_Bool    m_bDesignListDirty;
     SdPublishingDesign* m_pDesign;
     sal_Bool    Load();
@@ -233,3 +221,5 @@ public:
 };
 
 #endif // _SD_PUBDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

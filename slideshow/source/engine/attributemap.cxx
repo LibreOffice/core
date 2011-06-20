@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,49 +55,28 @@ namespace slideshow
             static AnimateAttributeMap::MapEntry lcl_attributeMap[] =
                 {
                     { "charcolor", ATTRIBUTE_CHAR_COLOR },
-
                     { "charfontname", ATTRIBUTE_CHAR_FONT_NAME },
-
                     { "charheight", ATTRIBUTE_CHAR_HEIGHT },
-
                     { "charposture", ATTRIBUTE_CHAR_POSTURE },
-
                     // TODO(Q1): This should prolly be changed in PPT import
                     // { "charrotation", ATTRIBUTE_CHAR_ROTATION },
                     { "charrotation", ATTRIBUTE_ROTATE },
-
                     { "charunderline", ATTRIBUTE_CHAR_UNDERLINE },
-
                     { "charweight", ATTRIBUTE_CHAR_WEIGHT },
-
                     { "color", ATTRIBUTE_COLOR },
-
                     { "dimcolor", ATTRIBUTE_DIMCOLOR },
-
                     { "fillcolor", ATTRIBUTE_FILL_COLOR },
-
                     { "fillstyle", ATTRIBUTE_FILL_STYLE },
-
                     { "height", ATTRIBUTE_HEIGHT },
-
                     { "linecolor", ATTRIBUTE_LINE_COLOR },
-
                     { "linestyle", ATTRIBUTE_LINE_STYLE },
-
                     { "opacity", ATTRIBUTE_OPACITY },
-
                     { "rotate", ATTRIBUTE_ROTATE },
-
                     { "skewx", ATTRIBUTE_SKEW_X },
-
                     { "skewy", ATTRIBUTE_SKEW_Y },
-
                     { "visibility", ATTRIBUTE_VISIBILITY },
-
                     { "width", ATTRIBUTE_WIDTH },
-
                     { "x", ATTRIBUTE_POS_X },
-
                     { "y", ATTRIBUTE_POS_Y }
                 };
 
@@ -121,3 +101,5 @@ namespace slideshow
 
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

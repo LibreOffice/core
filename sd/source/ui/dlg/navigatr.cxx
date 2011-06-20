@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,7 +88,6 @@ SdNavigatorWin::SdNavigatorWin(
 ,   meDragType      ( NAVIGATOR_DRAGTYPE_EMBEDDED )
 ,   mpBindings      ( pInBindings )
 ,   maImageList     ( SdResId( IL_NAVIGATR ) )
-,   maImageListH    ( SdResId( ILH_NAVIGATR ) )
 {
     maTlbObjects.SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
 
@@ -97,7 +97,6 @@ SdNavigatorWin::SdNavigatorWin(
 
     mpNavigatorCtrlItem = new SdNavigatorControllerItem( SID_NAVIGATOR_STATE, this, mpBindings );
     mpPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, mpBindings );
-    mpDocList = new List();
 
     ApplyImageList(); // load images *before* calculating sizes to get something useful !!!
 
@@ -156,13 +155,6 @@ SdNavigatorWin::~SdNavigatorWin()
 {
     delete mpNavigatorCtrlItem;
     delete mpPageNameCtrlItem;
-
-    // Liste der DocInfos loeschen
-    long nCount = mpDocList->Count();
-    while( nCount-- )
-        delete (NavDocInfo*) mpDocList->Remove( (sal_uLong)0 );
-
-    delete mpDocList;
 }
 
 // -----------------------------------------------------------------------
@@ -396,7 +388,7 @@ IMPL_LINK( SdNavigatorWin, ClickObjectHdl, void *, EMPTYARG )
                 mpBindings->GetDispatcher()->Execute(
                     SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-                // #98821# moved here from SetGetFocusHdl. Reset the
+                // moved here from SetGetFocusHdl. Reset the
                 // focus only if something has been selected in the
                 // document.
                 SfxViewShell* pCurSh = SfxViewShell::Current();
@@ -517,8 +509,8 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu )
                 break;
 
             default:
-                OSL_ENSURE(
-                    false, "SdNavigatorWin::ShapeFilterCallback called for unknown menu entry");
+                OSL_FAIL(
+                    "SdNavigatorWin::ShapeFilterCallback called for unknown menu entry");
                 break;
         }
 
@@ -695,9 +687,7 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
         maLbDocs.Clear();
 
         // Liste der DocInfos loeschen
-        long nCount = mpDocList->Count();
-        while( nCount-- )
-            delete (NavDocInfo*) mpDocList->Remove( (sal_uLong)0 );
+         maDocList.clear();
 
         if( mbDocImported )
             maLbDocs.InsertEntry( aStr, 0 );
@@ -710,14 +700,15 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
             ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, pSfxDocShell );
             if( pDocShell  && !pDocShell->IsInDestruction() && ( pDocShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) )
             {
-                NavDocInfo* pInfo = new NavDocInfo();
-                pInfo->mpDocShell = pDocShell;
+                NavDocInfo aInfo ;
+                aInfo.mpDocShell = pDocShell;
 
-                aStr = pDocShell->GetMedium()->GetName();
+                SfxMedium *pMedium = pDocShell->GetMedium();
+                aStr = pMedium ? pMedium->GetName() : String();
                 if( aStr.Len() )
-                    pInfo->SetName();
+                    aInfo.SetName();
                 else
-                    pInfo->SetName( sal_False );
+                    aInfo.SetName( sal_False );
                 // z.Z. wird wieder der Name der Shell genommen (also ohne Pfad)
                 // da Koose es als Fehler ansieht, wenn er Pfad in URL-Notation
                 // angezeigt wird!
@@ -725,13 +716,12 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
 
                 maLbDocs.InsertEntry( aStr, LISTBOX_APPEND );
 
-                //
                 if( pDocShell == pCurrentDocShell )
-                    pInfo->SetActive();
+                    aInfo.SetActive();
                 else
-                    pInfo->SetActive( sal_False );
+                    aInfo.SetActive( sal_False );
 
-                mpDocList->Insert( pInfo, LIST_APPEND );
+                maDocList.push_back( aInfo );
             }
             pSfxDocShell = SfxObjectShell::GetNext( *pSfxDocShell, 0 , sal_False );
         }
@@ -753,7 +743,7 @@ sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool b
                 return( bImage ? TBI_EMBEDDED : STR_DRAGTYPE_EMBEDDED );
         case NAVIGATOR_DRAGTYPE_LINK:
                 return( bImage ? TBI_LINK : STR_DRAGTYPE_LINK );
-        default: DBG_ERROR( "Keine Resource fuer DragType vorhanden!" );
+        default: OSL_FAIL( "Keine Resource fuer DragType vorhanden!" );
     }
     return( 0 );
 }
@@ -762,7 +752,7 @@ sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool b
 
 NavDocInfo* SdNavigatorWin::GetDocInfo()
 {
-    long nPos = maLbDocs.GetSelectEntryPos();
+    sal_uInt32 nPos = maLbDocs.GetSelectEntryPos();
 
     if( mbDocImported )
     {
@@ -773,9 +763,7 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
         nPos--;
     }
 
-    NavDocInfo* pInfo = (NavDocInfo*)mpDocList->GetObject( nPos );
-
-    return( pInfo );
+    return nPos < maDocList.size() ? &(maDocList[ nPos ]) : NULL;
 }
 
 /*************************************************************************
@@ -869,11 +857,9 @@ void SdNavigatorWin::SetDragImage()
 
 void SdNavigatorWin::ApplyImageList()
 {
-    const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    maToolbox.SetImageList( bHighContrast ? maImageListH : maImageList );
-
-    maToolbox.SetItemImage(TBI_SHAPE_FILTER, BitmapEx(SdResId( bHighContrast ? BMP_GRAPHIC_H : BMP_GRAPHIC)));
+    maToolbox.SetImageList( maImageList );
+    maToolbox.SetItemImage( TBI_SHAPE_FILTER, BitmapEx( SdResId( BMP_GRAPHIC ) ) );
 
     SetDragImage();
 }
@@ -1007,3 +993,5 @@ void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

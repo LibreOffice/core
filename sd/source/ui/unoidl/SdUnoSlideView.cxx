@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -167,7 +168,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
     if (xProperties.is())
     {
         sal_uInt16 nPageNumber(0);
-        if (xProperties->getPropertyValue(::rtl::OUString::createFromAscii("Number")) >>= nPageNumber)
+        if (xProperties->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Number"))) >>= nPageNumber)
         {
             mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(
                 nPageNumber-1,
@@ -282,3 +283,5 @@ void SAL_CALL SdUnoSlideView::getFastPropertyValue( ::com::sun::star::uno::Any&,
 */
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

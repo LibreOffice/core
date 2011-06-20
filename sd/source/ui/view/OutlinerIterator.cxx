@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -580,7 +581,7 @@ ViewIteratorImpl::ViewIteratorImpl (
     const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
     bool bDirectionIsForward)
     : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward),
-      mbPageChangeOccured(false),
+      mbPageChangeOccurred(false),
       mpPage(NULL),
       mpObjectIterator(NULL)
 {
@@ -598,7 +599,7 @@ ViewIteratorImpl::ViewIteratorImpl (
     PageKind ePageKind,
     EditMode eEditMode)
     : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward, ePageKind, eEditMode),
-      mbPageChangeOccured(false),
+      mbPageChangeOccurred(false),
       mpPage(NULL),
       mpObjectIterator(NULL)
 {
@@ -695,8 +696,8 @@ void ViewIteratorImpl::GotoNextText(void)
 
 void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
 {
-    mbPageChangeOccured = (maPosition.mnPageIndex!=nPageIndex);
-    if (mbPageChangeOccured)
+    mbPageChangeOccurred = (maPosition.mnPageIndex!=nPageIndex);
+    if (mbPageChangeOccurred)
     {
         maPosition.mnPageIndex = nPageIndex;
 
@@ -896,3 +897,5 @@ void DocumentIteratorImpl::GotoNextText (void)
 
 
 } } // end of namespace ::sd::outliner
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

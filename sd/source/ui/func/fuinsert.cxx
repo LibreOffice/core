@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,14 +49,14 @@
 #include <sfx2/request.hxx>
 #include <svl/globalnameitem.hxx>
 #include <unotools/pathoptions.hxx>
+#include <svtools/miscopt.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/linkmgr.hxx>
+#include <svx/linkwarn.hxx>
 #include <svx/svdetc.hxx>
 #include <avmedia/mediawindow.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <sfx2/printer.hxx>
 #include <sot/clsids.hxx>
 #include <svtools/sfxecode.hxx>
@@ -65,21 +66,16 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdomedia.hxx>
-#ifndef _EDITENG_HXX //autogen
 #include <editeng/editeng.hxx>
-#endif
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
 #include <svx/svdpagv.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/opengrf.hxx>
 
 #include <sfx2/viewfrm.hxx>
 
 #include "app.hrc"
-#include "misc.hxx"
 #include "sdresid.hxx"
 #include "View.hxx"
 #include "app.hxx"
@@ -156,7 +152,15 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
 
                 if(pGrafObj && aDlg.IsAsLink())
                 {
-                    // store link only?
+                    // really store as link only?
+                    if( SvtMiscOptions().ShowLinkWarningDialog() )
+                    {
+                        SvxLinkWarningDialog aWarnDlg(mpWindow,aDlg.GetPath());
+                        if( aWarnDlg.Execute() != RET_OK )
+                            return; // don't store as link
+                    }
+
+                    // store as link
                     String aFltName(aDlg.GetCurrentFilter());
                     String aPath(aDlg.GetPath());
                     pGrafObj->SetGraphicLink(aPath, aFltName);
@@ -165,7 +169,7 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
         }
         else
         {
-            SdGRFFilter::HandleGraphicFilterError( (sal_uInt16)nError, GraphicFilter::GetGraphicFilter()->GetLastError().nStreamError );
+            SdGRFFilter::HandleGraphicFilterError( (sal_uInt16)nError, GraphicFilter::GetGraphicFilter().GetLastError().nStreamError );
         }
     }
 }
@@ -389,7 +393,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     pOleObj->SetProgName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarMath" ) ) );
                 }
 
-                //HMHmpView->HideMarkHdl();
                 pOleObj->SetLogicRect(aRect);
                 Size aTmp( OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aUnit ) );
                 awt::Size aVisualSize;
@@ -502,7 +505,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
                                 if ( xSet.is() )
                                 {
-                                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
                                             uno::makeAny( ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                                 }
                             }
@@ -593,8 +596,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 ( (SdrOle2Obj*) pObj)->SetAspect(nAspect);
                                 Rectangle aRect = ( (SdrOle2Obj*) pObj)->GetLogicRect();
 
-                                //HMHmpView->HideMarkHdl();
-
                                 if ( nAspect == embed::Aspects::MSOLE_ICON )
                                 {
                                     if( xIconMetaFile.is() )
@@ -636,7 +637,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                     if( mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
                     {
-                        //  #73279# Math objects change their object size during InsertObject.
+                        //  Math objects change their object size during InsertObject.
                         //  New size must be set in SdrObject, or a wrong scale will be set at
                         //  ActivateObject.
 
@@ -660,7 +661,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                         if (bCreateNew)
                         {
-                            //HMHmpView->HideMarkHdl();
                             pObj->SetLogicRect(aRect);
 
                             if ( nAspect != embed::Aspects::MSOLE_ICON )
@@ -777,3 +777,5 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

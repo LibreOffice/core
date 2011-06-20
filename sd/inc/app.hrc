@@ -215,10 +215,6 @@
 #define SID_CONNECTOR_LINES_CIRCLES         (SID_SD_START+145)
 
 // Options-Leisten Slot-IDs
-//#i80528##define SID_GRAPHIC_DRAFT                 (SID_SD_START+146)
-//#i80528##define SID_FILL_DRAFT                        (SID_SD_START+147)
-//#i80528##define SID_TEXT_DRAFT                        (SID_SD_START+148)
-//#i80528##define SID_LINE_DRAFT                        (SID_SD_START+149)
 #define SID_HANDLES_DRAFT                   (SID_SD_START+150)
 #define SID_SOLID_CREATE                    (SID_SD_START+151)
 #define SID_HELPLINES_USE                   (SID_SD_START+152)
@@ -500,11 +496,12 @@
 #define SID_DISPLAY_MASTER_OBJECTS          (SID_SD_START+437)
 #define SID_INSERTPAGE_LAYOUT_MENU          (SID_SD_START+438)
 #define SID_TP_EDIT_MASTER                  (SID_SD_START+439)
+#define SID_OUTLINE_TEXT_AUTOFIT            (SID_SD_START+440)
 
 // Add companion for the SID_HIDE_SLIDE (that is defined in svx)
-#define SID_SHOW_SLIDE                      (SID_SD_START+440)
+#define SID_SHOW_SLIDE                      (SID_SD_START+441)
 
-#define SID_ADD_MOTION_PATH                 (SID_SD_START+441)
-#define SID_TABLE_TOOLBOX                   (SID_SD_START+442)
+#define SID_ADD_MOTION_PATH                 (SID_SD_START+442)
+#define SID_TABLE_TOOLBOX                   (SID_SD_START+443)
 
 #endif

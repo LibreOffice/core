@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ void ShapeList::addShape( SdrObject& rObject )
     }
     else
     {
-        DBG_ERROR("sd::ShapeList::addShape(), given shape already part of list!");
+        OSL_FAIL("sd::ShapeList::addShape(), given shape already part of list!");
     }
 }
 
@@ -79,7 +80,7 @@ SdrObject* ShapeList::removeShape( SdrObject& rObject )
     }
     else
     {
-        DBG_ERROR("sd::ShapeList::removeShape(), given shape not part of list!");
+        OSL_FAIL("sd::ShapeList::removeShape(), given shape not part of list!");
     }
     return 0;
 }
@@ -146,7 +147,7 @@ void ShapeList::ObjectInDestruction(const SdrObject& rObject)
     }
     else
     {
-        DBG_ERROR("sd::ShapeList::ObjectInDestruction(), got a call from an unknown friend!");
+        OSL_FAIL("sd::ShapeList::ObjectInDestruction(), got a call from an unknown friend!");
     }
 }
 
@@ -173,3 +174,5 @@ bool ShapeList::hasMore() const
 {
     return maIter != maShapeList.end();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ TYPEINIT1(PresentationViewShellBase, ViewShellBase);
 // new PresentationViewShellBase object has been constructed.
 
 SfxViewFactory* PresentationViewShellBase::pFactory;
-SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
+SfxViewShell* PresentationViewShellBase::CreateInstance (
     SfxViewFrame *_pFrame, SfxViewShell *pOldView)
 {
     PresentationViewShellBase* pBase =
@@ -91,12 +92,12 @@ PresentationViewShellBase::PresentationViewShellBase (
         if (xFrameSet.is())
         {
             Reference<beans::XPropertySet> xLayouterSet (
-                xFrameSet->getPropertyValue(::rtl::OUString::createFromAscii("LayoutManager")),
+                xFrameSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))),
                 UNO_QUERY);
             if (xLayouterSet.is())
             {
                 xLayouterSet->setPropertyValue(
-                    ::rtl::OUString::createFromAscii("AutomaticToolbars"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticToolbars")),
                     makeAny(sal_False));
             }
         }
@@ -121,3 +122,4 @@ void PresentationViewShellBase::InitializeFramework (void)
 
 } // end of namespace sd
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

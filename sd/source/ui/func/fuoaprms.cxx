@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/aeitem.hxx>
 #include "svx/xtable.hxx"
 
@@ -52,7 +51,7 @@
 #include "ViewShell.hxx"
 #include "anminfo.hxx"
 #include "unoaprms.hxx"                 // Undo-Action
-#include "sdundogr.hxx"                 // Undo Gruppe
+#include "sdundogr.hxx"                 // Undo Group
 #include "View.hxx"
 #include "sdabstdlg.hxx"
 #include "sdresid.hxx"
@@ -118,11 +117,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     short nSecondSoundOnSet     = ATTR_MISSING;
     short nSecondPlayFullSet    = ATTR_MISSING;
 
-
-
-//    sal_Bool bDontKnow   = sal_False;
-
-                                    // defaulten (fuer Undo-Aktion)
+    // defaults (for Undo-Action)
     presentation::AnimationEffect eEffect         = presentation::AnimationEffect_NONE;
     presentation::AnimationEffect eTextEffect     = presentation::AnimationEffect_NONE;
     presentation::AnimationSpeed  eSpeed          = presentation::AnimationSpeed_MEDIUM;
@@ -728,10 +723,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetSoundOn(pInfo->mbSoundOn, pInfo->mbSoundOn);
                 pAction->SetSound(pInfo->maSoundFile, pInfo->maSoundFile);
                 pAction->SetPlayFull(pInfo->mbPlayFull, pInfo->mbPlayFull);
-//              pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
                 pAction->SetClickAction(pInfo->meClickAction, pInfo->meClickAction);
                 pAction->SetBookmark(pInfo->GetBookmark(), pInfo->GetBookmark());
-//              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, sal_True);
                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);
                 pAction->SetSecondEffect(pInfo->meSecondEffect, pInfo->meSecondEffect);
                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, pInfo->meSecondSpeed);
@@ -739,7 +732,6 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetSecondPlayFull(pInfo->mbSecondPlayFull, pInfo->mbSecondPlayFull);
                 pUndoGroup->AddAction(pAction);
 
-//              pInfo->mbInvisibleInPresentation = sal_True;
             }
             else
             {
@@ -760,8 +752,6 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetPathObj(pInfo->mpPathObj, pPath);
                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
                 pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
-//              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation,
-//                                          pInfo->mbInvisibleInPresentation);
                 pAction->SetVerb(pInfo->mnVerb, (sal_uInt16)pInfo->GetBookmark().ToInt32() );
                 pAction->SetSecondEffect(pInfo->meSecondEffect, eSecondEffect);
                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, eSecondSpeed);
@@ -818,22 +808,20 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 if (nSecondPlayFullSet == ATTR_SET)
                     pInfo->mbSecondPlayFull = bSecondPlayFull;
 
-                // noch ein paar Spezialitaeten
-//              if (eEffect == presentation::AnimationEffect_PATH && nEffectSet == ATTR_SET)
-//                  pInfo->mSetPath(pPath);
-
                 if (eClickAction == presentation::ClickAction_VERB)
                     pInfo->mnVerb = (sal_uInt16)aBookmark.ToInt32();
             }
         }
-        // Undo Gruppe dem Undo Manager uebergeben
+        // Set the Undo Group in of the Undo Manager
         pUndoMgr->AddUndoAction(pUndoGroup);
         pUndoMgr->LeaveListAction();
 
-        // Model geaendert
+        // Model changed
         mpDoc->SetChanged();
     }
     // sieht man nicht, also muss an den Bindings nicht invalidiert werden
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

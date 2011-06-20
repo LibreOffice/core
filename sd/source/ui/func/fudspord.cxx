@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include "fupoor.hxx"
 #include "ViewShell.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 
 namespace sd {
@@ -95,7 +94,7 @@ FunctionReference FuDisplayOrder::Create( ViewShell* pViewSh, ::sd::Window* pWin
 
 sal_Bool FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     return sal_True;
@@ -144,7 +143,7 @@ sal_Bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 
 sal_Bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     SdrPageView* pPV = NULL;
@@ -192,3 +191,5 @@ void FuDisplayOrder::Deactivate()
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,20 +29,19 @@
 #ifndef SD_ZOOM_LIST_HXX
 #define SD_ZOOM_LIST_HXX
 
+#include <vector>
 
 #include <tools/gen.hxx>
-#include <tools/list.hxx>
-
 
 namespace sd {
 
 class ViewShell;
 
-class ZoomList : public List
+class ZoomList
 {
 public:
+
     ZoomList(ViewShell* pViewShell);
-    virtual ~ZoomList();
 
     void        InsertZoomRect(const Rectangle& rRect);
     Rectangle   GetNextZoomRect();
@@ -51,7 +51,9 @@ public:
 
 private:
     ViewShell*  mpViewShell;
-    sal_uLong       mnCurPos;
+    sal_uLong   mnCurPos;
+
+    std::vector<Rectangle> maRectangles;
 };
 
 } // end of namespace sd
@@ -59,3 +61,4 @@ private:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

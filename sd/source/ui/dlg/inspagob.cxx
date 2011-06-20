@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,11 +111,7 @@ void SdInsertPagesObjsDlg::Reset()
         Color aColor( COL_WHITE );
         Bitmap aBmpText( SdResId( BMP_DOC_TEXT ) );
         Image aImgText( aBmpText, aColor );
-        Bitmap aBmpTextH( SdResId( BMP_DOC_TEXT_H ) );
-        Image aImgTextH( aBmpTextH, Color( COL_BLACK ) );
-        SvLBoxEntry* pEntry = aLbTree.InsertEntry( rName, aImgText, aImgText );
-        aLbTree.SetExpandedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );
-        aLbTree.SetCollapsedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );
+        aLbTree.InsertEntry( rName, aImgText, aImgText );
     }
 
     aCbxMasters.Check( sal_True );
@@ -142,7 +139,7 @@ List* SdInsertPagesObjsDlg::GetList( sal_uInt16 nType )
         // wird das gesamte Dokument (und nicht mehr!) eingefuegt.
         if( aLbTree.GetSelectionCount() == 0 ||
             ( aLbTree.IsSelected( aLbTree.First() ) ) )
-            return( NULL ); // #37350#
+            return( NULL );
     }
     return( aLbTree.GetSelectEntryList( nType ) );
 }
@@ -186,3 +183,4 @@ IMPL_LINK( SdInsertPagesObjsDlg, SelectObjectHdl, void *, EMPTYARG )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

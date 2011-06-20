@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/stl_types.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -83,8 +84,8 @@ OUString ConfigurationController_getImplementationName (void) throw(RuntimeExcep
 Sequence<rtl::OUString> SAL_CALL ConfigurationController_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const OUString sServiceName(OUString::createFromAscii(
-        "com.sun.star.drawing.framework.ConfigurationController"));
+    static const OUString sServiceName(OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.drawing.framework.ConfigurationController")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -205,7 +206,7 @@ void SAL_CALL ConfigurationController::disposing (void)
     aEvent.Source = uno::Reference<uno::XInterface>((cppu::OWeakObject*)this);
 
     {
-        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        const SolarMutexGuard aSolarGuard;
         mpImplementation->mpBroadcaster->DisposeAndClear();
     }
 
@@ -655,7 +656,7 @@ void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArgumen
 
     if (aArguments.getLength() == 1)
     {
-        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        const SolarMutexGuard aSolarGuard;
 
         mpImplementation.reset(new Implementation(
             *this,
@@ -724,3 +725,5 @@ ConfigurationController::Implementation::~Implementation (void)
 
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

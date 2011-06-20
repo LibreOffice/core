@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -259,9 +260,6 @@ void SdPrintOptions::updateControls()
     aCbxPagename.Enable( !aRbtBooklet.IsChecked() && (aCbxDraw.IsChecked() || aCbxNotes.IsChecked() || aCbxOutline.IsChecked()) );
 }
 
-/* -----------------------------04.05.01 10:53--------------------------------
-
- ---------------------------------------------------------------------------*/
 void lcl_MoveRB_Impl(Window& rBtn, long nXDiff)
 {
     Point aPos(rBtn.GetPosPixel());
@@ -312,3 +310,4 @@ void SdPrintOptions::PageCreated (SfxAllItemSet
 #endif
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

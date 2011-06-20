@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@ ConfigurationAccess::ConfigurationAccess (
     {
         Reference<lang::XMultiServiceFactory> xProvider (
             xFactory->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")),
                 rxContext),
             UNO_QUERY);
         if (xProvider.is())
@@ -70,7 +71,7 @@ ConfigurationAccess::ConfigurationAccess (
 {
     Reference<lang::XMultiServiceFactory> xProvider (
         ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
         UNO_QUERY);
     if (xProvider.is())
         Initialize(xProvider, rsRootName, eMode);
@@ -228,3 +229,4 @@ void ConfigurationAccess::FillList(
 
 } } // end of namespace sd::tools
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

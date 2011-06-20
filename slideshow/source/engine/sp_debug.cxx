@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -295,3 +296,5 @@ void sp_array_destructor_hook(void *)
 } // namespace boost
 
 #endif // defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

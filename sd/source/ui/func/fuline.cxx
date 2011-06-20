@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,9 +44,7 @@
 #include <sfx2/viewfrm.hxx>
 #include "ViewShell.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "app.hrc"
 #include <svx/svxdlg.hxx>
@@ -128,3 +127,5 @@ void FuLine::Deactivate()
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

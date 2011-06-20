@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,9 +51,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <tools/link.hxx>
 
 #include <map>
@@ -1695,3 +1694,5 @@ void ToolBarShellList::UpdateShells (
 
 
 } // end of anonymous namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

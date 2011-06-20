@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -198,7 +199,6 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // Title-Textobjekt erstellen
                     SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
 
-//
                     OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( (sal_uInt16) nParaPos, 1);
                     pOutlinerParaObject->SetOutlinerMode(OUTLINERMODE_TITLEOBJECT);
 
@@ -233,7 +233,6 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                         OutlinerParaObject* pOPO = pOutl->CreateParaObject( (sal_uInt16) nParaPos, (sal_uInt16) nChildCount);
 
-// --
                         SdrOutliner* pTempOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, mpDoc );
                         pTempOutl->SetText( *pOPO );
 
@@ -250,7 +249,6 @@ void FuExpandPage::DoExecute( SfxRequest& )
                         pOPO = pTempOutl->CreateParaObject();
                         delete pTempOutl;
 
-// --
                         pOutlineObj->SetOutlinerParaObject( pOPO );
                         pOutlineObj->SetEmptyPresObj(sal_False);
 
@@ -276,3 +274,5 @@ void FuExpandPage::DoExecute( SfxRequest& )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

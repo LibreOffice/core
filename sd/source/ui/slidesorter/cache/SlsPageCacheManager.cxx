@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -132,7 +133,7 @@ namespace sd { namespace slidesorter { namespace cache {
 /** Container for the active caches.
 */
 class PageCacheManager::PageCacheContainer
-    : public ::std::hash_map<CacheDescriptor,
+    : public ::boost::unordered_map<CacheDescriptor,
                              ::boost::shared_ptr<PageCacheManager::Cache>,
                              CacheDescriptor::Hash,
                              CacheDescriptor::Equal>
@@ -146,7 +147,7 @@ public:
     class CompareWithCache { public:
         CompareWithCache(const ::boost::shared_ptr<PageCacheManager::Cache>& rpCache)
             : mpCache(rpCache) {}
-        bool operator () (const PageCacheContainer::value_type& rValue)
+        bool operator () (const PageCacheContainer::value_type& rValue) const
         { return rValue.second == mpCache; }
     private:
         ::boost::shared_ptr<PageCacheManager::Cache> mpCache;
@@ -487,3 +488,5 @@ void PageCacheManager::PutRecentlyUsedCache(
 
 
 } } } // end of namespace ::sd::slidesorter::cache
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

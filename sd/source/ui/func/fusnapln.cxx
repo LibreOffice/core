@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,7 @@
 #include "View.hxx"
 #include "ViewShell.hxx"
 #include "DrawViewShell.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "sdenumdef.hxx"
 #include "sdresid.hxx"
 #include "sdabstdlg.hxx"
@@ -75,7 +74,6 @@ FunctionReference FuSnapLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::
 void FuSnapLine::DoExecute( SfxRequest& rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    SdrPageView* pPV = 0;
     sal_uInt16  nHelpLine = 0;
     sal_Bool    bCreateNew = sal_True;
 
@@ -88,11 +86,12 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         pArgs = NULL;
     }
 
-    if ( !pArgs )
+    SdrPageView* pPV = mpView->GetSdrPageView();
+
+    if (!pArgs)
     {
         SfxItemSet aNewAttr(mpViewShell->GetPool(), ATTR_SNAPLINE_START, ATTR_SNAPLINE_END);
         bool bLineExist (false);
-        pPV = mpView->GetSdrPageView();
         Point aLinePos;
 
         if (pHelpLineIndex == NULL)
@@ -131,53 +130,54 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         AbstractSdSnapLineDlg* pDlg = pFact ? pFact->CreateSdSnapLineDlg( NULL, aNewAttr, mpView ) : 0;
-        if( pDlg )
+        OSL_ASSERT(pDlg);
+        if (!pDlg)
+            return;
+
+        if ( bLineExist )
         {
-            if ( bLineExist )
+            pDlg->HideRadioGroup();
+
+            const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
+
+            if ( rHelpLine.GetKind() == SDRHELPLINE_POINT )
             {
-                pDlg->HideRadioGroup();
-
-                const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
-
-                if ( rHelpLine.GetKind() == SDRHELPLINE_POINT )
-                {
-                    pDlg->SetText(String(SdResId(STR_SNAPDLG_SETPOINT)));
-                    pDlg->SetInputFields(sal_True, sal_True);
-                }
-                else
-                {
-                    pDlg->SetText(String(SdResId(STR_SNAPDLG_SETLINE)));
-
-                    if ( rHelpLine.GetKind() == SDRHELPLINE_VERTICAL )
-                        pDlg->SetInputFields(sal_True, sal_False);
-                    else
-                        pDlg->SetInputFields(sal_False, sal_True);
-                }
-                bCreateNew = sal_False;
+                pDlg->SetText(String(SdResId(STR_SNAPDLG_SETPOINT)));
+                pDlg->SetInputFields(sal_True, sal_True);
             }
             else
-                pDlg->HideDeleteBtn();
-
-            sal_uInt16 nResult = pDlg->Execute();
-
-            pDlg->GetAttr(aNewAttr);
-            delete pDlg;
-
-            switch( nResult )
             {
-                case RET_OK:
-                    rReq.Done(aNewAttr);
-                    pArgs = rReq.GetArgs();
-                    break;
+                pDlg->SetText(String(SdResId(STR_SNAPDLG_SETLINE)));
 
-                case RET_SNAP_DELETE:
-                    // Fangobjekt loeschen
-                    if ( !bCreateNew )
-                        pPV->DeleteHelpLine(nHelpLine);
-                    // und weiter wie bei default
-                default:
-                    return;
+                if ( rHelpLine.GetKind() == SDRHELPLINE_VERTICAL )
+                    pDlg->SetInputFields(sal_True, sal_False);
+                else
+                    pDlg->SetInputFields(sal_False, sal_True);
             }
+            bCreateNew = sal_False;
+        }
+        else
+            pDlg->HideDeleteBtn();
+
+        sal_uInt16 nResult = pDlg->Execute();
+
+        pDlg->GetAttr(aNewAttr);
+        delete pDlg;
+
+        switch( nResult )
+        {
+            case RET_OK:
+                rReq.Done(aNewAttr);
+                pArgs = rReq.GetArgs();
+                break;
+
+            case RET_SNAP_DELETE:
+                // Fangobjekt loeschen
+                if ( !bCreateNew )
+                    pPV->DeleteHelpLine(nHelpLine);
+                /*fall-through*/
+            default:
+                return;
         }
     }
     Point aHlpPos;
@@ -217,3 +217,5 @@ void FuSnapLine::Deactivate()
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

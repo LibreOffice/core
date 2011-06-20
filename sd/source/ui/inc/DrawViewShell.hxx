@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,7 @@
 #include "pres.hxx"
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/scanner/XScannerManager.hpp>
+#include <unotools/caserotate.hxx>
 
 class SdPage;
 class DrawDocShell;
@@ -64,7 +66,7 @@ class ViewOverlayManager;
 /** Base class of the stacked shells that provide graphical views to
     Draw and Impress documents and editing functionality.  In contrast
     to this other stacked shells are responsible for showing an
-    overview over several slides (SlideViewShell) or a textual
+    overview over several slides or a textual
     overview over the text in an Impress document (OutlineViewShell).
 */
 class DrawViewShell
@@ -217,6 +219,7 @@ public:
     void            FuTemporary(SfxRequest& rReq);
     void            FuPermanent(SfxRequest& rReq);
     void            FuSupport(SfxRequest& rReq);
+    void                FuSupportRotate(SfxRequest& rReq);
     void            FuTable(SfxRequest& rReq);
 
     void            AttrExec (SfxRequest& rReq);
@@ -434,6 +437,8 @@ private:
     */
     bool mbIsInSwitchPage;
 
+    RotateTransliteration m_aRotateCase;
+
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
 
     /** Depending on the given request create a new page or duplicate an
@@ -497,3 +502,5 @@ private:
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

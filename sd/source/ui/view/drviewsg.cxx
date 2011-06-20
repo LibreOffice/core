@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,8 @@
 #include "DrawViewShell.hxx"
 #include "ViewShellImplementation.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _IMAPDLG_HXX
 #include <svx/imapdlg.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -59,12 +56,6 @@
 #include "fupoor.hxx"
 
 namespace sd {
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void DrawViewShell::ExecIMap( SfxRequest& rReq )
 {
@@ -96,13 +87,6 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
         }
     }
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 {
@@ -294,3 +278,5 @@ void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

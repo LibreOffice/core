@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ namespace slideshow
                 {
                 }
 
-                bool operator()( const beans::NamedValue& rValue )
+                bool operator()( const beans::NamedValue& rValue ) const
                 {
                     return rValue.Name == mrSearchString;
                 }
@@ -93,7 +94,7 @@ namespace slideshow
                 {
                 }
 
-                bool operator()( const beans::NamedValue& rValue )
+                bool operator()( const beans::NamedValue& rValue ) const
                 {
                     return rValue.Name == mrKey.Name && rValue.Value == mrKey.Value;
                 }
@@ -718,27 +719,6 @@ namespace slideshow
                 ::cppcanvas::getBlue(aColor));
         }
 
-        /*sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
-        {
-            return ::cppcanvas::unMakeColor(
-                                                    // convert from IntSRGBA color to API color
-                                                    // (0xRRGGBBAA -> 0xAARRGGBB)
-                                                    static_cast< sal_uInt8 >(0),
-                                                    ::cppcanvas::getRed(aColor),
-                                                    ::cppcanvas::getGreen(aColor),
-                                                    ::cppcanvas::getBlue(aColor));
-        }*/
-
-        sal_Int8 unSignedToSigned(sal_Int8 nInt)
-        {
-            if(nInt < 0 ){
-                sal_Int8 nInt2 = nInt >> 1U;
-                return nInt2;
-            }else{
-                return nInt;
-            }
-        }
-
         void fillRect( const ::cppcanvas::CanvasSharedPtr& rCanvas,
                        const ::basegfx::B2DRectangle&      rRect,
                        ::cppcanvas::Color::IntSRGBA        aFillColor )
@@ -810,6 +790,9 @@ namespace slideshow
                                             aTmpRect.Y+aTmpRect.Height );
         }
 
+/*
+        TODO(F1): When ZOrder someday becomes usable enable this
+
         double getAPIShapePrio( const uno::Reference< drawing::XShape >& xShape )
         {
             uno::Reference< beans::XPropertySet > xPropSet( xShape,
@@ -827,6 +810,7 @@ namespace slideshow
             // Maybe we can also take the total number of shapes here
             return nPrio / 65535.0;
         }
+*/
 
         basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector& rSlideSize,
                                               const UnoViewSharedPtr&   pView )
@@ -851,3 +835,5 @@ namespace slideshow
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

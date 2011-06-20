@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -128,7 +129,6 @@ public:
     virtual sal_Bool    GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False ) const;
     virtual sal_Bool    SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False);
 
-//  virtual sal_Bool       HasMarkedObjUnused() const;
     void               FillOutliner();
     void               SetLinks();
     void               ResetLinks() const;
@@ -151,7 +151,7 @@ public:
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
 
 
-    // #97766# Re-implement GetScriptType for this view to get correct results
+    // Re-implement GetScriptType for this view to get correct results
     virtual sal_uInt16 GetScriptType() const;
 
     /** After this method has been called with <TRUE/> following changes of
@@ -161,11 +161,6 @@ public:
         cursor position.
     */
     void IgnoreCurrentPageChanges (bool bIgnore);
-
-#if 0
-    sal_Int32 GetPageNumberWidthPixel();
-#endif
-
     void InvalidateSlideNumberArea();
 
     /** creates and inserts an empty slide for the given paragraph. */
@@ -196,8 +191,8 @@ private:
     SdrOutliner*        mpOutliner;
     OutlinerView*       mpOutlinerView[MAX_OUTLINERVIEWS];
 
-    List*               mpOldParaOrder;
-    List*               mpSelectedParas;
+    std::vector<Paragraph*> maOldParaOrder;
+    std::vector<Paragraph*> maSelectedParas;
 
     sal_uInt16              mnPagesToProcess;    // fuer die Fortschrittsanzeige
     sal_uInt16              mnPagesProcessed;
@@ -205,11 +200,6 @@ private:
     sal_Bool                mbFirstPaint;
 
     SfxProgress*        mpProgress;
-
-    /** stores the last used high contrast mode.
-        this is changed in onUpdateStyleSettings()
-    */
-    bool mbHighContrastMode;
 
     /** stores the last used document color.
         this is changed in onUpdateStyleSettings()
@@ -262,3 +252,5 @@ private:
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

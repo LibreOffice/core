@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 
 #include "app.hrc"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "OutlineViewShell.hxx"
 #include "drawview.hxx"
 #include "drawdoc.hxx"
@@ -45,9 +44,7 @@
 #include "ViewShell.hxx"
 #include "fuzoom.hxx" // wegen SidArrayZoom[]
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svx/svdpagv.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -214,3 +211,5 @@ void FuScale::DoExecute( SfxRequest& rReq )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

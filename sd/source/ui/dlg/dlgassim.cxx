@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ SdPageListControl::SdPageListControl(
     // Tree-ListBox mit Linien versehen
     SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  WB_HASLINESATROOT |
-                            WB_HSCROLL | // #31562#
+                            WB_HSCROLL |
                             WB_HASBUTTONSATROOT );
 
     SetNodeDefaultImages ();
@@ -207,3 +208,4 @@ void SdPageListControl::DataChanged( const DataChangedEvent& rDCEvt )
     SvTreeListBox::DataChanged( rDCEvt );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

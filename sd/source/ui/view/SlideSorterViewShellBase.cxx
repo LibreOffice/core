@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ TYPEINIT1(SlideSorterViewShellBase, ViewShellBase);
 // new SlideSorterViewShellBase object has been constructed.
 
 SfxViewFactory* SlideSorterViewShellBase::pFactory;
-SfxViewShell* __EXPORT SlideSorterViewShellBase::CreateInstance (
+SfxViewShell* SlideSorterViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     SlideSorterViewShellBase* pBase = new SlideSorterViewShellBase(pFrame, pOldView);
@@ -95,3 +96,4 @@ SlideSorterViewShellBase::~SlideSorterViewShellBase (void)
 
 } // end of namespace sd
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,6 +40,8 @@
 #include "shapemanagerimpl.hxx"
 
 #include <boost/bind.hpp>
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace com::sun::star;
 
@@ -82,7 +85,7 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
                                     this,
                                     boost::cref(xDummyListener),
                                     boost::bind(
-                                        std::select1st<ShapeEventListenerMap::value_type>(),
+                                        o3tl::select1st<ShapeEventListenerMap::value_type>(),
                                         _1 )));
 
         // clone cursor map
@@ -91,10 +94,10 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
                        boost::bind( &ShapeManagerImpl::cursorChanged,
                                     this,
                                     boost::bind(
-                                        std::select1st<ShapeCursorMap::value_type>(),
+                                        o3tl::select1st<ShapeCursorMap::value_type>(),
                                         _1 ),
                                     boost::bind(
-                                        std::select2nd<ShapeCursorMap::value_type>(),
+                                        o3tl::select2nd<ShapeCursorMap::value_type>(),
                                         _1 )));
 
         if( mpLayerManager )
@@ -459,3 +462,5 @@ bool ShapeManagerImpl::notifyIntrinsicAnimationsDisabled()
 
 } // namespace internal
 } // namespace presentation
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

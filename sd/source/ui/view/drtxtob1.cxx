@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,14 +96,12 @@ void TextObjectBar::Execute( SfxRequest &rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pPoolItem = NULL;
     sal_uInt16 nSlot = rReq.GetSlot();
-    sal_Bool bOutlineMode = sal_False;
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
     std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
 
     if (mpView->ISA(OutlineView))
     {
-        bOutlineMode = sal_True;
         pOLV = static_cast<OutlineView*>(mpView)
             ->GetViewByWindow(mpViewShell->GetActiveWindow());
 
@@ -252,7 +251,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                 // Ensure bold/italic etc. icon state updates
                 Invalidate();
-                // #96551# trigger preview refresh
+                // trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
@@ -267,7 +266,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                 // Ensure bold/italic etc. icon state updates
                 Invalidate();
-                // #96551# trigger preview refresh
+                // trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
@@ -280,7 +279,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 pOLV->AdjustHeight( -1 );
 
-                // #96551# trigger preview refresh
+                // trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
@@ -293,7 +292,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 pOLV->AdjustHeight( 1 );
 
-                // #96551# trigger preview refresh
+                // trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
@@ -514,32 +513,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                             aNewAttr.Put( *pPoolItem );
                     }
                     break;
-/* #i35937#
-                    case FN_NUM_BULLET_ON:
-                    {
-                        if (aEditAttr.GetItemState(EE_PARA_BULLETSTATE) == SFX_ITEM_ON)
-                        {
-                            SfxUInt16Item aBulletState((const SfxUInt16Item&) aEditAttr.Get(EE_PARA_BULLETSTATE));
-
-                            if (aBulletState.GetValue() != 0)
-                            {
-                                // Ausschalten
-                                aNewAttr.Put(SfxUInt16Item(EE_PARA_BULLETSTATE, 0));
-                            }
-                            else
-                            {
-                                // Einschalten
-                                aNewAttr.Put(SfxUInt16Item(EE_PARA_BULLETSTATE, 1));
-                            }
-                        }
-                        else
-                        {
-                            // Einschalten
-                            aNewAttr.Put(SfxUInt16Item(EE_PARA_BULLETSTATE, 1));
-                        }
-                    }
-                    break;
-*/
+// #i35937# removed need for FN_NUM_BULLET_ON handling
                 }
 
                 rReq.Done( aNewAttr );
@@ -610,3 +584,5 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

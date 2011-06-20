@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: $
- * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +42,6 @@
 #include <tools/rcid.h>
 
 #include <vcl/help.hxx>
-#include <vcl/imagerepository.hxx>
 #include <vcl/lazydelete.hxx>
 
 #include <svx/sdrpagewindow.hxx>
@@ -209,10 +206,10 @@ extern ::rtl::OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& 
 
 void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 {
-    int nHighlightId = 0;
 
     if( pHdlList && pHdlList->GetView())
     {
+        int nHighlightId = 0;
         OutputDevice* pDev = pHdlList->GetView()->GetFirstOutputDevice();
         if( pDev == 0 )
             pDev = Application::GetDefaultDevice();
@@ -557,13 +554,15 @@ bool ViewOverlayManager::CreateTags()
 {
     bool bChanges = false;
 
-    SdPage* pPage = mrBase.GetMainViewShell()->getCurrentPage();
+    ::boost::shared_ptr<ViewShell> aMainShell = mrBase.GetMainViewShell();
+
+    SdPage* pPage = aMainShell.get() ? aMainShell->getCurrentPage() : NULL;
 
     if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
     {
         const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
 
-        for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
+        for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); ++iter )
         {
             if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) && (mrBase.GetDrawView()->GetTextEditObject() != (*iter)) )
             {
@@ -617,3 +616,5 @@ IMPL_LINK(ViewOverlayManager,EventMultiplexerListener,
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include "optsitem.hxx"
 #include "sddll.hxx"
 #include <sfx2/request.hxx>
-#ifndef _SFX_DISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
 
 #include <sfx2/objface.hxx>
 
@@ -61,7 +60,6 @@
 #include "ViewShellBase.hxx"
 #include "FactoryIds.hxx"
 
-// #110496#
 #include "slideshow.hxx"
 #include "fupoor.hxx"
 #include "Window.hxx"
@@ -127,7 +125,6 @@ void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
         pFrameView->Connect();
     }
     SetRuler(false);
-//    SwitchPage (nPageNumber);
     WriteFrameViewData();
 
     GetActiveWindow()->GrabFocus();
@@ -151,7 +148,6 @@ void PresentationViewShell::Activate( sal_Bool bIsMDIActivate )
 
     if( bIsMDIActivate )
     {
-        //HMH::sd::View*     pView = GetView();
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
 
         GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -186,3 +182,5 @@ void PresentationViewShell::Resize (void)
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,6 @@
 #include "res_bmp.hrc"
 #include "PresentationViewShell.hxx"
 
-#include "misc.hxx"
 #include "Outliner.hxx"
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
@@ -220,8 +220,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 {
     if (mpDrawView == NULL)
     {
-        // This assertion and return are here to prevent crashes like that
-        // of issue #126202#.
+        // This assertion and return are here to prevent crashes.
         DBG_ASSERT(mpDrawView!=NULL, "Please report this assertion to the Impress team.");
         return;
     }
@@ -237,7 +236,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_DRAW_TEXT_VERTICAL );
     }
 
-    FASTBOOL bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(sal_False);
+    bool bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(sal_False);
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     const sal_uLong nMarkCount = rMarkList.GetMarkCount();
@@ -614,7 +613,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         if ( !mpClipEvtLstnr )
         {
-            // SSA: #108717# avoid clipboard initialization for
+            // avoid clipboard initialization for
             // read-only presentation views (workaround for NT4.0
             // clipboard prob...)
             if( !ISA(PresentationViewShell) )
@@ -652,9 +651,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if (mpDrawView == NULL)
     {
-        // When we come to this line then we probably have another
-        // incarnation of issue #126202#.  The mpDrawView was not NULL but is
-        // now.  The reason for this may be that the DrawViewShell has been
+        // The mpDrawView was not NULL but is now.
+        // The reason for this may be that the DrawViewShell has been
         // destroyed in the mean time.
         // We can only return immediately and hope that the deleted
         // DrawViewShell is not called again.
@@ -924,7 +922,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
 
-        // Sonderbehandlung für SID_OUTLINE_BULLET wenn Objekte
+        // Sonderbehandlung fï¿½r SID_OUTLINE_BULLET wenn Objekte
         // mit unterschiedlichen arten von NumBullet Items markiert
         // sind
         sal_Bool bHasOutliner = sal_False;
@@ -1278,12 +1276,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         rSet.DisableItem( SID_INSERT_DIAGRAM );
     }
-#ifdef STARIMAGE_AVAILABLE
-    if (!(pApp->HasFeature(SFX_FEATURE_SIMAGE)))
-    {
-        rSet.DisableItem( SID_INSERT_IMAGE );
-    }
-#endif
     if (!SvtModuleOptions().IsMath())
     {
         rSet.DisableItem( SID_INSERT_MATH );
@@ -1358,22 +1350,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    // #i102735# discussed with CL: removed for performance reasons
-    #if 0
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_SOUND ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_VIDEO ) )
-    {
-        ///////////////////////////////////////////////////////////////////////
-        // Menuoption : Insert->Object->Sound and Insert->Object->Video
-        //              diable, if there isn't installed any appropriate plugin
-        //
-        if (!SvxPluginFileDlg::IsAvailable (SID_INSERT_SOUND))
-            rSet.DisableItem (SID_INSERT_SOUND);
-        if (!SvxPluginFileDlg::IsAvailable (SID_INSERT_VIDEO))
-            rSet.DisableItem (SID_INSERT_VIDEO);
-    }
-    #endif
-
     ///////////////////////////////////////////////////////////////////////
     // Menuoption: Change->Convert->To Bitmap, Change->Convert->To Metafile
     //             disable, if there only Bitmap or Metafiles marked
@@ -1441,9 +1417,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                             default:
                                 break;
                         }
-
-                        // #i25616# bFoundObjNoLine = sal_True;
-                        // #i25616# bFoundObjNoArea = sal_True;
                         break;
                     case OBJ_TABLE:
                         bFoundTable = true;
@@ -1489,11 +1462,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem (SID_OBJECT_CROP);
         rSet.DisableItem (SID_ATTR_GRAF_CROP);
     }
-
-    // #96090# moved SID_UNDO to ViewShell::GetMenuState()
-    // #96090# moved SID_REDO to ViewShell::GetMenuState()
-    // #96090# moved SID_GETUNDOSTRINGS to ViewShell::GetMenuState()
-    // #96090# moved SID_GETREDOSTRINGS to ViewShell::GetMenuState()
 
     ///////////////////////////////////////////////////////////////////////
     // Menuoption: Edit->Hyperlink
@@ -1626,7 +1594,7 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
         rSet.Put(SfxBoolItem(SID_HANDOUTMODE, sal_False));
     }
 
-    // #101976# Removed [GetDocSh()->GetCurrentFunction() ||] from the following
+    // Removed [GetDocSh()->GetCurrentFunction() ||] from the following
     // clause because the current function of the docshell can only be
     // search and replace or spell checking and in that case switching the
     // view mode is allowed.
@@ -1739,3 +1707,5 @@ void DrawViewShell::Execute (SfxRequest& rReq)
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

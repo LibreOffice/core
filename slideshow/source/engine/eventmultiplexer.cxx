@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,7 @@
 #include <boost/bind.hpp>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -474,7 +475,7 @@ UnoViewSharedPtr EventMultiplexerImpl::findUnoView(
                                  boost::cref( xView ),
                                  boost::bind( &UnoView::getUnoView, _1 )))) == aEnd )
     {
-        OSL_ENSURE(false, "EventMultiplexer::findUnoView(): unexpected message source" );
+        OSL_FAIL("EventMultiplexer::findUnoView(): unexpected message source" );
         return UnoViewSharedPtr();
     }
 
@@ -1276,3 +1277,4 @@ bool EventMultiplexer::notifySlideTransitionStarted()
 } // namespace internal
 } // namespace presentation
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

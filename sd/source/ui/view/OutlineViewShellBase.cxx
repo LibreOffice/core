@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ TYPEINIT1(OutlineViewShellBase, ViewShellBase);
 // new OutlineViewShellBase object has been constructed.
 
 SfxViewFactory* OutlineViewShellBase::pFactory;
-SfxViewShell* __EXPORT OutlineViewShellBase::CreateInstance (
+SfxViewShell* OutlineViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     OutlineViewShellBase* pBase = new OutlineViewShellBase(pFrame, pOldView);
@@ -84,3 +85,4 @@ OutlineViewShellBase::~OutlineViewShellBase (void)
 
 } // end of namespace sd
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

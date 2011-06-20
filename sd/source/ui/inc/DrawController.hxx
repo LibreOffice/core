@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -294,6 +295,8 @@ protected:
     using cppu::OPropertySetHelper::getFastPropertyValue;
 
 private:
+    const ::com::sun::star::uno::Type m_aSelectionTypeIdentifier;
+
     /** This pointer to the ViewShellBase can be NULL (after a call to
         ReleaseViewShellBase()).
     */
@@ -337,3 +340,5 @@ private:
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

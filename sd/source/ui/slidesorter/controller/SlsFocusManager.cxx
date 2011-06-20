@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -228,24 +229,6 @@ sal_Int32 FocusManager::GetFocusedPageIndex (void) const
 }
 
 
-
-/*
-void FocusManager::FocusPage (sal_Int32 nPageIndex)
-{
-    if (nPageIndex != mnPageIndex)
-    {
-        // Hide the focus while switching it to the specified page.
-        FocusHider aHider (*this);
-        mnPageIndex = nPageIndex;
-    }
-
-    if (HasFocus() && !IsFocusShowing())
-        ShowFocus();
-}
-*/
-
-
-
 void FocusManager::SetFocusedPage (const model::SharedPageDescriptor& rpDescriptor)
 {
     if (rpDescriptor.get() != NULL)
@@ -398,3 +381,4 @@ FocusManager::FocusHider::~FocusHider (void)
 
 } } } // end of namespace ::sd::slidesorter::controller
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ TYPEINIT1(ImpressViewShellBase, ViewShellBase);
 // new ImpressViewShellBase object has been constructed.
 
 SfxViewFactory* ImpressViewShellBase::pFactory;
-SfxViewShell* __EXPORT ImpressViewShellBase::CreateInstance (
+SfxViewShell* ImpressViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     ImpressViewShellBase* pBase = new ImpressViewShellBase(pFrame, pOldView);
@@ -120,3 +121,4 @@ void ImpressViewShellBase::InitializeFramework (void)
 
 } // end of namespace sd
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

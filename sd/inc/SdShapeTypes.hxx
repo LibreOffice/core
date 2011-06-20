@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _SD_SD_SHAPE_TYPES_HXX
 #define _SD_SD_SHAPE_TYPES_HXX
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_TYPE_HANDLERHXX
 #include <svx/ShapeTypeHandler.hxx>
-#endif
 #include <svx/AccessibleShape.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
@@ -72,12 +71,8 @@ AccessibleShape*
         );
 
 
-/** List of shape type descriptors corresponding to the
-    <type>SdShapeTypes</type> enum.
-*/
-extern ShapeTypeDescriptor aSdShapeTypeList[];
-
-
 } // end of namespace accessibility
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,7 +97,7 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
             {
                 const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
 
-                for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
+                for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); ++iter )
                 {
                     if( (*iter)->IsEmptyPresObj() && implIsMultiPresObj(pPage->GetPresObjKind(*iter)) )
                     {
@@ -112,3 +113,5 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

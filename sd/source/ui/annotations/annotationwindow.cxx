@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -242,9 +243,6 @@ void AnnotationTextWindow::GetFocus()
 
 void AnnotationTextWindow::LoseFocus()
 {
-//    if ( mpAnnotationWindow )
-//        mpAnnotationWindow->UpdateAnnotation();
-
     Window::LoseFocus();
 }
 
@@ -323,9 +321,6 @@ void AnnotationWindow::InitControls()
     mpMeta->AlwaysDisableInput(true);
     mpMeta->SetCallHandlersOnInputDisabled(true);
 
-//  mpMeta->AddEventListener( LINK( mpPostItTxt, PostItTxt, WindowEventListener ) );
-//  AddEventListener( LINK( mpTextWindow, PostItTxt, WindowEventListener ) );
-
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
     AllSettings aSettings = mpMeta->GetSettings();
@@ -352,10 +347,6 @@ void AnnotationWindow::InitControls()
     mpTextWindow->SetOutlinerView(mpOutlinerView);
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
 
-//  SfxItemSet item(DocShell()->GetPool());
-//  item.Put(SvxFontHeightItem(352,100,EE_CHAR_FONTHEIGHT));
-//  mpOutlinerView->SetAttribs(item);
-
     // TODO: ??
     EEHorizontalTextDirection aDefHoriTextDir = Application::GetSettings().GetLayoutRTL() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
     mpOutliner->SetDefaultHorizontalTextDirection( aDefHoriTextDir );
@@ -366,22 +357,10 @@ void AnnotationWindow::InitControls()
     mpVScrollbar->EnableRTL( false );
     mpVScrollbar->SetScrollHdl(LINK(this, AnnotationWindow, ScrollHdl));
     mpVScrollbar->EnableDrag();
-//  mpVScrollbar->AddEventListener( LINK( this, AnnotationWindow, WindowEventListener ) );
 
     sal_uLong nCntrl = mpOutliner->GetControlWord();
     nCntrl |= EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL | EE_CNTRL_NOCOLORS;
-/*
-    if (pVOpt->IsFieldShadings())
-        nCntrl |= EE_CNTRL_MARKFIELDS;
-    else
-        nCntrl &= ~EE_CNTRL_MARKFIELDS;
-    if (pVOpt->IsOnlineSpell())
-        nCntrl |= EE_CNTRL_ONLINESPELLING;
-    else
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
-*/
     mpOutliner->SetControlWord(nCntrl);
-//  mpOutliner->SetFlatMode( sal_True );
 
     Engine()->SetModifyHdl( Link() );
     Engine()->EnableUndo( sal_False );
@@ -410,8 +389,6 @@ void AnnotationWindow::Rescale()
 {
     MapMode aMode(MAP_100TH_MM);
     aMode.SetOrigin( Point() );
-    //aMode.SetScaleX( aMode.GetScaleX() * Fraction( 8, 10 ) );
-    //aMode.SetScaleY( aMode.GetScaleY() * Fraction( 8, 10 ) );
     mpOutliner->SetRefMapMode( aMode );
     SetMapMode( aMode );
     mpTextWindow->SetMapMode( aMode );
@@ -504,7 +481,7 @@ void AnnotationWindow::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
     }
 }
 
-void AnnotationWindow::SetLanguage(const SvxLanguageItem aNewItem)
+void AnnotationWindow::SetLanguage(const SvxLanguageItem &aNewItem)
 {
     Engine()->SetModifyHdl( Link() );
     ESelection aOld = getView()->GetSelection();
@@ -551,7 +528,6 @@ IMPL_LINK(AnnotationWindow, ModifyHdl, void*, EMPTYARG)
 sal_Int32 AnnotationWindow::GetScrollbarWidth()
 {
     return 16;
-//  return mpView->GetWrtShell().GetViewOptions()->GetZoom() / 10;
 }
 
 SvxLanguageItem AnnotationWindow::GetLanguage(void)
@@ -846,3 +822,5 @@ void AnnotationWindow::ExecuteSlot( sal_uInt16 nSID )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

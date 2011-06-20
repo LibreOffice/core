@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,33 +41,19 @@
 #include <svx/xtable.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include "drawdoc.hxx"
-#ifndef SVX_LIGHT
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
-#endif
 #include "unomodel.hxx"
 
-#ifndef SVX_LIGHT
-#ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
-#endif
 #include <sfx2/printer.hxx>
 #include "sdattr.hxx"
-#endif
 #include "../inc/ViewShell.hxx"
 #include "../inc/FrameView.hxx"
-#ifndef SVX_LIGHT
-#ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
-#endif
-#else
-#include <svx/svdoutl.hxx>
-#endif
 #include <editeng/editstat.hxx>
 #include <svx/unoapi.hxx>
 
@@ -76,7 +63,6 @@ using namespace ::comphelper;
 using namespace ::osl;
 using ::rtl::OUString;
 using namespace ::cppu;
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -149,9 +135,8 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
     HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT, HANDLE_UPDATEFROMTEMPLATE,
     HANDLE_PRINTER_INDEPENDENT_LAYOUT
-    // --> PB 2004-08-23 #i33095#
+    // #i33095#
     ,HANDLE_LOAD_READONLY, HANDLE_SAVE_VERSION
-    // <--
     ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL
 };
 
@@ -183,7 +168,6 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("DefaultTabStop"),        HANDLE_TABSTOP,             &::getCppuType((const sal_Int32*)0),    0,  0 },
             { MAP_LEN("PrinterName"),           HANDLE_PRINTERNAME,         &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("PrinterSetup"),          HANDLE_PRINTERJOB,          &::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0, MID_PRINTER },
-#ifndef SVX_LIGHT
 
             { MAP_LEN("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("IsPrintDate"),           HANDLE_PRINTDATE,           &::getBooleanCppuType(),                0,  MID_PRINTER },
@@ -195,7 +179,6 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("IsPrintBookletFront"),   HANDLE_PRINTBOOKLETFRONT,   &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("IsPrintBookletBack"),    HANDLE_PRINTBOOKLETBACK,    &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("PrintQuality"),          HANDLE_PRINTQUALITY,        &::getCppuType((const sal_Int32*)0),    0,  MID_PRINTER },
-#endif
             { MAP_LEN("ColorTableURL"),         HANDLE_COLORTABLEURL,       &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("DashTableURL"),          HANDLE_DASHTABLEURL,        &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("LineEndTableURL"),       HANDLE_LINEENDTABLEURL,     &::getCppuType((const OUString*)0),     0,  0 },
@@ -212,10 +195,9 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("UpdateFromTemplate"),    HANDLE_UPDATEFROMTEMPLATE,  &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,&::getCppuType((const sal_Int16*)0), 0,  0 },
-            // --> PB 2004-08-23 #i33095#
+            // --> #i33095#
             { MAP_LEN("LoadReadonly"),          HANDLE_LOAD_READONLY,       &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        &::getBooleanCppuType(),                0,  0 },
-            // <--
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -241,7 +223,7 @@ DocumentSettings::~DocumentSettings() throw()
 
 void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     SdDrawDocument* pDoc = mpModel->GetDoc();
     ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
@@ -837,7 +819,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             }
             break;
 
-            // --> PB 2004-08-23 #i33095#
+            // --> #i33095#
             case HANDLE_LOAD_READONLY:
             {
                 sal_Bool bNewValue = sal_False;
@@ -849,7 +831,6 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 }
             }
             break;
-            // <--
 
             case HANDLE_SAVE_VERSION:
             {
@@ -886,7 +867,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
 void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) throw(UnknownPropertyException, WrappedTargetException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     SdDrawDocument* pDoc = mpModel->GetDoc();
     ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
@@ -1108,13 +1089,12 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
             }
             break;
 
-            // --> PB 2004-08-23 #i33095#
+            // --> #i33095#
             case HANDLE_LOAD_READONLY:
             {
                 *pValue <<= pDocSh->IsLoadReadonly();
             }
             break;
-            // <--
 
             case HANDLE_SAVE_VERSION:
             {
@@ -1246,3 +1226,4 @@ Sequence< OUString > SAL_CALL DocumentSettings::getSupportedServiceNames(  )
     return aSeq;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _SDPAGE_HXX
 #define _SDPAGE_HXX
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 #ifndef INCLUDED_FUNCTIONAL
 #include <functional>
@@ -44,9 +43,7 @@
 #include <functional>
 #include <vector>
 #include <svx/svdobj.hxx>
-#ifndef _FM_FMPAGE_HXX //autogen
 #include <svx/fmpage.hxx>
-#endif
 #include "fadedef.h"
 #include "diadef.h"
 #ifndef _PRESENTATION
@@ -188,7 +185,7 @@ public:
     virtual void    SetUppBorder(sal_Int32 nBorder);
     virtual void    SetLwrBorder(sal_Int32 nBorder);
     virtual void    SetModel(SdrModel* pNewModel);
-    virtual FASTBOOL IsReadOnly() const;
+    virtual bool    IsReadOnly() const;
 
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
@@ -221,7 +218,7 @@ public:
     virtual SdrObject* NbcRemoveObject(sal_uLong nObjNum);
     virtual SdrObject* RemoveObject(sal_uLong nObjNum);
 
-    // #95876# Also overload ReplaceObject methods to realize when
+    // Also overload ReplaceObject methods to realize when
     // objects are removed with this mechanism instead of RemoveObject
     virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum);
     virtual SdrObject* ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum);
@@ -411,3 +408,5 @@ private:
 };
 
 #endif     // _SDPAGE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

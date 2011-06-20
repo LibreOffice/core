@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -239,7 +240,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPane::CustomAnimationPane(), Exception cought!" );
+        OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception cought!" );
     }
 
     // get current page and update custom animation list
@@ -261,7 +262,7 @@ CustomAnimationPane::~CustomAnimationPane()
     MotionPathTagVector aTags;
     aTags.swap( maMotionPathTags );
     MotionPathTagVector::iterator aIter;
-    for( aIter = aTags.begin(); aIter != aTags.end(); aIter++ )
+    for( aIter = aTags.begin(); aIter != aTags.end(); ++aIter )
         (*aIter)->Dispose();
 
     delete mpFLModify;
@@ -753,8 +754,6 @@ void CustomAnimationPane::updateControls()
     mpLBStart->Enable(nSelectionCount > 0);
     mpPBPropertyMore->Enable(nSelectionCount > 0);
 
-//  mpPBPlay->Enable(nSelectionCount > 0);
-
     mpFTProperty->SetText( maStrProperty );
 
     mnPropertyType = nPropertyTypeNone;
@@ -823,9 +822,6 @@ void CustomAnimationPane::updateControls()
             mpPBPropertyMore->Enable( sal_False );
         }
 
-        //
-        // ---
-        //
         sal_uInt16 nPos = 0xffff;
 
         sal_Int16 nNodeType = pEffect->getNodeType();
@@ -960,7 +956,7 @@ static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,
             rtl::Reference< MotionPathTag > xMotionPathTag;
             // first try to find if there is already a tag for this
             MotionPathTagVector::iterator aMIter( rOldTags.begin() );
-            for( ; aMIter != rOldTags.end(); aMIter++ )
+            for( ; aMIter != rOldTags.end(); ++aMIter )
             {
                 rtl::Reference< MotionPathTag > xTag( (*aMIter) );
                 if( xTag->getEffect() == pEffect )
@@ -1051,7 +1047,7 @@ void CustomAnimationPane::onSelectionChanged()
         }
         catch( Exception& )
         {
-            DBG_ERROR( "sd::CustomAnimationPane::onSelectionChanged(), Exception catched!" );
+            OSL_FAIL( "sd::CustomAnimationPane::onSelectionChanged(), Exception catched!" );
         }
     }
 }
@@ -1370,8 +1366,6 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
             InteractiveSequence* pIS = static_cast< InteractiveSequence* >( pEffectSequence );
             addValue( pSet, nHandleTrigger, makeAny( pIS->getTriggerShape() ) );
         }
-
-        //
 
         CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( pEffect->getPresetId() );
         if( pDescriptor.get() )
@@ -1781,7 +1775,7 @@ void CustomAnimationPane::onChangeCurrentPage()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationPane::onChangeCurrentPage(), exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPane::onChangeCurrentPage(), exception catched!" );
     }
 }
 
@@ -1841,7 +1835,7 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPane::getTextSelection(), exception cought!" );
+        OSL_FAIL( "sd::CustomAnimationPane::getTextSelection(), exception cought!" );
     }
 
     return false;
@@ -1900,7 +1894,7 @@ void CustomAnimationPane::onChange( bool bCreate )
                 aParaTarget.Shape = xShape;
 
                 std::list< sal_Int16 >::iterator aIter( aParaList.begin() );
-                for( ; aIter != aParaList.end(); aIter++ )
+                for( ; aIter != aParaList.end(); ++aIter )
                 {
                     aParaTarget.Paragraph = (*aIter);
                     aTargets.push_back( makeAny( aParaTarget ) );
@@ -1909,7 +1903,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         }
         else
         {
-            DBG_ERROR("sd::CustomAnimationPane::onChange(), unknown view selection!" );
+            OSL_FAIL("sd::CustomAnimationPane::onChange(), unknown view selection!" );
             return;
         }
     }
@@ -1949,7 +1943,7 @@ void CustomAnimationPane::onChange( bool bCreate )
                 std::vector< Any >::iterator aIter( aTargets.begin() );
                 const std::vector< Any >::iterator aEnd( aTargets.end() );
                 bool bFirst = true;
-                for( ; aIter != aEnd; aIter++ )
+                for( ; aIter != aEnd; ++aIter )
                 {
                     CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
 
@@ -2284,9 +2278,9 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
                 if( aInsertPos != rEffectSequence.begin() )
                 {
-                    aInsertPos--;
+                    --aInsertPos;
                     while( (aInsertPos != rEffectSequence.begin()) && !mpCustomAnimationList->isExpanded(*aInsertPos))
-                        aInsertPos--;
+                        --aInsertPos;
 
                     rEffectSequence.insert( aInsertPos, pEffect );
                 }
@@ -2314,9 +2308,9 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
                 if( aInsertPos != rEffectSequence.end() )
                 {
-                    aInsertPos++;
+                    ++aInsertPos;
                     while( (aInsertPos != rEffectSequence.end()) && !mpCustomAnimationList->isExpanded(*aInsertPos))
-                        aInsertPos++;
+                        ++aInsertPos;
 
                     rEffectSequence.insert( aInsertPos, pEffect );
                 }
@@ -2346,7 +2340,7 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
     {
         rtl::Reference< MotionPathTag > xMotionPathTag;
         MotionPathTagVector::iterator aIter;
-        for( aIter = maMotionPathTags.begin(); aIter != maMotionPathTags.end(); aIter++ )
+        for( aIter = maMotionPathTags.begin(); aIter != maMotionPathTags.end(); ++aIter )
         {
             if( (*aIter)->isSelected() )
             {
@@ -2497,3 +2491,5 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

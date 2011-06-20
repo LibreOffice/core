@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,7 +115,7 @@ void AccessibleSlideSorterObject::FireAccessibleEvent (
 
 void SAL_CALL AccessibleSlideSorterObject::disposing (void)
 {
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
 
     // Send a disposing to all listeners.
     if (mnClientId != 0)
@@ -174,7 +175,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
     sal_Int32 nIndexInParent(-1);
 
     if (mxParent.is())
@@ -224,7 +225,7 @@ sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
 
     SdPage* pPage = GetPage();
     if (pPage != NULL)
@@ -252,7 +253,7 @@ Reference<XAccessibleStateSet> SAL_CALL
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    const SolarMutexGuard aSolarGuard;
     ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper();
 
     if (mxParent.is())
@@ -385,7 +386,7 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
 {
     ThrowIfDisposed ();
 
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
 
     Rectangle aBBox (
         mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
@@ -433,7 +434,7 @@ awt::Point SAL_CALL AccessibleSlideSorterObject::getLocationOnScreen (void)
 {
     ThrowIfDisposed ();
 
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
 
     awt::Point aLocation (getLocation());
 
@@ -581,3 +582,5 @@ SdPage* AccessibleSlideSorterObject::GetPage (void) const
 
 
 } // end of namespace ::accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

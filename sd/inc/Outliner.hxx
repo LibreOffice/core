@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -238,7 +239,7 @@ private:
     */
     bool mbFoundObject;
 
-    /** When set to <TRUE/> this flag indicates that an error has occured
+    /** When set to <TRUE/> this flag indicates that an error has occurred
         that should terminate the iteration over the objects to search/spell
         check.
     */
@@ -551,3 +552,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

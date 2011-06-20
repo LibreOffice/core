@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "fuprobjs.hxx"
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/smplhint.hxx>
@@ -46,9 +45,7 @@
 
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
-#ifndef SD_OUTLINE_VIEW_SHELL_HX
 #include "OutlineViewShell.hxx"
-#endif
 #include "ViewShell.hxx"
 #include "Window.hxx"
 #include "glob.hxx"
@@ -102,13 +99,20 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     OutlineView* pOlView = static_cast<OutlineView*>(pOutlineViewShell->GetView());
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) mpWindow );
     ::Outliner* pOutl = pOutlinerView->GetOutliner();
-    List* pList = pOutlinerView->CreateSelectionList();
-    Paragraph* pPara = (Paragraph*)pList->First();
+
+    std::vector<Paragraph*> aSelList;
+    pOutlinerView->CreateSelectionList(aSelList);
+
+    std::vector<Paragraph*>::const_iterator iter = aSelList.begin();
+    Paragraph* pPara = aSelList.empty() ? NULL : *iter;
+
     nDepth = pOutl->GetDepth((sal_uInt16)pOutl->GetAbsPos( pPara ) );
     bool bPage = pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE );
 
-    while( pPara )
+    while( iter != aSelList.end() )
     {
+        pPara = *iter;
+
         nTmp = pOutl->GetDepth((sal_uInt16) pOutl->GetAbsPos( pPara ) );
 
         if( nDepth != nTmp )
@@ -123,8 +127,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             break;
         }
         bUnique = sal_True;
-
-        pPara = (Paragraph*) pList->Next();
+        ++iter;
     }
 
     if( bUnique )
@@ -177,3 +180,5 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

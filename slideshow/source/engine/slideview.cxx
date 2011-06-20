@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -791,8 +792,7 @@ SlideView::SlideView( const uno::Reference<presentation::XSlideShowView>& xView,
             basegfx::B2DVector(aViewTransform.m01,
                                aViewTransform.m11).getLength()) )
     {
-        OSL_ENSURE( false,
-                    "SlideView::SlideView(): Singular matrix!" );
+        OSL_FAIL( "SlideView::SlideView(): Singular matrix!" );
 
         canvas::tools::setIdentityAffineMatrix2D(aViewTransform);
     }
@@ -949,8 +949,7 @@ void SlideView::setPriority( const basegfx::B1DRange& /*rRange*/ )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    OSL_ENSURE( false,
-                "SlideView::setPriority() is a NOOP for slide view - "
+    OSL_FAIL( "SlideView::setPriority() is a NOOP for slide view - "
                 "content will always be shown in the background" );
 }
 
@@ -987,8 +986,7 @@ bool SlideView::resize( const ::basegfx::B2DRange& /*rArea*/ )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    OSL_ENSURE( false,
-                "SlideView::resize(): ignored for the View, can't change size "
+    OSL_FAIL( "SlideView::resize(): ignored for the View, can't change size "
                 "effectively, anyway" );
 
     return false;
@@ -1055,8 +1053,7 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
             basegfx::B2DVector(aViewTransform.m01,
                                aViewTransform.m11).getLength()) )
     {
-        OSL_ENSURE( false,
-                    "SlideView::modified(): Singular matrix!" );
+        OSL_FAIL( "SlideView::modified(): Singular matrix!" );
 
         canvas::tools::setIdentityAffineMatrix2D(aViewTransform);
     }
@@ -1194,3 +1191,4 @@ UnoViewSharedPtr createSlideView( uno::Reference< presentation::XSlideShowView> 
 } // namespace internal
 } // namespace slideshow
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,24 +50,6 @@ namespace slideshow
             RGBColor( double nRed, double nGreen, double nBlue );
             explicit RGBColor( const HSLColor& rColor );
 
-            /** Hue of the color.
-
-                @return hue, is in the range [0,360]
-             */
-            double getHue() const;
-
-            /** Saturation of the color.
-
-                @return saturation, is in the range [0,1]
-             */
-            double getSaturation() const;
-
-            /** Luminance of the color.
-
-                @return luminance, is in the range [0,1]
-             */
-            double getLuminance() const;
-
             /** Get the RGB red value.
              */
             double getRed() const;
@@ -79,16 +62,9 @@ namespace slideshow
              */
             double getBlue() const;
 
-            /** Create an HSL color object.
-             */
-            HSLColor getHSLColor() const;
-
             /** Create an integer sRGBA color.
              */
             ::cppcanvas::Color::IntSRGBA getIntegerColor() const;
-
-            RGBColor(const RGBColor& rLHS);
-            RGBColor& operator=( const RGBColor& rLHS);
 
             struct RGBTriple
             {
@@ -123,3 +99,5 @@ namespace slideshow
 }
 
 #endif /* INCLUDED_SLIDESHOW_RGBCOLOR_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

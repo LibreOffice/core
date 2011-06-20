@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "DrawViewShell.hxx"
-#ifndef SD_DRAW_DOC_HXX
 #include "drawdoc.hxx"
-#endif
 #include "sdresid.hxx"
 #include "ViewShellBase.hxx"
 
@@ -112,3 +111,4 @@ void NotesDockingWindow::Resize (void)
 
 } } // end of namespace ::sd::notes
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

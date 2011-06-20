@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <vcl/group.hxx>
 #include <sfx2/ctrlitem.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <svx/dlgctrl.hxx>
 #include <sfx2/progress.hxx>
@@ -44,9 +43,7 @@
 
 #include <vcl/lstbox.hxx>
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 #include "misc/scopelock.hxx"
 
 class SdDrawDocument;
@@ -199,3 +196,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

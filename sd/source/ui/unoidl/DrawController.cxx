@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
@@ -53,25 +55,16 @@
 #include "slideshow.hxx"
 
 #include <svx/fmshell.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <boost/shared_ptr.hpp>
 
 using namespace ::std;
 using ::rtl::OUString;
 using namespace ::cppu;
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-
-namespace {
-static const ::com::sun::star::uno::Type saComponentTypeIdentifier (
-    ::getCppuType( (Reference<lang::XEventListener > *)0 ));
-static const ::com::sun::star::uno::Type saSelectionTypeIdentifier (
-    ::getCppuType( (Reference<view::XSelectionChangeListener > *)0 ));
-
-} // end of anonymous namespace
 
 namespace sd {
 
@@ -82,6 +75,8 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
           OMultiTypeInterfaceContainerHelper,
           OMultiTypeInterfaceContainerHelper::keyType>& >(
               BroadcastHelperOwner::maBroadcastHelper)),
+      m_aSelectionTypeIdentifier(
+        ::getCppuType( (Reference<view::XSelectionChangeListener > *)0 )),
       mpBase(&rBase),
       maLastVisArea(),
       mpCurrentPage(NULL),
@@ -160,13 +155,15 @@ void SAL_CALL DrawController::dispose (void)
 {
     if( !mbDisposing )
     {
-        OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if( !mbDisposing )
         {
             mbDisposing = true;
 
-            boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
+            boost::shared_ptr<ViewShell> pViewShell;
+            if (mpBase)
+                pViewShell = mpBase->GetMainViewShell();
             if ( pViewShell )
             {
                 pViewShell->DeactivateCurrentFunction();
@@ -247,7 +244,7 @@ OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeExcepti
 
 
 
-static OUString ssServiceName (OUString::createFromAscii(
+static OUString ssServiceName (RTL_CONSTASCII_USTRINGPARAM(
     "com.sun.star.drawing.DrawingDocumentDrawView"));
 
 sal_Bool SAL_CALL DrawController::supportsService (
@@ -282,7 +279,7 @@ sal_Bool SAL_CALL DrawController::select (const Any& aSelection)
     throw(lang::IllegalArgumentException, RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (mxSubController.is())
         return mxSubController->select(aSelection);
@@ -297,7 +294,7 @@ Any SAL_CALL DrawController::getSelection()
     throw(RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (mxSubController.is())
         return mxSubController->getSelection();
@@ -315,7 +312,7 @@ void SAL_CALL DrawController::addSelectionChangeListener(
     if( mbDisposing )
         throw lang::DisposedException();
 
-    BroadcastHelperOwner::maBroadcastHelper.addListener (saSelectionTypeIdentifier, xListener);
+    BroadcastHelperOwner::maBroadcastHelper.addListener (m_aSelectionTypeIdentifier, xListener);
 }
 
 
@@ -328,7 +325,7 @@ void SAL_CALL DrawController::removeSelectionChangeListener(
     if (rBHelper.bDisposed)
         throw lang::DisposedException();
 
-    BroadcastHelperOwner::maBroadcastHelper.removeListener (saSelectionTypeIdentifier, xListener);
+    BroadcastHelperOwner::maBroadcastHelper.removeListener (m_aSelectionTypeIdentifier, xListener);
 }
 
 
@@ -386,7 +383,7 @@ void SAL_CALL DrawController::setCurrentPage( const Reference< drawing::XDrawPag
     throw(RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (mxSubController.is())
         mxSubController->setCurrentPage(xPage);
@@ -399,7 +396,7 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage (void)
     throw(RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference<drawing::XDrawPage> xPage;
 
     // Get current page from sub controller.
@@ -447,7 +444,7 @@ void DrawController::FireVisAreaChanged (const Rectangle& rVisArea) throw()
 void DrawController::FireSelectionChangeListener() throw()
 {
     OInterfaceContainerHelper * pLC = BroadcastHelperOwner::maBroadcastHelper.getContainer(
-        saSelectionTypeIdentifier);
+        m_aSelectionTypeIdentifier);
     if( pLC )
     {
         Reference< XInterface > xSource( (XWeak*)this );
@@ -530,7 +527,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
         catch( uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (::rtl::OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), "
                     "exception caught: ") +
                     ::rtl::OUStringToOString(
@@ -610,20 +607,14 @@ Reference<XModuleController> SAL_CALL
 
 //===== XUnoTunnel ============================================================
 
+namespace
+{
+    class theDrawControllerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theDrawControllerUnoTunnelId> {};
+}
+
 const Sequence<sal_Int8>& DrawController::getUnoTunnelId (void)
 {
-    static ::com::sun::star::uno::Sequence<sal_Int8>* pSequence = NULL;
-    if (pSequence == NULL)
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
-        if (pSequence == NULL)
-        {
-            static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);
-            rtl_createUuid((sal_uInt8*)aSequence.getArray(), 0, sal_True);
-            pSequence = &aSequence;
-        }
-    }
-    return *pSequence;
+    return theDrawControllerUnoTunnelId::get().getSeq();
 }
 
 
@@ -711,7 +702,7 @@ void DrawController::FillPropertyTable (
 
 IPropertyArrayHelper & DrawController::getInfoHelper()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (mpPropertyArrayHelper.get() == NULL)
     {
@@ -732,7 +723,7 @@ IPropertyArrayHelper & DrawController::getInfoHelper()
 Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
         throw ( ::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     static Reference < beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -741,7 +732,7 @@ Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
 
 uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFormController( const uno::Reference< form::XForm >& Form ) throw (uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     SdrView* pSdrView = mpBase->GetDrawView();
@@ -756,7 +747,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
 
 ::sal_Bool SAL_CALL DrawController::isFormDesignMode(  ) throw (uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Bool bIsDesignMode = sal_True;
 
@@ -769,7 +760,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
 
 void SAL_CALL DrawController::setFormDesignMode( ::sal_Bool _DesignMode ) throw (uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     if ( pFormShell )
@@ -778,7 +769,7 @@ void SAL_CALL DrawController::setFormDesignMode( ::sal_Bool _DesignMode ) throw 
 
 uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::Reference< awt::XControlModel >& xModel ) throw (container::NoSuchElementException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     SdrView* pSdrView = mpBase->GetDrawView();
@@ -835,7 +826,7 @@ void DrawController::setFastPropertyValue_NoBroadcast (
     const Any& rValue)
     throw ( com::sun::star::uno::Exception)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if (nHandle == PROPERTY_SUB_CONTROLLER)
         SetSubController(Reference<drawing::XDrawSubController>(rValue, UNO_QUERY));
     else if (mxSubController.is())
@@ -849,7 +840,7 @@ void DrawController::getFastPropertyValue (
     Any & rRet,
     sal_Int32 nHandle ) const
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     switch( nHandle )
     {
@@ -879,7 +870,7 @@ void DrawController::getFastPropertyValue (
 
 void DrawController::ProvideFrameworkControllers (void)
 {
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     try
     {
         Reference<XController> xController (this);
@@ -936,3 +927,4 @@ void DrawController::ThrowIfDisposed (void) const
 } // end of namespace sd
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

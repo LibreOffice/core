@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "Ruler.hxx"
 #include <svl/ptitem.hxx>
 #include <svx/ruler.hxx>
-#ifndef _SVXIDS_HXX //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/bindings.hxx>
 
@@ -64,20 +63,11 @@ class RulerCtrlItem : public SfxControllerItem
     RulerCtrlItem(sal_uInt16 nId, Ruler& rRlr, SfxBindings& rBind);
 };
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 RulerCtrlItem::RulerCtrlItem(sal_uInt16 _nId, Ruler& rRlr, SfxBindings& rBind)
 : SfxControllerItem(_nId, rBind)
 , rRuler(rRlr)
 {
 }
-
-
-/*************************************************************************
-|*
-\************************************************************************/
 
 void RulerCtrlItem::StateChanged( sal_uInt16 nSId, SfxItemState, const SfxPoolItem* pState )
 {
@@ -224,3 +214,4 @@ void Ruler::ExtraDown()
 
 } // end of namespace sd
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ namespace accessibility {
 
 class AccessibleSlideSorterObject;
 
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::PartialWeakComponentImplHelper6<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -77,6 +78,8 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> & rxParent,
         ::Window* pParentWindow);
 
+    void Init();
+
     virtual ~AccessibleSlideSorterView (void);
 
     /** This method acts like a dispose call.  It sends a disposing to all
@@ -96,6 +99,15 @@ public:
             Index of the child for which to return the implementation object.
     */
     AccessibleSlideSorterObject* GetAccessibleChildImplementation (sal_Int32 nIndex);
+
+    //===== XComponent ==============================================
+
+    virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::dispose(); }
+    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::addEventListener(xListener); }
+    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     //===== XAccessible =======================================================
 
@@ -117,9 +129,6 @@ public:
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener )
         throw (::com::sun::star::uno::RuntimeException);
-
-    using cppu::WeakComponentImplHelperBase::addEventListener;
-    using cppu::WeakComponentImplHelperBase::removeEventListener;
 
     //=====  XAccessibleContext  ==============================================
 
@@ -324,3 +333,5 @@ private:
 } // end of namespace ::accessibility
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

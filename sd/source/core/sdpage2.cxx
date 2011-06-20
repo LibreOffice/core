@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,19 +28,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
+#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/outliner.hxx>
-#ifndef _SVXLINK_HXX
 #include <sfx2/linkmgr.hxx>
-#endif
 #include <svx/svdotext.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <svx/svditer.hxx>
-#include <tools/list.hxx>
 
 #include "sdresid.hxx"
 #include "sdpage.hxx"
@@ -47,15 +49,12 @@
 #include "glob.hrc"
 #include "drawdoc.hxx"
 #include "stlpool.hxx"
-//#include "sdiocmpt.hxx"
 #include "pglink.hxx"
-//#include "strmname.h"
 #include "anminfo.hxx"
 
 #include "../ui/inc/strings.hrc"
 #include "../ui/inc/DrawDocShell.hxx"
 
-// #90477#
 #include <tools/tenccvt.hxx>
 #include <svl/itemset.hxx>
 
@@ -68,7 +67,7 @@ extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString&
 
 /*************************************************************************
 |*
-|* SetPresentationLayout, setzt: Layoutnamen, Masterpage-VerknÅpfung und
+|* SetPresentationLayout, setzt: Layoutnamen, Masterpage-VerknÔøΩpfung und
 |* Vorlagen fuer Praesentationsobjekte
 |*
 |* Vorraussetzungen: - Die Seite muss bereits das richtige Model kennen!
@@ -150,10 +149,10 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     // Listen mit:
     // - Vorlagenzeigern fuer Gliederungstextobjekt (alte und neue Vorlagen)
     // -Replacedaten fuer OutlinerParaObject
-    List aOutlineStyles;
-    List aOldOutlineStyles;
-    List aReplList;
-    sal_Bool bListsFilled = sal_False;
+    std::vector<SfxStyleSheetBase*> aOutlineStyles;
+    std::vector<SfxStyleSheetBase*> aOldOutlineStyles;
+    boost::ptr_vector<StyleReplaceData> aReplList;
+    bool bListsFilled = false;
 
     sal_uLong nObjCount = GetObjCount();
 
@@ -182,11 +181,11 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
 
                     pSheet = pStShPool->Find(aOldFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "alte Gliederungsvorlage nicht gefunden");
-                    aOldOutlineStyles.Insert(pSheet, LIST_APPEND);
+                    aOldOutlineStyles.push_back(pSheet);
 
                     pSheet = pStShPool->Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "neue Gliederungsvorlage nicht gefunden");
-                    aOutlineStyles.Insert(pSheet, LIST_APPEND);
+                    aOutlineStyles.push_back(pSheet);
 
                     if (bReplaceStyleSheets && pSheet)
                     {
@@ -196,7 +195,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                         pReplData->nFamily    = pSheet->GetFamily();
                         pReplData->aNewName   = aFullName;
                         pReplData->aName      = aOldFullName;
-                        aReplList.Insert(pReplData, LIST_APPEND);
+                        aReplList.push_back(pReplData);
                     }
                     else
                     {
@@ -207,13 +206,20 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                     }
                 }
 
-                bListsFilled = sal_True;
+                bListsFilled = true;
             }
 
-            SfxStyleSheet* pSheet = (SfxStyleSheet*)aOutlineStyles.First();
-            SfxStyleSheet* pOldSheet = (SfxStyleSheet*)aOldOutlineStyles.First();
-            while (pSheet)
+            SfxStyleSheet* pSheet = NULL;
+            SfxStyleSheet* pOldSheet = NULL;
+
+            std::vector<SfxStyleSheetBase*>::iterator iterOut = aOutlineStyles.begin();
+            std::vector<SfxStyleSheetBase*>::iterator iterOldOut = aOldOutlineStyles.begin();
+
+            while (iterOut != aOutlineStyles.end())
             {
+                pSheet = reinterpret_cast<SfxStyleSheet*>(*iterOut);
+                pOldSheet = reinterpret_cast<SfxStyleSheet*>(*iterOldOut);
+
                 if (pSheet != pOldSheet)
                 {
                     pObj->EndListening(*pOldSheet);
@@ -222,19 +228,18 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                         pObj->StartListening(*pSheet);
                 }
 
-                pSheet = (SfxStyleSheet*)aOutlineStyles.Next();
-                pOldSheet = (SfxStyleSheet*)aOldOutlineStyles.Next();
+                ++iterOut;
+                ++iterOldOut;
             }
 
             OutlinerParaObject* pOPO = ((SdrTextObj*)pObj)->GetOutlinerParaObject();
             if ( bReplaceStyleSheets && pOPO )
             {
-                StyleReplaceData* pReplData = (StyleReplaceData*) aReplList.First();
-
-                while( pReplData )
+                boost::ptr_vector<StyleReplaceData>::const_iterator it = aReplList.begin();
+                while (it != aReplList.end())
                 {
-                    pOPO->ChangeStyleSheets( pReplData->aName, pReplData->nFamily, pReplData->aNewName, pReplData->nNewFamily );
-                    pReplData = (StyleReplaceData*) aReplList.Next();
+                    pOPO->ChangeStyleSheets( it->aName, it->nFamily, it->aNewName, it->nNewFamily );
+                    ++it;
                 }
             }
         }
@@ -257,11 +262,6 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                 pObj->SetStyleSheet(pSheet, sal_True);
         }
     }
-
-    for (sal_uLong i = 0; i < aReplList.Count(); i++)
-    {
-        delete (StyleReplaceData*) aReplList.GetObject(i);
-    }
 }
 
 
@@ -282,15 +282,17 @@ void SdPage::EndListenOutlineText()
         DBG_ASSERT(pSPool, "StyleSheetPool nicht gefunden");
         String aTrueLayoutName(maLayoutName);
         aTrueLayoutName.Erase( aTrueLayoutName.SearchAscii( SD_LT_SEPARATOR ));
-        List* pOutlineStyles = pSPool->CreateOutlineSheetList(aTrueLayoutName);
-        for (SfxStyleSheet* pSheet = (SfxStyleSheet*)pOutlineStyles->First();
-             pSheet;
-             pSheet = (SfxStyleSheet*)pOutlineStyles->Next())
-            {
-                pOutlineTextObj->EndListening(*pSheet);
-            }
 
-        delete pOutlineStyles;
+        SfxStyleSheet *pSheet = NULL;
+        std::vector<SfxStyleSheetBase*> aOutlineStyles;
+        pSPool->CreateOutlineSheetList(aTrueLayoutName,aOutlineStyles);
+
+        std::vector<SfxStyleSheetBase*>::iterator iter;
+        for (iter = aOutlineStyles.begin(); iter != aOutlineStyles.end(); ++iter)
+        {
+            pSheet = reinterpret_cast<SfxStyleSheet*>(*iter);
+            pOutlineTextObj->EndListening(*pSheet);
+        }
     }
 }
 
@@ -316,9 +318,9 @@ void SdPage::SetModel(SdrModel* pNewModel)
 |*
 \************************************************************************/
 
-FASTBOOL SdPage::IsReadOnly() const
+bool SdPage::IsReadOnly() const
 {
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -646,3 +648,5 @@ void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
         NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnAnnotationRemoved" ) ), xSource );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

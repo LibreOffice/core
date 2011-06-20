@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include <svx/srchdlg.hxx>
 #include <sfx2/bindings.hxx>
 #include "fupoor.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "app.hrc"
 #include "app.hxx"
@@ -176,3 +175,5 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

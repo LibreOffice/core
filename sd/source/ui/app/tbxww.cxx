@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <svx/grafctrl.hxx>
 #include <svl/cjkoptions.hxx>
 #include <sfx2/viewsh.hxx>
-#ifndef _SFX_IMAGEMGR_HXX
 #include <sfx2/imagemgr.hxx>
-#endif
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -54,140 +53,6 @@
 
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxControl, TbxImageItem )
 
-/*************************************************************************
-|*
-|* PopUp-Window
-|*
-\************************************************************************/
-/*
-SdPopupWindowTbx::SdPopupWindowTbx( sal_uInt16 nId, WindowAlign eAlign,
-                                    SdResId aRIdWin, SdResId aRIdTbx,
-                                    SfxBindings& rBindings ) :
-                SfxPopupWindow  ( nId, aRIdWin, rBindings ),
-                aTbx            ( this, GetBindings(), aRIdTbx ),
-                aSdResIdWin       ( aRIdWin ),
-                aSdResIdTbx       ( aRIdTbx ),
-                eTbxAlign       ( eAlign )
-{
-    aTbx.UseDefault();
-    aSelectLink = aTbx.GetToolBox().GetSelectHdl();
-    aTbx.GetToolBox().SetSelectHdl( LINK( this, SdPopupWindowTbx, TbxSelectHdl ) );
-
-    FreeResource();
-
-    if( ( eAlign == WINDOWALIGN_TOP ) || ( eAlign == WINDOWALIGN_BOTTOM ) )
-    {
-        if ( aSdResIdWin.GetId() != RID_TEXT )
-            aTbx.GetToolBox().SetAlign( WINDOWALIGN_LEFT );
-
-        SetText( String() );
-    }
-
-    AdaptToCTL();
-}
-
-
-void SdPopupWindowTbx::AdaptToCTL (void)
-{
-    Size aSize = aTbx.CalcWindowSizePixel();
-    if (aSdResIdWin.GetId() == RID_TEXT)
-    {
-        SvtCJKOptions aCJKOptions;
-        if ( ! aCJKOptions.IsVerticalTextEnabled())
-        {
-            ToolBox& aToolBox = aTbx.GetToolBox();
-
-            // Iterate over all tool box items and remove those that are
-            // specific to complex text layout.
-            sal_uInt16 i=0;
-            while (i < aToolBox.GetItemCount())
-            {
-                sal_uInt16 nIndex = aToolBox.GetItemId(i);
-                switch (nIndex)
-                {
-                    case 0: // Line break.
-                    case SID_ATTR_CHAR_VERTICAL:
-                    case SID_TEXT_FITTOSIZE_VERTICAL:
-                    case SID_DRAW_CAPTION_VERTICAL:
-                    case SID_DRAW_FONTWORK_VERTICAL:
-                        aToolBox.RemoveItem (i);
-                        break;
-
-                    default:
-                        // Leave the item unmodified.  Advance to the next one.
-                        i+=1;
-                }
-            }
-            aToolBox.RecalcItems();
-            // Why is this necessary?
-            aToolBox.SetLineCount(1);
-            sal_uInt16 nLineCount = aToolBox.GetLineCount();
-            aSize = aToolBox.CalcWindowSizePixel(nLineCount);
-        }
-    }
-    aTbx.SetPosSizePixel( Point(), aSize );
-    SetOutputSizePixel( aSize );
-}
-*/
-
-/*-------------------------------------------------------------------------*/
-/*
-SdPopupWindowTbx::~SdPopupWindowTbx()
-{
-}
-*/
-/*-------------------------------------------------------------------------*/
-/*
-SfxPopupWindow* SdPopupWindowTbx::Clone() const
-{
-    SfxBindings& rBindings = (SfxBindings&)GetBindings();
-
-    return( new SdPopupWindowTbx( GetId(), eTbxAlign,
-                    aSdResIdWin, aSdResIdTbx, rBindings ) );
-
-    //return( SfxPopupWindow::Clone() );
-}
-*/
-/*-------------------------------------------------------------------------*/
-/*
-void SdPopupWindowTbx::Update()
-{
-    AdaptToCTL();
-
-    ToolBox *pBox = &aTbx.GetToolBox();
-    aTbx.Activate( pBox );
-    aTbx.Deactivate( pBox );
-}
-*/
-/*-------------------------------------------------------------------------*/
-/*
-void SdPopupWindowTbx::PopupModeEnd()
-{
-    aTbx.GetToolBox().EndSelection();
-
-    SfxPopupWindow::PopupModeEnd();
-}
-*/
-/*-------------------------------------------------------------------------*/
-/*
-IMPL_LINK( SdPopupWindowTbx, TbxSelectHdl, ToolBox*, pBox)
-{
-    if( IsInPopupMode() )
-        EndPopupMode();
-
-    aSelectLink.Call( &aTbx.GetToolBox() );
-
-    if ( pBox->GetModifier() & KEY_MOD1 )
-    {
-        //  #99013# if selected with control key, return focus to current view
-        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
-        if ( pShellWnd )
-            pShellWnd->GrabFocus();
-    }
-
-    return( 0L );
-}
-*/
 /*************************************************************************
 |*
 |* Klasse fuer Toolbox
@@ -289,9 +154,8 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
     if( eState == SFX_ITEM_AVAILABLE )
     {
         TbxImageItem* pItem = PTR_CAST( TbxImageItem, pState );
-        //DBG_ASSERT( pItem, "TbxImageItem erwartet!" );
         // Im StarDesktop kann jetzt auch ein anderes Item ankommen,
-        // das nicht ausgewertet werden darf (#33802# und #33838#)
+        // das nicht ausgewertet werden darf
         if( pItem )
         {
             ToolBox& rTbx = GetToolBox();
@@ -307,8 +171,8 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nImage ));
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
-                                         hasBigImages(),
-                                         GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
+                                         hasBigImages()
+                                       );
 
                 // !-Operator prueft, ob Image nicht vorhanden ist
                 if( !!aImage )
@@ -460,9 +324,6 @@ sal_Bool SdTbxControl::IsCheckable( sal_uInt16 nSId )
         case SID_CONNECTOR_LINES_CIRCLE_END:
         case SID_CONNECTOR_LINES_CIRCLES:
 
-
-
-        //case SID_ZOOM_OUT:
             return( sal_True );
     }
     return( sal_False );
@@ -470,3 +331,4 @@ sal_Bool SdTbxControl::IsCheckable( sal_uInt16 nSId )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

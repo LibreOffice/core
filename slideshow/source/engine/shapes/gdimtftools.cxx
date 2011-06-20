@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -329,7 +330,7 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
         // (though this is currently not used from the
         // DrawingLayer - shape transparency gradients
         // don't affect shape text)
-        return pAct->GetGDIMetaFile().GetActionCount();
+        return pAct->GetGDIMetaFile().GetActionSize();
     }
     default:
         return 1;
@@ -480,7 +481,6 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         pMtf->SetPrefMapMode( MapMode() );
         pMtf->SetPrefSize( aAnimSize );
 
-        // #115934#
         // Take care of special value for MultiPage TIFFs. ATM these shall just
         // show their first page for _quite_ some time.
         sal_Int32 nWaitTime100thSeconds( rAnimBmp.nWait );
@@ -548,3 +548,4 @@ bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

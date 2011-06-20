@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,9 @@
 
 #include "ViewShellHint.hxx"
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 #include <vcl/msgbox.hxx>
 #include <svx/svddef.hxx>
 #include <sfx2/bindings.hxx>
@@ -50,7 +47,6 @@
 #include "app.hrc"
 #include "strings.hrc"
 
-#include "misc.hxx"
 #include "fuzoom.hxx"
 #include "fudspord.hxx"
 #include "futransf.hxx"
@@ -63,13 +59,9 @@
 #include "fuinsert.hxx"
 #include "fuprlout.hxx"
 #include "fupage.hxx"
-#ifndef SD_FU_OBJECT_ANIMATION_PARAMETERS_HXX
 #include "fuoaprms.hxx"
-#endif
 #include "fucopy.hxx"
-#ifndef SD_FU_LINE_END_HXX
 #include "fulinend.hxx"
-#endif
 #include "fusnapln.hxx"
 #include "fuolbull.hxx"
 #include "fuinsfil.hxx"
@@ -84,7 +76,7 @@
 #include "Window.hxx"
 #include "drawview.hxx"
 #include "zoomlist.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>
 
@@ -358,8 +350,6 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_TWAIN_SELECT:
         {
-            sal_Bool bDone = sal_False;
-
             if( mxScannerManager.is() )
             {
                 try
@@ -370,7 +360,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
                     if( aContexts.getLength() )
                     {
                         ::com::sun::star::scanner::ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
-                        bDone = mxScannerManager->configureScanner( aContext );
+                        mxScannerManager->configureScanner( aContext );
                     }
                 }
                 catch(...)
@@ -475,7 +465,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 
                 if( !!aScanBmp )
                 {
-                    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                    const SolarMutexGuard aGuard;
                     SdrPage*            pPage = mpDrawView->GetSdrPageView()->GetPage();
                     Size                aBmpSize( aScanBmp.GetPrefSize() ), aPageSize( pPage->GetSize() );
                     const MapMode       aMap100( MAP_100TH_MM );
@@ -555,3 +545,5 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

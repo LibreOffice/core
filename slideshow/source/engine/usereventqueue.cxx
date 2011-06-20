@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -686,7 +687,7 @@ UserEventQueue::~UserEventQueue()
         clear();
     }
     catch (uno::Exception &) {
-        OSL_ENSURE( false, rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         comphelper::anyToString(
                             cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -1005,3 +1006,4 @@ void UserEventQueue::callSkipEffectEventHandler (void)
 } // namespace internal
 } // namespace presentation
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

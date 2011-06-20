@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ struct EventMultiplexerImpl;
     are handled as well. Note that registered events which
     have a non-zero timeout (i.e. events that return non-zero
     from getActivationTime()) will not be fired immediately
-    after the user action occured, but only after the given
+    after the user action occurred, but only after the given
     timeout. Which is actually a feature.
 */
 class EventMultiplexer : private ::boost::noncopyable
@@ -659,3 +660,4 @@ private:
 
 #endif /* INCLUDED_SLIDESHOW_EVENTMULTIPLEXER_HXX */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

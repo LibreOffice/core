@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -193,7 +194,7 @@ void QueueProcessorThread<Queue, Request, Cache, Factory>
             if (mrQueue.IsEmpty())
                 break;
         }
-        ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard (maMutex);
         if (mbIsTerminated)
             break;
@@ -285,7 +286,7 @@ void QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory
     >::Terminate (void)
 {
-    //    ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    //    SolarMutexGuard aSolarGuard;
     ::osl::Thread::terminate ();
     {
         ::osl::MutexGuard aGuard (maMutex);
@@ -317,3 +318,5 @@ void SAL_CALL QueueProcessorThread<
 } } } // end of namespace ::sd::slidesorter::cache
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

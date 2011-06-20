@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,7 +69,7 @@ void ConfigurationTracer::TraceBoundResources (
 {
     Sequence<Reference<XResourceId> > aResourceList (
         rxConfiguration->getResources(rxResourceId, ::rtl::OUString(), AnchorBindingMode_DIRECT));
-    const ::rtl::OUString sIndentation (::rtl::OUString::createFromAscii("    "));
+    const ::rtl::OUString sIndentation (RTL_CONSTASCII_USTRINGPARAM("    "));
     for (sal_Int32 nIndex=0; nIndex<aResourceList.getLength(); ++nIndex)
     {
         ::rtl::OUString sLine (aResourceList[nIndex]->getResourceURL());
@@ -81,3 +82,5 @@ void ConfigurationTracer::TraceBoundResources (
 #endif
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ TYPEINIT1(GraphicViewShellBase, ViewShellBase);
 // new GraphicViewShellBase object has been constructed.
 
 SfxViewFactory* GraphicViewShellBase::pFactory;
-SfxViewShell* __EXPORT GraphicViewShellBase::CreateInstance (
+SfxViewShell* GraphicViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     GraphicViewShellBase* pBase = new GraphicViewShellBase(pFrame, pOldView);
@@ -130,3 +131,4 @@ void GraphicViewShellBase::InitializeFramework (void)
 
 } // end of namespace sd
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

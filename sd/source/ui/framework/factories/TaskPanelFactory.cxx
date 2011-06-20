@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@ Sequence<rtl::OUString> SAL_CALL TaskPanelFactory_getSupportedServiceNames (void
     throw (RuntimeException)
 {
     static const OUString sServiceName(
-        OUString::createFromAscii("com.sun.star.drawing.framework.TaskPanelFactory"));
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.TaskPanelFactory"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -271,7 +272,7 @@ void SAL_CALL TaskPanelFactory::releaseResource (
             }
             else
             {
-                OSL_ENSURE( false, "TaskPanelFactory::releaseResource: don't know what to do with this resource!" );
+                OSL_FAIL( "TaskPanelFactory::releaseResource: don't know what to do with this resource!" );
             }
         }
     }
@@ -321,3 +322,5 @@ Reference<XResourceId> SAL_CALL TaskPanelResource::getResourceId ()
 } // end of anonymous namespace
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

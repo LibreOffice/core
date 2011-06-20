@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -296,7 +297,7 @@ SvxFieldData* SdFieldPopup::GetField()
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
 
-                // #91225# Get current filename, not the one stored in the old field
+                // Get current filename, not the one stored in the old field
                 pNewField = new SvxExtFileField( aName );
                 ( (SvxExtFileField*) pNewField )->SetType( eType );
                 ( (SvxExtFileField*) pNewField )->SetFormat( eFormat );
@@ -325,7 +326,7 @@ SvxFieldData* SdFieldPopup::GetField()
         if( pAuthorField->GetFormat() != eFormat ||
             pAuthorField->GetType() != eType )
         {
-            // #91225# Get current state of address, not the old one
+            // Get current state of address, not the old one
             SvtUserOptions aUserOptions;
             pNewField = new SvxAuthorField( aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() );
             ( (SvxAuthorField*) pNewField )->SetType( eType );
@@ -336,3 +337,4 @@ SvxFieldData* SdFieldPopup::GetField()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

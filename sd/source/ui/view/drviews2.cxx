@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,17 +33,11 @@
 #include "ViewShellImplementation.hxx"
 #include <vcl/waitobj.hxx>
 #include <svx/svdograf.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
-#ifndef _ZOOMITEM_HXX
 #include <svx/zoomitem.hxx>
-#endif
-#ifndef _EDITDATA_HXX
 #include <editeng/editdata.hxx>
-#endif
 #include <basic/sberrors.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
@@ -56,9 +51,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
 
-#ifndef _SDOUTL_HXX //autogen
 #include <svx/svdoutl.hxx>
-#endif
 #include <svx/xlnwtit.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/xlnstwit.hxx>
@@ -90,7 +83,6 @@
 #include "fuvect.hxx"
 #include "stlpool.hxx"
 
-// #90356#
 #include "optsitem.hxx"
 #include "sdabstdlg.hxx"
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -130,6 +122,31 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
     switch ( nSId )
     {
+        case SID_OUTLINE_TEXT_AUTOFIT:
+        {
+            ::svl::IUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+            SdrObject* pObj = NULL;
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if( rMarkList.GetMarkCount() == 1 )
+            {
+                pUndoManager->EnterListAction( String(), String() );
+                mpDrawView->BegUndo();
+
+                pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                bool bSet = ((const SdrTextFitToSizeTypeItem*)pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
+
+                mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+
+                pObj->SetMergedItem(SdrTextFitToSizeTypeItem(bSet ? SDRTEXTFIT_NONE : SDRTEXTFIT_AUTOFIT));
+
+                mpDrawView->EndUndo();
+                pUndoManager->LeaveListAction();
+            }
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
         // Flaechen und Linien-Attribute:
         // Sollten (wie StateMethode) eine eigene
         // Execute-Methode besitzen
@@ -153,7 +170,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 sal_Bool bMergeUndo = sal_False;
                 ::svl::IUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
 
-                // Anpassungen Start/EndWidth #63083#
+                // Anpassungen Start/EndWidth
                 if(nSId == SID_ATTR_LINE_WIDTH)
                 {
                     SdrObject* pObj = NULL;
@@ -174,7 +191,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             sal_Bool bSetItemSet(sal_False);
 
-                            // #86265# do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
+                            // do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
                             if(SFX_ITEM_DONTCARE != aAttr.GetItemState(XATTR_LINESTARTWIDTH))
                             {
                                 sal_Int32 nValAct = ((const XLineStartWidthItem&)aAttr.Get(XATTR_LINESTARTWIDTH)).GetValue();
@@ -185,7 +202,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                 aAttr.Put(XLineStartWidthItem(nValNew));
                             }
 
-                            // #86265# do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
+                            // do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
                             if(SFX_ITEM_DONTCARE != aAttr.GetItemState(XATTR_LINEENDWIDTH))
                             {
                                 sal_Int32 nValAct = ((const XLineEndWidthItem&)aAttr.Get(XATTR_LINEENDWIDTH)).GetValue();
@@ -305,7 +322,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else // nur zum Test
             {
-                DBG_ERROR(" Kein Wert fuer Silbentrennung!");
+                OSL_FAIL(" Kein Wert fuer Silbentrennung!");
                 SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
                 sal_Bool bValue = sal_True;
                 aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
@@ -594,7 +611,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
                         break;
                     case SVX_ZOOM_PAGEWIDTH_NOBORDER:
-                        DBG_ERROR("sd::DrawViewShell::FuTemporary(), SVX_ZOOM_PAGEWIDTH_NOBORDER not handled!" );
+                        OSL_FAIL("sd::DrawViewShell::FuTemporary(), SVX_ZOOM_PAGEWIDTH_NOBORDER not handled!" );
                         break;
                 }
                 rReq.Ignore ();
@@ -974,3 +991,5 @@ SdPage* DrawViewShell::CreateOrDuplicatePage (
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

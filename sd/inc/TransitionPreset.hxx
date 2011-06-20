@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,13 @@
 #ifndef _SD_TRANSITIONPRESET_HXX
 #define _SD_TRANSITIONPRESET_HXX
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#ifndef _UTL_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace animations { class XAnimationNode; }
@@ -53,7 +50,7 @@ namespace sd {
 class TransitionPreset;
 typedef boost::shared_ptr< TransitionPreset > TransitionPresetPtr;
 typedef std::list< TransitionPresetPtr > TransitionPresetList;
-typedef std::hash_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
+typedef boost::unordered_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
 
 class TransitionPreset
 {
@@ -81,8 +78,6 @@ private:
     rtl::OUString maPresetId;
     rtl::OUString maUIName;
 
-    static sd::TransitionPresetList* mpTransitionPresetList;
-
     static bool importTransitionsFile( TransitionPresetList& rList,
                                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
                                        UStringMap& rTransitionNameMape,
@@ -93,3 +88,4 @@ private:
 
 #endif // _SD_TRANSITIONPRESET_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

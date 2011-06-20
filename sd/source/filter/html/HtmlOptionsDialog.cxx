@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <osl/file.hxx>
-#include <vos/module.hxx>
+#include <osl/module.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -199,7 +200,7 @@ Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if ( maMediaDescriptor[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
             break;
     }
     if ( i == nCount )
@@ -221,7 +222,7 @@ void SdHtmlOptionsDialog::setPropertyValues( const Sequence< PropertyValue > & a
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if ( maMediaDescriptor[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
         {
             maMediaDescriptor[ i ].Value >>= maFilterDataSequence;
             break;
@@ -285,3 +286,5 @@ void SdHtmlOptionsDialog::setSourceDocument( const Reference< XComponent >& xDoc
     }
     throw IllegalArgumentException();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

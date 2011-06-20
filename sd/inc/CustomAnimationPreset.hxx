@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,23 +29,19 @@
 #ifndef _SD_CUSTOMANIMATIONPRESET_HXX
 #define _SD_CUSTOMANIMATIONPRESET_HXX
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 
-#ifndef _UTL_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 #include <CustomAnimationEffect.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace sd {
 
-typedef std::hash_map< rtl::OUString, CustomAnimationEffectPtr, comphelper::UStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
-typedef std::hash_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
+typedef boost::unordered_map< rtl::OUString, CustomAnimationEffectPtr, comphelper::UStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
+typedef boost::unordered_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
 typedef std::vector< rtl::OUString > UStringList;
 
 class CustomAnimationPreset
@@ -83,7 +80,7 @@ private:
 };
 
 typedef boost::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
-typedef std::hash_map<rtl::OUString, CustomAnimationPresetPtr, comphelper::UStringHash, comphelper::UStringEqual> EffectDescriptorMap;
+typedef boost::unordered_map<rtl::OUString, CustomAnimationPresetPtr, comphelper::UStringHash, comphelper::UStringEqual> EffectDescriptorMap;
 typedef std::vector< CustomAnimationPresetPtr > EffectDescriptorList;
 
 struct PresetCategory
@@ -110,8 +107,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
 
     SD_DLLPUBLIC CustomAnimationPresetPtr getEffectDescriptor( const rtl::OUString& rPresetId ) const;
-//  const AnimationEffect* getEffect( const rtl::OUString& rPresetId ) const;
-//  const AnimationEffect* getEffect( const rtl::OUString& rPresetId, const rtl::OUString& rPresetSubType ) const;
 
     const rtl::OUString& getUINameForPresetId( const rtl::OUString& rPresetId ) const;
     const rtl::OUString& getUINameForProperty( const rtl::OUString& rProperty ) const;
@@ -153,3 +148,4 @@ typedef boost::shared_ptr< CustomAnimationPresets > CustomAnimationPresetsPtr;
 
 #endif // _SD_CUSTOMANIMATIONEFFECTS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

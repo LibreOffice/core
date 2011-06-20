@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,9 +69,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/fmshell.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "sdmod.hxx"
 #include "cusshow.hxx"
 #include "ViewShellBase.hxx"
@@ -85,9 +84,7 @@
 #include "FrameView.hxx"
 #include "DrawDocShell.hxx"
 
-#ifndef _SD_APP_HRC_
 #include "app.hrc"
-#endif
 
 #include "slideshow.hxx"
 
@@ -425,3 +422,5 @@ private:
 } // namespace ::sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

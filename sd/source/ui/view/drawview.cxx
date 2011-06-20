@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
     /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,19 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <sfx2/dispatch.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svx/svdpagv.hxx>
 #include <sfx2/request.hxx>
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
-#ifndef _VIEW3D_HXX //autogen
 #include <svx/view3d.hxx>
-#endif
-#ifndef _SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
@@ -211,7 +206,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     // Presentation object outline
                     OutlinerView* pOV   = GetTextEditOutlinerView();
                     ::Outliner* pOutliner = pOV->GetOutliner();
-                    List*         pList = (List*)pOV->CreateSelectionList();
+
                     aTemplateName += String(SdResId(STR_LAYOUT_OUTLINE));
 
                     pOutliner->SetUpdateMode(sal_False);
@@ -224,7 +219,12 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     aComment.Insert( String((SdResId(STR_PSEUDOSHEET_OUTLINE))), nPos);
                     mpDocSh->GetUndoManager()->EnterListAction( aComment, String() );
 
-                    Paragraph* pPara = (Paragraph*)pList->Last();
+                    std::vector<Paragraph*> aSelList;
+                    pOV->CreateSelectionList(aSelList);
+
+                    std::vector<Paragraph*>::reverse_iterator iter = aSelList.rbegin();
+                    Paragraph* pPara = iter != aSelList.rend() ? *iter : NULL;
+
                     while (pPara)
                     {
                         sal_uLong nParaPos = pOutliner->GetAbsPos( pPara );
@@ -265,10 +265,11 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                                 pOutlSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                         }
 
-                        pPara = (Paragraph*)pList->Prev();
+                        ++iter;
+                        pPara = iter != aSelList.rend() ? *iter : NULL;
 
                         if( !pPara && nDepth > 0 &&  rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON &&
-                            pOutliner->GetDepth( (sal_uInt16) pOutliner->GetAbsPos( (Paragraph*) pList->First() ) ) > 0 )
+                            pOutliner->GetDepth( (sal_uInt16) pOutliner->GetAbsPos(*(aSelList.begin())) ) > 0 )
                             pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
                     }
 
@@ -277,7 +278,6 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                     mpDocSh->GetUndoManager()->LeaveListAction();
 
-                    delete pList;
                     bOk = sal_True;
                 }
                 else
@@ -414,7 +414,7 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             mpDrawViewShell->ResetActualLayer();
         }
 
-        // #94278# switch to that page when it's not a master page
+        // switch to that page when it's not a master page
         if(HINT_SWITCHTOPAGE == eHintKind)
         {
             const SdrPage* pPage = ((const SdrHint&)rHint).GetPage();
@@ -555,7 +555,7 @@ sal_Bool DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
 
 void DrawView::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 {
-    if (!rRect.IsEmpty())
+    if (!rRect.IsEmpty() && mpDrawViewShell)
     {
         mpDrawViewShell->MakeVisible(rRect, rWin);
     }
@@ -649,3 +649,5 @@ void DrawView::DeleteMarked()
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

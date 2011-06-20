@@ -30,12 +30,6 @@
 #include "vectdlg.hrc"
 #include "helpids.h"
 
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
 ModalDialog DLG_VECTORIZE
 {
     HelpID = HID_VECTORIZE_DLG;
@@ -132,7 +126,7 @@ ModalDialog DLG_VECTORIZE
         Last = 32 ;
         SpinSize = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " Pixel" ;
+        CustomUnitText [ en-US ] = " Pixel" ;
     };
 
     CheckBox CB_FILLHOLES
@@ -167,7 +161,7 @@ ModalDialog DLG_VECTORIZE
         Last = 128;
         SpinSize = 1;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " Pixel" ;
+        CustomUnitText [ en-US ] = " Pixel" ;
     };
 
     FixedText FT_ORIGINAL

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,9 +56,7 @@
 #include "res_bmp.hrc"
 #include "ViewShell.hxx"
 
-#ifndef _SV_SVAPP_HXX_
 #include <vcl/svapp.hxx>
-#endif
 
 #include <string>
 #include <algorithm>
@@ -117,7 +116,6 @@ void SdDisplay::Paint( const Rectangle& )
         aPt.Y() = ( aSize.Height() - aBmpSize.Height() ) / 2;
 
     aBitmapEx.Draw( this, aPt, aBmpSize );
-    //DrawBitmap( aPt, aBmpSize, *pBitmap );
 }
 
 // -----------------------------------------------------------------------
@@ -181,11 +179,6 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
 {
     aCtlDisplay.SetAccessibleName(String (SdResId(STR_DISPLAY)));
     FreeResource();
-
-    aBtnGetOneObject.SetModeImage( Image( SdResId( IMG_GET1OBJECT_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnGetAllObjects.SetModeImage( Image( SdResId( IMG_GETALLOBJECT_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnRemoveBitmap.SetModeImage( Image( SdResId( IMG_REMOVEBMP_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnRemoveAll.SetModeImage( Image( SdResId( IMG_REMOVEALLBMP_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     // neues Dokument mit Seite erzeugen
     pMyDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, NULL);
@@ -606,7 +599,7 @@ void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls 
                 ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
                 : ViewShell::OUTPUT_DRAWMODE_COLOR );
             aVD.Erase();
-            pObject->SingleObjectPainter( aVD ); // #110094#-17
+            pObject->SingleObjectPainter( aVD );
             aBmp = BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
         }
 
@@ -639,8 +632,6 @@ void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls 
     }
     else
     {
-        //aFiCount.SetText( String( SdResId( STR_NULL ) ) );
-
         // Wenn kein Objekt in der Liste ist
         aBtnFirst.Enable( sal_False );
         aBtnReverse.Enable( sal_False );
@@ -748,7 +739,6 @@ Fraction AnimationWindow::GetScale()
 
 void AnimationWindow::Resize()
 {
-    //if( !IsZoomedIn() )
     if ( !IsFloatingMode() ||
          !GetFloatingWindow()->IsRollUp() )
     {
@@ -764,7 +754,6 @@ void AnimationWindow::Resize()
         aCtlDisplay.SetOutputSizePixel( aDisplaySize );
 
         Point aPt;
-        // aPt.X() = aDiffSize.Width() / 2;
         aPt.Y() = aDiffSize.Height();
 
         // Verschieben der anderen Controls
@@ -842,8 +831,6 @@ void AnimationWindow::Resize()
         aGrpAnimation.Show();
 
         aSize = aWinSize;
-
-        //aFltWinSize = GetSizePixel();
     }
     SfxDockingWindow::Resize();
 }
@@ -1228,8 +1215,6 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
                 break;
 
             }
-            //aRect.SetPos(aWindowCenter + Point(aOffset.Width(), aOffset.Height()));
-            //pClone->SetSnapRect( aRect );
             // SetSnapRect ist fuer Ellipsen leider nicht implementiert !!!
             Point aMovePt( aWindowCenter + Point( aOffset.Width(), aOffset.Height() ) - aRect.TopLeft() );
             Size aMoveSize( aMovePt.X(), aMovePt.Y() );
@@ -1314,3 +1299,5 @@ void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

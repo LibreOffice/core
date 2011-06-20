@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -183,7 +184,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
         // reverse order so that when one slide is not deleted (to avoid an
         // empty document) the remaining slide is the first one.
         ::std::vector<SdPage*>::const_reverse_iterator aI;
-        for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); aI++)
+        for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); ++aI)
         {
             // Do not delete the last slide in the document.
             if (xPages->getCount() <= 1)
@@ -197,7 +198,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
     }
     catch( Exception& )
     {
-        DBG_ERROR("SelectionManager::DeleteSelectedNormalPages(), exception caught!");
+        OSL_FAIL("SelectionManager::DeleteSelectedNormalPages(), exception caught!");
     }
 }
 
@@ -219,7 +220,7 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
         // reverse order so that when one slide is not deleted (to avoid an
         // empty document) the remaining slide is the first one.
         ::std::vector<SdPage*>::const_reverse_iterator aI;
-        for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); aI++)
+        for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); ++aI)
         {
             // Do not delete the last slide in the document.
             if (xPages->getCount() <= 1)
@@ -233,7 +234,7 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
     }
     catch( Exception& )
     {
-        DBG_ERROR("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
+        OSL_FAIL("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
     }
 }
 
@@ -357,3 +358,5 @@ void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
 }
 
 } } } // end of namespace ::sd::slidesorter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

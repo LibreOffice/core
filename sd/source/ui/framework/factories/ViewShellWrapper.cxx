@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,12 +37,12 @@
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <rtl/uuid.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 
 
@@ -176,20 +177,14 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
 
 //----- XUnoTunnel ------------------------------------------------------------
 
+namespace
+{
+    class theViewShellWrapperUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theViewShellWrapperUnoTunnelId> {};
+}
+
 const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId (void)
 {
-    static Sequence<sal_Int8>* pSequence = NULL;
-    if (pSequence == NULL)
-    {
-        const ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (pSequence == NULL)
-        {
-            static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);
-            rtl_createUuid((sal_uInt8*)aSequence.getArray(), 0, sal_True);
-            pSequence = &aSequence;
-        }
-    }
-    return *pSequence;
+    return theViewShellWrapperUnoTunnelId::get().getSeq();
 }
 
 
@@ -267,3 +262,5 @@ void SAL_CALL ViewShellWrapper::disposing (const lang::EventObject& rEvent)
 
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

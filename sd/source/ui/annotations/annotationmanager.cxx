@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include "sddll.hxx"
 
-//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -42,6 +42,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 
+#include <sal/macros.h>
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
 #include <unotools/useroptions.hxx>
@@ -164,7 +165,8 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
     OUString sRet;
     if( xAnnotation.is() )
     {
-        const LocaleDataWrapper& rLocalData = SvtSysLocale().GetLocaleData();
+        const SvtSysLocale aSysLocale;
+        const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
 
         com::sun::star::util::DateTime aDateTime( xAnnotation->getDateTime() );
 
@@ -180,7 +182,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
 
         Time aTime( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds );
         if(aTime.GetTime() != 0)
-            sRet = sRet + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime( aTime,false );
+            sRet = sRet + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "))  + rLocalData.getTime( aTime,false );
     }
     return sRet;
 }
@@ -212,7 +214,7 @@ void AnnotationManagerImpl::init()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::AnnotationManagerImpl::AnnotationManagerImpl(), Exception caught!" );
+        OSL_FAIL( "sd::AnnotationManagerImpl::AnnotationManagerImpl(), Exception caught!" );
     }
 
     try
@@ -396,7 +398,7 @@ void AnnotationManagerImpl::InsertAnnotation()
                 Rectangle aNewRect( x, y, x + width - 1, y + height - 1 );
                    bool bFree = true;
 
-                   for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
+                   for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
                    {
                        RealPoint2D aPoint( (*iter)->getPosition() );
                        aTagRect.nLeft   = sal::static_int_cast< long >( aPoint.X * 100.0 );
@@ -552,7 +554,7 @@ void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const rtl::OUString& sAut
         if( pPage && !pPage->getAnnotations().empty() )
         {
             AnnotationVector aAnnotations( pPage->getAnnotations() );
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
+            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
             {
                 Reference< XAnnotation > xAnnotation( *iter );
                 if( xAnnotation->getAuthor() == sAuthor )
@@ -583,7 +585,7 @@ void AnnotationManagerImpl::DeleteAllAnnotations()
         {
 
             AnnotationVector aAnnotations( pPage->getAnnotations() );
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
+            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
             {
                 pPage->removeAnnotation( (*iter) );
             }
@@ -661,11 +663,11 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     {
         if( xCurrent.is() )
         {
-               for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
+               for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
                {
                    if( (*iter) == xCurrent )
                    {
-                       iter++;
+                       ++iter;
                        if( iter != aAnnotations.end() )
                        {
                            SelectAnnotation( (*iter) );
@@ -685,20 +687,19 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     {
         if( xCurrent.is() )
         {
-               for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
-               {
-                   if( (*iter) == xCurrent )
-                   {
-                       if( iter != aAnnotations.begin() )
-                       {
-                           iter--;
+            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+            {
+                if( (*iter) == xCurrent )
+                {
+                    if( iter != aAnnotations.begin() )
+                    {
+                        --iter;
                         SelectAnnotation( (*iter) );
                         return;
-
-                       }
-                       break;
-                   }
-               }
+                    }
+                    break;
+                }
+            }
         }
         else if( !aAnnotations.empty() )
         {
@@ -832,7 +833,7 @@ void AnnotationManagerImpl::onSelectionChanged()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::AnnotationManagerImpl::onSelectionChanged(), exception caught!" );
+        OSL_FAIL( "sd::AnnotationManagerImpl::onSelectionChanged(), exception caught!" );
     }
 }
 
@@ -905,7 +906,7 @@ void AnnotationManagerImpl::CreateTags()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::AnnotationManagerImpl::onSelectionChanged(), exception caught!" );
+        OSL_FAIL( "sd::AnnotationManagerImpl::onSelectionChanged(), exception caught!" );
     }
 }
 
@@ -971,30 +972,6 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     }
     return 0;
 }
-#if 0
-OUString AnnotationManagerImpl::GetHelpText( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )
-{
-    OUString sRet;
-    if( xAnnotation.is() )
-    {
-        OUString sAuthor( xAnnotation->getAuthor() );
-        if( sAuthor.getLength() != 0 )
-        {
-            sRet += sAuthor;
-        }
-        sRet += OUString( RTL_CONSTASCII_USTRINGPARAM( " [" ) );
-
-        sRet += getAnnotationDateTimeString( xAnnotation );
-        sRet += OUString( RTL_CONSTASCII_USTRINGPARAM( "]\n" ) );
-
-        Reference< XText > xText( xAnnotation->getTextRange() );
-        if( xText.is() )
-            sRet += xText->getString();
-    }
-
-    return sRet;
-}
-#endif
 
 void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation > xAnnotation, ::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu /* = false */ )
 {
@@ -1075,7 +1052,6 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     Reference< ::com::sun::star::frame::XFrame > xFrame( mrBase.GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface() );
     if( xFrame.is() )
     {
-        const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
         for( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
         {
             nId = pMenu->GetItemId( nPos );
@@ -1084,7 +1060,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
                 OUString sSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                 sSlotURL += OUString::valueOf( sal_Int32( nId ));
 
-                Image aImage( GetImage( xFrame, sSlotURL, false, bHighContrast ) );
+                Image aImage( GetImage( xFrame, sSlotURL, false ) );
                 if( !!aImage )
                     pMenu->SetItemImage( nId, aImage );
             }
@@ -1138,7 +1114,7 @@ Color AnnotationManagerImpl::GetColor(sal_uInt16 aAuthorIndex)
             COL_AUTHOR4_NORMAL,     COL_AUTHOR5_NORMAL,     COL_AUTHOR6_NORMAL,
             COL_AUTHOR7_NORMAL,     COL_AUTHOR8_NORMAL,     COL_AUTHOR9_NORMAL };
 
-        return Color( aArrayNormal[ aAuthorIndex % (sizeof( aArrayNormal )/ sizeof( aArrayNormal[0] ))]);
+        return Color( aArrayNormal[ aAuthorIndex % (SAL_N_ELEMENTS(aArrayNormal))]);
     }
     else
         return Color(COL_WHITE);
@@ -1153,7 +1129,7 @@ Color AnnotationManagerImpl::GetColorLight(sal_uInt16 aAuthorIndex)
             COL_AUTHOR4_LIGHT,      COL_AUTHOR5_LIGHT,      COL_AUTHOR6_LIGHT,
             COL_AUTHOR7_LIGHT,      COL_AUTHOR8_LIGHT,      COL_AUTHOR9_LIGHT };
 
-        return Color( aArrayLight[ aAuthorIndex % (sizeof( aArrayLight )/ sizeof( aArrayLight[0] ))]);
+        return Color( aArrayLight[ aAuthorIndex % (SAL_N_ELEMENTS(aArrayLight))]);
     }
     else
         return Color(COL_WHITE);
@@ -1168,7 +1144,7 @@ Color AnnotationManagerImpl::GetColorDark(sal_uInt16 aAuthorIndex)
             COL_AUTHOR4_DARK,       COL_AUTHOR5_DARK,       COL_AUTHOR6_DARK,
             COL_AUTHOR7_DARK,       COL_AUTHOR8_DARK,       COL_AUTHOR9_DARK };
 
-        return Color( aArrayAnkor[  aAuthorIndex % (sizeof( aArrayAnkor )   / sizeof( aArrayAnkor[0] ))]);
+        return Color( aArrayAnkor[  aAuthorIndex % (SAL_N_ELEMENTS(aArrayAnkor))]);
     }
     else
         return Color(COL_WHITE);
@@ -1239,11 +1215,6 @@ SdPage* AnnotationManagerImpl::GetLastPage()
 
 SdPage* AnnotationManagerImpl::GetCurrentPage()
 {
-/*
-    ::boost::shared_ptr<DrawViewShell> pDrawViewShell(::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
-    if (pDrawViewShell.get() != NULL)
-        return pDrawViewShell->GetActualPage();
-*/
     return mrBase.GetMainViewShell()->getCurrentPage();
 }
 
@@ -1271,3 +1242,5 @@ void AnnotationManager::GetAnnotationState(SfxItemSet& rItemSet)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

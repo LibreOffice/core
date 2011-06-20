@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,7 @@ SfxTabPage* SdParagraphNumTabPage::Create(Window *pParent, const SfxItemSet & rA
 
 sal_uInt16* SdParagraphNumTabPage::GetRanges()
 {
-    static sal_uInt16 __FAR_DATA aRange[] =
+    static sal_uInt16 aRange[] =
     {
         ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END,
         0
@@ -190,3 +191,19 @@ SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr )
 
        AddTabPage( RID_SVXPAGE_TABULATOR );
 }
+
+void SdParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+{
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+    switch( nId )
+    {
+    case RID_SVXPAGE_STD_PARAGRAPH:
+        aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/2));
+        rPage.PageCreated(aSet);
+        break;
+    default:
+        break;
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

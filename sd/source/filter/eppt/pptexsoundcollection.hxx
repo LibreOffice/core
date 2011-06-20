@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,13 @@
 #ifndef _SD_PPT_EXSOUNDCOLLECTION_HXX
 #define _SD_PPT_EXSOUNDCOLLECTION_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #ifdef DBG_ANIM_LOG
 #include <stdio.h>
 #endif
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
-#include <boost/shared_ptr.hpp>
-#endif
-
-#include <list>
 
 namespace ppt
 {
@@ -59,25 +57,26 @@ class ExSoundEntry
 
         // returns the size of a complete SoundContainer
         sal_uInt32              GetSize( sal_uInt32 nId ) const;
-        void                    Write( SvStream& rSt, sal_uInt32 nId );
+        void                    Write( SvStream& rSt, sal_uInt32 nId ) const;
 };
 
-class ExSoundCollection : private List
+class ExSoundCollection
 {
-        const ExSoundEntry*     ImplGetByIndex( sal_uInt32 nId ) const;
-
     public:
-
-                                ExSoundCollection() {}
-                                ~ExSoundCollection();
 
         sal_uInt32              GetId( const String& );
 
         // returns the size of a complete SoundCollectionContainer
         sal_uInt32              GetSize() const;
-        void                    Write( SvStream& rSt );
+        void                    Write( SvStream& rSt ) const;
+
+private:
+
+    boost::ptr_vector<ExSoundEntry> maEntries;
 };
 
 } // namespace ppt
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

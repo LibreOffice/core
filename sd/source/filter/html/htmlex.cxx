@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <tools/fsys.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/FilterConfigItem.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <sfx2/progress.hxx>
@@ -388,7 +387,7 @@ HtmlExport::HtmlExport(
         meMode( PUBLISH_HTML ),
         mbContentsPage(false),
         mnButtonThema(-1),
-        mnWidthPixel( PUB_LOWRES_WIDTH ),
+        mnWidthPixel( PUB_MEDRES_WIDTH ),
         meFormat( FORMAT_JPG ),
         mbNotes(false),
         mnCompression( -1 ),
@@ -400,6 +399,7 @@ HtmlExport::HtmlExport(
         maHTMLExtension(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION)),
         mpHTMLFiles(NULL),
         mpImageFiles(NULL),
+        mpThumbnailFiles(NULL),
         mpPageNames(NULL),
         mpTextFiles(NULL),
         maIndexUrl(RTL_CONSTASCII_USTRINGPARAM("index")),
@@ -438,12 +438,13 @@ HtmlExport::~HtmlExport()
     // ------------------------------------------------------------------
     // Listen loeschen
     // ------------------------------------------------------------------
-    if(mpImageFiles && mpHTMLFiles && mpPageNames && mpTextFiles)
+    if(mpImageFiles && mpHTMLFiles && mpThumbnailFiles && mpPageNames && mpTextFiles )
     {
         for ( sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
         {
             delete mpImageFiles[nSdPage];
             delete mpHTMLFiles[nSdPage];
+            delete mpThumbnailFiles[nSdPage];
             delete mpPageNames[nSdPage];
             delete mpTextFiles[nSdPage];
         }
@@ -451,6 +452,7 @@ HtmlExport::~HtmlExport()
 
     delete[] mpImageFiles;
     delete[] mpHTMLFiles;
+    delete[] mpThumbnailFiles;
     delete[] mpPageNames;
     delete[] mpTextFiles;
 }
@@ -637,7 +639,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else
         {
-            DBG_ERROR("Unknown property for html export detected!");
+            OSL_FAIL("Unknown property for html export detected!");
         }
 
         pParams++;
@@ -655,21 +657,6 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     Size aTmpSize( pPage->GetSize() );
     double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
 
-/*
-    switch( mnWidthPixel )
-    {
-        case 800:
-            mnWidthPixel = 640;
-            break;
-        case 1024:
-            mnWidthPixel = 800;
-            break;
-        case 640:
-        default:
-            mnWidthPixel = 512;
-            break;
-    }
-*/
     mnHeightPixel = (sal_uInt16)(mnWidthPixel/dRatio);
 
     //------------------------------------------------------------------
@@ -682,7 +669,6 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     maIndex = aINetURLObj.GetLastName();
 
     mnSdPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
-//    sal_uInt16 nHiddenSlides = 0;
     for( sal_uInt16 nPage = 0; nPage < mnSdPageCount; nPage++ )
     {
         pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
@@ -756,6 +742,11 @@ void HtmlExport::ExportHtml()
 
         if( !CreateImagesForPresPages() )
             break;
+
+        if( mbContentsPage &&
+           !CreateImagesForPresPages( true ) )
+            break;
+
 
         if( !CreateHtmlForPresPages() )
             break;
@@ -990,7 +981,7 @@ bool HtmlExport::SavePresentation()
 // =====================================================================
 // Image-Dateien anlegen
 // =====================================================================
-bool HtmlExport::CreateImagesForPresPages()
+bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 {
     try
     {
@@ -1007,9 +998,9 @@ bool HtmlExport::CreateImagesForPresPages()
 
         Sequence< PropertyValue > aFilterData(((meFormat==FORMAT_JPG)&&(mnCompression != -1))? 3 : 2);
         aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PixelWidth") );
-        aFilterData[0].Value <<= (sal_Int32)mnWidthPixel;
+        aFilterData[0].Value <<= (sal_Int32)(bThumbnail ? PUB_THUMBNAIL_WIDTH : mnWidthPixel );
         aFilterData[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PixelHeight") );
-        aFilterData[1].Value <<= (sal_Int32)mnHeightPixel;
+        aFilterData[1].Value <<= (sal_Int32)(bThumbnail ? PUB_THUMBNAIL_HEIGHT : mnHeightPixel);
         if((meFormat==FORMAT_JPG)&&(mnCompression != -1))
         {
             aFilterData[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Quality") );
@@ -1036,7 +1027,11 @@ bool HtmlExport::CreateImagesForPresPages()
             SdPage* pPage = maPages[ nSdPage ];
 
             OUString aFull(maExportPath);
-            aFull += *mpImageFiles[nSdPage];
+            if (bThumbnail)
+                aFull += *mpThumbnailFiles[nSdPage];
+            else
+                aFull += *mpImageFiles[nSdPage];
+
 
             aDescriptor[0].Value <<= aFull;
 
@@ -1108,7 +1103,6 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         if( mbDocColors )
         {
             SetDocColors( pPage );
-//          maBackColor = pPage->GetPageBackgroundColor();
         }
 
 // HTML Kopf
@@ -1495,7 +1489,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 {
     bool bOk = true;
 
-    List aClickableObjects;
+    std::vector<SdrObject*> aClickableObjects;
 
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount && bOk; nSdPage++)
     {
@@ -1533,7 +1527,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                       pInfo->meClickAction == presentation::ClickAction_LASTPAGE)) ||
                      pIMapInfo)
                 {
-                    aClickableObjects.Insert(pObject, LIST_APPEND);
+                    aClickableObjects.push_back(pObject);
                 }
 
                 pObject = aIter.Next();
@@ -1544,7 +1538,6 @@ bool HtmlExport::CreateHtmlForPresPages()
             else
                 bMasterDone = true;
         }
-        sal_uLong nClickableObjectCount = aClickableObjects.Count();
 
 // HTML Head
         String aStr(maHTMLHeader);
@@ -1609,7 +1602,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         aStr += StringToURL( *mpImageFiles[nSdPage] );
         aStr.AppendAscii( "\" alt=\"\"" );
 
-        if (nClickableObjectCount > 0)
+        if (!aClickableObjects.empty())
             aStr.AppendAscii( " USEMAP=\"#map0\"" );
 
         aStr.AppendAscii( "></center>\r\n" );
@@ -1634,13 +1627,13 @@ bool HtmlExport::CreateHtmlForPresPages()
         }
 
 // ggfs. Imagemap erzeugen
-        if (nClickableObjectCount > 0)
+        if (!aClickableObjects.empty())
         {
             aStr.AppendAscii( "<map name=\"map0\">\r\n" );
 
-            for (sal_uLong nObject = 0; nObject < nClickableObjectCount; nObject++)
+            for (sal_uInt32 nObject = 0, n = aClickableObjects.size(); nObject < n; nObject++)
             {
-                SdrObject* pObject = (SdrObject*)aClickableObjects.GetObject(nObject);
+                SdrObject* pObject = aClickableObjects[nObject];
                 SdAnimationInfo* pInfo     = mpDoc->GetAnimationInfo(pObject);
                 SdIMapInfo*      pIMapInfo = mpDoc->GetIMapInfo(pObject);
 
@@ -1854,7 +1847,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
             aStr.AppendAscii( "</map>\r\n" );
         }
-        aClickableObjects.Clear();
+        aClickableObjects.clear();
 
         aStr.AppendAscii( "</body>\r\n</html>" );
 
@@ -1898,7 +1891,7 @@ bool HtmlExport::CreateContentPage()
 
     aStr.AppendAscii( "<h2>" );
 
-    // #92564# Solaris compiler bug workaround
+    // Solaris compiler bug workaround
     if( mbFrames )
         aStr += CreateLink( maFramePage,
                             RESTOHTML(STR_HTMLEXP_CLICKSTART) );
@@ -1911,7 +1904,7 @@ bool HtmlExport::CreateContentPage()
     aStr.AppendAscii( "<center><table width=\"90%\"><tr>\r\n" );
 
     // Inhaltsverzeichnis
-    aStr.AppendAscii( "<td valign=\"top\" align=\"left\" width=\"50%\">\r\n" );
+    aStr.AppendAscii( "<td valign=\"top\" align=\"left\" width=\"25%\">\r\n" );
     aStr.AppendAscii( "<h3>" );
     aStr += RESTOHTML(STR_HTMLEXP_CONTENTS);
     aStr.AppendAscii( "</h3>" );
@@ -1929,7 +1922,7 @@ bool HtmlExport::CreateContentPage()
     aStr.AppendAscii( "</td>\r\n" );
 
     // Dokument Infos
-    aStr.AppendAscii( "<td valign=\"top\" width=\"50%\">\r\n" );
+    aStr.AppendAscii( "<td valign=\"top\" align=\"left\" width=\"75%\">\r\n" );
 
     if(maAuthor.Len())
     {
@@ -1979,6 +1972,21 @@ bool HtmlExport::CreateContentPage()
         aStr += RESTOHTML(STR_HTMLEXP_DOWNLOAD);
         aStr.AppendAscii( "</a></p>\r\n" );
     }
+
+    for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
+    {
+        String aText;
+
+        aText.AppendAscii( "<img src=\"" );
+        aText += StringToURL( *mpThumbnailFiles[nSdPage] );
+        aText.AppendAscii( "\" width=\"256\" height=\"192\" alt=\"" );
+        aText += StringToHTMLString( *mpPageNames[nSdPage] );
+        aText.AppendAscii( "\">" );
+
+        aStr += CreateLink(*mpHTMLFiles[nSdPage], aText);
+        aStr.AppendAscii( "\r\n" );
+    }
+
 
     aStr.AppendAscii( "</td></tr></table></center>\r\n" );
 
@@ -2104,6 +2112,7 @@ void HtmlExport::CreateFileNames()
     // Listen mit neuen Dateinamen anlegen
     mpHTMLFiles = new String*[mnSdPageCount];
     mpImageFiles = new String*[mnSdPageCount];
+    mpThumbnailFiles = new String*[mnSdPageCount];
     mpPageNames = new String*[mnSdPageCount];
     mpTextFiles = new String*[mnSdPageCount];
 
@@ -2133,6 +2142,15 @@ void HtmlExport::CreateFileNames()
             pName->AppendAscii( ".png" );
 
         mpImageFiles[nSdPage] = pName;
+
+        pName = new String( RTL_CONSTASCII_USTRINGPARAM("thumb") );
+        *pName += String::CreateFromInt32(nSdPage);
+        if( meFormat!=FORMAT_JPG )
+            pName->AppendAscii( ".png" );
+        else
+            pName->AppendAscii( ".jpg" );
+
+        mpThumbnailFiles[nSdPage] = pName;
 
         pName = new String( RTL_CONSTASCII_USTRINGPARAM("text"));
         *pName += String::CreateFromInt32(nSdPage);
@@ -2202,50 +2220,6 @@ String HtmlExport::getDocumentTitle()
 
     return mDocTitle;
 }
-
-/*
-var nCurrentPage = 0;
-var nPageCount = JSCRIPT2;
-
-function NavigateAbs( nPage )
-{
-    frames[\"show\"].location.href = \"img\" + nPage + \".htm\";
-    frames[\"notes\"].location.href = \"note\" + nPage + \".htm\";
-    nCurrentPage = nPage;
-    if(nCurrentPage==0)
-    {
-        frames[\"navbar1\"].location.href = \"navbar0.htm\";
-    }
-    else if(nCurrentPage==nPageCount-1)
-    {
-        frames[\"navbar1\"].location.href = \"navbar2.htm\";
-    }
-    else
-        frames[\"navbar1\"].location.href = \"navbar1.htm\";
-    }
-}
-
-function NavigateRel( nDelta )
-{
-    var nPage = parseInt(nCurrentPage) + parseInt(nDelta);
-    if( (nPage >= 0) && (nPage < nPageCount) )
-    {
-        NavigateAbs( nPage );
-    }
-}
-
-function ExpandOutline()
-{
-    frames[\"navbar2\"].location.href = \"navbar4.htm\";
-    frames[\"outline\"].location.href = \"outline1.htm\";
-}
-
-function CollapseOutline()
-{
-    frames[\"navbar2\"].location.href = \"navbar3.htm\";
-    frames[\"outline\"].location.href = \"outline0.htm\";
-}
-*/
 
 static const char* JS_NavigateAbs =
     "function NavigateAbs( nPage )\r\n"
@@ -3146,7 +3120,7 @@ bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileA
     catch( com::sun::star::uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR((OString("sd::HtmlExport::checkFileExists(), exception caught: ") +
+        OSL_FAIL((OString("sd::HtmlExport::checkFileExists(), exception caught: ") +
              rtl::OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 
@@ -3170,6 +3144,7 @@ bool HtmlExport::checkForExistingFiles()
         {
             if( (mpImageFiles[nSdPage] && checkFileExists( xFA, *mpImageFiles[nSdPage] )) ||
                 (mpHTMLFiles[nSdPage] && checkFileExists( xFA, *mpHTMLFiles[nSdPage] )) ||
+                (mpThumbnailFiles[nSdPage] && checkFileExists( xFA, *mpThumbnailFiles[nSdPage] )) ||
                 (mpPageNames[nSdPage] && checkFileExists( xFA, *mpPageNames[nSdPage] )) ||
                 (mpTextFiles[nSdPage] && checkFileExists( xFA, *mpTextFiles[nSdPage] )) )
             {
@@ -3209,7 +3184,7 @@ bool HtmlExport::checkForExistingFiles()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR((OString("sd::HtmlExport::checkForExistingFiles(), exception caught: ") +
+        OSL_FAIL((OString("sd::HtmlExport::checkForExistingFiles(), exception caught: ") +
              rtl::OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
         bFound = false;
     }
@@ -3222,13 +3197,6 @@ bool HtmlExport::checkForExistingFiles()
 String HtmlExport::StringToURL( const String& rURL )
 {
     return rURL;
-/*
-    return StringToHTMLString(rURL);
-    OUString aURL( StringToHTMLString(rURL) );
-
-    aURL = Uri::encode( aURL, rtl_UriCharClassUric, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
-    return String( aURL );
-*/
 }
 
 String HtmlExport::GetButtonName( int nButton ) const
@@ -3390,3 +3358,4 @@ void HtmlErrorContext::SetContext( sal_uInt16 nResId, const String& rURL1, const
 // =====================================================================
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

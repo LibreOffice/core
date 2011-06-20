@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -244,17 +245,17 @@ SdPage* DocumentHelper::AddMasterPage (
             // master page.
             rTargetDocument.InsertMasterPage (pClonedMasterPage);
         }
-        catch (uno::Exception& rException)
+        catch(const uno::Exception&)
         {
             pClonedMasterPage = NULL;
             DBG_UNHANDLED_EXCEPTION();
         }
-        catch (::std::exception rException)
+        catch(const ::std::exception&)
         {
             pClonedMasterPage = NULL;
             OSL_TRACE ("caught general exception");
         }
-        catch (...)
+        catch(...)
         {
             pClonedMasterPage = NULL;
             OSL_TRACE ("caught general exception");
@@ -311,59 +312,55 @@ void DocumentHelper::AssignMasterPageToPageList (
     SdPage* pMasterPage,
     const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList)
 {
-    do
+    if (pMasterPage == NULL || !pMasterPage->IsMasterPage())
+        return;
+
+    // Make the layout name by stripping ouf the layout postfix from the
+    // layout name of the given master page.
+    String sFullLayoutName (pMasterPage->GetLayoutName());
+    String sBaseLayoutName (sFullLayoutName);
+    sBaseLayoutName.Erase (sBaseLayoutName.SearchAscii (SD_LT_SEPARATOR));
+
+    if (rpPageList->empty())
+        return;
+
+    // Create a second list that contains only the valid pointers to
+    // pages for which an assignment is necessary.
+    ::std::vector<SdPage*>::const_iterator iPage;
+    ::std::vector<SdPage*> aCleanedList;
+    for (iPage=rpPageList->begin(); iPage!=rpPageList->end(); ++iPage)
     {
-        if (pMasterPage == NULL && pMasterPage->IsMasterPage())
-            break;
-
-        // Make the layout name by stripping ouf the layout postfix from the
-        // layout name of the given master page.
-        String sFullLayoutName (pMasterPage->GetLayoutName());
-        String sBaseLayoutName (sFullLayoutName);
-        sBaseLayoutName.Erase (sBaseLayoutName.SearchAscii (SD_LT_SEPARATOR));
-
-        if (rpPageList->empty())
-            break;
-
-        // Create a second list that contains only the valid pointers to
-        // pages for which an assignment is necessary.
-        ::std::vector<SdPage*>::const_iterator iPage;
-        ::std::vector<SdPage*> aCleanedList;
-        for (iPage=rpPageList->begin(); iPage!=rpPageList->end(); ++iPage)
+        OSL_ASSERT(*iPage!=NULL && (*iPage)->GetModel() == &rTargetDocument);
+        if (*iPage != NULL
+            && (*iPage)->GetLayoutName().CompareTo(sFullLayoutName)!=0)
         {
-            OSL_ASSERT(*iPage!=NULL && (*iPage)->GetModel() == &rTargetDocument);
-            if (*iPage != NULL
-                && (*iPage)->GetLayoutName().CompareTo(sFullLayoutName)!=0)
-            {
-                aCleanedList.push_back(*iPage);
-            }
+            aCleanedList.push_back(*iPage);
         }
-        if (aCleanedList.size() == 0)
-            break;
-
-        ::svl::IUndoManager* pUndoMgr = rTargetDocument.GetDocSh()->GetUndoManager();
-        if( pUndoMgr )
-            pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_SET_PRESLAYOUT)), String());
-
-        SdPage* pMasterPageInDocument = ProvideMasterPage(rTargetDocument,pMasterPage,rpPageList);
-        if (pMasterPageInDocument == NULL)
-            break;
-
-        // Assign the master pages to the given list of pages.
-        for (iPage=aCleanedList.begin();
-             iPage!=aCleanedList.end();
-             ++iPage)
-        {
-            AssignMasterPageToPage (
-                pMasterPageInDocument,
-                sBaseLayoutName,
-                *iPage);
-        }
-
-        if( pUndoMgr )
-            pUndoMgr->LeaveListAction();
     }
-    while (false);
+    if (aCleanedList.size() == 0)
+        return;
+
+    ::svl::IUndoManager* pUndoMgr = rTargetDocument.GetDocSh()->GetUndoManager();
+    if( pUndoMgr )
+        pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_SET_PRESLAYOUT)), String());
+
+    SdPage* pMasterPageInDocument = ProvideMasterPage(rTargetDocument,pMasterPage,rpPageList);
+    if (pMasterPageInDocument == NULL)
+        return;
+
+    // Assign the master pages to the given list of pages.
+    for (iPage=aCleanedList.begin();
+            iPage!=aCleanedList.end();
+            ++iPage)
+    {
+        AssignMasterPageToPage (
+            pMasterPageInDocument,
+            sBaseLayoutName,
+            *iPage);
+    }
+
+    if( pUndoMgr )
+        pUndoMgr->LeaveListAction();
 }
 
 
@@ -583,3 +580,5 @@ SdPage* DocumentHelper::ProvideMasterPage (
 
 
 } } } // end of namespace ::sd::toolpanel::controls
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

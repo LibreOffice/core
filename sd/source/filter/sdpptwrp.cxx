@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,7 +100,7 @@ sal_Bool SdPPTFilter::Import()
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );
-            pDocStream->SetKey( pStorage->GetKey() );
+            pDocStream->SetCryptMaskKey(pStorage->GetKey());
 
             String aTraceConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Tracing/Import/PowerPoint" ) );
             Sequence< PropertyValue > aConfigData( 1 );
@@ -143,12 +144,8 @@ sal_Bool SdPPTFilter::Export()
         if( mxModel.is() )
         {
             SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), sal_False );
-            ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii("ExportPPT") ));
+            ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExportPPT")) ));
 
-            /* !!!
-            if ( pViewShell && pViewShell->GetView() )
-                pViewShell->GetView()->SdrEndTextEdit();
-            */
             if( PPTExport && xStorRef.Is() )
             {
                 sal_uInt32          nCnvrtFlags = 0;
@@ -189,7 +186,7 @@ void SdPPTFilter::PreSaveBasic()
         ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
         if( pLibrary )
         {
-            SaveVBA pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii("SaveVBA") ));
+            SaveVBA pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveVBA")) ));
             if( pSaveVBA )
             {
                 pSaveVBA( (SfxObjectShell&) mrDocShell, pBas );
@@ -197,3 +194,5 @@ void SdPPTFilter::PreSaveBasic()
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

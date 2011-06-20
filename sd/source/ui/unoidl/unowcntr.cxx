@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,68 +29,62 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
-#include <tools/list.hxx>
 
 #include <unowcntr.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-DECLARE_LIST( WeakRefList, uno::WeakReference< uno::XInterface >* )
-
 SvUnoWeakContainer::SvUnoWeakContainer() throw()
 {
-    mpList = new WeakRefList;
 }
 
 SvUnoWeakContainer::~SvUnoWeakContainer() throw()
 {
-    uno::WeakReference< uno::XInterface >* pRef = mpList->First();
-    while( pRef )
-    {
-        delete mpList->Remove();
-        pRef = mpList->GetCurObject();
-    }
-    delete mpList;
+    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); ++it )
+            delete *it;
+    maList.clear();
 }
 
 /** inserts the given ref into this container */
 void SvUnoWeakContainer::insert( uno::WeakReference< uno::XInterface > xRef ) throw()
 {
-    uno::WeakReference< uno::XInterface >* pRef = mpList->First();
-    while( pRef )
+    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xTestRef( *pRef );
-        if(! xTestRef.is() )
+        uno::WeakReference< uno::XInterface >* pRef = *it;
+        uno::Reference< uno::XInterface > xTestRef( *pRef );
+        if ( !xTestRef.is() )
         {
-            delete mpList->Remove();
-            pRef = mpList->GetCurObject();
+            delete pRef;
+            it = maList.erase( it );
         }
         else
         {
-            if( *pRef == xRef )
+            if ( *pRef == xRef )
                 return;
-
-            pRef = mpList->Next();
+            ++it;
         }
     }
-
-    mpList->Insert( new uno::WeakReference< uno::XInterface >( xRef ) );
+    maList.push_back( new uno::WeakReference< uno::XInterface >( xRef ) );
 }
 
 /** searches the container for a ref that returns true on the given
     search function
 */
-sal_Bool SvUnoWeakContainer::findRef( uno::WeakReference< uno::XInterface >& rRef, void* pSearchData, weakref_searchfunc pSearchFunc )
+sal_Bool SvUnoWeakContainer::findRef(
+    uno::WeakReference< uno::XInterface >& rRef,
+    void* pSearchData,
+    weakref_searchfunc pSearchFunc
+)
 {
-    uno::WeakReference< uno::XInterface >* pRef = mpList->First();
-    while( pRef )
+    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); )
     {
-        uno::Reference< ::com::sun::star::uno::XInterface > xTestRef( *pRef );
-        if(!xTestRef.is())
+        uno::WeakReference< uno::XInterface >* pRef = *it;
+        uno::Reference< uno::XInterface > xTestRef( *pRef );
+        if ( !xTestRef.is() )
         {
-            delete mpList->Remove();
-            pRef = mpList->GetCurObject();
+            delete pRef;
+            it = maList.erase( it );
         }
         else
         {
@@ -98,28 +93,25 @@ sal_Bool SvUnoWeakContainer::findRef( uno::WeakReference< uno::XInterface >& rRe
                 rRef = *pRef;
                 return sal_True;
             }
-
-            pRef = mpList->Next();
+            ++it;
         }
     }
-
     return sal_False;
 }
 
 void SvUnoWeakContainer::dispose()
 {
-    uno::WeakReference< uno::XInterface >* pRef = mpList->First();
-    while( pRef )
+    for ( WeakRefList::iterator it = maList.begin(); it != maList.end(); ++it )
     {
+        uno::WeakReference< uno::XInterface >* pRef = *it;
         uno::Reference< uno::XInterface > xTestRef( *pRef );
-        if(xTestRef.is())
+        if ( xTestRef.is() )
         {
             uno::Reference< lang::XComponent > xComp( xTestRef, uno::UNO_QUERY );
             if( xComp.is() )
                 xComp->dispose();
         }
-
-        pRef = mpList->Next();
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

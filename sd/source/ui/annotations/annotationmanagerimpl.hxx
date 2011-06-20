@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,6 @@ public:
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
-    //
     void ExecuteAnnotation (SfxRequest& rRequest);
     void GetAnnotationState (SfxItemSet& rItemSet);
 
@@ -99,9 +99,7 @@ public:
     void onTagDeselected( AnnotationTag& rTag );
 
     void onSelectionChanged();
-#if 0
-    rtl::OUString GetHelpText( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
-#endif
+
     void addListener();
     void removeListener();
 
@@ -142,3 +140,5 @@ private:
 }
 
 #endif // _SD_ANNOTATIONMANAGER_IMPL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

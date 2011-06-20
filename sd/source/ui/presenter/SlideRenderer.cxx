@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include "SlideRenderer.hxx"
 #include "sdpage.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <cppcanvas/vclfactory.hxx>
 
@@ -53,7 +54,7 @@ Reference<XInterface> SAL_CALL SlideRenderer_createInstance (
 
 ::rtl::OUString SlideRenderer_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString::createFromAscii("com.sun.star.comp.Draw.SlideRenderer");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.SlideRenderer"));
 }
 
 
@@ -63,7 +64,7 @@ Sequence<rtl::OUString> SAL_CALL SlideRenderer_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.SlideRenderer"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SlideRenderer")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -116,7 +117,7 @@ void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
     else
     {
         throw RuntimeException(
-            OUString::createFromAscii("SlideRenderer: invalid number of arguments"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer: invalid number of arguments")),
                 static_cast<XWeak*>(this));
     }
 }
@@ -133,7 +134,7 @@ Reference<awt::XBitmap> SlideRenderer::createPreview (
     throw (css::uno::RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     return VCLUnoHelper::CreateBitmap(
         CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor));
@@ -150,7 +151,7 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     throw (css::uno::RuntimeException)
 {
     ThrowIfDisposed();
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     cppcanvas::BitmapCanvasSharedPtr pCanvas (cppcanvas::VCLFactory::getInstance().createCanvas(
         Reference<rendering::XBitmapCanvas>(rxCanvas, UNO_QUERY)));
@@ -202,7 +203,7 @@ BitmapEx SlideRenderer::CreatePreview (
     const SdPage* pPage = SdPage::getImplementation(rxSlide);
     if (pPage == NULL)
         throw lang::IllegalArgumentException(
-            OUString::createFromAscii("SlideRenderer::createPreview() called with invalid slide"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer::createPreview() called with invalid slide")),
             static_cast<XWeak*>(this),
             0);
 
@@ -210,7 +211,7 @@ BitmapEx SlideRenderer::CreatePreview (
     Size aPageSize = pPage->GetSize();
     if (aPageSize.Height() <= 0)
         throw lang::IllegalArgumentException(
-            OUString::createFromAscii("SlideRenderer::createPreview() called with invalid size"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer::createPreview() called with invalid size")),
             static_cast<XWeak*>(this),
             1);
 
@@ -270,3 +271,4 @@ void SlideRenderer::ThrowIfDisposed (void)
 
 } } // end of namespace ::sd::presenter
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

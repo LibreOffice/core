@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_VIEW_FORWARDER_HXX
 #include "AccessibleViewForwarder.hxx"
-#endif
 #include <svx/svdpntv.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -170,3 +169,5 @@ Size AccessibleViewForwarder::PixelToLogic (const Size& rSize) const
 
 
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

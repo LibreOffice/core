@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include "sdiocmpt.hxx"
 #include "drawdoc.hxx"
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 using namespace ::com::sun::star;
@@ -93,7 +93,6 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rOb
                  maSecondSoundFile          (rAnmInfo.maSecondSoundFile),
                  mbSecondSoundOn            (rAnmInfo.mbSecondSoundOn),
                  mbSecondPlayFull           (rAnmInfo.mbSecondPlayFull),
-//               maBookmark                 (rAnmInfo.maBookmark),
                  mnVerb                     (rAnmInfo.mnVerb),
                  mnPresOrder                (LIST_APPEND),
                  mrObject                   (rObject)
@@ -150,3 +149,5 @@ String SdAnimationInfo::GetBookmark()
 
     return sBookmark;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

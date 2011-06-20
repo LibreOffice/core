@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <svtools/svtreebx.hxx>
 #include <CustomAnimationEffect.hxx>
 #include "CustomAnimationPreset.hxx"
-#ifndef _SD_CUSTOMANIMATION_HRC
 #include "CustomAnimation.hrc"
-#endif
 
 namespace sd {
 
@@ -68,13 +67,7 @@ public:
     /** populates the list with all effects from the given MainSequence */
     void update( MainSequencePtr pMainSequence );
 
-    /** updates the given effect in the list */
-//  void update( CustomAnimationEffectPtr pEffect );
-
     void update();
-
-    /** removes the given effect to the list*/
-//  void remove( CustomAnimationEffectPtr pEffect );
 
     EffectSequence getSelection() const;
 
@@ -92,12 +85,11 @@ public:
 
     virtual void KeyInput( const KeyEvent& rKEvt );
 
-//  virtual SvLBoxEntry* CreateEntry() const;
     virtual void    SetTabs();
 
     virtual void notify_change();
 
-    const Image& getImage( sal_uInt16 nId, bool bHighContrast );
+    const Image& getImage( sal_uInt16 nId );
 
     bool isExpanded( const CustomAnimationEffectPtr& pEffect ) const;
 
@@ -116,7 +108,7 @@ private:
 
     Image maImgEmpty;
 
-    Image maImages[ IMG_CUSTOMANIMATION_MEDIA_STOP_H - IMG_CUSTOMANIMATION_ON_CLICK + 1];
+    Image maImages[ IMG_CUSTOMANIMATION_MEDIA_STOP - IMG_CUSTOMANIMATION_ON_CLICK + 1];
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxLastTargetShape;
     sal_Int32 mnLastGroupId;
@@ -128,3 +120,4 @@ private:
 
 #endif // _SD_CUSTOMANIMATIONLIST_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

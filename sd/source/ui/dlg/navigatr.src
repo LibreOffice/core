@@ -85,8 +85,6 @@ Window FLT_NAVIGATOR
                 Identifier = TBI_NEXT ;
                 HelpId = HID_SD_NAVIGATOR_TBI_NEXT ;
                  //Symbol = IMAGEBUTTON_NEXT ;
-                /* ### ACHTUNG: Neuer Text in Resource? Nächste Seite : Nõchste Seite */
-                /* ### ACHTUNG: Neuer Text in Resource? Zur nächsten Seite springen : Zur nõchsten Seite springen */
                 Text [ en-US ] = "Next Slide" ;
             };
             ToolBoxItem
@@ -106,7 +104,6 @@ Window FLT_NAVIGATOR
                 HelpId = HID_SD_NAVIGATOR_TBI_DRAGTYPE ;
                 DropDown = TRUE ;
                  //Left = FALSE;
-                /* ### ACHTUNG: Neuer Text in Resource? Modus für Drag & Drop auswählen : Modus f³r Drag & Drop auswõhlen */
                 Text [ en-US ] = "Drag Mode" ;
             };
             ToolBoxItem
@@ -127,7 +124,6 @@ Window FLT_NAVIGATOR
         TabStop = TRUE ;
         DropDown = TRUE ;
         QuickHelpText [ en-US ] = "Documents" ;
-        /* ### ACHTUNG: Neuer Text in Resource? Geöffnete Dokumente : Ge÷ffnete Dokumente */
     };
 
     #define NAVIGATR_IDLIST \
@@ -151,12 +147,6 @@ Window FLT_NAVIGATOR
         Prefix = "nv";
         MaskColor = IMAGE_STDBTN_COLOR ;
         NAVIGATR_IDLIST
-    };
-    ImageList ILH_NAVIGATR
-    {
-        Prefix = "nvh";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-           NAVIGATR_IDLIST
     };
 };
 

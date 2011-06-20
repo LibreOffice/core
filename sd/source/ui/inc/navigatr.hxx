@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
 #include <sfx2/ctrlitem.hxx>
 #include "sdtreelb.hxx"
 #include "pres.hxx"
@@ -126,17 +125,15 @@ private:
     ::sd::NavigatorChildWindow*     mpChildWinContext;
     Size                        maSize;
     Size                        maMinSize;
-//  Size                        maFltWinSize;
     sal_Bool                        mbDocImported;
     String                      maDropFileName;
     NavigatorDragType           meDragType;
-    List*                       mpDocList;
+    std::vector<NavDocInfo>     maDocList;
     SfxBindings*                mpBindings;
     SdNavigatorControllerItem*  mpNavigatorCtrlItem;
     SdPageNameControllerItem*   mpPageNameCtrlItem;
 
     ImageList                   maImageList;
-    ImageList                   maImageListH;
 
     /** This flag controls whether all shapes or only the named shapes are
         shown.
@@ -205,3 +202,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

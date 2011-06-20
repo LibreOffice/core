@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -228,7 +229,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 
                 aTmp.ReleaseAccess( pRAcc );
 
-                for( sal_uLong n = 0UL, nCount = rMtf.GetActionCount(); n < nCount; n++ )
+                for( size_t n = 0, nCount = rMtf.GetActionSize(); n < nCount; n++ )
                     aNewMtf.AddAction( rMtf.GetAction( n )->Clone() );
 
                 aMap.SetScaleX( aMap.GetScaleX() * aScale );
@@ -395,3 +396,5 @@ void SdVectorizeDlg::SaveSettings() const
         *xOStm << (sal_uInt16) aMtFillHoles.GetValue() << aCbFillHoles.IsChecked();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <editeng/outliner.hxx>
 #include "CustomAnimationCloner.hxx"
 #include "drawdoc.hxx"
@@ -41,7 +42,6 @@
 #include "undoanim.hxx"
 #include "EffectMigration.hxx"
 
-using namespace ::vos;
 using ::rtl::OUString;
 using namespace ::sd;
 using namespace ::com::sun::star::uno;
@@ -161,3 +161,4 @@ void SdPage::cloneAnimations( SdPage& rTargetPage ) const
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>& rxConfigu
 OUString SAL_CALL UpdateRequest::getName (void)
     throw (RuntimeException)
 {
-    return OUString::createFromAscii("UpdateRequest");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("UpdateRequest"));
 }
 
 
@@ -84,3 +85,4 @@ void SAL_CALL UpdateRequest::setName (const OUString& rsName)
 
 } } // end of namespace sd::framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

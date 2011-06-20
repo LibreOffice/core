@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,62 +63,13 @@
 #include <filter/msfilter/svxmsbas.hxx>
 #include <editeng/flditem.hxx>
 #include <sfx2/docinf.hxx>
-
-#define PPT_TRANSITION_TYPE_NONE            0
-#define PPT_TRANSITION_TYPE_RANDOM          1
-#define PPT_TRANSITION_TYPE_BLINDS          2
-#define PPT_TRANSITION_TYPE_CHECKER         3
-#define PPT_TRANSITION_TYPE_COVER           4
-#define PPT_TRANSITION_TYPE_DISSOLVE        5
-#define PPT_TRANSITION_TYPE_FADE            6
-#define PPT_TRANSITION_TYPE_PULL            7
-#define PPT_TRANSITION_TYPE_RANDOM_BARS     8
-#define PPT_TRANSITION_TYPE_STRIPS          9
-#define PPT_TRANSITION_TYPE_WIPE           10
-#define PPT_TRANSITION_TYPE_ZOOM           11
-#define PPT_TRANSITION_TYPE_SPLIT          13
-
-// effects, new in xp
-#define PPT_TRANSITION_TYPE_DIAMOND         17
-#define PPT_TRANSITION_TYPE_PLUS            18
-#define PPT_TRANSITION_TYPE_WEDGE           19
-#define PPT_TRANSITION_TYPE_PUSH            20
-#define PPT_TRANSITION_TYPE_COMB            21
-#define PPT_TRANSITION_TYPE_NEWSFLASH       22
-#define PPT_TRANSITION_TYPE_SMOOTHFADE      23
-#define PPT_TRANSITION_TYPE_WHEEL           26
-#define PPT_TRANSITION_TYPE_CIRCLE          27
+#include <oox/export/utils.hxx>
 
 using namespace com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::presentation;
 
-static PHLayout pPHLayout[] =
-{
-    { EPP_LAYOUT_TITLESLIDE,            { 0x0d, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x10, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, sal_True, sal_True, sal_True },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_BLANCSLIDE,            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, sal_False, sal_False, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x16, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x14, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x15, 0x0d, 0x0e, sal_True, sal_False, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x16, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_False, sal_False },
-    { EPP_LAYOUT_RIGHTCOLUMN2ROWS,      { 0x0d, 0x0e, 0x13, 0x13, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2ROWSANDTITLE,         { 0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_LEFTCOLUMN2ROWS,       { 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TOPROW2COLUMN,         { 0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2ROWSANDTITLE,         { 0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_4OBJECTS,              { 0x0d, 0x13, 0x13, 0x13, 0x13, 0x00, 0x00, 0x00 }, 0x13, 0x0d, 0x0e, sal_True, sal_False, sal_False },
-    { EPP_LAYOUT_ONLYTITLE,             { 0x0d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, sal_True, sal_False, sal_False },
-    { EPP_LAYOUT_BLANCSLIDE,            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, sal_False, sal_False, sal_False },
-    { EPP_LAYOUT_TITLERIGHT2BODIESLEFT, { 0x11, 0x12, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x14, 0x11, 0x12, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLERIGHTBODYLEFT,    { 0x11, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x11, 0x12, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     { 0x0d, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x12, sal_True, sal_True, sal_False },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x16, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x12, sal_True, sal_True, sal_False }
-};
+using ::com::sun::star::beans::XPropertySet;
 
 //============================ PPTWriter ==================================
 
@@ -125,16 +77,12 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
+    PPTWriterBase           ( rXModel, rXStatInd ),
+    mnCnvrtFlags            ( nCnvrtFlags ),
     mbStatus                ( sal_False ),
     mbUseNewAnimations      ( sal_True ),
     mnLatestStatValue       ( 0 ),
-    maFraction              ( 1, 576 ),
-    maMapModeSrc            ( MAP_100TH_MM ),
-    maMapModeDest           ( MAP_INCH, Point(), maFraction, maFraction ),
-    meLatestPageType        ( NORMAL ),
-    mXModel                 ( rXModel ),
-    mXStatusIndicator       ( rXStatInd ),
-    mbStatusIndicator       ( sal_False ),
+    mrStg                   ( rSvStorage ),
     mpCurUserStrm           ( NULL ),
     mpStrm                  ( NULL ),
     mpPicStrm               ( NULL ),
@@ -146,38 +94,10 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
     mnPagesWritten          ( 0 ),
     mnTxId                  ( 0x7a2f64 )
 {
-    sal_uInt32 i;
-    if ( !ImplInitSOIface() )
-        return;
+}
 
-    FontCollectionEntry aDefaultFontDesc( String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ),
-                                            ::com::sun::star::awt::FontFamily::ROMAN,
-                                                ::com::sun::star::awt::FontPitch::VARIABLE,
-                                                    RTL_TEXTENCODING_MS_1252 );
-    maFontCollection.GetId( aDefaultFontDesc ); // default is always times new roman
-
-    if ( !ImplGetPageByIndex( 0, NOTICE ) )
-        return;
-    sal_Int32 nWidth = 21000;
-    if ( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM(  "Width" ) ) ) )
-        mAny >>= nWidth;
-    sal_Int32 nHeight = 29700;
-    if ( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) )
-        mAny >>= nHeight;
-
-    maNotesPageSize = ImplMapSize( ::com::sun::star::awt::Size( nWidth, nHeight ) );
-
-    if ( !ImplGetPageByIndex( 0, MASTER ) )
-        return;
-    nWidth = 28000;
-    if ( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) )
-        mAny >>= nWidth;
-    nHeight = 21000;
-    if ( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) )
-        mAny >>= nHeight;
-    maDestPageSize = ImplMapSize( ::com::sun::star::awt::Size( nWidth, nHeight ) );
-
-    mrStg = rSvStorage;
+void PPTWriter::exportPPTPre()
+{
     if ( !mrStg.Is() )
         return;
 
@@ -206,30 +126,10 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
         mpPicStrm = mrStg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) );
 
     mpPptEscherEx = new PptEscherEx( *mpStrm );
+}
 
-    if ( !ImplGetStyleSheets() )
-        return;
-
-    if ( !ImplCreateDocument() )
-        return;
-
-    for ( i = 0; i < mnMasterPages; i++ )
-    {
-        if ( !ImplCreateMaster( i ) )
-            return;
-    }
-    if ( !ImplCreateMainNotes() )
-        return;
-    for ( i = 0; i < mnPages; i++ )
-    {
-        if ( !ImplCreateSlide( i ) )
-            return;
-    }
-    for ( i = 0; i < mnPages; i++ )
-    {
-        if ( !ImplCreateNotes( i ) )
-            return;
-    }
+void PPTWriter::exportPPTPost( )
+{
     if ( !ImplCloseDocument() )
         return;
 
@@ -244,19 +144,300 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
         }
     }
 
-    ImplWriteOLE( nCnvrtFlags );
+    ImplWriteOLE();
 
-    ImplWriteVBA( pVBA );
+    ImplWriteVBA();
 
     if ( !ImplWriteAtomEnding() )
         return;
 
-    if ( !ImplCreateDocumentSummaryInformation( nCnvrtFlags ) )
+    if ( !ImplCreateDocumentSummaryInformation() )
         return;
 
     mbStatus = sal_True;
 };
 
+// ---------------------------------------------------------------------------------------------
+
+void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStream& rBinaryTagData10Atom );
+
+void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
+                                sal_Bool bHasBackground, Reference< XPropertySet > aXBackgroundPropSet )
+{
+    Any aAny;
+
+    const PHLayout& rLayout = GetLayout( mXPagePropSet );
+    mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_Slide | nPageNum, mpStrm->Tell() );
+    mpPptEscherEx->OpenContainer( EPP_Slide );
+    mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
+    *mpStrm << rLayout.nLayout;
+    mpStrm->Write( rLayout.nPlaceHolder, 8 );       // placeholderIDs ( 8Stueck )
+    *mpStrm << (sal_uInt32)(nMasterNum | 0x80000000)// master ID ( ist gleich 0x80000000 bei einer masterpage   )
+            << (sal_uInt32)nPageNum + 0x100         // notes ID ( ist gleich null wenn keine notizen vorhanden )
+            << nMode
+            << (sal_uInt16)0;                       // padword
+
+    mnDiaMode = 0;
+    sal_Bool bVisible = sal_True;
+    ::com::sun::star::presentation::FadeEffect eFe = ::com::sun::star::presentation::FadeEffect_NONE;
+
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) ) ) )
+        aAny >>= bVisible;
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Change" ) ) ) )
+    {
+        switch ( *(sal_Int32*)aAny.getValue() )
+        {
+            case 1 :        // automatisch
+                mnDiaMode++;
+            case 2 :        // halbautomatisch
+                mnDiaMode++;
+            default :
+            case 0 :        // manuell
+            break;
+        }
+    }
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) ) ) )
+        aAny >>= eFe;
+
+    sal_uInt32  nSoundRef = 0;
+    sal_Bool    bIsSound = sal_False;
+    sal_Bool    bStopSound = sal_False;
+    sal_Bool    bLoopSound = sal_False;
+
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ) ) )
+    {
+        rtl::OUString aSoundURL;
+        if ( aAny >>= aSoundURL )
+        {
+            nSoundRef = maSoundCollection.GetId( aSoundURL );
+            bIsSound = sal_True;
+        }
+        else
+            aAny >>= bStopSound;
+    }
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LoopSound" ) ) ) )
+        aAny >>= bLoopSound;
+
+    sal_Bool bNeedsSSSlideInfoAtom = ( bVisible == sal_False )
+                                    || ( mnDiaMode == 2 )
+                                    || ( bIsSound )
+                                    || ( bStopSound )
+                                    || ( eFe != ::com::sun::star::presentation::FadeEffect_NONE );
+    if ( bNeedsSSSlideInfoAtom )
+    {
+        sal_uInt8   nDirection = 0;
+        sal_uInt8   nTransitionType = 0;
+        sal_uInt16  nBuildFlags = 1;        // advange by mouseclick
+        sal_Int32       nSlideTime = 0;         // muss noch !!!
+        sal_uInt8   nSpeed = 1;
+
+        if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ) ) )
+        {
+            ::com::sun::star::presentation::AnimationSpeed aAs;
+            aAny >>= aAs;
+            nSpeed = (sal_uInt8)aAs;
+        }
+        sal_Int16 nTT = 0;
+        if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ) )
+            && ( aAny >>= nTT ) )
+        {
+            sal_Int16 nTST = 0;
+            if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TransitionSubtype" ) ) )
+                && ( aAny >>= nTST ) )
+                nTransitionType = GetTransition( nTT, nTST, eFe, nDirection );
+
+        }
+        if ( !nTransitionType )
+            nTransitionType = GetTransition( eFe, nDirection );
+        if ( mnDiaMode == 2 )                                   // automatic ?
+            nBuildFlags |= 0x400;
+        if ( bVisible == sal_False )
+            nBuildFlags |= 4;
+        if ( bIsSound )
+            nBuildFlags |= 16;
+        if ( bLoopSound )
+            nBuildFlags |= 64;
+        if ( bStopSound )
+            nBuildFlags |= 256;
+
+        if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Duration" ) ) ) )// duration of this slide
+            nSlideTime = *(sal_Int32*)aAny.getValue() << 10;        // in ticks
+
+        mpPptEscherEx->AddAtom( 16, EPP_SSSlideInfoAtom );
+        *mpStrm << nSlideTime       // standtime in ticks
+                << nSoundRef
+                << nDirection
+                << nTransitionType
+                << nBuildFlags
+                << nSpeed
+                << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0;
+    }
+
+    ImplCreateHeaderFooters( mXPagePropSet );
+
+    EscherSolverContainer aSolverContainer;
+    mpPptEscherEx->OpenContainer( EPP_PPDrawing );
+    mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
+    mpPptEscherEx->EnterGroup(0,0);
+    ImplWritePage( rLayout, aSolverContainer, NORMAL, sal_False, nPageNum );    // Die Shapes der Seite werden im PPT Dok. erzeugt
+    mpPptEscherEx->LeaveGroup();
+
+    if ( bHasBackground )
+        ImplWriteBackground( aXBackgroundPropSet );
+    else
+    {
+        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+        mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );             // Flags: Connector | Background | HasSpt
+        EscherPropertyContainer aPropOpt;
+        aPropOpt.AddOpt( ESCHER_Prop_fillRectRight, PPTtoEMU( maDestPageSize.Width ) );
+        aPropOpt.AddOpt( ESCHER_Prop_fillRectBottom, PPTtoEMU( maDestPageSize.Width ) );
+        aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );
+        aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
+        aPropOpt.AddOpt( ESCHER_Prop_bWMode, ESCHER_wDontShow );
+        aPropOpt.AddOpt( ESCHER_Prop_fBackground, 0x10001 );                // if true, this is the background shape
+        aPropOpt.Commit( *mpStrm );
+        mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
+    }
+
+    aSolverContainer.WriteSolver( *mpStrm );
+
+    mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
+    mpPptEscherEx->CloseContainer();    // EPP_Drawing
+    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
+    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
+
+    SvMemoryStream aBinaryTagData10Atom;
+    ImplExportComments( mXDrawPage, aBinaryTagData10Atom );
+    if ( mbUseNewAnimations )
+    {
+        SvMemoryStream amsofbtAnimGroup;
+        ppt::AnimationExporter aExporter( aSolverContainer, maSoundCollection );
+        aExporter.doexport( mXDrawPage, amsofbtAnimGroup );
+        sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
+        if ( nmsofbtAnimGroupSize )
+        {
+            {
+                EscherExAtom aMagic2( aBinaryTagData10Atom, 0x2eeb );
+                aBinaryTagData10Atom << (sal_uInt32)0x01c45df9
+                                     << (sal_uInt32)0xe1471b30;
+            }
+            {
+                EscherExAtom aMagic( aBinaryTagData10Atom, 0x2b00 );
+                aBinaryTagData10Atom << (sal_uInt32)0;
+            }
+            aBinaryTagData10Atom.Write( amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell() );
+            {
+                EscherExContainer aMagic2( aBinaryTagData10Atom, 0x2b02 );
+            }
+        }
+    }
+    if ( aBinaryTagData10Atom.Tell() )
+    {
+        EscherExContainer aProgTags     ( *mpStrm, EPP_ProgTags );
+        EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
+        {
+            EscherExAtom aCString( *mpStrm, EPP_CString );
+            *mpStrm << (sal_uInt32)0x5f005f
+                    << (sal_uInt32)0x50005f
+                    << (sal_uInt32)0x540050
+                    << (sal_uInt16)0x31
+                    << (sal_uInt16)0x30;
+        }
+        {
+            EscherExAtom aBinaryTagData( *mpStrm, EPP_BinaryTagData );
+            mpStrm->Write( aBinaryTagData10Atom.GetData(), aBinaryTagData10Atom.Tell() );
+        }
+    }
+    mpPptEscherEx->CloseContainer();    // EPP_Slide
+}
+
+// ---------------------------------------------------------------------------------------------
+
+void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > aXBackgroundPropSet )
+{
+    mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
+    mpPptEscherEx->OpenContainer( EPP_MainMaster );
+    mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
+    *mpStrm << (sal_Int32)EPP_LAYOUT_TITLEANDBODYSLIDE  // slide layout -> title and body slide
+            << (sal_uInt8)1 << (sal_uInt8)2 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0     // placeholderID
+            << (sal_uInt32)0        // master ID ( ist gleich null bei einer masterpage )
+            << (sal_uInt32)0        // notes ID ( ist gleich null wenn keine notizen vorhanden )
+            << (sal_uInt16)0        // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
+            << (sal_uInt16)0;       // padword
+
+    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
+    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
+    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
+    *mpStrm << (sal_uInt32)0xff0000 << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x00ffff << (sal_uInt32)0x0099ff << (sal_uInt32)0xffff00 << (sal_uInt32)0x0000ff << (sal_uInt32)0x969696;
+    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
+    *mpStrm << (sal_uInt32)0xccffff << (sal_uInt32)0x000000 << (sal_uInt32)0x336666 << (sal_uInt32)0x008080 << (sal_uInt32)0x339933 << (sal_uInt32)0x000080 << (sal_uInt32)0xcc3300 << (sal_uInt32)0x66ccff;
+    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
+    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x333333 << (sal_uInt32)0x000000 << (sal_uInt32)0xdddddd << (sal_uInt32)0x808080 << (sal_uInt32)0x4d4d4d << (sal_uInt32)0xeaeaea;
+    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
+    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x66ccff << (sal_uInt32)0xff0000 << (sal_uInt32)0xcc00cc << (sal_uInt32)0xc0c0c0;
+    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
+    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0xc0c0c0 << (sal_uInt32)0xff6600 << (sal_uInt32)0x0000ff << (sal_uInt32)0x009900;
+    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
+    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0xff9933 << (sal_uInt32)0xccff99 << (sal_uInt32)0xcc00cc << (sal_uInt32)0xb2b2b2;
+
+    for ( int nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
+    {
+        if ( nInstance == EPP_TEXTTYPE_notUsed )
+            continue;
+
+        // the auto color is dependent to the page background,so we have to set a page that is in the right context
+        if ( nInstance == EPP_TEXTTYPE_Notes )
+            GetPageByIndex( 0, NOTICE );
+        else
+            GetPageByIndex( 0, MASTER );
+
+        mpPptEscherEx->BeginAtom();
+
+        sal_Bool bFirst = sal_True;
+        sal_Bool bSimpleText = sal_False;
+
+        *mpStrm << (sal_uInt16)5;                           // paragraph count
+
+        for ( sal_uInt16 nLev = 0; nLev < 5; nLev++ )
+        {
+            if ( nInstance >= EPP_TEXTTYPE_CenterBody )
+            {
+                bFirst = sal_False;
+                bSimpleText = sal_True;
+                *mpStrm << nLev;
+            }
+            mpStyleSheet->mpParaSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
+            mpStyleSheet->mpCharSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
+            bFirst = sal_False;
+        }
+        mpPptEscherEx->EndAtom( EPP_TxMasterStyleAtom, 0, nInstance );
+    }
+    GetPageByIndex( nPageNum, MASTER );
+
+    EscherSolverContainer aSolverContainer;
+
+    mpPptEscherEx->OpenContainer( EPP_PPDrawing );
+    mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
+
+    mpPptEscherEx->EnterGroup(0,0);
+    ImplWritePage( GetLayout( 0 ), aSolverContainer, MASTER, sal_True );    // Die Shapes der Seite werden im PPT Dok. erzeugt
+    mpPptEscherEx->LeaveGroup();
+
+    ImplWriteBackground( aXBackgroundPropSet );
+
+    aSolverContainer.WriteSolver( *mpStrm );
+
+    mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
+    mpPptEscherEx->CloseContainer();    // EPP_Drawing
+    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
+    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
+
+    if ( aBuExMasterStream.Tell() )
+    {
+        ImplProgTagContainer( mpStrm, &aBuExMasterStream );
+    }
+    mpPptEscherEx->CloseContainer();    // EPP_MainMaster
+};
 
 // ---------------------------------------------------------------------------------------------
 
@@ -275,8 +456,6 @@ PPTWriter::~PPTWriter()
     while( aStyleSheetIter < maStyleSheetList.end() )
         delete *aStyleSheetIter++;
 
-    for ( pPtr = maSlideNameList.First(); pPtr; pPtr = maSlideNameList.Next() )
-        delete (::rtl::OUString*)pPtr;
     for ( pPtr = maHyperlink.First(); pPtr; pPtr = maHyperlink.Next() )
         delete (EPPTHyperlink*)pPtr;
     for ( pPtr = maExOleObj.First(); pPtr; pPtr = maExOleObj.Next() )
@@ -284,13 +463,6 @@ PPTWriter::~PPTWriter()
 
     if ( mbStatusIndicator )
         mXStatusIndicator->end();
-}
-
-// ---------------------------------------------------------------------------------------------
-
-static inline sal_uInt32 PPTtoEMU( sal_Int32 nPPT )
-{
-    return (sal_uInt32)( (double)nPPT * 1587.5 );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -327,7 +499,7 @@ sal_Bool PPTWriter::ImplCreateCurrentUserStream()
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation( sal_uInt32 nCnvrtFlags )
+sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         mXModel, uno::UNO_QUERY_THROW);
@@ -357,10 +529,10 @@ sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation( sal_uInt32 nCnvrtFlags
             aHyperSeq[j] = pBlob[j];
         }
 
-        if ( nCnvrtFlags & 0x8000 )
+        if ( mnCnvrtFlags & 0x8000 )
         {
             uno::Sequence<sal_uInt8> aThumbSeq;
-            if ( ImplGetPageByIndex( 0, NORMAL ) &&
+            if ( GetPageByIndex( 0, NORMAL ) &&
                  ImplGetPropertyValue( mXPagePropSet,
                     String( RTL_CONSTASCII_USTRINGPARAM( "PreviewBitmap" ) ) ) )
             {
@@ -547,13 +719,13 @@ sal_Bool PPTWriter::ImplCreateDocument()
     mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 3 );  //Master footer (default)
     mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
     *mpStrm << (sal_uInt32)0x25000d;
-    if ( ImplGetPageByIndex( 0, MASTER ) )
+    if ( GetPageByIndex( 0, MASTER ) )
         ImplCreateHeaderFooterStrings( *mpStrm, mXPagePropSet );
     mpPptEscherEx->CloseContainer();
     mpPptEscherEx->OpenContainer( EPP_HeadersFooters, 4 );  //NotesMaster footer (default)
     mpPptEscherEx->AddAtom( 4, EPP_HeadersFootersAtom );
     *mpStrm << (sal_uInt32)0x3d000d;
-    if ( ImplGetPageByIndex( 0, NOTICE ) )
+    if ( GetPageByIndex( 0, NOTICE ) )
         ImplCreateHeaderFooterStrings( *mpStrm, mXPagePropSet );
     mpPptEscherEx->CloseContainer();
 
@@ -569,21 +741,17 @@ sal_Bool PPTWriter::ImplCreateDocument()
                 << (sal_Int32)i + 0x100                             // slideId - Unique slide identifier, used for OLE link monikers for example
                 << (sal_uInt32)0;                               // reserved, usualy 0
 
-        if ( !ImplGetPageByIndex( i, NORMAL ) )                 // sehr aufregend: noch einmal ueber alle seiten
+        if ( !GetPageByIndex( i, NORMAL ) )                     // sehr aufregend: noch einmal ueber alle seiten
             return sal_False;
-        ImplSetCurrentStyleSheet( ImplGetMasterIndex( NORMAL ) );
+        SetCurrentStyleSheet( GetMasterIndex( NORMAL ) );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
             aXName( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
 
         if ( aXName.is() )
-        {
-            ::rtl::OUString aStr = aXName->getName();
-            ::rtl::OUString *pUStr = new ::rtl::OUString( aStr );
-            maSlideNameList.Insert( pUStr, LIST_APPEND );
-        }
+            maSlideNameList.push_back( aXName->getName() );
         else
-            maSlideNameList.Insert( new ::rtl::OUString(), LIST_APPEND );
+            maSlideNameList.push_back( ::rtl::OUString() );
     }
     mpPptEscherEx->CloseContainer();    // EPP_SlideListWithText
 
@@ -640,29 +808,19 @@ sal_Bool PPTWriter::ImplCreateDocument()
                     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) ) )
                     {
                         ::rtl::OUString aSlideName( *(::rtl::OUString*)mAny.getValue() );
-                        ::rtl::OUString* pStr;
-                        for ( pStr = (::rtl::OUString*)maSlideNameList.First(); pStr;
-                                    pStr = (::rtl::OUString*)maSlideNameList.Next(), nStartSlide++ )
+
+                        std::vector<rtl::OUString>::const_iterator pIter = std::find(
+                                    maSlideNameList.begin(),maSlideNameList.end(),aSlideName);
+
+                        if (pIter != maSlideNameList.end())
                         {
-                            if ( *pStr == aSlideName )
-                            {
-                                nStartSlide++;
-                                nFlags |= 4;
-                                nEndSlide = (sal_uInt16)mnPages;
-                                break;
-                            }
+                            nStartSlide = pIter - maSlideNameList.begin() + 1;
+                            nFlags |= 4;
+                            nEndSlide = (sal_uInt16)mnPages;
                         }
-                        if ( !pStr )
-                            nStartSlide = 0;
                     }
                 }
 
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "DiaName" ) ) ) )
-//              {
-//              }
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsAlwaysOnTop" ) ) ) )
-//              {
-//              }
                 if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) ) ) )
                 {
                     sal_Bool bBool = sal_False;
@@ -671,7 +829,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                         nFlags |= 1;
                 }
 
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsEndless" ) ) ) ) // muesste eigendlich heissen IsNotEndless !=)"§()&
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsEndless" ) ) ) ) // muesste eigendlich heissen IsNotEndless !=)"ï¿½()&
                 {
                     sal_Bool bBool = sal_False;
                     mAny >>= bBool;
@@ -685,18 +843,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                     if ( !bBool )
                         nFlags |= 0x11;
                 }
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsMouseVisible" ) ) ) )
-//              {
-//              }
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) ) )
-//              {
-//              }
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "StartWithNavigator" ) ) ) )
-//              {
-//              }
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "UsePen" ) ) ) )
-//              {
-//              }
+
                 mpPptEscherEx->AddAtom( 80, EPP_SSDocInfoAtom, 1 );
                 *mpStrm << nPenColor << nRestartTime << nStartSlide << nEndSlide;
 
@@ -766,16 +913,13 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                                         if ( aXName.is() )
                                                         {
                                                             ::rtl::OUString aSlideName( aXName->getName() );
-                                                            sal_uInt32 nPageNumber = 0;
-                                                            for ( ::rtl::OUString* pSlideName = (::rtl::OUString*)maSlideNameList.First();
-                                                                pSlideName;
-                                                                pSlideName = (::rtl::OUString*)maSlideNameList.Next(), nPageNumber++ )
+                                                            std::vector<rtl::OUString>::const_iterator pIter = std::find(
+                                                                        maSlideNameList.begin(),maSlideNameList.end(),aSlideName);
+
+                                                            if (pIter != maSlideNameList.end())
                                                             {
-                                                                if ( *pSlideName == aSlideName )
-                                                                {
-                                                                    *mpStrm << (sal_uInt32)( nPageNumber + 0x100 ); // unique slide id
-                                                                    break;
-                                                                }
+                                                                sal_uInt32 nPageNumber = pIter - maSlideNameList.begin();
+                                                                *mpStrm << (sal_uInt32)( nPageNumber + 0x100 ); // unique slide id
                                                             }
                                                         }
                                                     }
@@ -804,8 +948,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
 sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
 {
     sal_uInt32 nCurrentOfs, nParaOfs, nParaCount = 0;
-// SfxOlePropertySection does this...
-//    rStrm << (sal_uInt32)0x41;      // property type VT_BLOB
+
     nParaOfs = rStrm.Tell();
     rStrm << (sal_uInt32)0;         // property size
     rStrm << (sal_uInt32)0;         // property count
@@ -883,184 +1026,10 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
     return sal_True;
 }
 
-PHLayout& PPTWriter::ImplGetLayout(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const
-{
-    ::com::sun::star::uno::Any aAny;
-    sal_Int16 nLayout = 20;
-    if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Layout" ) ) ), sal_True )
-        aAny >>= nLayout;
-
-    if ( ( nLayout >= 21 ) && ( nLayout <= 26 ) )   // NOTES _> HANDOUT6
-        nLayout = 20;
-    if ( ( nLayout >= 27 ) && ( nLayout <= 30 ) )   // VERTICAL LAYOUT
-        nLayout -= 6;
-    else if ( nLayout > 30 )
-        nLayout = 20;
-    return pPHLayout[ nLayout ];
-}
-
-
-// ---------------------------------------------------------------------------------------------
-
-sal_Bool PPTWriter::ImplCreateMaster( sal_uInt32 nPageNum )
-{
-    if ( !ImplGetPageByIndex( nPageNum, MASTER ) )
-        return sal_False;
-    ImplSetCurrentStyleSheet( nPageNum );
-
-    if ( !ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ) ) )                // Backgroundshape laden
-        return sal_False;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet;
-    if ( !( mAny >>= aXBackgroundPropSet ) )
-        return sal_False;
-
-    sal_uInt32 nFillColor = 0xffffff;
-    sal_uInt32 nFillBackColor = 0x000000;
-
-    ::com::sun::star::drawing::FillStyle aFS = ::com::sun::star::drawing::FillStyle_NONE;
-    if ( ImplGetPropertyValue( aXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) ) )
-        mAny >>= aFS;
-    switch ( aFS )
-    {
-        case ::com::sun::star::drawing::FillStyle_GRADIENT :
-        {
-            if ( ImplGetPropertyValue( aXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ) ) )
-            {
-                nFillColor = EscherPropertyContainer::GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 0 );
-                nFillBackColor = EscherPropertyContainer::GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 1 );
-            }
-        }
-        break;
-
-        case ::com::sun::star::drawing::FillStyle_SOLID :
-        {
-            if ( ImplGetPropertyValue( aXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) ) )
-            {
-                nFillColor = mpPptEscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) );
-                nFillBackColor = nFillColor ^ 0xffffff;
-            }
-        }
-        break;
-
-        default:
-            break;
-    }
-
-    mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
-    mpPptEscherEx->OpenContainer( EPP_MainMaster );
-    mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
-    *mpStrm << (sal_Int32)EPP_LAYOUT_TITLEANDBODYSLIDE  // slide layout -> title and body slide
-            << (sal_uInt8)1 << (sal_uInt8)2 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0     // placeholderID
-            << (sal_uInt32)0        // master ID ( ist gleich null bei einer masterpage )
-            << (sal_uInt32)0        // notes ID ( ist gleich null wenn keine notizen vorhanden )
-            << (sal_uInt16)0        // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
-            << (sal_uInt16)0;       // padword
-
-    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
-    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xff0000 << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x00ffff << (sal_uInt32)0x0099ff << (sal_uInt32)0xffff00 << (sal_uInt32)0x0000ff << (sal_uInt32)0x969696;
-    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xccffff << (sal_uInt32)0x000000 << (sal_uInt32)0x336666 << (sal_uInt32)0x008080 << (sal_uInt32)0x339933 << (sal_uInt32)0x000080 << (sal_uInt32)0xcc3300 << (sal_uInt32)0x66ccff;
-    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x333333 << (sal_uInt32)0x000000 << (sal_uInt32)0xdddddd << (sal_uInt32)0x808080 << (sal_uInt32)0x4d4d4d << (sal_uInt32)0xeaeaea;
-    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x66ccff << (sal_uInt32)0xff0000 << (sal_uInt32)0xcc00cc << (sal_uInt32)0xc0c0c0;
-    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0xc0c0c0 << (sal_uInt32)0xff6600 << (sal_uInt32)0x0000ff << (sal_uInt32)0x009900;
-    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0xff9933 << (sal_uInt32)0xccff99 << (sal_uInt32)0xcc00cc << (sal_uInt32)0xb2b2b2;
-
-    for ( int nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
-    {
-        if ( nInstance == EPP_TEXTTYPE_notUsed )
-            continue;
-
-        // the auto color is dependent to the page background,so we have to set a page that is in the right context
-        if ( nInstance == EPP_TEXTTYPE_Notes )
-            ImplGetPageByIndex( 0, NOTICE );
-        else
-            ImplGetPageByIndex( 0, MASTER );
-
-        mpPptEscherEx->BeginAtom();
-
-        sal_Bool bFirst = sal_True;
-        sal_Bool bSimpleText = sal_False;
-
-        *mpStrm << (sal_uInt16)5;                           // paragraph count
-
-        for ( sal_uInt16 nLev = 0; nLev < 5; nLev++ )
-        {
-            if ( nInstance >= EPP_TEXTTYPE_CenterBody )
-            {
-                bFirst = sal_False;
-                bSimpleText = sal_True;
-                *mpStrm << nLev;
-            }
-            mpStyleSheet->mpParaSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
-            mpStyleSheet->mpCharSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
-            bFirst = sal_False;
-        }
-        mpPptEscherEx->EndAtom( EPP_TxMasterStyleAtom, 0, nInstance );
-    }
-    ImplGetPageByIndex( nPageNum, MASTER );
-
-    EscherSolverContainer aSolverContainer;
-
-    mpPptEscherEx->OpenContainer( EPP_PPDrawing );
-    mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
-
-    mpPptEscherEx->EnterGroup(0,0);
-    ImplWritePage( pPHLayout[ 0 ], aSolverContainer, MASTER, sal_True );    // Die Shapes der Seite werden im PPT Dok. erzeugt
-    mpPptEscherEx->LeaveGroup();
-
-    ImplWriteBackground( aXBackgroundPropSet );
-
-    aSolverContainer.WriteSolver( *mpStrm );
-
-    mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
-    mpPptEscherEx->CloseContainer();    // EPP_Drawing
-    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
-
-    if ( aBuExMasterStream.Tell() )
-    {
-        ImplProgTagContainer( mpStrm, &aBuExMasterStream );
-    }
-    mpPptEscherEx->CloseContainer();    // EPP_MainMaster
-    return sal_True;
-};
-
 // ---------------------------------------------------------------------------------------------
 
 sal_Bool PPTWriter::ImplCreateMainNotes()
 {
-    if ( !ImplGetPageByIndex( 0, NOTICE ) )
-        return sal_False;
-    ImplSetCurrentStyleSheet( 0 );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XMasterPageTarget >
-        aXMasterPageTarget( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
-
-    if ( !aXMasterPageTarget.is() )
-        return sal_False;
-
-    mXDrawPage = aXMasterPageTarget->getMasterPage();
-    if ( !mXDrawPage.is() )
-        return sal_False;
-
-    mXPropSet = ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-            ( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
-    if ( !mXPropSet.is() )
-        return sal_False;
-
-    mXShapes = ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShapes >
-            ( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
-    if ( !mXShapes.is() )
-        return sal_False;
-
     EscherSolverContainer aSolverContainer;
 
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainNotes, mpStrm->Tell() );
@@ -1072,7 +1041,7 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
 
-    ImplWritePage( pPHLayout[ 20 ], aSolverContainer, NOTICE, sal_True );
+    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, sal_True );
 
     mpPptEscherEx->LeaveGroup();
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -1188,462 +1157,8 @@ void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStr
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
+void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
 {
-    ::com::sun::star::uno::Any aAny;
-
-    if ( !ImplGetPageByIndex( nPageNum, NORMAL ) )
-        return sal_False;
-    sal_uInt32 nMasterID = ImplGetMasterIndex( NORMAL );
-    ImplSetCurrentStyleSheet( nMasterID );
-    nMasterID |= 0x80000000;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet;
-    sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ) );
-    if ( bHasBackground )
-        bHasBackground = ( aAny >>= aXBackgroundPropSet );
-
-    sal_uInt16 nMode = 7;   // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
-    if ( bHasBackground )
-        nMode &=~4;
-
-/* sj: Don't know what's IsBackgroundVisible for, have to ask cl
-    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundVisible" ) ) ) )
-    {
-        sal_Bool bBackgroundVisible;
-        if ( aAny >>= bBackgroundVisible )
-        {
-            if ( bBackgroundVisible )
-                nMode &= ~4;
-        }
-    }
-*/
-    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundObjectsVisible" ) ) ) )
-    {
-        sal_Bool bBackgroundObjectsVisible = sal_False;
-        if ( aAny >>= bBackgroundObjectsVisible )
-        {
-            if ( !bBackgroundObjectsVisible )
-                nMode &= ~1;
-        }
-    }
-
-    const PHLayout& rLayout = ImplGetLayout( mXPagePropSet );
-    mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_Slide | nPageNum, mpStrm->Tell() );
-    mpPptEscherEx->OpenContainer( EPP_Slide );
-    mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
-    *mpStrm << rLayout.nLayout;
-    mpStrm->Write( rLayout.nPlaceHolder, 8 );       // placeholderIDs ( 8Stueck )
-    *mpStrm << (sal_uInt32)nMasterID                // master ID ( ist gleich 0x80000000 bei einer masterpage   )
-            << (sal_uInt32)nPageNum + 0x100         // notes ID ( ist gleich null wenn keine notizen vorhanden )
-            << nMode
-            << (sal_uInt16)0;                       // padword
-
-    mnDiaMode = 0;
-    sal_Bool bVisible = sal_True;
-    ::com::sun::star::presentation::FadeEffect eFe = ::com::sun::star::presentation::FadeEffect_NONE;
-
-    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) ) ) )
-        aAny >>= bVisible;
-    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Change" ) ) ) )
-    {
-        switch ( *(sal_Int32*)aAny.getValue() )
-        {
-            case 1 :        // automatisch
-                mnDiaMode++;
-            case 2 :        // halbautomatisch
-                mnDiaMode++;
-            default :
-            case 0 :        // manuell
-            break;
-        }
-    }
-    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) ) ) )
-        aAny >>= eFe;
-
-    sal_uInt32  nSoundRef = 0;
-    sal_Bool    bIsSound = sal_False;
-    sal_Bool    bStopSound = sal_False;
-    sal_Bool    bLoopSound = sal_False;
-
-    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ) ) )
-    {
-        rtl::OUString aSoundURL;
-        if ( aAny >>= aSoundURL )
-        {
-            nSoundRef = maSoundCollection.GetId( aSoundURL );
-            bIsSound = sal_True;
-        }
-        else
-            aAny >>= bStopSound;
-    }
-    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LoopSound" ) ) ) )
-        aAny >>= bLoopSound;
-
-
-    sal_Bool bNeedsSSSlideInfoAtom = ( bVisible == sal_False )
-                                    || ( mnDiaMode == 2 )
-                                    || ( bIsSound )
-                                    || ( bStopSound )
-                                    || ( eFe != ::com::sun::star::presentation::FadeEffect_NONE );
-    if ( bNeedsSSSlideInfoAtom )
-    {
-        sal_uInt8   nDirection = 0;
-        sal_uInt8   nTransitionType = 0;
-        sal_uInt16  nBuildFlags = 1;        // advange by mouseclick
-        sal_Int32       nSlideTime = 0;         // muss noch !!!
-        sal_uInt8   nSpeed = 1;
-
-        if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ) ) )
-        {
-            ::com::sun::star::presentation::AnimationSpeed aAs;
-            aAny >>= aAs;
-            nSpeed = (sal_uInt8)aAs;
-        }
-        sal_Int16 nTT = 0, nTST = 0;
-        if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ) )
-            && ( aAny >>= nTT ) )
-        {
-            if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TransitionSubtype" ) ) )
-                && ( aAny >>= nTST ) )
-            {
-                switch( nTT )
-                {
-                    case animations::TransitionType::FADE :
-                    {
-                        if ( nTST == animations::TransitionSubType::CROSSFADE )
-                            nTransitionType = PPT_TRANSITION_TYPE_SMOOTHFADE;
-                        else if ( nTST == animations::TransitionSubType::FADEOVERCOLOR )
-                            nTransitionType = PPT_TRANSITION_TYPE_FADE;
-                    }
-                    break;
-                    case PPT_TRANSITION_TYPE_COMB :
-                    {
-                        nTransitionType = PPT_TRANSITION_TYPE_COMB;
-                        if ( nTST == animations::TransitionSubType::COMBVERTICAL )
-                            nDirection++;
-                    }
-                    break;
-                    case animations::TransitionType::PUSHWIPE :
-                    {
-                        nTransitionType = PPT_TRANSITION_TYPE_PUSH;
-                        switch( nTST )
-                        {
-                            case animations::TransitionSubType::FROMRIGHT: nDirection = 0; break;
-                            case animations::TransitionSubType::FROMBOTTOM: nDirection = 1; break;
-                            case animations::TransitionSubType::FROMLEFT: nDirection = 2; break;
-                            case animations::TransitionSubType::FROMTOP: nDirection = 3; break;
-                        }
-                    }
-                    break;
-                    case animations::TransitionType::PINWHEELWIPE :
-                    {
-                        nTransitionType = PPT_TRANSITION_TYPE_WHEEL;
-                        switch( nTST )
-                        {
-                            case animations::TransitionSubType::ONEBLADE: nDirection = 1; break;
-                            case animations::TransitionSubType::TWOBLADEVERTICAL : nDirection = 2; break;
-                            case animations::TransitionSubType::THREEBLADE : nDirection = 3; break;
-                            case animations::TransitionSubType::FOURBLADE: nDirection = 4; break;
-                            case animations::TransitionSubType::EIGHTBLADE: nDirection = 8; break;
-                        }
-                    }
-                    break;
-                    case animations::TransitionType::FANWIPE :
-                    {
-                        nTransitionType = PPT_TRANSITION_TYPE_WEDGE;
-                    }
-                    break;
-                    case animations::TransitionType::ELLIPSEWIPE :
-                    {
-                        nTransitionType = PPT_TRANSITION_TYPE_CIRCLE;
-                    }
-                    break;
-                    case animations::TransitionType::FOURBOXWIPE :
-                    {
-                        nTransitionType = PPT_TRANSITION_TYPE_PLUS;
-                    }
-                    break;
-                    case animations::TransitionType::IRISWIPE :
-                    {
-                        nTransitionType = PPT_TRANSITION_TYPE_DIAMOND;
-                    }
-                    break;
-                }
-            }
-        }
-        if ( !nTransitionType )
-        {
-            switch ( eFe )
-            {
-                default :
-                case ::com::sun::star::presentation::FadeEffect_RANDOM :
-                    nTransitionType = PPT_TRANSITION_TYPE_RANDOM;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_STRIPES :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_VERTICAL_STRIPES :
-                    nTransitionType = PPT_TRANSITION_TYPE_BLINDS;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_VERTICAL_CHECKERBOARD :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_CHECKERBOARD :
-                    nTransitionType = PPT_TRANSITION_TYPE_CHECKER;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERLEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERRIGHT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERLEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERRIGHT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_TOP :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_BOTTOM :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_RIGHT :
-                    nTransitionType = PPT_TRANSITION_TYPE_COVER;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_DISSOLVE :
-                    nTransitionType = PPT_TRANSITION_TYPE_DISSOLVE;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_VERTICAL_LINES :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_LINES :
-                    nTransitionType = PPT_TRANSITION_TYPE_RANDOM_BARS;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_CLOSE_HORIZONTAL :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_OPEN_HORIZONTAL :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_CLOSE_VERTICAL :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_OPEN_VERTICAL :
-                    nTransitionType = PPT_TRANSITION_TYPE_SPLIT;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERLEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERRIGHT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERLEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERRIGHT :
-                    nDirection += 4;
-                    nTransitionType = PPT_TRANSITION_TYPE_STRIPS;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERLEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERLEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_BOTTOM :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_RIGHT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_TOP :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LEFT :
-                    nTransitionType = PPT_TRANSITION_TYPE_PULL;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_TOP :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_BOTTOM :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_RIGHT :
-                    nTransitionType = PPT_TRANSITION_TYPE_WIPE;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_TOP :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_LEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_BOTTOM :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_RIGHT :
-                    nTransitionType = PPT_TRANSITION_TYPE_WIPE;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_FADE_TO_CENTER :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_CENTER :
-                    nTransitionType = PPT_TRANSITION_TYPE_ZOOM;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_NONE :
-                    nDirection = 2;
-                break;
-            }
-        }
-        if ( mnDiaMode == 2 )                                   // automatic ?
-            nBuildFlags |= 0x400;
-        if ( bVisible == sal_False )
-            nBuildFlags |= 4;
-        if ( bIsSound )
-            nBuildFlags |= 16;
-        if ( bLoopSound )
-            nBuildFlags |= 64;
-        if ( bStopSound )
-            nBuildFlags |= 256;
-
-        if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Duration" ) ) ) )// duration of this slide
-            nSlideTime = *(sal_Int32*)aAny.getValue() << 10;        // in ticks
-
-
-        mpPptEscherEx->AddAtom( 16, EPP_SSSlideInfoAtom );
-        *mpStrm << nSlideTime       // standtime in ticks
-                << nSoundRef
-                << nDirection
-                << nTransitionType
-                << nBuildFlags
-                << nSpeed
-                << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0;
-    }
-
-    ImplCreateHeaderFooters( mXPagePropSet );
-
-    EscherSolverContainer aSolverContainer;
-    mpPptEscherEx->OpenContainer( EPP_PPDrawing );
-    mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
-    mpPptEscherEx->EnterGroup(0,0);
-    ImplWritePage( rLayout, aSolverContainer, NORMAL, sal_False, nPageNum );    // Die Shapes der Seite werden im PPT Dok. erzeugt
-    mpPptEscherEx->LeaveGroup();
-
-    if ( bHasBackground )
-        ImplWriteBackground( aXBackgroundPropSet );
-    else
-    {
-        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-        mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );             // Flags: Connector | Background | HasSpt
-        EscherPropertyContainer aPropOpt;
-        aPropOpt.AddOpt( ESCHER_Prop_fillRectRight, PPTtoEMU( maDestPageSize.Width ) );
-        aPropOpt.AddOpt( ESCHER_Prop_fillRectBottom, PPTtoEMU( maDestPageSize.Width ) );
-        aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );
-        aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
-        aPropOpt.AddOpt( ESCHER_Prop_bWMode, ESCHER_wDontShow );
-        aPropOpt.AddOpt( ESCHER_Prop_fBackground, 0x10001 );                // if true, this is the background shape
-        aPropOpt.Commit( *mpStrm );
-        mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
-    }
-
-    aSolverContainer.WriteSolver( *mpStrm );
-
-    mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
-    mpPptEscherEx->CloseContainer();    // EPP_Drawing
-    mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
-    *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
-
-    SvMemoryStream aBinaryTagData10Atom;
-    ImplExportComments( mXDrawPage, aBinaryTagData10Atom );
-    if ( mbUseNewAnimations )
-    {
-        SvMemoryStream amsofbtAnimGroup;
-        ppt::AnimationExporter aExporter( aSolverContainer, maSoundCollection );
-        aExporter.doexport( mXDrawPage, amsofbtAnimGroup );
-        sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
-        if ( nmsofbtAnimGroupSize )
-        {
-            {
-                EscherExAtom aMagic2( aBinaryTagData10Atom, 0x2eeb );
-                aBinaryTagData10Atom << (sal_uInt32)0x01c45df9
-                                     << (sal_uInt32)0xe1471b30;
-            }
-            {
-                EscherExAtom aMagic( aBinaryTagData10Atom, 0x2b00 );
-                aBinaryTagData10Atom << (sal_uInt32)0;
-            }
-            aBinaryTagData10Atom.Write( amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell() );
-            {
-                EscherExContainer aMagic2( aBinaryTagData10Atom, 0x2b02 );
-            }
-        }
-    }
-    if ( aBinaryTagData10Atom.Tell() )
-    {
-        EscherExContainer aProgTags     ( *mpStrm, EPP_ProgTags );
-        EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
-        {
-            EscherExAtom aCString( *mpStrm, EPP_CString );
-            *mpStrm << (sal_uInt32)0x5f005f
-                    << (sal_uInt32)0x50005f
-                    << (sal_uInt32)0x540050
-                    << (sal_uInt16)0x31
-                    << (sal_uInt16)0x30;
-        }
-        {
-            EscherExAtom aBinaryTagData( *mpStrm, EPP_BinaryTagData );
-            mpStrm->Write( aBinaryTagData10Atom.GetData(), aBinaryTagData10Atom.Tell() );
-        }
-    }
-/*
-    if ( mbUseNewAnimations )
-    {
-        SvMemoryStream amsofbtAnimGroup;
-        ppt::AnimationExporter aExporter( aSolverContainer, maSoundCollection );
-        aExporter.doexport( mXDrawPage, amsofbtAnimGroup );
-        sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
-        if ( nmsofbtAnimGroupSize )
-        {
-            EscherExContainer aProgTags     ( *mpStrm, EPP_ProgTags );
-            EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
-            {
-                EscherExAtom aCString( *mpStrm, EPP_CString );
-                *mpStrm << (sal_uInt32)0x5f005f
-                        << (sal_uInt32)0x50005f
-                        << (sal_uInt32)0x540050
-                        << (sal_uInt16)0x31
-                        << (sal_uInt16)0x30;
-            }
-            {
-                EscherExAtom aBinaryTagData( *mpStrm, EPP_BinaryTagData );
-                {
-                    {
-                        EscherExAtom aMagic2( *mpStrm, 0x2eeb );
-                        *mpStrm << (sal_uInt32)0x01c45df9
-                                << (sal_uInt32)0xe1471b30;
-                    }
-                    {
-                        EscherExAtom aMagic( *mpStrm, 0x2b00 );
-                        *mpStrm << (sal_uInt32)0;
-                    }
-                }
-                mpStrm->Write( amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell() );
-                {
-                    EscherExContainer aMagic2( *mpStrm, 0x2b02 );
-                }
-            }
-        }
-    }
-*/
-    mpPptEscherEx->CloseContainer();    // EPP_Slide
-    return sal_True;
-};
-
-// ---------------------------------------------------------------------------------------------
-
-sal_Bool PPTWriter::ImplCreateNotes( sal_uInt32 nPageNum )
-{
-    if ( !ImplGetPageByIndex( nPageNum, NOTICE ) )
-        return sal_False;
-    ImplSetCurrentStyleSheet( ImplGetMasterIndex( NORMAL ) );
-
-
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_Notes | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_Notes );
     mpPptEscherEx->AddAtom( 8, EPP_NotesAtom, 1 );
@@ -1659,7 +1174,7 @@ sal_Bool PPTWriter::ImplCreateNotes( sal_uInt32 nPageNum )
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
 
-    ImplWritePage( pPHLayout[ 20 ], aSolverContainer, NOTICE, sal_False );  // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, sal_False );  // Die Shapes der Seite werden im PPT Dok. erzeugt
 
     mpPptEscherEx->LeaveGroup();
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -1683,7 +1198,6 @@ sal_Bool PPTWriter::ImplCreateNotes( sal_uInt32 nPageNum )
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
     mpPptEscherEx->CloseContainer();    // EPP_Notes
-    return sal_True;
 };
 
 void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet )
@@ -1748,18 +1262,18 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
     mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
 }
 
-void PPTWriter::ImplWriteVBA( SvMemoryStream* pVBA )
+void PPTWriter::ImplWriteVBA()
 {
-    if ( pVBA )
+    if ( mpVBA )
     {
-        pVBA->Seek( STREAM_SEEK_TO_END );
-        sal_uInt32 nLen = pVBA->Tell();
+        mpVBA->Seek( STREAM_SEEK_TO_END );
+        sal_uInt32 nLen = mpVBA->Tell();
         if ( nLen > 8 )
         {
             nLen -= 8;
             mnVBAOleOfs = mpStrm->Tell();
             mpPptEscherEx->BeginAtom();
-            mpStrm->Write( (sal_Int8*)pVBA->GetData() + 8, nLen );
+            mpStrm->Write( (sal_Int8*)mpVBA->GetData() + 8, nLen );
             mpPptEscherEx->EndAtom( EPP_ExOleObjStg, 0, 1 );
         }
     }
@@ -1767,11 +1281,11 @@ void PPTWriter::ImplWriteVBA( SvMemoryStream* pVBA )
 
 // ---------------------------------------------------------------------------------------------
 
-void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
+void PPTWriter::ImplWriteOLE( )
 {
     PPTExOleObjEntry* pPtr;
 
-    SvxMSExportOLEObjects aOleExport( nCnvrtFlags );
+    SvxMSExportOLEObjects aOleExport( mnCnvrtFlags );
 
     for ( pPtr = (PPTExOleObjEntry*)maExOleObj.First(); pPtr;
         pPtr = (PPTExOleObjEntry*)maExOleObj.Next() )
@@ -1796,7 +1310,7 @@ void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
                         SvMemoryStream aStream;
                         SvStorageRef xCleanStorage( new SvStorage( sal_False, aStream ) );
                         xTempStorage->CopyTo( xCleanStorage );
-                        // SJ: #99809# create a dummy content stream, the dummy content is necessary for ppt, but not for
+                        // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
                         SotStorageStreamRef xStm = xCleanStorage->OpenSotStream( aPersistStream, STREAM_STD_READWRITE );
                         *xStm   << (sal_uInt32)0        // no ClipboardId
@@ -1834,12 +1348,6 @@ void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
             sal_uInt32 npStrmSize = pStrm->Tell();
             *mpStrm << npStrmSize;                  // uncompressed size
 
-#ifdef DBG_EXTRACTOLEOBJECTS
-            SvFileStream aOut( String::CreateFromAscii( "D:\\OUT.OLE" ), STREAM_TRUNC | STREAM_WRITE );
-            pStrm->Seek( 0 );
-            aOut.Write( pStrm->GetData(), npStrmSize );
-#endif
-
             pStrm->Seek( 0 );
             ZCodec aZCodec( 0x8000, 0x8000 );
             aZCodec.BeginCompression();
@@ -1861,7 +1369,6 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
 #define EPP_LastViewTypeSlideView   1
 #define EPP_LastViewTypeOutlineView 2
 #define EPP_LastViewTypeNotes       3
-
 
     sal_uInt32  i, nPos, nOfs, nPersistOfs = mpStrm->Tell();
     sal_uInt32  nPersistEntrys = 0;
@@ -1966,488 +1473,6 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
     return sal_True;
 }
 
-// ---------------------------------------------------------------------------------------------
-
-PPTExCharSheet::PPTExCharSheet( int nInstance )
-{
-    sal_uInt16 nFontHeight = 24;
-
-    for ( int nDepth = 0; nDepth < 5; nDepth++ )
-    {
-        PPTExCharLevel& rLev = maCharLevel[ nDepth ];
-        switch ( nInstance )
-        {
-            case EPP_TEXTTYPE_Title :
-            case EPP_TEXTTYPE_CenterTitle :
-                nFontHeight = 44;
-            break;
-            case EPP_TEXTTYPE_Body :
-            case EPP_TEXTTYPE_CenterBody :
-            case EPP_TEXTTYPE_HalfBody :
-            case EPP_TEXTTYPE_QuarterBody :
-            {
-                switch ( nDepth )
-                {
-                    case 0 : nFontHeight = 32; break;
-                    case 1 : nFontHeight = 28; break;
-                    case 2 : nFontHeight = 24; break;
-                    default :nFontHeight = 20; break;
-                }
-            }
-            break;
-            case EPP_TEXTTYPE_Notes :
-                nFontHeight = 12;
-            break;
-            case EPP_TEXTTYPE_notUsed :
-            case EPP_TEXTTYPE_Other :
-                nFontHeight = 24;
-            break;
-        }
-        rLev.mnFlags = 0;
-        rLev.mnFont = 0;
-        rLev.mnAsianOrComplexFont = 0xffff;
-        rLev.mnFontHeight = nFontHeight;
-        rLev.mnFontColor = 0;
-        rLev.mnEscapement = 0;
-    }
-}
-
-
-void PPTExCharSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                                    FontCollection& rFontCollection, int nLevel )
-{
-    PortionObj  aPortionObj( rXPropSet, rFontCollection );
-
-    PPTExCharLevel& rLev = maCharLevel[ nLevel ];
-
-    if ( aPortionObj.meCharColor == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnFontColor = aPortionObj.mnCharColor;
-    if ( aPortionObj.meCharEscapement == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnEscapement = aPortionObj.mnCharEscapement;
-    if ( aPortionObj.meCharHeight == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnFontHeight = aPortionObj.mnCharHeight;
-    if ( aPortionObj.meFontName == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnFont = aPortionObj.mnFont;
-    if ( aPortionObj.meAsianOrComplexFont == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnAsianOrComplexFont = aPortionObj.mnAsianOrComplexFont;
-    rLev.mnFlags = aPortionObj.mnCharAttr;
-}
-
-void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bool, sal_Bool bSimpleText,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet )
-{
-    const PPTExCharLevel& rLev = maCharLevel[ nLev ];
-
-    sal_uInt32 nCharFlags = 0xefffff;
-    if ( bSimpleText )
-        nCharFlags = 0x7ffff;
-
-    rSt << nCharFlags
-        << rLev.mnFlags
-        << rLev.mnFont;
-
-    sal_uInt32 nFontColor = rLev.mnFontColor;
-    if ( nFontColor == COL_AUTO )
-    {
-        sal_Bool bIsDark = sal_False;
-        ::com::sun::star::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundDark" ) ), sal_True ) )
-            aAny >>= bIsDark;
-        nFontColor = bIsDark ? 0xffffff : 0x000000;
-    }
-    nFontColor &= 0xffffff;
-    nFontColor |= 0xfe000000;
-    if ( bSimpleText )
-    {
-        rSt << rLev.mnFontHeight
-            << nFontColor;
-    }
-    else
-    {
-        rSt << rLev.mnAsianOrComplexFont
-            << (sal_uInt16)0xffff       // unbekannt
-            << (sal_uInt16)0xffff       // unbekannt
-            << rLev.mnFontHeight
-            << nFontColor
-            << rLev.mnEscapement;
-    }
-}
-
-PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBulletProvider& rProv ) :
-    rBuProv     ( rProv ),
-    mnInstance  ( nInstance )
-{
-    sal_Bool bHasBullet = sal_False;
-
-    sal_uInt16 nUpperDist = 0;
-    sal_uInt16 nBulletChar = 0x2022;
-    sal_uInt16 nBulletOfs = 0;
-    sal_uInt16 nTextOfs = 0;
-
-    for ( int nDepth = 0; nDepth < 5; nDepth++ )
-    {
-        PPTExParaLevel& rLev = maParaLevel[ nDepth ];
-        switch ( nInstance )
-        {
-            case EPP_TEXTTYPE_Title :
-            case EPP_TEXTTYPE_CenterTitle :
-            break;
-            case EPP_TEXTTYPE_Body :
-            case EPP_TEXTTYPE_CenterBody :
-            case EPP_TEXTTYPE_HalfBody :
-            case EPP_TEXTTYPE_QuarterBody :
-            {
-                bHasBullet = sal_True;
-                nUpperDist = 0x14;
-            }
-            break;
-            case EPP_TEXTTYPE_Notes :
-                nUpperDist = 0x1e;
-            break;
-
-//          default :
-//          case EPP_TEXTTYPE_notUsed :
-//          case EPP_TEXTTYPE_Other :
-//          break;
-        }
-        switch ( nDepth )
-        {
-            case 0 :
-            {
-                nBulletChar = 0x2022;
-                nBulletOfs = 0;
-                nTextOfs = ( bHasBullet ) ? 0xd8 : 0;
-            }
-            break;
-            case 1 :
-            {
-                nBulletChar = 0x2013;
-                nBulletOfs = 0x120;
-                nTextOfs = 0x1d4;
-            }
-            break;
-            case 2 :
-            {
-                nBulletChar = 0x2022;
-                nBulletOfs = 0x240;
-                nTextOfs = 0x2d0;
-            }
-            break;
-            case 3 :
-            {
-                nBulletChar = 0x2013;
-                nBulletOfs = 0x360;
-                nTextOfs = 0x3f0;
-            }
-            break;
-            case 4 :
-            {
-                nBulletChar = 0xbb;
-                nBulletOfs = 0x480;
-                nTextOfs = 0x510;
-            }
-            break;
-        }
-        rLev.mbIsBullet = bHasBullet;
-        rLev.mnBulletChar = nBulletChar;
-        rLev.mnBulletFont = 0;
-        rLev.mnBulletHeight = 100;
-        rLev.mnBulletColor = 0;
-        rLev.mnAdjust = 0;
-        rLev.mnLineFeed = 100;
-        rLev.mnLowerDist = 0;
-        rLev.mnUpperDist = nUpperDist;
-        rLev.mnTextOfs = nTextOfs;
-        rLev.mnBulletOfs = nBulletOfs;
-        rLev.mnDefaultTab = nDefaultTab;
-        rLev.mnAsianSettings = 2;
-        rLev.mnBiDi = 0;
-
-        rLev.mbExtendedBulletsUsed = sal_False;
-        rLev.mnBulletId = 0xffff;
-        rLev.mnBulletStart = 0;
-        rLev.mnMappedNumType = 0;
-        rLev.mnNumberingType = 0;
-    }
-}
-
-void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                                        FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel )
-{
-    ParagraphObj aParagraphObj( rXPropSet, rBuProv );
-    aParagraphObj.CalculateGraphicBulletSize( rCharLevel.mnFontHeight );
-    PPTExParaLevel& rLev = maParaLevel[ nLevel ];
-
-    if ( aParagraphObj.meTextAdjust == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnAdjust = aParagraphObj.mnTextAdjust;
-    if ( aParagraphObj.meLineSpacing == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-    {
-        sal_Int16 nLineSpacing = aParagraphObj.mnLineSpacing;
-        if ( nLineSpacing > 0 ) // if nLinespacing is < 0 the linespacing is an absolute spacing
-        {
-            sal_Bool bFixedLineSpacing = sal_False;
-            uno::Any aAny = rXPropSet->getPropertyValue( ::rtl::OUString(
-                                                             RTL_CONSTASCII_USTRINGPARAM(
-                                                                 "FontIndependentLineSpacing" ) ) );
-            if( !(aAny >>= bFixedLineSpacing) || !bFixedLineSpacing )
-            {
-                const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
-                if ( pDesc )
-                    nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
-            }
-        }
-        else
-        {
-            if ( rCharLevel.mnFontHeight > (sal_uInt16)( ((double)-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
-            {
-                const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
-                if ( pDesc )
-                     nLineSpacing = (sal_Int16)( (double)100.0 * pDesc->Scaling + 0.5 );
-                else
-                    nLineSpacing = 100;
-            }
-            else
-                nLineSpacing = (sal_Int16)( (double)nLineSpacing / 4.40972 );
-        }
-        rLev.mnLineFeed = nLineSpacing;
-    }
-    if ( aParagraphObj.meLineSpacingBottom == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnLowerDist = aParagraphObj.mnLineSpacingBottom;
-    if ( aParagraphObj.meLineSpacingTop == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnUpperDist = aParagraphObj.mnLineSpacingTop;
-    if ( aParagraphObj.meForbiddenRules == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-    {
-        rLev.mnAsianSettings &=~1;
-        if ( aParagraphObj.mbForbiddenRules )
-            rLev.mnAsianSettings |= 1;
-    }
-    if ( aParagraphObj.meParagraphPunctation == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-    {
-        rLev.mnAsianSettings &=~4;
-        if ( aParagraphObj.mbParagraphPunctation )
-            rLev.mnAsianSettings |= 4;
-    }
-
-    if ( aParagraphObj.meBiDi == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnBiDi = aParagraphObj.mnBiDi;
-
-    rLev.mbIsBullet = aParagraphObj.mbIsBullet; //( ( aParagraphObj.nBulletFlags & 1 ) != 0 );
-
-    if ( !nLevel )
-    {
-        if ( ( aParagraphObj.meBullet ==  ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-                    && aParagraphObj.bExtendedParameters )
-        {
-            for ( sal_Int16 i = 0; i < 5; i++ )
-            {
-                PPTExParaLevel& rLevel = maParaLevel[ i ];
-                if ( i )
-                    aParagraphObj.ImplGetNumberingLevel( rBuProv, i, sal_False );
-//              rLevel.mbIsBullet = ( ( aParagraphObj.nBulletFlags & 1 ) != 0 );
-                rLevel.mnTextOfs = aParagraphObj.nTextOfs;
-                rLevel.mnBulletOfs = (sal_uInt16)aParagraphObj.nBulletOfs;
-                rLevel.mnBulletChar = aParagraphObj.cBulletId;
-                FontCollectionEntry aFontDescEntry( aParagraphObj.aFontDesc.Name, aParagraphObj.aFontDesc.Family,
-                                                        aParagraphObj.aFontDesc.Pitch, aParagraphObj.aFontDesc.CharSet );
-                rLevel.mnBulletFont = (sal_uInt16)rFontCollection.GetId( aFontDescEntry );
-                rLevel.mnBulletHeight = aParagraphObj.nBulletRealSize;
-                rLevel.mnBulletColor = aParagraphObj.nBulletColor;
-
-                rLevel.mbExtendedBulletsUsed = aParagraphObj.bExtendedBulletsUsed;
-                rLevel.mnBulletId = aParagraphObj.nBulletId;
-                rLevel.mnNumberingType = aParagraphObj.nNumberingType;
-                rLevel.mnBulletStart = aParagraphObj.nStartWith;
-                rLevel.mnMappedNumType = aParagraphObj.nMappedNumType;
-            }
-        }
-    }
-}
-
-void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bool, sal_Bool bSimpleText,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet )
-{
-    const PPTExParaLevel& rLev = maParaLevel[ nLev ];
-
-    if ( maParaLevel[ 0 ].mbExtendedBulletsUsed || maParaLevel[ 1 ].mbExtendedBulletsUsed ||
-            maParaLevel[ 2 ].mbExtendedBulletsUsed || maParaLevel[ 3 ].mbExtendedBulletsUsed ||
-                maParaLevel[ 4 ].mbExtendedBulletsUsed )
-    {
-        SvStream& rOut = rBuProv.aBuExMasterStream;
-        if ( !nLev )
-        {
-            rOut << (sal_uInt32)( ( EPP_PST_ExtendedParagraphMasterAtom << 16 ) | ( mnInstance << 4 ) )
-                 << (sal_uInt32)( 5 * 16 + 2 )
-                 << (sal_uInt16)5;              // depth
-        }
-        sal_uInt16 nBulletId = rLev.mnBulletId;
-        if ( rLev.mnNumberingType != SVX_NUM_BITMAP )
-            nBulletId = 0xffff;
-        rOut << (sal_uInt32)0x03800000
-             << (sal_uInt16)nBulletId
-             << (sal_uInt32)rLev.mnMappedNumType
-             << (sal_uInt16)rLev.mnBulletStart
-             << (sal_uInt32)0;
-    }
-
-    sal_uInt32 nParaFlags = 0x3ffdff;
-    sal_uInt16 nBulletFlags = ( rLev.mbIsBullet ) ? 0xf : 0xe;
-
-    if ( nLev )
-        nParaFlags &= 0x207fff;
-    if ( bSimpleText )
-        nParaFlags &= 0x7fff;
-    sal_uInt32 nBulletColor = rLev.mnBulletColor;
-    if ( nBulletColor == COL_AUTO )
-    {
-        sal_Bool bIsDark = sal_False;
-        ::com::sun::star::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundDark" ) ), sal_True ) )
-            aAny >>= bIsDark;
-        nBulletColor = bIsDark ? 0xffffff : 0x000000;
-    }
-    nBulletColor &= 0xffffff;
-    nBulletColor |= 0xfe000000;
-    rSt << nParaFlags
-        << nBulletFlags
-        << rLev.mnBulletChar
-        << rLev.mnBulletFont
-        << rLev.mnBulletHeight
-        << nBulletColor
-        << rLev.mnAdjust
-        << rLev.mnLineFeed
-        << rLev.mnUpperDist
-        << rLev.mnLowerDist
-        << rLev.mnTextOfs
-        << rLev.mnBulletOfs;
-
-    if ( bSimpleText || nLev )
-    {
-        if ( nParaFlags & 0x200000 )
-            rSt << rLev.mnBiDi;
-    }
-    else
-    {
-        rSt << rLev.mnDefaultTab
-            << (sal_uInt16)0
-            << (sal_uInt16)0
-            << rLev.mnAsianSettings
-            << rLev.mnBiDi;
-    }
-}
-
-
-PPTExStyleSheet::PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider& rBuProv )
-{
-    for ( int nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
-    {
-        mpParaSheet[ nInstance ] = ( nInstance == EPP_TEXTTYPE_notUsed ) ? NULL : new PPTExParaSheet( nInstance, nDefaultTab, rBuProv );
-        mpCharSheet[ nInstance ] = ( nInstance == EPP_TEXTTYPE_notUsed ) ? NULL : new PPTExCharSheet( nInstance );
-    }
-}
-
-PPTExStyleSheet::~PPTExStyleSheet()
-{
-    for ( int nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
-    {
-        if ( nInstance == EPP_TEXTTYPE_notUsed )
-            continue;
-
-        delete mpParaSheet[ nInstance ];
-        delete mpCharSheet[ nInstance ];
-    }
-}
-
-void PPTExStyleSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                                        FontCollection& rFontCollection, int nInstance, int nLevel )
-{
-    if ( nInstance == EPP_TEXTTYPE_notUsed )
-        return;
-    mpCharSheet[ nInstance ]->SetStyleSheet( rXPropSet, rFontCollection, nLevel );
-    mpParaSheet[ nInstance ]->SetStyleSheet( rXPropSet, rFontCollection, nLevel, mpCharSheet[ nInstance ]->maCharLevel[ nLevel ] );
-}
-
-sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue )
-{
-    const PPTExParaLevel& rPara = mpParaSheet[ nInstance ]->maParaLevel[ nLevel ];
-    const PPTExCharLevel& rChar = mpCharSheet[ nInstance ]->maCharLevel[ nLevel ];
-
-    sal_uInt32 nFlag = 0;
-
-    switch ( eAttr )
-    {
-        case ParaAttr_BulletOn : return ( rPara.mbIsBullet ) ? ( nValue ) ? sal_False : sal_True : ( nValue ) ? sal_True : sal_False;
-        case ParaAttr_BuHardFont :
-        case ParaAttr_BulletFont : return ( rPara.mnBulletFont != nValue );
-        case ParaAttr_BuHardColor :
-        case ParaAttr_BulletColor : return ( rPara.mnBulletColor != nValue );
-        case ParaAttr_BuHardHeight :
-        case ParaAttr_BulletHeight : return ( rPara.mnBulletHeight != nValue );
-        case ParaAttr_BulletChar : return ( rPara.mnBulletChar != nValue );
-        case ParaAttr_Adjust : return ( rPara.mnAdjust != nValue );
-        case ParaAttr_LineFeed : return ( rPara.mnLineFeed != nValue );
-        case ParaAttr_UpperDist : return ( rPara.mnUpperDist != nValue );
-        case ParaAttr_LowerDist : return ( rPara.mnLowerDist != nValue );
-        case ParaAttr_TextOfs : return ( rPara.mnTextOfs != nValue );
-        case ParaAttr_BulletOfs : return ( rPara.mnBulletOfs != nValue );
-        case ParaAttr_DefaultTab : return ( rPara.mnDefaultTab != nValue );
-        case ParaAttr_BiDi : return ( rPara.mnBiDi != nValue );
-        case CharAttr_Bold : nFlag = 1; break;
-        case CharAttr_Italic : nFlag = 2; break;
-        case CharAttr_Underline : nFlag = 4; break;
-        case CharAttr_Shadow : nFlag = 16; break;
-        case CharAttr_Strikeout : nFlag = 256; break;
-        case CharAttr_Embossed : nFlag = 512; break;
-        case CharAttr_Font : return ( rChar.mnFont != nValue );
-        case CharAttr_AsianOrComplexFont : return ( rChar.mnAsianOrComplexFont != nValue );
-        case CharAttr_Symbol : return sal_True;
-        case CharAttr_FontHeight : return ( rChar.mnFontHeight != nValue );
-        case CharAttr_FontColor : return ( rChar.mnFontColor != nValue );
-        case CharAttr_Escapement : return ( rChar.mnEscapement != nValue );
-        default:
-            break;
-    };
-    if ( nFlag )
-    {
-        if ( rChar.mnFlags & nFlag )
-            return ( ( nValue & nFlag ) == 0 );
-        else
-            return ( ( nValue & nFlag ) != 0 );
-    }
-    return sal_True;
-}
-
-sal_uInt32 PPTExStyleSheet::SizeOfTxCFStyleAtom() const
-{
-    return 24;
-}
-
-// the TxCFStyleAtom stores the text properties that are used
-// when creating new objects in PowerPoint.
-
-void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
-{
-    const PPTExCharLevel& rCharStyle = mpCharSheet[ EPP_TEXTTYPE_Other ]->maCharLevel[ 0 ];
-
-    sal_uInt16 nFlags = 0x60        // ??
-                      | 0x02        // fontsize;
-                      | 0x04;       // fontcolor
-
-    sal_uInt32 nCharFlags = rCharStyle.mnFlags;
-    nCharFlags &= CharAttr_Italic | CharAttr_Bold | CharAttr_Underline | CharAttr_Shadow;
-
-    rSt << (sal_uInt32)( EPP_TxCFStyleAtom << 16 )  // recordheader
-        << SizeOfTxCFStyleAtom() - 8
-        << (sal_uInt16)( 0x80 | nCharFlags )
-        << (sal_uInt16)nFlags
-        << (sal_uInt16)nCharFlags
-        << (sal_Int32)-1                            // ?
-        << rCharStyle.mnFontHeight
-        << rCharStyle.mnFontColor;
-}
-
-
-// ---------------------------------------------------------------------------------------------
-
 // ---------------------
 // - exported function -
 // ---------------------
@@ -2463,6 +1488,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI ExportPPT( SvStorageRef
     pPPTWriter = new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
     if ( pPPTWriter )
     {
+        pPPTWriter->exportPPT();
         bStatus = ( pPPTWriter->IsValid() == sal_True );
         delete pPPTWriter;
     }
@@ -2505,3 +1531,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI SaveVBA( SfxObjectShell
     return sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

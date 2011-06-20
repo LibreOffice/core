@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,20 +39,14 @@
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svl/itempool.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/prntypes.hxx>
 #include <svl/style.hxx>
 #include <stlsheet.hxx>
-#ifndef _SVX_SVDORECT_HXX
 #include <svx/svdorect.hxx>
-#endif
-#ifndef _SVX_SVDUNDO_HXX
 #include <svx/svdundo.hxx>
-#endif
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/xbtmpit.hxx>
@@ -635,3 +630,5 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

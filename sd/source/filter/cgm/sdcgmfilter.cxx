@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,7 @@ sal_Bool SdCGMFilter::Import()
 
     if( pLibrary && mxModel.is() )
     {
-        ImportCGM       FncImportCGM = reinterpret_cast< ImportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii( "ImportCGM" ) ) );
+        ImportCGM       FncImportCGM = reinterpret_cast< ImportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ImportCGM" ) ) ) );
         ::rtl::OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
         sal_uInt32          nRetValue;
 
@@ -138,16 +139,12 @@ sal_Bool SdCGMFilter::Export()
 
     if( pLibrary && mxModel.is() )
     {
-        ExportCGM FncCGMExport = reinterpret_cast< ExportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii( "ExportCGM" ) ) );
+        ExportCGM FncCGMExport = reinterpret_cast< ExportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ExportCGM" ) ) ) );
 
         if( FncCGMExport )
         {
             ::rtl::OUString aPhysicalName( mrMedium.GetPhysicalName() );
 
-            /* !!!
-            if ( pViewShell && pViewShell->GetView() )
-                pViewShell->GetView()->SdrEndTextEdit();
-            */
             CreateStatusIndicator();
             bRet = FncCGMExport( aPhysicalName, mxModel, mxStatusIndicator, NULL );
         }
@@ -157,3 +154,5 @@ sal_Bool SdCGMFilter::Export()
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

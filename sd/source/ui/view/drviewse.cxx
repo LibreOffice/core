@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -124,7 +125,7 @@ namespace sd {
 
 void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
 {
-    // #98198# evtl. feed characters to activated textedit
+    // evtl. feed characters to activated textedit
     const SfxItemSet* pSet = rReq.GetArgs();
 
     if(pSet)
@@ -182,7 +183,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
             Invalidate();
 
-            // #98198# evtl. feed characters to activated textedit
+            // evtl. feed characters to activated textedit
             if(SID_ATTR_CHAR == nSId && GetView() && GetView()->IsTextEdit())
                 ImpAddPrintableCharactersToTextEdit(rReq, GetView());
 
@@ -264,7 +265,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             rBindings.Invalidate( SID_TEXT_FITTOSIZE );
             rBindings.Invalidate( SID_TEXT_FITTOSIZE_VERTICAL );
 
-            // #98198# evtl. feed characters to activated textedit
+            // evtl. feed characters to activated textedit
             if(SID_ATTR_CHAR == nSId && GetView() && GetView()->IsTextEdit())
                 ImpAddPrintableCharactersToTextEdit(rReq, GetView());
 
@@ -279,7 +280,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         }
         break;
 
-        // #98721#
         case SID_FM_CREATE_FIELDCONTROL:
         {
             SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
@@ -580,7 +580,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     // Jetzt explizit der letzte Slot incl. Update()
     Invalidate();
 
-    // #97016# III CTRL-SID_OBJECT_SELECT -> select first draw object if none is selected yet
+    // CTRL-SID_OBJECT_SELECT -> select first draw object if none is selected yet
     if(SID_OBJECT_SELECT == nSId && HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1))
     {
         if(!GetView()->AreObjectsMarked())
@@ -595,7 +595,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         }
     }
 
-    // #97016# with qualifier construct directly
+    // with qualifier construct directly
     if(HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1))
     {
         // get SdOptions
@@ -1054,7 +1054,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             const SfxItemSet* pReqArgs = rReq.GetArgs();
 
-            // #97516# Remember old ruler state
+            // Remember old ruler state
             sal_Bool bOldHasRuler(HasRuler());
 
             if ( pReqArgs )
@@ -1064,7 +1064,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
             else SetRuler (!HasRuler());
 
-            // #97516# Did ruler state change? Tell that to SdOptions, too.
+            // Did ruler state change? Tell that to SdOptions, too.
             sal_Bool bHasRuler(HasRuler());
 
             if(bOldHasRuler != bHasRuler)
@@ -1469,19 +1469,37 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         // #UndoRedo#
         case SID_UNDO :
         {
-            // #96090# moved implementation to BaseClass
+            // moved implementation to BaseClass
             ImpSidUndo(sal_True, rReq);
         }
         break;
         case SID_REDO :
         {
-            // #96090# moved implementation to BaseClass
+            // moved implementation to BaseClass
             ImpSidRedo(sal_True, rReq);
         }
         break;
 
         default:
         break;
+    }
+}
+
+void DrawViewShell::FuSupportRotate(SfxRequest &rReq)
+{
+    if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
+    {
+        ::sd::View* pView = GetView();
+
+        if (!pView)
+            return;
+
+        OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+
+        if (!pOLV)
+            return;
+
+        pOLV->TransliterateText( m_aRotateCase.getNextMode() );
     }
 }
 
@@ -1587,7 +1605,6 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
                 xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), Any( form::FormButtonType_URL ) );
                 if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
                 {
-                    // #105638# OJ
                     xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), Any( sal_True ) );
                 }
             }
@@ -1621,7 +1638,6 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
             xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )), Any( OUString( rTarget ) ) );
 
         xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), Any(  form::FormButtonType_URL ) );
-        // #105638# OJ
         if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
             xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), Any( sal_True ) );
 
@@ -1658,12 +1674,6 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void DrawViewShell::ShowUIControls (bool bVisible)
 {
     ViewShell::ShowUIControls (bVisible);
@@ -1692,3 +1702,5 @@ void DrawViewShell::StopSlideShow (bool /*bCloseFrame*/)
 #endif
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

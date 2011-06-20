@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <svtools/transfer.hxx>
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 #include "pres.hxx"
 #include "sddllapi.h"
 #include <tools/string.hxx>
@@ -136,8 +135,6 @@ protected:
     SfxMedium*              mpOwnMedium;
     Image                   maImgOle;
     Image                   maImgGraphic;
-    Image                   maImgOleH;
-    Image                   maImgGraphicH;
     sal_Bool                    mbLinkableSelected;
     sal_Bool                    mbDragEnabled;
     String                  maDocName;
@@ -270,3 +267,5 @@ private:
 };
 
 #endif      // _SDTREELB_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

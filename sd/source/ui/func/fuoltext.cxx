@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,7 @@
 #include <svx/svxids.hrc>
 #include "app.hrc"
 #include "OutlineView.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "DrawDocShell.hxx"
 #include "ViewShell.hxx"
 #include "OutlineViewShell.hxx"
@@ -155,22 +154,6 @@ sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
     {
         bReturn = FuOutline::MouseMove(rMEvt);
     }
-
-    // MT 07/2002: Done in OutlinerView::MouseMove
-    /*
-    const SvxFieldItem* pFieldItem = pOutlineView->GetViewByWindow( mpWindow )->
-                                        GetFieldUnderMousePointer();
-    const SvxFieldData* pField = NULL;
-    if( pFieldItem )
-        pField = pFieldItem->GetField();
-
-    if( pField && pField->ISA( SvxURLField ) )
-    {
-       mpWindow->SetPointer( Pointer( POINTER_REFHAND ) );
-    }
-    else
-       mpWindow->SetPointer( Pointer( POINTER_TEXT ) );
-    */
 
     return (bReturn);
 }
@@ -359,3 +342,5 @@ void FuOutlineText::DoPaste()
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,6 @@
 #include <svx/fontwork.hxx>
 #include <svx/colrctrl.hxx>
 #include <svx/verttexttbxctrl.hxx>
-#include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/linectrl.hxx>
@@ -134,7 +134,6 @@ void SdDLL::RegisterControllers()
     SvxBmpMaskChildWindow::RegisterChildWindow(0, pMod);
     GalleryChildWindow::RegisterChildWindow(0, pMod);
     SvxIMapDlgChildWindow::RegisterChildWindow(0, pMod);
-    SvxHyperlinkDlgWrapper::RegisterChildWindow(0, pMod, SFX_CHILDWIN_FORCEDOCK);
     SvxHlinkDlgWrapper::RegisterChildWindow(0, pMod);
     ::sd::SpellDialogChildWindow::RegisterChildWindow(0, pMod);
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
@@ -151,7 +150,6 @@ void SdDLL::RegisterControllers()
 
     SvxStyleToolBoxControl::RegisterControl(0, pMod);
     SvxFontNameToolBoxControl::RegisterControl(0, pMod);
-//  SvxFontHeightToolBoxControl::RegisterControl(0, pMod);
     SvxFontColorToolBoxControl::RegisterControl(0, pMod);
 
     SvxGrafFilterToolBoxControl::RegisterControl( SID_GRFFILTER, pMod );
@@ -176,7 +174,6 @@ void SdDLL::RegisterControllers()
     SvxZoomStatusBarControl::RegisterControl( SID_ATTR_ZOOM, pMod );
     SvxPosSizeStatusBarControl::RegisterControl( SID_ATTR_SIZE, pMod );
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
-    //SvxInsertStatusBarControl::RegisterControl(0, pModd);
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
 
     // MenuControls fuer PopupMenu
@@ -206,7 +203,6 @@ void SdDLL::RegisterControllers()
     SvxFrameLineColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
     SvxSubToolBoxControl::RegisterControl(SID_OPTIMIZE_TABLE, pMod);
-
-//  SdLayoutControl::RegisterControl( SID_ASSIGN_LAYOUT, pMod );
-//  SdLayoutControl::RegisterControl( SID_INSERTPAGE, pMod );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

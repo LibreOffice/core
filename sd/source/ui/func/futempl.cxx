@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,9 +61,7 @@
 #include "stlpool.hxx"
 #include "app.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawview.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
@@ -163,7 +162,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     Reference< XPropertySet > xInfo( xStyles->getByName( pNameItem->GetValue() ), UNO_QUERY_THROW );
 
                     OUString aUIName;
-                    xInfo->getPropertyValue( ::rtl::OUString::createFromAscii("DisplayName") ) >>= aUIName;
+                    xInfo->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName")) ) >>= aUIName;
                     if ( aUIName.getLength() )
                         rReq.AppendItem( SfxStringItem( nSId, aUIName ) );
                 }
@@ -264,9 +263,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
-/* #96983# GrabFocus moved to stylist
-            pWin->GrabFocus();
-*/
         break;
 
         case SID_STYLE_WATERCAN:
@@ -385,7 +381,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     }
                     else
                     {
-                        DBG_ERROR("Vorlage aus aelterer anderssprachiger Version");
+                        OSL_FAIL("Vorlage aus aelterer anderssprachiger Version");
                         bOldDocInOtherLanguage = sal_True;
                     }
 
@@ -477,45 +473,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                         SfxItemSet& rAttr = pStyleSheet->GetItemSet();
 
-/* #i35937#
-                        if ( rAttr.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
-                        {
-                            // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
-                            if ( aOriSet.GetItemState( EE_PARA_LRSPACE ) != SFX_ITEM_ON ||
-                                    (const SvxLRSpaceItem&) aOriSet.Get( EE_PARA_LRSPACE ) !=
-                                    (const SvxLRSpaceItem&) rAttr.Get( EE_PARA_LRSPACE ) )
-                            {
-                                SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rAttr.Get(EE_PARA_NUMBULLET) );
-
-                                sal_uInt16 nLevel = 0;
-                                if( (ePO >= PO_OUTLINE_2) && (ePO <= PO_OUTLINE_9) )
-                                    nLevel = (sal_uInt16)(ePO - PO_OUTLINE_1 + 1);
-
-                                EditEngine::ImportBulletItem( aNumBullet, nLevel, NULL,
-                                                        &(const SvxLRSpaceItem&) rAttr.Get( EE_PARA_LRSPACE ) );
-
-                                // the numbering bullet item is not valid in styles Outline 2 to Outline 9
-                                if( nLevel != 0 )
-                                {
-                                    // so put it into Outline 1 then..
-                                    String sStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
-                                    sStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
-                                    SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SD_STYLE_FAMILY_PSEUDO);
-
-                                    if(pFirstStyleSheet)
-                                    {
-                                        pFirstStyleSheet->GetItemSet().Put( aNumBullet);
-                                        SdStyleSheet* pRealSheet = ((SdStyleSheet*)pFirstStyleSheet)->GetRealStyleSheet();
-                                        pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                                    }
-                                }
-                                else
-                                {
-                                    ( (SfxItemSet&) rAttr).Put( aNumBullet );
-                                }
-                            }
-                        }
-*/
                         // check for unique names of named items for xml
                         if( rAttr.GetItemState( XATTR_FILLBITMAP ) == SFX_ITEM_SET )
                         {
@@ -731,3 +688,5 @@ void FuTemplate::Deactivate()
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

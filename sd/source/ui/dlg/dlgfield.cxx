@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -154,7 +155,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
 
-                // #91225# Get current filename, not the one stored in the old field
+                // Get current filename, not the one stored in the old field
                 pNewField = new SvxExtFileField( aName );
                 ( (SvxExtFileField*) pNewField )->SetType( eType );
                 ( (SvxExtFileField*) pNewField )->SetFormat( eFormat );
@@ -172,7 +173,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
             eFormat = (SvxAuthorFormat) ( aLbFormat.GetSelectEntryPos() );
 
-            // #91225# Get current state of address, not the old one
+            // Get current state of address, not the old one
             SvtUserOptions aUserOptions;
             pNewField = new SvxAuthorField( aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() );
             ( (SvxAuthorField*) pNewField )->SetType( eType );
@@ -182,12 +183,6 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
     return( pNewField );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void SdModifyFieldDlg::FillFormatList()
 {
@@ -364,3 +359,4 @@ SfxItemSet SdModifyFieldDlg::GetItemSet()
     return aOutput;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

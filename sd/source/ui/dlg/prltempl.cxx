@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,6 @@
 #include "prltempl.hxx"
 #include "prltempl.hrc"
 #include "enumdlg.hrc"
-//#include "enumdlg.hxx"
 #include "bulmaper.hxx"
 #include <svl/intitem.hxx>
 #include <svx/svxgrahicitem.hxx>
@@ -181,7 +181,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         break;
     }
 
-    // #112490# the tabpages Alignment, Tabs and Asian Typography are very
+    // the tabpages Alignment, Tabs and Asian Typography are very
     // usefull, except for the background style
     if( DlgId.GetId() != TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND )
     {
@@ -285,7 +285,7 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
 
         case RID_SVXPAGE_SHADOW:
-                aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE)); //add CHINA001
+                aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
                 aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
                 aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
                 rPage.PageCreated(aSet);
@@ -355,3 +355,4 @@ sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

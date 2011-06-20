@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef SD_FU_DRAW_HXX
 #define SD_FU_DRAW_HXX
 
-#ifndef _SV_POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
-#endif
 #include "fupoor.hxx"
 
 struct SdrViewEvent;
@@ -100,3 +99,5 @@ protected:
 } // end of namespace sd
 
 #endif      // _SD_FUDRAW_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

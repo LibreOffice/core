@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <boost/bind.hpp>
@@ -69,7 +70,6 @@ using ::rtl::OUString;
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
 using ::cppu::OInterfaceContainerHelper;
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -301,7 +301,6 @@ SfxItemSet& SdStyleSheet::GetItemSet()
     // aktuellen Praesentationslayouts: dessen ItemSet returnieren
     else
     {
-//        return (GetRealStyleSheet()->GetItemSet());
 
         SdStyleSheet* pSdSheet = GetRealStyleSheet();
 
@@ -732,7 +731,7 @@ OUString SdStyleSheet::GetFamilyString( SfxStyleFamily eFamily )
     case SD_STYLE_FAMILY_CELL:
         return OUString( RTL_CONSTASCII_USTRINGPARAM( "cell" ) );
     default:
-        DBG_ERROR( "SdStyleSheet::GetFamilyString(), illegal family!" );
+        OSL_FAIL( "SdStyleSheet::GetFamilyString(), illegal family!" );
     case SD_STYLE_FAMILY_GRAPHICS:
         return OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
     }
@@ -766,21 +765,6 @@ SdStyleSheet* SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, 
 // XInterface
 // --------------------------------------------------------------------
 
-/*
-Any SAL_CALL SdStyleSheet::queryInterface( const ::com::sun::star::uno::Type& aType ) throw (RuntimeException)
-{
-    return SdStyleSheetBase::queryInterface( aType );
-}
-
-// --------------------------------------------------------------------
-
-void SAL_CALL SdStyleSheet::acquire(  ) throw ()
-{
-    SdStyleSheetBase::acquire();
-}
-
-// --------------------------------------------------------------------
-*/
 void SAL_CALL SdStyleSheet::release(  ) throw ()
 {
     if (osl_decrementInterlockedCount( &m_refCount ) == 0)
@@ -793,8 +777,8 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
         }
         catch (RuntimeException const& exc)
         { // don't break throw ()
-            OSL_ENSURE(
-                false, OUStringToOString(
+            OSL_FAIL(
+                OUStringToOString(
                     exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             static_cast<void>(exc);
         }
@@ -803,31 +787,6 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
     }
 }
 
-// --------------------------------------------------------------------
-// XWeak
-// --------------------------------------------------------------------
-/*
-Reference< XAdapter > SAL_CALL SdStyleSheet::queryAdapter(  ) throw (RuntimeException)
-{
-    return SdStyleSheetBase::queryAdapter();
-}
-
-// --------------------------------------------------------------------
-// XTypeProvider
-// --------------------------------------------------------------------
-
-Sequence< Type > SAL_CALL SdStyleSheet::getTypes(  ) throw (RuntimeException)
-{
-    return SdStyleSheetBase::getTypes();
-}
-
-// --------------------------------------------------------------------
-
-Sequence< ::sal_Int8 > SAL_CALL SdStyleSheet::getImplementationId(  ) throw (RuntimeException)
-{
-    return SdStyleSheetBase::getImplementationId();
-}
-*/
 // --------------------------------------------------------------------
 // XComponent
 // --------------------------------------------------------------------
@@ -955,7 +914,7 @@ void SdStyleSheet::notifyModifyListener()
 
 OUString SAL_CALL SdStyleSheet::getImplementationName() throw(RuntimeException)
 {
-    return OUString::createFromAscii( "SdStyleSheet" );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdStyleSheet" ) );
 }
 
 // --------------------------------------------------------------------
@@ -992,7 +951,7 @@ Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames() throw(Run
 
 OUString SAL_CALL SdStyleSheet::getName() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
     return GetApiName();
 }
@@ -1001,7 +960,7 @@ OUString SAL_CALL SdStyleSheet::getName() throw(RuntimeException)
 
 void SAL_CALL SdStyleSheet::setName( const OUString& rName  ) throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     if( SetName( rName ) )
@@ -1017,7 +976,7 @@ void SAL_CALL SdStyleSheet::setName( const OUString& rName  ) throw(RuntimeExcep
 
 sal_Bool SAL_CALL SdStyleSheet::isUserDefined() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
     return IsUserDefined() ? sal_True : sal_False;
 }
@@ -1026,7 +985,7 @@ sal_Bool SAL_CALL SdStyleSheet::isUserDefined() throw(RuntimeException)
 
 sal_Bool SAL_CALL SdStyleSheet::isInUse() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
     return IsUsed() ? sal_True : sal_False;
 }
@@ -1035,7 +994,7 @@ sal_Bool SAL_CALL SdStyleSheet::isInUse() throw(RuntimeException)
 
 OUString SAL_CALL SdStyleSheet::getParentStyle() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     if( GetParent().Len() )
@@ -1051,14 +1010,14 @@ OUString SAL_CALL SdStyleSheet::getParentStyle() throw(RuntimeException)
 
 void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw(NoSuchElementException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     if( rParentName.getLength() )
     {
         const SfxStyles& rStyles = mxPool->GetStyles();
 
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
         {
             SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
             if( pStyle && (pStyle->nFamily == nFamily) && (pStyle->msApiName == rParentName) )
@@ -1093,7 +1052,7 @@ Reference< XPropertySetInfo > SdStyleSheet::getPropertySetInfo() throw(RuntimeEx
 
 void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     throwIfDisposed();
 
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
@@ -1174,7 +1133,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
 
 Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
@@ -1255,7 +1214,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
             }
             else
             {
-                DBG_ERROR("SvxShape::GetAnyForItem() Returnvalue has wrong Type!" );
+                OSL_FAIL("SvxShape::GetAnyForItem() Returnvalue has wrong Type!" );
             }
         }
 
@@ -1276,7 +1235,7 @@ void SAL_CALL SdStyleSheet::removeVetoableChangeListener( const OUString& , cons
 
 PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
@@ -1322,8 +1281,6 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
         case SFX_ITEM_DEFAULT:
             eState = PropertyState_DEFAULT_VALUE;
             break;
-//      case SFX_ITEM_DONTCARE:
-//      case SFX_ITEM_DISABLED:
         default:
             eState = PropertyState_AMBIGUOUS_VALUE;
             break;
@@ -1357,7 +1314,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
 
 Sequence< PropertyState > SAL_CALL SdStyleSheet::getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
@@ -1377,7 +1334,7 @@ Sequence< PropertyState > SAL_CALL SdStyleSheet::getPropertyStates( const Sequen
 
 void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
@@ -1403,7 +1360,7 @@ void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName )
 
 Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
@@ -1441,3 +1398,4 @@ const SfxItemPropertySimpleEntry* SdStyleSheet::getPropertyMapEntry( const OUStr
     return GetStylePropertySet().getPropertyMapEntry(rPropertyName);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

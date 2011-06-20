@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 
-// #107844#
 #include <svx/svdundo.hxx>
 
 #include <vector>
@@ -111,6 +111,7 @@ SV_DECL_REF(DrawDocShell)
 class DrawDocShell;
 class UndoManager;
 class ShapeList;
+class FrameView;
 }
 
 class ImpDrawPageListWatcher;
@@ -167,7 +168,7 @@ private:
     Timer*              mpOnlineSpellingTimer;
     sd::ShapeList*      mpOnlineSpellingList;
     SvxSearchItem*      mpOnlineSearchItem;
-    List*               mpFrameViewList;
+    std::vector<sd::FrameView*> maFrameViewList;
     List*               mpCustomShowList;
     ::sd::DrawDocShell* mpDocSh;
     SdTransferable *    mpCreatingTransferable;
@@ -195,7 +196,6 @@ private:
     CharClass*          mpCharClass;
     ::com::sun::star::lang::Locale* mpLocale;
 
-    // #109538#
     ::std::auto_ptr<ImpDrawPageListWatcher> mpDrawPageListWatcher;
     ::std::auto_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
 
@@ -224,10 +224,10 @@ public:
                         ~SdDrawDocument();
 
     virtual SdrModel*   AllocModel() const;
-    virtual SdrPage*    AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage*    AllocPage(bool bMasterPage);
     virtual const SdrModel* LoadModel(const String& rFileName);
     virtual void        DisposeLoadedModels();
-    virtual FASTBOOL    IsReadOnly() const;
+    virtual bool    IsReadOnly() const;
     virtual void        SetChanged(sal_Bool bFlag = sal_True);
     virtual SvStream*   GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
 
@@ -408,7 +408,7 @@ public:
 
     sal_uLong               GetLinkCount();
 
-    List*               GetFrameViewList() const { return mpFrameViewList; }
+    std::vector<sd::FrameView*>& GetFrameViewList() { return maFrameViewList; }
     SD_DLLPUBLIC List*  GetCustomShowList(sal_Bool bCreate = sal_False);
 
     void                NbcSetChanged(sal_Bool bFlag = sal_True);
@@ -427,8 +427,7 @@ public:
     sal_Bool                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
 
     ::sd::FrameView* GetFrameView(sal_uLong nPos) {
-        return static_cast< ::sd::FrameView*>(
-            mpFrameViewList->GetObject(nPos));}
+        return nPos < maFrameViewList.size() ? maFrameViewList[nPos] : NULL; }
 
     /** deprecated*/
     SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
@@ -449,8 +448,8 @@ public:
     void                Merge(SdrModel& rSourceModel,
                                 sal_uInt16 nFirstPageNum=0, sal_uInt16 nLastPageNum=0xFFFF,
                                 sal_uInt16 nDestPos=0xFFFF,
-                                FASTBOOL bMergeMasterPages=sal_False, FASTBOOL bAllMasterPages=sal_False,
-                                FASTBOOL bUndo=sal_True, FASTBOOL bTreadSourceAsConst=sal_False);
+                                bool bMergeMasterPages = false, bool bAllMasterPages = false,
+                                bool bUndo = true, bool bTreadSourceAsConst = false);
 
     SD_DLLPUBLIC ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
     void SetDefaultWritingMode( ::com::sun::star::text::WritingMode eMode );
@@ -539,16 +538,6 @@ public:
         @param sNotesPageName
             Name of the standard page.  An empty string leads to using an
             automatically created name.
-        @param eStandardLayout
-            Layout to use for the new standard page.  Note that this layout
-            is not used when the given <argument>pCurrentPage</argument> is
-            not a standard page.  In this case the layout is taken from the
-            standard page associated with <argument>pCurrentPage</argument>.
-        @param eNotesLayout
-            Layout to use for the new notes page.  Note that this layout
-            is not used when the given <argument>pCurrentPage</argument> is
-            not a notes page.  In this case the layout is taken from the
-            notes page associated with <argument>pCurrentPage</argument>.
         @param bIsPageBack
             This flag indicates whether to show the background shape.
         @param bIsPageObj
@@ -566,8 +555,6 @@ public:
         PageKind ePageKind,
         const String& sStandardPageName,
         const String& sNotesPageName,
-        AutoLayout eStandardLayout,
-        AutoLayout eNotesLayout,
         sal_Bool bIsPageBack,
         sal_Bool bIsPageObj,
         const sal_Int32 nInsertPosition = -1);
@@ -610,16 +597,6 @@ private:
         @param sNotesPageName
             Name of the standard page.  An empty string leads to using an
             automatically created name.
-        @param eStandardLayout
-            Layout to use for the new standard page.  Note that this layout
-            is not used when the given <argument>pCurrentPage</argument> is
-            not a standard page.  In this case the layout is taken from the
-            standard page associated with <argument>pCurrentPage</argument>.
-        @param eNotesLayout
-            Layout to use for the new notes page.  Note that this layout
-            is not used when the given <argument>pCurrentPage</argument> is
-            not a notes page.  In this case the layout is taken from the
-            notes page associated with <argument>pCurrentPage</argument>.
         @param bIsPageBack
             This flag indicates whether to show the background shape.
         @param bIsPageObj
@@ -641,8 +618,6 @@ private:
         PageKind ePageKind,
         const String& sStandardPageName,
         const String& sNotesPageName,
-        AutoLayout eStandardLayout,
-        AutoLayout eNotesLayout,
         sal_Bool bIsPageBack,
         sal_Bool bIsPageObj,
         SdPage* pStandardPage,
@@ -672,7 +647,6 @@ private:
         sal_Bool bIsPageBack,
         sal_Bool bIsPageObj);
 
-    // #109538#
     virtual void PageListChanged();
     virtual void MasterPageListChanged();
 };
@@ -700,3 +674,5 @@ private:
 }
 
 #endif // _DRAWDOC_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

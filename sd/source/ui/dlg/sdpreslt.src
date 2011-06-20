@@ -40,7 +40,6 @@ ModalDialog DLG_PRESLT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Wählen Sie eine ~Seitenvorlage : Wõhlen Sie eine ~Seitenvorlage */
         Text [ en-US ] = "~Select a slide design" ;
     };
     Control VS_LAYOUT

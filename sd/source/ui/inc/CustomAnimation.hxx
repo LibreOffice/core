@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,15 @@
 #ifndef _SD_CUSTOMANIMATION_HXX_
 #define _SD_CUSTOMANIMATION_HXX_
 
-#ifndef _COM_SUN_STAR_FRAME_XModel_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
 
 class Window;
 
 namespace sd {
 
-//  extern void showCustomAnimationPane( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView >& xView );
     extern ::Window* createCustomAnimationPane( ::Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 }
 
 #endif // _SD_CUSTOMANIMATION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #ifndef SD_PRLTEMPL_HXX
 #define SD_PRLTEMPL_HXX
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 #include <sfx2/tabdlg.hxx>
 #include <svx/tabarea.hxx>
 
@@ -99,3 +98,4 @@ public:
 
 #endif // SD_PRLTEMPL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

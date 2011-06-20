@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,11 +146,11 @@ class SD_DLLPUBLIC SdOptionsLayout : public SdOptionsGeneric
 {
 private:
 
-    sal_Bool    bRuler              : 1;    // Layout/Display/Ruler
-    sal_Bool    bMoveOutline        : 1;    // Layout/Display/Contur
-    sal_Bool    bDragStripes        : 1;    // Layout/Display/Guide
-    sal_Bool    bHandlesBezier      : 1;    // Layout/Display/Bezier
-    sal_Bool    bHelplines          : 1;    // Layout/Display/Helpline
+    sal_Bool    bRuler; // Layout/Display/Ruler
+    sal_Bool    bMoveOutline;   // Layout/Display/Contur
+    sal_Bool    bDragStripes;   // Layout/Display/Guide
+    sal_Bool    bHandlesBezier; // Layout/Display/Bezier
+    sal_Bool    bHelplines; // Layout/Display/Helpline
     sal_uInt16  nMetric;                    // Layout/Other/MeasureUnit
     sal_uInt16  nDefTab;                    // Layout/Other/TabStop
 
@@ -248,7 +249,6 @@ class SD_DLLPUBLIC SdOptionsMisc : public SdOptionsGeneric
 {
 private:
 
-    // #97016#
     sal_uLong   nDefaultObjectSizeWidth;
     sal_uLong   nDefaultObjectSizeHeight;
 
@@ -267,7 +267,6 @@ private:
     sal_Bool    bSolidDragging          : 1;    // Misc/ModifyWithAttributes
     sal_Bool    bSolidMarkHdl           : 1;    // /Misc/SimpleHandles
     sal_Bool    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
-    // #90356#
     sal_Bool    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
     // #i75315#
     sal_Bool    bSlideshowRespectZOrder : 1;    // Misc/SlideshowRespectZOrder
@@ -325,10 +324,8 @@ public:
             is disabled.  Other values are reserved for future use.
     */
     sal_uInt16  GetPrinterIndependentLayout() const { Init(); return mnPrinterIndependentLayout; };
-    // #90356#
     sal_Bool    IsShowUndoDeleteWarning() const { Init(); return (sal_Bool) bShowUndoDeleteWarning; }
     sal_Bool    IsSlideshowRespectZOrder() const { Init(); return (sal_Bool) bSlideshowRespectZOrder; }
-    // #97016#
     sal_uLong   GetDefaultObjectSizeWidth() const { Init(); return nDefaultObjectSizeWidth; }
     sal_uLong   GetDefaultObjectSizeHeight() const { Init(); return nDefaultObjectSizeHeight; }
 
@@ -367,10 +364,8 @@ public:
     void    SetPrinterIndependentLayout (sal_uInt16 nOn = 1 ){ if ( nOn != mnPrinterIndependentLayout ) { OptionsChanged(); mnPrinterIndependentLayout = nOn; } }
     void    SetSolidDragging( sal_Bool bOn = sal_True ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
     void    SetSolidMarkHdl( sal_Bool bOn = sal_True ) { if( bSolidMarkHdl != bOn ) { OptionsChanged(); bSolidMarkHdl = bOn; } }
-    // #90356#
     void    SetShowUndoDeleteWarning( sal_Bool bOn = sal_True ) { if( bShowUndoDeleteWarning != bOn ) { OptionsChanged(); bShowUndoDeleteWarning = bOn; } }
     void    SetSlideshowRespectZOrder( sal_Bool bOn = sal_True ) { if( bSlideshowRespectZOrder != bOn ) { OptionsChanged(); bSlideshowRespectZOrder = bOn; } }
-    // #97016#
     void    SetDefaultObjectSizeWidth( sal_uLong nWidth ) { if( nDefaultObjectSizeWidth != nWidth ) { OptionsChanged(); nDefaultObjectSizeWidth = nWidth; } }
     void    SetDefaultObjectSizeHeight( sal_uLong nHeight ) { if( nDefaultObjectSizeHeight != nHeight ) { OptionsChanged(); nDefaultObjectSizeHeight = nHeight; } }
 
@@ -686,3 +681,5 @@ public:
 };
 
 #endif // _SD_OPTSITEM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

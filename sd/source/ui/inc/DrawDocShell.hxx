@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,6 +90,7 @@ public:
     virtual void            Activate( sal_Bool bMDI );
     virtual void            Deactivate( sal_Bool bMDI );
     virtual sal_Bool            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual sal_Bool        ImportFrom( SfxMedium &rMedium, bool bInsert=false );
     virtual sal_Bool            ConvertFrom( SfxMedium &rMedium );
     virtual sal_Bool            Save();
     virtual sal_Bool            SaveAsOwnFormat( SfxMedium& rMedium );
@@ -203,7 +205,7 @@ public:
 
     DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
 
-                            // #91457# ExecuteSpellPopup now handled by DrawDocShell
+                            // ExecuteSpellPopup now handled by DrawDocShell
                             DECL_LINK( OnlineSpellCallback, SpellCallbackInfo* );
 
     void                    ClearUndoBuffer();
@@ -241,3 +243,5 @@ SV_IMPL_REF (DrawDocShell)
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

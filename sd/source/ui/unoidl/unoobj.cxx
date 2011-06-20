@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/stl_types.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/style.hxx>
 #include <svx/svdpool.hxx>
@@ -71,11 +72,7 @@
 #include "ViewShell.hxx"
 #include "unokywds.hxx"
 #include "unopage.hxx"
-#ifndef SVX_LIGHT
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
-#endif
 #include "helpids.h"
 #include "glob.hxx"
 #include "glob.hrc"
@@ -93,7 +90,6 @@
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using namespace ::vos;
 using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::presentation;
@@ -146,6 +142,7 @@ static SdTypesCache gImplTypesCache;
 
 #define WID_THAT_NEED_ANIMINFO 19
 
+#define WID_PLACEHOLDERTEXT 24
 
 
         #define IMPRESS_MAP_ENTRIES \
@@ -170,6 +167,7 @@ static SdTypesCache gImplTypesCache;
         { MAP_CHAR_LEN(UNO_NAME_OBJ_VERB),          WID_VERB,            &::getCppuType((const sal_Int32*)0),                       0, 0},\
         { MAP_CHAR_LEN("IsAnimation"),              WID_ISANIMATION,     &::getBooleanCppuType(),                                   0, 0},\
         { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
+        { MAP_CHAR_LEN("PlaceholderText"),          WID_PLACEHOLDERTEXT, &::getCppuType((const OUString*)0),                        0, 0},\
         { 0,0,0,0,0,0}
 
 
@@ -407,7 +405,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
 // XPropertyState
 beans::PropertyState SAL_CALL SdXShape::getPropertyState( const OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( mpPropSet->getPropertyMapEntry(PropertyName) )
     {
@@ -425,7 +423,7 @@ beans::PropertyState SAL_CALL SdXShape::getPropertyState( const OUString& Proper
 
 void SAL_CALL SdXShape::setPropertyToDefault( const OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( mpPropSet->getPropertyMapEntry(PropertyName) )
     {
@@ -439,7 +437,7 @@ void SAL_CALL SdXShape::setPropertyToDefault( const OUString& PropertyName ) thr
 
 uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( mpPropSet->getPropertyMapEntry(aPropertyName) )
     {
@@ -494,7 +492,7 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
 void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
@@ -546,17 +544,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     EffectMigration::SetAnimationSpeed( mpShape, eSpeed );
                     break;
                 }
-/* TODO??       case WID_ISANIMATION:
-                {
-
-                    sal_Bool bIsAnimation;
-                    if(!(aValue >>= bIsAnimation))
-                        throw lang::IllegalArgumentException();
-
-                    pInfo->mbIsMovie = bIsAnimation;
-                    break;
-                }
-*/
+// TODO: WID_ISANIMATION
                 case WID_BOOKMARK:
                 {
                     OUString aString;
@@ -570,11 +558,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     ::cppu::any2enum< presentation::ClickAction >( pInfo->meClickAction, aValue);
                     break;
 
-/* todo?
-                case WID_PLAYFULL:
-                    pInfo->mbPlayFull = ::cppu::any2bool(aValue);
-                    break;
-*/
+// TODO: WID_PLAYFULL:
                 case WID_SOUNDFILE:
                 {
                     OUString aString;
@@ -592,17 +576,6 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     EffectMigration::UpdateSoundEffect( mpShape, pInfo );
                     break;
                 }
-/*
-                case WID_BLUESCREEN:
-                {
-                    sal_Int32 nColor;
-                    if(!(aValue >>= nColor))
-                        throw lang::IllegalArgumentException();
-
-                    pInfo->maBlueScreen.SetColor( nColor );
-                    break;
-                }
-*/
                 case WID_VERB:
                 {
                     sal_Int32 nVerb = 0;
@@ -658,36 +631,8 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 case WID_MASTERDEPEND:
                     SetMasterDepend( ::cppu::any2bool(aValue) );
                     break;
-/* todo
-                case WID_ANIMPATH:
-                {
-                    uno::Reference< drawing::XShape > xShape;
-                    aValue >>= xShape;
 
-                    SdrObject* pObj = NULL;
-                    if(xShape.is())
-                        pObj = GetSdrObjectFromXShape( xShape );
-
-                    if( pObj == NULL || !pObj->ISA( SdrPathObj ) )
-                        throw lang::IllegalArgumentException();
-
-                    pInfo->mpPathObj = (SdrPathObj*)pObj;
-
-                    SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
-                    if( pDoc )
-                    {
-                        pInfo = pDoc->GetAnimationInfo(pObj);
-                        if( pInfo == NULL )
-                        {
-                            pInfo = new SdAnimationInfo(pDoc);
-                            pObj->InsertUserData( pInfo );
-                        }
-                        pInfo->mbInvisibleInPresentation = sal_True;
-                    }
-
-                    break;
-                }
-*/
+// TODO: WID_ANIMPATH
                 case WID_IMAGEMAP:
                 {
                     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
@@ -740,7 +685,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 ::com::sun::star::uno::Any SAL_CALL SdXShape::getPropertyValue( const ::rtl::OUString& PropertyName )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Any aRet;
 
@@ -778,6 +723,9 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             break;
         case WID_ISANIMATION:
             aRet <<= (sal_Bool)( pInfo && pInfo->mbIsMovie);
+            break;
+        case WID_PLACEHOLDERTEXT:
+            aRet <<= GetPlaceholderText();
             break;
         case WID_BOOKMARK:
         {
@@ -966,6 +914,24 @@ sal_Bool SdXShape::IsEmptyPresObj() const throw()
 
     return sal_False;
 }
+
+OUString SdXShape::GetPlaceholderText() const
+{
+    // only possible if this actually *is* a presentation object
+    if( !IsPresObj() )
+        return OUString();
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    if( pObj == NULL )
+        return OUString();
+
+    SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
+    DBG_ASSERT( pPage, "no page?" );
+    if( pPage == NULL )
+        return OUString();
+
+    return pPage->GetPresObjText( pPage->GetPresObjKind(pObj) );
+ }
 
 /** sets/reset the empty status of a presentation object
 */
@@ -1761,3 +1727,4 @@ void SdXShape::objectChanged( SdrObject*  )
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

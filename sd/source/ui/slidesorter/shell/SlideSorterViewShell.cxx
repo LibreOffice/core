@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,9 +135,6 @@ SlideSorterViewShell::SlideSorterViewShell (
 {
     meShellType = ST_SLIDE_SORTER;
 
-    SetPool( &GetDoc()->GetPool() );
-    SetUndoManager( GetDoc()->GetDocSh()->GetUndoManager() );
-
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
     else
@@ -171,8 +169,9 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
     catch( ::com::sun::star::uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
+        OSL_FAIL("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
     }
+    GetFrameView()->Disconnect();
 }
 
 
@@ -188,6 +187,11 @@ void SlideSorterViewShell::Initialize (void)
         mpVerticalScrollBar,
         mpScrollBarBox);
     mpView = &mpSlideSorter->GetView();
+
+    ViewShell::doShow();
+
+    SetPool( &GetDoc()->GetPool() );
+    SetUndoManager( GetDoc()->GetDocSh()->GetUndoManager() );
 
     // For accessibility we have to shortly hide the content window.
     // This triggers the construction of a new accessibility object for
@@ -278,17 +282,24 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
     ::com::sun::star::accessibility::XAccessible>
     SlideSorterViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
-    OSL_ASSERT(mpSlideSorter.get()!=NULL);
-
     // When the view is not set then the initialization is not yet complete
     // and we can not yet provide an accessibility object.
-    if (mpView == NULL)
+    if (mpView == NULL || mpSlideSorter.get() == NULL)
         return NULL;
 
-    return new ::accessibility::AccessibleSlideSorterView (
+    OSL_ASSERT(mpSlideSorter.get()!=NULL);
+
+    ::accessibility::AccessibleSlideSorterView *pAccessibleView =
+    new ::accessibility::AccessibleSlideSorterView(
         *mpSlideSorter.get(),
         pWindow->GetAccessibleParentWindow()->GetAccessible(),
         pWindow);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> xRet(pAccessibleView);
+
+    pAccessibleView->Init();
+
+    return xRet;
 }
 
 
@@ -693,7 +704,6 @@ void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
 
     ViewShell::SetZoomRect(aRect);
 
-    // #106268#
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
@@ -812,3 +822,5 @@ void SlideSorterViewShell::RemoveSelectionChangeListener (
 
 
 } } // end of namespace ::sd::slidesorter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

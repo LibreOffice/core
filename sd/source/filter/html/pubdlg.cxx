@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/FilterConfigItem.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <svtools/svmedit.hxx>
@@ -52,7 +51,6 @@
 #include <svtools/colrdlg.hxx>
 #include <editeng/colritem.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/list.hxx>
 #include <sdiocmpt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
@@ -69,9 +67,10 @@
 #include "buttonset.hxx"
 
 using namespace std;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+
+using ::rtl::OUString;
 
 extern void InterpolateFixedBitmap( FixedBitmap * pBitmap );
 
@@ -175,7 +174,6 @@ SdPublishingDesign::SdPublishingDesign()
     m_aAuthor      += (String)aUserOptions.GetLastName();
     m_aEMail        = aUserOptions.GetEmail();
     m_bDownload     = sal_False;
-//-/    m_bCreated      = sal_True;
     m_nButtonThema  = -1;
 
     m_bUserAttr     = sal_False;
@@ -220,7 +218,6 @@ int SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
                 m_aWWW         == rDesign.m_aWWW &&
                 m_aMisc        == rDesign.m_aMisc &&
                 m_bDownload    == rDesign.m_bDownload &&
-//-/                m_bCreated     == rDesign.m_bCreated &&
                 m_nButtonThema == rDesign.m_nButtonThema &&
                 m_bUserAttr    == rDesign.m_bUserAttr &&
                 m_aBackColor   == rDesign.m_aBackColor &&
@@ -467,13 +464,9 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     pPage5_Buttons->SetLineCount( 4 );
     pPage5_Buttons->SetExtraSpacing( 1 );
 
-    for( sal_uInt16 nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
-    {
-        SdPublishingDesign *pDesign = (SdPublishingDesign*)
-                                        m_pDesignList->GetObject(nIndex);
-
-        pPage1_Designs->InsertEntry(pDesign->m_aDesignName);
-    }
+    boost::ptr_vector<SdPublishingDesign>::iterator it;
+    for( it = m_aDesignList.begin(); it != m_aDesignList.end(); ++it )
+        pPage1_Designs->InsertEntry(it->m_aDesignName);
 
     pPage6_Preview->SetBorderStyle(WINDOW_BORDER_MONO);
 
@@ -489,13 +482,6 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 // =====================================================================
 SdPublishingDlg::~SdPublishingDlg()
 {
-    if( m_pDesignList )
-    {
-        for( sal_uInt16 nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
-            delete (SdPublishingDesign*)m_pDesignList->GetObject(nIndex);
-    }
-
-    delete m_pDesignList;
     RemovePages();
 }
 
@@ -640,8 +626,6 @@ void SdPublishingDlg::CreatePages()
     if(m_bImpress)
         aAssistentFunc.InsertControl(4,
             pPage4_Download = new CheckBox(this,SdResId(PAGE4_DOWNLOAD)));
-//-/    aAssistentFunc.InsertControl(4,
-//-/        pPage4_Created = new CheckBox(this,SdResId(PAGE4_CREATED)));
 
     // Seite 5
     aAssistentFunc.InsertControl(5,
@@ -767,7 +751,6 @@ void SdPublishingDlg::RemovePages()
     delete pPage4_Misc;
     if(m_bImpress)
         delete pPage4_Download;
-//-/    delete pPage4_Created;
 
     delete pPage5_Bmp;
     delete pPage5_Titel;
@@ -905,7 +888,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aValue.Value <<= OUString( pPage4_Email->GetText() );
     aProps.push_back( aValue );
 
-    // #92433# try to guess protocol for user's homepage
+    // try to guess protocol for user's homepage
     INetURLObject aHomeURL( pPage4_WWW->GetText(),
                             INET_PROT_HTTP,     // default proto is HTTP
                             INetURLObject::ENCODE_ALL );
@@ -965,13 +948,12 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     }
 
     // Seite 6
-//  aSet.Put(SfxBoolItem(ATTR_PUBLISH_SLIDESOUND,pPage6_Sound->IsChecked()));
 
 
     rParams.realloc( aProps.size() );
     PropertyValue* pParams = rParams.getArray();
 
-    for( std::vector< PropertyValue >::iterator i = aProps.begin(); i != aProps.end(); i++ )
+    for( std::vector< PropertyValue >::iterator i = aProps.begin(); i != aProps.end(); ++i )
     {
         *pParams++ = (*i);
     }
@@ -1003,7 +985,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
             pPage1_Designs->SelectEntryPos(0);
 
         sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
-        m_pDesign = (SdPublishingDesign*)m_pDesignList->GetObject(nPos);
+        m_pDesign = &m_aDesignList[nPos];
         DBG_ASSERT(m_pDesign, "Kein Design? Das darf nicht sein! (CL)");
 
         if(m_pDesign)
@@ -1019,7 +1001,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
 IMPL_LINK( SdPublishingDlg, DesignSelectHdl, ListBox *, EMPTYARG )
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
-    m_pDesign = (SdPublishingDesign*)m_pDesignList->GetObject(nPos);
+    m_pDesign = &m_aDesignList[nPos];
     DBG_ASSERT(m_pDesign, "Kein Design? Das darf nicht sein! (CL)");
 
     if(m_pDesign)
@@ -1036,20 +1018,17 @@ IMPL_LINK( SdPublishingDlg, DesignSelectHdl, ListBox *, EMPTYARG )
 IMPL_LINK( SdPublishingDlg, DesignDeleteHdl, PushButton *, EMPTYARG )
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
-    SdPublishingDesign* pDesign = (SdPublishingDesign*)
-                                    m_pDesignList->GetObject(nPos);
-    DBG_ASSERT(pDesign, "Kein Design? Das darf nicht sein! (CL)");
 
-    if(pDesign)
-    {
-        m_pDesignList->Remove(pDesign);
-        pPage1_Designs->RemoveEntry(nPos);
-    }
+    boost::ptr_vector<SdPublishingDesign>::iterator iter = m_aDesignList.begin()+nPos;
 
-    if(m_pDesign == pDesign)
+    DBG_ASSERT(iter != m_aDesignList.end(), "Kein Design? Das darf nicht sein! (CL)");
+
+    pPage1_Designs->RemoveEntry(nPos);
+
+    if(m_pDesign == &(*iter))
         DesignHdl( pPage1_NewDesign );
 
-    delete pDesign;
+    m_aDesignList.erase(iter);
 
     m_bDesignListDirty = sal_True;
 
@@ -1059,7 +1038,7 @@ IMPL_LINK( SdPublishingDlg, DesignDeleteHdl, PushButton *, EMPTYARG )
 }
 
 // =====================================================================
-// Clickhandler fuer das ändern des Servertyps
+// Clickhandler fuer das ï¿½ndern des Servertyps
 // =====================================================================
 IMPL_LINK( SdPublishingDlg, WebServerHdl, RadioButton *, pButton )
 {
@@ -1089,12 +1068,6 @@ IMPL_LINK( SdPublishingDlg, GfxFormatHdl, RadioButton *, pButton )
 // =====================================================================
 IMPL_LINK( SdPublishingDlg, BaseHdl, RadioButton *, EMPTYARG )
 {
-/*
-    if(pButton == pPage3_Standard)
-    pPage3_Frames->Check( pButton == pPage3 );
-    else
-        pPage3_Standard->Check(sal_False);
-*/
     UpdatePage();
 
     return 0;
@@ -1238,32 +1211,26 @@ IMPL_LINK( SdPublishingDlg, FinishHdl, OKButton *, EMPTYARG )
             {
                 pDesign->m_aDesignName = aDlg.GetDesignName();
 
-                SdPublishingDesign* pSameNameDes = NULL;
-                sal_uInt16 nIndex;
-                for( nIndex = 0; nIndex < m_pDesignList->Count(); nIndex++ )
+                boost::ptr_vector<SdPublishingDesign>::iterator iter;
+                for (iter = m_aDesignList.begin(); iter != m_aDesignList.end(); ++iter)
                 {
-                    pSameNameDes = (SdPublishingDesign*)
-                                    m_pDesignList->GetObject(nIndex);
-                    if(pSameNameDes->m_aDesignName == pDesign->m_aDesignName)
+                    if (iter->m_aDesignName == pDesign->m_aDesignName)
                         break;
                 }
 
-                if(nIndex < m_pDesignList->Count())
+                if (iter != m_aDesignList.end())
                 {
                     ErrorBox aErrorBox(this, WB_YES_NO,
                                        String(SdResId(STR_PUBDLG_SAMENAME)));
                     bRetry = aErrorBox.Execute() == RET_NO;
 
                     if(!bRetry)
-                    {
-                        m_pDesignList->Remove(pSameNameDes);
-                        delete pSameNameDes;
-                    }
+                        m_aDesignList.erase(iter);
                 }
 
                 if(!bRetry)
                 {
-                    m_pDesignList->Insert(pDesign);
+                    m_aDesignList.push_back(pDesign);
                     m_bDesignListDirty = sal_True;
                     pDesign = NULL;
                 }
@@ -1313,7 +1280,7 @@ void SdPublishingDlg::UpdatePage()
             pPage1_DelDesign->Disable();
         }
 
-        if(m_pDesignList && m_pDesignList->Count() == 0)
+        if(m_aDesignList.empty())
             pPage1_OldDesign->Disable();
         break;
     case 2:
@@ -1517,7 +1484,6 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
     pPage4_Misc->SetText(pDesign->m_aMisc);
     if(m_bImpress)
         pPage4_Download->Check(pDesign->m_bDownload);
-//-/    pPage4_Created->Check(pDesign->m_bCreated);
 
     pPage5_TextOnly->Check(pDesign->m_nButtonThema == -1);
     if(pDesign->m_nButtonThema != -1)
@@ -1582,7 +1548,6 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_aWWW = pPage4_WWW->GetText();
     pDesign->m_aMisc = pPage4_Misc->GetText();
     pDesign->m_bDownload = m_bImpress?pPage4_Download->IsChecked():sal_False;
-//-/    pDesign->m_bCreated = pPage4_Created->IsChecked();
 
     if(pPage5_TextOnly->IsChecked())
         pDesign->m_nButtonThema = -1;
@@ -1623,8 +1588,6 @@ IMPL_LINK( SdPublishingDlg, LastPageHdl, PushButton *, EMPTYARG )
 sal_Bool SdPublishingDlg::Load()
 {
     m_bDesignListDirty = sal_False;
-
-    m_pDesignList = new List();
 
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
     aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "designs.sod" ) ) );
@@ -1668,7 +1631,7 @@ sal_Bool SdPublishingDlg::Load()
         SdPublishingDesign* pDesign = new SdPublishingDesign();
         *pStream >> *pDesign;
 
-        m_pDesignList->Insert(pDesign);
+        m_aDesignList.push_back(pDesign);
     }
 
     return( pStream->GetError() == SVSTREAM_OK );
@@ -1696,17 +1659,13 @@ sal_Bool SdPublishingDlg::Save()
     {
         SdIOCompat aIO(*pStream, STREAM_WRITE, 0);
 
-        sal_uInt16 nDesigns = (sal_uInt16) m_pDesignList->Count();
+        sal_uInt16 nDesigns = (sal_uInt16) m_aDesignList.size();
         *pStream << nDesigns;
 
         for( sal_uInt16 nIndex = 0;
              pStream->GetError() == SVSTREAM_OK && nIndex < nDesigns;
              nIndex++ )
-        {
-            SdPublishingDesign* pDesign = (SdPublishingDesign*)
-                                            m_pDesignList->GetObject(nIndex);
-            *pStream << *pDesign;
-        }
+            *pStream << m_aDesignList[nIndex];
     }
 
     aMedium.Close();
@@ -1718,10 +1677,6 @@ sal_Bool SdPublishingDlg::Save()
 // *********************************************************************
 // SdDesignNameDlg Methoden
 // *********************************************************************
-
-// =====================================================================
-//
-// =====================================================================
 SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const String& aName):
                 ModalDialog             (pWindow, SdResId( DLG_DESIGNNAME )),
                 m_aEdit                 (this, SdResId(EDT_NAME)),
@@ -1734,17 +1689,11 @@ SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const String& aName):
     m_aBtnOK.Enable(aName.Len() != 0);
 }
 
-// =====================================================================
-//
-// =====================================================================
 String SdDesignNameDlg::GetDesignName()
 {
     return m_aEdit.GetText();
 }
 
-// =====================================================================
-//
-// =====================================================================
 IMPL_LINK( SdDesignNameDlg, ModifyHdl, Edit*, EMPTYARG )
 {
     m_aBtnOK.Enable(m_aEdit.GetText().Len() != 0);
@@ -1754,3 +1703,4 @@ IMPL_LINK( SdDesignNameDlg, ModifyHdl, Edit*, EMPTYARG )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

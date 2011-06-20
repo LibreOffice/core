@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 
 #include <vector>
 #include <map>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
 #include <functional>
 
@@ -244,7 +245,7 @@ namespace slideshow
 
                 Provides quicker lookup than ShapeSet for simple mappings
              */
-            typedef ::std::hash_map<
+            typedef ::boost::unordered_map<
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >,
                 ShapeSharedPtr,
@@ -383,3 +384,5 @@ namespace slideshow
 }
 
 #endif /* INCLUDED_SLIDESHOW_LAYERMANAGER_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

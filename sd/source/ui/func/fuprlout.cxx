@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,9 +46,7 @@
 #include "sdpage.hxx"
 #include "pres.hxx"
 #include "DrawViewShell.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "stlpool.hxx"
 #include "View.hxx"
 #include "glob.hrc"
@@ -285,3 +284,5 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

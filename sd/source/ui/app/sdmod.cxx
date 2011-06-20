@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_sd.hxx"
 #include <unotools/pathoptions.hxx>
 #include <svl/languageoptions.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/app.hxx>
@@ -103,7 +102,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
     pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
     StartListening( *SFX_APP() );
-    SvxErrorHandler::Get();
+    SvxErrorHandler::ensure();
     mpErrorHdl = new SfxErrorHandler( RID_SD_ERRHDL,
                                          ERRCODE_AREA_SD,
                                          ERRCODE_AREA_SD_END,
@@ -257,10 +256,6 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
     return xStm;
 }
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 SvNumberFormatter* SdModule::GetNumberFormatter()
 {
     if( !pNumberFormatter )
@@ -268,10 +263,6 @@ SvNumberFormatter* SdModule::GetNumberFormatter()
 
     return pNumberFormatter;
 }
-
-/*************************************************************************
-|*
-\************************************************************************/
 
 OutputDevice* SdModule::GetVirtualRefDevice (void)
 {
@@ -285,3 +276,5 @@ OutputDevice* SdModule::GetRefDevice (::sd::DrawDocShell& )
 {
     return GetVirtualRefDevice();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

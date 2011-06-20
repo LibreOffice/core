@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,9 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 
 #include "strings.hrc"
 #include "dialogs.hrc"
@@ -68,7 +65,7 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
     if( mpCurrentPage == 0 )
     {
         mpCurrentPage = pDoc->GetMasterSdPage( 0, PK_STANDARD );
-        DBG_ERROR( "MasterLayoutDialog::MasterLayoutDialog() - no current page?" );
+        OSL_FAIL( "MasterLayoutDialog::MasterLayoutDialog() - no current page?" );
     }
 
     switch( mpCurrentPage->GetPageKind() )
@@ -177,3 +174,5 @@ void MasterLayoutDialog::remove( PresObjKind eKind )
             SdrObject::Free(pObject);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

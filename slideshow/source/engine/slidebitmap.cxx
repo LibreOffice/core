@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,8 +97,7 @@ namespace slideshow
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( false,
-                            rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -130,3 +130,5 @@ namespace slideshow
 
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

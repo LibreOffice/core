@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -170,11 +171,12 @@ protected:
     Point maWinPos;
     Point maViewOrigin;
     Size maViewSize;
+    Size maPrevSize; // contains previous window size in logical coords
     sal_uInt16 mnMinZoom;
     sal_uInt16 mnMaxZoom;
+
     /** This flag tells whether to re-calculate the minimal zoom factor
-        depening on the current zoom factor.  According to task #105436# its
-        default value is now sal_False.
+        depening on the current zoom factor.  Its default value is now sal_False.
     */
     bool mbMinZoomAutoCalc;
     bool mbCalcMinZoomByMinSide;
@@ -214,3 +216,5 @@ protected:
 } // end of namespace sd
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

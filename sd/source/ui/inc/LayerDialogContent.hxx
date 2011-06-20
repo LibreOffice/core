@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <sfx2/dockwin.hxx>
 #include "LayerTabBar.hxx"
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 
 namespace sd {
 
@@ -62,3 +61,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

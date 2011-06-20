@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,8 +50,6 @@ namespace slideshow
                                          bool                                    bModeIn ) :
             mpParametricPoly( rPolygon ),
             maStaticTransformation(),
-            // AW: Not needed
-            // maBackgroundRect( createUnitRect() ),
             mbForwardParameterSweep( true ),
             mbSubtractPolygon( false ),
             mbScaleIsotrophically( rTransitionInfo.mbScaleIsotrophically ),
@@ -236,3 +235,5 @@ namespace slideshow
 
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

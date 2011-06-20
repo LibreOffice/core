@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,16 +42,12 @@
 #include <svx/xlnwtit.hxx>
 #include <sfx2/bindings.hxx>
 
-#ifndef _SFX_DISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
 #include <svl/intitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
-#ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
-#endif
 #include <svx/xtable.hxx>
 #include <svx/gallery.hxx>
 #include <vcl/graph.hxx>
@@ -879,3 +876,5 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

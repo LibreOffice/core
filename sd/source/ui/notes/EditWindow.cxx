@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include "sdresid.hxx"
 #include <svl/itempool.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
@@ -353,34 +354,7 @@ void EditWindow::MouseButtonDown(const MouseEvent &rEvt)
 
 void EditWindow::Command(const CommandEvent& rCEvt)
 {
-    /*  if (rCEvt.GetCommand() == COMMAND_CONTEXTMENU)
-    {
-        GetParent()->ToTop();
-
-        Point aPoint = rCEvt.GetMousePosPixel();
-        PopupMenu* pPopupMenu = new PopupMenu(SmResId(RID_COMMANDMENU));
-
-        // added for replaceability of context menus #96085, #93782
-        Menu* pMenu = NULL;
-        ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
-        aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
-        aEvent.ExecutePosition.X = aPoint.X();
-        aEvent.ExecutePosition.Y = aPoint.Y();
-        if ( GetView()->TryContextMenuInterception( *pPopupMenu, pMenu, aEvent ) )
-        {
-            if ( pMenu )
-            {
-                delete pPopupMenu;
-                pPopupMenu = (PopupMenu*) pMenu;
-            }
-        }
-
-        pPopupMenu->SetSelectHdl(LINK(this, EditWindow, MenuSelectHdl));
-
-        pPopupMenu->Execute( this, aPoint );
-        delete pPopupMenu;
-    }
-    else*/ if (mpEditView)
+    if (mpEditView)
         mpEditView->Command( rCEvt );
     else
         Window::Command (rCEvt);
@@ -388,78 +362,13 @@ void EditWindow::Command(const CommandEvent& rCEvt)
 }
 IMPL_LINK_INLINE_START( EditWindow, MenuSelectHdl, Menu *, EMPTYARG )
 {
-    /*    SmViewShell *pViewSh = rCmdBox.GetView();
-    if (pViewSh)
-        pViewSh->GetViewFrame()->GetDispatcher()->Execute(
-                SID_INSERTCOMMAND, SFX_CALLMODE_STANDARD,
-                new SfxInt16Item(SID_INSERTCOMMAND, pMenu->GetCurItemId()), 0L);
-*/
     return 0;
 }
 IMPL_LINK_INLINE_END( EditWindow, MenuSelectHdl, Menu *, EMPTYARG )
 
 void EditWindow::KeyInput(const KeyEvent& )
 {
-    /*  if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
-    {
-        sal_Bool bCallBase = sal_True;
-        SfxViewShell* pViewShell = SfxViewShell::Current();
-        if ( pViewShell && pViewShell->ISA(SmViewShell) )
-        {
-            SmDocShell* pDocSh = (SmDocShell*) pViewShell->GetViewFrame()->GetObjectShell();
-            if (pDocSh)
-            {
-    // fuert zum (sofortigen) Zerstoeren von this!
-                pDocSh->DoInPlaceActivate( sal_False );
-                bCallBase = sal_False;
-            }
-        }
-        if ( bCallBase )
-            Window::KeyInput( rKEvt );
-    }
-    else
-    {
-        // Timer neu starten, um den Handler (auch bei längeren Eingaben)
-        // möglichst nur einmal am Ende aufzurufen.
-        aCursorMoveTimer.Start();
 
-        DBG_ASSERT( mpEditView, "EditView missing (NULL pointer)" );
-        if (!mpEditView)
-            CreateEditView();
-        if ( !mpEditView->PostKeyEvent(rKEvt) )
-        {
-            if ( !SfxViewShell::Current()->KeyInput(rKEvt) )
-            {
-    // fuert bei F1 (Hilfe) zum Zerstoeren von this!
-                Flush();
-                if ( aModifyTimer.IsActive() )
-                    aModifyTimer.Stop();
-                Window::KeyInput(rKEvt);
-            }
-            else
-            {
-                //SFX hat evtl. Slot an der View gecallt und dabei (wg. Hack
-                //im SFX) den Focus auf die View gesetzt
-                SfxViewShell* pVShell = SfxViewShell::Current();
-                if ( pVShell && pVShell->ISA(SmViewShell) &&
-                     ((SmViewShell*)pVShell)->GetGraphicWindow().HasFocus() )
-                {
-                    GrabFocus();
-                }
-            }
-        }
-        else
-        {
-            // have doc-shell modified only for formula input/change and not
-            // cursor travelling and such things...
-            SmDocShell *pDocShell = GetDoc();
-            if (pDocShell)
-                pDocShell->SetModified( GetEditEngine()->IsModified() );
-
-            aModifyTimer.Start();
-        }
-    }
-    */
 }
 
 
@@ -642,7 +551,7 @@ void EditWindow::SetText(const XubString& rText)
         pEditEngine->SetText(rText);
         pEditEngine->ClearModifyFlag();
 
-        //! Hier die Timer neu zu starten verhindert, dass die Handler für andere
+        //! Hier die Timer neu zu starten verhindert, dass die Handler fï¿½r andere
         //! (im Augenblick nicht mehr aktive) Math Tasks aufgerufen werden.
         maModifyTimer.Start();
         maCursorMoveTimer.Start();
@@ -873,7 +782,7 @@ void EditWindow::Delete()
 void EditWindow::InsertText(const String& Text)
 {
     DBG_ASSERT( mpEditView, "EditView missing" );
-    ::vos::OGuard aGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (mpEditView)
         mpEditView->InsertText(Text);
 }
@@ -881,3 +790,5 @@ void EditWindow::InsertText(const String& Text)
 
 
 } } // end of namespace ::sd::notes
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

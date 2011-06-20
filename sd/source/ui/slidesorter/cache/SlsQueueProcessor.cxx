@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -221,15 +222,15 @@ void QueueProcessor::ProcessOneRequest (
             }
         }
     }
-    catch (::com::sun::star::uno::RuntimeException aException)
+    catch (::com::sun::star::uno::RuntimeException &aException)
     {
         (void) aException;
-        OSL_ASSERT("RuntimeException caught in QueueProcessor");
+        OSL_FAIL("RuntimeException caught in QueueProcessor");
     }
-    catch (::com::sun::star::uno::Exception aException)
+    catch (::com::sun::star::uno::Exception &aException)
     {
         (void) aException;
-        OSL_ASSERT("Exception caught in QueueProcessor");
+        OSL_FAIL("Exception caught in QueueProcessor");
     }
 }
 
@@ -254,3 +255,5 @@ void QueueProcessor::SetBitmapCache (
 
 
 } } } // end of namespace ::sd::slidesorter::cache
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

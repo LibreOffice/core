@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@ ScrollPanel::ScrollPanel (
 void ScrollPanel::Construct()
 {
     SetAccessibleName (
-        ::rtl::OUString::createFromAscii("Sub Task Panel"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")));
     mpControlContainer->SetMultiSelection (true);
 
     SetBorderStyle (WINDOW_BORDER_NORMAL);
@@ -223,7 +224,7 @@ void ScrollPanel::Paint (const Rectangle& rRect)
         Point (mnHorizontalBorder,0),
         Size(mnChildrenWidth,0));
     StripeList::const_iterator iStripe;
-    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); iStripe++)
+    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); ++iStripe)
     {
         aStripeArea.Top() = iStripe->first;
         aStripeArea.Bottom() = iStripe->second;
@@ -694,8 +695,8 @@ long ScrollPanel::Notify( NotifyEvent& rNEvt )
 {
     return new ::accessibility::AccessibleScrollPanel (
         *this,
-        ::rtl::OUString::createFromAscii("Scroll Panel"),
-        ::rtl::OUString::createFromAscii("Scroll Panel"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scroll Panel")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scroll Panel")));
 }
 
 
@@ -813,3 +814,5 @@ IMPL_LINK(ScrollPanel,WindowEventListener,VclSimpleEvent*,pEvent)
 
 
 } } // end of namespace ::sd::toolpanel
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

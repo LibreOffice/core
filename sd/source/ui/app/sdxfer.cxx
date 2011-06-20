@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,11 +32,9 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#ifndef _UNTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/svdpagv.hxx>
@@ -55,9 +54,6 @@
 #include <svl/urlbmk.hxx>
 #include <editeng/outliner.hxx>
 
-//#ifndef _SVDETC_HXX //autogen
-//#include <svx/svdetc.hxx>
-//#endif
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/streamwrap.hxx>
@@ -67,6 +63,7 @@
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svtools/embedtransfer.hxx>
 #include "DrawDocShell.hxx"
 #include "View.hxx"
@@ -144,7 +141,7 @@ SdTransferable::~SdTransferable()
     if( mpSdView )
         EndListening( *const_cast< sd::View *>( mpSdView) );
 
-    Application::GetSolarMutex().acquire();
+    SolarMutexGuard aSolarGuard;
 
     ObjectReleased();
 
@@ -175,7 +172,6 @@ SdTransferable::~SdTransferable()
     delete mpVDev;
     delete mpObjDesc;
 
-    Application::GetSolarMutex().release();
 }
 
 // -----------------------------------------------------------------------------
@@ -313,7 +309,7 @@ void SdTransferable::CreateData()
 
         if( !maDocShellRef.Is() )
         {
-            DBG_ERROR( "SdTransferable::CreateData(), failed to create a model with persist, clipboard operation will fail for OLE objects!" );
+            OSL_FAIL( "SdTransferable::CreateData(), failed to create a model with persist, clipboard operation will fail for OLE objects!" );
             mbOwnDocument = sal_True;
         }
 
@@ -604,10 +600,6 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
 
 // -----------------------------------------------------------------------------
 
-/* testcode
-#include <sfx2/docfile.hxx>
-*/
-
 sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& )
 {
     sal_Bool bRet = sal_False;
@@ -633,23 +625,12 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                         rxOStm->Commit();
                 }
 
-    /* testcode
-                {
-                    const rtl::OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "file:///e:/test.xml" ) );
-                    SfxMedium aMedium( aURL, STREAM_WRITE | STREAM_TRUNC, sal_True );
-                    aMedium.IsRemote();
-                    com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
-                    if( SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" ) )
-                        aMedium.Commit();
-                }
-    */
-
                 xComponent->dispose();
                 bRet = ( rxOStm->GetError() == ERRCODE_NONE );
             }
             catch( Exception& )
             {
-                DBG_ERROR( "sd::SdTransferable::WriteObject(), exception catched!" );
+                OSL_FAIL( "sd::SdTransferable::WriteObject(), exception catched!" );
                 bRet = sal_False;
             }
         }
@@ -741,7 +722,6 @@ void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, sal_Bool bPer
         if( mpSdViewIntern )
             mpSdViewIntern->HideSdrPage();
 
-        // #116168#
         mpSdDrawDocument->ClearModel(sal_False);
 
         mpPageDocShell = NULL;
@@ -798,22 +778,14 @@ sal_Int64 SAL_CALL SdTransferable::getSomething( const ::com::sun::star::uno::Se
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+namespace
+{
+    class theSdTransferableUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSdTransferableUnoTunnelId > {};
+}
 
 const ::com::sun::star::uno::Sequence< sal_Int8 >& SdTransferable::getUnoTunnelId()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex   aCreateMutex;
-        osl::MutexGuard     aGuard( aCreateMutex );
-
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-
-    return aSeq;
+    return theSdTransferableUnoTunnelId::get().getSeq();
 }
 
 // -----------------------------------------------------------------------------
@@ -879,3 +851,5 @@ sal_Bool SdTransferable::SetTableRTF( SdDrawDocument* pModel, const DataFlavor& 
 
     return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

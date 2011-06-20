@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,21 +31,11 @@
 #define _SD_DLGFIELD_HXX
 
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include <svx/langbox.hxx>
 class SvxFieldData;
 
@@ -87,3 +78,5 @@ public:
 
 
 #endif      // _SD_DLGFIELD_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

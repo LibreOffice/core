@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -219,7 +220,9 @@ void ConfigurationControllerResourceManager::DeactivateResource (
     if ( ! rxResourceId.is())
         return;
 
+#if defined VERBOSE && VERBOSE>=1
     bool bSuccess (false);
+#endif
     try
     {
         // 1. Remove resource from URL->Object map.
@@ -253,7 +256,9 @@ void ConfigurationControllerResourceManager::DeactivateResource (
                 }
             }
 
+#if defined VERBOSE && VERBOSE>=1
             bSuccess = true;
+#endif
         }
     }
     catch (RuntimeException&)
@@ -350,3 +355,4 @@ bool ConfigurationControllerResourceManager::ResourceComparator::operator() (
 
 } } // end of namespace sd::framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,9 +69,7 @@
 #include "sdresid.hxx"
 #include "OutlineViewShell.hxx"
 #include "ViewShellBase.hxx"
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "FactoryIds.hxx"
 #include "sdabstdlg.hxx"
 #include <memory>
@@ -221,7 +220,7 @@ void SdModule::Execute(SfxRequest& rReq)
         case SID_NEWSD:
             {
                 SfxFrame* pFrame = ExecuteNewDocument( rReq );
-                // #94442# if a frame was created, set it as return value
+                // if a frame was created, set it as return value
                 if(pFrame)
                     rReq.SetReturnValue(SfxFrameItem(0, pFrame));
             }
@@ -656,7 +655,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 if ( pFrameItem )
                                     pFrame = &pFrameItem->GetFrame()->GetFrame();
                             }
-                            catch (::com::sun::star::uno::Exception e)
+                            catch (::com::sun::star::uno::Exception &e)
                             {
                                 DBG_ASSERT (sal_False, "caught IllegalArgumentException while loading document from Impress autopilot");
                             }
@@ -740,7 +739,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                             pDocShell->SetUseUserData(sal_True);
 
-                            // #94652# clear UNDO stack after autopilot
+                            // clear UNDO stack after autopilot
                             pDocShell->ClearUndoBuffer();
 
                             bMakeLayoutVisible = true;
@@ -979,7 +978,7 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
                     &nReadByteCount));
 
             // Check the error code and stop copying the stream data when an
-            // error has occured.
+            // error has occurred.
             switch (nErrorCode)
             {
                 case ERRCODE_NONE:
@@ -1025,14 +1024,6 @@ void OutlineToImpressFinalizer::operator() (bool)
         // have any information about a BaseURL!
         if ( pOutlineShell->Read(*mpStream, String(), EE_FORMAT_RTF) == 0 )
         {
-/*
-            sd::OutlineViewPageChangesGuard aGuard( pView );
-
-            // Remove the first empty pages
-            sal_uInt16 nPageCount = mrDocument.GetPageCount();
-            mrDocument.RemovePage( --nPageCount );  // notes page
-            mrDocument.RemovePage( --nPageCount );  // standard page
-*/
         }
 
         // Call UpdatePreview once for every slide to resync the
@@ -1054,7 +1045,7 @@ void OutlineToImpressFinalizer::operator() (bool)
     }
 
 
-    // #97231# Undo-Stack needs to be cleared, else the user may remove the
+    // Undo-Stack needs to be cleared, else the user may remove the
     // only drawpage and this is a state we cannot handle ATM.
     ::sd::DrawDocShell* pDocShell = mrDocument.GetDocSh();
     if( pDocShell )
@@ -1063,3 +1054,5 @@ void OutlineToImpressFinalizer::operator() (bool)
 
 
 } // end of anonymous namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

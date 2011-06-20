@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -207,7 +208,6 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         aPageSize.Width()  -= pPage->GetLftBorder() + pPage->GetRgtBorder();
         aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
         pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), sal_True );
-//      pNewGrafObj->AdjustToMaxRect( Rectangle( pPV->GetOffset(), aPageSize ), sal_True );
 
         sal_uLong   nOptions = SDRINSERT_SETDEFLAYER;
         sal_Bool    bIsPresTarget = sal_False;
@@ -386,21 +386,17 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
             aURL = INetURLObject( aURLStr );
         }
 
-        GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
+        GraphicFilter&  rGraphicFilter = GraphicFilter::GetGraphicFilter();
         Graphic         aGraphic;
 
         aCurrentDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
         if( !::avmedia::MediaWindow::isMediaURL( aCurrentDropFile ) )
         {
-            if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
+            if( !rGraphicFilter.ImportGraphic( aGraphic, aURL ) )
             {
                 sal_Int8    nTempAction = ( aIter == maDropFileVector.begin() ) ? mnAction : 0;
-                const bool bLink = ( ( nTempAction & DND_ACTION_LINK ) != 0 );
-                SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, maDropPos, NULL, NULL );
-
-                if( pGrafObj && bLink )
-                    pGrafObj->SetGraphicLink( aCurrentDropFile, String() );
+                InsertGraphic( aGraphic, nTempAction, maDropPos, NULL, NULL );
 
                 // return action from first inserted graphic
                 if( aIter == maDropFileVector.begin() )
@@ -589,34 +585,32 @@ void View::LockRedraw(sal_Bool bLock)
         // alle gespeicherten Redraws ausfuehren
         if (!mnLockRedrawSmph)
         {
-            while (mpLockedRedraws && mpLockedRedraws->Count())
-            {
-                SdViewRedrawRec* pRec = (SdViewRedrawRec*)mpLockedRedraws->First();
-                OutputDevice* pCurrentOut = pRec->mpOut;
-                Rectangle aBoundRect(pRec->aRect);
-                mpLockedRedraws->Remove(pRec);
-                delete pRec;
+            boost::ptr_vector<SdViewRedrawRec>::iterator iter;
 
-                pRec = (SdViewRedrawRec*)mpLockedRedraws->First();
-                while (pRec)
+            while (!maLockedRedraws.empty())
+            {
+                iter = maLockedRedraws.begin();
+
+                OutputDevice* pCurrentOut = iter->mpOut;
+                Rectangle aBoundRect(iter->aRect);
+
+                iter = maLockedRedraws.erase(iter);
+
+                while (iter != maLockedRedraws.end())
                 {
-                    if (pRec->mpOut == pCurrentOut)
+                    if (iter->mpOut == pCurrentOut)
                     {
-                        aBoundRect.Union(pRec->aRect);
-                        mpLockedRedraws->Remove(pRec);
-                        delete pRec;
-                        pRec = (SdViewRedrawRec*)mpLockedRedraws->GetCurObject();
+                        aBoundRect.Union(iter->aRect);
+                        iter = maLockedRedraws.erase(iter);
                     }
                     else
                     {
-                        pRec = (SdViewRedrawRec*)mpLockedRedraws->Next();
+                        ++iter;
                     }
                 }
 
                 CompleteRedraw(pCurrentOut, Region(aBoundRect));
             }
-            delete mpLockedRedraws;
-            mpLockedRedraws = NULL;
         }
     }
 }
@@ -636,3 +630,5 @@ SfxStyleSheet* View::GetStyleSheet() const
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

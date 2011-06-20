@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,9 +70,7 @@
 #include <i18npool/mslangid.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef _SVTOOLS_PATHOPTIONS_HXX_
 #include <unotools/pathoptions.hxx>
-#endif
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 
@@ -93,7 +92,6 @@
 #include "../ui/inc/optsitem.hxx"
 #include "../ui/inc/FrameView.hxx"
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 using ::rtl::OUString;
@@ -158,7 +156,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mpOnlineSpellingTimer(NULL)
 , mpOnlineSpellingList(NULL)
 , mpOnlineSearchItem(NULL)
-, mpFrameViewList( new List() )
 , mpCustomShowList(NULL)
 , mpDocSh(static_cast< ::sd::DrawDocShell*>(pDrDocSh))
 , mpCreatingTransferable( NULL )
@@ -177,7 +174,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mpDrawPageListWatcher(0)
 , mpMasterPageListWatcher(0)
 {
-    // #109538#
     mpDrawPageListWatcher = ::std::auto_ptr<ImpDrawPageListWatcher>(
         new ImpDrawPageListWatcher(*this));
     mpMasterPageListWatcher = ::std::auto_ptr<ImpMasterPageListWatcher>(
@@ -195,7 +191,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SdOptions* pOptions = SD_MOD()->GetSdOptions(meDocType);
     pOptions->GetScale( nX, nY );
 
-    // #92067# Allow UI scale only for draw documents.
+    // Allow UI scale only for draw documents.
     if( eType == DOCUMENT_TYPE_DRAW )
         SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );  // user-defined
     else
@@ -273,7 +269,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
     catch(...)
     {
-        DBG_ERROR("Can't get SpellChecker");
+        OSL_FAIL("Can't get SpellChecker");
     }
 
     rOutliner.SetDefaultLanguage( Application::GetSettings().GetLanguage() );
@@ -327,7 +323,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
     catch(...)
     {
-        DBG_ERROR("Can't get SpellChecker");
+        OSL_FAIL("Can't get SpellChecker");
     }
 
     pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
@@ -348,7 +344,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     *
     * Es werden auf Pages und MasterPages folgende Default-Layer angelegt:
     *
-    * Layer STR_LAYOUT    : Standardlayer fÅr alle Zeichenobjekte
+    * Layer STR_LAYOUT    : Standardlayer fÔøΩr alle Zeichenobjekte
     *
     * Layer STR_BCKGRND   : Hintergrund der MasterPage
     *                       (auf normalen Pages z.Z. keine Verwendung)
@@ -356,7 +352,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     * Layer STR_BCKGRNDOBJ: Objekte auf dem Hintergrund der MasterPage
     *                       (auf normalen Pages z.Z. keine Verwendung)
     *
-    * Layer STR_CONTROLS  : Standardlayer fÅr Controls
+    * Layer STR_CONTROLS  : Standardlayer fÔøΩr Controls
     *
     **************************************************************************/
     {
@@ -401,7 +397,6 @@ SdDrawDocument::~SdDrawDocument()
     CloseBookmarkDoc();
     SetAllocDocSh(sal_False);
 
-    // #116168#
     ClearModel(sal_True);
 
     if (pLinkManager)
@@ -416,20 +411,9 @@ SdDrawDocument::~SdDrawDocument()
         pLinkManager = NULL;
     }
 
-    ::sd::FrameView* pFrameView = NULL;
-
-    for (sal_uLong i = 0; i < mpFrameViewList->Count(); i++)
-    {
-        // Ggf. FrameViews loeschen
-        pFrameView =
-            static_cast< ::sd::FrameView*>(mpFrameViewList->GetObject(i));
-
-        if (pFrameView)
-            delete pFrameView;
-    }
-
-    delete mpFrameViewList;
-    mpFrameViewList = NULL;
+    std::vector<sd::FrameView*>::iterator pIter;
+    for ( pIter = maFrameViewList.begin(); pIter != maFrameViewList.end(); ++pIter )
+        delete *pIter;
 
     if (mpCustomShowList)
     {
@@ -534,9 +518,9 @@ SdrModel* SdDrawDocument::AllocModel() const
 |*
 \************************************************************************/
 
-SdrPage* SdDrawDocument::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SdDrawDocument::AllocPage(bool bMasterPage)
 {
-    return new SdPage(*this, NULL, (sal_Bool)bMasterPage);
+    return new SdPage(*this, NULL, bMasterPage);
 }
 
 /*************************************************************************
@@ -573,7 +557,7 @@ void SdDrawDocument::SetChanged(sal_Bool bFlag)
 
 void SdDrawDocument::NbcSetChanged(sal_Bool bFlag)
 {
-    // #100237# forward to baseclass
+    // forward to baseclass
     FmFormModel::SetChanged(bFlag);
 }
 
@@ -682,7 +666,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         SdStyleSheetPool* pSPool = (SdStyleSheetPool*) GetStyleSheetPool();
         sal_uInt16 nPage, nPageCount;
 
-        // #96323# create missing layout style sheets for broken documents
+        // create missing layout style sheets for broken documents
         //         that where created with the 5.2
         nPageCount = GetMasterSdPageCount( PK_STANDARD );
         for (nPage = 0; nPage < nPageCount; nPage++)
@@ -749,21 +733,6 @@ void SdDrawDocument::UpdateAllLinks()
 */
 void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool )
 {
-/* cl removed because not needed anymore since binfilter
-    SdrObjListIter aShapeIter( *pPage );
-    while( aShapeIter.IsMore() )
-    {
-        OutlinerParaObject* pOPO = aShapeIter.Next()->GetOutlinerParaObject();
-        if( pOPO )
-        {
-            if( pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-                pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-
-            pOPO->FinishLoad( pSPool );
-        }
-    }
-*/
-
     const sd::ShapeList& rPresentationShapes( pPage->GetPresentationShapeList() );
     if(!rPresentationShapes.isEmpty())
     {
@@ -771,9 +740,10 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         String aName = pPage->GetLayoutName();
         aName.Erase( aName.SearchAscii( SD_LT_SEPARATOR ));
 
-        List* pOutlineList = pSPool->CreateOutlineSheetList(aName);
-        SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)
-                                        pSPool->GetTitleSheet(aName);
+        std::vector<SfxStyleSheetBase*> aOutlineList;
+        pSPool->CreateOutlineSheetList(aName,aOutlineList);
+
+        SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)pSPool->GetTitleSheet(aName);
 
         SdrObject* pObj = rPresentationShapes.getNextShape(0);
 
@@ -800,14 +770,16 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
                         pOPO->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
 
-                    for (sal_uInt16 nSheet = 0; nSheet < 10; nSheet++)
+                    std::vector<SfxStyleSheetBase*>::iterator iter;
+                    for (iter = aOutlineList.begin(); iter != aOutlineList.end(); ++iter)
                     {
-                        SfxStyleSheet* pSheet = (SfxStyleSheet*)pOutlineList->GetObject(nSheet);
+                        SfxStyleSheet* pSheet = reinterpret_cast<SfxStyleSheet*>(*iter);
+
                         if (pSheet)
                         {
                             pObj->StartListening(*pSheet);
 
-                            if( nSheet == 0)
+                            if( iter == aOutlineList.begin())
                                 // Textrahmen hoert auf StyleSheet der Ebene1
                                 pObj->NbcSetStyleSheet(pSheet, sal_True);
                         }
@@ -831,8 +803,6 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
             pObj = rPresentationShapes.getNextShape(pObj);
         }
-
-        delete pOutlineList;
     }
 }
 
@@ -988,9 +958,6 @@ SvxNumType SdDrawDocument::GetPageNumType() const
 
 void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
 {
-    // #108104#
-    // DBG_ASSERT (mpDocSh!=NULL, "No available document shell to set ref device at.");
-
     switch (nMode)
     {
         case ::com::sun::star::document::PrinterIndependentLayout::DISABLED:
@@ -998,7 +965,6 @@ void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
             // Just store supported modes and inform the doc shell.
             mnPrinterIndependentLayout = nMode;
 
-            // #108104#
             // Since it is possible that a SdDrawDocument is constructed without a
             // SdDrawDocShell the pointer member mpDocSh needs to be tested
             // before the call is executed. This is e.-g. used for copy/paste.
@@ -1030,13 +996,11 @@ void SdDrawDocument::SetStartWithPresentation( bool bStartWithPresentation )
     mbStartWithPresentation = bStartWithPresentation;
 }
 
-// #109538#
 void SdDrawDocument::PageListChanged()
 {
     mpDrawPageListWatcher->Invalidate();
 }
 
-// #109538#
 void SdDrawDocument::MasterPageListChanged()
 {
     mpMasterPageListWatcher->Invalidate();
@@ -1075,3 +1039,5 @@ sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const rtl::OUString& rAutho
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

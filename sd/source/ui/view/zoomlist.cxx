@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,10 @@
 
 #include "zoomlist.hxx"
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#ifndef _SFXVIEWSHELL_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-
 
 #include "ViewShell.hxx"
 
@@ -46,152 +42,69 @@ namespace sd {
 
 #define MAX_ENTRYS  10
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 ZoomList::ZoomList(ViewShell* pViewShell)
-: List()
-, mpViewShell (pViewShell)
+: mpViewShell (pViewShell)
 , mnCurPos(0)
 {
 }
 
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-ZoomList::~ZoomList()
-{
-#if ( defined GCC && defined C272 )
-    for (sal_uLong nObject=0; nObject<List::Count(); nObject++)
-#else
-    for (sal_uLong nObject=0; nObject<Count(); nObject++)
-#endif
-    {
-        // Ggf. ZoomRects loeschen
-        delete ((Rectangle*) GetObject(nObject));
-    }
-}
-
-
-/*************************************************************************
-|*
-|* Neues ZoomRect aufnehmen
-|*
-\************************************************************************/
-
 void ZoomList::InsertZoomRect(const Rectangle& rRect)
 {
-    sal_uLong nRectCount = Count();
+    sal_uLong nRectCount = maRectangles.size();
 
     if (nRectCount >= MAX_ENTRYS)
-    {
-        delete ((Rectangle*) GetObject(0));
-        Remove((sal_uLong) 0);
-    }
+        maRectangles.erase(maRectangles.begin());
     else if (nRectCount == 0)
-    {
         mnCurPos = 0;
-    }
     else
-    {
         mnCurPos++;
-    }
 
-    Rectangle* pRect = new Rectangle(rRect);
-    Insert(pRect, mnCurPos);
+    maRectangles.insert(maRectangles.begin()+mnCurPos,rRect);
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 }
-
-/*************************************************************************
-|*
-|* Naechstes ZoomRect herausgeben
-|*
-\************************************************************************/
 
 Rectangle ZoomList::GetNextZoomRect()
 {
     mnCurPos++;
-    sal_uLong nRectCount = Count();
+    sal_uLong nRectCount = maRectangles.size();
 
     if (nRectCount > 0 && mnCurPos > nRectCount - 1)
-    {
         mnCurPos = nRectCount - 1;
-    }
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 
-    Rectangle aRect(*(Rectangle*) GetObject(mnCurPos));
-    return (aRect);
+    return maRectangles[mnCurPos];
 }
-
-/*************************************************************************
-|*
-|* Letztes ZoomRect herausgeben
-|*
-\************************************************************************/
 
 Rectangle ZoomList::GetPreviousZoomRect()
 {
     if (mnCurPos > 0)
-    {
         mnCurPos--;
-    }
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 
-    Rectangle aRect(*(Rectangle*) GetObject(mnCurPos));
-    return (aRect);
+    return maRectangles[mnCurPos];
 }
-
-/*************************************************************************
-|*
-|* Gibt es ein naechstes ZoomRect?
-|*
-\************************************************************************/
 
 sal_Bool ZoomList::IsNextPossible() const
 {
-    sal_Bool bPossible = sal_False;
-    sal_uLong nRectCount = Count();
+    sal_uLong nRectCount = maRectangles.size();
 
-    if (nRectCount > 0 && mnCurPos < nRectCount - 1)
-    {
-        bPossible = sal_True;
-    }
-
-    return (bPossible);
+    return nRectCount > 0 && mnCurPos < nRectCount - 1;
 }
-
-/*************************************************************************
-|*
-|* Gibt es ein vorheriges ZoomRect?
-|*
-\************************************************************************/
 
 sal_Bool ZoomList::IsPreviousPossible() const
 {
-    sal_Bool bPossible = sal_False;
-
-    if (mnCurPos > 0)
-    {
-        bPossible = sal_True;
-    }
-
-    return (bPossible);
+    return mnCurPos > 0;
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

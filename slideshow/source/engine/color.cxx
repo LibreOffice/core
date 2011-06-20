@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -227,59 +228,6 @@ namespace slideshow
             return maHSLTriple.mnLuminance;
         }
 
-        double HSLColor::getRed() const
-        {
-            if( ::basegfx::fTools::equalZero( getSaturation() ) )
-                return getLuminance();
-
-            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue,
-                                  mnMagicValue,
-                                  getHue() + 120.0 );
-        }
-
-        double HSLColor::getGreen() const
-        {
-            if( ::basegfx::fTools::equalZero( getSaturation() ) )
-                return getLuminance();
-
-            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue,
-                                  mnMagicValue,
-                                  getHue() );
-        }
-
-        double HSLColor::getBlue() const
-        {
-            if( ::basegfx::fTools::equalZero( getSaturation() ) )
-                return getLuminance();
-
-            return hsl2rgbHelper( 2.0*getLuminance() - mnMagicValue,
-                                  mnMagicValue,
-                                  getHue() - 120.0 );
-        }
-
-        RGBColor HSLColor::getRGBColor() const
-        {
-            RGBColor::RGBTriple aColor( hsl2rgb( getHue(),
-                                                 getSaturation(),
-                                                 getLuminance() ) );
-            return RGBColor( aColor.mnRed, aColor.mnGreen, aColor.mnBlue );
-        }
-
-        RGBColor::RGBColor(const RGBColor& rLHS)
-        {
-            maRGBTriple.mnRed = rLHS.getRed();
-            maRGBTriple.mnGreen = rLHS.getGreen();
-            maRGBTriple.mnBlue = rLHS.getBlue();
-        }
-
-        RGBColor& RGBColor::operator=( const RGBColor& rLHS ){
-
-            maRGBTriple.mnRed = rLHS.getRed();
-            maRGBTriple.mnGreen = rLHS.getGreen();
-            maRGBTriple.mnBlue = rLHS.getBlue();
-            return *this;
-        }
-
         HSLColor operator+( const HSLColor& rLHS, const HSLColor& rRHS )
         {
             return HSLColor( rLHS.getHue() + rRHS.getHue(),
@@ -386,27 +334,6 @@ namespace slideshow
         {
         }
 
-        double RGBColor::getHue() const
-        {
-            return rgb2hsl( getRed(),
-                            getGreen(),
-                            getBlue() ).mnHue;
-        }
-
-        double RGBColor::getSaturation() const
-        {
-            return rgb2hsl( getRed(),
-                            getGreen(),
-                            getBlue() ).mnSaturation;
-        }
-
-        double RGBColor::getLuminance() const
-        {
-            return rgb2hsl( getRed(),
-                            getGreen(),
-                            getBlue() ).mnLuminance;
-        }
-
         double RGBColor::getRed() const
         {
             return maRGBTriple.mnRed;
@@ -420,14 +347,6 @@ namespace slideshow
         double RGBColor::getBlue() const
         {
             return maRGBTriple.mnBlue;
-        }
-
-        HSLColor RGBColor::getHSLColor() const
-        {
-            HSLColor::HSLTriple aColor( rgb2hsl( getRed(),
-                                                 getGreen(),
-                                                 getBlue() ) );
-            return HSLColor( aColor.mnHue, aColor.mnSaturation, aColor.mnLuminance );
         }
 
         ::cppcanvas::Color::IntSRGBA RGBColor::getIntegerColor() const
@@ -467,3 +386,5 @@ namespace slideshow
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

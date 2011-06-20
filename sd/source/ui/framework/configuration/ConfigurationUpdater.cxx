@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -212,7 +213,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
                 if (mnLockCount == 0)
                     UpdateCore(aClassifier);
             }
-            catch(RuntimeException)
+            catch(const RuntimeException&)
             {
             }
 
@@ -235,7 +236,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
 #endif
         }
     }
-    catch (RuntimeException e)
+    catch(const RuntimeException &)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -256,7 +257,7 @@ void ConfigurationUpdater::CleanRequestedConfiguration (void)
         // Request the deactivation of pure anchors that have no child.
         vector<Reference<XResourceId> > aResourcesToDeactivate;
         CheckPureAnchors(mxRequestedConfiguration, aResourcesToDeactivate);
-        if (aResourcesToDeactivate.size() > 0)
+        if (!aResourcesToDeactivate.empty())
         {
             Reference<XConfigurationController> xCC (
                 mxControllerManager->getConfigurationController());
@@ -327,10 +328,10 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
         // Deactivate pure anchors that have no child.
         vector<Reference<XResourceId> > aResourcesToDeactivate;
         CheckPureAnchors(mxCurrentConfiguration, aResourcesToDeactivate);
-        if (aResourcesToDeactivate.size() > 0)
+        if (!aResourcesToDeactivate.empty())
             mpResourceManager->DeactivateResources(aResourcesToDeactivate, mxCurrentConfiguration);
     }
-    catch(RuntimeException)
+    catch(const RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -466,3 +467,5 @@ IMPL_LINK(ConfigurationUpdater, TimeoutHandler, Timer*, EMPTYARG)
 
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

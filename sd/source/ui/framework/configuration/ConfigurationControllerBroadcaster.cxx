@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@ void ConfigurationControllerBroadcaster::AddListener(
 {
     if ( ! rxListener.is())
         throw lang::IllegalArgumentException(
-            OUString::createFromAscii("invalid listener"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("invalid listener")),
             mxConfigurationController,
             0);
 
@@ -77,7 +78,7 @@ void ConfigurationControllerBroadcaster::RemoveListener(
 {
     if ( ! rxListener.is())
         throw lang::IllegalArgumentException(
-            OUString::createFromAscii("invalid listener"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("invalid listener")),
             mxConfigurationController,
             0);
 
@@ -229,3 +230,4 @@ void ConfigurationControllerBroadcaster::DisposeAndClear (void)
 
 } } // end of namespace sd::framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

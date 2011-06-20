@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -118,7 +119,7 @@ Sequence<rtl::OUString> SAL_CALL BasicPaneFactory_getSupportedServiceNames (void
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.BasicPaneFactory"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.BasicPaneFactory")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -328,8 +329,8 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
         // The requested pane can not be created by any of the factories
         // managed by the called BasicPaneFactory object.
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii(
-                "BasicPaneFactory::createPane() called for unknown resource id"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "BasicPaneFactory::createPane() called for unknown resource id")),
             NULL,
             0);
     }
@@ -387,8 +388,8 @@ void SAL_CALL BasicPaneFactory::releaseResource (
         // created by any of the factories managed by the called
         // BasicPaneFactory object.
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii(
-                "BasicPaneFactory::releasePane() called for pane that that was not created by same factory."),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "BasicPaneFactory::releasePane() called for pane that that was not created by same factory.")),
             NULL,
             0);
     }
@@ -413,11 +414,6 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
             // problems after reload (missing resizes for the side panes).
             if (mbFirstUpdateSeen)
             {
-                if (mpUpdateLockManager.get()!=NULL)
-                {
-                    //                    ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
-                    //                    mpUpdateLockManager->Lock();
-                }
             }
             else
                 mbFirstUpdateSeen = true;
@@ -431,8 +427,6 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
             if (mpUpdateLockManager.get() != NULL)
             {
                 ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
-                //                if (mpUpdateLockManager->IsLocked())
-                //                    mpUpdateLockManager->Unlock();
             }
             break;
     }
@@ -566,3 +560,5 @@ void BasicPaneFactory::ThrowIfDisposed (void) const
 
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

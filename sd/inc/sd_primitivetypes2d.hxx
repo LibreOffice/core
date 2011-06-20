@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef INCLUDED_SD_PRIMITIVETYPES2D_HXX
 #define INCLUDED_SD_PRIMITIVETYPES2D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -47,3 +46,5 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

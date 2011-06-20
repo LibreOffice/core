@@ -28,7 +28,6 @@
 
 #define __RSC
 
-#include "misc.hxx"
 #include "glob.hrc"
 #include "sderror.hxx"
 

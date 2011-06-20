@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
-class SdSlideViewShell;
 class SdWindow;
-class SdSlideView;
 class SdDrawDocument;
 class Sound;
 
@@ -203,3 +202,5 @@ private:
 } } } // end of namespace ::sd::slidesorter::controller
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

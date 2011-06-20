@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -190,8 +191,7 @@ namespace slideshow
                 {
                     if( !mpContext->mbParseAnimationFunction )
                     {
-                        OSL_ENSURE( false,
-                                    "ValueTFunctor::operator(): variable encountered, but we're not parsing a function here" );
+                        OSL_FAIL( "ValueTFunctor::operator(): variable encountered, but we're not parsing a function here" );
                         throw ParseError();
                     }
 
@@ -636,3 +636,5 @@ namespace slideshow
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

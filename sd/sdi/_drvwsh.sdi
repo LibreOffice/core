@@ -25,18 +25,6 @@
  *
  ************************************************************************/
 
-enum SdrFitToSizeType
-{
-    SDRTEXTFIT_NONE ,
-    SDRTEXTFIT_PROPORTIONAL ,
-    SDRTEXTFIT_ALLLINES ,
-    SDRTEXTFIT_RESIZEATTR
-}
-item UINT32 SvxObjectItem ;
-item BOOL SdrShadowItem ;
-item SdrFitToSizeType SdrTextFitToSizeTypeItem ;
-
-
 interface DrawView
 {
     SID_JUMPTOMARK // ole : no, status : ?
@@ -669,6 +657,11 @@ interface DrawView
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
+    SID_OUTLINE_TEXT_AUTOFIT // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_TEXT_FITTOSIZE_VERTICAL // ole : no, status : ?
     [
         ExecMethod = FuPermanent ;
@@ -1234,7 +1227,6 @@ interface DrawView
     [
         ExecMethod = FuPermanent ;
     ]
-    // #98721#
     SID_FM_CREATE_FIELDCONTROL
     [
     SlotType = SfxBoolItem ;
@@ -1952,27 +1944,6 @@ interface DrawView
          //ExecMethod = FuTemporary ;
          //StateMethod = GetMenuState ;
     ]
-     // Neue Slots fuer Optionsleiste
-//#i80528#    SID_GRAPHIC_DRAFT // ole : ?, status : ?
-//#i80528#    [
-//#i80528#        ExecMethod = ExecOptionsBar ;
-//#i80528#        StateMethod = GetOptionsBarState ;
-//#i80528#    ]
-//#i80528#    SID_FILL_DRAFT // ole : ?, status : ?
-//#i80528#    [
-//#i80528#        ExecMethod = ExecOptionsBar ;
-//#i80528#        StateMethod = GetOptionsBarState ;
-//#i80528#    ]
-//#i80528#    SID_TEXT_DRAFT // ole : ?, status : ?
-//#i80528#    [
-//#i80528#        ExecMethod = ExecOptionsBar ;
-//#i80528#        StateMethod = GetOptionsBarState ;
-//#i80528#    ]
-//#i80528#    SID_LINE_DRAFT // ole : ?, status : ?
-//#i80528#    [
-//#i80528#        ExecMethod = ExecOptionsBar ;
-//#i80528#        StateMethod = GetOptionsBarState ;
-//#i80528#    ]
     SID_HANDLES_DRAFT // ole : ?, status : ?
     [
         ExecMethod = ExecOptionsBar ;
@@ -2181,6 +2152,11 @@ interface DrawView
     SID_TRANSLITERATE_TOGGLE_CASE // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_TRANSLITERATE_ROTATE_CASE // ole : no, status : ?
+    [
+        ExecMethod = FuSupportRotate ;
         StateMethod = GetCtrlState ;
     ]
     SID_TRANSLITERATE_LOWER // ole : no, status : ?

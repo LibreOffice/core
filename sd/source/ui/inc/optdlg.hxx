@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,6 @@ public:
 protected:
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
-//  virtual SfxItemSet* CreateInputItemSet( sal_uInt16 nPageId );
 };
 
 
@@ -55,3 +55,4 @@ protected:
 #endif // SD_OPTDLG_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

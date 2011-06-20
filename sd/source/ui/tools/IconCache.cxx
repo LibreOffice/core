@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "tools/IconCache.hxx"
 
 #include "sdresid.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 
@@ -50,7 +51,7 @@ private:
     */
     static IconCache* mpInstance;
 
-    typedef ::std::hash_map<sal_uInt16,Image> ImageContainer;
+    typedef ::boost::unordered_map<sal_uInt16,Image> ImageContainer;
     ImageContainer maContainer;
 
     Image GetIcon (sal_uInt16 nResourceId);
@@ -131,3 +132,5 @@ IconCache::~IconCache (void)
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

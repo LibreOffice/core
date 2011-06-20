@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,11 +109,11 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
     switch (nShapeType)
     {
         case PRESENTATION_GRAPHIC_OBJECT:
-            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationGraphicShape"));
+            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("PresentationGraphicShape"))));
             break;
         default:
             aDG.Initialize (
-                ::rtl::OUString::createFromAscii ("Unknown accessible presentation graphic shape"));
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown accessible presentation graphic shape")));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
@@ -125,3 +126,5 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
 }
 
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

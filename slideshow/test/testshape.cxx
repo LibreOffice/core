@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,7 +26,10 @@
  *
  ************************************************************************/
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
@@ -36,6 +40,8 @@
 #include "shape.hxx"
 #include "tests.hxx"
 #include "com/sun/star/presentation/XSlideShowView.hpp"
+
+#include <o3tl/compat_functional.hxx>
 
 #include <boost/bind.hpp>
 
@@ -139,7 +145,7 @@ private:
                 maViewLayers.end(),
                 boost::bind( std::equal_to< target::ViewLayerSharedPtr >(),
                              boost::cref( rNewLayer ),
-                             boost::bind( std::select1st<ViewVector::value_type>(),
+                             boost::bind( o3tl::select1st<ViewVector::value_type>(),
                                           _1 ))) == maViewLayers.end() )
             throw std::exception();
 
@@ -149,7 +155,7 @@ private:
                 maViewLayers.end(),
                 boost::bind( std::equal_to< target::ViewLayerSharedPtr >(),
                              boost::cref( rNewLayer ),
-                             boost::bind( std::select1st<ViewVector::value_type>(),
+                             boost::bind( o3tl::select1st<ViewVector::value_type>(),
                                           _1 ))));
         return true;
     }
@@ -219,3 +225,5 @@ TestShapeSharedPtr createTestShape(const basegfx::B2DRange& rRect,
         comphelper::make_shared_from_UNO(
             new ImplTestShape(rRect,nPrio)) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

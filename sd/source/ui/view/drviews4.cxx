@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,20 +38,12 @@
 #include <svx/svdundo.hxx>
 #include <svx/fmglob.hxx>
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/ruler.hxx>
-#ifndef _GLOBL3D_HXX
 #include <svx/globl3d.hxx>
-#endif
 #include <editeng/outliner.hxx>
-#ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
@@ -80,7 +73,6 @@
 #include <svx/bmpmask.hxx>
 #include "LayerTabBar.hxx"
 
-// #97016# IV
 #include <svx/svditer.hxx>
 
 namespace sd {
@@ -115,7 +107,7 @@ void DrawViewShell::DeleteActualPage()
     }
     catch( Exception& )
     {
-        DBG_ERROR("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
+        OSL_FAIL("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
     }
 }
 
@@ -164,7 +156,6 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     if ( !IsInputLocked() || ( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE ) )
     {
-        // #97016# IV
         if(KEY_RETURN == rKEvt.GetKeyCode().GetCode()
             && rKEvt.GetKeyCode().IsMod1()
             && GetView()->IsTextEdit())
@@ -291,7 +282,6 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     // opened by inplace client and we would deactivate the inplace client,
     // the contex menu is closed by VCL asynchronously which in the end
     // would work on deleted objects or the context menu has no parent anymore)
-    // See #126086# and #128122#
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
     sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
 
@@ -352,7 +342,6 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
                  pWin->CaptureMouse();
         }
 
-        // #109585#
         // Since the next MouseMove may execute a IsSolidDraggingNow() in
         // SdrCreateView::MovCreateObj and there the ApplicationBackgroundColor
         // is needed it is necessary to set it here.
@@ -440,7 +429,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( !IsInputLocked() )
     {
-        FASTBOOL bIsSetPageOrg = mpDrawView->IsSetPageOrg();
+        bool bIsSetPageOrg = mpDrawView->IsSetPageOrg();
 
         if (mbIsRulerDrag)
         {
@@ -486,7 +475,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     // menu from an inplace client is closed. Now we have the chance to
     // deactivate the inplace client without any problem regarding parent
     // windows and code on the stack.
-    // For more information, see #126086# and #128122#
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
     sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
     if ( bIsOleActive && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ))
@@ -552,7 +540,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             const SvxFieldItem* pFldItem = NULL;
             if( pOLV )
                 pFldItem = pOLV->GetFieldAtSelection();
-                //pFldItem = pOLV->GetFieldUnderMousePointer();
 
             // Hilfslinie
             if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
@@ -575,7 +562,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             {
                 LanguageType eLanguage( LANGUAGE_SYSTEM );
 
-                // #101743# Format popup with outliner language, if possible
+                // Format popup with outliner language, if possible
                 if( pOLV->GetOutliner() )
                 {
                     ESelection aSelection( pOLV->GetSelection() );
@@ -594,7 +581,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 if( pField )
                 {
                     SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
-                    //pOLV->DeleteSelected(); <-- fehlt leider !
                     // Feld selektieren, so dass es beim Insert geloescht wird
                     ESelection aSel = pOLV->GetSelection();
                     sal_Bool bSel = sal_True;
@@ -638,8 +624,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 if( (  rCEvt.IsMouseEvent() && pOutlinerView->IsWrongSpelledWordAtPos(aPos) ) ||
                                     ( !rCEvt.IsMouseEvent() && pOutlinerView->IsCursorAtWrongSpelledWord() ) )
                                 {
-                                    // #91457# Popup for Online-Spelling now handled by DrawDocShell
-                                    // Link aLink = LINK(GetDoc(), SdDrawDocument, OnlineSpellCallback);
+                                    // Popup for Online-Spelling now handled by DrawDocShell
                                     Link aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
 
                                     if( !rCEvt.IsMouseEvent() )
@@ -679,9 +664,13 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             {
                                 switch ( nId )
                                 {
+                                    case OBJ_OUTLINETEXT:
+                                        nSdResId = bGraphicShell ? RID_GRAPHIC_OUTLINETEXTOBJ_POPUP :
+                                                                    RID_DRAW_OUTLINETEXTOBJ_POPUP;
+                                        break;
+
                                     case OBJ_CAPTION:
                                     case OBJ_TITLETEXT:
-                                    case OBJ_OUTLINETEXT:
                                     case OBJ_TEXT:
                                         nSdResId = bGraphicShell ? RID_GRAPHIC_TEXTOBJ_POPUP :
                                                                     RID_DRAW_TEXTOBJ_POPUP;
@@ -750,7 +739,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                         break;
                                 }
                             }
-                            else if( nInv == E3dInventor /*&& nId == E3D_POLYSCENE_ID*/)
+                            else if( nInv == E3dInventor )
                             {
                                 if( nId == E3D_POLYSCENE_ID || nId == E3D_SCENE_ID )
                                 {
@@ -788,7 +777,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                                 RID_DRAW_NOSEL_POPUP;
                 }
             }
-            // Popup-Menue anzeigen
+            // show Popup-Menu
             if (nSdResId)
             {
                 GetActiveWindow()->ReleaseMouse();
@@ -797,7 +786,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId));
                 else
                 {
-                    //#106326# don't open contextmenu at mouse position if not opened via mouse
+                    //don't open contextmenu at mouse position if not opened via mouse
 
                     //middle of the window if nothing is marked
                     Point aMenuPos(GetActiveWindow()->GetSizePixel().Width()/2
@@ -911,22 +900,10 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void DrawViewShell::LockInput()
 {
     mnLockCount++;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void DrawViewShell::UnlockInput()
 {
@@ -1005,3 +982,5 @@ void DrawViewShell::ShowSnapLineContextMenu (
 #endif
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

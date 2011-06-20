@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,15 +34,11 @@
 #endif
 
 #include <svl/intitem.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/tabarea.hxx>
 #include <svx/drawitem.hxx>
 
-#ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 #include "dlgpage.hxx"
 
 #include "DrawDocShell.hxx"
@@ -116,3 +113,4 @@ void SdPageDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -193,7 +194,7 @@ SlideSorterController::~SlideSorterController (void)
     catch( uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::SlideSorterController::~SlideSorterController(), exception caught!" );
+        OSL_FAIL( "sd::SlideSorterController::~SlideSorterController(), exception caught!" );
     }
 
     // dispose should have been called by now so that nothing is to be done
@@ -994,45 +995,41 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rs
 
     // Get a pointer to the corresponding accessible object and notify
     // that of the name change.
-    do
-    {
         SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
         if ( ! pWindow)
-            break;
+            return;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            xAccessible (pWindow->GetAccessible(sal_False));
-        if ( ! xAccessible.is())
-            break;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        xAccessible (pWindow->GetAccessible(sal_False));
+    if ( ! xAccessible.is())
+        return;
 
-        // Now comes a small hack.  We assume that the accessible object is
-        // an instantiation of AccessibleSlideSorterView and cast it to that
-        // class.  The cleaner alternative to this cast would be a new member
-        // in which we would store the last AccessibleSlideSorterView object
-        // created by SlideSorterViewShell::CreateAccessibleDocumentView().
-        // But then there is no guaranty that the accessible object obtained
-        // from the window really is that instance last created by
-        // CreateAccessibleDocumentView().
-        // However, the dynamic cast together with the check of the result
-        // being NULL should be safe enough.
-        ::accessibility::AccessibleSlideSorterView* pAccessibleView
-              = dynamic_cast< ::accessibility::AccessibleSlideSorterView*>(xAccessible.get());
-        if (pAccessibleView == NULL)
-            break;
+    // Now comes a small hack.  We assume that the accessible object is
+    // an instantiation of AccessibleSlideSorterView and cast it to that
+    // class.  The cleaner alternative to this cast would be a new member
+    // in which we would store the last AccessibleSlideSorterView object
+    // created by SlideSorterViewShell::CreateAccessibleDocumentView().
+    // But then there is no guaranty that the accessible object obtained
+    // from the window really is that instance last created by
+    // CreateAccessibleDocumentView().
+    // However, the dynamic cast together with the check of the result
+    // being NULL should be safe enough.
+    ::accessibility::AccessibleSlideSorterView* pAccessibleView
+            = dynamic_cast< ::accessibility::AccessibleSlideSorterView*>(xAccessible.get());
+    if (pAccessibleView == NULL)
+        return;
 
-        ::accessibility::AccessibleSlideSorterObject* pChild
-              = pAccessibleView->GetAccessibleChildImplementation(nPageIndex);
-        if (pChild == NULL || pChild->GetPage() == NULL)
-            break;
+    ::accessibility::AccessibleSlideSorterObject* pChild
+            = pAccessibleView->GetAccessibleChildImplementation(nPageIndex);
+    if (pChild == NULL || pChild->GetPage() == NULL)
+        return;
 
-        ::rtl::OUString sOldName (rsOldName);
-        ::rtl::OUString sNewName (pChild->GetPage()->GetName());
-        pChild->FireAccessibleEvent(
-            ::com::sun::star::accessibility::AccessibleEventId::NAME_CHANGED,
-            makeAny(sOldName),
-            makeAny(sNewName));
-    }
-    while (false);
+    ::rtl::OUString sOldName (rsOldName);
+    ::rtl::OUString sNewName (pChild->GetPage()->GetName());
+    pChild->FireAccessibleEvent(
+        ::com::sun::star::accessibility::AccessibleEventId::NAME_CHANGED,
+        makeAny(sOldName),
+        makeAny(sNewName));
 }
 
 
@@ -1133,3 +1130,5 @@ void SlideSorterController::ModelChangeLock::Release (void)
 }
 
 } } } // end of namespace ::sd::slidesorter
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

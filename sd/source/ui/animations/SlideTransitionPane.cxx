@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,9 +45,7 @@
 #include "DrawController.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 #include <svx/gallery.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>
@@ -496,7 +495,6 @@ SlideTransitionPane::SlideTransitionPane(
 
     // update control states before adding handlers
     updateLayout();
-    //    updateSoundList();
     updateControls();
 
     // set handlers
@@ -546,7 +544,6 @@ void SlideTransitionPane::onChangeCurrentPage()
 {
     ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell
         = ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(mrBase);
-//    DBG_ASSERT( pSlideSorterViewShell, "No Slide-Sorter available" );
     ::boost::shared_ptr<sd::slidesorter::SlideSorterViewShell::PageSelection> pSelection;
 
     if( pSlideSorterViewShell )
@@ -890,30 +887,23 @@ void SlideTransitionPane::updateControlState()
 
     maPB_APPLY_TO_ALL.Enable( mbHasSelection );
     maPB_PLAY.Enable( mbHasSelection );
-//     maPB_SLIDE_SHOW.Enable( sal_True );
     maCB_AUTO_PREVIEW.Enable( mbHasSelection );
 }
 
 void SlideTransitionPane::updateSoundList()
 {
-    List aSoundList;
+    ::std::vector< String > aSoundList;
 
     GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, aSoundList );
     GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, aSoundList );
 
-    sal_uInt32 nCount = aSoundList.Count();
+    size_t nCount = aSoundList.size();
     maSoundList.clear();
     maSoundList.reserve( nCount );
-    for( sal_uInt32 i=0; i<nCount; ++i )
+    for( size_t i =0 ; i < nCount; ++i )
     {
-        String * pEntry = reinterpret_cast< String * >( aSoundList.GetObject( i ));
-        if( pEntry )
-        {
-            // store copy of string in member list
-            maSoundList.push_back( *pEntry );
-            // delete pointer in temporary List
-            delete pEntry;
-        }
+        // store copy of string in member list
+        maSoundList.push_back( aSoundList[ i ] );
     }
 
     lcl_FillSoundListBox( maSoundList, maLB_SOUND );
@@ -1041,9 +1031,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             aResult.mePresChange = PRESCHANGE_AUTO;
             if( maMF_ADVANCE_AUTO_AFTER.IsEnabled())
             {
-//                 sal_uInt16 nDigits = maMF_ADVANCE_AUTO_AFTER.GetDecimalDigits();
                 aResult.mnTime = static_cast<long>(maMF_ADVANCE_AUTO_AFTER.GetValue());
-                // / static_cast< sal_uInt16 >( pow( 10.0, static_cast< double >( nDigits )));
                 aResult.mbTimeAmbiguous = false;
             }
         }
@@ -1319,3 +1307,5 @@ IMPL_LINK( SlideTransitionPane, LateInitCallback, Timer*, EMPTYARG )
 
 
 } //  namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

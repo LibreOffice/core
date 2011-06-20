@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,14 +38,10 @@
 #include "app.hrc"
 #include <svx/svdpagv.hxx>
 
-#ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "ViewShell.hxx"
 #include "View.hxx"
-#ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "zoomlist.hxx"
 
@@ -108,7 +105,7 @@ FunctionReference FuZoom::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
 
 sal_Bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     mpWindow->CaptureMouse();
@@ -183,7 +180,7 @@ sal_Bool FuZoom::MouseMove(const MouseEvent& rMEvt)
 
 sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     if (bVisible)
@@ -260,3 +257,5 @@ void FuZoom::Deactivate()
     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
 }
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

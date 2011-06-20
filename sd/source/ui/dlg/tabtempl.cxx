@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -148,7 +149,7 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
 
         case RID_SVXPAGE_SHADOW:
-                aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE)); //add CHINA001
+                aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
                 aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
                 aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
                 rPage.PageCreated(aSet);
@@ -221,3 +222,4 @@ const SfxItemSet* SdTabTemplateDlg::GetRefreshedSet()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

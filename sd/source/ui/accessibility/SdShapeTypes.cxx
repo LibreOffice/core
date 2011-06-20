@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,79 +70,75 @@ AccessibleShape*
     }
 }
 
-
-
-
-ShapeTypeDescriptor aSdShapeTypeList[] = {
-    ShapeTypeDescriptor (
-        PRESENTATION_OUTLINER,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.OutlinerShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_SUBTITLE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.SubtitleShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_GRAPHIC_OBJECT,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.GraphicObjectShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_PAGE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.PageShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_OLE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.OLE2Shape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_CHART,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.ChartShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_TABLE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.TableShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_NOTES,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.NotesShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_TITLE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.TitleTextShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_HANDOUT,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.HandoutShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_HEADER,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.HeaderShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_FOOTER,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.FooterShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_DATETIME,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.DateTimeShape"),
-        CreateSdAccessibleShape ),
-    ShapeTypeDescriptor (
-        PRESENTATION_PAGENUMBER,
-        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.SlideNumberShape"),
-        CreateSdAccessibleShape )
-};
-
-
-
-
 void RegisterImpressShapeTypes (void)
 {
+    /** List of shape type descriptors corresponding to the
+        <type>SdShapeTypes</type> enum.
+    */
+    ShapeTypeDescriptor aSdShapeTypeList[] = {
+        ShapeTypeDescriptor (
+            PRESENTATION_OUTLINER,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.OutlinerShape"))),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_SUBTITLE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.SubtitleShape"))),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_GRAPHIC_OBJECT,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.GraphicObjectShape"))),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_PAGE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.PageShape"))),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_OLE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.OLE2Shape"))),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_CHART,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.ChartShape"))),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_TABLE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.TableShape"))),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_NOTES,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.NotesShape"))),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_TITLE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.TitleTextShape")),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_HANDOUT,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.HandoutShape")),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_HEADER,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.HeaderShape")),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_FOOTER,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.FooterShape")),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_DATETIME,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.DateTimeShape")),
+            CreateSdAccessibleShape ),
+        ShapeTypeDescriptor (
+            PRESENTATION_PAGENUMBER,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.SlideNumberShape")),
+            CreateSdAccessibleShape )
+    };
+
     ShapeTypeHandler::Instance().AddShapeTypeList (
         PRESENTATION_PAGENUMBER - PRESENTATION_OUTLINER + 1,
         aSdShapeTypeList);
 }
 
-
-
-
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,15 +56,12 @@
 #include <editeng/adjitem.hxx>
 #include <svx/xtable.hxx>
 
-// #88751#
 #include <svx/svdocapt.hxx>
 
-// #97016#
 #include <svx/svdomeas.hxx>
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
-// #109583#
 #include <editeng/writingmodeitem.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -277,7 +275,7 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 pObj->SetLayer(rAdmin.GetLayerID(aStr, sal_False));
             }
 
-            // #88751# init text position when vertica caption object is created
+            // init text position when vertica caption object is created
             if(pObj->ISA(SdrCaptionObj) && SID_DRAW_CAPTION_VERTICAL == nSlotId)
             {
                 // draw text object, needs to be initialized when vertical text is used
@@ -286,7 +284,6 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
-                // #109583#
                 // Correct the value of SDRATTR_TEXTDIRECTION to avoid SetItemSet
                 // calling SetVerticalWriting() again since this item may not yet
                 // be set at the object and thus may differ from verical state of
@@ -547,7 +544,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         rAttr.Put( SdrTextAutoGrowHeightItem( sal_True ) );
         rAttr.Put( SdrTextAutoGrowWidthItem( sal_True ) );
 
-        // #103516# Support full with for vertical caption objects, too
+        // Support full with for vertical caption objects, too
         if(SID_DRAW_CAPTION == nSlotId)
             rAttr.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         else
@@ -804,7 +801,6 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
     }
 }
 
-// #97016#
 SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     DBG_ASSERT( (nID != SID_DRAW_FONTWORK) && (nID != SID_DRAW_FONTWORK_VERTICAL ), "FuConstRectangle::CreateDefaultObject can not create Fontwork shapes!" );
@@ -907,7 +903,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO line object");
+                    OSL_FAIL("Object is NO line object");
                 }
 
                 break;
@@ -923,7 +919,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO measure object");
+                    OSL_FAIL("Object is NO measure object");
                 }
 
                 break;
@@ -965,7 +961,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO connector object");
+                    OSL_FAIL("Object is NO connector object");
                 }
 
                 break;
@@ -987,7 +983,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                         pObj->SetMergedItemSet(aSet);
                     }
 
-                    // For task #105815# the default text is not inserted anymore.
+                    // The default text is not inserted anymore.
                     //  String aText(SdResId(STR_POOLSHEET_TEXT));
                     //  ((SdrCaptionObj*)pObj)->SetText(aText);
 
@@ -997,7 +993,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                 }
                 else
                 {
-                    DBG_ERROR("Object is NO caption object");
+                    OSL_FAIL("Object is NO caption object");
                 }
 
                 break;
@@ -1022,3 +1018,5 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

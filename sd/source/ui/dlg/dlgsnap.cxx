@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,10 +74,6 @@ SdSnapLineDlg::SdSnapLineDlg(
       eUIUnit(pView->GetDoc()->GetUIUnit()),
       aUIScale(pView->GetDoc()->GetUIScale())
 {
-    aRbPoint.SetModeRadioImage( Image( SdResId( BMP_POINT_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aRbVert.SetModeRadioImage( Image( SdResId( BMP_VERTICAL_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aRbHorz.SetModeRadioImage( Image( SdResId( BMP_HORIZONTAL_H ) ), BMP_COLOR_HIGHCONTRAST );
-
     FreeResource();
 
     aRbHorz.SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
@@ -233,3 +230,4 @@ void SdSnapLineDlg::SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #endif
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
@@ -74,21 +75,19 @@
 #include "dlgass.hrc"
 #include "dlgass.hxx"
 #include "dlgctrls.hxx"
-#ifndef _SD_CFGID_HXX
 #include "strings.hrc"
-#endif
-#ifndef _DATETIMEITEM_HXX
 #include "dlgassim.hxx"
-#endif
 #include "TemplateScanner.hxx"
 #include "WindowUpdater.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::sd;
 
+using ::std::vector;
 
 void InterpolateFixedBitmap( FixedBitmap * pBitmap )
 {
@@ -119,8 +118,6 @@ public:
     String maPassword;
     String maPath;
 };
-
-DECLARE_LIST( PasswordEntryList, PasswordEntry * )
 
 // ====================================================================
 
@@ -211,7 +208,7 @@ public:
     String GetPassword( const String rPath );
     void DeletePassords();
 
-    PasswordEntryList maPasswordList;
+    vector< PasswordEntry* > maPasswordList;
 
     String maDocFile;
     String maLayoutFile;
@@ -441,13 +438,13 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         String sText (GetUiTextForCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open"))));
         // Remove the mnemonic and add a leading space so that icon and text
         // are not too close together.
-        sText.SearchAndReplaceAll(String(RTL_CONSTASCII_STRINGPARAM("~")),String());
-        sText.Insert(String(RTL_CONSTASCII_STRINGPARAM(" ")),0);
+        sText.SearchAndReplaceAll(String(RTL_CONSTASCII_USTRINGPARAM("~")),String());
+        sText.Insert(String(RTL_CONSTASCII_USTRINGPARAM(" ")),0);
         mpPage1OpenPB->SetText(sText);
         // Place icon left of text and both centered in the button.
         mpPage1OpenPB->SetModeImage(
-            GetUiIconForCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open"))),
-            BMP_COLOR_NORMAL);
+            GetUiIconForCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open")))
+        );
         mpPage1OpenPB->EnableImageDisplay(sal_True);
         mpPage1OpenPB->EnableTextDisplay(sal_True);
         mpPage1OpenPB->SetImageAlign(IMAGEALIGN_LEFT);
@@ -466,7 +463,6 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage1OpenLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectFileHdl));
     mpPage1OpenLB->SetDoubleClickHdl(rFinishLink);
     mpPage1OpenPB->SetClickHdl(LINK(this,AssistentDlgImpl,OpenButtonHdl));
-    //  mpPage1OpenLB->InsertEntry(String(SdResId(STR_WIZARD_POSITION)));
 
     // Seite 2
     maAssistentFunc.InsertControl(2, &maPreview );
@@ -532,7 +528,6 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         mpPage3LogoCB = new CheckBox( pWindow, SdResId( CB_PAGE3_LOGO) ));
 
     mpPage3EffectLB->Fill();
-//  mpPage3EffectLB->SelectEffect( presentation::FadeEffect_NONE );
     mpPage3EffectLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
     mpPage3EffectLB->SetDropDownLineCount( 12 );
 
@@ -644,11 +639,11 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         TemplateEntry* pStandardTemplateEntry = 0;
 
         std::vector<TemplateDir*>::iterator I;
-        for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
+        for (I=maPresentList.begin(); I!=maPresentList.end(); ++I)
         {
             TemplateDir* pDir = *I;
             std::vector<TemplateEntry*>::iterator   J;
-            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
+            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); ++J)
             {
                 TemplateEntry* pEntry = *J;
                 if(pEntry->msPath == aStandardTemplate)
@@ -685,9 +680,9 @@ AssistentDlgImpl::~AssistentDlgImpl()
     //  Delete the template file infos.
     std::vector<TemplateDir*>::iterator I;
     std::vector<TemplateEntry*>::iterator   J;
-    for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
+    for (I=maPresentList.begin(); I!=maPresentList.end(); ++I)
     {
-        for (J=(*I)->maEntries.begin(); J!=(*I)->maEntries.end(); J++)
+        for (J=(*I)->maEntries.begin(); J!=(*I)->maEntries.end(); ++J)
             delete (*J);
         delete (*I);
     }
@@ -749,7 +744,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
 
     //  Delete the file history list.
     std::vector<String*>::iterator  I2;
-    for (I2=maOpenFilesList.begin(); I2!=maOpenFilesList.end(); I2++)
+    for (I2=maOpenFilesList.begin(); I2!=maOpenFilesList.end(); ++I2)
         delete *I2;
 }
 
@@ -757,14 +752,11 @@ void AssistentDlgImpl::CloseDocShell()
 {
     if(xDocShell.Is())
     {
-        //uno::Reference< lang::XComponent > xModel( xDocShell->GetModel(), uno::UNO_QUERY );
         uno::Reference< util::XCloseable > xCloseable( xDocShell->GetModel(), uno::UNO_QUERY );
-        //if( xModel.is() )
         if( xCloseable.is() )
         {
             xCloseable->close( sal_True );
             xDocShell = NULL;
-            //xModel->dispose();
         }
         else
         {
@@ -889,7 +881,7 @@ void AssistentDlgImpl::TemplateScanDone (
     std::vector<TemplateDir*>& rTemplateFolder)
 {
     //  This method is called from a thread.  Therefore we get the solar mutex.
-    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Copy the contents of the given template folders to a local list.
     maPresentList.swap (rTemplateFolder);
@@ -899,7 +891,7 @@ void AssistentDlgImpl::TemplateScanDone (
     mpPage1RegionLB->Clear();
     std::vector<TemplateDir*>::iterator I;
     int i;
-    for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); I++,i++)
+    for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); ++I,++i)
     {
         TemplateDir* pDir = *I;
         if (pDir == NULL)
@@ -924,7 +916,7 @@ void AssistentDlgImpl::TemplateScanDone (
     //  Fill in the list box on the second page.
     nFirstEntry = 0;
     mpPage2RegionLB->Clear();
-    for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); I++,i++)
+    for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); ++I,++i)
     {
         TemplateDir* pDir = *I;
         if (pDir == NULL)
@@ -1044,7 +1036,6 @@ String AssistentDlgImpl::GetLayoutFileName()
 
 SfxObjectShellLock AssistentDlgImpl::GetDocument()
 {
-//  mbPreview = sal_False;      // Document nicht anzeigen
     UpdatePreview(sal_False);   // aber komplett laden
     UpdatePageList();
 
@@ -1094,7 +1085,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
     }
     else
     {
-        DBG_ERROR("sd::AssistentDlgImpl::GetDocument(), no template?");
+        OSL_FAIL("sd::AssistentDlgImpl::GetDocument(), no template?");
     }
 
     SfxObjectShellLock xRet = xDocShell;
@@ -1383,14 +1374,14 @@ void AssistentDlgImpl::SelectTemplateRegion( const String& rRegion )
 {
     mpPage1TemplateLB->Clear();
     std::vector<TemplateDir*>::iterator I;
-    for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
+    for (I=maPresentList.begin(); I!=maPresentList.end(); ++I)
     {
         TemplateDir * pDir = *I;
         mpTemplateRegion = *I;
         if (pDir->msRegion.Equals( rRegion ) )
         {
             std::vector<TemplateEntry*>::iterator   J;
-            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
+            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); ++J)
                 mpPage1TemplateLB->InsertEntry ((*J)->msTitle);
             mpPage1TemplateLB->Update();
             if(GetStartType() == ST_TEMPLATE)
@@ -1408,7 +1399,7 @@ void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
     mpPage2LayoutLB->Clear();
     mpPage2LayoutLB->InsertEntry(String(SdResId(STR_WIZARD_ORIGINAL)));
     std::vector<TemplateDir*>::iterator I;
-    for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
+    for (I=maPresentList.begin(); I!=maPresentList.end(); ++I)
     {
         TemplateDir * pDir = *I;
         mpLayoutRegion = *I;
@@ -1416,7 +1407,7 @@ void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
         if (pDir->msRegion.Equals (rRegion))
         {
             std::vector<TemplateEntry*>::iterator   J;
-            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
+            for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); ++J)
                 mpPage2LayoutLB->InsertEntry ((*J)->msTitle);
             mpPage2LayoutLB->Update();
             break;
@@ -1649,7 +1640,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
         }
         else
         {
-            DBG_ERROR("sd::AssistentDlgImpl::UpdatePreview(), no document for preview?");
+            OSL_FAIL("sd::AssistentDlgImpl::UpdatePreview(), no document for preview?");
         }
 
         mbUserDataDirty = sal_True;
@@ -1685,21 +1676,21 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPat
             if(aPass.Len() == 0)
                 return;
 
-            PasswordEntry* pEntry = maPasswordList.First();
-            while(pEntry)
+            PasswordEntry* pEntry = NULL;
+            for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
             {
-                if(pEntry->maPath == rPath)
+                if ( maPasswordList[ i ]->maPath == rPath )
+                {
+                    pEntry = maPasswordList[ i ];
                     break;
-
-                pEntry = maPasswordList.Next();
-
+                }
             }
 
             if(pEntry == NULL)
             {
                 pEntry = new PasswordEntry();
                 pEntry->maPath = rPath;
-                maPasswordList.Insert( pEntry );
+                maPasswordList.push_back( pEntry );
             }
 
             if(pEntry)
@@ -1719,26 +1710,20 @@ void AssistentDlgImpl::RestorePassword( SfxItemSet* pSet, const String& rPath )
 
 String AssistentDlgImpl::GetPassword( const String rPath )
 {
-    PasswordEntry* pEntry = maPasswordList.First();
-    while(pEntry)
+    for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
     {
+        PasswordEntry* pEntry = maPasswordList[ i ];
         if(pEntry->maPath == rPath)
             return pEntry->maPassword;
-
-        pEntry = maPasswordList.Next();
     }
-
     return String();
 }
 
 void AssistentDlgImpl::DeletePassords()
 {
-    PasswordEntry* pEntry = maPasswordList.First();
-    while(pEntry)
-    {
-        delete pEntry;
-        pEntry = maPasswordList.Next();
-    }
+    for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
+        delete maPasswordList[ i ];
+    maPasswordList.clear();
 }
 
 sal_Bool AssistentDlgImpl::IsOwnFormat( const String& rPath )
@@ -1794,7 +1779,7 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
                 for (sal_Int32 i=0; i<nCount; i++)
                 {
                     ::rtl::OUString sPropertyName (aProperties[i].Name);
-                    if (sPropertyName.equalsAscii("Label"))
+                    if (sPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Label")))
                     {
                         aProperties[i].Value >>= sString;
                         break;
@@ -2041,3 +2026,5 @@ void NextButton::Enable (bool bEnable)
     maNextButton1.Enable(bEnable);
     maNextButton2.Enable(bEnable);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

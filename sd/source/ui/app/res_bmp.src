@@ -35,165 +35,82 @@ Bitmap BMP_LAYOUT_EMPTY
 {
     File = "layout_empty.png";
 };
-Bitmap BMP_LAYOUT_EMPTY_H
-{
-    File = "layout_empty_h.png";
-};
 Bitmap BMP_LAYOUT_HEAD01
 {
     File = "layout_head01.png";
-};
-Bitmap BMP_LAYOUT_HEAD01_H
-{
-    File = "layout_head01_h.png";
 };
 Bitmap BMP_LAYOUT_HEAD02
 {
     File = "layout_head02.png";
 };
-Bitmap BMP_LAYOUT_HEAD02_H
-{
-    File = "layout_head02_h.png";
-};
 Bitmap BMP_LAYOUT_HEAD02A
 {
     File = "layout_head02a.png";
-};
-Bitmap BMP_LAYOUT_HEAD02A_H
-{
-    File = "layout_head02a_h.png";
 };
 Bitmap BMP_LAYOUT_HEAD02B
 {
     File = "layout_head02b.png";
 };
-Bitmap BMP_LAYOUT_HEAD02B_H
-{
-    File = "layout_head02b_h.png";
-};
 Bitmap BMP_LAYOUT_HEAD03
 {
     File = "layout_head03.png";
-};
-Bitmap BMP_LAYOUT_HEAD03_H
-{
-    File = "layout_head03_h.png";
 };
 Bitmap BMP_LAYOUT_HEAD03A
 {
     File = "layout_head03a.png";
 };
-Bitmap BMP_LAYOUT_HEAD03A_H
-{
-    File = "layout_head03a_h.png";
-};
 Bitmap BMP_LAYOUT_HEAD03B
 {
     File = "layout_head03b.png";
-};
-Bitmap BMP_LAYOUT_HEAD03B_H
-{
-    File = "layout_head03b_h.png";
 };
 Bitmap BMP_LAYOUT_HEAD03C
 {
     File = "layout_head03c.png";
 };
-Bitmap BMP_LAYOUT_HEAD03C_H
-{
-    File = "layout_head03c_h.png";
-};
 Bitmap BMP_LAYOUT_HEAD04
 {
     File = "layout_head04.png";
-};
-Bitmap BMP_LAYOUT_HEAD04_H
-{
-    File = "layout_head04_h.png";
 };
 Bitmap BMP_LAYOUT_HEAD06
 {
     File = "layout_head06.png";
 };
-Bitmap BMP_LAYOUT_HEAD06_H
-{
-    File = "layout_head06_h.png";
-};
 Bitmap BMP_LAYOUT_TEXTONLY
 {
     File = "layout_textonly.png";
-};
-Bitmap BMP_LAYOUT_TEXTONLY_H
-{
-    File = "layout_textonly_h.png";
 };
 Bitmap BMP_LAYOUT_VERTICAL01
 {
     File = "layout_vertical01.png";
 };
-Bitmap BMP_LAYOUT_VERTICAL01_H
-{
-    File = "layout_vertical01_h.png";
-};
 Bitmap BMP_LAYOUT_VERTICAL02
 {
     File = "layout_vertical02.png";
 };
-Bitmap BMP_LAYOUT_VERTICAL02_H
-{
-    File = "layout_vertical02_h.png";
-};
-
 Bitmap BMP_FOILH_01
 {
     File = "foilh01.png";
-};
-Bitmap BMP_FOILH_01_H
-{
-    File = "foilh01_h.png";
 };
 Bitmap BMP_FOILH_02
 {
     File = "foilh02.png";
 };
-Bitmap BMP_FOILH_02_H
-{
-    File = "foilh02_h.png";
-};
 Bitmap BMP_FOILH_03
 {
     File = "foilh03.png";
-};
-Bitmap BMP_FOILH_03_H
-{
-    File = "foilh03_h.png";
 };
 Bitmap BMP_FOILH_04
 {
     File = "foilh04.png";
 };
-Bitmap BMP_FOILH_04_H
-{
-    File = "foilh04_h.png";
-};
 Bitmap BMP_FOILH_06
 {
     File = "foilh06.png";
-};
-Bitmap BMP_FOILH_06_H
-{
-    File = "foilh06_h.png";
 };
 Bitmap BMP_FOILH_09
 {
     File = "foilh09.png";
 };
-Bitmap BMP_FOILH_09_H
-{
-    File = "foilh09_h.png";
-};
-
-
 Bitmap BMP_PLACEHOLDER_CHART_SMALL
 {
     File = "placeholder_chart_small.png";
@@ -264,139 +181,72 @@ Bitmap BMP_FOILN_01
 {
     File = "foiln01.bmp" ;
 };
-Bitmap BMP_FOILN_01_H
-{
-    File = "foiln01_h.bmp" ;
-};
+
 Bitmap BMP_PAGE
 {
     File = "page.bmp" ;
 };
-Bitmap BMP_PAGE_H
-{
-    File = "page_h.bmp" ;
-};
+
 Bitmap BMP_PAGE_EXCLUDED
 {
     File = "pageexcl.bmp" ;
 };
-Bitmap BMP_PAGE_EXCLUDED_H
-{
-    File = "pageexcl_h.bmp" ;
-};
+
 Bitmap BMP_PAGEOBJS_EXCLUDED
 {
     File = "pagobjex.bmp" ;
 };
-Bitmap BMP_PAGEOBJS_EXCLUDED_H
-{
-    File = "pagobjex_h.bmp" ;
-};
+
 Bitmap BMP_PAGEOBJS
 {
     File = "pageobjs.bmp" ;
 };
-Bitmap BMP_PAGEOBJS_H
-{
-    File = "pageobjs_h.bmp" ;
-};
+
 Bitmap BMP_OBJECTS
 {
     File = "objects.bmp" ;
 };
-Bitmap BMP_OBJECTS_H
-{
-    File = "objects_h.bmp" ;
-};
+
 Bitmap BMP_OLE
 {
     File = "ole.bmp" ;
 };
-Bitmap BMP_OLE_H
-{
-    File = "ole_h.bmp" ;
-};
+
 Bitmap BMP_GROUP
 {
     File = "group.bmp" ;
 };
-Bitmap BMP_GROUP_H
-{
-    File = "group_h.bmp" ;
-};
+
 Bitmap BMP_DOC_OPEN
 {
     File = "docopen.bmp" ;
 };
-Bitmap BMP_DOC_OPEN_H
-{
-    File = "docopen_h.bmp" ;
-};
+
 Bitmap BMP_DOC_CLOSED
 {
     File = "docclose.bmp" ;
 };
-Bitmap BMP_DOC_CLOSED_H
-{
-    File = "docclose_h.bmp" ;
-};
+
 Bitmap BMP_DOC_TEXT
 {
     File = "doctext.bmp" ;
 };
-Bitmap BMP_DOC_TEXT_H
-{
-    File = "doctext_h.bmp" ;
-};
+
 Bitmap BMP_EXPAND
 {
     File = "plus.bmp" ;
 };
-Bitmap BMP_EXPAND_H
-{
-    File = "plus_h.bmp" ;
-};
+
 Bitmap BMP_COLLAPSE
 {
     File = "minus.bmp" ;
 };
-Bitmap BMP_COLLAPSE_H
-{
-    File = "minus_h.bmp" ;
-};
+
 Bitmap BMP_GRAPHIC
 {
     File = "graphic.bmp" ;
 };
-Bitmap BMP_GRAPHIC_H
-{
-    File = "graphic_h.bmp" ;
-};
-Image IMG_PIPETTE_H
-{
-    ImageBitmap = Bitmap { File = "pipette_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
-};
-Image IMG_GET1OBJECT_H
-{
-    ImageBitmap = Bitmap { File = "get1obj_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
-};
-Image IMG_GETALLOBJECT_H
-{
-    ImageBitmap = Bitmap { File = "getallob_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
-};
-Image IMG_REMOVEBMP_H
-{
-    ImageBitmap = Bitmap { File = "del1bmp_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
-};
-Image IMG_REMOVEALLBMP_H
-{
-    ImageBitmap = Bitmap { File = "delall_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
-};
+
 #define SfxStyleFamiliesRes1\
     Text [ en-US ] = "Graphics Styles" ;\
 
@@ -424,40 +274,34 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         {
             SfxStyleFamiliesRes1
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
-            FilterList  =
+            FilterList [ en-US ] =
             {
-                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
-                < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
-                < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ;
+                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
+                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
+                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
             };
         };
         SfxStyleFamilyItem RID_PRESENTATIONSTYLEFAMILY
         {
             SfxStyleFamiliesRes2
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
-            FilterList =
+            FilterList [ en-US ] =
             {
-                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
             };
         };
     };
     #define STYLE_IMAGE_LISTEF \
         IdList = \
         { \
-            1; 2; \
+            1; \
         }; \
-        IdCount = 2;
+        IdCount = 1;
 
     ImageList 1 // == BMP_COLOR_NORMAL + 1
     {
         Prefix = "sf";
         MaskColor = IMAGE_MASK_STDCOLOR;
-        STYLE_IMAGE_LISTEF
-    };
-    ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
-    {
-        Prefix = "sfh";
-        MaskColor = IMAGE_MASK_STDCOLOR_HC;
         STYLE_IMAGE_LISTEF
     };
     #undef STYLE_IMAGE_LISTEF
@@ -467,22 +311,27 @@ Bitmap BMP_PRESOBJ_GRAPHIC
 {
     File = "image.bmp" ;
 };
+
 Bitmap BMP_PRESOBJ_OBJECT
 {
     File = "object.bmp" ;
 };
+
 Bitmap BMP_PRESOBJ_CHART
 {
     File = "chart.bmp" ;
 };
+
 Bitmap BMP_PRESOBJ_ORGCHART
 {
     File = "orgchart.bmp" ;
 };
+
 Bitmap BMP_PRESOBJ_TABLE
 {
     File = "table.bmp" ;
 };
+
 Bitmap BMP_WAIT_ICON
 {
     File = "waiticon.bmp";
@@ -494,15 +343,8 @@ Bitmap BMP_FADE_EFFECT_INDICATOR
 {
     File = "fade_effect_indicator.bmp";
 };
-Bitmap BMP_FADE_EFFECT_INDICATOR_H
-{
-    File = "fade_effect_indicator_hc.bmp";
-};
+
 Bitmap BMP_COMMENTS_INDICATOR
 {
     File = "comments_indicator.bmp";
-};
-Bitmap BMP_COMMENTS_INDICATOR_H
-{
-    File = "comments_indicator_hc.bmp";
 };

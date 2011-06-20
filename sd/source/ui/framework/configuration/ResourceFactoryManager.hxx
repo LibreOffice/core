@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace css = ::com::sun::star;
 
@@ -93,7 +94,7 @@ public:
 
 private:
     ::osl::Mutex maMutex;
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         ::rtl::OUString,
         css::uno::Reference<css::drawing::framework::XResourceFactory>,
         ::comphelper::UStringHash,
@@ -126,3 +127,5 @@ private:
 } } // end of namespace sd::framework
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

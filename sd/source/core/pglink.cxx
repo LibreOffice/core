@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#ifndef _SVXLINK_HXX
 #include <sfx2/linkmgr.hxx>
-#endif
 
 #include "pglink.hxx"
 #include "sdpage.hxx"
@@ -70,8 +69,8 @@ SdPageLink::~SdPageLink()
 |*
 \************************************************************************/
 
-void SdPageLink::DataChanged( const String& ,
-                                       const ::com::sun::star::uno::Any& )
+::sfx2::SvBaseLink::UpdateResult SdPageLink::DataChanged(
+    const String&, const ::com::sun::star::uno::Any& )
 {
     SdDrawDocument* pDoc = (SdDrawDocument*) pPage->GetModel();
     sfx2::LinkManager* pLinkManager = pDoc!=NULL ? pDoc->GetLinkManager() : NULL;
@@ -126,6 +125,7 @@ void SdPageLink::DataChanged( const String& ,
                 pDoc->CloseBookmarkDoc();
         }
     }
+    return SUCCESS;
 }
 
 /*************************************************************************
@@ -145,3 +145,4 @@ void SdPageLink::Closed()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

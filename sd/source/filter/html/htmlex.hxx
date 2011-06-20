@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,7 @@
 #include "ViewShell.hxx"
 #include "assclass.hxx"
 
-#ifndef _SD_RESID_HXX
 #include "sdresid.hxx"
-#endif
 #include "pubdlg.hxx"
 
 #include <vector>
@@ -59,9 +58,11 @@
 #define PUB_HIGHRES_WIDTH   1024
 #define PUB_HIGHRES_HEIGHT  768
 
+#define PUB_THUMBNAIL_WIDTH  256
+#define PUB_THUMBNAIL_HEIGHT 192
+
 #define HtmlButtonThemaStr = "private://gallery/hidden/HtmlExportButtons";
 
-class List;
 class SfxProgress;
 class SdrOutliner;
 class SdPage;
@@ -150,6 +151,7 @@ class HtmlExport
     String   maHTMLExtension;
     String** mpHTMLFiles;
     String** mpImageFiles;
+    String** mpThumbnailFiles;
     String** mpPageNames;
     String** mpTextFiles;
 
@@ -167,7 +169,7 @@ class HtmlExport
 
     void SetDocColors( SdPage* pPage = NULL );
 
-    bool    CreateImagesForPresPages();
+    bool        CreateImagesForPresPages( bool bThumbnails = false );
     bool    CreateHtmlTextForPresPages();
     bool    CreateHtmlForPresPages();
     bool    CreateContentPage();
@@ -237,3 +239,5 @@ class HtmlExport
 };
 
 #endif // _SD_HTMLEX_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
-#ifndef SD_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
 #include <memory>
 #include <boost/function.hpp>
 
@@ -179,3 +178,5 @@ private:
 } } // end of namespace ::sd::toolpanel
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

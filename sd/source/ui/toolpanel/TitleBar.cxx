@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "sdresid.hxx"
 #include <vcl/bitmap.hxx>
@@ -251,7 +252,6 @@ bool TitleBar::HasExpansionIndicator (void) const
 Image TitleBar::GetExpansionIndicator (void) const
 {
     Image aIndicator;
-    bool bHighContrastMode (GetSettings().GetStyleSettings().GetHighContrastMode() != 0);
     if (mbIsExpandable)
     {
         sal_uInt16 nResourceId = 0;
@@ -259,15 +259,9 @@ Image TitleBar::GetExpansionIndicator (void) const
         {
             case TBT_SUB_CONTROL_HEADLINE:
                 if (mbExpanded)
-                    if (bHighContrastMode)
-                        nResourceId = BMP_COLLAPSE_H;
-                    else
-                        nResourceId = BMP_COLLAPSE;
+                    nResourceId = BMP_COLLAPSE;
                 else
-                    if (bHighContrastMode)
-                        nResourceId = BMP_EXPAND_H;
-                    else
-                        nResourceId = BMP_EXPAND;
+                    nResourceId = BMP_EXPAND;
 
                 aIndicator = IconCache::Instance().GetIcon(nResourceId);
                 break;
@@ -583,3 +577,5 @@ String TitleBar::GetTitle (void) const
 
 
 } } // end of namespace ::sd::toolpanel
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

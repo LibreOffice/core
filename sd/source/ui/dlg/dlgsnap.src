@@ -62,7 +62,6 @@ ModalDialog DLG_SNAPLINE
         HelpID = "sd:PushButton:DLG_SNAPLINE:BTN_DELETE";
         Pos = MAP_APPFONT ( 88 , 63  ) ;
         Size = MAP_APPFONT ( 46 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
@@ -165,50 +164,4 @@ ModalDialog DLG_SNAPLINE
             ImageBitmap = Bitmap { File = "hlplhorz.bmp" ; };
         };
     };
-
-    Image BMP_POINT_H
-    {
-        MaskColor = IMAGE_MASK_STDCOLOR_HC;
-        ImageBitmap = Bitmap { File = "hlppoint_h.bmp" ; };
-    };
-
-    Image BMP_VERTICAL_H
-    {
-        MaskColor = IMAGE_MASK_STDCOLOR_HC;
-        ImageBitmap = Bitmap { File = "hlplvert_h.bmp" ; };
-    };
-
-    Image BMP_HORIZONTAL_H
-    {
-        MaskColor = IMAGE_MASK_STDCOLOR_HC;
-        ImageBitmap = Bitmap { File = "hlplhorz_h.bmp" ; };
-    };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

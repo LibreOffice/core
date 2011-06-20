@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef _SD_HTMLEX_BUTTONSET_HXX
 #define _SD_HTMLEX_BUTTONSET_HXX
 
+#include <sddllapi.h>
+
 #include <rtl/ustring.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
@@ -35,7 +38,7 @@
 class Image;
 class ButtonSetImpl;
 
-class ButtonSet
+class SD_DLLPUBLIC ButtonSet
 {
 public:
     ButtonSet();
@@ -51,3 +54,5 @@ private:
 };
 
 #endif // _SD_HTMLEX_BUTTONSET_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

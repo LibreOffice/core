@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ SubToolPanel::SubToolPanel (
       mnHorizontalBorder(2)
 {
     SetAccessibleName (
-        ::rtl::OUString::createFromAscii("Sub Task Panel"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")));
     mpControlContainer->SetMultiSelection (true);
 
     SetBorderStyle (WINDOW_BORDER_NORMAL);
@@ -116,7 +117,7 @@ void SubToolPanel::Paint (const Rectangle& rRect)
         Point (mnHorizontalBorder,0),
         Size(mnChildrenWidth,0));
     StripeList::const_iterator iStripe;
-    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); iStripe++)
+    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); ++iStripe)
     {
         aStripeArea.Top() = iStripe->first;
         aStripeArea.Bottom() = iStripe->second;
@@ -382,9 +383,11 @@ IMPL_LINK(SubToolPanel, WindowEventListener, VclSimpleEvent*, pEvent)
 {
     return new ::accessibility::AccessibleTreeNode (
         *this,
-        ::rtl::OUString::createFromAscii("Sub Task Panel"),
-        ::rtl::OUString::createFromAscii("Sub Task Panel"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")),
         ::com::sun::star::accessibility::AccessibleRole::PANEL);
 }
 
 } } // end of namespace ::sd::toolpanel
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

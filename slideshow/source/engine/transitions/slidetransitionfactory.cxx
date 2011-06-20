@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -473,6 +474,89 @@ void FadingSlideChange::performOut(
     }
 }
 
+class CutSlideChange : public SlideChangeBase
+{
+public:
+    /** Create a new SlideChanger, for the given leaving and
+        entering slides, which applies a cut effect.
+    */
+    CutSlideChange(
+        boost::optional<SlideSharedPtr> const & leavingSlide,
+        const SlideSharedPtr&                   pEnteringSlide,
+        const RGBColor&                          rFadeColor,
+        const SoundPlayerSharedPtr&             pSoundPlayer,
+        const UnoViewContainer&                 rViewContainer,
+        ScreenUpdater&                          rScreenUpdater,
+        EventMultiplexer&                       rEventMultiplexer )
+        : SlideChangeBase( leavingSlide,
+                           pEnteringSlide,
+                           pSoundPlayer,
+                           rViewContainer,
+                           rScreenUpdater,
+                           rEventMultiplexer ),
+          maFadeColor( rFadeColor ),
+          mbFirstTurn( true )
+        {}
+
+    virtual void performIn(
+        const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
+        const ViewEntry&                            rViewEntry,
+        const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
+        double                                      t );
+
+    virtual void performOut(
+        const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
+        const ViewEntry&                           rViewEntry,
+        const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
+        double                                     t );
+
+private:
+    RGBColor maFadeColor;
+    bool    mbFirstTurn;
+};
+
+void CutSlideChange::performIn(
+    const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
+    const ViewEntry&                            /*rViewEntry*/,
+    const ::cppcanvas::CanvasSharedPtr&         /*rDestinationCanvas*/,
+    double                                      t )
+{
+    ENSURE_OR_THROW(
+        rSprite,
+        "CutSlideChange::performIn(): Invalid sprite" );
+
+    // After 2/3rd of the active time, display new slide
+    rSprite->setAlpha( t > 2/3.0 ? 1.0 : 0.0 );
+}
+
+void CutSlideChange::performOut(
+    const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
+    const ViewEntry&                           rViewEntry,
+    const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
+    double                                     t )
+{
+    ENSURE_OR_THROW(
+        rSprite,
+        "CutSlideChange::performOut(): Invalid sprite" );
+    ENSURE_OR_THROW(
+        rDestinationCanvas,
+        "FadingSlideChange::performOut(): Invalid dest canvas" );
+
+    if( mbFirstTurn )
+    {
+        mbFirstTurn = false;
+
+        // clear page to given fade color. 'Leaving' slide is
+        // painted atop of that
+        fillPage( rDestinationCanvas,
+                  getEnteringSlideSizePixel( rViewEntry.mpView ),
+                  maFadeColor );
+    }
+
+    // Until 1/3rd of the active time, display old slide.
+    rSprite->setAlpha( t > 1/3.0 ? 0.0 : 1.0 );
+}
+
 class MovingSlideChange : public SlideChangeBase
 {
     /// Direction vector for leaving slide,
@@ -645,8 +729,7 @@ NumberAnimationSharedPtr createPushWipeTransition(
     switch( nTransitionSubType )
     {
     default:
-        OSL_ENSURE(
-            false,
+        OSL_FAIL(
             "createPushWipeTransition(): Unexpected transition "
             "subtype for animations::TransitionType::PUSHWIPE "
             "transitions" );
@@ -737,8 +820,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
     switch( nTransitionSubType )
     {
     default:
-        OSL_ENSURE(
-            false,
+        OSL_FAIL(
             "createSlideWipeTransition(): Unexpected transition "
             "subtype for animations::TransitionType::SLIDEWIPE "
             "transitions" );
@@ -938,8 +1020,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                 switch( nTransitionType )
                 {
                     default:
-                        OSL_ENSURE(
-                            false,
+                        OSL_FAIL(
                             "TransitionFactory::createSlideTransition(): "
                             "Unexpected transition type for "
                             "TRANSITION_SPECIAL transitions" );
@@ -1007,6 +1088,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                             pSoundPlayer );
                     }
 
+                    case animations::TransitionType::BARWIPE:
                     case animations::TransitionType::FADE:
                     {
                         // black page:
@@ -1038,16 +1120,27 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                                                   "SlideTransitionFactory::createSlideTransition(): Unknown FADE subtype" );
                         }
 
-                        return NumberAnimationSharedPtr(
-                            new FadingSlideChange(
-                                leavingSlide,
-                                pEnteringSlide,
-                                comphelper::make_optional(
-                                    rTransitionFadeColor),
-                                pSoundPlayer,
-                                rViewContainer,
-                                rScreenUpdater,
-                                rEventMultiplexer ));
+                        if( nTransitionType == animations::TransitionType::FADE )
+                            return NumberAnimationSharedPtr(
+                                new FadingSlideChange(
+                                    leavingSlide,
+                                    pEnteringSlide,
+                                    comphelper::make_optional(
+                                        rTransitionFadeColor),
+                                    pSoundPlayer,
+                                    rViewContainer,
+                                    rScreenUpdater,
+                                    rEventMultiplexer ));
+                        else
+                            return NumberAnimationSharedPtr(
+                                new CutSlideChange(
+                                    leavingSlide,
+                                    pEnteringSlide,
+                                    rTransitionFadeColor,
+                                    pSoundPlayer,
+                                    rViewContainer,
+                                    rScreenUpdater,
+                                    rEventMultiplexer ));
                     }
                 }
             }
@@ -1062,8 +1155,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
         "Unknown type/subtype (%d/%d) combination encountered",
         nTransitionType,
         nTransitionSubType );
-    OSL_ENSURE(
-        false,
+    OSL_FAIL(
         "TransitionFactory::createSlideTransition(): "
         "Unknown type/subtype combination encountered" );
 
@@ -1072,3 +1164,5 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
 
 } // namespace internal
 } // namespace presentation
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

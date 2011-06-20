@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,7 +102,6 @@ CopyDlg::CopyDlg(
     FreeResource();
 
     // Set up the view data button (image and accessible name).
-    maBtnSetViewData.SetModeImage( Image( SdResId( IMG_PIPETTE_H ) ), BMP_COLOR_HIGHCONTRAST );
     maBtnSetViewData.SetAccessibleName (maBtnSetViewData.GetQuickHelpText());
 
     // Farbtabellen
@@ -355,3 +355,5 @@ IMPL_LINK( CopyDlg, SetDefault, void*, EMPTYARG )
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

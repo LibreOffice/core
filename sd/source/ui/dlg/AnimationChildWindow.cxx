@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,21 +62,10 @@ AnimationChildWindow::AnimationChildWindow(
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
     pAnimWin->Initialize( pInfo );
-    /*
-    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 )
-    {
-        pWindow->SetPosSizePixel( pInfo->aPos, pInfo->aSize );
-    }
-    else
-        pWindow->SetPosPixel(SFX_APPWINDOW->OutputToScreenPixel(
-                                SFX_APPWINDOW->GetClientAreaPixel().TopLeft()));
 
-    if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
-        pAnimWin->ZoomIn();
-
-    pAnimWin->aFltWinSize = pWindow->GetSizePixel();
-    */
     SetHideNotDelete( sal_True );
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

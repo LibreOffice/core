@@ -79,6 +79,49 @@
 };
 
 //
+// OUTLINETEXTOBJ_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_OUTLINETEXTOBJ_POPUP
+#elif  SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_OUTLINETEXTOBJ_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_SET_DEFAULT
+        SEPARATOR
+        MN_LINE
+        MN_AREA
+        MN_TEXTATTR
+        MN_OUTLINE_TEXT_AUTOFIT
+        MN_TRANSFORM
+        MN_FONTWORK
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_CONVERT
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+    };
+};
+
+//
 // GEOMOBJ_POPUP
 //
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP

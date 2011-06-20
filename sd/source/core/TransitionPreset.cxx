@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
@@ -44,18 +45,16 @@
 #include <tools/stream.hxx>
 
 #include <rtl/uri.hxx>
+#include <rtl/instance.hxx>
 #include <tools/debug.hxx>
 
-#ifndef _SD_CUSTOMANIMATIONPRESET_HXX
 #include <TransitionPreset.hxx>
-#endif
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <algorithm>
 
 #include "sdpage.hxx"
 
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 
@@ -84,7 +83,7 @@ TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::co
     const NamedValue* p = aUserData.getConstArray();
     while( nLength-- )
     {
-        if( p->Name.equalsAscii( "preset-id" ) )
+        if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-id" ) ) )
         {
             p->Value >>= maPresetId;
             break;
@@ -137,7 +136,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             }
             else
                 {
-                    DBG_ERROR( "sd::TransitionPreset::importTransitionPresetList(), missformed xml configuration file, giving up!" );
+                    OSL_FAIL( "sd::TransitionPreset::importTransitionPresetList(), misformed xml configuration file, giving up!" );
                     break;
                 }
         }
@@ -221,27 +220,40 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::TransitionPreset::importResources(), Exception cought!" );
+        OSL_FAIL( "sd::TransitionPreset::importResources(), Exception cought!" );
     }
 
     return bRet;
 }
 
-TransitionPresetList* TransitionPreset::mpTransitionPresetList = 0;
+namespace
+{
+    class ImportedTransitionPresetList
+    {
+    private:
+        sd::TransitionPresetList m_aTransitionPresetList;
+    public:
+        ImportedTransitionPresetList()
+        {
+            sd::TransitionPreset::importTransitionPresetList(
+                m_aTransitionPresetList);
+        }
+        const sd::TransitionPresetList& getList() const
+        {
+            return m_aTransitionPresetList;
+        }
+    };
+
+    class theTransitionPresetList :
+        public rtl::Static<ImportedTransitionPresetList,
+                           theTransitionPresetList>
+    {
+    };
+}
 
 const TransitionPresetList& TransitionPreset::getTransitionPresetList()
 {
-    if( !mpTransitionPresetList )
-    {
-        OGuard aGuard( Application::GetSolarMutex() );
-        if( !mpTransitionPresetList )
-        {
-            mpTransitionPresetList = new sd::TransitionPresetList();
-            sd::TransitionPreset::importTransitionPresetList( *mpTransitionPresetList );
-        }
-    }
-
-    return *mpTransitionPresetList;
+    return theTransitionPresetList::get().getList();
 }
 
 void TransitionPreset::apply( SdPage* pSlide ) const
@@ -256,3 +268,5 @@ void TransitionPreset::apply( SdPage* pSlide ) const
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

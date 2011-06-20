@@ -137,7 +137,6 @@ Menu SD_MENU_PORTAL
                                 MI ( ITEM_VIEW_TOGGLEFUNCTIONBAR )
                                 MI ( ITEM_VIEW_TOGGLEOBJECTBAR )
                                 MN_TOGGLETOOLBAR
-                                MI ( ITEM_INSERT_HYPERLINK_INSERT )
                                 MN_TOGGLEOPTIONBAR
 #if SD_MENU_PORTAL == RID_DRAW_PORTALMENU
                                 MN_TOGGLECOMMONTASKBAR

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -248,7 +249,7 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
     {
         try
         {
-            const Any aNumber (xSet->getPropertyValue(::rtl::OUString::createFromAscii("Number")));
+            const Any aNumber (xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Number"))));
             sal_Int16 nNumber (-1);
             aNumber >>= nNumber;
             nNumber -= 1;
@@ -735,3 +736,5 @@ SdPage* SlideSorterModel::GetPage (const sal_Int32 nSdIndex) const
 
 
 } } } // end of namespace ::sd::slidesorter::model
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

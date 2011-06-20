@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@ namespace slideshow
             DelayFacade( const EventSharedPtr&  rEvent,
                          double                 nTimeout    ) :
 #if OSL_DEBUG_LEVEL > 1
-                Event(::rtl::OUString::createFromAscii("DelayFacade")),
+                Event(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DelayFacade"))),
 #endif
                 mpEvent( rEvent ),
                 mnTimeout( nTimeout )
@@ -148,3 +149,5 @@ namespace slideshow
 }
 
 #endif /* INCLUDED_SLIDESHOW_INTERRUPTABLEDELAYEVENT_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

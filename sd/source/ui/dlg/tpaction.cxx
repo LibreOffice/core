@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
-#ifndef _COM_SUN_STAR_EMBED_VERBDESCR_HPP_
 #include <com/sun/star/embed/VerbDescriptor.hpp>
-#endif
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
@@ -195,7 +194,7 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
     }
     else
     {
-        DBG_ERROR("sd::SdTPAction::SetView(), no docshell or viewshell?");
+        OSL_FAIL("sd::SdTPAction::SetView(), no docshell or viewshell?");
     }
 }
 
@@ -229,11 +228,6 @@ void SdTPAction::Construct()
             {
                 pGrafObj = (SdrGrafObj*) pObj;
             }
-//          // VCXControl ?
-//          else if( pObj->IsA( TYPE( VCSbxDrawObject ) ) )
-//          {
-//              bDisableAll = sal_True;
-//          }
         }
     }
     if( pGrafObj )
@@ -335,7 +329,7 @@ sal_Bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
         }
         else
         {
-            DBG_ERROR("sd::SdTPAction::FillItemSet(), I need a medium!");
+            OSL_FAIL("sd::SdTPAction::FillItemSet(), I need a medium!");
         }
     }
 
@@ -487,8 +481,8 @@ void SdTPAction::OpenFileDialog()
 
             aFileDialog.SetDisplayDirectory( aFile );
 
-            // The following is a fix for #1008001# and a workarround for
-            // #i4306#: The addition of the implicitely existing "all files"
+            // The following is a workarround for #i4306#:
+            // The addition of the implicitely existing "all files"
             // filter makes the (Windows system) open file dialog follow
             // links on the desktop to directories.
             aFileDialog.AddFilter (
@@ -921,8 +915,9 @@ sal_uInt16 SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
         case presentation::ClickAction_SOUND:            return STR_CLICK_ACTION_SOUND;
         case presentation::ClickAction_VERB:             return STR_CLICK_ACTION_VERB;
         case presentation::ClickAction_STOPPRESENTATION: return STR_CLICK_ACTION_STOPPRESENTATION;
-        default: DBG_ERROR( "Keine StringResource fuer ClickAction vorhanden!" );
+        default: OSL_FAIL( "Keine StringResource fuer ClickAction vorhanden!" );
     }
     return( 0 );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

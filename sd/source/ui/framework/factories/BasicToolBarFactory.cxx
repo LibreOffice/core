@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ Sequence<rtl::OUString> SAL_CALL BasicToolBarFactory_getSupportedServiceNames (v
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.BasicToolBarFactory"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.BasicToolBarFactory")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -243,3 +244,5 @@ void BasicToolBarFactory::ThrowIfDisposed (void) const
 
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

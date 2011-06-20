@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@ ReadOnlyModeObserver::ReadOnlyModeObserver (
       mpBroadcaster(new ModifyBroadcaster(maMutex))
 {
     // Create a URL object for the slot name.
-    maSlotNameURL.Complete = OUString::createFromAscii(".uno:EditDoc");
+    maSlotNameURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:EditDoc"));
     uno::Reference<lang::XMultiServiceFactory> xServiceManager (
         ::comphelper::getProcessServiceFactory());
     if (xServiceManager.is())
@@ -218,3 +219,5 @@ void SAL_CALL ReadOnlyModeObserver::notifyConfigurationChange (
 }
 
 } } // end of namespace sd::framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

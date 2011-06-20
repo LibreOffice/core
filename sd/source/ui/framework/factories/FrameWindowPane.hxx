@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "framework/Pane.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XRESOURCEID_HPP_
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
-#endif
 
 
 namespace sd { namespace framework {
@@ -61,3 +60,5 @@ public:
 } } // end of namespace sd::framework
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 using namespace ::com::sun::star;
@@ -134,3 +134,4 @@ String SdCustomShow::GetName() const
     return aName;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

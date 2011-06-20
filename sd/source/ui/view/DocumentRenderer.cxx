@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -268,8 +269,8 @@ namespace {
     {
     public:
         Selection (const OUString& rsSelection, const SdPage* pCurrentPage)
-            : mbAreAllPagesSelected(rsSelection.equalsAscii("all")),
-              mbIsShapeSelection(rsSelection.equalsAscii("selection")),
+            : mbAreAllPagesSelected(rsSelection.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("all"))),
+              mbIsShapeSelection(rsSelection.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("selection"))),
               mnCurrentPageIndex(pCurrentPage!=NULL ? (pCurrentPage->GetPageNum()-1)/2 : -1),
               mpSelectedPages()
         {
@@ -1361,7 +1362,7 @@ public:
             ::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
 
         if ( ! mpPrintView)
-            mpPrintView.reset(new DrawView(mrBase.GetDocShell(), &rPrinter, pDrawViewShell.get()));
+            mpPrintView.reset(new DrawView(mrBase.GetDocShell(), &rPrinter, NULL));
 
         if (nIndex<0 || sal::static_int_cast<sal_uInt32>(nIndex)>=maPrinterPages.size())
             return;
@@ -2074,13 +2075,11 @@ private:
             // Bugfix zu 44530:
             // Falls implizit umgestellt wurde (Landscape/Portrait)
             // wird dies beim Kacheln, bzw. aufteilen (Poster) beruecksichtigt
-            sal_Bool bSwitchPageSize = sal_False;
             if( ( rInfo.maPrintSize.Width() > rInfo.maPrintSize.Height()
                     && aPageWidth < aPageHeight )
                 || ( rInfo.maPrintSize.Width() < rInfo.maPrintSize.Height()
                     && aPageWidth > aPageHeight ) )
             {
-                bSwitchPageSize = sal_True;
                 const sal_Int32 nTmp (rInfo.maPrintSize.Width());
                 rInfo.maPrintSize.Width() = rInfo.maPrintSize.Height();
                 rInfo.maPrintSize.Height() = nTmp;
@@ -2291,12 +2290,6 @@ private:
 
             // if CutPage is set then do not move it, otherwise move the
             // scaled page to printable area
-            #if 0
-            if (bCutPage)
-                aMap.SetOrigin(Point(-aPageOffset.X(), -aPageOffset.Y()));
-            else
-                aMap.SetOrigin(Point(0,0));
-            #endif
             maPrinterPages.push_back(
                 ::boost::shared_ptr<PrinterPage>(
                     new RegularPrinterPage(
@@ -2321,13 +2314,9 @@ private:
                 rInfo.maPageSize.Width() - rPage.GetLftBorder() - rPage.GetRgtBorder());
             const long nPageHeight (
                 rInfo.maPageSize.Height() - rPage.GetUppBorder() - rPage.GetLwrBorder());
-            #if 0
-            Point aOrigin (
-                nPageWidth < rInfo.maPrintSize.Width() ? -aPageOffset.X() : 0,
-                nPageHeight < rInfo.maPrintSize.Height() ? -aPageOffset.Y() : 0);
-            #else
+
             Point aOrigin ( 0, 0 );
-            #endif
+
             for (Point aPageOrigin = aOrigin;
                  -aPageOrigin.Y()<nPageHeight;
                  aPageOrigin.Y() -= rInfo.maPrintSize.Height())
@@ -2420,3 +2409,5 @@ void SAL_CALL DocumentRenderer::render (
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

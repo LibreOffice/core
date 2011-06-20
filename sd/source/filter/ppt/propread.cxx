@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,22 +33,6 @@
 #include "tools/debug.hxx"
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"
-
-// ------------------------------------------------------------------------
-
-struct PropEntry
-{
-    sal_uInt32  mnId;
-    sal_uInt32  mnSize;
-    sal_uInt16  mnTextEnc;
-    sal_uInt8*  mpBuf;
-
-                        PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc );
-                        PropEntry( const PropEntry& rProp );
-                        ~PropEntry() { delete[] mpBuf; } ;
-
-    const PropEntry&    operator=(const PropEntry& rPropEntry);
-};
 
 PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc ) :
     mnId        ( nId ),
@@ -155,7 +140,7 @@ sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlig
                 }
                 catch( const std::bad_alloc& )
                 {
-                    DBG_ERROR( "sd PropItem::Read bad alloc" );
+                    OSL_FAIL( "sd PropItem::Read bad alloc" );
                 }
             }
             if ( bAlign )
@@ -184,7 +169,7 @@ sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlig
                 }
                 catch( const std::bad_alloc& )
                 {
-                    DBG_ERROR( "sd PropItem::Read bad alloc" );
+                    OSL_FAIL( "sd PropItem::Read bad alloc" );
                 }
             }
             if ( bAlign && ( nItemSize & 1 ) )
@@ -217,80 +202,12 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
 
 //  -----------------------------------------------------------------------
 
-struct Dict
+Section::Section( const Section& rSection )
+    : mnTextEnc(rSection.mnTextEnc),
+    maEntries(rSection.maEntries.clone())
 {
-    sal_uInt32  mnId;
-    String      aString;
-
-            Dict( sal_uInt32 nId, String rString ) { mnId = nId; aString = rString; };
-};
-
-//  -----------------------------------------------------------------------
-
-Dictionary::~Dictionary()
-{
-    for ( void* pPtr = First(); pPtr; pPtr = Next() )
-        delete (Dict*)pPtr;
-}
-
-//  -----------------------------------------------------------------------
-
-void Dictionary::AddProperty( sal_uInt32 nId, const String& rString )
-{
-    if ( rString.Len() )        // eindeutige namen bei properties
-    {
-        // pruefen, ob es die Propertybeschreibung in der Dictionary schon gibt
-        for ( Dict* pDict = (Dict*)First(); pDict; pDict = (Dict*)Next() )
-        {
-            if ( pDict->mnId == nId )
-            {
-                pDict->aString = rString;
-                return;
-            }
-        }
-        Insert( new Dict( nId, rString ), LIST_APPEND );
-    }
-}
-
-//  -----------------------------------------------------------------------
-
-sal_uInt32 Dictionary::GetProperty( const String& rString )
-{
-    for ( Dict* pDict = (Dict*)First(); pDict; pDict = (Dict*)Next() )
-    {
-        if ( pDict->aString == rString )
-            return pDict->mnId;
-    }
-    return 0;
-}
-
-//  -----------------------------------------------------------------------
-
-Dictionary& Dictionary::operator=( Dictionary& rDictionary )
-{
-    void* pPtr;
-
-    if ( this != &rDictionary )
-    {
-        for ( pPtr = First(); pPtr; pPtr = Next() )
-            delete (Dict*)pPtr;
-
-        for ( pPtr = rDictionary.First(); pPtr; pPtr = rDictionary.Next() )
-            Insert( new Dict( ((Dict*)pPtr)->mnId, ((Dict*)pPtr)->aString ), LIST_APPEND );
-    }
-    return *this;
-}
-
-//  -----------------------------------------------------------------------
-
-Section::Section( Section& rSection )
-: List()
-{
-    mnTextEnc = rSection.mnTextEnc;
     for ( int i = 0; i < 16; i++ )
         aFMTID[ i ] = rSection.aFMTID[ i ];
-    for ( PropEntry* pProp = (PropEntry*)rSection.First(); pProp; pProp = (PropEntry*)rSection.Next() )
-        Insert( new PropEntry( *pProp ), LIST_APPEND );
 }
 
 //  -----------------------------------------------------------------------
@@ -306,19 +223,20 @@ Section::Section( const sal_uInt8* pFMTID )
 
 sal_Bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
 {
-    PropEntry* pProp;
     if ( nId )
     {
-        for ( pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
+        boost::ptr_vector<PropEntry>::const_iterator iter;
+        for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
         {
-            if ( pProp->mnId == nId )
+            if (iter->mnId == nId)
                 break;
         }
-        if ( pProp )
+
+        if (iter != maEntries.end())
         {
             rPropItem.Clear();
             rPropItem.SetTextEncoding( mnTextEnc );
-            rPropItem.Write( pProp->mpBuf, pProp->mnSize );
+            rPropItem.Write( iter->mpBuf,iter->mnSize );
             rPropItem.Seek( STREAM_SEEK_TO_BEGIN );
             return sal_True;
         }
@@ -338,18 +256,19 @@ void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBu
         nId = 0;
 
     // keine doppelten PropId's zulassen, sortieren
-    for ( sal_uInt32 i = 0; i < Count(); i++ )
+    boost::ptr_vector<PropEntry>::iterator iter;
+    for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter )
     {
-        PropEntry* pPropEntry = (PropEntry*)GetObject( i );
-        if ( pPropEntry->mnId == nId )
-            delete (PropEntry*)Replace( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ), i );
-        else if ( pPropEntry->mnId > nId )
-            Insert( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ), i );
+        if ( iter->mnId == nId )
+            maEntries.replace( iter, new PropEntry( nId, pBuf, nBufSize, mnTextEnc ));
+        else if ( iter->mnId > nId )
+            maEntries.insert( iter, new PropEntry( nId, pBuf, nBufSize, mnTextEnc ));
         else
             continue;
         return;
     }
-    Insert( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ), LIST_APPEND );
+
+    maEntries.push_back( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ) );
 }
 
 //  -----------------------------------------------------------------------
@@ -358,18 +277,17 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
 {
     sal_Bool bRetValue = sal_False;
 
-    Dictionary aDict;
-    PropEntry* pProp;
-
-    for ( pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
+    boost::ptr_vector<PropEntry>::iterator iter;
+    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
     {
-        if ( pProp->mnId == 0 )
+        if ( iter->mnId == 0 )
             break;
     }
-    if ( pProp )
+
+    if ( iter != maEntries.end() )
     {
         sal_uInt32 nDictCount, nId, nSize, nPos;
-        SvMemoryStream aStream( (sal_Int8*)pProp->mpBuf, pProp->mnSize, STREAM_READ );
+        SvMemoryStream aStream( (sal_Int8*)iter->mpBuf, iter->mnSize, STREAM_READ );
         aStream.Seek( STREAM_SEEK_TO_BEGIN );
         aStream >> nDictCount;
         for ( sal_uInt32 i = 0; i < nDictCount; i++ )
@@ -398,25 +316,16 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
                 }
                 catch( const std::bad_alloc& )
                 {
-                    DBG_ERROR( "sd Section::GetDictionary bad alloc" );
+                    OSL_FAIL( "sd Section::GetDictionary bad alloc" );
                 }
                 if ( !aString.Len() )
                     break;
-                aDict.AddProperty( nId, aString );
+                rDict.insert( std::make_pair(aString,nId) );
             }
             bRetValue = sal_True;
         }
     }
-    rDict = aDict;
     return bRetValue;
-}
-
-//  -----------------------------------------------------------------------
-
-Section::~Section()
-{
-    for ( PropEntry* pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
-        delete pProp;
 }
 
 //  -----------------------------------------------------------------------
@@ -502,8 +411,12 @@ void Section::Read( SvStorageStream *pStrm )
                     break;
 
                     case VT_LPWSTR :
+                        {
                         *pStrm >> nTemp;
-                        nPropSize += ( nTemp << 1 ) + 4;
+                        // looks like these are aligned to 4 bytes
+                        sal_uInt32 nLength = nPropOfs + nSecOfs + nPropSize + ( nTemp << 1 ) + 4;
+                        nPropSize += ( nTemp << 1 ) + 4 + (nLength % 4);
+                        }
                     break;
 
                     case VT_BLOB_OBJECT :
@@ -539,6 +452,9 @@ void Section::Read( SvStorageStream *pStrm )
                     break;
                 }
                 pStrm->Seek( nPropOfs + nSecOfs );
+                // make sure we don't overflow the section size
+                if( nPropSize > nSecSize - nSecOfs )
+                    nPropSize = nSecSize - nSecOfs;
                 sal_uInt8* pBuf = new sal_uInt8[ nPropSize ];
                 pStrm->Read( pBuf, nPropSize );
                 AddProperty( nPropId, pBuf, nPropSize );
@@ -602,18 +518,13 @@ void Section::Read( SvStorageStream *pStrm )
 
 //  -----------------------------------------------------------------------
 
-Section& Section::operator=( Section& rSection )
+Section& Section::operator=( const Section& rSection )
 {
-    PropEntry* pProp;
-
     if ( this != &rSection )
     {
         memcpy( (void*)aFMTID, (void*)rSection.aFMTID, 16 );
-        for ( pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
-            delete pProp;
-        Clear();
-        for ( pProp = (PropEntry*)rSection.First(); pProp; pProp = (PropEntry*)rSection.Next() )
-            Insert( new PropEntry( *pProp ), LIST_APPEND );
+
+        maEntries = rSection.maEntries.clone();
     }
     return *this;
 }
@@ -643,38 +554,28 @@ PropRead::PropRead( SvStorage& rStorage, const String& rName ) :
 
 void PropRead::AddSection( Section& rSection )
 {
-    Insert( new Section( rSection ), LIST_APPEND );
+    maSections.push_back( new Section( rSection ) );
 }
 
 //  -----------------------------------------------------------------------
 
 const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
 {
-    Section* pSection;
-
-    for ( pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
+    boost::ptr_vector<Section>::iterator it;
+    for ( it = maSections.begin(); it != maSections.end(); ++it)
     {
-        if ( memcmp( pSection->GetFMTID(), pFMTID, 16 ) == 0 )
-            break;
+        if ( memcmp( it->GetFMTID(), pFMTID, 16 ) == 0 )
+            return &(*it);
     }
-    return pSection;
-}
-
-//  -----------------------------------------------------------------------
-
-PropRead::~PropRead()
-{
-    for ( Section* pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
-        delete pSection;
+    return NULL;
 }
 
 //  -----------------------------------------------------------------------
 
 void PropRead::Read()
 {
-    for ( Section* pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
-        delete pSection;
-    Clear();
+    maSections.clear();
+
     if ( mbStatus )
     {
         sal_uInt32  nSections;
@@ -708,10 +609,8 @@ void PropRead::Read()
 
 //  -----------------------------------------------------------------------
 
-PropRead& PropRead::operator=( PropRead& rPropRead )
+PropRead& PropRead::operator=( const PropRead& rPropRead )
 {
-    Section* pSection;
-
     if ( this != &rPropRead )
     {
         mbStatus = rPropRead.mbStatus;
@@ -723,11 +622,9 @@ PropRead& PropRead::operator=( PropRead& rPropRead )
         mnVersionHi = rPropRead.mnVersionHi;
         memcpy( mApplicationCLSID, rPropRead.mApplicationCLSID, 16 );
 
-        for ( pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
-            delete pSection;
-        Clear();
-        for ( pSection = (Section*)rPropRead.First(); pSection; pSection = (Section*)rPropRead.Next() )
-            Insert( new Section( *pSection ), LIST_APPEND );
+        maSections = rPropRead.maSections.clone();
     }
     return *this;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

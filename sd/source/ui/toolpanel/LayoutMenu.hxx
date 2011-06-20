@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "taskpane/TaskPaneTreeNode.hxx"
 
-#ifndef _COM_SUN_STAR_FRAME_XSTATUS_LISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
-#endif
 
 #include "glob.hxx"
 #include "pres.hxx"
@@ -237,3 +236,5 @@ private:
 } } // end of namespace ::sd::toolpanel
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

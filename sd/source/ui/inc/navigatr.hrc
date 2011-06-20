@@ -43,7 +43,6 @@
 #define LB_DOCS 1
 
 #define IL_NAVIGATR 333
-#define ILH_NAVIGATR 444
 //IAccessibility2 Implementation 2009-----
 #define STR_DRAGMODE 1
 //-----IAccessibility2 Implementation 2009

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,25 +33,17 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _GLOBL3D_HXX
 #include <svx/globl3d.hxx>
-#endif
 #include <svx/hlnkitem.hxx>
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
-#ifndef _BINDING_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/templdlg.hxx>
 #include <svx/xdef.hxx>
@@ -374,7 +367,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 else
                 {   SfxTemplateItem aItem( nWhich, String() );
                     aAllSet.Put( aItem, aItem.Which() );
-                    // rSet.DisableItem( nWhich );
                 }
             }
             break;
@@ -495,22 +487,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         delete pSet;
     }
 
-//    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-//    sal_uLong nMarkCount = rMarkList.GetMarkCount();
-//    sal_Bool bDisabled = sal_False;
-//
-//    for (sal_uLong i = 0;
-//         i < nMarkCount && !bDisabled && i < 50; i++)
-//    {
-//        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-//
-//        if (pObj->GetObjInventor() == E3dInventor)
-//        {
-//            bDisabled = sal_True;
-//            rSet.ClearItem(SDRATTR_SHADOW);
-//            rSet.DisableItem(SDRATTR_SHADOW);
-//        }
-//    }
 }
 
 
@@ -574,3 +550,5 @@ sal_Bool DrawViewShell::HasSelection(sal_Bool bText) const
 }
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

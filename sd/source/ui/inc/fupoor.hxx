@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <vcl/event.hxx>
 #include <rtl/ref.hxx>
 
-#ifndef _SALHELPER_SIMPLEREFERENCECOMPONENT_HXX_
 #include "helper/simplereferencecomponent.hxx"
-#endif
 
 class SdDrawDocument;
 class SfxRequest;
@@ -67,7 +66,6 @@ public:
 
     virtual void DoExecute( SfxRequest& rReq );
 
-    // #95491# see member
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
     sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
@@ -83,7 +81,7 @@ public:
     virtual sal_Bool MouseMove(const MouseEvent& );
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
 
-    // #95491# moved from inline to *.cxx
+    // moved from inline to *.cxx
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual sal_Bool Command(const CommandEvent& rCEvt);
@@ -99,7 +97,6 @@ public:
 
     void SetWindow(::sd::Window* pWin) { mpWindow = pWin; }
 
-    // #97016# II
     virtual void SelectionHasChanged();
 
     sal_uInt16  GetSlotID() const { return( nSlotId ); }
@@ -110,7 +107,6 @@ public:
 
     void StartDelayToScrollTimer ();
 
-    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
     /** is called when the currenct function should be aborted. <p>
@@ -196,7 +192,7 @@ protected:
     sal_Bool            bDelayActive;
     sal_Bool            bFirstMouseMove;
 
-    // #95491# member to hold state of the mouse buttons for creation
+    // member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)
 
 private:
@@ -210,3 +206,4 @@ typedef rtl::Reference< FuPoor > FunctionReference;
 
 #endif      // _SD_FUPOOR_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,6 +104,8 @@ public:
     bool TransferFocus (::Window* pSource, const KeyCode& rCode);
 
 private:
+    friend struct FocusManagerCreator;
+
     class LinkMap;
     ::std::auto_ptr<LinkMap> mpLinks;
 
@@ -132,3 +135,5 @@ private:
 } } // end of namespace ::sd::toolpanel
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

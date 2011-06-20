@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -154,7 +155,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
+        OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
     }
 
     onSelectionChanged();
@@ -262,7 +263,7 @@ void TableDesignPane::ApplyStyle()
     }
     catch( Exception& )
     {
-        DBG_ERROR("TableDesignPane::implValueSetHdl(), exception caught!");
+        OSL_FAIL("TableDesignPane::implValueSetHdl(), exception caught!");
     }
 }
 
@@ -353,7 +354,7 @@ void TableDesignPane::onSelectionChanged()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::TableDesignPane::onSelectionChanged(), Exception caught!" );
+        OSL_FAIL( "sd::TableDesignPane::onSelectionChanged(), Exception caught!" );
     }
 
     if( mxSelectedTable != xNewSelection )
@@ -485,7 +486,7 @@ void TableDesignPane::updateControls()
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::TableDesignPane::updateControls(), exception caught!");
+            OSL_FAIL("sd::TableDesignPane::updateControls(), exception caught!");
         }
         static_cast< CheckBox* >( mxControls[i].get() )->Check( bUse ? sal_True : sal_False );
         mxControls[i]->Enable(bHasTable ? sal_True : sal_False );
@@ -647,7 +648,7 @@ static void FillCellInfoVector( const Reference< XIndexAccess >& xTableStyle, Ce
     }
     catch(Exception&)
     {
-        DBG_ERROR("sd::FillCellInfoVector(), exception caught!");
+        OSL_FAIL("sd::FillCellInfoVector(), exception caught!");
     }
 }
 
@@ -811,7 +812,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                     // draw top border
                     for( sal_uInt16 nLine = 0; nLine < 4; ++nLine )
                     {
-                        const SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
+                        const ::editeng::SvxBorderLine* pBorderLine = xCellInfo->maBorder.GetLine(nLine);
                         if( !pBorderLine || ((pBorderLine->GetOutWidth() == 0) && (pBorderLine->GetInWidth()==0)) )
                             continue;
 
@@ -824,7 +825,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                             if( xBorderInfo.get() )
                             {
                                 const sal_uInt16 nOtherLine = nLine ^ 1;
-                                const SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(nOtherLine^1);
+                                const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(nOtherLine^1);
                                 if( pBorderLine2 && pBorderLine2->HasPriority(*pBorderLine) )
                                     continue; // other border line wins
                             }
@@ -887,12 +888,12 @@ void TableDesignPane::FillDesignPreviewControl()
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
+            OSL_FAIL("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
         }
     }
     catch( Exception& )
     {
-        DBG_ERROR("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
+        OSL_FAIL("sd::TableDesignPane::FillDesignPreviewControl(), exception caught!");
     }
     pValueSet->SelectItem(nSelectedItem);
 }
@@ -949,3 +950,4 @@ void showTableDesignDialog( ::Window* pParent, ViewShellBase& rBase )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

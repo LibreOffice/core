@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include "drawdoc.hxx"
 #include "View.hxx"
 
-#ifndef _SPLIT_HXX
 #include <vcl/split.hxx>
-#endif
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/smplhint.hxx>
@@ -162,14 +161,6 @@ void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
 
 void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
-    // #110094#-7
-    // Clear the master page cache so that master pages will be redrawn.
-    //if (mpViewShell != NULL)
-    //{
-    //    SdView* pView = mpViewShell->GetView();
-    //    if (pView != NULL)
-    //        pView->ReleaseMasterPagePaintCache ();
-    //}
     // Set the current state at all registered output devices.
     tWindowList::iterator aWindowIterator (maWindowList.begin());
     while (aWindowIterator != maWindowList.end())
@@ -187,3 +178,5 @@ void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uI
 
 
 } // end of namespace sd
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

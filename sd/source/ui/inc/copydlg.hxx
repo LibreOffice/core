@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define SD_COPY_DLG_HXX
 
 #include <vcl/group.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <svx/dlgctrl.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
@@ -103,3 +102,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

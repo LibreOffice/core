@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#ifndef _UTL_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 
 #include <list>
 #include <map>
@@ -84,3 +83,5 @@ private:
 }
 
 #endif // _SD_STLPROPERTYSET_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
