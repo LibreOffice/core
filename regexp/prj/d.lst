@@ -5,4 +5,5 @@ mkdir: %_DEST%\inc\external\regexp
 ..\%__SRC%\bin\i18nrege*.dll %_DEST%\bin\i18nrege*.dll
 ..\%__SRC%\lib\libi18nregexp*.so %_DEST%\lib\libi18nregexp*.so
 ..\%__SRC%\lib\libi18nregexp*.dylib %_DEST%\lib\libi18nregexp*.dylib
+..\%__SRC%\lib\libi18nregexp*.dll.a %_DEST%\lib\libi18nregexp*.dll.a
 ..\%__SRC%\lib\ii18nregexp.lib %_DEST%\lib\ii18nregexp.lib
