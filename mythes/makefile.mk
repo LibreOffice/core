@@ -93,6 +93,7 @@ OUT2INC += mythes.hxx
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
+.IF "$(SYSTEM_MYTHES)" != "YES"
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS= --disable-shared --with-pic \
     HUNSPELL_CFLAGS=-I$(SOLARINCDIR)$/hunspell \
@@ -104,6 +105,7 @@ CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff
 
 BUILD_ACTION=make
 
+.ENDIF
 .ELSE
 BUILD_ACTION=dmake
 .ENDIF # "$(COM)"=="GCC"
