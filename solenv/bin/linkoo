@@ -79,6 +79,8 @@ my %replaceable = (
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
     'basis-link/share/config' => '\.zip$',
+    $program_dir => '\.rdb',
+    'ure/share/misc' => '\.rdb'
 #    'share/uno_packages' => '\.zip$'
 );
 
@@ -303,25 +305,6 @@ sub link_iso_res()
     print "\n";
 }
 
-# Hack for (renamed) types.rdb (types.db)
-sub link_oovbaapi_rdb()
-{
-    print "oovbaapi.rdb case:";
-    my $src  = "$OOO_BUILD/oovbaapi/$TARGET/ucr";
-    my $dest = "$OOO_INSTALL/" . $program_dir;
-    do_link ($src, $dest, 'oovbaapi.db', 'oovbaapi.rdb');
-    print "\n";
-}
-
-sub link_types_rdb()
-{
-    print "Types.rdb case:";
-    my $src  = "$OOO_BUILD/offapi/$TARGET/ucr";
-    my $dest = "$OOO_INSTALL/" . $ure_misc_dir;
-    do_link ($src, $dest, 'types.db', 'types.rdb');
-    print "\n";
-}
-
 sub link_pagein_files()
 {
     print "pagein case:";
@@ -377,8 +360,6 @@ my $installed_files = build_installed_list ($OOO_INSTALL);
 
 scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
 link_iso_res();
-link_types_rdb();
-link_oovbaapi_rdb();
 link_pagein_files();
 
 if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
