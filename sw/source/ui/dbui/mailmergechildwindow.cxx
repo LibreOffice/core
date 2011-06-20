@@ -115,10 +115,10 @@ IMPL_LINK( SwMailMergeChildWin, BackHdl, ToolBox *, EMPTYARG )
     return 0;
 }
 
-void    SwMailMergeChildWin::FillInfo(SfxChildWinInfo& rInfo) const
+void SwMailMergeChildWin::FillInfo(SfxChildWinInfo& rInfo) const
 {
     SfxFloatingWindow::FillInfo(rInfo);
-    rInfo.aWinState.Erase();
+    rInfo.aWinState = rtl::OString();
     rInfo.bVisible = sal_False;
 }
 
