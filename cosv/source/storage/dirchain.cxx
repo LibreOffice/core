@@ -93,15 +93,6 @@ DirectoryChain::PushBack( const DirectoryChain & i_sPath )
 }
 
 void
-DirectoryChain::PopFront( uintt i_nCount )
-{
-    if (i_nCount <= aPath.size())
-        aPath.erase( aPath.begin(), aPath.begin() + i_nCount );
-    else
-        aPath.erase( aPath.begin(), aPath.end() );
-}
-
-void
 DirectoryChain::PopBack( uintt i_nCount )
 {
     if (i_nCount <= aPath.size())

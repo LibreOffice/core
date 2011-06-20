@@ -85,8 +85,6 @@ class DirectoryChain
     void                PushBack(
                             const DirectoryChain &
                                                 i_sPath );
-    void                PopFront(
-                            uintt               i_nCount = 1 );
     void                PopBack(
                             uintt               i_nCount = 1 );
 
