@@ -1768,10 +1768,12 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 
     if (pLstManager) // sind die Listendeklarationen gelesen?
     {
-        std::vector<sal_uInt8> aParaSprms;
         SwTxtNode* pTxtNd = pPaM->GetNode()->GetTxtNode();
-        OSL_ENSURE(pTxtNd, "Kein Text-Node an PaM-Position");
+        OSL_ENSURE(pTxtNd, "No Text-Node at PaM-Position");
+        if (!pTxtNd)
+            return;
 
+        std::vector<sal_uInt8> aParaSprms;
         const SwNumRule* pRule = bSetAttr ?
             pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
                 aParaSprms, pTxtNd) : 0;
