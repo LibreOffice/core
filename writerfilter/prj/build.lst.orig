@@ -1,6 +1,0 @@
-wf	writerfilter	: soltools sal BOOST:boost cppu cppuhelper ucbhelper tools svx LIBXSLT:libxslt oox NULL
-<<<<<<< HEAD
-=======
-wf	writerfilter	usr1	-	all	wf_mkout NULL
->>>>>>> master
-wf	writerfilter\prj	nmake	-	all	wf_prj NULL
