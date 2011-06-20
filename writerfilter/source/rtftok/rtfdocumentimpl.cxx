@@ -592,8 +592,10 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_PAR:
             {
                 // end previous paragraph
-                OUString aStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\x0d"));
-                text(aStr);
+                Mapper().startCharacterGroup();
+                sal_uInt8 sParEnd[] = { 0xd };
+                Mapper().text(sParEnd, 1);
+                Mapper().endCharacterGroup();
                 Mapper().endParagraphGroup();
                 // start new one
                 Mapper().startParagraphGroup();
