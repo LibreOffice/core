@@ -1258,6 +1258,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
             }
             break;
+        case RTF_TRRH:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
+                        NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_val, pValue);
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
