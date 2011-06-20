@@ -5239,7 +5239,11 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM, LPARAM lParam )
 
     // Feststellen, ob wir IME unterstuetzen
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
-    if ( pFrame && pFrame->mbIME && pFrame->mhDefIMEContext )
+
+    if ( !pFrame )
+        return;
+
+    if ( pFrame->mbIME && pFrame->mhDefIMEContext )
     {
         HKL     hKL = (HKL)lParam;
         UINT    nImeProps = ImmGetProperty( hKL, IGP_PROPERTY );
