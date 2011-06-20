@@ -107,9 +107,6 @@ SpellChecker::~SpellChecker()
     aDLocs = NULL;
     delete[] aDNames;
     aDNames = NULL;
-    if (xPropHelper.is())
-        pPropHelper->RemoveAsPropListener();
-    delete pPropHelper;
 }
 
 PropertyHelper_Spelling & SpellChecker::GetPropHelper_Impl()
@@ -597,7 +594,6 @@ void SAL_CALL SpellChecker::dispose()
         bDisposing = sal_True;
         EventObject aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
-        xPropHelper.clear();
     }
 }
 
