@@ -30,7 +30,7 @@
 
 #include <stddef.h>
 
-#include <Windows.h>
+#include <windows.h>
 
 #include "jni.h"
 #include "sal/types.h"
