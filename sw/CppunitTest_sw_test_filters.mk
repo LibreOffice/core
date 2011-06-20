@@ -85,8 +85,11 @@ $(eval $(call gb_RdbTarget_RdbTarget,sw_filters_test))
 $(eval $(call gb_RdbTarget_add_components,sw_filters_test,\
     sw/util/sw \
     sw/util/msword \
+    forms/util/frm \
+    dbaccess/util/dba \
     sfx2/util/sfx \
     framework/util/fwk \
+    toolkit/util/tk \
     unoxml/source/service/unoxml \
     fileaccess/source/fileacc \
     comphelper/util/comphelp \
