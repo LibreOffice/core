@@ -100,6 +100,9 @@ namespace writerfilter {
                 // reset by trowd
                 RTFSprms_t aTableRowSprms;
                 RTFSprms_t aTableRowAttributes;
+                // reset by cellx
+                RTFSprms_t aTableCellSprms;
+                RTFSprms_t aTableCellAttributes;
 
                 RTFReferenceTable::Entries_t aFontTableEntries;
                 int nCurrentFontIndex;
@@ -137,8 +140,6 @@ namespace writerfilter {
                 int nCellX;
                 std::deque<RTFSprms::Pointer_t> aTableCellsSprms;
                 std::deque<RTFSprms::Pointer_t> aTableCellsAttributes;
-                /// The first border type creates the container sprm inside cell sprms.
-                bool bNeedTableCellBorders;
         };
 
         /// Implementation of the RTFDocument interface.

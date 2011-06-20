@@ -67,25 +67,6 @@ RTFSprms_t& lcl_getNumPr(std::stack<RTFParserState>& aStates)
     return p->getSprms();
 }
 
-RTFSprms_t& lcl_getCellBordersSprms(std::stack<RTFParserState>& aStates)
-{
-    if (aStates.top().bNeedTableCellBorders)
-    {
-        RTFSprms::Pointer_t pTableCellAttributes(new RTFSprms_t());
-        aStates.top().aTableCellsAttributes.push_back(pTableCellAttributes);
-        RTFSprms::Pointer_t pTableCellSprms(new RTFSprms_t());
-        aStates.top().aTableCellsSprms.push_back(pTableCellSprms);
-
-        RTFSprms_t aAttributes;
-        RTFSprms_t aSprms;
-        RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-        aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue));
-
-        aStates.top().bNeedTableCellBorders = false;
-    }
-    return RTFSprm::find(*aStates.top().aTableCellsSprms.back(), NS_ooxml::LN_CT_TcPrBase_tcBorders)->getSprms();
-}
-
 Id lcl_getBorderTable(sal_uInt32 nIndex)
 {
     static const Id aBorderIds[] =
@@ -94,6 +75,33 @@ Id lcl_getBorderTable(sal_uInt32 nIndex)
     };
 
     return aBorderIds[nIndex];
+}
+
+void lcl_putNestedAttribute(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue, bool bAttribute = true)
+{
+    RTFValue::Pointer_t pParent = RTFSprm::find(rSprms, nParent);
+    if (!pParent.get())
+    {
+        RTFSprms_t aAttributes;
+        RTFValue::Pointer_t pParentValue(new RTFValue(aAttributes));
+        rSprms.push_back(make_pair(nParent, pParentValue));
+        pParent = pParentValue;
+    }
+    RTFSprms_t& rAttributes = (bAttribute ? pParent->getAttributes() : pParent->getSprms());
+    rAttributes.push_back(make_pair(nId, pValue));
+}
+
+void lcl_putNestedSprm(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue)
+{
+    lcl_putNestedAttribute(rSprms, nParent, nId, pValue, false);
+}
+
+RTFSprms_t& lcl_getCellBordersAttributes(std::stack<RTFParserState>& aStates)
+{
+    RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
+    OSL_ASSERT(p.get());
+    OSL_ASSERT(p->getSprms().size());
+    return p->getSprms().back().second->getAttributes();
 }
 
 void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue::Pointer_t pValue)
@@ -112,24 +120,9 @@ void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue
     else
     {
         // Attributes of the last border type
-        RTFSprms_t& rAttributes = lcl_getCellBordersSprms(aStates).back().second->getAttributes();
+        RTFSprms_t& rAttributes = lcl_getCellBordersAttributes(aStates);
         rAttributes.push_back(make_pair(nId, pValue));
     }
-}
-
-// This works on any container (sprm, attribute), as long as the nested value is an attribute.
-void lcl_putNestedAttribute(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue)
-{
-    RTFValue::Pointer_t pParent = RTFSprm::find(rSprms, nParent);
-    if (!pParent.get())
-    {
-        RTFSprms_t aAttributes;
-        RTFValue::Pointer_t pParentValue(new RTFValue(aAttributes));
-        rSprms.push_back(make_pair(nParent, pParentValue));
-        pParent = pParentValue;
-    }
-    RTFSprms_t& rAttributes = pParent->getAttributes();
-    rAttributes.push_back(make_pair(nId, pValue));
 }
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
@@ -835,7 +828,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_CLBRDRB:
         case RTF_CLBRDRR:
             {
-                RTFSprms_t& rBordersSprms = lcl_getCellBordersSprms(m_aStates);
                 RTFSprms_t aAttributes;
                 RTFSprms_t aSprms;
                 RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
@@ -847,19 +839,19 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     case RTF_CLBRDRR: nParam = NS_ooxml::LN_CT_TcBorders_right; break;
                     default: break;
                 }
-                rBordersSprms.push_back(make_pair(nParam, pValue));
+                lcl_putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders, nParam, pValue);
             }
             break;
         case RTF_CLVMGF:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_ST_Merge_restart));
-                m_aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_vMerge, pValue));
+                m_aStates.top().aTableCellSprms.push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_vMerge, pValue));
             }
             break;
         case RTF_CLVMRG:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_ST_Merge_continue));
-                m_aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_vMerge, pValue));
+                m_aStates.top().aTableCellSprms.push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_vMerge, pValue));
             }
             break;
         case RTF_CLVERTALT:
@@ -874,7 +866,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     default: break;
                 }
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aTableCellsSprms.back()->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_vAlign, pValue));
+                m_aStates.top().aTableCellSprms.push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_vAlign, pValue));
             }
             break;
         default:
@@ -1092,7 +1084,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CLCBPAT:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
-                lcl_putNestedAttribute(*m_aStates.top().aTableCellsSprms.back(),
+                lcl_putNestedAttribute(m_aStates.top().aTableCellSprms,
                         NS_ooxml::LN_CT_TcPrBase_shd, NS_ooxml::LN_CT_Shd_fill, pValue);
             }
             break;
@@ -1252,7 +1244,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pValue(new RTFValue(nCellX));
                 m_aStates.top().aTableRowSprms.push_back(make_pair(NS_ooxml::LN_CT_TblGridBase_gridCol, pValue));
 
-                m_aStates.top().bNeedTableCellBorders = true;
+                // Reset cell properties.
+                RTFSprms::Pointer_t pTableCellSprms(new RTFSprms_t(m_aStates.top().aTableCellSprms));
+                m_aStates.top().aTableCellsSprms.push_back(pTableCellSprms);
+                RTFSprms::Pointer_t pTableCellAttributes(new RTFSprms_t(m_aStates.top().aTableCellAttributes));
+                m_aStates.top().aTableCellsAttributes.push_back(pTableCellAttributes);
+                m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
+                m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
             }
             break;
         default:
@@ -1835,6 +1833,8 @@ RTFParserState::RTFParserState()
     aParagraphAttributes(),
     aTableRowSprms(),
     aTableRowAttributes(),
+    aTableCellSprms(),
+    aTableCellAttributes(),
     aFontTableEntries(),
     nCurrentFontIndex(0),
     aCurrentColor(),
@@ -1853,8 +1853,7 @@ RTFParserState::RTFParserState()
     aShapeProperties(),
     nCellX(0),
     aTableCellsSprms(),
-    aTableCellsAttributes(),
-    bNeedTableCellBorders(true)
+    aTableCellsAttributes()
 {
 }
 
