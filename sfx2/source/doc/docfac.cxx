@@ -170,9 +170,9 @@ void SfxObjectFactory::RegisterViewFactory
                 continue;
             rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                 "SfxObjectFactory::RegisterViewFactory: duplicate view name '"));
-            sMessage.append(rtl::OUStringToOString(sViewName, RTL_TEXTENCODING_ASCII_US));
-            sMessage.append(RTL_CONSTASCII_STRINGPARAM("'!"));
-            OSL_FAIL(sMessage.getStr());
+            aStr.append(rtl::OUStringToOString(sViewName, RTL_TEXTENCODING_ASCII_US));
+            aStr.append(RTL_CONSTASCII_STRINGPARAM("'!"));
+            OSL_FAIL(aStr.getStr());
             break;
         }
     }
