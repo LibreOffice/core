@@ -173,6 +173,13 @@ else
 $(eval $(call gb_Output_error,Unsupported OS: $(OS)))
 endif
 
+ifeq ($(CROSS_COMPILING),YES)
+# We can safely Assume all cross-compilation is from Unix systems.
+gb_Executable_EXT_for_build :=
+else
+gb_Executable_EXT_for_build := $(gb_Executable_EXT)
+endif
+
 include $(GBUILDDIR)/Tempfile.mk
 
 include $(GBUILDDIR)/Tempfile.mk
