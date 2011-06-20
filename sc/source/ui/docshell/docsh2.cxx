@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,11 +57,6 @@
 #include <sfx2/app.hxx>
 
 // INCLUDE ---------------------------------------------------------------
-/*
-#include <svdrwetc.hxx>
-#include <svdrwobx.hxx>
-#include <sostor.hxx>
-*/
 #include "drwlayer.hxx"
 #include "stlpool.hxx"
 #include "docsh.hxx"
@@ -72,7 +68,7 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-sal_Bool __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
+sal_Bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::InitNew" );
 
@@ -102,27 +98,6 @@ sal_Bool __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >&
 
     InitItems();
     CalcOutputFactor();
-#if 0
-    uno::Any aGlobs;
-        uno::Sequence< uno::Any > aArgs(1);
-        aArgs[ 0 ] <<= GetModel();
-    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
-    GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-        // Fake ThisComponent being setup by Activate ( which is a view
-        // related thing ),
-        //  a) if another document is opened then in theory  ThisComponent
-        //     will be reset as before,
-        //  b) when this document is  'really' Activated then ThisComponent
-        //     again will be set as before
-        // The only wrinkle seems if this document is loaded 'InVisible'
-        // but.. I don't see that this is possible from the vba API
-        // I could be wrong though
-        // There may be implications setting the current component
-        // too early :-/ so I will just manually set the Basic Variables
-        BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
-        if ( pAppMgr )
-            pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
-#endif
 
     return bRet;
 }
@@ -146,13 +121,8 @@ void ScDocShell::InitItems()
 {
     // AllItemSet fuer Controller mit benoetigten Items fuellen:
 
-    // if ( pImpl->pFontList )
-    //  delete pImpl->pFontList;
-
     //  Druck-Optionen werden beim Drucken und evtl. in GetPrinter gesetzt
 
-    // pImpl->pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
-    //PutItem( SvxFontListItem( pImpl->pFontList, SID_ATTR_CHAR_FONTLIST ) );
     UpdateFontList();
 
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
@@ -169,28 +139,27 @@ void ScDocShell::InitItems()
 
         pDrawLayer->SetNotifyUndoActionHdl( LINK( pDocFunc, ScDocFunc, NotifyDrawUndo ) );
 
-        //if (SfxObjectShell::HasSbxObject())
         pDrawLayer->UpdateBasic();          // DocShell-Basic in DrawPages setzen
     }
     else
     {
         //  always use global color table instead of local copy
-        PutItem( SvxColorTableItem( XColorTable::GetStdColorTable(), SID_COLOR_TABLE ) );
+        PutItem( SvxColorTableItem( &XColorTable::GetStdColorTable(), SID_COLOR_TABLE ) );
     }
 
-    if ( !aDocument.GetForbiddenCharacters().isValid() ||
+    if ( !aDocument.GetForbiddenCharacters().is() ||
             !aDocument.IsValidAsianCompression() || !aDocument.IsValidAsianKerning() )
     {
         //  get settings from SvxAsianConfig
-        SvxAsianConfig aAsian( sal_False );
+        SvxAsianConfig aAsian( false );
 
-        if ( !aDocument.GetForbiddenCharacters().isValid() )
+        if ( !aDocument.GetForbiddenCharacters().is() )
         {
             // set forbidden characters if necessary
             uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
             if (aLocales.getLength())
             {
-                vos::ORef<SvxForbiddenCharactersTable> xForbiddenTable =
+                rtl::Reference<SvxForbiddenCharactersTable> xForbiddenTable =
                         new SvxForbiddenCharactersTable( aDocument.GetServiceManager() );
 
                 const lang::Locale* pLocales = aLocales.getConstArray();
@@ -199,7 +168,6 @@ void ScDocShell::InitItems()
                     i18n::ForbiddenCharacters aForbidden;
                     aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine );
                     LanguageType eLang = SvxLocaleToLanguage(pLocales[i]);
-                    //pDoc->SetForbiddenCharacters( eLang, aForbidden );
 
                     xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
                 }
@@ -233,12 +201,12 @@ void ScDocShell::ResetDrawObjectShell()
 
 //------------------------------------------------------------------
 
-void __EXPORT ScDocShell::Activate()
+void ScDocShell::Activate()
 {
 }
 
 
-void __EXPORT ScDocShell::Deactivate()
+void ScDocShell::Deactivate()
 {
 }
 
@@ -257,7 +225,9 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
         InitItems();                                            // incl. Undo und Basic
         Broadcast( SfxSimpleHint( SC_HINT_DRWLAYER_NEW ) );
         if (nDocumentLock)
-            pDrawLayer->setLock(sal_True);
+            pDrawLayer->setLock(true);
     }
     return pDrawLayer;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

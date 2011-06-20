@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -174,7 +175,7 @@ DrawModelWrapper::DrawModelWrapper(
     }
     catch(...)
     {
-        DBG_ERROR("Can't get Hyphenator or SpellChecker for chart");
+        OSL_FAIL("Can't get Hyphenator or SpellChecker for chart");
     }
 
     //ref device for font rendering
@@ -407,3 +408,5 @@ bool DrawModelWrapper::removeShape( const uno::Reference< drawing::XShape >& xSh
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

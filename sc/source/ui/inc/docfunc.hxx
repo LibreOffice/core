@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,11 @@
 #include "global.hxx"
 #include "formula/grammar.hxx"
 #include "tabbgcolor.hxx"
+#include "token.hxx"
+#include "rangenam.hxx"
+
+#include <vector>
+#include <map>
 
 class ScEditEngineDefaulter;
 class SdrUndoAction;
@@ -40,20 +46,21 @@ class ScDocShell;
 class ScMarkData;
 class ScPatternAttr;
 class ScRange;
-class ScRangeName;
+class ScRangeList;
 class ScBaseCell;
 class ScTokenArray;
 struct ScTabOpParam;
 class ScTableProtection;
+struct ScCellMergeOption;
 
 // ---------------------------------------------------------------------------
 
 class ScDocFunc
 {
 private:
-    ScDocShell&     rDocShell;
+    ScDocShell&        rDocShell;
 
-    sal_Bool            AdjustRowHeight( const ScRange& rRange, sal_Bool bPaint = sal_True );
+    sal_Bool            AdjustRowHeight( const ScRange& rRange, sal_Bool bPaint = true );
     void            CreateOneName( ScRangeName& rList,
                                     SCCOL nPosX, SCROW nPosY, SCTAB nTab,
                                     SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
@@ -73,7 +80,9 @@ public:
     sal_Bool            DetectiveAddError(const ScAddress& rPos);
     sal_Bool            DetectiveMarkInvalid(SCTAB nTab);
     sal_Bool            DetectiveDelAll(SCTAB nTab);
-    sal_Bool            DetectiveRefresh(sal_Bool bAutomatic = sal_False);
+    sal_Bool            DetectiveRefresh(sal_Bool bAutomatic = false);
+    void            DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, ::std::vector<ScTokenRef>& rRefTokens);
+    void            DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, ::std::vector<ScTokenRef>& rRefTokens);
 
     sal_Bool            DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
                                     sal_Bool bRecord, sal_Bool bApi );
@@ -108,7 +117,7 @@ public:
 
     sal_Bool            InsertCells( const ScRange& rRange,const ScMarkData* pTabMark,
                                  InsCellCmd eCmd, sal_Bool bRecord, sal_Bool bApi,
-                                    sal_Bool bPartOfPaste = sal_False );
+                                    sal_Bool bPartOfPaste = false );
     sal_Bool            DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark,
                                  DelCellCmd eCmd, sal_Bool bRecord, sal_Bool bApi );
 
@@ -126,9 +135,7 @@ public:
 
     sal_Bool            SetLayoutRTL( SCTAB nTab, sal_Bool bRTL, sal_Bool bApi );
 
-//UNUSED2009-05 sal_Bool            SetGrammar( formula::FormulaGrammar::Grammar eGrammar );
-
-    SC_DLLPUBLIC sal_Bool           SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
+    SC_DLLPUBLIC sal_Bool            SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
                                     SCTAB nTab, ScSizeMode eMode, sal_uInt16 nSizeTwips,
                                     sal_Bool bRecord, sal_Bool bApi );
 
@@ -159,21 +166,35 @@ public:
     sal_Bool            FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
                                 FillDir eDir, sal_Bool bRecord, sal_Bool bApi );
     sal_Bool            FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
-                                FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
+                                FillDir    eDir, FillCmd eCmd, FillDateCmd    eDateCmd,
                                 double fStart, double fStep, double fMax,
                                 sal_Bool bRecord, sal_Bool bApi );
                     // FillAuto: rRange wird von Source-Range auf Dest-Range angepasst
+    SC_DLLPUBLIC    sal_Bool            FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir eDir, FillCmd eCmd, FillDateCmd  eDateCmd, sal_uLong nCount, double fStep, double fMax, sal_Bool bRecord, sal_Bool bApi );
+
     sal_Bool            FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
                                 FillDir eDir, sal_uLong nCount, sal_Bool bRecord, sal_Bool bApi );
 
     sal_Bool            ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, sal_Bool bApi );
 
-    sal_Bool            MergeCells( const ScRange& rRange, sal_Bool bContents,
+    sal_Bool            MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
                                 sal_Bool bRecord, sal_Bool bApi );
     sal_Bool            UnmergeCells( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
+    bool            UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord, sal_Bool bApi );
 
-    sal_Bool            SetNewRangeNames( ScRangeName* pNewRanges, sal_Bool bApi );     // takes ownership of pNewRanges
-    sal_Bool            ModifyRangeNames( const ScRangeName& rNewRanges, sal_Bool bApi );
+    bool            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc = true );     // takes ownership of pNewRanges
+    bool            ModifyRangeNames( const ScRangeName& rNewRanges );
+
+    /**
+     * Modify all range names, global scope names as well as sheet local ones,
+     * in one go.  Note that this method will <b>not</b> destroy the instances
+     * passed as arguments (it creates copies); the caller is responsible for
+     * destroying them.
+     *
+     * @param pGlobal global scope range names.
+     * @param rTabs sheet local range names.
+     */
+    void            ModifyAllRangeNames( const ScRangeName* pGlobal, const ScRangeName::TabNameCopyMap& rTabs );
 
     sal_Bool            CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_Bool bApi );
     sal_Bool            InsertNameList( const ScAddress& rStartPos, sal_Bool bApi );
@@ -188,3 +209,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -147,7 +148,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
         drawing::PointSequenceSequence aAllPoints;
         ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
-        for( ; aTickIter != aTickEnd; aTickIter++ )
+        for( ; aTickIter != aTickEnd; ++aTickIter )
         {
             TickInfo& rTickInfo = *aTickIter;
             if( !rTickInfo.bPaintIt )
@@ -214,7 +215,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
         drawing::PointSequenceSequence aAllPoints;
         ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
-        for( ; aTickIter != aTickEnd; aTickIter++ )
+        for( ; aTickIter != aTickEnd; ++aTickIter )
         {
             TickInfo& rTickInfo = *aTickIter;
             if( !rTickInfo.bPaintIt )
@@ -240,7 +241,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
 
 void VPolarGrid::createShapes()
 {
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
+    OSL_PRECOND(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
     if(!m_aGridPropertiesList.getLength())
@@ -271,3 +272,5 @@ void VPolarGrid::createShapes()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

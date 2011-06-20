@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,12 +83,11 @@ using namespace com::sun::star;
 
 void ScDrawView::Construct()
 {
-    EnableExtendedKeyInputDispatcher(sal_False);
-    EnableExtendedMouseEventDispatcher(sal_False);
-    EnableExtendedCommandEventDispatcher(sal_False);
+    EnableExtendedKeyInputDispatcher(false);
+    EnableExtendedMouseEventDispatcher(false);
+    EnableExtendedCommandEventDispatcher(false);
 
-    SetFrameDragSingles(sal_True);
-//  SetSolidMarkHdl(sal_True);              // einstellbar -> UpdateUserViewOptions
+    SetFrameDragSingles(true);
 
     SetMinMoveDistancePixel( 2 );
     SetHitTolerancePixel( 2 );
@@ -113,7 +113,7 @@ void ScDrawView::Construct()
         if (pLayer)
         {
             SetLayerLocked( pLayer->GetName(), bProt );
-            SetActiveLayer( pLayer->GetName() );        // FRONT als aktiven Layer setzen
+            SetActiveLayer( pLayer->GetName() );        // set active layer to FRONT
         }
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_CONTROLS);
         if (pLayer)
@@ -122,7 +122,7 @@ void ScDrawView::Construct()
         if (pLayer)
         {
             SetLayerLocked( pLayer->GetName(), bProt );
-            SetLayerVisible( pLayer->GetName(), sal_False);
+            SetLayerVisible( pLayer->GetName(), false);
         }
 
         SetSwapAsynchron(sal_True);
@@ -136,7 +136,7 @@ void ScDrawView::Construct()
     RecalcScale();
     UpdateWorkArea();
 
-    bInConstruct = sal_False;
+    bInConstruct = false;
 }
 
 void ScDrawView::ImplClearCalcDropMarker()
@@ -148,53 +148,22 @@ void ScDrawView::ImplClearCalcDropMarker()
     }
 }
 
-__EXPORT ScDrawView::~ScDrawView()
+ScDrawView::~ScDrawView()
 {
     ImplClearCalcDropMarker();
 }
 
 void ScDrawView::AddCustomHdl()
 {
-    sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
-
     const SdrMarkList &rMrkList = GetMarkedObjectList();
     sal_uInt32 nCount = rMrkList.GetMarkCount();
     for(sal_uInt32 nPos=0; nPos<nCount; nPos++ )
     {
-        const SdrObject* pObj = rMrkList.GetMark(nPos)->GetMarkedSdrObj();
-        if(ScDrawLayer::GetAnchor(pObj) == SCA_CELL)
+        SdrObject* pObj = rMrkList.GetMark(nPos)->GetMarkedSdrObj();
+        if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjDataTab(pObj, nTab))
         {
-            const sal_Int32 nDelta = 1;
-
-            Rectangle aBoundRect = pObj->GetCurrentBoundRect();
-            Point aPos;
-            if (bNegativePage)
-            {
-                aPos = aBoundRect.TopRight();
-                aPos.X() = -aPos.X();           // so the loop below is the same
-            }
-            else
-                aPos = aBoundRect.TopLeft();
-            long nPosX = (long) (aPos.X() / HMM_PER_TWIPS) + nDelta;
-            long nPosY = (long) (aPos.Y() / HMM_PER_TWIPS) + nDelta;
-
-            SCCOL nCol;
-            sal_Int32 nWidth = 0;
-
-            for(nCol=0; nCol<=MAXCOL && nWidth<=nPosX; nCol++)
-                nWidth += pDoc->GetColWidth(nCol,nTab);
-
-            if(nCol > 0)
-                --nCol;
-
-            SCROW nRow = nPosY <= 0 ? 0 : pDoc->GetRowForHeight( nTab,
-                    (sal_uLong) nPosY);
-            if(nRow > 0)
-                --nRow;
-
-            ScTabView* pView = pViewData->GetView();
-            ScAddress aScAddress(nCol, nRow, nTab);
-            pView->CreateAnchorHandles(aHdl, aScAddress);
+            if (ScTabView* pView = pViewData->GetView())
+                pView->CreateAnchorHandles(aHdl, pAnchor->maStart);
         }
     }
 }
@@ -204,8 +173,8 @@ void ScDrawView::InvalidateAttribs()
     if (!pViewData) return;
     SfxBindings& rBindings = pViewData->GetBindings();
 
-        // echte Statuswerte:
-    rBindings.InvalidateAll( sal_True );
+        // true status values:
+    rBindings.InvalidateAll( true );
 }
 
 void ScDrawView::InvalidateDrawTextAttrs()
@@ -247,20 +216,6 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
 }
 
-//void ScDrawView::DrawMarks( OutputDevice* pOut ) const
-//{
-//  DBG_ASSERT(pOut, "ScDrawView::DrawMarks: No OutputDevice (!)");
-//  SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
-//
-//  if(pPaintWindow)
-//  {
-//      if(pPaintWindow->isXorVisible())
-//      {
-//          ToggleShownXor(pOut, 0L);
-//      }
-//  }
-//}
-
 void ScDrawView::SetMarkedToLayer( sal_uInt8 nLayerNo )
 {
     if (AreObjectsMarked())
@@ -287,7 +242,7 @@ void ScDrawView::SetMarkedToLayer( sal_uInt8 nLayerNo )
 
         pViewData->GetDocShell()->SetDrawModified();
 
-        //  #84073# check mark list now instead of later in a timer
+        //  check mark list now instead of later in a timer
         CheckMarked();
         MarkListHasChanged();
     }
@@ -330,7 +285,7 @@ void ScDrawView::UpdateWorkArea()
     }
     else
     {
-        DBG_ERROR("Page nicht gefunden");
+        OSL_FAIL("Page nicht gefunden");
     }
 }
 
@@ -377,7 +332,7 @@ void ScDrawView::RecalcScale()
     if (nEndCol<20)
         nEndCol = 20;
     if (nEndRow<20)
-        nEndRow = 20;   // #i116848# instead of a large row number for an empty sheet, heights are multiplied in CalcScale
+        nEndRow = 1000;
 
     ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev,aZoomX,aZoomY,nPPTX,nPPTY,
                             aScaleX,aScaleY );
@@ -402,7 +357,7 @@ void ScDrawView::MarkListHasChanged()
     {
         pViewSh->Unmark();      // remove cell selection
 
-        //  #65379# end cell edit mode if drawing objects are selected
+        //  end cell edit mode if drawing objects are selected
         SC_MOD()->InputEnterHandler();
     }
 
@@ -414,10 +369,8 @@ void ScDrawView::MarkListHasChanged()
     ScClient* pClient = (ScClient*) pViewSh->GetIPClient();
     if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )
     {
-        //  #41730# beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
-        //HMHbDisableHdl = sal_True;
+        //  beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
         pClient->DeactivateObject();
-        //HMHbDisableHdl = sal_False;
         //  Image-Ole wieder durch Grafik ersetzen passiert jetzt in ScClient::UIActivate
     }
 
@@ -425,7 +378,6 @@ void ScDrawView::MarkListHasChanged()
 
     SdrOle2Obj* pOle2Obj = NULL;
     SdrGrafObj* pGrafObj = NULL;
-    SdrMediaObj* pMediaObj = NULL;
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     sal_uLong nMarkCount = rMarkList.GetMarkCount();
@@ -437,7 +389,7 @@ void ScDrawView::MarkListHasChanged()
         LockInternalLayer();
     }
 
-    sal_Bool bSubShellSet = sal_False;
+    sal_Bool bSubShellSet = false;
     if (nMarkCount == 1)
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -458,9 +410,8 @@ void ScDrawView::MarkListHasChanged()
         }
         else if (pObj->GetObjIdentifier() == OBJ_MEDIA)
         {
-            pMediaObj = (SdrMediaObj*) pObj;
-            pViewSh->SetMediaShell(sal_True);
-            bSubShellSet = sal_True;
+            pViewSh->SetMediaShell(true);
+            bSubShellSet = true;
         }
         else if (pObj->GetObjIdentifier() != OBJ_TEXT   // Verhindern, das beim Anlegen
                     || !pViewSh->IsDrawTextShell())     // eines TextObjekts auf die
@@ -482,19 +433,19 @@ void ScDrawView::MarkListHasChanged()
                 sal_uLong nListCount = pLst->GetObjCount();
                 if ( nListCount == 0 )
                 {
-                    //  #104156# An empty group (may occur during Undo) is no control or graphics object.
+                    //  An empty group (may occur during Undo) is no control or graphics object.
                     //  Creating the form shell during undo would lead to problems with the undo manager.
-                    bOnlyControls = sal_False;
-                    bOnlyGraf = sal_False;
+                    bOnlyControls = false;
+                    bOnlyGraf = false;
                 }
                 for ( sal_uInt16 j = 0; j < nListCount; ++j )
                 {
                     SdrObject *pSubObj = pLst->GetObj( j );
 
                     if (!pSubObj->ISA(SdrUnoObj))
-                        bOnlyControls = sal_False;
+                        bOnlyControls = false;
                     if (pSubObj->GetObjIdentifier() != OBJ_GRAF)
-                        bOnlyGraf = sal_False;
+                        bOnlyGraf = false;
 
                     if ( !bOnlyControls && !bOnlyGraf ) break;
                 }
@@ -502,9 +453,9 @@ void ScDrawView::MarkListHasChanged()
             else
             {
                 if (!pObj->ISA(SdrUnoObj))
-                    bOnlyControls = sal_False;
+                    bOnlyControls = false;
                 if (pObj->GetObjIdentifier() != OBJ_GRAF)
-                    bOnlyGraf = sal_False;
+                    bOnlyGraf = false;
             }
 
             if ( !bOnlyControls && !bOnlyGraf ) break;
@@ -534,9 +485,9 @@ void ScDrawView::MarkListHasChanged()
     if ( pOle2Obj && !bOle )
     {
         uno::Reference < embed::XEmbeddedObject > xObj = pOle2Obj->GetObjRef();
-        DBG_ASSERT( xObj.is(), "SdrOle2Obj ohne ObjRef" );
+        OSL_ENSURE( xObj.is(), "SdrOle2Obj ohne ObjRef" );
         if (xObj.is())
-            aVerbs = xObj->getSupportedVerbs();
+            xObj->getSupportedVerbs();
     }
     pViewSh->SetVerbs( aVerbs );
 
@@ -582,12 +533,12 @@ void ScDrawView::MarkListHasChanged()
 
 }
 
-void __EXPORT ScDrawView::ModelHasChanged()
+void ScDrawView::ModelHasChanged()
 {
     SdrObject* pEditObj = GetTextEditObject();
     if ( pEditObj && !pEditObj->IsInserted() && pViewData )
     {
-        //  #111700# SdrObjEditView::ModelHasChanged will end text edit in this case,
+        //  SdrObjEditView::ModelHasChanged will end text edit in this case,
         //  so make sure the EditEngine's undo manager is no longer used.
         pViewData->GetViewShell()->SetDrawTextUndo(NULL);
         SetCreateMode();    // don't leave FuText in a funny state
@@ -596,7 +547,7 @@ void __EXPORT ScDrawView::ModelHasChanged()
     FmFormView::ModelHasChanged();
 }
 
-void __EXPORT ScDrawView::UpdateUserViewOptions()
+void ScDrawView::UpdateUserViewOptions()
 {
     if (pViewData)
     {
@@ -612,9 +563,6 @@ void __EXPORT ScDrawView::UpdateUserViewOptions()
         SetGridVisible( rGrid.GetGridVisible() );
         SetSnapEnabled( rGrid.GetUseGridSnap() );
         SetGridSnap( rGrid.GetUseGridSnap() );
-
-        //  Snap from grid options is no longer used
-//      SetSnapGrid( Size( rGrid.GetFldSnapX(), rGrid.GetFldSnapY() ) );
 
         Fraction aFractX( rGrid.GetFldDrawX(), rGrid.GetFldDivisionX() + 1 );
         Fraction aFractY( rGrid.GetFldDrawY(), rGrid.GetFldDivisionY() + 1 );
@@ -645,7 +593,7 @@ sal_Bool ScDrawView::SelectObject( const String& rName )
         for (SCTAB i=0; i<nTabCount && !pFound; i++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(i));
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
@@ -669,11 +617,11 @@ sal_Bool ScDrawView::SelectObject( const String& rName )
         if ( nObjectTab != nTab )                               // Tabelle umschalten
             pView->SetTabNo( nObjectTab );
 
-        DBG_ASSERT( nTab == nObjectTab, "Tabellen umschalten hat nicht geklappt" );
+        OSL_ENSURE( nTab == nObjectTab, "Tabellen umschalten hat nicht geklappt" );
 
         pView->ScrollToObject( pFound );
 
-        /*  #61585# To select an object on the background layer, the layer has to
+        /*  To select an object on the background layer, the layer has to
             be unlocked even if exclusive drawing selection mode is not active
             (this is reversed in MarkListHasChanged when nothing is selected) */
         if ( pFound->GetLayer() == SC_LAYER_BACK &&
@@ -691,24 +639,8 @@ sal_Bool ScDrawView::SelectObject( const String& rName )
     return ( pFound != NULL );
 }
 
-//UNUSED2008-05  String ScDrawView::GetSelectedChartName() const
-//UNUSED2008-05  {
-//UNUSED2008-05      //  used for modifying a chart's data area - PersistName must always be used
-//UNUSED2008-05      //  (as in ScDocument::FindChartData and UpdateChartArea)
-//UNUSED2008-05
-//UNUSED2008-05      const SdrMarkList& rMarkList = GetMarkedObjectList();
-//UNUSED2008-05      if (rMarkList.GetMarkCount() == 1)
-//UNUSED2008-05      {
-//UNUSED2008-05          SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-//UNUSED2008-05          if (pObj->GetObjIdentifier() == OBJ_OLE2)
-//UNUSED2008-05              if ( pDoc->IsChart(pObj) )
-//UNUSED2008-05                  return static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      return EMPTY_STRING;        // nichts gefunden
-//UNUSED2008-05  }
 
-FASTBOOL ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions)
+bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions)
 {
     //  Markierung nicht aendern, wenn Ole-Objekt aktiv
     //  (bei Drop aus Ole-Objekt wuerde sonst mitten im ExecuteDrag deaktiviert!)
@@ -745,7 +677,7 @@ void ScDrawView::LockCalcLayer( SdrLayerID nLayer, bool bLock )
         SetLayerLocked( pLockLayer->GetName(), bLock );
 }
 
-void __EXPORT ScDrawView::MakeVisible( const Rectangle& rRect, Window& rWin )
+void ScDrawView::MakeVisible( const Rectangle& rRect, Window& rWin )
 {
     //! rWin richtig auswerten
     //! ggf Zoom aendern
@@ -768,12 +700,12 @@ void ScDrawView::DeleteMarked()
 
         // remove the cell note from document, we are its owner now
         ScPostIt* pNote = pDoc->ReleaseNote( pCaptData->maStart );
-        DBG_ASSERT( pNote, "ScDrawView::DeleteMarked - cell note missing in document" );
+        OSL_ENSURE( pNote, "ScDrawView::DeleteMarked - cell note missing in document" );
         if( pNote )
         {
             // rescue note data for undo (with pointer to caption object)
             ScNoteData aNoteData = pNote->GetNoteData();
-            DBG_ASSERT( aNoteData.mpCaption == pCaptObj, "ScDrawView::DeleteMarked - caption object does not match" );
+            OSL_ENSURE( aNoteData.mpCaption == pCaptObj, "ScDrawView::DeleteMarked - caption object does not match" );
             // collect the drawing undo action created while deleting the note
             if( bUndo )
                 pDrawLayer->BeginCalcUndo();
@@ -818,28 +750,4 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
     }
 }
 
-//UNUSED2009-05 void ScDrawView::CaptionTextDirection( sal_uInt16 nSlot )
-//UNUSED2009-05 {
-//UNUSED2009-05     if(nSlot != SID_TEXTDIRECTION_LEFT_TO_RIGHT && nSlot != SID_TEXTDIRECTION_TOP_TO_BOTTOM)
-//UNUSED2009-05         return;
-//UNUSED2009-05
-//UNUSED2009-05     SdrObject* pObject  = GetTextEditObject();
-//UNUSED2009-05     if ( ScDrawLayer::IsNoteCaption( pObject ) )
-//UNUSED2009-05     {
-//UNUSED2009-05         if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
-//UNUSED2009-05         {
-//UNUSED2009-05             SfxItemSet aAttr(pCaption->GetMergedItemSet());
-//UNUSED2009-05             aAttr.Put( SvxWritingModeItem(
-//UNUSED2009-05                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
-//UNUSED2009-05                     com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
-//UNUSED2009-05                     SDRATTR_TEXTDIRECTION ) );
-//UNUSED2009-05             pCaption->SetMergedItemSet(aAttr);
-//UNUSED2009-05             FuPoor* pPoor = pViewData->GetView()->GetDrawFuncPtr();
-//UNUSED2009-05             if ( pPoor )
-//UNUSED2009-05             {
-//UNUSED2009-05                 FuText* pText = static_cast<FuText*>(pPoor);
-//UNUSED2009-05                 pText->StopEditMode(sal_True);
-//UNUSED2009-05             }
-//UNUSED2009-05         }
-//UNUSED2009-05     }
-//UNUSED2009-05 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,8 +71,8 @@ ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindi
  , pAccel( NULL )
  , pHiddenMarks(NULL)
  , nRefTab(0)
- , bHighLightRef( sal_False )
- , bAccInserted( sal_False )
+ , bHighLightRef( false )
+ , bAccInserted( false )
 {
     ScInputOptions aInputOption=SC_MOD()->GetInputOptions();
     bEnableColorRef=aInputOption.GetRangeFinder();
@@ -101,7 +102,7 @@ void ScFormulaReferenceHelper::enableInput( sal_Bool bEnable )
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
         while( pFrame )
         {
-            //  #71577# enable everything except InPlace, including bean frames
+            //  enable everything except InPlace, including bean frames
             if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
@@ -130,7 +131,7 @@ void ScFormulaReferenceHelper::enableInput( sal_Bool bEnable )
 // -----------------------------------------------------------------------------
 void ScFormulaReferenceHelper::ShowSimpleReference( const XubString& rStr )
 {
-    if( /*!pRefEdit &&*/ bEnableColorRef )
+    if( bEnableColorRef )
     {
         bHighLightRef=sal_True;
         ScViewData* pViewData=ScDocShell::GetViewData();
@@ -141,21 +142,17 @@ void ScFormulaReferenceHelper::ShowSimpleReference( const XubString& rStr )
 
             ScRangeList aRangeList;
 
-            pTabViewShell->DoneRefMode( sal_False );
+            pTabViewShell->DoneRefMode( false );
             pTabViewShell->ClearHighlightRanges();
 
             if( ParseWithNames( aRangeList, rStr, pDoc ) )
             {
-                ScRange* pRangeEntry = aRangeList.First();
-
-                sal_uInt16 nIndex=0;
-                while(pRangeEntry != NULL)
+                for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
                 {
-                    ColorData aColName = ScRangeFindList::GetColorName(nIndex++);
-                    pTabViewShell->AddHighlightRange(*pRangeEntry, aColName);
-
-                    pRangeEntry = aRangeList.Next();
-                }
+                    ScRange* pRangeEntry = aRangeList[ i ];
+                    ColorData aColName = ScRangeFindList::GetColorName( i );
+                    pTabViewShell->AddHighlightRange( *pRangeEntry, aColName );
+               }
             }
         }
     }
@@ -211,7 +208,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference( const XubString& rStr )
 
             if(pTabViewShell!=NULL && pScTokA!=NULL)
             {
-                pTabViewShell->DoneRefMode( sal_False );
+                pTabViewShell->DoneRefMode( false );
                 pTabViewShell->ClearHighlightRanges();
 
                 pScTokA->Reset();
@@ -267,10 +264,10 @@ void ScFormulaReferenceHelper::HideReference( sal_Bool bDoneRefMode )
             //  In that case, RefMode was just started and must not be ended now.
 
             if ( bDoneRefMode )
-                pTabViewShell->DoneRefMode( sal_False );
+                pTabViewShell->DoneRefMode( false );
             pTabViewShell->ClearHighlightRanges();
         }
-        bHighLightRef=sal_False;
+        bHighLightRef=false;
     }
 }
 // -----------------------------------------------------------------------------
@@ -303,8 +300,6 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit, formula::R
     if( !pRefEdit && pEdit )
     {
         m_pDlg->RefInputStart( pEdit, pButton );
-//        if( pRefEdit )
-//            pRefEdit->SilentGrabFocus();
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -318,14 +313,14 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit, formula::R
             ScRangeList aRangeList;
             if( ParseWithNames( aRangeList, pRefEdit->GetText(), pDoc ) )
             {
-                const ScRange* pRange = aRangeList.GetObject( 0 );
-                if( pRange )
+                if ( !aRangeList.empty() )
                 {
+                    const ScRange* pRange = aRangeList.front();
                     pViewShell->SetTabNo( pRange->aStart.Tab() );
                     pViewShell->MoveCursorAbs(  pRange->aStart.Col(),
-                        pRange->aStart.Row(), SC_FOLLOW_JUMP, sal_False, sal_False );
+                        pRange->aStart.Row(), SC_FOLLOW_JUMP, false, false );
                     pViewShell->MoveCursorAbs( pRange->aEnd.Col(),
-                        pRange->aEnd.Row(), SC_FOLLOW_JUMP, sal_True, sal_False );
+                        pRange->aEnd.Row(), SC_FOLLOW_JUMP, sal_True, false );
                     m_pDlg->SetReference( *pRange, pDoc );
                 }
             }
@@ -351,7 +346,7 @@ void ScFormulaReferenceHelper::Init()
         pRefComp->SetCompileForFAP(sal_True);
 
         nRefTab = nTab;
-    } // if ( pViewData )
+    }
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
@@ -373,15 +368,12 @@ IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
 //----------------------------------------------------------------------------
 void ScFormulaReferenceHelper::RefInputDone( sal_Bool bForced )
 {
-    //<!--Modified by PengYunQuan for Validity Cell Range Picker
-    //if (pRefEdit && (bForced || !pRefBtn))
-    if ( CanInputDone( bForced ) )//if (pRefEdit && (bForced || !pRefBtn))
-    //-->Modified by PengYunQuan for Validity Cell Range Picker
+    if ( CanInputDone( bForced ) )
     {
         if (bAccInserted)           // Accelerator wieder abschalten
         {
             Application::RemoveAccel( pAccel.get() );
-            bAccInserted = sal_False;
+            bAccInserted = false;
         }
 
         // Fenstertitel anpassen
@@ -432,7 +424,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         pHiddenMarks = new sal_Bool [nChildren];
         for (sal_uInt16 i = 0; i < nChildren; i++)
         {
-            pHiddenMarks[i] = sal_False;
+            pHiddenMarks[i] = false;
             Window* pWin = m_pWindow->GetChild(i);
             pWin = pWin->GetWindow( WINDOW_CLIENT );
             if (pWin == (Window*)pRefEdit)
@@ -487,18 +479,15 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         // Fenstertitel anpassen
         m_pWindow->SetText( MnemonicGenerator::EraseAllMnemonicChars( sNewDialogText ) );
 
-//        if ( pButton )      // ueber den Button: Enter und Escape abfangen
-//        {
-            if (!pAccel.get())
-            {
-                pAccel.reset( new Accelerator );
-                pAccel->InsertItem( 1, KeyCode( KEY_RETURN ) );
-                pAccel->InsertItem( 2, KeyCode( KEY_ESCAPE ) );
-                pAccel->SetSelectHdl( LINK( this, ScFormulaReferenceHelper, AccelSelectHdl ) );
-            }
-            Application::InsertAccel( pAccel.get() );
-            bAccInserted = sal_True;
-//        }
+        if (!pAccel.get())
+        {
+            pAccel.reset( new Accelerator );
+            pAccel->InsertItem( 1, KeyCode( KEY_RETURN ) );
+            pAccel->InsertItem( 2, KeyCode( KEY_ESCAPE ) );
+            pAccel->SetSelectHdl( LINK( this, ScFormulaReferenceHelper, AccelSelectHdl ) );
+        }
+        Application::InsertAccel( pAccel.get() );
+        bAccInserted = true;
     }
 }
 // -----------------------------------------------------------------------------
@@ -526,7 +515,7 @@ sal_Bool ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
 {
     SfxApplication* pSfxApp = SFX_APP();
 
-    SetDispatcherLock( sal_False );         //! here and in dtor ?
+    SetDispatcherLock( false );         //! here and in dtor ?
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if ( pViewFrm && pViewFrm->HasChildWindow(FID_INPUTLINE_STATUS) )
@@ -550,7 +539,7 @@ sal_Bool ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
         if (pMyDisp)
             pMyViewFrm = pMyDisp->GetFrame();
     }
-    SC_MOD()->SetRefDialog( nId, sal_False, pMyViewFrm );
+    SC_MOD()->SetRefDialog( nId, false, pMyViewFrm );
 
     pSfxApp->Broadcast( SfxSimpleHint( FID_KILLEDITVIEW ) );
 
@@ -587,7 +576,7 @@ void ScFormulaReferenceHelper::SetDispatcherLock( sal_Bool bLock )
 // -----------------------------------------------------------------------------
 void ScFormulaReferenceHelper::ViewShellChanged(ScTabViewShell* /* pScViewShell */)
 {
-    enableInput( sal_False );
+    enableInput( false );
 
     EnableSpreadsheets();
 }
@@ -600,7 +589,7 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(sal_Bool bFlag, sal_Bool bChil
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
         while( pFrame )
         {
-            //  #71577# enable everything except InPlace, including bean frames
+            //  enable everything except InPlace, including bean frames
             if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
@@ -613,7 +602,7 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(sal_Bool bFlag, sal_Bool bChil
                         Window *pParent=pWin->GetParent();
                         if(pParent)
                         {
-                            pParent->EnableInput(bFlag,sal_False);
+                            pParent->EnableInput(bFlag,false);
                             if(bChilds)
                                 pViewSh->EnableRefInput(bFlag);
                         }
@@ -640,7 +629,7 @@ void lcl_InvalidateWindows()
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
         while( pFrame )
         {
-            //  #71577# enable everything except InPlace, including bean frames
+            //  enable everything except InPlace, including bean frames
             if ( !pFrame->GetFrame().IsInPlace() )
             {
                 SfxViewShell* p = pFrame->GetViewShell();
@@ -705,7 +694,6 @@ bool ScRefHandler::EnterRefMode()
     if( m_bInRefMode ) return false;
 
     SC_MOD()->InputEnterHandler();
-//    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
 
     ScTabViewShell* pScViewShell = NULL;
 
@@ -735,20 +723,18 @@ bool ScRefHandler::EnterRefMode()
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(pScViewShell);
 
-    DBG_ASSERT( pInputHdl, "Missing input handler :-/" );
+    OSL_ENSURE( pInputHdl, "Missing input handler :-/" );
 
     if ( pInputHdl )
         pInputHdl->NotifyChange( NULL );
 
-    m_aHelper.enableInput( sal_False );
+    m_aHelper.enableInput( false );
 
     m_aHelper.EnableSpreadsheets();
 
     m_aHelper.Init();
 
-    m_aHelper.SetDispatcherLock( sal_True );
-    //@Test
-    //SFX_APPWINDOW->Disable(sal_True);   //@BugID 54702
+    m_aHelper.SetDispatcherLock( true );
 
     return m_bInRefMode = true;
 }
@@ -767,28 +753,18 @@ bool ScRefHandler::LeaveRefMode()
     lcl_HideAllReferences();
 
     if( Dialog *pDlg = dynamic_cast<Dialog*>( static_cast<Window*>(*this) ) )
-        pDlg->SetModalInputMode(sal_False);
-    SetDispatcherLock( sal_False );         //! here and in DoClose ?
+        pDlg->SetModalInputMode(false);
+    SetDispatcherLock( false );         //! here and in DoClose ?
 
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
     if( pScViewShell )
         pScViewShell->UpdateInputHandler(sal_True);
 
-    //SFX_APPWINDOW->Enable(sal_True,sal_True);
     lcl_InvalidateWindows();
 
     m_bInRefMode = false;
     return true;
 }
-
-//----------------------------------------------------------------------------
-
-//SfxBindings& ScRefHandler::GetBindings()
-//{
-//  //! SfxModelessDialog should allow access to pBindings pointer
-//
-//  return *pMyBindings;
-//}
 
 //----------------------------------------------------------------------------
 
@@ -835,14 +811,14 @@ sal_Bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh ma
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScRefHandler::IsRefInputMode() const
+sal_Bool ScRefHandler::IsRefInputMode() const
 {
     return m_rWindow.IsVisible(); // nur wer sichtbar ist kann auch Referenzen bekommen
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScRefHandler::DoClose( sal_uInt16 nId )
+sal_Bool ScRefHandler::DoClose( sal_uInt16 nId )
 {
     m_aHelper.DoClose(nId);
     return sal_True;
@@ -869,11 +845,11 @@ void ScRefHandler::AddRefEntry()
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScRefHandler::IsTableLocked() const
+sal_Bool ScRefHandler::IsTableLocked() const
 {
     // per Default kann bei Referenzeingabe auch die Tabelle umgeschaltet werden
 
-    return sal_False;
+    return false;
 }
 
 //----------------------------------------------------------------------------
@@ -893,38 +869,6 @@ void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton*
 {
     m_aHelper.ToggleCollapsed( pEdit, pButton );
 }
-
-//The two following function is commentted out by PengYunQuan for Validity Cell Range Picker
-//long ScAnyRefDlg::PreNotify( NotifyEvent& rNEvt )
-//{
-//  sal_uInt16 nSwitch=rNEvt.GetType();
-//  if(nSwitch==EVENT_GETFOCUS)
-//  {
-//      pActiveWin=rNEvt.GetWindow();
-//  }
-//  return SfxModelessDialog::PreNotify(rNEvt);
-//}
-//
-//void ScAnyRefDlg::StateChanged( StateChangedType nStateChange )
-//{
-//  SfxModelessDialog::StateChanged( nStateChange );
-//
-//  if(nStateChange == STATE_CHANGE_VISIBLE)
-//  {
-//      if(IsVisible())
-//      {
-//          m_aHelper.enableInput( sal_False );
-//          m_aHelper.EnableSpreadsheets();
-//          m_aHelper.SetDispatcherLock( sal_True );
-//          aTimer.Start();
-//      }
-//      else
-//      {
-//          m_aHelper.enableInput( sal_True );
-//          m_aHelper.SetDispatcherLock( sal_False );           //! here and in DoClose ?
-//      }
-//  }
-//}
 
 #if defined( _MSC_VER )
 #define INTRODUCE_TEMPLATE
@@ -957,7 +901,7 @@ INTRODUCE_TEMPLATE void ScRefHdlrImplBase<TWindow,bBindRef>::StateChanged( State
     {\
         if(m_rWindow.IsVisible())\
         {\
-            m_aHelper.enableInput( sal_False );\
+            m_aHelper.enableInput( false );\
             m_aHelper.EnableSpreadsheets();\
             m_aHelper.SetDispatcherLock( sal_True );\
             aTimer.Start();\
@@ -965,7 +909,7 @@ INTRODUCE_TEMPLATE void ScRefHdlrImplBase<TWindow,bBindRef>::StateChanged( State
         else\
         {\
             m_aHelper.enableInput( sal_True );\
-            m_aHelper.SetDispatcherLock( sal_False );           /*//! here and in DoClose ?*/\
+            m_aHelper.SetDispatcherLock( false );           /*//! here and in DoClose ?*/\
         }\
     }\
 }
@@ -1009,3 +953,4 @@ void ScRefHandler::RefInputDone( sal_Bool bForced )
     m_aHelper.RefInputDone( bForced );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

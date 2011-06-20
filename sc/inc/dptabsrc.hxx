@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,14 +30,12 @@
 #define SC_DPTABSRC_HXX
 
 #include <vector>
-#include <hash_map>
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <list>
-// End Comments
 #include <memory>
+
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include "global.hxx"       // enum ScSubTotalFunc
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
@@ -61,10 +60,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include "dpglobal.hxx"
-// End Comments
 #include "dptabdat.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -78,20 +74,13 @@ namespace com { namespace sun { namespace star {
 
 class ScDPResultMember;
 class ScDPResultData;
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 class ScDPItemData;
-// End Comments
 class ScDPTableData;
-
-// ------------------------------------------------------------------------
-
 
 //  should be dynamic!
 #define SC_DAPI_MAXFIELDS   256
 
 
-// --------------------------------------------------------------------
 //
 //  implementation of DataPilotSource using ScDPTableData
 //
@@ -140,22 +129,22 @@ private:
     ScDPResultMember*       pRowResRoot;
     com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>* pColResults;
     com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>* pRowResults;
-    List                    aColLevelList;
-    List                    aRowLevelList;
+    std::vector<ScDPLevel*> aColLevelList;
+    std::vector<ScDPLevel*> aRowLevelList;
     sal_Bool                    bResultOverflow;
 
     ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
 
     void                    CreateRes_Impl();
     void                    FillMemberResults();
-    void                    FillLevelList( sal_uInt16 nOrientation, List& rList );
+    void                    FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*> &rList );
     void                    FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &bHasAutoShow);
 
     /**
      * Compile a list of dimension indices that are either, column, row or
      * page dimensions (i.e. all but data dimensions).
      */
-    void                    GetCategoryDimensionIndices(::std::hash_set<sal_Int32>& rCatDims);
+    void                    GetCategoryDimensionIndices(::boost::unordered_set<sal_Int32>& rCatDims);
 
     /**
      * Set visibilities of individual rows in the cache table based on the
@@ -166,13 +155,12 @@ private:
     void                    SetDupCount( long nNew );
 
 public:
-                                ScDPSource( ScDPTableData* pD );    // TableData is deleted by Source
+                                ScDPSource( ScDPTableData* pD );
     virtual                     ~ScDPSource();
 
     ScDPTableData*          GetData()       { return pData; }
     const ScDPTableData*    GetData() const { return pData; }
 
-    void                    SetGrandTotalName(const ::rtl::OUString& rName);
     const ::rtl::OUString*  GetGrandTotalName() const;
 
     sal_uInt16                  GetOrientation(long nColumn);
@@ -182,18 +170,14 @@ public:
     long                    GetDataDimensionCount();
     ScDPDimension*          GetDataDimension(long nIndex);
     String                  GetDataDimName(long nIndex);
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
-    ScDPTableDataCache*         GetCache();
+    const ScDPCache* GetCache();
     const ScDPItemData*            GetItemDataById( long nDim, long nId );
     long                                       GetDataLayoutDim(){ return pData->GetColumnCount(); }
     SCROW                                GetMemberId(  long  nDim, const ScDPItemData& rData );
-    // End Comments
     sal_Bool                    IsDataLayoutDimension(long nDim);
     sal_uInt16                  GetDataLayoutOrientation();
 
     sal_Bool                    IsDateDimension(long nDim);
-    sal_uInt32                  GetNumberFormat(long nDim);
 
     sal_Bool                    SubTotalAllowed(long nColumn);      //! move to ScDPResultData
 
@@ -206,8 +190,6 @@ public:
                             GetMemberResults( ScDPLevel* pLevel );
 
     ScDPDimensions*         GetDimensionsObject();
-
-//UNUSED2009-05 void                    DumpState( ScDocument* pDoc, const ScAddress& rPos );
 
                             // XDimensionsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
@@ -455,12 +437,6 @@ public:
     const ScDPItemData&         GetSelectedData();
 
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
-
-//UNUSED2009-05 sal_Bool                        IsValidPage( const ScDPItemData& rData );
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
-    sal_Bool                      IsVisible( const ScDPItemData& rData );
-// End Comments
 };
 
 class ScDPHierarchies : public cppu::WeakImplHelper2<
@@ -706,7 +682,7 @@ public:
 };
 
 // hash map from name to index in the member array, for fast name access
-typedef ::std::hash_map< ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > ScDPMembersHashMap;
+typedef ::boost::unordered_map< ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > ScDPMembersHashMap;
 
 class ScDPMembers : public cppu::WeakImplHelper2<
                             com::sun::star::container::XNameAccess,
@@ -754,12 +730,9 @@ public:
     long                    getMinMembers() const;
 
     sal_Int32               GetIndexFromName( const ::rtl::OUString& rName ) const;     // <0 if not found
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     const std::vector<sal_Int32>&    GetGlobalOrder();
     const ScDPItemData*               GetSrcItemDataByIndex(  SCROW nIndex);
     SCROW                                   GetSrcItemsCount();
-    // End Comments
 };
 
 class ScDPMember : public cppu::WeakImplHelper3<
@@ -773,10 +746,7 @@ private:
     long            nHier;
     long            nLev;
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     SCROW       mnDataId;
-    // End Comments
 //  String          aCaption;           // visible name (changeable by user)
     ::std::auto_ptr<rtl::OUString> mpLayoutName;
 
@@ -785,23 +755,15 @@ private:
     sal_Bool            bShowDet;
 
 public:
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
-        SCROW nIndex /*const String& rN, double fV, sal_Bool bHV */);
-    // End Comments
+        SCROW nIndex /*const String& rN, double fV, BOOL bHV */);
     virtual                 ~ScDPMember();
 
-    sal_Bool                    IsNamedItem( const ScDPItemData& r ) const;
     String                  GetNameStr() const;
     void                    FillItemData( ScDPItemData& rData ) const;
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
-    //  const ScDPItemData&  GetItemData() const{ return maData; }
     const ScDPItemData&  GetItemData() const;
     inline SCROW               GetItemDataId() const { return mnDataId; }
     sal_Bool                           IsNamedItem( SCROW    nIndex  ) const;
-    // End Comments
 
     SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
 
@@ -873,3 +835,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

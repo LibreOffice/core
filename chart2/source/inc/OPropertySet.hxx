@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,17 +34,11 @@
 #include <cppuhelper/weak.hxx>
 
 // interfaces and types
-// #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-// #include <com/sun/star/lang/XServiceInfo.hpp>
-// #endif
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/style/XStyleSupplier.hpp>
-// #ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSTATE_HPP_
-// #include <com/sun/star/beans/XFastPropertyState.hpp>
-// #endif
 #include <osl/mutex.hxx>
 #include "charttoolsdllapi.hxx"
 
@@ -61,14 +56,11 @@ class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet
     public ::cppu::OPropertySetHelper,
     // includes uno::XWeak (and XInterface, esp. ref-counting)
-//     public virtual ::cppu::OWeakObject,
 
-//     public virtual ::com::sun::star::lang::XServiceInfo,
     public ::com::sun::star::lang::XTypeProvider,
     public ::com::sun::star::beans::XPropertyState,
     public ::com::sun::star::beans::XMultiPropertyStates,
     public ::com::sun::star::style::XStyleSupplier
-//     public ::com::sun::star::beans::XFastPropertyState
 {
 public:
     OPropertySet( ::osl::Mutex & rMutex );
@@ -178,20 +170,6 @@ protected:
     // ____ XInterface ____
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
         throw (::com::sun::star::uno::RuntimeException);
-//     virtual void SAL_CALL acquire() throw ();
-//     virtual void SAL_CALL release() throw ();
-
-
-    // ____ XServiceInfo ____
-//     virtual ::rtl::OUString SAL_CALL
-//         getImplementationName()
-//         throw (::com::sun::star::uno::RuntimeException);
-//     virtual sal_Bool SAL_CALL
-//         supportsService( const ::rtl::OUString& ServiceName )
-//         throw (::com::sun::star::uno::RuntimeException);
-//     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-//         getSupportedServiceNames()
-//         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XTypeProvider ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
@@ -243,21 +221,6 @@ protected:
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
 
-    // ____ XFastPropertyState ____
-//     virtual ::com::sun::star::beans::PropertyState SAL_CALL getFastPropertyState( sal_Int32 nHandle )
-//         throw (::com::sun::star::beans::UnknownPropertyException,
-//                ::com::sun::star::uno::RuntimeException);
-//     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getFastPropertyStates( const ::com::sun::star::uno::Sequence< sal_Int32 >& aHandles )
-//         throw (::com::sun::star::beans::UnknownPropertyException,
-//                ::com::sun::star::uno::RuntimeException);
-//     virtual void SAL_CALL setFastPropertyToDefault( sal_Int32 nHandle )
-//         throw (::com::sun::star::beans::UnknownPropertyException,
-//                ::com::sun::star::uno::RuntimeException);
-//     virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyDefault( sal_Int32 nHandle )
-//         throw (::com::sun::star::beans::UnknownPropertyException,
-//                ::com::sun::star::lang::WrappedTargetException,
-//                ::com::sun::star::uno::RuntimeException);
-
     // ____ XMultiPropertySet ____
     virtual void SAL_CALL setPropertyValues(
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames,
@@ -284,3 +247,5 @@ private:
 
 // CHART_OPROPERTYSET_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

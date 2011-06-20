@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,7 @@ public:
 
     virtual sal_Bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                              const String & rMimeType,
-                             sal_Bool bSynchron = sal_False );
+                             sal_Bool bSynchron = false );
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
             void    EndListeningAll();
@@ -74,3 +75,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

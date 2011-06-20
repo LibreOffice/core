@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,6 +83,7 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
         mrImpData.mxLinkMgr.reset( new XclImpLinkManager( GetRoot() ) );
         mrImpData.mxSst.reset( new XclImpSst( GetRoot() ) );
         mrImpData.mxCondFmtMgr.reset( new XclImpCondFormatManager( GetRoot() ) );
+        mrImpData.mxValidMgr.reset( new XclImpValidationManager( GetRoot() ) );
         // TODO still in old RootData (deleted by RootData)
         GetOldRoot().pAutoFilterBuffer = new XclImpAutoFilterBuffer;
         mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
@@ -149,7 +151,7 @@ ExcelToSc& XclImpRoot::GetOldFmlaConverter() const
 
 XclImpSst& XclImpRoot::GetSst() const
 {
-    DBG_ASSERT( mrImpData.mxSst.is(), "XclImpRoot::GetSst - invalid call, wrong BIFF" );
+    OSL_ENSURE( mrImpData.mxSst, "XclImpRoot::GetSst - invalid call, wrong BIFF" );
     return *mrImpData.mxSst;
 }
 
@@ -202,7 +204,7 @@ XclImpNameManager& XclImpRoot::GetNameManager() const
 
 XclImpLinkManager& XclImpRoot::GetLinkManager() const
 {
-    DBG_ASSERT( mrImpData.mxLinkMgr.is(), "XclImpRoot::GetLinkManager - invalid call, wrong BIFF" );
+    OSL_ENSURE( mrImpData.mxLinkMgr, "XclImpRoot::GetLinkManager - invalid call, wrong BIFF" );
     return *mrImpData.mxLinkMgr;
 }
 
@@ -213,44 +215,50 @@ XclImpObjectManager& XclImpRoot::GetObjectManager() const
 
 XclImpSheetDrawing& XclImpRoot::GetCurrSheetDrawing() const
 {
-    DBG_ASSERT( !IsInGlobals(), "XclImpRoot::GetCurrSheetDrawing - must not be called from workbook globals" );
+    OSL_ENSURE( !IsInGlobals(), "XclImpRoot::GetCurrSheetDrawing - must not be called from workbook globals" );
     return mrImpData.mxObjMgr->GetSheetDrawing( GetCurrScTab() );
 }
 
 XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const
 {
-    DBG_ASSERT( mrImpData.mxCondFmtMgr.is(), "XclImpRoot::GetCondFormatManager - invalid call, wrong BIFF" );
+    OSL_ENSURE( mrImpData.mxCondFmtMgr, "XclImpRoot::GetCondFormatManager - invalid call, wrong BIFF" );
     return *mrImpData.mxCondFmtMgr;
+}
+
+XclImpValidationManager& XclImpRoot::GetValidationManager() const
+{
+    OSL_ENSURE( mrImpData.mxValidMgr, "XclImpRoot::GetValidationManager - invalid call, wrong BIFF" );
+    return *mrImpData.mxValidMgr;
 }
 
 XclImpAutoFilterBuffer& XclImpRoot::GetFilterManager() const
 {
     // TODO still in old RootData
-    DBG_ASSERT( GetOldRoot().pAutoFilterBuffer, "XclImpRoot::GetFilterManager - invalid call, wrong BIFF" );
+    OSL_ENSURE( GetOldRoot().pAutoFilterBuffer, "XclImpRoot::GetFilterManager - invalid call, wrong BIFF" );
     return *GetOldRoot().pAutoFilterBuffer;
 }
 
 XclImpWebQueryBuffer& XclImpRoot::GetWebQueryBuffer() const
 {
-    DBG_ASSERT( mrImpData.mxWebQueryBfr.is(), "XclImpRoot::GetWebQueryBuffer - invalid call, wrong BIFF" );
+    OSL_ENSURE( mrImpData.mxWebQueryBfr, "XclImpRoot::GetWebQueryBuffer - invalid call, wrong BIFF" );
     return *mrImpData.mxWebQueryBfr;
 }
 
 XclImpPivotTableManager& XclImpRoot::GetPivotTableManager() const
 {
-    DBG_ASSERT( mrImpData.mxPTableMgr.is(), "XclImpRoot::GetPivotTableManager - invalid call, wrong BIFF" );
+    OSL_ENSURE( mrImpData.mxPTableMgr, "XclImpRoot::GetPivotTableManager - invalid call, wrong BIFF" );
     return *mrImpData.mxPTableMgr;
 }
 
 XclImpSheetProtectBuffer& XclImpRoot::GetSheetProtectBuffer() const
 {
-    DBG_ASSERT( mrImpData.mxTabProtect.is(), "XclImpRoot::GetSheetProtectBuffer - invalid call, wrong BIFF" );
+    OSL_ENSURE( mrImpData.mxTabProtect, "XclImpRoot::GetSheetProtectBuffer - invalid call, wrong BIFF" );
     return *mrImpData.mxTabProtect;
 }
 
 XclImpDocProtectBuffer& XclImpRoot::GetDocProtectBuffer() const
 {
-    DBG_ASSERT( mrImpData.mxDocProtect.is(), "XclImpRoot::GetDocProtectBuffer - invalid call, wrong BIFF" );
+    OSL_ENSURE( mrImpData.mxDocProtect, "XclImpRoot::GetDocProtectBuffer - invalid call, wrong BIFF" );
     return *mrImpData.mxDocProtect;
 }
 
@@ -299,3 +307,5 @@ void XclImpRoot::ReadCodeName( XclImpStream& rStrm, bool bGlobals )
 }
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

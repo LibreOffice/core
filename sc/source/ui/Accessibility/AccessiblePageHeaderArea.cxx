@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,28 +32,22 @@
 #include "AccessiblePageHeaderArea.hxx"
 #include "AccessibleText.hxx"
 #include "AccessibilityHints.hxx"
-#include "unoguard.hxx"
 #include "editsrc.hxx"
 #include "prevwsh.hxx"
 #include "prevloc.hxx"
 #include "scresid.hxx"
-#ifndef SC_SC_HRC
 #include "sc.hrc"
-#endif
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <editeng/editobj.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -88,7 +83,7 @@ ScAccessiblePageHeaderArea::~ScAccessiblePageHeaderArea(void)
 
 void SAL_CALL ScAccessiblePageHeaderArea::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);
@@ -132,7 +127,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessible
     uno::Reference<XAccessible> xRet;
     if (containsPoint(rPoint))
     {
-         ScUnoGuard aGuard;
+         SolarMutexGuard aGuard;
         IsObjectValid();
 
         if(!mpTextHelper)
@@ -150,7 +145,7 @@ sal_Int32 SAL_CALL
     ScAccessiblePageHeaderArea::getAccessibleChildCount(void)
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
@@ -162,7 +157,7 @@ uno::Reference< XAccessible > SAL_CALL
         throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
@@ -173,7 +168,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessiblePageHeaderArea::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -220,19 +215,16 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
 
 //=====  XTypeProvider  =======================================================
 
+namespace
+{
+    class theScAccessiblePageHeaderAreaImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessiblePageHeaderAreaImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessiblePageHeaderArea::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessiblePageHeaderAreaImplementationId::get().getSeq();
 }
 
 //===== internal ==============================================================
@@ -252,7 +244,7 @@ rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(v
         sDesc = String(ScResId(STR_ACC_CENTERAREA_DESCR));
         break;
     default:
-        DBG_ERRORFILE("wrong adjustment found");
+        OSL_FAIL("wrong adjustment found");
     }
 
     return sDesc;
@@ -274,7 +266,7 @@ rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName(void)
         sName = String(ScResId(STR_ACC_CENTERAREA_NAME));
         break;
     default:
-        DBG_ERRORFILE("wrong adjustment found");
+        OSL_FAIL("wrong adjustment found");
     }
 
     return sName;
@@ -328,3 +320,5 @@ void ScAccessiblePageHeaderArea::CreateTextHelper()
         mpTextHelper->SetEventSource(this);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

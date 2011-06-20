@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         pDoc                ( pDocument ),
         nCurTab             ( theFormulaCell.Tab() ),
         pEdActive           ( NULL ),
-        bDlgLostFocus       ( sal_False ),
+        bDlgLostFocus       ( false ),
         errMsgNoFormula     ( ScResId( STR_NOFORMULA ) ),
         errMsgNoColRow      ( ScResId( STR_NOCOLROW ) ),
         errMsgWrongFormula  ( ScResId( STR_WRONGFORMULA ) ),
@@ -90,14 +91,14 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScTabOpDlg::~ScTabOpDlg()
+ScTabOpDlg::~ScTabOpDlg()
 {
     Hide();
 }
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScTabOpDlg::Init()
+void ScTabOpDlg::Init()
 {
     aBtnOk.         SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
     aBtnCancel.     SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
@@ -127,7 +128,7 @@ void __EXPORT ScTabOpDlg::Init()
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScTabOpDlg::Close()
+sal_Bool ScTabOpDlg::Close()
 {
     return DoClose( ScTabOpDlgWrapper::GetChildWindowId() );
 }
@@ -138,7 +139,7 @@ void ScTabOpDlg::SetActive()
 {
     if ( bDlgLostFocus )
     {
-        bDlgLostFocus = sal_False;
+        bDlgLostFocus = false;
         if( pEdActive )
             pEdActive->GrabFocus();
     }
@@ -239,7 +240,7 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 sal_Bool lcl_Parse( const String& rString, ScDocument* pDoc, SCTAB nCurTab,
                 ScRefAddress& rStart, ScRefAddress& rEnd )
 {
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     if ( rString.Search(':') != STRING_NOTFOUND )
         bRet = ConvertDoubleRef( pDoc, rString, nCurTab, rStart, rEnd, eConv );
@@ -324,7 +325,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                                     nMode );
             ScTabOpItem  aOutItem( SID_TABOP, &aOutParam );
 
-            SetDispatcherLock( sal_False );
+            SetDispatcherLock( false );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( SID_TABOP,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -369,3 +370,4 @@ IMPL_LINK( ScTabOpDlg, LoseFocusHdl, Control*, EMPTYARG )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

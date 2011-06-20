@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,24 +45,15 @@ static ColorData aColNames[SC_RANGECOLORS] =
 
 ScRangeFindList::ScRangeFindList(const String& rName) :
     aDocName( rName ),
-    bHidden( sal_False )
+    bHidden( false )
 {
 }
 
-ScRangeFindList::~ScRangeFindList()
-{
-    void* pEntry = aEntries.First();
-    while ( pEntry )
-    {
-        delete (ScRangeFindData*) aEntries.Remove( pEntry );
-        pEntry = aEntries.Next();
-    }
-}
-
-ColorData ScRangeFindList::GetColorName( sal_uInt16 nIndex )        // static
+ColorData ScRangeFindList::GetColorName( size_t nIndex )
 {
     return aColNames[nIndex % SC_RANGECOLORS];
 }
 
 //==================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

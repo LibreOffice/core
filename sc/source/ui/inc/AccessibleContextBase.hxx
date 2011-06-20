@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_IllegalAccessibleComponentStateException_HPP_
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
-#endif
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weak.hxx>
@@ -43,7 +42,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 
@@ -342,3 +341,5 @@ private:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

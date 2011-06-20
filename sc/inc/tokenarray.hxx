@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #define SC_TOKENARRAY_HXX
 
 #include "formula/token.hxx"
+#include "scmatrix.hxx"
 #include <tools/solar.h>
 #include "scdllapi.h"
 #include <formula/tokenarray.hxx>
@@ -70,10 +72,11 @@ public:
     /** ScSingleRefOpToken with ocMatRef. */
     formula::FormulaToken* AddMatrixSingleReference( const ScSingleRefData& rRef );
     formula::FormulaToken* AddDoubleReference( const ScComplexRefData& rRef );
+    formula::FormulaToken* AddRangeName( sal_uInt16 n, bool bGlobal );
     formula::FormulaToken* AddExternalName( sal_uInt16 nFileId, const String& rName );
     formula::FormulaToken* AddExternalSingleReference( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
     formula::FormulaToken* AddExternalDoubleReference( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
-    formula::FormulaToken* AddMatrix( ScMatrix* p );
+    formula::FormulaToken* AddMatrix( const ScMatrixRef& p );
     /** ScSingleRefOpToken with ocColRowName. */
     formula::FormulaToken* AddColRowName( const ScSingleRefData& rRef );
     virtual formula::FormulaToken* MergeArray( );
@@ -95,3 +98,4 @@ public:
 
 #endif // SC_TOKENARRAY_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

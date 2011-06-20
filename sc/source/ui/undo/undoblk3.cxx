@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,9 @@
 // INCLUDE -------------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
@@ -116,7 +119,7 @@ ScUndoDeleteContents::ScUndoDeleteContents(
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoDeleteContents::~ScUndoDeleteContents()
+ScUndoDeleteContents::~ScUndoDeleteContents()
 {
     delete pUndoDoc;
     DeleteSdrUndoAction( pDrawUndo );
@@ -125,7 +128,7 @@ __EXPORT ScUndoDeleteContents::~ScUndoDeleteContents()
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoDeleteContents::GetComment() const
+String ScUndoDeleteContents::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );    // "Loeschen"
 }
@@ -208,7 +211,7 @@ void ScUndoDeleteContents::DoChange( const sal_Bool bUndo )
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoDeleteContents::Undo()
+void ScUndoDeleteContents::Undo()
 {
     BeginUndo();
     DoChange( sal_True );
@@ -227,10 +230,10 @@ void __EXPORT ScUndoDeleteContents::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoDeleteContents::Redo()
+void ScUndoDeleteContents::Redo()
 {
     BeginRedo();
-    DoChange( sal_False );
+    DoChange( false );
     EndRedo();
 
     // #i97876# Spreadsheet data changes are not notified
@@ -246,7 +249,7 @@ void __EXPORT ScUndoDeleteContents::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteContents( nFlags, sal_True );
@@ -255,7 +258,7 @@ void __EXPORT ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScUndoDeleteContents::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoDeleteContents::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -294,7 +297,7 @@ ScUndoFillTable::ScUndoFillTable( ScDocShell* pNewDocShell,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoFillTable::~ScUndoFillTable()
+ScUndoFillTable::~ScUndoFillTable()
 {
     delete pUndoDoc;
 }
@@ -302,7 +305,7 @@ __EXPORT ScUndoFillTable::~ScUndoFillTable()
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoFillTable::GetComment() const
+String ScUndoFillTable::GetComment() const
 {
     return ScGlobal::GetRscString( STR_FILL_TAB );
 }
@@ -390,7 +393,7 @@ void ScUndoFillTable::DoChange( const sal_Bool bUndo )
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoFillTable::Undo()
+void ScUndoFillTable::Undo()
 {
     BeginUndo();
     DoChange( sal_True );
@@ -400,17 +403,17 @@ void __EXPORT ScUndoFillTable::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoFillTable::Redo()
+void ScUndoFillTable::Redo()
 {
     BeginRedo();
-    DoChange( sal_False );
+    DoChange( false );
     EndRedo();
 }
 
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoFillTable::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoFillTable::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->FillTab( nFlags, nFunction, bSkipEmpty, bAsLink );
@@ -419,7 +422,7 @@ void __EXPORT ScUndoFillTable::Repeat(SfxRepeatTarget& rTarget)
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScUndoFillTable::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoFillTable::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -456,7 +459,7 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoSelectionAttr::~ScUndoSelectionAttr()
+ScUndoSelectionAttr::~ScUndoSelectionAttr()
 {
     ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
     pPool->Remove(*pApplyPattern);
@@ -471,12 +474,18 @@ __EXPORT ScUndoSelectionAttr::~ScUndoSelectionAttr()
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoSelectionAttr::GetComment() const
+String ScUndoSelectionAttr::GetComment() const
 {
     //"Attribute" "/Linien"
     return ScGlobal::GetRscString( pLineOuter ? STR_UNDO_SELATTRLINES : STR_UNDO_SELATTR );
 }
 
+//----------------------------------------------------------------------------
+
+ScEditDataArray* ScUndoSelectionAttr::GetDataArray()
+{
+    return &aDataArray;
+}
 
 //----------------------------------------------------------------------------
 
@@ -492,6 +501,8 @@ void ScUndoSelectionAttr::DoChange( const sal_Bool bUndo )
 
     sal_uInt16 nExtFlags = 0;
     pDocShell->UpdatePaintExt( nExtFlags, aEffRange );
+
+    ChangeEditData(bUndo);
 
     if (bUndo)  // nur bei Undo
     {
@@ -518,10 +529,28 @@ void ScUndoSelectionAttr::DoChange( const sal_Bool bUndo )
     ShowTable( aRange );
 }
 
+void ScUndoSelectionAttr::ChangeEditData( const bool bUndo )
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    for (const ScEditDataArray::Item* pItem = aDataArray.First(); pItem; pItem = aDataArray.Next())
+    {
+        ScBaseCell* pCell;
+        pDoc->GetCell(pItem->GetCol(), pItem->GetRow(), pItem->GetTab(), pCell);
+        if (!pCell || pCell->GetCellType() != CELLTYPE_EDIT)
+            continue;
+
+        ScEditCell* pEditCell = static_cast<ScEditCell*>(pCell);
+        if (bUndo)
+            pEditCell->SetData(pItem->GetOldData(), NULL);
+        else
+            pEditCell->SetData(pItem->GetNewData(), NULL);
+    }
+}
+
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoSelectionAttr::Undo()
+void ScUndoSelectionAttr::Undo()
 {
     BeginUndo();
     DoChange( sal_True );
@@ -531,17 +560,17 @@ void __EXPORT ScUndoSelectionAttr::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoSelectionAttr::Redo()
+void ScUndoSelectionAttr::Redo()
 {
     BeginRedo();
-    DoChange( sal_False );
+    DoChange( false );
     EndRedo();
 }
 
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -556,7 +585,7 @@ void __EXPORT ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScUndoSelectionAttr::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoSelectionAttr::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -573,8 +602,7 @@ ScUndoAutoFill::ScUndoAutoFill( ScDocShell* pNewDocShell,
                 const ScRange& rRange, const ScRange& rSourceArea,
                 ScDocument* pNewUndoDoc, const ScMarkData& rMark,
                 FillDir eNewFillDir, FillCmd eNewFillCmd, FillDateCmd eNewFillDateCmd,
-                double fNewStartValue, double fNewStepValue, double fNewMaxValue,
-                sal_uInt16 nMaxShIndex )
+                double fNewStartValue, double fNewStepValue, double fNewMaxValue )
         //
     :   ScBlockUndo( pNewDocShell, rRange, SC_UNDO_AUTOHEIGHT ),
         //
@@ -586,8 +614,7 @@ ScUndoAutoFill::ScUndoAutoFill( ScDocShell* pNewDocShell,
         eFillDateCmd    ( eNewFillDateCmd ),
         fStartValue     ( fNewStartValue ),
         fStepValue      ( fNewStepValue ),
-        fMaxValue       ( fNewMaxValue ),
-        nMaxSharedIndex ( nMaxShIndex)
+        fMaxValue       ( fNewMaxValue )
 {
     SetChangeTrack();
 }
@@ -595,16 +622,15 @@ ScUndoAutoFill::ScUndoAutoFill( ScDocShell* pNewDocShell,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoAutoFill::~ScUndoAutoFill()
+ScUndoAutoFill::~ScUndoAutoFill()
 {
-    pDocShell->GetDocument()->EraseNonUsedSharedNames(nMaxSharedIndex);
     delete pUndoDoc;
 }
 
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoAutoFill::GetComment() const
+String ScUndoAutoFill::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_AUTOFILL ); //"Ausfuellen"
 }
@@ -620,10 +646,7 @@ void ScUndoAutoFill::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
-
-//----------------------------------------------------------------------------
-
-void __EXPORT ScUndoAutoFill::Undo()
+void ScUndoAutoFill::Undo()
 {
     BeginUndo();
 
@@ -641,7 +664,7 @@ void __EXPORT ScUndoAutoFill::Undo()
             sal_uInt16 nExtFlags = 0;
             pDocShell->UpdatePaintExt( nExtFlags, aWorkRange );
             pDoc->DeleteAreaTab( aWorkRange, IDF_AUTOFILL );
-            pUndoDoc->CopyToDocument( aWorkRange, IDF_AUTOFILL, sal_False, pDoc );
+            pUndoDoc->CopyToDocument( aWorkRange, IDF_AUTOFILL, false, pDoc );
 
             pDoc->ExtendMerge( aWorkRange, sal_True );
             pDocShell->PostPaint( aWorkRange, PAINT_GRID, nExtFlags );
@@ -651,33 +674,6 @@ void __EXPORT ScUndoAutoFill::Undo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->CellContentChanged();
-
-// Shared-Names loeschen
-// Falls Undo ins Dokument gespeichert
-// => automatisches Loeschen am Ende
-// umarbeiten!!
-
-    String aName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("___SC_"));
-    aName += String::CreateFromInt32(nMaxSharedIndex);
-    aName += '_';
-    ScRangeName* pRangeName = pDoc->GetRangeName();
-    sal_Bool bHasFound = sal_False;
-    for (sal_uInt16 i = 0; i < pRangeName->GetCount(); i++)
-    {
-        ScRangeData* pRangeData = (*pRangeName)[i];
-        if (pRangeData)
-        {
-            String aRName;
-            pRangeData->GetName(aRName);
-            if (aRName.Search(aName) != STRING_NOTFOUND)
-            {
-                pRangeName->AtFree(i);
-                bHasFound = sal_True;
-            }
-        }
-    }
-    if (bHasFound)
-        pRangeName->SetSharedMaxIndex(pRangeName->GetSharedMaxIndex()-1);
 
     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
     if ( pChangeTrack )
@@ -689,7 +685,7 @@ void __EXPORT ScUndoAutoFill::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoAutoFill::Redo()
+void ScUndoAutoFill::Redo()
 {
     BeginRedo();
 
@@ -740,7 +736,7 @@ void __EXPORT ScUndoAutoFill::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoAutoFill::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoAutoFill::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -756,7 +752,7 @@ void __EXPORT ScUndoAutoFill::Repeat(SfxRepeatTarget& rTarget)
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScUndoAutoFill::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoAutoFill::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -769,14 +765,12 @@ sal_Bool __EXPORT ScUndoAutoFill::CanRepeat(SfxRepeatTarget& rTarget) const
 
 //----------------------------------------------------------------------------
 
-ScUndoMerge::ScUndoMerge( ScDocShell* pNewDocShell,
-                            SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
-                            SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                            bool bMergeContents, ScDocument* pUndoDoc, SdrUndoAction* pDrawUndo )
+ScUndoMerge::ScUndoMerge( ScDocShell* pNewDocShell, const ScCellMergeOption& rOption,
+                          bool bMergeContents, ScDocument* pUndoDoc, SdrUndoAction* pDrawUndo )
         //
     :   ScSimpleUndo( pNewDocShell ),
         //
-        maRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
+        maOption(rOption),
         mbMergeContents( bMergeContents ),
         mpUndoDoc( pUndoDoc ),
         mpDrawUndo( pDrawUndo )
@@ -805,51 +799,77 @@ String ScUndoMerge::GetComment() const
 
 void ScUndoMerge::DoChange( bool bUndo ) const
 {
+    using ::std::set;
+
+    if (maOption.maTabs.empty())
+        // Nothing to do.
+        return;
+
     ScDocument* pDoc = pDocShell->GetDocument();
-
-    ScUndoUtil::MarkSimpleBlock( pDocShell, maRange );
-
-    if (bUndo)
-        // remove merge (contents are copied back below from undo document)
-        pDoc->RemoveMerge( maRange.aStart.Col(), maRange.aStart.Row(), maRange.aStart.Tab() );
-    else
-        // repeat merge, but do not remove note captions (will be done by drawing redo below)
-/*!*/   pDoc->DoMerge( maRange.aStart.Tab(),
-                       maRange.aStart.Col(), maRange.aStart.Row(),
-                       maRange.aEnd.Col(),   maRange.aEnd.Row(), false );
-
-    // undo -> copy back deleted contents
-    if (bUndo && mpUndoDoc)
-    {
-        pDoc->DeleteAreaTab( maRange, IDF_CONTENTS|IDF_NOCAPTIONS );
-        mpUndoDoc->CopyToDocument( maRange, IDF_ALL|IDF_NOCAPTIONS, sal_False, pDoc );
-    }
-
-    // redo -> merge contents again
-    else if (!bUndo && mbMergeContents)
-    {
-/*!*/   pDoc->DoMergeContents( maRange.aStart.Tab(),
-                               maRange.aStart.Col(), maRange.aStart.Row(),
-                               maRange.aEnd.Col(),   maRange.aEnd.Row()   );
-    }
-
-    if (bUndo)
-        DoSdrUndoAction( mpDrawUndo, pDoc );
-    else
-        RedoSdrUndoAction( mpDrawUndo );
-
-    sal_Bool bDidPaint = sal_False;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if ( pViewShell )
+
+    ScRange aCurRange = maOption.getSingleRange(pDocShell->GetCurTab());
+    ScUndoUtil::MarkSimpleBlock(pDocShell, aCurRange);
+
+    for (set<SCTAB>::const_iterator itr = maOption.maTabs.begin(), itrEnd = maOption.maTabs.end();
+          itr != itrEnd; ++itr)
     {
-        pViewShell->SetTabNo( maRange.aStart.Tab() );
-        bDidPaint = pViewShell->AdjustRowHeight( maRange.aStart.Row(), maRange.aEnd.Row() );
+        SCTAB nTab = *itr;
+        ScRange aRange = maOption.getSingleRange(nTab);
+
+        if (bUndo)
+            // remove merge (contents are copied back below from undo document)
+            pDoc->RemoveMerge( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab() );
+        else
+        {
+            // repeat merge, but do not remove note captions (will be done by drawing redo below)
+            pDoc->DoMerge( aRange.aStart.Tab(),
+                           aRange.aStart.Col(), aRange.aStart.Row(),
+                           aRange.aEnd.Col(),   aRange.aEnd.Row(), false );
+
+            if (maOption.mbCenter)
+            {
+                pDoc->ApplyAttr( aRange.aStart.Col(), aRange.aStart.Row(),
+                                 aRange.aStart.Tab(),
+                                 SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
+                pDoc->ApplyAttr( aRange.aStart.Col(), aRange.aStart.Row(),
+                                 aRange.aStart.Tab(),
+                                 SvxVerJustifyItem( SVX_VER_JUSTIFY_CENTER, ATTR_VER_JUSTIFY ) );
+            }
+        }
+
+        // undo -> copy back deleted contents
+        if (bUndo && mpUndoDoc)
+        {
+            pDoc->DeleteAreaTab( aRange, IDF_CONTENTS|IDF_NOCAPTIONS );
+            mpUndoDoc->CopyToDocument( aRange, IDF_ALL|IDF_NOCAPTIONS, false, pDoc );
+        }
+
+        // redo -> merge contents again
+        else if (!bUndo && mbMergeContents)
+        {
+            pDoc->DoMergeContents( aRange.aStart.Tab(),
+                                   aRange.aStart.Col(), aRange.aStart.Row(),
+                                   aRange.aEnd.Col(), aRange.aEnd.Row() );
+        }
+
+        if (bUndo)
+            DoSdrUndoAction( mpDrawUndo, pDoc );
+        else
+            RedoSdrUndoAction( mpDrawUndo );
+
+        bool bDidPaint = false;
+        if ( pViewShell )
+        {
+            pViewShell->SetTabNo(nTab);
+            bDidPaint = pViewShell->AdjustRowHeight(maOption.mnStartRow, maOption.mnEndRow);
+        }
+
+        if (!bDidPaint)
+            ScUndoUtil::PaintMore(pDocShell, aRange);
     }
 
-    if (!bDidPaint)
-        ScUndoUtil::PaintMore( pDocShell, maRange );
-
-    ShowTable( maRange );
+    ShowTable(aCurRange);
 }
 
 
@@ -880,8 +900,8 @@ void ScUndoMerge::Repeat(SfxRepeatTarget& rTarget)
     if (rTarget.ISA(ScTabViewTarget))
     {
         ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
-        sal_Bool bCont = sal_False;
-        rViewShell.MergeCells( sal_False, bCont, sal_True );
+        sal_Bool bCont = false;
+        rViewShell.MergeCells( false, bCont, sal_True );
     }
 }
 
@@ -917,7 +937,7 @@ ScUndoAutoFormat::ScUndoAutoFormat( ScDocShell* pNewDocShell,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoAutoFormat::~ScUndoAutoFormat()
+ScUndoAutoFormat::~ScUndoAutoFormat()
 {
     delete pUndoDoc;
 }
@@ -925,7 +945,7 @@ __EXPORT ScUndoAutoFormat::~ScUndoAutoFormat()
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoAutoFormat::GetComment() const
+String ScUndoAutoFormat::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_AUTOFORMAT );   //"Auto-Format"
 }
@@ -933,7 +953,7 @@ String __EXPORT ScUndoAutoFormat::GetComment() const
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoAutoFormat::Undo()
+void ScUndoAutoFormat::Undo()
 {
     BeginUndo();
 
@@ -950,7 +970,7 @@ void __EXPORT ScUndoAutoFormat::Undo()
     ScRange aCopyRange = aBlockRange;
     aCopyRange.aStart.SetTab(0);
     aCopyRange.aEnd.SetTab(nTabCount-1);
-    pUndoDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, sal_False, pDoc, &aMarkData );
+    pUndoDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, false, pDoc, &aMarkData );
 
     // Zellhoehen und -breiten (IDF_NONE)
     if (bSize)
@@ -963,9 +983,9 @@ void __EXPORT ScUndoAutoFormat::Undo()
         SCTAB nEndZ = aBlockRange.aEnd.Tab();
 
         pUndoDoc->CopyToDocument( nStartX, 0, 0, nEndX, MAXROW, nTabCount-1,
-                                    IDF_NONE, sal_False, pDoc, &aMarkData );
+                                    IDF_NONE, false, pDoc, &aMarkData );
         pUndoDoc->CopyToDocument( 0, nStartY, 0, MAXCOL, nEndY, nTabCount-1,
-                                    IDF_NONE, sal_False, pDoc, &aMarkData );
+                                    IDF_NONE, false, pDoc, &aMarkData );
         pDocShell->PostPaint( 0, 0, nStartZ, MAXCOL, MAXROW, nEndZ,
                               PAINT_GRID | PAINT_LEFT | PAINT_TOP, SC_PF_LINES );
     }
@@ -978,7 +998,7 @@ void __EXPORT ScUndoAutoFormat::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoAutoFormat::Redo()
+void ScUndoAutoFormat::Redo()
 {
     BeginRedo();
 
@@ -1015,7 +1035,7 @@ void __EXPORT ScUndoAutoFormat::Redo()
             nPPTY = ScGlobal::nScreenPPTY;
         }
 
-        sal_Bool bFormula = sal_False;  //! merken
+        sal_Bool bFormula = false;  //! merken
 
         for (SCTAB nTab=nStartZ; nTab<=nEndZ; nTab++)
         {
@@ -1025,20 +1045,18 @@ void __EXPORT ScUndoAutoFormat::Redo()
             aDestMark.MarkToMulti();
 
             // wie SC_SIZE_VISOPT
-            SCROW nLastRow = -1;
             for (SCROW nRow=nStartY; nRow<=nEndY; nRow++)
             {
                 sal_uInt8 nOld = pDoc->GetRowFlags(nRow,nTab);
-                bool bHidden = pDoc->RowHidden(nRow, nTab, nLastRow);
+                bool bHidden = pDoc->RowHidden(nRow, nTab);
                 if ( !bHidden && ( nOld & CR_MANUALSIZE ) )
                     pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
             }
             pDoc->SetOptimalHeight( nStartY, nEndY, nTab, 0, &aVirtDev,
-                                        nPPTX, nPPTY, aZoomX, aZoomY, sal_False );
+                                        nPPTX, nPPTY, aZoomX, aZoomY, false );
 
-            SCCOL nLastCol = -1;
             for (SCCOL nCol=nStartX; nCol<=nEndX; nCol++)
-                if (!pDoc->ColHidden(nCol, nTab, nLastCol))
+                if (!pDoc->ColHidden(nCol, nTab))
                 {
                     sal_uInt16 nThisSize = STD_EXTRA_WIDTH + pDoc->GetOptimalColWidth( nCol, nTab,
                                                 &aVirtDev, nPPTX, nPPTY, aZoomX, aZoomY, bFormula,
@@ -1061,7 +1079,7 @@ void __EXPORT ScUndoAutoFormat::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoAutoFormat::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoAutoFormat::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->AutoFormat( nFormatNo, sal_True );
@@ -1070,7 +1088,7 @@ void __EXPORT ScUndoAutoFormat::Repeat(SfxRepeatTarget& rTarget)
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScUndoAutoFormat::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoAutoFormat::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -1102,7 +1120,7 @@ ScUndoReplace::ScUndoReplace( ScDocShell* pNewDocShell, const ScMarkData& rMark,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoReplace::~ScUndoReplace()
+ScUndoReplace::~ScUndoReplace()
 {
     delete pUndoDoc;
     delete pSearchItem;
@@ -1140,7 +1158,7 @@ void ScUndoReplace::SetChangeTrack()
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoReplace::GetComment() const
+String ScUndoReplace::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REPLACE );  // "Ersetzen"
 }
@@ -1148,7 +1166,7 @@ String __EXPORT ScUndoReplace::GetComment() const
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoReplace::Undo()
+void ScUndoReplace::Undo()
 {
     BeginUndo();
 
@@ -1159,7 +1177,7 @@ void __EXPORT ScUndoReplace::Undo()
 
     if (pUndoDoc)       // nur bei ReplaceAll !!
     {
-        DBG_ASSERT(pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL,
+        OSL_ENSURE(pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL,
                    "ScUndoReplace:: Falscher Modus");
 
         SetViewMarkData( aMarkData );
@@ -1173,7 +1191,7 @@ void __EXPORT ScUndoReplace::Undo()
         sal_uInt16 nUndoFlags = (pSearchItem->GetPattern()) ? IDF_ATTRIB : IDF_CONTENTS;
         pUndoDoc->CopyToDocument( 0,      0,      0,
                                   MAXCOL, MAXROW, MAXTAB,
-                                  nUndoFlags, sal_False, pDoc, NULL, sal_False );   // ohne Row-Flags
+                                  nUndoFlags, false, pDoc, NULL, false );   // ohne Row-Flags
         pDocShell->PostPaintGridAll();
     }
     else if (pSearchItem->GetPattern() &&
@@ -1189,29 +1207,29 @@ void __EXPORT ScUndoReplace::Undo()
         pSearchItem->SetSearchString(aTempStr);
         if (pViewShell)
             pViewShell->MoveCursorAbs( aCursorPos.Col(), aCursorPos.Row(),
-                                       SC_FOLLOW_JUMP, sal_False, sal_False );
+                                       SC_FOLLOW_JUMP, false, false );
         pDocShell->PostPaintGridAll();
     }
     else if (pSearchItem->GetCellType() == SVX_SEARCHIN_NOTE)
     {
         ScPostIt* pNote = pDoc->GetNote( aCursorPos );
-        DBG_ASSERT( pNote, "ScUndoReplace::Undo - cell does not contain a note" );
+        OSL_ENSURE( pNote, "ScUndoReplace::Undo - cell does not contain a note" );
         if (pNote)
             pNote->SetText( aCursorPos, aUndoStr );
         if (pViewShell)
             pViewShell->MoveCursorAbs( aCursorPos.Col(), aCursorPos.Row(),
-                                       SC_FOLLOW_JUMP, sal_False, sal_False );
+                                       SC_FOLLOW_JUMP, false, false );
     }
     else
     {
-        // #78889# aUndoStr may contain line breaks
+        // aUndoStr may contain line breaks
         if ( aUndoStr.Search('\n') != STRING_NOTFOUND )
             pDoc->PutCell( aCursorPos, new ScEditCell( aUndoStr, pDoc ) );
         else
             pDoc->SetString( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aUndoStr );
         if (pViewShell)
             pViewShell->MoveCursorAbs( aCursorPos.Col(), aCursorPos.Row(),
-                                       SC_FOLLOW_JUMP, sal_False, sal_False );
+                                       SC_FOLLOW_JUMP, false, false );
         pDocShell->PostPaintGridAll();
     }
 
@@ -1225,7 +1243,7 @@ void __EXPORT ScUndoReplace::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoReplace::Redo()
+void ScUndoReplace::Redo()
 {
     BeginRedo();
 
@@ -1234,14 +1252,14 @@ void __EXPORT ScUndoReplace::Redo()
 
     if (pViewShell)
         pViewShell->MoveCursorAbs( aCursorPos.Col(), aCursorPos.Row(),
-                                   SC_FOLLOW_JUMP, sal_False, sal_False );
+                                   SC_FOLLOW_JUMP, false, false );
     if (pUndoDoc)
     {
         if (pViewShell)
         {
             SetViewMarkData( aMarkData );
 
-            pViewShell->SearchAndReplace( pSearchItem, sal_False, sal_True );
+            pViewShell->SearchAndReplace( pSearchItem, false, sal_True );
         }
     }
     else if (pSearchItem->GetPattern() &&
@@ -1254,7 +1272,7 @@ void __EXPORT ScUndoReplace::Redo()
     }
     else
         if (pViewShell)
-            pViewShell->SearchAndReplace( pSearchItem, sal_False, sal_True );
+            pViewShell->SearchAndReplace( pSearchItem, false, sal_True );
 
     SetChangeTrack();
 
@@ -1264,16 +1282,16 @@ void __EXPORT ScUndoReplace::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoReplace::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoReplace::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->SearchAndReplace( pSearchItem, sal_True, sal_False );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->SearchAndReplace( pSearchItem, sal_True, false );
 }
 
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScUndoReplace::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoReplace::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -1310,7 +1328,7 @@ ScUndoTabOp::ScUndoTabOp( ScDocShell* pNewDocShell,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoTabOp::~ScUndoTabOp()
+ScUndoTabOp::~ScUndoTabOp()
 {
     delete pUndoDoc;
 }
@@ -1318,7 +1336,7 @@ __EXPORT ScUndoTabOp::~ScUndoTabOp()
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoTabOp::GetComment() const
+String ScUndoTabOp::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_TABOP );    // "Mehrfachoperation"
 }
@@ -1326,7 +1344,7 @@ String __EXPORT ScUndoTabOp::GetComment() const
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoTabOp::Undo()
+void ScUndoTabOp::Undo()
 {
     BeginUndo();
 
@@ -1337,7 +1355,7 @@ void __EXPORT ScUndoTabOp::Undo()
 
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->DeleteAreaTab( aRange,IDF_ALL & ~IDF_NOTE );
-    pUndoDoc->CopyToDocument( aRange, IDF_ALL & ~IDF_NOTE, sal_False, pDoc );
+    pUndoDoc->CopyToDocument( aRange, IDF_ALL & ~IDF_NOTE, false, pDoc );
     pDocShell->PostPaint( aRange, PAINT_GRID, nExtFlags );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -1350,7 +1368,7 @@ void __EXPORT ScUndoTabOp::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoTabOp::Redo()
+void ScUndoTabOp::Redo()
 {
     BeginRedo();
 
@@ -1362,7 +1380,7 @@ void __EXPORT ScUndoTabOp::Redo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->TabOp( aParam, sal_False);
+        pViewShell->TabOp( aParam, false);
 
     EndRedo();
 }
@@ -1370,16 +1388,16 @@ void __EXPORT ScUndoTabOp::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoTabOp::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoTabOp::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScUndoTabOp::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+sal_Bool ScUndoTabOp::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -1409,7 +1427,7 @@ ScUndoConversion::ScUndoConversion(
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoConversion::~ScUndoConversion()
+ScUndoConversion::~ScUndoConversion()
 {
     delete pUndoDoc;
     delete pRedoDoc;
@@ -1429,7 +1447,7 @@ void ScUndoConversion::SetChangeTrack()
                 nStartChangeAction, nEndChangeAction );
         else
         {
-            DBG_ERROR( "ScUndoConversion::SetChangeTrack: kein UndoDoc" );
+            OSL_FAIL( "ScUndoConversion::SetChangeTrack: kein UndoDoc" );
             nStartChangeAction = nEndChangeAction = 0;
         }
     }
@@ -1447,7 +1465,7 @@ String ScUndoConversion::GetComment() const
         case SC_CONVERSION_SPELLCHECK:      aText = ScGlobal::GetRscString( STR_UNDO_SPELLING );    break;
         case SC_CONVERSION_HANGULHANJA:     aText = ScGlobal::GetRscString( STR_UNDO_HANGULHANJA ); break;
         case SC_CONVERSION_CHINESE_TRANSL:  aText = ScGlobal::GetRscString( STR_UNDO_CHINESE_TRANSLATION ); break;
-        default: DBG_ERRORFILE( "ScUndoConversion::GetComment - unknown conversion type" );
+        default: OSL_FAIL( "ScUndoConversion::GetComment - unknown conversion type" );
     }
     return aText;
 }
@@ -1475,7 +1493,7 @@ void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPo
     }
     else
     {
-        DBG_ERROR("Kein Un-/RedoDoc bei Un-/RedoSpelling");
+        OSL_FAIL("Kein Un-/RedoDoc bei Un-/RedoSpelling");
     }
 }
 
@@ -1542,13 +1560,13 @@ nFlags      ( nNewFlag )
     SetChangeTrack();
 }
 
-__EXPORT ScUndoRefConversion::~ScUndoRefConversion()
+ScUndoRefConversion::~ScUndoRefConversion()
 {
     delete pUndoDoc;
     delete pRedoDoc;
 }
 
-String __EXPORT ScUndoRefConversion::GetComment() const
+String ScUndoRefConversion::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Eingabe"
 }
@@ -1582,7 +1600,7 @@ void ScUndoRefConversion::DoChange( ScDocument* pRefDoc)
     if (pViewShell)
         pViewShell->CellContentChanged();
 }
-void __EXPORT ScUndoRefConversion::Undo()
+void ScUndoRefConversion::Undo()
 {
     BeginUndo();
     if (pUndoDoc)
@@ -1593,7 +1611,7 @@ void __EXPORT ScUndoRefConversion::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoRefConversion::Redo()
+void ScUndoRefConversion::Redo()
 {
     BeginRedo();
     if (pRedoDoc)
@@ -1602,13 +1620,13 @@ void __EXPORT ScUndoRefConversion::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoRefConversion::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoRefConversion::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->DoRefConversion();
 }
 
-sal_Bool __EXPORT ScUndoRefConversion::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoRefConversion::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -1632,7 +1650,7 @@ ScUndoRefreshLink::ScUndoRefreshLink( ScDocShell* pNewDocShell,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoRefreshLink::~ScUndoRefreshLink()
+ScUndoRefreshLink::~ScUndoRefreshLink()
 {
     delete pUndoDoc;
     delete pRedoDoc;
@@ -1641,7 +1659,7 @@ __EXPORT ScUndoRefreshLink::~ScUndoRefreshLink()
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoRefreshLink::GetComment() const
+String ScUndoRefreshLink::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_UPDATELINK );
 }
@@ -1649,7 +1667,7 @@ String __EXPORT ScUndoRefreshLink::GetComment() const
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoRefreshLink::Undo()
+void ScUndoRefreshLink::Undo()
 {
     BeginUndo();
 
@@ -1669,10 +1687,9 @@ void __EXPORT ScUndoRefreshLink::Undo()
                 if (bFirst)
                     pRedoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
                 else
-                    pRedoDoc->AddUndoTab( nTab, nTab, sal_True, sal_True );
-                bFirst = sal_False;
-                pDoc->CopyToDocument(aRange, IDF_ALL, sal_False, pRedoDoc);
-//              pRedoDoc->TransferDrawPage( pDoc, nTab, nTab );
+                    pRedoDoc->AddUndoTab( nTab, nTab, true, true );
+                bFirst = false;
+                pDoc->CopyToDocument(aRange, IDF_ALL, false, pRedoDoc);
                 pRedoDoc->SetLink( nTab,
                                    pDoc->GetLinkMode(nTab),
                                    pDoc->GetLinkDoc(nTab),
@@ -1683,8 +1700,7 @@ void __EXPORT ScUndoRefreshLink::Undo()
             }
 
             pDoc->DeleteAreaTab( aRange,IDF_ALL );
-            pUndoDoc->CopyToDocument( aRange, IDF_ALL, sal_False, pDoc );
-//          pDoc->TransferDrawPage( pUndoDoc, nTab, nTab );
+            pUndoDoc->CopyToDocument( aRange, IDF_ALL, false, pDoc );
             pDoc->SetLink( nTab, pUndoDoc->GetLinkMode(nTab), pUndoDoc->GetLinkDoc(nTab),
                                  pUndoDoc->GetLinkFlt(nTab),  pUndoDoc->GetLinkOpt(nTab),
                                  pUndoDoc->GetLinkTab(nTab),
@@ -1699,9 +1715,9 @@ void __EXPORT ScUndoRefreshLink::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoRefreshLink::Redo()
+void ScUndoRefreshLink::Redo()
 {
-    DBG_ASSERT(pRedoDoc, "Kein RedoDoc bei ScUndoRefreshLink::Redo");
+    OSL_ENSURE(pRedoDoc, "Kein RedoDoc bei ScUndoRefreshLink::Redo");
 
     BeginUndo();
 
@@ -1713,8 +1729,7 @@ void __EXPORT ScUndoRefreshLink::Redo()
             ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
 
             pDoc->DeleteAreaTab( aRange, IDF_ALL );
-            pRedoDoc->CopyToDocument( aRange, IDF_ALL, sal_False, pDoc );
-//          pDoc->TransferDrawPage( pRedoDoc, nTab, nTab );
+            pRedoDoc->CopyToDocument( aRange, IDF_ALL, false, pDoc );
             pDoc->SetLink( nTab,
                            pRedoDoc->GetLinkMode(nTab),
                            pRedoDoc->GetLinkDoc(nTab),
@@ -1732,7 +1747,7 @@ void __EXPORT ScUndoRefreshLink::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoRefreshLink::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoRefreshLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  gippsnich
 }
@@ -1740,9 +1755,9 @@ void __EXPORT ScUndoRefreshLink::Repeat(SfxRepeatTarget& /* rTarget */)
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScUndoRefreshLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+sal_Bool ScUndoRefreshLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -1762,7 +1777,7 @@ ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const String& rDo
                 return (ScAreaLink*)pBase;
     }
 
-    DBG_ERROR("ScAreaLink nicht gefunden");
+    OSL_FAIL("ScAreaLink nicht gefunden");
     return NULL;
 }
 
@@ -1794,14 +1809,14 @@ ScUndoInsertAreaLink::ScUndoInsertAreaLink( ScDocShell* pShell,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoInsertAreaLink::~ScUndoInsertAreaLink()
+ScUndoInsertAreaLink::~ScUndoInsertAreaLink()
 {
 }
 
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoInsertAreaLink::GetComment() const
+String ScUndoInsertAreaLink::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_INSERTAREALINK );
 }
@@ -1809,7 +1824,7 @@ String __EXPORT ScUndoInsertAreaLink::GetComment() const
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoInsertAreaLink::Undo()
+void ScUndoInsertAreaLink::Undo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
@@ -1825,7 +1840,7 @@ void __EXPORT ScUndoInsertAreaLink::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoInsertAreaLink::Redo()
+void ScUndoInsertAreaLink::Redo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
@@ -1836,7 +1851,7 @@ void __EXPORT ScUndoInsertAreaLink::Redo()
     pLink->SetDestArea( aRange );
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aDocName, &aFltName, &aAreaName );
     pLink->Update();
-    pLink->SetInCreate( sal_False );
+    pLink->SetInCreate( false );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
@@ -1844,7 +1859,7 @@ void __EXPORT ScUndoInsertAreaLink::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoInsertAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoInsertAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //! ....
 }
@@ -1852,9 +1867,9 @@ void __EXPORT ScUndoInsertAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScUndoInsertAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+sal_Bool ScUndoInsertAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -1884,14 +1899,14 @@ ScUndoRemoveAreaLink::ScUndoRemoveAreaLink( ScDocShell* pShell,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoRemoveAreaLink::~ScUndoRemoveAreaLink()
+ScUndoRemoveAreaLink::~ScUndoRemoveAreaLink()
 {
 }
 
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoRemoveAreaLink::GetComment() const
+String ScUndoRemoveAreaLink::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REMOVELINK );   //! eigener Text ??
 }
@@ -1899,7 +1914,7 @@ String __EXPORT ScUndoRemoveAreaLink::GetComment() const
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoRemoveAreaLink::Undo()
+void ScUndoRemoveAreaLink::Undo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
@@ -1910,7 +1925,7 @@ void __EXPORT ScUndoRemoveAreaLink::Undo()
     pLink->SetDestArea( aRange );
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aDocName, &aFltName, &aAreaName );
     pLink->Update();
-    pLink->SetInCreate( sal_False );
+    pLink->SetInCreate( false );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
@@ -1918,7 +1933,7 @@ void __EXPORT ScUndoRemoveAreaLink::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoRemoveAreaLink::Redo()
+void ScUndoRemoveAreaLink::Redo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
@@ -1934,7 +1949,7 @@ void __EXPORT ScUndoRemoveAreaLink::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoRemoveAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoRemoveAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  gippsnich
 }
@@ -1942,9 +1957,9 @@ void __EXPORT ScUndoRemoveAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScUndoRemoveAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+sal_Bool ScUndoRemoveAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -1980,13 +1995,13 @@ ScUndoUpdateAreaLink::ScUndoUpdateAreaLink( ScDocShell* pShell,
         nNewRefresh ( nNewRD ),
         bWithInsert ( bDoInsert )
 {
-    DBG_ASSERT( aOldRange.aStart == aNewRange.aStart, "AreaLink verschoben ?" );
+    OSL_ENSURE( aOldRange.aStart == aNewRange.aStart, "AreaLink verschoben ?" );
 }
 
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoUpdateAreaLink::~ScUndoUpdateAreaLink()
+ScUndoUpdateAreaLink::~ScUndoUpdateAreaLink()
 {
     delete pUndoDoc;
     delete pRedoDoc;
@@ -1995,7 +2010,7 @@ __EXPORT ScUndoUpdateAreaLink::~ScUndoUpdateAreaLink()
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoUpdateAreaLink::GetComment() const
+String ScUndoUpdateAreaLink::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_UPDATELINK );   //! eigener Text ??
 }
@@ -2017,13 +2032,13 @@ void ScUndoUpdateAreaLink::DoChange( const sal_Bool bUndo ) const
         {
             pDoc->FitBlock( aNewRange, aOldRange );
             pDoc->DeleteAreaTab( aOldRange, IDF_ALL & ~IDF_NOTE );
-            pUndoDoc->UndoToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, sal_False, pDoc );
+            pUndoDoc->UndoToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, false, pDoc );
         }
         else
         {
             ScRange aCopyRange( aOldRange.aStart, ScAddress(nEndX,nEndY,nEndZ) );
             pDoc->DeleteAreaTab( aCopyRange, IDF_ALL & ~IDF_NOTE );
-            pUndoDoc->CopyToDocument( aCopyRange, IDF_ALL & ~IDF_NOTE, sal_False, pDoc );
+            pUndoDoc->CopyToDocument( aCopyRange, IDF_ALL & ~IDF_NOTE, false, pDoc );
         }
     }
     else
@@ -2032,13 +2047,13 @@ void ScUndoUpdateAreaLink::DoChange( const sal_Bool bUndo ) const
         {
             pDoc->FitBlock( aOldRange, aNewRange );
             pDoc->DeleteAreaTab( aNewRange, IDF_ALL & ~IDF_NOTE );
-            pRedoDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, sal_False, pDoc );
+            pRedoDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, false, pDoc );
         }
         else
         {
             ScRange aCopyRange( aOldRange.aStart, ScAddress(nEndX,nEndY,nEndZ) );
             pDoc->DeleteAreaTab( aCopyRange, IDF_ALL & ~IDF_NOTE );
-            pRedoDoc->CopyToDocument( aCopyRange, IDF_ALL & ~IDF_NOTE, sal_False, pDoc );
+            pRedoDoc->CopyToDocument( aCopyRange, IDF_ALL & ~IDF_NOTE, false, pDoc );
         }
     }
 
@@ -2064,7 +2079,7 @@ void ScUndoUpdateAreaLink::DoChange( const sal_Bool bUndo ) const
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoUpdateAreaLink::Undo()
+void ScUndoUpdateAreaLink::Undo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
@@ -2083,7 +2098,7 @@ void __EXPORT ScUndoUpdateAreaLink::Undo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoUpdateAreaLink::Redo()
+void ScUndoUpdateAreaLink::Redo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
@@ -2096,13 +2111,13 @@ void __EXPORT ScUndoUpdateAreaLink::Redo()
         pLink->SetRefreshDelay( nNewRefresh );
     }
 
-    DoChange(sal_False);
+    DoChange(false);
 }
 
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoUpdateAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoUpdateAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  gippsnich
 }
@@ -2110,11 +2125,12 @@ void __EXPORT ScUndoUpdateAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScUndoUpdateAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+sal_Bool ScUndoUpdateAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return sal_False;
+    return false;
 }
 
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

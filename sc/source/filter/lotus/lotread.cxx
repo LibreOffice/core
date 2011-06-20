@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -194,14 +195,14 @@ FltError ImportLotus::Read()
             case S_END:                                             // S_END
             break;
             // -----------------------------------------------------------
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             default:
-            DBG_ERROR( "*ImportLotus::Read(): State unbekannt!" );
+            OSL_FAIL( "*ImportLotus::Read(): State unbekannt!" );
             eAkt = S_END;
 #endif
         }
 
-        DBG_ASSERT( nNextRec >= pIn->Tell(),
+        OSL_ENSURE( nNextRec >= pIn->Tell(),
             "*ImportLotus::Read(): Etwas zu gierig..." );
 
         pIn->Seek( nNextRec );
@@ -223,7 +224,7 @@ FltError ImportLotus::Read()
         }
         for( nCnt = 1 ; nCnt < nTabs ; nCnt++ )
         {
-            DBG_ASSERT( pD->HasTable( nCnt ),
+            OSL_ENSURE( pD->HasTable( nCnt ),
                 "-ImportLotus::Read(): Wo ist meine Tabelle?!" );
             pD->GetName( nCnt, aTabName );
             if( aTabName == aRef )
@@ -264,7 +265,7 @@ FltError ImportLotus::Read( SvStream& rIn )
         *pIn >> nOp >> nRecLen;
 
         if( pIn->IsEof() )
-            bRead = sal_False;
+            bRead = false;
         else
         {
             nNextRec += nRecLen + 4;
@@ -274,14 +275,14 @@ FltError ImportLotus::Read( SvStream& rIn )
                 case 0x0000:                            // BOF
                 if( nRecLen != 26 || !BofFm3() )
                 {
-                    bRead = sal_False;
+                    bRead = false;
                     eRet = eERR_FORMAT;
                 }
                 break;
 
                 case 0x0001:                            // EOF
-                    bRead = sal_False;
-                    DBG_ASSERT( nTab == 0,
+                    bRead = false;
+                    OSL_ENSURE( nTab == 0,
                         "-ImportLotus::Read( SvStream& ): Zweimal EOF nicht erlaubt" );
                     nTab++;
                 break;
@@ -308,7 +309,7 @@ FltError ImportLotus::Read( SvStream& rIn )
                 break;
             }
 
-            DBG_ASSERT( nNextRec >= pIn->Tell(),
+            OSL_ENSURE( nNextRec >= pIn->Tell(),
                 "*ImportLotus::Read(): Etwas zu gierig..." );
             pIn->Seek( nNextRec );
             aPrgrsBar.Progress();
@@ -322,3 +323,4 @@ FltError ImportLotus::Read( SvStream& rIn )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

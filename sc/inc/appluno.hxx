@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <rtl/ustring.hxx>
 
 class ScFunctionDescriptionObj;
 
@@ -209,3 +211,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

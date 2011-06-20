@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include "scitems.hxx"
 #include "uiitems.hxx"
 #include "global.hxx"
@@ -62,7 +61,6 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, sal_uInt16 nResId,
         :   SfxTabPage      ( pParent,
                               ScResId( nResId ),
                               rArgSet ),
-            //
             aFtGroup        ( this, ScResId( FT_GROUP ) ),
             aLbGroup        ( this, ScResId( LB_GROUP ) ),
             aFtColumns      ( this, ScResId( FT_COLUMNS ) ),
@@ -71,7 +69,6 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, sal_uInt16 nResId,
             aLbFunctions    ( this, ScResId( LB_FUNCTIONS ) ),
             aStrNone        ( ScResId( SCSTR_NONE ) ),
             aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
-            //
             pViewData       ( NULL ),
             pDoc            ( NULL ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
@@ -92,7 +89,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, sal_uInt16 nResId,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTpSubTotalGroup::~ScTpSubTotalGroup()
+ScTpSubTotalGroup::~ScTpSubTotalGroup()
 {
     sal_uInt16  nCount = (sal_uInt16)aLbColumns.GetEntryCount();
 
@@ -103,7 +100,7 @@ __EXPORT ScTpSubTotalGroup::~ScTpSubTotalGroup()
         for ( sal_uInt16 i=0; i<nCount; i++ )
         {
             pData = (sal_uInt16*)(aLbColumns.GetEntryData( i ));
-            DBG_ASSERT( pData, "EntryData not found" );
+            OSL_ENSURE( pData, "EntryData not found" );
 
             delete pData;
         }
@@ -120,7 +117,7 @@ void ScTpSubTotalGroup::Init()
     pViewData   = rSubTotalItem.GetViewData();
     pDoc        = ( pViewData ) ? pViewData->GetDocument() : NULL;
 
-    DBG_ASSERT( pViewData && pDoc, "ViewData or Document not found :-(" );
+    OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-(" );
 
     aLbGroup.SetSelectHdl       ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
     aLbColumns.SetSelectHdl     ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
@@ -133,31 +130,31 @@ void ScTpSubTotalGroup::Init()
 
 //------------------------------------------------------------------------
 
-sal_uInt16* __EXPORT ScTpSubTotalGroup::GetRanges()
+sal_uInt16* ScTpSubTotalGroup::GetRanges()
 {
     return pSubTotalsRanges;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
+bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
                                  const SfxItemSet&  rArgSet  )
 {
     sal_uInt16 nGroupIdx = 0;
 
-    DBG_ASSERT( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
+    OSL_ENSURE( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
 
     if ( (nGroupNo > 3) || (nGroupNo == 0) )
-        return sal_False;
+        return false;
     else
         nGroupIdx = nGroupNo-1;
 
     //----------------------------------------------------------
 
-    // #79058# first we have to clear the listboxes...
+    // first we have to clear the listboxes...
     for ( sal_uInt16 nLbEntry = 0; nLbEntry < aLbColumns.GetEntryCount(); ++nLbEntry )
     {
-        aLbColumns.CheckEntryPos( nLbEntry, sal_False );
+        aLbColumns.CheckEntryPos( nLbEntry, false );
         *((sal_uInt16*)aLbColumns.GetEntryData( nLbEntry )) = 0;
     }
     aLbFunctions.SelectEntryPos( 0 );
@@ -175,6 +172,7 @@ sal_Bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
 
         aLbGroup.SelectEntryPos( GetFieldSelPos( nField )+1 );
 
+        sal_uInt16 nFirstChecked = 0;
         for ( sal_uInt16 i=0; i<nSubTotals; i++ )
         {
             sal_uInt16  nCheckPos = GetFieldSelPos( pSubTotals[i] );
@@ -182,8 +180,12 @@ sal_Bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
 
             aLbColumns.CheckEntryPos( nCheckPos );
             *pFunction = FuncToLbPos( pFunctions[i] );
+
+            if (i == 0 || (i > 0 && nCheckPos < nFirstChecked))
+                nFirstChecked = nCheckPos;
         }
-        aLbColumns.SelectEntryPos( 0 );
+        // Select the first checked field from the top.
+        aLbColumns.SelectEntryPos(nFirstChecked);
     }
     else
     {
@@ -192,18 +194,18 @@ sal_Bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
         aLbFunctions.SelectEntryPos( 0 );
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
+bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
                                        SfxItemSet&  rArgSet  )
 {
     sal_uInt16 nGroupIdx = 0;
 
-    DBG_ASSERT( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
-    DBG_ASSERT(    (aLbGroup.GetEntryCount() > 0)
+    OSL_ENSURE( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
+    OSL_ENSURE(    (aLbGroup.GetEntryCount() > 0)
                 && (aLbColumns.GetEntryCount() > 0)
                 && (aLbFunctions.GetEntryCount() > 0),
                 "Non-initialized Lists" );
@@ -214,7 +216,7 @@ sal_Bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
         || (aLbColumns.GetEntryCount() == 0)
         || (aLbFunctions.GetEntryCount() == 0)
        )
-        return sal_False;
+        return false;
     else
         nGroupIdx = nGroupNo-1;
 
@@ -226,7 +228,7 @@ sal_Bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSubTotals, sal_True, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SFX_ITEM_SET )
             theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
     }
 
@@ -256,7 +258,7 @@ sal_Bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
         {
             if ( aLbColumns.IsChecked( i ) )
             {
-                DBG_ASSERT( nCheck <= nCheckCount,
+                OSL_ENSURE( nCheck <= nCheckCount,
                             "Range error :-(" );
                 nFunction = *((sal_uInt16*)aLbColumns.GetEntryData( i ));
                 pSubTotals[nCheck] = nFieldArr[i];
@@ -276,14 +278,14 @@ sal_Bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     if ( pSubTotals ) delete [] pSubTotals;
     if ( pFunctions ) delete [] pFunctions;
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
 void ScTpSubTotalGroup::FillListBoxes()
 {
-    DBG_ASSERT( pViewData && pDoc, "ViewData or Document not found :-/" );
+    OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-/" );
 
     if ( pViewData && pDoc )
     {
@@ -325,14 +327,14 @@ void ScTpSubTotalGroup::FillListBoxes()
 sal_uInt16 ScTpSubTotalGroup::GetFieldSelPos( SCCOL nField )
 {
     sal_uInt16  nFieldPos   = 0;
-    sal_Bool    bFound      = sal_False;
+    bool    bFound      = false;
 
     for ( sal_uInt16 n=0; n<nFieldCount && !bFound; n++ )
     {
         if ( nFieldArr[n] == nField )
         {
             nFieldPos = n;
-            bFound = sal_True;
+            bFound = true;
         }
     }
 
@@ -358,7 +360,7 @@ ScSubTotalFunc ScTpSubTotalGroup::LbPosToFunc( sal_uInt16 nPos )
         case  9:    return SUBTOTAL_FUNC_VAR;
         case 10:    return SUBTOTAL_FUNC_VARP;
         default:
-            DBG_ERROR( "ScTpSubTotalGroup::LbPosToFunc" );
+            OSL_FAIL( "ScTpSubTotalGroup::LbPosToFunc" );
             return SUBTOTAL_FUNC_NONE;
     }
 }
@@ -382,7 +384,7 @@ sal_uInt16 ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
         case SUBTOTAL_FUNC_VAR:     return 9;
         case SUBTOTAL_FUNC_VARP:    return 10;
         default:
-            DBG_ERROR( "ScTpSubTotalGroup::FuncToLbPos" );
+            OSL_FAIL( "ScTpSubTotalGroup::FuncToLbPos" );
             return 0;
     }
 }
@@ -400,7 +402,7 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
         sal_uInt16      nColumn     = aLbColumns.GetSelectEntryPos();
         sal_uInt16*     pFunction   = (sal_uInt16*)aLbColumns.GetEntryData( nColumn );
 
-        DBG_ASSERT( pFunction, "EntryData nicht gefunden!" );
+        OSL_ENSURE( pFunction, "EntryData nicht gefunden!" );
         if ( !pFunction )
             return 0;
 
@@ -411,8 +413,7 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
         else if ( pLb == &aLbFunctions )
         {
             *pFunction = nFunction;
-//          aLbColumns.CheckEntryPos( nColumn, (nFunction != 0) );//XXX
-            aLbColumns.CheckEntryPos( nColumn, sal_True );
+            aLbColumns.CheckEntryPos( nColumn, true );
         }
     }
     return 0;
@@ -438,19 +439,19 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
 //========================================================================
 // Abgeleitete Gruppen-TabPages:
 
-SfxTabPage* __EXPORT ScTpSubTotalGroup1::Create( Window*            pParent,
+SfxTabPage* ScTpSubTotalGroup1::Create( Window*         pParent,
                                                  const SfxItemSet&  rArgSet )
     { return ( new ScTpSubTotalGroup1( pParent, rArgSet ) ); }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTpSubTotalGroup2::Create( Window*             pParent,
+SfxTabPage* ScTpSubTotalGroup2::Create( Window*          pParent,
                                        const SfxItemSet&    rArgSet )
     { return ( new ScTpSubTotalGroup2( pParent, rArgSet ) ); }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTpSubTotalGroup3::Create( Window*             pParent,
+SfxTabPage* ScTpSubTotalGroup3::Create( Window*          pParent,
                                        const SfxItemSet&    rArgSet )
     { return ( new ScTpSubTotalGroup3( pParent, rArgSet ) ); }
 
@@ -472,25 +473,17 @@ ScTpSubTotalGroup3::ScTpSubTotalGroup3( Window* pParent, const SfxItemSet& rArgS
 
 
 #define RESET(i) (ScTpSubTotalGroup::DoReset( (i), rArgSet ))
-
-void __EXPORT ScTpSubTotalGroup1::Reset( const SfxItemSet& rArgSet ) { RESET(1); }
-
-void __EXPORT ScTpSubTotalGroup2::Reset( const SfxItemSet& rArgSet ) { RESET(2); }
-
-void __EXPORT ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3); }
-
+void ScTpSubTotalGroup1::Reset( const SfxItemSet& rArgSet ) { RESET(1); }
+void ScTpSubTotalGroup2::Reset( const SfxItemSet& rArgSet ) { RESET(2); }
+void ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3); }
 #undef RESET
 
 // -----------------------------------------------------------------------
 
 #define FILLSET(i) (ScTpSubTotalGroup::DoFillItemSet( (i), rArgSet ))
-
-sal_Bool __EXPORT ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
-
-sal_Bool __EXPORT ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(2); }
-
-sal_Bool __EXPORT ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
-
+sal_Bool ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
+sal_Bool ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(2); }
+sal_Bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
 #undef FILL
 
 //========================================================================
@@ -502,7 +495,6 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
         :   SfxTabPage      ( pParent,
                               ScResId( RID_SCPAGE_SUBT_OPTIONS ),
                               rArgSet ),
-            //
             aFlGroup        ( this, ScResId( FL_GROUP ) ),
             aBtnPagebreak   ( this, ScResId( BTN_PAGEBREAK ) ),
             aBtnCase        ( this, ScResId( BTN_CASE ) ),
@@ -513,7 +505,6 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
             aBtnFormats     ( this, ScResId( BTN_FORMATS ) ),
             aBtnUserDef     ( this, ScResId( BTN_USERDEF ) ),
             aLbUserDef      ( this, ScResId( LB_USERDEF ) ),
-            //
             pViewData       ( NULL ),
             pDoc            ( NULL ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
@@ -530,7 +521,7 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTpSubTotalOptions::~ScTpSubTotalOptions()
+ScTpSubTotalOptions::~ScTpSubTotalOptions()
 {
 }
 
@@ -544,7 +535,7 @@ void ScTpSubTotalOptions::Init()
     pViewData   = rSubTotalItem.GetViewData();
     pDoc        = ( pViewData ) ? pViewData->GetDocument() : NULL;
 
-    DBG_ASSERT( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
+    OSL_ENSURE( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
 
     aBtnSort.SetClickHdl    ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
     aBtnUserDef.SetClickHdl ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
@@ -554,7 +545,7 @@ void ScTpSubTotalOptions::Init()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTpSubTotalOptions::Create( Window*                pParent,
+SfxTabPage* ScTpSubTotalOptions::Create( Window*                 pParent,
                                           const SfxItemSet&     rArgSet )
 {
     return ( new ScTpSubTotalOptions( pParent, rArgSet ) );
@@ -562,7 +553,7 @@ SfxTabPage* __EXPORT ScTpSubTotalOptions::Create( Window*                pParent
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
+void ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
     aBtnPagebreak.Check ( rSubTotalData.bPagebreak );
     aBtnCase.Check      ( rSubTotalData.bCaseSens );
@@ -573,13 +564,13 @@ void __EXPORT ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
     if ( rSubTotalData.bUserDef )
     {
-        aBtnUserDef.Check( sal_True );
+        aBtnUserDef.Check( true );
         aLbUserDef.Enable();
         aLbUserDef.SelectEntryPos( rSubTotalData.nUserIndex );
     }
     else
     {
-        aBtnUserDef.Check( sal_False );
+        aBtnUserDef.Check( false );
         aLbUserDef.Disable();
         aLbUserDef.SelectEntryPos( 0 );
     }
@@ -589,7 +580,7 @@ void __EXPORT ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
 // -----------------------------------------------------------------------
 
-sal_Bool __EXPORT ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
+sal_Bool ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
 {
     ScSubTotalParam theSubTotalData;            // auslesen, wenn schon teilweise gefuellt
     SfxTabDialog* pDlg = GetTabDialog();
@@ -597,12 +588,12 @@ sal_Bool __EXPORT ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSubTotals, sal_True, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SFX_ITEM_SET )
             theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
     }
 
     theSubTotalData.bPagebreak      = aBtnPagebreak.IsChecked();
-    theSubTotalData.bReplace        = sal_True;
+    theSubTotalData.bReplace        = true;
     theSubTotalData.bCaseSens       = aBtnCase.IsChecked();
     theSubTotalData.bIncludePattern = aBtnFormats.IsChecked();
     theSubTotalData.bDoSort         = aBtnSort.IsChecked();
@@ -614,7 +605,7 @@ sal_Bool __EXPORT ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
 
     rArgSet.Put( ScSubTotalItem( nWhichSubTotals, &theSubTotalData ) );
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -626,10 +617,9 @@ void ScTpSubTotalOptions::FillUserSortListBox()
     aLbUserDef.Clear();
     if ( pUserLists )
     {
-        sal_uInt16 nCount = pUserLists->GetCount();
-        if ( nCount > 0 )
-            for ( sal_uInt16 i=0; i<nCount; i++ )
-                aLbUserDef.InsertEntry( (*pUserLists)[i]->GetString() );
+        size_t nCount = pUserLists->size();
+        for ( size_t i=0; i<nCount; ++i )
+            aLbUserDef.InsertEntry( (*pUserLists)[i]->GetString() );
     }
 }
 
@@ -675,15 +665,16 @@ IMPL_LINK( ScTpSubTotalOptions, CheckHdl, CheckBox *, pBox )
     return 0;
 }
 
-__EXPORT ScTpSubTotalGroup1::~ScTpSubTotalGroup1()
+ScTpSubTotalGroup1::~ScTpSubTotalGroup1()
 {
 }
 
-__EXPORT ScTpSubTotalGroup2::~ScTpSubTotalGroup2()
+ScTpSubTotalGroup2::~ScTpSubTotalGroup2()
 {
 }
 
-__EXPORT ScTpSubTotalGroup3::~ScTpSubTotalGroup3()
+ScTpSubTotalGroup3::~ScTpSubTotalGroup3()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

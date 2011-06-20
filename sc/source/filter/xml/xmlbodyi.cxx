@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <sal/types.h>
-#include <tools/debug.hxx>
 
 #include <memory>
 
@@ -77,8 +77,10 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sPassword(),
-    bProtected(sal_False),
-    bHadCalculationSettings(sal_False),
+    meHash1(PASSHASH_SHA1),
+    meHash2(PASSHASH_UNSPECIFIED),
+    bProtected(false),
+    bHadCalculationSettings(false),
     pChangeTrackingImportHelper(NULL)
 {
     ScDocument* pDoc = GetScImport().GetDocument();
@@ -122,6 +124,10 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                 bProtected = IsXMLToken(sValue, XML_TRUE);
             else if (IsXMLToken(aLocalName, XML_PROTECTION_KEY))
                 sPassword = sValue;
+            else if (IsXMLToken(aLocalName, XML_PROTECTION_KEY_DIGEST_ALGORITHM))
+                meHash1 = ScPassHashHelper::getHashTypeFromURI(sValue);
+            else if (IsXMLToken(aLocalName, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2))
+                meHash2 = ScPassHashHelper::getHashTypeFromURI(sValue);
         }
     }
 }
@@ -194,8 +200,9 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
         }
         break;
     case XML_TOK_BODY_NAMED_EXPRESSIONS:
-        pContext = new ScXMLNamedExpressionsContext ( GetScImport(), nPrefix, rLocalName,
-                                                        xAttrList );
+        pContext = new ScXMLNamedExpressionsContext (
+            GetScImport(), nPrefix, rLocalName, xAttrList,
+            new ScXMLNamedExpressionsContext::GlobalInserter(GetScImport()) );
         break;
     case XML_TOK_BODY_DATABASE_RANGES:
         pContext = new ScXMLDatabaseRangesContext ( GetScImport(), nPrefix, rLocalName,
@@ -261,7 +268,9 @@ void ScXMLBodyContext::EndElement()
         SvXMLImportContext *pContext = new ScXMLCalculationSettingsContext( GetScImport(), XML_NAMESPACE_TABLE, GetXMLToken(XML_CALCULATION_SETTINGS), NULL );
         pContext->EndElement();
     }
-    GetScImport().LockSolarMutex();
+
+    ScXMLImport::MutexGuard aGuard(GetScImport());
+
     ScMyImpDetectiveOpArray*    pDetOpArray = GetScImport().GetDetectiveOpArray();
     ScDocument*                 pDoc        = GetScImport().GetDocument();
     ScMyImpDetectiveOp          aDetOp;
@@ -281,42 +290,6 @@ void ScXMLBodyContext::EndElement()
         if (pChangeTrackingImportHelper)
             pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
 
-#if 0
-        // #i57869# table styles are applied before the contents now
-
-        std::vector<rtl::OUString> aTableStyleNames(GetScImport().GetTableStyle());
-        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
-        if ( xSpreadDoc.is() && !aTableStyleNames.empty())
-        {
-            uno::Reference <container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
-            if ( xIndex.is() )
-            {
-                sal_Int32 nTableCount = xIndex->getCount();
-                sal_Int32 nSize(aTableStyleNames.size());
-                DBG_ASSERT(nTableCount == nSize, "every table should have a style name");
-                for(sal_uInt32 i = 0; i < nTableCount; i++)
-                {
-                    if (i < nSize)
-                    {
-                        uno::Reference <beans::XPropertySet> xProperties(xIndex->getByIndex(i), uno::UNO_QUERY);
-                        if (xProperties.is())
-                        {
-                            rtl::OUString sTableStyleName(aTableStyleNames[i]);
-                            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetScImport().GetAutoStyles();
-                            if ( pStyles && sTableStyleName.getLength() )
-                            {
-                                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                    XML_STYLE_FAMILY_TABLE_TABLE, sTableStyleName, sal_True);
-                                if (pStyle)
-                                    pStyle->FillPropertySet(xProperties);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-#endif
-
         // #i37959# handle document protection after the sheet settings
         if (bProtected)
         {
@@ -327,12 +300,12 @@ void ScXMLBodyContext::EndElement()
             if (sPassword.getLength())
             {
                 SvXMLUnitConverter::decodeBase64(aPass, sPassword);
-                pProtection->setPasswordHash(aPass, PASSHASH_OOO);
+                pProtection->setPasswordHash(aPass, meHash1, meHash2);
             }
 
             pDoc->SetDocProtection(pProtection.get());
         }
     }
-    GetScImport().UnlockSolarMutex();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

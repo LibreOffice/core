@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,10 +99,10 @@ void lcl_doDynamicFontResize( uno::Any* pAOldAndNewFontHeightAny
                           , const awt::Size& rOldReferenceSize
                           , const awt::Size& rNewReferenceSize  )
 {
-    double fOldFontHeight = 0, fNewFontHeight;
+    double fOldFontHeight = 0;
     if( pAOldAndNewFontHeightAny && ( *pAOldAndNewFontHeightAny >>= fOldFontHeight ) )
     {
-        fNewFontHeight = RelativeSizeHelper::calculate( fOldFontHeight, rOldReferenceSize, rNewReferenceSize );
+        double fNewFontHeight = RelativeSizeHelper::calculate( fOldFontHeight, rOldReferenceSize, rNewReferenceSize );
         *pAOldAndNewFontHeightAny = uno::makeAny(fNewFontHeight);
     }
 }
@@ -483,3 +484,5 @@ void LabelPositionHelper::correctPositionForRotation( const uno::Reference< draw
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

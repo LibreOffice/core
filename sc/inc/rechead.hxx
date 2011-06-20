@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,14 @@
 
 #include <tools/stream.hxx>
 
-//      ID's fuer Dateien:
+//      ID's for files:
 
 #define SCID_SIZES          0x4200
 
 #define SCID_POOLS          0x4210
 #define SCID_DOCPOOL        0x4211
 #define SCID_STYLEPOOL      0x4212
-#define SCID_NEWPOOLS       0x4213      // ID fuer SC 3.0a
+#define SCID_NEWPOOLS       0x4213      // ID for SC 3.0a
 #define SCID_EDITPOOL       0x4214
 
 #define SCID_DOCUMENT       0x4220
@@ -53,7 +54,7 @@
 #define SCID_VIEWOPTIONS    0x422a
 #define SCID_PRINTSETUP     0x422b
 #define SCID_CHARSET        0x422c
-#define SCID_NEWDOCUMENT    0x422d      // ID fuer SC 3.0a
+#define SCID_NEWDOCUMENT    0x422d      // ID for SC 3.0a
 #define SCID_DDELINKS       0x422e
 #define SCID_AREALINKS      0x422f
 #define SCID_CONDFORMATS    0x4230
@@ -81,53 +82,51 @@
 
 
 
-//  Dateiversion
-//  Falls das obere Byte inkrementiert wird, wird das Doc von
-//  aelteren SCs nicht mehr geladen!
-
+//  file version
+//  if the high-byte is incremented, the document won't be opened by older SCs
 #define SC_INITIAL_VERSION  0x0001
-#define SC_FORMULA_LCLVER   0x0002          // Formalen mit lokaler VerNr
+#define SC_FORMULA_LCLVER   0x0002          // formula with local version no.
 //--------------------------------
-#define SC_NEW_TOKEN_ARRAYS 0x0003          // neues TokenArray-Format
-#define SC_FORMULA_VALUES   0x0004          // Werte in Formelzellen
-#define SC_FORMULA_VALUES2  0x0005          // Werte in Formelzellen
-#define SC_DATABYTES        0x0006          // Datenbytes, kleine Tables
-#define SC_DATABYTES2       0x0007          // Datenbytes, kleine Tables
-#define SC_NUMFMT           0x0008          // Zahlenformat an Formelzelle
-#define SC_NEWIF            0x0009          // neue Codierung von ocIf (komp.)
+#define SC_NEW_TOKEN_ARRAYS 0x0003          // new TokenArray format
+#define SC_FORMULA_VALUES   0x0004          // values in formula cells
+#define SC_FORMULA_VALUES2  0x0005          // values in formula cells
+#define SC_DATABYTES        0x0006          // data bytes, small tables
+#define SC_DATABYTES2       0x0007          // data bytes, small tables
+#define SC_NUMFMT           0x0008          // number format of formula cell
+#define SC_NEWIF            0x0009          // new coding of ocIf (komp.)
 //--------------------------------
-#define SC_RELATIVE_REFS    0x0010          // relative Referenzen
-#define SC_SUBTOTAL_FLAG    0x0011          // bSubTotal der Formelzelle
-#define SC_COLROWNAME_RANGEPAIR 0x0012      // ColRowNameRanges als ScRangePair
+#define SC_RELATIVE_REFS    0x0010          // relative references
+#define SC_SUBTOTAL_FLAG    0x0011          // bSubTotal of formula cell
+#define SC_COLROWNAME_RANGEPAIR 0x0012      // ColRowNameRanges as ScRangePair
 //--------------------------------
-#define SC_31_EXPORT_VER    0x0012          // Version bei 3.1-Export
-//-------------------------------- ab 4.0
-#define SC_32K_ROWS         0x0100          // 32000 Zeilen - inkompatibel
-#define SC_FONTCHARSET      0x0101          // Font-CharSets muessen stimmen
+#define SC_31_EXPORT_VER    0x0012          // version for 3.1-export
+//-------------------------------- since 4.0
+#define SC_32K_ROWS         0x0100          // 32000 rows - incompatibel
+#define SC_FONTCHARSET      0x0101          // Font-CharSets have to be right
 //--------------------------------
-#define SC_40_EXPORT_VER    0x0101          // Version bei 4.0-Export
-//-------------------------------- ab 5.0
+#define SC_40_EXPORT_VER    0x0101          // version for 4.0-Export
+//-------------------------------- since 5.0
 #define SC_RECALC_MODE_BITS 0x0201          // TokenArray RecalcMode
-#define SC_MATRIX_DOUBLEREF 0x0202          // DoubleRef implizite Schnittmenge
-#define SC_VERSION_EDITPOOL 0x0203          // EditCells mit EditPool
-#define SC_SUBTOTAL_BUGFIX  0x0204          // bSubTotal der Formelzelle wirklich
-//-------------------------------- ab 5.2
-#define SC_CONVERT_RECALC_ON_LOAD 0x0205    // #73616# CONVERT function recalculated on each load
+#define SC_MATRIX_DOUBLEREF 0x0202          // DoubleRef implicit intersection
+#define SC_VERSION_EDITPOOL 0x0203          // EditCells with EditPool
+#define SC_SUBTOTAL_BUGFIX  0x0204          // bSubTotal of formula cell (true)
+//-------------------------------- since 5.2
+#define SC_CONVERT_RECALC_ON_LOAD 0x0205    // CONVERT function recalculated on each load
 //--------------------------------
 #define SC_CURRENT_VERSION  0x0205
 
 
-//  alles ueber SC_31_EXPORT_VER muss auch beim Speichern abgefragt werden,
-//  weil 3.1-Export diese Versionsnummer schreibt.
+// all above SC_31_EXPORT_VER has to be queried during saving,
+// because 3.1-export writes this version number.
 
-// btw: 10 nach 09 ist kein Zaehlfehler sondern eine absichtliche Luecke,
-// weil nicht klar war, wie lange die RelRefs Entwicklung dauern wuerde.. :)
+// btw: 10 following 09 is not a counting error but an intentional gap,
+// because it was not clear, how long the RelRefs development would take. :)
 
 class SvStream;
 
 // -----------------------------------------------------------------------
 
-        //  Header mit Groessenangaben fuer mehrere Objekte
+        //  Header with size specification for multiple objects
 
 class ScMultipleReadHeader
 {
@@ -168,3 +167,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,13 +44,12 @@ class ScVbaFormatConditions: public ScVbaFormatConditions_BASE
     css::uno::Reference< ov::excel::XRange > mxRangeParent;
     css::uno::Reference< css::beans::XPropertySet > mxParentRangePropertySet;
 public:
-    ScVbaFormatConditions( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::sheet::XSheetConditionalEntries >&, const css::uno::Reference< css::frame::XModel >&  );
     void notifyRange() throw ( css::script::BasicErrorException );
     virtual css::uno::Reference< ov::excel::XFormatCondition > Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2, const css::uno::Reference< ov::excel::XStyle >& _xCalcStyle ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     rtl::OUString getA1Formula(const css::uno::Any& _aFormula) throw ( css::script::BasicErrorException );
     rtl::OUString getStyleName();
     void removeFormatCondition( const rtl::OUString& _sStyleName, sal_Bool _bRemoveStyle) throw ( css::script::BasicErrorException );
-    css::uno::Reference< css::sheet::XSheetConditionalEntries > getSheetConditionalEntries() { return mxSheetConditionalEntries; }
+    css::uno::Reference< css::sheet::XSheetConditionalEntries > getSheetConditionalEntries() const { return mxSheetConditionalEntries; }
     // XFormatConditions
     virtual void SAL_CALL Delete(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XFormatCondition > SAL_CALL Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
@@ -63,3 +63,5 @@ public:
 };
 
 #endif //SC_VBA_AXES_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

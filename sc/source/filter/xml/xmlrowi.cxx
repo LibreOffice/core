@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,7 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sVisibility(GetXMLToken(XML_VISIBLE)),
     nRepeatedRows(1),
-    bHasCell(sal_False)
+    bHasCell(false)
 {
     rtl::OUString sCellStyleName;
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
@@ -136,7 +137,7 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( sal_uInt16 nPrefix
         {
             bHasCell = sal_True;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList, sal_False, nRepeatedRows
+                                                      rLName, xAttrList, false, nRepeatedRows
                                                       //this
                                                       );
         }
@@ -166,12 +167,11 @@ void ScXMLTableRowContext::EndElement()
     {
         for (sal_Int32 i = 0; i < nRepeatedRows - 1; ++i) //one row is always added
             GetScImport().GetTables().AddRow();
-        DBG_ERRORFILE("it seems here is a nonvalid file; possible missing of table:table-cell element");
+        OSL_FAIL("it seems here is a nonvalid file; possible missing of table:table-cell element");
     }
-    sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
+    SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentRow(rXMLImport.GetTables().GetCurrentRow());
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
-    ScDocument* pDoc = rXMLImport.GetDocument();
     if(xSheet.is())
     {
         sal_Int32 nFirstRow(nCurrentRow - nRepeatedRows + 1);
@@ -202,35 +202,27 @@ void ScXMLTableRowContext::EndElement()
                                 if ( nSheet != pStyle->GetLastSheet() )
                                 {
                                     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
-                                    pSheetData->AddRowStyle( sStyleName, ScAddress( 0, (SCROW)nFirstRow, (SCTAB)nSheet ) );
+                                    pSheetData->AddRowStyle( sStyleName, ScAddress( 0, (SCROW)nFirstRow, nSheet ) );
                                     pStyle->SetLastSheet(nSheet);
                                 }
                             }
                         }
                     }
                     sal_Bool bVisible (sal_True);
-                    sal_Bool bFiltered (sal_False);
+                    sal_Bool bFiltered (false);
                     if (IsXMLToken(sVisibility, XML_COLLAPSE))
                     {
-                        bVisible = sal_False;
+                        bVisible = false;
                     }
                     else if (IsXMLToken(sVisibility, XML_FILTER))
                     {
-                        bVisible = sal_False;
+                        bVisible = false;
                         bFiltered = sal_True;
                     }
-
-                    // #i116164# call SetRowHidden/SetRowFiltered directly, so the tree doesn't have to be rebuilt
-                    // to compare with existing hidden flags.
-                    if (!bVisible && pDoc)
-                        pDoc->SetRowHidden((SCROW)nFirstRow, (SCROW)nCurrentRow, (SCTAB)nSheet, true);
-                    if (bFiltered && pDoc)
-                        pDoc->SetRowFiltered((SCROW)nFirstRow, (SCROW)nCurrentRow, (SCTAB)nSheet, true);
-
-                    //if (!bVisible)
-                    //    xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), uno::makeAny(bVisible));
-                    //if (bFiltered)
-                    //    xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), uno::makeAny(bFiltered));
+                    if (!bVisible)
+                        xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), uno::makeAny(bVisible));
+                    if (bFiltered)
+                        xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), uno::makeAny(bFiltered));
                 }
             }
         }
@@ -294,17 +286,17 @@ SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( sal_uInt16 nPrefi
     case XML_TOK_TABLE_ROWS_ROW_GROUP:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_False, sal_True );
+                                                   false, sal_True );
         break;
     case XML_TOK_TABLE_ROWS_HEADER_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, sal_False );
+                                                   sal_True, false );
         break;
     case XML_TOK_TABLE_ROWS_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_False, sal_False );
+                                                   false, false );
         break;
     case XML_TOK_TABLE_ROWS_ROW:
             pContext = new ScXMLTableRowContext( GetScImport(), nPrefix,
@@ -351,19 +343,20 @@ void ScXMLTableRowsContext::EndElement()
     else if (bGroup)
     {
         nGroupEndRow = rXMLImport.GetTables().GetCurrentRow();
-        sal_Int32 nSheet(rXMLImport.GetTables().GetCurrentSheet());
+        SCTAB nSheet(rXMLImport.GetTables().GetCurrentSheet());
         if (nGroupStartRow <= nGroupEndRow)
         {
             ScDocument* pDoc(GetScImport().GetDocument());
             if (pDoc)
             {
-                GetScImport().LockSolarMutex();
-                ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(static_cast<SCTAB>(nSheet), sal_True));
+                ScXMLImport::MutexGuard aGuard(GetScImport());
+                ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nSheet, sal_True));
                 ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
                 sal_Bool bResized;
                 pRowArray->Insert(static_cast<SCROW>(nGroupStartRow), static_cast<SCROW>(nGroupEndRow), bResized, !bGroupDisplay, sal_True);
-                GetScImport().UnlockSolarMutex();
             }
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

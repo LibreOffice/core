@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,13 @@
 #ifndef SC_ADDINLIS_HXX
 #define SC_ADDINLIS_HXX
 
-#include "adiasync.hxx"         // for ScAddInDocs PtrArr
-#include <tools/list.hxx>
+#include "adiasync.hxx" // for ScAddInDocs PtrArr
 #include <com/sun/star/sheet/XResultListener.hpp>
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 
-
-
 class ScDocument;
-
 
 class ScAddInListener : public cppu::WeakImplHelper2<
                             com::sun::star::sheet::XResultListener,
@@ -47,52 +44,56 @@ class ScAddInListener : public cppu::WeakImplHelper2<
 {
 private:
     com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVolRes;
-    com::sun::star::uno::Any    aResult;
-    ScAddInDocs*                pDocs;          // documents where this is used
+    com::sun::star::uno::Any aResult;
+    ScAddInDocs* pDocs; // documents where this is used
 
-    static List                 aAllListeners;
+    static ::std::list<ScAddInListener*> aAllListeners;
 
-                            // always allocated via CreateListener
-                            ScAddInListener(
-                                com::sun::star::uno::Reference<
-                                    com::sun::star::sheet::XVolatileResult> xVR,
-                                ScDocument* pD );
+    // always allocated via CreateListener
+    ScAddInListener( com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVR,
+                    ScDocument* pD );
 
 public:
-    virtual                 ~ScAddInListener();
+    virtual ~ScAddInListener();
 
-                            // create Listener and put it into global list
+    // create Listener and put it into global list
     static ScAddInListener* CreateListener(
-                                com::sun::star::uno::Reference<
-                                    com::sun::star::sheet::XVolatileResult> xVR,
+                                com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVR,
                                 ScDocument* pDoc );
 
-    static ScAddInListener* Get( com::sun::star::uno::Reference<
+    static ScAddInListener*Get( com::sun::star::uno::Reference<
                                     com::sun::star::sheet::XVolatileResult> xVR );
-    static void             RemoveDocument( ScDocument* pDocument );
 
-    sal_Bool                    HasDocument( ScDocument* pDoc ) const   { return pDocs->Seek_Entry( pDoc ); }
-    void                    AddDocument( ScDocument* pDoc )         { pDocs->Insert( pDoc ); }
-    const com::sun::star::uno::Any& GetResult() const               { return aResult; }
+    static void RemoveDocument( ScDocument* pDocument );
 
+    bool HasDocument( ScDocument* pDoc ) const
+         { return pDocs->Seek_Entry( pDoc ); }
 
-                            // XResultListener
-    virtual void SAL_CALL   modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
-                                throw(::com::sun::star::uno::RuntimeException);
+    void AddDocument( ScDocument* pDoc )
+         { pDocs->Insert( pDoc ); }
 
-                            // XEventListener
-    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source )
-                                throw(::com::sun::star::uno::RuntimeException);
+    const com::sun::star::uno::Any& GetResult() const
+          { return aResult; }
 
-                            // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
-                                throw(::com::sun::star::uno::RuntimeException);
+    // XResultListener
+    virtual void SAL_CALL modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
+                              throw(::com::sun::star::uno::RuntimeException);
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
+                              throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+                                         throw(::com::sun::star::uno::RuntimeException);
+
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+                                  throw(::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
+#endif // SC_ADDINLIS_HXX
 
-#endif
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,12 +65,12 @@ void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
         SdrPage* pDrawPage = pDrawLayer->GetPage( static_cast<sal_uInt16>(nTab) );
         if ( pDrawPage )
         {
-            bTabHasGraphics = sal_True;
-            FillGraphList( pDrawPage, nTab,
-                nStartCol, nStartRow, nEndCol, nEndRow );
-            for ( ScHTMLGraphEntry* pE = aGraphList.First(); pE;
-                    pE = aGraphList.Next() )
+            bTabHasGraphics = true;
+            FillGraphList( pDrawPage, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+            size_t ListSize = aGraphList.size();
+            for ( size_t i = 0; i < ListSize; ++i )
             {
+                ScHTMLGraphEntry* pE = &aGraphList[ i ];
                 if ( !pE->bInCell )
                 {   // nicht alle in Zellen: einige neben Tabelle
                     bTabAlignedLeft = sal_True;
@@ -126,7 +127,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
                 }
                 ScHTMLGraphEntry* pE = new ScHTMLGraphEntry( pObject,
                     aR, aSize, bInCell, aSpace );
-                aGraphList.Insert( pE, LIST_APPEND );
+                aGraphList.push_back( pE );
             }
             pObject = aIter.Next();
         }
@@ -247,3 +248,4 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,23 +29,15 @@
 #ifndef SC_SIMPREF_HXX
 #define SC_SIMPREF_HXX
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
 #include "anyrefdg.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "expftext.hxx"
 
 class ScViewData;
@@ -88,7 +81,7 @@ private:
 
 protected:
 
-    virtual void    RefInputDone( sal_Bool bForced = sal_False );
+    virtual void    RefInputDone( sal_Bool bForced = false );
 
 public:
                     ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -120,3 +113,4 @@ public:
 
 #endif // SC_DBNAMDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

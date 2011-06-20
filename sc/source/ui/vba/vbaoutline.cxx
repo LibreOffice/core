@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,9 @@ using namespace ::ooo::vba;
 void
 ScVbaOutline::ShowLevels( const uno::Any& RowLevels, const uno::Any& ColumnLevels ) throw (uno::RuntimeException)
 {
-    sal_Int16 nLevel = 0;
     if (mxOutline.is())
     {
+        sal_Int16 nLevel = 0;
         if (RowLevels >>= nLevel)
         {
             mxOutline->showLevel(nLevel, table::TableOrientation_ROWS);
@@ -63,3 +64,5 @@ ScVbaOutline::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

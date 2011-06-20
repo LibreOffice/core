@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,8 @@ ScExtTabSettings::ScExtTabSettings() :
     mnPageZoom( 0 ),
     mbSelected( false ),
     mbFrozenPanes( false ),
-    mbPageMode( false )
+    mbPageMode( false ),
+    mbShowGrid( true )
 {
 }
 
@@ -204,13 +206,13 @@ SCTAB ScExtDocOptions::GetCodeNameCount() const
 
 const String& ScExtDocOptions::GetCodeName( SCTAB nTab ) const
 {
-    DBG_ASSERT( (0 <= nTab) && (nTab < GetCodeNameCount()), "ScExtDocOptions::GetCodeName - invalid sheet index" );
+    OSL_ENSURE( (0 <= nTab) && (nTab < GetCodeNameCount()), "ScExtDocOptions::GetCodeName - invalid sheet index" );
     return ((0 <= nTab) && (nTab < GetCodeNameCount())) ? mxImpl->maCodeNames[ static_cast< size_t >( nTab ) ] : EMPTY_STRING;
 }
 
 void ScExtDocOptions::SetCodeName( SCTAB nTab, const String& rCodeName )
 {
-    DBG_ASSERT( nTab >= 0, "ScExtDocOptions::SetCodeName - invalid sheet index" );
+    OSL_ENSURE( nTab >= 0, "ScExtDocOptions::SetCodeName - invalid sheet index" );
     if( nTab >= 0 )
     {
         size_t nIndex = static_cast< size_t >( nTab );
@@ -222,3 +224,4 @@ void ScExtDocOptions::SetCodeName( SCTAB nTab, const String& rCodeName )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

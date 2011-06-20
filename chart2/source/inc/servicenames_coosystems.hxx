@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,14 @@ namespace chart
 {
 //.............................................................................
 
-#define CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.Cartesian")
-#define CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.CartesianView")
-#define CHART2_COOSYSTEM_POLAR_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.Polar")
-#define CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.PolarView")
+#define CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CoordinateSystems.Cartesian" ))
+#define CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CoordinateSystems.CartesianView" ))
+#define CHART2_COOSYSTEM_POLAR_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CoordinateSystems.Polar" ))
+#define CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CoordinateSystems.PolarView" ))
 
 //.............................................................................
 } //namespace chart
 //.............................................................................
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

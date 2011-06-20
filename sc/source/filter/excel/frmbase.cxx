@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,57 +29,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-
 #include "formel.hxx"
 
-
-
-
-_ScRangeList::~_ScRangeList()
+_ScRangeListTabs::_ScRangeListTabs()
 {
-    ScRange*    p = ( ScRange* ) First();
-
-    while( p )
-    {
-        delete p;
-        p = ( ScRange* ) Next();
-    }
 }
-
-
-
-
-_ScRangeListTabs::_ScRangeListTabs( void )
-{
-    ppTabLists = new _ScRangeList*[ MAXTAB + 1 ];
-
-    for( sal_uInt16 n = 0 ; n <= MAXTAB ; n++ )
-        ppTabLists[ n ] = NULL;
-
-    bHasRanges = sal_False;
-    pAct = NULL;
-    nAct = 0;
-}
-
 
 _ScRangeListTabs::~_ScRangeListTabs()
 {
-    if( bHasRanges )
-    {
-        for( sal_uInt16 n = 0 ; n <= MAXTAB ; n++ )
-        {
-            if( ppTabLists[ n ] )
-                delete ppTabLists[ n ];
-        }
-    }
-
-    delete[] ppTabLists;
 }
 
 
-void _ScRangeListTabs::Append( ScSingleRefData a, const sal_Bool b )
+void _ScRangeListTabs::Append( ScSingleRefData a, SCTAB nTab, const bool b )
 {
     if( b )
     {
@@ -93,28 +55,38 @@ void _ScRangeListTabs::Append( ScSingleRefData a, const sal_Bool b )
     }
     else
     {
-        DBG_ASSERT( ValidTab(a.nTab), "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
+        OSL_ENSURE( ValidTab(a.nTab), "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
     }
 
-    bHasRanges = sal_True;
+    if( nTab == SCTAB_MAX)
+        return;
+    if( nTab < 0)
+        nTab = a.nTab;
 
-    if( a.nTab >= 0 )
+    if (nTab < 0 || MAXTAB < nTab)
+        return;
+
+    TabRangeType::iterator itr = maTabRanges.find(nTab);
+    if (itr == maTabRanges.end())
     {
-        _ScRangeList*   p = ppTabLists[ a.nTab ];
+        // No entry for this table yet.  Insert a new one.
+        std::pair<TabRangeType::iterator, bool> r =
+            maTabRanges.insert(nTab, new RangeListType);
 
-        if( !p )
-            p = ppTabLists[ a.nTab ] = new _ScRangeList;
+        if (!r.second)
+            // Insertion failed.
+            return;
 
-        p->Append( a );
+        itr = r.first;
     }
+    itr->second->push_back(ScRange(a.nCol,a.nRow,a.nTab));
 }
 
-
-void _ScRangeListTabs::Append( ScComplexRefData a, const sal_Bool b )
+void _ScRangeListTabs::Append( ScComplexRefData a, SCTAB nTab, bool b )
 {
     if( b )
     {
-        // #96263# ignore 3D ranges
+        // ignore 3D ranges
         if( a.Ref1.nTab != a.Ref2.nTab )
             return;
 
@@ -150,62 +122,69 @@ void _ScRangeListTabs::Append( ScComplexRefData a, const sal_Bool b )
     }
     else
     {
-        DBG_ASSERT( ValidTab(a.Ref1.nTab),
+        OSL_ENSURE( ValidTab(a.Ref1.nTab),
             "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
-        DBG_ASSERT( a.Ref1.nTab == a.Ref2.nTab,
+        OSL_ENSURE( a.Ref1.nTab == a.Ref2.nTab,
             "+_ScRangeListTabs::Append(): 3D-Ranges werden in SC nicht unterstuetzt!" );
     }
 
-    bHasRanges = sal_True;
+    if( nTab == SCTAB_MAX)
+        return;
 
-    if( a.Ref1.nTab >= 0 )
+    if( nTab < -1)
+        nTab = a.Ref1.nTab;
+
+    if (nTab < 0 || MAXTAB < nTab)
+        return;
+
+    TabRangeType::iterator itr = maTabRanges.find(nTab);
+    if (itr == maTabRanges.end())
     {
-        _ScRangeList*   p = ppTabLists[ a.Ref1.nTab ];
+        // No entry for this table yet.  Insert a new one.
+        std::pair<TabRangeType::iterator, bool> r =
+            maTabRanges.insert(nTab, new RangeListType);
 
-        if( !p )
-            p = ppTabLists[ a.Ref1.nTab ] = new _ScRangeList;
+        if (!r.second)
+            // Insertion failed.
+            return;
 
-        p->Append( a );
+        itr = r.first;
     }
+    itr->second->push_back(
+        ScRange(a.Ref1.nCol,a.Ref1.nRow,a.Ref1.nTab,
+                a.Ref2.nCol,a.Ref2.nRow,a.Ref2.nTab));
 }
 
-
-const ScRange* _ScRangeListTabs::First( const sal_uInt16 n )
+const ScRange* _ScRangeListTabs::First( SCTAB n )
 {
-    DBG_ASSERT( ValidTab(n), "-_ScRangeListTabs::First(): Und tschuessssssss!" );
+    OSL_ENSURE( ValidTab(n), "-_ScRangeListTabs::First(): Und tschuessssssss!" );
 
-    if( ppTabLists[ n ] )
-    {
-        pAct = ppTabLists[ n ];
-        nAct = n;
-        return pAct->First();
-    }
-    else
-    {
-        pAct = NULL;
-        nAct = 0;
+    TabRangeType::iterator itr = maTabRanges.find(n);
+    if (itr == maTabRanges.end())
+        // No range list exists for this table.
         return NULL;
-    }
+
+    const RangeListType& rList = *itr->second;
+    maItrCur = rList.begin();
+    maItrCurEnd = rList.end();
+    return rList.empty() ? NULL : &(*maItrCur);
 }
 
-
-const ScRange* _ScRangeListTabs::Next( void )
+const ScRange* _ScRangeListTabs::Next ()
 {
-    if( pAct )
-        return pAct->Next();
-    else
+    ++maItrCur;
+    if (maItrCur == maItrCurEnd)
         return NULL;
+
+    return &(*maItrCur);
 }
-
-
-
 
 ConverterBase::ConverterBase( sal_uInt16 nNewBuffer ) :
     aEingPos( 0, 0, 0 ),
     eStatus( ConvOK ),
     nBufferSize( nNewBuffer )
 {
-    DBG_ASSERT( nNewBuffer > 0, "ConverterBase::ConverterBase - nNewBuffer == 0!" );
+    OSL_ENSURE( nNewBuffer > 0, "ConverterBase::ConverterBase - nNewBuffer == 0!" );
     pBuffer = new sal_Char[ nNewBuffer ];
 }
 
@@ -259,20 +238,6 @@ LotusConverterBase::~LotusConverterBase()
 {
 }
 
-//UNUSED2008-05  void LotusConverterBase::Reset( sal_Int32 nLen, const ScAddress& rEingPos )
-//UNUSED2008-05  {
-//UNUSED2008-05      ConverterBase::Reset();
-//UNUSED2008-05      nBytesLeft = nLen;
-//UNUSED2008-05      aEingPos = rEingPos;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void LotusConverterBase::Reset( sal_Int32 nLen )
-//UNUSED2008-05  {
-//UNUSED2008-05      ConverterBase::Reset();
-//UNUSED2008-05      nBytesLeft = nLen;
-//UNUSED2008-05      aEingPos.Set( 0, 0, 0 );
-//UNUSED2008-05  }
-
 void LotusConverterBase::Reset( const ScAddress& rEingPos )
 {
     ConverterBase::Reset();
@@ -280,3 +245,4 @@ void LotusConverterBase::Reset( const ScAddress& rEingPos )
     aEingPos = rEingPos;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

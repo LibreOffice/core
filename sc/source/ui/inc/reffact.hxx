@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,7 +100,6 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
         void            StartRefInput();
 };
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 class SC_DLLPUBLIC ScValidityRefChildWin : public SfxChildWindow
 {
     bool    m_bVisibleLock:1;
@@ -114,9 +114,10 @@ public:
     void                Hide(){ if( !m_bVisibleLock) SfxChildWindow::Hide(); }
     void                Show( sal_uInt16 nFlags ){ if( !m_bVisibleLock ) SfxChildWindow::Show( nFlags ); }
 };
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 //==================================================================
 
 
 #endif // SC_REFFACT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

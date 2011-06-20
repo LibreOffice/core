@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,6 @@ public:
 
         // fill
         PROP_DATAPOINT_FILL_STYLE,
-//         PROP_DATAPOINT_TRANSPARENCY_STYLE,
         PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME,
         PROP_DATAPOINT_GRADIENT_NAME,
         PROP_DATAPOINT_GRADIENT_STEPCOUNT,
@@ -99,3 +99,5 @@ private:
 
 // CHART_DATAPOINTPROPERTIES_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

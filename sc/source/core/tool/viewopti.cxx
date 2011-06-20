@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,8 +46,9 @@
 #include "miscuno.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
@@ -140,7 +142,7 @@ ScViewOptions::ScViewOptions( const ScViewOptions& rCpy )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScViewOptions::~ScViewOptions()
+ScViewOptions::~ScViewOptions()
 {
 }
 
@@ -151,7 +153,7 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_FORMULAS    ] =
     aOptArr[ VOPT_SYNTAX      ] =
     aOptArr[ VOPT_HELPLINES   ] =
-    aOptArr[ VOPT_BIGHANDLES  ] = sal_False;
+    aOptArr[ VOPT_BIGHANDLES  ] = false;
     aOptArr[ VOPT_NOTES       ] =
     aOptArr[ VOPT_NULLVALS    ] =
     aOptArr[ VOPT_VSCROLL     ] =
@@ -242,10 +244,6 @@ SvxGridItem* ScViewOptions::CreateGridItem( sal_uInt16 nId /* = SID_ATTR_GRID_OP
 //      ScTpViewItem - Daten fuer die ViewOptions-TabPage
 //========================================================================
 
-//UNUSED2008-05  ScTpViewItem::ScTpViewItem( sal_uInt16 nWhichP ) : SfxPoolItem( nWhichP )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 //------------------------------------------------------------------------
 
 ScTpViewItem::ScTpViewItem( sal_uInt16 nWhichP, const ScViewOptions& rOpt )
@@ -264,22 +262,22 @@ ScTpViewItem::ScTpViewItem( const ScTpViewItem& rItem )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScTpViewItem::~ScTpViewItem()
+ScTpViewItem::~ScTpViewItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScTpViewItem::GetValueText() const
+String ScTpViewItem::GetValueText() const
 {
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("ScTpViewItem") );
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
+int ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScTpViewItem& rPItem = (const ScTpViewItem&)rItem;
 
@@ -288,7 +286,7 @@ int __EXPORT ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScTpViewItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
 {
     return new ScTpViewItem( *this );
 }
@@ -409,10 +407,10 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
     //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
     {
-        pNames[SCGRIDOPT_RESOLU_X] = OUString::createFromAscii( "Resolution/XAxis/Metric" );
-        pNames[SCGRIDOPT_RESOLU_Y] = OUString::createFromAscii( "Resolution/YAxis/Metric" );
-        pNames[SCGRIDOPT_OPTION_X] = OUString::createFromAscii( "Option/XAxis/Metric" );
-        pNames[SCGRIDOPT_OPTION_Y] = OUString::createFromAscii( "Option/YAxis/Metric" );
+        pNames[SCGRIDOPT_RESOLU_X] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Resolution/XAxis/Metric" ));
+        pNames[SCGRIDOPT_RESOLU_Y] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Resolution/YAxis/Metric" ));
+        pNames[SCGRIDOPT_OPTION_X] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Option/XAxis/Metric" ));
+        pNames[SCGRIDOPT_OPTION_Y] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Option/YAxis/Metric" ));
     }
 
     return aNames;
@@ -420,9 +418,9 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
 
 
 ScViewCfg::ScViewCfg() :
-    aLayoutItem( OUString::createFromAscii( CFGPATH_LAYOUT ) ),
-    aDisplayItem( OUString::createFromAscii( CFGPATH_DISPLAY ) ),
-    aGridItem( OUString::createFromAscii( CFGPATH_GRID ) )
+    aLayoutItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_LAYOUT )) ),
+    aDisplayItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_DISPLAY )) ),
+    aGridItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_GRID )) )
 {
     sal_Int32 nIntVal = 0;
 
@@ -430,12 +428,12 @@ ScViewCfg::ScViewCfg() :
     Sequence<Any> aValues = aLayoutItem.GetProperties(aNames);
     aLayoutItem.EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -485,12 +483,12 @@ ScViewCfg::ScViewCfg() :
     aValues = aDisplayItem.GetProperties(aNames);
     aDisplayItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -551,12 +549,12 @@ ScViewCfg::ScViewCfg() :
     aValues = aGridItem.GetProperties(aNames);
     aGridItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -752,3 +750,4 @@ void ScViewCfg::SetOptions( const ScViewOptions& rNew )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,6 @@
 #include <vcl/outdev.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <tools/debug.hxx>
 #include <svx/sdasitm.hxx>
 
 #include <sot/exchange.hxx>
@@ -54,6 +54,9 @@
 #include "global.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"
+#include "xecontent.hxx"
+#include <editeng/flditem.hxx>
+#include "userdat.hxx"
 #include "xcl97rec.hxx"
 #include "xehelper.hxx"
 #include "xechart.hxx"
@@ -113,7 +116,7 @@ XclEscherEx::XclEscherEx( const XclExpRoot& rRoot, XclExpObjectManager& rObjMgr,
 
 XclEscherEx::~XclEscherEx()
 {
-    DBG_ASSERT( !aStack.Count(), "~XclEscherEx: stack not empty" );
+    OSL_ENSURE( !aStack.Count(), "~XclEscherEx: stack not empty" );
     DeleteCurrAppData();
     delete pTheClientData;
 }
@@ -210,7 +213,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     pCurrAppData = new XclEscherHostAppData;
     SdrObject* pObj = GetSdrObjectFromXShape( rxShape );
     if ( !pObj )
-        pCurrXclObj = new XclObjAny( mrObjMgr );  // just what is it?!?
+        pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );  // just what is it?!?
     else
     {
         pCurrXclObj = NULL;
@@ -235,10 +238,10 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                         pCurrXclObj = new XclObjOle( mrObjMgr, *pObj );
                 }
                 else    // just a metafile
-                    pCurrXclObj = new XclObjAny( mrObjMgr );
+                    pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );
             }
             else
-                pCurrXclObj = new XclObjAny( mrObjMgr );
+                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );
         }
         else if( nObjType == OBJ_UNO )
         {
@@ -250,13 +253,14 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             pCurrXclObj = CreateCtrlObj( rxShape, pChildAnchor );
 #endif
             if( !pCurrXclObj )
-                pCurrXclObj = new XclObjAny( mrObjMgr );   // just a metafile
+                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape );   // just a metafile
         }
         else if( !ScDrawLayer::IsNoteCaption( pObj ) )
         {
-            // #107540# ignore permanent note shapes
+            // ignore permanent note shapes
             // #i12190# do not ignore callouts (do not filter by object type ID)
-            pCurrXclObj = new XclObjAny( mrObjMgr );   // just a metafile
+            pCurrXclObj = ShapeInteractionHelper::CreateShapeObj( mrObjMgr, rxShape );
+            ShapeInteractionHelper::PopulateShapeInteractionInfo( mrObjMgr, rxShape, *pCurrAppData );
         }
     }
     if ( pCurrXclObj )
@@ -324,7 +328,7 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
         if( nShapeID == 0 )
         {
             XclObj* pLastObj = mrObjMgr.RemoveLastObj();
-            DBG_ASSERT( pLastObj == pCurrXclObj, "XclEscherEx::EndShape - wrong object" );
+            OSL_ENSURE( pLastObj == pCurrXclObj, "XclEscherEx::EndShape - wrong object" );
             DELETEZ( pLastObj );
             pCurrXclObj = 0;
         }
@@ -358,7 +362,6 @@ EscherExHostAppData* XclEscherEx::EnterAdditionalTextGroup()
     pCurrAppData->SetClientTextbox( NULL );
     return pCurrAppData;
 }
-
 
 void XclEscherEx::EndDocument()
 {
@@ -478,6 +481,7 @@ void XclEscherEx::DeleteCurrAppData()
         delete pCurrAppData->GetClientAnchor();
 //      delete pCurrAppData->GetClientData();
         delete pCurrAppData->GetClientTextbox();
+    delete pCurrAppData->GetInteractionInfo();
         delete pCurrAppData;
     }
 }
@@ -509,4 +513,41 @@ void XclEscherClientTextbox::WriteData( EscherEx& /*rEx*/ ) const
     pXclObj->SetText( GetRoot(), rTextObj );
 }
 
+XclExpShapeObj*
+ShapeInteractionHelper::CreateShapeObj( XclExpObjectManager& rObjMgr, const Reference< XShape >& xShape )
+{
+    return new XclExpShapeObj( rObjMgr, xShape );
+}
 
+void
+ShapeInteractionHelper::PopulateShapeInteractionInfo( XclExpObjectManager& rObjMgr, const Reference< XShape >& xShape, EscherExHostAppData& rHostAppData )
+{
+   try
+   {
+      SvMemoryStream* pMemStrm = NULL;
+      rtl::OUString sHyperLink;
+      rtl::OUString sMacro;
+      if ( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( ::GetSdrObjectFromXShape( xShape ) ) )
+      {
+         sHyperLink = pInfo->GetHlink();
+         sMacro = pInfo->GetMacro();
+      }
+      if (  sHyperLink.getLength() > 0 )
+      {
+         pMemStrm = new SvMemoryStream();
+         XclExpStream tmpStream( *pMemStrm, rObjMgr.GetRoot() );
+         ScAddress dummyAddress;
+         SvxURLField aUrlField;
+         aUrlField.SetURL( sHyperLink );
+         XclExpHyperlink hExpHlink( rObjMgr.GetRoot(), aUrlField, dummyAddress );
+         hExpHlink.WriteEmbeddedData( tmpStream );
+      }
+      if ( ( sHyperLink.getLength() > 0 ) || ( sMacro.getLength() > 0 ) )
+          rHostAppData.SetInteractionInfo( new InteractionInfo( pMemStrm, true ) );
+   }
+   catch( Exception& )
+   {
+   }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

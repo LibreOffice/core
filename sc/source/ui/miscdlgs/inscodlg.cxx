@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,11 +86,11 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-    bOtherDoc       ( sal_False ),
-    bFillMode       ( sal_False ),
-    bChangeTrack    ( sal_False ),
-    bMoveDownDisabled( sal_False ),
-    bMoveRightDisabled( sal_False )
+    bOtherDoc       ( false ),
+    bFillMode       ( false ),
+    bChangeTrack    ( false ),
+    bMoveDownDisabled( false ),
+    bMoveRightDisabled( false )
 {
     if ( pStrTitle )
         SetText( *pStrTitle );
@@ -97,7 +98,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     if ( nCheckDefaults != 0 )
     {
         ScInsertContentsDlg::nPreviousChecks = nCheckDefaults;
-        ScInsertContentsDlg::bPreviousAllCheck = sal_False;
+        ScInsertContentsDlg::bPreviousAllCheck = false;
         ScInsertContentsDlg::nPreviousChecks2 = 0;
     }
 
@@ -332,7 +333,7 @@ IMPL_LINK( ScInsertContentsDlg, LinkBtnHdl, void*, EMPTYARG )
     return 0;
 }
 
-__EXPORT ScInsertContentsDlg::~ScInsertContentsDlg()
+ScInsertContentsDlg::~ScInsertContentsDlg()
 {
     ScInsertContentsDlg::nPreviousChecks2 = 0;
     if(aBtnSkipEmptyCells.IsChecked())
@@ -370,3 +371,4 @@ sal_uInt16  ScInsertContentsDlg::GetFormulaCmdBits() const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

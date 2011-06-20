@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,10 @@
 #ifndef SC_FOPTMGR_HXX
 #define SC_FOPTMGR_HXX
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 //----------------------------------------------------------------------------
 
@@ -119,3 +112,5 @@ private:
 
 
 #endif // SC_FOPTMGR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

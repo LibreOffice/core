@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #define SC_TOKSTACK_HXX
 
 #include <string.h>
-#include <tools/debug.hxx>
 #include "compiler.hxx"
 #include "tokenarray.hxx"
 
@@ -136,6 +136,14 @@ class TokenPool
         sal_uInt16                      nP_Matrix;
         sal_uInt16                      nP_MatrixAkt;
 
+        /** for storage of named ranges */
+        struct RangeName
+        {
+            sal_uInt16 mnIndex;
+            bool mbGlobal;
+        };
+        ::std::vector<RangeName> maRangeNames;
+
         /** for storage of external names */
         struct ExtName
         {
@@ -169,14 +177,13 @@ class TokenPool
         sal_uInt16                      nElementAkt;
 
         static const sal_uInt16         nScTokenOff;// Offset fuer SC-Token
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         sal_uInt16                      nRek;       // Rekursionszaehler
 #endif
         ScTokenArray*               pScToken;   // Tokenbastler
 
         void                        GrowString( void );
         void                        GrowDouble( void );
-//UNUSED2009-05 void                        GrowError( void );
         void                        GrowTripel( void );
         void                        GrowId( void );
         void                        GrowElement( void );
@@ -195,7 +202,6 @@ class TokenPool
         inline void                 operator >>( TokenStack& rStack );
         inline const TokenId        Store( void );
         const TokenId               Store( const double& rDouble );
-//UNUSED2008-05  const TokenId               StoreError( sal_uInt16 nError );
 
                                     // nur fuer Range-Names
         const TokenId               Store( const sal_uInt16 nIndex );
@@ -208,6 +214,7 @@ class TokenPool
                                         // 4 externals (e.g. AddIns, Makros...)
         const TokenId               StoreNlf( const ScSingleRefData& rTr );
         const TokenId               StoreMatrix();
+        const TokenId               StoreName( sal_uInt16 nIndex, bool bGlobal );
         const TokenId               StoreExtName( sal_uInt16 nFileId, const String& rName );
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
@@ -218,7 +225,6 @@ class TokenPool
         inline E_TYPE               GetType( const TokenId& nId ) const;
         sal_Bool                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
         const String*               GetExternal( const TokenId& nId ) const;
-//UNUSED2008-05  const String*               GetString( const TokenId& nId ) const;
         ScMatrix*                   GetMatrix( unsigned int n ) const;
 };
 
@@ -250,7 +256,7 @@ class TokenStack
 
 inline const TokenId TokenStack::Get( void )
 {
-    DBG_ASSERT( nPos > 0,
+    OSL_ENSURE( nPos > 0,
         "*TokenStack::Get(): Leer ist leer, ist leer, ist leer, ist..." );
 
     TokenId nRet;
@@ -269,7 +275,7 @@ inline const TokenId TokenStack::Get( void )
 
 inline TokenStack &TokenStack::operator <<( const TokenId nNewId )
 {// Element auf Stack
-    DBG_ASSERT( nPos < nSize, "*TokenStack::<<(): Stackueberlauf" );
+    OSL_ENSURE( nPos < nSize, "*TokenStack::<<(): Stackueberlauf" );
     if( nPos < nSize )
     {
         pStack[ nPos ] = nNewId;
@@ -282,7 +288,7 @@ inline TokenStack &TokenStack::operator <<( const TokenId nNewId )
 
 inline void TokenStack::operator >>( TokenId& rId )
 {// Element von Stack
-    DBG_ASSERT( nPos > 0,
+    OSL_ENSURE( nPos > 0,
         "*TokenStack::>>(): Leer ist leer, ist leer, ist leer, ..." );
     if( nPos > 0 )
     {
@@ -305,7 +311,7 @@ inline TokenPool& TokenPool::operator <<( const TokenId nId )
     // POST: nId's werden hintereinander im Pool unter einer neuen Id
     //       abgelegt. Vorgang wird mit >> oder Store() abgeschlossen
     // nId -> ( sal_uInt16 ) nId - 1;
-    DBG_ASSERT( ( sal_uInt16 ) nId < nScTokenOff,
+    OSL_ENSURE( ( sal_uInt16 ) nId < nScTokenOff,
         "-TokenPool::operator <<: TokenId im DefToken-Bereich!" );
 
     if( nP_IdAkt >= nP_Id )
@@ -320,7 +326,7 @@ inline TokenPool& TokenPool::operator <<( const TokenId nId )
 
 inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 {
-    DBG_ASSERT( ( sal_uInt32 ) eId + nScTokenOff < 0xFFFF,
+    OSL_ENSURE( ( sal_uInt32 ) eId + nScTokenOff < 0xFFFF,
         "-TokenPool::operator<<: enmum zu gross!" );
 
     if( nP_IdAkt >= nP_Id )
@@ -379,7 +385,7 @@ const inline ScTokenArray* TokenPool::operator []( const TokenId nId )
 
     if( nId )
     {//...nur wenn nId > 0!
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         nRek = 0;
 #endif
         GetElement( ( sal_uInt16 ) nId - 1 );
@@ -406,3 +412,4 @@ inline E_TYPE TokenPool::GetType( const TokenId& rId ) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

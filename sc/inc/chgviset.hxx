@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,15 +71,15 @@ public:
                         ScChangeViewSettings()
                         {
                             pCommentSearcher=NULL;
-                            bIsDate=sal_False;
-                            bIsAuthor=sal_False;
-                            bIsRange=sal_False;
-                            bIsComment=sal_False;
-                            bShowIt=sal_False;
+                            bIsDate=false;
+                            bIsAuthor=false;
+                            bIsRange=false;
+                            bIsComment=false;
+                            bShowIt=false;
                             eDateMode=SCDM_DATE_BEFORE;
-                            bEveryoneButMe=sal_False;
-                            bShowAccepted=sal_False;
-                            bShowRejected=sal_False;
+                            bEveryoneButMe=false;
+                            bShowAccepted=false;
+                            bShowRejected=false;
                             mbIsActionRange = false;
                         }
 
@@ -147,3 +148,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

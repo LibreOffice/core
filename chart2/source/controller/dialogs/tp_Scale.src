@@ -67,7 +67,7 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Scale" ;
     };
-    //---------------------------
+
     CheckBox CBX_REVERSE
     {
         HelpID = "chart2:CheckBox:TP_SCALE:CBX_REVERSE:ValueAxis";
@@ -118,6 +118,7 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "~Minimum" ;
     };
+
     SpinField EDT_MIN
     {
         HelpID = "chart2:SpinField:TP_SCALE:EDT_MIN";
@@ -127,6 +128,7 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
+
     CheckBox CBX_AUTO_MIN
     {
         HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_MIN";
@@ -135,13 +137,14 @@ TabPage TP_SCALE
         TabStop = TRUE ;
         Text [ en-US ] = "~Automatic" ;
     };
-    //---------------------------
+
     FixedText TXT_MAX
     {
         Pos = MAP_APPFONT ( X2 , Y4  ) ;
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "Ma~ximum" ;
     };
+
     SpinField EDT_MAX
     {
         HelpID = "chart2:SpinField:TP_SCALE:EDT_MAX";
@@ -151,6 +154,7 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
+
     CheckBox CBX_AUTO_MAX
     {
         HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_MAX";
@@ -195,6 +199,7 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "Ma~jor interval" ;
     };
+
     SpinField EDT_STEP_MAIN
     {
         HelpID = "chart2:SpinField:TP_SCALE:EDT_STEP_MAIN";
@@ -257,6 +262,7 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "Minor inter~val" ;
     };
+
     MetricField MT_STEPHELP
     {
         HelpID = "chart2:MetricField:TP_SCALE:MT_STEPHELP";
@@ -296,13 +302,14 @@ TabPage TP_SCALE
         TabStop = TRUE ;
         Text [ en-US ] = "Aut~omatic" ;
     };
-    //---------------------------
+
     FixedText TXT_ORIGIN
     {
         Pos = MAP_APPFONT ( X2 , Y7  ) ;
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "Re~ference value" ;
     };
+
     SpinField EDT_ORIGIN
     {
         HelpID = "chart2:SpinField:TP_SCALE:EDT_ORIGIN";

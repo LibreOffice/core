@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,19 +37,38 @@
 
 class XclObj;
 class XclExpMsoDrawing;
+class SdrCaptionObj;
 
-class XclExpObjList : public List, public ExcEmptyRec, protected XclExpRoot
+class XclExpObjList : public ExcEmptyRec, protected XclExpRoot
 {
 public:
+
+    typedef std::vector<XclObj*>::iterator iterator;
+
     explicit            XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx );
     virtual             ~XclExpObjList();
-
-    XclObj*             First() { return (XclObj*) List::First(); }
-    XclObj*             Next() { return (XclObj*) List::Next(); }
 
     /// return: 1-based ObjId
     ///! count>=0xFFFF: Obj will be deleted, return 0
     sal_uInt16              Add( XclObj* );
+
+    XclObj* back () { return maObjs.empty() ? NULL : maObjs.back(); }
+
+    /**
+     *
+     * @brief Remove last element in the list.
+     *
+     */
+
+    void pop_back ();
+
+    inline bool empty () const { return maObjs.empty(); }
+
+    inline size_t size () const { return maObjs.size(); }
+
+    inline iterator begin () { return maObjs.begin(); }
+
+    inline iterator end () { return maObjs.end(); }
 
     inline XclExpMsoDrawing* GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
 
@@ -56,11 +76,19 @@ public:
     void                EndSheet();
 
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+
+    static void        ResetCounters();
 
 private:
+    static  sal_Int32   mnDrawingMLCount, mnVmlCount;
+    SCTAB               mnScTab;
+
     XclEscherEx&        mrEscherEx;
     XclExpMsoDrawing*   pMsodrawingPerSheet;
     XclExpMsoDrawing*   pSolverContainer;
+
+    std::vector<XclObj*> maObjs;
 };
 
 
@@ -79,6 +107,7 @@ protected:
         sal_uInt16          mnObjType;
         sal_uInt16              nObjId;
         sal_uInt16              nGrbit;
+        SCTAB               mnScTab;
         sal_Bool                bFirstOnSheet;
 
         bool                    mbOwnEscher;    /// true = Escher part created on the fly.
@@ -100,6 +129,10 @@ public:
     inline sal_uInt16           GetObjType() const { return mnObjType; }
 
     inline  void                SetId( sal_uInt16 nId ) { nObjId = nId; }
+    inline  sal_uInt16          GetId() const       { return nObjId; }
+
+    inline  void                SetTab( SCTAB nScTab )  { mnScTab = nScTab; }
+    inline  SCTAB               GetTab() const          { return mnScTab; }
 
     inline  void                SetLocked( sal_Bool b )
                                     { b ? nGrbit |= 0x0001 : nGrbit &= ~0x0001; }
@@ -136,9 +169,16 @@ public:
 
 class XclObjComment : public XclObj
 {
+    ScAddress                   maScPos;
+    std::auto_ptr< SdrCaptionObj >
+                                mpCaption;
+    bool                        mbVisible;
+    Rectangle                   maFrom;
+    Rectangle                   maTo;
+
 public:
                                 XclObjComment( XclExpObjectManager& rObjMgr,
-                                    const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible );
+                                    const Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, Rectangle &rFrom, Rectangle &To );
     virtual                     ~XclObjComment();
 
     /** c'tor process for formatted text objects above .
@@ -148,6 +188,7 @@ public:
 
 
     virtual void                Save( XclExpStream& rStrm );
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 
@@ -220,14 +261,26 @@ public:
 
 class XclObjAny : public XclObj
 {
-private:
+protected:
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:
-                                XclObjAny( XclExpObjectManager& rObjMgr );
+                                XclObjAny( XclExpObjectManager& rObjMgr,
+                                    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape );
     virtual                     ~XclObjAny();
 
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
+                                GetShape() const { return mxShape; }
+
+
     virtual void                Save( XclExpStream& rStrm );
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
+    static void                 WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj );
+    static void                 WriteFromTo( XclExpXmlStream& rStrm, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape, SCTAB nTab );
+
+private:
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
+                                mxShape;
 };
 
 
@@ -330,28 +383,27 @@ protected:
 public:
                                 ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const String& rTxt );
 
-    inline sal_Size             GetStringBytes()
+    inline sal_Size             GetStringBytes() const
                                     { return sText.GetSize(); }
 
-    void                        WriteAddress( XclExpStream& rStrm );
-    void                        WriteText( XclExpStream& rStrm );
+    void                        WriteAddress( XclExpStream& rStrm ) const ;
+    void                        WriteText( XclExpStream& rStrm ) const;
 
-    void                        SaveXml( XclExpXmlStream& rStrm );
+    void                        SaveXml( XclExpXmlStream& rStrm ) const;
 };
 
 
 
-class ExcEScenario : public ExcRecord, private List
+class ExcEScenario : public ExcRecord
 {
 private:
     sal_Size                    nRecLen;
     XclExpString                sName;
     XclExpString                sComment;
     XclExpString                sUserName;
-    sal_uInt8                       nProtected;
+    sal_uInt8                   nProtected;
 
-    inline ExcEScenarioCell*    _First()    { return (ExcEScenarioCell*) List::First(); }
-    inline ExcEScenarioCell*    _Next()     { return (ExcEScenarioCell*) List::Next(); }
+    std::vector<ExcEScenarioCell> aCells;
 
     sal_Bool                        Append( sal_uInt16 nCol, sal_uInt16 nRow, const String& rTxt );
 
@@ -370,16 +422,11 @@ public:
 
 
 
-class ExcEScenarioManager : public ExcRecord, private List
+class ExcEScenarioManager : public ExcRecord
 {
 private:
     sal_uInt16                      nActive;
-
-    inline ExcEScenario*        _First()    { return (ExcEScenario*) List::First(); }
-    inline ExcEScenario*        _Next()     { return (ExcEScenario*) List::Next(); }
-
-    inline void                 Append( ExcEScenario* pScen )
-                                    { List::Insert( pScen, LIST_APPEND ); }
+    std::vector<ExcEScenario*> aScenes;
 
     virtual void                SaveCont( XclExpStream& rStrm );
 
@@ -590,3 +637,5 @@ public:
 
 
 #endif // _XCL97REC_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

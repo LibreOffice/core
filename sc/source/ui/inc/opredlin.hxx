@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,25 +30,15 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/ctrlbox.hxx>
 #include <svx/fntctrl.hxx>
 #include <svx/strarray.hxx>
@@ -84,3 +75,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

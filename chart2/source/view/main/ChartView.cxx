@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,6 +61,7 @@
 #include "DateHelper.hxx"
 
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <boost/bind.hpp>
 #include <unotools/streamwrap.hxx>
 // header for class LocaleDataWrapper
@@ -72,7 +74,7 @@
 #include <svx/unoshape.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svx/unofill.hxx>
 
 #include <time.h>
@@ -118,20 +120,14 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using rtl::OUString;
 
+namespace
+{
+    class theExplicitValueProviderUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theExplicitValueProviderUnoTunnelId > {};
+}
+
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theExplicitValueProviderUnoTunnelId::get().getSeq();
 }
 
 ExplicitValueProvider* ExplicitValueProvider::getExplicitValueProvider(
@@ -184,26 +180,24 @@ void ChartView::impl_setChartModel( const uno::Reference< frame::XModel >& xChar
 void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments )
                 throw ( uno::Exception, uno::RuntimeException)
 {
-    DBG_ASSERT(aArguments.getLength() >= 1,"need 1 argument to initialize the view: xModel");
+    OSL_PRECOND(aArguments.getLength() >= 1,"need 1 argument to initialize the view: xModel");
     if( !(aArguments.getLength() >= 1) )
         return;
 
     uno::Reference< frame::XModel > xNewChartModel;
     if( !(aArguments[0] >>= xNewChartModel) )
     {
-        DBG_ERROR( "need a Reference to frame::XModel as first parameter for view initialization" );
+        OSL_FAIL( "need a Reference to frame::XModel as first parameter for view initialization" );
     }
     impl_setChartModel( xNewChartModel );
 
     if( !m_pDrawModelWrapper.get() )
     {
-        // /--
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper = ::boost::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
         m_xShapeFactory = m_pDrawModelWrapper->getShapeFactory();
         m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
-        StartListening( m_pDrawModelWrapper->getSdrModel(), sal_False /*bPreventDups*/ );
-        // \--
+        StartListening( m_pDrawModelWrapper->getSdrModel(), false /*bPreventDups*/ );
     }
 }
 
@@ -211,8 +205,8 @@ ChartView::~ChartView()
 {
     if( m_pDrawModelWrapper.get() )
     {
-        EndListening( m_pDrawModelWrapper->getSdrModel(), sal_False /*bAllDups*/ );
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        EndListening( m_pDrawModelWrapper->getSdrModel(), false /*bAllDups*/ );
+        SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper.reset();
     }
     m_xDrawPage = NULL;
@@ -226,7 +220,7 @@ void ChartView::impl_deleteCoordinateSystems()
     ::std::swap( aVectorToDeleteObjects, m_aVCooSysList );//#i109770#
     ::std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
     const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
         delete *aIter;
     }
@@ -463,7 +457,6 @@ struct AxisUsage
     void addCoordinateSystem( VCoordinateSystem* pCooSys, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
     ::std::vector< VCoordinateSystem* > getCoordinateSystems( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
     sal_Int32 getMaxAxisIndexForDimension( sal_Int32 nDimensionIndex );
-    //tFullAxisIndex getDimensionAndIndexForCooSys( VCoordinateSystem* pCooSys );
 
     ScaleAutomatism         aScaleAutomatism;
 
@@ -481,19 +474,6 @@ AxisUsage::~AxisUsage()
 {
     aCoordinateSystems.clear();
 }
-
-/*
-tFullScaleIndex AxisUsage::getDimensionAndIndexForCooSys( VCoordinateSystem* pCooSys )
-{
-    tFullScaleIndex aRet(0,0);
-
-    tCoordinateSystemMap::const_iterator aFound( aCoordinateSystems.find(pCooSys) );
-    if(aFound!=aCoordinateSystems.end())
-        aRet = aFound->second;
-
-    return aRet;
-}
-*/
 
 void AxisUsage::addCoordinateSystem( VCoordinateSystem* pCooSys, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
@@ -602,7 +582,7 @@ SeriesPlotterContainer::~SeriesPlotterContainer()
     // - delete all plotter
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
-    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
         delete *aPlotterIter;
     m_aSeriesPlotterList.clear();
 }
@@ -622,7 +602,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
               const uno::Reference< frame::XModel >& xChartModel )
 {
     //------------ get model series from model
-    sal_Int32 nDiagramIndex = 0;//todo if more than one diagam is supported
+    sal_Int32 nDiagramIndex = 0;//todo if more than one diagram is supported
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     if( !xDiagram.is())
         return;
@@ -698,13 +678,14 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             m_aSeriesPlotterList.push_back( pPlotter );
             pPlotter->setNumberFormatsSupplier( xNumberFormatsSupplier );
             pPlotter->setColorScheme( xColorScheme );
-            pPlotter->setExplicitCategoriesProvider( pVCooSys->getExplicitCategoriesProvider() );
+            if(pVCooSys)
+                pPlotter->setExplicitCategoriesProvider( pVCooSys->getExplicitCategoriesProvider() );
             sal_Int32 nMissingValueTreatment = DiagramHelper::getCorrectedMissingValueTreatment( xDiagram, xChartType );
 
             if(pVCooSys)
                 pVCooSys->addMinimumAndMaximumSupplier(pPlotter);
 
-            //------------ add series to plotter and thus prepare him for providing minimum and maximum values
+            //------------ add series to plotter and thus prepare him(it) for providing minimum and maximum values
             uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
             OSL_ASSERT( xDataSeriesContainer.is());
             if( !xDataSeriesContainer.is() )
@@ -776,7 +757,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     }
 
     //transport seriesnames to the coordinatesystems if needed
-    if( m_aSeriesPlotterList.size() )
+    if( !m_aSeriesPlotterList.empty() )
     {
         uno::Sequence< rtl::OUString > aSeriesNames;
         bool bSeriesNamesInitialized = false;
@@ -850,7 +831,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
     m_nMaxAxisIndex = 0;
     for(sal_Int32 nDimensionIndex=0; nDimensionIndex<3; nDimensionIndex++)
     {
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             sal_Int32 nLocalMax = aAxisIter->second.getMaxAxisIndexForDimension( nDimensionIndex );
             if( m_nMaxAxisIndex < nLocalMax )
@@ -864,7 +845,7 @@ void SeriesPlotterContainer::setScalesFromCooSysToPlotter()
     //set scales to plotter to enable them to provide the preferred scene AspectRatio
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
-    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
     {
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
         VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( m_rVCooSysList, pSeriesPlotter );
@@ -880,11 +861,11 @@ void SeriesPlotterContainer::setScalesFromCooSysToPlotter()
 
 void SeriesPlotterContainer::setNumberFormatsFromAxes()
 {
-    //set numberfarmats to plotter to enable them to display the data labels in the numberfromat of teh axis
+    //set numberformats to plotter to enable them to display the data labels in the numberformat of the axis
 
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
-    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+    for( aPlotterIter = m_aSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
     {
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
         VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( m_rVCooSysList, pSeriesPlotter );
@@ -947,7 +928,7 @@ void SeriesPlotterContainer::doAutoScaling( const uno::Reference< frame::XModel 
     {
 
         // - first do autoscale for all x and z scales (because they are treated independent)
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
             ::std::vector< VCoordinateSystem* > aVCooSysList_X = rAxisUsage.getCoordinateSystems(0,nAxisIndex);
@@ -969,7 +950,7 @@ void SeriesPlotterContainer::doAutoScaling( const uno::Reference< frame::XModel 
         }
 
         // - second do autoscale for the dependent y scales (the coordinate systems are prepared with x and z scales already )
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
             ::std::vector< VCoordinateSystem* > aVCooSysList_X = rAxisUsage.getCoordinateSystems(0,nAxisIndex);
@@ -1006,7 +987,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::
 
     for( sal_Int32 nAxisIndex=0; nAxisIndex<=m_nMaxAxisIndex; nAxisIndex++ )
     {
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
             ::std::vector< VCoordinateSystem* > aVCooSysList_Y = rAxisUsage.getCoordinateSystems( 1, nAxisIndex );
@@ -1021,7 +1002,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::
                 {
                     ::std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
                     ::std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
-                    for( ; aIter != aSeriesVector.end(); aIter++ )
+                    for( ; aIter != aSeriesVector.end(); ++aIter )
                     {
                         sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );
                         if( nAxisIndex == nCurrentIndex )
@@ -1102,7 +1083,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::
         //correct origin for y main axis (the origin is where the other main axis crosses)
         sal_Int32 nAxisIndex=0;
         sal_Int32 nDimensionIndex=1;
-        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; aAxisIter++ )
+        for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
             ::std::vector< VCoordinateSystem* > aVCooSysList = rAxisUsage.getCoordinateSystems(nDimensionIndex,nAxisIndex);
@@ -1152,7 +1133,7 @@ drawing::Direction3D SeriesPlotterContainer::getPreferredAspectRatio()
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = m_aSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = m_aSeriesPlotterList.end();
     for( aPlotterIter = m_aSeriesPlotterList.begin(), nPlotterCount=0
-        ; aPlotterIter != aPlotterEnd; aPlotterIter++, nPlotterCount++ )
+        ; aPlotterIter != aPlotterEnd; ++aPlotterIter, ++nPlotterCount )
     {
         drawing::Direction3D aSingleRatio( (*aPlotterIter)->getPreferredDiagramAspectRatio() );
         if( fx<0 && aSingleRatio.DirectionX>0 )
@@ -1505,7 +1486,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     m_bPointsWereSkipped = false;
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = rSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = rSeriesPlotterList.end();
-    for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+    for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
     {
         //------------ set transformation to plotter / create series
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
@@ -1516,7 +1497,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         else
         {
             xSeriesTarget = xSeriesTargetBehindAxis;
-            DBG_ASSERT( !bIsPieOrDonut, "not implemented yet! - during a complete recreation this shape is destroyed so no series can be created anymore" );
+            OSL_ENSURE( !bIsPieOrDonut, "not implemented yet! - during a complete recreation this shape is destroyed so no series can be created anymore" );
         }
         pSeriesPlotter->initPlotter( xSeriesTarget,xTextTargetShapes,m_xShapeFactory,aCID );
         pSeriesPlotter->setPageReferenceSize( rPageSize );
@@ -1545,7 +1526,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         if( !bUseFixedInnerSize )
             aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
 
-        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
         {
             VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
             pSeriesPlotter->releaseShapes();
@@ -1565,7 +1546,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         }
 
         // - create data series for all charttypes
-        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
         {
             //------------ set transformation to plotter / create series
             VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
@@ -1576,25 +1557,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
             m_bPointsWereSkipped = m_bPointsWereSkipped || pSeriesPlotter->PointsWereSkipped();
         }
 
-        /*
-        uno::Reference< drawing::XShape > xDiagramPlusAxes_KeepRatio( xDiagramPlusAxes_Shapes, uno::UNO_QUERY );
-
-        awt::Size aNewSize( rAvailableSize );
-        awt::Point aNewPos( rAvailablePos );
-        if( bKeepAspectRatio )
-        {
-            awt::Size aCurrentSize( xDiagramPlusAxes_KeepRatio->getSize());
-
-            aNewSize = ShapeFactory::calculateNewSizeRespectingAspectRatio(
-                            rAvailableSize, aCurrentSize );
-            aNewPos = ShapeFactory::calculateTopLeftPositionToCenterObject(
-                    rAvailablePos, rAvailableSize, aNewSize );
-        }
-
-        xDiagramPlusAxes_KeepRatio->setPosition( aNewPos );
-        xDiagramPlusAxes_KeepRatio->setSize( aNewSize );
-        */
-        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
         {
             VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
             pSeriesPlotter->rearrangeLabelToAvoidOverlapIfRequested( rPageSize );
@@ -1603,15 +1566,13 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
 
     if( bUseFixedInnerSize )
     {
-        //if( !bIsPieOrDonut )
-        //    aConsumedOuterRect = ::basegfx::B2IRectangle( ShapeFactory::getRectangleOfShape(xBoundingShape) );
         aUsedOuterRect = awt::Rectangle( aConsumedOuterRect.getMinX(), aConsumedOuterRect.getMinY(), aConsumedOuterRect.getWidth(), aConsumedOuterRect.getHeight() );
     }
     else
         aUsedOuterRect = awt::Rectangle( rAvailablePos.X, rAvailablePos.Y, rAvailableSize.Width, rAvailableSize.Height );
 
     bool bSnapRectToUsedArea = false;
-    for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+    for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
     {
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
         bSnapRectToUsedArea = pSeriesPlotter->shouldSnapRectToUsedArea();
@@ -1732,7 +1693,7 @@ SdrPage* ChartView::getSdrPage()
 
 uno::Reference< drawing::XShape > ChartView::getShapeForCID( const rtl::OUString& rObjectCID )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     SdrObject* pObj = DrawModelWrapper::getNamedSdrObject( rObjectCID, this->getSdrPage() );
     if( pObj )
         return uno::Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY);
@@ -1758,7 +1719,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const rtl::OUString& rObjectCID,
         ObjectType eObjectType( ObjectIdentifier::getObjectType( rObjectCID ) );
         if( eObjectType == OBJECTTYPE_AXIS || eObjectType == OBJECTTYPE_DIAGRAM )
         {
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             SvxShape* pRoot = SvxShape::getImplementation( xShape );
             if( pRoot )
             {
@@ -2425,27 +2386,7 @@ void lcl_removeEmptyGroupShapes( const Reference< drawing::XShapes>& xParent )
 
 bool ChartView::impl_AddInDrawsAllByItself()
 {
-    bool bRet = false;
-    /*
-    uno::Reference< beans::XPropertySet > xProp( m_xChartModel, uno::UNO_QUERY );
-    if( xProp.is()) try
-    {
-        uno::Reference< util::XRefreshable > xAddIn;
-        xProp->getPropertyValue( C2U( "AddIn" ) ) >>= xAddIn;
-        if( xAddIn.is() )
-        {
-            rtl::OUString aBaseDiagram;
-            xProp->getPropertyValue( C2U( "BaseDiagram" ) ) >>= aBaseDiagram;
-            if(aBaseDiagram.getLength())
-                bRet = true;
-        }
-    }
-    catch( uno::Exception& e )
-    {
-        ASSERT_EXCEPTION( e );
-    }
-    */
-    return bRet;
+    return false;
 }
 
 void ChartView::impl_refreshAddIn()
@@ -2488,12 +2429,10 @@ void ChartView::createShapes()
     impl_deleteCoordinateSystems();
     if( m_pDrawModelWrapper )
     {
-        // /--
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         // #i12587# support for shapes in chart
         m_pDrawModelWrapper->getSdrModel().EnableUndo( sal_False );
         m_pDrawModelWrapper->clearMainDrawPage();
-        // \--
     }
 
     lcl_setDefaultWritingMode( m_pDrawModelWrapper, m_xChartModel );
@@ -2508,11 +2447,11 @@ void ChartView::createShapes()
         pPage->SetSize(Size(aPageSize.Width,aPageSize.Height));
     else
     {
-        DBG_ERROR("could not set page size correctly");
+        OSL_FAIL("could not set page size correctly");
     }
 
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
 
         //------------ apply fill properties to page
         // todo: it would be nicer to just pass the page m_xDrawPage and format it,
@@ -2654,8 +2593,8 @@ void ChartView::createShapes()
     // #i12587# support for shapes in chart
     if ( m_pDrawModelWrapper )
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-        m_pDrawModelWrapper->getSdrModel().EnableUndo( sal_True );
+        SolarMutexGuard aSolarGuard;
+        m_pDrawModelWrapper->getSdrModel().EnableUndo( true );
     }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -2697,10 +2636,8 @@ void ChartView::impl_updateView()
 
             //prepare draw model
             {
-                // /--
-                ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+                SolarMutexGuard aSolarGuard;
                 m_pDrawModelWrapper->lockControllers();
-                // \--
             }
 
             //create chart view
@@ -2734,10 +2671,8 @@ void ChartView::impl_updateView()
         }
 
         {
-            // /--
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             m_pDrawModelWrapper->unlockControllers();
-            // \--
         }
 
         impl_notifyModeChangeListener(C2U("valid"));
@@ -2888,7 +2823,7 @@ void SAL_CALL ChartView::update() throw (uno::RuntimeException)
 Reference< beans::XPropertySetInfo > SAL_CALL ChartView::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
     return 0;
 }
 
@@ -2964,25 +2899,25 @@ void SAL_CALL ChartView::addPropertyChangeListener(
     const ::rtl::OUString& /* aPropertyName */, const Reference< beans::XPropertyChangeListener >& /* xListener */ )
         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL ChartView::removePropertyChangeListener(
     const ::rtl::OUString& /* aPropertyName */, const Reference< beans::XPropertyChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ChartView::addVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ChartView::removeVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 // ____ XMultiServiceFactory ____
@@ -3071,3 +3006,5 @@ uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (un
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

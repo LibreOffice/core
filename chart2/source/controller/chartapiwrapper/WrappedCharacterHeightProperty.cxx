@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,18 +34,11 @@
 #include "RelativeSizeHelper.hxx"
 #include "ReferenceSizePropertyProvider.hxx"
 
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
-
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
 
-//.............................................................................
-//.............................................................................
-
-//.............................................................................
 //.............................................................................
 
 namespace chart
@@ -125,17 +119,15 @@ beans::PropertyState WrappedCharacterHeightProperty_Base::getPropertyState( cons
 
 Any WrappedCharacterHeightProperty_Base::convertInnerToOuterValue( const Any& rInnerValue ) const
 {
-    OSL_ASSERT("should not be used: WrappedCharacterHeightProperty_Base::convertInnerToOuterValue - check if you miss data");
+    OSL_FAIL("should not be used: WrappedCharacterHeightProperty_Base::convertInnerToOuterValue - check if you miss data");
     return rInnerValue;
 }
 Any WrappedCharacterHeightProperty_Base::convertOuterToInnerValue( const Any& rOuterValue ) const
 {
-    OSL_ASSERT("should not be used: WrappedCharacterHeightProperty_Base::convertOuterToInnerValue - check if you miss data");
+    OSL_FAIL("should not be used: WrappedCharacterHeightProperty_Base::convertOuterToInnerValue - check if you miss data");
     return rOuterValue;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 WrappedCharacterHeightProperty::WrappedCharacterHeightProperty( ReferenceSizePropertyProvider* pRefSizePropProvider )
@@ -169,3 +161,5 @@ WrappedComplexCharacterHeightProperty::~WrappedComplexCharacterHeightProperty()
 } //namespace wrapper
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

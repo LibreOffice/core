@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <editeng/eeitem.hxx>
 
 
-#ifndef _FM_FMOBJFAC_HXX
 #include <svx/fmobjfac.hxx>
-#endif
 #include <svx/objfac3d.hxx>
 #include <svx/tbxcolor.hxx>
 
@@ -117,7 +116,6 @@
 #include "spelldialog.hxx"
 #include <svx/fontwork.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
 
@@ -130,31 +128,6 @@
 
 //------------------------------------------------------------------
 
-//UNUSED2008-05  // filter detection can't use ScFilterOptions (in sc-dll),
-//UNUSED2008-05  // so access to wk3 flag must be implemented here again
-//UNUSED2008-05
-//UNUSED2008-05  class ScLibOptions : public utl::ConfigItem
-//UNUSED2008-05  {
-//UNUSED2008-05      sal_Bool        bWK3Flag;
-//UNUSED2008-05
-//UNUSED2008-05  public:
-//UNUSED2008-05                  ScLibOptions();
-//UNUSED2008-05      sal_Bool        GetWK3Flag() const          { return bWK3Flag; }
-//UNUSED2008-05  };
-//UNUSED2008-05
-//UNUSED2008-05  #define CFGPATH_LIBFILTER      "Office.Calc/Filter/Import/Lotus123"
-//UNUSED2008-05  #define ENTRYSTR_WK3           "WK3"
-//UNUSED2008-05
-//UNUSED2008-05  ScLibOptions::ScLibOptions() :
-//UNUSED2008-05      ConfigItem( rtl::OUString::createFromAscii( CFGPATH_LIBFILTER ) ),
-//UNUSED2008-05      bWK3Flag( sal_False )
-//UNUSED2008-05  {
-//UNUSED2008-05      com::sun::star::uno::Sequence<rtl::OUString> aNames(1);
-//UNUSED2008-05      aNames[0] = rtl::OUString::createFromAscii( ENTRYSTR_WK3 );
-//UNUSED2008-05      com::sun::star::uno::Sequence<com::sun::star::uno::Any> aValues = GetProperties(aNames);
-//UNUSED2008-05      if ( aValues.getLength() == 1 && aValues[0].hasValue() )
-//UNUSED2008-05          bWK3Flag = comphelper::getBOOL( aValues[0] );
-//UNUSED2008-05  }
 
 //------------------------------------------------------------------
 
@@ -178,9 +151,7 @@ void ScDLL::Init()
     ScModule* pMod = new ScModule( &ScDocShell::Factory() );
     (*ppShlPtr) = pMod;
 
-//REMOVE        ScDocShell::RegisterFactory( SDT_SC_DOCFACTPRIO );
-
-    ScDocShell::Factory().SetDocumentServiceName( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) );
+    ScDocShell::Factory().SetDocumentServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" )) );
 
     ScGlobal::Init();       // erst wenn der ResManager initialisiert ist
                             //  erst nach ScGlobal::Init duerfen die App-Optionen
@@ -265,7 +236,7 @@ void ScDLL::Init()
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
 
     // common SFX controller
-    ::sfx2::TaskPaneWrapper::RegisterChildWindow( sal_False, pMod );
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow( false, pMod );
 
     // Svx-StatusBar-Controller
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
@@ -291,51 +262,42 @@ void ScDLL::Init()
     ScInputWindowWrapper        ::RegisterChildWindow(42, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK);
     ScNavigatorDialogWrapper    ::RegisterChildWindowContext(
             sal::static_int_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
-    ScSolverDlgWrapper          ::RegisterChildWindow(sal_False, pMod);
-    ScOptSolverDlgWrapper       ::RegisterChildWindow(sal_False, pMod);
-    ScNameDlgWrapper            ::RegisterChildWindow(sal_False, pMod);
-    ScPivotLayoutWrapper        ::RegisterChildWindow(sal_False, pMod);
-    ScTabOpDlgWrapper           ::RegisterChildWindow(sal_False, pMod);
-    ScFilterDlgWrapper          ::RegisterChildWindow(sal_False, pMod);
-    ScSpecialFilterDlgWrapper   ::RegisterChildWindow(sal_False, pMod);
-    ScDbNameDlgWrapper          ::RegisterChildWindow(sal_False, pMod);
-    ScConsolidateDlgWrapper     ::RegisterChildWindow(sal_False, pMod);
-    ScPrintAreasDlgWrapper      ::RegisterChildWindow(sal_False, pMod);
-    ScCondFormatDlgWrapper      ::RegisterChildWindow(sal_False, pMod);
-    ScColRowNameRangesDlgWrapper::RegisterChildWindow(sal_False, pMod);
-    ScFormulaDlgWrapper         ::RegisterChildWindow(sal_False, pMod);
+    ScSolverDlgWrapper          ::RegisterChildWindow(false, pMod);
+    ScOptSolverDlgWrapper       ::RegisterChildWindow(false, pMod);
+    ScNameDlgWrapper            ::RegisterChildWindow(false, pMod);
+    ScPivotLayoutWrapper        ::RegisterChildWindow(false, pMod);
+    ScTabOpDlgWrapper           ::RegisterChildWindow(false, pMod);
+    ScFilterDlgWrapper          ::RegisterChildWindow(false, pMod);
+    ScSpecialFilterDlgWrapper   ::RegisterChildWindow(false, pMod);
+    ScDbNameDlgWrapper          ::RegisterChildWindow(false, pMod);
+    ScConsolidateDlgWrapper     ::RegisterChildWindow(false, pMod);
+    ScPrintAreasDlgWrapper      ::RegisterChildWindow(false, pMod);
+    ScCondFormatDlgWrapper      ::RegisterChildWindow(false, pMod);
+    ScColRowNameRangesDlgWrapper::RegisterChildWindow(false, pMod);
+    ScFormulaDlgWrapper         ::RegisterChildWindow(false, pMod);
 
     // First docking Window for Calc
-    ScFunctionChildWindow       ::RegisterChildWindow(sal_False, pMod);
+    ScFunctionChildWindow       ::RegisterChildWindow(false, pMod);
 
     // Redlining- Window
-    ScAcceptChgDlgWrapper       ::RegisterChildWindow(sal_False, pMod);
-    ScSimpleRefDlgWrapper       ::RegisterChildWindow(sal_False, pMod, SFX_CHILDWIN_ALWAYSAVAILABLE|SFX_CHILDWIN_NEVERHIDE );
-    ScHighlightChgDlgWrapper    ::RegisterChildWindow(sal_False, pMod);
+    ScAcceptChgDlgWrapper       ::RegisterChildWindow(false, pMod);
+    ScSimpleRefDlgWrapper       ::RegisterChildWindow(false, pMod, SFX_CHILDWIN_ALWAYSAVAILABLE|SFX_CHILDWIN_NEVERHIDE );
+    ScHighlightChgDlgWrapper    ::RegisterChildWindow(false, pMod);
 
-    SvxSearchDialogWrapper      ::RegisterChildWindow(sal_False, pMod);
-    SvxHlinkDlgWrapper          ::RegisterChildWindow(sal_False, pMod);
-    SvxFontWorkChildWindow      ::RegisterChildWindow(sal_False, pMod);
-    SvxHyperlinkDlgWrapper      ::RegisterChildWindow(sal_False, pMod, SFX_CHILDWIN_FORCEDOCK);
-    SvxIMapDlgChildWindow       ::RegisterChildWindow(sal_False, pMod);
-    GalleryChildWindow          ::RegisterChildWindow(sal_False, pMod);
-    ScSpellDialogChildWindow    ::RegisterChildWindow(sal_False, pMod);
-    ::avmedia::MediaPlayer      ::RegisterChildWindow(sal_False, pMod);
+    SvxSearchDialogWrapper      ::RegisterChildWindow(false, pMod);
+    SvxHlinkDlgWrapper          ::RegisterChildWindow(false, pMod);
+    SvxFontWorkChildWindow      ::RegisterChildWindow(false, pMod);
+    SvxIMapDlgChildWindow       ::RegisterChildWindow(false, pMod);
+    GalleryChildWindow          ::RegisterChildWindow(false, pMod);
+    ScSpellDialogChildWindow    ::RegisterChildWindow(false, pMod);
 
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
-    ScValidityRefChildWin::RegisterChildWindow(sal_False, pMod);
-    //-->Added by PengYunQuan for Validity Cell Range Picker
+    ScValidityRefChildWin::RegisterChildWindow(false, pMod);
 
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 
     SvClassManager& rClassManager = SvxFieldItem::GetClassManager();
-//  rClassManager.SV_CLASS_REGISTER( SvxURLField );
-//  rClassManager.SV_CLASS_REGISTER( SvxDateField );
-//  rClassManager.SV_CLASS_REGISTER( SvxPageField );
     rClassManager.SV_CLASS_REGISTER( SvxPagesField );
-//  rClassManager.SV_CLASS_REGISTER( SvxTimeField );
     rClassManager.SV_CLASS_REGISTER( SvxFileField );
-//  rClassManager.SV_CLASS_REGISTER( SvxExtFileField );
     rClassManager.SV_CLASS_REGISTER( SvxTableField );
 
     SdrRegisterFieldClasses();      // SvDraw-Felder registrieren
@@ -361,5 +323,15 @@ void ScDLL::Exit()
     //  ScGlobal::Clear ist schon im Module-dtor
 }
 
+//------------------------------------------------------------------
+//  Statusbar
+//------------------------------------------------------------------
+
+#define TEXT_WIDTH(s)   rStatusBar.GetTextWidth((s))
+
+#undef TEXT_WIDTH
+
 // DetectFilter functionality has moved - please update your bookmarks
 // see sc/source/ui/unoobj/scdetect.cxx, have a nice day.
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,9 @@
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
+
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <mdds/flat_segment_tree.hpp>
 
 class ScDocument;
 class ScXMLExport;
@@ -138,8 +142,8 @@ public:
         const sal_Int32 nLastRow, const sal_Int32 nLastCol,
         const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc);
 
-    const ScMyDefaultStyleList* GetRowDefaults() { return pRowDefaults; }
-    const ScMyDefaultStyleList* GetColDefaults() { return pColDefaults; }
+    const ScMyDefaultStyleList* GetRowDefaults() const { return pRowDefaults; }
+    const ScMyDefaultStyleList* GetColDefaults() const { return pColDefaults; }
 };
 
 struct ScMyRowFormatRange
@@ -155,10 +159,9 @@ struct ScMyRowFormatRange
     sal_Bool operator<(const ScMyRowFormatRange& rRange) const;
 };
 
-typedef std::list<ScMyRowFormatRange> ScMyRowFormatRangesList;
-
 class ScRowFormatRanges
 {
+    typedef std::list<ScMyRowFormatRange> ScMyRowFormatRangesList;
     ScMyRowFormatRangesList     aRowFormatRanges;
     const ScMyDefaultStyleList* pRowDefaults;
     const ScMyDefaultStyleList* pColDefaults;
@@ -177,8 +180,8 @@ public:
     void Clear();
     void AddRange(ScMyRowFormatRange& rFormatRange, const sal_Int32 nStartRow);
     sal_Bool GetNext(ScMyRowFormatRange& rFormatRange);
-    sal_Int32 GetMaxRows();
-    sal_Int32 GetSize();
+    sal_Int32 GetMaxRows() const;
+    sal_Int32 GetSize() const;
     void Sort();
 };
 
@@ -196,11 +199,11 @@ struct ScMyFormatRange
     sal_Bool operator< (const ScMyFormatRange& rRange) const;
 };
 
-typedef std::list<ScMyFormatRange>          ScMyFormatRangeAddresses;
-typedef std::vector<ScMyFormatRangeAddresses*>  ScMyFormatRangeListVec;
-
 class ScFormatRangeStyles
 {
+    typedef std::list<ScMyFormatRange>          ScMyFormatRangeAddresses;
+    typedef std::vector<ScMyFormatRangeAddresses*>  ScMyFormatRangeListVec;
+
     ScMyFormatRangeListVec      aTables;
     ScMyOUStringVec             aStyleNames;
     ScMyOUStringVec             aAutoStyleNames;
@@ -253,12 +256,10 @@ struct ScColumnStyle
     ScColumnStyle() : nIndex(-1), bIsVisible(sal_True) {}
 };
 
-
-typedef std::vector<ScColumnStyle>  ScMyColumnStyleVec;
-typedef std::vector<ScMyColumnStyleVec> ScMyColumnVectorVec;
-
 class ScColumnStyles : public ScColumnRowStylesBase
 {
+    typedef std::vector<ScColumnStyle>  ScMyColumnStyleVec;
+    typedef std::vector<ScMyColumnStyleVec> ScMyColumnVectorVec;
     ScMyColumnVectorVec             aTables;
 
 public:
@@ -272,12 +273,21 @@ public:
     virtual rtl::OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField);
 };
 
-typedef std::vector<sal_Int32>  ScMysalInt32Vec;
-typedef std::vector<ScMysalInt32Vec>    ScMyRowVectorVec;
-
 class ScRowStyles : public ScColumnRowStylesBase
 {
-    ScMyRowVectorVec                aTables;
+    typedef ::mdds::flat_segment_tree<sal_Int32, sal_Int32> StylesType;
+    ::boost::ptr_vector<StylesType> aTables;
+    struct Cache
+    {
+        sal_Int32 mnTable;
+        sal_Int32 mnStart;
+        sal_Int32 mnEnd;
+        sal_Int32 mnStyle;
+        Cache();
+
+        bool hasCache(sal_Int32 nTable, sal_Int32 nField) const;
+    };
+    Cache maCache;
 
 public:
     ScRowStyles();
@@ -292,3 +302,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

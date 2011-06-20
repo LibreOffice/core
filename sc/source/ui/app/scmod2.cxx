@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,6 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-// static
 void ScModule::GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
                                     sal_Bool& rAutoSpell )
 {
@@ -66,7 +66,6 @@ void ScModule::GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal
     rAutoSpell = aOptions.bIsSpellAuto;
 }
 
-// static
 void ScModule::SetAutoSpellProperty( sal_Bool bSet )
 {
     //  use SvtLinguConfig instead of service LinguProperties to avoid
@@ -75,21 +74,20 @@ void ScModule::SetAutoSpellProperty( sal_Bool bSet )
 
     uno::Any aAny;
     aAny <<= bSet;
-    aConfig.SetProperty( rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ), aAny );
+    aConfig.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( LINGUPROP_AUTOSPELL )), aAny );
 }
 
 
 
-// static
 sal_Bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )
 {
     if ( nLang == LANGUAGE_NONE )
-        return sal_False;
+        return false;
 
     lang::Locale aLocale;
     SvxLanguageToLocale( aLocale, nLang );
 
-    sal_Bool bHasLang = sal_False;
+    sal_Bool bHasLang = false;
     try
     {
         uno::Reference< linguistic2::XThesaurus > xThes(LinguMgr::GetThesaurus());
@@ -98,10 +96,11 @@ sal_Bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR("Error in Thesaurus");
+        OSL_FAIL("Error in Thesaurus");
     }
 
     return bHasLang;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

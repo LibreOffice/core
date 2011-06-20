@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,16 +70,6 @@ void SAL_CALL ScChartRangeSelectionListener::selectionChanged( const lang::Event
         {
             m_pViewShell->DoChartSelection( aRanges );
         }
-//         SfxViewFrame *pFrame = SfxViewFrame::GetFirst( m_pDocShell );
-//         while (pFrame)
-//         {
-//             SfxViewShell* pSh = pFrame->GetViewShell();
-//             if (pSh && pSh->ISA(ScTabViewShell))
-//             {
-//                 ScTabViewShell* pViewSh  = (ScTabViewShell*)pSh;
-//             }
-//             pFrame = SfxViewFrame::GetNext( *pFrame, m_pDocShell );
-//         }
     }
 }
 
@@ -93,3 +84,5 @@ void SAL_CALL ScChartRangeSelectionListener::disposing()
 {
     m_pViewShell = 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

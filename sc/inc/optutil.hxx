@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,9 @@
 class ScOptionsUtil
 {
 public:
+    // values must correspond with integer values stored in the configuration
+    enum KeyBindingType { KEY_DEFAULT = 0, KEY_OOO_LEGACY = 1 };
+
     static sal_Bool     IsMetricSystem();
 };
 
@@ -65,13 +69,9 @@ public:
     using ConfigItem::EnableNotification;
     using ConfigItem::GetNodeNames;
 
-//  sal_Bool EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames)
-//                          { return ConfigItem::EnableNotification( rNames ); }
-
-//  com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
-//                          { return ConfigItem::GetNodeNames( rNode ); }
 };
 
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

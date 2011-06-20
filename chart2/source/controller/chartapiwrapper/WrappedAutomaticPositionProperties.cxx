@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,8 +130,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList )
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
 void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -142,7 +142,6 @@ void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property 
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void WrappedAutomaticPositionProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList )
 {
@@ -152,3 +151,5 @@ void WrappedAutomaticPositionProperties::addWrappedProperties( std::vector< Wrap
 } //namespace wrapper
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

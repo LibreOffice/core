@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,6 @@
 #define _PRINTFUN_CXX
 #define _INPUTHDL_CXX
 
-//  ab hier automatisch per makepch generiert
-//  folgende duerfen nicht aufgenommen werden:
-//      scslots.hxx
-
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <svl/solar.hrc>
@@ -46,7 +43,6 @@
 #include <tools/contnr.hxx>
 #include <vcl/sv.h>
 #include <tools/ref.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <i18npool/lang.h>
 #include <sfx2/sfx.hrc>
@@ -67,13 +63,11 @@
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/bitmap.hxx>
-#include <sot/sotref.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/vclenum.hxx>
 #include <sot/object.hxx>
 #include <sot/sotdata.hxx>
 #include <sot/factory.hxx>
-#include <tools/ownlist.hxx>
 #include <vcl/font.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/settings.hxx>
@@ -91,14 +85,12 @@
 #include <vcl/window.hxx>
 #include <global.hxx>
 #include <vcl/syswin.hxx>
-#include <tools/debug.hxx>
 #include <svl/svarray.hxx>
 #include <vcl/ctrl.hxx>
 #include <svl/hint.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/image.hxx>
 #include <vcl/timer.hxx>
-#include <tools/unqidx.hxx>
 #include <vcl/symbol.hxx>
 #include <vcl/fixed.hxx>
 #include <svl/brdcst.hxx>
@@ -123,7 +115,6 @@
 #include <vcl/field.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/combobox.hxx>
-#include <tools/pstm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -184,7 +175,7 @@
 #include <scresid.hxx>
 #include <sfx2/ipfrm.hxx>
 #include <docsh.hxx>
-//REMOVE    #include <sfx2/interno.hxx>
+#include <vcl/wintypes.hxx>
 #include <sfx2/docfac.hxx>
 #include <scitems.hxx>
 #include <vcl/virdev.hxx>
@@ -249,7 +240,7 @@
 #include <basic/sbxcore.hxx>
 #include <vcl/ctrl.hxx>
 #include <svx/xenum.hxx>
-#include <dbcolect.hxx>
+#include <dbdata.hxx>
 #include <sot/exchange.hxx>
 #include <math.h>
 #include <vcl/wrkwin.hxx>
@@ -329,3 +320,4 @@
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include "xlname.hxx"
 #include "xlformula.hxx"
 #include "xeroot.hxx"
+#include <boost/shared_ptr.hpp>
 
 // ============================================================================
 
@@ -49,12 +51,10 @@ public:
     void                Initialize();
 
     /** Inserts the Calc name with the passed index and returns the Excel NAME index. */
-    sal_uInt16          InsertName( sal_uInt16 nScNameIdx );
+    sal_uInt16          InsertName( SCTAB nTab, sal_uInt16 nScNameIdx );
     /** Inserts the Calc database range with the passed index and returns the Excel NAME index. */
     sal_uInt16          InsertDBRange( sal_uInt16 nScDBRangeIdx );
 
-//UNUSED2009-05 /** Inserts a new built-in defined name. */
-//UNUSED2009-05 sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab );
     /** Inserts a new built-in defined name, referring to the passed sheet range. */
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, const ScRange& rRange );
     /** Inserts a new built-in defined name, referring to the passed sheet range list. */
@@ -81,7 +81,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpNameManagerImpl > XclExpNameMgrImplRef;
+    typedef boost::shared_ptr< XclExpNameManagerImpl > XclExpNameMgrImplRef;
     XclExpNameMgrImplRef mxImpl;
 };
 
@@ -89,3 +89,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

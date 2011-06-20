@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -149,7 +150,7 @@ public:
 
     virtual void                UpdateData() {  }
     virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
-    virtual sal_Bool            IsDirty() const { return sal_False; }
+    virtual sal_Bool            IsDirty() const { return false; }
 
     DECL_LINK( NotifyHdl, EENotify* );
 protected:
@@ -203,7 +204,6 @@ public:
     virtual SvxViewForwarder* GetViewForwarder();
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
 
-//UNUSED2008-05  DECL_LINK( NotifyHdl, EENotify* );
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell* mpViewShell;
@@ -233,7 +233,6 @@ public:
     virtual SvxViewForwarder* GetViewForwarder();
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
 
-//UNUSED2008-05  DECL_LINK( NotifyHdl, EENotify* );
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell* mpViewShell;
@@ -268,7 +267,7 @@ public:
 
     virtual void                UpdateData() {  }
     virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
-    virtual sal_Bool            IsDirty() const { return sal_False; }
+    virtual sal_Bool            IsDirty() const { return false; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
@@ -301,7 +300,7 @@ public:
 
     virtual void                UpdateData() {  }
     virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
-    virtual sal_Bool            IsDirty() const { return sal_False; }
+    virtual sal_Bool            IsDirty() const { return false; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
@@ -350,10 +349,12 @@ public:
 
     virtual void                UpdateData() {}
     virtual void                SetDoUpdate( sal_Bool /* bValue */ ) {}
-    virtual sal_Bool            IsDirty() const { return sal_False; }
+    virtual sal_Bool            IsDirty() const { return false; }
 };
 
 
 // ============================================================================
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

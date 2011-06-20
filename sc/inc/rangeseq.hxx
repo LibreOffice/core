@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ public:
                                 const ScMatrix* pMatrix, SvNumberFormatter* pFormatter );
     static sal_Bool FillMixedArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange,
-                                sal_Bool bAllowNV = sal_False );
+                                sal_Bool bAllowNV = false );
 
     /** @param bDataTypes
             Additionally to the differentiation between string and double allow
@@ -112,3 +113,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

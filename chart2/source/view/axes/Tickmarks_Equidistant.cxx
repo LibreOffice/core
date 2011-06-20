@@ -30,7 +30,8 @@
 #include "Tickmarks_Equidistant.hxx"
 #include "ViewDefines.hxx"
 #include <rtl/math.hxx>
-#include <tools/debug.hxx>
+
+#include <limits>
 #include <memory>
 
 //.............................................................................
@@ -95,7 +96,7 @@ EquidistantTickFactory::EquidistantTickFactory(
     if( m_rScale.Scaling.is() )
     {
         m_xInverseScaling = m_rScale.Scaling->getInverseScaling();
-        DBG_ASSERT( m_xInverseScaling.is(), "each Scaling needs to return a inverse Scaling" );
+        OSL_ENSURE( m_xInverseScaling.is(), "each Scaling needs to return a inverse Scaling" );
     }
 
     double fMin = m_fScaledVisibleMin = m_rScale.Minimum;
@@ -214,7 +215,12 @@ sal_Int32 EquidistantTickFactory::getMaxTickCount( sal_Int32 nDepth ) const
     if (!isFinite(fSub))
         return 0;
 
-    sal_Int32 nIntervalCount = static_cast<sal_Int32>( fSub / m_rIncrement.Distance );
+    double fIntervalCount = fSub / m_rIncrement.Distance;
+    if (fIntervalCount > std::numeric_limits<sal_Int32>::max())
+        // Interval count too high!  Bail out.
+        return 0;
+
+    sal_Int32 nIntervalCount = static_cast<sal_Int32>(fIntervalCount);
 
     nIntervalCount+=3;
     for(sal_Int32 nN=0; nN<nDepth-1; nN++)
@@ -257,7 +263,7 @@ double* EquidistantTickFactory::getMinorTick( sal_Int32 nTick, sal_Int32 nDepth
 {
     //check validity of arguments
     {
-        //DBG_ASSERT( fStartParentTick < fNextParentTick, "fStartParentTick >= fNextParentTick");
+        //OSL_ENSURE( fStartParentTick < fNextParentTick, "fStartParentTick >= fNextParentTick");
         if(fStartParentTick >= fNextParentTick)
             return NULL;
         if(nDepth>static_cast<sal_Int32>(m_rIncrement.SubIncrements.size()) || nDepth<=0)
@@ -327,6 +333,9 @@ void EquidistantTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo
     //create point sequences for each tick depth
     sal_Int32 nDepthCount = this->getTickDepth();
     sal_Int32 nMaxMajorTickCount = this->getMaxTickCount( 0 );
+
+    if (nDepthCount <= 0 || nMaxMajorTickCount <= 0)
+        return;
 
     aAllTicks.realloc(nDepthCount);
     aAllTicks[0].realloc(nMaxMajorTickCount);

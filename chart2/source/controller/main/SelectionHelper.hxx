@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,8 +44,7 @@ namespace chart
 class ObjectIdentifier;
 
 //-----------------------------------------------------------------------------
-/**
-*/
+
 class Selection
 {
 public: //methods
@@ -74,7 +74,7 @@ public: //methods
     void resetPossibleSelectionAfterSingleClickWasEnsured();
 
     void remindSelectionBeforeMouseDown();
-    bool isSelectionDifferentFromBeforeMouseDown();
+    bool isSelectionDifferentFromBeforeMouseDown() const;
 
     void adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper* pDrawViewWrapper
                                        , bool bIsRightMouse, bool bWaitingForDoubleClick );
@@ -137,3 +137,5 @@ private:
 } //namespace chart
 //.............................................................................
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

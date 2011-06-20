@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 #include "chartlis.hxx"
 #include "docuno.hxx"
 
-//#include <vcl/svapp.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
@@ -64,7 +64,7 @@ sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool
     for (sal_uInt16 nPageNo=0; nPageNo<nPageCount; nPageNo++)
     {
         SdrPage* pPage = pModel->GetPage(nPageNo);
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
         SdrObject* pObject = aIter.Next();
@@ -77,8 +77,8 @@ sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool
                 if ( !bAllCharts )
                 {
                     ScRangeList aRanges;
-                    sal_Bool bColHeaders = sal_False;
-                    sal_Bool bRowHeaders = sal_False;
+                    sal_Bool bColHeaders = false;
+                    sal_Bool bRowHeaders = false;
                     pDoc->GetOldChartParameters( aName, aRanges, bColHeaders, bRowHeaders );
                     bHit = aRanges.In( rPos );
                 }
@@ -98,27 +98,26 @@ sal_Bool lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTa
 {
     //! if multiple sheets are copied, update references into the other copied sheets?
 
-    sal_Bool bChanged = sal_False;
+    bool bChanged = false;
 
-    sal_uLong nCount = rRanges.Count();
-    for (sal_uLong i=0; i<nCount; i++)
+    for ( size_t i=0, nCount = rRanges.size(); i < nCount; i++ )
     {
-        ScRange* pRange = rRanges.GetObject(i);
+        ScRange* pRange = rRanges[ i ];
         if ( pRange->aStart.Tab() == nSourceTab && pRange->aEnd.Tab() == nSourceTab )
         {
             pRange->aStart.SetTab( nDestTab );
             pRange->aEnd.SetTab( nDestTab );
-            bChanged = sal_True;
+            bChanged = true;
         }
         if ( pRange->aStart.Tab() >= nTabCount )
         {
             pRange->aStart.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
-            bChanged = sal_True;
+            bChanged = true;
         }
         if ( pRange->aEnd.Tab() >= nTabCount )
         {
             pRange->aEnd.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
-            bChanged = sal_True;
+            bChanged = true;
         }
     }
 
@@ -130,18 +129,11 @@ sal_Bool lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTa
 // === ScChartHelper ======================================
 
 //static
-sal_uInt16 ScChartHelper::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc )
-{
-    return lcl_DoUpdateCharts( rPos, pDoc, sal_False );
-}
-
-//static
 sal_uInt16 ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
 {
     return lcl_DoUpdateCharts( ScAddress(), pDoc, sal_True );
 }
 
-//static
 void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab )
 {
     if( !pSrcDoc || !pDestDoc )
@@ -169,7 +161,7 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, 
                     pDestDoc->GetChartRanges( aChartName, aRangesVector, pSrcDoc );
 
                     ::std::vector< ScRangeList >::iterator aIt( aRangesVector.begin() );
-                    for( ; aIt!=aRangesVector.end(); aIt++ )
+                    for( ; aIt!=aRangesVector.end(); ++aIt )
                     {
                         ScRangeList& rScRangeList( *aIt );
                         lcl_AdjustRanges( rScRangeList, nSrcTab, nDestTab, pDestDoc->GetTableCount() );
@@ -182,7 +174,6 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, 
     }
 }
 
-//static
 uno::Reference< chart2::XChartDocument > ScChartHelper::GetChartFromSdrObject( SdrObject* pObject )
 {
     uno::Reference< chart2::XChartDocument > xReturn;
@@ -209,7 +200,6 @@ void ScChartHelper::GetChartRanges( const uno::Reference< chart2::XChartDocument
     uno::Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
     if( !xDataSource.is() )
         return;
-    //uno::Reference< chart2::data::XDataProvider > xProvider = xChartDoc->getDataProvider();
 
     uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
     rRanges.realloc(2*aLabeledDataSequences.getLength());
@@ -246,7 +236,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
 
     try
     {
-        rtl::OUString aPropertyNameRole( ::rtl::OUString::createFromAscii("Role") );
+        rtl::OUString aPropertyNameRole( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Role")) );
 
         uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
         sal_Int32 nRange=0;
@@ -291,7 +281,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
     catch ( uno::Exception& ex )
     {
         (void)ex;
-        DBG_ERROR("Exception in ScChartHelper::SetChartRanges - invalid range string?");
+        OSL_FAIL("Exception in ScChartHelper::SetChartRanges - invalid range string?");
     }
 
     if( xModel.is() )
@@ -454,3 +444,5 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,13 +31,14 @@
 
 #include "address.hxx"
 #include "ftools.hxx"
+#include <boost/noncopyable.hpp>
 
 class SfxObjectShell;
 
 // BIFF versions ==============================================================
 
-#define DBG_ERROR_BIFF()        DBG_ERRORFILE( "Unknown BIFF type!" )
-#define DBG_ASSERT_BIFF( c )    DBG_ASSERT( c, "Unknown BIFF type!" )
+#define DBG_ERROR_BIFF()        OSL_FAIL( "Unknown BIFF type!" )
+#define OSL_ENSURE_BIFF( c )    OSL_ENSURE( c, "Unknown BIFF type!" )
 
 // Enumerations ===============================================================
 
@@ -88,7 +90,7 @@ class SvStream;
 class ScDocument;
 
 /** This class contains static helper methods for the Excel import and export filters. */
-class XclTools : ScfNoInstance
+class XclTools : boost::noncopyable
 {
 public:
     // GUID's -----------------------------------------------------------------
@@ -185,6 +187,10 @@ public:
         @descr  Adds a prefix to the representation returned by GetXclBuiltInDefName().
         @param cBuiltIn  Excel index of the built-in name. */
     static String       GetBuiltInDefName( sal_Unicode cBuiltIn );
+    /** Returns the Excel built-in name with OOXML prefix
+        @descr  Adds the "_xlnm." prefix to the representation returned by GetXclBuiltInDefName()
+        @param cBuiltIn  Excel index of the built in name.*/
+    static String       GetBuiltInDefNameXml( sal_Unicode cBuiltIn );
     /** Returns the Excel built-in name index of the passed defined name from Calc.
         @descr  Ignores any characters following a valid representation of a built-in name.
         @param pcBuiltIn  (out-param) If not 0, the index of the built-in name will be returned here.
@@ -243,12 +249,18 @@ public:
 // ------------------------------------------------------------------------
 private:
     static const String maDefNamePrefix;            /// Prefix for built-in defined names.
+    static const String maDefNamePrefixXml;         /// Prefix for built-in defined names for OOX
     static const String maStyleNamePrefix1;         /// Prefix for built-in cell style names.
     static const String maStyleNamePrefix2;         /// Prefix for built-in cell style names from OOX filter.
     static const String maCFStyleNamePrefix1;       /// Prefix for cond. formatting style names.
     static const String maCFStyleNamePrefix2;       /// Prefix for cond. formatting style names from OOX filter.
     static const ::rtl::OUString maSbMacroPrefix;   /// Prefix for StarBasic macros.
     static const ::rtl::OUString maSbMacroSuffix;   /// Suffix for StarBasic macros.
+
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static items. To enforce this, the default constructor
+        is made private */
+    XclTools();
 };
 
 // read/write colors ----------------------------------------------------------
@@ -265,3 +277,4 @@ XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor );
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

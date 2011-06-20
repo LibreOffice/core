@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@
 
 sal_Bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
     if (pDraw && !pViewData->IsRefMode())
     {
@@ -88,7 +89,7 @@ sal_Bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 sal_Bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
 {
     ScViewFunc* pView = pViewData->GetView();
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     FuPoor* pDraw = pView->GetDrawFuncPtr();
     if (pDraw && !pViewData->IsRefMode())
     {
@@ -128,7 +129,7 @@ sal_Bool ScGridWindow::DrawMouseMove(const MouseEvent& rMEvt)
     else
     {
         SetPointer( Pointer( POINTER_ARROW ) );
-        return sal_False;
+        return false;
     }
 }
 
@@ -159,7 +160,7 @@ sal_Bool ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
             return sal_True;
     }
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
@@ -172,25 +173,25 @@ sal_Bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
         sal_Bool bOldMarked = pDrView->AreObjectsMarked();
         if (pDraw->KeyInput( rKEvt ))
         {
-            sal_Bool bLeaveDraw = sal_False;
+            sal_Bool bLeaveDraw = false;
             sal_Bool bUsed = sal_True;
             sal_Bool bNewMarked = pDrView->AreObjectsMarked();
             if ( !pViewData->GetView()->IsDrawSelMode() )
                 if ( !bNewMarked )
                 {
-                    pViewData->GetViewShell()->SetDrawShell( sal_False );
+                    pViewData->GetViewShell()->SetDrawShell( false );
                     bLeaveDraw = sal_True;
                     if ( !bOldMarked &&
                         rKEvt.GetKeyCode().GetCode() == KEY_DELETE )
-                        bUsed = sal_False;                  // nichts geloescht
+                        bUsed = false;                  // nichts geloescht
                 }
             if (!bLeaveDraw)
-                UpdateStatusPosSize();      // #108137# for moving/resizing etc. by keyboard
+                UpdateStatusPosSize();      // for moving/resizing etc. by keyboard
             return bUsed;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, sal_uLong nLayer )
@@ -234,7 +235,7 @@ void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pCo
     if ( pDrView && pDrView->IsGridVisible() )
     {
         SdrPageView* pPV = pDrView->GetSdrPageView();
-        DBG_ASSERT(pPV, "keine PageView");
+        OSL_ENSURE(pPV, "keine PageView");
         if (pPV)
         {
             pContentDev->SetLineColor(COL_GRAY);
@@ -265,7 +266,7 @@ MapMode ScGridWindow::GetDrawMapMode( sal_Bool bForce )
             SCROW nEndRow = 0;
             pDoc->GetTableArea( nTab, nEndCol, nEndRow );
             if (nEndCol<20) nEndCol = 20;
-            if (nEndRow<20) nEndRow = 20;
+            if (nEndRow<20) nEndRow = 1000;
             ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, this,
                                     pViewData->GetZoomX(),pViewData->GetZoomY(),
                                     pViewData->GetPPTX(),pViewData->GetPPTY(),
@@ -286,47 +287,18 @@ MapMode ScGridWindow::GetDrawMapMode( sal_Bool bForce )
     return aDrawMode;
 }
 
-//sal_Bool ScGridWindow::DrawBeforeScroll()
-//{
-//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-//
-//  sal_Bool bXor = sal_False;
-//  if (pDrView)
-//  {
-//      bXor=pDrView->IsShownXorVisible(this);
-//      if (bXor) pDrView->HideShownXor(this);
-//  }
-//  return bXor;
-//}
-
-void ScGridWindow::DrawAfterScroll(/*sal_Bool bVal*/)
+void ScGridWindow::DrawAfterScroll(/*BOOL bVal*/)
 {
     Update();       // immer, damit das Verhalten mit/ohne DrawingLayer gleich ist
 
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if (pDrView)
     {
-        //if (bVal)
-        //  pDrView->ShowShownXor(this);
-
         OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
         if (pOlView && pOlView->GetWindow() == this)
-            pOlView->ShowCursor(sal_False);                 // ist beim Scrollen weggekommen
+            pOlView->ShowCursor(false);                 // ist beim Scrollen weggekommen
     }
 }
-
-//void ScGridWindow::DrawMarks()
-//{
-//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-//  if (pDrView)
-//      pDrView->DrawMarks(this);
-//}
-
-//sal_Bool ScGridWindow::NeedDrawMarks()
-//{
-//  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-//  return pDrView && pDrView->IsMarkHdlShown() && pDrView->AreObjectsMarked();
-//}
 
 void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress)
 {
@@ -370,11 +342,11 @@ void ScGridWindow::UpdateStatusPosSize()
     SfxItemSet aSet(pViewData->GetViewShell()->GetPool(), SID_ATTR_POSITION, SID_ATTR_SIZE);
 
     //  Fill items for position and size:
-    //  #108137# show action rectangle during action,
+    //  show action rectangle during action,
     //  position and size of selected object(s) if something is selected,
     //  mouse position otherwise
 
-    sal_Bool bActionItem = sal_False;
+    sal_Bool bActionItem = false;
     if ( pDrView->IsAction() )              // action rectangle
     {
         Rectangle aRect;
@@ -413,24 +385,8 @@ void ScGridWindow::UpdateStatusPosSize()
 sal_Bool ScGridWindow::DrawHasMarkedObj()
 {
     ScDrawView* p = pViewData->GetScDrawView();
-    return p ? p->AreObjectsMarked() : sal_False;
+    return p ? p->AreObjectsMarked() : false;
 }
-
-//void ScGridWindow::DrawStartTimer()
-//{
-    //ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-    //if (pDrView)
-    //{
-        /* jetzt in DrawMarks
-        sal_uInt16 nWinNum = pDrView->FindWin(this);
-        if (nWinNum!=SDRVIEWWIN_NOTFOUND)
-            pDrView->AfterInitRedraw(nWinNum);
-        */
-
-        // pDrView->PostPaint();
-        // pDrView->RestartAfterPaintTimer();
-    //}
-//}
 
 void ScGridWindow::DrawMarkDropObj( SdrObject* pObj )
 {
@@ -441,3 +397,4 @@ void ScGridWindow::DrawMarkDropObj( SdrObject* pObj )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

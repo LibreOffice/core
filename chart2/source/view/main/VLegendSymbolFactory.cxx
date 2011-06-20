@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,6 @@
 #include "ObjectIdentifier.hxx"
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
-
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -174,7 +172,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                 }
                 else if( aSymbol.Style == chart2::SymbolStyle_AUTO )
                 {
-                    DBG_ERROR("the given parameter is not allowed to contain an automatic symbol style");
+                    OSL_TRACE("the given parameter is not allowed to contain an automatic symbol style");
                 }
             }
         }
@@ -213,3 +211,5 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

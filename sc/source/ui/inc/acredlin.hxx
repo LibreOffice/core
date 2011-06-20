@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,9 @@
 #ifndef SC_ACREDLIN_HXX
 #define SC_ACREDLIN_HXX
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 
@@ -45,9 +40,7 @@
 #include "anyrefdg.hxx"
 #include <vcl/lstbox.hxx>
 
-#ifndef _SVX_ACREDLIN_HXX
 #include <svx/ctredlin.hxx>
-#endif
 #include <svx/simptabl.hxx>
 
 #ifndef _SVARRAY_HXX
@@ -139,7 +132,7 @@ private:
     Selection               theCurSel;
     SvxTPFilter*            pTPFilter;
     SvxTPView*              pTPView;
-    SvxRedlinTable*         pTheView; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    SvxRedlinTable*         pTheView; // #i48648 now SvHeaderTabListBox
     Size                    MinSize;
     ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;
@@ -173,7 +166,6 @@ private:
 
     void            Init();
     void            InitFilter();
-//UNUSED2008-05  void           SetMyStaticData();
 
     DECL_LINK( FilterHandle, SvxTPFilter* );
     DECL_LINK( RefHandle, SvxTPFilter* );
@@ -208,12 +200,12 @@ protected:
     String*         MakeTypeString(ScChangeActionType eType);
 
     SvLBoxEntry*    InsertChangeAction(const ScChangeAction* pScChangeAction,ScChangeActionState eState,
-                                    SvLBoxEntry* pParent=NULL,sal_Bool bDelMaster=sal_False,
-                                    sal_Bool bDisabled=sal_False,sal_uLong nPos=LIST_APPEND);
+                                    SvLBoxEntry* pParent=NULL,sal_Bool bDelMaster=false,
+                                    sal_Bool bDisabled=false,sal_uLong nPos=LIST_APPEND);
 
     SvLBoxEntry*    InsertFilteredAction(const ScChangeAction* pScChangeAction,ScChangeActionState eState,
-                                    SvLBoxEntry* pParent=NULL,sal_Bool bDelMaster=sal_False,
-                                    sal_Bool bDisabled=sal_False,sal_uLong nPos=LIST_APPEND);
+                                    SvLBoxEntry* pParent=NULL,sal_Bool bDelMaster=false,
+                                    sal_Bool bDisabled=false,sal_uLong nPos=LIST_APPEND);
 
 
     SvLBoxEntry*    InsertChangeActionContent(const ScChangeActionContent* pScChangeAction,
@@ -242,7 +234,7 @@ protected:
     void            ClearView();
 
     sal_Bool            Expand(ScChangeTrack* pChanges,const ScChangeAction* pScChangeAction,
-                            SvLBoxEntry* pEntry, sal_Bool bFilter=sal_False);
+                            SvLBoxEntry* pEntry, sal_Bool bFilter=false);
 
 public:
                     ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -262,3 +254,4 @@ public:
 
 #endif // SC_NAMEDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

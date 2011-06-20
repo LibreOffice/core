@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,8 +47,8 @@ ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xPar
     {
         if ( ( nStart + 1 ) > m_xSimpleText->getString().getLength() )
             //nStart = m_xSimpleText->getString().getLength();
-            xTextCursor->gotoEnd( sal_False );
-        xTextCursor->goRight( nStart, sal_False );
+            xTextCursor->gotoEnd( false );
+        xTextCursor->goRight( nStart, false );
     }
     if ( nLength < 0 ) // expand to end
         xTextCursor->gotoEnd( sal_True );
@@ -134,3 +135,4 @@ ScVbaCharacters::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

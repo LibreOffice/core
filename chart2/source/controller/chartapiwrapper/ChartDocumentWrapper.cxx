@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,8 +63,6 @@
 #include <comphelper/InlineContainer.hxx>
 // header for function SvxShapeCollection_NewInstance
 #include <svx/unoshcol.hxx>
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -75,6 +74,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart;
@@ -279,8 +279,7 @@ namespace chart
 namespace wrapper
 {
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
+
 
 //PROP_DOCUMENT_LABELS_IN_FIRST_ROW
 class WrappedDataSourceLabelsInFirstRowProperty : public WrappedProperty
@@ -381,8 +380,7 @@ Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( const Referen
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
+
 
 //PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN
 class WrappedDataSourceLabelsInFirstColumnProperty : public WrappedProperty
@@ -483,8 +481,7 @@ Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( const Refe
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
+
 
 //PROP_DOCUMENT_HAS_LEGEND
 class WrappedHasLegendProperty : public WrappedProperty
@@ -571,8 +568,7 @@ Any WrappedHasLegendProperty::getPropertyDefault( const Reference< beans::XPrope
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
+
 
 //PROP_DOCUMENT_HAS_MAIN_TITLE
 class WrappedHasMainTitleProperty : public WrappedProperty
@@ -648,8 +644,7 @@ Any WrappedHasMainTitleProperty::getPropertyDefault( const Reference< beans::XPr
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
+
 
 //PROP_DOCUMENT_HAS_SUB_TITLE
 class WrappedHasSubTitleProperty : public WrappedProperty
@@ -726,8 +721,7 @@ Any WrappedHasSubTitleProperty::getPropertyDefault( const Reference< beans::XPro
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
+
 ChartDocumentWrapper::ChartDocumentWrapper(
     const Reference< uno::XComponentContext > & xContext ) :
         m_spChart2ModelContact( new Chart2ModelContact( xContext ) ),
@@ -1138,7 +1132,7 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
         // create a shape collection
         xFoundShapes = uno::Reference< drawing::XShapes >( SvxShapeCollection_NewInstance(), uno::UNO_QUERY );
 
-        DBG_ASSERT( xFoundShapes.is(), "Couldn't create a shape collection!" );
+        OSL_ENSURE( xFoundShapes.is(), "Couldn't create a shape collection!" );
         if( xFoundShapes.is())
         {
             ::std::vector< uno::Reference< drawing::XShape > >::iterator aIter;
@@ -1305,20 +1299,17 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
             case SERVICE_NAME_MARKER_TABLE:
                 {
                     uno::Reference< lang::XMultiServiceFactory > xTableFactory( xChartDoc, uno::UNO_QUERY );
-                    DBG_ASSERT( xTableFactory.get() != this, "new model is expected to implement service factory for gradient table etc" );
+                    OSL_ENSURE( xTableFactory.get() != this, "new model is expected to implement service factory for gradient table etc" );
                     if( xTableFactory.is() && xTableFactory.get() != this )
                         xResult.set( xTableFactory->createInstance( aIt->first ), uno::UNO_QUERY );
                 }
                 break;
 
             case SERVICE_NAME_NAMESPACE_MAP:
-//                 xResult = svx::NamespaceMap_createInstance( aWhichIds, &m_pModel->GetPool() );
                 break;
             case SERVICE_NAME_EXPORT_GRAPHIC_RESOLVER:
-//                 xResult = static_cast< ::cppu::OWeakObject * >( new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE ));
                 break;
             case SERVICE_NAME_IMPORT_GRAPHIC_RESOLVER:
-//                 xResult = static_cast< ::cppu::OWeakObject * >( new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ ));
                 break;
         }
 
@@ -1329,7 +1320,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram());
                 if( xDia.is())
                 {
-                    // /-- locked controllers
+                    // locked controllers
                     Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
                     ControllerLockGuard aCtrlLockGuard( xModel );
                     Reference< chart2::XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
@@ -1343,17 +1334,15 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     if( Application::GetSettings().GetLayoutRTL() )
                         AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
                     ThreeDHelper::setScheme( xDiagram, e3DScheme );
-                    // \-- locked controllers
                 }
                 else
                 {
-                    // /-- locked controllers
+                    // locked controllers
                     ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
                     xDia.set( xTemplate->createDiagramByDataSource(
                                   uno::Reference< chart2::data::XDataSource >(),
                                   uno::Sequence< beans::PropertyValue >()));
                     xChartDoc->setFirstDiagram( xDia );
-                    // \-- locked controllers
                 }
 
                 xResult = static_cast< ::cppu::OWeakObject* >( new DiagramWrapper( m_spChart2ModelContact ));
@@ -1487,23 +1476,10 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ChartDocumentWrapper::getAvailableServ
 
     ::std::transform( rMap.begin(), rMap.end(),
                       aResult.getArray(),
-                      ::std::select1st< tServiceNameMap::value_type >() );
+                      ::o3tl::select1st< tServiceNameMap::value_type >() );
 
     return aResult;
 
-//         // shapes
-// //         uno::Sequence< OUString > aDrawServices( SvxUnoDrawMSFactory::getAvailableServiceNames() );
-// //         const OUString * pArr = aDrawServices.getConstArray();
-// //         aServices.insert( aServices.end(), pArr, pArr + aDrawServices.getLength() );
-//     }
-
-
-    // add-ins
- //    uno::Sequence< OUString > aAddIns( GetAddInCollection().GetAddInNames() );
-//     pArr = aAddIns.getConstArray();
-//     aServices.insert( aServices.end(), pArr, pArr + aAddIns.getLength() );
-
-//     return ContainerToSequence( aServices );
 }
 
 // ____ XAggregation ____
@@ -1615,3 +1591,5 @@ APPHELPER_XSERVICEINFO_IMPL( ChartDocumentWrapper, CHART_CHARTAPIWRAPPER_IMPLEME
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

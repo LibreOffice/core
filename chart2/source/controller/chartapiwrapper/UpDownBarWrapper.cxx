@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@
 
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
-// #include "NamedProperties.hxx"
 #include "UserDefinedProperties.hxx"
 
 using namespace ::com::sun::star;
@@ -72,7 +72,6 @@ private:
 
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        //::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),
@@ -238,22 +237,22 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const ::rtl::OUString& rPr
 void SAL_CALL UpDownBarWrapper::addPropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL UpDownBarWrapper::removePropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL UpDownBarWrapper::addVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 //XMultiPropertySet
@@ -261,7 +260,6 @@ void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const ::rtl::OUStr
 void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< ::rtl::OUString >& rNameSeq, const uno::Sequence< uno::Any >& rValueSeq )
                     throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    bool bUnknownProperty = false;
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
     {
@@ -273,12 +271,9 @@ void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< ::rtl::O
         catch( beans::UnknownPropertyException& ex )
         {
             ASSERT_EXCEPTION( ex );
-            bUnknownProperty = true;
         }
     }
     //todo: store unknown properties elsewhere
-//    if( bUnknownProperty )
-//        throw beans::UnknownPropertyException();
 }
 uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const uno::Sequence< ::rtl::OUString >& rNameSeq )
                     throw (uno::RuntimeException)
@@ -298,17 +293,17 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const un
 void SAL_CALL UpDownBarWrapper::addPropertiesChangeListener( const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL UpDownBarWrapper::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL UpDownBarWrapper::firePropertiesChangeEvent( const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 //XPropertyState
@@ -397,10 +392,10 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const 
 Sequence< OUString > UpDownBarWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = ::rtl::OUString::createFromAscii( "com.sun.star.chart.ChartArea" );
-    aServices[ 1 ] = ::rtl::OUString::createFromAscii( "com.sun.star.drawing.LineProperties" );
-    aServices[ 2 ] = ::rtl::OUString::createFromAscii( "com.sun.star.drawing.FillProperties" );
-    aServices[ 3 ] = ::rtl::OUString::createFromAscii( "com.sun.star.xml.UserDefinedAttributeSupplier" );
+    aServices[ 0 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.ChartArea"));
+    aServices[ 1 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineProperties"));
+    aServices[ 2 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.FillProperties"));
+    aServices[ 3 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.UserDefinedAttributeSupplier"));
 
     return aServices;
 }
@@ -410,3 +405,5 @@ APPHELPER_XSERVICEINFO_IMPL( UpDownBarWrapper, lcl_aServiceName );
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

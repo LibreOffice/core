@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,6 @@
 
 #define SC_PROGRESS_CXX
 
-//  ab hier automatisch per makepch generiert
-//  folgende duerfen nicht aufgenommen werden:
-//      ...
-
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <rtl/textenc.h>
@@ -53,7 +50,6 @@
 #include <rtl/locale.h>
 #include <tools/contnr.hxx>
 #include <i18npool/lang.h>
-#include <tools/list.hxx>
 #include <global.hxx>
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
@@ -61,7 +57,6 @@
 #include <tools/errcode.hxx>
 #include <tools/ref.hxx>
 #include <tools/link.hxx>
-#include <tools/debug.hxx>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
 #include <svl/svarray.hxx>
@@ -136,7 +131,6 @@
 #include <svl/intitem.hxx>
 #include <svl/cintitem.hxx>
 #include <svl/brdcst.hxx>
-#include <sot/sotref.hxx>
 #include <tools/globname.hxx>
 #include <sot/factory.hxx>
 #include <sot/object.hxx>
@@ -144,7 +138,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/gdimtf.hxx>
-#include <tools/unqidx.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/graph.h>
@@ -157,11 +150,7 @@
 #include <vcl/keycodes.hxx>
 #include <namebuff.hxx>
 #include <tools/shl.hxx>
-#include <tools/pstm.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <vos/types.hxx>
-#include <vos/object.hxx>
-#include <vos/macros.hxx>
 #include <tools/unqid.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <uno/sequence2.h>
@@ -185,7 +174,6 @@
 #include <tools/wintypes.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/event.hxx>
-#include <tools/ownlist.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/vclenum.hxx>
 #include <cell.hxx>
@@ -224,9 +212,8 @@
 #include <com/sun/star/container/NoSuchElementException.hdl>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/thread.hxx>
-#include <vos/runnable.hxx>
-#include <vos/refernce.hxx>
+#include <osl/thread.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <vcl/apptypes.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
@@ -319,3 +306,4 @@
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

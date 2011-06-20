@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,10 @@
 #ifndef SC_REDCOM_HXX
 #define SC_REDCOM_HXX
 
-//CHINA001 #ifndef _SVX_POSTDLG_HXX //autogen
-//CHINA001 #include <svx/postdlg.hxx>
-//CHINA001 #endif
-
 #include "chgtrack.hxx"
 
 class ScDocShell;
-class AbstractSvxPostItDialog; //CHINA001
+class AbstractSvxPostItDialog;
 
 class ScRedComDialog
 {
@@ -60,7 +57,7 @@ protected:
 public:
 
     ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
-                    ScDocShell *,ScChangeAction *,sal_Bool bPrevNext = sal_False);
+                    ScDocShell *,ScChangeAction *,sal_Bool bPrevNext = false);
     ~ScRedComDialog();
 
     short Execute();
@@ -68,3 +65,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

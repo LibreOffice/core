@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,16 +33,12 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#if STLPORT_VERSION<321
-#include <stddef.h>
-#else
 #include <cstddef>
-#endif
 #include <cstdio>
 
 #include <string.h>
 #include <tools/mempool.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include "token.hxx"
 #include "tokenarray.hxx"
@@ -108,10 +105,6 @@ namespace
     }
 //
 } // namespace
-//
-// ImpTokenIterator wird je Interpreter angelegt, mehrfache auch durch
-// SubCode via FormulaTokenIterator Push/Pop moeglich
-IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator, 32, 16 )
 
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 
@@ -230,17 +223,19 @@ void ScRawToken::SetDouble(double rVal)
     nRefCnt = 0;
 }
 
-void ScRawToken::SetName( sal_uInt16 n )
+void ScRawToken::SetName(bool bGlobal, sal_uInt16 nIndex)
 {
-    eOp    = ocName;
-    eType  = svIndex;
-    nIndex = n;
+    eOp = ocName;
+    eType = svIndex;
     nRefCnt = 0;
+
+    name.bGlobal = bGlobal;
+    name.nIndex = nIndex;
 }
 
 void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
 {
-    eOp = ocExternalRef;
+    eOp = ocPush;
     eType = svExternalSingleRef;
     nRefCnt = 0;
 
@@ -255,7 +250,7 @@ void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabNam
 
 void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef )
 {
-    eOp = ocExternalRef;
+    eOp = ocPush;
     eType = svExternalDoubleRef;
     nRefCnt = 0;
 
@@ -269,7 +264,7 @@ void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabNam
 
 void ScRawToken::SetExternalName( sal_uInt16 nFileId, const String& rName )
 {
-    eOp = ocExternalRef;
+    eOp = ocPush;
     eType = svExternalName;
     nRefCnt = 0;
 
@@ -280,35 +275,7 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const String& rName )
     extname.cName[n] = 0;
 }
 
-//UNUSED2008-05  void ScRawToken::SetInt(int rVal)
-//UNUSED2008-05  {
-//UNUSED2008-05      eOp   = ocPush;
-//UNUSED2008-05      eType = svDouble;
-//UNUSED2008-05      nValue = (double)rVal;
-//UNUSED2008-05      nRefCnt = 0;
-//UNUSED2008-05
-//UNUSED2008-05  }
-//UNUSED2008-05  void ScRawToken::SetMatrix( ScMatrix* p )
-//UNUSED2008-05  {
-//UNUSED2008-05      eOp   = ocPush;
-//UNUSED2008-05      eType = svMatrix;
-//UNUSED2008-05      pMat  = p;
-//UNUSED2008-05      nRefCnt = 0;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  ScComplexRefData& ScRawToken::GetReference()
-//UNUSED2008-05  {
-//UNUSED2008-05      DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "GetReference: no Ref" );
-//UNUSED2008-05      return aRef;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void ScRawToken::SetReference( ScComplexRefData& rRef )
-//UNUSED2008-05  {
-//UNUSED2008-05      DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "SetReference: no Ref" );
-//UNUSED2008-05      aRef = rRef;
-//UNUSED2008-05      if( GetType() == svSingleRef )
-//UNUSED2008-05          aRef.Ref2 = aRef.Ref1;
-//UNUSED2008-05  }
+
 
 void ScRawToken::SetExternal( const sal_Unicode* pStr )
 {
@@ -347,52 +314,41 @@ ScRawToken* ScRawToken::Clone() const
         static sal_uInt16 nOffset = lcl_ScRawTokenOffset();     // offset of sbyte
         sal_uInt16 n = nOffset;
 
-        if (eOp == ocExternalRef)
+        switch( eType )
         {
-            switch (eType)
+            case svSep:         break;
+            case svByte:        n += sizeof(ScRawToken::sbyte); break;
+            case svDouble:      n += sizeof(double); break;
+            case svString:      n = sal::static_int_cast<sal_uInt16>( n + GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ) ); break;
+            case svSingleRef:
+            case svDoubleRef:   n += sizeof(aRef); break;
+            case svMatrix:      n += sizeof(ScMatrix*); break;
+            case svIndex:       n += sizeof(name); break;
+            case svJump:        n += nJump[ 0 ] * 2 + 2; break;
+            case svExternal:    n = sal::static_int_cast<sal_uInt16>( n + GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ) ); break;
+
+            // external references
+            case svExternalSingleRef:
+            case svExternalDoubleRef: n += sizeof(extref); break;
+            case svExternalName:      n += sizeof(extname); break;
+            default:
             {
-                case svExternalSingleRef:
-                case svExternalDoubleRef: n += sizeof(extref); break;
-                case svExternalName:      n += sizeof(extname); break;
-                default:
-                {
-                    DBG_ERROR1( "unknown ScRawToken::Clone() external type %d", int(eType));
-                }
-            }
-        }
-        else
-        {
-            switch( eType )
-            {
-                case svSep:         break;
-                case svByte:        n += sizeof(ScRawToken::sbyte); break;
-                case svDouble:      n += sizeof(double); break;
-                case svString:      n = sal::static_int_cast<sal_uInt16>( n + GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ) ); break;
-                case svSingleRef:
-                case svDoubleRef:   n += sizeof(aRef); break;
-                case svMatrix:      n += sizeof(ScMatrix*); break;
-                case svIndex:       n += sizeof(sal_uInt16); break;
-                case svJump:        n += nJump[ 0 ] * 2 + 2; break;
-                case svExternal:    n = sal::static_int_cast<sal_uInt16>( n + GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ) ); break;
-                default:
-                {
-                    DBG_ERROR1( "unknown ScRawToken::Clone() type %d", int(eType));
-                }
+                OSL_TRACE( "unknown ScRawToken::Clone() type %d", int(eType));
             }
         }
         p = (ScRawToken*) new sal_uInt8[ n ];
         memcpy( p, this, n * sizeof(sal_uInt8) );
     }
     p->nRefCnt = 0;
-    p->bRaw = sal_False;
+    p->bRaw = false;
     return p;
 }
 
 
 FormulaToken* ScRawToken::CreateToken() const
 {
-#ifdef DBG_UTIL
-#define IF_NOT_OPCODE_ERROR(o,c) if (eOp!=o) DBG_ERROR1( #c "::ctor: OpCode %d lost, converted to " #o "; maybe inherit from FormulaToken instead!", int(eOp))
+#if OSL_DEBUG_LEVEL > 1
+#define IF_NOT_OPCODE_ERROR(o,c) if (eOp!=o) OSL_TRACE( #c "::ctor: OpCode %d lost, converted to " #o "; maybe inherit from FormulaToken instead!", int(eOp))
 #else
 #define IF_NOT_OPCODE_ERROR(o,c)
 #endif
@@ -422,7 +378,7 @@ FormulaToken* ScRawToken::CreateToken() const
             IF_NOT_OPCODE_ERROR( ocPush, ScMatrixToken);
             return new ScMatrixToken( pMat );
         case svIndex :
-            return new FormulaIndexToken( eOp, nIndex );
+            return new ScNameToken(name.nIndex, name.bGlobal);
         case svExternalSingleRef:
             {
                 String aTabName(extref.cTabName);
@@ -453,7 +409,7 @@ FormulaToken* ScRawToken::CreateToken() const
             return new FormulaUnknownToken( eOp );
         default:
             {
-                DBG_ERROR1( "unknown ScRawToken::CreateToken() type %d", int(GetType()));
+                OSL_TRACE( "unknown ScRawToken::CreateToken() type %d", int(GetType()));
                 return new FormulaUnknownToken( ocBad );
             }
     }
@@ -501,14 +457,14 @@ ScToken::~ScToken()
 }
 
 //  TextEqual: if same formula entered (for optimization in sort)
-sal_Bool ScToken::TextEqual( const FormulaToken& _rToken ) const
+bool ScToken::TextEqual( const FormulaToken& _rToken ) const
 {
     if ( eType == svSingleRef || eType == svDoubleRef )
     {
         //  in relative Refs only compare relative parts
 
         if ( eType != _rToken.GetType() || GetOpCode() != _rToken.GetOpCode() )
-            return sal_False;
+            return false;
 
         const ScToken& rToken = static_cast<const ScToken&>(_rToken);
         ScComplexRefData aTemp1;
@@ -549,7 +505,7 @@ sal_Bool ScToken::TextEqual( const FormulaToken& _rToken ) const
 }
 
 
-sal_Bool ScToken::Is3DRef() const
+bool ScToken::Is3DRef() const
 {
     switch ( eType )
     {
@@ -561,18 +517,14 @@ sal_Bool ScToken::Is3DRef() const
             if ( GetSingleRef().IsFlag3D() )
                 return sal_True;
             break;
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
-            return sal_True;
         default:
         {
             // added to avoid warnings
         }
     }
-    return sal_False;
+    return false;
 }
 
-// static
 FormulaTokenRef ScToken::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2,
         const ScAddress & rPos, bool bReuseDoubleRef )
 {
@@ -702,83 +654,83 @@ FormulaTokenRef ScToken::ExtendRangeReference( FormulaToken & rTok1, FormulaToke
 
 const ScSingleRefData& ScToken::GetSingleRef() const
 {
-    DBG_ERRORFILE( "ScToken::GetSingleRef: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetSingleRef: virtual dummy called" );
     static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
 ScSingleRefData& ScToken::GetSingleRef()
 {
-    DBG_ERRORFILE( "ScToken::GetSingleRef: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetSingleRef: virtual dummy called" );
     static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
 const ScComplexRefData& ScToken::GetDoubleRef() const
 {
-    DBG_ERRORFILE( "ScToken::GetDoubleRef: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetDoubleRef: virtual dummy called" );
     static ScComplexRefData aDummyDoubleRef = lcl_ScToken_InitDoubleRef();
     return aDummyDoubleRef;
 }
 
 ScComplexRefData& ScToken::GetDoubleRef()
 {
-    DBG_ERRORFILE( "ScToken::GetDoubleRef: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetDoubleRef: virtual dummy called" );
     static ScComplexRefData aDummyDoubleRef = lcl_ScToken_InitDoubleRef();
     return aDummyDoubleRef;
 }
 
 const ScSingleRefData& ScToken::GetSingleRef2() const
 {
-    DBG_ERRORFILE( "ScToken::GetSingleRef2: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetSingleRef2: virtual dummy called" );
     static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
 ScSingleRefData& ScToken::GetSingleRef2()
 {
-    DBG_ERRORFILE( "ScToken::GetSingleRef2: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetSingleRef2: virtual dummy called" );
     static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
 void ScToken::CalcAbsIfRel( const ScAddress& /* rPos */ )
 {
-    DBG_ERRORFILE( "ScToken::CalcAbsIfRel: virtual dummy called" );
+    OSL_FAIL( "ScToken::CalcAbsIfRel: virtual dummy called" );
 }
 
 void ScToken::CalcRelFromAbs( const ScAddress& /* rPos */ )
 {
-    DBG_ERRORFILE( "ScToken::CalcRelFromAbs: virtual dummy called" );
+    OSL_FAIL( "ScToken::CalcRelFromAbs: virtual dummy called" );
 }
 
 const ScMatrix* ScToken::GetMatrix() const
 {
-    DBG_ERRORFILE( "ScToken::GetMatrix: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetMatrix: virtual dummy called" );
     return NULL;
 }
 
 ScMatrix* ScToken::GetMatrix()
 {
-    DBG_ERRORFILE( "ScToken::GetMatrix: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetMatrix: virtual dummy called" );
     return NULL;
 }
 
 
 ScJumpMatrix* ScToken::GetJumpMatrix() const
 {
-    DBG_ERRORFILE( "ScToken::GetJumpMatrix: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetJumpMatrix: virtual dummy called" );
     return NULL;
 }
 const ScRefList* ScToken::GetRefList() const
 {
-    DBG_ERRORFILE( "ScToken::GetRefList: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetRefList: virtual dummy called" );
     return NULL;
 }
 
 ScRefList* ScToken::GetRefList()
 {
-    DBG_ERRORFILE( "ScToken::GetRefList: virtual dummy called" );
+    OSL_FAIL( "ScToken::GetRefList: virtual dummy called" );
     return NULL;
 }
 // ==========================================================================
@@ -794,7 +746,7 @@ void                    ScSingleRefToken::CalcAbsIfRel( const ScAddress& rPos )
                             { aSingleRef.CalcAbsIfRel( rPos ); }
 void                    ScSingleRefToken::CalcRelFromAbs( const ScAddress& rPos )
                             { aSingleRef.CalcRelFromAbs( rPos ); }
-sal_Bool ScSingleRefToken::operator==( const FormulaToken& r ) const
+bool ScSingleRefToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aSingleRef == static_cast<const ScToken&>(r).GetSingleRef();
 }
@@ -810,7 +762,7 @@ void                    ScDoubleRefToken::CalcAbsIfRel( const ScAddress& rPos )
                             { aDoubleRef.CalcAbsIfRel( rPos ); }
 void                    ScDoubleRefToken::CalcRelFromAbs( const ScAddress& rPos )
                             { aDoubleRef.CalcRelFromAbs( rPos ); }
-sal_Bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
+bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
 }
@@ -828,15 +780,15 @@ void                    ScRefListToken::CalcRelFromAbs( const ScAddress& rPos )
     for (ScRefList::iterator it( aRefList.begin()); it != aRefList.end(); ++it)
         (*it).CalcRelFromAbs( rPos);
 }
-sal_Bool ScRefListToken::operator==( const FormulaToken& r ) const
+bool ScRefListToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && &aRefList == static_cast<const ScToken&>(r).GetRefList();
 }
 
 
-const ScMatrix* ScMatrixToken::GetMatrix() const        { return pMatrix; }
-ScMatrix*       ScMatrixToken::GetMatrix()              { return pMatrix; }
-sal_Bool ScMatrixToken::operator==( const FormulaToken& r ) const
+const ScMatrix* ScMatrixToken::GetMatrix() const        { return pMatrix.get(); }
+ScMatrix*       ScMatrixToken::GetMatrix()              { return pMatrix.get(); }
+bool ScMatrixToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pMatrix == static_cast<const ScToken&>(r).GetMatrix();
 }
@@ -844,7 +796,7 @@ sal_Bool ScMatrixToken::operator==( const FormulaToken& r ) const
 // ============================================================================
 
 ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& r ) :
-    ScToken( svExternalSingleRef, ocExternalRef),
+    ScToken( svExternalSingleRef, ocPush),
     mnFileId(nFileId),
     maTabName(rTabName),
     maSingleRef(r)
@@ -893,7 +845,7 @@ void ScExternalSingleRefToken::CalcRelFromAbs( const ScAddress& rPos )
     maSingleRef.CalcRelFromAbs( rPos );
 }
 
-sal_Bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
+bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 {
     if (!FormulaToken::operator==(r))
         return false;
@@ -910,7 +862,7 @@ sal_Bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 // ============================================================================
 
 ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& r ) :
-    ScToken( svExternalDoubleRef, ocExternalRef),
+    ScToken( svExternalDoubleRef, ocPush),
     mnFileId(nFileId),
     maTabName(rTabName),
     maDoubleRef(r)
@@ -923,14 +875,6 @@ ScExternalDoubleRefToken::ScExternalDoubleRefToken( const ScExternalDoubleRefTok
     maTabName(r.maTabName),
     maDoubleRef(r.maDoubleRef)
 {
-}
-
-ScExternalDoubleRefToken::ScExternalDoubleRefToken( const ScExternalSingleRefToken& r ) :
-    ScToken( svExternalDoubleRef, ocExternalRef),
-    mnFileId( r.GetIndex()),
-    maTabName( r.GetString())
-{
-    maDoubleRef.Ref1 = maDoubleRef.Ref2 = r.GetSingleRef();
 }
 
 ScExternalDoubleRefToken::~ScExternalDoubleRefToken()
@@ -987,7 +931,7 @@ void ScExternalDoubleRefToken::CalcRelFromAbs( const ScAddress& rPos )
     maDoubleRef.CalcRelFromAbs( rPos );
 }
 
-sal_Bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
+bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
 {
     if (!ScToken::operator==(r))
         return false;
@@ -1003,8 +947,39 @@ sal_Bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
 
 // ============================================================================
 
+ScNameToken::ScNameToken(sal_uInt16 nIndex, bool bGlobal) :
+    ScToken(svIndex, ocName), mnIndex(nIndex), mbGlobal(bGlobal) {}
+
+ScNameToken::ScNameToken(const ScNameToken& r) :
+    ScToken(r), mnIndex(r.mnIndex), mbGlobal(r.mbGlobal) {}
+
+ScNameToken::~ScNameToken() {}
+
+sal_uInt8 ScNameToken::GetByte() const
+{
+    return static_cast<sal_uInt8>(mbGlobal);
+}
+
+sal_uInt16 ScNameToken::GetIndex() const
+{
+    return mnIndex;
+}
+
+bool ScNameToken::operator==( const FormulaToken& r ) const
+{
+    if ( !FormulaToken::operator==(r) )
+        return false;
+
+    if (mbGlobal != static_cast<bool>(r.GetByte()))
+        return false;
+
+    return mnIndex == r.GetIndex();
+}
+
+// ============================================================================
+
 ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const String& rName ) :
-    ScToken( svExternalName, ocExternalRef),
+    ScToken( svExternalName, ocPush),
     mnFileId(nFileId),
     maName(rName)
 {
@@ -1029,7 +1004,7 @@ const String& ScExternalNameToken::GetString() const
     return maName;
 }
 
-sal_Bool ScExternalNameToken::operator==( const FormulaToken& r ) const
+bool ScExternalNameToken::operator==( const FormulaToken& r ) const
 {
     if ( !FormulaToken::operator==(r) )
         return false;
@@ -1055,7 +1030,7 @@ sal_Bool ScExternalNameToken::operator==( const FormulaToken& r ) const
 // ============================================================================
 
 ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const  { return pJumpMatrix; }
-sal_Bool ScJumpMatrixToken::operator==( const FormulaToken& r ) const
+bool ScJumpMatrixToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pJumpMatrix == static_cast<const ScToken&>(r).GetJumpMatrix();
 }
@@ -1070,7 +1045,7 @@ const String &  ScEmptyCellToken::GetString() const
     static  String              aDummyString;
     return aDummyString;
 }
-sal_Bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
+bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
         bInherited == static_cast< const ScEmptyCellToken & >(r).IsInherited() &&
@@ -1080,14 +1055,14 @@ sal_Bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
 
 double          ScMatrixCellResultToken::GetDouble() const  { return xUpperLeft->GetDouble(); }
 const String &  ScMatrixCellResultToken::GetString() const  { return xUpperLeft->GetString(); }
-const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix; }
+const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix.get(); }
 // Non-const GetMatrix() is private and unused but must be implemented to
 // satisfy vtable linkage.
 ScMatrix* ScMatrixCellResultToken::GetMatrix()
 {
     return const_cast<ScMatrix*>(xMatrix.operator->());
 }
-sal_Bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
+bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
         xUpperLeft == static_cast<const ScMatrixCellResultToken &>(r).xUpperLeft &&
@@ -1095,7 +1070,7 @@ sal_Bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
 }
 
 
-sal_Bool ScMatrixFormulaCellToken::operator==( const FormulaToken& r ) const
+bool ScMatrixFormulaCellToken::operator==( const FormulaToken& r ) const
 {
     const ScMatrixFormulaCellToken* p = dynamic_cast<const ScMatrixFormulaCellToken*>(&r);
     return p && ScMatrixCellResultToken::operator==( r ) &&
@@ -1110,7 +1085,7 @@ void ScMatrixFormulaCellToken::Assign( const formula::FormulaToken& r )
         ScMatrixCellResultToken::Assign( *p);
     else
     {
-        DBG_ASSERT( r.GetType() != svMatrix, "ScMatrixFormulaCellToken::operator=: assigning ScMatrixToken to ScMatrixFormulaCellToken is not proper, use ScMatrixCellResultToken instead");
+        OSL_ENSURE( r.GetType() != svMatrix, "ScMatrixFormulaCellToken::operator=: assigning ScMatrixToken to ScMatrixFormulaCellToken is not proper, use ScMatrixCellResultToken instead");
         if (r.GetType() == svMatrix)
         {
             xUpperLeft = NULL;
@@ -1139,7 +1114,7 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
             // fall thru
         default:
             {
-                DBG_ERRORFILE("ScMatrixFormulaCellToken::SetUpperLeftDouble: not modifying unhandled token type");
+                OSL_FAIL("ScMatrixFormulaCellToken::SetUpperLeftDouble: not modifying unhandled token type");
             }
     }
 }
@@ -1147,7 +1122,7 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
 
 double          ScHybridCellToken::GetDouble() const    { return fDouble; }
 const String &  ScHybridCellToken::GetString() const    { return aString; }
-sal_Bool ScHybridCellToken::operator==( const FormulaToken& r ) const
+bool ScHybridCellToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
         fDouble == r.GetDouble() && aString == r.GetString() &&
@@ -1283,7 +1258,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
 }
 sal_Bool ScTokenArray::ImplGetReference( ScRange& rRange, sal_Bool bValidOnly ) const
 {
-    sal_Bool bIs = sal_False;
+    sal_Bool bIs = false;
     if ( pCode && nLen == 1 )
     {
         const FormulaToken* pToken = pCode[0];
@@ -1311,7 +1286,7 @@ sal_Bool ScTokenArray::ImplGetReference( ScRange& rRange, sal_Bool bValidOnly ) 
 
 sal_Bool ScTokenArray::IsReference( ScRange& rRange ) const
 {
-    return ImplGetReference( rRange, sal_False );
+    return ImplGetReference( rRange, false );
 }
 
 sal_Bool ScTokenArray::IsValidReference( ScRange& rRange ) const
@@ -1527,8 +1502,6 @@ FormulaToken* ScTokenArray::MergeArray( )
     if( nCol <= 0 || nRow <= 0 )
         return NULL;
 
-    // fprintf (stderr, "Array (cols = %d, rows = %d)\n", nCol, nRow );
-
     int nSign = 1;
     ScMatrix* pArray = new ScMatrix( nCol, nRow );
     for ( i = nStart, nCol = 0, nRow = 0 ; i < nLen ; i++ )
@@ -1604,7 +1577,7 @@ FormulaToken* ScTokenArray::MergeRangeReference( const ScAddress & rPos )
             p2->DecRef();
             p3->DecRef();
             nLen -= 2;
-            pCode[ nLen-1 ] = p;
+            pCode[ nLen-1 ] = p.get();
             nRefs--;
         }
     }
@@ -1633,9 +1606,14 @@ FormulaToken* ScTokenArray::AddDoubleReference( const ScComplexRefData& rRef )
     return Add( new ScDoubleRefToken( rRef ) );
 }
 
-FormulaToken* ScTokenArray::AddMatrix( ScMatrix* p )
+FormulaToken* ScTokenArray::AddMatrix( const ScMatrixRef& p )
 {
     return Add( new ScMatrixToken( p ) );
+}
+
+FormulaToken* ScTokenArray::AddRangeName( sal_uInt16 n, bool bGlobal )
+{
+    return Add(new ScNameToken(n, bGlobal));
 }
 
 FormulaToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const String& rName )
@@ -1669,29 +1647,29 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
             if ( rPos.Row() < MAXROW )
                 nRow = (nExtend = rPos.Row()) + 1;
             else
-                return sal_False;
+                return false;
         break;
         case DIR_RIGHT :
             if ( rPos.Col() < MAXCOL )
                 nCol = static_cast<SCCOL>(nExtend = rPos.Col()) + 1;
             else
-                return sal_False;
+                return false;
         break;
         case DIR_TOP :
             if ( rPos.Row() > 0 )
                 nRow = (nExtend = rPos.Row()) - 1;
             else
-                return sal_False;
+                return false;
         break;
         case DIR_LEFT :
             if ( rPos.Col() > 0 )
                 nCol = static_cast<SCCOL>(nExtend = rPos.Col()) - 1;
             else
-                return sal_False;
+                return false;
         break;
         default:
-            DBG_ERRORFILE( "unknown Direction" );
-            return sal_False;
+            OSL_FAIL( "unknown Direction" );
+            return false;
     }
     if ( pRPN && nRPN )
     {
@@ -1701,7 +1679,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
             sal_uInt8 nParamCount = t->GetByte();
             if ( nParamCount && nRPN > nParamCount )
             {
-                sal_Bool bRet = sal_False;
+                sal_Bool bRet = false;
                 sal_uInt16 nParam = nRPN - nParamCount - 1;
                 for ( ; nParam < nRPN-1; nParam++ )
                 {
@@ -1804,7 +1782,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -1836,20 +1814,6 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                 }
             }
             break;
-            case svExternalDoubleRef:
-            {
-                ScSingleRefData& rRef2 = static_cast<ScToken*>(pCode[j])->GetSingleRef2();
-                rRef2.CalcAbsIfRel( rOldPos );
-                rRef2.CalcRelFromAbs( rNewPos );
-            }
-            //! fallthru
-            case svExternalSingleRef:
-            {
-                ScSingleRefData& rRef1 = static_cast<ScToken*>(pCode[j])->GetSingleRef();
-                rRef1.CalcAbsIfRel( rOldPos );
-                rRef1.CalcRelFromAbs( rNewPos );
-            }
-            break;
             default:
             {
                 // added to avoid warnings
@@ -1859,3 +1823,4 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

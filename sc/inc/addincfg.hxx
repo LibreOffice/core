@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,11 +46,9 @@ public:
                             { return ConfigItem::GetProperties( rNames ); }
 
     using ConfigItem::GetNodeNames;
-
-//  com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
-//                          { return ConfigItem::GetNodeNames( rNode ); }
 };
 
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

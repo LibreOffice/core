@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,19 +39,16 @@
 
 #include <svx/svxids.hrc>
 
-//CHINA001 #include <svx/chardlg.hxx>
 #include <editeng/flstitem.hxx>
-//CHINA001 #include <svx/paragrph.hxx>
-//CHINA001 #include <svx/tabstpge.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/cjkoptions.hxx>
 
 #include "textdlgs.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
-#include <svx/svxids.hrc> //add CHINA001
-#include <svl/intitem.hxx> //add CHINA001
-#include <svx/flagsdef.hxx> //CHINA001
+#include <svx/svxids.hrc>
+#include <svl/intitem.hxx>
+#include <svx/flagsdef.hxx>
 // -----------------------------------------------------------------------
 
 ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
@@ -61,16 +59,16 @@ ScCharDlg::ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
 {
     FreeResource();
 
-    AddTabPage( RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
-    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_CHAR_POSITION ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_POSITION, SvxCharPositionPage::Create, 0);
+    AddTabPage( RID_SVXPAGE_CHAR_NAME );
+    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS );
+    AddTabPage( RID_SVXPAGE_CHAR_POSITION );
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool())); //CHINA001
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch( nId )
     {
         case RID_SVXPAGE_CHAR_NAME:
@@ -78,16 +76,13 @@ void __EXPORT ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             SvxFontListItem aItem(*( (const SvxFontListItem*)
                 ( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
 
-            //CHINA001 ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
             aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
             rPage.PageCreated(aSet);
         }
         break;
 
         case RID_SVXPAGE_CHAR_EFFECTS:
-            //CHINA001 ( (SvxCharEffectsPage&) rPage ).DisableControls(
-                            //CHINA001 DISABLE_CASEMAP);
-            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP)); //CHINA001
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
             rPage.PageCreated(aSet);
             break;
 
@@ -106,31 +101,27 @@ ScParagraphDlg::ScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
 
     SvtCJKOptions aCJKOptions;
 
-    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );//CHINA001 AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );//CHINA001 AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create, 0);
-    //AddTabPage( RID_SVXPAGE_EXT_PARAGRAPH, SvxExtParagraphTabPage::Create, 0);
+    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
+    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
     if ( aCJKOptions.IsAsianTypographyEnabled() )
-        AddTabPage( RID_SVXPAGE_PARA_ASIAN);//CHINA001 AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create,0);
+        AddTabPage( RID_SVXPAGE_PARA_ASIAN);
     else
         RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
-    AddTabPage( RID_SVXPAGE_TABULATOR );//CHINA001 AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create, 0);
+    AddTabPage( RID_SVXPAGE_TABULATOR );
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void ScParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     switch( nId )
     {
         case RID_SVXPAGE_TABULATOR:
             {
-            //CHINA001 ( (SvxTabulatorTabPage&) rPage ).
-            //CHINA001      DisableControls( TABTYPE_ALL &~TABTYPE_LEFT |
-            //CHINA001                       TABFILL_ALL &~TABFILL_NONE );
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//add CHINA001
+            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
             aSet.Put(SfxUInt16Item(SID_SVXTABULATORTABPAGE_CONTROLFLAGS,(TABTYPE_ALL &~TABTYPE_LEFT) |
                                 (TABFILL_ALL &~TABFILL_NONE) ));
-            rPage.PageCreated(aSet);//add CHINA001
+            rPage.PageCreated(aSet);
             }
         break;
     }
@@ -138,3 +129,4 @@ void __EXPORT ScParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

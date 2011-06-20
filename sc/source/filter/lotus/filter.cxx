@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -224,7 +225,7 @@ FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, CharSet 
     // Zeiger auf Dokument global machen
     pDoc = pDocument;
 
-    bEOF = sal_False;
+    bEOF = false;
 
     eCharVon = eSrc;
 
@@ -246,3 +247,4 @@ FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, CharSet 
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

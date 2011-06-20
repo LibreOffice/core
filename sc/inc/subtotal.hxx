@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@ public:
 };
 
 
-struct ScFunctionData                   // zum Berechnen von einzelnen Funktionen
+struct ScFunctionData                   // to calculate single functions
 {
     ScSubTotalFunc  eFunc;
     double          nVal;
@@ -48,10 +49,11 @@ struct ScFunctionData                   // zum Berechnen von einzelnen Funktione
     sal_Bool            bError;
 
     ScFunctionData( ScSubTotalFunc eFn ) :
-        eFunc(eFn), nVal(0.0), nCount(0), bError(sal_False) {}
+        eFunc(eFn), nVal(0.0), nCount(0), bError(false) {}
 };
 
 
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

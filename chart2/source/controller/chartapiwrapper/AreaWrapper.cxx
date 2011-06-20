@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,6 @@ private:
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        //::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),
@@ -115,7 +115,7 @@ awt::Point SAL_CALL AreaWrapper::getPosition()
 void SAL_CALL AreaWrapper::setPosition( const awt::Point& /*aPosition*/ )
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set position of chart area" );
+    OSL_FAIL( "trying to set position of chart area" );
 }
 
 awt::Size SAL_CALL AreaWrapper::getSize()
@@ -128,7 +128,7 @@ void SAL_CALL AreaWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set size of chart area" );
+    OSL_FAIL( "trying to set size of chart area" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
@@ -145,10 +145,8 @@ void SAL_CALL AreaWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
-    // /--
     MutexGuard aGuard( GetMutex());
     clearWrappedPropertySet();
-    // \--
 }
 
 void SAL_CALL AreaWrapper::addEventListener(
@@ -173,7 +171,7 @@ Reference< beans::XPropertySet > AreaWrapper::getInnerPropertySet()
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     if( xChartDoc.is() )
         return xChartDoc->getPageBackground();
-    OSL_ENSURE(false,"AreaWrapper::getInnerPropertySet() is NULL");
+    OSL_FAIL("AreaWrapper::getInnerPropertySet() is NULL");
     return 0;
 }
 
@@ -209,3 +207,5 @@ APPHELPER_XSERVICEINFO_IMPL( AreaWrapper, lcl_aServiceName );
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

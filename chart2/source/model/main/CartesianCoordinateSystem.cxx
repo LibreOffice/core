@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -153,3 +154,5 @@ Sequence< OUString > CartesianCoordinateSystem3d::getSupportedServiceNames_Stati
 APPHELPER_XSERVICEINFO_IMPL( CartesianCoordinateSystem3d, lcl_aImplementationNameCartesian3d )
 
 }  // namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

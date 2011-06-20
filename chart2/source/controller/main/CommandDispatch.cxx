@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -182,8 +183,6 @@ void CommandDispatch::fireStatusEventForURL(
         tListenerMap::iterator aIt( m_aListeners.find( aURL.Complete ));
         if( aIt != m_aListeners.end())
         {
-//             ::cppu::OInterfaceContainerHelper * pCntHlp = rBHelper.getContainer(
-//                 ::getCppuType( reinterpret_cast< Reference< frame::XStatusListener > * >(0)));
             if( aIt->second )
             {
                 ::cppu::OInterfaceIteratorHelper aIntfIt( *((*aIt).second) );
@@ -209,3 +208,5 @@ void CommandDispatch::fireStatusEventForURL(
 
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

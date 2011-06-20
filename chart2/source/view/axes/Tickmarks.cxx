@@ -32,7 +32,6 @@
 #include "Tickmarks_Dates.hxx"
 #include "ViewDefines.hxx"
 #include <rtl/math.hxx>
-#include <tools/debug.hxx>
 #include <memory>
 
 //.............................................................................
@@ -93,7 +92,7 @@ TickInfo* PureTickIter::nextInfo()
 {
     if(m_aTickIter!=m_rTickVector.end())
     {
-        m_aTickIter++;
+        ++m_aTickIter;
         if(m_aTickIter!=m_rTickVector.end())
             return &*m_aTickIter;
     }
@@ -115,7 +114,7 @@ TickFactory::TickFactory(
     if( m_rScale.Scaling.is() )
     {
         m_xInverseScaling = m_rScale.Scaling->getInverseScaling();
-        DBG_ASSERT( m_xInverseScaling.is(), "each Scaling needs to return a inverse Scaling" );
+        OSL_ENSURE( m_xInverseScaling.is(), "each Scaling needs to return a inverse Scaling" );
     }
 
     m_fScaledVisibleMin = m_rScale.Minimum;
@@ -319,7 +318,7 @@ void TickFactory_2D::updateScreenValues( ::std::vector< ::std::vector< TickInfo 
     {
         ::std::vector< TickInfo >::iterator       aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
-        for( ; aTickIter != aTickEnd; aTickIter++ )
+        for( ; aTickIter != aTickEnd; ++aTickIter )
         {
             TickInfo& rTickInfo = (*aTickIter);
             rTickInfo.aTickScreenPosition =

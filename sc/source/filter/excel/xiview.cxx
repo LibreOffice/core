@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,7 +109,7 @@ void XclImpTabViewSettings::Initialize()
 
 void XclImpTabViewSettings::ReadTabBgColor( XclImpStream& rStrm, XclImpPalette& rPal )
 {
-    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF8 );
+    OSL_ENSURE_BIFF( GetBiff() >= EXC_BIFF8 );
     if( GetBiff() < EXC_BIFF8 )
         return;
 
@@ -142,7 +143,7 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
         sal_uInt16 nFlags;
         rStrm >> nFlags >> maData.maFirstXclPos;
 
-        // #i59590# #158194# real life: Excel ignores some view settings in chart sheets
+        // #i59590# real life: Excel ignores some view settings in chart sheets
         maData.mbSelected       = ::get_flag( nFlags, EXC_WIN2_SELECTED );
         maData.mbDisplayed      = ::get_flag( nFlags, EXC_WIN2_DISPLAYED );
         maData.mbMirrored       = !bChart && ::get_flag( nFlags, EXC_WIN2_MIRRORED );
@@ -190,16 +191,17 @@ void XclImpTabViewSettings::ReadScl( XclImpStream& rStrm )
 {
     sal_uInt16 nNum, nDenom;
     rStrm >> nNum >> nDenom;
-    DBG_ASSERT( nDenom > 0, "XclImpPageSettings::ReadScl - invalid denominator" );
+    OSL_ENSURE( nDenom > 0, "XclImpPageSettings::ReadScl - invalid denominator" );
     if( nDenom > 0 )
         maData.mnCurrentZoom = limit_cast< sal_uInt16 >( (nNum * 100) / nDenom );
 }
 
 void XclImpTabViewSettings::ReadPane( XclImpStream& rStrm )
 {
-    rStrm   >> maData.mnSplitX
-            >> maData.mnSplitY
-            >> maData.maSecondXclPos
+    rStrm   >> maData.mnSplitX;
+    maData.mnSplitY = rStrm.ReaduInt16();
+
+    rStrm   >> maData.maSecondXclPos
             >> maData.mnActivePane;
 }
 
@@ -258,7 +260,7 @@ void XclImpTabViewSettings::Finalize()
             #i35812# Excel uses number of visible rows/columns, Calc uses position of freeze. */
         if( (maData.mnSplitX > 0) && (maData.maFirstXclPos.mnCol + maData.mnSplitX <= GetScMaxPos().Col()) )
             rTabSett.maFreezePos.SetCol( static_cast< SCCOL >( maData.maFirstXclPos.mnCol + maData.mnSplitX ) );
-        if( (maData.mnSplitY > 0) && (maData.maFirstXclPos.mnRow + maData.mnSplitY <= GetScMaxPos().Row()) )
+        if( (maData.mnSplitY > 0) && (maData.maFirstXclPos.mnRow + maData.mnSplitY <= static_cast<unsigned>(GetScMaxPos().Row())) )
             rTabSett.maFreezePos.SetRow( static_cast< SCROW >( maData.maFirstXclPos.mnRow + maData.mnSplitY ) );
     }
     else
@@ -274,6 +276,9 @@ void XclImpTabViewSettings::Finalize()
     else
         rTabSett.maGridColor = maData.maGridColor;
 
+    // show grid option
+    rTabSett.mbShowGrid      = maData.mbShowGrid;
+
     // view mode and zoom
     if( maData.mnCurrentZoom != 0 )
         (maData.mbPageMode ? maData.mnPageZoom : maData.mnNormalZoom) = maData.mnCurrentZoom;
@@ -288,7 +293,6 @@ void XclImpTabViewSettings::Finalize()
         // set Excel sheet settings globally at Calc document, take settings from displayed sheet
         ScViewOptions aViewOpt( rDoc.GetViewOptions() );
         aViewOpt.SetOption( VOPT_FORMULAS, maData.mbShowFormulas );
-        aViewOpt.SetOption( VOPT_GRID,     maData.mbShowGrid );
         aViewOpt.SetOption( VOPT_HEADER,   maData.mbShowHeadings );
         aViewOpt.SetOption( VOPT_NULLVALS, maData.mbShowZeros );
         aViewOpt.SetOption( VOPT_OUTLINER, maData.mbShowOutline );
@@ -302,3 +306,4 @@ void XclImpTabViewSettings::Finalize()
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

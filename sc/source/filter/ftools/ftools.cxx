@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -197,7 +198,7 @@ SotStorageStreamRef ScfTools::OpenStorageStreamRead( SotStorageRef xStrg, const 
 
 SotStorageStreamRef ScfTools::OpenStorageStreamWrite( SotStorageRef xStrg, const String& rStrmName )
 {
-    DBG_ASSERT( !xStrg || !xStrg->IsContained( rStrmName ), "ScfTools::OpenStorageStreamWrite - stream exists already" );
+    OSL_ENSURE( !xStrg || !xStrg->IsContained( rStrmName ), "ScfTools::OpenStorageStreamWrite - stream exists already" );
     SotStorageStreamRef xStrm;
     if( xStrg.Is() )
         xStrm = xStrg->OpenSotStream( rStrmName, STREAM_STD_WRITE | STREAM_TRUNC );
@@ -213,7 +214,7 @@ bool ScfTools::CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool 
 
 bool ScfTools::CheckItems( const SfxItemSet& rItemSet, const sal_uInt16* pnWhichIds, bool bDeep )
 {
-    DBG_ASSERT( pnWhichIds, "ScfTools::CheckItems - no which id list" );
+    OSL_ENSURE( pnWhichIds, "ScfTools::CheckItems - no which id list" );
     for( const sal_uInt16* pnWhichId = pnWhichIds; *pnWhichId != 0; ++pnWhichId )
         if( CheckItem( rItemSet, *pnWhichId, bDeep ) )
             return true;
@@ -397,10 +398,11 @@ ScFormatFilterPluginImpl::ScFormatFilterPluginImpl()
 {
 }
 
-ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
+SAL_DLLPUBLIC_EXPORT ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
 {
     return new ScFormatFilterPluginImpl();
 }
 
 // implementation class inside the filters
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

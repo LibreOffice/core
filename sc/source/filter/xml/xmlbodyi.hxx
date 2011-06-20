@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,16 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 
+#include "tabprotection.hxx"
+
 class ScXMLImport;
 class ScXMLChangeTrackingImportHelper;
 
 class ScXMLBodyContext : public SvXMLImportContext
 {
     rtl::OUString   sPassword;
+    ScPasswordHash  meHash1;
+    ScPasswordHash  meHash2;
     sal_Bool        bProtected;
     sal_Bool        bHadCalculationSettings;
 
@@ -59,3 +64,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

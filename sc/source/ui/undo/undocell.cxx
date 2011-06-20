@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,6 +55,8 @@
 #include "sc.hrc"
 #include "docuno.hxx"
 
+using ::boost::shared_ptr;
+
 // STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1(ScUndoCursorAttr, ScSimpleUndo);
@@ -82,6 +85,8 @@ ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
     nCol( nNewCol ),
     nRow( nNewRow ),
     nTab( nNewTab ),
+    pOldEditData( static_cast<EditTextObject*>(NULL) ),
+    pNewEditData( static_cast<EditTextObject*>(NULL) ),
     bIsAutomatic( bAutomatic )
 {
     ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
@@ -90,7 +95,7 @@ ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
     pApplyPattern = (ScPatternAttr*) &pPool->Put( *pApplyPat );
 }
 
-__EXPORT ScUndoCursorAttr::~ScUndoCursorAttr()
+ScUndoCursorAttr::~ScUndoCursorAttr()
 {
     ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
     pPool->Remove(*pNewPattern);
@@ -98,7 +103,7 @@ __EXPORT ScUndoCursorAttr::~ScUndoCursorAttr()
     pPool->Remove(*pApplyPattern);
 }
 
-String __EXPORT ScUndoCursorAttr::GetComment() const
+String ScUndoCursorAttr::GetComment() const
 {
     //! eigener Text fuer automatische Attributierung
 
@@ -106,15 +111,27 @@ String __EXPORT ScUndoCursorAttr::GetComment() const
     return ScGlobal::GetRscString( nId );
 }
 
-void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern ) const
+void ScUndoCursorAttr::SetEditData( EditTextObject* pOld, EditTextObject* pNew )
 {
-    pDocShell->GetDocument()->SetPattern( nCol, nRow, nTab, *pWhichPattern, sal_True );
+    pOldEditData.reset(pOld);
+    pNewEditData.reset(pNew);
+}
+
+void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const shared_ptr<EditTextObject>& pEditData ) const
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    pDoc->SetPattern( nCol, nRow, nTab, *pWhichPattern, true );
+
+    ScBaseCell* pCell;
+    pDoc->GetCell(nCol, nRow, nTab, pCell);
+    if (pCell && pCell->GetCellType() == CELLTYPE_EDIT && pEditData.get())
+        static_cast<ScEditCell*>(pCell)->SetData(pEditData.get(), NULL);
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
         pViewShell->SetTabNo( nTab );
-        pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, sal_False, sal_False );
+        pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, false, false );
         pViewShell->AdjustBlockHeight();
     }
 
@@ -131,10 +148,10 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern ) const
     pDocShell->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, nFlags );
 }
 
-void __EXPORT ScUndoCursorAttr::Undo()
+void ScUndoCursorAttr::Undo()
 {
     BeginUndo();
-    DoChange(pOldPattern);
+    DoChange(pOldPattern, pOldEditData);
 
     if ( bIsAutomatic )
     {
@@ -149,20 +166,20 @@ void __EXPORT ScUndoCursorAttr::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoCursorAttr::Redo()
+void ScUndoCursorAttr::Redo()
 {
     BeginRedo();
-    DoChange(pNewPattern);
+    DoChange(pNewPattern, pNewEditData);
     EndRedo();
 }
 
-void __EXPORT ScUndoCursorAttr::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoCursorAttr::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->ApplySelectionPattern( *pApplyPattern );
 }
 
-sal_Bool __EXPORT ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -193,7 +210,7 @@ ScUndoEnterData::ScUndoEnterData( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-__EXPORT ScUndoEnterData::~ScUndoEnterData()
+ScUndoEnterData::~ScUndoEnterData()
 {
     for (sal_uInt16 i=0; i<nCount; i++)
         if (ppOldCells[i])
@@ -207,7 +224,7 @@ __EXPORT ScUndoEnterData::~ScUndoEnterData()
     delete pNewEditData;
 }
 
-String __EXPORT ScUndoEnterData::GetComment() const
+String ScUndoEnterData::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Eingabe"
 }
@@ -223,7 +240,7 @@ void ScUndoEnterData::DoChange() const
     if (pViewShell)
     {
         pViewShell->SetTabNo( nTab );
-        pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, sal_False, sal_False );
+        pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, false, false );
     }
 
     pDocShell->PostDataChanged();
@@ -254,7 +271,7 @@ void ScUndoEnterData::SetChangeTrack()
         nEndChangeAction = 0;
 }
 
-void __EXPORT ScUndoEnterData::Undo()
+void ScUndoEnterData::Undo()
 {
     BeginUndo();
 
@@ -299,7 +316,7 @@ void __EXPORT ScUndoEnterData::Undo()
     }
 }
 
-void __EXPORT ScUndoEnterData::Redo()
+void ScUndoEnterData::Redo()
 {
     BeginRedo();
 
@@ -332,7 +349,7 @@ void __EXPORT ScUndoEnterData::Redo()
     }
 }
 
-void __EXPORT ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -341,7 +358,7 @@ void __EXPORT ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool __EXPORT ScUndoEnterData::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoEnterData::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -363,13 +380,13 @@ ScUndoEnterValue::ScUndoEnterValue( ScDocShell* pNewDocShell, const ScAddress& r
     SetChangeTrack();
 }
 
-__EXPORT ScUndoEnterValue::~ScUndoEnterValue()
+ScUndoEnterValue::~ScUndoEnterValue()
 {
     if (pOldCell)
         pOldCell->Delete();
 }
 
-String __EXPORT ScUndoEnterValue::GetComment() const
+String ScUndoEnterValue::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Eingabe"
 }
@@ -389,7 +406,7 @@ void ScUndoEnterValue::SetChangeTrack()
         nEndChangeAction = 0;
 }
 
-void __EXPORT ScUndoEnterValue::Undo()
+void ScUndoEnterValue::Undo()
 {
     BeginUndo();
 
@@ -407,7 +424,7 @@ void __EXPORT ScUndoEnterValue::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoEnterValue::Redo()
+void ScUndoEnterValue::Redo()
 {
     BeginRedo();
 
@@ -420,14 +437,14 @@ void __EXPORT ScUndoEnterValue::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoEnterValue::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoEnterValue::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  gippsnich
 }
 
-sal_Bool __EXPORT ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+sal_Bool ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -447,7 +464,7 @@ ScUndoPutCell::ScUndoPutCell( ScDocShell* pNewDocShell, const ScAddress& rNewPos
     SetChangeTrack();
 }
 
-__EXPORT ScUndoPutCell::~ScUndoPutCell()
+ScUndoPutCell::~ScUndoPutCell()
 {
     if (pOldCell)
         pOldCell->Delete();
@@ -455,7 +472,7 @@ __EXPORT ScUndoPutCell::~ScUndoPutCell()
         pEnteredCell->Delete();
 }
 
-String __EXPORT ScUndoPutCell::GetComment() const
+String ScUndoPutCell::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Eingabe"
 }
@@ -475,7 +492,7 @@ void ScUndoPutCell::SetChangeTrack()
         nEndChangeAction = 0;
 }
 
-void __EXPORT ScUndoPutCell::Undo()
+void ScUndoPutCell::Undo()
 {
     BeginUndo();
 
@@ -493,7 +510,7 @@ void __EXPORT ScUndoPutCell::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoPutCell::Redo()
+void ScUndoPutCell::Redo()
 {
     BeginRedo();
 
@@ -509,14 +526,14 @@ void __EXPORT ScUndoPutCell::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoPutCell::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoPutCell::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  gippsnich
 }
 
-sal_Bool __EXPORT ScUndoPutCell::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+sal_Bool ScUndoPutCell::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -537,11 +554,11 @@ ScUndoPageBreak::ScUndoPageBreak( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoPageBreak::~ScUndoPageBreak()
+ScUndoPageBreak::~ScUndoPageBreak()
 {
 }
 
-String __EXPORT ScUndoPageBreak::GetComment() const
+String ScUndoPageBreak::GetComment() const
 {
     //"Spaltenumbruch" | "Zeilenumbruch"  "einfuegen" | "loeschen"
     return String ( bColumn ?
@@ -562,32 +579,32 @@ void ScUndoPageBreak::DoChange( sal_Bool bInsertP ) const
     if (pViewShell)
     {
         pViewShell->SetTabNo( nTab );
-        pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, sal_False, sal_False );
+        pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, false, false );
 
         if (bInsertP)
-            pViewShell->InsertPageBreak(bColumn, sal_False);
+            pViewShell->InsertPageBreak(bColumn, false);
         else
-            pViewShell->DeletePageBreak(bColumn, sal_False);
+            pViewShell->DeletePageBreak(bColumn, false);
 
         pDocShell->GetDocument()->InvalidatePageBreaks(nTab);
     }
 }
 
-void __EXPORT ScUndoPageBreak::Undo()
+void ScUndoPageBreak::Undo()
 {
     BeginUndo();
     DoChange(!bInsert);
     EndUndo();
 }
 
-void __EXPORT ScUndoPageBreak::Redo()
+void ScUndoPageBreak::Redo()
 {
     BeginRedo();
     DoChange(bInsert);
     EndRedo();
 }
 
-void __EXPORT ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -600,7 +617,7 @@ void __EXPORT ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool __EXPORT ScUndoPageBreak::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoPageBreak::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -621,11 +638,11 @@ ScUndoPrintZoom::ScUndoPrintZoom( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoPrintZoom::~ScUndoPrintZoom()
+ScUndoPrintZoom::~ScUndoPrintZoom()
 {
 }
 
-String __EXPORT ScUndoPrintZoom::GetComment() const
+String ScUndoPrintZoom::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_PRINTSCALE );
 }
@@ -639,7 +656,7 @@ void ScUndoPrintZoom::DoChange( sal_Bool bUndo )
     String aStyleName = pDoc->GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
-    DBG_ASSERT( pStyleSheet, "PageStyle not found" );
+    OSL_ENSURE( pStyleSheet, "PageStyle not found" );
     if ( pStyleSheet )
     {
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
@@ -651,21 +668,21 @@ void ScUndoPrintZoom::DoChange( sal_Bool bUndo )
     }
 }
 
-void __EXPORT ScUndoPrintZoom::Undo()
+void ScUndoPrintZoom::Undo()
 {
     BeginUndo();
     DoChange(sal_True);
     EndUndo();
 }
 
-void __EXPORT ScUndoPrintZoom::Redo()
+void ScUndoPrintZoom::Redo()
 {
     BeginRedo();
-    DoChange(sal_False);
+    DoChange(false);
     EndRedo();
 }
 
-void __EXPORT ScUndoPrintZoom::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoPrintZoom::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -675,7 +692,7 @@ void __EXPORT ScUndoPrintZoom::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-sal_Bool __EXPORT ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -709,13 +726,13 @@ ScUndoThesaurus::ScUndoThesaurus( ScDocShell* pNewDocShell,
     pOldCell->Delete();
 }
 
-__EXPORT ScUndoThesaurus::~ScUndoThesaurus()
+ScUndoThesaurus::~ScUndoThesaurus()
 {
     delete pUndoTObject;
     delete pRedoTObject;
 }
 
-String __EXPORT ScUndoThesaurus::GetComment() const
+String ScUndoThesaurus::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_THESAURUS );    // "Thesaurus"
 }
@@ -734,7 +751,7 @@ void ScUndoThesaurus::SetChangeTrack( ScBaseCell* pOldCell )
         nEndChangeAction = 0;
 }
 
-void __EXPORT ScUndoThesaurus::DoChange( sal_Bool bUndo, const String& rStr,
+void ScUndoThesaurus::DoChange( sal_Bool bUndo, const String& rStr,
             const EditTextObject* pTObj )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -743,7 +760,7 @@ void __EXPORT ScUndoThesaurus::DoChange( sal_Bool bUndo, const String& rStr,
     if (pViewShell)
     {
         pViewShell->SetTabNo( nTab );
-        pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, sal_False, sal_False );
+        pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, false, false );
     }
 
     if (pTObj)
@@ -761,7 +778,7 @@ void __EXPORT ScUndoThesaurus::DoChange( sal_Bool bUndo, const String& rStr,
             }
             else
             {
-                DBG_ERROR("Nicht CELLTYPE_EDIT bei Un/RedoThesaurus");
+                OSL_FAIL("Nicht CELLTYPE_EDIT bei Un/RedoThesaurus");
             }
         }
     }
@@ -778,7 +795,7 @@ void __EXPORT ScUndoThesaurus::DoChange( sal_Bool bUndo, const String& rStr,
     pDocShell->PostPaintCell( nCol, nRow, nTab );
 }
 
-void __EXPORT ScUndoThesaurus::Undo()
+void ScUndoThesaurus::Undo()
 {
     BeginUndo();
     DoChange( sal_True, aUndoStr, pUndoTObject );
@@ -788,20 +805,20 @@ void __EXPORT ScUndoThesaurus::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoThesaurus::Redo()
+void ScUndoThesaurus::Redo()
 {
     BeginRedo();
-    DoChange( sal_False, aRedoStr, pRedoTObject );
+    DoChange( false, aRedoStr, pRedoTObject );
     EndRedo();
 }
 
-void __EXPORT ScUndoThesaurus::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoThesaurus::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->DoThesaurus( sal_True );
 }
 
-sal_Bool __EXPORT ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -815,7 +832,7 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
     maPos( rPos ),
     mpDrawUndo( pDrawUndo )
 {
-    DBG_ASSERT( rNoteData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note caption" );
+    OSL_ENSURE( rNoteData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note caption" );
     (bInsert ? maNewData : maOldData) = rNoteData;
 }
 
@@ -827,8 +844,8 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
     maNewData( rNewData ),
     mpDrawUndo( pDrawUndo )
 {
-    DBG_ASSERT( maOldData.mpCaption || maNewData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
-    DBG_ASSERT( !maOldData.mxInitData.get() && !maNewData.mxInitData.get(), "ScUndoReplaceNote::ScUndoReplaceNote - unexpected unitialized note" );
+    OSL_ENSURE( maOldData.mpCaption || maNewData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
+    OSL_ENSURE( !maOldData.mxInitData.get() && !maNewData.mxInitData.get(), "ScUndoReplaceNote::ScUndoReplaceNote - unexpected unitialized note" );
 }
 
 ScUndoReplaceNote::~ScUndoReplaceNote()
@@ -868,7 +885,7 @@ void ScUndoReplaceNote::Repeat( SfxRepeatTarget& /*rTarget*/ )
 
 sal_Bool ScUndoReplaceNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 {
-    return sal_False;
+    return false;
 }
 
 String ScUndoReplaceNote::GetComment() const
@@ -882,7 +899,7 @@ void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
     if( rNoteData.mpCaption )
     {
         ScDocument& rDoc = *pDocShell->GetDocument();
-        DBG_ASSERT( !rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
+        OSL_ENSURE( !rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
         ScPostIt* pNote = new ScPostIt( rDoc, maPos, rNoteData, false );
         rDoc.TakeNote( maPos, pNote );
     }
@@ -893,7 +910,7 @@ void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
     if( rNoteData.mpCaption )
     {
         ScDocument& rDoc = *pDocShell->GetDocument();
-        DBG_ASSERT( rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
+        OSL_ENSURE( rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
         if( ScPostIt* pNote = rDoc.ReleaseNote( maPos ) )
         {
             /*  Forget pointer to caption object to suppress removing the
@@ -940,7 +957,7 @@ void ScUndoShowHideNote::Repeat( SfxRepeatTarget& /*rTarget*/ )
 
 sal_Bool ScUndoShowHideNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 {
-    return sal_False;
+    return false;
 }
 
 String ScUndoShowHideNote::GetComment() const
@@ -971,13 +988,13 @@ ScUndoDetective::ScUndoDetective( ScDocShell* pNewDocShell,
     }
 }
 
-__EXPORT ScUndoDetective::~ScUndoDetective()
+ScUndoDetective::~ScUndoDetective()
 {
     DeleteSdrUndoAction( pDrawUndo );
     delete pOldList;
 }
 
-String __EXPORT ScUndoDetective::GetComment() const
+String ScUndoDetective::GetComment() const
 {
     sal_uInt16 nId = STR_UNDO_DETDELALL;
     if ( !bIsDelete )
@@ -994,7 +1011,7 @@ String __EXPORT ScUndoDetective::GetComment() const
 }
 
 
-void __EXPORT ScUndoDetective::Undo()
+void ScUndoDetective::Undo()
 {
     BeginUndo();
 
@@ -1019,7 +1036,7 @@ void __EXPORT ScUndoDetective::Undo()
                 pList->DeleteAndDestroy( nPos, 1 );
             else
             {
-                DBG_ERROR("Detektiv-Eintrag in der Liste nicht gefunden");
+                OSL_FAIL("Detektiv-Eintrag in der Liste nicht gefunden");
             }
         }
     }
@@ -1031,7 +1048,7 @@ void __EXPORT ScUndoDetective::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoDetective::Redo()
+void ScUndoDetective::Redo()
 {
     BeginRedo();
 
@@ -1051,14 +1068,14 @@ void __EXPORT ScUndoDetective::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoDetective::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoDetective::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  hammanich
 }
 
-sal_Bool __EXPORT ScUndoDetective::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+sal_Bool ScUndoDetective::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -1074,13 +1091,13 @@ ScUndoRangeNames::ScUndoRangeNames( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoRangeNames::~ScUndoRangeNames()
+ScUndoRangeNames::~ScUndoRangeNames()
 {
     delete pOldRanges;
     delete pNewRanges;
 }
 
-String __EXPORT ScUndoRangeNames::GetComment() const
+String ScUndoRangeNames::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_RANGENAMES );
 }
@@ -1095,35 +1112,36 @@ void ScUndoRangeNames::DoChange( sal_Bool bUndo )
     else
         pDoc->SetRangeName( new ScRangeName( *pNewRanges ) );
 
-    pDoc->CompileNameFormula( sal_False );  // CompileFormulaString
+    pDoc->CompileNameFormula( false );  // CompileFormulaString
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
 }
 
-void __EXPORT ScUndoRangeNames::Undo()
+void ScUndoRangeNames::Undo()
 {
     BeginUndo();
     DoChange( sal_True );
     EndUndo();
 }
 
-void __EXPORT ScUndoRangeNames::Redo()
+void ScUndoRangeNames::Redo()
 {
     BeginRedo();
-    DoChange( sal_False );
+    DoChange( false );
     EndRedo();
 }
 
-void __EXPORT ScUndoRangeNames::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoRangeNames::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  hammanich
 }
 
-sal_Bool __EXPORT ScUndoRangeNames::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+sal_Bool ScUndoRangeNames::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return sal_False;
+    return false;
 }
 
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,8 +52,6 @@
 #include "WrappedTextRotationProperty.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
 
 #include <algorithm>
 #include <comphelper/InlineContainer.hxx>
@@ -224,8 +223,7 @@ struct StaticPointWrapperPropertyArray : public rtl::StaticAggregate< Sequence< 
 };
 
 //----------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------
+
 
 //PROP_SERIES_ATTACHED_AXIS
 class WrappedAttachedAxisProperty : public ::chart::WrappedProperty
@@ -461,11 +459,8 @@ void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPr
         WrappedSeriesAreaOrLineProperty::setPropertyToDefault( xInnerPropertyState );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------
-
 } // anonymous namespace
+
 
 // --------------------------------------------------------------------------------
 
@@ -490,7 +485,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper(
 void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any >& aArguments )
                 throw ( uno::Exception, uno::RuntimeException)
 {
-    DBG_ASSERT(aArguments.getLength() >= 1,"need at least 1 argument to initialize the DataSeriesPointWrapper: series reference + optional datapoint index");
+    OSL_PRECOND(aArguments.getLength() >= 1,"need at least 1 argument to initialize the DataSeriesPointWrapper: series reference + optional datapoint index");
 
     m_nSeriesIndexInNewAPI = -1;//ignored in this case
     m_nPointIndex = -1;
@@ -743,13 +738,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     WrappedDataCaptionProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
     WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
-    //add unnamed fill properties (different inner names here)
-//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillGradient" ), C2U( "GradientName" ) ) );
-//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillHatch" ), C2U( "HatchName" ) ) );
-//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillTransparenceGradient" ), C2U( "TransparencyGradientName" ) ) );
-
     //add unnamed line properties (different inner names here)
-//     aWrappedProperties.push_back( new WrappedUnnamedProperty( C2U( "LineDash" ), C2U( "LineDashName" ) ) );
 
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillColor" ), C2U( "Color" ) ) );
     aWrappedProperties.push_back( new WrappedLineStyleProperty( this ) );
@@ -899,3 +888,5 @@ APPHELPER_XSERVICEINFO_IMPL( DataSeriesPointWrapper, lcl_aServiceName );
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

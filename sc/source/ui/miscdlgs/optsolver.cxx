@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,7 +68,7 @@ ScSolverProgressDialog::ScSolverProgressDialog( Window* pParent )
     maFlButtons     ( this, ScResId( FL_BUTTONS ) ),
     maBtnOk         ( this, ScResId( BTN_OK ) )
 {
-    maBtnOk.Enable(sal_False);
+    maBtnOk.Enable(false);
     FreeResource();
 }
 
@@ -302,13 +303,11 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
     aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_DEL_ROWS ) );
     uno::Reference<frame::XFrame> xFrame = GetBindings().GetActiveFrame();
-    Image aDelNm = ::GetImage( xFrame, aSlotURL, sal_False, sal_False );
-    Image aDelHC = ::GetImage( xFrame, aSlotURL, sal_False, sal_True );     // high contrast
+    Image aDelNm = ::GetImage( xFrame, aSlotURL, false );
 
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
-        mpDelButton[nRow]->SetModeImage( aDelNm, BMP_COLOR_NORMAL );
-        mpDelButton[nRow]->SetModeImage( aDelHC, BMP_COLOR_HIGHCONTRAST );
+        mpDelButton[nRow]->SetModeImage( aDelNm );
     }
 
     maBtnOpt.SetClickHdl( LINK( this, ScOptSolverDlg, BtnHdl ) );
@@ -556,7 +555,7 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
     {
         bool bSolve = ( pBtn == &maBtnSolve );
 
-        SetDispatcherLock( sal_False );
+        SetDispatcherLock( false );
         SwitchToDocument();
 
         bool bClose = true;
@@ -810,7 +809,7 @@ bool ScOptSolverDlg::FindTimeout( sal_Int32& rTimeout )
     for (sal_Int32 nProp=0; nProp<nPropCount && !bFound; ++nProp)
     {
         const beans::PropertyValue& rValue = maProperties[nProp];
-        if ( rValue.Name.equalsAscii( SC_UNONAME_TIMEOUT ) )
+        if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_TIMEOUT ) ) )
             bFound = ( rValue.Value >>= rTimeout );
     }
     return bFound;
@@ -855,10 +854,10 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     }
     uno::Sequence<table::CellAddress> aVariables;
     sal_Int32 nVarPos = 0;
-       sal_uLong nRangeCount = aVarRanges.Count();
-    for (sal_uLong nRangePos=0; nRangePos<nRangeCount; ++nRangePos)
+
+    for ( size_t nRangePos=0, nRange = aVarRanges.size(); nRangePos < nRange; ++nRangePos )
     {
-        ScRange aRange(*aVarRanges.GetObject(nRangePos));
+        ScRange aRange(*aVarRanges[ nRangePos ] );
         aRange.Justify();
         SCTAB nTab = aRange.aStart.Tab();
 
@@ -987,7 +986,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     // create and initialize solver
 
     uno::Reference<sheet::XSolver> xSolver = ScSolverUtil::GetSolver( maEngine );
-    DBG_ASSERT( xSolver.is(), "can't get solver component" );
+    OSL_ENSURE( xSolver.is(), "can't get solver component" );
     if ( !xSolver.is() )
         return false;
 
@@ -1011,7 +1010,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             }
             catch ( uno::Exception & )
             {
-                DBG_ERRORFILE("Exception in solver option property");
+                OSL_FAIL("Exception in solver option property");
             }
         }
     }
@@ -1077,3 +1076,4 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     return bClose;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

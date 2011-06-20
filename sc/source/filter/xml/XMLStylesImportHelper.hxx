@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,15 @@
 #define SC_XMLSTYLESIMPORTHELPER_HXX
 
 #include "rangelst.hxx"
+#include "simplerangelist.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <set>
 #include <vector>
+#include <list>
+#include <boost/shared_ptr.hpp>
 
 class ScXMLImport;
 
@@ -72,9 +76,11 @@ public:
 struct ScMyCurrencyStyle
 {
     rtl::OUString       sCurrency;
-    ScRangeListRef      xRanges;
+    ::boost::shared_ptr<ScSimpleRangeList> mpRanges;
 
-    ScMyCurrencyStyle() : xRanges(new ScRangeList()) {}
+    ScMyCurrencyStyle() :
+        mpRanges(new ScSimpleRangeList)
+    {}
     ~ScMyCurrencyStyle() {}
 };
 
@@ -90,23 +96,18 @@ typedef std::set<ScMyCurrencyStyle, LessCurrencyStyle>  ScMyCurrencyStylesSet;
 
 class ScMyStyleRanges : public SvRefBase
 {
-    ScRangeList*            pTextList;
-    ScRangeList*            pNumberList;
-    ScRangeList*            pTimeList;
-    ScRangeList*            pDateTimeList;
-    ScRangeList*            pPercentList;
-    ScRangeList*            pLogicalList;
-    ScRangeList*            pUndefinedList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpTextList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpNumberList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpTimeList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpDateTimeList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpPercentList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpLogicalList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpUndefinedList;
     ScMyCurrencyStylesSet*  pCurrencyList;
 
-    void AddRange(const ScRange& rRange, ScRangeList* pList,
-        const rtl::OUString* pStyleName, const sal_Int16 nType,
-        ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
-    void AddCurrencyRange(const ScRange& rRange, ScRangeListRef xList,
-        const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
-        ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
-    void InsertColRow(const ScRange& rRange, const SCsCOL nDx, const SCsROW nDy,
-        const SCsTAB nDz, ScDocument* pDoc);
+    void SetStylesToRanges(const ::std::list<ScRange>& rList,
+        const rtl::OUString* pStyleName, const sal_Int16 nCellType,
+        const rtl::OUString* pCurrency, ScXMLImport& rImport);
     void SetStylesToRanges(ScRangeList* pList,
         const rtl::OUString* pStyleName, const sal_Int16 nCellType,
         const rtl::OUString* pCurrency, ScXMLImport& rImport);
@@ -193,3 +194,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

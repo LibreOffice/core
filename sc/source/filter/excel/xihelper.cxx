@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@
 namespace {
 
 /** Fills the passed Calc address with the passed Excel cell coordinates without checking any limits. */
-inline void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt16 nXclRow, SCTAB nScTab )
+inline void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt32 nXclRow, SCTAB nScTab )
 {
     rScPos.SetCol( static_cast< SCCOL >( nXclCol ) );
     rScPos.SetRow( static_cast< SCROW >( nXclRow ) );
@@ -107,11 +108,6 @@ ScAddress XclImpAddressConverter::CreateValidAddress(
 
 // cell range -----------------------------------------------------------------
 
-bool XclImpAddressConverter::CheckRange( const XclRange& rXclRange, bool bWarn )
-{
-    return CheckAddress( rXclRange.maFirst, bWarn ) && CheckAddress( rXclRange.maLast, bWarn );
-}
-
 bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
         const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
 {
@@ -123,7 +119,7 @@ bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
 
         // check & correct end position
         sal_uInt16 nXclCol2 = rXclRange.maLast.mnCol;
-        sal_uInt16 nXclRow2 = rXclRange.maLast.mnRow;
+        sal_uInt32 nXclRow2 = rXclRange.maLast.mnRow;
         if( !CheckAddress( rXclRange.maLast, bWarn ) )
         {
             nXclCol2 = ::std::min( nXclCol2, mnMaxCol );
@@ -134,23 +130,7 @@ bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
     return bValidStart;
 }
 
-//UNUSED2009-05 ScRange XclImpAddressConverter::CreateValidRange(
-//UNUSED2009-05         const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
-//UNUSED2009-05 {
-//UNUSED2009-05     return ScRange(
-//UNUSED2009-05         CreateValidAddress( rXclRange.maFirst, nScTab1, bWarn ),
-//UNUSED2009-05         CreateValidAddress( rXclRange.maLast,  nScTab2, bWarn ) );
-//UNUSED2009-05 }
-
 // cell range list ------------------------------------------------------------
-
-//UNUSED2009-05 bool XclImpAddressConverter::CheckRangeList( const XclRangeList& rXclRanges, bool bWarn )
-//UNUSED2009-05 {
-//UNUSED2009-05     for( XclRangeList::const_iterator aIt = rXclRanges.begin(), aEnd = rXclRanges.end(); aIt != aEnd; ++aIt )
-//UNUSED2009-05         if( !CheckRange( *aIt, bWarn ) )
-//UNUSED2009-05             return false;
-//UNUSED2009-05     return true;
-//UNUSED2009-05 }
 
 void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
         const XclRangeList& rXclRanges, SCTAB nScTab, bool bWarn )
@@ -250,12 +230,6 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
 {
     return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, 0 );
 }
-
-//UNUSED2009-05 EditTextObject* XclImpStringHelper::CreateNoteObject(
-//UNUSED2009-05         const XclImpRoot& rRoot, const XclImpString& rString )
-//UNUSED2009-05 {
-//UNUSED2009-05     return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_NOTE, 0 );
-//UNUSED2009-05 }
 
 ScBaseCell* XclImpStringHelper::CreateCell(
         const XclImpRoot& rRoot, const XclImpString& rString, sal_uInt16 nXFIndex )
@@ -622,7 +596,7 @@ namespace {
 
 void lclAppendUrlChar( String& rUrl, sal_Unicode cChar )
 {
-    // #126855# encode special characters
+    // encode special characters
     switch( cChar )
     {
         case '#':   rUrl.AppendAscii( "%23" );  break;
@@ -782,7 +756,17 @@ void XclImpUrlHelper::DecodeUrl(
 {
     String aTabName;
     DecodeUrl( rUrl, aTabName, rbSameWb, rRoot, rEncodedUrl );
-    DBG_ASSERT( !aTabName.Len(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
+    OSL_ENSURE( !aTabName.Len(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
+}
+
+void XclImpUrlHelper::DecodeUrl(
+    ::rtl::OUString& rUrl, bool& rbSameWb, const XclImpRoot& rRoot, const ::rtl::OUString& rEncodedUrl )
+{
+    String aTabName;
+    String aUrl;
+    DecodeUrl( aUrl, aTabName, rbSameWb, rRoot, rEncodedUrl );
+    rUrl = aUrl;
+    OSL_ENSURE( !aTabName.Len(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
 }
 
 bool XclImpUrlHelper::DecodeLink( String& rApplic, String& rTopic, const String rEncUrl )
@@ -829,7 +813,7 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
         }
         break;
         default:
-            DBG_ERRORFILE( "XclImpCachedValue::XclImpCachedValue - unknown data type" );
+            OSL_FAIL( "XclImpCachedValue::XclImpCachedValue - unknown data type" );
     }
 }
 
@@ -866,7 +850,7 @@ XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
 
     for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
         for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
-            maValueList.Append( new XclImpCachedValue( rStrm ) );
+            maValueList.push_back( new XclImpCachedValue( rStrm ) );
 }
 
 XclImpCachedMatrix::~XclImpCachedMatrix()
@@ -876,38 +860,38 @@ XclImpCachedMatrix::~XclImpCachedMatrix()
 ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
 {
     ScMatrixRef xScMatrix;
-    DBG_ASSERT( mnScCols * mnScRows == maValueList.Count(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
-    if( mnScCols && mnScRows && static_cast< sal_uLong >( mnScCols * mnScRows ) <= maValueList.Count() )
+    OSL_ENSURE( mnScCols * mnScRows == maValueList.size(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
+    if( mnScCols && mnScRows && static_cast< sal_uLong >( mnScCols * mnScRows ) <= maValueList.size() )
     {
         xScMatrix = new ScMatrix( mnScCols, mnScRows );
-        const XclImpCachedValue* pValue = maValueList.First();
+        XclImpValueList::const_iterator itValue = maValueList.begin();
         for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
         {
             for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
             {
-                switch( pValue->GetType() )
+                switch( itValue->GetType() )
                 {
                     case EXC_CACHEDVAL_EMPTY:
                         // Excel shows 0.0 here, not an empty cell
                         xScMatrix->PutEmpty( nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_DOUBLE:
-                        xScMatrix->PutDouble( pValue->GetValue(), nScCol, nScRow );
+                        xScMatrix->PutDouble( itValue->GetValue(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_STRING:
-                        xScMatrix->PutString( pValue->GetString(), nScCol, nScRow );
+                        xScMatrix->PutString( itValue->GetString(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_BOOL:
-                        xScMatrix->PutBoolean( pValue->GetBool(), nScCol, nScRow );
+                        xScMatrix->PutBoolean( itValue->GetBool(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_ERROR:
-                        xScMatrix->PutError( pValue->GetScError(), nScCol, nScRow );
+                        xScMatrix->PutError( itValue->GetScError(), nScCol, nScRow );
                     break;
                     default:
-                        DBG_ERRORFILE( "XclImpCachedMatrix::CreateScMatrix - unknown value type" );
+                        OSL_FAIL( "XclImpCachedMatrix::CreateScMatrix - unknown value type" );
                         xScMatrix->PutEmpty( nScCol, nScRow );
                 }
-                pValue = maValueList.Next();
+                ++itValue;
             }
         }
     }
@@ -916,3 +900,4 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

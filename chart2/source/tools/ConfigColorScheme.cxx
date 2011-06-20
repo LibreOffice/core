@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include "macros.hxx"
 
 #include <unotools/configitem.hxx>
+#include <sal/macros.h>
 
 #include <set>
 
@@ -174,7 +176,7 @@ void ConfigColorScheme::retrieveConfigColors()
         0xff00ff, 0x00ffff, 0xffff00
     };
 
-    static const sal_Int32 nMaxDefaultColors = sizeof( nDefaultColors ) / sizeof( sal_Int32 );
+    static const sal_Int32 nMaxDefaultColors = SAL_N_ELEMENTS( nDefaultColors );
     return nDefaultColors[ nIndex % nMaxDefaultColors ];
 }
 
@@ -200,3 +202,5 @@ APPHELPER_XSERVICEINFO_IMPL( ConfigColorScheme,
 // ================================================================================
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

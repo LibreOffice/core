@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,6 +27,7 @@
  ************************************************************************/
 #include "vbaborders.hxx"
 
+#include <sal/macros.h>
 #include <cppuhelper/implbase3.hxx>
 #include <ooo/vba/excel/XlBordersIndex.hpp>
 #include <ooo/vba/excel/XlBorderWeight.hpp>
@@ -34,7 +36,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
-
 #include "vbapalette.hxx"
 
 using namespace ::com::sun::star;
@@ -332,7 +333,7 @@ public:
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
-        return sizeof( supportedIndexTable ) / sizeof( supportedIndexTable[0] );
+        return SAL_N_ELEMENTS( supportedIndexTable );
     }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
     {
@@ -572,3 +573,5 @@ ScVbaBorders::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

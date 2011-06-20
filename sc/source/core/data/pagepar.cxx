@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ void ScPageTableParam::Reset()
     bCellContent = sal_True;
     bNotes=bGrid=bHeaders=bDrawings=
     bLeftRight=bScaleAll=bScaleTo=bScalePageNum=
-    bFormulas=bNullVals=bSkipEmpty          = sal_False;
+    bFormulas=bNullVals=bSkipEmpty          = false;
     bTopDown=bScaleNone=bCharts=bObjects    = sal_True;
     nScaleAll = 100;
     nScalePageNum = nScaleWidth = nScaleHeight = 0;
@@ -92,7 +93,7 @@ ScPageAreaParam::~ScPageAreaParam()
 
 void ScPageAreaParam::Reset()
 {
-    bPrintArea = bRepeatRow = bRepeatCol = sal_False;
+    bPrintArea = bRepeatRow = bRepeatCol = false;
 
     memset( &aPrintArea, 0, sizeof(ScRange) );
     memset( &aRepeatRow, 0, sizeof(ScRange) );
@@ -120,3 +121,5 @@ sal_Bool ScPageAreaParam::operator==( const ScPageAreaParam& r ) const
 
     return bEqual;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

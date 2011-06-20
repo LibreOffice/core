@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,6 +47,8 @@
 using rtl::OUString;
 using namespace com::sun::star;
 using namespace xmloff::token;
+
+using rtl::OUString;
 
 //-----------------------------------------------------------------------------
 
@@ -282,8 +285,6 @@ class ScXMLChangeCellContext : public SvXMLImportContext
     double&                 rDateTimeValue;
     double                  fValue;
     sal_uInt16&             rType;
-//    sal_Bool                bIsMatrix;
-//    sal_Bool                bIsCoveredMatrix;
     sal_Bool                bEmpty;
     sal_Bool                bFirstParagraph;
     sal_Bool                bString;
@@ -703,9 +704,9 @@ ScXMLBigRangeContext::ScXMLBigRangeContext(  ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rBigRange(rTempBigRange)
 {
-    sal_Bool bColumn(sal_False);
-    sal_Bool bRow(sal_False);
-    sal_Bool bTable(sal_False);
+    sal_Bool bColumn(false);
+    sal_Bool bRow(false);
+    sal_Bool bTable(false);
     sal_Int32 nColumn(0);
     sal_Int32 nRow(0);
     sal_Int32 nTable(0);
@@ -794,8 +795,8 @@ ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& 
     nMatrixRows(0),
     nType(NUMBERFORMAT_ALL),
     nMatrixFlag(MM_NONE),
-    bBigRange(sal_False),
-    bContainsCell(sal_False)
+    bBigRange(false),
+    bContainsCell(false)
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -835,7 +836,7 @@ SvXMLImportContext *ScXMLCellContentDeletionContext::CreateChildContext( sal_uIn
         }
         else if (IsXMLToken(rLocalName, XML_CELL_ADDRESS))
         {
-            DBG_ASSERT(!nID, "a action with a ID should not contain a BigRange");
+            OSL_ENSURE(!nID, "a action with a ID should not contain a BigRange");
             bBigRange = sal_True;
             pContext = new ScXMLBigRangeContext(GetScImport(), nPrefix, rLocalName, xAttrList, aBigRange);
         }
@@ -1075,11 +1076,11 @@ SvXMLImportContext *ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTem
     else
     {
         if (!pChangeCellContext->IsEditCell())
-            pChangeCellContext->CreateTextPContext(sal_False);
+            pChangeCellContext->CreateTextPContext(false);
         sal_Bool bWasContext (sal_True);
         if (!pTextPContext)
         {
-            bWasContext = sal_False;
+            bWasContext = false;
             pTextPContext = GetScImport().GetTextImport()->CreateTextChildContext(
                                     GetScImport(), nPrefix, sLName, xAttrList);
         }
@@ -1129,10 +1130,10 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
     bEmpty(sal_True),
     bFirstParagraph(sal_True),
     bString(sal_True),
-    bFormula(sal_False)
+    bFormula(false)
 {
-    sal_Bool bIsMatrix(sal_False);
-    sal_Bool bIsCoveredMatrix(sal_False);
+    sal_Bool bIsMatrix(false);
+    sal_Bool bIsCoveredMatrix(false);
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
@@ -1146,7 +1147,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
         {
             if (IsXMLToken(aLocalName, XML_FORMULA))
             {
-                bEmpty = sal_False;
+                bEmpty = false;
                 GetScImport().ExtractFormulaNamespaceGrammar( rFormula, rFormulaNmsp, rGrammar, sValue );
                 bFormula = sal_True;
             }
@@ -1174,33 +1175,33 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
             if (IsXMLToken(aLocalName, XML_VALUE_TYPE))
             {
                 if (IsXMLToken(sValue, XML_FLOAT))
-                    bString = sal_False;
+                    bString = false;
                 else if (IsXMLToken(sValue, XML_DATE))
                 {
                     rType = NUMBERFORMAT_DATE;
-                    bString = sal_False;
+                    bString = false;
                 }
                 else if (IsXMLToken(sValue, XML_TIME))
                 {
                     rType = NUMBERFORMAT_TIME;
-                    bString = sal_False;
+                    bString = false;
                 }
             }
             else if (IsXMLToken(aLocalName, XML_VALUE))
             {
                 SvXMLUnitConverter::convertDouble(fValue, sValue);
-                bEmpty = sal_False;
+                bEmpty = false;
             }
             else if (IsXMLToken(aLocalName, XML_DATE_VALUE))
             {
-                bEmpty = sal_False;
+                bEmpty = false;
                 if (GetScImport().GetMM100UnitConverter().setNullDate(GetScImport().GetModel()))
                     GetScImport().GetMM100UnitConverter().convertDateTime(rDateTimeValue, sValue);
                 fValue = rDateTimeValue;
             }
             else if (IsXMLToken(aLocalName, XML_TIME_VALUE))
             {
-                bEmpty = sal_False;
+                bEmpty = false;
                 GetScImport().GetMM100UnitConverter().convertTime(rDateTimeValue, sValue);
                 fValue = rDateTimeValue;
             }
@@ -1225,11 +1226,11 @@ SvXMLImportContext *ScXMLChangeCellContext::CreateChildContext( sal_uInt16 nPref
 
     if ((nPrefix == XML_NAMESPACE_TEXT) && (IsXMLToken(rLocalName, XML_P)))
     {
-        bEmpty = sal_False;
+        bEmpty = false;
         if (bFirstParagraph)
         {
             pContext = new ScXMLChangeTextPContext(GetScImport(), nPrefix, rLocalName, xAttrList, this);
-            bFirstParagraph = sal_False;
+            bFirstParagraph = false;
         }
         else
         {
@@ -1260,10 +1261,10 @@ void ScXMLChangeCellContext::CreateTextPContext(sal_Bool bIsNewParagraph)
             if (bIsNewParagraph)
             {
                 xText->setString(sText);
-                xTextCursor->gotoEnd(sal_False);
+                xTextCursor->gotoEnd(false);
                 uno::Reference < text::XTextRange > xTextRange (xTextCursor, uno::UNO_QUERY);
                 if (xTextRange.is())
-                    xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, sal_False);
+                    xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, false);
             }
             GetScImport().GetTextImport()->SetCursor(xTextCursor);
         }
@@ -1290,7 +1291,6 @@ void ScXMLChangeCellContext::EndElement()
             if (GetScImport().GetDocument())
                 rOldCell = new ScEditCell(pEditTextObj->CreateTextObject(), GetScImport().GetDocument(), GetScImport().GetDocument()->GetEditPool());
             GetScImport().GetTextImport()->ResetCursor();
-            // delete pEditTextObj;
             pEditTextObj->release();
         }
         else
@@ -1303,24 +1303,6 @@ void ScXMLChangeCellContext::EndElement()
                     rOldCell = new ScValueCell(fValue);
                 if (rType == NUMBERFORMAT_DATE || rType == NUMBERFORMAT_TIME)
                     rInputString = sText;
-            }
-            else
-            {
-                // do nothing, this has to do later (on another place)
-                /*ScAddress aCellPos;
-                rOldCell = new ScFormulaCell(GetScImport().GetDocument(), aCellPos, sFormula);
-                if (bString)
-                    static_cast<ScFormulaCell*>(rOldCell)->SetString(sValue);
-                else
-                    static_cast<ScFormulaCell*>(rOldCell)->SetDouble(fValue);
-                static_cast<ScFormulaCell*>(rOldCell)->SetInChangeTrack(sal_True);
-                if (bIsCoveredMatrix)
-                    static_cast<ScFormulaCell*>(rOldCell)->SetMatrixFlag(MM_REFERENCE);
-                else if (bIsMatrix && nMatrixRows && nMatrixCols)
-                {
-                    static_cast<ScFormulaCell*>(rOldCell)->SetMatrixFlag(MM_FORMULA);
-                    static_cast<ScFormulaCell*>(rOldCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
-                }*/
             }
         }
     }
@@ -1646,7 +1628,7 @@ ScXMLMovementCutOffContext::ScXMLMovementCutOffContext( ScXMLImport& rImport,
     sal_Int32 nPosition(0);
     sal_Int32 nStartPosition(0);
     sal_Int32 nEndPosition(0);
-    sal_Bool bPosition(sal_False);
+    sal_Bool bPosition(false);
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
@@ -1839,7 +1821,7 @@ SvXMLImportContext *ScXMLDeletionContext::CreateChildContext( sal_uInt16 nPrefix
             pContext = new ScXMLCutOffsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
         else
         {
-            DBG_ERROR("don't know this");
+            OSL_FAIL("don't know this");
         }
     }
 
@@ -2023,3 +2005,4 @@ void ScXMLRejectionContext::EndElement()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

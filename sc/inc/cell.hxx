@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,9 @@
 #include <stddef.h>
 
 #include <set>
+#include <vector>
+#include <boost/shared_ptr.hpp>
+
 #include <tools/mempool.hxx>
 #include <svl/listener.hxx>
 #include "global.hxx"
@@ -56,6 +60,7 @@ class SvtBroadcaster;
 class ScCodeArray;
 class ScProgress;
 class ScPostIt;
+class ScPatternAttr;
 
 // ============================================================================
 
@@ -79,7 +84,7 @@ const int SC_CLONECELL_NOCAPTION        = 0x0004;
 class SC_DLLPUBLIC ScBaseCell
 {
 protected:
-                    ~ScBaseCell();  // nicht virtuell -> darf nicht direkt aufgerufen werden
+                    ~ScBaseCell();  // not virtual - not to be called directly.
 
 public:
     explicit        ScBaseCell( CellType eNewType );
@@ -109,7 +114,7 @@ public:
         Returns false for formula cells returning nothing, use HasEmptyData() for that. */
     bool            IsBlank( bool bIgnoreNotes = false ) const;
 
-// fuer Idle-Berechnung
+// for idle-calculations
     inline sal_uInt16   GetTextWidth() const { return nTextWidth; }
     inline void     SetTextWidth( sal_uInt16 nNew ) { nTextWidth = nNew; }
 
@@ -156,7 +161,7 @@ public:
     sal_Bool            HasEmptyData() const;
     sal_Bool            HasValueData() const;
     sal_Bool            HasStringData() const;
-    String          GetStringData() const;          // nur echte Strings
+    String          GetStringData() const;          // only real strings
 
     static sal_Bool     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
 
@@ -187,15 +192,13 @@ public:
     /** Cell takes ownership of the passed note and broadcaster. */
     explicit        ScNoteCell( ScPostIt* pNote, SvtBroadcaster* pBC = 0 );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                     ~ScNoteCell();
 #endif
 
 private:
                     ScNoteCell( const ScNoteCell& );
 };
-
-// ============================================================================
 
 class SC_DLLPUBLIC ScValueCell : public ScBaseCell
 {
@@ -206,7 +209,7 @@ public:
                     ScValueCell();
     explicit        ScValueCell( double fValue );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                     ~ScValueCell();
 #endif
 
@@ -216,8 +219,6 @@ public:
 private:
     double          mfValue;
 };
-
-// ============================================================================
 
 class SC_DLLPUBLIC ScStringCell : public ScBaseCell
 {
@@ -229,7 +230,7 @@ public:
                     ScStringCell();
     explicit        ScStringCell( const String& rString );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                     ~ScStringCell();
 #endif
 
@@ -241,14 +242,12 @@ private:
     String          maString;
 };
 
-// ============================================================================
-
 class SC_DLLPUBLIC ScEditCell : public ScBaseCell
 {
 private:
     EditTextObject*     pData;
-    String*             pString;        // fuer schnelleren Zugriff von Formeln
-    ScDocument*         pDoc;           // fuer EditEngine Zugriff mit Pool
+    String*             pString;        // for faster access to formulas
+    ScDocument*         pDoc;           // for EditEngine access with Pool
 
     void            SetTextObject( const EditTextObject* pObject,
                                     const SfxItemPool* pFromPool );
@@ -262,12 +261,12 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScEditCell )
 #endif
 
-                    ~ScEditCell();              // wegen pData immer!
+                    ~ScEditCell();              // always because of pData!
 
                     ScEditCell( const EditTextObject* pObject, ScDocument*,
                                 const SfxItemPool* pFromPool /* = NULL */ );
                     ScEditCell( const ScEditCell& rCell, ScDocument& rDoc );
-                    // fuer Zeilenumbrueche
+                    // for line breaks
                     ScEditCell( const String& rString, ScDocument* );
 
     void            SetData( const EditTextObject* pObject,
@@ -276,9 +275,52 @@ public:
     void            GetString( String& rString ) const;
 
     const EditTextObject* GetData() const   { return pData; }
+
+    /** Removes character attribute based on new pattern attributes. */
+    void            RemoveCharAttribs( const ScPatternAttr& rAttr );
 };
 
-// ============================================================================
+class ScEditDataArray
+{
+public:
+    class Item
+    {
+    public:
+        explicit Item(SCTAB nTab, SCCOL nCol, SCROW nRow,
+                      EditTextObject* pOldData, EditTextObject* pNewData);
+        ~Item();
+
+        const EditTextObject* GetOldData() const;
+        const EditTextObject* GetNewData() const;
+        SCTAB GetTab() const;
+        SCCOL GetCol() const;
+        SCROW GetRow() const;
+
+    private:
+        Item(); // disabled
+
+    private:
+        ::boost::shared_ptr<EditTextObject> mpOldData;
+        ::boost::shared_ptr<EditTextObject> mpNewData;
+        SCTAB mnTab;
+        SCCOL mnCol;
+        SCROW mnRow;
+
+    };
+
+    ScEditDataArray();
+    ~ScEditDataArray();
+
+    void AddItem(SCTAB nTab, SCCOL nCol, SCROW nRow,
+                 EditTextObject* pOldData, EditTextObject* pNewData);
+
+    const Item* First();
+    const Item* Next();
+
+private:
+    ::std::vector<Item>::const_iterator maIter;
+    ::std::vector<Item> maArray;
+};
 
 enum ScMatrixMode {
     MM_NONE      = 0,                   // No matrix formula
@@ -355,19 +397,19 @@ public:
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
     void            SetDirty();
-    inline void     SetDirtyVar() { bDirty = sal_True; }
+    void            SetDirtyVar();
     // If setting entire document dirty after load, no broadcasts but still append to FormulaTree.
     void            SetDirtyAfterLoad();
-    inline void     ResetTableOpDirtyVar() { bTableOpDirty = sal_False; }
+    inline void     ResetTableOpDirtyVar() { bTableOpDirty = false; }
     void            SetTableOpDirty();
     sal_Bool            IsDirtyOrInTableOpDirty() const;
     sal_Bool            GetDirty() const { return bDirty; }
     sal_Bool            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( sal_Bool bVar ) { bNeedListening = bVar; }
     void            Compile(const String& rFormula,
-                            sal_Bool bNoListening = sal_False,
+                            sal_Bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
-    void            CompileTokenArray( sal_Bool bNoListening = sal_False );
+    void            CompileTokenArray( sal_Bool bNoListening = false );
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
     void            CalcAfterLoad();
     bool            MarkUsedExternalReferences();
@@ -388,7 +430,7 @@ public:
     sal_Bool            HasRelNameReference() const;
     sal_Bool            HasColRowName() const;
 
-    void            UpdateReference(UpdateRefMode eUpdateRefMode,
+    bool            UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                     ScDocument* pUndoDoc = NULL,
@@ -400,19 +442,19 @@ public:
 
     void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    void            UpdateInsertTab(SCTAB nTable);
+    void            UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets = 1);
     void            UpdateInsertTabAbs(SCTAB nTable);
-    sal_Bool            UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove = sal_False);
+    sal_Bool            UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove = false, SCTAB nSheets = 1);
     void            UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
     void            UpdateRenameTab(SCTAB nTable, const String& rName);
     sal_Bool            TestTabRefAbs(SCTAB nTable);
-    void            UpdateCompile( sal_Bool bForceIfNameInUse = sal_False );
+    void            UpdateCompile( sal_Bool bForceIfNameInUse = false );
     sal_Bool            IsRangeNameInUse(sal_uInt16 nIndex) const;
     void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
     void            ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap );
     sal_Bool            IsSubTotal() const                      { return bSubTotal; }
     sal_Bool            IsChanged() const                       { return bChanged; }
-    void            ResetChanged()                          { bChanged = sal_False; }
+    void            ResetChanged()                          { bChanged = false; }
     sal_Bool            IsEmpty();      // formula::svEmptyCell result
                     // display as empty string if formula::svEmptyCell result
     sal_Bool            IsEmptyDisplayedAsString();
@@ -454,13 +496,12 @@ public:
     void            SetMatColsRows( SCCOL nCols, SCROW nRows );
     void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
 
-                    // ob Zelle im ChangeTrack und nicht im echten Dokument ist
+                    // cell belongs to ChangeTrack and not to the real document
     void            SetInChangeTrack( sal_Bool bVal ) { bInChangeTrack = bVal; }
     sal_Bool            IsInChangeTrack() const { return bInChangeTrack; }
 
-                    // Zu Typ und Format das entsprechende Standardformat.
-                    // Bei Format "Standard" evtl. das in die Formelzelle
-                    // uebernommene Format.
+                    // standard format for type and format
+                    // for format "Standard" possibly the format used in the formula cell
     sal_uLong           GetStandardFormat( SvNumberFormatter& rFormatter, sal_uLong nFormat ) const;
 
     // For import filters!
@@ -487,9 +528,11 @@ public:
 
     /** Determines whether or not the result string contains more than one paragraph */
     bool            IsMultilineResult();
+
+    void            MaybeInterpret();
 };
 
-//          Iterator fuer Referenzen in einer Formelzelle
+//          Iterator for references in a formula cell
 class ScDetectiveRefIter
 {
 private:
@@ -498,9 +541,9 @@ private:
 public:
                 ScDetectiveRefIter( ScFormulaCell* pCell );
     sal_Bool        GetNextRef( ScRange& rRange );
+    ScToken*    GetNextRefToken();
 };
-
-// ============================================================================
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

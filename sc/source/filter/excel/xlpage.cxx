@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,10 +33,12 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/paperinf.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/macros.h>
 #include "scitems.hxx"
 #include <editeng/brshitem.hxx>
 #include "global.hxx"
 #include "xlconst.hxx"
+#include <oox/core/xmlfilterbase.hxx>
 
 // Paper size =================================================================
 
@@ -48,6 +51,8 @@ struct XclPaperSize
 
 #define IN2TWIPS( v )      ((long)((v) * EXC_TWIPS_PER_INCH + 0.5))
 #define MM2TWIPS( v )      ((long)((v) * EXC_TWIPS_PER_INCH / CM_PER_INCH / 10.0 + 0.5))
+#define TWIPS2MM( v )      ((long)((v - 0.5) / EXC_TWIPS_PER_INCH * CM_PER_INCH * 10.0))
+
 
 static const XclPaperSize pPaperSizeTable[] =
 {
@@ -189,6 +194,8 @@ void XclPageData::SetDefaults()
     mfHdrLeftMargin = mfHdrRightMargin = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_HLR );
     mfFtrLeftMargin = mfFtrRightMargin = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_FLR );
     mnPaperSize = EXC_PAPERSIZE_DEFAULT;
+    mnPaperWidth = 0;
+    mnPaperHeight = 0;
     mnCopies = 1;
     mnStartPage = 0;
     mnScaling = 100;
@@ -203,7 +210,7 @@ void XclPageData::SetDefaults()
 Size XclPageData::GetScPaperSize() const
 {
     const XclPaperSize* pEntry = pPaperSizeTable;
-    if( mnPaperSize < STATIC_ARRAY_SIZE( pPaperSizeTable ) )
+    if( mnPaperSize < SAL_N_ELEMENTS( pPaperSizeTable ) )
         pEntry += mnPaperSize;
 
     Size aSize;
@@ -222,7 +229,7 @@ Size XclPageData::GetScPaperSize() const
     return aSize;
 }
 
-void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait )
+void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait, bool bStrictSize )
 {
     mbPortrait = bPortrait;
     mnPaperSize = 0;
@@ -230,19 +237,41 @@ void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait )
     long nHeight = bPortrait ? rSize.Height() : rSize.Width();
     long nMaxWDiff = 80;
     long nMaxHDiff = 50;
-    for( const XclPaperSize* pEntry = pPaperSizeTable; pEntry != STATIC_ARRAY_END( pPaperSizeTable ); ++pEntry )
+
+    mnPaperWidth = TWIPS2MM( nWidth );
+    mnPaperHeight = TWIPS2MM( nHeight );
+    if( bStrictSize )
+    {
+        nMaxWDiff = 5;
+        nMaxHDiff = 5;
+        mnStrictPaperSize = EXC_PAPERSIZE_USER;
+    }
+    else
+    {
+        mnPaperSize = 0;
+    }
+
+    for( const XclPaperSize* pEntry = pPaperSizeTable; pEntry != STATIC_TABLE_END( pPaperSizeTable ); ++pEntry )
     {
         long nWDiff = Abs( pEntry->mnWidth - nWidth );
         long nHDiff = Abs( pEntry->mnHeight - nHeight );
         if( ((nWDiff <= nMaxWDiff) && (nHDiff < nMaxHDiff)) ||
             ((nWDiff < nMaxWDiff) && (nHDiff <= nMaxHDiff)) )
         {
-            mnPaperSize = static_cast< sal_uInt16 >( pEntry - pPaperSizeTable );
+            sal_uInt16 nIndex = static_cast< sal_uInt16 >( pEntry - pPaperSizeTable );
+            if( !bStrictSize )
+                mnPaperSize = nIndex;
+            else
+                mnStrictPaperSize = mnPaperSize = nIndex;
+
             nMaxWDiff = nWDiff;
             nMaxHDiff = nHDiff;
         }
     }
+    if( !bStrictSize )
+        SetScPaperSize( rSize, bPortrait, sal_True );
 }
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

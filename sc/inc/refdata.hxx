@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,24 +86,24 @@ struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) int
     inline  void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
     // InitAddressRel: InitFlags and set address, everything relative to rPos
     inline  void InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos );
-    inline  void SetColRel( sal_Bool bVal ) { Flags.bColRel = (bVal ? sal_True : sal_False ); }
+    inline  void SetColRel( sal_Bool bVal ) { Flags.bColRel = (bVal ? sal_True : false ); }
     inline  sal_Bool IsColRel() const       { return Flags.bColRel; }
-    inline  void SetRowRel( sal_Bool bVal ) { Flags.bRowRel = (bVal ? sal_True : sal_False ); }
+    inline  void SetRowRel( sal_Bool bVal ) { Flags.bRowRel = (bVal ? sal_True : false ); }
     inline  sal_Bool IsRowRel() const       { return Flags.bRowRel; }
-    inline  void SetTabRel( sal_Bool bVal ) { Flags.bTabRel = (bVal ? sal_True : sal_False ); }
+    inline  void SetTabRel( sal_Bool bVal ) { Flags.bTabRel = (bVal ? sal_True : false ); }
     inline  sal_Bool IsTabRel() const       { return Flags.bTabRel; }
 
-    inline  void SetColDeleted( sal_Bool bVal ) { Flags.bColDeleted = (bVal ? sal_True : sal_False ); }
+    inline  void SetColDeleted( sal_Bool bVal ) { Flags.bColDeleted = (bVal ? sal_True : false ); }
     inline  sal_Bool IsColDeleted() const       { return Flags.bColDeleted; }
-    inline  void SetRowDeleted( sal_Bool bVal ) { Flags.bRowDeleted = (bVal ? sal_True : sal_False ); }
+    inline  void SetRowDeleted( sal_Bool bVal ) { Flags.bRowDeleted = (bVal ? sal_True : false ); }
     inline  sal_Bool IsRowDeleted() const       { return Flags.bRowDeleted; }
-    inline  void SetTabDeleted( sal_Bool bVal ) { Flags.bTabDeleted = (bVal ? sal_True : sal_False ); }
+    inline  void SetTabDeleted( sal_Bool bVal ) { Flags.bTabDeleted = (bVal ? sal_True : false ); }
     inline  sal_Bool IsTabDeleted() const       { return Flags.bTabDeleted; }
     inline  sal_Bool IsDeleted() const          { return IsColDeleted() || IsRowDeleted() || IsTabDeleted(); }
 
-    inline  void SetFlag3D( sal_Bool bVal ) { Flags.bFlag3D = (bVal ? sal_True : sal_False ); }
+    inline  void SetFlag3D( sal_Bool bVal ) { Flags.bFlag3D = (bVal ? sal_True : false ); }
     inline  sal_Bool IsFlag3D() const       { return Flags.bFlag3D; }
-    inline  void SetRelName( sal_Bool bVal )    { Flags.bRelName = (bVal ? sal_True : sal_False ); }
+    inline  void SetRelName( sal_Bool bVal )    { Flags.bRelName = (bVal ? sal_True : false ); }
     inline  sal_Bool IsRelName() const          { return Flags.bRelName; }
 
     inline  sal_Bool Valid() const;
@@ -211,3 +212,5 @@ inline bool ScComplexRefData::ValidExternal() const
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

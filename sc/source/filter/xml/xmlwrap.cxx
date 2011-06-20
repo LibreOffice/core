@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
-
 #include <rsc/rscsfx.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/debug.hxx>
-#include <vos/xception.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
@@ -88,6 +85,8 @@
 using namespace com::sun::star;
 using ::rtl::OUString;
 
+using rtl::OUString;
+
 // -----------------------------------------------------------------------
 
 ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const uno::Reference < embed::XStorage >& xStor ) :
@@ -95,37 +94,8 @@ ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const uno:
     pMedium(pM),
     xStorage(xStor)
 {
-    DBG_ASSERT( pMedium || xStorage.is(), "ScXMLImportWrapper: Medium or Storage must be set" );
+    OSL_ENSURE( pMedium || xStorage.is(), "ScXMLImportWrapper: Medium or Storage must be set" );
 }
-
-//UNUSED2008-05  uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator(
-//UNUSED2008-05          uno::Reference < frame::XModel> & rModel)
-//UNUSED2008-05  {
-//UNUSED2008-05      DBG_ERROR( "The status indicator from medium must be used!" );
-//UNUSED2008-05
-//UNUSED2008-05      uno::Reference<task::XStatusIndicator> xStatusIndicator;
-//UNUSED2008-05
-//UNUSED2008-05      if (rModel.is())
-//UNUSED2008-05      {
-//UNUSED2008-05          uno::Reference<frame::XController> xController( rModel->getCurrentController());
-//UNUSED2008-05          if ( xController.is())
-//UNUSED2008-05          {
-//UNUSED2008-05              uno::Reference<task::XStatusIndicatorFactory> xFactory( xController->getFrame(), uno::UNO_QUERY );
-//UNUSED2008-05              if ( xFactory.is())
-//UNUSED2008-05              {
-//UNUSED2008-05                  try
-//UNUSED2008-05                  {
-//UNUSED2008-05                      xStatusIndicator.set(xFactory->createStatusIndicator());
-//UNUSED2008-05                  }
-//UNUSED2008-05                  catch ( lang::DisposedException e )
-//UNUSED2008-05                  {
-//UNUSED2008-05                      DBG_ERROR("Exception while trying to get a Status Indicator");
-//UNUSED2008-05                  }
-//UNUSED2008-05              }
-//UNUSED2008-05          }
-//UNUSED2008-05      }
-//UNUSED2008-05      return xStatusIndicator;
-//UNUSED2008-05  }
 
 uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
 {
@@ -154,12 +124,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     if ( !xStorage.is() && pMedium )
         xStorage = pMedium->GetStorage();
 
-    // Get data source ...
-
-//  uno::Reference< uno::XInterface > xPipe;
-//  uno::Reference< io::XActiveDataSource > xSource;
-
-    sal_Bool bEncrypted = sal_False;
+    sal_Bool bEncrypted = false;
     rtl::OUString sStream(sDocName);
     if( xStorage.is() )
     {
@@ -174,7 +139,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
                 sStream = sOldDocName;
             }
             else
-                return sal_False;
+                return false;
 
             aParserInput.aInputStream = xDocStream->getInputStream();
             uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
@@ -195,32 +160,6 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             return SCERR_IMPORT_UNKNOWN;
         }
     }
-    // #99667#; no longer necessary
-/*  else if ( pMedium )
-    {
-        // if there is a medium and if this medium has a load environment,
-        // we get an active data source from the medium.
-        pMedium->GetInStream()->Seek( 0 );
-        xSource = pMedium->GetDataSource();
-        DBG_ASSERT( xSource.is(), "got no data source from medium" );
-        if( !xSource.is() )
-            return sal_False;
-
-        // get a pipe for connecting the data source to the parser
-        xPipe = xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.io.Pipe") );
-        DBG_ASSERT( xPipe.is(),
-                "XMLReader::Read: com.sun.star.io.Pipe service missing" );
-        if( !xPipe.is() )
-            return sal_False;
-
-        // connect pipe's output stream to the data source
-        uno::Reference<io::XOutputStream> xPipeOutput( xPipe, uno::UNO_QUERY );
-        xSource->setOutputStream( xPipeOutput );
-
-        aParserInput.aInputStream =
-            uno::Reference< io::XInputStream >( xPipe, uno::UNO_QUERY );
-    }*/
     else
         return SCERR_IMPORT_UNKNOWN;
 
@@ -228,7 +167,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     uno::Reference< beans::XPropertySet > xInfoSet;
     if( aArgs.getLength() > 0 )
         aArgs.getConstArray()[0] >>= xInfoSet;
-    DBG_ASSERT( xInfoSet.is(), "missing property set" );
+    OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
         rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
@@ -242,7 +181,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         xServiceFactory->createInstanceWithArguments(
             sComponentName, aArgs ),
         uno::UNO_QUERY );
-    DBG_ASSERT( xDocHandler.is(), "can't get Calc importer" );
+    OSL_ENSURE( xDocHandler.is(), "can't get Calc importer" );
     uno::Reference<document::XImporter> xImporter( xDocHandler, uno::UNO_QUERY );
     uno::Reference<lang::XComponent> xComponent( xModel, uno::UNO_QUERY );
     if (xImporter.is())
@@ -251,14 +190,6 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     // connect parser and filter
     uno::Reference<xml::sax::XParser> xParser( xXMLParser, uno::UNO_QUERY );
     xParser->setDocumentHandler( xDocHandler );
-
-    // parse
-/*  if( xSource.is() )
-    {
-        uno::Reference<io::XActiveDataControl> xSourceControl( xSource, uno::UNO_QUERY );
-        if( xSourceControl.is() )
-            xSourceControl->start();
-    }*/
 
     try
     {
@@ -277,7 +208,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             if ( aSaxEx.WrappedException >>= aTmp )
                 aSaxEx = aTmp;
             else
-                bTryChild = sal_False;
+                bTryChild = false;
         }
 
         packages::zip::ZipIOException aBrokenPackage;
@@ -288,10 +219,10 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         else
         {
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             ByteString aError( "SAX parse exception catched while importing:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aError.GetBuffer() );
+            OSL_FAIL( aError.GetBuffer() );
 #endif
 
             String sErr( String::CreateFromInt32( r.LineNumber ));
@@ -308,7 +239,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             }
             else
             {
-                DBG_ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
+                OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
                 nReturn = *new StringErrorInfo( SCERR_IMPORT_FORMAT_ROWCOL, sErr,
                                  ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
             }
@@ -324,10 +255,10 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         else
         {
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             ByteString aError( "SAX exception catched while importing:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aError.GetBuffer() );
+            OSL_FAIL( aError.GetBuffer() );
 #endif
             (void)r;    // avoid warning in product version
 
@@ -336,10 +267,10 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( packages::zip::ZipIOException& r )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ByteString aError( "Zip exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         (void)r;    // avoid warning in product version
 
@@ -347,10 +278,10 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( io::IOException& r )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ByteString aError( "IO exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         (void)r;    // avoid warning in product version
 
@@ -358,10 +289,10 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( uno::Exception& r )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ByteString aError( "uno exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         (void)r;    // avoid warning in product version
 
@@ -389,9 +320,9 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
-    DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
+    OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
     if( !xServiceFactory.is() )
-        return sal_False;
+        return false;
 
     xml::sax::InputSource aParserInput;
     if (pMedium)
@@ -404,9 +335,9 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
     uno::Reference<uno::XInterface> xXMLParser(
         xServiceFactory->createInstance(
             OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) ));
-    DBG_ASSERT( xXMLParser.is(), "com.sun.star.xml.sax.Parser service missing" );
+    OSL_ENSURE( xXMLParser.is(), "com.sun.star.xml.sax.Parser service missing" );
     if( !xXMLParser.is() )
-        return sal_False;
+        return false;
 
     // get filter
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
@@ -429,8 +360,6 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             { MAP_LEN( "BuildId" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "VBACompatibilityMode" ), 0, &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "ScriptConfiguration" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "OrganizerMode" ), 0, &::getBooleanCppuType(),
-                ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
 
             { NULL, 0, 0, NULL, 0, 0 }
         };
@@ -481,7 +410,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                     aName = pDocHierarchItem->GetValue();
             }
             else
-                aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+                aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ));
 
             if( aName.getLength() )
             {
@@ -490,32 +419,26 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             }
         }
 
-        if (bStylesOnly)
-        {
-            ::rtl::OUString const sOrganizerMode(
-                RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
-            xInfoSet->setPropertyValue(sOrganizerMode, uno::makeAny(sal_True));
-        }
-
         sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
-        // #i103539#: always read meta.xml for generator
         sal_uInt32 nMetaRetval(0);
-        uno::Sequence<uno::Any> aMetaArgs(1);
-        uno::Any* pMetaArgs = aMetaArgs.getArray();
-        pMetaArgs[0] <<= xInfoSet;
+        if(!bStylesOnly)
+        {
+            uno::Sequence<uno::Any> aMetaArgs(1);
+            uno::Any* pMetaArgs = aMetaArgs.getArray();
+            pMetaArgs[0] <<= xInfoSet;
 
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import start" );
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import start" );
 
-        nMetaRetval = ImportFromComponent(
-            xServiceFactory, xModel, xXMLParser, aParserInput,
-            bOasis ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisMetaImporter"))
-                   : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaImporter")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Meta.xml")), aMetaArgs,
-            sal_False);
+            nMetaRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+                bOasis ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisMetaImporter"))
+                       : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaImporter")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Meta.xml")), aMetaArgs,
+                false);
 
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import end" );
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import end" );
+        }
 
         SvXMLGraphicHelper* pGraphicHelper = NULL;
         uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
@@ -530,7 +453,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 
             if( pObjSh )
             {
-                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(xStorage, *pObjSh, EMBEDDEDOBJECTHELPER_MODE_READ, sal_False );
+                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(xStorage, *pObjSh, EMBEDDEDOBJECTHELPER_MODE_READ, false );
                 xObjectResolver = pObjectHelper;
             }
         }
@@ -557,7 +480,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                 bOasis ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisSettingsImporter"))
                        : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsImporter")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
-                sEmpty, aSettingsArgs, sal_False);
+                sEmpty, aSettingsArgs, false);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings import end" );
         }
@@ -605,7 +528,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         if (xStatusIndicator.is())
             xStatusIndicator->end();
 
-        sal_Bool bRet(sal_False);
+        sal_Bool bRet(false);
         if (bStylesOnly)
         {
             if (nStylesRetval)
@@ -676,7 +599,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
         return bRet;//!bStylesOnly ? bDocRetval : bStylesRetval;
     }
-    return sal_False;
+    return false;
 }
 
 bool lcl_HasValidStream(ScDocument& rDoc)
@@ -704,7 +627,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
     const sal_Bool bPlainText, uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
 {
-    sal_Bool bRet(sal_False);
+    sal_Bool bRet(false);
     uno::Reference<io::XOutputStream> xOut;
     uno::Reference<io::XStream> xStream;
 
@@ -724,7 +647,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
             xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny(sMediaType));
             OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
             if (bPlainText)
-                xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), uno::makeAny(sal_False));
+                xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), uno::makeAny(false));
 
             // even plain stream should be encrypted in encrypted documents
             xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(sal_True) );
@@ -732,17 +655,12 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
 
         xOut = xStream->getOutputStream();
     }
-    // #99667#; no longer necessary
-/*  else if ( pMedium )
-    {
-        xOut = pMedium->GetDataSink();
-    }*/
 
     // set Base URL
     uno::Reference< beans::XPropertySet > xInfoSet;
     if( aArgs.getLength() > 0 )
         aArgs.getConstArray()[0] >>= xInfoSet;
-    DBG_ASSERT( xInfoSet.is(), "missing property set" );
+    OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
         rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
@@ -755,7 +673,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     uno::Reference<document::XFilter> xFilter(
         xServiceFactory->createInstanceWithArguments( sComponentName , aArgs ),
             uno::UNO_QUERY );
-    DBG_ASSERT( xFilter.is(), "can't get exporter" );
+    OSL_ENSURE( xFilter.is(), "can't get exporter" );
     uno::Reference<document::XExporter> xExporter( xFilter, uno::UNO_QUERY );
     uno::Reference<lang::XComponent> xComponent( xModel, uno::UNO_QUERY );
     if (xExporter.is())
@@ -767,7 +685,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         pExport->SetSharedData(pSharedData);
 
         // if there are sheets to copy, get the source stream
-        if ( sName.equalsAscii("content.xml") && lcl_HasValidStream(rDoc) &&
+        if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("content.xml")) && lcl_HasValidStream(rDoc) &&
              ( pExport->getExportFlags() & EXPORT_OASIS ) )
         {
             // old stream is still in this file's storage - open read-only
@@ -808,18 +726,15 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
                 SCTAB nTabCount = rDoc.GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                     if (rDoc.IsStreamValid(nTab))
-                        rDoc.SetStreamValid(nTab, sal_False);
+                        rDoc.SetStreamValid(nTab, false);
             }
         }
         else
             bRet = xFilter->filter( aDescriptor );
 
         pSharedData = pExport->GetSharedData();
-
-        //stream is closed by SAX parser
-        //if (xOut.is())
-        //    xOut->closeOutput();
     }
+
     return bRet;
 }
 
@@ -828,15 +743,15 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScXMLImportWrapper::Export" );
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(comphelper::getProcessServiceFactory());
-    DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
+    OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
     if( !xServiceFactory.is() )
-        return sal_False;
+        return false;
 
     uno::Reference<uno::XInterface> xWriter(xServiceFactory->createInstance(
             OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ));
-    DBG_ASSERT( xWriter.is(), "com.sun.star.xml.sax.Writer service missing" );
+    OSL_ENSURE( xWriter.is(), "com.sun.star.xml.sax.Writer service missing" );
     if(!xWriter.is())
-        return sal_False;
+        return false;
 
     if ( !xStorage.is() && pMedium )
         xStorage = pMedium->GetOutputStorage();
@@ -897,7 +812,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         // TODO/LATER: do not do it for embedded links
         if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
         {
-            OUString aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+            OUString aName(RTL_CONSTASCII_USTRINGPARAM("dummyObjectName"));
             if ( pMedium && pMedium->GetItemSet() )
             {
                 const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
@@ -914,9 +829,9 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         }
 
         sal_Bool bMetaRet(pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
-        sal_Bool bStylesRet (sal_False);
-        sal_Bool bDocRet(sal_False);
-        sal_Bool bSettingsRet(sal_False);
+        sal_Bool bStylesRet (false);
+        sal_Bool bDocRet(false);
+        sal_Bool bSettingsRet(false);
         ScMySharedData* pSharedData = NULL;
 
         sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
@@ -950,13 +865,13 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
         if( xStorage.is() )
         {
-            pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, sal_False );
+            pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, false );
             xGrfContainer = pGraphicHelper;
         }
 
         if( pObjSh )
         {
-            pObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *pObjSh, EMBEDDEDOBJECTHELPER_MODE_WRITE, sal_False );
+            pObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *pObjSh, EMBEDDEDOBJECTHELPER_MODE_WRITE, false );
             xObjectResolver = pObjectHelper;
         }
 
@@ -978,7 +893,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                 sTextMediaType,
                 bOasis ? rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisStylesExporter"))
                        : rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesExporter")),
-                sal_False, aStylesArgs, pSharedData);
+                false, aStylesArgs, pSharedData);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles export end" );
         }
@@ -1002,7 +917,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                 sTextMediaType,
                 bOasis ? rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisContentExporter"))
                        : rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLContentExporter")),
-                sal_False, aDocArgs, pSharedData);
+                false, aDocArgs, pSharedData);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "content export end" );
         }
@@ -1030,7 +945,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                 sTextMediaType,
                 bOasis ? rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisSettingsExporter"))
                        : rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsExporter")),
-                sal_False, aSettingsArgs, pSharedData);
+                false, aSettingsArgs, pSharedData);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings export end" );
         }
@@ -1045,8 +960,8 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
     // later: give string descriptor as parameter for doc type
 
-    return sal_False;
+    return false;
 }
 
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

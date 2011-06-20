@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mrAnnotationData( rAnnotationData ),
     nParagraphCount(0),
-    bHasTextP(sal_False),
+    bHasTextP(false),
     pCellContext(pTempCellContext),
     pShapeContext(NULL)
 {
@@ -158,18 +159,6 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPref
             pContext = new ScXMLContentContext(GetScImport(), nPrefix,
                                             rLName, xAttrList, maCreateDateStringBuffer);
     }
-/*  else if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_P) )
-    {
-        if (!bHasTextP)
-        {
-            bHasTextP = sal_True;
-            maTextBuffer.setLength(0);
-        }
-        if(nParagraphCount)
-            maTextBuffer.append(static_cast<sal_Unicode>('\n'));
-        ++nParagraphCount;
-        pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, maTextBuffer);
-    }*/
 
     if( !pContext && pShapeContext )
         pContext = pShapeContext->CreateChildContext(nPrefix, rLName, xAttrList);
@@ -192,6 +181,7 @@ void ScXMLAnnotationContext::EndElement()
     {
         pShapeContext->EndElement();
         delete pShapeContext;
+        pShapeContext = NULL;
     }
 
     mrAnnotationData.maAuthor = maAuthorBuffer.makeStringAndClear();
@@ -218,3 +208,4 @@ void ScXMLAnnotationContext::AddContentStyle( sal_uInt16 nFamily, const rtl::OUS
     mrAnnotationData.maContentStyles.push_back( ScXMLAnnotationStyleEntry( nFamily, rName, rSelection ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

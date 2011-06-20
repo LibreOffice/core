@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ public:
         const css::uno::Reference< css::frame::XModel >& xModel,
         const css::uno::Reference< css::sheet::XViewPane > xViewPane ) throw (css::uno::RuntimeException);
 
-    css::uno::Reference< css::sheet::XViewPane > getViewPane() { return m_xViewPane; }
+    css::uno::Reference< css::sheet::XViewPane > getViewPane() const { return m_xViewPane; }
 
     // XPane attributes
     virtual sal_Int32 SAL_CALL getScrollColumn() throw (css::uno::RuntimeException);
@@ -65,3 +66,5 @@ protected:
 };
 
 #endif //SC_VBA_PANE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,10 @@
 #define SC_COLROWST_HXX
 
 #include "xiroot.hxx"
+#include <mdds/flat_segment_tree.hpp>
+
+#define XLS_USE_NEW_ROW_CONT 1
+
 
 class XclImpStream;
 
@@ -59,8 +64,13 @@ public:
 private:
     ScfUInt16Vec        maWidths;           /// Column widths in twips.
     ScfUInt8Vec         maColFlags;         /// Flags for all columns.
-    ScfUInt16Vec        maHeights;          /// Row heights in twips.
-    ScfUInt8Vec         maRowFlags;         /// Flags for all rows.
+                                            ///
+    typedef ::mdds::flat_segment_tree<SCROW, sal_uInt16> RowHeightsType;
+    typedef ::mdds::flat_segment_tree<SCROW, sal_uInt8>  RowFlagsType;
+    typedef ::mdds::flat_segment_tree<SCROW, bool>       RowHiddenType;
+    RowHeightsType      maRowHeights;
+    RowFlagsType        maRowFlags;
+    RowHiddenType       maHiddenRows;
 
     SCROW               mnLastScRow;
 
@@ -78,3 +88,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,7 +100,6 @@ void ScCaptionUtil::SetCaptionLayer( SdrCaptionObj& rCaption, bool bShown )
 
 void ScCaptionUtil::SetBasicCaptionSettings( SdrCaptionObj& rCaption, bool bShown )
 {
-    ScDrawLayer::SetAnchor( &rCaption, SCA_PAGE );
     SetCaptionLayer( rCaption, bShown );
     rCaption.SetFixedTail();
     rCaption.SetSpecialTextBoxShadow();
@@ -124,12 +124,12 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aTriangle.append( ::basegfx::B2DPoint(  0.0, 30.0 ) );
     aTriangle.append( ::basegfx::B2DPoint( 20.0, 30.0 ) );
     aTriangle.setClosed( true );
-    /*  #99319# Line ends are now created with an empty name. The
+    /*  Line ends are now created with an empty name. The
         checkForUniqueItem() method then finds a unique name for the item's
         value. */
     aItemSet.Put( XLineStartItem( String::EmptyString(), ::basegfx::B2DPolyPolygon( aTriangle ) ) );
     aItemSet.Put( XLineStartWidthItem( 200 ) );
-    aItemSet.Put( XLineStartCenterItem( sal_False ) );
+    aItemSet.Put( XLineStartCenterItem( false ) );
     aItemSet.Put( XFillStyleItem( XFILL_SOLID ) );
     aItemSet.Put( XFillColorItem( String::EmptyString(), ScDetectiveFunc::GetCommentColor() ) );
     aItemSet.Put( SdrCaptionEscDirItem( SDRCAPT_ESCBESTFIT ) );
@@ -138,7 +138,7 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     /*  SdrShadowItem has sal_False, instead the shadow is set for the
         rectangle only with SetSpecialTextBoxShadow() when the object is
         created (item must be set to adjust objects from older files). */
-    aItemSet.Put( SdrShadowItem( sal_False ) );
+    aItemSet.Put( SdrShadowItem( false ) );
     aItemSet.Put( SdrShadowXDistItem( 100 ) );
     aItemSet.Put( SdrShadowYDistItem( 100 ) );
 
@@ -147,9 +147,9 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aItemSet.Put( SdrTextRightDistItem( 100 ) );
     aItemSet.Put( SdrTextUpperDistItem( 100 ) );
     aItemSet.Put( SdrTextLowerDistItem( 100 ) );
-    aItemSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
-    aItemSet.Put( SdrTextAutoGrowHeightItem( sal_True ) );
-    // #78943# use the default cell style to be able to modify the caption font
+    aItemSet.Put( SdrTextAutoGrowWidthItem( false ) );
+    aItemSet.Put( SdrTextAutoGrowHeightItem( true ) );
+    // use the default cell style to be able to modify the caption font
     const ScPatternAttr& rDefPattern = static_cast< const ScPatternAttr& >( rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN ) );
     rDefPattern.FillEditItemSet( &aItemSet );
 
@@ -161,7 +161,7 @@ void ScCaptionUtil::SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& 
     // copy all items
     rCaption.SetMergedItemSet( rItemSet );
     // reset shadow items
-    rCaption.SetMergedItem( SdrShadowItem( sal_False ) );
+    rCaption.SetMergedItem( SdrShadowItem( false ) );
     rCaption.SetMergedItem( SdrShadowXDistItem( 100 ) );
     rCaption.SetMergedItem( SdrShadowYDistItem( 100 ) );
     rCaption.SetSpecialTextBoxShadow();
@@ -921,3 +921,5 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
 }
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

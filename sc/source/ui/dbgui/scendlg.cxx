@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,7 +86,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
             XColorTable* pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
             if (pColorTable)
             {
-                aLbColor.SetUpdateMode( sal_False );
+                aLbColor.SetUpdateMode( false );
                 long nCount = pColorTable->Count();
                 for ( long n=0; n<nCount; n++ )
                 {
@@ -108,9 +109,9 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
     aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
     aComment += String( ScResId( STR_ON ) );
     aComment += ' ';
-    aComment += ScGlobal::GetpLocaleData()->getDate( Date() );//CHINA001 aComment += ScGlobal::pLocaleData->getDate( Date() );
+    aComment += ScGlobal::GetpLocaleData()->getDate( Date() );
     aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
-    aComment += ScGlobal::GetpLocaleData()->getTime( Time() );//CHINA001  aComment += ScGlobal::pLocaleData->getTime( Time() );
+    aComment += ScGlobal::GetpLocaleData()->getTime( Time() );
 
     aEdComment  .SetText( aComment );
     aEdName     .SetText( rName );
@@ -127,16 +128,16 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
     aCbTwoWay.Check(sal_True);
     //aCbAttrib.Check(sal_False);
     //aCbValue.Check(sal_False);
-    aCbCopyAll.Check(sal_False);
+    aCbCopyAll.Check(false);
     aCbProtect.Check(sal_True);
 
     if (bIsEdit)
-        aCbCopyAll.Enable(sal_False);
+        aCbCopyAll.Enable(false);
     // If the Sheet is protected then we disable the Scenario Protect input
     // and default it to true above. Note we are in 'Add' mode here as: if
     // Sheet && scenario protection are true, then we cannot edit this dialog.
     if (bSheetProtected)
-        aCbProtect.Enable(sal_False);
+        aCbProtect.Enable(false);
 
     //! die drei funktionieren noch nicht...
     /*
@@ -151,7 +152,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
 
 //------------------------------------------------------------------------
 
-__EXPORT ScNewScenarioDlg::~ScNewScenarioDlg()
+ScNewScenarioDlg::~ScNewScenarioDlg()
 {
 }
 
@@ -246,3 +247,4 @@ IMPL_LINK( ScNewScenarioDlg, EnableHdl, CheckBox *, pBox )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

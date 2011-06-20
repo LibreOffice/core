@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <vcl/help.hxx>
 
 /*************************************************************************
-#*  Member:     ScExpandedFixedText                         Datum:18.09.97
+#*  Member:     ScExpandedFixedText
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     MD_Test
@@ -55,7 +56,7 @@ ScExpandedFixedText::ScExpandedFixedText( Window* pParent,
 }
 
 /*************************************************************************
-#*  Member:     RequestHelp                                 Datum:18.09.97
+#*  Member:     RequestHelp
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScExpandedFixedText
@@ -93,3 +94,4 @@ void ScExpandedFixedText::RequestHelp(const HelpEvent& rEvt)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

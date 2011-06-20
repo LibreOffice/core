@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,8 +75,10 @@ private:
 
     // ------------------------------------------------------------------------
 public:
-//UNUSED2009-05 explicit                    ScCsvTableBox( Window* pParent );
     explicit                    ScCsvTableBox( Window* pParent, const ResId& rResId );
+
+    /** Finishes initialization. Must be called after constructing a new object. */
+    void Init();
 
     // common table box handling ----------------------------------------------
 public:
@@ -85,8 +88,6 @@ public:
     void                        SetFixedWidthMode();
 
 private:
-    /** Initialisation on construction. */
-    SC_DLLPRIVATE void                        Init();
     /** Initializes the children controls (pos/size, scroll bars, ...). */
     SC_DLLPRIVATE void                        InitControls();
     /** Initializes size and position data of horizontal scrollbar. */
@@ -109,10 +110,6 @@ public:
     void                        SetUniStrings(
                                     const String* pTextLines, const String& rSepChars,
                                     sal_Unicode cTextSep, bool bMergeSep );
-//UNUSED2009-05 /** Fills all cells of all lines with the passed texts (ByteStrings). */
-//UNUSED2009-05 void                        SetByteStrings(
-//UNUSED2009-05                                 const ByteString* pLineTexts, CharSet eCharSet,
-//UNUSED2009-05                                 const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep );
 
     // column settings --------------------------------------------------------
 public:
@@ -159,3 +156,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

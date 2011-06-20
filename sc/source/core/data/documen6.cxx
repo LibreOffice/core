@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,9 +63,9 @@ const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
     if ( !pScriptTypeData->xBreakIter.is() )
     {
         uno::Reference< uno::XInterface > xInterface = xServiceManager->createInstance(
-                            ::rtl::OUString::createFromAscii( SC_BREAKITER_SERVICE ) );
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_BREAKITER_SERVICE )) );
         pScriptTypeData->xBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
-        DBG_ASSERT( pScriptTypeData->xBreakIter.is(), "can't get BreakIterator" );
+        OSL_ENSURE( pScriptTypeData->xBreakIter.is(), "can't get BreakIterator" );
     }
     return pScriptTypeData->xBreakIter;
 }
@@ -92,7 +93,7 @@ sal_Bool ScDocument::HasStringWeakCharacters( const String& rString )
         }
     }
 
-    return sal_False;       // none found
+    return false;       // none found
 }
 
 sal_uInt8 ScDocument::GetStringScriptType( const String& rString )
@@ -181,4 +182,4 @@ sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseC
     return GetCellScriptType( pCell, nFormat );
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

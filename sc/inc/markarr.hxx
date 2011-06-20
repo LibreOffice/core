@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,12 +47,12 @@ class ScMarkArray
     ScMarkEntry*    pData;
 
 friend class ScMarkArrayIter;
-friend class ScDocument;                // fuer FillInfo
+friend class ScDocument;                // for FillInfo
 
 public:
             ScMarkArray();
             ~ScMarkArray();
-    void    Reset( sal_Bool bMarked = sal_False );
+    void    Reset( sal_Bool bMarked = false );
     sal_Bool    GetMark( SCROW nRow ) const;
     void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, sal_Bool bMarked );
     sal_Bool    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
@@ -62,7 +63,6 @@ public:
     void    CopyMarksTo( ScMarkArray& rDestMarkArray ) const;
 
     sal_Bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
-//UNUSED2009-05 void    DeleteArea(SCROW nStartRow, SCROW nEndRow);
 
     /// Including current row, may return -1 if bUp and not found
     SCsROW  GetNextMarked( SCsROW nRow, sal_Bool bUp ) const;
@@ -70,7 +70,7 @@ public:
 };
 
 
-class ScMarkArrayIter                   // selektierte Bereiche durchgehen
+class ScMarkArrayIter                   // iterate over selected range
 {
     const ScMarkArray*  pArray;
     SCSIZE              nPos;
@@ -85,3 +85,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

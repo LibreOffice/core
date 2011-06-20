@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,8 +78,6 @@ private:
     FixedImage      aBmpPageDir;
     Image           aImgLeftRight;
     Image           aImgTopDown;
-    Image           aImgLeftRightHC;
-    Image           aImgTopDownHC;
     CheckBox        aBtnPageNo;
     NumericField    aEdPageNo;
 
@@ -113,3 +112,5 @@ private:
 };
 
 #endif // SC_TPTABLE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

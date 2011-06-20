@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include "vbaworksheet.hxx"
+#include "vbanames.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
@@ -65,9 +67,18 @@
 #include <ooo/vba/excel/XlSheetVisibility.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
 #include <ooo/vba/XControlProvider.hpp>
+#include <ooo/vba/excel/XlSheetVisibility.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vbahelper/vbashapes.hxx>
+
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
 
 #include <tools/string.hxx>
 
@@ -82,7 +93,7 @@
 
 #include "cellsuno.hxx"
 #include "drwlayer.hxx"
-
+#include "tabprotection.hxx"
 #include "scextopt.hxx"
 #include "vbaoutline.hxx"
 #include "vbarange.hxx"
@@ -96,7 +107,9 @@
 #include "vbaworksheets.hxx"
 #include "vbahyperlinks.hxx"
 #include "vbasheetobjects.hxx"
-#include "vbanames.hxx"
+#include "viewuno.hxx"
+
+#include "attrib.hxx"
 
 #define STANDARDWIDTH 2267
 #define STANDARDHEIGHT 427
@@ -188,7 +201,7 @@ ScVbaWorksheet::ScVbaWorksheet( const uno::Reference< XHelperInterface >& xParen
 
 ScVbaWorksheet::ScVbaWorksheet(const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< sheet::XSpreadsheet >& xSheet,
-        const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException) : WorksheetImpl_BASE( xParent, xContext ), mxSheet( xSheet ), mxModel(xModel), mbVeryHidden( false )
+        const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException) : WorksheetImpl_BASE( xParent, xContext ), mxSheet( xSheet ), mxModel(xModel)
 {
 }
 
@@ -210,6 +223,85 @@ ScVbaWorksheet::~ScVbaWorksheet()
 {
 }
 
+namespace
+{
+    class theScVbaWorksheetUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theScVbaWorksheetUnoTunnelId > {};
+}
+
+const uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
+{
+    return theScVbaWorksheetUnoTunnelId::get().getSeq();
+}
+
+uno::Reference< ov::excel::XWorksheet >
+ScVbaWorksheet::createSheetCopyInNewDoc(rtl::OUString aCurrSheetName)
+{
+    uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
+    uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
+    uno::Reference< table::XCellRange > xRange1( xSheetCellCursor, uno::UNO_QUERY);
+    uno::Reference<excel::XRange> xRange =  new ScVbaRange( this, mxContext, xRange1);
+    if (xRange.is())
+        xRange->Select();
+    excel::implnCopy(mxModel);
+    uno::Reference<frame::XModel> xModel = openNewDoc(aCurrSheetName);
+    if (xModel.is())
+    {
+        excel::implnPaste(xModel);
+    }
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY_THROW );
+    excel::setUpDocumentModules(xSpreadDoc);
+    uno::Reference <sheet::XSpreadsheets> xSheets( xSpreadDoc->getSheets(), uno::UNO_QUERY_THROW );
+    uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    ScDocShell* pShell = excel::getDocShell( xModel );
+    String aCodeName;
+    pShell->GetDocument()->GetCodeName( 0, aCodeName );
+    return uno::Reference< excel::XWorksheet >( getUnoDocModule( aCodeName, pShell ), uno::UNO_QUERY_THROW );
+}
+
+css::uno::Reference< ov::excel::XWorksheet >
+ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> xSheet, bool bAfter)
+{
+    rtl::OUString aCurrSheetName = getName();
+    ScVbaWorksheet* pDestSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
+
+    uno::Reference <sheet::XSpreadsheetDocument> xDestDoc( pDestSheet->getModel(), uno::UNO_QUERY );
+    uno::Reference <sheet::XSpreadsheetDocument> xSrcDoc( getModel(), uno::UNO_QUERY );
+
+    SCTAB nDest = 0;
+    SCTAB nSrc = 0;
+    rtl::OUString aSheetName = xSheet->getName();
+    bool bSameDoc = ( pDestSheet->getModel() == getModel() );
+    bool bDestSheetExists = ScVbaWorksheets::nameExists (xDestDoc, aSheetName, nDest );
+    bool bSheetExists = ScVbaWorksheets::nameExists (xSrcDoc, aCurrSheetName, nSrc );
+
+    // set sheet name to be newSheet name
+    aSheetName = aCurrSheetName;
+    if ( bSheetExists && bDestSheetExists )
+    {
+        SCTAB nDummy=0;
+        if(bAfter)
+              nDest++;
+        uno::Reference<sheet::XSpreadsheets> xSheets = xDestDoc->getSheets();
+        if ( bSameDoc || ScVbaWorksheets::nameExists( xDestDoc, aCurrSheetName, nDummy ) )
+            getNewSpreadsheetName(aSheetName,aCurrSheetName,xDestDoc);
+        if ( bSameDoc )
+            xSheets->copyByName(aCurrSheetName,aSheetName,nDest);
+        else
+        {
+            ScDocShell* pDestDocShell = excel::getDocShell( pDestSheet->getModel() );
+            ScDocShell* pSrcDocShell = excel::getDocShell( getModel() );
+            if ( pDestDocShell && pSrcDocShell )
+                pDestDocShell->TransferTab( *pSrcDocShell, static_cast<SCTAB>(nSrc), static_cast<SCTAB>(nDest), true, true );
+        }
+    }
+    // return new sheet
+    uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XWorksheet > xNewSheet( xApplication->Worksheets( uno::makeAny( aSheetName ) ), uno::UNO_QUERY_THROW );
+    return xNewSheet;
+}
+
 ::rtl::OUString
 ScVbaWorksheet::getName() throw (uno::RuntimeException)
 {
@@ -224,18 +316,26 @@ ScVbaWorksheet::setName(const ::rtl::OUString &rName ) throw (uno::RuntimeExcept
     xNamed->setName( rName );
 }
 
-sal_Int32
+::sal_Int32
 ScVbaWorksheet::getVisible() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
-    bool bVisible = false;
-    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ) ) >>= bVisible;
-    using namespace ::ooo::vba::excel::XlSheetVisibility;
-    return bVisible ? xlSheetVisible : (mbVeryHidden ? xlSheetVeryHidden : xlSheetHidden);
+    uno::Any aValue = xProps->getPropertyValue
+            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ) );
+    sal_Bool bRet = false;
+    aValue >>= bRet;
+    if ( bRet )
+    {
+        return excel::XlSheetVisibility::xlSheetVisible;
+    }
+    else
+    {
+        return excel::XlSheetVisibility::xlSheetHidden;
+    }
 }
 
 void
-ScVbaWorksheet::setVisible( sal_Int32 nVisible ) throw (uno::RuntimeException)
+ScVbaWorksheet::setVisible( ::sal_Int32 nVisible ) throw (uno::RuntimeException)
 {
     using namespace ::ooo::vba::excel::XlSheetVisibility;
     bool bVisible = true;
@@ -257,7 +357,9 @@ ScVbaWorksheet::setVisible( sal_Int32 nVisible ) throw (uno::RuntimeException)
             throw uno::RuntimeException();
     }
     uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ), uno::Any( bVisible ) );
+    xProps->setPropertyValue
+            ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ),
+              uno::Any( bVisible ) );
 }
 
 sal_Int16
@@ -276,8 +378,8 @@ ScVbaWorksheet::getEnableSelection() throw (uno::RuntimeException)
         uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
         ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
         ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
-        sal_Bool bLockedCells = sal_False;
-        sal_Bool bUnlockedCells = sal_False;
+        sal_Bool bLockedCells = false;
+        sal_Bool bUnlockedCells = false;
         if( pProtect )
         {
             bLockedCells   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
@@ -315,8 +417,8 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
         ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
         ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
         // default is xlNoSelection
-        sal_Bool bLockedCells = sal_False;
-        sal_Bool bUnlockedCells = sal_False;
+        sal_Bool bLockedCells = false;
+        sal_Bool bUnlockedCells = false;
         if( nSelection == excel::XlEnableSelection::xlNoRestrictions )
         {
             bLockedCells = sal_True;
@@ -339,38 +441,39 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
 
 }
 
-uno::Reference< beans::XPropertySet > ScVbaWorksheet::getFirstDBRangeProperties() throw (uno::RuntimeException)
-{
-    uno::Reference< beans::XPropertySet > xModelProps( mxModel, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XIndexAccess > xDBRangesIA( xModelProps->getPropertyValue(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DatabaseRanges" ) ) ), uno::UNO_QUERY_THROW );
-
-    for( sal_Int32 nIndex = 0, nCount = xDBRangesIA->getCount(); nIndex < nCount; ++nIndex )
-    {
-        uno::Reference< sheet::XCellRangeReferrer > xDBRange( xDBRangesIA->getByIndex( nIndex ), uno::UNO_QUERY_THROW );
-        // check if the database area is on this sheet
-        uno::Reference< sheet::XCellRangeAddressable > xRangeAddr( xDBRange->getReferredCells(), uno::UNO_QUERY_THROW );
-        if( getSheetID() == xRangeAddr->getRangeAddress().Sheet )
-            return uno::Reference< beans::XPropertySet >( xDBRange, uno::UNO_QUERY_THROW );
-    }
-    return uno::Reference< beans::XPropertySet >();
-}
-
 sal_Bool SAL_CALL ScVbaWorksheet::getAutoFilterMode() throw (uno::RuntimeException)
 {
-    uno::Reference< beans::XPropertySet > xDBRangeProps = getFirstDBRangeProperties();
-    sal_Bool bAutoFilterMode = sal_False;
-    return
-        xDBRangeProps.is() &&
-        (xDBRangeProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoFilter" ) ) ) >>= bAutoFilterMode) &&
-        bAutoFilterMode;
+    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
+    ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
+    ScDBData* pDBData = pDoc->GetAnonymousDBData(getSheetID());
+    if (pDBData)
+        return pDBData->HasAutoFilter();
+    return false;
 }
 
 void SAL_CALL ScVbaWorksheet::setAutoFilterMode( sal_Bool bAutoFilterMode ) throw (uno::RuntimeException)
 {
-    uno::Reference< beans::XPropertySet > xDBRangeProps = getFirstDBRangeProperties();
-    if( xDBRangeProps.is() )
-        xDBRangeProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoFilter" ) ), uno::Any( bAutoFilterMode ) );
+    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
+    ScDocShell* pDocShell = excel::getDocShell( xModel );
+    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDBData* pDBData = pDoc->GetAnonymousDBData(getSheetID());
+    if (pDBData)
+    {
+        pDBData->SetAutoFilter(bAutoFilterMode);
+        ScRange aRange;
+        pDBData->GetArea(aRange);
+        if (bAutoFilterMode && pDoc)
+            pDoc->ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                                    aRange.aEnd.Col(), aRange.aStart.Row(),
+                                    aRange.aStart.Tab(), SC_MF_AUTO );
+        else  if (!bAutoFilterMode && pDoc)
+            pDoc->RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
+                                    aRange.aEnd.Col(), aRange.aStart.Row(),
+                                    aRange.aStart.Tab(), SC_MF_AUTO );
+        ScRange aPaintRange(aRange.aStart, aRange.aEnd);
+        aPaintRange.aEnd.SetRow(aPaintRange.aStart.Row());
+        pDocShell->PostPaint(aPaintRange, PAINT_GRID);
+    }
 }
 
 uno::Reference< excel::XRange >
@@ -433,7 +536,7 @@ ScVbaWorksheet::getStandardHeight() throw (uno::RuntimeException)
 sal_Bool
 ScVbaWorksheet::getProtectionMode() throw (uno::RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool
@@ -446,13 +549,25 @@ ScVbaWorksheet::getProtectContents()throw (uno::RuntimeException)
 sal_Bool
 ScVbaWorksheet::getProtectDrawingObjects() throw (uno::RuntimeException)
 {
-    return sal_False;
+    SCTAB nTab = 0;
+    rtl::OUString aSheetName = getName();
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( getModel(), uno::UNO_QUERY_THROW );
+    bool bSheetExists = ScVbaWorksheets::nameExists (xSpreadDoc, aSheetName, nTab);
+    if ( bSheetExists )
+    {
+        uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
+        ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
+        ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+        if ( pProtect )
+            return pProtect->isOptionEnabled( ScTableProtection::OBJECTS );
+    }
+    return false;
 }
 
 sal_Bool
 ScVbaWorksheet::getProtectScenarios() throw (uno::RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 void
@@ -463,10 +578,30 @@ ScVbaWorksheet::Activate() throw (uno::RuntimeException)
     xSpreadsheet->setActiveSheet(getSheet());
 }
 
+// support expand (but not replace) the active sheet
 void
-ScVbaWorksheet::Select() throw (uno::RuntimeException)
+ScVbaWorksheet::Select(const css::uno::Any& aReplace) throw (uno::RuntimeException)
 {
-    Activate();
+    sal_Bool bReplace = true;
+    if (aReplace.hasValue() && aReplace.getValueTypeClass() == uno::TypeClass_BOOLEAN)
+    {
+        aReplace >>= bReplace;
+    }
+
+    uno::Reference< sheet::XSpreadsheetView > xSpreadsheet(
+            getModel()->getCurrentController(), uno::UNO_QUERY_THROW );
+    ScTabViewObj* pTabView = static_cast< ScTabViewObj* >( xSpreadsheet.get() );
+
+    if (bReplace)
+    {
+        pTabView->selectSheet(getSheet(), false);
+    }
+    else
+    {
+        uno::Reference< sheet::XSpreadsheet > xOldActiveSheet = pTabView->getActiveSheet();
+        pTabView->selectSheet(getSheet(), true);
+        pTabView->selectSheet(xOldActiveSheet, true);
+    }
 }
 
 void
@@ -510,36 +645,14 @@ void
 ScVbaWorksheet::Copy( const uno::Any& Before, const uno::Any& After ) throw (uno::RuntimeException)
 {
     uno::Reference<excel::XWorksheet> xSheet;
-    rtl::OUString aCurrSheetName =getName();
     if (!(Before >>= xSheet) && !(After >>=xSheet)&& !(Before.hasValue()) && !(After.hasValue()))
     {
-        uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
-        uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
-            uno::Reference< table::XCellRange > xRange1( xSheetCellCursor, uno::UNO_QUERY);
-        uno::Reference<excel::XRange> xRange =  new ScVbaRange( this, mxContext, xRange1);
-        if (xRange.is())
-            xRange->Select();
-        excel::implnCopy(mxModel);
-        uno::Reference<frame::XModel> xModel = openNewDoc(aCurrSheetName);
-        if (xModel.is())
-        {
-            excel::implnPaste(xModel);
-        }
+        createSheetCopyInNewDoc(getName());
         return;
     }
 
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( getModel(), uno::UNO_QUERY );
-    SCTAB nDest = 0;
-    rtl::OUString aSheetName = xSheet->getName();
-    if ( ScVbaWorksheets::nameExists (xSpreadDoc, aSheetName, nDest ) )
-    {
-        sal_Bool bAfter = After.hasValue();
-        if(bAfter)
-              nDest++;
-        uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
-        getNewSpreadsheetName(aSheetName,aCurrSheetName,xSpreadDoc);
-        xSheets->copyByName(aCurrSheetName,aSheetName,nDest);
-    }
+    uno::Reference<excel::XWorksheet> xNewSheet = createSheetCopy(xSheet, After.hasValue());
+    xNewSheet->Activate();
 }
 
 
@@ -591,13 +704,25 @@ ScVbaWorksheet::getSheetAtOffset(SCTAB offset) throw (uno::RuntimeException)
 uno::Reference< excel::XWorksheet >
 ScVbaWorksheet::getNext() throw (uno::RuntimeException)
 {
-    return getSheetAtOffset(static_cast<SCTAB>(1));
+    // catch the exception for index out of bound
+    try{
+        return getSheetAtOffset(static_cast<SCTAB>(1));
+    }catch( lang::IndexOutOfBoundsException& /*e*/ )
+    {
+        return NULL;
+    }
 }
 
 uno::Reference< excel::XWorksheet >
 ScVbaWorksheet::getPrevious() throw (uno::RuntimeException)
 {
-    return getSheetAtOffset(-1);
+    // catch the exception for index out of bound
+    try{
+        return getSheetAtOffset(-1);
+    }catch( lang::IndexOutOfBoundsException& /*e*/ )
+    {
+        return NULL;
+    }
 }
 
 
@@ -684,7 +809,7 @@ ScVbaWorksheet::ChartObjects( const uno::Any& Index ) throw (uno::RuntimeExcepti
         uno::Reference< table::XTableChartsSupplier > xChartSupplier( getSheet(), uno::UNO_QUERY_THROW );
         uno::Reference< table::XTableCharts > xTableCharts = xChartSupplier->getCharts();
 
-        uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxSheet, uno::UNO_QUERY_THROW );
+        uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( getSheet(), uno::UNO_QUERY_THROW );
         mxCharts = new ScVbaChartObjects(  this, mxContext, xTableCharts, xDrawPageSupplier );
     }
     if ( Index.hasValue() )
@@ -845,10 +970,10 @@ ScVbaWorksheet::ShowDataForm( ) throw (uno::RuntimeException)
     ScTabViewShell* pTabViewShell = excel::getBestViewShell( xModel );
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     AbstractScDataFormDlg* pDlg = pFact->CreateScDataFormDlg( pTabViewShell->GetDialogParent(),RID_SCDLG_DATAFORM, pTabViewShell);
-    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+    OSL_ENSURE(pDlg, "Dialog create fail!");
 
     pDlg->Execute();
 #else
@@ -901,7 +1026,7 @@ ScVbaWorksheet::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::U
 ::sal_Bool SAL_CALL
 ScVbaWorksheet::hasMethod( const ::rtl::OUString& /*aName*/ ) throw (uno::RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 uno::Reference< container::XNameAccess >
@@ -917,8 +1042,7 @@ ScVbaWorksheet::getFormControls()
         // get the www-standard container ( maybe we should access the
         // 'www-standard' by name rather than index, this seems an
         // implementation detail
-        if( xIndexAccess->hasElements() )
-            xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY );
+        xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW );
 
     }
     catch( uno::Exception& )
@@ -933,7 +1057,7 @@ ScVbaWorksheet::hasProperty( const ::rtl::OUString& aName ) throw (uno::RuntimeE
     uno::Reference< container::XNameAccess > xFormControls( getFormControls() );
     if ( xFormControls.is() )
         return xFormControls->hasByName( aName );
-    return sal_False;
+    return false;
 }
 
 uno::Any
@@ -1011,7 +1135,7 @@ ScVbaWorksheet::getCodeName() throw (css::uno::RuntimeException)
 sal_Int16
 ScVbaWorksheet::getSheetID() throw (uno::RuntimeException)
 {
-    uno::Reference< sheet::XCellRangeAddressable > xAddressable( mxSheet, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XCellRangeAddressable > xAddressable( getSheet(), uno::UNO_QUERY_THROW ); // if ActiveSheet, mxSheet is null.
     return xAddressable->getRangeAddress().Sheet;
 }
 
@@ -1021,9 +1145,9 @@ ScVbaWorksheet::PrintOut( const uno::Any& From, const uno::Any& To, const uno::A
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
     sal_Int16 nCopies = 1;
-    sal_Bool bCollate = sal_False;
-    sal_Bool bSelection = sal_False;
-    sal_Bool bIgnorePrintAreas = sal_False;
+    sal_Bool bCollate = false;
+    sal_Bool bSelection = false;
+    sal_Bool bIgnorePrintAreas = false;
     From >>= nFrom;
     To >>= nTo;
     Copies >>= nCopies;
@@ -1038,6 +1162,17 @@ ScVbaWorksheet::PrintOut( const uno::Any& From, const uno::Any& To, const uno::A
     PrintOutHelper( excel::getBestViewShell( xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, bSelection );
 }
 
+sal_Int64 SAL_CALL
+ScVbaWorksheet::getSomething(const uno::Sequence<sal_Int8 > & rId) throw(uno::RuntimeException)
+{
+    if (rId.getLength() == 16 &&
+        0 == rtl_compareMemory( ScVbaWorksheet::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ))
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+    }
+    return 0;
+}
+
 namespace worksheet
 {
 namespace sdecl = comphelper::service_decl;
@@ -1047,3 +1182,5 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ScVbaWorksheet",
     "ooo.vba.excel.Worksheet" );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

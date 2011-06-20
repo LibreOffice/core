@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,8 +70,6 @@ Any WrappedAddInProperty::getPropertyValue( const Reference< beans::XPropertySet
 }
 
 //.............................................................................
-//.............................................................................
-//.............................................................................
 
 WrappedBaseDiagramProperty::WrappedBaseDiagramProperty( ChartDocumentWrapper& rChartDocumentWrapper )
     : ::chart::WrappedProperty( C2U( "BaseDiagram" ), OUString() )
@@ -98,8 +97,6 @@ Any WrappedBaseDiagramProperty::getPropertyValue( const Reference< beans::XPrope
 }
 
 //.............................................................................
-//.............................................................................
-//.............................................................................
 
 WrappedAdditionalShapesProperty::WrappedAdditionalShapesProperty( ChartDocumentWrapper& rChartDocumentWrapper )
     : ::chart::WrappedProperty( C2U( "AdditionalShapes" ), OUString() )
@@ -122,8 +119,6 @@ Any WrappedAdditionalShapesProperty::getPropertyValue( const Reference< beans::X
     return uno::makeAny( m_rChartDocumentWrapper.getAdditionalShapes() );
 }
 
-//.............................................................................
-//.............................................................................
 //.............................................................................
 
 WrappedRefreshAddInAllowedProperty::WrappedRefreshAddInAllowedProperty( ChartDocumentWrapper& rChartDocumentWrapper )
@@ -151,8 +146,9 @@ Any WrappedRefreshAddInAllowedProperty::getPropertyValue( const Reference< beans
     return uno::makeAny( m_rChartDocumentWrapper.getUpdateAddIn() );
 }
 
-}
+} //namespace wrapper
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

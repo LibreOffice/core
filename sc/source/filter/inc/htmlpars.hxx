@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -441,7 +442,7 @@ protected:
     explicit            ScHTMLTable(
                             SfxItemPool& rPool,
                             EditEngine& rEditEngine,
-                            ScEEParseList& rEEParseList,
+                            ::std::vector< ScEEParseEntry* >& rEEParseList,
                             ScHTMLTableId& rnUnusedId );
 
     /** Fills all empty cells in this and nested tables with dummy parse entries. */
@@ -541,7 +542,7 @@ private:
     ScRangeList         maVMergedCells;     /// List of all vertically merged cells.
     ScRangeList         maUsedCells;        /// List of all used cells.
     EditEngine&         mrEditEngine;       /// Edit engine (from ScEEParser).
-    ScEEParseList&      mrEEParseList;      /// List that owns the parse entries (from ScEEParser).
+    ::std::vector< ScEEParseEntry* >& mrEEParseList;      /// List that owns the parse entries (from ScEEParser).
     ScHTMLEntryMap      maEntryMap;         /// List of entries for each cell.
     ScHTMLEntryList*    mpCurrEntryList;    /// Current entry list from map for faster access.
     ScHTMLEntryPtr      mxCurrEntry;        /// Working entry, not yet inserted in a list.
@@ -565,7 +566,7 @@ public:
     explicit            ScHTMLGlobalTable(
                             SfxItemPool& rPool,
                             EditEngine& rEditEngine,
-                            ScEEParseList& rEEParseList,
+                            ::std::vector< ScEEParseEntry* >& rEEParseList,
                             ScHTMLTableId& rnUnusedId );
 
     virtual             ~ScHTMLGlobalTable();
@@ -636,3 +637,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

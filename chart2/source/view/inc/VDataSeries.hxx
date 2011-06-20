@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,14 +45,9 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <cppuhelper/weakref.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
-/**
-*/
 class VDataSequence
 {
 public:
@@ -152,10 +148,9 @@ public:
     sal_Int32   m_nPolygonIndex;
     double m_fLogicMinX;
     double m_fLogicMaxX;
-    //
+
     //this is here for deep stacking:
     double m_fLogicZPos;//from 0 to series count -1
-    //
 
     rtl::OUString       getCID() const;
     rtl::OUString       getSeriesParticle() const;
@@ -256,13 +251,12 @@ private: //member
                                                     m_apSymbolProperties_InvisibleSymbolForSelection;
     mutable sal_Int32                               m_nCurrentAttributedPoint;
     ::com::sun::star::awt::Size                     m_aReferenceSize;
-    //
 
     sal_Int32   m_nMissingValueTreatment;
     bool        m_bAllowPercentValueInDataLabel;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

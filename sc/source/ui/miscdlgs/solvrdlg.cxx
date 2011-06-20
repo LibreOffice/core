@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         pDoc                ( pDocument ),
         nCurTab             ( aCursorPos.Tab() ),
         pEdActive           ( NULL ),
-        bDlgLostFocus       ( sal_False ),
+        bDlgLostFocus       ( false ),
         errMsgInvalidVar    ( ScResId( STR_INVALIDVAR ) ),
         errMsgInvalidForm   ( ScResId( STR_INVALIDFORM ) ),
         errMsgNoFormula     ( ScResId( STR_NOFORMULA ) ),
@@ -95,13 +96,13 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScSolverDlg::~ScSolverDlg()
+ScSolverDlg::~ScSolverDlg()
 {
 }
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScSolverDlg::Init()
+void ScSolverDlg::Init()
 {
     String          aStr;
 
@@ -130,7 +131,7 @@ void __EXPORT ScSolverDlg::Init()
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScSolverDlg::Close()
+sal_Bool ScSolverDlg::Close()
 {
     return DoClose( ScSolverDlgWrapper::GetChildWindowId() );
 }
@@ -141,7 +142,7 @@ void ScSolverDlg::SetActive()
 {
     if ( bDlgLostFocus )
     {
-        bDlgLostFocus = sal_False;
+        bDlgLostFocus = false;
         if( pEdActive )
             pEdActive->GrabFocus();
     }
@@ -214,7 +215,7 @@ sal_Bool ScSolverDlg::IsRefInputMode() const
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScSolverDlg::CheckTargetValue( String& rStrVal )
+sal_Bool ScSolverDlg::CheckTargetValue( String& rStrVal )
 {
     sal_uInt32 n1 = 0;
     double n2;
@@ -259,7 +260,7 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
                                                 theTargetValStr );
                         ScSolveItem  aOutItem( SCITEM_SOLVEDATA, &aOutParam );
 
-                        SetDispatcherLock( sal_False );
+                        SetDispatcherLock( false );
 
                         SwitchToDocument();
                         GetBindings().GetDispatcher()->Execute( SID_SOLVE,
@@ -314,3 +315,4 @@ IMPL_LINK( ScSolverDlg, LoseFocusHdl, Control*, EMPTYARG )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

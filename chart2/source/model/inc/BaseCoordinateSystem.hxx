@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,12 +92,6 @@ protected:
     // ____ XCoordinateSystem ____
     virtual ::sal_Int32 SAL_CALL getDimension()
         throw (::com::sun::star::uno::RuntimeException);
-    // not implemented
-//     virtual ::rtl::OUString SAL_CALL getCoordinateSystemType()
-//         throw (::com::sun::star::uno::RuntimeException);
-    // not implemented
-//     virtual ::rtl::OUString SAL_CALL getViewServiceName()
-//         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setAxisByDimension(
         ::sal_Int32 nDimension,
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis,
@@ -126,22 +121,6 @@ protected:
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > >& aChartTypes )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
-
-    // ____ XCloneable ____
-    // not implemented
-//     virtual ::com::sun::star::uno::Reference<
-//         ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-//         throw (::com::sun::star::uno::RuntimeException);
-
-    // ____ XServiceInfo ____
-    // not implemented
-//     virtual ::rtl::OUString SAL_CALL getImplementationName()
-//         throw (::com::sun::star::uno::RuntimeException);
-//     virtual ::sal_Bool SAL_CALL supportsService(
-//         const ::rtl::OUString& ServiceName )
-//         throw (::com::sun::star::uno::RuntimeException);
-//     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-//         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
@@ -188,3 +167,5 @@ private:
 
 // CHART_COORDINATESYSTEM_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

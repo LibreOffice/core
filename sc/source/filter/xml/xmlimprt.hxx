@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,9 @@
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <boost/ptr_container/ptr_list.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 class ScRangeList;
 class ScMyStyleNumberFormats;
@@ -163,12 +166,14 @@ enum ScXMLLabelRangeAttrTokens
 
 enum ScXMLTableTokens
 {
+    XML_TOK_TABLE_NAMED_EXPRESSIONS,
     XML_TOK_TABLE_COL_GROUP,
     XML_TOK_TABLE_HEADER_COLS,
     XML_TOK_TABLE_COLS,
     XML_TOK_TABLE_COL,
     XML_TOK_TABLE_ROW_GROUP,
     XML_TOK_TABLE_HEADER_ROWS,
+    XML_TOK_TABLE_PROTECTION,
     XML_TOK_TABLE_ROWS,
     XML_TOK_TABLE_ROW,
     XML_TOK_TABLE_SOURCE,
@@ -177,6 +182,12 @@ enum ScXMLTableTokens
     XML_TOK_TABLE_FORMS,
     XML_TOK_TABLE_EVENT_LISTENERS,
     XML_TOK_TABLE_EVENT_LISTENERS_EXT
+};
+
+enum ScXMLTokenProtectionTokens
+{
+    XML_TOK_TABLE_SELECT_PROTECTED_CELLS,
+    XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS
 };
 
 enum ScXMLTableRowsTokens
@@ -199,9 +210,11 @@ enum ScXMLTableAttrTokens
 {
     XML_TOK_TABLE_NAME,
     XML_TOK_TABLE_STYLE_NAME,
-    XML_TOK_TABLE_PROTECTION,
+    XML_TOK_TABLE_PROTECTED,
     XML_TOK_TABLE_PRINT_RANGES,
     XML_TOK_TABLE_PASSWORD,
+    XML_TOK_TABLE_PASSHASH,
+    XML_TOK_TABLE_PASSHASH_2,
     XML_TOK_TABLE_PRINT
 };
 
@@ -481,7 +494,8 @@ enum ScXMLDataPilotTableAttrTokens
     XML_TOK_DATA_PILOT_TABLE_ATTR_TARGET_RANGE_ADDRESS,
     XML_TOK_DATA_PILOT_TABLE_ATTR_BUTTONS,
     XML_TOK_DATA_PILOT_TABLE_ATTR_SHOW_FILTER_BUTTON,
-    XML_TOK_DATA_PILOT_TABLE_ATTR_DRILL_DOWN
+    XML_TOK_DATA_PILOT_TABLE_ATTR_DRILL_DOWN,
+    XML_TOK_DATA_PILOT_TABLE_ATTR_HEADER_GRID_LAYOUT
 };
 
 enum ScXMLDataPilotTableElemTokens
@@ -489,7 +503,6 @@ enum ScXMLDataPilotTableElemTokens
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SQL,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_TABLE,
     XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL,
-    XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL_EXT,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_QUERY,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SERVICE,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_CELL_RANGE,
@@ -520,7 +533,8 @@ enum ScXMLDataPilotTableSourceCellRangeElemTokens
 
 enum ScXMLDataPilotTableSourceCellRangeAttrTokens
 {
-    XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS
+    XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS,
+    XML_TOK_SOURCE_CELL_RANGE_ATTR_NAME
 };
 
 enum ScXMLDataPilotFieldAttrTokens
@@ -600,11 +614,11 @@ class SfxItemSet;
 class SvXMLNumFmtHelper;
 class XMLShapeImportHelper;
 class ScXMLChangeTrackingImportHelper;
-class ScUnoGuard;
+class SolarMutexGuard;
 
 struct tScMyCellRange
 {
-    sal_Int16 Sheet;
+    SCTAB Sheet;
     sal_Int32 StartColumn, EndColumn;
     sal_Int32 StartRow, EndRow;
 };
@@ -620,7 +634,7 @@ struct ScMyNamedExpression
     sal_Bool           bIsExpression;
 };
 
-typedef std::list<const ScMyNamedExpression*> ScMyNamedExpressions;
+typedef ::boost::ptr_list<ScMyNamedExpression> ScMyNamedExpressions;
 
 struct ScMyLabelRange
 {
@@ -642,7 +656,7 @@ struct ScMyImportValidation
     rtl::OUString                                   sFormula2;
     rtl::OUString                                   sFormulaNmsp1;
     rtl::OUString                                   sFormulaNmsp2;
-    rtl::OUString                                   sBaseCellAddress;   // #b4974740# string is used directly
+    rtl::OUString                                   sBaseCellAddress;   // string is used directly
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;
     com::sun::star::sheet::ConditionOperator        aOperator;
@@ -660,7 +674,9 @@ class ScMyStylesImportHelper;
 
 class ScXMLImport: public SvXMLImport
 {
-    typedef ::std::hash_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >  CellTypeMap;
+    typedef ::boost::unordered_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >   CellTypeMap;
+    typedef ::boost::ptr_map<SCTAB, ScMyNamedExpressions> SheetNamedExpMap;
+
     CellTypeMap             aCellTypeMap;
 
     ScDocument*             pDoc;
@@ -673,17 +689,12 @@ class ScXMLImport: public SvXMLImport
     rtl::OUString                       sStandardFormat;
     rtl::OUString                       sType;
 
-//  SvXMLAutoStylePoolP     *pScAutoStylePool;
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
-//  SvXMLImportContextRef       xStyles;
-//  SvXMLImportContextRef       xAutoStyles;
 
-//  SvXMLImportItemMapper   *pParaItemMapper;// paragraph item import
-//  SvI18NMap               *pI18NMap;          // name mapping for I18N
     SvXMLTokenMap           *pDocElemTokenMap;
     SvXMLTokenMap           *pStylesElemTokenMap;
     SvXMLTokenMap           *pStylesAttrTokenMap;
@@ -699,6 +710,7 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pLabelRangesElemTokenMap;
     SvXMLTokenMap           *pLabelRangeAttrTokenMap;
     SvXMLTokenMap           *pTableElemTokenMap;
+    SvXMLTokenMap           *pTableProtectionElemTokenMap;
     SvXMLTokenMap           *pTableRowsElemTokenMap;
     SvXMLTokenMap           *pTableColsElemTokenMap;
     SvXMLTokenMap           *pTableScenarioAttrTokenMap;
@@ -754,10 +766,12 @@ class ScXMLImport: public SvXMLImport
     ScMyTables              aTables;
 
     ScMyNamedExpressions*   pMyNamedExpressions;
+    SheetNamedExpMap maSheetNamedExpressions;
+
     ScMyLabelRanges*        pMyLabelRanges;
     ScMyImportValidations*  pValidations;
     ScMyImpDetectiveOpArray*    pDetectiveOpArray;
-    ScUnoGuard*             pScUnoGuard;
+    SolarMutexGuard*        pSolarMutexGuard;
 
     std::vector<rtl::OUString>          aTableStyles;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
@@ -811,8 +825,6 @@ public:
                                     const ::rtl::OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(const ::rtl::OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, sal_Bool bAutoStyles );
-//  SvXMLImportContext *CreateUseStylesContext(const ::rtl::OUString& rLocalName ,
-//                                  const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateBodyContext(
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -832,26 +844,12 @@ public:
 
     sal_Int16 GetCellType(const ::rtl::OUString& rStrValue) const;
 
-//  SvI18NMap& GetI18NMap() { return *pI18NMap; }
-
-//  inline const SvXMLImportItemMapper& GetParaItemMapper() const;
-//  SvXMLImportContext *CreateParaItemImportContext( sal_uInt16 nPrefix,
-//                                const ::rtl::OUString& rLocalName,
-//                                const ::com::sun::star::uno::Reference<
-//                                  ::com::sun::star::xml::sax::XAttributeList& xAttrList,
-//                                SfxItemSet& rItemSet );
-
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper() const { return xRowStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
-//  SvXMLImportContextRef           GetAutoStyles() const { return xAutoStyles; }
-//  SvXMLImportContextRef           GetStyles() const { return xStyles; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();
-//UNUSED2008-05  const SvXMLTokenMap& GetStylesElemTokenMap();
-//UNUSED2008-05  const SvXMLTokenMap& GetStylesAttrTokenMap();
-//UNUSED2008-05  const SvXMLTokenMap& GetStyleElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();
     const SvXMLTokenMap& GetContentValidationsElemTokenMap();
     const SvXMLTokenMap& GetContentValidationElemTokenMap();
@@ -863,6 +861,7 @@ public:
     const SvXMLTokenMap& GetLabelRangesElemTokenMap();
     const SvXMLTokenMap& GetLabelRangeAttrTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();
+    const SvXMLTokenMap& GetTableProtectionAttrTokenMap();
     const SvXMLTokenMap& GetTableRowsElemTokenMap();
     const SvXMLTokenMap& GetTableColsElemTokenMap();
     const SvXMLTokenMap& GetTableAttrTokenMap();
@@ -914,17 +913,17 @@ public:
     const SvXMLTokenMap& GetDataPilotMembersElemTokenMap();
     const SvXMLTokenMap& GetDataPilotMemberAttrTokenMap();
     const SvXMLTokenMap& GetConsolidationAttrTokenMap();
-//  const SvXMLTokenMap& GetTextPElemTokenMap();
-//  const SvXMLTokenMap& GetTextPAttrTokenMap();
-//  const SvXMLTokenMap& GetStyleStylesElemTokenMap();
-//  const SvXMLTokenMap& GetTextListBlockAttrTokenMap();
-//  const SvXMLTokenMap& GetTextListBlockElemTokenMap();
 
-    void    AddNamedExpression(const ScMyNamedExpression* pMyNamedExpression) {
+    void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
+    {
         if (!pMyNamedExpressions)
             pMyNamedExpressions = new ScMyNamedExpressions();
-        pMyNamedExpressions->push_back(pMyNamedExpression); }
+        pMyNamedExpressions->push_back(pMyNamedExpression);
+    }
+
     ScMyNamedExpressions* GetNamedExpressions() { return pMyNamedExpressions; }
+
+    void AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp);
 
     void    AddLabelRange(const ScMyLabelRange* pMyLabelRange) {
         if (!pMyLabelRanges)
@@ -986,7 +985,6 @@ public:
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endDocument(void)
@@ -994,6 +992,18 @@ public:
 
     virtual void DisposingModel();
 
+    /**
+     * Use this class to manage solar mutex locking instead of calling
+     * LockSolarMutex() and UnlockSolarMutex() directly.
+     */
+    class MutexGuard
+    {
+    public:
+        explicit MutexGuard(ScXMLImport& rImport);
+        ~MutexGuard();
+    private:
+        ScXMLImport& mrImport;
+    };
     void LockSolarMutex();
     void UnlockSolarMutex();
 
@@ -1003,10 +1013,11 @@ public:
 
     sal_Int32   GetRangeType(const rtl::OUString sRangeType) const;
     void SetNamedRanges();
+    void SetSheetNamedRanges();
     void SetLabelRanges();
     void AddDefaultNote( const com::sun::star::table::CellAddress& aCell );
 
-    sal_Int32   GetVisibleSheet();
+    SCTAB   GetVisibleSheet();
     /** Extracts the formula string, the formula grammar namespace URL, and a
         grammar enum value from the passed formula attribute value.
 
@@ -1047,3 +1058,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

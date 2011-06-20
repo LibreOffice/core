@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,11 +49,10 @@ private:
     String          aOptions;
     String          aSourceArea;
     ScRange         aDestArea;
-    sal_Bool            bAddUndo;
-    sal_Bool            bInCreate;
-    sal_Bool            bDoInsert;      // wird fuer das erste Update auf sal_False gesetzt
-
-    sal_Bool        FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
+    bool            bAddUndo;
+    bool            bInCreate;
+    bool            bDoInsert;      // is set to FALSE for first update
+    bool FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
 
 public:
     TYPEINFO();
@@ -62,22 +62,22 @@ public:
     virtual ~ScAreaLink();
 
     virtual void Closed();
-    virtual void DataChanged( const String& rMimeType,
-                              const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
     sal_Bool    Refresh( const String& rNewFile, const String& rNewFilter,
                     const String& rNewArea, sal_uLong nNewRefresh );
 
-    void    SetInCreate(sal_Bool bSet)                  { bInCreate = bSet; }
-    void    SetDoInsert(sal_Bool bSet)                  { bDoInsert = bSet; }
+    void    SetInCreate(bool bSet)                  { bInCreate = bSet; }
+    void    SetDoInsert(bool bSet)                  { bDoInsert = bSet; }
     void    SetDestArea(const ScRange& rNew);
     void    SetSource(const String& rDoc, const String& rFlt, const String& rOpt,
                         const String& rArea);
 
-    sal_Bool    IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
-                        const String& rSource, const ScRange& rDest ) const;
+    bool IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
+                  const String& rSource, const ScRange& rDest ) const;
 
     const String&   GetFile() const         { return aFileName;     }
     const String&   GetFilter() const       { return aFilterName;   }
@@ -91,3 +91,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

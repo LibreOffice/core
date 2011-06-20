@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 
 #include "anyrefdg.hxx"
 #include "rangeutl.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "queryparam.hxx"
@@ -110,7 +111,8 @@ ScFilterOptionsMgr::~ScFilterOptionsMgr()
 
 void ScFilterOptionsMgr::Init()
 {
-    DBG_ASSERT( pViewData && pDoc, "Init failed :-/" );
+//moggi:TODO
+    OSL_ENSURE( pViewData && pDoc, "Init failed :-/" );
 
     rLbCopyPos.SetSelectHdl  ( LINK( this, ScFilterOptionsMgr, LbPosSelHdl ) );
     rEdCopyPos.SetModifyHdl  ( LINK( this, ScFilterOptionsMgr, EdPosModifyHdl ) );
@@ -182,13 +184,13 @@ void ScFilterOptionsMgr::Init()
         {
             ScAddress&  rStart  = theCurArea.aStart;
             ScAddress&  rEnd    = theCurArea.aEnd;
-            ScDBData*   pDBData = pDBColl->GetDBAtArea( rStart.Tab(),
-                                                        rStart.Col(), rStart.Row(),
-                                                        rEnd.Col(),   rEnd.Row() );
+            const ScDBData* pDBData = pDBColl->GetDBAtArea(
+                rStart.Tab(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row());
+
             if ( pDBData )
             {
                 rBtnHeader.Check( pDBData->HasHeader() );
-                pDBData->GetName( theDbName );
+                theDbName = pDBData->GetName();
 
                 if ( theDbName != rStrNoName )
                 {
@@ -224,7 +226,7 @@ void ScFilterOptionsMgr::Init()
         }
         else
         {
-            rBtnCopyResult.Check( sal_False );
+            rBtnCopyResult.Check( false );
             rEdCopyPos.SetText( EMPTY_STRING );
             rLbCopyPos.Disable();
             rEdCopyPos.Disable();
@@ -287,7 +289,7 @@ IMPL_LINK( ScFilterOptionsMgr, EdPosModifyHdl, Edit*, pEd )
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
             String* pStr    = NULL;
-            sal_Bool    bFound  = sal_False;
+            sal_Bool    bFound  = false;
             sal_uInt16  i       = 0;
             sal_uInt16  nCount  = rLbCopyPos.GetEntryCount();
 
@@ -335,3 +337,5 @@ IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

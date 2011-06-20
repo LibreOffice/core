@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,24 +33,15 @@
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
 
-// #ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
-// #include <com/sun/star/awt/Gradient.hpp>
-// #endif
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-// #ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
-// #include <com/sun/star/drawing/Hatch.hpp>
-// #endif
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 
-// #ifndef _COM_SUN_STAR_CHART2_FILLBITMAP_HPP_
-// #include <com/sun/star/chart2/FillBitmap.hpp>
-// #endif
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -436,3 +428,5 @@ void DataPointProperties::AddDefaultsToMap(
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

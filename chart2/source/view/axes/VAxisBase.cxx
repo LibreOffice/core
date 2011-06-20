@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,6 @@
 #include "CommonConverters.hxx"
 #include "Tickmarks.hxx"
 #include "macros.hxx"
-
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
 
 #include <memory>
 
@@ -144,7 +142,7 @@ sal_Bool VAxisBase::isAnythingToDraw()
     if( !m_aAxisProperties.m_xAxisModel.is() )
         return false;
 
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
+    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return false;
 
@@ -234,7 +232,7 @@ void VAxisBase::removeTextShapesFromTicks()
         {
             ::std::vector< TickInfo >::iterator       aTickIter = (*aDepthIter).begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
-            for( ; aTickIter != aTickEnd; aTickIter++ )
+            for( ; aTickIter != aTickEnd; ++aTickIter )
             {
                 TickInfo& rTickInfo = (*aTickIter);
                 if(rTickInfo.xTextShape.is())
@@ -263,3 +261,5 @@ void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

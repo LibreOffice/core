@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,6 +58,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/wrlmitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/outdev.hxx>
@@ -119,12 +121,12 @@ ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
         pName = NULL;
 }
 
-__EXPORT ScPatternAttr::~ScPatternAttr()
+ScPatternAttr::~ScPatternAttr()
 {
     delete pName;
 }
 
-SfxPoolItem* __EXPORT ScPatternAttr::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 {
     ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().Clone(sal_True, pPool) );
 
@@ -136,7 +138,7 @@ SfxPoolItem* __EXPORT ScPatternAttr::Clone( SfxItemPool *pPool ) const
 
 inline int StrCmp( const String* pStr1, const String* pStr2 )
 {
-    return ( pStr1 ? ( pStr2 ? ( *pStr1 == *pStr2 ) : sal_False ) : ( pStr2 ? sal_False : sal_True ) );
+    return ( pStr1 ? ( pStr2 ? ( *pStr1 == *pStr2 ) : false ) : ( pStr2 ? false : sal_True ) );
 }
 
 inline bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
@@ -154,7 +156,7 @@ inline bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
     return ( 0 == memcmp( pItems1, pItems2, (ATTR_PATTERN_END - ATTR_PATTERN_START + 1) * sizeof(pItems1[0]) ) );
 }
 
-int __EXPORT ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
+int ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 {
     // #i62090# Use quick comparison between ScPatternAttr's ItemSets
 
@@ -162,16 +164,16 @@ int __EXPORT ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
              StrCmp( GetStyleName(), static_cast<const ScPatternAttr&>(rCmp).GetStyleName() ) );
 }
 
-SfxPoolItem* __EXPORT ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */ ) const
+SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */ ) const
 {
     String* pStr;
     sal_Bool    bHasStyle;
-    short   eFamDummy;
 
     rStream >> bHasStyle;
 
     if ( bHasStyle )
     {
+        short   eFamDummy;
         pStr = new String;
         rStream.ReadByteString( *pStr, rStream.GetStreamCharSet() );
         rStream >> eFamDummy; // wg. altem Dateiformat
@@ -190,7 +192,7 @@ SfxPoolItem* __EXPORT ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nV
     return pPattern;
 }
 
-SvStream& __EXPORT ScPatternAttr::Store(SvStream& rStream, sal_uInt16 /* nItemVersion */) const
+SvStream& ScPatternAttr::Store(SvStream& rStream, sal_uInt16 /* nItemVersion */) const
 {
     rStream << (sal_Bool)sal_True;
 
@@ -374,7 +376,7 @@ void ScPatternAttr::GetFont(
         eLang =
         ((const SvxLanguageItem&)rItemSet.Get( nLangId )).GetLanguage();
     }
-    DBG_ASSERT(pFontAttr,"nanu?");
+    OSL_ENSURE(pFontAttr,"nanu?");
 
     //  auswerten
 
@@ -699,7 +701,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
     if ( aColorItem.GetValue().GetColor() == COL_AUTO )
     {
-        //  #108979# When cell attributes are converted to EditEngine paragraph attributes,
+        //  When cell attributes are converted to EditEngine paragraph attributes,
         //  don't create a hard item for automatic color, because that would be converted
         //  to black when the item's Store method is used in CreateTransferable/WriteBin.
         //  COL_AUTO is the EditEngine's pool default, so ClearItem will result in automatic
@@ -735,12 +737,12 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     rEditSet.Put( SfxBoolItem       ( EE_PARA_HYPHENATE, bHyphenate ) );
     rEditSet.Put( SvxFrameDirectionItem( eDirection, EE_PARA_WRITINGDIR ) );
 
-    // #111216# Script spacing is always off.
+    // Script spacing is always off.
     // The cell attribute isn't used here as long as there is no UI to set it
     // (don't evaluate attributes that can't be changed).
     // If a locale-dependent default is needed, it has to go into the cell
     // style, like the fonts.
-    rEditSet.Put( SvxScriptSpaceItem( sal_False, EE_PARA_ASIANCJKSPACING ) );
+    rEditSet.Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
 }
 
 void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet ) const
@@ -833,7 +835,7 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
         switch ( ((const SvxAdjustItem*)pItem)->GetAdjust() )
         {
             case SVX_ADJUST_LEFT:
-                // #30154# EditEngine Default ist bei dem GetAttribs() ItemSet
+                // EditEngine Default ist bei dem GetAttribs() ItemSet
                 // immer gesetzt!
                 // ob links oder rechts entscheiden wir selbst bei Text/Zahl
                 eVal = SVX_HOR_JUSTIFY_STANDARD;
@@ -899,7 +901,7 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
     for ( sal_uInt16 nSubWhich=ATTR_PATTERN_START; nSubWhich<=ATTR_PATTERN_END; nSubWhich++ )
     {
         //  only items that are set are interesting
-        if ( rThisSet.GetItemState( nSubWhich, sal_False, &pThisItem ) == SFX_ITEM_SET )
+        if ( rThisSet.GetItemState( nSubWhich, false, &pThisItem ) == SFX_ITEM_SET )
         {
             SfxItemState eOldState = rOldSet.GetItemState( nSubWhich, sal_True, &pOldItem );
             if ( eOldState == SFX_ITEM_SET )
@@ -922,9 +924,9 @@ sal_Bool ScPatternAttr::HasItemsSet( const sal_uInt16* pWhich ) const
 {
     const SfxItemSet& rSet = GetItemSet();
     for (sal_uInt16 i=0; pWhich[i]; i++)
-        if ( rSet.GetItemState( pWhich[i], sal_False ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( pWhich[i], false ) == SFX_ITEM_SET )
             return sal_True;
-    return sal_False;
+    return false;
 }
 
 void ScPatternAttr::ClearItems( const sal_uInt16* pWhich )
@@ -944,7 +946,7 @@ SfxStyleSheetBase* lcl_CopyStyleToPool
 {
     if ( !pSrcStyle || !pDestPool || !pSrcPool )
     {
-        DBG_ERROR( "CopyStyleToPool: Invalid Arguments :-/" );
+        OSL_FAIL( "CopyStyleToPool: Invalid Arguments :-/" );
         return NULL;
     }
 
@@ -963,12 +965,12 @@ SfxStyleSheetBase* lcl_CopyStyleToPool
         SfxItemSet& rDestSet = pDestStyle->GetItemSet();
         rDestSet.Put( rSrcSet );
 
-        // #b5017505# number format exchange list has to be handled here, too
+        // number format exchange list has to be handled here, too
         // (only called for cell styles)
 
         const SfxPoolItem* pSrcItem;
         if ( pFormatExchangeList &&
-             rSrcSet.GetItemState( ATTR_VALUE_FORMAT, sal_False, &pSrcItem ) == SFX_ITEM_SET )
+             rSrcSet.GetItemState( ATTR_VALUE_FORMAT, false, &pSrcItem ) == SFX_ITEM_SET )
         {
             sal_uLong nOldFormat = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
             sal_uInt32* pNewFormat = static_cast<sal_uInt32*>(pFormatExchangeList->Get( nOldFormat ));
@@ -1003,7 +1005,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
     if ( pDestDoc != pSrcDoc )
     {
-        DBG_ASSERT( pStyle, "Missing Pattern-Style! :-/" );
+        OSL_ENSURE( pStyle, "Missing Pattern-Style! :-/" );
 
         // wenn Vorlage im DestDoc vorhanden, dieses benutzen, sonst Style
         // mit Parent-Vorlagen kopieren/ggF. erzeugen und dem DestDoc hinzufuegen
@@ -1019,7 +1021,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
     for ( sal_uInt16 nAttrId = ATTR_PATTERN_START; nAttrId <= ATTR_PATTERN_END; nAttrId++ )
     {
         const SfxPoolItem* pSrcItem;
-        SfxItemState eItemState = pSrcSet->GetItemState( nAttrId, sal_False, &pSrcItem );
+        SfxItemState eItemState = pSrcSet->GetItemState( nAttrId, false, &pSrcItem );
         if (eItemState==SFX_ITEM_ON)
         {
             SfxPoolItem* pNewItem = NULL;
@@ -1133,7 +1135,7 @@ sal_Bool ScPatternAttr::IsVisible() const
         if ( ((const SvxShadowItem*)pItem)->GetLocation() != SVX_SHADOW_NONE )
             return sal_True;
 
-    return sal_False;
+    return false;
 }
 
 inline sal_Bool OneEqual( const SfxItemSet& rSet1, const SfxItemSet& rSet2, sal_uInt16 nId )
@@ -1181,7 +1183,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle )
     }
     else
     {
-        DBG_ERROR( "ScPatternAttr::SetStyleSheet( NULL ) :-|" );
+        OSL_FAIL( "ScPatternAttr::SetStyleSheet( NULL ) :-|" );
         GetItemSet().SetParent(NULL);
         pStyle = NULL;
     }
@@ -1236,18 +1238,8 @@ sal_Bool ScPatternAttr::IsSymbolFont() const
         return sal_Bool( ((const SvxFontItem*) pItem)->GetCharSet()
             == RTL_TEXTENCODING_SYMBOL );
     else
-        return sal_False;
+        return false;
 }
-
-//UNUSED2008-05  FontToSubsFontConverter ScPatternAttr::GetSubsFontConverter( sal_uLong nFlags ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      const SfxPoolItem* pItem;
-//UNUSED2008-05      if( GetItemSet().GetItemState( ATTR_FONT, sal_True, &pItem ) == SFX_ITEM_SET )
-//UNUSED2008-05          return CreateFontToSubsFontConverter(
-//UNUSED2008-05              ((const SvxFontItem*) pItem)->GetFamilyName(), nFlags );
-//UNUSED2008-05      else
-//UNUSED2008-05          return 0;
-//UNUSED2008-05  }
 
 
 sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
@@ -1268,7 +1260,7 @@ sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
                                         const SfxItemSet* pCondSet ) const
 {
-    DBG_ASSERT(pFormatter,"GetNumberFormat ohne Formatter");
+    OSL_ENSURE(pFormatter,"GetNumberFormat ohne Formatter");
 
     const SfxPoolItem* pFormItem;
     if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,sal_True,&pFormItem) != SFX_ITEM_SET )
@@ -1345,3 +1337,4 @@ sal_uInt8 ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

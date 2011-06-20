@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/whiter.hxx>
-#include <avmedia/mediaplayer.hxx>
 
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
@@ -83,15 +83,6 @@ void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
             rReq.Ignore();
         }
         break;
-
-        case SID_AVMEDIA_PLAYER:
-        {
-            SfxViewFrame* pThisFrame = GetViewFrame();
-            pThisFrame->ToggleChildWindow( ::avmedia::MediaPlayer::GetChildWindowId() );
-            pThisFrame->GetBindings().Invalidate( SID_AVMEDIA_PLAYER );
-            rReq.Ignore();
-        }
-        break;
     }
 }
 
@@ -101,11 +92,6 @@ void ScTabViewShell::GetChildWinState( SfxItemSet& rSet )
     {
         sal_uInt16 nId = GalleryChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_GALLERY, GetViewFrame()->HasChildWindow( nId ) ) );
-    }
-    else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_AVMEDIA_PLAYER ) )
-    {
-        sal_uInt16 nId = ::avmedia::MediaPlayer::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_AVMEDIA_PLAYER, GetViewFrame()->HasChildWindow( nId ) ) );
     }
 }
 
@@ -144,7 +130,7 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
             }
             else if ( nFormats & SGA_FORMAT_SOUND )
             {
-                //  #98115# for sounds (linked or not), insert a hyperlink button,
+                //  for sounds (linked or not), insert a hyperlink button,
                 //  like in Impress and Writer
 
                 GalleryExplorer* pGal = SVX_GALLERY();
@@ -171,7 +157,7 @@ ScInputHandler* ScTabViewShell::GetInputHandler() const
 
 //------------------------------------------------------------------
 
-String __EXPORT ScTabViewShell::GetDescription() const
+String ScTabViewShell::GetDescription() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(" ** Test ** "));
 }
@@ -247,7 +233,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                 {
                     //  Disabled wird nicht mehr...
 
-                    sal_Bool bThere = sal_False;
+                    sal_Bool bThere = false;
                     SfxViewFrame* pThisFrame = GetViewFrame();
                     sal_uInt16 nId = ScIMapChildWindowId();
                     if ( pThisFrame->KnowsChildWindow(nId) )
@@ -278,7 +264,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                         if ( rMarkList.GetMarkCount() == 1 )
                             if ( ScIMapDlgGetObj(ScGetIMapDlg()) ==
                                         (void*) rMarkList.GetMark(0)->GetMarkedSdrObj() )
-                                bDisable = sal_False;
+                                bDisable = false;
                     }
 
                     rSet.Put( SfxBoolItem( SID_IMAP_EXEC, bDisable ) );
@@ -293,3 +279,4 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

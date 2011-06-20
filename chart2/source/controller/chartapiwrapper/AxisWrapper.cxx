@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -367,7 +368,6 @@ private:
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
-        //::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
         ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
@@ -491,7 +491,7 @@ awt::Point SAL_CALL AxisWrapper::getPosition()
 void SAL_CALL AxisWrapper::setPosition( const awt::Point& /*aPosition*/ )
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set position of Axis" );
+    OSL_FAIL( "trying to set position of Axis" );
 }
 
 awt::Size SAL_CALL AxisWrapper::getSize()
@@ -505,7 +505,7 @@ void SAL_CALL AxisWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set size of Axis" );
+    OSL_FAIL( "trying to set size of Axis" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
@@ -694,8 +694,6 @@ Sequence< OUString > AxisWrapper::getSupportedServiceNames_Static()
     aServices[ 0 ] = C2U( "com.sun.star.chart.ChartAxis" );
     aServices[ 1 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
     aServices[ 2 ] = C2U( "com.sun.star.style.CharacterProperties" );
-//     aServices[ 3 ] = C2U( "com.sun.star.beans.PropertySet" );
-//     aServices[ 4 ] = C2U( "com.sun.star.drawing.LineProperties" );
 
     return aServices;
 }
@@ -705,3 +703,5 @@ APPHELPER_XSERVICEINFO_IMPL( AxisWrapper, lcl_aServiceName );
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

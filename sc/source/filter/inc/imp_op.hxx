@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,8 @@
 #include "otlnbuff.hxx"
 #include "colrowst.hxx"
 #include "excdefs.hxx"
+#include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 
 class SfxItemSet;
@@ -77,8 +80,8 @@ public:
     void                Convert();
 
 private:
-    typedef ScfRef< XclImpOutlineBuffer >  XclImpOutlineBfrRef;
-    typedef ScfRef< XclImpColRowSettings > XclImpColRowSettRef;
+    typedef boost::shared_ptr< XclImpOutlineBuffer >  XclImpOutlineBfrRef;
+    typedef boost::shared_ptr< XclImpColRowSettings > XclImpColRowSettRef;
 
     XclImpOutlineBfrRef mxColOutlineBuff;
     XclImpOutlineBfrRef mxRowOutlineBuff;
@@ -106,14 +109,12 @@ protected:
     XclImpOutlineBuffer*    pRowOutlineBuff;
     XclImpColRowSettings*   pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
 
-    typedef ScfDelList< XclImpOutlineDataBuffer > XclImpOutlineListBuffer;
+    typedef boost::ptr_vector< XclImpOutlineDataBuffer > XclImpOutlineListBuffer;
     XclImpOutlineListBuffer* pOutlineListBuffer;
 
     sal_Int16               mnLastRefIdx;
-    sal_uInt16              mnIxfeIndex;        /// Current XF identifier from IXFE record.
-    bool                    mbBiff2HasXfs;      /// Select XF formatting or direct formatting in BIFF2.
-    bool                    mbBiff2HasXfsValid; /// False = mbBiff2HasXfs is undetermined yet.
-
+    sal_uInt16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record
+    sal_uInt16                  nLastXF;            // letzter XF in Formula-Record
     SCTAB                   nBdshtTab;          // Counter fuer Boundsheet
     ScFormulaCell*          pLastFormCell;      // fuer String-Records
 
@@ -123,7 +124,7 @@ protected:
     // Record-Funktionen
     void                    ReadFileSharing();
 
-    sal_uInt16              ReadXFIndex( const ScAddress& rScPos, bool bBiff2 );
+    sal_uInt16              ReadXFIndex( bool bBiff2 );
 
     void                    ReadDimensions();
     void                    ReadBlank();
@@ -205,3 +206,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

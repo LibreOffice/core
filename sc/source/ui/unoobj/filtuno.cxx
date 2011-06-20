@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,12 +34,12 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include "editutil.hxx"
 #include "filtuno.hxx"
 #include "miscuno.hxx"
-#include "unoguard.hxx"
 #include "scdll.hxx"
 #include "imoptdlg.hxx"
 #include "asciiopt.hxx"
@@ -46,8 +47,8 @@
 #include "globstr.hrc"
 
 
-#include "sc.hrc" //CHINA001
-#include "scabstdlg.hxx" //CHINA001
+#include "sc.hrc"
+#include "scabstdlg.hxx"
 #include "i18npool/lang.h"
 
 #include <memory>
@@ -70,7 +71,7 @@ SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTE
 //------------------------------------------------------------------------
 
 ScFilterOptionsObj::ScFilterOptionsObj() :
-    bExport( sal_False )
+    bExport( false )
 {
 }
 
@@ -83,21 +84,21 @@ ScFilterOptionsObj::~ScFilterOptionsObj()
 uno::Reference<uno::XInterface> SAL_CALL ScFilterOptionsObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDLL::Init();
     return (::cppu::OWeakObject*) new ScFilterOptionsObj;
 }
 
 rtl::OUString ScFilterOptionsObj::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii( SCFILTEROPTIONSOBJ_IMPLNAME );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFILTEROPTIONSOBJ_IMPLNAME ));
 }
 
 uno::Sequence<rtl::OUString> ScFilterOptionsObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCFILTEROPTIONSOBJ_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFILTEROPTIONSOBJ_SERVICE ));
     return aRet;
 }
 
@@ -108,7 +109,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValu
     uno::Sequence<beans::PropertyValue> aRet(1);
     beans::PropertyValue* pArray = aRet.getArray();
 
-    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_FILTEROPTIONS );
+    pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTEROPTIONS ));
     pArray[0].Value <<= aFilterOptions;
 
     return aRet;
@@ -150,7 +151,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
     String aFilterString( aFilterName );
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     if ( !bExport && aFilterString == ScDocShell::GetAsciiFilterName() )
     {
@@ -169,9 +170,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         if ( xInputStream.is() )
             pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
-        //CHINA001 ScImportAsciiDlg* pDlg = new ScImportAsciiDlg( NULL, aPrivDatName, pInStream, cAsciiDel );
         AbstractScImportAsciiDlg* pDlg = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream, RID_SCDLG_ASCII, cAsciiDel);
-        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+        OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
             ScAsciiOptions aOptions;
@@ -209,8 +209,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
     else
     {
         sal_Bool bMultiByte = sal_True;
-        sal_Bool bDBEnc     = sal_False;
-        sal_Bool bAscii     = sal_False;
+        sal_Bool bDBEnc     = false;
+        sal_Bool bAscii     = false;
 
         sal_Unicode cStrDel = '"';
         sal_Unicode cAsciiDel = ';';
@@ -235,7 +235,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         else if ( aFilterString == ScDocShell::GetLotusFilterName() )
         {
             //  lotus is only imported
-            DBG_ASSERT( !bExport, "Filter Options for Lotus Export is not implemented" );
+            OSL_ENSURE( !bExport, "Filter Options for Lotus Export is not implemented" );
 
             aTitle = ScGlobal::GetRscString( STR_IMPORT_LOTUS );
             eEncoding = RTL_TEXTENCODING_IBM_437;
@@ -273,15 +273,11 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         }
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
-//CHINA001      ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL, bAscii,
-//CHINA001      &aOptions, &aTitle, bMultiByte, bDBEnc,
-//CHINA001      !bExport );
-//CHINA001
 
         AbstractScImportOptionsDlg* pDlg = pFact->CreateScImportOptionsDlg( NULL, RID_SCDLG_IMPORTOPT,
                                                                             bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
                                                                             !bExport);
-        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+        OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
             pDlg->GetImportOptions( aOptions );
@@ -304,7 +300,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
 void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
                             throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    bExport = sal_False;
+    bExport = false;
 }
 
 // XExporter
@@ -315,3 +311,4 @@ void SAL_CALL ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::
     bExport = sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,10 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "sc.hrc" // Definition RID_XXX
 #include <formula/compiler.hrc> // Definition SC_OPCODE_XXX (interne OpCodes)
-
-
 
 Resource RID_FUNCTION_CATEGORIES
 {
@@ -76,4 +75,3 @@ Resource RID_FUNCTION_CATEGORIES
         Text[ en-US ] =  "Add-in" ;
     };
 };
-

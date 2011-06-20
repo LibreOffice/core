@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #include <memory>
 #include <vector>
 #include <list>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 class ScDocument;
 class ScChartUnoData;
@@ -57,25 +58,25 @@ public:
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType);
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
-        ::std::hash_set<sal_uInt16>& getAllFileIds();
+        ::boost::unordered_set<sal_uInt16>& getAllFileIds();
 
     private:
         ExternalRefListener();
         ExternalRefListener(const ExternalRefListener& r);
 
         ScChartListener& mrParent;
-        ::std::hash_set<sal_uInt16> maFileIds;
+        ::boost::unordered_set<sal_uInt16> maFileIds;
         ScDocument*                 mpDoc;
     };
 
 private:
 
     ::std::auto_ptr<ExternalRefListener>                mpExtRefListener;
-    ::std::auto_ptr< ::std::vector<ScSharedTokenRef> >  mpTokens;
+    ::std::auto_ptr< ::std::vector<ScTokenRef> >  mpTokens;
 
     ScChartUnoData* pUnoData;
     ScDocument*     pDoc;
-    sal_Bool            bUsed;  // fuer ScChartListenerCollection::FreeUnused
+    sal_Bool            bUsed;  // for ScChartListenerCollection::FreeUnused
     sal_Bool            bDirty;
     sal_Bool            bSeriesRangesScheduled;
 
@@ -88,7 +89,7 @@ public:
                     ScChartListener( const String& rName, ScDocument* pDoc,
                                      const ScRangeListRef& rRangeListRef );
                     ScChartListener( const String& rName, ScDocument* pDoc,
-                                     ::std::vector<ScSharedTokenRef>* pTokens );
+                                     ::std::vector<ScTokenRef>* pTokens );
                     ScChartListener( const ScChartListener& );
     virtual         ~ScChartListener();
     virtual ScDataObject*   Clone() const;
@@ -104,7 +105,7 @@ public:
     void            StartListeningTo();
     void            EndListeningTo();
     void            ChangeListening( const ScRangeListRef& rRangeListRef,
-                                    sal_Bool bDirty = sal_False );
+                                    sal_Bool bDirty = false );
     void            Update();
     ScRangeListRef  GetRangeList() const;
     void            SetRangeList( const ScRangeListRef& rNew );
@@ -171,13 +172,13 @@ public:
 
     virtual         ~ScChartListenerCollection();
 
-                    // nur nach copy-ctor noetig, wenn neu ins Dok gehaengt
+                    // only needed after copy-ctor, if newly added to doc
     void            StartAllListeners();
 
     void            ChangeListening( const String& rName,
                                     const ScRangeListRef& rRangeListRef,
                                     sal_Bool bDirty = sal_False );
-    // FreeUnused nur wie in ScDocument::UpdateChartListenerCollection verwenden!
+    // use FreeUnused only the way it's used in ScDocument::UpdateChartListenerCollection
     void            FreeUnused();
     void            FreeUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
                              const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
@@ -185,9 +186,9 @@ public:
     void            UpdateDirtyCharts();
     void SC_DLLPUBLIC SetDirty();
     void            SetDiffDirty( const ScChartListenerCollection&,
-                        sal_Bool bSetChartRangeLists = sal_False );
+                        sal_Bool bSetChartRangeLists = false );
 
-    void            SetRangeDirty( const ScRange& rRange );     // z.B. Zeilen/Spalten
+    void            SetRangeDirty( const ScRange& rRange );     // for example rows/columns
 
     void            UpdateScheduledSeriesRanges();
     void            UpdateChartsContainingTab( SCTAB nTab );
@@ -216,3 +217,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

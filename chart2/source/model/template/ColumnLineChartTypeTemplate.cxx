@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -422,7 +423,7 @@ Reference< XDataInterpreter > SAL_CALL ColumnLineChartTypeTemplate::getDataInter
     else
     {
         //todo...
-        OSL_ENSURE( false, "number of lines may not be valid anymore in the datainterpreter" );
+        OSL_FAIL( "number of lines may not be valid anymore in the datainterpreter" );
 
     }
 
@@ -446,3 +447,5 @@ IMPLEMENT_FORWARD_XINTERFACE2( ColumnLineChartTypeTemplate, ChartTypeTemplate, O
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ColumnLineChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

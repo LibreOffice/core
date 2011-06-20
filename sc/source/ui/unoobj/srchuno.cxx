@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,15 +33,15 @@
 
 #include "scitems.hxx"
 #include <svl/srchitem.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 
 #include "srchuno.hxx"
 #include "docsh.hxx"
 #include "undoblk.hxx"
 #include "hints.hxx"
 #include "markdata.hxx"
-#include "unoguard.hxx"
 #include "miscuno.hxx"
 #include "unonames.hxx"
 
@@ -85,21 +86,21 @@ ScCellSearchObj::ScCellSearchObj() :
 {
     pSearchItem = new SvxSearchItem( SCITEM_SEARCHDATA );
     //  Defaults:
-    pSearchItem->SetWordOnly(sal_False);
-    pSearchItem->SetExact(sal_False);
-    pSearchItem->SetMatchFullHalfWidthForms(sal_False);
-    pSearchItem->SetUseAsianOptions(sal_False);     // or all asian bits would have to be handled
-    pSearchItem->SetBackward(sal_False);
-    pSearchItem->SetSelection(sal_False);
-    pSearchItem->SetRegExp(sal_False);
-    pSearchItem->SetPattern(sal_False);
-    pSearchItem->SetLevenshtein(sal_False);
-    pSearchItem->SetLEVRelaxed(sal_False);
+    pSearchItem->SetWordOnly(false);
+    pSearchItem->SetExact(false);
+    pSearchItem->SetMatchFullHalfWidthForms(false);
+    pSearchItem->SetUseAsianOptions(false);     // or all asian bits would have to be handled
+    pSearchItem->SetBackward(false);
+    pSearchItem->SetSelection(false);
+    pSearchItem->SetRegExp(false);
+    pSearchItem->SetPattern(false);
+    pSearchItem->SetLevenshtein(false);
+    pSearchItem->SetLEVRelaxed(false);
     pSearchItem->SetLEVOther(2);
     pSearchItem->SetLEVShorter(2);
     pSearchItem->SetLEVLonger(2);
     //  Calc-Flags
-    pSearchItem->SetRowDirection(sal_False);
+    pSearchItem->SetRowDirection(false);
     pSearchItem->SetCellType(SVX_SEARCHIN_FORMULA);
 
     //  Selection-Flag wird beim Aufruf gesetzt
@@ -114,14 +115,14 @@ ScCellSearchObj::~ScCellSearchObj()
 
 rtl::OUString SAL_CALL ScCellSearchObj::getSearchString() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return pSearchItem->GetSearchString();
 }
 
 void SAL_CALL ScCellSearchObj::setSearchString( const rtl::OUString& aString )
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     pSearchItem->SetSearchString( aString );
 }
 
@@ -129,14 +130,14 @@ void SAL_CALL ScCellSearchObj::setSearchString( const rtl::OUString& aString )
 
 rtl::OUString SAL_CALL ScCellSearchObj::getReplaceString() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return pSearchItem->GetReplaceString();
 }
 
 void SAL_CALL ScCellSearchObj::setReplaceString( const rtl::OUString& aReplaceString )
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     pSearchItem->SetReplaceString( aReplaceString );
 }
 
@@ -145,7 +146,7 @@ void SAL_CALL ScCellSearchObj::setReplaceString( const rtl::OUString& aReplaceSt
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellSearchObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
         new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
@@ -157,7 +158,7 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aString(aPropertyName);
 
     if (aString.EqualsAscii( SC_UNO_SRCHBACK ))        pSearchItem->SetBackward( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
@@ -172,13 +173,14 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
     else if (aString.EqualsAscii( SC_UNO_SRCHSIMEX ))  pSearchItem->SetLEVOther( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
     else if (aString.EqualsAscii( SC_UNO_SRCHSIMREM )) pSearchItem->SetLEVShorter( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
     else if (aString.EqualsAscii( SC_UNO_SRCHTYPE ))   pSearchItem->SetCellType( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
+    else if (aString.EqualsAscii( SC_UNO_SRCHFILTERED )) pSearchItem->SetSearchFiltered( ScUnoHelpFunctions::GetBoolFromAny(aValue) );
 }
 
 uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const rtl::OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aString(aPropertyName);
     uno::Any aRet;
 
@@ -194,6 +196,7 @@ uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const rtl::OUString& aPrope
     else if (aString.EqualsAscii( SC_UNO_SRCHSIMEX ))  aRet <<= (sal_Int16) pSearchItem->GetLEVOther();
     else if (aString.EqualsAscii( SC_UNO_SRCHSIMREM )) aRet <<= (sal_Int16) pSearchItem->GetLEVShorter();
     else if (aString.EqualsAscii( SC_UNO_SRCHTYPE ))   aRet <<= (sal_Int16) pSearchItem->GetCellType();
+    else if (aString.EqualsAscii( SC_UNO_SRCHFILTERED )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsSearchFiltered() );
 
     return aRet;
 }
@@ -204,7 +207,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScCellSearchObj )
 
 rtl::OUString SAL_CALL ScCellSearchObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScCellSearchObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellSearchObj" ));
 }
 
 sal_Bool SAL_CALL ScCellSearchObj::supportsService( const rtl::OUString& rServiceName )
@@ -220,8 +223,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames(
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCSEARCHDESCRIPTOR_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCREPLACEDESCRIPTOR_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSEARCHDESCRIPTOR_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCREPLACEDESCRIPTOR_SERVICE ));
     return aRet;
 }
 
@@ -239,24 +242,16 @@ sal_Int64 SAL_CALL ScCellSearchObj::getSomething(
     return 0;
 }
 
-// static
-const uno::Sequence<sal_Int8>& ScCellSearchObj::getUnoTunnelId()
+namespace
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    class theScCellSearchObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScCellSearchObjUnoTunnelId> {};
 }
 
-// static
+const uno::Sequence<sal_Int8>& ScCellSearchObj::getUnoTunnelId()
+{
+    return theScCellSearchObjUnoTunnelId::get().getSeq();
+}
+
 ScCellSearchObj* ScCellSearchObj::getImplementation(
                                 const uno::Reference<util::XSearchDescriptor> xObj )
 {
@@ -274,3 +269,4 @@ ScCellSearchObj* ScCellSearchObj::getImplementation(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

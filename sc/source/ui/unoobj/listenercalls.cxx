@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 
 
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <tools/debug.hxx>
 
 #include "listenercalls.hxx"
 
@@ -45,7 +45,7 @@ ScUnoListenerCalls::ScUnoListenerCalls()
 
 ScUnoListenerCalls::~ScUnoListenerCalls()
 {
-    DBG_ASSERT( aEntries.empty(), "unhandled listener calls remaining" );
+    OSL_ENSURE( aEntries.empty(), "unhandled listener calls remaining" );
 }
 
 void ScUnoListenerCalls::Add( const uno::Reference<util::XModifyListener>& rListener,
@@ -72,7 +72,7 @@ void ScUnoListenerCalls::ExecuteAndClear()
             {
                 aEntry.xListener->modified( aEntry.aEvent );
             }
-            catch ( uno::RuntimeException )
+            catch ( const uno::RuntimeException& )
             {
                 // the listener is an external object and may throw a RuntimeException
                 // for reasons we don't know
@@ -87,3 +87,4 @@ void ScUnoListenerCalls::ExecuteAndClear()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

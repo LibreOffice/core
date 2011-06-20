@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,11 +31,11 @@
 
 #include "collect.hxx"
 
-//------------------------------------------------------------------------
+#include <rtl/ustring.hxx>
+
 #define MAXFUNCPARAM    16
 #define MAXARRSIZE      0xfffe
 
-//------------------------------------------------------------------------
 #ifndef WNT
 #define CALLTYPE
 #else
@@ -45,7 +46,6 @@ extern "C" {
 typedef void (CALLTYPE* AdvData)( double& nHandle, void* pData );
 }
 
-//------------------------------------------------------------------------
 enum ParamType
 {
     PTR_DOUBLE,
@@ -56,7 +56,6 @@ enum ParamType
     NONE
 };
 
-//------------------------------------------------------------------------
 class ModuleData;
 class FuncData : public ScDataObject
 {
@@ -91,18 +90,18 @@ public:
             sal_Bool        Call(void** ppParam);
             sal_Bool        Unadvice(double nHandle);
 
-                        // Name und Beschreibung des Parameters nParam.
-                        // nParam==0 => Desc := Funktions-Beschreibung,
+                        // name and description of parameter nParam.
+                        // nParam==0 => Desc := function description,
                         // Name := n/a
-            sal_Bool        GetParamDesc( String& aName, String& aDesc, sal_uInt16 nParam );
+            bool        getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam );
+
 };
 
 
-//------------------------------------------------------------------------
 class FuncCollection : public ScSortedCollection
 {
 public:
-    FuncCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False) : ScSortedCollection ( nLim, nDel, bDup ) {}
+    FuncCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false) : ScSortedCollection ( nLim, nDel, bDup ) {}
     FuncCollection(const FuncCollection& rFuncCollection) : ScSortedCollection ( rFuncCollection ) {}
 
     virtual ScDataObject*   Clone() const { return new FuncCollection(*this); }
@@ -116,3 +115,5 @@ sal_Bool InitExternalFunc(const rtl::OUString& rModuleName);
 void ExitExternalFunc();
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

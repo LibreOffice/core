@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,7 +83,6 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
         aBtnDateStd     ( this, ScResId( BTN_DATESTD ) ),
         aBtnDateSc10    ( this, ScResId( BTN_DATESC10 ) ),
         aBtnDate1904    ( this, ScResId( BTN_DATE1904 ) ),
-        aHSeparatorFL   ( this, ScResId( FL_H_SEPARATOR ) ),
         aBtnCase        ( this, ScResId( BTN_CASE ) ),
         aBtnCalc        ( this, ScResId( BTN_CALC ) ),
         aBtnMatch       ( this, ScResId( BTN_MATCH ) ),
@@ -106,7 +106,7 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
 
 //-----------------------------------------------------------------------
 
-__EXPORT ScTpCalcOptions::~ScTpCalcOptions()
+ScTpCalcOptions::~ScTpCalcOptions()
 {
     delete pOldOptions;
     delete pLocalOptions;
@@ -125,21 +125,21 @@ void ScTpCalcOptions::Init()
 
 //-----------------------------------------------------------------------
 
-sal_uInt16* __EXPORT ScTpCalcOptions::GetRanges()
+sal_uInt16* ScTpCalcOptions::GetRanges()
 {
     return pCalcOptRanges;
 }
 
 //-----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTpCalcOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* ScTpCalcOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new ScTpCalcOptions( pParent, rAttrSet ) );
 }
 
 //-----------------------------------------------------------------------
 
-void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
+void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 {
     sal_uInt16  d,m,y;
 
@@ -190,7 +190,7 @@ void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 
 //-----------------------------------------------------------------------
 
-sal_Bool __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
+sal_Bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     // alle weiteren Optionen werden in den Handlern aktualisiert
     pLocalOptions->SetIterCount( (sal_uInt16)aEdSteps.GetValue() );
@@ -212,12 +212,12 @@ sal_Bool __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
         return sal_True;
     }
     else
-        return sal_False;
+        return false;
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
+int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     int nReturn = KEEP_PAGE;
 
@@ -291,7 +291,7 @@ IMPL_LINK( ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
         }
         else
         {
-            pLocalOptions->SetIter( sal_False );
+            pLocalOptions->SetIter( false );
             aFtSteps.Disable(); aEdSteps.Disable();
             aFtEps  .Disable(); aEdEps  .Disable();
         }
@@ -303,3 +303,4 @@ IMPL_LINK( ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

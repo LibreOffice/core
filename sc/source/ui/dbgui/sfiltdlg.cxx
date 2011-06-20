@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 
 #include "uiitems.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "reffact.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
@@ -90,7 +91,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         pViewData       ( NULL ),
         pDoc            ( NULL ),
         pRefInputEdit   ( NULL ),
-        bRefInputMode   ( sal_False ),
+        bRefInputMode   ( false ),
         pTimer          ( NULL )
 {
     Init( rArgSet );
@@ -113,7 +114,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScSpecialFilterDlg::~ScSpecialFilterDlg()
+ScSpecialFilterDlg::~ScSpecialFilterDlg()
 {
     sal_uInt16 nEntries = aLbFilterArea.GetEntryCount();
     sal_uInt16 i;
@@ -134,7 +135,7 @@ __EXPORT ScSpecialFilterDlg::~ScSpecialFilterDlg()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
+void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 {
     const ScQueryItem& rQueryItem = (const ScQueryItem&)
                                     rArgSet.Get( nWhichQuery );
@@ -153,37 +154,23 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     {
         if(pDoc->GetChangeTrack()!=NULL) aBtnCopyResult.Disable();
 
-        ScRangeName*    pRangeNames = pDoc->GetRangeName();
-        const sal_uInt16    nCount      = pRangeNames ? pRangeNames->GetCount() : 0;
-
-        /*
-         * Aus den RangeNames des Dokumentes werden nun die
-         * gemerkt, bei denen es sich um Filter-Bereiche handelt
-         */
-
+        ScRangeName* pRangeNames = pDoc->GetRangeName();
         aLbFilterArea.Clear();
         aLbFilterArea.InsertEntry( aStrUndefined, 0 );
 
-        if ( nCount > 0 )
+        if (!pRangeNames->empty())
         {
-            String       aString;
-            ScRangeData* pData = NULL;
-            sal_uInt16       nInsert = 0;
-
-            for ( sal_uInt16 i=0; i<nCount; i++ )
+            ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
+            sal_uInt16 nInsert = 0;
+            for (; itr != itrEnd; ++itr)
             {
-                pData = (ScRangeData*)(pRangeNames->At( i ));
-                if ( pData )
-                {
-                    if ( pData->HasType( RT_CRITERIA ) )
-                    {
-                        pData->GetName( aString );
-                        nInsert = aLbFilterArea.InsertEntry( aString );
-                        pData->GetSymbol( aString );
-                        aLbFilterArea.SetEntryData( nInsert,
-                                                    new String( aString ) );
-                    }
-                }
+                if (!itr->HasType(RT_CRITERIA))
+                    continue;
+
+                nInsert = aLbFilterArea.InsertEntry(itr->GetName());
+                rtl::OUString aSymbol;
+                itr->GetSymbol(aSymbol);
+                aLbFilterArea.SetEntryData(nInsert, new String(aSymbol));
             }
         }
 
@@ -222,8 +209,8 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                             aStrNoName,
                             aStrUndefined );
 
-    //  #35206# Spezialfilter braucht immer Spaltenkoepfe
-    aBtnHeader.Check(sal_True);
+    //  Spezialfilter braucht immer Spaltenkoepfe
+    aBtnHeader.Check(true);
     aBtnHeader.Disable();
 
     // Modal-Modus einschalten
@@ -235,7 +222,7 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScSpecialFilterDlg::Close()
+sal_Bool ScSpecialFilterDlg::Close()
 {
     if (pViewData)
         pViewData->GetDocShell()->CancelAutoDBRange();
@@ -320,7 +307,7 @@ sal_Bool ScSpecialFilterDlg::IsRefInputMode() const
 
 IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 {
-    DBG_ASSERT( pDoc && pViewData, "Document or ViewData not found. :-/" );
+    OSL_ENSURE( pDoc && pViewData, "Document or ViewData not found. :-/" );
 
     if ( (pBtn == &aBtnOk) && pDoc && pViewData )
     {
@@ -329,7 +316,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
         ScQueryParam    theOutParam( theQueryData );
         ScAddress       theAdrCopy;
         sal_Bool            bEditInputOk    = sal_True;
-        sal_Bool            bQueryOk        = sal_False;
+        sal_Bool            bQueryOk        = false;
         ScRange         theFilterArea;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
@@ -349,7 +336,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
                 ERRORBOX( STR_INVALID_TABREF );
                 aEdCopyArea.GrabFocus();
-                bEditInputOk = sal_False;
+                bEditInputOk = false;
             }
         }
 
@@ -361,7 +348,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
             {
                 ERRORBOX( STR_INVALID_TABREF );
                 aEdFilterArea.GrabFocus();
-                bEditInputOk = sal_False;
+                bEditInputOk = false;
             }
         }
 
@@ -382,7 +369,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
                 if ( aBtnCopyResult.IsChecked() )
                 {
-                    theOutParam.bInplace    = sal_False;
+                    theOutParam.bInplace    = false;
                     theOutParam.nDestTab    = theAdrCopy.Tab();
                     theOutParam.nDestCol    = theAdrCopy.Col();
                     theOutParam.nDestRow    = theAdrCopy.Row();
@@ -416,7 +403,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
                 if ( bQueryOk && theOutParam.GetEntryCount() > MAXQUERY &&
                      theOutParam.GetEntry(MAXQUERY).bDoQuery )
                 {
-                    bQueryOk = sal_False;       // zu viele
+                    bQueryOk = false;       // zu viele
                                             //! andere Fehlermeldung ??
                 }
             }
@@ -424,7 +411,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
         if ( bQueryOk )
         {
-            SetDispatcherLock( sal_False );
+            SetDispatcherLock( false );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( FID_FILTER_OK,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -466,7 +453,7 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
         else if( bRefInputMode )
         {
             pRefInputEdit = NULL;
-            bRefInputMode = sal_False;
+            bRefInputMode = false;
         }
     }
 
@@ -509,7 +496,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
             if ( SCA_VALID == (nResult & SCA_VALID) )
             {
                 String* pStr    = NULL;
-                sal_Bool    bFound  = sal_False;
+                sal_Bool    bFound  = false;
                 sal_uInt16  i       = 0;
                 sal_uInt16  nCount  = aLbFilterArea.GetEntryCount();
 
@@ -533,3 +520,4 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

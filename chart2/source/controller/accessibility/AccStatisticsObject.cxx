@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,27 +40,9 @@ namespace chart
 
 AccStatisticsObject::AccStatisticsObject( const AccessibleElementInfo& rAccInfo )
         : AccessibleChartElement( rAccInfo, false/*NoChildren*/, true/*AlwaysTransparent*/ )
-        //, m_eType( eType )
-        //, m_nSeriesIndex( nSeriesIndex )
-{
-//    ChartModel * pModel = GetChartModel();
-//    OSL_ASSERT( pModel );
 
-    // /-- solar
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-/*    switch( eType )
-    {
-        case MEAN_VAL_LINE:
-            SetItemSet( pModel->GetAverageAttr( m_nSeriesIndex ));
-            break;
-        case ERROR_BARS:
-            SetItemSet( pModel->GetErrorAttr( m_nSeriesIndex ));
-            break;
-        case REGRESSION:
-            SetItemSet( pModel->GetRegressAttr( m_nSeriesIndex ));
-            break;
-    }*/
-    // \-- solar
+{
+    SolarMutexGuard aSolarGuard;
 }
 
 AccStatisticsObject::~AccStatisticsObject()
@@ -79,3 +62,5 @@ OUString SAL_CALL AccStatisticsObject::getImplementationName()
 }
 
 }  // namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

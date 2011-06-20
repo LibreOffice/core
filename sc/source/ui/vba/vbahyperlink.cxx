@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,7 +100,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
         // insert the text field into the document
         xText->setString( OUString() );
         uno::Reference< text::XTextRange > xRange( xText->createTextCursor(), uno::UNO_QUERY_THROW );
-        xText->insertTextContent( xRange, xUrlField, sal_False );
+        xText->insertTextContent( xRange, xUrlField, false );
     }
     else
     {
@@ -244,3 +245,5 @@ extern sdecl::ServiceDecl const serviceDecl(
 }
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

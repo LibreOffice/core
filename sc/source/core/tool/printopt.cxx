@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,9 @@
 #include "miscuno.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -64,7 +66,7 @@ ScPrintOptions::~ScPrintOptions()
 void ScPrintOptions::SetDefaults()
 {
     bSkipEmpty = sal_True;
-    bAllSheets = sal_False;
+    bAllSheets = false;
 }
 
 const ScPrintOptions& ScPrintOptions::operator=( const ScPrintOptions& rCpy )
@@ -87,9 +89,6 @@ int ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
 
 // -----------------------------------------------------------------------
 
-//UNUSED2008-05  ScTpPrintItem::ScTpPrintItem( sal_uInt16 nWhichP ) : SfxPoolItem( nWhichP )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
 
 ScTpPrintItem::ScTpPrintItem( sal_uInt16 nWhichP, const ScPrintOptions& rOpt ) :
     SfxPoolItem ( nWhichP ),
@@ -114,7 +113,7 @@ String ScTpPrintItem::GetValueText() const
 
 int ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScTpPrintItem& rPItem = (const ScTpPrintItem&)rItem;
     return ( theOptions == rPItem.theOptions );
@@ -149,18 +148,17 @@ Sequence<OUString> ScPrintCfg::GetPropertyNames()
 }
 
 ScPrintCfg::ScPrintCfg() :
-    ConfigItem( OUString::createFromAscii( CFGPATH_PRINT ) )
+    ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_PRINT )) )
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-//  EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -207,5 +205,6 @@ void ScPrintCfg::SetOptions( const ScPrintOptions& rNew )
     SetModified();
 }
 
-void ScPrintCfg::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void ScPrintCfg::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

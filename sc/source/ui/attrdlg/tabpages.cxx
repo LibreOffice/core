@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ ScTabPageProtection::ScTabPageProtection( Window*           pParent,
     SetExchangeSupport();
 
     //  States werden in Reset gesetzt
-    bTriEnabled = bDontCare = bProtect = bHideForm = bHideCell = bHidePrint = sal_False;
+    bTriEnabled = bDontCare = bProtect = bHideForm = bHideCell = bHidePrint = false;
 
     aBtnProtect.SetClickHdl(     LINK( this, ScTabPageProtection, ButtonClickHdl ) );
     aBtnHideCell.SetClickHdl(    LINK( this, ScTabPageProtection, ButtonClickHdl ) );
@@ -85,20 +86,20 @@ ScTabPageProtection::ScTabPageProtection( Window*           pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTabPageProtection::~ScTabPageProtection()
+ScTabPageProtection::~ScTabPageProtection()
 {
 }
 
 //------------------------------------------------------------------------
 
-sal_uInt16* __EXPORT ScTabPageProtection::GetRanges()
+sal_uInt16* ScTabPageProtection::GetRanges()
 {
     return pProtectionRanges;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTabPageProtection::Create( Window*           pParent,
+SfxTabPage* ScTabPageProtection::Create( Window*            pParent,
                                                   const SfxItemSet& rAttrSet )
 {
     return ( new ScTabPageProtection( pParent, rAttrSet ) );
@@ -106,13 +107,13 @@ SfxTabPage* __EXPORT ScTabPageProtection::Create( Window*           pParent,
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
+void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 {
     //  Variablen initialisieren
 
     sal_uInt16 nWhich = GetWhich( SID_SCATTR_PROTECTION );
     const ScProtectionAttr* pProtAttr = NULL;
-    SfxItemState eItemState = rCoreAttrs.GetItemState( nWhich, sal_False,
+    SfxItemState eItemState = rCoreAttrs.GetItemState( nWhich, false,
                                           (const SfxPoolItem**)&pProtAttr );
 
     // handelt es sich um ein Default-Item?
@@ -128,7 +129,7 @@ void __EXPORT ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
         //  (weil alles zusammen ein Attribut ist, kann auch nur alles zusammen
         //  auf DontCare stehen - #38543#)
         bProtect = sal_True;
-        bHideForm = bHideCell = bHidePrint = sal_False;
+        bHideForm = bHideCell = bHidePrint = false;
     }
     else
     {
@@ -150,13 +151,13 @@ void __EXPORT ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 
 // -----------------------------------------------------------------------
 
-sal_Bool __EXPORT ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
+sal_Bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
 {
-    sal_Bool                bAttrsChanged   = sal_False;
+    sal_Bool                bAttrsChanged   = false;
     sal_uInt16              nWhich          = GetWhich( SID_SCATTR_PROTECTION );
     const SfxPoolItem*  pOldItem        = GetOldItem( rCoreAttrs, SID_SCATTR_PROTECTION );
     const SfxItemSet&   rOldSet         = GetItemSet();
-    SfxItemState        eItemState      = rOldSet.GetItemState( nWhich, sal_False );
+    SfxItemState        eItemState      = rOldSet.GetItemState( nWhich, false );
     ScProtectionAttr    aProtAttr;
 
     if ( !bDontCare )
@@ -184,7 +185,7 @@ sal_Bool __EXPORT ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
+int ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( *pSetP );
@@ -201,7 +202,7 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
         bDontCare = sal_True;                           // alles zusammen auf DontCare
     else
     {
-        bDontCare = sal_False;                          // DontCare ueberall aus
+        bDontCare = false;                          // DontCare ueberall aus
         sal_Bool bOn = ( eState == STATE_CHECK );       // ausgewaehlter Wert
 
         if ( pBox == &aBtnProtect )
@@ -214,7 +215,7 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
             bHidePrint = bOn;
         else
         {
-            DBG_ERRORFILE("falscher Button");
+            OSL_FAIL("falscher Button");
         }
     }
 
@@ -248,3 +249,5 @@ void ScTabPageProtection::UpdateButtons()
         aBtnHideFormula.Enable( bEnable );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

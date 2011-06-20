@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@ void DoSdrUndoAction( SdrUndoAction* pUndoAction, ScDocument* pDoc )
         pUndoAction->Undo();
     else
     {
-        // #125875# if no drawing layer existed when the action was created,
+        // if no drawing layer existed when the action was created,
         // but it was created after that, there is no draw undo action,
         // and after undo there might be a drawing layer with a wrong page count.
         // The drawing layer must have been empty in that case, so any missing
@@ -80,7 +81,7 @@ void DoSdrUndoAction( SdrUndoAction* pUndoAction, ScDocument* pDoc )
 
 void RedoSdrUndoAction( SdrUndoAction* pUndoAction )
 {
-    // #125875# DoSdrUndoAction/RedoSdrUndoAction is called even if the pointer is null
+    // DoSdrUndoAction/RedoSdrUndoAction is called even if the pointer is null
 
     if ( pUndoAction )
         pUndoAction->Redo();
@@ -100,3 +101,4 @@ void EnableDrawAdjust( ScDocument* pDoc, sal_Bool bEnable )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

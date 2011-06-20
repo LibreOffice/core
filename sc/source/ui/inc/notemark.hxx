@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef SC_NOTEMARK_HXX
 #define SC_NOTEMARK_HXX
 
-#ifndef _MAPMOD_HXX //autogen
 #include <vcl/mapmod.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include "global.hxx"
 #include "address.hxx"
@@ -78,3 +77,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

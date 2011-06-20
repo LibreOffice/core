@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,7 +90,6 @@ private:
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
 
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
-        //::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),
@@ -266,22 +266,22 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const ::rtl::OUString& rP
 void SAL_CALL MinMaxLineWrapper::addPropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL MinMaxLineWrapper::removePropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL MinMaxLineWrapper::addVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL MinMaxLineWrapper::removeVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 //XMultiPropertySet
@@ -289,7 +289,6 @@ void SAL_CALL MinMaxLineWrapper::removeVetoableChangeListener( const ::rtl::OUSt
 void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< ::rtl::OUString >& rNameSeq, const uno::Sequence< uno::Any >& rValueSeq )
                     throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    bool bUnknownProperty = false;
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
     {
@@ -301,12 +300,9 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< ::rtl::
         catch( beans::UnknownPropertyException& ex )
         {
             ASSERT_EXCEPTION( ex );
-            bUnknownProperty = true;
         }
     }
     //todo: store unknown properties elsewhere
-//    if( bUnknownProperty )
-//        throw beans::UnknownPropertyException();
 }
 uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyValues( const uno::Sequence< ::rtl::OUString >& rNameSeq )
                     throw (uno::RuntimeException)
@@ -328,20 +324,20 @@ void SAL_CALL MinMaxLineWrapper::addPropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL MinMaxLineWrapper::removePropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL MinMaxLineWrapper::firePropertiesChangeEvent(
     const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */,
     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 //XPropertyState
@@ -445,3 +441,5 @@ APPHELPER_XSERVICEINFO_IMPL( MinMaxLineWrapper, lcl_aServiceName );
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

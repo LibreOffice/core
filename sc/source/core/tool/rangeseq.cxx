@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,34 +33,18 @@
 
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
-#include <tools/debug.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include "rangeseq.hxx"
 #include "document.hxx"
-#include "dociter.hxx"
 #include "scmatrix.hxx"
 #include "cell.hxx"
 
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
-
-bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
-{
-    // no need to look at empty cells - just use ScCellIterator
-    ScCellIterator aIter( pDoc, rRange );
-    ScBaseCell* pCell = aIter.GetFirst();
-    while (pCell)
-    {
-        if ( pCell->GetCellType() == CELLTYPE_FORMULA && static_cast<ScFormulaCell*>(pCell)->GetErrCode() != 0 )
-            return true;
-        pCell = aIter.GetNext();
-    }
-    return false;   // no error found
-}
 
 long lcl_DoubleToLong( double fVal )
 {
@@ -93,14 +78,14 @@ sal_Bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, con
     }
 
     rAny <<= aRowSeq;
-    return !lcl_HasErrors( pDoc, rRange );
+    return sal_True;        //! check for errors
 }
 
 
 sal_Bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
 {
     if (!pMatrix)
-        return sal_False;
+        return false;
 
     SCSIZE nColCount;
     SCSIZE nRowCount;
@@ -149,14 +134,14 @@ sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, c
     }
 
     rAny <<= aRowSeq;
-    return !lcl_HasErrors( pDoc, rRange );
+    return sal_True;        //! check for errors
 }
 
 
 sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix )
 {
     if (!pMatrix)
-        return sal_False;
+        return false;
 
     SCSIZE nColCount;
     SCSIZE nRowCount;
@@ -191,7 +176,7 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, c
     long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
     long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
-    bool bHasErrors = false;
+    String aDocStr;
 
     uno::Sequence< uno::Sequence<rtl::OUString> > aRowSeq( nRowCount );
     uno::Sequence<rtl::OUString>* pRowAry = aRowSeq.getArray();
@@ -201,17 +186,14 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, c
         rtl::OUString* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
         {
-            sal_uInt16 nErrCode = pDoc->GetStringForFormula(
-                        ScAddress((SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab),
-                        pColAry[nCol] );
-            if ( nErrCode != 0 )
-                bHasErrors = true;
+            pDoc->GetString( (SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab, aDocStr );
+            pColAry[nCol] = rtl::OUString( aDocStr );
         }
         pRowAry[nRow] = aColSeq;
     }
 
     rAny <<= aRowSeq;
-    return !bHasErrors;
+    return sal_True;        //! check for errors
 }
 
 
@@ -219,7 +201,7 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMa
                                             SvNumberFormatter* pFormatter )
 {
     if (!pMatrix)
-        return sal_False;
+        return false;
 
     SCSIZE nColCount;
     SCSIZE nRowCount;
@@ -267,7 +249,7 @@ double lcl_GetValueFromCell( ScBaseCell& rCell )
     else if ( eType == CELLTYPE_FORMULA )
         return ((ScFormulaCell&)rCell).GetValue();      // called only if result is value
 
-    DBG_ERROR( "GetValueFromCell: wrong type" );
+    OSL_FAIL( "GetValueFromCell: wrong type" );
     return 0;
 }
 
@@ -281,7 +263,7 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, co
     long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
     String aDocStr;
-    sal_Bool bHasErrors = sal_False;
+    sal_Bool bHasErrors = false;
 
     uno::Sequence< uno::Sequence<uno::Any> > aRowSeq( nRowCount );
     uno::Sequence<uno::Any>* pRowAry = aRowSeq.getArray();
@@ -322,7 +304,7 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, co
 sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix, bool bDataTypes )
 {
     if (!pMatrix)
-        return sal_False;
+        return false;
 
     SCSIZE nColCount;
     SCSIZE nRowCount;
@@ -362,7 +344,6 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMat
 
 //------------------------------------------------------------------------
 
-// static
 bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
         com::sun::star::uno::TypeClass & o_eClass,
         const com::sun::star::uno::Any & rAny )
@@ -395,7 +376,6 @@ bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
 
 //------------------------------------------------------------------------
 
-// static
 ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::Any & rAny )
 {
     ScMatrixRef xMatrix;
@@ -418,12 +398,11 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
             xMatrix = new ScMatrix(
                     static_cast<SCSIZE>(nMaxColCount),
                     static_cast<SCSIZE>(nRowCount) );
-            ScMatrix* pMatrix = xMatrix;
             SCSIZE nCols, nRows;
-            pMatrix->GetDimensions( nCols, nRows);
+            xMatrix->GetDimensions( nCols, nRows);
             if (nCols != static_cast<SCSIZE>(nMaxColCount) || nRows != static_cast<SCSIZE>(nRowCount))
             {
-                DBG_ERRORFILE( "ScSequenceToMatrix::CreateMixedMatrix: matrix exceeded max size, returning NULL matrix");
+                OSL_FAIL( "ScSequenceToMatrix::CreateMixedMatrix: matrix exceeded max size, returning NULL matrix");
                 return NULL;
             }
             for (nRow=0; nRow<nRowCount; nRow++)
@@ -437,11 +416,11 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
                     if (ScApiTypeConversion::ConvertAnyToDouble( fVal, eClass, pColArr[nCol]))
                     {
                         if (eClass == uno::TypeClass_BOOLEAN)
-                            pMatrix->PutBoolean( (fVal ? true : false),
+                            xMatrix->PutBoolean( (fVal ? true : false),
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                         else
-                            pMatrix->PutDouble( fVal,
+                            xMatrix->PutDouble( fVal,
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                     }
@@ -449,21 +428,19 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
                     {
                         // Try string, else use empty as last resort.
 
-                        //Reflection* pRefl = pColArr[nCol].getReflection();
-                        //if ( pRefl->equals( *OUString_getReflection() ) )
                         if ( pColArr[nCol] >>= aUStr )
-                            pMatrix->PutString( String( aUStr ),
+                            xMatrix->PutString( String( aUStr ),
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                         else
-                            pMatrix->PutEmpty(
+                            xMatrix->PutEmpty(
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                     }
                 }
                 for (nCol=nColCount; nCol<nMaxColCount; nCol++)
                 {
-                    pMatrix->PutEmpty(
+                    xMatrix->PutEmpty(
                             static_cast<SCSIZE>(nCol),
                             static_cast<SCSIZE>(nRow) );
                 }
@@ -487,8 +464,9 @@ sal_Bool ScByteSequenceToString::GetString( String& rString, const uno::Any& rAn
         rString.EraseTrailingChars( (sal_Unicode) 0 );
         return sal_True;
     }
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

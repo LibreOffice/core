@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@ ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
 ,pEnginePool(NULL)
 ,m_pSourceDoc(pSourceDoc)
 {
-    DBG_ASSERT( pSourceDoc, "ScPoolHelper: no document" );
+    OSL_ENSURE( pSourceDoc, "ScPoolHelper: no document" );
     pDocPool = new ScDocumentPool;
     pDocPool->FreezeIdRanges();
 
@@ -126,3 +127,4 @@ void ScPoolHelper::SourceDocumentGone()
 // -----------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

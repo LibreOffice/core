@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: interpr4.cxx,v $
- * $Revision: 1.57.92.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +55,11 @@ ScQueryParamBase::~ScQueryParamBase()
 {
 }
 
+bool ScQueryParamBase::IsValidFieldIndex() const
+{
+    return true;
+}
+
 SCSIZE ScQueryParamBase::GetEntryCount() const
 {
     return maEntries.size();
@@ -70,7 +73,7 @@ ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n) const
 void ScQueryParamBase::Resize(SCSIZE nNew)
 {
     if ( nNew < MAXQUERY )
-        nNew = MAXQUERY;                // nie weniger als MAXQUERY
+        nNew = MAXQUERY;                // never less than MAXQUERY
 
     vector<ScQueryEntry> aNewEntries(nNew);
     SCSIZE nCopy = ::std::min(maEntries.size(), nNew);
@@ -213,7 +216,7 @@ void ScQueryParam::Clear()
     nCol1=nCol2 = 0;
     nRow1=nRow2 = 0;
     nTab = SCTAB_MAX;
-    bHasHeader = bCaseSens = bRegExp = bMixedComparison = sal_False;
+    bHasHeader = bCaseSens = bRegExp = bMixedComparison = false;
     bInplace = bByRow = bDuplicate = sal_True;
 
     Resize( MAXQUERY );
@@ -261,7 +264,7 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
 
 sal_Bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
 {
-    sal_Bool bEqual = sal_False;
+    sal_Bool bEqual = false;
 
     // Anzahl der Queries gleich?
     SCSIZE nUsed      = 0;
@@ -321,7 +324,7 @@ void ScQueryParam::MoveToDest()
     }
     else
     {
-        DBG_ERROR("MoveToDest, bInplace == TRUE");
+        OSL_FAIL("MoveToDest, bInplace == TRUE");
     }
 }
 
@@ -356,6 +359,11 @@ ScDBQueryParamInternal::~ScDBQueryParamInternal()
 {
 }
 
+bool ScDBQueryParamInternal::IsValidFieldIndex() const
+{
+    return nCol1 <= mnField && mnField <= nCol2;
+}
+
 // ============================================================================
 
 ScDBQueryParamMatrix::ScDBQueryParamMatrix() :
@@ -363,7 +371,15 @@ ScDBQueryParamMatrix::ScDBQueryParamMatrix() :
 {
 }
 
+bool ScDBQueryParamMatrix::IsValidFieldIndex() const
+{
+    SCSIZE nC, nR;
+    mpMatrix->GetDimensions(nC, nR);
+    return 0 <= mnField && mnField <= static_cast<SCCOL>(nC);
+}
+
 ScDBQueryParamMatrix::~ScDBQueryParamMatrix()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

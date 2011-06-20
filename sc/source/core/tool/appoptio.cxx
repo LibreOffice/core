@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,8 +49,9 @@
 #include "miscuno.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -82,6 +84,9 @@ ScAppOptions::~ScAppOptions()
 
 void ScAppOptions::SetDefaults()
 {
+    // Set default tab count for new spreadsheet.
+    nTabCountInNewSpreadsheet = 0;
+
     if ( ScOptionsUtil::IsMetricSystem() )
         eMetric     = FUNIT_CM;             // default for countries with metric system
     else
@@ -119,6 +124,7 @@ void ScAppOptions::SetDefaults()
 
 const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 {
+    nTabCountInNewSpreadsheet = rCpy.nTabCountInNewSpreadsheet;
     eMetric         = rCpy.eMetric;
     eZoomType       = rCpy.eZoomType;
     bSynchronizeZoom = rCpy.bSynchronizeZoom;
@@ -213,13 +219,12 @@ void lcl_SetSortList( const Any& rValue )
 
         if (!bDefault)
         {
-            aList.FreeAll();
+            aList.clear();
 
             for (long i=0; i<nCount; i++)
             {
                 ScUserListData* pNew = new ScUserListData( pArray[i] );
-                if ( !aList.Insert(pNew) )
-                    delete pNew;
+                aList.push_back(pNew);
             }
         }
 
@@ -232,10 +237,10 @@ void lcl_GetSortList( Any& rDest )
     const ScUserList* pUserList = ScGlobal::GetUserList();
     if (pUserList)
     {
-        long nCount = pUserList->GetCount();
+        size_t nCount = pUserList->size();
         Sequence<OUString> aSeq( nCount );
         OUString* pArray = aSeq.getArray();
-        for (long i=0; i<nCount; i++)
+        for (size_t i=0; i<nCount; ++i)
             pArray[i] = (*pUserList)[sal::static_int_cast<sal_uInt16>(i)]->GetString();
         rDest <<= aSeq;
     }
@@ -304,7 +309,7 @@ Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 
     //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
-        pNames[SCLAYOUTOPT_MEASURE] = OUString::createFromAscii( "Other/MeasureUnit/Metric" );
+        pNames[SCLAYOUTOPT_MEASURE] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Other/MeasureUnit/Metric") );
 
     return aNames;
 }
@@ -388,12 +393,12 @@ Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 
 
 ScAppCfg::ScAppCfg() :
-    aLayoutItem( OUString::createFromAscii( CFGPATH_LAYOUT ) ),
-    aInputItem( OUString::createFromAscii( CFGPATH_INPUT ) ),
-    aRevisionItem( OUString::createFromAscii( CFGPATH_REVISION ) ),
-    aContentItem( OUString::createFromAscii( CFGPATH_CONTENT ) ),
-    aSortListItem( OUString::createFromAscii( CFGPATH_SORTLIST ) ),
-    aMiscItem( OUString::createFromAscii( CFGPATH_MISC ) )
+    aLayoutItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_LAYOUT )) ),
+    aInputItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_INPUT )) ),
+    aRevisionItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_REVISION )) ),
+    aContentItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_CONTENT )) ),
+    aSortListItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_SORTLIST )) ),
+    aMiscItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_MISC )) )
 {
     sal_Int32 nIntVal = 0;
 
@@ -405,12 +410,12 @@ ScAppCfg::ScAppCfg() :
     aValues = aLayoutItem.GetProperties(aNames);
     aLayoutItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -440,12 +445,12 @@ ScAppCfg::ScAppCfg() :
     aValues = aInputItem.GetProperties(aNames);
     aInputItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -469,12 +474,12 @@ ScAppCfg::ScAppCfg() :
     aValues = aRevisionItem.GetProperties(aNames);
     aRevisionItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -501,12 +506,12 @@ ScAppCfg::ScAppCfg() :
     aValues = aContentItem.GetProperties(aNames);
     aContentItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -524,12 +529,12 @@ ScAppCfg::ScAppCfg() :
     aValues = aSortListItem.GetProperties(aNames);
     aSortListItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -547,12 +552,12 @@ ScAppCfg::ScAppCfg() :
     aValues = aMiscItem.GetProperties(aNames);
     aMiscItem.EnableNotification(aNames);
     pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
+            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
@@ -743,3 +748,4 @@ void ScAppCfg::OptionsChanged()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

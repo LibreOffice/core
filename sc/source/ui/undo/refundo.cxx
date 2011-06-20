@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include "refundo.hxx"
 #include "undobase.hxx"
 #include "document.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "rangenam.hxx"
 #include "pivot.hxx"
 #include "chartarr.hxx"
@@ -188,7 +189,7 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst )
     if (pDetOpList)
         pDoc->SetDetOpList( new ScDetOpList(*pDetOpList) );
 
-    // #65055# bUndoRefFirst ist bSetChartRangeLists
+    // bUndoRefFirst ist bSetChartRangeLists
     if ( pChartListenerCollection )
         pDoc->SetChartListenerCollection( new ScChartListenerCollection(
             *pChartListenerCollection ), bUndoRefFirst );
@@ -196,7 +197,7 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst )
     if (pDBCollection || pRangeName)
     {
         sal_Bool bOldAutoCalc = pDoc->GetAutoCalc();
-        pDoc->SetAutoCalc( sal_False ); // Mehrfachberechnungen vermeiden
+        pDoc->SetAutoCalc( false ); // Mehrfachberechnungen vermeiden
         pDoc->CompileAll();
         pDoc->SetDirty();
         pDoc->SetAutoCalc( bOldAutoCalc );
@@ -212,3 +213,4 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, sal_Bool bUndoRefFirst )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

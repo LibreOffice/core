@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,20 +42,24 @@
 #include <sfx2/bindings.hxx>
 #include <svl/smplhint.hxx>
 
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+
 // INCLUDE ---------------------------------------------------------------
 
 #include "docsh.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
+#include "globalnames.hxx"
 #include "undodat.hxx"
 #include "undotab.hxx"
 #include "undoblk.hxx"
-//#include "pivot.hxx"
 #include "dpobject.hxx"
 #include "dpshttab.hxx"
 #include "dbdocfun.hxx"
 #include "consoli.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
+#include "progress.hxx"
 #include "olinetab.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"
@@ -66,13 +71,25 @@
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 
+#include <memory>
+#include <vector>
+
 // defined in docfunc.cxx
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sModuleSource );
+
+using com::sun::star::script::XLibraryContainer;
+using com::sun::star::script::vba::XVBACompatibility;
+using com::sun::star::container::XNameContainer;
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::UNO_QUERY;
+
+using ::std::auto_ptr;
+using ::std::vector;
 
 // ---------------------------------------------------------------------------
 
 //
-//  ehemalige viewfunc/dbfunc Methoden
+//  former viewfunc/dbfunc methods
 //
 
 void ScDocShell::ErrorMessage( sal_uInt16 nGlobStrId )
@@ -115,43 +132,6 @@ void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCR
     aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 }
 
-ScDBData* lcl_GetDBNearCursor( ScDBCollection* pColl, SCCOL nCol, SCROW nRow, SCTAB nTab )
-{
-    //! nach document/dbcolect verschieben
-
-    if (!pColl)
-        return NULL;
-
-    ScDBData* pNoNameData = NULL;
-    ScDBData* pNearData = NULL;
-    sal_uInt16 nCount = pColl->GetCount();
-    String aNoName = ScGlobal::GetRscString( STR_DB_NONAME );
-    SCTAB nAreaTab;
-    SCCOL nStartCol, nEndCol;
-    SCROW nStartRow, nEndRow;
-    for (sal_uInt16 i = 0; i < nCount; i++)
-    {
-        ScDBData* pDB = (*pColl)[i];
-        pDB->GetArea( nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow );
-        if ( nTab == nAreaTab && nCol+1 >= nStartCol && nCol <= nEndCol+1 &&
-                                 nRow+1 >= nStartRow && nRow <= nEndRow+1 )
-        {
-            if ( pDB->GetName() == aNoName )
-                pNoNameData = pDB;
-            else if ( nCol < nStartCol || nCol > nEndCol || nRow < nStartRow || nRow > nEndRow )
-            {
-                if (!pNearData)
-                    pNearData = pDB;    // ersten angrenzenden Bereich merken
-            }
-            else
-                return pDB;             // nicht "unbenannt" und Cursor steht wirklich drin
-        }
-    }
-    if (pNearData)
-        return pNearData;               // angrenzender, wenn nichts direkt getroffen
-    return pNoNameData;                 // "unbenannt" nur zurueck, wenn sonst nichts gefunden
-}
-
 ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel )
 {
     SCCOL nCol = rMarked.aStart.Col();
@@ -164,20 +144,19 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     SCCOL nEndCol = rMarked.aEnd.Col();
     SCROW nEndRow = rMarked.aEnd.Row();
     SCTAB nEndTab = rMarked.aEnd.Tab();
-
-    //  Wegen #49655# nicht einfach GetDBAtCursor: Der zusammenhaengende Datenbereich
+    //  Nicht einfach GetDBAtCursor: Der zusammenhaengende Datenbereich
     //  fuer "unbenannt" (GetDataArea) kann neben dem Cursor legen, also muss auch ein
     //  benannter DB-Bereich dort gesucht werden.
-
+    ScDBCollection* pColl = aDocument.GetDBCollection();
     ScDBData* pData = aDocument.GetDBAtArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
-    if (!pData)
-        pData = lcl_GetDBNearCursor( aDocument.GetDBCollection(), nCol, nRow, nTab );
+    if (!pData && pColl)
+        pData = pColl->GetDBNearCursor(nCol, nRow, nTab );
 
     sal_Bool bSelected = ( eSel == SC_DBSEL_FORCE_MARK ||
             (rMarked.aStart != rMarked.aEnd && eSel != SC_DBSEL_ROW_DOWN) );
     bool bOnlyDown = (!bSelected && eSel == SC_DBSEL_ROW_DOWN && rMarked.aStart.Row() == rMarked.aEnd.Row());
 
-    sal_Bool bUseThis = sal_False;
+    sal_Bool bUseThis = false;
     if (pData)
     {
         //      Bereich nehmen, wenn nichts anderes markiert
@@ -188,7 +167,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         SCCOL nOldCol2;
         SCROW nOldRow2;
         pData->GetArea( nDummy, nOldCol1,nOldRow1, nOldCol2,nOldRow2 );
-        sal_Bool bIsNoName = ( pData->GetName() == ScGlobal::GetRscString( STR_DB_NONAME ) );
+        sal_Bool bIsNoName = ( rtl::OUString(pData->GetName()) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)) );
 
         if (!bSelected)
         {
@@ -209,9 +188,9 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                     nEndCol = nStartCol;
                     nEndRow = nStartRow;
                 }
-                aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, sal_False, bOnlyDown );
+                aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, bOnlyDown );
                 if ( nOldCol1 != nStartCol || nOldCol2 != nEndCol || nOldRow1 != nStartRow )
-                    bUseThis = sal_False;               // passt gar nicht
+                    bUseThis = false;               // passt gar nicht
                 else if ( nOldRow2 != nEndRow )
                 {
                     //  Bereich auf neue End-Zeile erweitern
@@ -225,13 +204,13 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                  nOldCol2 == nEndCol && nOldRow2 == nEndRow )               // genau markiert?
                 bUseThis = sal_True;
             else
-                bUseThis = sal_False;           // immer Markierung nehmen (Bug 11964)
+                bUseThis = false;           // immer Markierung nehmen (Bug 11964)
         }
 
         //      fuer Import nie "unbenannt" nehmen
 
         if ( bUseThis && eMode == SC_DB_IMPORT && bIsNoName )
-            bUseThis = sal_False;
+            bUseThis = false;
     }
 
     if ( bUseThis )
@@ -245,15 +224,10 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         nStartCol = nEndCol = nCol;
         nStartRow = nEndRow = nRow;
         nStartTab = nEndTab = nTab;
-//      bMark = sal_False;                          // nichts zu markieren
     }
     else
     {
-        if ( bSelected )
-        {
-//          bMark = sal_False;
-        }
-        else
+        if ( !bSelected )
         {                                       // zusammenhaengender Bereich
             nStartCol = nCol;
             nStartRow = nRow;
@@ -267,18 +241,14 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 nEndCol = nStartCol;
                 nEndRow = nStartRow;
             }
-            aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, sal_False, bOnlyDown );
+            aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, bOnlyDown );
         }
 
         sal_Bool bHasHeader = aDocument.HasColHeader( nStartCol,nStartRow, nEndCol,nEndRow, nTab );
 
-        ScDBData* pNoNameData;
-        sal_uInt16 nNoNameIndex;
-        ScDBCollection* pColl = aDocument.GetDBCollection();
-        if ( eMode != SC_DB_IMPORT &&
-                pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nNoNameIndex ) )
+        ScDBData* pNoNameData = aDocument.GetAnonymousDBData(nTab);
+        if ( eMode != SC_DB_IMPORT && pNoNameData)
         {
-            pNoNameData = (*pColl)[nNoNameIndex];
 
             if ( !pOldAutoDBRange )
             {
@@ -302,7 +272,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             pNoNameData->SetArea( nTab, nStartCol,nStartRow, nEndCol,nEndRow );     // neu setzen
             pNoNameData->SetByRow( sal_True );
             pNoNameData->SetHeader( bHasHeader );
-            pNoNameData->SetAutoFilter( sal_False );
+            pNoNameData->SetAutoFilter( false );
         }
         else
         {
@@ -316,25 +286,35 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
 
                 String aImport = ScGlobal::GetRscString( STR_DBNAME_IMPORT );
                 long nCount = 0;
-                sal_uInt16 nDummy;
+                const ScDBData* pDummy = NULL;
+                ScDBCollection::NamedDBs& rDBs = pColl->getNamedDBs();
                 do
                 {
                     ++nCount;
                     aNewName = aImport;
                     aNewName += String::CreateFromInt32( nCount );
+                    pDummy = rDBs.findByName(aNewName);
                 }
-                while (pColl->SearchName( aNewName, nDummy ));
-            }
-            else
-                aNewName = ScGlobal::GetRscString( STR_DB_NONAME );
-            pNoNameData = new ScDBData( aNewName, nTab,
+                while (pDummy);
+                pNoNameData = new ScDBData( aNewName, nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
                                 sal_True, bHasHeader );
-            pColl->Insert( pNoNameData );
+                rDBs.insert(pNoNameData);
+            }
+            else
+            {
+                aNewName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+                pNoNameData = new ScDBData(aNewName , nTab,
+                                nStartCol,nStartRow, nEndCol,nEndRow,
+                                sal_True, bHasHeader );
+                aDocument.SetAnonymousDBData(nTab, pNoNameData);
+            }
+
+
 
             if ( pUndoColl )
             {
-                aDocument.CompileDBFormula( sal_False );        // CompileFormulaString
+                aDocument.CompileDBFormula( false );        // CompileFormulaString
 
                 ScDBCollection* pRedoColl = new ScDBCollection( *pColl );
                 GetUndoManager()->AddUndoAction( new ScUndoDBData( this, pUndoColl, pRedoColl ) );
@@ -349,9 +329,23 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         pData = pNoNameData;
     }
 
-//  if (bMark)
-//      MarkRange( ScRange( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab ), sal_False );
+    return pData;
+}
 
+ScDBData* ScDocShell::GetAnonymousDBData(const ScRange& rRange)
+{
+    bool bHasHeader = aDocument.HasColHeader(
+        rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab());
+
+    ScDBCollection* pColl = aDocument.GetDBCollection();
+    if (!pColl)
+        return NULL;
+
+    ScDBData* pData = pColl->getAnonDBs().getByRange(rRange);
+    if (!pData)
+        return NULL;
+
+    pData->SetHeader(bHasHeader);
     return pData;
 }
 
@@ -365,23 +359,22 @@ ScDBData* ScDocShell::GetOldAutoDBRange()
 void ScDocShell::CancelAutoDBRange()
 {
     // called when dialog is cancelled
+//moggi:TODO
     if ( pOldAutoDBRange )
     {
-        sal_uInt16 nNoNameIndex;
-        ScDBCollection* pColl = aDocument.GetDBCollection();
-        if ( pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nNoNameIndex ) )
+        SCTAB nTab = GetCurTab();
+        ScDBData* pDBData = aDocument.GetAnonymousDBData(nTab);
+        if ( pDBData )
         {
-            ScDBData* pNoNameData = (*pColl)[nNoNameIndex];
-
             SCCOL nRangeX1;
             SCROW nRangeY1;
             SCCOL nRangeX2;
             SCROW nRangeY2;
             SCTAB nRangeTab;
-            pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+            pDBData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
             DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
 
-            *pNoNameData = *pOldAutoDBRange;    // restore old settings
+            *pDBData = *pOldAutoDBRange;    // restore old settings
 
             if ( pOldAutoDBRange->HasAutoFilter() )
             {
@@ -406,7 +399,7 @@ sal_Bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
     sal_Bool bChange = aDocument.SetOptimalHeight( nStartRow,nEndRow, nTab, 0, aProv.GetDevice(),
-                                                aProv.GetPPTX(),aProv.GetPPTY(), aZoom,aZoom, sal_False );
+                                                aProv.GetPPTX(),aProv.GetPPTY(), aZoom,aZoom, false );
     if (bChange)
         PostPaint( 0,nStartRow,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID|PAINT_LEFT );
 
@@ -425,7 +418,7 @@ void ScDocShell::UpdateAllRowHeights( const ScMarkData* pTabMark )
 void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
 {
     sal_Bool bIsUndoEnabled = aDocument.IsUndoEnabled();
-    aDocument.EnableUndo( sal_False );
+    aDocument.EnableUndo( false );
     aDocument.LockStreamValid( true );      // ignore draw page size (but not formula results)
     if ( bBefore )          // check all sheets up to nUpdateTab
     {
@@ -446,7 +439,7 @@ void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
             if ( aUpdateSheets.GetTableSelect( nTab ) )
             {
                 aDocument.UpdatePageBreaks( nTab );
-                aDocument.SetPendingRowHeights( nTab, sal_False );
+                aDocument.SetPendingRowHeights( nTab, false );
             }
     }
     else                    // only nUpdateTab
@@ -455,7 +448,7 @@ void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
         {
             AdjustRowHeight( 0, MAXROW, nUpdateTab );
             aDocument.UpdatePageBreaks( nUpdateTab );
-            aDocument.SetPendingRowHeights( nUpdateTab, sal_False );
+            aDocument.SetPendingRowHeights( nUpdateTab, false );
         }
     }
     aDocument.LockStreamValid( false );
@@ -479,11 +472,11 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
             if ( pOld )
             {
                 const ScSheetSourceDesc* pSheetDesc = pOld->GetSheetDesc();
-                if ( pSheetDesc && pSheetDesc->aSourceRange.Intersects( rSource ) )
+                if ( pSheetDesc && pSheetDesc->GetSourceRange().Intersects( rSource ) )
                 {
                     ScDPObject* pNew = new ScDPObject( *pOld );
                     ScDBDocFunc aFunc( *this );
-                    aFunc.DataPilotUpdate( pOld, pNew, sal_True, sal_False );
+                    aFunc.DataPilotUpdate( pOld, pNew, sal_True, false );
                     delete pNew;    // DataPilotUpdate copies settings from "new" object
                 }
             }
@@ -494,14 +487,13 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
 String lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
 {
     String aName;
-    sal_Bool bOk = sal_False;
+    sal_Bool bOk = false;
     ScDBData* pData = pDoc->GetDBAtArea( pArea->nTab, pArea->nColStart, pArea->nRowStart,
                                                         pArea->nColEnd, pArea->nRowEnd );
     if (pData)
     {
-        pData->GetName( aName );
-        if ( aName != ScGlobal::GetRscString( STR_DB_NONAME ) )
-            bOk = sal_True;
+        aName = pData->GetName();
+        bOk = sal_True;
     }
 
     if (!bOk)
@@ -517,7 +509,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bReco
     sal_uInt16 nPos;
     SCCOL nColSize = 0;
     SCROW nRowSize = 0;
-    sal_Bool bErr = sal_False;
+    sal_Bool bErr = false;
     for (nPos=0; nPos<rParam.nDataAreaCount; nPos++)
     {
         ScArea* pArea = rParam.ppDataAreas[nPos];
@@ -544,7 +536,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bReco
     ScDocShellModificator aModificator( *this );
 
     ScRange aOldDest;
-    ScDBData* pDestData = aDocument.GetDBAtCursor( rParam.nCol, rParam.nRow, rParam.nTab, sal_True );
+    ScDBData* pDestData = aDocument.GetDBAtCursor( rParam.nCol, rParam.nRow, rParam.nTab, true );
     if (pDestData)
         pDestData->GetArea(aOldDest);
 
@@ -587,24 +579,24 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bReco
             ScOutlineTable* pUndoTab = pTable ? new ScOutlineTable( *pTable ) : NULL;
 
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( &aDocument, 0, nTabCount-1, sal_False, sal_True );
+            pUndoDoc->InitUndo( &aDocument, 0, nTabCount-1, false, sal_True );
 
             // Zeilenstatus
             aDocument.CopyToDocument( 0,0,nDestTab, MAXCOL,MAXROW,nDestTab,
-                                    IDF_NONE, sal_False, pUndoDoc );
+                                    IDF_NONE, false, pUndoDoc );
 
             // alle Formeln
             aDocument.CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1,
-                                        IDF_FORMULA, sal_False, pUndoDoc );
+                                        IDF_FORMULA, false, pUndoDoc );
 
             // komplette Ausgangszeilen
             aDocument.CopyToDocument( 0,aDestArea.nRowStart,nDestTab,
                                     MAXCOL,aDestArea.nRowEnd,nDestTab,
-                                    IDF_ALL, sal_False, pUndoDoc );
+                                    IDF_ALL, false, pUndoDoc );
 
             // alten Ausgabebereich
             if (pDestData)
-                aDocument.CopyToDocument( aOldDest, IDF_ALL, sal_False, pUndoDoc );
+                aDocument.CopyToDocument( aOldDest, IDF_ALL, false, pUndoDoc );
 
             GetUndoManager()->AddUndoAction(
                     new ScUndoConsolidate( this, aDestArea, rParam, pUndoDoc,
@@ -617,15 +609,15 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bReco
 
             aDocument.CopyToDocument( aDestArea.nColStart, aDestArea.nRowStart, aDestArea.nTab,
                                     aDestArea.nColEnd, aDestArea.nRowEnd, aDestArea.nTab,
-                                    IDF_ALL, sal_False, pUndoDoc );
+                                    IDF_ALL, false, pUndoDoc );
 
             // alten Ausgabebereich
             if (pDestData)
-                aDocument.CopyToDocument( aOldDest, IDF_ALL, sal_False, pUndoDoc );
+                aDocument.CopyToDocument( aOldDest, IDF_ALL, false, pUndoDoc );
 
             GetUndoManager()->AddUndoAction(
                     new ScUndoConsolidate( this, aDestArea, rParam, pUndoDoc,
-                                            sal_False, 0, NULL, pUndoData ) );
+                                            false, 0, NULL, pUndoData ) );
         }
     }
 
@@ -720,7 +712,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const String& rName, sal_Bool bRecord 
                         //  Bei Zurueckkopier-Szenarios auch Inhalte
                         if ( nScenFlags & SC_SCENARIO_TWOWAY )
                             aDocument.CopyToDocument( 0,0,i, MAXCOL,MAXROW,i,
-                                                        IDF_ALL,sal_False, pUndoDoc );
+                                                        IDF_ALL,false, pUndoDoc );
                     }
 
                     GetUndoManager()->AddUndoAction(
@@ -754,7 +746,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const String& rName, sal_Bool bRecord 
     }
     else
     {
-        DBG_ERROR( "UseScenario auf Szenario-Blatt" );
+        OSL_FAIL( "UseScenario auf Szenario-Blatt" );
     }
 }
 
@@ -818,7 +810,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const String& rName, const String& r
                                                 rName, rComment, rColor, nFlags, rMark ));
             }
 
-            aDocument.RenameTab( nNewTab, rName, sal_False );           // ohne Formel-Update
+            aDocument.RenameTab( nNewTab, rName, false );           // ohne Formel-Update
             aDocument.SetScenario( nNewTab, sal_True );
             aDocument.SetScenarioData( nNewTab, rComment, rColor, nFlags );
 
@@ -837,7 +829,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const String& rName, const String& r
             aDocument.ApplySelectionPattern( aPattern, aDestMark );
 
             if (!bCopyAll)
-                aDocument.SetVisible( nNewTab, sal_False );
+                aDocument.SetVisible( nNewTab, false );
 
             //  dies ist dann das aktive Szenario
             aDocument.CopyScenario( nNewTab, nTab, sal_True );  // sal_True - nicht aus Szenario kopieren
@@ -853,6 +845,47 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const String& rName, const String& r
         }
     }
     return nTab;
+}
+
+sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
+                                SCTAB nDestPos, sal_Bool bInsertNew,
+                                sal_Bool bNotifyAndPaint )
+{
+    ScDocument* pSrcDoc = rSrcDocShell.GetDocument();
+
+    sal_uLong nErrVal =  aDocument.TransferTab( pSrcDoc, nSrcPos, nDestPos,
+                    bInsertNew );       // no insert
+
+    // TransferTab doesn't copy drawing objects with bInsertNew=FALSE
+    if ( nErrVal > 0 && !bInsertNew)
+        aDocument.TransferDrawPage( pSrcDoc, nSrcPos, nDestPos );
+
+    if(nErrVal>0 && pSrcDoc->IsScenario( nSrcPos ))
+    {
+        String aComment;
+        Color  aColor;
+        sal_uInt16 nFlags;
+
+        pSrcDoc->GetScenarioData( nSrcPos, aComment,aColor, nFlags);
+        aDocument.SetScenario(nDestPos,true);
+        aDocument.SetScenarioData(nDestPos,aComment,aColor,nFlags);
+        sal_Bool bActive = pSrcDoc->IsActiveScenario(nSrcPos);
+        aDocument.SetActiveScenario(nDestPos, bActive );
+
+        sal_Bool bVisible=pSrcDoc->IsVisible(nSrcPos);
+        aDocument.SetVisible(nDestPos,bVisible );
+
+    }
+
+    if ( nErrVal > 0 && pSrcDoc->IsTabProtected( nSrcPos ) )
+        aDocument.SetTabProtection(nDestPos, pSrcDoc->GetTabProtection(nSrcPos));
+    if ( bNotifyAndPaint )
+    {
+            Broadcast( ScTablesHint( SC_TAB_INSERTED, nDestPos ) );
+            PostPaintExtras();
+            PostPaintGridAll();
+    }
+    return nErrVal;
 }
 
 sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, sal_Bool bRecord )
@@ -874,7 +907,7 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
         if (!aDocument.CopyTab( nSrcTab, nDestTab ))
         {
             //! EndDrawUndo?
-            return sal_False;
+            return false;
         }
         else
         {
@@ -887,51 +920,50 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
 
             if (bRecord)
             {
-                SvShorts aSrcList;
-                SvShorts aDestList;
-                aSrcList.push_front(nSrcTab);
-                aDestList.push_front(nDestTab);
+                auto_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
+                auto_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
                 GetUndoManager()->AddUndoAction(
-                        new ScUndoCopyTab( this, aSrcList, aDestList ) );
+                        new ScUndoCopyTab(this, pSrcList.release(), pDestList.release()));
             }
 
             sal_Bool bVbaEnabled = aDocument.IsInVBAMode();
-                        if ( bVbaEnabled )
-                        {
-                StarBASIC* pStarBASIC = GetBasic();
-                            String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-                            if ( GetBasicManager()->GetName().Len() > 0 )
-                            {
-                                aLibName = GetBasicManager()->GetName();
-                                pStarBASIC = GetBasicManager()->GetLib( aLibName );
-                            }
-                            SCTAB nTabToUse = nDestTab;
-                            if ( nDestTab == SC_TAB_APPEND )
-                                nTabToUse = aDocument.GetMaxTableNumber() - 1;
-                            String sCodeName;
-                            String sSource;
-                            com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = GetBasicContainer();
-                            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
-                            if( xLibContainer.is() )
-                            {
-                                com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
-                                aLibAny >>= xLib;
-                            }
-                            if( xLib.is() )
-                            {
-                                rtl::OUString sRTLSource;
-                                xLib->getByName( sSrcCodeName ) >>= sRTLSource;
-                                sSource = sRTLSource;
-                            }
-                            VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
-                        }
+            if ( bVbaEnabled )
+            {
+                String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+                Reference< XLibraryContainer > xLibContainer = GetBasicContainer();
+                Reference< XVBACompatibility > xVBACompat( xLibContainer, UNO_QUERY );
+
+                if ( xVBACompat.is() )
+                {
+                    aLibName = xVBACompat->getProjectName();
                 }
+
+                SCTAB nTabToUse = nDestTab;
+                if ( nDestTab == SC_TAB_APPEND )
+                    nTabToUse = aDocument.GetMaxTableNumber() - 1;
+                String sCodeName;
+                String sSource;
+                Reference< XNameContainer > xLib;
+                if( xLibContainer.is() )
+                {
+                    com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                    aLibAny >>= xLib;
+                }
+                if( xLib.is() )
+                {
+                    rtl::OUString sRTLSource;
+                    xLib->getByName( sSrcCodeName ) >>= sRTLSource;
+                    sSource = sRTLSource;
+                }
+                VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
+            }
+        }
         Broadcast( ScTablesHint( SC_TAB_COPIED, nSrcTab, nDestTab ) );
     }
     else
     {
         if ( aDocument.GetChangeTrack() )
-            return sal_False;
+            return false;
 
         if ( nSrcTab<nDestTab && nDestTab!=SC_TAB_APPEND )
             nDestTab--;
@@ -942,16 +974,20 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
             return sal_True;    // nothing to do, but valid
         }
 
-        if (!aDocument.MoveTab( nSrcTab, nDestTab ))
-            return sal_False;
+        ScProgress* pProgress = new ScProgress(this, ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
+                                                aDocument.GetCodeCount());
+        bool bDone = aDocument.MoveTab( nSrcTab, nDestTab, pProgress );
+        delete pProgress;
+        if (!bDone)
+        {
+            return false;
+        }
         else if (bRecord)
         {
-            SvShorts aSrcList;
-            SvShorts aDestList;
-            aSrcList.push_front(nSrcTab);
-            aDestList.push_front(nDestTab);
+            auto_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
+            auto_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
             GetUndoManager()->AddUndoAction(
-                    new ScUndoMoveTab( this, aSrcList, aDestList ) );
+                    new ScUndoMoveTab(this, pSrcList.release(), pDestList.release()));
         }
 
         Broadcast( ScTablesHint( SC_TAB_MOVED, nSrcTab, nDestTab ) );
@@ -978,7 +1014,8 @@ IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
     {
         ScRange aRange;
         pDBData->GetArea( aRange );
-        bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, NULL, sal_True, sal_False ); //! Api-Flag as parameter
+                Reference< ::com::sun::star::sdbc::XResultSet> xResultSet;
+        bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, xResultSet, NULL, true, false ); //! Api-Flag as parameter
         // internal operations (sort, query, subtotal) only if no error
         if (bContinue)
         {
@@ -990,3 +1027,4 @@ IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
     return bContinue != 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

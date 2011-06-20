@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,15 +50,15 @@ public:
     void    Draw( const Point&  rAt,
                   const Size&   rSize,
                   sal_Bool          bState,
-                  sal_Bool          bBtnIn = sal_False );
+                  sal_Bool          bBtnIn = false );
 
     void    Draw( const Point&  rAt,
                   sal_Bool          bState,
-                  sal_Bool          bBtnIn = sal_False )
+                  sal_Bool          bBtnIn = false )
                 { Draw( rAt, aBtnSize, bState, bBtnIn ); }
 
     void    Draw( sal_Bool          bState,
-                  sal_Bool          bBtnIn = sal_False )
+                  sal_Bool          bBtnIn = false )
                 { Draw( aBtnPos, aBtnSize, bState, bBtnIn ); }
 
     void    SetOptSizePixel();
@@ -82,3 +83,4 @@ protected:
 #endif // SC_CBUTTON_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

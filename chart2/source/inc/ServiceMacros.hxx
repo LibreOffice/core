@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -118,29 +119,7 @@ static ::com::sun::star::uno::Reference<                                    \
     return (::cppu::OWeakObject *)new Class( xContext );                    \
 }
 
-/** This macro contains the default implementation for getImplementationId().
-    Note, that you have to include the header necessary for rtl_createUuid.
-    Insert the following into your file:
-
-    <code>
-#include <rtl/uuid.h>
-    </code>
-
-    @param Class the Class-Name for which getImplementationId() should be
-    implemented
- */
-#define APPHELPER_GETIMPLEMENTATIONID_IMPL(Class) \
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL Class::getImplementationId() \
-    throw (::com::sun::star::uno::RuntimeException) \
-{ \
-    static ::com::sun::star::uno::Sequence< sal_Int8 > aId; \
-    if( aId.getLength() == 0 ) \
-    { \
-        aId.realloc( 16 ); \
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True ); \
-    } \
-    return aId; \
-}
-
 }//end namespace apphelper
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

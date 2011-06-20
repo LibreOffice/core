@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include "excrecds.hxx"
 #include "xeroot.hxx"
 #include "root.hxx"
+#include <boost/shared_ptr.hpp>
 
 //------------------------------------------------------------------ Forwards -
 
@@ -54,7 +56,7 @@ class ExcTable : public XclExpRecordBase, public XclExpRoot
 {
 private:
     typedef XclExpRecordList< ExcBundlesheetBase >  ExcBoundsheetList;
-    typedef ScfRef< XclExpCellTable >               XclExpCellTableRef;
+    typedef boost::shared_ptr< XclExpCellTable >    XclExpCellTableRef;
 
     XclExpRecordList<>          aRecList;
     XclExpCellTableRef          mxCellTable;
@@ -110,7 +112,7 @@ public:
 
     void                ReadDoc( void );
     void                Write( SvStream& rSvStrm );
-    void                WriteXml( SvStream& rSvStrm );
+    void                WriteXml( XclExpXmlStream& );
 };
 
 
@@ -118,3 +120,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

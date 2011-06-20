@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -624,17 +625,6 @@ drawing::Position3D PolarPlottingPositionHelper::transformAngleRadiusToScene( do
     return transformUnitCircleToScene( fUnitAngleDegree, fUnitRadius, fLogicZ, bDoScaling );
 }
 
-#ifdef NOTYET
-double PolarPlottingPositionHelper::getInnerLogicRadius() const
-{
-    const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[0] : m_aScales[1];
-    if( AxisOrientation_MATHEMATICAL==rScale.Orientation )
-        return rScale.Minimum;
-    else
-        return rScale.Maximum;
-}
-#endif
-
 double PolarPlottingPositionHelper::getOuterLogicRadius() const
 {
     const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[0] : m_aScales[1];
@@ -689,27 +679,6 @@ void PlottingPositionHelper::AllowShiftZAxisPos( bool bAllowShift )
     m_bAllowShiftZAxisPos = bAllowShift;
 }
 
-/*
-// ____ XTransformation ____
-uno::Sequence< double > SAL_CALL PolarPlottingPositionHelper::transform(
-                        const uno::Sequence< double >& rSourceValues )
-            throw (uno::RuntimeException, lang::IllegalArgumentException)
-{
-    uno::Sequence< double > aSourceValues(3);
-    return aSourceValues;
 }
 
-sal_Int32 SAL_CALL PolarPlottingPositionHelper::getSourceDimension() throw (uno::RuntimeException)
-{
-    return 3;
-}
-
-sal_Int32 SAL_CALL PolarPlottingPositionHelper::getTargetDimension() throw (uno::RuntimeException)
-{
-    return 3;
-}
-*/
-
-//.............................................................................
-} //namespace chart
-//.............................................................................
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

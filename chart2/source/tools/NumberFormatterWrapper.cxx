@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #include <svl/zformat.hxx>
 #include <tools/color.hxx>
 #include <i18npool/mslangid.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 
 //.............................................................................
@@ -56,15 +56,6 @@ FixedNumberFormatter::FixedNumberFormatter(
 FixedNumberFormatter::~FixedNumberFormatter()
 {
 }
-
-/*
-sal_Int32 FixedNumberFormatter::getTextAndColor( double fUnscaledValueForText, rtl::OUString& rLabel ) const
-{
-    sal_Int32 nLabelColor = Color(COL_BLUE).GetColor(); //@todo get this from somewheres
-    rLabel = getFormattedString( fUnscaledValueForText, nLabelColor );
-    return nLabelColor;
-}
-*/
 
 rtl::OUString FixedNumberFormatter::getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const
 {
@@ -88,7 +79,7 @@ NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNum
     SvNumberFormatsSupplierObj* pSupplierObj = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     if( pSupplierObj )
         m_pNumberFormatter = pSupplierObj->GetNumberFormatter();
-    DBG_ASSERT(m_pNumberFormatter,"need a numberformatter");
+    OSL_POSTCOND(m_pNumberFormatter,"need a numberformatter");
 }
 
 NumberFormatterWrapper::~NumberFormatterWrapper()
@@ -126,7 +117,7 @@ rtl::OUString NumberFormatterWrapper::getFormattedString(
     Color* pTextColor = NULL;
     if( !m_pNumberFormatter )
     {
-        DBG_ERROR("Need a NumberFormatter");
+        OSL_FAIL("Need a NumberFormatter");
         return aText;
     }
     // i99104 handle null date correctly
@@ -163,26 +154,8 @@ rtl::OUString NumberFormatterWrapper::getFormattedString(
     return aRet;
 }
 
-// to get the language type use MsLangId::convertLocaleToLanguage( rNumberFormat.aLocale )
-
-/*
-    uno::Reference< i18n::XNumberFormatCode > xNumberFormatCode(
-        m_xCC->getServiceManager()->createInstanceWithContext( C2U(
-        "com.sun.star.i18n.NumberFormatMapper" ), m_xCC ), uno::UNO_QUERY );
-
-    i18n::NumberFormatCode aNumberFormatCode = xNumberFormatCode->getDefault (
-        i18n::KNumberFormatType::MEDIUM,
-        i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER,
-        aLocale );
-
-    uno::Sequence< i18n::NumberFormatCode > aListOfNumberFormatCode = xNumberFormatCode->getAllFormatCode(
-        i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER,
-        aLocale );
-
-    i18n::NumberFormatCode aNumberFormatCode0 = aListOfNumberFormatCode[0];
-    i18n::NumberFormatCode aNumberFormatCode1 = aListOfNumberFormatCode[1];
-*/
-
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

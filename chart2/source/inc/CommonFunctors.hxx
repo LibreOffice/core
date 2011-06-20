@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
@@ -194,10 +196,10 @@ template< class MapType >
     findValueInMap( const MapType & rMap, const typename MapType::mapped_type & rData )
 {
     return ::std::find_if( rMap.begin(), rMap.end(),
-                           ::std::compose1( ::std::bind2nd(
+                           ::o3tl::compose1( ::std::bind2nd(
                                                 ::std::equal_to< typename MapType::mapped_type >(),
                                                 rData ),
-                                            ::std::select2nd< typename MapType::value_type >()));
+                                            ::o3tl::select2nd< typename MapType::value_type >()));
 }
 
 /** Functor that deletes the object behind the given pointer by calling the
@@ -215,3 +217,5 @@ template< typename T >
 
 // CHART2_COMMONFUNCTORS_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

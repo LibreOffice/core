@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,6 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //
     virtual void SAL_CALL applyStyles(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
@@ -297,3 +297,5 @@ private:
 
 // CHART_CHARTTYPETEMPLATE_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

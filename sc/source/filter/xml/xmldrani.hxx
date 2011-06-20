@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,9 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 
+#include "dbdata.hxx"
+
+class ScDBData;
 class ScXMLImport;
 
 class ScXMLDatabaseRangesContext : public SvXMLImportContext
@@ -105,9 +109,12 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     sal_Bool        bFilterSkipDuplicates;
     sal_Bool        bFilterUseRegularExpressions;
     sal_Bool        bFilterConditionSourceRange;
+    ScDBCollection::RangeType meRangeType;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+    ScDBData* ConvertToDBData(const ::rtl::OUString& rName);
 
 public:
 
@@ -360,3 +367,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

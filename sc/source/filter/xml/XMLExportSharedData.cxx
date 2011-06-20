@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 // INCLUDE ---------------------------------------------------------------
 #include "XMLExportSharedData.hxx"
 #include "XMLExportIterator.hxx"
-#include <tools/debug.hxx>
 
 using namespace com::sun::star;
 
@@ -68,7 +68,7 @@ void ScMySharedData::SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol)
     if(nCol > nLastColumns[nTable]) nLastColumns[nTable] = nCol;
 }
 
-sal_Int32 ScMySharedData::GetLastColumn(const sal_Int32 nTable)
+sal_Int32 ScMySharedData::GetLastColumn(const sal_Int32 nTable) const
 {
     return nLastColumns[nTable];
 }
@@ -78,7 +78,7 @@ void ScMySharedData::SetLastRow(const sal_Int32 nTable, const sal_Int32 nRow)
     if(nRow > nLastRows[nTable]) nLastRows[nTable] = nRow;
 }
 
-sal_Int32 ScMySharedData::GetLastRow(const sal_Int32 nTable)
+sal_Int32 ScMySharedData::GetLastRow(const sal_Int32 nTable) const
 {
     return nLastRows[nTable];
 }
@@ -92,14 +92,14 @@ void ScMySharedData::AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 
 
 void ScMySharedData::SetDrawPageHasForms(const sal_Int32 nTable, sal_Bool bHasForms)
 {
-    DBG_ASSERT(pDrawPages, "DrawPages not collected");
+    OSL_ENSURE(pDrawPages, "DrawPages not collected");
     if (pDrawPages)
         (*pDrawPages)[nTable].bHasForms = bHasForms;
 }
 
 uno::Reference<drawing::XDrawPage> ScMySharedData::GetDrawPage(const sal_Int32 nTable)
 {
-    DBG_ASSERT(pDrawPages, "DrawPages not collected");
+    OSL_ENSURE(pDrawPages, "DrawPages not collected");
     if (pDrawPages)
         return (*pDrawPages)[nTable].xDrawPage;
     else
@@ -108,7 +108,7 @@ uno::Reference<drawing::XDrawPage> ScMySharedData::GetDrawPage(const sal_Int32 n
 
 sal_Bool ScMySharedData::HasForm(const sal_Int32 nTable, uno::Reference<drawing::XDrawPage>& xDrawPage)
 {
-    sal_Bool bResult(sal_False);
+    sal_Bool bResult(false);
     if (pDrawPages)
     {
         if ((*pDrawPages)[nTable].bHasForms)
@@ -161,3 +161,5 @@ void ScMySharedData::SortNoteShapes()
     if (pNoteShapes)
         pNoteShapes->Sort();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

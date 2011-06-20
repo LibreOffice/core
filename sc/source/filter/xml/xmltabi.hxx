@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@ public:
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        const sal_Bool bTempIsSubTable = sal_False,
+                        const sal_Bool bTempIsSubTable = false,
                         const sal_Int32 nSpannedCols = 0);
 
     virtual ~ScXMLTableContext();
@@ -75,4 +76,28 @@ public:
     virtual void EndElement();
 };
 
+// ============================================================================
+
+class ScXMLTableProtectionContext : public SvXMLImportContext
+{
+    ScXMLImport& GetScImport();
+
+public:
+    ScXMLTableProtectionContext( ScXMLImport& rImport, sal_uInt16 nPrefix,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                 ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual ~ScXMLTableProtectionContext();
+
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+                                     const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

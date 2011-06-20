@@ -27,8 +27,6 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 
-
-
 Resource RID_GLOBSTR
 {
     String STR_UNDO_INSERTCELLS
@@ -365,7 +363,7 @@ Resource RID_GLOBSTR
     };
     String STR_UNDO_TRANSLITERATE
     {
-        Text [ en-US ] = "Case/Characters";
+        Text [ en-US ] = "~Change Case";
     };
     String STR_DB_NONAME
     {
@@ -618,6 +616,10 @@ Resource RID_GLOBSTR
     String STR_PAGE
     {
         Text [ en-US ] = "Page" ;
+    };
+    String STR_PGNUM
+    {
+        Text [ en-US ] = "Page %1" ;
     };
     String STR_LOAD_DOC
     {
@@ -1718,6 +1720,77 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Unknown User";
     };
+
+    String STR_SHAPE_AUTOSHAPE
+    {
+        Text [ en-US ] = "AutoShape";
+    };
+
+    String STR_SHAPE_RECTANGLE
+    {
+        Text [ en-US ] = "Rectangle";
+    };
+
+    String STR_SHAPE_LINE
+    {
+        Text [ en-US ] = "Line";
+    };
+
+    String STR_SHAPE_OVAL
+    {
+        Text [ en-US ] = "Oval";
+    };
+
+    String STR_SHAPE_TEXTBOX
+    {
+        Text [ en-US ] = "Text Box";
+    };
+
+    String STR_FORM_BUTTON
+    {
+        Text [ en-US ] = "Button";
+    };
+
+    String STR_FORM_CHECKBOX
+    {
+        Text [ en-US ] = "Check Box";
+    };
+
+    String STR_FORM_OPTIONBUTTON
+    {
+        Text [ en-US ] = "Option Button";
+    };
+
+    String STR_FORM_LABEL
+    {
+        Text [ en-US ] = "Label";
+    };
+
+    String STR_FORM_LISTBOX
+    {
+        Text [ en-US ] = "List Box";
+    };
+
+    String STR_FORM_GROUPBOX
+    {
+        Text [ en-US ] = "Group Box";
+    };
+
+    String STR_FORM_DROPDOWN
+    {
+        Text [ en-US ] = "Drop Down";
+    };
+
+    String STR_FORM_SPINNER
+    {
+        Text [ en-US ] = "Spinner";
+    };
+
+    String STR_FORM_SCROLLBAR
+    {
+        Text [ en-US ] = "Scroll Bar";
+    };
+
     String STR_STYLE_FAMILY_CELL
     {
         Text [ en-US ] = "Cell Styles";
@@ -1732,11 +1805,23 @@ Resource RID_GLOBSTR
     };
     String STR_PIVOT_FIRSTROWEMPTYERR
     {
-        Text [ en-US ] = "The field name cannot be empty. Check the first row of data source to make sure there are no empty cells." ;
+        Text [ en-US ] = "One or more fields appear to have an empty name. Check the first row of the data source to ensure there are no empty cells." ;
     };
     String STR_PIVOT_ONLYONEROWERR
     {
         Text [ en-US ] = "Pivot table needs at least two rows of data to create or refresh." ;
+    };
+    String STR_OPTIONS_WARN_SEPARATORS
+    {
+        Text [ en-US ] = "Because the current formula separator settings conflict with the locale, the formula separators have been reset to their default values.";
+    };
+    String STR_UNDO_INSERT_CURRENT_DATE
+    {
+        Text [ en-US ] = "Insert Current Date";
+    };
+    String STR_UNDO_INSERT_CURRENT_TIME
+    {
+        Text [ en-US ] = "Insert Current Time";
     };
 };
 

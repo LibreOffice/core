@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,8 +34,6 @@
 
 class ScStyleSheet;
 
-//------------------------------------------------------------------------
-
 class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 {
     SfxPoolItem**   ppPoolDefaults;
@@ -52,7 +51,7 @@ class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
     static sal_uInt16*  pVersionMap11;
 
 public:
-            ScDocumentPool( SfxItemPool* pSecPool = NULL, sal_Bool bLoadRefCounts = sal_False );
+            ScDocumentPool( SfxItemPool* pSecPool = NULL, sal_Bool bLoadRefCounts = false );
 protected:
             virtual ~ScDocumentPool();
 public:
@@ -64,7 +63,7 @@ public:
     virtual void                Remove( const SfxPoolItem& );
     static void                 CheckRef( const SfxPoolItem& );
 
-    void StyleDeleted( ScStyleSheet* pStyle );      // Loeschen von Vorlagen im Organizer
+    void StyleDeleted( ScStyleSheet* pStyle );      // delete templates(?) in organizer
     void CellStyleCreated( const String& rName );
     virtual SfxItemPresentation     GetPresentation(
                                         const SfxPoolItem&  rItem,
@@ -81,3 +80,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

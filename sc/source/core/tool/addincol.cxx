@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,8 @@
 
 
 #include <comphelper/processfactory.hxx>
-#include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/xception.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/charclass.hxx>
 
@@ -99,7 +98,7 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const String& rNam, const String& rLoc,
     nCallerPos( nCP ),
     nCategory( nCat ),
     sHelpId( sHelp ),
-    bCompInitialized( sal_False )
+    bCompInitialized( false )
 {
     if ( nArgCount )
     {
@@ -159,7 +158,7 @@ const uno::Sequence<sheet::LocalizedName>& ScUnoAddInFuncData::GetCompNames() co
 
 void ScUnoAddInFuncData::SetCompNames( const uno::Sequence< sheet::LocalizedName>& rNew )
 {
-    DBG_ASSERT( !bCompInitialized, "SetCompNames after initializing" );
+    OSL_ENSURE( !bCompInitialized, "SetCompNames after initializing" );
 
     aCompNames = rNew;
 
@@ -225,7 +224,7 @@ sal_Bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, String& rRetE
         rRetExcelName = pArray[0].Name;
         return sal_True;
     }
-    return sal_False;
+    return false;
 }
 
 void ScUnoAddInFuncData::SetFunction( const uno::Reference< reflection::XIdlMethod>& rNewFunc, const uno::Any& rNewObj )
@@ -262,7 +261,7 @@ ScUnoAddInCollection::ScUnoAddInCollection() :
     pExactHashMap( NULL ),
     pNameHashMap( NULL ),
     pLocalHashMap( NULL ),
-    bInitialized( sal_False )
+    bInitialized( false )
 {
 }
 
@@ -285,7 +284,7 @@ void ScUnoAddInCollection::Clear()
     ppFuncData = NULL;
     nFuncCount = 0;
 
-    bInitialized = sal_False;
+    bInitialized = false;
 }
 
 uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiServiceFactory> xMSF)
@@ -294,7 +293,7 @@ uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiSer
     try {
         uno::Reference<beans::XPropertySet> xPropset(xMSF, uno::UNO_QUERY);
         xPropset->getPropertyValue(
-            ::rtl::OUString::createFromAscii("DefaultContext")) >>= xCtx;
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))) >>= xCtx;
     }
     catch ( uno::Exception & ) {
     }
@@ -303,7 +302,7 @@ uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiSer
 
 void ScUnoAddInCollection::Initialize()
 {
-    DBG_ASSERT( !bInitialized, "Initialize twice?" );
+    OSL_ENSURE( !bInitialized, "Initialize twice?" );
 
     uno::Reference<lang::XMultiServiceFactory> xManager = comphelper::getProcessServiceFactory();
     uno::Reference<container::XContentEnumerationAccess> xEnAc( xManager, uno::UNO_QUERY );
@@ -311,14 +310,14 @@ void ScUnoAddInCollection::Initialize()
     {
         uno::Reference<container::XEnumeration> xEnum =
                         xEnAc->createContentEnumeration(
-                            rtl::OUString::createFromAscii(SCADDINSUPPLIER_SERVICE) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCADDINSUPPLIER_SERVICE)) );
         if ( xEnum.is() )
         {
             //  loop through all AddIns
             while ( xEnum->hasMoreElements() )
             {
                 uno::Any aAddInAny = xEnum->nextElement();
-//?             if ( aAddInAny.getReflection()->getTypeClass() == uno::TypeClass_INTERFACE )
+
                 {
                     uno::Reference<uno::XInterface> xIntFac;
                     aAddInAny >>= xIntFac;
@@ -411,7 +410,7 @@ void ScUnoAddInCollection::ReadConfiguration()
     ScAddInCfg& rAddInConfig = SC_MOD()->GetAddInCfg();
 
     // additional, temporary config item for the compatibility names
-    ScLinkConfigItem aAllLocalesConfig( rtl::OUString::createFromAscii( CFGPATH_ADDINS ), CONFIG_MODE_ALL_LOCALES );
+    ScLinkConfigItem aAllLocalesConfig( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_ADDINS )), CONFIG_MODE_ALL_LOCALES );
     // CommitLink is not used (only reading values)
 
     const rtl::OUString sSlash('/');
@@ -428,7 +427,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
         rtl::OUString aFunctionsPath = aServiceName;
         aFunctionsPath += sSlash;
-        aFunctionsPath += rtl::OUString::createFromAscii( CFGSTR_ADDINFUNCTIONS );
+        aFunctionsPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_ADDINFUNCTIONS) );
 
         uno::Sequence<rtl::OUString> aFunctionNames = rAddInConfig.GetNodeNames( aFunctionsPath );
         sal_Int32 nNewCount = aFunctionNames.getLength();
@@ -486,11 +485,11 @@ void ScUnoAddInCollection::ReadConfiguration()
                 uno::Sequence<rtl::OUString> aFuncPropNames(CFG_FUNCPROP_COUNT);
                 rtl::OUString* pNameArray = aFuncPropNames.getArray();
                 pNameArray[CFG_FUNCPROP_DISPLAYNAME] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_DISPLAYNAME] += rtl::OUString::createFromAscii( CFGSTR_DISPLAYNAME );
+                pNameArray[CFG_FUNCPROP_DISPLAYNAME] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DISPLAYNAME) );
                 pNameArray[CFG_FUNCPROP_DESCRIPTION] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_DESCRIPTION] += rtl::OUString::createFromAscii( CFGSTR_DESCRIPTION );
+                pNameArray[CFG_FUNCPROP_DESCRIPTION] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DESCRIPTION ));
                 pNameArray[CFG_FUNCPROP_CATEGORY] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_CATEGORY] += rtl::OUString::createFromAscii( CFGSTR_CATEGORY );
+                pNameArray[CFG_FUNCPROP_CATEGORY] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_CATEGORY) );
 
                 uno::Sequence<uno::Any> aFuncProperties = rAddInConfig.GetProperties( aFuncPropNames );
                 if ( aFuncProperties.getLength() == CFG_FUNCPROP_COUNT )
@@ -508,7 +507,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 uno::Sequence<sheet::LocalizedName> aCompNames;
 
                 rtl::OUString aCompPath = aFuncPropPath;
-                aCompPath += rtl::OUString::createFromAscii( CFGSTR_COMPATIBILITYNAME );
+                aCompPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_COMPATIBILITYNAME ));
                 uno::Sequence<rtl::OUString> aCompPropNames( &aCompPath, 1 );
 
                 uno::Sequence<uno::Any> aCompProperties = aAllLocalesConfig.GetProperties( aCompPropNames );
@@ -553,7 +552,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 long nCallerPos = SC_CALLERPOS_NONE;
 
                 rtl::OUString aArgumentsPath = aFuncPropPath;
-                aArgumentsPath += rtl::OUString::createFromAscii( CFGSTR_PARAMETERS );
+                aArgumentsPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_PARAMETERS) );
 
                 uno::Sequence<rtl::OUString> aArgumentNames = rAddInConfig.GetNodeNames( aArgumentsPath );
                 sal_Int32 nArgumentCount = aArgumentNames.getLength();
@@ -574,9 +573,9 @@ void ScUnoAddInCollection::ReadConfiguration()
                         aOneArgPath += sSlash;
 
                         pPropNameArray[nIndex] = aOneArgPath;
-                        pPropNameArray[nIndex++] += rtl::OUString::createFromAscii( CFGSTR_DISPLAYNAME );
+                        pPropNameArray[nIndex++] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DISPLAYNAME ));
                         pPropNameArray[nIndex] = aOneArgPath;
-                        pPropNameArray[nIndex++] += rtl::OUString::createFromAscii( CFGSTR_DESCRIPTION );
+                        pPropNameArray[nIndex++] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DESCRIPTION ));
                     }
 
                     uno::Sequence<uno::Any> aArgProperties = rAddInConfig.GetProperties( aArgPropNames );
@@ -588,7 +587,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                         ScAddInArgDesc aDesc;
                         aDesc.eType = SC_ADDINARG_NONE;     // arg type is not in configuration
-                        aDesc.bOptional = sal_False;
+                        aDesc.bOptional = false;
 
                         nVisibleCount = nArgumentCount;
                         pVisibleArgs = new ScAddInArgDesc[nVisibleCount];
@@ -666,7 +665,7 @@ sal_Bool ScUnoAddInCollection::GetExcelName( const String& rCalcName,
     const ScUnoAddInFuncData* pFuncData = GetFuncData( rCalcName );
     if ( pFuncData )
         return pFuncData->GetExcelName( eDestLang, rRetExcelName);
-    return sal_False;
+    return false;
 }
 
 sal_Bool ScUnoAddInCollection::GetCalcName( const String& rExcelName, String& rRetCalcName )
@@ -699,7 +698,7 @@ sal_Bool ScUnoAddInCollection::GetCalcName( const String& rExcelName, String& rR
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 inline sal_Bool IsTypeName( const rtl::OUString& rName, const uno::Type& rType )
@@ -711,13 +710,10 @@ sal_Bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xClas
 {
     //  this must match with ScUnoAddInCall::SetResult
 
-    if ( !xClass.is() ) return sal_False;
+    if ( !xClass.is() ) return false;
 
     switch (xClass->getTypeClass())
     {
-        // case uno::TypeClass_VOID:
-        //  ???
-
         case uno::TypeClass_ANY:                // variable type
         case uno::TypeClass_ENUM:               //! ???
         case uno::TypeClass_BOOLEAN:
@@ -756,7 +752,7 @@ sal_Bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xClas
                     IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<uno::Any> >*)0) ) );
             }
     }
-    return sal_False;
+    return false;
 }
 
 ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdlClass>& xClass )
@@ -826,8 +822,8 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         if ( xManager.is() )
         {
             uno::Reference<beans::XIntrospection> xIntro(
-                                    xManager->createInstance(rtl::OUString::createFromAscii(
-                                        "com.sun.star.beans.Introspection" )),
+                                    xManager->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.beans.Introspection" ))),
                                     uno::UNO_QUERY );
             if ( xIntro.is() )
             {
@@ -918,12 +914,12 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
                                     {
                                         if ( pParArr[nParamPos].aMode != reflection::ParamMode_IN )
-                                            bValid = sal_False;
+                                            bValid = false;
                                         uno::Reference<reflection::XIdlClass> xParClass =
                                                     pParArr[nParamPos].aType;
                                         ScAddInArgumentType eArgType = lcl_GetArgType( xParClass );
                                         if ( eArgType == SC_ADDINARG_NONE )
-                                            bValid = sal_False;
+                                            bValid = false;
                                         else if ( eArgType == SC_ADDINARG_CALLER )
                                             nCallerPos = nParamPos;
                                         else
@@ -946,7 +942,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                         }
                                         catch(uno::Exception&)
                                         {
-                                            aLocalU = rtl::OUString::createFromAscii( "###" );
+                                            aLocalU = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
                                         }
                                         String aLocalName = String( aLocalU );
 
@@ -958,7 +954,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                         }
                                         catch(uno::Exception&)
                                         {
-                                            aDescU = rtl::OUString::createFromAscii( "###" );
+                                            aDescU = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
                                         }
                                         String aDescription = String( aDescU );
 
@@ -983,7 +979,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                                     }
                                                     catch(uno::Exception&)
                                                     {
-                                                        aArgName = rtl::OUString::createFromAscii( "###" );
+                                                        aArgName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
                                                     }
                                                     rtl::OUString aArgDesc;
                                                     try
@@ -993,7 +989,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                                     }
                                                     catch(uno::Exception&)
                                                     {
-                                                        aArgName = rtl::OUString::createFromAscii( "###" );
+                                                        aArgName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
                                                     }
 
                                                     sal_Bool bOptional =
@@ -1010,7 +1006,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                                     pVisibleArgs[nDestPos++] = aDesc;
                                                 }
                                             }
-                                            DBG_ASSERT( nDestPos==nVisibleCount, "wrong count" );
+                                            OSL_ENSURE( nDestPos==nVisibleCount, "wrong count" );
                                         }
 
                                         ppFuncData[nFuncPos+nOld] = new ScUnoAddInFuncData(
@@ -1048,7 +1044,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
 void lcl_UpdateFunctionList( ScFunctionList& rFunctionList, const ScUnoAddInFuncData& rFuncData )
 {
-    String aCompare = rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
+    ::rtl::OUString aCompare = rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
 
     sal_uLong nCount = rFunctionList.GetCount();
     for (sal_uLong nPos=0; nPos<nCount; nPos++)
@@ -1097,8 +1093,8 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     if ( xManager.is() )
     {
         uno::Reference<beans::XIntrospection> xIntro(
-                                xManager->createInstance(rtl::OUString::createFromAscii(
-                                    "com.sun.star.beans.Introspection" )),
+                                xManager->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.beans.Introspection" ))),
                                 uno::UNO_QUERY );
         if ( xIntro.is() )
         {
@@ -1144,12 +1140,12 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                             for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
                             {
                                 if ( pParArr[nParamPos].aMode != reflection::ParamMode_IN )
-                                    bValid = sal_False;
+                                    bValid = false;
                                 uno::Reference<reflection::XIdlClass> xParClass =
                                             pParArr[nParamPos].aType;
                                 ScAddInArgumentType eArgType = lcl_GetArgType( xParClass );
                                 if ( eArgType == SC_ADDINARG_NONE )
-                                    bValid = sal_False;
+                                    bValid = false;
                                 else if ( eArgType == SC_ADDINARG_CALLER )
                                     nCallerPos = nParamPos;
                                 else
@@ -1192,7 +1188,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                                             pVisibleArgs[nDestPos++] = aDesc;
                                         }
                                     }
-                                    DBG_ASSERT( nDestPos==nVisibleCount, "wrong count" );
+                                    OSL_ENSURE( nDestPos==nVisibleCount, "wrong count" );
                                 }
 
                                 pOldData->SetFunction( xFunc, aObject );
@@ -1227,14 +1223,6 @@ String ScUnoAddInCollection::FindFunction( const String& rUpperName, sal_Bool bL
         ScAddInHashMap::const_iterator iLook( pLocalHashMap->find( rUpperName ) );
         if ( iLook != pLocalHashMap->end() )
             return iLook->second->GetOriginalName();
-
-#if 0
-        //  after that, scan international names (really?)
-
-        iLook = pNameHashMap->find( rUpperName );
-        if ( iLook != pNameHashMap->end() )
-            return iLook->second->GetOriginalName();
-#endif
     }
     else
     {
@@ -1313,14 +1301,13 @@ sal_Bool ScUnoAddInCollection::FillFunctionDesc( long nFunc, ScFuncDesc& rDesc )
         Initialize();
 
     if (nFunc >= nFuncCount || !ppFuncData[nFunc])
-        return sal_False;
+        return false;
 
     const ScUnoAddInFuncData& rFuncData = *ppFuncData[nFunc];
 
     return FillFunctionDescFromData( rFuncData, rDesc );
 }
 
-// static
 sal_Bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc )
 {
     rDesc.Clear();
@@ -1329,42 +1316,42 @@ sal_Bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncDat
 
     long nArgCount = rFuncData.GetArgumentCount();
     if ( nArgCount > USHRT_MAX )
-        return sal_False;
+        return false;
 
     if ( bIncomplete )
         nArgCount = 0;      // if incomplete, fill without argument info (no wrong order)
 
     // nFIndex is set from outside
 
-    rDesc.pFuncName = new String( rFuncData.GetUpperLocal() );     //! upper?
+    rDesc.pFuncName = new ::rtl::OUString( rFuncData.GetUpperLocal() );     //! upper?
     rDesc.nCategory = rFuncData.GetCategory();
     rDesc.sHelpId = rFuncData.GetHelpId();
 
     String aDesc = rFuncData.GetDescription();
     if (!aDesc.Len())
         aDesc = rFuncData.GetLocalName();      // use name if no description is available
-    rDesc.pFuncDesc = new String( aDesc );
+    rDesc.pFuncDesc = new ::rtl::OUString( aDesc );
 
     // AddInArgumentType_CALLER is already left out in FuncData
 
     rDesc.nArgCount = (sal_uInt16)nArgCount;
     if ( nArgCount )
     {
-        sal_Bool bMultiple = sal_False;
+        sal_Bool bMultiple = false;
         const ScAddInArgDesc* pArgs = rFuncData.GetArguments();
 
-        rDesc.ppDefArgNames = new String*[nArgCount];
-        rDesc.ppDefArgDescs = new String*[nArgCount];
+        rDesc.ppDefArgNames = new ::rtl::OUString*[nArgCount];
+        rDesc.ppDefArgDescs = new ::rtl::OUString*[nArgCount];
         rDesc.pDefArgFlags   = new ScFuncDesc::ParameterFlags[nArgCount];
         for ( long nArg=0; nArg<nArgCount; nArg++ )
         {
-            rDesc.ppDefArgNames[nArg] = new String( pArgs[nArg].aName );
-            rDesc.ppDefArgDescs[nArg] = new String( pArgs[nArg].aDescription );
+            rDesc.ppDefArgNames[nArg] = new ::rtl::OUString( pArgs[nArg].aName );
+            rDesc.ppDefArgDescs[nArg] = new ::rtl::OUString( pArgs[nArg].aDescription );
             rDesc.pDefArgFlags[nArg].bOptional = pArgs[nArg].bOptional;
             rDesc.pDefArgFlags[nArg].bSuppress = false;
 
             // no empty names...
-            if ( rDesc.ppDefArgNames[nArg]->Len() == 0 )
+            if ( rDesc.ppDefArgNames[nArg]->getLength() == 0 )
             {
                 String aDefName( RTL_CONSTASCII_USTRINGPARAM("arg") );
                 aDefName += String::CreateFromInt32( nArg+1 );
@@ -1390,14 +1377,14 @@ sal_Bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncDat
 
 ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const String& rName,
                                 long nParamCount ) :
-    bValidCount( sal_False ),
+    bValidCount( false ),
     nErrCode( errNoCode ),      // before function was called
     bHasString( sal_True ),
     fValue( 0.0 ),
     xMatrix( NULL )
 {
     pFuncData = rColl.GetFuncData( rName, true );           // need fully initialized data
-    DBG_ASSERT( pFuncData, "Function Data missing" );
+    OSL_ENSURE( pFuncData, "Function Data missing" );
     if ( pFuncData )
     {
         long nDescCount = pFuncData->GetArgumentCount();
@@ -1417,7 +1404,7 @@ ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const String& rName
             bValidCount = sal_True;
             for (long i=nParamCount; i<nDescCount; i++)
                 if ( !pArgs[i].bOptional )
-                    bValidCount = sal_False;
+                    bValidCount = false;
         }
         // else invalid (too many arguments)
 
@@ -1485,14 +1472,14 @@ void ScUnoAddInCall::SetParam( long nPos, const uno::Any& rValue )
                 aVarArg.getArray()[nVarPos] = rValue;
             else
             {
-                DBG_ERROR("wrong argument number");
+                OSL_FAIL("wrong argument number");
             }
         }
         else if ( nPos < aArgs.getLength() )
             aArgs.getArray()[nPos] = rValue;
         else
         {
-            DBG_ERROR("wrong argument number");
+            OSL_FAIL("wrong argument number");
         }
     }
 }
@@ -1509,7 +1496,7 @@ void ScUnoAddInCall::ExecuteCall()
         //  insert aVarArg as last argument
         //! after inserting caller (to prevent copying twice)?
 
-        DBG_ASSERT( aArgs.getLength() == nCount, "wrong argument count" );
+        OSL_ENSURE( aArgs.getLength() == nCount, "wrong argument count" );
         aArgs.getArray()[nCount-1] <<= aVarArg;
     }
 
@@ -1522,7 +1509,7 @@ void ScUnoAddInCall::ExecuteCall()
         long nCallPos = pFuncData->GetCallerPos();
         if (nCallPos>nUserLen)                          // should not happen
         {
-            DBG_ERROR("wrong CallPos");
+            OSL_FAIL("wrong CallPos");
             nCallPos = nUserLen;
         }
 
@@ -1572,12 +1559,7 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
         {
             nErrCode = errIllegalArgument;
         }
-#if 0
-        catch(FloatingPointException&)
-        {
-            nErrCode = errIllegalFPOperation;
-        }
-#endif
+
         catch(reflection::InvocationTargetException& rWrapped)
         {
             if ( rWrapped.TargetException.getValueType().equals(
@@ -1628,7 +1610,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             {
                 uno::TypeClass eMyClass;
                 ScApiTypeConversion::ConvertAnyToDouble( fValue, eMyClass, rNewRes);
-                bHasString = sal_False;
+                bHasString = false;
             }
             break;
 
@@ -1681,17 +1663,16 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount) );
-                        ScMatrix* pMatrix = xMatrix;
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const sal_Int32* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                pMatrix->PutDouble( pColArr[nCol],
+                                xMatrix->PutDouble( pColArr[nCol],
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutDouble( 0.0,
+                                xMatrix->PutDouble( 0.0,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
                         }
@@ -1724,17 +1705,16 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount) );
-                        ScMatrix* pMatrix = xMatrix;
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const double* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                pMatrix->PutDouble( pColArr[nCol],
+                                xMatrix->PutDouble( pColArr[nCol],
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutDouble( 0.0,
+                                xMatrix->PutDouble( 0.0,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
                         }
@@ -1767,17 +1747,16 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount) );
-                        ScMatrix* pMatrix = xMatrix;
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const rtl::OUString* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                pMatrix->PutString( String( pColArr[nCol] ),
+                                xMatrix->PutString( String( pColArr[nCol] ),
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutString( EMPTY_STRING,
+                                xMatrix->PutString( EMPTY_STRING,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
                         }
@@ -1799,4 +1778,4 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 //------------------------------------------------------------------------
 
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

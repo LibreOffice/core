@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,10 @@
 #include "svl/zforlist.hxx"
 #include "scmatrix.hxx"
 #include "rangelst.hxx"
+#include "formula/token.hxx"
 
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <list>
@@ -68,7 +70,8 @@ public:
     virtual ~ScExternalRefLink();
 
     virtual void Closed();
-    virtual void DataChanged(const String& rMimeType, const ::com::sun::star::uno::Any & rValue);
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue);
     virtual void Edit(Window* pParent, const Link& rEndEditHdl);
 
     void SetDoReferesh(bool b);
@@ -85,23 +88,21 @@ private:
     bool        mbDoRefresh;
 };
 
-// ============================================================================
-
 /**
  * Cache table for external reference data.
  */
 class ScExternalRefCache
 {
 public:
-    typedef ::boost::shared_ptr< formula::FormulaToken>     TokenRef;
-    typedef ::boost::shared_ptr<ScTokenArray>               TokenArrayRef;
+    typedef ::formula::FormulaTokenRef          TokenRef;
+    typedef ::boost::shared_ptr<ScTokenArray>   TokenArrayRef;
 
     struct TableName
     {
-        String maUpperName;
-        String maRealName;
+        ::rtl::OUString maUpperName;
+        ::rtl::OUString maRealName;
 
-        explicit TableName(const String& rUppper, const String& rReal);
+        explicit TableName(const ::rtl::OUString& rUppper, const ::rtl::OUString& rReal);
     };
 
     struct CellFormat
@@ -120,8 +121,8 @@ private:
         TokenRef    mxToken;
         sal_uInt32  mnFmtIndex;
     };
-    typedef ::std::hash_map<SCCOL, Cell>            RowDataType;
-    typedef ::std::hash_map<SCROW, RowDataType>     RowsDataType;
+    typedef ::boost::unordered_map<SCCOL, Cell>            RowDataType;
+    typedef ::boost::unordered_map<SCROW, RowDataType>     RowsDataType;
 
 public:
     // SUNWS needs a forward declared friend, otherwise types and members
@@ -178,7 +179,6 @@ public:
         /// Returns the half-open range of used columns in the specified row. Returns [0,0) if row is empty.
         SC_DLLPUBLIC ::std::pair< SCCOL, SCCOL > getColRange( SCROW nRow ) const;
         void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
-        const ScRangeList& getCachedRanges() const;
         bool isRangeCached(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
         void setCachedCell(SCCOL nCol, SCROW nRow);
@@ -205,14 +205,15 @@ public:
         ReferencedFlag                  meReferenced;
     };
 
-    typedef ::boost::shared_ptr<Table>      TableTypeRef;
-    typedef ::std::hash_map<String, size_t, ScStringHashCode>   TableNameIndexMap;
+    typedef ::boost::shared_ptr<Table> TableTypeRef;
+    typedef ::boost::unordered_map< ::rtl::OUString, size_t, ::rtl::OUStringHash>
+        TableNameIndexMap;
 
     ScExternalRefCache();
     ~ScExternalRefCache();
 
-    const String* getRealTableName(sal_uInt16 nFileId, const String& rTabName) const;
-    const String* getRealRangeName(sal_uInt16 nFileId, const String& rRangeName) const;
+    const ::rtl::OUString* getRealTableName(sal_uInt16 nFileId, const ::rtl::OUString& rTabName) const;
+    const ::rtl::OUString* getRealRangeName(sal_uInt16 nFileId, const ::rtl::OUString& rRangeName) const;
 
     /**
      * Get a cached cell data at specified cell location.
@@ -225,7 +226,7 @@ public:
      * @return pointer to the token instance in the cache.
      */
     ScExternalRefCache::TokenRef getCellData(
-        sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex);
+        sal_uInt16 nFileId, const ::rtl::OUString& rTabName, SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex);
 
     /**
      * Get a cached cell range data.
@@ -235,28 +236,31 @@ public:
      *         guaranteed if the TokenArrayRef is properly used..
      */
     ScExternalRefCache::TokenArrayRef getCellRangeData(
-        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange);
+        sal_uInt16 nFileId, const ::rtl::OUString& rTabName, const ScRange& rRange);
 
-    ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const String& rName);
-    void setRangeNameTokens(sal_uInt16 nFileId, const String& rName, TokenArrayRef pArray);
+    ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const ::rtl::OUString& rName);
+    void setRangeNameTokens(sal_uInt16 nFileId, const ::rtl::OUString& rName, TokenArrayRef pArray);
 
-    void setCellData(sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex);
+    void setCellData(sal_uInt16 nFileId, const ::rtl::OUString& rTabName,
+                     SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex);
 
     struct SingleRangeData
     {
         /** This name must be in upper-case. */
-        String      maTableName;
+        ::rtl::OUString maTableName;
         ScMatrixRef mpRangeData;
     };
     void setCellRangeData(sal_uInt16 nFileId, const ScRange& rRange, const ::std::vector<SingleRangeData>& rData,
-                          TokenArrayRef pArray);
+                          const TokenArrayRef& pArray);
 
     bool isDocInitialized(sal_uInt16 nFileId);
-    void initializeDoc(sal_uInt16 nFileId, const ::std::vector<String>& rTabNames);
+    void initializeDoc(sal_uInt16 nFileId, const ::std::vector<rtl::OUString>& rTabNames);
     String getTableName(sal_uInt16 nFileId, size_t nCacheId) const;
-    void getAllTableNames(sal_uInt16 nFileId, ::std::vector<String>& rTabNames) const;
-    SCsTAB getTabSpan( sal_uInt16 nFileId, const String& rStartTabName, const String& rEndTabName ) const;
+    void getAllTableNames(sal_uInt16 nFileId, ::std::vector<rtl::OUString>& rTabNames) const;
+    SCsTAB getTabSpan( sal_uInt16 nFileId, const ::rtl::OUString& rStartTabName, const ::rtl::OUString& rEndTabName ) const;
     void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
+    bool hasCacheTable(sal_uInt16 nFileId, const ::rtl::OUString& rTabName) const;
+    size_t getCacheTableCount(sal_uInt16 nFileId) const;
 
     /**
      * Set all tables of a document as referenced, used only during
@@ -269,7 +273,7 @@ public:
      * Set a table as referenced, used only during store-to-file.
      * @returns <TRUE/> if ALL tables of ALL documents are marked.
      */
-    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets, bool bPermanent );
+    bool setCacheTableReferenced( sal_uInt16 nFileId, const ::rtl::OUString& rTabName, size_t nSheets, bool bPermanent );
     void setAllCacheTableReferencedStati( bool bReferenced );
     bool areAllCacheTablesReferenced() const;
 
@@ -277,7 +281,7 @@ public:
      * Set a table as permanently referenced, to be called if not in
      * mark-during-store-to-file cycle.
      */
-    void setCacheTableReferencedPermanently( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
+    void setCacheTableReferencedPermanently( sal_uInt16 nFileId, const ::rtl::OUString& rTabName, size_t nSheets );
 
 private:
     struct ReferencedStatus
@@ -295,7 +299,6 @@ private:
         bool             mbAllReferenced;
 
                     ReferencedStatus();
-        explicit    ReferencedStatus( size_t nDocs );
         void        reset( size_t nDocs );
         void        checkAllDocs();
 
@@ -305,7 +308,7 @@ private:
 public:
 
     ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, size_t nTabIndex) const;
-    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const String& rTabName, bool bCreateNew, size_t* pnIndex);
+    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const ::rtl::OUString& rTabName, bool bCreateNew, size_t* pnIndex);
 
     void clearCache(sal_uInt16 nFileId);
 
@@ -320,9 +323,9 @@ private:
         }
     };
 
-    typedef ::std::hash_map<String, TokenArrayRef, ScStringHashCode>    RangeNameMap;
-    typedef ::std::hash_map<ScRange, TokenArrayRef, RangeHash>          RangeArrayMap;
-    typedef ::std::hash_map<String, String, ScStringHashCode>           NamePairMap;
+    typedef ::boost::unordered_map<rtl::OUString, TokenArrayRef, rtl::OUStringHash> RangeNameMap;
+    typedef ::boost::unordered_map<ScRange, TokenArrayRef, RangeHash> RangeArrayMap;
+    typedef ::boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash> NamePairMap;
 
     // SUNWS needs a forward declared friend, otherwise types and members
     // of the outer class are not accessible.
@@ -349,21 +352,19 @@ private:
 
         DocItem() : mbInitFromSource(false) {}
     };
-    typedef ::std::hash_map<sal_uInt16, DocItem>  DocDataType;
+    typedef ::boost::unordered_map<sal_uInt16, DocItem>  DocDataType;
     DocItem* getDocItem(sal_uInt16 nFileId) const;
 
 private:
     mutable DocDataType maDocs;
 };
 
-// ============================================================================
-
 class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelper
 {
 public:
 
     typedef ::std::set<ScFormulaCell*>                      RefCellSet;
-    typedef ::std::hash_map<sal_uInt16, RefCellSet>         RefCellMap;
+    typedef ::boost::unordered_map<sal_uInt16, RefCellSet>         RefCellMap;
 
     enum LinkUpdateType { LINK_MODIFIED, LINK_BROKEN };
 
@@ -411,24 +412,24 @@ private:
         Time                maLastAccess;
     };
 
-    typedef ::std::hash_map<sal_uInt16, SrcShell>           DocShellMap;
-    typedef ::std::hash_map<sal_uInt16, bool>               LinkedDocMap;
+    typedef ::boost::unordered_map<sal_uInt16, SrcShell>           DocShellMap;
+    typedef ::boost::unordered_map<sal_uInt16, bool>               LinkedDocMap;
 
-    typedef ::std::hash_map<sal_uInt16, SvNumberFormatterMergeMap> NumFmtMap;
+    typedef ::boost::unordered_map<sal_uInt16, SvNumberFormatterMergeMap> NumFmtMap;
 
 
-    typedef ::std::hash_set<LinkListener*, LinkListener::Hash>  LinkListeners;
-    typedef ::std::hash_map<sal_uInt16, LinkListeners>          LinkListenerMap;
+    typedef ::boost::unordered_set<LinkListener*, LinkListener::Hash>  LinkListeners;
+    typedef ::boost::unordered_map<sal_uInt16, LinkListeners>          LinkListenerMap;
 
 public:
     /** Source document meta-data container. */
     struct SrcFileData
     {
-        String maFileName;      /// original file name as loaded from the file.
-        String maRealFileName;  /// file name created from the relative name.
-        String maRelativeName;
-        String maFilterName;
-        String maFilterOptions;
+        ::rtl::OUString maFileName;      /// original file name as loaded from the file.
+        ::rtl::OUString maRealFileName;  /// file name created from the relative name.
+        ::rtl::OUString maRelativeName;
+        ::rtl::OUString maFilterName;
+        ::rtl::OUString maFilterOptions;
 
         void maybeCreateRealFileName(const String& rOwnDocName);
     };
@@ -437,7 +438,7 @@ public:
     explicit ScExternalRefManager(ScDocument* pDoc);
     virtual ~ScExternalRefManager();
 
-    virtual String getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const;
+    virtual ::rtl::OUString getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const;
 
     /**
      * Get a cache table instance for specified table and table index.  Unlike
@@ -471,7 +472,7 @@ public:
      *
      * @return shared_ptr to the cache table instance
      */
-    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const String& rTabName, bool bCreateNew, size_t* pnIndex = 0);
+    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const ::rtl::OUString& rTabName, bool bCreateNew, size_t* pnIndex = 0);
 
     /** Returns a vector containing all (real) table names and cache tables of
         the specified file.
@@ -479,7 +480,7 @@ public:
         The index in the returned vector corresponds to the table index used to
         access the cache table, e.g. in getCacheTable().
      */
-    void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<String>& rTabNames) const;
+    void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<rtl::OUString>& rTabNames) const;
 
     /**
      * Get the span (distance+sign(distance)) of two sheets of a specified
@@ -496,7 +497,8 @@ public:
      *        -1 if nFileId or rStartTabName not found
      *         0 if rEndTabName not found
      */
-    SCsTAB getCachedTabSpan( sal_uInt16 nFileId, const String& rStartTabName, const String& rEndTabName ) const;
+    SCsTAB getCachedTabSpan(
+        sal_uInt16 nFileId, const ::rtl::OUString& rStartTabName, const ::rtl::OUString& rEndTabName) const;
 
     /**
      * Get all unique number format indices that are used in the cache tables.
@@ -506,6 +508,8 @@ public:
      */
     void getAllCachedNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
 
+    bool hasCacheTable(sal_uInt16 nFileId, const ::rtl::OUString& rTabName) const;
+    size_t getCacheTableCount(sal_uInt16 nFileId) const;
     sal_uInt16 getExternalFileCount() const;
 
     /**
@@ -521,14 +525,14 @@ public:
      * Set a table as referenced, used only during store-to-file.
      * @returns <TRUE/> if ALL tables of ALL external documents are marked.
      */
-    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
+    bool setCacheTableReferenced( sal_uInt16 nFileId, const ::rtl::OUString& rTabName, size_t nSheets );
     void setAllCacheTableReferencedStati( bool bReferenced );
 
     /**
      * Set a table as permanently referenced, to be called if not in
      * mark-during-store-to-file cycle.
      */
-    void setCacheTableReferencedPermanently( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
+    void setCacheTableReferencedPermanently( sal_uInt16 nFileId, const ::rtl::OUString& rTabName, size_t nSheets );
 
     /**
      * @returns <TRUE/> if setAllCacheTableReferencedStati(false) was called,
@@ -536,10 +540,10 @@ public:
      */
     bool isInReferenceMarking() const   { return mbInReferenceMarking; }
 
-    void storeRangeNameTokens(sal_uInt16 nFileId, const String& rName, const ScTokenArray& rArray);
+    void storeRangeNameTokens(sal_uInt16 nFileId, const ::rtl::OUString& rName, const ScTokenArray& rArray);
 
     ScExternalRefCache::TokenRef getSingleRefToken(
-        sal_uInt16 nFileId, const String& rTabName, const ScAddress& rCell,
+        sal_uInt16 nFileId, const ::rtl::OUString& rTabName, const ScAddress& rCell,
         const ScAddress* pCurPos, SCTAB* pTab, ScExternalRefCache::CellFormat* pFmt = NULL);
 
     /**
@@ -556,7 +560,7 @@ public:
      *         delete the instance returned by this method.</i>
      */
     ScExternalRefCache::TokenArrayRef getDoubleRefTokens(
-        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, const ScAddress* pCurPos);
+        sal_uInt16 nFileId, const ::rtl::OUString& rTabName, const ScRange& rRange, const ScAddress* pCurPos);
 
     /**
      * Get an array of tokens corresponding with a specified name in a
@@ -570,10 +574,10 @@ public:
      * @return shared_ptr to array of tokens composing the name
      */
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(
-        sal_uInt16 nFileId, const String& rName, const ScAddress* pCurPos = NULL);
+        sal_uInt16 nFileId, const ::rtl::OUString& rName, const ScAddress* pCurPos = NULL);
 
-    const String& getOwnDocumentName() const;
-    bool isOwnDocument(const String& rFile) const;
+    ::rtl::OUString getOwnDocumentName() const;
+    bool isOwnDocument(const ::rtl::OUString& rFile) const;
 
     /**
      * Takes a flat file name, and convert it to an absolute URL path.  An
@@ -581,8 +585,8 @@ public:
      *
      * @param rFile file name to convert
      */
-    void convertToAbsName(String& rFile) const;
-    sal_uInt16 getExternalFileId(const String& rFile);
+    void convertToAbsName(::rtl::OUString& rFile) const;
+    sal_uInt16 getExternalFileId(const ::rtl::OUString& rFile);
 
     /**
      * It returns a pointer to the name of the URI associated with a given
@@ -597,16 +601,16 @@ public:
      *
      * @return const String* external document URI.
      */
-    const String* getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal = false);
+    const ::rtl::OUString* getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal = false);
     bool hasExternalFile(sal_uInt16 nFileId) const;
-    bool hasExternalFile(const String& rFile) const;
+    bool hasExternalFile(const ::rtl::OUString& rFile) const;
     const SrcFileData* getExternalFileData(sal_uInt16 nFileId) const;
 
-    const String* getRealTableName(sal_uInt16 nFileId, const String& rTabName) const;
-    const String* getRealRangeName(sal_uInt16 nFileId, const String& rRangeName) const;
+    const ::rtl::OUString* getRealTableName(sal_uInt16 nFileId, const ::rtl::OUString& rTabName) const;
+    const ::rtl::OUString* getRealRangeName(sal_uInt16 nFileId, const ::rtl::OUString& rRangeName) const;
     void refreshNames(sal_uInt16 nFileId);
     void breakLink(sal_uInt16 nFileId);
-    void switchSrcFile(sal_uInt16 nFileId, const String& rNewFile, const String& rNewFilter);
+    void switchSrcFile(sal_uInt16 nFileId, const ::rtl::OUString& rNewFile, const ::rtl::OUString& rNewFilter);
 
     /**
      * Set a relative file path for the specified file ID.  Note that the
@@ -615,7 +619,7 @@ public:
      * @param nFileId file ID for an external document
      * @param rRelUrl relative URL
      */
-    void setRelativeFileName(sal_uInt16 nFileId, const String& rRelUrl);
+    void setRelativeFileName(sal_uInt16 nFileId, const ::rtl::OUString& rRelUrl);
 
     /**
      * Set the filter name and options if any for a given source document.
@@ -625,7 +629,7 @@ public:
      * @param rFilterName
      * @param rOptions
      */
-    void setFilterData(sal_uInt16 nFileId, const String& rFilterName, const String& rOptions);
+    void setFilterData(sal_uInt16 nFileId, const ::rtl::OUString& rFilterName, const ::rtl::OUString& rOptions);
 
     void clear();
 
@@ -639,12 +643,7 @@ public:
      * @param rBaseFileUrl Absolute URL of the content.xml fragment of the
      *                     document being exported.
      */
-    void resetSrcFileData(const String& rBaseFileUrl);
-
-    /**
-     * Replace the original URL wirh the real URL that was generated from the relative URL.
-     */
-    void updateAbsAfterLoad();
+    void resetSrcFileData(const ::rtl::OUString& rBaseFileUrl);
 
     /**
      * Stop tracking a specific formula cell.
@@ -677,6 +676,12 @@ public:
      */
     void notifyAllLinkListeners(sal_uInt16 nFileId, LinkUpdateType eType);
 
+    /**
+     * Check if the file specified by the path is a legitimate file that
+     * exists & can be loaded.
+     */
+    bool isFileLoadable(const ::rtl::OUString& rFile) const;
+
 private:
     ScExternalRefManager();
     ScExternalRefManager(const ScExternalRefManager&);
@@ -685,9 +690,48 @@ private:
 
     void insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell);
 
-    ScDocument* getSrcDocument(sal_uInt16 nFileId);
-    SfxObjectShellRef loadSrcDocument(sal_uInt16 nFileId, String& rFilter);
-    bool isFileLoadable(const String& rFile) const;
+    void fillCellFormat(sal_uInt32 nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const;
+
+    ScExternalRefCache::TokenRef getSingleRefTokenFromSrcDoc(
+        sal_uInt16 nFileId, const ScDocument* pSrcDoc, const ScAddress& rCell,
+        ScExternalRefCache::CellFormat* pFmt);
+
+    /**
+     * Retrieve a range token array from a source document instance.
+     *
+     * @param pSrcDoc pointer to the source document instance.
+     * @param rTabName name of the first table.
+     * @param rRange range specified.  Upon successful retrieval, this range
+     *               gets modified to contain the correct table IDs, and in
+     *               case the range is larger than the data area of the source
+     *               document, it gets reduced to the data area.
+     * @param rCacheData an array of structs, with each struct containing the
+     *                   table name and the data in the specified range.
+     *
+     * @return range token array
+     */
+    ScExternalRefCache::TokenArrayRef getDoubleRefTokensFromSrcDoc(
+        const ScDocument* pSrcDoc, const ::rtl::OUString& rTabName, ScRange& rRange,
+        ::std::vector<ScExternalRefCache::SingleRangeData>& rCacheData);
+
+    /**
+     * Retrieve range name token array from a source document instance.
+     *
+     * @param nFileId file ID of the source document.
+     * @param pSrcDoc pointer to the source document instance
+     * @param rName range name to retrieve.  Note that the range name lookup
+     *              is case <i>in</i>-sensitive, and upon successful retrieval
+     *              of the range name array, this name gets updated to the
+     *              actual range name with the correct casing.
+     *
+     * @return range name token array
+     */
+    ScExternalRefCache::TokenArrayRef getRangeNameTokensFromSrcDoc(
+        sal_uInt16 nFileId, const ScDocument* pSrcDoc, ::rtl::OUString& rName);
+
+    const ScDocument* getInMemorySrcDocument(sal_uInt16 nFileId);
+    const ScDocument* getSrcDocument(sal_uInt16 nFileId);
+    SfxObjectShellRef loadSrcDocument(sal_uInt16 nFileId, ::rtl::OUString& rFilter);
 
     void maybeLinkExternalFile(sal_uInt16 nFileId);
 
@@ -712,7 +756,7 @@ private:
      */
     void purgeStaleSrcDocument(sal_Int32 nTimeOut);
 
-    sal_uInt32 getMappedNumberFormat(sal_uInt16 nFileId, sal_uInt32 nNumFmt, ScDocument* pSrcDoc);
+    sal_uInt32 getMappedNumberFormat(sal_uInt16 nFileId, sal_uInt32 nNumFmt, const ScDocument* pSrcDoc);
 
 private:
     /** cache of referenced ranges and names from source documents. */
@@ -757,3 +801,5 @@ private:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

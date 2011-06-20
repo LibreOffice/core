@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,11 +40,12 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <tools/debug.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
 using ::rtl::OUString;
+
+using rtl::OUString;
 
 //------------------------------------------------------------------
 
@@ -134,13 +136,13 @@ void ScXMLDDELinkContext::CreateDDELink()
         String sAppl(sApplication);
         String sTop(sTopic);
         String sIt(sItem);
-        GetScImport().GetDocument()->CreateDdeLink(sAppl, sTop, sIt, nMode);
+        GetScImport().GetDocument()->CreateDdeLink(sAppl, sTop, sIt, nMode, ScMatrixRef());
         sal_uInt16 nPos;
         if(GetScImport().GetDocument()->FindDdeLink(sAppl, sTop, sIt, nMode, nPos))
             nPosition = nPos;
         else
             nPosition = -1;
-        DBG_ASSERT(nPosition > -1, "DDE Link not inserted");
+        OSL_ENSURE(nPosition > -1, "DDE Link not inserted");
     }
 }
 
@@ -161,7 +163,7 @@ void ScXMLDDELinkContext::EndElement()
     if (nPosition > -1 && nColumns && nRows && GetScImport().GetDocument())
     {
         bool bSizeMatch = (static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size());
-        DBG_ASSERT( bSizeMatch, "ScXMLDDELinkContext::EndElement: matrix dimension doesn't match cells count");
+        OSL_ENSURE( bSizeMatch, "ScXMLDDELinkContext::EndElement: matrix dimension doesn't match cells count");
         // Excel writes bad ODF in that it does not write the
         // table:number-columns-repeated attribute of the
         // <table:table-column> element, but apparently uses the number of
@@ -170,7 +172,7 @@ void ScXMLDDELinkContext::EndElement()
         if (!bSizeMatch && nColumns == 1)
         {
             nColumns = aDDELinkTable.size() / nRows;
-            DBG_ASSERT( static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size(),
+            OSL_ENSURE( static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size(),
                     "ScXMLDDELinkContext::EndElement: adapted matrix dimension doesn't match either");
         }
         ScMatrixRef pMatrix = new ScMatrix( static_cast<SCSIZE>(nColumns), static_cast<SCSIZE>(nRows) );
@@ -440,19 +442,19 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
                 if (IsXMLToken(sTempValue, XML_STRING))
                     bString = sal_True;
                 else
-                    bString = sal_False;
+                    bString = false;
             }
             else if (IsXMLToken(aLocalName, XML_STRING_VALUE))
             {
                 sValue = sTempValue;
-                bEmpty = sal_False;
+                bEmpty = false;
                 bString2 = sal_True;
             }
             else if (IsXMLToken(aLocalName, XML_VALUE))
             {
                 GetScImport().GetMM100UnitConverter().convertDouble(fValue, sTempValue);
-                bEmpty = sal_False;
-                bString2 = sal_False;
+                bEmpty = false;
+                bString2 = false;
             }
         }
         else if (nPrefix == XML_NAMESPACE_TABLE)
@@ -479,7 +481,7 @@ SvXMLImportContext *ScXMLDDECellContext::CreateChildContext( sal_uInt16 nPrefix,
 
 void ScXMLDDECellContext::EndElement()
 {
-    DBG_ASSERT(bString == bString2, "something wrong with this type");
+    OSL_ENSURE(bString == bString2, "something wrong with this type");
     ScDDELinkCell aCell;
     aCell.sValue = sValue;
     aCell.fValue = fValue;
@@ -488,3 +490,5 @@ void ScXMLDDECellContext::EndElement()
     for(sal_Int32 i = 0; i < nCells; ++i)
         pDDELink->AddCellToRow(aCell);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,8 +74,6 @@
 #include <map>
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
-// header for define DBG_ERROR
-#include <tools/debug.hxx>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 
@@ -563,46 +562,47 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         if( aName.indexOf( C2U("Line") ) != -1 || aName.indexOf( C2U("Symbol") ) != -1 )
             return C2U( "com.sun.star.chart.LineDiagram" );
 
-        OSL_ENSURE( false, "unknown template" );
+        OSL_FAIL( "unknown template" );
     }
 
     return OUString();
 }
 
 typedef ::comphelper::MakeMap< ::rtl::OUString, ::rtl::OUString > tMakeStringStringMap;
+
 const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
     static tMakeStringStringMap g_aChartTypeNameMap =
         tMakeStringStringMap
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.LineChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.LineDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LineChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.LineDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.AreaChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.AreaDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.AreaChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.AreaDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.ColumnChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.BarDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ColumnChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.BarDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.PieChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.PieDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PieChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.PieDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.DonutChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.DonutDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DonutChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.DonutDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.ScatterChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.XYDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ScatterChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.XYDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.FilledNetChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.FilledNetDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.FilledNetChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.FilledNetDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.NetChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.NetDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.NetChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.NetDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.CandleStickChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.StockDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CandleStickChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.StockDiagram" ) ) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart2.BubbleChartType" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart.BubbleDiagram" ) )
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.BubbleChartType" ) )
+        , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.BubbleDiagram" ) ) )
 
         ;
     return g_aChartTypeNameMap;
@@ -756,7 +756,7 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
         aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
         if( aRelativePosition.Primary < 0 || aRelativePosition.Secondary < 0 || aRelativePosition.Primary > 1 || aRelativePosition.Secondary > 1 )
         {
-            DBG_ERROR("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
+            OSL_FAIL("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
             uno::Any aEmpty;
             xProp->setPropertyValue( C2U( "RelativePosition" ), aEmpty );
             return;
@@ -789,7 +789,7 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 
         if( aRelativeSize.Primary > 1 || aRelativeSize.Secondary > 1 )
         {
-            DBG_ERROR("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
+            OSL_FAIL("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
             uno::Any aEmpty;
             xProp->setPropertyValue( C2U( "RelativeSize" ), aEmpty );
             return;
@@ -1174,7 +1174,6 @@ void SAL_CALL DiagramWrapper::dispose()
 {
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
 
-    // /--
     MutexGuard aGuard( GetMutex());
 
     DisposeHelper::DisposeAndClear( m_xXAxis );
@@ -1189,7 +1188,6 @@ void SAL_CALL DiagramWrapper::dispose()
     DisposeHelper::DisposeAndClear( m_xDownBarWrapper );
 
     clearWrappedPropertySet();
-    // \--
 }
 
 void SAL_CALL DiagramWrapper::addEventListener(
@@ -1206,14 +1204,6 @@ void SAL_CALL DiagramWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// ____ XEventListener ____
-// void SAL_CALL DiagramWrapper::disposing( const lang::EventObject& Source )
-//     throw (uno::RuntimeException)
-// {
-// }
-
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_DATAROW_SOURCE
@@ -1317,9 +1307,6 @@ Any WrappedDataRowSourceProperty::getPropertyDefault( const Reference< beans::XP
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-
 
 //PROP_DIAGRAM_STACKED
 //PROP_DIAGRAM_DEEP
@@ -1366,7 +1353,7 @@ WrappedStackingProperty::WrappedStackingProperty( StackMode eStackMode, ::boost:
         m_aOuterName = C2U( "Deep" );
         break;
     default:
-        OSL_ENSURE( false, "unexpected stack mode" );
+        OSL_FAIL( "unexpected stack mode" );
         break;
     }
 }
@@ -1435,8 +1422,6 @@ Any WrappedStackingProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_THREE_D
@@ -1510,8 +1495,6 @@ Any WrappedDim3DProperty::getPropertyDefault( const Reference< beans::XPropertyS
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_VERTICAL
@@ -1590,8 +1573,6 @@ Any WrappedVerticalProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_NUMBER_OF_LINES
@@ -1717,12 +1698,11 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         {
             try
             {
-                // /-- locked controllers
+                // locked controllers
                 ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
                 uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
                 xProp->setPropertyValue( C2U( "NumberOfLines" ), uno::makeAny(nNewValue) );
                 xTemplate->changeDiagram( xDiagram );
-                // \-- locked controllers
             }
             catch( uno::Exception & ex )
             {
@@ -1749,8 +1729,6 @@ Any WrappedNumberOfLinesProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_ATTRIBUTED_DATA_POINTS
@@ -1871,8 +1849,6 @@ Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< be
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_SOLIDTYPE
 class WrappedSolidTypeProperty : public WrappedProperty
@@ -1949,8 +1925,6 @@ Any WrappedSolidTypeProperty::getPropertyDefault( const Reference< beans::XPrope
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 class WrappedAutomaticSizeProperty : public WrappedProperty
 {
@@ -2024,8 +1998,6 @@ Any WrappedAutomaticSizeProperty::getPropertyDefault( const Reference< beans::XP
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS
 class WrappedIncludeHiddenCellsProperty : public WrappedProperty
@@ -2062,8 +2034,6 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 // ____ XDiagramProvider ____
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
@@ -2077,7 +2047,7 @@ void SAL_CALL DiagramWrapper::setDiagram(
     throw (uno::RuntimeException)
 {
     //@todo: remove this method from interface
-    DBG_ERROR("DiagramWrapper::setDiagram is not implemented, should be removed and not be called" );
+    OSL_FAIL("DiagramWrapper::setDiagram is not implemented, should be removed and not be called" );
 }
 
 // ================================================================================
@@ -2138,9 +2108,6 @@ uno::Sequence< OUString > DiagramWrapper::getSupportedServiceNames_Static()
     aServices[ 5 ] = C2U( "com.sun.star.chart.ChartAxisZSupplier" );
     aServices[ 6 ] = C2U( "com.sun.star.chart.ChartTwoAxisXSupplier" );
     aServices[ 7 ] = C2U( "com.sun.star.chart.ChartTwoAxisYSupplier" );
-//     aServices[ x ] = C2U( "com.sun.star.beans.PropertySet" );
-//     aServices[ x ] = C2U( "com.sun.star.drawing.FillProperties" );
-//     aServices[ x ] = C2U( "com.sun.star.drawing.LineProperties" );
 
     return aServices;
 }
@@ -2151,3 +2118,4 @@ APPHELPER_XSERVICEINFO_IMPL( DiagramWrapper, lcl_aServiceName );
 } //  namespace wrapper
 } //  namespace chart
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

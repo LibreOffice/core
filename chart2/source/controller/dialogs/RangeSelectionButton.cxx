@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include "RangeSelectionButton.hxx"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "Strings.hrc"
 #include "ResId.hxx"
 
@@ -42,8 +42,7 @@ namespace chart
 RangeSelectionButton::RangeSelectionButton( Window *pParent, const ResId& rResId ) :
     ImageButton( pParent, rResId )
 {
-    SetModeImage( Image( SchResId(IMG_SELECTRANGE)    ), BMP_COLOR_NORMAL );
-    SetModeImage( Image( SchResId(IMG_SELECTRANGE_HC) ), BMP_COLOR_HIGHCONTRAST );
+    SetModeImage( Image( SchResId( IMG_SELECTRANGE) ) );
     this->SetQuickHelpText(SchResId(STR_TIP_SELECT_RANGE));
 }
 
@@ -54,3 +53,5 @@ RangeSelectionButton::~RangeSelectionButton()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

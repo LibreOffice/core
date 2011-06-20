@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -520,7 +521,7 @@ private:
             void        removeListener(  ChartController* pController );
             void        tryTermination();
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-                        getModel() { return m_xModel;}
+                        getModel() const { return m_xModel;}
 
         private:
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     m_xModel;
@@ -546,7 +547,7 @@ private:
                 TheModel* operator->() const { return m_pTheModel; }
         private:
             TheModel*               m_pTheModel;
-            mutable ::osl::Mutex&   m_rModelMutex;
+            ::osl::Mutex&   m_rModelMutex;
     };
 
 private:
@@ -681,7 +682,6 @@ private:
     void impl_ShapeControllerDispatch( const ::com::sun::star::util::URL& rURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
 
-    //
     DECL_LINK( DoubleClickWaitingHdl, void* );
     void execute_DoubleClick( const Point* pMousePixel = NULL );
     void startDoubleClickWaiting();
@@ -738,3 +738,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

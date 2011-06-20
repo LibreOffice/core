@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,6 +50,8 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 using ::rtl::OUString;
 
+using rtl::OUString;
+
 //------------------------------------------------------------------
 
 ScXMLTableScenarioContext::ScXMLTableScenarioContext(
@@ -62,8 +65,8 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
     bCopyBack( sal_True ),
     bCopyStyles( sal_True ),
     bCopyFormulas( sal_True ),
-    bIsActive( sal_False ),
-    bProtected( sal_False )
+    bIsActive( false ),
+    bProtected( false )
 {
     rImport.LockSolarMutex();
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
@@ -143,7 +146,7 @@ SvXMLImportContext *ScXMLTableScenarioContext::CreateChildContext(
 
 void ScXMLTableScenarioContext::EndElement()
 {
-    SCTAB nCurrTable( sal::static_int_cast<SCTAB>( GetScImport().GetTables().GetCurrentSheet() ) );
+    SCTAB nCurrTable( GetScImport().GetTables().GetCurrentSheet() );
     ScDocument* pDoc(GetScImport().GetDocument());
     if (pDoc)
     {
@@ -160,9 +163,9 @@ void ScXMLTableScenarioContext::EndElement()
         if( bProtected )
             nFlags |= SC_SCENARIO_PROTECT;
         pDoc->SetScenarioData( nCurrTable, String( sComment ), aBorderColor, nFlags );
-        for( sal_Int32 i = 0; i < static_cast<sal_Int32>(aScenarioRanges.Count()); ++i )
+        for( size_t i = 0; i < aScenarioRanges.size(); ++i )
         {
-            ScRange* pRange(aScenarioRanges.GetObject( i ));
+            ScRange* pRange(aScenarioRanges[ i ]);
             if( pRange )
                 pDoc->ApplyFlagsTab( pRange->aStart.Col(), pRange->aStart.Row(),
                     pRange->aEnd.Col(), pRange->aEnd.Row(), nCurrTable, SC_MF_SCENARIO );
@@ -171,3 +174,4 @@ void ScXMLTableScenarioContext::EndElement()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

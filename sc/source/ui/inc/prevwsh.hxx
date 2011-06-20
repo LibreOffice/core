@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,11 +82,11 @@ protected:
 
     virtual String  GetDescription() const;
 
-    virtual void    WriteUserData(String &, sal_Bool bBrowse = sal_False);
-    virtual void    ReadUserData(const String &, sal_Bool bBrowse = sal_False);
+    virtual void    WriteUserData(String &, sal_Bool bBrowse = false);
+    virtual void    ReadUserData(const String &, sal_Bool bBrowse = false);
 
-    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
-    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
+    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
+    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
 
 public:
                     TYPEINFO();
@@ -114,7 +115,7 @@ public:
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
+    virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = false );
     virtual sal_uInt16          SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
 
@@ -131,3 +132,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

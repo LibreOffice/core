@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,13 +59,12 @@
 #include "inputwin.hxx"
 #include "docsh.hxx"
 #include "viewdata.hxx"
-//CHINA001 #include "attrdlg.hxx"
 #include "appoptio.hxx"
 #include "sc.hrc"
 #include "stlpool.hxx"
 #include "tabvwsh.hxx"
 #include "dwfunctr.hxx"
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 #include "compiler.hxx"
 
 
@@ -148,7 +148,7 @@ sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
         return sal_True;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -161,7 +161,7 @@ sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
 //      FID_VALIDATION
 
 
-void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
+void ScTabViewShell::GetState( SfxItemSet& rSet )
 {
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
@@ -209,7 +209,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 if ( nTabSelCount > 1 )
                 {
                     // #i22589# also take "Print Entire Sheet" into account here
-                    sal_Bool bHas = sal_False;
+                    sal_Bool bHas = false;
                     for (SCTAB i=0; !bHas && i<nTabCount; i++)
                         bHas = rMark.GetTableSelect(i) && (pDoc->GetPrintRangeCount(i) || pDoc->IsPrintEntireSheet(i));
                     if (!bHas)
@@ -229,8 +229,13 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_SEARCH_ITEM:
-                rSet.Put( ScGlobal::GetSearchItem() );
+            {
+                SvxSearchItem aItem(ScGlobal::GetSearchItem()); // make a copy.
+                // Search on current selection if a range is marked.
+                aItem.SetSelection(rMark.IsMarked());
+                rSet.Put(aItem);
                 break;
+            }
 
             case SID_SEARCH_OPTIONS:
                 {
@@ -269,7 +274,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                     if ( pThisFrame->KnowsChildWindow( nId ) )
                     {
                         SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
-                        rSet.Put( SfxBoolItem( nWhich, pWnd ? sal_True : sal_False ) );
+                        rSet.Put( SfxBoolItem( nWhich, pWnd ? sal_True : false ) );
                     }
                     else
                         rSet.DisableItem( nWhich );
@@ -289,7 +294,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName,
                                                     SFX_STYLE_FAMILY_PAGE );
-                    DBG_ASSERT( pStyleSheet, "PageStyle not found" );
+                    OSL_ENSURE( pStyleSheet, "PageStyle not found" );
                     if ( pStyleSheet )
                     {
                         SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
@@ -458,8 +463,8 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_PRINTPREVIEW:
-                // #58924# Toggle-Slot braucht einen State
-                rSet.Put( SfxBoolItem( nWhich, sal_False ) );
+                // Toggle-Slot braucht einen State
+                rSet.Put( SfxBoolItem( nWhich, false ) );
                 break;
 
             case SID_READONLY_MODE:
@@ -479,8 +484,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 //------------------------------------------------------------------
 void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 {
-    //CHINA001 ScAttrDlg*               pDlg    = NULL;
-    SfxAbstractTabDialog * pDlg = NULL; //CHINA001
+    SfxAbstractTabDialog * pDlg = NULL;
     ScDocument*             pDoc    = GetViewData()->GetDocument();
 
     SvxBoxItem              aLineOuter( ATTR_BORDER );
@@ -506,17 +510,16 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, sal_uInt16 nTabPage
     pOldSet->MergeRange( SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO );
     pOldSet->Put(*pNumberInfoItem );
 
-    bInFormatDialog = sal_True;
-    //CHINA001 pDlg = new ScAttrDlg( GetViewFrame(), GetDialogParent(), pOldSet );
+    bInFormatDialog = true;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     pDlg = pFact->CreateScAttrDlg( GetViewFrame(), GetDialogParent(), pOldSet, RID_SCDLG_ATTR);
-    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+    OSL_ENSURE(pDlg, "Dialog create fail!");
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
     short nResult = pDlg->Execute();
-    bInFormatDialog = sal_False;
+    bInFormatDialog = false;
 
     if ( nResult == RET_OK )
     {
@@ -629,8 +632,8 @@ void ScTabViewShell::UpdateInputHandler( sal_Bool bForce /* = sal_False */, sal_
         PutInOrder( nStartRow, nEndRow );
         PutInOrder( nStartTab, nEndTab );
 
-        sal_Bool bHideFormula = sal_False;
-        sal_Bool bHideAll     = sal_False;
+        sal_Bool bHideFormula = false;
+        sal_Bool bHideAll     = false;
 
         if (pDoc->IsTabProtected(nTab))
         {
@@ -702,7 +705,7 @@ void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
 
 //------------------------------------------------------------------
 
-void __EXPORT ScTabViewShell::ExecuteSave( SfxRequest& rReq )
+void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
 {
     //  nur SID_SAVEDOC / SID_SAVEASDOC
 
@@ -718,7 +721,7 @@ void __EXPORT ScTabViewShell::ExecuteSave( SfxRequest& rReq )
     GetViewData()->GetDocShell()->ExecuteSlot( rReq );
 }
 
-void __EXPORT ScTabViewShell::GetSaveState( SfxItemSet& rSet )
+void ScTabViewShell::GetSaveState( SfxItemSet& rSet )
 {
     SfxShell* pDocSh = GetViewData()->GetDocShell();
 
@@ -734,8 +737,6 @@ void __EXPORT ScTabViewShell::GetSaveState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 }
-
-//------------------------------------------------------------------
 
 void ScTabViewShell::ExecDrawOpt( SfxRequest& rReq )
 {
@@ -801,3 +802,4 @@ void ScTabViewShell::GetDrawOptState( SfxItemSet& rSet )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

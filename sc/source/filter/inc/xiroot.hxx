@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,14 @@
 #define SC_XIROOT_HXX
 
 #include "xlroot.hxx"
+#include <boost/shared_ptr.hpp>
 
 // Forward declarations of objects in public use ==============================
 
 class XclImpStream;
 class XclImpString;
 
-typedef ScfRef< XclImpString > XclImpStringRef;
+typedef boost::shared_ptr< XclImpString > XclImpStringRef;
 
 // Global data ================================================================
 
@@ -53,6 +55,7 @@ class XclImpLinkManager;
 class XclImpObjectManager;
 class XclImpSheetDrawing;
 class XclImpCondFormatManager;
+class XclImpValidationManager;
 class XclImpAutoFilterBuffer;
 class XclImpWebQueryBuffer;
 class XclImpPivotTableManager;
@@ -68,27 +71,28 @@ class ExcelToSc;
 /** Stores global buffers and data needed for Excel import filter. */
 struct XclImpRootData : public XclRootData
 {
-    typedef ScfRef< XclImpAddressConverter >    XclImpAddrConvRef;
-    typedef ScfRef< XclImpFormulaCompiler >     XclImpFmlaCompRef;
+    typedef boost::shared_ptr< XclImpAddressConverter >    XclImpAddrConvRef;
+    typedef boost::shared_ptr< XclImpFormulaCompiler >     XclImpFmlaCompRef;
 
-    typedef ScfRef< XclImpSst >                 XclImpSstRef;
-    typedef ScfRef< XclImpPalette >             XclImpPaletteRef;
-    typedef ScfRef< XclImpFontBuffer >          XclImpFontBfrRef;
-    typedef ScfRef< XclImpNumFmtBuffer >        XclImpNumFmtBfrRef;
-    typedef ScfRef< XclImpXFBuffer >            XclImpXFBfrRef;
-    typedef ScfRef< XclImpXFRangeBuffer >       XclImpXFRangeBfrRef;
-    typedef ScfRef< XclImpTabInfo >             XclImpTabInfoRef;
-    typedef ScfRef< XclImpNameManager >         XclImpNameMgrRef;
-    typedef ScfRef< XclImpLinkManager >         XclImpLinkMgrRef;
-    typedef ScfRef< XclImpObjectManager >       XclImpObjectMgrRef;
-    typedef ScfRef< XclImpCondFormatManager >   XclImpCondFmtMgrRef;
-    typedef ScfRef< XclImpWebQueryBuffer >      XclImpWebQueryBfrRef;
-    typedef ScfRef< XclImpPivotTableManager >   XclImpPTableMgrRef;
-    typedef ScfRef< XclImpPageSettings >        XclImpPageSettRef;
-    typedef ScfRef< XclImpDocViewSettings >     XclImpDocViewSettRef;
-    typedef ScfRef< XclImpTabViewSettings >     XclImpTabViewSettRef;
-    typedef ScfRef< XclImpSheetProtectBuffer >  XclImpTabProtectRef;
-    typedef ScfRef< XclImpDocProtectBuffer >    XclImpDocProtectRef;
+    typedef boost::shared_ptr< XclImpSst >                 XclImpSstRef;
+    typedef boost::shared_ptr< XclImpPalette >             XclImpPaletteRef;
+    typedef boost::shared_ptr< XclImpFontBuffer >          XclImpFontBfrRef;
+    typedef boost::shared_ptr< XclImpNumFmtBuffer >        XclImpNumFmtBfrRef;
+    typedef boost::shared_ptr< XclImpXFBuffer >            XclImpXFBfrRef;
+    typedef boost::shared_ptr< XclImpXFRangeBuffer >       XclImpXFRangeBfrRef;
+    typedef boost::shared_ptr< XclImpTabInfo >             XclImpTabInfoRef;
+    typedef boost::shared_ptr< XclImpNameManager >         XclImpNameMgrRef;
+    typedef boost::shared_ptr< XclImpLinkManager >         XclImpLinkMgrRef;
+    typedef boost::shared_ptr< XclImpObjectManager >       XclImpObjectMgrRef;
+    typedef boost::shared_ptr< XclImpCondFormatManager >   XclImpCondFmtMgrRef;
+    typedef boost::shared_ptr< XclImpValidationManager >   XclImpValidationMgrRef;
+    typedef boost::shared_ptr< XclImpWebQueryBuffer >      XclImpWebQueryBfrRef;
+    typedef boost::shared_ptr< XclImpPivotTableManager >   XclImpPTableMgrRef;
+    typedef boost::shared_ptr< XclImpPageSettings >        XclImpPageSettRef;
+    typedef boost::shared_ptr< XclImpDocViewSettings >     XclImpDocViewSettRef;
+    typedef boost::shared_ptr< XclImpTabViewSettings >     XclImpTabViewSettRef;
+    typedef boost::shared_ptr< XclImpSheetProtectBuffer >  XclImpTabProtectRef;
+    typedef boost::shared_ptr< XclImpDocProtectBuffer >    XclImpDocProtectRef;
 
     XclImpAddrConvRef   mxAddrConv;         /// The address converter.
     XclImpFmlaCompRef   mxFmlaComp;         /// The formula compiler.
@@ -106,6 +110,7 @@ struct XclImpRootData : public XclRootData
 
     XclImpObjectMgrRef  mxObjMgr;           /// All drawing objects.
     XclImpCondFmtMgrRef mxCondFmtMgr;       /// Conditional formattings.
+    XclImpValidationMgrRef mxValidMgr;      /// Data validation
     XclImpWebQueryBfrRef mxWebQueryBfr;     /// All web queries.
     XclImpPTableMgrRef  mxPTableMgr;        /// All pivot tables and pivot caches.
 
@@ -182,6 +187,8 @@ public:
     XclImpSheetDrawing& GetCurrSheetDrawing() const;
     /** Returns the conditional formattings manager. */
     XclImpCondFormatManager& GetCondFormatManager() const;
+
+    XclImpValidationManager& GetValidationManager() const;
     /** Returns the filter manager. */
     XclImpAutoFilterBuffer& GetFilterManager() const;
     /** Returns the web query buffer. */
@@ -211,9 +218,11 @@ public:
     void                ReadCodeName( XclImpStream& rStrm, bool bGlobals );
 
 private:
-    mutable XclImpRootData& mrImpData;      /// Reference to the global import data struct.
+    XclImpRootData& mrImpData;      /// Reference to the global import data struct.
 };
 
 // ============================================================================
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,26 +31,22 @@
 
 
 #include "AccessibleContextBase.hxx"
-#include "unoguard.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
-#endif
 #include <toolkit/helper/convert.hxx>
 #include <svl/smplhint.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/unohelp.hxx>
 #include <tools/color.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -102,7 +99,7 @@ void ScAccessibleContextBase::Init()
 
 void SAL_CALL ScAccessibleContextBase::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 //  CommitDefunc(); not necessary and should not be send, because it cost a lot of time
 
     // hold reference to make sure that the destructor is not called
@@ -176,7 +173,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
 sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return Rectangle (Point(), GetBoundingBox().GetSize()).IsInside(VCLPoint(rPoint));
 }
@@ -185,14 +182,14 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtP
         const awt::Point& /* rPoint */ )
         throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
     return uno::Reference<XAccessible>();
 }
 
 awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return AWTRectangle(GetBoundingBox());
 }
@@ -200,7 +197,7 @@ awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
 awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return AWTPoint(GetBoundingBox().TopLeft());
 }
@@ -208,7 +205,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
 awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return AWTPoint(GetBoundingBoxOnScreen().TopLeft());
 }
@@ -216,7 +213,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
 awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return AWTSize(GetBoundingBox().GetSize());
 }
@@ -224,9 +221,9 @@ awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
 sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
-    sal_Bool bShowing(sal_False);
+    sal_Bool bShowing(false);
     if (mxParent.is())
     {
         uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
@@ -249,7 +246,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::isVisible(  )
 void SAL_CALL ScAccessibleContextBase::grabFocus(  )
         throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 sal_Int32 SAL_CALL ScAccessibleContextBase::getForeground(  )
@@ -270,7 +267,7 @@ sal_Int32 SAL_CALL
        ScAccessibleContextBase::getAccessibleChildCount(void)
     throw (uno::RuntimeException)
 {
-    DBG_ERROR("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abrevated class");
     return 0;
 }
 
@@ -278,7 +275,7 @@ uno::Reference<XAccessible> SAL_CALL
     ScAccessibleContextBase::getAccessibleChild(sal_Int32 /* nIndex */)
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    DBG_ERROR("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abrevated class");
     return uno::Reference<XAccessible>();
 }
 
@@ -293,7 +290,7 @@ sal_Int32 SAL_CALL
        ScAccessibleContextBase::getAccessibleIndexInParent(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     //  Use a simple but slow solution for now.  Optimize later.
    //   Return -1 to indicate that this object's parent does not know about the
@@ -334,12 +331,11 @@ sal_Int16 SAL_CALL
        ScAccessibleContextBase::getAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!msDescription.getLength())
     {
         OUString sDescription(createAccessibleDescription());
-//      DBG_ASSERT(sDescription.getLength(), "We should give always a descripition.");
 
         if (msDescription != sDescription)
         {
@@ -361,12 +357,12 @@ OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!msName.getLength())
     {
         OUString sName(createAccessibleName());
-        DBG_ASSERT(sName.getLength(), "We should give always a name.");
+        OSL_ENSURE(sName.getLength(), "We should give always a name.");
 
         if (msName != sName)
         {
@@ -403,7 +399,7 @@ lang::Locale SAL_CALL
     throw (IllegalAccessibleComponentStateException,
         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (mxParent.is())
     {
@@ -427,7 +423,7 @@ void SAL_CALL
 {
     if (xListener.is())
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         IsObjectValid();
         if (!IsDefunc())
         {
@@ -445,7 +441,7 @@ void SAL_CALL
 {
     if (xListener.is())
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         if (!IsDefunc() && mnClientId)
         {
             sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
@@ -468,7 +464,7 @@ void SAL_CALL ScAccessibleContextBase::disposing(
     const lang::EventObject& rSource )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (rSource.Source == mxParent)
         dispose();
 }
@@ -501,7 +497,7 @@ sal_Bool SAL_CALL
     for (int i=0; i<nLength; ++i, ++pServiceNames)
         if (sServiceName == *pServiceNames)
             return sal_True;
-    return sal_False;
+    return false;
 }
 
 uno::Sequence< ::rtl::OUString> SAL_CALL
@@ -527,19 +523,16 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleContextBase::getTypes()
     return comphelper::concatSequences(ScAccessibleContextBaseWeakImpl::getTypes(), ScAccessibleContextBaseImplEvent::getTypes());
 }
 
+namespace
+{
+    class theScAccessibleContextBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleContextBaseImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleContextBaseImplementationId::get().getSeq();
 }
 
 //=====  internal  ============================================================
@@ -548,7 +541,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    DBG_ERROR("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abrevated class");
     return rtl::OUString();
 }
 
@@ -556,7 +549,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    DBG_ERROR("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abrevated class");
     return rtl::OUString();
 }
 
@@ -608,14 +601,14 @@ void ScAccessibleContextBase::CommitFocusLost() const
 Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen(void) const
         throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
     return Rectangle();
 }
 
 Rectangle ScAccessibleContextBase::GetBoundingBox(void) const
         throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
     return Rectangle();
 }
 
@@ -626,3 +619,4 @@ void ScAccessibleContextBase::IsObjectValid() const
         throw lang::DisposedException();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

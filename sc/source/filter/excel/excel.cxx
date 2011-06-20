@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,20 +58,20 @@
 FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
 {
     // check the passed Calc document
-    DBG_ASSERT( pDocument, "::ScImportExcel - no document" );
+    OSL_ENSURE( pDocument, "::ScImportExcel - no document" );
     if( !pDocument ) return eERR_INTERN;        // should not happen
 
     /*  Import all BIFF versions regardless on eFormat, needed for import of
         external cells (file type detection returns Excel4.0). */
     if( (eFormat != EIF_AUTO) && (eFormat != EIF_BIFF_LE4) && (eFormat != EIF_BIFF5) && (eFormat != EIF_BIFF8) )
     {
-        DBG_ERRORFILE( "::ScImportExcel - wrong file format specification" );
+        OSL_FAIL( "::ScImportExcel - wrong file format specification" );
         return eERR_FORMAT;
     }
 
     // check the input stream from medium
     SvStream* pMedStrm = rMedium.GetInStream();
-    DBG_ASSERT( pMedStrm, "::ScImportExcel - medium without input stream" );
+    OSL_ENSURE( pMedStrm, "::ScImportExcel - medium without input stream" );
     if( !pMedStrm ) return eERR_OPEN;           // should not happen
 
 #if OSL_DEBUG_LEVEL > 0
@@ -101,15 +102,15 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
         SfxItemSet* pItemSet = rMedium.GetItemSet();
         if( pItemSet )
         {
-            SFX_ITEMSET_ARG( pItemSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
+            SFX_ITEMSET_ARG( pItemSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, false);
             if( pFileNameItem )
                 aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pFileNameItem->GetValue() );
 
-            SFX_ITEMSET_ARG( pItemSet, pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False);
+            SFX_ITEMSET_ARG( pItemSet, pPasswordItem, SfxStringItem, SID_PASSWORD, false);
             if( pPasswordItem )
                 aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pPasswordItem->GetValue() );
 
-            SFX_ITEMSET_ARG( pItemSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False);
+            SFX_ITEMSET_ARG( pItemSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false);
             if( pEncryptionDataItem )
                 aMediaDesc[ MediaDescriptor::PROP_ENCRYPTIONDATA() ] = pEncryptionDataItem->GetValue();
         }
@@ -144,7 +145,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     SotStorageStreamRef xStrgStrm;
     if( SotStorage::IsStorageFile( pMedStrm ) )
     {
-        xRootStrg = new SotStorage( pMedStrm, sal_False );
+        xRootStrg = new SotStorage( pMedStrm, false );
         if( xRootStrg->GetError() )
             xRootStrg = 0;
     }
@@ -220,7 +221,7 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         SvStream* pMedStrm, sal_Bool bBiff8, CharSet eNach )
 {
     // try to open an OLE storage
-    SotStorageRef xRootStrg = new SotStorage( pMedStrm, sal_False );
+    SotStorageRef xRootStrg = new SotStorage( pMedStrm, false );
     if( xRootStrg->GetError() ) return eERR_OPEN;
 
     // create BIFF dependent strings
@@ -270,44 +271,28 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     return eRet;
 }
 
-static FltError lcl_ExportExcel2007Xml( SfxMedium& rMedium, ScDocument *pDocument,
-        SvStream* pMedStrm, CharSet eNach )
-{
-    SotStorageRef xRootStrg = (SotStorage*) 0;
-
-    XclExpRootData aExpData( EXC_BIFF8, rMedium, xRootStrg, *pDocument, eNach );
-    aExpData.meOutput = EXC_OUTPUT_XML_2007;
-
-    ExportXml2007 aFilter( aExpData, *pMedStrm );
-
-    FltError eRet = aFilter.Write();
-
-    return eRet;
-}
-
 FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
     ExportFormatExcel eFormat, CharSet eNach )
 {
-    if( eFormat != ExpBiff5 && eFormat != ExpBiff8 && eFormat != Exp2007Xml )
+    if( eFormat != ExpBiff5 && eFormat != ExpBiff8 )
         return eERR_NI;
 
     // check the passed Calc document
-    DBG_ASSERT( pDocument, "::ScImportExcel - no document" );
+    OSL_ENSURE( pDocument, "::ScImportExcel - no document" );
     if( !pDocument ) return eERR_INTERN;        // should not happen
 
     // check the output stream from medium
     SvStream* pMedStrm = rMedium.GetOutStream();
-    DBG_ASSERT( pMedStrm, "::ScExportExcel5 - medium without output stream" );
+    OSL_ENSURE( pMedStrm, "::ScExportExcel5 - medium without output stream" );
     if( !pMedStrm ) return eERR_OPEN;           // should not happen
 
     FltError eRet = eERR_UNKN_BIFF;
     if( eFormat == ExpBiff5 || eFormat == ExpBiff8 )
         eRet = lcl_ExportExcelBiff( rMedium, pDocument, pMedStrm, eFormat == ExpBiff8, eNach );
-    else if( eFormat == Exp2007Xml )
-        eRet = lcl_ExportExcel2007Xml( rMedium, pDocument, pMedStrm, eNach );
 
     return eRet;
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,22 +44,8 @@ struct ScHighlightEntry
         aRef(rR), aColor(rC) {}
 };
 
-class ScHighlightRanges
-{
-    List        aEntries;
-
-public:
-            ScHighlightRanges();
-            ~ScHighlightRanges();
-
-    sal_uLong   Count() const                       { return aEntries.Count(); }
-    void    Insert( ScHighlightEntry* pNew )    { aEntries.Insert(pNew, LIST_APPEND); }
-    ScHighlightEntry* GetObject( sal_uLong nIndex ) const
-                        { return (ScHighlightEntry*)aEntries.GetObject(nIndex); }
-};
-
-
 
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

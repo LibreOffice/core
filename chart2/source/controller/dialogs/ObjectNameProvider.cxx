@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -309,7 +310,6 @@ rtl::OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural 
             }
                 break;
         case OBJECTTYPE_DATA_STOCK_RANGE:
-                //aRet=String(SchResId());
                 break;
         case OBJECTTYPE_DATA_STOCK_LOSS:
                 aRet=String(SchResId(STR_OBJECT_STOCK_LOSS));
@@ -394,7 +394,7 @@ OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
             aRet=String(SchResId(STR_OBJECT_TITLE_SECONDARY_Y_AXIS));
             break;
         default:
-            DBG_ERROR("unknown title type");
+            OSL_FAIL("unknown title type");
             break;
     }
 
@@ -567,13 +567,6 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataSeriesName( rObjectCID, xChartModel ) );
         }
     }
-    /*
-    else if( OBJECTTYPE_DIAGRAM == eObjectType )
-    {
-        //todo different names for different diagram types ???
-        //or different names for series of diferent charttypes
-    }
-    */
     else if( OBJECTTYPE_DATA_CURVE == eObjectType )
     {
         if( bVerbose )
@@ -604,12 +597,6 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                         if( nIndex != -1 )
                         {
                             sal_Unicode aDecimalSep( '.' );
-                            //@todo: enable this code when a localized decimal
-                            //separator is also available for the formula
-//                             SvtSysLocale aSysLocale;
-//                             OUString aSep( aSysLocale.GetLocaleData().getNumDecimalSep());
-//                             if( aSep.getLength() == 1 )
-//                                 aDecimalSep = aSep.toChar();
                             double fR( xCalculator->getCorrelationCoefficient());
                             aRet = aRet.replaceAt(
                                 nIndex, aWildcard.getLength(),
@@ -648,11 +635,6 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
                         sal_Unicode aDecimalSep( '.' );
-                        // replace average value
-//                             SvtSysLocale aSysLocale;
-//                             OUString aSep( aSysLocale.GetLocaleData().getNumDecimalSep());
-//                             if( aSep.getLength() == 1 )
-//                                 aDecimalSep = aSep.toChar();
 
                         sal_Int32 nIndex = -1;
                         OUString aWildcard( C2U("%AVERAGE_VALUE") );
@@ -751,6 +733,7 @@ rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & r
     return aRet;
 }
 
+
 rtl::OUString ObjectNameProvider::getNameForCID(
     const rtl::OUString& rObjectCID,
     const uno::Reference< chart2::XChartDocument >& xChartDocument )
@@ -769,7 +752,6 @@ rtl::OUString ObjectNameProvider::getNameForCID(
             return getGridName( rObjectCID, xModel );
         case OBJECTTYPE_DATA_SERIES:
             return lcl_getFullSeriesName( rObjectCID, xModel );
-        //case OBJECTTYPE_LEGEND_ENTRY:
         case OBJECTTYPE_DATA_POINT:
         case OBJECTTYPE_DATA_LABELS:
         case OBJECTTYPE_DATA_LABEL:
@@ -835,3 +817,5 @@ rtl::OUString ObjectNameProvider::getName_ObjectForAllSeries( ObjectType eObject
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

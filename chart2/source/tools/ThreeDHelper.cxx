@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -554,7 +555,7 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
         z = atan(tan(R) * sin(E));
         if(cos(z)==0.0)
         {
-            DBG_ERROR("calculation error in ThreeDHelper::convertElevationRotationDegToXYZAngleRad");
+            OSL_FAIL("calculation error in ThreeDHelper::convertElevationRotationDegToXYZAngleRad");
             return;
         }
         double cy = cos(R)/cos(z);
@@ -565,7 +566,7 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
         double fDenominator = cos(z)*(1.0-pow(sin(y),2));
         if(fDenominator==0.0)
         {
-            DBG_ERROR("calculation error in ThreeDHelper::convertElevationRotationDegToXYZAngleRad");
+            OSL_FAIL("calculation error in ThreeDHelper::convertElevationRotationDegToXYZAngleRad");
             return;
         }
         double sx = cos(R)*sin(E)/fDenominator;
@@ -1433,6 +1434,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
         ASSERT_EXCEPTION( e );
     }
 }
+
 void ThreeDHelper::setRoundedEdgesAndObjectLines(
             const uno::Reference< XDiagram > & xDiagram
             , sal_Int32 nRoundedEdges, sal_Int32 nObjectLines )
@@ -1513,3 +1515,5 @@ CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBott
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

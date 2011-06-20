@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+// XXX xelink.hxx MUST be included before xeformula.hxx because of the
+// redifinition of the CREATE_OUSTRING() macro, which is in oox/helper.hxx
+// (indirectly included via xelink.hxx) and ../inc/ftools.hxx (indirectly
+// included via xeformula.hxx) that does an undef first. Ugly.
+#include "xelink.hxx"
 #include "xeformula.hxx"
 
 #include <list>
@@ -41,7 +47,6 @@
 #include "token.hxx"
 #include "tokenarray.hxx"
 #include "xehelper.hxx"
-#include "xelink.hxx"
 #include "xename.hxx"
 #include "xestream.hxx"
 
@@ -112,7 +117,7 @@ void XclExpOperandList::AppendOperand( sal_uInt16 nTokPos, XclFuncParamConv eCon
     rConvInfo.mbValType = bValType;
 }
 
-typedef ScfRef< XclExpOperandList > XclExpOperandListRef;
+typedef boost::shared_ptr< XclExpOperandList > XclExpOperandListRef;
 typedef ::std::vector< XclExpOperandListRef > XclExpOperandListVector;
 
 // ----------------------------------------------------------------------------
@@ -187,7 +192,7 @@ XclExpFuncData::XclExpFuncData( const XclExpScToken& rTokData,
     mxOperands( new XclExpOperandList ),
     mpParamInfo( rFuncInfo.mpParamInfos )
 {
-    DBG_ASSERT( mrTokData.mpScToken, "XclExpFuncData::XclExpFuncData - missing core token" );
+    OSL_ENSURE( mrTokData.mpScToken, "XclExpFuncData::XclExpFuncData - missing core token" );
     // set name of an add-in function
     if( (maExtFuncData.maFuncName.Len() == 0) && dynamic_cast< const FormulaExternalToken* >( mrTokData.mpScToken ) )
         maExtFuncData.Set( GetScToken().GetExternal(), true, false );
@@ -274,7 +279,7 @@ static const XclExpCompConfig spConfigTable[] =
 /** Working data of the formula compiler. Used to push onto a stack for recursive calls. */
 struct XclExpCompData
 {
-    typedef ScfRef< ScTokenArray > ScTokenArrayRef;
+    typedef boost::shared_ptr< ScTokenArray > ScTokenArrayRef;
 
     const XclExpCompConfig& mrCfg;          /// Configuration for current formula type.
     ScTokenArrayRef     mxOwnScTokArr;      /// Own clone of a Calc token array.
@@ -303,7 +308,7 @@ XclExpCompData::XclExpCompData( const XclExpCompConfig* pCfg ) :
     mbVolatile( false ),
     mbOk( pCfg != 0 )
 {
-    DBG_ASSERT( pCfg, "XclExpFmlaCompImpl::Init - unknown formula type" );
+    OSL_ENSURE( pCfg, "XclExpFmlaCompImpl::Init - unknown formula type" );
 }
 
 } // namespace
@@ -375,7 +380,6 @@ private:
 
     void                ProcessDouble( const XclExpScToken& rTokData );
     void                ProcessString( const XclExpScToken& rTokData );
-    void                ProcessError( const XclExpScToken& rTokData );
     void                ProcessMissing( const XclExpScToken& rTokData );
     void                ProcessBad( const XclExpScToken& rTokData );
     void                ProcessParentheses( const XclExpScToken& rTokData );
@@ -414,7 +418,6 @@ private:
     void                ProcessExternalRangeRef( const XclExpScToken& rTokData );
     void                ProcessDefinedName( const XclExpScToken& rTokData );
     void                ProcessExternalName( const XclExpScToken& rTokData );
-    void                ProcessDatabaseArea( const XclExpScToken& rTokData );
 
     // token vector -----------------------------------------------------------
 
@@ -467,14 +470,13 @@ private:
     void                AppendExt( sal_uInt8 nData );
     void                AppendExt( sal_uInt8 nData, size_t nCount );
     void                AppendExt( sal_uInt16 nData );
-    void                AppendExt( sal_uInt32 nData );
     void                AppendExt( double fData );
     void                AppendExt( const String& rString );
 
     // ------------------------------------------------------------------------
 private:
     typedef ::std::map< XclFormulaType, XclExpCompConfig >  XclExpCompConfigMap;
-    typedef ScfRef< XclExpCompData >                        XclExpCompDataRef;
+    typedef boost::shared_ptr< XclExpCompData >             XclExpCompDataRef;
     typedef ::std::vector< XclExpCompDataRef >              XclExpCompDataVector;
 
     XclExpCompConfigMap maCfgMap;       /// Compiler configuration map for all formula types.
@@ -487,7 +489,7 @@ private:
     const SCsCOL        mnMaxScCol;     /// Maximum column index in Calc itself.
     const SCsROW        mnMaxScRow;     /// Maximum row index in Calc itself.
     const sal_uInt16    mnMaxColMask;   /// Mask to delete invalid bits in column fields.
-    const sal_uInt16    mnMaxRowMask;   /// Mask to delete invalid bits in row fields.
+    const sal_uInt32    mnMaxRowMask;   /// Mask to delete invalid bits in row fields.
 };
 
 // ----------------------------------------------------------------------------
@@ -501,10 +503,10 @@ XclExpFmlaCompImpl::XclExpFmlaCompImpl( const XclExpRoot& rRoot ) :
     mnMaxScCol( static_cast< SCsCOL >( rRoot.GetScMaxPos().Col() ) ),
     mnMaxScRow( static_cast< SCsROW >( rRoot.GetScMaxPos().Row() ) ),
     mnMaxColMask( static_cast< sal_uInt16 >( rRoot.GetXclMaxPos().Col() ) ),
-    mnMaxRowMask( static_cast< sal_uInt16 >( rRoot.GetXclMaxPos().Row() ) )
+    mnMaxRowMask( static_cast< sal_uInt32 >( rRoot.GetXclMaxPos().Row() ) )
 {
     // build the configuration map
-    for( const XclExpCompConfig* pEntry = spConfigTable; pEntry != STATIC_ARRAY_END( spConfigTable ); ++pEntry )
+    for( const XclExpCompConfig* pEntry = spConfigTable; pEntry != STATIC_TABLE_END( spConfigTable ); ++pEntry )
         maCfgMap[ pEntry->meType ] = *pEntry;
 }
 
@@ -530,7 +532,7 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclFormulaType eType,
         }
         else
         {
-            DBG_ERRORFILE( "XclExpFmlaCompImpl::CreateFormula - empty token array" );
+            OSL_FAIL( "XclExpFmlaCompImpl::CreateFormula - empty token array" );
             mxData->mbOk = false;
         }
 
@@ -538,7 +540,7 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclFormulaType eType,
         {
             // #i44907# auto-generated SUBTOTAL formula cells have trailing ocStop token
             mxData->mbOk = !aTokData.Is() || (aTokData.GetOpCode() == ocStop);
-            DBG_ASSERT( mxData->mbOk, "XclExpFmlaCompImpl::CreateFormula - unknown garbage behind formula" );
+            OSL_ENSURE( mxData->mbOk, "XclExpFmlaCompImpl::CreateFormula - unknown garbage behind formula" );
         }
     }
 
@@ -561,7 +563,7 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateSpecialRefFormula( sal_uInt8 nTokenId
 {
     Init( EXC_FMLATYPE_NAME );
     AppendOperandTokenId( nTokenId );
-    Append( rXclPos.mnRow );
+    Append( static_cast<sal_uInt16>(rXclPos.mnRow) );
     Append( rXclPos.mnCol );    // do not use AppendAddress(), we always need 16-bit column here
     return CreateTokenArray();
 }
@@ -584,7 +586,7 @@ bool XclExpFmlaCompImpl::Is3DRefOnly( XclFormulaType eType ) const
 const XclExpCompConfig* XclExpFmlaCompImpl::GetConfigForType( XclFormulaType eType ) const
 {
     XclExpCompConfigMap::const_iterator aIt = maCfgMap.find( eType );
-    DBG_ASSERT( aIt != maCfgMap.end(), "XclExpFmlaCompImpl::GetConfigForType - unknown formula type" );
+    OSL_ENSURE( aIt != maCfgMap.end(), "XclExpFmlaCompImpl::GetConfigForType - unknown formula type" );
     return (aIt == maCfgMap.end()) ? 0 : &aIt->second;
 }
 
@@ -610,12 +612,12 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
         case EXC_FMLATYPE_MATRIX:
         case EXC_FMLATYPE_CHART:
             mxData->mbOk = pScBasePos != 0;
-            DBG_ASSERT( mxData->mbOk, "XclExpFmlaCompImpl::Init - missing cell address" );
+            OSL_ENSURE( mxData->mbOk, "XclExpFmlaCompImpl::Init - missing cell address" );
             mxData->mpScBasePos = pScBasePos;
         break;
         case EXC_FMLATYPE_SHARED:
             mxData->mbOk = pScBasePos != 0;
-            DBG_ASSERT( mxData->mbOk, "XclExpFmlaCompImpl::Init - missing cell address" );
+            OSL_ENSURE( mxData->mbOk, "XclExpFmlaCompImpl::Init - missing cell address" );
             // clone the passed token array, convert references relative to current cell position
             mxData->mxOwnScTokArr.reset( rScTokArr.Clone() );
             ScCompiler::MoveRelWrap( *mxData->mxOwnScTokArr, GetDocPtr(), *pScBasePos, MAXCOL, MAXROW );
@@ -630,7 +632,7 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
         mxData->mpLinkMgr = mxData->mrCfg.mbLocalLinkMgr ? &GetLocalLinkManager() : &GetGlobalLinkManager();
 
         // token array iterator (use cloned token array if present)
-        mxData->maTokArrIt.Init( mxData->mxOwnScTokArr.is() ? *mxData->mxOwnScTokArr : rScTokArr, false );
+        mxData->maTokArrIt.Init( mxData->mxOwnScTokArr ? *mxData->mxOwnScTokArr : rScTokArr, false );
         mxData->mpRefLog = pRefLog;
     }
 }
@@ -640,7 +642,7 @@ void XclExpFmlaCompImpl::RecalcTokenClasses()
     if( mxData->mbOk )
     {
         mxData->mbOk = mxData->maOpPosStack.size() == 1;
-        DBG_ASSERT( mxData->mbOk, "XclExpFmlaCompImpl::RecalcTokenClasses - position of root token expected on stack" );
+        OSL_ENSURE( mxData->mbOk, "XclExpFmlaCompImpl::RecalcTokenClasses - position of root token expected on stack" );
         if( mxData->mbOk )
         {
             /*  Cell and array formulas start with VAL conversion and VALTYPE
@@ -663,7 +665,7 @@ void XclExpFmlaCompImpl::RecalcTokenClasses()
 void XclExpFmlaCompImpl::RecalcTokenClass( const XclExpTokenConvInfo& rConvInfo,
         XclFuncParamConv ePrevConv, XclExpClassConv ePrevClassConv, bool bWasRefClass )
 {
-    DBG_ASSERT( rConvInfo.mnTokPos < GetSize(), "XclExpFmlaCompImpl::RecalcTokenClass - invalid token position" );
+    OSL_ENSURE( rConvInfo.mnTokPos < GetSize(), "XclExpFmlaCompImpl::RecalcTokenClass - invalid token position" );
     sal_uInt8& rnTokenId = mxData->maTokVec[ rConvInfo.mnTokPos ];
     sal_uInt8 nTokClass = GetTokenClass( rnTokenId );
 
@@ -794,7 +796,7 @@ void XclExpFmlaCompImpl::FinalizeFormula()
 XclTokenArrayRef XclExpFmlaCompImpl::CreateTokenArray()
 {
     // create the Excel token array from working data before resetting mxData
-    DBG_ASSERT( mxData->mrCfg.mbAllowArrays || mxData->maExtDataVec.empty(), "XclExpFmlaCompImpl::CreateTokenArray - unexpected extended data" );
+    OSL_ENSURE( mxData->mrCfg.mbAllowArrays || mxData->maExtDataVec.empty(), "XclExpFmlaCompImpl::CreateTokenArray - unexpected extended data" );
     if( !mxData->mrCfg.mbAllowArrays )
         mxData->maExtDataVec.clear();
     XclTokenArrayRef xTokArr( new XclTokenArray( mxData->maTokVec, mxData->maExtDataVec, mxData->mbVolatile ) );
@@ -1166,9 +1168,6 @@ XclExpScToken XclExpFmlaCompImpl::Factor( XclExpScToken aTokData )
         case svUnknown:             mxData->mbOk = false;                   break;
         case svDouble:              ProcessDouble( aTokData );              break;
         case svString:              ProcessString( aTokData );              break;
-#if 0   // erAck
-        case svError:               ProcessError( aTokData );               break;
-#endif
         case svSingleRef:           ProcessCellRef( aTokData );             break;
         case svDoubleRef:           ProcessRangeRef( aTokData );            break;
         case svExternalSingleRef:   ProcessExternalCellRef( aTokData );     break;
@@ -1184,7 +1183,6 @@ XclExpScToken XclExpFmlaCompImpl::Factor( XclExpScToken aTokData )
             case ocBad:         ProcessBad( aTokData );             break;
             case ocOpen:        ProcessParentheses( aTokData );     break;
             case ocName:        ProcessDefinedName( aTokData );     break;
-            case ocDBArea:      ProcessDatabaseArea( aTokData );    break;
             case ocFalse:
             case ocTrue:        ProcessBoolean( aTokData );         break;
             case ocDde:         ProcessDdeLink( aTokData );         break;
@@ -1212,15 +1210,6 @@ void XclExpFmlaCompImpl::ProcessString( const XclExpScToken& rTokData )
 {
     AppendOperandTokenId( EXC_TOKID_STR, rTokData.mnSpaces );
     Append( rTokData.mpScToken->GetString() );
-}
-
-void XclExpFmlaCompImpl::ProcessError( const XclExpScToken& rTokData )
-{
-#if 0   // erAck
-    AppendErrorToken( XclTools::GetXclErrorCode( rTokData.mpScToken->GetError() ), rTokData.mnSpaces );
-#else
-    (void)rTokData; // compiler warning
-#endif
 }
 
 void XclExpFmlaCompImpl::ProcessMissing( const XclExpScToken& rTokData )
@@ -1302,7 +1291,7 @@ void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
     {
         SCSIZE nScCols, nScRows;
         pMatrix->GetDimensions( nScCols, nScRows );
-        DBG_ASSERT( (nScCols > 0) && (nScRows > 0), "XclExpFmlaCompImpl::ProcessMatrix - invalid matrix size" );
+        OSL_ENSURE( (nScCols > 0) && (nScRows > 0), "XclExpFmlaCompImpl::ProcessMatrix - invalid matrix size" );
         sal_uInt16 nCols = ::limit_cast< sal_uInt16 >( nScCols, 0, 256 );
         sal_uInt16 nRows = ::limit_cast< sal_uInt16 >( nScRows, 0, 1024 );
 
@@ -1319,18 +1308,16 @@ void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
         {
             for( SCSIZE nScCol = 0; nScCol < nScCols; ++nScCol )
             {
-                ScMatValType nType;
-                const ScMatrixValue* pMatVal = pMatrix->Get( nScCol, nScRow, nType );
-                DBG_ASSERT( pMatVal, "XclExpFmlaCompImpl::ProcessMatrix - missing matrix value" );
-                if( ScMatrix::IsValueType( nType ) )    // value, boolean, or error
+                ScMatrixValue nMatVal = pMatrix->Get( nScCol, nScRow );
+                if( ScMatrix::IsValueType( nMatVal.nType ) )    // value, boolean, or error
                 {
-                    if( ScMatrix::IsBooleanType( nType ) )
+                    if( ScMatrix::IsBooleanType( nMatVal.nType ) )
                     {
                         AppendExt( EXC_CACHEDVAL_BOOL );
-                        AppendExt( static_cast< sal_uInt8 >( pMatVal->GetBoolean() ? 1 : 0 ) );
+                        AppendExt( static_cast< sal_uInt8 >( nMatVal.GetBoolean() ? 1 : 0 ) );
                         AppendExt( 0, 7 );
                     }
-                    else if( sal_uInt16 nErr = pMatVal->GetError() )
+                    else if( sal_uInt16 nErr = nMatVal.GetError() )
                     {
                         AppendExt( EXC_CACHEDVAL_ERROR );
                         AppendExt( XclTools::GetXclErrorCode( nErr ) );
@@ -1339,12 +1326,12 @@ void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
                     else
                     {
                         AppendExt( EXC_CACHEDVAL_DOUBLE );
-                        AppendExt( pMatVal->fVal );
+                        AppendExt( nMatVal.fVal );
                     }
                 }
                 else    // string or empty
                 {
-                    const String& rStr = pMatVal->GetString();
+                    const String& rStr = nMatVal.GetString();
                     if( rStr.Len() == 0 )
                     {
                         AppendExt( EXC_CACHEDVAL_EMPTY );
@@ -1435,11 +1422,7 @@ void XclExpFmlaCompImpl::PrepareFunction( XclExpFuncData& rFuncData )
 {
     switch( rFuncData.GetOpCode() )
     {
-        case ocCosecant:                // simulate CSC(x) by (1/SIN(x))
-        case ocSecant:                  // simulate SEC(x) by (1/COS(x))
         case ocCot:                     // simulate COT(x) by (1/TAN(x))
-        case ocCosecantHyp:             // simulate CSCH(x) by (1/SINH(x))
-        case ocSecantHyp:               // simulate SECH(x) by (1/COSH(x))
         case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
             AppendIntToken( 1 );
         break;
@@ -1489,11 +1472,7 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
                 FinishChooseFunction( rFuncData );
             break;
 
-            case ocCosecant:                // simulate CSC(x) by (1/SIN(x))
-            case ocSecant:                  // simulate SEC(x) by (1/COS(x))
             case ocCot:                     // simulate COT(x) by (1/TAN(x))
-            case ocCosecantHyp:             // simulate CSCH(x) by (1/SINH(x))
-            case ocSecantHyp:               // simulate SECH(x) by (1/COSH(x))
             case ocCotHyp:                  // simulate COTH(x) by (1/TANH(x))
                 AppendBinaryOperatorToken( EXC_TOKID_DIV, true );
                 AppendParenToken();
@@ -1513,9 +1492,9 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
 void XclExpFmlaCompImpl::FinishIfFunction( XclExpFuncData& rFuncData )
 {
     sal_uInt16 nParamCount = rFuncData.GetParamCount();
-    DBG_ASSERT( (nParamCount == 2) || (nParamCount == 3), "XclExpFmlaCompImpl::FinishIfFunction - wrong parameter count" );
+    OSL_ENSURE( (nParamCount == 2) || (nParamCount == 3), "XclExpFmlaCompImpl::FinishIfFunction - wrong parameter count" );
     const ScfUInt16Vec& rAttrPos = rFuncData.GetAttrPosVec();
-    DBG_ASSERT( nParamCount == rAttrPos.size(), "XclExpFmlaCompImpl::FinishIfFunction - wrong number of tAttr tokens" );
+    OSL_ENSURE( nParamCount == rAttrPos.size(), "XclExpFmlaCompImpl::FinishIfFunction - wrong number of tAttr tokens" );
     // update tAttrIf token following the condition parameter
     Overwrite( rAttrPos[ 0 ] + 2, static_cast< sal_uInt16 >( rAttrPos[ 1 ] - rAttrPos[ 0 ] ) );
     // update the tAttrGoto tokens following true and false parameters
@@ -1528,7 +1507,7 @@ void XclExpFmlaCompImpl::FinishChooseFunction( XclExpFuncData& rFuncData )
 {
     sal_uInt16 nParamCount = rFuncData.GetParamCount();
     ScfUInt16Vec& rAttrPos = rFuncData.GetAttrPosVec();
-    DBG_ASSERT( nParamCount == rAttrPos.size(), "XclExpFmlaCompImpl::FinishChooseFunction - wrong number of tAttr tokens" );
+    OSL_ENSURE( nParamCount == rAttrPos.size(), "XclExpFmlaCompImpl::FinishChooseFunction - wrong number of tAttr tokens" );
     // number of choices is parameter count minus 1
     sal_uInt16 nChoices = nParamCount - 1;
     // tAttrChoose token contains number of choices
@@ -1658,7 +1637,7 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
         break;
         default:
         {
-            DBG_ASSERT( rFuncData.IsMacroFunc(), "XclExpFmlaCompImpl::AppendDefaultParam - unknown opcode" );
+            OSL_ENSURE( rFuncData.IsMacroFunc(), "XclExpFmlaCompImpl::AppendDefaultParam - unknown opcode" );
             if( rFuncData.IsMacroFunc() )
                 AppendMacroCallToken( rFuncData.GetExtFuncData() );
             else
@@ -1678,7 +1657,7 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
         case ocIf:
             if( nParamCount == 1 )
             {
-                // #112262# Excel needs at least two parameters in IF function
+                // Excel needs at least two parameters in IF function
                 PrepareParam( rFuncData );
                 AppendBoolToken( true );
                 FinishParam( rFuncData );
@@ -1840,7 +1819,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
             rnScRow = mnMaxAbsRow;
         else if( (rnScRow < 0) || (rnScRow > mnMaxAbsRow) )
             rRefData.SetRowDeleted( sal_True );
-        rXclPos.mnRow = static_cast< sal_uInt16 >( rnScRow ) & mnMaxRowMask;
+        rXclPos.mnRow = static_cast< sal_uInt32 >( rnScRow ) & mnMaxRowMask;
     }
     else
     {
@@ -1851,8 +1830,8 @@ void XclExpFmlaCompImpl::ConvertRefData(
         rXclPos.mnCol = static_cast< sal_uInt16 >( nXclRelCol ) & mnMaxColMask;
 
         // convert row index (2-step-cast ScsROW->sal_Int16->sal_uInt16 to get all bits correctly)
-        sal_Int16 nXclRelRow = static_cast< sal_Int16 >( rRefData.IsRowRel() ? rRefData.nRelRow : rRefData.nRow );
-        rXclPos.mnRow = static_cast< sal_uInt16 >( nXclRelRow ) & mnMaxRowMask;
+        sal_Int16 nXclRelRow = static_cast< sal_Int32 >( rRefData.IsRowRel() ? rRefData.nRelRow : rRefData.nRow );
+        rXclPos.mnRow = static_cast< sal_uInt32 >( nXclRelRow ) & mnMaxRowMask;
 
         // resolve relative tab index if possible
         if( rRefData.IsTabRel() && !IsInGlobals() && (GetCurrScTab() < GetDoc().GetTableCount()) )
@@ -1862,13 +1841,14 @@ void XclExpFmlaCompImpl::ConvertRefData(
     // flags for relative column and row
     if( bNatLangRef )
     {
-        DBG_ASSERT( meBiff == EXC_BIFF8, "XclExpFmlaCompImpl::ConvertRefData - NLRs only for BIFF8" );
+        OSL_ENSURE( meBiff == EXC_BIFF8, "XclExpFmlaCompImpl::ConvertRefData - NLRs only for BIFF8" );
         // Calc does not support absolute reference mode in natural language references
         ::set_flag( rXclPos.mnCol, EXC_TOK_NLR_REL );
     }
     else
     {
-        sal_uInt16& rnRelField = (meBiff <= EXC_BIFF5) ? rXclPos.mnRow : rXclPos.mnCol;
+        sal_uInt16 rnRelRow = rXclPos.mnRow;
+        sal_uInt16& rnRelField = (meBiff <= EXC_BIFF5) ? rnRelRow : rXclPos.mnCol;
         ::set_flag( rnRelField, EXC_TOK_REF_COLREL, rRefData.IsColRel() );
         ::set_flag( rnRelField, EXC_TOK_REF_ROWREL, rRefData.IsRowRel() );
     }
@@ -1904,7 +1884,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpScToken& rTokData )
 
     if( bNatLangRef )
     {
-        DBG_ASSERT( aRefData.IsColRel() != aRefData.IsRowRel(),
+        OSL_ENSURE( aRefData.IsColRel() != aRefData.IsRowRel(),
             "XclExpFmlaCompImpl::ProcessCellRef - broken natural language reference" );
         // create tNlr token for natural language reference
         sal_uInt8 nSubId = aRefData.IsColRel() ? EXC_TOK_NLR_COLV : EXC_TOK_NLR_ROWV;
@@ -2072,8 +2052,13 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
 
 void XclExpFmlaCompImpl::ProcessDefinedName( const XclExpScToken& rTokData )
 {
+    SCTAB nTab = SCTAB_GLOBAL;
+    bool bGlobal = static_cast<bool>(rTokData.mpScToken->GetByte());
+    if (!bGlobal && mxData->mpScBasePos)
+        nTab = mxData->mpScBasePos->Tab();
+
     XclExpNameManager& rNameMgr = GetNameManager();
-    sal_uInt16 nNameIdx = rNameMgr.InsertName( rTokData.mpScToken->GetIndex() );
+    sal_uInt16 nNameIdx = rNameMgr.InsertName(nTab, rTokData.mpScToken->GetIndex());
     if( nNameIdx != 0 )
     {
         // global names always with tName token, local names dependent on config
@@ -2112,7 +2097,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
             {
                 for( FormulaToken* pScToken = xArray->First(); pScToken; pScToken = xArray->Next() )
                 {
-                    if( pScToken->GetOpCode() == ocExternalRef )
+                    if( pScToken->IsExternalRef() )
                     {
                         switch( pScToken->GetType() )
                         {
@@ -2138,7 +2123,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
 
             // insert the new external name and create the tNameX token
             sal_uInt16 nExtSheet, nExtName;
-            const String* pFile = rExtRefMgr.getExternalFileName( nFileId );
+            const ::rtl::OUString* pFile = rExtRefMgr.getExternalFileName( nFileId );
             if( pFile && mxData->mpLinkMgr->InsertExtName( nExtSheet, nExtName, *pFile, rName, xArray ) )
             {
                 AppendNameXToken( nExtSheet, nExtName, rTokData.mnSpaces );
@@ -2151,12 +2136,6 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
     AppendErrorToken( EXC_ERR_NAME, rTokData.mnSpaces );
 }
 
-void XclExpFmlaCompImpl::ProcessDatabaseArea( const XclExpScToken& rTokData )
-{
-    sal_uInt16 nNameIdx = GetNameManager().InsertDBRange( rTokData.mpScToken->GetIndex() );
-    AppendNameToken( nNameIdx, rTokData.mnSpaces );
-}
-
 // token vector ---------------------------------------------------------------
 
 void XclExpFmlaCompImpl::PushOperandPos( sal_uInt16 nTokPos )
@@ -2167,7 +2146,7 @@ void XclExpFmlaCompImpl::PushOperandPos( sal_uInt16 nTokPos )
 void XclExpFmlaCompImpl::PushOperatorPos( sal_uInt16 nTokPos, const XclExpOperandListRef& rxOperands )
 {
     PushOperandPos( nTokPos );
-    DBG_ASSERT( rxOperands.get(), "XclExpFmlaCompImpl::AppendOperatorTokenId - missing operand list" );
+    OSL_ENSURE( rxOperands.get(), "XclExpFmlaCompImpl::AppendOperatorTokenId - missing operand list" );
     if( mxData->maOpListVec.size() <= nTokPos )
         mxData->maOpListVec.resize( nTokPos + 1, XclExpOperandListRef() );
     mxData->maOpListVec[ nTokPos ] = rxOperands;
@@ -2175,7 +2154,7 @@ void XclExpFmlaCompImpl::PushOperatorPos( sal_uInt16 nTokPos, const XclExpOperan
 
 sal_uInt16 XclExpFmlaCompImpl::PopOperandPos()
 {
-    DBG_ASSERT( !mxData->mbOk || !mxData->maOpPosStack.empty(), "XclExpFmlaCompImpl::PopOperandPos - token stack broken" );
+    OSL_ENSURE( !mxData->mbOk || !mxData->maOpPosStack.empty(), "XclExpFmlaCompImpl::PopOperandPos - token stack broken" );
     mxData->mbOk &= !mxData->maOpPosStack.empty();
     if( mxData->mbOk )
     {
@@ -2248,7 +2227,7 @@ void XclExpFmlaCompImpl::Append( const String& rString )
 
 void XclExpFmlaCompImpl::AppendAddress( const XclAddress& rXclPos )
 {
-    Append( rXclPos.mnRow );
+    Append( static_cast<sal_uInt16>(rXclPos.mnRow) );
     if( meBiff <= EXC_BIFF5 )
         Append( static_cast< sal_uInt8 >( rXclPos.mnCol ) );
     else
@@ -2257,8 +2236,8 @@ void XclExpFmlaCompImpl::AppendAddress( const XclAddress& rXclPos )
 
 void XclExpFmlaCompImpl::AppendRange( const XclRange& rXclRange )
 {
-    Append( rXclRange.maFirst.mnRow );
-    Append( rXclRange.maLast.mnRow );
+    Append( static_cast<sal_uInt16>(rXclRange.maFirst.mnRow) );
+    Append( static_cast<sal_uInt16>(rXclRange.maLast.mnRow) );
     if( meBiff <= EXC_BIFF5 )
     {
         Append( static_cast< sal_uInt8 >( rXclRange.maFirst.mnCol ) );
@@ -2456,7 +2435,7 @@ void XclExpFmlaCompImpl::AppendJumpToken( XclExpFuncData& rFuncData, sal_uInt8 n
 void XclExpFmlaCompImpl::InsertZeros( sal_uInt16 nInsertPos, sal_uInt16 nInsertSize )
 {
     // insert zeros into the token array
-    DBG_ASSERT( nInsertPos < mxData->maTokVec.size(), "XclExpFmlaCompImpl::Insert - invalid position" );
+    OSL_ENSURE( nInsertPos < mxData->maTokVec.size(), "XclExpFmlaCompImpl::Insert - invalid position" );
     mxData->maTokVec.insert( mxData->maTokVec.begin() + nInsertPos, nInsertSize, 0 );
 
     // update positions of operands waiting for an operator
@@ -2476,7 +2455,7 @@ void XclExpFmlaCompImpl::InsertZeros( sal_uInt16 nInsertPos, sal_uInt16 nInsertS
 
 void XclExpFmlaCompImpl::Overwrite( sal_uInt16 nWriteToPos, sal_uInt16 nOffset )
 {
-    DBG_ASSERT( static_cast< size_t >( nWriteToPos + 1 ) < mxData->maTokVec.size(), "XclExpFmlaCompImpl::Overwrite - invalid position" );
+    OSL_ENSURE( static_cast< size_t >( nWriteToPos + 1 ) < mxData->maTokVec.size(), "XclExpFmlaCompImpl::Overwrite - invalid position" );
     ShortToSVBT16( nOffset, &mxData->maTokVec[ nWriteToPos ] );
 }
 
@@ -2519,11 +2498,6 @@ void XclExpFmlaCompImpl::AppendExt( sal_uInt8 nData, size_t nCount )
 }
 
 void XclExpFmlaCompImpl::AppendExt( sal_uInt16 nData )
-{
-    lclAppend( mxData->maExtDataVec, nData );
-}
-
-void XclExpFmlaCompImpl::AppendExt( sal_uInt32 nData )
 {
     lclAppend( mxData->maExtDataVec, nData );
 }
@@ -2617,18 +2591,18 @@ XclTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclFormulaType eType, con
 
 XclTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclFormulaType eType, const ScRangeList& rScRanges )
 {
-    sal_uLong nCount = rScRanges.Count();
+    size_t nCount = rScRanges.size();
     if( nCount == 0 )
         return XclTokenArrayRef();
 
     ScTokenArray aScTokArr;
     SCTAB nCurrScTab = GetCurrScTab();
     bool b3DRefOnly = mxImpl->Is3DRefOnly( eType );
-    for( sal_uLong nIdx = 0; nIdx < nCount; ++nIdx )
+    for( size_t nIdx = 0; nIdx < nCount; ++nIdx )
     {
         if( nIdx > 0 )
             aScTokArr.AddOpCode( ocUnion );
-        lclPutRangeToTokenArray( aScTokArr, *rScRanges.GetObject( nIdx ), nCurrScTab, b3DRefOnly );
+        lclPutRangeToTokenArray( aScTokArr, *rScRanges[ nIdx ], nCurrScTab, b3DRefOnly );
     }
     return mxImpl->CreateFormula( eType, aScTokArr );
 }
@@ -2652,3 +2626,4 @@ XclTokenArrayRef XclExpFormulaCompiler::CreateNameXFormula(
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

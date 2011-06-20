@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,9 @@
 #ifndef SC_CORODLG_HXX
 #define SC_CORODLG_HXX
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
 #include "sc.hrc"
 #include "scresid.hxx"
@@ -47,8 +42,8 @@ class ScColRowLabelDlg : public ModalDialog
 {
 public:
             ScColRowLabelDlg( Window* pParent,
-                              sal_Bool bCol = sal_False,
-                              sal_Bool bRow = sal_False )
+                              sal_Bool bCol = false,
+                              sal_Bool bRow = false )
                 : ModalDialog( pParent, ScResId( RID_SCDLG_CHARTCOLROW ) ),
                   aFlColRow  ( this, ScResId(6) ),
                   aBtnRow    ( this, ScResId(2) ),
@@ -79,3 +74,4 @@ private:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

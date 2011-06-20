@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -228,7 +229,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
     }
     else
     {
-        DBG_ERRORFILE( "wrong count" );
+        OSL_FAIL( "wrong count" );
     }
 
     return maProperties;
@@ -264,7 +265,7 @@ void ScSolverOptionsDialog::FillListBox()
 
     // fill the list box
 
-    maLbSettings.SetUpdateMode(sal_False);
+    maLbSettings.SetUpdateMode(false);
     maLbSettings.Clear();
 
     String sEmpty;
@@ -396,7 +397,7 @@ IMPL_LINK( ScSolverOptionsDialog, EngineSelectHdl, ListBox*, EMPTYARG )
 
 IMPL_LINK( ScSolverOptionsDialog, SettingsSelHdl, SvxCheckListBox*, EMPTYARG )
 {
-    sal_Bool bCheckbox = sal_False;
+    sal_Bool bCheckbox = false;
 
     SvLBoxEntry* pEntry = maLbSettings.GetCurEntry();
     if (pEntry)
@@ -490,3 +491,4 @@ double ScSolverValueDialog::GetValue() const
     return fValue;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

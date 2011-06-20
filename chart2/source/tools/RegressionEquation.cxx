@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,6 @@ enum
 {
     PROP_EQUATION_SHOW,
     PROP_EQUATION_SHOW_CORRELATION_COEFF,
-//     PROP_EQUATION_SEPARATOR,
     PROP_EQUATION_REF_PAGE_SIZE,
     PROP_EQUATION_REL_POS,
     PROP_EQUATION_NUMBER_FORMAT
@@ -88,13 +88,6 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-//     rOutProperties.push_back(
-//         Property( C2U( "Separator" ),
-//                   PROP_EQUATION_SEPARATOR,
-//                   ::getCppuType( reinterpret_cast< ::rtl::OUString * >(0)),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "ReferencePageSize" ),
@@ -213,7 +206,8 @@ RegressionEquation::RegressionEquation( const RegressionEquation & rOther ) :
         MutexContainer(),
         impl::RegressionEquation_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+    m_xContext( NULL )
 {}
 
 RegressionEquation::~RegressionEquation()
@@ -310,16 +304,13 @@ void RegressionEquation::fireModifyEvent()
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL RegressionEquation::getText()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     return m_aStrings;
-    // \--
 }
 
 void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     ModifyListenerHelper::removeListenerFromAllElements(
         ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
@@ -327,7 +318,6 @@ void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< 
     ModifyListenerHelper::addListenerToAllElements(
         ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
     fireModifyEvent();
-    // \--
 }
 
 // ================================================================================
@@ -354,3 +344,5 @@ using impl::RegressionEquation_Base;
 IMPLEMENT_FORWARD_XINTERFACE2( RegressionEquation, RegressionEquation_Base, ::property::OPropertySet )
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

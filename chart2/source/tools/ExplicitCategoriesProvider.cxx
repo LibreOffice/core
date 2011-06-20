@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -419,7 +420,7 @@ Sequence< OUString > ExplicitCategoriesProvider::getExplicitSimpleCategories(
 struct DatePlusIndexComparator
 {
     inline bool operator() ( const DatePlusIndex& aFirst,
-                             const DatePlusIndex& aSecond )
+                             const DatePlusIndex& aSecond ) const
     {
         return ( aFirst.fValue < aSecond.fValue );
     }
@@ -602,3 +603,5 @@ const std::vector< DatePlusIndex >&  ExplicitCategoriesProvider::getDateCategori
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

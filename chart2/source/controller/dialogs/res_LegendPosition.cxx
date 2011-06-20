@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include "macros.hxx"
 #include "LegendHelper.hxx"
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 
@@ -274,3 +273,4 @@ void LegendPositionResources::SetAccessibleRelationMemberOf(Window* pMemberOf)
 } //namespace chart
 //.............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

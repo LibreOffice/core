@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,9 +53,6 @@ class ScCellFieldObj;
 class ScHeaderFieldObj;
 class ScHeaderFooterContentObj;
 class ScDocShell;
-
-
-//------------------------------------------------------------------
 
 
 class ScCellFieldsObj : public cppu::WeakImplHelper5<
@@ -141,7 +139,7 @@ private:
     SvxEditSource*          pEditSource;
     ESelection              aSelection;
 
-    String                  aUrl;               // Inhalt, wenn noch nicht eingefuegt (nur dann!)
+    String                  aUrl;               // content, only iff not already inserted
     String                  aRepresentation;
     String                  aTarget;
 
@@ -153,7 +151,7 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // per getImplementation gerufen:
+                            // called by getImplementation:
     void                    DeleteField();
     sal_Bool                    IsInserted() const      { return pEditSource != NULL; }
     SvxFieldItem            CreateFieldItem();
@@ -348,7 +346,7 @@ public:
                                             sal_uInt16 nT, const ESelection& rSel);
     virtual                 ~ScHeaderFieldObj();
 
-                            // per getImplementation gerufen:
+                            // called by getImplementation:
     void                    DeleteField();
     sal_Bool                    IsInserted() const      { return pEditSource != NULL; }
     SvxFieldItem            CreateFieldItem();
@@ -452,3 +450,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

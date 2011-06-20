@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include "chart2uno.hxx"
 #include "miscuno.hxx"
 #include "document.hxx"
-#include "unoguard.hxx"
 #include "cell.hxx"
 #include "chartpos.hxx"
 #include "unonames.hxx"
@@ -43,9 +43,11 @@
 #include "compiler.hxx"
 #include "reftokenhelper.hxx"
 #include "chartlis.hxx"
+#include "stlalgorithm.hxx"
 
 #include <sfx2/objsh.hxx>
 #include <tools/table.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -81,7 +83,6 @@ using ::std::vector;
 using ::std::list;
 using ::std::distance;
 using ::std::unary_function;
-using ::std::hash_set;
 using ::boost::shared_ptr;
 
 namespace
@@ -156,20 +157,6 @@ uno::Reference< sheet::XSpreadsheetDocument > lcl_GetSpreadSheetDocument( ScDocu
     return uno::Reference< sheet::XSpreadsheetDocument >( lcl_GetXModel( pDoc ), uno::UNO_QUERY );
 }
 
-// ============================================================================
-
-namespace {
-
-struct DeleteInstance : public unary_function<FormulaToken*, void>
-{
-    void operator() (FormulaToken* p) const
-    {
-        delete p;
-    }
-};
-
-}
-
 struct TokenTable
 {
     SCROW mnRowCount;
@@ -184,37 +171,37 @@ struct TokenTable
     }
     void clear()
     {
-        for_each(maTokens.begin(), maTokens.end(), DeleteInstance());
+        ::std::for_each(maTokens.begin(), maTokens.end(), ScDeleteObjectByPtr<FormulaToken>());
     }
 
     void push_back( FormulaToken* pToken )
     {
         maTokens.push_back( pToken );
-        DBG_ASSERT( maTokens.size()<= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too much tokens" );
+        OSL_ENSURE( maTokens.size()<= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too much tokens" );
     }
 
     sal_uInt32 getIndex(SCCOL nCol, SCROW nRow) const
     {
-        DBG_ASSERT( nCol<mnColCount, "wrong column index" );
-        DBG_ASSERT( nRow<mnRowCount, "wrong row index" );
+        OSL_ENSURE( nCol<mnColCount, "wrong column index" );
+        OSL_ENSURE( nRow<mnRowCount, "wrong row index" );
         sal_uInt32 nRet = static_cast<sal_uInt32>(nCol*mnRowCount + nRow);
-        DBG_ASSERT( maTokens.size()>= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too few tokens" );
+        OSL_ENSURE( maTokens.size()>= static_cast<sal_uInt32>( mnColCount*mnRowCount ), "too few tokens" );
         return nRet;
     }
 
-    vector<ScSharedTokenRef>* getColRanges(SCCOL nCol) const;
-    vector<ScSharedTokenRef>* getRowRanges(SCROW nRow) const;
-    vector<ScSharedTokenRef>* getAllRanges() const;
+    vector<ScTokenRef>* getColRanges(SCCOL nCol) const;
+    vector<ScTokenRef>* getRowRanges(SCROW nRow) const;
+    vector<ScTokenRef>* getAllRanges() const;
 };
 
-vector<ScSharedTokenRef>* TokenTable::getColRanges(SCCOL nCol) const
+vector<ScTokenRef>* TokenTable::getColRanges(SCCOL nCol) const
 {
     if (nCol >= mnColCount)
         return NULL;
     if( mnRowCount<=0 )
         return NULL;
 
-    auto_ptr< vector<ScSharedTokenRef> > pTokens(new vector<ScSharedTokenRef>);
+    auto_ptr< vector<ScTokenRef> > pTokens(new vector<ScTokenRef>);
     sal_uInt32 nLast = getIndex(nCol, mnRowCount-1);
     for (sal_uInt32 i = getIndex(nCol, 0); i <= nLast; ++i)
     {
@@ -222,20 +209,20 @@ vector<ScSharedTokenRef>* TokenTable::getColRanges(SCCOL nCol) const
         if (!p)
             continue;
 
-        ScSharedTokenRef pCopy(static_cast<ScToken*>(p->Clone()));
+        ScTokenRef pCopy(static_cast<ScToken*>(p->Clone()));
         ScRefTokenHelper::join(*pTokens, pCopy);
     }
     return pTokens.release();
 }
 
-vector<ScSharedTokenRef>* TokenTable::getRowRanges(SCROW nRow) const
+vector<ScTokenRef>* TokenTable::getRowRanges(SCROW nRow) const
 {
     if (nRow >= mnRowCount)
         return NULL;
     if( mnColCount<=0 )
         return NULL;
 
-    auto_ptr< vector<ScSharedTokenRef> > pTokens(new vector<ScSharedTokenRef>);
+    auto_ptr< vector<ScTokenRef> > pTokens(new vector<ScTokenRef>);
     sal_uInt32 nLast = getIndex(mnColCount-1, nRow);
     for (sal_uInt32 i = getIndex(0, nRow); i <= nLast; i += mnRowCount)
     {
@@ -243,15 +230,15 @@ vector<ScSharedTokenRef>* TokenTable::getRowRanges(SCROW nRow) const
         if (!p)
             continue;
 
-        ScSharedTokenRef p2(static_cast<ScToken*>(p->Clone()));
+        ScTokenRef p2(static_cast<ScToken*>(p->Clone()));
         ScRefTokenHelper::join(*pTokens, p2);
     }
     return pTokens.release();
 }
 
-vector<ScSharedTokenRef>* TokenTable::getAllRanges() const
+vector<ScTokenRef>* TokenTable::getAllRanges() const
 {
-    auto_ptr< vector<ScSharedTokenRef> > pTokens(new vector<ScSharedTokenRef>);
+    auto_ptr< vector<ScTokenRef> > pTokens(new vector<ScTokenRef>);
     sal_uInt32 nStop = mnColCount*mnRowCount;
     for (sal_uInt32 i = 0; i < nStop; i++)
     {
@@ -259,7 +246,7 @@ vector<ScSharedTokenRef>* TokenTable::getAllRanges() const
         if (!p)
             continue;
 
-        ScSharedTokenRef p2(static_cast<ScToken*>(p->Clone()));
+        ScTokenRef p2(static_cast<ScToken*>(p->Clone()));
         ScRefTokenHelper::join(*pTokens, p2);
     }
     return pTokens.release();
@@ -278,15 +265,15 @@ public:
     SCCOL getDataColCount() const { return mnDataColCount; }
     SCROW getDataRowCount() const { return mnDataRowCount; }
 
-    vector<ScSharedTokenRef>* getLeftUpperCornerRanges() const;
-    vector<ScSharedTokenRef>* getAllColHeaderRanges() const;
-    vector<ScSharedTokenRef>* getAllRowHeaderRanges() const;
+    vector<ScTokenRef>* getLeftUpperCornerRanges() const;
+    vector<ScTokenRef>* getAllColHeaderRanges() const;
+    vector<ScTokenRef>* getAllRowHeaderRanges() const;
 
-    vector<ScSharedTokenRef>* getColHeaderRanges(SCCOL nChartCol) const;
-    vector<ScSharedTokenRef>* getRowHeaderRanges(SCROW nChartRow) const;
+    vector<ScTokenRef>* getColHeaderRanges(SCCOL nChartCol) const;
+    vector<ScTokenRef>* getRowHeaderRanges(SCROW nChartRow) const;
 
-    vector<ScSharedTokenRef>* getDataColRanges(SCCOL nCol) const;
-    vector<ScSharedTokenRef>* getDataRowRanges(SCROW nRow) const;
+    vector<ScTokenRef>* getDataColRanges(SCCOL nCol) const;
+    vector<ScTokenRef>* getDataRowRanges(SCROW nRow) const;
 
 private:
     SCCOL mnDataColCount;
@@ -331,7 +318,7 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                         StackVar eType = pToken->GetType();
                         if( eType==svExternal || eType==svExternalSingleRef || eType==svExternalDoubleRef || eType==svExternalName )
                             bExternal = true;//lllll todo correct?
-                        ScSharedTokenRef pSharedToken(static_cast<ScToken*>(pToken->Clone()));
+                        ScTokenRef pSharedToken(static_cast<ScToken*>(pToken->Clone()));
                         ScRefTokenHelper::getRangeFromToken(aRange, pSharedToken, bExternal );
                         SCCOL nCol1=0, nCol2=0;
                         SCROW nRow1=0, nRow2=0;
@@ -413,33 +400,33 @@ Chart2PositionMap::~Chart2PositionMap()
     maData.clear();
 }
 
-vector<ScSharedTokenRef>* Chart2PositionMap::getLeftUpperCornerRanges() const
+vector<ScTokenRef>* Chart2PositionMap::getLeftUpperCornerRanges() const
 {
     return maLeftUpperCorner.getAllRanges();
 }
-vector<ScSharedTokenRef>* Chart2PositionMap::getAllColHeaderRanges() const
+vector<ScTokenRef>* Chart2PositionMap::getAllColHeaderRanges() const
 {
     return maColHeaders.getAllRanges();
 }
-vector<ScSharedTokenRef>* Chart2PositionMap::getAllRowHeaderRanges() const
+vector<ScTokenRef>* Chart2PositionMap::getAllRowHeaderRanges() const
 {
     return maRowHeaders.getAllRanges();
 }
-vector<ScSharedTokenRef>* Chart2PositionMap::getColHeaderRanges(SCCOL nCol) const
+vector<ScTokenRef>* Chart2PositionMap::getColHeaderRanges(SCCOL nCol) const
 {
     return maColHeaders.getColRanges( nCol);
 }
-vector<ScSharedTokenRef>* Chart2PositionMap::getRowHeaderRanges(SCROW nRow) const
+vector<ScTokenRef>* Chart2PositionMap::getRowHeaderRanges(SCROW nRow) const
 {
     return maRowHeaders.getRowRanges( nRow);
 }
 
-vector<ScSharedTokenRef>* Chart2PositionMap::getDataColRanges(SCCOL nCol) const
+vector<ScTokenRef>* Chart2PositionMap::getDataColRanges(SCCOL nCol) const
 {
     return maData.getColRanges( nCol);
 }
 
-vector<ScSharedTokenRef>* Chart2PositionMap::getDataRowRanges(SCROW nRow) const
+vector<ScTokenRef>* Chart2PositionMap::getDataRowRanges(SCROW nRow) const
 {
     return maData.getRowRanges( nRow);
 }
@@ -462,8 +449,8 @@ class Chart2Positioner
     };
 
 public:
-    Chart2Positioner(ScDocument* pDoc, const vector<ScSharedTokenRef>& rRefTokens) :
-        mpRefTokens(new vector<ScSharedTokenRef>(rRefTokens)),
+    Chart2Positioner(ScDocument* pDoc, const vector<ScTokenRef>& rRefTokens) :
+        mpRefTokens(new vector<ScTokenRef>(rRefTokens)),
         mpPositionMap(NULL),
         meGlue(GLUETYPE_NA),
         mpDoc(pDoc),
@@ -500,7 +487,7 @@ private:
     void createPositionMap();
 
 private:
-    shared_ptr< vector<ScSharedTokenRef> >  mpRefTokens;
+    shared_ptr< vector<ScTokenRef> >  mpRefTokens;
     auto_ptr<Chart2PositionMap>             mpPositionMap;
     GlueType    meGlue;
     SCCOL       mnStartCol;
@@ -525,7 +512,7 @@ void Chart2Positioner::glueState()
     mbDummyUpperLeft = false;
     if (mpRefTokens->size() <= 1)
     {
-        const ScSharedTokenRef& p = mpRefTokens->front();
+        const ScTokenRef& p = mpRefTokens->front();
         ScComplexRefData aData;
         if (ScRefTokenHelper::getDoubleRefDataFromToken(aData, p))
         {
@@ -552,7 +539,7 @@ void Chart2Positioner::glueState()
 
     SCCOL nMaxCols = 0, nEndCol = 0;
     SCROW nMaxRows = 0, nEndRow = 0;
-    for (vector<ScSharedTokenRef>::const_iterator itr = mpRefTokens->begin(), itrEnd = mpRefTokens->end()
+    for (vector<ScTokenRef>::const_iterator itr = mpRefTokens->begin(), itrEnd = mpRefTokens->end()
          ; itr != itrEnd; ++itr)
     {
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
@@ -616,7 +603,7 @@ void Chart2Positioner::glueState()
     const sal_uInt8 nGlue = 3;
 
     vector<sal_uInt8> aCellStates(nCR);
-    for (vector<ScSharedTokenRef>::const_iterator itr = mpRefTokens->begin(), itrEnd = mpRefTokens->end();
+    for (vector<ScTokenRef>::const_iterator itr = mpRefTokens->begin(), itrEnd = mpRefTokens->end();
           itr != itrEnd; ++itr)
     {
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
@@ -718,10 +705,10 @@ void Chart2Positioner::createPositionMap()
     auto_ptr<Table> pNewRowTable(new Table);
     Table* pCol = NULL;
     SCROW nNoGlueRow = 0;
-    for (vector<ScSharedTokenRef>::const_iterator itr = mpRefTokens->begin(), itrEnd = mpRefTokens->end();
+    for (vector<ScTokenRef>::const_iterator itr = mpRefTokens->begin(), itrEnd = mpRefTokens->end();
           itr != itrEnd; ++itr)
     {
-        const ScSharedTokenRef& pToken = *itr;
+        const ScTokenRef& pToken = *itr;
 
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
@@ -835,7 +822,7 @@ void Chart2Positioner::createPositionMap()
 /**
  * Function object to create a range string from a token list.
  */
-class Tokens2RangeString : public unary_function<ScSharedTokenRef, void>
+class Tokens2RangeString : public unary_function<ScTokenRef, void>
 {
 public:
     Tokens2RangeString(ScDocument* pDoc, FormulaGrammar::Grammar eGram, sal_Unicode cRangeSep) :
@@ -856,7 +843,7 @@ public:
     {
     }
 
-    void operator() (const ScSharedTokenRef& rToken)
+    void operator() (const ScTokenRef& rToken)
     {
         ScCompiler aCompiler(mpDoc, ScAddress(0,0,0));
         aCompiler.SetGrammar(meGrammar);
@@ -893,7 +880,7 @@ private:
  *
  * and each address doesn't include any '$' symbols.
  */
-class Tokens2RangeStringXML : public unary_function<ScSharedTokenRef, void>
+class Tokens2RangeStringXML : public unary_function<ScTokenRef, void>
 {
 public:
     Tokens2RangeStringXML(ScDocument* pDoc) :
@@ -914,14 +901,14 @@ public:
     {
     }
 
-    void operator() (const ScSharedTokenRef& rToken)
+    void operator() (const ScTokenRef& rToken)
     {
         if (mbFirst)
             mbFirst = false;
         else
             mpRangeStr->append(mcRangeSep);
 
-        ScSharedTokenRef aStart, aEnd;
+        ScTokenRef aStart, aEnd;
         splitRangeToken(rToken, aStart, aEnd);
         ScCompiler aCompiler(mpDoc, ScAddress(0,0,0));
         aCompiler.SetGrammar(FormulaGrammar::GRAM_ENGLISH);
@@ -946,7 +933,7 @@ public:
 private:
     Tokens2RangeStringXML(); // disabled
 
-    void splitRangeToken(const ScSharedTokenRef& pToken, ScSharedTokenRef& rStart, ScSharedTokenRef& rEnd) const
+    void splitRangeToken(const ScTokenRef& pToken, ScTokenRef& rStart, ScTokenRef& rEnd) const
     {
         ScComplexRefData aData;
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, pToken);
@@ -987,12 +974,12 @@ private:
     bool                mbFirst;
 };
 
-void lcl_convertTokensToString(OUString& rStr, const vector<ScSharedTokenRef>& rTokens, ScDocument* pDoc)
+void lcl_convertTokensToString(OUString& rStr, const vector<ScTokenRef>& rTokens, ScDocument* pDoc)
 {
     const sal_Unicode cRangeSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     FormulaGrammar::Grammar eGrammar = pDoc->GetGrammar();
     Tokens2RangeString func(pDoc, eGrammar, cRangeSep);
-    func = for_each(rTokens.begin(), rTokens.end(), func);
+    func = ::std::for_each(rTokens.begin(), rTokens.end(), func);
     func.getString(rStr);
 }
 
@@ -1028,7 +1015,7 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 ::sal_Bool SAL_CALL ScChart2DataProvider::createDataSourcePossible( const uno::Sequence< beans::PropertyValue >& aArguments )
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if( ! m_pDocument )
         return false;
 
@@ -1042,7 +1029,7 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
         }
     }
 
-    vector<ScSharedTokenRef> aTokens;
+    vector<ScTokenRef> aTokens;
     ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     return !aTokens.empty();
 }
@@ -1051,7 +1038,7 @@ namespace
 {
 
 Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFromTokens(
-    auto_ptr< vector< ScSharedTokenRef > > pValueTokens, auto_ptr< vector< ScSharedTokenRef > > pLabelTokens,
+    auto_ptr< vector< ScTokenRef > > pValueTokens, auto_ptr< vector< ScTokenRef > > pLabelTokens,
     ScDocument* pDoc, const Reference< chart2::data::XDataProvider >& xDP, bool bIncludeHiddenCells )
 {
     Reference< chart2::data::XLabeledDataSequence >  xResult;
@@ -1065,7 +1052,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFro
             if ( xContext.is() )
             {
                 xResult.set( xContext->getServiceManager()->createInstanceWithContext(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.chart2.data.LabeledDataSequence" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.LabeledDataSequence")),
                         xContext ), uno::UNO_QUERY_THROW );
             }
             if ( bHasValues )
@@ -1096,7 +1083,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFro
  *
  * @return true if the corner was added, false otherwise.
  */
-bool lcl_addUpperLeftCornerIfMissing(vector<ScSharedTokenRef>& rRefTokens,
+bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             SCROW nCornerRowCount=1, SCCOL nCornerColumnCount=1)
 {
     using ::std::max;
@@ -1115,10 +1102,10 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScSharedTokenRef>& rRefTokens,
     String aExtTabName;
     bool bExternal = false;
 
-    vector<ScSharedTokenRef>::const_iterator itr = rRefTokens.begin(), itrEnd = rRefTokens.end();
+    vector<ScTokenRef>::const_iterator itr = rRefTokens.begin(), itrEnd = rRefTokens.end();
 
     // Get the first ref token.
-    ScSharedTokenRef pToken = *itr;
+    ScTokenRef pToken = *itr;
     switch (pToken->GetType())
     {
         case svSingleRef:
@@ -1321,53 +1308,6 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScSharedTokenRef>& rRefTokens,
         // Not all the adjacent cells are included.  Bail out.
         return false;
 
-#if 0 // Do we really need to do this ???
-    if (rRefTokens.size() == 2)
-    {
-        // Make a simple rectangular range if possible.
-        ScRange aRightPart(ScAddress(nMinCol+1, nMinRow,   nTab),  ScAddress(nMaxCol, nMaxRow, nTab));
-        ScRange aBottomPart(ScAddress(nMinCol,  nMinRow+1, nTab),  ScAddress(nMaxCol, nMaxRow, nTab));
-        vector<ScRange> aRanges;
-        aRanges.reserve(2);
-        aRanges.push_back(aRightPart);
-        aRanges.push_back(aBottomPart);
-        if (lcl_isRangeContained(rRefTokens, aRanges))
-        {
-            // Consolidate them into a single rectangle.
-            ScComplexRefData aData;
-            aData.InitFlags();
-            aData.Ref1.SetFlag3D(true);
-            aData.Ref1.SetColRel(false);
-            aData.Ref1.SetRowRel(false);
-            aData.Ref1.SetTabRel(false);
-            aData.Ref2.SetColRel(false);
-            aData.Ref2.SetRowRel(false);
-            aData.Ref2.SetTabRel(false);
-            aData.Ref1.nCol = nMinCol;
-            aData.Ref1.nRow = nMinRow;
-            aData.Ref1.nTab = nTab;
-            aData.Ref2.nCol = nMaxCol;
-            aData.Ref2.nRow = nMaxRow;
-            aData.Ref2.nTab = nTab;
-            vector<ScSharedTokenRef> aNewTokens;
-            aNewTokens.reserve(1);
-            if (bExternal)
-            {
-                ScSharedTokenRef p(
-                    new ScExternalDoubleRefToken(nFileId, aExtTabName, aData));
-                aNewTokens.push_back(p);
-            }
-            else
-            {
-                ScSharedTokenRef p(new ScDoubleRefToken(aData));
-                aNewTokens.push_back(p);
-            }
-            rRefTokens.swap(aNewTokens);
-            return true;
-        }
-    }
-#endif
-
     ScSingleRefData aData;
     aData.InitFlags();
     aData.SetFlag3D(true);
@@ -1382,13 +1322,13 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScSharedTokenRef>& rRefTokens,
     {
         if (bExternal)
         {
-            ScSharedTokenRef pCorner(
+            ScTokenRef pCorner(
                 new ScExternalSingleRefToken(nFileId, aExtTabName, aData));
             ScRefTokenHelper::join(rRefTokens, pCorner);
         }
         else
         {
-            ScSharedTokenRef pCorner(new ScSingleRefToken(aData));
+            ScTokenRef pCorner(new ScSingleRefToken(aData));
             ScRefTokenHelper::join(rRefTokens, pCorner);
         }
     }
@@ -1402,13 +1342,13 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScSharedTokenRef>& rRefTokens,
         r.Ref2=aDataEnd;
         if (bExternal)
         {
-            ScSharedTokenRef pCorner(
+            ScTokenRef pCorner(
                 new ScExternalDoubleRefToken(nFileId, aExtTabName, r));
             ScRefTokenHelper::join(rRefTokens, pCorner);
         }
         else
         {
-            ScSharedTokenRef pCorner(new ScDoubleRefToken(r));
+            ScTokenRef pCorner(new ScDoubleRefToken(r));
             ScRefTokenHelper::join(rRefTokens, pCorner);
         }
     }
@@ -1423,7 +1363,7 @@ ScChart2DataProvider::createDataSource(
     const uno::Sequence< beans::PropertyValue >& aArguments )
     throw( lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if ( ! m_pDocument )
         throw uno::RuntimeException();
 
@@ -1465,7 +1405,7 @@ ScChart2DataProvider::createDataSource(
         }
     }
 
-    vector<ScSharedTokenRef> aRefTokens;
+    vector<ScTokenRef> aRefTokens;
     ScRefTokenHelper::compileRangeRepresentation(aRefTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     if (aRefTokens.empty())
         // Invalid range representation.  Bail out.
@@ -1491,13 +1431,13 @@ ScChart2DataProvider::createDataSource(
     // Fill Categories
     if( bCategories )
     {
-        auto_ptr< vector<ScSharedTokenRef> > pValueTokens(NULL);
+        auto_ptr< vector<ScTokenRef> > pValueTokens(NULL);
         if (bOrientCol)
             pValueTokens.reset(pChartMap->getAllRowHeaderRanges());
         else
             pValueTokens.reset(pChartMap->getAllColHeaderRanges());
 
-        auto_ptr< vector<ScSharedTokenRef> > pLabelTokens(NULL);
+        auto_ptr< vector<ScTokenRef> > pLabelTokens(NULL);
             pLabelTokens.reset(pChartMap->getLeftUpperCornerRanges());
 
         Reference< chart2::data::XLabeledDataSequence > xCategories = lcl_createLabeledDataSequenceFromTokens(
@@ -1512,8 +1452,8 @@ ScChart2DataProvider::createDataSource(
     sal_Int32 nCount = bOrientCol ? pChartMap->getDataColCount() : pChartMap->getDataRowCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        auto_ptr< vector<ScSharedTokenRef> > pValueTokens(NULL);
-        auto_ptr< vector<ScSharedTokenRef> > pLabelTokens(NULL);
+        auto_ptr< vector<ScTokenRef> > pValueTokens(NULL);
+        auto_ptr< vector<ScTokenRef> > pLabelTokens(NULL);
         if (bOrientCol)
         {
             pValueTokens.reset(pChartMap->getDataColRanges(static_cast<SCCOL>(i)));
@@ -1578,7 +1518,7 @@ namespace
 /**
  * Function object to create a list of table numbers from a token list.
  */
-class InsertTabNumber : public unary_function<ScSharedTokenRef, void>
+class InsertTabNumber : public unary_function<ScTokenRef, void>
 {
 public:
     InsertTabNumber() :
@@ -1591,7 +1531,7 @@ public:
     {
     }
 
-    void operator() (const ScSharedTokenRef& pToken) const
+    void operator() (const ScTokenRef& pToken) const
     {
         if (!ScRefTokenHelper::isRef(pToken))
             return;
@@ -1612,7 +1552,7 @@ class RangeAnalyzer
 {
 public:
     RangeAnalyzer();
-    void initRangeAnalyzer( const vector<ScSharedTokenRef>& rTokens );
+    void initRangeAnalyzer( const vector<ScTokenRef>& rTokens );
     void analyzeRange( sal_Int32& rnDataInRows, sal_Int32& rnDataInCols,
             bool& rbRowSourceAmbiguous ) const;
     bool inSameSingleRow( RangeAnalyzer& rOther );
@@ -1640,7 +1580,7 @@ RangeAnalyzer::RangeAnalyzer()
 {
 }
 
-void RangeAnalyzer::initRangeAnalyzer( const vector<ScSharedTokenRef>& rTokens )
+void RangeAnalyzer::initRangeAnalyzer( const vector<ScTokenRef>& rTokens )
 {
     mnRowCount=0;
     mnColumnCount=0;
@@ -1654,10 +1594,10 @@ void RangeAnalyzer::initRangeAnalyzer( const vector<ScSharedTokenRef>& rTokens )
     }
     mbEmpty=false;
 
-    vector<ScSharedTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
+    vector<ScTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
     for (; itr != itrEnd ; ++itr)
     {
-        ScSharedTokenRef aRefToken = *itr;
+        ScTokenRef aRefToken = *itr;
         StackVar eVar = aRefToken->GetType();
         if (eVar == svDoubleRef || eVar == svExternalDoubleRef)
         {
@@ -1747,17 +1687,17 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     ::rtl::OUString sRangeRep;
 
     bool bHasCategoriesLabels = false;
-    vector<ScSharedTokenRef> aAllCategoriesValuesTokens;
-    vector<ScSharedTokenRef> aAllSeriesLabelTokens;
+    vector<ScTokenRef> aAllCategoriesValuesTokens;
+    vector<ScTokenRef> aAllSeriesLabelTokens;
 
     chart::ChartDataRowSource eRowSource = chart::ChartDataRowSource_COLUMNS;
 
-    vector<ScSharedTokenRef> aAllTokens;
+    vector<ScTokenRef> aAllTokens;
 
     // parse given data source and collect infos
     {
-        ScUnoGuard aGuard;
-        DBG_ASSERT( m_pDocument, "No Document -> no detectArguments" );
+        SolarMutexGuard aGuard;
+        OSL_ENSURE( m_pDocument, "No Document -> no detectArguments" );
         if(!m_pDocument ||!xDataSource.is())
             return lcl_VectorToSequence( aResult );
 
@@ -1789,10 +1729,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                 if( xLabel.is())
                 {
                     bFirstCellAsLabel = true;
-                    vector<ScSharedTokenRef> aTokens;
+                    vector<ScTokenRef> aTokens;
                     ScRefTokenHelper::compileRangeRepresentation( aTokens, xLabel->getSourceRangeRepresentation(), m_pDocument, m_pDocument->GetGrammar() );
                     aLabel.initRangeAnalyzer(aTokens);
-                    vector<ScSharedTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
+                    vector<ScTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
                     for (; itr != itrEnd; ++itr)
                     {
                         ScRefTokenHelper::join(aAllTokens, *itr);
@@ -1806,10 +1746,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                 Reference< chart2::data::XDataSequence > xValues( xLS->getValues());
                 if( xValues.is())
                 {
-                    vector<ScSharedTokenRef> aTokens;
+                    vector<ScTokenRef> aTokens;
                     ScRefTokenHelper::compileRangeRepresentation( aTokens, xValues->getSourceRangeRepresentation(), m_pDocument, m_pDocument->GetGrammar() );
                     aValues.initRangeAnalyzer(aTokens);
-                    vector<ScSharedTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
+                    vector<ScTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
                     for (; itr != itrEnd; ++itr)
                     {
                         ScRefTokenHelper::join(aAllTokens, *itr);
@@ -1873,10 +1813,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     {
         list<SCTAB> aTableNumList;
         InsertTabNumber func;
-        func = for_each(aAllTokens.begin(), aAllTokens.end(), func);
+        func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
         func.getList(aTableNumList);
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString::createFromAscii("TableNumberList"), -1,
+            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableNumberList")), -1,
                                   uno::makeAny( lcl_createTableNumberList( aTableNumList ) ),
                                   beans::PropertyState_DIRECT_VALUE ));
     }
@@ -1885,7 +1825,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     if( bRowSourceDetected )
     {
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
                                   uno::makeAny( eRowSource ), beans::PropertyState_DIRECT_VALUE ));
     }
 
@@ -1893,7 +1833,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     if( bRowSourceDetected )
     {
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString::createFromAscii("HasCategories"), -1,
+            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
                                   uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE ));
     }
 
@@ -1901,7 +1841,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     if( bRowSourceDetected )
     {
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
                                   uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ));
     }
 
@@ -1927,7 +1867,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
     // add cell range property
     aResult.push_back(
-        beans::PropertyValue( ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+        beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
                               uno::makeAny( sRangeRep ), beans::PropertyState_DIRECT_VALUE ));
 
     //Sequence Mapping
@@ -1997,7 +1937,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         if( bDifferentIndexes && aSequenceMappingVector.size() )
         {
             aResult.push_back(
-                beans::PropertyValue( ::rtl::OUString::createFromAscii("SequenceMapping"), -1,
+                beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SequenceMapping")), -1,
                     uno::makeAny( lcl_VectorToSequence(aSequenceMappingVector) )
                     , beans::PropertyState_DIRECT_VALUE ));
         }
@@ -2009,11 +1949,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 ::sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByRangeRepresentationPossible( const ::rtl::OUString& aRangeRepresentation )
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if( ! m_pDocument )
         return false;
 
-    vector<ScSharedTokenRef> aTokens;
+    vector<ScTokenRef> aTokens;
     ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     return !aTokens.empty();
 }
@@ -2024,10 +1964,10 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
     throw (lang::IllegalArgumentException,
            uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference< chart2::data::XDataSequence > xResult;
 
-    DBG_ASSERT( m_pDocument, "No Document -> no createDataSequenceByRangeRepresentation" );
+    OSL_ENSURE( m_pDocument, "No Document -> no createDataSequenceByRangeRepresentation" );
     if(!m_pDocument || (aRangeRepresentation.getLength() == 0))
         return xResult;
 
@@ -2037,13 +1977,13 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
     // method to allow the client code to directly pass tokens representing
     // ranges.
 
-    vector<ScSharedTokenRef> aRefTokens;
+    vector<ScTokenRef> aRefTokens;
     ScRefTokenHelper::compileRangeRepresentation(aRefTokens, aRangeRepresentation, m_pDocument);
     if (aRefTokens.empty())
         return xResult;
 
     // ScChart2DataSequence manages the life cycle of pRefTokens.
-    vector<ScSharedTokenRef>* pRefTokens = new vector<ScSharedTokenRef>();
+    vector<ScTokenRef>* pRefTokens = new vector<ScTokenRef>();
     pRefTokens->swap(aRefTokens);
     xResult.set(new ScChart2DataSequence(m_pDocument, this, pRefTokens, m_bIncludeHiddenCells));
 
@@ -2062,12 +2002,6 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL ScChart2DataProvider::getRange
     return xResult;
 }
 
-/*uno::Reference< util::XNumberFormatsSupplier > SAL_CALL ScChart2DataProvider::getNumberFormatsSupplier()
-    throw (uno::RuntimeException)
-{
-    return uno::Reference< util::XNumberFormatsSupplier >( lcl_GetXModel( m_pDocument ), uno::UNO_QUERY );
-}*/
-
 // XRangeXMLConversion ---------------------------------------------------
 
 rtl::OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const rtl::OUString& sRangeRepresentation )
@@ -2081,13 +2015,13 @@ rtl::OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const rtl::OUStr
         // Empty data range is allowed.
         return aRet;
 
-    vector<ScSharedTokenRef> aRefTokens;
+    vector<ScTokenRef> aRefTokens;
     ScRefTokenHelper::compileRangeRepresentation(aRefTokens, sRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
     if (aRefTokens.empty())
         throw lang::IllegalArgumentException();
 
     Tokens2RangeStringXML converter(m_pDocument);
-    converter = for_each(aRefTokens.begin(), aRefTokens.end(), converter);
+    converter = ::std::for_each(aRefTokens.begin(), aRefTokens.end(), converter);
     converter.getString(aRet);
 
     return aRet;
@@ -2143,7 +2077,7 @@ rtl::OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const rtl::OUS
 uno::Reference< beans::XPropertySetInfo> SAL_CALL
 ScChart2DataProvider::getPropertySetInfo() throw( uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( m_aPropSet.getPropertyMap() );
     return aRef;
@@ -2187,7 +2121,7 @@ void SAL_CALL ScChart2DataProvider::addPropertyChangeListener(
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -2197,7 +2131,7 @@ void SAL_CALL ScChart2DataProvider::removePropertyChangeListener(
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -2207,7 +2141,7 @@ void SAL_CALL ScChart2DataProvider::addVetoableChangeListener(
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -2217,7 +2151,7 @@ void SAL_CALL ScChart2DataProvider::removeVetoableChangeListener(
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 // DataSource ================================================================
@@ -2250,7 +2184,7 @@ void ScChart2DataSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > SAL_CALL
 ScChart2DataSource::getDataSequences() throw ( uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     LabeledList::const_iterator aItr(m_aLabeledSequences.begin());
     LabeledList::const_iterator aEndItr(m_aLabeledSequences.end());
@@ -2266,74 +2200,6 @@ ScChart2DataSource::getDataSequences() throw ( uno::RuntimeException)
     }
 
     return aRet;
-
-/*    typedef ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > tVec;
-    tVec aVec;
-    bool bSeries = false;
-    // split into columns - FIXME: different if GlueState() is used
-    for ( ScRangePtr p = m_xRanges->First(); p; p = m_xRanges->Next())
-    {
-        for ( SCCOL nCol = p->aStart.Col(); nCol <= p->aEnd.Col(); ++nCol)
-        {
-            uno::Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-                new ScChart2LabeledDataSequence( m_pDocument));
-            if( xLabeledSeq.is())
-            {
-                aVec.push_back( xLabeledSeq );
-                if( bSeries )
-                {
-                    ScRangeListRef aColRanges = new ScRangeList;
-                    // one single sheet selected assumed for now
-                    aColRanges->Append( ScRange( nCol, p->aStart.Row(),
-                                                 p->aStart.Tab(), nCol, p->aStart.Row(),
-                                                 p->aStart.Tab()));
-                    // TEST: add range two times, once as label, once as data
-                    // TODO: create pure Numerical and Text sequences if possible
-                    uno::Reference< chart2::data::XDataSequence > xLabel(
-                        new ScChart2DataSequence( m_pDocument, aColRanges));
-
-                    // set role
-                    uno::Reference< beans::XPropertySet > xProp( xLabel, uno::UNO_QUERY );
-                    if( xProp.is())
-                        xProp->setPropertyValue(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" )),
-                            ::uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "label" ))));
-
-                    xLabeledSeq->setLabel( xLabel );
-                }
-
-                ScRangeListRef aColRanges = new ScRangeList;
-
-                // one single sheet selected assumed for now
-                aColRanges->Append( ScRange( nCol, p->aStart.Row() + 1,
-                                             p->aStart.Tab(), nCol, p->aEnd.Row(),
-                                             p->aStart.Tab()));
-                uno::Reference< chart2::data::XDataSequence > xData(
-                    new ScChart2DataSequence( m_pDocument, aColRanges));
-
-                // set role
-                uno::Reference< beans::XPropertySet > xProp( xData, uno::UNO_QUERY );
-                if( xProp.is())
-                    xProp->setPropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" )),
-                        ::uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "values" ))));
-
-                xLabeledSeq->setValues( xData );
-
-                bSeries = true;
-            }
-        }
-    }
-    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > aSequences(
-            aVec.size());
-    uno::Reference< chart2::data::XLabeledDataSequence> * pArr = aSequences.getArray();
-    sal_Int32 j = 0;
-    for ( tVec::const_iterator iSeq = aVec.begin(); iSeq != aVec.end();
-            ++iSeq, ++j)
-    {
-        pArr[j] = *iSeq;
-    }
-    return aSequences;*/
 }
 
 void ScChart2DataSource::AddLabeledSequence(const uno::Reference < chart2::data::XLabeledDataSequence >& xNew)
@@ -2366,7 +2232,7 @@ void ScChart2DataSequence::HiddenRangeListener::notify()
 
 ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
         const uno::Reference < chart2::data::XDataProvider >& xDP,
-        vector<ScSharedTokenRef>* pTokens,
+        vector<ScTokenRef>* pTokens,
         bool bIncludeHiddenCells )
     : m_bIncludeHiddenCells( bIncludeHiddenCells)
     , m_nObjectId( 0 )
@@ -2381,7 +2247,7 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
     , m_bGotDataChangedHint(false)
     , m_bExtDataRebuildQueued(false)
 {
-    DBG_ASSERT(pTokens, "reference token list is null");
+    OSL_ENSURE(pTokens, "reference token list is null");
 
     if ( m_pDocument )
     {
@@ -2396,7 +2262,7 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
 //  rRangeList->Format( aStr, SCR_ABS_3D, m_pDocument );
 //    m_aIdentifier = ::rtl::OUString( aStr );
 
-//      m_aIdentifier = ::rtl::OUString::createFromAscii( "ID_");
+//      m_aIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ID_"));
 //      static sal_Int32 nID = 0;
 //      m_aIdentifier += ::rtl::OUString::valueOf( ++nID);
 }
@@ -2434,7 +2300,7 @@ void ScChart2DataSequence::RefChanged()
                     pCLC->EndListeningHiddenRange(m_pHiddenListener.get());
             }
 
-            vector<ScSharedTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
+            vector<ScTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
             for (; itr != itrEnd; ++itr)
             {
                 ScRange aRange;
@@ -2458,7 +2324,7 @@ void ScChart2DataSequence::BuildDataCache()
 
     if (!m_pTokens.get())
     {
-        DBG_ERROR("m_pTokens == NULL!  Something is wrong.");
+        OSL_FAIL("m_pTokens == NULL!  Something is wrong.");
         return;
     }
 
@@ -2468,7 +2334,7 @@ void ScChart2DataSequence::BuildDataCache()
     sal_Int32 nDataCount = 0;
     sal_Int32 nHiddenValueCount = 0;
 
-    for (vector<ScSharedTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
+    for (vector<ScTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
           itr != itrEnd; ++itr)
     {
         if (ScRefTokenHelper::isExternalRef(*itr))
@@ -2489,8 +2355,8 @@ void ScChart2DataSequence::BuildDataCache()
                 {
                     for (SCROW nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
                     {
-                        bool bColHidden = m_pDocument->ColHidden(nCol, nTab, nLastCol);
-                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, nLastRow);
+                        bool bColHidden = m_pDocument->ColHidden(nCol, nTab, NULL, &nLastCol);
+                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, NULL, &nLastRow);
 
                         if (bColHidden || bRowHidden)
                         {
@@ -2540,7 +2406,7 @@ void ScChart2DataSequence::BuildDataCache()
                                 }
                             }
                             break;
-#if DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                             case CELLTYPE_DESTROYED:
 #endif
                             case CELLTYPE_EDIT:
@@ -2579,7 +2445,7 @@ void ScChart2DataSequence::RebuildDataCache()
     }
 }
 
-sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScSharedTokenRef& pToken)
+sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToken)
 {
     ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
     ScRange aRange;
@@ -2609,7 +2475,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScSharedTokenRef&
 
         if (p->GetType() != svMatrix)
         {
-            DBG_ERROR("Cached array is not a matrix token.");
+            OSL_FAIL("Cached array is not a matrix token.");
             continue;
         }
 
@@ -2667,12 +2533,11 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
     if (!m_pRangeIndices.get())
         return;
 
-    sal_uInt32 nCount = rRanges.Count();
-    for (sal_uInt32 i = 0; i < nCount; ++i)
+    for ( size_t i = 0, nCount = rRanges.size(); i < nCount; ++i )
     {
-        ScSharedTokenRef pToken;
-        ScRange* pRange = static_cast<ScRange*>(rRanges.GetObject(i));
-        DBG_ASSERT(pRange, "range object is NULL.");
+        ScTokenRef pToken;
+        const ScRange* pRange = rRanges[i];
+        OSL_ENSURE(pRange, "range object is NULL.");
 
         ScRefTokenHelper::getTokenFromRange(pToken, *pRange);
         sal_uInt32 nOrigPos = (*m_pRangeIndices)[i];
@@ -2699,8 +2564,8 @@ void ScChart2DataSequence::StopListeningToAllExternalRefs()
     if (!m_pExtRefListener.get())
         return;
 
-    const hash_set<sal_uInt16>& rFileIds = m_pExtRefListener->getAllFileIds();
-    hash_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
+    const boost::unordered_set<sal_uInt16>& rFileIds = m_pExtRefListener->getAllFileIds();
+    boost::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
     ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
     for (; itr != itrEnd; ++itr)
         pRefMgr->removeLinkListener(*itr, m_pExtRefListener.get());
@@ -2712,7 +2577,7 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
 {
     if (!m_pDocument)
     {
-        DBG_ERROR("document instance is NULL!?");
+        OSL_FAIL("document instance is NULL!?");
         return;
     }
 
@@ -2732,8 +2597,8 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
 
         ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
         m_pExtRefListener.reset(new ExternalRefListener(*this, m_pDocument));
-        const hash_set<sal_uInt16>& rFileIds = r.m_pExtRefListener->getAllFileIds();
-        hash_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
+        const boost::unordered_set<sal_uInt16>& rFileIds = r.m_pExtRefListener->getAllFileIds();
+        boost::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
         for (; itr != itrEnd; ++itr)
         {
             pRefMgr->addLinkListener(*itr, m_pExtRefListener.get());
@@ -2786,8 +2651,8 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
         ScRangeList aRanges;
         m_pRangeIndices.reset(new vector<sal_uInt32>());
-        vector<ScSharedTokenRef>::const_iterator itrBeg = m_pTokens->begin(), itrEnd = m_pTokens->end();
-        for (vector<ScSharedTokenRef>::const_iterator itr = itrBeg ;itr != itrEnd; ++itr)
+        vector<ScTokenRef>::const_iterator itrBeg = m_pTokens->begin(), itrEnd = m_pTokens->end();
+        for (vector<ScTokenRef>::const_iterator itr = itrBeg ;itr != itrEnd; ++itr)
         {
             if (!ScRefTokenHelper::isExternalRef(*itr))
             {
@@ -2799,7 +2664,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             }
         }
 
-        DBG_ASSERT(m_pRangeIndices->size() == static_cast<size_t>(aRanges.Count()),
+        OSL_ENSURE(m_pRangeIndices->size() == static_cast<size_t>(aRanges.size()),
                    "range list and range index list have different sizes.");
 
         auto_ptr<ScRangeList> pUndoRanges;
@@ -2812,7 +2677,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
         if (bChanged)
         {
-            DBG_ASSERT(m_pRangeIndices->size() == static_cast<size_t>(aRanges.Count()),
+            OSL_ENSURE(m_pRangeIndices->size() == aRanges.size(),
                        "range list and range index list have different sizes after the reference update.");
 
             // Bring the change back from the range list to the token list.
@@ -2836,16 +2701,16 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
             if (!m_pRangeIndices.get() || m_pRangeIndices->empty())
             {
-                DBG_ERROR(" faulty range indices");
+                OSL_FAIL(" faulty range indices");
                 break;
             }
 
             const ScRangeList& rRanges = rUndoHint.GetRanges();
 
-            sal_uInt32 nCount = rRanges.Count();
+            size_t nCount = rRanges.size();
             if (nCount != m_pRangeIndices->size())
             {
-                DBG_ERROR("range count and range index count differ.");
+                OSL_FAIL("range count and range index count differ.");
                 break;
             }
 
@@ -2917,7 +2782,7 @@ void ScChart2DataSequence::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
     maFileIds.erase(nFileId);
 }
 
-const hash_set<sal_uInt16>& ScChart2DataSequence::ExternalRefListener::getAllFileIds()
+const boost::unordered_set<sal_uInt16>& ScChart2DataSequence::ExternalRefListener::getAllFileIds()
 {
     return maFileIds;
 }
@@ -2927,7 +2792,7 @@ const hash_set<sal_uInt16>& ScChart2DataSequence::ExternalRefListener::getAllFil
 uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
             throw ( uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if ( !m_pDocument)
         throw uno::RuntimeException();
 
@@ -2957,7 +2822,7 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
 uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
             throw ( uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if ( !m_pDocument)
         throw uno::RuntimeException();
 
@@ -2980,7 +2845,7 @@ uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
 
 uno::Sequence< rtl::OUString > SAL_CALL ScChart2DataSequence::getTextualData(  ) throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if ( !m_pDocument)
         throw uno::RuntimeException();
 
@@ -2999,9 +2864,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScChart2DataSequence::getTextualData(  )
 ::rtl::OUString SAL_CALL ScChart2DataSequence::getSourceRangeRepresentation()
             throw ( uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     OUString aStr;
-    DBG_ASSERT( m_pDocument, "No Document -> no SourceRangeRepresentation" );
+    OSL_ENSURE( m_pDocument, "No Document -> no SourceRangeRepresentation" );
     if (m_pDocument && m_pTokens.get())
         lcl_convertTokensToString(aStr, *m_pTokens, m_pDocument);
 
@@ -3014,7 +2879,7 @@ namespace {
  * This function object is used to accumulatively count the numbers of
  * columns and rows in all reference tokens.
  */
-class AccumulateRangeSize : public unary_function<ScSharedTokenRef, void>
+class AccumulateRangeSize : public unary_function<ScTokenRef, void>
 {
 public:
     AccumulateRangeSize() :
@@ -3023,7 +2888,7 @@ public:
     AccumulateRangeSize(const AccumulateRangeSize& r) :
         mnCols(r.mnCols), mnRows(r.mnRows) {}
 
-    void operator() (const ScSharedTokenRef& pToken)
+    void operator() (const ScTokenRef& pToken)
     {
         ScRange r;
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
@@ -3044,7 +2909,7 @@ private:
  * This function object is used to generate label strings from a list of
  * reference tokens.
  */
-class GenerateLabelStrings : public unary_function<ScSharedTokenRef, void>
+class GenerateLabelStrings : public unary_function<ScTokenRef, void>
 {
 public:
     GenerateLabelStrings(sal_Int32 nSize, chart2::data::LabelOrigin eOrigin, bool bColumn) :
@@ -3059,7 +2924,7 @@ public:
         mnCount(r.mnCount),
         mbColumn(r.mbColumn) {}
 
-    void operator() (const ScSharedTokenRef& pToken)
+    void operator() (const ScTokenRef& pToken)
     {
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         ScRange aRange;
@@ -3118,7 +2983,7 @@ private:
 uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::data::LabelOrigin eOrigin)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if ( !m_pDocument)
         throw uno::RuntimeException();
 
@@ -3127,7 +2992,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
 
     // Determine the total size of all ranges.
     AccumulateRangeSize func;
-    func = for_each(m_pTokens->begin(), m_pTokens->end(), func);
+    func = ::std::for_each(m_pTokens->begin(), m_pTokens->end(), func);
     SCCOL nCols = func.getCols();
     SCROW nRows = func.getRows();
 
@@ -3157,7 +3022,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
     // Generate label strings based on the info so far.
     sal_Int32 nCount = bColumn ? nCols : nRows;
     GenerateLabelStrings genLabels(nCount, eOrigin, bColumn);
-    genLabels = for_each(m_pTokens->begin(), m_pTokens->end(), genLabels);
+    genLabels = ::std::for_each(m_pTokens->begin(), m_pTokens->end(), genLabels);
     Sequence<OUString> aSeq = genLabels.getLabels();
 
     return aSeq;
@@ -3171,13 +3036,13 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
     bool bGetSeriesFormat = (nIndex == -1);
     sal_Int32 nResult = 0;
 
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if ( !m_pDocument || !m_pTokens.get())
         return nResult;
 
     sal_Int32 nCount = 0;
     bool bFound = false;
-    ScRangePtr p;
+    ScRange* p;
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( lcl_GetSpreadSheetDocument( m_pDocument ));
     if (!xSpreadDoc.is())
@@ -3190,8 +3055,9 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
     ScRangeList aRanges;
     ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens);
     uno::Reference< table::XCellRange > xSheet;
-    for ( p = aRanges.First(); p && !bFound; p = aRanges.Next())
+    for ( size_t rIndex = 0, nRanges = aRanges.size(); (rIndex < nRanges) && !bFound; ++rIndex )
     {
+        p = aRanges[ rIndex ];
         // TODO: use DocIter?
         table::CellAddress aStart, aEnd;
         ScUnoConversion::FillApiAddress( aStart, p->aStart );
@@ -3243,18 +3109,18 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
 uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
-    auto_ptr< vector<ScSharedTokenRef> > pTokensNew;
+    auto_ptr< vector<ScTokenRef> > pTokensNew;
     if (m_pTokens.get())
     {
         // Clone tokens.
-        pTokensNew.reset(new vector<ScSharedTokenRef>);
+        pTokensNew.reset(new vector<ScTokenRef>);
         pTokensNew->reserve(m_pTokens->size());
-        vector<ScSharedTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
+        vector<ScTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
         for (; itr != itrEnd; ++itr)
         {
-            ScSharedTokenRef p(static_cast<ScToken*>((*itr)->Clone()));
+            ScTokenRef p(static_cast<ScToken*>((*itr)->Clone()));
             pTokensNew->push_back(p);
         }
     }
@@ -3272,7 +3138,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
     throw (uno::RuntimeException)
 {
     // like ScCellRangesBase::addModifyListener
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (!m_pTokens.get() || m_pTokens->empty())
         return;
 
@@ -3293,7 +3159,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
         if( m_pDocument )
         {
             ScChartListenerCollection* pCLC = m_pDocument->GetChartListenerCollection();
-            vector<ScSharedTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
+            vector<ScTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
             for (; itr != itrEnd; ++itr)
             {
                 ScRange aRange;
@@ -3315,7 +3181,7 @@ void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< 
 {
     // like ScCellRangesBase::removeModifyListener
 
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (!m_pTokens.get() || m_pTokens->empty())
         return;
 
@@ -3356,7 +3222,7 @@ void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< 
 uno::Reference< beans::XPropertySetInfo> SAL_CALL
 ScChart2DataSequence::getPropertySetInfo() throw( uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( m_aPropSet.getPropertyMap() );
     return aRef;
@@ -3420,8 +3286,7 @@ void SAL_CALL ScChart2DataSequence::addPropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3432,8 +3297,7 @@ void SAL_CALL ScChart2DataSequence::removePropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3444,8 +3308,7 @@ void SAL_CALL ScChart2DataSequence::addVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3456,8 +3319,7 @@ void SAL_CALL ScChart2DataSequence::removeVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 void ScChart2DataSequence::setDataChangedHint(bool b)
@@ -3465,46 +3327,6 @@ void ScChart2DataSequence::setDataChangedHint(bool b)
     m_bGotDataChangedHint = b;
 }
 
-// XUnoTunnel
-
-// sal_Int64 SAL_CALL ScChart2DataSequence::getSomething(
-//              const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
-// {
-//  if ( rId.getLength() == 16 &&
-//           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
-//                                  rId.getConstArray(), 16 ) )
-//  {
-//      return (sal_Int64)this;
-//  }
-//  return 0;
-// }
-
-// // static
-// const uno::Sequence<sal_Int8>& ScChart2DataSequence::getUnoTunnelId()
-// {
-//  static uno::Sequence<sal_Int8> * pSeq = 0;
-//  if( !pSeq )
-//  {
-//      osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-//      if( !pSeq )
-//      {
-//          static uno::Sequence< sal_Int8 > aSeq( 16 );
-//          rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-//          pSeq = &aSeq;
-//      }
-//  }
-//  return *pSeq;
-// }
-
-// // static
-// ScChart2DataSequence* ScChart2DataSequence::getImplementation( const uno::Reference<uno::XInterface> xObj )
-// {
-//  ScChart2DataSequence* pRet = NULL;
-//  uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
-//  if (xUT.is())
-//      pRet = (ScChart2DataSequence*) xUT->getSomething( getUnoTunnelId() );
-//  return pRet;
-// }
 
 #if USE_CHART2_EMPTYDATASEQUENCE
 // DataSequence ==============================================================
@@ -3530,7 +3352,7 @@ ScChart2EmptyDataSequence::ScChart2EmptyDataSequence( ScDocument* pDoc,
 //  rRangeList->Format( aStr, SCR_ABS_3D, m_pDocument );
 //    m_aIdentifier = ::rtl::OUString( aStr );
 
-//      m_aIdentifier = ::rtl::OUString::createFromAscii( "ID_");
+//      m_aIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ID_"));
 //      static sal_Int32 nID = 0;
 //      m_aIdentifier += ::rtl::OUString::valueOf( ++nID);
 }
@@ -3556,7 +3378,7 @@ void ScChart2EmptyDataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& 
 uno::Sequence< uno::Any> SAL_CALL ScChart2EmptyDataSequence::getData()
             throw ( uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if ( !m_pDocument)
         throw uno::RuntimeException();
     return uno::Sequence< uno::Any>();
@@ -3566,14 +3388,14 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2EmptyDataSequence::getData()
 
 uno::Sequence< rtl::OUString > SAL_CALL ScChart2EmptyDataSequence::getTextualData(  ) throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if ( !m_pDocument)
         throw uno::RuntimeException();
 
     sal_Int32 nCount = 0;
-    ScRangePtr p;
+    ScRange* p;
 
-    DBG_ASSERT(m_xRanges->Count() == 1, "not handled count of ranges");
+    OSL_ENSURE(m_xRanges->Count() == 1, "not handled count of ranges");
 
     for ( p = m_xRanges->First(); p; p = m_xRanges->Next())
     {
@@ -3602,14 +3424,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScChart2EmptyDataSequence::getTextualDat
         }
         else
         {
-            for (sal_Int32 nRow = p->aStart.Row(); nRow <= p->aEnd.Row(); ++nRow)
-            {
-                String aString = ScGlobal::GetRscString(STR_ROW);
-                aString += ' ';
-                aString += String::CreateFromInt32( nRow+1 );
-                pArr[nCount] = aString;
-                ++nCount;
-            }
+            sal_Int32 n = p->aEnd.Row() - p->aStart.Row() + 1;
+            for (sal_Int32 i = 0; i < n; ++i)
+                pArr[nCount++] = String::CreateFromInt32( i+1 );
         }
     }
     return aSeq;
@@ -3618,9 +3435,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScChart2EmptyDataSequence::getTextualDat
 ::rtl::OUString SAL_CALL ScChart2EmptyDataSequence::getSourceRangeRepresentation()
             throw ( uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String  aStr;
-    DBG_ASSERT( m_pDocument, "No Document -> no SourceRangeRepresentation" );
+    OSL_ENSURE( m_pDocument, "No Document -> no SourceRangeRepresentation" );
     if( m_pDocument )
         m_xRanges->Format( aStr, SCR_ABS_3D, m_pDocument, m_pDocument->GetAddressConvention() );
     return aStr;
@@ -3629,7 +3446,7 @@ uno::Sequence< rtl::OUString > SAL_CALL ScChart2EmptyDataSequence::getTextualDat
 uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2EmptyDataSequence::generateLabel(chart2::data::LabelOrigin /*nOrigin*/)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Sequence< ::rtl::OUString > aRet;
     return aRet;
 }
@@ -3640,7 +3457,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2EmptyDataSequence::generateLab
 {
     sal_Int32 nResult = 0;
 
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if ( !m_pDocument)
         return nResult;
 
@@ -3652,7 +3469,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2EmptyDataSequence::generateLab
 uno::Reference< util::XCloneable > SAL_CALL ScChart2EmptyDataSequence::createClone()
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (m_xDataProvider.is())
     {
         // copy properties
@@ -3689,7 +3506,7 @@ void SAL_CALL ScChart2EmptyDataSequence::removeModifyListener( const uno::Refere
 uno::Reference< beans::XPropertySetInfo> SAL_CALL
 ScChart2EmptyDataSequence::getPropertySetInfo() throw( uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( m_aPropSet.getPropertyMap() );
     return aRef;
@@ -3743,8 +3560,7 @@ void SAL_CALL ScChart2EmptyDataSequence::addPropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3755,8 +3571,7 @@ void SAL_CALL ScChart2EmptyDataSequence::removePropertyChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3767,8 +3582,7 @@ void SAL_CALL ScChart2EmptyDataSequence::addVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
 
@@ -3779,48 +3593,9 @@ void SAL_CALL ScChart2EmptyDataSequence::removeVetoableChangeListener(
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     // FIXME: real implementation
-//     throw uno::RuntimeException();
-    OSL_ENSURE( false, "Not yet implemented" );
+    OSL_FAIL( "Not yet implemented" );
 }
 
-// XUnoTunnel
-
-// sal_Int64 SAL_CALL ScChart2EmptyDataSequence::getSomething(
-//              const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
-// {
-//  if ( rId.getLength() == 16 &&
-//           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
-//                                  rId.getConstArray(), 16 ) )
-//  {
-//      return (sal_Int64)this;
-//  }
-//  return 0;
-// }
-
-// // static
-// const uno::Sequence<sal_Int8>& ScChart2EmptyDataSequence::getUnoTunnelId()
-// {
-//  static uno::Sequence<sal_Int8> * pSeq = 0;
-//  if( !pSeq )
-//  {
-//      osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-//      if( !pSeq )
-//      {
-//          static uno::Sequence< sal_Int8 > aSeq( 16 );
-//          rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-//          pSeq = &aSeq;
-//      }
-//  }
-//  return *pSeq;
-// }
-
-// // static
-// ScChart2DataSequence* ScChart2EmptyDataSequence::getImplementation( const uno::Reference<uno::XInterface> xObj )
-// {
-//  ScChart2DataSequence* pRet = NULL;
-//  uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
-//  if (xUT.is())
-//      pRet = (ScChart2EmptyDataSequence*) xUT->getSomething( getUnoTunnelId() );
-//  return pRet;
-// }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

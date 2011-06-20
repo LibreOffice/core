@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,19 +29,15 @@
 #ifndef SC_DRAWPAGE_HXX
 #define SC_DRAWPAGE_HXX
 
-#ifndef _FM_FMPAGE_HXX
 #include <svx/fmpage.hxx>
-#endif
 
 
 class ScDrawLayer;
 
-// -----------------------------------------------------------------------
-
 class ScDrawPage: public FmFormPage
 {
 public:
-    ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, sal_Bool bMasterPage=sal_False);
+    ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, bool bMasterPage = false);
     ~ScDrawPage();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
@@ -50,3 +47,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

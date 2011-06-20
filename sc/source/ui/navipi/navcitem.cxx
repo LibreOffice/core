@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@ ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemState /* eState */,
+void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemState /* eState */,
                                                           const SfxPoolItem* pItem )
 {
     switch( GetId() )
@@ -63,10 +64,9 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, Sf
         case SID_CURRENTCELL:
             if ( pItem )
             {
-//              const SfxPointItem* pCellPosItem = PTR_CAST(SfxPointItem, pItem);
                 const SfxStringItem* pCellPosItem = PTR_CAST(SfxStringItem, pItem);
 
-                DBG_ASSERT( pCellPosItem, "SfxStringItem expected!" );
+                OSL_ENSURE( pCellPosItem, "SfxStringItem expected!" );
 
                 if ( pCellPosItem )
                 {
@@ -76,9 +76,6 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, Sf
 
                     SCCOL nCol = aScAddress.Col()+1;
                     SCROW nRow = aScAddress.Row()+1;
-
-//                  SCCOL nCol = (sal_uInt16)pCellPosItem->GetValue().X()+1;
-//                  SCROW nRow = (sal_uInt16)pCellPosItem->GetValue().Y()+1;
 
                     rNavigatorDlg.UpdateColumn( &nCol );
                     rNavigatorDlg.UpdateRow   ( &nRow );
@@ -92,7 +89,7 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, Sf
             {
                 const SfxUInt16Item* pTabItem = PTR_CAST(SfxUInt16Item, pItem);
 
-                DBG_ASSERT( pTabItem, "SfxUInt16Item expected!" );
+                OSL_ENSURE( pTabItem, "SfxUInt16Item expected!" );
 
                 //  Tabelle fuer Basic ist 1-basiert
                 if ( pTabItem && pTabItem->GetValue() )
@@ -125,3 +122,4 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, Sf
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

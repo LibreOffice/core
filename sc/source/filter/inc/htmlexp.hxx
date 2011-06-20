@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <rtl/textenc.h>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include "expbase.hxx"
 
@@ -45,7 +47,8 @@ class OutputDevice;
 class ScDrawLayer;
 class SvStringsSortDtor;
 class ScEditCell;
-class SvxBorderLine;
+
+namespace editeng { class SvxBorderLine; }
 
 struct ScHTMLStyle
 {   // Defaults aus StyleSheet
@@ -83,10 +86,9 @@ struct ScHTMLGraphEntry
     ScHTMLGraphEntry( SdrObject* pObj, const ScRange& rRange,
         const Size& rSize,  sal_Bool bIn, const Size& rSpace ) :
         aRange( rRange ), aSize( rSize ), aSpace( rSpace ),
-        pObject( pObj ), bInCell( bIn ), bWritten( sal_False ) {}
+        pObject( pObj ), bInCell( bIn ), bWritten( false ) {}
 };
 
-DECLARE_LIST( ScHTMLGraphList, ScHTMLGraphEntry* )
 
 #define SC_HTML_FONTSIZES 7
 const short nIndentMax = 23;
@@ -99,9 +101,9 @@ class ScHTMLExport : public ScExportBase
     static sal_uInt16       nFontSize[SC_HTML_FONTSIZES];
     static const char*  pFontSizeCss[SC_HTML_FONTSIZES];
     static const sal_uInt16 nCellSpacing;
-    static const sal_Char __FAR_DATA sIndentSource[];
+    static const sal_Char sIndentSource[];
 
-    ScHTMLGraphList     aGraphList;
+    boost::ptr_vector< ScHTMLGraphEntry > aGraphList;
     ScHTMLStyle         aHTMLStyle;
     String              aBaseURL;
     String              aStreamPath;
@@ -140,7 +142,7 @@ class ScHTMLExport : public ScExportBase
 
                         // kopiere ggfs. eine lokale Datei ins Internet
     sal_Bool                CopyLocalFileToINet( String& rFileNm,
-                            const String& rTargetNm, sal_Bool bFileToFile = sal_False );
+                            const String& rTargetNm, sal_Bool bFileToFile = false );
     sal_Bool                HasCId() { return aCId.Len() > 0; }
     void                MakeCIdURL( String& rURL );
 
@@ -152,7 +154,7 @@ class ScHTMLExport : public ScExportBase
                                         SCCOL nEndCol, SCROW nEndRow );
 
     void                BorderToStyle( ByteString& rOut, const char* pBorderName,
-                                       const SvxBorderLine* pLine, bool& bInsertSemicolon );
+                                       const ::editeng::SvxBorderLine* pLine, bool& bInsertSemicolon );
 
     sal_uInt16              GetFontSizeNumber( sal_uInt16 nHeight );
     const char*         GetFontSizeCss( sal_uInt16 nHeight );
@@ -172,3 +174,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,7 +100,7 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
     const SfxItemPool* pItemPool(rExportP.GetDocument() ? rExportP.GetDocument()->GetPool() : NULL);
     AddFontItems(aWhichIds, 3, pItemPool, sal_True);
     const SfxItemPool* pEditPool(rExportP.GetDocument()->GetEditPool());
-    AddFontItems(aEditWhichIds, 3, pEditPool, sal_False);
+    AddFontItems(aEditWhichIds, 3, pEditPool, false);
 
     SfxStyleSheetIterator* pItr(rExportP.GetDocument() ? rExportP.GetDocument()->GetStyleSheetPool()->CreateIterator(SFX_STYLE_FAMILY_PAGE, 0xFFFF) : NULL);
     if(pItr)
@@ -123,19 +124,19 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
                         if (pLeftArea)
                         {
                             aEditEngine.SetText(*pLeftArea);
-                            AddFontItems(aEditWhichIds, 3, pPageEditPool, sal_False);
+                            AddFontItems(aEditWhichIds, 3, pPageEditPool, false);
                         }
                         const EditTextObject* pCenterArea(pPageItem->GetCenterArea());
                         if (pCenterArea)
                         {
                             aEditEngine.SetText(*pCenterArea);
-                            AddFontItems(aEditWhichIds, 3, pPageEditPool, sal_False);
+                            AddFontItems(aEditWhichIds, 3, pPageEditPool, false);
                         }
                         const EditTextObject* pRightArea(pPageItem->GetRightArea());
                         if (pRightArea)
                         {
                             aEditEngine.SetText(*pRightArea);
-                            AddFontItems(aEditWhichIds, 3, pPageEditPool, sal_False);
+                            AddFontItems(aEditWhichIds, 3, pPageEditPool, false);
                         }
                     }
                 }
@@ -150,3 +151,5 @@ XMLFontAutoStylePool* ScXMLExport::CreateFontAutoStylePool()
 {
     return new ScXMLFontAutoStylePool_Impl( *this );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

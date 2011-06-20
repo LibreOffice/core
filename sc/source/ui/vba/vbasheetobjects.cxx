@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -341,8 +342,8 @@ uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno
     /*  Extract double values from passed Anys (the lclPointsToHmm() helper
         function will throw a RuntimeException on any error), and convert from
         points to 1/100 mm. */
-    awt::Point aPos( lclPointsToHmm( rLeft ), lclPointsToHmm( rTop ) );
-    awt::Size aSize( lclPointsToHmm( rWidth ), lclPointsToHmm( rHeight ) );
+    awt::Point aPos( static_cast<sal_Int32>(lclPointsToHmm( rLeft )),  static_cast<sal_Int32>(lclPointsToHmm( rTop )) );
+    awt::Size aSize( static_cast<sal_Int32>(lclPointsToHmm( rWidth )), static_cast<sal_Int32>(lclPointsToHmm( rHeight )) );
     // TODO: translate coordinates for RTL sheets
     if( (aPos.X < 0) || (aPos.Y < 0) || (aSize.Width <= 0) || (aSize.Height <= 0) )
         throw uno::RuntimeException();
@@ -532,3 +533,5 @@ ScVbaButtons::ScVbaButtons(
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButtons, "ooo.vba.excel.Buttons" )
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

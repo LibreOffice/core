@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,8 @@
  *
  ************************************************************************/
 /*
-    WICHTIG:
-    Folgende Reihenfolge beim Aufbau der Pivot-Tabelle unbedingt einzuhalten:
+    IMPORTANT:
+    Strictly adhere to the following sequence when creating a pivot table:
 
     pPivot->SetColFields(aColArr, aColCount)
     pPivot->SetRowFields(aRowArr, aRowCount)
@@ -37,9 +38,7 @@
         pPivotReleaseData();
     }
 
-    ausserdem ist sicherzustellen, dass entweder das ColArr oder das RowArr
-    einen PivotDataField Eintrag enthalten
-
+    Make sure that either ColArr or RowArr contains a PivotDataField entry.
 */
 
 
@@ -68,6 +67,62 @@ class SvStream;
 class ScDocument;
 class ScUserListData;
 class ScProgress;
+
+struct ScDPLabelData;
+typedef ::boost::shared_ptr<ScDPLabelData> ScDPLabelDataRef;
+
+// -----------------------------------------------------------------------
+
+struct PivotField
+{
+    SCsCOL              nCol;
+    sal_uInt16              nFuncMask;
+    sal_uInt16              nFuncCount;
+    ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
+
+    explicit            PivotField( SCsCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
+    PivotField( const PivotField& r );
+
+    bool                operator==( const PivotField& r ) const;
+};
+
+// -----------------------------------------------------------------------
+
+// implementation still in global2.cxx
+struct ScPivotParam
+{
+    SCCOL           nCol;           // cursor position /
+    SCROW           nRow;           // or start of destination area
+    SCTAB           nTab;
+    ::std::vector<ScDPLabelDataRef> maLabelArray;
+    ::std::vector<PivotField> maPageFields;
+    ::std::vector<PivotField> maColFields;
+    ::std::vector<PivotField> maRowFields;
+    ::std::vector<PivotField> maDataFields;
+    sal_Bool            bIgnoreEmptyRows;
+    sal_Bool            bDetectCategories;
+    sal_Bool            bMakeTotalCol;
+    sal_Bool            bMakeTotalRow;
+
+    ScPivotParam();
+    ScPivotParam( const ScPivotParam& r );
+    ~ScPivotParam();
+
+    ScPivotParam&   operator=       ( const ScPivotParam& r );
+    bool            operator==      ( const ScPivotParam& r ) const;
+    void            ClearPivotArrays();
+    void            SetLabelData    (const ::std::vector<ScDPLabelDataRef>& r);
+};
+
+//------------------------------------------------------------------------
+
+struct ScDPName
+{
+    ::rtl::OUString     maName;         /// Original name of the dimension.
+    ::rtl::OUString     maLayoutName;   /// Layout name (display name)
+
+    explicit ScDPName(const ::rtl::OUString& rName, const ::rtl::OUString& rLayoutName);
+};
 
 // ============================================================================
 
@@ -133,45 +188,22 @@ typedef ::std::vector< ScPivotField > ScPivotFieldVector;
 
 // ============================================================================
 
-struct ScPivotParam
+struct ScDPFuncData
 {
-    SCCOL           nCol;           // Cursor Position /
-    SCROW           nRow;           // bzw. Anfang des Zielbereiches
-    SCTAB           nTab;
-    ScDPLabelDataVector maLabelArray;
-    ScPivotFieldVector maPageArr;
-    ScPivotFieldVector maColArr;
-    ScPivotFieldVector maRowArr;
-    ScPivotFieldVector maDataArr;
-    bool            bIgnoreEmptyRows;
-    bool            bDetectCategories;
-    bool            bMakeTotalCol;
-    bool            bMakeTotalRow;
-
-    ScPivotParam();
-
-    bool            operator==( const ScPivotParam& r ) const;
-};
-
-// ============================================================================
-
-struct ScPivotFuncData
-{
-    SCCOL               mnCol;
+    short               mnCol;
     sal_uInt16          mnFuncMask;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask );
-    explicit            ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask,
+    explicit            ScDPFuncData( short nNewCol, sal_uInt16 nNewFuncMask );
+    explicit            ScDPFuncData( short nNewCol, sal_uInt16 nNewFuncMask,
                             const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
 };
 
-typedef ::std::vector< ScPivotFuncData > ScPivotFuncDataVector;
-
 // ============================================================================
 
-typedef std::vector< String > ScDPNameVec;
-
-// ============================================================================
+typedef std::vector< ScDPLabelData > ScDPLabelDataVec;
+typedef std::vector<ScDPName> ScDPNameVec;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

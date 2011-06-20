@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@ struct ScSortParam;
 struct ScSubTotalParam;
 
 class SfxViewFrame;
+class SbaSelectionList;
 class ScDBData;
 class ScDocShell;
 class ScAddress;
@@ -50,15 +52,10 @@ namespace com { namespace sun { namespace star {
     namespace beans {
         struct PropertyValue;
     }
+    namespace sdbc {
+        class XResultSet;
+    }
 } } }
-
-namespace svx {
-    class ODataAccessDescriptor;
-}
-
-// ---------------------------------------------------------------------------
-// -----------------------------------------------------------------
-
 
 class ScDBDocFunc
 {
@@ -71,40 +68,47 @@ public:
                     ScDBDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
                     ~ScDBDocFunc() {}
 
-    void            UpdateImport( const String& rTarget, const svx::ODataAccessDescriptor& rDescriptor );
+    void            UpdateImport( const String& rTarget, const String& rDBName,
+                        const String& rTableName, const String& rStatement,
+                        bool bNative, sal_uInt8 nType,
+                        const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::sdbc::XResultSet >& xResultSet,
+                        const std::vector<sal_Int32> *pSelection );
 
-    sal_Bool        DoImport( SCTAB nTab, const ScImportParam& rParam,
-                        const svx::ODataAccessDescriptor* pDescriptor,      // used for selection and existing ResultSet
-                        sal_Bool bRecord,
-                        sal_Bool bAddrInsert = sal_False );
+    bool DoImport( SCTAB nTab, const ScImportParam& rParam,
+                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xResultSet,
+                   const std::vector<sal_Int32> *pSelection, bool bRecord,
+                   bool bAddrInsert = false );
 
-    sal_Bool        DoImportUno( const ScAddress& rPos,
-                                const com::sun::star::uno::Sequence<
-                                    com::sun::star::beans::PropertyValue>& aArgs );
+    bool DoImportUno( const ScAddress& rPos,
+                      const com::sun::star::uno::Sequence<
+                          com::sun::star::beans::PropertyValue>& aArgs );
 
     static void     ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame );
 
-    sal_Bool        Sort( SCTAB nTab, const ScSortParam& rSortParam,
+    sal_Bool            Sort( SCTAB nTab, const ScSortParam& rSortParam,
                             sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
 
-    SC_DLLPUBLIC sal_Bool Query( SCTAB nTab, const ScQueryParam& rQueryParam,
+    SC_DLLPUBLIC sal_Bool           Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                             const ScRange* pAdvSource, sal_Bool bRecord, sal_Bool bApi );
 
     sal_Bool            DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                     const ScSortParam* pForceNewSort,
                                     sal_Bool bRecord, sal_Bool bApi );
 
-    sal_Bool            AddDBRange( const String& rName, const ScRange& rRange, sal_Bool bApi );
-    sal_Bool            DeleteDBRange( const String& rName, sal_Bool bApi );
-    sal_Bool            RenameDBRange( const String& rOld, const String& rNew, sal_Bool bApi );
-    sal_Bool            ModifyDBData( const ScDBData& rNewData, sal_Bool bApi );    // Name unveraendert
+    bool AddDBRange( const ::rtl::OUString& rName, const ScRange& rRange, sal_Bool bApi );
+    bool DeleteDBRange( const ::rtl::OUString& rName );
+    bool RenameDBRange( const String& rOld, const String& rNew );
+    bool ModifyDBData( const ScDBData& rNewData );  // Name unveraendert
 
-    sal_Bool            RepeatDB( const String& rDBName, sal_Bool bRecord, sal_Bool bApi );
+    bool RepeatDB( const ::rtl::OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);
 
     sal_Bool            DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
-                                        sal_Bool bRecord, sal_Bool bApi, sal_Bool bAllowMove = sal_False );
+                                        sal_Bool bRecord, sal_Bool bApi, sal_Bool bAllowMove = false );
 };
 
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

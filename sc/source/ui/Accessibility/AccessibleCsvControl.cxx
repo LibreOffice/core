@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,24 +32,18 @@
 // ============================================================================
 #include "AccessibleCsvControl.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <tools/debug.hxx>
-#include <rtl/uuid.h>
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
-#endif
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "scitems.hxx"
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -58,11 +53,11 @@
 #include "csvgrid.hxx"
 #include "AccessibleText.hxx"
 #include "editsrc.hxx"
-#include "unoguard.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "scmod.hxx"
 #include <svtools/colorcfg.hxx>
+#include <vcl/svapp.hxx>
 // ause
 #include "editutil.hxx"
 
@@ -124,7 +119,7 @@ ScAccessibleCsvControl::~ScAccessibleCsvControl()
 
 void SAL_CALL ScAccessibleCsvControl::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     mpControl = NULL;
     ScAccessibleContextBase::disposing();
 }
@@ -141,14 +136,14 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( 
 
 sal_Bool SAL_CALL ScAccessibleCsvControl::isVisible() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetControl().IsVisible();
 }
 
 void SAL_CALL ScAccessibleCsvControl::grabFocus() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     implGetControl().GrabFocus();
 }
@@ -166,7 +161,7 @@ void ScAccessibleCsvControl::SendFocusEvent( bool bFocused )
 
 void ScAccessibleCsvControl::SendCaretEvent()
 {
-    DBG_ERRORFILE( "ScAccessibleCsvControl::SendCaretEvent - Illegal call" );
+    OSL_FAIL( "ScAccessibleCsvControl::SendCaretEvent - Illegal call" );
 }
 
 void ScAccessibleCsvControl::SendVisibleEvent()
@@ -187,17 +182,17 @@ void ScAccessibleCsvControl::SendSelectionEvent()
 
 void ScAccessibleCsvControl::SendTableUpdateEvent( sal_uInt32 /* nFirstColumn */, sal_uInt32 /* nLastColumn */, bool /* bAllRows */ )
 {
-    DBG_ERRORFILE( "ScAccessibleCsvControl::SendTableUpdateEvent - Illegal call" );
+    OSL_FAIL( "ScAccessibleCsvControl::SendTableUpdateEvent - Illegal call" );
 }
 
 void ScAccessibleCsvControl::SendInsertColumnEvent( sal_uInt32 /* nFirstColumn */, sal_uInt32 /* nLastColumn */ )
 {
-    DBG_ERRORFILE( "ScAccessibleCsvControl::SendInsertColumnEvent - Illegal call" );
+    OSL_FAIL( "ScAccessibleCsvControl::SendInsertColumnEvent - Illegal call" );
 }
 
 void ScAccessibleCsvControl::SendRemoveColumnEvent( sal_uInt32 /* nFirstColumn */, sal_uInt32 /* nLastColumn */ )
 {
-    DBG_ERRORFILE( "ScAccessibleCsvControl::SendRemoveColumnEvent - Illegal call" );
+    OSL_FAIL( "ScAccessibleCsvControl::SendRemoveColumnEvent - Illegal call" );
 }
 
 
@@ -205,27 +200,16 @@ void ScAccessibleCsvControl::SendRemoveColumnEvent( sal_uInt32 /* nFirstColumn *
 
 Rectangle ScAccessibleCsvControl::GetBoundingBoxOnScreen() const throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetControl().GetWindowExtentsRelative( NULL );
 }
 
 Rectangle ScAccessibleCsvControl::GetBoundingBox() const throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetControl().GetWindowExtentsRelative( implGetControl().GetAccessibleParentWindow() );
-}
-
-void ScAccessibleCsvControl::getUuid( Sequence< sal_Int8 >& rSeq )
-{
-    ScUnoGuard aGuard;
-    ensureAlive();
-    if( !rSeq.hasElements() )
-    {
-        rSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( rSeq.getArray() ), NULL, sal_True );
-    }
 }
 
 void ScAccessibleCsvControl::ensureAlive() const throw( DisposedException )
@@ -236,7 +220,7 @@ void ScAccessibleCsvControl::ensureAlive() const throw( DisposedException )
 
 ScCsvControl& ScAccessibleCsvControl::implGetControl() const
 {
-    DBG_ASSERT( mpControl, "ScAccessibleCsvControl::implGetControl - missing control" );
+    OSL_ENSURE( mpControl, "ScAccessibleCsvControl::implGetControl - missing control" );
     return *mpControl;
 }
 
@@ -269,7 +253,7 @@ Reference< XAccessible > ScAccessibleCsvControl::implGetChildByRole(
 
 AccessibleStateSetHelper* ScAccessibleCsvControl::implCreateStateSet()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     AccessibleStateSetHelper* pStateSet = new AccessibleStateSetHelper();
     if( implIsAlive() )
     {
@@ -342,7 +326,7 @@ sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
 /** Expands the sequence's size and returns the base index of the new inserted elements. */
 inline sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal_Int32 nExp )
 {
-    DBG_ASSERT( nExp > 0, "lcl_ExpandSequence - invalid value" );
+    OSL_ENSURE( nExp > 0, "lcl_ExpandSequence - invalid value" );
     rSeq.realloc( rSeq.getLength() + nExp );
     return rSeq.getLength() - nExp;
 }
@@ -395,7 +379,7 @@ ScAccessibleCsvRuler::~ScAccessibleCsvRuler()
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getForeground(  )
     throw (RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetRuler().GetSettings().GetStyleSettings().GetLabelTextColor().GetColor();
 }
@@ -403,7 +387,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getForeground(  )
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getBackground(  )
     throw (RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetRuler().GetSettings().GetStyleSettings().GetFaceColor().GetColor();
 }
@@ -426,7 +410,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvRuler::getAccessibleChild( sal_
 Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvRuler::getAccessibleRelationSet()
         throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     AccessibleRelationSetHelper* pRelationSet = new AccessibleRelationSetHelper();
     Reference< XAccessible > xAccObj = implGetChildByRole( getAccessibleParent(), nGridRole );
@@ -442,7 +426,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvRuler::getAccessible
 Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvRuler::getAccessibleStateSet()
         throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     AccessibleStateSetHelper* pStateSet = implCreateStateSet();
     if( implIsAlive() )
     {
@@ -459,7 +443,7 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvRuler::getAccessibleSta
 
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getCaretPosition() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return lcl_GetApiPos( implGetRuler().GetRulerCursorPos() );
 }
@@ -467,7 +451,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getCaretPosition() throw( RuntimeExcept
 sal_Bool SAL_CALL ScAccessibleCsvRuler::setCaretPosition( sal_Int32 nIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndex( nIndex );
     ScCsvRuler& rRuler = implGetRuler();
@@ -479,7 +463,7 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::setCaretPosition( sal_Int32 nIndex )
 sal_Unicode SAL_CALL ScAccessibleCsvRuler::getCharacter( sal_Int32 nIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndex( nIndex );
     return maBuffer.charAt( nIndex );
@@ -489,31 +473,24 @@ Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes(
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* aRequestedAttributes */ )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndexWithEnd( nIndex );
     Sequence< PropertyValue > aSeq;
     lcl_FillFontAttributes( aSeq, implGetRuler().GetFont() );
-//! TODO split attribute: waiting for #102221#
-//    if( implHasSplit( nIndex ) )
-//    {
-//        sal_Int32 nIndex = lcl_ExpandSequence( aSeq, 1 );
-//        aSeq[ nIndex ].Name = CREATE_OUSTRING( "..." );
-//        aSeq[ nIndex ].Value <<= ...;
-//    }
     return aSeq;
 }
 
 ScAccessibleCsvRuler::AwtRectangle SAL_CALL ScAccessibleCsvRuler::getCharacterBounds( sal_Int32 nIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndexWithEnd( nIndex );
     ScCsvRuler& rRuler = implGetRuler();
     Point aPos( rRuler.GetX( lcl_GetRulerPos( nIndex ) ) - rRuler.GetCharWidth() / 2, 0 );
     AwtRectangle aRect( aPos.X(), aPos.Y(), rRuler.GetCharWidth(), rRuler.GetSizePixel().Height() );
-    // #107054# do not return rectangle out of window
+    // do not return rectangle out of window
     sal_Int32 nWidth = rRuler.GetOutputSizePixel().Width();
     if( aRect.X >= nWidth )
         throw IndexOutOfBoundsException();
@@ -524,7 +501,7 @@ ScAccessibleCsvRuler::AwtRectangle SAL_CALL ScAccessibleCsvRuler::getCharacterBo
 
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getCharacterCount() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetTextLength();
 }
@@ -532,10 +509,10 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getCharacterCount() throw( RuntimeExcep
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getIndexAtPoint( const AwtPoint& rPoint )
         throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ScCsvRuler& rRuler = implGetRuler();
-    // #107054# use object's coordinate system, convert to API position
+    // use object's coordinate system, convert to API position
     return lcl_GetApiPos( ::std::min( ::std::max( rRuler.GetPosFromX( rPoint.X ), static_cast<sal_Int32>(0) ), rRuler.GetPosCount() ) );
 }
 
@@ -561,12 +538,12 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::setSelection( sal_Int32 /* nStartIndex *
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::getText() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return OUString( maBuffer.getStr(), implGetTextLength() );
 }
@@ -574,7 +551,7 @@ OUString SAL_CALL ScAccessibleCsvRuler::getText() throw( RuntimeException )
 OUString SAL_CALL ScAccessibleCsvRuler::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidRange( nStartIndex, nEndIndex );
     return OUString( maBuffer.getStr() + nStartIndex, nEndIndex - nStartIndex );
@@ -583,7 +560,7 @@ OUString SAL_CALL ScAccessibleCsvRuler::getTextRange( sal_Int32 nStartIndex, sal
 TextSegment SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType )
         throw( IndexOutOfBoundsException, IllegalArgumentException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
 
     TextSegment aResult;
@@ -648,7 +625,7 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal
 TextSegment SAL_CALL ScAccessibleCsvRuler::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 nTextType )
         throw( IndexOutOfBoundsException, IllegalArgumentException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndexWithEnd( nIndex );
 
@@ -701,7 +678,7 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextBeforeIndex( sal_Int32 nIndex,
 TextSegment SAL_CALL ScAccessibleCsvRuler::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 nTextType )
         throw( IndexOutOfBoundsException, IllegalArgumentException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndexWithEnd( nIndex );
 
@@ -756,7 +733,7 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::copyText( sal_Int32 /* nStartIndex */, s
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
-    return sal_False;
+    return false;
 }
 
 
@@ -797,11 +774,14 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL ScAccessibleCsvRuler::getTypes(
     return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(), aSeq );
 }
 
+namespace
+{
+    class theScAccessibleCsvRulerImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleCsvRulerImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvRuler::getImplementationId() throw( RuntimeException )
 {
-    static Sequence< sal_Int8 > aSeq;
-    getUuid( aSeq );
-    return aSeq;
+    return theScAccessibleCsvRulerImplementationId::get().getSeq();
 }
 
 
@@ -863,7 +843,7 @@ ScCsvRuler& ScAccessibleCsvRuler::implGetRuler() const
 
 void ScAccessibleCsvRuler::constructStringBuffer() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     // extend existing string buffer to new ruler size
     sal_Int32 nRulerCount = implGetRuler().GetPosCount();
@@ -948,7 +928,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAtPoint( con
     Reference< XAccessible > xRet;
     if( containsPoint( rPoint ) )
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         ensureAlive();
 
         const ScCsvGrid& rGrid = implGetGrid();
@@ -965,7 +945,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAtPoint( con
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getForeground(  )
 throw (RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
 }
@@ -973,7 +953,7 @@ throw (RuntimeException)
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getBackground(  )
 throw (RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
@@ -982,7 +962,7 @@ throw (RuntimeException)
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleChildCount() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetCellCount();
 }
@@ -990,7 +970,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleChildCount() throw( Runtime
 Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleChild( sal_Int32 nIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndex( nIndex );
     return implCreateCellObj( implGetRow( nIndex ), implGetColumn( nIndex ) );
@@ -999,7 +979,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleChild( sal_I
 Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleRelationSet()
         throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     AccessibleRelationSetHelper* pRelationSet = new AccessibleRelationSetHelper();
     Reference< XAccessible > xAccObj = implGetChildByRole( getAccessibleParent(), nRulerRole );
@@ -1015,7 +995,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleR
 Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleStateSet()
         throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     AccessibleStateSetHelper* pStateSet = implCreateStateSet();
     if( implIsAlive() )
     {
@@ -1035,14 +1015,14 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleStat
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleRowCount() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetRowCount();
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumnCount() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetColumnCount();
 }
@@ -1050,7 +1030,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumnCount() throw( Runtim
 OUString SAL_CALL ScAccessibleCsvGrid::getAccessibleRowDescription( sal_Int32 nRow )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidPosition( nRow, 0 );
     return implGetCellText( nRow, 0 );
@@ -1059,7 +1039,7 @@ OUString SAL_CALL ScAccessibleCsvGrid::getAccessibleRowDescription( sal_Int32 nR
 OUString SAL_CALL ScAccessibleCsvGrid::getAccessibleColumnDescription( sal_Int32 nColumn )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidPosition( 0, nColumn );
     return implGetCellText( 0, nColumn );
@@ -1105,7 +1085,7 @@ Sequence< sal_Int32 > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleRows()
 Sequence< sal_Int32 > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleColumns()
         throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
 
     ScCsvGrid& rGrid = implGetGrid();
@@ -1124,13 +1104,13 @@ sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleRowSelected( sal_Int32 /* nRo
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleColumnSelected( sal_Int32 nColumn )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndex( nColumn );
     return implIsColumnSelected( nColumn );
@@ -1139,7 +1119,7 @@ sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleColumnSelected( sal_Int32 nCo
 Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidPosition( nRow, nColumn );
     return implCreateCellObj( nRow, nColumn );
@@ -1168,7 +1148,7 @@ sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleSelected( sal_Int32 /* nRow *
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidPosition( nRow, nColumn );
     return implGetIndex( nRow, nColumn );
@@ -1177,7 +1157,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleIndex( sal_Int32 nRow, sal_
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleRow( sal_Int32 nChildIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndex( nChildIndex );
     return implGetRow( nChildIndex );
@@ -1186,7 +1166,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleRow( sal_Int32 nChildIndex 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumn( sal_Int32 nChildIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndex( nChildIndex );
     return implGetColumn( nChildIndex );
@@ -1198,7 +1178,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumn( sal_Int32 nChildInd
 void SAL_CALL ScAccessibleCsvGrid::selectAccessibleChild( sal_Int32 nChildIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndex( nChildIndex );
     sal_Int32 nColumn = implGetColumn( nChildIndex );
@@ -1211,7 +1191,7 @@ void SAL_CALL ScAccessibleCsvGrid::selectAccessibleChild( sal_Int32 nChildIndex 
 sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleChildSelected( sal_Int32 nChildIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndex( nChildIndex );
     sal_Int32 nColumn = implGetColumn( nChildIndex );
@@ -1220,7 +1200,7 @@ sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleChildSelected( sal_Int32 nChi
 
 void SAL_CALL ScAccessibleCsvGrid::clearAccessibleSelection() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     implGetGrid().SelectAll( false );
 }
@@ -1232,7 +1212,7 @@ void SAL_CALL ScAccessibleCsvGrid::selectAllAccessibleChildren() throw( RuntimeE
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleChildCount() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetRowCount() * implGetSelColumnCount();
 }
@@ -1240,7 +1220,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleChildCount() throw(
 Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     sal_Int32 nColumns = implGetSelColumnCount();
     if( nColumns == 0 )
@@ -1254,7 +1234,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleChil
 void SAL_CALL ScAccessibleCsvGrid::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     sal_Int32 nColumns = implGetSelColumnCount();
     if( nColumns == 0 )
@@ -1305,11 +1285,14 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL ScAccessibleCsvGrid::getTypes()
     return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(), aSeq );
 }
 
+namespace
+{
+    class theScAccessibleCsvGridImplementationId  : public rtl::Static< UnoTunnelIdInit, theScAccessibleCsvGridImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvGrid::getImplementationId() throw( RuntimeException )
 {
-    static Sequence< sal_Int8 > aSeq;
-    getUuid( aSeq );
-    return aSeq;
+    return theScAccessibleCsvGridImplementationId::get().getSeq();
 }
 
 
@@ -1494,7 +1477,7 @@ ScAccessibleCsvCell::~ScAccessibleCsvCell()
 
 void SAL_CALL ScAccessibleCsvCell::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     SetEditSource( SvxEditSourcePtr( NULL ) );
     ScAccessibleCsvControl::disposing();
 }
@@ -1504,7 +1487,7 @@ void SAL_CALL ScAccessibleCsvCell::disposing()
 
 void SAL_CALL ScAccessibleCsvCell::grabFocus() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     ScCsvGrid& rGrid = implGetGrid();
     rGrid.Execute( CSVCMD_MOVEGRIDCURSOR, rGrid.GetColumnPos( mnColumn ) );
@@ -1513,7 +1496,7 @@ void SAL_CALL ScAccessibleCsvCell::grabFocus() throw( RuntimeException )
 sal_Int32 SAL_CALL ScAccessibleCsvCell::getForeground(  )
 throw (RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
 }
@@ -1521,7 +1504,7 @@ throw (RuntimeException)
 sal_Int32 SAL_CALL ScAccessibleCsvCell::getBackground(  )
 throw (RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
@@ -1541,7 +1524,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvCell::getAccessibleChild( sal_I
 
 sal_Int32 SAL_CALL ScAccessibleCsvCell::getAccessibleIndexInParent() throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return mnIndex;
 }
@@ -1549,7 +1532,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvCell::getAccessibleIndexInParent() throw( Runt
 Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvCell::getAccessibleRelationSet()
         throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return new AccessibleRelationSetHelper();
 }
@@ -1557,7 +1540,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvCell::getAccessibleR
 Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvCell::getAccessibleStateSet()
         throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     AccessibleStateSetHelper* pStateSet = implCreateStateSet();
     if( implIsAlive() )
     {
@@ -1592,7 +1575,7 @@ OUString SAL_CALL ScAccessibleCsvCell::getImplementationName() throw( RuntimeExc
 
 Rectangle ScAccessibleCsvCell::GetBoundingBoxOnScreen() const throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     Rectangle aRect( implGetBoundingBox() );
     aRect.SetPos( implGetAbsPos( aRect.TopLeft() ) );
@@ -1601,7 +1584,7 @@ Rectangle ScAccessibleCsvCell::GetBoundingBoxOnScreen() const throw( RuntimeExce
 
 Rectangle ScAccessibleCsvCell::GetBoundingBox() const throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ensureAlive();
     return implGetBoundingBox();
 }
@@ -1678,3 +1661,4 @@ Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

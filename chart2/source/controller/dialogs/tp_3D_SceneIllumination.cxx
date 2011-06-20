@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,13 +34,10 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "CommonConverters.hxx"
 #include "NoWarningThisInCTOR.hxx"
 
-#ifndef _SVX_DIALOGS_HRC
 #include "svx/dialogs.hrc"
-#endif
 // header for define SVX_RES
 #include <svx/dialmgr.hxx>
 #include <rtl/math.hxx>
@@ -65,8 +63,7 @@ LightButton::LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLight
             : ImageButton( pParent, rResId )
             , m_bLightOn(false)
 {
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ), BMP_COLOR_NORMAL );
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF_H) ), BMP_COLOR_HIGHCONTRAST );
+    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ) );
 
     String aTipHelpStr( SchResId(STR_TIP_LIGHTSOURCE_X) );
     rtl::OUString aTipHelp( aTipHelpStr  );
@@ -79,9 +76,11 @@ LightButton::LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLight
     }
     this->SetQuickHelpText( String( aTipHelp ) );
 }
+
 LightButton::~LightButton()
 {
 }
+
 void LightButton::switchLightOn(bool bOn)
 {
     if( m_bLightOn==bOn )
@@ -89,15 +88,14 @@ void LightButton::switchLightOn(bool bOn)
     m_bLightOn = bOn;
     if(m_bLightOn)
     {
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_ON)   ), BMP_COLOR_NORMAL );
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_ON_H) ), BMP_COLOR_HIGHCONTRAST );
+        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_ON) ) );
     }
     else
     {
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ), BMP_COLOR_NORMAL );
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF_H) ), BMP_COLOR_HIGHCONTRAST );
+        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF) ) );
     }
 }
+
 bool LightButton::isLightOn() const
 {
     return m_bLightOn;
@@ -108,11 +106,10 @@ bool LightButton::isLightOn() const
 ColorButton::ColorButton( Window* pParent, const ResId& rResId )
             : ImageButton( pParent, rResId )
 {
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_COLORDLG)   ), BMP_COLOR_NORMAL );
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_COLORDLG_H) ), BMP_COLOR_HIGHCONTRAST );
-
+    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_COLORDLG) ) );
     this->SetQuickHelpText( String( SchResId(STR_TIP_CHOOSECOLOR) ) );
 }
+
 ColorButton::~ColorButton()
 {
 }
@@ -149,12 +146,14 @@ LightSourceInfo::LightSourceInfo()
     aLightSource.aDirection = drawing::Direction3D(1,1,1);
     aLightSource.bIsEnabled = sal_False;
 }
+
 void LightSourceInfo::initButtonFromSource()
 {
     if(!pButton)
         return;
-    pButton->SetModeImage( Image( SVX_RES( aLightSource.bIsEnabled ? RID_SVXIMAGE_LIGHT_ON : RID_SVXIMAGE_LIGHT_OFF )   ), BMP_COLOR_NORMAL );
-    pButton->SetModeImage( Image( SVX_RES( aLightSource.bIsEnabled ? RID_SVXIMAGE_LIGHT_ON_H : RID_SVXIMAGE_LIGHT_OFF_H ) ), BMP_COLOR_HIGHCONTRAST );
+    pButton->SetModeImage( Image( SVX_RES(
+        aLightSource.bIsEnabled ? RID_SVXIMAGE_LIGHT_ON : RID_SVXIMAGE_LIGHT_OFF
+    ) ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -205,7 +204,7 @@ namespace
             catch( const uno::Exception & ex )
             {
                 (void)(ex); // no warning in non-debug builds
-                OSL_ENSURE( false, ::rtl::OUStringToOString(
+                OSL_FAIL( ::rtl::OUStringToOString(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                                 ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
@@ -237,7 +236,7 @@ namespace
             catch( const uno::Exception & ex )
             {
                 (void)(ex); // no warning in non-debug builds
-                OSL_ENSURE( false, ::rtl::OUStringToOString(
+                OSL_FAIL( ::rtl::OUStringToOString(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                                 ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
@@ -256,7 +255,7 @@ namespace
         catch( const uno::Exception & ex )
         {
             (void)(ex); // no warning in non-debug builds
-            OSL_ENSURE( false, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
@@ -276,7 +275,7 @@ namespace
         catch( const uno::Exception & ex )
         {
             (void)(ex); // no warning in non-debug builds
-            OSL_ENSURE( false, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
@@ -353,8 +352,6 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWin
     m_aCtl_Preview.SetUserSelectionChangeCallback( LINK( this, ThreeD_SceneIllumination_TabPage, PreviewSelectHdl ) );
 
     ClickLightSourceButtonHdl(&m_aBtn_Light2);
-
-    //m_aDelyedModelChangeTimer.SetTimeout( 4*EDIT_UPDATEDATA_TIMEOUT );
 
     m_aModelChangeListener.startListening( uno::Reference< util::XModifyBroadcaster >(m_xSceneProperties, uno::UNO_QUERY) );
     m_aBtn_Light1.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
@@ -657,3 +654,5 @@ void ThreeD_SceneIllumination_TabPage::updatePreview()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

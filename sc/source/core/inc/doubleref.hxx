@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: interpre.hxx,v $
- * $Revision: 1.35.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,6 +138,9 @@ public:
     virtual bool isRangeEqual(const ScRange& rRange) const;
 
 private:
+    sal_uInt16 getCellString(::rtl::OUString& rStr, ScBaseCell* pCell) const;
+
+private:
     ScRange maRange;
 };
 
@@ -188,3 +189,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

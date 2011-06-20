@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
-#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HDL_
 #include <com/sun/star/uno/Exception.hdl>
-#endif
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -76,7 +75,6 @@ protected:
     sal_Bool volatile       m_bDisposed;
     sal_Bool volatile       m_bInDispose;
 
-    //
     sal_Bool                m_bLongLastingCallsCancelable;
     ::osl::Condition        m_aNoLongLastingCallCountCondition;
     sal_Int32 volatile      m_nLongLastingCallCount;
@@ -253,3 +251,5 @@ public:
 
 }//end namespace apphelper
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

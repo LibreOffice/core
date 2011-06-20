@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,14 +35,14 @@
 
 //------------------------------------------------------------------------
 
-String __EXPORT SvxDrawToolItem::GetValueText() const
+String SvxDrawToolItem::GetValueText() const
 {
     return GetValueText(GetValue());
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
+String SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
 {
     const sal_Char* p;
 
@@ -64,14 +65,14 @@ String __EXPORT SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT SvxDrawToolItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxDrawToolItem::Clone( SfxItemPool * ) const
 {
     return new SvxDrawToolItem(*this);
 }
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT SvxDrawToolItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
+SfxPoolItem* SvxDrawToolItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
 {
     sal_uInt16 nVal;
     rStream >> nVal;
@@ -80,3 +81,4 @@ SfxPoolItem* __EXPORT SvxDrawToolItem::Create( SvStream& rStream, sal_uInt16 nVe
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

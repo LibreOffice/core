@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -159,11 +160,6 @@ const ScUnoAddInHelpId pDateFuncHelpIds[] =
 
 // ============================================================================
 
-//UNUSED2008-05  ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator() :
-//UNUSED2008-05  pCurrHelpIds( NULL ),
-//UNUSED2008-05  nArrayCount( 0 )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
 
 ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( const ::rtl::OUString& rServiceName )
 {
@@ -175,12 +171,12 @@ void ScUnoAddInHelpIdGenerator::SetServiceName( const ::rtl::OUString& rServiceN
     pCurrHelpIds = NULL;
     sal_uInt32 nSize = 0;
 
-    if( rServiceName.equalsAscii( "com.sun.star.sheet.addin.Analysis" ) )
+    if( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.addin.Analysis" ) ) )
     {
         pCurrHelpIds = pAnalysisHelpIds;
         nSize = sizeof( pAnalysisHelpIds );
     }
-    else if( rServiceName.equalsAscii( "com.sun.star.sheet.addin.DateFunctions" ) )
+    else if( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.addin.DateFunctions" ) ) )
     {
         pCurrHelpIds = pDateFuncHelpIds;
         nSize = sizeof( pDateFuncHelpIds );
@@ -215,3 +211,4 @@ rtl::OString ScUnoAddInHelpIdGenerator::GetHelpId( const ::rtl::OUString& rFuncN
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

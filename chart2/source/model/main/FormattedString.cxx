@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -140,10 +141,8 @@ uno::Reference< util::XCloneable > SAL_CALL FormattedString::createClone()
 ::rtl::OUString SAL_CALL FormattedString::getString()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex());
     return m_aString;
-    // \--
 }
 
 void SAL_CALL FormattedString::setString( const ::rtl::OUString& String )
@@ -263,3 +262,5 @@ APPHELPER_XSERVICEINFO_IMPL( FormattedString,
                              C2U( "com.sun.star.comp.chart.FormattedString" ));
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

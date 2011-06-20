@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@
 #include "attrib.hxx"
 #include "sc.hrc"
 #include "undodat.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
 #include "dbdocfun.hxx"
@@ -57,11 +58,6 @@ ScDBFunc::ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewSh
 {
 }
 
-//UNUSED2008-05  ScDBFunc::ScDBFunc( Window* pParent, const ScDBFunc& rDBFunc, ScTabViewShell* pViewShell ) :
-//UNUSED2008-05      ScViewFunc( pParent, rDBFunc, pViewShell )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 ScDBFunc::~ScDBFunc()
 {
 }
@@ -70,41 +66,34 @@ ScDBFunc::~ScDBFunc()
 //      Hilfsfunktionen
 //
 
-void ScDBFunc::GotoDBArea( const String& rDBName )
+void ScDBFunc::GotoDBArea( const ::rtl::OUString& rDBName )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDBCollection* pDBCol = pDoc->GetDBCollection();
-
-    sal_uInt16 nFoundAt = 0;
-    if ( pDBCol->SearchName( rDBName, nFoundAt ) )
+    ScDBData* pData = pDBCol->getNamedDBs().findByName(rDBName);
+    if (pData)
     {
-        ScDBData* pData = (*pDBCol)[nFoundAt];
-        DBG_ASSERT( pData, "GotoDBArea: Datenbankbereich nicht gefunden!" );
+        SCTAB nTab = 0;
+        SCCOL nStartCol = 0;
+        SCROW nStartRow = 0;
+        SCCOL nEndCol = 0;
+        SCROW nEndRow = 0;
 
-        if ( pData )
-        {
-            SCTAB nTab = 0;
-            SCCOL nStartCol = 0;
-            SCROW nStartRow = 0;
-            SCCOL nEndCol = 0;
-            SCROW nEndRow = 0;
+        pData->GetArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+        SetTabNo( nTab );
 
-            pData->GetArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
-            SetTabNo( nTab );
-
-            MoveCursorAbs( nStartCol, nStartRow, ScFollowMode( SC_FOLLOW_JUMP ),
-                               sal_False, sal_False );  // bShift,bControl
-            DoneBlockMode();
-            InitBlockMode( nStartCol, nStartRow, nTab );
-            MarkCursor( nEndCol, nEndRow, nTab );
-            SelectionChanged();
-        }
+        MoveCursorAbs( nStartCol, nStartRow, ScFollowMode( SC_FOLLOW_JUMP ),
+                       false, false );  // bShift,bControl
+        DoneBlockMode();
+        InitBlockMode( nStartCol, nStartRow, nTab );
+        MarkCursor( nEndCol, nEndRow, nTab );
+        SelectionChanged();
     }
 }
 
 //  aktuellen Datenbereich fuer Sortieren / Filtern suchen
 
-ScDBData* ScDBFunc::GetDBData( sal_Bool bMark, ScGetDBMode eMode, ScGetDBSelection eSel )
+ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection eSel )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDBData* pData = NULL;
@@ -182,18 +171,47 @@ ScDBData* ScDBFunc::GetDBData( sal_Bool bMark, ScGetDBMode eMode, ScGetDBSelecti
                              GetViewData()->GetTabNo() ),
                     eMode, SC_DBSEL_KEEP );
 
-    if ( pData && bMark )
+    if (!pData)
+        return NULL;
+
+    if (bMark)
     {
         ScRange aFound;
         pData->GetArea(aFound);
-        MarkRange( aFound, sal_False );
+        MarkRange( aFound, false );
     }
     return pData;
 }
 
+ScDBData* ScDBFunc::GetAnonymousDBData()
+{
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScRange aRange;
+    ScMarkType eMarkType = GetViewData()->GetSimpleArea(aRange);
+    if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
+        return NULL;
+
+    // Expand to used data area if not explicitly marked.
+    const ScMarkData& rMarkData = GetViewData()->GetMarkData();
+    if (!rMarkData.IsMarked() && !rMarkData.IsMultiMarked())
+    {
+        SCCOL nCol1 = aRange.aStart.Col();
+        SCCOL nCol2 = aRange.aEnd.Col();
+        SCROW nRow1 = aRange.aStart.Row();
+        SCROW nRow2 = aRange.aEnd.Row();
+        pDocSh->GetDocument()->GetDataArea(aRange.aStart.Tab(), nCol1, nRow1, nCol2, nRow2, false, false);
+        aRange.aStart.SetCol(nCol1);
+        aRange.aStart.SetRow(nRow1);
+        aRange.aEnd.SetCol(nCol2);
+        aRange.aEnd.SetRow(nRow2);
+    }
+
+    return pDocSh->GetAnonymousDBData(aRange);
+}
+
 //  Datenbankbereiche aendern (Dialog)
 
-void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList )
+void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::vector<ScRange> &rDelAreaList )
 {
 
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
@@ -204,21 +222,16 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List&
     ScDBCollection* pRedoColl = NULL;
     const sal_Bool bRecord (pDoc->IsUndoEnabled());
 
-    long nDelCount = rDelAreaList.Count();
-    for (long nDelPos=0; nDelPos<nDelCount; nDelPos++)
+    std::vector<ScRange>::const_iterator iter;
+    for (iter = rDelAreaList.begin(); iter != rDelAreaList.end(); ++iter)
     {
-        ScRange* pEntry = (ScRange*) rDelAreaList.GetObject(nDelPos);
+        //  Targets am SBA abmelden nicht mehr noetig
+        const ScAddress& rStart = iter->aStart;
+        const ScAddress& rEnd   = iter->aEnd;
+        pDocShell->DBAreaDeleted( rStart.Tab(),
+                                  rStart.Col(), rStart.Row(),
+                                  rEnd.Col(),   rEnd.Row() );
 
-        if ( pEntry )
-        {
-            ScAddress& rStart = pEntry->aStart;
-            ScAddress& rEnd   = pEntry->aEnd;
-            pDocShell->DBAreaDeleted( rStart.Tab(),
-                                       rStart.Col(), rStart.Row(),
-                                       rEnd.Col(),   rEnd.Row() );
-
-            //  Targets am SBA abmelden nicht mehr noetig
-        }
     }
 
     if (bRecord)
@@ -228,7 +241,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List&
 
     pDoc->CompileDBFormula( sal_True );     // CreateFormulaString
     pDoc->SetDBCollection( new ScDBCollection( rNewColl ) );
-    pDoc->CompileDBFormula( sal_False );    // CompileFormulaString
+    pDoc->CompileDBFormula( false );    // CompileFormulaString
     pOldColl = NULL;
     pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
     aModificator.SetDocumentModified();
@@ -257,7 +270,7 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam, sal_Bool bRecord )
                                                     rSortParam.nCol2, rSortParam.nRow2 );
     if (!pDBData)
     {
-        DBG_ERROR( "Sort: keine DBData" );
+        OSL_FAIL( "Sort: keine DBData" );
         return;
     }
 
@@ -280,7 +293,7 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, sal_Bool bRecord, sal_Bool b
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     SCTAB nTab = GetViewData()->GetTabNo();
     ScDBDocFunc aDBDocFunc( *pDocSh );
-    sal_Bool bSuccess = aDBDocFunc.Sort( nTab, rSortParam, bRecord, bPaint, sal_False );
+    sal_Bool bSuccess = aDBDocFunc.Sort( nTab, rSortParam, bRecord, bPaint, false );
     if ( bSuccess && !rSortParam.bInplace )
     {
         //  Ziel markieren
@@ -299,7 +312,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     SCTAB nTab = GetViewData()->GetTabNo();
     ScDBDocFunc aDBDocFunc( *pDocSh );
-    sal_Bool bSuccess = aDBDocFunc.Query( nTab, rQueryParam, pAdvSource, bRecord, sal_False );
+    sal_Bool bSuccess = aDBDocFunc.Query( nTab, rQueryParam, pAdvSource, bRecord, false );
 
     if (bSuccess)
     {
@@ -338,7 +351,7 @@ void ScDBFunc::ToggleAutoFilter()
 
     ScQueryParam    aParam;
     ScDocument*     pDoc    = GetViewData()->GetDocument();
-    ScDBData*       pDBData = GetDBData( sal_False, SC_DB_MAKE, SC_DBSEL_ROW_DOWN );
+    ScDBData*       pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
 
     pDBData->SetByRow( sal_True );              //! Undo, vorher abfragen ??
     pDBData->GetQueryParam( aParam );
@@ -350,7 +363,7 @@ void ScDBFunc::ToggleAutoFilter()
     sal_Int16   nFlag;
     sal_Bool    bHasAuto = sal_True;
     sal_Bool    bHeader  = pDBData->HasHeader();
-    sal_Bool    bPaint   = sal_False;
+    sal_Bool    bPaint   = false;
 
     //!     stattdessen aus DB-Bereich abfragen?
 
@@ -360,7 +373,7 @@ void ScDBFunc::ToggleAutoFilter()
                 GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
 
         if ( (nFlag & SC_MF_AUTO) == 0 )
-            bHasAuto = sal_False;
+            bHasAuto = false;
     }
 
     if (bHasAuto)                               // aufheben
@@ -382,15 +395,15 @@ void ScDBFunc::ToggleAutoFilter()
         ScRange aRange;
         pDBData->GetArea( aRange );
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), sal_False ) );
+            new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), false ) );
 
-        pDBData->SetAutoFilter(sal_False);
+        pDBData->SetAutoFilter(false);
 
         //  Filter aufheben (incl. Paint / Undo)
 
         SCSIZE nEC = aParam.GetEntryCount();
         for (SCSIZE i=0; i<nEC; i++)
-            aParam.GetEntry(i).bDoQuery = sal_False;
+            aParam.GetEntry(i).bDoQuery = false;
         aParam.bDuplicate = sal_True;
         Query( aParam, NULL, sal_True );
 
@@ -461,7 +474,7 @@ void ScDBFunc::HideAutoFilter()
     ScDocument* pDoc = pDocSh->GetDocument();
 
     ScQueryParam aParam;
-    ScDBData* pDBData = GetDBData( sal_False );
+    ScDBData* pDBData = GetDBData( false );
 
     SCTAB nTab;
     SCCOL nCol1, nCol2;
@@ -478,9 +491,9 @@ void ScDBFunc::HideAutoFilter()
     ScRange aRange;
     pDBData->GetArea( aRange );
     pDocSh->GetUndoManager()->AddUndoAction(
-        new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), sal_False ) );
+        new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), false ) );
 
-    pDBData->SetAutoFilter(sal_False);
+    pDBData->SetAutoFilter(false);
 
     pDocSh->PostPaint( nCol1,nRow1,nTab, nCol2,nRow1,nTab, PAINT_GRID );
     aModificator.SetDocumentModified();
@@ -500,12 +513,14 @@ sal_Bool ScDBFunc::ImportData( const ScImportParam& rParam, sal_Bool bRecord )
     if ( !aTester.IsEditable() )
     {
         ErrorMessage(aTester.GetMessageId());
-        return sal_False;
+        return false;
     }
 
     ScDBDocFunc aDBDocFunc( *GetViewData()->GetDocShell() );
-    return aDBDocFunc.DoImport( GetViewData()->GetTabNo(), rParam, NULL, bRecord );
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
+    return aDBDocFunc.DoImport( GetViewData()->GetTabNo(), rParam, xResultSet, NULL, bRecord );
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

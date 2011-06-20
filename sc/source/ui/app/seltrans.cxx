@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,19 +58,19 @@ using namespace com::sun::star;
 
 sal_Bool lcl_IsURLButton( SdrObject* pObject )
 {
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
 
     SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObject);
     if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
        {
         uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
-        DBG_ASSERT( xControlModel.is(), "uno control without model" );
+        OSL_ENSURE( xControlModel.is(), "uno control without model" );
         if ( xControlModel.is() )
         {
             uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-            rtl::OUString sPropButtonType = rtl::OUString::createFromAscii( "ButtonType" );
+            rtl::OUString sPropButtonType(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ));
             if(xInfo->hasPropertyByName( sPropButtonType ))
             {
                 uno::Any aAny = xPropSet->getPropertyValue( sPropButtonType );
@@ -83,7 +84,6 @@ sal_Bool lcl_IsURLButton( SdrObject* pObject )
     return bRet;
 }
 
-// static
 
 ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView )
 {
@@ -173,14 +173,14 @@ ScSelectionTransferObj::~ScSelectionTransferObj()
         pScMod->SetSelectionTransfer( NULL );
     }
 
-    DBG_ASSERT( !pView, "ScSelectionTransferObj dtor: ForgetView not called" );
+    OSL_ENSURE( !pView, "ScSelectionTransferObj dtor: ForgetView not called" );
 }
 
 sal_Bool ScSelectionTransferObj::StillValid()
 {
     //! check if view still has same cell selection
     //! (but return sal_False if data has changed inbetween)
-    return sal_False;
+    return false;
 }
 
 void ScSelectionTransferObj::ForgetView()
@@ -273,7 +273,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
 
 void ScSelectionTransferObj::CreateCellData()
 {
-    DBG_ASSERT( !pCellData, "CreateCellData twice" );
+    OSL_ENSURE( !pCellData, "CreateCellData twice" );
     if ( pView )
     {
         ScViewData* pViewData = pView->GetViewData();
@@ -299,7 +299,7 @@ void ScSelectionTransferObj::CreateCellData()
             // bApi = sal_True -> no error mesages
             // #i18364# bStopEdit = sal_False -> don't end edit mode
             // (this may be called from pasting into the edit line)
-            sal_Bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc, sal_False, sal_True, sal_True, sal_False );
+            sal_Bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc, false, sal_True, sal_True, false );
 
             ScDrawLayer::SetGlobalDrawPersist(NULL);
 
@@ -328,7 +328,7 @@ void ScSelectionTransferObj::CreateCellData()
                 delete pClipDoc;
         }
     }
-    DBG_ASSERT( pCellData, "can't create CellData" );
+    OSL_ENSURE( pCellData, "can't create CellData" );
 }
 
 //! make static member of ScDrawView
@@ -336,7 +336,7 @@ extern void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_B
 
 void ScSelectionTransferObj::CreateDrawData()
 {
-    DBG_ASSERT( !pDrawData, "CreateDrawData twice" );
+    OSL_ENSURE( !pDrawData, "CreateDrawData twice" );
     if ( pView )
     {
         //  similar to ScDrawView::BeginDrag
@@ -380,7 +380,7 @@ void ScSelectionTransferObj::CreateDrawData()
             pDrawData->acquire();       // keep ref count up - released in ForgetView
         }
     }
-    DBG_ASSERT( pDrawData, "can't create DrawData" );
+    OSL_ENSURE( pDrawData, "can't create DrawData" );
 }
 
 ScTransferObj* ScSelectionTransferObj::GetCellData()
@@ -401,7 +401,7 @@ ScDrawTransferObj* ScSelectionTransferObj::GetDrawData()
 
 sal_Bool ScSelectionTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    sal_Bool bOK = sal_False;
+    sal_Bool bOK = false;
 
     uno::Reference<datatransfer::XTransferable> xSource;
     switch (eMode)
@@ -447,3 +447,4 @@ void ScSelectionTransferObj::ObjectReleased()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

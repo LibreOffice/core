@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,8 @@
 #include "document.hxx"
 #include "uiitems.hxx"
 #include "global.hxx"
-#include "dbcolect.hxx"
+#include "globalnames.hxx"
+#include "dbdata.hxx"
 #include "scresid.hxx"
 
 #include "sc.hrc"
@@ -89,7 +91,6 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
-        aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
         aStrNone        ( ScResId( SCSTR_NONE ) ),
         aStrEmpty       ( ScResId( SCSTR_EMPTY ) ),
         aStrNotEmpty    ( ScResId( SCSTR_NOTEMPTY ) ),
@@ -114,7 +115,7 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
 
 //------------------------------------------------------------------------
 
-__EXPORT ScPivotFilterDlg::~ScPivotFilterDlg()
+ScPivotFilterDlg::~ScPivotFilterDlg()
 {
     for (sal_uInt16 i=0; i<=MAXCOL; i++)
         delete pEntryLists[i];
@@ -125,7 +126,7 @@ __EXPORT ScPivotFilterDlg::~ScPivotFilterDlg()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
+void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 {
     const ScQueryItem& rQueryItem = (const ScQueryItem&)
                                     rArgSet.Get( nWhichQuery );
@@ -173,8 +174,7 @@ void __EXPORT ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                                                 theQueryData.nRow2,
                                                 nSrcTab ) );
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        String          theDbArea;
-        String          theDbName   = aStrNoName;
+        ::rtl::OUString theDbName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
 
         /*
          * Ueberpruefen, ob es sich bei dem uebergebenen
@@ -191,13 +191,14 @@ void __EXPORT ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                                                         rStart.Col(), rStart.Row(),
                                                         rEnd.Col(),   rEnd.Row() );
             if ( pDBData )
-                pDBData->GetName( theDbName );
+                theDbName = pDBData->GetName();
         }
 
-        theDbArea.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
-        theDbArea += theDbName;
-        theDbArea += ')';
-        aFtDbArea.SetText( theDbArea );
+        ::rtl::OUStringBuffer aBuf;
+        aBuf.appendAscii(" (");
+        aBuf.append(theDbName);
+        aBuf.append(sal_Unicode(')'));
+        aFtDbArea.SetText(aBuf.makeStringAndClear());
     }
     else
     {
@@ -427,13 +428,13 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
             {
                 *rEntry.pStr    = EMPTY_STRING;
                 rEntry.nVal     = SC_EMPTYFIELDS;
-                rEntry.bQueryByString = sal_False;
+                rEntry.bQueryByString = false;
             }
             else if ( aStrVal == aStrNotEmpty )
             {
                 *rEntry.pStr    = EMPTY_STRING;
                 rEntry.nVal     = SC_NONEMPTYFIELDS;
-                rEntry.bQueryByString = sal_False;
+                rEntry.bQueryByString = false;
             }
             else
             {
@@ -455,7 +456,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
                                     ? (ScQueryConnect)nConnect2
                                     : SC_AND;
 
-    theParam.bInplace   = sal_False;
+    theParam.bInplace   = false;
     theParam.nDestTab   = 0;    // Woher kommen diese Werte?
     theParam.nDestCol   = 0;
     theParam.nDestRow   = 0;
@@ -618,3 +619,4 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,15 +80,6 @@ typedef void (CALLTYPE* FARPROC) ( void );
 
 }
 
-#if defined(OS2) && defined(BLC)
-#define GETFUNCTIONCOUNT        "_GetFunctionCount"
-#define GETFUNCTIONDATA         "_GetFunctionData"
-#define SETLANGUAGE             "_SetLanguage"
-#define GETPARAMDESC            "_GetParameterDescription"
-#define ISASYNC                 "_IsAsync"
-#define ADVICE                  "_Advice"
-#define UNADVICE                "_Unadvice"
-#else // Pascal oder extern "C"
 #define GETFUNCTIONCOUNT        "GetFunctionCount"
 #define GETFUNCTIONDATA         "GetFunctionData"
 #define SETLANGUAGE             "SetLanguage"
@@ -95,7 +87,6 @@ typedef void (CALLTYPE* FARPROC) ( void );
 #define ISASYNC                 "IsAsync"
 #define ADVICE                  "Advice"
 #define UNADVICE                "Unadvice"
-#endif
 
 #define LIBFUNCNAME( name ) \
     (String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( name ) ))
@@ -105,7 +96,6 @@ typedef void (CALLTYPE* FARPROC) ( void );
 FuncData::FuncData(const String& rIName) :
     pModuleData     (NULL),
     aInternalName   (rIName),
-//  aFuncName       (""),
     nNumber         (0),
     nParamCount     (0),
     eAsyncType      (NONE)
@@ -186,7 +176,7 @@ public:
 class ModuleCollection : public ScSortedCollection
 {
 public:
-    ModuleCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False) : ScSortedCollection ( nLim, nDel, bDup ) {}
+    ModuleCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false) : ScSortedCollection ( nLim, nDel, bDup ) {}
     ModuleCollection(const ModuleCollection& rModuleCollection) : ScSortedCollection ( rModuleCollection ) {}
 
     virtual ScDataObject*       Clone() const { return new ModuleCollection(*this); }
@@ -230,12 +220,12 @@ sal_Bool InitExternalFunc(const rtl::OUString& rModuleName)
     // Module schon geladen?
     const ModuleData* pTemp;
     if (aModuleCollection.SearchModule(aModuleName, pTemp))
-        return sal_False;
+        return false;
 
     rtl::OUString aNP;
     aNP = rModuleName;
 
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     osl::Module* pLib = new osl::Module( aNP );
     if (pLib->is())
     {
@@ -270,7 +260,7 @@ sal_Bool InitExternalFunc(const rtl::OUString& rModuleName)
                 sal_uInt16 nParamCount;
                 ParamType eParamType[MAXFUNCPARAM];
                 ParamType eAsyncType = NONE;
-                // #62113# alles initialisieren, falls das AddIn sich schlecht verhaelt
+                // alles initialisieren, falls das AddIn sich schlecht verhaelt
                 cFuncName[0] = 0;
                 cInternalName[0] = 0;
                 nParamCount = 0;
@@ -323,7 +313,7 @@ void ExitExternalFunc()
 
 sal_Bool FuncData::Call(void** ppParam)
 {
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
     FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(aFuncName);
     if (fProc != NULL)
@@ -418,7 +408,7 @@ sal_Bool FuncData::Call(void** ppParam)
 
 sal_Bool FuncData::Unadvice( double nHandle )
 {
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
     FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(UNADVICE));
     if (fProc != NULL)
@@ -433,15 +423,12 @@ sal_Bool FuncData::Unadvice( double nHandle )
 
 const String& FuncData::GetModuleName() const
 {
-    // DBG_ASSERT( pModuleData, "Keine Arme, keine Kekse" ):
     return pModuleData->GetName();
 }
 
-//------------------------------------------------------------------------
-
-sal_Bool FuncData::GetParamDesc( String& aName, String& aDesc, sal_uInt16 nParam )
+bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( nParam <= nParamCount )
     {
         osl::Module* pLib = pModuleData->GetInstance();
@@ -453,17 +440,17 @@ sal_Bool FuncData::GetParamDesc( String& aName, String& aDesc, sal_uInt16 nParam
             *pcName = *pcDesc = 0;
             sal_uInt16 nFuncNo = nNumber;   // nicht per Reference versauen lassen..
             ((::GetParamDesc)fProc)( nFuncNo, nParam, pcName, pcDesc );
-            aName = String( pcName, osl_getThreadTextEncoding() );
-            aDesc = String( pcDesc, osl_getThreadTextEncoding() );
-            bRet = sal_True;
+            aName = ::rtl::OUString( pcName, 256, osl_getThreadTextEncoding() );
+            aDesc = ::rtl::OUString( pcDesc, 256, osl_getThreadTextEncoding() );
+            bRet = true;
         }
     }
     if ( !bRet )
     {
-        aName.Erase();
-        aDesc.Erase();
+        aName = ::rtl::OUString();
+        aDesc = ::rtl::OUString();
     }
     return bRet;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

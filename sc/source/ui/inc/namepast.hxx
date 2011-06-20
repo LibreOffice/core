@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,10 +34,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-#include "scui_def.hxx" //CHINA001
-//CHINA001 #define BTN_PASTE_NAME   100
-//CHINA001 #define BTN_PASTE_LIST   101
-//CHINA001
+#include "scui_def.hxx"
 class ScRangeName;
 
 class ScNamePasteDlg : public ModalDialog
@@ -60,3 +58,5 @@ public:
 
 
 #endif //SC_NAMEPAST_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

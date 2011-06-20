@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ Output stream class for Excel export
 
 class XclExpRoot;
 class XclExpBiff8Encrypter;
-typedef ScfRef< XclExpBiff8Encrypter > XclExpEncrypterRef;
+typedef boost::shared_ptr< XclExpBiff8Encrypter > XclExpEncrypterRef;
 
 /** This class is used to export Excel record streams.
     @descr  An instance is constructed with an SvStream and the maximum size of Excel
@@ -136,19 +137,11 @@ public:
     // *** unicode string export is realized with helper class XclExpString ***
     // (slice length setting has no effect here -> disabled automatically)
 
-//UNUSED2008-05  /** Writes Unicode buffer as 8/16 bit, repeats nFlags at start of a CONTINUE record. */
-//UNUSED2008-05  void                WriteUnicodeBuffer( const sal_uInt16* pBuffer, sal_Size nChars, sal_uInt8 nFlags );
-
     /** Writes Unicode buffer as 8/16 bit, repeats nFlags at start of a CONTINUE record. */
     void                WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nFlags );
 
     // *** write 8-bit-strings ***
     // (slice length setting has no effect here -> disabled automatically)
-
-//UNUSED2008-05  /** Writes ByteString buffer (without string length field). */
-//UNUSED2008-05  void                WriteByteStringBuffer(
-//UNUSED2008-05                          const ByteString& rString,
-//UNUSED2008-05                          sal_uInt16 nMaxLen = 0x00FF );
 
     /** Writes string length field and ByteString buffer. */
     void                WriteByteString(
@@ -268,12 +261,15 @@ private:
     (s.Len() && s.GetChar( 0 ) != 0 ? XclXmlUtils::ToOString( s ).getStr() : NULL)
 
 class ScAddress;
+class ScDocShell;
 class ScDocument;
+class ScFormulaCell;
 class ScRange;
 class ScRangeList;
 class ScTokenArray;
 struct XclAddress;
 struct XclFontData;
+struct XclRange;
 class XclRangeList;
 
 class XclXmlUtils
@@ -283,6 +279,7 @@ class XclXmlUtils
     XclXmlUtils(const XclXmlUtils&);
     XclXmlUtils& operator=(const XclXmlUtils&);
 public:
+    static void                     GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& sType, ::rtl::OUString& rValue);
     static ::rtl::OUString          GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId );
 
     static ::rtl::OString ToOString( const Color& rColor );
@@ -294,6 +291,7 @@ public:
     static ::rtl::OString ToOString( const ScRangeList& rRangeList );
     static ::rtl::OString ToOString( const XclAddress& rAddress );
     static ::rtl::OString ToOString( const XclExpString& s );
+    static ::rtl::OString ToOString( const XclRange& rRange );
     static ::rtl::OString ToOString( const XclRangeList& rRangeList );
 
     static ::rtl::OUString ToOUString( const char* s );
@@ -302,26 +300,29 @@ public:
     static ::rtl::OUString ToOUString( ScDocument& rDocument, const ScAddress& rAddress, ScTokenArray* pTokenArray );
     static ::rtl::OUString ToOUString( const XclExpString& s );
     static const char* ToPsz( bool b );
+
+    static sax_fastparser::FSHelperPtr  WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int32 nValue );
+    static sax_fastparser::FSHelperPtr  WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int64 nValue );
+    static sax_fastparser::FSHelperPtr  WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, const char* sValue );
+    static sax_fastparser::FSHelperPtr  WriteFontData( sax_fastparser::FSHelperPtr pStream, const XclFontData& rFontData, sal_Int32 nNameId );
 };
 
 class XclExpXmlStream : public oox::core::XmlFilterBase
 {
 public:
-    XclExpXmlStream( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, SvStream& rStrm, const XclExpRoot& rRoot );
+    XclExpXmlStream( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rCC );
     virtual ~XclExpXmlStream();
 
     /** Returns the filter root data. */
-    inline const XclExpRoot& GetRoot() const { return mrRoot; }
+    inline const XclExpRoot& GetRoot() const { return *mpRoot; }
 
     sax_fastparser::FSHelperPtr& GetCurrentStream();
     void PushStream( sax_fastparser::FSHelperPtr aStream );
     void PopStream();
 
-    ::rtl::OUString                 GetIdForPath( const ::rtl::OUString& rPath );
     sax_fastparser::FSHelperPtr     GetStreamForPath( const ::rtl::OUString& rPath );
 
     sax_fastparser::FSHelperPtr&    WriteAttributes( sal_Int32 nAttribute, ... );
-    sax_fastparser::FSHelperPtr&    WriteFontData( const XclFontData& rFontData, sal_Int32 nNameId );
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const ::rtl::OUString& sFullStream,
@@ -341,19 +342,20 @@ public:
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
     virtual oox::drawingml::chart::ChartConverter& getChartConverter();
 
-    void Trace( const char* format, ...);
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     virtual ::rtl::OUString implGetImplementationName() const;
+    ScDocShell *getDocShell();
 
     typedef std::map< ::rtl::OUString,
         std::pair< ::rtl::OUString,
             sax_fastparser::FSHelperPtr > >     XclExpXmlPathToStateMap;
 
-    const XclExpRoot&                           mrRoot;         /// Filter root data.
+    const XclExpRoot*                           mpRoot;
     std::stack< sax_fastparser::FSHelperPtr >   maStreams;
     XclExpXmlPathToStateMap                     maOpenedStreamMap;
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,8 +50,8 @@ struct ScInterpreterTableOpParams
     sal_Bool        bCollectNotifications;
 
     ScInterpreterTableOpParams()
-            : bValid( sal_False )
-            , bRefresh( sal_False )
+            : bValid( false )
+            , bRefresh( false )
             , bCollectNotifications( sal_True )
     {
     }
@@ -61,7 +62,6 @@ struct ScInterpreterTableOpParams
             , aOld2(                 r.aOld2 )
             , aNew2(                 r.aNew2 )
             , aFormulaPos(           r.aFormulaPos )
-            //! never copied!   , aNotifiedFormulaCells( r.aNotifiedFormulaCells )
             , aNotifiedFormulaPos(   r.aNotifiedFormulaPos )
             , bValid(                r.bValid )
             , bRefresh(              r.bRefresh )
@@ -76,8 +76,6 @@ struct ScInterpreterTableOpParams
         aOld2                 = r.aOld2;
         aNew2                 = r.aNew2;
         aFormulaPos           = r.aFormulaPos;
-        //! never copied!   aNotifiedFormulaCells = r.aNotifiedFormulaCells;
-        //! instead, empty anything eventually present
         ::std::vector< ScFormulaCell* >().swap( aNotifiedFormulaCells );
         aNotifiedFormulaPos   = r.aNotifiedFormulaPos;
         bValid                = r.bValid;
@@ -93,12 +91,9 @@ struct ScInterpreterTableOpParams
             aOld1       == r.aOld1 &&
             aOld2       == r.aOld2 &&
             aFormulaPos == r.aFormulaPos ;
-            // aNotifiedFormula(Cells|Pos), aNew1, aNew2, bRefresh,
-            // bCollectNotifications are not compared
     }
 };
 
-DECLARE_LIST( ScTabOpList, ScInterpreterTableOpParams* )
+#endif
 
-#endif // SC_TABOPPARAMS_HXX
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

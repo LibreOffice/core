@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,8 @@ public:
     InternalData();
 
     void createDefaultData();
+    bool isDefaultData();
+    void clearDefaultData();
 
     void setData( const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence< double > > & rDataInRows );
@@ -83,7 +86,7 @@ public:
     void setComplexColumnLabels( const tVecVecAny& rNewColumnLabels );
     tVecVecAny getComplexColumnLabels() const;
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
     void traceData() const;
 #endif
 
@@ -107,3 +110,5 @@ private:
 #endif
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

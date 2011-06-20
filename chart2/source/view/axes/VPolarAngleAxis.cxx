@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -178,7 +179,6 @@ void VPolarAngleAxis::createLabels()
         return;
 
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
-    double fLogicZ      = 1.0;//as defined
 
     if( m_aAxisProperties.m_bDisplayLabels )
     {
@@ -196,6 +196,7 @@ void VPolarAngleAxis::createLabels()
 
         AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
         aAxisLabelProperties.bOverlapAllowed = true;
+        double fLogicZ      = 1.0;//as defined
         while( !createTextShapes_ForAngleAxis( m_xTextTarget, aTickIter
                         , aAxisLabelProperties
                         , fLogicRadius, fLogicZ
@@ -232,3 +233,5 @@ void VPolarAngleAxis::createShapes()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

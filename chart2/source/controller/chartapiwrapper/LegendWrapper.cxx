@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 namespace chart
@@ -221,9 +221,6 @@ Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterV
 }
 }
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 namespace
 {
@@ -270,7 +267,6 @@ private:
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        //::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
         ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
         ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
@@ -288,7 +284,6 @@ struct StaticLegendWrapperPropertyArray : public rtl::StaticAggregate< Sequence<
 
 } // anonymous namespace
 
-// --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
 
 namespace chart
@@ -367,10 +362,8 @@ void SAL_CALL LegendWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
-    // /--
     MutexGuard aGuard( GetMutex());
     clearWrappedPropertySet();
-    // \--
 }
 
 void SAL_CALL LegendWrapper::addEventListener(
@@ -457,9 +450,6 @@ Sequence< ::rtl::OUString > LegendWrapper::getSupportedServiceNames_Static()
     aServices[ 1 ] = C2U( "com.sun.star.drawing.Shape" );
     aServices[ 2 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
     aServices[ 3 ] = C2U( "com.sun.star.style.CharacterProperties" );
-//     aServices[ 4 ] = C2U( "com.sun.star.beans.PropertySet" );
-//     aServices[ 5 ] = C2U( "com.sun.star.drawing.FillProperties" );
-//     aServices[ 6 ] = C2U( "com.sun.star.drawing.LineProperties" );
 
     return aServices;
 }
@@ -469,3 +459,5 @@ APPHELPER_XSERVICEINFO_IMPL( LegendWrapper, lcl_aServiceName );
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

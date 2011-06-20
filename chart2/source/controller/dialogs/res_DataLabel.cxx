@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -235,7 +236,7 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
 {
     if( !m_pPool || !m_pNumberFormatter )
     {
-        DBG_ERROR("Missing item pool or number formatter");
+        OSL_FAIL("Missing item pool or number formatter");
         return 1;
     }
 
@@ -417,3 +418,5 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

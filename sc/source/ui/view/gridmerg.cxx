@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@ ScGridMerger::ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePix
     nOneX( nOnePixelX ),
     nOneY( nOnePixelY ),
     nCount( 0 ),
-    bVertical( sal_False )
+    bVertical( false )
 {
     //  optimize (DrawGrid) only for pixel MapMode,
     //  to avoid rounding errors
@@ -104,7 +105,7 @@ void ScGridMerger::AddHorLine( long nX1, long nX2, long nY )
         if ( bVertical )
         {
             Flush();
-            bVertical = sal_False;
+            bVertical = false;
         }
         AddLine( nX1, nX2, nY );
     }
@@ -172,3 +173,4 @@ void ScGridMerger::Flush()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

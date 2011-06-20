@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -160,7 +161,7 @@ public:
             ::com::sun::star::chart2::XDiagram > & xDiagram,
         sal_Int32 nNewDimensionCount );
 
-    /** Replaces all occurences of xCooSysToReplace in the tree with
+    /** Replaces all occurrences of xCooSysToReplace in the tree with
         xReplacement in the diagram's tree
      */
     SAL_DLLPRIVATE static void replaceCoordinateSystem(
@@ -365,3 +366,5 @@ private:
 
 // CHART2_DIAGRAMHELPER_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

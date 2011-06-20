@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include <tools/debug.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/text/XText.hpp>
@@ -58,15 +58,15 @@ void XMLTableMasterPageExport::exportHeaderFooterContent(
             const Reference< XText >& rText,
             sal_Bool bAutoStyles, sal_Bool bProgress )
 {
-    DBG_ASSERT( rText.is(), "There is the text" );
+    OSL_ENSURE( rText.is(), "There is the text" );
 
     if( bAutoStyles )
         GetExport().GetTextParagraphExport()
-                ->collectTextAutoStyles( rText, bProgress, sal_False );
+                ->collectTextAutoStyles( rText, bProgress, false );
     else
     {
         GetExport().GetTextParagraphExport()->exportTextDeclarations( rText );
-        GetExport().GetTextParagraphExport()->exportText( rText, bProgress, sal_False );
+        GetExport().GetTextParagraphExport()->exportText( rText, bProgress, false );
     }
 }
 
@@ -91,26 +91,26 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                       aName, sal_True, sal_True );
             if (sCenter.getLength() && !sLeft.getLength() && !sRight.getLength())
-                exportHeaderFooterContent( xCenter, sal_False, sal_False );
+                exportHeaderFooterContent( xCenter, false, false );
             else
             {
                 if (sLeft.getLength())
                 {
                     SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_LEFT, sal_True, sal_True );
-                    exportHeaderFooterContent( xLeft, sal_False, sal_False );
+                    exportHeaderFooterContent( xLeft, false, false );
                 }
                 if (sCenter.getLength())
                 {
                     SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_CENTER, sal_True, sal_True );
-                    exportHeaderFooterContent( xCenter, sal_False, sal_False );
+                    exportHeaderFooterContent( xCenter, false, false );
                 }
                 if (sRight.getLength())
                 {
                     SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_RIGHT, sal_True, sal_True );
-                    exportHeaderFooterContent( xRight, sal_False, sal_False );
+                    exportHeaderFooterContent( xRight, false, false );
                 }
             }
         }
@@ -133,27 +133,27 @@ void XMLTableMasterPageExport::exportMasterPageContent(
     {
         if( xHeader.is() )
         {
-            exportHeaderFooterContent( xHeader->getCenterText(), sal_True, sal_False );
-            exportHeaderFooterContent( xHeader->getLeftText(), sal_True, sal_False );
-            exportHeaderFooterContent( xHeader->getRightText(), sal_True, sal_False );
+            exportHeaderFooterContent( xHeader->getCenterText(), sal_True, false );
+            exportHeaderFooterContent( xHeader->getLeftText(), sal_True, false );
+            exportHeaderFooterContent( xHeader->getRightText(), sal_True, false );
         }
         if( xHeaderLeft.is())
         {
-            exportHeaderFooterContent( xHeaderLeft->getCenterText(), sal_True, sal_False );
-            exportHeaderFooterContent( xHeaderLeft->getLeftText(), sal_True, sal_False );
-            exportHeaderFooterContent( xHeaderLeft->getRightText(), sal_True, sal_False );
+            exportHeaderFooterContent( xHeaderLeft->getCenterText(), sal_True, false );
+            exportHeaderFooterContent( xHeaderLeft->getLeftText(), sal_True, false );
+            exportHeaderFooterContent( xHeaderLeft->getRightText(), sal_True, false );
         }
         if( xFooter.is() )
         {
-            exportHeaderFooterContent( xFooter->getCenterText(), sal_True, sal_False );
-            exportHeaderFooterContent( xFooter->getLeftText(), sal_True, sal_False );
-            exportHeaderFooterContent( xFooter->getRightText(), sal_True, sal_False );
+            exportHeaderFooterContent( xFooter->getCenterText(), sal_True, false );
+            exportHeaderFooterContent( xFooter->getLeftText(), sal_True, false );
+            exportHeaderFooterContent( xFooter->getRightText(), sal_True, false );
         }
         if( xFooterLeft.is())
         {
-            exportHeaderFooterContent( xFooterLeft->getCenterText(), sal_True, sal_False );
-            exportHeaderFooterContent( xFooterLeft->getLeftText(), sal_True, sal_False );
-            exportHeaderFooterContent( xFooterLeft->getRightText(), sal_True, sal_False );
+            exportHeaderFooterContent( xFooterLeft->getCenterText(), sal_True, false );
+            exportHeaderFooterContent( xFooterLeft->getLeftText(), sal_True, false );
+            exportHeaderFooterContent( xFooterLeft->getRightText(), sal_True, false );
         }
     }
     else
@@ -176,3 +176,4 @@ void XMLTableMasterPageExport::exportMasterPageContent(
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

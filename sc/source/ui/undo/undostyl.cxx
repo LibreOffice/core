@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -140,7 +141,6 @@ void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, sal_Bool 
         pHdl->ForgetLastPattern();
 }
 
-// static
 void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
                                     SfxStyleFamily eStyleFamily, const ScStyleSaveData& rData )
 {
@@ -155,7 +155,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
     {
         // find old style to modify
         pStyle = pStlPool->Find( rName, eStyleFamily );
-        DBG_ASSERT( pStyle, "style not found" );
+        OSL_ENSURE( pStyle, "style not found" );
 
         if ( pStyle && !bDelete )
         {
@@ -194,13 +194,13 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
 
             SfxItemSet& rStyleSet = pStyle->GetItemSet();
             const SfxItemSet* pNewSet = rData.GetItems();
-            DBG_ASSERT( pNewSet, "no ItemSet for style" );
+            OSL_ENSURE( pNewSet, "no ItemSet for style" );
             if (pNewSet)
-                rStyleSet.Set( *pNewSet, sal_False );
+                rStyleSet.Set( *pNewSet, false );
 
             if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
             {
-                lcl_DocStyleChanged( pDoc, pStyle, sal_False );     // cell styles: row heights
+                lcl_DocStyleChanged( pDoc, pStyle, false );     // cell styles: row heights
             }
             else
             {
@@ -243,7 +243,7 @@ void ScUndoModifyStyle::Repeat(SfxRepeatTarget& /* rTarget */)
 
 sal_Bool ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return sal_False;       // no repeat possible
+    return false;       // no repeat possible
 }
 
 // -----------------------------------------------------------------------
@@ -305,7 +305,8 @@ void ScUndoApplyPageStyle::Repeat(SfxRepeatTarget& /* rTarget */)
 
 sal_Bool ScUndoApplyPageStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return sal_False;
+    return false;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

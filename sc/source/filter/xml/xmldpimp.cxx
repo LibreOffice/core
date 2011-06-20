@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,13 +60,13 @@
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
-//#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-
 using namespace com::sun::star;
 using namespace xmloff::token;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::rtl::OUString;
+
+using rtl::OUString;
 
 //------------------------------------------------------------------
 
@@ -128,17 +129,19 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     pDPDimSaveData(NULL),
     sDataPilotTableName(),
     sApplicationData(),
+    sGrandTotal(GetXMLToken(XML_BOTH)),
     mnRowFieldCount(0),
     mnColFieldCount(0),
     mnPageFieldCount(0),
     mnDataFieldCount(0),
     bIsNative(sal_True),
-    bIgnoreEmptyRows(sal_False),
-    bIdentifyCategories(sal_False),
-    bTargetRangeAddress(sal_False),
-    bSourceCellRange(sal_False),
+    bIgnoreEmptyRows(false),
+    bIdentifyCategories(false),
+    bTargetRangeAddress(false),
+    bSourceCellRange(false),
     bShowFilter(sal_True),
-    bDrillDown(sal_True)
+    bDrillDown(sal_True),
+    bHeaderGridLayout(false)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotTableAttrTokenMap();
@@ -164,6 +167,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_GRAND_TOTAL :
             {
+                sGrandTotal = sValue;
                 if (IsXMLToken(sValue, XML_BOTH))
                 {
                     maRowGrandTotal.mbVisible = true;
@@ -217,6 +221,11 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
                 bDrillDown = IsXMLToken(sValue, XML_TRUE);
             }
             break;
+            case XML_TOK_DATA_PILOT_TABLE_ATTR_HEADER_GRID_LAYOUT :
+            {
+                bHeaderGridLayout = IsXMLToken(sValue, XML_TRUE);
+            }
+            break;
         }
     }
 
@@ -264,7 +273,6 @@ SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( sal_uInt16 n
         }
         break;
         case XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL:
-        case XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL_EXT:
         {
             pContext = new ScXMLDataPilotGrandTotalContext(GetScImport(), nPrefix, rLName, xAttrList, this);
         }
@@ -332,7 +340,7 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHas
 {
     if (pDPSave)
     {
-        //  #91045# if a dimension with that name has already been inserted,
+        //  if a dimension with that name has already been inserted,
         //  mark the new one as duplicate
         if ( !pDim->IsDataLayout() &&
                 pDPSave->GetExistingDimensionByName(pDim->GetName()) )
@@ -390,89 +398,94 @@ void ScXMLDataPilotTableContext::AddGroupDim(const ScDPSaveGroupDimension& aGrou
 
 void ScXMLDataPilotTableContext::EndElement()
 {
-    if (bTargetRangeAddress)
+    if (!bTargetRangeAddress)
+        return;
+
+    pDPObject->SetName(sDataPilotTableName);
+    pDPObject->SetTag(sApplicationData);
+    pDPObject->SetOutRange(aTargetRangeAddress);
+    pDPObject->SetHeaderLayout(bHeaderGridLayout);
+    switch (nSourceType)
     {
-        pDPObject->SetName(sDataPilotTableName);
-        pDPObject->SetTag(sApplicationData);
-        pDPObject->SetOutRange(aTargetRangeAddress);
-        switch (nSourceType)
+        case SQL :
         {
-            case SQL :
-            {
-                ScImportSourceDesc aImportDesc;
-                aImportDesc.aDBName = sDatabaseName;
-                aImportDesc.aObject = sSourceObject;
-                aImportDesc.nType = sheet::DataImportMode_SQL;
-                aImportDesc.bNative = bIsNative;
-                pDPObject->SetImportDesc(aImportDesc);
-            }
-            break;
-            case TABLE :
-            {
-                ScImportSourceDesc aImportDesc;
-                aImportDesc.aDBName = sDatabaseName;
-                aImportDesc.aObject = sSourceObject;
-                aImportDesc.nType = sheet::DataImportMode_TABLE;
-                pDPObject->SetImportDesc(aImportDesc);
-            }
-            break;
-            case QUERY :
-            {
-                ScImportSourceDesc aImportDesc;
-                aImportDesc.aDBName = sDatabaseName;
-                aImportDesc.aObject = sSourceObject;
-                aImportDesc.nType = sheet::DataImportMode_QUERY;
-                pDPObject->SetImportDesc(aImportDesc);
-            }
-            break;
-            case SERVICE :
-            {
-                ScDPServiceDesc aServiceDesk(sServiceName, sServiceSourceName, sServiceSourceObject,
-                                    sServiceUsername, sServicePassword);
-                pDPObject->SetServiceData(aServiceDesk);
-            }
-            break;
-            case CELLRANGE :
-            {
-                if (bSourceCellRange)
-                {
-                    ScSheetSourceDesc aSheetDesc;
-                    aSheetDesc.aSourceRange = aSourceCellRangeAddress;
-                    aSheetDesc.aQueryParam = aSourceQueryParam;
-                    pDPObject->SetSheetDesc(aSheetDesc);
-                }
-            }
-            break;
+            ScImportSourceDesc aImportDesc(pDoc);
+            aImportDesc.aDBName = sDatabaseName;
+            aImportDesc.aObject = sSourceObject;
+            aImportDesc.nType = sheet::DataImportMode_SQL;
+            aImportDesc.bNative = bIsNative;
+            pDPObject->SetImportDesc(aImportDesc);
         }
-
-        pDPSave->SetRowGrand(maRowGrandTotal.mbVisible);
-        pDPSave->SetColumnGrand(maColGrandTotal.mbVisible);
-        if (maRowGrandTotal.maDisplayName.getLength())
-            // TODO: Right now, we only support one grand total name for both
-            // column and row totals.  Take the value from the row total for
-            // now.
-            pDPSave->SetGrandTotalName(maRowGrandTotal.maDisplayName);
-
-        pDPSave->SetIgnoreEmptyRows(bIgnoreEmptyRows);
-        pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
-        pDPSave->SetFilterButton(bShowFilter);
-        pDPSave->SetDrillDown(bDrillDown);
-        if (pDPDimSaveData)
-            pDPSave->SetDimensionData(pDPDimSaveData);
-        pDPObject->SetSaveData(*pDPSave);
-        if (pDoc)
+        break;
+        case TABLE :
         {
-            ScDPCollection* pDPCollection = pDoc->GetDPCollection();
-
-            // #i94570# Names have to be unique, or the tables can't be accessed by API.
-            if ( pDPCollection->GetByName(pDPObject->GetName()) )
-                pDPObject->SetName( String() );     // ignore the invalid name, create a new name in AfterXMLLoading
-
-            pDPObject->SetAlive(sal_True);
-            pDPCollection->InsertNewTable(pDPObject);
+            ScImportSourceDesc aImportDesc(pDoc);
+            aImportDesc.aDBName = sDatabaseName;
+            aImportDesc.aObject = sSourceObject;
+            aImportDesc.nType = sheet::DataImportMode_TABLE;
+            pDPObject->SetImportDesc(aImportDesc);
         }
-        SetButtons();
+        break;
+        case QUERY :
+        {
+            ScImportSourceDesc aImportDesc(pDoc);
+            aImportDesc.aDBName = sDatabaseName;
+            aImportDesc.aObject = sSourceObject;
+            aImportDesc.nType = sheet::DataImportMode_QUERY;
+            pDPObject->SetImportDesc(aImportDesc);
+        }
+        break;
+        case SERVICE :
+        {
+            ScDPServiceDesc aServiceDesk(sServiceName, sServiceSourceName, sServiceSourceObject,
+                                sServiceUsername, sServicePassword);
+            pDPObject->SetServiceData(aServiceDesk);
+        }
+        break;
+        case CELLRANGE :
+        {
+            if (bSourceCellRange)
+            {
+                ScSheetSourceDesc aSheetDesc(pDoc);
+                if (sSourceRangeName.getLength())
+                    // Range name takes precedence.
+                    aSheetDesc.SetRangeName(sSourceRangeName);
+                else
+                    aSheetDesc.SetSourceRange(aSourceCellRangeAddress);
+                aSheetDesc.SetQueryParam(aSourceQueryParam);
+                pDPObject->SetSheetDesc(aSheetDesc);
+            }
+        }
+        break;
     }
+
+    pDPSave->SetRowGrand(maRowGrandTotal.mbVisible);
+    pDPSave->SetColumnGrand(maColGrandTotal.mbVisible);
+    if (maRowGrandTotal.maDisplayName.getLength())
+        // TODO: Right now, we only support one grand total name for both
+        // column and row totals.  Take the value from the row total for
+        // now.
+        pDPSave->SetGrandTotalName(maRowGrandTotal.maDisplayName);
+
+    pDPSave->SetIgnoreEmptyRows(bIgnoreEmptyRows);
+    pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
+    pDPSave->SetFilterButton(bShowFilter);
+    pDPSave->SetDrillDown(bDrillDown);
+    if (pDPDimSaveData)
+        pDPSave->SetDimensionData(pDPDimSaveData);
+    pDPObject->SetSaveData(*pDPSave);
+    if (pDoc)
+    {
+        ScDPCollection* pDPCollection = pDoc->GetDPCollection();
+
+        // #i94570# Names have to be unique, or the tables can't be accessed by API.
+        if ( pDPCollection->GetByName(pDPObject->GetName()) )
+            pDPObject->SetName( String() );     // ignore the invalid name, create a new name in AfterXMLLoading
+
+        pDPObject->SetAlive(sal_True);
+        pDPCollection->InsertNewTable(pDPObject);
+    }
+    SetButtons();
 }
 
 void ScXMLDataPilotTableContext::SetGrandTotal(
@@ -793,9 +806,9 @@ ScXMLDataPilotGrandTotalContext::~ScXMLDataPilotGrandTotalContext()
 }
 
 SvXMLImportContext* ScXMLDataPilotGrandTotalContext::CreateChildContext(
-    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
+    sal_uInt16 /*nPrefix*/, const ::rtl::OUString& /*rLocalName*/, const Reference<XAttributeList>& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return NULL;
 }
 
 void ScXMLDataPilotGrandTotalContext::EndElement()
@@ -847,6 +860,9 @@ ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
                     pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
             }
             break;
+            case XML_TOK_SOURCE_CELL_RANGE_ATTR_NAME:
+                pDataPilotTable->SetSourceRangeName(sValue);
+            break;
         }
     }
 }
@@ -894,15 +910,15 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     fStep(0.0),
     nUsedHierarchy(1),
     nGroupPart(0),
-    bSelectedPage(sal_False),
-    bIsGroupField(sal_False),
-    bDateValue(sal_False),
-    bAutoStart(sal_False),
-    bAutoEnd(sal_False),
+    bSelectedPage(false),
+    bIsGroupField(false),
+    bDateValue(false),
+    bAutoStart(false),
+    bAutoEnd(false),
     mbHasHiddenMember(false)
 {
-    sal_Bool bHasName(sal_False);
-    sal_Bool bDataLayout(sal_False);
+    sal_Bool bHasName(false);
+    sal_Bool bDataLayout(false);
     OUString aDisplayName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotFieldAttrTokenMap();
@@ -1028,8 +1044,7 @@ void ScXMLDataPilotFieldContext::EndElement()
         pDim->SetOrientation(nOrientation);
         if (bSelectedPage)
         {
-            String sPage(sSelectedPage);
-            pDim->SetCurrentPage(&sPage);
+            pDim->SetCurrentPage(&sSelectedPage);
         }
         pDataPilotTable->AddDimension(pDim, mbHasHiddenMember);
         if (bIsGroupField)
@@ -1240,7 +1255,7 @@ ScXMLDataPilotDisplayInfoContext::ScXMLDataPilotDisplayInfoContext( ScXMLImport&
                 if (IsXMLToken(sValue, XML_TRUE))
                     aInfo.IsEnabled = sal_True;
                 else
-                    aInfo.IsEnabled = sal_False;
+                    aInfo.IsEnabled = false;
             }
             else if (IsXMLToken(aLocalName, XML_DISPLAY_MEMBER_MODE))
             {
@@ -1291,7 +1306,7 @@ ScXMLDataPilotSortInfoContext::ScXMLDataPilotSortInfoContext( ScXMLImport& rImpo
                 if (IsXMLToken(sValue, XML_ASCENDING))
                     aInfo.IsAscending = sal_True;
                 else if (IsXMLToken(sValue, XML_DESCENDING))
-                    aInfo.IsAscending = sal_False;
+                    aInfo.IsAscending = false;
             }
             else if (IsXMLToken(aLocalName, XML_SORT_MODE))
             {
@@ -1340,7 +1355,7 @@ ScXMLDataPilotLayoutInfoContext::ScXMLDataPilotLayoutInfoContext( ScXMLImport& r
                 if (IsXMLToken(sValue, XML_TRUE))
                     aInfo.AddEmptyLines = sal_True;
                 else
-                    aInfo.AddEmptyLines = sal_False;
+                    aInfo.AddEmptyLines = false;
             }
             else if (IsXMLToken(aLocalName, XML_LAYOUT_MODE))
             {
@@ -1538,7 +1553,7 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
     pDataPilotField(pTempDataPilotField),
     bDisplay( sal_True ),
     bDisplayDetails( sal_True ),
-    bHasName( sal_False )
+    bHasName( false )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotMemberAttrTokenMap();
@@ -1621,7 +1636,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
     double                      fEnd(0.0);
     double                      fStep(0.0);
     sal_Int32                   nGroupPart(0);
-    sal_Bool                    bDateValue(sal_False);
+    sal_Bool                    bDateValue(false);
     sal_Bool                    bAutoStart(sal_True);
     sal_Bool                    bAutoEnd(sal_True);
 
@@ -1646,7 +1661,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
             else
             {
                 GetScImport().GetMM100UnitConverter().convertDateTime(fStart, sValue);
-                bAutoStart = sal_False;
+                bAutoStart = false;
             }
         }
         else if (IsXMLToken(aLocalName, XML_DATE_END))
@@ -1657,7 +1672,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
             else
             {
                 GetScImport().GetMM100UnitConverter().convertDateTime(fEnd, sValue);
-                bAutoEnd = sal_False;
+                bAutoEnd = false;
             }
         }
         else if (IsXMLToken(aLocalName, XML_START))
@@ -1667,7 +1682,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
             else
             {
                 GetScImport().GetMM100UnitConverter().convertDouble(fStart, sValue);
-                bAutoStart = sal_False;
+                bAutoStart = false;
             }
         }
         else if (IsXMLToken(aLocalName, XML_END))
@@ -1677,7 +1692,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
             else
             {
                 GetScImport().GetMM100UnitConverter().convertDouble(fEnd, sValue);
-                bAutoEnd = sal_False;
+                bAutoEnd = false;
             }
         }
         else if (IsXMLToken(aLocalName, XML_STEP))
@@ -1832,3 +1847,5 @@ void ScXMLDataPilotGroupMemberContext::EndElement()
     if (sName.getLength())
         pDataPilotGroup->AddMember(sName);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

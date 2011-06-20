@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,6 @@
 #include "ModifyListenerCallBack.hxx"
 #include "TimerTriggeredControllerLock.hxx"
 
-// #ifndef _COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
-// #include <com/sun/star/chart2/SceneDescriptor.hpp>
-// #endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 // header for class TabPage
@@ -40,9 +38,7 @@
 // header for class FixedText
 #include <vcl/fixed.hxx>
 // header for class CheckBox
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for class ColorLB
 #include <svx/dlgctrl.hxx>
 // header for class SvxLightCtl3D
@@ -143,3 +139,5 @@ private:
 //.............................................................................
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

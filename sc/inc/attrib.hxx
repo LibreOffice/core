@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,8 @@
 
 //------------------------------------------------------------------------
 
-                                        // Flags fuer durch Merge verdeckte Zellen
-                                        // und Control fuer Auto-Filter
+                                        // flags for cells hidden by merge
+                                        // and control for auto filter
 #define SC_MF_HOR               0x0001
 #define SC_MF_VER               0x0002
 #define SC_MF_AUTO              0x0004  /// autofilter arrow
@@ -52,9 +53,9 @@
 
 
 class EditTextObject;
-class SvxBorderLine;
+namespace editeng { class SvxBorderLine; }
 
-sal_Bool SC_DLLPUBLIC ScHasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther );
+sal_Bool SC_DLLPUBLIC ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther );
 
 //------------------------------------------------------------------------
 
@@ -111,17 +112,17 @@ public:
 //------------------------------------------------------------------------
 class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
 {
-    sal_Bool        bProtection;    // Zelle schuetzen
-    sal_Bool        bHideFormula;   // Formel nicht Anzeigen
-    sal_Bool        bHideCell;      // Zelle nicht Anzeigen
-    sal_Bool        bHidePrint;     // Zelle nicht Ausdrucken
+    sal_Bool        bProtection;    // protect cell
+    sal_Bool        bHideFormula;   // hide formula
+    sal_Bool        bHideCell;      // hide cell
+    sal_Bool        bHidePrint;     // don't print cell
 public:
                             TYPEINFO();
                             ScProtectionAttr();
                             ScProtectionAttr(   sal_Bool bProtect,
-                                                sal_Bool bHFormula = sal_False,
-                                                sal_Bool bHCell = sal_False,
-                                                sal_Bool bHPrint = sal_False);
+                                                sal_Bool bHFormula = false,
+                                                sal_Bool bHCell = false,
+                                                sal_Bool bHPrint = false);
                             ScProtectionAttr( const ScProtectionAttr& );
                             ~ScProtectionAttr();
 
@@ -137,8 +138,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
 
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
             sal_Bool            GetProtection() const { return bProtection; }
             sal_Bool            SetProtection( sal_Bool bProtect);
@@ -160,7 +161,7 @@ public:
 
 
 //----------------------------------------------------------------------------
-// ScRangeItem: verwaltet einen Tabellenbereich
+// ScRangeItem: manages an area of a table
 
 #define SCR_INVALID     0x01
 #define SCR_ALLTABS     0x02
@@ -179,7 +180,7 @@ public:
 
     inline ScRangeItem& operator=( const ScRangeItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" from SfxPoolItem
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
@@ -200,7 +201,7 @@ private:
 };
 
 inline ScRangeItem::ScRangeItem( const sal_uInt16 nWhichP )
-    :   SfxPoolItem( nWhichP ), nFlags( SCR_INVALID ) // == ungueltige Area
+    :   SfxPoolItem( nWhichP ), nFlags( SCR_INVALID ) // == invalid area
 {
 }
 
@@ -222,7 +223,7 @@ inline ScRangeItem& ScRangeItem::operator=( const ScRangeItem &rCpy )
 }
 
 //----------------------------------------------------------------------------
-// ScTableListItem: verwaltet eine Liste von Tabellen
+// ScTableListItem: manages a list of tables
 //----------------------------------------------------------------------------
 class ScTableListItem : public SfxPoolItem
 {
@@ -231,12 +232,11 @@ public:
 
     inline  ScTableListItem( const sal_uInt16 nWhich );
             ScTableListItem( const ScTableListItem& rCpy );
-//UNUSED2008-05  ScTableListItem( const sal_uInt16 nWhich, const List& rList );
             ~ScTableListItem();
 
     ScTableListItem& operator=( const ScTableListItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methoden" from SfxPoolItem
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
@@ -244,9 +244,6 @@ public:
                                                  String &rText,
                                                  const IntlWrapper* pIntl = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-
-//UNUSED2009-05 sal_Bool    GetTableList( List& aList ) const;
-//UNUSED2009-05 void    SetTableList( const List& aList );
 
 public:
     sal_uInt16  nCount;
@@ -258,7 +255,7 @@ inline ScTableListItem::ScTableListItem( const sal_uInt16 nWhichP )
 {}
 
 //----------------------------------------------------------------------------
-// Seitenformat-Item: Kopf-/Fusszeileninhalte
+// page format item: contents of header and footer
 
 #define SC_HF_LEFTAREA   1
 #define SC_HF_CENTERAREA 2
@@ -282,8 +279,8 @@ public:
 
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
 
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     const EditTextObject* GetLeftArea() const       { return pLeftArea; }
     const EditTextObject* GetCenterArea() const     { return pCenterArea; }
@@ -293,13 +290,13 @@ public:
     void SetCenterArea( const EditTextObject& rNew );
     void SetRightArea( const EditTextObject& rNew );
 
-    //Set mit Uebereignung der Pointer, nArea siehe defines oben
+    // Set method with pointer assignment, nArea see defines above
     void SetArea( EditTextObject *pNew, int nArea );
 };
 
 
 //----------------------------------------------------------------------------
-// Seitenformat-Item: Kopf-/Fusszeileninhalte
+// page format item: contents of header and footer
 
 class SC_DLLPUBLIC ScViewObjectModeItem: public SfxEnumItem
 {
@@ -388,8 +385,8 @@ public:
                                     XubString& rText,
                                     const IntlWrapper* = 0 ) const;
 
-    virtual sal_Bool                QueryValue( ::com::sun::star::uno::Any& rAny, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool                PutValue( const ::com::sun::star::uno::Any& rAny, sal_uInt8 nMemberId = 0 );
+    virtual bool                QueryValue( ::com::sun::star::uno::Any& rAny, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool                PutValue( const ::com::sun::star::uno::Any& rAny, sal_uInt8 nMemberId = 0 );
 
 private:
     sal_uInt16                  mnWidth;
@@ -400,3 +397,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

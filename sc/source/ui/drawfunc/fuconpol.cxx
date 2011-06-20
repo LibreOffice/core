@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include "sc.hrc"
 #include "drawview.hxx"
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 #include <svx/svdopath.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -73,9 +74,9 @@ FuConstPolygon::~FuConstPolygon()
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
@@ -86,7 +87,7 @@ sal_Bool __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     {
         // Texteingabe hier nicht zulassen
         aVEvt.eEvent = SDREVENT_BEGDRAGOBJ;
-        pView->EnableExtendedMouseEventDispatcher(sal_False);
+        pView->EnableExtendedMouseEventDispatcher(false);
     }
     else
     {
@@ -105,7 +106,7 @@ sal_Bool __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
     pView->MouseMove(rMEvt, pWindow);
     sal_Bool bReturn = FuConstruct::MouseMove(rMEvt);
@@ -118,13 +119,13 @@ sal_Bool __EXPORT FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = sal_False;
-    sal_Bool bSimple = sal_False;
+    sal_Bool bReturn = false;
+    sal_Bool bSimple = false;
 
     SdrViewEvent aVEvt;
     (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt);
@@ -155,7 +156,7 @@ sal_Bool __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
 
@@ -242,14 +243,14 @@ void FuConstPolygon::Deactivate()
 {
     pView->SetEditMode(SDREDITMODE_EDIT);
 
-    pView->EnableExtendedMouseEventDispatcher(sal_False);
+    pView->EnableExtendedMouseEventDispatcher(false);
 
     FuConstruct::Deactivate();
 
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_POLYGON:
@@ -343,7 +344,7 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
         }
         else
         {
-            DBG_ERROR("Object is NO path object");
+            OSL_FAIL("Object is NO path object");
         }
 
         pObj->SetLogicRect(rRectangle);
@@ -353,3 +354,5 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -107,7 +108,7 @@ WrappedScaleProperty::WrappedScaleProperty( tScaleProperty eScaleProperty
             m_aOuterName = C2U("ReverseDirection");
             break;
         default:
-            OSL_ENSURE(false,"unknown scale property");
+            OSL_FAIL("unknown scale property");
             break;
     }
 }
@@ -190,9 +191,10 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             if( rSubIncrements.getLength() == 0 )
                 rSubIncrements.realloc( 1 );
 
-            double fStepMain = 0, fStepHelp = 0;
+            double fStepHelp = 0;
             if( (rOuterValue >>= fStepHelp) )
             {
+                double fStepMain = 0;
                 if( AxisHelper::isLogarithmic(aScaleData.Scaling) )
                 {
                     sal_Int32 nIntervalCount = static_cast< sal_Int32 >(fStepHelp);
@@ -347,7 +349,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         }
         default:
         {
-            OSL_ENSURE(false,"unknown scale property");
+            OSL_FAIL("unknown scale property");
             break;
         }
     }
@@ -587,7 +589,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         }
         default:
         {
-            OSL_ENSURE(false,"unknown scale property");
+            OSL_FAIL("unknown scale property");
             break;
         }
     }
@@ -598,3 +600,5 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
 } //  namespace wrapper
 } //  namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

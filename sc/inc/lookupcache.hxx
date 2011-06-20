@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <svl/listener.hxx>
 #include <tools/string.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ScDocument;
 
@@ -240,7 +241,7 @@ private:
         }
     };
 
-    typedef ::std::hash_map< QueryKey, QueryCriteriaAndResult, QueryKey::Hash, ::std::equal_to< QueryKey > > QueryMap;
+    typedef ::boost::unordered_map< QueryKey, QueryCriteriaAndResult, QueryKey::Hash, ::std::equal_to< QueryKey > > QueryMap;
     QueryMap        maQueryMap;
     ScRange         maRange;
     ScDocument *    mpDoc;
@@ -252,6 +253,8 @@ private:
 };
 
 
-typedef ::std::hash_map< ScRange, ScLookupCache*, ScLookupCache::Hash, ::std::equal_to< ScRange > > ScLookupCacheMap;
+typedef ::boost::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash, ::std::equal_to< ScRange > > ScLookupCacheMap;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

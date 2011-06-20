@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,13 +110,15 @@ inline sal_Bool LotusRange::IsSingle( void ) const
 
 // ----------------------------------------------------- class LotusRangeList -
 
-class LotusRangeList : private List
+class LotusRangeList
 {
 private:
     LR_ID               nIdCnt;
     ScComplexRefData        aComplRef;
     static SCCOL        nEingCol;
     static SCROW        nEingRow;
+    std::vector<LotusRange*> maRanges;
+
 public:
                         LotusRangeList( void );
                         ~LotusRangeList( void );
@@ -165,3 +168,4 @@ inline void LotusRangeList::SetEing( const SCCOL nCol, const SCROW nRow )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

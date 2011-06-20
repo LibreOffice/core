@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@ class Window;
 class SdrModel;
 class Dialog;
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 class SdrObject;
 
 //  Return-Werte fuer Command
@@ -73,7 +74,7 @@ protected:
     sal_Bool            bIsInDragMode;
     Point           aMDPos;                 // Position von MouseButtonDown
 
-    // #95491# member to hold state of the mouse buttons for creation
+    // member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)
 private:
     sal_uInt16      mnCode;
@@ -83,7 +84,7 @@ public:
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuPoor();
 
-    // #95491# see member
+    // see member
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
     sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
@@ -95,13 +96,13 @@ public:
 
     // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
     virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent&) { return sal_False; }
+    virtual sal_Bool MouseMove(const MouseEvent&) { return false; }
 
-    // #95491# moved from inline to *.cxx
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt); // { return sal_False; }
+    // moved from inline to *.cxx
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt); // { return FALSE; }
 
-    // #95491# moved from inline to *.cxx
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt); // { return sal_False; }
+    // moved from inline to *.cxx
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt); // { return FALSE; }
 
     virtual sal_uInt8 Command(const CommandEvent& rCEvt);
 
@@ -119,7 +120,7 @@ public:
 
     void    StopDragTimer();
 
-    // #98185# Create default drawing objects via keyboard
+    // Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 protected:
@@ -134,3 +135,4 @@ public:
 
 #endif      // _SD_FUPOOR_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

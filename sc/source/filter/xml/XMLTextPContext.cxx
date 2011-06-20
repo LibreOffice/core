@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/text/XTextCursor.hpp>
 
 using namespace com::sun::star;
@@ -222,3 +222,4 @@ void ScXMLTextPContext::EndElement()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

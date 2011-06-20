@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,13 @@
 #ifndef SC_NAMEBUFF_HXX
 #define SC_NAMEBUFF_HXX
 
-#include <tools/debug.hxx>
 #include <tools/string.hxx>
 #include "compiler.hxx"
 #include "root.hxx"
 #include "xiroot.hxx"
 
 #include "rangenam.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 
 class ScDocument;
@@ -102,28 +102,23 @@ inline sal_Bool StringHashEntry::operator ==( const StringHashEntry& r ) const
 
 
 
-class NameBuffer : private List, public ExcRoot
+class NameBuffer : public ExcRoot
 {
 private:
     sal_uInt16                  nBase;      // Index-Basis
+    std::vector<StringHashEntry*> maHashes;
+
 public:
-//    inline                  NameBuffer( void );   //#94039# prevent empty rootdata
+
     inline                  NameBuffer( RootData* );
     inline                  NameBuffer( RootData*, sal_uInt16 nNewBase );
 
     virtual                 ~NameBuffer();
-    inline const String*    Get( sal_uInt16 nIndex );
-    inline sal_uInt16           GetLastIndex( void );
+    inline const String*    Get( sal_uInt16 nIndex ) const;
+    inline sal_uInt16       GetLastIndex() const;
     inline void             SetBase( sal_uInt16 nNewBase = 0 );
     void                    operator <<( const String& rNewString );
 };
-
-//#94039# prevent empty rootdata
-//inline NameBuffer::NameBuffer( void )
-//{
-//    nBase = 0;
-//}
-
 
 inline NameBuffer::NameBuffer( RootData* p ) : ExcRoot( p )
 {
@@ -137,27 +132,22 @@ inline NameBuffer::NameBuffer( RootData* p, sal_uInt16 nNewBase ) : ExcRoot( p )
 }
 
 
-inline const String* NameBuffer::Get( sal_uInt16 n )
+inline const String* NameBuffer::Get ( sal_uInt16 n ) const
 {
-    if( n < nBase )
+    if( n < nBase || n >= maHashes.size() )
         return NULL;
-    else
-    {
-        StringHashEntry* pObj = ( StringHashEntry* ) List::GetObject( n );
 
-        if( pObj )
-            return &pObj->aString;
-        else
-            return NULL;
-    }
+    return &(maHashes[n]->aString);
 }
 
 
-inline sal_uInt16 NameBuffer::GetLastIndex( void )
+inline sal_uInt16 NameBuffer::GetLastIndex () const
 {
-    DBG_ASSERT( Count() + nBase <= 0xFFFF, "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
+    int size = maHashes.size() + nBase;
 
-    return ( sal_uInt16 ) ( Count() + nBase );
+    OSL_ENSURE( size <= 0xFFFF, "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
+
+    return static_cast<sal_uInt16>( size );
 }
 
 
@@ -175,7 +165,7 @@ class ShrfmlaBuffer : public ExcRoot
     {
         size_t operator() (const ScAddress &addr) const;
     };
-    typedef std::hash_map <ScAddress, sal_uInt16, ScAddressHashFunc> ShrfmlaHash;
+    typedef boost::unordered_map <ScAddress, sal_uInt16, ScAddressHashFunc> ShrfmlaHash;
     typedef std::list <ScRange>                                  ShrfmlaList;
 
     ShrfmlaHash  index_hash;
@@ -195,10 +185,10 @@ public:
 
 
 
-class RangeNameBufferWK3 : private List
+class RangeNameBufferWK3
 {
 private:
-    struct ENTRY
+    struct Entry
         {
         StringHashEntry     aStrHashEntry;
         ScComplexRefData        aScComplexRefDataRel;
@@ -206,7 +196,7 @@ private:
         sal_uInt16              nAbsInd;        // == 0 -> noch keine Abs-Name!
         sal_uInt16              nRelInd;
         sal_Bool                bSingleRef;
-                            ENTRY( const String& rName, const String& rScName, const ScComplexRefData& rCRD ) :
+                            Entry( const String& rName, const String& rScName, const ScComplexRefData& rCRD ) :
                                 aStrHashEntry( rName ),
                                 aScComplexRefDataRel( rCRD ),
                                 aScAbsName( rScName )
@@ -218,6 +208,8 @@ private:
 
     ScTokenArray*           pScTokenArray;
     sal_uInt16                  nIntCount;
+    std::vector<Entry> maEntries;
+
 public:
                             RangeNameBufferWK3( void );
     virtual                 ~RangeNameBufferWK3();
@@ -242,9 +234,9 @@ inline void RangeNameBufferWK3::Add( const String& rName, const ScRange& aScRang
     pSRD->nTab = pScAddr->Tab();
 
     // zunaechst ALLE Refs nur absolut
-    pSRD->SetColRel( sal_False );
-    pSRD->SetRowRel( sal_False );
-    pSRD->SetTabRel( sal_False );
+    pSRD->SetColRel( false );
+    pSRD->SetRowRel( false );
+    pSRD->SetTabRel( false );
 
     pSRD = &aCRD.Ref2;
     pScAddr = &aScRange.aEnd;
@@ -254,9 +246,9 @@ inline void RangeNameBufferWK3::Add( const String& rName, const ScRange& aScRang
     pSRD->nTab = pScAddr->Tab();
 
     // zunaechst ALLE Refs nur absolut
-    pSRD->SetColRel( sal_False );
-    pSRD->SetRowRel( sal_False );
-    pSRD->SetTabRel( sal_False );
+    pSRD->SetColRel( false );
+    pSRD->SetRowRel( false );
+    pSRD->SetTabRel( false );
 
     Add( rName, aCRD );
 }
@@ -264,7 +256,7 @@ inline void RangeNameBufferWK3::Add( const String& rName, const ScRange& aScRang
 
 
 
-class ExtSheetBuffer : private List, public ExcRoot
+class ExtSheetBuffer : public ExcRoot
 {
 private:
     struct Cont
@@ -281,7 +273,7 @@ private:
                         aTab( rTabName )
                     {
                         nTabNum = 0xFFFF;   // -> Tabelle noch nicht erzeugt
-                        bSWB = bLink = sal_False;
+                        bSWB = bLink = false;
                     }
                     Cont( const String& rFilePathAndName, const String& rTabName,
                         const sal_Bool bSameWB ) :
@@ -290,15 +282,17 @@ private:
                     {
                         nTabNum = 0xFFFF;   // -> Tabelle noch nicht erzeugt
                         bSWB = bSameWB;
-                        bLink = sal_False;
+                        bLink = false;
                     }
         };
+
+    std::vector<Cont> maEntries;
+
 public:
     inline          ExtSheetBuffer( RootData* );
-    virtual         ~ExtSheetBuffer();
 
     sal_Int16       Add( const String& rFilePathAndName,
-                        const String& rTabName, const sal_Bool bSameWorkbook = sal_False );
+                        const String& rTabName, const sal_Bool bSameWorkbook = false );
 
     sal_Bool            GetScTabIndex( sal_uInt16 nExcSheetIndex, sal_uInt16& rIn_LastTab_Out_ScIndex );
     sal_Bool            IsLink( const sal_uInt16 nExcSheetIndex ) const;
@@ -354,3 +348,4 @@ private:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

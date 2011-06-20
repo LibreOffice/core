@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ enum FillInfoLinePos
     };
 
 
-inline const SvxBorderLine* GetNullOrLine( const SvxBoxItem* pBox, FillInfoLinePos eWhich )
+inline const ::editeng::SvxBorderLine* GetNullOrLine( const SvxBoxItem* pBox, FillInfoLinePos eWhich )
 {
     if (pBox)
     {
@@ -102,7 +103,7 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
     while (bHOver)              // nY konstant
     {
         --rStartX;
-        if (rStartX >= (SCsCOL) nX1 && !pDoc->ColHidden(rStartX, nTab, nLastCol))
+        if (rStartX >= (SCsCOL) nX1 && !pDoc->ColHidden(rStartX, nTab, NULL, &nLastCol))
         {
             bHOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bHOverlapped;
             bVOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bVOverlapped;
@@ -124,8 +125,8 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
             --nArrY;                        // lokale Kopie !
 
         if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
-            !pDoc->ColHidden(rStartX, nTab, nLastCol) &&
-            !pDoc->RowHidden(rStartY, nTab, nLastRow) &&
+            !pDoc->ColHidden(rStartX, nTab, NULL, &nLastCol) &&
+            !pDoc->RowHidden(rStartY, nTab, NULL, &nLastRow) &&
             (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
         {
             bHOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bHOverlapped;
@@ -142,8 +143,8 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
 
     const ScMergeAttr* pMerge;
     if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
-        !pDoc->ColHidden(rStartX, nTab, nLastCol) &&
-        !pDoc->RowHidden(rStartY, nTab, nLastRow) &&
+        !pDoc->ColHidden(rStartX, nTab, NULL, &nLastCol) &&
+        !pDoc->RowHidden(rStartY, nTab, NULL, &nLastRow) &&
         (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
     {
         pMerge = (const ScMergeAttr*) &pRowInfo[nArrY].pCellInfo[rStartX+1].pPatternAttr->
@@ -162,7 +163,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                             SCTAB nTab, double nScaleX, double nScaleY,
                             sal_Bool bPageMode, sal_Bool bFormulaMode, const ScMarkData* pMarkData )
 {
-    DBG_ASSERT( pTab[nTab], "Tabelle existiert nicht" );
+    OSL_ENSURE( maTabs[nTab], "Tabelle existiert nicht" );
 
     sal_Bool bLayoutRTL = IsLayoutRTL( nTab );
 
@@ -185,16 +186,16 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
     SCCOL nArrX;
     SCSIZE nArrY;
     SCSIZE nArrCount;
-    sal_Bool bAnyMerged = sal_False;
-    sal_Bool bAnyShadow = sal_False;
-    sal_Bool bAnyCondition = sal_False;
+    sal_Bool bAnyMerged = false;
+    sal_Bool bAnyShadow = false;
+    sal_Bool bAnyCondition = false;
 
     sal_Bool bTabProtect = IsTabProtected(nTab);
 
                                                 // fuer Blockmarken von zusammengefassten Zellen mit
                                                 // versteckter erster Zeile / Spalte
-    sal_Bool bPaintMarks = sal_False;
-    sal_Bool bSkipMarks = sal_False;
+    sal_Bool bPaintMarks = false;
+    sal_Bool bSkipMarks = false;
     SCCOL nBlockStartX = 0, nBlockEndX = 0;
     SCROW nBlockEndY = 0, nBlockStartY = 0;
     if (pMarkData && pMarkData->IsMarked())
@@ -250,14 +251,14 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             pThisRowInfo->bEmptyBack    = sal_True;
             pThisRowInfo->bEmptyText    = sal_True;
             pThisRowInfo->bChanged      = sal_True;
-            pThisRowInfo->bAutoFilter   = sal_False;
-            pThisRowInfo->bPushButton   = sal_False;
+            pThisRowInfo->bAutoFilter   = false;
+            pThisRowInfo->bPushButton   = false;
             pThisRowInfo->nRotMaxCol    = SC_ROTMAX_NONE;
 
             ++nArrY;
             if (nArrY >= ROWINFO_MAX)
             {
-                DBG_ERROR("Zu grosser Bereich bei FillInfo" );
+                OSL_FAIL("Zu grosser Bereich bei FillInfo" );
                 nYExtra = nSignedY;                                 // Ende
                 nY2 = nYExtra - 1;                                  // Bereich anpassen
             }
@@ -271,7 +272,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
     //  rotierter Text...
 
     //  Attribut im Dokument ueberhaupt verwendet?
-    sal_Bool bAnyItem = sal_False;
+    sal_Bool bAnyItem = false;
     sal_uInt32 nRotCount = pPool->GetItemCount2( ATTR_ROTATE_VALUE );
     for (sal_uInt32 nItem=0; nItem<nRotCount; nItem++)
         if (pPool->GetItem2( ATTR_ROTATE_VALUE, nItem ))
@@ -286,7 +287,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
     {
         //! Conditionals auch bei HASATTR_ROTATE abfragen ????
 
-        DBG_ASSERT( nArrCount>2, "nArrCount zu klein" );
+        OSL_ENSURE( nArrCount>2, "nArrCount zu klein" );
 //      FindMaxRotCol( nTab, &pRowInfo[1], nArrCount-2, nX1, nX2 );
         FindMaxRotCol( nTab, &pRowInfo[1], nArrCount-1, nX1, nX2 );
         //  FindMaxRotCol setzt nRotMaxCol
@@ -319,22 +320,22 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                 pInfo->bMarked = ( nX >= nBlockStartX && nX <= nBlockEndX
                                 && nY >= nBlockStartY && nY <= nBlockEndY );
             else
-                pInfo->bMarked = sal_False;
+                pInfo->bMarked = false;
             pInfo->nWidth = 0;
 
             pInfo->nClipMark    = SC_CLIPMARK_NONE;
-            pInfo->bMerged      = sal_False;
-            pInfo->bHOverlapped = sal_False;
-            pInfo->bVOverlapped = sal_False;
-            pInfo->bAutoFilter  = sal_False;
-            pInfo->bPushButton  = sal_False;
+            pInfo->bMerged      = false;
+            pInfo->bHOverlapped = false;
+            pInfo->bVOverlapped = false;
+            pInfo->bAutoFilter  = false;
+            pInfo->bPushButton  = false;
             pInfo->bPopupButton = false;
             pInfo->bFilterActive = false;
             pInfo->nRotateDir   = SC_ROTDIR_NONE;
 
-            pInfo->bPrinted     = sal_False;                    //  view-intern
-            pInfo->bHideGrid    = sal_False;                    //  view-intern
-            pInfo->bEditEngine  = sal_False;                    //  view-intern
+            pInfo->bPrinted     = false;                    //  view-intern
+            pInfo->bHideGrid    = false;                    //  view-intern
+            pInfo->bEditEngine  = false;                    //  view-intern
 
             pInfo->pBackground  = NULL;                     //! weglassen?
             pInfo->pPatternAttr = NULL;
@@ -384,7 +385,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                 pRowInfo[0].pCellInfo[nArrX].nWidth = nThisWidth;           //! dies sollte reichen
 
-                ScColumn* pThisCol = &pTab[nTab]->aCol[nX];                 // Spalten-Daten
+                ScColumn* pThisCol = &maTabs[nTab]->aCol[nX];                   // Spalten-Daten
 
                 nArrY = 1;
                 SCSIZE nUIndex;
@@ -395,20 +396,20 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         (nThisRow=pThisCol->pItems[nUIndex].nRow) <= nY2 )
                 {
                     if (nThisRow > nHiddenEndRow)
-                        bHiddenRow = RowHidden( nThisRow, nTab, nHiddenEndRow);
+                        bHiddenRow = RowHidden( nThisRow, nTab, NULL, &nHiddenEndRow);
                     if ( !bHiddenRow )
                     {
                         while ( pRowInfo[nArrY].nRowNo < nThisRow )
                             ++nArrY;
-                        DBG_ASSERT( pRowInfo[nArrY].nRowNo == nThisRow, "Zeile nicht gefunden in FillInfo" );
+                        OSL_ENSURE( pRowInfo[nArrY].nRowNo == nThisRow, "Zeile nicht gefunden in FillInfo" );
 
                         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                         CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
                         pInfo->pCell = pThisCol->pItems[nUIndex].pCell;
                         if (pInfo->pCell->GetCellType() != CELLTYPE_NOTE)
                         {
-                            pThisRowInfo->bEmptyText = sal_False;                   // Zeile nicht leer
-                            pInfo->bEmptyCellText = sal_False;                      // Zelle nicht leer
+                            pThisRowInfo->bEmptyText = false;                   // Zeile nicht leer
+                            pInfo->bEmptyCellText = false;                      // Zelle nicht leer
                         }
                         ++nArrY;
                     }
@@ -475,7 +476,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                             bHideFormula = rProtAttr.GetHideFormula();
                         }
                         else
-                            bHidden = bHideFormula = sal_False;
+                            bHidden = bHideFormula = false;
 
                         sal_uLong nConditional = ((const SfxUInt32Item&)pPattern->
                                                 GetItem(ATTR_CONDITIONAL)).GetValue();
@@ -486,12 +487,12 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         do
                         {
                             SCROW nLastHiddenRow = -1;
-                            bool bRowHidden = RowHidden(nCurRow, nTab, nLastHiddenRow);
+                            bool bRowHidden = RowHidden(nCurRow, nTab, NULL, &nLastHiddenRow);
                             if ( nArrY==0 || !bRowHidden )
                             {
                                 RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                                 if (pBackground != pDefBackground)          // Spalten-HG == Standard ?
-                                    pThisRowInfo->bEmptyBack = sal_False;
+                                    pThisRowInfo->bEmptyBack = false;
                                 if (bAutoFilter)
                                     pThisRowInfo->bAutoFilter = sal_True;
                                 if (bPushButton)
@@ -513,7 +514,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 pInfo->pShadowAttr  = pShadowAttr;
                                 //  nWidth wird nicht mehr einzeln gesetzt
 
-                                sal_Bool bEmbed = sal_False; //bIsEmbedded &&
+                                sal_Bool bEmbed = false; //bIsEmbedded &&
                                         nTab    >= aEmbedRange.aStart.Tab() &&
                                         nTab    <= aEmbedRange.aEnd.Tab()   &&
                                         nX      >= aEmbedRange.aStart.Col() &&
@@ -524,12 +525,12 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 if (bScenario)
                                 {
                                     pInfo->pBackground = ScGlobal::GetButtonBrushItem();
-                                    pThisRowInfo->bEmptyBack = sal_False;
+                                    pThisRowInfo->bEmptyBack = false;
                                 }
                                 else if (bEmbed)
                                 {
                                     pInfo->pBackground = ScGlobal::GetEmbeddedBrushItem();
-                                    pThisRowInfo->bEmptyBack = sal_False;
+                                    pThisRowInfo->bEmptyBack = false;
                                 }
 
                                 if (bHidden || ( bFormulaMode && bHideFormula && pInfo->pCell
@@ -652,7 +653,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                     if ( pCondSet->GetItemState( ATTR_BACKGROUND, sal_True, &pItem ) == SFX_ITEM_SET )
                     {
                         pInfo->pBackground = (const SvxBrushItem*) pItem;
-                        pRowInfo[nArrY].bEmptyBack = sal_False;
+                        pRowInfo[nArrY].bEmptyBack = false;
                     }
 
                             //  Umrandung
@@ -712,7 +713,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                     GetItemState(ATTR_BACKGROUND,sal_True,&pItem) != SFX_ITEM_SET )
                         pItem = &pStartPattern->GetItem(ATTR_BACKGROUND);
                     pInfo->pBackground = (const SvxBrushItem*) pItem;
-                    pRowInfo[nArrY].bEmptyBack = sal_False;
+                    pRowInfo[nArrY].bEmptyBack = false;
 
                     // Schatten
 
@@ -725,7 +726,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                     // Blockmarken - wieder mit Original-Merge-Werten
 
-                    sal_Bool bCellMarked = sal_False;
+                    sal_Bool bCellMarked = false;
                     if (bPaintMarks)
                         bCellMarked = ( nStartX >= (SCsCOL) nBlockStartX
                                     && nStartX <= (SCsCOL) nBlockEndX
@@ -879,7 +880,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                             break;
 
                         default:
-                            DBG_ERROR("falscher Shadow-Enum");
+                            OSL_FAIL("falscher Shadow-Enum");
                     }
                 }
             }
@@ -1077,3 +1078,4 @@ ScTableInfo::~ScTableInfo()
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

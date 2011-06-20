@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -240,6 +241,7 @@ void SAL_CALL ScVbaSheetObjectBase::setName( const OUString& rName ) throw (uno:
 sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement() throw (uno::RuntimeException)
 {
     sal_Int32 nRet = excel::XlPlacement::xlMoveAndSize;
+#if 0 // TODO: not working at the moment.
     SvxShape* pShape = SvxShape::getImplementation( mxShape );
     if(pShape)
     {
@@ -251,11 +253,13 @@ sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement() throw (uno::RuntimeExcep
                 nRet = excel::XlPlacement::xlFreeFloating;
         }
     }
+#endif
     return nRet;
 }
 
-void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 nPlacement ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ ) throw (uno::RuntimeException)
 {
+#if 0 // TODO: not working at the moment.
     SvxShape* pShape = SvxShape::getImplementation( mxShape );
     if(pShape)
     {
@@ -271,6 +275,7 @@ void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 nPlacement ) throw (
             ScDrawLayer::SetAnchor(pObj, eType);
         }
     }
+#endif
 }
 
 sal_Bool SAL_CALL ScVbaSheetObjectBase::getPrintObject() throw (uno::RuntimeException)
@@ -404,7 +409,7 @@ void SAL_CALL ScVbaControlObjectBase::setPrintObject( sal_Bool bPrintObject ) th
 sal_Bool SAL_CALL ScVbaControlObjectBase::getAutoSize() throw (uno::RuntimeException)
 {
     // not supported
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL ScVbaControlObjectBase::setAutoSize( sal_Bool /*bAutoSize*/ ) throw (uno::RuntimeException)
@@ -542,3 +547,5 @@ void ScVbaButton::implSetDefaultProperties() throw (uno::RuntimeException)
 }
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

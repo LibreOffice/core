@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -334,92 +335,6 @@ void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
 }
 
 
-template< typename A, typename D >
-A ScCompressedArray<A,D>::GetLastUnequalAccess( A nStart, const D& rCompare )
-{
-    A nEnd = ::std::numeric_limits<A>::max();
-    size_t nIndex = nCount-1;
-    while (1)
-    {
-        if (pData[nIndex].aValue != rCompare)
-        {
-            nEnd = pData[nIndex].nEnd;
-            break;  // while
-        }
-        else
-        {
-            if (nIndex > 0)
-            {
-                --nIndex;
-                if (pData[nIndex].nEnd < nStart)
-                    break;  // while
-            }
-            else
-                break;  // while
-        }
-    }
-    return nEnd;
-}
-
-
-// === ScSummableCompressedArray =============================================
-
-template< typename A, typename D >
-unsigned long ScSummableCompressedArray<A,D>::SumValues( A nStart, A nEnd ) const
-{
-    size_t nIndex = Search( nStart);
-    unsigned long nSum = SumValuesContinuation( nStart, nEnd, nIndex);
-    if (nEnd > this->nMaxAccess)
-        nSum += this->pData[this->nCount-1].aValue * (nEnd - this->nMaxAccess);
-    return nSum;
-}
-
-
-template< typename A, typename D >
-unsigned long ScSummableCompressedArray<A,D>::SumValuesContinuation(
-        A nStart, A nEnd, size_t& nIndex ) const
-{
-    unsigned long nSum = 0;
-    A nS = nStart;
-    while (nIndex < this->nCount && nS <= nEnd)
-    {
-        A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
-        // FIXME: test for overflow in a single region?
-        unsigned long nNew = (unsigned long) this->pData[nIndex].aValue * (nE - nS + 1);
-        nSum += nNew;
-        if (nSum < nNew)
-            return ::std::numeric_limits<unsigned long>::max();
-        nS = nE + 1;
-        if (nS <= nEnd)
-            ++nIndex;
-    }
-    return nSum;
-}
-
-
-template< typename A, typename D >
-unsigned long ScSummableCompressedArray<A,D>::SumScaledValuesContinuation(
-        A nStart, A nEnd, size_t& nIndex, double fScale ) const
-{
-    unsigned long nSum = 0;
-    A nS = nStart;
-    while (nIndex < this->nCount && nS <= nEnd)
-    {
-        A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
-        unsigned long nScaledVal = (unsigned long) (this->pData[nIndex].aValue * fScale);
-        // FIXME: test for overflow in a single region?
-        unsigned long nNew = nScaledVal * (nE - nS + 1);
-        nSum += nNew;
-        if (nSum < nNew)
-            return ::std::numeric_limits<unsigned long>::max();
-        nS = nE + 1;
-        if (nS <= nEnd)
-            ++nIndex;
-    }
-    return nSum;
-}
-
-
 // === ScBitMaskCompressedArray ==============================================
 
 template< typename A, typename D >
@@ -496,67 +411,6 @@ void ScBitMaskCompressedArray<A,D>::CopyFromAnded(
     }
 }
 
-
-template< typename A, typename D >
-void ScBitMaskCompressedArray<A,D>::CopyFromOred(
-        const ScBitMaskCompressedArray<A,D>& rArray, A nStart, A nEnd,
-        const D& rValueToOr, long nSourceDy )
-{
-    size_t nIndex;
-    A nRegionEnd;
-    for (A j=nStart; j<=nEnd; ++j)
-    {
-        const D& rValue = (j==nStart ?
-                rArray.GetValue( j+nSourceDy, nIndex, nRegionEnd) :
-                rArray.GetNextValue( nIndex, nRegionEnd));
-        nRegionEnd -= nSourceDy;
-        if (nRegionEnd > nEnd)
-            nRegionEnd = nEnd;
-        SetValue( j, nRegionEnd, rValue | rValueToOr);
-        j = nRegionEnd;
-    }
-}
-
-
-template< typename A, typename D >
-A ScBitMaskCompressedArray<A,D>::GetBitStateStart( A nEnd,
-        const D& rBitMask, const D& rMaskedCompare ) const
-{
-    A nStart = ::std::numeric_limits<A>::max();
-    size_t nIndex = Search( nEnd);
-    while ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
-    {
-        if (nIndex > 0)
-        {
-            --nIndex;
-            nStart = this->pData[nIndex].nEnd + 1;
-        }
-        else
-        {
-            nStart = 0;
-            break;  // while
-        }
-    }
-    return nStart;
-}
-
-
-template< typename A, typename D >
-A ScBitMaskCompressedArray<A,D>::GetBitStateEnd( A nStart,
-        const D& rBitMask, const D& rMaskedCompare ) const
-{
-    A nEnd = ::std::numeric_limits<A>::max();
-    size_t nIndex = Search( nStart);
-    while (nIndex < this->nCount && (this->pData[nIndex].aValue & rBitMask) ==
-            rMaskedCompare)
-    {
-        nEnd = this->pData[nIndex].nEnd;
-        ++nIndex;
-    }
-    return nEnd;
-}
-
-
 template< typename A, typename D >
 A ScBitMaskCompressedArray<A,D>::GetFirstForCondition( A nStart, A nEnd,
         const D& rBitMask, const D& rMaskedCompare ) const
@@ -575,115 +429,6 @@ A ScBitMaskCompressedArray<A,D>::GetFirstForCondition( A nStart, A nEnd,
     } while (nIndex < this->nCount);
     return ::std::numeric_limits<A>::max();
 }
-
-
-template< typename A, typename D >
-A ScBitMaskCompressedArray<A,D>::GetLastForCondition( A nStart, A nEnd,
-        const D& rBitMask, const D& rMaskedCompare ) const
-{
-    size_t nIndex = Search( nEnd);
-    while (1)
-    {
-        if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
-            return ::std::min( this->pData[nIndex].nEnd, nEnd);
-
-        if (nIndex > 0)
-        {
-            --nIndex;
-            if (this->pData[nIndex].nEnd < nStart)
-                break;  // while
-        }
-        else
-            break;  // while
-    }
-    return ::std::numeric_limits<A>::max();
-}
-
-
-template< typename A, typename D >
-A ScBitMaskCompressedArray<A,D>::CountForCondition( A nStart, A nEnd,
-        const D& rBitMask, const D& rMaskedCompare ) const
-{
-    A nRet = 0;
-    size_t nIndex = Search( nStart);
-    do
-    {
-        if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
-        {
-            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
-            A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
-            nRet += nE - nS + 1;
-        }
-        if (this->pData[nIndex].nEnd >= nEnd)
-            break;  // while
-        ++nIndex;
-    } while (nIndex < this->nCount);
-    return nRet;
-}
-
-
-template< typename A, typename D >
-size_t ScBitMaskCompressedArray<A,D>::FillArrayForCondition( A nStart, A nEnd,
-        const D& rBitMask, const D& rMaskedCompare,
-        A * pArray, size_t nArraySize ) const
-{
-    size_t nUsed = 0;
-    size_t nIndex = Search( nStart);
-    while (nIndex < this->nCount && nUsed < nArraySize)
-    {
-        if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
-        {
-            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
-            A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
-            while (nS <= nE && nUsed < nArraySize)
-                pArray[nUsed++] = nS++;
-        }
-        if (this->pData[nIndex].nEnd >= nEnd)
-            break;  // while
-        ++nIndex;
-    }
-    return nUsed;
-}
-
-
-template< typename A, typename D >
-bool ScBitMaskCompressedArray<A,D>::HasCondition( A nStart, A nEnd,
-        const D& rBitMask, const D& rMaskedCompare ) const
-{
-    size_t nIndex = Search( nStart);
-    do
-    {
-        if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
-            return true;
-        if (this->pData[nIndex].nEnd >= nEnd)
-            break;  // while
-        ++nIndex;
-    }  while (nIndex < this->nCount);
-    return false;
-}
-
-
-template< typename A, typename D >
-A ScBitMaskCompressedArray<A,D>::CountForAnyBitCondition( A nStart, A nEnd,
-        const D& rBitMask ) const
-{
-    A nRet = 0;
-    size_t nIndex = Search( nStart);
-    do
-    {
-        if ((this->pData[nIndex].aValue & rBitMask) != 0)
-        {
-            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
-            A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
-            nRet += nE - nS + 1;
-        }
-        if (this->pData[nIndex].nEnd >= nEnd)
-            break;  // while
-        ++nIndex;
-    } while (nIndex < this->nCount);
-    return nRet;
-}
-
 
 template< typename A, typename D >
 A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
@@ -714,75 +459,6 @@ A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
 }
 
 
-template< typename A, typename D >
-template< typename S >
-unsigned long ScBitMaskCompressedArray<A,D>::SumCoupledArrayForCondition(
-        A nStart, A nEnd, const D& rBitMask, const D& rMaskedCompare,
-        const ScSummableCompressedArray<A,S>& rArray ) const
-{
-    unsigned long nSum = 0;
-    A nS = nStart;
-    size_t nIndex1 = Search( nStart);
-    size_t nIndex2 = rArray.Search( nStart);
-    do
-    {
-        if ((this->pData[nIndex1].aValue & rBitMask) == rMaskedCompare)
-        {
-            while (nIndex2 < rArray.GetEntryCount() &&
-                    rArray.GetDataEntry(nIndex2).nEnd < nS)
-                ++nIndex2;
-            unsigned long nNew = rArray.SumValuesContinuation( nS,
-                    ::std::min( this->pData[nIndex1].nEnd, nEnd), nIndex2);
-            nSum += nNew;
-            if (nSum < nNew)
-                return ::std::numeric_limits<unsigned long>::max();
-        }
-        nS = this->pData[nIndex1].nEnd + 1;
-        ++nIndex1;
-    } while (nIndex1 < this->nCount && nS <= nEnd);
-    if (nEnd > this->nMaxAccess &&
-            (this->pData[this->GetEntryCount()-1].aValue & rBitMask) == rMaskedCompare)
-        nSum += rArray.GetDataEntry(rArray.GetEntryCount()-1).aValue * (nEnd -
-                this->nMaxAccess);
-    return nSum;
-}
-
-
-template< typename A, typename D >
-template< typename S >
-unsigned long ScBitMaskCompressedArray<A,D>::SumScaledCoupledArrayForCondition(
-        A nStart, A nEnd, const D& rBitMask, const D& rMaskedCompare,
-        const ScSummableCompressedArray<A,S>& rArray, double fScale ) const
-{
-    unsigned long nSum = 0;
-    A nS = nStart;
-    size_t nIndex1 = Search( nStart);
-    size_t nIndex2 = rArray.Search( nStart);
-    do
-    {
-        if ((this->pData[nIndex1].aValue & rBitMask) == rMaskedCompare)
-        {
-            while (nIndex2 < rArray.GetEntryCount() &&
-                    rArray.GetDataEntry(nIndex2).nEnd < nS)
-                ++nIndex2;
-            unsigned long nNew = rArray.SumScaledValuesContinuation( nS,
-                    ::std::min( this->pData[nIndex1].nEnd, nEnd), nIndex2, fScale);
-            nSum += nNew;
-            if (nSum < nNew)
-                return ::std::numeric_limits<unsigned long>::max();
-        }
-        nS = this->pData[nIndex1].nEnd + 1;
-        ++nIndex1;
-    } while (nIndex1 < this->nCount && nS <= nEnd);
-    if (nEnd > this->nMaxAccess &&
-            (this->pData[this->GetEntryCount()-1].aValue & rBitMask) == rMaskedCompare)
-        nSum += (unsigned long)
-            (rArray.GetDataEntry(rArray.GetEntryCount()-1).aValue * fScale) *
-            (nEnd - this->nMaxAccess);
-    return nSum;
-}
-
-
 // === ScCompressedArrayIterator =============================================
 
 template< typename A, typename D >
@@ -808,99 +484,14 @@ void ScCompressedArrayIterator<A,D>::Follow(
 }
 
 
-// === ScCoupledCompressedArrayIterator ======================================
-
-template< typename A, typename D, typename S >
-ScCoupledCompressedArrayIterator<A,D,S>::ScCoupledCompressedArrayIterator(
-        const ScBitMaskCompressedArray<A,D> & rArray1, A nStart, A nEnd,
-        const D& rBitMaskP, const D& rMaskedCompareP,
-        const ScCompressedArray<A,S> & rArray2 )
-    : aIter1( rArray1, nStart, nEnd )
-    , aIter2( rArray2, nStart, nEnd )
-    , rBitMask( rBitMaskP )
-    , rMaskedCompare( rMaskedCompareP )
-{
-    InitLimits();
-}
-
-
-template< typename A, typename D, typename S >
-void ScCoupledCompressedArrayIterator<A,D,S>::InitLimits()
-{
-    bool bFound = true;
-    bool bMoved = false;
-    while (bFound && ((*aIter1 & rBitMask) != rMaskedCompare))
-    {
-        bFound = aIter1.NextRange();
-        bMoved = true;
-    }
-    if (bMoved && bFound)
-        aIter2.Follow( aIter1);
-}
-
-
-template< typename A, typename D, typename S >
-void ScCoupledCompressedArrayIterator<A,D,S>::NewLimits( A nStart, A nEnd )
-{
-    aIter1.NewLimits( nStart, nEnd);
-    aIter2.NewLimits( nStart, nEnd);
-    InitLimits();
-}
-
-
-template< typename A, typename D, typename S >
-bool ScCoupledCompressedArrayIterator<A,D,S>::NextRange()
-{
-    bool bAdv;
-    if (aIter1.GetRangeEnd() <= aIter2.GetRangeEnd())
-    {
-        // Advance bit mask array until condition is met, coupled array
-        // follows.
-        do
-        {
-            bAdv = aIter1.NextRange();
-        } while (bAdv && ((*aIter1 & rBitMask) != rMaskedCompare));
-        if (bAdv)
-            aIter2.Follow( aIter1);
-    }
-    else
-    {
-        // Make coupled array catch up with bit mask array.
-        do
-        {
-            bAdv = aIter2.NextRange();
-        } while (bAdv && aIter2.GetRangeEnd() < aIter1.GetRangeStart());
-        if (bAdv)
-            aIter1.Follow( aIter2);     // synchronize aIter1.nCurrent
-    }
-    return operator bool();
-}
-
-
-template< typename A, typename D, typename S >
-void ScCoupledCompressedArrayIterator<A,D,S>::Resync( A nPos )
-{
-    aIter1.Resync( nPos);
-    aIter2.Resync( nPos);
-    InitLimits();
-}
-
-
 // === Force instantiation of specializations ================================
 
 template class ScCompressedArray< SCROW, sal_uInt16>;           // heights, base class
-template class ScSummableCompressedArray< SCROW, sal_uInt16>;   // heights
 template class ScCompressedArray< SCROW, sal_uInt8>;             // flags, base class
 template class ScBitMaskCompressedArray< SCROW, sal_uInt8>;      // flags
-template unsigned long ScBitMaskCompressedArray< SCROW,
-    sal_uInt8>::SumCoupledArrayForCondition( SCROW, SCROW, const sal_uInt8&, const sal_uInt8&,
-            const ScSummableCompressedArray< SCROW, sal_uInt16>&) const;
-template unsigned long ScBitMaskCompressedArray< SCROW,
-    sal_uInt8>::SumScaledCoupledArrayForCondition( SCROW, SCROW, const sal_uInt8&,
-            const sal_uInt8&, const ScSummableCompressedArray< SCROW, sal_uInt16>&,
-            double) const;
 template void ScCompressedArrayIterator< SCROW, sal_uInt16>::Follow(
         const ScCompressedArrayIterator< SCROW, sal_uInt8>&);
-template class ScCoupledCompressedArrayIterator< SCROW, sal_uInt8, sal_uInt16>;
 
 // === EOF ===================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

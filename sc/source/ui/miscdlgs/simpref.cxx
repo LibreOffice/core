@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,11 +81,11 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         //
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
-        bRefInputMode   ( sal_False ),
+        bRefInputMode   ( false ),
         bAutoReOpen     ( sal_True ),
-        bCloseOnButtonUp( sal_False ),
-        bSingleCell     ( sal_False ),
-        bMultiSelection ( sal_False )
+        bCloseOnButtonUp( false ),
+        bSingleCell     ( false ),
+        bMultiSelection ( false )
 {
     //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
     Init();
@@ -93,9 +94,9 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
 }
 
 //----------------------------------------------------------------------------
-__EXPORT ScSimpleRefDlg::~ScSimpleRefDlg()
+ScSimpleRefDlg::~ScSimpleRefDlg()
 {
-    SetDispatcherLock( sal_False ); // Modal-Modus einschalten
+    SetDispatcherLock( false ); // Modal-Modus einschalten
 }
 
 //----------------------------------------------------------------------------
@@ -116,7 +117,7 @@ void ScSimpleRefDlg::Init()
 {
     aBtnOk.SetClickHdl      ( LINK( this, ScSimpleRefDlg, OkBtnHdl ) );
     aBtnCancel.SetClickHdl  ( LINK( this, ScSimpleRefDlg, CancelBtnHdl ) );
-    bCloseFlag=sal_False;
+    bCloseFlag=false;
 }
 
 //----------------------------------------------------------------------------
@@ -159,7 +160,7 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 
 //----------------------------------------------------------------------------
-sal_Bool __EXPORT ScSimpleRefDlg::Close()
+sal_Bool ScSimpleRefDlg::Close()
 {
     CancelBtnHdl(&aBtnCancel);
     return sal_True;
@@ -230,7 +231,7 @@ void ScSimpleRefDlg::RefInputDone( sal_Bool bForced)
 // ========
 IMPL_LINK( ScSimpleRefDlg, OkBtnHdl, void *, EMPTYARG )
 {
-    bAutoReOpen=sal_False;
+    bAutoReOpen=false;
     String aResult=aEdAssign.GetText();
     aCloseHdl.Call(&aResult);
     Link aUnoLink = aDoneHdl;       // stack var because this is deleted in DoClose
@@ -242,7 +243,7 @@ IMPL_LINK( ScSimpleRefDlg, OkBtnHdl, void *, EMPTYARG )
 //------------------------------------------------------------------------
 IMPL_LINK( ScSimpleRefDlg, CancelBtnHdl, void *, EMPTYARG )
 {
-    bAutoReOpen=sal_False;
+    bAutoReOpen=false;
     String aResult=aEdAssign.GetText();
     aCloseHdl.Call(NULL);
     Link aUnoLink = aAbortedHdl;    // stack var because this is deleted in DoClose
@@ -255,3 +256,4 @@ IMPL_LINK( ScSimpleRefDlg, CancelBtnHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -121,7 +122,6 @@ Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPro
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 class WrappedStackedTextProperty : public WrappedProperty
 {
@@ -140,10 +140,6 @@ WrappedStackedTextProperty::~WrappedStackedTextProperty()
 
 }// end namespace chart
 
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 namespace
@@ -198,7 +194,6 @@ private:
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        //::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
         ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
         ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
@@ -271,7 +266,7 @@ void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set size of title" );
+    OSL_FAIL( "trying to set size of title" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
@@ -288,10 +283,8 @@ void SAL_CALL TitleWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
-    // /--
     MutexGuard aGuard( GetMutex());
     clearWrappedPropertySet();
-    // \--
 }
 
 void SAL_CALL TitleWrapper::addEventListener(
@@ -554,9 +547,6 @@ Sequence< OUString > TitleWrapper::getSupportedServiceNames_Static()
     aServices[ 1 ] = C2U( "com.sun.star.drawing.Shape" );
     aServices[ 2 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
     aServices[ 3 ] = C2U( "com.sun.star.style.CharacterProperties" );
-//     aServices[ 4 ] = C2U( "com.sun.star.beans.PropertySet" );
-//     aServices[ 5 ] = C2U( "com.sun.star.drawing.FillProperties" );
-//     aServices[ 6 ] = C2U( "com.sun.star.drawing.LineProperties" );
 
     return aServices;
 }
@@ -566,3 +556,5 @@ APPHELPER_XSERVICEINFO_IMPL( TitleWrapper, lcl_aServiceName );
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,12 +39,10 @@
 #include "miscuno.hxx"
 #include "unonames.hxx"
 #include "docoptio.hxx"
-#include "unoguard.hxx"
 
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
-// static
 const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 {
     static SfxItemPropertyMapEntry aMap[] =
@@ -65,7 +64,6 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
     return aMap;
 }
 
-// static
 sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
                 const rtl::OUString& aPropertyName, const uno::Any& aValue )
@@ -74,7 +72,7 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
 
     const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName(aPropertyName );
     if( !pEntry || !pEntry->nWID )
-        return sal_False;
+        return false;
     switch( pEntry->nWID )
     {
         case PROP_UNO_CALCASSHOWN :
@@ -138,7 +136,6 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
     return sal_True;
 }
 
-// static
 uno::Any ScDocOptionsHelper::getPropertyValue(
                 const ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
@@ -214,7 +211,7 @@ void SAL_CALL ScDocOptionsObj::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     sal_Bool bDone = ScDocOptionsHelper::setPropertyValue( aOptions, *GetPropertySet().getPropertyMap(), aPropertyName, aValue );
 
@@ -226,7 +223,7 @@ uno::Any SAL_CALL ScDocOptionsObj::getPropertyValue( const rtl::OUString& aPrope
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     uno::Any aRet(ScDocOptionsHelper::getPropertyValue( aOptions, *GetPropertySet().getPropertyMap(), aPropertyName ));
     if ( !aRet.hasValue() )
@@ -235,3 +232,4 @@ uno::Any SAL_CALL ScDocOptionsObj::getPropertyValue( const rtl::OUString& aPrope
     return aRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

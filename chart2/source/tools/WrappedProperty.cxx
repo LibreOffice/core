@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,6 @@ const OUString& WrappedProperty::getOuterName() const
     return m_aOuterName;
 }
 
-//virtual
 ::rtl::OUString WrappedProperty::getInnerName() const
 {
     return m_aInnerName;
@@ -148,3 +148,5 @@ beans::PropertyState WrappedProperty::getPropertyState( const Reference< beans::
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

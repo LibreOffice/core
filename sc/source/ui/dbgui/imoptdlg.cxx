@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,12 +49,12 @@ ScImportOptions::ScImportOptions( const String& rStr )
     // because the import options string is passed here when a CSV file is loaded and saved again.
     // The old format is still supported because it might be used in macros.
 
-    bFixedWidth = sal_False;
+    bFixedWidth = false;
     nFieldSepCode = 0;
     nTextSepCode = 0;
     eCharSet = RTL_TEXTENCODING_DONTKNOW;
     bSaveAsShown = sal_True;    // "true" if not in string (after CSV import)
-    bQuoteAllText = sal_False;
+    bQuoteAllText = false;
     xub_StrLen nTokenCount = rStr.GetTokenCount(',');
     if ( nTokenCount >= 3 )
     {
@@ -70,7 +71,7 @@ ScImportOptions::ScImportOptions( const String& rStr )
         if ( nTokenCount == 4 )
         {
             // compatibility with old options string: "Save as shown" as 4th token, numeric
-            bSaveAsShown = (rStr.GetToken( 3, ',' ).ToInt32() ? sal_True : sal_False);
+            bSaveAsShown = (rStr.GetToken( 3, ',' ).ToInt32() ? sal_True : false);
             bQuoteAllText = sal_True;   // use old default then
         }
         else
@@ -115,3 +116,5 @@ void ScImportOptions::SetTextEncoding( rtl_TextEncoding nEnc )
         gsl_getSystemTextEncoding() : nEnc);
     aStrFont = ScGlobal::GetCharsetString( nEnc );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

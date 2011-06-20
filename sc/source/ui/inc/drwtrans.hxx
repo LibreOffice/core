@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,8 +53,6 @@ private:
     SdrModel*                       pModel;
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
-//REMOVE        SvEmbeddedObjectRef             aDocShellRef;
-//REMOVE        SvEmbeddedObjectRef             aDrawPersistRef;
     SfxObjectShellRef               aDocShellRef;
     SfxObjectShellRef               aDrawPersistRef;
 
@@ -75,7 +74,6 @@ private:
 
 
     void                InitDocShell();
-//REMOVE        SvInPlaceObjectRef  GetSingleObject();
     SdrOle2Obj* GetSingleObject();
 
 public:
@@ -114,3 +112,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

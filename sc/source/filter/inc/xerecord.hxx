@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include "xlconst.hxx"
 #include "xestream.hxx"
+#include <boost/shared_ptr.hpp>
 
 // Base classes to export Excel records =======================================
 
@@ -332,7 +334,7 @@ template< typename RecType = XclExpRecordBase >
 class XclExpRecordList : public XclExpRecordBase
 {
 public:
-    typedef ScfRef< RecType > RecordRefType;
+    typedef boost::shared_ptr< RecType > RecordRefType;
 
     /** Returns pointer to an existing record or 0 on error. */
     inline bool         IsEmpty() const { return maRecs.empty(); }
@@ -417,3 +419,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

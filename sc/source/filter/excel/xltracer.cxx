@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -242,12 +243,6 @@ void XclTracer::TraceChartLegendPosition()
     ProcessTraceOnce(eChartLegendPosition);
 }
 
-void XclTracer::TraceChartEmbeddedObj()
-{
-    // drawing objects e.g. text boxes etc not supported inside charts
-    ProcessTraceOnce(eChartEmbeddedObj);
-}
-
 void XclTracer::TraceUnsupportedObjects()
 {
     // Called from Excel 5.0 - limited Graphical object support.
@@ -268,3 +263,4 @@ void XclTracer::TraceDVType(  bool bType)
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,8 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2011 Oracle and/or its affiliates.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -114,7 +115,7 @@ short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16* pMinDi
     if ( nNum > nNeg && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(cLast) ) )
     {   // number at the beginning
         nVal = aValue.Copy( 0, nNum ).ToInt32();
-        //  #60893# any number with a leading zero sets the minimum number of digits
+        //  any number with a leading zero sets the minimum number of digits
         if ( p[nNeg] == '0' && pMinDigits && ( nNum - nNeg > *pMinDigits ) )
             *pMinDigits = nNum - nNeg;
         aValue.Erase( 0, nNum );
@@ -134,7 +135,7 @@ short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16* pMinDi
         if ( nNum < nEnd - nNeg )
         {   // number at the end
             nVal = aValue.Copy( nNum + 1 ).ToInt32();
-            //  #60893# any number with a leading zero sets the minimum number of digits
+            //  any number with a leading zero sets the minimum number of digits
             if ( p[nNum+1+nNeg] == '0' && pMinDigits && ( nEnd - nNum - nNeg > *pMinDigits ) )
                 *pMinDigits = nEnd - nNum - nNeg;
             aValue.Erase( nNum + 1 );
@@ -193,13 +194,13 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             double& rInc, sal_uInt16& rMinDigits,
                             ScUserListData*& rListData, sal_uInt16& rListIndex)
 {
-    DBG_ASSERT( nCol1==nCol2 || nRow1==nRow2, "FillAnalyse: falscher Bereich" );
+    OSL_ENSURE( nCol1==nCol2 || nRow1==nRow2, "FillAnalyse: falscher Bereich" );
 
     rInc = 0.0;
     rMinDigits = 0;
     rListData = NULL;
     rCmd = FILL_SIMPLE;
-    if (( nScFillModeMouseModifier & KEY_MOD1 )||IsDataFiltered())  //i89232
+    if ( (nScFillModeMouseModifier & KEY_MOD1) || IsDataFiltered() )
         return ;        // Ctrl-Taste: Copy
 
     SCCOL nAddX;
@@ -232,7 +233,6 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             if (nCount > 1)
             {
-                long nCmpInc = 0;
                 double nVal;
                 Date aNullDate = *pDocument->GetFormatTable()->GetNullDate();
                 Date aDate1 = aNullDate;
@@ -243,6 +243,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 aDate2 += (long)nVal;
                 if ( aDate1 != aDate2 )
                 {
+                    long nCmpInc = 0;
                     FillDateCmd eType;
                     long nDDiff = aDate2.GetDay()   - (long) aDate1.GetDay();
                     long nMDiff = aDate2.GetMonth() - (long) aDate1.GetMonth();
@@ -271,7 +272,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             if ( eType == FILL_DAY )
                             {
                                 if ( aDate2-aDate1 != nCmpInc )
-                                    bVal = sal_False;
+                                    bVal = false;
                             }
                             else
                             {
@@ -279,14 +280,14 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 nMDiff = aDate2.GetMonth() - (long) aDate1.GetMonth();
                                 nYDiff = aDate2.GetYear()  - (long) aDate1.GetYear();
                                 if (nDDiff || ( nMDiff + 12 * nYDiff != nCmpInc ))
-                                    bVal = sal_False;
+                                    bVal = false;
                             }
                             aDate1 = aDate2;
                             nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                             nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
                         }
                         else
-                            bVal = sal_False;   // #50965# kein Datum passt auch nicht
+                            bVal = false;   // kein Datum passt auch nicht
                     }
                     if (bVal)
                     {
@@ -326,11 +327,11 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         nVal2 = ((ScValueCell*)pCell)->GetValue();
                         double nDiff = nVal2 - nVal1;
                         if ( !::rtl::math::approxEqual( nDiff, rInc ) )
-                            bVal = sal_False;
+                            bVal = false;
                         nVal1 = nVal2;
                     }
                     else
-                        bVal = sal_False;
+                        bVal = false;
                     nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                     nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
                 }
@@ -391,14 +392,14 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             {
                                 double nDiff = (double)nVal2 - (double)nVal1;
                                 if ( !::rtl::math::approxEqual( nDiff, rInc ) )
-                                    bVal = sal_False;
+                                    bVal = false;
                                 nVal1 = nVal2;
                             }
                             else
-                                bVal = sal_False;
+                                bVal = false;
                         }
                         else
-                            bVal = sal_False;
+                            bVal = false;
                         nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                         nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
                     }
@@ -419,88 +420,45 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 void ScTable::FillFormula(sal_uLong& /* nFormulaCounter */, sal_Bool /* bFirst */, ScFormulaCell* pSrcCell,
                           SCCOL nDestCol, SCROW nDestRow, sal_Bool bLast )
 {
-/*  sal_uInt16 nTokArrLen = pSrcCell->GetTokenArrayLen();
-    if ( nTokArrLen > 15 )                          // mehr als =A1 oder =67
+
+    pDocument->SetNoListening( true );  // noch falsche Referenzen
+    ScAddress aAddr( nDestCol, nDestRow, nTab );
+    ScFormulaCell* pDestCell = new ScFormulaCell( *pSrcCell, *pDocument, aAddr );
+    aCol[nDestCol].Insert(nDestRow, pDestCell);
+
+    if ( bLast && pDestCell->GetMatrixFlag() )
     {
-        ScRangeName* pRangeName = pDocument->GetRangeName();
-        String aName("___SC_");                     // Wird dieser String veraendert,
-                                                    // auch in document2 EraseNonUsed...
-                                                    // mitaendern!!
-        aName += pRangeName->GetSharedMaxIndex() + 1;
-        aName += '_';
-        aName += nFormulaCounter;
-        nFormulaCounter++;
-        if (bFirst)
+        ScAddress aOrg;
+        if ( pDestCell->GetMatrixOrigin( aOrg ) )
         {
-            ScRangeData *pAktRange = new ScRangeData(
-                            pDocument, aName, pSrcCell->GetTokenArray(), nTokArrLen,
-                            pSrcCell->GetCol(), pSrcCell->GetRow(), nTab ,RT_SHARED);
-            if (!pRangeName->Insert( pAktRange ))
-                delete pAktRange;
-            else
-                bSharedNameInserted = sal_True;
-        }
-        sal_uInt16 nIndex;
-        pRangeName->SearchName(aName, nIndex);
-        if (!pRangeName)
-        {
-            DBG_ERROR("ScTable::FillFormula: Falscher Name");
-            return;
-        }
-        nIndex = ((ScRangeData*) ((*pRangeName)[nIndex]))->GetIndex();
-        ScTokenArray aArr;
-        aArr.AddName(nIndex);
-        aArr.AddOpCode(ocStop);
-        ScFormulaCell* pDestCell = new ScFormulaCell
-            (pDocument, ScAddress( nDestCol, nDestRow, nTab ), aArr );
-        aCol[nDestCol].Insert(nDestRow, pDestCell);
-    }
-    else
-*/  {
-        pDocument->SetNoListening( sal_True );  // noch falsche Referenzen
-        ScAddress aAddr( nDestCol, nDestRow, nTab );
-        ScFormulaCell* pDestCell = new ScFormulaCell( *pSrcCell, *pDocument, aAddr );
-        aCol[nDestCol].Insert(nDestRow, pDestCell);
-#if 0
-// mit RelRefs unnoetig
-        pDestCell->UpdateReference(URM_COPY,
-                         ScRange( aAddr, aAddr ),
-                         nDestCol - pSrcCell->aPos.Col(),
-                         nDestRow - pSrcCell->aPos.Row(), 0);
-#endif
-        if ( bLast && pDestCell->GetMatrixFlag() )
-        {
-            ScAddress aOrg;
-            if ( pDestCell->GetMatrixOrigin( aOrg ) )
+            if ( nDestCol >= aOrg.Col() && nDestRow >= aOrg.Row() )
             {
-                if ( nDestCol >= aOrg.Col() && nDestRow >= aOrg.Row() )
+                ScBaseCell* pOrgCell = pDocument->GetCell( aOrg );
+                if ( pOrgCell && pOrgCell->GetCellType() == CELLTYPE_FORMULA
+                  && ((ScFormulaCell*)pOrgCell)->GetMatrixFlag() == MM_FORMULA )
                 {
-                    ScBaseCell* pOrgCell = pDocument->GetCell( aOrg );
-                    if ( pOrgCell && pOrgCell->GetCellType() == CELLTYPE_FORMULA
-                      && ((ScFormulaCell*)pOrgCell)->GetMatrixFlag() == MM_FORMULA )
-                    {
-                        ((ScFormulaCell*)pOrgCell)->SetMatColsRows(
-                            nDestCol - aOrg.Col() + 1,
-                            nDestRow - aOrg.Row() + 1 );
-                    }
-                    else
-                    {
-                        DBG_ERRORFILE( "FillFormula: MatrixOrigin keine Formelzelle mit MM_FORMULA" );
-                    }
+                    ((ScFormulaCell*)pOrgCell)->SetMatColsRows(
+                        nDestCol - aOrg.Col() + 1,
+                        nDestRow - aOrg.Row() + 1 );
                 }
                 else
                 {
-                    DBG_ERRORFILE( "FillFormula: MatrixOrigin rechts unten" );
+                    OSL_FAIL( "FillFormula: MatrixOrigin keine Formelzelle mit MM_FORMULA" );
                 }
             }
             else
             {
-                DBG_ERRORFILE( "FillFormula: kein MatrixOrigin" );
+                OSL_FAIL( "FillFormula: MatrixOrigin rechts unten" );
             }
         }
-        pDocument->SetNoListening( sal_False );
-        pDestCell->StartListeningTo( pDocument );
+        else
+        {
+            OSL_FAIL( "FillFormula: kein MatrixOrigin" );
+        }
     }
+    pDocument->SetNoListening( false );
+    pDestCell->StartListeningTo( pDocument );
+
 }
 
 void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -569,13 +527,15 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     sal_uLong nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
     sal_Bool bHasFiltered = IsDataFiltered();
-    if (!bHasFiltered)  //modify for i89232
+
+    if (!bHasFiltered)
     {
         if (bVertical)
             DeleteArea(nCol1, static_cast<SCROW>(nIMin), nCol2, static_cast<SCROW>(nIMax), IDF_AUTOFILL);
         else
             DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, IDF_AUTOFILL);
     }
+
     sal_uLong nProgress = rProgress.GetState();
 
     //
@@ -605,12 +565,12 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nAtSrc));
                 else                // rInner&:=nCol, rOuter&:=nRow
                     pSrcPattern = aCol[nAtSrc].GetPattern(static_cast<SCROW>(nRow));
-                bGetPattern = sal_False;
+                bGetPattern = false;
                 pStyleSheet = pSrcPattern->GetStyleSheet();
                 //  Merge/Mergeflag nicht uebernehmen,
                 const SfxItemSet& rSet = pSrcPattern->GetItemSet();
-                if ( rSet.GetItemState(ATTR_MERGE, sal_False) == SFX_ITEM_SET
-                  || rSet.GetItemState(ATTR_MERGE_FLAG, sal_False) == SFX_ITEM_SET )
+                if ( rSet.GetItemState(ATTR_MERGE, false) == SFX_ITEM_SET
+                  || rSet.GetItemState(ATTR_MERGE_FLAG, false) == SFX_ITEM_SET )
                 {
                     pNewPattern = new ScPatternAttr( *pSrcPattern );
                     SfxItemSet& rNewSet = pNewPattern->GetItemSet();
@@ -639,7 +599,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 break;      // Schleife abbrechen
             }
 
-            if ( !RowFiltered(nRow) )
+            if (!RowFiltered( nRow ))
             {
                 if ( bHasFiltered )
                     DeleteArea(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
@@ -647,12 +607,12 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                 if ( pSrcPattern != aCol[nCol].GetPattern( static_cast<SCROW>(nRow) ) )
                 {
-                    //  Vorlage auch uebernehmen
+                    // Vorlage auch uebernehmen
                     //! am AttrArray mit ApplyPattern zusammenfassen ??
                     if ( pStyleSheet )
                         aCol[nCol].ApplyStyle( static_cast<SCROW>(nRow), *pStyleSheet );
 
-                    //  ApplyPattern statt SetPattern um alte MergeFlags stehenzulassen
+                    //    ApplyPattern statt SetPattern um alte MergeFlags stehenzulassen
                     if ( pNewPattern )
                         aCol[nCol].ApplyPattern( static_cast<SCROW>(nRow), *pNewPattern );
                     else
@@ -662,7 +622,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if (nAtSrc==nISrcEnd)
                 {
                     if ( nAtSrc != nISrcStart )
-                    {   // mehr als eine Source-Zelle
+                    {    // mehr als eine Source-Zelle
                         nAtSrc = nISrcStart;
                         bGetPattern = sal_True;
                     }
@@ -744,7 +704,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             sal_uLong nSource = nISrcStart;
             double nDelta;
-            if (( nScFillModeMouseModifier & KEY_MOD1 )||bHasFiltered) //i89232
+            if ( (nScFillModeMouseModifier & KEY_MOD1) || bHasFiltered )
                 nDelta = 0.0;
             else if ( bPositive )
                 nDelta = 1.0;
@@ -760,8 +720,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             String aValue;
             ScBaseCell* pSrcCell = NULL;
             CellType eCellType = CELLTYPE_NONE;
-            sal_Bool bIsOrdinalSuffix = sal_False;
-            sal_Bool bRowFiltered = sal_False; //i89232
+            sal_Bool bIsOrdinalSuffix = false;
+            sal_Bool bRowFiltered = false;
 
             rInner = nIStart;
             while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
@@ -772,7 +732,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         pSrcCell = aCol[nCol].GetCell( static_cast<SCROW>(nSource) );
                     else                // rInner&:=nCol, rOuter&:=nRow
                         pSrcCell = aCol[nSource].GetCell( static_cast<SCROW>(nRow) );
-                    bGetCell = sal_False;
+                    bGetCell = false;
                     if ( pSrcCell )
                     {
                         eCellType = pSrcCell->GetCellType();
@@ -787,7 +747,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                     ((ScStringCell*)pSrcCell)->GetString( aValue );
                                 else
                                     ((ScEditCell*)pSrcCell)->GetString( aValue );
-                                if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered)   //i89232
+                                if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
                                 {
                                     nCellDigits = 0;    // look at each source cell individually
                                     nHeadNoneTail = lcl_DecompValueString(
@@ -807,13 +767,10 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         eCellType = CELLTYPE_NONE;
                 }
 
-                //Modify for i89232
                 bRowFiltered = mpFilteredRows->getValue(nRow);
 
                 if (!bRowFiltered)
                 {
-                //End of i89232
-
                     switch (eCellType)
                     {
                         case CELLTYPE_VALUE:
@@ -881,7 +838,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             nSource = nISrcStart;
                             bGetCell = sal_True;
                         }
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered ) //i89232
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
                         {
                             if ( bPositive )
                                 nDelta += 1.0;
@@ -889,7 +846,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 nDelta -= 1.0;
                         }
                         nFormulaCounter = nActFormCnt;
-                        bFirst = sal_False;
+                        bFirst = false;
                     }
                     else if (bPositive)
                     {
@@ -903,6 +860,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     }
                 }
 
+                if (rInner == nIEnd) break;
+                if (bPositive) ++rInner; else --rInner;
+
                 //  Progress in der inneren Schleife nur bei teuren Zellen,
                 //  und auch dann nicht fuer jede einzelne
 
@@ -910,8 +870,6 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if ( eCellType == CELLTYPE_FORMULA || eCellType == CELLTYPE_EDIT )
                     rProgress.SetStateOnPercent( nProgress );
 
-                if (rInner == nIEnd) break;
-                if (bPositive) ++rInner; else --rInner;
             }
             rProgress.SetStateOnPercent( nProgress );
         }
@@ -923,12 +881,12 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if (bVertical)
                 FillSeries( static_cast<SCCOL>(nCol), nRow1,
                         static_cast<SCCOL>(nCol), nRow2, nFillCount, eFillDir,
-                        eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, sal_False,
+                        eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, false,
                         rProgress );
             else
                 FillSeries( nCol1, static_cast<SCROW>(nRow), nCol2,
                         static_cast<SCROW>(nRow), nFillCount, eFillDir,
-                        eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, sal_False,
+                        eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, false,
                         rProgress );
             nProgress = rProgress.GetState();
         }
@@ -950,7 +908,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
     sal_uLong nSrcCount = 0;
     FillDir eFillDir = FILL_TO_BOTTOM;
     if ( nEndX == nCol2 && nEndY == nRow2 )     // leer
-        bOk = sal_False;
+        bOk = false;
     else if ( nEndX == nCol2 )                  // nach oben/unten
     {
         nEndX = nCol2 = nCol1;                  // nur erste Spalte ansehen
@@ -972,7 +930,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
             eFillDir = FILL_TO_LEFT;
     }
     else                                        // Richtung nicht eindeutig
-        bOk = sal_False;
+        bOk = false;
 
     if ( bOk )
     {
@@ -999,7 +957,6 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
         }
         else if ( eFillCmd == FILL_SIMPLE )         // Auffuellen mit Muster
         {
-            //Add for i89232
             if ((eFillDir == FILL_TO_BOTTOM)||(eFillDir == FILL_TO_TOP))
             {
                 long nBegin = 0;
@@ -1014,14 +971,15 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     nBegin = nEndY;
                     nEnd = nRow1 -1;
                 }
+
                 long nNonFiltered = CountNonFilteredRows(nBegin, nEnd);
                 long nFiltered = nEnd + 1 - nBegin - nNonFiltered;
-                if (nIndex >0)
+
+                if (nIndex > 0)
                     nIndex = nIndex - nFiltered;
                 else
                     nIndex = nIndex + nFiltered;
             }
-            //End of i89232
 
             long nPosIndex = nIndex;
             while ( nPosIndex < 0 )
@@ -1053,7 +1011,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                             ((ScStringCell*)pCell)->GetString( aValue );
                         else
                             ((ScEditCell*)pCell)->GetString( aValue );
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() )  //i89232
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() )
                         {
                             sal_Int32 nVal;
                             sal_uInt16 nCellDigits = 0; // look at each source cell individually
@@ -1074,7 +1032,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     {
                         //  dabei kann's keinen Ueberlauf geben...
                         double nVal = ((ScValueCell*)pCell)->GetValue();
-                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() )  //i89232
+                        if ( !(nScFillModeMouseModifier & KEY_MOD1) && !IsDataFiltered() )
                             nVal += (double) nDelta;
 
                         Color* pColor;
@@ -1174,7 +1132,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
         }
         else
         {
-            DBG_ERROR("GetAutoFillPreview: falscher Modus");
+            OSL_FAIL("GetAutoFillPreview: falscher Modus");
         }
     }
 
@@ -1390,10 +1348,12 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     for (rInner = nIMin; rInner <= nIMax; rInner++)
                     {
+                        if (pDocument->RowFiltered( rInner, nTab))
+                            continue;
                         sal_uLong nInd = nActFormCnt;
                         FillFormula(nInd, bFirst, (ScFormulaCell*)pSrcCell,
                             static_cast<SCCOL>(nCol), nRow, (rInner == nIEnd) );
-                        bFirst = sal_False;
+                        bFirst = false;
                         rProgress.SetStateOnPercent( ++nProgress );
                     }
                 }
@@ -1401,6 +1361,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     for (rInner = nIMin; rInner <= nIMax; rInner++)
                     {
+                        if (pDocument->RowFiltered( rInner, nTab))
+                            continue;
                         ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
                         aCol[nCol].Insert( aDestPos.Row(), pSrcCell->CloneWithoutNote( *pDocument ) );
                     }
@@ -1418,8 +1380,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 double nVal = nStartVal;
                 long nIndex = 0;
 
-                sal_Bool bError = sal_False;
-                sal_Bool bOverflow = sal_False;
+                sal_Bool bError = false;
+                sal_Bool bOverflow = false;
 
                 sal_uInt16 nDayOfMonth = 0;
                 rInner = nIStart;
@@ -1431,7 +1393,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         {
                             case FILL_LINEAR:
                                 {
-                                    //  #86365# use multiplication instead of repeated addition
+                                    //  use multiplication instead of repeated addition
                                     //  to avoid accumulating rounding errors
                                     nVal = nStartVal;
                                     double nAdd = nStepValue;
@@ -1510,8 +1472,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     double nStartVal = (double)nStringValue;
                     double nVal = nStartVal;
                     long nIndex = 0;
-                    sal_Bool bError = sal_False;
-                    sal_Bool bOverflow = sal_False;
+                    sal_Bool bError = false;
+                    sal_Bool bOverflow = false;
 
                     sal_Bool bIsOrdinalSuffix = aValue.Equals( ScGlobal::GetOrdinalSuffix(
                                 (sal_Int32)nStartVal));
@@ -1525,7 +1487,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             {
                                 case FILL_LINEAR:
                                     {
-                                        //  #86365# use multiplication instead of repeated addition
+                                        //  use multiplication instead of repeated addition
                                         //  to avoid accumulating rounding errors
                                         nVal = nStartVal;
                                         double nAdd = nStepValue;
@@ -1614,17 +1576,11 @@ void ScTable::Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     ScProgress aProgress( pDocument->GetDocumentShell(),
                             ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
 
-    bSharedNameInserted = sal_False;
-
     if (eFillCmd == FILL_AUTO)
         FillAuto(nCol1, nRow1, nCol2, nRow2, nFillCount, eFillDir, aProgress);
     else
         FillSeries(nCol1, nRow1, nCol2, nRow2, nFillCount, eFillDir,
                     eFillCmd, eFillDateCmd, nStepValue, nMaxValue, 0, sal_True, aProgress);
-
-    if (bSharedNameInserted)                        // Wurde Shared-Name eingefuegt?
-        pDocument->GetRangeName()->SetSharedMaxIndex(
-            pDocument->GetRangeName()->GetSharedMaxIndex()+1);  // dann hochzaehlen
 }
 
 
@@ -1637,8 +1593,6 @@ void ScTable::AutoFormatArea(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
         ScAutoFormatData* pData = (*pAutoFormat)[nFormatNo];
         if (pData)
         {
-//          ScPatternAttr aPattern(pDocument->GetPool());
-//            pData->FillToItemSet(nIndex, aPattern.GetItemSet(), *pDocument);
             ApplyPatternArea(nStartCol, nStartRow, nEndCol, nEndRow, rAttr);
         }
     }
@@ -1943,14 +1897,6 @@ void ScTable::UpdateInsertTabAbs(SCTAB nTable)
         aCol[i].UpdateInsertTabAbs(nTable);
 }
 
-//UNUSED2008-05  sal_uInt16 ScTable::GetErrorData( SCCOL nCol, SCROW nRow ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      if (ValidColRow(nCol,nRow))
-//UNUSED2008-05          return aCol[nCol].GetErrorData( nRow );
-//UNUSED2008-05      else
-//UNUSED2008-05          return 0;
-//UNUSED2008-05  }
-
 sal_Bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, sal_Bool bInSel,
                                     const ScMarkData& rMark) const
 {
@@ -1972,7 +1918,7 @@ sal_Bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, sal_Bool bInSel,
         return sal_True;
     else
     {
-        sal_Bool bStop = sal_False;
+        sal_Bool bStop = false;
         while (!bStop)
         {
             if (ValidCol(rCol))
@@ -1990,7 +1936,7 @@ sal_Bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, sal_Bool bInSel,
                 return sal_True;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void ScTable::RemoveAutoSpellObj()
@@ -2001,7 +1947,7 @@ void ScTable::RemoveAutoSpellObj()
 
 sal_Bool ScTable::TestTabRefAbs(SCTAB nTable)
 {
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     for (SCCOL i=0; i <= MAXCOL; i++)
         if (aCol[i].TestTabRefAbs(nTable))
             bRet = sal_True;
@@ -2033,3 +1979,4 @@ void ScTable::CompileColRowNameFormula()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

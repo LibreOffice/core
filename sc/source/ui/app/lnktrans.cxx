@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,7 @@ void ScLinkTransferObj::AddSupportedFormats()
 
 sal_Bool ScLinkTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    sal_Bool bOK = sal_False;
+    sal_Bool bOK = false;
     if ( aLinkURL.Len() )
     {
         INetBookmark aBmk( aLinkURL, aLinkText );
@@ -95,3 +96,4 @@ void ScLinkTransferObj::DragFinished( sal_Int8 nDropAction )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

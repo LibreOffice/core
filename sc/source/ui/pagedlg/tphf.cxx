@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,11 +48,10 @@
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
-//CHINA001 #include "tphfedit.hxx"
 #include "hfedtdlg.hxx"
 #include "styledlg.hxx"
 #include "scresid.hxx"
-#include "scuitphfedit.hxx" //CHINA001
+#include "scuitphfedit.hxx"
 #undef _TPHF_CXX
 
 
@@ -107,13 +107,13 @@ ScHFPage::ScHFPage( Window* pParent, sal_uInt16 nResId,
 
 //------------------------------------------------------------------
 
-__EXPORT ScHFPage::~ScHFPage()
+ScHFPage::~ScHFPage()
 {
 }
 
 //------------------------------------------------------------------
 
-void __EXPORT ScHFPage::Reset( const SfxItemSet& rSet )
+void ScHFPage::Reset( const SfxItemSet& rSet )
 {
     SvxHFPage::Reset( rSet );
     TurnOnHdl( 0 );
@@ -121,7 +121,7 @@ void __EXPORT ScHFPage::Reset( const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-sal_Bool __EXPORT ScHFPage::FillItemSet( SfxItemSet& rOutSet )
+sal_Bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 {
     sal_Bool bResult = SvxHFPage::FillItemSet( rOutSet );
 
@@ -141,7 +141,7 @@ sal_Bool __EXPORT ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 
 //------------------------------------------------------------------
 
-void __EXPORT ScHFPage::ActivatePage( const SfxItemSet& rSet )
+void ScHFPage::ActivatePage( const SfxItemSet& rSet )
 {
     sal_uInt16              nPageWhich = GetWhich( SID_ATTR_PAGE );
     const SvxPageItem&  rPageItem  = (const SvxPageItem&)
@@ -159,7 +159,7 @@ void __EXPORT ScHFPage::ActivatePage( const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-int __EXPORT ScHFPage::DeactivatePage( SfxItemSet* pSetP )
+int ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( LEAVE_PAGE == SvxHFPage::DeactivatePage( pSetP ) )
         if ( pSetP )
@@ -214,7 +214,7 @@ IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
 
     if ( !pViewSh )
     {
-        DBG_ERROR( "Current ViewShell not found." );
+        OSL_FAIL( "Current ViewShell not found." );
         return 0;
     }
 
@@ -293,14 +293,14 @@ ScHeaderPage::ScHeaderPage( Window* pParent, const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScHeaderPage( pParent, rCoreSet ) );
 }
 
 //------------------------------------------------------------------
 
-sal_uInt16* __EXPORT ScHeaderPage::GetRanges()
+sal_uInt16* ScHeaderPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
@@ -316,14 +316,14 @@ ScFooterPage::ScFooterPage( Window* pParent, const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScFooterPage( pParent, rCoreSet ) );
 }
 
 //------------------------------------------------------------------
 
-sal_uInt16* __EXPORT ScFooterPage::GetRanges()
+sal_uInt16* ScFooterPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
@@ -331,3 +331,4 @@ sal_uInt16* __EXPORT ScFooterPage::GetRanges()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

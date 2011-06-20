@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,25 +80,6 @@ public:
                             const ::rtl::OUString& rString,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
-//UNUSED2008-05  /** Constructs a formatted BIFF8 Unicode string.
-//UNUSED2008-05      @param rFormats  The formatting runs.
-//UNUSED2008-05      @param nFlags  Modifiers for string export.
-//UNUSED2008-05      @param nMaxLen  The maximum number of characters to store in this string. */
-//UNUSED2008-05  explicit            XclExpString(
-//UNUSED2008-05                          const String& rString,
-//UNUSED2008-05                          const XclFormatRunVec& rFormats,
-//UNUSED2008-05                          XclStrFlags nFlags = EXC_STR_DEFAULT,
-//UNUSED2008-05                          sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
-//UNUSED2008-05
-//UNUSED2008-05  /** Constructs a formatted BIFF8 Unicode string.
-//UNUSED2008-05      @param rFormats  The formatting runs.
-//UNUSED2008-05      @param nFlags  Modifiers for string export.
-//UNUSED2008-05      @param nMaxLen  The maximum number of characters to store in this string. */
-//UNUSED2008-05  explicit            XclExpString(
-//UNUSED2008-05                          const ::rtl::OUString& rString,
-//UNUSED2008-05                          const XclFormatRunVec& rFormats,
-//UNUSED2008-05                          XclStrFlags nFlags = EXC_STR_DEFAULT,
-//UNUSED2008-05                          sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     // assign -----------------------------------------------------------------
 
@@ -108,15 +90,7 @@ public:
                             const String& rString,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
-    /** Assigns a formatted string, converts this object to a BIFF8 Unicode string.
-        @param rFormats  The formatting runs.
-        @param nFlags  Modifiers for string export.
-        @param nMaxLen  The maximum number of characters to store in this string. */
-    void                Assign(
-                            const String& rString,
-                            const XclFormatRunVec& rFormats,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
-                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
+
     /** Assigns an unformatted string, converts this object to a BIFF8 Unicode string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
@@ -124,15 +98,7 @@ public:
                             const ::rtl::OUString& rString,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
-    /** Assigns a formatted string, converts this object to a BIFF8 Unicode string.
-        @param rFormats  The formatting runs.
-        @param nFlags  Modifiers for string export.
-        @param nMaxLen  The maximum number of characters to store in this string. */
-    void                Assign(
-                            const ::rtl::OUString& rString,
-                            const XclFormatRunVec& rFormats,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
-                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
+
     /** Assigns a Unicode character, converts this object to a BIFF8 Unicode string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string (for appending). */
@@ -150,27 +116,11 @@ public:
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
-//UNUSED2008-05  /** Assigns a character, converts this object to a BIFF2-BIFF7 byte string.
-//UNUSED2008-05      @param nFlags  Modifiers for string export.
-//UNUSED2008-05      @param nMaxLen  The maximum number of characters to store in this string (for appending). */
-//UNUSED2008-05  void                AssignByte(
-//UNUSED2008-05                          sal_Unicode cChar,
-//UNUSED2008-05                          rtl_TextEncoding eTextEnc,
-//UNUSED2008-05                          XclStrFlags nFlags = EXC_STR_DEFAULT,
-//UNUSED2008-05                          sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
-
     // append -----------------------------------------------------------------
 
     /** Appends a string. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF8 Unicode string. */
     void                Append( const String& rString );
-
-//UNUSED2008-05  /** Appends a string. Uses the string flags used in constructor or last Assign().
-//UNUSED2008-05      @descr  This object must be a BIFF8 Unicode string. */
-//UNUSED2008-05  void                Append( const ::rtl::OUString& rString );
-//UNUSED2008-05  /** Appends a character. Uses the string flags used in constructor or last Assign().
-//UNUSED2008-05      @descr  This object must be a BIFF8 Unicode string. */
-//UNUSED2008-05  void                Append( sal_Unicode cChar );
 
     /** Appends a string. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF2-BIFF7 byte string. */
@@ -348,3 +298,4 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclExpString& rStrin
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

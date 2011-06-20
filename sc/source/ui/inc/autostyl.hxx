@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,22 +29,27 @@
 #ifndef SC_AUTOSTYL_HXX
 #define SC_AUTOSTYL_HXX
 
-#include <vcl/timer.hxx>
-#include <tools/list.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <tools/string.hxx>
+
+#include <vcl/timer.hxx>
 
 class ScDocShell;
 class ScRange;
+class ScAutoStyleData;
+struct ScAutoStyleInitData;
 
 class ScAutoStyleList
 {
 private:
+
     ScDocShell*     pDocSh;
     Timer           aTimer;
     Timer           aInitTimer;
     sal_uLong           nTimerStart;
-    List            aEntries;
-    List            aInitials;
+    boost::ptr_vector<ScAutoStyleData> aEntries;
+    boost::ptr_vector<ScAutoStyleInitData> aInitials;
 
     void    ExecuteEntries();
     void    AdjustEntries(sal_uLong nDiff);
@@ -66,3 +72,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

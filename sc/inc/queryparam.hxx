@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: interpre.hxx,v $
- * $Revision: 1.35.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +48,8 @@ struct ScQueryParamBase
 
     virtual ~ScQueryParamBase();
 
+    virtual bool IsValidFieldIndex() const;
+
     SC_DLLPUBLIC SCSIZE GetEntryCount() const;
     SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n) const;
     void Resize(SCSIZE nNew);
@@ -82,7 +82,7 @@ struct ScQueryParamTable
 
 struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamTable
 {
-    sal_Bool            bDestPers;          // nicht gespeichert
+    bool            bDestPers;          // not saved
     SCTAB           nDestTab;
     SCCOL           nDestCol;
     SCROW           nDestRow;
@@ -127,6 +127,8 @@ struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTa
 {
     ScDBQueryParamInternal();
     virtual ~ScDBQueryParamInternal();
+
+    virtual bool IsValidFieldIndex() const;
 };
 
 // ============================================================================
@@ -137,6 +139,10 @@ struct ScDBQueryParamMatrix : public ScDBQueryParamBase
 
     ScDBQueryParamMatrix();
     virtual ~ScDBQueryParamMatrix();
+
+    virtual bool IsValidFieldIndex() const;
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

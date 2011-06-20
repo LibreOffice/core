@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef SC_FORMULAPARSERPOOL_HXX
 #define SC_FORMULAPARSERPOOL_HXX
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 
 class ScDocument;
@@ -51,7 +52,7 @@ public:
                         getFormulaParser( const ::rtl::OUString& rNamespace );
 
 private:
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         ::rtl::OUString,
         ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser >,
         ::rtl::OUStringHash,
@@ -65,3 +66,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

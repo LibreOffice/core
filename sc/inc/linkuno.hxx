@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 
 #include "externalrefmgr.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 class ScAreaLink;
@@ -293,7 +294,7 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
-                            // aus get/setPropertyValue gerufen:
+                            // called from get/setPropertyValue:
     ::rtl::OUString         getFileName(void) const;
     void                    setFileName(const ::rtl::OUString& FileName);
     ::rtl::OUString         getFilter(void) const;
@@ -498,8 +499,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
-// ============================================================================
-
 class ScExternalSheetCacheObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalSheetCache >
 {
 public:
@@ -532,8 +531,6 @@ private:
     ScExternalRefCache::TableTypeRef mpTable;
     size_t mnIndex;
 };
-
-// ============================================================================
 
 class ScExternalDocLinkObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalDocLink >
 {
@@ -580,8 +577,6 @@ private:
     ScExternalRefManager*   mpRefMgr;
     sal_uInt16              mnFileId;
 };
-
-// ============================================================================
 
 /** This is the UNO API equivalent of ScExternalRefManager. */
 class ScExternalDocLinksObj : public cppu::WeakImplHelper1< ::com::sun::star::sheet::XExternalDocLinks >
@@ -632,3 +627,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

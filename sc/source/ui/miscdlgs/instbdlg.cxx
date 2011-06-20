@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,7 +106,7 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
 
 //------------------------------------------------------------------------
 
-__EXPORT ScInsertTableDlg::~ScInsertTableDlg()
+ScInsertTableDlg::~ScInsertTableDlg()
 {
     if (pDocShTables)
         pDocShTables->DoClose();
@@ -170,7 +171,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
 #define ModalDialog Dialog
 #endif /* ENABLE_LAYOUT */
 
-short __EXPORT ScInsertTableDlg::Execute()
+short ScInsertTableDlg::Execute()
 {
     // set Parent of DocumentInserter and Doc-Manager
     Window* pOldDefParent = Application::GetDefDialogParent();
@@ -226,7 +227,7 @@ void ScInsertTableDlg::SetFromTo_Impl()
 
 void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
 {
-    aLbTables.SetUpdateMode( sal_False );
+    aLbTables.SetUpdateMode( false );
     aLbTables.Clear();
 
     if ( pSrcDoc )
@@ -432,3 +433,4 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

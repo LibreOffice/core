@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,6 @@
 #include "ObjectNameProvider.hxx"
 #include "macros.hxx"
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-
-// #ifndef _VOS_MUTEX_HXX_
-// #include <vos/mutex.hxx>
-// #endif
-// #ifndef _SV_SVAPP_HXX
-// #include <vcl/svapp.hxx>
-// #endif
 
 #include "ResId.hxx"
 
@@ -151,3 +145,5 @@ void SAL_CALL StatusBarCommandDispatch::selectionChanged( const lang::EventObjec
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

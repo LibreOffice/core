@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,8 +39,6 @@
 #include "tp_ChartType.hxx"
 #include "tp_RangeChooser.hxx"
 #include "tp_Wizard_TitlesAndObjects.hxx"
-#include "tp_Location.hxx"
-
 #include "tp_DataSource.hxx"
 #include "ChartTypeTemplateProvider.hxx"
 #include "DialogModel.hxx"
@@ -50,8 +49,6 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 
-//#define LOCATION_PAGE 1
-
 #define PATH_FULL   1
 #define STATE_FIRST        0
 #define STATE_CHARTTYPE    STATE_FIRST
@@ -59,20 +56,11 @@ using namespace ::com::sun::star;
 #define STATE_DATA_SERIES  2
 #define STATE_OBJECTS      3
 #define STATE_LOCATION     4
-
-#ifdef LOCATION_PAGE
-#define STATE_LAST         STATE_LOCATION
-#else
 #define STATE_LAST         STATE_OBJECTS
-#endif
 
 namespace
 {
-#ifdef LOCATION_PAGE
-    const sal_Int32 nPageCount = 5;
-#else
     const sal_Int32 nPageCount = 4;
-#endif
 }
 
 CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XModel >& xChartModel
@@ -112,9 +100,6 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
         , STATE_SIMPLE_RANGE
         , STATE_DATA_SERIES
         , STATE_OBJECTS
-#ifdef LOCATION_PAGE
-        , STATE_LOCATION
-#endif
         , WZS_INVALID_STATE
     );
     this->SetRoadmapHelpId( HID_SCH_WIZARD_ROADMAP );
@@ -177,14 +162,6 @@ svt::OWizardPage* CreationWizard::createPage(WizardState nState)
         m_aTimerTriggeredControllerLock.startTimer();
         }
         break;
-#ifdef LOCATION_PAGE
-    case STATE_LOCATION:
-        {
-        m_aTimerTriggeredControllerLock.startTimer();
-        pRet  = new LocationTabPage(this,m_xChartModel,m_xCC);
-        }
-        break;
-#endif
     default:
         break;
     }
@@ -251,11 +228,6 @@ String CreationWizard::getStateDisplayName( WizardState nState ) const
     case STATE_OBJECTS:
         nResId = STR_PAGE_CHART_ELEMENTS;
         break;
-#ifdef LOCATION_PAGE
-    case STATE_LOCATION:
-        nResId = STR_PAGE_CHART_LOCATION;
-        break;
-#endif
     default:
         break;
     }
@@ -265,3 +237,5 @@ String CreationWizard::getStateDisplayName( WizardState nState ) const
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

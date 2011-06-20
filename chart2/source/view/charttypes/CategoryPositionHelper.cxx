@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,6 @@
 namespace chart
 {
 //.............................................................................
-//using namespace ::com::sun::star;
-//using namespace ::com::sun::star::chart2;
 
 CategoryPositionHelper::CategoryPositionHelper( double fSeriesCount, double fCategoryWidth )
     : m_fSeriesCount(fSeriesCount)
@@ -103,3 +102,5 @@ void CategoryPositionHelper::setCategoryWidth( double fCategoryWidth )
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,11 +28,14 @@
 
 #include <stdio.h>
 
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <ooo/vba/excel/XlCalculation.hpp>
+#include <ooo/vba/excel/XlCutCopyMode.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -40,7 +44,17 @@
 #include <ooo/vba/excel/XlMousePointer.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <ooo/vba/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include<ooo/vba/XCommandBars.hpp>
+#include <ooo/vba/excel/XlEnableCancelKey.hpp>
+#include <ooo/vba/excel/XlApplicationInternational.hpp>
+#include <unotools/localedatawrapper.hxx>
 
 #include "vbaapplication.hxx"
 #include "vbaworkbooks.hxx"
@@ -52,26 +66,38 @@
 #include "vbawindow.hxx"
 #include "vbawindows.hxx"
 #include "vbaglobals.hxx"
+#include "vbamenubars.hxx"
 #include "tabvwsh.hxx"
 #include "gridwin.hxx"
 #include "vbanames.hxx"
 #include <vbahelper/vbashape.hxx>
 #include "vbatextboxshape.hxx"
 #include "vbaassistant.hxx"
+#include "vbafilesearch.hxx" // add the support of VBA Application.FileSearch
 #include "sc.hrc"
+#include "macromgr.hxx"
+#include "global.hxx"
+#include "scmod.hxx"
+#include "docoptio.hxx"
+#include "appoptio.hxx"
 
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
+
+#include <map>
 
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 
+#include <comphelper/processfactory.hxx>
+
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
 
 #include <docuno.hxx>
 
@@ -80,24 +106,49 @@
 #include <basic/sbuno.hxx>
 #include <basic/sbmeth.hxx>
 
+#include "transobj.hxx"
 #include "convuno.hxx"
 #include "cellsuno.hxx"
+#include "miscuno.hxx"
+#include "unonames.hxx"
 #include "docsh.hxx"
 #include <vbahelper/helperdecl.hxx>
 #include "excelvbahelper.hxx"
 
+#include <basic/sbmeth.hxx>
+#include <basic/sbmod.hxx>
+#include <basic/sbstar.hxx>
+#include <basic/sbx.hxx>
+#include <basic/sbxobj.hxx>
+#include <basic/sbuno.hxx>
 
+#include "vbafiledialog.hxx"
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::rtl::OUString;
 
 // #TODO is this defined somewhere else?
-#if ( defined UNX ) || ( defined OS2 ) //unix
+#if ( defined UNX ) //unix
 #define FILE_PATH_SEPERATOR "/"
 #else // windows
 #define FILE_PATH_SEPERATOR "\\"
 #endif
 
 uno::Any sbxToUnoValue( SbxVariable* pVar );
+
+class ActiveWorkbook : public ScVbaWorkbook
+{
+protected:
+    virtual uno::Reference< frame::XModel > getModel()
+    {
+        return getCurrentExcelDoc(mxContext);
+    }
+public:
+    ActiveWorkbook( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext) : ScVbaWorkbook(  xParent, xContext ){}
+};
 
 // ============================================================================
 
@@ -205,15 +256,47 @@ ScVbaApplication::hasProperty( const ::rtl::OUString& Name ) throw(uno::RuntimeE
 uno::Reference< excel::XWorkbook >
 ScVbaApplication::getActiveWorkbook() throw (uno::RuntimeException)
 {
-    // will throw if active document is not in VBA compatibility mode (no object for codename)
-    return uno::Reference< excel::XWorkbook >( getVBADocument( getCurrentExcelDoc( mxContext ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XWorkbook > xWrkbk;
+    ScDocShell* pShell = excel::getDocShell( getCurrentExcelDoc( mxContext ) );
+    if ( pShell )
+    {
+        String aName;
+        if ( pShell->GetDocument() )
+        {
+            aName = pShell->GetDocument()->GetCodeName();
+            xWrkbk.set( getUnoDocModule(  aName, pShell ), uno::UNO_QUERY );
+            // fallback ( e.g. it's possible a new document was created via the api )
+            // in that case the document will not have the appropriate Document Modules
+            // #TODO #FIXME ( needs to be fixes as part of providing support for an overall document
+            // vba mode etc. )
+            if ( !xWrkbk.is() )
+                return new ActiveWorkbook( this, mxContext );
+        }
+    }
+    return xWrkbk;
 }
 
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaApplication::getThisWorkbook() throw (uno::RuntimeException)
 {
-    // should never throw as this model is in VBA compatibility mode
-    return uno::Reference< excel::XWorkbook >( getVBADocument( getThisExcelDoc( mxContext ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XWorkbook > xWrkbk;
+    ScDocShell* pShell = excel::getDocShell( getThisExcelDoc( mxContext ) );
+    if ( pShell )
+    {
+        String aName;
+        if ( pShell->GetDocument() )
+        {
+            aName = pShell->GetDocument()->GetCodeName();
+            xWrkbk.set( getUnoDocModule( aName, pShell ), uno::UNO_QUERY );
+            // fallback ( e.g. it's possible a new document was created via the api )
+            // in that case the document will not have the appropriate Document Modules
+            // #TODO #FIXME ( needs to be fixes as part of providing support for an overall document
+            // vba mode etc. )
+            if ( !xWrkbk.is() )
+                return new ActiveWorkbook( this, mxContext );
+        }
+    }
+    return xWrkbk;
 }
 
 uno::Reference< XAssistant > SAL_CALL
@@ -222,16 +305,48 @@ ScVbaApplication::getAssistant() throw (uno::RuntimeException)
     return uno::Reference< XAssistant >( new ScVbaAssistant( this, mxContext ) );
 }
 
+// add support of VBA Application.FileSearch
+uno::Reference< XFileSearch > SAL_CALL
+ScVbaApplication::getFileSearch() throw (uno::RuntimeException)
+{
+    if (! m_xFileSearch.get() )
+    {
+        m_xFileSearch = uno::Reference< XFileSearch >( new ScVbaFileSearch( this, uno::Reference< XHelperInterface >( this ), mxContext ) );
+    }
+
+    return m_xFileSearch;
+}
+
 uno::Any SAL_CALL
 ScVbaApplication::getSelection() throw (uno::RuntimeException)
 {
     OSL_TRACE("** ScVbaApplication::getSelection() ** ");
     uno::Reference< frame::XModel > xModel( getCurrentDocument() );
-    uno::Reference< lang::XServiceInfo > xServiceInfo( xModel->getCurrentSelection(), uno::UNO_QUERY_THROW );
-    rtl::OUString sImpementaionName = xServiceInfo->getImplementationName();
-    if( sImpementaionName.equalsIgnoreAsciiCaseAscii("com.sun.star.drawing.SvxShapeCollection") )
+
+    Reference< view::XSelectionSupplier > xSelSupp( xModel->getCurrentController(), UNO_QUERY_THROW );
+    Reference< beans::XPropertySet > xPropSet( xSelSupp, UNO_QUERY_THROW );
+    OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_FILTERED_RANGE_SELECTION ) );
+    uno::Any aOldVal = xPropSet->getPropertyValue( aPropName );
+    uno::Any any;
+    any <<= false;
+    xPropSet->setPropertyValue( aPropName, any );
+    uno::Reference< uno::XInterface > aSelection = ScUnoHelpFunctions::AnyToInterface(
+        xSelSupp->getSelection() );
+    xPropSet->setPropertyValue( aPropName, aOldVal );
+
+    if (!aSelection.is())
     {
-        uno::Reference< drawing::XShapes > xShapes( xModel->getCurrentSelection(), uno::UNO_QUERY_THROW );
+        throw uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("failed to obtain current selection")),
+            uno::Reference< uno::XInterface >() );
+    }
+
+    uno::Reference< lang::XServiceInfo > xServiceInfo( aSelection, uno::UNO_QUERY_THROW );
+    rtl::OUString sImplementationName = xServiceInfo->getImplementationName();
+
+    if( sImplementationName.equalsIgnoreAsciiCaseAscii("com.sun.star.drawing.SvxShapeCollection") )
+    {
+        uno::Reference< drawing::XShapes > xShapes( aSelection, uno::UNO_QUERY_THROW );
         uno::Reference< container::XIndexAccess > xIndexAccess( xShapes, uno::UNO_QUERY_THROW );
         uno::Reference< drawing::XShape > xShape( xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW );
     // if ScVbaShape::getType( xShape ) == office::MsoShapeType::msoAutoShape
@@ -247,13 +362,13 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException)
     }
         return uno::makeAny( uno::Reference< msforms::XShape >(new ScVbaShape( this, mxContext, xShape, xShapes, xModel, ScVbaShape::getType( xShape ) ) ) );
     }
-    else if( xServiceInfo->supportsService( rtl::OUString::createFromAscii("com.sun.star.sheet.SheetCellRange")) ||
-             xServiceInfo->supportsService( rtl::OUString::createFromAscii("com.sun.star.sheet.SheetCellRanges")))
+    else if( xServiceInfo->supportsService( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRange")) ) ||
+             xServiceInfo->supportsService( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRanges")) ) )
     {
-        uno::Reference< table::XCellRange > xRange( getCurrentDocument()->getCurrentSelection(), ::uno::UNO_QUERY);
+        uno::Reference< table::XCellRange > xRange( aSelection, ::uno::UNO_QUERY);
         if ( !xRange.is() )
         {
-            uno::Reference< sheet::XSheetCellRangeContainer > xRanges( getCurrentDocument()->getCurrentSelection(), ::uno::UNO_QUERY);
+            uno::Reference< sheet::XSheetCellRangeContainer > xRanges( aSelection, ::uno::UNO_QUERY);
             if ( xRanges.is() )
                 return uno::makeAny( uno::Reference< excel::XRange >( new ScVbaRange( excel::getUnoSheetModuleObj( xRanges ), mxContext, xRanges ) ) );
 
@@ -262,7 +377,8 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException)
     }
     else
     {
-        throw uno::RuntimeException( sImpementaionName + rtl::OUString::createFromAscii(" not suported"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( sImplementationName + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+              " not supported")), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -273,10 +389,10 @@ ScVbaApplication::getActiveCell() throw (uno::RuntimeException )
     uno::Reference< table::XCellRange > xRange( xView->getActiveSheet(), ::uno::UNO_QUERY_THROW);
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell(mxContext);
     if ( !pViewShell )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii("No ViewShell available"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No ViewShell available")), uno::Reference< uno::XInterface >() );
     ScViewData* pTabView = pViewShell->GetViewData();
     if ( !pTabView )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii("No ViewData available"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No ViewData available")), uno::Reference< uno::XInterface >() );
 
     sal_Int32 nCursorX = pTabView->GetCurX();
     sal_Int32 nCursorY = pTabView->GetCurY();
@@ -301,8 +417,17 @@ ScVbaApplication::Workbooks( const uno::Any& aIndex ) throw (uno::RuntimeExcepti
 uno::Any SAL_CALL
 ScVbaApplication::Worksheets( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    uno::Reference< excel::XWorkbook > xWorkbook( getActiveWorkbook(), uno::UNO_SET_THROW );
-    return xWorkbook->Worksheets( aIndex );
+    uno::Reference< excel::XWorkbook > xWorkbook( getActiveWorkbook(), uno::UNO_QUERY );
+        uno::Any result;
+    if ( xWorkbook.is() )
+        result  = xWorkbook->Worksheets( aIndex );
+
+    else
+        // Fixme - check if this is reasonable/desired behavior
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No ActiveWorkBook available" )),
+            uno::Reference< uno::XInterface >() );
+
+    return result;
 }
 
 uno::Any SAL_CALL
@@ -343,16 +468,67 @@ ScVbaApplication::getActiveWindow() throw (uno::RuntimeException)
 uno::Any SAL_CALL
 ScVbaApplication::getCutCopyMode() throw (uno::RuntimeException)
 {
-    //# FIXME TODO, implementation
     uno::Any result;
-    result <<= sal_False;
+    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( NULL );
+    ScDocument* pDoc = pOwnClip ? pOwnClip->GetDocument() : NULL;
+    if ( pDoc )
+    {
+        if ( pDoc->IsCutMode() )
+        {
+            result <<= excel::XlCutCopyMode::xlCut;
+        }
+        else
+        {
+            result <<= excel::XlCutCopyMode::xlCopy;
+        }
+    }
+    else
+    {
+        result <<= false;
+    }
     return result;
 }
 
 void SAL_CALL
-ScVbaApplication::setCutCopyMode( const uno::Any& /*_cutcopymode*/ ) throw (uno::RuntimeException)
+ScVbaApplication::setCutCopyMode( const uno::Any& _cutcopymode ) throw (uno::RuntimeException)
 {
-    //# FIXME TODO, implementation
+    // According to Excel's behavior, no matter what is the value of _cutcopymode, always releases the clip object.
+    sal_Bool bCutCopyMode = false;
+    if ( ( _cutcopymode >>= bCutCopyMode ) )
+    {
+        ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( NULL );
+        if ( pOwnClip )
+        {
+            pOwnClip->ObjectReleased();
+            ScTabViewShell* pTabViewShell = excel::getBestViewShell( getCurrentDocument() );
+            if ( pTabViewShell )
+            {
+                ScViewData* pView = pTabViewShell->GetViewData();
+                Window* pWindow = pView ? pView->GetActiveWin() : NULL;
+                if ( pWindow )
+                {
+                    Reference< datatransfer::clipboard::XClipboard > xClipboard = pWindow->GetClipboard();
+                    Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
+                    if ( xClipboard.is() )
+                    {
+                        xClipboard->setContents( NULL, NULL );
+                        if ( xFlushableClipboard.is() )
+                        {
+                            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+                            try
+                            {
+                                xFlushableClipboard->flushClipboard();
+                            }
+                            catch( const uno::Exception& )
+                            {
+                            }
+                            Application::AcquireSolarMutex( nRef );
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 uno::Any SAL_CALL
@@ -365,7 +541,7 @@ void SAL_CALL
 ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::RuntimeException)
 {
     rtl::OUString sText;
-    sal_Bool bDefault = sal_False;
+    sal_Bool bDefault = false;
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
     uno::Reference< task::XStatusIndicatorSupplier > xStatusIndicatorSupplier( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     uno::Reference< task::XStatusIndicator > xStatusIndicator( xStatusIndicatorSupplier->getStatusIndicator(), uno::UNO_QUERY_THROW );
@@ -379,14 +555,14 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
     }
     else if( _statusbar >>= bDefault )
     {
-        if( bDefault == sal_False )
+        if( bDefault == false )
         {
             xStatusIndicator->end();
             setDisplayStatusBar( sal_True );
         }
     }
     else
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "Invalid prarameter. It should be a string or False" ),
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid prarameter. It should be a string or False" )),
             uno::Reference< uno::XInterface >() );
 }
 
@@ -409,7 +585,7 @@ ScVbaApplication::setCalculation( ::sal_Int32 _calculation ) throw (uno::Runtime
     switch(_calculation)
     {
         case excel::XlCalculation::xlCalculationManual:
-            xCalc->enableAutomaticCalculation(sal_False);
+            xCalc->enableAutomaticCalculation(false);
             break;
         case excel::XlCalculation::xlCalculationAutomatic:
         case excel::XlCalculation::xlCalculationSemiautomatic:
@@ -457,7 +633,9 @@ ScVbaApplication::Names( const css::uno::Any& aIndex ) throw ( uno::RuntimeExcep
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPropertySet( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XNamedRanges > xNamedRanges( xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("NamedRanges")) , uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges( xPropertySet->getPropertyValue(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "NamedRanges" )) ), uno::UNO_QUERY_THROW );
+
     css::uno::Reference< excel::XNames > xNames ( new ScVbaNames( this , mxContext , xNamedRanges , xModel ) );
     if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
     {
@@ -485,8 +663,8 @@ ScVbaApplication::getActiveSheet() throw (uno::RuntimeException)
     if ( !result.is() )
     {
         // Fixme - check if this is reasonable/desired behavior
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-            "No activeSheet available" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No activeSheet available" )),
+            uno::Reference< uno::XInterface >() );
     }
     return result;
 
@@ -506,18 +684,18 @@ void SAL_CALL
 ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) throw (uno::RuntimeException)
 {
     //test Scroll is a boolean
-    sal_Bool bScroll = sal_False;
+    sal_Bool bScroll = false;
     //R1C1-style string or a string of procedure name.
 
     if( Scroll.hasValue() )
     {
-        sal_Bool aScroll = sal_False;
+        sal_Bool aScroll = false;
         if( Scroll >>= aScroll )
         {
             bScroll = aScroll;
         }
         else
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "sencond parameter should be boolean" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "second parameter should be boolean" )),
                     uno::Reference< uno::XInterface >() );
     }
 
@@ -559,11 +737,11 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
         {
             //maybe this should be a procedure name
             //TODO for procedure name
-            //browse::XBrowseNodeFactory is a singlton. OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory")
+            //browse::XBrowseNodeFactory is a singlton. OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory"))
             //and the createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) to get a root browse::XBrowseNode.
             //for query XInvocation interface.
             //but how to directly get the XInvocation?
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "invalid reference for range name, it should be procedure name" ),
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid reference for range name, it should be procedure name" )),
                     uno::Reference< uno::XInterface >() );
         }
         return;
@@ -598,7 +776,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
         }
         return;
     }
-    throw uno::RuntimeException( rtl::OUString::createFromAscii( "invalid reference or name" ),
+    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid reference or name" )),
             uno::Reference< uno::XInterface >() );
 }
 
@@ -633,7 +811,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
             case excel::XlMousePointer::xlNorthwestArrow:
             {
                 const Pointer& rPointer( POINTER_ARROW );
-                setCursorHelper( xModel, rPointer, sal_False );
+                setCursorHelper( xModel, rPointer, false );
                 break;
             }
             case excel::XlMousePointer::xlWait:
@@ -647,7 +825,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
             case excel::XlMousePointer::xlDefault:
             {
                 const Pointer& rPointer( POINTER_NULL );
-                setCursorHelper( xModel, rPointer, sal_False );
+                setCursorHelper( xModel, rPointer, false );
                 break;
             }
             default:
@@ -702,6 +880,89 @@ ScVbaApplication::getEnableEvents() throw (uno::RuntimeException)
     return mrAppSettings.mbEnableEvents;
 }
 
+sal_Bool SAL_CALL
+ScVbaApplication::getVisible() throw (uno::RuntimeException)
+{
+    sal_Bool bVisible = sal_True;
+    return bVisible;
+}
+
+void SAL_CALL
+ScVbaApplication::setVisible(sal_Bool /*bVisible*/) throw (uno::RuntimeException)
+{
+}
+
+//add the support of Excel VBA Application.Iteration
+//The Excel Iteration option is global and unique, but in Symphony there is an Iteration property in ScModule and one in every ScDocument,
+//so the set method will set all the Iteration properties
+sal_Bool SAL_CALL
+ScVbaApplication::getIteration() throw (uno::RuntimeException)
+{
+    ScModule* pScMod = SC_MOD();
+    ScDocOptions  aDocOpt  = pScMod->GetDocOptions();
+
+    return aDocOpt.IsIter();
+}
+
+void SAL_CALL
+ScVbaApplication::setIteration(sal_Bool bIteration) throw (uno::RuntimeException)
+{
+    ScModule* pScMod = SC_MOD();
+    ScDocOptions& aDocOpt = const_cast< ScDocOptions& > (pScMod->GetDocOptions());
+    aDocOpt.SetIter( bIteration );
+
+    uno::Any aIteration;
+    aIteration <<= bIteration;
+
+    OUString aPropName(RTL_CONSTASCII_USTRINGPARAM( "IsIterationEnabled" ));
+
+    uno::Reference< XCollection > xWorkbooks( new ScVbaWorkbooks( this, mxContext ) );
+    sal_Int32 nCount = xWorkbooks->getCount();
+
+    for (sal_Int32 i = 1; i <= nCount; i++)
+    {
+        uno::Reference< ooo::vba::excel::XWorkbook > xWorkbook;
+        uno::Any aWorkbook = xWorkbooks->Item(uno::makeAny(i), uno::Any());
+        aWorkbook >>= xWorkbook;
+        ScVbaWorkbook* pWorkbook = excel::getImplFromDocModuleWrapper<ScVbaWorkbook>( xWorkbook );
+        uno::Reference< frame::XModel > xModel( pWorkbook->getDocModel(), uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xPropertySet( xModel, uno::UNO_QUERY_THROW );
+        xPropertySet->setPropertyValue( aPropName, aIteration );
+    }
+}
+
+//add the support of Excel VBA Application.EnableCancelKey
+sal_Int32 SAL_CALL
+ScVbaApplication::getEnableCancelKey() throw (uno::RuntimeException)
+{
+    return ooo::vba::excel::XlEnableCancelKey::xlDisabled;
+}
+
+void SAL_CALL
+ScVbaApplication::setEnableCancelKey(sal_Int32 /*lEnableCancelKey*/) throw (uno::RuntimeException)
+{
+}
+
+sal_Int32 SAL_CALL ScVbaApplication::getSheetsInNewWorkbook() throw (uno::RuntimeException)
+{
+    const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
+    return rAppOpt.GetTabCountInNewSpreadsheet();
+}
+
+void SAL_CALL ScVbaApplication::setSheetsInNewWorkbook( sal_Int32 SheetsInNewWorkbook ) throw (script::BasicErrorException, uno::RuntimeException)
+{
+    if ( SheetsInNewWorkbook < 1 || SheetsInNewWorkbook > MAXTAB )
+    {
+        DebugHelper::exception( OUString(RTL_CONSTASCII_USTRINGPARAM("The number must be between 1 and 255")),
+            uno::Exception(), SbERR_METHOD_FAILED, OUString() );
+    }
+    else
+    {
+        ScAppOptions& rAppOpt = const_cast< ScAppOptions& >(SC_MOD()->GetAppOptions());
+        rAppOpt.SetTabCountInNewSpreadsheet( SheetsInNewWorkbook );
+    }
+}
+
 void SAL_CALL
 ScVbaApplication::Calculate() throw(  script::BasicErrorException , uno::RuntimeException )
 {
@@ -716,7 +977,7 @@ uno::Reference< beans::XPropertySet > lcl_getPathSettingsService( const uno::Ref
     if ( !xPathSettings.is() )
     {
         uno::Reference< lang::XMultiComponentFactory > xSMgr( xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-        xPathSettings.set( xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.util.PathSettings"), xContext), uno::UNO_QUERY_THROW );
+        xPathSettings.set( xSMgr->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSettings")), xContext ), uno::UNO_QUERY_THROW );
     }
     return xPathSettings;
 }
@@ -741,36 +1002,37 @@ rtl::OUString ScVbaApplication::getOfficePath( const rtl::OUString& _sPathType )
     }
     return sRetPath;
 }
-
 void SAL_CALL
-ScVbaApplication::setDefaultFilePath( const ::rtl::OUString& DefaultFilePath ) throw (uno::RuntimeException)
+ScVbaApplication::setDefaultFilePath( const ::rtl::OUString& DefaultFilePath ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getPathSettingsService( mxContext );
     rtl::OUString aURL;
     osl::FileBase::getFileURLFromSystemPath( DefaultFilePath, aURL );
-    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Work")), uno::Any( aURL ) );
+    xProps->setPropertyValue(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Work")), uno::makeAny( aURL ) );
+
+
 }
 
 ::rtl::OUString SAL_CALL
-ScVbaApplication::getDefaultFilePath() throw (uno::RuntimeException)
+ScVbaApplication::getDefaultFilePath(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return getOfficePath( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Work")));
 }
 
 ::rtl::OUString SAL_CALL
-ScVbaApplication::getLibraryPath() throw (uno::RuntimeException)
+ScVbaApplication::LibraryPath(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return getOfficePath( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Basic")));
 }
 
 ::rtl::OUString SAL_CALL
-ScVbaApplication::getTemplatesPath() throw (uno::RuntimeException)
+ScVbaApplication::TemplatesPath(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return getOfficePath( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Template")));
 }
 
 ::rtl::OUString SAL_CALL
-ScVbaApplication::getPathSeparator() throw (uno::RuntimeException)
+ScVbaApplication::PathSeparator(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     static rtl::OUString sPathSep( RTL_CONSTASCII_USTRINGPARAM( FILE_PATH_SEPERATOR ) );
     return sPathSep;
@@ -937,12 +1199,12 @@ uno::Reference< excel::XRange > lclCreateVbaRange(
     for( ListOfScRange::const_iterator aIt = rList.begin(), aEnd = rList.end(); aIt != aEnd; ++aIt )
         aCellRanges.Append( *aIt );
 
-    if( aCellRanges.Count() == 1 )
+    if( aCellRanges.size() == 1 )
     {
-        uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pDocShell, *aCellRanges.First() ) );
+        uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pDocShell, *aCellRanges.front() ) );
         return new ScVbaRange( excel::getUnoSheetModuleObj( xRange ), rxContext, xRange );
     }
-    if( aCellRanges.Count() > 1 )
+    if( aCellRanges.size() > 1 )
     {
         uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pDocShell, aCellRanges ) );
         return new ScVbaRange( excel::getUnoSheetModuleObj( xRanges ), rxContext, xRanges );
@@ -1066,17 +1328,23 @@ ScVbaApplication::Volatile( const uno::Any& aVolatile )  throw ( uno::RuntimeExc
 {
     sal_Bool bVolatile = sal_True;
     aVolatile >>= bVolatile;
+    SbMethod* pMeth = StarBASIC::GetActiveMethod();
+    if ( pMeth )
+    {
+        OSL_TRACE("ScVbaApplication::Volatile() In method ->%s<-", rtl::OUStringToOString( pMeth->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
+        uno::Reference< frame::XModel > xModel( getCurrentDocument() );
+        ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
+        pDoc->GetMacroManager()->SetUserFuncVolatile( pMeth->GetName(), bVolatile);
+    }
+
+// this is bound to break when loading the document
     return;
 }
 
-void SAL_CALL
-ScVbaApplication::DoEvents() throw ( uno::RuntimeException )
-{
-}
 ::sal_Bool SAL_CALL
 ScVbaApplication::getDisplayFormulaBar() throw ( css::uno::RuntimeException )
 {
-    sal_Bool bRes = sal_False;
+    sal_Bool bRes = false;
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell( mxContext );
     if ( pViewShell )
     {
@@ -1086,7 +1354,7 @@ ScVbaApplication::getDisplayFormulaBar() throw ( css::uno::RuntimeException )
 
         pViewShell->GetState( reqList );
         const SfxPoolItem *pItem=0;
-        if ( reqList.GetItemState( FID_TOGGLEINPUTLINE, sal_False, &pItem ) == SFX_ITEM_SET )
+        if ( reqList.GetItemState( FID_TOGGLEINPUTLINE, false, &pItem ) == SFX_ITEM_SET )
             bRes =   ((SfxBoolItem*)pItem)->GetValue();
     }
     return bRes;
@@ -1122,44 +1390,418 @@ ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeExcep
     return aRet;
 }
 
-uno::Any SAL_CALL ScVbaApplication::GetOpenFilename(
-        const uno::Any& rFileFilter, const uno::Any& rFilterIndex, const uno::Any& rTitle,
-        const uno::Any& rButtonText, const uno::Any& rMultiSelect ) throw (uno::RuntimeException)
+uno::Any SAL_CALL
+ScVbaApplication::GetOpenFilename(const uno::Any& FileFilter, const uno::Any& FilterIndex, const uno::Any& Title, const uno::Any& ButtonText, const uno::Any& MultiSelect)  throw (uno::RuntimeException)
 {
-    uno::Sequence< uno::Any > aArgs( 6 );
-    aArgs[ 0 ] <<= getThisExcelDoc( mxContext );
-    aArgs[ 1 ] = rFileFilter;
-    aArgs[ 2 ] = rFilterIndex;
-    aArgs[ 3 ] = rTitle;
-    aArgs[ 4 ] = rButtonText;
-    aArgs[ 5 ] = rMultiSelect;
-    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-    uno::Reference< XExecutableDialog > xFilePicker( xFactory->createInstanceWithArgumentsAndContext(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.OpenFilePicker" ) ), aArgs, mxContext ), uno::UNO_QUERY_THROW );
-    return xFilePicker->execute();
+    uno::Any aRet = uno::makeAny( false );
+    try
+    {
+        const rtl::OUString sServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
+        uno::Reference< lang::XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
+        // Set the type of File Picker Dialog: TemplateDescription::FILEOPEN_SIMPLE.
+        uno::Sequence< uno::Any > aDialogType( 1 );
+        aDialogType[0] <<= ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
+        uno::Reference< ui::dialogs::XFilePicker > xFilePicker( xMSF->createInstanceWithArguments( sServiceName, aDialogType ), UNO_QUERY );
+        uno::Reference< ui::dialogs::XFilePicker2 > xFilePicker2( xFilePicker, UNO_QUERY );
+        uno::Reference< ui::dialogs::XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
+        uno::Reference< ui::dialogs::XExecutableDialog > xExecutableDialog( xFilePicker, UNO_QUERY );
+        uno::Reference< ui::dialogs::XFilePickerControlAccess > xPickerControlAccess( xFilePicker, UNO_QUERY );
+
+        if ( xFilterManager.is() && FileFilter.hasValue() )
+        {
+            sal_Int32 nFilterIndex = 1;
+            if ( FilterIndex.hasValue() )
+            {
+                FilterIndex >>= nFilterIndex;
+            }
+            ::rtl::OUString strFilter;
+            FileFilter >>= strFilter;
+            sal_Int32 nCommaID = 0;
+            sal_Int32 nIndex = 1;
+            do
+            {
+                ::rtl::OUString aFilterTitleToken = strFilter.getToken( 0, ',' , nCommaID );
+                ::rtl::OUString aFilterToken;
+                if ( nCommaID >= 0 )
+                {
+                    aFilterToken = strFilter.getToken( 0, ',' , nCommaID );
+                }
+                else if ( nCommaID < 0 && nIndex == 1 )
+                {
+                    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid FileFilter format!" )),
+                        uno::Reference< uno::XInterface >() );
+                }
+                xFilterManager->appendFilter( aFilterTitleToken, aFilterToken );
+                if ( nFilterIndex == nIndex )
+                {
+                    xFilterManager->setCurrentFilter( aFilterTitleToken );
+                }
+                nIndex++;
+            } while ( nCommaID >= 0 );
+        }
+        if ( xExecutableDialog.is() && Title.hasValue() )
+        {
+            ::rtl::OUString sTitle;
+            Title >>= sTitle;
+            xExecutableDialog->setTitle( sTitle );
+        }
+        if ( xPickerControlAccess.is() && ButtonText.hasValue() )
+        {
+            ::rtl::OUString sButtonText;
+            ButtonText >>= sButtonText;
+            xPickerControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, sButtonText );
+        }
+        sal_Bool bMultiSelect = false;
+        if ( xFilePicker.is() && MultiSelect.hasValue() )
+        {
+            MultiSelect >>= bMultiSelect;
+            xFilePicker->setMultiSelectionMode( bMultiSelect );
+        }
+
+        if ( xFilePicker.is() && xFilePicker->execute() )
+        {
+            sal_Bool bUseXFilePicker2 = false;
+            uno::Reference< lang::XServiceInfo > xServiceInfo( xFilePicker, UNO_QUERY );
+            if ( xServiceInfo.is() )
+            {
+                rtl::OUString sImplName = xServiceInfo->getImplementationName();
+                if ( sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.fpicker.VistaFileDialog")) ||
+                    sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.ui.dialogs.SalGtkFilePicker")) )
+                {
+                    bUseXFilePicker2 = sal_True;
+                }
+            }
+            uno::Sequence< rtl::OUString > aSelectedFiles;
+            if ( bUseXFilePicker2 && xFilePicker2.is() )
+            {
+                // On Linux, XFilePicker->getFiles() always return one selected file although we select more than one file, also on Vista
+                // XFilePicker->getFiles() does not work well too, so we call XFilePicker2->getSelectedFiles() to get selected files.
+                aSelectedFiles = xFilePicker2->getSelectedFiles();
+            }
+            else
+            {
+                // If only one file is selected, the first entry of the sequence contains the complete path/filename in URL format. If multiple files are selected,
+                // the first entry of the sequence contains the path in URL format, and the other entries contains the names of the selected files without path information.
+                uno::Sequence< rtl::OUString > aTmpFiles = xFilePicker->getFiles();
+                aSelectedFiles = aTmpFiles;
+                sal_Int32 iFileCount = aTmpFiles.getLength();
+                if ( iFileCount > 1 )
+                {
+                    aSelectedFiles.realloc( iFileCount - 1 );
+                    INetURLObject aPath( aTmpFiles[0] );
+                    aPath.setFinalSlash();
+                    for ( sal_Int32 i = 1; i < iFileCount; i++ )
+                    {
+                        if ( aTmpFiles[i].indexOf ('/') > 0 || aTmpFiles[i].indexOf ('\\') > 0 )
+                        {
+                            aSelectedFiles[i - 1] = aTmpFiles[i];
+                        }
+                        else
+                        {
+                            if ( i == 1 )
+                                aPath.Append( aTmpFiles[i] );
+                            else
+                                aPath.setName( aTmpFiles[i] );
+                            aSelectedFiles[i - 1] = aPath.GetMainURL( INetURLObject::NO_DECODE );
+                        }
+                    }
+                }
+            }
+
+            sal_Int32 iFileCount = aSelectedFiles.getLength();
+            for ( sal_Int32 i = 0; i < iFileCount; i++ )
+            {
+                INetURLObject aObj( aSelectedFiles[i] );
+                if ( aObj.GetProtocol() == INET_PROT_FILE )
+                {
+                    rtl::OUString aTemp = aObj.PathToFileName();
+                    aSelectedFiles[i] = aTemp.getLength() > 0 ? aTemp : aSelectedFiles[i];
+                }
+            }
+            if ( bMultiSelect )
+            {
+                aRet = uno::makeAny( aSelectedFiles );
+            }
+            else if ( aSelectedFiles.getLength() > 0 && !bMultiSelect )
+            {
+                aRet = uno::makeAny( aSelectedFiles[0] );
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+    }
+
+    return aRet;
 }
 
-uno::Any SAL_CALL ScVbaApplication::GetSaveAsFilename(
-        const uno::Any& rInitialFileName, const uno::Any& rFileFilter, const uno::Any& rFilterIndex,
-        const uno::Any& rTitle, const uno::Any& rButtonText ) throw (uno::RuntimeException)
+::com::sun::star::uno::Reference< ::ooo::vba::XFileDialog > SAL_CALL
+ScVbaApplication::getFileDialog() throw (::com::sun::star::uno::RuntimeException)
 {
-    uno::Sequence< uno::Any > aArgs( 6 );
-    aArgs[ 0 ] <<= getThisExcelDoc( mxContext );
-    aArgs[ 1 ] = rInitialFileName;
-    aArgs[ 2 ] = rFileFilter;
-    aArgs[ 3 ] = rFilterIndex;
-    aArgs[ 4 ] = rTitle;
-    aArgs[ 5 ] = rButtonText;
-    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-    uno::Reference< XExecutableDialog > xFilePicker( xFactory->createInstanceWithArgumentsAndContext(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.SaveAsFilePicker" ) ), aArgs, mxContext ), uno::UNO_QUERY_THROW );
-    return xFilePicker->execute();
+    uno::Reference< XFileDialog > xFileDialogs( new ScVbaFileDialog( uno::Reference< XHelperInterface >( this ), mxContext, getCurrentDocument() ) );
+    return  xFileDialogs;
 }
+
+typedef std::map< ::rtl::OUString, ::rtl::OUString > FileFilterMap;
+
+uno::Any SAL_CALL
+ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFilename, const ::com::sun::star::uno::Any& FileFilter, const ::com::sun::star::uno::Any& FilterIndex, const ::com::sun::star::uno::Any& Title, const ::com::sun::star::uno::Any& ButtonText ) throw (::com::sun::star::uno::RuntimeException)
+{
+    uno::Any strRet;
+    try
+    {
+        const rtl::OUString sServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
+        uno::Reference< lang::XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
+
+        uno::Sequence< uno::Any > aDialogType( 1 );
+        aDialogType[0] <<= ui::dialogs::TemplateDescription::FILESAVE_SIMPLE;
+        uno::Reference< ui::dialogs::XFilePicker > xFilePicker( xMSF->createInstanceWithArguments( sServiceName, aDialogType ), UNO_QUERY );
+
+        if (InitialFilename.hasValue())
+        {
+            ::rtl::OUString strInitFileName;
+            InitialFilename >>= strInitFileName;
+            xFilePicker->setDefaultName(strInitFileName);
+        }
+
+        // Begin from 1.
+        sal_Int32 nFilterIndex = 1;
+        if (FilterIndex.hasValue())
+        {
+            FilterIndex >>= nFilterIndex;
+        }
+
+        uno::Reference< ui::dialogs::XFilterManager > xFilter( xFilePicker, UNO_QUERY );
+        FileFilterMap mFilterNameMap;
+        if (FileFilter.hasValue())
+        {
+            ::rtl::OUString strFilter;
+            sal_Int32       nCommaID = 0;
+            FileFilter >>= strFilter;
+
+            sal_Int32 nIndex = 1;
+            do
+            {
+                ::rtl::OUString aFilterTitleToken = strFilter.getToken( 0, ',' , nCommaID );
+                ::rtl::OUString aFilterToken;
+                if ( nCommaID >= 0 )
+                {
+                    aFilterToken = strFilter.getToken( 0, ',' , nCommaID );
+                }
+                else if ( nCommaID < 0 && nIndex == 1 )
+                {
+                    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid FileFilter format!" )),
+                        uno::Reference< uno::XInterface >() );
+                }
+
+                FileFilterMap::const_iterator aIt = mFilterNameMap.find( aFilterTitleToken );
+                if ( aIt == mFilterNameMap.end() )
+                {
+                    xFilter->appendFilter( aFilterTitleToken, aFilterToken );
+                    if ( nFilterIndex == nIndex )
+                    {
+                        xFilter->setCurrentFilter( aFilterTitleToken );
+                    }
+                    nIndex++;
+                    mFilterNameMap[aFilterTitleToken] = aFilterToken;
+                }
+            } while ( nCommaID >= 0 );
+        }
+
+        if (Title.hasValue())
+        {
+            ::rtl::OUString strTitle;
+            Title >>= strTitle;
+            uno::Reference< ::com::sun::star::ui::dialogs::XExecutableDialog> xExcTblDlg(xFilePicker, UNO_QUERY );
+            xExcTblDlg->setTitle(strTitle);
+        }
+
+        if (ButtonText.hasValue())
+        {
+            ::rtl::OUString strBttTxt;
+            ButtonText >>= strBttTxt;
+        }
+
+
+        if ( xFilePicker.is() )
+        {
+            sal_Int16 nRet = xFilePicker->execute();
+            if (nRet == 0)
+            {
+                strRet <<= false;
+            }
+            else
+            {
+                uno::Sequence < rtl::OUString > aPathSeq = xFilePicker->getFiles();
+
+                if ( aPathSeq.getLength() )
+                {
+                    ::rtl::OUString sSelectedFilters;
+                    if ( xFilter.is() )
+                    {
+                        ::rtl::OUString sSelectedFilterName = xFilter->getCurrentFilter();
+                        FileFilterMap::const_iterator aIt = mFilterNameMap.find( sSelectedFilterName );
+                        if ( aIt != mFilterNameMap.end() )
+                        {
+                            sSelectedFilters = aIt->second;
+                        }
+                    }
+                    INetURLObject aURLObj( aPathSeq[0] );
+                    ::rtl::OUString aPathStr = aURLObj.PathToFileName();
+                    if ( aURLObj.GetProtocol() == INET_PROT_FILE )
+                    {
+                        sal_Int32 nSemicolonID = 0;
+                        ::rtl::OUString sFirstFilter = sSelectedFilters.getToken( 0, ';' , nSemicolonID );
+                        ::rtl::OUString sFileExtension = aURLObj.GetExtension();
+                        if ( sFileExtension.getLength() == 0 )
+                        {
+                            sFileExtension = sFirstFilter.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*.*")) ? sFileExtension : sFirstFilter.copy( sFirstFilter.indexOfAsciiL("*.", 2) + 2 );
+                            aPathStr = sFileExtension.getLength() == 0 ? aPathStr : aPathStr + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
+                        }
+                        else
+                        {
+                            sal_Bool bValidFilter = false;
+                            FileFilterMap::const_iterator aIt = mFilterNameMap.begin();
+                            while ( aIt != mFilterNameMap.end() )
+                            {
+                                sSelectedFilters = aIt->second;
+                                nSemicolonID = 0;
+                                do
+                                {
+                                    ::rtl::OUString aFilterToken = sSelectedFilters.getToken( 0, ';' , nSemicolonID );
+                                    if ( aFilterToken.trim().equalsIgnoreAsciiCase( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*.")) + sFileExtension) )
+                                    {
+                                        bValidFilter = sal_True;
+                                        break;
+                                    }
+                                } while ( nSemicolonID >= 0 );
+                                if ( bValidFilter )
+                                {
+                                    break;
+                                }
+                                aIt++;
+                            }
+                            if ( !bValidFilter )
+                            {
+                                sFileExtension = sFirstFilter.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*.*")) ? rtl::OUString()
+                                                                                 : sFirstFilter.copy( sFirstFilter.indexOfAsciiL("*.", 2) + 2 );
+                                aPathStr = sFileExtension.getLength() == 0 ? aPathStr
+                                                                          : aPathStr + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
+                            }
+                        }
+                    }
+                    strRet <<= aPathStr;
+                }
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+    }
+    return strRet;
+}
+
+//end add
 
 uno::Reference< frame::XModel >
 ScVbaApplication::getCurrentDocument() throw (css::uno::RuntimeException)
 {
     return getCurrentExcelDoc(mxContext);
+}
+
+uno::Any SAL_CALL
+ScVbaApplication::MenuBars( const uno::Any& aIndex ) throw (uno::RuntimeException)
+{
+    uno::Reference< XCommandBars > xCommandBars( CommandBars( uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xMenuBars( new ScVbaMenuBars( this, mxContext, xCommandBars ) );
+    if (  aIndex.hasValue() )
+    {
+        return uno::Any ( xMenuBars->Item( aIndex, uno::Any() ) );
+    }
+
+    return uno::Any( xMenuBars );
+}
+
+//add the support of Application.International
+sal_Int32 SAL_CALL
+ConvertCountryCode(const OUString& language)
+{
+    sal_Int32 nCode = 0;
+
+    if( language == OUString(RTL_CONSTASCII_USTRINGPARAM("ar")) ) nCode = 966; // Arabic
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("cs")) ) nCode = 42; // Czech
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("da")) ) nCode = 45;  // Danish
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("de")) ) nCode = 49;  // German
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("en")) ) nCode = 1;   // English
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("es")) ) nCode = 34;  // Spanish
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("el")) ) nCode = 30;  // Greek
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("fa")) ) nCode = 98;  // Persian = Farsi
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("fi")) ) nCode = 358;  // Finnish
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("fr")) ) nCode = 33;  // French
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("he")) ) nCode = 972;     // Hebrew
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("hi")) ) nCode = 91;  // Indian = Hindi
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("hu")) ) nCode = 36;  // Hungarian
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("it")) ) nCode = 39;  // Italian
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("ja")) ) nCode = 81;  // Japanese
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("ko")) ) nCode = 82;  // Korean
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("nl")) ) nCode = 31;  // Dutch
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("no")) ) nCode = 47;  // Norwegian
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("pl")) ) nCode = 48;  // Polish
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("pt")) ) nCode = 351;     // Portuguese
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("ru")) ) nCode = 7;   // Russian
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("sv")) ) nCode = 46;  // Swedish
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("th")) ) nCode = 66;  // Thai
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("tk")) ) nCode = 90;  // Turkish
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("ur")) ) nCode = 92;  // Urdu
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("vi")) ) nCode = 84;  // Vietnamese
+    else if ( language == OUString(RTL_CONSTASCII_USTRINGPARAM("zh")) ) nCode = 86;  // Simplified Chinese
+
+    return nCode;
+}
+
+uno::Any SAL_CALL
+ScVbaApplication::International( sal_Int32 Index ) throw (uno::RuntimeException)
+{
+    uno::Any aRet;
+    OUString str;
+    const LocaleDataWrapper* pLocaleData = ScGlobal::GetpLocaleData();
+    switch ( Index )
+    {
+    case excel::XlApplicationInternational::xlCountryCode:
+        aRet <<= ConvertCountryCode( pLocaleData->getLanguageCountryInfo().Language );
+        break;
+    case excel::XlApplicationInternational::xlDecimalSeparator:
+        str = pLocaleData->getNumDecimalSep();
+        aRet <<= str;
+        break;
+    case excel::XlApplicationInternational::xlDateSeparator:
+        str = pLocaleData->getDateSep();
+        aRet <<= str;
+        break;
+    default:
+        break;
+    }
+    return aRet;
+}
+
+void SAL_CALL ScVbaApplication::Undo(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    SfxAllItemSet reqList(  SFX_APP()->GetPool() );
+    SfxRequest      rReq(SID_UNDO, 0, reqList);
+    ScTabViewShell* pViewShell = excel::getCurrentBestViewShell( mxContext );
+
+    if (pViewShell != NULL)
+    {
+        pViewShell->ExecuteUndo(rReq);
+    }
+}
+
+double SAL_CALL ScVbaApplication::InchesToPoints( double Inches ) throw (uno::RuntimeException)
+{
+    // Convert a measurement from Inch to Point (1 inch = 72 points).
+    return MetricField::ConvertDoubleValue( Inches, 0, 0, FUNIT_INCH, FUNIT_POINT );
 }
 
 rtl::OUString&
@@ -1190,3 +1832,5 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ScVbaApplication",
     "ooo.vba.excel.Application" );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

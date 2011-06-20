@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,6 +48,8 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
     aSelection( rStatus ),
     pDocSh( pD ),
     nTotalPages( 0 ),
+    nPages(),
+    nFirstAttr(),
     bLocInitialized( false )
 {
     //  page count uses the stored cell widths for the printer anyway,
@@ -64,11 +67,6 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
 
     ScDocument* pDoc = pDocSh->GetDocument();
     SCTAB nTabCount = pDoc->GetTableCount();
-
-    // avoid repeated progress bars if row heights for all sheets are needed
-    if ( nTabCount > 1 && rMark.GetSelectCount() == nTabCount )
-        pDocSh->UpdatePendingRowHeights( nTabCount-1, true );
-
     SCTAB nTab;
     for ( nTab=0; nTab<nTabCount; nTab++ )
     {
@@ -77,14 +75,16 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
         long nThisTab = 0;
         if ( rMark.GetTableSelect( nTab ) )
         {
+            pDoc->InvalidatePageBreaks( nTab );                 // user print area (selection) may be different
+
             ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange, &aSelection.GetOptions() );
             nThisTab = aFunc.GetTotalPages();
-            nFirstAttr[nTab] = aFunc.GetFirstPageNo();          // from page style or previous sheet
+            nFirstAttr.push_back( aFunc.GetFirstPageNo() );         // from page style or previous sheet
         }
         else
-            nFirstAttr[nTab] = nAttrPage;
+            nFirstAttr.push_back( nAttrPage );
 
-        nPages[nTab] = nThisTab;
+        nPages.push_back( nThisTab );
         nTotalPages += nThisTab;
     }
 }
@@ -128,7 +128,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
                 aPage.Select( aPageRange );
 
                 ScPreviewLocationData aLocData( pDoc, pDev );
-                aFunc.DoPrint( aPage, nTabStart, nDisplayStart, sal_False, &aLocData );
+                aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, NULL, &aLocData );
 
                 ScRange aCellRange;
                 Rectangle aPixRect;
@@ -177,7 +177,7 @@ SCTAB ScPrintFuncCache::GetTabForPage( long nPage ) const
 long ScPrintFuncCache::GetTabStart( SCTAB nTab ) const
 {
     long nRet = 0;
-    for ( SCTAB i=0; i<nTab; i++ )
+    for ( SCTAB i=0; i<nTab&& i < static_cast<SCTAB>(nPages.size()); i++ )
         nRet += nPages[i];
     return nRet;
 }
@@ -193,9 +193,15 @@ long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
         if ( pDoc->NeedPageResetAfterTab(i) )
             nDisplayStart = 0;
         else
-            nDisplayStart += nPages[i];
+        {
+            if ( i < static_cast<SCTAB>(nPages.size()) )
+                nDisplayStart += nPages[i];
+            else
+                OSL_FAIL("nPages out of bounds, FIX IT!");
+        }
     }
     return nDisplayStart;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

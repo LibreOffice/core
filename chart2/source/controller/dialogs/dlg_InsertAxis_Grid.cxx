@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,7 +113,6 @@ SchAxisDlg::SchAxisDlg( Window* pWindow
             aCbSecondaryZ.Hide();
 
             Size aSize( GetSizePixel() );
-            //aSize.Height() -= aCbSecondaryZ.GetSizePixel().Height();
             aSize.Height() -= ( aCbSecondaryZ.GetPosPixel().Y() - aCbSecondaryY.GetPosPixel().Y() );
             SetSizePixel(aSize);
         }
@@ -162,3 +162,4 @@ SchGridDlg::~SchGridDlg()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

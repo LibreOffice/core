@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 
 #include "AccessibleContextBase.hxx"
 
-class ScPivotFieldWindow;
+class ScDPFieldControlBase;
 class ScAccessibleDataPilotButton;
 
 class ScAccessibleDataPilotControl
@@ -42,7 +43,7 @@ public:
     ScAccessibleDataPilotControl(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent,
-        ScPivotFieldWindow* pFieldWindow);
+        ScDPFieldControlBase* pDPFieldWindow);
 
     virtual void Init();
 
@@ -131,7 +132,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    ScPivotFieldWindow* mpFieldWindow;
+    ScDPFieldControlBase* mpDPFieldWindow;
     struct AccessibleWeak
     {
         ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xWeakAcc;
@@ -143,3 +144,5 @@ private:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

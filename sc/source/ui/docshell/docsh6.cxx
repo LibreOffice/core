@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,8 +43,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-//#include <svxlink.hxx>
-
 #include "docsh.hxx"
 
 #include "stlsheet.hxx"
@@ -53,6 +52,31 @@
 #include "tabvwsh.hxx"
 #include "tablink.hxx"
 #include "collect.hxx"
+#include "docoptio.hxx"
+#include "globstr.hrc"
+#include "scmod.hxx"
+
+#include "formula/FormulaCompiler.hxx"
+#include "comphelper/processfactory.hxx"
+#include "vcl/msgbox.hxx"
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
+
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::container::XNameAccess;
+using ::com::sun::star::util::XChangesBatch;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::rtl::OUString;
+
+namespace {
 
 struct ScStylePair
 {
@@ -60,6 +84,12 @@ struct ScStylePair
     SfxStyleSheetBase *pDest;
 };
 
+inline OUString C2U(const char* s)
+{
+    return OUString::createFromAscii(s);
+}
+
+}
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -69,7 +99,7 @@ struct ScStylePair
 //  Ole
 //
 
-void __EXPORT ScDocShell::SetVisArea( const Rectangle & rVisArea )
+void ScDocShell::SetVisArea( const Rectangle & rVisArea )
 {
     //  with the SnapVisArea call in SetVisAreaOrSize, it's safe to always
     //  use both the size and position of the VisArea
@@ -127,7 +157,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, sal_Bool bModifySt
 
     //      hier Position anpassen!
 
-    //  #92248# when loading an ole object, the VisArea is set from the document's
+    //  when loading an ole object, the VisArea is set from the document's
     //  view settings and must be used as-is (document content may not be complete yet).
     if ( !aDocument.IsImportingXML() )
         aDocument.SnapVisArea( aArea );
@@ -153,8 +183,6 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, sal_Bool bModifySt
             if (pViewSh->GetViewData()->GetDocShell() == this)
                 pViewSh->UpdateOleZoom();
         }
-        //else
-        //  DataChanged( SvDataType() );            // fuer Zuppeln wenn nicht IP-aktiv
     }
 
     if (aDocument.IsEmbedded())
@@ -185,12 +213,11 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize )
     if (GetCreateMode() == SFX_CREATE_MODE_STANDARD)
         return;
 
-    DBG_ASSERT(pViewData,"pViewData==0 bei ScDocShell::UpdateOle");
+    OSL_ENSURE(pViewData,"pViewData==0 bei ScDocShell::UpdateOle");
 
     Rectangle aOldArea = SfxObjectShell::GetVisArea();
     Rectangle aNewArea = aOldArea;
 
-    sal_Bool bChange = sal_False;
     sal_Bool bEmbedded = aDocument.IsEmbedded();
     if (bEmbedded)
         aNewArea = aDocument.GetEmbeddedRect();
@@ -198,10 +225,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize )
     {
         SCTAB nTab = pViewData->GetTabNo();
         if ( nTab != aDocument.GetVisibleTab() )
-        {
             aDocument.SetVisibleTab( nTab );
-            bChange = sal_True;
-        }
 
         sal_Bool bNegativePage = aDocument.IsNegativePage( nTab );
         SCCOL nX = pViewData->GetPosX(SC_SPLIT_LEFT);
@@ -216,20 +240,14 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize )
     }
 
     if (aNewArea != aOldArea)
-    {
-        SetVisAreaOrSize( aNewArea, sal_True ); // hier muss auch der Start angepasst werden
-        bChange = sal_True;
-    }
-
-//  if (bChange)
-//      DataChanged( SvDataType() );        //! passiert auch bei SetModified
+        SetVisAreaOrSize( aNewArea, true ); // hier muss auch der Start angepasst werden
 }
 
 //
 //  Style-Krempel fuer Organizer etc.
 //
 
-SfxStyleSheetBasePool* __EXPORT ScDocShell::GetStyleSheetPool()
+SfxStyleSheetBasePool* ScDocShell::GetStyleSheetPool()
 {
     return (SfxStyleSheetBasePool*)aDocument.GetStyleSheetPool();
 }
@@ -248,14 +266,14 @@ void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
         SfxItemSet& rStyleSet = pStyle->GetItemSet();
 
         const SfxPoolItem* pItem;
-        if (rStyleSet.GetItemState(ATTR_PAGE_HEADERSET,sal_False,&pItem) == SFX_ITEM_SET)
+        if (rStyleSet.GetItemState(ATTR_PAGE_HEADERSET,false,&pItem) == SFX_ITEM_SET)
         {
             SfxItemSet& rSrcSet = ((SvxSetItem*)pItem)->GetItemSet();
             SfxItemSet* pDestSet = new SfxItemSet(*rStyleSet.GetPool(),rSrcSet.GetRanges());
             pDestSet->Put(rSrcSet);
             rStyleSet.Put(SvxSetItem(ATTR_PAGE_HEADERSET,pDestSet));
         }
-        if (rStyleSet.GetItemState(ATTR_PAGE_FOOTERSET,sal_False,&pItem) == SFX_ITEM_SET)
+        if (rStyleSet.GetItemState(ATTR_PAGE_FOOTERSET,false,&pItem) == SFX_ITEM_SET)
         {
             SfxItemSet& rSrcSet = ((SvxSetItem*)pItem)->GetItemSet();
             SfxItemSet* pDestSet = new SfxItemSet(*rStyleSet.GetPool(),rSrcSet.GetRanges());
@@ -267,7 +285,7 @@ void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
     }
 }
 
-void __EXPORT ScDocShell::LoadStyles( SfxObjectShell &rSource )
+void ScDocShell::LoadStyles( SfxObjectShell &rSource )
 {
     aDocument.StylesToNames();
 
@@ -350,7 +368,7 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, sal_Bool bReplace, sal_Boo
 }
 
 
-sal_Bool __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
+sal_Bool ScDocShell::Insert( SfxObjectShell &rSource,
                                 sal_uInt16 nSourceIdx1, sal_uInt16 nSourceIdx2, sal_uInt16 nSourceIdx3,
                                 sal_uInt16 &nIdx1, sal_uInt16 &nIdx2, sal_uInt16 &nIdx3, sal_uInt16 &rIdxDeleted )
 {
@@ -360,6 +378,15 @@ sal_Bool __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
         lcl_AdjustPool( GetStyleSheetPool() );      // SetItems anpassen
 
     return bRet;
+}
+
+void ScDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
+{
+    ::sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
+    if (!pLinkManager)
+        return;
+
+    pLinkManager->ReconnectDdeLink(rServer);
 }
 
 void ScDocShell::UpdateLinks()
@@ -402,7 +429,7 @@ void ScDocShell::UpdateLinks()
             String aFltName = aDocument.GetLinkFlt(i);
             String aOptions = aDocument.GetLinkOpt(i);
             sal_uLong nRefresh  = aDocument.GetLinkRefreshDelay(i);
-            sal_Bool bThere = sal_False;
+            sal_Bool bThere = false;
             for (SCTAB j=0; j<i && !bThere; j++)                // im Dokument mehrfach?
                 if (aDocument.IsLinked(j)
                         && aDocument.GetLinkDoc(j) == aDocName
@@ -428,7 +455,7 @@ void ScDocShell::UpdateLinks()
                 pLink->SetInCreate( sal_True );
                 pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aDocName, &aFltName );
                 pLink->Update();
-                pLink->SetInCreate( sal_False );
+                pLink->SetInCreate( false );
             }
         }
 }
@@ -437,7 +464,7 @@ sal_Bool ScDocShell::ReloadTabLinks()
 {
     sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
 
-    sal_Bool bAny = sal_False;
+    sal_Bool bAny = false;
     sal_uInt16 nCount = pLinkManager->GetLinks().Count();
     for (sal_uInt16 i=0; i<nCount; i++ )
     {
@@ -445,12 +472,10 @@ sal_Bool ScDocShell::ReloadTabLinks()
         if (pBase->ISA(ScTableLink))
         {
             ScTableLink* pTabLink = (ScTableLink*)pBase;
-//          pTabLink->SetAddUndo(sal_False);        //! Undo's zusammenfassen
-            pTabLink->SetPaint(sal_False);          //  Paint nur einmal am Ende
+            pTabLink->SetPaint(false);          //  Paint nur einmal am Ende
             pTabLink->Update();
-            pTabLink->SetPaint(sal_True);
-//          pTabLink->SetAddUndo(sal_True);
-            bAny = sal_True;
+            pTabLink->SetPaint(true);
+            bAny = true;
         }
     }
 
@@ -466,4 +491,45 @@ sal_Bool ScDocShell::ReloadTabLinks()
     return sal_True;        //! Fehler erkennen
 }
 
+void ScDocShell::CheckConfigOptions()
+{
+    if (IsConfigOptionsChecked())
+        // no need to check repeatedly.
+        return;
 
+    OUString aDecSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
+
+    ScModule* pScMod = SC_MOD();
+    const ScDocOptions& rOpt = pScMod->GetDocOptions();
+    OUString aSepArg = rOpt.GetFormulaSepArg();
+    OUString aSepArrRow = rOpt.GetFormulaSepArrayRow();
+    OUString aSepArrCol = rOpt.GetFormulaSepArrayCol();
+
+    if (aDecSep == aSepArg || aDecSep == aSepArrRow || aDecSep == aSepArrCol)
+    {
+        // One of arg separators conflicts with the current decimal
+        // separator.  Reset them to default.
+        ScDocOptions aNew = rOpt;
+        aNew.ResetFormulaSeparators();
+        aDocument.SetDocOptions(aNew);
+        pScMod->SetDocOptions(aNew);
+
+        // Launch a nice warning dialog to let the users know of this change.
+        ScTabViewShell* pViewShell = GetBestViewShell();
+        if (pViewShell)
+        {
+            Window* pParent = pViewShell->GetFrameWin();
+            InfoBox aBox(pParent, ScGlobal::GetRscString(STR_OPTIONS_WARN_SEPARATORS));
+            aBox.Execute();
+        }
+
+        // For now, this is the only option setting that could launch info
+        // dialog.  But in the future we may want to implement a nicer
+        // dialog to display a list of warnings in case we have several
+        // pieces of information to display.
+    }
+
+    SetConfigOptionsChecked(true);
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

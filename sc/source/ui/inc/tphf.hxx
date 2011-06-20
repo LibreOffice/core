@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,8 +53,6 @@ protected:
                               const SfxItemSet& rSet,
                               sal_uInt16 nSetId );
 
-//    using SvxHFPage::ActivatePage;
-//    using SvxHFPage::DeactivatePage;
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
     virtual void    ActivatePage( const SfxItemSet& rSet );
@@ -101,3 +100,4 @@ private:
 
 #endif // SC_TPHF_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

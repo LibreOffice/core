@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 
-//#include "CommonConverters.hxx"
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -113,7 +113,7 @@ struct lcl_LessXOfPoint
     inline bool operator() ( const std::vector< double >& first,
                              const std::vector< double >& second )
     {
-        if( first.size() > 0 && second.size() > 0 )
+        if( !first.empty() && !second.empty() )
         {
             return first[0]<second[0];
         }
@@ -299,7 +299,7 @@ void VDataSeries::doSortByXValues()
 {
     if( m_aValues_X.is() && m_aValues_X.Doubles.getLength() )
     {
-        //prepare a vector vor sorting
+        //prepare a vector for sorting
         std::vector< ::std::vector< double > > aTmp;//outer vector are points, inner vector are the different values of athe point
         double fNan;
         ::rtl::math::setNan( & fNan );
@@ -315,7 +315,7 @@ void VDataSeries::doSortByXValues()
         //do sort
         std::sort( aTmp.begin(), aTmp.end(), lcl_LessXOfPoint() );
 
-        //fill the sorted points back to the mambers
+        //fill the sorted points back to the members
         m_aValues_X.Doubles.realloc( m_nPointCount );
         m_aValues_Y.Doubles.realloc( m_nPointCount );
 
@@ -622,7 +622,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
             return nLabelPlacement;
         }
 
-        DBG_ERROR("no label placement supported");
+        OSL_FAIL("no label placement supported");
     }
     catch( uno::Exception& e )
     {
@@ -1000,3 +1000,5 @@ sal_Int32 VDataSeries::getMissingValueTreatment() const
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -738,7 +739,7 @@ bool hasUnhiddenData( const uno::Reference< chart2::XDataSeries >& xSeries )
 
 struct lcl_LessIndex
 {
-    inline bool operator() ( const sal_Int32& first, const sal_Int32& second )
+    inline bool operator() ( const sal_Int32& first, const sal_Int32& second ) const
     {
         return ( first < second );
     }
@@ -916,3 +917,5 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
 
 } //  namespace DataSeriesHelper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

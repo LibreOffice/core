@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,8 @@
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
 #include "xestring.hxx"
+#include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 class Size;
 
@@ -122,11 +125,6 @@ public:
     /** Converts the passed rectangle from 1/100 mm to Excel chart units. */
     XclChRectangle      CalcChartRectFromHmm( const ::com::sun::star::awt::Rectangle& rRect ) const;
 
-    /** Converts the passed horizontal coordinate from a relative position to Excel chart units. */
-    sal_Int32           CalcChartXFromRelative( double fPosX ) const;
-    /** Converts the passed vertical coordinate from a relative position to Excel chart units. */
-    sal_Int32           CalcChartYFromRelative( double fPosY ) const;
-
     /** Reads all line properties from the passed property set. */
     void                ConvertLineFormat(
                             XclChLineFormat& rLineFmt,
@@ -161,7 +159,7 @@ protected:
     void                FinalizeFutureRecBlock( XclExpStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpChRootData > XclExpChRootDataRef;
+    typedef boost::shared_ptr< XclExpChRootData > XclExpChRootDataRef;
     XclExpChRootDataRef mxChData;           /// Reference to the root data object.
 };
 
@@ -228,7 +226,7 @@ private:
     XclChFramePos       maData;             /// Position of the frame.
 };
 
-typedef ScfRef< XclExpChFramePos > XclExpChFramePosRef;
+typedef boost::shared_ptr< XclExpChFramePos > XclExpChFramePosRef;
 
 // ----------------------------------------------------------------------------
 
@@ -263,7 +261,7 @@ private:
     sal_uInt32          mnColorId;          /// Line color identifier.
 };
 
-typedef ScfRef< XclExpChLineFormat > XclExpChLineFormatRef;
+typedef boost::shared_ptr< XclExpChLineFormat > XclExpChLineFormatRef;
 
 // ----------------------------------------------------------------------------
 
@@ -297,7 +295,7 @@ private:
     sal_uInt32          mnBackColorId;      /// Pattern background color identifier.
 };
 
-typedef ScfRef< XclExpChAreaFormat > XclExpChAreaFormatRef;
+typedef boost::shared_ptr< XclExpChAreaFormat > XclExpChAreaFormatRef;
 
 // ----------------------------------------------------------------------------
 
@@ -332,7 +330,7 @@ private:
     sal_uInt32          mnColor2Id;         /// Second fill color identifier.
 };
 
-typedef ScfRef< XclExpChEscherFormat > XclExpChEscherFormatRef;
+typedef boost::shared_ptr< XclExpChEscherFormat > XclExpChEscherFormatRef;
 
 // ----------------------------------------------------------------------------
 
@@ -403,7 +401,7 @@ private:
     XclChObjectType     meObjType;          /// Type of the represented object.
 };
 
-typedef ScfRef< XclExpChFrame > XclExpChFrameRef;
+typedef boost::shared_ptr< XclExpChFrame > XclExpChFrameRef;
 
 // Source links ===============================================================
 
@@ -424,8 +422,10 @@ public:
     /** Converts the number format from the passed property set. */
     void                ConvertNumFmt( const ScfPropertySet& rPropSet, bool bPercent );
 
+    void                AppendString( const String& rStr );
+
     /** Returns true, if this source link contains explicit string data. */
-    inline bool         HasString() const { return mxString.is() && !mxString->IsEmpty(); }
+    inline bool         HasString() const { return mxString && !mxString->IsEmpty(); }
 
     /** Writes the CHSOURCELINK record and optionally a CHSTRING record with explicit string data. */
     virtual void        Save( XclExpStream& rStrm );
@@ -439,7 +439,7 @@ private:
     XclExpStringRef     mxString;           /// Text data (CHSTRING record).
 };
 
-typedef ScfRef< XclExpChSourceLink > XclExpChSourceLinkRef;
+typedef boost::shared_ptr< XclExpChSourceLink > XclExpChSourceLinkRef;
 
 // Text =======================================================================
 
@@ -450,7 +450,7 @@ public:
     explicit            XclExpChFont( sal_uInt16 nFontIdx );
 };
 
-typedef ScfRef< XclExpChFont > XclExpChFontRef;
+typedef boost::shared_ptr< XclExpChFont > XclExpChFontRef;
 
 // ----------------------------------------------------------------------------
 
@@ -467,7 +467,7 @@ private:
     XclChObjectLink     maData;             /// Contents of the CHOBJECTLINK record.
 };
 
-typedef ScfRef< XclExpChObjectLink > XclExpChObjectLinkRef;
+typedef boost::shared_ptr< XclExpChObjectLink > XclExpChObjectLinkRef;
 
 // ----------------------------------------------------------------------------
 
@@ -490,7 +490,7 @@ private:
     XclChFrLabelProps   maData;             /// Contents of the CHFRLABELPROPS record.
 };
 
-typedef ScfRef< XclExpChFrLabelProps > XclExpChFrLabelPropsRef;
+typedef boost::shared_ptr< XclExpChFrLabelProps > XclExpChFrLabelPropsRef;
 
 // ----------------------------------------------------------------------------
 
@@ -535,7 +535,7 @@ public:
     virtual void        SetRotation( sal_uInt16 nRotation );
 
     /** Converts all text settings of the passed title text object. */
-    void                ConvertTitle( XTitleRef xTitle, sal_uInt16 nTarget );
+    void                ConvertTitle( XTitleRef xTitle, sal_uInt16 nTarget, const String* pSubTitle = NULL );
     /** Converts all text settings of the passed legend. */
     void                ConvertLegend( const ScfPropertySet& rPropSet );
     /** Converts all settings of the passed data point caption text object. */
@@ -545,7 +545,7 @@ public:
     void                ConvertTrendLineEquation( const ScfPropertySet& rPropSet, const XclChDataPointPos& rPointPos );
 
     /** Returns true, if the string object does not contain any text data. */
-    inline bool         HasString() const { return mxSrcLink.is() && mxSrcLink->HasString(); }
+    inline bool         HasString() const { return mxSrcLink && mxSrcLink->HasString(); }
     /** Returns the flags needed for the CHATTACHEDLABEL record. */
     sal_uInt16          GetAttLabelFlags() const;
 
@@ -566,7 +566,7 @@ private:
     sal_uInt32          mnTextColorId;      /// Text color identifier.
 };
 
-typedef ScfRef< XclExpChText > XclExpChTextRef;
+typedef boost::shared_ptr< XclExpChText > XclExpChTextRef;
 
 // Data series ================================================================
 
@@ -602,7 +602,7 @@ private:
     sal_uInt32          mnFillColorId;      /// Fill color identifier.
 };
 
-typedef ScfRef< XclExpChMarkerFormat > XclExpChMarkerFormatRef;
+typedef boost::shared_ptr< XclExpChMarkerFormat > XclExpChMarkerFormatRef;
 
 // ----------------------------------------------------------------------------
 
@@ -616,7 +616,7 @@ public:
     void                Convert( const ScfPropertySet& rPropSet );
 };
 
-typedef ScfRef< XclExpChPieFormat > XclExpChPieFormatRef;
+typedef boost::shared_ptr< XclExpChPieFormat > XclExpChPieFormatRef;
 
 // ----------------------------------------------------------------------------
 
@@ -636,7 +636,7 @@ private:
     XclCh3dDataFormat   maData;             /// Contents of the CH3DDATAFORMAT record.
 };
 
-typedef ScfRef< XclExpCh3dDataFormat > XclExpCh3dDataFormatRef;
+typedef boost::shared_ptr< XclExpCh3dDataFormat > XclExpCh3dDataFormatRef;
 
 // ----------------------------------------------------------------------------
 
@@ -647,7 +647,7 @@ public:
     explicit            XclExpChAttachedLabel( sal_uInt16 nFlags );
 };
 
-typedef ScfRef< XclExpChAttachedLabel > XclExpChAttLabelRef;
+typedef boost::shared_ptr< XclExpChAttachedLabel > XclExpChAttLabelRef;
 
 // ----------------------------------------------------------------------------
 
@@ -688,7 +688,7 @@ private:
     XclExpChAttLabelRef mxAttLabel;         /// Data point label type (CHATTACHEDLABEL record).
 };
 
-typedef ScfRef< XclExpChDataFormat > XclExpChDataFormatRef;
+typedef boost::shared_ptr< XclExpChDataFormat > XclExpChDataFormatRef;
 
 // ----------------------------------------------------------------------------
 
@@ -718,7 +718,7 @@ private:
     XclExpChTextRef     mxLabel;            /// Formatting of the equation text box.
 };
 
-typedef ScfRef< XclExpChSerTrendLine > XclExpChSerTrendLineRef;
+typedef boost::shared_ptr< XclExpChSerTrendLine > XclExpChSerTrendLineRef;
 
 // ----------------------------------------------------------------------------
 
@@ -738,7 +738,7 @@ private:
     XclChSerErrorBar    maData;             /// Contents of the CHSERERRORBAR record.
 };
 
-typedef ScfRef< XclExpChSerErrorBar > XclExpChSerErrorBarRef;
+typedef boost::shared_ptr< XclExpChSerErrorBar > XclExpChSerErrorBarRef;
 
 // ----------------------------------------------------------------------------
 
@@ -812,7 +812,7 @@ private:
     sal_uInt16          mnParentIdx;        /// 0-based index of parent series (trend lines and error bars).
 };
 
-typedef ScfRef< XclExpChSeries > XclExpChSeriesRef;
+typedef boost::shared_ptr< XclExpChSeries > XclExpChSeriesRef;
 
 // Chart type groups ==========================================================
 
@@ -868,7 +868,7 @@ private:
     XclChChart3d        maData;             /// Contents of the CHCHART3D record.
 };
 
-typedef ScfRef< XclExpChChart3d > XclExpChChart3dRef;
+typedef boost::shared_ptr< XclExpChChart3d > XclExpChChart3dRef;
 
 // ----------------------------------------------------------------------------
 
@@ -898,7 +898,7 @@ private:
     XclExpChFrameRef    mxFrame;            /// Legend frame format (CHFRAME group).
 };
 
-typedef ScfRef< XclExpChLegend > XclExpChLegendRef;
+typedef boost::shared_ptr< XclExpChLegend > XclExpChLegendRef;
 
 // ----------------------------------------------------------------------------
 
@@ -926,7 +926,7 @@ private:
     sal_uInt16          mnBarDist;          /// Distance between bars (CHDROPBAR record).
 };
 
-typedef ScfRef< XclExpChDropBar > XclExpChDropBarRef;
+typedef boost::shared_ptr< XclExpChDropBar > XclExpChDropBarRef;
 
 // ----------------------------------------------------------------------------
 
@@ -970,7 +970,7 @@ public:
     /** Returns true, if chart type supports wall and floor format. */
     inline bool         Is3dWallChart() const { return Is3dChart() && (maTypeInfo.meTypeCateg != EXC_CHTYPECATEG_PIE); }
     /** Returns true, if the series in this chart type group are ordered on the Z axis. */
-    inline bool         Is3dDeepChart() const { return Is3dWallChart() && mxChart3d.is() && !mxChart3d->IsClustered(); }
+    inline bool         Is3dDeepChart() const { return Is3dWallChart() && mxChart3d && !mxChart3d->IsClustered(); }
     /** Returns true, if this chart type can be combined with other types. */
     inline bool         IsCombinable2d() const { return !Is3dChart() && maTypeInfo.mbCombinable2d; }
 
@@ -994,7 +994,7 @@ private:
 
 private:
     typedef XclExpRecordList< XclExpChSeries >          XclExpChSeriesList;
-    typedef ScfRefMap< sal_uInt16, XclExpChLineFormat > XclExpChLineFormatMap;
+    typedef ::boost::ptr_map<sal_uInt16, XclExpChLineFormat> XclExpChLineFormatMap;
 
     XclChTypeGroup      maData;             /// Contents of the CHTYPEGROUP record.
     XclExpChType        maType;             /// Chart type (e.g. CHBAR, CHLINE, ...).
@@ -1007,7 +1007,7 @@ private:
     XclExpChLineFormatMap maChartLines;     /// Global line formats (CHCHARTLINE group).
 };
 
-typedef ScfRef< XclExpChTypeGroup > XclExpChTypeGroupRef;
+typedef boost::shared_ptr< XclExpChTypeGroup > XclExpChTypeGroupRef;
 
 // Axes =======================================================================
 
@@ -1034,7 +1034,7 @@ private:
     XclChDateRange      maDateData;         /// Contents of the CHDATERANGE record.
 };
 
-typedef ScfRef< XclExpChLabelRange > XclExpChLabelRangeRef;
+typedef boost::shared_ptr< XclExpChLabelRange > XclExpChLabelRangeRef;
 
 // ----------------------------------------------------------------------------
 
@@ -1055,7 +1055,7 @@ private:
     XclChValueRange     maData;             /// Contents of the CHVALUERANGE record.
 };
 
-typedef ScfRef< XclExpChValueRange > XclExpChValueRangeRef;
+typedef boost::shared_ptr< XclExpChValueRange > XclExpChValueRangeRef;
 
 // ----------------------------------------------------------------------------
 
@@ -1079,7 +1079,7 @@ private:
     sal_uInt32          mnTextColorId;      /// Axis labels text color identifier.
 };
 
-typedef ScfRef< XclExpChTick > XclExpChTickRef;
+typedef boost::shared_ptr< XclExpChTick > XclExpChTickRef;
 
 // ----------------------------------------------------------------------------
 
@@ -1134,7 +1134,7 @@ private:
     sal_uInt16          mnNumFmtIdx;        /// Index into number format buffer (CHFORMAT record).
 };
 
-typedef ScfRef< XclExpChAxis > XclExpChAxisRef;
+typedef boost::shared_ptr< XclExpChAxis > XclExpChAxisRef;
 
 // ----------------------------------------------------------------------------
 
@@ -1198,7 +1198,7 @@ private:
     XclExpChTypeGroupList maTypeGroups;     /// Chart type groups (CHTYPEGROUP group).
 };
 
-typedef ScfRef< XclExpChAxesSet > XclExpChAxesSetRef;
+typedef boost::shared_ptr< XclExpChAxesSet > XclExpChAxesSetRef;
 
 // The chart object ===========================================================
 
@@ -1263,8 +1263,8 @@ public:
     virtual void        Save( XclExpStream& rStrm );
 
 private:
-    ScfRef< XclExpObjectManager > mxObjMgr;
-    ScfRef< XclExpRecordBase > mxObjRecs;
+    boost::shared_ptr< XclExpObjectManager > mxObjMgr;
+    boost::shared_ptr< XclExpRecordBase > mxObjRecs;
 };
 
 // ----------------------------------------------------------------------------
@@ -1284,3 +1284,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

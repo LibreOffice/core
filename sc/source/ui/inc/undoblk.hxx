@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,11 @@
 #include "markdata.hxx"
 #include "viewutil.hxx"
 #include "spellparam.hxx"
+#include "cellmergeoption.hxx"
+
+#include "cell.hxx"
+
+#include <boost/shared_ptr.hpp>
 
 class ScDocShell;
 class ScBaseCell;
@@ -182,9 +188,9 @@ struct ScUndoPasteOptions
 
     ScUndoPasteOptions() :
         nFunction( PASTE_NOFUNC ),
-        bSkipEmpty( sal_False ),
-        bTranspose( sal_False ),
-        bAsLink( sal_False ),
+        bSkipEmpty( false ),
+        bTranspose( false ),
+        bAsLink( false ),
         eMoveMode( INS_NONE )
     {}
 };
@@ -351,9 +357,11 @@ public:
 
     virtual String  GetComment() const;
 
+    ScEditDataArray*    GetDataArray();
 private:
     ScMarkData      aMarkData;
     ScRange         aRange;
+    ScEditDataArray aDataArray;
     ScDocument*     pUndoDoc;
     sal_Bool            bMulti;
     ScPatternAttr*  pApplyPattern;
@@ -361,6 +369,7 @@ private:
     SvxBoxInfoItem* pLineInner;
 
     void            DoChange( const sal_Bool bUndo );
+    void            ChangeEditData( const bool bUndo );
 };
 
 
@@ -412,8 +421,7 @@ public:
                                     ScDocument* pNewUndoDoc, const ScMarkData& rMark,
                                     FillDir eNewFillDir,
                                     FillCmd eNewFillCmd, FillDateCmd eNewFillDateCmd,
-                                    double fNewStartValue, double fNewStepValue, double fNewMaxValue,
-                                    sal_uInt16 nMaxShIndex );
+                                    double fNewStartValue, double fNewStepValue, double fNewMaxValue );
     virtual         ~ScUndoAutoFill();
 
     virtual void    Undo();
@@ -435,7 +443,6 @@ private:
     double          fMaxValue;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
-    sal_uInt16          nMaxSharedIndex;
 
     void            SetChangeTrack();
 };
@@ -445,10 +452,8 @@ class ScUndoMerge: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoMerge( ScDocShell* pNewDocShell,
-                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
-                                 SCCOL nEndX,   SCROW nEndY,   SCTAB nEndZ,
-                                 bool bMergeContents, ScDocument* pUndoDoc, SdrUndoAction* pDrawUndo );
+                    ScUndoMerge( ScDocShell* pNewDocShell, const ScCellMergeOption& rOption,
+                                 bool bMergeContents, ScDocument* pUndoDoc, SdrUndoAction* pDrawUndo);
     virtual         ~ScUndoMerge();
 
     virtual void    Undo();
@@ -459,7 +464,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScRange         maRange;
+    ScCellMergeOption maOption;
     bool            mbMergeContents;        // Merge contents in Redo().
     ScDocument*     mpUndoDoc;              // wenn Daten zusammengefasst
     SdrUndoAction*  mpDrawUndo;
@@ -940,7 +945,7 @@ class ScUndoRemoveMerge: public ScBlockUndo
 public:
                     TYPEINFO();
                     ScUndoRemoveMerge( ScDocShell* pNewDocShell,
-                                       const ScRange& rArea,
+                                       const ScCellMergeOption& rOption,
                                        ScDocument* pNewUndoDoc );
     virtual         ~ScUndoRemoveMerge();
 
@@ -952,6 +957,9 @@ public:
     virtual String  GetComment() const;
 
 private:
+    void            SetCurTab();
+
+    ScCellMergeOption maOption;
     ScDocument*     pUndoDoc;
 };
 
@@ -986,3 +994,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

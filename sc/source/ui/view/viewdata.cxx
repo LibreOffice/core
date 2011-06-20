@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -45,6 +42,7 @@
 #include <editeng/editstat.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include <vcl/svapp.hxx>
 #include <rtl/math.hxx>
@@ -66,6 +64,7 @@
 #include "unonames.hxx"
 #include "inputopt.hxx"
 #include "viewutil.hxx"
+#include "stlalgorithm.hxx"
 #include <xmloff/xmluconv.hxx>
 #include "ViewSettingsSequenceDefines.hxx"
 #include <rtl/ustrbuf.hxx>
@@ -74,17 +73,13 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
 #define SC_GROWY_SMALL_EXTRA    100
 #define SC_GROWY_BIG_EXTRA      200
 
 #define TAG_TABBARWIDTH "tw:"
 
-static sal_Bool bMoveArea = sal_False;              //! Member?
+static sal_Bool bMoveArea = false;              //! Member?
 sal_uInt16 nEditAdjust = SVX_ADJUST_LEFT;       //! Member !!!
-
-//==================================================================
 
 ScViewDataTable::ScViewDataTable() :
                 eZoomType( SVX_ZOOM_PERCENT ),
@@ -101,7 +96,8 @@ ScViewDataTable::ScViewDataTable() :
                 nFixPosY( 0 ),
                 nCurX( 0 ),
                 nCurY( 0 ),
-                bOldCurValid( sal_False )
+                bShowGrid( true ),
+                mbOldCursorValid( false )
 {
     nPosX[0]=nPosX[1]=0;
     nPosY[0]=nPosY[1]=0;
@@ -160,6 +156,9 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         pSettings[SC_TABLE_ZOOM_VALUE].Value <<= nZoomValue;
         pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_PAGEVIEWZOOMVALUE));
         pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
+
+        pSettings[SC_TABLE_SHOWGRID].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_SHOWGRID));
+        pSettings[SC_TABLE_SHOWGRID].Value <<= static_cast<sal_Bool>(bShowGrid);
     }
 }
 
@@ -264,6 +263,10 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
             aPageZoomX = aPageZoomY = aZoom;
             rHasZoom = true;
         }
+        else if (sName.compareToAscii(SC_UNO_SHOWGRID) == 0)
+        {
+            aSettings[i].Value >>= bShowGrid;
+        }
         else if (sName.compareToAscii(SC_TABLESELECTED) == 0)
         {
             bool bSelected = false;
@@ -293,10 +296,8 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         nVSplitPos = bHasVSplitInTwips ? static_cast< long >( nTempPosVTw * rViewData.GetPPTY() ) : nTempPosV;
 }
 
-//==================================================================
-
-ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
-    :   pDocShell   ( pDocSh ),
+ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
+        pDocShell   ( pDocSh ),
         pDoc        ( NULL ),
         pView       ( pViewSh ),
         pViewShell  ( pViewSh ),
@@ -311,17 +312,18 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
         eRefType    ( SC_REFTYPE_NONE ),
         nTabNo      ( 0 ),
         nRefTabNo   ( 0 ),
+        nPasteFlags ( SC_PASTE_NONE ),
         eEditActivePart( SC_SPLIT_BOTTOMLEFT ),
-        bActive     ( sal_True ),                   //! wie initialisieren?
-        bIsRefMode  ( sal_False ),
-        bDelMarkValid( sal_False ),
         nFillMode   ( SC_FILL_NONE ),
-        bPagebreak  ( sal_False ),
-        bSelCtrlMouseClick( sal_False )
+        bActive     ( true ),                   //! wie initialisieren?
+        bIsRefMode  ( false ),
+        bDelMarkValid( false ),
+        bPagebreak  ( false ),
+        bSelCtrlMouseClick( false )
 {
 
     SetGridMode     ( sal_True );
-    SetSyntaxMode   ( sal_False );
+    SetSyntaxMode   ( false );
     SetHeaderMode   ( sal_True );
     SetTabMode      ( sal_True );
     SetVScrollMode  ( sal_True );
@@ -330,14 +332,12 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
 
     aScrSize = Size( (long) ( STD_COL_WIDTH           * PIXEL_PER_TWIPS * OLE_STD_CELLS_X ),
                      (long) ( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
-    pTabData[0] = new ScViewDataTable;
-    for ( SCTAB i = 1; i <= MAXTAB; i++ )
-        pTabData[i] = NULL;
-    pThisTab = pTabData[nTabNo];
+    maTabData.push_back( new ScViewDataTable );
+    pThisTab = maTabData[nTabNo];
     for (sal_uInt16 j=0; j<4; j++)
     {
         pEditView[j] = NULL;
-        bEditActive[j] = sal_False;
+        bEditActive[j] = false;
     }
 
     nEditEndCol = nEditStartCol = nEditCol = 0;
@@ -354,17 +354,20 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
     if (pDoc && !pDoc->IsVisible(nTabNo))
     {
         while ( !pDoc->IsVisible(nTabNo) && pDoc->HasTable(nTabNo+1) )
+        {
             ++nTabNo;
-
-        pTabData[nTabNo] = new ScViewDataTable;
-        pThisTab = pTabData[nTabNo];
+            maTabData.push_back(NULL);
+        }
+        maTabData[nTabNo] = new ScViewDataTable() ;
+        pThisTab = maTabData[nTabNo];
     }
 
     CalcPPT();
 }
 
-ScViewData::ScViewData( const ScViewData& rViewData )
-    :   pDocShell   ( rViewData.pDocShell ),
+ScViewData::ScViewData( const ScViewData& rViewData ) :
+        maTabData( rViewData.maTabData ),
+        pDocShell   ( rViewData.pDocShell ),
         pDoc        ( rViewData.pDoc ),
         pView       ( rViewData.pView ),
         pViewShell  ( rViewData.pViewShell ),
@@ -380,10 +383,10 @@ ScViewData::ScViewData( const ScViewData& rViewData )
         nTabNo      ( rViewData.nTabNo ),
         nRefTabNo   ( rViewData.nTabNo ),           // kein RefMode
         eEditActivePart( rViewData.eEditActivePart ),
-        bActive     ( sal_True ),                               //! wie initialisieren?
-        bIsRefMode  ( sal_False ),
-        bDelMarkValid( sal_False ),
         nFillMode   ( SC_FILL_NONE ),
+        bActive     ( true ),                               //! wie initialisieren?
+        bIsRefMode  ( false ),
+        bDelMarkValid( false ),
         bPagebreak  ( rViewData.bPagebreak ),
         bSelCtrlMouseClick( rViewData.bSelCtrlMouseClick )
 {
@@ -397,16 +400,12 @@ ScViewData::ScViewData( const ScViewData& rViewData )
     SetOutlineMode  ( rViewData.IsOutlineMode() );
 
     aScrSize = rViewData.aScrSize;
-    for ( SCTAB i = 0; i <= MAXTAB; i++ )
-        if (rViewData.pTabData[i])
-            pTabData[i] = new ScViewDataTable( *rViewData.pTabData[i] );
-        else
-            pTabData[i] = NULL;
-    pThisTab = pTabData[nTabNo];
+
+    pThisTab = maTabData[nTabNo];
     for (sal_uInt16 j=0; j<4; j++)
     {
         pEditView[j] = NULL;
-        bEditActive[j] = sal_False;
+        bEditActive[j] = false;
     }
 
     nEditEndCol = nEditStartCol = nEditCol = 0;
@@ -421,51 +420,6 @@ void ScViewData::InitData( ScDocument* pDocument )
     *pOptions = pDoc->GetViewOptions();
 }
 
-//UNUSED2008-05  void ScViewData::InitFrom( const ScViewData* pRef )
-//UNUSED2008-05  {
-//UNUSED2008-05      if (pRef==NULL)
-//UNUSED2008-05      {
-//UNUSED2008-05          DBG_ERROR("ScViewData::InitFrom mit NULL");
-//UNUSED2008-05          return;
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      aScrSize    = pRef->aScrSize;
-//UNUSED2008-05      nTabNo      = pRef->nTabNo;
-//UNUSED2008-05      eDefZoomType = pRef->eDefZoomType;
-//UNUSED2008-05      aDefZoomX   = pRef->aDefZoomX;
-//UNUSED2008-05      aDefZoomY   = pRef->aDefZoomY;
-//UNUSED2008-05      aDefPageZoomX = pRef->aDefPageZoomX;
-//UNUSED2008-05      aDefPageZoomY = pRef->aDefPageZoomY;
-//UNUSED2008-05      bPagebreak  = pRef->bPagebreak;
-//UNUSED2008-05      aLogicMode  = pRef->aLogicMode;
-//UNUSED2008-05
-//UNUSED2008-05      SetGridMode     ( pRef->IsGridMode() );
-//UNUSED2008-05      SetSyntaxMode   ( pRef->IsSyntaxMode() );
-//UNUSED2008-05      SetHeaderMode   ( pRef->IsHeaderMode() );
-//UNUSED2008-05      SetTabMode      ( pRef->IsTabMode() );
-//UNUSED2008-05      SetVScrollMode  ( pRef->IsVScrollMode() );
-//UNUSED2008-05      SetHScrollMode  ( pRef->IsHScrollMode() );
-//UNUSED2008-05      SetOutlineMode  ( pRef->IsOutlineMode() );
-//UNUSED2008-05
-//UNUSED2008-05      for (SCTAB i=0; i<=MAXTAB; i++)
-//UNUSED2008-05      {
-//UNUSED2008-05          delete pTabData[i];
-//UNUSED2008-05          if (pRef->pTabData[i])
-//UNUSED2008-05              pTabData[i] = new ScViewDataTable( *pRef->pTabData[i] );
-//UNUSED2008-05          else
-//UNUSED2008-05              pTabData[i] = NULL;
-//UNUSED2008-05      }
-//UNUSED2008-05      pThisTab = pTabData[nTabNo];
-//UNUSED2008-05      CalcPPT();
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void ScViewData::SetDocShell( ScDocShell* pShell )
-//UNUSED2008-05  {
-//UNUSED2008-05      pDocShell = pShell;
-//UNUSED2008-05      pDoc = pDocShell->GetDocument();
-//UNUSED2008-05      *pOptions = pDoc->GetViewOptions();
-//UNUSED2008-05      CalcPPT();
-//UNUSED2008-05  }
 
 ScDocument* ScViewData::GetDocument() const
 {
@@ -474,63 +428,77 @@ ScDocument* ScViewData::GetDocument() const
     else if (pDocShell)
         return pDocShell->GetDocument();
 
-    DBG_ERROR("kein Document an ViewData");
+    OSL_FAIL("kein Document an ViewData");
     return NULL;
 }
 
 ScViewData::~ScViewData()
 {
-    for (SCTAB i=0; i<=MAXTAB; i++)
-        if (pTabData[i])
-            delete pTabData[i];
-
     KillEditView();
     delete pOptions;
+    ::std::for_each(
+        maTabData.begin(), maTabData.end(), ScDeleteObjectByPtr<ScViewDataTable>());
 }
 
-void ScViewData::UpdateThis()
+void ScViewData::UpdateCurrentTab()
 {
-    do
+    pThisTab = maTabData[nTabNo];
+    while (!pThisTab)
     {
-        pThisTab = pTabData[nTabNo];
-        if (!pThisTab)
-        {
-            if (nTabNo>0)
-                --nTabNo;
-            else
-                pThisTab = pTabData[0] = new ScViewDataTable;
-
-                // hier keine Assertion, weil sonst Paints kommen, bevor alles initialisiert ist!
-        }
+        if (nTabNo > 0)
+            pThisTab = maTabData[--nTabNo];
+        else
+            pThisTab = maTabData[0] = new ScViewDataTable;
     }
-    while (!pThisTab);
 }
 
 void ScViewData::InsertTab( SCTAB nTab )
 {
-    delete pTabData[MAXTAB];
-
-    for (SCTAB i=MAXTAB; i>nTab; i--)
-        pTabData[i] = pTabData[i-1];
-
-    pTabData[nTab] = NULL;      // force creating new
+    if( nTab >= static_cast<SCTAB>(maTabData.size()))
+        maTabData.resize(nTab+1, NULL);
+    else
+        maTabData.insert( maTabData.begin() + nTab, NULL );
     CreateTabData( nTab );
 
-    UpdateThis();
+    UpdateCurrentTab();
     aMarkData.InsertTab( nTab );
+}
+
+void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
+{
+    if( nTab+nNewSheets >= static_cast<SCTAB>(maTabData.size()))
+        maTabData.resize(nTab+nNewSheets, NULL);
+    else
+    {
+        maTabData.insert( maTabData.begin() + nTab, nNewSheets, NULL );
+    }
+    for (SCTAB i = nTab; i < nTab + nNewSheets; ++i)
+    {
+        CreateTabData( i );
+        aMarkData.InsertTab( i );
+    }
+    UpdateCurrentTab();
 }
 
 void ScViewData::DeleteTab( SCTAB nTab )
 {
-    delete pTabData[nTab];
+    delete maTabData.at(nTab);
 
-    for (SCTAB i=nTab; i<MAXTAB; i++)
-        pTabData[i] = pTabData[i+1];
-
-    pTabData[MAXTAB] = NULL;
-
-    UpdateThis();
+    maTabData.erase(maTabData.begin() + nTab);
+    UpdateCurrentTab();
     aMarkData.DeleteTab( nTab );
+}
+
+void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
+{
+    for (SCTAB i = 0; i < nSheets; ++i)
+    {
+        aMarkData.DeleteTab( nTab + i );
+        delete maTabData.at(nTab + i);
+    }
+
+    maTabData.erase(maTabData.begin() + nTab, maTabData.begin()+ nTab+nSheets);
+    UpdateCurrentTab();
 }
 
 void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
@@ -540,21 +508,21 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
 
     if (nDestTab > MAXTAB)
     {
-        DBG_ERROR("Zuviele Tabellen");
+        OSL_FAIL("Zuviele Tabellen");
         return;
     }
 
-    delete pTabData[MAXTAB];
+    if (nSrcTab >= static_cast<SCTAB>(maTabData.size()))
+        OSL_FAIL("pTabData out of bounds, FIX IT");
 
-    for (SCTAB i=MAXTAB; i>nDestTab; i--)
-        pTabData[i] = pTabData[i-1];
+    EnsureTabDataSize(nDestTab + 1);
 
-    if ( pTabData[nSrcTab] )
-        pTabData[nDestTab] = new ScViewDataTable( *pTabData[nSrcTab] );
+    if ( maTabData[nSrcTab] )
+        maTabData.insert(maTabData.begin() + nDestTab, new ScViewDataTable( *maTabData[nSrcTab] ));
     else
-        pTabData[nDestTab] = NULL;
+        maTabData.insert(maTabData.begin() + nDestTab, NULL);
 
-    UpdateThis();
+    UpdateCurrentTab();
     aMarkData.InsertTab( nDestTab );
 }
 
@@ -562,52 +530,31 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
 {
     if (nDestTab==SC_TAB_APPEND)
         nDestTab = pDoc->GetTableCount() - 1;
-
-    SCTAB i;
-    ScViewDataTable* pTab = pTabData[nSrcTab];
-
-    SCTAB nInsTab = nDestTab;
-    if ( nSrcTab < nDestTab )
+    ScViewDataTable* pTab = NULL;
+    if (nSrcTab < static_cast<SCTAB>(maTabData.size()))
     {
-        --nInsTab;
-        for (i=nSrcTab; i<nDestTab; i++)
-            pTabData[i] = pTabData[i+1];
+        pTab = maTabData[nSrcTab];
+        maTabData.erase( maTabData.begin() + nSrcTab );
     }
+
+    if (nDestTab < static_cast<SCTAB>(maTabData.size()))
+        maTabData.insert( maTabData.begin() + nDestTab, pTab );
     else
-        for (i=nSrcTab; i>nDestTab; i--)
-            pTabData[i] = pTabData[i-1];
+    {
+        EnsureTabDataSize(nDestTab + 1);
+        maTabData[nDestTab] = pTab;
+    }
 
-    pTabData[nDestTab] = pTab;
-
-    UpdateThis();
+    UpdateCurrentTab();
     aMarkData.DeleteTab( nSrcTab );
-    aMarkData.InsertTab( nInsTab );         // ggf. angepasst
+    aMarkData.InsertTab( nDestTab );            // ggf. angepasst
 }
 
-//UNUSED2008-05  void ScViewData::UpdateOle( ScSplitPos /* eWhich */ )
-//UNUSED2008-05  {
-//UNUSED2008-05      GetDocShell()->UpdateOle(this);
-//UNUSED2008-05  }
-
-void ScViewData::SetViewShell( ScTabViewShell* pViewSh )
-{
-    if (pViewSh)
-    {
-        pViewShell  = pViewSh;
-        pView       = pViewSh;
-    }
-    else
-    {
-        pViewShell  = NULL;
-        pView       = NULL;
-    }
-}
 void ScViewData::CreateTabData( std::vector< SCTAB >& rvTabs )
 {
     std::vector< SCTAB >::iterator it_end = rvTabs.end();
     for ( std::vector< SCTAB >::iterator it = rvTabs.begin(); it != it_end; ++it )
-        if ( !pTabData[*it] )
-            CreateTabData( *it );
+        CreateTabData(*it);
 }
 
 void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
@@ -619,10 +566,10 @@ void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
 
     if ( bAll )
     {
-        for ( SCTAB i = 0; i <= MAXTAB; ++i )
+        for ( SCTAB i = 0; i < static_cast<SCTAB>(maTabData.size()); ++i )
         {
-            if ( pTabData[i] )
-                pTabData[i]->eZoomType = eNew;
+            if ( maTabData[i] )
+                maTabData[i]->eZoomType = eNew;
         }
         eDefZoomType = eNew;
     }
@@ -633,8 +580,8 @@ void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
         for ( ; it != it_end; ++it )
         {
             SCTAB i = *it;
-            if ( pTabData[i] )
-                pTabData[i]->eZoomType = eNew;
+            if ( i < static_cast<SCTAB>(maTabData.size()) && maTabData[i] )
+                maTabData[i]->eZoomType = eNew;
         }
     }
 }
@@ -676,19 +623,19 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
 
     if ( bAll )
     {
-        for ( SCTAB i = 0; i <= MAXTAB; ++i )
+        for ( SCTAB i = 0; i < static_cast<SCTAB>(maTabData.size()); ++i )
         {
-            if ( pTabData[i] )
+            if ( maTabData[i] )
             {
                 if ( bPagebreak )
                 {
-                    pTabData[i]->aPageZoomX = aValidX;
-                    pTabData[i]->aPageZoomY = aValidY;
+                    maTabData[i]->aPageZoomX = aValidX;
+                    maTabData[i]->aPageZoomY = aValidY;
                 }
                 else
                 {
-                    pTabData[i]->aZoomX = aValidX;
-                    pTabData[i]->aZoomY = aValidY;
+                    maTabData[i]->aZoomX = aValidX;
+                    maTabData[i]->aZoomY = aValidY;
                 }
             }
         }
@@ -710,17 +657,17 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
         for ( ; it != it_end; ++it )
         {
             SCTAB i = *it;
-            if ( pTabData[i] )
+            if ( i < static_cast<SCTAB>(maTabData.size()) && maTabData[i] )
             {
                 if ( bPagebreak )
                 {
-                    pTabData[i]->aPageZoomX = aValidX;
-                    pTabData[i]->aPageZoomY = aValidY;
+                    maTabData[i]->aPageZoomX = aValidX;
+                    maTabData[i]->aPageZoomY = aValidY;
                 }
                 else
                 {
-                    pTabData[i]->aZoomX = aValidX;
-                    pTabData[i]->aZoomY = aValidY;
+                    maTabData[i]->aZoomX = aValidX;
+                    maTabData[i]->aZoomY = aValidY;
                 }
             }
         }
@@ -743,6 +690,12 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, sal_Bool
     SetZoom( rNewX, rNewY, vTabs );
 }
 
+void ScViewData::SetShowGrid( bool bShow )
+{
+    CreateSelectedTabData();
+    maTabData[nTabNo]->bShowGrid = bShow;
+}
+
 void ScViewData::RefreshZoom()
 {
     // recalculate zoom-dependent values (only for current sheet)
@@ -754,7 +707,7 @@ void ScViewData::RefreshZoom()
     aLogicMode.SetScaleY( GetZoomY() );
 }
 
-void ScViewData::SetPagebreakMode( sal_Bool bSet )
+void ScViewData::SetPagebreakMode( bool bSet )
 {
     bPagebreak = bSet;
 
@@ -797,7 +750,7 @@ ScMarkType ScViewData::GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB&
 {
     //  parameter bMergeMark is no longer needed: The view's selection is never modified
     //  (a local copy is used), and a multi selection that adds to a single range can always
-    //  be treated like a single selection (#108266# - GetSimpleArea isn't used in selection
+    //  be treated like a single selection (GetSimpleArea isn't used in selection
     //  handling itself)
 
     ScRange aRange;
@@ -830,7 +783,7 @@ void ScViewData::GetMultiArea( ScRangeListRef& rRange ) const
     if (bMulti)
     {
         rRange = new ScRangeList;
-        aNewMark.FillRangeListWithMarks( rRange, sal_False );
+        aNewMark.FillRangeListWithMarks( rRange, false );
     }
     else
     {
@@ -853,7 +806,7 @@ sal_Bool ScViewData::SimpleColMarked()
         if (nStartRow==0 && nEndRow==MAXROW)
             return sal_True;
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool ScViewData::SimpleRowMarked()
@@ -868,7 +821,7 @@ sal_Bool ScViewData::SimpleRowMarked()
         if (nStartCol==0 && nEndCol==MAXCOL)
             return sal_True;
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool ScViewData::IsMultiMarked()
@@ -916,7 +869,7 @@ void ScViewData::GetFillData( SCCOL& rStartCol, SCROW& rStartRow,
 
 SCCOL ScViewData::GetOldCurX() const
 {
-    if (pThisTab->bOldCurValid)
+    if (pThisTab->mbOldCursorValid)
         return pThisTab->nOldCurX;
     else
         return pThisTab->nCurX;
@@ -924,7 +877,7 @@ SCCOL ScViewData::GetOldCurX() const
 
 SCROW ScViewData::GetOldCurY() const
 {
-    if (pThisTab->bOldCurValid)
+    if (pThisTab->mbOldCursorValid)
         return pThisTab->nOldCurY;
     else
         return pThisTab->nCurY;
@@ -934,12 +887,12 @@ void ScViewData::SetOldCursor( SCCOL nNewX, SCROW nNewY )
 {
     pThisTab->nOldCurX = nNewX;
     pThisTab->nOldCurY = nNewY;
-    pThisTab->bOldCurValid = sal_True;
+    pThisTab->mbOldCursorValid = true;
 }
 
 void ScViewData::ResetOldCursor()
 {
-    pThisTab->bOldCurValid = sal_False;
+    pThisTab->mbOldCursorValid = false;
 }
 
 Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY,
@@ -958,7 +911,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTabNo );
     ScHSplitPos eHWhich = WhichH(eWhich);
 
-    sal_Bool bWasThere = sal_False;
+    sal_Bool bWasThere = false;
     if (pEditView[eWhich])
     {
         //  Wenn die View schon da ist, nichts aufrufen, was die Cursorposition aendert
@@ -971,7 +924,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         if (pEditView[eWhich]->GetWindow() != pWin)
         {
             pEditView[eWhich]->SetWindow(pWin);
-            DBG_ERROR("EditView Window geaendert");
+            OSL_FAIL("EditView Window geaendert");
         }
     }
     else
@@ -987,7 +940,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     sal_uLong nVC = pEditView[eWhich]->GetControlWord();
     pEditView[eWhich]->SetControlWord(nVC & ~EV_CNTRL_AUTOSCROLL);
 
-    bEditActive[eWhich] = sal_True;
+    bEditActive[eWhich] = true;
 
     const ScPatternAttr* pPattern = pDoc->GetPattern( nNewX, nNewY, nTabNo );
     SvxCellHorJustify eJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
@@ -1036,14 +989,14 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         if ( bLayoutRTL )
             bGrowBackwards = !bGrowBackwards;                       // invert on RTL sheet
         if ( bAsianVertical )
-            bGrowCentered = bGrowToLeft = bGrowBackwards = sal_False;   // keep old behavior for asian mode
+            bGrowCentered = bGrowToLeft = bGrowBackwards = false;   // keep old behavior for asian mode
 
         long nSizeXPix;
         if (bBreak && !bAsianVertical)
             nSizeXPix = aPixRect.GetWidth();    // Papersize -> kein H-Scrolling
         else
         {
-            DBG_ASSERT(pView,"keine View fuer EditView");
+            OSL_ENSURE(pView,"keine View fuer EditView");
 
             if ( bGrowCentered )
             {
@@ -1061,7 +1014,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             if ( nSizeXPix <= 0 )
                 nSizeXPix = aPixRect.GetWidth();    // editing outside to the right of the window -> keep cell width
         }
-        DBG_ASSERT(pView,"keine View fuer EditView");
+        OSL_ENSURE(pView,"keine View fuer EditView");
         long nSizeYPix = pView->GetGridHeight(WhichV(eWhich)) - aPixRect.Top();
         if ( nSizeYPix <= 0 )
             nSizeYPix = aPixRect.GetHeight();   // editing outside below the window -> keep cell height
@@ -1069,12 +1022,12 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         Size aPaperSize = pView->GetActiveWin()->PixelToLogic( Size( nSizeXPix, nSizeYPix ), GetLogicMode() );
         if ( bBreak && !bAsianVertical && SC_MOD()->GetInputOptions().GetTextWysiwyg() )
         {
-            //  #95593# if text is formatted for printer, use the exact same paper width
+            //  if text is formatted for printer, use the exact same paper width
             //  (and same line breaks) as for output.
 
             Fraction aFract(1,1);
             Rectangle aUtilRect = ScEditUtil( pDoc,nNewX,nNewY,nTabNo, Point(0,0), pWin,
-                                    HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, sal_False );
+                                    HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, false );
             aPaperSize.Width() = aUtilRect.GetWidth();
         }
         pNewEngine->SetPaperSize( aPaperSize );
@@ -1099,17 +1052,13 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             bMoveArea = bLayoutRTL;
         }
         aVis.Left() = aVis.Right() - nDiff;
-        // --> OD 2005-12-22 #i49561#
-        // Important note:
+        // #i49561# Important note:
         // The set offset of the visible area of the EditView for centered and
         // right alignment in horizontal layout is consider by instances of
         // class <ScEditObjectViewForwarder> in its methods <LogicToPixel(..)>
         // and <PixelToLogic(..)>. This is needed for the correct visibility
         // of paragraphs in edit mode at the accessibility API.
-        // <--
         pEditView[eWhich]->SetVisArea(aVis);
-        //
-
         //  UpdateMode has been disabled in ScInputHandler::StartTable
         //  must be enabled before EditGrowY (GetTextHeight)
         pNewEngine->SetUpdateMode( sal_True );
@@ -1122,8 +1071,6 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         Point aDocPos = pEditView[eWhich]->GetWindowPosTopLeft(0);
         if (aDocPos.Y() < aOutputArea.Top())
             pEditView[eWhich]->Scroll( 0, aOutputArea.Top() - aDocPos.Y() );
-
-        //!     Status (Event) zuruecksetzen
     }
 
                                                     // hier muss bEditActive schon gesetzt sein
@@ -1131,20 +1078,18 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     if (!bWasThere)
         pNewEngine->InsertView(pEditView[eWhich]);
 
-    //      Hintergrundfarbe der Zelle
+    //      background color of the cell
     Color aBackCol = ((const SvxBrushItem&)pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
 
     ScModule* pScMod = SC_MOD();
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed sal_True)
-    if ( aBackCol.GetTransparency() > 0 ||
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    if ( aBackCol.GetTransparency() > 0 )
     {
         aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
     }
     pEditView[eWhich]->SetBackgroundColor( aBackCol );
 
-    pEditView[eWhich]->Invalidate();            //  noetig ??
-    //  noetig, wenn Position geaendert
+    pEditView[eWhich]->Invalidate();            //  needed ??
+    //  needed, wenn position changed
 }
 
 IMPL_LINK_INLINE_START( ScViewData, EmptyEditHdl, EditStatus *, EMPTYARG )
@@ -1165,7 +1110,7 @@ IMPL_LINK( ScViewData, EditEngineHdl, EditStatus *, pStatus )
         {
             ScSplitPos eWhich = GetActivePart();
             if (pEditView[eWhich])
-                pEditView[eWhich]->ShowCursor(sal_False);
+                pEditView[eWhich]->ShowCursor(false);
         }
     }
     return 0;
@@ -1198,7 +1143,7 @@ void ScViewData::EditGrowX()
     //  Margin ist schon bei der urspruenglichen Breite beruecksichtigt
     long nTextWidth = pEngine->CalcTextWidth();
 
-    sal_Bool bChanged = sal_False;
+    sal_Bool bChanged = false;
     sal_Bool bAsianVertical = pEngine->IsVertical();
 
     //  get bGrow... variables the same way as in SetEditEngine
@@ -1211,9 +1156,9 @@ void ScViewData::EditGrowX()
     if ( bLayoutRTL )
         bGrowBackwards = !bGrowBackwards;                       // invert on RTL sheet
     if ( bAsianVertical )
-        bGrowCentered = bGrowToLeft = bGrowBackwards = sal_False;   // keep old behavior for asian mode
+        bGrowCentered = bGrowToLeft = bGrowBackwards = false;   // keep old behavior for asian mode
 
-    sal_Bool bUnevenGrow = sal_False;
+    sal_Bool bUnevenGrow = false;
     if ( bGrowCentered )
     {
         while (aArea.GetWidth() + 0 < nTextWidth && ( nEditStartCol > nLeft || nEditEndCol < nRight ) )
@@ -1333,7 +1278,7 @@ void ScViewData::EditGrowX()
                 aVis.Right() -= nMove;
             }
             pCurView->SetVisArea( aVis );
-            bMoveArea = sal_False;
+            bMoveArea = false;
         }
 
         pCurView->SetOutputArea(aArea);
@@ -1382,7 +1327,7 @@ void ScViewData::EditGrowY( sal_Bool bInitial )
     long        nOldBottom = aArea.Bottom();
     long        nTextHeight = pEngine->GetTextHeight();
 
-    //  #106635# When editing a formula in a cell with optimal height, allow a larger portion
+    //  When editing a formula in a cell with optimal height, allow a larger portion
     //  to be clipped before extending to following rows, to avoid obscuring cells for
     //  reference input (next row is likely to be useful in formulas).
     long nAllowedExtra = SC_GROWY_SMALL_EXTRA;
@@ -1399,8 +1344,8 @@ void ScViewData::EditGrowY( sal_Bool bInitial )
             nAllowedExtra = SC_GROWY_BIG_EXTRA;
     }
 
-    sal_Bool bChanged = sal_False;
-    sal_Bool bMaxReached = sal_False;
+    sal_Bool bChanged = false;
+    sal_Bool bMaxReached = false;
     while (aArea.GetHeight() + nAllowedExtra < nTextHeight && nEditEndRow < nBottom && !bMaxReached)
     {
         ++nEditEndRow;
@@ -1445,7 +1390,7 @@ void ScViewData::ResetEditView()
                 pEngine->RemoveView(pEditView[i]);
                 pEditView[i]->SetOutputArea( Rectangle() );
             }
-            bEditActive[i] = sal_False;
+            bEditActive[i] = false;
         }
 
     if (pEngine)
@@ -1473,37 +1418,48 @@ void ScViewData::GetEditView( ScSplitPos eWhich, EditView*& rViewPtr, SCCOL& rCo
 
 void ScViewData::CreateTabData( SCTAB nNewTab )
 {
-    if (!pTabData[nNewTab])
-    {
-        pTabData[nNewTab] = new ScViewDataTable;
+    EnsureTabDataSize(nNewTab + 1);
 
-        pTabData[nNewTab]->eZoomType  = eDefZoomType;
-        pTabData[nNewTab]->aZoomX     = aDefZoomX;
-        pTabData[nNewTab]->aZoomY     = aDefZoomY;
-        pTabData[nNewTab]->aPageZoomX = aDefPageZoomX;
-        pTabData[nNewTab]->aPageZoomY = aDefPageZoomY;
+    if (!maTabData[nNewTab])
+    {
+        maTabData[nNewTab] = new ScViewDataTable;
+
+        maTabData[nNewTab]->eZoomType  = eDefZoomType;
+        maTabData[nNewTab]->aZoomX     = aDefZoomX;
+        maTabData[nNewTab]->aZoomY     = aDefZoomY;
+        maTabData[nNewTab]->aPageZoomX = aDefPageZoomX;
+        maTabData[nNewTab]->aPageZoomY = aDefPageZoomY;
     }
 }
 
 void ScViewData::CreateSelectedTabData()
 {
-    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabCount = aMarkData.GetLastSelected();
     for (SCTAB i=0; i<nTabCount; i++)
-        if ( aMarkData.GetTableSelect(i) && !pTabData[i] )
-            CreateTabData( i );
+        if ( aMarkData.GetTableSelect(i))
+            CreateTabData(i);
+}
+
+void ScViewData::EnsureTabDataSize(size_t nSize)
+{
+    if (nSize >= maTabData.size())
+    {
+        size_t n = nSize - maTabData.size() + 1;
+        maTabData.insert(maTabData.end(), n, NULL);
+    }
 }
 
 void ScViewData::SetTabNo( SCTAB nNewTab )
 {
     if (!ValidTab(nNewTab))
     {
-        DBG_ERROR("falsche Tabellennummer");
+        OSL_FAIL("falsche Tabellennummer");
         return;
     }
 
     nTabNo = nNewTab;
     CreateTabData(nTabNo);
-    pThisTab = pTabData[nTabNo];
+    pThisTab = maTabData[nTabNo];
 
     CalcPPT();          //  for common column width correction
     RecalcPixPos();     //! nicht immer noetig!
@@ -1516,14 +1472,14 @@ void ScViewData::SetActivePart( ScSplitPos eNewActive )
 
 Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScHSplitPos eWhich ) const
 {
-    DBG_ASSERT( eWhich==SC_SPLIT_LEFT || eWhich==SC_SPLIT_RIGHT, "Falsche Position" );
+    OSL_ENSURE( eWhich==SC_SPLIT_LEFT || eWhich==SC_SPLIT_RIGHT, "Falsche Position" );
     ScSplitPos ePos = ( eWhich == SC_SPLIT_LEFT ) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
     return GetScrPos( nWhereX, nWhereY, ePos );
 }
 
 Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScVSplitPos eWhich ) const
 {
-    DBG_ASSERT( eWhich==SC_SPLIT_TOP || eWhich==SC_SPLIT_BOTTOM, "Falsche Position" );
+    OSL_ENSURE( eWhich==SC_SPLIT_TOP || eWhich==SC_SPLIT_BOTTOM, "Falsche Position" );
     ScSplitPos ePos = ( eWhich == SC_SPLIT_TOP ) ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT;
     return GetScrPos( nWhereX, nWhereY, ePos );
 }
@@ -1644,12 +1600,12 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 }
 
 //
-//      Anzahl Zellen auf einem Bildschirm
+//      Number of cells on a screen
 //
 
 SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeX ) const
 {
-    DBG_ASSERT( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
+    OSL_ENSURE( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
 
     if (pView)
         ((ScViewData*)this)->aScrSize.Width()  = pView->GetGridWidth(eWhichX);
@@ -1663,7 +1619,7 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
     else
         nX = nPosX-1;           // rueckwaerts
 
-    sal_Bool bOut = sal_False;
+    sal_Bool bOut = false;
     for ( ; nScrPosX<=nScrSizeX && !bOut; nX = sal::static_int_cast<SCsCOL>(nX + nDir) )
     {
         SCsCOL  nColNo = nX;
@@ -1691,7 +1647,7 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
 
 SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeY ) const
 {
-    DBG_ASSERT( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
+    OSL_ENSURE( nDir==1 || nDir==-1, "falscher CellsAt Aufruf" );
 
     if (pView)
         ((ScViewData*)this)->aScrSize.Height() = pView->GetGridHeight(eWhichY);
@@ -1747,15 +1703,6 @@ SCROW ScViewData::PrevCellsY( ScVSplitPos eWhichY ) const
     return CellsAtY( GetPosY( eWhichY ), -1, eWhichY, SC_SIZE_NONE );
 }
 
-//UNUSED2008-05  SCCOL ScViewData::LastCellsX( ScHSplitPos eWhichX ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      return CellsAtX( MAXCOL+1, -1, eWhichX, SC_SIZE_NONE );
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  SCROW ScViewData::LastCellsY( ScVSplitPos eWhichY ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      return CellsAtY( MAXROW+1, -1, eWhichY, SC_SIZE_NONE );
-//UNUSED2008-05  }
 
 sal_Bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix )
 {
@@ -1790,7 +1737,7 @@ sal_Bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, lon
     {
         rSizeXPix = ToPixel( pDoc->GetColWidth( nX, nTabNo ), nPPTX );
         rSizeYPix = ToPixel( pDoc->GetRowHeight( nY, nTabNo ), nPPTY );
-        return sal_False;
+        return false;
     }
 }
 
@@ -1875,12 +1822,11 @@ sal_Bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWh
     {
         //! public Methode um Position anzupassen
 
-        sal_Bool bHOver = sal_False;
-        while (pDoc->IsHorOverlapped( rPosX, rPosY, nTabNo ))
-            { --rPosX; bHOver=sal_True; }
-        sal_Bool bVOver = sal_False;
-        while (pDoc->IsVerOverlapped( rPosX, rPosY, nTabNo ))
-            { --rPosY; bVOver=sal_True; }
+        SCCOL nOrigX = rPosX;
+        SCROW nOrigY = rPosY;
+        pDoc->SkipOverlapped(rPosX, rPosY, nTabNo);
+        bool bHOver = (nOrigX != rPosX);
+        bool bVOver = (nOrigY != rPosY);
 
         if ( bRepair && ( bHOver || bVOver ) )
         {
@@ -1889,19 +1835,19 @@ sal_Bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWh
             if ( ( bHOver && pMerge->GetColMerge() <= 1 ) ||
                  ( bVOver && pMerge->GetRowMerge() <= 1 ) )
             {
-                DBG_ERROR("Merge-Fehler gefunden");
+                OSL_FAIL("Merge-Fehler gefunden");
 
                 pDoc->RemoveFlagsTab( 0,0, MAXCOL,MAXROW, nTabNo, SC_MF_HOR | SC_MF_VER );
                 SCCOL nEndCol = MAXCOL;
                 SCROW nEndRow = MAXROW;
-                pDoc->ExtendMerge( 0,0, nEndCol,nEndRow, nTabNo, sal_True, sal_False );
+                pDoc->ExtendMerge( 0,0, nEndCol,nEndRow, nTabNo, sal_True, false );
                 if (pDocShell)
                     pDocShell->PostPaint( ScRange(0,0,nTabNo,MAXCOL,MAXROW,nTabNo), PAINT_GRID );
             }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 void ScViewData::GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
@@ -2071,7 +2017,7 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     if ( pDoc->IsLayoutRTL( nTabNo ) )
         nTwips = -nTwips;
     SCCOL nX1 = 0;
-    bEnd = sal_False;
+    bEnd = false;
     while (!bEnd)
     {
         nAdd = (long) pDoc->GetColWidth(nX1,nTabNo);
@@ -2087,7 +2033,7 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     nSize = 0;
     nTwips = (long) (rVisAreaStart.Y() / HMM_PER_TWIPS);
     SCROW nY1 = 0;
-    bEnd = sal_False;
+    bEnd = false;
     while (!bEnd)
     {
         nAdd = (long) pDoc->GetRowHeight(nY1,nTabNo);
@@ -2128,37 +2074,37 @@ SfxObjectShell* ScViewData::GetSfxDocShell() const
 
 SfxBindings& ScViewData::GetBindings()
 {
-    DBG_ASSERT( pViewShell, "GetBindings() without ViewShell" );
+    OSL_ENSURE( pViewShell, "GetBindings() without ViewShell" );
     return pViewShell->GetViewFrame()->GetBindings();
 }
 
 SfxDispatcher& ScViewData::GetDispatcher()
 {
-    DBG_ASSERT( pViewShell, "GetDispatcher() without ViewShell" );
+    OSL_ENSURE( pViewShell, "GetDispatcher() without ViewShell" );
     return *pViewShell->GetViewFrame()->GetDispatcher();
 }
 
 Window* ScViewData::GetDialogParent()
 {
-    DBG_ASSERT( pViewShell, "GetDialogParent() ohne ViewShell" );
+    OSL_ENSURE( pViewShell, "GetDialogParent() ohne ViewShell" );
     return pViewShell->GetDialogParent();
 }
 
 Window* ScViewData::GetActiveWin()
 {
-    DBG_ASSERT( pView, "GetActiveWin() ohne View" );
+    OSL_ENSURE( pView, "GetActiveWin() ohne View" );
     return pView->GetActiveWin();
 }
 
 ScDrawView* ScViewData::GetScDrawView()
 {
-    DBG_ASSERT( pView, "GetScDrawView() ohne View" );
+    OSL_ENSURE( pView, "GetScDrawView() ohne View" );
     return pView->GetScDrawView();
 }
 
 sal_Bool ScViewData::IsMinimized()
 {
-    DBG_ASSERT( pView, "IsMinimized() ohne View" );
+    OSL_ENSURE( pView, "IsMinimized() ohne View" );
     return pView->IsMinimized();
 }
 
@@ -2167,7 +2113,7 @@ void ScViewData::UpdateScreenZoom( const Fraction& rNewX, const Fraction& rNewY 
     Fraction aOldX = GetZoomX();
     Fraction aOldY = GetZoomY();
 
-    SetZoom( rNewX, rNewY, sal_False );
+    SetZoom( rNewX, rNewY, false );
 
     Fraction aWidth = GetZoomX();
     aWidth *= Fraction( aScrSize.Width(),1 );
@@ -2188,7 +2134,7 @@ void ScViewData::CalcPPT()
         nPPTX = nPPTX / pDocShell->GetOutputFactor();   // Faktor ist Drucker zu Bildschirm
     nPPTY = ScGlobal::nScreenPPTY * (double) GetZoomY();
 
-    //  #83616# if detective objects are present,
+    //  if detective objects are present,
     //  try to adjust horizontal scale so the most common column width has minimal rounding errors,
     //  to avoid differences between cell and drawing layer output
 
@@ -2220,8 +2166,6 @@ void ScViewData::CalcPPT()
         }
     }
 }
-
-//------------------------------------------------------------------
 
 #define SC_OLD_TABSEP   '/'
 #define SC_NEW_TABSEP   '+'
@@ -2257,45 +2201,45 @@ void ScViewData::WriteUserData(String& rData)
     for (SCTAB i=0; i<nTabCount; i++)
     {
         rData += ';';                   // Numerierung darf auf keinen Fall durcheinanderkommen
-        if (pTabData[i])
+        if (i < static_cast<SCTAB>(maTabData.size()) && maTabData[i])
         {
             sal_Unicode cTabSep = SC_OLD_TABSEP;                // wie 3.1
-            if ( pTabData[i]->nCurY > MAXROW_30 ||
-                 pTabData[i]->nPosY[0] > MAXROW_30 || pTabData[i]->nPosY[1] > MAXROW_30 ||
-                 ( pTabData[i]->eVSplitMode == SC_SPLIT_FIX &&
-                    pTabData[i]->nFixPosY > MAXROW_30 ) )
+            if ( maTabData[i]->nCurY > MAXROW_30 ||
+                 maTabData[i]->nPosY[0] > MAXROW_30 || maTabData[i]->nPosY[1] > MAXROW_30 ||
+                 ( maTabData[i]->eVSplitMode == SC_SPLIT_FIX &&
+                    maTabData[i]->nFixPosY > MAXROW_30 ) )
             {
                 cTabSep = SC_NEW_TABSEP;        // um eine 3.1-Version nicht umzubringen
             }
 
 
-            rData += String::CreateFromInt32( pTabData[i]->nCurX );
+            rData += String::CreateFromInt32( maTabData[i]->nCurX );
             rData += cTabSep;
-            rData += String::CreateFromInt32( pTabData[i]->nCurY );
+            rData += String::CreateFromInt32( maTabData[i]->nCurY );
             rData += cTabSep;
-            rData += String::CreateFromInt32( pTabData[i]->eHSplitMode );
+            rData += String::CreateFromInt32( maTabData[i]->eHSplitMode );
             rData += cTabSep;
-            rData += String::CreateFromInt32( pTabData[i]->eVSplitMode );
+            rData += String::CreateFromInt32( maTabData[i]->eVSplitMode );
             rData += cTabSep;
-            if ( pTabData[i]->eHSplitMode == SC_SPLIT_FIX )
-                rData += String::CreateFromInt32( pTabData[i]->nFixPosX );
+            if ( maTabData[i]->eHSplitMode == SC_SPLIT_FIX )
+                rData += String::CreateFromInt32( maTabData[i]->nFixPosX );
             else
-                rData += String::CreateFromInt32( pTabData[i]->nHSplitPos );
+                rData += String::CreateFromInt32( maTabData[i]->nHSplitPos );
             rData += cTabSep;
-            if ( pTabData[i]->eVSplitMode == SC_SPLIT_FIX )
-                rData += String::CreateFromInt32( pTabData[i]->nFixPosY );
+            if ( maTabData[i]->eVSplitMode == SC_SPLIT_FIX )
+                rData += String::CreateFromInt32( maTabData[i]->nFixPosY );
             else
-                rData += String::CreateFromInt32( pTabData[i]->nVSplitPos );
+                rData += String::CreateFromInt32( maTabData[i]->nVSplitPos );
             rData += cTabSep;
-            rData += String::CreateFromInt32( pTabData[i]->eWhichActive );
+            rData += String::CreateFromInt32( maTabData[i]->eWhichActive );
             rData += cTabSep;
-            rData += String::CreateFromInt32( pTabData[i]->nPosX[0] );
+            rData += String::CreateFromInt32( maTabData[i]->nPosX[0] );
             rData += cTabSep;
-            rData += String::CreateFromInt32( pTabData[i]->nPosX[1] );
+            rData += String::CreateFromInt32( maTabData[i]->nPosX[1] );
             rData += cTabSep;
-            rData += String::CreateFromInt32( pTabData[i]->nPosY[0] );
+            rData += String::CreateFromInt32( maTabData[i]->nPosY[0] );
             rData += cTabSep;
-            rData += String::CreateFromInt32( pTabData[i]->nPosY[1] );
+            rData += String::CreateFromInt32( maTabData[i]->nPosY[1] );
         }
     }
 }
@@ -2308,18 +2252,16 @@ void ScViewData::ReadUserData(const String& rData)
     xub_StrLen nCount = rData.GetTokenCount(';');
     if ( nCount <= 2 )
     {
-        //  #45208# beim Reload in der Seitenansicht sind evtl. die Preview-UserData
+        //  beim Reload in der Seitenansicht sind evtl. die Preview-UserData
         //  stehengelassen worden. Den Zoom von der Preview will man hier nicht...
-        DBG_ERROR("ReadUserData: das sind nicht meine Daten");
+        OSL_FAIL("ReadUserData: das sind nicht meine Daten");
         return;
     }
 
     String aTabOpt;
     xub_StrLen nTagLen = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(TAG_TABBARWIDTH)).Len();
 
-    //-------------------
     // nicht pro Tabelle:
-    //-------------------
     SCTAB nTabStart = 2;
 
     Fraction aZoomX, aZoomY, aPageZoomX, aPageZoomY;    //! evaluate (all sheets?)
@@ -2353,15 +2295,14 @@ void ScViewData::ReadUserData(const String& rData)
         nTabStart = 3;
     }
 
-    //-------------
     // pro Tabelle:
-    //-------------
     SCTAB nPos = 0;
     while ( nCount > nPos+nTabStart )
     {
         aTabOpt = rData.GetToken(static_cast<xub_StrLen>(nPos+nTabStart));
-        if (!pTabData[nPos])
-            pTabData[nPos] = new ScViewDataTable;
+        EnsureTabDataSize(nPos + 1);
+        if (!maTabData[nPos])
+            maTabData[nPos] = new ScViewDataTable;
 
         sal_Unicode cTabSep = 0;
         if (aTabOpt.GetTokenCount(SC_OLD_TABSEP) >= 11)
@@ -2374,44 +2315,44 @@ void ScViewData::ReadUserData(const String& rData)
 
         if (cTabSep)
         {
-            pTabData[nPos]->nCurX = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(0,cTabSep).ToInt32()));
-            pTabData[nPos]->nCurY = SanitizeRow( aTabOpt.GetToken(1,cTabSep).ToInt32());
-            pTabData[nPos]->eHSplitMode = (ScSplitMode) aTabOpt.GetToken(2,cTabSep).ToInt32();
-            pTabData[nPos]->eVSplitMode = (ScSplitMode) aTabOpt.GetToken(3,cTabSep).ToInt32();
+            maTabData[nPos]->nCurX = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(0,cTabSep).ToInt32()));
+            maTabData[nPos]->nCurY = SanitizeRow( aTabOpt.GetToken(1,cTabSep).ToInt32());
+            maTabData[nPos]->eHSplitMode = (ScSplitMode) aTabOpt.GetToken(2,cTabSep).ToInt32();
+            maTabData[nPos]->eVSplitMode = (ScSplitMode) aTabOpt.GetToken(3,cTabSep).ToInt32();
 
-            if ( pTabData[nPos]->eHSplitMode == SC_SPLIT_FIX )
+            if ( maTabData[nPos]->eHSplitMode == SC_SPLIT_FIX )
             {
-                pTabData[nPos]->nFixPosX = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(4,cTabSep).ToInt32()));
+                maTabData[nPos]->nFixPosX = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(4,cTabSep).ToInt32()));
                 UpdateFixX(nPos);
             }
             else
-                pTabData[nPos]->nHSplitPos = aTabOpt.GetToken(4,cTabSep).ToInt32();
+                maTabData[nPos]->nHSplitPos = aTabOpt.GetToken(4,cTabSep).ToInt32();
 
-            if ( pTabData[nPos]->eVSplitMode == SC_SPLIT_FIX )
+            if ( maTabData[nPos]->eVSplitMode == SC_SPLIT_FIX )
             {
-                pTabData[nPos]->nFixPosY = SanitizeRow( aTabOpt.GetToken(5,cTabSep).ToInt32());
+                maTabData[nPos]->nFixPosY = SanitizeRow( aTabOpt.GetToken(5,cTabSep).ToInt32());
                 UpdateFixY(nPos);
             }
             else
-                pTabData[nPos]->nVSplitPos = aTabOpt.GetToken(5,cTabSep).ToInt32();
+                maTabData[nPos]->nVSplitPos = aTabOpt.GetToken(5,cTabSep).ToInt32();
 
-            pTabData[nPos]->eWhichActive = (ScSplitPos) aTabOpt.GetToken(6,cTabSep).ToInt32();
-            pTabData[nPos]->nPosX[0] = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(7,cTabSep).ToInt32()));
-            pTabData[nPos]->nPosX[1] = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(8,cTabSep).ToInt32()));
-            pTabData[nPos]->nPosY[0] = SanitizeRow( aTabOpt.GetToken(9,cTabSep).ToInt32());
-            pTabData[nPos]->nPosY[1] = SanitizeRow( aTabOpt.GetToken(10,cTabSep).ToInt32());
+            maTabData[nPos]->eWhichActive = (ScSplitPos) aTabOpt.GetToken(6,cTabSep).ToInt32();
+            maTabData[nPos]->nPosX[0] = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(7,cTabSep).ToInt32()));
+            maTabData[nPos]->nPosX[1] = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(8,cTabSep).ToInt32()));
+            maTabData[nPos]->nPosY[0] = SanitizeRow( aTabOpt.GetToken(9,cTabSep).ToInt32());
+            maTabData[nPos]->nPosY[1] = SanitizeRow( aTabOpt.GetToken(10,cTabSep).ToInt32());
 
             //  Test, ob der aktive Teil laut SplitMode ueberhaupt existiert
             //  (Bug #44516#)
-            ScSplitPos eTest = pTabData[nPos]->eWhichActive;
+            ScSplitPos eTest = maTabData[nPos]->eWhichActive;
             if ( ( WhichH( eTest ) == SC_SPLIT_RIGHT &&
-                    pTabData[nPos]->eHSplitMode == SC_SPLIT_NONE ) ||
+                    maTabData[nPos]->eHSplitMode == SC_SPLIT_NONE ) ||
                  ( WhichV( eTest ) == SC_SPLIT_TOP &&
-                    pTabData[nPos]->eVSplitMode == SC_SPLIT_NONE ) )
+                    maTabData[nPos]->eVSplitMode == SC_SPLIT_NONE ) )
             {
                 //  dann wieder auf Default (unten links)
-                pTabData[nPos]->eWhichActive = SC_SPLIT_BOTTOMLEFT;
-                DBG_ERROR("SplitPos musste korrigiert werden");
+                maTabData[nPos]->eWhichActive = SC_SPLIT_BOTTOMLEFT;
+                OSL_FAIL("SplitPos musste korrigiert werden");
             }
         }
         ++nPos;
@@ -2436,9 +2377,9 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
         rDocSett.mfTabBarWidth = pView->GetRelTabBarWidth();
 
     // sheet settings
-    for( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
+    for( SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabData.size()); ++nTab )
     {
-        if( const ScViewDataTable* pViewTab = pTabData[ nTab ] )
+        if( const ScViewDataTable* pViewTab = maTabData[ nTab ] )
         {
             ScExtTabSettings& rTabSett = rDocOpt.GetOrCreateTabSettings( nTab );
 
@@ -2449,7 +2390,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             bool bVSplit = eVSplit != SC_SPLIT_NONE;
             bool bRealSplit = (eHSplit == SC_SPLIT_NORMAL) || (eVSplit == SC_SPLIT_NORMAL);
             bool bFrozen    = (eHSplit == SC_SPLIT_FIX)    || (eVSplit == SC_SPLIT_FIX);
-            DBG_ASSERT( !bRealSplit || !bFrozen, "ScViewData::WriteExtOptions - split and freeze in same sheet" );
+            OSL_ENSURE( !bRealSplit || !bFrozen, "ScViewData::WriteExtOptions - split and freeze in same sheet" );
             rTabSett.mbFrozenPanes = !bRealSplit && bFrozen;
 
             // split and freeze position
@@ -2510,6 +2451,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
                 if( rGridColor.GetColor() != SC_STD_GRIDCOLOR )
                     rTabSett.maGridColor = rGridColor;
             }
+            rTabSett.mbShowGrid = pViewTab->bShowGrid;
 
             // view mode and zoom
             rTabSett.mbPageMode = bPagebreak;
@@ -2537,15 +2479,15 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
     pView->SetPendingRelTabBarWidth( rDocSett.mfTabBarWidth );
 
     // sheet settings
-    for( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
+    for( SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabData.size()); ++nTab )
     {
         if( const ScExtTabSettings* pTabSett = rDocOpt.GetTabSettings( nTab ) )
         {
-            if( !pTabData[ nTab ] )
-                pTabData[ nTab ] = new ScViewDataTable;
+            if( !maTabData[ nTab ] )
+                maTabData[ nTab ] = new ScViewDataTable;
 
             const ScExtTabSettings& rTabSett = *pTabSett;
-            ScViewDataTable& rViewTab = *pTabData[ nTab ];
+            ScViewDataTable& rViewTab = *maTabData[ nTab ];
 
             // split mode initialization
             bool bFrozen = rTabSett.mbFrozenPanes;
@@ -2582,7 +2524,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
             {
                 Point aPixel = Application::GetDefaultDevice()->LogicToPixel(
                                 rTabSett.maSplitPos, MapMode( MAP_TWIP ) );  //! Zoom?
-                // #109648# - the test for use of printer metrics for text formatting here
+                // the test for use of printer metrics for text formatting here
                 // effectively results in the nFactor = 1.0 regardless of the Option setting.
                 if( pDocShell && SC_MOD()->GetInputOptions().GetTextWysiwyg())
                 {
@@ -2642,15 +2584,11 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
             if( rTabSett.mnPageZoom )
                 rViewTab.aPageZoomX = rViewTab.aPageZoomY = Fraction( rTabSett.mnPageZoom, 100L );
 
+            rViewTab.bShowGrid = rTabSett.mbShowGrid;
+
             // get some settings from displayed Excel sheet, set at Calc document
             if( nTab == GetTabNo() )
             {
-                // selection only for displayed sheet, do not select single cell
-// Disabled, does not work correctly. Anyway, our own XML filters do not import a selection at all.
-//                const ScRangeList& rSel = rTabSett.maSelection;
-//                if( (rSel.Count() >= 2) || ((rSel.Count() == 1) && (*rSel.GetObject( 0 ) != ScRange( rCursor ))) )
-//                    rMarkData.MarkFromRangeList( rTabSett.maSelection, sal_False );
-
                 // grid color -- #i47435# set automatic grid color explicitly
                 if( pOptions )
                 {
@@ -2688,22 +2626,21 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
         SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
         pSettings[SC_VIEW_ID].Value <<= sBuffer.makeStringAndClear();
 
-        SCTAB nTabCount (pDoc->GetTableCount());
         uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
-        DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
+        OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
         if( xServiceFactory.is() )
         {
             rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.NamedPropertyValues"));
             uno::Reference<container::XNameContainer> xNameContainer = uno::Reference<container::XNameContainer>(xServiceFactory->createInstance(sName), uno::UNO_QUERY);
             if (xNameContainer.is())
             {
-                for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                for (SCTAB nTab=0; nTab<static_cast<SCTAB>(maTabData.size()); nTab++)
                 {
-                    if (pTabData[nTab])
+                    if (maTabData[nTab])
                     {
                         uno::Sequence <beans::PropertyValue> aTableViewSettings;
-                        pTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this, nTab);
+                        maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this, nTab);
                         String sTabName;
                         GetDocument()->GetName( nTab, sTabName );
                         rtl::OUString sOUName(sTabName);
@@ -2716,11 +2653,11 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
                         //#101739#; two tables with the same name are possible
                         catch ( container::ElementExistException& )
                         {
-                            DBG_ERRORFILE("seems there are two tables with the same name");
+                            OSL_FAIL("seems there are two tables with the same name");
                         }
                         catch ( uno::RuntimeException& )
                         {
-                            DBG_ERRORFILE("something went wrong");
+                            OSL_FAIL("something went wrong");
                         }
                     }
                 }
@@ -2796,7 +2733,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
     sal_Int32 nCount(rSettings.getLength());
     sal_Int32 nTemp32(0);
     sal_Int16 nTemp16(0);
-    sal_Bool bPageMode(sal_False);
+    sal_Bool bPageMode(false);
     for (sal_Int32 i = 0; i < nCount; i++)
     {
         // SC_VIEWID has to parse and use by mba
@@ -2817,9 +2754,12 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                         uno::Sequence<beans::PropertyValue> aTabSettings;
                         if (aAny >>= aTabSettings)
                         {
-                            pTabData[nTab] = new ScViewDataTable;
+                            EnsureTabDataSize(nTab + 1);
+                            if (!maTabData[nTab])
+                                maTabData[nTab] = new ScViewDataTable;
+
                             bool bHasZoom = false;
-                            pTabData[nTab]->ReadUserDataSequence(aTabSettings, *this, nTab, bHasZoom);
+                            maTabData[nTab]->ReadUserDataSequence(aTabSettings, *this, nTab, bHasZoom);
                             aHasZoomVect[nTab] = bHasZoom;
                         }
                     }
@@ -2938,14 +2878,14 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
     }
 
     // copy default zoom to sheets where a different one wasn't specified
-    for (SCTAB nZoomTab=0; nZoomTab<=MAXTAB; ++nZoomTab)
-        if (pTabData[nZoomTab] && ( nZoomTab >= static_cast<SCTAB>(aHasZoomVect.size()) || !aHasZoomVect[nZoomTab] ))
+    for (SCTAB nZoomTab=0; nZoomTab< static_cast<SCTAB>(maTabData.size()); ++nZoomTab)
+        if (maTabData[nZoomTab] && ( nZoomTab >= static_cast<SCTAB>(aHasZoomVect.size()) || !aHasZoomVect[nZoomTab] ))
         {
-            pTabData[nZoomTab]->eZoomType  = eDefZoomType;
-            pTabData[nZoomTab]->aZoomX     = aDefZoomX;
-            pTabData[nZoomTab]->aZoomY     = aDefZoomY;
-            pTabData[nZoomTab]->aPageZoomX = aDefPageZoomX;
-            pTabData[nZoomTab]->aPageZoomY = aDefPageZoomY;
+            maTabData[nZoomTab]->eZoomType  = eDefZoomType;
+            maTabData[nZoomTab]->aZoomX     = aDefZoomX;
+            maTabData[nZoomTab]->aZoomY     = aDefZoomY;
+            maTabData[nZoomTab]->aPageZoomX = aDefPageZoomX;
+            maTabData[nZoomTab]->aPageZoomY = aDefPageZoomY;
         }
 
     if (nCount)
@@ -2966,7 +2906,7 @@ void ScViewData::SetOptions( const ScViewOptions& rOpt )
                                    rOpt.GetObjMode(VOBJ_TYPE_OLE) );
 
     *pOptions = rOpt;
-    DBG_ASSERT( pView, "No View" );
+    OSL_ENSURE( pView, "No View" );
 
     if( pView )
     {
@@ -2976,7 +2916,7 @@ void ScViewData::SetOptions( const ScViewOptions& rOpt )
 
 Point ScViewData::GetMousePosPixel()
 {
-    DBG_ASSERT( pView, "GetMousePosPixel() ohne View" );
+    OSL_ENSURE( pView, "GetMousePosPixel() ohne View" );
     return pView->GetMousePosPixel();
 }
 
@@ -2996,16 +2936,16 @@ sal_Bool ScViewData::UpdateFixX( SCTAB nTab )               // sal_True = Wert g
     if (!ValidTab(nTab))        // Default
         nTab=nTabNo;        // akuelle Tabelle
 
-    if (!pView || pTabData[nTab]->eHSplitMode != SC_SPLIT_FIX)
-        return sal_False;
+    if (!pView || maTabData[nTab]->eHSplitMode != SC_SPLIT_FIX)
+        return false;
 
     ScDocument* pLocalDoc = GetDocument();
-    if (!pLocalDoc->HasTable(nTab))          // #114007# if called from reload, the sheet may not exist
-        return sal_False;
+    if (!pLocalDoc->HasTable(nTab))          // if called from reload, the sheet may not exist
+        return false;
 
-    SCCOL nFix = pTabData[nTab]->nFixPosX;
+    SCCOL nFix = maTabData[nTab]->nFixPosX;
     long nNewPos = 0;
-    for (SCCOL nX=pTabData[nTab]->nPosX[SC_SPLIT_LEFT]; nX<nFix; nX++)
+    for (SCCOL nX=maTabData[nTab]->nPosX[SC_SPLIT_LEFT]; nX<nFix; nX++)
     {
         sal_uInt16 nTSize = pLocalDoc->GetColWidth( nX, nTab );
         if (nTSize)
@@ -3015,15 +2955,15 @@ sal_Bool ScViewData::UpdateFixX( SCTAB nTab )               // sal_True = Wert g
         }
     }
     nNewPos += pView->GetGridOffset().X();
-    if (nNewPos != pTabData[nTab]->nHSplitPos)
+    if (nNewPos != maTabData[nTab]->nHSplitPos)
     {
-        pTabData[nTab]->nHSplitPos = nNewPos;
+        maTabData[nTab]->nHSplitPos = nNewPos;
         if (nTab == nTabNo)
             RecalcPixPos();                 //! sollte nicht noetig sein !!!
         return sal_True;
     }
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool ScViewData::UpdateFixY( SCTAB nTab )               // sal_True = Wert geaendert
@@ -3031,16 +2971,16 @@ sal_Bool ScViewData::UpdateFixY( SCTAB nTab )               // sal_True = Wert g
     if (!ValidTab(nTab))        // Default
         nTab=nTabNo;        // akuelle Tabelle
 
-    if (!pView || pTabData[nTab]->eVSplitMode != SC_SPLIT_FIX)
-        return sal_False;
+    if (!pView || maTabData[nTab]->eVSplitMode != SC_SPLIT_FIX)
+        return false;
 
     ScDocument* pLocalDoc = GetDocument();
-    if (!pLocalDoc->HasTable(nTab))          // #114007# if called from reload, the sheet may not exist
-        return sal_False;
+    if (!pLocalDoc->HasTable(nTab))          // if called from reload, the sheet may not exist
+        return false;
 
-    SCROW nFix = pTabData[nTab]->nFixPosY;
+    SCROW nFix = maTabData[nTab]->nFixPosY;
     long nNewPos = 0;
-    for (SCROW nY=pTabData[nTab]->nPosY[SC_SPLIT_TOP]; nY<nFix; nY++)
+    for (SCROW nY=maTabData[nTab]->nPosY[SC_SPLIT_TOP]; nY<nFix; nY++)
     {
         sal_uInt16 nTSize = pLocalDoc->GetRowHeight( nY, nTab );
         if (nTSize)
@@ -3050,15 +2990,15 @@ sal_Bool ScViewData::UpdateFixY( SCTAB nTab )               // sal_True = Wert g
         }
     }
     nNewPos += pView->GetGridOffset().Y();
-    if (nNewPos != pTabData[nTab]->nVSplitPos)
+    if (nNewPos != maTabData[nTab]->nVSplitPos)
     {
-        pTabData[nTab]->nVSplitPos = nNewPos;
+        maTabData[nTab]->nVSplitPos = nNewPos;
         if (nTab == nTabNo)
             RecalcPixPos();                 //! sollte nicht noetig sein !!!
         return sal_True;
     }
 
-    return sal_False;
+    return false;
 }
 
 void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
@@ -3078,7 +3018,7 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
 
     rOutl.SetCalcFieldValueHdl( LINK( SC_MOD(), ScModule, CalcFieldValueHdl ) );
 
-    //  #97417# don't call GetSpellChecker if online spelling isn't enabled.
+    //  don't call GetSpellChecker if online spelling isn't enabled.
     //  The language for AutoCorrect etc. is taken from the pool defaults
     //  (set in ScDocument::UpdateDrawLanguages)
 
@@ -3098,7 +3038,6 @@ ScAddress ScViewData::GetCurPos() const
 }
 
 
-// static
 void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
         SCROW nEndRow, double nPPTY, const ScDocument * pDoc, SCTAB nTabNo )
 {
@@ -3138,7 +3077,6 @@ void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
 }
 
 
-// static
 void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
         SCROW & rPosY, SCROW nStartRow, double nPPTY, const ScDocument * pDoc,
         SCTAB nTabNo )
@@ -3177,3 +3115,5 @@ void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
         ++nRow;
     rPosY = nRow;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

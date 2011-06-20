@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,6 +40,10 @@ class SvStream;
 class SfxMedium;
 class ScAsciiOptions;
 
+/**
+ * These options control how multi-line cells are converted during export in
+ * certain lossy formats (such as csv).
+ */
 struct ScExportTextOptions
 {
     enum NewlineConversion { ToSystem, ToSpace, None };
@@ -50,7 +55,7 @@ struct ScExportTextOptions
     bool mbAddQuotes;
 };
 
-class ScImportExport
+class SC_DLLPUBLIC ScImportExport
 {
     ScDocShell* pDocSh;
     ScDocument* pDoc;
@@ -108,7 +113,7 @@ public:
     static sal_Bool  IsFormatSupported( sal_uLong nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
             String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted );
-    static  void    WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, sal_Bool bZero = sal_False );
+    static  void    WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, sal_Bool bZero = false );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
     static  inline  sal_Bool    IsEndianSwap( const SvStream& rStrm );
 
@@ -152,7 +157,6 @@ public:
 };
 
 
-// static
 inline sal_Bool ScImportExport::IsEndianSwap( const SvStream& rStrm )
 {
 #ifdef OSL_BIGENDIAN
@@ -162,7 +166,6 @@ inline sal_Bool ScImportExport::IsEndianSwap( const SvStream& rStrm )
 #endif
 }
 
-// static
 inline void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
 {
 #ifdef OSL_BIGENDIAN
@@ -182,10 +185,11 @@ public:
                 rStr.getLength() * sizeof(sal_Unicode), STREAM_READ)
     {
         SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
-        SetEndianSwap( sal_False );
+        SetEndianSwap( false );
     }
 };
 
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

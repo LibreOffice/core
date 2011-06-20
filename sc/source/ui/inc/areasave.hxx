@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,57 +29,60 @@
 #ifndef SC_AREASAVE_HXX
 #define SC_AREASAVE_HXX
 
-#include "collect.hxx"
-#include "global.hxx"
 #include "address.hxx"
+
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScDocument;
 class ScAreaLink;
 
 
-class ScAreaLinkSaver : public ScDataObject
+class ScAreaLinkSaver
 {
 private:
-    String      aFileName;
-    String      aFilterName;
-    String      aOptions;
-    String      aSourceArea;
-    ScRange     aDestArea;
-    sal_uLong       nRefresh;
+    ::rtl::OUString aFileName;
+    ::rtl::OUString aFilterName;
+    ::rtl::OUString aOptions;
+    ::rtl::OUString aSourceArea;
+    ScRange aDestArea;
+    sal_uLong nRefresh;
 
 public:
-                ScAreaLinkSaver( const ScAreaLink& rSource );
-                ScAreaLinkSaver( const ScAreaLinkSaver& rCopy );
-    virtual     ~ScAreaLinkSaver();
+    ScAreaLinkSaver( const ScAreaLink& rSource );
+    ScAreaLinkSaver( const ScAreaLinkSaver& rCopy );
+    ~ScAreaLinkSaver();
 
-    virtual ScDataObject*   Clone() const;
-
-    sal_Bool        IsEqual( const ScAreaLink& rCompare ) const;
-    sal_Bool        IsEqualSource( const ScAreaLink& rCompare ) const;
+    bool        IsEqual( const ScAreaLink& rCompare ) const;
+    bool        IsEqualSource( const ScAreaLink& rCompare ) const;
 
     void        WriteToLink( ScAreaLink& rLink ) const;
     void        InsertNewLink( ScDocument* pDoc ) const;
 };
 
 
-class ScAreaLinkSaveCollection : public ScCollection
+class ScAreaLinkSaveCollection
 {
+    typedef ::boost::ptr_vector<ScAreaLinkSaver> DataType;
+    DataType maData;
 public:
-                ScAreaLinkSaveCollection();
-                ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& rCopy );
-    virtual     ~ScAreaLinkSaveCollection();
+    ScAreaLinkSaveCollection();
+    ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& r );
+    ~ScAreaLinkSaveCollection();
 
-    virtual ScDataObject*   Clone() const;
 
-    ScAreaLinkSaver*    operator[](sal_uInt16 nIndex) const {return (ScAreaLinkSaver*)At(nIndex);}
-
-    sal_Bool        IsEqual( const ScDocument* pDoc ) const;
+    bool        IsEqual( const ScDocument* pDoc ) const;
     void        Restore( ScDocument* pDoc ) const;
 
     // returns NULL if empty
     static ScAreaLinkSaveCollection* CreateFromDoc( const ScDocument* pDoc );
+
+    const ScAreaLinkSaver* operator[](size_t nIndex) const;
+    size_t size() const;
+    void clear();
+    void push_back(ScAreaLinkSaver* p);
 };
 
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

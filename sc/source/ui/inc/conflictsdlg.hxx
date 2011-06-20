@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,7 +83,6 @@ private:
     static void                     Transform_Impl( ScChangeActionList& rActionList, ScChangeActionMergeMap* pMergeMap );
 
 public:
-//UNUSED2008-05  static bool                     HasSharedAction( ScConflictsList& rConflictsList, sal_uLong nSharedAction );
     static bool                     HasOwnAction( ScConflictsList& rConflictsList, sal_uLong nOwnAction );
 
     static ScConflictsListEntry*    GetSharedActionEntry( ScConflictsList& rConflictsList, sal_uLong nSharedAction );
@@ -148,11 +148,8 @@ class ScConflictsListBox: public SvxRedlinTable
 private:
 
 public:
-//UNUSED2008-05         ScConflictsListBox( Window* pParent, WinBits nBits = WB_BORDER );
                         ScConflictsListBox( Window* pParent, const ResId& rResId );
                         ~ScConflictsListBox();
-
-//UNUSED2008-05  sal_uLong               GetRootEntryPos( const SvLBoxEntry* pRootEntry ) const;
 };
 
 //=============================================================================
@@ -214,3 +211,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

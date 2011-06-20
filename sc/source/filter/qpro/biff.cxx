@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ bool ScBiffReader::nextRecord()
     *mpStream >> mnId >> mnLength;
 
     mnOffset = mpStream->Tell();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Read record 0x%x length 0x%x at offset 0x%x\n",
         (unsigned)mnId, (unsigned)mnLength, (unsigned)mnOffset );
 
@@ -102,3 +103,4 @@ bool ScBiffReader::nextRecord()
     return true;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

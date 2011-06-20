@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include "xehelper.hxx"
 #include "xeformula.hxx"
 #include "externalrefmgr.hxx"
+#include <boost/shared_ptr.hpp>
 
 class ScRange;
 struct ScSingleRefData;
@@ -81,8 +83,6 @@ public:
 
     /** Returns the Calc sheet index of the nSortedTab-th entry in the sorted sheet names list. */
     SCTAB               GetRealScTab( SCTAB nSortedScTab ) const;
-//UNUSED2009-05 /** Returns the index of the passed Calc sheet in the sorted sheet names list. */
-//UNUSED2009-05 SCTAB               GetSortedScTab( SCTAB nScTab ) const;
 
     /** Returns the number of Calc sheets. */
     inline SCTAB        GetScTabCount() const { return mnScCnt; }
@@ -211,7 +211,7 @@ public:
     virtual void        Save( XclExpStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpLinkManagerImpl > XclExpLinkMgrImplPtr;
+    typedef boost::shared_ptr< XclExpLinkManagerImpl > XclExpLinkMgrImplPtr;
     XclExpLinkMgrImplPtr mxImpl;
 };
 
@@ -219,3 +219,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

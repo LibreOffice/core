@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,7 @@ using ::osl::MutexGuard;
 // ----------------------------------------
 namespace
 {
-#define LOCAL_CONST_STR(i, x) sal_Char __READONLY_DATA i[sizeof(x)] = x
+#define LOCAL_CONST_STR(i, x) sal_Char const i[sizeof(x)] = x
 #define MAP_LEN(x) x, sizeof(x) - 1
 
 LOCAL_CONST_STR( sXML_metaStreamName,       "meta.xml");
@@ -80,11 +81,9 @@ LOCAL_CONST_STR( sXML_contentStreamName,    "content.xml" );
 LOCAL_CONST_STR( sXML_oldContentStreamName, "Content.xml" );
 
 // soffice 6/7
-// LOCAL_CONST_STR( sXML_export_chart_meta_service,            "com.sun.star.comp.Chart.XMLMetaExporter" );
 LOCAL_CONST_STR( sXML_export_chart_styles_service,          "com.sun.star.comp.Chart.XMLStylesExporter" );
 LOCAL_CONST_STR( sXML_export_chart_content_service,         "com.sun.star.comp.Chart.XMLContentExporter" );
 
-// LOCAL_CONST_STR( sXML_import_chart_meta_service,            "com.sun.star.comp.Chart.XMLMetaImporter" );
 LOCAL_CONST_STR( sXML_import_chart_styles_service,          "com.sun.star.comp.Chart.XMLStylesImporter" );
 LOCAL_CONST_STR( sXML_import_chart_content_service,         "com.sun.star.comp.Chart.XMLContentImporter" );
 LOCAL_CONST_STR( sXML_import_chart_old_content_service,     "com.sun.star.office.sax.importer.Chart" );
@@ -129,10 +128,6 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
                         RTL_CONSTASCII_STRINGPARAM( "Password" ))
                     || rMediaDescriptor[i].Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ))
-    //                  || rMediaDescriptor[i].Name.equalsAsciiL(
-    //                      RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ))
-    //                  || rMediaDescriptor[i].Name.equalsAsciiL(
-    //                      RTL_CONSTASCII_STRINGPARAM( "Unpacked" ))
                     )
                 {
                     aPropertiesForStorage.push_back( rMediaDescriptor[i] );
@@ -206,10 +201,6 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
                          RTL_CONSTASCII_STRINGPARAM( "Password" ))
                      || rMediaDescriptor[i].Name.equalsAsciiL(
                          RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ))
-//                  || rMediaDescriptor[i].Name.equalsAsciiL(
-//                      RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ))
-//                  || rMediaDescriptor[i].Name.equalsAsciiL(
-//                      RTL_CONSTASCII_STRINGPARAM( "Unpacked" ))
                     )
                 {
                     aPropertiesForStorage.push_back( rMediaDescriptor[i] );
@@ -294,7 +285,7 @@ sal_Bool SAL_CALL XMLFilter::filter(
     }
     else
     {
-        OSL_ENSURE( false, "filter() called with no document set" );
+        OSL_FAIL( "filter() called with no document set" );
     }
 
     return bResult;
@@ -355,7 +346,7 @@ sal_Int32 XMLFilter::impl_Import(
         Reference< lang::XServiceInfo > xServInfo( xDocumentComp, uno::UNO_QUERY_THROW );
         if( ! xServInfo->supportsService( C2U( "com.sun.star.chart2.ChartDocument" )))
         {
-            OSL_ENSURE( false, "Import: No ChartDocument" );
+            OSL_FAIL( "Import: No ChartDocument" );
             return ERRCODE_SFX_GENERAL;
         }
 
@@ -375,8 +366,6 @@ sal_Int32 XMLFilter::impl_Import(
         if( ! xStorage.is())
             return ERRCODE_SFX_GENERAL;
 
-//         bool bOasis = (SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60);
-
         Reference< document::XGraphicObjectResolver > xGraphicObjectResolver;
         uno::Reference< lang::XMultiServiceFactory > xServiceFactory( xFactory, uno::UNO_QUERY);
         if( xServiceFactory.is())
@@ -392,7 +381,7 @@ sal_Int32 XMLFilter::impl_Import(
         /** property map for import info set */
         comphelper::PropertyMapEntry aImportInfoMap[] =
         {
-            // #80365# necessary properties for XML progress bar at load time
+            // necessary properties for XML progress bar at load time
             { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -523,8 +512,6 @@ sal_Int32 XMLFilter::impl_ImportStream(
             if( aParserInput.aInputStream.is())
             {
                 sal_Int32 nArgs = 0;
-                //if( m_xStatusIndicator.is())
-                //    nArgs++;
                 if( xGraphicObjectResolver.is())
                     nArgs++;
                 if( xImportInfo.is())
@@ -533,8 +520,6 @@ sal_Int32 XMLFilter::impl_ImportStream(
                 uno::Sequence< uno::Any > aFilterCompArgs( nArgs );
 
                 nArgs = 0;
-                //if( m_xStatusIndicator.is())
-                //    aFilterCompArgs[ nArgs++ ] <<= m_xStatusIndicator;
                 if( xGraphicObjectResolver.is())
                     aFilterCompArgs[nArgs++] <<= xGraphicObjectResolver;
                 if( xImportInfo.is())
@@ -566,7 +551,7 @@ sal_Int32 XMLFilter::impl_ImportStream(
                     }
                     catch(uno::Exception&)
                     {
-                        OSL_ENSURE(0,"Exception caught!");
+                        OSL_FAIL("Exception caught!");
                     }
                 }
                 xParser->setDocumentHandler( xDocHandler );
@@ -619,7 +604,7 @@ sal_Int32 XMLFilter::impl_Export(
         Reference< lang::XServiceInfo > xServInfo( xDocumentComp, uno::UNO_QUERY_THROW );
         if( ! xServInfo->supportsService( C2U( "com.sun.star.chart2.ChartDocument" )))
         {
-            OSL_ENSURE( false, "Export: No ChartDocument" );
+            OSL_FAIL( "Export: No ChartDocument" );
             return ERRCODE_SFX_GENERAL;
         }
 
@@ -664,7 +649,7 @@ sal_Int32 XMLFilter::impl_Export(
             }
             catch(uno::Exception&)
             {
-                OSL_ENSURE(0,"Exception caught!");
+                OSL_FAIL("Exception caught!");
             }
         }
 
@@ -709,8 +694,6 @@ sal_Int32 XMLFilter::impl_Export(
             if( xGraphicObjectResolver.is())
                 aFilterProperties[ nArgs++ ] <<= xGraphicObjectResolver;
         }
-
-//         bool bOasis = (SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60);
 
         // export meta information
         if( bOasis )
@@ -871,3 +854,5 @@ void XMLReportFilterHelper::isOasisFormat(const Sequence< beans::PropertyValue >
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

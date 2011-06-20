@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
 
-#include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -55,7 +55,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
 
-// static
 void ScGlobal::InitAddIns()
 {
     // multi paths separated by semicolons
@@ -115,18 +114,18 @@ void ScGlobal::InitAddIns()
                         }
                         catch ( Exception& )
                         {
-                            DBG_ERRORFILE( "ResultSetException catched!" );
+                            OSL_FAIL( "ResultSetException catched!" );
                         }
                     }
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERRORFILE( "Exception catched!" );
+                    OSL_FAIL( "Exception catched!" );
                 }
                 catch ( ... )
                 {
 
-                    DBG_ERRORFILE( "unexpected exception caught!" );
+                    OSL_FAIL( "unexpected exception caught!" );
                 }
             }
         }
@@ -134,7 +133,6 @@ void ScGlobal::InitAddIns()
 }
 
 
-// static
 String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
 {
     if (!xOrdinalSuffix.is())
@@ -145,27 +143,33 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
                 ::comphelper::getProcessServiceFactory();
             Reference< XInterface > xInterface =
                 xServiceManager->createInstance(
-                    ::rtl::OUString::createFromAscii("com.sun.star.i18n.OrdinalSuffix"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.OrdinalSuffix")));
             if  (xInterface.is())
                 xOrdinalSuffix = Reference< i18n::XOrdinalSuffix >( xInterface, UNO_QUERY);
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "GetOrdinalSuffix: exception caught during init" );
+            OSL_FAIL( "GetOrdinalSuffix: exception caught during init" );
         }
     }
-    DBG_ASSERT( xOrdinalSuffix.is(), "GetOrdinalSuffix: createInstance failed");
+    OSL_ENSURE( xOrdinalSuffix.is(), "GetOrdinalSuffix: createInstance failed");
     if (xOrdinalSuffix.is())
     {
         try
         {
-            return xOrdinalSuffix->getOrdinalSuffix( nNumber,
+            uno::Sequence< rtl::OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
                     ScGlobal::pLocaleData->getLocale());
+            if ( aSuffixes.getLength() > 0 )
+                return aSuffixes[0];
+            else
+                return String();
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "GetOrdinalSuffix: exception caught during getOrdinalSuffix" );
+            OSL_FAIL( "GetOrdinalSuffix: exception caught during getOrdinalSuffix" );
         }
     }
     return String();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

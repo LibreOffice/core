@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,23 +47,23 @@ ScSortDlg::ScSortDlg( Window*           pParent,
         SfxTabDialog( pParent,
                       ScResId( RID_SCDLG_SORT ),
                       pArgSet ),
-        bIsHeaders  ( sal_False ),
-        bIsByRows   ( sal_False )
+        bIsHeaders  ( false ),
+        bIsByRows   ( false )
 
 {
 #if LAYOUT_SFX_TABDIALOG_BROKEN
     AddTabPage( TP_FIELDS,  ScTabPageSortFields::Create,  0 );
     AddTabPage( TP_OPTIONS, ScTabPageSortOptions::Create, 0 );
 #else
-    String fields = rtl::OUString::createFromAscii ("fields");
-    AddTabPage( TP_FIELDS, fields, ScTabPageSortFields::Create, 0, sal_False, TAB_APPEND);
-    String options = rtl::OUString::createFromAscii ("options");
-    AddTabPage( TP_OPTIONS, options, ScTabPageSortOptions::Create, 0, sal_False, TAB_APPEND);
+    String fields = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fields"));
+    AddTabPage( TP_FIELDS, fields, ScTabPageSortFields::Create, 0, false, TAB_APPEND);
+    String options = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("options"));
+    AddTabPage( TP_OPTIONS, options, ScTabPageSortOptions::Create, 0, false, TAB_APPEND);
 #endif
     FreeResource();
 }
 
-__EXPORT ScSortDlg::~ScSortDlg()
+ScSortDlg::~ScSortDlg()
 {
 }
 
@@ -105,3 +106,5 @@ IMPL_LINK( ScSortWarningDlg, BtnHdl, PushButton*, pBtn )
     return 0;
 }
 //========================================================================//
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -336,7 +337,6 @@ bool ObjectPropertiesDialogParameter::IsComplexCategoriesAxis() const
     return m_bComplexCategoriesAxis;
 }
 
-//const sal_uInt16 nNoArrowDlg          = 1100;
 const sal_uInt16 nNoArrowNoShadowDlg    = 1101;
 
 //-------------------------------------------------------------------
@@ -541,7 +541,6 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
                     aSet.Put(SvxGraphicItem(SID_GRAPHIC,*m_pAutoSymbolGraphic));
             }
             rPage.PageCreated(aSet);
-            //rPage.ActivatePage(*GetInputSetImpl()); //what for?
             break;
 
         case RID_SVXPAGE_AREA:
@@ -552,7 +551,6 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
             aSet.Put(SfxUInt16Item(SID_PAGE_TYPE,nPageType));
             aSet.Put(SfxUInt16Item(SID_DLG_TYPE,nDlgType));
             rPage.PageCreated(aSet);
-            //rPage.ActivatePage(*GetInputSetImpl()); //what for?
             break;
 
         case RID_SVXPAGE_TRANSPARENCE:
@@ -563,15 +561,12 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 
         case RID_SVXPAGE_CHAR_NAME:
 
-            //CHINA001 ((SvxCharNamePage&)rPage).
-            //CHINA001     SetFontList(SvxFontListItem(m_pViewElementListProvider->getFontList()));
-            aSet.Put (SvxFontListItem(m_pViewElementListProvider->getFontList(), SID_ATTR_CHAR_FONTLIST)); //CHINA001
-            rPage.PageCreated(aSet); //CHINA001
+            aSet.Put (SvxFontListItem(m_pViewElementListProvider->getFontList(), SID_ATTR_CHAR_FONTLIST));
+            rPage.PageCreated(aSet);
             break;
 
         case RID_SVXPAGE_CHAR_EFFECTS:
-            //CHINA001 ((SvxCharEffectsPage&) rPage).DisableControls( DISABLE_CASEMAP );
-            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP)); //CHINA001
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
             rPage.PageCreated(aSet);
             break;
 
@@ -664,3 +659,5 @@ bool SchAttribTabDlg::DialogWasClosedWithOK() const
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

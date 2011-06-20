@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,6 +45,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace xmloff::token;
 
+using rtl::OUString;
 
 TYPEINIT1( XMLTableHeaderFooterContext, SvXMLImportContext );
 
@@ -55,16 +57,16 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
                        sal_Bool bFooter, sal_Bool bLft ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xPropSet( rPageStylePropSet ),
-    sOn( OUString::createFromAscii( bFooter ? SC_UNO_PAGE_FTRON : SC_UNO_PAGE_HDRON ) ),
-    sShareContent( OUString::createFromAscii( bFooter ? SC_UNO_PAGE_FTRSHARED : SC_UNO_PAGE_HDRSHARED ) ),
-    sContent( OUString::createFromAscii( bFooter ? SC_UNO_PAGE_RIGHTFTRCON : SC_UNO_PAGE_RIGHTHDRCON ) ),
-    sContentLeft( OUString::createFromAscii( bFooter ? SC_UNO_PAGE_LEFTFTRCONT : SC_UNO_PAGE_LEFTHDRCONT ) ),
+    sOn( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_FTRON)) : OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_HDRON)) ),
+    sShareContent( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_FTRSHARED)) : OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_HDRSHARED)) ),
+    sContent( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTFTRCON)) : OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTHDRCON)) ),
+    sContentLeft( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_LEFTFTRCONT)) : OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_LEFTHDRCONT)) ),
     bDisplay( sal_True ),
     bInsertContent( sal_True ),
     bLeft( bLft ),
-    bContainsLeft(sal_False),
-    bContainsRight(sal_False),
-    bContainsCenter(sal_False)
+    bContainsLeft(false),
+    bContainsRight(false),
+    bContainsCenter(false)
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -89,7 +91,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         {
             if( ::cppu::any2bool(xPropSet->getPropertyValue( sShareContent )) )
                 // Don't share headers any longer
-                xPropSet->setPropertyValue( sShareContent, uno::makeAny(sal_False) );
+                xPropSet->setPropertyValue( sShareContent, uno::makeAny(false) );
         }
         else
         {
@@ -266,3 +268,5 @@ void XMLHeaderFooterRegionContext::EndElement()
     if (xOldTextCursor.is())
         GetImport().GetTextImport()->SetCursor(xOldTextCursor);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

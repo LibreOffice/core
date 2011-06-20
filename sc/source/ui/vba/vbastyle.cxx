@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent, c
     {
         initialise();
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -86,7 +87,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent, const
     {
         initialise();
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -118,7 +119,7 @@ ScVbaStyle::setNameLocal( const ::rtl::OUString& NameLocal ) throw (script::Basi
     {
         mxPropertySet->setPropertyValue(DISPLAYNAME, uno::makeAny( NameLocal ) );
     }
-    catch (uno::Exception& e)
+    catch (const uno::Exception& e)
     {
         DebugHelper::exception(e);
     }
@@ -132,7 +133,7 @@ ScVbaStyle::getNameLocal() throw (script::BasicErrorException, uno::RuntimeExcep
     {
         mxPropertySet->getPropertyValue(DISPLAYNAME) >>= sName;
     }
-    catch (uno::Exception e)
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -146,7 +147,7 @@ ScVbaStyle::Delete() throw (script::BasicErrorException, uno::RuntimeException)
     {
         mxStyleFamilyNameContainer->removeByName(mxStyle->getName());
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -184,3 +185,5 @@ ScVbaStyle::getServiceNames()
         }
         return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,8 +40,9 @@
 #include "docsh.hxx"
 #include "tabvwsh.hxx"
 #include "document.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "globstr.hrc"
+#include "globalnames.hxx"
 #include "global.hxx"
 
 void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
@@ -58,7 +60,7 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
             pViewShell->SetTabNo( nStartZ );
 
         pViewShell->DoneBlockMode();
-        pViewShell->MoveCursorAbs( nStartX, nStartY, SC_FOLLOW_JUMP, sal_False, sal_False );
+        pViewShell->MoveCursorAbs( nStartX, nStartY, SC_FOLLOW_JUMP, false, false );
         pViewShell->InitOwnBlockMode();
         pViewShell->GetViewData()->GetMarkData().
                 SetMarkArea( ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ) );
@@ -92,26 +94,22 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
 
     if (!pRet)
     {
-        sal_Bool bWasTemp = sal_False;
+        bool bWasTemp = false;
         if ( pUndoData )
         {
-            String aName;
-            pUndoData->GetName( aName );
-            if ( aName == ScGlobal::GetRscString( STR_DB_NONAME ) )
-                bWasTemp = sal_True;
+            const ::rtl::OUString& aName = pUndoData->GetName();
+            if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))
+                bWasTemp = true;
         }
-        DBG_ASSERT(bWasTemp, "Undo: didn't find database range");
-
-        sal_uInt16 nIndex;
-        ScDBCollection* pColl = pDoc->GetDBCollection();
-        if (pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nIndex ))
-            pRet = (*pColl)[nIndex];
-        else
+        OSL_ENSURE(bWasTemp, "Undo: didn't find database range");
+        (void)bWasTemp;
+        pRet = pDoc->GetAnonymousDBData(nTab);
+        if (!pRet)
         {
-            pRet = new ScDBData( ScGlobal::GetRscString( STR_DB_NONAME ), nTab,
+            pRet = new ScDBData( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)), nTab,
                                 nCol1,nRow1, nCol2,nRow2, sal_True,
                                 pDoc->HasColHeader( nCol1,nRow1,nCol2,nRow2,nTab ) );
-            pColl->Insert( pRet );
+            pDoc->SetAnonymousDBData(nTab,pRet);
         }
     }
 
@@ -134,3 +132,5 @@ void ScUndoUtil::PaintMore( ScDocShell* pDocShell,
     pDocShell->PostPaint( nCol1,nRow1,rRange.aStart.Tab(),
                           nCol2,nRow2,rRange.aEnd.Tab(), PAINT_GRID );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

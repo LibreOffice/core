@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,7 +87,7 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
 
 //------------------------------------------------------------------------
 
-__EXPORT ScMetricInputDlg::~ScMetricInputDlg()
+ScMetricInputDlg::~ScMetricInputDlg()
 {
 }
 
@@ -128,7 +129,7 @@ void ScMetricInputDlg::CalcPositions()
     Point   aNewPos;
 
     aFtSize.Width() = aFtEditTitle.GetTextWidth(aFtEditTitle.GetText());
-    // #95990# add mnemonic char width to fixed text width
+    // add mnemonic char width to fixed text width
     aFtSize.Width() += aFtEditTitle.GetTextWidth(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("(W)")));
     aFtEditTitle.SetSizePixel( aFtSize );
 
@@ -184,3 +185,4 @@ IMPL_LINK_INLINE_END( ScMetricInputDlg, ModifyHdl, MetricField *, EMPTYARG )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

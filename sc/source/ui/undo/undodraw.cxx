@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,68 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+
+
+//------------------------------------------------------------------
+
+// TOOLS
+#define _BIGINT_HXX
+#define _SFXMULTISEL_HXX
+#define _STACK_HXX
+#define _QUEUE_HXX
+#define _DYNARR_HXX
+#define _TREELIST_HXX
+#define _CACHESTR_HXX
+#define _NEW_HXX
+#define _DYNARY_HXX
+#define _SVMEMPOOL_HXX
+#define _CACHESTR_HXX
+#define _SV_MULTISEL_HXX
+
+//SV
+#define _CONFIG_HXX
+#define _CURSOR_HXX
+#define _FONTDLG_HXX
+#define _PRVWIN_HXX
+#define _HELP_HXX
+#define _MDIWIN_HXX
+#define _SPIN_HXX
+#define _FILDLG_HXX
+#define _COLDLG_HXX
+#define _SOUND_HXX
+
+
+#define SI_NOITEMS
+#define _SI_NOSBXCONTROLS
+#define _SI_NOOTHERFORMS
+#define _SI_NOCONTROL
+#define _SI_NOSBXCONTROLS
+#define _SIDLL_HXX
+
+// SFX
+#define _SFXAPPWIN_HXX
+#define _SFX_SAVEOPT_HXX
+#define _SFXPRNMON_HXX
+#define _INTRO_HXX
+#define _SFXMSGDESCR_HXX
+#define _SFXMSGPOOL_HXX
+#define _SFXFILEDLG_HXX
+#define _PASSWD_HXX
+#define _SFXTBXCTRL_HXX
+#define _SFXSTBITEM_HXX
+#define _SFXMNUITEM_HXX
+#define _SFXIMGMGR_HXX
+#define _SFXTBXMGR_HXX
+#define _SFXSTBMGR_HXX
+#define _SFX_MINFITEM_HXX
+#define _SFXEVENT_HXX
+
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/svdundo.hxx>
 
 #include "undodraw.hxx"
 #include "docsh.hxx"
-#include "tabvwsh.hxx"
 
 
 // -----------------------------------------------------------------------
@@ -49,7 +105,7 @@ ScUndoDraw::ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh ) :
 {
 }
 
-__EXPORT ScUndoDraw::~ScUndoDraw()
+ScUndoDraw::~ScUndoDraw()
 {
     delete pDrawUndo;
 }
@@ -59,7 +115,7 @@ void ScUndoDraw::ForgetDrawUndo()
     pDrawUndo = NULL;   // nicht loeschen (Draw-Undo muss dann von aussen gemerkt werden)
 }
 
-String __EXPORT ScUndoDraw::GetComment() const
+String ScUndoDraw::GetComment() const
 {
     if (pDrawUndo)
         return pDrawUndo->GetComment();
@@ -67,7 +123,7 @@ String __EXPORT ScUndoDraw::GetComment() const
         return String();
 }
 
-String __EXPORT ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
+String ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
 {
     if (pDrawUndo)
         return pDrawUndo->GetRepeatComment(rTarget);
@@ -75,7 +131,7 @@ String __EXPORT ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
         return String();
 }
 
-sal_uInt16 __EXPORT ScUndoDraw::GetId() const
+sal_uInt16 ScUndoDraw::GetId() const
 {
     if (pDrawUndo)
         return pDrawUndo->GetId();
@@ -83,69 +139,60 @@ sal_uInt16 __EXPORT ScUndoDraw::GetId() const
         return 0;
 }
 
-sal_Bool __EXPORT ScUndoDraw::IsLinked()
+sal_Bool ScUndoDraw::IsLinked()
 {
     if (pDrawUndo)
         return pDrawUndo->IsLinked();
     else
-        return sal_False;
+        return false;
 }
 
-void __EXPORT ScUndoDraw::SetLinked( sal_Bool bIsLinked )
+void ScUndoDraw::SetLinked( sal_Bool bIsLinked )
 {
     if (pDrawUndo)
         pDrawUndo->SetLinked(bIsLinked);
 }
 
-sal_Bool  __EXPORT ScUndoDraw::Merge( SfxUndoAction* pNextAction )
+sal_Bool  ScUndoDraw::Merge( SfxUndoAction* pNextAction )
 {
     if (pDrawUndo)
         return pDrawUndo->Merge(pNextAction);
     else
-        return sal_False;
+        return false;
 }
 
-void ScUndoDraw::UpdateSubShell()
-{
-    // #i26822# remove the draw shell if the selected object has been removed
-    ScTabViewShell* pViewShell = pDocShell->GetBestViewShell();
-    if (pViewShell)
-        pViewShell->UpdateDrawShell();
-}
-
-void __EXPORT ScUndoDraw::Undo()
+void ScUndoDraw::Undo()
 {
     if (pDrawUndo)
     {
         pDrawUndo->Undo();
         pDocShell->SetDrawModified();
-        UpdateSubShell();
     }
 }
 
-void __EXPORT ScUndoDraw::Redo()
+void ScUndoDraw::Redo()
 {
     if (pDrawUndo)
     {
         pDrawUndo->Redo();
         pDocShell->SetDrawModified();
-        UpdateSubShell();
     }
 }
 
-void __EXPORT ScUndoDraw::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoDraw::Repeat(SfxRepeatTarget& rTarget)
 {
     if (pDrawUndo)
         pDrawUndo->Repeat(rTarget);
 }
 
-sal_Bool __EXPORT ScUndoDraw::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoDraw::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     if (pDrawUndo)
         return pDrawUndo->CanRepeat(rTarget);
     else
-        return sal_False;
+        return false;
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

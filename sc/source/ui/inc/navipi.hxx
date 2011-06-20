@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,7 @@ public:
     explicit            ScScenarioListBox( ScScenarioWindow& rParent );
     virtual             ~ScScenarioListBox();
 
-    void                UpdateEntries( List* pNewEntryList );
+    void                UpdateEntries( const std::vector<String> &aNewEntryList );
 
 protected:
     virtual void        Select();
@@ -243,7 +244,6 @@ private:
     SfxBindings&        rBindings;      // must be first member
 
     ImageList           aCmdImageList;  // must be before aTbxCmd
-    ImageList           aCmdImageListH;
     FixedInfo           aFtCol;
     ColumnEdit          aEdCol;
     FixedInfo           aFtRow;
@@ -364,3 +364,4 @@ private:
 
 #endif // SC_NAVIPI_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

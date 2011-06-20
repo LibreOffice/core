@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <vcl/fixed.hxx>
 
 class ScDocument;
@@ -66,3 +65,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

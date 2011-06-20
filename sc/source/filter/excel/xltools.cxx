@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <sal/mathconf.h>
 #include <unotools/fontcvt.hxx>
 #include <sfx2/objsh.hxx>
+#include <sal/macros.h>
 #include <editeng/editstat.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include "xestream.hxx"
@@ -53,7 +55,7 @@ using ::rtl::OUString;
 
 XclGuid::XclGuid()
 {
-    ::std::fill( mpnData, STATIC_ARRAY_END( mpnData ), 0 );
+    ::std::fill( mpnData, STATIC_TABLE_END( mpnData ), 0 );
 }
 
 XclGuid::XclGuid(
@@ -77,14 +79,14 @@ XclGuid::XclGuid(
 
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 {
-    return ::std::equal( rCmp1.mpnData, STATIC_ARRAY_END( rCmp1.mpnData ), rCmp2.mpnData );
+    return ::std::equal( rCmp1.mpnData, STATIC_TABLE_END( rCmp1.mpnData ), rCmp2.mpnData );
 }
 
 bool operator<( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 {
     return ::std::lexicographical_compare(
-        rCmp1.mpnData, STATIC_ARRAY_END( rCmp1.mpnData ),
-        rCmp2.mpnData, STATIC_ARRAY_END( rCmp2.mpnData ) );
+        rCmp1.mpnData, STATIC_TABLE_END( rCmp1.mpnData ),
+        rCmp2.mpnData, STATIC_TABLE_END( rCmp2.mpnData ) );
 }
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid )
@@ -172,7 +174,7 @@ sal_Int32 XclTools::GetScRotation( sal_uInt16 nXclRot, sal_Int32 nRotForStacked 
 {
     if( nXclRot == EXC_ROT_STACKED )
         return nRotForStacked;
-    DBG_ASSERT( nXclRot <= 180, "XclTools::GetScRotation - illegal rotation angle" );
+    OSL_ENSURE( nXclRot <= 180, "XclTools::GetScRotation - illegal rotation angle" );
     return static_cast< sal_Int32 >( (nXclRot <= 180) ? (100 * ((nXclRot > 90) ? (450 - nXclRot) : nXclRot)) : 0 );
 }
 
@@ -198,7 +200,7 @@ sal_uInt8 XclTools::GetXclRotFromOrient( sal_uInt8 nXclOrient )
         case EXC_ORIENT_STACKED:    return EXC_ROT_STACKED;
         case EXC_ORIENT_90CCW:      return EXC_ROT_90CCW;
         case EXC_ORIENT_90CW:       return EXC_ROT_90CW;
-        default:    DBG_ERRORFILE( "XclTools::GetXclRotFromOrient - unknown text orientation" );
+        default:    OSL_FAIL( "XclTools::GetXclRotFromOrient - unknown text orientation" );
     }
     return EXC_ROT_NONE;
 }
@@ -207,7 +209,7 @@ sal_uInt8 XclTools::GetXclOrientFromRot( sal_uInt16 nXclRot )
 {
     if( nXclRot == EXC_ROT_STACKED )
         return EXC_ORIENT_STACKED;
-    DBG_ASSERT( nXclRot <= 180, "XclTools::GetXclOrientFromRot - unknown text rotation" );
+    OSL_ENSURE( nXclRot <= 180, "XclTools::GetXclOrientFromRot - unknown text rotation" );
     if( (45 < nXclRot) && (nXclRot <= 90) )
         return EXC_ORIENT_90CCW;
     if( (135 < nXclRot) && (nXclRot <= 180) )
@@ -252,7 +254,7 @@ sal_uInt16 XclTools::GetScErrorCode( sal_uInt8 nXclError )
         case EXC_ERR_NAME:  return errNoName;
         case EXC_ERR_NUM:   return errIllegalFPOperation;
         case EXC_ERR_NA:    return NOTAVAILABLE;
-        default:            DBG_ERRORFILE( "XclTools::GetScErrorCode - unknown error code" );
+        default:            OSL_FAIL( "XclTools::GetScErrorCode - unknown error code" );
     }
     return NOTAVAILABLE;
 }
@@ -357,7 +359,7 @@ Color XclTools::GetPatternColor( const Color& rPattColor, const Color& rBackColo
         0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     // 08 - 15
         0x50, 0x70, 0x78                                    // 16 - 18
     };
-    return (nXclPattern < STATIC_ARRAY_SIZE( pnRatioTable )) ?
+    return (nXclPattern < SAL_N_ELEMENTS( pnRatioTable )) ?
         ScfTools::GetMixedColor( rPattColor, rBackColor, pnRatioTable[ nXclPattern ] ) : rPattColor;
 }
 
@@ -409,7 +411,7 @@ pCodePageTable[] =
     {   32768,  RTL_TEXTENCODING_APPLE_ROMAN    },  // Apple Roman
     {   32769,  RTL_TEXTENCODING_MS_1252        }   // MS Windows Latin I (BIFF2-BIFF3)
 };
-const XclCodePageEntry* const pCodePageTableEnd = STATIC_ARRAY_END( pCodePageTable );
+const XclCodePageEntry* const pCodePageTableEnd = STATIC_TABLE_END( pCodePageTable );
 
 struct XclCodePageEntry_CPPred
 {
@@ -432,7 +434,7 @@ rtl_TextEncoding XclTools::GetTextEncoding( sal_uInt16 nCodePage )
     const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_CPPred( nCodePage ) );
     if( pEntry == pCodePageTableEnd )
     {
-        DBG_ERROR2( "XclTools::GetTextEncoding - unknown code page: 0x%04hX (%d)", nCodePage, nCodePage );
+        OSL_TRACE( "XclTools::GetTextEncoding - unknown code page: 0x%04hX (%d)", nCodePage, nCodePage );
         return RTL_TEXTENCODING_DONTKNOW;
     }
     return pEntry->meTextEnc;
@@ -446,7 +448,7 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
     const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_TEPred( eTextEnc ) );
     if( pEntry == pCodePageTableEnd )
     {
-        DBG_ERROR1( "XclTools::GetXclCodePage - unsupported text encoding: %d", eTextEnc );
+        OSL_TRACE( "XclTools::GetXclCodePage - unsupported text encoding: %d", eTextEnc );
         return 1252;
     }
     return pEntry->mnCodePage;
@@ -456,7 +458,7 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
 
 String XclTools::GetXclFontName( const String& rFontName )
 {
-    // #106246# substitute with MS fonts
+    // substitute with MS fonts
     String aNewName( GetSubsFontName( rFontName, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
     if( aNewName.Len() )
         return aNewName;
@@ -466,6 +468,8 @@ String XclTools::GetXclFontName( const String& rFontName )
 // built-in defined names -----------------------------------------------------
 
 const String XclTools::maDefNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
+
+const String XclTools::maDefNamePrefixXml ( RTL_CONSTASCII_USTRINGPARAM( "_xlnm." ) );
 
 static const sal_Char* const ppcDefNames[] =
 {
@@ -487,10 +491,10 @@ static const sal_Char* const ppcDefNames[] =
 
 String XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    DBG_ASSERT( STATIC_ARRAY_SIZE( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
+    OSL_ENSURE( SAL_N_ELEMENTS( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
         "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
     String aDefName;
-    if( cBuiltIn < STATIC_ARRAY_SIZE( ppcDefNames ) )
+    if( cBuiltIn < SAL_N_ELEMENTS( ppcDefNames ) )
         aDefName.AssignAscii( ppcDefNames[ cBuiltIn ] );
     else
         aDefName = String::CreateFromInt32( cBuiltIn );
@@ -500,6 +504,11 @@ String XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 String XclTools::GetBuiltInDefName( sal_Unicode cBuiltIn )
 {
     return String( maDefNamePrefix ).Append( GetXclBuiltInDefName( cBuiltIn ) );
+}
+
+String XclTools::GetBuiltInDefNameXml( sal_Unicode cBuiltIn )
+{
+    return String( maDefNamePrefixXml ).Append( GetXclBuiltInDefName( cBuiltIn ) );
 }
 
 sal_Unicode XclTools::GetBuiltInDefNameIndex( const String& rDefName )
@@ -554,7 +563,7 @@ String XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const String& rName, s
     else
     {
         aStyleName = maStyleNamePrefix1;
-        if( nStyleId < STATIC_ARRAY_SIZE( ppcStyleNames ) )
+        if( nStyleId < SAL_N_ELEMENTS( ppcStyleNames ) )
             aStyleName.AppendAscii( ppcStyleNames[ nStyleId ] );
         else if( rName.Len() > 0 )
             aStyleName.Append( rName );
@@ -594,7 +603,7 @@ bool XclTools::IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleI
     if( nPrefixLen > 0 )
     {
         String aShortName;
-        for( sal_uInt8 nId = 0; nId < STATIC_ARRAY_SIZE( ppcStyleNames ); ++nId )
+        for( sal_uInt8 nId = 0; nId < SAL_N_ELEMENTS( ppcStyleNames ); ++nId )
         {
             if( nId != EXC_STYLE_NORMAL )
             {
@@ -689,7 +698,7 @@ void XclTools::SkipSubStream( XclImpStream& rStrm )
 
 // Basic macro names ----------------------------------------------------------
 
-const OUString XclTools::maSbMacroPrefix( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:Standard." ) );
+const OUString XclTools::maSbMacroPrefix( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ) );
 const OUString XclTools::maSbMacroSuffix( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ) );
 
 OUString XclTools::GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell )
@@ -714,7 +723,10 @@ String XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
     sal_Int32 nMacroNameLen = nSbMacroUrlLen - maSbMacroPrefix.getLength() - maSbMacroSuffix.getLength();
     if( (nMacroNameLen > 0) && rSbMacroUrl.matchIgnoreAsciiCase( maSbMacroPrefix, 0 ) &&
             rSbMacroUrl.matchIgnoreAsciiCase( maSbMacroSuffix, nSbMacroUrlLen - maSbMacroSuffix.getLength() ) )
-        return rSbMacroUrl.copy( maSbMacroPrefix.getLength(), nMacroNameLen );
+    {
+        sal_Int32 nPrjDot = rSbMacroUrl.indexOf( '.', maSbMacroPrefix.getLength() ) + 1;
+        return rSbMacroUrl.copy( nPrjDot, nSbMacroUrlLen - nPrjDot - maSbMacroSuffix.getLength() );
+    }
     return String::EmptyString();
 }
 
@@ -734,3 +746,5 @@ XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor )
 }
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,7 @@
 // this are the defines for the position of the settings in the
 // TableViewSettingsSequence
 
-#define SC_TABLE_VIEWSETTINGS_COUNT         15
+#define SC_TABLE_VIEWSETTINGS_COUNT         16
 
 #define SC_CURSOR_X                         0
 #define SC_CURSOR_Y                         1
@@ -78,6 +79,7 @@
 #define SC_TABLE_ZOOM_VALUE                 12
 #define SC_TABLE_PAGE_VIEW_ZOOM_VALUE       13
 #define SC_TABLE_TAB_BG_COLOR               14
+#define SC_TABLE_SHOWGRID                   15
 
 #define SC_CURSORPOSITIONX                  "CursorPositionX"
 #define SC_CURSORPOSITIONY                  "CursorPositionY"
@@ -106,3 +108,5 @@
 #define SC_VIEW                             "view"
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

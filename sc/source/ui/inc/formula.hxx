@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "anyrefdg.hxx"
 #include "global.hxx"       // ScAddress
 #include <svtools/stdctrl.hxx>
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <vcl/group.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/tabpage.hxx>
@@ -113,7 +112,7 @@ public:
 
     virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    virtual void RefInputDone( sal_Bool bForced = sal_False );
+    virtual void RefInputDone( sal_Bool bForced = false );
     virtual sal_Bool IsTableLocked() const;
     virtual sal_Bool IsRefInputMode() const;
 
@@ -136,3 +135,4 @@ protected:
 
 #endif // SC_CRNRDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

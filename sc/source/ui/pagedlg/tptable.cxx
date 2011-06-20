@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -125,10 +126,8 @@ ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
         aBtnTopDown         ( this, ScResId( BTN_TOPDOWN ) ),
         aBtnLeftRight       ( this, ScResId( BTN_LEFTRIGHT ) ),
         aBmpPageDir         ( this, ScResId( BMP_PAGEDIR ) ),
-        aImgLeftRight       ( ScResId( IMG_LEFTRIGHT ) ),
-        aImgTopDown         ( ScResId( IMG_TOPDOWN ) ),
-        aImgLeftRightHC     ( ScResId( IMG_LEFTRIGHT_H ) ),
-        aImgTopDownHC       ( ScResId( IMG_TOPDOWN_H ) ),
+        aImgLeftRight       (       ScResId( IMG_LEFTRIGHT ) ),
+        aImgTopDown         (       ScResId( IMG_TOPDOWN ) ),
         aBtnPageNo          ( this, ScResId( BTN_PAGENO ) ),
         aEdPageNo           ( this, ScResId( ED_PAGENO ) ),
         aFlPrint            ( this, ScResId( FL_PRINT ) ),
@@ -171,11 +170,8 @@ ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
 void ScTablePage::ShowImage()
 {
-    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     bool bLeftRight = aBtnLeftRight.IsChecked();
-    aBmpPageDir.SetImage( bHC ?
-        (bLeftRight ? aImgLeftRightHC : aImgTopDownHC) :
-        (bLeftRight ? aImgLeftRight : aImgTopDown) );
+    aBmpPageDir.SetImage( (bLeftRight ? aImgLeftRight : aImgTopDown) );
 }
 
 // -----------------------------------------------------------------------
@@ -272,7 +268,7 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     if( aLbScaleMode.GetSelectEntryCount() == 0 )
     {
         // fall back to 100%
-        DBG_ERRORFILE( "ScTablePage::Reset - missing scaling item" );
+        OSL_FAIL( "ScTablePage::Reset - missing scaling item" );
         aLbScaleMode.SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
         aEdScaleAll.SetValue( 100 );
     }
@@ -306,7 +302,7 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
     const SfxItemSet&   rOldSet      = GetItemSet();
     sal_uInt16              nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);
-    sal_Bool                bDataChanged = sal_False;
+    sal_Bool                bDataChanged = false;
 
     //-----------
     // sal_Bool-Flags
@@ -571,3 +567,4 @@ sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

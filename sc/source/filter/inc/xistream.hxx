@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include <comphelper/docpasswordhelper.hxx>
 #include <filter/msfilter/mscodec.hxx>
+#include <boost/shared_ptr.hpp>
 #include "xlstream.hxx"
 #include "xlconst.hxx"
 
@@ -47,7 +49,7 @@ Input stream class for Excel import
 // ============================================================================
 
 class XclImpDecrypter;
-typedef ScfRef< XclImpDecrypter > XclImpDecrypterRef;
+typedef boost::shared_ptr< XclImpDecrypter > XclImpDecrypterRef;
 
 /** Base class for BIFF stream decryption. */
 class XclImpDecrypter : public ::comphelper::IDocPasswordVerifier
@@ -188,9 +190,6 @@ public:
                             sal_uInt16& rnRawRecId, sal_uInt16& rnRawRecSize, sal_uInt16& rnRawRecLeft,
                             bool& rbValid ) const;
 
-    /** Returns the stored stream position. */
-    inline sal_Size     GetPos() const { return mnPos; }
-
 private:
     sal_Size            mnPos;          /// Absolute position of the stream.
     sal_Size            mnNextPos;      /// Absolute position of next record.
@@ -289,14 +288,6 @@ public:
         started with StartNextRecord(). */
     void                ResetRecord( bool bContLookup,
                             sal_uInt16 nAltContId = EXC_ID_UNKNOWN );
-    /** Sets stream pointer before current record and invalidates stream.
-        @descr  The next call to StartNextRecord() will start again the current
-        record. This can be used in situations where a loop or a function
-        leaves on a specific record, but the parent context expects to start
-        this record by itself. The stream is invalid as long as the first
-        record has not been started (it is not allowed to call any other stream
-        operation then). */
-    void                RewindRecord();
 
     /** Enables decryption of record contents for the rest of the stream. */
     void                SetDecrypter( XclImpDecrypterRef xDecrypter );
@@ -321,8 +312,6 @@ public:
     /** Seeks to last position from user position stack.
         @descr  This position will be removed from the stack. */
     void                PopPosition();
-//UNUSED2008-05  /** Removes last position from user position stack, but does not seek to it. */
-//UNUSED2008-05  void                RejectPosition();
 
     /** Stores current position. This position keeps valid in all records. */
     void                StoreGlobalPosition();
@@ -353,13 +342,11 @@ public:
     XclImpStream&       operator>>( float& rfValue );
     XclImpStream&       operator>>( double& rfValue );
 
-    sal_Int8            ReadInt8();
     sal_uInt8           ReaduInt8();
     sal_Int16           ReadInt16();
     sal_uInt16          ReaduInt16();
     sal_Int32           ReadInt32();
     sal_uInt32          ReaduInt32();
-    float               ReadFloat();
     double              ReadDouble();
 
     /** Reads nBytes bytes to the existing(!) buffer pData.
@@ -433,8 +420,6 @@ public:
     void                IgnoreUniString( sal_uInt16 nChars, sal_uInt8 nFlags );
     /** Ignores 8 bit flags, ext. header, nChar characters, ext. data. */
     void                IgnoreUniString( sal_uInt16 nChars );
-    /** Ignores 16 bit character count, 8 bit flags, ext. header, character array, ext. data. */
-    void                IgnoreUniString();
 
     // *** read/ignore 8-bit-strings, store in String *** ---------------------
 
@@ -544,3 +529,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

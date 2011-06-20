@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,16 @@
 #define SC_FORMEL_HXX
 
 #include <tools/solar.h>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
-#include "tokstack.hxx"
-#include "root.hxx"
-#include <global.hxx>
+
 #include <compiler.hxx>
+#include <global.hxx>
 
+#include "root.hxx"
+#include "tokstack.hxx"
 
-// ----- forwards --------------------------------------------------------
+#include <boost/ptr_container/ptr_map.hpp>
+#include <vector>
 
 class XclImpStream;
 class ScTokenArray;
@@ -45,20 +47,14 @@ class ScFormulaCell;
 struct ScSingleRefData;
 struct ScComplexRefData;
 
-
-
-
-//------------------------------------------------------------------------
-
 enum ConvErr
 {
     ConvOK = 0,
-    ConvErrNi,      // nicht implemntierter/unbekannter Opcode aufgetreten
-    ConvErrNoMem,   // Fehler beim Speicheranfordern
-    ConvErrExternal,// Add-Ins aus Excel werden nicht umgesetzt
-    ConvErrCount    // Nicht alle Bytes der Formel 'erwischt'
+    ConvErrNi,      // unimplemented/unknown opcode occurred
+    ConvErrNoMem,   // alloc error
+    ConvErrExternal,// excel add-ins are not converted
+    ConvErrCount    // did not get all bytes of formula
 };
-
 
 enum FORMULA_TYPE
 {
@@ -67,136 +63,41 @@ enum FORMULA_TYPE
     FT_SharedFormula
 };
 
-
-
-
-//--------------------------------------------------------- class ScRangeList -
-
-class _ScRangeList : protected List
-{
-private:
-protected:
-public:
-    virtual                 ~_ScRangeList();
-    inline void             Append( const ScRange& rRange );
-    inline void             Append( ScRange* pRange );
-    inline void             Append( const ScSingleRefData& rSRD );
-    inline void             Append( const ScComplexRefData& rCRD );
-
-    using                   List::Count;
-    inline sal_Bool             HasRanges( void ) const;
-
-    inline const ScRange*   First( void );
-    inline const ScRange*   Next( void );
-};
-
-
-inline void _ScRangeList::Append( const ScRange& r )
-{
-    List::Insert( new ScRange( r ), LIST_APPEND );
-}
-
-
-inline void _ScRangeList::Append( ScRange* p )
-{
-    List::Insert( p, LIST_APPEND );
-}
-
-
-inline sal_Bool _ScRangeList::HasRanges( void ) const
-{
-    return Count() > 0;
-}
-
-
-inline const ScRange* _ScRangeList::First( void )
-{
-    return ( const ScRange* ) List::First();
-}
-
-
-inline const ScRange* _ScRangeList::Next( void )
-{
-    return ( const ScRange* ) List::Next();
-}
-
-
-inline void _ScRangeList::Append( const ScSingleRefData& r )
-{
-    List::Insert( new ScRange( r.nCol, r.nRow, r.nTab ), LIST_APPEND );
-}
-
-
-inline void _ScRangeList::Append( const ScComplexRefData& r )
-{
-    List::Insert(   new ScRange(    r.Ref1.nCol, r.Ref1.nRow, r.Ref1.nTab,
-                                    r.Ref2.nCol, r.Ref2.nRow, r.Ref2.nTab ),
-                    LIST_APPEND );
-}
-
-
-
-
-//----------------------------------------------------- class ScRangeListTabs -
-
 class _ScRangeListTabs
 {
-private:
-protected:
-    sal_Bool                        bHasRanges;
-    _ScRangeList**              ppTabLists;
-    _ScRangeList*               pAct;
-    sal_uInt16                      nAct;
+    typedef ::std::vector<ScRange> RangeListType;
+    typedef ::boost::ptr_map<SCTAB, RangeListType> TabRangeType;
+    TabRangeType maTabRanges;
+    RangeListType::const_iterator maItrCur;
+    RangeListType::const_iterator maItrCurEnd;
+
 public:
-                                _ScRangeListTabs( void );
-    virtual                     ~_ScRangeListTabs();
+    _ScRangeListTabs ();
+    ~_ScRangeListTabs();
 
-    void                        Append( ScSingleRefData aSRD, const sal_Bool bLimit = sal_True );
-    void                        Append( ScComplexRefData aCRD, const sal_Bool bLimit = sal_True );
+    void Append( ScSingleRefData aSRD, SCTAB nTab, bool bLimit = true );
+    void Append( ScComplexRefData aCRD, SCTAB nTab, bool bLimit = true );
 
-    inline sal_Bool                 HasRanges( void ) const;
+    const ScRange* First ( SCTAB nTab = 0 );
+    const ScRange* Next ();
 
-    const ScRange*              First( const sal_uInt16 nTab = 0 );
-    const ScRange*              Next( void );
-//      const ScRange*              NextContinue( void );
-    inline const _ScRangeList*  GetActList( void ) const;
+    bool HasRanges () const { return !maTabRanges.empty(); }
 };
-
-
-inline sal_Bool _ScRangeListTabs::HasRanges( void ) const
-{
-    return bHasRanges;
-}
-
-
-inline const _ScRangeList* _ScRangeListTabs::GetActList( void ) const
-{
-    return pAct;
-}
-
-
-
 
 class ConverterBase
 {
 protected:
-    TokenPool           aPool;          // User Token + Predefined Token
+    TokenPool           aPool;          // user token + predefined token
     TokenStack          aStack;
     ScAddress           aEingPos;
     ConvErr             eStatus;
-    sal_Char*           pBuffer;        // Universal-Puffer
-    sal_uInt16              nBufferSize;    // ...und seine Groesse
+    sal_Char*           pBuffer;        // universal buffer
+    sal_uInt16              nBufferSize;    // ...and its size
 
                         ConverterBase( sal_uInt16 nNewBuffer );
     virtual             ~ConverterBase();
 
     void                Reset();
-
-public:
-    inline SCCOL        GetEingabeCol( void ) const { return aEingPos.Col(); }
-    inline SCROW        GetEingabeRow( void ) const { return aEingPos.Row(); }
-    inline SCTAB        GetEingabeTab( void ) const { return aEingPos.Tab(); }
-    inline ScAddress    GetEingPos( void ) const    { return aEingPos; }
 };
 
 
@@ -213,7 +114,7 @@ public:
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, sal_Size nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
-    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen,
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 };
 
@@ -237,8 +138,6 @@ protected:
     virtual             ~LotusConverterBase();
 
 public:
-//UNUSED2008-05  void                Reset( sal_Int32 nLen );
-//UNUSED2008-05  void                Reset( sal_Int32 nLen, const ScAddress& rEingPos );
     void                Reset( const ScAddress& rEingPos );
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
@@ -294,3 +193,4 @@ inline void LotusConverterBase::Read( sal_uInt32& nUINT32 )
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

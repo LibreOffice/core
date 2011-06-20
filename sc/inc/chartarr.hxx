@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,12 @@
 
 // -----------------------------------------------------------------------
 
-#include "collect.hxx"
 #include "rangelst.hxx"
 #include "chartpos.hxx"
 
-class ScAddress;
-class Table;
-class ScDocument;
+#include <boost/ptr_container/ptr_vector.hpp>
 
+class ScDocument;
 
 // ScMemChart is a stripped-down SchMemChart from old chart,
 // used only to transport a rectangular data array for the UNO API,
@@ -48,8 +47,8 @@ class ScMemChart
     short           nRowCnt;
     short           nColCnt;
     double*         pData;
-    String*         pColText;
-    String*         pRowText;
+    ::rtl::OUString* pColText;
+    ::rtl::OUString* pRowText;
 
     ScMemChart(const ScMemChart& rMemChart);      // not implemented
 
@@ -59,69 +58,69 @@ public:
 
     short GetColCount() const { return nColCnt; }
     short GetRowCount() const { return nRowCnt; }
-    const String& GetColText(short nCol) const { return pColText[nCol]; }
-    const String& GetRowText(short nRow) const { return pRowText[nRow]; }
+    const ::rtl::OUString& GetColText(short nCol) const { return pColText[nCol]; }
+    const ::rtl::OUString& GetRowText(short nRow) const { return pRowText[nRow]; }
     double GetData(short nCol, short nRow) const { return pData[nCol * nRowCnt + nRow]; }
     void SetData(short nCol, short nRow, const double& rVal) { pData[nCol * nRowCnt + nRow] = rVal; }
-    void SetColText(short nCol, const String& rText) { pColText[nCol] = rText; }
-    void SetRowText(short nRow, const String& rText) { pRowText[nRow] = rText; }
+    void SetColText(short nCol, const ::rtl::OUString& rText) { pColText[nCol] = rText; }
+    void SetRowText(short nRow, const ::rtl::OUString& rText) { pRowText[nRow] = rText; }
 };
 
-
-class SC_DLLPUBLIC ScChartArray : public ScDataObject               // nur noch Parameter-Struct
+class SC_DLLPUBLIC ScChartArray             // only parameter-struct
 {
-    String      aName;
+    ::rtl::OUString aName;
     ScDocument* pDocument;
     ScChartPositioner aPositioner;
-    sal_Bool        bValid;             // fuer Erzeugung aus SchMemChart
+    bool        bValid;             // for creation out of SchMemChart
 
 private:
     ScMemChart* CreateMemChartSingle();
     ScMemChart* CreateMemChartMulti();
 public:
     ScChartArray( ScDocument* pDoc, SCTAB nTab,
-                    SCCOL nStartColP, SCROW nStartRowP,
-                    SCCOL nEndColP, SCROW nEndRowP,
-                    const String& rChartName );
+                  SCCOL nStartColP, SCROW nStartRowP,
+                  SCCOL nEndColP, SCROW nEndRowP,
+                  const ::rtl::OUString& rChartName );
     ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
-                    const String& rChartName );
+                  const ::rtl::OUString& rChartName );
     ScChartArray( const ScChartArray& rArr );
-
-    virtual ~ScChartArray();
-    virtual ScDataObject* Clone() const;
+    ~ScChartArray();
 
     const ScRangeListRef&   GetRangeList() const { return aPositioner.GetRangeList(); }
     void    SetRangeList( const ScRangeListRef& rNew ) { aPositioner.SetRangeList(rNew); }
     void    SetRangeList( const ScRange& rNew ) { aPositioner.SetRangeList(rNew); }
     const   ScChartPositionMap* GetPositionMap() { return aPositioner.GetPositionMap(); }
 
-    void    SetHeaders(sal_Bool bCol, sal_Bool bRow) { aPositioner.SetHeaders(bCol, bRow); }
-    sal_Bool    HasColHeaders() const            { return aPositioner.HasColHeaders(); }
-    sal_Bool    HasRowHeaders() const            { return aPositioner.HasRowHeaders(); }
-    sal_Bool    IsValid() const                  { return bValid; }
-    void    SetName(const String& rNew)      { aName = rNew; }
-    const String& GetName() const            { return aName; }
+    void    SetHeaders(bool bCol, bool bRow) { aPositioner.SetHeaders(bCol, bRow); }
+    bool    HasColHeaders() const { return aPositioner.HasColHeaders(); }
+    bool    HasRowHeaders() const { return aPositioner.HasRowHeaders(); }
+    bool IsValid() const { return bValid; }
+    void SetName(const ::rtl::OUString& rNew) { aName = rNew; }
+    const ::rtl::OUString& GetName() const { return aName; }
 
-    sal_Bool    operator==(const ScChartArray& rCmp) const;
+    bool operator==(const ScChartArray& rCmp) const;
 
     ScMemChart* CreateMemChart();
 };
 
-class ScChartCollection : public ScCollection
+class ScChartCollection
 {
+    typedef ::boost::ptr_vector<ScChartArray> DataType;
+    DataType maData;
 public:
-    ScChartCollection() : ScCollection( 4,4 ) {}
-    ScChartCollection( const ScChartCollection& rColl ):
-            ScCollection( rColl ) {}
+    ScChartCollection();
+    ScChartCollection(const ScChartCollection& rColl);
 
-    virtual ScDataObject*   Clone() const;
-    ScChartArray*       operator[](sal_uInt16 nIndex) const
-                        { return (ScChartArray*)At(nIndex); }
+    SC_DLLPUBLIC void push_back(ScChartArray* p);
+    void clear();
+    size_t size() const;
+    bool empty() const;
+    ScChartArray* operator[](size_t nIndex);
+    const ScChartArray* operator[](size_t nIndex) const;
 
-    sal_Bool    operator==(const ScChartCollection& rCmp) const;
+    bool operator==(const ScChartCollection& rCmp) const;
 };
-
-
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

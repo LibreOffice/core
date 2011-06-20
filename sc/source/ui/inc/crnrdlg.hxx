@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ScViewData;
 class ScDocument;
@@ -78,7 +79,7 @@ private:
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
 
-    typedef ::std::hash_map< String, ScRange, ScStringHashCode, ::std::equal_to<String> > NameRangeMap;
+    typedef ::boost::unordered_map< String, ScRange, ScStringHashCode, ::std::equal_to<String> > NameRangeMap;
     NameRangeMap    aRangeMap;
     ScViewData*     pViewData;
     ScDocument*     pDoc;
@@ -90,8 +91,8 @@ private:
     void Init               ();
     void UpdateNames        ();
     void UpdateRangeData    ( const ScRange& rRange, sal_Bool bColName );
-    void SetColRowData( const ScRange& rLabelRange,sal_Bool bRef=sal_False);
-    void AdjustColRowData( const ScRange& rDataRange,sal_Bool bRef=sal_False);
+    void SetColRowData( const ScRange& rLabelRange,sal_Bool bRef=false);
+    void AdjustColRowData( const ScRange& rDataRange,sal_Bool bRef=false);
     DECL_LINK( CancelBtnHdl, void * );
     DECL_LINK( OkBtnHdl, void * );
     DECL_LINK( AddBtnHdl, void * );
@@ -110,3 +111,4 @@ private:
 
 #endif // SC_CRNRDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

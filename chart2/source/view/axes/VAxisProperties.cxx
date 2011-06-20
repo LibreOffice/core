@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -400,16 +401,7 @@ AxisLabelProperties::AxisLabelProperties()
                         , nRhythm( 1 )
                         , bRhythmIsFix(false)
 {
-    /*
-    aLocale.Language = C2U( "en" );
-    aLocale.Country  = C2U( "US" );
 
-    //aLocale.Language = C2U( "ar" );
-    //aLocale.Country  = C2U( "IR" );
-
-    //aLocale.Language = C2U( "ja" );
-    //aLocale.Country  = C2U( "JP" );
-    */
 }
 
 void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
@@ -450,28 +442,6 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
     }
 }
 
-/*
-sal_Int16 getSwappedWritingMode( sal_Int16 nWritingMode )
-{
-    //LR_TB == LT
-    //RL_TB == RT (Arabic, Hebrew)
-    //TB_RL == TR (Japanese, Chinese, Korean)
-    // ?? TL (Mongolian) see also text::WritingMode2
-
-    switch(nWritingMode)
-    {
-        case text::WritingMode2::RL_TB:
-            return  text::WritingMode2::TB_RL;
-        case text::WritingMode2::TB_RL:
-            return  text::WritingMode2::RL_TB;
-        case text::WritingMode2::LR_TB:
-            return  text::WritingMode2::TB_LR;
-        default:
-            return  text::WritingMode2::LR_TB;
-    }
-}
-*/
-
 sal_Bool AxisLabelProperties::getIsStaggered() const
 {
     if( STAGGER_ODD == eStaggering || STAGGER_EVEN == eStaggering )
@@ -482,3 +452,5 @@ sal_Bool AxisLabelProperties::getIsStaggered() const
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sot/sotref.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
@@ -63,7 +63,7 @@ ScClient::ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrMod
     SetObject( pObj->GetObjRef() );
 }
 
-__EXPORT ScClient::~ScClient()
+ScClient::~ScClient()
 {
 }
 
@@ -93,13 +93,13 @@ SdrOle2Obj* ScClient::GetDrawObj()
     return pOle2Obj;
 }
 
-void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
+void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
     if (!pViewSh)
     {
-        DBG_ERROR("Wrong ViewShell");
+        OSL_FAIL("Wrong ViewShell");
         return;
     }
 
@@ -155,13 +155,13 @@ void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
     }
 }
 
-void __EXPORT ScClient::ObjectAreaChanged()
+void ScClient::ObjectAreaChanged()
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
     if (!pViewSh)
     {
-        DBG_ERROR("Wrong ViewShell");
+        OSL_FAIL("Wrong ViewShell");
         return;
     }
 
@@ -183,7 +183,7 @@ void __EXPORT ScClient::ObjectAreaChanged()
         pViewSh->ScrollToObject( pDrawObj );
 }
 
-void __EXPORT ScClient::ViewChanged()
+void ScClient::ViewChanged()
 {
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
     {
@@ -202,7 +202,7 @@ void __EXPORT ScClient::ViewChanged()
         aSz = xObj->getVisualAreaSize( GetAspect() );
     } catch ( embed::NoVisualAreaSizeException& )
     {
-        DBG_ERROR("The visual area size must be available!\n");
+        OSL_FAIL("The visual area size must be available!\n");
     }
 
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
@@ -242,7 +242,7 @@ void __EXPORT ScClient::ViewChanged()
     }
 }
 
-void __EXPORT ScClient::MakeVisible()
+void ScClient::MakeVisible()
 {
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
@@ -254,3 +254,4 @@ void __EXPORT ScClient::MakeVisible()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@ using ::rtl::OUString;
 //.............................................................................
 namespace chart
 {
-//.............................................................................
 
 WrappedTextRotationProperty::WrappedTextRotationProperty( bool bDirectState )
     : ::chart::WrappedProperty( C2U( "TextRotation" ), C2U( "TextRotation" ) )
@@ -82,6 +82,7 @@ Any WrappedTextRotationProperty::convertOuterToInnerValue( const Any& rOuterValu
     return aRet;
 }
 
-//.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,10 +33,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include "scui_def.hxx" //CHINA001
-
-//CHINA001 #define SCRET_COLS 0x42
-//CHINA001 #define SCRET_ROWS 0x43
+#include "scui_def.hxx"
 
 //------------------------------------------------------------------------
 
@@ -64,3 +62,4 @@ private:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

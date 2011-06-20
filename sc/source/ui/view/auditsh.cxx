@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,7 +105,7 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
             break;
         case SID_CANCEL:        // Escape
         case SID_FILL_NONE:
-            pViewData->GetViewShell()->SetAuditShell( sal_False );
+            pViewData->GetViewShell()->SetAuditShell( false );
             break;
 
         case SID_FILL_SELECT:
@@ -117,12 +118,12 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
                     if ( pReqArgs->GetItemState( SID_RANGE_COL, sal_True, &pXItem ) == SFX_ITEM_SET
                       && pReqArgs->GetItemState( SID_RANGE_ROW, sal_True, &pYItem ) == SFX_ITEM_SET )
                     {
-                        DBG_ASSERT( pXItem->ISA(SfxInt16Item) && pYItem->ISA(SfxInt32Item),
+                        OSL_ENSURE( pXItem->ISA(SfxInt16Item) && pYItem->ISA(SfxInt32Item),
                                         "falsche Items" );
                         SCsCOL nCol = static_cast<SCsCOL>(((const SfxInt16Item*) pXItem)->GetValue());
                         SCsROW nRow = static_cast<SCsROW>(((const SfxInt32Item*) pYItem)->GetValue());
                         ScViewFunc* pView = pViewData->GetView();
-                        pView->MoveCursorAbs( nCol, nRow, SC_FOLLOW_LINE, sal_False, sal_False );
+                        pView->MoveCursorAbs( nCol, nRow, SC_FOLLOW_LINE, false, false );
                         switch ( nFunction )
                         {
                             case SID_FILL_ADD_PRED:
@@ -153,3 +154,4 @@ void ScAuditingShell::GetState( SfxItemSet& rSet )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

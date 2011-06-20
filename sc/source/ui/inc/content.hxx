@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,6 @@ class ScContentTree : public SvTreeListBox
 {
     ScNavigatorDlg*     pParentWindow;
     ImageList           aEntryImages;
-    ImageList           aHCEntryImages;
     SvLBoxEntry*        pRootNodes[SC_CONTENT_COUNT];
     sal_uInt16              nRootType;          // als Root eingestellt
     String              aManualDoc;         // im Navigator umgeschaltet (Title)
@@ -110,7 +110,6 @@ class ScContentTree : public SvTreeListBox
     sal_uLong   GetChildIndex( SvLBoxEntry* pEntry ) const;
 
     void    DoDrag();
-//UNUSED2008-05  void   AdjustTitle();
 
     ScDocument* GetSourceDocument();
 
@@ -167,3 +166,4 @@ public:
 
 #endif // SC_NAVIPI_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

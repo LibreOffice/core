@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ ScAddInAsync::ScAddInAsync( sal_uLong nHandleP, sal_uInt16 nIndex, ScDocument* p
     SvtBroadcaster(),
     pStr( NULL ),
     nHandle( nHandleP ),
-    bValid( sal_False )
+    bValid( false )
 {
     pDocs = new ScAddInDocs( 1, 1 );
     pDocs->Insert( pDoc );
@@ -137,7 +138,7 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
                 p->pStr = new String( (sal_Char*)pData, osl_getThreadTextEncoding() );
             break;
         default :
-            DBG_ERROR( "unbekannter AsyncType" );
+            OSL_FAIL( "unbekannter AsyncType" );
             return;
     }
     p->bValid = sal_True;
@@ -185,3 +186,4 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

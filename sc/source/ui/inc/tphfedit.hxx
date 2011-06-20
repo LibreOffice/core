@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <svx/pageitem.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/group.hxx>
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 #include "scdllapi.h"
@@ -53,7 +52,7 @@ class SvxFieldItem;
 class ScAccessibleEditObject;
 class ScEditWindow;
 
-SC_DLLPUBLIC ScEditWindow* GetScEditWindow (); //CHINA001
+SC_DLLPUBLIC ScEditWindow* GetScEditWindow ();
 
 enum ScEditWindowLocation
 {
@@ -114,8 +113,6 @@ private:
 
     SC_DLLPRIVATE  DECL_LINK( TimerHdl, Timer*);
 
-//  void            DrawArrow();
-
 protected:
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -138,102 +135,6 @@ public:
     virtual long    PreNotify( NotifyEvent& rNEvt );
 };
 
-
-//===================================================================
-//CHINA001
-//CHINA001 class ScHFEditPage : public SfxTabPage
-//CHINA001 {
-//CHINA001 public:
-//CHINA001 virtual  sal_Bool    FillItemSet ( SfxItemSet& rCoreSet );
-//CHINA001 virtual  void    Reset       ( const SfxItemSet& rCoreSet );
-//CHINA001
-//CHINA001 void         SetNumType(SvxNumType eNumType);
-//CHINA001
-//CHINA001 protected:
-//CHINA001 ScHFEditPage( Window*            pParent,
-//CHINA001 sal_uInt16           nResId,
-//CHINA001 const SfxItemSet&    rCoreSet,
-//CHINA001 sal_uInt16           nWhich );
-//CHINA001 virtual      ~ScHFEditPage();
-//CHINA001
-//CHINA001 private:
-//CHINA001 FixedText        aFtLeft;
-//CHINA001 ScEditWindow aWndLeft;
-//CHINA001 FixedText        aFtCenter;
-//CHINA001 ScEditWindow aWndCenter;
-//CHINA001 FixedText        aFtRight;
-//CHINA001 ScEditWindow aWndRight;
-//CHINA001 ImageButton      aBtnText;
-//CHINA001 ScExtIButton aBtnFile;
-//CHINA001 ImageButton      aBtnTable;
-//CHINA001 ImageButton      aBtnPage;
-//CHINA001 ImageButton      aBtnLastPage;
-//CHINA001 ImageButton      aBtnDate;
-//CHINA001 ImageButton      aBtnTime;
-//CHINA001 FixedLine        aFlInfo;
-//CHINA001 FixedInfo        aFtInfo;
-//CHINA001 ScPopupMenu      aPopUpFile;
-//CHINA001
-//CHINA001 sal_uInt16           nWhich;
-//CHINA001 String           aCmdArr[6];
-//CHINA001
-//CHINA001 private:
-//CHINA001 #ifdef _TPHFEDIT_CXX
-//CHINA001 void FillCmdArr();
-//CHINA001 DECL_LINK( ClickHdl, ImageButton* );
-//CHINA001 DECL_LINK( MenuHdl, ScExtIButton* );
-//CHINA001 #endif
-//CHINA001 };
-//CHINA001
-//CHINA001 //===================================================================
-//CHINA001
-//CHINA001 class ScRightHeaderEditPage : public ScHFEditPage
-//CHINA001 {
-//CHINA001 public:
-//CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static sal_uInt16*       GetRanges();
-//CHINA001
-//CHINA001 private:
-//CHINA001 ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
-//CHINA001 };
-//CHINA001
-//CHINA001 //===================================================================
-//CHINA001
-//CHINA001 class ScLeftHeaderEditPage : public ScHFEditPage
-//CHINA001 {
-//CHINA001 public:
-//CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static sal_uInt16*       GetRanges();
-//CHINA001
-//CHINA001 private:
-//CHINA001 ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
-//CHINA001 };
-//CHINA001
-//CHINA001 //===================================================================
-//CHINA001
-//CHINA001 class ScRightFooterEditPage : public ScHFEditPage
-//CHINA001 {
-//CHINA001 public:
-//CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static sal_uInt16*       GetRanges();
-//CHINA001
-//CHINA001 private:
-//CHINA001 ScRightFooterEditPage( Window* pParent, const SfxItemSet& rSet );
-//CHINA001 };
-//CHINA001
-//CHINA001 //===================================================================
-//CHINA001
-//CHINA001 class ScLeftFooterEditPage : public ScHFEditPage
-//CHINA001 {
-//CHINA001 public:
-//CHINA001 static SfxTabPage*   Create( Window* pParent, const SfxItemSet& rCoreSet );
-//CHINA001 static sal_uInt16*       GetRanges();
-//CHINA001
-//CHINA001 private:
-//CHINA001 ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rSet );
-//CHINA001 };
-
-
-
 #endif // SC_TPHFEDIT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

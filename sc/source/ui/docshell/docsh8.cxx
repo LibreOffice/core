@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,8 +79,18 @@
 #include "dbdocutl.hxx"
 #include "dociter.hxx"
 #include "globstr.hrc"
+#include "svl/zformat.hxx"
+#include "svl/intitem.hxx"
+#include "patattr.hxx"
+#include "scitems.hxx"
+#include "docpool.hxx"
+#include "segmenttree.hxx"
+#include "docparam.hxx"
+
+#include <vector>
 
 using namespace com::sun::star;
+using ::std::vector;
 
 // -----------------------------------------------------------------------
 
@@ -87,10 +98,10 @@ using namespace com::sun::star;
 #define SC_SERVICE_DRVMAN           "com.sun.star.sdbc.DriverManager"
 
 //! move to a header file?
-//#define SC_DBPROP_DATASOURCENAME  "DataSourceName"
 #define SC_DBPROP_ACTIVECONNECTION  "ActiveConnection"
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
+#define SC_DBPROP_PROPCHANGE_NOTIFY "PropertyChangeNotificationEnabled"
 
 #define SC_DBPROP_NAME              "Name"
 #define SC_DBPROP_TYPE              "Type"
@@ -119,9 +130,9 @@ namespace
         if (!xFactory.is()) return SCERR_EXPORT_CONNECT;
 
         _rDrvMgr.set( xFactory->createInstance(
-                            rtl::OUString::createFromAscii( SC_SERVICE_DRVMAN ) ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_DRVMAN )) ),
                             uno::UNO_QUERY);
-        DBG_ASSERT( _rDrvMgr.is(), "can't get DriverManager" );
+        OSL_ENSURE( _rDrvMgr.is(), "can't get DriverManager" );
         if (!_rDrvMgr.is()) return SCERR_EXPORT_CONNECT;
 
         // get connection
@@ -135,7 +146,7 @@ namespace
         ::std::vector< rtl_TextEncoding >::iterator aIter = ::std::find(aEncodings.begin(),aEncodings.end(),(rtl_TextEncoding) eCharSet);
         if ( aIter == aEncodings.end() )
         {
-            DBG_ERRORFILE( "DBaseImport: dbtools::OCharsetMap doesn't know text encoding" );
+            OSL_FAIL( "DBaseImport: dbtools::OCharsetMap doesn't know text encoding" );
             return SCERR_IMPORT_CONNECT;
         } // if ( aIter == aMap.end() )
         rtl::OUString aCharSetStr;
@@ -148,9 +159,9 @@ namespace
         }
 
         uno::Sequence<beans::PropertyValue> aProps(2);
-        aProps[0].Name = rtl::OUString::createFromAscii(SC_DBPROP_EXTENSION);
+        aProps[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_EXTENSION));
         aProps[0].Value <<= rtl::OUString( aExtension );
-        aProps[1].Name = rtl::OUString::createFromAscii(SC_DBPROP_CHARSET);
+        aProps[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_CHARSET));
         aProps[1].Value <<= aCharSetStr;
 
         _rConnection = _rDrvMgr->getConnectionWithInfo( aConnUrl, aProps );
@@ -160,14 +171,13 @@ namespace
 // -----------------------------------------------------------------------
 // MoveFile/KillFile/IsDocument: similar to SfxContentHelper
 
-// static
 sal_Bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject& rDestObj )
 {
     sal_Bool bMoveData = sal_True;
-    sal_Bool bRet = sal_True, bKillSource = sal_False;
+    sal_Bool bRet = sal_True, bKillSource = false;
     if ( rSourceObj.GetProtocol() != rDestObj.GetProtocol() )
     {
-        bMoveData = sal_False;
+        bMoveData = false;
         bKillSource = sal_True;
     }
     String aName = rDestObj.getName();
@@ -180,7 +190,7 @@ sal_Bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObj
         ::ucbhelper::Content aDestPath( aDestPathObj.GetMainURL(INetURLObject::NO_DECODE),
                             uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         uno::Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
-        rtl::OUString aTransferName = rtl::OUString::createFromAscii( "transfer" );
+        rtl::OUString aTransferName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "transfer" ));
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
             aDestPath.executeCommand( aTransferName, uno::makeAny(
@@ -189,13 +199,13 @@ sal_Bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObj
         }
         else
         {
-            DBG_ERRORFILE( "transfer command not available" );
+            OSL_FAIL( "transfer command not available" );
         }
     }
     catch( uno::Exception& )
     {
         // ucb may throw different exceptions on failure now
-        bRet = sal_False;
+        bRet = false;
     }
 
     if ( bKillSource )
@@ -205,7 +215,6 @@ sal_Bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObj
 }
 
 
-// static
 sal_Bool ScDocShell::KillFile( const INetURLObject& rURL )
 {
     sal_Bool bRet = sal_True;
@@ -213,22 +222,21 @@ sal_Bool ScDocShell::KillFile( const INetURLObject& rURL )
     {
         ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
                         uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        aCnt.executeCommand( rtl::OUString::createFromAscii( "delete" ),
+        aCnt.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "delete" )),
                                 comphelper::makeBoolAny( sal_True ) );
     }
     catch( uno::Exception& )
     {
         // ucb may throw different exceptions on failure now
-        bRet = sal_False;
+        bRet = false;
     }
 
     return bRet;
 }
 
-// static
 sal_Bool ScDocShell::IsDocument( const INetURLObject& rURL )
 {
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     try
     {
         ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
@@ -238,7 +246,7 @@ sal_Bool ScDocShell::IsDocument( const INetURLObject& rURL )
     catch( uno::Exception& )
     {
         // ucb may throw different exceptions on failure now - warning only
-        DBG_WARNING( "Any other exception" );
+        OSL_FAIL( "Any other exception" );
     }
 
     return bRet;
@@ -246,12 +254,60 @@ sal_Bool ScDocShell::IsDocument( const INetURLObject& rURL )
 
 // -----------------------------------------------------------------------
 
-sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
-                                sal_Bool bSimpleColWidth[MAXCOLCOUNT] )
+static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales)
 {
+    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+    if (!pFormatter)
+        return;
+
+    SCCOL nColCount = static_cast<SCCOL>(rScales.size());
+    for (SCCOL i = 0; i < nColCount; ++i)
+    {
+        if (rScales[i] < 0)
+            continue;
+
+        sal_uInt32 nOldFormat;
+        rDoc.GetNumberFormat(static_cast<SCCOL>(i), 0, 0, nOldFormat);
+        const SvNumberformat* pOldEntry = pFormatter->GetEntry(nOldFormat);
+        if (!pOldEntry)
+            continue;
+
+        LanguageType eLang = pOldEntry->GetLanguage();
+        sal_Bool bThousand, bNegRed;
+        sal_uInt16 nPrecision, nLeading;
+        pOldEntry->GetFormatSpecialInfo(bThousand, bNegRed, nPrecision, nLeading);
+
+        nPrecision = static_cast<sal_uInt16>(rScales[i]);
+        String aNewPicture;
+        pFormatter->GenerateFormat(aNewPicture, nOldFormat, eLang,
+                                   bThousand, bNegRed, nPrecision, nLeading);
+
+        sal_uInt32 nNewFormat = pFormatter->GetEntryKey(aNewPicture, eLang);
+        if (nNewFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+        {
+            xub_StrLen nErrPos = 0;
+            short nNewType = 0;
+            bool bOk = pFormatter->PutEntry(
+                aNewPicture, nErrPos, nNewType, nNewFormat, eLang);
+
+            if (!bOk)
+                continue;
+        }
+
+        ScPatternAttr aNewAttrs( rDoc.GetPool() );
+        SfxItemSet& rSet = aNewAttrs.GetItemSet();
+        rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat) );
+        rDoc.ApplyPatternAreaTab(static_cast<SCCOL>(i), 0, static_cast<SCCOL>(i), MAXROW, 0, aNewAttrs);
+    }
+}
+
+sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
+                               ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc )
+{
+    ScColumn::DoubleAllocSwitch aAllocSwitch(true);
+
     sal_uLong nErr = eERR_OK;
     long i;
-    long nColCount = 0;
 
     try
     {
@@ -263,14 +319,21 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
             return nRet;
         ::utl::DisposableComponent aConnectionHelper(xConnection);
 
-        ScProgress aProgress( this, ScGlobal::GetRscString( STR_LOAD_DOC ), 0 );
+        long nRowCount = 0;
+        if ( nRowCount < 0 )
+        {
+            OSL_FAIL("can't get row count");
+            nRowCount = 0;
+        }
+
+        ScProgress aProgress( this, ScGlobal::GetRscString( STR_LOAD_DOC ), nRowCount );
         uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
         uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
-                            rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
                             uno::UNO_QUERY);
         ::utl::DisposableComponent aRowSetHelper(xRowSet);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
+        OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is()) return SCERR_IMPORT_CONNECT;
 
         sal_Int32 nType = sdb::CommandType::TABLE;
@@ -278,18 +341,23 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
 
         aAny <<= xConnection;
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_ACTIVECONNECTION), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_ACTIVECONNECTION)), aAny );
 
         aAny <<= nType;
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
 
         aAny <<= rtl::OUString( aTabName );
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
+
+        aAny <<= false;
+        xRowProp->setPropertyValue(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_PROPCHANGE_NOTIFY)), aAny );
 
         xRowSet->execute();
 
+        long nColCount = 0;
         uno::Reference<sdbc::XResultSetMetaData> xMeta;
         uno::Reference<sdbc::XResultSetMetaDataSupplier> xMetaSupp( xRowSet, uno::UNO_QUERY );
         if ( xMetaSupp.is() )
@@ -303,8 +371,12 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
             nErr = SCWARN_IMPORT_RANGE_OVERFLOW;    // warning
         }
 
+        if ( nColCount > 0 )
+            aDocument.DoColResize( 0, 0, static_cast<SCCOL>(nColCount) - 1,
+                    static_cast<SCSIZE>(nRowCount) + 1 );
+
         uno::Reference<sdbc::XRow> xRow( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRow.is(), "can't get Row" );
+        OSL_ENSURE( xRow.is(), "can't get Row" );
         if (!xRow.is()) return SCERR_IMPORT_CONNECT;
 
         // currency flag is not needed for dBase
@@ -316,9 +388,7 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
         //  read column names
         //! add type descriptions
 
-        aProgress.SetState( 0 );
-        ScColumn::bDoubleAlloc = sal_True;      // row count isn't readily available in advance
-
+        vector<long> aScales(nColCount, -1);
         for (i=0; i<nColCount; i++)
         {
             String aHeader = xMeta->getColumnLabel( i+1 );
@@ -348,6 +418,7 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
                                         nPrec, nScale ) );
                         aHeader += ',';
                         aHeader += String::CreateFromInt32( nScale );
+                        aScales[i] = nScale;
                     }
                     break;
             }
@@ -355,20 +426,39 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
             aDocument.SetString( static_cast<SCCOL>(i), 0, 0, aHeader );
         }
 
+        lcl_setScalesToColumns(aDocument, aScales);
+
         SCROW nRow = 1;     // 0 is column titles
-        sal_Bool bEnd = sal_False;
+        sal_Bool bEnd = false;
         while ( !bEnd && xRowSet->next() )
         {
+            bool bSimpleRow = true;
             if ( nRow <= MAXROW )
             {
                 SCCOL nCol = 0;
                 for (i=0; i<nColCount; i++)
                 {
+                    ScDatabaseDocUtil::StrData aStrData;
                     ScDatabaseDocUtil::PutData( &aDocument, nCol, nRow, 0,
-                                                xRow, i+1, pTypeArr[i], sal_False,
-                                                &bSimpleColWidth[nCol] );
+                                                xRow, i+1, pTypeArr[i], false,
+                                                &aStrData );
+
+                    if (aStrData.mnStrLength > aColWidthParam[nCol].mnMaxTextLen)
+                    {
+                        aColWidthParam[nCol].mnMaxTextLen = aStrData.mnStrLength;
+                        aColWidthParam[nCol].mnMaxTextRow = nRow;
+                    }
+
+                    if (!aStrData.mbSimpleText)
+                    {
+                        bSimpleRow = false;
+                        aColWidthParam[nCol].mbSimpleText = false;
+                    }
+
                     ++nCol;
                 }
+                if (!bSimpleRow)
+                    rRowHeightsRecalc.setTrue(nRow, nRow);
                 ++nRow;
             }
             else        // past the end of the spreadsheet
@@ -376,6 +466,9 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
                 bEnd = sal_True;                            // don't continue
                 nErr = SCWARN_IMPORT_RANGE_OVERFLOW;    // warning message
             }
+
+            if ( nRowCount )
+                aProgress.SetStateOnPercent( nRow );
         }
     }
     catch ( sdbc::SQLException& )
@@ -384,13 +477,9 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR("Unexpected exception in database");
+        OSL_FAIL("Unexpected exception in database");
         nErr = ERRCODE_IO_GENERAL;
     }
-
-    ScColumn::bDoubleAlloc = sal_False;
-    if ( nColCount > 0 )
-        aDocument.DoColResize( 0, 0, static_cast<SCCOL>(nColCount) - 1, 0 );
 
     return nErr;
 }
@@ -416,7 +505,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
     //  updating of column titles didn't work in 5.2 and isn't always wanted
     //  (saving normally shouldn't modify the document)
     //! read flag from configuration
-    sal_Bool bUpdateTitles = sal_False;
+    sal_Bool bUpdateTitles = false;
 
     ScDocument* pDoc = rDocShell.GetDocument();
     SvNumberFormatter* pNumFmt = pDoc->GetFormatTable();
@@ -433,8 +522,8 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
     SCROW nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
     for ( SCCOL nCol = nFirstCol; nCol <= nLastCol; nCol++ )
     {
-        sal_Bool bTypeDefined = sal_False;
-        sal_Bool bPrecDefined = sal_False;
+        sal_Bool bTypeDefined = false;
+        sal_Bool bPrecDefined = false;
         sal_Int32 nFieldLen = 0;
         sal_Int32 nPrecision = 0;
         sal_Int32 nDbType = sdbc::DataType::SQLNULL;
@@ -479,7 +568,6 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                         break;
                     case 'N' :
                         nDbType = sdbc::DataType::DECIMAL;
-                        bTypeDefined = sal_True;
                         break;
                 }
                 if ( bTypeDefined && !nFieldLen && nToken > 2 )
@@ -577,8 +665,8 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                 }
             }
         }
-        sal_Bool bSdbLenAdjusted = sal_False;
-        sal_Bool bSdbLenBad = sal_False;
+        sal_Bool bSdbLenAdjusted = false;
+        sal_Bool bSdbLenBad = false;
         // Feldlaenge
         if ( nDbType == sdbc::DataType::VARCHAR && !nFieldLen )
         {   // maximale Feldbreite bestimmen
@@ -728,7 +816,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
     for ( SCCOL nDocCol = nFirstCol; nDocCol <= nLastCol && bHasFieldNames; nDocCol++ )
     {   // nur Strings in erster Zeile => sind Feldnamen
         if ( !aDocument.HasStringData( nDocCol, nFirstRow, nTab ) )
-            bHasFieldNames = sal_False;
+            bHasFieldNames = false;
     }
 
     long nColCount = nLastCol - nFirstCol + 1;
@@ -765,44 +853,44 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
 
         // create table
         uno::Reference<sdbcx::XTablesSupplier> xTablesSupp =xDDSup->getDataDefinitionByConnection( xConnection );
-        DBG_ASSERT( xTablesSupp.is(), "can't get Data Definition" );
+        OSL_ENSURE( xTablesSupp.is(), "can't get Data Definition" );
         if (!xTablesSupp.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<container::XNameAccess> xTables = xTablesSupp->getTables();
-        DBG_ASSERT( xTables.is(), "can't get Tables" );
+        OSL_ENSURE( xTables.is(), "can't get Tables" );
         if (!xTables.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<sdbcx::XDataDescriptorFactory> xTablesFact( xTables, uno::UNO_QUERY );
-        DBG_ASSERT( xTablesFact.is(), "can't get tables factory" );
+        OSL_ENSURE( xTablesFact.is(), "can't get tables factory" );
         if (!xTablesFact.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<sdbcx::XAppend> xTablesAppend( xTables, uno::UNO_QUERY );
-        DBG_ASSERT( xTablesAppend.is(), "can't get tables XAppend" );
+        OSL_ENSURE( xTablesAppend.is(), "can't get tables XAppend" );
         if (!xTablesAppend.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<beans::XPropertySet> xTableDesc = xTablesFact->createDataDescriptor();
-        DBG_ASSERT( xTableDesc.is(), "can't get table descriptor" );
+        OSL_ENSURE( xTableDesc.is(), "can't get table descriptor" );
         if (!xTableDesc.is()) return SCERR_EXPORT_CONNECT;
 
         aAny <<= rtl::OUString( aTabName );
-        xTableDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_NAME), aAny );
+        xTableDesc->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_NAME)), aAny );
 
         // create columns
 
         uno::Reference<sdbcx::XColumnsSupplier> xColumnsSupp( xTableDesc, uno::UNO_QUERY );
-        DBG_ASSERT( xColumnsSupp.is(), "can't get columns supplier" );
+        OSL_ENSURE( xColumnsSupp.is(), "can't get columns supplier" );
         if (!xColumnsSupp.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<container::XNameAccess> xColumns = xColumnsSupp->getColumns();
-        DBG_ASSERT( xColumns.is(), "can't get columns" );
+        OSL_ENSURE( xColumns.is(), "can't get columns" );
         if (!xColumns.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<sdbcx::XDataDescriptorFactory> xColumnsFact( xColumns, uno::UNO_QUERY );
-        DBG_ASSERT( xColumnsFact.is(), "can't get columns factory" );
+        OSL_ENSURE( xColumnsFact.is(), "can't get columns factory" );
         if (!xColumnsFact.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<sdbcx::XAppend> xColumnsAppend( xColumns, uno::UNO_QUERY );
-        DBG_ASSERT( xColumnsAppend.is(), "can't get columns XAppend" );
+        OSL_ENSURE( xColumnsAppend.is(), "can't get columns XAppend" );
         if (!xColumnsAppend.is()) return SCERR_EXPORT_CONNECT;
 
         const rtl::OUString* pColNames = aColNames.getConstArray();
@@ -814,63 +902,58 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
         for (nCol=0; nCol<nColCount; nCol++)
         {
             uno::Reference<beans::XPropertySet> xColumnDesc = xColumnsFact->createDataDescriptor();
-            DBG_ASSERT( xColumnDesc.is(), "can't get column descriptor" );
+            OSL_ENSURE( xColumnDesc.is(), "can't get column descriptor" );
             if (!xColumnDesc.is()) return SCERR_EXPORT_CONNECT;
 
             aAny <<= pColNames[nCol];
-            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_NAME), aAny );
+            xColumnDesc->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_NAME)), aAny );
 
             aAny <<= pColTypes[nCol];
-            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_TYPE), aAny );
+            xColumnDesc->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_TYPE)), aAny );
 
             aAny <<= pColLengths[nCol];
-            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_PRECISION), aAny );
+            xColumnDesc->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_PRECISION)), aAny );
 
             aAny <<= pColScales[nCol];
-            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_SCALE), aAny );
+            xColumnDesc->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_SCALE)), aAny );
 
             xColumnsAppend->appendByDescriptor( xColumnDesc );
         }
 
         xTablesAppend->appendByDescriptor( xTableDesc );
 
-        // re-open connection
-//      xConnection = xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
-//      DBG_ASSERT( xConnection.is(), "can't get Connection" );
-//      if (!xConnection.is()) return SCERR_EXPORT_CONNECT;
-
         // get row set for writing
         uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
         uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
-                            rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
                             uno::UNO_QUERY);
         ::utl::DisposableComponent aRowSetHelper(xRowSet);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
+        OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is()) return SCERR_EXPORT_CONNECT;
 
         aAny <<= xConnection;
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_ACTIVECONNECTION), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_ACTIVECONNECTION)), aAny );
 
         aAny <<= (sal_Int32) sdb::CommandType::TABLE;
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
 
         aAny <<= rtl::OUString( aTabName );
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
 
         xRowSet->execute();
 
         // write data rows
 
         uno::Reference<sdbc::XResultSetUpdate> xResultUpdate( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xResultUpdate.is(), "can't get XResultSetUpdate" );
+        OSL_ENSURE( xResultUpdate.is(), "can't get XResultSetUpdate" );
         if (!xResultUpdate.is()) return SCERR_EXPORT_CONNECT;
 
         uno::Reference<sdbc::XRowUpdate> xRowUpdate( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRowUpdate.is(), "can't get XRowUpdate" );
+        OSL_ENSURE( xRowUpdate.is(), "can't get XRowUpdate" );
         if (!xRowUpdate.is()) return SCERR_EXPORT_CONNECT;
 
         SCROW nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
@@ -893,7 +976,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
                             if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
                             {
                                 if ( pCell->GetCellType() == CELLTYPE_EDIT )
-                                {   // #60761# Paragraphs erhalten
+                                {   // Paragraphs erhalten
                                     lcl_getLongVarCharEditString( aString,
                                             pCell, aEditEngine);
                                 }
@@ -920,7 +1003,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
                     case sdbc::DataType::DATE:
                         {
                             aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
-                            // #39274# zwischen 0 Wert und 0 kein Wert unterscheiden
+                            // zwischen 0 Wert und 0 kein Wert unterscheiden
                             sal_Bool bIsNull = (fVal == 0.0);
                             if ( bIsNull )
                                 bIsNull = !aDocument.HasValueData( nDocCol, nDocRow, nTab );
@@ -954,7 +1037,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
                         break;
 
                     default:
-                        DBG_ERROR( "ScDocShell::DBaseExport: unknown FieldType" );
+                        OSL_FAIL( "ScDocShell::DBaseExport: unknown FieldType" );
                         if ( nErr == eERR_OK )
                             nErr = SCWARN_EXPORT_DATALOST;
                         aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
@@ -992,7 +1075,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
             // SQL error 22001: String length exceeds field width (after encoding).
             bool bEncErr = (nError == 22018);
             bool bIsOctetTextEncoding = rtl_isOctetTextEncoding( eCharSet);
-            DBG_ASSERT( !bEncErr || bIsOctetTextEncoding, "ScDocShell::DBaseExport: encoding error and not an octect textencoding");
+            OSL_ENSURE( !bEncErr || bIsOctetTextEncoding, "ScDocShell::DBaseExport: encoding error and not an octect textencoding");
             SCCOL nDocCol = nFirstCol;
             const sal_Int32* pColTypes = aColTypes.getConstArray();
             const sal_Int32* pColLengths = aColLengths.getConstArray();
@@ -1081,7 +1164,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR("Unexpected exception in database");
+        OSL_FAIL("Unexpected exception in database");
         nErr = ERRCODE_IO_GENERAL;
     }
 
@@ -1089,3 +1172,4 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

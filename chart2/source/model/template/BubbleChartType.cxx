@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,12 +62,7 @@ struct StaticBubbleChartTypeDefaults_Initializer
     ::chart::tPropertyValueMap* operator()()
     {
         static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
         return &aStaticDefaults;
-    }
-private:
-    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & /*rOutMap*/ )
-    {
     }
 };
 
@@ -154,7 +150,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
         Reference< chart2::XAxis > xAxis( xResult->getAxisByDimension( i, MAIN_AXIS_INDEX ) );
         if( !xAxis.is() )
         {
-            OSL_ENSURE(false,"a created coordinate system should have an axis for each dimension");
+            OSL_FAIL("a created coordinate system should have an axis for each dimension");
             continue;
         }
 
@@ -182,17 +178,12 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 uno::Sequence< ::rtl::OUString > SAL_CALL BubbleChartType::getSupportedMandatoryRoles()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< ::rtl::OUString > aMandRolesSeq;
-
-    if( aMandRolesSeq.getLength() == 0 )
-    {
-        aMandRolesSeq.realloc( 4 );
-        aMandRolesSeq[0] = C2U( "label" );
-        aMandRolesSeq[1] = C2U( "values-x" );
-        aMandRolesSeq[2] = C2U( "values-y" );
-        aMandRolesSeq[3] = C2U( "values-size" );
-    }
-
+    uno::Sequence< ::rtl::OUString > aMandRolesSeq(4);
+    aMandRolesSeq.realloc( 4 );
+    aMandRolesSeq[0] = C2U( "label" );
+    aMandRolesSeq[1] = C2U( "values-x" );
+    aMandRolesSeq[2] = C2U( "values-y" );
+    aMandRolesSeq[3] = C2U( "values-size" );
     return aMandRolesSeq;
 }
 
@@ -240,3 +231,5 @@ APPHELPER_XSERVICEINFO_IMPL( BubbleChartType,
                              C2U( "com.sun.star.comp.chart.BubbleChartType" ));
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

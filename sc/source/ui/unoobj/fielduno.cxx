@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include <svl/smplhint.hxx>
+#include <vcl/svapp.hxx>
 
 
 #include <editeng/eeitem.hxx>
@@ -35,7 +37,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -50,7 +52,6 @@
 #include "editsrc.hxx"
 #include "cellsuno.hxx"
 #include "servuno.hxx"      // fuer IDs
-#include "unoguard.hxx"
 #include "unonames.hxx"
 #include "editutil.hxx"
 
@@ -276,8 +277,6 @@ void ScCellFieldsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
-
         //! Ref-Update
     }
     else if ( rHint.ISA( SfxSimpleHint ) &&
@@ -309,7 +308,7 @@ ScCellFieldObj* ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 
 sal_Int32 SAL_CALL ScCellFieldsObj::getCount() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
@@ -322,31 +321,30 @@ uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference<text::XTextField> xField(GetObjectByIndex_Impl(nIndex));
     if (xField.is())
         return uno::makeAny(xField);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScCellFieldsObj::getElementType() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return getCppuType((uno::Reference<text::XTextField>*)0);
 }
 
 sal_Bool SAL_CALL ScCellFieldsObj::hasElements() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
 
 uno::Reference<container::XEnumeration> SAL_CALL ScCellFieldsObj::createEnumeration()
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFieldEnumeration")));
 }
 
@@ -354,14 +352,14 @@ void SAL_CALL ScCellFieldsObj::addContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ScCellFieldsObj::removeContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 // XRefreshable
@@ -394,7 +392,6 @@ void SAL_CALL ScCellFieldsObj::refresh(  )
                     }
                     catch(uno::RuntimeException&)
                     {
-//                      DBG_ERROR("a object is gone without to remove from Broadcaster");
                         ++pInterfaces;
                         ++i;
                     }
@@ -409,7 +406,7 @@ void SAL_CALL ScCellFieldsObj::addRefreshListener( const uno::Reference< util::X
 {
     if (xListener.is())
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         if (!mpRefreshListeners)
             mpRefreshListeners = new cppu::OInterfaceContainerHelper(aMutex);
         mpRefreshListeners->addInterface(xListener);
@@ -421,7 +418,7 @@ void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util:
 {
     if (xListener.is())
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         if (mpRefreshListeners)
             mpRefreshListeners->removeInterface(xListener);
     }
@@ -431,14 +428,6 @@ void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util:
 
 //  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
 
-
-//UNUSED2008-05  ScCellFieldObj::ScCellFieldObj() :
-//UNUSED2008-05      OComponentHelper( getMutex() ),
-//UNUSED2008-05      aPropSet( lcl_GetURLPropertyMap() ),
-//UNUSED2008-05      pDocShell( NULL )
-//UNUSED2008-05  {
-//UNUSED2008-05      pEditSource = NULL;
-//UNUSED2008-05  }
 
 ScCellFieldObj::ScCellFieldObj(ScDocShell* pDocSh, const ScAddress& rPos,
                                             const ESelection& rSel) :
@@ -493,16 +482,15 @@ uno::Sequence<uno::Type> SAL_CALL ScCellFieldObj::getTypes() throw(uno::RuntimeE
     return aTypes;
 }
 
+namespace
+{
+    class theScCellFieldObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScCellFieldObjImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL ScCellFieldObj::getImplementationId()
                                                     throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScCellFieldObjImplementationId::get().getSeq();
 }
 
 uno::Any SAL_CALL ScCellFieldObj::queryInterface( const uno::Type& rType )
@@ -549,8 +537,6 @@ void ScCellFieldObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
-
         //! Ref-Update
     }
     else if ( rHint.ISA( SfxSimpleHint ) &&
@@ -566,7 +552,7 @@ void ScCellFieldObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 SvxFieldItem ScCellFieldObj::CreateFieldItem()
 {
-    DBG_ASSERT( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
+    OSL_ENSURE( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
 
     SvxURLField aField;
     aField.SetFormat(SVXURLFORMAT_APPDEFAULT);
@@ -581,7 +567,6 @@ void ScCellFieldObj::DeleteField()
     if (pEditSource)
     {
         SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
-//      pEditEngine->QuickDelete( aSelection );
         pForwarder->QuickInsertText( String(), aSelection );
         pEditSource->UpdateData();
 
@@ -598,7 +583,7 @@ void ScCellFieldObj::DeleteField()
 rtl::OUString SAL_CALL ScCellFieldObj::getPresentation( sal_Bool bShowCommand )
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aRet;
 
     if (pEditSource)
@@ -609,7 +594,7 @@ rtl::OUString SAL_CALL ScCellFieldObj::getPresentation( sal_Bool bShowCommand )
 
         //  Typ egal (in Zellen gibts nur URLs)
         SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
-        DBG_ASSERT(pField,"getPresentation: Feld nicht gefunden");
+        OSL_ENSURE(pField,"getPresentation: Feld nicht gefunden");
         if (pField)
         {
             SvxURLField* pURL = (SvxURLField*)pField;
@@ -628,7 +613,7 @@ rtl::OUString SAL_CALL ScCellFieldObj::getPresentation( sal_Bool bShowCommand )
 void SAL_CALL ScCellFieldObj::attach( const uno::Reference<text::XTextRange>& xTextRange )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (xTextRange.is())
     {
         uno::Reference<text::XText> xText(xTextRange->getText());
@@ -641,7 +626,7 @@ void SAL_CALL ScCellFieldObj::attach( const uno::Reference<text::XTextRange>& xT
 
 uno::Reference<text::XTextRange> SAL_CALL ScCellFieldObj::getAnchor() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (pDocShell)
         return new ScCellObj( pDocShell, aCellPos );
     return NULL;
@@ -673,7 +658,7 @@ void SAL_CALL ScCellFieldObj::removeEventListener(
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellFieldObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef = pPropSet->getPropertySetInfo();
     return aRef;
 }
@@ -684,7 +669,7 @@ void SAL_CALL ScCellFieldObj::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aNameString(aPropertyName);
     rtl::OUString aStrVal;
     if (pEditSource)
@@ -695,7 +680,7 @@ void SAL_CALL ScCellFieldObj::setPropertyValue(
 
         //  Typ egal (in Zellen gibts nur URLs)
         SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
-        DBG_ASSERT(pField,"setPropertyValue: Feld nicht gefunden");
+        OSL_ENSURE(pField,"setPropertyValue: Feld nicht gefunden");
         if (pField)
         {
             SvxURLField* pURL = (SvxURLField*)pField;   // ist eine Kopie in der ScUnoEditEngine
@@ -717,7 +702,7 @@ void SAL_CALL ScCellFieldObj::setPropertyValue(
                     pURL->SetTargetFrame( aStrVal );
             }
             else
-                bOk = sal_False;
+                bOk = false;
 
             if (bOk)
             {
@@ -750,7 +735,7 @@ uno::Any SAL_CALL ScCellFieldObj::getPropertyValue( const rtl::OUString& aProper
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     String aNameString(aPropertyName);
 
@@ -774,7 +759,7 @@ uno::Any SAL_CALL ScCellFieldObj::getPropertyValue( const rtl::OUString& aProper
 
         //  Typ egal (in Zellen gibts nur URLs)
         SvxFieldData* pField = aTempEngine.FindByPos( aSelection.nStartPara, aSelection.nStartPos, 0 );
-        DBG_ASSERT(pField,"getPropertyValue: Feld nicht gefunden");
+        OSL_ENSURE(pField,"getPropertyValue: Feld nicht gefunden");
         if (pField)
         {
             SvxURLField* pURL = (SvxURLField*)pField;
@@ -815,24 +800,16 @@ sal_Int64 SAL_CALL ScCellFieldObj::getSomething(
     return 0;
 }
 
-// static
-const uno::Sequence<sal_Int8>& ScCellFieldObj::getUnoTunnelId()
+namespace
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    class theScCellFieldObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScCellFieldObjUnoTunnelId> {};
 }
 
-// static
+const uno::Sequence<sal_Int8>& ScCellFieldObj::getUnoTunnelId()
+{
+    return theScCellFieldObjUnoTunnelId::get().getSeq();
+}
+
 ScCellFieldObj* ScCellFieldObj::getImplementation(
                                 const uno::Reference<text::XTextContent> xObj )
 {
@@ -847,7 +824,7 @@ ScCellFieldObj* ScCellFieldObj::getImplementation(
 
 rtl::OUString SAL_CALL ScCellFieldObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScCellFieldObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellFieldObj" ));
 }
 
 sal_Bool SAL_CALL ScCellFieldObj::supportsService( const rtl::OUString& rServiceName )
@@ -863,8 +840,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellFieldObj::getSupportedServiceNames()
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCTEXTFIELD_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCTEXTCONTENT_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCTEXTFIELD_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCTEXTCONTENT_SERVICE ));
     return aRet;
 }
 
@@ -876,7 +853,7 @@ ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent, sal_uIn
     nType( nT ),
     mpRefreshListeners( NULL )
 {
-    DBG_ASSERT( pContentObj, "ScHeaderFieldsObj ohne Objekt?" );
+    OSL_ENSURE( pContentObj, "ScHeaderFieldsObj ohne Objekt?" );
 
     if (pContentObj)
     {
@@ -955,7 +932,7 @@ ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) cons
 
 sal_Int32 SAL_CALL ScHeaderFieldsObj::getCount() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
@@ -979,31 +956,30 @@ uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference<text::XTextField> xField(GetObjectByIndex_Impl(nIndex));
     if (xField.is())
         return uno::makeAny(xField);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScHeaderFieldsObj::getElementType() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return getCppuType((uno::Reference<text::XTextField>*)0);
 }
 
 sal_Bool SAL_CALL ScHeaderFieldsObj::hasElements() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
 
 uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFieldsObj::createEnumeration()
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFieldEnumeration")));
 }
 
@@ -1011,14 +987,14 @@ void SAL_CALL ScHeaderFieldsObj::addContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ScHeaderFieldsObj::removeContainerListener(
                                 const uno::Reference<container::XContainerListener>& /* xListener */ )
                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 // XRefreshable
@@ -1051,7 +1027,6 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
                     }
                     catch(uno::RuntimeException&)
                     {
-//                      DBG_ERROR("a object is gone without to remove from Broadcaster");
                         ++pInterfaces;
                         ++i;
                     }
@@ -1066,7 +1041,7 @@ void SAL_CALL ScHeaderFieldsObj::addRefreshListener( const uno::Reference< util:
 {
     if (xListener.is())
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         if (!mpRefreshListeners)
             mpRefreshListeners = new cppu::OInterfaceContainerHelper(aMutex);
         mpRefreshListeners->addInterface(xListener);
@@ -1078,7 +1053,7 @@ void SAL_CALL ScHeaderFieldsObj::removeRefreshListener( const uno::Reference<uti
 {
     if (xListener.is())
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         if (mpRefreshListeners)
             mpRefreshListeners->removeInterface(xListener);
     }
@@ -1093,7 +1068,6 @@ SvxFileFormat lcl_UnoToSvxFileFormat( sal_Int16 nUnoValue )
         case text::FilenameDisplayFormat::FULL: return SVXFILEFORMAT_FULLPATH;
         case text::FilenameDisplayFormat::PATH: return SVXFILEFORMAT_PATH;
         case text::FilenameDisplayFormat::NAME: return SVXFILEFORMAT_NAME;
-//      case text::FilenameDisplayFormat::NAME_AND_EXT:
         default:
             return SVXFILEFORMAT_NAME_EXT;
     }
@@ -1106,24 +1080,10 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
         case SVXFILEFORMAT_NAME_EXT:    return text::FilenameDisplayFormat::NAME_AND_EXT;
         case SVXFILEFORMAT_FULLPATH:    return text::FilenameDisplayFormat::FULL;
         case SVXFILEFORMAT_PATH:        return text::FilenameDisplayFormat::PATH;
-//      case SVXFILEFORMAT_NAME:
         default:
             return text::FilenameDisplayFormat::NAME;
     }
 }
-
-
-//  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
-//UNUSED2008-05  ScHeaderFieldObj::ScHeaderFieldObj() :
-//UNUSED2008-05      OComponentHelper( getMutex() ),
-//UNUSED2008-05      aPropSet( lcl_GetHeaderFieldPropertyMap() ),
-//UNUSED2008-05      pContentObj( NULL ),
-//UNUSED2008-05      nPart( 0 ),
-//UNUSED2008-05      nType( 0 ),
-//UNUSED2008-05      nFileFormat( SVXFILEFORMAT_NAME_EXT )
-//UNUSED2008-05  {
-//UNUSED2008-05      pEditSource = NULL;
-//UNUSED2008-05  }
 
 ScHeaderFieldObj::ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, sal_uInt16 nP,
                                             sal_uInt16 nT, const ESelection& rSel) :
@@ -1180,16 +1140,15 @@ uno::Sequence<uno::Type> SAL_CALL ScHeaderFieldObj::getTypes() throw(uno::Runtim
     return aTypes;
 }
 
+namespace
+{
+    class theScHeaderFieldObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScHeaderFieldObjImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL ScHeaderFieldObj::getImplementationId()
                                                     throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScHeaderFieldObjImplementationId::get().getSeq();
 }
 
 uno::Any SAL_CALL ScHeaderFieldObj::queryInterface( const uno::Type& rType )
@@ -1213,7 +1172,7 @@ void ScHeaderFieldObj::InitDoc( ScHeaderFooterContentObj* pContent, sal_uInt16 n
 {
     if ( pContent && !pEditSource )
     {
-        DBG_ASSERT( !pContentObj, "ContentObj, aber kein EditSource?" );
+        OSL_ENSURE( !pContentObj, "ContentObj, aber kein EditSource?" );
 
         aSelection = rSel;
         nPart = nP;
@@ -1236,7 +1195,7 @@ ScHeaderFieldObj::~ScHeaderFieldObj()
 
 SvxFieldItem ScHeaderFieldObj::CreateFieldItem()
 {
-    DBG_ASSERT( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
+    OSL_ENSURE( !pEditSource, "CreateFieldItem mit eingefuegtem Feld" );
 
     switch (nType)
     {
@@ -1286,7 +1245,6 @@ void ScHeaderFieldObj::DeleteField()
     if (pEditSource)
     {
         SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
-//      pEditEngine->QuickDelete( aSelection );
         pForwarder->QuickInsertText( String(), aSelection );
         pEditSource->UpdateData();
 
@@ -1303,7 +1261,7 @@ void ScHeaderFieldObj::DeleteField()
 rtl::OUString SAL_CALL ScHeaderFieldObj::getPresentation( sal_Bool /* bShowCommand */ )
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aRet;
 
     if (pEditSource)
@@ -1322,7 +1280,7 @@ rtl::OUString SAL_CALL ScHeaderFieldObj::getPresentation( sal_Bool /* bShowComma
 void SAL_CALL ScHeaderFieldObj::attach( const uno::Reference<text::XTextRange>& xTextRange )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (xTextRange.is())
     {
         uno::Reference<text::XText> xText(xTextRange->getText());
@@ -1335,7 +1293,7 @@ void SAL_CALL ScHeaderFieldObj::attach( const uno::Reference<text::XTextRange>& 
 
 uno::Reference<text::XTextRange> SAL_CALL ScHeaderFieldObj::getAnchor() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (pContentObj)
     {
         uno::Reference<text::XText> xText;
@@ -1376,7 +1334,7 @@ void SAL_CALL ScHeaderFieldObj::removeEventListener(
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScHeaderFieldObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (nType == SC_SERVICE_FILEFIELD)
     {
         //  file field has different properties
@@ -1396,7 +1354,7 @@ void SAL_CALL ScHeaderFieldObj::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aNameString(aPropertyName);
     if ( nType == SC_SERVICE_FILEFIELD && aNameString.EqualsAscii( SC_UNONAME_FILEFORM ) )
     {
@@ -1410,7 +1368,7 @@ void SAL_CALL ScHeaderFieldObj::setPropertyValue(
                 ScUnoEditEngine aTempEngine(pEditEngine);
                 SvxFieldData* pField = aTempEngine.FindByPos(
                         aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField) );
-                DBG_ASSERT(pField,"setPropertyValue: Field not found");
+                OSL_ENSURE(pField,"setPropertyValue: Field not found");
                 if (pField)
                 {
                     SvxExtFileField* pExtFile = (SvxExtFileField*)pField;   // local to the ScUnoEditEngine
@@ -1429,7 +1387,7 @@ uno::Any SAL_CALL ScHeaderFieldObj::getPropertyValue( const rtl::OUString& aProp
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     //! Properties?
     uno::Any aRet;
@@ -1456,7 +1414,7 @@ uno::Any SAL_CALL ScHeaderFieldObj::getPropertyValue( const rtl::OUString& aProp
             ScUnoEditEngine aTempEngine(pEditEngine);
             SvxFieldData* pField = aTempEngine.FindByPos(
                     aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField) );
-            DBG_ASSERT(pField,"setPropertyValue: Field not found");
+            OSL_ENSURE(pField,"setPropertyValue: Field not found");
             if (pField)
             {
                 const SvxExtFileField* pExtFile = (const SvxExtFileField*)pField;
@@ -1489,24 +1447,16 @@ sal_Int64 SAL_CALL ScHeaderFieldObj::getSomething(
     return 0;
 }
 
-// static
-const uno::Sequence<sal_Int8>& ScHeaderFieldObj::getUnoTunnelId()
+namespace
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    class theScHeaderFieldObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScHeaderFieldObjUnoTunnelId> {};
 }
 
-// static
+const uno::Sequence<sal_Int8>& ScHeaderFieldObj::getUnoTunnelId()
+{
+    return theScHeaderFieldObjUnoTunnelId::get().getSeq();
+}
+
 ScHeaderFieldObj* ScHeaderFieldObj::getImplementation(
                                 const uno::Reference<text::XTextContent> xObj )
 {
@@ -1521,7 +1471,7 @@ ScHeaderFieldObj* ScHeaderFieldObj::getImplementation(
 
 rtl::OUString SAL_CALL ScHeaderFieldObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScHeaderFieldObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScHeaderFieldObj" ));
 }
 
 sal_Bool SAL_CALL ScHeaderFieldObj::supportsService( const rtl::OUString& rServiceName )
@@ -1537,8 +1487,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScHeaderFieldObj::getSupportedServiceNames
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCTEXTFIELD_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCTEXTCONTENT_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCTEXTFIELD_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCTEXTCONTENT_SERVICE ));
     return aRet;
 }
 
@@ -1547,3 +1497,4 @@ uno::Sequence<rtl::OUString> SAL_CALL ScHeaderFieldObj::getSupportedServiceNames
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

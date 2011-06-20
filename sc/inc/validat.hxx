@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,12 +60,12 @@ enum ScValidErrorStyle
 };
 
 //
-//  Eintrag fuer Gueltigkeit (es gibt nur eine Bedingung)
+// Entry for validation (only one condition exists)
 //
 
 class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
 {
-    sal_uInt32          nKey;               // Index in Attributen
+    sal_uInt32          nKey;               // index in attributes
 
     ScValidationMode    eDataMode;
     sal_Bool                bShowInput;
@@ -76,7 +77,7 @@ class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
     String              aErrorTitle;
     String              aErrorMessage;
 
-    sal_Bool                bIsUsed;            // temporaer beim Speichern
+    sal_Bool                bIsUsed;            // temporary during saving
 
     sal_Bool            DoMacro( const ScAddress& rPos, const String& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const;
@@ -100,7 +101,7 @@ public:
             ScValidationData( ScDocument* pDocument, const ScValidationData& r );
     virtual ~ScValidationData();
 
-    ScValidationData* Clone() const     // echte Kopie
+    ScValidationData* Clone() const     // real copy
                     { return new ScValidationData( GetDocument(), *this ); }
     ScValidationData* Clone(ScDocument* pNew) const
                     { return new ScValidationData( pNew, *this ); }
@@ -132,26 +133,26 @@ public:
         @return  true = rStrings has been filled with at least one entry. */
     bool            FillSelectionList( TypedScStrCollection& rStrings, const ScAddress& rPos ) const;
 
-                    //  mit String: bei Eingabe, mit Zelle: fuer Detektiv / RC_FORCED
+                    //  with string: during input, with cell: for detective / RC_FORCED
     sal_Bool            IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
                                     const ScAddress& rPos ) const;
     sal_Bool            IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
-                    // sal_True -> Abbruch
+                    // TRUE -> break
     sal_Bool            DoError( Window* pParent, const String& rInput, const ScAddress& rPos ) const;
     void            DoCalcError( ScFormulaCell* pCell ) const;
 
     sal_Bool            IsEmpty() const;
     sal_uInt32      GetKey() const          { return nKey; }
-    void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // nur wenn nicht eingefuegt!
+    void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
 
     void            SetUsed(sal_Bool bSet)      { bIsUsed = bSet; }
     sal_Bool            IsUsed() const          { return bIsUsed; }
 
-    sal_Bool            EqualEntries( const ScValidationData& r ) const;    // fuer Undo
+    sal_Bool            EqualEntries( const ScValidationData& r ) const;    // for undo
 
-    //  sortiert (per PTRARR) nach Index
-    //  operator== nur fuer die Sortierung
+    //  sort (using PTRARR) by index
+    //  operator== only for sorting
     sal_Bool operator ==( const ScValidationData& r ) const { return nKey == r.nKey; }
     sal_Bool operator < ( const ScValidationData& r ) const { return nKey <  r.nKey; }
 
@@ -176,7 +177,7 @@ private:
 };
 
 //
-//  Liste der Bedingungen:
+//  list of contitions:
 //
 
 typedef ScValidationData* ScValidationDataPtr;
@@ -202,12 +203,9 @@ public:
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
-    /** Temporarily during save, returns RefManager's decision whether ALL
-     *  references are marked now. */
-    bool    MarkUsedExternalReferences() const;
-
-    sal_Bool    operator==( const ScValidationDataList& r ) const;      // fuer Ref-Undo
+    sal_Bool    operator==( const ScValidationDataList& r ) const;      // for ref-undo
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

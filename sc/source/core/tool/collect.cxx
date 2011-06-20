@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -131,7 +132,7 @@ sal_Bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
         {
             ScDataObject** pNewItems = new ScDataObject*[nLimit + nDelta];
             if (!pNewItems)
-                return sal_False;
+                return false;
             nLimit = sal::static_int_cast<sal_uInt16>( nLimit + nDelta );
             memmove(pNewItems, pItems, nCount * sizeof(ScDataObject*));
             delete[] pItems;
@@ -143,7 +144,7 @@ sal_Bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
         nCount++;
         return sal_True;
     }
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -224,7 +225,7 @@ sal_uInt16 ScSortedCollection::IndexOf(ScDataObject* pScDataObject) const
 sal_Bool ScSortedCollection::Search(ScDataObject* pScDataObject, sal_uInt16& rIndex) const
 {
     rIndex = nCount;
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
     short nLo = 0;
     short nHi = nCount - 1;
     short nIndex;
@@ -260,7 +261,7 @@ sal_Bool ScSortedCollection::Insert(ScDataObject* pScDataObject)
         if (bDuplicates)
             return AtInsert(nIndex, pScDataObject);
         else
-            return sal_False;
+            return false;
     }
     else
         return AtInsert(nIndex, pScDataObject);
@@ -276,7 +277,7 @@ sal_Bool ScSortedCollection::InsertPos(ScDataObject* pScDataObject, sal_uInt16& 
         if (bDuplicates)
             return AtInsert(nIndex, pScDataObject);
         else
-            return sal_False;
+            return false;
     }
     else
         return AtInsert(nIndex, pScDataObject);
@@ -287,10 +288,10 @@ sal_Bool ScSortedCollection::InsertPos(ScDataObject* pScDataObject, sal_uInt16& 
 sal_Bool ScSortedCollection::operator==(const ScSortedCollection& rCmp) const
 {
     if ( nCount != rCmp.nCount )
-        return sal_False;
+        return false;
     for (sal_uInt16 i=0; i<nCount; i++)
         if ( !IsEqual(pItems[i],rCmp.pItems[i]) )
-            return sal_False;
+            return false;
     return sal_True;
 }
 
@@ -334,24 +335,6 @@ ScDataObject*   ScStrCollection::Clone() const
 // TypedScStrCollection
 //------------------------------------------------------------------------
 
-//UNUSED2008-05  TypedStrData::TypedStrData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-//UNUSED2008-05                                  sal_Bool bAllStrings )
-//UNUSED2008-05  {
-//UNUSED2008-05      if ( pDoc->HasValueData( nCol, nRow, nTab ) )
-//UNUSED2008-05      {
-//UNUSED2008-05          pDoc->GetValue( nCol, nRow, nTab, nValue );
-//UNUSED2008-05          if (bAllStrings)
-//UNUSED2008-05              pDoc->GetString( nCol, nRow, nTab, aStrValue );
-//UNUSED2008-05          nStrType = 0;
-//UNUSED2008-05      }
-//UNUSED2008-05      else
-//UNUSED2008-05      {
-//UNUSED2008-05          pDoc->GetString( nCol, nRow, nTab, aStrValue );
-//UNUSED2008-05          nValue = 0.0;
-//UNUSED2008-05          nStrType = 1;       //! Typ uebergeben ?
-//UNUSED2008-05      }
-//UNUSED2008-05  }
-
 
 ScDataObject*   TypedStrData::Clone() const
 {
@@ -361,7 +344,7 @@ ScDataObject*   TypedStrData::Clone() const
 TypedScStrCollection::TypedScStrCollection( sal_uInt16 nLim , sal_uInt16 nDel , sal_Bool bDup  )
     : ScSortedCollection( nLim, nDel, bDup )
 {
-    bCaseSensitive = sal_False;
+    bCaseSensitive = false;
 }
 
 TypedScStrCollection::~TypedScStrCollection()
@@ -429,7 +412,7 @@ sal_Bool TypedScStrCollection::FindText( const String& rStart, String& rResult,
     //  Die Collection ist nach String-Vergleichen sortiert, darum muss hier
     //  alles durchsucht werden
 
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
 
     String aOldResult;
     if ( rPos != SCPOS_INVALID && rPos < nCount )
@@ -515,8 +498,9 @@ sal_Bool TypedScStrCollection::GetExactMatch( String& rString ) const
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

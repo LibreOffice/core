@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
-//#include <toolkit/unoiface.hxx>
 #include <toolkit/unohlp.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/smplhint.hxx>
@@ -47,7 +47,6 @@
 #include "nameuno.hxx"
 #include "docsh.hxx"
 #include "content.hxx"
-#include "unoguard.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "unonames.hxx"
@@ -120,7 +119,6 @@ uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const rtl::OUString& aName)
     }
 
     throw container::NoSuchElementException();
-//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames(void) throw( uno::RuntimeException )
@@ -138,7 +136,7 @@ sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const rtl::OUString& aName) th
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
         if ( aNames[i] == aNameStr )
             return sal_True;
-    return sal_False;
+    return false;
 }
 
 // container::XElementAccess
@@ -195,7 +193,7 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
                 xCollection.set(new ScDatabaseRangesObj(pDocShell));
                 break;
             default:
-                DBG_ERROR("invalid type");
+                OSL_FAIL("invalid type");
         }
     }
 
@@ -210,7 +208,7 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL  ScLinkTargetTypeObj::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference< beans::XPropertySetInfo >  aRef(new SfxItemPropertySetInfo( lcl_GetLinkTargetMap() ));
     return aRef;
 }
@@ -227,7 +225,6 @@ void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const rtl::OUString& /* aPro
     //! exception?
 }
 
-//  static
 void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType )
 {
     sal_uInt16 nImgId = 0;
@@ -245,8 +242,7 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType 
     }
     if (nImgId)
     {
-        sal_Bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-        ImageList aEntryImages( ScResId( bHighContrast ? RID_IMAGELIST_H_NAVCONT : RID_IMAGELIST_NAVCONT ) );
+        ImageList aEntryImages( ScResId( RID_IMAGELIST_NAVCONT ) );
         const Image& rImage = aEntryImages.GetImage( nImgId );
         rRet <<= uno::Reference< awt::XBitmap > (VCLUnoHelper::CreateBitmap( rImage.GetBitmapEx() ));
     }
@@ -272,7 +268,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScLinkTargetTypeObj )
 ScLinkTargetsObj::ScLinkTargetsObj( const uno::Reference< container::XNameAccess > & rColl ) :
     xCollection( rColl )
 {
-    DBG_ASSERT( xCollection.is(), "ScLinkTargetsObj: NULL" );
+    OSL_ENSURE( xCollection.is(), "ScLinkTargetsObj: NULL" );
 }
 
 ScLinkTargetsObj::~ScLinkTargetsObj()
@@ -316,3 +312,4 @@ sal_Bool SAL_CALL ScLinkTargetsObj::hasElements(void) throw( uno::RuntimeExcepti
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

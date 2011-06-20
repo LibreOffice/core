@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,8 @@
 #include "rangenam.hxx"
 #include "sc.hrc"               // SC_HINT_AREAS_CHANGED
 
+using namespace formula;
+
 // -----------------------------------------------------------------------
 
 sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& rName )
@@ -51,16 +54,15 @@ sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const Strin
         ScRangeName* pNames = pDoc->GetRangeName();
         if (pNames)
         {
-            sal_uInt16 nPos;
-            if( pNames->SearchName( rName, nPos ) )
+            const ScRangeData* pData = pNames->findByName(rName);
+            if (pData)
             {
-                ScRangeData* pData = (*pNames)[ nPos ];
                 if ( pData->IsValidReference( rRange ) )
                     return sal_True;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 ScServerObjectSvtListenerForwarder::ScServerObjectSvtListenerForwarder(
@@ -82,7 +84,7 @@ void ScServerObjectSvtListenerForwarder::Notify( SvtBroadcaster& /* rBC */, cons
 ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
     aForwarder( this ),
     pDocSh( pShell ),
-    bRefreshListener( sal_False )
+    bRefreshListener( false )
 {
     //  parse item string
 
@@ -97,18 +99,20 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
         SCTAB nTab = pDocSh->GetCurTab();
         aRange.aStart.SetTab( nTab );
 
-        if ( aRange.Parse( rItem, pDoc ) & SCA_VALID )
+        // For DDE link, we always must parse references using OOO A1 convention.
+
+        if ( aRange.Parse( rItem, pDoc, FormulaGrammar::CONV_OOO ) & SCA_VALID )
         {
             // area reference
         }
-        else if ( aRange.aStart.Parse( rItem, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID )
+        else if ( aRange.aStart.Parse( rItem, pDoc, FormulaGrammar::CONV_OOO ) & SCA_VALID )
         {
             // cell reference
             aRange.aEnd = aRange.aStart;
         }
         else
         {
-            DBG_ERROR("ScServerObject: invalid item");
+            OSL_FAIL("ScServerObject: invalid item");
         }
     }
 
@@ -119,7 +123,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
     StartListening(*SFX_APP());     // for SC_HINT_AREAS_CHANGED
 }
 
-__EXPORT ScServerObject::~ScServerObject()
+ScServerObject::~ScServerObject()
 {
     Clear();
 }
@@ -144,12 +148,12 @@ void ScServerObject::EndListeningAll()
     SfxListener::EndListeningAll();
 }
 
-sal_Bool __EXPORT ScServerObject::GetData(
+sal_Bool ScServerObject::GetData(
         ::com::sun::star::uno::Any & rData /*out param*/,
         const String & rMimeType, sal_Bool /* bSynchron */ )
 {
     if (!pDocSh)
-        return sal_False;
+        return false;
 
     // named ranges may have changed -> update aRange
     if ( aItemStr.Len() )
@@ -170,7 +174,7 @@ sal_Bool __EXPORT ScServerObject::GetData(
         pDocSh->GetDocument()->StartListeningArea( aRange, &aForwarder );
         StartListening(*pDocSh);
         StartListening(*SFX_APP());
-        bRefreshListener = sal_False;
+        bRefreshListener = false;
     }
 
     String aDdeTextFmt = pDocSh->GetDdeTextFmt();
@@ -208,9 +212,9 @@ sal_Bool __EXPORT ScServerObject::GetData(
     return 0;
 }
 
-void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    sal_Bool bDataChanged = sal_False;
+    sal_Bool bDataChanged = false;
 
     //  DocShell can't be tested via type info, because SFX_HINT_DYING comes from the dtor
     if ( &rBC == pDocSh )
@@ -271,3 +275,4 @@ void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

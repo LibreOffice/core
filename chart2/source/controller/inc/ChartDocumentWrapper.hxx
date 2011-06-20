@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 #define CHART_CHARTDOCUMENTWRAPPER_HXX
 
 #include "WrappedPropertySet.hxx"
-//#include "OPropertySet.hxx"
 #include "ServiceMacros.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -233,3 +233,5 @@ private: //member
 
 // CHART_CHARTDOCUMENT_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

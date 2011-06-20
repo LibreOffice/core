@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <vcl/outdev.hxx>
-#include <tools/debug.hxx>
 
 #include "prevloc.hxx"
 #include "document.hxx"
-
-//==================================================================
 
 enum ScPreviewLocationType
 {
@@ -71,8 +65,6 @@ struct ScPreviewLocationEntry
     {
     }
 };
-
-//==================================================================
 
 ScPreviewTableInfo::ScPreviewTableInfo() :
     nTab(0),
@@ -165,8 +157,6 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
     }
 }
 
-//------------------------------------------------------------------
-
 ScPreviewLocationData::ScPreviewLocationData( ScDocument* pDocument, OutputDevice* pWin ) :
     pWindow( pWin ),
     pDoc( pDocument ),
@@ -192,13 +182,7 @@ void ScPreviewLocationData::SetPrintTab( SCTAB nNew )
 
 void ScPreviewLocationData::Clear()
 {
-    void* pEntry = aEntries.First();
-    while ( pEntry )
-    {
-        delete (ScPreviewLocationEntry*) pEntry;
-        pEntry = aEntries.Next();
-    }
-    aEntries.Clear();
+    aEntries.clear();
 
     nDrawRanges = 0;
 }
@@ -207,23 +191,30 @@ void ScPreviewLocationData::AddCellRange( const Rectangle& rRect, const ScRange&
                                             const MapMode& rDrawMap )
 {
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_CELLRANGE, aPixelRect, rRange, bRepCol, bRepRow ) );
+    aEntries.push_front( new ScPreviewLocationEntry( SC_PLOC_CELLRANGE, aPixelRect, rRange, bRepCol, bRepRow ) );
 
-    DBG_ASSERT( nDrawRanges < SC_PREVIEW_MAXRANGES, "too many ranges" );
+    OSL_ENSURE( nDrawRanges < SC_PREVIEW_MAXRANGES, "too many ranges" );
+
     if ( nDrawRanges < SC_PREVIEW_MAXRANGES )
     {
         aDrawRectangle[nDrawRanges] = aPixelRect;
         aDrawMapMode[nDrawRanges] = rDrawMap;
-            if (bRepCol)
-                if (bRepRow)
-                    aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_EDGE;
-                else
-                    aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_REPCOL;
+
+        if (bRepCol)
+        {
+            if (bRepRow)
+                aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_EDGE;
             else
-                if (bRepRow)
-                    aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_REPROW;
-                else
-                    aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_TAB;
+                aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_REPCOL;
+        }
+        else
+        {
+            if (bRepRow)
+                aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_REPROW;
+            else
+                aDrawRangeId[nDrawRanges] = SC_PREVIEW_RANGE_TAB;
+        }
+
         ++nDrawRanges;
     }
 }
@@ -233,7 +224,8 @@ void ScPreviewLocationData::AddColHeaders( const Rectangle& rRect, SCCOL nStartC
     SCTAB nTab = 0; //! ?
     ScRange aRange( nStartCol, 0, nTab, nEndCol, 0, nTab );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_COLHEADER, aPixelRect, aRange, bRepCol, sal_False ) );
+
+    aEntries.push_front( new ScPreviewLocationEntry( SC_PLOC_COLHEADER, aPixelRect, aRange, bRepCol, false ) );
 }
 
 void ScPreviewLocationData::AddRowHeaders( const Rectangle& rRect, SCROW nStartRow, SCROW nEndRow, sal_Bool bRepRow )
@@ -241,7 +233,8 @@ void ScPreviewLocationData::AddRowHeaders( const Rectangle& rRect, SCROW nStartR
     SCTAB nTab = 0; //! ?
     ScRange aRange( 0, nStartRow, nTab, 0, nEndRow, nTab );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_ROWHEADER, aPixelRect, aRange, sal_False, bRepRow ) );
+
+    aEntries.push_front( new ScPreviewLocationEntry( SC_PLOC_ROWHEADER, aPixelRect, aRange, false, bRepRow ) );
 }
 
 void ScPreviewLocationData::AddHeaderFooter( const Rectangle& rRect, sal_Bool bHeader, sal_Bool bLeft )
@@ -252,28 +245,29 @@ void ScPreviewLocationData::AddHeaderFooter( const Rectangle& rRect, sal_Bool bH
     ScPreviewLocationType eType = bHeader ?
                 ( bLeft ? SC_PLOC_LEFTHEADER : SC_PLOC_RIGHTHEADER ) :
                 ( bLeft ? SC_PLOC_LEFTFOOTER : SC_PLOC_RIGHTFOOTER );
-    aEntries.Insert( new ScPreviewLocationEntry( eType, aPixelRect, aRange, sal_False, sal_False ) );
+
+    aEntries.push_front( new ScPreviewLocationEntry( eType, aPixelRect, aRange, false, false ) );
 }
 
 void ScPreviewLocationData::AddNoteMark( const Rectangle& rRect, const ScAddress& rPos )
 {
     ScRange aRange( rPos );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_NOTEMARK, aPixelRect, aRange, sal_False, sal_False ) );
+
+    aEntries.push_front( new ScPreviewLocationEntry( SC_PLOC_NOTEMARK, aPixelRect, aRange, false, false ) );
 }
 
 void ScPreviewLocationData::AddNoteText( const Rectangle& rRect, const ScAddress& rPos )
 {
     ScRange aRange( rPos );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_NOTETEXT, aPixelRect, aRange, sal_False, sal_False ) );
-}
 
-//------------------------------------------------------------------
+    aEntries.push_front( new ScPreviewLocationEntry( SC_PLOC_NOTETEXT, aPixelRect, aRange, false, false ) );
+}
 
 void ScPreviewLocationData::GetDrawRange( sal_uInt16 nPos, Rectangle& rPixelRect, MapMode& rMapMode, sal_uInt8& rRangeId ) const
 {
-    DBG_ASSERT( nPos < nDrawRanges, "wrong position" );
+    OSL_ENSURE( nPos < nDrawRanges, "wrong position" );
     if ( nPos < nDrawRanges )
     {
         rPixelRect = aDrawRectangle[nPos];
@@ -282,56 +276,19 @@ void ScPreviewLocationData::GetDrawRange( sal_uInt16 nPos, Rectangle& rPixelRect
     }
 }
 
-ScPreviewLocationEntry* lcl_GetEntryByAddress( const List& rEntries, const ScAddress& rPos, ScPreviewLocationType eType )
+ScPreviewLocationEntry* lcl_GetEntryByAddress( const boost::ptr_list<ScPreviewLocationEntry> &rEntries,
+                                               const ScAddress& rPos, ScPreviewLocationType eType )
 {
-    sal_uLong nCount = rEntries.Count();
-    for (sal_uLong nListPos=0; nListPos<nCount; nListPos++)
+    boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;
+    for (it = rEntries.begin(); it != rEntries.end(); ++it)
     {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)rEntries.GetObject(nListPos);
-        if ( pEntry->eType == eType && pEntry->aCellRange.In( rPos ) )
-            return pEntry;
+        if ( it->eType == eType && it->aCellRange.In( rPos ) )
+            return const_cast<ScPreviewLocationEntry*>(&(*it));
     }
+
     return NULL;
 }
 
-//UNUSED2008-05  ScAddress ScPreviewLocationData::GetCellFromRange( const Size& rOffsetPixel, const ScRange& rRange ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      const double nScaleX = HMM_PER_TWIPS;
-//UNUSED2008-05      const double nScaleY = HMM_PER_TWIPS;
-//UNUSED2008-05
-//UNUSED2008-05      Size aOffsetLogic = pWindow->PixelToLogic( rOffsetPixel, aCellMapMode );
-//UNUSED2008-05      SCTAB nTab = rRange.aStart.Tab();
-//UNUSED2008-05
-//UNUSED2008-05      long nPosX = 0;
-//UNUSED2008-05      SCCOL nCol = rRange.aStart.Col();
-//UNUSED2008-05      SCCOL nEndCol = rRange.aEnd.Col();
-//UNUSED2008-05      while ( nCol <= nEndCol && nPosX < aOffsetLogic.Width() )
-//UNUSED2008-05      {
-//UNUSED2008-05          sal_uInt16 nDocW = pDoc->GetColWidth( nCol, nTab );
-//UNUSED2008-05          if (nDocW)
-//UNUSED2008-05              nPosX += (long) (nDocW * nScaleX);
-//UNUSED2008-05          ++nCol;
-//UNUSED2008-05      }
-//UNUSED2008-05      if ( nCol > rRange.aStart.Col() )
-//UNUSED2008-05          --nCol;
-//UNUSED2008-05
-//UNUSED2008-05      long nPosY = 0;
-//UNUSED2008-05      ScCoupledCompressedArrayIterator< SCROW, sal_uInt8, sal_uInt16> aIter(
-//UNUSED2008-05              pDoc->GetRowFlagsArray( nTab), rRange.aStart.Row(),
-//UNUSED2008-05              rRange.aEnd.Row(), CR_HIDDEN, 0, pDoc->GetRowHeightArray( nTab));
-//UNUSED2008-05      while ( aIter && nPosY < aOffsetLogic.Height() )
-//UNUSED2008-05      {
-//UNUSED2008-05          sal_uInt16 nDocH = *aIter;
-//UNUSED2008-05          if (nDocH)
-//UNUSED2008-05              nPosY += (long) (nDocH * nScaleY);
-//UNUSED2008-05          ++aIter;
-//UNUSED2008-05      }
-//UNUSED2008-05      SCROW nRow = aIter.GetPos();
-//UNUSED2008-05      if ( nRow > rRange.aStart.Row() )
-//UNUSED2008-05          --nRow;
-//UNUSED2008-05
-//UNUSED2008-05      return ScAddress( nCol, nRow, nTab );
-//UNUSED2008-05  }
 
 Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const
 {
@@ -374,79 +331,80 @@ sal_Bool ScPreviewLocationData::GetCellPosition( const ScAddress& rCellPos, Rect
                                aOffsetRect.Bottom() + pEntry->aPixelRect.Top() );
         return sal_True;
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool ScPreviewLocationData::HasCellsInRange( const Rectangle& rVisiblePixel ) const
 {
-    sal_uLong nCount = aEntries.Count();
-    for (sal_uLong nListPos=0; nListPos<nCount; nListPos++)
+    boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;
+    for (it = aEntries.begin(); it != aEntries.end(); ++it)
     {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        ScPreviewLocationType eType = pEntry->eType;
-        if ( eType == SC_PLOC_CELLRANGE || eType == SC_PLOC_COLHEADER || eType == SC_PLOC_ROWHEADER )
-            if ( pEntry->aPixelRect.IsOver( rVisiblePixel ) )
-                return sal_True;
+        if ( it->eType == SC_PLOC_CELLRANGE || it->eType == SC_PLOC_COLHEADER || it->eType == SC_PLOC_ROWHEADER )
+            if ( it->aPixelRect.IsOver( rVisiblePixel ) )
+                return true;
     }
-    return sal_False;
+
+    return false;
 }
 
 sal_Bool ScPreviewLocationData::GetHeaderPosition( Rectangle& rRect ) const
 {
-    sal_uLong nCount = aEntries.Count();
-    for (sal_uLong nListPos=0; nListPos<nCount; nListPos++)
+    boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;
+    for (it = aEntries.begin(); it != aEntries.end(); ++it)
     {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        if ( pEntry->eType == SC_PLOC_LEFTHEADER || pEntry->eType == SC_PLOC_RIGHTHEADER )
+        if ( it->eType == SC_PLOC_LEFTHEADER || it->eType == SC_PLOC_RIGHTHEADER )
         {
-            rRect = pEntry->aPixelRect;
-            return sal_True;
+            rRect = it->aPixelRect;
+            return true;
         }
     }
-    return sal_False;
+
+    return false;
 }
 
 sal_Bool ScPreviewLocationData::GetFooterPosition( Rectangle& rRect ) const
 {
-    sal_uLong nCount = aEntries.Count();
-    for (sal_uLong nListPos=0; nListPos<nCount; nListPos++)
+    boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;
+    for (it = aEntries.begin(); it != aEntries.end(); ++it)
     {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        if ( pEntry->eType == SC_PLOC_LEFTFOOTER || pEntry->eType == SC_PLOC_RIGHTFOOTER )
+        if ( it->eType == SC_PLOC_LEFTFOOTER || it->eType == SC_PLOC_RIGHTFOOTER )
         {
-            rRect = pEntry->aPixelRect;
-            return sal_True;
+            rRect = it->aPixelRect;
+            return true;
         }
     }
-    return sal_False;
+
+    return false;
 }
 
 sal_Bool ScPreviewLocationData::IsHeaderLeft() const
 {
-    sal_uLong nCount = aEntries.Count();
-    for (sal_uLong nListPos=0; nListPos<nCount; nListPos++)
+    boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;
+    for (it = aEntries.begin(); it != aEntries.end(); ++it)
     {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        if ( pEntry->eType == SC_PLOC_LEFTHEADER )
-            return sal_True;
-        if ( pEntry->eType == SC_PLOC_RIGHTHEADER )
-            return sal_False;
+        if ( it->eType == SC_PLOC_LEFTHEADER )
+            return true;
+
+        if ( it->eType == SC_PLOC_RIGHTHEADER )
+            return false;
     }
-    return sal_False;
+
+    return false;
 }
 
 sal_Bool ScPreviewLocationData::IsFooterLeft() const
 {
-    sal_uLong nCount = aEntries.Count();
-    for (sal_uLong nListPos=0; nListPos<nCount; nListPos++)
+    boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;
+    for (it = aEntries.begin(); it != aEntries.end(); ++it)
     {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        if ( pEntry->eType == SC_PLOC_LEFTFOOTER )
-            return sal_True;
-        if ( pEntry->eType == SC_PLOC_RIGHTFOOTER )
-            return sal_False;
+        if ( it->eType == SC_PLOC_LEFTFOOTER )
+            return true;
+
+        if ( it->eType == SC_PLOC_RIGHTFOOTER )
+            return false;
     }
-    return sal_False;
+
+    return false;
 }
 
 long ScPreviewLocationData::GetNoteCountInRange( const Rectangle& rVisiblePixel, sal_Bool bNoteMarks ) const
@@ -454,13 +412,13 @@ long ScPreviewLocationData::GetNoteCountInRange( const Rectangle& rVisiblePixel,
     ScPreviewLocationType eType = bNoteMarks ? SC_PLOC_NOTEMARK : SC_PLOC_NOTETEXT;
 
     sal_uLong nRet = 0;
-    sal_uLong nCount = aEntries.Count();
-    for (sal_uLong nListPos=0; nListPos<nCount; nListPos++)
+    boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;
+    for (it = aEntries.begin(); it != aEntries.end(); ++it)
     {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        if ( pEntry->eType == eType && pEntry->aPixelRect.IsOver( rVisiblePixel ) )
+        if ( it->eType == eType && it->aPixelRect.IsOver( rVisiblePixel ) )
             ++nRet;
     }
+
     return nRet;
 }
 
@@ -470,22 +428,22 @@ sal_Bool ScPreviewLocationData::GetNoteInRange( const Rectangle& rVisiblePixel, 
     ScPreviewLocationType eType = bNoteMarks ? SC_PLOC_NOTEMARK : SC_PLOC_NOTETEXT;
 
     sal_uLong nPos = 0;
-    sal_uLong nCount = aEntries.Count();
-    for (sal_uLong nListPos=0; nListPos<nCount; nListPos++)
+    boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;
+    for (it = aEntries.begin(); it != aEntries.end(); ++it)
     {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        if ( pEntry->eType == eType && pEntry->aPixelRect.IsOver( rVisiblePixel ) )
+        if ( it->eType == eType && it->aPixelRect.IsOver( rVisiblePixel ) )
         {
             if ( nPos == sal::static_int_cast<sal_uLong>(nIndex) )
             {
-                rCellPos = pEntry->aCellRange.aStart;
-                rNoteRect = pEntry->aPixelRect;
-                return sal_True;
+                rCellPos = it->aCellRange.aStart;
+                rNoteRect = it->aPixelRect;
+                return true;
             }
             ++nPos;
         }
     }
-    return sal_False;
+
+    return false;
 }
 
 Rectangle ScPreviewLocationData::GetNoteInRangeOutputRect(const Rectangle& rVisiblePixel, sal_Bool bNoteMarks, const ScAddress& aCellPos) const
@@ -493,17 +451,17 @@ Rectangle ScPreviewLocationData::GetNoteInRangeOutputRect(const Rectangle& rVisi
     ScPreviewLocationType eType = bNoteMarks ? SC_PLOC_NOTEMARK : SC_PLOC_NOTETEXT;
 
     sal_uLong nPos = 0;
-    sal_uLong nCount = aEntries.Count();
-    for (sal_uLong nListPos=0; nListPos<nCount; nListPos++)
+    boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;
+    for (it = aEntries.begin(); it != aEntries.end(); ++it)
     {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        if ( pEntry->eType == eType && pEntry->aPixelRect.IsOver( rVisiblePixel ) )
+        if ( it->eType == eType && it->aPixelRect.IsOver( rVisiblePixel ) )
         {
-            if ( aCellPos == pEntry->aCellRange.aStart )
-                return pEntry->aPixelRect;
+            if ( aCellPos == it->aCellRange.aStart )
+                return it->aPixelRect;
             ++nPos;
         }
     }
+
     return Rectangle();
 }
 
@@ -513,18 +471,18 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     const double nScaleY = HMM_PER_TWIPS;
 
     // from left to right:
-    sal_Bool bHasHeaderCol = sal_False;
-    sal_Bool bHasRepCols   = sal_False;
-    sal_Bool bHasMainCols  = sal_False;
+    sal_Bool bHasHeaderCol = false;
+    sal_Bool bHasRepCols   = false;
+    sal_Bool bHasMainCols  = false;
     SCCOL nRepeatColStart = 0;
     SCCOL nRepeatColEnd   = 0;
     SCCOL nMainColStart   = 0;
     SCCOL nMainColEnd     = 0;
 
     // from top to bottom:
-    sal_Bool bHasHeaderRow = sal_False;
-    sal_Bool bHasRepRows   = sal_False;
-    sal_Bool bHasMainRows  = sal_False;
+    sal_Bool bHasHeaderRow = false;
+    sal_Bool bHasRepRows   = false;
+    sal_Bool bHasMainRows  = false;
     SCROW nRepeatRowStart = 0;
     SCROW nRepeatRowEnd   = 0;
     SCROW nMainRowStart   = 0;
@@ -533,59 +491,58 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     Rectangle aHeaderRect, aRepeatRect, aMainRect;
     SCTAB nTab = 0;
 
-    sal_uLong nCount = aEntries.Count();
-    for (sal_uLong nListPos=0; nListPos<nCount; nListPos++)
+    boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;
+    for (it = aEntries.begin(); it != aEntries.end(); ++it)
     {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        if ( pEntry->eType == SC_PLOC_CELLRANGE )
+        if ( it->eType == SC_PLOC_CELLRANGE )
         {
-            if ( pEntry->bRepeatCol )
+            if ( it->bRepeatCol )
             {
-                bHasRepCols = sal_True;
-                nRepeatColStart = pEntry->aCellRange.aStart.Col();
-                nRepeatColEnd = pEntry->aCellRange.aEnd.Col();
-                aRepeatRect.Left() = pEntry->aPixelRect.Left();
-                aRepeatRect.Right() = pEntry->aPixelRect.Right();
+                bHasRepCols = true;
+                nRepeatColStart = it->aCellRange.aStart.Col();
+                nRepeatColEnd = it->aCellRange.aEnd.Col();
+                aRepeatRect.Left() = it->aPixelRect.Left();
+                aRepeatRect.Right() = it->aPixelRect.Right();
             }
             else
             {
-                bHasMainCols = sal_True;
-                nMainColStart = pEntry->aCellRange.aStart.Col();
-                nMainColEnd = pEntry->aCellRange.aEnd.Col();
-                aMainRect.Left() = pEntry->aPixelRect.Left();
-                aMainRect.Right() = pEntry->aPixelRect.Right();
+                bHasMainCols = true;
+                nMainColStart = it->aCellRange.aStart.Col();
+                nMainColEnd = it->aCellRange.aEnd.Col();
+                aMainRect.Left() = it->aPixelRect.Left();
+                aMainRect.Right() = it->aPixelRect.Right();
             }
-            if ( pEntry->bRepeatRow )
+            if ( it->bRepeatRow )
             {
-                bHasRepRows = sal_True;
-                nRepeatRowStart = pEntry->aCellRange.aStart.Row();
-                nRepeatRowEnd = pEntry->aCellRange.aEnd.Row();
-                aRepeatRect.Top() = pEntry->aPixelRect.Top();
-                aRepeatRect.Bottom() = pEntry->aPixelRect.Bottom();
+                bHasRepRows = true;
+                nRepeatRowStart = it->aCellRange.aStart.Row();
+                nRepeatRowEnd = it->aCellRange.aEnd.Row();
+                aRepeatRect.Top() = it->aPixelRect.Top();
+                aRepeatRect.Bottom() = it->aPixelRect.Bottom();
             }
             else
             {
-                bHasMainRows = sal_True;
-                nMainRowStart = pEntry->aCellRange.aStart.Row();
-                nMainRowEnd = pEntry->aCellRange.aEnd.Row();
-                aMainRect.Top() = pEntry->aPixelRect.Top();
-                aMainRect.Bottom() = pEntry->aPixelRect.Bottom();
+                bHasMainRows = true;
+                nMainRowStart = it->aCellRange.aStart.Row();
+                nMainRowEnd = it->aCellRange.aEnd.Row();
+                aMainRect.Top() = it->aPixelRect.Top();
+                aMainRect.Bottom() = it->aPixelRect.Bottom();
             }
-            nTab = pEntry->aCellRange.aStart.Tab();     //! store separately?
+            nTab = it->aCellRange.aStart.Tab();     //! store separately?
         }
-        else if ( pEntry->eType == SC_PLOC_ROWHEADER )
+        else if ( it->eType == SC_PLOC_ROWHEADER )
         {
             // row headers result in an additional column
-            bHasHeaderCol = sal_True;
-            aHeaderRect.Left() = pEntry->aPixelRect.Left();
-            aHeaderRect.Right() = pEntry->aPixelRect.Right();
+            bHasHeaderCol = true;
+            aHeaderRect.Left() = it->aPixelRect.Left();
+            aHeaderRect.Right() = it->aPixelRect.Right();
         }
-        else if ( pEntry->eType == SC_PLOC_COLHEADER )
+        else if ( it->eType == SC_PLOC_COLHEADER )
         {
             // column headers result in an additional row
-            bHasHeaderRow = sal_True;
-            aHeaderRect.Top() = pEntry->aPixelRect.Top();
-            aHeaderRect.Bottom() = pEntry->aPixelRect.Bottom();
+            bHasHeaderRow = true;
+            aHeaderRect.Top() = it->aPixelRect.Top();
+            aHeaderRect.Bottom() = it->aPixelRect.Bottom();
         }
     }
 
@@ -627,7 +584,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
 
                     long nPixelStart = pWindow->LogicToPixel( Size( nPosX, 0 ), aCellMapMode ).Width();
                     long nPixelEnd = pWindow->LogicToPixel( Size( nNextX, 0 ), aCellMapMode ).Width() - 1;
-                    pColInfo[nColPos].Set( sal_False, nCol,
+                    pColInfo[nColPos].Set( false, nCol,
                                                 aRepeatRect.Left() + nPixelStart,
                                                 aRepeatRect.Left() + nPixelEnd );
 
@@ -646,7 +603,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
 
                     long nPixelStart = pWindow->LogicToPixel( Size( nPosX, 0 ), aCellMapMode ).Width();
                     long nPixelEnd = pWindow->LogicToPixel( Size( nNextX, 0 ), aCellMapMode ).Width() - 1;
-                    pColInfo[nColPos].Set( sal_False, nCol,
+                    pColInfo[nColPos].Set( false, nCol,
                                                 aMainRect.Left() + nPixelStart,
                                                 aMainRect.Left() + nPixelEnd );
 
@@ -694,7 +651,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
 
                 long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
                 long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;
-                pRowInfo[nRowPos].Set( sal_False, nRow,
+                pRowInfo[nRowPos].Set( false, nRow,
                         aRepeatRect.Top() + nPixelStart,
                         aRepeatRect.Top() + nPixelEnd );
 
@@ -715,7 +672,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
 
                 long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
                 long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;
-                pRowInfo[nRowPos].Set( sal_False, nRow,
+                pRowInfo[nRowPos].Set( false, nRow,
                         aMainRect.Top() + nPixelStart,
                         aMainRect.Top() + nPixelEnd );
 
@@ -776,17 +733,18 @@ Rectangle ScPreviewLocationData::GetCellOutputRect(const ScAddress& rCellPos) co
 
 sal_Bool ScPreviewLocationData::GetMainCellRange( ScRange& rRange, Rectangle& rPixRect ) const
 {
-    sal_uLong nCount = aEntries.Count();
-    for (sal_uLong nListPos=0; nListPos<nCount; nListPos++)
+    boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;
+    for (it = aEntries.begin(); it != aEntries.end(); ++it)
     {
-        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        if ( pEntry->eType == SC_PLOC_CELLRANGE && !pEntry->bRepeatCol && !pEntry->bRepeatRow )
+        if ( it->eType == SC_PLOC_CELLRANGE && !it->bRepeatCol && !it->bRepeatRow )
         {
-            rRange = pEntry->aCellRange;
-            rPixRect = pEntry->aPixelRect;
-            return sal_True;
+            rRange = it->aCellRange;
+            rPixRect = it->aPixelRect;
+            return true;
         }
     }
-    return sal_False;       // not found
+
+    return false;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

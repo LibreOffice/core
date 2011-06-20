@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,6 +50,8 @@
 //--------------------------------------------------------------------------
 
 
+using ::com::sun::star::util::SearchOptions;
+
 sal_Bool lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, String& rVal )
 {
     //  sal_True = more than 1 paragraph
@@ -64,7 +67,7 @@ sal_Bool lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, Strin
 sal_Bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
                             const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc)
 {
-    sal_Bool    bFound = sal_False;
+    sal_Bool    bFound = false;
     sal_Bool    bDoSearch = sal_True;
     sal_Bool    bDoBack = rSearchItem.GetBackward();
 
@@ -74,7 +77,7 @@ sal_Bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW
         bDoSearch = rMark.IsCellMarked(nCol, nRow);
     if ( bDoSearch && ((pCell = aCol[nCol].GetCell( nRow )) != NULL) )
     {
-        sal_Bool bMultiLine = sal_False;
+        sal_Bool bMultiLine = false;
         CellType eCellType = pCell->GetCellType();
         switch (rSearchItem.GetCellType())
         {
@@ -133,7 +136,7 @@ sal_Bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW
         }
         else
         {
-            DBG_ERROR("pSearchText == NULL");
+            OSL_FAIL("pSearchText == NULL");
             return bFound;
         }
 
@@ -141,11 +144,12 @@ sal_Bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW
         if ( bFound &&
             ( (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE)
             ||(rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) ) &&
-                // #60558# Matrix nicht zerreissen, nur Matrixformel ersetzen
+                // Matrix nicht zerreissen, nur Matrixformel ersetzen
                 !( (eCellType == CELLTYPE_FORMULA &&
                 ((cMatrixFlag = ((ScFormulaCell*)pCell)->GetMatrixFlag()) == MM_REFERENCE))
                 // kein UndoDoc => Matrix nicht wiederherstellbar => nicht ersetzen
-                || (cMatrixFlag != MM_NONE && !pUndoDoc) )
+                || (cMatrixFlag != MM_NONE && !pUndoDoc) ) &&
+             IsBlockEditable(nCol, nRow, nCol, nRow)
             )
         {
             if ( cMatrixFlag == MM_NONE && rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE )
@@ -162,7 +166,7 @@ sal_Bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW
                 //  wenn der gefundene Text leer ist, nicht weitersuchen,
                 //  sonst wuerde man nie mehr aufhoeren (#35410#)
                 if ( nEnd < nStart || nEnd == STRING_MAXLEN )
-                    bRepeat = sal_False;
+                    bRepeat = false;
 
                 String sReplStr = rSearchItem.GetReplaceString();
                 if (rSearchItem.GetRegExp())
@@ -194,7 +198,7 @@ sal_Bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW
                 if (bRepeat)
                 {
                     if ( rSearchItem.GetCommand() != SVX_SEARCHCMD_REPLACE_ALL || nStart >= nEnd )
-                        bRepeat = sal_False;
+                        bRepeat = false;
                     else if (bDoBack)
                     {
                         xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
@@ -219,7 +223,7 @@ sal_Bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW
                     pNote->SetText( ScAddress( nCol, nRow, nTab ), aString );
             }
             else if ( cMatrixFlag != MM_NONE )
-            {   // #60558# Matrix nicht zerreissen
+            {   // Matrix nicht zerreissen
                 if ( aString.Len() > 2 )
                 {   // {} raus, erst hier damit auch "{=" durch "{=..." ersetzt werden kann
                     if ( aString.GetChar( aString.Len()-1 ) == '}' )
@@ -246,10 +250,46 @@ sal_Bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW
     return bFound;
 }
 
+void ScTable::SkipFilteredRows(SCROW& rRow, SCROW& rLastNonFilteredRow, bool bForward)
+{
+    if (bForward)
+    {
+        // forward search
+
+        if (rRow <= rLastNonFilteredRow)
+            return;
+
+        SCROW nLastRow = rRow;
+        if (RowFiltered(rRow, NULL, &nLastRow))
+            // move to the first non-filtered row.
+            rRow = nLastRow + 1;
+        else
+            // record the last non-filtered row to avoid checking
+            // the filtered state for each and every row.
+            rLastNonFilteredRow = nLastRow;
+    }
+    else
+    {
+        // backward search
+
+        if (rRow >= rLastNonFilteredRow)
+            return;
+
+        SCROW nFirstRow = rRow;
+        if (RowFiltered(rRow, &nFirstRow, NULL))
+            // move to the first non-filtered row.
+            rRow = nFirstRow - 1;
+        else
+            // record the last non-filtered row to avoid checking
+            // the filtered state for each and every row.
+            rLastNonFilteredRow = nFirstRow;
+    }
+}
+
 sal_Bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                         const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc)
 {
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
     sal_Bool bAll =  (rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL)
                ||(rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL);
     SCCOL nCol = rCol;
@@ -257,8 +297,10 @@ sal_Bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& r
     SCCOL nLastCol;
     SCROW nLastRow;
     GetLastDataPos(nLastCol, nLastRow);
+    bool bSkipFiltered = !rSearchItem.IsSearchFiltered();
     if (!bAll && rSearchItem.GetBackward())
     {
+        SCROW nLastNonFilteredRow = MAXROW + 1;
         nCol = Min(nCol, (SCCOL)(nLastCol + 1));
         nRow = Min(nRow, (SCROW)(nLastRow + 1));
         if (rSearchItem.GetRowDirection())
@@ -266,6 +308,9 @@ sal_Bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& r
             nCol--;
             while (!bFound && ((SCsROW)nRow >= 0))
             {
+                if (bSkipFiltered)
+                    SkipFilteredRows(nRow, nLastNonFilteredRow, false);
+
                 while (!bFound && ((SCsCOL)nCol >= 0))
                 {
                     bFound = SearchCell(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
@@ -297,6 +342,9 @@ sal_Bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& r
             {
                 while (!bFound && ((SCsROW)nRow >= 0))
                 {
+                    if (bSkipFiltered)
+                        SkipFilteredRows(nRow, nLastNonFilteredRow, false);
+
                     bFound = SearchCell(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
                     if (!bFound)
                     {
@@ -306,8 +354,10 @@ sal_Bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& r
                 }
                 if (!bFound)
                 {
+                    // Not found in this column.  Move to the next column.
                     sal_Bool bIsEmpty;
                     nRow = nLastRow;
+                    nLastNonFilteredRow = MAXROW + 1;
                     do
                     {
                         nCol--;
@@ -323,11 +373,15 @@ sal_Bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& r
     }
     else
     {
+        SCROW nLastNonFilteredRow = -1;
         if (!bAll && rSearchItem.GetRowDirection())
         {
             nCol++;
             while (!bFound && (nRow <= nLastRow))
             {
+                if (bSkipFiltered)
+                    SkipFilteredRows(nRow, nLastNonFilteredRow, true);
+
                 while (!bFound && (nCol <= nLastCol))
                 {
                     bFound = SearchCell(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
@@ -351,6 +405,9 @@ sal_Bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& r
             {
                 while (!bFound && (nRow <= nLastRow))
                 {
+                    if (bSkipFiltered)
+                        SkipFilteredRows(nRow, nLastNonFilteredRow, true);
+
                     bFound = SearchCell(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
                     if (!bFound)
                     {
@@ -360,7 +417,9 @@ sal_Bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& r
                 }
                 if (!bFound)
                 {
+                    // Not found in this column.  Move to the next column.
                     nRow = 0;
+                    nLastNonFilteredRow = -1;
                     nCol++;
                     while ((nCol <= nLastCol) && aCol[nCol].IsEmptyData()) nCol++;
                 }
@@ -401,7 +460,7 @@ sal_Bool ScTable::SearchAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
 sal_Bool ScTable::Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                         const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc)
 {
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
     SCCOL nCol = rCol;
     SCROW nRow = rRow;
     if (rSearchItem.GetBackward())
@@ -431,7 +490,7 @@ sal_Bool ScTable::ReplaceAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark
                             String& rUndoStr, ScDocument* pUndoDoc)
 {
     sal_Bool bOldDouble = ScColumn::bDoubleAlloc;       // sollte immer sal_False sein?
-    DBG_ASSERT(!bOldDouble,"bDoubleAlloc ???");
+    OSL_ENSURE(!bOldDouble,"bDoubleAlloc ???");
     ScColumn::bDoubleAlloc = sal_True;                  // fuer Undo-Doc
 
     sal_Bool bFound = sal_True;
@@ -465,7 +524,7 @@ sal_Bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCR
 
     SCsCOL nCol = rCol;
     SCsROW nRow = rRow;
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
 
     sal_Bool bSelect = rSearchItem.GetSelection();
     sal_Bool bRows = rSearchItem.GetRowDirection();
@@ -554,7 +613,7 @@ sal_Bool ScTable::ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SC
             ApplyStyle( rCol, rRow, *pReplaceStyle );
         else
         {
-            DBG_ERROR("pReplaceStyle==0");
+            OSL_FAIL("pReplaceStyle==0");
         }
     }
 
@@ -618,7 +677,7 @@ sal_Bool ScTable::ReplaceAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& 
         }
         else
         {
-            DBG_ERROR("pReplaceStyle==0");
+            OSL_FAIL("pReplaceStyle==0");
         }
     }
 
@@ -630,7 +689,7 @@ sal_Bool ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
                                 String& rUndoStr, ScDocument* pUndoDoc)
 {
     sal_uInt16 nCommand = rSearchItem.GetCommand();
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
     if ( ValidColRow(rCol, rRow) ||
          ((nCommand == SVX_SEARCHCMD_FIND || nCommand == SVX_SEARCHCMD_REPLACE) &&
            (((rCol == MAXCOLCOUNT || rCol == -1) && VALIDROW(rRow)) ||
@@ -645,7 +704,7 @@ sal_Bool ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
             if (nCommand == SVX_SEARCHCMD_FIND)
                 bFound = SearchStyle(rSearchItem, rCol, rRow, rMark);
             else if (nCommand == SVX_SEARCHCMD_REPLACE)
-                bFound = ReplaceStyle(rSearchItem, rCol, rRow, rMark, sal_False);
+                bFound = ReplaceStyle(rSearchItem, rCol, rRow, rMark, false);
             else if (nCommand == SVX_SEARCHCMD_FIND_ALL)
                 bFound = SearchAllStyle(rSearchItem, rMark);
             else if (nCommand == SVX_SEARCHCMD_REPLACE_ALL)
@@ -657,7 +716,13 @@ sal_Bool ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
             com::sun::star::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
             aSearchOptions.Locale = *ScGlobal::GetLocale();
 
-            //  #107259# reflect UseAsianOptions flag in SearchOptions
+            if (!aSearchOptions.searchString.getLength())
+            {
+                // Search for empty cells.
+                return SearchAndReplaceEmptyCells(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
+            }
+
+            //  reflect UseAsianOptions flag in SearchOptions
             //  (use only ignore case and width if asian options are disabled).
             //  This is also done in SvxSearchDialog CommandHdl, but not in API object.
             if ( !rSearchItem.IsUseAsianOptions() )
@@ -683,8 +748,307 @@ sal_Bool ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
     return bFound;
 }
 
+bool ScTable::SearchAndReplaceEmptyCells(
+    const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, ScMarkData& rMark,
+    String& rUndoStr, ScDocument* pUndoDoc)
+{
+    SCCOL nColStart, nColEnd;
+    SCROW nRowStart, nRowEnd;
+    GetFirstDataPos(nColStart, nRowStart);
+    GetLastDataPos(nColEnd, nRowEnd);
 
+    ScRangeList aRanges;
+    aRanges.Append(ScRange(nColStart, nRowStart, nTab, nColEnd, nRowEnd, nTab));
 
+    if (rSearchItem.GetSelection())
+    {
+        // current selection only.
+        if (!rMark.IsMarked() && !rMark.IsMultiMarked())
+            // There is no selection.  Bail out.
+            return false;
 
+        ScRangeList aMarkedRanges, aNewRanges;
+        rMark.FillRangeListWithMarks(&aMarkedRanges, true);
+        for ( size_t i = 0, n = aMarkedRanges.size(); i < n; ++i )
+        {
+            ScRange* p = aMarkedRanges[ i ];
+            if (p->aStart.Col() > nColEnd || p->aStart.Row() > nRowEnd)
+                // This range is outside the data area.  Skip it.
+                continue;
 
+            // Shrink the range into data area only.
+            if (p->aStart.Col() < nColStart)
+                p->aStart.SetCol(rCol);
+            if (p->aStart.Row() < nRowStart)
+                p->aStart.SetRow(rRow);
 
+            if (p->aEnd.Col() > nColEnd)
+                p->aEnd.SetCol(nColEnd);
+            if (p->aEnd.Row() > nRowEnd)
+                p->aEnd.SetRow(nRowEnd);
+
+            aNewRanges.Append(*p);
+        }
+        aRanges = aNewRanges;
+    }
+
+    sal_uInt16 nCommand = rSearchItem.GetCommand();
+    if (nCommand == SVX_SEARCHCMD_FIND || nCommand == SVX_SEARCHCMD_REPLACE)
+    {
+        if (rSearchItem.GetBackward())
+        {
+            for ( size_t i = aRanges.size(); i > 0; --i )
+            {
+                ScRange* p = aRanges[ i - 1 ];
+                if (SearchRangeForEmptyCell( *p, rSearchItem, rCol, rRow, rUndoStr, pUndoDoc))
+                    return true;
+            }
+        }
+        else
+        {
+            for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
+            {
+                ScRange* p = aRanges[ i ];
+                if (SearchRangeForEmptyCell( *p, rSearchItem, rCol, rRow, rUndoStr, pUndoDoc ))
+                    return true;
+            }
+        }
+    }
+    else if (nCommand == SVX_SEARCHCMD_FIND_ALL || nCommand == SVX_SEARCHCMD_REPLACE_ALL)
+    {
+        bool bFound = false;
+        ScMarkData aNewMark(rMark);
+        aNewMark.ResetMark();
+        for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
+        {
+            ScRange* p = aRanges[ i ];
+            bFound |= SearchRangeForAllEmptyCells(*p, rSearchItem, aNewMark, rUndoStr, pUndoDoc);
+        }
+        rMark = aNewMark;
+        return bFound;
+    }
+    return false;
+}
+
+namespace {
+
+bool lcl_maybeReplaceCellString(
+    ScColumn& rColObj, SCCOL& rCol, SCROW& rRow, String& rUndoStr, SCCOL nCol, SCROW nRow, const SvxSearchItem& rSearchItem)
+{
+    ScBaseCell* pCell = rColObj.GetCell(nRow);
+    if (!pCell || pCell->GetCellType() == CELLTYPE_NOTE)
+    {
+        // empty cell found.
+        rCol = nCol;
+        rRow = nRow;
+        if (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE &&
+            rSearchItem.GetReplaceString().Len())
+        {
+            rColObj.Insert(nRow, new ScStringCell(rSearchItem.GetReplaceString()));
+            rUndoStr = String();
+        }
+        return true;
+    }
+    return false;
+}
+
+}
+
+bool ScTable::SearchRangeForEmptyCell(
+    const ScRange& rRange, const SvxSearchItem& rSearchItem,
+    SCCOL& rCol, SCROW& rRow, String& rUndoStr, ScDocument* /*pUndoDoc*/)
+{
+    sal_uInt16 nCmd = rSearchItem.GetCommand();
+    bool bSkipFiltered = rSearchItem.IsSearchFiltered();
+    if (rSearchItem.GetBackward())
+    {
+        // backward search
+        if (rSearchItem.GetRowDirection())
+        {
+            // row direction.
+            SCROW nLastNonFilteredRow = MAXROW + 1;
+            SCROW nBeginRow = rRange.aEnd.Row() > rRow ? rRow : rRange.aEnd.Row();
+            for (SCROW nRow = nBeginRow; nRow >= rRange.aStart.Row(); --nRow)
+            {
+                if (bSkipFiltered)
+                    SkipFilteredRows(nRow, nLastNonFilteredRow, false);
+                if (nRow < rRange.aStart.Row())
+                    break;
+
+                SCCOL nBeginCol = rRange.aEnd.Col();
+                if (nRow == rRow && nBeginCol >= rCol)
+                    // always start from one cell before the cursor.
+                    nBeginCol = rCol - (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+
+                for (SCCOL nCol = nBeginCol; nCol >= rRange.aStart.Col(); --nCol)
+                {
+                    if (lcl_maybeReplaceCellString(aCol[nCol], rCol, rRow, rUndoStr, nCol, nRow, rSearchItem))
+                        return true;
+                }
+            }
+        }
+        else
+        {
+            // column direction.
+            SCCOL nBeginCol = rRange.aEnd.Col() > rCol ? rCol : rRange.aEnd.Col();
+            for (SCCOL nCol = nBeginCol; nCol >= rRange.aStart.Col(); --nCol)
+            {
+                SCROW nLastNonFilteredRow = MAXROW + 1;
+                SCROW nBeginRow = rRange.aEnd.Row();
+                if (nCol == rCol && nBeginRow >= rRow)
+                    // always start from one cell before the cursor.
+                    nBeginRow = rRow - (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+                for (SCROW nRow = nBeginRow; nRow >= rRange.aStart.Row(); --nRow)
+                {
+                    if (bSkipFiltered)
+                        SkipFilteredRows(nRow, nLastNonFilteredRow, false);
+                    if (nRow < rRange.aStart.Row())
+                        break;
+
+                    if (lcl_maybeReplaceCellString(aCol[nCol], rCol, rRow, rUndoStr, nCol, nRow, rSearchItem))
+                        return true;
+                }
+            }
+        }
+    }
+    else
+    {
+        // forward search
+        if (rSearchItem.GetRowDirection())
+        {
+            // row direction.
+            SCROW nLastNonFilteredRow = -1;
+            SCROW nBeginRow = rRange.aStart.Row() < rRow ? rRow : rRange.aStart.Row();
+            for (SCROW nRow = nBeginRow; nRow <= rRange.aEnd.Row(); ++nRow)
+            {
+                if (bSkipFiltered)
+                    SkipFilteredRows(nRow, nLastNonFilteredRow, true);
+                if (nRow > rRange.aEnd.Row())
+                    break;
+
+                SCCOL nBeginCol = rRange.aStart.Col();
+                if (nRow == rRow && nBeginCol <= rCol)
+                    // always start from one cell past the cursor.
+                    nBeginCol = rCol + (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+                for (SCCOL nCol = nBeginCol; nCol <= rRange.aEnd.Col(); ++nCol)
+                {
+                    if (lcl_maybeReplaceCellString(aCol[nCol], rCol, rRow, rUndoStr, nCol, nRow, rSearchItem))
+                        return true;
+                }
+            }
+        }
+        else
+        {
+            // column direction.
+            SCCOL nBeginCol = rRange.aStart.Col() < rCol ? rCol : rRange.aStart.Col();
+            for (SCCOL nCol = nBeginCol; nCol <= rRange.aEnd.Col(); ++nCol)
+            {
+                SCROW nLastNonFilteredRow = -1;
+                SCROW nBeginRow = rRange.aStart.Row();
+                if (nCol == rCol && nBeginRow <= rRow)
+                    // always start from one cell past the cursor.
+                    nBeginRow = rRow + (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+                for (SCROW nRow = nBeginRow; nRow <= rRange.aEnd.Row(); ++nRow)
+                {
+                    if (bSkipFiltered)
+                        SkipFilteredRows(nRow, nLastNonFilteredRow, true);
+                    if (nRow > rRange.aEnd.Row())
+                        break;
+
+                    if (lcl_maybeReplaceCellString(aCol[nCol], rCol, rRow, rUndoStr, nCol, nRow, rSearchItem))
+                        return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool ScTable::SearchRangeForAllEmptyCells(
+    const ScRange& rRange, const SvxSearchItem& rSearchItem, ScMarkData& rMark,
+    String& rUndoStr, ScDocument* pUndoDoc)
+{
+    bool bFound = false;
+    bool bReplace = (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) &&
+                    (rSearchItem.GetReplaceString().Len() > 0);
+    bool bSkipFiltered = rSearchItem.IsSearchFiltered();
+
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        SCROW nLastNonFilteredRow = -1;
+        if (aCol[nCol].IsEmptyData())
+        {
+            // The entire column is empty.
+            for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+            {
+                SCROW nLastRow;
+                if (!RowFiltered(nRow, NULL, &nLastRow))
+                {
+                    rMark.SetMultiMarkArea(ScRange(nCol, nRow, nTab, nCol, nLastRow, nTab));
+                    if (bReplace)
+                    {
+                        const String& rNewStr = rSearchItem.GetReplaceString();
+                        for (SCROW i = nRow; i <= nLastRow; ++i)
+                        {
+                            aCol[nCol].Insert(i, new ScStringCell(rNewStr));
+                            if (pUndoDoc)
+                                // TODO: I'm using a string cell with empty content to
+                                // trigger deletion of cell instance on undo.  Maybe I
+                                // should create a new cell type for this?
+                                pUndoDoc->PutCell(nCol, i, nTab, new ScStringCell(String()));
+                        }
+                        rUndoStr = String();
+                    }
+                }
+
+                nRow = nLastRow; // move to the last filtered row.
+            }
+            bFound = true;
+            continue;
+        }
+
+        for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+        {
+            if (bSkipFiltered)
+                SkipFilteredRows(nRow, nLastNonFilteredRow, true);
+            if (nRow > rRange.aEnd.Row())
+                break;
+
+            ScBaseCell* pCell = aCol[nCol].GetCell(nRow);
+            if (!pCell)
+            {
+                // empty cell found
+                rMark.SetMultiMarkArea(ScRange(nCol, nRow, nTab));
+                bFound = true;
+
+                if (bReplace)
+                {
+                    aCol[nCol].Insert(nRow, new ScStringCell(rSearchItem.GetReplaceString()));
+                    if (pUndoDoc)
+                        // TODO: I'm using a string cell with empty content to
+                        // trigger deletion of cell instance on undo.  Maybe I
+                        // should create a new cell type for this?
+                        pUndoDoc->PutCell(nCol, nRow, nTab, new ScStringCell(String()));
+                }
+            }
+            else if (pCell->GetCellType() == CELLTYPE_NOTE)
+            {
+                rMark.SetMultiMarkArea(ScRange(nCol, nRow, nTab));
+                bFound = true;
+
+                if (bReplace)
+                {
+                    if (pUndoDoc)
+                    {
+                        ScAddress aCellPos(nCol, nRow, nTab);
+                        pUndoDoc->PutCell(nCol, nRow, nTab, pCell->CloneWithNote(aCellPos, *pUndoDoc, aCellPos));
+                    }
+                    aCol[nCol].SetString(nRow, nTab, rSearchItem.GetReplaceString());
+                }
+            }
+        }
+    }
+    return bFound;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

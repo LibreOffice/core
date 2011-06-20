@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,7 +85,6 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
     if(pObj && m_pScene)
     {
         m_aReferenceRect = pObj->GetLogicRect();
-        Rectangle aTemp = m_pScene->GetLogicRect();
 
         m_aWireframePolyPolygon = m_pScene->CreateWireframe();
 
@@ -235,3 +235,5 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

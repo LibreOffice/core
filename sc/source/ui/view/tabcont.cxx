@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,14 +55,15 @@
 //==================================================================
 
 ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
-            TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL |
-                                    WB_RANGESELECT | WB_MULTISELECT | WB_DRAG | WB_SIZEABLE ) ),
+    TabBar( pParent,
+            WinBits(WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_RANGESELECT |
+                    WB_MULTISELECT | WB_DRAG | WB_SIZEABLE) ),
             DropTargetHelper( this ),
             DragSourceHelper( this ),
             pViewData( pData ),
             nMouseClickPageId( TabBar::PAGE_NOT_FOUND ),
             nSelPageIdByMouse( TabBar::PAGE_NOT_FOUND ),
-            bErrorShown( sal_False )
+            bErrorShown( false )
 {
     ScDocument* pDoc = pViewData->GetDocument();
 
@@ -94,6 +96,7 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
     SetSplitHdl( LINK( pViewData->GetView(), ScTabView, TabBarResize ) );
 
     EnableEditMode();
+    UpdateInputContext();
 }
 
 ScTabControl::~ScTabControl()
@@ -157,11 +160,11 @@ void ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
         pViewData->GetView()->ActiveGrabFocus();
     }
 
-    /*  #47745# Click into free area -> insert new sheet (like in Draw).
+    /*  Click into free area -> insert new sheet (like in Draw).
         Needing clean left click without modifiers (may be context menu).
-        #106948# Remember clicks to all pages, to be able to move mouse pointer later. */
+        Remember clicks to all pages, to be able to move mouse pointer later. */
     if( rMEvt.IsLeft() && (rMEvt.GetModifier() == 0) )
-        nMouseClickPageId = GetPageId( rMEvt.GetPosPixel() );
+        nMouseClickPageId = GetPageId( rMEvt.GetPosPixel(), true );
     else
         nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
 
@@ -173,13 +176,27 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
 
     // mouse button down and up on same page?
-    if( nMouseClickPageId != GetPageId( aPos ) )
+    if( nMouseClickPageId != GetPageId( aPos, true ) )
         nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
+
+    if (nMouseClickPageId == TabBar::INSERT_TAB_POS)
+    {
+        // Insert a new sheet at the right end, with default name.
+        ScDocument* pDoc = pViewData->GetDocument();
+        if (!pDoc->IsDocEditable())
+            return;
+        String aName;
+        pDoc->CreateValidTabName(aName);
+        SCTAB nTabCount = pDoc->GetTableCount();
+        pViewData->GetViewShell()->InsertTable(aName, nTabCount);
+        return;
+    }
 
     if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && nMouseClickPageId != 0 && nMouseClickPageId != TAB_PAGE_NOTFOUND )
     {
         SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
         pDispatcher->Execute( FID_TAB_MENU_RENAME, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+        return;
     }
 
     if( nMouseClickPageId == 0 )
@@ -240,12 +257,6 @@ void ScTabControl::Select()
     for (i=0; i<nCount; i++)
         rMark.SelectTable( i, IsPageSelected(static_cast<sal_uInt16>(i)+1) );
 
-/*      Markierungen werden per Default nicht pro Tabelle gehalten
-    sal_uInt16 nSelCnt = GetSelectPageCount();
-    if (nSelCnt>1)
-        pDoc->ExtendMarksFromTable( nPage );
-*/
-
     SfxDispatcher& rDisp = pViewData->GetDispatcher();
     if (rDisp.IsLocked())
         pViewData->GetView()->SetTabNo( static_cast<SCTAB>(nPage) );
@@ -285,6 +296,17 @@ void ScTabControl::Select()
         }
 }
 
+void ScTabControl::UpdateInputContext()
+{
+    ScDocument* pDoc = pViewData->GetDocument();
+    WinBits nStyle = GetStyle();
+    if (pDoc->GetDocumentShell()->IsReadOnly())
+        // no insert sheet tab for readonly doc.
+        SetStyle((nStyle & ~WB_INSERTTAB));
+    else
+        SetStyle((nStyle | WB_INSERTTAB));
+}
+
 void ScTabControl::UpdateStatus()
 {
     ScDocument* pDoc = pViewData->GetDocument();
@@ -297,7 +319,7 @@ void ScTabControl::UpdateStatus()
     SCTAB nMaxCnt = Max( nCount, static_cast<SCTAB>(GetMaxId()) );
     Color aTabBgColor;
 
-    sal_Bool bModified = sal_False;                                     // Tabellen-Namen
+    sal_Bool bModified = false;                                     // Tabellen-Namen
     for (i=0; i<nMaxCnt && !bModified; i++)
     {
         if (pDoc->IsVisible(i))
@@ -340,7 +362,7 @@ void ScTabControl::UpdateStatus()
 
     if (bActive)
     {
-        bModified = sal_False;                                          // Selektion
+        bModified = false;                                          // Selektion
         for (i=0; i<nMaxCnt && !bModified; i++)
             if ( rMark.GetTableSelect(i) != IsPageSelected(static_cast<sal_uInt16>(i)+1) )
                 bModified = sal_True;
@@ -358,26 +380,12 @@ void ScTabControl::UpdateStatus()
 
 void ScTabControl::ActivateView(sal_Bool bActivate)
 {
-//  ScDocument* pDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
-
-//  ResetMark direkt in TabView
-//  pDoc->ResetMark();
 
     sal_uInt16 nCurId = GetCurPageId();
     if (!nCurId) return;            // kann vorkommen, wenn bei Excel-Import alles versteckt ist
     sal_uInt16 nPage = nCurId - 1;
-//    sal_uInt16 nCount = GetMaxId();
 
-    /*
-    sal_uInt16 i;
-    for (i=0; i<nCount; i++)
-    {
-        SelectPage( i+1, sal_False );
-        if (bActivate)
-            rMark.SelectTable( i, sal_False );
-    }
-    */
     if (bActivate)
     {
         SelectPage( nPage+1, sal_True );
@@ -458,13 +466,12 @@ void ScTabControl::DoDrag( const Region& /* rRegion */ )
     ScDocument* pDoc = pDocSh->GetDocument();
 
     SCTAB nTab = pViewData->GetTabNo();
-    ScRange aTabRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
     ScMarkData aTabMark = pViewData->GetMarkData();
     aTabMark.ResetMark();   // doesn't change marked table information
-    aTabMark.SetMarkArea( aTabRange );
+    aTabMark.SetMarkArea( ScRange(0,0,nTab,MAXCOL,MAXROW,nTab) );
 
     ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-    ScClipParam aClipParam(aTabRange, false);
+    ScClipParam aClipParam(ScRange(0, 0, 0, MAXCOL, MAXROW, 0), false);
     pDoc->CopyToClip(aClipParam, pClipDoc, &aTabMark, false);
 
     TransferableObjectDescriptor aObjDesc;
@@ -500,7 +507,7 @@ sal_uInt16 lcl_DocShellNr( ScDocument* pDoc )
         pShell = SfxObjectShell::GetNext( *pShell );
     }
 
-    DBG_ERROR("Dokument nicht gefunden");
+    OSL_FAIL("Dokument nicht gefunden");
     return 0;
 }
 
@@ -581,7 +588,7 @@ long ScTabControl::StartRenaming()
 long ScTabControl::AllowRenaming()
 {
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
-    DBG_ASSERT( pViewSh, "pViewData->GetViewShell()" );
+    OSL_ENSURE( pViewSh, "pViewData->GetViewShell()" );
 
     long nRet = TABBAR_RENAMING_CANCEL;
     sal_uInt16 nId = GetEditPageId();
@@ -597,12 +604,12 @@ long ScTabControl::AllowRenaming()
             //  if the error message from this TabControl is currently visible,
             //  don't end edit mode now, to avoid problems when returning to
             //  the other call (showing the error) - this should not happen
-            DBG_ERROR("ScTabControl::AllowRenaming: nested calls");
+            OSL_FAIL("ScTabControl::AllowRenaming: nested calls");
             nRet = TABBAR_RENAMING_NO;
         }
         else if ( Application::IsInModalMode() )
         {
-            //  #73472# don't show error message above any modal dialog
+            //  don't show error message above any modal dialog
             //  instead cancel renaming without error message
             nRet = TABBAR_RENAMING_CANCEL;
         }
@@ -610,7 +617,7 @@ long ScTabControl::AllowRenaming()
         {
             bErrorShown = sal_True;
             pViewSh->ErrorMessage( STR_INVALIDTABNAME );
-            bErrorShown = sal_False;
+            bErrorShown = false;
             nRet = TABBAR_RENAMING_NO;
         }
     }
@@ -637,3 +644,4 @@ void ScTabControl::Mirror()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/unofored.hxx>
+#include <vcl/svapp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
@@ -45,7 +47,6 @@
 #include "docfunc.hxx"
 #include "hints.hxx"
 #include "patattr.hxx"
-#include "unoguard.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "postit.hxx"
@@ -196,7 +197,7 @@ ScAnnotationEditSource::ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddre
     aCellPos( rP ),
     pEditEngine( NULL ),
     pForwarder( NULL ),
-    bDataValid( sal_False )
+    bDataValid( false )
 {
     if (pDocShell)
         pDocShell->GetDocument()->AddUnoObject(*this);
@@ -204,7 +205,7 @@ ScAnnotationEditSource::ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddre
 
 ScAnnotationEditSource::~ScAnnotationEditSource()
 {
-    ScUnoGuard aGuard;      //  needed for EditEngine dtor
+    SolarMutexGuard aGuard;     //  needed for EditEngine dtor
 
     if (pDocShell)
         pDocShell->GetDocument()->RemoveUnoObject(*this);
@@ -282,8 +283,6 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
-
         //! Ref-Update
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
@@ -297,7 +296,7 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
             DELETEZ( pEditEngine );     // EditEngine uses document's pool
         }
         else if ( nId == SFX_HINT_DATACHANGED )
-            bDataValid = sal_False;                     // Text muss neu geholt werden
+            bDataValid = false;                     // Text muss neu geholt werden
     }
 }
 
@@ -371,3 +370,4 @@ SfxBroadcaster& ScAccessibilityEditSource::GetBroadcaster() const
     return mpAccessibleTextData->GetBroadcaster();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@ using namespace xmloff::token;
 ScMyImpDetectiveObj::ScMyImpDetectiveObj() :
     aSourceRange(),
     eObjType( SC_DETOBJ_NONE ),
-    bHasError( sal_False )
+    bHasError( false )
 {
 }
 
@@ -71,7 +72,7 @@ void ScMyImpDetectiveOpArray::Sort()
 sal_Bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
 {
     if( aDetectiveOpList.empty() )
-        return sal_False;
+        return false;
     ScMyImpDetectiveOpList::iterator aItr = aDetectiveOpList.begin();
     rDetOp = *aItr;
     aDetectiveOpList.erase( aItr );
@@ -134,7 +135,7 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDetectiveObjVec( pNewDetectiveObjVec ),
     aDetectiveObj(),
-    bValid( sal_False )
+    bValid( false )
 {
     if( !xAttrList.is() ) return;
 
@@ -153,9 +154,8 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
             case XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CELL_RANGE:
             {
                 sal_Int32 nOffset(0);
-                GetScImport().LockSolarMutex();
+                ScXMLImport::MutexGuard aGuard(GetScImport());
                 bValid = ScRangeStringConverter::GetRangeFromString( aDetectiveObj.aSourceRange, sValue, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
-                GetScImport().UnlockSolarMutex();
             }
             break;
             case XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_DIRECTION:
@@ -198,7 +198,7 @@ void ScXMLDetectiveHighlightedContext::EndElement()
             bValid = sal_True;
         break;
         default:
-            bValid = sal_False;
+            bValid = false;
     }
     if( bValid )
         pDetectiveObjVec->push_back( aDetectiveObj );
@@ -214,7 +214,7 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     aDetectiveOp(),
-    bHasType( sal_False )
+    bHasType( false )
 {
     if( !xAttrList.is() ) return;
 
@@ -263,3 +263,4 @@ void ScXMLDetectiveOperationContext::EndElement()
         GetScImport().GetDetectiveOpArray()->AddDetectiveOp( aDetectiveOp );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

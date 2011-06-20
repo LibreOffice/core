@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,10 @@
 #include <ooo/vba/excel/XlPageOrientation.hpp>
 #include <ooo/vba/excel/XlOrder.hpp>
 #include <ooo/vba/excel/Constants.hpp>
+#include <i18npool/paper.hxx>
+#include <editeng/paperinf.hxx>
+#include <ooo/vba/excel/XlPaperSize.hpp>
+#include <sal/macros.h>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -96,7 +101,7 @@ void SAL_CALL ScVbaPageSetup::setPrintArea( const rtl::OUString& rAreas ) throw 
 {
     uno::Reference< sheet::XPrintAreas > xPrintAreas( mxSheet, uno::UNO_QUERY_THROW );
     if( rAreas.getLength() == 0 ||
-        rAreas.equalsIgnoreAsciiCase ( rtl::OUString::createFromAscii("FALSE") ) )
+        rAreas.equalsIgnoreAsciiCase ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FALSE")) ) )
     {
         // print the whole sheet
         uno::Sequence< table::CellRangeAddress > aSeq;
@@ -108,10 +113,10 @@ void SAL_CALL ScVbaPageSetup::setPrintArea( const rtl::OUString& rAreas ) throw 
         ScRange aRange;
         if( getScRangeListForAddress( rAreas, excel::getDocShell( mxModel ) , aRange, aCellRanges ) )
         {
-            uno::Sequence< table::CellRangeAddress > aSeq( aCellRanges.Count() );
-            sal_uInt16 i=0;
-            for( ScRange* pRange = aCellRanges.First(); pRange; pRange = aCellRanges.Next() )
+            uno::Sequence< table::CellRangeAddress > aSeq( aCellRanges.size() );
+            for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
             {
+                ScRange* pRange = aCellRanges[ i ];
                 table::CellRangeAddress aRangeAddress;
                 ScUnoConversion::FillApiRange( aRangeAddress, *pRange );
                 aSeq[ i++ ] = aRangeAddress;
@@ -174,7 +179,7 @@ void SAL_CALL ScVbaPageSetup::setFitToPagesWide( const uno::Any& fitToPagesWide)
     sal_uInt16 scaleToPageX = 0;
     try
     {
-        sal_Bool aValue = sal_False;
+        sal_Bool aValue = false;
         if( fitToPagesWide.getValueTypeClass() != uno::TypeClass_BOOLEAN || (fitToPagesWide >>= aValue))
         {
             fitToPagesWide >>= scaleToPageX;
@@ -199,7 +204,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom) throw (css::uno::Ru
     {
         if( zoom.getValueTypeClass() == uno::TypeClass_BOOLEAN )
         {
-            sal_Bool aValue = sal_False;
+            sal_Bool aValue = false;
             zoom >>= aValue;
             if( aValue )
             {
@@ -458,7 +463,7 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getOrder() throw (css::uno::RuntimeException)
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PrintDownFirst")));
-        sal_Bool bPrintDownFirst = sal_False;
+        sal_Bool bPrintDownFirst = false;
         aValue >>= bPrintDownFirst;
         if( !bPrintDownFirst )
             order = excel::XlOrder::xlOverThenDown;
@@ -478,7 +483,7 @@ void SAL_CALL ScVbaPageSetup::setOrder( sal_Int32 order) throw (css::uno::Runtim
         case excel::XlOrder::xlDownThenOver:
             break;
         case excel::XlOrder::xlOverThenDown:
-            bOrder = sal_False;
+            bOrder = false;
             break;
         default:
             DebugHelper::exception(SbERR_BAD_PARAMETER, rtl::OUString() );
@@ -533,7 +538,7 @@ void SAL_CALL ScVbaPageSetup::setFirstPageNumber( sal_Int32 firstPageNumber) thr
 
 sal_Bool SAL_CALL ScVbaPageSetup::getCenterVertically() throw (css::uno::RuntimeException)
 {
-    sal_Bool centerVertically = sal_False;
+    sal_Bool centerVertically = false;
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CenterVertically")));
@@ -558,7 +563,7 @@ void SAL_CALL ScVbaPageSetup::setCenterVertically( sal_Bool centerVertically) th
 
 sal_Bool SAL_CALL ScVbaPageSetup::getCenterHorizontally() throw (css::uno::RuntimeException)
 {
-    sal_Bool centerHorizontally = sal_False;
+    sal_Bool centerHorizontally = false;
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CenterHorizontally")));
@@ -583,7 +588,7 @@ void SAL_CALL ScVbaPageSetup::setCenterHorizontally( sal_Bool centerHorizontally
 
 sal_Bool SAL_CALL ScVbaPageSetup::getPrintHeadings() throw (css::uno::RuntimeException)
 {
-    sal_Bool printHeadings = sal_False;
+    sal_Bool printHeadings = false;
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PrintHeaders")));
@@ -624,3 +629,104 @@ ScVbaPageSetup::getServiceNames()
     }
     return aServiceNames;
 }
+
+struct PaperSizeMap
+{
+    Paper ePaper;
+    sal_Int32 xlPaper;
+};
+
+static PaperSizeMap paperSizeMappings[] =
+{
+    { PAPER_A3, ooo::vba::excel::XlPaperSize::xlPaperA3 },
+    { PAPER_A4, ooo::vba::excel::XlPaperSize::xlPaperA4 },
+    { PAPER_A5, ooo::vba::excel::XlPaperSize::xlPaperA5 },
+    { PAPER_B4_ISO, ooo::vba::excel::XlPaperSize::xlPaperB4 },
+    { PAPER_B5_ISO, ooo::vba::excel::XlPaperSize::xlPaperB5 },
+    { PAPER_LETTER, ooo::vba::excel::XlPaperSize::xlPaperLetter },
+    { PAPER_LEGAL, ooo::vba::excel::XlPaperSize::xlPaperLegal },
+    { PAPER_TABLOID, ooo::vba::excel::XlPaperSize::xlPaperTabloid },
+    { PAPER_USER, ooo::vba::excel::XlPaperSize::xlPaperUser },
+    { PAPER_B6_ISO, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeB6 },
+    { PAPER_ENV_C4, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeC4 },
+    { PAPER_ENV_C5, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeC5 },
+    { PAPER_ENV_C6, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeC6 },
+    { PAPER_ENV_C65, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeC65 },
+    { PAPER_ENV_DL, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeDL },
+    { PAPER_C, ooo::vba::excel::XlPaperSize::xlPaperCsheet },
+    { PAPER_D, ooo::vba::excel::XlPaperSize::xlPaperDsheet },
+    { PAPER_E, ooo::vba::excel::XlPaperSize::xlPaperEsheet },
+    { PAPER_ENV_MONARCH, ooo::vba::excel::XlPaperSize::xlPaperEnvelopeMonarch },
+    { PAPER_ENV_PERSONAL, ooo::vba::excel::XlPaperSize::xlPaperEnvelopePersonal },
+    { PAPER_ENV_9, ooo::vba::excel::XlPaperSize::xlPaperEnvelope9 },
+    { PAPER_ENV_10, ooo::vba::excel::XlPaperSize::xlPaperEnvelope10 },
+    { PAPER_ENV_11, ooo::vba::excel::XlPaperSize::xlPaperEnvelope11 },
+    { PAPER_ENV_12, ooo::vba::excel::XlPaperSize::xlPaperEnvelope12 }
+};
+
+static const int nMapSize = SAL_N_ELEMENTS(paperSizeMappings);
+
+sal_Int32 PaperSizeOOoToExcel(Paper ePaper)
+{
+    sal_Int32 nPaperSize = ooo::vba::excel::XlPaperSize::xlPaperUser;
+
+    for (int i = 0; i < nMapSize; i++)
+    {
+        if (ePaper == paperSizeMappings[i].ePaper)
+        {
+            nPaperSize = paperSizeMappings[i].xlPaper;
+            break;
+        }
+    }
+
+    return nPaperSize;
+}
+
+sal_Int32 SAL_CALL ScVbaPageSetup::getPaperSize() throw (css::uno::RuntimeException)
+{
+    com::sun::star::awt::Size size;
+    Paper ePaper = PAPER_USER;
+
+    try
+    {
+        uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Size")));
+        aValue >>= size;
+        ePaper = SvxPaperInfo::GetSvxPaper( Size(size.Width, size.Height), MAP_100TH_MM, true);
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    return PaperSizeOOoToExcel(ePaper);
+}
+
+Paper PaperSizeExcelToOOo( sal_Int32 xlPaper)
+{
+    Paper ePaper = PAPER_USER;
+
+    for (int i = 0; i < nMapSize; i++)
+    {
+        if (xlPaper == paperSizeMappings[i].xlPaper)
+        {
+            ePaper = paperSizeMappings[i].ePaper;
+            break;
+        }
+    }
+
+    return ePaper;
+}
+void SAL_CALL ScVbaPageSetup::setPaperSize( sal_Int32 paperSize) throw (css::uno::RuntimeException)
+{
+    Paper ePaper = PaperSizeExcelToOOo( paperSize );
+
+    try
+    {
+        Size size1 = SvxPaperInfo::GetPaperSize( ePaper, MAP_100TH_MM );
+        com::sun::star::awt::Size size(size1.Width(), size1.Height());
+        mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Size")), uno::makeAny( size ));
+    }
+    catch( uno::Exception& )
+    {
+    }
+}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

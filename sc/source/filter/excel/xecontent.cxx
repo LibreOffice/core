@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,7 +135,7 @@ XclExpSstImpl::XclExpSstImpl() :
 
 sal_uInt32 XclExpSstImpl::Insert( XclExpStringRef xString )
 {
-    DBG_ASSERT( xString.get(), "XclExpSstImpl::Insert - empty pointer not allowed" );
+    OSL_ENSURE( xString.get(), "XclExpSstImpl::Insert - empty pointer not allowed" );
     if( !xString.get() )
         xString.reset( new XclExpString );
 
@@ -205,7 +206,7 @@ void XclExpSstImpl::Save( XclExpStream& rStrm )
                 aStr.Append( '\t' ).APPENDINT( nStrings ).Append( '\n' );
             }
         }
-        DBG_ERRORFILE( aStr.GetBuffer() );
+        OSL_FAIL( aStr.GetBuffer() );
 #undef APPENDINT
     }
 #endif
@@ -262,8 +263,8 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     sax_fastparser::FSHelperPtr pSst = rStrm.CreateOutputStream(
-            OUString::createFromAscii( "xl/sharedStrings.xml" ),
-            OUString::createFromAscii( "sharedStrings.xml" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "xl/sharedStrings.xml") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "sharedStrings.xml" )),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" );
@@ -331,12 +332,15 @@ void XclExpMergedcells::AppendRange( const ScRange& rRange, sal_uInt32 nBaseXFId
 
 sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
 {
-    DBG_ASSERT( maBaseXFIds.size() == maMergedRanges.Count(), "XclExpMergedcells::GetBaseXFId - invalid lists" );
+    OSL_ENSURE( maBaseXFIds.size() == maMergedRanges.size(), "XclExpMergedcells::GetBaseXFId - invalid lists" );
     ScfUInt32Vec::const_iterator aIt = maBaseXFIds.begin();
     ScRangeList& rNCRanges = const_cast< ScRangeList& >( maMergedRanges );
-    for( const ScRange* pScRange = rNCRanges.First(); pScRange; pScRange = rNCRanges.Next(), ++aIt )
+    for ( size_t i = 0, nRanges = rNCRanges.size(); i < nRanges; ++i, ++aIt )
+    {
+        const ScRange* pScRange = rNCRanges[ i ];
         if( pScRange->In( rPos ) )
             return *aIt;
+    }
     return EXC_XFID_NOTFOUND;
 }
 
@@ -362,16 +366,16 @@ void XclExpMergedcells::Save( XclExpStream& rStrm )
 
 void XclExpMergedcells::SaveXml( XclExpXmlStream& rStrm )
 {
-    sal_uLong nCount = maMergedRanges.Count();
+    size_t nCount = maMergedRanges.size();
     if( !nCount )
         return;
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_mergeCells,
             XML_count,  OString::valueOf( (sal_Int32) nCount ).getStr(),
             FSEND );
-    for( sal_uLong i = 0; i < nCount; ++i )
+    for( size_t i = 0; i < nCount; ++i )
     {
-        if( const ScRange* pRange = maMergedRanges.GetObject( i ) )
+        if( const ScRange* pRange = maMergedRanges[ i ] )
         {
             rWorksheet->singleElement( XML_mergeCell,
                     XML_ref,    XclXmlUtils::ToOString( *pRange ).getStr(),
@@ -409,11 +413,19 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     }
 
     // file link or URL
-    if( eProtocol == INET_PROT_FILE )
+    if( eProtocol == INET_PROT_FILE || eProtocol == INET_PROT_SMB )
     {
         sal_uInt16 nLevel;
         bool bRel;
         String aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot ) );
+
+        if( eProtocol == INET_PROT_SMB )
+        {
+            // #n382718# (and #n261623#) Convert smb notation to '\\'
+            aFileName = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
+            aFileName = String( aFileName.GetBuffer() + 4 ); // skip the 'smb:' part
+            aFileName.SearchAndReplaceAll( '/', '\\' );
+        }
 
         if( !bRel )
             mnFlags |= EXC_HLINK_ABS;
@@ -455,7 +467,16 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     else if( rUrl.GetChar( 0 ) == '#' )     // hack for #89066#
     {
         String aTextMark( rUrl.Copy( 1 ) );
-        aTextMark.SearchAndReplace( '.', '!' );
+
+        xub_StrLen nSepPos = aTextMark.SearchAndReplace( '.', '!' );
+        String aSheetName( aTextMark.Copy(0, nSepPos));
+
+        if ( aSheetName.Search(' ') != STRING_NOTFOUND && aSheetName.GetChar(0) != '\'')
+        {
+            aTextMark.Insert('\'', nSepPos);
+            aTextMark.Insert('\'', 0);
+        }
+
         mxTextMark.reset( new XclExpString( aTextMark, EXC_STR_FORCEUNICODE, 255 ) );
     }
 
@@ -516,24 +537,31 @@ void XclExpHyperlink::WriteBody( XclExpStream& rStrm )
 {
     sal_uInt16 nXclCol = static_cast< sal_uInt16 >( maScPos.Col() );
     sal_uInt16 nXclRow = static_cast< sal_uInt16 >( maScPos.Row() );
-    mxVarData->Seek( STREAM_SEEK_TO_BEGIN );
+    rStrm   << nXclRow << nXclRow << nXclCol << nXclCol;
+    WriteEmbeddedData( rStrm );
+}
 
-    rStrm   << nXclRow << nXclRow << nXclCol << nXclCol
-            << XclTools::maGuidStdLink
+void XclExpHyperlink::WriteEmbeddedData( XclExpStream& rStrm )
+{
+    rStrm << XclTools::maGuidStdLink
             << sal_uInt32( 2 )
             << mnFlags;
+
+    mxVarData->Seek( STREAM_SEEK_TO_BEGIN );
     rStrm.CopyFromStream( *mxVarData );
 }
 
 void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
 {
-    OUString sId = rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
+    OUString sId = msTarget.getLength() ? rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
             XclXmlUtils::ToOUString( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
             msTarget,
-            XclXmlUtils::ToOUString( "External" ) );
+            XclXmlUtils::ToOUString( "External" ) ) : OUString();
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
             XML_ref,                XclXmlUtils::ToOString( maScPos ).getStr(),
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
+            FSNS( XML_r, XML_id ),  sId.getLength()
+                                       ? XclXmlUtils::ToOString( sId ).getStr()
+                                       : NULL,
             XML_location,           mxTextMark.get() != NULL
                                         ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
                                         : NULL,
@@ -551,9 +579,12 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
     // row label ranges
     FillRangeList( maRowRanges, rRoot.GetDoc().GetRowNameRangesRef(), nScTab );
     // row labels only over 1 column (restriction of Excel97/2000/XP)
-    for( ScRange* pScRange = maRowRanges.First(); pScRange; pScRange = maRowRanges.Next() )
+    for ( size_t i = 0, nRanges = maRowRanges.size(); i < nRanges; ++i )
+    {
+        ScRange* pScRange = maRowRanges[ i ];
         if( pScRange->aStart.Col() != pScRange->aEnd.Col() )
             pScRange->aEnd.SetCol( pScRange->aStart.Col() );
+    }
     // col label ranges
     FillRangeList( maColRanges, rRoot.GetDoc().GetColNameRangesRef(), nScTab );
 }
@@ -561,8 +592,9 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
 void XclExpLabelranges::FillRangeList( ScRangeList& rScRanges,
         ScRangePairListRef xLabelRangesRef, SCTAB nScTab )
 {
-    for( const ScRangePair* pRangePair = xLabelRangesRef->First(); pRangePair; pRangePair = xLabelRangesRef->Next() )
+    for ( size_t i = 0, nPairs = xLabelRangesRef->size(); i < nPairs; ++i )
     {
+        ScRangePair* pRangePair = (*xLabelRangesRef)[i];
         const ScRange& rScRange = pRangePair->GetRange( 0 );
         if( rScRange.aStart.Tab() == nScTab )
             rScRanges.Append( rScRange );
@@ -683,7 +715,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
         case SC_COND_EQLESS:        mnOperator = EXC_CF_CMP_LESS_EQUAL;                     break;
         case SC_COND_DIRECT:        mnType = EXC_CF_TYPE_FMLA;                              break;
         default:                    mnType = EXC_CF_TYPE_NONE;
-            DBG_ERRORFILE( "XclExpCF::WriteBody - unknown condition type" );
+            OSL_FAIL( "XclExpCF::WriteBody - unknown condition type" );
     }
 
     // *** formulas ***
@@ -848,8 +880,8 @@ void XclExpCondfmt::Save( XclExpStream& rStrm )
 
 void XclExpCondfmt::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT( !maCFList.IsEmpty(), "XclExpCondfmt::WriteBody - no CF records to write" );
-    DBG_ASSERT( !maXclRanges.empty(), "XclExpCondfmt::WriteBody - no cell ranges found" );
+    OSL_ENSURE( !maCFList.IsEmpty(), "XclExpCondfmt::WriteBody - no CF records to write" );
+    OSL_ENSURE( !maXclRanges.empty(), "XclExpCondfmt::WriteBody - no cell ranges found" );
 
     rStrm   << static_cast< sal_uInt16 >( maCFList.GetSize() )
             << sal_uInt16( 1 )
@@ -1007,7 +1039,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
             case SC_VALID_TIME:     mnFlags |= EXC_DV_MODE_TIME;        break;
             case SC_VALID_TEXTLEN:  mnFlags |= EXC_DV_MODE_TEXTLEN;     break;
             case SC_VALID_CUSTOM:   mnFlags |= EXC_DV_MODE_CUSTOM;      break;
-            default:                DBG_ERRORFILE( "XclExpDV::XclExpDV - unknown mode" );
+            default:                OSL_FAIL( "XclExpDV::XclExpDV - unknown mode" );
         }
 
         switch( pValData->GetOperation() )
@@ -1021,7 +1053,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
             case SC_COND_NOTEQUAL:      mnFlags |= EXC_DV_COND_NOTEQUAL;    break;
             case SC_COND_BETWEEN:       mnFlags |= EXC_DV_COND_BETWEEN;     break;
             case SC_COND_NOTBETWEEN:    mnFlags |= EXC_DV_COND_NOTBETWEEN;  break;
-            default:                    DBG_ERRORFILE( "XclExpDV::XclExpDV - unknown condition" );
+            default:                    OSL_FAIL( "XclExpDV::XclExpDV - unknown condition" );
         }
         switch( eScErrorStyle )
         {
@@ -1029,11 +1061,11 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
             case SC_VALERR_WARNING:     mnFlags |= EXC_DV_ERROR_WARNING;    break;
             case SC_VALERR_INFO:        mnFlags |= EXC_DV_ERROR_INFO;       break;
             case SC_VALERR_MACRO:
-                // #111781# set INFO for validity with macro call, delete title
+                // set INFO for validity with macro call, delete title
                 mnFlags |= EXC_DV_ERROR_INFO;
                 maErrorTitle.Assign( '\0' );    // contains macro name
             break;
-            default:                    DBG_ERRORFILE( "XclExpDV::XclExpDV - unknown error style" );
+            default:                    OSL_FAIL( "XclExpDV::XclExpDV - unknown error style" );
         }
         ::set_flag( mnFlags, EXC_DV_IGNOREBLANK, pValData->IsIgnoreBlank() );
         ::set_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN, pValData->GetListType() == ValidListType::INVISIBLE );
@@ -1110,7 +1142,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
     }
     else
     {
-        DBG_ERRORFILE( "XclExpDV::XclExpDV - missing core data" );
+        OSL_FAIL( "XclExpDV::XclExpDV - missing core data" );
         mnScHandle = ULONG_MAX;
     }
 }
@@ -1156,7 +1188,8 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
             XML_operator,           lcl_GetOperatorType( mnFlags ),
             XML_prompt,             XESTRING_TO_PSZ( maPromptText ),
             XML_promptTitle,        XESTRING_TO_PSZ( maPromptTitle ),
-            XML_showDropDown,       XclXmlUtils::ToPsz( ! ::get_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN ) ),
+            // showDropDown should have been showNoDropDown - check oox/xlsx import for details
+            XML_showDropDown,       XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN ) ),
             XML_showErrorMessage,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWERROR ) ),
             XML_showInputMessage,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWPROMPT ) ),
             XML_sqref,              XclXmlUtils::ToOString( maScRanges ).getStr(),
@@ -1322,7 +1355,7 @@ XclExpWebQuery::~XclExpWebQuery()
 
 void XclExpWebQuery::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT( !mbEntireDoc || !mxQryTables.get(), "XclExpWebQuery::Save - illegal mode" );
+    OSL_ENSURE( !mbEntireDoc || !mxQryTables.get(), "XclExpWebQuery::Save - illegal mode" );
     sal_uInt16 nFlags;
 
     // QSI record
@@ -1433,7 +1466,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
                     String aRangeName;
                     ScRange aScDestRange;
                     ScUnoConversion::FillScRange( aScDestRange, aDestRange );
-                    if( const ScRangeData* pRangeData = rRoot.GetNamedRanges().GetRangeAtBlock( aScDestRange ) )
+                    if( const ScRangeData* pRangeData = rRoot.GetNamedRanges().findByRange( aScDestRange ) )
                     {
                         aRangeName = pRangeData->GetName();
                     }
@@ -1460,3 +1493,4 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

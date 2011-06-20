@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,12 +35,6 @@
 #include "global.hxx"
 
 //------------------------------------------------------------------------
-//CHINA001 #define INS_CONT_NOEMPTY     0x0100
-//CHINA001 #define INS_CONT_TRANS       0x0200
-//CHINA001 #define INS_CONT_LINK        0x0400
-//CHINA001
-//CHINA001 #define SC_CELL_SHIFT_DISABLE_DOWN   0x01
-//CHINA001 #define SC_CELL_SHIFT_DISABLE_RIGHT  0x02
 #include "scui_def.hxx"
 
 class ScInsertContentsDlg : public ModalDialog
@@ -120,3 +115,4 @@ private:
 #endif // SC_INSCODLG_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

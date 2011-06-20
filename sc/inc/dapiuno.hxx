@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,8 +94,6 @@ public:
                             const ScDPNumGroupInfo& rGroupInfo );
 };
 
-// ============================================================================
-
 /** DataPilotTables collection per sheet. */
 class ScDataPilotTablesObj : public cppu::WeakImplHelper4<
                                         com::sun::star::sheet::XDataPilotTables,
@@ -162,8 +161,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
-// ============================================================================
-
 //  ScDataPilotDescriptorBase is never instantiated directly
 class ScDataPilotDescriptorBase : public com::sun::star::sheet::XDataPilotDescriptor,
                                   public com::sun::star::beans::XPropertySet,
@@ -192,7 +189,7 @@ public:
 
     ScDocShell*             GetDocShell() const     { return pDocShell; }
 
-                            // in den Ableitungen:
+                            // in the derivatives:
     virtual ScDPObject* GetDPObject() const = 0;
     virtual void SetDPObject(ScDPObject* pDPObj) = 0;
 
@@ -282,8 +279,6 @@ public:
                             // XServiceInfo is in derived classes
 };
 
-// ============================================================================
-
 class ScDataPilotDescriptor : public ScDataPilotDescriptorBase
 {
 private:
@@ -312,8 +307,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 };
-
-// ============================================================================
 
 class ScDataPilotTableObj : public ScDataPilotDescriptorBase,
                             public com::sun::star::sheet::XDataPilotTable2,
@@ -393,8 +386,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
-// ============================================================================
-
 struct ScFieldIdentifier
 {
     ::rtl::OUString     maFieldName;    /// Source field name.
@@ -407,8 +398,6 @@ struct ScFieldIdentifier
     inline explicit     ScFieldIdentifier( const ::rtl::OUString& rFieldName, sal_Int32 nFieldIdx, bool bDataLayout ) :
                             maFieldName( rFieldName ), mnFieldIdx( nFieldIdx ), mbDataLayout( bDataLayout ) {}
 };
-
-// ============================================================================
 
 /** Base class of all implementation objects based on a DataPilot descriptor
     or DataPilot table object. Wraps acquiring and releasing the parent. */
@@ -440,8 +429,6 @@ protected:
 private:
     ScDataPilotChildObjBase& operator=( const ScDataPilotChildObjBase& );
 };
-
-// ============================================================================
 
 typedef ::cppu::WeakImplHelper4
 <
@@ -506,8 +493,6 @@ private:
 private:
     ::com::sun::star::uno::Any maOrient;    /// Field orientation, no value = all fields.
 };
-
-// ============================================================================
 
 typedef ::cppu::WeakImplHelper5
 <
@@ -584,7 +569,7 @@ public:
     virtual com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> SAL_CALL
                                 getItems() throw (::com::sun::star::uno::RuntimeException);
 
-                            // nur noch aus Property-Funktionen gerufen:
+                            // only called from property-functions:
     com::sun::star::sheet::DataPilotFieldOrientation getOrientation(void) const;
     void setOrientation(com::sun::star::sheet::DataPilotFieldOrientation Orientation);
     com::sun::star::sheet::GeneralFunction getFunction(void) const;
@@ -636,8 +621,6 @@ private:
     ::com::sun::star::uno::Any maOrient;
 };
 
-// ============================================================================
-
 typedef ::std::vector< ::rtl::OUString > ScFieldGroupMembers;
 
 struct ScFieldGroup
@@ -647,8 +630,6 @@ struct ScFieldGroup
 };
 
 typedef ::std::vector< ScFieldGroup > ScFieldGroups;
-
-// ============================================================================
 
 typedef ::cppu::WeakImplHelper4
 <
@@ -736,8 +717,6 @@ private:
     ScFieldGroups       maGroups;
 };
 
-// ============================================================================
-
 typedef ::cppu::WeakImplHelper5
 <
     ::com::sun::star::container::XNameContainer,
@@ -818,8 +797,6 @@ private:
     ::rtl::OUString     maGroupName;
 };
 
-// ============================================================================
-
 typedef ::cppu::WeakImplHelper2
 <
     ::com::sun::star::container::XNamed,
@@ -850,8 +827,6 @@ private:
     ScDataPilotFieldGroupObj& mrParent;
     ::rtl::OUString     maName;
 };
-
-// ============================================================================
 
 typedef ::cppu::WeakImplHelper4
 <
@@ -905,8 +880,6 @@ public:
 private:
     ScDataPilotItemObj* GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
 };
-
-// ============================================================================
 
 typedef ::cppu::WeakImplHelper3
 <
@@ -985,7 +958,6 @@ private:
     sal_Int32           mnIndex;
 };
 
-// ============================================================================
-
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

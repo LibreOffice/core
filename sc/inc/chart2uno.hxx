@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,9 +49,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-// #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-// #include <com/sun/star/lang/XUnoTunnel.hpp>
-// #endif
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase6.hxx>
@@ -58,7 +56,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <list>
 #include <vector>
 #include <memory>
@@ -111,9 +109,6 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection()
         throw (::com::sun::star::uno::RuntimeException);
-
-/*    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > SAL_CALL getNumberFormatsSupplier()
-        throw (::com::sun::star::uno::RuntimeException);*/
 
     // XRangeXMLConversion ---------------------------------------------------
 
@@ -258,7 +253,7 @@ class ScChart2DataSequence : public
 public:
     explicit ScChart2DataSequence( ScDocument* pDoc,
             const com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataProvider >& xDP,
-            ::std::vector<ScSharedTokenRef>* pTokens, bool bIncludeHiddenCells );
+            ::std::vector<ScTokenRef>* pTokens, bool bIncludeHiddenCells );
 
     virtual ~ScChart2DataSequence();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -365,16 +360,6 @@ public:
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
 
-    // XUnoTunnel ------------------------------------------------------------
-
-//  virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
-//                                  sal_Int8 >& aIdentifier )
-//                              throw(::com::sun::star::uno::RuntimeException);
-
-//  static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-//  static ScChart2DataSequence* getImplementation( const com::sun::star::uno::Reference<
-//                                  com::sun::star::uno::XInterface> xObj );
-
 private:
     void setDataChangedHint(bool b);
 
@@ -395,14 +380,14 @@ private:
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType);
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
-        const ::std::hash_set<sal_uInt16>& getAllFileIds();
+        const ::boost::unordered_set<sal_uInt16>& getAllFileIds();
 
     private:
         ExternalRefListener();
         ExternalRefListener(const ExternalRefListener& r);
 
         ScChart2DataSequence&       mrParent;
-        ::std::hash_set<sal_uInt16> maFileIds;
+        ::boost::unordered_set<sal_uInt16> maFileIds;
         ScDocument*                 mpDoc;
     };
 
@@ -414,7 +399,7 @@ private:
 
     void RebuildDataCache();
 
-    sal_Int32 FillCacheFromExternalRef(const ScSharedTokenRef& pToken);
+    sal_Int32 FillCacheFromExternalRef(const ScTokenRef& pToken);
 
     void UpdateTokensFromRanges(const ScRangeList& rRanges);
 
@@ -463,7 +448,7 @@ private:
     sal_Bool                    m_bIncludeHiddenCells;
 
     // internals
-    typedef ::std::auto_ptr< ::std::vector<ScSharedTokenRef> >  TokenListPtr;
+    typedef ::std::auto_ptr< ::std::vector<ScTokenRef> >  TokenListPtr;
     typedef ::std::auto_ptr< ::std::vector<sal_uInt32> >        RangeIndexMapPtr;
     typedef ::std::auto_ptr<ExternalRefListener>                ExtRefListenerPtr;
 
@@ -602,16 +587,6 @@ public:
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
 
-    // XUnoTunnel ------------------------------------------------------------
-
-//  virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
-//                                  sal_Int8 >& aIdentifier )
-//                              throw(::com::sun::star::uno::RuntimeException);
-
-//  static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-//  static ScChart2DataSequence* getImplementation( const com::sun::star::uno::Reference<
-//                                  com::sun::star::uno::XInterface> xObj );
-
     // Implementation --------------------------------------------------------
 
     ScRangeListRef GetRangeList() { return m_xRanges; }
@@ -632,3 +607,5 @@ private:
 #endif
 
 #endif // SC_CHART2UNO_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 #include "HelpIds.hrc"
 #include "Strings.hrc"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "macros.hxx"
 #include "ChartModelHelper.hxx"
 #include "DiagramHelper.hxx"
@@ -44,9 +44,7 @@
 #include <com/sun/star/chart2/PieChartOffsetMode.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 // header for class Image
 #include <vcl/image.hxx>
 // header for class Bitmap
@@ -61,16 +59,6 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-
-// macro for selecting a normal or high contrast bitmap the stack variable
-// bIsHighContrast must exist and reflect the correct state
-#define SELECT_BITMAP(name) Bitmap( SchResId( bIsHighContrast ? name ## _HC : name ))
-#define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
-
-/*
-        ( C2U( "com.sun.star.chart2.template.Surface" ),                        CHSTYLE_3D_SURFACE)
-        ( C2U( "com.sun.star.chart2.template.Addin" ),                          CHSTYLE_ADDIN)
-*/
 
 ChartTypeParameter::ChartTypeParameter()
                     : nSubTypeIndex( 1 )
@@ -147,7 +135,7 @@ ChartTypeDialogController::ChartTypeDialogController()
 ChartTypeDialogController::~ChartTypeDialogController()
 {
 }
-Image ChartTypeDialogController::getImage( bool /*bIsHighContrast*/ )
+Image ChartTypeDialogController::getImage()
 {
     return Image();
 }
@@ -230,7 +218,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
     const tTemplateServiceChartTypeParameterMap::const_iterator aEnd  = rMap.end();
     for( sal_Int32 nMatchPrecision=0; nMatchPrecision<7 && !bFoundSomeMatch; nMatchPrecision++ )
     {
-        for( aIter = rMap.begin(); aIter != aEnd; aIter++ )
+        for( aIter = rMap.begin(); aIter != aEnd; ++aIter )
         {
             if( rParameter.mapsToSimilarService( (*aIter).second, nMatchPrecision ) )
             {
@@ -275,16 +263,16 @@ rtl::OUString ChartTypeDialogController::getServiceNameForParameter( const Chart
     const tTemplateServiceChartTypeParameterMap& rMap = getTemplateMap();
     tTemplateServiceChartTypeParameterMap::const_iterator       aIter = rMap.begin();
     const tTemplateServiceChartTypeParameterMap::const_iterator aEnd  = rMap.end();
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
         if( aParameter.mapsToSameService( (*aIter).second ) )
             return (*aIter).first;
     }
 
-    OSL_ENSURE( false, "ChartType not implemented yet - use fallback to similar type" );
+    OSL_FAIL( "ChartType not implemented yet - use fallback to similar type" );
     for( sal_Int32 nMatchPrecision=1; nMatchPrecision<8; nMatchPrecision++ )
     {
-        for( aIter = rMap.begin(); aIter != aEnd; aIter++ )
+        for( aIter = rMap.begin(); aIter != aEnd; ++aIter )
         {
             if( aParameter.mapsToSimilarService( (*aIter).second, nMatchPrecision ) )
                 return (*aIter).first;
@@ -350,7 +338,7 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
     {
         uno::Reference< frame::XModel > xModel( xChartModel, uno::UNO_QUERY);
 
-        // /-- locked controllers
+        // locked controllers
         ControllerLockGuard aCtrlLockGuard( xModel );
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
         DiagramHelper::tTemplateWithServiceName aTemplateWithService(
@@ -369,11 +357,10 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
             if( xDiaProp.is() )
                 xDiaProp->setPropertyValue( C2U( "SortByXValues" ), uno::makeAny( rParameter.bSortByXValues ) );
         }
-        // \-- locked controllers
     }
     return false;
 }
-void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool /*bIsHighContrast*/, const ChartTypeParameter& /*rParameter*/ )
+void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
 }
@@ -455,9 +442,9 @@ String ColumnChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_COLUMN ));
 }
-Image ColumnChartDialogController::getImage( bool bIsHighContrast )
+Image ColumnChartDialogController::getImage()
 {
-    return SELECT_IMAGE( IMG_TYPE_COLUMN );
+    return Image( SchResId( IMG_TYPE_COLUMN ));
 }
 const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTemplateMap() const
 {
@@ -473,7 +460,7 @@ const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTem
         ;
     return m_aTemplateMap;
 }
-void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -482,36 +469,36 @@ void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool 
         switch(rParameter.nGeometry3D)
         {
             case DataPointGeometry3D::CYLINDER:
-                rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_SAEULE_3D_1 ) );
-                rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_SAEULE_3D_2 ) );
-                rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_SAEULE_3D_3 ) );
-                rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_SAEULE_3D_4 ) );
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_SAEULE_3D_1 )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_SAEULE_3D_2 )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_SAEULE_3D_3 )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_SAEULE_3D_4 )));
             break;
             case DataPointGeometry3D::CONE:
-                rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_KEGEL_3D_1 ) );
-                rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_KEGEL_3D_2 ) );
-                rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_KEGEL_3D_3 ) );
-                rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_KEGEL_3D_4 ) );
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_KEGEL_3D_1 )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_KEGEL_3D_2 )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_KEGEL_3D_3 )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_KEGEL_3D_4 )));
             break;
             case DataPointGeometry3D::PYRAMID:
-                rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_PYRAMID_3D_1 ) );
-                rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_PYRAMID_3D_2 ) );
-                rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_PYRAMID_3D_3 ) );
-                rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_PYRAMID_3D_4 ) );
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_PYRAMID_3D_1 )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_PYRAMID_3D_2 )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_PYRAMID_3D_3 )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_PYRAMID_3D_4 )));
             break;
             default: //DataPointGeometry3D::CUBOID:
-                rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_COLUMNS_3D_1 ) );
-                rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_COLUMNS_3D_2 ) );
-                rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_COLUMNS_3D_3 ) );
-                rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_COLUMNS_3D ) );
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_COLUMNS_3D_1 )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_COLUMNS_3D_2 )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_COLUMNS_3D_3 )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_COLUMNS_3D )));
             break;
         }
     }
     else
     {
-        rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_COLUMNS_2D_1 ) );
-        rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_COLUMNS_2D_2 ) );
-        rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_COLUMNS_2D_3 ) );
+        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_COLUMNS_2D_1 )));
+        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_COLUMNS_2D_2 )));
+        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_COLUMNS_2D_3 )));
     }
 
     rSubTypeList.SetItemText( 1, String( SchResId( STR_NORMAL )) );
@@ -532,9 +519,9 @@ String BarChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_BAR ));
 }
-Image BarChartDialogController::getImage( bool bIsHighContrast )
+Image BarChartDialogController::getImage()
 {
-    return SELECT_IMAGE( IMG_TYPE_BAR );
+    return Image( SchResId( IMG_TYPE_BAR ));
 }
 const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTemplateMap() const
 {
@@ -550,7 +537,7 @@ const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTempla
         ;
     return m_aTemplateMap;
 }
-void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -559,36 +546,36 @@ void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIs
         switch(rParameter.nGeometry3D)
         {
             case DataPointGeometry3D::CYLINDER:
-                rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_ROEHRE_3D_1 ) );
-                rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_ROEHRE_3D_2 ) );
-                rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_ROEHRE_3D_3 ) );
-                rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_ROEHRE_3D_4 ) );
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_ROEHRE_3D_1 )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_ROEHRE_3D_2 )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_ROEHRE_3D_3 )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_ROEHRE_3D_4 )));
             break;
             case DataPointGeometry3D::CONE:
-                rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_KEGELQ_3D_1 ) );
-                rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_KEGELQ_3D_2 ) );
-                rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_KEGELQ_3D_3 ) );
-                rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_KEGELQ_3D_4 ) );
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_KEGELQ_3D_1 )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_KEGELQ_3D_2 )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_KEGELQ_3D_3 )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_KEGELQ_3D_4 )));
             break;
             case DataPointGeometry3D::PYRAMID:
-                rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_PYRAMIDQ_3D_1 ) );
-                rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_PYRAMIDQ_3D_2 ) );
-                rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_PYRAMIDQ_3D_3 ) );
-                rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_PYRAMIDQ_3D_4 ) );
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_PYRAMIDQ_3D_1 )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_PYRAMIDQ_3D_2 )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_PYRAMIDQ_3D_3 )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_PYRAMIDQ_3D_4 )));
             break;
             default: //DataPointGeometry3D::CUBOID:
-                rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_BARS_3D_1 ) );
-                rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_BARS_3D_2 ) );
-                rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_BARS_3D_3 ) );
-                rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_BARS_3D ) );
+                rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_BARS_3D_1 )));
+                rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_BARS_3D_2 )));
+                rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_BARS_3D_3 )));
+                rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_BARS_3D )));
             break;
         }
     }
     else
     {
-        rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_BARS_2D_1 ) );
-        rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_BARS_2D_2 ) );
-        rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_BARS_2D_3 ) );
+        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_BARS_2D_1 )));
+        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_BARS_2D_2 )));
+        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_BARS_2D_3 )));
     }
     rSubTypeList.SetItemText( 1, String( SchResId( STR_NORMAL )) );
     rSubTypeList.SetItemText( 2, String( SchResId( STR_STACKED )) );
@@ -608,9 +595,9 @@ String PieChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_PIE ));
 }
-Image PieChartDialogController::getImage( bool bIsHighContrast )
+Image PieChartDialogController::getImage()
 {
-    return SELECT_IMAGE( IMG_TYPE_PIE );
+    return Image( SchResId( IMG_TYPE_PIE ));
 }
 const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTemplateMap() const
 {
@@ -627,29 +614,30 @@ const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTempla
     ;
     return m_aTemplateMap;
 }
-void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
     if( rParameter.b3DLook )
     {
-        rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_CIRCLES_3D ) );
-        rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_CIRCLES_3D_EXPLODED ) );
-        rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_DONUT_3D ) );
-        rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_DONUT_3D_EXPLODED ) );
+        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_CIRCLES_3D )));
+        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_CIRCLES_3D_EXPLODED )));
+        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_DONUT_3D )));
+        rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_DONUT_3D_EXPLODED )));
     }
     else
     {
-        rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_CIRCLES_2D ) );
-        rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_CIRCLES_2D_EXPLODED ) );
-        rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_DONUT_2D ) );
-        rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_DONUT_2D_EXPLODED ) );
+        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_CIRCLES_2D )));
+        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_CIRCLES_2D_EXPLODED )));
+        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_DONUT_2D )));
+        rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_DONUT_2D_EXPLODED )));
     }
-    rSubTypeList.SetItemText( 1, String( SchResId( STR_NORMAL )) );
-    rSubTypeList.SetItemText( 2, String( SchResId( STR_PIE_EXPLODED )) );
-    rSubTypeList.SetItemText( 3, String( SchResId( STR_DONUT )) );
-    rSubTypeList.SetItemText( 4, String( SchResId( STR_DONUT_EXPLODED )) );
+    rSubTypeList.SetItemText( 1, String( SchResId( STR_NORMAL         ) ) );
+    rSubTypeList.SetItemText( 2, String( SchResId( STR_PIE_EXPLODED   ) ) );
+    rSubTypeList.SetItemText( 3, String( SchResId( STR_DONUT          ) ) );
+    rSubTypeList.SetItemText( 4, String( SchResId( STR_DONUT_EXPLODED ) ) );
 }
+
 bool PieChartDialogController::shouldShow_3DLookControl() const
 {
     return true;
@@ -670,9 +658,9 @@ String LineChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_LINE ));
 }
-Image LineChartDialogController::getImage( bool bIsHighContrast )
+Image LineChartDialogController::getImage()
 {
-    return SELECT_IMAGE( IMG_TYPE_LINE );
+    return Image( SchResId( IMG_TYPE_LINE ));
 }
 const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTemplateMap() const
 {
@@ -689,7 +677,6 @@ const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTempl
     ( C2U( "com.sun.star.chart2.template.StackedLine" ),                ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y,false,true) )
     ( C2U( "com.sun.star.chart2.template.PercentStackedLine" ),         ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT,false,true) )
     //-------------------------------------------------------
-    //( C2U( "com.sun.star.chart2.template.ThreeDLine" ),                 ChartTypeParameter(4,false,true,GlobalStackMode_NONE,false,true) )
     ( C2U( "com.sun.star.chart2.template.StackedThreeDLine" ),          ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Y,false,true) )
     ( C2U( "com.sun.star.chart2.template.PercentStackedThreeDLine" ),   ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Y_PERCENT,false,true) )
     ( C2U( "com.sun.star.chart2.template.ThreeDLineDeep" ),             ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z,false,true) )
@@ -697,7 +684,7 @@ const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTempl
     ;
     return m_aTemplateMap;
 }
-void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -706,34 +693,34 @@ void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bI
         //direct lines
         if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
         {
-            rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_POINTS_XCATEGORY ) );
-            rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_LINE_P_XCATEGORY ) );
-            rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_LINE_O_XCATEGORY ) );
-            rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_LINE3D_XCATEGORY ) );
+            rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XCATEGORY )));
+            rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XCATEGORY )));
+            rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XCATEGORY )));
+            rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XCATEGORY )));
         }
         else
         {
-            rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_POINTS_STACKED ) );
-            rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_LINE_P_STACKED ) );
-            rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_LINE_O_STACKED ) );
-            rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_LINE3D_STACKED ) );
+            rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_STACKED )));
+            rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_STACKED )));
+            rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_STACKED )));
+            rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_STACKED )));
         }
     }
     else //CurveStyle_LINES
     {
         if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
         {
-            rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_POINTS_XCATEGORY ) );
-            rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_LINE_P_XCATEGORY_SMOOTH ) );
-            rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_LINE_O_XCATEGORY_SMOOTH ) );
-            rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_LINE3D_XCATEGORY_SMOOTH ) );
+            rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XCATEGORY )));
+            rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XCATEGORY_SMOOTH )));
+            rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XCATEGORY_SMOOTH )));
+            rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XCATEGORY_SMOOTH )));
         }
         else
         {
-            rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_POINTS_STACKED ) );
-            rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_LINE_P_STACKED_SMOOTH ) );
-            rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_LINE_O_STACKED_SMOOTH ) );
-            rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_LINE3D_STACKED_SMOOTH ) );
+            rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_STACKED )));
+            rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_STACKED_SMOOTH )));
+            rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_STACKED_SMOOTH )));
+            rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_STACKED_SMOOTH )));
         }
     }
 
@@ -803,9 +790,9 @@ String XYChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_XY ));
 }
-Image XYChartDialogController::getImage( bool bIsHighContrast )
+Image XYChartDialogController::getImage()
 {
-    return SELECT_IMAGE( IMG_TYPE_XY );
+    return Image( SchResId( IMG_TYPE_XY ));
 }
 const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplateMap() const
 {
@@ -819,24 +806,24 @@ const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplat
     ;
     return m_aTemplateMap;
 }
-void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
     if( CurveStyle_LINES==rParameter.eCurveStyle )
     {
-        rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_POINTS_XVALUES ) );
-        rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_LINE_P_XVALUES ) );
-        rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_LINE_O_XVALUES ) );
-        rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_LINE3D_XVALUES ) );
+        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XVALUES )));
+        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XVALUES )));
+        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XVALUES )));
+        rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XVALUES )));
     }
     else //CurveStyle_LINES
     {
         //smooth lines
-        rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_POINTS_XVALUES ) );
-        rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_LINE_P_XVALUES_SMOOTH ) );
-        rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_LINE_O_XVALUES_SMOOTH ) );
-        rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_LINE3D_XVALUES_SMOOTH ) );
+        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_POINTS_XVALUES )));
+        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_LINE_P_XVALUES_SMOOTH )));
+        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_LINE_O_XVALUES_SMOOTH )));
+        rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_LINE3D_XVALUES_SMOOTH )));
     }
 
     rSubTypeList.SetItemText( 1, String( SchResId( STR_POINTS_ONLY )) );
@@ -890,9 +877,9 @@ String AreaChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_AREA ));
 }
-Image AreaChartDialogController::getImage( bool bIsHighContrast )
+Image AreaChartDialogController::getImage()
 {
-    return SELECT_IMAGE( IMG_TYPE_AREA );
+    return Image( SchResId( IMG_TYPE_AREA ));
 }
 bool AreaChartDialogController::shouldShow_3DLookControl() const
 {
@@ -911,21 +898,21 @@ const tTemplateServiceChartTypeParameterMap& AreaChartDialogController::getTempl
     ;
     return m_aTemplateMap;
 }
-void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
     if( rParameter.b3DLook )
     {
-        rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_AREAS_3D ) );
-        rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_AREAS_3D_1 ) );
-        rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_AREAS_3D_2 ) );
+        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_AREAS_3D )));
+        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_AREAS_3D_1 )));
+        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_AREAS_3D_2 )));
     }
     else
     {
-        rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_AREAS_2D_1 ) );
-        rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_AREAS_2D ) );
-        rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_AREAS_2D_3 ) );
+        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_AREAS_2D_1 )));
+        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_AREAS_2D )));
+        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_AREAS_2D_3 )));
     }
 
     rSubTypeList.SetItemText( 1, String( SchResId( rParameter.b3DLook ? STR_DEEP : STR_NORMAL )) );
@@ -973,9 +960,9 @@ String NetChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_NET ));
 }
-Image NetChartDialogController::getImage( bool bIsHighContrast )
+Image NetChartDialogController::getImage()
 {
-    return SELECT_IMAGE( IMG_TYPE_NET );
+    return Image( SchResId( IMG_TYPE_NET ));
 }
 bool NetChartDialogController::shouldShow_StackingControl() const
 {
@@ -1004,23 +991,23 @@ const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTempla
     ;
     return m_aTemplateMap;
 }
-void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
     if( GlobalStackMode_NONE == rParameter.eStackMode )
     {
-        rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_NET_SYMB ) );
-        rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_NET_LINESYMB ) );
-        rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_NET ) );
-        rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_NET_FILL ) );
+        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_NET_SYMB )));
+        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_NET_LINESYMB )));
+        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_NET )));
+        rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_NET_FILL )));
     }
     else
     {
-        rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_NET_SYMB_STACK ) );
-        rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_NET_LINESYMB_STACK ) );
-        rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_NET_STACK ) );
-        rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_NET_FILL_STACK ) );
+        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_NET_SYMB_STACK )));
+        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_NET_LINESYMB_STACK )));
+        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_NET_STACK )));
+        rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_NET_FILL_STACK )));
     }
 
     rSubTypeList.SetItemText( 1, String( SchResId( STR_POINTS_ONLY )) );
@@ -1059,17 +1046,20 @@ StockChartDialogController::StockChartDialogController()
 {
     bSupports3D = false;
 }
+
 StockChartDialogController::~StockChartDialogController()
 {
 }
+
 String StockChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_STOCK ));
 }
-Image StockChartDialogController::getImage( bool bIsHighContrast )
+Image StockChartDialogController::getImage()
 {
-    return SELECT_IMAGE( IMG_TYPE_STOCK );
+    return Image( SchResId( IMG_TYPE_STOCK ));
 }
+
 const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemplateMap() const
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
@@ -1081,13 +1071,13 @@ const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemp
     ;
     return m_aTemplateMap;
 }
-void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& /*rParameter*/ )
+void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
-    rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_STOCK_1 ) );
-    rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_STOCK_2 ) );
-    rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_STOCK_3 ) );
-    rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_STOCK_4 ) );
+    rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_STOCK_1 )));
+    rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_STOCK_2 )));
+    rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_STOCK_3 )));
+    rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_STOCK_4 )));
 
     rSubTypeList.SetItemText( 1, String( SchResId( STR_STOCK_1 )) );
     rSubTypeList.SetItemText( 2, String( SchResId( STR_STOCK_2 )) );
@@ -1106,6 +1096,7 @@ CombiColumnLineChartDialogController::CombiColumnLineChartDialogController()
 {
     bSupports3D = false;
 }
+
 CombiColumnLineChartDialogController::~CombiColumnLineChartDialogController()
 {
     if(m_pFT_NumberOfLines)
@@ -1113,14 +1104,17 @@ CombiColumnLineChartDialogController::~CombiColumnLineChartDialogController()
     if(m_pMF_NumberOfLines)
         delete m_pMF_NumberOfLines;
 }
+
 String CombiColumnLineChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_COMBI_COLUMN_LINE ));
 }
-Image CombiColumnLineChartDialogController::getImage( bool bIsHighContrast )
+
+Image CombiColumnLineChartDialogController::getImage( )
 {
-    return SELECT_IMAGE( IMG_TYPE_COLUMN_LINE );
+    return Image( SchResId( IMG_TYPE_COLUMN_LINE ) );
 }
+
 const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogController::getTemplateMap() const
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
@@ -1130,11 +1124,11 @@ const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogControlle
     ;
     return m_aTemplateMap;
 }
-void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& /*rParameter*/ )
+void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
-    rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_COLUMN_LINE ) );
-    rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_COLUMN_LINE_STACKED ) );
+    rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_COLUMN_LINE )));
+    rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_COLUMN_LINE_STACKED )));
 
     rSubTypeList.SetItemText( 1, String( SchResId( STR_LINE_COLUMN )) );
     rSubTypeList.SetItemText( 2, String( SchResId( STR_LINE_STACKEDCOLUMN )) );
@@ -1259,9 +1253,9 @@ String BubbleChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_BUBBLE ));
 }
-Image BubbleChartDialogController::getImage( bool bIsHighContrast )
+Image BubbleChartDialogController::getImage()
 {
-    return SELECT_IMAGE( IMG_TYPE_BUBBLE );
+    return Image( SchResId( IMG_TYPE_BUBBLE ));
 }
 const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTemplateMap() const
 {
@@ -1270,10 +1264,10 @@ const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTem
         ( C2U( "com.sun.star.chart2.template.Bubble" ),          ChartTypeParameter(1,true) ) ;
     return m_aTemplateMap;
 }
-void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& /*rParameter*/ )
+void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
-    rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_BUBBLE_1 ) );
+    rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_BUBBLE_1 )));
 
     rSubTypeList.SetItemText( 1, String( SchResId( STR_BUBBLE_1 )) );
 }
@@ -1285,3 +1279,5 @@ void BubbleChartDialogController::adjustParameterToSubType( ChartTypeParameter& 
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

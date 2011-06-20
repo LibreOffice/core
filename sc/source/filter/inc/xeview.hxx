@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,7 +109,7 @@ private:
 
 private:
     sal_uInt16          mnSplitX;           /// Split X position, or frozen column.
-    sal_uInt16          mnSplitY;           /// Split Y position, or frozen row.
+    sal_uInt32          mnSplitY;           /// Split Y position, or frozen row.
     XclAddress          maSecondXclPos;     /// First visible cell in additional panes.
     sal_uInt8           mnActivePane;       /// Active pane (with cell cursor).
 };
@@ -178,3 +179,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

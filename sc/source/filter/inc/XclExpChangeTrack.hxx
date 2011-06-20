@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 #ifndef SC_XCLEXPCHANGETRACK_HXX
 #define SC_XCLEXPCHANGETRACK_HXX
 
-#include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/uuid.h>
 #include "bigrange.hxx"
@@ -64,18 +64,26 @@ public:
 //___________________________________________________________________
 // XclExpUserBViewList - list of UserBView records
 
-class XclExpUserBViewList : public ExcEmptyRec, private List
+class XclExpUserBViewList : public ExcEmptyRec
 {
 private:
-    inline XclExpUserBView*     _First()    { return (XclExpUserBView*) List::First(); }
-    inline XclExpUserBView*     _Next()     { return (XclExpUserBView*) List::Next(); }
+    std::vector<XclExpUserBView*> aViews;
 
 public:
+
+    typedef std::vector<XclExpUserBView*>::iterator iterator;
+    typedef std::vector<XclExpUserBView*>::const_iterator const_iterator;
+
                                 XclExpUserBViewList( const ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpUserBViewList();
 
-    inline const XclExpUserBView* First()   { return (const XclExpUserBView*) List::First(); }
-    inline const XclExpUserBView* Next()    { return (const XclExpUserBView*) List::Next(); }
+    inline iterator begin () { return aViews.begin(); }
+
+    inline iterator end () { return aViews.end(); }
+
+    inline const_iterator begin () const { return aViews.begin(); }
+
+    inline const_iterator end () const { return aViews.end(); }
 
     virtual void                Save( XclExpStream& rStrm );
 };
@@ -238,6 +246,8 @@ public:
 
     virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -247,6 +257,7 @@ class XclExpChTrInfo : public ExcRecord
 {
 private:
     XclExpString                sUsername;
+    sal_Int32                   mnLogNumber;
     DateTime                    aDateTime;
     sal_uInt8                   aGUID[ 16 ];
 
@@ -256,15 +267,19 @@ public:
     inline                      XclExpChTrInfo(
                                     const String& rUsername,
                                     const DateTime& rDateTime,
-                                    const sal_uInt8* pGUID );
+                                    const sal_uInt8* pGUID,
+                                    sal_Int32 nLogNumber );
     virtual                     ~XclExpChTrInfo();
 
     virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
-inline XclExpChTrInfo::XclExpChTrInfo( const String& rUsername, const DateTime& rDateTime, const sal_uInt8* pGUID ) :
+inline XclExpChTrInfo::XclExpChTrInfo( const String& rUsername, const DateTime& rDateTime, const sal_uInt8* pGUID, sal_Int32 nLogNumber ) :
     sUsername( rUsername ),
+    mnLogNumber( nLogNumber ),
     aDateTime( rDateTime )
 {
     memcpy( aGUID, pGUID, 16 );
@@ -299,22 +314,6 @@ public:
 };
 
 //___________________________________________________________________
-// XclExpChTrTabIdBufferList
-
-class XclExpChTrTabIdBufferList : private List
-{
-private:
-    inline XclExpChTrTabIdBuffer* First()   { return (XclExpChTrTabIdBuffer*) List::First(); }
-    inline XclExpChTrTabIdBuffer* Next()    { return (XclExpChTrTabIdBuffer*) List::Next(); }
-
-public:
-    virtual                     ~XclExpChTrTabIdBufferList();
-
-    inline void                 Append( XclExpChTrTabIdBuffer* pNew )
-                                    { List::Insert( pNew, LIST_APPEND ); }
-};
-
-//___________________________________________________________________
 // XclExpChTrTabId - tab id record
 
 class XclExpChTrTabId : public ExcRecord
@@ -322,6 +321,7 @@ class XclExpChTrTabId : public ExcRecord
 private:
     sal_uInt16*                 pBuffer;
     sal_uInt16                  nTabCount;
+    bool                        mbInRevisionHeaders;
 
     inline void                 Clear() { if( pBuffer ) delete[] pBuffer; pBuffer = NULL; }
 
@@ -329,14 +329,16 @@ private:
 
 public:
     inline                      XclExpChTrTabId( sal_uInt16 nCount ) :
-                                    pBuffer( NULL ), nTabCount( nCount ) {}
-                                XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer );
+                                    pBuffer( NULL ), nTabCount( nCount ), mbInRevisionHeaders( false ) {}
+                                XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer, bool bInRevisionHeaders = false );
     virtual                     ~XclExpChTrTabId();
 
     void                        Copy( const XclExpChTrTabIdBuffer& rBuffer );
 
     virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -368,6 +370,7 @@ protected:
 
     inline void                 Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress ) const;
     inline void                 Write2DRange( XclExpStream& rStrm, const ScRange& rRange ) const;
+    inline sal_uInt16           GetTabId( SCTAB nTabId ) const;
     inline void                 WriteTabId( XclExpStream& rStrm, SCTAB nTabId ) const;
 
                                 // save header data, call SaveActionData()
@@ -383,6 +386,9 @@ protected:
     virtual void                PrepareSaveAction( XclExpStream& rStrm ) const;
                                 // do something after writing the record
     virtual void                CompleteSaveAction( XclExpStream& rStrm ) const;
+
+    inline sal_uInt32           GetActionNumber() const { return nIndex; }
+    inline sal_Bool             GetAccepted() const { return bAccepted; }
 
 public:
                                 XclExpChTrAction(
@@ -403,6 +409,8 @@ public:
 
     virtual void                Save( XclExpStream& rStrm );
     virtual sal_Size            GetLen() const;
+
+    inline XclExpChTrAction*    GetAddAction() { return pAddAction; }
 };
 
 inline void XclExpChTrAction::Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress ) const
@@ -419,9 +427,14 @@ inline void XclExpChTrAction::Write2DRange( XclExpStream& rStrm, const ScRange& 
             << (sal_uInt16) rRange.aEnd.Col();
 }
 
+inline sal_uInt16 XclExpChTrAction::GetTabId( SCTAB nTab ) const
+{
+    return rIdBuffer.GetId( rTabInfo.GetXclTab( nTab ) );
+}
+
 inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, SCTAB nTab ) const
 {
-    rStrm << rIdBuffer.GetId( rTabInfo.GetXclTab( nTab ) );
+    rStrm << GetTabId( nTab );
 }
 
 //___________________________________________________________________
@@ -430,6 +443,8 @@ inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, SCTAB nTab ) cons
 struct XclExpChTrData
 {
     XclExpString*               pString;
+    XclExpStringRef             mpFormattedString;
+    const ScFormulaCell*        mpFormulaCell;
     XclTokenArrayRef            mxTokArr;
     XclExpRefLog                maRefLog;
     double                      fValue;
@@ -465,6 +480,7 @@ protected:
     ScAddress                   aPosition;
 
     void                        GetCellData(
+                                    const XclExpRoot& rRoot,
                                     const ScBaseCell* pScCell,
                                     XclExpChTrData*& rpData,
                                     sal_uInt32& rXclLength1,
@@ -481,6 +497,8 @@ public:
 
     virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -508,6 +526,8 @@ public:
 
     virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -530,6 +550,8 @@ public:
 
     virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -555,6 +577,8 @@ public:
 
     virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -571,6 +595,8 @@ public:
 
     virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetActionByteCount() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -589,32 +615,15 @@ private:
 };
 
 //___________________________________________________________________
-// XclExpChTrRecordList - list of "Revision Log" stream records
-
-class XclExpChTrRecordList : private List
-{
-private:
-    inline ExcRecord*           First() { return (ExcRecord*) List::First(); }
-    inline ExcRecord*           Next()  { return (ExcRecord*) List::Next(); }
-
-public:
-    virtual                     ~XclExpChTrRecordList();
-
-    using                       List::Count;
-    void                        Append( ExcRecord* pNewRec );
-    void                        Save( XclExpStream& rStrm );
-};
-
-//___________________________________________________________________
 // XclExpChangeTrack - exports the "Revision Log" stream
 
 class XclExpChangeTrack : protected XclExpRoot
 {
 private:
-    XclExpChTrRecordList        aRecList;
+    std::vector<ExcRecord*>     aRecList;           // list of "Revision Log" stream records
     XclExpChTrActionStack       aActionStack;
-    XclExpChTrTabIdBufferList   aTabIdBufferList;
     XclExpChTrTabIdBuffer*      pTabIdBuffer;
+    std::vector<XclExpChTrTabIdBuffer*> maBuffers;
 
     ScDocument*                 pTempDoc;           // empty document
 
@@ -633,9 +642,11 @@ public:
                                 ~XclExpChangeTrack();
 
     void                        Write();
+    void                        WriteXml( XclExpXmlStream& rStrm );
 };
 
 //___________________________________________________________________
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

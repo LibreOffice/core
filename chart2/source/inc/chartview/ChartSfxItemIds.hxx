@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 // SCHATTR
 // ============================================================
 
+// can't this be changed to 0?
 #define SCHATTR_START                       1
 
 #define SCHATTR_DATADESCR_START             SCHATTR_START
@@ -97,7 +99,7 @@
 // --------------------------------------------------------------------------
 
 #define SCHATTR_AXIS                    (SCHATTR_STYLE_END + 1)// see chtmodel.hxx defines CHART_AXIS_PRIMARY_X, etc.
-//Ummappen:
+//Re-mapped:
 #define SCHATTR_AXIS_START              (SCHATTR_AXIS + 1)
 //axis scale
 #define SCHATTR_AXISTYPE                 SCHATTR_AXIS_START
@@ -195,8 +197,8 @@
 #define CHART_AXIS_DATE         4
 
 // values for SCHATTR_STYLE_SHAPE items
-#define CHART_SHAPE3D_IGNORE  -2 //intern! (GetChartShapeStyle()!)
-#define CHART_SHAPE3D_ANY     -1 //undefinierter Typ (GetChartShapeStyle()!)
+#define CHART_SHAPE3D_IGNORE  -2 //internal! (GetChartShapeStyle()!)
+#define CHART_SHAPE3D_ANY     -1 //undefined type (GetChartShapeStyle()!)
 #define CHART_SHAPE3D_SQUARE   0
 #define CHART_SHAPE3D_CYLINDER 1
 #define CHART_SHAPE3D_CONE     2
@@ -214,3 +216,5 @@
 // ============================================================
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,14 +30,17 @@
 #define SC_MATRIX_HXX
 
 #include "global.hxx"
-#include "formula/intruref.hxx"
+#include "types.hxx"
 #include "formula/errorcodes.hxx"
 #include <tools/string.hxx>
 #include "scdllapi.h"
 
+#include <boost/intrusive_ptr.hpp>
+
 class SvStream;
 class ScInterpreter;
 class SvNumberFormatter;
+class ScMatrixImpl;
 
 typedef sal_uInt8 ScMatValType;
 const ScMatValType SC_MATVAL_VALUE     = 0x00;
@@ -46,68 +50,84 @@ const ScMatValType SC_MATVAL_EMPTY     = SC_MATVAL_STRING | 0x04; // STRING plus
 const ScMatValType SC_MATVAL_EMPTYPATH = SC_MATVAL_EMPTY | 0x08;  // EMPTY plus flag
 const ScMatValType SC_MATVAL_NONVALUE  = SC_MATVAL_EMPTYPATH;     // mask of all non-value bits
 
-union ScMatrixValue
+struct ScMatrixValue
 {
-    double fVal;
-    String* pS;
+    union {
+        double fVal;
+        const String* pS;
+    };
+    ScMatValType nType;
 
     /// Only valid if ScMatrix methods indicate so!
-    const String& GetString() const     { return pS ? *pS : EMPTY_STRING; }
+    const String& GetString() const { return pS ? *pS : EMPTY_STRING; }
 
     /// Only valid if ScMatrix methods indicate that this is no string!
     sal_uInt16 GetError() const         { return GetDoubleErrorValue( fVal); }
 
     /// Only valid if ScMatrix methods indicate that this is a boolean
-    bool GetBoolean() const         { return fVal != 0.; }
+    bool GetBoolean() const         { return fVal != 0.0; }
+
+    ScMatrixValue() : fVal(0.0), nType(SC_MATVAL_EMPTY) {}
+
+    ScMatrixValue(const ScMatrixValue& r) : fVal(r.fVal), nType(r.nType)
+    {
+        if (nType == SC_MATVAL_STRING)
+            // This is probably not necessary but just in case...
+            pS = r.pS;
+    }
+
+    bool operator== (const ScMatrixValue& r) const
+    {
+        if (nType != r.nType)
+            return false;
+
+        switch (nType)
+        {
+            case SC_MATVAL_VALUE:
+            case SC_MATVAL_BOOLEAN:
+                return fVal == r.fVal;
+            break;
+            default:
+                ;
+        }
+        if (!pS)
+            return r.pS == NULL;
+
+        return GetString().Equals(r.GetString());
+    }
+
+    bool operator!= (const ScMatrixValue& r) const
+    {
+        return !operator==(r);
+    }
+
+    ScMatrixValue& operator= (const ScMatrixValue& r)
+    {
+        nType = r.nType;
+        fVal = r.fVal;
+
+        if (nType == SC_MATVAL_STRING)
+            // This is probably not necessary but just in case...
+            pS = r.pS;
+
+        return *this;
+    }
 };
 
-/** Matrix representation of double values and strings.
-
-    @ATTENTION: optimized for speed and double values.
-
-    <p> Matrix elements are NOT initialized after construction!
-
-    <p> All methods using an SCSIZE nIndex parameter and all Is...() methods do
-    NOT check the range for validity! However, the Put...() and Get...()
-    methods using nCol/nRow parameters do check the range.
-
-    <p> Methods using nCol/nRow parameters do replicate a single row vector if
-    nRow &gt; 0 and nCol &lt; nColCount, respectively a column vector if nCol
-    &gt; 0 and nRow &lt; nRowCount.
-
-    <p> GetString( SCSIZE nIndex ) does not check if there really is a string,
-    do this with IsString() first. GetString( SCSIZE nC, SCSIZE nR ) does check
-    it and returns and empty string if there is no string. Both GetDouble()
-    methods don't check for a string, do this with IsNumeric() or IsString() or
-    IsValue() first.
-
-    <p> The GetString( SvNumberFormatter&, ...) methods return the matrix
-    element's string if one is present, otherwise the numerical value is
-    formatted as a string, or in case of an error the error string is returned.
-
-    <p> PutDouble() does not reset an eventual string! Use
-    PutDoubleAndResetString() if that is wanted. Also the FillDouble...()
-    methods don't reset strings. As a consequence memory leaks may occur if
-    used wrong.
+/**
+ * Matrix data type that can store values of mixed types.  Each element can
+ * be one of the following types: numeric, string, boolean, empty, and empty
+ * path.
+ *
+ * This class also supports four different density types: filled zero,
+ * filled empty, sparse zero, and sparse empty.  The filled density type
+ * allocates memory for every single element at all times, whereas the
+ * sparse density types allocates memory only for non-default elements.
  */
 class SC_DLLPUBLIC ScMatrix
 {
-    ScMatrixValue*  pMat;
-    ScMatValType*   mnValType;
-    sal_uLong           mnNonValue; // how many strings and empties
-    ScInterpreter*  pErrorInterpreter;
-    mutable sal_uLong   nRefCnt;    // reference count
-    SCSIZE          nColCount;
-    SCSIZE          nRowCount;
-    bool            mbCloneIfConst;     // Whether the matrix is cloned with a CloneIfConst() call.
-
-    void ResetIsString();
-    void DeleteIsString();
-    void CreateMatrix( SCSIZE nC, SCSIZE nR);
-    void Clear();
-
-    // pStr may be NULL, bFlag MUST NOT be 0
-    void PutStringEntry( const String* pStr, sal_uInt8 bFlag, SCSIZE nIndex );
+    ScMatrixImpl*   pImpl;
+    mutable size_t  nRefCnt;    // reference count
 
     // only delete via Delete()
     ~ScMatrix();
@@ -116,9 +136,36 @@ class SC_DLLPUBLIC ScMatrix
     ScMatrix( const ScMatrix& );
     ScMatrix& operator=( const ScMatrix&);
 
-    void SetErrorAtInterpreter( sal_uInt16 nError) const;
-
 public:
+    enum DensityType
+    {
+        FILLED_ZERO,
+        FILLED_EMPTY,
+        SPARSE_ZERO,
+        SPARSE_EMPTY
+    };
+
+    /**
+     * When adding all numerical matrix elements for a scalar result such as
+     * summation, the interpreter wants to separate the first non-zero value
+     * with the rest of the summed values.
+     *
+     * TODO: Find out if we still need to do this.  If not, we can re-write
+     * ScInterpreter::IterateParameters() to make it simpler and remove this
+     * struct.
+     */
+    struct IterateResult
+    {
+        double mfFirst;
+        double mfRest;
+        size_t mnCount;
+
+        IterateResult(double fFirst, double fRest, size_t nCount) :
+            mfFirst(fFirst), mfRest(fRest), mnCount(nCount) {}
+
+        IterateResult(const IterateResult& r) :
+            mfFirst(r.mfFirst), mfRest(r.mfRest), mnCount(r.mnCount) {}
+    };
 
     /// The maximum number of elements a matrix may have at runtime.
     inline static size_t GetElementsMax()
@@ -169,13 +216,11 @@ public:
         return (nType & SC_MATVAL_NONVALUE) == SC_MATVAL_EMPTYPATH;
     }
 
-    /** If nC*nR results in more than GetElementsMax() entries, a 1x1 matrix is
-        created instead and a double error value (errStackOverflow) is set.
-        Compare nC and nR with a GetDimensions() call to check. */
-    ScMatrix( SCSIZE nC, SCSIZE nR) : nRefCnt(0), mbCloneIfConst(true) { CreateMatrix( nC, nR); }
+    ScMatrix( SCSIZE nC, SCSIZE nR, DensityType eType = FILLED_ZERO);
 
     /** Clone the matrix. */
     ScMatrix* Clone() const;
+    ScMatrix* Clone( DensityType eType) const;
 
     /** Clone the matrix if mbCloneIfConst (immutable) is set, otherwise
         return _this_ matrix, to be assigned to a ScMatrixRef. */
@@ -183,54 +228,34 @@ public:
 
     /** Set the matrix to (im)mutable for CloneIfConst(), only the interpreter
         should do this and know the consequences. */
-    inline void SetImmutable( bool bVal ) { mbCloneIfConst = bVal; }
+    void SetImmutable( bool bVal );
 
     /**
-     * Resize the matrix to specified new dimension.  Note that this operation
-     * clears all stored values.
+     * Resize the matrix to specified new dimension.
      */
     void Resize( SCSIZE nC, SCSIZE nR);
 
     /** Clone the matrix and extend it to the new size. nNewCols and nNewRows
         MUST be at least of the size of the original matrix. */
-    ScMatrix* CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows ) const;
+    ScMatrix* CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows, DensityType eType) const;
 
-    /// Disable refcounting forever, may only be deleted via Delete() afterwards.
-    inline  void    SetEternalRef()         { nRefCnt = ULONG_MAX; }
-    inline  bool    IsEternalRef() const    { return nRefCnt == ULONG_MAX; }
-    inline  void    IncRef() const
+    inline void IncRef() const
     {
-        if ( !IsEternalRef() )
-            ++nRefCnt;
+        ++nRefCnt;
     }
-    inline  void    DecRef() const
+    inline void DecRef() const
     {
-        if ( nRefCnt > 0 && !IsEternalRef() )
-            if ( --nRefCnt == 0 )
-                delete this;
-    }
-    inline  void    Delete()
-    {
-        if ( nRefCnt == 0 || IsEternalRef() )
+        --nRefCnt;
+        if (nRefCnt == 0)
             delete this;
-        else
-            --nRefCnt;
     }
 
-    void SetErrorInterpreter( ScInterpreter* p)
-        { pErrorInterpreter = p; }
-
-    ScMatrix( SvStream& rStream);
-    void Store( SvStream& rStream) const;
-
-    void GetDimensions( SCSIZE& rC, SCSIZE& rR) const
-        { rC = nColCount; rR = nRowCount; };
-    SCSIZE GetElementCount() const
-        { return nColCount * nRowCount; }
-    inline bool ValidColRow( SCSIZE nC, SCSIZE nR) const
-        { return nC < nColCount && nR < nRowCount; }
-    inline SCSIZE CalcOffset( SCSIZE nC, SCSIZE nR) const
-        { return nC * nRowCount + nR; }
+    DensityType GetDensityType() const;
+    void SetErrorInterpreter( ScInterpreter* p);
+    void GetDimensions( SCSIZE& rC, SCSIZE& rR) const;
+    SCSIZE GetElementCount() const;
+    bool ValidColRow( SCSIZE nC, SCSIZE nR) const;
+    SCSIZE CalcOffset( SCSIZE nC, SCSIZE nR) const;
 
     /** For a row vector or column vector, if the position does not point into
         the vector but is a valid column or row offset it is adapted such that
@@ -238,26 +263,7 @@ public:
         vector, same row column 0 for a column vector. Else, for a 2D matrix,
         returns false.
      */
-    inline bool ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const
-    {
-        if (nColCount == 1 && nRowCount == 1)
-        {
-            rC = 0;
-            rR = 0;
-            return true;
-        }
-        else if (nColCount == 1 && rR < nRowCount)
-        {
-            rC = 0;
-            return true;
-        }
-        else if (nRowCount == 1 && rC < nColCount)
-        {
-            rR = 0;
-            return true;
-        }
-        return false;
-    }
+    bool ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const;
 
     /** Checks if the matrix position is within the matrix. If it is not, for a
         row vector or column vector the position is adapted such that it points
@@ -265,28 +271,17 @@ public:
         same row column 0 for a column vector. Else, for a 2D matrix and
         position not within matrix, returns false.
      */
-    inline bool ValidColRowOrReplicated( SCSIZE & rC, SCSIZE & rR ) const
-    {
-        return ValidColRow( rC, rR) || ValidColRowReplicated( rC, rR);
-    }
-
+    bool ValidColRowOrReplicated( SCSIZE & rC, SCSIZE & rR ) const;
 
     void PutDouble( double fVal, SCSIZE nC, SCSIZE nR);
-    void PutDouble( double fVal, SCSIZE nIndex)
-        { pMat[nIndex].fVal = fVal; }
+    void PutDouble( double fVal, SCSIZE nIndex);
     void PutString( const String& rStr, SCSIZE nC, SCSIZE nR);
     void PutString( const String& rStr, SCSIZE nIndex);
     void PutEmpty( SCSIZE nC, SCSIZE nR);
-    void PutEmpty( SCSIZE nIndex);
-    /// Jump sal_False without path
+    /// Jump FALSE without path
     void PutEmptyPath( SCSIZE nC, SCSIZE nR);
-    void PutEmptyPath( SCSIZE nIndex);
-    void PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR )
-        { PutDouble( CreateDoubleError( nErrorCode ), nC, nR ); }
-    void PutError( sal_uInt16 nErrorCode, SCSIZE nIndex )
-        { PutDouble( CreateDoubleError( nErrorCode ), nIndex ); }
+    void PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR );
     void PutBoolean( bool bVal, SCSIZE nC, SCSIZE nR);
-    void PutBoolean( bool bVal, SCSIZE nIndex);
 
     void FillDouble( double fVal,
             SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 );
@@ -297,128 +292,61 @@ public:
                     Use GetErrorIfNotString() instead if not sure.
         @returns 0 if no error, else one of err... constants */
     sal_uInt16 GetError( SCSIZE nC, SCSIZE nR) const;
-    sal_uInt16 GetError( SCSIZE nIndex) const
-        { return pMat[nIndex].GetError(); }
 
     /** Use in ScInterpreter to obtain the error code, if any.
         @returns 0 if no error or string element, else one of err... constants */
     sal_uInt16 GetErrorIfNotString( SCSIZE nC, SCSIZE nR) const
         { return IsValue( nC, nR) ? GetError( nC, nR) : 0; }
-    sal_uInt16 GetErrorIfNotString( SCSIZE nIndex) const
-        { return IsValue( nIndex) ? GetError( nIndex) : 0; }
 
     /// @return 0.0 if empty or empty path, else value or DoubleError.
     double GetDouble( SCSIZE nC, SCSIZE nR) const;
     /// @return 0.0 if empty or empty path, else value or DoubleError.
-    double GetDouble( SCSIZE nIndex) const
-    {
-        if ( pErrorInterpreter )
-        {
-            sal_uInt16 nError = GetDoubleErrorValue( pMat[nIndex].fVal);
-            if ( nError )
-                SetErrorAtInterpreter( nError);
-        }
-        return pMat[nIndex].fVal;
-    }
+    double GetDouble( SCSIZE nIndex) const;
 
     /// @return empty string if empty or empty path, else string content.
     const String& GetString( SCSIZE nC, SCSIZE nR) const;
     /// @return empty string if empty or empty path, else string content.
-    const String& GetString( SCSIZE nIndex) const
-        { return pMat[nIndex].GetString(); }
+    const String& GetString( SCSIZE nIndex) const;
 
     /** @returns the matrix element's string if one is present, otherwise the
         numerical value formatted as string, or in case of an error the error
         string is returned; an empty string for empty, a "FALSE" string for
         empty path. */
     String GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
-    String GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const;
 
     /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
     /// an empty string!
-    const ScMatrixValue* Get( SCSIZE nC, SCSIZE nR, ScMatValType& nType) const;
+    ScMatrixValue Get( SCSIZE nC, SCSIZE nR) const;
 
     /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    sal_Bool IsString( SCSIZE nIndex ) const
-        { return mnValType && IsNonValueType( mnValType[nIndex]); }
+    sal_Bool IsString( SCSIZE nIndex ) const;
 
     /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    sal_Bool IsString( SCSIZE nC, SCSIZE nR ) const
-    {
-        ValidColRowReplicated( nC, nR );
-        return mnValType && IsNonValueType( mnValType[ nC * nRowCount + nR ]);
-    }
+    sal_Bool IsString( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if empty or empty path.
-    sal_Bool IsEmpty( SCSIZE nIndex ) const
-        { return mnValType && ((mnValType[nIndex] & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
-
-    /// @return <TRUE/> if empty or empty path.
-    sal_Bool IsEmpty( SCSIZE nC, SCSIZE nR ) const
-    {
-        ValidColRowReplicated( nC, nR );
-        return mnValType && ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY);
-    }
+    sal_Bool IsEmpty( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if empty path.
-    sal_Bool IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
-    {
-        ValidColRowReplicated( nC, nR );
-        return mnValType && ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTYPATH) == SC_MATVAL_EMPTYPATH);
-    }
-
-    /// @return <TRUE/> if empty path.
-    sal_Bool IsEmptyPath( SCSIZE nIndex ) const
-        { return mnValType && ((mnValType[nIndex] & SC_MATVAL_EMPTYPATH) == SC_MATVAL_EMPTYPATH); }
+    sal_Bool IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if value or boolean.
-    sal_Bool IsValue( SCSIZE nIndex ) const
-        { return !mnValType || IsValueType( mnValType[nIndex]); }
+    sal_Bool IsValue( SCSIZE nIndex ) const;
 
     /// @return <TRUE/> if value or boolean.
-    sal_Bool IsValue( SCSIZE nC, SCSIZE nR ) const
-    {
-        ValidColRowReplicated( nC, nR );
-        return !mnValType || IsValueType( mnValType[ nC * nRowCount + nR ]);
-    }
+    sal_Bool IsValue( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if value or boolean or empty or empty path.
-    sal_Bool IsValueOrEmpty( SCSIZE nIndex ) const
-        { return !mnValType || IsValueType( mnValType[nIndex] ) ||
-            ((mnValType[nIndex] & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
-
-    /// @return <TRUE/> if value or boolean or empty or empty path.
-    sal_Bool IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
-    {
-        ValidColRowReplicated( nC, nR );
-        return !mnValType || IsValueType( mnValType[ nC * nRowCount + nR ]) ||
-            ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTY) ==
-             SC_MATVAL_EMPTY);
-    }
+    sal_Bool IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if boolean.
-    sal_Bool IsBoolean( SCSIZE nIndex ) const
-        { return mnValType && IsBooleanType( mnValType[nIndex]); }
-
-    /// @return <TRUE/> if boolean.
-    sal_Bool IsBoolean( SCSIZE nC, SCSIZE nR ) const
-    {
-        ValidColRowReplicated( nC, nR );
-        return mnValType && IsBooleanType( mnValType[ nC * nRowCount + nR ]);
-    }
+    sal_Bool IsBoolean( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if entire matrix is numeric, including booleans, with no strings or empties
-    sal_Bool IsNumeric() const
-        { return 0 == mnNonValue; }
+    sal_Bool IsNumeric() const;
 
     void MatTrans( ScMatrix& mRes) const;
     void MatCopy ( ScMatrix& mRes) const;
-
-//UNUSED2009-05 /** Copy upper left of this matrix to mRes matrix.
-//UNUSED2009-05     This matrix's dimensions must be greater or equal to the mRes matrix
-//UNUSED2009-05     dimensions.
-//UNUSED2009-05  */
-//UNUSED2009-05 void MatCopyUpperLeft( ScMatrix& mRes) const;
 
     // Convert ScInterpreter::CompareMat values (-1,0,1) to boolean values
     void CompareEqual();
@@ -428,16 +356,28 @@ public:
     void CompareLessEqual();
     void CompareGreaterEqual();
 
-    double And();       // logical AND of all matrix values, or NAN
-    double Or();        // logical OR of all matrix values, or NAN
+    double And() const;       // logical AND of all matrix values, or NAN
+    double Or() const;        // logical OR of all matrix values, or NAN
+
+    IterateResult Sum(bool bTextAsZero) const;
+    IterateResult SumSquare(bool bTextAsZero) const;
+    IterateResult Product(bool bTextAsZero) const;
+    size_t Count(bool bCountStrings) const;
 
     // All other matrix functions  MatMult, MInv, ...  are in ScInterpreter
     // to be numerically safe.
 };
 
+inline void intrusive_ptr_add_ref(const ScMatrix* p)
+{
+    p->IncRef();
+}
 
-typedef formula::SimpleIntrusiveReference< class ScMatrix > ScMatrixRef;
-typedef formula::SimpleIntrusiveReference< const class ScMatrix > ScConstMatrixRef;
-
+inline void intrusive_ptr_release(const ScMatrix* p)
+{
+    p->DecRef();
+}
 
 #endif  // SC_MATRIX_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

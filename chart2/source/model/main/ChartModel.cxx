@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -520,9 +521,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection() thr
             uno::Any aSel = xSelectionSupl->getSelection();
             rtl::OUString aObjectCID;
             if( aSel >>= aObjectCID )
-            {
                 xReturn.set( ObjectIdentifier::getObjectPropertySet( aObjectCID, Reference< XChartDocument >(this)));
-            }
         }
     }
     return xReturn;
@@ -573,6 +572,10 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
     m_xCurrentController.clear();
 
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
+
+    if( m_xOldModelAgg.is())
+        m_xOldModelAgg->setDelegator( NULL );
+
     OSL_TRACE( "ChartModel: dispose() called" );
 }
 
@@ -771,16 +774,16 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
             //create data
             uno::Sequence< beans::PropertyValue > aArgs( 4 );
             aArgs[0] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellRangeRepresentation" )), -1,
                 uno::makeAny( C2U("all") ), beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("HasCategories"), -1,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasCategories" )), -1,
                 uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
             aArgs[2] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstCellAsLabel" )), -1,
                 uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
             aArgs[3] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), -1,
                 uno::makeAny( ::com::sun::star::chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
             xDataSource = m_xInternalDataProvider->createDataSource( aArgs );
         }
@@ -815,10 +818,8 @@ sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
 uno::Reference< chart2::data::XDataProvider > SAL_CALL ChartModel::getDataProvider()
             throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xDataProvider;
-    // \--
 }
 
 // ____ XDataReceiver ____
@@ -827,7 +828,6 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
             throw (uno::RuntimeException)
 {
     {
-        // /--
         MutexGuard aGuard( m_aModelMutex );
         uno::Reference< beans::XPropertySet > xProp( xDataProvider, uno::UNO_QUERY );
         if( xProp.is() )
@@ -846,7 +846,6 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
         m_xInternalDataProvider.clear();
 
         //the numberformatter is kept independent of the data provider!
-        // \--
     }
     setModified( sal_True );
 }
@@ -855,7 +854,6 @@ void SAL_CALL ChartModel::attachNumberFormatsSupplier( const uno::Reference< uti
             throw (uno::RuntimeException)
 {
     {
-        // /--
         MutexGuard aGuard( m_aModelMutex );
         if( xNewSupplier==m_xNumberFormatsSupplier )
             return;
@@ -878,7 +876,6 @@ void SAL_CALL ChartModel::attachNumberFormatsSupplier( const uno::Reference< uti
 
         m_xNumberFormatsSupplier.set( xNewSupplier );
         m_xOwnNumberFormatsSupplier.clear();
-        // \--
     }
     setModified( sal_True );
 }
@@ -888,7 +885,6 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
                    uno::RuntimeException)
 {
     {
-        // /--
         MutexGuard aGuard( m_aModelMutex );
         if( !m_xDataProvider.is() )
             return;
@@ -919,7 +915,6 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
             ASSERT_EXCEPTION( ex );
         }
         unlockControllers();
-        // \--
     }
     setModified( sal_True );
 }
@@ -961,10 +956,8 @@ void SAL_CALL ChartModel::setChartTypeManager( const uno::Reference< chart2::XCh
             throw (uno::RuntimeException)
 {
     {
-        // /--
         MutexGuard aGuard( m_aModelMutex );
         m_xChartTypeManager = xNewManager;
-        // \--
     }
     setModified( sal_True );
 }
@@ -972,42 +965,34 @@ void SAL_CALL ChartModel::setChartTypeManager( const uno::Reference< chart2::XCh
 uno::Reference< chart2::XChartTypeManager > SAL_CALL ChartModel::getChartTypeManager()
             throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xChartTypeManager;
-    // \--
 }
 
 uno::Reference< beans::XPropertySet > SAL_CALL ChartModel::getPageBackground()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xPageBackground;
-    // \--
 }
 
 // ____ XTitled ____
 uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitleObject()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_xTitle;
-    // \--
 }
 
 void SAL_CALL ChartModel::setTitleObject( const uno::Reference< chart2::XTitle >& xTitle )
     throw (uno::RuntimeException)
 {
     {
-        // /--
         MutexGuard aGuard( m_aModelMutex );
         if( m_xTitle.is() )
             ModifyListenerHelper::removeListener( m_xTitle, this );
         m_xTitle = xTitle;
         ModifyListenerHelper::addListener( m_xTitle, this );
-        // \--
     }
     setModified( sal_True );
 }
@@ -1068,7 +1053,7 @@ void SAL_CALL ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Siz
     }
     else
     {
-        OSL_ENSURE( false, "setVisualAreaSize: Aspect not implemented yet.");
+        OSL_FAIL( "setVisualAreaSize: Aspect not implemented yet.");
     }
 }
 
@@ -1177,9 +1162,6 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 {
     uno::Sequence< datatransfer::DataFlavor > aRet(1);
 
-//     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMEType,
-//         C2U( "GDIMetaFile" ),
-//      ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
         C2U( "GDIMetaFile" ),
         ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
@@ -1190,8 +1172,6 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 ::sal_Bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
     throw (uno::RuntimeException)
 {
-//     return ( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType) ||
-//              aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast) );
     return aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast);
 }
 
@@ -1377,3 +1357,5 @@ uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartM
 }
 
 }  // namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

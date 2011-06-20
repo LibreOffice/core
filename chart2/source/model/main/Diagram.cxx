@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -504,7 +505,7 @@ void SAL_CALL Diagram::addCoordinateSystem(
 
         if( m_aCoordSystems.size()>=1 )
         {
-            OSL_ENSURE( false, "more than one coordinatesystem is not supported yet by the fileformat" );
+            OSL_FAIL( "more than one coordinatesystem is not supported yet by the fileformat" );
             return;
         }
         m_aCoordSystems.push_back( aCoordSys );
@@ -729,3 +730,5 @@ APPHELPER_XSERVICEINFO_IMPL( Diagram,
                              C2U( "com.sun.star.comp.chart2.Diagram" ));
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

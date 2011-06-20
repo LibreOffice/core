@@ -47,5 +47,3 @@
 #define BTN_HIDE_PRINT          6
 #define FT_HINT2                7
 #define FL_PRINT                8
-
-

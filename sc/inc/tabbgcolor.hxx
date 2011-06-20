@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabbgcolor.hxx,v $
- * $Revision: 1.00 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +40,6 @@ struct ScUndoTabColorInfo
     Color maOldTabBgColor;
     Color maNewTabBgColor;
 
-    bool IsDefaultOldTabBgColor() const;
-    bool IsDefaultNewTabBgColor() const;
-
     explicit ScUndoTabColorInfo(SCTAB nTab);
     ScUndoTabColorInfo(const ScUndoTabColorInfo& r);
 
@@ -52,3 +47,5 @@ struct ScUndoTabColorInfo
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

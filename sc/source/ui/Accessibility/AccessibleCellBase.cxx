@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,26 +37,19 @@
 #include "document.hxx"
 #include "docfunc.hxx"
 #include "cell.hxx"
-#include "unoguard.hxx"
 #include "scresid.hxx"
-#ifndef SC_SC_HRC
 #include "sc.hrc"
-#endif
 #include "unonames.hxx"
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <tools/debug.hxx>
 #include <editeng/brshitem.hxx>
-#include <rtl/uuid.h>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sfx2/objsh.hxx>
+#include <vcl/svapp.hxx>
 
 #include <float.h>
 
@@ -86,7 +80,7 @@ ScAccessibleCellBase::~ScAccessibleCellBase()
 sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
+     SolarMutexGuard aGuard;
     IsObjectValid();
     // test whether the cell is hidden (column/row - hidden/filtered)
     sal_Bool bVisible(sal_True);
@@ -98,7 +92,7 @@ sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
         bool bRowFiltered = mpDoc->RowFiltered(maCellAddress.Row(), maCellAddress.Tab());
 
         if (bColHidden || bColFiltered || bRowHidden || bRowFiltered)
-            bVisible = sal_False;
+            bVisible = false;
     }
     return bVisible;
 }
@@ -106,7 +100,7 @@ sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
 sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
     if (mpDoc)
@@ -146,7 +140,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
 sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
 
@@ -212,7 +206,7 @@ sal_Int32
     ScAccessibleCellBase::getAccessibleIndexInParent(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     return mnIndex;
 }
@@ -249,7 +243,7 @@ uno::Any SAL_CALL
     ScAccessibleCellBase::getCurrentValue(  )
     throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
+     SolarMutexGuard aGuard;
     IsObjectValid();
     uno::Any aAny;
     if (mpDoc)
@@ -262,10 +256,10 @@ sal_Bool SAL_CALL
     ScAccessibleCellBase::setCurrentValue( const uno::Any& aNumber )
     throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
+     SolarMutexGuard aGuard;
     IsObjectValid();
     double fValue = 0;
-    sal_Bool bResult(sal_False);
+    sal_Bool bResult(false);
     if((aNumber >>= fValue) && mpDoc && mpDoc->GetDocumentShell())
     {
         uno::Reference<XAccessibleStateSet> xParentStates;
@@ -320,26 +314,25 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleCellBase::getTypes()
     return comphelper::concatSequences(ScAccessibleCellBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
+namespace
+{
+    class theScAccessibleCellBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleCellBaseImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleCellBase::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleCellBaseImplementationId::get().getSeq();
 }
 
 sal_Bool ScAccessibleCellBase::IsEditable(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    sal_Bool bEditable(sal_False);
+    sal_Bool bEditable(false);
     if (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::EDITABLE))
         bEditable = sal_True;
     return bEditable;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

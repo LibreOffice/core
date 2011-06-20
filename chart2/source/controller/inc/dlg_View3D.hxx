@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 // header for class TabControl
 #include <vcl/tabctrl.hxx>
 // header for class OKButton
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for class XColorTable
 #include <svx/xtable.hxx>
 
@@ -82,3 +81,5 @@ private:
 //.............................................................................
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

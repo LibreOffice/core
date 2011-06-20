@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_sc.hxx"
 
 #include "XclImpChangeTrack.hxx"
-#include <tools/debug.hxx>
 #include <sot/storage.hxx>
 #include <svl/zforlist.hxx>
 #include "chgviset.hxx"
@@ -49,7 +49,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
     pChangeTrack( NULL ),
     pStrm( NULL ),
     nTabIdCount( 0 ),
-    bGlobExit( sal_False ),
+    bGlobExit( false ),
     eNestedMode( nmBase )
 {
     // Verify that the User Names stream exists before going any further. Excel adds both
@@ -145,8 +145,8 @@ sal_Bool XclImpChangeTrack::CheckRecord( sal_uInt16 nOpCode )
 {
     if( (nOpCode != EXC_CHTR_OP_UNKNOWN) && (aRecHeader.nOpCode != nOpCode) )
     {
-        DBG_ERROR( "XclImpChangeTrack::CheckRecord - unknown action" );
-        return sal_False;
+        OSL_FAIL( "XclImpChangeTrack::CheckRecord - unknown action" );
+        return false;
     }
     return aRecHeader.nIndex != 0;
 }
@@ -168,7 +168,7 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab,
         // external ref - read doc and tab name and find sc tab num
         // - URL
         String aEncUrl( pStrm->ReadUniString() );
-        String aUrl;
+        ::rtl::OUString aUrl;
         bool bSelf;
         XclImpUrlHelper::DecodeUrl( aUrl, bSelf, GetRoot(), aEncUrl );
         pStrm->Ignore( 1 );
@@ -265,7 +265,7 @@ void XclImpChangeTrack::ReadCell(
         }
         break;
         default:
-            DBG_ERROR( "XclImpChangeTrack::ReadCell - unknown data type" );
+            OSL_FAIL( "XclImpChangeTrack::ReadCell - unknown data type" );
     }
 }
 
@@ -279,7 +279,7 @@ void XclImpChangeTrack::ReadChTrInsert()
             (aRecHeader.nOpCode != EXC_CHTR_OP_DELROW) &&
             (aRecHeader.nOpCode != EXC_CHTR_OP_DELCOL) )
         {
-            DBG_ERROR( "XclImpChangeTrack::ReadChTrInsert - unknown action" );
+            OSL_FAIL( "XclImpChangeTrack::ReadChTrInsert - unknown action" );
             return;
         }
 
@@ -342,7 +342,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
         Read2DAddress( aPosition );
         sal_uInt16 nOldSize;
         *pStrm >> nOldSize;
-        DBG_ASSERT( (nOldSize == 0) == (nOldValueType == EXC_CHTR_TYPE_EMPTY),
+        OSL_ENSURE( (nOldSize == 0) == (nOldValueType == EXC_CHTR_TYPE_EMPTY),
             "XclImpChangeTrack::ReadChTrCellContent - old value mismatch" );
         pStrm->Ignore( 4 );
         switch( nValueType & EXC_CHTR_TYPE_FORMATMASK )
@@ -350,7 +350,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
             case 0x0000:                            break;
             case 0x1100:    pStrm->Ignore( 16 );    break;
             case 0x1300:    pStrm->Ignore( 8 );     break;
-            default:        DBG_ERROR( "XclImpChangeTrack::ReadChTrCellContent - unknown format info" );
+            default:        OSL_FAIL( "XclImpChangeTrack::ReadChTrCellContent - unknown format info" );
         }
 
         ScBaseCell* pOldCell;
@@ -361,7 +361,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
         ReadCell( pNewCell, nNewFormat, nNewValueType, aPosition );
         if( !pStrm->IsValid() || (pStrm->GetRecLeft() > 0) )
         {
-            DBG_ERROR( "XclImpChangeTrack::ReadChTrCellContent - bytes left, action ignored" );
+            OSL_FAIL( "XclImpChangeTrack::ReadChTrCellContent - bytes left, action ignored" );
             if( pOldCell )
                 pOldCell->Delete();
             if( pNewCell )
@@ -424,14 +424,14 @@ void XclImpChangeTrack::ReadChTrInsertTab()
 
 void XclImpChangeTrack::InitNestedMode()
 {
-    DBG_ASSERT( eNestedMode == nmBase, "XclImpChangeTrack::InitNestedMode - unexpected nested mode" );
+    OSL_ENSURE( eNestedMode == nmBase, "XclImpChangeTrack::InitNestedMode - unexpected nested mode" );
     if( eNestedMode == nmBase )
         eNestedMode = nmFound;
 }
 
 void XclImpChangeTrack::ReadNestedRecords()
 {
-    DBG_ASSERT( eNestedMode == nmFound, "XclImpChangeTrack::StartNestedMode - missing nested mode" );
+    OSL_ENSURE( eNestedMode == nmFound, "XclImpChangeTrack::StartNestedMode - missing nested mode" );
     if( eNestedMode == nmFound )
     {
         eNestedMode = nmNested;
@@ -441,7 +441,7 @@ void XclImpChangeTrack::ReadNestedRecords()
 
 sal_Bool XclImpChangeTrack::EndNestedMode()
 {
-    DBG_ASSERT( eNestedMode != nmBase, "XclImpChangeTrack::EndNestedMode - missing nested mode" );
+    OSL_ENSURE( eNestedMode != nmBase, "XclImpChangeTrack::EndNestedMode - missing nested mode" );
     sal_Bool bReturn = (eNestedMode == nmNested);
     eNestedMode = nmBase;
     return bReturn;
@@ -449,7 +449,7 @@ sal_Bool XclImpChangeTrack::EndNestedMode()
 
 void XclImpChangeTrack::ReadRecords()
 {
-    sal_Bool bExitLoop = sal_False;
+    sal_Bool bExitLoop = false;
 
     while( !bExitLoop && !bGlobExit && pStrm->StartNextRecord() )
     {
@@ -475,7 +475,7 @@ void XclImpChangeTrack::Apply()
     if( pChangeTrack )
     {
         pChangeTrack->SetUser( sOldUsername );
-        pChangeTrack->SetUseFixDateTime( sal_False );
+        pChangeTrack->SetUseFixDateTime( false );
 
         GetDoc().SetChangeTrack( pChangeTrack );
         pChangeTrack = NULL;
@@ -500,3 +500,4 @@ bool XclImpChTrFmlConverter::Read3DTabReference( sal_uInt16 /*nIxti*/, SCTAB& rF
     return rChangeTrack.Read3DTabRefInfo( rFirstTab, rLastTab, rExtInfo );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

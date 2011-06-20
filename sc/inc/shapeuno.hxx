@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/container/XChild.hpp>
 
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -53,6 +53,7 @@ namespace com { namespace sun { namespace star {
 class SdrObject;
 struct SvEventDescription;
 class ShapeUnoEventAccessImpl;
+class  ScMacroInfo;
 
 //------------------------------------------------------------------------
 
@@ -67,21 +68,18 @@ typedef ::cppu::WeakImplHelper5 <   ::com::sun::star::beans::XPropertySet
                                 >   ScShapeObj_Base;
 typedef ::cppu::ImplHelper1     <   ::com::sun::star::text::XText
                                 >   ScShapeObj_TextBase;
-typedef ::cppu::ImplHelper1     <   ::com::sun::star::container::XChild
-                                >   ScShapeObj_ChildBase;
 class ScShapeObj    :public ScShapeObj_Base
                     ,public ScShapeObj_TextBase
-                    ,public ScShapeObj_ChildBase
 {
 private:
+friend  ScMacroInfo* lcl_getShapeHyperMacroInfo( ScShapeObj* pShape, sal_Bool bCreate );
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > mxShapeAgg;
     // cached pointers to avoid repeated queryAggregation calls:
     ::com::sun::star::beans::XPropertySet*                                  pShapePropertySet;
     ::com::sun::star::beans::XPropertyState*                                pShapePropertyState;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > mxPropSetInfo;
     com::sun::star::uno::Sequence< sal_Int8 >*                              pImplementationId;
-    bool                                                                    bIsTextShape;
-    bool                                                                    bIsNoteCaption;
+    sal_Bool                                                                    bIsTextShape;
     bool                                                                    bInitializedNotifier;
 
     SdrObject* GetSdrObject() const throw();
@@ -224,12 +222,6 @@ public:
     virtual void SAL_CALL   setString( const ::rtl::OUString& aString )
                                     throw(::com::sun::star::uno::RuntimeException);
 
-    // XChild
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent()
-                            throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xParent )
-                            throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
-
                             // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -251,3 +243,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

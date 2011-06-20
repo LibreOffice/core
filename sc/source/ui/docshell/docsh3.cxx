@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,11 +79,6 @@
 #include "inputhdl.hxx"
 #include "conflictsdlg.hxx"
 #include "globstr.hrc"
-
-#if DEBUG_CHANGETRACK
-#include <stdio.h>
-#endif // DEBUG_CHANGETRACK
-
 
 //------------------------------------------------------------------
 
@@ -260,11 +256,10 @@ void ScDocShell::UnlockPaint_Impl(sal_Bool bDoc)
             if (xRangeList)
             {
                 sal_uInt16 nParts = pPaint->GetParts();
-                sal_uLong nCount = xRangeList->Count();
-                for ( sal_uLong i=0; i<nCount; i++ )
+                for ( size_t i = 0, nCount = xRangeList->size(); i < nCount; i++ )
                 {
                     //! nExtFlags ???
-                    ScRange aRange = *xRangeList->GetObject(i);
+                    ScRange aRange = *(*xRangeList)[i];
                     PostPaint( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab(),
                                 aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab(),
                                 nParts );
@@ -279,7 +274,7 @@ void ScDocShell::UnlockPaint_Impl(sal_Bool bDoc)
     }
     else
     {
-        DBG_ERROR("UnlockPaint ohne LockPaint");
+        OSL_FAIL("UnlockPaint ohne LockPaint");
     }
 }
 
@@ -289,7 +284,7 @@ void ScDocShell::LockDocument_Impl(sal_uInt16 nNew)
     {
         ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
         if (pDrawLayer)
-            pDrawLayer->setLock(sal_True);
+            pDrawLayer->setLock(true);
     }
     nDocumentLock = nNew;
 }
@@ -301,7 +296,7 @@ void ScDocShell::UnlockDocument_Impl(sal_uInt16 nNew)
     {
         ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
         if (pDrawLayer)
-            pDrawLayer->setLock(sal_False);
+            pDrawLayer->setLock(false);
     }
 }
 
@@ -329,12 +324,12 @@ void ScDocShell::SetLockCount(sal_uInt16 nNew)
 
 void ScDocShell::LockPaint()
 {
-    LockPaint_Impl(sal_False);
+    LockPaint_Impl(false);
 }
 
 void ScDocShell::UnlockPaint()
 {
-    UnlockPaint_Impl(sal_False);
+    UnlockPaint_Impl(false);
 }
 
 void ScDocShell::LockDocument()
@@ -352,7 +347,7 @@ void ScDocShell::UnlockDocument()
     }
     else
     {
-        DBG_ERROR("UnlockDocument without LockDocument");
+        OSL_FAIL("UnlockDocument without LockDocument");
     }
 }
 
@@ -412,7 +407,7 @@ void ScDocShell::CalcOutputFactor()
         nPrtToScreenFactor = nPrinterWidth / (double) nWindowWidth;
     else
     {
-        DBG_ERROR("GetTextSize gibt 0 ??");
+        OSL_FAIL("GetTextSize gibt 0 ??");
         nPrtToScreenFactor = 1.0;
     }
 }
@@ -472,7 +467,7 @@ void ScDocShell::UpdateFontList()
 {
     delete pImpl->pFontList;
     // pImpl->pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
-    pImpl->pFontList = new FontList( GetRefDevice(), NULL, sal_False ); // sal_False or sal_True???
+    pImpl->pFontList = new FontList( GetRefDevice(), NULL, false ); // sal_False or sal_True???
     SvxFontListItem aFontListItem( pImpl->pFontList, SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 
@@ -486,7 +481,7 @@ OutputDevice* ScDocShell::GetRefDevice()
 
 sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags )
 {
-    SfxPrinter *pOld = aDocument.GetPrinter( sal_False );
+    SfxPrinter *pOld = aDocument.GetPrinter( false );
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
 
@@ -596,8 +591,6 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
     SCTAB nTab = rPos.Tab();
 
     const ScChangeAction* pFound = NULL;
-    const ScChangeAction* pFoundContent = NULL;
-    const ScChangeAction* pFoundMove = NULL;
     long nModified = 0;
     const ScChangeAction* pAction = pTrack->GetFirst();
     while (pAction)
@@ -619,19 +612,6 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
                 if ( aRange.In( rPos ) )
                 {
                     pFound = pAction;       // der letzte gewinnt
-                    switch ( pAction->GetType() )
-                    {
-                        case SC_CAT_CONTENT :
-                            pFoundContent = pAction;
-                        break;
-                        case SC_CAT_MOVE :
-                            pFoundMove = pAction;
-                        break;
-                        default:
-                        {
-                            // added to avoid warnings
-                        }
-                    }
                     ++nModified;
                 }
             }
@@ -681,7 +661,7 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pP
     DateTime aDT = pAction->GetDateTime();
     String aDate = ScGlobal::pLocaleData->getDate( aDT );
     aDate += ' ';
-    aDate += ScGlobal::pLocaleData->getTime( aDT, sal_False, sal_False );
+    aDate += ScGlobal::pLocaleData->getTime( aDT, false, false );
 
     SfxItemSet aSet( GetPool(),
                       SID_ATTR_POSTIT_AUTHOR, SID_ATTR_POSTIT_AUTHOR,
@@ -745,7 +725,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
                 GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentProperties> xDocProps(
                 xDPS->getDocumentProperties());
-            DBG_ASSERT(xDocProps.is(), "no DocumentProperties");
+            OSL_ENSURE(xDocProps.is(), "no DocumentProperties");
             String aDocUser = xDocProps->getModifiedBy();
 
             if ( aDocUser.Len() )
@@ -805,7 +785,7 @@ bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument
             pA->GetDescription( aADesc, pSearchDoc, sal_True );
             if ( aActionDesc.Equals( aADesc ) )
             {
-                DBG_ERROR( "lcl_FindAction(): found equal action!" );
+                OSL_FAIL( "lcl_FindAction(): found equal action!" );
                 return true;
             }
         }
@@ -817,7 +797,7 @@ bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument
 
 void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheckDuplicates, sal_uLong nOffset, ScChangeActionMergeMap* pMergeMap, bool bInverseMap )
 {
-    ScTabViewShell* pViewSh = GetBestViewShell( sal_False );    //! Funktionen an die DocShell
+    ScTabViewShell* pViewSh = GetBestViewShell( false );    //! Funktionen an die DocShell
     if (!pViewSh)
         return;
 
@@ -830,17 +810,17 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     {   // anschalten
         aDocument.StartChangeTracking();
         pThisTrack = aDocument.GetChangeTrack();
-        DBG_ASSERT(pThisTrack,"ChangeTracking nicht angeschaltet?");
+        OSL_ENSURE(pThisTrack,"ChangeTracking nicht angeschaltet?");
         if ( !bShared )
         {
-            // #51138# visuelles RedLining einschalten
+            // visuelles RedLining einschalten
             ScChangeViewSettings aChangeViewSet;
             aChangeViewSet.SetShowChanges(sal_True);
             aDocument.SetChangeViewSettings(aChangeViewSet);
         }
     }
 
-    // #97286# include 100th seconds in compare?
+    // include 100th seconds in compare?
     sal_Bool bIgnore100Sec = !pSourceTrack->IsTime100thSeconds() ||
             !pThisTrack->IsTime100thSeconds();
 
@@ -935,7 +915,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     LockPaint();    // #i73877# no repainting after each action
 
     //  MergeChangeData in das aktuelle Dokument uebernehmen
-    sal_Bool bHasRejected = sal_False;
+    sal_Bool bHasRejected = false;
     String aOldUser = pThisTrack->GetUser();
     pThisTrack->SetUseFixDateTime( sal_True );
     ScMarkData& rMarkData = pViewSh->GetViewData()->GetMarkData();
@@ -971,13 +951,13 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 //  -> wird weggelassen
                 //! ??? Loesch-Aktion rueckgaengig machen ???
                 //! ??? Aktion irgendwo anders speichern  ???
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                 String aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
                     ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
                 ByteString aError( aValue, gsl_getSystemTextEncoding() );
                 aError += " weggelassen";
-                DBG_ERROR( aError.GetBuffer() );
+                OSL_FAIL( aError.GetBuffer() );
 #endif
             }
             else
@@ -1035,7 +1015,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             //! Test, ob es ganz unten im Dokument war, dann automatisches
                             //! Zeilen-Einfuegen ???
 
-                            DBG_ASSERT( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
+                            OSL_ENSURE( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
                             ScAddress aPos = aSourceRange.aStart;
                             String aValue;
                             ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
@@ -1058,18 +1038,18 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                     aValue.Erase( 0, 1 );
                                     aValue.Erase( aValue.Len()-1, 1 );
                                     GetDocFunc().EnterMatrix( aSourceRange,
-                                        NULL, NULL, aValue, sal_False, sal_False,
+                                        NULL, NULL, aValue, false, false,
                                         EMPTY_STRING, formula::FormulaGrammar::GRAM_DEFAULT );
                                 }
                                 break;
                                 case MM_REFERENCE :     // do nothing
                                 break;
                                 case MM_FAKE :
-                                    DBG_WARNING( "MergeDocument: MatrixFlag MM_FAKE" );
+                                    OSL_FAIL( "MergeDocument: MatrixFlag MM_FAKE" );
                                     pViewSh->EnterData( aPos.Col(), aPos.Row(), aPos.Tab(), aValue );
                                 break;
                                 default:
-                                    DBG_ERROR( "MergeDocument: unknown MatrixFlag" );
+                                    OSL_FAIL( "MergeDocument: unknown MatrixFlag" );
                             }
                         }
                         break;
@@ -1077,17 +1057,17 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         {
                             String aName;
                             aDocument.CreateValidTabName( aName );
-                            GetDocFunc().InsertTable( aSourceRange.aStart.Tab(), aName, sal_True, sal_False );
+                            GetDocFunc().InsertTable( aSourceRange.aStart.Tab(), aName, sal_True, false );
                         }
                         break;
                         case SC_CAT_INSERT_ROWS:
-                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSROWS, sal_True, sal_False );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSROWS, sal_True, false );
                         break;
                         case SC_CAT_INSERT_COLS:
-                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS, sal_True, sal_False );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS, sal_True, false );
                         break;
                         case SC_CAT_DELETE_TABS :
-                            GetDocFunc().DeleteTable( aSourceRange.aStart.Tab(), sal_True, sal_False );
+                            GetDocFunc().DeleteTable( aSourceRange.aStart.Tab(), sal_True, false );
                         break;
                         case SC_CAT_DELETE_ROWS:
                         {
@@ -1095,7 +1075,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() )
                             {
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELROWS, sal_True, sal_False );
+                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELROWS, sal_True, false );
 
                                 // #i101099# [Collaboration] Changes are not correctly shown
                                 if ( bShared )
@@ -1115,7 +1095,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() && !pDel->IsTabDeleteCol() )
                             {   // deleted Table enthaelt deleted Cols, die nicht
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELCOLS, sal_True, sal_False );
+                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELCOLS, sal_True, false );
                             }
                         }
                         break;
@@ -1124,7 +1104,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             const ScChangeActionMove* pMove = (const ScChangeActionMove*) pSourceAction;
                             ScRange aFromRange( pMove->GetFromRange().MakeRange() );
                             GetDocFunc().MoveBlock( aFromRange,
-                                aSourceRange.aStart, sal_True, sal_True, sal_False, sal_False );
+                                aSourceRange.aStart, sal_True, sal_True, false, false );
                         }
                         break;
                         default:
@@ -1139,10 +1119,8 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     ScChangeAction* pAct = pThisTrack->GetLast();
                     if ( pAct && pAct->GetActionNumber() > nOldActionMax )
                         pAct->SetComment( rComment );
-#ifdef DBG_UTIL
                     else
-                        DBG_ERROR( "MergeDocument: wohin mit dem Kommentar?!?" );
-#endif
+                        OSL_FAIL( "MergeDocument: wohin mit dem Kommentar?!?" );
                 }
 
                 // Referenzen anpassen
@@ -1189,7 +1167,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
     rMarkData = aOldMarkData;
     pThisTrack->SetUser(aOldUser);
-    pThisTrack->SetUseFixDateTime( sal_False );
+    pThisTrack->SetUseFixDateTime( false );
 
     pSourceTrack->Clear();      //! der ist jetzt verhunzt
 
@@ -1219,18 +1197,9 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         return false;
     }
 
-#if DEBUG_CHANGETRACK
-    ::rtl::OUString aMessage = ::rtl::OUString::createFromAscii( "\nbefore merge:\n" );
-    aMessage += pThisTrack->ToString();
-    ::rtl::OString aMsg = ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_UTF8 );
-    OSL_ENSURE( false, aMsg.getStr() );
-    //fprintf( stdout, "%s ", aMsg.getStr() );
-    //fflush( stdout );
-#endif // DEBUG_CHANGETRACK
-
     // reset show changes
     ScChangeViewSettings aChangeViewSet;
-    aChangeViewSet.SetShowChanges( sal_False );
+    aChangeViewSet.SetShowChanges( false );
     aDocument.SetChangeViewSettings( aChangeViewSet );
 
     // find first merge action in this document
@@ -1396,14 +1365,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         aInfoBox.Execute();
     }
 
-#if DEBUG_CHANGETRACK
-    aMessage = ::rtl::OUString::createFromAscii( "\nafter merge:\n" );
-    aMessage += pThisTrack->ToString();
-    aMsg = ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_UTF8 );
-    OSL_ENSURE( false, aMsg.getStr() );
-    //fprintf( stdout, "%s ", aMsg.getStr() );
-    //fflush( stdout );
-#endif // DEBUG_CHANGETRACK
-
     return ( pThisAction != NULL );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

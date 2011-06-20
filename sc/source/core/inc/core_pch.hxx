@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,7 +26,7 @@
  *
  ************************************************************************/
 
-//  ItemID-Defines etc. muessen immer ganz vorne stehen
+//  ItemID-Defines etc. must be included first
 
 #include "scitems.hxx"
 
@@ -34,17 +35,12 @@
 
 #define SC_PROGRESS_CXX
 
-//  ab hier automatisch per makepch generiert
-//  folgende duerfen nicht aufgenommen werden:
-//      setjmp.h
-
 #include <tools/solar.h>
 #include <string.h>
 #include <tools/string.hxx>
 #include <tools/rtti.hxx>
 #include <limits.h>
 #include <tools/ref.hxx>
-#include <tools/list.hxx>
 #include <tools/contnr.hxx>
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
@@ -54,7 +50,6 @@
 #include <global.hxx>
 #include <tools/color.hxx>
 #include <i18npool/lang.h>
-#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <svl/svarray.hxx>
 #include <markarr.hxx>
@@ -81,7 +76,6 @@
 #include <stdarg.h>
 #include <tools/rc.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/unqidx.hxx>
 #include <rsc/rscsfx.hxx>
 #include <basic/sbxdef.hxx>
 #include <svl/itemset.hxx>
@@ -104,7 +98,6 @@
 #include <sot/sotdata.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
-#include <sot/sotref.hxx>
 #include <rechead.hxx>
 #include <tools/unqid.hxx>
 #include <vcl/apptypes.hxx>
@@ -120,14 +113,12 @@
 #include <vcl/accel.hxx>
 #include <patattr.hxx>
 #include <svl/zforlist.hxx>
-#include <tools/pstm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/event.hxx>
-#include <tools/ownlist.hxx>
 #include <svl/itempool.hxx>
 #include <tools/datetime.hxx>
 #include <attrib.hxx>
@@ -146,7 +137,6 @@
 #include <vcl/prntypes.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/gdimtf.hxx>
-//#include <setjmp.h>
 #include <tools/urlobj.hxx>
 #include <vcl/print.hxx>
 #include <docoptio.hxx>
@@ -202,7 +192,7 @@
 #include <rangenam.hxx>
 #include <scmatrix.hxx>
 #include <svx/pageitem.hxx>
-#include <dbcolect.hxx>
+#include <dbdata.hxx>
 #include <userlist.hxx>
 #include <editeng/editdata.hxx>
 #include <basic/sbxvar.hxx>
@@ -246,3 +236,4 @@
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

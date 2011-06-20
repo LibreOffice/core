@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,16 +34,14 @@
 #include <vcl/timer.hxx>
 #include <svl/lstner.hxx>
 #include "global.hxx"       // ScInputMode
-#include "markdata.hxx"     //ScMarkData
+#include "markdata.hxx"     // ScMarkData
 #include "shellids.hxx"
 #include <unotools/options.hxx>
 #include <tools/shl.hxx>
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 #include <map>
 #include <list>
 #include <algorithm>
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 
 class KeyEvent;
@@ -123,7 +122,7 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     ScClipData          aClipData;
     ScSelectionTransferObj* pSelTransfer;
     ScMessagePool*      pMessagePool;
-    //  globalen InputHandler gibt's nicht mehr, jede View hat einen
+    // there is no global InputHandler anymore, each View has it's own
     ScInputHandler*     pRefInputHandler;
     ScViewCfg*          pViewCfg;
     ScDocCfg*           pDocCfg;
@@ -146,9 +145,7 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     bool                mbIsInSharedDocLoading;
     bool                mbIsInSharedDocSaving;
 
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     std::map<sal_uInt16, std::list<Window*> > m_mapRefWindow;
-    //-->Added by PengYunQuan for Validity Cell Range Picker
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 
@@ -159,9 +156,9 @@ public:
     virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
     void                DeleteCfg();
 
-                        // von der Applikation verschoben:
+                        // moved by the application
 
-    DECL_LINK( IdleHandler,     Timer* );   // Timer statt idle
+    DECL_LINK( IdleHandler,     Timer* );   // Timer instead of idle
     DECL_LINK( SpellTimerHdl,   Timer* );
     DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
@@ -200,12 +197,12 @@ public:
 
     // Options:
     const ScViewOptions&    GetViewOptions  ();
-    const ScDocOptions&     GetDocOptions   ();
+SC_DLLPUBLIC    const ScDocOptions&     GetDocOptions   ();
 SC_DLLPUBLIC    const ScAppOptions&     GetAppOptions   ();
     const ScInputOptions&   GetInputOptions ();
 SC_DLLPUBLIC    const ScPrintOptions&   GetPrintOptions ();
     void                    SetViewOptions  ( const ScViewOptions& rOpt );
-    void                    SetDocOptions   ( const ScDocOptions& rOpt );
+SC_DLLPUBLIC    void                    SetDocOptions   ( const ScDocOptions& rOpt );
 SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rOpt );
     void                    SetInputOptions ( const ScInputOptions& rOpt );
     void                    SetPrintOptions ( const ScPrintOptions& rOpt );
@@ -228,11 +225,11 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 
     void                ModifyOptions( const SfxItemSet& rOptSet );
 
-    //  InputHandler:
-    sal_Bool                IsEditMode();   // nicht bei SC_INPUT_TYPE
-    sal_Bool                IsInputMode();  // auch bei SC_INPUT_TYPE
+    // InputHandler:
+    sal_Bool                IsEditMode();   // not for SC_INPUT_TYPE
+    sal_Bool                IsInputMode();  // also for SC_INPUT_TYPE
     void                SetInputMode( ScInputMode eMode );
-    sal_Bool                InputKeyEvent( const KeyEvent& rKEvt, sal_Bool bStartEdit = sal_False );
+    sal_Bool                InputKeyEvent( const KeyEvent& rKEvt, sal_Bool bStartEdit = false );
     SC_DLLPUBLIC void                InputEnterHandler( sal_uInt8 nBlockMode = 0 );
     void                InputCancelHandler();
     void                InputSelection( EditView* pView );
@@ -244,23 +241,20 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 
     void                ViewShellGone(ScTabViewShell* pViewSh);
     void                ViewShellChanged();
-    // Kommunikation mit Funktionsautopilot
+    // communication with function-autopilot
     void                InputGetSelection( xub_StrLen& rStart, xub_StrLen& rEnd );
     void                InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd );
     void                InputReplaceSelection( const String& rStr );
     String              InputGetFormulaStr();
     void                ActivateInputWindow( const String* pStr = NULL,
-                                                sal_Bool bMatrix = sal_False );
+                                                sal_Bool bMatrix = false );
 
     void                InitFormEditData();
     void                ClearFormEditData();
     ScFormEditData*     GetFormEditData()       { return pFormEditData; }
 
-    //  Referenzeingabe:
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
-    //void              SetRefDialog( sal_uInt16 nId, sal_Bool bVis, SfxViewFrame* pViewFrm = NULL );
+    // input of reference:
     SC_DLLPUBLIC void               SetRefDialog( sal_uInt16 nId, sal_Bool bVis, SfxViewFrame* pViewFrm = NULL );
-    //-->Added by PengYunQuan for Validity Cell Range Picker
     sal_Bool                IsModalMode(SfxObjectShell* pDocSh = NULL);
     sal_Bool                IsFormulaMode();
     sal_Bool                IsRefDialogOpen();
@@ -271,7 +265,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                EndReference();
     sal_uInt16              GetCurRefDlgId() const                  { return nCurRefDlgId; }
 
-    //virtuelle Methoden fuer den Optionendialog
+    // virtual methods for the options dialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
     virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );
@@ -293,3 +287,4 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

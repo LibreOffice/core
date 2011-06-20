@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define SC_BCASLOT_HXX
 
 #include <set>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <functional>
 #include <svl/broadcast.hxx>
 #include <svl/svarray.hxx>
@@ -53,7 +54,7 @@ private:
 public:
             ScBroadcastArea( const ScRange& rRange )
                 : pUpdateChainNext( NULL ), aRange( rRange ),
-                nRefCount( 0 ), bInUpdateChain( sal_False ) {}
+                nRefCount( 0 ), bInUpdateChain( false ) {}
     inline SvtBroadcaster&       GetBroadcaster()       { return aBroadcaster; }
     inline const SvtBroadcaster& GetBroadcaster() const { return aBroadcaster; }
     inline void         UpdateRange( const ScRange& rNewRange )
@@ -96,7 +97,7 @@ struct ScBroadcastAreaEqual
     }
 };
 
-typedef ::std::hash_set< ScBroadcastArea*, ScBroadcastAreaHash, ScBroadcastAreaEqual > ScBroadcastAreas;
+typedef ::boost::unordered_set< ScBroadcastArea*, ScBroadcastAreaHash, ScBroadcastAreaEqual > ScBroadcastAreas;
 
 //=============================================================================
 
@@ -116,7 +117,7 @@ struct ScBroadcastAreaBulkEqual
     }
 };
 
-typedef ::std::hash_set< const ScBroadcastArea*, ScBroadcastAreaBulkHash,
+typedef ::boost::unordered_set< const ScBroadcastArea*, ScBroadcastAreaBulkHash,
         ScBroadcastAreaBulkEqual > ScBroadcastAreasBulk;
 
 //=============================================================================
@@ -304,3 +305,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

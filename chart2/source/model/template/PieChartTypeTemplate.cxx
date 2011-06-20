@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -231,11 +232,6 @@ sal_Int32 PieChartTypeTemplate::getAxisCountByDimension( sal_Int32 /*nDimension*
     return 0;
 }
 
-// void PieChartTypeTemplate::createAxes(
-//     const Sequence< Reference< chart2::XCoordinateSystem > > & rCoordSys )
-// {
-// }
-
 void PieChartTypeTemplate::adaptAxes(
     const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > & /*rCoordSys*/ )
 {
@@ -266,8 +262,6 @@ void PieChartTypeTemplate::adaptScales(
                 aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
                 xAxis->setScaleData( aScaleData );
             }
-
-            //------
 
             xAxis = AxisHelper::getAxis( 0 /*nDimensionIndex*/,0 /*nAxisIndex*/
                     , aCooSysSeq[nCooSysIdx] );
@@ -653,3 +647,5 @@ IMPLEMENT_FORWARD_XINTERFACE2( PieChartTypeTemplate, ChartTypeTemplate, OPropert
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( PieChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

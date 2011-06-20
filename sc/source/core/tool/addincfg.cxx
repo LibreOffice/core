@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <tools/debug.hxx>
-
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -47,7 +46,7 @@ using namespace com::sun::star;
 #define CFGPATH_ADDINS  "Office.CalcAddIns/AddInInfo"
 
 ScAddInCfg::ScAddInCfg() :
-    ConfigItem( rtl::OUString::createFromAscii( CFGPATH_ADDINS ) )
+    ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_ADDINS )) )
 {
     uno::Sequence<rtl::OUString> aNames(1);     // one entry: empty string
     EnableNotification( aNames );
@@ -55,7 +54,7 @@ ScAddInCfg::ScAddInCfg() :
 
 void ScAddInCfg::Commit()
 {
-    DBG_ERROR("ScAddInCfg shouldn't be modified");
+    OSL_FAIL("ScAddInCfg shouldn't be modified");
 }
 
 void ScAddInCfg::Notify( const uno::Sequence<rtl::OUString>& )
@@ -70,3 +69,4 @@ void ScAddInCfg::Notify( const uno::Sequence<rtl::OUString>& )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

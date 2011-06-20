@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
     if ( bTextWysiwyg )
     {
         pDevice = pDocSh->GetPrinter();
-        bOwner = sal_False;
+        bOwner = false;
 
         aOldMapMode = pDevice->GetMapMode();
         pDevice->SetMapMode( MAP_PIXEL );       // GetNeededSize needs pixel MapMode
@@ -75,3 +76,4 @@ ScSizeDeviceProvider::~ScSizeDeviceProvider()
         pDevice->SetMapMode( aOldMapMode );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

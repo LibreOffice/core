@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,16 +35,16 @@
 #include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svl/smplhint.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
 #include "dispuno.hxx"
-#include "unoguard.hxx"
 #include "tabvwsh.hxx"
 #include "dbdocfun.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 
 using namespace com::sun::star;
 
@@ -119,7 +120,7 @@ uno::Reference<frame::XDispatch> SAL_CALL ScDispatchProviderInterceptor::queryDi
                         sal_Int32 nSearchFlags )
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     uno::Reference<frame::XDispatch> xResult;
     // create some dispatch ...
@@ -144,7 +145,7 @@ uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
                         const uno::Sequence<frame::DispatchDescriptor>& aDescripts )
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
     uno::Reference< frame::XDispatch>* pReturn = aReturn.getArray();
@@ -163,7 +164,7 @@ uno::Reference<frame::XDispatchProvider> SAL_CALL
                         ScDispatchProviderInterceptor::getSlaveDispatchProvider()
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return m_xSlaveDispatcher;
 }
 
@@ -171,7 +172,7 @@ void SAL_CALL ScDispatchProviderInterceptor::setSlaveDispatchProvider(
                         const uno::Reference<frame::XDispatchProvider>& xNewDispatchProvider )
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     m_xSlaveDispatcher.set(xNewDispatchProvider);
 }
 
@@ -179,7 +180,7 @@ uno::Reference<frame::XDispatchProvider> SAL_CALL
                         ScDispatchProviderInterceptor::getMasterDispatchProvider()
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return m_xMasterDispatcher;
 }
 
@@ -187,7 +188,7 @@ void SAL_CALL ScDispatchProviderInterceptor::setMasterDispatchProvider(
                         const uno::Reference<frame::XDispatchProvider>& xNewSupplier )
                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     m_xMasterDispatcher.set(xNewSupplier);
 }
 
@@ -196,7 +197,7 @@ void SAL_CALL ScDispatchProviderInterceptor::setMasterDispatchProvider(
 void SAL_CALL ScDispatchProviderInterceptor::disposing( const lang::EventObject& /* Source */ )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if (m_xIntercepted.is())
     {
@@ -215,7 +216,7 @@ void SAL_CALL ScDispatchProviderInterceptor::disposing( const lang::EventObject&
 
 ScDispatch::ScDispatch(ScTabViewShell* pViewSh) :
     pViewShell( pViewSh ),
-    bListeningToView( sal_False )
+    bListeningToView( false )
 {
     if (pViewShell)
         StartListening(*pViewShell);
@@ -247,9 +248,9 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
                                 const uno::Sequence<beans::PropertyValue>& aArgs )
                                 throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
-    sal_Bool bDone = sal_False;
+    sal_Bool bDone = false;
     if ( pViewShell && !aURL.Complete.compareToAscii(cURLInsertColumns) )
     {
         ScViewData* pViewData = pViewShell->GetViewData();
@@ -275,8 +276,8 @@ void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImportParam& 
                     ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
                                                     sdb::CommandType::TABLE );
 
-        aDescriptor.setDataSource(rtl::OUString( rParam.aDBName ));
-        aDescriptor[svx::daCommand]     <<= rtl::OUString( rParam.aStatement );
+        aDescriptor.setDataSource(rParam.aDBName);
+        aDescriptor[svx::daCommand]     <<= rParam.aStatement;
         aDescriptor[svx::daCommandType] <<= nType;
     }
     else
@@ -296,7 +297,7 @@ void SAL_CALL ScDispatch::addStatusListener(
                                 const util::URL& aURL )
                                 throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if (!pViewShell)
         throw uno::RuntimeException();
@@ -321,7 +322,7 @@ void SAL_CALL ScDispatch::addStatusListener(
             bListeningToView = sal_True;
         }
 
-        ScDBData* pDBData = pViewShell->GetDBData(sal_False,SC_DB_OLD);
+        ScDBData* pDBData = pViewShell->GetDBData(false,SC_DB_OLD);
         if ( pDBData )
             pDBData->GetImportParam( aLastImport );
         lcl_FillDataSource( aEvent, aLastImport );          // modifies State, IsEnabled
@@ -336,7 +337,7 @@ void SAL_CALL ScDispatch::removeStatusListener(
                                 const util::URL& aURL )
                                 throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if ( !aURL.Complete.compareToAscii(cURLDocDataSource) )
     {
@@ -356,7 +357,7 @@ void SAL_CALL ScDispatch::removeStatusListener(
             uno::Reference<view::XSelectionSupplier> xSupplier(lcl_GetSelectionSupplier( pViewShell ));
             if ( xSupplier.is() )
                 xSupplier->removeSelectionChangeListener(this);
-            bListeningToView = sal_False;
+            bListeningToView = false;
         }
     }
 }
@@ -371,7 +372,7 @@ void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventO
     if ( pViewShell )
     {
         ScImportParam aNewImport;
-        ScDBData* pDBData = pViewShell->GetDBData(sal_False,SC_DB_OLD);
+        ScDBData* pDBData = pViewShell->GetDBData(false,SC_DB_OLD);
         if ( pDBData )
             pDBData->GetImportParam( aNewImport );
 
@@ -403,7 +404,7 @@ void SAL_CALL ScDispatch::disposing( const ::com::sun::star::lang::EventObject& 
 {
     uno::Reference<view::XSelectionSupplier> xSupplier(rSource.Source, uno::UNO_QUERY);
     xSupplier->removeSelectionChangeListener(this);
-    bListeningToView = sal_False;
+    bListeningToView = false;
 
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
@@ -413,3 +414,4 @@ void SAL_CALL ScDispatch::disposing( const ::com::sun::star::lang::EventObject& 
     pViewShell = NULL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

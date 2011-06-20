@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,7 +163,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
             // use ScChartPositioner to auto-detect column/row headers (like ScChartArray in old version)
             ScRangeListRef aRangeListRef( new ScRangeList );
             aRangeListRef->Parse( aRangeString, pScDoc );
-            if ( aRangeListRef->Count() )
+            if ( !aRangeListRef->empty() )
             {
                 pScDoc->LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
 
@@ -193,16 +194,16 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
             uno::Sequence< beans::PropertyValue > aArgs( 4 );
             aArgs[0] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
                 uno::makeAny( aRangeString ), beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("HasCategories"), -1,
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
                 uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
             aArgs[2] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
                 uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
             aArgs[3] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
                 uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
             xReceiver->setArguments( aArgs );
 
@@ -228,7 +229,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
     uno::Reference < embed::XEmbeddedObject > xObj;
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
-    sal_Bool bIsFromFile = sal_False;
+    sal_Bool bIsFromFile = false;
     ::rtl::OUString aName;
 
     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
@@ -237,7 +238,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
 
     sal_uInt16 nSlot = rReq.GetSlot();
-    SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
+    SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, false );
     if ( nSlot == SID_INSERT_OBJECT && pNameItem )
     {
         SvGlobalName aClassName = pNameItem->GetValue();
@@ -311,14 +312,14 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                             if ( xSet.is() )
                             {
-                                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
                                         uno::makeAny( ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                             }
                         }
                     }
                     else
                     {
-                        DBG_ERROR("Invalid URL!");
+                        OSL_FAIL("Invalid URL!");
                         //! error message
                         //! can this happen???
                     }
@@ -400,7 +401,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
             if ( nAspect != embed::Aspects::MSOLE_ICON )
             {
-                //  #73279# Math objects change their object size during InsertObject.
+                //  Math objects change their object size during InsertObject.
                 //  New size must be set in SdrObject, or a wrong scale will be set at
                 //  ActivateObject.
 
@@ -426,8 +427,8 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 // XXX Activate aus Makro ist toedlich !!! ???
                 if (bIsFromFile)
                 {
-                    // #45012# Objekt ist selektiert, also Draw-Shell aktivieren
-                    pViewShell->SetDrawShell( sal_True );
+                    // Objekt ist selektiert, also Draw-Shell aktivieren
+                    pViewShell->SetDrawShell( true );
                 }
                 else
                 {
@@ -440,7 +441,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
         }
         catch( uno::Exception& )
         {
-            OSL_ASSERT( "May need error handling here!\n" );
+            OSL_FAIL( "May need error handling here!\n" );
         }
     }
     else
@@ -524,19 +525,20 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             aMultiMark.MarkToMulti();
 
             ScRangeList aRanges;
-            aMultiMark.FillRangeListWithMarks( &aRanges, sal_False );
+            aMultiMark.FillRangeListWithMarks( &aRanges, false );
             String aStr;
             ScDocument* pDocument = pViewSh->GetViewData()->GetDocument();
             aRanges.Format( aStr, SCR_ABS_3D, pDocument, pDocument->GetAddressConvention() );
             aRangeString = aStr;
 
             // get "total" range for positioning
-            sal_uLong nCount = aRanges.Count();
-            if ( nCount > 0 )
+            if ( !aRanges.empty() )
             {
-                aPositionRange = *aRanges.GetObject(0);
-                for (sal_uLong i=1; i<nCount; i++)
-                    aPositionRange.ExtendTo( *aRanges.GetObject(i) );
+                aPositionRange = *aRanges[ 0 ];
+                for ( size_t i = 1, nCount = aRanges.size(); i < nCount; ++i )
+                {
+                    aPositionRange.ExtendTo( *aRanges[ i ] );
+                }
             }
 
             if(bAutomaticMark)
@@ -574,7 +576,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
         MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
 
-        sal_Bool bSizeCh = sal_False;
+        sal_Bool bSizeCh = false;
         if (bDrawRect && !aMarkDest.IsEmpty())
         {
             aSize = aMarkDest.GetSize();
@@ -610,7 +612,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
                 else if ( pItem->ISA( SfxBoolItem ) )
                 {
-                    //  #46033# in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
+                    //  in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
                     //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
 
                     if ( ((const SfxBoolItem*)pItem)->GetValue() )
@@ -652,7 +654,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                 }
                 else
                 {
-                    DBG_ERROR( "Could not create new table :-/" );
+                    OSL_FAIL( "Could not create new table :-/" );
                 }
             }
             else if ( nToTable != pData->GetTabNo() )
@@ -715,7 +717,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                 {
                     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
                         xMCF->createInstanceWithContext(
-                            rtl::OUString::createFromAscii("com.sun.star.comp.chart2.WizardDialog")
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.WizardDialog"))
                             , xContext), uno::UNO_QUERY);
                     uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
                     if( xChartModel.is() && xInit.is() )
@@ -725,10 +727,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                         uno::Sequence<uno::Any> aSeq(2);
                         uno::Any* pArray = aSeq.getArray();
                         beans::PropertyValue aParam1;
-                        aParam1.Name = rtl::OUString::createFromAscii("ParentWindow");
+                        aParam1.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
                         aParam1.Value <<= uno::makeAny(xDialogParentWindow);
                         beans::PropertyValue aParam2;
-                        aParam2.Name = rtl::OUString::createFromAscii("ChartModel");
+                        aParam2.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ChartModel"));
                         aParam2.Value <<= uno::makeAny(xChartModel);
                         pArray[0] <<= uno::makeAny(aParam1);
                         pArray[1] <<= uno::makeAny(aParam2);
@@ -742,7 +744,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                             {
                                 //get dialog size:
                                 awt::Size aDialogAWTSize;
-                                if( xDialogProps->getPropertyValue( ::rtl::OUString::createFromAscii("Size") )
+                                if( xDialogProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) )
                                     >>= aDialogAWTSize )
                                 {
                                     Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
@@ -750,18 +752,18 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                                     {
                                         //calculate and set new position
                                         Point aDialogPos = pViewShell->GetChartDialogPos( aDialogSize, aRect );
-                                        xDialogProps->setPropertyValue( ::rtl::OUString::createFromAscii("Position"),
+                                        xDialogProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Position")),
                                             uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                                     }
                                 }
                                 //tell the dialog to unlock controller
-                                xDialogProps->setPropertyValue( ::rtl::OUString::createFromAscii("UnlockControllersOnExecute"),
+                                xDialogProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UnlockControllersOnExecute")),
                                             uno::makeAny( sal_True ) );
 
                             }
                             catch( uno::Exception& )
                             {
-                                OSL_ASSERT( "Chart wizard couldn't be positioned automatically\n" );
+                                OSL_FAIL( "Chart wizard couldn't be positioned automatically\n" );
                             }
                         }
 
@@ -788,7 +790,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                             bAddUndo = false;       // don't create the undo action for inserting
 
                             // leave the draw shell
-                            pViewShell->SetDrawShell( sal_False );
+                            pViewShell->SetDrawShell( false );
                         }
                         else
                         {
@@ -847,3 +849,4 @@ void FuInsertChart::Deactivate()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "prnsave.hxx"
 #include "global.hxx"
 #include "address.hxx"
@@ -49,7 +48,7 @@
 ScPrintSaverTab::ScPrintSaverTab() :
     mpRepeatCol(NULL),
     mpRepeatRow(NULL),
-    mbEntireSheet(sal_False)
+    mbEntireSheet(false)
 {
 }
 
@@ -107,13 +106,13 @@ ScPrintRangeSaver::~ScPrintRangeSaver()
 
 ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab)
 {
-    DBG_ASSERT(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
+    OSL_ENSURE(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
     return pData[nTab];
 }
 
 const ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab) const
 {
-    DBG_ASSERT(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
+    OSL_ENSURE(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
     return pData[nTab];
 }
 
@@ -124,7 +123,7 @@ sal_Bool ScPrintRangeSaver::operator==( const ScPrintRangeSaver& rCmp ) const
         for (SCTAB i=0; i<nTabCount; i++)
             if (!(pData[i]==rCmp.pData[i]))
             {
-                bEqual = sal_False;
+                bEqual = false;
                 break;
             }
     return bEqual;
@@ -133,3 +132,4 @@ sal_Bool ScPrintRangeSaver::operator==( const ScPrintRangeSaver& rCmp ) const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

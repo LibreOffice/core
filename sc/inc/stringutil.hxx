@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: table.hxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +30,41 @@
 #define SC_STRINGUTIL_HXX
 
 #include "rtl/ustring.hxx"
+#include "scdllapi.h"
+
+class SvNumberFormatter;
+
+/**
+ * Store parameters used in the ScDocument::SetString() method.  Various
+ * options for string-setting operation are specified herein.
+ */
+struct SC_DLLPUBLIC ScSetStringParam
+{
+    /**
+     * Stores the pointer to the number formatter instance to be used during
+     * number format detection.  The caller must manage the life cycle of the
+     * instance.
+     */
+    SvNumberFormatter* mpNumFormatter;
+
+    /**
+     * When true, we try to detect special number format (dates etc) from the
+     * input string, when false, we only try to detect a basic decimal number
+     * format.
+     */
+    bool mbDetectNumberFormat;
+
+    /**
+     * When true, set the format of the cell to Text when a string cell is
+     * requested for a number input.  We may want to do this during text file
+     * import (csv, html etc).
+     */
+    bool mbSetTextCellFormat;
+
+    ScSetStringParam();
+};
+
+// ============================================================================
 
 class ScStringUtil
 {
@@ -40,6 +73,8 @@ public:
      * Check if a given string is a simple decimal number (e.g. 12.345). We
      * don't do any elaborate parsing here; we only check for the simplest
      * case of decimal number format.
+     *
+     * Note that preceding and trailing spaces are ignored during parsing.
      *
      * @param rStr string to parse
      * @param dsep decimal separator
@@ -54,3 +89,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

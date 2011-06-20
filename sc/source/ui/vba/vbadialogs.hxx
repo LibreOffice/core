@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,6 +45,7 @@ public:
 
     // XCollection
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException);
 
     // XDialogs
     virtual void SAL_CALL Dummy() throw (css::uno::RuntimeException);
@@ -53,3 +55,5 @@ public:
 };
 
 #endif /* SC_VBA_DIALOGS_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

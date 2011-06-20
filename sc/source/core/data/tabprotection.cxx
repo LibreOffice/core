@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,25 +32,31 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "tabprotection.hxx"
-#include "tools/debug.hxx"
 #include "svl/PasswordHelper.hxx"
 #include <comphelper/docpasswordhelper.hxx>
 #include "document.hxx"
 
+#include <vector>
+
 #define DEBUG_TAB_PROTECTION 0
+
+#define URI_SHA1 "http://www.w3.org/2000/09/xmldsig#sha1"
+#define URI_XLS_LEGACY "http://docs.oasis-open.org/office/ns/table/legacy-hash-excel"
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::std::vector;
 
 // ============================================================================
 
-bool ScPassHashHelper::needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash)
+bool ScPassHashHelper::needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2)
 {
     if (rDoc.IsDocProtected())
     {
         const ScDocProtection* p = rDoc.GetDocProtection();
-        if (!p->isPasswordEmpty() && !p->hasPasswordHash(eHash))
+        if (!p->isPasswordEmpty() && !p->hasPasswordHash(eHash1, eHash2))
             return true;
     }
 
@@ -61,11 +68,35 @@ bool ScPassHashHelper::needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash
             // Sheet not protected.  Skip it.
             continue;
 
-        if (!p->isPasswordEmpty() && !p->hasPasswordHash(eHash))
+        if (!p->isPasswordEmpty() && !p->hasPasswordHash(eHash1, eHash2))
             return true;
     }
 
     return false;
+}
+
+OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
+{
+    switch (eHash)
+    {
+        case PASSHASH_SHA1:
+            return OUString(RTL_CONSTASCII_USTRINGPARAM(URI_SHA1));
+        case PASSHASH_XL:
+            return OUString(RTL_CONSTASCII_USTRINGPARAM(URI_XLS_LEGACY));
+        case PASSHASH_UNSPECIFIED:
+        default:
+            ;
+    }
+    return OUString();
+}
+
+ScPasswordHash ScPassHashHelper::getHashTypeFromURI(const OUString& rURI)
+{
+    if (rURI.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URI_SHA1)))
+        return PASSHASH_SHA1;
+    else if (rURI.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URI_XLS_LEGACY)))
+        return PASSHASH_XL;
+    return PASSHASH_UNSPECIFIED;
 }
 
 // ============================================================================
@@ -79,7 +110,8 @@ ScPassHashProtectable::~ScPassHashProtectable()
 class ScTableProtectionImpl
 {
 public:
-    static ::com::sun::star::uno::Sequence<sal_Int8> hashPassword(const String& aPassText, ScPasswordHash eHash = PASSHASH_OOO);
+    static Sequence<sal_Int8> hashPassword(const String& aPassText, ScPasswordHash eHash = PASSHASH_SHA1);
+    static Sequence<sal_Int8> hashPassword(const Sequence<sal_Int8>& rPassHash, ScPasswordHash eHash = PASSHASH_SHA1);
 
     explicit ScTableProtectionImpl(SCSIZE nOptSize);
     explicit ScTableProtectionImpl(const ScTableProtectionImpl& r);
@@ -89,10 +121,13 @@ public:
     void setProtected(bool bProtected);
 
     bool isPasswordEmpty() const;
-    bool hasPasswordHash(ScPasswordHash eHash) const;
+    bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const;
     void setPassword(const String& aPassText);
-    ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(ScPasswordHash eHash) const;
-    void setPasswordHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash = PASSHASH_OOO);
+    ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
+        ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const;
+    void setPasswordHash(
+        const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
+        ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED);
     bool verifyPassword(const String& aPassText) const;
 
     bool isOptionEnabled(SCSIZE nOptId) const;
@@ -104,7 +139,8 @@ private:
     ::std::vector<bool> maOptions;
     bool mbEmptyPass;
     bool mbProtected;
-    ScPasswordHash meHash;
+    ScPasswordHash meHash1;
+    ScPasswordHash meHash2;
 };
 
 Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(const String& aPassText, ScPasswordHash eHash)
@@ -115,19 +151,44 @@ Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(const String& aPassText, 
         case PASSHASH_XL:
             aHash = ::comphelper::DocPasswordHelper::GetXLHashAsSequence( aPassText, RTL_TEXTENCODING_UTF8 );
         break;
-        case PASSHASH_OOO:
-        default:
+        case PASSHASH_SHA1:
             SvPasswordHelper::GetHashPassword(aHash, aPassText);
         break;
+        default:
+            ;
     }
     return aHash;
+}
+
+Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(
+    const Sequence<sal_Int8>& rPassHash, ScPasswordHash eHash)
+{
+    if (!rPassHash.getLength() || eHash == PASSHASH_UNSPECIFIED)
+        return rPassHash;
+
+    // TODO: Right now, we only support double-hash by SHA1.
+    if (eHash == PASSHASH_SHA1)
+    {
+        vector<sal_Char> aChars;
+        sal_Int32 n = rPassHash.getLength();
+        aChars.reserve(n);
+        for (sal_Int32 i = 0; i < n; ++i)
+            aChars.push_back(static_cast<sal_Char>(rPassHash[i]));
+
+        Sequence<sal_Int8> aNewHash;
+        SvPasswordHelper::GetHashPassword(aNewHash, &aChars[0], aChars.size());
+        return aNewHash;
+    }
+
+    return rPassHash;
 }
 
 ScTableProtectionImpl::ScTableProtectionImpl(SCSIZE nOptSize) :
     maOptions(nOptSize),
     mbEmptyPass(true),
     mbProtected(false),
-    meHash(PASSHASH_OOO)
+    meHash1(PASSHASH_SHA1),
+    meHash2(PASSHASH_UNSPECIFIED)
 {
 }
 
@@ -137,7 +198,8 @@ ScTableProtectionImpl::ScTableProtectionImpl(const ScTableProtectionImpl& r) :
     maOptions(r.maOptions),
     mbEmptyPass(r.mbEmptyPass),
     mbProtected(r.mbProtected),
-    meHash(r.meHash)
+    meHash1(r.meHash1),
+    meHash2(r.meHash2)
 {
 }
 
@@ -181,7 +243,7 @@ bool ScTableProtectionImpl::isPasswordEmpty() const
     return mbEmptyPass;
 }
 
-bool ScTableProtectionImpl::hasPasswordHash(ScPasswordHash eHash) const
+bool ScTableProtectionImpl::hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const
 {
     if (mbEmptyPass)
         return true;
@@ -189,35 +251,65 @@ bool ScTableProtectionImpl::hasPasswordHash(ScPasswordHash eHash) const
     if (maPassText.Len())
         return true;
 
-    if (meHash == eHash)
-        return true;
+    if (meHash1 == eHash)
+    {
+        if (meHash2 == PASSHASH_UNSPECIFIED)
+            // single hash.
+            return true;
+
+        return meHash2 == eHash2;
+    }
 
     return false;
 }
 
-Sequence<sal_Int8> ScTableProtectionImpl::getPasswordHash(ScPasswordHash eHash) const
+Sequence<sal_Int8> ScTableProtectionImpl::getPasswordHash(
+    ScPasswordHash eHash, ScPasswordHash eHash2) const
 {
+    Sequence<sal_Int8> aPassHash;
+
     if (mbEmptyPass)
         // Flaged as empty.
-        return Sequence<sal_Int8>();
+        return aPassHash;
 
     if (maPassText.Len())
+    {
         // Cleartext password exists.  Hash it.
-        return hashPassword(maPassText, eHash);
+        aPassHash = hashPassword(maPassText, eHash);
+        if (eHash2 != PASSHASH_UNSPECIFIED)
+            // Double-hash it.
+            aPassHash = hashPassword(aPassHash, eHash2);
 
-    if (meHash == eHash)
-        // Stored hash exists.
-        return maPassHash;
+        return aPassHash;
+    }
+    else
+    {
+        // No clear text password.  Check if we have a hash value of the right hash type.
+        if (meHash1 == eHash)
+        {
+            aPassHash = maPassHash;
 
-    // Failed to find a matching hash.
+            if (meHash2 == eHash2)
+                // Matching double-hash requested.
+                return aPassHash;
+            else if (meHash2 == PASSHASH_UNSPECIFIED)
+                // primary hashing type match.  Double hash it by the requested
+                // double-hash type.
+                return hashPassword(aPassHash, eHash2);
+        }
+    }
+
+    // failed.
     return Sequence<sal_Int8>();
 }
 
-void ScTableProtectionImpl::setPasswordHash(const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash)
+void ScTableProtectionImpl::setPasswordHash(
+    const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
 {
     sal_Int32 nLen = aPassword.getLength();
     mbEmptyPass = nLen <= 0 ? true : false;
-    meHash = eHash;
+    meHash1 = eHash;
+    meHash2 = eHash2;
     maPassHash = aPassword;
 
 #if DEBUG_TAB_PROTECTION
@@ -241,7 +333,8 @@ bool ScTableProtectionImpl::verifyPassword(const String& aPassText) const
         // Clear text password exists, and this one takes precedence.
         return aPassText.Equals(maPassText);
 
-    Sequence<sal_Int8> aHash = hashPassword(aPassText, meHash);
+    Sequence<sal_Int8> aHash = hashPassword(aPassText, meHash1);
+    aHash = hashPassword(aHash, meHash2);
 
 #if DEBUG_TAB_PROTECTION
     fprintf(stdout, "ScTableProtectionImpl::verifyPassword: hash = ");
@@ -257,7 +350,7 @@ bool ScTableProtectionImpl::isOptionEnabled(SCSIZE nOptId) const
 {
     if ( maOptions.size() <= static_cast<size_t>(nOptId) )
     {
-        DBG_ERROR("ScTableProtectionImpl::isOptionEnabled: wrong size");
+        OSL_FAIL("ScTableProtectionImpl::isOptionEnabled: wrong size");
         return false;
     }
 
@@ -268,7 +361,7 @@ void ScTableProtectionImpl::setOption(SCSIZE nOptId, bool bEnabled)
 {
     if ( maOptions.size() <= static_cast<size_t>(nOptId) )
     {
-        DBG_ERROR("ScTableProtectionImpl::setOption: wrong size");
+        OSL_FAIL("ScTableProtectionImpl::setOption: wrong size");
         return;
     }
 
@@ -317,9 +410,9 @@ bool ScDocProtection::isPasswordEmpty() const
     return mpImpl->isPasswordEmpty();
 }
 
-bool ScDocProtection::hasPasswordHash(ScPasswordHash eHash) const
+bool ScDocProtection::hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const
 {
-    return mpImpl->hasPasswordHash(eHash);
+    return mpImpl->hasPasswordHash(eHash, eHash2);
 }
 
 void ScDocProtection::setPassword(const String& aPassText)
@@ -327,14 +420,15 @@ void ScDocProtection::setPassword(const String& aPassText)
     mpImpl->setPassword(aPassText);
 }
 
-uno::Sequence<sal_Int8> ScDocProtection::getPasswordHash(ScPasswordHash eHash) const
+uno::Sequence<sal_Int8> ScDocProtection::getPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const
 {
-    return mpImpl->getPasswordHash(eHash);
+    return mpImpl->getPasswordHash(eHash, eHash2);
 }
 
-void ScDocProtection::setPasswordHash(const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash)
+void ScDocProtection::setPasswordHash(
+    const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
 {
-    mpImpl->setPasswordHash(aPassword, eHash);
+    mpImpl->setPasswordHash(aPassword, eHash, eHash2);
 }
 
 bool ScDocProtection::verifyPassword(const String& aPassText) const
@@ -392,9 +486,9 @@ bool ScTableProtection::isPasswordEmpty() const
     return mpImpl->isPasswordEmpty();
 }
 
-bool ScTableProtection::hasPasswordHash(ScPasswordHash eHash) const
+bool ScTableProtection::hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const
 {
-    return mpImpl->hasPasswordHash(eHash);
+    return mpImpl->hasPasswordHash(eHash, eHash2);
 }
 
 void ScTableProtection::setPassword(const String& aPassText)
@@ -402,14 +496,15 @@ void ScTableProtection::setPassword(const String& aPassText)
     mpImpl->setPassword(aPassText);
 }
 
-Sequence<sal_Int8> ScTableProtection::getPasswordHash(ScPasswordHash eHash) const
+Sequence<sal_Int8> ScTableProtection::getPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const
 {
-    return mpImpl->getPasswordHash(eHash);
+    return mpImpl->getPasswordHash(eHash, eHash2);
 }
 
-void ScTableProtection::setPasswordHash(const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash)
+void ScTableProtection::setPasswordHash(
+    const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
 {
-    mpImpl->setPasswordHash(aPassword, eHash);
+    mpImpl->setPasswordHash(aPassword, eHash, eHash2);
 }
 
 bool ScTableProtection::verifyPassword(const String& aPassText) const
@@ -426,4 +521,4 @@ void ScTableProtection::setOption(Option eOption, bool bEnabled)
 {
     mpImpl->setOption(eOption, bEnabled);
 }
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

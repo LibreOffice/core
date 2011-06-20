@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,9 +51,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-// for storing/reading the position and size of the dialog
-// #include <svtools/viewoptions.hxx>
-
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
@@ -71,8 +69,7 @@ DataEditor::DataEditor(
         m_aTbxData( this, SchResId( TBX_DATA )),
         m_xChartDoc( xChartDoc ),
         m_xContext( xContext ),
-        m_aToolboxImageList( SchResId( IL_DIAGRAM_DATA )),
-        m_aToolboxImageListHighContrast( SchResId( IL_HC_DIAGRAM_DATA ))
+        m_aToolboxImageList( SchResId( IL_DIAGRAM_DATA ))
 {
     FreeResource();
 
@@ -97,7 +94,7 @@ DataEditor::DataEditor(
         bReadOnly = xStor->isReadonly();
     SetReadOnly( bReadOnly );
 
-    // #101228# change buttons to flat-look if set so by user
+    // change buttons to flat-look if set so by user
     SvtMiscOptions aMiscOptions;
     const sal_Int16 nStyle( aMiscOptions.GetToolboxStyle() );
     // react on changes
@@ -117,8 +114,6 @@ DataEditor::DataEditor(
     aWinSize.setWidth( nWindowWidth );
     SetOutputSizePixel( aWinSize );
     AdaptBrowseBoxSize();
-
-//     ImplAdjustHeaderControls( false /* bRefreshFromModel */ );
 
     // allow travelling to toolbar with F6
     notifySystemWindow( this, & m_aTbxData, ::comphelper::mem_fun( & TaskPaneList::AddWindow ));
@@ -218,82 +213,10 @@ IMPL_LINK( DataEditor, CellModified, void*, EMPTYARG )
     return 0;
 }
 
-// IMPL_LINK( DataEditor, BrowserColumnResized, void*, EMPTYARG )
-// {
-//     ImplAdjustHeaderControls( false /* bRefreshFromModel */ );
-//     return 0;
-// }
-
-// IMPL_LINK( DataEditor, BrowserContentScrolled, void*, EMPTYARG )
-// {
-//     ImplAdjustHeaderControls( false /* bRefreshFromModel */ );
-//     return 0;
-// }
-
 void DataEditor::UpdateData()
 {
     m_apBrwData->SetDataFromModel( m_xChartDoc, m_xContext );
 }
-
-// react on the change of the underlying document by displaying the new data
-// void DataEditor::SFX_NOTIFY(
-//     SfxBroadcaster& rBC,
-//     const TypeId& rBCType,
-//     const SfxHint& rHint,
-//     const TypeId& rHintType )
-// {
-//     if( rHint.Type() == TYPE(SfxSimpleHint) )
-//     {
-//         // note: if dynamic_cast works this should be changed
-//         switch( static_cast< const SfxSimpleHint & >( rHint ).GetId())
-//         {
-//             case SFX_HINT_DOCCHANGED:
-//                 UpdateData();
-//                 break;
-
-//             case SFX_HINT_DYING:
-//                 break;
-//         }
-//     }
-// }
-
-// {
-//     sal_Bool bRet = sal_True;
-
-//     // confirm changes currently made and not saved
-//     m_apBrwData->EndEditing();
-
-//     if( m_apBrwData->IsDirty() )
-//     {
-//         QueryBox aSafetyQuery( this, WB_YES_NO_CANCEL | WB_DEF_YES,
-//                                String( SchResId( STR_DIAGRAM_DATA_SAFETY_QUERY )));
-//         long nQueryResult = aSafetyQuery.Execute();
-
-//         bRet = ( nQueryResult != RET_CANCEL );
-
-//         if( nQueryResult == RET_YES )
-//         {
-//             // save changes
-//             ApplyChangesToModel();
-//         }
-//     }
-
-//     if( bRet )
-//     {
-//         // close child window
-//         SfxBoolItem aItem( SID_DIAGRAM_DATA, sal_False );
-//         if( m_pBindings )
-//         {
-//             SfxDispatcher* pDisp = m_pBindings->GetDispatcher();
-//             if( pDisp )
-//                 pDisp->Execute( SID_DIAGRAM_DATA, SFX_CALLMODE_ASYNCHRON, &aItem, 0L);
-//             else
-//                 DBG_ERROR( "Couldn't dispatch command" );
-//         }
-//     }
-
-//     return ( bRet? SfxFloatingWindow::Close(): sal_False );
-// }
 
 void DataEditor::AdaptBrowseBoxSize()
 {
@@ -310,7 +233,6 @@ void DataEditor::Resize()
 {
     Dialog::Resize();
     AdaptBrowseBoxSize();
-//     ImplAdjustHeaderControls( false /* bRefreshFromModel */ );
 }
 
 sal_Bool DataEditor::Close()
@@ -329,13 +251,7 @@ bool DataEditor::ApplyChangesToModel()
 // sets the correct toolbar icons depending on the current mode (e.g. high contrast)
 void DataEditor::ApplyImageList()
 {
-    bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
-
-    ImageList& rImgLst = bIsHighContrast
-        ? m_aToolboxImageListHighContrast
-        : m_aToolboxImageList;
-
-    m_aTbxData.SetImageList( rImgLst );
+    m_aTbxData.SetImageList( m_aToolboxImageList );
 }
 
 // add/remove a window (the toolbar) to/from the global list, so that F6
@@ -361,3 +277,5 @@ void DataEditor::notifySystemWindow(
 }
 
 } // namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,15 +106,12 @@ static SCSIZE initSlotDistribution( ScSlotDistribution & rSD, SCSIZE & rBSR )
     // Must be sorted by row1,row2!
     while (nRow2 <= MAXROWCOUNT)
     {
-        //fprintf( stderr, "r1,r2,slice,cum: %7zu, %7zu, %7zu, %7zu\n", (size_t)nRow1, (size_t)nRow2, (size_t)nSlice, (size_t)nSlots);
-        // {0,32k,128,0;32k,64k,256,0+256;64k,128k,512,0+256+128;128k,256k,1024,0+256+128+128;256k,512k,2048,...;512k,1M,4096,...}
         rSD.push_back( ScSlotData( nRow1, nRow2, nSlice, nSlots));
         nSlots += (nRow2 - nRow1) / nSlice;
         nRow1 = nRow2;
         nRow2 *= 2;
         nSlice *= 2;
     }
-    //fprintf( stderr, "Slices: %zu, slots per sheet: %zu, memory per referenced sheet: %zu\n", (size_t) nSlots, (size_t) nSlots * BCA_SLOTS_COL, (size_t) nSlots * BCA_SLOTS_COL * sizeof(void*));
     rBSR = nSlots;
     return nSlots;
 }
@@ -142,7 +140,7 @@ ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
         // deleted.
         ScBroadcastArea* pArea = *aIter;
         // Erase all so no hash will be accessed upon destruction of the
-        // hash_set.
+        // boost::unordered_map.
         aBroadcastAreaTbl.erase( aIter++);
         if (!pArea->DecRef())
             delete pArea;
@@ -161,12 +159,12 @@ bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
             pDoc->SetHardRecalcState( 1 );
 
             SfxObjectShell* pShell = pDoc->GetDocumentShell();
-            DBG_ASSERT( pShell, "Missing DocShell :-/" );
+            OSL_ENSURE( pShell, "Missing DocShell :-/" );
 
             if ( pShell )
                 pShell->SetError( SCWARN_CORE_HARD_RECALC, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
-            pDoc->SetAutoCalc( sal_False );
+            pDoc->SetAutoCalc( false );
             pDoc->SetHardRecalcState( 2 );
         }
         return true;
@@ -179,7 +177,7 @@ bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
         SvtListener* pListener, ScBroadcastArea*& rpArea )
 {
     bool bNewArea = false;
-    DBG_ASSERT(pListener, "StartListeningArea: pListener Null");
+    OSL_ENSURE(pListener, "StartListeningArea: pListener Null");
     if (CheckHardRecalcStateCondition())
         return false;
     if ( !rpArea )
@@ -201,7 +199,7 @@ bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
             }
             else
             {
-                DBG_ERRORFILE("StartListeningArea: area not found and not inserted in slot?!?");
+                OSL_FAIL("StartListeningArea: area not found and not inserted in slot?!?");
                 delete rpArea;
                 rpArea = 0;
             }
@@ -220,7 +218,7 @@ bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
 
 void ScBroadcastAreaSlot::InsertListeningArea( ScBroadcastArea* pArea )
 {
-    DBG_ASSERT( pArea, "InsertListeningArea: pArea NULL");
+    OSL_ENSURE( pArea, "InsertListeningArea: pArea NULL");
     if (CheckHardRecalcStateCondition())
         return;
     if (aBroadcastAreaTbl.insert( pArea).second)
@@ -233,7 +231,7 @@ void ScBroadcastAreaSlot::InsertListeningArea( ScBroadcastArea* pArea )
 void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
         SvtListener* pListener, ScBroadcastArea*& rpArea )
 {
-    DBG_ASSERT(pListener, "EndListeningArea: pListener Null");
+    OSL_ENSURE(pListener, "EndListeningArea: pListener Null");
     if ( !rpArea )
     {
         ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange));
@@ -258,7 +256,7 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
             ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange));
             if (aIter == aBroadcastAreaTbl.end())
                 return;
-            DBG_ASSERT( *aIter == rpArea, "EndListeningArea: area pointer mismatch");
+            OSL_ENSURE( *aIter == rpArea, "EndListeningArea: area pointer mismatch");
             aBroadcastAreaTbl.erase( aIter);
             if ( !rpArea->DecRef() )
             {
@@ -281,8 +279,8 @@ ScBroadcastAreas::iterator ScBroadcastAreaSlot::FindBroadcastArea(
 sal_Bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
 {
     if (aBroadcastAreaTbl.empty())
-        return sal_False;
-    sal_Bool bIsBroadcasted = sal_False;
+        return false;
+    sal_Bool bIsBroadcasted = false;
     const ScAddress& rAddress = rHint.GetAddress();
     for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
             aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
@@ -310,8 +308,8 @@ sal_Bool ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
         const ScHint& rHint) const
 {
     if (aBroadcastAreaTbl.empty())
-        return sal_False;
-    sal_Bool bIsBroadcasted = sal_False;
+        return false;
+    sal_Bool bIsBroadcasted = false;
     for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
             aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
     {
@@ -410,7 +408,7 @@ void ScBroadcastAreaSlot::UpdateRemoveArea( ScBroadcastArea* pArea )
     if (aIter == aBroadcastAreaTbl.end())
         return;
     if (*aIter != pArea)
-        DBG_ERRORFILE( "UpdateRemoveArea: area pointer mismatch");
+        OSL_FAIL( "UpdateRemoveArea: area pointer mismatch");
     else
     {
         aBroadcastAreaTbl.erase( aIter);
@@ -492,7 +490,7 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
     SCCOL nCol = rAddress.Col();
     if ( !ValidRow(nRow) || !ValidCol(nCol) )
     {
-        DBG_ERRORFILE( "Row/Col invalid, using first slot!" );
+        OSL_FAIL( "Row/Col invalid, using first slot!" );
         return 0;
     }
     for (size_t i=0; i < aSlotDistribution.size(); ++i)
@@ -505,7 +503,7 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
                 static_cast<SCSIZE>(nCol) / BCA_SLOT_COLS * nBcaSlotsRow;
         }
     }
-    DBG_ERRORFILE( "No slot found, using last!" );
+    OSL_FAIL( "No slot found, using last!" );
     return nBcaSlots - 1;
 }
 
@@ -542,7 +540,6 @@ inline void ComputeNextSlot( SCSIZE & nOff, SCSIZE & nBreak, ScBroadcastAreaSlot
 void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
         SvtListener* pListener )
 {
-    //fprintf( stderr, "StartListeningArea (c,r,t): %d, %d, %d, %d, %d, %d\n", (int)rRange.aStart.Col(), (int)rRange.aStart.Row(), (int)rRange.aStart.Tab(), (int)rRange.aEnd.Col(), (int)rRange.aEnd.Row(), (int)rRange.aEnd.Tab());
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
         if ( !pBCAlways )
@@ -591,10 +588,8 @@ void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
 void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
         SvtListener* pListener )
 {
-    //fprintf( stderr, "EndListeningArea (c,r,t): %d, %d, %d, %d, %d, %d\n", (int)rRange.aStart.Col(), (int)rRange.aStart.Row(), (int)rRange.aStart.Tab(), (int)rRange.aEnd.Col(), (int)rRange.aEnd.Row(), (int)rRange.aEnd.Tab());
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
-        DBG_ASSERT( pBCAlways, "ScBroadcastAreaSlotMachine::EndListeningArea: BCA_LISTEN_ALWAYS but none established");
         if ( pBCAlways )
         {
             pListener->EndListening( *pBCAlways);
@@ -654,19 +649,19 @@ sal_Bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
             return sal_True;
         }
         else
-            return sal_False;
+            return false;
     }
     else
     {
         TableSlotsMap::const_iterator iTab( aTableSlotsMap.find( rAddress.Tab()));
         if (iTab == aTableSlotsMap.end())
-            return sal_False;
+            return false;
         ScBroadcastAreaSlot* pSlot = (*iTab).second->getAreaSlot(
                 ComputeSlotOffset( rAddress));
         if ( pSlot )
             return pSlot->AreaBroadcast( rHint );
         else
-            return sal_False;
+            return false;
     }
 }
 
@@ -674,7 +669,7 @@ sal_Bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
 sal_Bool ScBroadcastAreaSlotMachine::AreaBroadcastInRange( const ScRange& rRange,
         const ScHint& rHint ) const
 {
-    sal_Bool bBroadcasted = sal_False;
+    sal_Bool bBroadcasted = false;
     SCTAB nEndTab = rRange.aEnd.Tab();
     for (TableSlotsMap::const_iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
             iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
@@ -785,7 +780,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
             if (iTab == aTableSlotsMap.end())
             {
-                DBG_ERRORFILE( "UpdateBroadcastAreas: Where's the TableSlot?!?");
+                OSL_FAIL( "UpdateBroadcastAreas: Where's the TableSlot?!?");
                 continue;   // for
             }
             ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
@@ -898,7 +893,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
 
         // unchain
         pArea->SetUpdateChainNext( NULL );
-        pArea->SetInUpdateChain( sal_False );
+        pArea->SetInUpdateChain( false );
 
         // Delete if not inserted to any slot. RemoveBulkArea(pArea) was
         // already executed in UpdateRemove().
@@ -935,3 +930,5 @@ size_t ScBroadcastAreaSlotMachine::RemoveBulkArea( const ScBroadcastArea* pArea 
 {
     return aBulkBroadcastAreas.erase( pArea );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

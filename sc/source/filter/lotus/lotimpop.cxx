@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "lotimpop.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "attrib.hxx"
 #include "document.hxx"
@@ -48,13 +49,13 @@
 #include "lotattr.hxx"
 
 
-static vos:: OMutex         aLotImpSemaphore;
+static osl::Mutex aLotImpSemaphore;
 
 
 ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, CharSet eQ ) :
     ImportTyp( pDoc, eQ ),
     pIn( &aStream ),
-    aConv( *pIn, eQ, sal_False )
+    aConv( *pIn, eQ, false )
 {
     // good point to start locking of import lotus
     aLotImpSemaphore.acquire();
@@ -80,7 +81,7 @@ ImportLotus::~ImportLotus()
     delete pLotusRoot->pAttrTable;
     delete pLotusRoot;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     pLotusRoot = NULL;
 #endif
 
@@ -130,7 +131,7 @@ sal_Bool ImportLotus::BofFm3( void )
 
 void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 {
-    DBG_ASSERT( nRecLen >= 4, "*ImportLotus::Columnwidth(): Record zu kurz!" );
+    OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Columnwidth(): Record zu kurz!" );
 
     sal_uInt8    nLTab, nWindow2;
     sal_uInt16  nCnt = ( nRecLen - 4 ) / 2;
@@ -162,7 +163,7 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 
 void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
 {
-    DBG_ASSERT( nRecLen >= 4, "*ImportLotus::Hiddencolumn(): Record zu kurz!" );
+    OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Hiddencolumn(): Record zu kurz!" );
 
     sal_uInt8    nLTab, nWindow2;
     sal_uInt16  nCnt = ( nRecLen - 4 ) / 2;
@@ -270,7 +271,7 @@ void ImportLotus::Smallnumcell( void )
 
 ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
     {
-    DBG_ASSERT( pIn, "-ImportLotus::Formulacell(): Null-Stream -> Rums!" );
+    OSL_ENSURE( pIn, "-ImportLotus::Formulacell(): Null-Stream -> Rums!" );
 
     ScAddress           aAddr;
 
@@ -304,7 +305,7 @@ void ImportLotus::Read( String &r )
 
 void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
 {
-    DBG_ASSERT( nRecLen > 4, "*ImportLotus::RowPresentation(): Record zu kurz!" );
+    OSL_ENSURE( nRecLen > 4, "*ImportLotus::RowPresentation(): Record zu kurz!" );
 
     sal_uInt8    nLTab, nFlags;
     sal_uInt16  nRow, nHeight;
@@ -400,7 +401,7 @@ void ImportLotus::Font_Ysize( void )
 
 void ImportLotus::_Row( const sal_uInt16 nRecLen )
     {
-    DBG_ASSERT( nExtTab >= 0, "*ImportLotus::_Row(): Kann hier nicht sein!" );
+    OSL_ENSURE( nExtTab >= 0, "*ImportLotus::_Row(): Kann hier nicht sein!" );
 
     sal_uInt16          nRow;
     sal_uInt16          nHeight;
@@ -409,7 +410,7 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
     sal_uInt8           nRepeats;
     LotAttrWK3      aAttr;
 
-    sal_Bool            bCenter = sal_False;
+    sal_Bool            bCenter = false;
     SCCOL           nCenterStart = 0, nCenterEnd = 0;
 
     Read( nRow );
@@ -455,7 +456,7 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
             if( bCenter )
                 {// evtl. alte Center bemachen
                 pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
-                bCenter = sal_False;
+                bCenter = false;
                 }
             }
 
@@ -471,3 +472,4 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
     }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

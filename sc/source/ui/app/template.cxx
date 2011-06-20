@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@ ScTemplateDlg::ScTemplateDlg(Window * pParent, sal_uInt16 nAppResource) :
 
 //------------------------------------------------------------------------
 
-__EXPORT ScTemplateDlg::~ScTemplateDlg()
+ScTemplateDlg::~ScTemplateDlg()
 {
 }
 
@@ -77,3 +78,4 @@ void ScTemplateDlg::ToggleApplyTemplate()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

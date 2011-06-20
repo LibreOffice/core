@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <vcl/waitobj.hxx>
 
 #include "uiitems.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "reffact.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
@@ -54,6 +55,9 @@
 #include "filtdlg.hxx"
 #undef _FILTDLG_CXX
 #include <vcl/msgbox.hxx>
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // DEFINE --------------------------------------------------------------------
 
@@ -114,66 +118,67 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         pDoc            ( NULL ),
         nSrcTab         ( 0 ),
         nFieldCount     ( 0 ),
-        bRefInputMode   ( sal_False ),
+        bRefInputMode   ( false ),
         pTimer          ( NULL )
 {
     for (sal_uInt16 i=0; i<=MAXCOL; i++)
         pEntryLists[i] = NULL;
     for (SCSIZE i=0;i<MAXQUERY;i++)
     {
-         bRefreshExceptQuery[i]=sal_False;
+         bRefreshExceptQuery[i]=false;
     }
     aBtnMore.SetMoreText( String(ScResId( SCSTR_MOREBTN_MOREOPTIONS )) );
     aBtnMore.SetLessText( String(ScResId( SCSTR_MOREBTN_FEWEROPTIONS )) );
     Init( rArgSet );
     FreeResource();
 
-    // Hack: RefInput-Kontrolle
+    // Hack: RefInput control
     pTimer = new Timer;
-    pTimer->SetTimeout( 50 ); // 50ms warten
+    pTimer->SetTimeout( 50 ); // Wait 50ms
     pTimer->SetTimeoutHdl( LINK( this, ScFilterDlg, TimeOutHdl ) );
 
-    String sAccName (ScResId(RID_FILTER_OPERATOR));
-    String sIndexName(sAccName);
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
-    aLbConnect1.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
-    aLbConnect2.SetAccessibleName(sIndexName);
+    OUStringBuffer aBuf;
 
-    sAccName = String(ScResId(RID_FILTER_FIELDNAME));
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
-    aLbField1.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
-    aLbField2.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 3"));
-    aLbField3.SetAccessibleName(sIndexName);
+    OUString sAccName = ResId::toString(ScResId(RID_FILTER_OPERATOR));
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aLbConnect1.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aLbConnect2.SetAccessibleName(aBuf.makeStringAndClear());
 
+    sAccName = ResId::toString(ScResId(RID_FILTER_FIELDNAME));
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aLbField1.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aLbField2.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aLbField3.SetAccessibleName(aBuf.makeStringAndClear());
 
-    sAccName = String(ScResId(RID_FILTER_CONDITION));
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
-    aLbCond1.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
-    aLbCond2.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 3"));
-    aLbCond3.SetAccessibleName(sIndexName);
+    sAccName = ResId::toString(ScResId(RID_FILTER_CONDITION));
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aLbCond1.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aLbCond2.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aLbCond3.SetAccessibleName(aBuf.makeStringAndClear());
 
-    sAccName = String(ScResId(RID_FILTER_VALUE));
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
-    aEdVal1.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
-    aEdVal2.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 3"));
-    aEdVal3.SetAccessibleName(sIndexName);
+    sAccName = ResId::toString(ScResId(RID_FILTER_VALUE));
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aEdVal1.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aEdVal2.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aEdVal3.SetAccessibleName(aBuf.makeStringAndClear());
 
     aLbCopyArea.SetAccessibleName(ScResId(STR_COPY_AREA_TO));
     aEdCopyArea.SetAccessibleName(ScResId(STR_COPY_AREA_TO));
@@ -196,7 +201,7 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScFilterDlg::~ScFilterDlg()
+ScFilterDlg::~ScFilterDlg()
 {
     for (sal_uInt16 i=0; i<=MAXCOL; i++)
         delete pEntryLists[i];
@@ -204,7 +209,7 @@ __EXPORT ScFilterDlg::~ScFilterDlg()
     delete pOptionsMgr;
     delete pOutItem;
 
-    // Hack: RefInput-Kontrolle
+    // Hack: RefInput control
     pTimer->Stop();
     delete pTimer;
 }
@@ -212,7 +217,7 @@ __EXPORT ScFilterDlg::~ScFilterDlg()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
+void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 {
     const ScQueryItem& rQueryItem = (const ScQueryItem&)
                                     rArgSet.Get( nWhichQuery );
@@ -241,7 +246,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
     pDoc        = pViewData ? pViewData->GetDocument() : NULL;
     nSrcTab     = pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
 
-    // fuer leichteren Zugriff:
+    // for easier access:
     aFieldLbArr  [0] = &aLbField1;
     aFieldLbArr  [1] = &aLbField2;
     aFieldLbArr  [2] = &aLbField3;
@@ -259,7 +264,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
     aConnLbArr   [2] = &aLbConnect3;
     aConnLbArr   [3] = &aLbConnect4;
 
-    // Optionen initialisieren lassen:
+    // Option initialization:
 
     pOptionsMgr  = new ScFilterOptionsMgr(
                             this,
@@ -281,7 +286,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
                             aStrNoName,
                             aStrUndefined );
 
-    // Feldlisten einlesen und Eintraege selektieren:
+    // Read in field lists and select entries
 
     FillFieldLists();
 
@@ -321,6 +326,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
         aFieldLbArr[i]->SelectEntryPos( nFieldSelPos );
         aCondLbArr [i]->SelectEntryPos( nCondPos );
         aValueEdArr[i]->SetText( aValStr );
+        aValueEdArr[i]->EnableAutocomplete( sal_False );
         aValueEdArr[i]->SetModifyHdl( LINK( this, ScFilterDlg, ValModifyHdl ) );
         UpdateValueList( static_cast<sal_uInt16>(i+1) );
     }
@@ -331,7 +337,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
     aScrollBar.SetRange( Range( 0, 4 ) );
     aScrollBar.SetLineSize( 1 );
     aLbConnect1.Hide();
-    // Disable/Enable Logik:
+    // Disable/Enable Logic:
 
        (aLbField1.GetSelectEntryPos() != 0)
     && (aLbField2.GetSelectEntryPos() != 0)
@@ -390,16 +396,16 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     if(pDoc!=NULL &&
         pDoc->GetChangeTrack()!=NULL) aBtnCopyResult.Disable();
-    // Modal-Modus einschalten
+    // Switch on modal mode
 //  SetDispatcherLock( sal_True );
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-//  SFX_APPWINDOW->Disable(sal_False);      //! allgemeine Methode im ScAnyRefDlg
+    //@BugID 54702 Enable/disable only in Basic class
+//  SFX_APPWINDOW->Disable(sal_False);      //! general method in ScAnyRefDlg
 }
 
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScFilterDlg::Close()
+sal_Bool ScFilterDlg::Close()
 {
     if (pViewData)
         pViewData->GetDocShell()->CancelAutoDBRange();
@@ -409,12 +415,12 @@ sal_Bool __EXPORT ScFilterDlg::Close()
 
 
 //----------------------------------------------------------------------------
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-// neue Selektion im Referenz-Edit angezeigt wird.
+// Mouse-selected cell area becomes the new selection and is shown in the
+// reference text box
 
 void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( bRefInputMode )    // Nur moeglich, wenn im Referenz-Editmodus
+    if ( bRefInputMode )    // Only possible if in reference edit mode
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( &aEdCopyArea );
@@ -502,7 +508,7 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
 
         if ( nFieldSelPos )
         {
-            WaitObject aWaiter( this );     // auch wenn nur die ListBox gefuellt wird
+            WaitObject aWaiter( this );     // even if only the list box has content
 
             SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
             if (!pEntryLists[nColumn])
@@ -513,15 +519,15 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
                 SCROW nLastRow   = theQueryData.nRow2;
                 mbHasDates[nOffset+nList-1] = false;
 
-                //  erstmal ohne die erste Zeile
+                // first without the first line
 
                 pEntryLists[nColumn] = new TypedScStrCollection( 128, 128 );
                 pEntryLists[nColumn]->SetCaseSensitive( aBtnCase.IsChecked() );
                 pDoc->GetFilterEntriesArea( nColumn, nFirstRow+1, nLastRow,
                                             nTab, *pEntryLists[nColumn], mbHasDates[nOffset+nList-1] );
 
-                //  Eintrag fuer die erste Zeile
-                //! Eintrag (pHdrEntry) ohne Collection erzeugen?
+                // Entry for the first line
+                //! Entry (pHdrEntry) doesn't generate collection?
 
                 nHeaderPos[nColumn] = USHRT_MAX;
                 TypedScStrCollection aHdrColl( 1, 1 );
@@ -535,11 +541,11 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
                     if ( pEntryLists[nColumn]->Insert( pNewEntry ) )
                     {
                         nHeaderPos[nColumn] = pEntryLists[nColumn]->IndexOf( pNewEntry );
-                        DBG_ASSERT( nHeaderPos[nColumn] != USHRT_MAX,
+                        OSL_ENSURE( nHeaderPos[nColumn] != USHRT_MAX,
                                     "Header-Eintrag nicht wiedergefunden" );
                     }
                     else
-                        delete pNewEntry;           // war schon drin
+                        delete pNewEntry;           // was already there
                 }
             }
 
@@ -555,6 +561,7 @@ void ScFilterDlg::UpdateValueList( sal_uInt16 nList )
             }
         }
         pValList->SetText( aCurValue );
+        pValList->EnableDDAutoWidth(false);
     }
 
     UpdateHdrInValueList( nList );
@@ -576,7 +583,7 @@ void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
                 if ( nPos != USHRT_MAX )
                 {
                     ComboBox* pValList = aValueEdArr[nList-1];
-                    sal_uInt16 nListPos = nPos + 2;                 // nach "leer" und "nicht leer"
+                    sal_uInt16 nListPos = nPos + 2;                 // for "empty" and "non-empty"
 
                     TypedStrData* pHdrEntry = (*pEntryLists[nColumn])[nPos];
                     if ( pHdrEntry )
@@ -585,12 +592,12 @@ void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
                         sal_Bool bWasThere = ( pValList->GetEntry(nListPos) == aHdrStr );
                         sal_Bool bInclude = !aBtnHeader.IsChecked();
 
-                        if (bInclude)           // Eintrag aufnehmen
+                        if (bInclude)           // Include entry
                         {
                             if (!bWasThere)
                                 pValList->InsertEntry(aHdrStr, nListPos);
                         }
-                        else                    // Eintrag weglassen
+                        else                    // Omit entry
                         {
                             if (bWasThere)
                                 pValList->RemoveEntry(nListPos);
@@ -598,13 +605,13 @@ void ScFilterDlg::UpdateHdrInValueList( sal_uInt16 nList )
                     }
                     else
                     {
-                        DBG_ERROR("Eintag in Liste nicht gefunden");
+                        OSL_FAIL("Eintag in Liste nicht gefunden");
                     }
                 }
             }
             else
             {
-                DBG_ERROR("Spalte noch nicht initialisiert");
+                OSL_FAIL("Spalte noch nicht initialisiert");
             }
         }
     }
@@ -641,7 +648,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 {
     ScAddress       theCopyPos;
     ScQueryParam    theParam( theQueryData );
-    sal_Bool            bCopyPosOk = sal_False;
+    sal_Bool            bCopyPosOk = false;
 
     if ( aBtnCopyResult.IsChecked() )
     {
@@ -657,7 +664,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 
     if ( aBtnCopyResult.IsChecked() && bCopyPosOk )
     {
-        theParam.bInplace   = sal_False;
+        theParam.bInplace   = false;
         theParam.nDestTab   = theCopyPos.Tab();
         theParam.nDestCol   = theCopyPos.Col();
         theParam.nDestRow   = theCopyPos.Row();
@@ -677,7 +684,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
     theParam.bRegExp        = aBtnRegExp.IsChecked();
     theParam.bDestPers      = aBtnDestPers.IsChecked();
 
-    //  nur die drei eingestellten - alles andere zuruecksetzen
+    // only set the three - reset everything else
 
     DELETEZ( pOutItem );
     pOutItem = new ScQueryItem( nWhichQuery, &theParam );
@@ -713,13 +720,13 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
 
                 ERRORBOX( STR_INVALID_TABREF );
                 aEdCopyArea.GrabFocus();
-                bAreaInputOk = sal_False;
+                bAreaInputOk = false;
             }
         }
 
         if ( bAreaInputOk )
         {
-            SetDispatcherLock( sal_False );
+            SetDispatcherLock( false );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( FID_FILTER_OK,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -745,9 +752,9 @@ IMPL_LINK( ScFilterDlg, MoreClickHdl, MoreButton*, EMPTYARG )
     else
     {
         pTimer->Stop();
-        bRefInputMode = sal_False;
-        //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-        //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
+        bRefInputMode = false;
+        //@BugID 54702 Enable/disable only in Basic class
+        //SFX_APPWINDOW->Disable(FALSE);        //! general method in ScAnyRefDlg
     }
     return 0;
 }
@@ -757,7 +764,7 @@ IMPL_LINK( ScFilterDlg, MoreClickHdl, MoreButton*, EMPTYARG )
 
 IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
-    // alle 50ms nachschauen, ob RefInputMode noch stimmt
+    // Check if RefInputMode is still true every 50ms
 
     if( _pTimer == pTimer && IsActive() )
         bRefInputMode = (aEdCopyArea.HasFocus() || aRbCopyArea.HasFocus());
@@ -774,8 +781,7 @@ IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 {
     /*
-     * Behandlung der Enable/Disable-Logik,
-     * abhaengig davon, welche ListBox angefasst wurde:
+     * Handle enable/disable logic depending on which ListBox was selected
      */
     sal_uInt16 nOffset = GetSliderPos();
 
@@ -858,8 +864,8 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
             aEdVal4.Disable();
             for (sal_uInt16 i= nOffset; i< MAXQUERY; i++)
             {
-                theQueryData.GetEntry(i).bDoQuery = sal_False;
-                bRefreshExceptQuery[i]=sal_False;
+                theQueryData.GetEntry(i).bDoQuery = false;
+                bRefreshExceptQuery[i]=false;
                 theQueryData.GetEntry(i).nField =  static_cast<SCCOL>(0);
             }
             bRefreshExceptQuery[nOffset] =sal_True;
@@ -902,8 +908,8 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
             sal_uInt16 nTemp=nOffset+1;
             for (sal_uInt16 i= nTemp; i< MAXQUERY; i++)
             {
-                theQueryData.GetEntry(i).bDoQuery = sal_False;
-                bRefreshExceptQuery[i]=sal_False;
+                theQueryData.GetEntry(i).bDoQuery = false;
+                bRefreshExceptQuery[i]=false;
                 theQueryData.GetEntry(i).nField =  static_cast<SCCOL>(0);
             }
             bRefreshExceptQuery[nTemp]=sal_True;
@@ -939,8 +945,8 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
             sal_uInt16 nTemp=nOffset+2;
             for (sal_uInt16 i= nTemp; i< MAXQUERY; i++)
             {
-                theQueryData.GetEntry(i).bDoQuery = sal_False;
-                bRefreshExceptQuery[i]=sal_False;
+                theQueryData.GetEntry(i).bDoQuery = false;
+                bRefreshExceptQuery[i]=false;
                 theQueryData.GetEntry(i).nField =  static_cast<SCCOL>(0);
             }
             bRefreshExceptQuery[nTemp]=sal_True;
@@ -968,8 +974,8 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
             sal_uInt16 nTemp=nOffset+3;
             for (sal_uInt16 i= nTemp; i< MAXQUERY; i++)
             {
-                theQueryData.GetEntry(i).bDoQuery = sal_False;
-                bRefreshExceptQuery[i]=sal_False;
+                theQueryData.GetEntry(i).bDoQuery = false;
+                bRefreshExceptQuery[i]=false;
                 theQueryData.GetEntry(i).nField =  static_cast<SCCOL>(0);
             }
             bRefreshExceptQuery[nTemp]=sal_True;
@@ -1012,13 +1018,13 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 
 IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 {
-    //  Spaltenkoepfe:
-    //      FeldListen: Spaltexx <-> Spaltenkopf-String
-    //      WertListen: Spaltenkopf-Wert entfaellt.
-    //  Gross-/Kleinschreibung:
-    //      WertListen: komplett neu
+    //  Column headers:
+    //      Field list: Columnxx <-> column header string
+    //      Value list: Column header value not applicable.
+    //  Upper/lower case:
+    //      Value list: completely new
 
-    if ( pBox == &aBtnHeader )              // Feldlisten und Wertlisten
+    if ( pBox == &aBtnHeader )              // Field list and value list
     {
         sal_uInt16 nCurSel1 = aLbField1.GetSelectEntryPos();
         sal_uInt16 nCurSel2 = aLbField2.GetSelectEntryPos();
@@ -1036,12 +1042,12 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
         UpdateHdrInValueList( 4 );
     }
 
-    if ( pBox == &aBtnCase )            // Wertlisten komplett
+    if ( pBox == &aBtnCase )            // Complete value list
     {
         for (sal_uInt16 i=0; i<=MAXCOL; i++)
             DELETEZ( pEntryLists[i] );
 
-        UpdateValueList( 1 );       // aktueller Text wird gemerkt
+        UpdateValueList( 1 );       // current text is recorded
         UpdateValueList( 2 );
         UpdateValueList( 3 );
         UpdateValueList( 4 );
@@ -1103,13 +1109,13 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
             {
                 rEntry.pStr->Erase();
                 rEntry.nVal = SC_EMPTYFIELDS;
-                rEntry.bQueryByString = sal_False;
+                rEntry.bQueryByString = false;
             }
             else if ( aStrVal == aStrNotEmpty )
             {
                 rEntry.pStr->Erase();
                 rEntry.nVal = SC_NONEMPTYFIELDS;
-                rEntry.bQueryByString = sal_False;
+                rEntry.bQueryByString = false;
             }
             else
             {
@@ -1243,3 +1249,5 @@ void ScFilterDlg::RefreshEditRow( sal_uInt16 nOffset )
         UpdateValueList( static_cast<sal_uInt16>(i+1) );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

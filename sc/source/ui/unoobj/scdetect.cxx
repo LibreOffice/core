@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,8 @@
 
 #include "scdetect.hxx"
 
+#include <sal/macros.h>
+
 #include <framework/interaction.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -37,9 +40,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -53,9 +54,7 @@
 
 #include <framework/interaction.hxx>
 
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <ucbhelper/simpleinteractionrequest.hxx>
 
 #include <svtools/parhtml.hxx>
@@ -66,7 +65,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <sot/storinfo.hxx>
@@ -98,31 +97,32 @@ ScFilterDetect::~ScFilterDetect()
 {
 }
 
-static const sal_Char __FAR_DATA pFilterSc50[]      = "StarCalc 5.0";
-static const sal_Char __FAR_DATA pFilterSc50Temp[]  = "StarCalc 5.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc40[]      = "StarCalc 4.0";
-static const sal_Char __FAR_DATA pFilterSc40Temp[]  = "StarCalc 4.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc30[]      = "StarCalc 3.0";
-static const sal_Char __FAR_DATA pFilterSc30Temp[]  = "StarCalc 3.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc10[]      = "StarCalc 1.0";
-static const sal_Char __FAR_DATA pFilterXML[]       = "StarOffice XML (Calc)";
-static const sal_Char __FAR_DATA pFilterAscii[]     = "Text - txt - csv (StarCalc)";
-static const sal_Char __FAR_DATA pFilterLotus[]     = "Lotus";
-static const sal_Char __FAR_DATA pFilterQPro6[]     = "Quattro Pro 6.0";
-static const sal_Char __FAR_DATA pFilterExcel4[]    = "MS Excel 4.0";
-static const sal_Char __FAR_DATA pFilterEx4Temp[]   = "MS Excel 4.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel5[]    = "MS Excel 5.0/95";
-static const sal_Char __FAR_DATA pFilterEx5Temp[]   = "MS Excel 5.0/95 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel95[]   = "MS Excel 95";
-static const sal_Char __FAR_DATA pFilterEx95Temp[]  = "MS Excel 95 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel97[]   = "MS Excel 97";
-static const sal_Char __FAR_DATA pFilterEx97Temp[]  = "MS Excel 97 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
-static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
-static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
-static const sal_Char __FAR_DATA pFilterHtml[]      = "HTML (StarCalc)";
-static const sal_Char __FAR_DATA pFilterHtmlWeb[]   = "calc_HTML_WebQuery";
-static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCalc)";
+static const sal_Char pFilterSc50[]     = "StarCalc 5.0";
+static const sal_Char pFilterSc50Temp[] = "StarCalc 5.0 Vorlage/Template";
+static const sal_Char pFilterSc40[]     = "StarCalc 4.0";
+static const sal_Char pFilterSc40Temp[] = "StarCalc 4.0 Vorlage/Template";
+static const sal_Char pFilterSc30[]     = "StarCalc 3.0";
+static const sal_Char pFilterSc30Temp[] = "StarCalc 3.0 Vorlage/Template";
+static const sal_Char pFilterSc10[]     = "StarCalc 1.0";
+static const sal_Char pFilterXML[]      = "StarOffice XML (Calc)";
+static const sal_Char pFilterAscii[]        = "Text - txt - csv (StarCalc)";
+static const sal_Char pFilterLotus[]        = "Lotus";
+static const sal_Char pFilterQPro6[]        = "Quattro Pro 6.0";
+static const sal_Char pFilterExcel4[]   = "MS Excel 4.0";
+static const sal_Char pFilterEx4Temp[]  = "MS Excel 4.0 Vorlage/Template";
+static const sal_Char pFilterExcel5[]   = "MS Excel 5.0/95";
+static const sal_Char pFilterEx5Temp[]  = "MS Excel 5.0/95 Vorlage/Template";
+static const sal_Char pFilterExcel95[]  = "MS Excel 95";
+static const sal_Char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
+static const sal_Char pFilterExcel97[]  = "MS Excel 97";
+static const sal_Char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
+static const sal_Char pFilter2003XML[]   = "MS Excel 2003 XML";
+static const sal_Char pFilterDBase[]        = "dBase";
+static const sal_Char pFilterDif[]      = "DIF";
+static const sal_Char pFilterSylk[]     = "SYLK";
+static const sal_Char pFilterHtml[]     = "HTML (StarCalc)";
+static const sal_Char pFilterHtmlWeb[]  = "calc_HTML_WebQuery";
+static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 
 
 static sal_Bool lcl_MayBeAscii( SvStream& rStream )
@@ -169,13 +169,13 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     rStream >> nMark;
     bool bValidMark = false;
-    for (size_t i=0; i < sizeof(nValidMarks)/sizeof(nValidMarks[0]) && !bValidMark; ++i)
+    for (size_t i=0; i < SAL_N_ELEMENTS(nValidMarks) && !bValidMark; ++i)
     {
         if (nValidMarks[i] == nMark)
             bValidMark = true;
     }
     if ( !bValidMark )
-        return sal_False;
+        return false;
 
     const size_t nHeaderBlockSize = 32;
     // Empty dbf is >= 32*2+1 bytes in size.
@@ -184,7 +184,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     rStream.Seek(STREAM_SEEK_TO_END);
     sal_uLong nSize = rStream.Tell();
     if ( nSize < nEmptyDbf )
-        return sal_False;
+        return false;
 
     // length of header starts at 8
     rStream.Seek(8);
@@ -192,7 +192,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     rStream >> nHeaderLen;
 
     if ( nHeaderLen < nEmptyDbf || nSize < nHeaderLen )
-        return sal_False;
+        return false;
 
     // Last byte of header must be 0x0d, this is how it's specified.
     // #i9581#,#i26407# but some applications don't follow the specification
@@ -210,22 +210,6 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     return ( 0x0d == nEndFlag );
 }
 
-#if 0
-static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
-{
-    if ( !pFilter )
-        return sal_False;
-
-    //  sal_True for XML file or template
-    //  (template filter has no internal name -> allow configuration key names)
-
-    String aName(pFilter->GetFilterName());
-    return aName.EqualsAscii(pFilterXML) ||
-           aName.EqualsAscii("calc_StarOffice_XML_Calc") ||
-           aName.EqualsAscii("calc_StarOffice_XML_Calc_Template");
-}
-#endif
-
 ::rtl::OUString SAL_CALL ScFilterDetect::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
 {
     REFERENCE< XInputStream > xStream;
@@ -241,11 +225,11 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
     // there is no parameter that forbids to open as template
-    sal_Bool bOpenAsTemplate = sal_False;
-    sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
+    sal_Bool bOpenAsTemplate = false;
+    sal_Bool bWasReadOnly = false, bReadOnly = false;
 
-    sal_Bool bRepairPackage = sal_False;
-    sal_Bool bRepairAllowed = sal_False;
+    sal_Bool bRepairPackage = false;
+    sal_Bool bRepairAllowed = false;
 
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
@@ -305,12 +289,12 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
     }
 
     // can't check the type for external filters, so set the "dont" flag accordingly
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
 
     SfxAllItemSet *pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, false );
 
     bWasReadOnly = pItem && pItem->GetValue();
 
@@ -333,7 +317,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
             pFilter = aMatcher.GetFilter4EA( aTypeName );
 
         // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, sal_False, NULL, pSet );
+        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, false, NULL, pSet );
         aMedium.UseInteractionHandler( sal_True );
 
         sal_Bool bIsStorage = aMedium.IsStorage();
@@ -348,7 +332,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
             // maybe that IsStorage() already created an error!
             if ( bIsStorage )
             {
-                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage( sal_False ));
+                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage( false ));
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
@@ -380,7 +364,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                         String aFilterName;
                         if ( pFilter )
                             aFilterName = pFilter->GetName();
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : sal_False, &aFilterName );
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : false, &aFilterName );
                     }
                     catch( lang::WrappedTargetException& aWrap )
                     {
@@ -436,20 +420,21 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                 bool bIsXLS = false;
                 SvStream* pStream = aMedium.GetInStream();
                 const SfxFilter* pPreselectedFilter = pFilter;
-                if ( pPreselectedFilter && pPreselectedFilter->GetName().SearchAscii("Excel") != STRING_NOTFOUND )
+                if ( pPreselectedFilter && ( ( pPreselectedFilter->GetName().SearchAscii("Excel") != STRING_NOTFOUND ) ||
+                    ( !aPreselectedFilterName.Len() && pPreselectedFilter->GetFilterName().EqualsAscii( pFilterAscii ) ) ) )
                     bIsXLS = true;
                 pFilter = 0;
                 if ( pStream )
                 {
-                    SotStorageRef aStorage = new SotStorage ( pStream, sal_False );
+                    SotStorageRef aStorage = new SotStorage ( pStream, false );
                     if ( !aStorage->GetError() )
                     {
                         // Excel-5: detect through contained streams
                         // there are some "excel" formats from 3rd party vendors that need to be distinguished
-                        String aStreamName(RTL_CONSTASCII_STRINGPARAM("Workbook"));
+                        String aStreamName(RTL_CONSTASCII_USTRINGPARAM("Workbook"));
                         sal_Bool bExcel97Stream = ( aStorage->IsStream( aStreamName ) );
 
-                        aStreamName = String(RTL_CONSTASCII_STRINGPARAM("Book"));
+                        aStreamName = String(RTL_CONSTASCII_USTRINGPARAM("Book"));
                         sal_Bool bExcel5Stream = ( aStorage->IsStream( aStreamName ) );
                         if ( bExcel97Stream || bExcel5Stream )
                         {
@@ -502,7 +487,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                                 }
                                 else if ( aOldName.EqualsAscii(pFilterEx97Temp) )
                                 {
-                                    // #101923# auto detection has found template -> return Excel5 template
+                                    // auto detection has found template -> return Excel5 template
                                     pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterEx5Temp) );
                                 }
                                 else
@@ -631,7 +616,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             pLotus2,
                             pQPro
                             };
-                        const sal_uInt16 nFilterCount = sizeof(ppFilterPatterns) / sizeof(ppFilterPatterns[0]);
+                        const sal_uInt16 nFilterCount = SAL_N_ELEMENTS(ppFilterPatterns);
 
                         static const sal_Char* const pFilterName[] =     // zugehoerige Filter
                             {
@@ -647,8 +632,6 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             pFilterLotus,
                             pFilterQPro6
                             };
-
-                        // const sal_uInt16 nByteMask = 0xFF;
 
                         // suchen Sie jetzt!
                         // ... realisiert ueber 'Mustererkennung'
@@ -671,7 +654,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                                 if( nMuster < 0x0100 )
                                 { //                                direkter Byte-Vergleich
                                     if( ( sal_uInt8 ) nMuster != nAkt )
-                                        bSync = sal_False;
+                                        bSync = false;
                                 }
                                 else if( nMuster & M_DC )
                                 { //                                             don't care
@@ -679,7 +662,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                                 else if( nMuster & M_ALT(0) )
                                 { //                                      alternative Bytes
                                     sal_uInt8 nAnzAlt = ( sal_uInt8 ) nMuster;
-                                    bSync = sal_False;          // zunaechst unsynchron
+                                    bSync = false;          // zunaechst unsynchron
                                     while( nAnzAlt > 0 )
                                     {
                                         pSearch++;
@@ -700,12 +683,12 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                                     {   // gefundenen Filter einstellen
                                         pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterName[ nFilter ]) );
                                     }
-                                    bSync = sal_False;              // leave inner loop
+                                    bSync = false;              // leave inner loop
                                     nFilter = nFilterCount;     // leave outer loop
                                 }
                                 else
                                 { //                                         Tabellenfehler
-                                    DBG_ERROR( "-ScApplication::DetectFilter(): Fehler in Mustertabelle");
+                                    OSL_FAIL( "-ScApplication::DetectFilter(): Fehler in Mustertabelle");
                                 }
 
                                 pSearch++;
@@ -719,52 +702,51 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             // without the preselection other filters (Writer) take precedence
                             // DBase can't be detected reliably, so it also needs preselection
                             bool bMaybeText = lcl_MayBeAscii( rStr );
-                            if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && bMaybeText )
-                            {
-                                // Text filter is accepted if preselected
-                                pFilter = pPreselectedFilter;
-                            }
-                            else
-                            {
-                                // get file header
-                                rStr.Seek( 0 );
-                                const int nTrySize = 80;
-                                ByteString aHeader;
-                                for ( int j = 0; j < nTrySize && !rStr.IsEof(); j++ )
-                                {
-                                    sal_Char c;
-                                    rStr >> c;
-                                    aHeader += c;
-                                }
-                                aHeader += '\0';
 
-                                if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
-                                {
-                                    // test for HTML
-                                    if ( pPreselectedFilter->GetName().EqualsAscii(pFilterHtml) )
-                                    {
-                                        pFilter = pPreselectedFilter;
-                                    }
-                                    else
-                                    {
-                                        pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
-                                        if ( bIsXLS )
-                                            bFakeXLS = true;
-                                    }
-                                }
-                                else if ( bIsXLS && bMaybeText )
-                                {
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterAscii) );
-                                    bFakeXLS = true;
-                                }
-                                else if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
-                                {
-                                    // test for RTF
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
-                                }
-                                else if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
-                                    pFilter = pPreselectedFilter;
+                            // get file header
+                            rStr.Seek( 0 );
+                            const int nTrySize = 80;
+                            ByteString aHeader;
+                            for ( int j = 0; j < nTrySize && !rStr.IsEof(); j++ )
+                            {
+                                sal_Char c;
+                                rStr >> c;
+                                aHeader += c;
                             }
+                            aHeader += '\0';
+
+                            if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
+                            {
+                                // test for HTML
+                                if ( pPreselectedFilter->GetName().EqualsAscii(pFilterHtml) )
+                                {
+                                    pFilter = pPreselectedFilter;
+                                }
+                                else
+                                {
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
+                                    if ( bIsXLS )
+                                        bFakeXLS = true;
+                                }
+                            }
+                            else if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
+                            {
+                                // test for RTF
+                                pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
+                            }
+                            else if ( bIsXLS && bMaybeText )
+                            {
+                                aHeader.EraseLeadingChars();
+                                if( aHeader.CompareTo( "<?xml", 5 ) == COMPARE_EQUAL )
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilter2003XML) );
+                                else
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterAscii) );
+                                bFakeXLS = true;
+                            }
+                            else if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
+                                pFilter = pPreselectedFilter;
+                            else if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && bMaybeText )
+                                pFilter = pPreselectedFilter;
                         }
                     }
                 }
@@ -776,7 +758,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("InputStream");
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
         lDescriptor[nPropertyCount].Value <<= xStream;
         nPropertyCount++;
     }
@@ -785,7 +767,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("UCBContent");
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent"));
         lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
@@ -795,7 +777,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
         if ( nIndexOfReadOnlyFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("ReadOnly");
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
             lDescriptor[nPropertyCount].Value <<= bReadOnly;
             nPropertyCount++;
         }
@@ -806,7 +788,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
     if ( !bRepairPackage && bRepairAllowed )
     {
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("RepairPackage");
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage"));
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
 
@@ -820,7 +802,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
         if ( nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
             lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
             nPropertyCount++;
         }
@@ -834,7 +816,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("DocumentTitle");
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
             lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
             nPropertyCount++;
         }
@@ -847,7 +829,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
         if ( nIndexOfFilterName == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
             lDescriptor[nPropertyCount].Value <<= rtl::OUString(pFilter->GetName());
             nPropertyCount++;
         }
@@ -882,7 +864,7 @@ sal_Bool SAL_CALL ScFilterDetect::supportsService( const UNOOUSTRING& sServiceNa
             return sal_True ;
         }
     }
-    return sal_False ;
+    return false ;
 }
 
 /* XServiceInfo */
@@ -894,16 +876,15 @@ UNOSEQUENCE< UNOOUSTRING > SAL_CALL ScFilterDetect::getSupportedServiceNames() t
 /* Helper for XServiceInfo */
 UNOSEQUENCE< UNOOUSTRING > ScFilterDetect::impl_getStaticSupportedServiceNames()
 {
-    UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.ExtendedTypeDetection"  );
+    seqServiceNames.getArray() [0] = UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ExtendedTypeDetection"  ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 UNOOUSTRING ScFilterDetect::impl_getStaticImplementationName()
 {
-    return UNOOUSTRING::createFromAscii( "com.sun.star.comp.calc.FormatDetector" );
+    return UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.calc.FormatDetector" ));
 }
 
 /* Helper for registry */
@@ -912,3 +893,4 @@ UNOREFERENCE< UNOXINTERFACE > SAL_CALL ScFilterDetect::impl_createInstance( cons
     return UNOREFERENCE< UNOXINTERFACE >( *new ScFilterDetect( xServiceManager ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

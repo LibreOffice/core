@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -176,7 +177,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
         Reference< chart2::XAxis > xAxis( xResult->getAxisByDimension( i, MAIN_AXIS_INDEX ) );
         if( !xAxis.is() )
         {
-            OSL_ENSURE(false,"a created coordinate system should have an axis for each dimension");
+            OSL_FAIL("a created coordinate system should have an axis for each dimension");
             continue;
         }
 
@@ -238,3 +239,5 @@ APPHELPER_XSERVICEINFO_IMPL( PieChartType,
                              C2U( "com.sun.star.comp.chart.PieChartType" ));
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

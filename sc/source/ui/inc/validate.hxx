@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,13 +34,11 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/svmedit.hxx>
-//<!--Added by PengYunQuan for Validity Cell Range Picker
+
 #include "anyrefdg.hxx"
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 // ============================================================================
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 struct  ScRefHandlerCaller{
     virtual ~ScRefHandlerCaller(){}
 };
@@ -49,15 +48,15 @@ protected:
     ScRefHandlerCaller  *m_pHandler;
     void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , ScDocument* );
     void            (ScRefHandlerCaller::*m_pSetActiveHdl)();
-    void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( ScRefEdit* pEdit, ScRefButton* pButton );
-    void            (ScRefHandlerCaller::*m_pRefInputStartPostHdl)( ScRefEdit* pEdit, ScRefButton* pButton );
+    void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::RefEdit* pEdit, formula::RefButton* pButton );
+    void            (ScRefHandlerCaller::*m_pRefInputStartPostHdl)( formula::RefEdit* pEdit, formula::RefButton* pButton );
     void            (ScRefHandlerCaller::*m_pRefInputDonePreHdl)();
     void            (ScRefHandlerCaller::*m_pRefInputDonePostHdl)();
 
 public:
     typedef void            (ScRefHandlerCaller::*PFUNCSETREFHDLTYPE)( const ScRange& , ScDocument* );
     typedef void            (ScRefHandlerCaller::*PCOMMONHDLTYPE)();
-    typedef void            (ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  ScRefEdit* pEdit, ScRefButton* pButton );
+    typedef void            (ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  formula::RefEdit* pEdit, formula::RefButton* pButton );
 
     PFUNCSETREFHDLTYPE  SetSetRefHdl(  PFUNCSETREFHDLTYPE pNewHdl )
     {
@@ -86,33 +85,23 @@ public:
 
     ScRefHandlerHelper():m_pHandler(NULL), m_pSetReferenceHdl( NULL ), m_pSetActiveHdl(NULL),  m_pRefInputStartPreHdl( NULL ), m_pRefInputStartPostHdl( NULL ), m_pRefInputDonePreHdl( NULL ),  m_pRefInputDonePostHdl( NULL ){}
 };
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 /** The "Validity" tab dialog. */
-//<!--Modified by PengYunQuan for Validity Cell Range Picker
-//class ScValidationDlg : public SfxTabDialog
 class ScValidationDlg :public ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false>, public ScRefHandlerHelper
-//-->Modified by PengYunQuan for Validity Cell Range Picker
 {
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     typedef ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false> ScValidationDlgBase;
 
-    //Start_Moddify by liliang 03/26/2008 SODC_13677_2
     DECL_LINK( OkHdl, Button * );
-    //End_Moddify by liliang 03/26/2008 SODC_13677_2
+
     bool    m_bOwnRefHdlr:1;
 
     ScTabViewShell *m_pTabVwSh;
     bool    m_bRefInputting:1;
     bool    EnterRefStatus();
     bool    LeaveRefStatus();
-    //-->Added by PengYunQuan for Validity Cell Range Picker
+
 public:
-    //<!--Modified by PengYunQuan for Validity Cell Range Picker
-    //explicit                    ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet );
     explicit ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = NULL );
-    //-->Modified by PengYunQuan for Validity Cell Range Picker
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     virtual                     ~ScValidationDlg();
     inline static ScValidationDlg * Find1AliveObject( Window *pAncestor );
     bool    IsAlive();
@@ -137,17 +126,17 @@ public:
 
     void        CloseRefDialog()
     {
-        DBG_ASSERT( false, "should not execute here!!!when the edit kill focus, should remove refhandler.\r\n" );
+        OSL_FAIL( "should not execute here!!!when the edit kill focus, should remove refhandler.\r\n" );
 
         if ( IsInExecute() )
-            EndDialog( sal_False );
+            EndDialog( false );
         else if ( GetStyle() & WB_CLOSEABLE )
             Close();
     }
 
     bool IsRefInputting(){  return m_bRefInputting; }
 
-    virtual void        RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton = NULL )
+    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL )
     {
         if( !CanInputStart( pEdit ) )
             return;
@@ -160,7 +149,7 @@ public:
             (m_pHandler->*m_pRefInputStartPostHdl)( pEdit, pButton );
     }
 
-    virtual void        RefInputDone( sal_Bool bForced = sal_False )
+    virtual void        RefInputDone( sal_Bool bForced = false )
     {
         if( !CanInputDone( bForced ) )
             return;
@@ -180,17 +169,13 @@ public:
     enum { SLOTID = SID_VALIDITY_REFERENCE };
 
     sal_Bool Close();
-    //-->Added by PengYunQuan for Validity Cell Range Picker
 };
 
 
 // ============================================================================
 
 /** The tab page "Criteria" from the Validation dialog. */
-//<!--Modified by PengYunQuan for Validity Cell Range Picker
-//class ScTPValidationValue : public SfxTabPage
 class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
-//-->Modified by PengYunQuan for Validity Cell Range Picker
 {
 public:
     explicit                    ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet );
@@ -222,16 +207,10 @@ private:
     FixedText                   maFtValue;
     ListBox                     maLbValue;
     FixedText                   maFtMin;
-    //<!--Modified by PengYunQuan for Validity Cell Range Picker
-    //Edit                        maEdMin;
-    ScRefEdit                        maEdMin;
-    //-->Modified by PengYunQuan for Validity Cell Range Picker
+    formula::RefEdit            maEdMin;
     MultiLineEdit               maEdList;       /// Entries for explicit list
     FixedText                   maFtMax;
-    //<!--Modified by PengYunQuan for Validity Cell Range Picker
-    //Edit                        maEdMax;
-    ScRefEdit                        maEdMax;
-    //-->Modified by PengYunQuan for Validity Cell Range Picker
+    formula::RefEdit            maEdMax;
     FixedText                   maFtHint;       /// Hint text for cell range validity.
 
     String                      maStrMin;
@@ -240,33 +219,31 @@ private:
     String                      maStrRange;
     String                      maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
+
     DECL_LINK( EditSetFocusHdl, Edit *);
     DECL_LINK( KillFocusHdl, Window *);
     void    OnClick( Button *pBtn );
-    ScRefEdit   *m_pRefEdit;
-    class ScRefButtonEx:public ::ScRefButton
+    formula::RefEdit*           m_pRefEdit;
+    class ScRefButtonEx:public ::formula::RefButton
     {
         void Click();
     public:
-        ScRefButtonEx( Window* pParent, const ResId& rResId, ScRefEdit* pEdit = NULL, ScRefHandler *pRefHdlr = NULL ): ::ScRefButton( pParent, rResId, pEdit, pRefHdlr ){}
+        ScRefButtonEx( Window* pParent, const ResId& rResId, formula::RefEdit* pEdit = NULL, ScRefHandler *pRefHdlr = NULL ): ::formula::RefButton( pParent, rResId, pEdit, pRefHdlr ){}
     }m_btnRef;
     friend class ScRefButtonEx;
     void            SetReferenceHdl( const ScRange& , ScDocument* );
     void            SetActiveHdl();
-    void            RefInputStartPreHdl( ScRefEdit* pEdit, ScRefButton* pButton );
+    void            RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton* pButton );
     void            RefInputDonePreHdl();
     void            RefInputDonePostHdl();
     ScValidationDlg * GetValidationDlg();
 
-    //TYPEINFO();
     void            TidyListBoxes();
 public:
     sal_uInt16          GetAllowEntryPos();
     String          GetMinText();
     void    SetupRefDlg();
     void    RemoveRefDlg();
-    //-->Added by PengYunQuan for Validity Cell Range Picker
 };
 
 
@@ -332,7 +309,6 @@ public:
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 inline ScTabViewShell *ScValidationDlg::GetTabViewShell()
 {
     return m_pTabVwSh;
@@ -342,6 +318,7 @@ inline ScValidationDlg * ScValidationDlg::Find1AliveObject( Window *pAncestor )
 {
     return static_cast<ScValidationDlg *>( SC_MOD()->Find1RefWindow( SLOTID, pAncestor ) );
 }
-//-->Added by PengYunQuan for Validity Cell Range Picker
+
 #endif // SC_VALIDATE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

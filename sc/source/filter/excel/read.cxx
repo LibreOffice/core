@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,12 +89,11 @@ FltError ImportExcel::Read( void )
 
     Zustand             eAkt = Z_BiffNull, ePrev = Z_BiffNull;
 
-    FltError            eLastErr = eERR_OK;
-    sal_uInt16              nOpcode;
-    sal_uInt16              nBofLevel = 0;
-    sal_Bool                bBiff4Workbook = sal_False;
+    FltError        eLastErr = eERR_OK;
+    sal_uInt16      nOpcode;
+    sal_uInt16      nBofLevel = 0;
 
-    DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
+    OSL_ENSURE( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
@@ -124,7 +124,7 @@ FltError ImportExcel::Read( void )
 
         if( !aIn.IsValid() )
         {
-            // #124240# finalize table if EOF is missing
+            // finalize table if EOF is missing
             switch( eAkt )
             {
                 case Z_Biff2:
@@ -187,10 +187,7 @@ FltError ImportExcel::Read( void )
                                     NeueTabelle();
                                 }
                                 else if( pExcRoot->eDateiTyp == Biff4W )
-                                {
                                     eAkt = Z_Biff4W;
-                                    bBiff4Workbook = sal_True;
-                                }
                             break;
                             case EXC_BIFF5:
                                 Bof5();
@@ -722,11 +719,11 @@ FltError ImportExcel::Read( void )
                             break;
                             case Biff5V:
                             default:
-                                pD->SetVisible( GetCurrScTab(), sal_False );
+                                pD->SetVisible( GetCurrScTab(), false );
                                 ePrev = eAkt;
                                 eAkt = Z_Biffn0;
                         }
-                        DBG_ASSERT( pExcRoot->eDateiTyp != Biff5W,
+                        OSL_ENSURE( pExcRoot->eDateiTyp != Biff5W,
                             "+ImportExcel::Read(): Doppel-Whopper-Workbook!" );
 
                         break;
@@ -748,9 +745,9 @@ FltError ImportExcel::Read( void )
                 break;
             // ----------------------------------------------------------------
             case Z_Ende:        // ----------------------------------- Z_Ende -
-                DBG_ERROR( "*ImportExcel::Read(): Not possible state!" );
+                OSL_FAIL( "*ImportExcel::Read(): Not possible state!" );
                 break;
-            default: DBG_ERROR( "-ImportExcel::Read(): Zustand vergessen!" );
+            default: OSL_FAIL( "-ImportExcel::Read(): Zustand vergessen!" );
         }
     }
 
@@ -803,6 +800,7 @@ FltError ImportExcel8::Read( void )
     XclImpObjectManager&    rObjMgr         = GetObjectManager();
     // call to GetCurrSheetDrawing() cannot be cached (changes in new sheets)
     XclImpCondFormatManager& rCondFmtMgr    = GetCondFormatManager();
+    XclImpValidationManager& rValidMgr      = GetValidationManager();
     XclImpPivotTableManager& rPTableMgr     = GetPivotTableManager();
     XclImpWebQueryBuffer&   rWQBfr          = GetWebQueryBuffer();
 
@@ -831,61 +829,22 @@ FltError ImportExcel8::Read( void )
     sal_Size nProgressBasePos = 0;
     sal_Size nProgressBaseSize = 0;
 
+    bool bSheetHasCodeName = false;
+
+    std::vector< String > CodeNames;
+
+    std::vector < SCTAB > nTabsWithNoCodeName;
+
     while( eAkt != EXC_STATE_END )
     {
         if( eAkt == EXC_STATE_BEFORE_SHEET )
         {
             sal_uInt16 nScTab = GetCurrScTab();
-            if( nScTab < maSheetOffsets.size() )
+            if( nScTab < maSheetOffsets.size()  )
             {
-                nProgressBaseSize += (maStrm.GetSvStreamPos() - nProgressBasePos);
+                nProgressBaseSize += (aIn.GetSvStreamPos() - nProgressBasePos);
                 nProgressBasePos = maSheetOffsets[ nScTab ];
-                maStrm.StartNextRecord( nProgressBasePos );
-
-                // #94191# import only 256 sheets
-                if( nScTab > GetScMaxPos().Tab() )
-                {
-                    if( maStrm.GetRecId() != EXC_ID_EOF )
-                        XclTools::SkipSubStream( maStrm );
-                    // #i29930# show warning box
-                    GetAddressConverter().CheckScTab( nScTab, true );
-                    eAkt = EXC_STATE_END;
-                }
-                else
-                {
-                    // #i109800# SHEET record may point to any record inside the sheet substream
-                    bool bIsBof = maStrm.GetRecId() == EXC_ID5_BOF;
-                    if( bIsBof )
-                        Bof5();                         // read the BOF record
-                    else
-                        pExcRoot->eDateiTyp = Biff8;    // on missing BOF, assume a standard worksheet
-
-                    NeueTabelle();
-                    switch( pExcRoot->eDateiTyp )
-                    {
-                        case Biff8:     // worksheet
-                        case Biff8M4:   // macro sheet
-                            eAkt = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
-                            // go to next record
-                            if( bIsBof ) maStrm.StartNextRecord();
-                            maStrm.StoreGlobalPosition();
-                        break;
-                        case Biff8C:    // chart sheet
-                            GetCurrSheetDrawing().ReadTabChart( maStrm );
-                            Eof();
-                            GetTracer().TraceChartOnlySheet();
-                        break;
-                        case Biff8W:    // workbook
-                            DBG_ERRORFILE( "ImportExcel8::Read - double workbook globals" );
-                            // run through
-                        case Biff8V:    // VB module
-                        default:
-                            // TODO: do not create a sheet in the Calc document
-                            pD->SetVisible( GetCurrScTab(), sal_False );
-                            XclTools::SkipSubStream( maStrm );
-                            IncCurrScTab();
-                    }
-                }
+                aIn.StartNextRecord( nProgressBasePos );
             }
             else
                 eAkt = EXC_STATE_END;
@@ -895,14 +854,13 @@ FltError ImportExcel8::Read( void )
 
         if( !aIn.IsValid() )
         {
-            // #124240# #i63591# finalize table if EOF is missing
+            // #i63591# finalize table if EOF is missing
             switch( eAkt )
             {
                 case EXC_STATE_SHEET_PRE:
                     eAkt = EXC_STATE_SHEET;
                     aIn.SeekGlobalPosition();
                     continue;   // next iteration in while loop
-//                break;    // unxsols warning: statement unreachable
                 case EXC_STATE_SHEET:
                     Eof();
                     eAkt = EXC_STATE_END;
@@ -927,11 +885,11 @@ FltError ImportExcel8::Read( void )
         switch( nRecId )
         {
             case EXC_ID_USERSVIEWBEGIN:
-                DBG_ASSERT( !bInUserView, "ImportExcel8::Read - nested user view settings" );
+                OSL_ENSURE( !bInUserView, "ImportExcel8::Read - nested user view settings" );
                 bInUserView = true;
             break;
             case EXC_ID_USERSVIEWEND:
-                DBG_ASSERT( bInUserView, "ImportExcel8::Read - not in user view settings" );
+                OSL_ENSURE( bInUserView, "ImportExcel8::Read - not in user view settings" );
                 bInUserView = false;
             break;
         }
@@ -944,7 +902,7 @@ FltError ImportExcel8::Read( void )
             {
                 if( nRecId == EXC_ID5_BOF )
                 {
-                    DBG_ASSERT( GetBiff() == EXC_BIFF8, "ImportExcel8::Read - wrong BIFF version" );
+                    OSL_ENSURE( GetBiff() == EXC_BIFF8, "ImportExcel8::Read - wrong BIFF version" );
                     Bof5();
                     if( pExcRoot->eDateiTyp == Biff8W )
                     {
@@ -957,6 +915,7 @@ FltError ImportExcel8::Read( void )
                         // #i62752# possible to have BIFF8 sheet without globals
                         NeueTabelle();
                         eAkt = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
+                        bSheetHasCodeName = false; // reset
                         aIn.StoreGlobalPosition();
                     }
                 }
@@ -1057,8 +1016,54 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_SXIDSTM:        rPTableMgr.ReadSxidstm( maStrm );   break;
                     case EXC_ID_SXVS:           rPTableMgr.ReadSxvs( maStrm );      break;
                     case EXC_ID_DCONREF:        rPTableMgr.ReadDconref( maStrm );   break;
+                    case EXC_ID_DCONNAME:       rPTableMgr.ReadDConName( maStrm );  break;
                 }
 
+            }
+            break;
+
+            // ----------------------------------------------------------------
+            // before worksheet: wait for new worksheet BOF
+            case EXC_STATE_BEFORE_SHEET:
+            {
+                if( nRecId == EXC_ID5_BOF )
+                {
+                    // import only 256 sheets
+                    if( GetCurrScTab() > GetScMaxPos().Tab() )
+                    {
+                        XclTools::SkipSubStream( maStrm );
+                        // #i29930# show warning box
+                        GetAddressConverter().CheckScTab( GetCurrScTab(), true );
+                        eAkt = EXC_STATE_END;
+                    }
+                    else
+                    {
+                        Bof5();
+                        NeueTabelle();
+                        switch( pExcRoot->eDateiTyp )
+                        {
+                            case Biff8:     // worksheet
+                            case Biff8M4:   // macro sheet
+                                eAkt = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
+                                aIn.StoreGlobalPosition();
+                            break;
+                            case Biff8C:    // chart sheet
+                                GetCurrSheetDrawing().ReadTabChart( maStrm );
+                                Eof();
+                                GetTracer().TraceChartOnlySheet();
+                            break;
+                            case Biff8W:    // workbook
+                                OSL_FAIL( "ImportExcel8::Read - double workbook globals" );
+                                // run through
+                            case Biff8V:    // VB module
+                            default:
+                                // TODO: do not create a sheet in the Calc document
+                                pD->SetVisible( GetCurrScTab(), false );
+                                XclTools::SkipSubStream( maStrm );
+                                IncCurrScTab();
+                        }
+                    }
+                }
             }
             break;
 
@@ -1082,12 +1087,32 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID2_DIMENSIONS:
                     case EXC_ID3_DIMENSIONS:    ReadDimensions();                       break;
 
-                    case EXC_ID_CODENAME:       ReadCodeName( aIn, false );             break;
+                    case EXC_ID_CODENAME:       ReadCodeName( aIn, false ); bSheetHasCodeName = true; break;
 
                     case 0x0A:                          // EOF          [ 2345   ]
+                    {
                         eAkt = EXC_STATE_SHEET;
+                        String sName;
+                        GetDoc().GetName( GetCurrScTab(), sName );
+                        if ( !bSheetHasCodeName )
+                        {
+                            nTabsWithNoCodeName.push_back( GetCurrScTab() );
+                            OSL_TRACE("No Codename for %d", GetCurrScTab() );
+                        }
+                        else
+                        {
+                            String sCodeName;
+                            GetDoc().GetCodeName( GetCurrScTab(), sCodeName );
+                            OSL_TRACE("Have CodeName %s for SheetName %s",
+                                rtl::OUStringToOString( sCodeName, RTL_TEXTENCODING_UTF8 ).getStr(),  rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                            CodeNames.push_back( sCodeName );
+                        }
+
+                        bSheetHasCodeName = false; // reset
+
                         aIn.SeekGlobalPosition();         // und zurueck an alte Position
                         break;
+                    }
                     case 0x12:  SheetProtect(); break;
                     case 0x13:  SheetPassword(); break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
@@ -1100,8 +1125,8 @@ FltError ImportExcel8::Read( void )
                     case 0x9D:  AutoFilterInfo(); break;// AUTOFILTERINFO
                     case 0x9E:  AutoFilter(); break;    // AUTOFILTER
                     case 0x0208: Row34(); break;        // ROW          [  34    ]
-                    case 0x0021:
-                    case 0x0221: Array34(); break;      // ARRAY        [  34    ]
+                    case EXC_ID2_ARRAY:
+                    case EXC_ID3_ARRAY: Array34(); break;      // ARRAY        [  34    ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                     case 0x04BC: Shrfmla(); break;      // SHRFMLA      [    5   ]
                     case 0x0867: SheetProtection(); break; // SHEETPROTECTION
@@ -1176,8 +1201,8 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_CONDFMT:        rCondFmtMgr.ReadCondfmt( maStrm );      break;
                     case EXC_ID_CF:             rCondFmtMgr.ReadCF( maStrm );           break;
 
-                    case EXC_ID_DVAL:           XclImpValidation::ReadDval( maStrm );   break;
-                    case EXC_ID_DV:             XclImpValidation::ReadDV( maStrm );     break;
+                    case EXC_ID_DVAL:           rValidMgr.ReadDval( maStrm );           break;
+                    case EXC_ID_DV:             rValidMgr.ReadDV( maStrm );             break;
 
                     case EXC_ID_QSI:            rWQBfr.ReadQsi( maStrm );               break;
                     case EXC_ID_WQSTRING:       rWQBfr.ReadWqstring( maStrm );          break;
@@ -1206,16 +1231,54 @@ FltError ImportExcel8::Read( void )
 
     if( eLastErr == eERR_OK )
     {
+        // In some strange circumstances a the codename might be missing
+        // # Create any missing Sheet CodeNames
+        std::vector < SCTAB >::iterator it_end = nTabsWithNoCodeName.end();
+        for ( std::vector < SCTAB >::iterator it = nTabsWithNoCodeName.begin(); it != it_end; ++it )
+        {
+            SCTAB nTab = 1;
+            OSL_TRACE("Trying to find suitable codename for %d", *it );
+            while ( true )
+            {
+                String sTmpName( RTL_CONSTASCII_USTRINGPARAM("Sheet" ) );
+                sTmpName += String::CreateFromInt32( sal_Int32(nTab++) );
+                std::vector< String >::iterator codeName_It = CodeNames.begin();
+                std::vector< String >::iterator codeName_It_end = CodeNames.end();
+                // search for codename
+                for ( ; codeName_It != codeName_It_end; ++codeName_It )
+                {
+                    if ( *codeName_It == sTmpName )
+                        break;
+                }
+
+                if ( codeName_It == codeName_It_end ) // generated codename not found
+                {
+                    OSL_TRACE("Using generated codename %s", rtl::OUStringToOString( sTmpName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    // Set new codename
+                    GetDoc().SetCodeName( *it, sTmpName );
+                    // Record newly used codename
+                    CodeNames.push_back( sTmpName );
+                    // Record those we have created so they can be created in
+                    // basic
+                    AutoGeneratedCodeNames.push_back( sTmpName );
+                    break;
+                }
+            }
+
+        }
         // #i45843# Convert pivot tables before calculation, so they are available
         // for the GETPIVOTDATA function.
         if( GetBiff() == EXC_BIFF8 )
             GetPivotTableManager().ConvertPivotTables();
 
         pProgress.reset();
-
+#if 0
+        // Excel documents look much better without this call; better in the
+        // sense that the row heights are identical to the original heights in
+        // Excel.
         if (pD->IsAdjustHeightEnabled())
             AdjustRowHeight();
-
+#endif
         PostDocLoad();
 
         pD->CalcAfterLoad();
@@ -1241,3 +1304,4 @@ FltError ImportExcel8::Read( void )
 
 //___________________________________________________________________
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

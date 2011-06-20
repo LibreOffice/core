@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,6 @@
 
 #ifndef SC_FUSEL_HXX
 #define SC_FUSEL_HXX
-
-#ifndef _SV_HXX
-#endif
 
 #include "fudraw.hxx"
 
@@ -79,3 +77,4 @@ private:
 
 #endif      // _SD_FUSEL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

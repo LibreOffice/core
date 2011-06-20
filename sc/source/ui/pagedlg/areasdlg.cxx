@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,6 +69,8 @@ const sal_uInt16 SC_AREASDLG_RR_OFFSET  = 2;
 
 //============================================================================
 
+using ::rtl::OUString;
+
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
 #define ERRORBOX(nId)       ErrorBox( this, WinBits(WB_OK|WB_DEF_OK), \
                             ScGlobal::GetRscString( nId ) ).Execute()
@@ -75,10 +78,17 @@ const sal_uInt16 SC_AREASDLG_RR_OFFSET  = 2;
 
 // globale Funktionen (->am Ende der Datei):
 
-bool    lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
-void    lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr );
+bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
+void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr );
+void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr )
+{
+    String aStr;
+    lcl_GetRepeatRangeString(pRange, pDoc, bIsRow, aStr);
+    rStr = aStr;
+}
 
 #if 0
+// this method is useful when debugging address flags.
 static void printAddressFlags(sal_uInt16 nFlag)
 {
     if ((nFlag & SCA_COL_ABSOLUTE  ) == SCA_COL_ABSOLUTE  )  printf("SCA_COL_ABSOLUTE \n");
@@ -131,7 +141,7 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         //
-        bDlgLostFocus   ( sal_False ),
+        bDlgLostFocus   ( false ),
         pRefInputEdit   ( &aEdPrintArea ),
         pDoc            ( NULL ),
         pViewData       ( NULL ),
@@ -140,7 +150,7 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
     ScTabViewShell* pScViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
     ScDocShell*     pScDocSh  = PTR_CAST( ScDocShell,     SfxObjectShell::Current() );
 
-    DBG_ASSERT( pScDocSh, "Current DocumentShell not found :-(" );
+    OSL_ENSURE( pScDocSh, "Current DocumentShell not found :-(" );
 
     pDoc = pScDocSh->GetDocument();
 
@@ -209,9 +219,6 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
         if ( &aEdPrintArea == pRefInputEdit )
         {
             rRef.Format( aStr, SCR_ABS, pDoc, eConv );
-
-//          aEdPrintArea.ReplaceSelected( aStr );
-
             String aVal = aEdPrintArea.GetText();
             Selection aSel = aEdPrintArea.GetSelection();
             aSel.Justify();
@@ -266,7 +273,7 @@ void ScPrintAreasDlg::SetActive()
 {
     if ( bDlgLostFocus )
     {
-        bDlgLostFocus = sal_False;
+        bDlgLostFocus = false;
 
         if ( pRefInputEdit )
         {
@@ -376,7 +383,7 @@ sal_Bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 
 sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
 {
-    sal_Bool        bOk = sal_False;
+    sal_Bool        bOk = false;
     String      aStrPrintArea   = aEdPrintArea.GetText();
     String      aStrRepeatRow   = aEdRepeatRow.GetText();
     String      aStrRepeatCol   = aEdRepeatCol.GetText();
@@ -388,7 +395,6 @@ sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
         const sal_uInt16 nValidRange = nValidAddr | SCA_VALID_ROW2 | SCA_VALID_COL2;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         const sal_Unicode sep  = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
-        // const sal_Unicode rsep = ScCompiler::GetNativeSymbol(ocRange).GetChar(0);
 
         ScAddress aAddr;
         ScRange aRange;
@@ -401,7 +407,7 @@ sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
             {
                 sal_uInt16 nAddrResult = aAddr.Parse( aOne, pDoc, eConv );
                 if ((nAddrResult & nValidAddr) != nValidAddr)
-                    bPrintAreaOk = sal_False;
+                    bPrintAreaOk = false;
             }
         }
     }
@@ -427,7 +433,11 @@ sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
         else if ( !bRepeatColOk ) pEd = &aEdRepeatCol;
 
         ERRORBOX( STR_INVALID_TABREF );
-        pEd->GrabFocus();
+
+        OSL_ASSERT(pEd);
+
+        if (pEd)
+            pEd->GrabFocus();
     }
 
     return bOk;
@@ -455,7 +465,7 @@ void ScPrintAreasDlg::Impl_FillLists()
     else
     {
         ScRangeListRef aList( new ScRangeList );
-        pViewData->GetMarkData().FillRangeListWithMarks( aList, sal_False );
+        pViewData->GetMarkData().FillRangeListWithMarks( aList, false );
         aList->Format( aStrRange, SCR_ABS, pDoc, eConv );
     }
 
@@ -464,54 +474,45 @@ void ScPrintAreasDlg::Impl_FillLists()
     //------------------------------------------------------
     // Ranges holen und in ListBoxen merken
     //------------------------------------------------------
-    ScRangeName*    pRangeNames = pDoc->GetRangeName();
-    const sal_uInt16    nCount      = pRangeNames ? pRangeNames->GetCount() : 0;
+    ScRangeName* pRangeNames = pDoc->GetRangeName();
 
-    if ( nCount > 0 )
+    if (!pRangeNames || pRangeNames->empty())
+        // No range names to process.
+        return;
+
+    ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
+    for (; itr != itrEnd; ++itr)
     {
-        String          aName;
-        String          aSymbol;
-//        ScRange         aRange;
-        ScRangeData*    pData = NULL;
+        if (!itr->HasType(RT_ABSAREA) && !itr->HasType(RT_REFAREA) && !itr->HasType(RT_ABSPOS))
+            continue;
 
-        for ( sal_uInt16 i=0; i<nCount; i++ )
+        OUString aName = itr->GetName();
+        OUString aSymbol;
+        itr->GetSymbol(aSymbol);
+        if (aRange.ParseAny(aSymbol, pDoc, eConv) & SCA_VALID)
         {
-            pData = (ScRangeData*)(pRangeNames->At( i ));
-            if ( pData )
+            if (itr->HasType(RT_PRINTAREA))
             {
-                if (   pData->HasType( RT_ABSAREA )
-                    || pData->HasType( RT_REFAREA )
-                    || pData->HasType( RT_ABSPOS ) )
-                {
-                    pData->GetName( aName );
-                    pData->GetSymbol( aSymbol );
-                    if ( aRange.ParseAny( aSymbol, pDoc, eConv ) & SCA_VALID )
-                    {
-                        if ( pData->HasType( RT_PRINTAREA ) )
-                        {
-                            aRange.Format( aSymbol, SCR_ABS, pDoc, eConv );
-                            aLbPrintArea.SetEntryData(
-                                aLbPrintArea.InsertEntry( aName ),
-                                new String( aSymbol ) );
-                        }
+                aRange.Format(aSymbol, SCR_ABS, pDoc, eConv);
+                aLbPrintArea.SetEntryData(
+                    aLbPrintArea.InsertEntry(aName),
+                    new String(aSymbol) );
+            }
 
-                        if ( pData->HasType( RT_ROWHEADER ) )
-                        {
-                            lcl_GetRepeatRangeString(&aRange, pDoc, true, aSymbol);
-                            aLbRepeatRow.SetEntryData(
-                                aLbRepeatRow.InsertEntry( aName ),
-                                new String( aSymbol ) );
-                        }
+            if (itr->HasType(RT_ROWHEADER))
+            {
+                lcl_GetRepeatRangeString(&aRange, pDoc, true, aSymbol);
+                aLbRepeatRow.SetEntryData(
+                    aLbRepeatRow.InsertEntry(aName),
+                    new String(aSymbol) );
+            }
 
-                        if ( pData->HasType( RT_COLHEADER ) )
-                        {
-                            lcl_GetRepeatRangeString(&aRange, pDoc, false, aSymbol);
-                            aLbRepeatCol.SetEntryData(
-                                aLbRepeatCol.InsertEntry( aName ),
-                                new String( aSymbol ) );
-                        }
-                    }
-                }
+            if (itr->HasType(RT_COLHEADER))
+            {
+                lcl_GetRepeatRangeString(&aRange, pDoc, false, aSymbol);
+                aLbRepeatCol.SetEntryData(
+                    aLbRepeatCol.InsertEntry(aName),
+                    new String(aSymbol));
             }
         }
     }
@@ -528,7 +529,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
     {
         if ( Impl_CheckRefStrings() )
         {
-            sal_Bool            bDataChanged = sal_False;
+            sal_Bool            bDataChanged = false;
             String          aStr;
             SfxStringItem   aPrintArea( SID_CHANGE_PRINTAREA, aStr );
             SfxStringItem   aRepeatRow( FN_PARAM_2, aStr );
@@ -561,7 +562,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
 
             if ( bDataChanged )
             {
-                SetDispatcherLock( sal_False );
+                SetDispatcherLock( false );
                 SwitchToDocument();
                 GetBindings().GetDispatcher()->Execute( SID_CHANGE_PRINTAREA,
                                           SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -675,7 +676,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
 
     if ( (nEntryCount > nFirstCustomPos) && aStrEd.Len() > 0 )
     {
-        sal_Bool    bFound  = sal_False;
+        sal_Bool    bFound  = false;
         String* pSymbol = NULL;
         sal_uInt16 i;
 
@@ -725,7 +726,7 @@ bool lcl_CheckOne_OOO( const String& rStr, bool bIsRow, SCCOLROW& rVal )
             {
                 sal_Int32 n = aStr.ToInt32();
 
-                if ( ( bStrOk = (n > 0) && ( n <= MAXROWCOUNT ) ) != sal_False )
+                if ( ( bStrOk = (n > 0) && ( n <= MAXROWCOUNT ) ) != false )
                     nNum = static_cast<SCCOLROW>(n - 1);
             }
         }
@@ -904,3 +905,4 @@ void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIs
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

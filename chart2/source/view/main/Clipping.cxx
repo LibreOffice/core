@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -164,7 +165,7 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
 {
     if(nPolygonIndex<0)
     {
-        OSL_ENSURE( false, "The polygon index needs to be > 0");
+        OSL_FAIL( "The polygon index needs to be > 0");
         nPolygonIndex=0;
     }
 
@@ -190,7 +191,7 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
         if( nNewResultPointCount > nReallocLength )
         {
             nReallocLength = nNewResultPointCount;
-            DBG_ERROR("this should not be the case to avoid performance problems");
+            OSL_FAIL("this should not be the case to avoid performance problems");
         }
         pOuterSequenceX->realloc(nReallocLength);
         pOuterSequenceY->realloc(nReallocLength);
@@ -302,3 +303,5 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

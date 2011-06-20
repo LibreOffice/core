@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
 #include <rtl/logfile.hxx>
 #include <string.h>
 #include <math.h>
@@ -53,7 +52,9 @@
 #include "scmatrix.hxx"
 #include "globstr.hrc"
 #include "cellkeytranslator.hxx"
+#ifndef SC_INFO_OSVERSION
 #include "osversiondef.hxx"
+#endif
 
 #include <string.h>
 #include <math.h>
@@ -100,6 +101,28 @@ const double fInvEpsilon = 1.0E-7;
             return ::pow( lhs,rhs);
         }
     };
+
+namespace
+{
+
+// Multiply n x m Mat A with m x l Mat B to n x l Mat R
+void lcl_MFastMult(ScMatrixRef pA, ScMatrixRef pB, ScMatrixRef pR,
+                   SCSIZE n, SCSIZE m, SCSIZE l)
+{
+    double sum;
+    for (SCSIZE row = 0; row < n; row++)
+    {
+        for (SCSIZE col = 0; col < l; col++)
+        {   // result element(col, row) =sum[ (row of A) * (column of B)]
+            sum = 0.0;
+            for (SCSIZE k = 0; k < m; k++)
+                sum += pA->GetDouble(k,row) * pB->GetDouble(col,k);
+            pR->PutDouble(sum, col, row);
+        }
+    }
+}
+
+}
 
 double ScInterpreter::ScGetGCD(double fx, double fy)
 {
@@ -173,8 +196,10 @@ void ScInterpreter::ScGCD()
                 }
                 break;
                 case svMatrix :
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
                 {
-                    ScMatrixRef pMat = PopMatrix();
+                    ScMatrixRef pMat = GetMatrix();
                     if (pMat)
                     {
                         SCSIZE nC, nR;
@@ -183,21 +208,23 @@ void ScInterpreter::ScGCD()
                             SetError(errIllegalArgument);
                         else
                         {
-                            SCSIZE nCount = nC * nR;
-                            for ( SCSIZE j = 0; j < nCount; j++ )
+                            for ( SCSIZE j = 0; j < nC; j++ )
                             {
-                                if (!pMat->IsValue(j))
+                                for (SCSIZE k = 0; k < nR; ++k)
                                 {
-                                    PushIllegalArgument();
-                                    return;
+                                    if (!pMat->IsValue(j,k))
+                                    {
+                                        PushIllegalArgument();
+                                        return;
+                                    }
+                                    fx = ::rtl::math::approxFloor( pMat->GetDouble(j,k));
+                                    if (fx < 0.0)
+                                    {
+                                        PushIllegalArgument();
+                                        return;
+                                    }
+                                    fy = ScGetGCD(fx, fy);
                                 }
-                                fx = ::rtl::math::approxFloor( pMat->GetDouble(j));
-                                if (fx < 0.0)
-                                {
-                                    PushIllegalArgument();
-                                    return;
-                                }
-                                fy = ScGetGCD(fx, fy);
                             }
                         }
                     }
@@ -265,8 +292,10 @@ void ScInterpreter:: ScLCM()
                 }
                 break;
                 case svMatrix :
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
                 {
-                    ScMatrixRef pMat = PopMatrix();
+                    ScMatrixRef pMat = GetMatrix();
                     if (pMat)
                     {
                         SCSIZE nC, nR;
@@ -275,24 +304,26 @@ void ScInterpreter:: ScLCM()
                             SetError(errIllegalArgument);
                         else
                         {
-                            SCSIZE nCount = nC * nR;
-                            for ( SCSIZE j = 0; j < nCount; j++ )
+                            for ( SCSIZE j = 0; j < nC; j++ )
                             {
-                                if (!pMat->IsValue(j))
+                                for (SCSIZE k = 0; k < nR; ++k)
                                 {
-                                    PushIllegalArgument();
-                                    return;
+                                    if (!pMat->IsValue(j,k))
+                                    {
+                                        PushIllegalArgument();
+                                        return;
+                                    }
+                                    fx = ::rtl::math::approxFloor( pMat->GetDouble(j,k));
+                                    if (fx < 0.0)
+                                    {
+                                        PushIllegalArgument();
+                                        return;
+                                    }
+                                    if (fx == 0.0 || fy == 0.0)
+                                        fy = 0.0;
+                                    else
+                                        fy = fx * fy / ScGetGCD(fx, fy);
                                 }
-                                fx = ::rtl::math::approxFloor( pMat->GetDouble(j));
-                                if (fx < 0.0)
-                                {
-                                    PushIllegalArgument();
-                                    return;
-                                }
-                                if (fx == 0.0 || fy == 0.0)
-                                    fy = 0.0;
-                                else
-                                    fy = fx * fy / ScGetGCD(fx, fy);
                             }
                         }
                     }
@@ -308,7 +339,7 @@ void ScInterpreter:: ScLCM()
 ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetNewMat" );
-    ScMatrix* pMat = new ScMatrix( nC, nR);
+    ScMatrixRef pMat = new ScMatrix( nC, nR);
     pMat->SetErrorInterpreter( this);
     // A temporary matrix is mutable and ScMatrix::CloneIfConst() returns the
     // very matrix.
@@ -318,10 +349,14 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
     if ( nCols != nC || nRows != nR )
     {   // arbitray limit of elements exceeded
         SetError( errStackOverflow);
-        pMat->Delete();
-        pMat = NULL;
+        pMat.reset();
     }
     return pMat;
+}
+
+ScInterpreter::VolatileType ScInterpreter::GetVolatileType() const
+{
+    return meVolaileType;
 }
 
 ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken,
@@ -462,7 +497,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             {
                 ScBaseCell* pCell = GetCell( aAdr );
                 if (HasCellEmptyData(pCell))
-                    pMat->PutEmpty( 0 );
+                    pMat->PutEmpty(0, 0);
                 else if (HasCellValueData(pCell))
                     pMat->PutDouble(GetCellValue(aAdr, pCell), 0);
                 else
@@ -521,6 +556,36 @@ ScMatrixRef ScInterpreter::GetMatrix()
                     pMat->PutString( aStr, 0);
             }
         }
+        break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!pToken)
+            {
+                PopError();
+                SetError( errIllegalArgument);
+                break;
+            }
+            if (pToken->GetType() == svDouble)
+            {
+                pMat = new ScMatrix(1, 1);
+                pMat->PutDouble(pToken->GetDouble(), 0, 0);
+            }
+            else if (pToken->GetType() == svString)
+            {
+                pMat = new ScMatrix(1, 1);
+                pMat->PutString(pToken->GetString(), 0, 0);
+            }
+            else
+            {
+                pMat = new ScMatrix(1, 1);
+                pMat->PutEmpty(0, 0);
+            }
+        }
+        break;
+        case svExternalDoubleRef:
+            PopExternalDoubleRef(pMat);
         break;
         default:
             PopError();
@@ -592,7 +657,7 @@ void ScInterpreter::ScMatValue()
             case svMatrix:
             {
                 ScMatrixRef pMat = PopMatrix();
-                CalculateMatrixValue(pMat,nC,nR);
+                CalculateMatrixValue(pMat.get(),nC,nR);
             }
             break;
             default:
@@ -611,12 +676,12 @@ void ScInterpreter::CalculateMatrixValue(const ScMatrix* pMat,SCSIZE nC,SCSIZE n
         pMat->GetDimensions(nCl, nRw);
         if (nC < nCl && nR < nRw)
         {
-            ScMatValType nMatValType;
-            const ScMatrixValue* pMatVal = pMat->Get( nC, nR,nMatValType);
+            const ScMatrixValue nMatVal = pMat->Get( nC, nR);
+            ScMatValType nMatValType = nMatVal.nType;
             if (ScMatrix::IsNonValueType( nMatValType))
-                PushString( pMatVal->GetString() );
+                PushString( nMatVal.GetString() );
             else
-                PushDouble(pMatVal->fVal);
+                PushDouble(nMatVal.fVal);
                 // also handles DoubleError
         }
         else
@@ -648,7 +713,7 @@ void ScInterpreter::ScEMat()
     }
 }
 
-void ScInterpreter::MEMat(ScMatrix* mM, SCSIZE n)
+void ScInterpreter::MEMat(const ScMatrixRef& mM, SCSIZE n)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::MEMat" );
     mM->FillDouble(0.0, 0, 0, n-1, n-1);
@@ -671,7 +736,7 @@ void ScInterpreter::MEMat(ScMatrix* mM, SCSIZE n)
  * permutations (row exchanges).
  *
  * Returns 0 if a singular matrix is encountered, else +1 if an even number of
- * permutations occured, or -1 if odd, which is the sign of the determinant.
+ * permutations occurred, or -1 if odd, which is the sign of the determinant.
  * This may be used to calculate the determinant by multiplying the sign with
  * the product of the diagonal elements of the LU matrix.
  */
@@ -762,8 +827,8 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
 #endif
 
     bool bSingular=false;
-    for (SCSIZE i=0; i < n && !bSingular; i++)
-        bSingular = (mA->GetDouble(i,i) == 0.0);
+    for (SCSIZE i=0; i<n && !bSingular; i++)
+        bSingular = bSingular || ((mA->GetDouble(i,i))==0.0);
     if (bSingular)
         nSign = 0;
 
@@ -845,7 +910,7 @@ void ScInterpreter::ScMatDet()
             else
             {
                 ::std::vector< SCSIZE> P(nR);
-                int nDetSign = lcl_LUP_decompose( xLU, nR, P);
+                int nDetSign = lcl_LUP_decompose( xLU.get(), nR, P);
                 if (!nDetSign)
                     PushInt(0);     // singular matrix
                 else
@@ -853,9 +918,8 @@ void ScInterpreter::ScMatDet()
                     // In an LU matrix the determinant is simply the product of
                     // all diagonal elements.
                     double fDet = nDetSign;
-                    ScMatrix* pLU = xLU;
                     for (SCSIZE i=0; i < nR; ++i)
-                        fDet *= pLU->GetDouble( i, i);
+                        fDet *= xLU->GetDouble( i, i);
                     PushDouble( fDet);
                 }
             }
@@ -894,13 +958,12 @@ void ScInterpreter::ScMatInv()
             else
             {
                 ::std::vector< SCSIZE> P(nR);
-                int nDetSign = lcl_LUP_decompose( xLU, nR, P);
+                int nDetSign = lcl_LUP_decompose( xLU.get(), nR, P);
                 if (!nDetSign)
                     PushIllegalArgument();
                 else
                 {
                     // Solve equation for each column.
-                    ScMatrix* pY = xY;
                     ::std::vector< double> B(nR);
                     ::std::vector< double> X(nR);
                     for (SCSIZE j=0; j < nR; ++j)
@@ -908,11 +971,11 @@ void ScInterpreter::ScMatInv()
                         for (SCSIZE i=0; i < nR; ++i)
                             B[i] = 0.0;
                         B[j] = 1.0;
-                        lcl_LUP_solve( xLU, nR, P, B, X);
+                        lcl_LUP_solve( xLU.get(), nR, P, B, X);
                         for (SCSIZE i=0; i < nR; ++i)
-                            pY->PutDouble( X[i], j, i);
+                            xY->PutDouble( X[i], j, i);
                     }
-#if 0
+#if OSL_DEBUG_LEVEL > 1
                     /* Possible checks for ill-condition:
                      * 1. Scale matrix, invert scaled matrix. If there are
                      *    elements of the inverted matrix that are several
@@ -933,32 +996,26 @@ void ScInterpreter::ScMatInv()
                     ScMatrixRef xR = GetNewMat( nR, nR);
                     if (xR)
                     {
-                        ScMatrix* pR = xR;
-                        lcl_MFastMult( pMat, pY, pR, nR, nR, nR);
-#if OSL_DEBUG_LEVEL > 1
+                        ScMatrix* pR = xR.get();
+                        lcl_MFastMult( pMat, xY.get(), pR, nR, nR, nR);
                         fprintf( stderr, "\n%s\n", "ScMatInv(): mult-identity");
-#endif
                         for (SCSIZE i=0; i < nR; ++i)
                         {
                             for (SCSIZE j=0; j < nR; ++j)
                             {
                                 double fTmp = pR->GetDouble( j, i);
-#if OSL_DEBUG_LEVEL > 1
                                 fprintf( stderr, "%8.2g  ", fTmp);
-#endif
                                 if (fabs( fTmp - (i == j)) > fInvEpsilon)
                                     SetError( errIllegalArgument);
                             }
-#if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "\n%s\n", "");
-#endif
                         }
                     }
 #endif
                     if (nGlobalError)
                         PushError( nGlobalError);
                     else
-                        PushMatrix( pY);
+                        PushMatrix( xY);
                 }
             }
         }
@@ -1070,7 +1127,6 @@ ScMatrixRef lcl_MatrixCalculation(const _Function& _pOperation,ScMatrix* pMat1, 
     ScMatrixRef xResMat = _pIterpreter->GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
-        ScMatrix* pResMat = xResMat;
         for (i = 0; i < nMinC; i++)
         {
             for (j = 0; j < nMinR; j++)
@@ -1078,17 +1134,17 @@ ScMatrixRef lcl_MatrixCalculation(const _Function& _pOperation,ScMatrix* pMat1, 
                 if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
                 {
                     double d = _pOperation(pMat1->GetDouble(i,j),pMat2->GetDouble(i,j));
-                    pResMat->PutDouble( d, i, j);
+                    xResMat->PutDouble( d, i, j);
                 }
                 else
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i, j);
+                    xResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i, j);
             }
         }
     }
     return xResMat;
 }
 
-ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
+ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef& pMat2)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::MatConcat" );
     SCSIZE nC1, nC2, nMinC;
@@ -1101,7 +1157,6 @@ ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
-        ScMatrix* pResMat = xResMat;
         for (i = 0; i < nMinC; i++)
         {
             for (j = 0; j < nMinR; j++)
@@ -1110,12 +1165,12 @@ ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
                 if (!nErr)
                     nErr = pMat2->GetErrorIfNotString( i, j);
                 if (nErr)
-                    pResMat->PutError( nErr, i, j);
+                    xResMat->PutError( nErr, i, j);
                 else
                 {
                     String aTmp( pMat1->GetString( *pFormatter, i, j));
                     aTmp += pMat2->GetString( *pFormatter, i, j);
-                    pResMat->PutString( aTmp, i, j);
+                    xResMat->PutString( aTmp, i, j);
                 }
             }
         }
@@ -1155,7 +1210,7 @@ void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt2 )
 void ScInterpreter::ScAdd()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAdd" );
-    CalculateAddSub(sal_False);
+    CalculateAddSub(false);
 }
 void ScInterpreter::CalculateAddSub(sal_Bool _bSub)
 {
@@ -1216,12 +1271,12 @@ void ScInterpreter::CalculateAddSub(sal_Bool _bSub)
         if ( _bSub )
         {
             MatrixSub aSub;
-            pResMat = lcl_MatrixCalculation(aSub ,pMat1, pMat2,this);
+            pResMat = lcl_MatrixCalculation(aSub ,pMat1.get(), pMat2.get(),this);
         }
         else
         {
             MatrixAdd aAdd;
-            pResMat = lcl_MatrixCalculation(aAdd ,pMat1, pMat2,this);
+            pResMat = lcl_MatrixCalculation(aAdd ,pMat1.get(), pMat2.get(),this);
         }
 
         if (!pResMat)
@@ -1243,7 +1298,7 @@ void ScInterpreter::CalculateAddSub(sal_Bool _bSub)
         else
         {
             fVal = fVal2;
-            bFlag = sal_False;          // Matrix - double
+            bFlag = false;          // Matrix - double
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
@@ -1328,48 +1383,50 @@ void ScInterpreter::ScAmpersand()
         else
         {
             sStr = sStr2;
-            bFlag = sal_False;          // Matrix - double
+            bFlag = false;          // Matrix - double
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
-            SCSIZE nCount = nC * nR;
             if (nGlobalError)
             {
-                for ( SCSIZE i = 0; i < nCount; i++ )
-                    pResMat->PutError( nGlobalError, i);
+                for (SCSIZE i = 0; i < nC; ++i)
+                    for (SCSIZE j = 0; j < nR; ++j)
+                        pResMat->PutError( nGlobalError, i, j);
             }
             else if (bFlag)
             {
-                for ( SCSIZE i = 0; i < nCount; i++ )
-                {
-                    sal_uInt16 nErr = pMat->GetErrorIfNotString( i);
-                    if (nErr)
-                        pResMat->PutError( nErr, i);
-                    else
+                for (SCSIZE i = 0; i < nC; ++i)
+                    for (SCSIZE j = 0; j < nR; ++j)
                     {
-                        String aTmp( sStr);
-                        aTmp += pMat->GetString( *pFormatter, i);
-                        pResMat->PutString( aTmp, i);
+                        sal_uInt16 nErr = pMat->GetErrorIfNotString( i, j);
+                        if (nErr)
+                            pResMat->PutError( nErr, i, j);
+                        else
+                        {
+                            String aTmp( sStr);
+                            aTmp += pMat->GetString( *pFormatter, i, j);
+                            pResMat->PutString( aTmp, i, j);
+                        }
                     }
-                }
             }
             else
             {
-                for ( SCSIZE i = 0; i < nCount; i++ )
-                {
-                    sal_uInt16 nErr = pMat->GetErrorIfNotString( i);
-                    if (nErr)
-                        pResMat->PutError( nErr, i);
-                    else
+                for (SCSIZE i = 0; i < nC; ++i)
+                    for (SCSIZE j = 0; j < nR; ++j)
                     {
-                        String aTmp( pMat->GetString( *pFormatter, i));
-                        aTmp += sStr;
-                        pResMat->PutString( aTmp, i);
+                        sal_uInt16 nErr = pMat->GetErrorIfNotString( i, j);
+                        if (nErr)
+                            pResMat->PutError( nErr, i, j);
+                        else
+                        {
+                            String aTmp( pMat->GetString( *pFormatter, i, j));
+                            aTmp += sStr;
+                            pResMat->PutString( aTmp, i, j);
+                        }
                     }
-                }
             }
             PushMatrix(pResMat);
         }
@@ -1427,7 +1484,7 @@ void ScInterpreter::ScMul()
     if (pMat1 && pMat2)
     {
         MatrixMul aMul;
-        ScMatrixRef pResMat = lcl_MatrixCalculation(aMul,pMat1, pMat2,this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation(aMul,pMat1.get(), pMat2.get(),this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1502,7 +1559,7 @@ void ScInterpreter::ScDiv()
     if (pMat1 && pMat2)
     {
         MatrixDiv aDiv;
-        ScMatrixRef pResMat = lcl_MatrixCalculation(aDiv,pMat1, pMat2,this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation(aDiv,pMat1.get(), pMat2.get(),this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1522,7 +1579,7 @@ void ScInterpreter::ScDiv()
         else
         {
             fVal = fVal2;
-            bFlag = sal_False;          // Matrix - double
+            bFlag = false;          // Matrix - double
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
@@ -1584,7 +1641,7 @@ void ScInterpreter::ScPow()
     if (pMat1 && pMat2)
     {
         MatrixPow aPow;
-        ScMatrixRef pResMat = lcl_MatrixCalculation(aPow,pMat1, pMat2,this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation(aPow,pMat1.get(), pMat2.get(),this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1604,7 +1661,7 @@ void ScInterpreter::ScPow()
         else
         {
             fVal = fVal2;
-            bFlag = sal_False;          // Matrix - double
+            bFlag = false;          // Matrix - double
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
@@ -1670,7 +1727,7 @@ void ScInterpreter::ScSumProduct()
             PushNoValue();
             return;
         }
-        ScMatrixRef pResMat = lcl_MatrixCalculation(aMul,pMat1, pMat,this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation(aMul,pMat1.get(), pMat.get(),this);
         if (!pResMat)
         {
             PushNoValue();
@@ -1692,7 +1749,7 @@ void ScInterpreter::ScSumProduct()
 void ScInterpreter::ScSumX2MY2()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumX2MY2" );
-    CalculateSumX2MY2SumX2DY2(sal_False);
+    CalculateSumX2MY2SumX2DY2(false);
 }
 void ScInterpreter::CalculateSumX2MY2SumX2DY2(sal_Bool _bSumX2DY2)
 {
@@ -1766,7 +1823,7 @@ void ScInterpreter::ScSumXMY2()
         return;
     } // if (nC1 != nC2 || nR1 != nR2)
     MatrixSub aSub;
-    ScMatrixRef pResMat = lcl_MatrixCalculation(aSub,pMat1, pMat2,this);
+    ScMatrixRef pResMat = lcl_MatrixCalculation(aSub,pMat1.get(), pMat2.get(),this);
     if (!pResMat)
     {
         PushNoValue();
@@ -1840,32 +1897,18 @@ void ScInterpreter::ScFrequency()
     PushMatrix(pResMat);
 }
 
+namespace {
+
 // -----------------------------------------------------------------------------
 // Helper methods for LINEST/LOGEST and TREND/GROWTH
 // All matrices must already exist and have the needed size, no control tests
-// done. Those methodes, which names start with lcl_T, are adapted to case 3,
+// done. Those methods, which names start with lcl_T, are adapted to case 3,
 // where Y (=observed values) is given as row.
 // Remember, ScMatrix matrices are zero based, index access (column,row).
 // -----------------------------------------------------------------------------
 
-// Multiply n x m Mat A with m x l Mat B to n x l Mat R
-void lcl_MFastMult( ScMatrixRef pA, ScMatrixRef pB, ScMatrixRef pR, SCSIZE n, SCSIZE m, SCSIZE l )
-{
-    double sum;
-    for (SCSIZE row = 0; row < n; row++)
-    {
-        for (SCSIZE col = 0; col < l; col++)
-        {   // result element(col, row) =sum[ (row of A) * (column of B)]
-            sum = 0.0;
-            for (SCSIZE k = 0; k < m; k++)
-                sum += pA->GetDouble(k,row) * pB->GetDouble(col,k);
-            pR->PutDouble(sum, col, row);
-        }
-    }
-}
-
 // <A;B> over all elements; uses the matrices as vectors of length M
-double lcl_GetSumProduct( ScMatrixRef pMatA, ScMatrixRef pMatB, SCSIZE nM )
+double lcl_GetSumProduct(ScMatrixRef pMatA, ScMatrixRef pMatB, SCSIZE nM)
 {
     double fSum = 0.0;
     for (SCSIZE i=0; i<nM; i++)
@@ -1876,7 +1919,7 @@ double lcl_GetSumProduct( ScMatrixRef pMatA, ScMatrixRef pMatB, SCSIZE nM )
 // Special version for use within QR decomposition.
 // Euclidean norm of column index C starting in row index R;
 // matrix A has count N rows.
-double lcl_GetColumnEuclideanNorm( ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSIZE nN )
+double lcl_GetColumnEuclideanNorm(ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSIZE nN)
 {
     double fNorm = 0.0;
     for (SCSIZE row=nR; row<nN; row++)
@@ -1886,18 +1929,18 @@ double lcl_GetColumnEuclideanNorm( ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSI
 
 // Euclidean norm of row index R starting in column index C;
 // matrix A has count N columns.
-double lcl_TGetColumnEuclideanNorm( ScMatrixRef pMatA, SCSIZE nR, SCSIZE nC, SCSIZE nN )
+double lcl_TGetColumnEuclideanNorm(ScMatrixRef pMatA, SCSIZE nR, SCSIZE nC, SCSIZE nN)
 {
     double fNorm = 0.0;
     for (SCSIZE col=nC; col<nN; col++)
         fNorm  += (pMatA->GetDouble(col,nR)) * (pMatA->GetDouble(col,nR));
     return sqrt(fNorm);
-            }
+}
 
 // Special version for use within QR decomposition.
 // Maximum norm of column index C starting in row index R;
 // matrix A has count N rows.
-double lcl_GetColumnMaximumNorm( ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSIZE nN )
+double lcl_GetColumnMaximumNorm(ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSIZE nN)
 {
     double fNorm = 0.0;
     for (SCSIZE row=nR; row<nN; row++)
@@ -1908,7 +1951,7 @@ double lcl_GetColumnMaximumNorm( ScMatrixRef pMatA, SCSIZE nC, SCSIZE nR, SCSIZE
 
 // Maximum norm of row index R starting in col index C;
 // matrix A has count N columns.
-double lcl_TGetColumnMaximumNorm( ScMatrixRef pMatA, SCSIZE nR, SCSIZE nC, SCSIZE nN )
+double lcl_TGetColumnMaximumNorm(ScMatrixRef pMatA, SCSIZE nR, SCSIZE nC, SCSIZE nN)
 {
     double fNorm = 0.0;
     for (SCSIZE col=nC; col<nN; col++)
@@ -1920,8 +1963,8 @@ double lcl_TGetColumnMaximumNorm( ScMatrixRef pMatA, SCSIZE nR, SCSIZE nC, SCSIZ
 // Special version for use within QR decomposition.
 // <A(Ca);B(Cb)> starting in row index R;
 // Ca and Cb are indices of columns, matrices A and B have count N rows.
-double lcl_GetColumnSumProduct( ScMatrixRef pMatA, SCSIZE nCa, ScMatrixRef pMatB,
-        SCSIZE nCb, SCSIZE nR, SCSIZE nN )
+double lcl_GetColumnSumProduct(ScMatrixRef pMatA, SCSIZE nCa,
+                               ScMatrixRef pMatB, SCSIZE nCb, SCSIZE nR, SCSIZE nN)
 {
     double fResult = 0.0;
     for (SCSIZE row=nR; row<nN; row++)
@@ -1931,8 +1974,8 @@ double lcl_GetColumnSumProduct( ScMatrixRef pMatA, SCSIZE nCa, ScMatrixRef pMatB
 
 // <A(Ra);B(Rb)> starting in column index C;
 // Ra and Rb are indices of rows, matrices A and B have count N columns.
-double lcl_TGetColumnSumProduct( ScMatrixRef pMatA, SCSIZE nRa,
-        ScMatrixRef pMatB, SCSIZE nRb, SCSIZE nC, SCSIZE nN )
+double lcl_TGetColumnSumProduct(ScMatrixRef pMatA, SCSIZE nRa,
+                                ScMatrixRef pMatB, SCSIZE nRb, SCSIZE nC, SCSIZE nN)
 {
     double fResult = 0.0;
     for (SCSIZE col=nC; col<nN; col++)
@@ -1940,14 +1983,10 @@ double lcl_TGetColumnSumProduct( ScMatrixRef pMatA, SCSIZE nRa,
     return fResult;
 }
 
+// no mathematical signum, but used to switch between adding and subtracting
 double lcl_GetSign(double fValue)
 {
-    if (fValue < 0.0)
-        return -1.0;
-    else if (fValue > 0.0)
-        return 1.0;
-    else
-        return 0.0;
+    return (fValue >= 0.0 ? 1.0 : -1.0 );
 }
 
 /* Calculates a QR decomposition with Householder reflection.
@@ -1964,7 +2003,7 @@ double lcl_GetSign(double fValue)
  * errors singularity is often not detected.
  */
 bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
-                    ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
+                                  ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
 {
     double fScale ;
     double fEuclid ;
@@ -1977,9 +2016,10 @@ bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
         // calculate vector u of the householder transformation
         fScale = lcl_GetColumnMaximumNorm(pMatA, col, col, nN);
         if (fScale == 0.0)
+        {
             // A is singular
             return false;
-
+        }
         for (SCSIZE row = col; row <nN; row++)
             pMatA->PutDouble( pMatA->GetDouble(col,row)/fScale, col, row);
 
@@ -1994,8 +2034,7 @@ bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
         {
             fSum =lcl_GetColumnSumProduct(pMatA, col, pMatA, c, col, nN);
             for (SCSIZE row = col; row <nN; row++)
-                pMatA->PutDouble( pMatA->GetDouble(c,row)
-                        - fSum * fFactor * pMatA->GetDouble(col,row), c, row);
+                pMatA->PutDouble( pMatA->GetDouble(c,row) - fSum * fFactor * pMatA->GetDouble(col,row), c, row);
         }
     }
     return true;
@@ -2003,7 +2042,7 @@ bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
 
 // same with transposed matrix A, N is count of columns, K count of rows
 bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
-                    ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
+                                   ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
 {
     double fScale ;
     double fEuclid ;
@@ -2016,9 +2055,10 @@ bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
         // calculate vector u of the householder transformation
         fScale = lcl_TGetColumnMaximumNorm(pMatA, row, row, nN);
         if (fScale == 0.0)
+        {
             // A is singular
             return false;
-
+        }
         for (SCSIZE col = row; col <nN; col++)
             pMatA->PutDouble( pMatA->GetDouble(col,row)/fScale, col, row);
 
@@ -2033,8 +2073,8 @@ bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
         {
             fSum =lcl_TGetColumnSumProduct(pMatA, row, pMatA, r, row, nN);
             for (SCSIZE col = row; col <nN; col++)
-                pMatA->PutDouble( pMatA->GetDouble(col,r)
-                        - fSum * fFactor * pMatA->GetDouble(col,row), col, r);
+                pMatA->PutDouble(
+                    pMatA->GetDouble(col,r) - fSum * fFactor * pMatA->GetDouble(col,row), col, r);
         }
     }
     return true;
@@ -2048,7 +2088,7 @@ bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
  * lcl_CaluclateQRdecomposition.
  */
 void lcl_ApplyHouseholderTransformation(ScMatrixRef pMatA, SCSIZE nC,
-                                          ScMatrixRef pMatY, SCSIZE nN)
+                                        ScMatrixRef pMatY, SCSIZE nN)
 {
     // ScMatrix matrices are zero based, index access (column,row)
     double fDenominator = lcl_GetColumnSumProduct(pMatA, nC, pMatA, nC, nC, nN);
@@ -2056,7 +2096,7 @@ void lcl_ApplyHouseholderTransformation(ScMatrixRef pMatA, SCSIZE nC,
     double fFactor = 2.0 * (fNumerator/fDenominator);
     for (SCSIZE row = nC; row < nN; row++)
         pMatY->PutDouble(
-                pMatY->GetDouble(row) - fFactor * pMatA->GetDouble(nC,row), row);
+            pMatY->GetDouble(row) - fFactor * pMatA->GetDouble(nC,row), row);
 }
 
 // Same with transposed matrices A and Y.
@@ -2106,8 +2146,8 @@ void lcl_SolveWithUpperRightTriangle(ScMatrixRef pMatA,
  * zero elements, no check is done.
  */
 void lcl_SolveWithLowerLeftTriangle(ScMatrixRef pMatA,
-                    ::std::vector< double>& pVecR, ScMatrixRef pMatT,
-                    SCSIZE nK, bool bIsTransposed)
+                                    ::std::vector< double>& pVecR, ScMatrixRef pMatT,
+                                    SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
     double fSum;
@@ -2132,8 +2172,8 @@ void lcl_SolveWithLowerLeftTriangle(ScMatrixRef pMatA,
  * not used.
  */
 void lcl_ApplyUpperRightTriangle(ScMatrixRef pMatA,
-                        ::std::vector< double>& pVecR, ScMatrixRef pMatB,
-                        ScMatrixRef pMatZ, SCSIZE nK, bool bIsTransposed)
+                                 ::std::vector< double>& pVecR, ScMatrixRef pMatB,
+                                 ScMatrixRef pMatZ, SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
     double fSum;
@@ -2162,7 +2202,7 @@ double lcl_GetMeanOverAll(ScMatrixRef pMat, SCSIZE nN)
 // Calculates means of the columns of matrix X. X is a RxC matrix;
 // ResMat is a 1xC matrix (=row).
 void lcl_CalculateColumnMeans(ScMatrixRef pX, ScMatrixRef pResMat,
-                                 SCSIZE nC, SCSIZE nR)
+                              SCSIZE nC, SCSIZE nR)
 {
     double fSum = 0.0;
     for (SCSIZE i=0; i < nC; i++)
@@ -2177,7 +2217,7 @@ void lcl_CalculateColumnMeans(ScMatrixRef pX, ScMatrixRef pResMat,
 // Calculates means of the rows of matrix X. X is a RxC matrix;
 // ResMat is a Rx1 matrix (=column).
 void lcl_CalculateRowMeans(ScMatrixRef pX, ScMatrixRef pResMat,
-                             SCSIZE nC, SCSIZE nR)
+                           SCSIZE nC, SCSIZE nR)
 {
     double fSum = 0.0;
     for (SCSIZE k=0; k < nR; k++)
@@ -2190,28 +2230,28 @@ void lcl_CalculateRowMeans(ScMatrixRef pX, ScMatrixRef pResMat,
 }
 
 void lcl_CalculateColumnsDelta(ScMatrixRef pMat, ScMatrixRef pColumnMeans,
-                                 SCSIZE nC, SCSIZE nR)
+                               SCSIZE nC, SCSIZE nR)
 {
     for (SCSIZE i = 0; i < nC; i++)
         for (SCSIZE k = 0; k < nR; k++)
             pMat->PutDouble( ::rtl::math::approxSub
-                    (pMat->GetDouble(i,k) , pColumnMeans->GetDouble(i) ) , i, k);
+                             (pMat->GetDouble(i,k) , pColumnMeans->GetDouble(i) ) , i, k);
 }
 
 void lcl_CalculateRowsDelta(ScMatrixRef pMat, ScMatrixRef pRowMeans,
-                             SCSIZE nC, SCSIZE nR)
+                            SCSIZE nC, SCSIZE nR)
 {
     for (SCSIZE k = 0; k < nR; k++)
         for (SCSIZE i = 0; i < nC; i++)
             pMat->PutDouble( ::rtl::math::approxSub
-                    ( pMat->GetDouble(i,k) , pRowMeans->GetDouble(k) ) , i, k);
+                             ( pMat->GetDouble(i,k) , pRowMeans->GetDouble(k) ) , i, k);
 }
 
 // Case1 = simple regression
 // MatX = X - MeanX, MatY = Y - MeanY, y - haty = (y - MeanY) - (haty - MeanY)
 // = (y-MeanY)-((slope*x+a)-(slope*MeanX+a)) = (y-MeanY)-slope*(x-MeanX)
 double lcl_GetSSresid(ScMatrixRef pMatX, ScMatrixRef pMatY, double fSlope,
-                         SCSIZE nN)
+                      SCSIZE nN)
 {
     double fSum = 0.0;
     double fTemp = 0.0;
@@ -2221,6 +2261,8 @@ double lcl_GetSSresid(ScMatrixRef pMatX, ScMatrixRef pMatY, double fSlope,
         fSum += fTemp * fTemp;
     }
     return fSum;
+}
+
 }
 
 // Fill default values in matrix X, transform Y to log(Y) in case LOGEST|GROWTH,
@@ -2315,8 +2357,8 @@ bool ScInterpreter::CheckMatrix(bool _bLOG, sal_uInt8& nCase, SCSIZE& nCX,
     else
     {
         pMatX = GetNewMat(nCY, nRY);
-        nCX = nCY;
-        nRX = nRY;
+            nCX = nCY;
+            nRX = nRY;
         if (!pMatX)
         {
             PushIllegalArgument();
@@ -2330,6 +2372,7 @@ bool ScInterpreter::CheckMatrix(bool _bLOG, sal_uInt8& nCase, SCSIZE& nCX,
     }
     return true;
 }
+
 // -----------------------------------------------------------------------------
 
 // LINEST
@@ -2349,7 +2392,7 @@ void ScInterpreter::ScRKP()
 void ScInterpreter::CalulateRGPRKP(bool _bRKP)
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 1, 4 ) )
+    if (!MustHaveParamCount( nParamCount, 1, 4 ))
         return;
     bool bConstant, bStats;
 
@@ -2367,8 +2410,8 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
         {
             Pop();
             bConstant = true;
-            //            PushIllegalParameter(); if ODF behavior is desired
-            //            return;
+//            PushIllegalParameter(); if ODF behavior is desired
+//            return;
         }
         else
             bConstant = GetBool();
@@ -2380,8 +2423,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
     if (nParamCount >= 2)
     {
         if (IsMissing())
-        {
-            // In ODF1.2 empty second parameter (which is two ;; ) is allowed
+        { //In ODF1.2 empty second parameter (which is two ;; ) is allowed
             Pop();
             pMatX = NULL;
         }
@@ -2404,17 +2446,17 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
     // 1 = simple; 2 = multiple with Y as column; 3 = multiple with Y as row
     sal_uInt8 nCase;
 
-    SCSIZE nCX, nCY;     // number of columns
-    SCSIZE nRX, nRY;     // number of rows
+    SCSIZE nCX, nCY; // number of columns
+    SCSIZE nRX, nRY;    //number of rows
     SCSIZE K = 0, N = 0; // K=number of variables X, N=number of data samples
-    if ( !CheckMatrix(_bRKP,nCase,nCX,nCY,nRX,nRY,K,N,pMatX,pMatY) )
+    if (!CheckMatrix(_bRKP,nCase,nCX,nCY,nRX,nRY,K,N,pMatX,pMatY))
     {
         PushIllegalParameter();
         return;
     }
 
     // Enough data samples?
-    if ( (bConstant && (N<K+1)) || (!bConstant && (N<K)) || (N<1) || (K<1) )
+    if ((bConstant && (N<K+1)) || (!bConstant && (N<K)) || (N<1) || (K<1))
     {
         PushIllegalParameter();
         return;
@@ -2516,7 +2558,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             else
             {
                 double fFstatistic = (fSSreg / static_cast<double>(K))
-                    / (fSSresid / fDegreesFreedom);
+                                     / (fSSresid / fDegreesFreedom);
                 pResMat->PutDouble(fFstatistic, 0, 3);
 
                 // standard error of estimate
@@ -2529,7 +2571,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                 if (bConstant)
                 {
                     double fSigmaIntercept = fRMSE
-                        * sqrt(fMeanX*fMeanX/fSumX2 + 1.0/static_cast<double>(N));
+                                             * sqrt(fMeanX*fMeanX/fSumX2 + 1.0/static_cast<double>(N));
                     pResMat->PutDouble(fSigmaIntercept, 1, 1);
                 }
                 else
@@ -2602,7 +2644,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             pResMat->PutDouble(_bRKP ? exp(fIntercept) : fIntercept, K, 0 );
             for (SCSIZE i = 0; i < K; i++)
                 pResMat->PutDouble(_bRKP ? exp(pSlopes->GetDouble(i))
-                        : pSlopes->GetDouble(i) , K-1-i, 0);
+                                   : pSlopes->GetDouble(i) , K-1-i, 0);
 
 
             if (bStats)
@@ -2652,7 +2694,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                 else
                 {
                     double fFstatistic = (fSSreg / static_cast<double>(K))
-                        / (fSSresid / fDegreesFreedom);
+                                         / (fSSresid / fDegreesFreedom);
                     pResMat->PutDouble(fFstatistic, 0, 3);
 
                     // standard error of estimate = root mean SSE
@@ -2690,7 +2732,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                     if (bConstant)
                     {
                         fSigmaIntercept = fRMSE
-                            * sqrt(fSigmaIntercept + 1.0 / static_cast<double>(N));
+                                          * sqrt(fSigmaIntercept + 1.0 / static_cast<double>(N));
                         pResMat->PutDouble(fSigmaIntercept, K, 1);
                     }
                     else
@@ -2761,7 +2803,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             pResMat->PutDouble(_bRKP ? exp(fIntercept) : fIntercept, K, 0 );
             for (SCSIZE i = 0; i < K; i++)
                 pResMat->PutDouble(_bRKP ? exp(pSlopes->GetDouble(i))
-                        : pSlopes->GetDouble(i) , K-1-i, 0);
+                                   : pSlopes->GetDouble(i) , K-1-i, 0);
 
 
             if (bStats)
@@ -2811,7 +2853,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                 else
                 {
                     double fFstatistic = (fSSreg / static_cast<double>(K))
-                        / (fSSresid / fDegreesFreedom);
+                                         / (fSSresid / fDegreesFreedom);
                     pResMat->PutDouble(fFstatistic, 0, 3);
 
                     // standard error of estimate = root mean SSE
@@ -2849,7 +2891,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                     if (bConstant)
                     {
                         fSigmaIntercept = fRMSE
-                            * sqrt(fSigmaIntercept + 1.0 / static_cast<double>(N));
+                                          * sqrt(fSigmaIntercept + 1.0 / static_cast<double>(N));
                         pResMat->PutDouble(fSigmaIntercept, K, 1);
                     }
                     else
@@ -2864,7 +2906,6 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             PushMatrix(pResMat);
         }
     }
-    return;
 }
 
 void ScInterpreter::ScTrend()
@@ -2882,17 +2923,17 @@ void ScInterpreter::ScGrowth()
 void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 1, 4 ) )
+    if (!MustHaveParamCount( nParamCount, 1, 4 ))
         return;
 
-    // optional fourth parameter
+    // optional forth parameter
     bool bConstant;
     if (nParamCount == 4)
         bConstant = GetBool();
     else
         bConstant = true;
 
-    // The third parameter may be missing in ODF, although the fourth parameter
+    // The third parameter may be missing in ODF, although the forth parameter
     // is present. Default values depend on data not yet read.
     ScMatrixRef pMatNewX;
     if (nParamCount >= 3)
@@ -2908,8 +2949,8 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     else
         pMatNewX = NULL;
 
-    // In ODF1.2 empty second parameter (which is two ;; ) is allowed.
-    // Defaults will be set in CheckMatrix.
+    //In ODF1.2 empty second parameter (which is two ;; ) is allowed
+    //Defaults will be set in CheckMatrix
     ScMatrixRef pMatX;
     if (nParamCount >= 2)
     {
@@ -2937,17 +2978,17 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     // 1 = simple; 2 = multiple with Y as column; 3 = multiple with Y as row
     sal_uInt8 nCase;
 
-    SCSIZE nCX, nCY;     // number of columns
-    SCSIZE nRX, nRY;     // number of rows
+    SCSIZE nCX, nCY; // number of columns
+    SCSIZE nRX, nRY; //number of rows
     SCSIZE K = 0, N = 0; // K=number of variables X, N=number of data samples
-    if ( !CheckMatrix(_bGrowth,nCase,nCX,nCY,nRX,nRY,K,N,pMatX,pMatY) )
+    if (!CheckMatrix(_bGrowth,nCase,nCX,nCY,nRX,nRY,K,N,pMatX,pMatY))
     {
         PushIllegalParameter();
         return;
     }
 
     // Enough data samples?
-    if ( (bConstant && (N<K+1)) || (!bConstant && (N<K)) || (N<1) || (K<1) )
+    if ((bConstant && (N<K+1)) || (!bConstant && (N<K)) || (N<1) || (K<1))
     {
         PushIllegalParameter();
         return;
@@ -2972,7 +3013,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             return;
         }
         nCountXN = nCXN * nRXN;
-        for ( SCSIZE i = 0; i < nCountXN; i++ )
+        for (SCSIZE i = 0; i < nCountXN; i++)
             if (!pMatNewX->IsValue(i))
             {
                 PushIllegalArgument();
@@ -3036,11 +3077,10 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             return;
         }
         double fSlope = fSumXY / fSumX2;
-        double fIntercept = 0.0;
         double fHelp;
         if (bConstant)
         {
-            fIntercept = fMeanY - fSlope * fMeanX;
+            double fIntercept = fMeanY - fSlope * fMeanX;
             for (SCSIZE i = 0; i < nCountXN; i++)
             {
                 fHelp = pMatNewX->GetDouble(i)*fSlope + fIntercept;
@@ -3117,7 +3157,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             }
         }
         else
-        {   // nCase == 3, Y is row, all matrices are transposed
+        { // nCase == 3, Y is row, all matrices are transposed
 
             ::std::vector< double> aVecR(N); // for QR decomposition
             // Enough memory for needed matrices?
@@ -3177,8 +3217,8 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
         }
     }
     PushMatrix(pResMat);
-    return;
 }
+
 
 void ScInterpreter::ScMatRef()
 {
@@ -3201,8 +3241,9 @@ void ScInterpreter::ScMatRef()
                 PushNA();
             else
             {
-                ScMatValType nMatValType;
-                const ScMatrixValue* pMatVal = pMat->Get( nC, nR, nMatValType);
+                const ScMatrixValue nMatVal = pMat->Get( nC, nR);
+                ScMatValType nMatValType = nMatVal.nType;
+
                 if (ScMatrix::IsNonValueType( nMatValType))
                 {
                     if (ScMatrix::IsEmptyPathType( nMatValType))
@@ -3216,11 +3257,11 @@ void ScInterpreter::ScMatRef()
                         PushTempToken( new ScEmptyCellToken( false, true));
                     }
                     else
-                        PushString( pMatVal->GetString() );
+                        PushString( nMatVal.GetString() );
                 }
                 else
                 {
-                    PushDouble(pMatVal->fVal);  // handles DoubleError
+                    PushDouble(nMatVal.fVal);  // handles DoubleError
                     pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex, aAdr, pCell );
                     nFuncFmtType = nCurFmtType;
                     nFuncFmtIndex = nCurFmtIndex;
@@ -3271,3 +3312,5 @@ void ScInterpreter::ScInfo()
             PushIllegalArgument();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

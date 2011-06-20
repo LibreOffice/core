@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,7 +128,6 @@ sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                 {
                     rxOStm->SetBufferSize( 0xff00 );
 
-                    // #108584#
                     // for the changed pool defaults from drawing layer pool set those
                     // attributes as hard attributes to preserve them for saving
                     const SfxItemPool& rItemPool = pMarkedObjModel->GetItemPool();
@@ -162,7 +162,7 @@ sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
             break;
         default:
             {
-                DBG_ERROR( "ChartTransferable::WriteObject: unknown object id" );
+                OSL_FAIL( "ChartTransferable::WriteObject: unknown object id" );
             }
             break;
     }
@@ -170,3 +170,5 @@ sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

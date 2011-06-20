@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include "scui_def.hxx" //CHINA001
-
-//CHINA001 #define NAME_TOP     1
-//CHINA001 #define NAME_LEFT        2
-//CHINA001 #define NAME_BOTTOM      4
-//CHINA001 #define NAME_RIGHT       8
+#include "scui_def.hxx"
 
 class ScNameCreateDlg : public ModalDialog
 {
@@ -57,3 +53,5 @@ public:
 
 
 #endif //SC_NAMECREA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

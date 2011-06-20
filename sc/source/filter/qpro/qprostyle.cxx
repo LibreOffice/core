@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,6 +47,7 @@
 #include <editeng/crsditem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <map>
 
 #include "global.hxx"
@@ -143,12 +145,12 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
 
     // Font Attributes
     sal_uInt16 nTmpFnt = maFontRecord[ maFont[ nStyle ] ];
-    sal_Bool bIsBold, bIsItalic, bIsUnderLine, bIsStrikeThrough;
+    sal_Bool bIsBold, bIsItalic, bIsUnderLine;
 
     bIsBold = ( nTmpFnt & 0x0001 ) != 0;
     bIsItalic = ( nTmpFnt & 0x0002 ) != 0;
     bIsUnderLine = ( nTmpFnt & 0x0004 ) != 0;
-    bIsStrikeThrough = (nTmpFnt & 0x0020 ) != 0;
+    //(nTmpFnt & 0x0020 ) for StrikeThrough
 
     if( bIsBold )
         rItemSet.Put( SvxWeightItem( WEIGHT_BOLD,ATTR_FONT_WEIGHT) );
@@ -165,3 +167,5 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
 
     pDoc->ApplyPattern( nCol, nRow, nTab, aPattern );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

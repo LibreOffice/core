@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include "ContainerHelper.hxx"
 #include "TimerTriggeredControllerLock.hxx"
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -43,6 +44,7 @@
 #include <vcl/msgbox.hxx>
 // header for class OImplementationId
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -73,7 +75,7 @@ CreationWizardUnoDlg::CreationWizardUnoDlg( const uno::Reference< uno::XComponen
 }
 CreationWizardUnoDlg::~CreationWizardUnoDlg()
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     if( m_pDialog )
     {
         delete m_pDialog;
@@ -143,7 +145,6 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeEx
 {
     static uno::Sequence< uno::Type > aTypeList;
 
-    // /--
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !aTypeList.getLength() )
     {
@@ -161,17 +162,16 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeEx
     }
 
     return aTypeList;
-    // \--
 }
+
+namespace
+{
+    class theCreationWizardUnoDlgImplementationId : public rtl::Static< UnoTunnelIdInit, theCreationWizardUnoDlgImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId( void ) throw( uno::RuntimeException )
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theCreationWizardUnoDlgImplementationId::get().getSeq();
 }
 
 //-------------------------------------------------------------------------
@@ -179,7 +179,7 @@ uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId( vo
 // XTerminateListener
 void SAL_CALL CreationWizardUnoDlg::queryTermination( const lang::EventObject& /*Event*/ ) throw( frame::TerminationVetoException, uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     // we will never give a veto here
     if( m_pDialog && !m_pDialog->isClosable() )
@@ -209,7 +209,7 @@ void SAL_CALL CreationWizardUnoDlg::setTitle( const ::rtl::OUString& /*rTitle*/ 
 //-------------------------------------------------------------------------
 void CreationWizardUnoDlg::createDialogOnDemand()
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     if( !m_pDialog )
     {
         Window* pParent = NULL;
@@ -252,7 +252,7 @@ sal_Int16 SAL_CALL CreationWizardUnoDlg::execute(  ) throw(uno::RuntimeException
 {
     sal_Int16 nRet = RET_CANCEL;
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         createDialogOnDemand();
         if( !m_pDialog )
             return nRet;
@@ -293,8 +293,7 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
     m_xChartModel.clear();
     m_xParentWindow.clear();
 
-    // /--
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     if( m_pDialog )
     {
         delete m_pDialog;
@@ -316,14 +315,13 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
     {
         ASSERT_EXCEPTION( ex );
     }
-    // \--
 }
 
 //XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL CreationWizardUnoDlg::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
     return 0;
 }
 
@@ -340,7 +338,7 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const ::rtl::OUString& rPr
 
         //set left upper outer corner relative to screen
         //pixels, screen position
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         createDialogOnDemand();
         if( m_pDialog )
         {
@@ -372,7 +370,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const ::rtl::OUString&
     {
         //get left upper outer corner relative to screen
         //pixels, screen position
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         createDialogOnDemand();
         if( m_pDialog )
         {
@@ -385,7 +383,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const ::rtl::OUString&
     {
         //get outer size inclusive decoration
         //pixels, screen position
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         createDialogOnDemand();
         if( m_pDialog )
         {
@@ -407,27 +405,29 @@ void SAL_CALL CreationWizardUnoDlg::addPropertyChangeListener(
         const ::rtl::OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* xListener */ )
         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL CreationWizardUnoDlg::removePropertyChangeListener(
     const ::rtl::OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL CreationWizardUnoDlg::addVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

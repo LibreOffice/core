@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
     ScTabViewShell* pVisibleSh = this;
     if ( nSlotId == SID_OLE_SELECT || nSlotId == SID_OLE_ACTIVATE || nSlotId == SID_OLE_DEACTIVATE )
     {
-        DBG_ERROR("old slot SID_OLE...");
+        OSL_FAIL("old slot SID_OLE...");
     }
 
     switch (nSlotId)
@@ -115,7 +116,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
         case SID_OBJECT_WIDTH:
         case SID_OBJECT_HEIGHT:
             {
-                sal_Bool bDone = sal_False;
+                sal_Bool bDone = false;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState( nSlotId, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
@@ -257,7 +258,7 @@ void ScTabViewShell::RemoveAccessibilityObject( SfxListener& rObject )
     }
     else
     {
-        DBG_ERROR("kein Accessibility-Broadcaster?");
+        OSL_FAIL("kein Accessibility-Broadcaster?");
     }
 }
 
@@ -291,3 +292,4 @@ bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,10 +76,10 @@ using namespace ::com::sun::star;
 
 // Global data ================================================================
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 XclDebugObjCounter::~XclDebugObjCounter()
 {
-    DBG_ASSERT( mnObjCnt == 0, "XclDebugObjCounter::~XclDebugObjCounter - wrong root object count" );
+    OSL_ENSURE( mnObjCnt == 0, "XclDebugObjCounter::~XclDebugObjCounter - wrong root object count" );
 }
 #endif
 
@@ -118,7 +119,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         case SCRIPTTYPE_LATIN:      mnDefApiScript = ApiScriptType::LATIN;      break;
         case SCRIPTTYPE_ASIAN:      mnDefApiScript = ApiScriptType::ASIAN;      break;
         case SCRIPTTYPE_COMPLEX:    mnDefApiScript = ApiScriptType::COMPLEX;    break;
-        default:    DBG_ERRORFILE( "XclRootData::XclRootData - unknown script type" );
+        default:    OSL_FAIL( "XclRootData::XclRootData - unknown script type" );
     }
 
     // maximum cell position
@@ -160,7 +161,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "XclRootData::XclRootData - cannot get output device info" );
+        OSL_FAIL( "XclRootData::XclRootData - cannot get output device info" );
     }
 }
 
@@ -173,27 +174,28 @@ XclRootData::~XclRootData()
 XclRoot::XclRoot( XclRootData& rRootData ) :
     mrData( rRootData )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     ++mrData.mnObjCnt;
 #endif
 
     // filter tracer
     // do not use CREATE_OUSTRING for conditional expression
-    mrData.mxTracer.reset( new XclTracer( GetDocUrl(), OUString::createFromAscii(
-        IsExport() ? "Office.Tracing/Export/Excel" : "Office.Tracing/Import/Excel" ) ) );
+    mrData.mxTracer.reset( new XclTracer( GetDocUrl(), IsExport() ?
+                                                OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Tracing/Export/Excel"))
+                                              : OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Tracing/Import/Excel" )) ) );
 }
 
 XclRoot::XclRoot( const XclRoot& rRoot ) :
     mrData( rRoot.mrData )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     ++mrData.mnObjCnt;
 #endif
 }
 
 XclRoot::~XclRoot()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     --mrData.mnObjCnt;
 #endif
 }
@@ -202,7 +204,7 @@ XclRoot& XclRoot::operator=( const XclRoot& rRoot )
 {
     (void)rRoot;    // avoid compiler warning
     // allowed for assignment in derived classes - but test if the same root data is used
-    DBG_ASSERT( &mrData == &rRoot.mrData, "XclRoot::operator= - incompatible root data" );
+    OSL_ENSURE( &mrData == &rRoot.mrData, "XclRoot::operator= - incompatible root data" );
     return *this;
 }
 
@@ -227,7 +229,7 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
     if( mrData.mnCharWidth <= 0 )
     {
         // #i48717# Win98 with HP LaserJet returns 0
-        DBG_ERRORFILE( "XclRoot::SetCharWidth - invalid character width (no printer?)" );
+        OSL_FAIL( "XclRoot::SetCharWidth - invalid character width (no printer?)" );
         mrData.mnCharWidth = 11 * rFontData.mnHeight / 20;
     }
 }
@@ -240,6 +242,16 @@ sal_Int32 XclRoot::GetHmmFromPixelX( double fPixelX ) const
 sal_Int32 XclRoot::GetHmmFromPixelY( double fPixelY ) const
 {
     return static_cast< sal_Int32 >( fPixelY * mrData.mfScreenPixelY + 0.5 );
+}
+
+double XclRoot::GetPixelXFromHmm( sal_Int32 nX ) const
+{
+    return static_cast< double >( (nX - 0.5) / mrData.mfScreenPixelX );
+}
+
+double XclRoot::GetPixelYFromHmm( sal_Int32 nY ) const
+{
+    return static_cast< double >( (nY - 0.5) / mrData.mfScreenPixelY );
 }
 
 uno::Sequence< beans::NamedValue > XclRoot::RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
@@ -358,8 +370,8 @@ ScEditEngineDefaulter& XclRoot::GetEditEngine() const
         ScEditEngineDefaulter& rEE = *mrData.mxEditEngine;
         rEE.SetRefMapMode( MAP_100TH_MM );
         rEE.SetEditTextObjectPool( GetDoc().GetEditPool() );
-        rEE.SetUpdateMode( sal_False );
-        rEE.EnableUndo( sal_False );
+        rEE.SetUpdateMode( false );
+        rEE.EnableUndo( false );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
     return *mrData.mxEditEngine;
@@ -372,8 +384,8 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
         mrData.mxHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool(), sal_True ) );
         ScHeaderEditEngine& rEE = *mrData.mxHFEditEngine;
         rEE.SetRefMapMode( MAP_TWIP );  // headers/footers use twips as default metric
-        rEE.SetUpdateMode( sal_False );
-        rEE.EnableUndo( sal_False );
+        rEE.SetUpdateMode( false );
+        rEE.EnableUndo( false );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
 
         // set Calc header/footer defaults
@@ -396,8 +408,8 @@ EditEngine& XclRoot::GetDrawEditEngine() const
         mrData.mxDrawEditEng.reset( new EditEngine( &GetDoc().GetDrawLayer()->GetItemPool() ) );
         EditEngine& rEE = *mrData.mxDrawEditEng;
         rEE.SetRefMapMode( MAP_100TH_MM );
-        rEE.SetUpdateMode( sal_False );
-        rEE.EnableUndo( sal_False );
+        rEE.SetUpdateMode( false );
+        rEE.EnableUndo( false );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
     return *mrData.mxDrawEditEng;
@@ -425,3 +437,4 @@ XclTracer& XclRoot::GetTracer() const
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

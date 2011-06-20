@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,9 @@
 #ifndef SC_HIGHRED_HXX
 #define SC_HIGHRED_HXX
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 
@@ -44,14 +39,10 @@
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 
-#ifndef _SVX_ACREDLIN_HXX
 #include <svx/ctredlin.hxx>
-#endif
 #include <svx/simptabl.hxx>
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
@@ -104,7 +95,7 @@ private:
 
 protected:
 
-    virtual void    RefInputDone( sal_Bool bForced = sal_False );
+    virtual void    RefInputDone( sal_Bool bForced = false );
 
 public:
                     ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -122,3 +113,4 @@ public:
 
 #endif // SC_NAMEDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

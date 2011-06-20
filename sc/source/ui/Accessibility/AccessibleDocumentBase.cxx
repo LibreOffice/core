@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include "AccessibleDocumentBase.hxx"
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -49,3 +48,5 @@ ScAccessibleDocumentBase::ScAccessibleDocumentBase(
 ScAccessibleDocumentBase::~ScAccessibleDocumentBase(void)
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,16 +162,11 @@ void VTitle::createShapes(
         {
             drawing::TextHorizontalAdjust eHorizontalAdjust = drawing::TextHorizontalAdjust_CENTER;
             drawing::TextVerticalAdjust eVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
-            //text::WritingMode eWritingMode = text::WritingMode_LR_TB;//@todo get correct one
 
             aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextHorizontalAdjust"), uno::makeAny(eHorizontalAdjust) ) ); // drawing::TextHorizontalAdjust
             aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextVerticalAdjust"), uno::makeAny(eVerticalAdjust) ) ); //drawing::TextVerticalAdjust
-            //aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextWritingMode"), uno::makeAny(eWritingMode) ) ); //text::WritingMode
             aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowHeight"), uno::makeAny(sal_True) ) ); // sal_Bool
             aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowWidth"), uno::makeAny(sal_True) ) ); // sal_Bool
-
-            ////aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextMaximumFrameWidth"), uno::makeAny(rSize.Width) ) ); //sal_Int32
-            ////aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextMaximumFrameHeight"), uno::makeAny(rSize.Height) ) ); //sal_Int32
 
             //set name/classified ObjectID (CID)
             if( m_aCID.getLength() )
@@ -236,11 +232,8 @@ void VTitle::createShapes(
             bool bHasRefPageSize =
                 ( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize );
 
-            //for( nN=0; nN<aStringList.getLength();nN++ ) //portion wise fromatting does not work still
             if( aStringList.getLength()>0 )
             {
-                //uno::Reference< beans::XPropertySet > xTargetProps( aCursorList[nN], uno::UNO_QUERY );
-                //uno::Reference< beans::XPropertySet > xSourceProps( aStringList[nN], uno::UNO_QUERY );
                 uno::Reference< beans::XPropertySet > xTargetProps( xShape, uno::UNO_QUERY );
                 uno::Reference< beans::XPropertySet > xSourceProps( aStringList[0], uno::UNO_QUERY );
                 PropertyMapper::setMappedProperties( xTargetProps, xSourceProps, PropertyMapper::getPropertyNameMapForCharacterProperties() );
@@ -297,3 +290,5 @@ void VTitle::createShapes(
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

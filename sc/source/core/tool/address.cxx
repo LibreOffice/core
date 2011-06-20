@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,9 +44,10 @@
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
-using namespace ::com::sun::star;
 
-////////////////////////////////////////////////////////////////////////////
+using namespace ::com::sun::star;
+using ::rtl::OUString;
+
 const ScAddress::Details ScAddress::detailsOOOa1( formula::FormulaGrammar::CONV_OOO, 0, 0 );
 
 ScAddress::Details::Details ( const ScDocument* pDoc,
@@ -56,13 +58,6 @@ ScAddress::Details::Details ( const ScDocument* pDoc,
 {
 }
 
-//UNUSED2009-05 void ScAddress::Details::SetPos ( const ScDocument* pDoc,
-//UNUSED2009-05                                   const ScAddress & rAddr )
-//UNUSED2009-05 {
-//UNUSED2009-05     nRow  = rAddr.Row();
-//UNUSED2009-05     nCol  = rAddr.Col();
-//UNUSED2009-05     eConv = pDoc->GetAddressConvention();
-//UNUSED2009-05 }
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -299,7 +294,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
                     p = start;
                     break;
                 }
-                only_digits = sal_False;
+                only_digits = false;
                 p++;
             }
             else if( CharClass::isAsciiDigit( uc ))
@@ -394,14 +389,14 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                             rtl::OUString aStr;
                             if (!(rInfo.Data >>= aStr))
                             {
-                                DBG_ERROR1( "ScRange::Parse_XL_Header: Data type mismatch for ExternalLinkInfo %d", i);
+                                OSL_TRACE( "ScRange::Parse_XL_Header: Data type mismatch for ExternalLinkInfo %d", i);
                                 return NULL;
                             }
                             rExternDocName = aStr;
                         }
                         break;
                     default:
-                        DBG_ERROR2( "ScRange::Parse_XL_Header: unhandled ExternalLinkType %d for index %d",
+                        OSL_TRACE( "ScRange::Parse_XL_Header: unhandled ExternalLinkType %d for index %d",
                                 rInfo.Type, i);
                         return NULL;
                 }
@@ -495,7 +490,9 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     if (rExternDocName.Len())
     {
         ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-        pRefMgr->convertToAbsName( rExternDocName);
+        OUString aTmp = rExternDocName;
+        pRefMgr->convertToAbsName(aTmp);
+        rExternDocName = aTmp;
     }
     else
     {
@@ -638,13 +635,6 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
     // Keep in mind that nFlags2 gets left-shifted by 4 bits before being merged.
     sal_uInt16 nFlags2 = SCA_VALID_TAB;
 
-#if 0
-    {
-        ByteString  aStr(p, RTL_TEXTENCODING_UTF8);
-        aStr.Append(static_cast< char >(0));
-        std::cerr << "parse::XL::R1C1 \'" << aStr.GetBuffer() << '\'' << std::endl;
-    }
-#endif
     p = r.Parse_XL_Header( p, pDoc, aExternDocName, aStartTabName,
             aEndTabName, nFlags, bOnlyAcceptSingle, NULL );
 
@@ -820,13 +810,6 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
     String aExternDocName, aStartTabName, aEndTabName; // for external link table
     sal_uInt16 nFlags = SCA_VALID | SCA_VALID_TAB, nFlags2 = SCA_VALID_TAB;
 
-#if 0
-    {
-        ByteString  aStr(p, RTL_TEXTENCODING_UTF8);
-        aStr.Append(static_cast< char >(0));
-        std::cerr << "parse::XL::A1 \'" << aStr.GetBuffer() << '\'' << std::endl;
-    }
-#endif
     p = r.Parse_XL_Header( p, pDoc, aExternDocName, aStartTabName,
             aEndTabName, nFlags, bOnlyAcceptSingle, pExternalLinks );
 
@@ -923,6 +906,21 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
     p = tmp2;
     p = lcl_eatWhiteSpace( p+1 );
     tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2 );
+    if( !tmp1 && !aEndTabName.Len() )     // Probably the aEndTabName was specified after the first range
+    {
+        p = lcl_XL_ParseSheetRef( p, aEndTabName, false, NULL );
+        if( p )
+        {
+            SCTAB nTab = 0;
+            if( aEndTabName.Len() && pDoc->GetTable( aEndTabName, nTab ) )
+            {
+                r.aEnd.SetTab( nTab );
+                nFlags |= SCA_VALID_TAB2 | SCA_TAB2_3D | SCA_TAB2_ABSOLUTE;
+            }
+            p = lcl_eatWhiteSpace( p+1 );
+            tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2 );
+        }
+    }
     if( !tmp1 ) // strange, but valid singleton
         return nFlags;
 
@@ -952,7 +950,7 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
                          ScAddress::ExternalInfo* pExtInfo = NULL, ScRange* pRange = NULL )
 {
     sal_uInt16  nRes = 0;
-    String  aDocName;       // der pure Dokumentenname
+    OUString aDocName;       // der pure Dokumentenname
     String  aTab;
     bool    bExtDoc = false;
     bool    bExtDocInherited = false;
@@ -963,7 +961,9 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
     if (*p == '\'')
     {
         const sal_Unicode* pStart = p;
-        p = lcl_ParseQuotedName(p, aDocName);
+        String aTmp;
+        p = lcl_ParseQuotedName(p, aTmp);
+        aDocName = aTmp;
         if (*p++ == SC_COMPILER_FILE_TAB_SEP)
             bExtDoc = true;
         else
@@ -1015,7 +1015,18 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
             nBits = 0;
 
         if (!bExtDoc && (!pDoc || !pDoc->GetTable( aTab, nTab )))
-            nBits = 0;
+        {
+            // Specified table name is not found in this document.  Assume this is an external document.
+            bExtDoc = true;
+            aDocName = aTab;
+            xub_StrLen n = aTab.SearchBackward('.');
+            if (n != STRING_NOTFOUND && n > 0)
+                // Extension found.  Strip it.
+                aTab.Erase(n);
+            else
+                // No extension found.  This is probably not an external document.
+                nBits = 0;
+        }
     }
     else
     {
@@ -1087,7 +1098,7 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
             // Need document name if inherited.
             if (bExtDocInherited)
             {
-                const String* pFileName = pRefMgr->getExternalFileName( pExtInfo->mnFileId);
+                const OUString* pFileName = pRefMgr->getExternalFileName( pExtInfo->mnFileId);
                 if (pFileName)
                     aDocName = *pFileName;
                 else
@@ -1302,7 +1313,7 @@ void ScRange::Justify()
 
 void ScRange::ExtendTo( const ScRange& rRange )
 {
-    DBG_ASSERT( rRange.IsValid(), "ScRange::ExtendTo - cannot extend to invalid range" );
+    OSL_ENSURE( rRange.IsValid(), "ScRange::ExtendTo - cannot extend to invalid range" );
     if( IsValid() )
     {
         aStart.SetCol( ::std::min( aStart.Col(), rRange.aStart.Col() ) );
@@ -1369,12 +1380,12 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const String& r, ScDocument* pDoc, ScAdd
                     nRes2 |= SCA_TAB_ABSOLUTE;
             }
             else
-                nRes1 = 0;      // #38840# keine Tokens aus halben Sachen
+                nRes1 = 0;      // keine Tokens aus halben Sachen
         }
     }
     nRes1 = ( ( nRes1 | nRes2 ) & SCA_VALID )
           | nRes1
-          | ( ( nRes2 & 0x070F ) << 4 );
+          | ( ( nRes2 & SCA_BITS ) << 4 );
     return nRes1;
 }
 
@@ -1431,7 +1442,7 @@ sal_uInt16 ScRange::ParseCols( const String& rStr, ScDocument* pDoc,
     if( NULL == p )
         return 0;
 
-    pDoc = NULL; // make compiler shutup we may need this later
+    (void)pDoc; // make compiler shutup we may need this later
 
     switch (rDetails.eConv)
     {
@@ -1490,7 +1501,7 @@ sal_uInt16 ScRange::ParseRows( const String& rStr, ScDocument* pDoc,
     if( NULL == p )
         return 0;
 
-    pDoc = NULL; // make compiler shutup we may need this later
+    (void)pDoc; // make compiler shutup we may need this later
 
     switch (rDetails.eConv)
     {
@@ -1617,14 +1628,15 @@ getFileNameFromDoc( const ScDocument* pDoc )
                 sFileName = pShell->GetTitle();
         }
     }
-#if 0
-        {
-            ByteString  aStr( sFileName, RTL_TEXTENCODING_UTF8 );
-            aStr.Append(static_cast< char >(0));
-            std::cerr << "docname \'" << aStr.GetBuffer() << '\'' << std::endl;
-        }
-#endif
     return sFileName;
+}
+
+void ScAddress::Format( OUString& r, sal_uInt16 nFlags, ScDocument* pDoc,
+                        const Details& rDetails) const
+{
+    String aStr;
+    Format(aStr, nFlags, pDoc, rDetails);
+    r = aStr;
 }
 
 void ScAddress::Format( String& r, sal_uInt16 nFlags, ScDocument* pDoc,
@@ -1640,7 +1652,6 @@ void ScAddress::Format( String& r, sal_uInt16 nFlags, ScDocument* pDoc,
             r = ScGlobal::GetRscString( STR_NOREF_STR );
             return;
         }
-//      if( nFlags & ( SCA_TAB_ABSOLUTE | SCA_TAB_3D ) )
         if( nFlags & SCA_TAB_3D )
         {
             String aTabName, aDocName;
@@ -1648,8 +1659,8 @@ void ScAddress::Format( String& r, sal_uInt16 nFlags, ScDocument* pDoc,
             // External Reference, same as in ScCompiler::MakeTabStr()
             if( aTabName.GetChar(0) == '\'' )
             {   // "'Doc'#Tab"
-                xub_StrLen nPos = ScCompiler::GetDocTabPos( aTabName);
-                if (nPos != STRING_NOTFOUND)
+                xub_StrLen nPos = ScGlobal::FindUnquoted( aTabName, SC_COMPILER_FILE_TAB_SEP);
+                if (nPos != STRING_NOTFOUND && nPos > 0 && aTabName.GetChar(nPos-1) == '\'')
                 {
                     aDocName = aTabName.Copy( 0, nPos + 1 );
                     aTabName.Erase( 0, nPos + 1 );
@@ -1721,18 +1732,11 @@ lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
 {
     pDoc->GetName( nTab, rTabName );
     rDocName.Erase();
-#if 0
-    {
-        ByteString  aStr(rTabName, RTL_TEXTENCODING_UTF8);
-        aStr.Append(static_cast< char >(0));
-        std::cerr << "tabname \'" << aStr.GetBuffer() << '\'' << std::endl;
-    }
-#endif
     // External reference, same as in ScCompiler::MakeTabStr()
     if ( rTabName.GetChar(0) == '\'' )
     {   // "'Doc'#Tab"
-        xub_StrLen nPos = ScCompiler::GetDocTabPos( rTabName);
-        if (nPos != STRING_NOTFOUND)
+        xub_StrLen nPos = ScGlobal::FindUnquoted( rTabName, SC_COMPILER_FILE_TAB_SEP);
+        if (nPos != STRING_NOTFOUND && nPos > 0 && rTabName.GetChar(nPos-1) == '\'')
         {
             rDocName = rTabName.Copy( 0, nPos + 1 );
             rTabName.Erase( 0, nPos + 1 );
@@ -1883,6 +1887,14 @@ void ScRange::Format( String& r, sal_uInt16 nFlags, ScDocument* pDoc,
 #undef  absrel_differ
 }
 
+void ScRange::Format( OUString& r, sal_uInt16 nFlags, ScDocument* pDoc,
+                      const ScAddress::Details& rDetails ) const
+{
+    String aStr;
+    Format(aStr, nFlags, pDoc, rDetails);
+    r = aStr;
+}
+
 bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 {
     SCsTAB nMaxTab = pDoc ? pDoc->GetTableCount() : MAXTAB+1;
@@ -1891,17 +1903,17 @@ bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
     dz = Tab() + dz;
     sal_Bool bValid = sal_True;
     if( dx < 0 )
-        dx = 0, bValid = sal_False;
+        dx = 0, bValid = false;
     else if( dx > MAXCOL )
-        dx = MAXCOL, bValid =sal_False;
+        dx = MAXCOL, bValid =false;
     if( dy < 0 )
-        dy = 0, bValid = sal_False;
+        dy = 0, bValid = false;
     else if( dy > MAXROW )
-        dy = MAXROW, bValid =sal_False;
+        dy = MAXROW, bValid =false;
     if( dz < 0 )
-        dz = 0, bValid = sal_False;
+        dz = 0, bValid = false;
     else if( dz >= nMaxTab )
-        dz = nMaxTab-1, bValid =sal_False;
+        dz = nMaxTab-1, bValid =false;
     Set( dx, dy, dz );
     return bValid;
 }
@@ -2027,3 +2039,5 @@ bool AlphaToCol( SCCOL& rCol, const String& rStr)
         rCol = nResult;
     return bOk;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

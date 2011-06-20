@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,7 +98,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
         Reference< chart2::XAxis > xAxis( xResult->getAxisByDimension( i, MAIN_AXIS_INDEX ) );
         if( !xAxis.is() )
         {
-            OSL_ENSURE(false,"a created coordinate system should have an axis for each dimension");
+            OSL_FAIL("a created coordinate system should have an axis for each dimension");
             continue;
         }
 
@@ -121,30 +122,16 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 Sequence< OUString > SAL_CALL ChartType::getSupportedMandatoryRoles()
     throw (uno::RuntimeException)
 {
-    static Sequence< OUString > aDefaultSeq;
-
-    if( aDefaultSeq.getLength() == 0 )
-    {
-        aDefaultSeq.realloc( 2 );
-        aDefaultSeq[0] = C2U( "label" );
-        aDefaultSeq[1] = C2U( "values-y" );
-    }
-
+    Sequence< OUString > aDefaultSeq(2);
+    aDefaultSeq[0] = C2U( "label" );
+    aDefaultSeq[1] = C2U( "values-y" );
     return aDefaultSeq;
 }
 
 Sequence< OUString > SAL_CALL ChartType::getSupportedOptionalRoles()
     throw (uno::RuntimeException)
 {
-    static Sequence< OUString > aDefaultOptRolesSeq;
-
-//     if( aDefaultOptRolesSeq.getLength() == 0 )
-//     {
-//         aDefaultOptRolesSeq.realloc( 1 );
-//         aDefaultOptRolesSeq[0] = C2U( "error-bars-y" );
-//     }
-
-    return aDefaultOptRolesSeq;
+    return Sequence< OUString >();
 }
 
 OUString SAL_CALL ChartType::getRoleOfSequenceForSeriesLabel()
@@ -340,3 +327,5 @@ IMPLEMENT_FORWARD_XINTERFACE2( ChartType, ChartType_Base, ::property::OPropertyS
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ChartType, ChartType_Base, ::property::OPropertySet )
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

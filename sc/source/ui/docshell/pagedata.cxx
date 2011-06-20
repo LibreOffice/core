@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 
 #include <string.h>
-#include <tools/debug.hxx>
-
 
 #include "pagedata.hxx"
 
@@ -97,11 +96,11 @@ ScPageBreakData::~ScPageBreakData()
 
 ScPrintRangeData& ScPageBreakData::GetData(size_t nPos)
 {
-    DBG_ASSERT(nPos < nAlloc, "ScPageBreakData::GetData bumm");
+    OSL_ENSURE(nPos < nAlloc, "ScPageBreakData::GetData bumm");
 
     if ( nPos >= nUsed )
     {
-        DBG_ASSERT(nPos == nUsed, "ScPageBreakData::GetData falsche Reihenfolge");
+        OSL_ENSURE(nPos == nUsed, "ScPageBreakData::GetData falsche Reihenfolge");
         nUsed = nPos+1;
     }
 
@@ -111,11 +110,11 @@ ScPrintRangeData& ScPageBreakData::GetData(size_t nPos)
 sal_Bool ScPageBreakData::IsEqual( const ScPageBreakData& rOther ) const
 {
     if ( nUsed != rOther.nUsed )
-        return sal_False;
+        return false;
 
     for (sal_uInt16 i=0; i<nUsed; i++)
         if ( pData[i].GetPrintRange() != rOther.pData[i].GetPrintRange() )
-            return sal_False;
+            return false;
 
     //! ScPrintRangeData komplett vergleichen ??
 
@@ -137,3 +136,4 @@ void ScPageBreakData::AddPages()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

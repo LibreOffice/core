@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -185,9 +186,7 @@ void RangeChooserTabPage::initControlsFromModel()
     m_nChangingControlCalls++;
 
     if(m_pTemplateProvider)
-    {
         m_xCurrentChartTypeTemplate = m_pTemplateProvider->getCurrentTemplate();
-    }
 
     bool bUseColumns = ! m_aRB_Rows.IsChecked();
     bool bFirstCellAsLabel = bUseColumns ? m_aCB_FirstRowAsLabel.IsChecked() : m_aCB_FirstColumnAsLabel.IsChecked();
@@ -247,7 +246,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
             m_xCurrentChartTypeTemplate.set( m_pTemplateProvider->getCurrentTemplate());
         if( !m_xCurrentChartTypeTemplate.is())
         {
-            OSL_ENSURE( false, "Need a template to change data source" );
+            OSL_FAIL( "Need a template to change data source" );
             return;
         }
     }
@@ -412,3 +411,5 @@ void RangeChooserTabPage::setDirty()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

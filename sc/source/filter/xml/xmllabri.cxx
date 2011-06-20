@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,7 +91,7 @@ ScXMLLabelRangeContext::ScXMLLabelRangeContext(
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    bColumnOrientation( sal_False )
+    bColumnOrientation( false )
 {
     sal_Int16               nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap&    rAttrTokenMap(GetScImport().GetLabelRangeAttrTokenMap());
@@ -131,7 +132,7 @@ SvXMLImportContext* ScXMLLabelRangeContext::CreateChildContext(
 
 void ScXMLLabelRangeContext::EndElement()
 {
-    //  #b5071088# Label ranges must be stored as strings until all sheets are loaded
+    //  Label ranges must be stored as strings until all sheets are loaded
     //  (like named expressions).
 
     ScMyLabelRange* pLabelRange = new ScMyLabelRange;
@@ -143,3 +144,4 @@ void ScXMLLabelRangeContext::EndElement()
     GetScImport().AddLabelRange(pLabelRange);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

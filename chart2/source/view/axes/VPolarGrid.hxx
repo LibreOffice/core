@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,15 +81,11 @@ private: //member
                     , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
                     , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
                     , const ::std::vector<VLineProperties>& rLinePropertiesList );
-#if NOTYET
-    void    create2DAngleGrid( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xLogicTarget
-                    , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
-                    , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
-                    , const ::std::vector<VLineProperties>& rLinePropertiesList );
-#endif
 };
 
 //.............................................................................
 } //namespace chart
 //.............................................................................
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,8 +57,6 @@ using namespace formula;
 #define SCdEpsilon                1.0E-7
 #define SC_MAX_ITERATION_COUNT    20
 #define MAX_ANZ_DOUBLE_FOR_SORT 100000
-// PI jetzt als F_PI aus solar.h
-//#define   PI            3.1415926535897932
 
 const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  // found experimental
 const double fMachEps = ::std::numeric_limits<double>::epsilon();
@@ -86,7 +85,7 @@ double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, double fBx, 
     const double fYEps = 1.0E-307;
     const double fXEps = ::std::numeric_limits<double>::epsilon();
 
-    DBG_ASSERT(fAx<fBx, "IterateInverse: wrong interval");
+    OSL_ENSURE(fAx<fBx, "IterateInverse: wrong interval");
 
     //  find enclosing interval
 
@@ -461,10 +460,6 @@ double ScInterpreter::Fakultaet(double x)
     }
     else
         SetError(errNoValue);
-/*                                           // Stirlingsche Naeherung zu ungenau
-    else
-        x = pow(x/exp(1), x) * sqrt(x) * SQRT_2_PI * (1.0 + 1.0 / (12.0 * x));
-*/
     return x;
 }
 
@@ -488,24 +483,10 @@ double ScInterpreter::BinomKoeff(double n, double k)
             k--;
             n--;
         }
-/*
-        double f1 = n;                      // Zaehler
-        double f2 = k;                      // Nenner
-        n--;
-        k--;
-        while (k > 0.0)
-        {
-            f2 *= k;
-            f1 *= n;
-            k--;
-            n--;
-        }
-        nVal = f1 / f2;
-*/
+
     }
     return nVal;
 }
-
 
 // The algorithm is based on lanczos13m53 in lanczos.hpp
 // in math library from http://www.boost.org
@@ -547,7 +528,6 @@ double lcl_getLanczosSum(double fZ)
     double fSumNum;
     double fSumDenom;
     int nI;
-    double fZInv;
     if (fZ<=1.0)
     {
         fSumNum = fNum[12];
@@ -563,7 +543,7 @@ double lcl_getLanczosSum(double fZ)
     else
     // Cancel down with fZ^12; Horner scheme with reverse coefficients
     {
-        fZInv = 1/fZ;
+        double fZInv = 1/fZ;
         fSumNum = fNum[0];
         fSumDenom = fDenom[0];
         for (nI = 1; nI <=12; ++nI)
@@ -650,7 +630,6 @@ double ScInterpreter::GetGamma(double fZ)
     return exp( fLogPi - fLogDivisor) * ((::rtl::math::sin( F_PI*fZ) < 0.0) ? -1.0 : 1.0);
 }
 
-
 /** You must ensure fZ>0 */
 double ScInterpreter::GetLogGamma(double fZ)
 {
@@ -671,48 +650,12 @@ double ScInterpreter::GetFDist(double x, double fF1, double fF2)
     double alpha = fF2/2.0;
     double beta = fF1/2.0;
     return (GetBetaDist(arg, alpha, beta));
-/*
-    double Z = (pow(fF,1.0/3.0)*(1.0-2.0/(9.0*fF2)) - (1.0-2.0/(9.0*fF1))) /
-               sqrt(2.0/(9.0*fF1) + pow(fF,2.0/3.0)*2.0/(9.0*fF2));
-    return (0.5-gauss(Z));
-*/
 }
 
 double ScInterpreter::GetTDist(double T, double fDF)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetTDist" );
     return 0.5 * GetBetaDist(fDF/(fDF+T*T), fDF/2.0, 0.5);
-/*
-    sal_uInt16 DF = (sal_uInt16) fDF;
-    double A = T / sqrt(DF);
-    double B = 1.0 + A*A;
-    double R;
-    if (DF == 1)
-        R = 0.5 + atan(A)/F_PI;
-    else if (DF % 2 == 0)
-    {
-        double S0 = A/(2.0 * sqrt(B));
-        double C0 = S0;
-        for (sal_uInt16 i = 2; i <= DF-2; i+=2)
-        {
-            C0 *= (1.0 - 1.0/(double)i)/B;
-            S0 += C0;
-        }
-        R = 0.5 + S0;
-    }
-    else
-    {
-        double S1 = A / (B * F_PI);
-        double C1 = S1;
-        for (sal_uInt16 i = 3; i <= DF-2; i+=2)
-        {
-            C1 *= (1.0 - 1.0/(double)i)/B;
-            S1 += C1;
-        }
-        R = 0.5 + atan(A)/F_PI + S1;
-    }
-    return 1.0 - R;
-*/
 }
 
 // for LEGACY.CHIDIST, returns right tail, fDF=degrees of freedom
@@ -743,7 +686,6 @@ double ScInterpreter::GetChiSqDistPDF(double fX, double fDF)
 {
     // you must ensure fDF is positive integer
     double fValue;
-    double fCount;
     if (fX <= 0.0)
         return 0.0; // see ODFF
     if (fDF*fX > 1391000.0)
@@ -753,6 +695,7 @@ double ScInterpreter::GetChiSqDistPDF(double fX, double fDF)
     }
     else // fDF is small in most cases, we can iterate
     {
+        double fCount;
         if (fmod(fDF,2.0)<0.5)
         {
             // even
@@ -782,7 +725,6 @@ void ScInterpreter::ScChiSqDist()
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
-    double fX;
     bool bCumulative;
     if (nParamCount == 3)
         bCumulative = GetBool();
@@ -793,7 +735,7 @@ void ScInterpreter::ScChiSqDist()
         PushIllegalArgument();
     else
     {
-        fX = GetDouble();
+        double fX = GetDouble();
         if (bCumulative)
             PushDouble(GetChiSqDistCDF(fX,fDF));
         else
@@ -805,12 +747,11 @@ void ScInterpreter::ScGamma()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGamma" );
     double x = GetDouble();
-    double fResult;
     if (x <= 0.0 && x == ::rtl::math::approxFloor(x))
         PushIllegalArgument();
     else
     {
-        fResult = GetGamma(x);
+        double fResult = GetGamma(x);
         if (nGlobalError)
         {
             PushError( nGlobalError);
@@ -819,7 +760,6 @@ void ScInterpreter::ScGamma()
         PushDouble(fResult);
     }
 }
-
 
 void ScInterpreter::ScLogGamma()
 {
@@ -949,20 +889,18 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
     const double fLogDblMin = log( ::std::numeric_limits<double>::min());
     double fLogY = (fX < 0.1) ? ::rtl::math::log1p(-fX) : log(0.5-fX+0.5);
     double fLogX = log(fX);
-    double fAm1LogX = (fA-1.0) * fLogX;
-    double fBm1LogY = (fB-1.0) * fLogY;
+    double fAm1 = fA-1.0;
+    double fBm1 = fB-1.0;
     double fLogBeta = GetLogBeta(fA,fB);
     // check whether parts over- or underflow
-    if (   fAm1LogX < fLogDblMax  && fAm1LogX > fLogDblMin
-        && fBm1LogY < fLogDblMax  && fBm1LogY > fLogDblMin
-        && fLogBeta < fLogDblMax  && fLogBeta > fLogDblMin
-        && fAm1LogX + fBm1LogY < fLogDblMax && fAm1LogX + fBm1LogY > fLogDblMin)
+    if (   fAm1 * fLogX < fLogDblMax  && fAm1 * fLogX > fLogDblMin
+        && fBm1 * fLogY < fLogDblMax  && fBm1* fLogY > fLogDblMin
+        && fLogBeta < fLogDblMax      && fLogBeta > fLogDblMin )
         return pow(fX,fA-1.0) * pow(0.5-fX+0.5,fB-1.0) / GetBeta(fA,fB);
     else // need logarithm;
         // might overflow as a whole, but seldom, not worth to pre-detect it
-        return exp( fAm1LogX + fBm1LogY - fLogBeta);
+        return exp((fA-1.0)*fLogX + (fB-1.0)* fLogY - fLogBeta);
 }
-
 
 /*
                 x^a * (1-x)^b
@@ -1227,62 +1165,13 @@ void ScInterpreter::ScVariationen2()
     }
 }
 
-
-double ScInterpreter::GetBinomDistPMF(double x, double n, double p)
-// used in ScB and ScBinomDist
-// preconditions: 0.0 <= x <= n, 0.0 < p < 1.0;  x,n integral although double
-        {
-    double q = (0.5 - p) + 0.5;
-            double fFactor = pow(q, n);
-    if (fFactor <=::std::numeric_limits<double>::min())
-            {
-                fFactor = pow(p, n);
-        if (fFactor <= ::std::numeric_limits<double>::min())
-            return GetBetaDistPDF(p, x+1.0, n-x+1.0)/(n+1.0);
-                else
-                {
-            sal_uInt32 max = static_cast<sal_uInt32>(n - x);
-            for (sal_uInt32 i = 0; i < max && fFactor > 0.0; i++)
-                        fFactor *= (n-i)/(i+1)*q/p;
-            return fFactor;
-                }
-            }
-            else
-            {
-        sal_uInt32 max = static_cast<sal_uInt32>(x);
-        for (sal_uInt32 i = 0; i < max && fFactor > 0.0; i++)
-                    fFactor *= (n-i)/(i+1)*p/q;
-        return fFactor;
-        }
-    }
-
-double lcl_GetBinomDistRange(double n, double xs,double xe,
-            double fFactor /* q^n */, double p, double q)
-//preconditions: 0.0 <= xs < xe <= n; xs,xe,n integral although double
-                {
-    sal_uInt32 i;
-    double fSum;
-    // skip summands index 0 to xs-1, start sum with index xs
-    sal_uInt32 nXs = static_cast<sal_uInt32>( xs );
-    for (i = 1; i <= nXs && fFactor > 0.0; i++)
-        fFactor *= (n-i+1)/i * p/q;
-    fSum = fFactor; // Summand xs
-    sal_uInt32 nXe = static_cast<sal_uInt32>(xe);
-    for (i = nXs+1; i <= nXe && fFactor > 0.0; i++)
-                    {
-        fFactor *= (n-i+1)/i * p/q;
-                        fSum += fFactor;
-                    }
-    return (fSum>1.0) ? 1.0 : fSum;
-                }
-
 void ScInterpreter::ScB()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScB" );
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 4 ) )
         return ;
-    if (nParamCount == 3)   // mass function
+    if (nParamCount == 3)
     {
         double x = ::rtl::math::approxFloor(GetDouble());
         double p = GetDouble();
@@ -1290,43 +1179,107 @@ void ScInterpreter::ScB()
         if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
             PushIllegalArgument();
         else
-            if (p == 0.0)
-                PushDouble( (x == 0.0) ? 1.0 : 0.0 );
-            else
-                if ( p == 1.0)
-                    PushDouble( (x == n) ? 1.0 : 0.0);
+        {
+            double q = 1.0 - p;
+            double fFactor = pow(q, n);
+            if (fFactor == 0.0)
+            {
+                fFactor = pow(p, n);
+                if (fFactor == 0.0)
+                    PushNoValue();
                 else
-                    PushDouble(GetBinomDistPMF(x,n,p));
+                {
+                    sal_uLong max = (sal_uLong) (n - x);
+                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
+                        fFactor *= (n-i)/(i+1)*q/p;
+                    PushDouble(fFactor);
+                }
             }
             else
-    {   // nParamCount == 4
-        double xe = ::rtl::math::approxFloor(GetDouble());
-        double xs = ::rtl::math::approxFloor(GetDouble());
-        double p = GetDouble();
-        double n = ::rtl::math::approxFloor(GetDouble());
-        double q = (0.5 - p) + 0.5;
-        bool bIsValidX = ( 0.0 <= xs && xs <= xe && xe <= n);
-        if ( bIsValidX && 0.0 < p && p < 1.0)
             {
-            if (xs == xe)       // mass function
-                PushDouble(GetBinomDistPMF(xs,n,p));
-            else
-                {
-                double fFactor = pow(q, n);
-                if (fFactor > ::std::numeric_limits<double>::min())
-                    PushDouble(lcl_GetBinomDistRange(n,xs,xe,fFactor,p,q));
+                sal_uLong max = (sal_uLong) x;
+                for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
+                    fFactor *= (n-i)/(i+1)*p/q;
+                PushDouble(fFactor);
+            }
+        }
+    }
+    else if (nParamCount == 4)
+    {
+        double xe = GetDouble();
+        double xs = GetDouble();
+        double p = GetDouble();
+        double n = GetDouble();
+//                                          alter Stand 300-SC
+//      if ((xs < n) && (xe < n) && (p < 1.0))
+//      {
+//          double Varianz = sqrt(n * p * (1.0 - p));
+//          xs = fabs(xs - (n * p /* / 2.0 STE */ ));
+//          xe = fabs(xe - (n * p /* / 2.0 STE */ ));
+//// STE        double nVal = gauss((xs + 0.5) / Varianz) + gauss((xe + 0.5) / Varianz);
+//          double nVal = fabs(gauss(xs / Varianz) - gauss(xe / Varianz));
+//          PushDouble(nVal);
+//      }
+        bool bIsValidX = ( 0.0 <= xs && xs <= xe && xe <= n);
+        if ( bIsValidX && 0.0 < p && p < 1.0 )
+        {
+            double q = 1.0 - p;
+            double fFactor = pow(q, n);
+            if (fFactor == 0.0)
+            {
+                fFactor = pow(p, n);
+                if (fFactor == 0.0)
+                    PushNoValue();
                 else
                 {
-                    fFactor = pow(p, n);
-                    if (fFactor > ::std::numeric_limits<double>::min())
+                    double fSum = 0.0;
+                    sal_uLong max;
+                    if (xe < (sal_uLong) n)
+                        max = (sal_uLong) (n-xe)-1;
+                    else
+                        max = 0;
+                    sal_uLong i;
+                    for (i = 0; i < max && fFactor > 0.0; i++)
+                        fFactor *= (n-i)/(i+1)*q/p;
+                    if (xs < (sal_uLong) n)
+                        max = (sal_uLong) (n-xs);
+                    else
+                        fSum = fFactor;
+                    for (; i < max && fFactor > 0.0; i++)
                     {
-                    // sum from j=xs to xe {(n choose j) * p^j * q^(n-j)}
-                    // = sum from i = n-xe to n-xs { (n choose i) * q^i * p^(n-i)}
-                        PushDouble(lcl_GetBinomDistRange(n,n-xe,n-xs,fFactor,q,p));
+                        fFactor *= (n-i)/(i+1)*q/p;
+                        fSum += fFactor;
+                    }
+                    PushDouble(fSum);
+                }
+            }
+            else
+            {
+                sal_uLong max;
+                double fSum;
+                if ( (sal_uLong) xs == 0)
+                {
+                    fSum = fFactor;
+                    max = 0;
                 }
                 else
-                        PushDouble(GetBetaDist(q,n-xe,xe+1.0)-GetBetaDist(q,n-xs+1,xs) );
+                {
+                    max = (sal_uLong) xs-1;
+                    fSum = 0.0;
                 }
+                sal_uLong i;
+                for (i = 0; i < max && fFactor > 0.0; i++)
+                    fFactor *= (n-i)/(i+1)*p/q;
+                if ((sal_uLong)xe == 0)                     // beide 0
+                    fSum = fFactor;
+                else
+                    max = (sal_uLong) xe;
+                for (; i < max && fFactor > 0.0; i++)
+                {
+                    fFactor *= (n-i)/(i+1)*p/q;
+                    fSum += fFactor;
+                }
+                PushDouble(fSum);
             }
         }
         else
@@ -1351,63 +1304,78 @@ void ScInterpreter::ScBinomDist()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBinomDist" );
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
-        bool bIsCum   = GetBool();     // false=mass function; true=cumulative
-        double p      = GetDouble();
-        double n      = ::rtl::math::approxFloor(GetDouble());
-        double x      = ::rtl::math::approxFloor(GetDouble());
-        double q = (0.5 - p) + 0.5;           // get one bit more for p near 1.0
-        double fFactor, fSum;
+        double kum    = GetDouble();                    // 0 oder 1
+        double p      = GetDouble();                    // p
+        double n      = ::rtl::math::approxFloor(GetDouble());              // n
+        double x      = ::rtl::math::approxFloor(GetDouble());              // x
+        double fFactor, q;
         if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
-        {
             PushIllegalArgument();
-            return;
-            }
-        if ( p == 0.0)
+        else if (kum == 0.0)                        // Dichte
+        {
+            q = 1.0 - p;
+            fFactor = pow(q, n);
+            if (fFactor == 0.0)
             {
-            PushDouble( (x==0.0 || bIsCum) ? 1.0 : 0.0 );
-            return;
+                fFactor = pow(p, n);
+                if (fFactor == 0.0)
+                    PushNoValue();
+                else
+                {
+                    sal_uLong max = (sal_uLong) (n - x);
+                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
+                        fFactor *= (n-i)/(i+1)*q/p;
+                    PushDouble(fFactor);
+                }
             }
-        if ( p == 1.0)
-        {
-            PushDouble( (x==n) ? 1.0 : 0.0);
-            return;
+            else
+            {
+                sal_uLong max = (sal_uLong) x;
+                for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
+                    fFactor *= (n-i)/(i+1)*p/q;
+                PushDouble(fFactor);
+            }
         }
-        if (!bIsCum)
-            PushDouble( GetBinomDistPMF(x,n,p));
-        else
+        else                                        // Verteilung
         {
-            if (x == n)
+            if (n == x)
                 PushDouble(1.0);
             else
             {
+                double fSum;
+                q = 1.0 - p;
                 fFactor = pow(q, n);
-                if (x == 0.0)
-                    PushDouble(fFactor);
-                else
-                    if (fFactor <= ::std::numeric_limits<double>::min())
+                if (fFactor == 0.0)
                 {
                     fFactor = pow(p, n);
-                        if (fFactor <= ::std::numeric_limits<double>::min())
-                            PushDouble(GetBetaDist(q,n-x,x+1.0));
+                    if (fFactor == 0.0)
+                        PushNoValue();
                     else
                     {
-                            if (fFactor > fMachEps)
-                            {
                         fSum = 1.0 - fFactor;
-                                sal_uInt32 max = static_cast<sal_uInt32> (n - x) - 1;
-                                for (sal_uInt32 i = 0; i < max && fFactor > 0.0; i++)
+                        sal_uLong max = (sal_uLong) (n - x) - 1;
+                        for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
                         {
                             fFactor *= (n-i)/(i+1)*q/p;
                             fSum -= fFactor;
                         }
-                                PushDouble( (fSum < 0.0) ? 0.0 : fSum );
-                }
-                else
-                                PushDouble(lcl_GetBinomDistRange(n,n-x,n,fFactor,q,p));
+                        if (fSum < 0.0)
+                            PushDouble(0.0);
+                        else
+                            PushDouble(fSum);
                     }
                 }
-                    else
-                        PushDouble( lcl_GetBinomDistRange(n,0.0,x,fFactor,p,q)) ;
+                else
+                {
+                    fSum = fFactor;
+                    sal_uLong max = (sal_uLong) x;
+                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
+                    {
+                        fFactor *= (n-i)/(i+1)*p/q;
+                        fSum += fFactor;
+                    }
+                    PushDouble(fSum);
+                }
             }
         }
     }
@@ -1772,7 +1740,7 @@ void ScInterpreter::ScHypGeomDist()
         fCDenomVarLower = N - n - 2.0*(M - x) + 1.0;
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     double fCNumLower = N - n - fCNumVarUpper;
 #endif
     double fCDenomUpper = N - n - M + x + 1.0 - fCDenomVarLower;
@@ -1794,12 +1762,12 @@ void ScInterpreter::ScHypGeomDist()
             else
             {
                 // overlap
-                DBG_ASSERT( fCNumLower < n + 1.0, "ScHypGeomDist: wrong assertion" );
+                OSL_ENSURE( fCNumLower < n + 1.0, "ScHypGeomDist: wrong assertion" );
                 lcl_PutFactorialElements( cnNumer, N - 2.0*n, fCNumVarUpper, N - n );
                 lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
             }
 
-            DBG_ASSERT( fCDenomUpper <= N - M, "ScHypGeomDist: wrong assertion" );
+            OSL_ENSURE( fCDenomUpper <= N - M, "ScHypGeomDist: wrong assertion" );
 
             if ( fCDenomUpper < n - x + 1.0 )
                 // no overlap
@@ -1829,7 +1797,7 @@ void ScInterpreter::ScHypGeomDist()
                 lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
             }
 
-            DBG_ASSERT( fCDenomUpper <= n, "ScHypGeomDist: wrong assertion" );
+            OSL_ENSURE( fCDenomUpper <= n, "ScHypGeomDist: wrong assertion" );
 
             if ( fCDenomUpper < n - x + 1.0 )
                 // no overlap
@@ -1842,7 +1810,7 @@ void ScInterpreter::ScHypGeomDist()
             }
         }
 
-        DBG_ASSERT( fCDenomUpper <= M, "ScHypGeomDist: wrong assertion" );
+        OSL_ENSURE( fCDenomUpper <= M, "ScHypGeomDist: wrong assertion" );
     }
     else
     {
@@ -1878,8 +1846,8 @@ void ScInterpreter::ScHypGeomDist()
         {
             // Case 4
 
-            DBG_ASSERT( M >= n - x, "ScHypGeomDist: wrong assertion" );
-            DBG_ASSERT( M - x <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
+            OSL_ENSURE( M >= n - x, "ScHypGeomDist: wrong assertion" );
+            OSL_ENSURE( M - x <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
 
             if ( N - n < N - M + 1.0 )
             {
@@ -1890,8 +1858,7 @@ void ScInterpreter::ScHypGeomDist()
             else
             {
                 // Overlap
-                DBG_ASSERT( fCNumLower <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
-
+                OSL_ENSURE( fCNumLower <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
                 lcl_PutFactorialElements( cnNumer, M - n, fCNumVarUpper, N - n );
                 lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
             }
@@ -1908,7 +1875,7 @@ void ScInterpreter::ScHypGeomDist()
             }
             else
             {
-                DBG_ASSERT( M <= fCDenomUpper, "ScHypGeomDist: wrong assertion" );
+                OSL_ENSURE( M <= fCDenomUpper, "ScHypGeomDist: wrong assertion" );
                 lcl_PutFactorialElements( cnDenom, fCDenomVarLower, N - n - 2.0*M + x,
                         N - n - M + x + 1.0 );
 
@@ -1917,7 +1884,7 @@ void ScInterpreter::ScHypGeomDist()
             }
         }
 
-        DBG_ASSERT( fCDenomUpper <= n, "ScHypGeomDist: wrong assertion" );
+        OSL_ENSURE( fCDenomUpper <= n, "ScHypGeomDist: wrong assertion" );
 
         fDNumVarLower = 0.0;
     }
@@ -2221,7 +2188,6 @@ public:
     double  GetValue( double x ) const  { return fp - rInt.GetChiSqDistCDF(x, fDF); }
 };
 
-
 void ScInterpreter::ScChiSqInv()
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
@@ -2241,7 +2207,6 @@ void ScInterpreter::ScChiSqInv()
         SetError(errNoConvergence);
     PushDouble(fVal);
 }
-
 
 void ScInterpreter::ScConfidence()
 {
@@ -2332,8 +2297,10 @@ void ScInterpreter::ScZTest()
         }
         break;
         case svMatrix :
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if (pMat)
             {
                 SCSIZE nCount = pMat->GetElementCount();
@@ -2429,9 +2396,6 @@ bool ScInterpreter::CalculateTest(sal_Bool _bTemplin
         }
         fT = fabs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
         double c = fS1/(fS1+fS2);
-// s.u. fF = ::rtl::math::approxFloor(1.0/(c*c/(fCount1-1.0)+(1.0-c)*(1.0-c)/(fCount2-1.0)));
-//      fF = ::rtl::math::approxFloor((fS1+fS2)*(fS1+fS2)/(fS1*fS1/(fCount1-1.0) + fS2*fS2/(fCount2-1.0)));
-
     //  GetTDist wird mit GetBetaDist berechnet und kommt auch mit nicht ganzzahligen
     //  Freiheitsgraden klar. Dann stimmt das Ergebnis auch mit Excel ueberein (#52406#):
         fF = 1.0/(c*c/(fCount1-1.0)+(1.0-c)*(1.0-c)/(fCount2-1.0));
@@ -2510,7 +2474,7 @@ void ScInterpreter::ScTTest()
     }
     else if (fTyp == 2.0)
     {
-        CalculateTest(sal_False,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF);
+        CalculateTest(false,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF);
     }
     else if (fTyp == 3.0)
     {
@@ -2600,11 +2564,6 @@ void ScInterpreter::ScFTest()
         fF2 = fCount1-1.0;
     }
     PushDouble(2.0*GetFDist(fF, fF1, fF2));
-/*
-    double Z = (pow(fF,1.0/3.0)*(1.0-2.0/(9.0*fF2)) - (1.0-2.0/(9.0*fF1))) /
-               sqrt(2.0/(9.0*fF1) + pow(fF,2.0/3.0)*2.0/(9.0*fF2));
-    PushDouble(1.0-2.0*gauss(Z));
-*/
 }
 
 void ScInterpreter::ScChiTest()
@@ -2659,25 +2618,6 @@ void ScInterpreter::ScChiTest()
     else
         fDF = (double)(nC1-1)*(double)(nR1-1);
     PushDouble(GetChiDist(fChi, fDF));
-/*
-    double fX, fS, fT, fG;
-    fX = 1.0;
-    for (double fi = fDF; fi >= 2.0; fi -= 2.0)
-        fX *= fChi/fi;
-    fX *= exp(-fChi/2.0);
-    if (fmod(fDF, 2.0) != 0.0)
-        fX *= sqrt(2.0*fChi/F_PI);
-    fS = 1.0;
-    fT = 1.0;
-    fG = fDF;
-    while (fT >= 1.0E-7)
-    {
-        fG += 2.0;
-        fT *= fChi/fG;
-        fS += fT;
-    }
-    PushDouble(1.0 - fX*fS);
-*/
 }
 
 void ScInterpreter::ScKurt()
@@ -2796,8 +2736,10 @@ void ScInterpreter::ScHarMean()
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nCount = pMat->GetElementCount();
@@ -2917,8 +2859,10 @@ void ScInterpreter::ScGeoMean()
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nCount = pMat->GetElementCount();
@@ -3041,8 +2985,10 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nCount = pMat->GetElementCount();
@@ -3167,14 +3113,14 @@ double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile
     {
         size_t nIndex = (size_t)::rtl::math::approxFloor( fPercentile * (nSize-1));
         double fDiff = fPercentile * (nSize-1) - ::rtl::math::approxFloor( fPercentile * (nSize-1));
-        DBG_ASSERT(nIndex < nSize, "GetPercentile: wrong index(1)");
+        OSL_ENSURE(nIndex < nSize, "GetPercentile: wrong index(1)");
         vector<double>::iterator iter = rArray.begin() + nIndex;
         ::std::nth_element( rArray.begin(), iter, rArray.end());
         if (fDiff == 0.0)
             return *iter;
         else
         {
-            DBG_ASSERT(nIndex < nSize-1, "GetPercentile: wrong index(2)");
+            OSL_ENSURE(nIndex < nSize-1, "GetPercentile: wrong index(2)");
             double fVal = *iter;
             iter = rArray.begin() + nIndex+1;
             ::std::nth_element( rArray.begin(), iter, rArray.end());
@@ -3278,7 +3224,6 @@ void ScInterpreter::CalculateSmallLarge(sal_Bool bSmall)
      * actually are defined to return an array of values if an array of
      * positions was passed, in which case, depending on the number of values,
      * we may or will need a real sorted array again, see #i32345. */
-    //GetSortArray(1, aSortArray);
     GetNumberSequenceArray(1, aSortArray);
     SCSIZE nSize = aSortArray.size();
     if (aSortArray.empty() || nSize == 0 || nGlobalError || nSize < k)
@@ -3295,7 +3240,7 @@ void ScInterpreter::CalculateSmallLarge(sal_Bool bSmall)
 void ScInterpreter::ScLarge()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScLarge" );
-    CalculateSmallLarge(sal_False);
+    CalculateSmallLarge(false);
 }
 
 void ScInterpreter::ScSmall()
@@ -3310,22 +3255,7 @@ void ScInterpreter::ScPercentrank()
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2 ) )
         return;
-#if 0
-/*                          wird nicht unterstuetzt
-    double fPrec;
-    if (nParamCount == 3)
-    {
-        fPrec = ::rtl::math::approxFloor(GetDouble());
-        if (fPrec < 1.0)
-        {
-            PushIllegalArgument();
-            return;
-        }
-    }
-    else
-        fPrec = 3.0;
-*/
-#endif
+
     double fNum = GetDouble();
     vector<double> aSortArray;
     GetSortArray(1, aSortArray);
@@ -3358,13 +3288,13 @@ void ScInterpreter::ScPercentrank()
                 fRes = (double)nOldCount/(double)(nSize-1);
             else
             {
-                //  #75312# nOldCount is the count of smaller entries
+                //  nOldCount is the count of smaller entries
                 //  fNum is between pSortArray[nOldCount-1] and pSortArray[nOldCount]
                 //  use linear interpolation to find a position between the entries
 
                 if ( nOldCount == 0 )
                 {
-                    DBG_ERROR("should not happen");
+                    OSL_FAIL("should not happen");
                     fRes = 0.0;
                 }
                 else
@@ -3401,7 +3331,7 @@ void ScInterpreter::ScTrimMean()
         if (nIndex % 2 != 0)
             nIndex--;
         nIndex /= 2;
-        DBG_ASSERT(nIndex < nSize, "ScTrimMean: falscher Index");
+        OSL_ENSURE(nIndex < nSize, "ScTrimMean: falscher Index");
         double fSum = 0.0;
         for (SCSIZE i = nIndex; i < nSize-nIndex; i++)
             fSum += aSortArray[i];
@@ -3457,8 +3387,10 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (!pMat)
                     break;
 
@@ -3593,9 +3525,9 @@ void ScInterpreter::ScRank()
     if (nParamCount == 3)
         bDescending = GetBool();
     else
-        bDescending = sal_False;
+        bDescending = false;
     double fCount = 1.0;
-    sal_Bool bValid = sal_False;
+    sal_Bool bValid = false;
     switch (GetStackType())
     {
         case formula::svDouble    :
@@ -3661,8 +3593,10 @@ void ScInterpreter::ScRank()
         }
         break;
         case svMatrix :
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             double fVal = GetDouble();
             if (pMat)
             {
@@ -3758,8 +3692,10 @@ void ScInterpreter::ScAveDev()
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nCount = pMat->GetElementCount();
@@ -3829,8 +3765,10 @@ void ScInterpreter::ScAveDev()
             }
             break;
             case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             {
-                ScMatrixRef pMat = PopMatrix();
+                ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
                     SCSIZE nCount = pMat->GetElementCount();
@@ -3902,26 +3840,28 @@ void ScInterpreter::ScProbability()
         {
             double fSum = 0.0;
             double fRes = 0.0;
-            sal_Bool bStop = sal_False;
+            sal_Bool bStop = false;
             double fP, fW;
-            SCSIZE nCount1 = nC1 * nR1;
-            for ( SCSIZE i = 0; i < nCount1 && !bStop; i++ )
+            for ( SCSIZE i = 0; i < nC1 && !bStop; i++ )
             {
-                if (pMatP->IsValue(i) && pMatW->IsValue(i))
+                for (SCSIZE j = 0; j < nR1 && !bStop; ++j )
                 {
-                    fP = pMatP->GetDouble(i);
-                    fW = pMatW->GetDouble(i);
-                    if (fP < 0.0 || fP > 1.0)
-                        bStop = sal_True;
-                    else
+                    if (pMatP->IsValue(i,j) && pMatW->IsValue(i,j))
                     {
-                        fSum += fP;
-                        if (fW >= fLo && fW <= fUp)
-                            fRes += fP;
+                        fP = pMatP->GetDouble(i,j);
+                        fW = pMatW->GetDouble(i,j);
+                        if (fP < 0.0 || fP > 1.0)
+                            bStop = true;
+                        else
+                        {
+                            fSum += fP;
+                            if (fW >= fLo && fW <= fUp)
+                                fRes += fP;
+                        }
                     }
+                    else
+                        SetError( errIllegalArgument);
                 }
-                else
-                    SetError( errIllegalArgument);
             }
             if (bStop || fabs(fSum -1.0) > 1.0E-7)
                 PushNoValue();
@@ -3941,13 +3881,13 @@ void ScInterpreter::ScCorrel()
 void ScInterpreter::ScCovar()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCovar" );
-    CalculatePearsonCovar(sal_False,sal_False);
+    CalculatePearsonCovar(false,false);
 }
 
 void ScInterpreter::ScPearson()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScPearson" );
-    CalculatePearsonCovar(sal_True,sal_False);
+    CalculatePearsonCovar(sal_True,false);
 }
 void ScInterpreter::CalculatePearsonCovar(sal_Bool _bPearson,sal_Bool _bStexy)
 {
@@ -4060,7 +4000,7 @@ void ScInterpreter::ScRSQ()
 void ScInterpreter::ScSTEXY()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSTEXY" );
-    CalculatePearsonCovar(sal_True,sal_True);
+    CalculatePearsonCovar(true,true);
 }
 void ScInterpreter::CalculateSlopeIntercept(sal_Bool bSlope)
 {
@@ -4143,7 +4083,7 @@ void ScInterpreter::ScSlope()
 void ScInterpreter::ScIntercept()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIntercept" );
-    CalculateSlopeIntercept(sal_False);
+    CalculateSlopeIntercept(false);
 }
 
 void ScInterpreter::ScForecast()
@@ -4214,3 +4154,4 @@ void ScInterpreter::ScForecast()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

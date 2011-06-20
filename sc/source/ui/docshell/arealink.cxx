@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,20 +47,19 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "undoblk.hxx"
 #include "globstr.hrc"
 #include "markdata.hxx"
 #include "hints.hxx"
 #include "filter.hxx"
-//CHINA001 #include "linkarea.hxx"          // dialog
 
 #include "attrib.hxx"           // raus, wenn ResetAttrib am Dokument
 #include "patattr.hxx"          // raus, wenn ResetAttrib am Dokument
 #include "docpool.hxx"          // raus, wenn ResetAttrib am Dokument
 
-#include "sc.hrc" //CHINA001
-#include "scabstdlg.hxx" //CHINA001
+#include "sc.hrc"
+#include "scabstdlg.hxx"
 #include "clipparam.hxx"
 
 struct AreaLink_Impl
@@ -86,46 +86,46 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
     aOptions        (rOpt),
     aSourceArea     (rArea),
     aDestArea       (rDest),
-    bAddUndo        (sal_True),
-    bInCreate       (sal_False),
-    bDoInsert       (sal_True)
+    bAddUndo        (true),
+    bInCreate       (false),
+    bDoInsert       (true)
 {
-    DBG_ASSERT(pShell->ISA(ScDocShell), "ScAreaLink mit falscher ObjectShell");
+    OSL_ENSURE(pShell->ISA(ScDocShell), "ScAreaLink mit falscher ObjectShell");
     pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
     SetRefreshHandler( LINK( this, ScAreaLink, RefreshHdl ) );
     SetRefreshControl( pImpl->m_pDocSh->GetDocument()->GetRefreshTimerControlAddress() );
 }
 
-__EXPORT ScAreaLink::~ScAreaLink()
+ScAreaLink::~ScAreaLink()
 {
     StopRefreshTimer();
     delete pImpl;
 }
 
-void __EXPORT ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
+void ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
 {
     //  use own dialog instead of SvBaseLink::Edit...
     //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
     //  ein Optionen-Dialog kommt...
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     AbstractScLinkedAreaDlg* pDlg = pFact->CreateScLinkedAreaDlg( pParent, RID_SCDLG_LINKAREA);
-    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+    OSL_ENSURE(pDlg, "Dialog create fail!");
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
     pImpl->m_pDialog = pDlg;
     pDlg->StartExecuteModal( LINK( this, ScAreaLink, AreaEndEditHdl ) );
 }
 
-void __EXPORT ScAreaLink::DataChanged( const String&,
-                                       const ::com::sun::star::uno::Any& )
+::sfx2::SvBaseLink::UpdateResult ScAreaLink::DataChanged(
+    const String&, const ::com::sun::star::uno::Any& )
 {
     //  bei bInCreate nichts tun, damit Update gerufen werden kann, um den Status im
     //  LinkManager zu setzen, ohne die Daten im Dokument zu aendern
 
     if (bInCreate)
-        return;
+        return SUCCESS;
 
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
@@ -139,7 +139,7 @@ void __EXPORT ScAreaLink::DataChanged( const String&,
         //  -> remove prefix
         ScDocumentLoader::RemoveAppPrefix( aFilter );
 
-        // #81155# dialog doesn't set area, so keep old one
+        // dialog doesn't set area, so keep old one
         if ( !aArea.Len() )
         {
             aArea = aSourceArea;
@@ -152,9 +152,11 @@ void __EXPORT ScAreaLink::DataChanged( const String&,
 
         Refresh( aFile, aFilter, aArea, GetRefreshDelay() );
     }
+
+    return SUCCESS;
 }
 
-void __EXPORT ScAreaLink::Closed()
+void ScAreaLink::Closed()
 {
     // Verknuepfung loeschen: Undo
 
@@ -166,12 +168,12 @@ void __EXPORT ScAreaLink::Closed()
                                                         aFileName, aFilterName, aOptions,
                                                         aSourceArea, aDestArea, GetRefreshDelay() ) );
 
-        bAddUndo = sal_False;   // nur einmal
+        bAddUndo = false;   // nur einmal
     }
 
     SCTAB nDestTab = aDestArea.aStart.Tab();
     if (pDoc->IsStreamValid(nDestTab))
-        pDoc->SetStreamValid(nDestTab, sal_False);
+        pDoc->SetStreamValid(nDestTab, false);
 
     SvBaseLink::Closed();
 }
@@ -195,7 +197,7 @@ void ScAreaLink::SetSource(const String& rDoc, const String& rFlt, const String&
     SetName( aNewLinkName );
 }
 
-sal_Bool ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
+bool ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
                             const String& rSource, const ScRange& rDest ) const
 {
     return aFileName == rFile && aFilterName == rFilter && aOptions == rOpt &&
@@ -203,36 +205,38 @@ sal_Bool ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const 
 }
 
 // find a range with name >rAreaName< in >pSrcDoc<, return it in >rRange<
-sal_Bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName )
+bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName )
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     ScRangeName* pNames = pSrcDoc->GetRangeName();
-    sal_uInt16 nPos;
     if (pNames)         // benannte Bereiche
     {
-        if (pNames->SearchName( rAreaName, nPos ))
-            if ( (*pNames)[nPos]->IsValidReference( rRange ) )
-                bFound = sal_True;
+        const ScRangeData* p = pNames->findByName(rAreaName);
+        if (p && p->IsValidReference(rRange))
+            bFound = true;
     }
     if (!bFound)        // Datenbankbereiche
     {
         ScDBCollection* pDBColl = pSrcDoc->GetDBCollection();
         if (pDBColl)
-            if (pDBColl->SearchName( rAreaName, nPos ))
+        {
+            const ScDBData* pDB = pDBColl->getNamedDBs().findByName(rAreaName);
+            if (pDB)
             {
                 SCTAB nTab;
                 SCCOL nCol1, nCol2;
                 SCROW nRow1, nRow2;
-                (*pDBColl)[nPos]->GetArea(nTab,nCol1,nRow1,nCol2,nRow2);
+                pDB->GetArea(nTab,nCol1,nRow1,nCol2,nRow2);
                 rRange = ScRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
-                bFound = sal_True;
+                bFound = true;
             }
+        }
     }
     if (!bFound)        // direct reference (range or cell)
     {
         ScAddress::Details aDetails(pSrcDoc->GetAddressConvention(), 0, 0);
         if ( rRange.ParseAny( rAreaName, pSrcDoc, aDetails ) & SCA_VALID )
-            bFound = sal_True;
+            bFound = true;
     }
     return bFound;
 }
@@ -245,14 +249,14 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     //  Dokument laden - wie TabLink
 
     if (!rNewFile.Len() || !rNewFilter.Len())
-        return sal_False;
+        return false;
 
     String aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pImpl->m_pDocSh ) );
     sal_Bool bNewUrlName = (aNewUrl != aFileName);
 
     const SfxFilter* pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
-        return sal_False;
+        return false;
 
     ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
 
@@ -268,11 +272,11 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     if ( aOptions.Len() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
 
-    SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, sal_False, pFilter);
+    SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, false, pFilter);
 
     // aRef->DoClose() will be closed explicitly, but it is still more safe to use SfxObjectShellLock here
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
-    SfxObjectShellLock aRef = pSrcShell;
+    SfxObjectShellRef aRef = pSrcShell;
     pSrcShell->DoLoad(pMed);
 
     ScDocument* pSrcDoc = pSrcShell->GetDocument();
@@ -352,16 +356,16 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                 {
                     pUndoDoc->InitUndo( pDoc, 0, pDoc->GetTableCount()-1 );
                     pDoc->CopyToDocument( 0,0,0,MAXCOL,MAXROW,MAXTAB,
-                                            IDF_FORMULA, sal_False, pUndoDoc );     // alle Formeln
+                                            IDF_FORMULA, false, pUndoDoc );     // alle Formeln
                 }
                 else
                     pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );             // nur Zieltabelle
-                pDoc->CopyToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, sal_False, pUndoDoc );
+                pDoc->CopyToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, false, pUndoDoc );
             }
             else        // ohne Einfuegen
             {
                 pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );             // nur Zieltabelle
-                pDoc->CopyToDocument( aMaxRange, IDF_ALL & ~IDF_NOTE, sal_False, pUndoDoc );
+                pDoc->CopyToDocument( aMaxRange, IDF_ALL & ~IDF_NOTE, false, pUndoDoc );
             }
         }
 
@@ -410,7 +414,7 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                     ScMarkData aDestMark;
                     aDestMark.SelectOneTable( nDestTab );
                     aDestMark.SetMarkArea( aNewTokenRange );
-                    pDoc->CopyFromClip( aNewTokenRange, aDestMark, IDF_ALL, NULL, &aClipDoc, sal_False );
+                    pDoc->CopyFromClip( aNewTokenRange, aDestMark, IDF_ALL, NULL, &aClipDoc, false );
                     aNewTokenRange.aStart.SetRow( aNewTokenRange.aEnd.Row() + 2 );
                 }
             }
@@ -427,7 +431,7 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         {
             pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
             pRedoDoc->InitUndo( pDoc, nDestTab, nDestTab );
-            pDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, sal_False, pRedoDoc );
+            pDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, false, pRedoDoc );
 
             pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoUpdateAreaLink( pImpl->m_pDocSh,
@@ -485,7 +489,7 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 
     aRef->DoClose();
 
-    pDoc->SetInLinkUpdate( sal_False );
+    pDoc->SetInLinkUpdate( false );
 
     if (bCanDo)
     {
@@ -528,3 +532,4 @@ IMPL_LINK( ScAreaLink, AreaEndEditHdl, void*, EMPTYARG )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,12 +61,15 @@ class ScDrawObjData : public SdrObjUserData
 public:
     ScAddress           maStart;
     ScAddress           maEnd;
+    Point               maStartOffset;
+    Point               maEndOffset;
     bool                mbNote;
+    Rectangle           maLastRect;
 
     explicit            ScDrawObjData();
 
 private:
-    virtual ScDrawObjData* Clone( SdrObject* pObj ) const;
+     virtual ScDrawObjData* Clone( SdrObject* pObj ) const;
 };
 
 //-------------------------------------------------------------------------
@@ -99,16 +103,12 @@ public:
     void            SetMacro( const rtl::OUString& rMacro ) { maMacro = rMacro; }
     const rtl::OUString& GetMacro() const { return maMacro; }
 
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
     void            SetHlink( const rtl::OUString& rHlink ) { maHlink = rHlink; }
     const rtl::OUString& GetHlink() const { return maHlink; }
-#endif
 
 private:
     rtl::OUString   maMacro;
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
     rtl::OUString   maHlink;
-#endif
 };
 
 //-------------------------------------------------------------------------
@@ -116,3 +116,4 @@ private:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

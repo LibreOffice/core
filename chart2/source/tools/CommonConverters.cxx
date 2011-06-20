@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -165,7 +166,7 @@ void AddPointToPoly( drawing::PolyPolygonShape3D& rPoly, const drawing::Position
 {
     if(nPolygonIndex<0)
     {
-        OSL_ENSURE( false, "The polygon index needs to be > 0");
+        OSL_FAIL( "The polygon index needs to be > 0");
         nPolygonIndex=0;
     }
 
@@ -210,12 +211,12 @@ drawing::Position3D getPointFromPoly( const drawing::PolyPolygonShape3D& rPolygo
         }
         else
         {
-            ;DBG_ERROR("polygon was accessed with a wrong index");
+            OSL_FAIL("polygon was accessed with a wrong index");
         }
     }
     else
     {
-        ;DBG_ERROR("polygon was accessed with a wrong index");
+        OSL_FAIL("polygon was accessed with a wrong index");
     }
     return aRet;
 }
@@ -280,7 +281,6 @@ drawing::PolyPolygonShape3D BezierToPoly(
     const drawing::PolyPolygonBezierCoords& rBezier )
 {
     const drawing::PointSequenceSequence& rPointSequence = rBezier.Coordinates;
-//     const drawing::FlagSequenceSequence& rFlags = rBezier.Flags;
 
     drawing::PolyPolygonShape3D aRet;
     aRet.SequenceX.realloc( rPointSequence.getLength() );
@@ -546,3 +546,5 @@ bool replaceParamterInString( rtl::OUString & rInOutResourceString,
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

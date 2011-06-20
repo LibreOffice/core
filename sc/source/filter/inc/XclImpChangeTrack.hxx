@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,7 +93,6 @@ private:
     void                        ReadDateTime( DateTime& rDateTime );
 
     inline void                 ReadString( String& rString );
-    inline void                 IgnoreString();
 
     sal_Bool                    CheckRecord( sal_uInt16 nOpCode );
 
@@ -166,11 +166,6 @@ inline void XclImpChangeTrack::ReadString( String& rString )
     rString = pStrm->ReadUniString();
 }
 
-inline void XclImpChangeTrack::IgnoreString()
-{
-    pStrm->IgnoreUniString();
-}
-
 //___________________________________________________________________
 // derived class for special 3D ref handling
 
@@ -200,3 +195,4 @@ inline XclImpChTrFmlConverter::XclImpChTrFmlConverter(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

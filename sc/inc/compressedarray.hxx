@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,22 +89,10 @@ public:
     /** Get value for a row, and it's region end row */
     const D&                    GetValue( A nPos, size_t& nIndex, A& nEnd ) const;
 
-    /** Get value for a row, and it's region start row and end row */
-    const D&                    GetValue( A nPos, size_t& nIndex, A& nStart, A& nEnd ) const;
-
     /** Get next value and it's region end row. If nIndex<nCount, nIndex is
         incremented first. If the resulting nIndex>=nCount, the value of the
         last entry is returned again. */
     const D&                    GetNextValue( size_t& nIndex, A& nEnd ) const;
-
-    /** Get previous value and it's region start row. If nIndex==0, nIndex is
-        not decremented and the value of the first entry is returned again. */
-    const D&                    GetPrevValue( size_t& nIndex, A& nStart ) const;
-
-    /** Return the last row where an entry meets the condition:
-        (aValue != rCompare). If no entry meets this condition
-        ::std::numeric_limits<A>::max() is returned. */
-    A                           GetLastUnequalAccess( A nStart, const D& rCompare );
 
     /** Insert rows before nStart and copy value for inserted rows from
         nStart-1, return that value. */
@@ -121,8 +110,6 @@ public:
     SC_DLLPUBLIC size_t                      Search( A nPos ) const;
     /** Get number of entries */
     size_t                      GetEntryCount() const;
-    /** Get data entry for an index */
-    const DataEntry&            GetDataEntry( size_t nIndex ) const;
 
 protected:
 
@@ -175,17 +162,6 @@ const D& ScCompressedArray<A,D>::GetValue( A nPos, size_t& nIndex, A& nEnd ) con
 
 
 template< typename A, typename D >
-const D& ScCompressedArray<A,D>::GetValue( A nPos, size_t& nIndex, A& nStart,
-        A& nEnd ) const
-{
-    nIndex = Search( nPos);
-    nStart = (nIndex > 0 ? pData[nIndex-1].nEnd + 1 : 0);
-    nEnd = pData[nIndex].nEnd;
-    return pData[nIndex].aValue;
-}
-
-
-template< typename A, typename D >
 const D& ScCompressedArray<A,D>::GetNextValue( size_t& nIndex, A& nEnd ) const
 {
     if (nIndex < nCount)
@@ -197,27 +173,9 @@ const D& ScCompressedArray<A,D>::GetNextValue( size_t& nIndex, A& nEnd ) const
 
 
 template< typename A, typename D >
-const D& ScCompressedArray<A,D>::GetPrevValue( size_t& nIndex, A& nStart ) const
-{
-    if (nIndex > 0)
-        --nIndex;
-    nStart = (nIndex > 0 ? pData[nIndex-1].nEnd + 1 : 0);
-    return pData[nIndex].aValue;
-}
-
-
-template< typename A, typename D >
 size_t ScCompressedArray<A,D>::GetEntryCount() const
 {
     return nCount;
-}
-
-
-template< typename A, typename D >
-const typename ScCompressedArray<A,D>::DataEntry&
-ScCompressedArray<A,D>::GetDataEntry( size_t nIndex ) const
-{
-    return pData[nIndex];
 }
 
 
@@ -391,51 +349,6 @@ void ScCompressedArrayIterator<A,D>::Resync( A nPos )
 }
 
 
-// === ScSummableCompressedArray =============================================
-
-/** Data type D must be of a type that is convertable to unsigned long. The
-    advantage is that specialized methods exist to act on a region of values
-    for performance reasons.
- */
-
-template< typename A, typename D > class ScSummableCompressedArray : public ScCompressedArray<A,D>
-{
-public:
-                                ScSummableCompressedArray( A nMaxAccessP,
-                                        const D& rValue,
-                                        size_t nDeltaP = nScCompressedArrayDelta )
-                                    : ScCompressedArray<A,D>( nMaxAccessP,
-                                            rValue, nDeltaP)
-                                    {}
-                                ScSummableCompressedArray( A nMaxAccessP,
-                                        const D* pDataArray, size_t nDataCount )
-                                    : ScCompressedArray<A,D>( nMaxAccessP,
-                                            pDataArray, nDataCount)
-                                    {}
-
-    /** Returns the sum of all values for a region. If an overflow would occur,
-        ::std::numeric_limits<unsigned long>::max() is returned. */
-    unsigned long               SumValues( A nStart, A nEnd ) const;
-
-    /** Returns the sum of all values for a region. If an overflow would occur,
-        ::std::numeric_limits<unsigned long>::max() is returned.
-        The caller has to assure that nIndex matches an entry belonging to
-        nStart, for example, by calling Search(nStart) first! */
-    unsigned long               SumValuesContinuation( A nStart, A nEnd,
-                                    size_t& nIndex ) const;
-
-    /** Returns the sum of all scaled values for a region. If an overflow would
-        occur, ::std::numeric_limits<unsigned long>::max() is returned.
-        Summed values are treated as if for each row the expression
-        (sum += (unsigned long) (scale * value)) had been applied.
-        The caller has to assure that nIndex matches an entry belonging to
-        nStart, for example, by calling Search(nStart) first! */
-    unsigned long               SumScaledValuesContinuation( A nStart, A nEnd,
-                                    size_t& nIndex, double fScale ) const;
-
-};
-
-
 // === ScBitMaskCompressedArray ==============================================
 
 /** The data type represents bits, managable by bitwise operations.
@@ -465,24 +378,6 @@ public:
                                     A nStart, A nEnd, const D& rValueToAnd,
                                     long nSourceDy = 0 );
 
-    /** Copy values from rArray and bitwise OR them with rValueToOr. */
-    void                        CopyFromOred(
-                                    const ScBitMaskCompressedArray& rArray,
-                                    A nStart, A nEnd, const D& rValueToOr,
-                                    long nSourceDy = 0 );
-
-    /** Return the start row of a region where all entries meet the condition:
-        ((aValue & rBitMask) == rMaskedCompare). If not even nEnd meets
-        this condition, ::std::numeric_limits<A>::max() is returned. */
-    A                           GetBitStateStart( A nEnd, const D& rBitMask,
-                                    const D& rMaskedCompare ) const;
-
-    /** Return the end row of a region where all entries meet the condition:
-        ((aValue & rBitMask) == rMaskedCompare). If not even nStart meets
-        this condition, ::std::numeric_limits<A>::max() is returned. */
-    A                           GetBitStateEnd( A nStart, const D& rBitMask,
-                                    const D& rMaskedCompare ) const;
-
     /** Return the first row where an entry meets the condition:
         ((aValue & rBitMask) == rMaskedCompare), searching between nStart and
         nEnd. If no entry meets this condition, ::std::numeric_limits<A>::max()
@@ -492,58 +387,10 @@ public:
                                     const D& rMaskedCompare ) const;
 
     /** Return the last row where an entry meets the condition:
-        ((aValue & rBitMask) == rMaskedCompare), searching between nStart and
-        nEnd. If no entry meets this condition, ::std::numeric_limits<A>::max()
-        is returned. */
-    SC_DLLPUBLIC A                           GetLastForCondition( A nStart, A nEnd,
-                                    const D& rBitMask,
-                                    const D& rMaskedCompare ) const;
-
-    /** Count rows between nStart and nEnd where entries meet the condition:
-        ((aValue & rBitMask) == rMaskedCompare) */
-    A                           CountForCondition( A nStart, A nEnd,
-                                    const D& rBitMask,
-                                    const D& rMaskedCompare ) const;
-
-    /** Whether there is any entry between nStart and nEnd where the condition
-        is met: ((aValue & rBitMask) == rMaskedCompare) */
-    SC_DLLPUBLIC bool                        HasCondition( A nStart, A nEnd,
-                                    const D& rBitMask,
-                                    const D& rMaskedCompare ) const;
-
-    /** Fill an array with row numbers between nStart and nEnd where entries
-        meet the condition: ((aValue & rBitMask) == rMaskedCompare).
-        @return the count of used elements in array. */
-    size_t                      FillArrayForCondition( A nStart, A nEnd,
-                                    const D& rBitMask,
-                                    const D& rMaskedCompare,
-                                    A * pArray, size_t nArraySize ) const;
-
-    /** Count rows between nStart and nEnd where entries meet the condition:
-        ((aValue & rBitMask) != 0) */
-    A                           CountForAnyBitCondition( A nStart, A nEnd,
-                                    const D& rBitMask ) const;
-
-    /** Return the last row where an entry meets the condition:
         ((aValue & rBitMask) != 0), start searching at nStart. If no entry
         meets this condition, ::std::numeric_limits<A>::max() is returned. */
     A                           GetLastAnyBitAccess( A nStart,
                                     const D& rBitMask ) const;
-
-    /** Sum values of a ScSummableCompressedArray for each row where in *this*
-        array the condition is met: ((aValue & rBitMask) == rMaskedCompare). */
-    template< typename S >
-    SC_DLLPUBLIC unsigned long               SumCoupledArrayForCondition( A nStart, A nEnd,
-                                    const D& rBitMask, const D& rMaskedCompare,
-                                    const ScSummableCompressedArray<A,S>& rArray ) const;
-
-    /** Sum scaled values of a ScSummableCompressedArray for each row where in
-        *this* array the condition is met: ((aValue & rBitMask) == rMaskedCompare). */
-    template< typename S >
-    SC_DLLPUBLIC unsigned long               SumScaledCoupledArrayForCondition( A nStart, A nEnd,
-                                    const D& rBitMask, const D& rMaskedCompare,
-                                    const ScSummableCompressedArray<A,S>& rArray,
-                                    double fScale ) const;
 };
 
 
@@ -565,105 +412,6 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nPos, const D& rValueToOr )
 }
 
 
-// === ScCoupledCompressedArrayIterator ======================================
-
-/** Iterate over a ScBitMaskCompressedArray and retrieve values from a coupled
-    array for positions where in the bit mask array the condition ((*aIter1 &
-    rBitMask) == rMaskedCompare) is met.
- */
-
-template< typename A, typename D, typename S > class ScCoupledCompressedArrayIterator
-{
-public:
-    SC_DLLPUBLIC                            ScCoupledCompressedArrayIterator(
-                                        const ScBitMaskCompressedArray<A,D> & rArray1,
-                                        A nStart, A nEnd,
-                                        const D& rBitMask,
-                                        const D& rMaskedCompare,
-                                        const ScCompressedArray<A,S> & rArray2 );
-    void                        NewLimits( A nStart, A nEnd );
-    A                           GetIterStart() const;
-    A                           GetIterEnd() const;
-    bool                        operator ++();
-    A                           GetPos() const;
-                                operator bool() const;
-    const S&                    operator *() const;
-    SC_DLLPUBLIC bool                        NextRange();
-    A                           GetRangeStart() const;
-    A                           GetRangeEnd() const;
-    void                        Resync( A nPos );
-
-private:
-    ScCompressedArrayIterator<A,D>  aIter1;
-    ScCompressedArrayIterator<A,S>  aIter2;
-    const D&                        rBitMask;
-    const D&                        rMaskedCompare;
-
-    void                            InitLimits();
-};
-
-
-template< typename A, typename D, typename S >
-A ScCoupledCompressedArrayIterator<A,D,S>::GetIterStart() const
-{
-    return aIter1.GetIterStart();
-}
-
-
-template< typename A, typename D, typename S >
-A ScCoupledCompressedArrayIterator<A,D,S>::GetIterEnd() const
-{
-    return aIter1.GetIterEnd();
-}
-
-
-template< typename A, typename D, typename S >
-ScCoupledCompressedArrayIterator<A,D,S>::operator bool() const
-{
-    return aIter1 && aIter2;
-}
-
-
-template< typename A, typename D, typename S >
-const S& ScCoupledCompressedArrayIterator<A,D,S>::operator*() const
-{
-    return *aIter2;
-}
-
-
-template< typename A, typename D, typename S >
-bool ScCoupledCompressedArrayIterator<A,D,S>::operator ++()
-{
-    if (aIter1.GetPos() < aIter1.GetRangeEnd())
-    {
-        ++aIter1;
-        ++aIter2;
-        return operator bool();
-    }
-    else
-        return NextRange();
-}
-
-
-template< typename A, typename D, typename S >
-A ScCoupledCompressedArrayIterator<A,D,S>::GetPos() const
-{
-    return aIter2.GetPos();
-}
-
-
-template< typename A, typename D, typename S >
-A ScCoupledCompressedArrayIterator<A,D,S>::GetRangeStart() const
-{
-    return ::std::max( aIter1.GetRangeStart(), aIter2.GetRangeStart());
-}
-
-
-template< typename A, typename D, typename S >
-A ScCoupledCompressedArrayIterator<A,D,S>::GetRangeEnd() const
-{
-    return ::std::min( aIter1.GetRangeEnd(), aIter2.GetRangeEnd());
-}
-
-
 #endif // SC_COMPRESSEDARRAY_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

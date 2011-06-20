@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,10 @@
 ScCbWarningBox::ScCbWarningBox( Window* pParent, const String& rMsgStr, bool bDefYes ) :
     WarningBox( pParent, WB_YES_NO | (bDefYes ? WB_DEF_YES : WB_DEF_NO), rMsgStr )
 {
-    SetDefaultCheckBoxText();
+    // By default, the check box is ON, and the user needs to un-check it to
+    // disable all future warnings.
+    SetCheckBoxState(true);
+    SetCheckBoxText(String(ScResId(SCSTR_WARN_ME_IN_FUTURE_CHECK)));
 }
 
 sal_Int16 ScCbWarningBox::Execute()
@@ -49,7 +53,7 @@ sal_Int16 ScCbWarningBox::Execute()
     if( IsDialogEnabled() )
     {
         nRet = WarningBox::Execute();
-        if( GetCheckBoxState() )
+        if (!GetCheckBoxState())
             DisableDialog();
     }
     return nRet;
@@ -75,17 +79,18 @@ ScReplaceWarnBox::ScReplaceWarnBox( Window* pParent ) :
 
 bool ScReplaceWarnBox::IsDialogEnabled()
 {
-    return SC_MOD()->GetInputOptions().GetReplaceCellsWarn() == sal_True;
+    return SC_MOD()->GetInputOptions().GetReplaceCellsWarn() == true;
 }
 
 void ScReplaceWarnBox::DisableDialog()
 {
     ScModule* pScMod = SC_MOD();
     ScInputOptions aInputOpt( pScMod->GetInputOptions() );
-    aInputOpt.SetReplaceCellsWarn( sal_False );
+    aInputOpt.SetReplaceCellsWarn( false );
     pScMod->SetInputOptions( aInputOpt );
 }
 
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

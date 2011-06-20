@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
 
 #include "scitems.hxx"
 #include <tools/shl.hxx>
@@ -67,6 +66,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/xmlcnitm.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include "docpool.hxx"
 #include "global.hxx"
@@ -74,7 +74,6 @@
 #include "patattr.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"           // Slot-IDs
-
 
 #define SC_MAX_POOLREF      (SFX_ITEMS_OLD_MAXREF - 39)
 #define SC_SAFE_POOLREF     (SC_MAX_POOLREF + 20)
@@ -95,7 +94,7 @@ sal_uInt16* ScDocumentPool::pVersionMap11 = 0;
 
 // ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
 
-static SfxItemInfo __READONLY_DATA  aItemInfos[] =
+static SfxItemInfo const  aItemInfos[] =
 {
     { SID_ATTR_CHAR_FONT,           SFX_ITEM_POOLABLE },    // ATTR_FONT
     { SID_ATTR_CHAR_FONTHEIGHT,     SFX_ITEM_POOLABLE },    // ATTR_FONT_HEIGHT
@@ -127,8 +126,10 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_HANGPUNCTUATION     from 614d
     { SID_ATTR_PARA_FORBIDDEN_RULES,SFX_ITEM_POOLABLE },    // ATTR_FORBIDDEN_RULES     from 614d
     { SID_ATTR_ALIGN_HOR_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_HOR_JUSTIFY
+    { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, // ATTR_HOR_JUSTIFY_METHOD
     { SID_ATTR_ALIGN_INDENT,        SFX_ITEM_POOLABLE },    // ATTR_INDENT          ab 350
     { SID_ATTR_ALIGN_VER_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_VER_JUSTIFY
+    { SID_ATTR_ALIGN_VER_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, // ATTR_VER_JUSTIFY_METHOD
     { SID_ATTR_ALIGN_STACKED,       SFX_ITEM_POOLABLE },    // ATTR_STACKED         from 680/dr14 (replaces ATTR_ORIENTATION)
     { SID_ATTR_ALIGN_DEGREES,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_VALUE    ab 367
     { SID_ATTR_ALIGN_LOCKPOS,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_MODE     ab 367
@@ -224,7 +225,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
     pGlobalBorderInnerAttr->SetLine(NULL, BOXINFO_LINE_VERT);
     pGlobalBorderInnerAttr->SetTable(sal_True);
     pGlobalBorderInnerAttr->SetDist(sal_True);
-    pGlobalBorderInnerAttr->SetMinDist(sal_False);
+    pGlobalBorderInnerAttr->SetMinDist(false);
 
     ppPoolDefaults = new SfxPoolItem*[ATTR_ENDINDEX-ATTR_STARTINDEX+1];
 
@@ -235,8 +236,8 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
     ppPoolDefaults[ ATTR_FONT_UNDERLINE  - ATTR_STARTINDEX ] = new SvxUnderlineItem( UNDERLINE_NONE, ATTR_FONT_UNDERLINE );
     ppPoolDefaults[ ATTR_FONT_OVERLINE   - ATTR_STARTINDEX ] = new SvxOverlineItem( UNDERLINE_NONE, ATTR_FONT_OVERLINE );
     ppPoolDefaults[ ATTR_FONT_CROSSEDOUT - ATTR_STARTINDEX ] = new SvxCrossedOutItem( STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT );
-    ppPoolDefaults[ ATTR_FONT_CONTOUR    - ATTR_STARTINDEX ] = new SvxContourItem( sal_False, ATTR_FONT_CONTOUR );
-    ppPoolDefaults[ ATTR_FONT_SHADOWED   - ATTR_STARTINDEX ] = new SvxShadowedItem( sal_False, ATTR_FONT_SHADOWED );
+    ppPoolDefaults[ ATTR_FONT_CONTOUR    - ATTR_STARTINDEX ] = new SvxContourItem( false, ATTR_FONT_CONTOUR );
+    ppPoolDefaults[ ATTR_FONT_SHADOWED   - ATTR_STARTINDEX ] = new SvxShadowedItem( false, ATTR_FONT_SHADOWED );
     ppPoolDefaults[ ATTR_FONT_COLOR      - ATTR_STARTINDEX ] = new SvxColorItem( Color(COL_AUTO), ATTR_FONT_COLOR );
     ppPoolDefaults[ ATTR_FONT_LANGUAGE   - ATTR_STARTINDEX ] = new SvxLanguageItem( LanguageType(LANGUAGE_DONTKNOW), ATTR_FONT_LANGUAGE );
     ppPoolDefaults[ ATTR_CJK_FONT        - ATTR_STARTINDEX ] = pCjkFont;
@@ -253,16 +254,18 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
                                                                     ATTR_CTL_FONT_LANGUAGE );
     ppPoolDefaults[ ATTR_FONT_EMPHASISMARK-ATTR_STARTINDEX ] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, ATTR_FONT_EMPHASISMARK );
     ppPoolDefaults[ ATTR_USERDEF         - ATTR_STARTINDEX ] = new SvXMLAttrContainerItem( ATTR_USERDEF );
-    ppPoolDefaults[ ATTR_FONT_WORDLINE   - ATTR_STARTINDEX ] = new SvxWordLineModeItem(sal_False, ATTR_FONT_WORDLINE );
+    ppPoolDefaults[ ATTR_FONT_WORDLINE   - ATTR_STARTINDEX ] = new SvxWordLineModeItem(false, ATTR_FONT_WORDLINE );
     ppPoolDefaults[ ATTR_FONT_RELIEF     - ATTR_STARTINDEX ] = new SvxCharReliefItem( RELIEF_NONE, ATTR_FONT_RELIEF );
     ppPoolDefaults[ ATTR_HYPHENATE       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_HYPHENATE );
-    ppPoolDefaults[ ATTR_SCRIPTSPACE     - ATTR_STARTINDEX ] = new SvxScriptSpaceItem( sal_False, ATTR_SCRIPTSPACE);
-    ppPoolDefaults[ ATTR_HANGPUNCTUATION - ATTR_STARTINDEX ] = new SvxHangingPunctuationItem( sal_False, ATTR_HANGPUNCTUATION);
-    ppPoolDefaults[ ATTR_FORBIDDEN_RULES - ATTR_STARTINDEX ] = new SvxForbiddenRuleItem( sal_False, ATTR_FORBIDDEN_RULES);
+    ppPoolDefaults[ ATTR_SCRIPTSPACE     - ATTR_STARTINDEX ] = new SvxScriptSpaceItem( false, ATTR_SCRIPTSPACE);
+    ppPoolDefaults[ ATTR_HANGPUNCTUATION - ATTR_STARTINDEX ] = new SvxHangingPunctuationItem( false, ATTR_HANGPUNCTUATION);
+    ppPoolDefaults[ ATTR_FORBIDDEN_RULES - ATTR_STARTINDEX ] = new SvxForbiddenRuleItem( false, ATTR_FORBIDDEN_RULES);
     ppPoolDefaults[ ATTR_HOR_JUSTIFY     - ATTR_STARTINDEX ] = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY);
+    ppPoolDefaults[ ATTR_HOR_JUSTIFY_METHOD - ATTR_STARTINDEX ] = new SvxJustifyMethodItem( SVX_JUSTIFY_METHOD_AUTO, ATTR_HOR_JUSTIFY_METHOD);
     ppPoolDefaults[ ATTR_INDENT          - ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_INDENT, 0 );
     ppPoolDefaults[ ATTR_VER_JUSTIFY     - ATTR_STARTINDEX ] = new SvxVerJustifyItem( SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY);
-    ppPoolDefaults[ ATTR_STACKED         - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_STACKED, sal_False );
+    ppPoolDefaults[ ATTR_VER_JUSTIFY_METHOD - ATTR_STARTINDEX ] = new SvxJustifyMethodItem( SVX_JUSTIFY_METHOD_AUTO, ATTR_VER_JUSTIFY_METHOD);
+    ppPoolDefaults[ ATTR_STACKED         - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_STACKED, false );
     ppPoolDefaults[ ATTR_ROTATE_VALUE    - ATTR_STARTINDEX ] = new SfxInt32Item( ATTR_ROTATE_VALUE, 0 );
     ppPoolDefaults[ ATTR_ROTATE_MODE     - ATTR_STARTINDEX ] = new SvxRotateModeItem( SVX_ROTATE_MODE_BOTTOM, ATTR_ROTATE_MODE );
     ppPoolDefaults[ ATTR_VERTICAL_ASIAN  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_VERTICAL_ASIAN );
@@ -274,7 +277,10 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
     ppPoolDefaults[ ATTR_SHRINKTOFIT     - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_SHRINKTOFIT );
     ppPoolDefaults[ ATTR_BORDER_TLBR     - ATTR_STARTINDEX ] = new SvxLineItem( ATTR_BORDER_TLBR );
     ppPoolDefaults[ ATTR_BORDER_BLTR     - ATTR_STARTINDEX ] = new SvxLineItem( ATTR_BORDER_BLTR );
-    ppPoolDefaults[ ATTR_MARGIN          - ATTR_STARTINDEX ] = new SvxMarginItem( ATTR_MARGIN );
+    SvxMarginItem* pItem = new SvxMarginItem( ATTR_MARGIN );
+    pItem->SetTopMargin( 27 );
+    pItem->SetBottomMargin( 27 );
+    ppPoolDefaults[ ATTR_MARGIN          - ATTR_STARTINDEX ] = pItem;
     ppPoolDefaults[ ATTR_MERGE           - ATTR_STARTINDEX ] = new ScMergeAttr;
     ppPoolDefaults[ ATTR_MERGE_FLAG      - ATTR_STARTINDEX ] = new ScMergeFlagAttr;
     ppPoolDefaults[ ATTR_VALUE_FORMAT    - ATTR_STARTINDEX ] = new SfxUInt32Item( ATTR_VALUE_FORMAT, 0 );
@@ -308,9 +314,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
     ppPoolDefaults[ ATTR_PAGE_ON         - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_ON, sal_True );
     ppPoolDefaults[ ATTR_PAGE_DYNAMIC    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_DYNAMIC, sal_True );
     ppPoolDefaults[ ATTR_PAGE_SHARED     - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_SHARED, sal_True );
-    ppPoolDefaults[ ATTR_PAGE_NOTES      - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NOTES, sal_False );
-    ppPoolDefaults[ ATTR_PAGE_GRID       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_GRID, sal_False );
-    ppPoolDefaults[ ATTR_PAGE_HEADERS    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_HEADERS, sal_False );
+    ppPoolDefaults[ ATTR_PAGE_NOTES      - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NOTES, false );
+    ppPoolDefaults[ ATTR_PAGE_GRID       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_GRID, false );
+    ppPoolDefaults[ ATTR_PAGE_HEADERS    - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_HEADERS, false );
     ppPoolDefaults[ ATTR_PAGE_CHARTS     - ATTR_STARTINDEX ] = new ScViewObjectModeItem( ATTR_PAGE_CHARTS );
     ppPoolDefaults[ ATTR_PAGE_OBJECTS    - ATTR_STARTINDEX ] = new ScViewObjectModeItem( ATTR_PAGE_OBJECTS );
     ppPoolDefaults[ ATTR_PAGE_DRAWINGS   - ATTR_STARTINDEX ] = new ScViewObjectModeItem( ATTR_PAGE_DRAWINGS );
@@ -328,10 +334,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
     ppPoolDefaults[ ATTR_PAGE_FOOTERRIGHT- ATTR_STARTINDEX ] = new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT );
     ppPoolDefaults[ ATTR_PAGE_HEADERSET  - ATTR_STARTINDEX ] = new SvxSetItem( ATTR_PAGE_HEADERSET, aSetItemItemSet );
     ppPoolDefaults[ ATTR_PAGE_FOOTERSET  - ATTR_STARTINDEX ] = new SvxSetItem( ATTR_PAGE_FOOTERSET, aSetItemItemSet );
-    ppPoolDefaults[ ATTR_PAGE_FORMULAS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_FORMULAS, sal_False );
+    ppPoolDefaults[ ATTR_PAGE_FORMULAS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_FORMULAS, false );
     ppPoolDefaults[ ATTR_PAGE_NULLVALS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NULLVALS, sal_True );
     ppPoolDefaults[ ATTR_PAGE_SCALETO    - ATTR_STARTINDEX ] = new ScPageScaleToItem( 1, 1 );
-//  ppPoolDefaults[ ATTR_ITEM_DOUBLE     - ATTR_STARTINDEX ] = new ScDoubleItem( ATTR_ITEM_DOUBLE, 0 );
 
     SetDefaults( ppPoolDefaults );
 
@@ -375,7 +380,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
     SetVersionMap( 11, 100, 187, pVersionMap11 );
 }
 
-__EXPORT ScDocumentPool::~ScDocumentPool()
+ScDocumentPool::~ScDocumentPool()
 {
     Delete();
 
@@ -391,7 +396,7 @@ __EXPORT ScDocumentPool::~ScDocumentPool()
 
 void ScDocumentPool::InitVersionMaps()
 {
-    DBG_ASSERT( !pVersionMap1 && !pVersionMap2 &&
+    OSL_PRECOND( !pVersionMap1 && !pVersionMap2 &&
                 !pVersionMap3 && !pVersionMap4 &&
                 !pVersionMap5 && !pVersionMap6 &&
                 !pVersionMap7 && !pVersionMap8 &&
@@ -550,7 +555,7 @@ void ScDocumentPool::InitVersionMaps()
 
 void ScDocumentPool::DeleteVersionMaps()
 {
-    DBG_ASSERT( pVersionMap1 && pVersionMap2 &&
+    OSL_PRECOND( pVersionMap1 && pVersionMap2 &&
                 pVersionMap3 && pVersionMap4 &&
                 pVersionMap5 && pVersionMap6 &&
                 pVersionMap7 && pVersionMap8 &&
@@ -592,7 +597,7 @@ void ScDocumentPool::DeleteVersionMaps()
 //  wird (Assertions).
 //
 
-const SfxPoolItem& __EXPORT ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
+const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {
     if ( rItem.Which() != ATTR_PATTERN )                // nur Pattern ist special
         return SfxItemPool::Put( rItem, nWhich );
@@ -607,7 +612,7 @@ const SfxPoolItem& __EXPORT ScDocumentPool::Put( const SfxPoolItem& rItem, sal_u
     return rNew;
 }
 
-void __EXPORT ScDocumentPool::Remove( const SfxPoolItem& rItem )
+void ScDocumentPool::Remove( const SfxPoolItem& rItem )
 {
     if ( rItem.Which() == ATTR_PATTERN )                // nur Pattern ist special
     {
@@ -616,7 +621,7 @@ void __EXPORT ScDocumentPool::Remove( const SfxPoolItem& rItem )
         {
             if ( nRef != (sal_uLong) SC_SAFE_POOLREF )
             {
-                DBG_ERROR("Wer fummelt da an meinen Ref-Counts herum");
+                OSL_FAIL("Wer fummelt da an meinen Ref-Counts herum");
                 SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
             }
             return;                 // nicht herunterzaehlen
@@ -625,14 +630,14 @@ void __EXPORT ScDocumentPool::Remove( const SfxPoolItem& rItem )
     SfxItemPool::Remove( rItem );
 }
 
-void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )   // static
+void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )
 {
     sal_uLong nRef = rItem.GetRefCount();
     if ( nRef >= (sal_uLong) SC_MAX_POOLREF && nRef <= (sal_uLong) SFX_ITEMS_OLD_MAXREF )
     {
         // beim Apply vom Cache wird evtl. um 2 hochgezaehlt (auf MAX+1 oder SAFE+2),
         // heruntergezaehlt wird nur einzeln (in LoadCompleted)
-        DBG_ASSERT( nRef<=(sal_uLong)SC_MAX_POOLREF+1 || (nRef>=(sal_uLong)SC_SAFE_POOLREF-1 && nRef<=(sal_uLong)SC_SAFE_POOLREF+2),
+        OSL_ENSURE( nRef<=(sal_uLong)SC_MAX_POOLREF+1 || (nRef>=(sal_uLong)SC_SAFE_POOLREF-1 && nRef<=(sal_uLong)SC_SAFE_POOLREF+2),
                 "ScDocumentPool::CheckRef" );
         SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
     }
@@ -673,7 +678,7 @@ void ScDocumentPool::CellStyleCreated( const String& rName )
     }
 }
 
-SfxItemPool* __EXPORT ScDocumentPool::Clone() const
+SfxItemPool* ScDocumentPool::Clone() const
 {
     return new SfxItemPool (*this, sal_True);
 }
@@ -691,9 +696,9 @@ SfxItemPresentation lcl_HFPresentation
     const SfxItemSet& rSet = ((const SfxSetItem&)rItem).GetItemSet();
     const SfxPoolItem* pItem;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState(ATTR_PAGE_ON,sal_False,&pItem) )
+    if ( SFX_ITEM_SET == rSet.GetItemState(ATTR_PAGE_ON,false,&pItem) )
     {
-        if( sal_False == ((const SfxBoolItem*)pItem)->GetValue() )
+        if( false == ((const SfxBoolItem*)pItem)->GetValue() )
             return SFX_ITEM_PRESENTATION_NONE;
     }
 
@@ -781,7 +786,7 @@ SfxItemPresentation lcl_HFPresentation
     return ePresentation;
 }
 
-SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
+SfxItemPresentation ScDocumentPool::GetPresentation(
     const SfxPoolItem&  rItem,
     SfxItemPresentation ePresentation,
     SfxMapUnit          ePresentationMetric,
@@ -1017,24 +1022,6 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
         }
         break;
 
-/*
-        case ATTR_PAGE_HEADERLEFT:
-        rText = "SID_SCATTR_PAGE_HEADERLEFT";
-        break;
-
-        case ATTR_PAGE_FOOTERLEFT:
-        rText = "SID_SCATTR_PAGE_FOOTERLEFT";
-        break;
-
-        case ATTR_PAGE_HEADERRIGHT:
-        rText = "SID_SCATTR_PAGE_HEADERRIGHT";
-        break;
-
-        case ATTR_PAGE_FOOTERRIGHT:
-        rText = "SID_SCATTR_PAGE_FOOTERRIGHT";
-        break;
-*/
-
         default:
             if ( !pIntl )
                 pIntl = ScGlobal::GetScIntlWrapper();
@@ -1045,7 +1032,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
     return ePresentation;
 }
 
-SfxMapUnit __EXPORT ScDocumentPool::GetMetric( sal_uInt16 nWhich ) const
+SfxMapUnit ScDocumentPool::GetMetric( sal_uInt16 nWhich ) const
 {
     //  eigene Attribute: Twips, alles andere 1/100 mm
 
@@ -1055,7 +1042,4 @@ SfxMapUnit __EXPORT ScDocumentPool::GetMetric( sal_uInt16 nWhich ) const
         return SFX_MAPUNIT_100TH_MM;
 }
 
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

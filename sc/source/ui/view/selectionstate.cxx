@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@ ScSelectionState::ScSelectionState( ScViewData& rViewData ) :
         if( rMarkData.IsMultiMarked() )
         {
             meType = SC_SELECTTYPE_SHEET;
-            rMarkData.FillRangeListWithMarks( &maSheetSel, sal_False );
+            rMarkData.FillRangeListWithMarks( &maSheetSel, false );
         }
         // else type is SC_SELECTTYPE_NONE - already initialized
     }
@@ -69,7 +70,7 @@ bool operator==( const ScSelectionState& rL, const ScSelectionState& rR )
     if( bEqual ) switch( rL.GetSelectionType() )
     {
         case SC_SELECTTYPE_EDITCELL:
-            bEqual &= ( rL.GetEditSelection().IsEqual( rR.GetEditSelection() ) != sal_False );
+            bEqual &= ( rL.GetEditSelection().IsEqual( rR.GetEditSelection() ) != false );
         // run through!
         case SC_SELECTTYPE_SHEET:
             bEqual &= (rL.GetSheetSelection() == rR.GetSheetSelection()) == sal_True;
@@ -87,3 +88,4 @@ bool operator==( const ScSelectionState& rL, const ScSelectionState& rR )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

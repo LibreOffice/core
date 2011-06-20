@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 // header for class ModalDialog
 #include <vcl/dialog.hxx>
 // header for class CheckBox
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 // header for class SfxItemSet
 #include <svl/itemset.hxx>
 //for auto_ptr
@@ -70,3 +69,5 @@ public:
 //.............................................................................
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

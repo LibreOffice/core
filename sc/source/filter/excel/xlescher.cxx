@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,7 +79,7 @@ namespace {
 /** Returns the scaling factor to calculate coordinates from twips. */
 double lclGetTwipsScale( MapUnit eMapUnit )
 {
-    /*  #111027# We cannot use OutputDevice::LogicToLogic() or the XclTools
+    /*  We cannot use OutputDevice::LogicToLogic() or the XclTools
         conversion functions to calculate drawing layer coordinates due to
         Calc's strange definition of a point (1 inch == 72.27 points, instead
         of 72 points). */
@@ -87,7 +88,7 @@ double lclGetTwipsScale( MapUnit eMapUnit )
     {
         case MAP_TWIP:      fScale = 72 / POINTS_PER_INCH;  break;  // Calc twips <-> real twips
         case MAP_100TH_MM:  fScale = HMM_PER_TWIPS;         break;  // Calc twips <-> 1/100mm
-        default:            DBG_ERRORFILE( "lclGetTwipsScale - map unit not implemented" );
+        default:            OSL_FAIL( "lclGetTwipsScale - map unit not implemented" );
     }
     return fScale;
 }
@@ -129,20 +130,20 @@ void lclGetColFromX(
 
 /** Calculates an object row position from a drawing layer Y position (in twips). */
 void lclGetRowFromY(
-        ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclRow,
-        sal_uInt16& rnOffset, sal_uInt16 nXclStartRow, sal_uInt16 nXclMaxRow,
+        ScDocument& rDoc, SCTAB nScTab, sal_uInt32& rnXclRow,
+        sal_uInt32& rnOffset, sal_uInt32 nXclStartRow, sal_uInt32 nXclMaxRow,
         long& rnStartH, long nY, double fScale )
 {
     // rnStartH in conjunction with nXclStartRow is used as buffer for previously calculated height
     long nTwipsY = static_cast< long >( nY / fScale + 0.5 );
     long nRowH = 0;
     bool bFound = false;
-    for( SCROW nRow = static_cast< SCROW >( nXclStartRow ); nRow <= nXclMaxRow; ++nRow )
+    for( SCROW nRow = static_cast< SCROW >( nXclStartRow ); static_cast<unsigned>(nRow) <= nXclMaxRow; ++nRow )
     {
         nRowH = rDoc.GetRowHeight( nRow, nScTab );
         if( rnStartH + nRowH > nTwipsY )
         {
-            rnXclRow = static_cast< sal_uInt16 >( nRow );
+            rnXclRow = static_cast< sal_uInt32 >( nRow );
             bFound = true;
             break;
         }
@@ -150,7 +151,7 @@ void lclGetRowFromY(
     }
     if( !bFound )
         rnXclRow = nXclMaxRow;
-    rnOffset = static_cast< sal_uInt16 >( nRowH ? ((nTwipsY - rnStartH) * 256.0 / nRowH + 0.5) : 0 );
+    rnOffset = static_cast< sal_uInt32 >( nRowH ? ((nTwipsY - rnStartH) * 256.0 / nRowH + 0.5) : 0 );
 }
 
 /** Mirrors a rectangle (from LTR to RTL layout or vice versa). */
@@ -188,7 +189,7 @@ Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMa
         lclGetXFromCol( rDoc, nScTab, maLast.mnCol,  mnRX + 1, fScale ),
         lclGetYFromRow( rDoc, nScTab, maLast.mnRow,  mnBY, fScale ) );
 
-    // #106948# adjust coordinates in mirrored sheets
+    // adjust coordinates in mirrored sheets
     if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
     return aRect;
@@ -200,7 +201,7 @@ void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle&
     sal_uInt16 nXclMaxCol = rRoot.GetXclMaxPos().Col();
     sal_uInt16 nXclMaxRow = static_cast<sal_uInt16>( rRoot.GetXclMaxPos().Row());
 
-    // #106948# adjust coordinates in mirrored sheets
+    // adjust coordinates in mirrored sheets
     Rectangle aRect( rRect );
     if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
@@ -222,7 +223,7 @@ void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 
     {
         case MAP_TWIP:      fScale = HMM_PER_TWIPS; break;  // Calc twips -> 1/100mm
         case MAP_100TH_MM:  fScale = 1.0;           break;  // Calc 1/100mm -> 1/100mm
-        default:            DBG_ERRORFILE( "XclObjAnchor::SetRect - map unit not implemented" );
+        default:            OSL_FAIL( "XclObjAnchor::SetRect - map unit not implemented" );
     }
 
     /*  In objects with DFF client anchor, the position of the shape is stored
@@ -366,7 +367,7 @@ bool XclControlHelper::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor,
 }
 
 String XclControlHelper::ExtractFromMacroDescriptor(
-        const ScriptEventDescriptor& rDescriptor, XclTbxEventType eEventType )
+        const ScriptEventDescriptor& rDescriptor, XclTbxEventType eEventType, SfxObjectShell* /*pShell*/ )
 {
     if( (rDescriptor.ScriptCode.getLength() > 0) &&
             rDescriptor.ScriptType.equalsIgnoreAsciiCaseAscii( "Script" ) &&
@@ -377,3 +378,5 @@ String XclControlHelper::ExtractFromMacroDescriptor(
 }
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

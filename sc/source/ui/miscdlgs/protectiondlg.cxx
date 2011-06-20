@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include "scresid.hxx"
 #include "tabprotection.hxx"
 
+#include <sal/macros.h>
 #include <vcl/msgbox.hxx>
 
 
@@ -41,7 +43,7 @@ static const ScTableProtection::Option aOptions[] = {
     ScTableProtection::SELECT_LOCKED_CELLS,
     ScTableProtection::SELECT_UNLOCKED_CELLS,
 };
-static const sal_uInt16 nOptionCount = sizeof(aOptions)/sizeof(aOptions[0]);
+static const sal_uInt16 nOptionCount = SAL_N_ELEMENTS(aOptions);
 
 
 ScTableProtectionDlg::ScTableProtectionDlg(Window* pParent) :
@@ -60,8 +62,8 @@ ScTableProtectionDlg::ScTableProtectionDlg(Window* pParent) :
     maBtnCancel (this, ScResId(BTN_CANCEL)),
     maBtnHelp   (this, ScResId(BTN_HELP)),
 
-    maSelectLockedCells(ScResId(ST_SELECT_LOCKED_CELLS)),
-    maSelectUnlockedCells(ScResId(ST_SELECT_UNLOCKED_CELLS))
+    maSelectLockedCells(ScResId(ST_SELECT_PROTECTED_CELLS)),
+    maSelectUnlockedCells(ScResId(ST_SELECT_UNPROTECTED_CELLS))
 {
     Init();
     FreeResource();
@@ -159,3 +161,5 @@ IMPL_LINK( ScTableProtectionDlg, PasswordModifyHdl, Edit*, EMPTYARG )
     maBtnOk.Enable(aPass1.Equals(aPass2));
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

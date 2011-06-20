@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -273,7 +274,7 @@ void VCartesianGrid::createShapes()
             ::std::vector< TickInfo >::const_iterator       aTickIter = (*aDepthIter).begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
             sal_Int32 nRealPointCount = 0;
-            for( ; aTickIter != aTickEnd; aTickIter++ )
+            for( ; aTickIter != aTickEnd; ++aTickIter )
             {
                 if( !(*aTickIter).bPaintIt )
                     continue;
@@ -313,7 +314,7 @@ void VCartesianGrid::createShapes()
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
             sal_Int32 nRealPointCount = 0;
             sal_Int32 nPolyIndex = 0;
-            for( ; aTickIter != aTickEnd; aTickIter++, nPolyIndex++ )
+            for( ; aTickIter != aTickEnd; ++aTickIter, ++nPolyIndex )
             {
                 if( !(*aTickIter).bPaintIt )
                     continue;
@@ -333,3 +334,5 @@ void VCartesianGrid::createShapes()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,9 +83,13 @@ public:
     virtual void SAL_CALL setCenterHorizontally( sal_Bool centerHorizontally ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getPrintHeadings() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPrintHeadings( sal_Bool printHeadings ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getPaperSize() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPaperSize( sal_Int32 paperSize ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

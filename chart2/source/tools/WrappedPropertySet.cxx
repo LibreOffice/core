@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,7 @@ void WrappedPropertySet::clearWrappedPropertySet()
     if(m_pWrappedPropertyMap)
     {
         for( tWrappedPropertyMap::iterator aIt = m_pWrappedPropertyMap->begin()
-            ; aIt!= m_pWrappedPropertyMap->end(); aIt++ )
+            ; aIt!= m_pWrappedPropertyMap->end(); ++aIt )
         {
             const WrappedProperty* pWrappedProperty = (*aIt).second;
             DELETEZ(pWrappedProperty);
@@ -123,7 +124,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
         else
         {
 #if OSL_DEBUG_LEVEL > 1
-            DBG_ERROR("found no inner property set to map to");
+            OSL_FAIL("found no inner property set to map to");
 #endif
         }
     }
@@ -149,7 +150,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
     }
     catch( uno::Exception& ex )
     {
-        OSL_ENSURE(false,"invalid exception caught in WrappedPropertySet::setPropertyValue");
+        OSL_FAIL("invalid exception caught in WrappedPropertySet::setPropertyValue");
         lang::WrappedTargetException aWrappedException;
         aWrappedException.TargetException = uno::makeAny( ex );
         throw aWrappedException;
@@ -172,7 +173,7 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
         else
         {
 #if OSL_DEBUG_LEVEL > 1
-            DBG_ERROR("found no inner property set to map to");
+            OSL_FAIL("found no inner property set to map to");
 #endif
         }
     }
@@ -190,7 +191,7 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
     }
     catch( uno::Exception& ex )
     {
-        OSL_ENSURE(false,"invalid exception caught in WrappedPropertySet::setPropertyValue");
+        OSL_FAIL("invalid exception caught in WrappedPropertySet::setPropertyValue");
         lang::WrappedTargetException aWrappedException;
         aWrappedException.TargetException = uno::makeAny( ex );
         throw aWrappedException;
@@ -211,7 +212,6 @@ void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPr
         else
             xInnerPropertySet->addPropertyChangeListener( rPropertyName, xListener );
     }
-//     m_aBoundListenerContainer.addInterface( (sal_Int32)nHandle, xListener );
 }
 void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
                                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
@@ -273,6 +273,8 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
         }
     }
     //todo: store unknown properties elsewhere
+    OSL_ENSURE(!bUnknownProperty,"unknown property");
+    (void)bUnknownProperty;
 //    if( bUnknownProperty )
 //        throw beans::UnknownPropertyException();
 }
@@ -305,19 +307,19 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
 void SAL_CALL WrappedPropertySet::addPropertiesChangeListener( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented yet");
+    OSL_FAIL("not implemented yet");
     //todo
 }
 void SAL_CALL WrappedPropertySet::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented yet");
+    OSL_FAIL("not implemented yet");
     //todo
 }
 void SAL_CALL WrappedPropertySet::firePropertiesChangeEvent( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented yet");
+    OSL_FAIL("not implemented yet");
     //todo
 }
 
@@ -481,13 +483,13 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
 
                     if( nHandle == -1 )
                     {
-                        OSL_ENSURE( false, "missing property in property list" );
+                        OSL_FAIL( "missing property in property list" );
                         delete pProperty;//we are owner or the created WrappedProperties
                     }
                     else if( p->find( nHandle ) != p->end() )
                     {
                         //duplicate Wrapped property
-                        OSL_ENSURE( false, "duplicate Wrapped property" );
+                        OSL_FAIL( "duplicate Wrapped property" );
                         delete pProperty;//we are owner or the created WrappedProperties
                     }
                     else
@@ -509,3 +511,5 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

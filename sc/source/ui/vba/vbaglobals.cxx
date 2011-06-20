@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,13 @@
 #include <vbahelper/helperdecl.hxx>
 #include "vbaglobals.hxx"
 
+#include <sal/macros.h>
+
 #include <comphelper/unwrapargs.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/component_context.hxx>
-
 #include "vbaapplication.hxx"
 #include "vbaworksheet.hxx"
 #include "vbarange.hxx"
@@ -55,7 +57,7 @@ ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Referen
     OSL_TRACE("ScVbaGlobals::ScVbaGlobals()");
 
         uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
-        aInitArgs[ 0 ].Name = rtl::OUString::createFromAscii("Application");
+        aInitArgs[ 0 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Application"));
         aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
         aInitArgs[ 1 ].Name = sDocCtxName;
         aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
@@ -99,8 +101,8 @@ ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException)
         return xWorkbook;
     }
 // FIXME check if this is correct/desired behavior
-    throw uno::RuntimeException( rtl::OUString::createFromAscii(
-        "No activeWorkbook available" ), Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "No activeWorkbook available" )), Reference< uno::XInterface >() );
 }
 
 
@@ -234,15 +236,23 @@ ScVbaGlobals::getDebug() throw (uno::RuntimeException)
 {
     try // return empty object on error
     {
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-        uno::Reference< uno::XInterface > xVBADebug = xServiceManager->createInstanceWithContext(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.Debug" ) ), mxContext );
+        uno::Reference< uno::XInterface > xVBADebug = xServiceManager->createInstanceWithArgumentsAndContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.Debug" ) ), aArgs, mxContext );
         return uno::Any( xVBADebug );
     }
     catch( uno::Exception& )
     {
     }
     return uno::Any();
+}
+
+uno::Any SAL_CALL
+ScVbaGlobals::MenuBars( const uno::Any& aIndex ) throw (uno::RuntimeException)
+{
+    return uno::Any( getApplication()->MenuBars(aIndex) );
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL
@@ -261,7 +271,7 @@ ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.excel.Hyperlink" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.script.vba.VBASpreadsheetEventProcessor" ) )
           };
-        sal_Int32 nExcelServices = ( sizeof( names )/ sizeof( names[0] ) );
+        sal_Int32 nExcelServices = ( SAL_N_ELEMENTS(names) );
         sal_Int32 startIndex = serviceNames.getLength();
         serviceNames.realloc( serviceNames.getLength() + nExcelServices );
         for ( sal_Int32 index = 0; index < nExcelServices; ++index )
@@ -300,3 +310,4 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ooo.vba.excel.Globals" );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

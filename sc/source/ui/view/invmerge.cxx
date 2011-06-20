@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 
 
 #include <vcl/window.hxx>
-#include <tools/debug.hxx>
 
 #include "invmerge.hxx"
 
@@ -61,7 +61,7 @@ void ScInvertMerger::Flush()
     FlushLine();
     FlushTotal();
 
-    DBG_ASSERT( aLineRect.IsEmpty() && aTotalRect.IsEmpty(), "Flush: not empty" );
+    OSL_ENSURE( aLineRect.IsEmpty() && aTotalRect.IsEmpty(), "Flush: not empty" );
 
     if ( pRects )
     {
@@ -163,7 +163,7 @@ void ScInvertMerger::AddRect( const Rectangle& rRect )
     }
     else
     {
-        sal_Bool bDone = sal_False;
+        sal_Bool bDone = false;
         if ( aJustified.Top()    == aLineRect.Top()    &&
              aJustified.Bottom() == aLineRect.Bottom() )
         {
@@ -190,3 +190,4 @@ void ScInvertMerger::AddRect( const Rectangle& rRect )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

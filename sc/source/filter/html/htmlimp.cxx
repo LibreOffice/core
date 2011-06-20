@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,7 +97,7 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScR
         aPageSize = ((const SvxSizeItem&) rSet.Get(ATTR_PAGE_SIZE)).GetSize();
         if ( !aPageSize.Width() || !aPageSize.Height() )
         {
-            DBG_ERRORFILE("PageSize Null ?!?!?");
+            OSL_FAIL("PageSize Null ?!?!?");
             aPageSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );
         }
         aPageSize.Width() -= nLeftMargin + nRightMargin;
@@ -105,7 +106,7 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScR
     }
     else
     {
-        DBG_ERRORFILE("kein StyleSheet?!?");
+        OSL_FAIL("kein StyleSheet?!?");
         aPageSize = pDefaultDev->LogicToPixel(
             SvxPaperInfo::GetPaperSize( PAPER_A4 ), MapMode( MAP_TWIP ) );
     }
@@ -131,7 +132,7 @@ void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const String& rName, const
     ScTokenArray aTokArray;
     aTokArray.AddDoubleReference( aRefData );
     ScRangeData* pRangeData = new ScRangeData( pDoc, rName, aTokArray );
-    if( !pDoc->GetRangeName()->Insert( pRangeData ) )
+    if( !pDoc->GetRangeName()->insert( pRangeData ) )
         delete pRangeData;
 }
 
@@ -149,8 +150,10 @@ void ScHTMLImport::WriteToDocument(
     pGlobTable->ApplyCellBorders( mpDoc, maRange.aStart );
 
     // correct cell borders for merged cells
-    for ( ScEEParseEntry* pEntry = pParser->First(); pEntry; pEntry = pParser->Next() )
+    size_t ListSize = pParser->ListSize();
+    for ( size_t i = 0; i < ListSize; ++i )
     {
+        const ScEEParseEntry* pEntry = pParser->ListEntry( i );
         if( (pEntry->nColOverlap > 1) || (pEntry->nRowOverlap > 1) )
         {
             SCTAB nTab = maRange.aStart.Tab();
@@ -207,8 +210,7 @@ void ScHTMLImport::WriteToDocument(
         if( pTable->GetTableName().Len() )
         {
             String aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
-            sal_uInt16 nPos;
-            if( !mpDoc->GetRangeName()->SearchName( aName, nPos ) )
+            if (!mpDoc->GetRangeName()->findByName(aName))
                 InsertRangeName( mpDoc, aName, aNewRange );
         }
     }
@@ -221,7 +223,7 @@ String ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument* pDoc, const S
 
 String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName )
 {
-    DBG_ASSERT( pDoc, "ScHTMLImport::GetHTMLRangeNameList - missing document" );
+    OSL_ENSURE( pDoc, "ScHTMLImport::GetHTMLRangeNameList - missing document" );
 
     String aNewName;
     ScRangeName* pRangeNames = pDoc->GetRangeName();
@@ -234,22 +236,22 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
         if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )
         {   // build list with all HTML tables
             sal_uLong nIndex = 1;
-            sal_uInt16 nPos;
-            sal_Bool bLoop = sal_True;
+            bool bLoop = true;
             while( bLoop )
             {
                 aToken = ScfTools::GetNameFromHTMLIndex( nIndex++ );
-                bLoop = pRangeNames->SearchName( aToken, nPos );
-                if( bLoop )
+                const ScRangeData* pRangeData = pRangeNames->findByName(aToken);
+                if (pRangeData)
                 {
-                    const ScRangeData* pRangeData = (*pRangeNames)[ nPos ];
                     ScRange aRange;
-                    if( pRangeData && pRangeData->IsReference( aRange ) && !aRangeList.In( aRange ) )
+                    if( pRangeData->IsReference( aRange ) && !aRangeList.In( aRange ) )
                     {
                         ScGlobal::AddToken( aNewName, aToken, ';' );
                         aRangeList.Append( aRange );
                     }
                 }
+                else
+                    bLoop = false;
             }
         }
         else
@@ -258,3 +260,4 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
     return aNewName;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

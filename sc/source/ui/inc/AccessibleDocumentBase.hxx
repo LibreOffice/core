@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #ifndef _SC_ACCESSIBLEDOCUMENTBASE_HXX
 #define _SC_ACCESSIBLEDOCUMENTBASE_HXX
 
-#ifndef _SC_ACCESSIBLE_CONTEXT_BASE_HXX
 #include "AccessibleContextBase.hxx"
-#endif
 
 class ScAccessibleDocumentBase
     :   public ScAccessibleContextBase
@@ -48,3 +47,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

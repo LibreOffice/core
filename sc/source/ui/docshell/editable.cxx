@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,9 +92,9 @@ void ScEditableTester::TestBlock( ScDocument* pDoc, SCTAB nTab,
         sal_Bool bThisMatrix;
         if ( !pDoc->IsBlockEditable( nTab, nStartCol, nStartRow, nEndCol, nEndRow, &bThisMatrix ) )
         {
-            bIsEditable = sal_False;
+            bIsEditable = false;
             if ( !bThisMatrix )
-                bOnlyMatrix = sal_False;
+                bOnlyMatrix = false;
         }
     }
 }
@@ -127,9 +128,9 @@ void ScEditableTester::TestSelection( ScDocument* pDoc, const ScMarkData& rMark 
         sal_Bool bThisMatrix;
         if ( !pDoc->IsSelectionEditable( rMark, &bThisMatrix ) )
         {
-            bIsEditable = sal_False;
+            bIsEditable = false;
             if ( !bThisMatrix )
-                bOnlyMatrix = sal_False;
+                bOnlyMatrix = false;
         }
     }
 }
@@ -141,9 +142,9 @@ void ScEditableTester::TestView( ScViewFunc* pView )
         sal_Bool bThisMatrix;
         if ( !pView->SelectionEditable( &bThisMatrix ) )
         {
-            bIsEditable = sal_False;
+            bIsEditable = false;
             if ( !bThisMatrix )
-                bOnlyMatrix = sal_False;
+                bOnlyMatrix = false;
         }
     }
 }
@@ -160,3 +161,4 @@ sal_uInt16 ScEditableTester::GetMessageId() const
         return STR_PROTECTIONERR;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

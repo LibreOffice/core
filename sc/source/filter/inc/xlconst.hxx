@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,6 +74,10 @@ const SCTAB EXC_MAXTAB5                     = EXC_MAXTAB4;
 const SCCOL EXC_MAXCOL8                     = EXC_MAXCOL5;
 const SCROW EXC_MAXROW8                     = 65535;
 const SCTAB EXC_MAXTAB8                     = EXC_MAXTAB5;
+
+const SCCOL EXC_MAXCOL_XML_2007             = 16383;
+const SCROW EXC_MAXROW_XML_2007             = 1048575;
+const SCTAB EXC_MAXTAB_XML_2007             = 1023;
 
 const sal_uInt16 EXC_NOTAB                  = SAL_MAX_UINT16;   /// An invalid Excel sheet index, for common use.
 const SCTAB SCTAB_INVALID                   = SCTAB_MAX;        /// An invalid Calc sheet index, for common use.
@@ -175,27 +180,21 @@ const sal_uInt16 EXC_BOF_WORKSPACE          = 0x0100;   /// Workspace.
 const sal_uInt16 EXC_BOF_UNKNOWN            = 0xFFFF;   /// Internal use only.
 
 // (0x000A) EOF ---------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_EOF                 = 0x000A;
 
 // (0x0012) PROTECT -----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_PROTECT             = 0x0012;
 
 // (0x0013) PASSWORD ----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_PASSWORD            = 0x0013;
 
 // (0x0019) WINDOWPROTECT -----------------------------------------------------
-
 const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
 
 // (0x0042) CODEPAGE ----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_CODEPAGE            = 0x0042;
 
 // (0x0081) WSBOOL ------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_WSBOOL              = 0x0081;
 
 const sal_uInt16 EXC_WSBOOL_ROWBELOW        = 0x0040;
@@ -205,59 +204,46 @@ const sal_uInt16 EXC_WSBOOL_FITTOPAGE       = 0x0100;
 const sal_uInt16 EXC_WSBOOL_DEFAULTFLAGS    = 0x04C1;
 
 // (0x0086) WRITEPROT ---------------------------------------------------------
-
 const sal_uInt16 EXC_ID_WRITEPROT           = 0x0086;
 
 // (0x008C) COUNTRY -----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_COUNTRY             = 0x008C;
 
 // (0x009B) FILTERMODE --------------------------------------------------------
-
 const sal_uInt16 EXC_ID_FILTERMODE          = 0x009B;
 
 // (0x009C) FNGROUPCOUNT ------------------------------------------------------
-
 const sal_uInt16 EXC_ID_FNGROUPCOUNT        = 0x009C;
 
 // (0x009D) AUTOFILTERINFO ----------------------------------------------------
-
 const sal_uInt16 EXC_ID_AUTOFILTERINFO      = 0x009D;
 
 // (0x009E) AUTOFILTER --------------------------------------------------------
-
 const sal_uInt16 EXC_ID_AUTOFILTER          = 0x009E;
 
 // (0x00BF, 0x00C0, 0x00C1) TOOLBARHDR, TOOLBAREND, MMS -----------------------
-
 const sal_uInt16 EXC_ID_TOOLBARHDR          = 0x00BF;
 const sal_uInt16 EXC_ID_TOOLBAREND          = 0x00C0;
 const sal_uInt16 EXC_ID_MMS                 = 0x00C1;
 
 // (0x00E1, 0x00E2) INTERFACEHDR, INTERFACEEND --------------------------------
-
 const sal_uInt16 EXC_ID_INTERFACEHDR        = 0x00E1;
 const sal_uInt16 EXC_ID_INTERFACEEND        = 0x00E2;
 
 // (0x0160) USESELFS ----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_USESELFS            = 0x0160;
 
 // (0x0161) DSF ---------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_DSF                 = 0x0161;
 
 // (0x01AA,0x01AB) USERSVIEWBEGIN, USERSVIEWEND -------------------------------
-
 const sal_uInt16 EXC_ID_USERSVIEWBEGIN      = 0x01AA;
 const sal_uInt16 EXC_ID_USERSVIEWEND        = 0x01AB;
 
 // (0x01BA) CODENAME ----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_CODENAME            = 0x01BA;
 
 // (0x01C0) XL9FILE -----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_XL9FILE             = 0x01C0;
 
 // (0x8xx) Future records -----------------------------------------------------
@@ -277,3 +263,4 @@ const sal_uInt16 EXC_FUTUREREC_ALERT        = 0x0002;
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

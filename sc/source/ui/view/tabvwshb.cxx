@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,7 +91,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
 
-    //  #41412# wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
+    //  wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
 
     SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
     if ( !pClient )
@@ -118,18 +119,14 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 
 sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 {
-    // #41081# Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
+    // Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
     RemoveHintWindow();
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
     ErrCode nErr = ERRCODE_NONE;
-    sal_Bool bErrorShown = sal_False;
+    sal_Bool bErrorShown = false;
 
-    // linked objects aren't supported
-//  if ( xIPObj->IsLink() )
-//      nErr = xIPObj->DoVerb(nVerb);           // gelinkt -> ohne Client etc.
-//  else
     {
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
         if ( !pClient )
@@ -181,8 +178,6 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             bErrorShown = sal_True;
             // SfxViewShell::DoVerb zeigt seine Fehlermeldungen selber an
 
-            SetNewVisArea();
-
             // attach listener to selection changes in chart that affect cell
             // ranges, so those can be highlighted
             // note: do that after DoVerb, so that the chart controller exists
@@ -207,7 +202,7 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                     }
                     catch( const uno::Exception & )
                     {
-                        DBG_ERROR( "Exception caught while querying chart" );
+                        OSL_FAIL( "Exception caught while querying chart" );
                     }
                 }
             }
@@ -223,14 +218,13 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     return ( !(nErr & ERRCODE_ERROR_MASK) );
 }
 
-ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
+ErrCode ScTabViewShell::DoVerb(long nVerb)
 {
     SdrView* pView = GetSdrView();
     if (!pView)
         return ERRCODE_SO_NOTIMPL;          // soll nicht sein
 
     SdrOle2Obj* pOle2Obj = NULL;
-    SdrGrafObj* pGrafObj = NULL;
     SdrObject* pObj = NULL;
     ErrCode nErr = ERRCODE_NONE;
 
@@ -240,10 +234,6 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
             pOle2Obj = (SdrOle2Obj*) pObj;
-        else if (pObj->GetObjIdentifier() == OBJ_GRAF)
-        {
-            pGrafObj = (SdrGrafObj*) pObj;
-        }
     }
 
     if (pOle2Obj)
@@ -252,7 +242,7 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
     }
     else
     {
-        DBG_ERROR("kein Objekt fuer Verb gefunden");
+        OSL_FAIL("kein Objekt fuer Verb gefunden");
     }
 
     return nErr;
@@ -292,7 +282,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     ScDrawView*  pView     = pTabView->GetScDrawView();
     ScDocShell*  pDocSh    = GetViewData()->GetDocShell();
     ScDocument*  pDoc      = pDocSh->GetDocument();
-//  SdrModel*    pDrModel  = pDocSh->MakeDrawLayer();
     SdrModel*    pDrModel  = pView->GetModel();
 
     switch ( nSlot )
@@ -309,7 +298,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_INSERT_DIAGRAM:
             FuInsertChart(this, pWin, pView, pDrModel, rReq);
-//?         SC_MOD()->SetFunctionDlg( NULL );//XXX
             break;
 
         case SID_INSERT_OBJECT:
@@ -374,8 +362,8 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         // #98721#
         case SID_FM_CREATE_FIELDCONTROL:
             {
-                SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
-                DBG_ASSERT( pDescriptorItem, "SID_FM_CREATE_FIELDCONTROL: invalid request args!" );
+                SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, false );
+                OSL_ENSURE( pDescriptorItem, "SID_FM_CREATE_FIELDCONTROL: invalid request args!" );
 
                 if(pDescriptorItem)
                 {
@@ -539,7 +527,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                 if ( bLockPaint )
                     pDocSh->UnlockPaint();
 
-                GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+                GetViewFrame()->GetBindings().InvalidateAll(false);
             }
             break;
 //      default:
@@ -564,13 +552,12 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
                     SfxStringListItem aStrLst( nWhich );
                     if ( pUndoManager )
                     {
-                        List* pList = aStrLst.GetList();
+                        std::vector<String> &aList = aStrLst.GetList();
                         sal_Bool bIsUndo = ( nWhich == SID_GETUNDOSTRINGS );
                         size_t nCount = bIsUndo ? pUndoManager->GetUndoActionCount() : pUndoManager->GetRedoActionCount();
                         for (size_t i=0; i<nCount; i++)
-                            pList->Insert( new String( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
-                                                                 pUndoManager->GetRedoActionComment(i) ),
-                                           LIST_APPEND );
+                            aList.push_back( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
+                                                       pUndoManager->GetRedoActionComment(i) );
                     }
                     rSet.Put( aStrLst );
                 }
@@ -586,3 +573,4 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

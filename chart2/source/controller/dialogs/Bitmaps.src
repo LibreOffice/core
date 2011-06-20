@@ -33,7 +33,7 @@ Image IMG_TYPE_COLUMN
 };
 Image IMG_TYPE_BAR
 {
-    ImageBitmap = Bitmap { File = "typebar_16.png " ; };
+    ImageBitmap = Bitmap { File = "typebar_16.png" ; };
     MaskColor = STD_MASKCOLOR;
 };
 Image IMG_TYPE_PIE
@@ -501,35 +501,35 @@ Image BMP_REGRESSION_NONE
 {
     ImageBitmap = Bitmap
     {
-        File = "regno.bmp" ;
+        File = "regno.png" ;
     };
 };
 Image BMP_REGRESSION_LINEAR
 {
     ImageBitmap = Bitmap
     {
-        File = "reglin.bmp" ;
+        File = "reglin.png" ;
     };
 };
 Image BMP_REGRESSION_LOG
 {
     ImageBitmap = Bitmap
     {
-        File = "reglog.bmp" ;
+        File = "reglog.png" ;
     };
 };
 Image BMP_REGRESSION_EXP
 {
     ImageBitmap = Bitmap
     {
-        File = "regexp.bmp" ;
+        File = "regexp.png" ;
     };
 };
 Image BMP_REGRESSION_POWER
 {
     ImageBitmap = Bitmap
     {
-        File = "regpow.bmp" ;
+        File = "regpow.png" ;
     };
 };
 //---------------------

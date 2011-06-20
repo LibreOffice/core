@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,19 +45,19 @@ class SC_DLLPUBLIC ScImportOptions
 public:
         ScImportOptions()
             : nFieldSepCode(0), nTextSepCode(0),
-            eCharSet(RTL_TEXTENCODING_DONTKNOW), bFixedWidth(sal_False),
-            bSaveAsShown(sal_False), bQuoteAllText(sal_False)
+            eCharSet(RTL_TEXTENCODING_DONTKNOW), bFixedWidth(false),
+            bSaveAsShown(false), bQuoteAllText(false)
         {}
         ScImportOptions( const String& rStr );
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, const String& rStr )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep), aStrFont(rStr),
-            bFixedWidth(sal_False), bSaveAsShown(sal_False), bQuoteAllText(sal_False)
+            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false)
         { eCharSet = ScGlobal::GetCharsetValue(aStrFont); }
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, rtl_TextEncoding nEnc )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep),
-            bFixedWidth(sal_False), bSaveAsShown(sal_False), bQuoteAllText(sal_False)
+            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false)
         { SetTextEncoding( nEnc ); }
 
         ScImportOptions( const ScImportOptions& rCpy )
@@ -110,3 +111,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

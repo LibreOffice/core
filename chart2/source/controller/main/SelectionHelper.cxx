@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 // header for class SdrPathObj
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -50,7 +51,6 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-//using namespace ::com::sun::star::chart2;
 
 namespace
 {
@@ -64,7 +64,7 @@ rtl::OUString lcl_getObjectName( SdrObject* pObj )
 
 void impl_selectObject( SdrObject* pObjectToSelect, DrawViewWrapper& rDrawViewWrapper )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     if(pObjectToSelect)
     {
@@ -151,7 +151,7 @@ void Selection::remindSelectionBeforeMouseDown()
     m_aSelectedOID_beforeMouseDown = m_aSelectedOID;
 }
 
-bool Selection::isSelectionDifferentFromBeforeMouseDown()
+bool Selection::isSelectionDifferentFromBeforeMouseDown() const
 {
     return ( m_aSelectedOID != m_aSelectedOID_beforeMouseDown );
 }
@@ -161,7 +161,7 @@ void Selection::applySelection( DrawViewWrapper* pDrawViewWrapper )
     if( pDrawViewWrapper )
     {
         {
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             pDrawViewWrapper->UnmarkAll();
         }
         SdrObject* pObjectToSelect = 0;
@@ -188,7 +188,7 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
 
         ObjectIdentifier aLastSelectedObject( m_aSelectedOID );
 
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
 
         //bAllowMultiClickSelectionChange==true -> a second click on the same object can lead to a changed selection (e.g. series -> single data point)
 
@@ -251,7 +251,7 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
                     }
                 }
 
-                DBG_ASSERT( pNewObj && m_aSelectedOID.isValid(), "somehow lost selected object" );
+                OSL_ENSURE( pNewObj && m_aSelectedOID.isValid(), "somehow lost selected object" );
             }
             else
             {
@@ -350,12 +350,11 @@ bool Selection::isAdditionalShapeSelected() const
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-
 bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
                                       , rtl::OUString& rOutName
                                       , bool bGivenObjectMayBeResult )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     //find the deepest named group
     SdrObject* pObj = pInOutObject;
     rtl::OUString aName;
@@ -405,7 +404,7 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
         return false;
     if( !ObjectIdentifier::isDragableObject(rNameOfSelectedObject) )
         return false;
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     SdrObject* pObj = rDrawViewWrapper.getNamedSdrObject( rNameOfSelectedObject );
     if( !rDrawViewWrapper.IsObjectHit( pObj, rMPos ) )
         return false;
@@ -418,7 +417,7 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
     bool bGetDiagramInsteadOf_Wall )
 {
     // //- solar mutex
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     rtl::OUString aRet;
 
     SdrObject* pNewObj = rDrawViewWrapper.getHitObject(rMPos);
@@ -491,7 +490,7 @@ bool SelectionHelper::isRotateableObject( const ::rtl::OUString& rCID
 }
 
 SelectionHelper::SelectionHelper( SdrObject* pSelectedObj )
-                      : m_pSelectedObj( pSelectedObj )
+                      : m_pSelectedObj( pSelectedObj ), m_pMarkObj(NULL)
 {
 
 }
@@ -499,7 +498,6 @@ SelectionHelper::~SelectionHelper()
 {
 }
 
-//virtual
 bool SelectionHelper::getFrameDragSingles()
 {
     bool bFrameDragSingles = true;//true == green == surrounding handles
@@ -519,7 +517,7 @@ SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
         return 0;
 
     //search for a child with name "MarkHandles" or "HandlesOnly"
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     SdrObjList* pSubList = pObj->GetSubList();
     if(pSubList)
     {
@@ -544,7 +542,7 @@ SdrObject* SelectionHelper::getObjectToMark()
     //search for a child with name "MarkHandles" or "HandlesOnly"
     if(pObj)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         SdrObjList* pSubList = pObj->GetSubList();
         if(pSubList)
         {
@@ -575,7 +573,7 @@ E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
         pRotateable = dynamic_cast<E3dObject*>(pObj);
         if( !pRotateable )
         {
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             SdrObjList* pSubList = pObj->GetSubList();
             if(pSubList)
             {
@@ -592,17 +590,16 @@ E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
     E3dScene* pScene = 0;
     if(pRotateable)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+        SolarMutexGuard aSolarGuard;
         pScene = pRotateable->GetScene();
     }
     return pScene;
 
 }
 
-//virtual
 bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     //@todo -> more flexible handle creation
     //2 scenarios possible:
@@ -692,3 +689,5 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

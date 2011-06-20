@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-
 #include "imoptdlg.hrc"
 
 ModalDialog RID_SCDLG_IMPORTOPT
@@ -103,8 +102,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     CheckBox CB_SAVESHOWN
     {
-        HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_SAVESHOWN";
-        Pos = MAP_APPFONT( 12, 78 );
+        Pos = MAP_APPFONT( 12, 66 );
         Size = MAP_APPFONT( 172, 10 );
         TabStop = TRUE;
         Hide = TRUE;
@@ -113,7 +111,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     CheckBox CB_QUOTEALL
     {
         HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_QUOTEALL";
-        Pos = MAP_APPFONT( 20, 64 );
+        Pos = MAP_APPFONT( 12, 79 );
         Size = MAP_APPFONT( 164, 10 );
         Hide = TRUE;
         Text [ en-US ] = "~Quote all text cells";
@@ -135,21 +133,3 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

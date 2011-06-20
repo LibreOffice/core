@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 class ScNewScenarioDlg : public ModalDialog
 {
 public:
-        ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bool bEdit = sal_False, sal_Bool bSheetProtected = sal_False );
+        ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bool bEdit = false, sal_Bool bSheetProtected = false );
         ~ScNewScenarioDlg();
 
     void SetScenarioData( const String& rName, const String& rComment,
@@ -78,3 +79,4 @@ private:
 #endif // SC_SCENDLG_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

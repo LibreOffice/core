@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@
 #include "docsh.hxx"
 #include "viewdata.hxx"
 #include "pivot.hxx"
-//CHINA001 #include "pfiltdlg.hxx"
 #include "uiitems.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
@@ -58,16 +58,16 @@
 #include "userlist.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::std::vector;
 using ::std::auto_ptr;
-using ::std::hash_map;
+using ::boost::unordered_map;
 using ::rtl::OUString;
 using ::rtl::OUStringHash;
 
@@ -94,9 +94,9 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
         long nField = pDPObj->GetHeaderDim( ScAddress( nCol-1, nRow, nTab ), nOrient );
         if ( nField >= 0 && nOrient == DataPilotFieldOrientation_PAGE )
         {
-            sal_Bool bIsDataLayout = sal_False;
-            String aFieldName = pDPObj->GetDimName( nField, bIsDataLayout );
-            if ( aFieldName.Len() && !bIsDataLayout )
+            bool bIsDataLayout = false;
+            OUString aFieldName = pDPObj->GetDimName( nField, bIsDataLayout );
+            if ( !aFieldName.isEmpty() && !bIsDataLayout )
                 return DataPilotFieldOrientation_PAGE;
         }
     }
@@ -107,9 +107,9 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
     long nField = pDPObj->GetHeaderDim(ScAddress(nCol, nRow, nTab), nOrient);
     if (nField >= 0 && (nOrient == DataPilotFieldOrientation_COLUMN || nOrient == DataPilotFieldOrientation_ROW) )
     {
-        sal_Bool bIsDataLayout = sal_False;
-        String aFieldName = pDPObj->GetDimName(nField, bIsDataLayout);
-        if (aFieldName.Len() && !bIsDataLayout)
+        bool bIsDataLayout = false;
+        OUString aFieldName = pDPObj->GetDimName(nField, bIsDataLayout);
+        if (!aFieldName.isEmpty() && !bIsDataLayout)
             return static_cast<DataPilotFieldOrientation>(nOrient);
     }
 
@@ -124,7 +124,7 @@ sal_Bool ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
         LaunchPageFieldMenu( nCol, nRow );
         return sal_True;
     }
-    return sal_False;
+    return false;
 }
 
 bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt )
@@ -207,40 +207,37 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             ScQueryParam aQueryParam;
             SCTAB nSrcTab = 0;
             const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
-            DBG_ASSERT(pDesc, "no sheet source for filter button");
+            OSL_ENSURE(pDesc, "no sheet source for filter button");
             if (pDesc)
             {
-                aQueryParam = pDesc->aQueryParam;
-                nSrcTab = pDesc->aSourceRange.aStart.Tab();
+                aQueryParam = pDesc->GetQueryParam();
+                nSrcTab = pDesc->GetSourceRange().aStart.Tab();
             }
 
             SfxItemSet aArgSet( pViewData->GetViewShell()->GetPool(),
                                         SCITEM_QUERYDATA, SCITEM_QUERYDATA );
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
 
-//CHINA001          ScPivotFilterDlg* pDlg = new ScPivotFilterDlg(
-//CHINA001          pViewData->GetViewShell()->GetDialogParent(),
-//CHINA001          aArgSet, nSrcTab );
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+            OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
             AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewData->GetViewShell()->GetDialogParent(),
                                                                             aArgSet, nSrcTab,
                                                                             RID_SCDLG_PIVOTFILTER);
-            DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+            OSL_ENSURE(pDlg, "Dialog create fail!");
             if ( pDlg->Execute() == RET_OK )
             {
-                ScSheetSourceDesc aNewDesc;
+                ScSheetSourceDesc aNewDesc(pDoc);
                 if (pDesc)
                     aNewDesc = *pDesc;
 
                 const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
-                aNewDesc.aQueryParam = rQueryItem.GetQueryData();
+                aNewDesc.SetQueryParam(rQueryItem.GetQueryData());
 
                 ScDPObject aNewObj( *pDPObj );
                 aNewObj.SetSheetDesc( aNewDesc );
                 ScDBDocFunc aFunc( *pViewData->GetDocShell() );
-                aFunc.DataPilotUpdate( pDPObj, &aNewObj, sal_True, sal_False );
+                aFunc.DataPilotUpdate( pDPObj, &aNewObj, sal_True, false );
                 pViewData->GetView()->CursorPosChanged();       // shells may be switched
             }
             delete pDlg;
@@ -250,7 +247,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
     }
     else
     {
-        DBG_ERROR("Da is ja garnix");
+        OSL_FAIL("Da is ja garnix");
     }
 }
 
@@ -261,12 +258,12 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
 
 void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, sal_Bool bMove )
 {
-    DBG_ASSERT(pDragDPObj, "pDragDPObj missing");
+    OSL_ENSURE(pDragDPObj, "pDragDPObj missing");
 
     //  scroll window if at edges
     //! move this to separate method
 
-    sal_Bool bTimer = sal_False;
+    sal_Bool bTimer = false;
     Point aPixel = rMEvt.GetPosPixel();
 
     SCsCOL nDx = 0;
@@ -282,7 +279,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, sal_Bool bMove )
         nDy = 1;
     if ( nDx != 0 || nDy != 0 )
     {
-        UpdateDragRect( sal_False, Rectangle() );
+        UpdateDragRect( false, Rectangle() );
 
         if ( nDx  != 0)
             pViewData->GetView()->ScrollX( nDx, WhichH(eWhich) );
@@ -310,9 +307,9 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, sal_Bool bMove )
                                                 aPosRect, nOrient, nDimPos );
     UpdateDragRect( bHasRange && bMove, aPosRect );
 
-    sal_Bool bIsDataLayout;
+    bool bIsDataLayout;
     sal_Int32 nDimFlags = 0;
-    String aDimName = pDragDPObj->GetDimName( nDPField, bIsDataLayout, &nDimFlags );
+    OUString aDimName = pDragDPObj->GetDimName( nDPField, bIsDataLayout, &nDimFlags );
     bool bAllowed = !bHasRange || ScDPObject::IsOrientationAllowed( nOrient, nDimFlags );
 
     if (bMove)          // set mouse pointer
@@ -359,7 +356,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, sal_Bool bMove )
             aNewObj.SetSaveData( aSaveData );
             ScDBDocFunc aFunc( *pViewData->GetDocShell() );
             // when dragging fields, allow re-positioning (bAllowMove)
-            aFunc.DataPilotUpdate( pDragDPObj, &aNewObj, sal_True, sal_False, sal_True );
+            aFunc.DataPilotUpdate( pDragDPObj, &aNewObj, sal_True, false, sal_True );
             pViewData->GetView()->CursorPosChanged();       // shells may be switched
         }
     }
@@ -456,18 +453,6 @@ private:
 
 }
 
-bool lcl_GetLabelIndex( size_t& rLabelIndex, long nDimension, const ScDPLabelDataVector& rLabelArray )
-{
-    size_t n = rLabelArray.size();
-    for (size_t i = 0; i < n; ++i)
-        if (static_cast<long>(rLabelArray[i].mnCol) == nDimension)
-        {
-            rLabelIndex = i;
-            return true;
-        }
-    return false;
-}
-
 void ScGridWindow::DPLaunchFieldPopupMenu(
     const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj)
 {
@@ -479,15 +464,14 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
     sal_uInt16 nOrient;
     pDPData->mnDim = pDPObj->GetHeaderDim(rPos, nOrient);
 
-    // #i116457# FillLabelData skips empty column names, so mnDim can't be used directly as index into maLabelArray.
-    size_t nLabelIndex = 0;
-    if (!lcl_GetLabelIndex( nLabelIndex, pDPData->mnDim, pDPData->maDPParam.maLabelArray ))
+    if (pDPData->maDPParam.maLabelArray.size() <= static_cast<size_t>(pDPData->mnDim))
+        // out-of-bound dimension ID.  This should never happen!
         return;
 
-    const ScDPLabelData& rLabelData = pDPData->maDPParam.maLabelArray[nLabelIndex];
+    const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
 
     mpDPFieldPopup.reset(new ScDPFieldPopupWindow(this, pViewData->GetDocument()));
-    mpDPFieldPopup->setName(OUString::createFromAscii("Pivot table field member popup"));
+    mpDPFieldPopup->setName(OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilot field member popup")));
     mpDPFieldPopup->setExtendedData(pDPData.release());
     mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
     {
@@ -506,11 +490,11 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
     ScUserList* pUserList = ScGlobal::GetUserList();
     if (pUserList)
     {
-        sal_uInt16 n = pUserList->GetCount();
+        size_t n = pUserList->size();
         aUserSortNames.reserve(n);
-        for (sal_uInt16 i = 0; i < n; ++i)
+        for (size_t i = 0; i < n; ++i)
         {
-            ScUserListData* pData = static_cast<ScUserListData*>((*pUserList)[i]);
+            const ScUserListData* pData = (*pUserList)[i];
             aUserSortNames.push_back(pData->GetString());
         }
     }
@@ -559,8 +543,8 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
 
 void ScGridWindow::UpdateDPFromFieldPopupMenu()
 {
-    typedef hash_map<OUString, OUString, OUStringHash> MemNameMapType;
-    typedef hash_map<OUString, bool, OUStringHash> MemVisibilityType;
+    typedef boost::unordered_map<OUString, OUString, OUStringHash> MemNameMapType;
+    typedef boost::unordered_map<OUString, bool, OUStringHash> MemVisibilityType;
 
     if (!mpDPFieldPopup.get())
         return;
@@ -574,17 +558,14 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     aNewDPObj.BuildAllDimensionMembers();
     ScDPSaveData* pSaveData = aNewDPObj.GetSaveData();
 
-    sal_Bool bIsDataLayout;
-    String aDimName = pDPObj->GetDimName(pDPData->mnDim, bIsDataLayout);
+    bool bIsDataLayout;
+    OUString aDimName = pDPObj->GetDimName(pDPData->mnDim, bIsDataLayout);
     ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aDimName);
     if (!pDim)
         return;
 
-    size_t nLabelIndex = 0;
-    lcl_GetLabelIndex( nLabelIndex, pDPData->mnDim, pDPData->maDPParam.maLabelArray );
-
     // Build a map of layout names to original names.
-    const ScDPLabelData& rLabelData = pDPData->maDPParam.maLabelArray[nLabelIndex];
+    const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
     MemNameMapType aMemNameMap;
     for (vector<ScDPLabelData::Member>::const_iterator itr = rLabelData.maMembers.begin(), itrEnd = rLabelData.maMembers.end();
            itr != itrEnd; ++itr)
@@ -613,6 +594,22 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     aFunc.DataPilotUpdate(pDPObj, &aNewDPObj, true, false);
 }
 
+void ScGridWindow::UpdateVisibleRange()
+{
+    SCCOL nPosX = pViewData->GetPosX(eHWhich);
+    SCROW nPosY = pViewData->GetPosY(eVWhich);
+    SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
+    if (nXRight > MAXCOL) nXRight = MAXCOL;
+    SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
+    if (nYBottom > MAXROW) nYBottom = MAXROW;
+
+    // Store the current visible range.
+    maVisibleRange.mnCol1 = nPosX;
+    maVisibleRange.mnCol2 = nXRight;
+    maVisibleRange.mnRow1 = nPosY;
+    maVisibleRange.mnRow2 = nYBottom;
+}
+
 void ScGridWindow::DPMouseMove( const MouseEvent& rMEvt )
 {
     DPTestMouse( rMEvt, sal_True );
@@ -620,10 +617,10 @@ void ScGridWindow::DPMouseMove( const MouseEvent& rMEvt )
 
 void ScGridWindow::DPMouseButtonUp( const MouseEvent& rMEvt )
 {
-    bDPMouse = sal_False;
+    bDPMouse = false;
     ReleaseMouse();
 
-    DPTestMouse( rMEvt, sal_False );
+    DPTestMouse( rMEvt, false );
     SetPointer( Pointer( POINTER_ARROW ) );
 }
 
@@ -642,19 +639,16 @@ void ScGridWindow::UpdateDragRect( sal_Bool bShowRange, const Rectangle& rPosRec
         return;         // everything unchanged
     }
 
-    // if ( bDragRect )
-    //  DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, sal_False );
     if ( bShowRange )
     {
         nDragStartX = nStartX;
         nDragStartY = nStartY;
         nDragEndX = nEndX;
         nDragEndY = nEndY;
-        bDragRect = sal_True;
-        // DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, sal_False );
+        bDragRect = true;
     }
     else
-        bDragRect = sal_False;
+        bDragRect = false;
 
     UpdateDragRectOverlay();
 }
@@ -674,8 +668,8 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
     ScPageBreakData* pPageData = pViewData->GetView()->GetPageBreakData();
     if ( pPageData )
     {
-        sal_Bool bHori = sal_False;
-        sal_Bool bVert = sal_False;
+        sal_Bool bHori = false;
+        sal_Bool bVert = false;
         SCCOL nHitX = 0;
         SCROW nHitY = 0;
 
@@ -802,7 +796,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
 
     //  Scrolling
 
-    sal_Bool bTimer = sal_False;
+    sal_Bool bTimer = false;
     Point aPos = rMEvt.GetPosPixel();
     SCsCOL nDx = 0;
     SCsROW nDy = 0;
@@ -817,9 +811,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
     {
         if ( bPagebreakDrawn )          // weginvertieren
         {
-            // DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
-            //              aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), sal_False );
-            bPagebreakDrawn = sal_False;
+            bPagebreakDrawn = false;
             UpdateDragRectOverlay();
         }
 
@@ -863,8 +855,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
     if ( !bTop )  ++nPosY;
 
     sal_Bool bBreak = ( nPagebreakMouse == SC_PD_BREAK_H || nPagebreakMouse == SC_PD_BREAK_V );
-    sal_Bool bHide = sal_False;
-    sal_Bool bToEnd = sal_False;
+    sal_Bool bHide = false;
+    sal_Bool bToEnd = false;
     ScRange aDrawRange = aPagebreakSource;
     if ( bBreak )
     {
@@ -925,17 +917,13 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
         if ( bPagebreakDrawn )
         {
             // weginvertieren
-            // DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
-            //              aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), sal_False );
-            bPagebreakDrawn = sal_False;
+            bPagebreakDrawn = false;
         }
         aPagebreakDrag = aDrawRange;
         if ( !bUp && !bHide )
         {
             // hininvertieren
-            // DrawDragRect( aPagebreakDrag.aStart.Col(), aPagebreakDrag.aStart.Row(),
-            //              aPagebreakDrag.aEnd.Col(), aPagebreakDrag.aEnd.Row(), sal_False );
-            bPagebreakDrawn = sal_True;
+            bPagebreakDrawn = true;
         }
         UpdateDragRectOverlay();
     }
@@ -968,12 +956,12 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
                     if (pDoc->HasColBreak(static_cast<SCCOL>(nPagebreakBreak), nTab) & BREAK_MANUAL)
                     {
                         ScAddress aOldAddr( static_cast<SCCOL>(nPagebreakBreak), nPosY, nTab );
-                        pViewFunc->DeletePageBreak( sal_True, sal_True, &aOldAddr, sal_False );
+                        pViewFunc->DeletePageBreak( sal_True, sal_True, &aOldAddr, false );
                     }
                     if ( !bHide && !bToEnd )    // am Ende nicht
                     {
                         ScAddress aNewAddr( static_cast<SCCOL>(nNew), nPosY, nTab );
-                        pViewFunc->InsertPageBreak( sal_True, sal_True, &aNewAddr, sal_False );
+                        pViewFunc->InsertPageBreak( sal_True, sal_True, &aNewAddr, false );
                     }
                     if ( bGrow )
                     {
@@ -982,12 +970,12 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
                         if ( static_cast<SCCOL>(nPagebreakPrev) > aPagebreakSource.aStart.Col() && !bManualBreak )
                         {
                             ScAddress aPrev( static_cast<SCCOL>(nPagebreakPrev), nPosY, nTab );
-                            pViewFunc->InsertPageBreak( sal_True, sal_True, &aPrev, sal_False );
+                            pViewFunc->InsertPageBreak( sal_True, sal_True, &aPrev, false );
                         }
 
                         if (!pDocSh->AdjustPrintZoom( ScRange(
                                       static_cast<SCCOL>(nPagebreakPrev),0,nTab, static_cast<SCCOL>(nNew-1),0,nTab ) ))
-                            bGrow = sal_False;
+                            bGrow = false;
                     }
                 }
                 else
@@ -995,12 +983,12 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
                     if (pDoc->HasRowBreak(nPagebreakBreak, nTab) & BREAK_MANUAL)
                     {
                         ScAddress aOldAddr( nPosX, nPagebreakBreak, nTab );
-                        pViewFunc->DeletePageBreak( sal_False, sal_True, &aOldAddr, sal_False );
+                        pViewFunc->DeletePageBreak( false, sal_True, &aOldAddr, false );
                     }
                     if ( !bHide && !bToEnd )    // am Ende nicht
                     {
                         ScAddress aNewAddr( nPosX, nNew, nTab );
-                        pViewFunc->InsertPageBreak( sal_False, sal_True, &aNewAddr, sal_False );
+                        pViewFunc->InsertPageBreak( false, sal_True, &aNewAddr, false );
                     }
                     if ( bGrow )
                     {
@@ -1009,12 +997,12 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
                         if ( nPagebreakPrev > aPagebreakSource.aStart.Row() && !bManualBreak )
                         {
                             ScAddress aPrev( nPosX, nPagebreakPrev, nTab );
-                            pViewFunc->InsertPageBreak( sal_False, sal_True, &aPrev, sal_False );
+                            pViewFunc->InsertPageBreak( false, sal_True, &aPrev, false );
                         }
 
                         if (!pDocSh->AdjustPrintZoom( ScRange(
                                       0,nPagebreakPrev,nTab, 0,nNew-1,nTab ) ))
-                            bGrow = sal_False;
+                            bGrow = false;
                     }
                 }
 
@@ -1060,7 +1048,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
             else if (!bHide)
                 aPagebreakDrag.Format( aNewRanges, SCA_VALID );
 
-            pViewFunc->SetPrintRanges( pDoc->IsPrintEntireSheet( nTab ), &aNewRanges, NULL, NULL, sal_False );
+            pViewFunc->SetPrintRanges( pDoc->IsPrintEntireSheet( nTab ), &aNewRanges, NULL, NULL, false );
         }
     }
 
@@ -1075,3 +1063,4 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

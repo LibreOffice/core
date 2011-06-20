@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,6 @@
 #include "printopt.hxx"
 #include "userlist.hxx"
 #include "sc.hrc"           // VAR_ARGS
-#include "unoguard.hxx"
 #include "unonames.hxx"
 #include "funcdesc.hxx"
 #include <com/sun/star/sheet/FunctionArgument.hpp>
@@ -376,7 +376,7 @@ ScSpreadsheetSettings::~ScSpreadsheetSettings()
 uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDLL::Init();
     static uno::Reference<uno::XInterface> xInst((cppu::OWeakObject*)new ScSpreadsheetSettings());
     return xInst;
@@ -384,14 +384,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
 
 rtl::OUString ScSpreadsheetSettings::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii( "stardiv.StarCalc.ScSpreadsheetSettings" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScSpreadsheetSettings" ));
 }
 
 uno::Sequence<rtl::OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCSPREADSHEETSETTINGS_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSPREADSHEETSETTINGS_SERVICE ));
     return aRet;
 }
 
@@ -400,7 +400,7 @@ uno::Sequence<rtl::OUString> ScSpreadsheetSettings::getSupportedServiceNames_Sta
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSpreadsheetSettings::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
         new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
@@ -412,14 +412,14 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aString(aPropertyName);
 
     ScModule* pScMod = SC_MOD();
     ScAppOptions   aAppOpt(pScMod->GetAppOptions());
     ScInputOptions aInpOpt(pScMod->GetInputOptions());
-    sal_Bool bSaveApp = sal_False;
-    sal_Bool bSaveInp = sal_False;
+    sal_Bool bSaveApp = false;
+    sal_Bool bSaveInp = false;
     // print options aren't loaded until needed
 
     if (aString.EqualsAscii( SC_UNONAME_DOAUTOCP ))
@@ -522,15 +522,14 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             //  es wird direkt die "lebende" Liste veraendert,
             //  mehr tut ScGlobal::SetUserList auch nicht
 
-            pUserList->FreeAll();                   // alle Eintraege raus
+            pUserList->clear();                 // alle Eintraege raus
             sal_uInt16 nCount = (sal_uInt16)aSeq.getLength();
             const rtl::OUString* pAry = aSeq.getConstArray();
             for (sal_uInt16 i=0; i<nCount; i++)
             {
                 String aEntry = pAry[i];
                 ScUserListData* pData = new ScUserListData(aEntry);
-                if (!pUserList->Insert(pData))      // hinten anhaengen
-                    delete pData;                   // sollte nicht vorkommen
+                pUserList->push_back(pData);
             }
             bSaveApp = sal_True;    // Liste wird mit den App-Optionen gespeichert
         }
@@ -559,7 +558,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const rtl::OUString& 
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aString = aPropertyName;
     uno::Any aRet;
 
@@ -603,10 +602,10 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const rtl::OUString& 
         ScUserList* pUserList = ScGlobal::GetUserList();
         if (pUserList)
         {
-            sal_uInt16 nCount = pUserList->GetCount();
+            size_t nCount = pUserList->size();
             uno::Sequence<rtl::OUString> aSeq(nCount);
             rtl::OUString* pAry = aSeq.getArray();
-            for (sal_uInt16 i=0; i<nCount; i++)
+            for (size_t i=0; i<nCount; ++i)
             {
                 String aEntry((*pUserList)[i]->GetString());
                 pAry[i] = aEntry;
@@ -639,7 +638,7 @@ ScRecentFunctionsObj::~ScRecentFunctionsObj()
 uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDLL::Init();
     static uno::Reference<uno::XInterface> xInst((cppu::OWeakObject*)new ScRecentFunctionsObj());
     return xInst;
@@ -647,14 +646,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
 
 rtl::OUString ScRecentFunctionsObj::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii( "stardiv.StarCalc.ScRecentFunctionsObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScRecentFunctionsObj" ));
 }
 
 uno::Sequence<rtl::OUString> ScRecentFunctionsObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCRECENTFUNCTIONSOBJ_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCRECENTFUNCTIONSOBJ_SERVICE ));
     return aRet;
 }
 
@@ -663,7 +662,7 @@ uno::Sequence<rtl::OUString> ScRecentFunctionsObj::getSupportedServiceNames_Stat
 uno::Sequence<sal_Int32> SAL_CALL ScRecentFunctionsObj::getRecentFunctionIds()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
     sal_uInt16 nCount = rOpt.GetLRUFuncListCount();
     const sal_uInt16* pFuncs = rOpt.GetLRUFuncList();
@@ -682,7 +681,7 @@ void SAL_CALL ScRecentFunctionsObj::setRecentFunctionIds(
                     const uno::Sequence<sal_Int32>& aRecentFunctionIds )
                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     sal_uInt16 nCount = (sal_uInt16) Min( aRecentFunctionIds.getLength(), (sal_Int32) LRU_MAX );
     const sal_Int32* pAry = aRecentFunctionIds.getConstArray();
 
@@ -720,7 +719,7 @@ ScFunctionListObj::~ScFunctionListObj()
 uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDLL::Init();
     static uno::Reference<uno::XInterface> xInst((cppu::OWeakObject*)new ScFunctionListObj());
     return xInst;
@@ -728,14 +727,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
 
 rtl::OUString ScFunctionListObj::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii( "stardiv.StarCalc.ScFunctionListObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScFunctionListObj" ));
 }
 
 uno::Sequence<rtl::OUString> ScFunctionListObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCFUNCTIONLISTOBJ_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFUNCTIONLISTOBJ_SERVICE ));
     return aRet;
 }
 
@@ -744,25 +743,25 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
 {
     rDesc.initArgumentInfo();   // full argument info is needed
 
-    DBG_ASSERT( rSequence.getLength() == SC_FUNCDESC_PROPCOUNT, "Falscher Count" );
+    OSL_ENSURE( rSequence.getLength() == SC_FUNCDESC_PROPCOUNT, "Falscher Count" );
 
     beans::PropertyValue* pArray = rSequence.getArray();
 
-    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_ID );
+    pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ID ));
     pArray[0].Value <<= (sal_Int32) rDesc.nFIndex;
 
-    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_CATEGORY );
+    pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CATEGORY ));
     pArray[1].Value <<= (sal_Int32) rDesc.nCategory;
 
-    pArray[2].Name = rtl::OUString::createFromAscii( SC_UNONAME_NAME );
+    pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_NAME ));
     if (rDesc.pFuncName)
         pArray[2].Value <<= rtl::OUString( *rDesc.pFuncName );
 
-    pArray[3].Name = rtl::OUString::createFromAscii( SC_UNONAME_DESCRIPTION );
+    pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_DESCRIPTION ));
     if (rDesc.pFuncDesc)
         pArray[3].Value <<= rtl::OUString( *rDesc.pFuncDesc );
 
-    pArray[4].Name = rtl::OUString::createFromAscii( SC_UNONAME_ARGUMENTS );
+    pArray[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ARGUMENTS ));
     if (rDesc.ppDefArgNames && rDesc.ppDefArgDescs && rDesc.pDefArgFlags )
     {
         sal_uInt16 nCount = rDesc.nArgCount;
@@ -801,7 +800,7 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
 uno::Sequence<beans::PropertyValue> SAL_CALL ScFunctionListObj::getById( sal_Int32 nId )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
@@ -821,8 +820,6 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFunctionListObj::getById( sal_Int
     }
     else
         throw uno::RuntimeException();                  // should not happen
-
-//    return uno::Sequence<beans::PropertyValue>(0);
 }
 
 // XNameAccess
@@ -831,8 +828,8 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const rtl::OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    String aNameStr(aName);
+    SolarMutexGuard aGuard;
+    ::rtl::OUString aNameStr(aName);
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
@@ -853,19 +850,17 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const rtl::OUString& aName )
     }
     else
         throw uno::RuntimeException();                  // should not happen
-
-//    return uno::Any();
 }
 
 // XIndexAccess
 
 sal_Int32 SAL_CALL ScFunctionListObj::getCount() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    sal_uInt16 nCount = 0;
+    SolarMutexGuard aGuard;
+    sal_Int32 nCount = 0;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
-        nCount = (sal_uInt16)pFuncList->GetCount();
+        nCount = static_cast<sal_Int32>(pFuncList->GetCount());
     return nCount;
 }
 
@@ -873,7 +868,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
                             throw(lang::IndexOutOfBoundsException,
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
@@ -892,8 +887,6 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
     }
     else
         throw uno::RuntimeException();                  // should not happen
-
-//    return uno::Any();
 }
 
 // XEnumerationAccess
@@ -901,7 +894,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
 uno::Reference<container::XEnumeration> SAL_CALL ScFunctionListObj::createEnumeration()
                                                     throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.FunctionDescriptionEnumeration")));
 }
 
@@ -909,26 +902,26 @@ uno::Reference<container::XEnumeration> SAL_CALL ScFunctionListObj::createEnumer
 
 uno::Type SAL_CALL ScFunctionListObj::getElementType() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return getCppuType((uno::Sequence<beans::PropertyValue>*)0);
 }
 
 sal_Bool SAL_CALL ScFunctionListObj::hasElements() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return ( getCount() > 0 );
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScFunctionListObj::getElementNames() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
-        sal_uInt16 nCount = (sal_uInt16)pFuncList->GetCount();
+        sal_uInt32 nCount = pFuncList->GetCount();
         uno::Sequence<rtl::OUString> aSeq(nCount);
         rtl::OUString* pAry = aSeq.getArray();
-        for (sal_uInt16 nIndex=0; nIndex<nCount; nIndex++)
+        for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
             if ( pDesc && pDesc->pFuncName )
@@ -942,21 +935,20 @@ uno::Sequence<rtl::OUString> SAL_CALL ScFunctionListObj::getElementNames() throw
 sal_Bool SAL_CALL ScFunctionListObj::hasByName( const rtl::OUString& aName )
                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    String aNameStr(aName);
+    SolarMutexGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
-        sal_uInt16 nCount = (sal_uInt16)pFuncList->GetCount();
-        for (sal_uInt16 nIndex=0; nIndex<nCount; nIndex++)
+        sal_uInt32 nCount = pFuncList->GetCount();
+        for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
             //! Case-insensitiv ???
-            if ( pDesc && pDesc->pFuncName && aNameStr == *pDesc->pFuncName )
+            if ( pDesc && pDesc->pFuncName && aName == *pDesc->pFuncName )
                 return sal_True;
         }
     }
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -964,3 +956,4 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const rtl::OUString& aName )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

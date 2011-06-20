@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,10 +34,10 @@
 // INCLUDE ---------------------------------------------------------------
 #include "XMLStylesImportHelper.hxx"
 #include "xmlimprt.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 
 using namespace com::sun::star;
+using ::std::list;
 
 void ScMyStyleNumberFormats::AddStyleNumberFormat(const rtl::OUString& rStyleName, const sal_Int32 nNumberFormat)
 {
@@ -53,153 +54,82 @@ sal_Int32 ScMyStyleNumberFormats::GetStyleNumberFormat(const rtl::OUString& rSty
         return aItr->nNumberFormat;
 }
 
-ScMyStyleRanges::ScMyStyleRanges()
-    :
-    pTextList(NULL),
-    pNumberList(NULL),
-    pTimeList(NULL),
-    pDateTimeList(NULL),
-    pPercentList(NULL),
-    pLogicalList(NULL),
-    pUndefinedList(NULL),
+ScMyStyleRanges::ScMyStyleRanges() :
     pCurrencyList(NULL)
 {
 }
 
 ScMyStyleRanges::~ScMyStyleRanges()
 {
-    if (pTextList)
-        delete pTextList;
-    if (pNumberList)
-        delete pNumberList;
-    if (pTimeList)
-        delete pTimeList;
-    if (pDateTimeList)
-        delete pDateTimeList;
-    if (pPercentList)
-        delete pPercentList;
-    if (pLogicalList)
-        delete pLogicalList;
-    if (pUndefinedList)
-        delete pUndefinedList;
-    if (pCurrencyList)
-        delete pCurrencyList;
-}
-
-void ScMyStyleRanges::AddRange(const ScRange& rRange, ScRangeList* pList,
-    const rtl::OUString* pStyleName, const sal_Int16 nType,
-    ScXMLImport& rImport, const sal_uInt32 nMaxRanges)
-{
-    pList->Join(rRange);
-    DBG_ASSERT(nMaxRanges > 0, "MaxRanges to less");
-    if (pList->Count() > nMaxRanges)
-    {
-        sal_Int32 nCount(pList->Count());
-        ScRange* pRange(NULL);
-        for (sal_Int32 i = 0; i < nCount; ++i)
-        {
-            pRange = pList->GetObject(i);
-            if (pRange && (pRange->aEnd.Row() + 1 < rRange.aStart.Row()))
-            {
-                rImport.SetStyleToRange(*pRange, pStyleName, nType, NULL);
-                delete pRange;
-                pRange = NULL;
-                pList->Remove(i);
-            }
-        }
-    }
-}
-
-void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, ScRangeListRef xList,
-    const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
-    ScXMLImport& rImport, const sal_uInt32 nMaxRanges)
-{
-    xList->Join(rRange);
-    DBG_ASSERT(nMaxRanges > 0, "MaxRanges to less");
-    if (xList->Count() > nMaxRanges)
-    {
-        sal_Int32 nCount(xList->Count());
-        ScRange* pRange(NULL);
-        for (sal_Int32 i = 0; i < nCount; ++i)
-        {
-            pRange = xList->GetObject(i);
-            if (pRange && (pRange->aEnd.Row() + 1 < rRange.aStart.Row()))
-            {
-                rImport.SetStyleToRange(*pRange, pStyleName, util::NumberFormat::CURRENCY, pCurrency);
-                delete pRange;
-                pRange = NULL;
-                xList->Remove(i);
-            }
-        }
-    }
+    delete pCurrencyList;
 }
 
 void ScMyStyleRanges::AddRange(const ScRange& rRange,
-    const rtl::OUString* pStyleName, const sal_Int16 nType,
-    ScXMLImport& rImport, const sal_uInt32 nMaxRanges)
+    const rtl::OUString* /*pStyleName*/, const sal_Int16 nType,
+    ScXMLImport& /*rImport*/, const sal_uInt32 /*nMaxRanges*/)
 {
     switch (nType)
     {
         case util::NumberFormat::NUMBER:
         {
-            if (!pNumberList)
-                pNumberList = new ScRangeList();
-            AddRange(rRange, pNumberList, pStyleName, nType, rImport, nMaxRanges);
+            if (!mpNumberList)
+                mpNumberList.reset(new ScSimpleRangeList);
+            mpNumberList->addRange(rRange);
         }
         break;
         case util::NumberFormat::TEXT:
         {
-            if (!pTextList)
-                pTextList = new ScRangeList();
-            AddRange(rRange, pTextList, pStyleName, nType, rImport, nMaxRanges);
+            if (!mpTextList)
+                mpTextList.reset(new ScSimpleRangeList);
+            mpTextList->addRange(rRange);
         }
         break;
         case util::NumberFormat::TIME:
         {
-            if (!pTimeList)
-                pTimeList = new ScRangeList();
-            AddRange(rRange, pTimeList, pStyleName, nType, rImport, nMaxRanges);
+            if (!mpTimeList)
+                mpTimeList.reset(new ScSimpleRangeList);
+            mpTimeList->addRange(rRange);
         }
         break;
         case util::NumberFormat::DATETIME:
         {
-            if (!pDateTimeList)
-                pDateTimeList = new ScRangeList();
-            AddRange(rRange, pDateTimeList, pStyleName, nType, rImport, nMaxRanges);
+            if (!mpDateTimeList)
+                mpDateTimeList.reset(new ScSimpleRangeList);
+            mpDateTimeList->addRange(rRange);
         }
         break;
         case util::NumberFormat::PERCENT:
         {
-            if (!pPercentList)
-                pPercentList = new ScRangeList();
-            AddRange(rRange, pPercentList, pStyleName, nType, rImport, nMaxRanges);
+            if (!mpPercentList)
+                mpPercentList.reset(new ScSimpleRangeList);
+            mpPercentList->addRange(rRange);
         }
         break;
         case util::NumberFormat::LOGICAL:
         {
-            if (!pLogicalList)
-                pLogicalList = new ScRangeList();
-            AddRange(rRange, pLogicalList, pStyleName, nType, rImport, nMaxRanges);
+            if (!mpLogicalList)
+                mpLogicalList.reset(new ScSimpleRangeList);
+            mpLogicalList->addRange(rRange);
         }
         break;
         case util::NumberFormat::UNDEFINED:
         {
-            if (!pUndefinedList)
-                pUndefinedList = new ScRangeList();
-            AddRange(rRange, pUndefinedList, pStyleName, nType, rImport, nMaxRanges);
+            if (!mpUndefinedList)
+                mpUndefinedList.reset(new ScSimpleRangeList);
+            mpUndefinedList->addRange(rRange);
         }
         break;
         default:
         {
-            DBG_ERROR("wrong type");
+            OSL_FAIL("wrong type");
         }
         break;
     }
 }
 
 void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
-    const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
-    ScXMLImport& rImport, const sal_uInt32 nMaxRanges)
+    const rtl::OUString* /*pStyleName*/, const rtl::OUString* pCurrency,
+    ScXMLImport& /*rImport*/, const sal_uInt32 /*nMaxRanges*/)
 {
     if (!pCurrencyList)
         pCurrencyList = new ScMyCurrencyStylesSet();
@@ -213,96 +143,156 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
         if (aPair.second)
         {
             aItr = aPair.first;
-            AddCurrencyRange(rRange, aItr->xRanges, pStyleName, pCurrency, rImport, nMaxRanges);
+            aItr->mpRanges->addRange(rRange);
         }
     }
     else
-        aItr->xRanges->Join(rRange);
+        aItr->mpRanges->addRange(rRange);
 }
 
-void ScMyStyleRanges::InsertColRow(const ScRange& rRange, const SCsCOL nDx, const SCsROW nDy,
-        const SCsTAB nDz, ScDocument* pDoc)
+void ScMyStyleRanges::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* /*pDoc*/)
 {
-    UpdateRefMode aRefMode(URM_INSDEL);
-    if (pNumberList)
-        pNumberList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
-    if (pTextList)
-        pTextList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
-    if (pTimeList)
-        pTimeList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
-    if (pDateTimeList)
-        pDateTimeList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
-    if (pPercentList)
-        pPercentList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
-    if (pLogicalList)
-        pLogicalList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
-    if (pUndefinedList)
-        pUndefinedList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
+    if (mpTextList)
+        mpTextList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
+    if (mpNumberList)
+        mpNumberList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
+    if (mpTimeList)
+        mpTimeList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
+    if (mpDateTimeList)
+        mpDateTimeList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
+    if (mpPercentList)
+        mpPercentList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
+    if (mpLogicalList)
+        mpLogicalList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
+    if (mpUndefinedList)
+        mpUndefinedList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
+
     if (pCurrencyList)
     {
         ScMyCurrencyStylesSet::iterator aItr(pCurrencyList->begin());
         ScMyCurrencyStylesSet::iterator aEndItr(pCurrencyList->end());
         while (aItr != aEndItr)
         {
-            aItr->xRanges->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
+            aItr->mpRanges->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
             ++aItr;
         }
     }
 }
 
-void ScMyStyleRanges::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc)
+void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* /*pDoc*/)
 {
-    InsertColRow(ScRange(0, static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab),
-        MAXCOL, MAXROW, static_cast<SCTAB>(nTab)), 0, 1, 0, pDoc);
+    if (mpTextList)
+        mpTextList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+    if (mpNumberList)
+        mpNumberList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+    if (mpTimeList)
+        mpTimeList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+    if (mpDateTimeList)
+        mpDateTimeList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+    if (mpPercentList)
+        mpPercentList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+    if (mpLogicalList)
+        mpLogicalList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+    if (mpUndefinedList)
+        mpUndefinedList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+
+    if (pCurrencyList)
+    {
+        ScMyCurrencyStylesSet::iterator aItr(pCurrencyList->begin());
+        ScMyCurrencyStylesSet::iterator aEndItr(pCurrencyList->end());
+        while (aItr != aEndItr)
+        {
+            aItr->mpRanges->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
+            ++aItr;
+        }
+    }
 }
 
-void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc)
+void ScMyStyleRanges::SetStylesToRanges(const list<ScRange>& rRanges,
+    const rtl::OUString* pStyleName, const sal_Int16 nCellType,
+    const rtl::OUString* pCurrency, ScXMLImport& rImport)
 {
-    InsertColRow(ScRange(static_cast<SCCOL>(nCol), 0, static_cast<SCTAB>(nTab),
-        MAXCOL, MAXROW, static_cast<SCTAB>(nTab)), 1, 0, 0, pDoc);
+    list<ScRange>::const_iterator itr = rRanges.begin(), itrEnd = rRanges.end();
+    for (; itr != itrEnd; ++itr)
+        rImport.SetStyleToRange(*itr, pStyleName, nCellType, pCurrency);
 }
 
 void ScMyStyleRanges::SetStylesToRanges(ScRangeList* pList,
     const rtl::OUString* pStyleName, const sal_Int16 nCellType,
     const rtl::OUString* pCurrency, ScXMLImport& rImport)
 {
-    sal_Int32 nCount(pList->Count());
-    for (sal_Int32 i = 0; i < nCount; ++i)
-        rImport.SetStyleToRange(*pList->GetObject(i), pStyleName, nCellType, pCurrency);
+    for ( size_t i = 0, nCount = pList->size(); i < nCount; ++i)
+        rImport.SetStyleToRange( *(*pList)[i], pStyleName, nCellType, pCurrency );
 }
 
 void ScMyStyleRanges::SetStylesToRanges(ScRangeListRef xList,
     const rtl::OUString* pStyleName, const sal_Int16 nCellType,
     const rtl::OUString* pCurrency, ScXMLImport& rImport)
 {
-    sal_Int32 nCount(xList->Count());
-    for (sal_Int32 i = 0; i < nCount; ++i)
-        rImport.SetStyleToRange(*xList->GetObject(i), pStyleName, nCellType, pCurrency);
+    for (size_t i = 0, nCount = xList->size(); i < nCount; ++i)
+        rImport.SetStyleToRange( *(*xList)[i], pStyleName, nCellType, pCurrency );
 }
 
 void ScMyStyleRanges::SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLImport& rImport)
 {
-    if (pNumberList)
-        SetStylesToRanges(pNumberList, pStyleName, util::NumberFormat::NUMBER, NULL, rImport);
-    if (pTextList)
-        SetStylesToRanges(pTextList, pStyleName, util::NumberFormat::TEXT, NULL, rImport);
-    if (pTimeList)
-        SetStylesToRanges(pTimeList, pStyleName, util::NumberFormat::TIME, NULL, rImport);
-    if (pDateTimeList)
-        SetStylesToRanges(pDateTimeList, pStyleName, util::NumberFormat::DATETIME, NULL, rImport);
-    if (pPercentList)
-        SetStylesToRanges(pPercentList, pStyleName, util::NumberFormat::PERCENT, NULL, rImport);
-    if (pLogicalList)
-        SetStylesToRanges(pLogicalList, pStyleName, util::NumberFormat::LOGICAL, NULL, rImport);
-    if (pUndefinedList)
-        SetStylesToRanges(pUndefinedList, pStyleName, util::NumberFormat::UNDEFINED, NULL, rImport);
+    if (mpNumberList)
+    {
+        list<ScRange> aList;
+        mpNumberList->getRangeList(aList);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::NUMBER, NULL, rImport);
+        mpNumberList->clear();
+    }
+    if (mpTextList)
+    {
+        list<ScRange> aList;
+        mpTextList->getRangeList(aList);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::TEXT, NULL, rImport);
+        mpTextList->clear();
+    }
+    if (mpTimeList)
+    {
+        list<ScRange> aList;
+        mpTimeList->getRangeList(aList);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::TIME, NULL, rImport);
+        mpTimeList->clear();
+    }
+    if (mpDateTimeList)
+    {
+        list<ScRange> aList;
+        mpDateTimeList->getRangeList(aList);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::DATETIME, NULL, rImport);
+        mpDateTimeList->clear();
+    }
+    if (mpPercentList)
+    {
+        list<ScRange> aList;
+        mpPercentList->getRangeList(aList);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::PERCENT, NULL, rImport);
+        mpPercentList->clear();
+    }
+    if (mpLogicalList)
+    {
+        list<ScRange> aList;
+        mpLogicalList->getRangeList(aList);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::LOGICAL, NULL, rImport);
+        mpLogicalList->clear();
+    }
+    if (mpUndefinedList)
+    {
+        list<ScRange> aList;
+        mpUndefinedList->getRangeList(aList);
+        SetStylesToRanges(aList, pStyleName, util::NumberFormat::UNDEFINED, NULL, rImport);
+        mpUndefinedList->clear();
+    }
     if (pCurrencyList)
     {
         ScMyCurrencyStylesSet::iterator aItr(pCurrencyList->begin());
         ScMyCurrencyStylesSet::iterator aEndItr(pCurrencyList->end());
         while (aItr != aEndItr)
         {
-            SetStylesToRanges(aItr->xRanges, pStyleName, util::NumberFormat::CURRENCY, &aItr->sCurrency, rImport);
+            list<ScRange> aList;
+            aItr->mpRanges->getRangeList(aList);
+            SetStylesToRanges(aList, pStyleName, util::NumberFormat::CURRENCY, &aItr->sCurrency, rImport);
             ++aItr;
         }
     }
@@ -356,7 +346,7 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString*
         aStyle.sStyleName = *pStyleNameP;
     else
     {
-        DBG_ERROR("here is no stylename given");
+        OSL_FAIL("here is no stylename given");
     }
     ScMyStylesSet::iterator aItr(aCellStyles.find(aStyle));
     if (aItr == aCellStyles.end())
@@ -366,7 +356,7 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString*
             aItr = aPair.first;
         else
         {
-            DBG_ERROR("not possible to insert style");
+            OSL_FAIL("not possible to insert style");
             return aCellStyles.end();
         }
     }
@@ -375,7 +365,7 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString*
 
 void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
 {
-    DBG_ASSERT(aRowDefaultStyle != aCellStyles.end(), "no row default style");
+    OSL_ENSURE(aRowDefaultStyle != aCellStyles.end(), "no row default style");
     if (!aRowDefaultStyle->sStyleName.getLength())
     {
         SCCOL nStartCol(rRange.aStart.Col());
@@ -383,12 +373,12 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
         if (aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nStartCol))
         {
             ScMyStylesSet::iterator aPrevItr(aColDefaultStyles[nStartCol]);
-            DBG_ASSERT(aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nEndCol), "to much columns");
+            OSL_ENSURE(aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nEndCol), "to much columns");
             for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < sal::static_int_cast<SCCOL>(aColDefaultStyles.size())); ++i)
             {
                 if (aPrevItr != aColDefaultStyles[i])
                 {
-                    DBG_ASSERT(aPrevItr != aCellStyles.end(), "no column default style");
+                    OSL_ENSURE(aPrevItr != aCellStyles.end(), "no column default style");
                     ScRange aRange(rRange);
                     aRange.aStart.SetCol(nStartCol);
                     aRange.aEnd.SetCol(i - 1);
@@ -411,12 +401,12 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
             }
             else
             {
-                DBG_ERRORFILE("no column default style");
+                OSL_FAIL("no column default style");
             }
         }
         else
         {
-            DBG_ERRORFILE("to much columns");
+            OSL_FAIL("to much columns");
         }
     }
     else
@@ -456,9 +446,9 @@ void ScMyStylesImportHelper::AddRange()
 void ScMyStylesImportHelper::AddColumnStyle(const rtl::OUString& sStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat)
 {
     (void)nColumn;  // avoid warning in product version
-    DBG_ASSERT(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
+    OSL_ENSURE(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
     ScMyStylesSet::iterator aItr(GetIterator(&sStyleName));
-    DBG_ASSERT(aItr != aCellStyles.end(), "no column default style");
+    OSL_ENSURE(aItr != aCellStyles.end(), "no column default style");
     aColDefaultStyles.reserve(aColDefaultStyles.size() + nRepeat);
     for (sal_Int32 i = 0; i < nRepeat; ++i)
         aColDefaultStyles.push_back(aItr);
@@ -485,7 +475,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
 {
     if (!bPrevRangeAdded)
     {
-        sal_Bool bAddRange(sal_False);
+        sal_Bool bAddRange(false);
         if (nCellType == nPrevCellType &&
             IsEqual(pStyleName, pPrevStyleName) &&
             IsEqual(pCurrency, pPrevCurrency))
@@ -494,7 +484,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
             {
                 if (rRange.aEnd.Row() == aPrevRange.aEnd.Row())
                 {
-                    DBG_ASSERT(aPrevRange.aEnd.Col() + 1 == rRange.aStart.Col(), "something wents wrong");
+                    OSL_ENSURE(aPrevRange.aEnd.Col() + 1 == rRange.aStart.Col(), "something wents wrong");
                     aPrevRange.aEnd.SetCol(rRange.aEnd.Col());
                 }
                 else
@@ -505,7 +495,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
                 if (rRange.aStart.Col() == aPrevRange.aStart.Col() &&
                     rRange.aEnd.Col() == aPrevRange.aEnd.Col())
                 {
-                    DBG_ASSERT(aPrevRange.aEnd.Row() + 1 == rRange.aStart.Row(), "something wents wrong");
+                    OSL_ENSURE(aPrevRange.aEnd.Row() + 1 == rRange.aStart.Row(), "something wents wrong");
                     aPrevRange.aEnd.SetRow(rRange.aEnd.Row());
                 }
                 else
@@ -524,7 +514,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
     {
         aPrevRange = rRange;
         ResetAttributes();
-        bPrevRangeAdded = sal_False;
+        bPrevRangeAdded = false;
     }
 }
 
@@ -537,7 +527,7 @@ void ScMyStylesImportHelper::AddCell(const com::sun::star::table::CellAddress& r
 
 void ScMyStylesImportHelper::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc)
 {
-    rImport.LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(rImport);
     ScMyStylesSet::iterator aItr(aCellStyles.begin());
     ScMyStylesSet::iterator aEndItr(aCellStyles.end());
     while (aItr != aEndItr)
@@ -545,12 +535,11 @@ void ScMyStylesImportHelper::InsertRow(const sal_Int32 nRow, const sal_Int32 nTa
         aItr->xRanges->InsertRow(nRow, nTab, pDoc);
         ++aItr;
     }
-    rImport.UnlockSolarMutex();
 }
 
 void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc)
 {
-    rImport.LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(rImport);
     ScMyStylesSet::iterator aItr(aCellStyles.begin());
     ScMyStylesSet::iterator aEndItr(aCellStyles.end());
     while (aItr != aEndItr)
@@ -558,7 +547,6 @@ void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTa
         aItr->xRanges->InsertCol(nCol, nTab, pDoc);
         ++aItr;
     }
-    rImport.UnlockSolarMutex();
 }
 
 void ScMyStylesImportHelper::EndTable()
@@ -585,3 +573,4 @@ void ScMyStylesImportHelper::SetStylesToRanges()
     nMaxRanges = 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include "ControllerLockGuard.hxx"
 #include "macros.hxx"
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
@@ -56,15 +55,6 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-
-// macro for selecting a normal or high contrast bitmap the stack variable
-// bIsHighContrast must exist and reflect the correct state
-#define SELECT_BITMAP(name) Bitmap( SchResId( bIsHighContrast ? name ## _HC : name ))
-#define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
-
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
 
 namespace
 {
@@ -856,8 +846,6 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
     m_aSubTypeList.SetColCount(4);
     m_aSubTypeList.SetLineCount(1);
 
-    bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
-
     bool bDisableComplexChartTypes = false;
     uno::Reference< beans::XPropertySet > xProps( m_xChartModel, uno::UNO_QUERY );
     if ( xProps.is() )
@@ -891,9 +879,9 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
 
     ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
-        m_aMainTypeList.InsertEntry( (*aIter)->getName(), (*aIter)->getImage( bIsHighContrast ) );
+        m_aMainTypeList.InsertEntry( (*aIter)->getName(), (*aIter)->getImage() );
         (*aIter)->setChangeListener( this );
     }
 
@@ -912,7 +900,7 @@ ChartTypeTabPage::~ChartTypeTabPage()
     //delete all dialog controller
     ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
         delete *aIter;
     }
@@ -1092,8 +1080,7 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
     m_nChangingCalls++;
     if( m_pCurrentMainType && bAlsoResetSubTypeList )
     {
-        bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
-        m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, bIsHighContrast, rParameter );
+        m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, rParameter );
     }
     m_aSubTypeList.SelectItem( static_cast<sal_uInt16>( rParameter.nSubTypeIndex) );
     m_pAxisTypeResourceGroup->fillControls( rParameter );
@@ -1120,7 +1107,7 @@ void ChartTypeTabPage::initializePage()
 
     ::std::vector< ChartTypeDialogController* >::iterator             aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( sal_uInt16 nM=0; aIter != aEnd; aIter++, nM++ )
+    for( sal_uInt16 nM=0; aIter != aEnd; ++aIter, ++nM )
     {
         if( (*aIter)->isSubType(aServiceName) )
         {
@@ -1186,3 +1173,5 @@ uno::Reference< XChartTypeTemplate > ChartTypeTabPage::getCurrentTemplate() cons
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

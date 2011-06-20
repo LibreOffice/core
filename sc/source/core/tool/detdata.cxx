@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "detdata.hxx"
 #include "refupdat.hxx"
 #include "rechead.hxx"
@@ -46,7 +45,7 @@ SV_IMPL_PTRARR( ScDetOpArr_Impl, ScDetOpDataPtr );
 
 ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
     ScDetOpArr_Impl(),
-    bHasAddError( sal_False )
+    bHasAddError( false )
 {
     sal_uInt16 nCount = rList.Count();
 
@@ -109,10 +108,11 @@ sal_Bool ScDetOpList::operator==( const ScDetOpList& r ) const
     sal_Bool bEqual = ( nCount == r.Count() );
     for (sal_uInt16 i=0; i<nCount && bEqual; i++)       // Reihenfolge muss auch gleich sein
         if ( !(*(*this)[i] == *r[i]) )              // Eintraege unterschiedlich ?
-            bEqual = sal_False;
+            bEqual = false;
 
     return bEqual;
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef SC_FUNCUTL_HXX
 #define SC_FUNCUTL_HXX
 
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/svmedit.hxx>
 #include "anyrefdg.hxx"     // formula::RefButton
 
@@ -196,3 +193,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

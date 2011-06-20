@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 
 // ============================================================================
 #include "csvcontrol.hxx"
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include "AccessibleCsvControl.hxx"
 
@@ -180,7 +180,7 @@ void ScCsvControl::DisableRepaint()
 
 void ScCsvControl::EnableRepaint( bool bInvalidate )
 {
-    DBG_ASSERT( IsNoRepaint(), "ScCsvControl::EnableRepaint - invalid call" );
+    OSL_ENSURE( IsNoRepaint(), "ScCsvControl::EnableRepaint - invalid call" );
     --mrData.mnNoRepaint;
     Repaint( bInvalidate );
 }
@@ -335,3 +335,4 @@ ScCsvControl::XAccessibleRef ScCsvControl::CreateAccessible()
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,26 +33,28 @@
 #include <tools/solar.h>
 #include "scdllapi.h"
 
+#include <set>
+
 class ScMarkArray;
 class ScRangeList;
 
 //!     todo:
-//!     Es muss auch die Moeglichkeit geben, MarkArrays pro Tabelle zu halten,
-//!     damit "alle suchen" ueber mehrere Tabellen wieder funktioniert!
+//!     It should be possible to have MarkArrays for each table, in order to
+//!     enable "search all" across more than one table again!
 
 
 class SC_DLLPUBLIC ScMarkData
 {
 private:
-    ScRange         aMarkRange;             // Bereich
-    ScRange         aMultiRange;            // maximaler Bereich insgesamt
-    ScMarkArray*    pMultiSel;              // Mehrfachselektion
-    sal_Bool            bTabMarked[MAXTABCOUNT];// Tabelle selektiert
-    sal_Bool            bMarked;                // Rechteck markiert
-    sal_Bool            bMultiMarked;           // mehrfach markiert
+    ScRange         aMarkRange;             // area
+    ScRange         aMultiRange;            // maximum area altogether
+    ScMarkArray*    pMultiSel;              // multi selection
+    ::std::set<SCTAB> maTabMarked;
+    sal_Bool            bMarked;                // rectangle marked
+    sal_Bool            bMultiMarked;
 
-    sal_Bool            bMarking;               // Bereich wird aufgezogen -> kein MarkToMulti
-    sal_Bool            bMarkIsNeg;             // Aufheben bei Mehrfachselektion
+    sal_Bool            bMarking;               // area is being marked -> no MarkToMulti
+    sal_Bool            bMarkIsNeg;             // cancel if multi selection
 
 public:
                 ScMarkData();
@@ -76,22 +79,23 @@ public:
 
     void        SetAreaTab( SCTAB nTab );
 
-    void        SelectTable( SCTAB nTab, sal_Bool bNew )        { bTabMarked[nTab] = bNew; }
-    sal_Bool        GetTableSelect( SCTAB nTab ) const          { return bTabMarked[nTab]; }
+    void        SelectTable( SCTAB nTab, bool bNew );
+    bool        GetTableSelect( SCTAB nTab ) const;
 
     void        SelectOneTable( SCTAB nTab );
     SCTAB       GetSelectCount() const;
     SCTAB       GetFirstSelected() const;
+    SCTAB       GetLastSelected() const;
 
     void        SetMarkNegative( sal_Bool bFlag )   { bMarkIsNeg = bFlag; }
     sal_Bool        IsMarkNegative() const          { return bMarkIsNeg;  }
     void        SetMarking( sal_Bool bFlag )        { bMarking = bFlag;   }
     sal_Bool        GetMarkingFlag() const          { return bMarking;    }
 
-    //  fuer FillInfo / Document etc.
+    //  for FillInfo / Document etc.
     const ScMarkArray* GetArray() const         { return pMultiSel; }
 
-    sal_Bool        IsCellMarked( SCCOL nCol, SCROW nRow, sal_Bool bNoSimple = sal_False ) const;
+    sal_Bool        IsCellMarked( SCCOL nCol, SCROW nRow, sal_Bool bNoSimple = false ) const;
     void        FillRangeListWithMarks( ScRangeList* pList, sal_Bool bClear ) const;
     void        ExtendRangeListTables( ScRangeList* pList ) const;
 
@@ -109,7 +113,7 @@ public:
     sal_Bool        HasMultiMarks( SCCOL nCol ) const;
     sal_Bool        HasAnyMultiMarks() const;
 
-    //  Tabellen-Markierungen anpassen:
+    //  adjust table marking:
     void        InsertTab( SCTAB nTab );
     void        DeleteTab( SCTAB nTab );
 };
@@ -119,3 +123,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

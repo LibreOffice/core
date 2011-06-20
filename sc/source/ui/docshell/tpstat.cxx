@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@
 // Dokumentinfo-Tabpage:
 //========================================================================
 
-SfxTabPage* __EXPORT ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
+SfxTabPage* ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
 {
     return new ScDocStatPage( pParent, rSet );
 }
@@ -79,23 +80,24 @@ ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScDocStatPage::~ScDocStatPage()
+ScDocStatPage::~ScDocStatPage()
 {
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
+sal_Bool ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScDocStatPage::Reset( const SfxItemSet& /* rSet */ )
+void ScDocStatPage::Reset( const SfxItemSet& /* rSet */ )
 {
 }
 
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,7 +85,7 @@ using namespace com::sun::star;
 FuSelection::FuSelection(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq ) :
     FuDraw(pViewSh, pWin, pViewP, pDoc, rReq),
-    bVCAction(sal_False)
+    bVCAction(false)
 {
 }
 
@@ -111,9 +112,9 @@ sal_uInt8 FuSelection::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
     const bool bSelectionOnly = rMEvt.IsRight();
     if ( pView->IsAction() )
@@ -123,8 +124,8 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         return sal_True;
     }
 
-    bVCAction = sal_False;
-    bIsInDragMode = sal_False;      //  irgendwo muss es ja zurueckgesetzt werden (#50033#)
+    bVCAction = false;
+    bIsInDragMode = false;      //  irgendwo muss es ja zurueckgesetzt werden (#50033#)
 
     sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
@@ -205,8 +206,7 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                            pObj = pHit;
                    }
 
-                   ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, sal_True );
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
+                   ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true );
                    // For interoperability favour links over macros if both are defined
                    if ( pInfo->GetHlink().getLength() > 0 )
                    {
@@ -214,20 +214,27 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                        sURL = pInfo->GetHlink();
                    }
                    else if ( pInfo->GetMacro().getLength() > 0 )
-#else
-                   if ( pInfo->GetMacro().getLength() > 0 )
-#endif
                    {
                        SfxObjectShell* pObjSh = SfxObjectShell::Current();
                        if ( pObjSh && SfxApplication::IsXScriptURL( pInfo->GetMacro() ) )
                        {
+                           uno::Reference< beans::XPropertySet > xProps( pObj->getUnoShape(), uno::UNO_QUERY );
+                           uno::Any aCaller;
+                           if ( xProps.is() )
+                           {
+                               try
+                               {
+                                   aCaller = xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) );
+                               }
+                               catch( uno::Exception& ) {}
+                           }
                            uno::Any aRet;
                            uno::Sequence< sal_Int16 > aOutArgsIndex;
                            uno::Sequence< uno::Any > aOutArgs;
                            uno::Sequence< uno::Any >* pInArgs =
                                new uno::Sequence< uno::Any >(0);
                            pObjSh->CallXScript( pInfo->GetMacro(),
-                               *pInArgs, aRet, aOutArgsIndex, aOutArgs);
+                               *pInArgs, aRet, aOutArgsIndex, aOutArgs, true, &aCaller );
                            pViewShell->FakeButtonUp( pViewShell->GetViewData()->GetActivePart() );
                            return sal_True;        // kein CaptureMouse etc.
                        }
@@ -284,14 +291,14 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     pView->UnlockInternalLayer();
 
                 // try to select the clicked object
-                if ( pView->MarkObj( aMDPos, -2, sal_False, rMEvt.IsMod1() ) )
+                if ( pView->MarkObj( aMDPos, -2, false, rMEvt.IsMod1() ) )
                 {
                     //*********************************************************
                     //Objekt verschieben
                     //********************************************************
                     if (pView->IsMarkedHit(aMDPos))
                     {
-                        //  #95834# Don't start drag timer if inplace editing of an OLE object
+                        //  Don't start drag timer if inplace editing of an OLE object
                         //  was just ended with this mouse click - the view will be moved
                         //  (different tool bars) and the object that was clicked on would
                         //  be moved unintentionally.
@@ -340,7 +347,7 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuSelection::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuSelection::MouseMove(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn = FuDraw::MouseMove(rMEvt);
 
@@ -367,13 +374,7 @@ sal_Bool __EXPORT FuSelection::MouseMove(const MouseEvent& rMEvt)
     // Event an den Manager weiterleiten
     if( bVCAction )
     {
-        //  GetSbxForm gibts nicht mehr - Basic-Controls sind tot
-        //SdrPageView* pPgView = pView->GetPageViewByIndex(0);
-        //ScDrawPage*  pPage     = (ScDrawPage*)pPgView->GetPage();
-        //VCSbxForm* pForm = (VCSbxForm*)(SbxObject*)(pPage->GetSbxForm());
-        //((VCManager*)(pForm->GetVCContainer()))->
-        //    MouseMove( pWindow, rMEvt );
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     ForcePointer(&rMEvt);
@@ -387,13 +388,12 @@ sal_Bool __EXPORT FuSelection::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     sal_Bool bReturn = FuDraw::MouseButtonUp(rMEvt);
-//  sal_Bool bOle    = pViewShell->GetViewData()->IsOle();
     sal_Bool bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
 
     if (aDragTimer.IsActive() )
@@ -486,14 +486,6 @@ sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
     }
 
-/*
-    if ( pView->IsObjEdit() )
-    {
-        sal_Bool bShowCursor = sal_True;
-//!     pOutlinerView = pView->GetOutlinerView(pWindow, bShowCursor);
-        bReturn = sal_True;
-    }
-*/
     /**************************************************************************
     * Ggf. OLE-Objekt beruecksichtigen
     **************************************************************************/
@@ -519,7 +511,7 @@ sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                //  #43984# aktivieren nur, wenn die Maus auch (noch) ueber dem
+                //  aktivieren nur, wenn die Maus auch (noch) ueber dem
                 //  selektierten Objekt steht
 
                 SdrViewEvent aVEvt;
@@ -538,7 +530,6 @@ sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             if (((SdrOle2Obj*) pObj)->GetObjRef().is())
                             {
-                                //HMHpView->HideMarkHdl();
                                 pViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0 );
                             }
                         }
@@ -546,7 +537,7 @@ sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                     //
                     //  Edit text
-                    //  #49458# not in UNO controls
+                    //  not in UNO controls
                     //  #i32352# not in media objects
                     //
                     else if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) && !pObj->ISA(SdrMediaObj) )
@@ -579,15 +570,8 @@ sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     // Event an den Manager weiterleiten
     if( bVCAction )
     {
-        //  GetSbxForm gibts nicht mehr - Basic-Controls sind tot
-        //SdrPageView* pPgView = pView->GetPageViewByIndex(0);
-        //ScDrawPage*  pPage     = (ScDrawPage*)pPgView->GetPage();
-        //VCSbxForm* pForm = (VCSbxForm*)(SbxObject*)(pPage->GetSbxForm());
-        //((VCManager*)(pForm->GetVCContainer()))->
-        //    MouseButtonUp( pWindow, rMEvt );
-        //HMHpView->ShowMarkHdl();
-        bVCAction = sal_False;
-        bReturn = sal_True;
+        bVCAction = false;
+        bReturn = true;
     }
 
     ForcePointer(&rMEvt);
@@ -627,7 +611,7 @@ sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
 sal_Bool FuSelection::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
+    sal_Bool bReturn = false;
 
     if (!bReturn)
     {
@@ -646,26 +630,8 @@ sal_Bool FuSelection::KeyInput(const KeyEvent& rKEvt)
 
 void FuSelection::Activate()
 {
-/*
-    SdrDragMode eMode;
-    switch (aSfxRequest.GetSlot() )
-    {
-        case SID_OBJECT_SELECT:
-            eMode = SDRDRAG_MOVE;
-            break;
-        case SID_OBJECT_ROTATE:
-            eMode = SDRDRAG_ROTATE;
-            break;
-        case SID_OBJECT_MIRROR:
-            eMode = SDRDRAG_MIRROR;
-            break;
-    }
-    pView->SetDragMode(eMode);
-*/
     FuDraw::Activate();
 }
-
-
 
 /*************************************************************************
 |*
@@ -678,10 +644,6 @@ void FuSelection::Deactivate()
     /**************************************************************************
     * Hide Cursor
     **************************************************************************/
-//    sal_Bool bShowCursor = sal_False;
-//! pOutlinerView = pView->GetOutlinerView(pWindow, bShowCursor);
-
-//  pView->SetDragMode(SDRDRAG_MOVE);
     FuDraw::Deactivate();
 }
 
@@ -690,7 +652,4 @@ void FuSelection::Deactivate()
 #pragma optimize ( "", on )
 #endif
 
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

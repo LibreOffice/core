@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,15 +42,14 @@ class ScDrawObjData;
 class ScDrawView: public FmFormView
 {
     ScViewData*             pViewData;
-    OutputDevice*           pDev;                   //! noetig ?
+    OutputDevice*           pDev;                   //! needed ?
     ScDocument*             pDoc;
     SCTAB                   nTab;
-    Fraction                aScaleX;                // Faktor fuer Drawing-MapMode
+    Fraction                aScaleX;                // Factor for Drawing-MapMode
     Fraction                aScaleY;
     SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
     sal_Bool                    bInConstruct;
-    //HMHBOOL                   bDisableHdl;
 
     void            Construct();
     void            UpdateBrowser();
@@ -75,11 +75,7 @@ public:
 
     virtual void    DeleteMarked();
 
-    void            DrawMarks( OutputDevice* pOut ) const;
-
     void            MarkDropObj( SdrObject* pObj );
-
-    //HMHBOOL           IsDisableHdl() const    { return bDisableHdl; }
 
     void            SetMarkedToLayer( sal_uInt8 nLayerNo );
 
@@ -97,8 +93,9 @@ public:
 
     void            CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
 
-    void            SetAnchor( ScAnchorType );
-    ScAnchorType    GetAnchor() const;
+    void            SetPageAnchored();
+    void            SetCellAnchored();
+    ScAnchorType    GetAnchorType() const;
 
     void            VCAddWin( Window* pWin );
     void            VCRemoveWin( Window* pWin );
@@ -111,11 +108,10 @@ public:
     void            SetMarkedOriginalSize();
 
     sal_Bool            SelectObject( const String& rName );
-//UNUSED2008-05  String         GetSelectedChartName() const;
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 
-    FASTBOOL        InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions=0);
+    bool            InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions=0);
 
     /** Returns the selected object, if it is the caption object of a cell note.
         @param ppCaptData  (out-param) If not null, returns the pointer to the caption object data. */
@@ -139,8 +135,7 @@ public:
     /** Unlocks the internal layer that contains caption objects of cell notes. */
     inline void     UnlockInternalLayer() { LockInternalLayer( false ); }
 
-    SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
-//UNUSED2009-05 void                    CaptionTextDirection(sal_uInt16 nSlot);
+    SdrEndTextEditKind  ScEndTextEdit();    // calls SetDrawTextUndo(0)
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 };
 
@@ -149,3 +144,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

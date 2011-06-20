@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include "precompiled_sc.hxx"
 
 #include "compiler.hxx"
+#include <sal/macros.h>
 
 // ODFF, English, Programmatical, ODF_11
 ScCompiler::AddInMap ScCompiler::maAddInMap[] =
@@ -136,14 +138,14 @@ ScCompiler::AddInMap ScCompiler::maAddInMap[] =
     { "FVSCHEDULE", "FVSCHEDULE", false, "com.sun.star.sheet.addin.Analysis.getFvschedule", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFVSCHEDULE" },
 };
 
-// static
 const ScCompiler::AddInMap* ScCompiler::GetAddInMap()
 {
     return maAddInMap;
 }
 
-// static
 size_t ScCompiler::GetAddInMapCount()
 {
-    return sizeof(maAddInMap)/sizeof(maAddInMap[0]);
+    return SAL_N_ELEMENTS(maAddInMap);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -133,9 +134,9 @@ IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
 
     String aFilter;
     String aOptions;
-    //  get filter name by looking at the file content (bWithContent = sal_True)
-    // Break operation if any error occured inside.
-    if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, sal_True, sal_True ))
+    //  get filter name by looking at the file content (bWithContent = TRUE)
+    // Break operation if any error occurred inside.
+    if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, true, true ))
         return 0;
 
     // #i53241# replace HTML filter with DataQuery filter
@@ -234,7 +235,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
     {
         WaitObject aWait( this );
 
-        // #92296# replace HTML filter with DataQuery filter
+        // replace HTML filter with DataQuery filter
         const String aHTMLFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_HTML ) );
         const String aWebQFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_QUERY ) );
 
@@ -265,7 +266,6 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
 
         if ( !pSourceShell->GetError() )                    // only errors
         {
-            //aCbUrl.SetText( pSourceShell->GetTitle( SFX_TITLE_FULLNAME ) );
             aCbUrl.SetText( pMed->GetName() );
         }
         else
@@ -288,7 +288,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
 
 void ScLinkedAreaDlg::UpdateSourceRanges()
 {
-    aLbRanges.SetUpdateMode( sal_False );
+    aLbRanges.SetUpdateMode( false );
 
     aLbRanges.Clear();
     if ( pSourceShell )
@@ -367,3 +367,4 @@ sal_uLong ScLinkedAreaDlg::GetRefresh()
         return 0;   // disabled
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

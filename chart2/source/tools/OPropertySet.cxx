@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,8 @@
 #include "OPropertySet.hxx"
 #include "ImplOPropertySet.hxx"
 #include "ContainerHelper.hxx"
-#include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -39,7 +40,6 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::style::XStyleSupplier;
-// using ::com::sun::star::beans::XFastPropertyState;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -72,11 +72,9 @@ OPropertySet::OPropertySet( const OPropertySet & rOther, ::osl::Mutex & par_rMut
         m_rMutex( par_rMutex ),
         m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault(false)
 {
-    // /--
     MutexGuard aGuard( m_rMutex );
     if( rOther.m_pImplProperties.get())
         m_pImplProperties.reset( new impl::ImplOPropertySet( * rOther.m_pImplProperties.get()));
-    // \--
 }
 
 void OPropertySet::SetNewValuesExplicitlyEvenIfTheyEqualDefault()
@@ -97,10 +95,6 @@ Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
 {
     return ::cppu::queryInterface(
         aType,
-//         static_cast< uno::XInterface * >(
-//             static_cast< uno::XWeak * >( this )),
-//         static_cast< uno::XWeak * >( this ),
-//         static_cast< lang::XServiceInfo * >( this ),
         static_cast< lang::XTypeProvider * >( this ),
         static_cast< beans::XPropertySet * >( this ),
         static_cast< beans::XMultiPropertySet * >( this ),
@@ -108,44 +102,7 @@ Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
         static_cast< beans::XPropertyState * >( this ),
         static_cast< beans::XMultiPropertyStates * >( this ),
         static_cast< XStyleSupplier * >( this ) );
-//         static_cast< XFastPropertyState * >( this ) );
 }
-
-// void SAL_CALL OPropertySet::acquire() throw ()
-// {
-//     OWeakObject::acquire();
-// }
-
-// void SAL_CALL OPropertySet::release() throw ()
-// {
-//     OWeakObject::release();
-// }
-
-
-// ____ XServiceInfo ____
-// OUString SAL_CALL
-//     OPropertySet::getImplementationName()
-//     throw (uno::RuntimeException)
-// {
-//     return OUString( RTL_CONSTASCII_USTRINGPARAM( "property::OPropertySet" ));
-// }
-
-// sal_Bool SAL_CALL
-//     OPropertySet::supportsService( const OUString& ServiceName )
-//     throw (uno::RuntimeException)
-// {
-//     return ( 0 == ServiceName.reverseCompareToAsciiL(
-//                  RTL_CONSTASCII_STRINGPARAM( "com.sun.star.beans.PropertySet" )));
-// }
-
-// Sequence< OUString > SAL_CALL
-//     OPropertySet::getSupportedServiceNames()
-//     throw (uno::RuntimeException)
-// {
-//     Sequence< OUString > aServiceNames( 1 );
-//     aServiceNames[ 0 ] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.PropertySet" ));
-//     return aServiceNames;
-// }
 
 #define LCL_PROP_CPPUTYPE(t) (::getCppuType( reinterpret_cast< const Reference<t> *>(0)))
 
@@ -156,15 +113,12 @@ Sequence< uno::Type > SAL_CALL
 {
     static Sequence< uno::Type > aTypeList;
 
-    // /--
     MutexGuard aGuard( m_rMutex );
 
     if( aTypeList.getLength() == 0 )
     {
         ::std::vector< uno::Type > aTypes;
 
-//         aTypes.push_back( LCL_PROP_CPPUTYPE( uno::XWeak ));
-//         aTypes.push_back( LCL_PROP_CPPUTYPE( lang::XServiceInfo ));
         aTypes.push_back( LCL_PROP_CPPUTYPE( lang::XTypeProvider ));
         aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XPropertySet ));
         aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XMultiPropertySet ));
@@ -172,28 +126,24 @@ Sequence< uno::Type > SAL_CALL
         aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XPropertyState ));
         aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XMultiPropertyStates ));
         aTypes.push_back( LCL_PROP_CPPUTYPE( XStyleSupplier ));
-//         aTypes.push_back( LCL_PROP_CPPUTYPE( XFastPropertyState ));
 
         aTypeList = ::chart::ContainerHelper::ContainerToSequence( aTypes );
     }
 
     return aTypeList;
-    // \--
+}
+
+namespace
+{
+    class theOPropertySetImplementationId : public rtl::Static< UnoTunnelIdInit, theOPropertySetImplementationId > {};
 }
 
 Sequence< sal_Int8 > SAL_CALL
     OPropertySet::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theOPropertySetImplementationId::get().getSeq();
 }
-
 
 // ____ XPropertyState ____
 beans::PropertyState SAL_CALL
@@ -352,7 +302,7 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
     {
         aDefault = GetDefaultValue( nHandle );
     }
-    catch( beans::UnknownPropertyException ex )
+    catch( beans::UnknownPropertyException& )
     {
         aDefault.clear();
     }
@@ -369,7 +319,6 @@ void SAL_CALL OPropertySet::getFastPropertyValue
 {
     if( ! m_pImplProperties->GetPropertyValueByHandle( rValue, nHandle ))
     {
-//         OSL_TRACE( "OPropertySet: asking style for property" );
         // property was not set -> try style
         uno::Reference< beans::XFastPropertySet > xStylePropSet( m_pImplProperties->GetStyle(), uno::UNO_QUERY );
         if( xStylePropSet.is() )
@@ -414,28 +363,27 @@ void SAL_CALL OPropertySet::getFastPropertyValue
                         }
                         else
                         {
-                            OSL_ENSURE( false,  "HandleCheck: Handle not found in Style" );
+                            OSL_FAIL(  "HandleCheck: Handle not found in Style" );
                         }
                     }
                     else
-                        OSL_ENSURE( false, "HandleCheck: Invalid XPropertySetInfo returned" );
+                        OSL_FAIL( "HandleCheck: Invalid XPropertySetInfo returned" );
                 }
                 else
-                    OSL_ENSURE( false, "HandleCheck: XPropertySet not supported" );
+                    OSL_FAIL( "HandleCheck: XPropertySet not supported" );
             }
 #endif
             rValue = xStylePropSet->getFastPropertyValue( nHandle );
         }
         else
         {
-//             OSL_TRACE( "OPropertySet: no style => getting default for property" );
             // there is no style (or the style does not support XFastPropertySet)
             // => take the default value
             try
             {
                 rValue = GetDefaultValue( nHandle );
             }
-            catch( beans::UnknownPropertyException ex )
+            catch( beans::UnknownPropertyException& )
             {
                 rValue.clear();
             }
@@ -466,41 +414,6 @@ void SAL_CALL OPropertySet::setStyle( const Reference< style::XStyle >& xStyle )
             0 );
 }
 
-// ____ XFastPropertyState ____
-// beans::PropertyState OPropertySet::SAL_CALL getFastPropertyState( sal_Int32 nHandle )
-//     throw (beans::UnknownPropertyException,
-//            uno::RuntimeException)
-// {
-//     return m_pImplProperties->GetPropertyStateByHandle( nHandle );
-// }
-
-// uno::Sequence< beans::PropertyState > OPropertySet::SAL_CALL getFastPropertyStates(
-//     const uno::Sequence< sal_Int32 >& aHandles )
-//     throw (beans::UnknownPropertyException,
-//            uno::RuntimeException)
-// {
-//     ::std::vector< sal_Int32 > aHandleVec(
-//         aHandles.getConstArray(),
-//         aHandles.getConstArray() + aHandles.getLength() );
-
-//     return m_pImplProperties->GetPropertyStatesByHandle( aHandleVec );
-// }
-
-// void OPropertySet::SAL_CALL setFastPropertyToDefault( sal_Int32 nHandle )
-//     throw (beans::UnknownPropertyException,
-//            uno::RuntimeException)
-// {
-//     m_pImplProperties->SetPropertyToDefault( nHandle );
-// }
-
-// uno::Any OPropertySet::SAL_CALL getFastPropertyDefault( sal_Int32 nHandle )
-//     throw (beans::UnknownPropertyException,
-//            lang::WrappedTargetException,
-//            uno::RuntimeException)
-// {
-//     return GetDefaultValue( nHandle );
-// }
-
 // ____ XMultiPropertySet ____
 void SAL_CALL OPropertySet::setPropertyValues(
     const Sequence< OUString >& PropertyNames, const Sequence< Any >& Values )
@@ -528,3 +441,5 @@ void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& 
 
 
 } //  namespace property
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

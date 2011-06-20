@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,9 +113,6 @@ protected:
     /** Returns this object's current bounding box relative to the parent object. */
     virtual Rectangle GetBoundingBox() const throw( ::com::sun::star::uno::RuntimeException );
 
-    /** Creates a new UUID in rSeq, if it is empty. Locks mutex internally. */
-    void getUuid( ::com::sun::star::uno::Sequence< sal_Int8 >& rSeq );
-
     /** Returns whether the object is alive. Must be called with locked mutex. */
     inline bool implIsAlive() const { return !rBHelper.bDisposed && !rBHelper.bInDispose && mpControl; }
     /** Throws an exception, if the object is disposed/disposing or any pointer
@@ -174,7 +172,7 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
         throw( ::com::sun::star::uno::RuntimeException );
 
-    /** Throws an exception (the ruler does not have childern). */
+    /** Throws an exception (the ruler does not have children). */
     virtual XAccessibleRef SAL_CALL getAccessibleChild( sal_Int32 nIndex )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
@@ -664,3 +662,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

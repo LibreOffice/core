@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,15 +64,12 @@ ScScenarioListBox::~ScScenarioListBox()
 {
 }
 
-void ScScenarioListBox::UpdateEntries( List* pNewEntryList )
+void ScScenarioListBox::UpdateEntries( const std::vector<String> &aNewEntryList )
 {
     Clear();
     maEntries.clear();
 
-    if( !pNewEntryList )
-        return;
-
-    switch( pNewEntryList->Count() )
+    switch( aNewEntryList.size() )
     {
         case 0:
             // no scenarios in current sheet
@@ -80,31 +78,33 @@ void ScScenarioListBox::UpdateEntries( List* pNewEntryList )
 
         case 1:
             // sheet is a scenario container, comment only
-            mrParent.SetComment( *static_cast< String* >( pNewEntryList->First() ) );
+            mrParent.SetComment( aNewEntryList[0] );
         break;
 
         default:
         {
             // sheet contains scenarios
-            DBG_ASSERT( pNewEntryList->Count() % 3 == 0, "ScScenarioListBox::UpdateEntries - wrong list size" );
-            SetUpdateMode( sal_False );
-            String* pEntry = static_cast< String* >( pNewEntryList->First() );
-            while( pEntry )
+            OSL_ENSURE( aNewEntryList.size() % 3 == 0, "ScScenarioListBox::UpdateEntries - wrong list size" );
+            SetUpdateMode( false );
+
+            std::vector<String>::const_iterator iter;
+            for (iter = aNewEntryList.begin(); iter != aNewEntryList.end(); ++iter)
             {
                 ScenarioEntry aEntry;
 
                 // first entry of a triple is the scenario name
-                aEntry.maName = *pEntry;
+                aEntry.maName = *iter;
+
                 // second entry of a triple is the scenario comment
-                if( (pEntry = static_cast< String* >( pNewEntryList->Next() )) != 0 )
-                    aEntry.maComment = *pEntry;
+                ++iter;
+                aEntry.maComment = *iter;
+
                 // third entry of a triple is the protection ("0" = not protected, "1" = protected)
-                if( (pEntry = static_cast< String* >( pNewEntryList->Next() )) != 0 )
-                    aEntry.mbProtected = (pEntry->Len() > 0) && (pEntry->GetChar( 0 ) != '0');
+                ++iter;
+                aEntry.mbProtected = (iter->Len() > 0) && (iter->GetChar( 0 ) != '0');
 
                 maEntries.push_back( aEntry );
                 InsertEntry( aEntry.maName, LISTBOX_APPEND );
-                pEntry = static_cast< String* >( pNewEntryList->Next() );
             }
             SetUpdateMode( sal_True );
             SetNoSelection();
@@ -307,3 +307,4 @@ void ScScenarioWindow::SetSizePixel( const Size& rNewSize )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

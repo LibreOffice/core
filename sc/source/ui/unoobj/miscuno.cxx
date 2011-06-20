@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,10 +31,9 @@
 
 
 
-#include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
 
 #include "miscuno.hxx"
-#include "unoguard.hxx"
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -42,16 +42,10 @@ using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 
-//UNUSED2008-05  SC_SIMPLE_SERVICE_INFO( ScEmptyEnumeration, "ScEmptyEnumeration", "stardiv.unknown" )
-//UNUSED2008-05  SC_SIMPLE_SERVICE_INFO( ScEmptyEnumerationAccess, "ScEmptyEnumerationAccess", "stardiv.unknown" )
-//UNUSED2008-05  SC_SIMPLE_SERVICE_INFO( ScIndexEnumeration, "ScIndexEnumeration", "stardiv.unknown" )
-//UNUSED2008-05  SC_SIMPLE_SERVICE_INFO( ScPrintSettingsObj, "ScPrintSettingsObj", "stardiv.unknown" )
-
 SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, "ScNameToIndexAccess", "stardiv.unknown" )
 
 //------------------------------------------------------------------------
 
-//  static
 uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::Any& rAny )
 {
     if ( rAny.getValueTypeClass() == uno::TypeClass_INTERFACE )
@@ -61,7 +55,6 @@ uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::A
     return uno::Reference<uno::XInterface>();   //! Exception?
 }
 
-//  static
 sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const rtl::OUString& rName, sal_Bool bDefault )
 {
@@ -87,7 +80,6 @@ sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPrope
     return bRet;
 }
 
-//  static
 sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const rtl::OUString& rName, long nDefault )
 {
@@ -107,7 +99,6 @@ sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XProp
     return nRet;
 }
 
-//  static
 sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const rtl::OUString& rName, long nDefault )
 {
@@ -137,7 +128,6 @@ sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XProp
     return nRet;
 }
 
-// static
 OUString ScUnoHelpFunctions::GetStringProperty(
     const Reference<beans::XPropertySet>& xProp, const OUString& rName, const OUString& rDefault )
 {
@@ -157,15 +147,13 @@ OUString ScUnoHelpFunctions::GetStringProperty(
     return aRet;
 }
 
-//  static
 sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
         return *(sal_Bool*)aAny.getValue();
-    return sal_False;
+    return false;
 }
 
-//  static
 sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
 {
     sal_Int16 nRet = 0;
@@ -174,7 +162,6 @@ sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
     return 0;
 }
 
-//  static
 sal_Int32 ScUnoHelpFunctions::GetInt32FromAny( const uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
@@ -183,7 +170,6 @@ sal_Int32 ScUnoHelpFunctions::GetInt32FromAny( const uno::Any& aAny )
     return 0;
 }
 
-//  static
 sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
@@ -194,13 +180,11 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
     return nRet;
 }
 
-//  static
 void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
 {
     rAny.setValue( &bValue, getBooleanCppuType() );
 }
 
-//  static
 void ScUnoHelpFunctions::SetOptionalPropertyValue(
     Reference<beans::XPropertySet>& rPropSet, const sal_Char* pPropName, const Any& rVal )
 {
@@ -232,14 +216,14 @@ ScIndexEnumeration::~ScIndexEnumeration()
 
 sal_Bool SAL_CALL ScIndexEnumeration::hasMoreElements() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return ( nPos < xIndex->getCount() );
 }
 
 uno::Any SAL_CALL ScIndexEnumeration::nextElement() throw(container::NoSuchElementException,
                                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Any aReturn;
     try
     {
@@ -255,7 +239,7 @@ uno::Any SAL_CALL ScIndexEnumeration::nextElement() throw(container::NoSuchEleme
 ::rtl::OUString SAL_CALL ScIndexEnumeration::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("ScIndexEnumeration");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScIndexEnumeration"));
 }
 
 sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const ::rtl::OUString& ServiceName )
@@ -275,59 +259,6 @@ sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const ::rtl::OUString& Se
 }
 
 //------------------------------------------------------------------------
-
-//UNUSED2008-05  ScEmptyEnumerationAccess::ScEmptyEnumerationAccess()
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  ScEmptyEnumerationAccess::~ScEmptyEnumerationAccess()
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  // XEnumerationAccess
-//UNUSED2008-05
-//UNUSED2008-05  uno::Reference<container::XEnumeration> SAL_CALL ScEmptyEnumerationAccess::createEnumeration()
-//UNUSED2008-05                                                      throw(uno::RuntimeException)
-//UNUSED2008-05  {
-//UNUSED2008-05      ScUnoGuard aGuard;
-//UNUSED2008-05      return new ScEmptyEnumeration;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  uno::Type SAL_CALL ScEmptyEnumerationAccess::getElementType() throw(uno::RuntimeException)
-//UNUSED2008-05  {
-//UNUSED2008-05      ScUnoGuard aGuard;
-//UNUSED2008-05      return getCppuType((uno::Reference<uno::XInterface>*)0);    // or what?
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  sal_Bool SAL_CALL ScEmptyEnumerationAccess::hasElements() throw(uno::RuntimeException)
-//UNUSED2008-05  {
-//UNUSED2008-05      return sal_False;
-//UNUSED2008-05  }
-
-//------------------------------------------------------------------------
-
-//UNUSED2008-05  ScEmptyEnumeration::ScEmptyEnumeration()
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  ScEmptyEnumeration::~ScEmptyEnumeration()
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  // XEnumeration
-//UNUSED2008-05
-//UNUSED2008-05  sal_Bool SAL_CALL ScEmptyEnumeration::hasMoreElements() throw(uno::RuntimeException)
-//UNUSED2008-05  {
-//UNUSED2008-05      ScUnoGuard aGuard;
-//UNUSED2008-05      return sal_False;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  uno::Any SAL_CALL ScEmptyEnumeration::nextElement() throw(container::NoSuchElementException,
-//UNUSED2008-05                                          lang::WrappedTargetException, uno::RuntimeException)
-//UNUSED2008-05  {
-//UNUSED2008-05      ScUnoGuard aGuard;
-//UNUSED2008-05      return uno::Any();
-//UNUSED2008-05  }
 
 //------------------------------------------------------------------------
 
@@ -361,7 +292,6 @@ sal_Int32 SAL_CALL ScNameToIndexAccess::getCount(  ) throw(::com::sun::star::uno
         return xNameAccess->getByName( aNames.getConstArray()[nIndex] );
 
     throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 // XElementAccess
@@ -382,43 +312,6 @@ sal_Bool SAL_CALL ScNameToIndexAccess::hasElements(  ) throw(::com::sun::star::u
 
 //------------------------------------------------------------------------
 
-//UNUSED2008-05  ScPrintSettingsObj::ScPrintSettingsObj()
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  ScPrintSettingsObj::~ScPrintSettingsObj()
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  // XPropertySet
-//UNUSED2008-05
-//UNUSED2008-05  uno::Reference<beans::XPropertySetInfo> SAL_CALL ScPrintSettingsObj::getPropertySetInfo()
-//UNUSED2008-05                                                          throw(uno::RuntimeException)
-//UNUSED2008-05  {
-//UNUSED2008-05      return NULL;
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void SAL_CALL ScPrintSettingsObj::setPropertyValue(
-//UNUSED2008-05                          const rtl::OUString& /* aPropertyName */, const uno::Any& /* aValue */ )
-//UNUSED2008-05                  throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-//UNUSED2008-05                          lang::IllegalArgumentException, lang::WrappedTargetException,
-//UNUSED2008-05                          uno::RuntimeException)
-//UNUSED2008-05  {
-//UNUSED2008-05      //! later...
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  uno::Any SAL_CALL ScPrintSettingsObj::getPropertyValue( const rtl::OUString& /* aPropertyName */ )
-//UNUSED2008-05                  throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-//UNUSED2008-05                          uno::RuntimeException)
-//UNUSED2008-05  {
-//UNUSED2008-05      //! later...
-//UNUSED2008-05      return uno::Any();
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  SC_IMPL_DUMMY_PROPERTY_LISTENER( ScPrintSettingsObj )
 
 
-//------------------------------------------------------------------------
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

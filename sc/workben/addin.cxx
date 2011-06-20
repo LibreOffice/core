@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,8 @@
 #include <usr/factoryhlp.hxx>
 #include <usr/macros.hxx>
 #include <usr/reflserv.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/debug.hxx>
 #include <tools/date.hxx>
 #include <svl/itemprop.hxx>
 #include <usr/proptypehlp.hxx>
@@ -63,7 +63,7 @@ SMART_UNO_IMPLEMENTATION( ScTestAddIn, UsrObject );
 
 extern "C" {
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -92,13 +92,13 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (registry::InvalidRegistryException&)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSHURE( false, "### InvalidRegistryException!" );
         }
     }
-    return sal_False;
+    return false;
 }
 
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void* pRet = 0;
@@ -340,8 +340,6 @@ UString ScTestAddIn::getDisplayCategoryName(const UString& aProgrammaticFunction
 void ScTestAddIn::setLocale(const lang::Locale& eLocale) THROWS( (UsrSystemException) )
 {
     aFuncLoc = eLocale;
-//  DBG_ERROR( UStringToString(aFuncLoc.Language, CHARSET_SYSTEM) + String("-") +
-//             UStringToString(aFuncLoc.Country, CHARSET_SYSTEM) );
 }
 
 ::com::sun::star::lang::Locale SAL_CALL ScTestAddIn::getLocale(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -374,14 +372,10 @@ double SAL_CALL ScTestAddIn::addOne( double fValue ) throw(::com::sun::star::uno
 ::rtl::OUString SAL_CALL ScTestAddIn::getDateString( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xCaller, double fValue ) throw(::com::sun::star::uno::RuntimeException)
 {
     uno::Any aDateAny = xCaller->getPropertyValue( L"NullDate" );
-//! if ( aDateAny.getReflection()->equals( *Date_getReflection() ) )
     {
         util::Date aDate;
         aDateAny >>= aDate;
-        //const Date* pDate = (const Date*)aDateAny.get();
-        //if (pDate)
         {
-            //Date aNewDate = *pDate;
             Date aNewDate( aDate.Day, aDate.Month, aDate.Year );
 
             aNewDate += (long)(fValue+0.5);
@@ -406,12 +400,11 @@ sal_Int32 SAL_CALL ScTestAddIn::getColorValue( const ::com::sun::star::uno::Refe
     {
         long nRet = -1;
         uno::Any aTrans = xProp->getPropertyValue( L"IsCellBackgroundTransparent" );
-        BOOL bIsTrans;
+        sal_Bool bIsTrans;
         aTrans >>= bIsTrans;        //! dont use >>= for BOOL
         if (!bIsTrans)
         {
             uno::Any aCol = xProp->getPropertyValue( L"CellBackColor" );
-            //nRet = NAMESPACE_USR(OPropertyTypeConversion)::toINT32( aCol );
             aCol >>= nRet;
         }
         return nRet;
@@ -530,8 +523,6 @@ INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, 
         aInner.getArray()[2] = L"Suelz";
         uno::Sequence< uno::Sequence<rtl::OUString> > aOuter( &aInner, 1 );
 
-        //return uno::Any( &aOuter, Sequence< Sequence<UString> >::getReflection() );
-
         aRet <<= aOuter;
         return aRet;
     }
@@ -593,3 +584,4 @@ sal_Bool SAL_CALL ScTestAddIn::supportsService( const ::rtl::OUString& ServiceNa
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

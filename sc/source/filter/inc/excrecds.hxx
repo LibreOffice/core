@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,14 +47,12 @@
 #include "root.hxx"
 #include "excdefs.hxx"
 #include "cell.hxx"
+#include <boost/shared_ptr.hpp>
 
 //------------------------------------------------------------------ Forwards -
 
-class SvxBorderLine;
-
 class SvStream;
 class Font;
-class List;
 class ScPatternAttr;
 class ScTokenArray;
 class ScRangeData;
@@ -72,6 +71,7 @@ class ExcRecord : public XclExpRecord
 {
 public:
     virtual void            Save( XclExpStream& rStrm );
+    virtual void            SaveXml( XclExpXmlStream& rStrm );
 
     virtual sal_uInt16          GetNum() const = 0;
     virtual sal_Size        GetLen() const = 0;
@@ -97,28 +97,6 @@ public:
     virtual sal_Size        GetLen() const;
 };
 
-
-//------------------------------------------------------- class ExcRecordList -
-
-class ExcRecordList : protected List, public ExcEmptyRec
-{
-private:
-protected:
-public:
-    virtual                 ~ExcRecordList();
-
-    using                   List::Count;
-
-    inline ExcRecord*       First( void )               { return ( ExcRecord* ) List::First(); }
-    inline ExcRecord*       Next( void )                { return ( ExcRecord* ) List::Next(); }
-
-    inline void             Append( ExcRecord* pNew )   { if( pNew ) List::Insert( pNew, LIST_APPEND ); }
-    inline const ExcRecord* Get( sal_uInt32 nNum ) const    { return ( ExcRecord* ) List::GetObject( nNum ); }
-
-    virtual void            Save( XclExpStream& rStrm );
-};
-
-
 //--------------------------------------------------------- class ExcDummyRec -
 
 class ExcDummyRec : public ExcRecord
@@ -142,7 +120,7 @@ private:
 protected:
     sal_Bool                    bVal;
 
-    inline                  ExcBoolRecord() : bVal( sal_False ) {}
+    inline                  ExcBoolRecord() : bVal( false ) {}
 
 public:
     inline                  ExcBoolRecord( const sal_Bool bDefault ) : bVal( bDefault ) {}
@@ -285,6 +263,8 @@ public:
     virtual sal_uInt16          GetNum( void ) const;
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
+private:
+    sal_Bool                    bDateCompatibility;
 };
 
 
@@ -427,7 +407,7 @@ private:
 
     sal_Bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
                                 sal_uInt8 nOp, double fVal, String* pText,
-                                sal_Bool bSimple = sal_False );
+                                sal_Bool bSimple = false );
 
     virtual void            WriteBody( XclExpStream& rStrm );
 
@@ -471,6 +451,7 @@ private:
     XclExpFiltermode*   pFilterMode;
     XclExpAutofilterinfo* pFilterInfo;
     ScRange                 maRef;
+    bool mbAutoFilter;
 };
 
 // ----------------------------------------------------------------------------
@@ -495,7 +476,7 @@ public:
 private:
     using               XclExpRoot::CreateRecord;
 
-    typedef ScfRef< ExcAutoFilterRecs >             XclExpTabFilterRef;
+    typedef boost::shared_ptr< ExcAutoFilterRecs >  XclExpTabFilterRef;
     typedef ::std::map< SCTAB, XclExpTabFilterRef > XclExpTabFilterMap;
 
     XclExpTabFilterMap  maFilterMap;
@@ -504,3 +485,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

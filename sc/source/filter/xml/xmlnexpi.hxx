@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,14 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
+#include "address.hxx"
+
+#include <boost/shared_ptr.hpp>
 
 class ScXMLImport;
+struct ScMyNamedExpression;
+class ScRangeName;
+class ScDocument;
 
 class ScXMLNamedExpressionsContext : public SvXMLImportContext
 {
@@ -39,10 +46,45 @@ class ScXMLNamedExpressionsContext : public SvXMLImportContext
 
 public:
 
-    ScXMLNamedExpressionsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+    class Inserter
+    {
+    public:
+        virtual void insert(ScMyNamedExpression* pExp) = 0;
+    };
+
+    /**
+     * Global named expressions are inserted into ScXMLImport, which does the
+     * bulk insertion at the end of the import.
+     */
+    class GlobalInserter : public Inserter
+    {
+    public:
+        GlobalInserter(ScXMLImport& rImport);
+        virtual void insert(ScMyNamedExpression* pExp);
+    private:
+        ScXMLImport& mrImport;
+    };
+
+    /**
+     * Sheet local named expressions are inserted directly into ScRangeName
+     * instance of that sheet.  TODO: the global ones should be inserted the
+     * same way for efficiency.
+     */
+    class SheetLocalInserter : public Inserter
+    {
+    public:
+        SheetLocalInserter(ScXMLImport& rImport, SCTAB nTab);
+        virtual void insert(ScMyNamedExpression* pExp);
+    private:
+        ScXMLImport& mrImport;
+        SCTAB mnTab;
+    };
+
+    ScXMLNamedExpressionsContext(
+        ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        Inserter* pInserter );
 
     virtual ~ScXMLNamedExpressionsContext();
 
@@ -52,6 +94,9 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void EndElement();
+
+private:
+    ::boost::shared_ptr<Inserter> mpInserter;
 };
 
 class ScXMLNamedRangeContext : public SvXMLImportContext
@@ -61,10 +106,11 @@ class ScXMLNamedRangeContext : public SvXMLImportContext
 
 public:
 
-    ScXMLNamedRangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+    ScXMLNamedRangeContext(
+        ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        ScXMLNamedExpressionsContext::Inserter* pInserter );
 
     virtual ~ScXMLNamedRangeContext();
 
@@ -74,6 +120,9 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void EndElement();
+
+private:
+    ScXMLNamedExpressionsContext::Inserter* mpInserter;
 };
 
 class ScXMLNamedExpressionContext : public SvXMLImportContext
@@ -83,10 +132,11 @@ class ScXMLNamedExpressionContext : public SvXMLImportContext
 
 public:
 
-    ScXMLNamedExpressionContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+    ScXMLNamedExpressionContext(
+        ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        ScXMLNamedExpressionsContext::Inserter* pInserter );
 
     virtual ~ScXMLNamedExpressionContext();
 
@@ -96,6 +146,11 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void EndElement();
+
+private:
+    ScXMLNamedExpressionsContext::Inserter* mpInserter;
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

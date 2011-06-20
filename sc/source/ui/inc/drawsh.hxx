@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <svx/svdmark.hxx>
 #include <tools/link.hxx>
 
-class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
+class AbstractSvxNameDialog;
 class ScViewData;
 class ScDrawView;
 
@@ -44,9 +45,7 @@ class ScDrawShell : public SfxShell
 
     DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
 
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
     void SetHlinkForObject( SdrObject* pObj, const rtl::OUString& rHlnk );
-#endif
 
 protected:
     ScViewData* GetViewData()   { return pViewData; }
@@ -92,3 +91,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

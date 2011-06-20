@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,8 +36,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "global.hxx"       // enum ScSubTotalFunc
 #include "dpcachetable.hxx"
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <vector>
 #include <memory>
 
@@ -57,10 +58,7 @@ class ScDPResultMember;
 class ScDPResultVisibilityData;
 
 struct ScDPValueData;
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 class ScDPItemData;
-// End Comments
 //
 //  Member names that are being processed for InitFrom/LateInitFrom
 //  (needed for initialization of grouped items)
@@ -69,10 +67,7 @@ class ScDPItemData;
 class ScDPInitState
 {
     long*           pIndex;     // array
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
     SCROW*     pData; // array
- // End Comments
     long            nCount;
 
 public:
@@ -84,11 +79,8 @@ public:
 
     long                GetCount() const    { return nCount; }
     const long*         GetSource() const   { return pIndex; }
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
     const SCROW* GetNameIds() const    { return pData; }
     SCROW   GetNameIdForIndex( long nIndexValue ) const;
-// End Comments
 };
 
 typedef ::std::vector<sal_Int32> ScMemberSortOrder;
@@ -237,8 +229,6 @@ class ScDPDataMember;
 
 #define SC_DPMEASURE_ALL    -1
 #define SC_DPMEASURE_ANY    -2
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 
 struct MemberHashIndexFunc : public std::unary_function< const SCROW &, size_t >
 {
@@ -258,7 +248,7 @@ public:
 };
 
 typedef std::vector <ScDPParentDimData *>                 DimMemberArray;
-typedef std::hash_map < SCROW, ScDPParentDimData *, MemberHashIndexFunc>  DimMemberHash;
+typedef boost::unordered_map < SCROW, ScDPParentDimData *, MemberHashIndexFunc>  DimMemberHash;
 
 class ResultMembers
 {
@@ -284,7 +274,7 @@ private:
     sal_Bool      mbAllChildren;
 public:
     LateInitParams( const ::std::vector<ScDPDimension*>& ppDim, const ::std::vector<ScDPLevel*>& ppLev,
-        sal_Bool bRow, sal_Bool bInitChild = sal_True , sal_Bool bAllChildren = sal_False);
+        sal_Bool bRow, sal_Bool bInitChild = sal_True , sal_Bool bAllChildren = false);
     ~LateInitParams();
 
     void  SetInitChild( sal_Bool b ) { mbInitChild = b; }
@@ -298,7 +288,6 @@ public:
     inline sal_Bool  IsRow() const { return mbRow; }
     sal_Bool  IsEnd( size_t nPos ) const ;
 };
-// End Comments
 
 class ScDPResultData
 {
@@ -347,8 +336,6 @@ public:
     sal_Bool                IsBaseForGroup( long nDim ) const;              // any group
     long                GetGroupBase( long nGroupDim ) const;
     sal_Bool                IsNumOrDateGroup( long nDim ) const;
- // Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
     sal_Bool                IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                                long nBaseDataId, long nBaseIndex ) const;
     sal_Bool                IsInGroup( SCROW nGroupDataId, long nGroupIndex,
@@ -358,7 +345,6 @@ public:
 
     ResultMembers* GetDimResultMembers( long nDim , ScDPDimension* pDim , ScDPLevel*   pLevel) const ;
 
-// End Comments
     const ScDPSource*   GetSource() const;
 };
 
@@ -367,10 +353,7 @@ class ScDPResultMember
 {
 private:
     const ScDPResultData*   pResultData;
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     ScDPParentDimData        aParentDimData;
-    // End Comments
     ScDPResultDimension*    pChildDimension;
     ScDPDataMember*         pDataRoot;
     sal_Bool                    bHasElements;
@@ -382,16 +365,11 @@ private:
 
     sal_uInt16                  nMemberStep;            // step to show details
 public:
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     ScDPResultMember(  const ScDPResultData* pData,  const ScDPParentDimData& rParentDimData,
         sal_Bool bForceSub );  //! Ref
     ScDPResultMember(  const ScDPResultData* pData, sal_Bool bForceSub );
-    // End Comments
     ~ScDPResultMember();
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     void                InitFrom( const ::std::vector<ScDPDimension*>& ppDim,
                                         const ::std::vector<ScDPLevel*>& ppLev,
                                         size_t nPos,
@@ -402,8 +380,7 @@ public:
                                         const ::std::vector< SCROW >& pItemData,
                                         size_t nPos,
                                         ScDPInitState& rInitState);
-    void              CheckShowEmpty( sal_Bool bShow = sal_False );
-    // End Comments
+    void              CheckShowEmpty( sal_Bool bShow = false );
     String              GetName() const;
     void                FillItemData( ScDPItemData& rData ) const;
     sal_Bool                IsValid() const;
@@ -412,25 +389,18 @@ public:
     sal_Bool                HasHiddenDetails() const;
     sal_Bool                IsSubTotalInTitle(long nMeasure) const;
 
-//  sal_Bool                SubTotalEnabled() const;
     long                GetSubTotalCount( long* pUserSubStart = NULL ) const;
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     sal_Bool              IsNamedItem( SCROW nIndex ) const;
     bool IsValidEntry( const ::std::vector< SCROW >& aMembers ) const;
-    // End Comments
 
     void                SetHasElements()    { bHasElements = sal_True; }
     void                SetAutoHidden()     { bAutoHidden = sal_True; }
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     void                ProcessData( const ::std::vector<SCROW>& aChildMembers,
                                         const ScDPResultDimension* pDataDim,
                                         const ::std::vector<SCROW>& aDataMembers,
                                         const ::std::vector<ScDPValueData>& aValues );
-    // End Comments
     void                FillMemberResults( com::sun::star::uno::Sequence<
                                                 com::sun::star::sheet::MemberResult>* pSequences,
                                             long& rPos, long nMeasure, sal_Bool bRoot,
@@ -460,15 +430,12 @@ public:
 
     ScDPDataMember*         GetDataRoot() const             { return pDataRoot; }
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     const ScDPDimension*  GetParentDim() const               { return aParentDimData.mpParentDim; }     //! Ref
     const ScDPLevel*         GetParentLevel() const         { return aParentDimData.mpParentLevel; }   //! Ref
     const ScDPMember*     GetDPMember()const              { return aParentDimData.mpMemberDesc; }    //! Ref
     inline SCROW               GetOrder() const                           { return aParentDimData.mnOrder; }         //! Ref
     inline sal_Bool                  IsRoot() const                       { return GetParentLevel() == NULL; }
     SCROW                       GetDataId( ) const ;
-    // End Comments
     ScDPAggData*        GetColTotal( long nMeasure ) const;
 
     void                FillVisibilityData(ScDPResultVisibilityData& rData) const;
@@ -494,17 +461,11 @@ public:
     sal_Bool                IsVisible() const;
     sal_Bool                HasData( long nMeasure, const ScDPSubTotalState& rSubState ) const;
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     sal_Bool              IsNamedItem(   SCROW r ) const;
-    // End Comments
     sal_Bool                HasHiddenDetails() const;
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     void                ProcessData( const ::std::vector< SCROW >& aChildMembers, const ::std::vector<ScDPValueData>& aValues,
                                        const ScDPSubTotalState& rSubState );
-    // End Comments
     sal_Bool                HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const;
     double              GetAggregate( long nMeasure, const ScDPSubTotalState& rSubState ) const;
     const ScDPAggData*  GetConstAggData( long nMeasure, const ScDPSubTotalState& rSubState ) const;
@@ -544,11 +505,8 @@ SV_DECL_PTRARR_DEL(ScDPDataMembers, ScDPDataMemberPtr, SC_DP_RES_GROW, SC_DP_RES
 class ScDPResultDimension
 {
 public :
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     typedef std::vector <ScDPResultMember *>                           MemberArray;
     typedef std::map < SCROW , ScDPResultMember *> MemberHash;
-    // End Comments
 private:
         const ScDPResultData*   pResultData;
     MemberArray             maMemberArray;
@@ -565,24 +523,18 @@ private:
     long                    nAutoMeasure;
     long                    nAutoCount;
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     ScDPResultMember*        FindMember(   SCROW  iData ) const;
     ScDPResultMember*        AddMember( const ScDPParentDimData& aData );
     ScDPResultMember*        InsertMember( ScDPParentDimData* pMemberData );
-    ResultMembers*               GetResultMember( ScDPDimension* pDim, ScDPLevel* pLevel );
     void                                  InitWithMembers( LateInitParams& rParams,
                                                             const ::std::vector< SCROW >& pItemData,
                                                             size_t  nPos,
                                                             ScDPInitState& rInitState  );
-    // End Comments
 public:
        ScDPResultDimension( const ScDPResultData* pData );
     ~ScDPResultDimension();
 
                         //  allocates new members
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     void                InitFrom( const ::std::vector<ScDPDimension*>& ppDim,
                                         const ::std::vector<ScDPLevel*>& ppLev,
                                         size_t nPos,
@@ -591,13 +543,10 @@ public:
                                         const ::std::vector< SCROW >& pItemData,
                                         size_t nPos,
                                         ScDPInitState& rInitState );
-    void               CheckShowEmpty( sal_Bool bShow = sal_False );
+    void               CheckShowEmpty( sal_Bool bShow = false );
 
-    // End Comments
     long                GetSize(long nMeasure) const;
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     bool                IsValidEntry( const ::std::vector<SCROW>& aMembers ) const;
 
     //  modifies existing members, allocates data dimensions
@@ -605,7 +554,6 @@ public:
                                      const ScDPResultDimension* pDataDim,
                                      const ::std::vector<SCROW>& aDataMembers,
                                      const ::std::vector<ScDPValueData>& aValues ) const;   //! Test
- // End Comments
     void                FillMemberResults( com::sun::star::uno::Sequence<
                                                 com::sun::star::sheet::MemberResult>* pSequences,
                                             long nStart, long nMeasure );
@@ -675,11 +623,8 @@ public:
                         ~ScDPDataDimension();
 
     void                InitFrom( const ScDPResultDimension* pDim );        // recursive
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     void                ProcessData( const ::std::vector< SCROW >& aDataMembers, const ::std::vector<ScDPValueData>& aValues,
                                        const ScDPSubTotalState& rSubState );
-    // End Comments
     void                FillDataRow( const ScDPResultDimension* pRefDim,
                                     com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
                                     long nCol, long nMeasure, sal_Bool bIsSubTotalRow,
@@ -713,10 +658,7 @@ public:
 class ScDPResultVisibilityData
 {
 public:
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     ScDPResultVisibilityData( ScDPSource* pSource);
-    // End Comments
     ~ScDPResultVisibilityData();
 
     void addVisibleMember(const String& rDimName, const ScDPItemData& rMemberItem);
@@ -727,8 +669,8 @@ private:
     {
         size_t operator()(const ScDPItemData& r) const;
     };
-    typedef ::std::hash_set<ScDPItemData, MemberHash> VisibleMemberType;
-    typedef ::std::hash_map<String, VisibleMemberType, ScStringHashCode> DimMemberType;
+    typedef ::boost::unordered_set<ScDPItemData, MemberHash> VisibleMemberType;
+    typedef ::boost::unordered_map<String, VisibleMemberType, ScStringHashCode> DimMemberType;
     DimMemberType maDimensions;
 
     ScDPSource* mpSource;
@@ -736,3 +678,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

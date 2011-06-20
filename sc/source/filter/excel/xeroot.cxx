@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,91 +81,91 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
 
 XclExpTabInfo& XclExpRoot::GetTabInfo() const
 {
-    DBG_ASSERT( mrExpData.mxTabInfo.is(), "XclExpRoot::GetTabInfo - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxTabInfo, "XclExpRoot::GetTabInfo - missing object (wrong BIFF?)" );
     return *mrExpData.mxTabInfo;
 }
 
 XclExpAddressConverter& XclExpRoot::GetAddressConverter() const
 {
-    DBG_ASSERT( mrExpData.mxAddrConv.is(), "XclExpRoot::GetAddressConverter - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxAddrConv, "XclExpRoot::GetAddressConverter - missing object (wrong BIFF?)" );
     return *mrExpData.mxAddrConv;
 }
 
 XclExpFormulaCompiler& XclExpRoot::GetFormulaCompiler() const
 {
-    DBG_ASSERT( mrExpData.mxFmlaComp.is(), "XclExpRoot::GetFormulaCompiler - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxFmlaComp, "XclExpRoot::GetFormulaCompiler - missing object (wrong BIFF?)" );
     return *mrExpData.mxFmlaComp;
 }
 
 XclExpProgressBar& XclExpRoot::GetProgressBar() const
 {
-    DBG_ASSERT( mrExpData.mxProgress.is(), "XclExpRoot::GetProgressBar - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxProgress, "XclExpRoot::GetProgressBar - missing object (wrong BIFF?)" );
     return *mrExpData.mxProgress;
 }
 
 XclExpSst& XclExpRoot::GetSst() const
 {
-    DBG_ASSERT( mrExpData.mxSst.is(), "XclExpRoot::GetSst - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxSst, "XclExpRoot::GetSst - missing object (wrong BIFF?)" );
     return *mrExpData.mxSst;
 }
 
 XclExpPalette& XclExpRoot::GetPalette() const
 {
-    DBG_ASSERT( mrExpData.mxPalette.is(), "XclExpRoot::GetPalette - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxPalette, "XclExpRoot::GetPalette - missing object (wrong BIFF?)" );
     return *mrExpData.mxPalette;
 }
 
 XclExpFontBuffer& XclExpRoot::GetFontBuffer() const
 {
-    DBG_ASSERT( mrExpData.mxFontBfr.is(), "XclExpRoot::GetFontBuffer - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxFontBfr, "XclExpRoot::GetFontBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxFontBfr;
 }
 
 XclExpNumFmtBuffer& XclExpRoot::GetNumFmtBuffer() const
 {
-    DBG_ASSERT( mrExpData.mxNumFmtBfr.is(), "XclExpRoot::GetNumFmtBuffer - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxNumFmtBfr, "XclExpRoot::GetNumFmtBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxNumFmtBfr;
 }
 
 XclExpXFBuffer& XclExpRoot::GetXFBuffer() const
 {
-    DBG_ASSERT( mrExpData.mxXFBfr.is(), "XclExpRoot::GetXFBuffer - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxXFBfr, "XclExpRoot::GetXFBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxXFBfr;
 }
 
 XclExpLinkManager& XclExpRoot::GetGlobalLinkManager() const
 {
-    DBG_ASSERT( mrExpData.mxGlobLinkMgr.is(), "XclExpRoot::GetGlobalLinkManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxGlobLinkMgr, "XclExpRoot::GetGlobalLinkManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxGlobLinkMgr;
 }
 
 XclExpLinkManager& XclExpRoot::GetLocalLinkManager() const
 {
-    DBG_ASSERT( GetLocalLinkMgrRef().is(), "XclExpRoot::GetLocalLinkManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( GetLocalLinkMgrRef(), "XclExpRoot::GetLocalLinkManager - missing object (wrong BIFF?)" );
     return *GetLocalLinkMgrRef();
 }
 
 XclExpNameManager& XclExpRoot::GetNameManager() const
 {
-    DBG_ASSERT( mrExpData.mxNameMgr.is(), "XclExpRoot::GetNameManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxNameMgr, "XclExpRoot::GetNameManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxNameMgr;
 }
 
 XclExpObjectManager& XclExpRoot::GetObjectManager() const
 {
-    DBG_ASSERT( mrExpData.mxObjMgr.is(), "XclExpRoot::GetObjectManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxObjMgr, "XclExpRoot::GetObjectManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxObjMgr;
 }
 
 XclExpFilterManager& XclExpRoot::GetFilterManager() const
 {
-    DBG_ASSERT( mrExpData.mxFilterMgr.is(), "XclExpRoot::GetFilterManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxFilterMgr, "XclExpRoot::GetFilterManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxFilterMgr;
 }
 
 XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
 {
-    DBG_ASSERT( mrExpData.mxPTableMgr.is(), "XclExpRoot::GetPivotTableManager - missing object (wrong BIFF?)" );
+    OSL_ENSURE( mrExpData.mxPTableMgr, "XclExpRoot::GetPivotTableManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxPTableMgr;
 }
 
@@ -235,7 +236,7 @@ XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
         case EXC_ID_EXTERNSHEET:    xRec = GetLocalLinkMgrRef();    break;
         case EXC_ID_NAME:           xRec = mrExpData.mxNameMgr;     break;
     }
-    DBG_ASSERT( xRec.is(), "XclExpRoot::CreateRecord - unknown record ID or missing object" );
+    OSL_ENSURE( xRec, "XclExpRoot::CreateRecord - unknown record ID or missing object" );
     return xRec;
 }
 
@@ -285,13 +286,13 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const ::r
 uno::Sequence< beans::NamedValue > XclExpRoot::GetEncryptionData() const
 {
     uno::Sequence< beans::NamedValue > aEncryptionData;
-    SFX_ITEMSET_ARG( GetMedium().GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False );
+    SFX_ITEMSET_ARG( GetMedium().GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
     if ( pEncryptionDataItem )
         pEncryptionDataItem->GetValue() >>= aEncryptionData;
     else
     {
         // try to get the encryption data from the password
-        SFX_ITEMSET_ARG( GetMedium().GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
+        SFX_ITEMSET_ARG( GetMedium().GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false );
         if ( pPasswordItem && pPasswordItem->GetValue().Len() )
             aEncryptionData = GenerateEncryptionData( pPasswordItem->GetValue() );
     }
@@ -315,3 +316,4 @@ XclExpRootData::XclExpLinkMgrRef XclExpRoot::GetLocalLinkMgrRef() const
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include "markdata.hxx"
 #include "sortparam.hxx"
 #include "queryparam.hxx"
+#include "subtotalparam.hxx"
 #include "pivot.hxx"
 
 class ScDocShell;
@@ -300,15 +302,15 @@ private:
 class ScUndoAutoFilter: public ScDBFuncUndo
 {
 private:
-    String          aDBName;
-    sal_Bool            bFilterSet;
+    ::rtl::OUString aDBName;
+    bool            bFilterSet;
 
-    void            DoChange( sal_Bool bUndo );
+    void            DoChange( bool bUndo );
 
 public:
                     TYPEINFO();
                     ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
-                            const String& rName, sal_Bool bSet );
+                                      const ::rtl::OUString& rName, bool bSet );
     virtual         ~ScUndoAutoFilter();
 
     virtual void    Undo();
@@ -406,39 +408,6 @@ private:
     sal_Bool            bQuerySize;
 };
 
-//UNUSED2008-05  class ScUndoPivot: public ScSimpleUndo
-//UNUSED2008-05  {
-//UNUSED2008-05  public:
-//UNUSED2008-05                      TYPEINFO();
-//UNUSED2008-05                      ScUndoPivot( ScDocShell* pNewDocShell,
-//UNUSED2008-05                              const ScArea& rOld, const ScArea& rNew,
-//UNUSED2008-05                              ScDocument* pOldDoc, ScDocument* pNewDoc,
-//UNUSED2008-05                              const ScPivot* pOldPivot, const ScPivot* pNewPivot );
-//UNUSED2008-05      virtual         ~ScUndoPivot();
-//UNUSED2008-05
-//UNUSED2008-05      virtual void    Undo();
-//UNUSED2008-05      virtual void    Redo();
-//UNUSED2008-05      virtual void    Repeat(SfxRepeatTarget& rTarget);
-//UNUSED2008-05      virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
-//UNUSED2008-05
-//UNUSED2008-05      virtual String  GetComment() const;
-//UNUSED2008-05
-//UNUSED2008-05  private:
-//UNUSED2008-05      ScArea          aOldArea;
-//UNUSED2008-05      ScArea          aNewArea;
-//UNUSED2008-05      ScDocument*     pOldUndoDoc;
-//UNUSED2008-05      ScDocument*     pNewUndoDoc;
-//UNUSED2008-05      ScPivotParam    aOldParam;              // fuer Redo
-//UNUSED2008-05      ScQueryParam    aOldQuery;
-//UNUSED2008-05      ScArea          aOldSrc;
-//UNUSED2008-05      ScPivotParam    aNewParam;              // fuer Undo in Collection
-//UNUSED2008-05      ScQueryParam    aNewQuery;
-//UNUSED2008-05      ScArea          aNewSrc;
-//UNUSED2008-05      String          aOldName;
-//UNUSED2008-05      String          aOldTag;
-//UNUSED2008-05      String          aNewName;
-//UNUSED2008-05      String          aNewTag;
-//UNUSED2008-05  };
 
 class ScUndoDataPilot: public ScSimpleUndo
 {
@@ -528,8 +497,45 @@ private:
     void                Init();
 };
 
+// amelia
+class ScUndoDataForm: public ScBlockUndo
+{
+public:
+                    TYPEINFO();
+                    ScUndoDataForm( ScDocShell* pNewDocShell,
+                                SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                                SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
+                                const ScMarkData& rMark,
+                                ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
+                                sal_uInt16 nNewFlags,
+                                ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3,
+                                sal_Bool bRedoIsFilled = true
+                                 );
+    virtual     ~ScUndoDataForm();
 
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+
+    virtual String  GetComment() const;
+
+private:
+    ScMarkData      aMarkData;
+    ScDocument*     pUndoDoc;
+    ScDocument*     pRedoDoc;
+    sal_uInt16          nFlags;
+    ScRefUndoData*      pRefUndoData;
+    ScRefUndoData*      pRefRedoData;
+    sal_uLong           nStartChangeAction;
+    sal_uLong           nEndChangeAction;
+    sal_Bool            bRedoFilled;
+
+    void            DoChange( const sal_Bool bUndo );
+    void            SetChangeTrack();
+};
 
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

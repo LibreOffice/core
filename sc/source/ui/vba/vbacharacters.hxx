@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@ private:
     // Add becuase of MSO has diferent behavior.
     sal_Bool bReplace;
 public:
-    ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, const css::uno::Reference< css::text::XSimpleText >& xRange, const css::uno::Any& Start, const css::uno::Any& Length, sal_Bool bReplace = sal_False  ) throw ( css::lang::IllegalArgumentException );
+    ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, const css::uno::Reference< css::text::XSimpleText >& xRange, const css::uno::Any& Start, const css::uno::Any& Length, sal_Bool bReplace = false  ) throw ( css::lang::IllegalArgumentException );
 
     virtual ~ScVbaCharacters() {}
     // Attributes
@@ -73,3 +74,4 @@ public:
 
 #endif /* SC_VBA_CHARACTER_HXX */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

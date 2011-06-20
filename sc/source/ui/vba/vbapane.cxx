@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ ScVbaPane::setScrollColumn( sal_Int32 _scrollcolumn ) throw (uno::RuntimeExcepti
 {
     if( _scrollcolumn < 1 )
     {
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "Column number should not less than 1" ),
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Column number should not less than 1" )),
                 uno::Reference< uno::XInterface >() );
     }
     m_xViewPane->setFirstVisibleColumn( _scrollcolumn - 1 );
@@ -73,7 +74,7 @@ ScVbaPane::setScrollRow( sal_Int32 _scrollrow ) throw (uno::RuntimeException)
 {
     if( _scrollrow < 1 )
     {
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "Row number should not less than 1" ),
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Row number should not less than 1" )),
                 uno::Reference< uno::XInterface >() );
     }
     m_xViewPane->setFirstVisibleRow( _scrollrow - 1 );
@@ -107,7 +108,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Down >>= down )
             downRows += down;
         else
-            messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: Down\n" );
+            messageBuffer += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Error getting parameter: Down\n" ));
     }
     if( Up.hasValue() )
     {
@@ -115,7 +116,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Up >>= up )
             downRows -= up;
         else
-            messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: Up\n" );
+            messageBuffer += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Error getting parameter: Up\n" ));
     }
     if( ToRight.hasValue() )
     {
@@ -123,7 +124,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToRight >>= right )
             rightCols += right;
         else
-            messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: ToRight\n" );
+            messageBuffer += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Error getting parameter: ToRight\n" ));
     }
     if( ToLeft.hasValue() )
     {
@@ -131,7 +132,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToLeft >>= left )
             rightCols -= left;
         else
-            messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: ToLeft\n" );
+            messageBuffer += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Error getting parameter: ToLeft\n" ));
     }
     if( messageBuffer.getLength() > 0 )
         throw(uno::RuntimeException( messageBuffer, uno::Reference< uno::XInterface >() ) );
@@ -162,7 +163,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Down >>= down )
             downPages += down;
         else
-            messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: Down\n" );
+            messageBuffer += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Error getting parameter: Down\n" ));
     }
     if( Up.hasValue() )
     {
@@ -170,7 +171,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Up >>= up )
             downPages -= up;
         else
-            messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: Up\n" );
+            messageBuffer += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Error getting parameter: Up\n" ));
     }
     if( ToRight.hasValue() )
     {
@@ -178,7 +179,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToRight >>= right )
             acrossPages += right;
         else
-            messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: ToRight\n" );
+            messageBuffer += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Error getting parameter: ToRight\n" ));
     }
     if( ToLeft.hasValue() )
     {
@@ -186,7 +187,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToLeft >>= left )
             acrossPages -= left;
         else
-            messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: ToLeft\n" );
+            messageBuffer += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Error getting parameter: ToLeft\n" ));
     }
     if( messageBuffer.getLength() > 0 )
         throw(uno::RuntimeException( messageBuffer, uno::Reference< uno::XInterface >() ) );
@@ -204,3 +205,5 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
 // XHelperInterface
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaPane, "ooo.vba.excel.Pane" )
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

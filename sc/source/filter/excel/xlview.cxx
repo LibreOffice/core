@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,7 +94,7 @@ bool XclTabViewData::HasPane( sal_uInt8 nPaneId ) const
         case EXC_PANE_BOTTOMLEFT:   return mnSplitY > 0;
         case EXC_PANE_TOPLEFT:      return true;
     }
-    DBG_ERRORFILE( "XclExpPane::HasPane - wrong pane ID" );
+    OSL_FAIL( "XclExpPane::HasPane - wrong pane ID" );
     return false;
 }
 
@@ -113,3 +114,4 @@ XclSelectionData& XclTabViewData::CreateSelectionData( sal_uInt8 nPane )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,8 +49,6 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 
 //.............................................................................
@@ -112,7 +111,7 @@ void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes 
        , Reference< drawing::XShapes >& xLogicTargetForSeriesBehindAxis )
             throw (uno::RuntimeException)
 {
-    DBG_ASSERT(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
+    OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
     //is only allowed to be called once
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
@@ -601,3 +600,5 @@ sal_Int32 VCoordinateSystem::getNumberFormatKeyForAxis(
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

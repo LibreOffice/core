@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-// #include <math.h>
-
-#include <tools/debug.hxx>
 #include <rtl/logfile.hxx>
 #include "interpre.hxx"
 
@@ -197,3 +195,5 @@ double ScInterpreter::GetGammaDist( double fX, double fAlpha, double fLambda )
     else
         return GetLowRegIGamma( fAlpha, fX / fLambda);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

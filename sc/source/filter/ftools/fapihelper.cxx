@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,7 @@ Reference< XInterface > ScfApiHelper::CreateInstance(
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "ScfApiHelper::CreateInstance - cannot create instance" );
+            OSL_FAIL( "ScfApiHelper::CreateInstance - cannot create instance" );
         }
     }
     return xInt;
@@ -122,17 +123,11 @@ Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "ScfApiHelper::CreateInstanceWithArgs - cannot create instance" );
+            OSL_FAIL( "ScfApiHelper::CreateInstanceWithArgs - cannot create instance" );
         }
     }
     return xInt;
 }
-
-//UNUSED2008-05  Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
-//UNUSED2008-05          SfxObjectShell* pShell, const OUString& rServiceName, const Sequence< Any >& rArgs )
-//UNUSED2008-05  {
-//UNUSED2008-05      return CreateInstanceWithArgs( GetServiceFactory( pShell ), rServiceName, rArgs );
-//UNUSED2008-05  }
 
 Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
         const OUString& rServiceName, const Sequence< Any >& rArgs )
@@ -144,12 +139,12 @@ uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( S
         ::comphelper::IDocPasswordVerifier& rVerifier, const ::std::vector< OUString >* pDefaultPasswords )
 {
     uno::Sequence< beans::NamedValue > aEncryptionData;
-    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False);
+    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false);
     if ( pEncryptionDataItem )
         pEncryptionDataItem->GetValue() >>= aEncryptionData;
 
     ::rtl::OUString aPassword;
-    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False);
+    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false);
     if ( pPasswordItem )
         aPassword = pPasswordItem->GetValue();
 
@@ -241,7 +236,7 @@ void ScfPropertySet::GetProperties( Sequence< Any >& rValues, const Sequence< OU
 {
     try
     {
-        DBG_ASSERT( mxMultiPropSet.is(), "ScfPropertySet::GetProperties - multi property set not available" );
+        OSL_ENSURE( mxMultiPropSet.is(), "ScfPropertySet::GetProperties - multi property set not available" );
         if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
         {
             rValues = mxMultiPropSet->getPropertyValues( rPropNames );
@@ -273,7 +268,7 @@ void ScfPropertySet::SetAnyProperty( const OUString& rPropName, const Any& rValu
     }
     catch( Exception& )
     {
-        DBG_ERRORFILE(
+        OSL_FAIL(
             ByteString( "ScfPropertySet::SetAnyProperty - cannot set property \"" ).
                 Append( ByteString( String( rPropName ), RTL_TEXTENCODING_ASCII_US ) ).
                 Append( '"' ).
@@ -283,7 +278,7 @@ void ScfPropertySet::SetAnyProperty( const OUString& rPropName, const Any& rValu
 
 void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, const Sequence< Any >& rValues )
 {
-    DBG_ASSERT( rPropNames.getLength() == rValues.getLength(), "ScfPropertySet::SetProperties - length of sequences different" );
+    OSL_ENSURE( rPropNames.getLength() == rValues.getLength(), "ScfPropertySet::SetProperties - length of sequences different" );
     try
     {
         if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
@@ -292,7 +287,7 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
         }
         else if( mxPropSet.is() )
         {
-            DBG_ERRORFILE( "ScfPropertySet::SetProperties - multi property set not available" );
+            OSL_FAIL( "ScfPropertySet::SetProperties - multi property set not available" );
             const OUString* pPropName = rPropNames.getConstArray();
             const OUString* pPropNameEnd = pPropName + rPropNames.getLength();
             const Any* pValue = rValues.getConstArray();
@@ -302,7 +297,7 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
     }
     catch( Exception& )
     {
-        DBG_ERRORFILE( "ScfPropertySet::SetAnyProperty - cannot set multiple properties" );
+        OSL_FAIL( "ScfPropertySet::SetAnyProperty - cannot set multiple properties" );
     }
 }
 
@@ -311,7 +306,7 @@ void ScfPropertySet::SetProperties( const Sequence< OUString >& rPropNames, cons
 ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
     mnNextIdx( 0 )
 {
-    DBG_ASSERT( ppcPropNames, "ScfPropSetHelper::ScfPropSetHelper - no strings found" );
+    OSL_ENSURE( ppcPropNames, "ScfPropSetHelper::ScfPropSetHelper - no strings found" );
 
     // create OUStrings from ASCII property names
     typedef ::std::pair< OUString, size_t >     IndexedOUString;
@@ -413,7 +408,7 @@ void ScfPropSetHelper::WriteToPropertySet( ScfPropertySet& rPropSet ) const
 
 Any* ScfPropSetHelper::GetNextAny()
 {
-    DBG_ASSERT( mnNextIdx < maNameOrder.size(), "ScfPropSetHelper::GetNextAny - sequence overflow" );
+    OSL_ENSURE( mnNextIdx < maNameOrder.size(), "ScfPropSetHelper::GetNextAny - sequence overflow" );
     Any* pAny = 0;
     if( mnNextIdx < maNameOrder.size() )
         pAny = &maValueSeq[ maNameOrder[ mnNextIdx++ ] ];
@@ -422,3 +417,4 @@ Any* ScfPropSetHelper::GetNextAny()
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

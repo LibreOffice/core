@@ -25,6 +25,7 @@
  *
  ************************************************************************/
 #include "pagedlg.hrc"
+
 ModelessDialog RID_SCDLG_AREAS
 {
     HelpId = HID_SCPAGE_AREAS ;
@@ -156,6 +157,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText [ en-US ] = "Shrink" ;
     };
 };
+
 TabPage RID_SCPAGE_TABLE
 {
     Hide = TRUE ;
@@ -256,23 +258,13 @@ TabPage RID_SCPAGE_TABLE
     };
     Image IMG_LEFTRIGHT
     {
-        ImageBitmap = Bitmap { File = "lftrgt.bmp" ; };
+        ImageBitmap = Bitmap { File = "lftrgt.png" ; };
         MaskColor = STD_MASKCOLOR;
-    };
-    Image IMG_LEFTRIGHT_H
-    {
-        ImageBitmap = Bitmap { File = "lftrgt_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
     };
     Image IMG_TOPDOWN
     {
-        ImageBitmap = Bitmap { File = "topdown.bmp" ; };
+        ImageBitmap = Bitmap { File = "topdown.png" ; };
         MaskColor = STD_MASKCOLOR;
-    };
-    Image IMG_TOPDOWN_H
-    {
-        ImageBitmap = Bitmap { File = "topdown_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
     };
     CheckBox BTN_PAGENO
     {
@@ -415,28 +407,3 @@ TabPage RID_SCPAGE_TABLE
         Text [ en-US ] = "Scale" ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -94,6 +94,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text [ en-US ] = "Selection" ;
     };
 };
+
 ModalDialog RID_SCDLG_INSCELL
 {
     OutputSize = TRUE ;
@@ -467,37 +468,69 @@ ModalDialog RID_SCDLG_INSCONT
         Size = MAP_APPFONT( 1 , 38 ) ;
     };
 };
+
 ModalDialog RID_SCDLG_MOVETAB
 {
     OutputSize = TRUE ;
     HelpId = CMD_FID_TAB_MOVE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 168 , 130 ) ;
+    Size = MAP_APPFONT ( 158 , 236 ) ;
     Text [ en-US ] = "Move/Copy Sheet" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 112 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 66 , 216 ) ;
+        Size = MAP_APPFONT ( 42 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 112 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 110 , 216 ) ;
+        Size = MAP_APPFONT ( 42 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 112 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 6 , 216 ) ;
+        Size = MAP_APPFONT ( 42 , 14 ) ;
         TabStop = TRUE ;
+    };
+    FixedLine FL_SEP1
+    {
+        Pos = MAP_APPFONT ( 0 , 208 ) ;
+        Size = MAP_APPFONT (168 , 4 ) ;
+    };
+    FixedLine FL_ACTION
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 146 , 8 ) ;
+        Text [ en-US ] = "Action" ;
+    };
+    RadioButton BTN_MOVE
+    {
+        Pos = MAP_APPFONT ( 12 , 17 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Text [ en-US ] = "~Move" ;
+        TabStop = TRUE ;
+    };
+    RadioButton BTN_COPY
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Text [ en-US ] = "~Copy" ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_LOCATION
+    {
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 146 , 8 ) ;
+        Text [ en-US ] = "Location" ;
     };
     FixedText FT_DEST
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Pos = MAP_APPFONT ( 12 , 54 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
         Text [ en-US ] = "To ~document" ;
     };
@@ -505,14 +538,14 @@ ModalDialog RID_SCDLG_MOVETAB
     {
         HelpID = "sc:ListBox:RID_SCDLG_MOVETAB:LB_DEST";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 100 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Size = MAP_APPFONT ( 134 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_INSERT
     {
-        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
         Text [ en-US ] = "~Insert before" ;
     };
@@ -520,23 +553,58 @@ ModalDialog RID_SCDLG_MOVETAB
     {
         HelpID = "sc:ListBox:RID_SCDLG_MOVETAB:LB_INSERT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 46 ) ;
-        Size = MAP_APPFONT ( 100 , 62 ) ;
+        Pos = MAP_APPFONT ( 12 , 93 ) ;
+        Size = MAP_APPFONT ( 134 , 62 ) ;
         TabStop = TRUE ;
     };
-    CheckBox BTN_COPY
+    FixedLine FL_NAME
     {
         HelpID = "sc:CheckBox:RID_SCDLG_MOVETAB:BTN_COPY";
-        Pos = MAP_APPFONT ( 6 , 114 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ en-US ] = "~Copy" ;
+        Pos = MAP_APPFONT ( 6 , 162 ) ;
+        Size = MAP_APPFONT ( 146 , 8 ) ;
+        Text [ en-US ] = "Name" ;
+    };
+    FixedText FT_TABNAME
+    {
+        Pos = MAP_APPFONT ( 12 , 173 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text [ en-US ] = "New ~name" ;
+    };
+    Edit ED_INPUT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 183 ) ;
+        Size = MAP_APPFONT ( 134 , 12 ) ;
         TabStop = TRUE ;
+    };
+    FixedText FT_TABNAME_WARN
+    {
+        Pos = MAP_APPFONT ( 12 , 197 ) ;
+        Size = MAP_APPFONT ( 134 , 8 ) ;
+        Text [ en-US ] = "..." ;
+    };
+    String STR_CURRENTDOC
+    {
+        Text [ en-US ] = "(current document)" ;
     };
     String STR_NEWDOC
     {
         Text [ en-US ] = "- new document -" ;
     };
+    String STR_TABNAME_WARN_USED
+    {
+        Text [ en-US ] = "This name is already used." ;
+    };
+    String STR_TABNAME_WARN_EMPTY
+    {
+        Text [ en-US ] = "Name is empty." ;
+    };
+    String STR_TABNAME_WARN_INVALID
+    {
+        Text [ en-US ] = "Name contains one or more invalid characters." ;
+    };
 };
+
 ModalDialog RID_SCDLG_STRINPUT
 {
     HelpID = "sc:ModalDialog:RID_SCDLG_STRINPUT";
@@ -578,6 +646,7 @@ ModalDialog RID_SCDLG_STRINPUT
         Size = MAP_APPFONT ( 110 , 8 ) ;
     };
 };
+
 ModalDialog RID_SCDLG_TAB_BG_COLOR
 {
     HelpID = "sc:ModalDialog:RID_SCDLG_TAB_BG_COLOR";
@@ -623,108 +692,6 @@ ModalDialog RID_SCDLG_TAB_BG_COLOR
         DefButton = FALSE ;
     };
 };
-/*
-ModalDialog RID_SCDLG_TAB_BG_COLOR
-{
-    HelpID = "sc:ModalDialog:RID_SCDLG_TAB_BG_COLOR";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 180 , 150 ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Control TAB_BG_COLOR_CT_BORDER
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 1 , 1 ) ; //12, 32
-        Size = MAP_APPFONT ( 116+2 , 145+2 ) ;
-        DialogControl = TRUE;
-    };
-    Control TAB_BG_COLOR_SET_BGDCOLOR
-    {
-        // * HelpId = HID_BACKGROUND_CTL_BGDCOLORSET ;
-        Hide = FALSE ;
-        Pos = MAP_APPFONT ( 0 , 0 ) ;
-        Size = MAP_APPFONT ( 116 , 145 ) ;
-        TabStop = TRUE ;
-    };
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 125 , 50 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 125 , 67 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = FALSE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 125 , 84 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = FALSE ;
-    };
-};
-*/
-/*
-ModalDialog RID_SCDLG_MTRINPUT
-{
-    HelpID = "sc:ModalDialog:RID_SCDLG_MTRINPUT";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 190 , 63 ) ;
-    Moveable = TRUE ;
-    Closeable = FALSE ;
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 136 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 136 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 136 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    FixedText FT_LABEL
-    {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-    };
-    MetricField ED_VALUE
-    {
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
-        HelpId = HID_SC_MTRIN_VAL ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 6 ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-    };
-    CheckBox BTN_DEFVAL
-    {
-        HelpID = "sc:CheckBox:RID_SCDLG_MTRINPUT:BTN_DEFVAL";
-         // HelpID, weil die generierten aus den Ableitungen nicht in die hid.lst kommen
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 24 ) ;
-        Size = MAP_APPFONT ( 58 , 10 ) ;
-        Text [ en-US ] = "~Default value" ;
-    };
-};
-*/
 
 ModalDialog RID_SCDLG_COL_MAN
 {
@@ -1539,6 +1506,3 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     };
     Text [ en-US ] = "Change Source Data Range" ;
 };
-
-
-

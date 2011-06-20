@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -184,10 +185,11 @@ public:
     virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();
     virtual SvxViewForwarder*   GetViewForwarder();
-    virtual SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = sal_False );
+    virtual SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = false );
     virtual void                UpdateData();
     virtual SfxBroadcaster&     GetBroadcaster() const;
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

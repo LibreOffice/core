@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <algorithm>
 #include <svl/smplhint.hxx>
-#include <rtl/uuid.h>
+#include <vcl/svapp.hxx>
 
 #include "dapiuno.hxx"
 #include "datauno.hxx"
@@ -40,7 +41,6 @@
 #include "tabvwsh.hxx"
 #include "pivot.hxx"
 #include "rangeutl.hxx"
-#include "unoguard.hxx"
 #include "dpobject.hxx"
 #include "dpshttab.hxx"
 #include "dpsdbtab.hxx"
@@ -63,6 +63,7 @@
 
 #include <comphelper/extract.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
@@ -108,7 +109,6 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
     {
         {MAP_CHAR_LEN(SC_UNO_COLGRAND),     0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DRILLDOWN),    0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_GRANDTOTAL_NAME),0,&getCppuType((rtl::OUString*)0), beans::PropertyAttribute::MAYBEVOID, 0 },
         {MAP_CHAR_LEN(SC_UNO_IGNEMPROWS),   0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_IMPORTDESC),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_RPTEMPTY),     0,  &getBooleanCppuType(),  0, 0 },
@@ -176,7 +176,7 @@ bool lclCheckMinMaxStep( const DataPilotFieldGroupInfo& rInfo )
         lclCheckValidDouble( rInfo.Start, rInfo.HasAutoStart ) &&
         lclCheckValidDouble( rInfo.End, rInfo.HasAutoEnd ) &&
         (rInfo.HasAutoStart || rInfo.HasAutoEnd || (rInfo.Start <= rInfo.End)) &&
-        lclCheckValidDouble( rInfo.Step, sal_False ) &&
+        lclCheckValidDouble( rInfo.Step, false ) &&
         (0.0 <= rInfo.Step);
 }
 
@@ -257,7 +257,7 @@ void ScDataPilotConversion::FillGroupInfo( DataPilotFieldGroupInfo& rInfo, const
 
 //------------------------------------------------------------------------
 
-ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const String& rName )
+ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUString& rName )
 {
     if (pDocShell)
     {
@@ -265,8 +265,8 @@ ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const String& rN
         ScDPCollection* pColl = pDoc->GetDPCollection();
         if ( pColl )
         {
-            sal_uInt16 nCount = pColl->GetCount();
-            for (sal_uInt16 i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
@@ -298,7 +298,7 @@ sal_Int32 lcl_GetObjectIndex( ScDPObject* pDPObj, const ScFieldIdentifier& rFiel
         sal_Int32 nCount = pDPObj->GetDimCount();
         for ( sal_Int32 nDim = 0; nDim < nCount; ++nDim )
         {
-            sal_Bool bIsDataLayout = sal_False;
+            bool bIsDataLayout = false;
             OUString aDimName( pDPObj->GetDimName( nDim, bIsDataLayout ) );
             if ( rFieldId.mbDataLayout ? bIsDataLayout : (aDimName == rFieldId.maFieldName) )
                 return nDim;
@@ -344,9 +344,11 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nInd
         if ( pColl )
         {
             //  count tables on this sheet
+            //  api only handles sheet data at this time
+            //! allow all data sources!!!
             sal_Int32 nFound = 0;
-            sal_uInt16 nCount = pColl->GetCount();
-            for (sal_uInt16 i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
@@ -374,7 +376,7 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByName_Impl(const OUString& 
 Reference<XDataPilotDescriptor> SAL_CALL ScDataPilotTablesObj::createDataPilotDescriptor()
                                             throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (pDocShell)
         return new ScDataPilotDescriptor(pDocShell);
     return NULL;
@@ -422,14 +424,14 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
                                     const Reference<XDataPilotDescriptor>& xDescriptor )
                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (!xDescriptor.is()) return;
 
     // inserting with already existing name?
     if ( aNewName.getLength() && hasByName( aNewName ) )
         throw RuntimeException();       // no other exceptions specified
 
-    sal_Bool bDone = sal_False;
+    sal_Bool bDone = false;
     ScDataPilotDescriptorBase* pImp = ScDataPilotDescriptorBase::getImplementation( xDescriptor );
     if ( pDocShell && pImp )
     {
@@ -461,7 +463,7 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
 void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
                                         throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aNameStr(aName);
     ScDPObject* pDPObj = lcl_GetDPObject( pDocShell, nTab, aNameStr );
     if (pDPObj && pDocShell)
@@ -477,7 +479,7 @@ void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
 
 Reference< XEnumeration > SAL_CALL ScDataPilotTablesObj::createEnumeration() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DataPilotTablesEnumeration")));
 }
 
@@ -485,7 +487,7 @@ Reference< XEnumeration > SAL_CALL ScDataPilotTablesObj::createEnumeration() thr
 
 sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if ( pDocShell )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -493,10 +495,12 @@ sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException)
         if ( pColl )
         {
             //  count tables on this sheet
+            //  api only handles sheet data at this time
+            //! allow all data sources!!!
 
             sal_uInt16 nFound = 0;
-            sal_uInt16 nCount = pColl->GetCount();
-            for (sal_uInt16 i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
@@ -512,7 +516,7 @@ sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException)
 Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
         throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Reference<XDataPilotTable2> xTable(GetObjectByIndex_Impl(nIndex));
     if (!xTable.is())
         throw IndexOutOfBoundsException();
@@ -521,13 +525,13 @@ Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScDataPilotTablesObj::getElementType() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return getCppuType((Reference<XDataPilotTable2>*)0);
 }
 
 sal_Bool SAL_CALL ScDataPilotTablesObj::hasElements() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
 
@@ -536,7 +540,7 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasElements() throw(RuntimeException)
 Any SAL_CALL ScDataPilotTablesObj::getByName( const OUString& aName )
         throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Reference<XDataPilotTable2> xTable(GetObjectByName_Impl(aName));
     if (!xTable.is())
         throw NoSuchElementException();
@@ -546,7 +550,7 @@ Any SAL_CALL ScDataPilotTablesObj::getByName( const OUString& aName )
 Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -554,11 +558,13 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
         if ( pColl )
         {
             //  count tables on this sheet
+            //  api only handles sheet data at this time
+            //! allow all data sources!!!
 
             sal_uInt16 nFound = 0;
-            sal_uInt16 nCount = pColl->GetCount();
-            sal_uInt16 i;
-            for (i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            size_t i;
+            for (i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
@@ -568,7 +574,7 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
             sal_uInt16 nPos = 0;
             Sequence<OUString> aSeq(nFound);
             OUString* pAry = aSeq.getArray();
-            for (i=0; i<nCount; i++)
+            for (i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
@@ -584,25 +590,27 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
 sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
                                         throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         ScDPCollection* pColl = pDoc->GetDPCollection();
         if ( pColl )
         {
-            String aNamStr(aName);
-            sal_uInt16 nCount = pColl->GetCount();
-            for (sal_uInt16 i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
+                //  api only handles sheet data at this time
+                //! allow all data sources!!!
+
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
-                     pDPObj->GetName() == aNamStr )
-                    return sal_True;
+                     pDPObj->GetName() == aName )
+                    return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -662,16 +670,15 @@ Sequence< uno::Type > SAL_CALL ScDataPilotDescriptorBase::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theScDataPilotDescriptorBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScDataPilotDescriptorBaseImplementationId > {};
+}
+
 Sequence<sal_Int8> SAL_CALL ScDataPilotDescriptorBase::getImplementationId()
                                                     throw(RuntimeException)
 {
-    static Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScDataPilotDescriptorBaseImplementationId::get().getSeq();
 }
 
 void ScDataPilotDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -690,7 +697,7 @@ void ScDataPilotDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 CellRangeAddress SAL_CALL ScDataPilotDescriptorBase::getSourceRange()
                                             throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     ScDPObject* pDPObject(GetDPObject());
     if (!pDPObject)
@@ -698,22 +705,25 @@ CellRangeAddress SAL_CALL ScDataPilotDescriptorBase::getSourceRange()
 
     CellRangeAddress aRet;
     if (pDPObject->IsSheetData())
-        ScUnoConversion::FillApiRange( aRet, pDPObject->GetSheetDesc()->aSourceRange );
+        ScUnoConversion::FillApiRange( aRet, pDPObject->GetSheetDesc()->GetSourceRange() );
     return aRet;
 }
 
 void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress& aSourceRange ) throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     ScDPObject* pDPObject = GetDPObject();
     if (!pDPObject)
         throw RuntimeException();
 
-    ScSheetSourceDesc aSheetDesc;
+    ScSheetSourceDesc aSheetDesc(pDocShell->GetDocument());
     if (pDPObject->IsSheetData())
         aSheetDesc = *pDPObject->GetSheetDesc();
-    ScUnoConversion::FillScRange( aSheetDesc.aSourceRange, aSourceRange );
+
+    ScRange aRange;
+    ScUnoConversion::FillScRange(aRange, aSourceRange);
+    aSheetDesc.SetSourceRange(aRange);
     pDPObject->SetSheetDesc( aSheetDesc );
     SetDPObject( pDPObject );
 }
@@ -721,49 +731,49 @@ void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress&
 Reference<XSheetFilterDescriptor> SAL_CALL ScDataPilotDescriptorBase::getFilterDescriptor()
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScDataPilotFilterDescriptor( pDocShell, this );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getDataPilotFields()
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getColumnFields()
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this, DataPilotFieldOrientation_COLUMN );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getRowFields()
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this, DataPilotFieldOrientation_ROW );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getPageFields()
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this, DataPilotFieldOrientation_PAGE );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getDataFields()
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this, DataPilotFieldOrientation_DATA );
 }
 
 Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getHiddenFields()
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScDataPilotFieldsObj( *this, DataPilotFieldOrientation_HIDDEN );
 }
 
@@ -771,7 +781,7 @@ Reference<XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getHiddenFields()
 Reference< XPropertySetInfo > SAL_CALL ScDataPilotDescriptorBase::getPropertySetInfo(  )
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static Reference<XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( maPropSet.getPropertyMap() );
     return aRef;
@@ -781,12 +791,12 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
                 WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObject = GetDPObject();
     if (pDPObject)
     {
         ScDPSaveData* pOldData = pDPObject->GetSaveData();
-        DBG_ASSERT(pOldData, "Here should be a SaveData");
+        OSL_ENSURE(pOldData, "Here should be a SaveData");
         if ( pOldData )
         {
             ScDPSaveData aNewData( *pOldData );
@@ -816,18 +826,12 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
             {
                 aNewData.SetDrillDown(::cppu::any2bool( aValue ));
             }
-            else if ( aNameString.EqualsAscii( SC_UNO_GRANDTOTAL_NAME ) )
-            {
-                rtl::OUString aStrVal;
-                if ( aValue >>= aStrVal )
-                    aNewData.SetGrandTotalName(aStrVal);
-            }
             else if ( aNameString.EqualsAscii( SC_UNO_IMPORTDESC ) )
             {
                 uno::Sequence<beans::PropertyValue> aArgSeq;
                 if ( aValue >>= aArgSeq )
                 {
-                    ScImportSourceDesc aImportDesc;
+                    ScImportSourceDesc aImportDesc(pDocShell->GetDocument());
 
                     const ScImportSourceDesc* pOldDesc = pDPObject->GetImportSourceDesc();
                     if (pOldDesc)
@@ -928,14 +932,14 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
 Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Any aRet;
 
     ScDPObject* pDPObject(GetDPObject());
     if (pDPObject)
     {
         ScDPSaveData* pOldData = pDPObject->GetSaveData();
-        DBG_ASSERT(pOldData, "Here should be a SaveData");
+        OSL_ENSURE(pOldData, "Here should be a SaveData");
         if ( pOldData )
         {
             ScDPSaveData aNewData( *pOldData );
@@ -964,12 +968,6 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
             else if ( aNameString.EqualsAscii( SC_UNO_DRILLDOWN ) )
             {
                 aRet = ::cppu::bool2any( aNewData.GetDrillDown() );
-            }
-            else if ( aNameString.EqualsAscii( SC_UNO_GRANDTOTAL_NAME ) )
-            {
-                const rtl::OUString* pGrandTotalName = aNewData.GetGrandTotalName();
-                if (pGrandTotalName)
-                    aRet <<= *pGrandTotalName;      // same behavior as in ScDPSource
             }
             else if ( aNameString.EqualsAscii( SC_UNO_IMPORTDESC ) )
             {
@@ -1011,14 +1009,14 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                 {
                     uno::Sequence<beans::PropertyValue> aSeq( 4 );
                     beans::PropertyValue* pArray = aSeq.getArray();
-                    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNO_SOURCENAME );
-                    pArray[0].Value <<= rtl::OUString( pServiceDesc->aParSource );
-                    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNO_OBJECTNAME );
-                    pArray[1].Value <<= rtl::OUString( pServiceDesc->aParName );
-                    pArray[2].Name = rtl::OUString::createFromAscii( SC_UNO_USERNAME );
-                    pArray[2].Value <<= rtl::OUString( pServiceDesc->aParUser );
-                    pArray[3].Name = rtl::OUString::createFromAscii( SC_UNO_PASSWORD );
-                    pArray[3].Value <<= rtl::OUString( pServiceDesc->aParPass );
+                    pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SOURCENAME ));
+                    pArray[0].Value <<= pServiceDesc->aParSource;
+                    pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_OBJECTNAME ));
+                    pArray[1].Value <<= pServiceDesc->aParName;
+                    pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_USERNAME ));
+                    pArray[2].Value <<= pServiceDesc->aParUser;
+                    pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PASSWORD ));
+                    pArray[3].Value <<= pServiceDesc->aParPass;
                     aRet <<= aSeq;
                 }
                 else
@@ -1064,12 +1062,12 @@ void SAL_CALL ScDataPilotDescriptorBase::removeVetoableChangeListener(
 
 Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutField() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if( ScDPObject* pDPObject = GetDPObject() )
     {
         if( ScDPSaveData* pSaveData = pDPObject->GetSaveData() )
         {
-            if( /*ScDPSaveDimension* pDataDim =*/ pSaveData->GetDataLayoutDimension() )
+            if( pSaveData->GetDataLayoutDimension() )
             {
                 ScFieldIdentifier aFieldId( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_DATALAYOUT_NAME ) ), 0, true );
                 return new ScDataPilotFieldObj( *this, aFieldId );
@@ -1093,24 +1091,16 @@ sal_Int64 SAL_CALL ScDataPilotDescriptorBase::getSomething(
     return 0;
 }
 
-// static
-const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
+namespace
 {
-    static Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    class theScDataPilotDescriptorBaseUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScDataPilotDescriptorBaseUnoTunnelId> {};
 }
 
-// static
+const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
+{
+    return theScDataPilotDescriptorBaseUnoTunnelId::get().getSeq();
+}
+
 ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(
                                 const Reference<XDataPilotDescriptor> xObj )
 {
@@ -1177,16 +1167,15 @@ Sequence< uno::Type > SAL_CALL ScDataPilotTableObj::getTypes() throw(RuntimeExce
     return aTypes;
 }
 
+namespace
+{
+    class theScDataPilotTableObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScDataPilotTableObjImplementationId > {};
+}
+
 Sequence<sal_Int8> SAL_CALL ScDataPilotTableObj::getImplementationId()
                                                     throw(RuntimeException)
 {
-    static Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theScDataPilotTableObjImplementationId::get().getSeq();
 }
 
 // ---
@@ -1210,7 +1199,7 @@ void ScDataPilotTableObj::SetDPObject( ScDPObject* pDPObject )
 
 OUString SAL_CALL ScDataPilotTableObj::getName() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
     if (pDPObj)
         return pDPObj->GetName();
@@ -1220,7 +1209,7 @@ OUString SAL_CALL ScDataPilotTableObj::getName() throw(RuntimeException)
 void SAL_CALL ScDataPilotTableObj::setName( const OUString& aNewName )
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
     if (pDPObj)
     {
@@ -1237,7 +1226,7 @@ void SAL_CALL ScDataPilotTableObj::setName( const OUString& aNewName )
 
 OUString SAL_CALL ScDataPilotTableObj::getTag() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
     if (pDPObj)
         return pDPObj->GetTag();
@@ -1247,7 +1236,7 @@ OUString SAL_CALL ScDataPilotTableObj::getTag() throw(RuntimeException)
 void SAL_CALL ScDataPilotTableObj::setTag( const OUString& aNewTag )
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
     if (pDPObj)
     {
@@ -1263,7 +1252,7 @@ void SAL_CALL ScDataPilotTableObj::setTag( const OUString& aNewTag )
 
 CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRange() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     CellRangeAddress aRet;
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
     if (pDPObj)
@@ -1278,27 +1267,23 @@ CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRange() throw(RuntimeExc
     return aRet;
 }
 
-sal_uLong RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDocSh, sal_Bool bRecord, sal_Bool bApi );
-
 void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
-    if( ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName) )
-        RefreshDPObject( pDPObj, NULL, GetDocShell(), sal_True, sal_True );
-    //if (pDPObj)
-    //{
-    //  ScDPObject* pNew = new ScDPObject(*pDPObj);
-    //  ScDBDocFunc aFunc(*GetDocShell());
-    //  aFunc.DataPilotUpdate( pDPObj, pNew, sal_True, sal_True );
-    //  delete pNew;        // DataPilotUpdate copies settings from "new" object
-    //}
-
+    SolarMutexGuard aGuard;
+    ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
+    if (pDPObj)
+    {
+        ScDPObject* pNew = new ScDPObject(*pDPObj);
+        ScDBDocFunc aFunc(*GetDocShell());
+        aFunc.DataPilotUpdate( pDPObj, pNew, true, true );
+        delete pNew;        // DataPilotUpdate copies settings from "new" object
+    }
 }
 
 Sequence< Sequence<Any> > SAL_CALL ScDataPilotTableObj::getDrillDownData(const CellAddress& aAddr)
     throw (RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Sequence< Sequence<Any> > aTabData;
     ScAddress aAddr2(static_cast<SCCOL>(aAddr.Column), static_cast<SCROW>(aAddr.Row), aAddr.Sheet);
     ScDPObject* pObj = GetDPObject();
@@ -1312,7 +1297,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDataPilotTableObj::getDrillDownData(const C
 DataPilotTablePositionData SAL_CALL ScDataPilotTableObj::getPositionData(const CellAddress& aAddr)
     throw (RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     DataPilotTablePositionData aPosData;
     ScAddress aAddr2(static_cast<SCCOL>(aAddr.Column), static_cast<SCROW>(aAddr.Row), aAddr.Sheet);
     ScDPObject* pObj = GetDPObject();
@@ -1326,7 +1311,7 @@ DataPilotTablePositionData SAL_CALL ScDataPilotTableObj::getPositionData(const C
 void SAL_CALL ScDataPilotTableObj::insertDrillDownSheet(const CellAddress& aAddr)
     throw (RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = GetDPObject();
     if (!pDPObj)
         throw RuntimeException();
@@ -1340,7 +1325,7 @@ void SAL_CALL ScDataPilotTableObj::insertDrillDownSheet(const CellAddress& aAddr
 CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRangeByType( sal_Int32 nType )
     throw (IllegalArgumentException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (nType < 0 || nType > DataPilotOutputRangeType::RESULT)
         throw IllegalArgumentException();
 
@@ -1353,7 +1338,7 @@ CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRangeByType( sal_Int32 n
 void SAL_CALL ScDataPilotTableObj::addModifyListener( const uno::Reference<util::XModifyListener>& aListener )
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     uno::Reference<util::XModifyListener> *pObj = new uno::Reference<util::XModifyListener>( aListener );
     aModifyListeners.Insert( pObj, aModifyListeners.Count() );
@@ -1367,7 +1352,7 @@ void SAL_CALL ScDataPilotTableObj::addModifyListener( const uno::Reference<util:
 void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<util::XModifyListener>& aListener )
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     acquire();      // in case the listeners have the last ref - released below
 
@@ -1406,9 +1391,9 @@ void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const ScUpdateRefHint& rRef = static_cast< const ScUpdateRefHint& >( rHint );
         if ( aRanges.UpdateReference( rRef.GetMode(), GetDocShell()->GetDocument(), rRef.GetRange(),
                  rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) &&
-             aRanges.Count() == 1 )
+             aRanges.size() == 1 )
         {
-            const ScRange* pRange = aRanges.GetObject( 0 );
+            const ScRange* pRange = aRanges.front();
             if ( pRange )
             {
                 nTab = pRange->aStart.Tab();
@@ -1442,10 +1427,10 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     // set defaults like in ScPivotParam constructor
      aSaveData.SetColumnGrand( sal_True );
     aSaveData.SetRowGrand( sal_True );
-    aSaveData.SetIgnoreEmptyRows( sal_False );
-    aSaveData.SetRepeatIfEmpty( sal_False );
+    aSaveData.SetIgnoreEmptyRows( false );
+    aSaveData.SetRepeatIfEmpty( false );
     mpDPObject->SetSaveData(aSaveData);
-    ScSheetSourceDesc aSheetDesc;
+    ScSheetSourceDesc aSheetDesc(pDocSh ? pDocSh->GetDocument() : NULL);
     mpDPObject->SetSheetDesc(aSheetDesc);
     mpDPObject->GetSource();
 }
@@ -1466,7 +1451,7 @@ void ScDataPilotDescriptor::SetDPObject( ScDPObject* pDPObject )
     {
         delete mpDPObject;
         mpDPObject = pDPObject;
-        DBG_ERROR("replace DPObject should not happen");
+        OSL_FAIL("replace DPObject should not happen");
     }
 }
 
@@ -1474,27 +1459,27 @@ void ScDataPilotDescriptor::SetDPObject( ScDPObject* pDPObject )
 
 OUString SAL_CALL ScDataPilotDescriptor::getName() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return mpDPObject->GetName();
 }
 
 void SAL_CALL ScDataPilotDescriptor::setName( const OUString& aNewName )
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     mpDPObject->SetName( aNewName );
 }
 
 OUString SAL_CALL ScDataPilotDescriptor::getTag() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return mpDPObject->GetTag();
 }
 
 void SAL_CALL ScDataPilotDescriptor::setTag( const OUString& aNewTag )
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     mpDPObject->SetTag( aNewTag );
 }
 
@@ -1542,17 +1527,16 @@ ScDPSaveDimension* ScDataPilotChildObjBase::GetDPDimension( ScDPObject** ppDPObj
                 return pSaveData->GetDimensionByName( maFieldId.maFieldName );
 
             // find dimension with specified index (search in duplicated dimensions)
-            String aFieldName = maFieldId.maFieldName;  // needed for comparison
-            const List& rDimensions = pSaveData->GetDimensions();
-            sal_uLong nDimCount = rDimensions.Count();
+            const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pSaveData->GetDimensions();
+
             sal_Int32 nFoundIdx = 0;
-            for( sal_uLong nDim = 0; nDim < nDimCount; ++nDim )
+            boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
+            for(it = rDimensions.begin(); it != rDimensions.end(); ++it)
             {
-                ScDPSaveDimension* pDim = static_cast< ScDPSaveDimension* >( rDimensions.GetObject( nDim ) );
-                if( !pDim->IsDataLayout() && (pDim->GetName() == aFieldName) )
+                if( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
                 {
                     if( nFoundIdx == maFieldId.mnFieldIdx )
-                        return pDim;
+                        return const_cast<ScDPSaveDimension*>(&(*it));
                     ++nFoundIdx;
                 }
             }
@@ -1635,7 +1619,7 @@ sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSource, cons
 sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
                                 const Any& rOrient, SCSIZE nIndex, ScFieldIdentifier& rFieldId )
 {
-    sal_Bool bOk = sal_False;
+    sal_Bool bOk = false;
     SCSIZE nPos = 0;
     sal_Int32 nDimIndex = 0;
 
@@ -1710,7 +1694,7 @@ sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
             rFieldId.mnFieldIdx = nRepeat;
         }
         else
-            bOk = sal_False;
+            bOk = false;
     }
 
     return bOk;
@@ -1722,7 +1706,7 @@ sal_Bool lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldName,
     // The name "Data" always refers to the data layout field.
     rFieldId.maFieldName = rFieldName;
     rFieldId.mnFieldIdx = 0;
-    rFieldId.mbDataLayout = rFieldName.equalsAscii( SC_DATALAYOUT_NAME );
+    rFieldId.mbDataLayout = rFieldName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_DATALAYOUT_NAME ) );
 
     pDPObj->GetSource();    // IsDimNameInUse doesn't update source data
 
@@ -1760,7 +1744,7 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByName_Impl(const OUString& 
 Reference<XEnumeration> SAL_CALL ScDataPilotFieldsObj::createEnumeration()
                                                     throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DataPilotFieldsEnumeration")));
 }
 
@@ -1768,7 +1752,7 @@ Reference<XEnumeration> SAL_CALL ScDataPilotFieldsObj::createEnumeration()
 
 sal_Int32 SAL_CALL ScDataPilotFieldsObj::getCount() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 // TODO
     ScDPObject* pDPObj = GetDPObject();
     return pDPObj ? lcl_GetFieldCount( pDPObj->GetSource(), maOrient ) : 0;
@@ -1777,7 +1761,7 @@ sal_Int32 SAL_CALL ScDataPilotFieldsObj::getCount() throw(RuntimeException)
 Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
         throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Reference< XPropertySet > xField( GetObjectByIndex_Impl( nIndex ) );
     if (!xField.is())
         throw IndexOutOfBoundsException();
@@ -1786,20 +1770,20 @@ Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScDataPilotFieldsObj::getElementType() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return getCppuType((Reference<XPropertySet>*)0);
 }
 
 sal_Bool SAL_CALL ScDataPilotFieldsObj::hasElements() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
 
 Any SAL_CALL ScDataPilotFieldsObj::getByName( const OUString& aName )
         throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Reference<XPropertySet> xField(GetObjectByName_Impl(aName));
     if (!xField.is())
         throw NoSuchElementException();
@@ -1809,20 +1793,20 @@ Any SAL_CALL ScDataPilotFieldsObj::getByName( const OUString& aName )
 Sequence<OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 // TODO
     if (ScDPObject* pDPObj = GetDPObject())
     {
         Sequence< OUString > aSeq( lcl_GetFieldCount( pDPObj->GetSource(), maOrient ) );
         OUString* pAry = aSeq.getArray();
-        const List& rDimensions = pDPObj->GetSaveData()->GetDimensions();
-        sal_Int32 nDimCount = rDimensions.Count();
-        for (sal_Int32 nDim = 0; nDim < nDimCount; nDim++)
+
+        const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pDPObj->GetSaveData()->GetDimensions();
+        boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
+        for (it = rDimensions.begin(); it != rDimensions.end(); ++it)
         {
-            ScDPSaveDimension* pDim = (ScDPSaveDimension*)rDimensions.GetObject(nDim);
-            if(maOrient.hasValue() && (pDim->GetOrientation() == maOrient.get< DataPilotFieldOrientation >()))
+            if(maOrient.hasValue() && (it->GetOrientation() == maOrient.get< DataPilotFieldOrientation >()))
             {
-                *pAry = pDim->GetName();
+                *pAry = it->GetName();
                 ++pAry;
             }
         }
@@ -1834,7 +1818,7 @@ Sequence<OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
 sal_Bool SAL_CALL ScDataPilotFieldsObj::hasByName( const OUString& aName )
                                         throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     return GetObjectByName_Impl(aName) != NULL;
 }
@@ -1864,7 +1848,7 @@ ScDataPilotFieldObj::~ScDataPilotFieldObj()
 
 OUString SAL_CALL ScDataPilotFieldObj::getName() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     OUString aName;
     if( ScDPSaveDimension* pDim = GetDPDimension() )
     {
@@ -1883,7 +1867,7 @@ OUString SAL_CALL ScDataPilotFieldObj::getName() throw(RuntimeException)
 
 void SAL_CALL ScDataPilotFieldObj::setName( const OUString& rName ) throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     ScDPSaveDimension* pDim = GetDPDimension( &pDPObj );
     if( pDim && !pDim->IsDataLayout() )
@@ -1899,7 +1883,7 @@ void SAL_CALL ScDataPilotFieldObj::setName( const OUString& rName ) throw(Runtim
 Reference<XPropertySetInfo> SAL_CALL ScDataPilotFieldObj::getPropertySetInfo()
                                                         throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static Reference<XPropertySetInfo> aRef(
         new SfxItemPropertySetInfo( maPropSet.getPropertyMap() ));
     return aRef;
@@ -1908,7 +1892,7 @@ Reference<XPropertySetInfo> SAL_CALL ScDataPilotFieldObj::getPropertySetInfo()
 void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aNameString(aPropertyName);
     if ( aNameString.EqualsAscii( SC_UNONAME_FUNCTION ) )
     {
@@ -2004,7 +1988,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
 Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     String aNameString(aPropertyName);
     Any aRet;
 
@@ -2067,7 +2051,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
 Reference<XIndexAccess> SAL_CALL ScDataPilotFieldObj::getItems()
                 throw (RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (!mxItems.is())
         mxItems.set( new ScDataPilotItemsObj( mrParent, maFieldId ) );
     return mxItems;
@@ -2077,14 +2061,14 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDataPilotFieldObj )
 
 DataPilotFieldOrientation ScDataPilotFieldObj::getOrientation() const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
     return pDim ? static_cast< DataPilotFieldOrientation >( pDim->GetOrientation() ) : DataPilotFieldOrientation_HIDDEN;
 }
 
 void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (maOrient.hasValue() && (eNew == maOrient.get< DataPilotFieldOrientation >()))
         return;
 
@@ -2105,19 +2089,17 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
 
             // look for existing duplicate with orientation "hidden"
 
-            String aNameStr( maFieldId.maFieldName );
-            const List& rDimensions = pSaveData->GetDimensions();
-            sal_Int32 nDimCount = rDimensions.Count();
             sal_Int32 nFound = 0;
-            for ( sal_Int32 nDim = 0; nDim < nDimCount && !pNewDim; nDim++ )
+            const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pSaveData->GetDimensions();
+            boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
+            for ( it = rDimensions.begin(); it != rDimensions.end() && !pNewDim; ++it )
             {
-                ScDPSaveDimension* pOneDim = static_cast<ScDPSaveDimension*>(rDimensions.GetObject(nDim));
-                if ( !pOneDim->IsDataLayout() && (pOneDim->GetName() == aNameStr) )
+                if ( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
                 {
-                    if ( pOneDim->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
-                        pNewDim = pOneDim;      // use this one
+                    if ( it->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
+                        pNewDim = const_cast<ScDPSaveDimension*>(&(*it));      // use this one
                     else
-                        ++nFound;               // count existing non-hidden occurences
+                        ++nFound;               // count existing non-hidden occurrences
                 }
             }
 
@@ -2131,7 +2113,7 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
         pDim->SetOrientation(sal::static_int_cast<sal_uInt16>(eNew));
 
         // move changed field behind all other fields (make it the last field in dimension)
-        pSaveData->SetPosition( pDim, pSaveData->GetDimensions().Count() );
+        pSaveData->SetPosition( pDim, pSaveData->GetDimensions().size() );
 
         SetDPObject( pDPObj );
 
@@ -2141,7 +2123,7 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
 
 GeneralFunction ScDataPilotFieldObj::getFunction() const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     GeneralFunction eRet = GeneralFunction_NONE;
     if( ScDPSaveDimension* pDim = GetDPDimension() )
     {
@@ -2161,7 +2143,7 @@ GeneralFunction ScDataPilotFieldObj::getFunction() const
 
 void ScDataPilotFieldObj::setFunction(GeneralFunction eNewFunc)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
@@ -2184,7 +2166,7 @@ void ScDataPilotFieldObj::setFunction(GeneralFunction eNewFunc)
 
 Sequence< GeneralFunction > ScDataPilotFieldObj::getSubtotals() const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Sequence< GeneralFunction > aRet;
     if( ScDPSaveDimension* pDim = GetDPDimension() )
     {
@@ -2205,7 +2187,7 @@ Sequence< GeneralFunction > ScDataPilotFieldObj::getSubtotals() const
 
 void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubtotals )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
@@ -2251,7 +2233,7 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubt
 
 OUString ScDataPilotFieldObj::getCurrentPage() const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
     if( pDim && pDim->HasCurrentPage() )
         return pDim->GetCurrentPage();
@@ -2260,26 +2242,25 @@ OUString ScDataPilotFieldObj::getCurrentPage() const
 
 void ScDataPilotFieldObj::setCurrentPage( const OUString& rPage )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
-        String aPage( rPage );
-        pDim->SetCurrentPage( &aPage );
+        pDim->SetCurrentPage( &rPage );
         SetDPObject( pDPObj );
     }
 }
 
 sal_Bool ScDataPilotFieldObj::getUseCurrentPage() const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
     return pDim && pDim->HasCurrentPage();
 }
 
 void ScDataPilotFieldObj::setUseCurrentPage( sal_Bool bUse )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
@@ -2289,7 +2270,7 @@ void ScDataPilotFieldObj::setUseCurrentPage( sal_Bool bUse )
                 true, because it is still needed to set an explicit page name. */
             if( !pDim->HasCurrentPage() )
             {
-                String aPage;
+                const ::rtl::OUString aPage;
                 pDim->SetCurrentPage( &aPage );
             }
         }
@@ -2301,14 +2282,14 @@ void ScDataPilotFieldObj::setUseCurrentPage( sal_Bool bUse )
 
 const DataPilotFieldAutoShowInfo* ScDataPilotFieldObj::getAutoShowInfo()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
     return pDim ? pDim->GetAutoShowInfo() : 0;
 }
 
 void ScDataPilotFieldObj::setAutoShowInfo( const DataPilotFieldAutoShowInfo* pInfo )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
@@ -2319,14 +2300,14 @@ void ScDataPilotFieldObj::setAutoShowInfo( const DataPilotFieldAutoShowInfo* pIn
 
 const DataPilotFieldLayoutInfo* ScDataPilotFieldObj::getLayoutInfo()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
     return pDim ? pDim->GetLayoutInfo() : 0;
 }
 
 void ScDataPilotFieldObj::setLayoutInfo( const DataPilotFieldLayoutInfo* pInfo )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
@@ -2337,14 +2318,14 @@ void ScDataPilotFieldObj::setLayoutInfo( const DataPilotFieldLayoutInfo* pInfo )
 
 const DataPilotFieldReference* ScDataPilotFieldObj::getReference()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
     return pDim ? pDim->GetReferenceValue() : 0;
 }
 
 void ScDataPilotFieldObj::setReference( const DataPilotFieldReference* pInfo )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
@@ -2355,14 +2336,14 @@ void ScDataPilotFieldObj::setReference( const DataPilotFieldReference* pInfo )
 
 const DataPilotFieldSortInfo* ScDataPilotFieldObj::getSortInfo()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
     return pDim ? pDim->GetSortInfo() : 0;
 }
 
 void ScDataPilotFieldObj::setSortInfo( const DataPilotFieldSortInfo* pInfo )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
@@ -2373,14 +2354,14 @@ void ScDataPilotFieldObj::setSortInfo( const DataPilotFieldSortInfo* pInfo )
 
 sal_Bool ScDataPilotFieldObj::getShowEmpty() const
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
     return pDim && pDim->GetShowEmpty();
 }
 
 void ScDataPilotFieldObj::setShowEmpty( sal_Bool bShow )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
@@ -2391,17 +2372,17 @@ void ScDataPilotFieldObj::setShowEmpty( sal_Bool bShow )
 
 sal_Bool ScDataPilotFieldObj::hasGroupInfo()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
         if( const ScDPDimensionSaveData* pDimData = pDPObj->GetSaveData()->GetExistingDimensionData() )
             return pDimData->GetNamedGroupDim( pDim->GetName() ) || pDimData->GetNumGroupDim( pDim->GetName() );
-    return sal_False;
+    return false;
 }
 
 DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     DataPilotFieldGroupInfo aInfo;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
@@ -2462,7 +2443,7 @@ DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
 
 void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( /*ScDPSaveDimension* pDim =*/ GetDPDimension( &pDPObj ) )
     {
@@ -2554,7 +2535,7 @@ void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
 
 sal_Bool ScDataPilotFieldObj::HasString(const Sequence< OUString >& rItems, const OUString& aString)
 {
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
 
     sal_Int32 nCount(rItems.getLength());
     sal_Int32 nItem(0);
@@ -2571,7 +2552,7 @@ sal_Bool ScDataPilotFieldObj::HasString(const Sequence< OUString >& rItems, cons
 Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( const Sequence< OUString >& rItems )
          throw (RuntimeException, IllegalArgumentException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     Reference< XDataPilotField > xRet;
     OUString sNewDim;
@@ -2726,7 +2707,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         if (xFields.is())
         {
             xRet.set(xFields->getByName(sNewDim), UNO_QUERY);
-            DBG_ASSERT(xRet.is(), "there is a name, so there should be also a field");
+            OSL_ENSURE(xRet.is(), "there is a name, so there should be also a field");
         }
     }
     return xRet;
@@ -2735,7 +2716,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
 Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( const DataPilotFieldGroupInfo& rInfo )
         throw (RuntimeException, IllegalArgumentException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     using namespace ::com::sun::star::sheet::DataPilotFieldGroupBy;
 
     // check min/max/step, HasDateValues must be set always
@@ -2904,7 +2885,7 @@ ScDataPilotFieldGroupsObj::~ScDataPilotFieldGroupsObj()
 Any SAL_CALL ScDataPilotFieldGroupsObj::getByName( const OUString& rName )
         throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if( implFindByName( rName ) == maGroups.end() )
         throw NoSuchElementException();
     return Any( Reference< XNameAccess >( new ScDataPilotFieldGroupObj( *this, rName ) ) );
@@ -2912,7 +2893,7 @@ Any SAL_CALL ScDataPilotFieldGroupsObj::getByName( const OUString& rName )
 
 Sequence< OUString > SAL_CALL ScDataPilotFieldGroupsObj::getElementNames() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Sequence< OUString > aSeq;
     if( !maGroups.empty() )
     {
@@ -2926,7 +2907,7 @@ Sequence< OUString > SAL_CALL ScDataPilotFieldGroupsObj::getElementNames() throw
 
 sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasByName( const OUString& rName ) throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return implFindByName( rName ) != maGroups.end();
 }
 
@@ -2935,7 +2916,7 @@ sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasByName( const OUString& rName ) 
 void SAL_CALL ScDataPilotFieldGroupsObj::replaceByName( const OUString& rName, const Any& rElement )
         throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if( rName.getLength() == 0 )
         throw IllegalArgumentException();
@@ -2958,7 +2939,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::replaceByName( const OUString& rName, c
 void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, const Any& rElement )
         throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if( rName.getLength() == 0 )
         throw IllegalArgumentException();
@@ -2972,7 +2953,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, co
     if( !lclExtractGroupMembers( aMembers, rElement ) )
         throw IllegalArgumentException();
 
-    // create the new entry if no error has been occured
+    // create the new entry if no error has been occurred
     maGroups.resize( maGroups.size() + 1 );
     ScFieldGroup& rGroup = maGroups.back();
     rGroup.maName = rName;
@@ -2982,7 +2963,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, co
 void SAL_CALL ScDataPilotFieldGroupsObj::removeByName( const OUString& rName )
         throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if( rName.getLength() == 0 )
         throw IllegalArgumentException();
@@ -2998,14 +2979,14 @@ void SAL_CALL ScDataPilotFieldGroupsObj::removeByName( const OUString& rName )
 
 sal_Int32 SAL_CALL ScDataPilotFieldGroupsObj::getCount() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return static_cast< sal_Int32 >( maGroups.size() );
 }
 
 Any SAL_CALL ScDataPilotFieldGroupsObj::getByIndex( sal_Int32 nIndex )
         throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if ((nIndex < 0) || (nIndex >= static_cast< sal_Int32 >( maGroups.size() )))
         throw IndexOutOfBoundsException();
     return Any( Reference< XNameAccess >( new ScDataPilotFieldGroupObj( *this, maGroups[ nIndex ].maName ) ) );
@@ -3015,7 +2996,7 @@ Any SAL_CALL ScDataPilotFieldGroupsObj::getByIndex( sal_Int32 nIndex )
 
 Reference<XEnumeration> SAL_CALL ScDataPilotFieldGroupsObj::createEnumeration() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScIndexEnumeration( this, OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.DataPilotFieldGroupsEnumeration" ) ) );
 }
 
@@ -3023,13 +3004,13 @@ Reference<XEnumeration> SAL_CALL ScDataPilotFieldGroupsObj::createEnumeration() 
 
 uno::Type SAL_CALL ScDataPilotFieldGroupsObj::getElementType() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return getCppuType( (Reference< XNameAccess >*)0 );
 }
 
 sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasElements() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return !maGroups.empty();
 }
 
@@ -3037,7 +3018,7 @@ sal_Bool SAL_CALL ScDataPilotFieldGroupsObj::hasElements() throw(RuntimeExceptio
 
 ScFieldGroup& ScDataPilotFieldGroupsObj::getFieldGroup( const OUString& rName ) throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScFieldGroups::iterator aIt = implFindByName( rName );
     if( aIt == maGroups.end() )
         throw RuntimeException();
@@ -3046,7 +3027,7 @@ ScFieldGroup& ScDataPilotFieldGroupsObj::getFieldGroup( const OUString& rName ) 
 
 void ScDataPilotFieldGroupsObj::renameFieldGroup( const OUString& rOldName, const OUString& rNewName ) throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScFieldGroups::iterator aOldIt = implFindByName( rOldName );
     ScFieldGroups::iterator aNewIt = implFindByName( rNewName );
     // new name must not exist yet
@@ -3054,8 +3035,6 @@ void ScDataPilotFieldGroupsObj::renameFieldGroup( const OUString& rOldName, cons
         throw RuntimeException();
     aOldIt->maName = rNewName;
 }
-
-// private
 
 ScFieldGroups::iterator ScDataPilotFieldGroupsObj::implFindByName( const OUString& rName )
 {
@@ -3102,7 +3081,7 @@ ScDataPilotFieldGroupObj::~ScDataPilotFieldGroupObj()
 Any SAL_CALL ScDataPilotFieldGroupObj::getByName( const OUString& rName )
         throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
     if( aIt == rMembers.end() )
@@ -3112,13 +3091,13 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByName( const OUString& rName )
 
 Sequence< OUString > SAL_CALL ScDataPilotFieldGroupObj::getElementNames() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return ::comphelper::containerToSequence( mrParent.getFieldGroup( maGroupName ).maMembers );
 }
 
 sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasByName( const OUString& rName ) throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
     return ::std::find( rMembers.begin(), rMembers.end(), rName ) != rMembers.end();
 }
@@ -3128,7 +3107,7 @@ sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasByName( const OUString& rName ) t
 void SAL_CALL ScDataPilotFieldGroupObj::replaceByName( const OUString& rName, const Any& rElement )
         throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     // it should be possible to quickly rename an item -> accept string or XNamed
     OUString aNewName = lclExtractMember( rElement );
@@ -3154,7 +3133,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::replaceByName( const OUString& rName, co
 void SAL_CALL ScDataPilotFieldGroupObj::insertByName( const OUString& rName, const Any& /*rElement*/ )
         throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     // we will ignore the passed element and just try to insert the name
     if( rName.getLength() == 0 )
@@ -3171,7 +3150,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::insertByName( const OUString& rName, con
 void SAL_CALL ScDataPilotFieldGroupObj::removeByName( const OUString& rName )
         throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if( rName.getLength() == 0 )
         throw IllegalArgumentException();
@@ -3187,14 +3166,14 @@ void SAL_CALL ScDataPilotFieldGroupObj::removeByName( const OUString& rName )
 
 sal_Int32 SAL_CALL ScDataPilotFieldGroupObj::getCount() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return static_cast< sal_Int32 >( mrParent.getFieldGroup( maGroupName ).maMembers.size() );
 }
 
 Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
         throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
     if ((nIndex < 0) || (nIndex >= static_cast< sal_Int32 >( rMembers.size() )))
         throw IndexOutOfBoundsException();
@@ -3205,7 +3184,7 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
 
 Reference< XEnumeration > SAL_CALL ScDataPilotFieldGroupObj::createEnumeration() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScIndexEnumeration( this, OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.DataPilotFieldGroupEnumeration" ) ) );
 }
 
@@ -3213,13 +3192,13 @@ Reference< XEnumeration > SAL_CALL ScDataPilotFieldGroupObj::createEnumeration()
 
 uno::Type SAL_CALL ScDataPilotFieldGroupObj::getElementType() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return getCppuType( (Reference< XNamed >*)0 );
 }
 
 sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasElements() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return !mrParent.getFieldGroup( maGroupName ).maMembers.empty();
 }
 
@@ -3227,13 +3206,13 @@ sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasElements() throw(RuntimeException
 
 OUString SAL_CALL ScDataPilotFieldGroupObj::getName() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return maGroupName;
 }
 
 void SAL_CALL ScDataPilotFieldGroupObj::setName( const OUString& rName ) throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     mrParent.renameFieldGroup( maGroupName, rName );
     // if call to renameFieldGroup() did not throw, remember the new name
     maGroupName = rName;
@@ -3257,13 +3236,13 @@ ScDataPilotFieldGroupItemObj::~ScDataPilotFieldGroupItemObj()
 
 OUString SAL_CALL ScDataPilotFieldGroupItemObj::getName() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return maName;
 }
 
 void SAL_CALL ScDataPilotFieldGroupItemObj::setName( const OUString& rName ) throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     mrParent.replaceByName( maName, Any( rName ) );
     // if call to replaceByName() did not throw, remember the new name
     maName = rName;
@@ -3293,13 +3272,13 @@ ScDataPilotItemObj* ScDataPilotItemsObj::GetObjectByIndex_Impl( sal_Int32 nIndex
 Any SAL_CALL ScDataPilotItemsObj::getByName( const OUString& aName )
         throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Reference<XNameAccess> xMembers = GetMembers();
     if (xMembers.is())
     {
         Reference<XIndexAccess> xMembersIndex(new ScNameToIndexAccess( xMembers ));
         sal_Int32 nCount = xMembersIndex->getCount();
-        sal_Bool bFound(sal_False);
+        sal_Bool bFound(false);
         sal_Int32 nItem = 0;
         while (nItem < nCount && !bFound )
         {
@@ -3317,7 +3296,7 @@ Any SAL_CALL ScDataPilotItemsObj::getByName( const OUString& aName )
 Sequence<OUString> SAL_CALL ScDataPilotItemsObj::getElementNames()
                                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Sequence< OUString > aSeq;
     if( ScDPObject* pDPObj = GetDPObject() )
         pDPObj->GetMemberNames( lcl_GetObjectIndex( pDPObj, maFieldId ), aSeq );
@@ -3327,8 +3306,8 @@ Sequence<OUString> SAL_CALL ScDataPilotItemsObj::getElementNames()
 sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const OUString& aName )
                                         throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
-    sal_Bool bFound = sal_False;
+    SolarMutexGuard aGuard;
+    sal_Bool bFound = false;
     Reference<XNameAccess> xMembers = GetMembers();
     if (xMembers.is())
     {
@@ -3352,7 +3331,7 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const OUString& aName )
 Reference<XEnumeration> SAL_CALL ScDataPilotItemsObj::createEnumeration()
                                                     throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return new ScIndexEnumeration(this, OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DataPilotItemsEnumeration")));
 }
 
@@ -3360,14 +3339,14 @@ Reference<XEnumeration> SAL_CALL ScDataPilotItemsObj::createEnumeration()
 
 sal_Int32 SAL_CALL ScDataPilotItemsObj::getCount() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return GetMemberCount();
 }
 
 Any SAL_CALL ScDataPilotItemsObj::getByIndex( sal_Int32 nIndex )
         throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Reference< XPropertySet > xItem( GetObjectByIndex_Impl( nIndex ) );
     if (!xItem.is())
         throw IndexOutOfBoundsException();
@@ -3376,13 +3355,13 @@ Any SAL_CALL ScDataPilotItemsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScDataPilotItemsObj::getElementType() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return getCppuType((Reference<XPropertySet>*)0);
 }
 
 sal_Bool SAL_CALL ScDataPilotItemsObj::hasElements() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
 
@@ -3402,7 +3381,7 @@ ScDataPilotItemObj::~ScDataPilotItemObj()
                             // XNamed
 OUString SAL_CALL ScDataPilotItemObj::getName() throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     OUString sRet;
     Reference<XNameAccess> xMembers = GetMembers();
     if (xMembers.is())
@@ -3428,7 +3407,7 @@ Reference< XPropertySetInfo >
                             SAL_CALL ScDataPilotItemObj::getPropertySetInfo(  )
                                 throw(RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static Reference<XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( maPropSet.getPropertyMap() );
     return aRef;
@@ -3437,7 +3416,7 @@ Reference< XPropertySetInfo >
 void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
@@ -3454,11 +3433,11 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyNam
                 if (pMember)
                 {
                     bool bGetNewIndex = false;
-                    if ( aPropertyName.equalsAscii( SC_UNONAME_SHOWDETAIL ) )
+                    if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_SHOWDETAIL ) ) )
                         pMember->SetShowDetails(cppu::any2bool(aValue));
-                    else if ( aPropertyName.equalsAscii( SC_UNONAME_ISHIDDEN ) )
+                    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISHIDDEN ) ) )
                         pMember->SetIsVisible(!cppu::any2bool(aValue));
-                    else if ( aPropertyName.equalsAscii( SC_UNONAME_POS ) )
+                    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_POS ) ) )
                     {
                         sal_Int32 nNewPos = 0;
                         if ( ( aValue >>= nNewPos ) && nNewPos >= 0 && nNewPos < nCount )
@@ -3490,7 +3469,7 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyNam
 Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     Any aRet;
     if( ScDPSaveDimension* pDim = GetDPDimension() )
     {
@@ -3504,7 +3483,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                 Reference< XNamed > xMember( xMembersIndex->getByIndex( mnIndex ), UNO_QUERY );
                 String sName( xMember->getName() );
                 ScDPSaveMember* pMember = pDim->GetExistingMemberByName( sName );
-                if( aPropertyName.equalsAscii( SC_UNONAME_SHOWDETAIL ) )
+                if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_SHOWDETAIL ) ) )
                 {
                     if (pMember && pMember->HasShowDetails())
                     {
@@ -3519,7 +3498,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                             aRet <<= true;
                     }
                 }
-                else if ( aPropertyName.equalsAscii( SC_UNONAME_ISHIDDEN ) )
+                else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISHIDDEN ) ) )
                 {
                     if (pMember && pMember->HasIsVisible())
                     {
@@ -3534,7 +3513,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                             aRet <<= false;
                     }
                 }
-                else if ( aPropertyName.equalsAscii( SC_UNONAME_POS ) )
+                else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_POS ) ) )
                 {
                     aRet <<= mnIndex;
                 }
@@ -3573,3 +3552,4 @@ void SAL_CALL ScDataPilotItemObj::removeVetoableChangeListener(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

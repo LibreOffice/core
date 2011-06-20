@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,12 +97,6 @@ public:
                             const ::rtl::OUString& rServiceName,
                             const UnoAnySequence& rArgs );
 
-//UNUSED2008-05  /** Creates an instance from the passed service name, using the service factory of the passed object. */
-//UNUSED2008-05  static XInterfaceRef CreateInstanceWithArgs(
-//UNUSED2008-05                          SfxObjectShell* pShell,
-//UNUSED2008-05                          const ::rtl::OUString& rServiceName,
-//UNUSED2008-05                          const UnoAnySequence& rArgs );
-
     /** Creates an instance from the passed service name, using the process service factory. */
     static XInterfaceRef CreateInstanceWithArgs(
                             const ::rtl::OUString& rServiceName,
@@ -117,7 +112,7 @@ public:
 template< typename Type >
 ::com::sun::star::uno::Sequence< Type > ScfApiHelper::VectorToSequence( const ::std::vector< Type >& rVector )
 {
-    DBG_ASSERT( !rVector.empty(), "ScfApiHelper::VectorToSequence - vector is empty" );
+    OSL_ENSURE( !rVector.empty(), "ScfApiHelper::VectorToSequence - vector is empty" );
     return ::com::sun::star::uno::Sequence< Type >( &rVector.front(), static_cast< sal_Int32 >( rVector.size() ) );
 }
 
@@ -189,7 +184,7 @@ public:
                             { UnoAny aAny; return GetAnyProperty( aAny, rPropName ) && (aAny >>= rValue); }
 
     /** Gets the specified Boolean property from the property set.
-        @return  true = property contains true; false = property contains false or error occured. */
+        @return  true = property contains true; false = property contains false or error occurred. */
     bool                GetBoolProperty( const ::rtl::OUString& rPropName ) const;
 
     /** Gets the specified Boolean property from the property set.
@@ -329,7 +324,8 @@ bool ScfPropSetHelper::ReadValue( Type& rValue )
 template< typename Type >
 void ScfPropSetHelper::WriteValue( const Type& rValue )
 {
-    if( UnoAny* pAny = GetNextAny() )
+    UnoAny* pAny = GetNextAny();
+    if( pAny )
         *pAny <<= rValue;
 }
 
@@ -351,3 +347,4 @@ ScfPropSetHelper& operator<<( ScfPropSetHelper& rPropSetHelper, const Type& rVal
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

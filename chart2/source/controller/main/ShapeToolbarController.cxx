@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include "ShapeToolbarController.hxx"
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -120,7 +121,7 @@ void ShapeToolbarController::release() throw ()
 void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments ) throw (uno::Exception, uno::RuntimeException)
 {
     ToolboxController::initialize( rArguments );
-    ::vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
@@ -136,37 +137,37 @@ void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments 
                 break;
             }
         }
-        if ( m_aCommandURL.equalsAscii( ".uno:BasicShapes" ) )
+        if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:BasicShapes" ) ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BasicShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_BASIC;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
-        else if ( m_aCommandURL.equalsAscii( ".uno:SymbolShapes" ) )
+        else if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:SymbolShapes" ) ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SymbolShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_SYMBOL;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
-        else if ( m_aCommandURL.equalsAscii( ".uno:ArrowShapes" ) )
+        else if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:ArrowShapes" ) ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ArrowShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_ARROW;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox) );
         }
-        else if ( m_aCommandURL.equalsAscii( ".uno:FlowChartShapes" ) )
+        else if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:FlowChartShapes" ) ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FlowChartShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_FLOWCHART;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
-        else if ( m_aCommandURL.equalsAscii( ".uno:CalloutShapes" ) )
+        else if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:CalloutShapes" ) ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CalloutShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_CALLOUT;
             m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
         }
-        else if ( m_aCommandURL.equalsAscii( ".uno:StarShapes" ) )
+        else if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:StarShapes" ) ) )
         {
             m_aStates.insert( TCommandState::value_type( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StarShapes" ) ), sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_STAR;
@@ -233,7 +234,7 @@ void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Even
 // ::com::sun::star::frame::XToolbarController
 Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Reference< awt::XWindow > xRet;
@@ -258,7 +259,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
 
 ::rtl::OUString ShapeToolbarController::getSubToolbarName() throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
     if ( xSub.is() )
@@ -270,7 +271,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
 
 void ShapeToolbarController::functionSelected( const ::rtl::OUString& rCommand ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
@@ -283,7 +284,7 @@ void ShapeToolbarController::functionSelected( const ::rtl::OUString& rCommand )
 
 void ShapeToolbarController::updateImage() throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
@@ -296,3 +297,5 @@ void ShapeToolbarController::updateImage() throw (uno::RuntimeException)
 //.............................................................................
 } //  namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

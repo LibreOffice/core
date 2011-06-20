@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,6 +50,7 @@
 #include "document.hxx"
 #include "sc.hrc"
 
+#include "vcl/svapp.hxx"
 
 //------------------------------------------------------------------
 
@@ -63,8 +65,8 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     sal_uInt16              nSlotId  = rReq.GetSlot();
     SCsCOLROW           nRepeat = 1;
-    sal_Bool                bSel = sal_False;
-    sal_Bool                bKeep = sal_False;
+    sal_Bool                bSel = false;
+    sal_Bool                bKeep = false;
 
     if ( pReqArgs != NULL )
     {
@@ -84,9 +86,55 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
         else if ( nLocked & KEY_MOD1 )
         {
             // ADD mode: keep the selection, start a new block when marking with shift again
-            bKeep = sal_True;
-            pTabViewShell->SetNewStartIfMarking();
+            bKeep = true;
         }
+    }
+
+    if (bSel)
+    {
+        switch (nSlotId)
+        {
+            case SID_CURSORDOWN:
+                rReq.SetSlot(SID_CURSORDOWN_SEL);
+            break;
+            case SID_CURSORUP:
+                rReq.SetSlot(SID_CURSORUP_SEL);
+            break;
+            case SID_CURSORRIGHT:
+                rReq.SetSlot(SID_CURSORRIGHT_SEL);
+            break;
+            case SID_CURSORLEFT:
+                rReq.SetSlot(SID_CURSORLEFT_SEL);
+            break;
+            case SID_CURSORPAGEDOWN:
+                rReq.SetSlot(SID_CURSORPAGEDOWN_SEL);
+            break;
+            case SID_CURSORPAGEUP:
+                rReq.SetSlot(SID_CURSORPAGEUP_SEL);
+            break;
+            case SID_CURSORPAGERIGHT:
+                rReq.SetSlot(SID_CURSORPAGERIGHT_SEL);
+            break;
+            case SID_CURSORPAGELEFT:
+                rReq.SetSlot(SID_CURSORPAGELEFT_SEL);
+            break;
+            case SID_CURSORBLKDOWN:
+                rReq.SetSlot(SID_CURSORBLKDOWN_SEL);
+            break;
+            case SID_CURSORBLKUP:
+                rReq.SetSlot(SID_CURSORBLKUP_SEL);
+            break;
+            case SID_CURSORBLKRIGHT:
+                rReq.SetSlot(SID_CURSORBLKRIGHT_SEL);
+            break;
+            case SID_CURSORBLKLEFT:
+                rReq.SetSlot(SID_CURSORBLKLEFT_SEL);
+            break;
+            default:
+                ;
+        }
+        ExecuteCursorSel(rReq);
+        return;
     }
 
     SCsCOLROW nRTLSign = 1;
@@ -152,7 +200,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell (Cursor)");
+            OSL_FAIL("Unbekannte Message bei ViewShell (Cursor)");
             return;
     }
 
@@ -169,38 +217,64 @@ void ScCellShell::GetStateCursor( SfxItemSet& /* rSet */ )
 
 void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
 {
-    const SfxItemSet*   pReqArgs = rReq.GetArgs();
-    sal_uInt16              nSlotId  = rReq.GetSlot();
-    short               nRepeat = 1;
-
-    if ( pReqArgs != NULL )
+    sal_uInt16 nSlotId  = rReq.GetSlot();
+    ScTabViewShell* pViewShell = GetViewData()->GetViewShell();
+    ScInputHandler* pInputHdl = pViewShell->GetInputHandler();
+    pViewShell->HideAllCursors();
+    if (pInputHdl && pInputHdl->IsInputMode())
     {
-        const   SfxPoolItem* pItem;
-        if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
-            nRepeat = ((const SfxInt16Item*)pItem)->GetValue();
+        // the current cell is in edit mode.  Commit the text before moving on.
+        pViewShell->ExecuteInputDirect();
     }
 
-    switch ( nSlotId )
+    // Horizontal direction depends on whether or not the UI language is RTL.
+    SCsCOL nMovX = 1;
+    if (GetViewData()->GetDocument()->IsLayoutRTL(GetViewData()->GetTabNo()))
+        // mirror horizontal movement for right-to-left mode.
+        nMovX = -1;
+
+    switch (nSlotId)
     {
-        case SID_CURSORDOWN_SEL:        rReq.SetSlot( SID_CURSORDOWN );  break;
-        case SID_CURSORBLKDOWN_SEL:     rReq.SetSlot( SID_CURSORBLKDOWN );  break;
-        case SID_CURSORUP_SEL:          rReq.SetSlot( SID_CURSORUP );  break;
-        case SID_CURSORBLKUP_SEL:       rReq.SetSlot( SID_CURSORBLKUP );  break;
-        case SID_CURSORLEFT_SEL:        rReq.SetSlot( SID_CURSORLEFT );  break;
-        case SID_CURSORBLKLEFT_SEL:     rReq.SetSlot( SID_CURSORBLKLEFT );  break;
-        case SID_CURSORRIGHT_SEL:       rReq.SetSlot( SID_CURSORRIGHT );  break;
-        case SID_CURSORBLKRIGHT_SEL:    rReq.SetSlot( SID_CURSORBLKRIGHT );  break;
-        case SID_CURSORPAGEDOWN_SEL:    rReq.SetSlot( SID_CURSORPAGEDOWN );  break;
-        case SID_CURSORPAGEUP_SEL:      rReq.SetSlot( SID_CURSORPAGEUP );  break;
-        case SID_CURSORPAGERIGHT_SEL:   rReq.SetSlot( SID_CURSORPAGERIGHT_ );  break;
-        case SID_CURSORPAGELEFT_SEL:    rReq.SetSlot( SID_CURSORPAGELEFT_ );  break;
+        case SID_CURSORDOWN_SEL:
+            pViewShell->ExpandBlock(0, 1, SC_FOLLOW_LINE);
+        break;
+        case SID_CURSORUP_SEL:
+            pViewShell->ExpandBlock(0, -1, SC_FOLLOW_LINE);
+        break;
+        case SID_CURSORRIGHT_SEL:
+            pViewShell->ExpandBlock(nMovX, 0, SC_FOLLOW_LINE);
+        break;
+        case SID_CURSORLEFT_SEL:
+            pViewShell->ExpandBlock(-nMovX, 0, SC_FOLLOW_LINE);
+        break;
+        case SID_CURSORPAGEUP_SEL:
+            pViewShell->ExpandBlockPage(0, -1);
+        break;
+        case SID_CURSORPAGEDOWN_SEL:
+            pViewShell->ExpandBlockPage(0, 1);
+        break;
+        case SID_CURSORPAGERIGHT_SEL:
+            pViewShell->ExpandBlockPage(nMovX, 0);
+        break;
+        case SID_CURSORPAGELEFT_SEL:
+            pViewShell->ExpandBlockPage(-nMovX, 0);
+        break;
+        case SID_CURSORBLKDOWN_SEL:
+            pViewShell->ExpandBlockArea(0, 1);
+        break;
+        case SID_CURSORBLKUP_SEL:
+            pViewShell->ExpandBlockArea(0, -1);
+        break;
+        case SID_CURSORBLKRIGHT_SEL:
+            pViewShell->ExpandBlockArea(nMovX, 0);
+        break;
+        case SID_CURSORBLKLEFT_SEL:
+            pViewShell->ExpandBlockArea(-nMovX, 0);
+        break;
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell (CursorSel)");
-            return;
+            ;
     }
-    rReq.AppendItem( SfxInt16Item(FN_PARAM_1, nRepeat ) );
-    rReq.AppendItem( SfxBoolItem(FN_PARAM_2, sal_True) );
-    ExecuteSlot( rReq, GetInterface() );
+    pViewShell->ShowAllCursors();
 }
 
 void ScCellShell::ExecuteMove( SfxRequest& rReq )
@@ -226,7 +300,7 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
         //  weil das ScSbxRange-Objekt bei Eingaben die Markierung veraendert
 
         case SID_NEXT_UNPROTECT:
-            pTabViewShell->FindNextUnprot( sal_False, !rReq.IsAPI() );
+            pTabViewShell->FindNextUnprot( false, !rReq.IsAPI() );
             break;
 
         case SID_PREV_UNPROTECT:
@@ -235,16 +309,16 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
 
         case SID_CURSORENTERUP:
             if (rReq.IsAPI())
-                pTabViewShell->MoveCursorRel( 0, -1, SC_FOLLOW_LINE, sal_False );
+                pTabViewShell->MoveCursorRel( 0, -1, SC_FOLLOW_LINE, false );
             else
                 pTabViewShell->MoveCursorEnter( sal_True );
             break;
 
         case SID_CURSORENTERDOWN:
             if (rReq.IsAPI())
-                pTabViewShell->MoveCursorRel( 0, 1, SC_FOLLOW_LINE, sal_False );
+                pTabViewShell->MoveCursorRel( 0, 1, SC_FOLLOW_LINE, false );
             else
-                pTabViewShell->MoveCursorEnter( sal_False );
+                pTabViewShell->MoveCursorEnter( false );
             break;
 
         case SID_SELECT_COL:
@@ -288,15 +362,15 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
             break;
 
         case SID_CURSORTOPOFSCREEN:
-            pTabViewShell->MoveCursorScreen( 0, -1, SC_FOLLOW_LINE, sal_False );
+            pTabViewShell->MoveCursorScreen( 0, -1, SC_FOLLOW_LINE, false );
             break;
 
         case SID_CURSORENDOFSCREEN:
-            pTabViewShell->MoveCursorScreen( 0, 1, SC_FOLLOW_LINE, sal_False );
+            pTabViewShell->MoveCursorScreen( 0, 1, SC_FOLLOW_LINE, false );
             break;
 
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell (Cursor)");
+            OSL_FAIL("Unbekannte Message bei ViewShell (Cursor)");
             return;
     }
 
@@ -313,7 +387,7 @@ void ScCellShell::ExecutePageSel( SfxRequest& rReq )
         case SID_CURSORTOPOFFILE_SEL:   rReq.SetSlot( SID_CURSORTOPOFFILE );  break;
         case SID_CURSORENDOFFILE_SEL:   rReq.SetSlot( SID_CURSORENDOFFILE );  break;
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell (ExecutePageSel)");
+            OSL_FAIL("Unbekannte Message bei ViewShell (ExecutePageSel)");
             return;
     }
     rReq.AppendItem( SfxBoolItem(FN_PARAM_2, sal_True) );
@@ -325,8 +399,8 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     sal_uInt16              nSlotId  = rReq.GetSlot();
-    sal_Bool                bSel = sal_False;
-    sal_Bool                bKeep = sal_False;
+    sal_Bool                bSel = false;
+    sal_Bool                bKeep = false;
 
     if ( pReqArgs != NULL )
     {
@@ -344,8 +418,7 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
         else if ( nLocked & KEY_MOD1 )
         {
             // ADD mode: keep the selection, start a new block when marking with shift again
-            bKeep = sal_True;
-            pTabViewShell->SetNewStartIfMarking();
+            bKeep = true;
         }
     }
 
@@ -369,7 +442,7 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
             break;
 
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell (ExecutePage)");
+            OSL_FAIL("Unbekannte Message bei ViewShell (ExecutePage)");
             return;
     }
 
@@ -380,3 +453,4 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

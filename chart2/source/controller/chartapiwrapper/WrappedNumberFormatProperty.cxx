@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,6 @@
 
 #include "WrappedNumberFormatProperty.hxx"
 #include "macros.hxx"
-
-// header for define DBG_ERROR
-#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -89,7 +87,7 @@ Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XProp
 {
     if( !xInnerPropertySet.is() )
     {
-        DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
+        OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
         return Any();
     }
     Any aRet( xInnerPropertySet->getPropertyValue( m_aInnerName ));
@@ -116,8 +114,6 @@ Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPr
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( WrappedNumberFormatProperty* pWrappedNumberFormatProperty )
         : WrappedProperty( C2U("LinkNumberFormatToSource"), C2U("") )
@@ -143,7 +139,7 @@ void WrappedLinkNumberFormatProperty::setPropertyValue( const Any& rOuterValue, 
 {
     if( !xInnerPropertySet.is() )
     {
-        DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::setPropertyValue");
+        OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::setPropertyValue");
         return;
     }
 
@@ -179,7 +175,7 @@ Any WrappedLinkNumberFormatProperty::getPropertyValue( const Reference< beans::X
 {
     if( !xInnerPropertySet.is() )
     {
-        DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
+        OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
         return getPropertyDefault(0);
     }
     bool bLink = ! xInnerPropertySet->getPropertyValue( C2U("NumberFormat" )).hasValue();
@@ -197,3 +193,5 @@ Any WrappedLinkNumberFormatProperty::getPropertyDefault( const Reference< beans:
 } //namespace wrapper
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,9 +49,12 @@ class XclRoot;
 const sal_uInt8 EXC_LINE_NONE               = 0x00;
 const sal_uInt8 EXC_LINE_THIN               = 0x01;
 const sal_uInt8 EXC_LINE_MEDIUM             = 0x02;
+const sal_uInt8 EXC_LINE_DASHED             = 0x03;
+const sal_uInt8 EXC_LINE_DOTTED             = 0x04;
 const sal_uInt8 EXC_LINE_THICK              = 0x05;
 const sal_uInt8 EXC_LINE_DOUBLE             = 0x06;
 const sal_uInt8 EXC_LINE_HAIR               = 0x07;
+const sal_uInt8 EXC_LINE_MEDIUMDASHED       = 0x08;
 
 // Background patterns --------------------------------------------------------
 
@@ -377,8 +381,6 @@ struct XclFontData
     void                SetApiHeight( float fPoint );
     /** Sets the API font family. */
     void                SetApiFamily( sal_Int16 nApiFamily );
-//UNUSED2009-05 /** Sets the API font text encoding. */
-//UNUSED2009-05 void                SetApiFontEncoding( sal_Int16 nApiFontEnc );
     /** Sets the API font posture. */
     void                SetApiPosture( ::com::sun::star::awt::FontSlant eApiPosture );
     /** Sets the API font weight. */
@@ -475,9 +477,6 @@ protected:
     /** Returns the current number format map. */
     inline const XclNumFmtMap& GetFormatMap() const { return maFmtMap; }
 
-//UNUSED2008-05  /** Returns the number format with the specified Excel format index. */
-//UNUSED2008-05  const XclNumFmt*    GetFormat( sal_uInt16 nXclNumFmt ) const;
-
     /** Inserts a new number format for the specified Excel format index. */
     void                InsertFormat( sal_uInt16 nXclNumFmt, const String& rFormat );
 
@@ -521,8 +520,12 @@ struct XclCellAlign
 
     /** Returns the Calc horizontal alignment. */
     SvxCellHorJustify   GetScHorAlign() const;
+    /** Returns horizontal justification method as Calc's attribute. */
+    SvxCellJustifyMethod GetScHorJustifyMethod() const;
     /** Returns the Calc vertical alignment. */
     SvxCellVerJustify   GetScVerAlign() const;
+    /** Returns vertical justification method as Calc's attribute. */
+    SvxCellJustifyMethod GetScVerJustifyMethod() const;
     /** Returns the Calc frame direction. */
     SvxFrameDirection   GetScFrameDir() const;
 
@@ -617,3 +620,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

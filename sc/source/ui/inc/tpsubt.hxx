@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 
 class ScViewData;
 class ScDocument;
+struct ScSubTotalParam;
 
 //========================================================================
 // Gruppenseiten: Basisklasse
@@ -54,9 +56,9 @@ public:
     virtual ~ScTpSubTotalGroup();
 
     static sal_uInt16*  GetRanges       ();
-    sal_Bool            DoReset         ( sal_uInt16            nGroupNo,
+    bool            DoReset         ( sal_uInt16            nGroupNo,
                                       const SfxItemSet& rArgSet  );
-    sal_Bool            DoFillItemSet   ( sal_uInt16        nGroupNo,
+    bool            DoFillItemSet   ( sal_uInt16        nGroupNo,
                                       SfxItemSet&   rArgSet  );
 protected:
     FixedText       aFtGroup;
@@ -101,7 +103,7 @@ public:
 
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
+    virtual sal_Bool    FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
@@ -118,7 +120,7 @@ public:
 
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
+    virtual sal_Bool    FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
@@ -135,7 +137,7 @@ public:
 
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
+    virtual sal_Bool    FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
@@ -154,7 +156,7 @@ public:
     static sal_uInt16*      GetRanges   ();
     static SfxTabPage*  Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
+    virtual sal_Bool    FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 private:
@@ -186,3 +188,4 @@ private:
 
 #endif // SC_TPSORT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

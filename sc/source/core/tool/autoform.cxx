@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,10 +56,7 @@
 
 const sal_Char *linker_dummy = "";
 
-//  Standard-Name ist jetzt STR_STYLENAME_STANDARD (wie Vorlagen)
-//static const sal_Char __FAR_DATA cStandardName[] = "Standard";
-
-static const sal_Char __FAR_DATA sAutoTblFmtName[] = "autotbl.fmt";
+static const sal_Char sAutoTblFmtName[] = "autotbl.fmt";
 
 // bis SO5PF
 const sal_uInt16 AUTOFORMAT_ID_X        = 9501;
@@ -81,11 +79,11 @@ const sal_uInt16 AUTOFORMAT_DATA_ID_641 = 10002;
 const sal_uInt16 AUTOFORMAT_ID_680DR14      = 10011;
 const sal_uInt16 AUTOFORMAT_DATA_ID_680DR14 = 10012;
 
-// --- from 680/dr25 on: #21549# store strings as UTF-8
+// --- from 680/dr25 on: store strings as UTF-8
 const sal_uInt16 AUTOFORMAT_ID_680DR25      = 10021;
 const sal_uInt16 AUTOFORMAT_DATA_ID_680DR25 = 10022;
 
-// --- from DEV300/overline2 on: #5991# overline support
+// --- from DEV300/overline2 on: overline support
 const sal_uInt16 AUTOFORMAT_ID_300OVRLN      = 10031;
 const sal_uInt16 AUTOFORMAT_DATA_ID_300OVRLN = 10032;
 
@@ -203,8 +201,8 @@ void ScAfVersions::Write(SvStream& rStream)
     rStream << SvxUnderlineItem(UNDERLINE_NONE, ATTR_FONT_UNDERLINE).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxOverlineItem(UNDERLINE_NONE, ATTR_FONT_OVERLINE).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxCrossedOutItem(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxContourItem(sal_False, ATTR_FONT_CONTOUR).GetVersion(SOFFICE_FILEFORMAT_40);
-    rStream << SvxShadowedItem(sal_False, ATTR_FONT_SHADOWED).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxContourItem(false, ATTR_FONT_CONTOUR).GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxShadowedItem(false, ATTR_FONT_SHADOWED).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxColorItem(ATTR_FONT_COLOR).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxBoxItem(ATTR_BORDER).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxLineItem(SID_FRAME_LINESTYLE).GetVersion(SOFFICE_FILEFORMAT_40);
@@ -244,8 +242,8 @@ ScAutoFormatDataField::ScAutoFormatDataField() :
     aUnderline( UNDERLINE_NONE,ATTR_FONT_UNDERLINE ),
     aOverline( UNDERLINE_NONE,ATTR_FONT_OVERLINE ),
     aCrossedOut( STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT ),
-    aContour( sal_False, ATTR_FONT_CONTOUR ),
-    aShadowed( sal_False, ATTR_FONT_SHADOWED ),
+    aContour( false, ATTR_FONT_CONTOUR ),
+    aShadowed( false, ATTR_FONT_SHADOWED ),
     aColor( ATTR_FONT_COLOR ),
     aBox( ATTR_BORDER ),
     aTLBR( ATTR_BORDER_TLBR ),
@@ -378,7 +376,7 @@ sal_Bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVe
 
     if( 0 == rVersions.nNumFmtVersion )
     {
-        // --- from 680/dr25 on: #21549# store strings as UTF-8
+        // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         aNumFormat.Load( rStream, eCharSet );
     }
@@ -473,7 +471,7 @@ sal_Bool ScAutoFormatDataField::Save( SvStream& rStream )
     aRotateAngle.Store  ( rStream, aRotateAngle.GetVersion( SOFFICE_FILEFORMAT_40 ) );
     aRotateMode.Store   ( rStream, aRotateMode.GetVersion( SOFFICE_FILEFORMAT_40 ) );
 
-    // --- from 680/dr25 on: #21549# store strings as UTF-8
+    // --- from 680/dr25 on: store strings as UTF-8
     aNumFormat.Save( rStream, RTL_TEXTENCODING_UTF8 );
 
     return (rStream.GetError() == 0);
@@ -523,15 +521,15 @@ ScAutoFormatData::~ScAutoFormatData()
 
 ScAutoFormatDataField& ScAutoFormatData::GetField( sal_uInt16 nIndex )
 {
-    DBG_ASSERT( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
-    DBG_ASSERT( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
+    OSL_ENSURE( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
+    OSL_ENSURE( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
     return *ppDataField[ nIndex ];
 }
 
 const ScAutoFormatDataField& ScAutoFormatData::GetField( sal_uInt16 nIndex ) const
 {
-    DBG_ASSERT( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
-    DBG_ASSERT( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
+    OSL_ENSURE( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
+    OSL_ENSURE( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
     return *ppDataField[ nIndex ];
 }
 
@@ -699,7 +697,7 @@ void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, S
         rItemSet.Put( rField.GetHeight() );
         rItemSet.Put( rField.GetWeight() );
         rItemSet.Put( rField.GetPosture() );
-        // #103065# do not insert empty CJK font
+        // do not insert empty CJK font
         const SvxFontItem& rCJKFont = rField.GetCJKFont();
         if( rCJKFont.GetStyleName().Len() )
         {
@@ -714,7 +712,7 @@ void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, S
             rItemSet.Put( rField.GetWeight(), ATTR_CJK_FONT_WEIGHT );
             rItemSet.Put( rField.GetPosture(), ATTR_CJK_FONT_POSTURE );
         }
-        // #103065# do not insert empty CTL font
+        // do not insert empty CTL font
         const SvxFontItem& rCTLFont = rField.GetCTLFont();
         if( rCTLFont.GetStyleName().Len() )
         {
@@ -800,7 +798,7 @@ sal_Bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersion
     if( bRet && (nVer == AUTOFORMAT_DATA_ID_X ||
             (AUTOFORMAT_DATA_ID_504 <= nVer && nVer <= AUTOFORMAT_DATA_ID)) )
     {
-        // --- from 680/dr25 on: #21549# store strings as UTF-8
+        // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         rStream.ReadByteString( aName, eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVer )
@@ -829,7 +827,7 @@ sal_Bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersion
             bRet = GetField( i ).Load( rStream, rVersions, nVer );
     }
     else
-        bRet = sal_False;
+        bRet = false;
     return bRet;
 }
 
@@ -856,7 +854,7 @@ sal_Bool ScAutoFormatData::LoadOld( SvStream& rStream, const ScAfVersions& rVers
             bRet = GetField( i ).LoadOld( rStream, rVersions );
     }
     else
-        bRet = sal_False;
+        bRet = false;
     return bRet;
 }
 #endif
@@ -866,33 +864,8 @@ sal_Bool ScAutoFormatData::Save(SvStream& rStream)
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
     sal_Bool b;
     rStream << nVal;
-    // --- from 680/dr25 on: #21549# store strings as UTF-8
+    // --- from 680/dr25 on: store strings as UTF-8
     rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
-
-#if 0
-    //  This was an internal flag to allow creating AutoFormats with localized names
-
-    if ( USHRT_MAX == nStrResId )
-    {
-        String aIniVal( SFX_APP()->GetIniManager()->Get(
-            SFX_GROUP_WORKINGSET_IMPL,
-            String( RTL_CONSTASCII_USTRINGPARAM( "SaveTableAutoFmtNameId" ))));
-        if( 0 != aIniVal.ToInt32() )
-        {
-            // check Name for ResId
-            for( sal_uInt16 nId = RID_SVXSTR_TBLAFMT_BEGIN;
-                        RID_SVXSTR_TBLAFMT_END > nId; ++nId )
-            {
-                String s( SVX_RES( nId ) );
-                if( s == aName )
-                {
-                    nStrResId = nId - RID_SVXSTR_TBLAFMT_BEGIN;
-                    break;
-                }
-            }
-        }
-    }
-#endif
 
     rStream << nStrResId;
     rStream << ( b = bIncludeFont );
@@ -914,7 +887,7 @@ sal_Bool ScAutoFormatData::Save(SvStream& rStream)
 
 ScAutoFormat::ScAutoFormat(sal_uInt16 nLim, sal_uInt16 nDel, sal_Bool bDup):
     ScSortedCollection        (nLim, nDel, bDup),
-    bSaveLater              (sal_False)
+    bSaveLater              (false)
 {
     //  create default autoformat
     ScAutoFormatData* pData = new ScAutoFormatData;
@@ -944,7 +917,7 @@ ScAutoFormat::ScAutoFormat(sal_uInt16 nLim, sal_uInt16 nDel, sal_Bool bDup):
 
     //  black thin border
     Color aBlack( COL_BLACK );
-    SvxBorderLine aLine( &aBlack, DEF_LINE_WIDTH_0 );
+    ::editeng::SvxBorderLine aLine( &aBlack, DEF_LINE_WIDTH_0 );
     SvxBoxItem aBox( ATTR_BORDER );
     aBox.SetLine(&aLine, BOX_LINE_LEFT);
     aBox.SetLine(&aLine, BOX_LINE_TOP);
@@ -999,7 +972,7 @@ ScAutoFormat::ScAutoFormat(sal_uInt16 nLim, sal_uInt16 nDel, sal_Bool bDup):
 
 ScAutoFormat::ScAutoFormat(const ScAutoFormat& rAutoFormat) :
     ScSortedCollection (rAutoFormat),
-    bSaveLater       (sal_False)
+    bSaveLater       (false)
 {}
 
 ScAutoFormat::~ScAutoFormat()
@@ -1062,11 +1035,9 @@ sal_Bool ScAutoFormat::Load()
                 sal_uInt8 nChrSet, nCnt;
                 long nPos = rStream.Tell();
                 rStream >> nCnt >> nChrSet;
-//              if( 4 <= nCnt )
-//                  rStream >> nFileVers;
                 if( rStream.Tell() != sal_uLong(nPos + nCnt) )
                 {
-                    DBG_ERRORFILE( "Der Header enthaelt mehr/neuere Daten" );
+                    OSL_FAIL( "Der Header enthaelt mehr/neuere Daten" );
                     rStream.Seek( nPos + nCnt );
                 }
                 rStream.SetStreamCharSet( GetSOLoadTextEncoding( nChrSet, nFileVers ) );
@@ -1127,12 +1098,12 @@ sal_Bool ScAutoFormat::Load()
                     }
                 }
                 else
-                    bRet = sal_False;
+                    bRet = false;
             }
 #endif
         }
     }
-    bSaveLater = sal_False;
+    bSaveLater = false;
     return bRet;
 }
 
@@ -1160,9 +1131,6 @@ sal_Bool ScAutoFormat::Save()
                 << (sal_uInt8)2         // Anzahl von Zeichen des Headers incl. diesem
                 << (sal_uInt8)::GetSOStoreTextEncoding(
                     gsl_getSystemTextEncoding(), sal::static_int_cast<sal_uInt16>(rStream.GetVersion()) );
-//              << (sal_uInt8)4         // Anzahl von Zeichen des Headers incl. diesem
-//              << (sal_uInt8)::GetStoreCharSet(::GetSystemCharSet())
-//              << (UNIT16)SOFFICE_FILEFORMAT_NOW;
         ScAfVersions::Write(rStream);           // Item-Versionen
 
         bRet = (rStream.GetError() == 0);
@@ -1175,7 +1143,7 @@ sal_Bool ScAutoFormat::Save()
 
         aMedium.Commit();
     }
-    bSaveLater = sal_False;
+    bSaveLater = false;
     return bRet;
 }
 
@@ -1198,3 +1166,4 @@ sal_uInt16 ScAutoFormat::FindIndexPerName( const String& rName ) const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

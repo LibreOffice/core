@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@
 
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
-#include <tools/debug.hxx>
 #include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
@@ -95,12 +95,12 @@ void BubbleChart::calculateMaximumLogicBubbleSize()
         {
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-            for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+            for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-                for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
@@ -211,7 +211,7 @@ void BubbleChart::createShapes()
     if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
         return;
 
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"BubbleChart is not proper initialized");
+    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"BubbleChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
@@ -256,7 +256,7 @@ void BubbleChart::createShapes()
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
             aXSlotIter = aZSlotIter->begin();
-            for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; aXSlotIter++, nX++ )
+            for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, ++nX )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
@@ -264,7 +264,7 @@ void BubbleChart::createShapes()
 
     //=============================================================================
                 //iterate through all series
-                for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; aSeriesIter++, nSeriesIndex++ )
+                for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; ++aSeriesIter, ++nSeriesIndex )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
@@ -381,7 +381,7 @@ void BubbleChart::createShapes()
                                 eAlignment = LABEL_ALIGN_CENTER;
                                 break;
                             default:
-                                DBG_ERROR("this label alignment is not implemented yet");
+                                OSL_FAIL("this label alignment is not implemented yet");
                                 aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
                                 eAlignment = LABEL_ALIGN_TOP;
                                 break;
@@ -415,3 +415,5 @@ void BubbleChart::createShapes()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

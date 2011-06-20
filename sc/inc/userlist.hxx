@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,62 +31,76 @@
 
 #include <tools/stream.hxx>
 #include "scdllapi.h"
-#include "collect.hxx"
 
-//------------------------------------------------------------------------
-class SC_DLLPUBLIC ScUserListData : public ScDataObject
+#include <boost/ptr_container/ptr_vector.hpp>
+
+/**
+ * Stores individual user-defined sort list.
+ */
+class SC_DLLPUBLIC ScUserListData
 {
-friend class ScUserList;
-    String  aStr;
-    sal_uInt16  nTokenCount;
-    String* pSubStrings;
-    String* pUpperSub;
+public:
+    struct SubStr
+    {
+        ::rtl::OUString maReal;
+        ::rtl::OUString maUpper;
+        SubStr(const ::rtl::OUString& rReal, const ::rtl::OUString& rUpper);
+    };
+private:
+    typedef ::boost::ptr_vector<SubStr> SubStringsType;
+    SubStringsType maSubStrings;
+    ::rtl::OUString aStr;
 
     SC_DLLPRIVATE void  InitTokens();
 
 public:
-                    ScUserListData(const String& rStr);
-                    ScUserListData(const ScUserListData& rData);
-    virtual         ~ScUserListData();
+    ScUserListData(const ::rtl::OUString& rStr);
+    ScUserListData(const ScUserListData& rData);
+    ~ScUserListData();
 
-    virtual ScDataObject*       Clone() const { return new ScUserListData(*this); }
-
-    const   String&         GetString() const { return aStr; }
-            void            SetString( const String& rStr);
-            sal_uInt16          GetSubCount() const;
-            sal_Bool            GetSubIndex(const String& rSubStr, sal_uInt16& rIndex) const;
-            String          GetSubStr(sal_uInt16 nIndex) const;
-            StringCompare   Compare(const String& rSubStr1, const String& rSubStr2) const;
-            StringCompare   ICompare(const String& rSubStr1, const String& rSubStr2) const;
+    const ::rtl::OUString& GetString() const { return aStr; }
+    void SetString(const ::rtl::OUString& rStr);
+    size_t GetSubCount() const;
+    bool GetSubIndex(const ::rtl::OUString& rSubStr, sal_uInt16& rIndex) const;
+    ::rtl::OUString GetSubStr(sal_uInt16 nIndex) const;
+    StringCompare Compare(const ::rtl::OUString& rSubStr1, const ::rtl::OUString& rSubStr2) const;
+    StringCompare ICompare(const ::rtl::OUString& rSubStr1, const ::rtl::OUString& rSubStr2) const;
 };
 
-//------------------------------------------------------------------------
-class SC_DLLPUBLIC ScUserList : public ScCollection
+/**
+ * Collection of user-defined sort lists.
+ */
+class SC_DLLPUBLIC ScUserList
 {
+    typedef ::boost::ptr_vector<ScUserListData> DataType;
+    DataType maData;
 public:
-                    ScUserList( sal_uInt16 nLim = 4, sal_uInt16 nDel = 4);
-                    ScUserList( const ScUserList& rUserList ) : ScCollection ( rUserList ) {}
+    typedef DataType::iterator iterator;
+    typedef DataType::const_iterator const_iterator;
 
-    virtual ScDataObject*       Clone() const;
+    ScUserList();
+    ScUserList(const ScUserList& r);
 
-            ScUserListData* GetData( const String& rSubStr ) const;
-            /// If the list in rStr is already inserted
-            sal_Bool            HasEntry( const String& rStr ) const;
+    const ScUserListData* GetData( const ::rtl::OUString& rSubStr ) const;
+    /// If the list in rStr is already inserted
+    bool HasEntry( const ::rtl::OUString& rStr ) const;
 
-    inline  ScUserListData* operator[]( const sal_uInt16 nIndex) const;
-    inline  ScUserList&     operator= ( const ScUserList& r );
-            sal_Bool            operator==( const ScUserList& r ) const;
-    inline  sal_Bool            operator!=( const ScUserList& r ) const;
+    const ScUserListData*  operator[](size_t nIndex) const;
+    ScUserListData*  operator[](size_t nIndex);
+    ScUserList&     operator= ( const ScUserList& r );
+    bool            operator==( const ScUserList& r ) const;
+    bool            operator!=( const ScUserList& r ) const;
+
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
+    void clear();
+    size_t size() const;
+    void push_back(ScUserListData* p);
+    void erase(iterator itr);
 };
-
-inline  ScUserList& ScUserList::operator=( const ScUserList& r )
-    { return (ScUserList&)ScCollection::operator=( r ); }
-
-inline ScUserListData* ScUserList::operator[]( const sal_uInt16 nIndex) const
-    { return (ScUserListData*)At(nIndex); }
-
-inline sal_Bool ScUserList::operator!=( const ScUserList& r ) const
-    { return !operator==( r ); }
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

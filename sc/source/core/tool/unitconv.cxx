@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,8 +39,9 @@
 #include "viewopti.hxx"         //! move ScLinkConfigItem to separate header!
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // --------------------------------------------------------------------
 
@@ -74,7 +76,6 @@ ScDataObject* ScUnitConverterData::Clone() const
 }
 
 
-// static
 void ScUnitConverterData::BuildIndexString( String& rStr,
             const String& rFromUnit, const String& rToUnit )
 {
@@ -103,12 +104,12 @@ void ScUnitConverterData::BuildIndexString( String& rStr,
 #define CFGSTR_UNIT_FACTOR  "Factor"
 
 ScUnitConverter::ScUnitConverter( sal_uInt16 nInit, sal_uInt16 nDeltaP ) :
-        ScStrCollection( nInit, nDeltaP, sal_False )
+        ScStrCollection( nInit, nDeltaP, false )
 {
     //  read from configuration - "convert.ini" is no longer used
     //! config item as member to allow change of values
 
-    ScLinkConfigItem aConfigItem( OUString::createFromAscii( CFGPATH_UNIT ) );
+    ScLinkConfigItem aConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_UNIT )) );
 
     // empty node name -> use the config item's path itself
     OUString aEmptyString;
@@ -129,11 +130,11 @@ ScUnitConverter::ScUnitConverter( sal_uInt16 nInit, sal_uInt16 nDeltaP ) :
             sPrefix += sSlash;
 
             pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString::createFromAscii( CFGSTR_UNIT_FROM );
+            pValNameArray[nIndex++] += OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_UNIT_FROM ));
             pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString::createFromAscii( CFGSTR_UNIT_TO );
+            pValNameArray[nIndex++] += OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_UNIT_TO ));
             pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString::createFromAscii( CFGSTR_UNIT_FACTOR );
+            pValNameArray[nIndex++] += OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_UNIT_FACTOR ));
         }
 
         Sequence<Any> aProperties = aConfigItem.GetProperties(aValNames);
@@ -172,7 +173,8 @@ sal_Bool ScUnitConverter::GetValue( double& fValue, const String& rFromUnit,
         return sal_True;
     }
     fValue = 1.0;
-    return sal_False;
+    return false;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

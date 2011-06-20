@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,8 +102,8 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
     pFormat         ( pAutoFormat ),
     pSelFmtData     ( pSelFormatData ),
     nIndex          ( 0 ),
-    bCoreDataChanged( sal_False ),
-    bFmtInserted    ( sal_False )
+    bCoreDataChanged( false ),
+    bFmtInserted    ( false )
 {
     Init();
     pWndPreview->NotifyChange( (*pFormat)[0] );
@@ -111,7 +112,7 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
 
 //------------------------------------------------------------------------
 
-__EXPORT ScAutoFormatDlg::~ScAutoFormatDlg()
+ScAutoFormatDlg::~ScAutoFormatDlg()
 {
     delete pWndPreview;
 }
@@ -254,7 +255,7 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
         String              aStrStandard( SfxResId(STR_STANDARD) );
         String              aFormatName;
         ScStringInputDlg*   pDlg;
-        sal_Bool                bOk = sal_False;
+        sal_Bool                bOk = false;
 
         while ( !bOk )
         {
@@ -358,7 +359,7 @@ IMPL_LINK( ScAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
 
 IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
 {
-    sal_Bool bOk = sal_False;
+    sal_Bool bOk = false;
     while( !bOk )
     {
 
@@ -372,7 +373,7 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
                                          HID_SC_REN_AFMT_DLG, HID_SC_REN_AFMT_NAME );
         if( pDlg->Execute() == RET_OK )
         {
-            sal_Bool bFmtRenamed = sal_False;
+            sal_Bool bFmtRenamed = false;
             pDlg->GetInputString( aFormatName );
             sal_uInt16 n;
 
@@ -402,7 +403,7 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
 
                     sal_uInt16 nCount = pFormat->GetCount();
 
-                    aLbFormat.SetUpdateMode(sal_False);
+                    aLbFormat.SetUpdateMode(false);
                     aLbFormat.Clear();
                     for ( sal_uInt16 i = 0; i < nCount; i++ )
                     {
@@ -466,7 +467,7 @@ IMPL_LINK( ScAutoFormatDlg, SelFmtHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScAutoFormatDlg::GetCurrFormatName()
+String ScAutoFormatDlg::GetCurrFormatName()
 {
     String  aResult;
 
@@ -474,3 +475,5 @@ String __EXPORT ScAutoFormatDlg::GetCurrFormatName()
 
     return aResult;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

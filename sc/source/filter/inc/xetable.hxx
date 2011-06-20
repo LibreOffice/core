@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,9 @@
 #include "xeformula.hxx"
 #include "xestyle.hxx"
 
+#include <boost/shared_ptr.hpp>
+#include <map>
+
 /* ============================================================================
 Export of cell tables including row and column description.
 - Managing all used and formatted cells in a sheet.
@@ -70,7 +74,7 @@ class XclExpRangeFmlaBase : public XclExpRecord
 {
 public:
     /** Returns true, if the passed cell position is equal to own base position. */
-    bool                IsBasePos( sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const;
+    bool                IsBasePos( sal_uInt16 nXclCol, sal_uInt32 nXclRow ) const;
 
     /** Derived classes create the token array for a corresponding FORMULA cell record. */
     virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const = 0;
@@ -96,7 +100,7 @@ protected:
     XclAddress          maBaseXclPos;   /// Address of base cell (first FORMULA record).
 };
 
-typedef ScfRef< XclExpRangeFmlaBase > XclExpRangeFmlaRef;
+typedef boost::shared_ptr< XclExpRangeFmlaBase > XclExpRangeFmlaRef;
 
 // Array formulas =============================================================
 
@@ -126,7 +130,7 @@ private:
     XclTokenArrayRef    mxTokArr;       /// The token array of a matrix formula.
 };
 
-typedef ScfRef< XclExpArray > XclExpArrayRef;
+typedef boost::shared_ptr< XclExpArray > XclExpArrayRef;
 
 // ----------------------------------------------------------------------------
 
@@ -177,7 +181,7 @@ private:
     sal_uInt8           mnUsedCount;    /// Number of FORMULA records referring to this record.
 };
 
-typedef ScfRef< XclExpShrfmla > XclExpShrfmlaRef;
+typedef boost::shared_ptr< XclExpShrfmla > XclExpShrfmlaRef;
 
 // ----------------------------------------------------------------------------
 
@@ -237,14 +241,14 @@ private:
     SCTAB               mnScTab;        /// Sheet index of this record.
     sal_uInt16          mnLastAppXclCol;/// Column index of last appended cell.
     sal_uInt16          mnColInpXclCol; /// Column index of column input cell.
-    sal_uInt16          mnColInpXclRow; /// Row index of column input cell.
+    sal_uInt32          mnColInpXclRow; /// Row index of column input cell.
     sal_uInt16          mnRowInpXclCol; /// Column index of row input cell.
-    sal_uInt16          mnRowInpXclRow; /// Row index of row input cell.
+    sal_uInt32          mnRowInpXclRow; /// Row index of row input cell.
     sal_uInt8           mnScMode;       /// Type of the multiple operation (Calc constant).
     bool                mbValid;        /// true = Contains valid references.
 };
 
-typedef ScfRef< XclExpTableop > XclExpTableopRef;
+typedef boost::shared_ptr< XclExpTableop > XclExpTableopRef;
 
 // ----------------------------------------------------------------------------
 
@@ -286,7 +290,7 @@ public:
     /** Returns the (first) Excel column index of the cell(s). */
     inline sal_uInt16   GetXclCol() const { return maXclPos.mnCol; }
     /** Returns the Excel row index of the cell. */
-    inline sal_uInt16   GetXclRow() const { return maXclPos.mnRow; }
+    inline sal_uInt32   GetXclRow() const { return maXclPos.mnRow; }
 
     /** Derived classes return the column index of the last contained cell. */
     virtual sal_uInt16  GetLastXclCol() const = 0;
@@ -314,13 +318,13 @@ protected:
     /** Sets this record to a new column position. */
     inline void         SetXclCol( sal_uInt16 nXclCol ) { maXclPos.mnCol = nXclCol; }
     /** Sets this record to a new row position. */
-    inline void         SetXclRow( sal_uInt16 nXclRow ) { maXclPos.mnRow = nXclRow; }
+    inline void         SetXclRow( sal_uInt32 nXclRow ) { maXclPos.mnRow = nXclRow; }
 
 private:
     XclAddress          maXclPos;       /// Address of the cell.
 };
 
-typedef ScfRef< XclExpCellBase > XclExpCellRef;
+typedef boost::shared_ptr< XclExpCellBase > XclExpCellRef;
 
 // Single cell records ========================================================
 
@@ -403,28 +407,6 @@ private:
 private:
     bool                mbValue;        /// The cell value.
 };
-
-// ----------------------------------------------------------------------------
-
-//UNUSED2009-05 /** Represents a BOOLERR record that describes a cell with an error code. */
-//UNUSED2009-05 class XclExpErrorCell : public XclExpSingleCellBase
-//UNUSED2009-05 {
-//UNUSED2009-05     DECL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell )
-//UNUSED2009-05
-//UNUSED2009-05 public:
-//UNUSED2009-05     explicit            XclExpErrorCell( const XclExpRoot rRoot, const XclAddress& rXclPos,
-//UNUSED2009-05                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
-//UNUSED2009-05                             sal_uInt8 nErrCode );
-//UNUSED2009-05
-//UNUSED2009-05     virtual void        SaveXml( XclExpXmlStream& rStrm );
-//UNUSED2009-05 private:
-//UNUSED2009-05     virtual void        WriteContents( XclExpStream& rStrm );
-//UNUSED2009-05
-//UNUSED2009-05 private:
-//UNUSED2009-05     sal_uInt8           mnErrCode;      /// The error code.
-//UNUSED2009-05 };
-
-// ----------------------------------------------------------------------------
 
 class ScStringCell;
 class ScEditCell;
@@ -897,11 +879,11 @@ public:
     /** Constructs the ROW record and converts the Calc row settings.
         @param bAlwaysEmpty  true = This row will not be filled with blank cells
             in the Finalize() function. */
-    explicit            XclExpRow( const XclExpRoot& rRoot, sal_uInt16 nXclRow,
+    explicit            XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
                             XclExpRowOutlineBuffer& rOutlineBfr, bool bAlwaysEmpty );
 
     /** Returns the excel row index of this ROW record. */
-    inline sal_uInt16   GetXclRow() const { return mnXclRow; }
+    inline sal_uInt32   GetXclRow() const { return mnXclRow; }
     /** Returns the height of the row in twips. */
     inline sal_uInt16   GetHeight() const { return mnHeight; }
     /** Returns true, if this row does not contain at least one valid cell. */
@@ -956,7 +938,7 @@ private:
     typedef XclExpRecordList< XclExpCellBase > XclExpCellList;
 
     XclExpCellList      maCellList;         /// List of cell records for this row.
-    sal_uInt16          mnXclRow;           /// Excel row index of this row.
+    sal_uInt32          mnXclRow;           /// Excel row index of this row.
     sal_uInt16          mnHeight;           /// Row height in twips.
     sal_uInt16          mnFlags;            /// Flags for the ROW record.
     sal_uInt16          mnXFIndex;          /// Default row formatting.
@@ -999,17 +981,15 @@ private:
     /** Returns access to the specified ROW record. Inserts preceding missing ROW records.
         @param bRowAlwaysEmpty  true = Created rows will not be filled with blank cells
             in the XclExpRow::Finalize() function. */
-    XclExpRow&          GetOrCreateRow( sal_uInt16 nXclRow, bool bRowAlwaysEmpty );
+    XclExpRow&          GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysEmpty );
 
 private:
-    typedef XclExpRecordList< XclExpRow >   XclExpRowList;
-    typedef XclExpRowList::RecordRefType    XclExpRowRef;
+    typedef ::boost::shared_ptr<XclExpRow>  RowRef;
+    typedef ::std::map<sal_uInt32, RowRef>  RowMap;
 
-    XclExpRowList       maRowList;          /// List of all ROW records.
+    RowMap              maRowMap;
     XclExpRowOutlineBuffer maOutlineBfr;    /// Buffer for row outline groups.
     XclExpDimensions    maDimensions;       /// DIMENSIONS record for used area.
-    XclExpRow*          mpLastUsedRow;      /// Last used row for faster access.
-    sal_uInt16          mnLastUsedXclRow;   /// Last used row for faster access.
 };
 
 // ============================================================================
@@ -1066,11 +1046,11 @@ private:
     typedef XclExpRecordList< XclExpNote >      XclExpNoteList;
     typedef XclExpRecordList< XclExpHyperlink > XclExpHyperlinkList;
 
-    typedef ScfRef< XclExpDefrowheight >        XclExpDefrowhRef;
-    typedef ScfRef< XclExpNoteList >            XclExpNoteListRef;
-    typedef ScfRef< XclExpMergedcells >         XclExpMergedcellsRef;
-    typedef ScfRef< XclExpHyperlinkList >       XclExpHyperlinkRef;
-    typedef ScfRef< XclExpDval >                XclExpDvalRef;
+    typedef boost::shared_ptr< XclExpDefrowheight >        XclExpDefrowhRef;
+    typedef boost::shared_ptr< XclExpNoteList >            XclExpNoteListRef;
+    typedef boost::shared_ptr< XclExpMergedcells >         XclExpMergedcellsRef;
+    typedef boost::shared_ptr< XclExpHyperlinkList >       XclExpHyperlinkRef;
+    typedef boost::shared_ptr< XclExpDval >                XclExpDvalRef;
 
     XclExpColinfoBuffer maColInfoBfr;       /// Buffer for column formatting.
     XclExpRowBuffer     maRowBfr;           /// Rows and cell records.
@@ -1087,3 +1067,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

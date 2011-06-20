@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,7 +68,7 @@
 #include "drawview.hxx"
 #include "impex.hxx"
 #include "dbfunc.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "sc.hrc"
 #include "filter.hxx"
 #include "scextopt.hxx"
@@ -116,7 +117,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     }
 
     TransferableDataHelper aDataHelper( rxTransferable );
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
 
     //
     //  handle individual formats
@@ -165,14 +166,14 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                         nFirstCol = nLastCol = 0;
                         nFirstRow = nLastRow = 0;
                     }
-                    ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, nSrcTab, nLastCol, nLastRow, nSrcTab), false);
+                    ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, 0, nLastCol, nLastRow, 0), false);
                     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aSrcMark);
                     ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
 
                     SetCursor( nPosX, nPosY );
                     Unmark();
                     PasteFromClip( IDF_ALL, pClipDoc,
-                                    PASTE_NOFUNC, sal_False, sal_False, sal_False, INS_NONE, IDF_NONE,
+                                    PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
                                     bAllowDialogs );
                     delete pClipDoc;
                     bRet = sal_True;
@@ -191,17 +192,6 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     // try to get the replacement image from the clipboard
                     Graphic aGraphic;
                     sal_uLong nGrFormat = 0;
-// (wg. Selection Manager bei Trustet Solaris)
-#ifndef SOLARIS
-/*
-                    if( aDataHelper.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
-                        nGrFormat = SOT_FORMATSTR_ID_SVXB;
-                    else if( aDataHelper.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
-                        nGrFormat = SOT_FORMAT_GDIMETAFILE;
-                    else if( aDataHelper.GetGraphic( FORMAT_BITMAP, aGraphic ) )
-                        nGrFormat = SOT_FORMAT_BITMAP;
-*/
-#endif
 
                     // insert replacement image ( if there is one ) into the object helper
                     if ( nGrFormat )
@@ -217,15 +207,12 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                 }
                 else
                 {
-                    DBG_ERROR("Error in CreateAndLoad");
+                    OSL_FAIL("Error in CreateAndLoad");
                 }
             }
         }
         else
         {
-//            uno::Reference < io::XInputStream > xStm;
-//            TransferableObjectDescriptor    aObjDesc;
-
             if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) )
             {
                 ::rtl::OUString aName;
@@ -293,7 +280,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                 }
                 else
                 {
-                    DBG_ERROR("Error creating external OLE object");
+                    OSL_FAIL("Error creating external OLE object");
                 }
             }
             //TODO/LATER: if format is not available, create picture
@@ -301,7 +288,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     }
     else if ( nFormatId == SOT_FORMATSTR_ID_LINK )      // LINK is also in ScImportExport
     {
-        bRet = PasteDDE( rxTransferable );
+        bRet = PasteLink( rxTransferable );
     }
     else if ( ScImportExport::IsFormatSupported( nFormatId ) || nFormatId == SOT_FORMAT_RTF )
     {
@@ -319,18 +306,31 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             ::rtl::OUString aStr;
             SotStorageStreamRef xStream;
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.Is() )
+            {
+                if (nFormatId == SOT_FORMATSTR_ID_HTML)
+                {
+                    // Launch the text import options dialog.  For now, we do
+                    // this for html pasting only, but in the future it may
+                    // make sense to do it for other data types too.
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    ::std::auto_ptr<AbstractScTextImportOptionsDlg> pDlg(
+                        pFact->CreateScTextImportOptionsDlg(NULL, RID_SCDLG_TEXT_IMPORT_OPTIONS));
+
+                    if (pDlg->Execute() == RET_OK)
+                    {
+                        ScAsciiOptions aOptions;
+                        aOptions.SetLanguage(pDlg->GetLanguageType());
+                        aOptions.SetDetectSpecialNumber(pDlg->IsDateConversionSet());
+                        aObj.SetExtOptions(aOptions);
+                    }
+                }
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
                 bRet = aObj.ImportStream( *xStream, String(), nFormatId );
+            }
             else if (nFormatId == FORMAT_STRING && aDataHelper.GetString( nFormatId, aStr ))
             {
                 // Do CSV dialog if more than one line.
                 sal_Int32 nDelim = aStr.indexOf('\n');
-#if 0
-                ::rtl::OString tmpStr = OUStringToOString( aStr,
-                        RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "String is '%s' (%d) [%d]\n", tmpStr.getStr(),
-                        tmpStr.getLength(), nDelim);
-#endif
                 if (nDelim >= 0 && nDelim != aStr.getLength () - 1)
                 {
                     ScImportStringStream aStrm( aStr);
@@ -352,7 +352,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                         // Content was partially pasted, which can be undone by
                         // the user though.
                         if (aObj.IsOverflow())
-                            bRet = sal_False;
+                            bRet = false;
                     }
                     else
                         bRet = sal_True;
@@ -374,20 +374,15 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     {
         //  import of database data into table
 
-        const DataFlavorExVector& rVector = aDataHelper.GetDataFlavorExVector();
-        if ( svx::ODataAccessObjectTransferable::canExtractObjectDescriptor(rVector) )
+        String sDataDesc;
+        if ( aDataHelper.GetString( nFormatId, sDataDesc ) )
         {
-            // transport the whole ODataAccessDescriptor as slot parameter
-            svx::ODataAccessDescriptor aDesc = svx::ODataAccessObjectTransferable::extractObjectDescriptor(aDataHelper);
-            uno::Any aDescAny;
-            uno::Sequence<beans::PropertyValue> aProperties = aDesc.createPropertyValueSequence();
-            aDescAny <<= aProperties;
-            SfxUsrAnyItem aDataDesc(SID_SBA_IMPORT, aDescAny);
+            SfxStringItem aDataDesc(SID_SBA_IMPORT, sDataDesc);
 
             ScDocShell* pDocSh = GetViewData()->GetDocShell();
             SCTAB nTab = GetViewData()->GetTabNo();
 
-            ClickCursor(nPosX, nPosY, sal_False);               // set cursor position
+            ClickCursor(nPosX, nPosY, false);               // set cursor position
 
             //  Creation of database area "Import1" isn't here, but in the DocShell
             //  slot execute, so it can be added to the undo action
@@ -406,10 +401,20 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             sal_Bool bAreaIsNew = !pDBData;
             SfxBoolItem aAreaNew(FN_PARAM_2, bAreaIsNew);
 
+            ::svx::ODataAccessDescriptor aDesc;
+            DataFlavorExVector& rVector = aDataHelper.GetDataFlavorExVector();
+            ::std::auto_ptr<SfxUsrAnyItem> pCursorItem;
+            if ( ::svx::ODataAccessObjectTransferable::canExtractObjectDescriptor(rVector) )
+            {
+                aDesc = ::svx::ODataAccessObjectTransferable::extractObjectDescriptor(aDataHelper);
+                if ( aDesc.has(::svx::daCursor) )
+                    pCursorItem.reset(new SfxUsrAnyItem(FN_PARAM_3, aDesc[::svx::daCursor]));
+            }
+
             //  asynchronous, to avoid doing the whole import in drop handler
             SfxDispatcher& rDisp = GetViewData()->GetDispatcher();
             rDisp.Execute(SID_SBA_IMPORT, SFX_CALLMODE_ASYNCHRON,
-                                        &aDataDesc, &aTarget, &aAreaNew, (void*)0 );
+                                        &aDataDesc, &aTarget, &aAreaNew, pCursorItem.get(), (void*)0 );
 
             bRet = sal_True;
         }
@@ -518,7 +523,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     pObject = aIter.Next();
                 }
 
-                nObjCount += pPage->GetObjCount();          // #105888# count group object only once
+                nObjCount += pPage->GetObjCount();          // count group object only once
             }
 
             PasteDraw( aPos, pModel, (nObjCount > 1) );     // grouped if more than 1 object
@@ -534,10 +539,6 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
         uno::Reference < io::XInputStream > xStm;
         if( aDataHelper.GetInputStream( nFormatId, xStm ) )
         {
-#if 0
-            SotStorage aDest( "d:\\test.xls" ); // to see the file
-            pStor->CopyTo( &aDest );
-#endif
             ScDocument* pInsDoc = new ScDocument( SCDOCMODE_CLIP );
             SCTAB nSrcTab = 0;      // Biff5 in clipboard: always sheet 0
             pInsDoc->ResetClip( pDoc, nSrcTab );
@@ -556,12 +557,12 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     // ensure correct sheet indexes
                     aSource.aStart.SetTab( nSrcTab );
                     aSource.aEnd.SetTab( nSrcTab );
-// #92240# don't use selection area: if cursor is moved in Excel after Copy, selection
+// don't use selection area: if cursor is moved in Excel after Copy, selection
 // represents the new cursor position and not the copied area
                 }
                 else
                 {
-                    DBG_ERROR("no dimension");  //! possible?
+                    OSL_FAIL("no dimension");   //! possible?
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;
                     if ( pInsDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
@@ -578,13 +579,13 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                 if ( pLogicPos )
                 {
                     // position specified (Drag&Drop) - change selection
-                    MoveCursorAbs( nPosX, nPosY, SC_FOLLOW_NONE, sal_False, sal_False );
+                    MoveCursorAbs( nPosX, nPosY, SC_FOLLOW_NONE, false, false );
                     Unmark();
                 }
 
                 pInsDoc->SetClipArea( aSource );
                 PasteFromClip( IDF_ALL, pInsDoc,
-                                PASTE_NOFUNC, sal_False, sal_False, sal_False, INS_NONE, IDF_NONE,
+                                PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
                                 bAllowDialogs );
                 delete pInsDoc;
 
@@ -609,15 +610,6 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                 String aFile = aFileList.GetFile( i );
 
                 PasteFile( aPos, aFile, bLink );
-#if 0
-                SfxStringItem aNameItem( FID_INSERT_FILE, aFile );
-                SfxPointItem aPosItem( FN_PARAM_1, aPos );
-                SfxDispatcher* pDisp =
-                    GetViewData()->GetViewShell()->GetViewFrame()->GetDispatcher();
-                if (pDisp)
-                    pDisp->Execute( FID_INSERT_FILE, SFX_CALLMODE_ASYNCHRON,
-                                        &aNameItem, &aPosItem, (void*)0 );
-#endif
 
                 aPos.X() += 400;
                 aPos.Y() += 400;
@@ -633,22 +625,12 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
         bRet = PasteBookmark( nFormatId, rxTransferable, nPosX, nPosY );
     }
 
-    pDoc->SetPastingDrawFromOtherDoc( sal_False );
+    pDoc->SetPastingDrawFromOtherDoc( false );
 
     return bRet;
 }
 
-ByteString lcl_GetSubString( sal_Char* pData, long nStart, long nDataSize )
-{
-    if ( nDataSize <= nStart /* || pData[nDataSize] != 0 */ )
-    {
-        DBG_ERROR("DDE Data: invalid data");
-        return ByteString();
-    }
-    return ByteString( pData + nStart );
-}
-
-sal_Bool ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rxTransferable )
+bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& rxTransferable )
 {
     TransferableDataHelper aDataHelper( rxTransferable );
 
@@ -658,8 +640,8 @@ sal_Bool ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>
     uno::Sequence<sal_Int8> aSequence;
     if ( !aDataHelper.GetSequence( SOT_FORMATSTR_ID_LINK, aSequence ) )
     {
-        DBG_ERROR("DDE Data not found.");
-        return sal_False;
+        OSL_FAIL("DDE Data not found.");
+        return false;
     }
 
     //  check size (only if string is available in transferable)
@@ -690,37 +672,76 @@ sal_Bool ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>
 
     //  create formula
 
-    long nSeqLen = aSequence.getLength();
-    sal_Char* pData = (sal_Char*)aSequence.getConstArray();
+    sal_Int32 nSeqLen = aSequence.getLength();
+    const char* p = reinterpret_cast<const char*>(aSequence.getConstArray());
 
     rtl_TextEncoding eSysEnc = gsl_getSystemTextEncoding();
 
-    ByteString aByteApp   = lcl_GetSubString( pData, 0, nSeqLen );
-    ByteString aByteTopic = lcl_GetSubString( pData, aByteApp.Len() + 1, nSeqLen );
-    ByteString aByteItem  = lcl_GetSubString( pData, aByteApp.Len() + aByteTopic.Len() + 2, nSeqLen );
+    // char array delimited by \0.
+    // app \0 topic \0 item \0 (extra \0) where the extra is optional.
+    ::std::vector<rtl::OUString> aStrs;
+    const char* pStart = p;
+    sal_Int32 nStart = 0;
+    for (sal_Int32 i = 0; i < nSeqLen; ++i, ++p)
+    {
+        if (*p == '\0')
+        {
+            sal_Int32 nLen = i - nStart;
+            aStrs.push_back(rtl::OUString(pStart, nLen, eSysEnc));
+            nStart = ++i;
+            pStart = ++p;
+        }
+    }
 
-    String aApp( aByteApp, eSysEnc );
-    String aTopic( aByteTopic, eSysEnc );
-    String aItem( aByteItem, eSysEnc );
+    if (aStrs.size() < 3)
+        return false;
 
-    // TODO: we could define ocQuote for "
-    const String aQuote( '"' );
-    const String& sSep = ScCompiler::GetNativeSymbol( ocSep);
-    String aFormula( '=' );
-    aFormula += ScCompiler::GetNativeSymbol( ocDde);
-    aFormula += ScCompiler::GetNativeSymbol( ocOpen);
-    aFormula += aQuote;
-    aFormula += aApp;
-    aFormula += aQuote;
-    aFormula += sSep;
-    aFormula += aQuote;
-    aFormula += aTopic;
-    aFormula += aQuote;
-    aFormula += sSep;
-    aFormula += aQuote;
-    aFormula += aItem;
-    aFormula += aQuote;
-    aFormula += ScCompiler::GetNativeSymbol( ocClose);
+    const rtl::OUString* pApp   = &aStrs[0];
+    const rtl::OUString* pTopic = &aStrs[1];
+    const rtl::OUString* pItem  = &aStrs[2];
+    const rtl::OUString* pExtra = NULL;
+    if (aStrs.size() > 3)
+        pExtra = &aStrs[3];
+
+    if (pExtra && pExtra->equalsAscii("calc:extref"))
+    {
+        // Paste this as an external reference.  Note that paste link always
+        // uses Calc A1 syntax even when another formula syntax is specified
+        // in the UI.
+        rtl::OUStringBuffer aBuf;
+        aBuf.appendAscii("='");
+        rtl::OUString aPath = ScGlobal::GetAbsDocName(
+            *pTopic, GetViewData()->GetDocument()->GetDocumentShell());
+        aBuf.append(aPath);
+        aBuf.appendAscii("'#");
+        aBuf.append(*pItem);
+        EnterMatrix(aBuf.makeStringAndClear(), ::formula::FormulaGrammar::GRAM_NATIVE);
+        return true;
+    }
+    else
+    {
+        // DDE in all other cases.
+
+        // TODO: we could define ocQuote for "
+        rtl::OUStringBuffer aBuf;
+        aBuf.append(sal_Unicode('='));
+        aBuf.append(ScCompiler::GetNativeSymbol(ocDde));
+        aBuf.append(ScCompiler::GetNativeSymbol(ocOpen));
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(*pApp);
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(ScCompiler::GetNativeSymbol(ocSep));
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(*pTopic);
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(ScCompiler::GetNativeSymbol(ocSep));
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(*pItem);
+        aBuf.append(sal_Unicode('"'));
+        aBuf.append(ScCompiler::GetNativeSymbol(ocClose));
+
+        EnterMatrix(aBuf.makeStringAndClear(), ::formula::FormulaGrammar::GRAM_NATIVE);
+    }
 
     //  mark range
 
@@ -732,13 +753,10 @@ sal_Bool ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>
     InitBlockMode( nCurX, nCurY, nTab );
     MarkCursor( nCurX+static_cast<SCCOL>(nCols)-1, nCurY+static_cast<SCROW>(nRows)-1, nTab );
     ShowAllCursors();
-
-    //  enter formula
-
-    EnterMatrix( aFormula );
     CursorPosChanged();
 
-    return sal_True;
+    return true;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

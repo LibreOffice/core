@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,8 +61,7 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     nTab( pData->GetTabNo() ),
     pDropMarker( NULL ),
     pDropMarkObj( NULL ),
-    bInConstruct( sal_True )
-    //HMHbDisableHdl( sal_False )
+    bInConstruct( true )
 {
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
@@ -74,7 +74,7 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
 
 // Verankerung setzen
 
-void ScDrawView::SetAnchor( ScAnchorType eType )
+void ScDrawView::SetPageAnchored()
 {
     SdrObject* pObj = NULL;
     if( AreObjectsMarked() )
@@ -84,7 +84,7 @@ void ScDrawView::SetAnchor( ScAnchorType eType )
         for( sal_uLong i=0; i<nCount; i++ )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            ScDrawLayer::SetAnchor( pObj, eType );
+            ScDrawLayer::SetPageAnchored( *pObj );
         }
 
         if ( pViewData )
@@ -92,10 +92,31 @@ void ScDrawView::SetAnchor( ScAnchorType eType )
     }
 }
 
-ScAnchorType ScDrawView::GetAnchor() const
+void ScDrawView::SetCellAnchored()
 {
-    sal_Bool bPage = sal_False;
-    sal_Bool bCell = sal_False;
+    if (!pDoc)
+        return;
+
+    SdrObject* pObj = NULL;
+    if( AreObjectsMarked() )
+    {
+        const SdrMarkList* pMark = &GetMarkedObjectList();
+        sal_uLong nCount = pMark->GetMarkCount();
+        for( sal_uLong i=0; i<nCount; i++ )
+        {
+            pObj = pMark->GetMark(i)->GetMarkedSdrObj();
+            ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab);
+        }
+
+        if ( pViewData )
+            pViewData->GetDocShell()->SetDrawModified();
+    }
+}
+
+ScAnchorType ScDrawView::GetAnchorType() const
+{
+    sal_Bool bPage = false;
+    sal_Bool bCell = false;
     const SdrObject* pObj = NULL;
     if( AreObjectsMarked() )
     {
@@ -105,8 +126,8 @@ ScAnchorType ScDrawView::GetAnchor() const
         for( sal_uLong i=0; i<nCount; i++ )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            if( ScDrawLayer::GetAnchor( pObj ) == SCA_CELL )
-                bCell =sal_True;
+            if( ScDrawLayer::GetAnchorType( *pObj ) == SCA_CELL )
+                bCell =true;
             else
                 bPage = sal_True;
         }
@@ -118,7 +139,7 @@ ScAnchorType ScDrawView::GetAnchor() const
     return SCA_DONTKNOW;
 }
 
-void __EXPORT ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (rHint.ISA(ScTabDeletedHint))                        // Tabelle geloescht
     {
@@ -134,6 +155,20 @@ void __EXPORT ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         if ( nTab == ((ScTabSizeChangedHint&)rHint).GetTab() )
             UpdateWorkArea();
+    }
+    else if ( rHint.ISA( SdrHint ) )
+    {
+        if (const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint ))
+        {
+            //Update the anchors of any non note object that is cell anchored which has
+            //been moved since the last anchors for its position was calculated
+            if (pSdrHint->GetKind() == HINT_OBJCHG || pSdrHint->GetKind() == HINT_OBJINSERTED)
+                if (SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject()))
+                    if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pObj))
+                        if (!pAnchor->mbNote && pAnchor->maLastRect != pObj->GetLogicRect())
+                            ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab);
+        }
+        FmFormView::Notify( rBC,rHint );
     }
     else
         FmFormView::Notify( rBC,rHint );
@@ -168,15 +203,12 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
         ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );    // aus imapwrap
 
         // TargetListe kann von uns wieder geloescht werden
-        String* pEntry = aTargetList.First();
-        while( pEntry )
-        {
-            delete pEntry;
-            pEntry = aTargetList.Next();
-        }
+        for ( size_t i = 0, n = aTargetList.size(); i < n; ++i )
+            delete aTargetList[ i ];
     }
 }
 
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

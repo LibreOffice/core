@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "global.hxx"
 #include "formula/opcode.hxx"
 #include "unotools/transliterationwrapper.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include <memory>
 
@@ -48,7 +49,7 @@ struct ScCellKeyword
     ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const ::com::sun::star::lang::Locale& rLocale);
 };
 
-typedef ::std::hash_map< String, ::std::list<ScCellKeyword>, ScStringHashCode, ::std::equal_to<String> > ScCellKeywordHashMap;
+typedef ::boost::unordered_map< String, ::std::list<ScCellKeyword>, ScStringHashCode, ::std::equal_to<String> > ScCellKeywordHashMap;
 
 /** Translate cell function keywords.
 
@@ -89,3 +90,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

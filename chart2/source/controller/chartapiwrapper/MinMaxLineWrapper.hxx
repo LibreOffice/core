@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,9 +64,6 @@ class MinMaxLineWrapper : public MutexContainer
                         , ::com::sun::star::beans::XMultiPropertySet
                         , ::com::sun::star::beans::XPropertyState
                         , ::com::sun::star::beans::XMultiPropertyStates
-                        //  , ::com::sun::star::uno::XWeak          // implemented by WeakImplHelper(optional interface)
-                        //  , ::com::sun::star::uno::XInterface     // implemented by WeakImplHelper
-                        //  , ::com::sun::star::lang::XTypeProvider // implemented by WeakImplHelper
                         >
 {
 public:
@@ -131,3 +129,5 @@ private: //member
 
 // CHART_MINMAXLINEWRAPPER_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

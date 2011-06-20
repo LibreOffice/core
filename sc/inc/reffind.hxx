@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,14 +42,13 @@ private:
     String      aFormula;
     formula::FormulaGrammar::AddressConvention eConv;
     ScDocument* pDoc;
+    ScAddress   maPos;
     xub_StrLen  nFound;
     xub_StrLen  nSelStart;
     xub_StrLen  nSelEnd;
 
 public:
-    static const sal_Unicode __FAR_DATA pDelimiters[];
-
-    ScRefFinder( const String& rFormula,
+    ScRefFinder( const String& rFormula, const ScAddress& rPos,
              ScDocument* pDocument = NULL,
              formula::FormulaGrammar::AddressConvention eConvP = formula::FormulaGrammar::CONV_OOO );
     ~ScRefFinder();
@@ -66,3 +66,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,6 +47,7 @@
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 
+#include <sal/macros.h>
 #include <rtl/math.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>
@@ -147,7 +149,8 @@ XclChEscherFormat::~XclChEscherFormat()
 
 XclChPicFormat::XclChPicFormat() :
     mnBmpMode( EXC_CHPICFORMAT_NONE ),
-    mnFlags( EXC_CHPICFORMAT_TOPBOTTOM | EXC_CHPICFORMAT_FRONTBACK | EXC_CHPICFORMAT_LEFTRIGHT ),
+    mnFormat( EXC_CHPICFORMAT_DEFAULT ),
+    mnFlags( EXC_CHPICFORMAT_DEFAULTFLAGS ),
     mfScale( 0.5 )
 {
 }
@@ -422,7 +425,7 @@ sal_uInt16 XclChartHelper::GetSeriesLineAutoColorIdx( sal_uInt16 nFormatIdx )
         17, 18, 19, 20, 21, 22, 23, 24,
         25, 26, 27, 28, 29, 30, 31, 63
     };
-    return spnLineColors[ nFormatIdx % STATIC_ARRAY_SIZE( spnLineColors ) ];
+    return spnLineColors[ nFormatIdx % SAL_N_ELEMENTS( spnLineColors ) ];
 }
 
 sal_uInt16 XclChartHelper::GetSeriesFillAutoColorIdx( sal_uInt16 nFormatIdx )
@@ -437,13 +440,13 @@ sal_uInt16 XclChartHelper::GetSeriesFillAutoColorIdx( sal_uInt16 nFormatIdx )
          8,  9, 10, 11, 12, 13, 14, 15,
         16, 17, 18, 19, 20, 21, 22, 23
     };
-    return spnFillColors[ nFormatIdx % STATIC_ARRAY_SIZE( spnFillColors ) ];
+    return spnFillColors[ nFormatIdx % SAL_N_ELEMENTS( spnFillColors ) ];
 }
 
 sal_uInt8 XclChartHelper::GetSeriesFillAutoTransp( sal_uInt16 nFormatIdx )
 {
     static const sal_uInt8 spnTrans[] = { 0x00, 0x40, 0x20, 0x60, 0x70 };
-    return spnTrans[ (nFormatIdx / 56) % STATIC_ARRAY_SIZE( spnTrans ) ];
+    return spnTrans[ (nFormatIdx / 56) % SAL_N_ELEMENTS( spnTrans ) ];
 }
 
 sal_uInt16 XclChartHelper::GetAutoMarkerType( sal_uInt16 nFormatIdx )
@@ -452,14 +455,14 @@ sal_uInt16 XclChartHelper::GetAutoMarkerType( sal_uInt16 nFormatIdx )
         EXC_CHMARKERFORMAT_DIAMOND, EXC_CHMARKERFORMAT_SQUARE, EXC_CHMARKERFORMAT_TRIANGLE,
         EXC_CHMARKERFORMAT_CROSS, EXC_CHMARKERFORMAT_STAR, EXC_CHMARKERFORMAT_CIRCLE,
         EXC_CHMARKERFORMAT_PLUS, EXC_CHMARKERFORMAT_DOWJ, EXC_CHMARKERFORMAT_STDDEV };
-    return spnSymbols[ nFormatIdx % STATIC_ARRAY_SIZE( spnSymbols ) ];
+    return spnSymbols[ nFormatIdx % SAL_N_ELEMENTS( spnSymbols ) ];
 }
 
 bool XclChartHelper::HasMarkerFillColor( sal_uInt16 nMarkerType )
 {
     static const bool spbFilled[] = {
         false, true, true, true, false, false, false, false, true, false };
-    return (nMarkerType < STATIC_ARRAY_SIZE( spbFilled )) && spbFilled[ nMarkerType ];
+    return (nMarkerType < SAL_N_ELEMENTS( spbFilled )) && spbFilled[ nMarkerType ];
 }
 
 OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
@@ -470,7 +473,7 @@ OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
         case EXC_CHSERERR_XMINUS:   return EXC_CHPROP_ROLE_ERRORBARS_NEGX;
         case EXC_CHSERERR_YPLUS:    return EXC_CHPROP_ROLE_ERRORBARS_POSY;
         case EXC_CHSERERR_YMINUS:   return EXC_CHPROP_ROLE_ERRORBARS_NEGY;
-        default:    DBG_ERRORFILE( "XclChartHelper::GetErrorBarValuesRole - unknown bar type" );
+        default:    OSL_FAIL( "XclChartHelper::GetErrorBarValuesRole - unknown bar type" );
     }
     return OUString();
 }
@@ -506,7 +509,7 @@ static const XclChFormatInfo spFmtInfos[] =
 
 XclChFormatInfoProvider::XclChFormatInfoProvider()
 {
-    const XclChFormatInfo* pEnd = STATIC_ARRAY_END( spFmtInfos );
+    const XclChFormatInfo* pEnd = STATIC_TABLE_END( spFmtInfos );
     for( const XclChFormatInfo* pIt = spFmtInfos; pIt != pEnd; ++pIt )
         maInfoMap[ pIt->meObjType ] = pIt;
 }
@@ -514,7 +517,7 @@ XclChFormatInfoProvider::XclChFormatInfoProvider()
 const XclChFormatInfo& XclChFormatInfoProvider::GetFormatInfo( XclChObjectType eObjType ) const
 {
     XclFmtInfoMap::const_iterator aIt = maInfoMap.find( eObjType );
-    DBG_ASSERT( aIt != maInfoMap.end(), "XclChFormatInfoProvider::GetFormatInfo - unknown object type" );
+    OSL_ENSURE( aIt != maInfoMap.end(), "XclChFormatInfoProvider::GetFormatInfo - unknown object type" );
     return (aIt == maInfoMap.end()) ? *spFmtInfos : *aIt->second;
 }
 
@@ -547,7 +550,7 @@ static const XclChTypeInfo spTypeInfos[] =
     { EXC_CHTYPEID_RADARLINE, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARLINE, SERVICE_CHART2_NET,       EXC_CHVARPOINT_SINGLE, csscd::TOP,           false, false, true,  false, true,  false, true,  false, false, false, false },
     { EXC_CHTYPEID_RADARAREA, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARAREA, SERVICE_CHART2_FILLEDNET, EXC_CHVARPOINT_NONE,   csscd::TOP,           false, false, true,  true,  true,  false, true,  false, false, true,  false },
     { EXC_CHTYPEID_PIE,       EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,       EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  true,  false, false, false, false },
-    { EXC_CHTYPEID_DONUT,     EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,       EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_DONUT,     EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,       EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  false, true,  false, false, true,  false },
     { EXC_CHTYPEID_PIEEXT,    EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIEEXT,    SERVICE_CHART2_PIE,       EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, false, true,  true,  true,  true,  true,  false, false, false, false },
     { EXC_CHTYPEID_SCATTER,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER,   EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  false, false, false, true,  false, false, false, false, false, false },
     { EXC_CHTYPEID_BUBBLES,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_BUBBLE,    EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         false, false, false, true,  true,  false, false, false, false, false, false },
@@ -575,7 +578,7 @@ void XclChExtTypeInfo::Set( const XclChTypeInfo& rTypeInfo, bool b3dChart, bool 
 
 XclChTypeInfoProvider::XclChTypeInfoProvider()
 {
-    const XclChTypeInfo* pEnd = STATIC_ARRAY_END( spTypeInfos );
+    const XclChTypeInfo* pEnd = STATIC_TABLE_END( spTypeInfos );
     for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
         maInfoMap[ pIt->meTypeId ] = pIt;
 }
@@ -583,27 +586,27 @@ XclChTypeInfoProvider::XclChTypeInfoProvider()
 const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfo( XclChTypeId eTypeId ) const
 {
     XclChTypeInfoMap::const_iterator aIt = maInfoMap.find( eTypeId );
-    DBG_ASSERT( aIt != maInfoMap.end(), "XclChTypeInfoProvider::GetTypeInfo - unknown chart type" );
+    OSL_ENSURE( aIt != maInfoMap.end(), "XclChTypeInfoProvider::GetTypeInfo - unknown chart type" );
     return (aIt == maInfoMap.end()) ? *maInfoMap.rbegin()->second : *aIt->second;
 }
 
 const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromRecId( sal_uInt16 nRecId ) const
 {
-    const XclChTypeInfo* pEnd = STATIC_ARRAY_END( spTypeInfos );
+    const XclChTypeInfo* pEnd = STATIC_TABLE_END( spTypeInfos );
     for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
         if( pIt->mnRecId == nRecId )
             return *pIt;
-    DBG_ERRORFILE( "XclChTypeInfoProvider::GetTypeInfoFromRecId - unknown record id" );
+    OSL_FAIL( "XclChTypeInfoProvider::GetTypeInfoFromRecId - unknown record id" );
     return GetTypeInfo( EXC_CHTYPEID_UNKNOWN );
 }
 
 const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromService( const OUString& rServiceName ) const
 {
-    const XclChTypeInfo* pEnd = STATIC_ARRAY_END( spTypeInfos );
+    const XclChTypeInfo* pEnd = STATIC_TABLE_END( spTypeInfos );
     for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
         if( rServiceName.equalsAscii( pIt->mpcServiceName ) )
             return *pIt;
-    DBG_ERRORFILE( "XclChTypeInfoProvider::GetTypeInfoFromService - unknown service name" );
+    OSL_FAIL( "XclChTypeInfoProvider::GetTypeInfoFromService - unknown service name" );
     return GetTypeInfo( EXC_CHTYPEID_UNKNOWN );
 }
 
@@ -623,7 +626,7 @@ Any XclChObjectTable::GetObject( const OUString& rObjName )
     // get object table
     if( !mxContainer.is() )
         mxContainer.set( ScfApiHelper::CreateInstance( mxFactory, maServiceName ), UNO_QUERY );
-    DBG_ASSERT( mxContainer.is(), "XclChObjectTable::GetObject - container not found" );
+    OSL_ENSURE( mxContainer.is(), "XclChObjectTable::GetObject - container not found" );
 
     Any aObj;
     if( mxContainer.is() )
@@ -635,7 +638,7 @@ Any XclChObjectTable::GetObject( const OUString& rObjName )
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "XclChObjectTable::GetObject - object not found" );
+            OSL_FAIL( "XclChObjectTable::GetObject - object not found" );
         }
     }
     return aObj;
@@ -647,7 +650,7 @@ OUString XclChObjectTable::InsertObject( const Any& rObj )
     // create object table
     if( !mxContainer.is() )
         mxContainer.set( ScfApiHelper::CreateInstance( mxFactory, maServiceName ), UNO_QUERY );
-    DBG_ASSERT( mxContainer.is(), "XclChObjectTable::InsertObject - container not found" );
+    OSL_ENSURE( mxContainer.is(), "XclChObjectTable::InsertObject - container not found" );
 
     OUString aObjName;
     if( mxContainer.is() )
@@ -666,7 +669,7 @@ OUString XclChObjectTable::InsertObject( const Any& rObj )
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "XclChObjectTable::InsertObject - cannot insert object" );
+            OSL_FAIL( "XclChObjectTable::InsertObject - cannot insert object" );
             aObjName = OUString();
         }
     }
@@ -792,7 +795,7 @@ void XclChPropSetHelper::ReadLineProperties(
         }
         break;
         default:
-            DBG_ERRORFILE( "XclChPropSetHelper::ReadLineProperties - unknown line style" );
+            OSL_FAIL( "XclChPropSetHelper::ReadLineProperties - unknown line style" );
             rLineFmt.mnPattern = EXC_CHLINEFORMAT_SOLID;
     }
 }
@@ -841,7 +844,7 @@ void XclChPropSetHelper::ReadEscherProperties(
     {
         case cssd::FillStyle_SOLID:
         {
-            DBG_ASSERT( nTransparency > 0, "XclChPropSetHelper::ReadEscherProperties - unexpected solid area without transparency" );
+            OSL_ENSURE( nTransparency > 0, "XclChPropSetHelper::ReadEscherProperties - unexpected solid area without transparency" );
             if( (0 < nTransparency) && (nTransparency <= 100) )
             {
                 // convert to Escher properties
@@ -913,7 +916,7 @@ void XclChPropSetHelper::ReadEscherProperties(
         }
         break;
         default:
-            DBG_ERRORFILE( "XclChPropSetHelper::ReadEscherProperties - unknown fill style" );
+            OSL_FAIL( "XclChPropSetHelper::ReadEscherProperties - unknown fill style" );
     }
 }
 
@@ -1068,22 +1071,22 @@ void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
 
 void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
         XclChObjectTable& rGradientTable, XclChObjectTable& /*rHatchTable*/, XclChObjectTable& rBitmapTable,
-        const XclChEscherFormat& rEscherFmt, const XclChPicFormat* pPicFmt,
-        sal_uInt32 nDffFillType, XclChPropertyMode ePropMode )
+        const XclChEscherFormat& rEscherFmt, const XclChPicFormat& rPicFmt,
+        XclChPropertyMode ePropMode )
 {
-    if( rEscherFmt.mxItemSet.is() )
+    if( rEscherFmt.mxItemSet )
     {
-        if( const XFillStyleItem* pStyleItem = static_cast< const XFillStyleItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLSTYLE, sal_False ) ) )
+        if( const XFillStyleItem* pStyleItem = static_cast< const XFillStyleItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLSTYLE, false ) ) )
         {
             switch( pStyleItem->GetValue() )
             {
                 case XFILL_SOLID:
                     // #i84812# Excel 2007 writes Escher properties for solid fill
-                    if( const XFillColorItem* pColorItem = static_cast< const XFillColorItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLCOLOR, sal_False ) ) )
+                    if( const XFillColorItem* pColorItem = static_cast< const XFillColorItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLCOLOR, false ) ) )
                     {
                         namespace cssd = ::com::sun::star::drawing;
                         // get solid transparence too
-                        const XFillTransparenceItem* pTranspItem = static_cast< const XFillTransparenceItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLTRANSPARENCE, sal_False ) );
+                        const XFillTransparenceItem* pTranspItem = static_cast< const XFillTransparenceItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLTRANSPARENCE, false ) );
                         sal_uInt16 nTransp = pTranspItem ? pTranspItem->GetValue() : 0;
                         ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
                         rAreaHlp.InitializeWrite();
@@ -1092,7 +1095,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                     }
                 break;
                 case XFILL_GRADIENT:
-                    if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLGRADIENT, sal_False ) ) )
+                    if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLGRADIENT, false ) ) )
                     {
                         Any aGradientAny;
                         if( pGradItem->QueryValue( aGradientAny, MID_FILLGRADIENT ) )
@@ -1110,7 +1113,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                     }
                 break;
                 case XFILL_BITMAP:
-                    if( const XFillBitmapItem* pBmpItem = static_cast< const XFillBitmapItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLBITMAP, sal_False ) ) )
+                    if( const XFillBitmapItem* pBmpItem = static_cast< const XFillBitmapItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLBITMAP, false ) ) )
                     {
                         Any aBitmapAny;
                         if( pBmpItem->QueryValue( aBitmapAny, MID_GRAFURL ) )
@@ -1119,10 +1122,8 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                             if( aBmpName.getLength() )
                             {
                                 namespace cssd = ::com::sun::star::drawing;
-                                /*  #i71810# Caller decides whether to use a CHPICFORMAT record for bitmap mode.
-                                    If not passed, detect fill mode from the DFF property 'fill-type'. */
-                                bool bStretch = pPicFmt ? (pPicFmt->mnBmpMode == EXC_CHPICFORMAT_STRETCH) : (nDffFillType == mso_fillPicture);
-                                cssd::BitmapMode eApiBmpMode = bStretch ? cssd::BitmapMode_STRETCH : cssd::BitmapMode_REPEAT;
+                                cssd::BitmapMode eApiBmpMode = (rPicFmt.mnBmpMode == EXC_CHPICFORMAT_STRETCH) ?
+                                    cssd::BitmapMode_STRETCH : cssd::BitmapMode_REPEAT;
                                 maBitmapHlp.InitializeWrite();
                                 maBitmapHlp << cssd::FillStyle_BITMAP << aBmpName << eApiBmpMode;
                                 maBitmapHlp.WriteToPropertySet( rPropSet );
@@ -1131,7 +1132,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                     }
                 break;
                 default:
-                    DBG_ERRORFILE( "XclChPropSetHelper::WriteEscherProperties - unknown fill mode" );
+                    OSL_FAIL( "XclChPropSetHelper::WriteEscherProperties - unknown fill mode" );
             }
         }
     }
@@ -1195,7 +1196,7 @@ ScfPropSetHelper& XclChPropSetHelper::GetLineHelper( XclChPropertyMode ePropMode
         case EXC_CHPROPMODE_COMMON:         return maLineHlpCommon;
         case EXC_CHPROPMODE_LINEARSERIES:   return maLineHlpLinear;
         case EXC_CHPROPMODE_FILLEDSERIES:   return maLineHlpFilled;
-        default: DBG_ERRORFILE( "XclChPropSetHelper::GetLineHelper - unknown property mode" );
+        default: OSL_FAIL( "XclChPropSetHelper::GetLineHelper - unknown property mode" );
     }
     return maLineHlpCommon;
 }
@@ -1206,7 +1207,7 @@ ScfPropSetHelper& XclChPropSetHelper::GetAreaHelper( XclChPropertyMode ePropMode
     {
         case EXC_CHPROPMODE_COMMON:         return maAreaHlpCommon;
         case EXC_CHPROPMODE_FILLEDSERIES:   return maAreaHlpFilled;
-        default:    DBG_ERRORFILE( "XclChPropSetHelper::GetAreaHelper - unknown property mode" );
+        default:    OSL_FAIL( "XclChPropSetHelper::GetAreaHelper - unknown property mode" );
     }
     return maAreaHlpCommon;
 }
@@ -1217,7 +1218,7 @@ ScfPropSetHelper& XclChPropSetHelper::GetGradientHelper( XclChPropertyMode eProp
     {
         case EXC_CHPROPMODE_COMMON:         return maGradHlpCommon;
         case EXC_CHPROPMODE_FILLEDSERIES:   return maGradHlpFilled;
-        default:    DBG_ERRORFILE( "XclChPropSetHelper::GetGradientHelper - unknown property mode" );
+        default:    OSL_FAIL( "XclChPropSetHelper::GetGradientHelper - unknown property mode" );
     }
     return maGradHlpCommon;
 }
@@ -1228,7 +1229,7 @@ ScfPropSetHelper& XclChPropSetHelper::GetHatchHelper( XclChPropertyMode ePropMod
     {
         case EXC_CHPROPMODE_COMMON:         return maHatchHlpCommon;
         case EXC_CHPROPMODE_FILLEDSERIES:   return maHatchHlpFilled;
-        default:    DBG_ERRORFILE( "XclChPropSetHelper::GetHatchHelper - unknown property mode" );
+        default:    OSL_FAIL( "XclChPropSetHelper::GetHatchHelper - unknown property mode" );
     }
     return maHatchHlpCommon;
 }
@@ -1299,7 +1300,7 @@ XclChRootData::~XclChRootData()
 void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChartDocument >& rxChartDoc, const Rectangle& rChartRect )
 {
     // remember chart document reference and chart shape position/size
-    DBG_ASSERT( rxChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
+    OSL_ENSURE( rxChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
     mxChartDoc = rxChartDoc;
     maChartRect = rChartRect;
 
@@ -1346,3 +1347,5 @@ Reference< XShape > XclChRootData::GetTitleShape( const XclChTextKey& rTitleKey 
 }
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

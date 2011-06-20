@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,7 +91,7 @@ SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(Window* pParent,
 
 sal_Bool SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
+    //Since 04/1998 text can be rotated by an arbitrary angle: SCHATTR_TEXT_DEGREES
     bool bStacked = aOrientHlp.GetStackedState() == STATE_CHECK;
     rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
 
@@ -124,3 +125,4 @@ void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
 //.............................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

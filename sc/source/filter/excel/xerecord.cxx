@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -175,7 +176,7 @@ void XclExpRecord::WriteBody( XclExpStream& /*rStrm*/ )
 
 void XclExpRecord::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mnRecId != EXC_ID_UNKNOWN, "XclExpRecord::Save - record ID uninitialized" );
+    OSL_ENSURE( mnRecId != EXC_ID_UNKNOWN, "XclExpRecord::Save - record ID uninitialized" );
     rStrm.StartRecord( mnRecId, mnRecSize );
     WriteBody( rStrm );
     rStrm.EndRecord();
@@ -300,3 +301,4 @@ void XclExpSubStream::Save( XclExpStream& rStrm )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

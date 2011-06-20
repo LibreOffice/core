@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include "ThreeDHelper.hxx"
 #include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
@@ -109,7 +109,7 @@ void VDiagram::init(
               , const uno::Reference< drawing::XShapes >& xFinalTarget
               , const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 {
-    DBG_ASSERT(xLogicTarget.is()&&xFinalTarget.is()&&xFactory.is(),"no proper initialization parameters");
+    OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is()&&xFactory.is(),"no proper initialization parameters");
 
     m_xLogicTarget  = xLogicTarget;
     m_xFinalTarget  = xFinalTarget;
@@ -170,7 +170,7 @@ void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
 
 void VDiagram::createShapes_2d()
 {
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is(),"is not proper initialized");
+    OSL_PRECOND(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is(),"is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is()))
         return;
 
@@ -194,15 +194,14 @@ void VDiagram::createShapes_2d()
         m_xWall2D = uno::Reference< drawing::XShape >(
             m_xShapeFactory->createInstance( C2U(
             "com.sun.star.drawing.RectangleShape" ) ), uno::UNO_QUERY );
-        //m_xWall2D->setPosition(m_aAvailablePosIncludingAxes);
-        //m_xWall2D->setSize(m_aAvailableSizeIncludingAxes);
+
         xGroupForWall->add(m_xWall2D);
         uno::Reference< beans::XPropertySet > xProp( m_xWall2D, uno::UNO_QUERY );
         if( xProp.is())
         {
             try
             {
-                DBG_ASSERT( m_xDiagram.is(), "Invalid Diagram model" );
+                OSL_ENSURE( m_xDiagram.is(), "Invalid Diagram model" );
                 if( m_xDiagram.is() )
                 {
                     uno::Reference< beans::XPropertySet > xWallProp( m_xDiagram->getWall());
@@ -314,7 +313,7 @@ namespace
 
 void lcl_ensureScaleValue( double& rfScale )
 {
-    DBG_ASSERT(rfScale>0, "calculation error for automatic 3D height in chart");
+    OSL_ENSURE(rfScale>0, "calculation error for automatic 3D height in chart");
     if( rfScale<0 )
         rfScale = 1.0;
     else if( rfScale<0.2 )
@@ -327,7 +326,7 @@ void lcl_ensureScaleValue( double& rfScale )
 
 void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
 {
-    DBG_ASSERT(m_xAspectRatio3D.is(), "created shape offers no XPropertySet");
+    OSL_PRECOND(m_xAspectRatio3D.is(), "created shape offers no XPropertySet");
     if( m_xAspectRatio3D.is())
     {
         try
@@ -350,9 +349,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                 double fW = rAvailableSize.Width;
                 double fH = rAvailableSize.Height;
 
-//                 double cx = fabs(cos(m_fXAnglePi));
                 double sx = fabs(sin(m_fXAnglePi));
-//                 double cy = fabs(cos(m_fYAnglePi));
                 double sy = fabs(sin(m_fYAnglePi));
                 double cz = fabs(cos(m_fZAnglePi));
                 double sz = fabs(sin(m_fZAnglePi));
@@ -388,7 +385,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                     else
                     {
                         //todo
-                        DBG_ASSERT(false, "not implemented yet");
+                        OSL_FAIL("not implemented yet");
 
                         if( fScaleX<0 )
                             fScaleX = 1.0;
@@ -416,20 +413,6 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                         else
                             fScaleY = 1.0;//looking from top or bottom the height is irrelevant
 
-                        /*
-                        //fW*zoomfactor == fScaleX*cy*cz + fScaleY*sz*cy + fScaleZ*sy*cx;
-                        //fH*zoomfactor == fScaleY*cx*cz + fScaleX*sz*cy + fScaleZ*sx*cz;
-                        //==> fScaleY*(sz*cy*fH -cx*cz*fW) =  fScaleX*(sz*cy*fW - cy*cz*fH) + fScaleZ*(sx*cz*fW - sy*cx*fH);
-                        double fDivide = sz*cy*fH -cx*cz*fW;
-                        if( !::basegfx::fTools::equalZero(fDivide) )
-                        {
-                            fScaleY = ( fScaleX*(sz*cy*fW - cy*cz*fH)
-                                + fScaleZ*(sx*cz*fW - sy*cx*fH) ) / fDivide;
-                            lcl_ensureScaleValue(fScaleY);
-                        }
-                        else
-                            fScaleY = 1.0;//looking from top or bottom hieght is irrelevant
-                        */
                     }
                     else if( fScaleY>0 && fScaleZ>0 )
                     {
@@ -446,7 +429,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                     else
                     {
                         //todo
-                        DBG_ASSERT(false, "not implemented yet");
+                        OSL_FAIL("not implemented yet");
 
                         if( fScaleX<0 )
                             fScaleX = 1.0;
@@ -510,7 +493,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
 
 void VDiagram::createShapes_3d()
 {
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is(),"is not proper initialized");
+    OSL_PRECOND(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is(),"is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is()))
         return;
 
@@ -697,7 +680,7 @@ void VDiagram::createShapes_3d()
         m_xCoordinateRegionShape = uno::Reference< drawing::XShape >( xShapes, uno::UNO_QUERY );
 
         uno::Reference< beans::XPropertySet > xShapeProp( m_xCoordinateRegionShape, uno::UNO_QUERY );
-        DBG_ASSERT(xShapeProp.is(), "created shape offers no XPropertySet");
+        OSL_ENSURE(xShapeProp.is(), "created shape offers no XPropertySet");
         if( xShapeProp.is())
         {
             try
@@ -806,3 +789,4 @@ void VDiagram::reduceToMimimumSize()
 } //namespace chart
 //.............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,29 +29,17 @@
 #ifndef SC_FILLDLG_HXX
 #define SC_FILLDLG_HXX
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include "global.hxx"
 
 class ScDocument;
 
 //----------------------------------------------------------------------------
 
-//CHINA001 #define  FDS_OPT_NONE        0
-//CHINA001 #define  FDS_OPT_HORZ        1
-//CHINA001 #define  FDS_OPT_VERT        2
-//CHINA001
-#include "scui_def.hxx" //CHINA001
+#include "scui_def.hxx"
 //============================================================================
 
 class ScFillSeriesDlg : public ModalDialog
@@ -76,7 +65,7 @@ public:
 
     String      GetStartStr() const         { return aEdStartVal.GetText(); }
 
-    void        SetEdStartValEnabled(sal_Bool bFlag=sal_False);
+    void        SetEdStartValEnabled(sal_Bool bFlag=false);
 
 private:
     FixedText       aFtStartVal;
@@ -141,3 +130,4 @@ private:
 
 #endif // SC_FILLDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

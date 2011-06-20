@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,6 @@
 #include "ShapeFactory.hxx"
 #include "CommonConverters.hxx"
 #include "Tickmarks.hxx"
-
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
 
 //.............................................................................
 namespace chart
@@ -87,3 +85,5 @@ TickFactory* VAxisOrGridBase::createTickFactory()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

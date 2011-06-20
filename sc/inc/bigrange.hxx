@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,7 +112,7 @@ inline void ScBigAddress::PutInOrder( ScBigAddress& r )
 
 
 inline sal_Bool ScBigAddress::IsValid( const ScDocument* pDoc ) const
-{   //! Min/Max sind ok, kennzeichnen ganze Col/Row/Tab
+{   // min/max interval bounds define whole col/row/tab
     return
         ((0 <= nCol && nCol <= MAXCOL)
             || nCol == nInt32Min || nCol == nInt32Max) &&
@@ -209,9 +210,9 @@ public:
                     { return ScRange( aStart.MakeAddress(),
                         aEnd.MakeAddress() ); }
 
-    inline sal_Bool In( const ScBigAddress& ) const;    // ist Address& in Range?
-    inline sal_Bool In( const ScBigRange& ) const;      // ist Range& in Range?
-    inline sal_Bool Intersects( const ScBigRange& ) const;  // ueberschneiden sich zwei Ranges?
+    inline sal_Bool In( const ScBigAddress& ) const;    // is Address& in range?
+    inline sal_Bool In( const ScBigRange& ) const;      // is Range& in range?
+    inline sal_Bool Intersects( const ScBigRange& ) const;  // do two ranges overlap?
 
     ScBigRange&     operator=( const ScBigRange& r )
                         { aStart = r.aStart; aEnd = r.aEnd; return *this; }
@@ -271,3 +272,5 @@ inline SvStream& operator>> ( SvStream& rStream, ScBigRange& rRange )
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,11 @@ public:
                             const OUString& rNamespace );
 
 private:
-    typedef ::std::hash_map< OUString, Reference< XSingleComponentFactory >, OUStringHash > FactoryMap;
+    typedef ::boost::unordered_map<
+        OUString,
+        Reference< XSingleComponentFactory >,
+        OUStringHash,
+        ::std::equal_to< OUString > > FactoryMap;
 
     Reference< XComponentContext > mxContext;   /// Global component context.
     FactoryMap          maFactories;            /// All parser factories, mapped by formula namespace.
@@ -157,3 +162,4 @@ Reference< XFormulaParser > ScFormulaParserPool::getFormulaParser( const OUStrin
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

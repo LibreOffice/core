@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 #include "xerecord.hxx"
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
+#include <boost/shared_ptr.hpp>
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF, STYLE).
@@ -124,7 +126,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpPaletteImpl > XclExpPaletteImplRef;
+    typedef boost::shared_ptr< XclExpPaletteImpl > XclExpPaletteImplRef;
     XclExpPaletteImplRef mxImpl;
 };
 
@@ -316,11 +318,10 @@ private:
 private:
     typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
     typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
-    typedef NfKeywordTable*                         NfKeywordTablePtr;
 
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
     XclExpNumFmtVec     maFormatMap;    /// Maps core formats to Excel indexes.
-    NfKeywordTablePtr   mpKeywordTable; /// Replacement table.
+    NfKeywordTable*     mpKeywordTable; /// Replacement table.
     sal_uLong               mnStdFmt;       /// Key for standard number format.
     sal_uInt16          mnXclOffset;    /// Offset to first user defined format.
 };
@@ -335,10 +336,6 @@ struct XclExpCellProt : public XclCellProt
         @return  true = At least one protection item is set. */
     bool                FillFromItemSet( const SfxItemSet& rItemSet, bool bStyle = false );
 
-#if 0
-    /** Fills the data to the passed fields of a BIFF2 XF record. */
-    void                FillToXF2( sal_uInt8& rnNumFmt ) const;
-#endif
     /** Fills the data to the passed fields of a BIFF3-BIFF8 XF record. */
     void                FillToXF3( sal_uInt16& rnProt ) const;
 
@@ -358,14 +355,6 @@ struct XclExpCellAlign : public XclCellAlign
     bool                FillFromItemSet( const SfxItemSet& rItemSet,
                             bool bForceLineBreak, XclBiff eBiff, bool bStyle = false );
 
-#if 0
-    /** Fills the data to the passed fields of a BIFF2 XF record. */
-    void                FillToXF2( sal_uInt8& rnFlags ) const;
-    /** Fills the data to the passed fields of a BIFF3 XF record. */
-    void                FillToXF3( sal_uInt16& rnAlign ) const;
-    /** Fills the data to the passed fields of a BIFF4 XF record. */
-    void                FillToXF4( sal_uInt16& rnAlign ) const;
-#endif
     /** Fills the data to the passed fields of a BIFF5/BIFF7 XF record. */
     void                FillToXF5( sal_uInt16& rnAlign ) const;
     /** Fills the data to the passed fields of a BIFF8 XF record. */
@@ -396,12 +385,6 @@ struct XclExpCellBorder : public XclCellBorder
     /** Fills the mn***Color base members from the mn***ColorId members. */
     void                SetFinalColors( const XclExpPalette& rPalette );
 
-#if 0
-    /** Fills the data to the passed fields of a BIFF2 XF record. */
-    void                FillToXF2( sal_uInt8& rnFlags ) const;
-    /** Fills the data to the passed fields of a BIFF3/BIFF4 XF record. */
-    void                FillToXF3( sal_uInt32& rnBorder ) const;
-#endif
     /** Fills the data to the passed fields of a BIFF5/BIFF7 XF record. */
     void                FillToXF5( sal_uInt32& rnBorder, sal_uInt32& rnArea ) const;
     /** Fills the data to the passed fields of a BIFF8 XF record. */
@@ -432,12 +415,6 @@ struct XclExpCellArea : public XclCellArea
     /** Fills the mn***Color base members from the mn***ColorId members. */
     void                SetFinalColors( const XclExpPalette& rPalette );
 
-#if 0
-    /** Fills the data to the passed fields of a BIFF2 XF record. */
-    void                FillToXF2( sal_uInt8& rnFlags ) const;
-    /** Fills the data to the passed fields of a BIFF3/BIFF4 XF record. */
-    void                FillToXF3( sal_uInt16& rnArea ) const;
-#endif
     /** Fills the data to the passed fields of a BIFF5/BIFF7 XF record. */
     void                FillToXF5( sal_uInt32& rnArea ) const;
     /** Fills the data to the passed fields of a BIFF8 XF record. */
@@ -568,23 +545,6 @@ class XclExpDefaultXF : public XclExpXF
 {
 public:
     explicit            XclExpDefaultXF( const XclExpRoot& rRoot, bool bCellXF );
-
-//UNUSED2008-05  /** Sets the parent XF ID. Only allowed for cell XFs. */
-//UNUSED2008-05  void                SetParent( sal_uInt32 nParentXFId );
-//UNUSED2008-05
-//UNUSED2008-05  /** Sets all "attribute used" flags explicitely.
-//UNUSED2008-05      @descr  The following Set***() functions set the appropriate flag too. */
-//UNUSED2008-05  void                SetUsedFlags(
-//UNUSED2008-05                          bool bProtUsed, bool bFontUsed, bool bFmtUsed,
-//UNUSED2008-05                          bool bAlignUsed, bool bBorderUsed, bool bAreaUsed );
-//UNUSED2008-05  /** Sets the cell protection flags. */
-//UNUSED2008-05  void                SetProtection( const XclExpCellProt& rProtection );
-//UNUSED2008-05  /** Sets cell alignment attributes. */
-//UNUSED2008-05  void                SetAlignment( const XclExpCellAlign& rAlignment );
-//UNUSED2008-05  /** Sets a cell border style. */
-//UNUSED2008-05  void                SetBorder( const XclExpCellBorder& rBorder );
-//UNUSED2008-05  /** Sets a cell area style. */
-//UNUSED2008-05  void                SetArea( const XclExpCellArea& rArea );
 
     /** Sets the Excel font index. */
     void                SetFont( sal_uInt16 nXclFont );
@@ -779,3 +739,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

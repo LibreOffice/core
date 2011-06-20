@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include <sfx2/itemconnect.hxx>
 #include "pivot.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 // ============================================================================
 
@@ -68,15 +69,22 @@ private:
 
 class ScDPFunctionDlg : public ModalDialog
 {
+    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
 public:
     explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVector& rLabelVec,
-                            const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
+                            const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
 
     sal_uInt16              GetFuncMask() const;
     ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
 
 private:
-    void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
+    void                Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
+
+    const ::rtl::OUString& GetBaseFieldName(const ::rtl::OUString& rLayoutName) const;
+    const ::rtl::OUString& GetBaseItemName(const ::rtl::OUString& rLayoutName) const;
+
+    /** Searches for a listbox entry, starts search at specified position. */
+    sal_uInt16 FindBaseItemPos( const String& rEntry, sal_uInt16 nStartPos ) const;
 
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( DblClickHdl, MultiListBox* );
@@ -98,6 +106,9 @@ private:
     HelpButton          maBtnHelp;
     MoreButton          maBtnMore;
 
+    NameMapType         maBaseFieldNameMap; // cache for base field display -> original name.
+    NameMapType         maBaseItemNameMap;  // cache for base item display -> original name.
+
     ScDPListBoxWrapper  maLbTypeWrp;        /// Wrapper for direct usage of API constants.
 
     const ScDPLabelDataVector& mrLabelVec;  /// Data of all labels.
@@ -110,7 +121,7 @@ class ScDPSubtotalDlg : public ModalDialog
 {
 public:
     explicit            ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
-                            const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
+                            const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
 
     sal_uInt16              GetFuncMask() const;
@@ -118,7 +129,7 @@ public:
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
 private:
-    void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
+    void                Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
 
     DECL_LINK( DblClickHdl, MultiListBox* );
     DECL_LINK( RadioClickHdl, RadioButton* );
@@ -160,6 +171,11 @@ private:
     void                Init( const ScDPNameVec& rDataFields, bool bEnableLayout );
     void                InitHideListBox();
 
+    const ::rtl::OUString& GetFieldName(const ::rtl::OUString& rLayoutName) const;
+
+    /** Searches for a listbox entry, starts search at specified position. */
+    sal_uInt16 FindListBoxEntry( const ListBox& rLBox, const String& rEntry, sal_uInt16 nStartPos ) const;
+
     DECL_LINK( RadioClickHdl, RadioButton* );
     DECL_LINK( CheckHdl, CheckBox* );
     DECL_LINK( SelectHdl, ListBox* );
@@ -195,6 +211,9 @@ private:
 
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.
+
+    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
+    NameMapType maDataFieldNameMap; /// Cache for displayed name to field name mapping.
 };
 
 // ============================================================================
@@ -211,7 +230,7 @@ public:
      *         be different from the name displayed in the dialog if the field
      *         has a layout name.
      */
-    String              GetDimensionName() const;
+    ::rtl::OUString GetDimensionName() const;
 
 private:
     DECL_LINK( DblClickHdl, ListBox* );
@@ -223,7 +242,7 @@ private:
     CancelButton        maBtnCancel;
     HelpButton          maBtnHelp;
 
-    typedef ::std::hash_map<String, long, ScStringHashCode> DimNameIndexMap;
+    typedef ::boost::unordered_map<String, long, ScStringHashCode> DimNameIndexMap;
     DimNameIndexMap     maNameIndexMap;
     ScDPObject&         mrDPObj;
 };
@@ -232,3 +251,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

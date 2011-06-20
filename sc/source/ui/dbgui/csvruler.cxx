@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,8 +40,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "miscuno.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 
 
@@ -60,9 +62,9 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
     const Any *pProperties;
     Sequence<OUString> aNames(1);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
+    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
 
-    pNames[0] = OUString::createFromAscii( FIXED_WIDTH_LIST );
+    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH_LIST ));
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
 
@@ -95,9 +97,9 @@ static void save_FixedWidthList(ScCsvSplits aSplits)
     Any *pProperties;
     Sequence<OUString> aNames(1);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
+    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
 
-    pNames[0] = OUString::createFromAscii( FIXED_WIDTH_LIST );
+    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH_LIST ));
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();
     pProperties[0] <<= sFixedWidthLists;
@@ -109,7 +111,7 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
     mnPosCursorLast( 1 )
 {
-    EnableRTL( false ); // #107812# RTL
+    EnableRTL( false ); // RTL
     InitColors();
     InitSizeData();
     maBackgrDev.SetFont( GetFont() );
@@ -680,3 +682,4 @@ ScAccessibleCsvControl* ScCsvRuler::ImplCreateAccessible()
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

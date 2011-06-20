@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,17 +140,17 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                             delete pItem;
                         }
                     }
-                    catch( beans::UnknownPropertyException ex )
+                    catch( beans::UnknownPropertyException &ex )
                     {
                         delete pItem;
-                        OSL_ENSURE( false,
+                        OSL_FAIL(
                                     ::rtl::OUStringToOString(
                                         ex.Message +
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                              " - unknown Property: " )) + aProperty.first,
                                         RTL_TEXTENCODING_ASCII_US ).getStr());
                     }
-                    catch( uno::Exception ex )
+                    catch( uno::Exception &ex )
                     {
                         ASSERT_EXCEPTION( ex );
                     }
@@ -161,7 +162,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                 {
                     FillSpecialItem( nWhich, rOutItemSet );
                 }
-                catch( uno::Exception ex )
+                catch( uno::Exception &ex )
                 {
                     ASSERT_EXCEPTION( ex );
                 }
@@ -174,14 +175,14 @@ void ItemConverter::FillSpecialItem(
     sal_uInt16 /*nWhichId*/, SfxItemSet & /*rOutItemSet*/ ) const
     throw( uno::Exception )
 {
-    OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );
+    OSL_FAIL( "ItemConverter: Unhandled special item found!" );
 }
 
 bool ItemConverter::ApplySpecialItem(
     sal_uInt16 /*nWhichId*/, const SfxItemSet & /*rItemSet*/ )
     throw( uno::Exception )
 {
-    OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );
+    OSL_FAIL( "ItemConverter: Unhandled special item found!" );
     return false;
 }
 
@@ -211,18 +212,18 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                         bItemsChanged = true;
                     }
                 }
-                catch( beans::UnknownPropertyException ex )
+                catch( beans::UnknownPropertyException &ex )
                 {
-                    OSL_ENSURE( false,
+                    OSL_FAIL(
                                 ::rtl::OUStringToOString(
                                     ex.Message +
                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                          " - unknown Property: " )) + aProperty.first,
                                     RTL_TEXTENCODING_ASCII_US).getStr());
                 }
-                catch( uno::Exception ex )
+                catch( uno::Exception &ex )
                 {
-                    OSL_ENSURE( false, ::rtl::OUStringToOString(
+                    OSL_FAIL( ::rtl::OUStringToOString(
                                     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
                 }
             }
@@ -238,7 +239,6 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 }
 
 // --------------------------------------------------------------------------------
-
 void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItemSet &rSourceSet )
 {
     SfxWhichIter      aIter (rSourceSet);
@@ -266,3 +266,5 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
 }
 
 } //  namespace comphelper
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

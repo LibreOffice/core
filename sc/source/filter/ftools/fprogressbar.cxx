@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,12 +80,11 @@ void ScfProgressBar::Init( SfxObjectShell* pDocShell )
     mbInProgress = false;
 }
 
-ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegment ) const
+ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegment )
 {
     if( nSegment < 0 )
         return 0;
-    DBG_ASSERT( maSegments.GetObject( nSegment ), "ScfProgressBar::GetSegment - invalid segment index" );
-    return maSegments.GetObject( nSegment );
+    return &(maSegments.at( nSegment ));
 }
 
 void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
@@ -142,7 +142,7 @@ void ScfProgressBar::IncreaseProgressBar( sal_Size nDelta )
     }
     else
     {
-        DBG_ERRORFILE( "ScfProgressBar::IncreaseProgressBar - no progress bar found" );
+        OSL_FAIL( "ScfProgressBar::IncreaseProgressBar - no progress bar found" );
     }
 
     mnTotalPos = nNewPos;
@@ -150,19 +150,19 @@ void ScfProgressBar::IncreaseProgressBar( sal_Size nDelta )
 
 sal_Int32 ScfProgressBar::AddSegment( sal_Size nSize )
 {
-    DBG_ASSERT( !mbInProgress, "ScfProgressBar::AddSegment - already in progress mode" );
+    OSL_ENSURE( !mbInProgress, "ScfProgressBar::AddSegment - already in progress mode" );
     if( nSize == 0 )
         return SCF_INV_SEGMENT;
 
-    maSegments.Append( new ScfProgressSegment( nSize ) );
+    maSegments.push_back( new ScfProgressSegment( nSize ) );
     mnTotalSize += nSize;
-    return static_cast< sal_Int32 >( maSegments.Count() - 1 );
+    return static_cast< sal_Int32 >( maSegments.size() - 1 );
 }
 
 ScfProgressBar& ScfProgressBar::GetSegmentProgressBar( sal_Int32 nSegment )
 {
     ScfProgressSegment* pSegment = GetSegment( nSegment );
-    DBG_ASSERT( !pSegment || (pSegment->mnPos == 0), "ScfProgressBar::GetSegmentProgressBar - segment already started" );
+    OSL_ENSURE( !pSegment || (pSegment->mnPos == 0), "ScfProgressBar::GetSegmentProgressBar - segment already started" );
     if( pSegment && (pSegment->mnPos == 0) )
     {
         if( !pSegment->mxProgress.get() )
@@ -174,24 +174,24 @@ ScfProgressBar& ScfProgressBar::GetSegmentProgressBar( sal_Int32 nSegment )
 
 bool ScfProgressBar::IsFull() const
 {
-    DBG_ASSERT( mbInProgress && mpCurrSegment, "ScfProgressBar::IsFull - no segment started" );
+    OSL_ENSURE( mbInProgress && mpCurrSegment, "ScfProgressBar::IsFull - no segment started" );
     return mpCurrSegment && (mpCurrSegment->mnPos >= mpCurrSegment->mnSize);
 }
 
 void ScfProgressBar::ActivateSegment( sal_Int32 nSegment )
 {
-    DBG_ASSERT( mnTotalSize > 0, "ScfProgressBar::ActivateSegment - progress range is zero" );
+    OSL_ENSURE( mnTotalSize > 0, "ScfProgressBar::ActivateSegment - progress range is zero" );
     if( mnTotalSize > 0 )
         SetCurrSegment( GetSegment( nSegment ) );
 }
 
 void ScfProgressBar::ProgressAbs( sal_Size nPos )
 {
-    DBG_ASSERT( mbInProgress && mpCurrSegment, "ScfProgressBar::ProgressAbs - no segment started" );
+    OSL_ENSURE( mbInProgress && mpCurrSegment, "ScfProgressBar::ProgressAbs - no segment started" );
     if( mpCurrSegment )
     {
-        DBG_ASSERT( mpCurrSegment->mnPos <= nPos, "ScfProgressBar::ProgressAbs - delta pos < 0" );
-        DBG_ASSERT( nPos <= mpCurrSegment->mnSize, "ScfProgressBar::ProgressAbs - segment overflow" );
+        OSL_ENSURE( mpCurrSegment->mnPos <= nPos, "ScfProgressBar::ProgressAbs - delta pos < 0" );
+        OSL_ENSURE( nPos <= mpCurrSegment->mnSize, "ScfProgressBar::ProgressAbs - segment overflow" );
         if( (mpCurrSegment->mnPos < nPos) && (nPos <= mpCurrSegment->mnSize) )
         {
             IncreaseProgressBar( nPos - mpCurrSegment->mnPos );
@@ -226,14 +226,6 @@ void ScfSimpleProgressBar::Init( sal_Size nSize )
         maProgress.ActivateSegment( nSegment );
 }
 
-// ============================================================================
-
-//UNUSED2008-05  ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, const String& rText ) :
-//UNUSED2008-05      mrStrm( rStrm )
-//UNUSED2008-05  {
-//UNUSED2008-05      Init( pDocShell, rText );
-//UNUSED2008-05  }
-
 ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, sal_uInt16 nResId ) :
     mrStrm( rStrm )
 {
@@ -258,3 +250,4 @@ void ScfStreamProgressBar::Init( SfxObjectShell* pDocShell, const String& rText 
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

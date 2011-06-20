@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,6 @@ Any lcl_getRegressionDefault()
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 ::com::sun::star::chart::ChartRegressionCurveType lcl_getRegressionCurveType( RegressionCurveHelper::tRegressionType eRegressionType )
 {
@@ -95,7 +95,6 @@ Any lcl_getRegressionDefault()
     return eRet;
 }
 
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 RegressionCurveHelper::tRegressionType lcl_getRegressionType( ::com::sun::star::chart::ChartRegressionCurveType eRegressionCurveType )
@@ -180,8 +179,6 @@ void lcl_ConvertRangeToXML(
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 template< typename PROPERTYTYPE >
 class WrappedStatisticProperty : public WrappedSeriesOrDiagramProperty< PROPERTYTYPE >
@@ -217,8 +214,6 @@ protected:
 
 };
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_CONST_ERROR_LOW
 class WrappedConstantErrorLowProperty : public WrappedStatisticProperty< double >
@@ -260,6 +255,7 @@ double WrappedConstantErrorLowProperty::getValueFromSeries( const Reference< bea
     }
     return aRet;
 }
+
 void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, double aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
@@ -272,8 +268,7 @@ void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::
         }
     }
 }
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_CONST_ERROR_HIGH
 class WrappedConstantErrorHighProperty : public WrappedStatisticProperty< double >
@@ -315,6 +310,7 @@ double WrappedConstantErrorHighProperty::getValueFromSeries( const Reference< be
     }
     return aRet;
 }
+
 void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, double aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
@@ -327,8 +323,7 @@ void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans:
         }
     }
 }
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_MEAN_VALUE
 class WrappedMeanValueProperty : public WrappedStatisticProperty< sal_Bool >
@@ -360,6 +355,7 @@ sal_Bool WrappedMeanValueProperty::getValueFromSeries( const Reference< beans::X
         bRet = RegressionCurveHelper::hasMeanValueLine( xRegCnt );
     return bRet;
 }
+
 void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, sal_Bool aNewValue ) const
 {
     uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropertySet, uno::UNO_QUERY );
@@ -371,8 +367,7 @@ void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XProper
             RegressionCurveHelper::removeMeanValueLine( xRegCnt );
     }
 }
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_CATEGORY
 // deprecated, replaced by ErrorBarStyle
@@ -474,8 +469,6 @@ void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPr
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_PERCENT_ERROR
 class WrappedPercentageErrorProperty : public WrappedStatisticProperty< double >
 {
@@ -531,8 +524,6 @@ void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::X
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_MARGIN
 class WrappedErrorMarginProperty : public WrappedStatisticProperty< double >
 {
@@ -587,8 +578,6 @@ void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XProp
     }
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_INDICATOR
 class WrappedErrorIndicatorProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartErrorIndicatorType >
@@ -664,8 +653,6 @@ void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XP
 
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_BAR_STYLE
 // this is the new constant group that replaces the deprecated enum ChartErrorCategory
 class WrappedErrorBarStyleProperty : public WrappedStatisticProperty< sal_Int32 >
@@ -713,8 +700,6 @@ void WrappedErrorBarStyleProperty::setValueToSeries( const Reference< beans::XPr
     }
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_RANGE_POSITIVE
 class WrappedErrorBarRangePositiveProperty : public WrappedStatisticProperty< OUString >
@@ -783,8 +768,6 @@ void WrappedErrorBarRangePositiveProperty::setValueToSeries( const Reference< be
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_ERROR_RANGE_NEGATIVE
 class WrappedErrorBarRangeNegativeProperty : public WrappedStatisticProperty< OUString >
 {
@@ -852,8 +835,6 @@ void WrappedErrorBarRangeNegativeProperty::setValueToSeries( const Reference< be
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_REGRESSION_CURVES
 class WrappedRegressionCurvesProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartRegressionCurveType >
 {
@@ -901,8 +882,6 @@ void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::
     }
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //PROP_CHART_STATISTIC_REGRESSION_PROPERTIES
 //PROP_CHART_STATISTIC_ERROR_PROPERTIES
@@ -978,8 +957,6 @@ void WrappedStatisticPropertySetProperty::setValueToSeries(
 {
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 namespace
@@ -1125,8 +1102,6 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 void WrappedStatisticProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -1134,18 +1109,14 @@ void WrappedStatisticProperties::addWrappedPropertiesForSeries( std::vector< Wra
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 void WrappedStatisticProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM  );
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 } //namespace wrapper
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

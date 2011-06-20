@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #include "scitems.hxx"
 
 #include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
-//#include <svx/labdlg.hxx> CHINA001
 #include <svl/srchitem.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/tabline.hxx>
-//CHINA001 #include <svx/transfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -57,7 +56,6 @@
 #include "drawview.hxx"
 #include "scresid.hxx"
 #include <svx/svdobj.hxx>
-//add header of cui CHINA001
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
@@ -115,7 +113,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 {
     sal_uInt16              nSlot       = rReq.GetSlot();
     Window*             pWin        = pViewData->GetActiveWin();
-//  SfxViewFrame*       pViewFrame  = SfxViewShell::Current()->GetViewFrame(); //!!! koennte knallen
     ScDrawView*         pView       = pViewData->GetScDrawView();
     SdrModel*           pDoc        = pViewData->GetDocument()->GetDrawLayer();
 
@@ -189,9 +186,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 }
 
                 if( pView->AreObjectsMarked() )
-                    pView->SetAttrToMarked( *rReq.GetArgs(), sal_False );
+                    pView->SetAttrToMarked( *rReq.GetArgs(), false );
                 else
-                    pView->SetDefaultAttr( *rReq.GetArgs(), sal_False);
+                    pView->SetDefaultAttr( *rReq.GetArgs(), false);
                 pView->InvalidateAttribs();
             }
             break;
@@ -208,7 +205,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             ExecuteTextAttrDlg( rReq );
             break;
 
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
         case SID_DRAW_HLINK_EDIT:
             if ( pSingleSelectedObj )
                 pViewData->GetDispatcher().Execute( SID_HYPERLINK_DIALOG );
@@ -236,7 +232,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                     ScGlobal::OpenURL( pInfo->GetHlink(), String::EmptyString() );
             }
             break;
-#endif
 
         case SID_ATTR_TRANSFORM:
             {
@@ -246,7 +241,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
                     if( !pArgs )
                     {
-                        // const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                         if( rMarkList.GetMark(0) != 0 )
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -258,8 +252,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 // --------- Itemset fuer Groesse und Position --------
                                 SfxItemSet aNewGeoAttr(pView->GetGeoAttrFromMarked());
 
-                                //SvxCaptionTabDialog* pDlg = new SvxCaptionTabDialog(pWin, pView);
-                                //change for cui CHINA001
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if ( pFact )
                                 {
@@ -279,17 +271,16 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                     }
 
                                     delete pDlg;
-                                }// change for cui
+                                }
                             }
                             else
                             {
                                 SfxItemSet aNewAttr(pView->GetGeoAttrFromMarked());
-                                //CHINA001 SvxTransformTabDialog* pDlg = new SvxTransformTabDialog(pWin, &aNewAttr, pView);
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if(pFact)
                                 {
                                     SfxAbstractTabDialog* pDlg = pFact->CreateSvxTransformTabDialog( pWin, &aNewAttr,pView );
-                                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                                    OSL_ENSURE(pDlg, "Dialog creation failed!");
                                     if (pDlg->Execute() == RET_OK)
                                     {
                                         rReq.Done(*(pDlg->GetOutputItemSet()));
@@ -343,7 +334,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, sal_False, &pItem ))
+        if( SFX_ITEM_SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, false, &pItem ))
         {
             rtl::OUString sMacro;
             SvxMacro* pMacro = ((SvxMacroItem*)pItem)->GetMacroTable().Get( SFX_EVENT_MOUSECLICK_OBJECT );
@@ -382,31 +373,25 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
-        pView->MergeAttrFromMarked( aNewAttr, sal_False );
+        pView->MergeAttrFromMarked( aNewAttr, false );
 
-//CHINA001  SvxLineTabDialog* pDlg
-//CHINA001  = new SvxLineTabDialog( pViewData->GetDialogParent(),
-//CHINA001  &aNewAttr,
-//CHINA001  pViewData->GetDocument()->GetDrawLayer(),
-//CHINA001  pObj,
-//CHINA001  bHasMarked );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+        OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
         SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
                     &aNewAttr,
                 pViewData->GetDocument()->GetDrawLayer(),
                 pObj,
                 bHasMarked);
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
 
     if ( pDlg->Execute() == RET_OK )
     {
         if( bHasMarked )
-            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), sal_False );
+            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), false );
         else
-            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), sal_False );
+            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
         pView->InvalidateAttribs();
         rReq.Done();
@@ -422,27 +407,22 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
-        pView->MergeAttrFromMarked( aNewAttr, sal_False );
+        pView->MergeAttrFromMarked( aNewAttr, false );
 
-    //CHINA001 SvxAreaTabDialog* pDlg
-    //CHINA001  = new SvxAreaTabDialog( pViewData->GetDialogParent(),
-//CHINA001                              &aNewAttr,
-//CHINA001                              pViewData->GetDocument()->GetDrawLayer(),
-//CHINA001                              pView );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+    OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
     AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( pViewData->GetDialogParent(),
                                                                     &aNewAttr,
                                                             pViewData->GetDocument()->GetDrawLayer(),
                                                             pView);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
     // #i74099# by default, the dialog deletes the current color table if a different one is loaded
     // (see SwDrawShell::ExecDrawDlg)
     const SvxColorTableItem* pColorItem =
         static_cast<const SvxColorTableItem*>( pViewData->GetSfxDocShell()->GetItem(SID_COLOR_TABLE) );
-    if (pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
+    if (pColorItem->GetColorTable() == &XColorTable::GetStdColorTable())
         pDlg->DontDeleteColorTable();
 
     if ( nTabPage != 0xffff )
@@ -451,9 +431,9 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
     if ( pDlg->Execute() == RET_OK )
     {
         if( bHasMarked )
-            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), sal_False );
+            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), false );
         else
-            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), sal_False );
+            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
         pView->InvalidateAttribs();
         rReq.Done();
@@ -469,7 +449,7 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 /* nTabPage *
     SfxItemSet  aNewAttr    ( pView->GetDefaultAttr() );
 
     if( bHasMarked )
-        pView->MergeAttrFromMarked( aNewAttr, sal_False );
+        pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aNewAttr, pView );
@@ -481,7 +461,7 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 /* nTabPage *
         if ( bHasMarked )
             pView->SetAttributes( *pDlg->GetOutputItemSet() );
         else
-            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), sal_False );
+            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
         pView->InvalidateAttribs();
         rReq.Done();
@@ -489,7 +469,6 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 /* nTabPage *
     delete( pDlg );
 }
 
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
 void ScDrawShell::SetHlinkForObject( SdrObject* pObj, const rtl::OUString& rHlnk )
 {
     if ( pObj )
@@ -499,5 +478,5 @@ void ScDrawShell::SetHlinkForObject( SdrObject* pObj, const rtl::OUString& rHlnk
         lcl_setModified( GetObjectShell() );
     }
 }
-#endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

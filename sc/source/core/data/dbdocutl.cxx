@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,18 +47,24 @@ using namespace ::com::sun::star;
 
 #define D_TIMEFACTOR              86400.0
 
-// -----------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-// static
+ScDatabaseDocUtil::StrData::StrData() :
+    mbSimpleText(true), mnStrLength(0)
+{
+}
+
+// ----------------------------------------------------------------------------
+
 void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const uno::Reference<sdbc::XRow>& xRow, long nRowPos,
-                                long nType, sal_Bool bCurrency, sal_Bool* pSimpleFlag )
+                                long nType, sal_Bool bCurrency, StrData* pStrData )
 {
     String aString;
     double nVal = 0.0;
-    sal_Bool bValue = sal_False;
-    sal_Bool bEmptyFlag = sal_False;
-    sal_Bool bError = sal_False;
+    sal_Bool bValue = false;
+    sal_Bool bEmptyFlag = false;
+    sal_Bool bError = false;
     sal_uLong nFormatIndex = 0;
 
     //! wasNull calls only if null value was found?
@@ -185,8 +192,11 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
         if (aString.Len())
         {
             pCell = ScBaseCell::CreateTextCell( aString, pDoc );
-            if ( pSimpleFlag && pCell->GetCellType() == CELLTYPE_EDIT )
-                *pSimpleFlag = sal_False;
+            if (pStrData)
+            {
+                pStrData->mbSimpleText = pCell->GetCellType() != CELLTYPE_EDIT;
+                pStrData->mnStrLength = aString.Len();
+            }
         }
         else
             pCell = NULL;
@@ -195,3 +205,4 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

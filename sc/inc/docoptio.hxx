@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,25 +33,36 @@
 #include <svl/poolitem.hxx>
 #include <svl/itemprop.hxx>
 #include "scdllapi.h"
+#include "scmod.hxx"
 #include "optutil.hxx"
+
+#include "formula/grammar.hxx"
 
 class SC_DLLPUBLIC ScDocOptions
 {
-    double fIterEps;                // Epsilon-Wert dazu
-    sal_uInt16 nIterCount;              // Anzahl
+    double fIterEps;                // epsilon value dazu
+    sal_uInt16 nIterCount;              // number
+    SCTAB nInitTabCount;            // number of Tabs for new Spreadssheet doc
     sal_uInt16 nPrecStandardFormat; // precision for standard format
-    sal_uInt16 nDay;                    // Nulldatum:
+    ScOptionsUtil::KeyBindingType eKeyBindingType;
+    sal_uInt16 nDay;                    // Null date:
     sal_uInt16 nMonth;
     sal_uInt16 nYear;
-    sal_uInt16 nYear2000;               // bis zu welcher zweistelligen Jahreszahl 20xx angenommen wird
-    sal_uInt16 nTabDistance;            // Abstand Standardtabulatoren
-    sal_Bool   bIsIgnoreCase;           // Gross-/Kleinschr. bei Vergleichen
-    sal_Bool   bIsIter;                 // Iteration bei cirk. Ref
-    sal_Bool   bCalcAsShown;            // berechnen wie angezeigt (Precision)
-    sal_Bool   bMatchWholeCell;         // Suchkriterien muessen ganze Zelle matchen
-    sal_Bool   bDoAutoSpell;            // Auto-Spelling
-    sal_Bool   bLookUpColRowNames;      // Spalten-/Zeilenbeschriftungen automagisch suchen
+    sal_uInt16 nYear2000;               // earlier 19YY is assumed, 20YY otherwise (if only YY of year is given)
+    sal_uInt16 nTabDistance;            // distance of standard tabs
+    sal_Bool   bIsIgnoreCase;           // ignore case for comparisons?
+    sal_Bool   bIsIter;                 // iterations for circular refs
+    sal_Bool   bCalcAsShown;            // calculate as shown (wrt precision)
+    sal_Bool   bMatchWholeCell;         // search criteria must match the whole cell
+    sal_Bool   bDoAutoSpell;            // auto-spelling
+    sal_Bool   bLookUpColRowNames;      // determine column-/row titles automagically
     sal_Bool   bFormulaRegexEnabled;    // regular expressions in formulas enabled
+    bool   bUseEnglishFuncName;     // use English function name even if the locale is not English.
+    ::formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
+
+    ::rtl::OUString aFormulaSepArg;
+    ::rtl::OUString aFormulaSepArrayRow;
+    ::rtl::OUString aFormulaSepArrayCol;
 
 public:
                 ScDocOptions();
@@ -69,6 +81,8 @@ public:
     void   SetIter( sal_Bool bVal )         { bIsIter = bVal; }
     sal_uInt16 GetIterCount() const         { return nIterCount; }
     void   SetIterCount( sal_uInt16 nCount) { nIterCount = nCount; }
+    SCTAB GetInitTabCount() const           { return nInitTabCount; }
+    void   SetInitTabCount( SCTAB nTabs) { nInitTabCount = nTabs; }
     double GetIterEps() const           { return fIterEps; }
     void   SetIterEps( double fEps )    { fIterEps = fEps; }
 
@@ -80,7 +94,6 @@ public:
     void   SetTabDistance( sal_uInt16 nTabDist ) {nTabDistance = nTabDist;}
 
     void        ResetDocOptions();
-    inline void     CopyTo(ScDocOptions& rOpt);
 
     inline const ScDocOptions&  operator=( const ScDocOptions& rOpt );
     inline int                  operator==( const ScDocOptions& rOpt ) const;
@@ -88,6 +101,9 @@ public:
 
     sal_uInt16  GetStdPrecision() const { return nPrecStandardFormat; }
     void        SetStdPrecision( sal_uInt16 n ) { nPrecStandardFormat = n; }
+
+    ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return eKeyBindingType; }
+    void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { eKeyBindingType = e; }
 
     sal_Bool    IsCalcAsShown() const       { return bCalcAsShown; }
     void    SetCalcAsShown( sal_Bool bVal ) { bCalcAsShown = bVal; }
@@ -97,35 +113,35 @@ public:
 
     void    SetFormulaRegexEnabled( sal_Bool bVal ) { bFormulaRegexEnabled = bVal; }
     sal_Bool    IsFormulaRegexEnabled() const       { return bFormulaRegexEnabled; }
+
+    void SetFormulaSyntax( ::formula::FormulaGrammar::Grammar eGram ) { eFormulaGrammar = eGram; }
+    ::formula::FormulaGrammar::Grammar GetFormulaSyntax() const { return eFormulaGrammar; }
+
+    void SetUseEnglishFuncName( bool bVal ) { bUseEnglishFuncName = bVal; }
+    bool GetUseEnglishFuncName() const { return bUseEnglishFuncName; }
+
+    void SetFormulaSepArg(const ::rtl::OUString& rSep) { aFormulaSepArg = rSep; }
+    ::rtl::OUString GetFormulaSepArg() const { return aFormulaSepArg; }
+
+    void SetFormulaSepArrayRow(const ::rtl::OUString& rSep) { aFormulaSepArrayRow = rSep; }
+    ::rtl::OUString GetFormulaSepArrayRow() const { return aFormulaSepArrayRow; }
+
+    void SetFormulaSepArrayCol(const ::rtl::OUString& rSep) { aFormulaSepArrayCol = rSep; }
+    ::rtl::OUString GetFormulaSepArrayCol() const { return aFormulaSepArrayCol; }
+
+    void ResetFormulaSeparators();
+    static const LocaleDataWrapper& GetLocaleDataWrapper();
 };
-
-
-inline void ScDocOptions::CopyTo(ScDocOptions& rOpt)
-{
-    rOpt.bIsIgnoreCase          = bIsIgnoreCase;
-    rOpt.bIsIter                = bIsIter;
-    rOpt.nIterCount             = nIterCount;
-    rOpt.fIterEps               = fIterEps;
-    rOpt.nPrecStandardFormat    = nPrecStandardFormat;
-    rOpt.nDay                   = nDay;
-    rOpt.nMonth                 = nMonth;
-    rOpt.nYear2000              = nYear2000;
-    rOpt.nYear                  = nYear;
-    rOpt.nTabDistance           = nTabDistance;
-    rOpt.bCalcAsShown           = bCalcAsShown;
-    rOpt.bMatchWholeCell        = bMatchWholeCell;
-    rOpt.bDoAutoSpell           = bDoAutoSpell;
-    rOpt.bLookUpColRowNames     = bLookUpColRowNames;
-    rOpt.bFormulaRegexEnabled   = bFormulaRegexEnabled;
-}
 
 inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
 {
     bIsIgnoreCase       = rCpy.bIsIgnoreCase;
     bIsIter             = rCpy.bIsIter;
     nIterCount          = rCpy.nIterCount;
+    nInitTabCount       = rCpy.nInitTabCount;
     fIterEps            = rCpy.fIterEps;
     nPrecStandardFormat = rCpy.nPrecStandardFormat;
+    eKeyBindingType     = rCpy.eKeyBindingType;
     nDay                = rCpy.nDay;
     nMonth              = rCpy.nMonth;
     nYear               = rCpy.nYear;
@@ -136,6 +152,11 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     bDoAutoSpell        = rCpy.bDoAutoSpell;
     bLookUpColRowNames  = rCpy.bLookUpColRowNames;
     bFormulaRegexEnabled= rCpy.bFormulaRegexEnabled;
+    bUseEnglishFuncName = rCpy.bUseEnglishFuncName;
+    eFormulaGrammar     = rCpy.eFormulaGrammar;
+    aFormulaSepArg      = rCpy.aFormulaSepArg;
+    aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
+    aFormulaSepArrayCol = rCpy.aFormulaSepArrayCol;
 
     return *this;
 }
@@ -146,8 +167,10 @@ inline int ScDocOptions::operator==( const ScDocOptions& rOpt ) const
                 rOpt.bIsIgnoreCase          == bIsIgnoreCase
             &&  rOpt.bIsIter                == bIsIter
             &&  rOpt.nIterCount             == nIterCount
+            &&  rOpt.nInitTabCount          == nInitTabCount
             &&  rOpt.fIterEps               == fIterEps
             &&  rOpt.nPrecStandardFormat    == nPrecStandardFormat
+            &&  rOpt.eKeyBindingType        == eKeyBindingType
             &&  rOpt.nDay                   == nDay
             &&  rOpt.nMonth                 == nMonth
             &&  rOpt.nYear                  == nYear
@@ -158,6 +181,11 @@ inline int ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.bDoAutoSpell           == bDoAutoSpell
             &&  rOpt.bLookUpColRowNames     == bLookUpColRowNames
             &&  rOpt.bFormulaRegexEnabled   == bFormulaRegexEnabled
+            &&  rOpt.bUseEnglishFuncName    == bUseEnglishFuncName
+            &&  rOpt.eFormulaGrammar        == eFormulaGrammar
+            &&  rOpt.aFormulaSepArg         == aFormulaSepArg
+            &&  rOpt.aFormulaSepArrayRow    == aFormulaSepArrayRow
+            &&  rOpt.aFormulaSepArrayCol    == aFormulaSepArrayCol
             );
 }
 
@@ -167,14 +195,13 @@ inline int ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
 }
 
 //==================================================================
-// Item fuer Einstellungsdialog - Berechnen
+// Item for preferences dialog - calculation
 //==================================================================
 
 class SC_DLLPUBLIC ScTpCalcItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-//UNUSED2008-05  ScTpCalcItem( sal_uInt16 nWhich );
                 ScTpCalcItem( sal_uInt16 nWhich,
                               const ScDocOptions& rOpt );
                 ScTpCalcItem( const ScTpCalcItem& rItem );
@@ -197,13 +224,22 @@ private:
 class ScDocCfg : public ScDocOptions
 {
     ScLinkConfigItem    aCalcItem;
+    ScLinkConfigItem    aFormulaItem;
     ScLinkConfigItem    aLayoutItem;
+    ScLinkConfigItem    aCompatItem;
+    ScLinkConfigItem    aDefaultsItem;
 
     DECL_LINK( CalcCommitHdl, void* );
+    DECL_LINK( FormulaCommitHdl, void* );
     DECL_LINK( LayoutCommitHdl, void* );
+    DECL_LINK( CompatCommitHdl, void* );
+    DECL_LINK( DefaultsCommitHdl, void* );
 
     com::sun::star::uno::Sequence<rtl::OUString> GetCalcPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetFormulaPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetCompatPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetDefaultsPropertyNames();
 
 public:
             ScDocCfg();
@@ -214,3 +250,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

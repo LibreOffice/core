@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,6 @@ private:
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
-        //::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),
@@ -116,10 +116,8 @@ void SAL_CALL WallFloorWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
-    // /--
     MutexGuard aGuard( GetMutex());
     clearWrappedPropertySet();
-    // \--
 }
 
 void SAL_CALL WallFloorWrapper::addEventListener(
@@ -192,3 +190,5 @@ APPHELPER_XSERVICEINFO_IMPL( WallFloorWrapper, lcl_aServiceName );
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,8 +26,6 @@
  ************************************************************************/
 #include "sc.hrc"
 
-//#define RID_SCDLG_NAVIGATOR   256
-
 #define FT_ROW                  1
 #define ED_ROW                  2
 #define FT_COL                  3
@@ -41,13 +39,9 @@
 #define STR_NOTACTIVE           11
 #define STR_HIDDEN              12
 #define STR_ACTIVEWIN           13
-//#define IMG_ENTRIES               14
 #define STR_QHLP_SCEN_LISTBOX   15
 #define STR_QHLP_SCEN_COMMENT   16
 #define IL_CMD                  17
-#define ILH_CMD                 18
-
-
 
 #define IID_AREAS       1
 #define IID_DBAREAS     2
@@ -59,5 +53,3 @@
 #define IID_DROPMODE    9
 #define IID_CHANGEROOT  10
 #define IID_ZOOMOUT     11
-
-

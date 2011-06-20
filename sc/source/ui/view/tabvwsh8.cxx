@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,15 +42,14 @@
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::SetDefaultFrameLine( const SvxBorderLine* pLine )
+void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine )
 {
     if ( pLine )
     {
         delete pCurFrameLine;
-        pCurFrameLine = new SvxBorderLine( &pLine->GetColor(),
-                                            pLine->GetOutWidth(),
-                                            pLine->GetInWidth(),
-                                            pLine->GetDistance() );
+        pCurFrameLine = new ::editeng::SvxBorderLine( &pLine->GetColor(),
+                                            pLine->GetWidth(),
+                                            pLine->GetStyle() );
     }
     else if ( pCurFrameLine )
     {
@@ -60,9 +60,9 @@ void ScTabViewShell::SetDefaultFrameLine( const SvxBorderLine* pLine )
 
 //------------------------------------------------------------------
 
-sal_Bool __EXPORT ScTabViewShell::HasSelection( sal_Bool bText ) const
+sal_Bool ScTabViewShell::HasSelection( sal_Bool bText ) const
 {
-    sal_Bool bHas = sal_False;
+    sal_Bool bHas = false;
     ScViewData* pData = (ScViewData*)GetViewData();     // const weggecasted
     if ( bText )
     {
@@ -102,3 +102,4 @@ void ScTabViewShell::UIDeactivated( SfxInPlaceClient* pClient )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

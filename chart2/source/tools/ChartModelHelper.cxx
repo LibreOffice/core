@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,9 +44,6 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
 
 //.............................................................................
 namespace chart
@@ -136,7 +134,7 @@ awt::Size ChartModelHelper::getPageSize( const uno::Reference< frame::XModel >& 
 {
     awt::Size aPageSize( ChartModelHelper::getDefaultPageSize() );
     uno::Reference< embed::XVisualObject > xVisualObject(xModel,uno::UNO_QUERY);
-    DBG_ASSERT(xVisualObject.is(),"need xVisualObject for page size");
+    OSL_ENSURE(xVisualObject.is(),"need xVisualObject for page size");
     if( xVisualObject.is() )
         aPageSize = xVisualObject->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
     return aPageSize;
@@ -145,7 +143,7 @@ awt::Size ChartModelHelper::getPageSize( const uno::Reference< frame::XModel >& 
 void ChartModelHelper::setPageSize( const awt::Size& rSize, const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< embed::XVisualObject > xVisualObject(xModel,uno::UNO_QUERY);
-    DBG_ASSERT(xVisualObject.is(),"need xVisualObject for page size");
+    OSL_ENSURE(xVisualObject.is(),"need xVisualObject for page size");
     if( xVisualObject.is() )
         xVisualObject->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, rSize );
 }
@@ -258,3 +256,5 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const un
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

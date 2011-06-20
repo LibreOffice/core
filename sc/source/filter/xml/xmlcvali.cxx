@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
-#include <tools/debug.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -234,8 +234,8 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nShowList(sheet::TableValidationVisibility::UNSORTED),
     bAllowEmptyCell(sal_True),
-    bDisplayHelp(sal_False),
-    bDisplayError(sal_False)
+    bDisplayHelp(false),
+    bDisplayError(false)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationAttrTokenMap();
@@ -260,7 +260,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
             break;
             case XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL:
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bAllowEmptyCell = sal_False;
+                    bAllowEmptyCell = false;
             break;
             case XML_TOK_CONTENT_VALIDATION_DISPLAY_LIST:
             {
@@ -353,7 +353,7 @@ void ScXMLContentValidationContext::SetFormula( OUString& rFormula, OUString& rF
 
 void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidation ) const
 {
-    rValidation.aValidationType = sheet::ValidationType_ANY;    // #b6343997# default if no condition is given
+    rValidation.aValidationType = sheet::ValidationType_ANY;    // default if no condition is given
     rValidation.aOperator = sheet::ConditionOperator_NONE;
 
     if( sCondition.getLength() > 0 )
@@ -502,7 +502,7 @@ ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
     sTitle(),
     sMessage(),
     nParagraphCount(0),
-    bDisplay(sal_False)
+    bDisplay(false)
 {
     pValidationContext = pTempValidationContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -573,7 +573,7 @@ ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
     sMessage(),
     sMessageType(),
     nParagraphCount(0),
-    bDisplay(sal_False)
+    bDisplay(false)
 {
     pValidationContext = pTempValidationContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -644,7 +644,7 @@ ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
                                       ScXMLContentValidationContext* pTempValidationContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sName(),
-    bExecute(sal_False)
+    bExecute(false)
 {
     pValidationContext = pTempValidationContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -694,3 +694,5 @@ void ScXMLErrorMacroContext::EndElement()
 {
     pValidationContext->SetErrorMacro( bExecute );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

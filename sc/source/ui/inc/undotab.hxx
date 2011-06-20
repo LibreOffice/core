@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,13 +35,6 @@
 #include <tools/color.hxx>
 #include "tabbgcolor.hxx"
 
-#ifndef _SVSTDARR_SHORTS
-
-#define _SVSTDARR_SHORTS
-#include <svl/svstdarr.hxx>
-
-#endif
-
 #ifndef _SVSTDARR_STRINGS
 
 #define _SVSTDARR_STRINGS
@@ -50,7 +44,9 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <boost/shared_ptr.hpp>
 #include <memory>
+#include <vector>
 
 class ScDocShell;
 class ScDocument;
@@ -98,7 +94,7 @@ public:
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
                             sal_Bool bApp,
-                            SvStrings *pNewNameList);
+                            std::vector<rtl::OUString>& newNameList);
     virtual         ~ScUndoInsertTables();
 
     virtual void    Undo();
@@ -111,7 +107,7 @@ public:
 private:
 
     SdrUndoAction*  pDrawUndo;
-    SvStrings*      pNameList;
+    std::vector<rtl::OUString>      aNameList;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
     SCTAB           nTab;
@@ -127,7 +123,7 @@ public:
                     TYPEINFO();
                     ScUndoDeleteTab(
                             ScDocShell* pNewDocShell,
-                            const SvShorts &theTabs,        //SCTAB nNewTab,
+                            const std::vector<SCTAB> &theTabs,      //SCTAB nNewTab,
                             ScDocument* pUndoDocument,
                             ScRefUndoData* pRefData );
     virtual         ~ScUndoDeleteTab();
@@ -140,7 +136,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    SvShorts    theTabs;
+    std::vector<SCTAB> theTabs;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
 
@@ -179,9 +175,13 @@ class ScUndoMoveTab: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoMoveTab( ScDocShell* pNewDocShell,
-                                  const SvShorts &aOldTab,
-                                  const SvShorts &aNewTab);
+                    ScUndoMoveTab(
+                        ScDocShell* pNewDocShell,
+                        ::std::vector<SCTAB>* pOldTabs,
+                        ::std::vector<SCTAB>* pNewTabs,
+                        ::std::vector< ::rtl::OUString>* pOldNames = NULL,
+                        ::std::vector< ::rtl::OUString>* pNewNames = NULL );
+
     virtual         ~ScUndoMoveTab();
 
     virtual void    Undo();
@@ -192,8 +192,10 @@ public:
     virtual String  GetComment() const;
 
 private:
-    SvShorts    theOldTabs;
-    SvShorts    theNewTabs;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
+    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpOldNames;
+    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpNewNames;
 
     void DoChange( sal_Bool bUndo ) const;
 };
@@ -203,9 +205,11 @@ class ScUndoCopyTab: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoCopyTab(ScDocShell* pNewDocShell,
-                                  const SvShorts &aOldTab,
-                                  const SvShorts &aNewTab);
+                    ScUndoCopyTab(
+                        ScDocShell* pNewDocShell,
+                        ::std::vector<SCTAB>* pOldTabs,
+                        ::std::vector<SCTAB>* pNewTabs,
+                        ::std::vector< ::rtl::OUString>* pNewNames = NULL );
 
     virtual         ~ScUndoCopyTab();
 
@@ -217,9 +221,10 @@ public:
     virtual String  GetComment() const;
 
 private:
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
+    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpNewNames;
     SdrUndoAction*  pDrawUndo;
-    SvShorts    theOldTabs;
-    SvShorts    theNewTabs;
 
     void DoChange() const;
 };
@@ -517,27 +522,6 @@ private:
     void DoChange( sal_Bool bNew );
 };
 
-
-//UNUSED2009-05 class ScUndoSetGrammar : public ScSimpleUndo
-//UNUSED2009-05 {
-//UNUSED2009-05 public:
-//UNUSED2009-05                     TYPEINFO();
-//UNUSED2009-05                     ScUndoSetGrammar( ScDocShell* pShell,
-//UNUSED2009-05                                       formula::FormulaGrammar::Grammar eGrammar );
-//UNUSED2009-05     virtual         ~ScUndoSetGrammar();
-//UNUSED2009-05
-//UNUSED2009-05     virtual void    Undo();
-//UNUSED2009-05     virtual void    Redo();
-//UNUSED2009-05     virtual void    Repeat(SfxRepeatTarget& rTarget);
-//UNUSED2009-05     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
-//UNUSED2009-05
-//UNUSED2009-05     virtual String  GetComment() const;
-//UNUSED2009-05
-//UNUSED2009-05 private:
-//UNUSED2009-05     formula::FormulaGrammar::Grammar meNewGrammar, meOldGrammar;
-//UNUSED2009-05
-//UNUSED2009-05     void DoChange( formula::FormulaGrammar::Grammar eGrammar );
-//UNUSED2009-05 };
-
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

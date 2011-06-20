@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -122,7 +123,7 @@ bool XclPCItem::IsEqual( const XclPCItem& rItem ) const
         case EXC_PCITEM_INTEGER:    return mnValue    == rItem.mnValue;
         case EXC_PCITEM_BOOL:       return mbValue    == rItem.mbValue;
         case EXC_PCITEM_ERROR:      return mnError    == rItem.mnError;
-        default:    DBG_ERRORFILE( "XclPCItem::IsEqual - unknown pivot cache item type" );
+        default:    OSL_FAIL( "XclPCItem::IsEqual - unknown pivot cache item type" );
     }
     return false;
 }
@@ -229,7 +230,7 @@ sal_Int32 XclPCNumGroupInfo::GetScDateType() const
         case EXC_SXNUMGROUP_TYPE_MONTH: nScType = ScDPGroupBy::MONTHS;    break;
         case EXC_SXNUMGROUP_TYPE_QUART: nScType = ScDPGroupBy::QUARTERS;  break;
         case EXC_SXNUMGROUP_TYPE_YEAR:  nScType = ScDPGroupBy::YEARS;     break;
-        default:    DBG_ERROR1( "XclPCNumGroupInfo::GetScDateType - unexpected date type %d", GetXclDataType() );
+        default:    OSL_TRACE( "XclPCNumGroupInfo::GetScDateType - unexpected date type %d", GetXclDataType() );
     }
     return nScType;
 }
@@ -246,7 +247,7 @@ void XclPCNumGroupInfo::SetScDateType( sal_Int32 nScType )
         case ScDPGroupBy::MONTHS:     nXclType = EXC_SXNUMGROUP_TYPE_MONTH;   break;
         case ScDPGroupBy::QUARTERS:   nXclType = EXC_SXNUMGROUP_TYPE_QUART;   break;
         case ScDPGroupBy::YEARS:      nXclType = EXC_SXNUMGROUP_TYPE_YEAR;    break;
-        default:    DBG_ERROR1( "XclPCNumGroupInfo::SetScDateType - unexpected date type %d", nScType );
+        default:    OSL_TRACE( "XclPCNumGroupInfo::SetScDateType - unexpected date type %d", nScType );
     }
     SetXclDataType( nXclType );
 }
@@ -292,11 +293,6 @@ bool XclPCField::IsStandardField() const
 {
     return meFieldType == EXC_PCFIELD_STANDARD;
 }
-
-//UNUSED2008-05  bool XclPCField::IsCalculatedField() const
-//UNUSED2008-05  {
-//UNUSED2008-05      return meFieldType == EXC_PCFIELD_CALCED;
-//UNUSED2008-05  }
 
 bool XclPCField::IsStdGroupField() const
 {
@@ -1029,3 +1025,4 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTViewEx9Info& rInfo )
         << XclExpString(rInfo.maGrandTotalName, EXC_STR_DEFAULT, EXC_PT_MAXSTRLEN);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

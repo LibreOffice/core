@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,9 +94,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocCurrency,           13,     1,  2,  V, { VR }, 0, 0 },
     { ocFixed,              14,     1,  2,  V, { VR, VR, C }, 0, 0 },
     { ocSin,                15,     1,  1,  V, { VR }, 0, 0 },
-    { ocCosecant,           15,     1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocCos,                16,     1,  1,  V, { VR }, 0, 0 },
-    { ocSecant,             16,     1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocTan,                17,     1,  1,  V, { VR }, 0, 0 },
     { ocCot,                17,     1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocArcTan,             18,     1,  1,  V, { VR }, 0, 0 },
@@ -232,9 +231,7 @@ static const XclFunctionInfo saFuncTable_3[] =
     { ocMedian,             227,    1,  MX, V, { RX }, 0, 0 },
     { ocSumProduct,         228,    1,  MX, V, { VA }, 0, 0 },
     { ocSinHyp,             229,    1,  1,  V, { VR }, 0, 0 },
-    { ocCosecantHyp,        229,    1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocCosHyp,             230,    1,  1,  V, { VR }, 0, 0 },
-    { ocSecantHyp,          230,    1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocTanHyp,             231,    1,  1,  V, { VR }, 0, 0 },
     { ocCotHyp,             231,    1,  1,  V, { VR }, EXC_FUNCFLAG_EXPORTONLY, 0 },
     { ocArcSinHyp,          232,    1,  1,  V, { VR }, 0, 0 },
@@ -419,22 +416,22 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
         from earlier tables. */
     XclBiff eBiff = rRoot.GetBiff();
     if( eBiff >= EXC_BIFF2 )
-        (this->*pFillFunc)( saFuncTable_2, STATIC_ARRAY_END( saFuncTable_2 ) );
+        (this->*pFillFunc)( saFuncTable_2, STATIC_TABLE_END( saFuncTable_2 ) );
     if( eBiff >= EXC_BIFF3 )
-        (this->*pFillFunc)( saFuncTable_3, STATIC_ARRAY_END( saFuncTable_3 ) );
+        (this->*pFillFunc)( saFuncTable_3, STATIC_TABLE_END( saFuncTable_3 ) );
     if( eBiff >= EXC_BIFF4 )
-        (this->*pFillFunc)( saFuncTable_4, STATIC_ARRAY_END( saFuncTable_4 ) );
+        (this->*pFillFunc)( saFuncTable_4, STATIC_TABLE_END( saFuncTable_4 ) );
     if( eBiff >= EXC_BIFF5 )
-        (this->*pFillFunc)( saFuncTable_5, STATIC_ARRAY_END( saFuncTable_5 ) );
+        (this->*pFillFunc)( saFuncTable_5, STATIC_TABLE_END( saFuncTable_5 ) );
     if( eBiff >= EXC_BIFF8 )
-        (this->*pFillFunc)( saFuncTable_8, STATIC_ARRAY_END( saFuncTable_8 ) );
-    (this->*pFillFunc)( saFuncTable_Odf, STATIC_ARRAY_END( saFuncTable_Odf ) );
+        (this->*pFillFunc)( saFuncTable_8, STATIC_TABLE_END( saFuncTable_8 ) );
+    (this->*pFillFunc)( saFuncTable_Odf, STATIC_TABLE_END( saFuncTable_Odf ) );
 }
 
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 nXclFunc ) const
 {
     // only in import filter allowed
-    DBG_ASSERT( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclFunc - wrong filter" );
+    OSL_ENSURE( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclFunc - wrong filter" );
     XclFuncMap::const_iterator aIt = maXclFuncMap.find( nXclFunc );
     return (aIt == maXclFuncMap.end()) ? 0 : aIt->second;
 }
@@ -442,7 +439,7 @@ const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 n
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclMacroName( const String& rXclMacroName ) const
 {
     // only in import filter allowed, but do not test maXclMacroNameMap, it may be empty for old BIFF versions
-    DBG_ASSERT( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclMacroName - wrong filter" );
+    OSL_ENSURE( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclMacroName - wrong filter" );
     XclMacroNameMap::const_iterator aIt = maXclMacroNameMap.find( rXclMacroName );
     return (aIt == maXclMacroNameMap.end()) ? 0 : aIt->second;
 }
@@ -450,7 +447,7 @@ const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclMacroName( const S
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromOpCode( OpCode eOpCode ) const
 {
     // only in export filter allowed
-    DBG_ASSERT( !maScFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromOpCode - wrong filter" );
+    OSL_ENSURE( !maScFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromOpCode - wrong filter" );
     ScFuncMap::const_iterator aIt = maScFuncMap.find( eOpCode );
     return (aIt == maScFuncMap.end()) ? 0 : aIt->second;
 }
@@ -497,7 +494,7 @@ XclTokenArray::XclTokenArray( ScfUInt8Vec& rTokVec, ScfUInt8Vec& rExtDataVec, bo
 
 sal_uInt16 XclTokenArray::GetSize() const
 {
-    DBG_ASSERT( maTokVec.size() <= 0xFFFF, "XclTokenArray::GetSize - array too long" );
+    OSL_ENSURE( maTokVec.size() <= 0xFFFF, "XclTokenArray::GetSize - array too long" );
     return limit_cast< sal_uInt16 >( maTokVec.size() );
 }
 
@@ -566,7 +563,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArray& rTokArr )
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArrayRef& rxTokArr )
 {
-    if( rxTokArr.is() )
+    if( rxTokArr )
         rxTokArr->Write( rStrm );
     else
         rStrm << sal_uInt16( 0 );
@@ -702,7 +699,7 @@ const ScTokenArray* XclTokenArrayHelper::GetSharedFormula( const XclRoot& rRoot,
     if( rScTokArr.GetLen() == 1 )
         if( const FormulaToken* pScToken = rScTokArr.GetArray()[ 0 ] )
             if( pScToken->GetOpCode() == ocName )
-                if( ScRangeData* pData = rRoot.GetNamedRanges().FindIndex( pScToken->GetIndex() ) )
+                if( ScRangeData* pData = rRoot.GetNamedRanges().findByIndex( pScToken->GetIndex() ) )
                     if( pData->HasType( RT_SHARED ) )
                         return pData->GetCode();
     return 0;
@@ -788,3 +785,4 @@ bool XclTokenArrayHelper::GetMultipleOpRefs( XclMultipleOpRefs& rRefs, const ScT
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

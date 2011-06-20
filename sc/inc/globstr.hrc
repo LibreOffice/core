@@ -28,7 +28,6 @@
 #ifndef __GLOBSTR_HRC_
 #define __GLOBSTR_HRC_
 
-
 #define STR_UNDO_DELETECELLS        1
 #define STR_UNDO_CUT                2
 #define STR_UNDO_PASTE              3
@@ -92,7 +91,6 @@
 #define STR_MSSG_SOLVE_4            60
 #define STR_MSSG_SOLVE_5            61
 #define STR_MSSG_SOLVE_6            62
-// unused: 63
 
 #define STR_TABLE_GESAMTERGEBNIS    64
 #define STR_TABLE_ERGEBNIS          65
@@ -101,7 +99,6 @@
 #define STR_TABLE_ODER              68
 #define STR_UNDO_INSERTCELLS        69
 #define STR_TABLE_DEF               70
-//#define STR_STYLENAME_STANDARD      71 s.u.
 #define STR_MOVE_TO_END             72
 #define STR_BOX_YNI                 73
 #define STR_NO_REF_TABLE            74
@@ -165,8 +162,6 @@
 #define STR_FUN_TEXT_STDDEV         130
 #define STR_FUN_TEXT_VAR            131
 #define STR_DOC_STAT                132
-
-//#define STR_STYLENAME_RESULT        133 s.u.
 
 #define STR_DBNAME_IMPORT           134
 
@@ -245,7 +240,7 @@
 
 #define STR_INVALID_AFAREA          193
 
-#define STR_CASCADE                 194 // Funktionsautopilot
+#define STR_CASCADE                 194 // function auto pilot
 #define STR_OPTIONAL                195
 #define STR_REQUIRED                196
 #define STR_EDITFUNCTION            197
@@ -281,7 +276,7 @@
 #define STR_SPELLING_STOP_OK        219
 #define STR_THESAURUS_NO_STRING     220
 #define STR_SPELLING_BEGIN_TAB      221
-#define STR_SPELLING_NO_LANG        222                         // kann spaeter wieder raus
+#define STR_SPELLING_NO_LANG        222                         // can be removed later
 
 #define STR_UNDO_GRAFEDIT           223
 
@@ -338,7 +333,6 @@
 #define STR_VOBJ_DRAWINGS           263
 #define STR_VOBJ_MODE_SHOW          264
 #define STR_VOBJ_MODE_HIDE          265
-//#i80528##define STR_VOBJ_MODE_DUMMY           266
 
 #define STR_SCATTR_PAGE_TOPDOWN     267
 #define STR_SCATTR_PAGE_LEFTRIGHT   268
@@ -353,7 +347,6 @@
 #define STR_SCATTR_PAGE_SCALETOPAGES 277
 
 #define STR_NOREF_STR               278     /* moved to compiler.src, keep define! */
-// unused: 279
 
 #define STR_UNDO_CHARTDATA          280
 #define STR_UNDO_ORIGINALSIZE       281
@@ -409,7 +402,6 @@
 #define STR_DETINVALID_OVERFLOW     315
 #define STR_GRAPHICNAME             316
 #define STR_INVALIDNAME             317
-//  318 ist oben
 #define STR_ERR_LINKOVERLAP         319
 
 #define STR_VALID_MACRONOTFOUND     320
@@ -571,13 +563,33 @@
 #define STR_STYLE_FAMILY_PAGE       434
 
 #define STR_ERR_DATAPILOTSOURCE     435
-#define STR_PIVOT_FIRSTROWEMPTYERR      436
+#define STR_PIVOT_FIRSTROWEMPTYERR  436
 #define STR_PIVOT_ONLYONEROWERR     437
 
 #define STR_UNDO_SET_TAB_BG_COLOR       438
 #define STR_UNDO_SET_MULTI_TAB_BG_COLOR 439
+#define STR_UNDO_INSERT_CURRENT_DATE    440
+#define STR_UNDO_INSERT_CURRENT_TIME    441
 
-#define STR_COUNT                       440
+#define STR_OPTIONS_WARN_SEPARATORS     442
+#define STR_SHAPE_AUTOSHAPE         443
+#define STR_SHAPE_RECTANGLE         444
+#define STR_SHAPE_LINE              445
+#define STR_SHAPE_OVAL              446
+#define STR_SHAPE_TEXTBOX           447
+
+#define STR_FORM_BUTTON             448
+#define STR_FORM_CHECKBOX           449
+#define STR_FORM_OPTIONBUTTON       450
+#define STR_FORM_LABEL              451
+#define STR_FORM_LISTBOX            452
+#define STR_FORM_GROUPBOX           453
+#define STR_FORM_DROPDOWN           454
+#define STR_FORM_SPINNER            455
+#define STR_FORM_SCROLLBAR          456
+
+#define STR_PGNUM                    457
+
+#define STR_COUNT                    458
 
 #endif
-

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,15 +44,9 @@ class SAL_NO_VTABLE IAnyRefDialog : public formula::IControlReferenceHandler
 public:
     virtual ~IAnyRefDialog(){}
 
-    //virtual void ShowReference(const String& _sRef) = 0;
-    //virtual void HideReference( sal_Bool bDoneRefMode = sal_True ) = 0;
-    //virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) = 0;
-    //virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) = 0;
-
-
     virtual void SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) = 0;
-    virtual void RefInputDone( sal_Bool bForced = sal_False ) = 0;
+    virtual void RefInputDone( sal_Bool bForced = false ) = 0;
     virtual sal_Bool IsTableLocked() const = 0;
     virtual sal_Bool IsRefInputMode() const = 0;
 
@@ -62,3 +57,5 @@ public:
 };
 
 #endif // SC_IANYREFDIALOG_HXX_INCLUDED
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

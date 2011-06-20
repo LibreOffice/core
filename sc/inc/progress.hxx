@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,15 +84,15 @@ public:
 
                             ScProgress( SfxObjectShell* pObjSh,
                                          const String& rText,
-                                         sal_uLong nRange, sal_Bool bAllDocs = sal_False,
+                                         sal_uLong nRange, sal_Bool bAllDocs = false,
                                          sal_Bool bWait = sal_True );
                             ~ScProgress();
 
 #ifdef SC_PROGRESS_CXX
-                            // nur fuer DummyInterpret, sonst nie benutzen!!!
+                            // for DummyInterpret only, never use otherwise!!!
                             ScProgress();
 #endif
-                            // kann NULL sein!
+                            // might be NULL!
             SfxProgress*    GetSfxProgress() const { return pProgress; }
 
             sal_Bool            SetStateText( sal_uLong nVal, const String &rVal, sal_uLong nNewRange = 0 )
@@ -102,7 +103,7 @@ public:
                                             nGlobalRange = nNewRange;
                                         CalcGlobalPercent( nVal );
                                         if ( !pProgress->SetStateText( nVal, rVal, nNewRange ) )
-                                            bGlobalNoUserBreak = sal_False;
+                                            bGlobalNoUserBreak = false;
                                         return bGlobalNoUserBreak;
                                     }
                                     return sal_True;
@@ -115,7 +116,7 @@ public:
                                             nGlobalRange = nNewRange;
                                         CalcGlobalPercent( nVal );
                                         if ( !pProgress->SetState( nVal, nNewRange ) )
-                                            bGlobalNoUserBreak = sal_False;
+                                            bGlobalNoUserBreak = false;
                                         return bGlobalNoUserBreak;
                                     }
                                     return sal_True;
@@ -126,20 +127,20 @@ public:
                                     {
                                         CalcGlobalPercent( nGlobalRange - nVal );
                                         if ( !pProgress->SetState( nGlobalRange - nVal ) )
-                                            bGlobalNoUserBreak = sal_False;
+                                            bGlobalNoUserBreak = false;
                                         return bGlobalNoUserBreak;
                                     }
                                     return sal_True;
                                 }
             sal_Bool            SetStateOnPercent( sal_uLong nVal )
-                                {   // nur wenn Prozent mehr als vorher
+                                {   // only if percentage increased
                                     if ( nGlobalRange && (nVal * 100 /
                                             nGlobalRange) > nGlobalPercent )
                                         return SetState( nVal );
                                     return sal_True;
                                 }
             sal_Bool            SetStateCountDownOnPercent( sal_uLong nVal )
-                                {   // nur wenn Prozent mehr als vorher
+                                {   // only if percentage increased
                                     if ( nGlobalRange &&
                                             ((nGlobalRange - nVal) * 100 /
                                             nGlobalRange) > nGlobalPercent )
@@ -157,3 +158,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,18 +83,16 @@
 #include "viewutil.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
-//CHINA001 #include "namepast.hxx"
 #include "reffind.hxx"
 #include "tabvwsh.hxx"
-//CHINA001 #include "textdlgs.hxx"
 #include "editutil.hxx"
 #include "globstr.hrc"
 
 #define ScEditShell
 #include "scslots.hxx"
 
-#include "scui_def.hxx" //CHINA001
-#include "scabstdlg.hxx" //CHINA001
+#include "scui_def.hxx"
+#include "scabstdlg.hxx"
 
 
 using namespace ::com::sun::star;
@@ -111,7 +110,7 @@ ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
     pEditView       (pView),
     pViewData       (pData),
     pClipEvtLstnr   (NULL),
-    bPastePossible  (sal_False),
+    bPastePossible  (false),
     bIsInsertMode   (sal_True)
 {
     SetPool( pEditView->GetEditEngine()->GetEmptyItemSet().GetPool() );
@@ -123,9 +122,9 @@ ScEditShell::~ScEditShell()
 {
     if ( pClipEvtLstnr )
     {
-        pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), sal_False );
+        pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), false );
 
-        //  #122057# The listener may just now be waiting for the SolarMutex and call the link
+        //  The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
         pClipEvtLstnr->ClearCallbackLink();
 
@@ -151,13 +150,13 @@ void lcl_RemoveAttribs( EditView& rEditView )
     ScEditEngineDefaulter* pEngine = static_cast<ScEditEngineDefaulter*>(rEditView.GetEditEngine());
 
     sal_Bool bOld = pEngine->GetUpdateMode();
-    pEngine->SetUpdateMode(sal_False);
+    pEngine->SetUpdateMode(false);
 
     String aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
     pEngine->GetUndoManager().EnterListAction( aName, aName );
 
-    rEditView.RemoveAttribs(sal_True);
-    pEngine->RepeatDefaults();      // #97226# paragraph attributes from cell formats must be preserved
+    rEditView.RemoveAttribs(true);
+    pEngine->RepeatDefaults();      // paragraph attributes from cell formats must be preserved
 
     pEngine->GetUndoManager().LeaveListAction();
 
@@ -180,12 +179,12 @@ void ScEditShell::Execute( SfxRequest& rReq )
     SfxBindings&        rBindings   = pViewData->GetBindings();
 
     ScInputHandler* pHdl = GetMyInputHdl();
-    DBG_ASSERT(pHdl,"kein ScInputHandler");
+    OSL_ENSURE(pHdl,"kein ScInputHandler");
 
     EditView* pTopView   = pHdl->GetTopView();      // hat Eingabezeile den Focus?
     EditView* pTableView = pHdl->GetTableView();
 
-    DBG_ASSERT(pTableView,"no EditView :-(");
+    OSL_ENSURE(pTableView,"no EditView :-(");
     /* #i91683# No EditView if spell-check dialog is active and positioned on
      * an error and user immediately (without double click or F2) selected a
      * text portion of that cell with the mouse and wanted to modify it. */
@@ -198,8 +197,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
     EditEngine* pEngine = pTableView->GetEditEngine();
 
     pHdl->DataChanging();
-    sal_Bool bSetSelIsRef = sal_False;
-    sal_Bool bSetModified = sal_True;
+    sal_Bool bSetSelIsRef = false;
 
     switch ( nSlot )
     {
@@ -225,7 +223,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_THES:
             {
                 String aReplaceText;
-                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , sal_False );
+                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , false );
                 if (pItem2)
                     aReplaceText = pItem2->GetValue();
                 if (aReplaceText.Len() > 0)
@@ -235,7 +233,6 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_COPY:
             pTableView->Copy();
-            bSetModified = sal_False;
             break;
 
         case SID_CUT:
@@ -336,7 +333,6 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     if (pTopView)
                         pTopView->SetSelection(ESelection(0,0,nPar-1,nLen));
                 }
-                bSetModified = sal_False;
             }
             break;
 
@@ -355,13 +351,13 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 const SfxItemSet *pArgs = rReq.GetArgs();
                 const SfxPoolItem* pItem = 0;
                 if( pArgs )
-                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
+                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
 
                 if ( pItem )
                 {
                     aString = ((const SfxStringItem*)pItem)->GetValue();
                     const SfxPoolItem* pFtItem = NULL;
-                    pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
+                    pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
                     const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
                     if ( pFontItem )
                     {
@@ -399,7 +395,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     SfxItemSet aSet( pTableView->GetEmptyItemSet() );
                     SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, GetPool() );
                     aSetItem.PutItemForScriptType( nSetScript, aNewItem );
-                    aSet.Put( aSetItem.GetItemSet(), sal_False );
+                    aSet.Put( aSetItem.GetItemSet(), false );
 
                     //  SetAttribs an der View selektiert ein Wort, wenn nichts selektiert ist
                     pTableView->GetEditEngine()->QuickSetAttribs( aSet, pTableView->GetSelection() );
@@ -424,14 +420,11 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case FID_INSERT_NAME:
             {
                 ScDocument*     pDoc = pViewData->GetDocument();
-                //CHINA001 ScNamePasteDlg* pDlg = new ScNamePasteDlg( pViewData->GetDialogParent(),
-                //CHINA001                              pDoc->GetRangeName(), sal_False );
-                                                // "Liste" disablen
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pDoc->GetRangeName(), RID_SCDLG_NAMES_PASTE, sal_False );
-                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pDoc->GetRangeName(), RID_SCDLG_NAMES_PASTE, false );
+                OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
@@ -463,13 +456,12 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                 SfxObjectShell* pObjSh = pViewData->GetSfxDocShell();
 
-                //CHINA001 ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(), &aAttrs, pObjSh );
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg( pViewData->GetDialogParent(), &aAttrs,
                                                                      pObjSh, RID_SCDLG_CHAR );
-                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                OSL_ENSURE(pDlg, "Dialog create fail!");
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
 
@@ -492,13 +484,14 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_TOGGLE_REL:
             {
-                sal_Bool bOk = sal_False;
+                bool bOk = false;
                 if (pEngine->GetParagraphCount() == 1)
                 {
                     String aText = pEngine->GetText();
                     ESelection aSel = pEditView->GetSelection();    // aktuelle View
 
-                    ScRefFinder aFinder( aText, pViewData->GetDocument() );
+                    ScDocument* pDoc = pViewData->GetDocument();
+                    ScRefFinder aFinder(aText, pViewData->GetCurPos(), pDoc, pDoc->GetAddressConvention());
                     aFinder.ToggleRel( aSel.nStartPos, aSel.nEndPos );
                     if (aFinder.GetFound())
                     {
@@ -511,7 +504,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTopView->GetEditEngine()->SetText( aNew );
                             pTopView->SetSelection( aNewSel );
                         }
-                        bOk = sal_True;
+                        bOk = true;
 
                         //  Referenz wird selektiert -> beim Tippen nicht ueberschreiben
                         bSetSelIsRef = sal_True;
@@ -534,7 +527,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     const String& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
-                    sal_Bool bDone = sal_False;
+                    sal_Bool bDone = false;
                     if ( eMode == HLINK_DEFAULT || eMode == HLINK_FIELD )
                     {
                         const SvxURLField* pURLField = GetURLField();
@@ -556,7 +549,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTableView->InsertField( aURLItem );
                             pTableView->SetSelection( aSel );       // select inserted field
 
-                            //  #57254# jetzt doch auch Felder in der Top-View
+                            //  jetzt doch auch Felder in der Top-View
 
                             if ( pTopView )
                             {
@@ -618,7 +611,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         break;
     }
 
-    pHdl->DataChanged(sal_False, bSetModified);
+    pHdl->DataChanged();
     if (bSetSelIsRef)
         pHdl->SetSelIsRef(sal_True);
 }
@@ -634,9 +627,9 @@ void lcl_DisableAll( SfxItemSet& rSet )    // disable all slots
     }
 }
 
-void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
+void ScEditShell::GetState( SfxItemSet& rSet )
 {
-    // #125326# When deactivating the view, edit mode is stopped, but the EditShell is left active
+    // When deactivating the view, edit mode is stopped, but the EditShell is left active
     // (a shell can't be removed from within Deactivate). In that state, the EditView isn't inserted
     // into the EditEngine, so it can have an invalid selection and must not be used.
     if ( !pViewData->HasEditView( pViewData->GetActivePart() ) )
@@ -755,7 +748,7 @@ IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
     return 0;
 }
 
-void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
+void ScEditShell::GetClipState( SfxItemSet& rSet )
 {
     if ( !pClipEvtLstnr )
     {
@@ -839,7 +832,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                     sal_uInt16 nWhich = rPool.GetWhich( nSlot );
                     aSetItem.PutItemForScriptType( nScript, pArgs->Get( nWhich ) );
 
-                    aSet.Put( aSetItem.GetItemSet(), sal_False );
+                    aSet.Put( aSetItem.GetItemSet(), false );
                 }
             }
             break;
@@ -863,9 +856,9 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
                 SfxItemPool& rPool = GetPool();
 
-                sal_Bool bOld = sal_False;
+                sal_Bool bOld = false;
                 SvxScriptSetItem aOldSetItem( nSlot, rPool );
-                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), sal_False );
+                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), false );
                 const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
                 if ( pCore && ((const SvxWeightItem*)pCore)->GetWeight() > WEIGHT_NORMAL )
                     bOld = sal_True;
@@ -873,7 +866,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 SvxScriptSetItem aSetItem( nSlot, rPool );
                 aSetItem.PutItemForScriptType( nScript,
                             SvxWeightItem( bOld ? WEIGHT_NORMAL : WEIGHT_BOLD, EE_CHAR_WEIGHT ) );
-                aSet.Put( aSetItem.GetItemSet(), sal_False );
+                aSet.Put( aSetItem.GetItemSet(), false );
 
                 rBindings.Invalidate( nSlot );
             }
@@ -886,9 +879,9 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
                 SfxItemPool& rPool = GetPool();
 
-                sal_Bool bOld = sal_False;
+                sal_Bool bOld = false;
                 SvxScriptSetItem aOldSetItem( nSlot, rPool );
-                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), sal_False );
+                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), false );
                 const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
                 if ( pCore && ((const SvxPostureItem*)pCore)->GetValue() != ITALIC_NONE )
                     bOld = sal_True;
@@ -896,7 +889,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 SvxScriptSetItem aSetItem( nSlot, rPool );
                 aSetItem.PutItemForScriptType( nScript,
                             SvxPostureItem( bOld ? ITALIC_NONE : ITALIC_NORMAL, EE_CHAR_ITALIC ) );
-                aSet.Put( aSetItem.GetItemSet(), sal_False );
+                aSet.Put( aSetItem.GetItemSet(), false );
 
                 rBindings.Invalidate( nSlot );
             }
@@ -1000,7 +993,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
     EditEngine* pEngine = pEditView->GetEditEngine();
     sal_Bool bOld = pEngine->GetUpdateMode();
-    pEngine->SetUpdateMode(sal_False);
+    pEngine->SetUpdateMode(false);
 
     pEditView->SetAttribs( aSet );
 
@@ -1107,13 +1100,13 @@ String ScEditShell::GetSelectionText( sal_Bool bWholeWord )
 
 void ScEditShell::ExecuteUndo(SfxRequest& rReq)
 {
-    //  #81733# Undo must be handled here because it's called for both EditViews
+    //  Undo must be handled here because it's called for both EditViews
 
     ScInputHandler* pHdl = GetMyInputHdl();
-    DBG_ASSERT(pHdl,"no ScInputHandler");
+    OSL_ENSURE(pHdl,"no ScInputHandler");
     EditView* pTopView   = pHdl->GetTopView();
     EditView* pTableView = pHdl->GetTableView();
-    DBG_ASSERT(pTableView,"no EditView");
+    OSL_ENSURE(pTableView,"no EditView");
 
     pHdl->DataChanging();
 
@@ -1149,7 +1142,7 @@ void ScEditShell::ExecuteUndo(SfxRequest& rReq)
             }
             break;
     }
-    pViewData->GetBindings().InvalidateAll(sal_False);
+    pViewData->GetBindings().InvalidateAll(false);
 
     pHdl->DataChanged();
 }
@@ -1173,7 +1166,7 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
     //  disable if no action in input line EditView
 
     ScInputHandler* pHdl = GetMyInputHdl();
-    DBG_ASSERT(pHdl,"no ScInputHandler");
+    OSL_ENSURE(pHdl,"no ScInputHandler");
     EditView* pTopView = pHdl->GetTopView();
     if (pTopView)
     {
@@ -1191,11 +1184,11 @@ void ScEditShell::ExecuteTrans( SfxRequest& rReq )
     if ( nType )
     {
         ScInputHandler* pHdl = GetMyInputHdl();
-        DBG_ASSERT( pHdl, "no ScInputHandler" );
+        OSL_ENSURE( pHdl, "no ScInputHandler" );
 
         EditView* pTopView   = pHdl->GetTopView();
         EditView* pTableView = pHdl->GetTableView();
-        DBG_ASSERT( pTableView, "no EditView" );
+        OSL_ENSURE( pTableView, "no EditView" );
 
         pHdl->DataChanging();
 
@@ -1207,3 +1200,4 @@ void ScEditShell::ExecuteTrans( SfxRequest& rReq )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

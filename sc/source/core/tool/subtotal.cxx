@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ sal_Bool SubTotal::SafePlus(double& fVal1, double fVal2)
     fVal1 += fVal2;
     if (!::rtl::math::isFinite(fVal1))
     {
-        bOk = sal_False;
+        bOk = false;
         if (fVal2 > 0.0)
             fVal1 = DBL_MAX;
         else
@@ -60,7 +61,7 @@ sal_Bool SubTotal::SafeMult(double& fVal1, double fVal2)
     fVal1 *= fVal2;
     if (!::rtl::math::isFinite(fVal1))
     {
-        bOk = sal_False;
+        bOk = false;
         fVal1 = DBL_MAX;
     }
     return bOk;
@@ -74,8 +75,10 @@ sal_Bool SubTotal::SafeDiv(double& fVal1, double fVal2)
     fVal1 /= fVal2;
     if (!::rtl::math::isFinite(fVal1))
     {
-        bOk = sal_False;
+        bOk = false;
         fVal1 = DBL_MAX;
     }
     return bOk;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,11 +43,22 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 class ScDatabaseDocUtil
 {
 public:
+    /**
+     * Detailed information on single string value.
+     */
+    struct StrData
+    {
+        bool        mbSimpleText;
+        sal_uInt32  mnStrLength;
+
+        StrData();
+    };
     static void PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::sdbc::XRow>& xRow, long nRowPos,
-                        long nType, sal_Bool bCurrency, sal_Bool* pSimpleFlag = NULL );
+                        long nType, sal_Bool bCurrency, StrData* pStrData = NULL );
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

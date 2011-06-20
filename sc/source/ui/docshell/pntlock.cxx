@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@ ScPaintLockData::ScPaintLockData(sal_uInt16 nNewMode) :
     nLevel( 0 ),
     nDocLevel( 0 ),
     nParts( 0 ),
-    bModified( sal_False )
+    bModified( false )
 {
 }
 
@@ -59,3 +60,4 @@ void ScPaintLockData::AddRange( const ScRange& rRange, sal_uInt16 nP )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

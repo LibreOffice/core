@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,19 +32,12 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <vcl/dialog.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svtools/inettbc.hxx>
-
-//REMOVE    #ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE    #define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE    SO2_DECL_REF(SvEmbeddedObject)
-//REMOVE    #endif
 
 namespace sfx2 { class DocumentInserter; }
 namespace sfx2 { class FileDialogHelper; }
@@ -104,3 +98,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

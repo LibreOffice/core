@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,9 +54,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 
 #include <ucbhelper/content.hxx>
-#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 #include <vcl/cvtgrf.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <vcl/svapp.hxx>
@@ -161,7 +160,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
 
     // find FilterName in MediaDescriptor
     OUString aFilterName(
-        lcl_getProperty< OUString >( rMediaDescriptor, OUString::createFromAscii("FilterName")));
+        lcl_getProperty< OUString >( rMediaDescriptor, OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ))));
 
     // if FilterName was found, get Filter from factory
     if( aFilterName.getLength() > 0 )
@@ -179,7 +178,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
                 (aFilterProps >>= aProps))
             {
                 OUString aFilterServiceName(
-                    lcl_getProperty< OUString >( aProps, OUString::createFromAscii("FilterService")));
+                    lcl_getProperty< OUString >( aProps, OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterService" ))));
 
                 if( aFilterServiceName.getLength())
                 {
@@ -375,7 +374,7 @@ void ChartModel::impl_store(
     }
     else
     {
-        OSL_ENSURE( false, "No filter" );
+        OSL_FAIL( "No filter" );
     }
 
     setModified( sal_False );
@@ -390,7 +389,7 @@ void ChartModel::impl_store(
         apphelper::MediaDescriptorHelper aMDHelper(rMediaDescriptor);
         try
         {
-            xPropSet->setPropertyValue( OUString::createFromAscii("SavedObject"),
+            xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "SavedObject" )),
                 uno::makeAny( aMDHelper.HierarchicalDocumentName ) );
         }
         catch ( uno::Exception& )
@@ -606,7 +605,7 @@ void ChartModel::impl_load(
     }
     else
     {
-        OSL_ENSURE( false, "loadFromStorage cannot create filter" );
+        OSL_FAIL( "loadFromStorage cannot create filter" );
     }
 
     if( xStorage.is() )
@@ -858,3 +857,5 @@ void SAL_CALL ChartModel::removeStorageChangeListener( const Reference< document
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,7 @@ public:
     ScDocument*             GetDocument() const;
     SfxObjectShell*         GetEmbeddedObject() const;
 
-    void                    UpdateAllRowHeights( const ScMarkData* pTabMark = NULL, bool bCalcOutputFactor = false );
+    void                    UpdateAllRowHeights( const ScMarkData* pTabMark = NULL );
 
     void                    BeforeXMLLoading();
     void                    AfterXMLLoading(sal_Bool bRet);
@@ -148,8 +149,6 @@ public:
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   acquire() throw();
     virtual void SAL_CALL   release() throw();
-
-//? virtual UString         getClassName(void);
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -213,8 +212,6 @@ public:
                             //  XDrawPagesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPages > SAL_CALL
                             getDrawPages() throw(::com::sun::star::uno::RuntimeException);
-
-    //! XPrintable??
 
                             //  XGoalSeek
     virtual ::com::sun::star::sheet::GoalResult SAL_CALL seekGoal(
@@ -683,7 +680,6 @@ private:
     ScDocShell*             pDocShell;
 
 public:
-//UNUSED2008-05             ScSpreadsheetSettingsObj(ScDocShell* pDocSh);
     virtual                 ~ScSpreadsheetSettingsObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -747,7 +743,7 @@ class ScAnnotationsObj : public cppu::WeakImplHelper3<
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB                   nTab;           // Collection haengt am Sheet
+    SCTAB                   nTab;           // Collection belongs to the sheet
 
     bool                    GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos ) const;
     ScAnnotationObj*        GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
@@ -861,3 +857,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,6 +48,7 @@
 #define SC_UNO_EXTERNALDOCLINKS     "ExternalDocLinks"
 #define SC_UNO_COLLABELRNG          "ColumnLabelRanges"
 #define SC_UNO_DATABASERNG          "DatabaseRanges"
+#define SC_UNO_UNNAMEDDBRNG         "UnnamedDatabaseRanges"
 #define SC_UNO_NAMEDRANGES          "NamedRanges"
 #define SC_UNO_ROWLABELRNG          "RowLabelRanges"
 #define SC_UNO_SHEETLINKS           "SheetLinks"
@@ -106,6 +108,8 @@
 #define SC_UNONAME_CELLPRO          "CellProtection"
 #define SC_UNONAME_CELLHJUS         "HoriJustify"
 #define SC_UNONAME_CELLVJUS         "VertJustify"
+#define SC_UNONAME_CELLHJUS_METHOD  "HoriJustifyMethod"
+#define SC_UNONAME_CELLVJUS_METHOD  "VertJustifyMethod"
 #define SC_UNONAME_CELLORI          "Orientation"
 #define SC_UNONAME_NUMFMT           "NumberFormat"
 #define SC_UNONAME_SHADOW           "ShadowFormat"
@@ -184,6 +188,10 @@
 #define SC_UNONAME_ANCHOR           "Anchor"
 #define SC_UNONAME_HORIPOS          "HoriOrientPosition"
 #define SC_UNONAME_VERTPOS          "VertOrientPosition"
+//     #i66550 HLINK_FOR_SHAPES
+#define SC_UNONAME_HYPERLINK        "Hyperlink"
+#define SC_UNONAME_MOVEPROTECT      "MoveProtect"
+#define SC_UNONAME_SIZEPROTECT      "SizeProtect"
 
 //  other cell properties
 #define SC_UNONAME_CHCOLHDR         "ChartColumnAsLabel"
@@ -354,6 +362,7 @@
 #define SC_UNO_SRCHSTYLES           "SearchStyles"
 #define SC_UNO_SRCHTYPE             "SearchType"
 #define SC_UNO_SRCHWORDS            "SearchWords"
+#define SC_UNO_SRCHFILTERED         "SearchFiltered"
 
 //  old (5.2) property names for page styles - for compatibility only!
 #define OLD_UNO_PAGE_BACKCOLOR      "BackgroundColor"
@@ -528,6 +537,7 @@
 #define SC_UNO_ZOOMTYPE             "ZoomType"
 #define SC_UNO_ZOOMVALUE            "ZoomValue"
 #define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
+#define SC_UNO_FILTERED_RANGE_SELECTION       "FilteredRangeSelection"
 #define SC_UNO_VISAREASCREEN        "VisibleAreaOnScreen"
 
 /*Stampit enable/disable print cancel */
@@ -614,9 +624,8 @@
 #define SC_UNONAME_XLA1REPR         "XLA1Representation"
 #define SC_UNONAME_REFSHEET         "ReferenceSheet"
 
-// --> PB 2004-08-23 #i33095# Security Options
+// Security options
 #define SC_UNO_LOADREADONLY         "LoadReadonly"
-// <--
 #define SC_UNO_MODIFYPASSWORDINFO   "ModifyPasswordInfo"
 
 // FormulaParser
@@ -635,13 +644,15 @@
 
 // Solver
 #define SC_UNONAME_TIMEOUT          "Timeout"
-
 #define SC_UNO_SHAREDOC             "IsDocumentShared"
 
 // EventDescriptor
-
 #define SC_UNO_EVENTTYPE            "EventType"
 #define SC_UNO_SCRIPT               "Script"
 
+// Named ranges
+#define SC_UNO_MODIFY_BROADCAST     "ModifyAndBroadcast"
+
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

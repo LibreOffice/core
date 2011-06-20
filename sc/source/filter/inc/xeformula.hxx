@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include "xlformula.hxx"
 #include "xeroot.hxx"
+#include <boost/shared_ptr.hpp>
 
 // External reference log =====================================================
 
@@ -87,7 +89,7 @@ public:
     XclTokenArrayRef    CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName );
 
 private:
-    typedef ScfRef< XclExpFmlaCompImpl > XclExpFmlaCompImplRef;
+    typedef boost::shared_ptr< XclExpFmlaCompImpl > XclExpFmlaCompImplRef;
     XclExpFmlaCompImplRef mxImpl;
 };
 
@@ -95,3 +97,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

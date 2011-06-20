@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -52,6 +50,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <stdio.h>
@@ -66,7 +65,7 @@
 #include "document.hxx"
 #include "collect.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
 #include "filter.hxx"
@@ -326,27 +325,10 @@ void lcl_ReadChartTypeData(SvStream& rStream, Sc10ChartTypeData& rTypeData)
         rStream.Read(&rTypeData.LabelText[i], sizeof(Sc10ChartText));
     rStream.Read(&rTypeData.LeftTitle, sizeof(rTypeData.LeftTitle));
     rStream.Read(&rTypeData.Reserved, sizeof(rTypeData.Reserved));
-    //rStream.Read(&rTypeData, sizeof(rTypeData));
 }
 
 double lcl_PascalToDouble(sal_Char* tp6)
 {
-// #i68483# bah! this was broken forever...
-//   struct
-//   {
-//        sal_uInt8       be  ;     /* biased exponent           */
-//        sal_uInt16      v1  ;     /* lower 16 bits of mantissa */
-//        sal_uInt16      v2  ;     /* next  16 bits of mantissa */
-//        sal_uInt8       v3:7;     /* upper  7 bits of mantissa */
-//        sal_uInt8       s :1;     /* sign bit                  */
-//   } real;
-//
-//   memcpy (&real, tp6, 6);
-//   if (real.be == 0)
-//         return 0.0;
-//   return (((((128 +real.v3) * 65536.0) + real.v2) * 65536.0 + real.v1) *
-//         ldexp ((real.s? -1.0: 1.0), real.be - (129+39)));
-
     sal_uInt8* pnUnsigned = reinterpret_cast< sal_uInt8* >( tp6 );
     // biased exponent
     sal_uInt8 be = pnUnsigned[ 0 ];
@@ -406,7 +388,6 @@ String lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
 // Font
 //--------------------------------------------
 
-
 Sc10FontData::Sc10FontData(SvStream& rStream)
 {
     rStream >> Height;
@@ -439,16 +420,14 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream) :
   }
   else
   {
-    DBG_ERROR( "FontID" );
+    OSL_FAIL( "FontID" );
     nError = errUnknownID;
   }
 }
 
-
 //--------------------------------------------
 // Benannte-Bereiche
 //--------------------------------------------
-
 
 Sc10NameData::Sc10NameData(SvStream& rStream)
 {
@@ -486,7 +465,7 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
   }
   else
   {
-    DBG_ERROR( "NameID" );
+    OSL_FAIL( "NameID" );
     nError = errUnknownID;
   }
 }
@@ -495,12 +474,9 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
 // Vorlagen
 //--------------------------------------------
 
-
 Sc10PatternData::Sc10PatternData(SvStream& rStream)
 {
   rStream.Read(Name, sizeof(Name));
-  //rStream.Read(&ValueFormat, sizeof(ValueFormat));
-  //rStream.Read(&LogFont, sizeof(LogFont));
   lcl_ReadValueFormat(rStream, ValueFormat);
   lcl_ReadLogFont(rStream, LogFont);
 
@@ -534,20 +510,17 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
   }
   else
   {
-    DBG_ERROR( "PatternID" );
+    OSL_FAIL( "PatternID" );
     nError = errUnknownID;
   }
 }
-
 
 //--------------------------------------------
 // Datenbank
 //--------------------------------------------
 
-
 Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
 {
-    //rStream.Read(&DataBaseRec, sizeof(DataBaseRec));
     rStream.Read(&DataBaseRec.Name, sizeof(DataBaseRec.Name));
     rStream >> DataBaseRec.Tab;
     lcl_ReadBlockRect(rStream, DataBaseRec.Block);
@@ -601,7 +574,7 @@ Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream) :
   }
   else
   {
-    DBG_ERROR( "DataBaseID" );
+    OSL_FAIL( "DataBaseID" );
     nError = errUnknownID;
   }
 }
@@ -813,7 +786,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             Color aRColor( nColor.Red, nColor.Green, nColor.Blue );
 
             sal_uInt16 nFact;
-            sal_Bool        bSwapCol = sal_False;
+            sal_Bool        bSwapCol = false;
             switch (pHeadFootLine->Raster)
             {
                case raNone:     nFact = 0xffff; bSwapCol = sal_True; break;
@@ -866,18 +839,18 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
               lcl_ChangeColor(cTop, ColorTop);
               lcl_ChangeColor(cRight, ColorRight);
               lcl_ChangeColor(cBottom, ColorBottom);
-              SvxBorderLine aLine;
+              ::editeng::SvxBorderLine aLine;
               SvxBoxItem aBox( ATTR_BORDER );
-              aLine.SetOutWidth(nLeft);
+              aLine.SetWidth(nLeft);
               aLine.SetColor(ColorLeft);
               aBox.SetLine(&aLine, BOX_LINE_LEFT);
-              aLine.SetOutWidth(nTop);
+              aLine.SetWidth(nTop);
               aLine.SetColor(ColorTop);
               aBox.SetLine(&aLine, BOX_LINE_TOP);
-              aLine.SetOutWidth(nRight);
+              aLine.SetWidth(nRight);
               aLine.SetColor(ColorRight);
               aBox.SetLine(&aLine, BOX_LINE_RIGHT);
-              aLine.SetOutWidth(nBottom);
+              aLine.SetWidth(nBottom);
               aLine.SetColor(ColorBottom);
               aBox.SetLine(&aLine, BOX_LINE_BOTTOM);
 
@@ -892,7 +865,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
                 aSetItemItemSet.Put( SvxSizeItem( ATTR_PAGE_SIZE, Size( 0, pPage->Bottom - pPage->Foot ) ) );
 
             aSetItemItemSet.Put(SfxBoolItem( ATTR_PAGE_ON, sal_True ));
-            aSetItemItemSet.Put(SfxBoolItem( ATTR_PAGE_DYNAMIC, sal_False ));
+            aSetItemItemSet.Put(SfxBoolItem( ATTR_PAGE_DYNAMIC, false ));
             aSetItemItemSet.Put(SfxBoolItem( ATTR_PAGE_SHARED, sal_True ));
 
             pSet->Put( SvxSetItem( nHeadFoot ? ATTR_PAGE_FOOTERSET : ATTR_PAGE_HEADERSET,
@@ -996,7 +969,7 @@ Sc10Import::~Sc10Import()
     delete pPatternCollection;
     delete pDataBaseCollection;
 
-    DBG_ASSERT( pPrgrsBar == NULL,
+    OSL_ENSURE( pPrgrsBar == NULL,
         "*Sc10Import::Sc10Import(): Progressbar lebt noch!?" );
 }
 
@@ -1027,15 +1000,15 @@ sal_uLong Sc10Import::Import()
     if (!nError) { ImportNameCollection();      pPrgrsBar->Progress(); }
     pDoc->SetViewOptions( aSc30ViewOpt );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     if (nError)
     {
-        DBG_ERROR( ByteString::CreateFromInt32( nError ).GetBuffer() );
+        OSL_FAIL( ByteString::CreateFromInt32( nError ).GetBuffer() );
     }
 #endif
 
     delete pPrgrsBar;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     pPrgrsBar = NULL;
 #endif
 
@@ -1046,14 +1019,13 @@ sal_uLong Sc10Import::Import()
 void Sc10Import::LoadFileHeader()
 {
     Sc10FileHeader FileHeader;
-    //rStream.Read(&FileHeader, sizeof(FileHeader));
     lcl_ReadFileHeader(rStream, FileHeader);
 
     nError = rStream.GetError();
     if ( nError == 0 )
     {
         sal_Char Sc10CopyRight[32];
-        strcpy(Sc10CopyRight, "Blaise-Tabelle");    // #100211# - checked
+        strcpy(Sc10CopyRight, "Blaise-Tabelle");
         Sc10CopyRight[14] = 10;
         Sc10CopyRight[15] = 13;
         Sc10CopyRight[16] = 0;
@@ -1089,7 +1061,6 @@ void Sc10Import::LoadEditStateInfo()
 
 void Sc10Import::LoadProtect()
 {
-    //rStream.Read(&SheetProtect, sizeof(SheetProtect));
     lcl_ReadSheetProtect(rStream, SheetProtect);
     nError = rStream.GetError();
 
@@ -1120,10 +1091,6 @@ void Sc10Import::LoadScrZoom()
 
 void Sc10Import::LoadPalette()
 {
-    //rStream.Read(TextPalette, sizeof(TextPalette));
-    //rStream.Read(BackPalette, sizeof(BackPalette));
-    //rStream.Read(RasterPalette, sizeof(RasterPalette));
-    //rStream.Read(FramePalette, sizeof(FramePalette));
     lcl_ReadPalette(rStream, TextPalette);
     lcl_ReadPalette(rStream, BackPalette);
     lcl_ReadPalette(rStream, RasterPalette);
@@ -1152,9 +1119,9 @@ void Sc10Import::ImportNameCollection()
     for (sal_uInt16 i = 0; i < pNameCollection->GetCount(); i++)
     {
         Sc10NameData*   pName = pNameCollection->At( i );
-        pRN->Insert( new ScRangeData(   pDoc,
-                                        SC10TOSTRING( pName->Name ),
-                                        SC10TOSTRING( pName->Reference ) ) );
+        pRN->insert(
+            new ScRangeData(
+                pDoc, SC10TOSTRING(pName->Name), SC10TOSTRING(pName->Reference)));
     }
 }
 
@@ -1173,7 +1140,7 @@ void Sc10Import::LoadPatternCollection()
         else
         {
             pPattern->Name[ 27 ] = 0;
-            strcat( pPattern->Name, "_Old" );       // #100211# - checked
+            strcat( pPattern->Name, "_Old" );
             aName = SC10TOSTRING( pPattern->Name );
             pStylePool->Make( aName, SFX_STYLE_FAMILY_PARA );
         }
@@ -1253,9 +1220,6 @@ void Sc10Import::LoadPatternCollection()
                     rItemSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
 
                 sal_Int16 Margin = Max( ( sal_uInt16 ) 20, ( sal_uInt16 ) ( EJustify * 20 ) );
-//              if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) ||
-//                  ( ( OJustify & ojBottomTop ) == ojBottomTop ) )
-// vielleicht so?
                 if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) )
                     rItemSet.Put( SvxMarginItem( 20, Margin, 20, Margin, ATTR_MARGIN ) );
                 else
@@ -1311,19 +1275,19 @@ void Sc10Import::LoadPatternCollection()
                     lcl_ChangeColor( cRight, ColorRight );
                     lcl_ChangeColor( cBottom, ColorBottom );
 
-                    SvxBorderLine   aLine;
+                    ::editeng::SvxBorderLine    aLine;
                     SvxBoxItem      aBox( ATTR_BORDER );
 
-                    aLine.SetOutWidth( nLeft );
+                    aLine.SetWidth( nLeft );
                     aLine.SetColor( ColorLeft );
                     aBox.SetLine( &aLine, BOX_LINE_LEFT );
-                    aLine.SetOutWidth( nTop );
+                    aLine.SetWidth( nTop );
                     aLine.SetColor( ColorTop );
                     aBox.SetLine( &aLine, BOX_LINE_TOP );
-                    aLine.SetOutWidth( nRight );
+                    aLine.SetWidth( nRight );
                     aLine.SetColor( ColorRight );
                     aBox.SetLine( &aLine, BOX_LINE_RIGHT );
-                    aLine.SetOutWidth( nBottom );
+                    aLine.SetWidth( nBottom );
                     aLine.SetColor( ColorBottom );
                     aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
                     rItemSet.Put( aBox );
@@ -1348,7 +1312,7 @@ void Sc10Import::LoadPatternCollection()
                     Color aRColor( COL_BLACK );
                     lcl_ChangeColor( nRColor, aRColor );
                     sal_uInt16 nFact;
-                    sal_Bool        bSwapCol = sal_False;
+                    sal_Bool        bSwapCol = false;
                     sal_Bool        bSetItem = sal_True;
                     switch (pPattern->Raster)
                     {
@@ -1406,7 +1370,7 @@ void Sc10Import::LoadDataBaseCollection()
                                     ( SCROW ) pOldData->DataBaseRec.Block.y2,
                                     sal_True,
                                     ( sal_Bool) pOldData->DataBaseRec.RowHeader );
-        pDoc->GetDBCollection()->Insert( pNewData );
+        pDoc->GetDBCollection()->getNamedDBs().insert(pNewData);
     }
 }
 
@@ -1436,7 +1400,6 @@ void Sc10Import::LoadTables()
         String           aStr;  // Universal-Konvertierungs-String
 
 
-        //rStream.Read(&PageFormat, sizeof(PageFormat));
         lcl_ReadPageFormat(rStream, PageFormat);
 
         sal_uInt16 nAt = aPageCollection.InsertFormat(PageFormat);
@@ -1446,7 +1409,6 @@ void Sc10Import::LoadTables()
 
         rStream >> DataBaseIndex;
 
-        //rStream.Read(&TabProtect, sizeof(TabProtect));
         lcl_ReadTabProtect(rStream, TabProtect);
 
         ScTableProtection aProtection;
@@ -1494,18 +1456,6 @@ void Sc10Import::LoadTables()
             aSc30ViewOpt.SetObjMode( VOBJ_TYPE_DRAW,  eObjMode );
         }
 
-    /*  wofuer wird das benoetigt? Da in SC 1.0 die Anzeigeflags pro Tabelle gelten und nicht pro View
-        Dieses Flag in die ViewOptions eintragen bei Gelegenheit, Sollte der Stephan Olk machen
-        sal_uInt16 nDisplayMask = 0xFFFF;
-        sal_uInt16 nDisplayValue = 0;
-        if (Tab == 0)
-            nDisplayValue = Display;
-        else
-        {
-            sal_uInt16 nDiff = Display ^ nDisplayValue;
-            nDisplayMask &= ~nDiff;
-        }
-    */
         //--------------------------------------------------------------------
         rStream >> Visible;
 
@@ -1513,19 +1463,19 @@ void Sc10Import::LoadTables()
         if (nError != 0) return;
 
         if (TabNo == 0)
-            pDoc->RenameTab(static_cast<SCTAB> (TabNo), SC10TOSTRING( TabName ), sal_False);
+            pDoc->RenameTab(static_cast<SCTAB> (TabNo), SC10TOSTRING( TabName ), false);
         else
             pDoc->InsertTab(SC_TAB_APPEND, SC10TOSTRING( TabName ) );
 
         pDoc->SetPageStyle( static_cast<SCTAB>(Tab), aPageName );
 
-        if (Visible == 0) pDoc->SetVisible(static_cast<SCTAB> (TabNo), sal_False);
+        if (Visible == 0) pDoc->SetVisible(static_cast<SCTAB> (TabNo), false);
 
         // ColWidth
         rStream >> ID;
         if (ID != ColWidthID)
         {
-            DBG_ERROR( "ColWidthID" );
+            OSL_FAIL( "ColWidthID" );
             nError = errUnknownID;
             return;
         }
@@ -1544,7 +1494,7 @@ void Sc10Import::LoadTables()
         rStream >> ID;
         if (ID != ColAttrID)
         {
-            DBG_ERROR( "ColAttrID" );
+            OSL_FAIL( "ColAttrID" );
             nError = errUnknownID;
             return;
         }
@@ -1574,7 +1524,7 @@ void Sc10Import::LoadTables()
         rStream >> ID;
         if (ID != RowHeightID)
         {
-            DBG_ERROR( "RowHeightID" );
+            OSL_FAIL( "RowHeightID" );
             nError = errUnknownID;
             return;
         }
@@ -1594,7 +1544,7 @@ void Sc10Import::LoadTables()
         rStream >> ID;
         if (ID != RowAttrID)
         {
-            DBG_ERROR( "RowAttrID" );
+            OSL_FAIL( "RowAttrID" );
             nError = errUnknownID;
             return;
         }
@@ -1624,7 +1574,7 @@ void Sc10Import::LoadTables()
         rStream >> ID;
         if (ID != TableID)
         {
-            DBG_ERROR( "TableID" );
+            OSL_FAIL( "TableID" );
             nError = errUnknownID;
             return;
         }
@@ -1635,7 +1585,7 @@ void Sc10Import::LoadTables()
             if ((Count != 0) && (nError == 0))
                 LoadCol(Col, static_cast<SCTAB> (TabNo));
         }
-        DBG_ASSERT( nError == 0, "Stream" );
+        OSL_ENSURE( nError == 0, "Stream" );
     }
     pPrgrsBar->Progress();
 
@@ -1694,7 +1644,6 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                     /*double Value =*/ ScfTools::ReadLongDouble(rStream);
                     sal_uInt8 Len;
                     sal_Char s[256+1];
-                    //rStream.Read(&Value, sizeof(Value));
                     rStream >> Len;
                     rStream.Read(&s[1], Len);
                     s[0] = '=';
@@ -1768,13 +1717,10 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         pColData = aFont.pData;
         for( i = 0 ; i < nLimit ; i++, pColData++ )
         {
-            //nEnd = aFont.pData[i].Row;
             nEnd = static_cast<SCROW>(pColData->Row);
-            //if ((nStart <= nEnd) && (aFont.pData[i].Value != 0))
             if ((nStart <= nEnd) && (pColData->Value))
             {
                 FontFamily eFam = FAMILY_DONTKNOW;
-                //Sc10FontData* pFont = pFontCollection->At(aFont.pData[i].Value);
                 Sc10FontData* pFont = pFontCollection->At(pColData->Value);
                 switch (pFont->PitchAndFamily & 0xF0)
                 {
@@ -1802,9 +1748,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     pColData = aColor.pData;
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
-        //nEnd = aColor.pData[i].Row;
         nEnd = static_cast<SCROW>(pColData->Row);
-        //if ((nStart <= nEnd) && (aColor.pData[i].Value != 0))
         if ((nStart <= nEnd) && (pColData->Value))
         {
             Color TextColor(COL_BLACK);
@@ -1901,7 +1845,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     nStart = nEnd + 1;
     }
     // Umrandung
-    sal_Bool            bEnd = sal_False;
+    sal_Bool            bEnd = false;
     sal_uInt16          nColorIndex = 0;
     sal_uInt16          nFrameIndex = 0;
 
@@ -1986,22 +1930,22 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         if( ( nStart <= nEnd ) && ( nValue != 0 ) )
         {
             ScPatternAttr   aScPattern(pDoc->GetPool());
-            SvxBorderLine   aLine;
+            ::editeng::SvxBorderLine    aLine;
             SvxBoxItem      aBox( ATTR_BORDER );
 
-            aLine.SetOutWidth( nLeft );
+            aLine.SetWidth( nLeft );
             aLine.SetColor( ColorLeft );
             aBox.SetLine( &aLine, BOX_LINE_LEFT );
 
-            aLine.SetOutWidth( nTop );
+            aLine.SetWidth( nTop );
             aLine.SetColor( ColorTop );
             aBox.SetLine( &aLine, BOX_LINE_TOP );
 
-            aLine.SetOutWidth( nRight );
+            aLine.SetWidth( nRight );
             aLine.SetColor( ColorRight );
             aBox.SetLine( &aLine, BOX_LINE_RIGHT );
 
-            aLine.SetOutWidth( nBottom );
+            aLine.SetWidth( nBottom );
             aLine.SetColor( ColorBottom );
             aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
 
@@ -2028,7 +1972,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
     // Hintergrund (Farbe, Raster)
     sal_uInt16      nRasterIndex = 0;
-    bEnd        = sal_False;
+    bEnd        = false;
     nColorIndex = 0;
     nEnd        = 0;
     nStart      = 0;
@@ -2057,7 +2001,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         ScPatternAttr aScPattern( pDoc->GetPool() );
 
         sal_uInt16 nFact;
-        sal_Bool        bSwapCol = sal_False;
+        sal_Bool        bSwapCol = false;
         sal_Bool        bSetItem = sal_True;
         switch ( aRaster.pData[ nRasterIndex ].Value )
         {
@@ -2203,7 +2147,6 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
       rStream >> rAttr.pData[i].Row;
       rStream >> rAttr.pData[i].Value;
     }
-    //rStream.Read(rAttr.pData, rAttr.Count * sizeof(Sc10ColData));
     nError = rStream.GetError();
   }
   else
@@ -2361,25 +2304,6 @@ void Sc10Import::LoadObjects()
   if (rStream.IsEof()) return;
   if (ID == ObjectID)
   {
-#ifdef SC10_SHOW_OBJECTS
-    // Achtung nur zu Debugzwecken
-    //-----------------------------------
-    pDoc->InsertTab(SC_TAB_APPEND, "GraphObjects");
-    SCCOL nCol = 0;
-    SCROW nRow = 0;
-    SCTAB nTab = 0;
-    pDoc->GetTable("GraphObjects", nTab);
-    pDoc->SetString(nCol++, nRow, nTab, "ObjectTyp");
-    pDoc->SetString(nCol++, nRow, nTab, "Col");
-    pDoc->SetString(nCol++, nRow, nTab, "Row");
-    pDoc->SetString(nCol++, nRow, nTab, "Tab");
-    pDoc->SetString(nCol++, nRow, nTab, "X");
-    pDoc->SetString(nCol++, nRow, nTab, "Y");
-    pDoc->SetString(nCol++, nRow, nTab, "W");
-    pDoc->SetString(nCol++, nRow, nTab, "H");
-    //-----------------------------------
-#endif
-
     sal_uInt16 nAnz;
     rStream >> nAnz;
     sal_Char Reserved[32];
@@ -2389,11 +2313,10 @@ void Sc10Import::LoadObjects()
     {
       sal_uInt8 ObjectType;
       Sc10GraphHeader GraphHeader;
-      sal_Bool IsOleObject = sal_False; // Achtung dies ist nur ein Notnagel
+      sal_Bool IsOleObject = false; // Achtung dies ist nur ein Notnagel
       for (sal_uInt16 i = 0; (i < nAnz) && (nError == 0) && !rStream.IsEof() && !IsOleObject; i++)
       {
         rStream >> ObjectType;
-        //rStream.Read(&GraphHeader, sizeof(GraphHeader));
         lcl_ReadGraphHeader(rStream, GraphHeader);
 
         double nPPTX = ScGlobal::nScreenPPTX;
@@ -2412,36 +2335,6 @@ void Sc10Import::LoadObjects()
         nStartY += (long) ( GraphHeader.y / nPPTY * HMM_PER_TWIPS );
         long nSizeY = (long) ( GraphHeader.h / nPPTY * HMM_PER_TWIPS );
 
-#ifdef SC10_SHOW_OBJECTS
-         // Achtung nur zu Debugzwecken
-         //-----------------------------------
-         nCol = 0;
-         nRow++;
-         switch (ObjectType)
-         {
-          case otOle :
-           pDoc->SetString(nCol++, nRow, nTab, "Ole-Object");
-           break;
-          case otImage :
-           pDoc->SetString(nCol++, nRow, nTab, "Image-Object");
-           break;
-          case otChart :
-           pDoc->SetString(nCol++, nRow, nTab, "Chart-Object");
-           break;
-          default :
-           pDoc->SetString(nCol++, nRow, nTab, "ERROR");
-           break;
-         }
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.CarretX);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.CarretY);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.CarretZ);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.x);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.y);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.w);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.h);
-         //-----------------------------------
-#endif
-
         switch (ObjectType)
         {
           case otOle :
@@ -2451,7 +2344,6 @@ void Sc10Import::LoadObjects()
           case otImage :
           {
            Sc10ImageHeader ImageHeader;
-           //rStream.Read(&ImageHeader, sizeof(ImageHeader));
            lcl_ReadImageHeaer(rStream, ImageHeader);
 
            // Achtung nun kommen die Daten (Bitmap oder Metafile)
@@ -2468,16 +2360,12 @@ void Sc10Import::LoadObjects()
             Sc10ChartHeader ChartHeader;
             Sc10ChartSheetData ChartSheetData;
             Sc10ChartTypeData* pTypeData = new Sc10ChartTypeData;
-            //rStream.Read(&ChartHeader, sizeof(ChartHeader));
             lcl_ReadChartHeader(rStream, ChartHeader);
 
             //! altes Metafile verwenden ??
             rStream.SeekRel(ChartHeader.Size);
 
-            //rStream.Read(&ChartSheetData, sizeof(ChartSheetData));
             lcl_ReadChartSheetData(rStream, ChartSheetData);
-
-            //rStream.Read(pTypeData, sizeof(Sc10ChartTypeData));
             lcl_ReadChartTypeData(rStream, *pTypeData);
 
             Rectangle aRect( Point(nStartX,nStartY), Size(nSizeX,nSizeY) );
@@ -2499,13 +2387,10 @@ void Sc10Import::LoadObjects()
   }
   else
   {
-    DBG_ERROR( "ObjectID" );
+    OSL_FAIL( "ObjectID" );
     nError = errUnknownID;
   }
 }
-
-
-
 
 //-----------------------------------------------------------------------------------------------
 
@@ -2518,3 +2403,4 @@ FltError ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocu
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

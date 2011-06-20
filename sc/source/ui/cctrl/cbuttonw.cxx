@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ ScDDComboBoxButton::ScDDComboBoxButton( OutputDevice* pOutputDevice )
 
 // -------------------------------------------------------------------------
 
-__EXPORT ScDDComboBoxButton::~ScDDComboBoxButton()
+ScDDComboBoxButton::~ScDDComboBoxButton()
 {
 }
 
@@ -87,7 +88,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
     Rectangle   aBtnRect( rAt, rSize );
     Rectangle   aInnerRect = aBtnRect;
 
-    pOut->EnableMapMode( sal_False );
+    pOut->EnableMapMode( false );
 
     DecorationView aDecoView( pOut);
 
@@ -176,3 +177,4 @@ void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

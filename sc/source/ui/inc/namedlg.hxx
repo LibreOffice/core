@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,28 +29,28 @@
 #ifndef SC_NAMEDLG_HXX
 #define SC_NAMEDLG_HXX
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"
 
+#include <boost/ptr_container/ptr_map.hpp>
+
 class ScViewData;
 class ScDocument;
-
+struct ScNameDlgImpl;
 
 //==================================================================
 
 class ScNameDlg : public ScAnyRefDlg
 {
 private:
+    typedef ::boost::ptr_map<SCTAB, ScRangeName> TabNameMapType;
+    FixedText       maFtScope;
+    ListBox         maLbScope;
     FixedLine       aFlName;
     ComboBox        aEdName;
 
@@ -74,19 +75,33 @@ private:
     const String    aStrAdd;    // "Hinzufuegen"
     const String    aStrModify; // "Aendern"
     const String    errMsgInvalidSym;
+    const ::rtl::OUString maGlobalNameStr;
 
     ScViewData*     pViewData;
     ScDocument*     pDoc;
-    ScRangeName     aLocalRangeName;
+    ScRangeName     maGlobalRangeName;
+    ScRangeName::TabNameMap maTabRangeNames;
+    ScRangeName*    mpCurRangeName;    //! range name set currently selected
     const ScAddress theCursorPos;
     Selection       theCurSel;
 
-#ifdef _NAMEDLG_CXX
+    ScNameDlgImpl*  mpImpl;
+
 private:
     void Init();
     void UpdateChecks();
     void UpdateNames();
-    void CalcCurTableAssign( String& aAssign, sal_uInt16 nPos );
+    void CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData );
+
+    void SaveControlStates();
+    void RestoreControlStates();
+
+    bool AddPushed();
+    void RemovePushed();
+    void OKPushed();
+    void NameSelected();
+    void ScopeChanged();
+    void NameModified(Edit* pEd);
 
     // Handler:
     DECL_LINK( OkBtnHdl, void * );
@@ -96,12 +111,10 @@ private:
     DECL_LINK( EdModifyHdl, Edit * );
     DECL_LINK( NameSelectHdl, void * );
     DECL_LINK( AssignGetFocusHdl, void * );
-#endif
+    DECL_LINK( ScopeChangedHdl, ListBox* );
 
 protected:
-
     virtual void    RefInputDone( sal_Bool bForced = sal_False );
-
 
 public:
                     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -121,3 +134,4 @@ public:
 
 #endif // SC_NAMEDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

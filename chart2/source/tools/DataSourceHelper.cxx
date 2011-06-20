@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -370,9 +371,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
 {
     bool bHasDataRowSource = false;
     bool bHasFirstCellAsLabel = false;
-//     bool bHasHasCategories = false;
     bool bHasCellRangeRepresentation = false;
-//     bool bHasSequenceMapping = false;
 
     uno::Reference< data::XDataProvider > xDataProvider( xChartDocument->getDataProvider() );
     if( !xDataProvider.is() )
@@ -398,24 +397,12 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
                 bHasFirstCellAsLabel =
                     (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(::getBooleanCppuType()));
             }
-//             else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasCategories" ) ))
-//             {
-//                 bHasHasCategories =
-//                     (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(::getBooleanCppuType()));
-//             }
             else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CellRangeRepresentation" ) ))
             {
                 ::rtl::OUString aRange;
                 bHasCellRangeRepresentation =
                     (aProperty.Value.hasValue() && (aProperty.Value >>= aRange) && aRange.getLength() > 0);
             }
-//         else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SequenceMapping" ) ))
-//         {
-//             bHasSequenceMapping =
-//                 (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(
-//                     ::getCppuType( reinterpret_cast<
-//                                    const uno::Sequence< sal_Int32 > * >(0))));
-//         }
         }
     }
     catch( const uno::Exception & ex )
@@ -533,3 +520,5 @@ Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference<
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

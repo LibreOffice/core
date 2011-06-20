@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,7 @@ ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Windo
     bByKeyboard( bKeyboard ),
     pModel( NULL ),
     pObject( NULL ),
-    bVisible( sal_False )
+    bVisible( false )
 {
     Size aSizePixel = pWindow->GetOutputSizePixel();
     if( pRightWin )
@@ -104,13 +105,13 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
             rOutliner.SetRefDevice(pPrinter);
         }
 
-        if( SdrPage* pPage = pModel->AllocPage( sal_False ) )
+        if( SdrPage* pPage = pModel->AllocPage( false ) )
         {
             pObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
             if( pObject )
                 aRect = pObject->GetCurrentBoundRect();
 
-            // #39351# Page einfuegen damit das Model sie kennt und auch deleted
+            // Page einfuegen damit das Model sie kennt und auch deleted
             pModel->InsertPage( pPage );
 
         }
@@ -198,3 +199,4 @@ void ScNoteMarker::InvalidateWin()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

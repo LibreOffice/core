@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@ private:
     HelpButton      aBtnHelp;
 
 public:
-            ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove = sal_False );
+            ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove = false );
             ~ScInsertCellDlg();
 
     InsCellCmd GetInsCellCmd() const;
@@ -60,3 +61,4 @@ public:
 #endif // SC_INSCLDLG_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

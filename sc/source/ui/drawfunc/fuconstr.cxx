@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,9 +83,9 @@ sal_uInt8 FuConstruct::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
@@ -118,7 +119,7 @@ sal_Bool __EXPORT FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
         }
     }
 
-    bIsInDragMode = sal_False;
+    bIsInDragMode = false;
 
     return bReturn;
 }
@@ -129,7 +130,7 @@ sal_Bool __EXPORT FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstruct::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 {
     FuDraw::MouseMove(rMEvt);
 
@@ -176,9 +177,9 @@ sal_Bool __EXPORT FuConstruct::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     sal_Bool bReturn = SimpleMouseButtonUp( rMEvt );
@@ -196,7 +197,7 @@ sal_Bool __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                //  #49458# bei Uno-Controls nicht in Textmodus
+                //  bei Uno-Controls nicht in Textmodus
                 if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
                 {
                     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
@@ -244,7 +245,7 @@ sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
     else if ( pView->IsMarkObj() )
         pView->EndMarkObj();
 
-    else bReturn = sal_False;
+    else bReturn = false;
 
     if ( !pView->IsAction() )
     {
@@ -252,7 +253,7 @@ sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 
         if ( !pView->AreObjectsMarked() && rMEvt.GetClicks() < 2 )
         {
-            pView->MarkObj(aPnt, -2, sal_False, rMEvt.IsMod1());
+            pView->MarkObj(aPnt, -2, false, rMEvt.IsMod1());
 
             SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
             if ( pView->AreObjectsMarked() )
@@ -274,9 +275,9 @@ sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstruct::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
+    sal_Bool bReturn = false;
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -333,3 +334,4 @@ void FuConstruct::Deactivate()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

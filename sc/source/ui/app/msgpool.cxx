@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 
 //------------------------------------------------------------------------
 
-static SfxItemInfo __READONLY_DATA aMsgItemInfos[] =
+static SfxItemInfo const aMsgItemInfos[] =
 {
     { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_STRING
     { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_SEARCHDATA - nicht mehr benutzt !!!
@@ -66,11 +67,11 @@ ScMessagePool::ScMessagePool()
     aGlobalQueryItem        ( ScQueryItem           ( SCITEM_QUERYDATA, NULL, NULL ) ),
     aGlobalSubTotalItem     ( ScSubTotalItem        ( SCITEM_SUBTDATA, NULL, NULL ) ),
     aGlobalConsolidateItem  ( ScConsolidateItem     ( SCITEM_CONSOLIDATEDATA, NULL ) ),
-    aGlobalPivotItem        ( ScPivotItem           ( SCITEM_PIVOTDATA, NULL, NULL, sal_False ) ),
+    aGlobalPivotItem        ( ScPivotItem           ( SCITEM_PIVOTDATA, NULL, NULL, false ) ),
     aGlobalSolveItem        ( ScSolveItem           ( SCITEM_SOLVEDATA, NULL ) ),
     aGlobalUserListItem     ( ScUserListItem        ( SCITEM_USERLIST ) ),
     //
-    aPrintWarnItem          ( SfxBoolItem           ( SCITEM_PRINTWARN, sal_False ) )
+    aPrintWarnItem          ( SfxBoolItem           ( SCITEM_PRINTWARN, false ) )
 {
     ppPoolDefaults = new SfxPoolItem*[MSGPOOL_END - MSGPOOL_START + 1];
 
@@ -93,7 +94,7 @@ ScMessagePool::ScMessagePool()
 }
 
 
-__EXPORT ScMessagePool::~ScMessagePool()
+ScMessagePool::~ScMessagePool()
 {
     Delete();
     SetSecondaryPool( NULL );       // before deleting defaults (accesses defaults)
@@ -107,7 +108,7 @@ __EXPORT ScMessagePool::~ScMessagePool()
 }
 
 
-SfxMapUnit __EXPORT ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
+SfxMapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
 {
     //  eigene Attribute: Twips, alles andere 1/100 mm
 
@@ -121,3 +122,4 @@ SfxMapUnit __EXPORT ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

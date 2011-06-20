@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,10 +54,10 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     eFunction( SUBTOTAL_FUNC_NONE ),
-    bLinkToSource( sal_False ),
-    bTargetAddr(sal_False)
+    bLinkToSource( false ),
+    bTargetAddr(false)
 {
-    rImport.LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(GetScImport());
     if( !xAttrList.is() ) return;
 
     sal_Int16               nAttrCount      = xAttrList->getLength();
@@ -116,7 +117,6 @@ void ScXMLConsolidationContext::EndElement()
         aConsParam.nTab = aTargetAddr.Tab();
         aConsParam.eFunction = eFunction;
 
-        sal_Bool bError = sal_False;
         sal_uInt16 nCount = (sal_uInt16) Min( ScRangeStringConverter::GetTokenCount( sSourceList ), (sal_Int32)0xFFFF );
         ScArea** ppAreas = nCount ? new ScArea*[ nCount ] : NULL;
         if( ppAreas )
@@ -129,7 +129,7 @@ void ScXMLConsolidationContext::EndElement()
                 if ( !ScRangeStringConverter::GetAreaFromString(
                     *ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
                 {
-                    bError = sal_True;      //! handle error
+                    //! handle error
                 }
             }
 
@@ -141,7 +141,7 @@ void ScXMLConsolidationContext::EndElement()
             delete[] ppAreas;
         }
 
-        aConsParam.bByCol = aConsParam.bByRow = sal_False;
+        aConsParam.bByCol = aConsParam.bByRow = false;
         if( IsXMLToken(sUseLabel, XML_COLUMN ) )
             aConsParam.bByCol = sal_True;
         else if( IsXMLToken( sUseLabel, XML_ROW ) )
@@ -158,3 +158,4 @@ void ScXMLConsolidationContext::EndElement()
     GetScImport().UnlockSolarMutex();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

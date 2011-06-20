@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,9 @@ ScRefreshTimerProtector::ScRefreshTimerProtector( ScRefreshTimerControl * const 
 {
     if ( ppControl && *ppControl )
     {
-        (*ppControl)->SetAllowRefresh( sal_False );
+        (*ppControl)->SetAllowRefresh( false );
         // wait for any running refresh in another thread to finnish
-        ::vos::OGuard aGuard( (*ppControl)->GetMutex() );
+        ::osl::MutexGuard aGuard( (*ppControl)->GetMutex() );
     }
 }
 
@@ -70,7 +71,7 @@ void ScRefreshTimer::Timeout()
     if ( ppControl && *ppControl && (*ppControl)->IsRefreshAllowed() )
     {
         // now we COULD make the call in another thread ...
-        ::vos::OGuard aGuard( (*ppControl)->GetMutex() );
+        ::osl::MutexGuard aGuard( (*ppControl)->GetMutex() );
         maTimeoutHdl.Call( this );
         // restart from now on, don't execute immediately again if timed out
         // a second time during refresh
@@ -79,3 +80,4 @@ void ScRefreshTimer::Timeout()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 
 #include "scitems.hxx"
 #include <sfx2/request.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
 #include <layout/layout.hxx>
@@ -49,18 +51,17 @@
 #include "document.hxx"
 #include "shtabdlg.hxx"
 #include "scresid.hxx"
-//CHINA001 #include "instbdlg.hxx"
 #include "globstr.hrc"
-//CHINA001 #include "strindlg.hxx"
-//CHINA001 #include "mvtabdlg.hxx"
 #include "docfunc.hxx"
 #include "eventuno.hxx"
 
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 
 #include "tabbgcolor.hxx"
 #include "tabbgcolordlg.hxx"
 #include "sccommands.h"
+
+#include <vector>
 
 using ::boost::scoped_ptr;
 using namespace com::sun::star;
@@ -172,12 +173,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
-                    //CHINA001 ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg( GetDialogParent(), RID_SCDLG_SHOW_TAB);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     String aTabName;
                     sal_Bool bFirst = sal_True;
@@ -187,7 +187,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         {
                             pDoc->GetName( i, aTabName );
                             pDlg->Insert( aTabName, bFirst );
-                            bFirst = sal_False;
+                            bFirst = false;
                         }
                     }
 
@@ -219,7 +219,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if ( pReqArgs != NULL )             // von Basic
                 {
-                    sal_Bool bOk = sal_False;
+                    sal_Bool bOk = false;
                     const SfxPoolItem*  pTabItem;
                     const SfxPoolItem*  pNameItem;
                     String              aName;
@@ -241,35 +241,31 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else                                // Dialog
                 {
-//CHINA001                  ScInsertTableDlg* pDlg = new ScInsertTableDlg(
-//CHINA001                  GetDialogParent(),
-//CHINA001                  *pViewData,nTabSelCount);
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScInsertTableDlg* pDlg = pFact->CreateScInsertTableDlg( GetDialogParent(), *pViewData,
                                                                                     nTabSelCount, nSlot == FID_INS_TABLE_EXT,
                                                                                     RID_SCDLG_INSERT_TABLE);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
                     if ( RET_OK == pDlg->Execute() )
                     {
                         if (pDlg->GetTablesFromFile())
                         {
-                            SCTAB nTabs[MAXTABCOUNT];
-                            SCTAB nCount = 0;
+                            std::vector<SCTAB> nTabs;
                             sal_uInt16 n = 0;
                             const String* pStr = pDlg->GetFirstTable( &n );
                             while ( pStr )
                             {
-                                nTabs[nCount++] = static_cast<SCTAB>(n);
+                                nTabs.push_back( static_cast<SCTAB>(n) );
                                 pStr = pDlg->GetNextTable( &n );
                             }
                             sal_Bool bLink = pDlg->GetTablesAsLink();
-                            if (nCount != 0)
+                            if (!nTabs.empty())
                             {
                                 if(pDlg->IsTableBefore())
                                 {
-                                    ImportTables( pDlg->GetDocShellTables(), nCount, nTabs,
+                                    ImportTables( pDlg->GetDocShellTables(), nTabs.size(), &nTabs[0],
                                                 bLink,nTabNr );
                                 }
                                 else
@@ -285,7 +281,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                         }
                                     }
 
-                                    ImportTables( pDlg->GetDocShellTables(), nCount, nTabs,
+                                    ImportTables( pDlg->GetDocShellTables(), nTabs.size(), &nTabs[0],
                                                 bLink,nTabAfter );
                                 }
                             }
@@ -304,20 +300,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                     InsertTable( *pDlg->GetFirstTable(), nTabNr );
                                 }
                                 else
-                                    InsertTables( NULL, nTabNr,nCount );
+                                {
+                                    std::vector<rtl::OUString> aNames(0);
+                                    InsertTables( aNames, nTabNr,nCount );
+                                }
                             }
                             else
                             {
                                 SCTAB   nTabAfter    = nTabNr+1;
-                                SCTAB nSelHigh=0;
-
-                                for(SCTAB i=0;i<nTabCount;i++)
-                                {
-                                    if(rMark.GetTableSelect(i))
-                                    {
-                                        nSelHigh=i;
-                                    }
-                                }
+                                SCTAB nSelHigh = rMark.GetLastSelected();
 
                                 for(SCTAB j=nSelHigh+1;j<nTabCount;j++)
                                 {
@@ -340,7 +331,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    InsertTables( NULL, nTabAfter,nCount);
+                                    std::vector<rtl::OUString> aNames(0);
+                                    InsertTables( aNames, nTabAfter,nCount);
                                 }
                             }
                         }
@@ -373,23 +365,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         ( pDoc->IsTabProtected( nTabNr ) || nTabSelCount > 1 ) )
                     break; // kein Rename
 
-#if 0
-                //  ScSbxObject wird nicht mehr benutzt, stattdessen aus dem
-                //  ScSbxTable::Notify die richtige Tabelle an der Basic-View eingestellt
-                if( rReq.IsAPI() )
-                {
-                    SbxObject* pObj = GetScSbxObject();
-                    ScSbxTable* pSbxTab = PTR_CAST( ScSbxTable, pObj );
-                    DBG_ASSERT( pSbxTab, "pSbxTab???" );
-
-                    if( pSbxTab )
-                        nTabNr = pSbxTab->GetTableNr();
-                }
-#endif
-
                 if( pReqArgs != NULL )
                 {
-                    sal_Bool        bDone   = sal_False;
+                    sal_Bool        bDone   = false;
                     const SfxPoolItem* pItem;
                     String      aName;
 
@@ -417,7 +395,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 else
                 {
                     sal_uInt16      nRet    = RET_OK;
-                    sal_Bool        bDone   = sal_False;
+                    sal_Bool        bDone   = false;
                     String      aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
                     String      aName;
                     String      aDlgTitle;
@@ -439,14 +417,14 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     }
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    AbstractScStringInputDlg* pDlg = pFact->CreateScStringInputDlg( GetDialogParent(),
-                                                                                    aDlgTitle,
-                                                                                    String(ScResId(SCSTR_NAME)),
-                                                                                    aName,
-                                                                                    GetStaticInterface()->GetSlot(nSlot)->GetCommand(), pHelpId, RID_SCDLG_STRINPUT);
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                    AbstractScStringInputDlg* pDlg = pFact->CreateScStringInputDlg(
+                        GetDialogParent(), aDlgTitle, String(ScResId(SCSTR_NAME)),
+                        aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
+                        pHelpId, RID_SCDLG_STRINPUT);
+
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     while ( !bDone && nRet == RET_OK )
                     {
@@ -498,11 +476,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if ( pDoc->GetChangeTrack() != NULL )
                     break;      // bei aktiviertem ChangeTracking kein TabMove
 
-                sal_Bool   bDoIt = sal_False;
+                sal_Bool   bDoIt = false;
                 sal_uInt16 nDoc = 0;
                 SCTAB nTab = pViewData->GetTabNo();
-                sal_Bool   bCpy = sal_False;
+                sal_Bool   bCpy = false;
                 String aDocName;
+                String aTabName;
 
                 if( pReqArgs != NULL )
                 {
@@ -560,12 +539,16 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
-                    //CHINA001 ScMoveTableDlg* pDlg = new ScMoveTableDlg( GetDialogParent() );
-                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                    String aDefaultName;
+                    pDoc->GetName( pViewData->GetTabNo(), aDefaultName );
 
-                    AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg( GetDialogParent(), RID_SCDLG_MOVETAB );
-                    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+
+                    AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg( GetDialogParent(),
+                                                                                aDefaultName,
+                                                                                RID_SCDLG_MOVETAB );
+                    OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     SCTAB nTableCount = pDoc->GetTableCount();
                     ScMarkData& rMark       = GetViewData()->GetMarkData();
@@ -574,15 +557,25 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     if(nTableCount==nTabSelCount)
                     {
-                        pDlg->SetCopyTable();
-                        pDlg->EnableCopyTable(sal_False);
+                        pDlg->SetForceCopyTable();
                     }
+
+                    // We support direct renaming of sheet only when one sheet
+                    // is selected.
+                    pDlg->EnableRenameTable(nTabSelCount == 1);
+
                     if ( pDlg->Execute() == RET_OK )
                     {
                         nDoc = pDlg->GetSelectedDocument();
                         nTab = pDlg->GetSelectedTable();
                         bCpy = pDlg->GetCopyTable();
-                        bDoIt = sal_True;
+                        bool bRna = pDlg->GetRenameTable();
+                        // Leave aTabName string empty, when Rename is FALSE.
+                        if( bRna )
+                        {
+                           pDlg->GetTabNameString( aTabName );
+                        }
+                        bDoIt = true;
 
                         String aFoundDocName;
                         if ( nDoc != SC_DOC_NEW )
@@ -594,7 +587,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 if ( !pSh->GetDocument()->IsDocEditable() )
                                 {
                                     ErrorMessage(STR_READONLYERR);
-                                    bDoIt = sal_False;
+                                    bDoIt = false;
                                 }
                             }
                         }
@@ -611,7 +604,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     rReq.Done();        // aufzeichnen, solange das Dokument noch aktiv ist
 
-                    MoveTable( nDoc, nTab, bCpy );
+                    MoveTable( nDoc, nTab, bCpy, &aTabName );
                 }
             }
             break;
@@ -641,15 +634,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     SCTAB nNewTab   = nCurrentTab;
                     SCTAB nFirstTab=0;
-                    sal_Bool   bTabFlag=sal_False;
+                    sal_Bool   bTabFlag=false;
                     ScMarkData& rMark = pViewData->GetMarkData();
-                    SvShorts TheTabs;
+                    std::vector<SCTAB> TheTabs;
                     for(SCTAB i=0;i<nTabCount;i++)
                     {
                         if(rMark.GetTableSelect(i) &&!pDoc->IsTabProtected(i))
                         {
                             TheTabs.push_back(i);
-                            bTabFlag=sal_True;
+                            bTabFlag=true;
                             if(nNewTab==i) nNewTab++;
                         }
                         if(!bTabFlag) nFirstTab=i;
@@ -681,12 +674,23 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                         if ( rMark.GetTableSelect(nTab) )
-                            aFunc.SetLayoutRTL( nTab, bSet, sal_False );
+                            aFunc.SetLayoutRTL( nTab, bSet, false );
 
                     pUndoManager->LeaveListAction();
                 }
                 else
-                    aFunc.SetLayoutRTL( nCurrentTab, bSet, sal_False );
+                    aFunc.SetLayoutRTL( nCurrentTab, bSet, false );
+            }
+            break;
+
+        case FID_TAB_TOGGLE_GRID:
+            {
+                bool bShowGrid = pViewData->GetShowGrid();
+                pViewData->SetShowGrid(!bShowGrid);
+                SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                rBindings.Invalidate( FID_TAB_TOGGLE_GRID );
+                PaintGrid();
+                rReq.Done();
             }
             break;
 
@@ -706,7 +710,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if( pReqArgs != NULL )
                 {
-                    sal_Bool                bDone = sal_False;
+                    sal_Bool                bDone = false;
                     const SfxPoolItem*  pItem;
                     Color               aColor;
                     if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
@@ -742,13 +746,13 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 else
                 {
                     sal_uInt16      nRet    = RET_OK; /// temp
-                    sal_Bool        bDone   = sal_False; /// temp
+                    sal_Bool        bDone   = false; /// temp
                     Color       aTabBgColor;
                     Color       aNewTabBgColor;
 
                     aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
                     AbstractScTabBgColorDlg* pDlg = pFact->CreateScTabBgColorDlg(
                                                                 GetDialogParent(),
                                                                 String(ScResId(SCSTR_SET_TAB_BG_COLOR)),
@@ -820,7 +824,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             break;
 
         default:
-            DBG_ERROR("Unbekannte Message bei ViewShell");
+            OSL_FAIL("Unbekannte Message bei ViewShell");
             break;
     }
 }
@@ -864,7 +868,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 
             case FID_TABLE_SHOW:
                 {
-                    sal_Bool bHasHidden = sal_False;
+                    sal_Bool bHasHidden = false;
                     for ( SCTAB i=0; i < nTabCount && !bHasHidden; i++ )
                         if (!pDoc->IsVisible(i))
                             bHasHidden = sal_True;
@@ -954,6 +958,10 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                     rSet.Put( SvxColorItem( aColor, nWhich ) );
                 }
                 break;
+
+            case FID_TAB_TOGGLE_GRID:
+                rSet.Put( SfxBoolItem(nWhich, pViewData->GetShowGrid()) );
+                break;
         }
         nWhich = aIter.NextWhich();
     }
@@ -962,3 +970,4 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

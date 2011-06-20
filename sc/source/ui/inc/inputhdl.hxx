@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -125,7 +126,14 @@ private:
 private:
     void            UpdateActiveView();
     void            SyncViews( EditView* pSourceView = NULL );
-    sal_Bool            StartTable( sal_Unicode cTyped, sal_Bool bFromCommand );
+    /**
+     * @param cTyped typed character. If 0, look at existing document content
+     *               for text or number.
+     * @param bInputActivated true if the cell input mode is activated (via
+     *                        F2), false otherwise.
+     * @return true if the new edit mode has been started.
+     */
+    bool            StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated );
     void            RemoveSelection();
     void            UpdateFormulaMode();
     void            InvalidateAttribs();
@@ -172,7 +180,7 @@ public:
 
     sal_Bool            GetTextAndFields( ScEditEngineDefaulter& rDestEngine );
 
-    sal_Bool            KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit = sal_False );
+    sal_Bool            KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit = false );
     void            EnterHandler( sal_uInt8 nBlockMode = 0 );
     void            CancelHandler();
     void            SetReference( const ScRange& rRef, ScDocument* pDoc );
@@ -184,13 +192,12 @@ public:
     void            ClearText();
 
     void            InputSelection( EditView* pView );
-    void            InputChanged( EditView* pView, sal_Bool bFromNotify = sal_False );
+    void            InputChanged( EditView* pView, sal_Bool bFromNotify = false );
 
     void            ViewShellGone(ScTabViewShell* pViewSh);
     void            SetRefViewShell(ScTabViewShell* pRefVsh) {pRefViewSh=pRefVsh;}
 
-
-    void            NotifyChange( const ScInputHdlState* pState, sal_Bool bForce = sal_False,
+    void            NotifyChange( const ScInputHdlState* pState, sal_Bool bForce = false,
                                     ScTabViewShell* pSourceSh = NULL,
                                     sal_Bool bStopEditing = sal_True);
     void            UpdateCellAdjust( SvxCellHorJustify eJust );
@@ -210,8 +217,8 @@ public:
     EditView*       GetTableView()      { return pTableView; }
     EditView*       GetTopView()        { return pTopView; }
 
-    sal_Bool            DataChanging( sal_Unicode cTyped = 0, sal_Bool bFromCommand = sal_False );
-    void            DataChanged( sal_Bool bFromTopNotify = sal_False, sal_Bool bSetModified = sal_True );
+    sal_Bool            DataChanging( sal_Unicode cTyped = 0, sal_Bool bFromCommand = false );
+    void            DataChanged( sal_Bool bFromTopNotify = false );
 
     sal_Bool            TakesReturn() const     { return ( nTipVisible != 0 ); }
 
@@ -244,7 +251,7 @@ public:
 
     void            ForgetLastPattern();
 
-    void            UpdateSpellSettings( sal_Bool bFromStartTab = sal_False );
+    void            UpdateSpellSettings( sal_Bool bFromStartTab = false );
 
     void            FormulaPreview();
 
@@ -291,8 +298,7 @@ private:
     EditTextObject* pEditData;
 };
 
-
-
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

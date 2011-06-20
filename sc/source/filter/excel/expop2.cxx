@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,10 +79,10 @@ ExportBiff5::~ExportBiff5()
 FltError ExportBiff5::Write()
 {
     SfxObjectShell* pDocShell = GetDocShell();
-    DBG_ASSERT( pDocShell, "ExportBiff5::Write - no document shell" );
+    OSL_ENSURE( pDocShell, "ExportBiff5::Write - no document shell" );
 
     SotStorageRef xRootStrg = GetRootStorage();
-    DBG_ASSERT( xRootStrg.Is(), "ExportBiff5::Write - no root storage" );
+    OSL_ENSURE( xRootStrg.Is(), "ExportBiff5::Write - no root storage" );
 
     bool bWriteBasicCode = false;
     bool bWriteBasicStrg = false;
@@ -118,7 +119,7 @@ FltError ExportBiff5::Write()
         if ( SvtFilterOptions::Get()->IsEnableCalcPreview() )
         {
             ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                pDocShell->GetPreviewMetaFile (sal_False);
+                pDocShell->GetPreviewMetaFile (false);
             uno::Sequence<sal_uInt8> metaFile(
                 sfx2::convertMetaFile(pMetaFile.get()));
             sfx2::SaveOlePropertySet(xDocProps, xRootStrg, &metaFile);
@@ -147,73 +148,4 @@ ExportBiff8::ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm ) :
 ExportBiff8::~ExportBiff8()
 {
 }
-
-
-ExportXml2007::ExportXml2007( XclExpRootData& rExpData, SvStream& rStrm )
-    : ExportTyp( rStrm, &rExpData.mrDoc, rExpData.meTextEnc )
-    , XclExpRoot( rExpData )
-{
-    pExcRoot = &GetOldRoot();
-    pExcRoot->pER = this;
-    pExcRoot->eDateiTyp = Biff8;
-    pExcDoc = new ExcDocument( *this );
-}
-
-
-ExportXml2007::~ExportXml2007()
-{
-    delete pExcDoc;
-}
-
-
-FltError ExportXml2007::Write()
-{
-    SfxObjectShell* pDocShell = GetDocShell();
-    DBG_ASSERT( pDocShell, "ExportXml2007::Write - no document shell" );
-
-    SotStorageRef xRootStrg = GetRootStorage();
-    DBG_ASSERT( xRootStrg.Is(), "ExportXml2007::Write - no root storage" );
-
-    bool bWriteBasicCode = false;
-    bool bWriteBasicStrg = false;
-
-    if( SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get() )
-    {
-        bWriteBasicCode = pFilterOpt->IsLoadExcelBasicCode();
-        bWriteBasicStrg = pFilterOpt->IsLoadExcelBasicStorage();
-    }
-
-    if( pDocShell && xRootStrg.Is() && bWriteBasicStrg )
-    {
-        SvxImportMSVBasic aBasicImport( *pDocShell, *xRootStrg, bWriteBasicCode, bWriteBasicStrg );
-        sal_uLong nErr = aBasicImport.SaveOrDelMSVBAStorage( sal_True, EXC_STORAGE_VBA_PROJECT );
-        if( nErr != ERRCODE_NONE )
-            pDocShell->SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-    }
-
-    pExcDoc->ReadDoc();         // ScDoc -> ExcDoc
-    pExcDoc->WriteXml( aOut );  // wechstreamen
-
-    if( pDocShell && xRootStrg.Is() )
-    {
-        using namespace ::com::sun::star;
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<document::XDocumentProperties> xDocProps
-                = xDPS->getDocumentProperties();
-        ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-            pDocShell->GetPreviewMetaFile (sal_False);
-        uno::Sequence<sal_uInt8> metaFile(
-            sfx2::convertMetaFile(pMetaFile.get()));
-        sfx2::SaveOlePropertySet(xDocProps, xRootStrg, &metaFile);
-    }
-
-    //! TODO: separate warnings for columns and sheets
-    const XclExpAddressConverter& rAddrConv = GetAddressConverter();
-    if( rAddrConv.IsColTruncated() || rAddrConv.IsRowTruncated() || rAddrConv.IsTabTruncated() )
-        return SCWARN_EXPORT_MAXROW;
-
-    return eERR_OK;
-}
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

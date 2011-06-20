@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,15 +93,12 @@ public:
     void CompleteSelectionChanged(sal_Bool bNewState);
 
     virtual void LostFocus();
-
     virtual void GotFocus();
 
     void BoundingBoxChanged();
-
     void VisAreaChanged();
 
     ///=====  SfxListener  =====================================================
-
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     ///=====  XAccessibleTable  ================================================
@@ -285,5 +283,6 @@ private:
     Rectangle   GetVisCells(const Rectangle& rVisArea);
 };
 
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

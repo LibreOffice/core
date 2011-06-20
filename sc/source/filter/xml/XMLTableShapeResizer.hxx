@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,44 +39,33 @@ class ScChartListenerCollection;
 class ScDocument;
 class Rectangle;
 
-struct ScMyToResizeShape
+struct ScMyToFixupOLE
 {
     com::sun::star::uno::Reference <com::sun::star::drawing::XShape> xShape;
-    rtl::OUString* pRangeList;
-    com::sun::star::table::CellAddress  aEndCell;
-    com::sun::star::table::CellAddress  aStartCell;
-    sal_Int32 nEndX;
-    sal_Int32 nEndY;
-
-    ScMyToResizeShape() : pRangeList(NULL) {}
+    rtl::OUString sRangeList;
 };
 
-typedef std::list<ScMyToResizeShape> ScMyToResizeShapes;
+typedef std::list<ScMyToFixupOLE> ScMyToFixupOLEs;
 
-class ScMyShapeResizer
+class ScMyOLEFixer
 {
     ScXMLImport&                rImport;
-    ScMyToResizeShapes          aShapes;
+    ScMyToFixupOLEs             aShapes;
     ScChartListenerCollection*  pCollection;
 
-    sal_Bool IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const;
     void CreateChartListener(ScDocument* pDoc,
         const rtl::OUString& rName,
-        const rtl::OUString* pRangeList);
-    void GetNewShapeSizePos(ScDocument* pDoc, const Rectangle& rStartRect,
-                            const com::sun::star::table::CellAddress& rEndCell,
-                            com::sun::star::awt::Point& rPoint, com::sun::star::awt::Size& rSize,
-                            sal_Int32& rEndX, sal_Int32& rEndY) const;
+        const rtl::OUString& rRangeList);
 public:
-    ScMyShapeResizer(ScXMLImport& rImport);
-    ~ScMyShapeResizer();
+    ScMyOLEFixer(ScXMLImport& rImport);
+    ~ScMyOLEFixer();
 
-    void    AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
-                    rtl::OUString* pRangeList,
-                    com::sun::star::table::CellAddress& rStartAddress,
-                    com::sun::star::table::CellAddress& rEndAddress,
-                    sal_Int32 nEndX, sal_Int32 nEndY);
-    void    ResizeShapes();
+    static sal_Bool IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape);
+    void    AddOLE(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
+                   const rtl::OUString &rRangeList);
+    void    FixupOLEs();
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

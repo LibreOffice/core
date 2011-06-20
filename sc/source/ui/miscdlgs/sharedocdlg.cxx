@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,9 +74,9 @@ ScShareDocumentDlg::ScShareDocumentDlg( Window* pParent, ScViewData* pViewData )
     ,mpViewData           ( pViewData )
     ,mpDocShell           ( NULL )
 {
-    DBG_ASSERT( mpViewData, "ScShareDocumentDlg CTOR: mpViewData is null!" );
+    OSL_ENSURE( mpViewData, "ScShareDocumentDlg CTOR: mpViewData is null!" );
     mpDocShell = ( mpViewData ? mpViewData->GetDocShell() : NULL );
-    DBG_ASSERT( mpDocShell, "ScShareDocumentDlg CTOR: mpDocShell is null!" );
+    OSL_ENSURE( mpDocShell, "ScShareDocumentDlg CTOR: mpDocShell is null!" );
 
     FreeResource();
 
@@ -172,7 +173,7 @@ void ScShareDocumentDlg::UpdateView()
                         aString += '\t';
                         aString += ScGlobal::pLocaleData->getDate( aDateTime );
                         aString += ' ';
-                        aString += ScGlobal::pLocaleData->getTime( aDateTime, sal_False );
+                        aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
 
                         maLbUsers.InsertEntry( aString, NULL );
                     }
@@ -185,7 +186,7 @@ void ScShareDocumentDlg::UpdateView()
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "ScShareDocumentDlg::UpdateView(): caught exception\n" );
+            OSL_FAIL( "ScShareDocumentDlg::UpdateView(): caught exception\n" );
             maLbUsers.Clear();
             maLbUsers.InsertEntry( maStrNoUserData, NULL );
         }
@@ -228,8 +229,10 @@ void ScShareDocumentDlg::UpdateView()
 
         aString += ScGlobal::pLocaleData->getDate( aDateTime );
         aString += ' ';
-        aString += ScGlobal::pLocaleData->getTime( aDateTime, sal_False );
+        aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
 
         maLbUsers.InsertEntry( aString, NULL );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

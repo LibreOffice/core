@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -187,7 +188,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnChartType::getPropertyS
     return *StaticColumnChartTypeInfo::get();
 }
 
-//
 
 uno::Sequence< ::rtl::OUString > ColumnChartType::getSupportedServiceNames_Static()
 {
@@ -202,3 +202,5 @@ APPHELPER_XSERVICEINFO_IMPL( ColumnChartType,
                              C2U( "com.sun.star.comp.chart.ColumnChartType" ));
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,12 @@
 #define SC_AUTONAMECACHE_HXX
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include "address.hxx"
 #include "global.hxx"
 
 typedef ::std::vector< ScAddress > ScAutoNameAddresses;
-typedef ::std::hash_map< String, ScAutoNameAddresses, ScStringHashCode, ::std::equal_to< String > > ScAutoNameHashMap;
+typedef ::boost::unordered_map< String, ScAutoNameAddresses, ScStringHashCode, ::std::equal_to< String > > ScAutoNameHashMap;
 
 //
 //  Cache for faster lookup of automatic names during CompileXML
@@ -51,8 +52,9 @@ public:
             ScAutoNameCache( ScDocument* pD );
             ~ScAutoNameCache();
 
-    const ScAutoNameAddresses& GetNameOccurences( const String& rName, SCTAB nTab );
+    const ScAutoNameAddresses& GetNameOccurrences( const String& rName, SCTAB nTab );
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

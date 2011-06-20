@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -102,10 +103,9 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
     aOkButton.SetClickHdl(LINK( this, ScHighlightChgDlg, OKBtnHdl));
     aHighlightBox.SetClickHdl(LINK( this, ScHighlightChgDlg, HighLightHandle ));
     aFilterCtr.SetRefHdl(LINK( this, ScHighlightChgDlg, RefHandle ));
-    aFilterCtr.HideRange(sal_False);
+    aFilterCtr.HideRange(false);
     aFilterCtr.Show();
-    SetDispatcherLock( sal_True );
-    //SFX_APPWINDOW->Disable(sal_False);
+    SetDispatcherLock( true );
 
     Init();
 
@@ -113,16 +113,15 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
 
 ScHighlightChgDlg::~ScHighlightChgDlg()
 {
-    SetDispatcherLock( sal_False );
-    //SFX_APPWINDOW->Enable();
+    SetDispatcherLock( false );
 }
 
-void __EXPORT ScHighlightChgDlg::Init()
+void ScHighlightChgDlg::Init()
 {
     String  aAreaStr;
     ScRange aRange;
 
-    DBG_ASSERT( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
+    OSL_ENSURE( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     if(pChanges!=NULL)
@@ -164,12 +163,11 @@ void __EXPORT ScHighlightChgDlg::Init()
     }
 
     aFilterCtr.CheckRange(aChangeViewSet.HasRange());
-    ScRange* pRangeEntry=aChangeViewSet.GetTheRangeList().GetObject(0);
 
-
-    if(pRangeEntry!=NULL)
+    if ( !aChangeViewSet.GetTheRangeList().empty() )
     {
         String aRefStr;
+        const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
         pRangeEntry->Format( aRefStr, ABS_DREF3D, pDoc );
         aFilterCtr.SetRange(aRefStr);
     }
@@ -195,7 +193,7 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 //----------------------------------------------------------------------------
-sal_Bool __EXPORT ScHighlightChgDlg::Close()
+sal_Bool ScHighlightChgDlg::Close()
 {
     return DoClose( ScHighlightChgDlgWrapper::GetChildWindowId() );
 }
@@ -214,17 +212,6 @@ void ScHighlightChgDlg::RefInputDone( sal_Bool bForced)
 
 void ScHighlightChgDlg::SetActive()
 {
-    /*
-    if(pTPFilter!=NULL)
-    {
-        aAcceptChgCtr.GetFilterPage()->SetFocusToRange();
-        aEdAssign.Hide();
-        aRbAssign.Hide();
-        SFX_APPWINDOW->Enable();
-        SetDispatcherLock( sal_False );
-    }
-    //RefInputDone();
-    */
 }
 
 sal_Bool ScHighlightChgDlg::IsRefInputMode() const
@@ -256,8 +243,7 @@ IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef )
 {
     if(pRef!=NULL)
     {
-        SetDispatcherLock( sal_True );
-        //SFX_APPWINDOW->Disable(sal_False);
+        SetDispatcherLock( true );
         aEdAssign.Show();
         aRbAssign.Show();
         aEdAssign.SetText(aFilterCtr.GetRange());
@@ -300,3 +286,4 @@ IMPL_LINK( ScHighlightChgDlg, OKBtnHdl, PushButton*, pOKBtn )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

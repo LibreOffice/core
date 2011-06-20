@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <sal/macros.h>
 #include <string.h>
 
 #include <tools/resmgr.hxx>
@@ -54,12 +56,12 @@ using namespace                 ::com::sun::star;
 extern "C" {
 
 
-void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** /*ppEnv*/ )
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     void*                                   pRet = 0;
 
@@ -161,8 +163,7 @@ void AnalysisAddIn::InitData( void )
         delete pResMgr;
 
     OString             aModName( "analysis" );
-    pResMgr = ResMgr::CreateResMgr( ( const sal_Char* ) aModName,
-                                        aFuncLoc );
+    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), aFuncLoc );
 
     if( pFD )
         delete pFD;
@@ -201,9 +202,6 @@ AnalysisAddIn::~AnalysisAddIn()
 
     if( pCDL )
         delete pCDL;
-
-//  if( pResMgr )           no delete, because _all_ resource managers are deleted _before_ this dtor is called
-//      delete pResMgr;
 
     if( pDefLocales )
         delete[] pDefLocales;
@@ -388,7 +386,7 @@ STRING SAL_CALL AnalysisAddIn::getDisplayArgumentName( const STRING& aName, sal_
     if( p && nArg <= 0xFFFF )
     {
         sal_uInt16  nStr = p->GetStrIndex( sal_uInt16( nArg ) );
-        if( nStr /*&& nStr < 4*/ )
+        if( nStr )
             aRet = GetFuncDescrStr( p->GetDescrID(), nStr );
         else
             aRet = STRFROMANSI( "internal" );
@@ -406,7 +404,7 @@ STRING SAL_CALL AnalysisAddIn::getArgumentDescription( const STRING& aName, sal_
     if( p && nArg <= 0xFFFF )
     {
         sal_uInt16  nStr = p->GetStrIndex( sal_uInt16( nArg ) );
-        if( nStr /*&& nStr < 4*/ )
+        if( nStr )
             aRet = GetFuncDescrStr( p->GetDescrID(), nStr + 1 );
         else
             aRet = STRFROMANSI( "for internal use only" );
@@ -481,7 +479,7 @@ STRING SAL_CALL AnalysisAddIn::getDisplayCategoryName( const STRING& aProgrammat
 
 static const sal_Char*      pLang[] = { "de", "en" };
 static const sal_Char*      pCoun[] = { "DE", "US" };
-static const sal_uInt32     nNumOfLoc = sizeof( pLang ) / sizeof( sal_Char* );
+static const sal_uInt32     nNumOfLoc = SAL_N_ELEMENTS(pLang);
 
 
 void AnalysisAddIn::InitDefLocales( void )
@@ -532,13 +530,6 @@ SEQofLocName SAL_CALL AnalysisAddIn::getCompatibilityNames( const STRING& aProgr
 
 
 // XAnalysis
-
-/*double SAL_CALL AnalysisAddIn::get_Test( constREFXPS&,
-    sal_Int32 nMode, double f1, double f2, double f3 ) THROWDEF_RTE
-{
-    return _Test( nMode, f1, f2, f3 );
-}*/
-
 
 /**
  * Workday
@@ -761,7 +752,6 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
         sal_Int32       n1, n2;
         sal_Int32       nE1 = aCoeffList.getLength();
         sal_Int32       nE2;
-        //sal_Int32     nZ = 0;
 
         for( n1 = 0 ; n1 < nE1 ; n1++ )
         {
@@ -913,7 +903,6 @@ double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROW
     if( nOrder < 0 || fNum <= 0.0 )
         THROW_IAE;
 
-//  return yn( nOrder, fNum );
     double fRet = sca::analysis::BesselY( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
@@ -1237,7 +1226,6 @@ STRING SAL_CALL AnalysisAddIn::getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
-//  z.Power( 0.5 );
     z.Sqrt();
 
     return z.GetString();
@@ -1279,3 +1267,4 @@ double SAL_CALL AnalysisAddIn::getConvert( double f, const STRING& aFU, const ST
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

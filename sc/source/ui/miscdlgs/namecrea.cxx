@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,10 +53,10 @@ ScNameCreateDlg::ScNameCreateDlg( Window * pParent, sal_uInt16 nFlags )
     aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
     aHelpButton     ( this, ScResId( BTN_HELP ) )
 {
-    aTopBox.Check   ( (nFlags & NAME_TOP)   ? sal_True : sal_False );
-    aLeftBox.Check  ( (nFlags & NAME_LEFT)  ? sal_True : sal_False );
-    aBottomBox.Check( (nFlags & NAME_BOTTOM)? sal_True : sal_False );
-    aRightBox.Check ( (nFlags & NAME_RIGHT) ? sal_True : sal_False );
+    aTopBox.Check   ( (nFlags & NAME_TOP)   ? sal_True : false );
+    aLeftBox.Check  ( (nFlags & NAME_LEFT)  ? sal_True : false );
+    aBottomBox.Check( (nFlags & NAME_BOTTOM)? sal_True : false );
+    aRightBox.Check ( (nFlags & NAME_RIGHT) ? sal_True : false );
 
     FreeResource();
 }
@@ -77,3 +78,4 @@ sal_uInt16 ScNameCreateDlg::GetFlags() const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

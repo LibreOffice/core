@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ ScProgress*     ScProgress::pOldInterpretProgress = NULL;
 sal_uLong           ScProgress::nInterpretProgress = 0;
 sal_Bool            ScProgress::bAllowInterpretProgress = sal_True;
 ScDocument*     ScProgress::pInterpretDoc;
-sal_Bool            ScProgress::bIdleWasDisabled = sal_False;
+sal_Bool            ScProgress::bIdleWasDisabled = false;
 
 
 sal_Bool lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
@@ -76,7 +77,7 @@ sal_Bool lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
                 return sal_True;
         }
     }
-    return sal_False;
+    return false;
 }
 
 bool lcl_HasControllersLocked( SfxObjectShell& rObjSh )
@@ -100,7 +101,7 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
         }
         else
         {
-            DBG_ERROR( "ScProgress: there can be only one!" );
+            OSL_FAIL( "ScProgress: there can be only one!" );
             pProgress = NULL;
         }
     }
@@ -116,9 +117,8 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
                           pObjSh->GetProgress() ||
                           lcl_HasControllersLocked(*pObjSh) ) )
     {
-        //  #62808# no own progress for embedded objects,
-        //  #73633# no second progress if the document already has one
-        //  #163566# no progress while controllers are locked (repaint disabled)
+        //  no own progress for embedded objects,
+        //  no second progress if the document already has one
 
         pProgress = NULL;
     }
@@ -151,7 +151,6 @@ ScProgress::~ScProgress()
     }
 }
 
-// static
 
 void ScProgress::CreateInterpretProgress( ScDocument* pDoc, sal_Bool bWait )
 {
@@ -170,14 +169,13 @@ void ScProgress::CreateInterpretProgress( ScDocument* pDoc, sal_Bool bWait )
             if ( !pGlobalProgress )
                 pInterpretProgress = new ScProgress( pDoc->GetDocumentShell(),
                     ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ),
-                    pDoc->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE, sal_False, bWait );
+                    pDoc->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE, false, bWait );
             pInterpretDoc = pDoc;
         }
     }
 }
 
 
-// static
 
 void ScProgress::DeleteInterpretProgress()
 {
@@ -188,7 +186,6 @@ void ScProgress::DeleteInterpretProgress()
             a refresh of the sheet window which may call CreateInterpretProgress
             and DeleteInterpretProgress again (from Output::DrawStrings),
             resulting in double deletion of 'pInterpretProgress'. */
-//       if ( --nInterpretProgress == 0 )
         if ( nInterpretProgress == 1 )
         {
             if ( pInterpretProgress != &theDummyInterpretProgress )
@@ -207,3 +204,4 @@ void ScProgress::DeleteInterpretProgress()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

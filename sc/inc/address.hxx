@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,14 +85,13 @@ const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 
 // The maximum values. Defines are needed for preprocessor checks, for example
 // in bcaslot.cxx, otherwise type safe constants are preferred.
-//#define MAXROWCOUNT_DEFINE 65536
 #define MAXROWCOUNT_DEFINE 1048576
 #define MAXCOLCOUNT_DEFINE 1024
 
 // Count values
 const SCROW       MAXROWCOUNT    = MAXROWCOUNT_DEFINE;
 const SCCOL       MAXCOLCOUNT    = MAXCOLCOUNT_DEFINE;
-const SCTAB       MAXTABCOUNT    = 256;
+const SCTAB       MAXTABCOUNT    = 32000;
 const SCCOLROW    MAXCOLROWCOUNT = MAXROWCOUNT;
 // Maximum values
 const SCROW       MAXROW         = MAXROWCOUNT - 1;
@@ -226,6 +226,9 @@ inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
 #define SCA_VALID_ROW       0x0100
 #define SCA_VALID_COL       0x0200
 #define SCA_VALID_TAB       0x0400
+// SCA_BITS is a convience for
+// (SCA_VALID_TAB | SCA_VALID_COL | SCA_VALID_ROW | SCA_TAB_3D | SCA_TAB_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_COL_ABSOLUTE)
+#define SCA_BITS            0x070F
 // somewhat cheesy kludge to force the display of the document name even for
 // local references.  Requires TAB_3D to be valid
 #define SCA_FORCE_DOC       0x0800
@@ -272,13 +275,12 @@ public:
             {}
         /* Use the formula::FormulaGrammar::AddressConvention associated with rAddr::Tab() */
         Details( const ScDocument* pDoc, const ScAddress & rAddr );
-//UNUSED2009-05 void SetPos( const ScDocument* pDoc, const ScAddress & rAddr );
     };
     SC_DLLPUBLIC static const Details detailsOOOa1;
 
     struct ExternalInfo
     {
-        String      maTabName;
+        ::rtl::OUString maTabName;
         sal_uInt16  mnFileId;
         bool        mbExternal;
 
@@ -321,6 +323,8 @@ public:
                   const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
+    SC_DLLPUBLIC void Format( rtl::OUString&, sal_uInt16 = 0, ScDocument* = NULL,
+                 const Details& rDetails = detailsOOOa1) const;
     SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
 
@@ -336,7 +340,7 @@ public:
     inline size_t hash() const;
 
     /// "A1" or "$A$1" or R1C1 or R[1]C[1]
-    String GetColRowString( bool bAbsolute = sal_False,
+    String GetColRowString( bool bAbsolute = false,
                             const Details& rDetails = detailsOOOa1) const;
 };
 
@@ -483,7 +487,7 @@ public:
                   const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    sal_uInt16 ParseAny( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 ParseAny( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     SC_DLLPUBLIC sal_uInt16 ParseCols( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
@@ -517,6 +521,9 @@ public:
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
     SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, ScDocument* = NULL,
+                 const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
+
+    SC_DLLPUBLIC void Format( rtl::OUString&, sal_uInt16 = 0, ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
@@ -818,3 +825,4 @@ bool AlphaToCol( SCCOL& rCol, const String& rStr);
 
 #endif // SC_ADDRESS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

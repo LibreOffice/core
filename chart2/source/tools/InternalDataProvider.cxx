@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -297,7 +298,7 @@ public:
             rVector.resize( m_nLevel );
 
         vector< uno::Any >::iterator aIt( rVector.begin() );
-        for( sal_Int32 nN=0; aIt<rVector.end(); aIt++, nN++)
+        for( sal_Int32 nN=0; aIt<rVector.end(); ++aIt, ++nN)
         {
             if( nN==m_nLevel )
                 break;
@@ -319,7 +320,7 @@ public:
     void operator() ( vector< uno::Any >& rVector )
     {
         vector< uno::Any >::iterator aIt( rVector.begin() );
-        for( sal_Int32 nN=0; aIt<rVector.end(); aIt++, nN++)
+        for( sal_Int32 nN=0; aIt<rVector.end(); ++aIt, ++nN)
         {
             if( nN==m_nLevel )
             {
@@ -511,9 +512,79 @@ void InternalDataProvider::lcl_decreaseMapReferences(
 Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSequenceAndAddToMap(
     const OUString & rRangeRepresentation )
 {
+    OUString aRangeRepresentation = rRangeRepresentation;
+    if( aRangeRepresentation.indexOf('{') >= 0 )
+    {
+        ::std::vector< double > aNewData;
+        ::std::vector< uno::Any > aNewLabels;
+        OUString    aToken;
+        sal_Int32   nCategories     = 0;
+        sal_Int32   nIndex          = 0;
+        bool        bValues         = true;
+        bool        bLabelSet       = false;
+        OUString str = aRangeRepresentation.replace('{',' ').replace('}',' ');
+
+        m_aInternalData.clearDefaultData();
+        sal_Int32 n = m_aInternalData.getColumnCount();
+        if( n )
+            n = n - 1;
+
+        do
+        {
+            // TODO: This will be problematic if ';' is used in label names
+            // '"' character also needs to be considered in such cases
+            aToken = str.getToken(0,';',nIndex);
+            if( !aToken.getLength() )
+                break;
+            if( aToken.indexOf('"') < 0 )
+            {
+                aNewData.push_back( aToken.toDouble() );
+            }
+            else
+            {
+                aNewLabels.push_back( uno::makeAny(aToken.replace('"', ' ').trim()) );
+                if( !nCategories &&
+                   ( !m_aInternalData.getComplexColumnLabel(n).size() ||
+                     !m_aInternalData.getComplexColumnLabel(n).front().hasValue() ) )
+                {
+                    m_aInternalData.setComplexColumnLabel( n,  aNewLabels );
+                    bLabelSet = true;
+                }
+                else
+                {
+                    m_aInternalData.setComplexRowLabel(nCategories, aNewLabels);
+                    if(nCategories==1 && bLabelSet)
+                    {
+                        ::std::vector< uno::Any > aLabels;
+                        m_aInternalData.setComplexRowLabel( 0, m_aInternalData.getComplexColumnLabel( n ) );
+                        m_aInternalData.setComplexColumnLabel( n, aLabels );
+                    }
+                }
+                aNewLabels.pop_back();
+                nCategories++;
+                bValues = false;
+            }
+        } while( nIndex >= 0 );
+
+        if( bValues )
+        {
+            m_aInternalData.insertColumn( n );
+            m_aInternalData.setColumnValues( n, aNewData );
+            aRangeRepresentation = OUString::valueOf( n );
+        }
+        else if( nCategories > 1 )
+        {
+            aRangeRepresentation = lcl_aCategoriesRangeName;
+        }
+        else
+        {
+            aRangeRepresentation = lcl_aLabelRangePrefix+OUString::valueOf( n );
+        }
+    }
+
     Reference< chart2::data::XDataSequence > xSeq(
-        new UncachedDataSequence( this, rRangeRepresentation ));
-    lcl_addDataSequenceToMap( rRangeRepresentation, xSeq );
+        new UncachedDataSequence( this, aRangeRepresentation ));
+    lcl_addDataSequenceToMap( aRangeRepresentation, xSeq );
     return xSeq;
 }
 
@@ -708,8 +779,7 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
     else if( aRangeRepresentation.getLength())
     {
         // data
-        sal_Int32 nIndex = aRangeRepresentation.toInt32();
-        return lcl_createDataSequenceAndAddToMap( OUString::valueOf( nIndex ));
+        return lcl_createDataSequenceAndAddToMap( aRangeRepresentation );
     }
 
     return Reference< chart2::data::XDataSequence >();
@@ -1425,3 +1495,5 @@ Sequence< OUString > InternalDataProvider::getSupportedServiceNames_Static()
 APPHELPER_XSERVICEINFO_IMPL( InternalDataProvider, lcl_aServiceName );
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

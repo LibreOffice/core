@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,11 +43,9 @@
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 
-#ifndef SC_SCMATRIX_HXX
 #include "scmatrix.hxx"
-#endif
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 
 class String;
@@ -56,7 +55,7 @@ class ScMatrix;
 class ScFuncDesc;
 
 
-typedef ::std::hash_map< String, const ScUnoAddInFuncData*, ScStringHashCode, ::std::equal_to< String > > ScAddInHashMap;
+typedef ::boost::unordered_map< String, const ScUnoAddInFuncData*, ScStringHashCode, ::std::equal_to< String > > ScAddInHashMap;
 
 
 enum ScAddInArgumentType
@@ -233,7 +232,7 @@ public:
 
     sal_uInt16              GetErrCode() const      { return nErrCode; }
     sal_Bool                HasString() const       { return bHasString; }
-    sal_Bool                HasMatrix() const       { return ( xMatrix.Is() ); }
+    bool                HasMatrix() const       { return xMatrix.get(); }
     sal_Bool                HasVarRes() const       { return ( xVarRes.is() ); }
     double              GetValue() const        { return fValue; }
     const String&       GetString() const       { return aString; }
@@ -245,3 +244,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

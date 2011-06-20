@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,9 +50,6 @@ namespace wrapper
 {
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 //PROPERTYTYPE is the type of the outer property
 
 template< typename PROPERTYTYPE >
@@ -118,7 +116,7 @@ public:
         m_aOuterValue = rOuterValue;
 
         bool bHasAmbiguousValue = false;
-        PROPERTYTYPE aOldValue;
+        PROPERTYTYPE aOldValue = PROPERTYTYPE();
         if( detectInnerValue( aOldValue, bHasAmbiguousValue ) )
         {
             if( bHasAmbiguousValue || aNewValue != aOldValue )
@@ -195,8 +193,6 @@ enum
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -223,8 +219,6 @@ void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutPro
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -234,9 +228,6 @@ void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 
 WrappedSplineTypeProperty::WrappedSplineTypeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
     : WrappedSplineProperty<sal_Int32>( C2U("SplineType"), C2U("CurveStyle"), uno::makeAny(sal_Int32(0)), spChart2ModelContact )
@@ -276,10 +267,9 @@ Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue 
 
     return uno::makeAny(aInnerValue);
 }
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 } //namespace wrapper
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

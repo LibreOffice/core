@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,9 +55,9 @@ void MultipleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
     if( aIter != aEnd )
     {
         (*aIter)->FillItemSet( rOutItemSet );
-        aIter++;
+        ++aIter;
     }
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
         SfxItemSet aSet = this->CreateEmptyItemSet();
         (*aIter)->FillItemSet( aSet );
@@ -82,3 +83,5 @@ bool MultipleItemConverter::GetItemProperty( tWhichIdType /*nWhichId*/, tPropert
 }
 
 } //  namespace comphelper
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

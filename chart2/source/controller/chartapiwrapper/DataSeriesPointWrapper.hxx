@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -135,8 +136,6 @@ private:
         sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
         throw (::com::sun::star::uno::Exception);
 
-    // ----------------------------------------
-
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
@@ -158,3 +157,5 @@ private:
 
 // CHART_DATASERIESPOINTWRAPPER_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

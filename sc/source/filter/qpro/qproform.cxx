@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include "precompiled_sc.hxx"
 
 #include <sal/config.h>
+#include <sal/macros.h>
 #include "qpro.hxx"
 
 #include "qproform.hxx"
@@ -49,7 +51,7 @@ void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sa
     else
     {
         rSRD.nCol = nCol;
-        rSRD.SetColRel( sal_False );
+        rSRD.SetColRel( false );
     }
     if( nRelBit & 0x2000 )
     {
@@ -61,7 +63,7 @@ void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sa
     else
     {
         rSRD.nRow = nTmp;
-        rSRD.SetRowRel( sal_False );
+        rSRD.SetRowRel( false );
     }
     if( nRelBit & 0x8000 )
     {
@@ -73,7 +75,7 @@ void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sa
     else
     {
         rSRD.nTab = nPage;
-        rSRD.SetTabRel( sal_False );
+        rSRD.SetTabRel( false );
     }
     if (rSRD.nTab != aEingPos.Tab())
         rSRD.SetFlag3D( sal_True);
@@ -92,8 +94,8 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
     sal_Int32    nCount;
     TokenId  nPush, nPush1;
 
-    sal_Bool bAddIn = sal_False;
-    sal_Bool bNeg = sal_False;
+    sal_Bool bAddIn = false;
+    sal_Bool bNeg = false;
 
     if( eOc == ocNoName )
     {
@@ -150,7 +152,6 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
 
     if( nArgs> 0 )
     {
-        sal_Int16 nNull = -1;
         sal_Int16 nLast = nArgs- 1;
 
         if( eOc == ocZGZ )
@@ -159,6 +160,7 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
             aPool << eParam[ 3 ] << ocSep << eParam[ 2 ] << ocSep << eParam[ 1 ] << ocSep << eParam[ 0 ];
         else
         {
+            sal_Int16 nNull = -1;
             aPool << eParam[ nLast ];
             for( nCount = nLast - 1 ; nCount >= 0 ; nCount-- )
             {
@@ -325,7 +327,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 // Sheet name of second corner is not displayed if identical
                 if (aCRD.Ref1.IsFlag3D() && aCRD.Ref1.nTab == aCRD.Ref2.nTab &&
                         aCRD.Ref1.IsTabRel() == aCRD.Ref2.IsTabRel())
-                    aCRD.Ref2.SetFlag3D( sal_False);
+                    aCRD.Ref2.SetFlag3D( false);
                 aStack << aPool.Store( aCRD );
                 break;
 
@@ -556,7 +558,7 @@ static const struct
     { ocNoName, FT_NotImpl }   // gives properties of DOS menus
 };
 
-const int nIndexCount = sizeof( aFuncMap ) / sizeof( aFuncMap[ 0 ] );
+const int nIndexCount = SAL_N_ELEMENTS(aFuncMap);
 
 DefTokenId QProToSc::IndexToToken( sal_uInt16 nIndex )
 {
@@ -743,3 +745,5 @@ const sal_Char* QProToSc::getString( sal_uInt8 nIndex )
     }
     return pExtString;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,6 @@
 
 #include "BarChart.hxx"
 #include "ShapeFactory.hxx"
-//#include "chartview/servicenames_charttypes.hxx"
-//#include "servicenames_coosystems.hxx"
 #include "CommonConverters.hxx"
 #include "ObjectIdentifier.hxx"
 #include "LabelPositionHelper.hxx"
@@ -45,7 +44,6 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 
 //.............................................................................
@@ -55,10 +53,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel
                     , sal_Int32 nDimensionCount )
@@ -174,7 +168,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
                 rAlignment = LABEL_ALIGN_CENTER;
-                DBG_ERROR( "top label placement is not really supported by horizontal bar charts" );
+                OSL_FAIL( "top label placement is not really supported by horizontal bar charts" );
             }
         }
         break;
@@ -191,7 +185,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
                 rAlignment = LABEL_ALIGN_CENTER;
-                DBG_ERROR( "bottom label placement is not supported by horizontal bar charts" );
+                OSL_FAIL( "bottom label placement is not supported by horizontal bar charts" );
             }
         }
         break;
@@ -208,7 +202,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
                 rAlignment = LABEL_ALIGN_CENTER;
-                DBG_ERROR( "left label placement is not supported by column charts" );
+                OSL_FAIL( "left label placement is not supported by column charts" );
             }
         }
         break;
@@ -225,7 +219,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
                 rAlignment = LABEL_ALIGN_CENTER;
-                DBG_ERROR( "right label placement is not supported by column charts" );
+                OSL_FAIL( "right label placement is not supported by column charts" );
             }
         }
         break;
@@ -269,7 +263,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             fDepth = fabs(fScaledUpperBarDepth-fScaledLowerBarDepth)/2.0;
         break;
     default:
-        DBG_ERROR("this label alignment is not implemented yet");
+        OSL_FAIL("this label alignment is not implemented yet");
 
         break;
     }
@@ -426,7 +420,7 @@ void BarChart::createShapes()
     if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
         return;
 
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"BarChart is not proper initialized");
+    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"BarChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
@@ -481,7 +475,7 @@ void BarChart::createShapes()
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
-            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; aXSlotIter++ )
+            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; ++aXSlotIter )
             {
                 sal_Int32 nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
                 if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
@@ -508,7 +502,7 @@ void BarChart::createShapes()
 //=============================================================================
             //iterate through all x slots in this category
             double fSlotX=0;
-            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; aXSlotIter++, fSlotX+=1.0 )
+            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
                 sal_Int32 nAttachedAxisIndex = 0;
                 BarPositionHelper* pPosHelper = m_pMainPosHelper;
@@ -575,7 +569,7 @@ void BarChart::createShapes()
                 aSeriesIter = pSeriesList->begin();
     //=============================================================================
                 //iterate through all series in this x slot
-                for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
@@ -805,27 +799,6 @@ void BarChart::createShapes()
                             }
                             else //m_nDimension!=3
                             {
-                                //if( bCreateLineInsteadOfComplexGeometryDueToMissingSpace )
-                                //{
-                                //    drawing::PolyPolygonShape3D aPoly;
-                                //    drawing::Position3D aUpperPoint( fLogicX,fUpperYValue,fLogicZ );
-                                //    drawing::Position3D aLowerPoint( fLogicX,fLowerYValue,fLogicZ );
-
-                                //    AddPointToPoly( aPoly, aUpperPoint );
-                                //    AddPointToPoly( aPoly, aLowerPoint );
-
-                                //    VLineProperties aLineProperties;
-                                //    aLineProperties.initFromPropertySet( xDataPointProperties, true /*bUseSeriesPropertyNames*/ );
-                                //    if( !aLineProperties.isLineVisible() )
-                                //    {
-                                //        //todo
-                                //        //aLineProperties.Color =
-                                //    }
-
-                                //    xShape = m_pShapeFactory->createLine2D( xPointGroupShape_Shapes
-                                //                , PolyToPointSequence(aPoly), &aLineProperties );
-                                //}
-
                                 drawing::PolyPolygonShape3D aPoly;
                                 drawing::Position3D aLeftUpperPoint( fLogicX-fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
                                 drawing::Position3D aRightUpperPoint( fLogicX+fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
@@ -886,9 +859,6 @@ void BarChart::createShapes()
 
                     }//end iteration through partial points
 
-                    //remove PointGroupShape if empty
-    //                if(!xPointGroupShape_Shapes->getCount())
-    //                    xSeriesGroupShape_Shapes->remove(xPointGroupShape_Shape);
                 }//next series in x slot (next y slot)
             }//next x slot
         }//next z slot
@@ -919,7 +889,7 @@ void BarChart::createShapes()
 
 //=============================================================================
             //iterate through all x slots in this category
-            for( double fSlotX=0; aXSlotIter != aXSlotEnd; aXSlotIter++, fSlotX+=1.0 )
+            for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
@@ -928,7 +898,7 @@ void BarChart::createShapes()
                 aSeriesIter = pSeriesList->begin();
 //=============================================================================
                 //iterate through all series in this x slot
-                for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
@@ -958,17 +928,7 @@ void BarChart::createShapes()
     }
 
     /* @todo remove series shapes if empty
-    //remove and delete point-group-shape if empty
-    if(!xSeriesGroupShape_Shapes->getCount())
-    {
-        (*aSeriesIter)->m_xShape.set(NULL);
-        m_xLogicTarget->remove(xSeriesGroupShape_Shape);
-    }
     */
-
-    //remove and delete series-group-shape if empty
-
-    //... todo
 
     OSL_TRACE( "\nPPPPPPPPP<<<<<<<<<<<< bar chart :: createShapes():: skipped points: %d created points: %d", nSkippedPoints, nCreatedPoints );
 }
@@ -976,3 +936,5 @@ void BarChart::createShapes()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

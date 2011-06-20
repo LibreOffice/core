@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,11 +87,9 @@ void PolarOptionsTabPage::Reset(const SfxItemSet& rInAttrs)
 {
     const SfxPoolItem *pPoolItem = NULL;
 
-    long nTmp;
     if (rInAttrs.GetItemState(SCHATTR_STARTING_ANGLE, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
-        nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
-
+        long nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
         m_aAngleDial.SetRotation( nTmp*100 );
     }
     else
@@ -124,3 +123,5 @@ void PolarOptionsTabPage::Reset(const SfxItemSet& rInAttrs)
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

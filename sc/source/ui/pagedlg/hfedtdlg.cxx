@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,10 +41,9 @@
 #include "hfedtdlg.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
-//CHINA001 #include "tphfedit.hxx"
 #include "scresid.hxx"
 #include "hfedtdlg.hrc"
-#include "scuitphfedit.hxx" //CHINA001
+#include "scuitphfedit.hxx"
 //------------------------------------------------------------------
 
 //  macros from docsh4.cxx
@@ -168,13 +168,13 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScHFEditDlg::~ScHFEditDlg()
+ScHFEditDlg::~ScHFEditDlg()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScHFEditDlg::PageCreated( sal_uInt16 /* nId */, SfxTabPage& rPage )
+void ScHFEditDlg::PageCreated( sal_uInt16 /* nId */, SfxTabPage& rPage )
 {
     // kann ja nur ne ScHFEditPage sein...
 
@@ -184,3 +184,4 @@ void __EXPORT ScHFEditDlg::PageCreated( sal_uInt16 /* nId */, SfxTabPage& rPage 
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

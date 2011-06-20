@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1038,11 +1039,6 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                 xLabeledSeq->setValues( xNewSeq );
                             }
                         }
-                        else if( xLabeledSeq.is())
-                        {
-                            // values cannot be deleted. This would also delete the Role (for labels)
-//                             xLabeledSeq->setValues( Reference< data::XDataSequence >());
-                        }
                     }
                 }
 
@@ -1076,3 +1072,5 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

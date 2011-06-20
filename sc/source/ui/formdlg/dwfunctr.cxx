@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
-
 #include <editeng/editview.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -59,7 +57,7 @@
 SFX_IMPL_DOCKINGWINDOW( ScFunctionChildWindow, FID_FUNCTION_BOX )
 
 /*************************************************************************
-#*  Member:     ScFunctionChildWindow                       Datum:06.10.97
+#*  Member:     ScFunctionChildWindow
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionChildWindow
@@ -74,7 +72,7 @@ SFX_IMPL_DOCKINGWINDOW( ScFunctionChildWindow, FID_FUNCTION_BOX )
 #*
 #************************************************************************/
 
-__EXPORT ScFunctionChildWindow::ScFunctionChildWindow( Window* pParentP,
+ScFunctionChildWindow::ScFunctionChildWindow( Window* pParentP,
                                     sal_uInt16 nId,
                                     SfxBindings* pBindings,
                                     SfxChildWinInfo* pInfo ) :
@@ -90,7 +88,7 @@ __EXPORT ScFunctionChildWindow::ScFunctionChildWindow( Window* pParentP,
 }
 
 /*************************************************************************
-#*  Member:     ScFunctionDockWin                           Datum:06.10.97
+#*  Member:     ScFunctionDockWin
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -130,13 +128,12 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     aDDFuncList.Hide();
     nArgs=0;
     nDockMode=0;
-    bSizeFlag=sal_False;
+    bSizeFlag=false;
     aCatBox.SetDropDownLineCount(9);
     Font aFont=aFiFuncDesc.GetFont();
     aFont.SetColor(Color(COL_BLACK));
     aFiFuncDesc.SetFont(aFont);
     aFiFuncDesc.SetBackground( GetBackground() );       //! never transparent?
-//? SetBackground();
 
     Link aLink=LINK( this, ScFunctionDockWin, SelHdl);
     aCatBox.SetSelectHdl(aLink);
@@ -153,7 +150,6 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     StartListening( *pBindingsP, sal_True );
 
     Point aTopLeft=aCatBox.GetPosPixel();
-    //String aString=aCatBox.GetEntry( 0)+String("www");
     String aString=String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ww"));
     Size aTxtSize( aFiFuncDesc.GetTextWidth(aString), aFiFuncDesc.GetTextHeight() );
     nMinWidth=aTxtSize.Width()+aTopLeft.X()
@@ -169,7 +165,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
 }
 
 /*************************************************************************
-#*  Member:     ScFunctionDockWin                           Datum:06.10.97
+#*  Member:     ScFunctionDockWin
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -182,13 +178,13 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
 #*
 #************************************************************************/
 
-__EXPORT ScFunctionDockWin::~ScFunctionDockWin()
+ScFunctionDockWin::~ScFunctionDockWin()
 {
     EndListening( GetBindings() );
 }
 
 /*************************************************************************
-#*  Member:     UpdateFunctionList                          Datum:06.10.97
+#*  Member:     UpdateFunctionList
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -204,20 +200,9 @@ __EXPORT ScFunctionDockWin::~ScFunctionDockWin()
 
 void ScFunctionDockWin::InitLRUList()
 {
-    const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
-    sal_uInt16 nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
-    sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
+    ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
+    pFuncMgr->fillLastRecentlyUsedFunctions(aLRUList);
 
-    sal_uInt16 i;
-    for ( i=0; i<LRU_MAX; i++ )
-        aLRUList[i] = NULL;
-
-    if ( pLRUListIds )
-    {
-        ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-        for ( i=0; i<nLRUFuncCount; i++ )
-            aLRUList[i] = pFuncMgr->Get( pLRUListIds[i] );
-    }
 
     sal_uInt16  nSelPos   = aCatBox.GetSelectEntryPos();
 
@@ -226,7 +211,7 @@ void ScFunctionDockWin::InitLRUList()
 }
 
 /*************************************************************************
-#*  Member:     UpdateFunctionList                          Datum:10.12.99
+#*  Member:     UpdateFunctionList
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -250,7 +235,7 @@ void ScFunctionDockWin::UpdateLRUList()
 
 
 /*************************************************************************
-#*  Member:     SetSize                                     Datum:06.10.97
+#*  Member:     SetSize
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -327,7 +312,7 @@ void ScFunctionDockWin::SetSize()
     }
 }
 /*************************************************************************
-#*  Member:     SetLeftRightSize                            Datum:15.10.97
+#*  Member:     SetLeftRightSize
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -343,7 +328,7 @@ void ScFunctionDockWin::SetSize()
 
 void ScFunctionDockWin::SetLeftRightSize()
 {
-    if(bSizeFlag==sal_False)
+    if(bSizeFlag==false)
     {
         bSizeFlag=sal_True;
 
@@ -351,8 +336,6 @@ void ScFunctionDockWin::SetLeftRightSize()
         Size aNewSize=GetOutputSizePixel();
         aDiffSize.Width()-=aNewSize.Width();
         aDiffSize.Height()-=aNewSize.Height();
-
-        //@ SetUpdateMode( sal_False);
 
         String aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ww"));
 
@@ -372,14 +355,12 @@ void ScFunctionDockWin::SetLeftRightSize()
         aOldSize=aNewSize;
         aNewSize.Width()+=aDiffSize.Width();
         aNewSize.Height()+=aDiffSize.Height();
-        //SetSizePixel(aNewSize);
-        //@ SetUpdateMode( sal_True);
-        bSizeFlag=sal_False;
+        bSizeFlag=false;
     }
 
 }
 /*************************************************************************
-#*  Member:     SetTopBottonSize                            Datum:15.10.97
+#*  Member:     SetTopBottonSize
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -395,7 +376,7 @@ void ScFunctionDockWin::SetLeftRightSize()
 
 void ScFunctionDockWin::SetTopBottonSize()
 {
-    if(bSizeFlag==sal_False)
+    if(bSizeFlag==false)
     {
         bSizeFlag=sal_True;
         Size aDiffSize=GetSizePixel();
@@ -408,14 +389,12 @@ void ScFunctionDockWin::SetTopBottonSize()
 
         aNewSize.Width()+=aDiffSize.Width();
         aNewSize.Height()+=aDiffSize.Height();
-        //SetSizePixel(aNewSize);
-        //@ SetUpdateMode( sal_True);
-        bSizeFlag=sal_False;
+        bSizeFlag=false;
     }
 }
 
 /*************************************************************************
-#*  Member:     SetMyWidthLeRi                              Datum:15.10.97
+#*  Member:     SetMyWidthLeRi
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -440,8 +419,6 @@ void ScFunctionDockWin::SetMyWidthLeRi(Size &aNewSize)
 
     Point aCDTopLeft=aCatBox.GetPosPixel();
     Point aFLTopLeft=aFuncList.GetPosPixel();
-    Point aSplitterTopLeft=aPrivatSplit.GetPosPixel();
-    Point aFDTopLeft=aFiFuncDesc.GetPosPixel();
 
     aCDSize.Width()=aNewSize.Width()-aCDTopLeft.X()-aFLTopLeft.X();
     aFLSize.Width()=aNewSize.Width()-2*aFLTopLeft.X();
@@ -455,7 +432,7 @@ void ScFunctionDockWin::SetMyWidthLeRi(Size &aNewSize)
 }
 
 /*************************************************************************
-#*  Member:     SetHeight                                   Datum:06.10.97
+#*  Member:     SetHeight
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -503,7 +480,7 @@ void ScFunctionDockWin::SetMyHeightLeRi(Size &aNewSize)
 }
 
 /*************************************************************************
-#*  Member:     SetMyWidthToBo                              Datum:16.10.97
+#*  Member:     SetMyWidthToBo
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -544,7 +521,7 @@ void ScFunctionDockWin::SetMyWidthToBo(Size &aNewSize)
 }
 
 /*************************************************************************
-#*  Member:     SetHeight                                   Datum:16.10.97
+#*  Member:     SetHeight
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -573,7 +550,7 @@ void ScFunctionDockWin::SetMyHeightToBo(Size &aNewSize)
 }
 
 /*************************************************************************
-#*  Member:     SetDescription                              Datum:13.10.97
+#*  Member:     SetDescription
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -596,30 +573,30 @@ void ScFunctionDockWin::SetDescription()
     {
         pDesc->initArgumentInfo();      // full argument info is needed
 
-        String  aString=pAllFuncList->GetSelectEntry();
+        ::rtl::OUStringBuffer aBuf(pAllFuncList->GetSelectEntry());
         if(nDockMode==0)
         {
-            aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":\n\n" ));
+            aBuf.appendAscii(":\n\n");
         }
         else
         {
-            aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":   " ));
+            aBuf.appendAscii(":   ");
         }
 
-        aString+=pDesc->GetParamList();
+        aBuf.append(pDesc->GetParamList());
 
         if(nDockMode==0)
         {
-            aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "\n\n" ));
+            aBuf.appendAscii("\n\n");
         }
         else
         {
-            aString += '\n';
+            aBuf.appendAscii("\n");
         }
 
-        aString+=*(pDesc->pFuncDesc);
+        aBuf.append(*pDesc->pFuncDesc);
 
-        aFiFuncDesc.SetText(aString);
+        aFiFuncDesc.SetText(aBuf.makeStringAndClear());
         aFiFuncDesc.StateChanged(STATE_CHANGE_TEXT);
         aFiFuncDesc.Invalidate();
         aFiFuncDesc.Update();
@@ -628,7 +605,7 @@ void ScFunctionDockWin::SetDescription()
  }
 
 /*************************************************************************
-#*  Member:     Resizing                                    Datum:06.10.97
+#*  Member:     Resizing
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -642,7 +619,7 @@ void ScFunctionDockWin::SetDescription()
 #*
 #************************************************************************/
 
-void __EXPORT ScFunctionDockWin::Resizing( Size& rNewSize )
+void ScFunctionDockWin::Resizing( Size& rNewSize )
 {
     if((sal_uLong)rNewSize.Width()<nMinWidth) rNewSize.Width()=nMinWidth;
     if((sal_uLong)rNewSize.Height()<nMinHeight) rNewSize.Height()=nMinHeight;
@@ -650,7 +627,7 @@ void __EXPORT ScFunctionDockWin::Resizing( Size& rNewSize )
 }
 
 /*************************************************************************
-#*  Member:     Close                                       Datum:07.10.97
+#*  Member:     Close
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -663,9 +640,9 @@ void __EXPORT ScFunctionDockWin::Resizing( Size& rNewSize )
 #*
 #************************************************************************/
 
-sal_Bool __EXPORT ScFunctionDockWin::Close()
+sal_Bool ScFunctionDockWin::Close()
 {
-    SfxBoolItem aItem( FID_FUNCTION_BOX, sal_False );
+    SfxBoolItem aItem( FID_FUNCTION_BOX, false );
 
     GetBindings().GetDispatcher()->Execute( FID_FUNCTION_BOX,
                                 SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
@@ -678,7 +655,7 @@ sal_Bool __EXPORT ScFunctionDockWin::Close()
 
 
 /*************************************************************************
-#*  Member:     CheckAlignment                              Datum:16.10.97
+#*  Member:     CheckAlignment
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -691,7 +668,7 @@ sal_Bool __EXPORT ScFunctionDockWin::Close()
 #*  Output:     Das uebergebene Alignment
 #*
 #************************************************************************/
-SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */,
+SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */,
                                 SfxChildAlignment aChildAlign)
 {
     String aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ww"));
@@ -703,7 +680,7 @@ SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /
     }
     else
     {
-        bInit=sal_False;
+        bInit=false;
         eSfxOldAlignment=aChildAlign;
         eSfxNewAlignment=aChildAlign;
     }
@@ -718,9 +695,7 @@ SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /
         case SFX_ALIGN_TOOLBOXTOP:
         case SFX_ALIGN_TOOLBOXBOTTOM:
 
-                        nMinWidth= 0;/*aDDFuncList.GetPosPixel().X()+
-                                    10*aTxtSize.Width()+
-                                    aFuncList.GetPosPixel().X();*/
+                        nMinWidth= 0;
                         nMinHeight=0;
 
                         break;
@@ -736,7 +711,6 @@ SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /
                         nMinWidth=aTxtSize.Width()+aTopLeft.X()
                                 +2*aFuncList.GetPosPixel().X();
                         nMinHeight=19*aTxtSize.Height();
-                            //aCatBox.SelectEntryPos(0);
 
                         break;
     }
@@ -744,7 +718,7 @@ SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /
     return aChildAlign;
 }
 /*************************************************************************
-#*  Member:     Close                                       Datum:07.10.97
+#*  Member:     Close
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -758,21 +732,11 @@ SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /
 #************************************************************************/
 void ScFunctionDockWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
 {
-//    const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
-    /*
-    if ( pPoolItemHint
-         && ( pPoolItemHint->GetObject()->ISA( SvxColorTableItem ) ) )
-    {
-        // Die Liste der Farben hat sich geaendert
-        pColorTable = ( (SvxColorTableItem*) pPoolItemHint->GetObject() )->GetColorTable();
-        FillValueSet();
-    }
-    */
 }
 
 
 /*************************************************************************
-#*  Member:     Resize                                  Datum:06.10.97
+#*  Member:     Resize
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -786,7 +750,7 @@ void ScFunctionDockWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
 #*
 #************************************************************************/
 
-void __EXPORT ScFunctionDockWin::Resize()
+void ScFunctionDockWin::Resize()
 {
     if ( !IsFloatingMode() ||
          !GetFloatingWindow()->IsRollUp() )
@@ -799,7 +763,7 @@ void __EXPORT ScFunctionDockWin::Resize()
 }
 
 /*************************************************************************
-#*  Member:     UpdateFunctionList                          Datum:06.10.97
+#*  Member:     UpdateFunctionList
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -820,7 +784,7 @@ void ScFunctionDockWin::UpdateFunctionList()
                             ? (nSelPos-1) : 0;
 
     pAllFuncList->Clear();
-    pAllFuncList->SetUpdateMode( sal_False );
+    pAllFuncList->SetUpdateMode( false );
 
     if ( nSelPos > 0 )
     {
@@ -837,11 +801,11 @@ void ScFunctionDockWin::UpdateFunctionList()
     }
     else // LRU-Liste
     {
-        for ( sal_uInt16 i=0; i<LRU_MAX && aLRUList[i]; i++ )
+        for(::std::vector<const formula::IFunctionDescription*>::iterator iter=aLRUList.begin();iter!=aLRUList.end();++iter)
         {
-            const ScFuncDesc* pDesc = aLRUList[i];
+            const formula::IFunctionDescription* pDesc = *iter;
             pAllFuncList->SetEntryData(
-                    pAllFuncList->InsertEntry( *(pDesc->pFuncName) ),
+                    pAllFuncList->InsertEntry(pDesc->getFunctionName()),
                     (void*)pDesc );
         }
     }
@@ -862,7 +826,7 @@ void ScFunctionDockWin::UpdateFunctionList()
 }
 
 /*************************************************************************
-#*  Member:     DoEnter                                     Datum:06.10.97
+#*  Member:     DoEnter
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -957,7 +921,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
                 else
                 {
                     aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
-                    pEdView->InsertText(aString,sal_False);
+                    pEdView->InsertText(aString,false);
                     pHdl->DataChanged();
                 }
             }
@@ -978,7 +942,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
 
 
 /*************************************************************************
-#*  Handle:     SelHdl                                      Datum:06.10.97
+#*  Handle:     SelHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -1011,7 +975,7 @@ IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
 }
 
 /*************************************************************************
-#*  Handle:     SelHdl                                      Datum:06.10.97
+#*  Handle:     SelHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -1038,7 +1002,7 @@ IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
 }
 
 /*************************************************************************
-#*  Handle:     SetSplitHdl                                 Datum:13.10.97
+#*  Handle:     SetSplitHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScFunctionDockWin
@@ -1067,12 +1031,6 @@ IMPL_LINK( ScFunctionDockWin, SetSplitHdl, ScPrivatSplit*, pCtrl )
         aFuncList.SetSizePixel(aFLSize);
         aFiFuncDesc.SetPosPixel(aFDTopLeft);
         aFiFuncDesc.SetSizePixel(aFDSize);
-        /*
-        aFuncList.Invalidate();
-        aFuncList.Update();
-        aFiFuncDesc.Invalidate();
-        aFiFuncDesc.Update();
-        */
     }
     //...
 
@@ -1180,3 +1138,4 @@ void ScFunctionDockWin::StateChanged( StateChangedType nStateChange )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

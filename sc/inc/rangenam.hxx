@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,8 @@
 #include "scdllapi.h"
 
 #include <map>
+#include <boost/ptr_container/ptr_set.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 //------------------------------------------------------------------------
 
@@ -65,7 +68,7 @@ typedef sal_uInt16 RangeType;
 
 class ScTokenArray;
 
-class ScRangeData : public ScDataObject
+class ScRangeData
 {
 private:
     String          aName;
@@ -75,14 +78,13 @@ private:
     RangeType       eType;
     ScDocument*     pDoc;
     sal_uInt16          nIndex;
-    sal_Bool            bModified;          // wird bei UpdateReference gesetzt/geloescht
+    sal_Bool            bModified;          // is set/cleared by UpdateReference
 
     // max row and column to use for wrapping of references.  If -1 use the
     // application's default.
     SCROW           mnMaxRow;
     SCCOL           mnMaxCol;
 
-    friend class ScRangeName;
     ScRangeData( sal_uInt16 nIndex );
 public:
     typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
@@ -101,13 +103,10 @@ public:
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const ScAddress& rTarget );
-                                // rTarget ist ABSPOS Sprungmarke
+                                // rTarget is ABSPOS jump label
                     ScRangeData(const ScRangeData& rScRangeData);
 
-    SC_DLLPUBLIC virtual        ~ScRangeData();
-
-
-    virtual ScDataObject* Clone() const;
+    SC_DLLPUBLIC ~ScRangeData();
 
     sal_Bool            operator== (const ScRangeData& rData) const;
 
@@ -115,10 +114,11 @@ public:
     const String&   GetName( void ) const           { return aName; }
     const String&   GetUpperName( void ) const      { return aUpperName; }
     ScAddress       GetPos() const                  { return aPos; }
-    // Der Index muss eindeutig sein. Ist er 0, wird ein neuer Index vergeben
+    // The index has to be unique. If index=0 a new index value is assigned.
     void            SetIndex( sal_uInt16 nInd )         { nIndex = nInd; }
     sal_uInt16    GetIndex() const                { return nIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
+    const ScTokenArray* GetCode() const             { return pCode; }
     sal_uInt16          GetErrCode();
     sal_Bool            HasReferences() const;
     void            SetDocument( ScDocument* pDocument){ pDoc = pDocument; }
@@ -127,7 +127,8 @@ public:
     void            AddType( RangeType nType )      { eType = eType|nType; }
     RangeType       GetType() const                 { return eType; }
     sal_Bool            HasType( RangeType nType ) const;
-    SC_DLLPUBLIC void           GetSymbol( String& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
+    SC_DLLPUBLIC void GetSymbol( String& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
+    SC_DLLPUBLIC void GetSymbol( rtl::OUString& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress&,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -142,12 +143,10 @@ public:
 
     SC_DLLPUBLIC sal_Bool           IsReference( ScRange& rRef ) const;
     sal_Bool            IsReference( ScRange& rRef, const ScAddress& rPos ) const;
-    sal_Bool            IsValidReference( ScRange& rRef ) const;
-
-//UNUSED2009-05 sal_Bool            IsRangeAtCursor( const ScAddress&, sal_Bool bStartOnly ) const;
+    SC_DLLPUBLIC sal_Bool           IsValidReference( ScRange& rRef ) const;
     sal_Bool            IsRangeAtBlock( const ScRange& ) const;
 
-    void            UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable);
+    void            UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable, SCTAB nNewSheets);
     void            TransferTabRef( SCTAB nOldTab, SCTAB nNewTab );
 
     void            ValidateTabRefs();
@@ -170,55 +169,53 @@ inline sal_Bool ScRangeData::HasType( RangeType nType ) const
 
 extern "C" int SAL_CALL ScRangeData_QsortNameCompare( const void*, const void* );
 
-#if defined( ICC ) && defined( OS2 )
-    static int _Optlink  ICCQsortNameCompare( const void* a, const void* b)
-                            { return ScRangeData_QsortNameCompare(a,b); }
-#endif
+bool operator< (const ScRangeData& left, const ScRangeData& right);
 
-//------------------------------------------------------------------------
-
-class ScRangeName : public ScSortedCollection
+class ScRangeName
 {
 private:
-    ScDocument* pDoc;
-    sal_uInt16 nSharedMaxIndex;
-
-    using ScSortedCollection::Clone;    // calcwarnings: shouldn't be used
+    typedef ::boost::ptr_set<ScRangeData> DataType;
+    DataType maData;
 
 public:
-    ScRangeName(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False,
-                ScDocument* pDocument = NULL) :
-        ScSortedCollection  ( nLim, nDel, bDup ),
-        pDoc                ( pDocument ),
-        nSharedMaxIndex     ( 1 ) {}            // darf nicht 0 sein!!
+    /// Map that manages stored ScRangeName instances.
+    typedef ::boost::ptr_map<SCTAB, ScRangeName>  TabNameMap;
+    /// Map that stores non-managed pointers to ScRangeName instances.
+    typedef ::std::map<SCTAB, const ScRangeName*> TabNameCopyMap;
 
-    ScRangeName(const ScRangeName& rScRangeName, ScDocument* pDocument);
+    static void copyLocalNames(const TabNameMap& rNames, TabNameCopyMap& rCopy);
 
-    virtual ScDataObject*     Clone(ScDocument* pDocP) const
-                             { return new ScRangeName(*this, pDocP); }
-    ScRangeData*            operator[]( const sal_uInt16 nIndex) const
-                             { return (ScRangeData*)At(nIndex); }
-    virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-    virtual sal_Bool            IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
+    typedef DataType::const_iterator const_iterator;
+    typedef DataType::iterator iterator;
 
-//UNUSED2009-05 ScRangeData*            GetRangeAtCursor( const ScAddress&, sal_Bool bStartOnly ) const;
-    SC_DLLPUBLIC ScRangeData*           GetRangeAtBlock( const ScRange& ) const;
+    ScRangeName();
+    ScRangeName(const ScRangeName& r);
 
-    SC_DLLPUBLIC sal_Bool                   SearchName( const String& rName, sal_uInt16& rPos ) const;
-                            // SearchNameUpper must be called with an upper-case search string
-    sal_Bool                    SearchNameUpper( const String& rUpperName, sal_uInt16& rPos ) const;
-    void                    UpdateReference(UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange,
-                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    void                    UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0);
-    void                    UpdateTranspose( const ScRange& rSource, const ScAddress& rDest );
-    void                    UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
-    virtual sal_Bool            Insert(ScDataObject* pScDataObject);
-    SC_DLLPUBLIC ScRangeData*           FindIndex(sal_uInt16 nIndex);
-    sal_uInt16                  GetSharedMaxIndex()             { return nSharedMaxIndex; }
-    void                    SetSharedMaxIndex(sal_uInt16 nInd)  { nSharedMaxIndex = nInd; }
-    sal_uInt16                  GetEntryIndex();
+    SC_DLLPUBLIC const ScRangeData* findByRange(const ScRange& rRange) const;
+    SC_DLLPUBLIC ScRangeData* findByName(const rtl::OUString& rName);
+    SC_DLLPUBLIC const ScRangeData* findByName(const rtl::OUString& rName) const;
+    ScRangeData* findByUpperName(const rtl::OUString& rName);
+    const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
+    SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i);
+    void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
+                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
+    void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0, SCTAB nNewSheets = 1);
+    void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
+    void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
+
+    SC_DLLPUBLIC const_iterator begin() const;
+    SC_DLLPUBLIC const_iterator end() const;
+    SC_DLLPUBLIC iterator begin();
+    SC_DLLPUBLIC iterator end();
+    SC_DLLPUBLIC size_t size() const;
+    bool empty() const;
+    SC_DLLPUBLIC bool insert(ScRangeData* p);
+    void erase(const ScRangeData& r);
+    void erase(const iterator& itr);
+    void clear();
+    bool operator== (const ScRangeName& r) const;
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

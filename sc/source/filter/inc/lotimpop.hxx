@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,6 @@
 
 class ScFormulaCell;
 class LotusFontBuffer;
-class SvxBorderLine;
 
 
 class ImportLotus : public ImportTyp
@@ -167,3 +167,5 @@ inline void ImportLotus::Skip( const sal_uInt16 n )
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

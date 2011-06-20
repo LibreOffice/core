@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,9 +61,9 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
         eGlue( SC_CHARTGLUE_NA ),
         nStartCol(0),
         nStartRow(0),
-        bColHeaders( sal_False ),
-        bRowHeaders( sal_False ),
-        bDummyUpperLeft( sal_False )
+        bColHeaders( false ),
+        bRowHeaders( false ),
+        bDummyUpperLeft( false )
 {
     SetRangeList( ScRange( nStartColP, nStartRowP, nTab, nEndColP, nEndRowP, nTab ) );
     CheckColRowHeaders();
@@ -75,9 +76,9 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rR
         eGlue( SC_CHARTGLUE_NA ),
         nStartCol(0),
         nStartRow(0),
-        bColHeaders( sal_False ),
-        bRowHeaders( sal_False ),
-        bDummyUpperLeft( sal_False )
+        bColHeaders( false ),
+        bRowHeaders( false ),
+        bDummyUpperLeft( false )
 {
     if ( aRangeListRef.Is() )
         CheckColRowHeaders();
@@ -119,12 +120,13 @@ void ScChartPositioner::GlueState()
 {
     if ( eGlue != SC_CHARTGLUE_NA )
         return;
-    bDummyUpperLeft = sal_False;
-    ScRangePtr pR;
-    if ( aRangeListRef->Count() <= 1 )
+    bDummyUpperLeft = false;
+    ScRange* pR;
+    if ( aRangeListRef->size() <= 1 )
     {
-        if ( (pR = aRangeListRef->First())!=NULL )
+        if (  !aRangeListRef->empty() )
         {
+            pR = aRangeListRef->front();
             if ( pR->aStart.Tab() == pR->aEnd.Tab() )
                 eGlue = SC_CHARTGLUE_NONE;
             else
@@ -140,31 +142,26 @@ void ScChartPositioner::GlueState()
         }
         return;
     }
-//  sal_uLong nOldPos = aRangeListRef->GetCurPos();
 
-    pR = aRangeListRef->First();
+    pR = aRangeListRef->front();
     nStartCol = pR->aStart.Col();
     nStartRow = pR->aStart.Row();
     SCCOL nMaxCols, nEndCol;
     SCROW nMaxRows, nEndRow;
     nMaxCols = nEndCol = 0;
     nMaxRows = nEndRow = 0;
-    do
+    for ( size_t i = 1, nRanges = aRangeListRef->size(); i <= nRanges; ++i )     // <= so 1 extra pass after last item
     {   // umspannenden Bereich etc. feststellen
         SCCOLROW nTmp, n1, n2;
-        if ( (n1 = pR->aStart.Col()) < nStartCol )
-            nStartCol = static_cast<SCCOL>(n1);
-        if ( (n2 = pR->aEnd.Col()) > nEndCol )
-            nEndCol = static_cast<SCCOL>(n2);
-        if ( (nTmp = n2 - n1 + 1) > nMaxCols )
-            nMaxCols = static_cast<SCCOL>(nTmp);
-        if ( (n1 = pR->aStart.Row()) < nStartRow )
-            nStartRow = static_cast<SCROW>(n1);
-        if ( (n2 = pR->aEnd.Row()) > nEndRow )
-            nEndRow = static_cast<SCROW>(n2);
-        if ( (nTmp = n2 - n1 + 1) > nMaxRows )
-            nMaxRows = static_cast<SCROW>(nTmp);
-    } while ( (pR = aRangeListRef->Next())!=NULL );
+        if ( (n1 = pR->aStart.Col()) < nStartCol ) nStartCol = static_cast<SCCOL>(n1  );
+        if ( (n2 = pR->aEnd.Col()  ) > nEndCol   ) nEndCol   = static_cast<SCCOL>(n2  );
+        if ( (nTmp = n2 - n1 + 1   ) > nMaxCols  ) nMaxCols  = static_cast<SCCOL>(nTmp);
+        if ( (n1 = pR->aStart.Row()) < nStartRow ) nStartRow = static_cast<SCROW>(n1  );
+        if ( (n2 = pR->aEnd.Row()  ) > nEndRow   ) nEndRow   = static_cast<SCROW>(n2  );
+        if ( (nTmp = n2 - n1 + 1   ) > nMaxRows  ) nMaxRows  = static_cast<SCROW>(nTmp);
+        if ( i < nRanges )                      // in last pass; i = nRanges so don't use at()
+            pR = (*aRangeListRef)[i];
+    }
     SCCOL nC = nEndCol - nStartCol + 1;
     if ( nC == 1 )
     {
@@ -197,8 +194,9 @@ void ScChartPositioner::GlueState()
 
     SCCOL nCol, nCol1, nCol2;
     SCROW nRow, nRow1, nRow2;
-    for ( pR = aRangeListRef->First(); pR; pR = aRangeListRef->Next() )
+    for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
     {   // Selektionen 2D als belegt markieren
+        pR = (*aRangeListRef)[i];
         nCol1 = pR->aStart.Col() - nStartCol;
         nCol2 = pR->aEnd.Col() - nStartCol;
         nRow1 = pR->aStart.Row() - nStartRow;
@@ -212,7 +210,7 @@ void ScChartPositioner::GlueState()
     }
     sal_Bool bGlue = sal_True;
 
-    sal_Bool bGlueCols = sal_False;
+    sal_Bool bGlueCols = false;
     for ( nCol = 0; bGlue && nCol < nC; nCol++ )
     {   // Spalten probieren durchzugehen und als frei markieren
         p = pA + (sal_uLong)nCol * nR;
@@ -223,7 +221,7 @@ void ScChartPositioner::GlueState()
                 // moeglich. Am Rand koennte ok sein, wenn in dieser Spalte
                 // in jeder belegten Zeile einer belegt ist.
                 if ( nRow > 0 && nCol > 0 )
-                    bGlue = sal_False;      // nCol==0 kann DummyUpperLeft sein
+                    bGlue = false;      // nCol==0 kann DummyUpperLeft sein
                 else
                     nRow = nR;
             }
@@ -237,7 +235,7 @@ void ScChartPositioner::GlueState()
         }
     }
 
-    sal_Bool bGlueRows = sal_False;
+    sal_Bool bGlueRows = false;
     for ( nRow = 0; bGlue && nRow < nR; nRow++ )
     {   // Zeilen probieren durchzugehen und als frei markieren
         p = pA + nRow;
@@ -246,7 +244,7 @@ void ScChartPositioner::GlueState()
             if ( *p == nOccu )
             {
                 if ( nCol > 0 && nRow > 0 )
-                    bGlue = sal_False;      // nRow==0 kann DummyUpperLeft sein
+                    bGlue = false;      // nRow==0 kann DummyUpperLeft sein
                 else
                     nCol = nC;
             }
@@ -267,7 +265,7 @@ void ScChartPositioner::GlueState()
     {   // ein unberuehrtes Feld heisst, dass es weder spaltenweise noch
         // zeilenweise zu erreichen war, also nichts zusamenzufassen
         if ( *p == nHole )
-            bGlue = sal_False;
+            bGlue = false;
     }
     if ( bGlue )
     {
@@ -297,32 +295,34 @@ void ScChartPositioner::CheckColRowHeaders()
     sal_Bool bColStrings = sal_True;
     sal_Bool bRowStrings = sal_True;
     GlueState();
-    if ( aRangeListRef->Count() == 1 )
+    if ( aRangeListRef->size() == 1 )
     {
-        aRangeListRef->First()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+        aRangeListRef->front()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         if ( nCol1 > nCol2 || nRow1 > nRow2 )
-            bColStrings = bRowStrings = sal_False;
+            bColStrings = bRowStrings = false;
         else
         {
             for (iCol=nCol1; iCol<=nCol2 && bColStrings; iCol++)
             {
                 if (lcl_hasValueDataButNoDates( pDocument, iCol, nRow1, nTab1 ))
-                        bColStrings = sal_False;
+                        bColStrings = false;
             }
             for (iRow=nRow1; iRow<=nRow2 && bRowStrings; iRow++)
             {
                 if (lcl_hasValueDataButNoDates( pDocument, nCol1, iRow, nTab1 ))
-                        bRowStrings = sal_False;
+                        bRowStrings = false;
             }
         }
     }
     else
     {
         sal_Bool bVert = (eGlue == SC_CHARTGLUE_NONE || eGlue == SC_CHARTGLUE_ROWS);
-        for ( ScRangePtr pR = aRangeListRef->First();
-                pR && (bColStrings || bRowStrings);
-                pR = aRangeListRef->Next() )
+        for ( size_t i = 0, nRanges = aRangeListRef->size();
+              (i < nRanges) && (bColStrings || bRowStrings);
+              ++i
+            )
         {
+            ScRange* pR = (*aRangeListRef)[i];
             pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
             sal_Bool bTopRow = (nRow1 == nStartRow);
             if ( bRowStrings && (bVert || nCol1 == nStartCol) )
@@ -332,7 +332,7 @@ void ScChartPositioner::CheckColRowHeaders()
                     for (iRow=nRow1; iRow<=nRow2 && bRowStrings; iRow++)
                     {
                         if (lcl_hasValueDataButNoDates( pDocument, nCol1, iRow, nTab1 ))
-                                bRowStrings = sal_False;
+                                bRowStrings = false;
                     }
             }
             if ( bColStrings && bTopRow )
@@ -341,7 +341,7 @@ void ScChartPositioner::CheckColRowHeaders()
                     for (iCol=nCol1; iCol<=nCol2 && bColStrings; iCol++)
                     {
                         if (lcl_hasValueDataButNoDates( pDocument, iCol, nRow1, nTab1 ))
-                                bColStrings = sal_False;
+                                bColStrings = false;
                     }
             }
         }
@@ -388,12 +388,12 @@ void ScChartPositioner::CreatePositionMap()
     Table* pCols = new Table;
     Table* pNewRowTable = new Table;
     ScAddress* pNewAddress = new ScAddress;
-    ScRangePtr pR;
     Table* pCol;
     ScAddress* pPos;
     SCROW nNoGlueRow = 0;
-    for ( pR = aRangeListRef->First(); pR; pR = aRangeListRef->Next() )
+    for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
     {
+        ScRange* pR = (*aRangeListRef)[i];
         pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         for ( nTab = nTab1; nTab <= nTab2; nTab++ )
         {
@@ -457,7 +457,6 @@ void ScChartPositioner::CreatePositionMap()
 
     if ( nColCount==0 || nRowCount==0 )
     {   // einen Eintrag ohne Daten erzeugen
-        pR = aRangeListRef->First();
         if ( pCols->Count() > 0 )
             pCol = (Table*) pCols->First();
         else
@@ -519,7 +518,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
         nColCount( nChartCols ),
         nRowCount( nChartRows )
 {
-    DBG_ASSERT( nColCount && nRowCount, "ScChartPositionMap without dimension" );
+    OSL_ENSURE( nColCount && nRowCount, "ScChartPositionMap without dimension" );
 
     ScAddress* pPos;
     SCCOL nCol;
@@ -605,35 +604,4 @@ ScChartPositionMap::~ScChartPositionMap()
     delete [] ppRowHeader;
 }
 
-
-//UNUSED2009-05 ScRangeListRef ScChartPositionMap::GetColRanges( SCCOL nChartCol ) const
-//UNUSED2009-05 {
-//UNUSED2009-05     ScRangeListRef xRangeList = new ScRangeList;
-//UNUSED2009-05     if ( nChartCol < nColCount )
-//UNUSED2009-05     {
-//UNUSED2009-05         sal_uLong nStop = GetIndex( nChartCol, nRowCount );
-//UNUSED2009-05         for ( sal_uLong nIndex = GetIndex( nChartCol, 0 ); nIndex < nStop; nIndex++ )
-//UNUSED2009-05         {
-//UNUSED2009-05             if ( ppData[ nIndex ] )
-//UNUSED2009-05                 xRangeList->Join( *ppData[ nIndex ] );
-//UNUSED2009-05         }
-//UNUSED2009-05     }
-//UNUSED2009-05     return xRangeList;
-//UNUSED2009-05 }
-
-
-//UNUSED2009-05 ScRangeListRef ScChartPositionMap::GetRowRanges( SCROW nChartRow ) const
-//UNUSED2009-05 {
-//UNUSED2009-05     ScRangeListRef xRangeList = new ScRangeList;
-//UNUSED2009-05     if ( nChartRow < nRowCount )
-//UNUSED2009-05     {
-//UNUSED2009-05         sal_uLong nStop = GetIndex( nColCount, nChartRow );
-//UNUSED2009-05         for ( sal_uLong nIndex = GetIndex( 0, nChartRow ); nIndex < nStop;
-//UNUSED2009-05                 nIndex += nRowCount )
-//UNUSED2009-05         {
-//UNUSED2009-05             if ( ppData[ nIndex ] )
-//UNUSED2009-05                 xRangeList->Join( *ppData[ nIndex ] );
-//UNUSED2009-05         }
-//UNUSED2009-05     }
-//UNUSED2009-05     return xRangeList;
-//UNUSED2009-05 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

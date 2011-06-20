@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,21 +28,11 @@
 #ifndef _SC_ZOOMSLIDERTBCONTRL_HXX
 #define _SC_ZOOMSLIDERTBCONTRL_HXX
 
-#ifndef _WINDOW_HXX        //autogen
 #include <vcl/window.hxx>
-#endif
-#ifndef _SFXPOOLITEM_HXX   //autogen
 #include <svl/poolitem.hxx>
-#endif
-#ifndef _SFXTBXCTRL_HXX    //autogen
 #include <sfx2/tbxctrl.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
 #include <svx/zoomslideritem.hxx>
 
 
@@ -85,3 +76,5 @@ protected:
     virtual void    Paint( const Rectangle& rRect );
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

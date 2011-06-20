@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 #include <rtl/ustrbuf.hxx>
 
@@ -37,9 +36,7 @@
 #include "xmlimprt.hxx"
 #include "xmlcelli.hxx"
 #include "docuno.hxx"
-#include "global.hxx"
 #include "document.hxx"
-#include "XMLConverter.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -48,28 +45,29 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+ScXMLNamedExpressionsContext::GlobalInserter::GlobalInserter(ScXMLImport& rImport) : mrImport(rImport) {}
+
+void ScXMLNamedExpressionsContext::GlobalInserter::insert(ScMyNamedExpression* pExp)
 {
-/*  sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
-    {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+    if (pExp)
+        mrImport.AddNamedExpression(pExp);
+}
 
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetNamedRangeAttrTokenMap();
+ScXMLNamedExpressionsContext::SheetLocalInserter::SheetLocalInserter(ScXMLImport& rImport, SCTAB nTab) :
+    mrImport(rImport), mnTab(nTab) {}
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
-        {
-        }
-    }*/
+void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpression* pExp)
+{
+    mrImport.AddNamedExpression(mnTab, pExp);
+}
+
+ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext(
+    ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */,
+    Inserter* pInserter ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    mpInserter(pInserter)
+{
     rImport.LockSolarMutex();
 }
 
@@ -89,16 +87,12 @@ SvXMLImportContext *ScXMLNamedExpressionsContext::CreateChildContext( sal_uInt16
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     case XML_TOK_NAMED_EXPRESSIONS_NAMED_RANGE:
-        pContext = new ScXMLNamedRangeContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList//,
-                                                      //this
-                                                      );
+        pContext = new ScXMLNamedRangeContext(
+            GetScImport(), nPrefix, rLName, xAttrList, mpInserter.get() );
         break;
     case XML_TOK_NAMED_EXPRESSIONS_NAMED_EXPRESSION:
-        pContext = new ScXMLNamedExpressionContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList//,
-                                                      //this
-                                                      );
+        pContext = new ScXMLNamedExpressionContext(
+            GetScImport(), nPrefix, rLName, xAttrList, mpInserter.get() );
         break;
     }
 
@@ -114,13 +108,18 @@ void ScXMLNamedExpressionsContext::EndElement()
     // because it has to be set after the Database Ranges
 }
 
-ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+ScXMLNamedRangeContext::ScXMLNamedRangeContext(
+    ScXMLImport& rImport,
+    sal_uInt16 nPrfx,
+    const ::rtl::OUString& rLName,
+    const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+    ScXMLNamedExpressionsContext::Inserter* pInserter ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    mpInserter(pInserter)
 {
+    if (!mpInserter)
+        return;
+
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
     // A simple table:cell-range-address is not a formula expression, stored
     // without [] brackets but with dot, .A1
@@ -162,7 +161,7 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
         }
     }
     pNamedExpression->bIsExpression = sal_False;
-    GetScImport().AddNamedExpression(pNamedExpression);
+    mpInserter->insert(pNamedExpression);
 }
 
 ScXMLNamedRangeContext::~ScXMLNamedRangeContext()
@@ -174,10 +173,6 @@ SvXMLImportContext *ScXMLNamedRangeContext::CreateChildContext( sal_uInt16 nPref
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-/*  const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLName ) )
-    {
-    }*/
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
@@ -185,13 +180,16 @@ void ScXMLNamedRangeContext::EndElement()
 {
 }
 
-ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
+    ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+    ScXMLNamedExpressionsContext::Inserter* pInserter ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    mpInserter(pInserter)
 {
+    if (!mpInserter)
+        return;
+
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetNamedExpressionAttrTokenMap());
@@ -225,7 +223,7 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
         }
     }
     pNamedExpression->bIsExpression = sal_True;
-    GetScImport().AddNamedExpression(pNamedExpression);
+    mpInserter->insert(pNamedExpression);
 }
 
 ScXMLNamedExpressionContext::~ScXMLNamedExpressionContext()
@@ -237,10 +235,6 @@ SvXMLImportContext *ScXMLNamedExpressionContext::CreateChildContext( sal_uInt16 
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-/*  const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLName ) )
-    {
-    }*/
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );;
 }
 
@@ -248,3 +242,4 @@ void ScXMLNamedExpressionContext::EndElement()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

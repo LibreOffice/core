@@ -104,7 +104,6 @@ String SCSTR_QHELP_BTNCALC
 
 String SCSTR_QHELP_BTNOK
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */
     Text [ en-US ] = "Accept" ;
 };
 
@@ -130,11 +129,11 @@ String SCSTR_QHELP_BTNEQUAL
 #define DEFAULT_IDLIST \
     IdList = {                                          \
         /* Eingabezeile */                              \
-        SID_INPUT_FUNCTION;             /* 20047 */     \
-        SID_INPUT_SUM;                  /* 20048 */     \
-        SID_INPUT_EQUAL;                /* 20049 */     \
-        SID_INPUT_CANCEL;                               \
-        SID_INPUT_OK;                                   \
+        SID_INPUT_FUNCTION;             /* 26047 */     \
+        SID_INPUT_SUM;                  /* 26048 */     \
+        SID_INPUT_EQUAL;                /* 26049 */     \
+        SID_INPUT_CANCEL;               /* 26050 */     \
+        SID_INPUT_OK;                   /* 26051 */     \
     };                                                  \
     IdCount = {                                         \
         5;                                              \
@@ -151,19 +150,5 @@ ImageList RID_DEFAULTIMAGELIST_LC
 {
     Prefix = "lc";
     MaskColor = STD_MASKCOLOR ;
-    DEFAULT_IDLIST
-};
-
-ImageList RID_DEFAULTIMAGELIST_SCH
-{
-    Prefix = "sch";
-    MaskColor = SC_HC_MASKCOLOR ;
-    DEFAULT_IDLIST
-};
-
-ImageList RID_DEFAULTIMAGELIST_LCH
-{
-    Prefix = "lch";
-    MaskColor = SC_HC_MASKCOLOR ;
     DEFAULT_IDLIST
 };

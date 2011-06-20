@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,8 +140,6 @@ enum
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -152,7 +151,6 @@ void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOut
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void WrappedScaleTextProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                  , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -163,3 +161,5 @@ void WrappedScaleTextProperties::addWrappedProperties( std::vector< WrappedPrope
 } //namespace wrapper
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

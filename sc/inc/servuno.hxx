@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@ class String;
 class ScDocShell;
 
 
-//! AutoFormat wirklich hier oder besser global??????
+//! AutoFormat here or global??????
 
 #define SC_SERVICE_SHEET        0
 #define SC_SERVICE_URLFIELD     1
@@ -70,7 +71,7 @@ class ScDocShell;
 #define SC_SERVICE_IMAP_CIRC    25
 #define SC_SERVICE_IMAP_POLY    26
 
-// #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+// Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #define SC_SERVICE_EXPORT_GOR   27
 #define SC_SERVICE_IMPORT_GOR   28
 #define SC_SERVICE_EXPORT_EOR   29
@@ -104,11 +105,10 @@ class ScDocShell;
 class ScServiceProvider
 {
 public:
-                            // pDocShell wird nicht fuer alle Services benoetigt
+                            // pDocShell is not needed for all Services
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                             MakeInstance( sal_uInt16 nType, ScDocShell* pDocShell );
     static ::com::sun::star::uno::Sequence<rtl::OUString> GetAllServiceNames();
-//UNUSED2008-05  static String           GetProviderName(sal_uInt16 nObjectType);
     static sal_uInt16       GetProviderType(const String& rServiceName);
 };
 
@@ -116,3 +116,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ private:
     com::sun::star::uno::Reference<
         com::sun::star::sheet::XDimensionsSupplier> xSource;
     ScAddress               aStartPos;
-    sal_Bool                    bDoFilter;
+    bool                    bDoFilter;
     ScDPOutLevelData*       pColFields;
     ScDPOutLevelData*       pRowFields;
     ScDPOutLevelData*       pPageFields;
@@ -90,7 +91,7 @@ private:
     com::sun::star::uno::Sequence<
         com::sun::star::uno::Sequence<
             com::sun::star::sheet::DataResult> > aData;
-    sal_Bool                    bResultsError;
+    bool                    bResultsError;
     bool                    mbHasDataLayout;
     String                  aDataDescription;
 
@@ -102,8 +103,8 @@ private:
     sal_uInt32                  nSingleNumFmt;
 
     // Output geometry related parameters
-    sal_Bool                    bSizesValid;
-    sal_Bool                    bSizeOverflow;
+    bool                    bSizesValid;
+    bool                    bSizeOverflow;
     long                    nColCount;
     long                    nRowCount;
     long                    nHeaderSize;
@@ -135,7 +136,7 @@ public:
                     ScDPOutput( ScDocument* pD,
                                 const com::sun::star::uno::Reference<
                                     com::sun::star::sheet::XDimensionsSupplier>& xSrc,
-                                const ScAddress& rPos, sal_Bool bFilter );
+                                const ScAddress& rPos, bool bFilter );
                     ~ScDPOutput();
 
     void            SetPosition( const ScAddress& rPos );
@@ -143,7 +144,7 @@ public:
     void            Output();           //! Refresh?
     ScRange         GetOutputRange( sal_Int32 nRegionType = ::com::sun::star::sheet::DataPilotOutputRangeType::WHOLE );
     long            GetHeaderRows();
-    sal_Bool            HasError();         // range overflow or exception from source
+    bool            HasError();         // range overflow or exception from source
 
     void            GetPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTablePositionData& rPosData);
 
@@ -172,3 +173,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

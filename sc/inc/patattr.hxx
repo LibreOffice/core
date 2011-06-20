@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,7 +82,7 @@ public:
     static const SfxPoolItem& GetItem( sal_uInt16 nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet );
     const SfxPoolItem&      GetItem( sal_uInt16 nWhich, const SfxItemSet* pCondSet ) const;
 
-                            // pWhich sind keine Ranges, sondern einzelne IDs, 0-terminiert
+                            // pWhich are no ranges, but single IDs, 0-terminated
     sal_Bool                    HasItemsSet( const sal_uInt16* pWhich ) const;
     void                    ClearItems( const sal_uInt16* pWhich );
 
@@ -133,19 +134,6 @@ public:
                                 with text encoding RTL_TEXTENC_SYMBOL */
     sal_Bool                    IsSymbolFont() const;
 
-//UNUSED2008-05                          /** Create a FontToSubsFontConverter if needed for
-//UNUSED2008-05                              this pattern, else return 0.
-//UNUSED2008-05
-//UNUSED2008-05                              @param nFlags is the bit mask which shall be
-//UNUSED2008-05                              used for CreateFontToSubsFontConverter().
-//UNUSED2008-05
-//UNUSED2008-05                              The converter must be destroyed by the caller
-//UNUSED2008-05                              using DestroyFontToSubsFontConverter() which
-//UNUSED2008-05                              should be accomplished using the
-//UNUSED2008-05                              ScFontToSubsFontConverter_AutoPtr
-//UNUSED2008-05                           */
-//UNUSED2008-05  FontToSubsFontConverter GetSubsFontConverter( sal_uLong nFlags ) const;
-
     sal_uLong                   GetNumberFormat( SvNumberFormatter* ) const;
     sal_uLong                   GetNumberFormat( SvNumberFormatter* pFormatter,
                                                 const SfxItemSet* pCondSet ) const;
@@ -191,3 +179,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

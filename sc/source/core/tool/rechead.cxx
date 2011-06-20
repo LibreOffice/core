@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "rechead.hxx"
 #include "scerrors.hxx"
 
@@ -55,7 +54,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     rStream >> nID;
     if (nID != SCID_SIZES)
     {
-        DBG_ERROR("SCID_SIZES nicht gefunden");
+        OSL_FAIL("SCID_SIZES nicht gefunden");
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
@@ -80,7 +79,7 @@ ScMultipleReadHeader::~ScMultipleReadHeader()
 {
     if ( pMemStream && pMemStream->Tell() != pMemStream->GetEndOfData() )
     {
-        DBG_ERRORFILE( "Sizes nicht vollstaendig gelesen" );
+        OSL_FAIL( "Sizes nicht vollstaendig gelesen" );
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SCWARN_IMPORT_INFOLOST );
     }
@@ -93,7 +92,7 @@ ScMultipleReadHeader::~ScMultipleReadHeader()
 void ScMultipleReadHeader::EndEntry()
 {
     sal_uLong nPos = rStream.Tell();
-    DBG_ASSERT( nPos <= nEntryEnd, "zuviel gelesen" );
+    OSL_ENSURE( nPos <= nEntryEnd, "zuviel gelesen" );
     if ( nPos != nEntryEnd )
     {
         if ( rStream.GetError() == SVSTREAM_OK )
@@ -111,7 +110,7 @@ void ScMultipleReadHeader::StartEntry()
     (*pMemStream) >> nEntrySize;
 
     nEntryEnd = nPos + nEntrySize;
-    DBG_ASSERT( nEntryEnd <= nTotalEnd, "zuviele Eintraege gelesen" );
+    OSL_ENSURE( nEntryEnd <= nTotalEnd, "zuviele Eintraege gelesen" );
 }
 
 sal_uLong ScMultipleReadHeader::BytesLeft() const
@@ -120,7 +119,7 @@ sal_uLong ScMultipleReadHeader::BytesLeft() const
     if (nReadEnd <= nEntryEnd)
         return nEntryEnd-nReadEnd;
 
-    DBG_ERROR("Fehler bei ScMultipleReadHeader::BytesLeft");
+    OSL_FAIL("Fehler bei ScMultipleReadHeader::BytesLeft");
     return 0;
 }
 
@@ -171,3 +170,4 @@ void ScMultipleWriteHeader::StartEntry()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

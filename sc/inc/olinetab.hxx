@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@ class ScOutlineEntry : public ScDataObject
 
 public:
                             ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize,
-                                                bool bNewHidden = sal_False );
+                                                bool bNewHidden = false );
                             ScOutlineEntry( const ScOutlineEntry& rEntry );
 
     virtual ScDataObject*       Clone() const;
@@ -55,8 +56,8 @@ public:
     SCCOLROW                GetStart() const    { return nStart; }
     SCSIZE                  GetSize() const     { return nSize; }
     SCCOLROW                GetEnd() const      { return nStart+nSize-1; }
-    bool                    IsHidden() const    { return bHidden; }             // Gruppe versteckt
-    bool                    IsVisible() const   { return bVisible; }            // Control sichtbar?
+    bool                    IsHidden() const    { return bHidden; }             // group hidden
+    bool                    IsVisible() const   { return bVisible; }            // control visible?
 
     void                    Move( SCsCOLROW nDelta );
     void                    SetSize( SCSIZE nNewSize );
@@ -101,7 +102,7 @@ public:
                                                 sal_uInt16& rFindLevel ) const;
 
     sal_Bool                    Insert( SCCOLROW nStartPos, SCCOLROW nEndPos, sal_Bool& rSizeChanged,
-                                    sal_Bool bHidden = sal_False, sal_Bool bVisible = sal_True );
+                                    sal_Bool bHidden = false, sal_Bool bVisible = sal_True );
     sal_Bool                    Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, sal_Bool& rSizeChanged );
 
     ScOutlineEntry*         GetEntry( sal_uInt16 nLevel, sal_uInt16 nIndex ) const;
@@ -114,7 +115,7 @@ public:
                                 sal_uInt16& rnIndex ) const;
 
     void                    SetVisibleBelow( sal_uInt16 nLevel, sal_uInt16 nEntry, sal_Bool bValue,
-                                                sal_Bool bSkipHidden = sal_False );
+                                                sal_Bool bSkipHidden = false );
 
     void                    GetRange( SCCOLROW& rStart, SCCOLROW& rEnd ) const;
     void                    ExtendBlock( sal_uInt16 nLevel, SCCOLROW& rBlkStart, SCCOLROW& rBlkEnd );
@@ -146,7 +147,7 @@ public:
 
     sal_Bool                    TestInsertCol( SCSIZE nSize );
     void                    InsertCol( SCCOL nStartCol, SCSIZE nSize );
-    sal_Bool                    DeleteCol( SCCOL nStartCol, SCSIZE nSize ); // TRUE: Undo nur ueber Original
+    sal_Bool                    DeleteCol( SCCOL nStartCol, SCSIZE nSize ); // TRUE: Undo only using original
     sal_Bool                    TestInsertRow( SCSIZE nSize );
     void                    InsertRow( SCROW nStartRow, SCSIZE nSize );
     sal_Bool                    DeleteRow( SCROW nStartRow, SCSIZE nSize );
@@ -177,3 +178,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

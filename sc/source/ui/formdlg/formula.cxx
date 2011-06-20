@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,7 +97,6 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     // title has to be from the view that opened the dialog,
     // even if it's not the current view
 
-    SfxObjectShell* pParentDoc = NULL;
     if ( pB )
     {
         SfxDispatcher* pMyDisp = pB->GetDispatcher();
@@ -107,15 +107,10 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
             {
                 pScViewShell = PTR_CAST( ScTabViewShell, pMyViewFrm->GetViewShell() );
                 if( pScViewShell )
-                    pScViewShell->UpdateInputHandler(sal_True);
-                pParentDoc = pMyViewFrm->GetObjectShell();
+                    pScViewShell->UpdateInputHandler(true);
             }
         }
     }
-    //if ( !pParentDoc && pScViewShell )                    // use current only if above fails
-    //  pParentDoc = pScViewShell->GetObjectShell();
-    //if ( pParentDoc )
-    //  aDocName = pParentDoc->GetTitle();
 
     if ( pDoc == NULL )
         pDoc = pViewData->GetDocument();
@@ -127,12 +122,12 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(pScViewShell);
 
-    DBG_ASSERT( pInputHdl, "Missing input handler :-/" );
+    OSL_ENSURE( pInputHdl, "Missing input handler :-/" );
 
     if ( pInputHdl )
         pInputHdl->NotifyChange( NULL );
 
-    m_aHelper.enableInput( sal_False );
+    m_aHelper.enableInput( false );
     m_aHelper.EnableSpreadsheets();
     m_aHelper.Init();
     m_aHelper.SetDispatcherLock( sal_True );
@@ -157,7 +152,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pData->SetInputHandler(pScMod->GetInputHdl());
         pData->SetDocShell(pViewData->GetDocShell());
 
-        DBG_ASSERT(pData,"FormEditData ist nicht da");
+        OSL_ENSURE(pData,"FormEditData ist nicht da");
 
         formula::FormulaDlgMode eMode = FORMULA_FORMDLG_FORMULA;            // Default...
 
@@ -166,14 +161,14 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         String aFormula;
         pDoc->GetFormula( nCol, nRow, nTab, aFormula );
         sal_Bool bEdit   = ( aFormula.Len() > 1 );
-        sal_Bool bMatrix = sal_False;
+        sal_Bool bMatrix = false;
         if ( bEdit )
         {
             bMatrix = CheckMatrix(aFormula);
 
             xub_StrLen nFStart = 0;
             xub_StrLen nFEnd   = 0;
-            if ( GetFormulaHelper().GetNextFunc( aFormula, sal_False, nFStart, &nFEnd) )
+            if ( GetFormulaHelper().GetNextFunc( aFormula, false, nFStart, &nFEnd) )
             {
                 pScMod->InputReplaceSelection( aFormula );
                 pScMod->InputSetSelection( nFStart, nFEnd );
@@ -184,7 +179,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                 pData->SetFStart( nFStart );
             }
             else
-                bEdit = sal_False;
+                bEdit = false;
         }
 
         if ( !bEdit )
@@ -197,7 +192,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
             pScMod->InputSetSelection( 1, aNewFormula.Len()+1 );
             xub_StrLen PrivStart, PrivEnd;
             pScMod->InputGetSelection( PrivStart, PrivEnd);
-            SetMeText(pScMod->InputGetFormulaStr(),PrivStart, PrivEnd,bMatrix,sal_False,sal_False);
+            SetMeText(pScMod->InputGetFormulaStr(),PrivStart, PrivEnd,bMatrix,false,false);
 
             pData->SetFStart( 1 );      // hinter dem "="
         }
@@ -208,7 +203,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
 
         Update(rStrExp);
-    } // if (!pData)
+    }
 
 }
 
@@ -270,7 +265,7 @@ void ScFormulaDlg::fill()
     }
 }
 
-__EXPORT ScFormulaDlg::~ScFormulaDlg()
+ScFormulaDlg::~ScFormulaDlg()
 {
     ScModule* pScMod = SC_MOD();
     ScFormEditData* pData = pScMod->GetFormEditData();
@@ -286,7 +281,7 @@ __EXPORT ScFormulaDlg::~ScFormulaDlg()
 
 sal_Bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
 {
-    sal_Bool bAlive = sal_False;
+    sal_Bool bAlive = false;
 
     //  gehoert der InputHandler zu irgendeiner ViewShell ?
 
@@ -325,9 +320,9 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
 }
 
 
-sal_Bool __EXPORT ScFormulaDlg::Close()
+sal_Bool ScFormulaDlg::Close()
 {
-    DoEnter(sal_False);
+    DoEnter(false);
     return sal_True;
 }
 
@@ -340,7 +335,7 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
 
     ::std::auto_ptr<ScFormulaCell> pFCell( new ScFormulaCell( pDoc, aCursorPos, rStrExp ) );
 
-    // #35521# HACK! um bei ColRowNames kein #REF! zu bekommen,
+    // HACK! um bei ColRowNames kein #REF! zu bekommen,
     // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
     // eingefuegt wird, bei der Einzeldarstellung aber als
     // single-Zellbezug interpretiert wird
@@ -357,7 +352,7 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
             pFCell.reset( new ScFormulaCell( pDoc, aCursorPos, aBraced ) );
         }
         else
-            bColRowName = sal_False;
+            bColRowName = false;
     }
 
     sal_uInt16 nErrCode = pFCell->GetErrCode();
@@ -405,6 +400,7 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
 //  virtuelle Methoden von ScAnyRefDlg:
 void ScFormulaDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
+    pEdit->SetSelection(Selection(0, SELECTION_MAX));
     ::std::pair<formula::RefButton*,formula::RefEdit*> aPair = RefInputStartBefore( pEdit, pButton );
     m_aHelper.RefInputStart( aPair.second, aPair.first);
     RefInputStartAfter( aPair.second, aPair.first );
@@ -434,7 +430,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
         {
             //  Referenz auf anderes Dokument - wie inputhdl.cxx
 
-            DBG_ASSERT(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
+            OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
             String aTmp;
             rRef.Format( aTmp, SCA_VALID|SCA_TAB_3D, pRefDoc );     // immer 3d
@@ -452,10 +448,24 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
         }
         else
         {
-            sal_uInt16 nFmt = ( rRef.aStart.Tab() == aCursorPos.Tab() )
-                                ? SCA_VALID
-                                : SCA_VALID | SCA_TAB_3D;
-            rRef.Format( aRefStr, nFmt, pRefDoc, pRefDoc->GetAddressConvention() );
+            // We can't use ScRange::Format here because in R1C1 mode we need
+            // to display the reference position relative to the cursor
+            // position.
+            ScTokenArray aArray;
+            ScComplexRefData aRefData;
+            aRefData.InitRangeRel(rRef, aCursorPos);
+            bool bSingle = aRefData.Ref1 == aRefData.Ref2;
+            if (aCursorPos.Tab() != rRef.aStart.Tab())
+                aRefData.Ref1.SetFlag3D(true);
+            if (bSingle)
+                aArray.AddSingleReference(aRefData.Ref1);
+            else
+                aArray.AddDoubleReference(aRefData);
+            ScCompiler aComp(pDoc, aCursorPos, aArray);
+            aComp.SetGrammar(pDoc->GetGrammar());
+            ::rtl::OUStringBuffer aBuf;
+            aComp.CreateStringFromTokenArray(aBuf);
+            aRefStr = aBuf.makeStringAndClear();
         }
 
         UpdateParaWin(theSel,aRefStr);
@@ -474,7 +484,7 @@ sal_Bool ScFormulaDlg::IsDocAllowed(SfxObjectShell* pDocSh) const
     //  not allowed: different from this doc, and no name
     //  pDocSh is always a ScDocShell
     if ( pDocSh && ((ScDocShell*)pDocSh)->GetDocument() != pDoc && !pDocSh->HasName() )
-        return sal_False;
+        return false;
 
     return sal_True;        // everything else is allowed
 }
@@ -530,7 +540,7 @@ void ScFormulaDlg::AddRefEntry( )
 sal_Bool ScFormulaDlg::IsTableLocked( ) const
 {
     // per Default kann bei Referenzeingabe auch die Tabelle umgeschaltet werden
-    return sal_False;
+    return false;
 }
 void ScFormulaDlg::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton)
 {
@@ -549,9 +559,9 @@ void ScFormulaDlg::dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked)
     // Wenn durch Dokument-Umschalterei die Eingabezeile weg war/ist,
     // ist der String leer. Dann nicht die alte Formel loeschen.
     if ( !aStrItem.GetValue().Len() )
-        aRetItem.SetValue( sal_False );     // sal_False = Cancel
+        aRetItem.SetValue( false );     // sal_False = Cancel
 
-    m_aHelper.SetDispatcherLock( sal_False ); // Modal-Modus ausschalten
+    m_aHelper.SetDispatcherLock( false ); // Modal-Modus ausschalten
 
     clear();
 
@@ -665,3 +675,4 @@ table::CellAddress ScFormulaDlg::getReferencePosition() const
     return pArray;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

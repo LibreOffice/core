@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,15 +77,6 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //optional
-//    rOutProperties.push_back(
-//        Property( C2U( "FillTransparenceGradient" ),
-//                  FillProperties::PROP_FILL_TRANSPARENCE_GRADIENT,
-//                  ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
-//                  beans::PropertyAttribute::BOUND
-//                  | beans::PropertyAttribute::MAYBEDEFAULT
-//                  | beans::PropertyAttribute::MAYBEVOID ));
-
     rOutProperties.push_back(
         Property( C2U( "FillGradientName" ),
                   FillProperties::PROP_FILL_GRADIENT_NAME,
@@ -100,15 +92,6 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
-    //optional
-//    rOutProperties.push_back(
-//        Property( C2U( "FillGradient" ),
-//                  FillProperties::PROP_FILL_GRADIENT,
-//                  ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
-//                  beans::PropertyAttribute::BOUND
-//                  | beans::PropertyAttribute::MAYBEDEFAULT
-//                  | beans::PropertyAttribute::MAYBEVOID ));
-
     rOutProperties.push_back(
         Property( C2U( "FillHatchName" ),
                   FillProperties::PROP_FILL_HATCH_NAME,
@@ -116,15 +99,6 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    //optional
-//    rOutProperties.push_back(
-//        Property( C2U( "FillHatch" ),
-//                  FillProperties::PROP_FILL_HATCH,
-//                  ::getCppuType( reinterpret_cast< const drawing::Hatch * >(0)),
-//                  beans::PropertyAttribute::BOUND
-//                  | beans::PropertyAttribute::MAYBEDEFAULT
-//                  | beans::PropertyAttribute::MAYBEVOID ));
 
     //bitmap properties see lcl_AddPropertiesToVector_only_BitmapProperties()
 
@@ -145,22 +119,6 @@ void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< ::com::sun:
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    //optional
-//    rOutProperties.push_back(
-//        Property( C2U( "FillBitmap" ),
-//                  FillProperties::PROP_FILL_BITMAP,
-//                  ::getCppuType( reinterpret_cast< const uno::Reference< awt::XBitmap > * >(0)),
-//                  beans::PropertyAttribute::BOUND
-//                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-    //optional
-//    rOutProperties.push_back(
-//        Property( C2U( "FillBitmapURL" ),
-//                  FillProperties::PROP_FILL_BITMAP_URL,
-//                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
-//                  beans::PropertyAttribute::BOUND
-//                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "FillBitmapOffsetX" ),
@@ -274,3 +232,5 @@ void FillProperties::AddDefaultsToMap(
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

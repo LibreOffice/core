@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef SC_XINAME_HXX
 #define SC_XINAME_HXX
 
-#include <map>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include "xlname.hxx"
 #include "xiroot.hxx"
 
@@ -90,7 +91,7 @@ public:
     const XclImpName*   GetName( sal_uInt16 nXclNameIdx ) const;
 
 private:
-    typedef ScfDelList< XclImpName > XclImpNameList;
+    typedef boost::ptr_vector< XclImpName > XclImpNameList;
     XclImpNameList      maNameList;
 };
 
@@ -98,3 +99,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

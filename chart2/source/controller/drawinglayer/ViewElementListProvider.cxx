@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -221,54 +222,15 @@ FontList* ViewElementListProvider::getFontList() const
     if(!m_pFontList)
     {
         OutputDevice* pRefDev    = m_pDrawModelWrapper ? m_pDrawModelWrapper->getReferenceDevice() : NULL;
-        OutputDevice* pDefaultOut = Application::GetDefaultDevice();    // #67730#
+        OutputDevice* pDefaultOut = Application::GetDefaultDevice();
         m_pFontList = new FontList( pRefDev ? pRefDev    : pDefaultOut
                                 , pRefDev ? pDefaultOut : NULL
                                 , sal_False );
     }
     return m_pFontList;
 }
-
-/*
-SfxPrinter* ObjectPropertiesDialogParameter::getPrinter()
-{
-    //was old chart:
-    //SfxPrinter* SchChartDocShell::GetPrinter()
-
-    // OLE-Objekt: kein Printer anlegen ??? see old chart: :UpdateTablePointers
-    //@todo get printer from calc or other container
-    //return NULL;
-
-    SfxPrinter* pPrinter = NULL;
-    bool bOwnPrinter = true;
-    if (!pPrinter)
-    {
-        SfxBoolItem aItem(SID_PRINTER_NOTFOUND_WARN, sal_True);
-        // ItemSet mit speziellem Poolbereich anlegen
-        SfxItemSet* pSet = new SfxItemSet(GetPool(),
-                                          SID_PRINTER_NOTFOUND_WARN,
-                                          SID_PRINTER_NOTFOUND_WARN, 0);
-        pSet->Put(aItem);
-        pPrinter = new SfxPrinter(pSet); //@todo ->need to remember and delete
-        bOwnPrinter = sal_True;
-
-        MapMode aMapMode = pPrinter->GetMapMode();
-        aMapMode.SetMapUnit(MAP_100TH_MM);
-        pPrinter->SetMapMode(aMapMode);
-
-        if (pChDoc)
-        {
-            if (pPrinter != pChDoc->GetRefDevice())
-                pChDoc->SetRefDevice(pPrinter);
-
-            if (pPrinter != pChDoc->GetOutliner()->GetRefDevice())
-                pChDoc->GetOutliner()->SetRefDevice(pPrinter);
-        }
-    }
-    return pPrinter;
-}
-*/
-
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

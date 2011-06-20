@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 #include <vbahelper/helperdecl.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/unwrapargs.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
@@ -36,6 +38,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XlFileFormat.hpp>
+#include <ooo/vba/excel/XApplication.hpp>
 
 #include "scextopt.hxx"
 #include "vbaworksheet.hxx"
@@ -47,7 +50,7 @@
 #include "vbapalette.hxx"
 #include <osl/file.hxx>
 #include <stdio.h>
-#include "vbanames.hxx"  // Amelia Wang
+#include "vbanames.hxx"
 #include "nameuno.hxx"
 #include "docoptio.hxx"
 #include "unonames.hxx"
@@ -125,7 +128,7 @@ ScVbaWorkbook::Colors( const ::uno::Any& Index ) throw (::script::BasicErrorExce
 }
 
 ::sal_Int32 SAL_CALL
-ScVbaWorkbook::FileFormat(  ) throw (::script::BasicErrorException, ::uno::RuntimeException)
+ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
 {
         sal_Int32 aFileFormat = 0;
         rtl::OUString aFilterName;
@@ -133,56 +136,74 @@ ScVbaWorkbook::FileFormat(  ) throw (::script::BasicErrorException, ::uno::Runti
 
         // #FIXME - seems suspect should we not walk through the properties
         // to find the FilterName
-        if (aArgs[0].Name.equalsAscii( "FilterName")) {
+        if (aArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilterName"))) {
             aArgs[0].Value >>= aFilterName;
         } else {
            aArgs[1].Value >>= aFilterName;
         }
 
-        if (aFilterName.equalsAscii("Text - txt - csv (StarCalc)")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Text - txt - csv (StarCalc)"))) {
             aFileFormat = excel::XlFileFormat::xlCSV; //xlFileFormat.
         }
 
-        if (aFilterName.equalsAscii("DBF")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DBF"))) {
             aFileFormat = excel::XlFileFormat::xlDBF4;
         }
 
-        if (aFilterName.equalsAscii("DIF")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DIF"))) {
             aFileFormat = excel::XlFileFormat::xlDIF;
         }
 
-        if (aFilterName.equalsAscii("Lotus")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Lotus"))) {
             aFileFormat = excel::XlFileFormat::xlWK3;
         }
 
-        if (aFilterName.equalsAscii("MS Excel 4.0")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MS Excel 4.0"))) {
             aFileFormat = excel::XlFileFormat::xlExcel4Workbook;
         }
 
-        if (aFilterName.equalsAscii("MS Excel 5.0/95")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MS Excel 5.0/95"))) {
             aFileFormat = excel::XlFileFormat::xlExcel5;
         }
 
-        if (aFilterName.equalsAscii("MS Excel 97")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MS Excel 97"))) {
             aFileFormat = excel::XlFileFormat::xlExcel9795;
         }
 
-        if (aFilterName.equalsAscii("HTML (StarCalc)")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HTML (StarCalc)"))) {
             aFileFormat = excel::XlFileFormat::xlHtml;
         }
 
-        if (aFilterName.equalsAscii("calc_StarOffice_XML_Calc_Template")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc_StarOffice_XML_Calc_Template"))) {
             aFileFormat = excel::XlFileFormat::xlTemplate;
         }
 
-        if (aFilterName.equalsAscii("StarOffice XML (Calc)")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarOffice XML (Calc)"))) {
             aFileFormat = excel::XlFileFormat::xlWorkbookNormal;
         }
-        if (aFilterName.equalsAscii("calc8")) {
+        if (aFilterName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc8"))) {
             aFileFormat = excel::XlFileFormat::xlWorkbookNormal;
         }
 
         return aFileFormat;
+}
+
+// Convert Excel fileformat to OO file filter
+::rtl::OUString ScVbaWorkbook::convertFileFormat(sal_Int32 aFileFormat)
+{
+    rtl::OUString aFilterName;
+
+    switch(aFileFormat)
+    {
+        case excel::XlFileFormat::xlCSV:
+                aFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text - txt - csv (StarCalc)" ) );
+                break;
+        case excel::XlFileFormat::xlExcel9795:
+                aFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MS Excel 97" ) );
+                break;
+    }
+
+    return aFilterName;
 }
 
 void
@@ -213,14 +234,30 @@ ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< uno::Any> const & args,
     init();
 }
 
+namespace
+{
+    class theScVbaWorkbookUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScVbaWorkbookUnoTunnelId > {};
+}
+
+const uno::Sequence<sal_Int8>&
+ScVbaWorkbook::getUnoTunnelId()
+{
+    return theScVbaWorkbookUnoTunnelId::get().getSeq();
+}
+
 uno::Reference< excel::XWorksheet >
 ScVbaWorkbook::getActiveSheet() throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getCurrentExcelDoc( mxContext ), uno::UNO_SET_THROW );
     uno::Reference< sheet::XSpreadsheetView > xView( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XSpreadsheet > xSheet( xView->getActiveSheet(), uno::UNO_SET_THROW );
-    // #162503# return the original sheet module wrapper object, instead of a new instance
-    return uno::Reference< excel::XWorksheet >( excel::getUnoSheetModuleObj( xSheet ), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xSheetProps( xView->getActiveSheet(), uno::UNO_QUERY_THROW );
+    // return the original document module wrapper object, instead of a new instance
+    ::rtl::OUString aCodeName;
+    xSheetProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_CODENAME ) ) ) >>= aCodeName;
+    ScDocShell* pShell = excel::getDocShell( xModel );
+    if( !pShell )
+        throw uno::RuntimeException();
+    return uno::Reference< excel::XWorksheet >( getUnoDocModule( aCodeName, pShell ), uno::UNO_QUERY_THROW );
 }
 
 uno::Any SAL_CALL
@@ -259,6 +296,12 @@ ScVbaWorkbook::Activate() throw (uno::RuntimeException)
     VbaDocumentBase::Activate();
 }
 
+void
+ScVbaWorkbook::Protect( const uno::Any &aPassword ) throw (uno::RuntimeException)
+{
+    VbaDocumentBase::Protect( aPassword );
+}
+
 ::sal_Bool
 ScVbaWorkbook::getProtectStructure() throw (uno::RuntimeException)
 {
@@ -294,8 +337,52 @@ ScVbaWorkbook::SaveCopyAs( const rtl::OUString& sFileName ) throw ( uno::Runtime
     xStor->storeToURL( aURL, storeProps );
 }
 
+// Add Workbook.SaveAs.
+void
+ScVbaWorkbook::SaveAs( const rtl::OUString& FileName, const uno::Any& FileFormat, const uno::Any& /*CreateBackup*/ ) throw ( uno::RuntimeException)
+{
+    rtl::OUString aURL;
+    osl::FileBase::getFileURLFromSystemPath( FileName, aURL );
+    //if the input parameter "FileName" takes the form as "MyFile", we need to get the current directory and combine the current directory and the file name
+    INetURLObject aFileNameURL( aURL );
+    aURL = aFileNameURL.GetMainURL( INetURLObject::NO_DECODE );
+    if ( aURL.getLength() == 0 )
+    {
+        uno::Reference< excel::XApplication > xApplication ( Application(),uno::UNO_QUERY_THROW );
+        rtl::OUString aPathStr = xApplication->getDefaultFilePath();
+        rtl::OUString aPathURLStr;
+        osl::FileBase::getFileURLFromSystemPath( aPathStr, aPathURLStr );
+        INetURLObject aPathURL( aPathURLStr );
+        aPathURL.Append( FileName );
+        aURL = aPathURL.GetMainURL( INetURLObject::NO_DECODE );
+    }
+
+    uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
+
+    sal_Int32 aFileFormat = excel::XlFileFormat::xlExcel9795;
+    FileFormat >>= aFileFormat;
+
+    if (  FileName.indexOf('.') == -1 )
+    {
+        if ( aFileFormat == excel::XlFileFormat::xlExcel9795 )
+        {
+            aURL = aURL + rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".xls" ) );
+        }
+        else if ( aFileFormat == excel::XlFileFormat::xlCSV )
+        {
+            aURL = aURL + rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".csv" ) );
+        }
+    }
+
+    uno::Sequence<  beans::PropertyValue > storeProps(1);
+    storeProps[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+    storeProps[0].Value <<= convertFileFormat(aFileFormat);
+
+    xStor->storeAsURL( aURL, storeProps );
+}
+
 css::uno::Any SAL_CALL
-ScVbaWorkbook::Styles( const uno::Any& Item ) throw (uno::RuntimeException)
+ScVbaWorkbook::Styles( const::uno::Any& Item ) throw (uno::RuntimeException)
 {
     // quick look and Styles object doesn't seem to have a valid parent
     // or a least the object browser just shows an object that has no
@@ -306,7 +393,6 @@ ScVbaWorkbook::Styles( const uno::Any& Item ) throw (uno::RuntimeException)
     return uno::makeAny( dStyles );
 }
 
-// Amelia Wang
 uno::Any SAL_CALL
 ScVbaWorkbook::Names( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
@@ -345,6 +431,17 @@ ScVbaWorkbook::getCodeName() throw (css::uno::RuntimeException)
     return xModelProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CodeName" ) ) ).get< ::rtl::OUString >();
 }
 
+sal_Int64
+ScVbaWorkbook::getSomething(const uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException)
+{
+    if (rId.getLength() == 16 &&
+        0 == rtl_compareMemory( ScVbaWorksheet::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ))
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+    }
+    return 0;
+}
+
 namespace workbook
 {
 namespace sdecl = comphelper::service_decl;
@@ -354,3 +451,5 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ScVbaWorkbook",
     "ooo.vba.excel.Workbook" );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

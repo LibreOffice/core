@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include "macros.hxx"
 #include "ChartModelHelper.hxx"
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <com/sun/star/util/XUpdatable.hpp>
 
@@ -81,7 +82,7 @@ bool ChartRenderer::DoPaint(OutputDevice* pOutDev, const Rectangle& rLogicObject
             if( aContainerChartSize.Width != aChartSize.Width
                 || aContainerChartSize.Height != aChartSize.Height )
             {
-                DBG_ERROR("chart size does not equal size assumed by the container");
+                OSL_FAIL("chart size does not equal size assumed by the container");
                 //correct the state here on the fly -> let the container size win
                 ChartModelHelper::setPageSize( aContainerChartSize, xModel );
             }
@@ -99,7 +100,7 @@ bool ChartRenderer::DoPaint(OutputDevice* pOutDev, const Rectangle& rLogicObject
         {
             awt::Size aResolution(1000,1000);
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex());
+                SolarMutexGuard aGuard;
                 Rectangle aPixelRect( pOutDev->LogicToPixel( rLogicObjectRect ) );
                 aResolution.Width = aPixelRect.GetWidth();
                 aResolution.Height = aPixelRect.GetHeight();
@@ -112,7 +113,7 @@ bool ChartRenderer::DoPaint(OutputDevice* pOutDev, const Rectangle& rLogicObject
         if( xUpdatable.is() )
             xUpdatable->update();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         ExplicitValueProvider* pProvider = ExplicitValueProvider::getExplicitValueProvider( xChartView );
         if( !pProvider )
             return false;
@@ -176,3 +177,5 @@ Sequence< OUString > ChartRenderer::getSupportedServiceNames_Static()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

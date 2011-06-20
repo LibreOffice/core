@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-//#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase7.hxx>
 
@@ -131,7 +131,7 @@ class ScStyleFamilyObj : public ::cppu::WeakImplHelper4<
 {
 private:
     ScDocShell*             pDocShell;
-    SfxStyleFamily          eFamily;        // Familie
+    SfxStyleFamily          eFamily;        // Family
 
     ScStyleObj*             GetObjectByIndex_Impl(sal_uInt32 nIndex);
     ScStyleObj*             GetObjectByName_Impl(const rtl::OUString& Name);
@@ -223,7 +223,7 @@ class ScStyleObj : public ::cppu::WeakImplHelper7<
 private:
     const SfxItemPropertySet* pPropSet;
     ScDocShell*             pDocShell;
-    SfxStyleFamily          eFamily;        // Familie
+    SfxStyleFamily          eFamily;        // Family
     String                  aStyleName;
 
     SfxStyleSheetBase*      GetStyle_Impl();
@@ -239,7 +239,7 @@ public:
                             ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const String& rName);
     virtual                 ~ScStyleObj();
 
-                            // per getImplementation gerufen:
+                            // created by getImplementation:
     sal_Bool                IsInserted() const      { return pDocShell != NULL; }
     SfxStyleFamily          GetFamily() const       { return eFamily; }
     void                    InitDoc( ScDocShell* pNewDocSh, const String& rNewName );
@@ -376,3 +376,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #pragma hdrstop
 #endif
 
-#include <tools/debug.hxx>
 #include <usr/ustring.hxx>
 
 #include "result.hxx"
@@ -39,8 +39,6 @@ using namespace com::sun::star;
 //------------------------------------------------------------------------
 
 SV_IMPL_PTRARR( XResultListenerArr_Impl, XResultListenerPtr );
-
-//SMART_UNO_IMPLEMENTATION( ScAddInResult, UsrObject );
 
 //------------------------------------------------------------------------
 
@@ -58,19 +56,14 @@ void ScAddInResult::NewValue()
     ++nTickCount;
 
     uno::Any aAny;
-    if ( TRUE /* nTickCount % 4 */ )
-    {
-        String aRet = aArg;
-        aRet += nTickCount;
-        rtl::OUString aUStr = StringToOUString( aRet, CHARSET_SYSTEM );
-        aAny <<= aUStr;
-    }
-    // else void
+    String aRet = aArg;
+    aRet += nTickCount;
+    rtl::OUString aUStr = StringToOUString( aRet, CHARSET_SYSTEM );
+    aAny <<= aUStr;
 
-//  sheet::ResultEvent aEvent( (UsrObject*)this, aAny );
     sheet::ResultEvent aEvent( (cppu::OWeakObject*)this, aAny );
 
-    for ( USHORT n=0; n<aListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aListeners.Count(); n++ )
         (*aListeners[n])->modified( aEvent );
 }
 
@@ -105,8 +98,8 @@ void SAL_CALL ScAddInResult::removeResultListener( const ::com::sun::star::uno::
 {
     acquire();
 
-    USHORT nCount = aListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<sheet::XResultListener> *pObj = aListeners[n];
         if ( *pObj == aListener )
@@ -131,3 +124,4 @@ void SAL_CALL ScAddInResult::removeResultListener( const ::com::sun::star::uno::
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

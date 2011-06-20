@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,9 @@ class ScExportBase
 {
 public:
 #if defined UNX
-    static const sal_Char __FAR_DATA sNewLine;
+    static const sal_Char sNewLine;
 #else
-    static const sal_Char __FAR_DATA sNewLine[];
+    static const sal_Char sNewLine[];
 #endif
 
 protected:
@@ -80,3 +81,4 @@ public:
 
 #endif  // SC_EXPBASE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

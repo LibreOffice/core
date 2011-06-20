@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@ public:
     virtual ~ScHTMLImport();
     const ScHTMLParser* GetParser() const { return (ScHTMLParser*)mpParser; }
 
-    virtual void        WriteToDocument( sal_Bool bSizeColsRows = sal_False, double nOutputFactor = 1.0,
+    virtual void        WriteToDocument( sal_Bool bSizeColsRows = false, double nOutputFactor = 1.0,
                                          SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
     static String       GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
@@ -50,3 +51,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

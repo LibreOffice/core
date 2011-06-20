@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,6 +59,7 @@
 #include <iterator>
 #include <functional>
 #include <numeric>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -121,10 +123,10 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
     {
         tTranslationMap::const_iterator aIt(
             ::std::find_if( aTranslationMap.begin(), aTranslationMap.end(),
-                            ::std::compose1( ::std::bind2nd(
+                            ::o3tl::compose1( ::std::bind2nd(
                                                  ::std::equal_to< tTranslationMap::mapped_type >(),
                                                  rRoleString ),
-                                             ::std::select2nd< tTranslationMap::value_type >())));
+                                             ::o3tl::select2nd< tTranslationMap::value_type >())));
 
         if( aIt != aTranslationMap.end())
             aResult = (*aIt).first;
@@ -686,7 +688,7 @@ bool DialogModel::setData(
     if( ! xDataProvider.is() ||
         ! m_xTemplate.is() )
     {
-        OSL_ENSURE( false, "Model objects missing" );
+        OSL_FAIL( "Model objects missing" );
         return false;
     }
 
@@ -828,3 +830,5 @@ sal_Int32 DialogModel::countSeries() const
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

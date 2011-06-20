@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,8 +100,8 @@ class ScPrintFuncCache
     ScPrintSelectionStatus  aSelection;
     ScDocShell*             pDocSh;
     long                    nTotalPages;
-    long                    nPages[MAXTABCOUNT];
-    long                    nFirstAttr[MAXTABCOUNT];
+    std::vector<long>       nPages;
+    std::vector<long>       nFirstAttr;
     std::vector<ScPrintPageLocation> aLocations;
     bool                    bLocInitialized;
 
@@ -123,3 +124,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

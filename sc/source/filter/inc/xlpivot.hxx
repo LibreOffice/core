@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,7 +120,6 @@ const sal_uInt16 EXC_SXVIEW_DATALAST        = 0xFFFF;
 const sal_uInt16 EXC_SXVIEW_AUTOFMT         = 0x0001;
 
 // (0x00B1) SXVD --------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXVD                = 0x00B1;
 
 const sal_uInt16 EXC_SXVD_AXIS_NONE         = 0x0000;
@@ -147,7 +147,6 @@ const sal_uInt16 EXC_SXVD_SUBT_VARP         = 0x0800;
 const sal_uInt16 EXC_SXVD_DEFAULT_CACHE     = EXC_PC_NOFIELD;
 
 // (0x00B2) SXVI --------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXVI                = 0x00B2;
 
 const sal_uInt16 EXC_SXVI_TYPE_PAGE         = 0x00FE;
@@ -176,22 +175,18 @@ const sal_uInt16 EXC_SXVI_MISSING           = 0x0008;
 const sal_uInt16 EXC_SXVI_DEFAULT_CACHE     = EXC_PC_NOFIELD;
 
 // (0x00B4) SXIVD -------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXIVD               = 0x00B4;
 const sal_uInt16 EXC_SXIVD_DATA             = 0xFFFE;
 
 // (0x00B5) SXLI --------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXLI                = 0x00B5;
 const sal_uInt16 EXC_SXLI_DEFAULTFLAGS      = 0x0000;
 
 // (0x00B6) SXPI --------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXPI                = 0x00B6;
 const sal_uInt16 EXC_SXPI_ALLITEMS          = 0x7FFD;
 
 // (0x00C5) SXDI --------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXDI                = 0x00C5;
 
 const sal_uInt16 EXC_SXDI_FUNC_SUM          = 0x0000;
@@ -220,7 +215,6 @@ const sal_uInt16 EXC_SXDI_PREVITEM          = 0x7FFB;
 const sal_uInt16 EXC_SXDI_NEXTITEM          = 0x7FFC;
 
 // (0x00C6) SXDB --------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXDB                = 0x00C6;
 
 const sal_uInt16 EXC_SXDB_SAVEDATA          = 0x0001;
@@ -239,7 +233,6 @@ const sal_uInt16 EXC_SXDB_SRC_CONSOLID      = 0x0004;
 const sal_uInt16 EXC_SXDB_SRC_SCENARIO      = 0x0008;
 
 // (0x00C7) SXFIELD -----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXFIELD             = 0x00C7;
 
 const sal_uInt16 EXC_SXFIELD_HASITEMS       = 0x0001;
@@ -267,43 +260,33 @@ const sal_uInt16 EXC_SXFIELD_INDEX_MAX      = 1;        /// List index for maxim
 const sal_uInt16 EXC_SXFIELD_INDEX_STEP     = 2;        /// List index for step item in groupings.
 
 // (0x00C8) SXINDEXLIST -------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXINDEXLIST         = 0x00C8;
 
 // (0x00C9) SXDOUBLE ----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXDOUBLE            = 0x00C9;
 
 // (0x00CA) SXBOOLEAN ---------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXBOOLEAN           = 0x00CA;
 
 // (0x00CB) SXERROR -----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXERROR             = 0x00CB;
 
 // (0x00CC) SXINTEGER ---------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXINTEGER           = 0x00CC;
 
 // (0x00CD) SXSTRING ----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXSTRING            = 0x00CD;
 
 // (0x00CE) SXDATETIME --------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXDATETIME          = 0x00CE;
 
 // (0x00CF) SXEMPTY -----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXEMPTY             = 0x00CF;
 
 // (0x00D5) SXIDSTM -----------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXIDSTM             = 0x00D5;
 
 // (0x00D8) SXNUMGROUP --------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXNUMGROUP          = 0x00D8;
 
 const sal_uInt16 EXC_SXNUMGROUP_AUTOMIN     = 0x0001;
@@ -319,15 +302,12 @@ const sal_uInt16 EXC_SXNUMGROUP_TYPE_YEAR   = 7;
 const sal_uInt16 EXC_SXNUMGROUP_TYPE_NUM    = 8;
 
 // (0x00D9) SXGROUPINFO -------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXGROUPINFO         = 0x00D9;
 
 // (0x00DC) SXEXT -------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXEXT               = 0x00DC;
 
 // (0x00E3) SXVS --------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXVS                = 0x00E3;
 
 const sal_uInt16 EXC_SXVS_UNKNOWN           = 0x0000;
@@ -338,38 +318,30 @@ const sal_uInt16 EXC_SXVS_PIVOTTAB          = 0x0008;
 const sal_uInt16 EXC_SXVS_SCENARIO          = 0x0010;
 
 // (0x00F0) SXRULE ------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXRULE              = 0x00F0;
 
 // (0x00F1) SXEX --------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXEX                = 0x00F1;
 
 const sal_uInt32 EXC_SXEX_DRILLDOWN         = 0x00020000;
 const sal_uInt32 EXC_SXEX_DEFAULTFLAGS      = 0x004F0200;
 
 // (0x00F2) SXFILT ------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXFILT              = 0x00F2;
 
 // (0x00F5) -------------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_00F5                = 0x00F5;   /// Unknown record
 
 // (0x00F6) SXNAME ------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXNAME              = 0x00F6;
 
 // (0x00F8) SXPAIR ------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXPAIR              = 0x00F8;
 
 // (0x00F9) SXFMLA ------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXFMLA              = 0x00F9;
 
 // (0x0100) SXVDEX ------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXVDEX              = 0x0100;
 
 const sal_uInt32 EXC_SXVDEX_SHOWALL         = 0x00000001;
@@ -387,16 +359,13 @@ const sal_uInt16 EXC_SXVDEX_SHOW_NONE       = 0xFFFF;
 const sal_uInt16 EXC_SXVDEX_FORMAT_NONE     = 0x0000;
 
 // (0x0103) SXFORMULA ---------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXFORMULA           = 0x0103;
 
 // (0x0122) SXDBEX ------------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXDBEX              = 0x0122;
 const double EXC_SXDBEX_CREATION_DATE       = 51901.029652778;
 
 // (0x01BB) SXFDBTYPE ---------------------------------------------------------
-
 const sal_uInt16 EXC_ID_SXFDBTYPE           = 0x01BB;
 const sal_uInt16 EXC_SXFDBTYPE_DEFAULT      = 0x0000;
 
@@ -526,9 +495,6 @@ public:
 
     /** Returns true, if this is a standard field build directly from source data. */
     bool                IsStandardField() const;
-
-//UNUSED2008-05  /** Returns true, if the items of the field are calculated from a formula. */
-//UNUSED2008-05  bool                IsCalculatedField() const;
 
     /** Returns true, if this field is a grouping field. */
     bool                IsStdGroupField() const;
@@ -815,3 +781,4 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTViewEx9Info& rInfo );
 // ============================================================================
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

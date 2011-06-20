@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,11 +78,11 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
         {
             pDoc->InitDrawLayer();
             pModel = pDoc->GetDrawLayer();
-            DBG_ASSERT(pModel,"Draw Layer ?");
+            OSL_ENSURE(pModel,"Draw Layer ?");
         }
 
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nDestTab));
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
         pPage->InsertObject(pSdrOle2Obj);
 
         pSdrOle2Obj->SetLogicRect(rRect);               // erst nach InsertObject !!!
@@ -96,9 +97,10 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
             // Sc10Import dtor geholt.
 
         ScChartCollection* pColl = pDoc->GetChartCollection();
-        pColl->Insert( new ScChartArray( pDoc, nSrcTab, static_cast<SCCOL>(nX1), static_cast<SCROW>(nY1), static_cast<SCCOL>(nX2), static_cast<SCROW>(nY2), aName ) );
+        pColl->push_back( new ScChartArray( pDoc, nSrcTab, static_cast<SCCOL>(nX1), static_cast<SCROW>(nY1), static_cast<SCCOL>(nX2), static_cast<SCROW>(nY2), aName ) );
     }
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

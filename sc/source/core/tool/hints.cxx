@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,10 +80,6 @@ ScUpdateRefHint::~ScUpdateRefHint()
 //      ScPointerChangedHint - Pointer ist ungueltig geworden
 // -----------------------------------------------------------------------
 
-//UNUSED2008-05  ScPointerChangedHint::ScPointerChangedHint( sal_uInt16 nF ) :
-//UNUSED2008-05      nFlags( nF )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
 
 ScPointerChangedHint::~ScPointerChangedHint()
 {
@@ -160,3 +157,4 @@ ScDataPilotModifiedHint::~ScDataPilotModifiedHint()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

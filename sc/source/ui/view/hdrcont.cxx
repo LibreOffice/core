@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,16 +75,16 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
             nSize       ( nNewSize ),
             nMarkStart  ( 0 ),
             nMarkEnd    ( 0 ),
-            bMarkRange  ( sal_False ),
-            bDragging   ( sal_False ),
-            bIgnoreMove ( sal_False )
+            bMarkRange  ( false ),
+            bDragging   ( false ),
+            bIgnoreMove ( false )
 {
     // --- RTL --- no default mirroring for this window, the spreadsheet itself
     // is also not mirrored
-    // #107811# mirror the vertical window for correct border drawing
-    // #106948# table layout depends on sheet format, not UI setting, so the
+    // mirror the vertical window for correct border drawing
+    // table layout depends on sheet format, not UI setting, so the
     // borders of the vertical window have to be handled manually, too.
-    EnableRTL( sal_False );
+    EnableRTL( false );
 
     aNormFont = GetFont();
     aNormFont.SetTransparent( sal_True );       //! WEIGHT_NORMAL hart setzen ???
@@ -109,7 +110,7 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
 
 void ScHeaderControl::SetWidth( long nNew )
 {
-    DBG_ASSERT( bVertical, "SetDigits nur fuer Zeilenkoepfe erlaubt" );
+    OSL_ENSURE( bVertical, "SetDigits nur fuer Zeilenkoepfe erlaubt" );
     if ( nNew != nWidth )
     {
         Size aSize( nNew, GetSizePixel().Height() );    // Hoehe nicht aendern
@@ -148,7 +149,7 @@ void ScHeaderControl::SetMark( sal_Bool bNewSet, SCCOLROW nNewStart, SCCOLROW nN
 {
     sal_Bool bEnabled = SC_MOD()->GetInputOptions().GetMarkHeader();    //! cachen?
     if (!bEnabled)
-        bNewSet = sal_False;
+        bNewSet = false;
 
     //  Variablen setzen
 
@@ -290,12 +291,10 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     sal_Bool bMirrored = IsMirrored();
 
-//  const FunctionSet*  pFuncSet = pSelEngine->GetFunctionSet();
     String              aString;
     sal_uInt16              nBarSize;
     Point               aScrPos;
     Size                aTextSize;
-//  Size                aSize = GetOutputSizePixel();
 
     if (bVertical)
         nBarSize = (sal_uInt16) GetSizePixel().Width();
@@ -328,7 +327,6 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     //  aeussere Linien komplett durchzeichnen
     //  Zuerst Ende der letzten Zelle finden
 
-//  long nLineEnd = -1;
     long nLineEnd = nInitScrPos - nLayoutSign;
 
     for (SCCOLROW i=nPos; i<nSize; i++)
@@ -421,15 +419,6 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
             }
         }
 
-#if 0
-        // 3D border is no longer used
-        SetLineColor( rStyleSettings.GetLightColor() );
-        if (bVertical)
-            DrawLine( Point( 0, nPStart ), Point( 0, nLineEnd ) );
-        else
-            DrawLine( Point( nPStart, 0 ), Point( nLineEnd, 0 ) );
-#endif
-
         SetLineColor( rStyleSettings.GetDarkShadowColor() );
         if (bVertical)
         {
@@ -481,7 +470,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                 if ( nTransEnd * nLayoutSign >= nTransStart * nLayoutSign && bHighContrast && !bDark )
                 {
                     //  Transparent selection background is drawn after lines, before text.
-                    //  #109814# Use DrawSelectionBackground to make sure there is a visible
+                    //  Use DrawSelectionBackground to make sure there is a visible
                     //  difference. The case of a dark face color, where DrawSelectionBackground
                     //  would just paint over the lines, is handled separately (bDark).
                     //  Otherwise, GetHighlightColor is used with 80% transparency.
@@ -494,7 +483,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                     else
                         aTransRect = Rectangle( nTransStart, 0, nTransEnd, nBarSize-1 );
                     SetBackground( Color( rStyleSettings.GetFaceColor() ) );
-                    DrawSelectionBackground( aTransRect, 0, sal_True, sal_False, sal_False );
+                    DrawSelectionBackground( aTransRect, 0, sal_True, false, false );
                     SetBackground();
                 }
                 break;
@@ -611,7 +600,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
 
 SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, sal_Bool& rBorder )
 {
-    sal_Bool    bFound=sal_False;
+    sal_Bool    bFound=false;
     SCCOLROW    nCount = 1;
     SCCOLROW    nPos = GetPos();
     SCCOLROW    nHitNo = nPos;
@@ -629,8 +618,6 @@ SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, sal_Bool& rBorde
     do
     {
         SCCOLROW nEntryNo = nCount + nPos;
-
-//      nScrPos = GetScrPos( nEntryNo ) - 1;
 
         if (nEntryNo > nSize)
             nScrPos = nEndPos + nLayoutSign;
@@ -697,7 +684,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
     if (IsDisabled())
         return;
 
-    bIgnoreMove = sal_False;
+    bIgnoreMove = false;
     SelectWindow();
 
     sal_Bool bFound;
@@ -724,10 +711,9 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
             ShowDragHelp();
             DrawInvert( nDragPos );
 
-            // CaptureMouse();
             StartTracking();
             bDragging = sal_True;
-            bDragMoved = sal_False;
+            bDragMoved = false;
         }
     }
     else if (rMEvt.IsLeft())
@@ -744,7 +730,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
         SetMarking( sal_True );     //  muss vor SelMouseButtonDown sein
         pSelEngine->SelMouseButtonDown( rMEvt );
 
-        //  #74215# In column/row headers a simple click already is a selection.
+        //  In column/row headers a simple click already is a selection.
         //  -> Call SelMouseMove to ensure CreateAnchor is called (and DestroyAnchor
         //  if the next click is somewhere else with Control key).
         pSelEngine->SelMouseMove( rMEvt );
@@ -764,16 +750,14 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     if ( IsDisabled() )
         return;
 
-    SetMarking( sal_False );
-    bIgnoreMove = sal_False;
-//    sal_Bool bFound;
-//    SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
+    SetMarking( false );
+    bIgnoreMove = false;
 
     if ( bDragging )
     {
         DrawInvert( nDragPos );
         ReleaseMouse();
-        bDragging   = sal_False;
+        bDragging   = false;
 
         long nScrPos    = GetScrPos( nDragNo );
         long nMousePos  = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
@@ -901,13 +885,9 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
                                          sal::static_int_cast<SCCOL>(nPos), MAXROW, nTab );
 
                 // see if any part of the range is already selected
-                sal_Bool bSelected = sal_False;
                 ScRangeList aRanges;
-                pViewData->GetMarkData().FillRangeListWithMarks( &aRanges, sal_False );
-                sal_uLong nRangeCount = aRanges.Count();
-                for (sal_uLong i=0; i<nRangeCount && !bSelected; i++)
-                    if ( aRanges.GetObject(i)->Intersects( aNewRange ) )
-                        bSelected = sal_True;
+                pViewData->GetMarkData().FillRangeListWithMarks( &aRanges, false );
+                bool bSelected = aRanges.Intersects(aNewRange);
 
                 // select the range if no part of it was selected
                 if ( !bSelected )
@@ -929,13 +909,13 @@ void ScHeaderControl::StopMarking()
     if ( bDragging )
     {
         DrawInvert( nDragPos );
-        bDragging = sal_False;
+        bDragging = false;
     }
 
-    SetMarking( sal_False );
+    SetMarking( false );
     bIgnoreMove = sal_True;
 
-    //  #86260# don't call pSelEngine->Reset, so selection across the parts of
+    //  don't call pSelEngine->Reset, so selection across the parts of
     //  a split/frozen view is possible
 
     ReleaseMouse();
@@ -1007,17 +987,17 @@ SCCOLROW ScHeaderControl::GetHiddenCount( SCCOLROW nEntryNo )
 
 sal_Bool ScHeaderControl::IsLayoutRTL()
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool ScHeaderControl::IsMirrored()
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool ScHeaderControl::IsDisabled()
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool ScHeaderControl::ResizeAllowed()
@@ -1044,3 +1024,4 @@ void ScHeaderControl::SetMarking( sal_Bool /* bSet */ )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

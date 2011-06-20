@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,9 +51,6 @@ namespace chart
 namespace wrapper
 {
 
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 class WrappedStockProperty : public WrappedProperty
@@ -115,10 +113,9 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
         {
             try
             {
-                // /-- locked controllers
+                // locked controllers
                 ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
                 xTemplate->changeDiagram( xDiagram );
-                // \-- locked controllers
             }
             catch( uno::Exception & ex )
             {
@@ -134,8 +131,6 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
     return m_aDefaultValue;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 
 class WrappedVolumeProperty : public WrappedStockProperty
@@ -210,8 +205,6 @@ uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTempla
 }
 
 //-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
-
 
 class WrappedUpDownProperty : public WrappedStockProperty
 {
@@ -289,8 +282,6 @@ enum
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -310,8 +301,6 @@ void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProp
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -319,10 +308,8 @@ void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty*
     rList.push_back( new WrappedUpDownProperty( spChart2ModelContact ) );
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 } //namespace wrapper
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

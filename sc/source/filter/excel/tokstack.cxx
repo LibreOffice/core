@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -204,23 +205,6 @@ void TokenPool::GrowDouble( void )
     pP_Dbl = pP_DblNew;
 }
 
-
-//UNUSED2009-05 void TokenPool::GrowError( void )
-//UNUSED2009-05 {
-//UNUSED2009-05     sal_uInt16      nP_ErrNew = nP_Err * 2;
-//UNUSED2009-05
-//UNUSED2009-05     sal_uInt16*     pP_ErrNew = new sal_uInt16[ nP_ErrNew ];
-//UNUSED2009-05
-//UNUSED2009-05     for( sal_uInt16 nL = 0 ; nL < nP_Err ; nL++ )
-//UNUSED2009-05         pP_ErrNew[ nL ] = pP_Err[ nL ];
-//UNUSED2009-05
-//UNUSED2009-05     nP_Err = nP_ErrNew;
-//UNUSED2009-05
-//UNUSED2009-05     delete[] pP_Err;
-//UNUSED2009-05     pP_Err = pP_ErrNew;
-//UNUSED2009-05 }
-
-
 void TokenPool::GrowTripel( void )
 {
     sal_uInt16          nP_RefTrNew = nP_RefTr * 2;
@@ -328,7 +312,7 @@ void TokenPool::GrowMatrix( void )
 
 void TokenPool::GetElement( const sal_uInt16 nId )
 {
-    DBG_ASSERT( nId < nElementAkt, "*TokenPool::GetElement(): Id zu gross!?" );
+    OSL_ENSURE( nId < nElementAkt, "*TokenPool::GetElement(): Id zu gross!?" );
 
     if( pType[ nId ] == T_Id )
         GetElementRek( nId );
@@ -336,9 +320,9 @@ void TokenPool::GetElement( const sal_uInt16 nId )
     {
         switch( pType[ nId ] )
         {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             case T_Id:
-                DBG_ERROR( "-TokenPool::GetElement(): hier hast Du nichts zu suchen!" );
+                OSL_FAIL( "-TokenPool::GetElement(): hier hast Du nichts zu suchen!" );
                 break;
 #endif
             case T_Str:
@@ -348,9 +332,6 @@ void TokenPool::GetElement( const sal_uInt16 nId )
                 pScToken->AddDouble( pP_Dbl[ pElement[ nId ] ] );
                 break;
             case T_Err:
-#if 0   // erAck
-                pScToken->AddError( pP_Err[ pElement[ nId ] ] );
-#endif
                 break;
             case T_RefC:
                 pScToken->AddSingleReference( *ppP_RefTr[ pElement[ (sal_uInt16) nId ] ] );
@@ -364,8 +345,15 @@ void TokenPool::GetElement( const sal_uInt16 nId )
                 }
                 break;
             case T_RN:
-                pScToken->AddName( pElement[ nId ] );
-                break;
+            {
+                sal_uInt16 n = pElement[nId];
+                if (n < maRangeNames.size())
+                {
+                    const RangeName& r = maRangeNames[n];
+                    pScToken->AddRangeName(r.mnIndex, r.mbGlobal);
+                }
+            }
+            break;
             case T_Ext:
                 {
                 sal_uInt16          n = pElement[ nId ];
@@ -407,6 +395,7 @@ void TokenPool::GetElement( const sal_uInt16 nId )
                     pScToken->AddExternalName(r.mnFileId, r.maName);
                 }
             }
+            break;
             case T_ExtRefC:
             {
                 sal_uInt16 n = pElement[nId];
@@ -416,6 +405,7 @@ void TokenPool::GetElement( const sal_uInt16 nId )
                     pScToken->AddExternalSingleReference(r.mnFileId, r.maTabName, r.maRef);
                 }
             }
+            break;
             case T_ExtRefA:
             {
                 sal_uInt16 n = pElement[nId];
@@ -427,7 +417,7 @@ void TokenPool::GetElement( const sal_uInt16 nId )
             }
             break;
             default:
-                DBG_ERROR("-TokenPool::GetElement(): Zustand undefiniert!?");
+                OSL_FAIL("-TokenPool::GetElement(): Zustand undefiniert!?");
         }
     }
 }
@@ -435,14 +425,14 @@ void TokenPool::GetElement( const sal_uInt16 nId )
 
 void TokenPool::GetElementRek( const sal_uInt16 nId )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     nRek++;
-    DBG_ASSERT( nRek <= nP_Id, "*TokenPool::GetElement(): Rekursion loopt!?" );
+    OSL_ENSURE( nRek <= nP_Id, "*TokenPool::GetElement(): Rekursion loopt!?" );
 #endif
 
-    DBG_ASSERT( nId < nElementAkt, "*TokenPool::GetElementRek(): Id zu gross!?" );
+    OSL_ENSURE( nId < nElementAkt, "*TokenPool::GetElementRek(): Id zu gross!?" );
 
-    DBG_ASSERT( pType[ nId ] == T_Id, "-TokenPool::GetElementRek(): nId nicht Id-Folge!" );
+    OSL_ENSURE( pType[ nId ] == T_Id, "-TokenPool::GetElementRek(): nId nicht Id-Folge!" );
 
 
     sal_uInt16      nAnz = pSize[ nId ];
@@ -463,9 +453,6 @@ void TokenPool::GetElementRek( const sal_uInt16 nId )
                     pScToken->AddDouble( pP_Dbl[ pElement[ *pAkt ] ] );
                     break;
                 case T_Err:
-#if 0   // erAck
-                    pScToken->AddError( pP_Err[ pElement[ *pAkt ] ] );
-#endif
                     break;
                 case T_RefC:
                     pScToken->AddSingleReference( *ppP_RefTr[ pElement[ *pAkt ] ] );
@@ -479,8 +466,15 @@ void TokenPool::GetElementRek( const sal_uInt16 nId )
                     }
                     break;
                 case T_RN:
-                    pScToken->AddName( pElement[ *pAkt ] );
-                    break;
+                {
+                    sal_uInt16 n = pElement[*pAkt];
+                    if (n < maRangeNames.size())
+                    {
+                        const RangeName& r = maRangeNames[n];
+                        pScToken->AddRangeName(r.mnIndex, r.mbGlobal);
+                    }
+                }
+                break;
                 case T_Ext:
                     {
                     sal_uInt16      n = pElement[ *pAkt ];
@@ -517,6 +511,7 @@ void TokenPool::GetElementRek( const sal_uInt16 nId )
                         pScToken->AddExternalName(r.mnFileId, r.maName);
                     }
                 }
+                break;
                 case T_ExtRefC:
                 {
                     sal_uInt16 n = pElement[*pAkt];
@@ -526,6 +521,7 @@ void TokenPool::GetElementRek( const sal_uInt16 nId )
                         pScToken->AddExternalSingleReference(r.mnFileId, r.maTabName, r.maRef);
                     }
                 }
+                break;
                 case T_ExtRefA:
                 {
                     sal_uInt16 n = pElement[*pAkt];
@@ -537,7 +533,7 @@ void TokenPool::GetElementRek( const sal_uInt16 nId )
                 }
                 break;
                 default:
-                    DBG_ERROR("-TokenPool::GetElementRek(): Zustand undefiniert!?");
+                    OSL_FAIL("-TokenPool::GetElementRek(): Zustand undefiniert!?");
             }
         }
         else    // elementarer SC_Token
@@ -545,7 +541,7 @@ void TokenPool::GetElementRek( const sal_uInt16 nId )
     }
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     nRek--;
 #endif
 }
@@ -592,14 +588,7 @@ const TokenId TokenPool::Store( const double& rDouble )
 
 const TokenId TokenPool::Store( const sal_uInt16 nIndex )
 {
-    if( nElementAkt >= nElement )
-        GrowElement();
-
-    pElement[ nElementAkt ] = nIndex;           // Daten direkt im Index!
-    pType[ nElementAkt ] = T_RN;                // Typinfo Range Name eintragen
-
-    nElementAkt++;
-    return ( const TokenId ) nElementAkt;               // Ausgabe von altem Wert + 1!
+    return StoreName(nIndex, true);
 }
 
 
@@ -624,7 +613,7 @@ const TokenId TokenPool::Store( const String& rString )
         //...ansonsten nur kopieren
         *ppP_Str[ nP_StrAkt ] = rString;
 
-    DBG_ASSERT( sizeof( xub_StrLen ) <= 2, "*TokenPool::Store(): StrLen doesn't match!" );
+    OSL_ENSURE( sizeof( xub_StrLen ) <= 2, "*TokenPool::Store(): StrLen doesn't match!" );
 
     pSize[ nElementAkt ] = ( sal_uInt16 ) ppP_Str[ nP_StrAkt ]->Len();
 
@@ -760,6 +749,24 @@ const TokenId TokenPool::StoreMatrix()
     return ( const TokenId ) nElementAkt;
 }
 
+const TokenId TokenPool::StoreName( sal_uInt16 nIndex, bool bGlobal )
+{
+    if ( nElementAkt >= nElement )
+        GrowElement();
+
+    pElement[nElementAkt] = static_cast<sal_uInt16>(maRangeNames.size());
+    pType[nElementAkt] = T_RN;
+
+    maRangeNames.push_back(RangeName());
+    RangeName& r = maRangeNames.back();
+    r.mnIndex = nIndex;
+    r.mbGlobal = bGlobal;
+
+    ++nElementAkt;
+
+    return static_cast<const TokenId>(nElementAkt);
+}
+
 const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const String& rName )
 {
     if ( nElementAkt >= nElement )
@@ -819,6 +826,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName
 void TokenPool::Reset( void )
 {
     nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_ErrAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = nP_MatrixAkt = 0;
+    maRangeNames.clear();
     maExtNames.clear();
     maExtCellRefs.clear();
     maExtAreaRefs.clear();
@@ -844,9 +852,8 @@ sal_Bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
         }
     }
 
-    return sal_False;
+    return false;
 }
-
 
 const String* TokenPool::GetExternal( const TokenId& rId ) const
 {
@@ -862,21 +869,6 @@ const String* TokenPool::GetExternal( const TokenId& rId ) const
     return p;
 }
 
-
-//UNUSED2008-05  const String* TokenPool::GetString( const TokenId& r ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      const String*   p = NULL;
-//UNUSED2008-05      sal_uInt16 n = (sal_uInt16) r;
-//UNUSED2008-05      if( n && n <= nElementAkt )
-//UNUSED2008-05      {
-//UNUSED2008-05          n--;
-//UNUSED2008-05          if( pType[ n ] == T_Str )
-//UNUSED2008-05              p = ppP_Str[ pElement[ n ] ];
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      return p;
-//UNUSED2008-05  }
-
 ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
 {
     if( n < nP_MatrixAkt )
@@ -886,3 +878,4 @@ ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
     return NULL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

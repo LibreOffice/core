@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
-//class SvNumberFormatter;
 
 //.............................................................................
 namespace chart
@@ -110,3 +110,5 @@ private: //member:
 //.............................................................................
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,16 +31,12 @@
 
 #include <sfx2/tbxctrl.hxx>
 
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
-
 class ScTbxInsertCtrl : public SfxToolBoxControl
 {
     sal_uInt16                  nLastSlotId;
 
     using SfxToolBoxControl::Select;
-    virtual void            Select( sal_Bool bMod1 = sal_False );
+    virtual void            Select( sal_Bool bMod1 = false );
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -54,35 +51,6 @@ public:
                                               const SfxPoolItem* pState );
 };
 
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
-/*
-class ScTbxInsertPopup : public SfxPopupWindow
-{
-    SfxToolBoxManager   aTbx;
-    ResId               aRIdWinTemp;
-    ResId               aRIdTbxTemp;
-
-    Link                aTbxClickHdl;
-
-    DECL_LINK( TbxSelectHdl, ToolBox* );
-    DECL_LINK( TbxClickHdl, ToolBox* );
-
-protected:
-    virtual void        PopupModeEnd();
-
-public:
-    ScTbxInsertPopup( sal_uInt16 nId, WindowAlign eAlign,
-                        const ResId& rRIdWin, const ResId& rRIdTbx,
-                        SfxBindings& rBindings );
-    ~ScTbxInsertPopup();
-
-    virtual SfxPopupWindow* Clone() const;
-    void StartSelection();
-};
-*/
-
-
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

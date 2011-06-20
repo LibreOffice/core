@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef SC_CLIENT_HXX
 #define SC_CLIENT_HXX
 
-#ifndef _SFX_CLIENTSH_HXX //autogen
 #include <sfx2/ipclient.hxx>
-#endif
 
 class ScDocument;
 class ScTabViewShell;
@@ -62,3 +61,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

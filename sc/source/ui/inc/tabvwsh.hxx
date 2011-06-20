@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,6 @@ class SdrOle2Obj;
 class SfxBindings;
 class SfxChildWindow;
 class SfxModelessDialog;
-class SvxBorderLine;
 class SvxBoxObjectRef;
 class SvxNumberInfoItem;
 struct SfxChildWinInfo;
@@ -68,6 +68,8 @@ class ScDPObject;
 class ScNavigatorSettings;
 
 struct ScHeaderFieldData;
+
+namespace editeng { class SvxBorderLine; }
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XDispatchProviderInterceptor;
@@ -129,7 +131,7 @@ private:
 
     ScInputHandler*         pInputHandler;              // fuer OLE-Eingabezeile
 
-    SvxBorderLine*          pCurFrameLine;
+    ::editeng::SvxBorderLine*           pCurFrameLine;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XDispatchProviderInterceptor >
@@ -168,7 +170,6 @@ private:
 
     SbxObject*              pScSbxObject;
 
-//UNUSED2008-05  sal_Bool                    bChartDlgIsEdit;            // Datenbereich aendern
     sal_Bool                    bChartAreaValid;            // wenn Chart aufgezogen wird
     String                  aEditChartName;
     ScRangeListRef          aChartSource;
@@ -184,7 +185,6 @@ private:
 private:
     void    Construct( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );
 
-//UNUSED2008-05  void          SetMySubShell( SfxShell* pShell );
     SfxShell*       GetMySubShell() const;
 
     void            DoReadUserData( const String& rData );
@@ -201,9 +201,9 @@ private:
 protected:
     virtual void    Activate(sal_Bool bMDI);
     virtual void    Deactivate(sal_Bool bMDI);
-    virtual sal_uInt16  PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual sal_uInt16  PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = false );
 
-    virtual void    ShowCursor(FASTBOOL bOn);
+    virtual void    ShowCursor(bool bOn);
 
     virtual void    Move();     // Benachrichtigung
 
@@ -221,14 +221,14 @@ protected:
     virtual sal_Bool    HasSelection( sal_Bool bText ) const;
     virtual String  GetDescription() const;
 
-    virtual void    WriteUserData(String &, sal_Bool bBrowse = sal_False);
-    virtual void    ReadUserData(const String &, sal_Bool bBrowse = sal_False);
-    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
-    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
+    virtual void    WriteUserData(String &, sal_Bool bBrowse = false);
+    virtual void    ReadUserData(const String &, sal_Bool bBrowse = false);
+    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
+    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
 
     virtual void    UIDeactivated( SfxInPlaceClient* pClient );
 
-    virtual FASTBOOL KeyInput( const KeyEvent &rKeyEvent );
+    virtual bool    KeyInput( const KeyEvent &rKeyEvent );
     virtual SdrView* GetDrawView() const;
 
 public:
@@ -240,9 +240,6 @@ public:
 
                     // -> Clone-Methode fuer Factory
 
-//UNUSED2008-05  ScTabViewShell( SfxViewFrame*           pViewFrame,
-//UNUSED2008-05                  const ScTabViewShell&   rWin );
-
                     // aus einer allgemeinen Shell konstruieren und
                     // soviel wie moeglich uebernehmen (SliderPos etc.):
 
@@ -251,24 +248,21 @@ public:
 
     virtual         ~ScTabViewShell();
 
-    Window*         GetDialogParent();
+    SC_DLLPUBLIC Window* GetDialogParent();
 
     bool            IsRefInputMode() const;
     void            ExecuteInputDirect();
 
     ScInputHandler* GetInputHandler() const;
-    void            UpdateInputHandler( sal_Bool bForce = sal_False, sal_Bool bStopEditing = sal_True );
+    void            UpdateInputHandler( sal_Bool bForce = false, sal_Bool bStopEditing = sal_True );
     void            UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust );
     sal_Bool            TabKeyInput(const KeyEvent& rKEvt);
     sal_Bool            SfxKeyInput(const KeyEvent& rKEvt);
 
     void            SetActive();
 
-    SvxBorderLine*  GetDefaultFrameLine() const { return pCurFrameLine; }
-    void            SetDefaultFrameLine(const SvxBorderLine* pLine );
-
-//UNUSED2008-05  void            ExecuteShowNIY( SfxRequest& rReq );
-//UNUSED2008-05  void           StateDisabled( SfxItemSet& rSet );
+    ::editeng::SvxBorderLine*   GetDefaultFrameLine() const { return pCurFrameLine; }
+    void            SetDefaultFrameLine(const ::editeng::SvxBorderLine* pLine );
 
     SC_DLLPUBLIC void           Execute( SfxRequest& rReq );
     SC_DLLPUBLIC void           GetState( SfxItemSet& rSet );
@@ -297,7 +291,7 @@ public:
     void            GetSaveState( SfxItemSet& rSet );
     void            ExecSearch( SfxRequest& rReq );
 
-    void            ExecuteUndo(SfxRequest& rReq);
+    SC_DLLPUBLIC    void            ExecuteUndo(SfxRequest& rReq);
     void            GetUndoState(SfxItemSet &rSet);
 
     void            ExecuteSbx( SfxRequest& rReq );
@@ -309,7 +303,7 @@ public:
     void            ExecDrawOpt(SfxRequest& rReq);
     void            GetDrawOptState(SfxItemSet &rSet);
 
-    void            UpdateDrawShell();
+
     void            SetDrawShell( sal_Bool bActive );
     void            SetDrawTextShell( sal_Bool bActive );
 
@@ -333,7 +327,7 @@ public:
 
 
     void            SetDrawShellOrSub();
-    void            SetCurSubShell( ObjectSelectionType eOST, sal_Bool bForce = sal_False );
+    void            SetCurSubShell( ObjectSelectionType eOST, sal_Bool bForce = false );
 
     void            SetFormShellAtTop( sal_Bool bSet );
 
@@ -350,22 +344,17 @@ public:
 
     void            FillFieldData( ScHeaderFieldData& rData );
 
-//UNUSED2008-05  void            ResetChartArea();
     void            SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest );
     sal_Bool            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const;
 
-//UNUSED2008-05  sal_Bool            IsChartDlgEdit() const;
-//UNUSED2008-05  void            SetChartDlgEdit(sal_Bool bFlag){bChartDlgIsEdit=bFlag;}
-
     void            SetEditChartName(const String& aStr){aEditChartName=aStr;}
-//UNUSED2008-05  const String&   GetEditChartName() const;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     ScNavigatorSettings*    GetNavigatorSettings();
 
     // Drucken:
-    virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
+    virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = false );
     virtual sal_uInt16          SetPrinter( SfxPrinter* pNewPrinter,
                                           sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false );
 
@@ -434,3 +423,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,26 +67,23 @@ sal_uInt32 StringHashEntry::MakeHashCode( const String& r )
 
 NameBuffer::~NameBuffer()
 {
-    register StringHashEntry*   pDel = ( StringHashEntry* ) List::First();
-    while( pDel )
-    {
-        delete pDel;
-        pDel = ( StringHashEntry* ) List::Next();
-    }
+    std::vector<StringHashEntry*>::iterator pIter;
+    for ( pIter = maHashes.begin(); pIter != maHashes.end(); ++pIter )
+        delete *pIter;
 }
 
 
 //void NameBuffer::operator <<( const SpString &rNewString )
 void NameBuffer::operator <<( const String &rNewString )
 {
-    DBG_ASSERT( Count() + nBase < 0xFFFF,
+    OSL_ENSURE( maHashes.size() + nBase < 0xFFFF,
         "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
 
-    List::Insert( new StringHashEntry( rNewString ), LIST_APPEND );
+    maHashes.push_back( new StringHashEntry( rNewString ) );
 }
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 sal_uInt16  nShrCnt;
 #endif
 
@@ -101,7 +99,7 @@ ShrfmlaBuffer::ShrfmlaBuffer( RootData* pRD ) :
     ExcRoot( pRD ),
     mnCurrIdx (nBase)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     nShrCnt = 0;
 #endif
 }
@@ -121,14 +119,14 @@ void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
 {
     String          aName( CreateName( rRange.aStart ) );
 
-    DBG_ASSERT( mnCurrIdx <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
+    OSL_ENSURE( mnCurrIdx <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
 
     ScRangeData* pData = new ScRangeData( pExcRoot->pIR->GetDocPtr(), aName, rToken, rRange.aStart, RT_SHARED );
     const ScAddress& rMaxPos = pExcRoot->pIR->GetMaxPos();
     pData->SetMaxCol(rMaxPos.Col());
     pData->SetMaxRow(rMaxPos.Row());
     pData->SetIndex( static_cast< sal_uInt16 >( mnCurrIdx ) );
-    pExcRoot->pIR->GetNamedRanges().Insert( pData );
+    pExcRoot->pIR->GetNamedRanges().insert( pData );
     index_hash[rRange.aStart] = static_cast< sal_uInt16 >( mnCurrIdx );
     index_list.push_front (rRange);
     ++mnCurrIdx;
@@ -168,121 +166,100 @@ String ShrfmlaBuffer::CreateName( const ScRange& r )
     return aName;
 }
 
-
-ExtSheetBuffer::~ExtSheetBuffer()
-{
-    Cont    *pAkt = ( Cont * ) List::First();
-    while( pAkt )
-    {
-        delete pAkt;
-        pAkt = ( Cont * ) List::Next();
-    }
-}
-
-
 sal_Int16 ExtSheetBuffer::Add( const String& rFPAN, const String& rTN, const sal_Bool bSWB )
 {
-    List::Insert( new Cont( rFPAN, rTN, bSWB ), LIST_APPEND );
+    maEntries.push_back( Cont( rFPAN, rTN, bSWB ) );
     // return 1-based index of EXTERNSHEET
-    return static_cast< sal_Int16 >( List::Count() );
+    return static_cast< sal_Int16 >( maEntries.size() );
 }
 
 
 sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
 {
-    DBG_ASSERT( nExcIndex,
+    OSL_ENSURE( nExcIndex,
         "*ExtSheetBuffer::GetScTabIndex(): Sheet-Index == 0!" );
 
-    nExcIndex--;
-    Cont*       pCur = ( Cont * ) List::GetObject( nExcIndex );
+    if ( !nExcIndex || nExcIndex > maEntries.size() )
+        return false;
+
+    Cont*       pCur = &maEntries[ nExcIndex - 1 ];
     sal_uInt16&     rTabNum = pCur->nTabNum;
 
-    if( pCur )
+    if( rTabNum < 0xFFFD )
     {
-        if( rTabNum < 0xFFFD )
-        {
-            rScIndex = rTabNum;
-            return sal_True;
-        }
+        rScIndex = rTabNum;
+        return sal_True;
+    }
 
-        if( rTabNum == 0xFFFF )
-        {// neue Tabelle erzeugen
-            SCTAB   nNewTabNum;
-            if( pCur->bSWB )
-            {// Tabelle ist im selben Workbook!
-                if( pExcRoot->pIR->GetDoc().GetTable( pCur->aTab, nNewTabNum ) )
+    if( rTabNum == 0xFFFF )
+    {// neue Tabelle erzeugen
+        SCTAB   nNewTabNum;
+        if( pCur->bSWB )
+        {// Tabelle ist im selben Workbook!
+            if( pExcRoot->pIR->GetDoc().GetTable( pCur->aTab, nNewTabNum ) )
+            {
+                rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
+                return sal_True;
+            }
+            else
+                rTabNum = 0xFFFD;
+        }
+        else if( pExcRoot->pIR->GetDocShell() )
+        {// Tabelle ist 'echt' extern
+            if( pExcRoot->pIR->GetExtDocOptions().GetDocSettings().mnLinkCnt == 0 )
+            {
+                String      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
+                                    pExcRoot->pIR->GetDocShell() ) );
+                String      aTabName( ScGlobal::GetDocTabName( aURL, pCur->aTab ) );
+                if( pExcRoot->pIR->GetDoc().LinkExternalTab( nNewTabNum, aTabName, aURL, pCur->aTab ) )
                 {
                     rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
                     return sal_True;
                 }
                 else
-                    rTabNum = 0xFFFD;
+                    rTabNum = 0xFFFE;       // Tabelle einmal nicht angelegt -> wird
+                                            //  wohl auch nicht mehr gehen...
             }
-            else if( pExcRoot->pIR->GetDocShell() )
-            {// Tabelle ist 'echt' extern
-                if( pExcRoot->pIR->GetExtDocOptions().GetDocSettings().mnLinkCnt == 0 )
-                {
-                    String      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
-                                        pExcRoot->pIR->GetDocShell() ) );
-                    String      aTabName( ScGlobal::GetDocTabName( aURL, pCur->aTab ) );
-                    if( pExcRoot->pIR->GetDoc().LinkExternalTab( nNewTabNum, aTabName, aURL, pCur->aTab ) )
-                    {
-                        rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
-                        return sal_True;
-                    }
-                    else
-                        rTabNum = 0xFFFE;       // Tabelle einmal nicht angelegt -> wird
-                                                //  wohl auch nicht mehr gehen...
-                }
-                else
-                    rTabNum = 0xFFFE;
+            else
+                rTabNum = 0xFFFE;
 
-            }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
 sal_Bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
 {
-    DBG_ASSERT( nExcIndex > 0, "*ExtSheetBuffer::IsLink(): Index muss >0 sein!" );
-    Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
+    OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::IsLink(): Index muss >0 sein!" );
 
-    if( pRet )
-        return pRet->bLink;
-    else
-        return sal_False;
+    if (!nExcIndex || nExcIndex > maEntries.size() )
+        return false;
+
+    return maEntries[ nExcIndex -1 ].bLink;
 }
 
 
 sal_Bool ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, String& rAppl, String& rDoc ) const
 {
-    DBG_ASSERT( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index muss >0 sein!" );
-    Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
+    OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index muss >0 sein!" );
 
-    if( pRet )
-    {
-        rAppl = pRet->aFile;
-        rDoc = pRet->aTab;
-        return sal_True;
-    }
-    else
-        return sal_False;
+    if (!nExcIndex || nExcIndex > maEntries.size() )
+        return false;
+
+    const Cont &rRet = maEntries[ nExcIndex -1 ];
+
+    rAppl = rRet.aFile;
+    rDoc = rRet.aTab;
+
+    return true;
 }
 
 
 void ExtSheetBuffer::Reset( void )
 {
-    Cont    *pAkt = ( Cont * ) List::First();
-    while( pAkt )
-    {
-        delete pAkt;
-        pAkt = ( Cont * ) List::Next();
-    }
-
-    List::Clear();
+    maEntries.clear();
 }
 
 
@@ -330,7 +307,7 @@ void ExtNameBuff::AddName( const String& rName, sal_Int16 nRefIdx )
 
 const ExtName* ExtNameBuff::GetNameByIndex( sal_Int16 nRefIdx, sal_uInt16 nNameIdx ) const
 {
-    DBG_ASSERT( nNameIdx > 0, "ExtNameBuff::GetNameByIndex() - invalid name index" );
+    OSL_ENSURE( nNameIdx > 0, "ExtNameBuff::GetNameByIndex() - invalid name index" );
     ExtNameMap::const_iterator aIt = maExtNames.find( nRefIdx );
     return ((aIt != maExtNames.end()) && (0 < nNameIdx) && (nNameIdx <= aIt->second.size())) ? &aIt->second[ nNameIdx - 1 ] : 0;
 }
@@ -342,3 +319,4 @@ void ExtNameBuff::Reset( void )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

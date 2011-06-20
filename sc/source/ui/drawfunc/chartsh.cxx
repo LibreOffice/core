@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,11 +34,9 @@
 //------------------------------------------------------------------
 #include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
-//CHINA001 #include <svx/labdlg.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/tabline.hxx>
-//CHINA001 #include <svx/transfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
@@ -63,7 +62,6 @@ SFX_IMPL_INTERFACE(ScChartShell, ScDrawShell, ScResId(SCSTR_CHARTSHELL) )
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                 ScResId(RID_DRAW_OBJECTBAR) );
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_CHART) );
-    //SFX_OBJECTMENU_REGISTRATION( SID_OBJECTMENU0, ScResId(RID_OBJECTMENU_DRAW) );
 }
 
 TYPEINIT1( ScChartShell, ScDrawShell );
@@ -81,3 +79,4 @@ ScChartShell::~ScChartShell()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

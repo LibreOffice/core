@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,7 +82,7 @@
 #include "progress.hxx"
 #include "dociter.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
 #include "editutil.hxx"
@@ -152,6 +153,10 @@ void ExcRecord::WriteBody( XclExpStream& rStrm )
     SaveCont( rStrm );
 }
 
+void ExcRecord::SaveXml( XclExpXmlStream& /*rStrm*/ )
+{
+}
+
 
 //--------------------------------------------------------- class ExcEmptyRec -
 
@@ -171,25 +176,6 @@ sal_Size ExcEmptyRec::GetLen() const
     return 0;
 }
 
-
-
-//------------------------------------------------------- class ExcRecordList -
-
-ExcRecordList::~ExcRecordList()
-{
-    for( ExcRecord* pRec = First(); pRec; pRec = Next() )
-        delete pRec;
-}
-
-
-void ExcRecordList::Save( XclExpStream& rStrm )
-{
-    for( ExcRecord* pRec = First(); pRec; pRec = Next() )
-        pRec->Save( rStrm );
-}
-
-
-
 //--------------------------------------------------------- class ExcDummyRec -
 
 void ExcDummyRec::Save( XclExpStream& rStrm )
@@ -202,8 +188,6 @@ sal_uInt16 ExcDummyRec::GetNum( void ) const
 {
     return 0x0000;
 }
-
-
 
 //------------------------------------------------------- class ExcBoolRecord -
 
@@ -353,7 +337,8 @@ const sal_uInt8* ExcDummy_041::GetData( void ) const
 Exc1904::Exc1904( ScDocument& rDoc )
 {
     Date* pDate = rDoc.GetFormatTable()->GetNullDate();
-    bVal = pDate ? (*pDate == Date( 1, 1, 1904 )) : sal_False;
+    bVal = pDate ? (*pDate == Date( 1, 1, 1904 )) : false;
+    bDateCompatibility = pDate ? !( *pDate == Date( 30, 12, 1899 )) : false;
 }
 
 
@@ -365,9 +350,21 @@ sal_uInt16 Exc1904::GetNum( void ) const
 
 void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 {
-    rStrm.WriteAttributes(
+    bool bISOIEC = ( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 );
+
+    if( bISOIEC )
+    {
+        rStrm.WriteAttributes(
+            XML_dateCompatibility, XclXmlUtils::ToPsz( bDateCompatibility ),
+            FSEND );
+    }
+
+    if( !bISOIEC || bDateCompatibility )
+    {
+        rStrm.WriteAttributes(
             XML_date1904, XclXmlUtils::ToPsz( bVal ),
             FSEND );
+    }
 }
 
 
@@ -413,7 +410,7 @@ ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
     ExcBundlesheetBase( rRootData, _nTab )
 {
     String sTabName = rRootData.pER->GetTabInfo().GetScTabName( _nTab );
-    DBG_ASSERT( sTabName.Len() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
+    OSL_ENSURE( sTabName.Len() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
     aName = ByteString( sTabName, rRootData.pER->GetTextEncoding() );
 }
 
@@ -592,7 +589,7 @@ void ExcFilterCondition::Save( XclExpStream& rStrm )
             rStrm << fVal;
         break;
         case EXC_AFTYPE_STRING:
-            DBG_ASSERT( pText, "ExcFilterCondition::Save() -- pText is NULL!" );
+            OSL_ENSURE( pText, "ExcFilterCondition::Save() -- pText is NULL!" );
             rStrm << (sal_uInt32)0 << (sal_uInt8) pText->Len() << (sal_uInt16)0 << (sal_uInt8)0;
         break;
         case EXC_AFTYPE_BOOLERR:
@@ -644,7 +641,7 @@ void ExcFilterCondition::SaveText( XclExpStream& rStrm )
 {
     if( nType == EXC_AFTYPE_STRING )
     {
-        DBG_ASSERT( pText, "ExcFilterCondition::SaveText() -- pText is NULL!" );
+        OSL_ENSURE( pText, "ExcFilterCondition::SaveText() -- pText is NULL!" );
         pText->WriteFlagField( rStrm );
         pText->WriteBuffer( rStrm );
     }
@@ -664,7 +661,7 @@ sal_Bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, 
                                     double fVal, String* pText, sal_Bool bSimple )
 {
     if( !aCond[ 1 ].IsEmpty() )
-        return sal_False;
+        return false;
 
     sal_uInt16 nInd = aCond[ 0 ].IsEmpty() ? 0 : 1;
 
@@ -682,7 +679,7 @@ sal_Bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, 
 
 sal_Bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 {
-    sal_Bool    bConflict = sal_False;
+    sal_Bool    bConflict = false;
     String  sText;
 
     if( rEntry.pStr )
@@ -836,32 +833,20 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
     XclExpRoot( rRoot ),
     pFilterMode( NULL ),
     pFilterInfo( NULL )
+    , mbAutoFilter (false)
 {
-    ScDBCollection& rDBColl = GetDatabaseRanges();
     XclExpNameManager& rNameMgr = GetNameManager();
 
-    // search for first DB-range with filter
-    sal_uInt16      nIndex  = 0;
-    sal_Bool        bFound  = sal_False;
-    sal_Bool        bAdvanced = sal_False;
-    ScDBData*   pData   = NULL;
+    sal_Bool        bFound  = false;
+    sal_Bool        bAdvanced = false;
+    ScDBData*   pData   = rRoot.GetDoc().GetAnonymousDBData(nTab);
     ScRange     aAdvRange;
-    while( (nIndex < rDBColl.GetCount()) && !bFound )
+    if (pData)
     {
-        pData = rDBColl[ nIndex ];
-        if( pData )
-        {
-            ScRange aRange;
-            pData->GetArea( aRange );
-            bAdvanced = pData->GetAdvancedQuerySource( aAdvRange );
-            bFound = (aRange.aStart.Tab() == nTab) &&
-                (pData->HasQueryParam() || pData->HasAutoFilter() || bAdvanced);
-        }
-        if( !bFound )
-            nIndex++;
+        bAdvanced = pData->GetAdvancedQuerySource( aAdvRange );
+        bFound = (pData->HasQueryParam() || pData->HasAutoFilter() || bAdvanced);
     }
-
-    if( pData && bFound )
+    if( bFound )
     {
         ScQueryParam    aParam;
         pData->GetQueryParam( aParam );
@@ -872,7 +857,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
 
         maRef = aRange;
 
-        // #i2394# #100489# built-in defined names must be sorted by containing sheet name
+        // #i2394# built-in defined names must be sorted by containing sheet name
         rNameMgr.InsertBuiltInName( EXC_BUILTIN_FILTERDATABASE, aRange );
 
         // advanced filter
@@ -896,9 +881,9 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
         // AutoFilter
         else
         {
-            sal_Bool    bConflict   = sal_False;
+            sal_Bool    bConflict   = false;
             sal_Bool    bContLoop   = sal_True;
-            sal_Bool    bHasOr      = sal_False;
+            sal_Bool    bHasOr      = false;
             SCCOLROW nFirstField = aParam.GetEntry( 0 ).nField;
 
             // create AUTOFILTER records for filtered columns
@@ -936,6 +921,9 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
             if( !maFilterList.IsEmpty() )
                 pFilterMode = new XclExpFiltermode;
             pFilterInfo = new XclExpAutofilterinfo( aRange.aStart, nColCnt );
+
+            if (maFilterList.IsEmpty () && !bConflict)
+                mbAutoFilter = true;
         }
     }
 }
@@ -965,7 +953,7 @@ sal_Bool ExcAutoFilterRecs::IsFiltered( SCCOL nCol )
     for( size_t nPos = 0, nSize = maFilterList.GetSize(); nPos < nSize; ++nPos )
         if( maFilterList.GetRecord( nPos )->GetCol() == static_cast<sal_uInt16>(nCol) )
             return sal_True;
-    return sal_False;
+    return false;
 }
 
 void ExcAutoFilterRecs::AddObjRecs()
@@ -993,7 +981,7 @@ void ExcAutoFilterRecs::Save( XclExpStream& rStrm )
 
 void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( maFilterList.IsEmpty() )
+    if( maFilterList.IsEmpty() && !mbAutoFilter )
         return;
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -1001,7 +989,8 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
             XML_ref,    XclXmlUtils::ToOString( maRef ).getStr(),
             FSEND );
     // OOXTODO: XML_extLst, XML_sortState
-    maFilterList.SaveXml( rStrm );
+    if( !maFilterList.IsEmpty() )
+        maFilterList.SaveXml( rStrm );
     rWorksheet->endElement( XML_autoFilter );
 }
 
@@ -1047,3 +1036,4 @@ bool XclExpFilterManager::HasFilterMode( SCTAB nScTab )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

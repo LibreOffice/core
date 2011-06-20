@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -170,8 +171,6 @@ public:
 
     sal_Bool            IsInputActive();
     EditView*       GetEditView();
-//UNUSED2008-05  EditView*      ActivateEdit( const String&     rText,
-//UNUSED2008-05                                const ESelection& rSel );
 
     void            TextGrabFocus();
     void            TextInvalidate();
@@ -196,7 +195,7 @@ protected:
     virtual void    SetText( const String& rString );
     virtual String  GetText() const;
 
-    sal_Bool        UseSubTotal( ScRangeList* pRangeList ) const;
+    bool UseSubTotal( ScRangeList* pRangeList ) const;
 
 private:
     ScPosWnd        aWndPos;
@@ -226,3 +225,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,6 @@
 
 #ifndef SC_DRTXTOB_HXX
 #define SC_DRTXTOB_HXX
-
-#ifndef _SFX_HXX
-#endif
 
 #include <sfx2/shell.hxx>
 #include <sfx2/module.hxx>
@@ -87,3 +85,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

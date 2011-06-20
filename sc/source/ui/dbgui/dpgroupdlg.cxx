@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,14 +35,10 @@
 
 
 #include "dpgroupdlg.hxx"
-#ifndef SC_DPGROUPDLG_HRC
 #include "dpgroupdlg.hrc"
-#endif
 #include <tools/resary.hxx>
 #include "scresid.hxx"
-#ifndef SC_SC_HRC
 #include "sc.hrc"
-#endif
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 // ============================================================================
@@ -200,7 +197,7 @@ ScDPNumGroupInfo ScDPNumGroupDlg::GetGroupInfo() const
 {
     ScDPNumGroupInfo aInfo;
     aInfo.Enable = sal_True;
-    aInfo.DateValues = sal_False;
+    aInfo.DateValues = false;
     aInfo.AutoStart = maStartHelper.IsAuto();
     aInfo.AutoEnd = maEndHelper.IsAuto();
 
@@ -358,3 +355,4 @@ IMPL_LINK( ScDPDateGroupDlg, CheckHdl, SvxCheckListBox*, pListBox )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

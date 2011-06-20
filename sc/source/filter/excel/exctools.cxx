@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@
 #include "xilink.hxx"
 #include "xecontent.hxx"
 
-// - ALLGEMEINE ----------------------------------------------------------
+#include <vector>
 
 RootData::RootData( void )
 {
@@ -91,214 +92,106 @@ RootData::~RootData()
 }
 
 
-
-
-XclImpOutlineBuffer::XclImpOutlineBuffer( SCSIZE nNewSize )
+XclImpOutlineBuffer::XclImpOutlineBuffer( SCSIZE nNewSize ) :
+    maLevels(0, nNewSize, 0),
+    mpOutlineArray(NULL),
+    mnEndPos(nNewSize),
+    mnMaxLevel(0),
+    mbButtonAfter(true)
 {
-    DBG_ASSERT( nNewSize > 0, "-OutlineBuffer::Ctor: nNewSize == 0!" );
-
-    nSize = nNewSize + 1;
-    pLevel = new sal_uInt8[ nSize ];
-    pOuted = new sal_Bool[ nSize ];
-    pHidden = new sal_Bool[ nSize ];
-    pOutlineArray = NULL;
-
-    Reset();
 }
-
 
 XclImpOutlineBuffer::~XclImpOutlineBuffer()
 {
-    delete[] pLevel;
-    delete[] pOuted;
-    delete[] pHidden;
 }
 
-
-void XclImpOutlineBuffer::SetLevel( SCSIZE nIndex, sal_uInt8 nVal, sal_Bool bOuted, sal_Bool bHidden )
+void XclImpOutlineBuffer::SetLevel( SCSIZE nIndex, sal_uInt8 nVal, bool bCollapsed )
 {
-    if( nIndex < nSize )
-    {
-        pLevel[ nIndex ] = nVal;
-        pOuted[ nIndex ] = bOuted;
-        pHidden[ nIndex ] = bHidden;
-
-        if( nIndex > nLast )
-            nLast = nIndex;
-        if( nVal > nMaxLevel )
-            nMaxLevel = nVal;
-    }
+    maLevels.insert_back(nIndex, nIndex+1, nVal);
+    if (nVal > mnMaxLevel)
+        mnMaxLevel = nVal;
+    if (bCollapsed)
+        maCollapsedPosSet.insert(nIndex);
 }
-
 
 void XclImpOutlineBuffer::SetOutlineArray( ScOutlineArray* pOArray )
 {
-    pOutlineArray = pOArray;
+    mpOutlineArray = pOArray;
 }
 
-
-// transtorm xcl-outline into SC-outline
-void XclImpOutlineBuffer::MakeScOutline( void )
+void XclImpOutlineBuffer::MakeScOutline()
 {
-    if( !pOutlineArray || !HasOutline() )
+    if (!mpOutlineArray)
         return;
 
-    const sal_uInt16    nNumLev         = 8;
-    sal_Bool            bPreOutedLevel  = sal_False;
-    sal_uInt8           nCurrLevel      = 0;
-    sal_Bool            bMakeHidden[ nNumLev ];
-    sal_Bool            bMakeVisible[ nNumLev + 1 ];
-
-    sal_uInt16 nLevel;
-    for( nLevel = 0; nLevel < nNumLev; ++nLevel )
-        bMakeHidden[ nLevel ] = sal_False;
-    for( nLevel = 0; nLevel <= nNumLev; ++nLevel )
-        bMakeVisible[ nLevel ] = sal_True;
-    if( nLast < (nSize - 1) )
-        nLast++;
-
-    // search for hidden attributes at end of level, move them to begin
-    if( bButtonNormal )
+    ::std::vector<SCSIZE> aOutlineStack;
+    aOutlineStack.reserve(mnMaxLevel);
+    OutlineLevels::const_iterator itr = maLevels.begin(), itrEnd = maLevels.end();
+    for (; itr != itrEnd; ++itr)
     {
-        for( sal_uInt8 nWorkLevel = 1; nWorkLevel <= nMaxLevel; nWorkLevel++ )
+        SCSIZE nPos = itr->first;
+        if (nPos >= mnEndPos)
         {
-            sal_uInt16  nStartPos       = 0;
-            sal_uInt8    nCurrLevel2 = 0;
-            sal_uInt8   nPrevLevel  = 0;
-
-            for( SCSIZE nC = 0 ; nC <= nLast ; nC++ )
+            // Don't go beyond the max allowed position.
+            OSL_ENSURE(aOutlineStack.empty(), "XclImpOutlineBuffer::MakeScOutline: outline stack not empty but expected to be.");
+            break;
+        }
+        sal_uInt8 nLevel = itr->second;
+        sal_uInt8 nCurLevel = static_cast<sal_uInt8>(aOutlineStack.size());
+        if (nLevel > nCurLevel)
+        {
+            for (sal_uInt8 i = 0; i < nLevel - nCurLevel; ++i)
+                aOutlineStack.push_back(nPos);
+        }
+        else
+        {
+            OSL_ENSURE(nLevel < nCurLevel, "XclImpOutlineBuffer::MakeScOutline: unexpected level!");
+            for (sal_uInt8 i = 0; i < nCurLevel - nLevel; ++i)
             {
-                nPrevLevel = nCurrLevel2;
-                nCurrLevel2 = pLevel[ nC ];
-                if( (nPrevLevel < nWorkLevel) && (nCurrLevel2 >= nWorkLevel) )
-                    nStartPos = static_cast< sal_uInt16 >( nC );
-                else if( (nPrevLevel >= nWorkLevel) && (nCurrLevel2 < nWorkLevel) )
+                if (aOutlineStack.empty())
                 {
-                    if( pOuted[ nC ] && pHidden[ nStartPos ] )
-                    {
-                        if( nStartPos )
-                            pOuted[ nStartPos - 1 ] = sal_True;
-                        else
-                            bPreOutedLevel = sal_True;
-                        pOuted[ nC ] = sal_False;
-                    }
+                    // Something is wrong.
+                    return;
                 }
+                SCSIZE nFirstPos = aOutlineStack.back();
+                aOutlineStack.pop_back();
+                bool bCollapsed = false;
+                if (mbButtonAfter)
+                    bCollapsed = maCollapsedPosSet.count(nPos) > 0;
+                else if (nFirstPos > 0)
+                    bCollapsed = maCollapsedPosSet.count(nFirstPos-1) > 0;
+
+                sal_Bool bDummy;
+                mpOutlineArray->Insert(nFirstPos, nPos-1, bDummy, bCollapsed);
             }
         }
     }
-    else
-        bPreOutedLevel = pHidden[ 0 ];
-
-    // generate SC outlines
-    sal_uInt16  nPrevC;
-    sal_uInt16  nStart[ nNumLev ];
-    sal_Bool    bDummy;
-    sal_Bool    bPrevOuted  = bPreOutedLevel;
-    sal_Bool    bCurrHidden = sal_False;
-    sal_Bool    bPrevHidden = sal_False;
-
-    for( SCSIZE nC = 0; nC <= nLast; nC++ )
-    {
-        sal_uInt8 nWorkLevel = pLevel[ nC ];
-
-        nPrevC      = static_cast< sal_uInt16 >( nC ? nC - 1 : 0 );
-        bPrevHidden = bCurrHidden;
-        bCurrHidden = pHidden[ nC ];
-
-        // open new levels
-        while( nWorkLevel > nCurrLevel )
-        {
-            nCurrLevel++;
-            bMakeHidden[ nCurrLevel ] = bPrevOuted;
-            bMakeVisible[ nCurrLevel + 1 ] =
-                bMakeVisible[ nCurrLevel ] && !bMakeHidden[ nCurrLevel ];
-            nStart[ nCurrLevel ] = static_cast< sal_uInt16 >( nC );
-        }
-        // close levels
-        while( nWorkLevel < nCurrLevel )
-        {
-            sal_Bool bLastLevel     = (nWorkLevel == (nCurrLevel - 1));
-            sal_Bool bRealHidden    = (bMakeHidden[ nCurrLevel ] && bPrevHidden );
-            sal_Bool bRealVisible   = (bMakeVisible[ nCurrLevel ] ||
-                                    (!bCurrHidden && bLastLevel));
-
-            pOutlineArray->Insert( nStart[ nCurrLevel ], nPrevC , bDummy,
-                bRealHidden, bRealVisible );
-            nCurrLevel--;
-        }
-
-        bPrevOuted = pOuted[ nC ];
-    }
 }
 
-
-void XclImpOutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, sal_uInt8 nVal,
-                                    sal_Bool bOuted, sal_Bool bHidden )
+void XclImpOutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, sal_uInt8 nVal, bool bCollapsed )
 {
-    DBG_ASSERT( nF <= nL, "+OutlineBuffer::SetLevelRange(): Last < First!" );
+    if (nF > nL)
+        // invalid range
+        return;
 
-    if( nL < nSize )
-    {
-        if( nL > nLast )
-            nLast = nL;
+    maLevels.insert_back(nF, nL+1, nVal);
 
-        sal_uInt8*  pLevelCount;
-        sal_uInt8*  pLast;
-        sal_Bool*   pOutedCount;
-        sal_Bool*   pHiddenCount;
-
-        pLevelCount = &pLevel[ nF ];
-        pLast = &pLevel[ nL ];
-        pOutedCount = &pOuted[ nF ];
-        pHiddenCount = &pHidden[ nF ];
-
-        while( pLevelCount <= pLast )
-        {
-            *( pLevelCount++ ) = nVal;
-            *( pOutedCount++ ) = bOuted;
-            *( pHiddenCount++ ) = bHidden;
-        }
-
-        if( nVal > nMaxLevel )
-            nMaxLevel = nVal;
-    }
+    if (bCollapsed)
+        maCollapsedPosSet.insert(nF);
 }
 
-
-void XclImpOutlineBuffer::Reset( void )
+void XclImpOutlineBuffer::SetButtonMode( bool bRightOrUnder )
 {
-    for( SCSIZE nC = 0 ; nC < nSize ; nC++  )
-    {
-        pLevel[ nC ] = 0;
-        pOuted[ nC ] = pHidden[ nC ] = sal_False;
-    }
-    nLast = 0;
-    nMaxLevel = 0;
+    mbButtonAfter = bRightOrUnder;
 }
 
-
-//___________________________________________________________________
-
-
-ExcScenarioCell::ExcScenarioCell( const sal_uInt16 nC, const sal_uInt16 nR ) : nCol( nC ), nRow( nR )
+ExcScenarioCell::ExcScenarioCell( const sal_uInt16 nC, const sal_uInt16 nR )
+    : nCol( nC ), nRow( nR )
 {
 }
 
-
-void ExcScenarioCell::SetValue( const String& r )
-{
-    aValue = r;
-}
-
-
-
-
-#define EXCSCAPPEND(EXCSCCELL)  (List::Insert(EXCSCCELL,LIST_APPEND))
-#define EXCSCFIRST()            ((ExcScenarioCell*)List::First())
-#define EXCSCNEXT()             ((ExcScenarioCell*)List::Next())
-
-
-ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR->GetCurrScTab() )
+ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
+    : nTab( rR.pIR->GetCurrScTab() )
 {
     sal_uInt16          nCref;
     sal_uInt8           nName, nComment;
@@ -330,32 +223,20 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR
     {
         rIn >> nR >> nC;
 
-        EXCSCAPPEND( new ExcScenarioCell( nC, nR ) );
+        aEntries.push_back(new ExcScenarioCell( nC, nR ));
 
         n--;
     }
 
     n = nCref;
-    ExcScenarioCell*    p = EXCSCFIRST();
-    while( p )
-    {
-        p->SetValue( rIn.ReadUniString() );
 
-        p = EXCSCNEXT();
-    }
+    boost::ptr_vector<ExcScenarioCell>::iterator iter;
+    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
+        iter->SetValue(rIn.ReadUniString());
 }
-
 
 ExcScenario::~ExcScenario()
 {
-    ExcScenarioCell*    p = EXCSCFIRST();
-
-    while( p )
-    {
-        delete p;
-        p = EXCSCNEXT();
-    }
-
     if( pName )
         delete pName;
     if( pComment )
@@ -364,38 +245,35 @@ ExcScenario::~ExcScenario()
         delete pUserName;
 }
 
-
 void ExcScenario::Apply( const XclImpRoot& rRoot, const sal_Bool bLast )
 {
     ScDocument&         r = rRoot.GetDoc();
-    ExcScenarioCell*    p = EXCSCFIRST();
     String              aSzenName( *pName );
     sal_uInt16              nNewTab = nTab + 1;
 
     if( !r.InsertTab( nNewTab, aSzenName ) )
         return;
 
-    r.SetScenario( nNewTab, sal_True );
-    // #112621# do not show scenario frames
+    r.SetScenario( nNewTab, true );
+    // do not show scenario frames
     r.SetScenarioData( nNewTab, *pComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL|(nProtected ? SC_SCENARIO_PROTECT : 0) );
 
-    while( p )
+    boost::ptr_vector<ExcScenarioCell>::const_iterator iter;
+    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
     {
-        sal_uInt16          nCol = p->nCol;
-        sal_uInt16          nRow = p->nRow;
-        String          aVal = p->GetValue();
+        sal_uInt16 nCol = iter->nCol;
+        sal_uInt16 nRow = iter->nRow;
+        String aVal = iter->GetValue();
 
         r.ApplyFlagsTab( nCol, nRow, nCol, nRow, nNewTab, SC_MF_SCENARIO );
 
         r.SetString( nCol, nRow, nNewTab, aVal );
-
-        p = EXCSCNEXT();
     }
 
     if( bLast )
         r.SetActiveScenario( nNewTab, sal_True );
 
-    // #111896# modify what the Active tab is set to if the new
+    // modify what the Active tab is set to if the new
     // scenario tab occurs before the active tab.
     ScExtDocSettings& rDocSett = rRoot.GetExtDocOptions().GetDocSettings();
     if( (static_cast< SCCOL >( nTab ) < rDocSett.mnDisplTab) && (rDocSett.mnDisplTab < MAXTAB) )
@@ -403,32 +281,16 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const sal_Bool bLast )
     rRoot.GetTabInfo().InsertScTab( nNewTab );
 }
 
-
-
-
-ExcScenarioList::~ExcScenarioList()
-{
-    ExcScenario*    p = _First();
-
-    while( p )
-    {
-        delete p;
-        p = _Next();
-    }
-}
-
-
 void ExcScenarioList::Apply( const XclImpRoot& rRoot )
 {
-    ExcScenario*    p = _Last();
-    sal_uInt16          n = ( sal_uInt16 ) Count();
+    sal_uInt16 n = static_cast<sal_uInt16>(aEntries.size());
 
-    while( p )
+    boost::ptr_vector<ExcScenario>::reverse_iterator iter;
+    for (iter = aEntries.rbegin(); iter != aEntries.rend(); ++iter)
     {
         n--;
-        p->Apply( rRoot, ( sal_Bool ) ( n == nLastScenario ) );
-        p = _Prev();
+        iter->Apply(rRoot, n == nLastScenario);
     }
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

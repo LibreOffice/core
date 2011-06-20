@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,21 +113,21 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
 
     if ( !bDisableAnchor )
     {
-        switch( pView->GetAnchor() )
+        switch( pView->GetAnchorType() )
         {
         case SCA_PAGE:
             rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, sal_True ) );
-            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, sal_False ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
         break;
 
         case SCA_CELL:
-        rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, sal_False ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
         rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, sal_True ) );
         break;
 
         default:
-        rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, sal_False ) );
-        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, sal_False ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, false ) );
+        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, false ) );
         break;
         }
     }
@@ -136,7 +137,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
 {
     ScDrawView* pView = pViewData->GetScDrawView();
 
-    //  #111711# call IsMirrorAllowed first to make sure ForcePossibilities (and thus CheckMarked)
+    //  call IsMirrorAllowed first to make sure ForcePossibilities (and thus CheckMarked)
     //  is called before GetMarkCount, so the nMarkCount value is valid for the rest of this method.
     if (!pView->IsMirrorAllowed(sal_True,sal_True))
     {
@@ -176,7 +177,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     }
 
     // do not change layer of form controls
-    // #158385# #i83729# do not change layer of cell notes (on internal layer)
+    // #i83729# do not change layer of cell notes (on internal layer)
     if ( !nMarkCount || pView->HasMarkedControl() || pView->HasMarkedInternal() )
     {
         rSet.DisableItem( SID_OBJECT_HEAVEN );
@@ -194,27 +195,23 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         }
     }
 
-    sal_Bool bCanRename = sal_False;
+    sal_Bool bCanRename = false;
     if ( nMarkCount > 1 )
     {
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
         // no hypelink options for a selected group
         rSet.DisableItem( SID_DRAW_HLINK_EDIT );
         rSet.DisableItem( SID_DRAW_HLINK_DELETE );
         rSet.DisableItem( SID_OPEN_HYPERLINK );
-#endif
     }
     else if ( nMarkCount == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
         if ( !pInfo || (pInfo->GetHlink().getLength() == 0) )
         {
             rSet.DisableItem( SID_DRAW_HLINK_DELETE );
             rSet.DisableItem( SID_OPEN_HYPERLINK );
         }
-#endif
         SdrLayerID nLayerID = pObj->GetLayer();
         if ( nLayerID != SC_LAYER_INTERN )
             bCanRename = sal_True;                          // #i51351# anything except internal objects can be renamed
@@ -296,7 +293,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 
     if( bHasMarked )
     {
-        rSet.Put( pDrView->GetAttrFromMarked(sal_False) );
+        rSet.Put( pDrView->GetAttrFromMarked(false) );
 
         // Wenn die View selektierte Objekte besitzt, muessen entspr. Items
         // von SFX_ITEM_DEFAULT (_ON) auf SFX_ITEM_DISABLED geaendert werden
@@ -325,7 +322,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
         // #i34458# The SvxSizeItem in SID_TABLE_CELL is no longer needed by
         // SvxPosSizeStatusBarControl, it's enough to have it in SID_ATTR_SIZE.
 
-        sal_Bool bActionItem = sal_False;
+        sal_Bool bActionItem = false;
         if ( pDrView->IsAction() )              // action rectangle
         {
             Rectangle aRect;
@@ -365,7 +362,7 @@ void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
     //  Dialoge fuer Draw-Attribute disablen, wenn noetig
 
     ScDrawView* pDrView = pViewData->GetScDrawView();
-    SfxItemSet aViewSet = pDrView->GetAttrFromMarked(sal_False);
+    SfxItemSet aViewSet = pDrView->GetAttrFromMarked(false);
 
     if ( aViewSet.GetItemState( XATTR_LINESTYLE ) == SFX_ITEM_DEFAULT )
     {
@@ -388,7 +385,7 @@ sal_Bool ScDrawShell::AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList
         {
             if(nLayerNo!=pObj->GetLayer())
             {
-                bResult=sal_False;
+                bResult=false;
                 break;
             }
         }
@@ -397,3 +394,4 @@ sal_Bool ScDrawShell::AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

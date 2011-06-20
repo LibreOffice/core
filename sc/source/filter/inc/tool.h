@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -143,14 +144,14 @@ inline const SfxUInt32Item* FormCache::GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt
 
     aCompareIdent.SetStamp( nFormat, nSt );
     nIndex = aCompareIdent.GetStamp();
-    DBG_ASSERT( nIndex < __nSize, "FormCache::GetAttr(): Uuuuuuups... so nicht!" );
+    OSL_ENSURE( nIndex < __nSize, "FormCache::GetAttr(): Uuuuuuups... so nicht!" );
     if( bValid[ nIndex ] )
         pRet = aIdents[ nIndex ].GetAttr();
     else
     {
         // neues Attribut anlegen
         pAttr = NewAttr( nFormat, nSt );
-        DBG_ASSERT( pAttr, "FormCache::GetAttr(): Nix Speicherus" );
+        OSL_ENSURE( pAttr, "FormCache::GetAttr(): Nix Speicherus" );
 
         aIdents[ nIndex ] = FormIdent( nFormat, nSt, *pAttr );
         bValid[ nIndex ] = sal_True;
@@ -162,3 +163,4 @@ inline const SfxUInt32Item* FormCache::GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

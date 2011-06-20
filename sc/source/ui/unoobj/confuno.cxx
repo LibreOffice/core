@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 
 #include "confuno.hxx"
 #include "unonames.hxx"
-#include "unoguard.hxx"
 #include "scdll.hxx"
 #include "docsh.hxx"
 #include "miscuno.hxx"
@@ -45,6 +45,7 @@
 #include <sfx2/printer.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
 
@@ -84,9 +85,7 @@ const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_UPDTEMPL),     0,  &getBooleanCppuType(),              0, 0},
         /*Stampit enable/disable print cancel */
         {MAP_CHAR_LEN(SC_UNO_ALLOWPRINTJOBCANCEL), 0, &getBooleanCppuType(),        0, 0},
-        // --> PB 2004-08-25 #i33095# Security Options
         {MAP_CHAR_LEN(SC_UNO_LOADREADONLY), 0,  &getBooleanCppuType(),              0, 0},
-        // <--
         {MAP_CHAR_LEN(SC_UNO_SHAREDOC),     0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_MODIFYPASSWORDINFO), 0,  &getCppuType((uno::Sequence< beans::PropertyValue >*)0),              0, 0},
         {0,0,0,0,0,0}
@@ -125,7 +124,7 @@ void ScDocumentConfiguration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocumentConfiguration::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
         new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
@@ -137,14 +136,14 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     if(pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         if (pDoc)
         {
-            sal_Bool bUpdateHeights = sal_False;
+            sal_Bool bUpdateHeights = false;
 
             ScViewOptions aViewOpt(pDoc->GetViewOptions());
 
@@ -254,7 +253,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
             {
-                sal_Bool bTmp=sal_False;
+                sal_Bool bTmp=false;
                 if ( aValue >>= bTmp )
                     pDocShell->SetSaveVersionOnClose( bTmp );
             }
@@ -266,13 +265,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_LOADREADONLY ) == 0 )
             {
-                sal_Bool bTmp=sal_False;
+                sal_Bool bTmp=false;
                 if ( aValue >>= bTmp )
                     pDocShell->SetLoadReadonly( bTmp );
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
-                sal_Bool bDocShared = sal_False;
+                sal_Bool bDocShared = false;
                 if ( aValue >>= bDocShared )
                 {
                     pDocShell->SetSharedXMLFlag( bDocShared );
@@ -336,7 +335,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Any aRet;
 
     if(pDocShell)
@@ -379,7 +378,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 // #i75610# don't create the printer, return empty string if no printer created yet
                 // (as in SwXDocumentSettings)
-                SfxPrinter* pPrinter = pDoc->GetPrinter( sal_False );
+                SfxPrinter* pPrinter = pDoc->GetPrinter( false );
                 if (pPrinter)
                     aRet <<= rtl::OUString ( pPrinter->GetName());
                 else
@@ -389,7 +388,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 // #i75610# don't create the printer, return empty sequence if no printer created yet
                 // (as in SwXDocumentSettings)
-                SfxPrinter* pPrinter = pDoc->GetPrinter( sal_False );
+                SfxPrinter* pPrinter = pDoc->GetPrinter( false );
                 if (pPrinter)
                 {
                     SvMemoryStream aStream;
@@ -420,7 +419,6 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 aRet <<= pDocShell->IsQueryLoadTemplate();
             else if ( aPropertyName.compareToAscii( SC_UNO_LOADREADONLY ) == 0 )
                 aRet <<= pDocShell->IsLoadReadonly();
-            // <--
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasSharedXMLFlagSet() );
@@ -463,7 +461,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
 
 rtl::OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScDocumentConfiguration" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScDocumentConfiguration" ));
 }
 
 sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const rtl::OUString& rServiceName )
@@ -479,10 +477,11 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDocumentConfiguration::getSupportedServi
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCCOMPSCPREADSHEETSETTINGS_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCDOCUMENTSETTINGS_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCOMPSCPREADSHEETSETTINGS_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCUMENTSETTINGS_SERVICE ));
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,7 +96,7 @@ void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_Bool bEnable = sal_False;
+    sal_Bool bEnable = false;
 
     if( rMarkList.GetMarkCount() == 1 )
     {
@@ -146,3 +147,4 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
     Invalidate();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

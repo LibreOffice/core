@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,10 +48,13 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
     OUStringBuffer aStrBuf;
     aStrBuf.appendAscii( SVLIBRARY("scui") );
 
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf.makeStringAndClear() ) )
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf.makeStringAndClear(),
+                                                             SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( ScAbstractDialogFactory* (__LOADONCALLAPI*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
+            aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")) );
     if ( fp )
         return fp();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,8 @@
 #include <vcl/window.hxx>
 #include "printfun.hxx"     // ScPrintState
 
+#include <vector>
+
 class ScDocShell;
 class ScPreviewShell;
 class FmFormView;
@@ -47,8 +50,8 @@ private:
     sal_Bool            bValid;             // folgende Werte gueltig
     SCTAB           nTabCount;
     SCTAB           nTabsTested;        // fuer wieviele Tabellen ist nPages gueltig?
-    long            nPages[MAXTABCOUNT];
-    long            nFirstAttr[MAXTABCOUNT];
+    std::vector<long>       nPages;
+    std::vector<long>       nFirstAttr;
     SCTAB           nTab;               // Tabelle
     long            nTabPage;           // Seite von Tabelle
     long            nTabStart;          // erste Seite der Tabelle (wirklich)
@@ -63,10 +66,11 @@ private:
     ScPreviewLocationData* pLocationData;   // stores table layout for accessibility API
     FmFormView*     pDrawView;
 
+    SCTAB           nCurTab;
+
                                         // intern:
-    bool            bInPaint;
-    bool            bInSetZoom;
-    sal_Bool        bInGetState;
+    sal_Bool            bInPaint;
+    sal_Bool            bInGetState;
     ScDocShell*     pDocShell;
     ScPreviewShell* pViewShell;
 
@@ -125,7 +129,7 @@ public:
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
-    void    DataChanged(sal_Bool bNewTime = sal_False);             // statt Invalidate rufen
+    void    DataChanged(sal_Bool bNewTime = false);             // statt Invalidate rufen
     void    DoInvalidate();
 
     void    SetXOffset( long nX );
@@ -167,3 +171,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

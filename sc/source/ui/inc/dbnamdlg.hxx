@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,19 +29,15 @@
 #ifndef SC_DBNAMDLG_HXX
 #define SC_DBNAMDLG_HXX
 
-#ifndef _COMBOBOX_HXX //autogen
+#include <vector>
+
 #include <vcl/combobox.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
 #include "anyrefdg.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "expftext.hxx"
 
 class ScViewData;
@@ -75,7 +72,7 @@ private:
     CheckBox            aBtnDoSize;
     CheckBox            aBtnKeepFmt;
     CheckBox            aBtnStripData;
-    ScExpandedFixedText aFTSource;     //@18.09.97 erweiterter FixedText
+    ScExpandedFixedText aFTSource;
     FixedText           aFTOperations;
 
     OKButton        aBtnOk;
@@ -90,7 +87,6 @@ private:
 
     const String    aStrAdd;    // "Hinzufuegen"
     const String    aStrModify; // "Aendern"
-    const String    aStrNoName; // "unbenannt"
     const String    aStrInvalid;
 
     String          aStrSource;
@@ -103,7 +99,7 @@ private:
 
     ScDBCollection  aLocalDbCol;
     ScRange         theCurArea;
-    List            aRemoveList;
+    std::vector<ScRange> aRemoveList;
 
 #ifdef _DBNAMDLG_CXX
 private:
@@ -125,3 +121,4 @@ private:
 
 #endif // SC_DBNAMDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

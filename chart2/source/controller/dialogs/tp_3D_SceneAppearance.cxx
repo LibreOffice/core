@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -181,11 +182,10 @@ void ThreeD_SceneAppearance_TabPage::applyRoundedEdgeAndObjectLinesToModel()
             break;
     }
 
-    // /-- locked controllers
+    // locked controllers
     ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
     ThreeDHelper::setRoundedEdgesAndObjectLines(
         ::chart::ChartModelHelper::findDiagram( m_xChartModel ), nCurrentRoundedEdges, nObjectLines );
-    // \-- locked controllers
 }
 
 void ThreeD_SceneAppearance_TabPage::applyShadeModeToModel()
@@ -306,7 +306,7 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, void*, EMPTYARG )
         return 0;
 
     {
-        // /-- locked controllers
+        // locked controllers
         ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
 
         uno::Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( m_xChartModel ) );
@@ -317,9 +317,8 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, void*, EMPTYARG )
             ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Simple );
         else
         {
-            OSL_ENSURE( false, "Invalid Entry selected" );
+            OSL_FAIL( "Invalid Entry selected" );
         }
-        // \-- locked controllers
     }
 
     // update other controls
@@ -361,3 +360,5 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, Check
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

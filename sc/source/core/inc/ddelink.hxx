@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,16 +68,16 @@ public:
     void            Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
 
                                             // von SvBaseLink ueberladen:
-    virtual void    DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
                                             // von SvtBroadcaster ueberladen:
     virtual void    ListenersGone();
 
                                             // fuer Interpreter:
 
-    const ScMatrix* GetResult() const           { return pResult; }
-    void            SetResult( ScMatrix* pRes ) { pResult = pRes; }
+    const ScMatrix* GetResult() const           { return pResult.get(); }
+    void            SetResult( ScMatrixRef pRes ) { pResult = pRes; }
 
                                             // XML and Excel import after NewData()
     ScMatrixRef     GetModifiableResult()   { return pResult; }
@@ -97,3 +98,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

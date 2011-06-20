@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include "scdll.hxx"
 #include "document.hxx"
 #include "scmatrix.hxx"
+#include "externalrefmgr.hxx"
 
 #include <math.h>
 #include <map>
@@ -59,8 +61,8 @@ struct ScCompare
         {
             pVal[ 0 ] = p1;
             pVal[ 1 ] = p2;
-            bEmpty[0] = sal_False;
-            bEmpty[1] = sal_False;
+            bEmpty[0] = false;
+            bEmpty[1] = false;
         }
 };
 
@@ -91,12 +93,12 @@ public:
 };
 
 enum ScIterFunc {
-    ifSUM,                              // Aufsummieren
-    ifSUMSQ,                            // Quadratsummen
-    ifPRODUCT,                          // Multiplizieren
-    ifAVERAGE,                          // Durchschnitt
-    ifCOUNT,                            // Anzahl Werte
-    ifCOUNT2,                           // Anzahl Werte (nichtleer)
+    ifSUM,                              // Add up
+    ifSUMSQ,                            // Sums of squares
+    ifPRODUCT,                          // Product
+    ifAVERAGE,                          // Average
+    ifCOUNT,                            // Count Values
+    ifCOUNT2,                           // Count Values (not empty)
     ifMIN,                              // Minimum
     ifMAX                               // Maximum
 };
@@ -134,6 +136,15 @@ public:
     static inline double div( const double& fNumerator, const double& fDenominator );
 
     ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR);
+
+    enum VolatileType {
+        VOLATILE,
+        VOLATILE_MACRO,
+        NOT_VOLATILE
+    };
+
+    VolatileType GetVolatileType() const;
+
 private:
     static ScTokenStack*    pGlobalStack;
     static sal_Bool             bGlobalStackInUse;
@@ -168,6 +179,8 @@ private:
     sal_Bool        bCalcAsShown;           // precision as shown
     sal_Bool        bMatrixFormula;         // formula cell is a matrix formula
 
+    VolatileType meVolaileType;
+
 //---------------------------------Funktionen in interpre.cxx---------
 // nMust <= nAct <= nMax ? ok : PushError
 inline sal_Bool MustHaveParamCount( short nAct, short nMust );
@@ -201,10 +214,10 @@ inline sal_Bool HasCellEmptyData( const ScBaseCell* pCell )
     { return pCell ? pCell->HasEmptyData() : sal_True; }
 /// This includes inherited emptiness, which usually is regarded as value!
 inline sal_Bool HasCellValueData( const ScBaseCell* pCell )
-    { return pCell ? pCell->HasValueData() : sal_False; }
+    { return pCell ? pCell->HasValueData() : false; }
 /// Not empty and not value.
 inline sal_Bool HasCellStringData( const ScBaseCell* pCell )
-    { return pCell ? pCell->HasStringData() : sal_False; }
+    { return pCell ? pCell->HasStringData() : false; }
 
 sal_Bool CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt8* pCellArr);
@@ -279,7 +292,7 @@ void ValidateRef( const ScRefList & rRefList );
 void SingleRefToVars( const ScSingleRefData & rRef, SCCOL & rCol, SCROW & rRow, SCTAB & rTab );
 void PopSingleRef( ScAddress& );
 void PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab);
-void DoubleRefToRange( const ScComplexRefData&, ScRange&, sal_Bool bDontCheckForTableOp = sal_False );
+void DoubleRefToRange( const ScComplexRefData&, ScRange&, sal_Bool bDontCheckForTableOp = false );
 /** If formula::StackVar formula::svDoubleRef pop ScDoubleRefToken and return values of
     ScComplexRefData.
     Else if StackVar svRefList return values of the ScComplexRefData where
@@ -289,15 +302,21 @@ void DoubleRefToRange( const ScComplexRefData&, ScRange&, sal_Bool bDontCheckFor
     while(nParamCount--) PopDoubleRef(aRange,nParamCount,nRefInList);
   */
 void PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRefInList );
-void PopDoubleRef( ScRange&, sal_Bool bDontCheckForTableOp = sal_False );
+void PopDoubleRef( ScRange&, sal_Bool bDontCheckForTableOp = false );
 void DoubleRefToVars( const ScToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
-        sal_Bool bDontCheckForTableOp = sal_False );
-ScDBRangeBase* PopDoubleRef();
+        sal_Bool bDontCheckForTableOp = false );
+ScDBRangeBase* PopDBDoubleRef();
 void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
-                          sal_Bool bDontCheckForTableOp = sal_False );
+                          sal_Bool bDontCheckForTableOp = false );
+void PopExternalSingleRef(sal_uInt16& rFileId, String& rTabName, ScSingleRefData& rRef);
+void PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = NULL);
+void PopExternalDoubleRef(sal_uInt16& rFileId, String& rTabName, ScComplexRefData& rRef);
+void PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray);
+void PopExternalDoubleRef(ScMatrixRef& rMat);
+void GetExternalDoubleRef(sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& aData, ScExternalRefCache::TokenArrayRef& rArray);
 sal_Bool PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
 // If MatrixFormula: convert formula::svDoubleRef to svMatrix, create JumpMatrix.
@@ -308,15 +327,21 @@ inline void MatrixDoubleRefToMatrix();      // if MatrixFormula: PopDoubleRefPus
 // If MatrixFormula or ForceArray: ConvertMatrixParameters()
 inline bool MatrixParameterConversion();
 ScMatrixRef PopMatrix();
-//void PushByte(sal_uInt8 nVal);
+void QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr);
+//void PushByte(BYTE nVal);
 void PushDouble(double nVal);
 void PushInt( int nVal );
 void PushStringBuffer( const sal_Unicode* pString );
 void PushString( const String& rString );
 void PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab);
 void PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
-void PushMatrix(ScMatrix* pMat);
+                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
+void PushExternalSingleRef(sal_uInt16 nFileId, const String& rTabName,
+                           SCCOL nCol, SCROW nRow, SCTAB nTab);
+void PushExternalDoubleRef(sal_uInt16 nFileId, const String& rTabName,
+                           SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                           SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
+void PushMatrix(const ScMatrixRef& pMat);
 void PushError( sal_uInt16 nError );
 /// Raw stack type without default replacements.
 formula::StackVar GetRawStackType();
@@ -327,11 +352,13 @@ formula::StackVar GetStackType( sal_uInt8 nParam );
 sal_uInt8 GetByte() { return cPar; }
 // generiert aus DoubleRef positionsabhaengige SingleRef
 sal_Bool DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
+double GetDoubleFromMatrix(const ScMatrixRef& pMat);
 double GetDouble();
 double GetDoubleWithDefault(double nDefault);
 sal_Bool IsMissing();
 sal_Bool GetBool() { return GetDouble() != 0.0; }
 const String& GetString();
+const String& GetStringFromMatrix(const ScMatrixRef& pMat);
 // pop matrix and obtain one element, upper left or according to jump matrix
 ScMatValType GetDoubleOrStringFromMatrix( double& rDouble, String& rString );
 ScMatrixRef CreateMatrixFromDoubleRef( const formula::FormulaToken* pToken,
@@ -374,7 +401,7 @@ double Compare();
         NULL means case sensitivity document option is to be used!
  */
 ScMatrixRef CompareMat( ScCompareOptions* pOptions = NULL );
-ScMatrixRef QueryMat( ScMatrix* pMat, ScCompareOptions& rOptions );
+ScMatrixRef QueryMat( const ScMatrixRef& pMat, ScCompareOptions& rOptions );
 void ScEqual();
 void ScNotEqual();
 void ScLess();
@@ -411,10 +438,6 @@ void ScArcSinHyp();
 void ScArcCosHyp();
 void ScArcTanHyp();
 void ScArcCotHyp();
-void ScCosecant();
-void ScSecant();
-void ScCosecantHyp();
-void ScSecantHyp();
 void ScExp();
 void ScLn();
 void ScLog10();
@@ -453,20 +476,20 @@ void ScJis();
 void ScAsc();
 void ScUnicode();
 void ScUnichar();
-void ScMin( sal_Bool bTextAsZero = sal_False );
-void ScMax( sal_Bool bTextAsZero = sal_False );
-double IterateParameters( ScIterFunc, sal_Bool bTextAsZero = sal_False );
+void ScMin( sal_Bool bTextAsZero = false );
+void ScMax( sal_Bool bTextAsZero = false );
+double IterateParameters( ScIterFunc, sal_Bool bTextAsZero = false );
 void ScSumSQ();
 void ScSum();
 void ScProduct();
-void ScAverage( sal_Bool bTextAsZero = sal_False );
+void ScAverage( sal_Bool bTextAsZero = false );
 void ScCount();
 void ScCount2();
-void GetStVarParams( double& rVal, double& rValCount, sal_Bool bTextAsZero = sal_False );
-void ScVar( sal_Bool bTextAsZero = sal_False );
-void ScVarP( sal_Bool bTextAsZero = sal_False );
-void ScStDev( sal_Bool bTextAsZero = sal_False );
-void ScStDevP( sal_Bool bTextAsZero = sal_False );
+void GetStVarParams( double& rVal, double& rValCount, sal_Bool bTextAsZero = false );
+void ScVar( sal_Bool bTextAsZero = false );
+void ScVarP( sal_Bool bTextAsZero = false );
+void ScStDev( sal_Bool bTextAsZero = false );
+void ScStDevP( sal_Bool bTextAsZero = false );
 void ScColumns();
 void ScRows();
 void ScTables();
@@ -531,7 +554,6 @@ sal_Bool SetSbxVariable( SbxVariable* pVar, SCCOL nCol, SCROW nRow, SCTAB nTab )
 void ScErrorType();
 void ScDBArea();
 void ScColRowNameAuto();
-void ScExternalRef();
 void ScGetPivotData();
 void ScHyperLink();
 void ScBahtText();
@@ -541,10 +563,10 @@ void ScTTT();
 
 /** Obtain the date serial number for a given date.
     @param bStrict
-        If sal_False, nYear < 100 takes the two-digit year setting into account,
+        If FALSE, nYear < 100 takes the two-digit year setting into account,
         and rollover of invalid calendar dates takes place, e.g. 1999-02-31 =>
         1999-03-03.
-        If sal_True, the date passed must be a valid Gregorian calendar date. No
+        If TRUE, the date passed must be a valid Gregorian calendar date. No
         two-digit expanding or rollover is done.
  */
 double GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bStrict );
@@ -642,14 +664,14 @@ void ScLCM();
 //-------------------------- Matrixfunktionen ---------------------------------
 
 void ScMatValue();
-void MEMat(ScMatrix* mM, SCSIZE n);
+void MEMat(const ScMatrixRef& mM, SCSIZE n);
 void ScMatDet();
 void ScMatInv();
 void ScMatMult();
 void ScMatTrans();
 void ScEMat();
 void ScMatRef();
-ScMatrixRef MatConcat(ScMatrix* pMat1, ScMatrix* pMat2);
+ScMatrixRef MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef& pMat2);
 void ScSumProduct();
 void ScSumX2MY2();
 void ScSumX2DY2();
@@ -696,7 +718,6 @@ double GetGamma(double x);
 double GetLogGamma(double x);
 double GetBeta(double fAlpha, double fBeta);
 double GetLogBeta(double fAlpha, double fBeta);
-double GetBinomDistPMF(double x, double n, double p); //probability mass function
 void ScLogGamma();
 void ScGamma();
 void ScPhi();
@@ -784,7 +805,6 @@ double GetGammaDistPDF(double fX, double fAlpha, double fLambda);
 // cumulative distribution function; fLambda is "scale" parameter
 double GetGammaDist(double fX, double fAlpha, double fLambda);
 
-//----------------------------------------------------------------------------
 public:
     ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
                     const ScAddress&, ScTokenArray& );
@@ -840,7 +860,7 @@ inline sal_Bool ScInterpreter::MustHaveParamCount( short nAct, short nMust )
         PushParameterExpected();
     else
         PushIllegalParameter();
-    return sal_False;
+    return false;
 }
 
 
@@ -852,7 +872,7 @@ inline sal_Bool ScInterpreter::MustHaveParamCount( short nAct, short nMust, shor
         PushParameterExpected();
     else
         PushIllegalParameter();
-    return sal_False;
+    return false;
 }
 
 
@@ -861,7 +881,7 @@ inline sal_Bool ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
     if ( nAct >= nMin )
         return sal_True;
     PushParameterExpected();
-    return sal_False;
+    return false;
 }
 
 
@@ -871,7 +891,7 @@ inline sal_Bool ScInterpreter::CheckStringResultLen( String& rResult, const Stri
     {
         SetError( errStringOverflow );
         rResult.Erase();
-        return sal_False;
+        return false;
     }
     return sal_True;
 }
@@ -891,7 +911,6 @@ inline void ScInterpreter::TreatDoubleError( double& rVal )
 }
 
 
-// static
 inline double ScInterpreter::div( const double& fNumerator, const double& fDenominator )
 {
     return (fDenominator != 0.0) ? (fNumerator / fDenominator) :
@@ -899,3 +918,5 @@ inline double ScInterpreter::div( const double& fNumerator, const double& fDenom
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

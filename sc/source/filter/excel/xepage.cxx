@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,25 +97,37 @@ XclExpSetup::XclExpSetup( const XclPageData& rPageData ) :
 
 void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
 {
-    rStrm.GetCurrentStream()->singleElement( XML_pageSetup,
-            XML_paperSize,          OString::valueOf( (sal_Int32) mrData.mnPaperSize ).getStr(),
-            XML_scale,              OString::valueOf( (sal_Int32) mrData.mnScaling ).getStr(),
-            XML_firstPageNumber,    OString::valueOf( (sal_Int32) mrData.mnStartPage ).getStr(),
-            XML_fitToWidth,         OString::valueOf( (sal_Int32) mrData.mnFitToWidth ).getStr(),
-            XML_fitToHeight,        OString::valueOf( (sal_Int32) mrData.mnFitToHeight ).getStr(),
-            XML_pageOrder,          mrData.mbPrintInRows ? "overThenDown" : "downThenOver",
-            XML_orientation,        mrData.mbPortrait ? "portrait" : "landscape",   // OOXTODO: "default"?
-            XML_usePrinterDefaults, XclXmlUtils::ToPsz( !mrData.mbValid ),
-            XML_blackAndWhite,      XclXmlUtils::ToPsz( mrData.mbBlackWhite ),
-            XML_draft,              XclXmlUtils::ToPsz( mrData.mbDraftQuality ),
-            XML_cellComments,       mrData.mbPrintNotes ? "atEnd" : "none",         // OOXTODO: "asDisplayed"?
-            XML_useFirstPageNumber, XclXmlUtils::ToPsz( mrData.mbManualStart ),
-            // OOXTODO: XML_errors, // == displayed|blank|dash|NA
-            XML_horizontalDpi,      OString::valueOf( (sal_Int32) mrData.mnHorPrintRes ).getStr(),
-            XML_verticalDpi,        OString::valueOf( (sal_Int32) mrData.mnVerPrintRes ).getStr(),
-            XML_copies,             OString::valueOf( (sal_Int32) mrData.mnCopies ).getStr(),
-            // OOXTODO: devMode settings part RelationshipId: FSNS( XML_r, XML_id ),
-            FSEND );
+    sax_fastparser::FastAttributeList* pAttrList=rStrm.GetCurrentStream()->createAttrList();
+    if( rStrm.getVersion() != oox::core::ISOIEC_29500_2008 ||
+        mrData.mnStrictPaperSize != EXC_PAPERSIZE_USER )
+    {
+        pAttrList->add( XML_paperSize,           OString::valueOf( (sal_Int32) mrData.mnPaperSize ).getStr() );
+    }
+    else
+    {
+        pAttrList->add( XML_paperWidth,          OString::valueOf( (sal_Int32) mrData.mnPaperWidth ).concat(OString("mm")).getStr() );
+        pAttrList->add( XML_paperHeight,         OString::valueOf( (sal_Int32) mrData.mnPaperHeight ).concat(OString("mm")).getStr() );
+        // pAttrList->add( XML_paperUnits,          "mm" );
+    }
+    pAttrList->add( XML_scale,              OString::valueOf( (sal_Int32) mrData.mnScaling ).getStr() );
+    pAttrList->add( XML_firstPageNumber,    OString::valueOf( (sal_Int32) mrData.mnStartPage ).getStr() );
+    pAttrList->add( XML_fitToWidth,         OString::valueOf( (sal_Int32) mrData.mnFitToWidth ).getStr() );
+    pAttrList->add( XML_fitToHeight,        OString::valueOf( (sal_Int32) mrData.mnFitToHeight ).getStr() );
+    pAttrList->add( XML_pageOrder,          mrData.mbPrintInRows ? "overThenDown" : "downThenOver" );
+    pAttrList->add( XML_orientation,        mrData.mbPortrait ? "portrait" : "landscape" );   // OOXTODO: "default"?
+    pAttrList->add( XML_usePrinterDefaults, XclXmlUtils::ToPsz( !mrData.mbValid ) );
+    pAttrList->add( XML_blackAndWhite,      XclXmlUtils::ToPsz( mrData.mbBlackWhite ) );
+    pAttrList->add( XML_draft,              XclXmlUtils::ToPsz( mrData.mbDraftQuality ) );
+    pAttrList->add( XML_cellComments,       mrData.mbPrintNotes ? "atEnd" : "none" );         // OOXTODO: "asDisplayed"?
+    pAttrList->add( XML_useFirstPageNumber, XclXmlUtils::ToPsz( mrData.mbManualStart ) );
+    // OOXTODO: XML_errors, // == displayed|blank|dash|NA
+    pAttrList->add( XML_horizontalDpi,      OString::valueOf( (sal_Int32) mrData.mnHorPrintRes ).getStr() );
+    pAttrList->add( XML_verticalDpi,        OString::valueOf( (sal_Int32) mrData.mnVerPrintRes ).getStr() );
+    pAttrList->add( XML_copies,             OString::valueOf( (sal_Int32) mrData.mnCopies ).getStr() );
+    // OOXTODO: devMode settings part RelationshipId: FSNS( XML_r, XML_id ),
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList > aAttrs(pAttrList);
+    rStrm.GetCurrentStream()->singleElement( XML_pageSetup, aAttrs );
 }
 
 void XclExpSetup::WriteBody( XclExpStream& rStrm )
@@ -317,6 +330,14 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
         maData.maHorPageBreaks.push_back(nRow);
     }
 
+    if (maData.maHorPageBreaks.size() > 1026)
+    {
+        // Excel allows only up to 1026 page breaks.  Trim any excess page breaks.
+        ScfUInt16Vec::iterator itr = maData.maHorPageBreaks.begin();
+        ::std::advance(itr, 1026);
+        maData.maHorPageBreaks.erase(itr, maData.maHorPageBreaks.end());
+    }
+
     set<SCCOL> aColBreaks;
     rDoc.GetAllColBreaks(aColBreaks, nScTab, false, true);
     for (set<SCCOL>::const_iterator itr = aColBreaks.begin(), itrEnd = aColBreaks.end(); itr != itrEnd; ++itr)
@@ -412,3 +433,4 @@ void XclExpChartPageSettings::Save( XclExpStream& rStrm )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,8 +41,6 @@ class SvxShadowItem;
 class ScBaseCell;
 class ScPatternAttr;
 
-// ============================================================================
-
 const sal_uInt8 SC_ROTDIR_NONE       = 0;
 const sal_uInt8 SC_ROTDIR_STANDARD   = 1;
 const sal_uInt8 SC_ROTDIR_LEFT       = 2;
@@ -62,8 +61,6 @@ enum ScShadowPart
     SC_SHADOW_CORNER
 };
 
-// ============================================================================
-
 struct CellInfo
 {
     ScBaseCell*                 pCell;
@@ -73,16 +70,16 @@ struct CellInfo
 
     const SvxBrushItem*         pBackground;
 
-    const SvxBoxItem*           pLinesAttr;         /// Original item from document.
-    const SvxLineItem*          mpTLBRLine;         /// Original item from document.
-    const SvxLineItem*          mpBLTRLine;         /// Original item from document.
+    const SvxBoxItem*           pLinesAttr;         /// original item from document.
+    const SvxLineItem*          mpTLBRLine;         /// original item from document.
+    const SvxLineItem*          mpBLTRLine;         /// original item from document.
 
-    const SvxShadowItem*        pShadowAttr;            // Original-Item (intern)
+    const SvxShadowItem*        pShadowAttr;            // original item (internal)
 
     const SvxShadowItem*        pHShadowOrigin;
     const SvxShadowItem*        pVShadowOrigin;
 
-    ScShadowPart                eHShadowPart : 4;           // Schatten effektiv zum Zeichnen
+    ScShadowPart                eHShadowPart : 4;           // shadow effective for drawing
     ScShadowPart                eVShadowPart : 4;
     sal_uInt8                        nClipMark;
     sal_uInt16                      nWidth;
@@ -99,15 +96,13 @@ struct CellInfo
     bool                        bPopupButton: 1;
     bool                        bFilterActive:1;
 
-    sal_Bool                        bPrinted : 1;               // bei Bedarf (Pagebreak-Modus)
+    sal_Bool                        bPrinted : 1;               // when required (pagebreak mode)
 
-    sal_Bool                        bHideGrid : 1;              // output-intern
-    sal_Bool                        bEditEngine : 1;            // output-intern
+    sal_Bool                        bHideGrid : 1;              // output-internal
+    sal_Bool                        bEditEngine : 1;            // output-internal
 };
 
 const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;
-
-// ============================================================================
 
 struct RowInfo
 {
@@ -115,13 +110,13 @@ struct RowInfo
 
     sal_uInt16              nHeight;
     SCROW               nRowNo;
-    SCCOL               nRotMaxCol;         // SC_ROTMAX_NONE, wenn nichts
+    SCCOL               nRotMaxCol;         // SC_ROTMAX_NONE, if nothing
 
     sal_Bool                bEmptyBack;
     sal_Bool                bEmptyText;
     sal_Bool                bAutoFilter;
     sal_Bool                bPushButton;
-    sal_Bool                bChanged;           // sal_True, wenn nicht getestet
+    sal_Bool                bChanged;           // TRUE, if not tested
 
     inline explicit     RowInfo() : pCellInfo( 0 ) {}
 
@@ -129,8 +124,6 @@ private:
                     RowInfo( const RowInfo& );
     RowInfo&        operator=( const RowInfo& );
 };
-
-// ============================================================================
 
 struct ScTableInfo
 {
@@ -147,7 +140,6 @@ private:
     ScTableInfo&        operator=( const ScTableInfo& );
 };
 
-// ============================================================================
-
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,6 @@
 #include "autoform.hxx"         // Core
 #include "autofmt.hxx"          // Dialog
 #include "consdlg.hxx"
-//CHINA001 #include "sortdlg.hxx"
 #include "filtdlg.hxx"
 #include "dbnamdlg.hxx"
 #include "pvlaydlg.hxx"
@@ -103,6 +103,8 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
     if(pCW)
         pCW->SetHideNotDelete(sal_True);
 
+    ScDocument* pDoc = GetViewData()->GetDocument();
+
     switch( nSlotId )
     {
         case FID_DEFINE_NAME:
@@ -125,7 +127,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                 SCITEM_CONSOLIDATEDATA );
 
             const ScConsolidateParam* pDlgData =
-                            GetViewData()->GetDocument()->GetConsolidateDlgData();
+                            pDoc->GetConsolidateDlgData();
 
             if ( !pDlgData )
             {
@@ -162,7 +164,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             GetDBData( sal_True, SC_DB_OLD );
             const ScMarkData& rMark = GetViewData()->GetMarkData();
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
-                MarkDataArea( sal_False );
+                MarkDataArea( false );
 
             pResult = new ScDbNameDlg( pB, pCW, pParent, GetViewData() );
         }
@@ -175,8 +177,13 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData( sal_True, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            pDBData->ExtendDataArea(pDoc);
             pDBData->GetQueryParam( aQueryParam );
+
+            ScRange aArea;
+            pDBData->GetArea(aArea);
+            MarkRange(aArea, false);
 
             ScQueryItem aItem( SCITEM_QUERYDATA, GetViewData(), &aQueryParam );
             ScRange aAdvSource;
@@ -200,8 +207,13 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData( sal_True, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            pDBData->ExtendDataArea(pDoc);
             pDBData->GetQueryParam( aQueryParam );
+
+            ScRange aArea;
+            pDBData->GetArea(aArea);
+            MarkRange(aArea, false);
 
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA,
                                       GetViewData(),
@@ -220,7 +232,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             ScRefAddress  aCurPos   ( pViewData->GetCurX(),
                                       pViewData->GetCurY(),
                                       pViewData->GetTabNo(),
-                                      sal_False, sal_False, sal_False );
+                                      false, false, false );
 
             pResult = new ScTabOpDlg( pB, pCW, pParent, pViewData->GetDocument(), aCurPos );
         }
@@ -250,8 +262,13 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
             if( pDialogDPObject )
             {
+                // Check for an existing datapilot output.
+                ScViewData* pViewData = GetViewData();
+                ScDPObject* pObj = pDoc->GetDPAtCursor(
+                    pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
+
                 GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
-                pResult = new ScPivotLayoutDlg( pB, pCW, pParent, *pDialogDPObject );
+                pResult = new ScDPLayoutDlg( pB, pCW, pParent, *pDialogDPObject, pObj == NULL);
             }
         }
         break;
@@ -266,7 +283,6 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             ScViewData* pViewData = GetViewData();
 
-            ScDocument* pDoc = pViewData->GetDocument();
             const ScConditionalFormat* pForm = pDoc->GetCondFormat(
                 pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
 
@@ -305,7 +321,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
 
         default:
-        DBG_ERROR( "ScTabViewShell::CreateRefDialog: unbekannte ID" );
+        OSL_FAIL( "ScTabViewShell::CreateRefDialog: unbekannte ID" );
         break;
     }
 
@@ -325,3 +341,4 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

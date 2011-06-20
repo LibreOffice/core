@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,10 +96,10 @@ private:
 private:
     void    Init                ();
     sal_uInt16  UpdateUserListBox   ();
-    void    UpdateEntries       ( sal_uInt16 nList );
+    void    UpdateEntries       ( size_t nList );
     void    MakeListStr         ( String& rListStr );
     void    AddNewList          ( const String& rEntriesStr );
-    void    RemoveList          ( sal_uInt16 nList );
+    void    RemoveList          ( size_t nList );
     void    ModifyList          ( sal_uInt16        nSelList,
                                   const String& rEntriesStr );
     void    CopyListFromArea    ( const ScRefAddress& rStartPos,
@@ -115,3 +116,4 @@ private:
 
 #endif // SC_TPUSRLST_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

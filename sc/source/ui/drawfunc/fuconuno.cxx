@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,8 +44,8 @@ FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, Window* pWin, ScDr
                    SdrModel* pDoc, SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {
-    SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, sal_False );
-    SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, sal_False );
+    SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, false );
+    SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, false );
     if( pInventorItem )
         nInventor = pInventorItem->GetValue();
     if( pIdentifierItem )
@@ -67,9 +68,9 @@ FuConstUnoControl::~FuConstUnoControl()
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
@@ -90,7 +91,7 @@ sal_Bool __EXPORT FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstUnoControl::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuConstUnoControl::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -101,12 +102,12 @@ sal_Bool __EXPORT FuConstUnoControl::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    sal_Bool bReturn = sal_False;
+    sal_Bool bReturn = false;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
@@ -126,7 +127,7 @@ sal_Bool __EXPORT FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool __EXPORT FuConstUnoControl::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuConstUnoControl::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
@@ -170,7 +171,7 @@ void FuConstUnoControl::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& rRectangle)
 {
     // case SID_FM_CREATE_CONTROL:
@@ -188,3 +189,4 @@ SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 /* nID */, co
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

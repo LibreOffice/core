@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,8 @@
 
 #include "address.hxx"
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <anyrefdg.hxx>
 
 class ScDocument;
@@ -106,3 +103,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

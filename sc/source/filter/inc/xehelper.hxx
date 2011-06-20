@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef SC_XEHELPER_HXX
 #define SC_XEHELPER_HXX
 
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include "xladdress.hxx"
 #include "xeroot.hxx"
 #include "xestring.hxx"
@@ -139,23 +142,7 @@ public:
         @return  true = Cell range returned in rXclRange is valid (original or cropped). */
     bool                ConvertRange( XclRange& rXclRange, const ScRange& rScRange, bool bWarn );
 
-//UNUSED2008-05  /** Returns a valid cell range by moving it into allowed dimensions.
-//UNUSED2008-05      @descr  The start and/or end position of the range may be modified.
-//UNUSED2008-05      @param rScRange  The Calc cell range to convert.
-//UNUSED2008-05      @param bWarn  true = Sets the internal flag that produces a warning box
-//UNUSED2008-05          after loading/saving the file, if the cell range contains invalid cells.
-//UNUSED2008-05      @return  The converted Excel cell range. */
-//UNUSED2008-05  XclRange            CreateValidRange( const ScRange& rScRange, bool bWarn );
-
     // cell range list --------------------------------------------------------
-
-//UNUSED2008-05  /** Checks if the passed cell range list is valid.
-//UNUSED2008-05      @param rScRanges  The Calc cell range list to check.
-//UNUSED2008-05      @param bWarn  true = Sets the internal flag that produces a warning box
-//UNUSED2008-05          after loading/saving the file, if the cell range list contains at
-//UNUSED2008-05          least one invalid range.
-//UNUSED2008-05      @return  true = Cell range list in rScRanges is completly valid. */
-//UNUSED2008-05  bool                CheckRangeList( const ScRangeList& rScRanges, bool bWarn );
 
     /** Checks and eventually crops the cell ranges to valid dimensions.
         @descr  The start position of the ranges will not be modified. Cell
@@ -190,14 +177,14 @@ class XclExpHyperlink;
 /** Helper to create HLINK records during creation of formatted cell strings.
 
     In Excel it is not possible to have more than one hyperlink in a cell. This
-    helper detects multiple occurences of hyperlinks and fills a string which
+    helper detects multiple occurrences of hyperlinks and fills a string which
     is used to create a cell note containing all URLs. Only cells containing
     one hyperlink are exported as hyperlink cells.
  */
 class XclExpHyperlinkHelper : protected XclExpRoot
 {
 public:
-    typedef ScfRef< XclExpHyperlink > XclExpHyperlinkRef;
+    typedef boost::shared_ptr< XclExpHyperlink > XclExpHyperlinkRef;
 
     explicit            XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos );
                         ~XclExpHyperlinkHelper();
@@ -234,7 +221,7 @@ class ScPatternAttr;
 /** This class provides methods to create an XclExpString.
     @descr  The string can be created from an edit engine text object or
     directly from a Calc edit cell. */
-class XclExpStringHelper : ScfNoInstance
+class XclExpStringHelper : boost::noncopyable
 {
 public:
     /** Creates a new unformatted string from the passed string.
@@ -344,6 +331,12 @@ public:
     /** Returns the script type first text portion different to WEAK, or the system
         default script type, if there is only weak script in the passed string. */
     static sal_Int16    GetLeadingScriptType( const XclExpRoot& rRoot, const String& rString );
+
+private:
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. To enforce this, the default constructor
+        is made private */
+    XclExpStringHelper();
 };
 
 // Header/footer conversion ===================================================
@@ -379,7 +372,7 @@ class EditEngine;
     Known but unsupported control sequences:
     &G                      picture
  */
-class XclExpHFConverter : protected XclExpRoot, ScfNoCopy
+class XclExpHFConverter : protected XclExpRoot, private boost::noncopyable
 {
 public:
     explicit            XclExpHFConverter( const XclExpRoot& rRoot );
@@ -412,7 +405,7 @@ private:
 /** This class contains static methods to encode a file URL.
     @descr  Excel stores URLs in a format that contains special control characters,
     i.e. for directory separators or volume names. */
-class XclExpUrlHelper : ScfNoInstance
+class XclExpUrlHelper : boost::noncopyable
 {
 public:
     /** Encodes and returns the URL passed in rAbsUrl to an Excel like URL.
@@ -420,6 +413,12 @@ public:
     static String       EncodeUrl( const XclExpRoot& rRoot, const String& rAbsUrl, const String* pTableName = 0 );
     /** Encodes and returns the passed DDE link to an Excel like DDE link. */
     static String       EncodeDde( const String& rApplic, const String rTopic );
+
+private:
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. To enforce this, the default constructor
+        is made private */
+    XclExpUrlHelper();
 };
 
 // ----------------------------------------------------------------------------
@@ -449,3 +448,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

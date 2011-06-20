@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,10 @@
 #include "patattr.hxx"
 #include "docoptio.hxx"
 #include "cellform.hxx"
+#include "segmenttree.hxx"
+#include "progress.hxx"
+#include "globstr.hrc"
+#include "tools/fract.hxx"
 
 #include <vector>
 
@@ -69,8 +74,8 @@ ScDocumentIterator::ScDocumentIterator( ScDocument* pDocument,
     nEndTab( nEndTable )
 {
     PutInOrder( nStartTab, nEndTab );
-    if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
-    if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
+    if (!ValidTab(nStartTab)) nStartTab = pDoc->GetTableCount()-1;
+    if (!ValidTab(nEndTab)) nEndTab = pDoc->GetTableCount()-1;
 
     pDefPattern = pDoc->GetDefPattern();
 
@@ -88,21 +93,26 @@ ScDocumentIterator::~ScDocumentIterator()
 
 sal_Bool ScDocumentIterator::GetThisCol()
 {
-    ScTable*        pTab;
-    while ( (pTab = pDoc->pTab[nTab]) == NULL )
+    ScTable*        pTab = NULL;
+    while ( nTab < pDoc->GetTableCount() && (pTab = pDoc->maTabs[nTab]) == NULL )
     {
         if ( nTab == nEndTab )
         {
             nCol = MAXCOL;
             nRow = MAXROW;
-            return sal_False;
+            return false;
         }
         ++nTab;
+    }
+    if (pTab == NULL)
+    {
+        OSL_FAIL("no table in document?");
+        return false;
     }
     ScColumn*       pCol = &pTab->aCol[nCol];
     ScAttrArray*    pAtt = pCol->pAttrArray;
 
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
     do
     {
         SCROW nColRow;
@@ -148,13 +158,13 @@ sal_Bool ScDocumentIterator::GetThisCol()
 
 sal_Bool ScDocumentIterator::GetThis()
 {
-    sal_Bool bEnd = sal_False;
-    sal_Bool bSuccess = sal_False;
+    sal_Bool bEnd = false;
+    sal_Bool bSuccess = false;
 
     while ( !bSuccess && !bEnd )
     {
         if ( nRow > MAXROW )
-            bSuccess = sal_False;
+            bSuccess = false;
         else
             bSuccess = GetThisCol();
 
@@ -233,47 +243,6 @@ void lcl_IterGetNumberFormat( sal_uLong& nFormat, const ScAttrArray*& rpArr,
     }
 }
 
-//UNUSED2008-05  ScValueIterator::ScValueIterator( ScDocument* pDocument,
-//UNUSED2008-05                                    SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
-//UNUSED2008-05                                    SCCOL nECol, SCROW nERow, SCTAB nETab,
-//UNUSED2008-05                                    sal_Bool bSTotal, sal_Bool bTextZero ) :
-//UNUSED2008-05  pDoc( pDocument ),
-//UNUSED2008-05  nNumFmtIndex(0),
-//UNUSED2008-05  nStartCol( nSCol),
-//UNUSED2008-05  nStartRow( nSRow),
-//UNUSED2008-05  nStartTab( nSTab ),
-//UNUSED2008-05  nEndCol( nECol ),
-//UNUSED2008-05  nEndRow( nERow),
-//UNUSED2008-05  nEndTab( nETab ),
-//UNUSED2008-05  nNumFmtType( NUMBERFORMAT_UNDEFINED ),
-//UNUSED2008-05  bNumValid( sal_False ),
-//UNUSED2008-05  bSubTotal(bSTotal),
-//UNUSED2008-05  bNextValid( sal_False ),
-//UNUSED2008-05  bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
-//UNUSED2008-05  bTextAsZero( bTextZero )
-//UNUSED2008-05  {
-//UNUSED2008-05      PutInOrder( nStartCol, nEndCol);
-//UNUSED2008-05      PutInOrder( nStartRow, nEndRow);
-//UNUSED2008-05      PutInOrder( nStartTab, nEndTab );
-//UNUSED2008-05
-//UNUSED2008-05      if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
-//UNUSED2008-05      if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
-//UNUSED2008-05      if (!ValidRow(nStartRow)) nStartRow = MAXROW;
-//UNUSED2008-05      if (!ValidRow(nEndRow)) nEndRow = MAXROW;
-//UNUSED2008-05      if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
-//UNUSED2008-05      if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
-//UNUSED2008-05
-//UNUSED2008-05      nCol = nStartCol;
-//UNUSED2008-05      nRow = nStartRow;
-//UNUSED2008-05      nTab = nStartTab;
-//UNUSED2008-05
-//UNUSED2008-05      nColRow = 0;                    // wird bei GetFirst initialisiert
-//UNUSED2008-05
-//UNUSED2008-05      nNumFormat = 0;                 // werden bei GetNumberFormat initialisiert
-//UNUSED2008-05      pAttrArray = 0;
-//UNUSED2008-05      nAttrEndRow = 0;
-//UNUSED2008-05  }
-
 ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
             sal_Bool bSTotal, sal_Bool bTextZero ) :
     pDoc( pDocument ),
@@ -285,9 +254,9 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
     nEndRow( rRange.aEnd.Row() ),
     nEndTab( rRange.aEnd.Tab() ),
     nNumFmtType( NUMBERFORMAT_UNDEFINED ),
-    bNumValid( sal_False ),
+    bNumValid( false ),
     bSubTotal(bSTotal),
-    bNextValid( sal_False ),
+    bNextValid( false ),
     bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
     bTextAsZero( bTextZero )
 {
@@ -315,7 +284,11 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
 
 sal_Bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
 {
-    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+    if (nTab >= pDoc->GetTableCount())
+    {
+        OSL_FAIL("try to access out of index, FIX IT");
+    }
+    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     for (;;)
     {
         if ( nRow > nEndRow )
@@ -332,10 +305,10 @@ sal_Bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
                     {
                         // rValue = 0.0;    //! do not change caller's value!
                         rErr = 0;
-                        return sal_False;               // Ende und Aus
+                        return false;               // Ende und Aus
                     }
                 }
-                pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+                pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
             } while ( pCol->nCount == 0 );
             pCol->Search( nRow, nColRow );
         }
@@ -346,7 +319,7 @@ sal_Bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
         if ( nColRow < pCol->nCount && pCol->pItems[nColRow].nRow <= nEndRow )
         {
             nRow = pCol->pItems[nColRow].nRow + 1;
-            if ( !bSubTotal || !pDoc->pTab[nTab]->RowFiltered( nRow-1 ) )
+            if ( !bSubTotal || !pDoc->maTabs[nTab]->RowFiltered( nRow-1 ) )
             {
                 ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
                 ++nColRow;
@@ -354,7 +327,7 @@ sal_Bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
                 {
                     case CELLTYPE_VALUE:
                     {
-                        bNumValid = sal_False;
+                        bNumValid = false;
                         rValue = ((ScValueCell*)pCell)->GetValue();
                         rErr = 0;
                         --nRow;
@@ -396,14 +369,14 @@ sal_Bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
                             {
                                 rValue = ((ScFormulaCell*)pCell)->GetValue();
                                 nRow--;
-                                bNumValid = sal_False;
+                                bNumValid = false;
                                 return sal_True;                            // gefunden
                             }
                             else if ( bTextAsZero )
                             {
                                 rValue = 0.0;
                                 nRow--;
-                                bNumValid = sal_False;
+                                bNumValid = false;
                                 return sal_True;
                             }
                         }
@@ -438,9 +411,9 @@ sal_Bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
 
 void ScValueIterator::GetCurNumFmtInfo( short& nType, sal_uLong& nIndex )
 {
-    if (!bNumValid)
+    if (!bNumValid && nTab < pDoc->GetTableCount())
     {
-        const ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+        const ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
         nNumFmtIndex = pCol->GetNumberFormat( nRow );
         if ( (nNumFmtIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
         {
@@ -475,8 +448,9 @@ sal_Bool ScValueIterator::GetFirst(double& rValue, sal_uInt16& rErr)
     nRow = nStartRow;
     nTab = nStartTab;
 
-//  nColRow = 0;
-    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+    if (nTab >= pDoc->GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
+    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     pCol->Search( nRow, nColRow );
 
     nNumFormat = 0;                 // werden bei GetNumberFormat initialisiert
@@ -485,14 +459,6 @@ sal_Bool ScValueIterator::GetFirst(double& rValue, sal_uInt16& rErr)
 
     return GetThis(rValue, rErr);
 }
-
-/*  ist inline:
-sal_Bool ScValueIterator::GetNext(double& rValue, sal_uInt16& rErr)
-{
-    ++nRow;
-    return GetThis(rValue, rErr);
-}
-*/
 
 // ============================================================================
 
@@ -507,30 +473,40 @@ ScDBQueryDataIterator::DataAccess::~DataAccess()
 
 SCROW ScDBQueryDataIterator::GetRowByColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCSIZE nColRow)
 {
-    ScColumn* pCol = &rDoc.pTab[nTab]->aCol[nCol];
+    if (nTab >= rDoc.GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
+    ScColumn* pCol = &rDoc.maTabs[nTab]->aCol[nCol];
     return pCol->pItems[nColRow].nRow;
 }
 
 ScBaseCell* ScDBQueryDataIterator::GetCellByColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCSIZE nColRow)
 {
-    ScColumn* pCol = &rDoc.pTab[nTab]->aCol[nCol];
+    if (nTab >= rDoc.GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
+    ScColumn* pCol = &rDoc.maTabs[nTab]->aCol[nCol];
     return pCol->pItems[nColRow].pCell;
 }
 
 ScAttrArray* ScDBQueryDataIterator::GetAttrArrayByCol(ScDocument& rDoc, SCTAB nTab, SCCOL nCol)
 {
-    ScColumn* pCol = &rDoc.pTab[nTab]->aCol[nCol];
+    if (nTab >= rDoc.GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
+    ScColumn* pCol = &rDoc.maTabs[nTab]->aCol[nCol];
     return pCol->pAttrArray;
 }
 
 bool ScDBQueryDataIterator::IsQueryValid(ScDocument& rDoc, const ScQueryParam& rParam, SCTAB nTab, SCROW nRow, ScBaseCell* pCell)
 {
-    return rDoc.pTab[nTab]->ValidQuery(nRow, rParam, NULL, pCell);
+    if (nTab >= rDoc.GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
+    return rDoc.maTabs[nTab]->ValidQuery(nRow, rParam, NULL, pCell);
 }
 
 SCSIZE ScDBQueryDataIterator::SearchColEntryIndex(ScDocument& rDoc, SCTAB nTab, SCROW nRow, SCCOL nCol)
 {
-    ScColumn* pCol = &rDoc.pTab[nTab]->aCol[nCol];
+    if (nTab >= rDoc.GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
+    ScColumn* pCol = &rDoc.maTabs[nTab]->aCol[nCol];
     SCSIZE nColRow;
     pCol->Search(nRow, nColRow);
     return nColRow;
@@ -541,8 +517,7 @@ SCSIZE ScDBQueryDataIterator::SearchColEntryIndex(ScDocument& rDoc, SCTAB nTab, 
 ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
     DataAccess(pParent),
     mpParam(pParam),
-    mpDoc(pDoc),
-    bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
+    mpDoc(pDoc)
 {
     nCol = mpParam->mnField;
     nRow = mpParam->nRow1;
@@ -580,6 +555,10 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
         }
 
         SCSIZE nCellCount = mpDoc->GetCellCount(nTab, nCol);
+        if (!nCellCount)
+            // No cells found in this column.  Bail out.
+            return false;
+
         SCROW nThisRow = ScDBQueryDataIterator::GetRowByColEntryIndex(*mpDoc, nTab, nCol, nColRow);
         while ( (nColRow < nCellCount) && (nThisRow < nRow) )
             nThisRow = ScDBQueryDataIterator::GetRowByColEntryIndex(*mpDoc, nTab, nCol, ++nColRow);
@@ -658,7 +637,6 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
             nRow = mpParam->nRow2 + 1; // Naechste Spalte
     }
 // statement unreachable
-//    return false;
 }
 
 bool ScDBQueryDataIterator::DataAccessInternal::getFirst(Value& rValue)
@@ -975,10 +953,10 @@ ScCellIterator::ScCellIterator( ScDocument* pDocument,
     if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
     if (!ValidRow(nStartRow)) nStartRow = MAXROW;
     if (!ValidRow(nEndRow)) nEndRow = MAXROW;
-    if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
-    if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
+    if (!ValidTab(nStartTab)) nStartTab = pDoc->GetTableCount()-1;
+    if (!ValidTab(nEndTab)) nEndTab = pDoc->GetTableCount()-1;
 
-    while (nEndTab>0 && !pDoc->pTab[nEndTab])
+    while (nEndTab>0 && !pDoc->maTabs[nEndTab])
         --nEndTab;                                      // nur benutzte Tabellen
     if (nStartTab>nEndTab)
         nStartTab = nEndTab;
@@ -988,9 +966,9 @@ ScCellIterator::ScCellIterator( ScDocument* pDocument,
     nTab = nStartTab;
     nColRow = 0;                    // wird bei GetFirst initialisiert
 
-    if (!pDoc->pTab[nTab])
+    if (!pDoc->maTabs[nTab])
     {
-        DBG_ERROR("Tabelle nicht gefunden");
+        OSL_FAIL("Tabelle nicht gefunden");
         nStartCol = nCol = MAXCOL+1;
         nStartRow = nRow = MAXROW+1;
         nStartTab = nTab = MAXTAB+1;    // -> Abbruch bei GetFirst
@@ -1017,10 +995,10 @@ ScCellIterator::ScCellIterator
     if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
     if (!ValidRow(nStartRow)) nStartRow = MAXROW;
     if (!ValidRow(nEndRow)) nEndRow = MAXROW;
-    if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
-    if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
+    if (!ValidTab(nStartTab)) nStartTab = pDoc->GetTableCount()-1;
+    if (!ValidTab(nEndTab)) nEndTab = pDoc->GetTableCount()-1;
 
-    while (nEndTab>0 && !pDoc->pTab[nEndTab])
+    while (nEndTab>0 && !pDoc->maTabs[nEndTab])
         --nEndTab;                                      // nur benutzte Tabellen
     if (nStartTab>nEndTab)
         nStartTab = nEndTab;
@@ -1030,9 +1008,9 @@ ScCellIterator::ScCellIterator
     nTab = nStartTab;
     nColRow = 0;                    // wird bei GetFirst initialisiert
 
-    if (!pDoc->pTab[nTab])
+    if (!pDoc->maTabs[nTab])
     {
-        DBG_ERROR("Tabelle nicht gefunden");
+        OSL_FAIL("Tabelle nicht gefunden");
         nStartCol = nCol = MAXCOL+1;
         nStartRow = nRow = MAXROW+1;
         nStartTab = nTab = MAXTAB+1;    // -> Abbruch bei GetFirst
@@ -1041,7 +1019,8 @@ ScCellIterator::ScCellIterator
 
 ScBaseCell* ScCellIterator::GetThis()
 {
-    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+
+    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     for ( ;; )
     {
         if ( nRow > nEndRow )
@@ -1057,7 +1036,7 @@ ScBaseCell* ScCellIterator::GetThis()
                     if ( nTab > nEndTab )
                         return NULL;                // Ende und Aus
                 }
-                pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+                pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
             } while ( pCol->nCount == 0 );
             pCol->Search( nRow, nColRow );
         }
@@ -1068,7 +1047,7 @@ ScBaseCell* ScCellIterator::GetThis()
         if ( nColRow < pCol->nCount && pCol->pItems[nColRow].nRow <= nEndRow )
         {
             nRow = pCol->pItems[nColRow].nRow;
-            if ( !bSubTotal || !pDoc->pTab[nTab]->RowFiltered( nRow ) )
+            if ( !bSubTotal || !pDoc->maTabs[nTab]->RowFiltered( nRow ) )
             {
                 ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
 
@@ -1093,8 +1072,7 @@ ScBaseCell* ScCellIterator::GetFirst()
     nCol = nStartCol;
     nRow = nStartRow;
     nTab = nStartTab;
-//  nColRow = 0;
-    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     pCol->Search( nRow, nColRow );
     return GetThis();
 }
@@ -1114,8 +1092,8 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
     nTab( nTable),
     nStopOnMismatch( nStopOnMismatchDisabled ),
     nTestEqualCondition( nTestEqualConditionDisabled ),
-    bAdvanceQuery( sal_False ),
-    bIgnoreMismatchOnLeadingStrings( sal_False )
+    bAdvanceQuery( false ),
+    bIgnoreMismatchOnLeadingStrings( false )
 {
     nCol = aParam.nCol1;
     nRow = aParam.nRow1;
@@ -1139,7 +1117,9 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
 
 ScBaseCell* ScQueryCellIterator::GetThis()
 {
-    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+    if (nTab >= pDoc->GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
+    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     const ScQueryEntry& rEntry = aParam.GetEntry(0);
     SCCOLROW nFirstQueryField = rEntry.nField;
     bool bAllStringIgnore = bIgnoreMismatchOnLeadingStrings &&
@@ -1164,7 +1144,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                     AdvanceQueryParamEntryField();
                     nFirstQueryField = rEntry.nField;
                 }
-                pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+                pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
             } while ( pCol->nCount == 0 );
             pCol->Search( nRow, nColRow );
             bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
@@ -1186,7 +1166,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
             else
             {
                 sal_Bool bTestEqualCondition;
-                if ( (pDoc->pTab[nTab])->ValidQuery( nRow, aParam, NULL,
+                if ( (pDoc->maTabs[nTab])->ValidQuery( nRow, aParam, NULL,
                         (nCol == static_cast<SCCOL>(nFirstQueryField) ? pCell : NULL),
                         (nTestEqualCondition ? &bTestEqualCondition : NULL) ) )
                 {
@@ -1202,7 +1182,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                     if ( nTestEqualCondition && bTestEqualCondition )
                     {
                         nTestEqualCondition |= nTestEqualConditionMatched;
-                        nStopOnMismatch |= nStopOnMismatchOccured;
+                        nStopOnMismatch |= nStopOnMismatchOccurred;
                         return NULL;
                     }
                     bool bStop;
@@ -1220,7 +1200,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                         bStop = true;
                     if (bStop)
                     {
-                        nStopOnMismatch |= nStopOnMismatchOccured;
+                        nStopOnMismatch |= nStopOnMismatchOccurred;
                         return NULL;
                     }
                 }
@@ -1236,12 +1216,13 @@ ScBaseCell* ScQueryCellIterator::GetThis()
 
 ScBaseCell* ScQueryCellIterator::GetFirst()
 {
+    if (nTab >= pDoc->GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
     nCol = aParam.nCol1;
     nRow = aParam.nRow1;
     if (aParam.bHasHeader)
         nRow++;
-//  nColRow = 0;
-    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     pCol->Search( nRow, nColRow );
     return GetThis();
 }
@@ -1268,7 +1249,7 @@ void ScQueryCellIterator::AdvanceQueryParamEntryField()
                 rEntry.nField++;
             else
             {
-                DBG_ERRORFILE( "AdvanceQueryParamEntryField: ++rEntry.nField > MAXCOL" );
+                OSL_FAIL( "AdvanceQueryParamEntryField: ++rEntry.nField > MAXCOL" );
             }
         }
         else
@@ -1336,8 +1317,8 @@ sal_Bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
                 break;  // for
         }
         SCSIZE nColRowSave;
-        bIgnoreMismatchOnLeadingStrings = sal_False;
-        SetTestEqualCondition( sal_False );
+        bIgnoreMismatchOnLeadingStrings = false;
+        SetTestEqualCondition( false );
         do
         {
             nFoundCol = GetCol();
@@ -1376,8 +1357,8 @@ sal_Bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
             else
                 break;  // for
         }
-        SetStopOnMismatch( sal_False );
-        SetTestEqualCondition( sal_False );
+        SetStopOnMismatch( false );
+        SetTestEqualCondition( false );
         if (GetNext())
         {
             // Last of a consecutive area, avoid searching the entire parameter
@@ -1402,8 +1383,10 @@ sal_Bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
 
 ScBaseCell* ScQueryCellIterator::BinarySearch()
 {
+    if (nTab >= pDoc->GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
     nCol = aParam.nCol1;
-    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
     if (!pCol->nCount)
         return 0;
 
@@ -1674,38 +1657,24 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB 
     nTab( nTable ),
     nStartCol( nCol1 ),
     nEndCol( nCol2 ),
-    nStartRow( nRow1 ),
     nEndRow( nRow2 ),
     nCol( nCol1 ),
     nRow( nRow1 ),
     bMore( sal_True )
 {
+    if (nTab >= pDoc->GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
+    SCCOL i;
+    SCSIZE nIndex;
 
     pNextRows = new SCROW[ nCol2-nCol1+1 ];
     pNextIndices = new SCSIZE[ nCol2-nCol1+1 ];
 
-    SetTab( nTab );
-}
-
-ScHorizontalCellIterator::~ScHorizontalCellIterator()
-{
-    delete [] pNextRows;
-    delete [] pNextIndices;
-}
-
-void ScHorizontalCellIterator::SetTab( SCTAB nTabP )
-{
-    nTab = nTabP;
-    nRow = nStartRow;
-    nCol = nStartCol;
-    bMore = sal_True;
-
-    for (SCCOL i=nStartCol; i<=nEndCol; i++)
+    for (i=nStartCol; i<=nEndCol; i++)
     {
-        ScColumn* pCol = &pDoc->pTab[nTab]->aCol[i];
+        ScColumn* pCol = &pDoc->maTabs[nTab]->aCol[i];
 
-        SCSIZE nIndex;
-        pCol->Search( nStartRow, nIndex );
+        pCol->Search( nRow1, nIndex );
         if ( nIndex < pCol->nCount )
         {
             pNextRows[i-nStartCol] = pCol->pItems[nIndex].nRow;
@@ -1718,8 +1687,14 @@ void ScHorizontalCellIterator::SetTab( SCTAB nTabP )
         }
     }
 
-    if (pNextRows[0] != nStartRow)
+    if (pNextRows[0] != nRow1)
         Advance();
+}
+
+ScHorizontalCellIterator::~ScHorizontalCellIterator()
+{
+    delete [] pNextRows;
+    delete [] pNextIndices;
 }
 
 ScBaseCell* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
@@ -1729,9 +1704,9 @@ ScBaseCell* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
         rCol = nCol;
         rRow = nRow;
 
-        ScColumn* pCol = &pDoc->pTab[nTab]->aCol[nCol];
+        ScColumn* pCol = &pDoc->maTabs[nTab]->aCol[nCol];
         SCSIZE nIndex = pNextIndices[nCol-nStartCol];
-        DBG_ASSERT( nIndex < pCol->nCount, "ScHorizontalCellIterator::GetNext: nIndex out of range" );
+        OSL_ENSURE( nIndex < pCol->nCount, "ScHorizontalCellIterator::GetNext: nIndex out of range" );
         ScBaseCell* pCell = pCol->pItems[nIndex].pCell;
         if ( ++nIndex < pCol->nCount )
         {
@@ -1760,7 +1735,7 @@ sal_Bool ScHorizontalCellIterator::ReturnNext( SCCOL& rCol, SCROW& rRow )
 
 void ScHorizontalCellIterator::Advance()
 {
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
     SCCOL i;
 
     for (i=nCol+1; i<=nEndCol && !bFound; i++)
@@ -1788,157 +1763,7 @@ void ScHorizontalCellIterator::Advance()
     }
 
     if ( !bFound )
-        bMore = sal_False;
-}
-
-//------------------------------------------------------------------------
-
-ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
-        const ScRange& rRange, bool bSTotal, bool bTextZero ) :
-    pDoc( pDocument ),
-    nNumFmtIndex(0),
-    nEndTab( rRange.aEnd.Tab() ),
-    nNumFmtType( NUMBERFORMAT_UNDEFINED ),
-    bNumValid( false ),
-    bSubTotal( bSTotal ),
-    bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
-    bTextAsZero( bTextZero )
-{
-    SCCOL nStartCol = rRange.aStart.Col();
-    SCROW nStartRow = rRange.aStart.Row();
-    SCTAB nStartTab = rRange.aStart.Tab();
-    SCCOL nEndCol = rRange.aEnd.Col();
-    SCROW nEndRow = rRange.aEnd.Row();
-    PutInOrder( nStartCol, nEndCol);
-    PutInOrder( nStartRow, nEndRow);
-    PutInOrder( nStartTab, nEndTab );
-
-    if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
-    if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
-    if (!ValidRow(nStartRow)) nStartRow = MAXROW;
-    if (!ValidRow(nEndRow)) nEndRow = MAXROW;
-    if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
-    if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
-
-    nCurCol = nStartCol;
-    nCurRow = nStartRow;
-    nCurTab = nStartTab;
-
-    nNumFormat = 0;                 // will be initialized in GetNumberFormat()
-    pAttrArray = 0;
-    nAttrEndRow = 0;
-
-    pCellIter = new ScHorizontalCellIterator( pDoc, nStartTab, nStartCol,
-            nStartRow, nEndCol, nEndRow );
-}
-
-ScHorizontalValueIterator::~ScHorizontalValueIterator()
-{
-    delete pCellIter;
-}
-
-bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
-{
-    bool bFound = false;
-    while ( !bFound )
-    {
-        ScBaseCell* pCell = pCellIter->GetNext( nCurCol, nCurRow );
-        while ( !pCell )
-        {
-            if ( nCurTab < nEndTab )
-            {
-                pCellIter->SetTab( ++nCurTab);
-                pCell = pCellIter->GetNext( nCurCol, nCurRow );
-            }
-            else
-                return false;
-        }
-        if ( !bSubTotal || !pDoc->pTab[nCurTab]->RowFiltered( nCurRow ) )
-        {
-            switch (pCell->GetCellType())
-            {
-                case CELLTYPE_VALUE:
-                    {
-                        bNumValid = false;
-                        rValue = ((ScValueCell*)pCell)->GetValue();
-                        rErr = 0;
-                        if ( bCalcAsShown )
-                        {
-                            ScColumn* pCol = &pDoc->pTab[nCurTab]->aCol[nCurCol];
-                            lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
-                                    nAttrEndRow, pCol->pAttrArray, nCurRow, pDoc );
-                            rValue = pDoc->RoundValueAsShown( rValue, nNumFormat );
-                        }
-                        bFound = true;
-                    }
-                    break;
-                case CELLTYPE_FORMULA:
-                    {
-                        if (!bSubTotal || !((ScFormulaCell*)pCell)->IsSubTotal())
-                        {
-                            rErr = ((ScFormulaCell*)pCell)->GetErrCode();
-                            if ( rErr || ((ScFormulaCell*)pCell)->IsValue() )
-                            {
-                                rValue = ((ScFormulaCell*)pCell)->GetValue();
-                                bNumValid = false;
-                                bFound = true;
-                            }
-                            else if ( bTextAsZero )
-                            {
-                                rValue = 0.0;
-                                bNumValid = false;
-                                bFound = true;
-                            }
-                        }
-                    }
-                    break;
-                case CELLTYPE_STRING :
-                case CELLTYPE_EDIT :
-                    {
-                        if ( bTextAsZero )
-                        {
-                            rErr = 0;
-                            rValue = 0.0;
-                            nNumFmtType = NUMBERFORMAT_NUMBER;
-                            nNumFmtIndex = 0;
-                            bNumValid = true;
-                            bFound = true;
-                        }
-                    }
-                    break;
-                default:
-                    ;   // nothing
-            }
-        }
-    }
-    return bFound;
-}
-
-void ScHorizontalValueIterator::GetCurNumFmtInfo( short& nType, sal_uLong& nIndex )
-{
-    if (!bNumValid)
-    {
-        const ScColumn* pCol = &(pDoc->pTab[nCurTab])->aCol[nCurCol];
-        nNumFmtIndex = pCol->GetNumberFormat( nCurRow );
-        if ( (nNumFmtIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-        {
-            const ScBaseCell* pCell;
-            SCSIZE nCurIndex;
-            if ( pCol->Search( nCurRow, nCurIndex ) )
-                pCell = pCol->pItems[nCurIndex].pCell;
-            else
-                pCell = NULL;
-            if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-                ((const ScFormulaCell*)pCell)->GetFormatInfo( nNumFmtType, nNumFmtIndex );
-            else
-                nNumFmtType = pDoc->GetFormatTable()->GetType( nNumFmtIndex );
-        }
-        else
-            nNumFmtType = pDoc->GetFormatTable()->GetType( nNumFmtIndex );
-        bNumValid = true;
-    }
-    nType = nNumFmtType;
-    nIndex = nNumFmtIndex;
+        bMore = false;
 }
 
 //-------------------------------------------------------------------------------
@@ -1952,13 +1777,15 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     nEndCol( nCol2 ),
     nEndRow( nRow2 )
 {
-    DBG_ASSERT( pDoc->pTab[nTab], "Tabelle nicht da" );
+    if (nTab >= pDoc->GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
+    OSL_ENSURE( pDoc->maTabs[nTab], "Tabelle nicht da" );
 
     SCCOL i;
 
     nRow = nStartRow;
     nCol = nStartCol;
-    bRowEmpty = sal_False;
+    bRowEmpty = false;
 
     pIndices    = new SCSIZE[nEndCol-nStartCol+1];
     pNextEnd    = new SCROW[nEndCol-nStartCol+1];
@@ -1969,8 +1796,8 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     for (i=nStartCol; i<=nEndCol; i++)
     {
         SCCOL nPos = i - nStartCol;
-        ScAttrArray* pArray = pDoc->pTab[nTab]->aCol[i].pAttrArray;
-        DBG_ASSERT( pArray, "pArray == 0" );
+        ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
+        OSL_ENSURE( pArray, "pArray == 0" );
 
         SCSIZE nIndex;
         pArray->Search( nStartRow, nIndex );
@@ -1984,7 +1811,7 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
                 nSkipTo = nThisEnd;         // nSkipTo kann gleich hier gesetzt werden
         }
         else
-            bEmpty = sal_False;                 // Attribute gefunden
+            bEmpty = false;                 // Attribute gefunden
 
         pIndices[nPos] = nIndex;
         pNextEnd[nPos] = nThisEnd;
@@ -2005,6 +1832,8 @@ ScHorizontalAttrIterator::~ScHorizontalAttrIterator()
 
 const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow )
 {
+    if (nTab >= pDoc->GetTableCount())
+        OSL_FAIL("try to access index out of bounds, FIX IT");
     for (;;)
     {
         if (!bRowEmpty)
@@ -2041,7 +1870,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             SCCOL nPos = i-nStartCol;
             if ( pNextEnd[nPos] < nRow )
             {
-                ScAttrArray* pArray = pDoc->pTab[nTab]->aCol[i].pAttrArray;
+                ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
 
                 SCSIZE nIndex = ++pIndices[nPos];
                 if ( nIndex < pArray->nCount )
@@ -2051,22 +1880,22 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
                     if ( IsDefaultItem( pPattern ) )
                         pPattern = NULL;
                     else
-                        bEmpty = sal_False;                 // Attribute gefunden
+                        bEmpty = false;                 // Attribute gefunden
 
                     pNextEnd[nPos] = nThisEnd;
                     ppPatterns[nPos] = pPattern;
 
-                    DBG_ASSERT( pNextEnd[nPos] >= nRow, "Reihenfolge durcheinander" );
+                    OSL_ENSURE( pNextEnd[nPos] >= nRow, "Reihenfolge durcheinander" );
                 }
                 else
                 {
-                    DBG_ERROR("AttrArray reicht nicht bis MAXROW");
+                    OSL_FAIL("AttrArray reicht nicht bis MAXROW");
                     pNextEnd[nPos] = MAXROW;
                     ppPatterns[nPos] = NULL;
                 }
             }
             else if ( ppPatterns[nPos] )
-                bEmpty = sal_False;                         // Bereich noch nicht zuende
+                bEmpty = false;                         // Bereich noch nicht zuende
         }
 
         if (bEmpty)
@@ -2081,8 +1910,6 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
         bRowEmpty = bEmpty;
         nCol = nStartCol;           // wieder links anfangen
     }
-
-//    return NULL;
 }
 
 //-------------------------------------------------------------------------------
@@ -2126,7 +1953,7 @@ sal_Bool ScUsedAreaIterator::GetNext()
     //  naechsten Abschnitt heraussuchen
 
     sal_Bool bFound = sal_True;
-    sal_Bool bUseCell = sal_False;
+    sal_Bool bUseCell = false;
 
     if ( pCell && pPattern )
     {
@@ -2164,7 +1991,7 @@ sal_Bool ScUsedAreaIterator::GetNext()
         nFoundEndCol = nAttrCol2;
     }
     else                                // gar nichts
-        bFound = sal_False;
+        bFound = false;
 
     if ( bUseCell )                     // Position von Zelle
     {
@@ -2194,8 +2021,8 @@ ScDocAttrIterator::ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
     nEndRow( nRow2 ),
     nCol( nCol1 )
 {
-    if ( ValidTab(nTab) && pDoc->pTab[nTab] )
-        pColIter = pDoc->pTab[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow );
+    if ( ValidTab(nTab) && nTab < pDoc->GetTableCount() && pDoc->maTabs[nTab] )
+        pColIter = pDoc->maTabs[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow );
     else
         pColIter = NULL;
 }
@@ -2219,11 +2046,105 @@ const ScPatternAttr* ScDocAttrIterator::GetNext( SCCOL& rCol, SCROW& rRow1, SCRO
         delete pColIter;
         ++nCol;
         if ( nCol <= nEndCol )
-            pColIter = pDoc->pTab[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow );
+            pColIter = pDoc->maTabs[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow );
         else
             pColIter = NULL;
     }
     return NULL;        // is nix mehr
+}
+
+// ============================================================================
+
+ScDocRowHeightUpdater::TabRanges::TabRanges() :
+    mnTab(0), mpRanges(new ScFlatBoolRowSegments)
+{
+}
+
+ScDocRowHeightUpdater::TabRanges::TabRanges(SCTAB nTab) :
+    mnTab(nTab), mpRanges(new ScFlatBoolRowSegments)
+{
+}
+
+ScDocRowHeightUpdater::ScDocRowHeightUpdater(ScDocument& rDoc, OutputDevice* pOutDev, double fPPTX, double fPPTY, const vector<TabRanges>* pTabRangesArray) :
+    mrDoc(rDoc), mpOutDev(pOutDev), mfPPTX(fPPTX), mfPPTY(fPPTY), mpTabRangesArray(pTabRangesArray)
+{
+}
+
+void ScDocRowHeightUpdater::update()
+{
+    if (!mpTabRangesArray || mpTabRangesArray->empty())
+    {
+        // No ranges defined.  Update all rows in all tables.
+        updateAll();
+        return;
+    }
+
+    sal_uInt32 nCellCount = 0;
+    vector<TabRanges>::const_iterator itr = mpTabRangesArray->begin(), itrEnd = mpTabRangesArray->end();
+    for (; itr != itrEnd; ++itr)
+    {
+        ScFlatBoolRowSegments::RangeData aData;
+        ScFlatBoolRowSegments::RangeIterator aRangeItr(*itr->mpRanges);
+        for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
+        {
+            if (!aData.mbValue)
+                continue;
+
+            nCellCount += aData.mnRow2 - aData.mnRow1 + 1;
+        }
+    }
+
+    ScProgress aProgress(mrDoc.GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount);
+
+    Fraction aZoom(1, 1);
+    itr = mpTabRangesArray->begin();
+    sal_uInt32 nProgressStart = 0;
+    for (; itr != itrEnd; ++itr)
+    {
+        SCTAB nTab = itr->mnTab;
+        if (!ValidTab(nTab) || nTab >= mrDoc.GetTableCount() || !mrDoc.maTabs[nTab])
+            continue;
+
+        ScFlatBoolRowSegments::RangeData aData;
+        ScFlatBoolRowSegments::RangeIterator aRangeItr(*itr->mpRanges);
+        for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
+        {
+            if (!aData.mbValue)
+                continue;
+
+            mrDoc.maTabs[nTab]->SetOptimalHeight(
+                aData.mnRow1, aData.mnRow2, 0, mpOutDev, mfPPTX, mfPPTY, aZoom, aZoom, false, &aProgress, nProgressStart);
+
+            nProgressStart += aData.mnRow2 - aData.mnRow1 + 1;
+        }
+    }
+}
+
+void ScDocRowHeightUpdater::updateAll()
+{
+    sal_uInt32 nCellCount = 0;
+    for (SCTAB nTab = 0; nTab < mrDoc.GetTableCount(); ++nTab)
+    {
+        if (!ValidTab(nTab) || !mrDoc.maTabs[nTab])
+            continue;
+
+        nCellCount += mrDoc.maTabs[nTab]->GetWeightedCount();
+    }
+
+    ScProgress aProgress(mrDoc.GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount);
+
+    Fraction aZoom(1, 1);
+    sal_uLong nProgressStart = 0;
+    for (SCTAB nTab = 0; nTab < mrDoc.GetTableCount(); ++nTab)
+    {
+        if (!ValidTab(nTab) || !mrDoc.maTabs[nTab])
+            continue;
+
+        mrDoc.maTabs[nTab]->SetOptimalHeight(
+            0, MAXROW, 0, mpOutDev, mfPPTX, mfPPTY, aZoom, aZoom, false, &aProgress, nProgressStart);
+
+        nProgressStart += mrDoc.maTabs[nTab]->GetWeightedCount();
+    }
 }
 
 //-------------------------------------------------------------------------------
@@ -2239,12 +2160,12 @@ ScAttrRectIterator::ScAttrRectIterator(ScDocument* pDocument, SCTAB nTable,
     nIterStartCol( nCol1 ),
     nIterEndCol( nCol1 )
 {
-    if ( ValidTab(nTab) && pDoc->pTab[nTab] )
+    if ( ValidTab(nTab) && nTab < pDoc->GetTableCount() && pDoc->maTabs[nTab] )
     {
-        pColIter = pDoc->pTab[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow );
+        pColIter = pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow );
         while ( nIterEndCol < nEndCol &&
-                pDoc->pTab[nTab]->aCol[nIterEndCol].IsAllAttrEqual(
-                    pDoc->pTab[nTab]->aCol[nIterEndCol+1], nStartRow, nEndRow ) )
+                pDoc->maTabs[nTab]->aCol[nIterEndCol].IsAllAttrEqual(
+                    pDoc->maTabs[nTab]->aCol[nIterEndCol+1], nStartRow, nEndRow ) )
             ++nIterEndCol;
     }
     else
@@ -2262,7 +2183,7 @@ void ScAttrRectIterator::DataChanged()
     {
         SCROW nNextRow = pColIter->GetNextRow();
         delete pColIter;
-        pColIter = pDoc->pTab[nTab]->aCol[nIterStartCol].CreateAttrIterator( nNextRow, nEndRow );
+        pColIter = pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nNextRow, nEndRow );
     }
 }
 
@@ -2284,10 +2205,10 @@ const ScPatternAttr* ScAttrRectIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2,
         if ( nIterStartCol <= nEndCol )
         {
             nIterEndCol = nIterStartCol;
-            pColIter = pDoc->pTab[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow );
+            pColIter = pDoc->maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow );
             while ( nIterEndCol < nEndCol &&
-                    pDoc->pTab[nTab]->aCol[nIterEndCol].IsAllAttrEqual(
-                        pDoc->pTab[nTab]->aCol[nIterEndCol+1], nStartRow, nEndRow ) )
+                    pDoc->maTabs[nTab]->aCol[nIterEndCol].IsAllAttrEqual(
+                        pDoc->maTabs[nTab]->aCol[nIterEndCol+1], nStartRow, nEndRow ) )
                 ++nIterEndCol;
         }
         else
@@ -2317,3 +2238,5 @@ SCROW ScRowBreakIterator::next()
     ++maItr;
     return maItr == maEnd ? NOT_FOUND : *maItr;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

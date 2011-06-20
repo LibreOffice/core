@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -185,7 +186,6 @@ uno::Reference< util::XCloneable > SAL_CALL ScatterChartType::createClone()
 }
 
 // ____ XChartType ____
-// ____ XChartType ____
 Reference< chart2::XCoordinateSystem > SAL_CALL
     ScatterChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
     throw (lang::IllegalArgumentException,
@@ -200,7 +200,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
         Reference< chart2::XAxis > xAxis( xResult->getAxisByDimension( i, MAIN_AXIS_INDEX ) );
         if( !xAxis.is() )
         {
-            OSL_ENSURE(false,"a created coordinate system should have an axis for each dimension");
+            OSL_FAIL("a created coordinate system should have an axis for each dimension");
             continue;
         }
 
@@ -228,32 +228,17 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 uno::Sequence< ::rtl::OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< ::rtl::OUString > aMandRolesSeq;
-
-    if( aMandRolesSeq.getLength() == 0 )
-    {
-        aMandRolesSeq.realloc( 3 );
-        aMandRolesSeq[0] = C2U( "label" );
-        aMandRolesSeq[1] = C2U( "values-x" );
-        aMandRolesSeq[2] = C2U( "values-y" );
-    }
-
+    uno::Sequence< ::rtl::OUString > aMandRolesSeq(3);
+    aMandRolesSeq[0] = C2U( "label" );
+    aMandRolesSeq[1] = C2U( "values-x" );
+    aMandRolesSeq[2] = C2U( "values-y" );
     return aMandRolesSeq;
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL ScatterChartType::getSupportedOptionalRoles()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< ::rtl::OUString > aOptRolesSeq;
-
-//     if( aOptRolesSeq.getLength() == 0 )
-//     {
-//         aOptRolesSeq.realloc( 2 );
-//         aOptRolesSeq[0] = C2U( "error-bars-x" );
-//         aOptRolesSeq[1] = C2U( "error-bars-y" );
-//     }
-
-    return aOptRolesSeq;
+    return uno::Sequence< ::rtl::OUString >();
 }
 
 
@@ -295,3 +280,5 @@ APPHELPER_XSERVICEINFO_IMPL( ScatterChartType,
                              C2U( "com.sun.star.comp.chart.ScatterChartType" ));
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,8 +42,50 @@
 #include "externalrefmgr.hxx"
 
 #include <vector>
+#include <cstring>
 
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::std::vector;
+
+namespace {
+
+/**
+ * Extract a file path from OLE link path.  An OLE link path is expected to
+ * be in the following format:
+ *
+ * Excel.Sheet.8 \3 [file path]
+ */
+bool extractFilePath(const OUString& rUrl, OUString& rPath)
+{
+    const char* prefix = "Excel.Sheet.8\3";
+    size_t nPrefixLen = ::std::strlen(prefix);
+
+    sal_Int32 n = rUrl.getLength();
+    if (n <= static_cast<sal_Int32>(nPrefixLen))
+        // needs to have the specified prefix.
+        return false;
+
+    OUStringBuffer aBuf;
+    const sal_Unicode* p = rUrl.getStr();
+    for (size_t i = 0; i < static_cast<size_t>(n); ++i, ++p)
+    {
+        if (i < nPrefixLen)
+        {
+            sal_Unicode pc = static_cast<sal_Unicode>(*prefix++);
+            if (pc != *p)
+                return false;
+
+            continue;
+        }
+        aBuf.append(*p);
+    }
+
+    rPath = aBuf.makeStringAndClear();
+    return true;
+}
+
+}
 
 ExcelToSc8::ExternalTabInfo::ExternalTabInfo() :
     mnFileId(0), mbExternal(false)
@@ -91,6 +134,20 @@ bool ExcelToSc8::Read3DTabReference( sal_uInt16 nIxti, SCTAB& rFirstTab, SCTAB& 
     return GetExternalFileIdFromXti(nIxti, rExtInfo.mnFileId);
 }
 
+bool ExcelToSc8::HandleOleLink(sal_uInt16 nXtiIndex, const XclImpExtName& rExtName, ExternalTabInfo& rExtInfo)
+{
+    const String* pUrl = rLinkMan.GetSupbookUrl(nXtiIndex);
+    if (!pUrl)
+        return false;
+
+    OUString aPath;
+    if (!extractFilePath(*pUrl, aPath))
+        // file path extraction failed.
+        return false;
+
+    OUString aFileUrl = ScGlobal::GetAbsDocName(aPath, GetDocShell());
+    return rExtName.CreateOleData(GetDoc(), aFileUrl, rExtInfo.mnFileId, rExtInfo.maTabName, rExtInfo.maRange);
+}
 
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
 // otherwise it will seek to the first byte past additional content after <nFormulaLen>
@@ -100,8 +157,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     sal_uInt16                  nUINT16;
     double                  fDouble;
     String                  aString;
-    sal_Bool                    bError = sal_False;
-    sal_Bool                    bArrayFormula = sal_False;
+    sal_Bool                    bError = false;
+    sal_Bool                    bArrayFormula = false;
     TokenId                 nMerk0;
     const sal_Bool              bRangeName = eFT == FT_RangeName;
     const sal_Bool              bSharedFormula = eFT == FT_SharedFormula;
@@ -131,11 +188,11 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     {
         aIn >> nOp;
 
-        // #98524# always reset flags
+        // always reset flags
         aSRD.InitFlags();
         aCRD.InitFlags();
 
-        switch( nOp )   //                              Buch Seite:
+        switch( nOp )   //                              book page:
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
@@ -150,7 +207,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool >> aStack;
                 break;
             case 0x04: // Subtraction                           [313 264]
-                // SECOMD-TOP minus TOP
+                // SECOND-TOP minus TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocSub << nMerk0;
                 aPool >> aStack;
@@ -166,7 +223,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool << aStack << ocDiv << nMerk0;
                 aPool >> aStack;
                 break;
-            case 0x07: // Exponetiation                         [313 265]
+            case 0x07: // Exponentiation                            [313 265]
                 // raise SECOND-TOP to power of TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocPow << nMerk0;
@@ -197,19 +254,19 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool >> aStack;
                 break;
             case 0x0C: // Greater Than or Equal                 [313 265]
-                // SECOND-TOP == TOP
+                // SECOND-TOP >= TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocGreaterEqual << nMerk0;
                 aPool >> aStack;
                 break;
             case 0x0D: // Greater Than                          [313 265]
-                // SECOND-TOP == TOP
+                // SECOND-TOP > TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocGreater << nMerk0;
                 aPool >> aStack;
                 break;
             case 0x0E: // Not Equal                             [313 265]
-                // SECOND-TOP == TOP
+                // SECOND-TOP != TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocNotEqual << nMerk0;
                 aPool >> aStack;
@@ -220,9 +277,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool >> aStack;
                 break;
             case 0x10: // Union                                 [314 265]
-                // ocSep behelfsweise statt 'ocUnion'
+                // ocSep instead of 'ocUnion'
                 aStack >> nMerk0;
-//#100928#      aPool << ocOpen << aStack << ocSep << nMerk0 << ocClose;
                 aPool << aStack << ocSep << nMerk0;
                     // doesn't fit exactly, but is more Excel-like
                 aPool >> aStack;
@@ -336,7 +392,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 nFakt = 2;
 
                 if( nOpt & 0x04 )
-                {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
+                {// nFakt -> skip bytes or words    AttrChoose
                     nData++;
                     aIn.Ignore( nData * nFakt );
                 }
@@ -347,9 +403,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x1C: // Error Value                           [314 266]
             {
                 aIn >> nByte;
-#if 0   // erAck
-                aPool.StoreError( XclTools::GetScErrorCode( nByte ) );
-#else
+
                 DefTokenId          eOc;
                 switch( nByte )
                 {
@@ -365,7 +419,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool << eOc;
                 if( eOc != ocStop )
                     aPool << ocOpen << ocClose;
-#endif
                 aPool >> aStack;
             }
                 break;
@@ -422,7 +475,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aIn >> nParamCount >> nXclFunc;
                 nParamCount &= 0x7F;
                 if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
-                    DoMulArgs( pFuncInfo->meOpCode, nParamCount, pFuncInfo->mnMinParamCount );
+                    DoMulArgs( pFuncInfo->meOpCode, nParamCount );
                 else
                     DoMulArgs( ocNoName, 0 );
             }
@@ -430,15 +483,18 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x43:
             case 0x63:
             case 0x23: // Name                                  [318 269]
-                aIn >> nUINT16;
             {
+                aIn >> nUINT16;
                 aIn.Ignore( 2 );
-                //Determine if this is a user-defined Macro name.
                 const XclImpName* pName = GetNameManager().GetName( nUINT16 );
-                if(pName && !pName->GetScRangeData())
-                    aStack << aPool.Store( ocMacro, pName->GetXclName() );
-                else
-                    aStack << aPool.Store( nUINT16 );
+                if (pName)
+                {
+                    if (pName->GetScRangeData())
+                        aStack << aPool.StoreName(nUINT16, pName->IsGlobal());
+                    else
+                        // used-defined macro name.
+                        aStack << aPool.Store(ocMacro, pName->GetXclName());
+                }
             }
             break;
             case 0x44:
@@ -520,26 +576,22 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x66:
             case 0x26: // Constant Reference Subexpression      [321 271]
                 aExtensions.push_back( EXTENSION_MEMAREA );
-                aIn.Ignore( 6 );       // mehr steht da nicht!
+                aIn.Ignore( 6 );       // There isn't any more
                 break;
             case 0x47:
             case 0x67:
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
-                aIn.Ignore( 6 );   // mehr steht da nicht!
-//               aPool << ocBad;
-//               aPool >> aStack;
+                aIn.Ignore( 6 );   // There isn't any more
                 break;
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
-                aIn.Ignore( 6 );   // mehr steht da nicht!
-//               aPool << ocBad;
-//               aPool >> aStack;
+                aIn.Ignore( 6 );   // There isn't any more
                 break;
             case 0x49:
             case 0x69:
             case 0x29: // Variable Reference Subexpression      [331 281]
-                aIn.Ignore( 2 );   // mehr steht da nicht!
+                aIn.Ignore( 2 );   // There isn't any more
                 break;
             case 0x4C:
             case 0x6C:
@@ -588,16 +640,12 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x4E:
             case 0x6E:
             case 0x2E: // Reference Subexpression Within a Name [332 282]
-                aIn.Ignore( 2 );   // mehr steht da nicht!
-//               aPool << ocBad;
-//               aPool >> aStack;
+                aIn.Ignore( 2 );   // There isn't any more
                 break;
             case 0x4F:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
-                aIn.Ignore( 2 );   // mehr steht da nicht!
-//               aPool << ocBad;
-//               aPool >> aStack;
+                aIn.Ignore( 2 );   // There isn't any more
                 break;
             case 0x58:
             case 0x78:
@@ -621,10 +669,13 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 {
                     // internal defined name with explicit sheet, i.e.: =Sheet1!AnyName
                     const XclImpName* pName = GetNameManager().GetName( nNameIdx );
-                    if( pName && !pName->GetScRangeData() )
-                        aStack << aPool.Store( ocMacro, pName->GetXclName() );
-                    else
-                        aStack << aPool.Store( nNameIdx );
+                    if (pName)
+                    {
+                        if (pName->GetScRangeData())
+                            aStack << aPool.StoreName( nNameIdx, pName->IsGlobal());
+                        else
+                            aStack << aPool.Store(ocMacro, pName->GetXclName());
+                    }
                 }
                 else if( const XclImpExtName* pExtName = rLinkMan.GetExternName( nXtiIndex, nNameIdx ) )
                 {
@@ -636,7 +687,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                              * external name reference can be stored in ODF,
                              * which remains to be done for #i3740#. Until then
                              * create a #NAME? token. */
-#if 0
+#if 1
                             sal_uInt16 nFileId;
                             if (!GetExternalFileIdFromXti(nXtiIndex, nFileId) || !pExtName->HasFormulaTokens())
                             {
@@ -679,8 +730,29 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                                 aStack << aPool.Store( ocEuroConvert, String() );
                             }
                         break;
-
-                        default:    // OLE link
+                        case xlExtOLE:
+                        {
+                            ExternalTabInfo aExtInfo;
+                            if (HandleOleLink(nXtiIndex, *pExtName, aExtInfo))
+                            {
+                                if (aExtInfo.maRange.aStart == aExtInfo.maRange.aEnd)
+                                {
+                                    // single cell
+                                    aSRD.InitAddress(aExtInfo.maRange.aStart);
+                                    aStack << aPool.StoreExtRef(aExtInfo.mnFileId, aExtInfo.maTabName, aSRD);
+                                }
+                                else
+                                {
+                                    // range
+                                    aCRD.InitRange(aExtInfo.maRange);
+                                    aStack << aPool.StoreExtRef(aExtInfo.mnFileId, aExtInfo.maTabName, aCRD);
+                                }
+                            }
+                            else
+                                aStack << aPool.Store(ocNoName, pExtName->GetName());
+                        }
+                        break;
+                        default:
                         {
                             aPool << ocBad;
                             aPool >> aStack;
@@ -689,7 +761,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 }
                 else
                 {
-                    //aStack << ocNoName;
                     aPool << ocBad;
                     aPool >> aStack;
                 }
@@ -717,7 +788,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                 aSRD.nTab = nTabFirst;
                 aSRD.SetFlag3D( sal_True );
-                aSRD.SetTabRel( sal_False );
+                aSRD.SetTabRel( false );
 
                 ExcRelToScRel8( nRw, nGrbitCol, aSRD, bRangeName );
 
@@ -790,9 +861,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 rR1.nTab = nTabFirst;
                 rR2.nTab = nTabLast;
                 rR1.SetFlag3D( sal_True );
-                rR1.SetTabRel( sal_False );
+                rR1.SetTabRel( false );
                 rR2.SetFlag3D( nTabFirst != nTabLast );
-                rR2.SetTabRel( sal_False );
+                rR2.SetTabRel( false );
 
                 ExcRelToScRel8( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
                 ExcRelToScRel8( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
@@ -871,11 +942,11 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
 
 // stream seeks to first byte after <nFormulaLen>
-ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen,
+                              SCsTAB nTab, const FORMULA_TYPE eFT )
 {
-    sal_uInt8                   nOp, nLen;//, nByte;
-    sal_Bool                    bError = sal_False;
-    sal_Bool                    bArrayFormula = sal_False;
+    sal_uInt8                   nOp, nLen;
+    sal_Bool                    bError = false;
     const sal_Bool              bRangeName = eFT == FT_RangeName;
     const sal_Bool              bSharedFormula = eFT == FT_SharedFormula;
     const sal_Bool              bRNorSF = bRangeName || bSharedFormula;
@@ -883,7 +954,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
     ScSingleRefData         aSRD;
     ScComplexRefData            aCRD;
 
-    bExternName = sal_False;
+    bExternName = false;
 
     if( eStatus != ConvOK )
     {
@@ -900,17 +971,15 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
     {
         aIn >> nOp;
 
-        // #98524# always reset flags
+        // always reset flags
         aSRD.InitFlags();
         aCRD.InitFlags();
 
-        switch( nOp )   //                              Buch Seite:
+        switch( nOp )   //                              book page:
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
                 aIn.Ignore( 4 );
-
-                bArrayFormula = sal_True;
                 break;
             case 0x02: // Data Table                            [325 277]
                 aIn.Ignore( 4 );
@@ -950,7 +1019,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 nFakt = 2;
 
                 if( nOpt & 0x04 )
-                {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
+                {// nFakt -> skip bytes or words    AttrChoose
                     nData++;
                     aIn.Ignore( nData * nFakt );
                 }
@@ -1002,7 +1071,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRangeName );
 
-                rRangeList.Append( aSRD );
+                rRangeList.Append( aSRD, nTab );
             }
                 break;
             case 0x45:
@@ -1030,7 +1099,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 else if( IsComplRowRange( nRowFirst, nRowLast ) )
                     SetComplRow( aCRD );
 
-                rRangeList.Append( aCRD );
+                rRangeList.Append( aCRD, nTab );
             }
                 break;
             case 0x46:
@@ -1042,12 +1111,12 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
-                aIn.Ignore( 6 );   // mehr steht da nicht!
+                aIn.Ignore( 6 );   // There isn't any more
                 break;
             case 0x49:
             case 0x69:
             case 0x29: // Variable Reference Subexpression      [331 281]
-                aIn.Ignore( 2 );   // mehr steht da nicht!
+                aIn.Ignore( 2 );   // There isn't any more
                 break;
             case 0x4A:
             case 0x6A:
@@ -1074,7 +1143,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
 
                 ExcRelToScRel8( nRow, nCol, aSRD, bRNorSF );
 
-                rRangeList.Append( aSRD );
+                rRangeList.Append( aSRD, nTab );
             }
                 break;
             case 0x4D:
@@ -1100,7 +1169,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 else if( IsComplRowRange( nRowFirst, nRowLast ) )
                     SetComplRow( aCRD );
 
-                rRangeList.Append( aCRD );
+                rRangeList.Append( aCRD, nTab );
             }
                 break;
             case 0x4E:
@@ -1132,7 +1201,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 {
                     aSRD.nTab = nFirstScTab;
                     aSRD.SetFlag3D( sal_True );
-                    aSRD.SetTabRel( sal_False );
+                    aSRD.SetTabRel( false );
 
                     ExcRelToScRel8( nRw, nGrbitCol, aSRD, bRangeName );
 
@@ -1142,10 +1211,10 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                         aCRD.Ref2.nCol = aSRD.nCol;
                         aCRD.Ref2.nRow = aSRD.nRow;
                         aCRD.Ref2.nTab = nLastScTab;
-                        rRangeList.Append( aCRD );
+                        rRangeList.Append( aCRD, nTab );
                     }
                     else
-                        rRangeList.Append( aSRD );
+                        rRangeList.Append( aSRD, nTab );
                 }
             }
                 break;
@@ -1166,9 +1235,9 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                     rR1.nTab = nFirstScTab;
                     rR2.nTab = nLastScTab;
                     rR1.SetFlag3D( sal_True );
-                    rR1.SetTabRel( sal_False );
+                    rR1.SetTabRel( false );
                     rR2.SetFlag3D( nFirstScTab != nLastScTab );
-                    rR2.SetTabRel( sal_False );
+                    rR2.SetTabRel( false );
 
                     ExcRelToScRel8( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
                     ExcRelToScRel8( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
@@ -1178,7 +1247,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                     else if( IsComplRowRange( nRw1, nRw2 ) )
                         SetComplRow( aCRD );
 
-                    rRangeList.Append( aCRD );
+                    rRangeList.Append( aCRD, nTab );
                 }
             }
                 break;
@@ -1251,7 +1320,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
     {
         rStrm >> nOp;
 
-        // #98524# always reset flags
+        // always reset flags
         aSRD.InitFlags();
         aCRD.InitFlags();
 
@@ -1391,7 +1460,7 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
             rSRD.nRow = Min( static_cast<SCROW>(nRow), MAXROW);
 
         // T A B
-        // #67965# abs needed if rel in shared formula for ScCompiler UpdateNameReference
+        // abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
             rSRD.nTab = GetCurrScTab();
     }
@@ -1399,13 +1468,19 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
     {
         // C O L
         if ( bColRel )
+        {
             rSRD.nRelCol = static_cast<SCsCOL>(nCol) - aEingPos.Col();
+            rSRD.nCol = rSRD.nRelCol;
+        }
         else
             rSRD.nCol = static_cast<SCCOL>(nCol);
 
         // R O W
         if ( bRowRel )
+        {
             rSRD.nRelRow = static_cast<SCsROW>(nRow) - aEingPos.Row();
+            rSRD.nRow = rSRD.nRelRow;
+        }
         else
             rSRD.nRow = static_cast<SCROW>(nRow);
 
@@ -1475,14 +1550,13 @@ sal_Bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLe
                 aIn >> nIxti >> nRow1 >> nRow2 >> nCol1 >> nCol2;
 
     _3d_common:
-                // #122885# skip references to deleted sheets
+                // skip references to deleted sheets
                 if( !rLinkMan.GetScTabRange( nTab1, nTab2, nIxti ) || !ValidTab( nTab1 ) || !ValidTab( nTab2 ) )
                     break;
 
                 goto _common;
     _common:
                 // do not check abs/rel flags, linked controls have set them!
-//               if( !(( nCol1 & 0xC000 ) || ( nCol2 & 0xC000 )) )
                 {
                     ScRange aScRange;
                     nCol1 &= 0x3FFF;
@@ -1575,7 +1649,7 @@ sal_Bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLe
                 sal_uInt8   nOpt;
                 aIn >> nOpt >> nData;
                 if( nOpt & 0x04 )
-                {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
+                {// nFakt -> skip bytes or words    AttrChoose
                     nData++;
                     nSeek = nData * 2;
             }
@@ -1587,10 +1661,7 @@ sal_Bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLe
     }
     aIn.Seek( nEndPos );
 
-    return r.Count() != 0;
+    return !r.empty();
 }
 
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

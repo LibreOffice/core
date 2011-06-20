@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <tools/debug.hxx>
+#include <sal/macros.h>
 #include <svtools/unoimap.hxx>
 #include <svx/unofill.hxx>
 #include <editeng/unonrule.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 #include "servuno.hxx"
-#include "unoguard.hxx"
 #include "unonames.hxx"
 #include "cellsuno.hxx"
 #include "fielduno.hxx"
@@ -53,7 +54,7 @@
 #include "chart2uno.hxx"
 #include "tokenuno.hxx"
 
-// #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+// Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <sfx2/docfile.hxx>
@@ -70,7 +71,26 @@
 #include <basic/basmgr.hxx>
 #include <sfx2/app.hxx>
 
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/document/XCodeNameQuery.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#include <comphelper/componentcontext.hxx>
+#include <cppuhelper/component_context.hxx>
+#include <vbahelper/vbaaccesshelper.hxx>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+
 using namespace ::com::sun::star;
+
+bool isInVBAMode( ScDocShell& rDocSh )
+{
+    uno::Reference<script::XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
+    uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY );
+    if ( xVBACompat.is() )
+        return xVBACompat->getVBACompatibilityMode();
+    return false;
+}
 
 class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper1< container::XNameAccess >
 {
@@ -93,14 +113,16 @@ public:
 
     virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         maCachedObject = uno::Any(); // clear cached object
         String sName = aName;
 
         ScDocument* pDoc = mpDocShell->GetDocument();
         if ( !pDoc )
             throw uno::RuntimeException();
-        if ( sName == pDoc->GetCodeName() )
+        // aName ( sName ) is generated from the stream name which can be different ( case-wise )
+        // from the code name
+        if( sName.EqualsIgnoreCaseAscii( pDoc->GetCodeName() ) )
             maCachedObject = maWorkbook;
         else
         {
@@ -109,7 +131,9 @@ public:
             for( SCTAB i = 0; i < nCount; i++ )
             {
                 pDoc->GetCodeName( i, sCodeName );
-                if( sCodeName == sName )
+                // aName ( sName ) is generated from the stream name which can be different ( case-wise )
+                // from the code name
+                if( sCodeName.EqualsIgnoreCaseAscii( sName ) )
                 {
                     String sSheetName;
                     if( pDoc->GetName( i, sSheetName ) )
@@ -135,7 +159,7 @@ public:
     }
     ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         OSL_TRACE("ScVbaObjectForCodeNameProvider::getByName( %s )",
             rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr() );
         if ( !hasByName( aName ) )
@@ -144,7 +168,7 @@ public:
     }
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         ScDocument* pDoc = mpDocShell->GetDocument();
         if ( !pDoc )
             throw uno::RuntimeException();
@@ -174,7 +198,7 @@ public:
     // XCodeNameQuery
     rtl::OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
     {
-        ScUnoGuard aGuard;
+        SolarMutexGuard aGuard;
         rtl::OUString sCodeName;
         if ( mpDocShell )
         {
@@ -225,7 +249,7 @@ struct ProvNamesId_Type
     sal_uInt16      nType;
 };
 
-static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
+static const ProvNamesId_Type aProvNamesId[] =
 {
     { "com.sun.star.sheet.Spreadsheet",                 SC_SERVICE_SHEET },
     { "com.sun.star.text.TextField.URL",                SC_SERVICE_URLFIELD },
@@ -255,7 +279,7 @@ static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.image.ImageMapCircleObject",        SC_SERVICE_IMAP_CIRC },
     { "com.sun.star.image.ImageMapPolygonObject",       SC_SERVICE_IMAP_POLY },
 
-        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
     { "com.sun.star.document.ExportGraphicObjectResolver",  SC_SERVICE_EXPORT_GOR },
     { "com.sun.star.document.ImportGraphicObjectResolver",  SC_SERVICE_IMPORT_GOR },
     { "com.sun.star.document.ExportEmbeddedObjectResolver", SC_SERVICE_EXPORT_EOR },
@@ -284,7 +308,8 @@ static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.text.textfield.Time",               SC_SERVICE_TIMEFIELD },
     { "com.sun.star.text.textfield.DocumentTitle",      SC_SERVICE_TITLEFIELD },
     { "com.sun.star.text.textfield.FileName",           SC_SERVICE_FILEFIELD },
-    { "com.sun.star.text.textfield.SheetName",          SC_SERVICE_SHEETFIELD }
+    { "com.sun.star.text.textfield.SheetName",          SC_SERVICE_SHEETFIELD },
+    { "ooo.vba.VBAGlobals",          SC_SERVICE_VBAGLOBALS },
 };
 
 //
@@ -292,7 +317,7 @@ static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
 //  in case some macro is still using them
 //
 
-static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
+static const sal_Char* aOldNames[SC_SERVICE_COUNT] =
     {
         "",                                         // SC_SERVICE_SHEET
         "stardiv.one.text.TextField.URL",           // SC_SERVICE_URLFIELD
@@ -322,7 +347,7 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_IMAP_CIRC
         "",                                         // SC_SERVICE_IMAP_POLY
 
-        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
         "",                                         // SC_SERVICE_EXPORT_GOR
         "",                                         // SC_SERVICE_IMPORT_GOR
         "",                                         // SC_SERVICE_EXPORT_EOR
@@ -349,20 +374,13 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
 
 //  alles static
 
-//UNUSED2008-05  String ScServiceProvider::GetProviderName(sal_uInt16 nObjectType)
-//UNUSED2008-05  {
-//UNUSED2008-05      String sRet;
-//UNUSED2008-05      if (nObjectType < SC_SERVICE_COUNT)
-//UNUSED2008-05          sRet = String::CreateFromAscii( aProvNames[nObjectType] );
-//UNUSED2008-05      return sRet;
-//UNUSED2008-05  }
 
 sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
 {
     if (rServiceName.Len())
     {
-        const sal_uInt16 nEntries =
-            sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+        const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
+
         for (sal_uInt16 i = 0; i < nEntries; i++)
         {
             if (rServiceName.EqualsAscii( aProvNamesId[i].pName ))
@@ -374,10 +392,10 @@ sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
         sal_uInt16 i;
         for (i=0; i<SC_SERVICE_COUNT; i++)
         {
-            DBG_ASSERT( aOldNames[i], "ScServiceProvider::GetProviderType: no oldname => crash");
+            OSL_ENSURE( aOldNames[i], "ScServiceProvider::GetProviderType: no oldname => crash");
             if (rServiceName.EqualsAscii( aOldNames[i] ))
             {
-                DBG_ERROR("old service name used");
+                OSL_FAIL("old service name used");
                 return i;
             }
         }
@@ -481,7 +499,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             xRet.set(SvUnoImageMapPolygonObject_createInstance( ScShapeObj::GetSupportedMacroItems() ));
             break;
 
-        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
         case SC_SERVICE_EXPORT_GOR:
             xRet.set((::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE ));
             break;
@@ -553,7 +571,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             }
             break;
         case SC_SERVICE_VBACODENAMEPROVIDER:
-            if (pDocShell && pDocShell->GetDocument()->IsInVBAMode())
+            if ( pDocShell && ooo::vba::isAlienExcelDoc( *pDocShell ) && isInVBAMode( *pDocShell ) )
             {
                 OSL_TRACE("**** creating VBA Object provider");
                 xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider( pDocShell )));
@@ -587,7 +605,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
 
 uno::Sequence<rtl::OUString> ScServiceProvider::GetAllServiceNames()
 {
-    const sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     uno::Sequence<rtl::OUString> aRet(nEntries);
     rtl::OUString* pArray = aRet.getArray();
     for (sal_uInt16 i = 0; i < nEntries; i++)
@@ -600,3 +618,4 @@ uno::Sequence<rtl::OUString> ScServiceProvider::GetAllServiceNames()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

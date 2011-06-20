@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase4.hxx>
 
-#ifndef _COM_SUN_STAR_CHART2_XLABELEDDATASEQUENCE_HPP_
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -113,3 +112,5 @@ private:
 
 // CHART2_LABELEDDATASEQUENCE_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

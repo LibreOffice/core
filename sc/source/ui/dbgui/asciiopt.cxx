@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 #include "impex.hxx"
 #include "asciiopt.hxx"
 #include "asciiopt.hrc"
-#include <tools/debug.hxx>
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
 // ause
@@ -43,22 +43,22 @@
 
 // ============================================================================
 
-static const sal_Char __FAR_DATA pStrFix[] = "FIX";
-static const sal_Char __FAR_DATA pStrMrg[] = "MRG";
+static const sal_Char pStrFix[] = "FIX";
+static const sal_Char pStrMrg[] = "MRG";
 
 
 // ============================================================================
 
 ScAsciiOptions::ScAsciiOptions() :
-    bFixedLen       ( sal_False ),
+    bFixedLen       ( false ),
     aFieldSeps      ( ';' ),
-    bMergeFieldSeps ( sal_False ),
+    bMergeFieldSeps ( false ),
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),
     cTextSep        ( cDefaultTextSep ),
     eCharSet        ( gsl_getSystemTextEncoding() ),
     eLang           ( LANGUAGE_SYSTEM ),
-    bCharSetSystem  ( sal_False ),
+    bCharSetSystem  ( false ),
     nStartRow       ( 1 ),
     nInfoCount      ( 0 ),
     pColStart       ( NULL ),
@@ -180,16 +180,16 @@ sal_Bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
          nStartRow       == rCmp.nStartRow &&
          nInfoCount      == rCmp.nInfoCount )
     {
-        DBG_ASSERT( !nInfoCount || (pColStart && pColFormat && rCmp.pColStart && rCmp.pColFormat),
+        OSL_ENSURE( !nInfoCount || (pColStart && pColFormat && rCmp.pColStart && rCmp.pColFormat),
                      "0-Zeiger in ScAsciiOptions" );
         for (sal_uInt16 i=0; i<nInfoCount; i++)
             if ( pColStart[i] != rCmp.pColStart[i] ||
                  pColFormat[i] != rCmp.pColFormat[i] )
-                return sal_False;
+                return false;
 
         return sal_True;
     }
-    return sal_False;
+    return false;
 }
 
 //
@@ -211,7 +211,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
 
     if ( nCount >= 1 )
     {
-        bFixedLen = bMergeFieldSeps = sal_False;
+        bFixedLen = bMergeFieldSeps = false;
         aFieldSeps.Erase();
 
         aToken = rString.GetToken(0,',');
@@ -377,7 +377,7 @@ String ScAsciiOptions::WriteToString() const
         //  Spalten-Infos
         //
 
-    DBG_ASSERT( !nInfoCount || (pColStart && pColFormat), "0-Zeiger in ScAsciiOptions" );
+    OSL_ENSURE( !nInfoCount || (pColStart && pColFormat), "0-Zeiger in ScAsciiOptions" );
     for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
     {
         if (nInfo)
@@ -408,79 +408,4 @@ String ScAsciiOptions::WriteToString() const
     return aOutStr;
 }
 
-#if 0
-//  Code, um die Spalten-Liste aus einem Excel-kompatiblen String zu erzeugen:
-//  (im Moment nicht benutzt)
-
-void ScAsciiOptions::InterpretColumnList( const String& rString )
-{
-    //  Eingabe ist 1-basiert, pColStart fuer FixedLen ist 0-basiert
-
-    //  Kommas durch Semikolon ersetzen
-
-    String aSemiStr = rString;
-    sal_uInt16 nPos = 0;
-    do
-        nPos = aSemiStr.SearchAndReplace( ',', ';', nPos );
-    while ( nPos != STRING_NOTFOUND );
-
-    //  Eintraege sortieren
-
-    sal_uInt16 nCount = aSemiStr.GetTokenCount();
-    sal_uInt16* pTemp = new sal_uInt16[nCount+1];
-    pTemp[0] = 1;                                   // erste Spalte faengt immer bei 1 an
-    sal_uInt16 nFound = 1;
-    sal_uInt16 i,j;
-    for (i=0; i<nCount; i++)
-    {
-        sal_uInt16 nVal = (sal_uInt16) aSemiStr.GetToken(i);
-        if (nVal)
-        {
-            sal_Bool bThere = sal_False;
-            nPos = 0;
-            for (j=0; j<nFound; j++)
-            {
-                if ( pTemp[j] == nVal )
-                    bThere = sal_True;
-                else if ( pTemp[j] < nVal )
-                    nPos = j+1;
-            }
-            if ( !bThere )
-            {
-                if ( nPos < nFound )
-                    memmove( &pTemp[nPos+1], &pTemp[nPos], (nFound-nPos)*sizeof(sal_uInt16) );
-                pTemp[nPos] = nVal;
-                ++nFound;
-            }
-        }
-    }
-
-    //  Eintraege uebernehmen
-
-    delete[] pColStart;
-    delete[] pColFormat;
-    nInfoCount = nFound;
-    if (nInfoCount)
-    {
-        pColStart = new sal_uInt16[nInfoCount];
-        pColFormat = new sal_uInt8[nInfoCount];
-        for (i=0; i<nInfoCount; i++)
-        {
-            pColStart[i] = pTemp[i] - 1;
-            pColFormat[i] = SC_COL_STANDARD;
-        }
-    }
-    else
-    {
-        pColStart = NULL;
-        pColFormat = NULL;
-    }
-
-    bFixedLen = sal_True;           // sonst macht's keinen Sinn
-
-    //  aufraeumen
-
-    delete[] pTemp;
-}
-#endif
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

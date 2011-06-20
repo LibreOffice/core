@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -466,33 +467,27 @@ void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
 chart2::ScaleData SAL_CALL Axis::getScaleData()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aMutex );
     return m_aScaleData;
-    // \--
 }
 
 Reference< beans::XPropertySet > SAL_CALL Axis::getGridProperties()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aMutex );
     return m_xGrid;
-    // \--
 }
 Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubGridProperties()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( m_aMutex );
     return m_aSubGridProperties;
-    // \--
 }
 
 Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not implemented yet" );
+    OSL_FAIL( "Not implemented yet" );
     return Sequence< Reference< beans::XPropertySet > >();
 }
 
@@ -501,10 +496,8 @@ Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties
 Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     return m_xTitle;
-    // \--
 }
 
 void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle )
@@ -638,3 +631,5 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( Axis, Axis_Base, ::property::OPropertySet )
 APPHELPER_XSERVICEINFO_IMPL( Axis, lcl_aServiceName );
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@
 
 //==================================================================
 
-String __EXPORT ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
+String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
 {
     String aStrSelection;
 
@@ -74,7 +75,7 @@ String __EXPORT ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
             if ( bInFormatDialog && aRange.aStart.Row() != aRange.aEnd.Row() )
             {
                 // Range auf eine Datenzeile begrenzen
-                // (#48613# nur wenn der Aufruf aus einem Format-Dialog kommt)
+                // (nur wenn der Aufruf aus einem Format-Dialog kommt)
                 ScHorizontalCellIterator aIter( pDoc, aRange.aStart.Tab(),
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(), aRange.aEnd.Row() );
@@ -156,7 +157,7 @@ void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const S
         }
         else
         {
-            //  #91216# if the view is not active, InsertURLField doesn't work
+            //  if the view is not active, InsertURLField doesn't work
             //  -> use InsertBookmark to directly manipulate cell content
             //  bTryReplace=sal_True -> if cell contains only one URL, replace it
 
@@ -198,7 +199,7 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
     ScModule*       pScMod      = SC_MOD();
     ScInputHandler* pHdl        = pScMod->GetInputHdl( pViewData->GetViewShell() );
 
-    sal_Bool bSelectFirst = sal_False;
+    sal_Bool bSelectFirst = false;
     if ( !pScMod->IsEditMode() )
     {
         if ( !SelectionEditable() )
@@ -215,7 +216,7 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
 
     EditView*       pTopView    = pHdl->GetTopView();
     EditView*       pTableView  = pHdl->GetTableView();
-    DBG_ASSERT( pTopView || pTableView, "No EditView" );
+    OSL_ENSURE( pTopView || pTableView, "No EditView" );
 
     if ( bSelectFirst )
     {
@@ -252,9 +253,9 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
         case FID_SEARCH_NOW:
             {
                 if ( pReqArgs &&
-                     SFX_ITEM_SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, sal_False, &pItem) )
+                     SFX_ITEM_SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem) )
                 {
-                    DBG_ASSERT( pItem->ISA(SvxSearchItem), "falsches Item" );
+                    OSL_ENSURE( pItem->ISA(SvxSearchItem), "falsches Item" );
                     const SvxSearchItem* pSearchItem = (const SvxSearchItem*) pItem;
 
                     ScGlobal::SetSearchItem( *pSearchItem );
@@ -266,15 +267,15 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
         case SID_SEARCH_ITEM:
             if (pReqArgs && SFX_ITEM_SET ==
-                            pReqArgs->GetItemState(SID_SEARCH_ITEM, sal_False, &pItem))
+                            pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem))
             {
                 //  Search-Item merken
-                DBG_ASSERT( pItem->ISA(SvxSearchItem), "falsches Item" );
+                OSL_ENSURE( pItem->ISA(SvxSearchItem), "falsches Item" );
                 ScGlobal::SetSearchItem( *(const SvxSearchItem*) pItem );
             }
             else
             {
-                DBG_ERROR("SID_SEARCH_ITEM ohne Parameter");
+                OSL_FAIL("SID_SEARCH_ITEM ohne Parameter");
             }
             break;
         case FID_SEARCH:
@@ -282,7 +283,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
         case FID_REPLACE_ALL:
         case FID_SEARCH_ALL:
             {
-                if (pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState(nSlot, sal_False, &pItem))
+                if (pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState(nSlot, false, &pItem))
                 {
                     //  SearchItem holen
 
@@ -291,7 +292,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     //  SearchItem fuellen
 
                     aSearchItem.SetSearchString(((SfxStringItem*)pItem)->GetValue());
-                    if(SFX_ITEM_SET == pReqArgs->GetItemState(FN_PARAM_1, sal_False, &pItem))
+                    if(SFX_ITEM_SET == pReqArgs->GetItemState(FN_PARAM_1, false, &pItem))
                         aSearchItem.SetReplaceString(((SfxStringItem*)pItem)->GetValue());
 
                     if (nSlot == FID_SEARCH)
@@ -341,3 +342,4 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

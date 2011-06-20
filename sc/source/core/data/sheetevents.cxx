@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sheetdata.cxx,v $
- * $Revision: 1.69.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,16 +33,13 @@
 
 #include "sheetevents.hxx"
 #include <com/sun/star/script/vba/VBAEventId.hpp>
-#include <tools/debug.hxx>
-
 // -----------------------------------------------------------------------
 
-// static
 rtl::OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
 {
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
     {
-        DBG_ERRORFILE("invalid event number");
+        OSL_FAIL("invalid event number");
         return rtl::OUString();
     }
 
@@ -61,13 +56,12 @@ rtl::OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
     return rtl::OUString::createFromAscii(aEventNames[nEvent]);
 }
 
-// static
 sal_Int32 ScSheetEvents::GetVbaSheetEventId(sal_Int32 nEvent)
 {
     using namespace ::com::sun::star::script::vba::VBAEventId;
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
     {
-        DBG_ERRORFILE("invalid event number");
+        OSL_FAIL("invalid event number");
         return NO_EVENT;
     }
 
@@ -84,7 +78,6 @@ sal_Int32 ScSheetEvents::GetVbaSheetEventId(sal_Int32 nEvent)
     return nVbaEventIds[nEvent];
 }
 
-// static
 sal_Int32 ScSheetEvents::GetVbaDocumentEventId(sal_Int32 nEvent)
 {
     using namespace ::com::sun::star::script::vba::VBAEventId;
@@ -140,7 +133,7 @@ const rtl::OUString* ScSheetEvents::GetScript(sal_Int32 nEvent) const
 {
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
     {
-        DBG_ERRORFILE("invalid event number");
+        OSL_FAIL("invalid event number");
         return NULL;
     }
 
@@ -153,7 +146,7 @@ void ScSheetEvents::SetScript(sal_Int32 nEvent, const rtl::OUString* pNew)
 {
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
     {
-        DBG_ERRORFILE("invalid event number");
+        OSL_FAIL("invalid event number");
         return;
     }
 
@@ -170,3 +163,4 @@ void ScSheetEvents::SetScript(sal_Int32 nEvent, const rtl::OUString* pNew)
         mpScriptNames[nEvent] = NULL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

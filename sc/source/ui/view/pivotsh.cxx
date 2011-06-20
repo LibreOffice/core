@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,8 +52,7 @@
 #include "dpshttab.hxx"
 #include "dbdocfun.hxx"
 #include "uiitems.hxx"
-//CHINA001 #include "pfiltdlg.hxx"
-#include "scabstdlg.hxx" //CHINA001
+#include "scabstdlg.hxx"
 //------------------------------------------------------------------------
 
 #define ScPivotShell
@@ -112,11 +112,11 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                 ScQueryParam aQueryParam;
                 SCTAB nSrcTab = 0;
                 const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
-                DBG_ASSERT( pDesc, "no sheet source for DP filter dialog" );
+                OSL_ENSURE( pDesc, "no sheet source for DP filter dialog" );
                 if( pDesc )
                 {
-                    aQueryParam = pDesc->aQueryParam;
-                    nSrcTab = pDesc->aSourceRange.aStart.Tab();
+                    aQueryParam = pDesc->GetQueryParam();
+                    nSrcTab = pDesc->GetSourceRange().aStart.Tab();
                 }
 
                 ScViewData* pViewData = pViewShell->GetViewData();
@@ -124,30 +124,27 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                     SCITEM_QUERYDATA, SCITEM_QUERYDATA );
                 aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
 
-                //CHINA001 ScPivotFilterDlg* pDlg = new ScPivotFilterDlg(
-                //CHINA001     pViewShell->GetDialogParent(), aArgSet, nSrcTab );
-
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewShell->GetDialogParent(),
                                                                                 aArgSet, nSrcTab,
                                                                                 RID_SCDLG_PIVOTFILTER);
-                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                OSL_ENSURE(pDlg, "Dialog create fail!");
 
                 if( pDlg->Execute() == RET_OK )
                 {
-                    ScSheetSourceDesc aNewDesc;
+                    ScSheetSourceDesc aNewDesc(pViewData->GetDocument());
                     if( pDesc )
                         aNewDesc = *pDesc;
 
                     const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
-                    aNewDesc.aQueryParam = rQueryItem.GetQueryData();
+                    aNewDesc.SetQueryParam(rQueryItem.GetQueryData());
 
                     ScDPObject aNewObj( *pDPObj );
                     aNewObj.SetSheetDesc( aNewDesc );
                     ScDBDocFunc aFunc( *pViewData->GetDocShell() );
-                    aFunc.DataPilotUpdate( pDPObj, &aNewObj, sal_True, sal_False );
+                    aFunc.DataPilotUpdate( pDPObj, &aNewObj, sal_True, false );
                     pViewData->GetView()->CursorPosChanged();       // shells may be switched
                 }
                 delete pDlg;
@@ -158,7 +155,7 @@ void ScPivotShell::Execute( SfxRequest& rReq )
 }
 
 //------------------------------------------------------------------------
-void __EXPORT ScPivotShell::GetState( SfxItemSet& rSet )
+void ScPivotShell::GetState( SfxItemSet& rSet )
 {
     ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -202,3 +199,4 @@ ScDPObject* ScPivotShell::GetCurrDPObject()
         rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@ template< typename Ifc1 >
 sal_Int32 ScVbaPageBreak<Ifc1>::getType() throw (uno::RuntimeException)
 {
     uno::Any aValue = mxRowColPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsStartOfNewPage" )));
-    sal_Bool hasPageBreak = sal_False;
+    sal_Bool hasPageBreak = false;
     aValue >>= hasPageBreak;
 
     if( !hasPageBreak )
@@ -77,7 +78,7 @@ void ScVbaPageBreak<Ifc1>::setType(sal_Int32 type) throw (uno::RuntimeException)
     if( type == excel::XlPageBreak::xlPageBreakManual )
         maTablePageBreakData.ManualBreak = sal_True;
     else
-        maTablePageBreakData.ManualBreak = sal_False;
+        maTablePageBreakData.ManualBreak = false;
 }
 
 template< typename Ifc1 >
@@ -170,3 +171,4 @@ ScVbaVPageBreak::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

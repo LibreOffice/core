@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 #include "AreaChart.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
-//#include "chartview/servicenames_charttypes.hxx"
 #include "CommonConverters.hxx"
 #include "macros.hxx"
 #include "ViewDefines.hxx"
@@ -49,7 +49,6 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
-#include <tools/debug.hxx>
 #include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
 
@@ -229,7 +228,7 @@ void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlo
     if( m_nDimension == 3 && !m_bCategoryXAxis )
     {
         //3D xy always deep
-        DBG_ASSERT( zSlot==-1,"3D xy charts should be deep stacked in model also" );
+        OSL_ENSURE( zSlot==-1,"3D xy charts should be deep stacked in model also" );
         zSlot=-1;
         xSlot=0;
         ySlot=0;
@@ -498,13 +497,13 @@ void AreaChart::impl_createSeriesShapes()
     ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator            aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
 //=============================================================================
-    for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; aZSlotIter++, nZ++ )
+    for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
     {
         ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
     //=============================================================================
-        for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
@@ -516,7 +515,7 @@ void AreaChart::impl_createSeriesShapes()
             drawing::PolyPolygonShape3D* pSeriesPoly = NULL;
 
             //iterate through all series
-            for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+            for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
             {
                 sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
                 PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
@@ -597,7 +596,7 @@ void AreaChart::createShapes()
     if( m_nDimension == 2 && ( m_bArea || !m_bCategoryXAxis ) )
         lcl_reorderSeries( m_aZSlots );
 
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"AreaChart is not proper initialized");
+    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"AreaChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
@@ -646,13 +645,13 @@ void AreaChart::createShapes()
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
             //iterate through all x slots in this category to get 100percent sum
-            for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+            for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
 
-                for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
@@ -684,7 +683,7 @@ void AreaChart::createShapes()
             //for the area chart there should be at most one x slot (no side by side stacking available)
             //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???
             aXSlotIter = aZSlotIter->begin();
-            for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; aXSlotIter++, nX++ )
+            for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, ++nX )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
@@ -693,7 +692,7 @@ void AreaChart::createShapes()
                 std::map< sal_Int32, double > aLogicYForNextSeriesMap;//one for each different nAttachedAxisIndex
     //=============================================================================
                 //iterate through all series
-                for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; aSeriesIter++, nSeriesIndex++ )
+                for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; ++aSeriesIter, ++nSeriesIndex )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
@@ -930,7 +929,7 @@ void AreaChart::createShapes()
                                 //todo implement this different for area charts
                                 break;
                             default:
-                                DBG_ERROR("this label alignment is not implemented yet");
+                                OSL_FAIL("this label alignment is not implemented yet");
                                 aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
                                 eAlignment = LABEL_ALIGN_TOP;
                                 break;
@@ -995,3 +994,5 @@ void AreaChart::createShapes()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

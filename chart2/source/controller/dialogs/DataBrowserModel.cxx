@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -228,7 +229,6 @@ bool lcl_ShowCategories( const Reference< chart2::XDiagram > & /* xDiagram */ )
 {
     // show categories for all charts
     return true;
-//     return DiagramHelper::isCategoryDiagram( xDiagram );
 }
 
 bool lcl_ShowCategoriesAsDataLabel( const Reference< chart2::XDiagram > & xDiagram )
@@ -442,7 +442,7 @@ void DataBrowserModel::insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
 
         if(nAfterColumnIndex<0)
         {
-            OSL_ENSURE( false, "wrong index for category level insertion" );
+            OSL_FAIL( "wrong index for category level insertion" );
             return;
         }
 
@@ -1019,3 +1019,5 @@ void DataBrowserModel::addErrorBarRanges(
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

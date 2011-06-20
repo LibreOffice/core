@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,9 +49,7 @@
 // header for class SvxForbiddenCharactersTable
 #include <editeng/forbiddencharacterstable.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 // header for class SvxShape
 #include <svx/unoshape.hxx>
@@ -119,48 +118,12 @@ OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & x
 
 }
 
-    /*
-void lcl_initOutliner( SdrOutliner* pTargetOutliner, SdrOutliner* pSourceOutliner )
-{
-    //just an unsuccessful try to initialize the text edit outliner correctly
-    //if( bInit )
-    {
-        pTargetOutliner->EraseVirtualDevice();
-        pTargetOutliner->SetUpdateMode(sal_False);
-        pTargetOutliner->SetEditTextObjectPool( pSourceOutliner->GetEditTextObjectPool() );
-        pTargetOutliner->SetDefTab( pSourceOutliner->GetDefTab() );
-    }
-
-    pTargetOutliner->SetRefDevice( pSourceOutliner->GetRefDevice() );
-    pTargetOutliner->SetForbiddenCharsTable( pSourceOutliner->GetForbiddenCharsTable() );
-    pTargetOutliner->SetAsianCompressionMode( pSourceOutliner->GetAsianCompressionMode() );
-    pTargetOutliner->SetKernAsianPunctuation( pSourceOutliner->IsKernAsianPunctuation() );
-    pTargetOutliner->SetStyleSheetPool( pSourceOutliner->GetStyleSheetPool() );
-    pTargetOutliner->SetRefMapMode( pSourceOutliner->GetRefMapMode() );
-    pTargetOutliner->SetDefaultLanguage( pSourceOutliner->GetDefaultLanguage() );
-    pTargetOutliner->SetHyphenator( pSourceOutliner->GetHyphenator() );
-
-    sal_uInt16 nX, nY;
-    pSourceOutliner->GetGlobalCharStretching( nX, nY );
-    pTargetOutliner->SetGlobalCharStretching( nX, nY );
-
-    *//*
-    if ( !GetRefDevice() )
-    {
-        MapMode aMapMode(eObjUnit, Point(0,0), aObjUnit, aObjUnit);
-        pTargetOutliner->SetRefMapMode(aMapMode);
-    }
-    *//*
-}
-*/
-
 DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool bPaintPageForEditMode)
             : E3dView(pSdrModel, pOut)
             , m_pMarkHandleProvider(NULL)
             , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
             , m_bRestoreMapMode( false )
 {
-    // #114898#
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
 
@@ -201,7 +164,6 @@ void DrawViewWrapper::ReInit()
     bHlplVisible = false;
 
     this->SetNoDragXorPolys(true);//for interactive 3D resize-dragging: paint only a single rectangle (not a simulated 3D object)
-    //this->SetResizeAtCenter(true);//for interactive resize-dragging: keep the object center fix
 
     //a correct work area is at least necessary for correct values in the position and  size dialog
     Rectangle aRect(Point(0,0), aOutputSize);
@@ -222,7 +184,6 @@ SdrPageView* DrawViewWrapper::GetPageView() const
     return pSdrPageView;
 };
 
-//virtual
 void DrawViewWrapper::SetMarkHandles()
 {
     if( m_pMarkHandleProvider && m_pMarkHandleProvider->getMarkHandles( aHdl ) )
@@ -234,7 +195,6 @@ void DrawViewWrapper::SetMarkHandles()
 SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 {
     SdrObject* pRet = NULL;
-    //sal_uLong nOptions =SDRSEARCH_DEEP|SDRSEARCH_PASS2BOUND|SDRSEARCH_PASS3NEAREST;
     sal_uLong nOptions = SDRSEARCH_DEEP | SDRSEARCH_TESTMARKABLE;
 
     SdrPageView* pSdrPageView = this->GetPageView();
@@ -334,7 +294,6 @@ void DrawViewWrapper::attachParentReferenceDevice( const uno::Reference< frame::
 
 SdrOutliner* DrawViewWrapper::getOutliner() const
 {
-//    lcl_initOutliner( m_apOutliner.get(), &GetModel()->GetDrawOutliner() );
     return m_apOutliner.get();
 }
 
@@ -442,3 +401,5 @@ SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

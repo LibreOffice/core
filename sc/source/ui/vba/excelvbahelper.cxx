@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,15 +35,57 @@
 #include "transobj.hxx"
 #include "scmod.hxx"
 #include "cellsuno.hxx"
+#include "compiler.hxx"
+#include "token.hxx"
+#include "tokenarray.hxx"
+
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
+
+using namespace ::com::sun::star;
+using namespace ::ooo::vba;
 
 namespace ooo {
 namespace vba {
 namespace excel {
 
-using namespace ::com::sun::star;
-using namespace ::ooo::vba;
-
 // ============================================================================
+
+uno::Reference< sheet::XUnnamedDatabaseRanges >
+GetUnnamedDataBaseRanges( ScDocShell* pShell ) throw ( uno::RuntimeException )
+{
+    uno::Reference< frame::XModel > xModel;
+    if ( pShell )
+        xModel.set( pShell->GetModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xModelProps( xModel, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( xModelProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UnnamedDatabaseRanges") ) ), uno::UNO_QUERY_THROW );
+    return xUnnamedDBRanges;
+}
+
+// returns the XDatabaseRange for the autofilter on sheet (nSheet)
+// also populates sName with the name of range
+uno::Reference< sheet::XDatabaseRange >
+GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet ) throw ( uno::RuntimeException )
+{
+    uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( GetUnnamedDataBaseRanges( pShell ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XDatabaseRange > xDataBaseRange;
+    if (xUnnamedDBRanges->hasByTable( nSheet ) )
+    {
+        uno::Reference< sheet::XDatabaseRange > xDBRange( xUnnamedDBRanges->getByTable( nSheet ) , uno::UNO_QUERY_THROW );
+        sal_Bool bHasAuto = false;
+        uno::Reference< beans::XPropertySet > xProps( xDBRange, uno::UNO_QUERY_THROW );
+        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AutoFilter") ) ) >>= bHasAuto;
+        if ( bHasAuto )
+        {
+            xDataBaseRange=xDBRange;
+        }
+    }
+    return xDataBaseRange;
+}
 
 ScDocShell* GetDocShellFromRange( const uno::Reference< uno::XInterface >& xRange ) throw ( uno::RuntimeException )
 {
@@ -54,6 +97,21 @@ ScDocShell* GetDocShellFromRange( const uno::Reference< uno::XInterface >& xRang
     return pScCellRangesBase->GetDocShell();
 }
 
+uno::Reference< XHelperInterface >
+getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
+{
+    uno::Reference< sheet::XSheetCellRange > xSheetRange( xRange, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XSpreadsheet > xSheet( xSheetRange->getSpreadsheet(), uno::UNO_SET_THROW );
+    return getUnoSheetModuleObj( xSheet );
+}
+
+ScDocShell* GetDocShellFromRanges( const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges ) throw ( uno::RuntimeException )
+{
+    // need the ScCellRangesBase to get docshell
+    uno::Reference< uno::XInterface > xIf( xRanges, uno::UNO_QUERY_THROW );
+    return GetDocShellFromRange( xIf );
+}
+
 ScDocument* GetDocumentFromRange( const uno::Reference< uno::XInterface >& xRange ) throw ( uno::RuntimeException )
 {
         ScDocShell* pDocShell = GetDocShellFromRange( xRange );
@@ -62,6 +120,16 @@ ScDocument* GetDocumentFromRange( const uno::Reference< uno::XInterface >& xRang
                 throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to access underlying document from uno range object" ) ), uno::Reference< uno::XInterface >() );
         }
         return pDocShell->GetDocument();
+}
+
+uno::Reference< frame::XModel > GetModelFromRange( const uno::Reference< uno::XInterface >& xRange ) throw ( uno::RuntimeException )
+{
+    ScDocShell* pDocShell = GetDocShellFromRange( xRange );
+    if ( !pDocShell )
+    {
+        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to access underlying model uno range object" ) ), uno::Reference< uno::XInterface >() );
+    }
+    return pDocShell->GetModel();
 }
 
 void implSetZoom( const uno::Reference< frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs )
@@ -103,7 +171,7 @@ private:
 
     bool getReplaceCellsWarning() throw ( uno::RuntimeException )
     {
-        sal_Bool res = sal_False;
+        sal_Bool res = false;
         getGlobalSheetSettings()->getPropertyValue( REPLACE_CELLS_WARNING ) >>= res;
         return ( res == sal_True );
     }
@@ -179,7 +247,7 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
 void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
 {
     PasteCellsWarningReseter resetWarningBox;
-    sal_Bool bAsLink(sal_False), bOtherDoc(sal_False);
+    sal_Bool bAsLink(false), bOtherDoc(false);
     InsCellCmd eMoveMode = INS_NONE;
 
     ScTabViewShell* pTabViewShell = getBestViewShell( xModel );
@@ -196,10 +264,7 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
                 ScDocument* pDoc = NULL;
                 if ( pOwnClip )
-                {
                     pDoc = pOwnClip->GetDocument();
-                    pOwnClip->SetUseInApi( false );     // don't use in Insert after it was pasted once
-                }
                 pTabViewShell->PasteFromClip( nFlags, pDoc,
                     nFunction, bSkipEmpty, bTranspose, bAsLink,
                     eMoveMode, IDF_NONE, sal_True );
@@ -208,6 +273,15 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16
         }
     }
 
+}
+
+void implnCopyRange( const uno::Reference< frame::XModel>& xModel, const ScRange& rRange )
+{
+    ScTabViewShell* pViewShell = getBestViewShell( xModel );
+    if ( pViewShell )
+    {
+        pViewShell->CopyToClip( NULL, rRange, false, true, true );
+    }
 }
 
 ScDocShell*
@@ -247,7 +321,20 @@ getViewFrame( const uno::Reference< frame::XModel >& xModel )
     return NULL;
 }
 
-uno::Reference< XHelperInterface >
+sal_Bool IsR1C1ReferFormat( ScDocument* pDoc, const rtl::OUString& sRangeStr )
+{
+    ScRangeList aCellRanges;
+    String sAddress( sRangeStr );
+    sal_uInt16 nMask = SCA_VALID;
+    sal_uInt16 rResFlags = aCellRanges.Parse( sAddress, pDoc, nMask, formula::FormulaGrammar::CONV_XL_R1C1 );
+    if ( rResFlags & SCA_VALID )
+    {
+        return sal_True;
+    }
+    return false;
+}
+
+uno::Reference< vba::XHelperInterface >
 getUnoSheetModuleObj( const uno::Reference< sheet::XSpreadsheet >& xSheet ) throw ( uno::RuntimeException )
 {
     uno::Reference< beans::XPropertySet > xProps( xSheet, uno::UNO_QUERY_THROW );
@@ -258,15 +345,86 @@ getUnoSheetModuleObj( const uno::Reference< sheet::XSpreadsheet >& xSheet ) thro
     // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
     // the document in the future could fix this, especially IF the switching of the vba mode takes care to
     // create the special document module objects if they don't exist.
-    return getUnoDocModule( sCodeName, GetDocShellFromRange( xSheet ) );
+    uno::Reference< XHelperInterface > xParent( ov::getUnoDocModule( sCodeName, GetDocShellFromRange( xSheet ) ), uno::UNO_QUERY );
+    return xParent;
 }
 
-uno::Reference< XHelperInterface >
-getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
+formula::FormulaGrammar::Grammar GetFormulaGrammar( ScDocument* pDoc, const ScAddress& sAddress, const css::uno::Any& aFormula )
 {
-    uno::Reference< sheet::XSheetCellRange > xSheetRange( xRange, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XSpreadsheet > xSheet( xSheetRange->getSpreadsheet(), uno::UNO_SET_THROW );
-    return getUnoSheetModuleObj( xSheet );
+    formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_NATIVE_XL_A1;
+    if ( pDoc && aFormula.hasValue() && aFormula.getValueTypeClass() == uno::TypeClass_STRING )
+    {
+        rtl::OUString sFormula;
+        aFormula >>= sFormula;
+
+        ScCompiler aCompiler( pDoc, sAddress );
+        aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
+        ScTokenArray* pCode = aCompiler.CompileString( sFormula );
+        if ( pCode )
+        {
+            sal_uInt16 nLen = pCode->GetLen();
+            formula::FormulaToken** pTokens = pCode->GetArray();
+            for ( sal_uInt16 nPos = 0; nPos < nLen; nPos++ )
+            {
+                const formula::FormulaToken& rToken = *pTokens[nPos];
+                switch ( rToken.GetType() )
+                {
+                    case formula::svSingleRef:
+                    case formula::svDoubleRef:
+                    {
+                        return formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
+                    }
+                    break;
+                    default: break;
+                }
+            }
+        }
+    }
+    return eGrammar;
+}
+
+void CompileExcelFormulaToODF( ScDocument* pDoc, const String& rOldFormula, String& rNewFormula )
+{
+    if ( !pDoc )
+    {
+        return;
+    }
+    ScCompiler aCompiler( pDoc, ScAddress() );
+    aCompiler.SetGrammar( excel::GetFormulaGrammar( pDoc, ScAddress(), uno::Any( rtl::OUString( rOldFormula ) ) ) );
+    aCompiler.CompileString( rOldFormula );
+    aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_PODF_A1 );
+    aCompiler.CreateStringFromTokenArray( rNewFormula );
+}
+
+void CompileODFFormulaToExcel( ScDocument* pDoc, const String& rOldFormula, String& rNewFormula, const formula::FormulaGrammar::Grammar eGrammar )
+{
+    // eGrammar can be formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 and formula::FormulaGrammar::GRAM_NATIVE_XL_A1
+    if ( !pDoc )
+    {
+        return;
+    }
+    ScCompiler aCompiler( pDoc, ScAddress() );
+    aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_PODF_A1 );
+    ScTokenArray* pCode = aCompiler.CompileString( rOldFormula );
+    aCompiler.SetGrammar( eGrammar );
+    if ( !pCode )
+    {
+        return;
+    }
+    sal_uInt16 nLen = pCode->GetLen();
+    formula::FormulaToken** pTokens = pCode->GetArray();
+    for ( sal_uInt16 nPos = 0; nPos < nLen && pTokens[nPos]; nPos++ )
+    {
+        String rFormula;
+        formula::FormulaToken* pToken = pTokens[nPos];
+        aCompiler.CreateStringFromToken( rFormula, pToken, true );
+        if ( pToken->GetOpCode() == ocSep )
+        {
+            // Excel formula separator is ",".
+            rFormula = String::CreateFromAscii(",");
+        }
+        rNewFormula += rFormula;
+    }
 }
 
 uno::Reference< XHelperInterface >
@@ -293,6 +451,86 @@ getUnoSheetModuleObj( const uno::Reference< frame::XModel >& xModel, SCTAB nTab 
     uno::Reference< container::XIndexAccess > xSheets( xDoc->getSheets(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XSpreadsheet > xSheet( xSheets->getByIndex( nTab ), uno::UNO_QUERY_THROW );
     return getUnoSheetModuleObj( xSheet );
+}
+
+void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& xDoc )
+{
+    uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
+    ScDocShell* pShell = excel::getDocShell( xModel );
+    if ( pShell )
+    {
+        String aPrjName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+        pShell->GetBasicManager()->SetName( aPrjName );
+
+        /*  Set library container to VBA compatibility mode. This will create
+            the VBA Globals object and store it in the Basic manager of the
+            document. */
+        uno::Reference<script::XLibraryContainer> xLibContainer = pShell->GetBasicContainer();
+        uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY_THROW );
+        xVBACompat->setVBACompatibilityMode( sal_True );
+
+        if( xLibContainer.is() )
+        {
+            if( !xLibContainer->hasByName( aPrjName ) )
+                xLibContainer->createLibrary( aPrjName );
+            uno::Any aLibAny = xLibContainer->getByName( aPrjName );
+            uno::Reference< container::XNameContainer > xLib;
+            aLibAny >>= xLib;
+            if( xLib.is()  )
+            {
+                uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
+                uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
+                uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider"))), uno::UNO_QUERY_THROW );
+                // set up the module info for the workbook and sheets in the nealy created
+                // spreadsheet
+                ScDocument* pDoc = pShell->GetDocument();
+                String sCodeName = pDoc->GetCodeName();
+                if ( sCodeName.Len() == 0 )
+                {
+                    sCodeName = String( RTL_CONSTASCII_USTRINGPARAM("ThisWorkbook") );
+                    pDoc->SetCodeName( sCodeName );
+                }
+
+                std::vector< rtl::OUString > sDocModuleNames;
+                sDocModuleNames.push_back( sCodeName );
+
+                for ( SCTAB index = 0; index < pDoc->GetTableCount(); index++)
+                {
+                    String aName;
+                    pDoc->GetCodeName( index, aName );
+                    sDocModuleNames.push_back( aName );
+                }
+
+                std::vector<rtl::OUString>::iterator it_end = sDocModuleNames.end();
+
+                for ( std::vector<rtl::OUString>::iterator it = sDocModuleNames.begin(); it != it_end; ++it )
+                {
+                    script::ModuleInfo sModuleInfo;
+
+                    uno::Any aName= xVBACodeNamedObjectAccess->getByName( *it );
+                    sModuleInfo.ModuleObject.set( aName, uno::UNO_QUERY );
+                    sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
+                    xVBAModuleInfo->insertModuleInfo( *it, sModuleInfo );
+                    if( xLib->hasByName( *it ) )
+                        xLib->replaceByName( *it, uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n") ) ) );
+                    else
+                        xLib->insertByName( *it, uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) ) ) );
+                }
+            }
+        }
+
+        /*  Trigger the Workbook_Open event, event processor will register
+            itself as listener for specific events. */
+        try
+        {
+            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pShell->GetDocument()->GetVbaEventProcessor(), uno::UNO_SET_THROW );
+            uno::Sequence< uno::Any > aArgs;
+            xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_OPEN, aArgs );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
 }
 
 SfxItemSet*

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,13 +46,13 @@ public:
     static void CalculateCubicSplines(
             const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
             , ::com::sun::star::drawing::PolyPolygonShape3D& rResult
-            , sal_Int32 nGranularity );
+            , sal_uInt32 nGranularity );
 
     static void CalculateBSplines(
             const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
             , ::com::sun::star::drawing::PolyPolygonShape3D& rResult
-            , sal_Int32 nGranularity
-            , sal_Int32 nSplineDepth );
+            , sal_uInt32 nGranularity
+            , sal_uInt32 nSplineDepth );
 };
 
 
@@ -59,3 +60,5 @@ public:
 } //namespace chart
 //.............................................................................
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,8 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
+#include "svl/zforlist.hxx"
+#include "svl/zformat.hxx"
 
 #include "viewfunc.hxx"
 #include "detfunc.hxx"
@@ -47,6 +50,17 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 #include "fusel.hxx"
+#include "reftokenhelper.hxx"
+#include "externalrefmgr.hxx"
+#include "cell.hxx"
+
+#include <vector>
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::std::vector;
+
+#define D_TIMEFACTOR              86400.0
 
 //==================================================================
 
@@ -137,6 +151,168 @@ void ScViewFunc::DetectiveRefresh()
     RecalcPPT();
 }
 
+static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, ScDocument* pDoc)
+{
+    String aAddrText;
+    rRange.Format(aAddrText, SCR_ABS_3D, pDoc);
+    SfxStringItem aPosItem(SID_CURRENTCELL, aAddrText);
+    SfxBoolItem aUnmarkItem(FN_PARAM_1, true);        // remove existing selection
+    pView->GetDispatcher().Execute(
+        SID_CURRENTCELL, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
+        &aPosItem, &aUnmarkItem, 0L);
+}
+
+void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
+{
+    ScViewData* pView = GetViewData();
+    ScDocShell* pDocSh = pView->GetDocShell();
+
+    ScRangeList aRanges(rRanges);
+    ScRange* p = aRanges.front();
+    ScRangeList aRangesToMark;
+    ScAddress aCurPos = pView->GetCurPos();
+    size_t ListSize = aRanges.size();
+    for ( size_t i = 0; i < ListSize; ++i )
+    {
+        p = aRanges[i];
+        // Collect only those ranges that are on the same sheet as the current
+        // cursor.
+        if (p->aStart.Tab() == aCurPos.Tab())
+            aRangesToMark.Append(*p);
+    }
+
+    if (aRangesToMark.empty())
+        return;
+
+    // Jump to the first range of all precedent ranges.
+    p = aRangesToMark.front();
+    lcl_jumpToRange(*p, pView, pDocSh->GetDocument());
+
+    ListSize = aRangesToMark.size();
+    for ( size_t i = 0; i < ListSize; ++i )
+    {
+        p = aRangesToMark[i];
+        MarkRange(*p, false, true);
+    }
+}
+
+void ScViewFunc::DetectiveMarkPred()
+{
+    ScViewData* pView = GetViewData();
+    ScDocShell* pDocSh = pView->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
+    ScMarkData& rMarkData = pView->GetMarkData();
+    ScAddress aCurPos = pView->GetCurPos();
+    ScRangeList aRanges;
+    if (rMarkData.IsMarked() || rMarkData.IsMultiMarked())
+        rMarkData.FillRangeListWithMarks(&aRanges, false);
+    else
+        aRanges.Append(aCurPos);
+
+    vector<ScTokenRef> aRefTokens;
+    pDocSh->GetDocFunc().DetectiveCollectAllPreds(aRanges, aRefTokens);
+
+    if (aRefTokens.empty())
+        // No precedents found.  Nothing to do.
+        return;
+
+    ScTokenRef p = aRefTokens.front();
+    if (ScRefTokenHelper::isExternalRef(p))
+    {
+        // This is external.  Open the external document if available, and
+        // jump to the destination.
+
+        sal_uInt16 nFileId = p->GetIndex();
+        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+        const OUString* pPath = pRefMgr->getExternalFileName(nFileId);
+
+        ScRange aRange;
+        if (pPath && ScRefTokenHelper::getRangeFromToken(aRange, p, true))
+        {
+            const String& rTabName = p->GetString();
+            OUStringBuffer aBuf;
+            aBuf.append(*pPath);
+            aBuf.append(sal_Unicode('#'));
+            aBuf.append(rTabName);
+            aBuf.append(sal_Unicode('.'));
+
+            String aRangeStr;
+            aRange.Format(aRangeStr, SCA_VALID);
+            aBuf.append(aRangeStr);
+
+            ScGlobal::OpenURL(aBuf.makeStringAndClear(), String());
+        }
+        return;
+    }
+    else
+    {
+        ScRange aRange;
+        ScRefTokenHelper::getRangeFromToken(aRange, p, false);
+        if (aRange.aStart.Tab() != aCurPos.Tab())
+        {
+            // The first precedent range is on a different sheet.  Jump to it
+            // immediately and forget the rest.
+            lcl_jumpToRange(aRange, pView, pDoc);
+            return;
+        }
+    }
+
+    ScRangeList aDestRanges;
+    ScRefTokenHelper::getRangeListFromTokens(aDestRanges, aRefTokens);
+    MarkAndJumpToRanges(aDestRanges);
+}
+
+void ScViewFunc::DetectiveMarkSucc()
+{
+    ScViewData* pView = GetViewData();
+    ScDocShell* pDocSh = pView->GetDocShell();
+    ScMarkData& rMarkData = pView->GetMarkData();
+    ScAddress aCurPos = pView->GetCurPos();
+    ScRangeList aRanges;
+    if (rMarkData.IsMarked() || rMarkData.IsMultiMarked())
+        rMarkData.FillRangeListWithMarks(&aRanges, false);
+    else
+        aRanges.Append(aCurPos);
+
+    vector<ScTokenRef> aRefTokens;
+    pDocSh->GetDocFunc().DetectiveCollectAllSuccs(aRanges, aRefTokens);
+
+    if (aRefTokens.empty())
+        // No dependants found.  Nothing to do.
+        return;
+
+    ScRangeList aDestRanges;
+    ScRefTokenHelper::getRangeListFromTokens(aDestRanges, aRefTokens);
+    MarkAndJumpToRanges(aDestRanges);
+}
+
+void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
+{
+    ScViewData* pViewData = GetViewData();
+    ScAddress aCurPos = pViewData->GetCurPos();
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
+    ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    Date aActDate;
+    double fDate = aActDate - *pFormatter->GetNullDate();
+    Time aActTime;
+    double fTime =
+        aActTime.Get100Sec() / 100.0 + aActTime.GetSec() +
+        (aActTime.GetMin() * 60.0) + (aActTime.GetHour() * 3600.0);
+    fTime /= D_TIMEFACTOR;
+    pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
+    pDocSh->GetDocFunc().PutCell(aCurPos, new ScValueCell(fDate+fTime), false);
+
+    // Set the new cell format only when it differs from the current cell
+    // format type.
+    sal_uInt32 nCurNumFormat = pDoc->GetNumberFormat(aCurPos);
+    const SvNumberformat* pEntry = pFormatter->GetEntry(nCurNumFormat);
+    if (!pEntry || !(pEntry->GetType() & nCellFmt))
+        SetNumberFormat(nCellFmt);
+    pUndoMgr->LeaveListAction();
+}
+
 //---------------------------------------------------------------------------
 
 void ScViewFunc::ShowNote( bool bShow )
@@ -195,3 +371,5 @@ void ScViewFunc::EditNote()
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

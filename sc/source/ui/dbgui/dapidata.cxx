@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 
 //------------------------------------------------------------------
 
-#include <tools/debug.hxx>
 #include <vcl/waitobj.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -90,7 +90,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
 
         uno::Reference<container::XNameAccess> xContext(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( DP_SERVICE_DBCONTEXT ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( DP_SERVICE_DBCONTEXT )) ),
                 uno::UNO_QUERY);
         if (xContext.is())
         {
@@ -106,7 +106,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     }
     catch(uno::Exception&)
     {
-        DBG_ERROR("exception in database");
+        OSL_FAIL("exception in database");
     }
 
     aLbDatabase.SelectEntryPos( 0 );
@@ -129,7 +129,7 @@ void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
     rDesc.aDBName = aLbDatabase.GetSelectEntry();
     rDesc.aObject = aCbObject.GetText();
 
-    if ( !rDesc.aDBName.Len() || !rDesc.aObject.Len() )
+    if (rDesc.aDBName.isEmpty() || rDesc.aObject.isEmpty())
         rDesc.nType = sheet::DataImportMode_NONE;
     else if ( nSelect == DP_TYPELIST_TABLE )
         rDesc.nType = sheet::DataImportMode_TABLE;
@@ -165,7 +165,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
 
         uno::Reference<container::XNameAccess> xContext(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( DP_SERVICE_DBCONTEXT ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( DP_SERVICE_DBCONTEXT )) ),
                 uno::UNO_QUERY);
         if ( !xContext.is() ) return;
 
@@ -176,7 +176,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
 
         uno::Reference<task::XInteractionHandler> xHandler(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
                 uno::UNO_QUERY);
 
         uno::Reference<sdbc::XConnection> xConnection = xSource->connectWithCompletion( xHandler );
@@ -219,11 +219,12 @@ void ScDataPilotDatabaseDlg::FillObjects()
     }
     catch(uno::Exception&)
     {
-        //  #71604# this may happen if an invalid database is selected -> no DBG_ERROR
-        DBG_WARNING("exception in database");
+        //  this may happen if an invalid database is selected -> no DBG_ERROR
+        OSL_FAIL("exception in database");
     }
 }
 
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

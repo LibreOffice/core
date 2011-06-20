@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,7 +93,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
     ScPrintOptions aOptions;
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCPRINTOPTIONS, sal_False , &pItem))
+    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCPRINTOPTIONS, false , &pItem))
         aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
     else
     {
@@ -100,7 +101,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
         aOptions = SC_MOD()->GetPrintOptions();
     }
 
-    if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_PRINT_SELECTEDSHEET, sal_False , &pItem ) )
+    if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_PRINT_SELECTEDSHEET, false , &pItem ) )
     {
         sal_Bool bChecked = ( (const SfxBoolItem*)pItem )->GetValue();
         aSelectedSheetsCB.Check( bChecked );
@@ -138,7 +139,8 @@ sal_Bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
     }
     else
     {
-        return sal_False;
+        return false;
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

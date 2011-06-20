@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,22 +60,11 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, sal_
     aNameList.SetSelectHdl( LINK( this,ScNamePasteDlg,ListSelHdl) );
     aNameList.SetDoubleClickHdl( LINK( this,ScNamePasteDlg,ListDblClickHdl) );
 
-    sal_uInt16  nCnt = pList->GetCount();
-    String  aText;
-
-    for( sal_uInt16 i=0 ; i<nCnt ; i++ )
+    ScRangeName::const_iterator itr = pList->begin(), itrEnd = pList->end();
+    for (; itr != itrEnd; ++itr)
     {
-        ScRangeData* pData = (*pList)[ i ];
-
-        if( pData )
-        {
-            if (   !pData->HasType( RT_DATABASE )
-                && !pData->HasType( RT_SHARED ) )
-            {
-                pData->GetName( aText );
-                aNameList.InsertEntry( aText );
-            }
-        }
+        if (!itr->HasType(RT_DATABASE) && !itr->HasType(RT_SHARED))
+            aNameList.InsertEntry(itr->GetName());
     }
 
     ListSelHdl( &aNameList );
@@ -131,3 +121,4 @@ String ScNamePasteDlg::GetSelectedName() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

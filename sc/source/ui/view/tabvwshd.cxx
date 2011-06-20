@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@
 
 Window* ScTabViewShell::GetDialogParent()
 {
-    //  #95513# if a ref-input dialog is open, use it as parent
+    //  if a ref-input dialog is open, use it as parent
     //  (necessary when a slot is executed from the dialog's OK handler)
     if ( nCurRefDlgId && nCurRefDlgId == SC_MOD()->GetCurRefDlgId() )
     {
@@ -98,3 +99,4 @@ Window* ScTabViewShell::GetDialogParent()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

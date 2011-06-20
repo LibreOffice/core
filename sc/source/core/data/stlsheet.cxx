@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,27 +85,27 @@ ScStyleSheet::ScStyleSheet( const ScStyleSheet& rStyle )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScStyleSheet::~ScStyleSheet()
+ScStyleSheet::~ScStyleSheet()
 {
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScStyleSheet::HasFollowSupport() const
+sal_Bool ScStyleSheet::HasFollowSupport() const
 {
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScStyleSheet::HasParentSupport () const
+sal_Bool ScStyleSheet::HasParentSupport () const
 {
-    sal_Bool bHasParentSupport = sal_False;
+    sal_Bool bHasParentSupport = false;
 
     switch ( GetFamily() )
     {
         case SFX_STYLE_FAMILY_PARA: bHasParentSupport = sal_True;   break;
-        case SFX_STYLE_FAMILY_PAGE: bHasParentSupport = sal_False;  break;
+        case SFX_STYLE_FAMILY_PAGE: bHasParentSupport = false;  break;
         default:
         {
             // added to avoid warnings
@@ -116,9 +117,9 @@ sal_Bool __EXPORT ScStyleSheet::HasParentSupport () const
 
 //------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScStyleSheet::SetParent( const String& rParentName )
+sal_Bool ScStyleSheet::SetParent( const String& rParentName )
 {
-    sal_Bool bResult = sal_False;
+    sal_Bool bResult = false;
     String aEffName = rParentName;
     SfxStyleSheetBase* pStyle = rPool.Find( aEffName, nFamily );
     if (!pStyle)
@@ -151,7 +152,7 @@ sal_Bool __EXPORT ScStyleSheet::SetParent( const String& rParentName )
 
 //------------------------------------------------------------------------
 
-SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
+SfxItemSet& ScStyleSheet::GetItemSet()
 {
     if ( !pSet )
     {
@@ -207,12 +208,11 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                                                       ATTR_ULSPACE );
                         SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
 
-                        aBoxInfoItem.SetTable( sal_False );
+                        aBoxInfoItem.SetTable( false );
                         aBoxInfoItem.SetDist( sal_True );
                         aBoxInfoItem.SetValid( VALID_DISTANCE, sal_True );
 
-                        // aPageItem.SetLandscape( ORIENTATION_LANDSCAPE == pPrinter->GetOrientation() );
-                        aPageItem.SetLandscape( sal_False );
+                        aPageItem.SetLandscape( false );
 
                         rHFSet.Put( aBoxInfoItem );
                         rHFSet.Put( aHFSizeItem );
@@ -251,8 +251,8 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                                        0 );
                 break;
         }
-        bMySet = sal_True;
-    } // if ( !pSet )
+        bMySet = true;
+    }
     if ( nHelpId == HID_SC_SHEET_CELL_ERG1 )
     {
         if ( !pSet->Count() )
@@ -262,7 +262,7 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
             {
                 sal_uLong nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_CURRENCY,ScGlobal::eLnge );
                 pSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumFmt ) );
-            } // if ( pDoc && pDoc->IsLoadingDone() )
+            }
         }
     }
 
@@ -271,7 +271,7 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
 
 //------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScStyleSheet::IsUsed() const
+sal_Bool ScStyleSheet::IsUsed() const
 {
     if ( GetFamily() == SFX_STYLE_FAMILY_PARA )
     {
@@ -290,7 +290,7 @@ sal_Bool __EXPORT ScStyleSheet::IsUsed() const
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) )
         if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
@@ -299,7 +299,7 @@ void __EXPORT ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 //------------------------------------------------------------------------
 
-//  #66123# schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,
+//  schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,
 //  obwohl der fuer den Benutzer sichtbare Name uebersetzt ist:
 
 const String& ScStyleSheet::GetName() const
@@ -344,10 +344,11 @@ sal_Bool ScStyleSheet::SetName( const String& rNew )
 {
     String aFileStdName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_STANDARD));
     if ( rNew == aFileStdName && aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
-        return sal_False;
+        return false;
     else
         return SfxStyleSheet::SetName( rNew );
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,7 +96,6 @@ beans::PropertyState WrappedIgnoreProperty::getPropertyState( const Reference< b
 void WrappedIgnoreProperties::addIgnoreLineProperties( std::vector< WrappedProperty* >& rList )
 {
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_SOLID ) ) );
-//     rList.push_back( new WrappedIgnoreProperty( C2U( "LineDash" ), uno::makeAny( drawing::LineDash() ) ) );
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineDashName" ), uno::makeAny( rtl::OUString() ) ) );
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineColor" ), uno::makeAny( sal_Int32(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineTransparence" ), uno::makeAny( sal_Int16(0) ) ) );
@@ -142,3 +142,5 @@ void WrappedIgnoreProperties::addIgnoreFillProperties_only_BitmapProperties( ::s
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

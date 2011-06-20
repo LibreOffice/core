@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/debug.hxx>
-
 #include "consoli.hxx"
 #include "document.hxx"
 #include "olinetab.hxx"
@@ -48,22 +47,6 @@
 #define SC_CONS_NOTFOUND    -1
 
 // STATIC DATA -----------------------------------------------------------
-
-/*  Strings bei Gelegenheit ganz raus...
-static sal_uInt16 nFuncRes[] = {                //  Reihenfolge wie bei enum ScSubTotalFunc
-        0,                                  //  none
-        STR_PIVOTFUNC_AVG,
-        STR_PIVOTFUNC_COUNT,
-        STR_PIVOTFUNC_COUNT2,
-        STR_PIVOTFUNC_MAX,
-        STR_PIVOTFUNC_MIN,
-        STR_PIVOTFUNC_PROD,
-        STR_PIVOTFUNC_STDDEV,
-        STR_PIVOTFUNC_STDDEV2,
-        STR_PIVOTFUNC_SUM,
-        STR_PIVOTFUNC_VAR,
-        STR_PIVOTFUNC_VAR2 };
-*/
 
 static OpCode eOpCodeTable[] = {            //  Reihenfolge wie bei enum ScSubTotalFunc
         ocBad,                              //  none
@@ -122,10 +105,10 @@ void lcl_AddString( String**& pData, T& nCount, const String& rInsert )
 
 ScConsData::ScConsData() :
     eFunction(SUBTOTAL_FUNC_SUM),
-    bReference(sal_False),
-    bColByName(sal_False),
-    bRowByName(sal_False),
-    bSubTitles(sal_False),
+    bReference(false),
+    bColByName(false),
+    bRowByName(false),
+    bSubTitles(false),
     nColCount(0),
     nRowCount(0),
     ppUsed(NULL),
@@ -139,7 +122,7 @@ ScConsData::ScConsData() :
     nTitleCount(0),
     ppTitles(NULL),
     ppTitlePos(NULL),
-    bCornerUsed(sal_False)
+    bCornerUsed(false)
 {
 }
 
@@ -184,8 +167,6 @@ void ScConsData::DeleteData()
         ppRefs = NULL;
     }
 
-//  DELETEARR( ppData1, nColCount );
-//  DELETEARR( ppData2, nColCount );
     DELETEARR( ppCount, nColCount );
     DELETEARR( ppSum,   nColCount );
     DELETEARR( ppSumSqr,nColCount );
@@ -200,7 +181,7 @@ void ScConsData::DeleteData()
     if (bColByName) nColCount = 0;                  // sonst stimmt ppColHeaders nicht
     if (bRowByName) nRowCount = 0;
 
-    bCornerUsed = sal_False;
+    bCornerUsed = false;
     aCornerText.Erase();
 }
 
@@ -256,7 +237,7 @@ void ScConsData::InitData( sal_Bool bDelete )
 
 void ScConsData::DoneFields()
 {
-    InitData(sal_False);
+    InitData(false);
 }
 
 void ScConsData::SetSize( SCCOL nCols, SCROW nRows )
@@ -302,7 +283,7 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
             pSrcDoc->GetString( nCol, nRow1, nTab, aTitle );
             if (aTitle.Len())
             {
-                sal_Bool bFound = sal_False;
+                sal_Bool bFound = false;
                 for (SCSIZE i=0; i<nColCount && !bFound; i++)
                     if ( *ppColHeaders[i] == aTitle )
                         bFound = sal_True;
@@ -319,7 +300,7 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
             pSrcDoc->GetString( nCol1, nRow, nTab, aTitle );
             if (aTitle.Len())
             {
-                sal_Bool bFound = sal_False;
+                sal_Bool bFound = false;
                 for (SCSIZE i=0; i<nRowCount && !bFound; i++)
                     if ( *ppRowHeaders[i] == aTitle )
                         bFound = sal_True;
@@ -512,7 +493,7 @@ double lcl_CalcData( ScSubTotalFunc eFunc,
             break;
         default:
         {
-            DBG_ERROR("unbekannte Funktion bei Consoli::CalcData");
+            OSL_FAIL("unbekannte Funktion bei Consoli::CalcData");
             fCount = -MAXDOUBLE;
         }
             break;
@@ -527,12 +508,12 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     PutInOrder(nRow1,nRow2);
     if ( nCol2 >= sal::static_int_cast<SCCOL>(nCol1 + nColCount) && !bColByName )
     {
-        DBG_ASSERT(0,"Bereich zu gross");
+        OSL_FAIL("Bereich zu gross");
         nCol2 = sal::static_int_cast<SCCOL>( nCol1 + nColCount - 1 );
     }
     if ( nRow2 >= sal::static_int_cast<SCROW>(nRow1 + nRowCount) && !bRowByName )
     {
-        DBG_ASSERT(0,"Bereich zu gross");
+        OSL_FAIL("Bereich zu gross");
         nRow2 = sal::static_int_cast<SCROW>( nRow1 + nRowCount - 1 );
     }
 
@@ -575,14 +556,14 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
             SCCOL nPos = SC_CONS_NOTFOUND;
             if (aTitle.Len())
             {
-                sal_Bool bFound = sal_False;
+                sal_Bool bFound = false;
                 for (SCSIZE i=0; i<nColCount && !bFound; i++)
                     if ( *ppColHeaders[i] == aTitle )
                     {
                         nPos = static_cast<SCCOL>(i);
                         bFound = sal_True;
                     }
-                DBG_ASSERT(bFound, "Spalte nicht gefunden");
+                OSL_ENSURE(bFound, "Spalte nicht gefunden");
             }
             pDestCols[nCol-nStartCol] = nPos;
         }
@@ -596,14 +577,14 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
             SCROW nPos = SC_CONS_NOTFOUND;
             if (aTitle.Len())
             {
-                sal_Bool bFound = sal_False;
+                sal_Bool bFound = false;
                 for (SCSIZE i=0; i<nRowCount && !bFound; i++)
                     if ( *ppRowHeaders[i] == aTitle )
                     {
                         nPos = static_cast<SCROW>(i);
                         bFound = sal_True;
                     }
-                DBG_ASSERT(bFound, "Zeile nicht gefunden");
+                OSL_ENSURE(bFound, "Zeile nicht gefunden");
             }
             pDestRows[nRow-nStartRow] = nPos;
         }
@@ -818,11 +799,13 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 ScOutlineArray* pOutArr = pDestDoc->GetOutlineTable( nTab, sal_True )->GetRowArray();
                 SCROW nOutStart = nRow+nArrY;
                 SCROW nOutEnd = nRow+nArrY+nNeeded-1;
-                sal_Bool bSize = sal_False;
+                sal_Bool bSize = false;
                 pOutArr->Insert( nOutStart, nOutEnd, bSize );
+                pDestDoc->InitializeNoteCaptions(nTab);
                 for (SCROW nOutRow=nOutStart; nOutRow<=nOutEnd; nOutRow++)
-                    pDestDoc->ShowRow( nOutRow, nTab, sal_False );
-                pDestDoc->UpdateOutlineRow( nOutStart, nOutEnd, nTab, sal_False );
+                    pDestDoc->ShowRow( nOutRow, nTab, false );
+                pDestDoc->SetDrawPageSize(nTab);
+                pDestDoc->UpdateOutlineRow( nOutStart, nOutEnd, nTab, false );
 
                 //  Zwischentitel
 
@@ -835,7 +818,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                         sal_Bool bDo = sal_True;
                         if (nPos+1<nDataCount)
                             if (ppTitlePos[nArrY][nPos+1] == nTPos)
-                                bDo = sal_False;                                    // leer
+                                bDo = false;                                    // leer
                         if ( bDo && nTPos < nNeeded )
                         {
                             aString =  *ppRowHeaders[nArrY];
@@ -856,3 +839,4 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

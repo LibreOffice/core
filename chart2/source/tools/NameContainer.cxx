@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -153,7 +154,7 @@ Sequence< OUString > SAL_CALL NameContainer::getElementNames()
     sal_Int32 nCount = m_aMap.size();
     Sequence< OUString > aSeq(nCount);
     sal_Int32 nN = 0;
-    for( tContentMap::iterator aIter = m_aMap.begin(); aIter != m_aMap.end(), nN < nCount; aIter++, nN++ )
+    for( tContentMap::iterator aIter = m_aMap.begin(); aIter != m_aMap.end(), nN < nCount; ++aIter, ++nN )
         aSeq[nN]=aIter->first;
     return aSeq;
 }
@@ -187,3 +188,5 @@ uno::Reference< util::XCloneable > SAL_CALL NameContainer::createClone()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

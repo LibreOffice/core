@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,10 +43,6 @@
 #include <com/sun/star/chart2/XColorScheme.hpp>
 
 #include <com/sun/star/container/XChild.hpp>
-
-//#include "chartview/servicenames_charttypes.hxx"
-//#include "servicenames_coosystems.hxx"
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 
 //.............................................................................
@@ -161,7 +158,7 @@ PieChart::~PieChart()
 
 void PieChart::setScales( const std::vector< ExplicitScaleData >& rScales, bool /* bSwapXAndYAxis */ )
 {
-    DBG_ASSERT(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
+    OSL_ENSURE(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
     m_pPosHelper->setScales( rScales, true );
 }
 
@@ -185,21 +182,6 @@ bool PieChart::shouldSnapRectToUsedArea()
 {
     return true;
 }
-
-//-----------------------------------------------------------------
-// lang::XServiceInfo
-//-----------------------------------------------------------------
-/*
-APPHELPER_XSERVICEINFO_IMPL(PieChart,CHART2_VIEW_PIECHART_SERVICE_IMPLEMENTATION_NAME)
-
-    uno::Sequence< rtl::OUString > PieChart
-::getSupportedServiceNames_Static()
-{
-    uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = CHART2_VIEW_PIECHART_SERVICE_NAME;
-    return aSNS;
-}
-*/
 
 uno::Reference< drawing::XShape > PieChart::createDataPoint(
           const uno::Reference< drawing::XShapes >& xTarget
@@ -345,7 +327,7 @@ void PieChart::createShapes()
     if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
         return;
 
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"PieChart is not proper initialized");
+    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"PieChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
@@ -371,7 +353,7 @@ void PieChart::createShapes()
     ::rtl::math::setNan(&m_fMaxOffset);
 
 //=============================================================================
-    for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); aXSlotIter++, fSlotX+=1.0 )
+    for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); ++aXSlotIter, fSlotX+=1.0 )
     {
         ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
         if( pSeriesList->size()<=0 )//there should be only one series in each x slot
@@ -409,9 +391,7 @@ void PieChart::createShapes()
             if( !bIsVisible )
                 continue;
 
-            double fLogicZ = -1.0;//as defined
             double fDepth  = this->getTransformedDepth();
-//=============================================================================
 
             uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
             //collect data point information (logic coordinates, style ):
@@ -462,6 +442,7 @@ void PieChart::createShapes()
                 }
 
                 //create data point
+                double fLogicZ = -0.5;//as defined
                 uno::Reference<drawing::XShape> xPointShape(
                     createDataPoint( xSeriesGroupShape_Shapes, xPointProperties
                                     , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
@@ -893,3 +874,5 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

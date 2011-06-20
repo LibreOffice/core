@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,9 +58,6 @@ namespace
         IPM_MAP_ENTRY( EE_CHAR_LANGUAGE, "CharLocale", MID_LANG_LOCALE )
         IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CJK, "CharLocaleAsian", MID_LANG_LOCALE )
         IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CTL, "CharLocaleComplex", MID_LANG_LOCALE )
-//         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT, "CharHeight", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_ITALIC, "CharPosture", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_WEIGHT, "CharWeight", 0 )
 
         IPM_MAP_ENTRY( EE_CHAR_STRIKEOUT, "CharStrikeout", MID_CROSS_OUT )
         IPM_MAP_ENTRY( EE_CHAR_WLM, "CharWordMode", 0 )
@@ -70,12 +68,6 @@ namespace
 
         IPM_MAP_ENTRY( EE_PARA_WRITINGDIR, "WritingMode", 0 )
 
-//         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CJK, "CharHeightAsian", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CTL, "CharHeightComplex", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_WEIGHT_CJK, "CharWeightAsian", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_WEIGHT_CTL, "CharWeightComplex", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_ITALIC_CJK, "CharPostureAsian", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_ITALIC_CTL, "CharPostureComplex", 0 )
         IPM_MAP_ENTRY( EE_PARA_ASIANCJKSPACING, "ParaIsCharacterDistance", 0 )
         );
 
@@ -583,3 +575,5 @@ uno::Reference< beans::XPropertySet >
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

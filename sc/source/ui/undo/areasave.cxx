@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <sfx2/linkmgr.hxx>
-#include <tools/debug.hxx>
 
 #include "areasave.hxx"
 #include "arealink.hxx"
@@ -54,7 +54,6 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
 }
 
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
-    ScDataObject(),
     aFileName   ( rCopy.aFileName ),
     aFilterName ( rCopy.aFilterName ),
     aOptions    ( rCopy.aOptions ),
@@ -64,25 +63,18 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
 {
 }
 
-ScAreaLinkSaver::~ScAreaLinkSaver()
+ScAreaLinkSaver::~ScAreaLinkSaver() {}
+
+bool ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
 {
+    return ( aFileName.equals(rCompare.GetFile()) &&
+             aFilterName.equals(rCompare.GetFilter()) &&
+             aOptions.equals(rCompare.GetOptions()) &&
+             aSourceArea.equals(rCompare.GetSource()) &&
+             nRefresh == rCompare.GetRefreshDelay() );
 }
 
-ScDataObject*   ScAreaLinkSaver::Clone() const
-{
-    return new ScAreaLinkSaver( *this );
-}
-
-sal_Bool ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
-{
-    return ( aFileName   == rCompare.GetFile() &&
-             aFilterName == rCompare.GetFilter() &&
-             aOptions    == rCompare.GetOptions() &&
-             aSourceArea == rCompare.GetSource() &&
-             nRefresh    == rCompare.GetRefreshDelay() );
-}
-
-sal_Bool ScAreaLinkSaver::IsEqual( const ScAreaLink& rCompare ) const
+bool ScAreaLinkSaver::IsEqual( const ScAreaLink& rCompare ) const
 {
     return ( IsEqualSource( rCompare ) &&
              aDestArea == rCompare.GetDestArea() );
@@ -106,33 +98,21 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc ) const
                                             aSourceArea, aDestArea.aStart, nRefresh );
         pLink->SetInCreate( sal_True );
         pLink->SetDestArea( aDestArea );
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aFilterName, &aSourceArea );
+        String aTmp1(aFilterName), aTmp2(aSourceArea);
+        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aTmp1, &aTmp2 );
         pLink->Update();
-        pLink->SetInCreate( sal_False );
+        pLink->SetInCreate( false );
     }
 }
 
-// -----------------------------------------------------------------------
+ScAreaLinkSaveCollection::ScAreaLinkSaveCollection() {}
 
-ScAreaLinkSaveCollection::ScAreaLinkSaveCollection()
-{
-}
+ScAreaLinkSaveCollection::ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& r ) :
+    maData(r.maData) {}
 
-ScAreaLinkSaveCollection::ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& rCopy ) :
-    ScCollection( rCopy )
-{
-}
+ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection() {}
 
-ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection()
-{
-}
-
-ScDataObject*   ScAreaLinkSaveCollection::Clone() const
-{
-    return new ScAreaLinkSaveCollection( *this );
-}
-
-sal_Bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
+bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
 {
     // IsEqual can be checked in sequence.
     // Neither ref-update nor removing links will change the order.
@@ -140,7 +120,7 @@ sal_Bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
     sfx2::LinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
     if (pLinkManager)
     {
-        sal_uInt16 nPos = 0;
+        size_t nPos = 0;
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         sal_uInt16 nLinkCount = rLinks.Count();
         for (sal_uInt16 i=0; i<nLinkCount; i++)
@@ -148,17 +128,17 @@ sal_Bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
             {
-                if ( nPos >= GetCount() || !(*this)[nPos]->IsEqual( *(ScAreaLink*)pBase ) )
-                    return sal_False;
+                if ( nPos >= size() || !(*this)[nPos]->IsEqual( *(ScAreaLink*)pBase ) )
+                    return false;
 
                 ++nPos;
             }
         }
-        if ( nPos < GetCount() )
-            return sal_False;           // fewer links in the document than in the save collection
+        if ( nPos < size() )
+            return false;           // fewer links in the document than in the save collection
     }
 
-    return sal_True;
+    return true;
 }
 
 ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScAreaLinkSaver& rSaver )
@@ -187,10 +167,10 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nSaveCount = GetCount();
-        for (sal_uInt16 nPos=0; nPos<nSaveCount; nPos++)
+        size_t nSaveCount = size();
+        for (size_t nPos=0; nPos<nSaveCount; ++nPos)
         {
-            ScAreaLinkSaver* pSaver = (*this)[nPos];
+            const ScAreaLinkSaver* pSaver = (*this)[nPos];
             ScAreaLink* pLink = lcl_FindLink( rLinks, *pSaver );
             if ( pLink )
                 pSaver->WriteToLink( *pLink );          // restore output position
@@ -200,7 +180,6 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
     }
 }
 
-// static
 ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocument* pDoc )
 {
     ScAreaLinkSaveCollection* pColl = NULL;
@@ -219,8 +198,7 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
                     pColl = new ScAreaLinkSaveCollection;
 
                 ScAreaLinkSaver* pSaver = new ScAreaLinkSaver( *(ScAreaLink*)pBase );
-                if (!pColl->Insert(pSaver))
-                    delete pSaver;
+                pColl->push_back(pSaver);
             }
         }
     }
@@ -228,3 +206,24 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
     return pColl;
 }
 
+const ScAreaLinkSaver* ScAreaLinkSaveCollection::operator [](size_t nIndex) const
+{
+    return &maData[nIndex];
+}
+
+size_t ScAreaLinkSaveCollection::size() const
+{
+    return maData.size();
+}
+
+void ScAreaLinkSaveCollection::clear()
+{
+    maData.clear();
+}
+
+void ScAreaLinkSaveCollection::push_back(ScAreaLinkSaver* p)
+{
+    maData.push_back(p);
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

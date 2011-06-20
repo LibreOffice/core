@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <ooo/vba/excel/XlOrientation.hpp>
 #include <ooo/vba/excel/Constants.hpp>
 #include <ooo/vba/excel/XRange.hpp>
-#include <com/sun/star/table/CellVertJustify.hpp>
+#include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -62,12 +63,12 @@ ScVbaFormat< Ifc1 >::ScVbaFormat( const uno::Reference< XHelperInterface >& xPar
 {
     try
     {
+        mxServiceInfo.set( mxPropertySet, uno::UNO_QUERY_THROW );
         if ( !mxModel.is() )
             DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XModel Interface could not be retrieved") ) );
-        // mxServiceInfo is unused,
-        // mxNumberFormatsSupplier is initialized when needed in initializeNumberFormats.
+        mxNumberFormatsSupplier.set( mxModel, uno::UNO_QUERY_THROW );
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -86,26 +87,26 @@ ScVbaFormat<Ifc1>::setVerticalAlignment( const uno::Any& _oAlignment)   throw (s
         switch (nAlignment)
         {
             case excel::XlVAlign::xlVAlignBottom :
-                aVal =  uno::makeAny( table::CellVertJustify_BOTTOM );
+                aVal =  uno::makeAny( table::CellVertJustify2::BOTTOM );
                 break;
             case excel::XlVAlign::xlVAlignCenter :
-                aVal = uno::makeAny( table::CellVertJustify_CENTER );
+                aVal = uno::makeAny( table::CellVertJustify2::CENTER );
                 break;
             case excel::XlVAlign::xlVAlignDistributed:
             case excel::XlVAlign::xlVAlignJustify:
-                aVal = uno::makeAny( table::CellVertJustify_STANDARD );
+                aVal = uno::makeAny( table::CellVertJustify2::STANDARD );
                 break;
 
             case excel::XlVAlign::xlVAlignTop:
-                aVal = uno::makeAny( table::CellVertJustify_TOP);
+                aVal = uno::makeAny( table::CellVertJustify2::TOP);
                 break;
             default:
-                aVal = uno::makeAny( table::CellVertJustify_STANDARD );
+                aVal = uno::makeAny( table::CellVertJustify2::STANDARD );
                 break;
         }
         mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLVJUS ) ), aVal );
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -120,20 +121,20 @@ ScVbaFormat<Ifc1>::getVerticalAlignment(  ) throw (script::BasicErrorException, 
     {
         if (!isAmbiguous( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLVJUS ) ) ) )
         {
-            table::CellVertJustify aAPIAlignment;
+            sal_Int32 aAPIAlignment = table::CellVertJustify2::STANDARD;
             mxPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLVJUS ) ) ) >>= aAPIAlignment;
             switch( aAPIAlignment )
             {
-                case table::CellVertJustify_BOTTOM:
+                case table::CellVertJustify2::BOTTOM:
                     aResult = uno::makeAny( excel::XlVAlign::xlVAlignBottom );
                     break;
-                case table::CellVertJustify_CENTER:
+                case table::CellVertJustify2::CENTER:
                     aResult = uno::makeAny( excel::XlVAlign::xlVAlignCenter );
                     break;
-                case table::CellVertJustify_STANDARD:
+                case table::CellVertJustify2::STANDARD:
                     aResult = uno::makeAny( excel::XlVAlign::xlVAlignBottom );
                     break;
-                case table::CellVertJustify_TOP:
+                case table::CellVertJustify2::TOP:
                     aResult = uno::makeAny( excel::XlVAlign::xlVAlignTop );
                     break;
                 default:
@@ -141,7 +142,7 @@ ScVbaFormat<Ifc1>::getVerticalAlignment(  ) throw (script::BasicErrorException, 
             }
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -181,7 +182,7 @@ ScVbaFormat<Ifc1>::setHorizontalAlignment( const uno::Any& HorizontalAlignment )
         if ( aVal.hasValue() )
             mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLHJUS ) ), aVal );
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -222,7 +223,7 @@ ScVbaFormat<Ifc1>::getHorizontalAlignment(  ) throw (script::BasicErrorException
             }
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -261,7 +262,7 @@ ScVbaFormat<Ifc1>::setOrientation( const uno::Any& _aOrientation ) throw (script
             mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLORI ) ), aVal );
 
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -298,7 +299,7 @@ ScVbaFormat<Ifc1>::getOrientation(  ) throw (script::BasicErrorException, uno::R
             }
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -313,7 +314,7 @@ ScVbaFormat<Ifc1>::setWrapText( const uno::Any& _aWrapText ) throw (script::Basi
     {
         mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_WRAP ) ), _aWrapText);
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -332,7 +333,7 @@ ScVbaFormat<Ifc1>::getWrapText(  ) throw (script::BasicErrorException, uno::Runt
             aWrap = mxPropertySet->getPropertyValue(aPropName);
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -391,7 +392,7 @@ ScVbaFormat<Ifc1>::getNumberFormatLocal(  ) throw (script::BasicErrorException, 
 
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -413,7 +414,7 @@ ScVbaFormat<Ifc1>::setNumberFormat( lang::Locale _aLocale, const rtl::OUString& 
         }
         mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_NUMBERFO ) ), uno::makeAny( nFormat ) );
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -442,7 +443,7 @@ ScVbaFormat<Ifc1>::setNumberFormatLocal( const uno::Any& _oLocalFormatString ) t
             nNewFormat = xNumberFormats->addNew(sLocalFormatString, aRangeLocale);
         mxPropertySet->setPropertyValue(sNumFormat, uno::makeAny( nNewFormat ));
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -472,7 +473,7 @@ ScVbaFormat<Ifc1>::setNumberFormat( const uno::Any& _oFormatString ) throw (scri
         sal_Int32 nNewFormat = xNumberFormatTypes->getFormatForLocale(nFormat, aRangeLocale);
         mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_NUMBERFO ) ), uno::makeAny( nNewFormat));
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -497,7 +498,7 @@ ScVbaFormat<Ifc1>::setIndentLevel( const uno::Any& _aLevel ) throw (script::Basi
             mxPropertySet->setPropertyValue( sHoriJust, uno::makeAny( table::CellHoriJustify_LEFT) ) ;
         mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_PINDENT ) ), uno::makeAny( sal_Int16(nLevel * 352.8) ) );
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -520,7 +521,7 @@ ScVbaFormat<Ifc1>::getIndentLevel(  ) throw (script::BasicErrorException, uno::R
                 NRetIndentLevel = uno::makeAny( sal_Int32(0) );
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -533,7 +534,7 @@ ScVbaFormat<Ifc1>::setLocked( const uno::Any& _aLocked ) throw (script::BasicErr
 {
     try
     {
-        sal_Bool bIsLocked = sal_False;
+        sal_Bool bIsLocked = false;
         if ( !( _aLocked >>= bIsLocked ) )
             throw uno::RuntimeException();
         util::CellProtection aCellProtection;
@@ -542,7 +543,7 @@ ScVbaFormat<Ifc1>::setLocked( const uno::Any& _aLocked ) throw (script::BasicErr
         aCellProtection.IsLocked = bIsLocked;
         mxPropertySet->setPropertyValue(sCellProt, uno::makeAny( aCellProtection ) );
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -554,7 +555,7 @@ ScVbaFormat<Ifc1>::setFormulaHidden( const uno::Any& FormulaHidden ) throw (scri
 {
     try
     {
-        sal_Bool bIsFormulaHidden = sal_False;
+        sal_Bool bIsFormulaHidden = false;
         FormulaHidden >>= bIsFormulaHidden;
         util::CellProtection aCellProtection;
         rtl::OUString sCellProt( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLPRO ) );
@@ -562,7 +563,7 @@ ScVbaFormat<Ifc1>::setFormulaHidden( const uno::Any& FormulaHidden ) throw (scri
         aCellProtection.IsFormulaHidden = bIsFormulaHidden;
         mxPropertySet->setPropertyValue(sCellProt,uno::makeAny(aCellProtection));
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception( SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -595,7 +596,7 @@ ScVbaFormat<Ifc1>::getLocked(  ) throw (script::BasicErrorException, uno::Runtim
             }
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -628,7 +629,7 @@ ScVbaFormat<Ifc1>::getFormulaHidden(  ) throw (script::BasicErrorException, uno:
             }
         }
     }
-    catch (uno::Exception e)
+    catch (const uno::Exception&)
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -643,7 +644,7 @@ ScVbaFormat<Ifc1>::setShrinkToFit( const uno::Any& ShrinkToFit ) throw (script::
     {
         mxPropertySet->setPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SHRINK_TO_FIT ) ), ShrinkToFit);
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_NOT_IMPLEMENTED, rtl::OUString() );
     }
@@ -661,7 +662,7 @@ ScVbaFormat<Ifc1>::getShrinkToFit(  ) throw (script::BasicErrorException, uno::R
         if (!isAmbiguous(sShrinkToFit))
             aRet = mxPropertySet->getPropertyValue(sShrinkToFit);
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_NOT_IMPLEMENTED, rtl::OUString());
     }
@@ -694,7 +695,7 @@ ScVbaFormat<Ifc1>::setReadingOrder( const uno::Any& ReadingOrder ) throw (script
         }
         mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_WRITING ) ), aVal );
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -725,7 +726,7 @@ ScVbaFormat<Ifc1>::getReadingOrder(  ) throw (script::BasicErrorException, uno::
             }
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_NOT_IMPLEMENTED, rtl::OUString());
     }
@@ -753,7 +754,7 @@ ScVbaFormat< Ifc1 >::getNumberFormat(  ) throw (script::BasicErrorException, uno
             aFormat = uno::makeAny( sFormat );
         }
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -770,7 +771,7 @@ ScVbaFormat<Ifc1>::isAmbiguous(const rtl::OUString& _sPropertyName) throw ( scri
         if (mbCheckAmbiguoity)
             bResult = ( getXPropertyState()->getPropertyState(_sPropertyName) == beans::PropertyState_AMBIGUOUS_VALUE );
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception& )
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -841,3 +842,4 @@ template class ScVbaFormat< excel::XStyle >;
 template class ScVbaFormat< excel::XRange >;
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,7 @@
 // header for class Application
 #include <vcl/svapp.hxx>
 // header for class ::vos::OGuard
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 
 using namespace ::com::sun::star;
@@ -131,7 +132,7 @@ void ChartController::executeDispatch_InsertAxes()
         AxisHelper::getAxisOrGridExcistence( aDialogInput.aExistenceList, xDiagram, sal_True );
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, sal_True );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         SchAxisDlg aDlg( m_pChartWindow, aDialogInput );
         if( aDlg.Execute() == RET_OK )
         {
@@ -169,7 +170,7 @@ void ChartController::executeDispatch_InsertGrid()
         AxisHelper::getAxisOrGridExcistence( aDialogInput.aExistenceList, xDiagram, sal_False );
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, sal_False );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         SchGridDlg aDlg( m_pChartWindow, aDialogInput );//aItemSet, b3D, bNet, bSecondaryX, bSecondaryY );
         if( aDlg.Execute() == RET_OK )
         {
@@ -204,7 +205,7 @@ void ChartController::executeDispatch_InsertTitles()
         TitleDialogData aDialogInput;
         aDialogInput.readFromModel( getModel() );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         SchTitleDlg aDlg( m_pChartWindow, aDialogInput );
         if( aDlg.Execute() == RET_OK )
         {
@@ -255,7 +256,7 @@ void ChartController::executeDispatch_OpenLegendDialog()
     try
     {
         //prepare and open dialog
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         SchLegendDlg aDlg( m_pChartWindow, m_xCC );
         aDlg.init( getModel() );
         if( aDlg.Execute() == RET_OK )
@@ -313,7 +314,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         aItemConverter.FillItemSet( aItemSet );
 
         //prepare and open dialog
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         //get number formatter
         uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( getModel(), uno::UNO_QUERY );
@@ -364,7 +365,7 @@ void ChartController::executeDispatch_InsertMenu_YErrorBars()
         aItemConverter.FillItemSet( aItemSet );
 
         //prepare and open dialog
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         InsertErrorBarsDialog aDlg(
             m_pChartWindow, aItemSet,
             uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY ));
@@ -447,7 +448,7 @@ void ChartController::executeDispatch_InsertMenu_Trendlines()
         aItemConverter.FillItemSet( aItemSet );
 
         //prepare and open dialog
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         InsertTrendlineDialog aDlg( m_pChartWindow, aItemSet );
         aDlg.adjustSize();
 
@@ -504,7 +505,7 @@ void ChartController::executeDispatch_InsertTrendline()
                 RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt, xCurve ), false ));
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         SchAttribTabDlg aDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
                               uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ));
 
@@ -552,7 +553,7 @@ void ChartController::executeDispatch_InsertYErrorBars()
                 OBJECTTYPE_DATA_ERRORS, ::rtl::OUString(), m_aSelection.getSelectedCID()));
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
-        ::vos::OGuard aGuard( Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         SchAttribTabDlg aDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
                               uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ));
         aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
@@ -789,15 +790,6 @@ void ChartController::executeDispatch_InsertAxisTitle()
             xTitle = TitleHelper::createTitle( eTitleType, ObjectNameProvider::getTitleNameByType(eTitleType), getModel(), m_xCC, apRefSizeProvider.get() );
             aUndoGuard.commit();
         }
-
-        /*
-        if( xTitle.is() )
-        {
-            OUString aTitleCID = ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, getModel() );
-            select( uno::makeAny(aTitleCID) );
-            executeDispatch_EditText();
-        }
-        */
     }
     catch( uno::RuntimeException& e)
     {
@@ -944,3 +936,5 @@ void ChartController::executeDispatch_DeleteMinorGrid()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

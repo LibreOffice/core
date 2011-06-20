@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -250,7 +251,7 @@ sal_Bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const 
     else if( IsXMLToken(rString, XML_REMOVE_PRECEDENTS ) )
         rDetOpType = SCDETOP_DELPRED;
     else
-        return sal_False;
+        return false;
     return sal_True;
 }
 
@@ -315,8 +316,8 @@ void ScXMLConverter::GetStringFromDetOpType(
 void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
 {
     OUStringBuffer sBuffer(sFormula.getLength());
-    sal_Bool bInQuotationMarks(sal_False);
-    sal_Bool bInDoubleQuotationMarks(sal_False);
+    sal_Bool bInQuotationMarks(false);
+    sal_Bool bInDoubleQuotationMarks(false);
     sal_Int16 nCountBraces(0);
     sal_Unicode chPrevious('=');
     for (sal_Int32 i = 0; i < sFormula.getLength(); ++i)
@@ -339,7 +340,7 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
         chPrevious = sFormula[i];
     }
 
-    DBG_ASSERT(nCountBraces == 0, "there are some braces still open");
+    OSL_ENSURE(nCountBraces == 0, "there are some braces still open");
     sFormula = sBuffer.makeStringAndClear();
 }
 
@@ -352,13 +353,6 @@ void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUS
     ConvertCoreToAPIDateTime(aDateTime, aAPIDateTime);
     SvXMLUnitConverter::convertDateTime(sDate, aAPIDateTime);
 }
-
-//UNUSED2008-05  void ScXMLConverter::ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* /* pUnitConverter */)
-//UNUSED2008-05  {
-//UNUSED2008-05      com::sun::star::util::DateTime aAPIDateTime;
-//UNUSED2008-05      SvXMLUnitConverter::convertDateTime(aAPIDateTime, sDate);
-//UNUSED2008-05      ConvertAPIToCoreDateTime(aAPIDateTime, aDateTime);
-//UNUSED2008-05  }
 
 void ScXMLConverter::ConvertCoreToAPIDateTime(const DateTime& aDateTime, util::DateTime& rDateTime)
 {
@@ -436,7 +430,7 @@ const ScXMLConditionInfo* lclGetConditionInfo( const sal_Unicode*& rpcString, co
 
     // search the table for an entry
     if( nLength > 0 )
-        for( const ScXMLConditionInfo* pInfo = spConditionInfos; pInfo < STATIC_ARRAY_END( spConditionInfos ); ++pInfo )
+        for( const ScXMLConditionInfo* pInfo = spConditionInfos; pInfo < STATIC_TABLE_END( spConditionInfos ); ++pInfo )
             if( (nLength == pInfo->mnIdentLength) && (::rtl_ustr_ascii_shortenedCompare_WithLength( pcIdStart, nLength, pInfo->mpcIdentifier, nLength ) == 0) )
                 return pInfo;
 
@@ -591,7 +585,7 @@ bool lclSkipEmptyParentheses( const sal_Unicode*& rpcString, const sal_Unicode* 
 
 // ----------------------------------------------------------------------------
 
-/*static*/ void ScXMLConditionHelper::parseCondition(
+void ScXMLConditionHelper::parseCondition(
         ScXMLConditionParseResult& rParseResult, const OUString& rAttribute, sal_Int32 nStartIndex )
 {
     rParseResult.meToken = XML_COND_INVALID;
@@ -668,3 +662,4 @@ bool lclSkipEmptyParentheses( const sal_Unicode*& rpcString, const sal_Unicode* 
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

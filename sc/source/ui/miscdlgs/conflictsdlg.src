@@ -110,4 +110,3 @@ ModalDialog RID_SCDLG_CONFLICTS
         Text [ en-US ] = "Unknown User" ;
     };
 };
-

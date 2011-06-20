@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,6 +54,7 @@
 #include <algorithm>
 #include <iterator>
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 
@@ -561,7 +563,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstanceWithA
     throw (uno::Exception,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "createInstanceWithArguments: No arguments supported" );
+    OSL_FAIL( "createInstanceWithArguments: No arguments supported" );
     return createInstance( ServiceSpecifier );
 }
 
@@ -574,7 +576,7 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
 
     // get own default templates
     ::std::transform( rMap.begin(), rMap.end(), ::std::back_inserter( aServices ),
-                      ::std::select1st< tTemplateMapType::value_type >());
+                      ::o3tl::select1st< tTemplateMapType::value_type >());
 
     // add components that were registered in the context's factory
     uno::Reference< container::XContentEnumerationAccess > xEnumAcc(
@@ -617,3 +619,5 @@ Sequence< OUString > ChartTypeManager::getSupportedServiceNames_Static()
 APPHELPER_XSERVICEINFO_IMPL( ChartTypeManager,
                              C2U( "com.sun.star.comp.chart.ChartTypeManager" ));
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

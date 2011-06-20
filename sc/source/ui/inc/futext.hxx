@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,11 +65,11 @@ public:
     virtual void SelectionHasChanged();
 
     void    SetInEditMode( SdrObject* pObj = NULL, const Point* pMousePixel = NULL,
-                            sal_Bool bCursorToEnd = sal_False, const KeyEvent* pInitialKey = NULL );
-    void    StopEditMode(sal_Bool bTextDirection = sal_False);
+                            sal_Bool bCursorToEnd = false, const KeyEvent* pInitialKey = NULL );
+    void    StopEditMode(sal_Bool bTextDirection = false);
     void    StopDragMode(SdrObject* pObject);
 
-    // #98185# Create default drawing objects via keyboard
+    // Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 private:
@@ -79,3 +80,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

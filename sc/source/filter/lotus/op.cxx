@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,6 +49,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include "cell.hxx"
 #include "rangenam.hxx"
@@ -57,7 +59,6 @@
 #include "op.h"
 #include "optab.h"
 #include "tool.h"
-//#include "math.h"
 #include "decl.h"
 #include "lotform.hxx"
 #include "lotrange.hxx"
@@ -167,23 +168,6 @@ void OP_Label( SvStream& r, sal_uInt16 n )
     delete [] pText;
 }
 
-
-//UNUSED2009-05 void OP_Text( SvStream& r, sal_uInt16 n )        // WK3
-//UNUSED2009-05 {
-//UNUSED2009-05     sal_uInt16          nRow;
-//UNUSED2009-05     sal_uInt8            nCol, nTab;
-//UNUSED2009-05     sal_Char        pText[ 256 ];
-//UNUSED2009-05
-//UNUSED2009-05     r >> nRow >> nTab >> nCol;
-//UNUSED2009-05     n -= 4;
-//UNUSED2009-05
-//UNUSED2009-05     r.Read( pText, n );
-//UNUSED2009-05     pText[ n ] = 0;   // zur Sicherheit Nullterminator anhaengen
-//UNUSED2009-05
-//UNUSED2009-05     PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab), pText );
-//UNUSED2009-05 }
-
-
 void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
 {
     sal_uInt8               nFormat;
@@ -198,7 +182,7 @@ void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
     sal_Int32               nBytesLeft = nFormulaSize;
     ScAddress           aAddress( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab );
 
-    LotusToSc           aConv( r, pLotusRoot->eCharsetQ, sal_False );
+    LotusToSc           aConv( r, pLotusRoot->eCharsetQ, false );
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
 
@@ -254,10 +238,10 @@ void OP_NamedRange( SvStream& r, sal_uInt16 /*n*/ )
     if( isdigit( *cPuffer ) )
     {   // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
         *pAnsi = 'A';
-        strcpy( pAnsi + 1, cPuffer );       // #100211# - checked
+        strcpy( pAnsi + 1, cPuffer );
     }
     else
-        strcpy( pAnsi, cPuffer );           // #100211# - checked
+        strcpy( pAnsi, cPuffer );
 
     String              aTmp( pAnsi, pLotusRoot->eCharsetQ );
 
@@ -272,12 +256,10 @@ void OP_SymphNamedRange( SvStream& r, sal_uInt16 /*n*/ )
     // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
     sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
     sal_uInt8               nType;
-    sal_Char*           pName;
     sal_Char            cPuffer[ 32 ];
 
     r.Read( cPuffer, 16 );
     cPuffer[ 16 ] = 0;
-    pName = cPuffer;
 
     r >> nColSt >> nRowSt >> nColEnd >> nRowEnd >> nType;
 
@@ -291,10 +273,10 @@ void OP_SymphNamedRange( SvStream& r, sal_uInt16 /*n*/ )
     if( isdigit( *cPuffer ) )
     {   // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
         *pAnsi = 'A';
-        strcpy( pAnsi + 1, cPuffer );       // #100211# - checked
+        strcpy( pAnsi + 1, cPuffer );
     }
     else
-        strcpy( pAnsi, cPuffer );           // #100211# - checked
+        strcpy( pAnsi, cPuffer );
 
     String      aTmp( pAnsi, pLotusRoot->eCharsetQ );
     ScfTools::ConvertToScDefinedName( aTmp );
@@ -664,8 +646,8 @@ void OP_ApplyPatternArea123( SvStream& rStream )
                     {
                         std::map<sal_uInt16, ScPatternAttr>::iterator loc = aLotusPatternPool.find( nData );
 
-                        // #126338# apparently, files with invalid index occur in the wild -> don't crash then
-                        DBG_ASSERT( loc != aLotusPatternPool.end(), "invalid format index" );
+                        // apparently, files with invalid index occur in the wild -> don't crash then
+                        OSL_ENSURE( loc != aLotusPatternPool.end(), "invalid format index" );
                         if ( loc != aLotusPatternPool.end() )
                             pDoc->ApplyPatternAreaTab( nCol, nRow, nCol +  nColCount - 1, nRow + nRowCount - 1, static_cast< SCTAB >( nTab + i ), loc->second );
                     }
@@ -682,3 +664,5 @@ void OP_ApplyPatternArea123( SvStream& rStream )
 
     aLotusPatternPool.clear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,12 +75,11 @@ TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
 //      allgemeine Hilfsfunktionen
 //
 
-sal_Bool ScHasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther )
+sal_Bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther )
 {
-//    DBG_ASSERT( pThis || pOther, "LineAttr == 0" );
 
     if (!pThis)
-        return sal_False;
+        return false;
     if (!pOther)
         return sal_True;
 
@@ -89,13 +89,13 @@ sal_Bool ScHasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther 
     if (nThisSize > nOtherSize)
         return sal_True;
     else if (nThisSize < nOtherSize)
-        return sal_False;
+        return false;
     else
     {
         if ( pOther->GetInWidth() && !pThis->GetInWidth() )
             return sal_True;
         else if ( pThis->GetInWidth() && !pOther->GetInWidth() )
-            return sal_False;
+            return false;
         else
         {
             return sal_True;            //! ???
@@ -155,7 +155,7 @@ String ScMergeAttr::GetValueText() const
 
 int ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
+    OSL_ENSURE( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
     return (Which() == rItem.Which())
              && (nColMerge == ((ScMergeAttr&)rItem).nColMerge)
              && (nRowMerge == ((ScMergeAttr&)rItem).nRowMerge);
@@ -206,9 +206,9 @@ ScMergeFlagAttr::~ScMergeFlagAttr()
 ScProtectionAttr::ScProtectionAttr():
     SfxPoolItem(ATTR_PROTECTION),
     bProtection(sal_True),
-    bHideFormula(sal_False),
-    bHideCell(sal_False),
-    bHidePrint(sal_False)
+    bHideFormula(false),
+    bHideCell(false),
+    bHidePrint(false)
 {
 }
 
@@ -241,7 +241,7 @@ ScProtectionAttr::~ScProtectionAttr()
 
 //------------------------------------------------------------------------
 
-sal_Bool ScProtectionAttr::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool ScProtectionAttr::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId  )
@@ -265,16 +265,16 @@ sal_Bool ScProtectionAttr::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
         case MID_4 :
             rVal <<= (sal_Bool ) bHidePrint; break;
         default:
-            DBG_ERROR("Wrong MemberID!");
-            return sal_False;
+            OSL_FAIL("Wrong MemberID!");
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Bool bVal = sal_Bool();
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -288,11 +288,11 @@ sal_Bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 bHideFormula = aProtection.IsFormulaHidden;
                 bHideCell    = aProtection.IsHidden;
                 bHidePrint   = aProtection.IsPrintHidden;
-                bRet = sal_True;
+                bRet = true;
             }
             else
             {
-                DBG_ERROR("exception - wrong argument");
+                OSL_FAIL("exception - wrong argument");
             }
             break;
         }
@@ -305,7 +305,7 @@ sal_Bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_4 :
             bRet = (rVal >>= bVal); if (bRet) bHidePrint=bVal; break;
         default:
-            DBG_ERROR("Wrong MemberID!");
+            OSL_FAIL("Wrong MemberID!");
     }
 
     return bRet;
@@ -378,7 +378,7 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
 
 int ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
+    OSL_ENSURE( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
     return (Which() == rItem.Which())
              && (bProtection == ((ScProtectionAttr&)rItem).bProtection)
              && (bHideFormula == ((ScProtectionAttr&)rItem).bHideFormula)
@@ -448,7 +448,7 @@ sal_Bool ScProtectionAttr::SetHidePrint( sal_Bool bHPrint)
 
 int ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
 
     return ( aRange == ( (ScRangeItem&)rAttr ).aRange );
 }
@@ -478,7 +478,7 @@ SfxItemPresentation ScRangeItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
         rText  = ScGlobal::GetRscString(STR_AREA);
         rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-//      break;// Durchfallen !!!
+        /* !!! fall-through !!! */
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
@@ -519,15 +519,6 @@ ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
 
 // -----------------------------------------------------------------------
 
-//UNUSED2008-05  ScTableListItem::ScTableListItem( const sal_uInt16 nWhichP, const List& rList )
-//UNUSED2008-05      :   SfxPoolItem ( nWhichP ),
-//UNUSED2008-05          nCount      ( 0 ),
-//UNUSED2008-05          pTabArr     ( NULL )
-//UNUSED2008-05  {
-//UNUSED2008-05      SetTableList( rList );
-//UNUSED2008-05  }
-
-// -----------------------------------------------------------------------
 
 ScTableListItem::~ScTableListItem()
 {
@@ -558,7 +549,7 @@ ScTableListItem& ScTableListItem::operator=( const ScTableListItem& rCpy )
 
 int ScTableListItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
 
     ScTableListItem&    rCmp   = (ScTableListItem&)rAttr;
     sal_Bool                bEqual = (nCount == rCmp.nCount);
@@ -631,35 +622,6 @@ SfxItemPresentation ScTableListItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// -----------------------------------------------------------------------
-
-//UNUSED2009-05 sal_Bool ScTableListItem::GetTableList( List& aList ) const
-//UNUSED2009-05 {
-//UNUSED2009-05     for ( sal_uInt16 i=0; i<nCount; i++ )
-//UNUSED2009-05         aList.Insert( new SCTAB( pTabArr[i] ) );
-//UNUSED2009-05
-//UNUSED2009-05     return ( nCount > 0 );
-//UNUSED2009-05 }
-
-// -----------------------------------------------------------------------
-
-//UNUSED2009-05 void ScTableListItem::SetTableList( const List& rList )
-//UNUSED2009-05 {
-//UNUSED2009-05     nCount = (sal_uInt16)rList.Count();
-//UNUSED2009-05
-//UNUSED2009-05     delete [] pTabArr;
-//UNUSED2009-05
-//UNUSED2009-05     if ( nCount > 0 )
-//UNUSED2009-05     {
-//UNUSED2009-05         pTabArr = new SCTAB [nCount];
-//UNUSED2009-05
-//UNUSED2009-05         for ( sal_uInt16 i=0; i<nCount; i++ )
-//UNUSED2009-05             pTabArr[i] = *( (SCTAB*)rList.GetObject( i ) );
-//UNUSED2009-05     }
-//UNUSED2009-05     else
-//UNUSED2009-05         pTabArr = NULL;
-//UNUSED2009-05 }
-
 
 // -----------------------------------------------------------------------
 //      ScPageHFItem - Daten der Kopf-/Fusszeilen
@@ -700,18 +662,18 @@ ScPageHFItem::~ScPageHFItem()
 
 //------------------------------------------------------------------------
 
-sal_Bool ScPageHFItem::QueryValue( uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
+bool ScPageHFItem::QueryValue( uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
 {
     uno::Reference<sheet::XHeaderFooterContent> xContent =
         new ScHeaderFooterContentObj( pLeftArea, pCenterArea, pRightArea );
 
     rVal <<= xContent;
-    return sal_True;
+    return true;
 }
 
-sal_Bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
+bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     uno::Reference<sheet::XHeaderFooterContent> xContent;
     if ( rVal >>= xContent )
     {
@@ -745,17 +707,17 @@ sal_Bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */
                         pRightArea = aEngine.CreateTextObject();
                 }
 
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }
 
     if (!bRet)
     {
-        DBG_ERROR("exception - wrong argument");
+        OSL_FAIL("exception - wrong argument");
     }
 
-    return bRet;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -769,7 +731,7 @@ String ScPageHFItem::GetValueText() const
 
 int ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScPageHFItem& r = (const ScPageHFItem&)rItem;
 
@@ -798,7 +760,7 @@ void lcl_SetSpace( String& rStr, const ESelection& rSel )
 
 sal_Bool lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
 {
-    sal_Bool bChange = sal_False;
+    sal_Bool bChange = false;
     sal_uInt16 nParCnt = rEng.GetParagraphCount();
     for (sal_uInt16 nPar = 0; nPar<nParCnt; nPar++)
     {
@@ -853,7 +815,7 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
     EditTextObject* pCenter = EditTextObject::Create(rStream);
     EditTextObject* pRight  = EditTextObject::Create(rStream);
 
-    DBG_ASSERT( pLeft && pCenter && pRight, "Error reading ScPageHFItem" );
+    OSL_ENSURE( pLeft && pCenter && pRight, "Error reading ScPageHFItem" );
 
     if ( pLeft == NULL   || pLeft->GetParagraphCount() == 0 ||
          pCenter == NULL || pCenter->GetParagraphCount() == 0 ||
@@ -931,63 +893,6 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
 
 //------------------------------------------------------------------------
 
-//UNUSED2009-05 class ScFieldChangerEditEngine : public ScEditEngineDefaulter
-//UNUSED2009-05 {
-//UNUSED2009-05     TypeId      aExtFileId;
-//UNUSED2009-05     sal_uInt16      nConvPara;
-//UNUSED2009-05     xub_StrLen  nConvPos;
-//UNUSED2009-05     sal_Bool        bConvert;
-//UNUSED2009-05
-//UNUSED2009-05 public:
-//UNUSED2009-05     ScFieldChangerEditEngine( SfxItemPool* pEnginePool, sal_Bool bDeleteEnginePool );
-//UNUSED2009-05     virtual     ~ScFieldChangerEditEngine() {}
-//UNUSED2009-05
-//UNUSED2009-05     virtual String  CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara,
-//UNUSED2009-05                                     sal_uInt16 nPos, Color*& rTxtColor,
-//UNUSED2009-05                                     Color*& rFldColor );
-//UNUSED2009-05
-//UNUSED2009-05     sal_Bool            ConvertFields();
-//UNUSED2009-05 };
-//UNUSED2009-05
-//UNUSED2009-05 ScFieldChangerEditEngine::ScFieldChangerEditEngine( SfxItemPool* pEnginePoolP,
-//UNUSED2009-05             sal_Bool bDeleteEnginePoolP ) :
-//UNUSED2009-05         ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP ),
-//UNUSED2009-05         aExtFileId( TYPE( SvxExtFileField ) ),
-//UNUSED2009-05         nConvPara( 0 ),
-//UNUSED2009-05         nConvPos( 0 ),
-//UNUSED2009-05         bConvert( sal_False )
-//UNUSED2009-05 {
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 String ScFieldChangerEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-//UNUSED2009-05             sal_uInt16 nPara, sal_uInt16 nPos, Color*& /* rTxtColor */, Color*& /* rFldColor */ )
-//UNUSED2009-05 {
-//UNUSED2009-05     const SvxFieldData* pFieldData = rField.GetField();
-//UNUSED2009-05     if ( pFieldData && pFieldData->Type() == aExtFileId )
-//UNUSED2009-05     {
-//UNUSED2009-05         bConvert = sal_True;
-//UNUSED2009-05         nConvPara = nPara;
-//UNUSED2009-05         nConvPos = nPos;
-//UNUSED2009-05     }
-//UNUSED2009-05     return EMPTY_STRING;
-//UNUSED2009-05 }
-//UNUSED2009-05
-//UNUSED2009-05 sal_Bool ScFieldChangerEditEngine::ConvertFields()
-//UNUSED2009-05 {
-//UNUSED2009-05     sal_Bool bConverted = sal_False;
-//UNUSED2009-05     do
-//UNUSED2009-05     {
-//UNUSED2009-05         bConvert = sal_False;
-//UNUSED2009-05         UpdateFields();
-//UNUSED2009-05         if ( bConvert )
-//UNUSED2009-05         {
-//UNUSED2009-05             ESelection aSel( nConvPara, nConvPos, nConvPara, nConvPos+1 );
-//UNUSED2009-05             QuickInsertField( SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD), aSel );
-//UNUSED2009-05             bConverted = sal_True;
-//UNUSED2009-05         }
-//UNUSED2009-05     } while ( bConvert );
-//UNUSED2009-05     return bConverted;
-//UNUSED2009-05 }
 
 void ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
 {
@@ -1019,7 +924,7 @@ void ScPageHFItem::SetArea( EditTextObject *pNew, int nArea )
         case SC_HF_CENTERAREA:  delete pCenterArea; pCenterArea = pNew; break;
         case SC_HF_RIGHTAREA:   delete pRightArea;  pRightArea  = pNew; break;
         default:
-            DBG_ERROR( "New Area?" );
+            OSL_FAIL( "New Area?" );
     }
 }
 
@@ -1083,7 +988,7 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
             ePres = SFX_ITEM_PRESENTATION_NAMELESS;//das geht immer!
             break;
         }
-//      break; // DURCHFALLEN!!!
+        /* !!! fall-through !!! */
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW+GetValue());
@@ -1102,7 +1007,7 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
 
 String ScViewObjectModeItem::GetValueText( sal_uInt16 nVal ) const
 {
-    DBG_ASSERT( nVal <= VOBJ_MODE_HIDE, "enum overflow!" );
+    OSL_ENSURE( nVal <= VOBJ_MODE_HIDE, "enum overflow!" );
 
     return ScGlobal::GetRscString( STR_VOBJ_MODE_SHOW + (nVal % 2));
 }
@@ -1180,10 +1085,9 @@ String ScDoubleItem::GetValueText() const
 
 int ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
     const ScDoubleItem& _rItem = (const ScDoubleItem&)rItem;
     return int(nValue == _rItem.nValue);
-        //int(nValue == ((const ScDoubleItem&)rItem).nValue);
 }
 
 //------------------------------------------------------------------------
@@ -1239,7 +1143,7 @@ ScPageScaleToItem* ScPageScaleToItem::Clone( SfxItemPool* ) const
 
 int ScPageScaleToItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "ScPageScaleToItem::operator== - unequal wid or type" );
+    OSL_ENSURE( SfxPoolItem::operator==( rCmp ), "ScPageScaleToItem::operator== - unequal wid or type" );
     const ScPageScaleToItem& rPageCmp = static_cast< const ScPageScaleToItem& >( rCmp );
     return ((mnWidth == rPageCmp.mnWidth) && (mnHeight == rPageCmp.mnHeight)) ? 1 : 0;
 }
@@ -1290,35 +1194,35 @@ SfxItemPresentation ScPageScaleToItem::GetPresentation(
         break;
 
         default:
-            DBG_ERRORFILE( "ScPageScaleToItem::GetPresentation - unknown presentation mode" );
+            OSL_FAIL( "ScPageScaleToItem::GetPresentation - unknown presentation mode" );
             ePres = SFX_ITEM_PRESENTATION_NONE;
     }
     return ePres;
 }
 
-sal_Bool ScPageScaleToItem::QueryValue( uno::Any& rAny, sal_uInt8 nMemberId ) const
+bool ScPageScaleToItem::QueryValue( uno::Any& rAny, sal_uInt8 nMemberId ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nMemberId )
     {
         case SC_MID_PAGE_SCALETO_WIDTH:     rAny <<= mnWidth;   break;
         case SC_MID_PAGE_SCALETO_HEIGHT:    rAny <<= mnHeight;  break;
         default:
-            DBG_ERRORFILE( "ScPageScaleToItem::QueryValue - unknown member ID" );
-            bRet = sal_False;
+            OSL_FAIL( "ScPageScaleToItem::QueryValue - unknown member ID" );
+            bRet = false;
     }
     return bRet;
 }
 
-sal_Bool ScPageScaleToItem::PutValue( const uno::Any& rAny, sal_uInt8 nMemberId )
+bool ScPageScaleToItem::PutValue( const uno::Any& rAny, sal_uInt8 nMemberId )
 {
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     switch( nMemberId )
     {
         case SC_MID_PAGE_SCALETO_WIDTH:     bRet = rAny >>= mnWidth;    break;
         case SC_MID_PAGE_SCALETO_HEIGHT:    bRet = rAny >>= mnHeight;   break;
         default:
-            DBG_ERRORFILE( "ScPageScaleToItem::PutValue - unknown member ID" );
+            OSL_FAIL( "ScPageScaleToItem::PutValue - unknown member ID" );
     }
     return bRet;
 }
@@ -1326,3 +1230,4 @@ sal_Bool ScPageScaleToItem::PutValue( const uno::Any& rAny, sal_uInt8 nMemberId 
 // ============================================================================
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 
 //==================================================================
 
-sal_Bool   ScDeleteContentsDlg::bPreviousAllCheck = sal_False;
+sal_Bool   ScDeleteContentsDlg::bPreviousAllCheck = false;
 sal_uInt16 ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
                                                  IDF_NOTE     | IDF_FORMULA |
                                                  IDF_VALUE);
@@ -64,12 +65,12 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-    bObjectsDisabled( sal_False )
+    bObjectsDisabled( false )
 {
     if ( nCheckDefaults != 0 )
     {
         ScDeleteContentsDlg::nPreviousChecks = nCheckDefaults;
-        ScDeleteContentsDlg::bPreviousAllCheck = sal_False;
+        ScDeleteContentsDlg::bPreviousAllCheck = false;
     }
 
     aBtnDelAll.Check     ( ScDeleteContentsDlg::bPreviousAllCheck );
@@ -158,7 +159,7 @@ void ScDeleteContentsDlg::DisableChecks( sal_Bool bDelAllChecked )
 void ScDeleteContentsDlg::DisableObjects()
 {
     bObjectsDisabled = sal_True;
-    aBtnDelObjects.Check(sal_False);
+    aBtnDelObjects.Check(false);
     aBtnDelObjects.Disable();
 }
 
@@ -172,9 +173,10 @@ IMPL_LINK_INLINE_START( ScDeleteContentsDlg, DelAllHdl, void *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( ScDeleteContentsDlg, DelAllHdl, void *, EMPTYARG )
 
-__EXPORT ScDeleteContentsDlg::~ScDeleteContentsDlg()
+ScDeleteContentsDlg::~ScDeleteContentsDlg()
 {
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

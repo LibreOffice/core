@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,7 +118,7 @@ void ScMediaShell::ExecuteMedia( SfxRequest& rReq )
         const SfxItemSet*   pArgs = rReq.GetArgs();
         const SfxPoolItem*  pItem;
 
-        if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, sal_False, &pItem ) ) )
+        if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, false, &pItem ) ) )
             pItem = NULL;
 
         if( pItem )
@@ -141,3 +142,5 @@ void ScMediaShell::ExecuteMedia( SfxRequest& rReq )
 
     Invalidate();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

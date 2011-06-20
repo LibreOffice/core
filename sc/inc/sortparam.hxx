@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include "scdllapi.h"
 
-#define MAXSORT     3
-
+#define MAXSORT 3
 
 struct ScSubTotalParam;
 struct ScQueryParam;
@@ -46,22 +46,23 @@ struct SC_DLLPUBLIC ScSortParam
     SCROW       nRow1;
     SCCOL       nCol2;
     SCROW       nRow2;
-    sal_Bool        bHasHeader;
-    sal_Bool        bByRow;
-    sal_Bool        bCaseSens;
-    sal_Bool        bUserDef;
-    sal_uInt16      nUserIndex;
-    sal_Bool        bIncludePattern;
-    sal_Bool        bInplace;
+    sal_uInt16  nUserIndex;
+    bool        bHasHeader;
+    bool        bByRow;
+    bool        bCaseSens;
+    bool        bNaturalSort;
+    bool        bUserDef;
+    bool        bIncludePattern;
+    bool        bInplace;
     SCTAB       nDestTab;
     SCCOL       nDestCol;
     SCROW       nDestRow;
-    sal_Bool        bDoSort[MAXSORT];
+    bool        bDoSort[MAXSORT];
     SCCOLROW    nField[MAXSORT];
-    sal_Bool        bAscending[MAXSORT];
-    ::com::sun::star::lang::Locale      aCollatorLocale;
-    String      aCollatorAlgorithm;
-    sal_uInt16      nCompatHeader;
+    bool        bAscending[MAXSORT];
+    ::com::sun::star::lang::Locale aCollatorLocale;
+    ::rtl::OUString aCollatorAlgorithm;
+    sal_uInt16  nCompatHeader;
 
     ScSortParam();
     ScSortParam( const ScSortParam& r );
@@ -70,8 +71,8 @@ struct SC_DLLPUBLIC ScSortParam
     /// TopTen sort
     ScSortParam( const ScQueryParam&, SCCOL nCol );
 
-    ScSortParam&    operator=   ( const ScSortParam& r );
-    sal_Bool            operator==  ( const ScSortParam& rOther ) const;
+    ScSortParam&    operator=  ( const ScSortParam& r );
+    bool            operator== ( const ScSortParam& rOther ) const;
     void            Clear       ();
 
     void            MoveToDest();
@@ -79,3 +80,5 @@ struct SC_DLLPUBLIC ScSortParam
 
 
 #endif // SC_SORTPARAM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,7 +90,7 @@ Reference<XAccessibleStateSet> ScAccessibleFilterMenuItem::getAccessibleStateSet
 OUString ScAccessibleFilterMenuItem::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString::createFromAscii("ScAccessibleFilterMenuItem");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("ScAccessibleFilterMenuItem"));
 }
 
 // XAccessibleAction
@@ -109,7 +110,7 @@ sal_Bool ScAccessibleFilterMenuItem::doAccessibleAction(sal_Int32 /*nIndex*/)
 OUString ScAccessibleFilterMenuItem::getAccessibleActionDescription(sal_Int32 /*nIndex*/)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    return OUString::createFromAscii("click");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("click"));
 }
 
 Reference<XAccessibleKeyBinding> ScAccessibleFilterMenuItem::getAccessibleActionKeyBinding(
@@ -203,3 +204,4 @@ void ScAccessibleFilterMenuItem::updateStateSet()
         p->insert(SELECTED);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

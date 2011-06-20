@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,7 @@ OUString lcl_getServiceNameForType( ::chart::RegressionCurveHelper::tRegressionT
             aServiceName = C2U( "com.sun.star.chart2.PotentialRegressionCurve" );
             break;
         default:
-            OSL_ENSURE(false,"unknown regression curve type - use linear instead");
+            OSL_FAIL("unknown regression curve type - use linear instead");
             aServiceName = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
             break;
     }
@@ -371,7 +372,7 @@ void RegressionCurveHelper::addRegressionCurve(
 
     if( eType == REGRESSION_TYPE_NONE )
     {
-        OSL_ENSURE(false,"don't create a regression curve of type none");
+        OSL_FAIL("don't create a regression curve of type none");
         return;
     }
 
@@ -716,3 +717,5 @@ bool RegressionCurveHelper::hasEquation( const Reference< chart2::XRegressionCur
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

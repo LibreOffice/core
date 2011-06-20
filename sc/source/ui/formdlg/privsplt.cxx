@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include "privsplt.hxx"
 
 /*************************************************************************
-#*  Member:     ScPrivatSplit                               Datum:13.10.97
+#*  Member:     ScPrivatSplit
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     MD_Test
@@ -63,7 +64,7 @@ ScPrivatSplit::ScPrivatSplit( Window* pParent, const ResId& rResId,
 
     aWinPointer=GetPointer();
 
-    aMovingFlag=sal_False;
+    aMovingFlag=false;
     if(eScSplit==SC_SPLIT_HORZ)
     {
         aWinPointer=Pointer(POINTER_HSPLIT);
@@ -77,7 +78,7 @@ ScPrivatSplit::ScPrivatSplit( Window* pParent, const ResId& rResId,
 
 
 /*************************************************************************
-#*  Member:     MouseButtonDown                         Datum:13.10.97
+#*  Member:     MouseButtonDown
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -102,7 +103,7 @@ void ScPrivatSplit::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 /*************************************************************************
-#*  Member:     MouseButtonUp                           Datum:13.10.97
+#*  Member:     MouseButtonUp
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -164,7 +165,7 @@ void ScPrivatSplit::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 /*************************************************************************
-#*  Member:     MouseMove                                   Datum:13.10.97
+#*  Member:     MouseMove
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -229,7 +230,7 @@ void ScPrivatSplit::MouseMove( const MouseEvent& rMEvt )
 }
 
 /*************************************************************************
-#*  Member:     SetYRange                                   Datum:14.10.97
+#*  Member:     SetYRange
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -249,7 +250,7 @@ void ScPrivatSplit::SetYRange(Range cRgeY)
 
 
 /*************************************************************************
-#*  Member:     GetDeltaY                                   Datum:13.10.97
+#*  Member:     GetDeltaY
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -267,7 +268,7 @@ short ScPrivatSplit::GetDeltaX()
 }
 
 /*************************************************************************
-#*  Member:     GetDeltaY                                   Datum:13.10.97
+#*  Member:     GetDeltaY
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -285,7 +286,7 @@ short ScPrivatSplit::GetDeltaY()
 }
 
 /*************************************************************************
-#*  Member:     CtrModified                                 Datum:13.10.97
+#*  Member:     CtrModified
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     ScPrivatSplit
@@ -388,17 +389,17 @@ void ScPrivatSplit::StateChanged( StateChangedType nType )
     if ( (nType == STATE_CHANGE_ZOOM) ||
          (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( sal_True, false, false );
         Invalidate();
     }
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( false, sal_True, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( false, false, sal_True );
         Invalidate();
     }
 
@@ -420,3 +421,4 @@ void ScPrivatSplit::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

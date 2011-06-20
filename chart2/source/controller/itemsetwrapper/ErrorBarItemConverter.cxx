@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -204,7 +205,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_PERCENT:
         case SCHATTR_STAT_BIGERROR:
         {
-            OSL_ENSURE( false, "Deprectaed item" );
+            OSL_FAIL( "Deprectaed item" );
             uno::Reference< beans::XPropertySet > xErrorBarProp( GetPropertySet());
 
             double fValue =
@@ -454,3 +455,5 @@ void ErrorBarItemConverter::FillSpecialItem(
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

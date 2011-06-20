@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,880 +29,1265 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include "fieldwnd.hxx"
-
-#include <tools/debug.hxx>
-#include <vcl/decoview.hxx>
-#include <vcl/help.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/decoview.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/mnemonic.hxx>
+#include <vcl/help.hxx>
 
+#include "fieldwnd.hxx"
 #include "pvlaydlg.hxx"
+#include "dpuiglobal.hxx"
 #include "AccessibleDataPilotControl.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "pivot.hrc"
 
-// ============================================================================
-
-using namespace ::com::sun::star;
 using ::rtl::OUString;
+using ::std::vector;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::WeakReference;
+using ::com::sun::star::accessibility::XAccessible;
 
-// ============================================================================
+const size_t INVALID_INDEX = static_cast<size_t>(-1);
 
-namespace {
-
-/** Line width for insertion cursor in pixels. */
-const long CURSOR_WIDTH             = 3;
-
-/** Number of tracking events before auto scrolling starts. */
-const size_t INITIAL_TRACKING_DELAY = 20;
-
-} // namespace
-
-// ============================================================================
-
-ScPivotFieldWindow::ScPivotWindowField::ScPivotWindowField( const ScDPLabelData& rLabelData ) :
-    maFuncData( rLabelData.mnCol, rLabelData.mnFuncMask ),
-    maFieldName( rLabelData.getDisplayName() )
+ScDPFieldControlBase::ScrollBar::ScrollBar(Window* pParent, WinBits nStyle) :
+    ::ScrollBar(pParent, nStyle),
+    mpParent(pParent)
 {
 }
 
-ScPivotFieldWindow::ScPivotWindowField::ScPivotWindowField( ScPivotLayoutDlg& rDialog, const ScPivotField& rField, bool bDataWindow ) :
-    maFuncData( rField.nCol, rField.nFuncMask, rField.maFieldRef )
+void ScDPFieldControlBase::ScrollBar::Command( const CommandEvent& rCEvt )
 {
-    InitFieldName( rDialog, bDataWindow );
+    mpParent->Command(rCEvt);
 }
 
-ScPivotFieldWindow::ScPivotWindowField::ScPivotWindowField( ScPivotLayoutDlg& rDialog, const ScPivotFuncData& rFuncData, bool bDataWindow ) :
-    maFuncData( rFuncData )
+ScDPFieldControlBase::ScDPFieldControlBase( ScDPLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption ) :
+    Control(pParent, rResId),
+    mpDlg(pParent),
+    mpCaption(pCaption),
+    mnFieldSelected(0),
+    pAccessible(NULL)
 {
-    InitFieldName( rDialog, bDataWindow );
+    if (pCaption)
+        maName = MnemonicGenerator::EraseAllMnemonicChars( pCaption->GetText() );
 }
 
-void ScPivotFieldWindow::ScPivotWindowField::InitFieldName( ScPivotLayoutDlg& rDialog, bool bDataWindow )
+ScDPFieldControlBase::~ScDPFieldControlBase()
 {
-    if( maFuncData.mnCol != PIVOT_DATA_FIELD )
+    if (pAccessible)
     {
-        ScDPLabelData* pLabelData = rDialog.GetLabelData( maFuncData.mnCol );
-        DBG_ASSERT( pLabelData, "ScPivotWindowField::InitFieldName - no label data found" );
-        if( pLabelData )
+        com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+        if (xTempAcc.is())
+            pAccessible->dispose();
+    }
+}
+
+void ScDPFieldControlBase::UseMnemonic()
+{
+    // Now the FixedText has its mnemonic char. Grab the text and hide the
+    // FixedText to be able to handle tabstop and mnemonics separately.
+    if (mpCaption)
+    {
+        SetText(mpCaption->GetText());
+        mpCaption->Hide();
+    }
+
+    // after reading the mnemonics, tab stop style bits can be updated
+    UpdateStyle();
+}
+
+OUString ScDPFieldControlBase::GetName() const
+{
+    return maName;
+}
+
+void ScDPFieldControlBase::SetName(const OUString& rName)
+{
+    maName = rName;
+}
+
+bool ScDPFieldControlBase::IsExistingIndex( size_t nIndex ) const
+{
+    return nIndex < maFieldNames.size();
+}
+
+void ScDPFieldControlBase::AddField( const String& rText, size_t nNewIndex )
+{
+    OSL_ENSURE( nNewIndex == maFieldNames.size(), "ScDPFieldWindow::AddField - invalid index" );
+    if( IsValidIndex( nNewIndex ) )
+    {
+        maFieldNames.push_back( FieldName( rText, true ) );
+        if (pAccessible)
         {
-            if( bDataWindow )
-            {
-                // write original nFuncMask to label data
-                pLabelData->mnFuncMask = maFuncData.mnFuncMask;
-                // GetFuncString() modifies nFuncMask (e.g. auto to sum or count)
-                maFieldName = rDialog.GetFuncString( maFuncData.mnFuncMask, pLabelData->mbIsValue );
-            }
-            maFieldName += pLabelData->getDisplayName();
+            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+            if (xTempAcc.is())
+                pAccessible->AddField(nNewIndex);
+            else
+                pAccessible = NULL;
         }
     }
 }
 
-// ============================================================================
-
-ScPivotFieldWindow::ScPivotFieldWindow( ScPivotLayoutDlg* pDialog, const ResId& rResId,
-        ScrollBar& rScrollBar, FixedText* pFtCaption, const OUString& rName,
-        ScPivotFieldType eFieldType, const sal_Char* pcHelpId, PointerStyle eDropPointer,
-        size_t nColCount, size_t nRowCount, long nFieldWidthFactor, long nSpaceSize ) :
-    Control( pDialog, rResId ),
-    mpDialog( pDialog ),
-    mpAccessible( 0 ),
-    mrScrollBar( rScrollBar ),
-    mpFtCaption( pFtCaption ),
-    maName( rName ),
-    meFieldType( eFieldType ),
-    meDropPointer( eDropPointer ),
-    mnColCount( nColCount ),
-    mnRowCount( nRowCount ),
-    mnFirstVisIndex( 0 ),
-    mnSelectIndex( 0 ),
-    mnInsCursorIndex( PIVOTFIELD_INVALID ),
-    mnOldFirstVisIndex( 0 ),
-    mnAutoScrollDelay( 0 ),
-    mbVertical( eFieldType == PIVOTFIELDTYPE_SELECT ),
-    mbIsTrackingSource( false )
+bool ScDPFieldControlBase::AddField( const String& rText, const Point& rPos, size_t& rnIndex )
 {
-    SetHelpId( pcHelpId );
-
-    mnLineSize = mbVertical ? mnRowCount : mnColCount;
-    mnPageSize = mnColCount * mnRowCount;
-
-    // a single field is 36x12 appfont units
-    maFieldSize = LogicToPixel( Size( 36, 12 ), MapMode( MAP_APPFONT ) );
-    maFieldSize.Width() *= nFieldWidthFactor;
-    maSpaceSize = LogicToPixel( Size( nSpaceSize, nSpaceSize ), MapMode( MAP_APPFONT ) );
-
-    // set window size
-    long nWinWidth  = static_cast< long >( mnColCount * maFieldSize.Width()  + (mnColCount - 1) * maSpaceSize.Width() );
-    long nWinHeight = static_cast< long >( mnRowCount * maFieldSize.Height() + (mnRowCount - 1) * maSpaceSize.Height() );
-    SetSizePixel( Size( nWinWidth, nWinHeight ) );
-
-    // scroll bar
-    Point aScrollBarPos = GetPosPixel();
-    Size aScrollBarSize( nWinWidth, nWinHeight );
-    if( mbVertical )
+    size_t nNewIndex = 0;
+    if( GetFieldIndex( rPos, nNewIndex ) )
     {
-        aScrollBarPos.Y() += nWinHeight + maSpaceSize.Height();
-        aScrollBarSize.Height() = GetSettings().GetStyleSettings().GetScrollBarSize();
+        if( nNewIndex > maFieldNames.size() )
+            nNewIndex = maFieldNames.size();
+
+        maFieldNames.insert( maFieldNames.begin() + nNewIndex, FieldName( rText, true ) );
+        mnFieldSelected = nNewIndex;
+        ResetScrollBar();
+        Redraw();
+        rnIndex = nNewIndex;
+
+        if (pAccessible)
+        {
+            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+            if (xTempAcc.is())
+                pAccessible->AddField(nNewIndex);
+            else
+                pAccessible = NULL;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+bool ScDPFieldControlBase::AppendField(const String& rText, size_t& rnIndex)
+{
+    if (!IsValidIndex(maFieldNames.size()))
+        return false;
+
+    maFieldNames.push_back(FieldName(rText, true));
+    mnFieldSelected = maFieldNames.size() - 1;
+    ResetScrollBar();
+    Redraw();
+
+    rnIndex = mnFieldSelected;
+    return true;
+}
+
+void ScDPFieldControlBase::DelField( size_t nDelIndex )
+{
+    if ( IsExistingIndex(nDelIndex) )
+    {
+        if (pAccessible) // before decrement fieldcount
+        {
+            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+            if (xTempAcc.is())
+                pAccessible->RemoveField(nDelIndex);
+            else
+                pAccessible = NULL;
+        }
+        maFieldNames.erase( maFieldNames.begin() + nDelIndex );
+        if (mnFieldSelected >= maFieldNames.size())
+            mnFieldSelected = maFieldNames.size() - 1;
+
+        ResetScrollBar();
+        Redraw();
+    }
+}
+
+size_t ScDPFieldControlBase::GetFieldCount() const
+{
+    return maFieldNames.size();
+}
+
+bool ScDPFieldControlBase::IsEmpty() const
+{
+    return maFieldNames.empty();
+}
+
+void ScDPFieldControlBase::ClearFields()
+{
+    com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+    if (!xTempAcc.is() && pAccessible)
+        pAccessible = NULL;
+    if (pAccessible)
+        for( size_t nIdx = maFieldNames.size(); nIdx > 0; --nIdx )
+            pAccessible->RemoveField( nIdx - 1 );
+
+    maFieldNames.clear();
+}
+
+void ScDPFieldControlBase::SetFieldText( const String& rText, size_t nIndex )
+{
+    if( IsExistingIndex( nIndex ) )
+    {
+        maFieldNames[ nIndex ] = FieldName( rText, true );
+        Redraw();
+
+        if (pAccessible)
+        {
+            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+            if (xTempAcc.is())
+                pAccessible->FieldNameChange(nIndex);
+            else
+                pAccessible = NULL;
+        }
+    }
+}
+
+const String& ScDPFieldControlBase::GetFieldText( size_t nIndex ) const
+{
+    if( IsExistingIndex( nIndex ) )
+        return maFieldNames[ nIndex ].first;
+    return EMPTY_STRING;
+}
+
+void ScDPFieldControlBase::GetExistingIndex( const Point& rPos, size_t& rnIndex )
+{
+    if( !maFieldNames.empty() && (GetFieldType() != TYPE_SELECT) && GetFieldIndex( rPos, rnIndex ) )
+    {
+        if( rnIndex >= maFieldNames.size() )
+            rnIndex = maFieldNames.size() - 1;
+    }
+    else
+        rnIndex = 0;
+}
+
+size_t ScDPFieldControlBase::GetSelectedField() const
+{
+    return mnFieldSelected;
+}
+
+void ScDPFieldControlBase::SetSelectedField(size_t nSelected)
+{
+    mnFieldSelected = nSelected;
+}
+
+vector<ScDPFieldControlBase::FieldName>& ScDPFieldControlBase::GetFieldNames()
+{
+    return maFieldNames;
+}
+
+const vector<ScDPFieldControlBase::FieldName>& ScDPFieldControlBase::GetFieldNames() const
+{
+    return maFieldNames;
+}
+
+void ScDPFieldControlBase::Paint( const Rectangle& /* rRect */ )
+{
+    // hiding the caption is now done from StateChanged
+    Redraw();
+}
+
+void ScDPFieldControlBase::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        Redraw();
+    }
+    Control::DataChanged( rDCEvt );
+}
+
+void ScDPFieldControlBase::Command( const CommandEvent& rCEvt )
+{
+    if (rCEvt.GetCommand() == COMMAND_WHEEL)
+    {
+        const CommandWheelData* pData = rCEvt.GetWheelData();
+        if (pData->GetMode() == COMMAND_WHEEL_SCROLL && !pData->IsHorz())
+        {
+            // Handle vertical mouse wheel scrolls.
+            long nNotch = pData->GetNotchDelta(); // positive => up; negative => down
+            HandleWheelScroll(nNotch);
+        }
+    }
+}
+
+void ScDPFieldControlBase::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if( rMEvt.IsLeft() )
+    {
+        size_t nIndex = 0;
+        if( GetFieldIndex( rMEvt.GetPosPixel(), nIndex ) && IsExistingIndex( nIndex ) )
+        {
+            GrabFocusWithSel( nIndex );
+
+            if( rMEvt.GetClicks() == 1 )
+            {
+                PointerStyle ePtr = mpDlg->NotifyMouseButtonDown( GetFieldType(), nIndex );
+                CaptureMouse();
+                SetPointer( Pointer( ePtr ) );
+            }
+            else
+                mpDlg->NotifyDoubleClick( GetFieldType(), nIndex );
+        }
+    }
+}
+
+void ScDPFieldControlBase::MouseButtonUp( const MouseEvent& rMEvt )
+{
+    if( rMEvt.IsLeft() )
+    {
+        if( rMEvt.GetClicks() == 1 )
+        {
+            mpDlg->NotifyMouseButtonUp( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
+            SetPointer( Pointer( POINTER_ARROW ) );
+        }
+
+        if( IsMouseCaptured() )
+            ReleaseMouse();
+    }
+}
+
+void ScDPFieldControlBase::MouseMove( const MouseEvent& rMEvt )
+{
+    if( IsMouseCaptured() )
+    {
+        PointerStyle ePtr = mpDlg->NotifyMouseMove( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
+        SetPointer( Pointer( ePtr ) );
+    }
+    size_t nIndex = 0;
+    if( GetFieldIndex( rMEvt.GetPosPixel(), nIndex ) && IsShortenedText( nIndex ) )
+    {
+        Point aPos = OutputToScreenPixel( rMEvt.GetPosPixel() );
+        Rectangle   aRect( aPos, GetSizePixel() );
+        String aHelpText = GetFieldText(nIndex);
+        Help::ShowQuickHelp( this, aRect, aHelpText );
+    }
+}
+
+void ScDPFieldControlBase::KeyInput( const KeyEvent& rKEvt )
+{
+    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    sal_uInt16 nCode = rKeyCode.GetCode();
+    bool bKeyEvaluated = false;
+
+    const FieldNames& rFields = GetFieldNames();
+    if( rKeyCode.IsMod1() && (GetFieldType() != TYPE_SELECT) )
+    {
+        bKeyEvaluated = true;
+        switch( nCode )
+        {
+            case KEY_UP:    MoveFieldRel( 0, -1 );              break;
+            case KEY_DOWN:  MoveFieldRel( 0, 1 );               break;
+            case KEY_LEFT:  MoveFieldRel( -1, 0 );              break;
+            case KEY_RIGHT: MoveFieldRel( 1, 0 );               break;
+            case KEY_HOME:  MoveField( 0 );                     break;
+            case KEY_END:   MoveField( rFields.size() - 1 );  break;
+            default:        bKeyEvaluated = false;
+        }
     }
     else
     {
-        aScrollBarPos.X() += nWinWidth + maSpaceSize.Width();
-        aScrollBarSize.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
-    }
-    mrScrollBar.SetPosSizePixel( aScrollBarPos, aScrollBarSize );
-    mrScrollBar.SetLineSize( 1 );
-    mrScrollBar.SetPageSize( static_cast< long >( mbVertical ? mnColCount : mnRowCount ) );
-    mrScrollBar.SetVisibleSize( static_cast< long >( mbVertical ? mnColCount : mnRowCount ) );
-    mrScrollBar.SetScrollHdl( LINK( this, ScPivotFieldWindow, ScrollHdl ) );
-    mrScrollBar.SetEndScrollHdl( LINK( this, ScPivotFieldWindow, ScrollHdl ) );
-}
-
-ScPivotFieldWindow::~ScPivotFieldWindow()
-{
-    ::rtl::Reference< ScAccessibleDataPilotControl > xAcc = GetAccessibleControl();
-    if( xAcc.is() )
-        xAcc->dispose();
-}
-
-void ScPivotFieldWindow::ReadDataLabels( const ScDPLabelDataVector& rLabels )
-{
-    maFields.clear();
-    maFields.reserve( rLabels.size() );
-    for( ScDPLabelDataVector::const_iterator aIt = rLabels.begin(), aEnd = rLabels.end(); aIt != aEnd; ++aIt )
-    {
-        ScPivotWindowField aField( *aIt );
-        if( aField.maFieldName.getLength() > 0 )
-            maFields.push_back( aField );
-    }
-    Invalidate();
-}
-
-void ScPivotFieldWindow::ReadPivotFields( const ScPivotFieldVector& rPivotFields )
-{
-    maFields.clear();
-    maFields.reserve( rPivotFields.size() );
-    for( ScPivotFieldVector::const_iterator aIt = rPivotFields.begin(), aEnd = rPivotFields.end(); aIt != aEnd; ++aIt )
-    {
-        ScPivotWindowField aField( *mpDialog, *aIt, meFieldType == PIVOTFIELDTYPE_DATA );
-        if( aField.maFieldName.getLength() > 0 )
-            maFields.push_back( aField );
-    }
-    Invalidate();
-}
-
-void ScPivotFieldWindow::WriteFieldNames( ScDPNameVec& rFieldNames ) const
-{
-    rFieldNames.clear();
-    rFieldNames.reserve( maFields.size() );
-    // do not use the names stored in maFields, but generate plain display names from label data
-    for( ScPivotWindowFieldVector::const_iterator aIt = maFields.begin(), aEnd = maFields.end(); aIt != aEnd; ++aIt )
-    {
-        if( ScDPLabelData* pLabelData = mpDialog->GetLabelData( aIt->maFuncData.mnCol ) )
+        bKeyEvaluated = true;
+        switch( nCode )
         {
-            OUString aDisplayName = pLabelData->getDisplayName();
-            if( aDisplayName.getLength() > 0 )
-                rFieldNames.push_back( aDisplayName );
+            case KEY_UP:    MoveSelection( 0, -1 ); break;
+            case KEY_DOWN:  MoveSelection( 0, 1 ); break;
+            case KEY_LEFT:  MoveSelection( -1, 0 ); break;
+            case KEY_RIGHT: MoveSelection( 1, 0 ); break;
+            case KEY_HOME:  SetSelectionHome();     break;
+            case KEY_END:   SetSelectionEnd();      break;
+            case KEY_DELETE:
+                mpDlg->NotifyRemoveField( GetFieldType(), mnFieldSelected );
+            break;
+            default:
+                bKeyEvaluated = false;
         }
     }
-}
 
-void ScPivotFieldWindow::WritePivotFields( ScPivotFieldVector& rPivotFields ) const
-{
-    rPivotFields.resize( maFields.size() );
-    ScPivotFieldVector::iterator aOutIt = rPivotFields.begin();
-    for( ScPivotWindowFieldVector::const_iterator aIt = maFields.begin(), aEnd = maFields.end(); aIt != aEnd; ++aIt, ++aOutIt )
+    if (bKeyEvaluated)
     {
-        aOutIt->nCol = aIt->maFuncData.mnCol;
-        aOutIt->nFuncMask = aIt->maFuncData.mnFuncMask;
-        aOutIt->maFieldRef = aIt->maFuncData.maFieldRef;
+        ScrollToShowSelection();
+        Redraw();
     }
+    else
+        Control::KeyInput( rKEvt );
 }
 
-OUString ScPivotFieldWindow::GetDescription() const
+void ScDPFieldControlBase::GetFocus()
 {
-    switch( meFieldType )
+    Control::GetFocus();
+    Redraw();
+    if( GetGetFocusFlags() & GETFOCUS_MNEMONIC )    // move field on shortcut
     {
-        case PIVOTFIELDTYPE_COL:      return String( ScResId( STR_ACC_DATAPILOT_COL_DESCR ) );
-        case PIVOTFIELDTYPE_ROW:      return String( ScResId( STR_ACC_DATAPILOT_ROW_DESCR ) );
-        case PIVOTFIELDTYPE_DATA:     return String( ScResId( STR_ACC_DATAPILOT_DATA_DESCR ) );
-        case PIVOTFIELDTYPE_SELECT:   return String( ScResId( STR_ACC_DATAPILOT_SEL_DESCR ) );
-        default:;
+        size_t nOldCount = GetFieldCount();
+        mpDlg->NotifyMoveFieldToEnd( GetFieldType() );
+        if (GetFieldCount() > nOldCount)
+            // Scroll to the end only when a new field is inserted.
+            ScrollToEnd();
     }
-    return OUString();
+    else                                            // else change focus
+        mpDlg->NotifyFieldFocus( GetFieldType(), true );
+
+    AccessibleSetFocus(true);
 }
 
-OUString ScPivotFieldWindow::GetFieldText( size_t nFieldIndex ) const
+void ScDPFieldControlBase::LoseFocus()
 {
-    return (nFieldIndex < maFields.size()) ? maFields[ nFieldIndex ].maFieldName : OUString();
+    Control::LoseFocus();
+    Redraw();
+    mpDlg->NotifyFieldFocus( GetFieldType(), false );
+
+    AccessibleSetFocus(false);
 }
 
-ScPivotFuncDataEntry ScPivotFieldWindow::FindFuncDataByCol( SCCOL nCol ) const
+Reference<XAccessible> ScDPFieldControlBase::CreateAccessible()
 {
-    for( ScPivotWindowFieldVector::const_iterator aIt = maFields.begin(), aEnd = maFields.end(); aIt != aEnd; ++aIt )
-        if( aIt->maFuncData.mnCol == nCol )
-            return ScPivotFuncDataEntry( &aIt->maFuncData, aIt - maFields.begin() );
-    return ScPivotFuncDataEntry( 0, PIVOTFIELD_INVALID );
+    pAccessible =
+        new ScAccessibleDataPilotControl(GetAccessibleParentWindow()->GetAccessible(), this);
+
+    com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xReturn = pAccessible;
+
+    pAccessible->Init();
+    xAccessible = xReturn;
+
+    return xReturn;
 }
 
-Point ScPivotFieldWindow::GetFieldPosition( size_t nFieldIndex ) const
+void ScDPFieldControlBase::FieldFocusChanged(size_t nOldSelected, size_t nFieldSelected)
 {
-    long nRelIndex = static_cast< long >( nFieldIndex ) - mnFirstVisIndex;
-    long nCol = static_cast< long >( mbVertical ? (nRelIndex / mnRowCount) : (nRelIndex % mnColCount) );
-    long nRow = static_cast< long >( mbVertical ? (nRelIndex % mnRowCount) : (nRelIndex / mnColCount) );
-    return Point( nCol * (maFieldSize.Width() + maSpaceSize.Width()), nRow * (maFieldSize.Height() + maSpaceSize.Height()) );
+    if (!pAccessible)
+        return;
+
+    com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+    if (xTempAcc.is())
+        pAccessible->FieldFocusChange(nOldSelected, nFieldSelected);
+    else
+        pAccessible = NULL;
 }
 
-size_t ScPivotFieldWindow::GetFieldIndex( const Point& rWindowPos ) const
+void ScDPFieldControlBase::AccessibleSetFocus(bool bOn)
 {
-    if( (rWindowPos.X() >= 0) && (rWindowPos.Y() >= 0) )
+    if (!pAccessible)
+        return;
+
+    com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+    if (!xTempAcc.is())
     {
-        long nGridWidth = maFieldSize.Width() + maSpaceSize.Width();
-        long nGridHeight = maFieldSize.Height() + maSpaceSize.Height();
-        size_t nCol = static_cast< size_t >( rWindowPos.X() / nGridWidth );
-        size_t nRow = static_cast< size_t >( rWindowPos.Y() / nGridHeight );
-        if( (nCol < mnColCount) && (nRow < mnRowCount) )
-        {
-            long nColOffset = rWindowPos.X() % nGridWidth;
-            long nRowOffset = rWindowPos.Y() % nGridHeight;
-            // check that passed position is not in the space between the fields
-            if( (nColOffset < maFieldSize.Width()) && (nRowOffset < maFieldSize.Height()) )
-            {
-                size_t nFieldIndex = mnFirstVisIndex + (mbVertical ? (nCol * mnRowCount + nRow) : (nRow * mnColCount + nCol));
-                return (nFieldIndex < maFields.size()) ? nFieldIndex : PIVOTFIELD_INVALID;
-            }
-        }
-    }
-    return PIVOTFIELD_INVALID;
-}
-
-size_t ScPivotFieldWindow::GetDropIndex( const Point& rWindowPos ) const
-{
-    if( (rWindowPos.X() >= 0) && (rWindowPos.Y() >= 0) )
-    {
-        long nGridWidth = maFieldSize.Width() + maSpaceSize.Width();
-        long nGridHeight = maFieldSize.Height() + maSpaceSize.Height();
-        size_t nCol = static_cast< size_t >( rWindowPos.X() / nGridWidth );
-        size_t nRow = static_cast< size_t >( rWindowPos.Y() / nGridHeight );
-        if( (nCol < mnColCount) && (nRow < mnRowCount) )
-        {
-            size_t nFieldIndex = mnFirstVisIndex + (mbVertical ? (nCol * mnRowCount + nRow) : (nRow * mnColCount + nCol));
-            long nColOffset = rWindowPos.X() % nGridWidth;
-            long nRowOffset = rWindowPos.Y() % nGridHeight;
-            // take next field, if position is in right/lower third
-            if( (mnColCount == 1) ? (nRowOffset * 3 > nGridHeight * 2) : (nColOffset * 3 > nGridWidth * 2) )
-                ++nFieldIndex;
-            return ::std::min( nFieldIndex, maFields.size() );
-        }
-    }
-    return maFields.size();
-}
-
-void ScPivotFieldWindow::GrabFocusAndSelect( size_t nSelectIndex )
-{
-    if( !HasFocus() ) GrabFocus();
-    MoveSelection( nSelectIndex );
-}
-
-void ScPivotFieldWindow::SelectNextField()
-{
-    MoveSelection( NEXT_FIELD );
-}
-
-void ScPivotFieldWindow::InsertField( size_t nInsertIndex, const ScPivotFuncData& rFuncData )
-{
-    if( (meFieldType != PIVOTFIELDTYPE_SELECT) && (nInsertIndex <= maFields.size()) )
-    {
-        size_t nFieldIndex = FindFuncDataByCol( rFuncData.mnCol ).second;
-        if( nFieldIndex < maFields.size() )
-        {
-            // field exists already in this window, move it to the specified position
-            MoveField( nFieldIndex, nInsertIndex );
-        }
-        else
-        {
-            // insert the field into the vector and notify accessibility object
-            ScPivotWindowField aField( *mpDialog, rFuncData, meFieldType == PIVOTFIELDTYPE_DATA );
-            if( aField.maFieldName.getLength() > 0 )
-            {
-                InsertFieldUnchecked( nInsertIndex, aField );
-                // adjust selection and scroll position
-                MoveSelection( nInsertIndex );
-                Invalidate();
-            }
-        }
-    }
-}
-
-bool ScPivotFieldWindow::RemoveField( size_t nRemoveIndex )
-{
-    if( (meFieldType != PIVOTFIELDTYPE_SELECT) && (nRemoveIndex < maFields.size()) )
-    {
-        // remove the field from the vector and notify accessibility object
-        RemoveFieldUnchecked( nRemoveIndex );
-        // adjust selection and scroll position, if last field is removed
-        if( !maFields.empty() )
-            MoveSelection( (mnSelectIndex < maFields.size()) ? mnSelectIndex : (maFields.size() - 1) );
-        Invalidate();
-        return true;
-    }
-    return false;
-}
-
-bool ScPivotFieldWindow::MoveField( size_t nFieldIndex, size_t nInsertIndex )
-{
-    /*  If field is moved behind current position, insertion index needs to be
-        adjusted, because the field is first removed from the vector. This is
-        done before nFieldIndex and nInsertIndex are checked for equality, to
-        catch the cases "move before ourselves" and "move bedind ourselves"
-        which are both no-ops. */
-    if( nFieldIndex < nInsertIndex )
-        --nInsertIndex;
-
-    if( (meFieldType != PIVOTFIELDTYPE_SELECT) && (nFieldIndex != nInsertIndex) && (nFieldIndex < maFields.size()) && (nInsertIndex < maFields.size()) )
-    {
-        // move the field in the vector and notify accessibility object
-        ScPivotWindowField aField = maFields[ nFieldIndex ];
-        RemoveFieldUnchecked( nFieldIndex );
-        InsertFieldUnchecked( nInsertIndex, aField );
-        // adjust selection and scroll position
-        MoveSelection( nInsertIndex );
-        Invalidate();
-        return true;
-    }
-    return false;
-}
-
-const ScPivotFuncData* ScPivotFieldWindow::GetSelectedFuncData() const
-{
-    return (mnSelectIndex < maFields.size()) ? &maFields[ mnSelectIndex ].maFuncData : 0;
-}
-
-void ScPivotFieldWindow::ModifySelectedField( const ScPivotFuncData& rFuncData )
-{
-    if( mnSelectIndex < maFields.size() )
-    {
-        maFields[ mnSelectIndex ].maFuncData = rFuncData;
-        maFields[ mnSelectIndex ].InitFieldName( *mpDialog, meFieldType == PIVOTFIELDTYPE_DATA );
-        Invalidate();
-    }
-}
-
-bool ScPivotFieldWindow::RemoveSelectedField()
-{
-    return RemoveField( mnSelectIndex );
-}
-
-bool ScPivotFieldWindow::MoveSelectedField( size_t nInsertIndex )
-{
-    return MoveField( mnSelectIndex, nInsertIndex );
-}
-
-void ScPivotFieldWindow::NotifyStartTracking()
-{
-    // rescue old scrolling index, to be able to restore it when tracking is cancelled
-    mnOldFirstVisIndex = mnFirstVisIndex;
-}
-
-void ScPivotFieldWindow::NotifyTracking( const Point& rWindowPos )
-{
-    size_t nFieldIndex = GetDropIndex( rWindowPos );
-
-    // insertion index changed: draw new cursor and exit
-    if( nFieldIndex != mnInsCursorIndex )
-    {
-        mnInsCursorIndex = nFieldIndex;
-        mnAutoScrollDelay = INITIAL_TRACKING_DELAY;
-        Invalidate();
+        pAccessible = NULL;
         return;
     }
 
-    // insertion index unchanged: countdown for auto scrolling
-    if( mnAutoScrollDelay > 0 )
-    {
-        --mnAutoScrollDelay;
-        return;
-    }
-
-    // check if tracking happens on first or last field
-    long nScrollDelta = 0;
-    if( (mnInsCursorIndex > 0) && (mnInsCursorIndex == mnFirstVisIndex) )
-        nScrollDelta = -static_cast< long >( mnLineSize );
-    else if( (mnInsCursorIndex < maFields.size()) && (mnInsCursorIndex == mnFirstVisIndex + mnPageSize) )
-        nScrollDelta = static_cast< long >( mnLineSize );
-    if( nScrollDelta != 0 )
-    {
-        // update mnInsCursorIndex, so it will be drawn at the same position after scrolling
-        mnInsCursorIndex += nScrollDelta;
-        mnFirstVisIndex += nScrollDelta;
-        // delay auto scroll by line size, to slow down scrolling in column/page windows
-        mnAutoScrollDelay = mnLineSize - 1;
-        Invalidate();
-    }
+    if (bOn)
+        pAccessible->GotFocus();
+    else
+        pAccessible->LostFocus();
 }
 
-void ScPivotFieldWindow::NotifyEndTracking( ScPivotFieldEndTracking eEndType )
+void ScDPFieldControlBase::UpdateStyle()
 {
-    if( eEndType != ENDTRACKING_DROP )
-        mnFirstVisIndex = mnOldFirstVisIndex;
-    if( eEndType != ENDTRACKING_SUSPEND )
-    {
-        mnOldFirstVisIndex = PIVOTFIELD_INVALID;
-        mbIsTrackingSource = false;
-    }
-    mnInsCursorIndex = PIVOTFIELD_INVALID;
-    Invalidate();
-}
-
-// protected ------------------------------------------------------------------
-
-void ScPivotFieldWindow::Paint( const Rectangle& /*rRect*/ )
-{
-    // prepare a virtual device for buffered painting
-    VirtualDevice aVirDev;
-    // #i97623# VirtualDevice is always LTR on construction while other windows derive direction from parent
-    aVirDev.EnableRTL( IsRTLEnabled() );
-    aVirDev.SetMapMode( MAP_PIXEL );
-    aVirDev.SetOutputSizePixel( GetSizePixel() );
-    Font aFont = GetFont();
-    aFont.SetTransparent( true );
-    aVirDev.SetFont( aFont );
-
-    // draw the background and all fields
-    DrawBackground( aVirDev );
-    for( size_t nFieldIndex = mnFirstVisIndex, nEndIndex = mnFirstVisIndex + mnPageSize; nFieldIndex < nEndIndex; ++nFieldIndex )
-        DrawField( aVirDev, nFieldIndex );
-    DrawInsertionCursor( aVirDev );
-    DrawBitmap( Point( 0, 0 ), aVirDev.GetBitmap( Point( 0, 0 ), GetSizePixel() ) );
-
-    // draw field text focus
-    if( HasFocus() && (mnSelectIndex < maFields.size()) && (mnFirstVisIndex <= mnSelectIndex) && (mnSelectIndex < mnFirstVisIndex + mnPageSize) )
-    {
-        long nFieldWidth = maFieldSize.Width();
-        long nSelectionWidth = Min( GetTextWidth( maFields[ mnSelectIndex ].maFieldName ) + 4, nFieldWidth - 6 );
-        Rectangle aSelection(
-            GetFieldPosition( mnSelectIndex ) + Point( (nFieldWidth - nSelectionWidth) / 2, 3 ),
-            Size( nSelectionWidth, maFieldSize.Height() - 6 ) );
-        InvertTracking( aSelection, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
-    }
-
-    // update scrollbar
-    size_t nFieldCount = maFields.size();
-    /*  Already show the scrollbar if window is full but no fields are hidden
-        (yet). This gives the user the hint that it is now possible to add more
-        fields to the window. */
-    mrScrollBar.Show( nFieldCount >= mnPageSize );
-    mrScrollBar.Enable( nFieldCount > mnPageSize );
-    if( mrScrollBar.IsVisible() )
-    {
-        mrScrollBar.SetRange( Range( 0, static_cast< long >( (nFieldCount - 1) / mnLineSize + 1 ) ) );
-        mrScrollBar.SetThumbPos( static_cast< long >( mnFirstVisIndex / mnLineSize ) );
-    }
-
-    /*  Exclude empty fields from tab chain, but do not disable them. They need
-        to be enabled because they still act as target for field movement via
-        keyboard shortcuts. */
     WinBits nMask = ~(WB_TABSTOP | WB_NOTABSTOP);
     SetStyle( (GetStyle() & nMask) | (IsEmpty() ? WB_NOTABSTOP : WB_TABSTOP) );
 }
 
-void ScPivotFieldWindow::StateChanged( StateChangedType nStateChange )
+void ScDPFieldControlBase::DrawBackground( OutputDevice& rDev )
 {
-    Control::StateChanged( nStateChange );
+    const StyleSettings& rStyleSet = GetSettings().GetStyleSettings();
+    Color aFaceColor = rStyleSet.GetFaceColor();
+    Color aWinColor = rStyleSet.GetWindowColor();
+    Color aWinTextColor = rStyleSet.GetWindowTextColor();
 
-    if( nStateChange == STATE_CHANGE_INITSHOW )
+    Point aPos0;
+    Size aSize( GetSizePixel() );
+
+    if (mpCaption)
     {
-        /*  After the fixed text associated to this control has received its
-            unique mnemonic from VCL dialog initialization code, put this text
-            into the field windows.
-            #124828# Hiding the FixedTexts and clearing the tab stop style bits
-            has to be done after assigning the mnemonics, but Paint() is too
-            late, because the test tool may send key events to the dialog when
-            it isn't visible. Mnemonics are assigned in Dialog::StateChanged()
-            for STATE_CHANGE_INITSHOW, so this can be done immediately
-            afterwards. */
-        if( mpFtCaption )
-        {
-            SetText( mpFtCaption->GetText() );
-            mpFtCaption->Hide();
-        }
-    }
-}
-
-void ScPivotFieldWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Control::DataChanged( rDCEvt );
-    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-        Invalidate();
-}
-
-void ScPivotFieldWindow::KeyInput( const KeyEvent& rKEvt )
-{
-    bool bKeyEvaluated = false;
-
-    if( !maFields.empty() )
-    {
-        const KeyCode& rKeyCode = rKEvt.GetKeyCode();
-        sal_uInt16 nCode = rKeyCode.GetCode();
-
-        // do not move fields in selection window
-        if( rKeyCode.IsMod1() && (meFieldType != PIVOTFIELDTYPE_SELECT) )
-        {
-            bKeyEvaluated = true;
-            switch( nCode )
-            {
-                case KEY_UP:        MoveSelectedField( mbVertical ? PREV_FIELD : PREV_LINE );   break;
-                case KEY_DOWN:      MoveSelectedField( mbVertical ? NEXT_FIELD : NEXT_LINE );   break;
-                case KEY_LEFT:      MoveSelectedField( mbVertical ? PREV_LINE : PREV_FIELD );   break;
-                case KEY_RIGHT:     MoveSelectedField( mbVertical ? NEXT_LINE : NEXT_FIELD );   break;
-                case KEY_HOME:      MoveSelectedField( FIRST_FIELD );                           break;
-                case KEY_END:       MoveSelectedField( LAST_FIELD );                            break;
-                default:            bKeyEvaluated = false;
-            }
-        }
-        else
-        {
-            bKeyEvaluated = true;
-            switch( nCode )
-            {
-                case KEY_UP:        MoveSelection( mbVertical ? PREV_FIELD : PREV_LINE );           break;
-                case KEY_DOWN:      MoveSelection( mbVertical ? NEXT_FIELD : NEXT_LINE );           break;
-                case KEY_LEFT:      MoveSelection( mbVertical ? PREV_LINE : PREV_FIELD );           break;
-                case KEY_RIGHT:     MoveSelection( mbVertical ? NEXT_LINE : NEXT_FIELD );           break;
-                case KEY_PAGEUP:    MoveSelection( PREV_PAGE );                                     break;
-                case KEY_PAGEDOWN:  MoveSelection( NEXT_PAGE );                                     break;
-                case KEY_HOME:      MoveSelection( FIRST_FIELD );                                   break;
-                case KEY_END:       MoveSelection( LAST_FIELD );                                    break;
-                // delete field per DEL key - dialog needs to change focus if window becomes empty
-                case KEY_DELETE:    RemoveSelectedField(); mpDialog->NotifyFieldRemoved( *this );   break;
-                default:            bKeyEvaluated = false;
-            }
-        }
-    }
-
-    if( !bKeyEvaluated )
-        Control::KeyInput( rKEvt );
-}
-
-void ScPivotFieldWindow::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    if( rMEvt.IsLeft() )
-    {
-        size_t nNewSelectIndex = GetFieldIndex( rMEvt.GetPosPixel() );
-        if( nNewSelectIndex < maFields.size() )
-        {
-            // grabbing after GetFieldIndex() will prevent to focus empty window
-            GrabFocusAndSelect( nNewSelectIndex );
-            if( rMEvt.GetClicks() == 1 )
-            {
-                // one click: start tracking
-                mbIsTrackingSource = true;
-                mnOldFirstVisIndex = mnFirstVisIndex;
-                mpDialog->NotifyStartTracking( *this );
-            }
-            else
-            {
-                // two clicks: open field options dialog
-                mpDialog->NotifyDoubleClick( *this );
-            }
-        }
-    }
-}
-
-void ScPivotFieldWindow::RequestHelp( const HelpEvent& rHEvt )
-{
-    if( (rHEvt.GetMode() & HELPMODE_QUICK) != 0 )
-    {
-        // show a tooltip with full field name, if field text is clipped
-        size_t nFieldIndex = GetFieldIndex( rHEvt.GetMousePosPixel() - GetPosPixel() );
-        if( (nFieldIndex < maFields.size()) && maFields[ nFieldIndex ].mbClipped )
-        {
-            Rectangle aRect( rHEvt.GetMousePosPixel(), GetSizePixel() );
-            Help::ShowQuickHelp( this, aRect, maFields[ nFieldIndex ].maFieldName );
-            return;
-        }
-    }
-    Control::RequestHelp( rHEvt );
-}
-
-void ScPivotFieldWindow::GetFocus()
-{
-    Control::GetFocus();
-    Invalidate();
-    ::rtl::Reference< ScAccessibleDataPilotControl > xAcc = GetAccessibleControl();
-    if( xAcc.is() )
-        xAcc->GotFocus();
-}
-
-void ScPivotFieldWindow::LoseFocus()
-{
-    Control::LoseFocus();
-    Invalidate();
-    ::rtl::Reference< ScAccessibleDataPilotControl > xAcc = GetAccessibleControl();
-    if( xAcc.is() )
-        xAcc->LostFocus();
-}
-
-uno::Reference< accessibility::XAccessible > ScPivotFieldWindow::CreateAccessible()
-{
-    mpAccessible = new ScAccessibleDataPilotControl( GetAccessibleParentWindow()->GetAccessible(), this );
-    uno::Reference< accessibility::XAccessible > xReturn( mpAccessible );
-    mpAccessible->Init();
-    mxAccessible = xReturn;
-    return xReturn;
-}
-
-// private --------------------------------------------------------------------
-
-size_t ScPivotFieldWindow::RecalcVisibleIndex( size_t nSelectIndex ) const
-{
-    // calculate a scrolling offset that shows the selected field
-    size_t nNewFirstVisIndex = mnFirstVisIndex;
-    if( nSelectIndex < nNewFirstVisIndex )
-        nNewFirstVisIndex = static_cast< size_t >( (nSelectIndex / mnLineSize) * mnLineSize );
-    else if( nSelectIndex >= nNewFirstVisIndex + mnPageSize )
-        nNewFirstVisIndex = static_cast< size_t >( (nSelectIndex / mnLineSize + 1) * mnLineSize ) - mnPageSize;
-    // check if there are complete empty lines in the bottom/right
-    size_t nMaxFirstVisIndex = (maFields.size() <= mnPageSize) ? 0 : (((maFields.size() - 1) / mnLineSize + 1) * mnLineSize - mnPageSize);
-    return ::std::min( nNewFirstVisIndex, nMaxFirstVisIndex );
-}
-
-void ScPivotFieldWindow::SetSelectionUnchecked( size_t nSelectIndex, size_t nFirstVisIndex )
-{
-    if( !maFields.empty() && (nSelectIndex < maFields.size()) )
-    {
-        bool bScrollPosChanged = mnFirstVisIndex != nFirstVisIndex;
-        bool bSelectionChanged = mnSelectIndex != nSelectIndex;
-
-        sal_Int32 nOldSelected = static_cast< sal_Int32 >( mnSelectIndex );
-        mnFirstVisIndex = nFirstVisIndex;
-        mnSelectIndex = nSelectIndex;
-
-        if( bScrollPosChanged || bSelectionChanged )
-            Invalidate();
-
-        // TODO: accessibility action for changed scrolling position?
-
-        // notify accessibility object about changed selection
-        if( bSelectionChanged && HasFocus() )
-        {
-            ::rtl::Reference< ScAccessibleDataPilotControl > xAcc = GetAccessibleControl();
-            if( xAcc.is() )
-                xAcc->FieldFocusChange( nOldSelected, static_cast< sal_Int32 >( mnSelectIndex ) );
-        }
-    }
-}
-
-void ScPivotFieldWindow::MoveSelection( size_t nSelectIndex )
-{
-    if( nSelectIndex < maFields.size() )
-        SetSelectionUnchecked( nSelectIndex, RecalcVisibleIndex( nSelectIndex ) );
-}
-
-void ScPivotFieldWindow::MoveSelection( MoveType eMoveType )
-{
-    if( maFields.empty() )
-        return;
-
-    size_t nLastIndex = maFields.size() - 1;
-    size_t nNewSelectIndex = mnSelectIndex;
-    switch( eMoveType )
-    {
-        case PREV_FIELD:
-            nNewSelectIndex = (nNewSelectIndex > 0) ? (nNewSelectIndex - 1) : 0;
-        break;
-        case NEXT_FIELD:
-            nNewSelectIndex = (nNewSelectIndex < nLastIndex) ? (nNewSelectIndex + 1) : nLastIndex;
-        break;
-        case PREV_LINE:
-            nNewSelectIndex = (nNewSelectIndex > mnLineSize) ? (nNewSelectIndex - mnLineSize) : 0;
-        break;
-        case NEXT_LINE:
-            nNewSelectIndex = (nNewSelectIndex + mnLineSize < nLastIndex) ? (nNewSelectIndex + mnLineSize) : nLastIndex;
-        break;
-        case PREV_PAGE:
-            nNewSelectIndex = (nNewSelectIndex > mnPageSize) ? (nNewSelectIndex - mnPageSize) : 0;
-        break;
-        case NEXT_PAGE:
-            nNewSelectIndex = (nNewSelectIndex + mnPageSize < nLastIndex) ? (nNewSelectIndex + mnPageSize) : nLastIndex;
-        break;
-        case FIRST_FIELD:
-            nNewSelectIndex = 0;
-        break;
-        case LAST_FIELD:
-            nNewSelectIndex = nLastIndex;
-        break;
-    }
-
-    // SetSelectionUnchecked() redraws the control and updates the scrollbar
-    SetSelectionUnchecked( nNewSelectIndex, RecalcVisibleIndex( nNewSelectIndex ) );
-}
-
-void ScPivotFieldWindow::MoveSelectedField( MoveType eMoveType )
-{
-    if( mnSelectIndex < maFields.size() )
-    {
-        // find position to insert the field by changing the selection first
-        size_t nOldSelectIndex = mnSelectIndex;
-        MoveSelection( eMoveType );
-        MoveField( nOldSelectIndex, (nOldSelectIndex < mnSelectIndex) ? (mnSelectIndex + 1) : mnSelectIndex );
-    }
-}
-
-void ScPivotFieldWindow::InsertFieldUnchecked( size_t nInsertIndex, const ScPivotWindowField& rField )
-{
-    maFields.insert( maFields.begin() + nInsertIndex, rField );
-    ::rtl::Reference< ScAccessibleDataPilotControl > xAcc = GetAccessibleControl();
-    if( xAcc.is() )
-        xAcc->AddField( static_cast< sal_Int32 >( nInsertIndex ) );
-}
-
-void ScPivotFieldWindow::RemoveFieldUnchecked( size_t nRemoveIndex )
-{
-    ::rtl::Reference< ScAccessibleDataPilotControl > xAcc = GetAccessibleControl();
-    if( xAcc.is() )
-        xAcc->RemoveField( static_cast< sal_Int32 >( nRemoveIndex ) );
-    maFields.erase( maFields.begin() + nRemoveIndex );
-}
-
-void ScPivotFieldWindow::DrawBackground( OutputDevice& rDev )
-{
-    Size aDevSize = rDev.GetOutputSizePixel();
-    const StyleSettings& rStyleSett = GetSettings().GetStyleSettings();
-
-    if( meFieldType == PIVOTFIELDTYPE_SELECT )
-    {
-        rDev.SetLineColor();
-        rDev.SetFillColor( rStyleSett.GetFaceColor() );
-        rDev.DrawRect( Rectangle( Point( 0, 0 ), aDevSize ) );
+        rDev.SetLineColor( aWinTextColor );
+        rDev.SetFillColor( aWinColor );
     }
     else
     {
-        rDev.SetLineColor( rStyleSett.GetWindowTextColor() );
-        rDev.SetFillColor( rStyleSett.GetWindowColor() );
-        rDev.DrawRect( Rectangle( Point( 0, 0 ), aDevSize ) );
+        rDev.SetLineColor( aFaceColor );
+        rDev.SetFillColor( aFaceColor );
+    }
+    rDev.DrawRect( Rectangle( aPos0, aSize ) );
 
-        /*  Draw the caption text. This needs some special handling, because we
-            support hard line breaks here. This part will draw each line of the
-            text for itself. */
-        rDev.SetTextColor( rStyleSett.GetWindowTextColor() );
-        xub_StrLen nTokenCnt = GetText().GetTokenCount( '\n' );
-        long nY = (aDevSize.Height() - nTokenCnt * rDev.GetTextHeight()) / 2;
-        for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
+    rDev.SetTextColor( aWinTextColor );
+
+    /*  Draw the caption text. This needs some special handling, because we
+        support hard line breaks here. This part will draw each line of the
+        text for itself. */
+
+    xub_StrLen nTokenCnt = GetText().GetTokenCount('\n');
+    long nY = (aSize.Height() - nTokenCnt * rDev.GetTextHeight()) / 2;
+    for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
+    {
+        String aLine( GetText().GetToken( 0, '\n', nStringIx ) );
+        Point aLinePos( (aSize.Width() - rDev.GetCtrlTextWidth( aLine )) / 2, nY );
+        rDev.DrawCtrlText( aLinePos, aLine );
+        nY += rDev.GetTextHeight();
+    }
+}
+
+void ScDPFieldControlBase::DrawField(
+        OutputDevice& rDev, const Rectangle& rRect, FieldName& rText, bool bFocus )
+{
+    const StyleSettings& rStyleSet = GetSettings().GetStyleSettings();
+    Color aTextColor = rStyleSet.GetButtonTextColor();
+
+    VirtualDevice aVirDev( rDev );
+    // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
+    aVirDev.EnableRTL( IsRTLEnabled() );
+
+    String aText = rText.first;
+    Size aDevSize( rRect.GetSize() );
+    long    nWidth       = aDevSize.Width();
+    long    nHeight      = aDevSize.Height();
+    long    nLabelWidth  = rDev.GetTextWidth( aText );
+    long    nLabelHeight = rDev.GetTextHeight();
+
+    // #i31600# if text is too long, cut and add ellipsis
+    rText.second = nLabelWidth + 6 <= nWidth;
+    if( !rText.second )
+    {
+        xub_StrLen nMinLen = 0;
+        xub_StrLen nMaxLen = aText.Len();
+        bool bFits = false;
+        do
         {
-            String aLine = GetText().GetToken( 0, '\n', nStringIx );
-            Point aLinePos( (aDevSize.Width() - rDev.GetCtrlTextWidth( aLine )) / 2, nY );
-            rDev.DrawCtrlText( aLinePos, aLine );
-            nY += rDev.GetTextHeight();
+            xub_StrLen nCurrLen = (nMinLen + nMaxLen) / 2;
+            aText = String( rText.first, 0, nCurrLen ).AppendAscii( "..." );
+            nLabelWidth = rDev.GetTextWidth( aText );
+            bFits = nLabelWidth + 6 <= nWidth;
+            (bFits ? nMinLen : nMaxLen) = nCurrLen;
+        }
+        while( !bFits || (nMinLen + 1 < nMaxLen) );
+    }
+    Point aLabelPos( (nWidth - nLabelWidth) / 2, ::std::max< long >( (nHeight - nLabelHeight) / 2, 3 ) );
+
+    aVirDev.SetOutputSizePixel( aDevSize );
+    aVirDev.SetFont( rDev.GetFont() );
+    DecorationView aDecoView( &aVirDev );
+    aDecoView.DrawButton( Rectangle( Point( 0, 0 ), aDevSize ), bFocus ? BUTTON_DRAW_DEFAULT : 0 );
+    aVirDev.SetTextColor( aTextColor );
+    aVirDev.DrawText( aLabelPos, aText );
+    rDev.DrawBitmap( rRect.TopLeft(), aVirDev.GetBitmap( Point( 0, 0 ), aDevSize ) );
+}
+
+ScDPLayoutDlg* ScDPFieldControlBase::GetParentDlg() const
+{
+    return mpDlg;
+}
+
+void ScDPFieldControlBase::AppendPaintable(Window* p)
+{
+    maPaintables.push_back(p);
+}
+
+void ScDPFieldControlBase::DrawPaintables()
+{
+    Rectangle aRect(GetPosPixel(), GetSizePixel());
+    Paintables::iterator itr = maPaintables.begin(), itrEnd = maPaintables.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        Window* p = *itr;
+        if (!p->IsVisible())
+            continue;
+
+        p->Paint(aRect);
+    }
+}
+
+void ScDPFieldControlBase::DrawInvertSelection()
+{
+    if (!HasFocus())
+        return;
+
+    if (mnFieldSelected >= maFieldNames.size())
+        return;
+
+    size_t nPos = GetDisplayPosition(mnFieldSelected);
+    if (nPos == INVALID_INDEX)
+        return;
+
+    Size aFldSize = GetFieldSize();
+    long nFldWidth = aFldSize.Width();
+    long nSelWidth = std::min<long>(
+        GetTextWidth(maFieldNames[mnFieldSelected].first) + 4, nFldWidth - 6);
+
+    Point aPos = GetFieldPosition(nPos);
+    aPos += Point((nFldWidth - nSelWidth) / 2, 3);
+    Size aSize(nSelWidth, aFldSize.Height() - 6);
+
+    Rectangle aSel(aPos, aSize);
+    InvertTracking(aSel, SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
+}
+
+Size ScDPFieldControlBase::GetStdFieldBtnSize() const
+{
+    return mpDlg->GetStdFieldBtnSize();
+}
+
+bool ScDPFieldControlBase::IsShortenedText( size_t nIndex ) const
+{
+    const FieldNames& rFields = GetFieldNames();
+    return (nIndex < rFields.size()) && !rFields[nIndex].second;
+}
+
+void ScDPFieldControlBase::MoveField( size_t nDestIndex )
+{
+    if (nDestIndex != mnFieldSelected)
+    {
+        swap(maFieldNames[nDestIndex], maFieldNames[mnFieldSelected]);
+        mnFieldSelected = nDestIndex;
+    }
+}
+
+void ScDPFieldControlBase::MoveFieldRel( SCsCOL nDX, SCsROW nDY )
+{
+    MoveField( CalcNewFieldIndex( nDX, nDY ) );
+}
+
+void ScDPFieldControlBase::SetSelection(size_t nIndex)
+{
+    FieldNames& rFields = GetFieldNames();
+    if (rFields.empty())
+        return;
+
+    if (nIndex >= rFields.size())
+        // Prevent it from going out-of-bound.
+        nIndex = rFields.size() - 1;
+
+    if( mnFieldSelected != nIndex )
+    {
+        size_t nOldSelected = mnFieldSelected;
+        mnFieldSelected = nIndex;
+        Redraw();
+
+        if (HasFocus())
+            FieldFocusChanged(nOldSelected, mnFieldSelected);
+    }
+
+    ScrollToShowSelection();
+}
+
+void ScDPFieldControlBase::SetSelectionHome()
+{
+    const FieldNames& rFields = GetFieldNames();
+    if( !rFields.empty() )
+    {
+        SetSelection( 0 );
+    }
+}
+
+void ScDPFieldControlBase::SetSelectionEnd()
+{
+    const FieldNames& rFields = GetFieldNames();
+    if( !rFields.empty() )
+    {
+        SetSelection( rFields.size() - 1 );
+    }
+}
+
+void ScDPFieldControlBase::MoveSelection(SCsCOL nDX, SCsROW nDY)
+{
+    size_t nNewIndex = CalcNewFieldIndex( nDX, nDY );
+    SetSelection( nNewIndex );
+}
+
+void ScDPFieldControlBase::ModifySelectionOffset( long nOffsetDiff )
+{
+    mnFieldSelected -= nOffsetDiff;
+    Redraw();
+}
+
+void ScDPFieldControlBase::SelectNext()
+{
+    SetSelection(mnFieldSelected + 1);
+}
+
+void ScDPFieldControlBase::GrabFocusWithSel( size_t nIndex )
+{
+    SetSelection( nIndex );
+    if( !HasFocus() )
+        GrabFocus();
+}
+
+//=============================================================================
+
+ScDPHorFieldControl::ScDPHorFieldControl(
+    ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
+    ScDPFieldControlBase(pDialog, rResId, pCaption),
+    maScroll(this, WB_HORZ | WB_DRAG),
+    mnFieldBtnRowCount(0),
+    mnFieldBtnColCount(0)
+{
+    maScroll.SetScrollHdl( LINK(this, ScDPHorFieldControl, ScrollHdl) );
+    maScroll.SetEndScrollHdl( LINK(this, ScDPHorFieldControl, EndScrollHdl) );
+    maScroll.Hide();
+
+    AppendPaintable(&maScroll);
+}
+
+ScDPHorFieldControl::~ScDPHorFieldControl()
+{
+}
+
+Point ScDPHorFieldControl::GetFieldPosition( size_t nIndex )
+{
+    Point aPos;
+    Size aSize;
+    GetFieldBtnPosSize(nIndex, aPos, aSize);
+    return aPos;
+}
+
+Size ScDPHorFieldControl::GetFieldSize() const
+{
+    return GetStdFieldBtnSize();
+}
+
+bool ScDPHorFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
+{
+    rnIndex = INVALID_INDEX;
+    if (rPos.X() < 0 || rPos.Y() < 0)
+        return false;
+
+    Size aWndSize = GetSizePixel();
+    if (rPos.X() > aWndSize.Width() || rPos.Y() > aWndSize.Height())
+        return false;
+
+    size_t nX = rPos.X();
+    size_t nY = rPos.Y();
+    size_t nW = aWndSize.Width();
+    size_t nH = aWndSize.Height();
+
+    Size aFldSize = GetFieldSize();
+    size_t nCurX = OUTER_MARGIN_HOR + aFldSize.Width() + ROW_FIELD_BTN_GAP/2;
+    size_t nCurY = OUTER_MARGIN_VER + aFldSize.Height() + ROW_FIELD_BTN_GAP/2;
+    size_t nCol = 0;
+    size_t nRow = 0;
+    while (nX > nCurX && nCurX <= nW)
+    {
+        nCurX += aFldSize.Width() + ROW_FIELD_BTN_GAP;
+        ++nCol;
+    }
+    while (nY > nCurY && nCurY <= nH)
+    {
+        nCurY += aFldSize.Height() + ROW_FIELD_BTN_GAP;
+        ++nRow;
+    }
+
+    size_t nOffset = maScroll.GetThumbPos();
+    nCol += nOffset; // convert to logical column ID.
+    rnIndex = nCol * mnFieldBtnRowCount + nRow;
+    size_t nFldCount = GetFieldCount();
+    if (rnIndex > nFldCount)
+        rnIndex = nFldCount;
+    return IsValidIndex(rnIndex);
+}
+
+void ScDPHorFieldControl::Redraw()
+{
+    VirtualDevice   aVirDev;
+    // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
+    aVirDev.EnableRTL( IsRTLEnabled() );
+    aVirDev.SetMapMode( MAP_PIXEL );
+
+    Point           aPos0;
+    Size            aSize( GetSizePixel() );
+    Font            aFont( GetFont() );         // Font vom Window
+    aFont.SetTransparent( true );
+    aVirDev.SetFont( aFont );
+    aVirDev.SetOutputSizePixel( aSize );
+
+    DrawBackground( aVirDev );
+
+    FieldNames& rFields = GetFieldNames();
+    {
+        long nScrollOffset = maScroll.GetThumbPos();
+        FieldNames::iterator itr = rFields.begin(), itrEnd = rFields.end();
+        if (nScrollOffset)
+            ::std::advance(itr, nScrollOffset*mnFieldBtnRowCount);
+
+        for (size_t i = 0; itr != itrEnd; ++itr, ++i)
+        {
+            Point aFldPt;
+            Size aFldSize;
+            if (!GetFieldBtnPosSize(i, aFldPt, aFldSize))
+                break;
+
+            size_t nField = i + nScrollOffset*mnFieldBtnRowCount;
+            bool bFocus = HasFocus() && (nField == GetSelectedField());
+            DrawField(aVirDev, Rectangle(aFldPt, aFldSize), *itr, bFocus);
         }
     }
+
+    DrawBitmap( aPos0, aVirDev.GetBitmap( aPos0, aSize ) );
+    DrawPaintables();
+    DrawInvertSelection();
+    UpdateStyle();
 }
 
-void ScPivotFieldWindow::DrawField( OutputDevice& rDev, size_t nFieldIndex )
+void ScDPHorFieldControl::CalcSize()
 {
-    if( (nFieldIndex < maFields.size()) && (mnFirstVisIndex <= nFieldIndex) && (nFieldIndex < mnFirstVisIndex + mnPageSize) )
+    Size aWndSize = GetSizePixel();
+
+    long nScrollSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    maScroll.SetSizePixel(Size(aWndSize.Width() - OUTER_MARGIN_HOR*2, nScrollSize));
+    maScroll.SetPosPixel(Point(OUTER_MARGIN_HOR, aWndSize.Height() - OUTER_MARGIN_VER - nScrollSize));
+
+    long nTotalH = aWndSize.Height() - nScrollSize - OUTER_MARGIN_VER*2;
+    long nTotalW = aWndSize.Width() - OUTER_MARGIN_HOR*2;
+    mnFieldBtnRowCount = nTotalH / (GetFieldSize().Height() + ROW_FIELD_BTN_GAP);
+    mnFieldBtnColCount = (nTotalW + ROW_FIELD_BTN_GAP) / (GetFieldSize().Width() + ROW_FIELD_BTN_GAP);
+
+    maScroll.SetLineSize(1);
+    maScroll.SetVisibleSize(mnFieldBtnColCount);
+    maScroll.SetPageSize(mnFieldBtnColCount);
+    maScroll.SetRange(Range(0, mnFieldBtnColCount));
+}
+
+bool ScDPHorFieldControl::IsValidIndex(size_t /*nIndex*/) const
+{
+    return true;
+}
+
+size_t ScDPHorFieldControl::CalcNewFieldIndex(SCsCOL nDX, SCsROW nDY) const
+{
+    size_t nSel = GetSelectedField();
+    size_t nFldCount = GetFieldCount();
+    SCsROW nRow = nSel % mnFieldBtnRowCount;
+    SCsCOL nCol = nSel / mnFieldBtnRowCount;
+    SCsCOL nColUpper = static_cast<SCsCOL>(ceil(
+        static_cast<double>(nFldCount) / static_cast<double>(mnFieldBtnRowCount)) - 1);
+    SCsROW nRowUpper = mnFieldBtnRowCount - 1;
+
+    nCol += nDX;
+    if (nCol < 0)
+        nCol = 0;
+    else if (nColUpper < nCol)
+        nCol = nColUpper;
+    nRow += nDY;
+    if (nRow < 0)
+        nRow = 0;
+    else if (nRowUpper < nRow)
+        nRow = nRowUpper;
+
+    nSel = nCol*mnFieldBtnRowCount + nRow;
+    if (nSel >= nFldCount)
+        nSel = nFldCount - 1;
+
+    return nSel;
+}
+
+size_t ScDPHorFieldControl::GetDisplayPosition(size_t nIndex) const
+{
+    size_t nColFirst = maScroll.GetThumbPos();
+    size_t nColLast = nColFirst + mnFieldBtnColCount - 1;
+    size_t nCol = nIndex / mnFieldBtnRowCount;
+    size_t nRow = nIndex % mnFieldBtnRowCount;
+    if (nCol < nColFirst || nColLast < nCol)
+        // index is outside the visible area.
+        return INVALID_INDEX;
+
+    size_t nPos = (nCol - nColFirst)*mnFieldBtnRowCount + nRow;
+    return nPos;
+}
+
+String ScDPHorFieldControl::GetDescription() const
+{
+    return ScResId(STR_ACC_DATAPILOT_COL_DESCR);
+}
+
+void ScDPHorFieldControl::ScrollToEnd()
+{
+    maScroll.DoScroll(maScroll.GetRangeMax());
+}
+
+void ScDPHorFieldControl::ScrollToShowSelection()
+{
+    size_t nLower = maScroll.GetThumbPos();
+    size_t nUpper = nLower + mnFieldBtnColCount - 1;
+    size_t nCol = GetSelectedField() / mnFieldBtnRowCount;
+    if (nCol < nLower)
     {
-        // draw the button
-        Point aFieldPos = GetFieldPosition( nFieldIndex );
-        bool bFocus = HasFocus() && (nFieldIndex == mnSelectIndex);
-        DecorationView aDecoView( &rDev );
-        aDecoView.DrawButton( Rectangle( aFieldPos, maFieldSize ), bFocus ? BUTTON_DRAW_DEFAULT : 0 );
-
-        // #i31600# if text is too long, cut and add ellipsis
-        const OUString& rFullText = maFields[ nFieldIndex ].maFieldName;
-        OUString aClippedText = rFullText;
-        long nLabelWidth = rDev.GetTextWidth( rFullText );
-        if( (maFields[ nFieldIndex ].mbClipped = nLabelWidth + 6 > maFieldSize.Width()) == true )
-        {
-            sal_Int32 nMinLen = 0;
-            sal_Int32 nMaxLen = rFullText.getLength();
-            bool bFits = false;
-            do
-            {
-                sal_Int32 nCurrLen = (nMinLen + nMaxLen) / 2;
-                aClippedText = rFullText.copy( 0, nCurrLen ) + OUString( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
-                nLabelWidth = rDev.GetTextWidth( aClippedText );
-                bFits = nLabelWidth + 6 <= maFieldSize.Width();
-                (bFits ? nMinLen : nMaxLen) = nCurrLen;
-            }
-            while( !bFits || (nMinLen + 1 < nMaxLen) );
-        }
-
-        // draw the button text
-        Point aLabelOffset( (maFieldSize.Width() - nLabelWidth) / 2, ::std::max< long >( (maFieldSize.Height() - rDev.GetTextHeight()) / 2, 3 ) );
-        rDev.SetTextColor( GetSettings().GetStyleSettings().GetButtonTextColor() );
-        rDev.DrawText( aFieldPos + aLabelOffset, aClippedText );
+        // scroll to left.
+        maScroll.DoScroll(nCol);
+    }
+    else if (nUpper < nCol)
+    {
+        // scroll to right.
+        maScroll.DoScroll(nCol - mnFieldBtnColCount + 1);
     }
 }
 
-void ScPivotFieldWindow::DrawInsertionCursor( OutputDevice& rDev )
+void ScDPHorFieldControl::ResetScrollBar()
 {
-    if( (mnInsCursorIndex <= maFields.size()) && (mnFirstVisIndex <= mnInsCursorIndex) && (mnInsCursorIndex <= mnFirstVisIndex + mnPageSize) &&
-        (!mbIsTrackingSource || (mnInsCursorIndex < mnSelectIndex) || (mnInsCursorIndex > mnSelectIndex + 1)) )
+    long nOldMax = maScroll.GetRangeMax();
+    long nNewMax = static_cast<long>(ceil(
+        static_cast<double>(GetFieldCount()) / static_cast<double>(mnFieldBtnRowCount)));
+
+    if (nOldMax != nNewMax)
     {
-        Color aTextColor = GetSettings().GetStyleSettings().GetButtonTextColor();
-        rDev.SetLineColor( aTextColor );
-        rDev.SetFillColor( aTextColor );
-
-        bool bVerticalCursor = mnColCount > 1;
-        long nCursorLength = bVerticalCursor ? maFieldSize.Height() : maFieldSize.Width();
-
-        bool bEndOfLastField = mnInsCursorIndex == mnFirstVisIndex + mnPageSize;
-        Point aMainLinePos = GetFieldPosition( bEndOfLastField ? (mnInsCursorIndex - 1) : mnInsCursorIndex );
-        if( bEndOfLastField )
-            (bVerticalCursor ? aMainLinePos.X() : aMainLinePos.Y()) += ((bVerticalCursor ? maFieldSize.Width() : maFieldSize.Height()) - CURSOR_WIDTH);
-        else if( (bVerticalCursor ? aMainLinePos.X() : aMainLinePos.Y()) > 0 )
-            (bVerticalCursor ? aMainLinePos.X() : aMainLinePos.Y()) -= ((CURSOR_WIDTH + 1) / 2);
-        Size aMainLineSize( bVerticalCursor ? CURSOR_WIDTH : nCursorLength, bVerticalCursor ? nCursorLength : CURSOR_WIDTH );
-        rDev.DrawRect( Rectangle( aMainLinePos, aMainLineSize ) );
-
-        Point aSubLinePos = aMainLinePos;
-        (bVerticalCursor ? aSubLinePos.X() : aSubLinePos.Y()) -= CURSOR_WIDTH;
-        Size aSubLineSize( bVerticalCursor ? (3 * CURSOR_WIDTH) : CURSOR_WIDTH, bVerticalCursor ? CURSOR_WIDTH : (3 * CURSOR_WIDTH) );
-        rDev.DrawRect( Rectangle( aSubLinePos, aSubLineSize ) );
-
-        (bVerticalCursor ? aSubLinePos.Y() : aSubLinePos.X()) += (nCursorLength - CURSOR_WIDTH);
-        rDev.DrawRect( Rectangle( aSubLinePos, aSubLineSize ) );
+        maScroll.SetRangeMax(nNewMax);
+        bool bShow = mnFieldBtnColCount*mnFieldBtnRowCount < GetFieldCount();
+        maScroll.Show(bShow);
     }
 }
 
-::rtl::Reference< ScAccessibleDataPilotControl > ScPivotFieldWindow::GetAccessibleControl()
+void ScDPHorFieldControl::HandleWheelScroll(long /*nNotch*/)
 {
-    ::rtl::Reference< ScAccessibleDataPilotControl > xAccImpl;
-    if( mpAccessible )
-    {
-        // try to resolve the weak reference mxAccessible
-        uno::Reference< accessibility::XAccessible > xAcc = mxAccessible;
-        if( xAcc.is() )
-            xAccImpl.set( mpAccessible );   // the rtl reference keeps the object alive
-        else
-            mpAccessible = 0;               // object is dead, forget the pointer
-    }
-    return xAccImpl;
- }
+    // not handled for horizontal field controls.
+}
 
-// handlers -------------------------------------------------------------------
-
-IMPL_LINK( ScPivotFieldWindow, ScrollHdl, ScrollBar*, pScrollBar )
+bool ScDPHorFieldControl::GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize)
 {
-    // scrollbar may return negative values, if it is too small
-    long nThumbPos = pScrollBar->GetThumbPos();
-    if( nThumbPos >= 0 )
-    {
-        size_t nNewFirstVisIndex = static_cast< size_t >( nThumbPos * mnLineSize );
-        // keep the selection index on same relative position inside row/column
-        size_t nSelectLineOffset = mnSelectIndex % mnLineSize;
-        size_t nNewSelectIndex = mnSelectIndex;
-        if( nNewSelectIndex < nNewFirstVisIndex )
-            nNewSelectIndex = nNewFirstVisIndex + nSelectLineOffset;
-        else if( nNewSelectIndex >= nNewFirstVisIndex + mnPageSize )
-            nNewSelectIndex = nNewFirstVisIndex + mnPageSize - mnLineSize + nSelectLineOffset;
-        nNewSelectIndex = ::std::min( nNewSelectIndex, maFields.size() - 1 );
-        SetSelectionUnchecked( nNewSelectIndex, nNewFirstVisIndex );
-    }
-    GrabFocus();
+    if (nPos >= mnFieldBtnColCount*mnFieldBtnRowCount)
+        return false;
+
+    Point aPos = Point(OUTER_MARGIN_HOR, OUTER_MARGIN_VER);
+    size_t nRow = nPos % mnFieldBtnRowCount;
+    size_t nCol = nPos / mnFieldBtnRowCount;
+
+    aPos.X() += nCol*(GetFieldSize().Width() + ROW_FIELD_BTN_GAP);
+    aPos.Y() += nRow*(GetFieldSize().Height() + ROW_FIELD_BTN_GAP);
+
+    rPos = aPos;
+    rSize = GetFieldSize();
+    return true;
+}
+
+void ScDPHorFieldControl::HandleScroll()
+{
+    Redraw();
+}
+
+IMPL_LINK(ScDPHorFieldControl, ScrollHdl, ScrollBar*, EMPTYARG)
+{
+    HandleScroll();
     return 0;
 }
 
-// ============================================================================
+IMPL_LINK(ScDPHorFieldControl, EndScrollHdl, ScrollBar*, EMPTYARG)
+{
+    HandleScroll();
+    return 0;
+}
+
+//=============================================================================
+
+ScDPPageFieldControl::ScDPPageFieldControl(
+    ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
+    ScDPHorFieldControl(pDialog, rResId, pCaption)
+{
+}
+
+ScDPPageFieldControl::~ScDPPageFieldControl()
+{
+}
+
+ScDPFieldType ScDPPageFieldControl::GetFieldType() const
+{
+    return TYPE_PAGE;
+}
+
+String ScDPPageFieldControl::GetDescription() const
+{
+    return ScResId(STR_ACC_DATAPILOT_PAGE_DESCR);
+}
+
+//=============================================================================
+
+ScDPColFieldControl::ScDPColFieldControl(
+    ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
+    ScDPHorFieldControl(pDialog, rResId, pCaption)
+{
+}
+
+ScDPColFieldControl::~ScDPColFieldControl()
+{
+}
+
+ScDPFieldType ScDPColFieldControl::GetFieldType() const
+{
+    return TYPE_COL;
+}
+
+String ScDPColFieldControl::GetDescription() const
+{
+    return ScResId(STR_ACC_DATAPILOT_COL_DESCR);
+}
+
+//=============================================================================
+
+ScDPRowFieldControl::ScDPRowFieldControl(
+    ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption ) :
+    ScDPFieldControlBase( pDialog, rResId, pCaption ),
+    maScroll(this, WB_VERT | WB_DRAG),
+    mnColumnBtnCount(0)
+{
+    maScroll.SetScrollHdl( LINK(this, ScDPRowFieldControl, ScrollHdl) );
+    maScroll.SetEndScrollHdl( LINK(this, ScDPRowFieldControl, EndScrollHdl) );
+    maScroll.Show(false);
+
+    AppendPaintable(&maScroll);
+}
+
+ScDPRowFieldControl::~ScDPRowFieldControl()
+{
+}
+
+//-------------------------------------------------------------------
+
+Point ScDPRowFieldControl::GetFieldPosition(size_t nIndex)
+{
+    Point aPos;
+    Size aSize;
+    GetFieldBtnPosSize(nIndex, aPos, aSize);
+    return aPos;
+}
+
+Size ScDPRowFieldControl::GetFieldSize() const
+{
+    return GetStdFieldBtnSize();
+}
+
+bool ScDPRowFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
+{
+    rnIndex = INVALID_INDEX;
+    if (rPos.X() < 0 || rPos.Y() < 0)
+        return false;
+
+    long nFldH = GetFieldSize().Height();
+    long nThreshold = OUTER_MARGIN_VER + nFldH + ROW_FIELD_BTN_GAP / 2;
+
+    size_t nIndex = 0;
+    for (; nIndex < mnColumnBtnCount; ++nIndex)
+    {
+        if (rPos.Y() < nThreshold)
+            break;
+
+        nThreshold += nFldH + ROW_FIELD_BTN_GAP;
+    }
+
+    if (nIndex >= mnColumnBtnCount)
+        nIndex = mnColumnBtnCount - 1;
+
+    nIndex += maScroll.GetThumbPos();
+    rnIndex = nIndex;
+    return IsValidIndex(rnIndex);
+}
+
+void ScDPRowFieldControl::Redraw()
+{
+    VirtualDevice   aVirDev;
+    // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
+    aVirDev.EnableRTL( IsRTLEnabled() );
+    aVirDev.SetMapMode( MAP_PIXEL );
+
+    Point aPos0;
+    Size aWndSize = GetSizePixel();
+    Font aFont = GetFont();
+    aFont.SetTransparent(true);
+    aVirDev.SetFont(aFont);
+    aVirDev.SetOutputSizePixel(aWndSize);
+
+    DrawBackground(aVirDev);
+
+    FieldNames& rFields = GetFieldNames();
+    {
+        long nScrollOffset = maScroll.GetThumbPos();
+        FieldNames::iterator itr = rFields.begin(), itrEnd = rFields.end();
+        if (nScrollOffset)
+            ::std::advance(itr, nScrollOffset);
+
+        for (size_t i = 0; itr != itrEnd; ++itr, ++i)
+        {
+            Point aFldPt;
+            Size aFldSize;
+            if (!GetFieldBtnPosSize(i, aFldPt, aFldSize))
+                break;
+
+            size_t nField = i + nScrollOffset;
+            bool bFocus = HasFocus() && (nField == GetSelectedField());
+            DrawField(aVirDev, Rectangle(aFldPt, aFldSize), *itr, bFocus);
+        }
+    }
+
+    // Create a bitmap from the virtual device, and place that bitmap onto
+    // this control.
+    DrawBitmap(aPos0, aVirDev.GetBitmap(aPos0, aWndSize));
+
+    DrawPaintables();
+    DrawInvertSelection();
+    UpdateStyle();
+}
+
+void ScDPRowFieldControl::CalcSize()
+{
+    Size aWndSize = GetSizePixel();
+
+    long nTotal = aWndSize.Height() - OUTER_MARGIN_VER;
+    mnColumnBtnCount = nTotal / (GetFieldSize().Height() + ROW_FIELD_BTN_GAP);
+
+    long nScrollSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+
+    maScroll.SetSizePixel(Size(nScrollSize, aWndSize.Height() - OUTER_MARGIN_VER*2));
+    maScroll.SetPosPixel(Point(aWndSize.Width() - nScrollSize - OUTER_MARGIN_HOR, OUTER_MARGIN_VER));
+    maScroll.SetLineSize(1);
+    maScroll.SetVisibleSize(mnColumnBtnCount);
+    maScroll.SetPageSize(mnColumnBtnCount);
+    maScroll.SetRange(Range(0, mnColumnBtnCount));
+    maScroll.DoScroll(0);
+
+}
+
+bool ScDPRowFieldControl::IsValidIndex(size_t /*nIndex*/) const
+{
+    // This method is here in case we decide to impose an arbitrary upper
+    // boundary on the number of fields.
+    return true;
+}
+
+size_t ScDPRowFieldControl::CalcNewFieldIndex(SCsCOL /*nDX*/, SCsROW nDY) const
+{
+    size_t nNewField = GetSelectedField();
+    nNewField += nDY;
+    return IsExistingIndex(nNewField) ? nNewField : GetSelectedField();
+}
+
+size_t ScDPRowFieldControl::GetDisplayPosition(size_t nIndex) const
+{
+    size_t nLower = maScroll.GetThumbPos();
+    size_t nUpper = nLower + mnColumnBtnCount;
+    if (nLower <= nIndex && nIndex <= nUpper)
+        return nIndex - nLower;
+
+    return INVALID_INDEX;
+}
+
+//-------------------------------------------------------------------
+
+String ScDPRowFieldControl::GetDescription() const
+{
+    return ScResId(STR_ACC_DATAPILOT_ROW_DESCR);
+}
+
+ScDPFieldType ScDPRowFieldControl::GetFieldType() const
+{
+    return TYPE_ROW;
+}
+
+void ScDPRowFieldControl::ScrollToEnd()
+{
+    maScroll.DoScroll(maScroll.GetRangeMax());
+}
+
+void ScDPRowFieldControl::ScrollToShowSelection()
+{
+    size_t nLower = maScroll.GetThumbPos();
+    size_t nUpper = nLower + mnColumnBtnCount - 1;
+    size_t nSel = GetSelectedField();
+    if (nSel < nLower)
+    {
+        // scroll up
+        maScroll.DoScroll(nSel);
+    }
+    else if (nUpper < nSel)
+    {
+        // scroll down
+        size_t nD = nSel - nUpper;
+        maScroll.DoScroll(nLower + nD);
+    }
+}
+
+void ScDPRowFieldControl::ResetScrollBar()
+{
+    long nOldMax = maScroll.GetRangeMax();
+    long nNewMax = std::max<long>(mnColumnBtnCount, GetFieldCount());
+
+    if (nOldMax != nNewMax)
+    {
+        maScroll.SetRangeMax(nNewMax);
+        maScroll.Show(GetFieldCount() > mnColumnBtnCount);
+    }
+}
+
+void ScDPRowFieldControl::HandleWheelScroll(long nNotch)
+{
+    maScroll.DoScroll(maScroll.GetThumbPos() - nNotch);
+}
+
+bool ScDPRowFieldControl::GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize)
+{
+    if (nPos >= mnColumnBtnCount)
+        return false;
+
+    size_t nOffset = maScroll.GetThumbPos();
+    if (nPos + nOffset >= GetFieldCount())
+        return false;
+
+    rSize = GetFieldSize();
+    rPos = Point(OUTER_MARGIN_HOR, OUTER_MARGIN_VER);
+    rPos.Y() += nPos * (rSize.Height() + ROW_FIELD_BTN_GAP);
+    return true;
+}
+
+void ScDPRowFieldControl::HandleScroll()
+{
+    Redraw();
+}
+
+IMPL_LINK(ScDPRowFieldControl, ScrollHdl, ScrollBar*, EMPTYARG)
+{
+    HandleScroll();
+    return 0;
+}
+
+IMPL_LINK(ScDPRowFieldControl, EndScrollHdl, ScrollBar*, EMPTYARG)
+{
+    HandleScroll();
+    return 0;
+}
+
+//=============================================================================
+
+ScDPSelectFieldControl::ScDPSelectFieldControl(
+        ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
+    ScDPHorFieldControl(pDialog, rResId, pCaption)
+{
+    SetName(String(ScResId(STR_SELECT)));
+}
+
+ScDPSelectFieldControl::~ScDPSelectFieldControl()
+{
+}
+
+ScDPFieldType ScDPSelectFieldControl::GetFieldType() const
+{
+    return TYPE_SELECT;
+}
+
+String ScDPSelectFieldControl::GetDescription() const
+{
+    return ScResId(STR_ACC_DATAPILOT_SEL_DESCR);
+}
+
+//=============================================================================
+
+ScDPDataFieldControl::ScDPDataFieldControl(
+    ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
+    ScDPHorFieldControl(pDialog, rResId, pCaption)
+{
+}
+
+ScDPDataFieldControl::~ScDPDataFieldControl()
+{
+}
+
+ScDPFieldType ScDPDataFieldControl::GetFieldType() const
+{
+    return TYPE_DATA;
+}
+
+Size ScDPDataFieldControl::GetFieldSize() const
+{
+    Size aWndSize = GetSizePixel();
+    long nFieldObjWidth = static_cast<long>(aWndSize.Width() / 2.0 - OUTER_MARGIN_HOR - DATA_FIELD_BTN_GAP/2);
+    Size aFieldSize(nFieldObjWidth, FIELD_BTN_HEIGHT);
+    return aFieldSize;
+}
+
+String ScDPDataFieldControl::GetDescription() const
+{
+    return ScResId(STR_ACC_DATAPILOT_DATA_DESCR);
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

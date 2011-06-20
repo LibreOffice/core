@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,8 +37,6 @@
 #include "ContainerHelper.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
-
-// #include <deque>
 
 #include <vector>
 #include <algorithm>
@@ -342,3 +341,5 @@ InterpretedData SAL_CALL StockDataInterpreter::reinterpretDataSeries(
 }
 
 } // namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

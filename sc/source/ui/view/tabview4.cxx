@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,7 +68,7 @@ void ScTabView::HideTip()
 
 void ScTabView::ShowRefTip()
 {
-    sal_Bool bDone = sal_False;
+    sal_Bool bDone = false;
     if ( aViewData.GetRefType() == SC_REFTYPE_REF && Help::IsQuickHelpEnabled() )
     {
         SCCOL nStartX = aViewData.GetRefStartX();
@@ -129,7 +130,7 @@ void ScTabView::StopRefMode()
 {
     if (aViewData.IsRefMode())
     {
-        aViewData.SetRefMode( sal_False, SC_REFTYPE_NONE );
+        aViewData.SetRefMode( false, SC_REFTYPE_NONE );
 
         HideTip();
         UpdateShrinkOverlay();
@@ -149,7 +150,7 @@ void ScTabView::StopRefMode()
         }
 
         pSelEngine->Reset();
-        pSelEngine->SetAddMode( sal_False );        //! sollte das nicht bei Reset passieren?
+        pSelEngine->SetAddMode( false );        //! sollte das nicht bei Reset passieren?
 
         ScSplitPos eOld = pSelEngine->GetWhich();
         ScSplitPos eNew = aViewData.GetActivePart();
@@ -171,14 +172,14 @@ void ScTabView::StopRefMode()
     AlignToCursor( aViewData.GetCurX(), aViewData.GetCurY(), SC_FOLLOW_NONE );
 }
 
-void ScTabView::DoneRefMode( sal_Bool bContinue )
+void ScTabView::DoneRefMode( bool bContinue )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     if ( aViewData.GetRefType() == SC_REFTYPE_REF && bContinue )
         SC_MOD()->AddRefEntry();
 
     sal_Bool bWasRef = aViewData.IsRefMode();
-    aViewData.SetRefMode( sal_False, SC_REFTYPE_NONE );
+    aViewData.SetRefMode( false, SC_REFTYPE_NONE );
 
     HideTip();
     UpdateShrinkOverlay();
@@ -305,7 +306,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
     }
 }
 
-void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType, sal_Bool bPaint )
+void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType, bool bPaint )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
@@ -333,16 +334,7 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
     }
 }
 
-//UNUSED2008-05  void ScTabView::EndSelection()
-//UNUSED2008-05  {
-//UNUSED2008-05      ScModule* pScMod = SC_MOD();
-//UNUSED2008-05      sal_Bool bRefMode = pScMod->IsFormulaMode();
-//UNUSED2008-05      if ( bRefMode )
-//UNUSED2008-05          pScMod->EndReference();
-//UNUSED2008-05  }
-
-// static
-void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, sal_Bool bLayoutRTL )
+void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, bool bLayoutRTL )
 {
     if ( nVisible == 0 )
         nVisible = 1;       // #i59893# don't use visible size 0
@@ -365,8 +357,7 @@ void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible,
     }
 }
 
-// static
-long ScTabView::GetScrollBarPos( ScrollBar& rScroll, sal_Bool bLayoutRTL )
+long ScTabView::GetScrollBarPos( ScrollBar& rScroll, bool bLayoutRTL )
 {
     if ( bLayoutRTL )
         return -rScroll.GetThumbPos() - rScroll.GetVisibleSize();
@@ -434,7 +425,7 @@ void ScTabView::UpdateScrollBars()
 
     nVisYB = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
     long nMaxYB = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB, MAXROW, nStartY );
-    SetScrollBar( aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, sal_False );
+    SetScrollBar( aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, false );
 
     if (bRight)
     {
@@ -447,7 +438,7 @@ void ScTabView::UpdateScrollBars()
     {
         nVisYT = aViewData.VisibleCellsY( SC_SPLIT_TOP );
         long nMaxYT = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_TOP), nVisYT, MAXROW, 0 );
-        SetScrollBar( aVScrollTop, nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), sal_False );
+        SetScrollBar( aVScrollTop, nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), false );
     }
 
     //      Bereich testen
@@ -571,3 +562,4 @@ void ScTabView::InterpretVisible()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

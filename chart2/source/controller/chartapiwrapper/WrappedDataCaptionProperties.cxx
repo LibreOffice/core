@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,8 +50,6 @@ namespace chart
 namespace wrapper
 {
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 class WrappedDataCaptionProperty : public WrappedSeriesOrDiagramProperty< sal_Int32 >
@@ -117,8 +116,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
 void WrappedDataCaptionProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -130,7 +128,6 @@ void WrappedDataCaptionProperties::addProperties( ::std::vector< Property > & rO
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -139,7 +136,6 @@ void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< W
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -147,8 +143,6 @@ void WrappedDataCaptionProperties::addWrappedPropertiesForDiagram( std::vector< 
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM );
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 WrappedDataCaptionProperty::WrappedDataCaptionProperty(
@@ -182,9 +176,9 @@ void WrappedDataCaptionProperty::setValueToSeries( const Reference< beans::XProp
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 } //namespace wrapper
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

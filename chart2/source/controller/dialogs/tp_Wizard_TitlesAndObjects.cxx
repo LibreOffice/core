@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,8 +135,6 @@ sal_Bool TitlesAndObjectsTabPage::commitPage( ::svt::WizardTypes::CommitPageReas
 
 void TitlesAndObjectsTabPage::commitToModel()
 {
-    bool bChanged = false;
-
     m_aTimerTriggeredControllerLock.startTimer();
     uno::Reference< frame::XModel >  xModel( m_xChartModel, uno::UNO_QUERY);
 
@@ -145,13 +144,12 @@ void TitlesAndObjectsTabPage::commitToModel()
     {
         TitleDialogData aTitleOutput;
         m_apTitleResources->readFromResources( aTitleOutput );
-        bChanged = bChanged || aTitleOutput.writeDifferenceToModel( xModel, m_xCC );
+        aTitleOutput.writeDifferenceToModel( xModel, m_xCC );
         m_apTitleResources->ClearModifyFlag();
     }
 
     //commit legend changes to model
     {
-        bChanged = true;
         m_apLegendPositionResources->writeToModel( xModel );
     }
 
@@ -185,3 +183,5 @@ bool TitlesAndObjectsTabPage::canAdvance() const
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

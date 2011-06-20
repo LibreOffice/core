@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,8 +111,6 @@ public:
                            const ::com::sun::star::uno::Reference<
                                ::com::sun::star::uno::XComponentContext > & xContext );
 
-//     void setNumberFormatter();
-
     // predicates to determine what actions are possible at the current cursor
     // position.  This depends on the implementation of the according mutators
     // below.  (They are used for enabling toolbar icons)
@@ -204,3 +203,5 @@ private:
 } // namespace chart
 
 #endif  // CHART_DATA_BROWSER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

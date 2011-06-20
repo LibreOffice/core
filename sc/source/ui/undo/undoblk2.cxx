@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,7 +87,7 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
     pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
 }
 
-__EXPORT ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
+ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
 {
     delete[] pRanges;
     delete pUndoDoc;
@@ -94,7 +95,7 @@ __EXPORT ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
     DeleteSdrUndoAction( pDrawUndo );
 }
 
-String __EXPORT ScUndoWidthOrHeight::GetComment() const
+String ScUndoWidthOrHeight::GetComment() const
 {
     // [ "optimale " ] "Spaltenbreite" | "Zeilenhoehe"
     return ( bWidth ?
@@ -108,7 +109,7 @@ String __EXPORT ScUndoWidthOrHeight::GetComment() const
         ) );
 }
 
-void __EXPORT ScUndoWidthOrHeight::Undo()
+void ScUndoWidthOrHeight::Undo()
 {
     BeginUndo();
 
@@ -135,14 +136,14 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
             {
                 pUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
                         static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE,
-                        sal_False, pDoc );
+                        false, pDoc );
                 pDoc->UpdatePageBreaks( nTab );
                 pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, nTab,
                         MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_TOP );
             }
             else        // Height
             {
-                pUndoDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, sal_False, pDoc );
+                pUndoDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, false, pDoc );
                 pDoc->UpdatePageBreaks( nTab );
                 pDocShell->PostPaint( 0, nPaintStart, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_LEFT );
             }
@@ -163,11 +164,11 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoWidthOrHeight::Redo()
+void ScUndoWidthOrHeight::Redo()
 {
     BeginRedo();
 
-    sal_Bool bPaintAll = sal_False;
+    sal_Bool bPaintAll = false;
     if (eMode==SC_SIZE_OPTIMAL)
     {
         if ( SetViewMarkData( aMarkData ) )
@@ -180,11 +181,10 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
         if ( nTab < nStartTab || nTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
-    }
 
-    // SetWidthOrHeight aendert aktuelle Tabelle !
-    if ( pViewShell )
-        pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, sal_False, sal_True, &aMarkData );
+        // SetWidthOrHeight aendert aktuelle Tabelle !
+        pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, false, true, &aMarkData );
+    }
 
     // paint grid if selection was changed directly at the MarkData
     if (bPaintAll)
@@ -193,15 +193,16 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoWidthOrHeight::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoWidthOrHeight::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->SetMarkedWidthOrHeight( bWidth, eMode, nNewSize, sal_True );
 }
 
-sal_Bool __EXPORT ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

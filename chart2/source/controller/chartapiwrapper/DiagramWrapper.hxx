@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,8 +80,7 @@ class DiagramWrapper : public ::comphelper::ImplInheritanceHelper13<
                      , ::com::sun::star::chart::X3DDisplay
                      , ::com::sun::star::chart::X3DDefaultSetter
                      , ::com::sun::star::lang::XServiceInfo
-                        , ::com::sun::star::lang::XComponent
-//                      , ::com::sun::star::lang::XEventListener
+                     , ::com::sun::star::lang::XComponent
                      , ::com::sun::star::chart::XDiagramPositioning
                      , ::com::sun::star::chart2::XDiagramProvider
                      , ::com::sun::star::chart::XSecondAxisTitleSupplier
@@ -222,12 +222,7 @@ public:
     virtual void SAL_CALL setDefaultRotation() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDefaultIllumination() throw (::com::sun::star::uno::RuntimeException);
 
-//     // ____ XEventListener ____
-//     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-//         throw (::com::sun::star::uno::RuntimeException);
-
     // ____ XDiagramPositioning ____
-
     virtual void SAL_CALL setAutomaticDiagramPositioning(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isAutomaticDiagramPositioning(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDiagramPositionExcludingAxes( const ::com::sun::star::awt::Rectangle& PositionRect ) throw (::com::sun::star::uno::RuntimeException);
@@ -287,3 +282,5 @@ private:
 
 // CHART_DIAGRAMWRAPPER_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

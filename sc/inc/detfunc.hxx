@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,9 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include "scdllapi.h"
+#include "token.hxx"
+
+#include <vector>
 
 class SdrObject;
 class SdrPage;
@@ -43,6 +47,7 @@ class ScDetectiveData;
 class ScDocument;
 class ScAddress;
 class ScRange;
+class ScRangeList;
 
 #define SC_DET_MAXCIRCLE    1000
 
@@ -144,6 +149,9 @@ public:
 
     sal_Bool        MarkInvalid(sal_Bool& rOverflow);
 
+    void        GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
+    void        GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
+
     static void UpdateAllComments( ScDocument& rDoc );        // on all tables
     void        UpdateAllArrowColors();     // on all tables
 
@@ -164,3 +172,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

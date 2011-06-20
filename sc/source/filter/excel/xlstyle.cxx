@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/font.hxx>
+#include <sal/macros.h>
 #include <rtl/tencinfo.h>
 #include <toolkit/unohlp.hxx>
 #include <editeng/svxfont.hxx>
@@ -111,20 +113,20 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     {
         case EXC_BIFF2:
             mpnColorTable = spnDefColorTable2;
-            mnTableSize = STATIC_ARRAY_SIZE( spnDefColorTable2 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable2 );
         break;
         case EXC_BIFF3:
         case EXC_BIFF4:
             mpnColorTable = spnDefColorTable3;
-            mnTableSize = STATIC_ARRAY_SIZE( spnDefColorTable3 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable3 );
         break;
         case EXC_BIFF5:
             mpnColorTable = spnDefColorTable5;
-            mnTableSize = STATIC_ARRAY_SIZE( spnDefColorTable5 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable5 );
         break;
         case EXC_BIFF8:
             mpnColorTable = spnDefColorTable8;
-            mnTableSize = STATIC_ARRAY_SIZE( spnDefColorTable8 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable8 );
         break;
         default:
             DBG_ERROR_BIFF();
@@ -150,7 +152,7 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
         case EXC_COLOR_NOTETEXT:        nColor = mnNoteText;    break;
         case EXC_COLOR_FONTAUTO:        nColor = COL_AUTO;      break;
         default:
-            DBG_ERROR1( "XclDefaultPalette::GetDefColorData - unknown default color index: %d", nXclIndex );
+            OSL_TRACE( "XclDefaultPalette::GetDefColorData - unknown default color index: %d", nXclIndex );
             nColor = COL_AUTO;
     }
     return nColor;
@@ -197,7 +199,7 @@ void XclFontData::Clear()
 
 void XclFontData::FillFromVclFont( const Font& rFont )
 {
-    maName = XclTools::GetXclFontName( rFont.GetName() );   // #106246# substitute with MS fonts
+    maName = XclTools::GetXclFontName( rFont.GetName() );   // substitute with MS fonts
     maStyle.Erase();
     maColor = rFont.GetColor();
     SetScUnderline( rFont.GetUnderline() );
@@ -316,7 +318,7 @@ void XclFontData::SetScFamily( FontFamily eScFamily )
         case FAMILY_SWISS:      mnFamily = EXC_FONTFAM_SWISS;       break;
         case FAMILY_SYSTEM:     mnFamily = EXC_FONTFAM_SYSTEM;      break;
         default:
-            DBG_ERRORFILE( "XclFontData::SetScFamily - unknown font family" );
+            OSL_FAIL( "XclFontData::SetScFamily - unknown font family" );
             mnFamily = EXC_FONTFAM_DONTKNOW;
     }
 }
@@ -467,12 +469,6 @@ void XclFontData::SetApiFamily( sal_Int16 nApiFamily )
         default:                        mnFamily = FAMILY_DONTKNOW;
     }
 }
-
-//UNUSED2009-05 void XclFontData::SetApiFontEncoding( sal_Int16 nApiFontEnc )
-//UNUSED2009-05 {
-//UNUSED2009-05     // API constants are equal to rtl_TextEncoding constants
-//UNUSED2009-05     SetFontEncoding( static_cast< rtl_TextEncoding >( nApiFontEnc ) );
-//UNUSED2009-05 }
 
 void XclFontData::SetApiPosture( Awt::FontSlant eApiPosture )
 {
@@ -757,7 +753,7 @@ ScfPropSetHelper& XclFontPropSetHelper::GetChartHelper( sal_Int16 nScript )
         case ApiScriptType::LATIN:      return maHlpChWstrn;
         case ApiScriptType::ASIAN:      return maHlpChAsian;
         case ApiScriptType::COMPLEX:    return maHlpChCmplx;
-        default:    DBG_ERRORFILE( "XclFontPropSetHelper::GetChartHelper - unknown script type" );
+        default:    OSL_FAIL( "XclFontPropSetHelper::GetChartHelper - unknown script type" );
     }
     return maHlpChWstrn;
 }
@@ -1492,12 +1488,6 @@ void XclNumFmtBuffer::InitializeImport()
     maFmtMap.clear();
 }
 
-//UNUSED2008-05  const XclNumFmt* XclNumFmtBuffer::GetFormat( sal_uInt16 nXclNumFmt ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      XclNumFmtMap::const_iterator aIt = maFmtMap.find( nXclNumFmt );
-//UNUSED2008-05      return (aIt != maFmtMap.end()) ? &aIt->second : 0;
-//UNUSED2008-05  }
-
 void XclNumFmtBuffer::InsertFormat( sal_uInt16 nXclNumFmt, const String& rFormat )
 {
     XclNumFmt& rNumFmt = maFmtMap[ nXclNumFmt ];
@@ -1513,7 +1503,7 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
     typedef ::std::map< LanguageType, const XclBuiltInFormatTable* > XclBuiltInMap;
     XclBuiltInMap aBuiltInMap;
     for( const XclBuiltInFormatTable* pTable = spBuiltInFormatTables;
-            pTable != STATIC_ARRAY_END( spBuiltInFormatTables ); ++pTable )
+            pTable != STATIC_TABLE_END( spBuiltInFormatTables ); ++pTable )
         aBuiltInMap[ pTable->meLanguage ] = pTable;
 
     // build a list of table pointers for the current language, with all parent tables
@@ -1525,9 +1515,9 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
     // language not supported
     if( aBuiltInVec.empty() )
     {
-        DBG_ERROR1( "XclNumFmtBuffer::InsertBuiltinFormats - language 0x%04hX not supported (#i29949#)", meSysLang );
+        OSL_TRACE( "XclNumFmtBuffer::InsertBuiltinFormats - language 0x%04hX not supported (#i29949#)", meSysLang );
         XclBuiltInMap::const_iterator aMIt = aBuiltInMap.find( LANGUAGE_DONTKNOW );
-        DBG_ASSERT( aMIt != aBuiltInMap.end(), "XclNumFmtBuffer::InsertBuiltinFormats - default map not found" );
+        OSL_ENSURE( aMIt != aBuiltInMap.end(), "XclNumFmtBuffer::InsertBuiltinFormats - default map not found" );
         if( aMIt != aBuiltInMap.end() )
             aBuiltInVec.push_back( aMIt->second );
     }
@@ -1603,9 +1593,14 @@ SvxCellHorJustify XclCellAlign::GetScHorAlign() const
         case EXC_XF_HOR_FILL:       eHorJust = SVX_HOR_JUSTIFY_REPEAT;      break;
         case EXC_XF_HOR_JUSTIFY:
         case EXC_XF_HOR_DISTRIB:    eHorJust = SVX_HOR_JUSTIFY_BLOCK;       break;
-        default:    DBG_ERRORFILE( "XclCellAlign::GetScHorAlign - unknown horizontal alignment" );
+        default:    OSL_FAIL( "XclCellAlign::GetScHorAlign - unknown horizontal alignment" );
     }
     return eHorJust;
+}
+
+SvxCellJustifyMethod XclCellAlign::GetScHorJustifyMethod() const
+{
+    return (mnHorAlign == EXC_XF_HOR_DISTRIB) ? SVX_JUSTIFY_METHOD_DISTRIBUTE : SVX_JUSTIFY_METHOD_AUTO;
 }
 
 SvxCellVerJustify XclCellAlign::GetScVerAlign() const
@@ -1617,10 +1612,15 @@ SvxCellVerJustify XclCellAlign::GetScVerAlign() const
         case EXC_XF_VER_CENTER:     eVerJust = SVX_VER_JUSTIFY_CENTER;      break;
         case EXC_XF_VER_BOTTOM:     eVerJust = SVX_VER_JUSTIFY_STANDARD;    break;
         case EXC_XF_VER_JUSTIFY:
-        case EXC_XF_VER_DISTRIB:    eVerJust = SVX_VER_JUSTIFY_TOP;         break;
-        default:    DBG_ERRORFILE( "XclCellAlign::GetScVerAlign - unknown vertical alignment" );
+        case EXC_XF_VER_DISTRIB:    eVerJust = SVX_VER_JUSTIFY_BLOCK;       break;
+        default:    OSL_FAIL( "XclCellAlign::GetScVerAlign - unknown vertical alignment" );
     }
     return eVerJust;
+}
+
+SvxCellJustifyMethod XclCellAlign::GetScVerJustifyMethod() const
+{
+    return (mnVerAlign == EXC_XF_VER_DISTRIB) ? SVX_JUSTIFY_METHOD_DISTRIBUTE : SVX_JUSTIFY_METHOD_AUTO;
 }
 
 SvxFrameDirection XclCellAlign::GetScFrameDir() const
@@ -1631,7 +1631,7 @@ SvxFrameDirection XclCellAlign::GetScFrameDir() const
         case EXC_XF_TEXTDIR_CONTEXT:    eFrameDir = FRMDIR_ENVIRONMENT;     break;
         case EXC_XF_TEXTDIR_LTR:        eFrameDir = FRMDIR_HORI_LEFT_TOP;   break;
         case EXC_XF_TEXTDIR_RTL:        eFrameDir = FRMDIR_HORI_RIGHT_TOP;  break;
-        default:    DBG_ERRORFILE( "XclCellAlign::GetScFrameDir - unknown CTL text direction" );
+        default:    OSL_FAIL( "XclCellAlign::GetScFrameDir - unknown CTL text direction" );
     }
     return eFrameDir;
 }
@@ -1647,7 +1647,7 @@ void XclCellAlign::SetScHorAlign( SvxCellHorJustify eHorJust )
         case SVX_HOR_JUSTIFY_BLOCK:     mnHorAlign = EXC_XF_HOR_JUSTIFY;    break;
         case SVX_HOR_JUSTIFY_REPEAT:    mnHorAlign = EXC_XF_HOR_FILL;       break;
         default:                        mnHorAlign = EXC_XF_HOR_GENERAL;
-            DBG_ERROR( "XclCellAlign::SetScHorAlign - unknown horizontal alignment" );
+            OSL_FAIL( "XclCellAlign::SetScHorAlign - unknown horizontal alignment" );
     }
 }
 
@@ -1660,7 +1660,7 @@ void XclCellAlign::SetScVerAlign( SvxCellVerJustify eVerJust )
         case SVX_VER_JUSTIFY_CENTER:    mnVerAlign = EXC_XF_VER_CENTER; break;
         case SVX_VER_JUSTIFY_BOTTOM:    mnVerAlign = EXC_XF_VER_BOTTOM; break;
         default:                        mnVerAlign = EXC_XF_VER_BOTTOM;
-            DBG_ERROR( "XclCellAlign::SetScVerAlign - unknown vertical alignment" );
+            OSL_FAIL( "XclCellAlign::SetScVerAlign - unknown vertical alignment" );
     }
 }
 
@@ -1672,7 +1672,7 @@ void XclCellAlign::SetScFrameDir( SvxFrameDirection eFrameDir )
         case FRMDIR_HORI_LEFT_TOP:  mnTextDir = EXC_XF_TEXTDIR_LTR;     break;
         case FRMDIR_HORI_RIGHT_TOP: mnTextDir = EXC_XF_TEXTDIR_RTL;     break;
         default:                    mnTextDir = EXC_XF_TEXTDIR_CONTEXT;
-            DBG_ERRORFILE( "XclCellAlign::SetScFrameDir - unknown CTL text direction" );
+            OSL_FAIL( "XclCellAlign::SetScFrameDir - unknown CTL text direction" );
     }
 }
 
@@ -1769,3 +1769,4 @@ bool XclXFBase::Equals( const XclXFBase& rCmp ) const
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

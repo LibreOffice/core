@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 #include <list>
 #include "xlpivot.hxx"
 #include "xiroot.hxx"
+#include <boost/shared_ptr.hpp>
 
 class ScDPSaveData;
 class ScDPSaveDimension;
@@ -65,7 +67,7 @@ private:
     void                ReadSxempty( XclImpStream& rStrm );
 };
 
-typedef ScfRef< XclImpPCItem > XclImpPCItemRef;
+typedef boost::shared_ptr< XclImpPCItem > XclImpPCItemRef;
 
 // ============================================================================
 
@@ -89,8 +91,6 @@ public:
     /** Returns the base field if this is a grouping field. */
     const XclImpPCField* GetGroupBaseField() const;
 
-    /** Returns the number of items of this field. */
-    sal_uInt16          GetItemCount() const;
     /** Returns the item at the specified position or 0 on error. */
     const XclImpPCItem* GetItem( sal_uInt16 nItemIdx ) const;
     /** Returns the item representing a limit value in numeric/date/time grouping fields.
@@ -152,7 +152,7 @@ private:
     bool                mbNumGroupInfoRead; /// true = Numeric grouping info read (SXNUMGROUP record).
 };
 
-typedef ScfRef< XclImpPCField > XclImpPCFieldRef;
+typedef boost::shared_ptr< XclImpPCField > XclImpPCFieldRef;
 
 // ============================================================================
 
@@ -167,6 +167,8 @@ public:
     /** Returns the data source range read from the DCONREF record. */
     inline const ScRange& GetSourceRange() const { return maSrcRange; }
 
+    const ::rtl::OUString& GetSourceRangeName() const { return maSrcRangeName; }
+
     /** Returns the number of pivot cache fields. */
     sal_uInt16          GetFieldCount() const;
     /** Returns read-only access to a pivot cache field. */
@@ -180,10 +182,17 @@ public:
     void                ReadSxvs( XclImpStream& rStrm );
     /** Reads a DCONREF record containing the source range of the pivot cache. */
     void                ReadDconref( XclImpStream& rStrm );
+    /**
+     * Read DECONNAME record which contains the defined name of the source
+     * range.
+     */
+    void                ReadDConName( XclImpStream& rStrm );
     /** Reads the entire pivot cache stream. Uses decrypter from passed stream. */
     void                ReadPivotCacheStream( XclImpStream& rStrm );
 
+    bool                HasCacheRecords() const;
     bool                IsRefreshOnLoad() const;
+    bool                IsValid() const;
 
 private:
     typedef ::std::vector< XclImpPCFieldRef > XclImpPCFieldVec;
@@ -193,12 +202,13 @@ private:
     ScRange             maSrcRange;         /// Source range in the spreadsheet.
     String              maUrl;              /// URL of the source data.
     String              maTabName;          /// Sheet name of the source data.
+    ::rtl::OUString     maSrcRangeName;     /// Name of the source data range.
     sal_uInt16          mnStrmId;           /// Pivot cache stream identifier.
     sal_uInt16          mnSrcType;          /// Source data type.
     bool                mbSelfRef;          /// true = Source data from own document.
 };
 
-typedef ScfRef< XclImpPivotCache > XclImpPivotCacheRef;
+typedef boost::shared_ptr< XclImpPivotCache > XclImpPivotCacheRef;
 
 // ============================================================================
 // Pivot table
@@ -229,7 +239,7 @@ private:
     const XclImpPCField* mpCacheField;      /// Corresponding pivot cache field.
 };
 
-typedef ScfRef< XclImpPTItem > XclImpPTItemRef;
+typedef boost::shared_ptr< XclImpPTItem > XclImpPTItemRef;
 
 // ============================================================================
 
@@ -251,8 +261,6 @@ public:
     const XclImpPTItem* GetItem( sal_uInt16 nItemIdx ) const;
     /** Returns the internal name of the specified item. */
     const String*       GetItemName( sal_uInt16 nItemIdx ) const;
-    /** Returns the displayed name of the specified item. */
-    const String*       GetVisItemName( sal_uInt16 nItemIdx ) const;
 
     /** Returns the flags of the axes this field is part of. */
     inline sal_uInt16   GetAxes() const { return maFieldInfo.mnAxes; }
@@ -308,7 +316,7 @@ private:
     XclImpPTItemVec     maItems;            /// List of all items of this field.
 };
 
-typedef ScfRef< XclImpPTField > XclImpPTFieldRef;
+typedef boost::shared_ptr< XclImpPTField > XclImpPTFieldRef;
 
 // ============================================================================
 
@@ -384,7 +392,7 @@ private:
     ScDPObject*         mpDPObj;
 };
 
-typedef ScfRef< XclImpPivotTable > XclImpPivotTableRef;
+typedef boost::shared_ptr< XclImpPivotTable > XclImpPivotTableRef;
 
 // ============================================================================
 // ============================================================================
@@ -411,6 +419,7 @@ public:
     void                ReadSxvs( XclImpStream& rStrm );
     /** Reads a DCONREF record containing the source range of a pivot cache. */
     void                ReadDconref( XclImpStream& rStrm );
+    void                ReadDConName( XclImpStream& rStrm );
 
     // pivot table records ----------------------------------------------------
 
@@ -455,3 +464,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,18 +33,16 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include "global.hxx"
-#include <vector>
 #include <boost/shared_ptr.hpp>
-
-#define ENABLE_SHEET_PROTECTION 0
 
 class ScDocument;
 class ScTableProtectionImpl;
 
 enum ScPasswordHash
 {
-    PASSHASH_OOO = 0,
-    PASSHASH_XL
+    PASSHASH_SHA1 = 0,
+    PASSHASH_XL,
+    PASSHASH_UNSPECIFIED
 };
 
 class ScPassHashHelper
@@ -53,7 +52,11 @@ public:
         least one hash that needs to be regenerated, it returns true.  If all
         hash values are compatible with the specified hash type, then it
         returns false. */
-    static bool needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash);
+    static bool needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED);
+
+    static ::rtl::OUString getHashURI(ScPasswordHash eHash);
+
+    static ScPasswordHash getHashTypeFromURI(const ::rtl::OUString& rURI);
 
 private:
     ScPassHashHelper();
@@ -72,11 +75,13 @@ public:
     virtual void setProtected(bool bProtected) = 0;
 
     virtual bool isPasswordEmpty() const = 0;
-    virtual bool hasPasswordHash(ScPasswordHash eHash) const = 0;
+    virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const = 0;
     virtual void setPassword(const String& aPassText) = 0;
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(ScPasswordHash eHash) const = 0;
-    virtual void setPasswordHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
-                                 ScPasswordHash eHash = PASSHASH_OOO) = 0;
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
+        ScPasswordHash eHash, ScPasswordHash eHas2 = PASSHASH_UNSPECIFIED) const = 0;
+    virtual void setPasswordHash(
+        const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
+        ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) = 0;
     virtual bool verifyPassword(const String& aPassText) const = 0;
 };
 
@@ -102,11 +107,13 @@ public:
     virtual void setProtected(bool bProtected);
 
     virtual bool isPasswordEmpty() const;
-    virtual bool hasPasswordHash(ScPasswordHash eHash) const;
+    virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const;
     virtual void setPassword(const String& aPassText);
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(ScPasswordHash eHash) const;
-    virtual void setPasswordHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
-                                 ScPasswordHash eHash = PASSHASH_OOO);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
+        ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const;
+    virtual void setPasswordHash(
+        const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
+        ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED);
     virtual bool verifyPassword(const String& aPassText) const;
 
     bool isOptionEnabled(Option eOption) const;
@@ -159,11 +166,13 @@ public:
     virtual void setProtected(bool bProtected);
 
     virtual bool isPasswordEmpty() const;
-    virtual bool hasPasswordHash(ScPasswordHash eHash) const;
+    virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const;
     virtual void setPassword(const String& aPassText);
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(ScPasswordHash eHash) const;
-    virtual void setPasswordHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
-                                 ScPasswordHash eHash = PASSHASH_OOO);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
+        ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const;
+    virtual void setPasswordHash(
+        const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
+        ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED);
     virtual bool verifyPassword(const String& aPassText) const;
 
     bool isOptionEnabled(Option eOption) const;
@@ -175,3 +184,5 @@ private:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

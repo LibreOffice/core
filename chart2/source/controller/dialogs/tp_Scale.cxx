@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include "NoWarningThisInCTOR.hxx"
 #include "AxisHelper.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <rtl/math.hxx>
 // header for class SvxDoubleItem
 #include <svx/chrtitem.hxx>
@@ -184,6 +183,8 @@ ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     aFmtFldMax.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
     aFmtFldStepMain.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
     aFmtFldOrigin.SetModifyHdl(LINK(this, ScaleTabPage, FmtFieldModifiedHdl));
+
+    HideAllControls();
 }
 
 IMPL_LINK( ScaleTabPage, FmtFieldModifiedHdl, FormattedField*, pFmtFied )
@@ -418,7 +419,7 @@ SfxTabPage* ScaleTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)
 
 sal_Bool ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    DBG_ASSERT( pNumFormatter, "No NumberFormatter available" );
+    OSL_PRECOND( pNumFormatter, "No NumberFormatter available" );
 
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXISTYPE, m_nAxisType));
     if(m_bAllowDateAxis)
@@ -453,7 +454,7 @@ sal_Bool ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
 void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
 {
-    DBG_ASSERT( pNumFormatter, "No NumberFormatter available" );
+    OSL_PRECOND( pNumFormatter, "No NumberFormatter available" );
     if(!pNumFormatter)
         return;
 
@@ -568,7 +569,7 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
 {
     if( !pNumFormatter )
     {
-        DBG_ERROR( "No NumberFormatter available" );
+        OSL_FAIL( "No NumberFormatter available" );
         return LEAVE_PAGE;
     }
 
@@ -580,7 +581,7 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
         nIndex = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
     else
     {
-        OSL_ENSURE( false, "Using Standard Language" );
+        OSL_FAIL( "Using Standard Language" );
     }
 
     Control* pControl = NULL;
@@ -698,7 +699,7 @@ void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     aFmtFldStepMain.SetFormatter( pNumFormatter );
     aFmtFldOrigin.SetFormatter( pNumFormatter );
 
-    // #101318#, #i6278# allow more decimal places than the output format.  As
+    // #i6278# allow more decimal places than the output format.  As
     // the numbers shown in the edit fields are used for input, it makes more
     // sense to display the values in the input format rather than the output
     // format.
@@ -785,6 +786,51 @@ bool ScaleTabPage::ShowWarning( sal_uInt16 nResIdMessage, Control* pControl /* =
     return true;
 }
 
+void ScaleTabPage::HideAllControls()
+{
+    // We need to set these controls invisible when the class is instantiated
+    // since some code in EnableControls() depends on that logic. The real
+    // visibility of these controls depend on axis data type, and are
+    // set in EnableControls().
+
+    m_aTxt_AxisType.Hide();
+    m_aLB_AxisType.Hide();
+
+    aCbxLogarithm.Hide();
+    aTxtMin.Hide();
+    aFmtFldMin.Hide();
+    aCbxAutoMin.Hide();
+    aTxtMax.Hide();
+    aFmtFldMax.Hide();
+    aCbxAutoMax.Hide();
+    aTxtMain.Hide();
+    aFmtFldStepMain.Hide();
+    aCbxAutoStepMain.Hide();
+    aTxtHelp.Hide();
+    aTxtHelpCount.Hide();
+    aMtStepHelp.Hide();
+    aCbxAutoStepHelp.Hide();
+
+    aTxtOrigin.Hide();
+    aFmtFldOrigin.Hide();
+    aCbxAutoOrigin.Hide();
+
+    aTxtHelpCount.Hide();
+    aTxtHelp.Hide();
+
+    m_aTxt_TimeResolution.Hide();
+    m_aLB_TimeResolution.Hide();
+    m_aCbx_AutoTimeResolution.Hide();
+
+    aFmtFldStepMain.Hide();
+    m_aMt_MainDateStep.Hide();
+
+    m_aLB_MainTimeUnit.Hide();
+    m_aLB_HelpTimeUnit.Hide();
+}
+
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

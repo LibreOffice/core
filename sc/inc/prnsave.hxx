@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,8 +41,8 @@ class ScPrintSaverTab
     typedef ::std::vector< ScRange > ScRangeVec;
 
     ScRangeVec  maPrintRanges;      // Array
-    ScRange*    mpRepeatCol;        // einzeln
-    ScRange*    mpRepeatRow;        // einzeln
+    ScRange*    mpRepeatCol;        // single
+    ScRange*    mpRepeatRow;        // single
     sal_Bool        mbEntireSheet;
 
 public:
@@ -79,3 +80,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

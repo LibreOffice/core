@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,14 +54,12 @@ public:
 
     void                CreateStandardStyles();
     void                CopyStdStylesFrom( ScStyleSheetPool* pSrcPool );
-//UNUSED2008-05  void               UpdateStdNames();
 
     void                CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                                         const String& rName, SfxStyleFamily eFamily );
 
     ScStyleSheet*       FindCaseIns( const String& rName, SfxStyleFamily eFam );
 
-//UNUSED2009-05 void                SetForceStdName( const String* pSet );
     const String*       GetForceStdName() const { return pForceStdName; }
 
     virtual SfxStyleSheetBase& Make( const String&, SfxStyleFamily eFam,
@@ -84,3 +83,4 @@ private:
 
 #endif     // SC_STLPOOL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

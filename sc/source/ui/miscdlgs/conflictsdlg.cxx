@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,20 +77,6 @@ bool ScConflictsListEntry::HasOwnAction( sal_uLong nOwnAction ) const
 // class ScConflictsListHelper
 //=============================================================================
 
-//UNUSED2008-05  bool ScConflictsListHelper::HasSharedAction( ScConflictsList& rConflictsList, sal_uLong nSharedAction )
-//UNUSED2008-05  {
-//UNUSED2008-05      ScConflictsList::const_iterator aEnd = rConflictsList.end();
-//UNUSED2008-05      for ( ScConflictsList::const_iterator aItr = rConflictsList.begin(); aItr != aEnd; ++aItr )
-//UNUSED2008-05      {
-//UNUSED2008-05          if ( aItr->HasSharedAction( nSharedAction ) )
-//UNUSED2008-05          {
-//UNUSED2008-05              return true;
-//UNUSED2008-05          }
-//UNUSED2008-05      }
-//UNUSED2008-05
-//UNUSED2008-05      return false;
-//UNUSED2008-05  }
-
 bool ScConflictsListHelper::HasOwnAction( ScConflictsList& rConflictsList, sal_uLong nOwnAction )
 {
     ScConflictsList::const_iterator aEnd = rConflictsList.end();
@@ -145,12 +132,12 @@ void ScConflictsListHelper::Transform_Impl( ScChangeActionList& rActionList, ScC
         if ( aItrMap != pMergeMap->end() )
         {
             *aItr = aItrMap->second;
-            aItr++;
+            ++aItr;
         }
         else
         {
             aItr = rActionList.erase( aItr );
-            DBG_ERROR( "ScConflictsListHelper::Transform_Impl: erased action from conflicts list!" );
+            OSL_FAIL( "ScConflictsListHelper::Transform_Impl: erased action from conflicts list!" );
         }
     }
 }
@@ -318,7 +305,7 @@ ScConflictsResolver::ScConflictsResolver( ScChangeTrack* pTrack, ScConflictsList
     :mpTrack ( pTrack )
     ,mrConflictsList ( rConflictsList )
 {
-    DBG_ASSERT( mpTrack, "ScConflictsResolver CTOR: mpTrack is null!" );
+    OSL_ENSURE( mpTrack, "ScConflictsResolver CTOR: mpTrack is null!" );
 }
 
 ScConflictsResolver::~ScConflictsResolver()
@@ -354,25 +341,6 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
                     if ( bHandleNonContentAction )
                     {
                         mpTrack->Reject( pAction );
-                    }
-                }
-            }
-            else if ( eConflictAction == SC_CONFLICT_ACTION_KEEP_OTHER )
-            {
-                if ( pAction->GetType() == SC_CAT_CONTENT )
-                {
-                    if ( bHandleContentAction )
-                    {
-                        // do nothing
-                        //mpTrack->SelectContent( pAction );
-                    }
-                }
-                else
-                {
-                    if ( bHandleNonContentAction )
-                    {
-                        // do nothing
-                        //mpTrack->Accept( pAction );
                     }
                 }
             }
@@ -430,11 +398,6 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
 // class ScConflictsListBox
 //=============================================================================
 
-//UNUSED2008-05  ScConflictsListBox::ScConflictsListBox( Window* pParent, WinBits nBits )
-//UNUSED2008-05      :SvxRedlinTable( pParent, nBits )
-//UNUSED2008-05  {
-//UNUSED2008-05  }
-
 ScConflictsListBox::ScConflictsListBox( Window* pParent, const ResId& rResId )
     :SvxRedlinTable( pParent, rResId )
 {
@@ -443,23 +406,6 @@ ScConflictsListBox::ScConflictsListBox( Window* pParent, const ResId& rResId )
 ScConflictsListBox::~ScConflictsListBox()
 {
 }
-
-//UNUSED2008-05  sal_uLong ScConflictsListBox::GetRootEntryPos( const SvLBoxEntry* pRootEntry ) const
-//UNUSED2008-05  {
-//UNUSED2008-05      sal_uLong nPos = 0;
-//UNUSED2008-05      SvLBoxEntry* pEntry = GetRootLevelParent( First() );
-//UNUSED2008-05      while ( pEntry )
-//UNUSED2008-05      {
-//UNUSED2008-05          if ( pEntry == pRootEntry )
-//UNUSED2008-05          {
-//UNUSED2008-05              return nPos;
-//UNUSED2008-05          }
-//UNUSED2008-05          pEntry = NextSibling( pEntry );
-//UNUSED2008-05          ++nPos;
-//UNUSED2008-05      }
-//UNUSED2008-05      return 0xffffffff;
-//UNUSED2008-05  }
-
 
 //=============================================================================
 // class ScConflictsDlg
@@ -490,14 +436,14 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
     ,mbInSelectHdl      ( false )
     ,mbInDeselectHdl    ( false )
 {
-    DBG_ASSERT( mpViewData, "ScConflictsDlg CTOR: mpViewData is null!" );
+    OSL_ENSURE( mpViewData, "ScConflictsDlg CTOR: mpViewData is null!" );
     mpOwnDoc = ( mpViewData ? mpViewData->GetDocument() : NULL );
-    DBG_ASSERT( mpOwnDoc, "ScConflictsDlg CTOR: mpOwnDoc is null!" );
+    OSL_ENSURE( mpOwnDoc, "ScConflictsDlg CTOR: mpOwnDoc is null!" );
     mpOwnTrack = ( mpOwnDoc ? mpOwnDoc->GetChangeTrack() : NULL );
-    DBG_ASSERT( mpOwnTrack, "ScConflictsDlg CTOR: mpOwnTrack is null!" );
-    DBG_ASSERT( mpSharedDoc, "ScConflictsDlg CTOR: mpSharedDoc is null!" );
+    OSL_ENSURE( mpOwnTrack, "ScConflictsDlg CTOR: mpOwnTrack is null!" );
+    OSL_ENSURE( mpSharedDoc, "ScConflictsDlg CTOR: mpSharedDoc is null!" );
     mpSharedTrack = ( mpSharedDoc ? mpSharedDoc->GetChangeTrack() : NULL );
-    DBG_ASSERT( mpSharedTrack, "ScConflictsDlg CTOR: mpSharedTrack is null!" );
+    OSL_ENSURE( mpSharedTrack, "ScConflictsDlg CTOR: mpSharedTrack is null!" );
 
     FreeResource();
 
@@ -561,8 +507,8 @@ String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocumen
 {
     String aString;
 
-    DBG_ASSERT( pAction, "ScConflictsDlg::GetActionString(): pAction is null!" );
-    DBG_ASSERT( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );
+    OSL_ENSURE( pAction, "ScConflictsDlg::GetActionString(): pAction is null!" );
+    OSL_ENSURE( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );
     if ( pAction && pDoc )
     {
         String aDesc;
@@ -582,7 +528,7 @@ String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocumen
         DateTime aDateTime = pAction->GetDateTime();
         aString += ScGlobal::pLocaleData->getDate( aDateTime );
         aString += ' ';
-        aString += ScGlobal::pLocaleData->getTime( aDateTime, sal_False );
+        aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
         aString += '\t';
     }
 
@@ -606,7 +552,7 @@ void ScConflictsDlg::HandleListBoxSelection( bool bSelectHandle )
     {
         if ( bSelectHandle )
         {
-            maLbConflicts.SelectAll( sal_False );
+            maLbConflicts.SelectAll( false );
         }
         if ( !maLbConflicts.IsSelected( pRootEntry ) )
         {
@@ -662,7 +608,7 @@ IMPL_LINK( ScConflictsDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
 
     ScTabView* pTabView = mpViewData->GetView();
     pTabView->DoneBlockMode();
-    sal_Bool bContMark = sal_False;
+    sal_Bool bContMark = false;
     SvLBoxEntry* pEntry = maLbConflicts.FirstSelected();
     while ( pEntry )
     {
@@ -735,7 +681,7 @@ void ScConflictsDlg::KeepAllHandler( bool bMine )
         SetConflictAction( pRootEntry, eConflictAction );
         pRootEntry = maLbConflicts.NextSibling( pRootEntry );
     }
-    maLbConflicts.SetUpdateMode( sal_False );
+    maLbConflicts.SetUpdateMode( false );
     maLbConflicts.Clear();
     maLbConflicts.SetUpdateMode( sal_True );
     SetPointer( Pointer( POINTER_ARROW ) );
@@ -892,3 +838,5 @@ void ScConflictsDlg::UpdateView()
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

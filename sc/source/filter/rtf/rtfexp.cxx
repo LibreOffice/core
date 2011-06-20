@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svl/style.hxx>
 #include <svtools/rtfout.hxx>
 #include <svtools/rtfkeywd.hxx>
@@ -83,37 +85,6 @@ sal_uLong ScRTFExport::Write()
 {
     rStrm << '{' << OOO_STRING_SVTOOLS_RTF_RTF;
     rStrm << OOO_STRING_SVTOOLS_RTF_ANSI << sNewLine;
-
-#if 0
-// das ist noch nicht ausgegoren
-/*
-    SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
-    SfxStyleSheetBase*      pStyleSheet = NULL;
-    DBG_ASSERT( pStylePool, "StylePool not found! :-(" );
-    pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
-    pStyleSheet = pStylePool->Find( STRING_STANDARD, SFX_STYLE_FAMILY_PARA );
-    DBG_ASSERT( pStyleSheet, "ParaStyle not found! :-(" );
-    const SfxItemSet& rSetPara = pStyleSheet->GetItemSet();
-
-    // fonttbl
-    String aFontFamilyName(
-        ((const SvxFontItem&)(rSetPara.Get( ATTR_FONT ))).GetFamilyName() );
-    rStrm << OOO_STRING_SVTOOLS_RTF_DEFF << '0'
-        << '{' << OOO_STRING_SVTOOLS_RTF_FONTTBL
-        << '{' << OOO_STRING_SVTOOLS_RTF_F << '0' << OOO_STRING_SVTOOLS_RTF_FNIL << ' ' << aFontFamilyName.GetStr() << ";}"
-        << '}' << sNewLine;
-
-    // hier kaeme die colortbl
-
-    // stylesheet
-    sal_uInt32 nFontHeight =
-        ((const SvxFontHeightItem&)(rSetPara.Get( ATTR_FONT_HEIGHT ))).GetHeight();
-    rStrm << '{' << OOO_STRING_SVTOOLS_RTF_STYLESHEET
-        << '{' << OOO_STRING_SVTOOLS_RTF_FS << String( sal_uInt32(nFontHeight / TWIPS_PER_POINT) ).GetStr()
-            << ' ' << pStyleSheet->GetName().GetStr() << ";}"
-        << '}' << sNewLine;
-*/
-#endif
 
     // Daten
     for ( SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); nTab++ )
@@ -225,11 +196,11 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         switch ( pCell->GetCellType() )
         {
             case CELLTYPE_NOTE :
-                bValueData = sal_False;
+                bValueData = false;
             break;      // nix
             case CELLTYPE_EDIT :
             {
-                bValueData = sal_False;
+                bValueData = false;
                 EditEngine& rEngine = GetEditEngine();
                 const EditTextObject* pObj;
                 ((const ScEditCell*)pCell)->GetData( pObj );
@@ -250,10 +221,10 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         }
     }
     else
-        bValueData = sal_False;
+        bValueData = false;
 
     sal_Bool bResetPar, bResetAttr;
-    bResetPar = bResetAttr = sal_False;
+    bResetPar = bResetAttr = false;
 
     const SvxHorJustifyItem&    rHorJustifyItem = (const SvxHorJustifyItem&)pAttr->GetItem( ATTR_HOR_JUSTIFY );
     const SvxWeightItem&        rWeightItem     = (const SvxWeightItem&)    pAttr->GetItem( ATTR_FONT_WEIGHT );
@@ -303,3 +274,4 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

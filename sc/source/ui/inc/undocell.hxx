@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,8 @@
 #include "undobase.hxx"
 #include "postit.hxx"
 
+#include <boost/shared_ptr.hpp>
+
 class ScDocShell;
 class ScBaseCell;
 class ScPatternAttr;
@@ -59,6 +62,11 @@ public:
 
     virtual String  GetComment() const;
 
+    /** once the objects are passed to this class, their life-cycle is
+        managed by this class; the calling function must pass new'ed
+        objects to this method. */
+    void            SetEditData( EditTextObject* pOld, EditTextObject* pNew );
+
 private:
     SCCOL           nCol;
     SCROW           nRow;
@@ -66,9 +74,11 @@ private:
     ScPatternAttr*  pOldPattern;
     ScPatternAttr*  pNewPattern;
     ScPatternAttr*  pApplyPattern;
+    ::boost::shared_ptr<EditTextObject> pOldEditData;
+    ::boost::shared_ptr<EditTextObject> pNewEditData;
     sal_Bool            bIsAutomatic;
 
-    void            DoChange( const ScPatternAttr* pWhichPattern ) const;
+    void            DoChange( const ScPatternAttr* pWhichPattern, const ::boost::shared_ptr<EditTextObject>& pEditData ) const;
 };
 
 
@@ -364,3 +374,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

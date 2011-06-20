@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,6 @@ private:
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
-        //::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),
@@ -210,3 +210,4 @@ APPHELPER_XSERVICEINFO_IMPL( GridWrapper, lcl_aServiceName );
 } //  namespace wrapper
 } //  namespace chart
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

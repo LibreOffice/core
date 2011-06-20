@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,25 +33,14 @@
 #include <svl/lstner.hxx>
 #include <svtools/stdctrl.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 #include "anyrefdg.hxx"
 #include "global.hxx"       // ScAddress
 #include "privsplt.hxx"
 #include "funcdesc.hxx"
 
-#ifndef LRU_MAX
-#define LRU_MAX 10
-#endif
 /*************************************************************************
 |*
 |* Ableitung vom SfxChildWindow als "Behaelter" fuer Controller
@@ -101,7 +91,7 @@ private:
     String**            pArgArr;
 
 
-    const ScFuncDesc*   aLRUList[LRU_MAX];
+    ::std::vector< const formula::IFunctionDescription*> aLRUList;
 
     void            UpdateFunctionList();
     void            UpdateLRUList();
@@ -156,3 +146,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

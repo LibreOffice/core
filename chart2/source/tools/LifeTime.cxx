@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,7 +69,7 @@ bool LifeTimeManager::impl_isDisposed( bool bAssert )
     {
         if( bAssert )
         {
-            OSL_ENSURE( sal_False, "This component is already disposed " );
+            OSL_FAIL( "This component is already disposed " );
             (void)(bAssert);
         }
         return sal_True;
@@ -197,7 +198,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     {
         if( bAssert )
         {
-            OSL_ENSURE( sal_False, "This object is already closed" );
+            OSL_FAIL( "This object is already closed" );
             (void)(bAssert);//avoid warnings
         }
         return sal_True;
@@ -246,7 +247,6 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
                         ::getCppuType((const uno::Reference< util::XCloseListener >*)0) );;
             if( pIC )
             {
-                //lang::EventObject aEvent( static_cast< util::XCloseable*>(xCloseable) );
                 lang::EventObject aEvent( xCloseable );
                 ::cppu::OInterfaceIteratorHelper aIt( *pIC );
                 while( aIt.hasMoreElements() )
@@ -375,7 +375,6 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
                         ::getCppuType((const uno::Reference< util::XCloseListener >*)0) );;
             if( pIC )
             {
-                //lang::EventObject aEvent( static_cast< util::XCloseable*>(xCloseable) );
                 lang::EventObject aEvent( xCloseable );
                 ::cppu::OInterfaceIteratorHelper aIt( *pIC );
                 while( aIt.hasMoreElements() )
@@ -491,56 +490,6 @@ LifeTimeGuard::~LifeTimeGuard()
     }
 }
 
-/*
-the XCloseable::close method has to be implemented in the following way:
-::close
-{
-    //hold no mutex
-
-    if( !m_aLifeTimeManager.g_close_startTryClose( bDeliverOwnership ) )
-        return;
-    //no mutex is acquired
-
-    // At the end of this method may we must dispose ourself ...
-    // and may nobody from outside hold a reference to us ...
-    // then it's a good idea to do that by ourself.
-    uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
-
-    //the listeners have had no veto
-    //check wether we self can close
-    {
-        util::CloseVetoException aVetoException = util::CloseVetoException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "the model itself could not be closed" ) )
-                        , static_cast< ::cppu::OWeakObject* >(this));
-
-        if( m_aLifeTimeManager.g_close_isNeedToCancelLongLastingCalls( bDeliverOwnership, aVetoException ) )
-        {
-            ////you can empty this block, if you never start longlasting calls or
-            ////if your longlasting calls are per default not cancelable (check how you have constructed your LifeTimeManager)
-
-            sal_Bool bLongLastingCallsAreCanceled = sal_False;
-            try
-            {
-                //try to cancel running longlasting calls
-                //// @todo
-            }
-            catch( uno::Exception& ex )
-            {
-                //// @todo
-                //do not throw anything here!! (without endTryClose)
-            }
-            //if not successful canceled
-            if(!bLongLastingCallsAreCanceled)
-            {
-                m_aLifeTimeManager.g_close_endTryClose( bDeliverOwnership, sal_True );
-                throw aVetoException;
-            }
-        }
-
-    }
-    m_aLifeTimeManager.g_close_endTryClose_doClose();
-}
-*/
-
 }//end namespace apphelper
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

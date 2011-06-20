@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@ class ScPaintHint : public SfxHint
 {
     ScRange     aRange;
     sal_uInt16      nParts;
-    sal_Bool        bPrint;     //  Flag, ob auch Druck/Vorschau betroffen ist
+    sal_Bool        bPrint;     //  flag indicating whether print/preview if affected
 
     ScPaintHint(); // disabled
 
@@ -93,7 +94,6 @@ class ScPointerChangedHint : public SfxHint
 public:
                     TYPEINFO();
 
-//UNUSED2008-05     ScPointerChangedHint( sal_uInt16 nF );
                     ~ScPointerChangedHint();
 
     sal_uInt16          GetFlags() const            { return nFlags; }
@@ -183,3 +183,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

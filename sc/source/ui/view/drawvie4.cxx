@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ Point aDragStartDiff;
 
 void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle )
 {
-    rAnyOle = rOneOle = sal_False;
+    rAnyOle = rOneOle = false;
     sal_uLong nCount = rMarkList.GetMarkCount();
     for (sal_uLong i=0; i<nCount; i++)
     {
@@ -104,47 +105,9 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rO
     }
 }
 
-#if 0
-void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
-{
-    sal_uInt16 nPages = pModel->GetPageCount();
-    for (SCTAB nTab=0; nTab<nPages; nTab++)
-    {
-        SdrPage* pPage = pModel->GetPage(nTab);
-        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
-        SdrObject* pObject = aIter.Next();
-        while (pObject)
-        {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
-            {
-                SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if ( aIPObj.Is() && SotExchange::IsChart( aIPObj->GetStorage()->GetClassName() ) )
-                {
-                    SchMemChart* pOldData = SchDLL::GetChartData(aIPObj);
-                    if ( pOldData )
-                    {
-                        //  create data from source document
-                        ScChartArray aArray( pSourceDoc, *pOldData );
-                        if ( aArray.IsValid() )
-                        {
-                            SchMemChart* pNewData = aArray.CreateMemChart();
-                            SchDLL::Update( aIPObj, pNewData );
-                            delete pNewData;
-                            ((SdrOle2Obj*)pObject)->GetNewReplacement();
-                        }
-                    }
-                }
-            }
-            pObject = aIter.Next();
-        }
-    }
-}
-#endif
-
-
 sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 {
-    sal_Bool bReturn = sal_False;
+    sal_Bool bReturn = false;
 
     if ( AreObjectsMarked() )
     {
@@ -270,7 +233,6 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 
 void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
 {
-    Point aLogic = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
     double nPPTX = ScGlobal::nScreenPPTX;
     double nPPTY = ScGlobal::nScreenPPTY;
 
@@ -283,7 +245,7 @@ void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
     if (nEndCol<20)
         nEndCol = 20;
     if (nEndRow<20)
-        nEndRow = 20;
+        nEndRow = 1000;
 
     Fraction aZoom(1,1);
     ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev, aZoom,aZoom,
@@ -301,13 +263,13 @@ void ScDrawView::SetMarkedOriginalSize()
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         sal_uInt16 nIdent = pObj->GetObjIdentifier();
-        sal_Bool bDo = sal_False;
+        sal_Bool bDo = false;
         Size aOriginalSize;
         if (nIdent == OBJ_OLE2)
         {
             // TODO/LEAN: working with visual area can switch object to running state
             uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            if ( xObj.is() )    // #121612# NULL for an invalid object that couldn't be loaded
+            if ( xObj.is() )    // NULL for an invalid object that couldn't be loaded
             {
                 sal_Int64 nAspect = ((SdrOle2Obj*)pObj)->GetAspect();
 
@@ -330,7 +292,7 @@ void ScDrawView::SetMarkedOriginalSize()
                         bDo = sal_True;
                     } catch( embed::NoVisualAreaSizeException& )
                     {
-                        OSL_ENSURE( sal_False, "Can't get the original size of the object!" );
+                        OSL_ENSURE( false, "Can't get the original size of the object!" );
                     }
                 }
             }
@@ -392,3 +354,4 @@ void ScDrawView::SetMarkedOriginalSize()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

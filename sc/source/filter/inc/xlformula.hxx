@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <formula/opcode.hxx>
 #include "address.hxx"
 #include "ftools.hxx"
+#include <boost/shared_ptr.hpp>
 
 // Constants ==================================================================
 
@@ -408,7 +410,7 @@ private:
     bool                mbVolatile;     /// True = Formula contains volatile function.
 };
 
-typedef ScfRef< XclTokenArray > XclTokenArrayRef;
+typedef boost::shared_ptr< XclTokenArray > XclTokenArrayRef;
 
 /** Calls the Read() function at the passed token array. */
 XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArray& rTokArr );
@@ -551,14 +553,14 @@ public:
 
 inline sal_uInt8 XclTokenArrayHelper::GetTokenId( sal_uInt8 nBaseId, sal_uInt8 nTokenClass )
 {
-    DBG_ASSERT( !::get_flag( nBaseId, static_cast< sal_uInt8 >( ~EXC_TOKID_MASK ) ), "XclTokenArrayHelper::GetTokenId - invalid token ID" );
-    DBG_ASSERT( !::get_flag( nTokenClass, static_cast< sal_uInt8 >( ~EXC_TOKCLASS_MASK ) ), "XclTokenArrayHelper::GetTokenId - invalid token class" );
+    OSL_ENSURE( !::get_flag( nBaseId, static_cast< sal_uInt8 >( ~EXC_TOKID_MASK ) ), "XclTokenArrayHelper::GetTokenId - invalid token ID" );
+    OSL_ENSURE( !::get_flag( nTokenClass, static_cast< sal_uInt8 >( ~EXC_TOKCLASS_MASK ) ), "XclTokenArrayHelper::GetTokenId - invalid token class" );
     return nBaseId | nTokenClass;
 }
 
 inline void XclTokenArrayHelper::ChangeTokenClass( sal_uInt8& rnTokenId, sal_uInt8 nTokenClass )
 {
-    DBG_ASSERT( !::get_flag( nTokenClass, static_cast< sal_uInt8 >( ~EXC_TOKCLASS_MASK ) ), "XclTokenArrayHelper::ChangeTokenClass - invalid token class" );
+    OSL_ENSURE( !::get_flag( nTokenClass, static_cast< sal_uInt8 >( ~EXC_TOKCLASS_MASK ) ), "XclTokenArrayHelper::ChangeTokenClass - invalid token class" );
     ::set_flag( rnTokenId, EXC_TOKCLASS_MASK, false );
     ::set_flag( rnTokenId, nTokenClass );
 }
@@ -567,3 +569,4 @@ inline void XclTokenArrayHelper::ChangeTokenClass( sal_uInt8& rnTokenId, sal_uIn
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

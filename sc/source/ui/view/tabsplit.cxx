@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,8 +45,8 @@ ScTabSplitter::ScTabSplitter( Window* pParent, WinBits nWinStyle, ScViewData* pD
     Splitter( pParent, nWinStyle ),
     pViewData(pData)
 {
-    SetFixed(sal_False);
-    EnableRTL( sal_False );
+    SetFixed(false);
+    EnableRTL( false );
 }
 
 
@@ -53,7 +54,7 @@ ScTabSplitter::~ScTabSplitter()
 {
 }
 
-void __EXPORT ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
+void ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
 {
     if (bFixed)
         Window::MouseMove( rMEvt );
@@ -61,7 +62,7 @@ void __EXPORT ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
         Splitter::MouseMove( rMEvt );
 }
 
-void __EXPORT ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
+void ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if (bFixed)
         Window::MouseButtonUp( rMEvt );
@@ -69,7 +70,7 @@ void __EXPORT ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
         Splitter::MouseButtonUp( rMEvt );
 }
 
-void __EXPORT ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
+void ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (bFixed)
         Window::MouseButtonDown( rMEvt );
@@ -77,7 +78,7 @@ void __EXPORT ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
         Splitter::MouseButtonDown( rMEvt );
 }
 
-void __EXPORT ScTabSplitter::Splitting( Point& rSplitPos )
+void ScTabSplitter::Splitting( Point& rSplitPos )
 {
     Window* pParent = GetParent();
     Point aScreenPos = pParent->OutputToNormalizedScreenPixel( rSplitPos );
@@ -103,3 +104,4 @@ void ScTabSplitter::SetFixed(sal_Bool bSet)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

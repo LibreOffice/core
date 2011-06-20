@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,7 +106,7 @@ private:
     virtual void        WriteAddData( XclExpStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpCachedMatrix > XclExpCachedMatRef;
+    typedef boost::shared_ptr< XclExpCachedMatrix > XclExpCachedMatRef;
     XclExpCachedMatRef  mxMatrix;       /// Cached results of the DDE link.
 };
 
@@ -246,7 +247,7 @@ protected:
     void                WriteExtNameBuffer( XclExpStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpExtNameBuffer >   XclExpExtNameBfrRef;
+    typedef boost::shared_ptr< XclExpExtNameBuffer >   XclExpExtNameBfrRef;
     XclExpExtNameBfrRef mxExtNameBfr;   /// List of EXTERNNAME records.
 };
 
@@ -712,7 +713,7 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
 
     SCTAB nDisplScTab = rDocOpt.GetDocSettings().mnDisplTab;
 
-    // #112908# find first visible exported sheet
+    // find first visible exported sheet
     if( (nFirstVisScTab == SCTAB_INVALID) || !IsExportTab( nFirstVisScTab ) )
     {
         // no exportable visible sheet -> use first exportable sheet
@@ -772,7 +773,7 @@ bool XclExpTabInfo::IsSelectedTab( SCTAB nScTab ) const
 
 bool XclExpTabInfo::IsDisplayedTab( SCTAB nScTab ) const
 {
-    DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::IsActiveTab - sheet out of range" );
+    OSL_ENSURE( nScTab < mnScCnt, "XclExpTabInfo::IsActiveTab - sheet out of range" );
     return GetXclTab( nScTab ) == mnDisplXclTab;
 }
 
@@ -783,7 +784,7 @@ bool XclExpTabInfo::IsMirroredTab( SCTAB nScTab ) const
 
 const String& XclExpTabInfo::GetScTabName( SCTAB nScTab ) const
 {
-    DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::IsActiveTab - sheet out of range" );
+    OSL_ENSURE( nScTab < mnScCnt, "XclExpTabInfo::IsActiveTab - sheet out of range" );
     return (nScTab < mnScCnt) ? maTabInfoVec[ nScTab ].maScName : EMPTY_STRING;
 }
 
@@ -794,25 +795,19 @@ sal_uInt16 XclExpTabInfo::GetXclTab( SCTAB nScTab ) const
 
 SCTAB XclExpTabInfo::GetRealScTab( SCTAB nSortedScTab ) const
 {
-    DBG_ASSERT( nSortedScTab < mnScCnt, "XclExpTabInfo::GetRealScTab - sheet out of range" );
+    OSL_ENSURE( nSortedScTab < mnScCnt, "XclExpTabInfo::GetRealScTab - sheet out of range" );
     return (nSortedScTab < mnScCnt) ? maFromSortedVec[ nSortedScTab ] : SCTAB_INVALID;
 }
 
-//UNUSED2009-05 SCTAB XclExpTabInfo::GetSortedScTab( SCTAB nScTab ) const
-//UNUSED2009-05 {
-//UNUSED2009-05     DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::GetSortedScTab - sheet out of range" );
-//UNUSED2009-05     return (nScTab < mnScCnt) ? maToSortedVec[ nScTab ] : SCTAB_INVALID;
-//UNUSED2009-05 }
-
 bool XclExpTabInfo::GetFlag( SCTAB nScTab, sal_uInt8 nFlags ) const
 {
-    DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::GetFlag - sheet out of range" );
+    OSL_ENSURE( nScTab < mnScCnt, "XclExpTabInfo::GetFlag - sheet out of range" );
     return (nScTab < mnScCnt) && ::get_flag( maTabInfoVec[ nScTab ].mnFlags, nFlags );
 }
 
 void XclExpTabInfo::SetFlag( SCTAB nScTab, sal_uInt8 nFlags, bool bSet )
 {
-    DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::SetFlag - sheet out of range" );
+    OSL_ENSURE( nScTab < mnScCnt, "XclExpTabInfo::SetFlag - sheet out of range" );
     if( nScTab < mnScCnt )
         ::set_flag( maTabInfoVec[ nScTab ].mnFlags, nFlags, bSet );
 }
@@ -892,7 +887,7 @@ XclExpExtNameBase::XclExpExtNameBase(
     mxName( XclExpStringHelper::CreateString( rRoot, rName, EXC_STR_8BITLENGTH ) ),
     mnFlags( nFlags )
 {
-    DBG_ASSERT( maName.Len() <= 255, "XclExpExtNameBase::XclExpExtNameBase - string too long" );
+    OSL_ENSURE( maName.Len() <= 255, "XclExpExtNameBase::XclExpExtNameBase - string too long" );
     SetRecSize( 6 + mxName->GetSize() );
 }
 
@@ -941,7 +936,7 @@ XclExpExtNameDde::XclExpExtNameDde( const XclExpRoot& rRoot,
 
 void XclExpExtNameDde::WriteAddData( XclExpStream& rStrm )
 {
-    if( mxMatrix.is() )
+    if( mxMatrix )
         mxMatrix->Save( rStrm );
 }
 
@@ -968,7 +963,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
             break;
 
         const ScToken* p = static_cast<const ScToken*>(mpArray->First());
-        if (p->GetOpCode() != ocExternalRef)
+        if (!p->IsExternalRef())
             break;
 
         switch (p->GetType())
@@ -1237,7 +1232,7 @@ public:
 bool XclExpCrnList::InsertValue( SCCOL nScCol, SCROW nScRow, const Any& rValue )
 {
     RecordRefType xLastRec = GetLastRecord();
-    if( xLastRec.is() && xLastRec->InsertValue( nScCol, nScRow, rValue ) )
+    if( xLastRec && xLastRec->InsertValue( nScCol, nScRow, rValue ) )
         return true;
     if( GetSize() == SAL_MAX_UINT16 )
         return false;
@@ -1331,7 +1326,7 @@ XclExpExtNameBuffer& XclExpExternSheetBase::GetExtNameBuffer()
 
 void XclExpExternSheetBase::WriteExtNameBuffer( XclExpStream& rStrm )
 {
-    if( mxExtNameBfr.is() )
+    if( mxExtNameBfr )
         mxExtNameBfr->Save( rStrm );
 }
 
@@ -1360,7 +1355,7 @@ void XclExpExternSheet::Save( XclExpStream& rStrm )
 
 void XclExpExternSheet::Init( const String& rEncUrl )
 {
-    DBG_ASSERT_BIFF( GetBiff() <= EXC_BIFF5 );
+    OSL_ENSURE_BIFF( GetBiff() <= EXC_BIFF5 );
     maTabName.AssignByte( rEncUrl, GetTextEncoding(), EXC_STR_8BITLENGTH );
     SetRecSize( maTabName.GetSize() );
 }
@@ -1494,7 +1489,7 @@ sal_uInt16 XclExpSupbook::GetTabCount() const
 
 sal_uInt16 XclExpSupbook::InsertTabName( const String& rTabName, ScExternalRefCache::TableTypeRef xCacheTable )
 {
-    DBG_ASSERT( meType == EXC_SBTYPE_EXTERN, "XclExpSupbook::InsertTabName - don't insert sheet names here" );
+    OSL_ENSURE( meType == EXC_SBTYPE_EXTERN, "XclExpSupbook::InsertTabName - don't insert sheet names here" );
     sal_uInt16 nSBTab = ulimit_cast< sal_uInt16 >( maXctList.GetSize() );
     XclExpXctRef xXct( new XclExpXct( GetRoot(), rTabName, nSBTab, xCacheTable ) );
     AddRecSize( xXct->GetTabName().GetSize() );
@@ -1535,7 +1530,7 @@ void XclExpSupbook::Save( XclExpStream& rStrm )
 const XclExpString* XclExpSupbook::GetTabName( sal_uInt16 nSBTab ) const
 {
     XclExpXctRef xXct = maXctList.GetRecord( nSBTab );
-    return xXct.is() ? &xXct->GetTabName() : 0;
+    return xXct ? &xXct->GetTabName() : 0;
 }
 
 void XclExpSupbook::WriteBody( XclExpStream& rStrm )
@@ -1560,7 +1555,7 @@ void XclExpSupbook::WriteBody( XclExpStream& rStrm )
             rStrm << mnXclTabCount << EXC_SUPB_ADDIN;
         break;
         default:
-            DBG_ERRORFILE( "XclExpSupbook::WriteBody - unknown SUPBOOK type" );
+            OSL_FAIL( "XclExpSupbook::WriteBody - unknown SUPBOOK type" );
     }
 }
 
@@ -1576,7 +1571,7 @@ XclExpSupbookBuffer::XclExpSupbookBuffer( const XclExpRoot& rRoot ) :
     sal_uInt16 nCodeCnt = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
     size_t nCount = nXclCnt + rTabInfo.GetXclExtTabCount();
 
-    DBG_ASSERT( nCount > 0, "XclExpSupbookBuffer::XclExpSupbookBuffer - no sheets to export" );
+    OSL_ENSURE( nCount > 0, "XclExpSupbookBuffer::XclExpSupbookBuffer - no sheets to export" );
     if( nCount )
     {
         maSBIndexVec.resize( nCount );
@@ -1616,7 +1611,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFirstXclTab, sal_uInt16 nLast
             pRefLogEntry->mnFirstXclTab = nFirstXclTab;
             pRefLogEntry->mnLastXclTab = nLastXclTab;
             XclExpSupbookRef xSupbook = maSupbookList.GetRecord( aXti.mnSupbook );
-            if( xSupbook.is() )
+            if( xSupbook )
                 xSupbook->FillRefLogEntry( *pRefLogEntry, aXti.mnFirstSBTab, aXti.mnLastSBTab );
         }
     }
@@ -1638,8 +1633,8 @@ void XclExpSupbookBuffer::StoreCellRange( const ScRange& rRange )
     {
         const XclExpSBIndex& rSBIndex = maSBIndexVec[ nXclTab ];
         XclExpSupbookRef xSupbook = maSupbookList.GetRecord( rSBIndex.mnSupbook );
-        DBG_ASSERT( xSupbook.is(), "XclExpSupbookBuffer::StoreCellRange - missing SUPBOOK record" );
-        if( xSupbook.is() )
+        OSL_ENSURE( xSupbook , "XclExpSupbookBuffer::StoreCellRange - missing SUPBOOK record" );
+        if( xSupbook )
             xSupbook->StoreCellRange( rRange, rSBIndex.mnSBTab );
     }
 }
@@ -1667,7 +1662,7 @@ private:
 void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rCell )
 {
     ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
-    const String* pUrl = pRefMgr->getExternalFileName(nFileId);
+    const OUString* pUrl = pRefMgr->getExternalFileName(nFileId);
     if (!pUrl)
         return;
 
@@ -1705,7 +1700,7 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const String& rTabName,
 void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange )
 {
     ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
-    const String* pUrl = pRefMgr->getExternalFileName(nFileId);
+    const OUString* pUrl = pRefMgr->getExternalFileName(nFileId);
     if (!pUrl)
         return;
 
@@ -1780,7 +1775,7 @@ bool XclExpSupbookBuffer::InsertAddIn(
     }
     else
         xSupbook = maSupbookList.GetRecord( mnAddInSB );
-    DBG_ASSERT( xSupbook.is(), "XclExpSupbookBuffer::InsertAddin - missing add-in supbook" );
+    OSL_ENSURE( xSupbook, "XclExpSupbookBuffer::InsertAddin - missing add-in supbook" );
     rnSupbook = mnAddInSB;
     rnExtName = xSupbook->InsertAddIn( rName );
     return rnExtName > 0;
@@ -1833,7 +1828,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const String& rTabNam
 {
     XclExpXti aXti(0, EXC_NOTAB, EXC_NOTAB);
     ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
-    const String* pUrl = pRefMgr->getExternalFileName(nFileId);
+    const OUString* pUrl = pRefMgr->getExternalFileName(nFileId);
     if (!pUrl)
         return aXti;
 
@@ -1879,7 +1874,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const String& rTabNam
     {
         pRefLogEntry->mnFirstXclTab = 0;
         pRefLogEntry->mnLastXclTab  = 0;
-        if (xSupbook.is())
+        if (xSupbook)
             xSupbook->FillRefLogEntry(*pRefLogEntry, aXti.mnFirstSBTab, aXti.mnLastSBTab);
     }
 
@@ -1957,7 +1952,7 @@ void XclExpLinkManagerImpl5::FindExtSheet(
     }
 
     (void)pRefLogEntry;     // avoid compiler warning
-    DBG_ASSERT( !pRefLogEntry, "XclExpLinkManagerImpl5::FindExtSheet - fill reflog entry not implemented" );
+    OSL_ENSURE( !pRefLogEntry, "XclExpLinkManagerImpl5::FindExtSheet - fill reflog entry not implemented" );
 }
 
 sal_uInt16 XclExpLinkManagerImpl5::FindExtSheet( sal_Unicode cCode )
@@ -1994,7 +1989,7 @@ bool XclExpLinkManagerImpl5::InsertAddIn(
         sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName )
 {
     XclExpExtSheetRef xExtSheet = FindInternal( rnExtSheet, EXC_EXTSH_ADDIN );
-    if( xExtSheet.is() )
+    if( xExtSheet )
     {
         rnExtName = xExtSheet->InsertAddIn( rName );
         return rnExtName > 0;
@@ -2140,7 +2135,7 @@ void XclExpLinkManagerImpl8::FindExtSheet(
 sal_uInt16 XclExpLinkManagerImpl8::FindExtSheet( sal_Unicode cCode )
 {
     (void)cCode;    // avoid compiler warning
-    DBG_ASSERT( (cCode == EXC_EXTSH_OWNDOC) || (cCode == EXC_EXTSH_ADDIN),
+    OSL_ENSURE( (cCode == EXC_EXTSH_OWNDOC) || (cCode == EXC_EXTSH_ADDIN),
         "XclExpLinkManagerImpl8::FindExtSheet - unknown externsheet code" );
     return InsertXti( maSBBuffer.GetXti( EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );
 }
@@ -2369,3 +2364,4 @@ void XclExpLinkManager::Save( XclExpStream& rStrm )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

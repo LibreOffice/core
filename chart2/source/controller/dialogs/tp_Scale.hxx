@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -137,6 +138,8 @@ private:
         @return false, if nResIdMessage was 0, true otherwise
      */
     bool ShowWarning( sal_uInt16 nResIdMessage, Control* pControl = NULL );
+
+    void HideAllControls();
 };
 
 //.............................................................................
@@ -145,3 +148,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

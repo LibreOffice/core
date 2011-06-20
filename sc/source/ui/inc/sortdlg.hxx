@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include "scui_def.hxx" //CHINA001
+#include "scui_def.hxx"
 
 #ifndef LAYOUT_SFX_TABDIALOG_BROKEN
 #define LAYOUT_SFX_TABDIALOG_BROKEN 1
@@ -85,3 +86,5 @@ private:
 #endif
 
 #endif // SC_SORTDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

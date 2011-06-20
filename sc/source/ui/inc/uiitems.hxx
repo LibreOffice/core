@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include "conditio.hxx"
 #include "sortparam.hxx"
 #include "queryparam.hxx"
+#include "subtotalparam.hxx"
 #include "paramisc.hxx"
 #include <svl/poolitem.hxx>
 
@@ -54,13 +56,6 @@ class ScInputStatusItem : public SfxPoolItem
 
 public:
                             TYPEINFO();
-//UNUSED2008-05             ScInputStatusItem( sal_uInt16 nWhich,
-//UNUSED2008-05                                SCTAB nTab,
-//UNUSED2008-05                                SCCOL nCol, SCROW nRow,
-//UNUSED2008-05                                SCCOL nStartCol, SCROW nStartRow,
-//UNUSED2008-05                                SCCOL nEndCol,   SCROW nSEndRow,
-//UNUSED2008-05                                const String& rString,
-//UNUSED2008-05                                const EditTextObject* pData );
 
                             ScInputStatusItem( sal_uInt16 nWhich,
                                                const ScAddress& rCurPos,
@@ -97,6 +92,8 @@ public:
 #define SC_TAB_MOVED        3
 #define SC_TAB_COPIED       4
 #define SC_TAB_HIDDEN       5
+#define SC_TABS_INSERTED    6
+#define SC_TABS_DELETED     7
 
 class ScTablesHint : public SfxHint
 {
@@ -165,7 +162,7 @@ public:
     virtual String          GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberUd ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberUd ) const;
 
     ScViewData*         GetViewData () const { return pViewData; }
     const ScSortParam&  GetSortData () const { return theSortData; }
@@ -225,7 +222,7 @@ public:
     virtual String          GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberUd ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberUd ) const;
 
     ScViewData*             GetViewData () const { return pViewData; }
     const ScSubTotalParam&  GetSubTotalData() const { return theSubTotalData; }
@@ -376,3 +373,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

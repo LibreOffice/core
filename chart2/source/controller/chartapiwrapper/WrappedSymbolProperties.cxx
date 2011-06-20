@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,8 +68,6 @@ namespace wrapper
 {
 
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 class WrappedSymbolTypeProperty : public WrappedSeriesOrDiagramProperty< sal_Int32 >
@@ -199,8 +198,6 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -233,8 +230,6 @@ void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutPro
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -242,16 +237,12 @@ void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< Wrappe
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 void WrappedSymbolProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM );
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 WrappedSymbolTypeProperty::WrappedSymbolTypeProperty(
@@ -341,8 +332,6 @@ beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Referenc
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 WrappedSymbolBitmapURLProperty::WrappedSymbolBitmapURLProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -415,8 +404,6 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
 }
 
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 namespace
@@ -542,8 +529,6 @@ beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Referenc
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 WrappedSymbolAndLinesProperty::WrappedSymbolAndLinesProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -592,10 +577,8 @@ beans::PropertyState WrappedSymbolAndLinesProperty::getPropertyState( const Refe
     return beans::PropertyState_DEFAULT_VALUE;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 } //namespace wrapper
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

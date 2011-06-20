@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,9 +67,9 @@ inline long Diff( const Point& rP1, const Point& rP2 )
 sal_Bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
 {
     if (!pPV)
-        return sal_False;
+        return false;
 
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
     SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
@@ -95,7 +96,7 @@ sal_Bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
                 SCsROW nCurY = (SCsROW) pViewData->GetCurY();
                 sal_Bool bStart = ( Diff( rPos,aLineStart ) > Diff( rPos,aLineEnd ) );
                 if ( nCurX == nStartCol && nCurY == nStartRow )
-                    bStart = sal_False;
+                    bStart = false;
                 else if ( nCurX == nEndCol && nCurY == nEndRow )
                     bStart = sal_True;
 
@@ -111,7 +112,7 @@ sal_Bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
                     nDifX = nEndCol - nCurX;
                     nDifY = nEndRow - nCurY;
                 }
-                pViewShell->MoveCursorRel( nDifX, nDifY, SC_FOLLOW_JUMP, sal_False );
+                pViewShell->MoveCursorRel( nDifX, nDifY, SC_FOLLOW_JUMP, false );
 
                 bFound = sal_True;
             }
@@ -183,3 +184,4 @@ void FuSelection::ActivateNoteHandles(SdrObject* pObject)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

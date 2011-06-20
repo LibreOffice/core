@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,11 +41,10 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <comphelper/extract.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <tools/debug.hxx>
 #include "XMLTableHeaderFooterContext.hxx"
 #include "XMLConverter.hxx"
 #include "XMLTableShapeImportHelper.hxx"
@@ -65,17 +65,18 @@
 #define XML_LINE_TLBR 0
 #define XML_LINE_BLTR 1
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
-//using namespace ::com::sun::star::text;
 using namespace ::formula;
+
+using rtl::OUString;
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::UNO_QUERY;
 
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
@@ -167,15 +168,16 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             pBorderWidths[i]->mnIndex = -1;
         if( pBorders[i] )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pBorders[i]->maValue >>= aBorderLine;
-             if( pBorderWidths[i] )
+            if( pBorderWidths[i] )
             {
-                table::BorderLine aBorderLineWidth;
+                table::BorderLine2 aBorderLineWidth;
                 pBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
                 aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+                aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
                 pBorders[i]->maValue <<= aBorderLine;
             }
         }
@@ -184,9 +186,9 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     {
         if( pDiagBorders[i] && ( pDiagBorderWidths[i] || pOldDiagBorderWidths[i] ) )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pDiagBorders[i]->maValue >>= aBorderLine;
-            table::BorderLine aBorderLineWidth;
+            table::BorderLine2 aBorderLineWidth;
             if (pDiagBorderWidths[i])
                 pDiagBorderWidths[i]->maValue >>= aBorderLineWidth;     // prefer new attribute
             else
@@ -194,6 +196,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
             aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
             aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+            aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
             pDiagBorders[i]->maValue <<= aBorderLine;
             if (pDiagBorderWidths[i])
                 pDiagBorderWidths[i]->mnIndex = -1;
@@ -272,7 +275,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     }
     else if (pHeight)
     {
-        rProperties.push_back(XMLPropertyState(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), ::cppu::bool2any( sal_False )));
+        rProperties.push_back(XMLPropertyState(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), ::cppu::bool2any( false )));
     }
     // don't access pointers to rProperties elements after push_back!
 }
@@ -344,7 +347,7 @@ void XMLTableStyleContext::SetOperator( uno::Sequence< beans::PropertyValue >& r
 
 void XMLTableStyleContext::SetBaseCellAddress( uno::Sequence< beans::PropertyValue >& rProps, const OUString& rBaseCell ) const
 {
-    /*  #b4974740# Source position must be set as string, because it may refer
+    /*  Source position must be set as string, because it may refer
         to a sheet that hasn't been loaded yet. */
     lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SOURCESTR ) ), rBaseCell );
 }
@@ -390,7 +393,7 @@ void XMLTableStyleContext::SetFormula( uno::Sequence< beans::PropertyValue >& rP
             lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_GRAMMAR2 ) ), nGrammar );
         break;
         default:
-            OSL_ENSURE( false, "XMLTableStyleContext::SetFormula - invalid formula index" );
+            OSL_FAIL( "XMLTableStyleContext::SetFormula - invalid formula index" );
     }
 }
 
@@ -473,8 +476,8 @@ XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
     pStyles(&rStyles),
     nNumberFormat(-1),
     nLastSheet(-1),
-    bConditionalFormatCreated(sal_False),
-    bParentSet(sal_False)
+    bConditionalFormatCreated(false),
+    bParentSet(false)
 {
 }
 
@@ -521,7 +524,7 @@ void XMLTableStyleContext::FillPropertySet(
             sal_Int32 nNumFmt = GetNumberFormat();
             if (nNumFmt >= 0)
                 AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(nNumFmt));
-            if (!bConditionalFormatCreated && (aMaps.size() > 0))
+            if (!bConditionalFormatCreated && (!aMaps.empty()))
             {
                 aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONDXML)));
                 std::vector<ScXMLMapContent>::iterator aItr(aMaps.begin());
@@ -566,7 +569,7 @@ void XMLTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::An
     if (property)
         property->mnIndex = -1; // #i46996# remove old property, so it isn't double
     sal_Int32 nIndex(static_cast<XMLTableStylesContext *>(pStyles)->GetIndex(nContextID));
-    DBG_ASSERT(nIndex != -1, "Property not found in Map");
+    OSL_ENSURE(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be insertes in a sort order later
 }
@@ -577,7 +580,7 @@ XMLPropertyState* XMLTableStyleContext::FindProperty(const sal_Int16 nContextID)
     UniReference < XMLPropertySetMapper > xPrMap;
     UniReference < SvXMLImportPropertyMapper > xImpPrMap =
         pStyles->GetImportPropertyMapper( GetFamily() );
-    DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+    OSL_ENSURE( xImpPrMap.is(), "There is the import prop mapper" );
     if( xImpPrMap.is() )
         xPrMap = xImpPrMap->getPropertySetMapper();
     if( xPrMap.is() )
@@ -613,7 +616,7 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
                     pMyStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
             else
             {
-                DBG_ERROR("not possible to get style");
+                OSL_FAIL("not possible to get style");
             }
         }
         if (pStyle)
@@ -965,8 +968,8 @@ ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
         const uno::Reference< XAttributeList > & xAttrList,
         sal_Bool bOverwrite ) :
     XMLTextMasterPageContext( rImport, nPrfx, rLName, xAttrList, bOverwrite ),
-    bContainsRightHeader(sal_False),
-    bContainsRightFooter(sal_False)
+    bContainsRightHeader(false),
+    bContainsRightFooter(false)
 {
 }
 
@@ -1056,14 +1059,14 @@ void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPrope
     if (pCellImp)
     {
         ScAddress aPos = pCellImp->GetCellObj().GetPosition();
-        if ( static_cast<sal_Int32>(aPos.Tab()) != nLastSheet )
+        if ( aPos.Tab() != nLastSheet )
         {
             ESelection aSel = pCellImp->GetSelection();
 
             ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetImport().GetModel())->GetSheetSaveData();
             pSheetData->AddTextStyle( GetName(), aPos, aSel );
 
-            nLastSheet = static_cast<sal_Int32>(aPos.Tab());
+            nLastSheet = aPos.Tab();
         }
     }
     else if ( rXMLImport.GetTables().GetCurrentSheet() != nLastSheet )
@@ -1085,3 +1088,4 @@ void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPrope
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

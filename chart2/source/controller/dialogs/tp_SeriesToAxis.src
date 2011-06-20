@@ -33,12 +33,14 @@ TabPage TP_OPTIONS
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
+
     FixedLine 1
     {
         Pos = MAP_APPFONT ( 6 , 6  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Align data series to";
     };
+
     RadioButton RBT_OPT_AXIS_1
     {
         HelpID = "chart2:RadioButton:TP_OPTIONS:RBT_OPT_AXIS_1";
@@ -47,6 +49,7 @@ TabPage TP_OPTIONS
         TabStop = TRUE ;
         Text [ en-US ] = "Primary Y axis";
     };
+
     RadioButton RBT_OPT_AXIS_2
     {
         HelpID = "chart2:RadioButton:TP_OPTIONS:RBT_OPT_AXIS_2";
@@ -62,6 +65,7 @@ TabPage TP_OPTIONS
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Settings";
     };
+
     FixedText FT_OVERLAP
     {
         Pos = MAP_APPFONT ( 12 , 80 ) ;
@@ -82,7 +86,7 @@ TabPage TP_OPTIONS
         Maximum = 100 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText  = " %" ;
+        CustomUnitText  = "%" ;
         First = 1 ;
         Last = 100 ;
         SpinSize = 1 ;
@@ -109,7 +113,7 @@ TabPage TP_OPTIONS
         Maximum = 600 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText  = " %" ;
+        CustomUnitText  = "%" ;
         First = 1 ;
         Last = 100 ;
         SpinSize = 1 ;

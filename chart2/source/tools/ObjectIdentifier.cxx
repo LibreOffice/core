@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -417,7 +418,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     }
     else
     {
-        DBG_ASSERT(false,"give object could not be identifed in createClassifiedIdentifierForObject");
+        OSL_FAIL("give object could not be identifed in createClassifiedIdentifierForObject");
     }
 
     return aRet;
@@ -1450,3 +1451,5 @@ Any ObjectIdentifier::getAny() const
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

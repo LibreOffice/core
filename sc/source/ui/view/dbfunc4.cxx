@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,6 @@ using namespace com::sun::star;
 
 //==================================================================
 
-// static
 sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool bAllCharts )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
@@ -65,7 +65,7 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sa
     for (sal_uInt16 nPageNo=0; nPageNo<nPageCount; nPageNo++)
     {
         SdrPage* pPage = pModel->GetPage(nPageNo);
-        DBG_ASSERT(pPage,"Page ?");
+        OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
         SdrObject* pObject = aIter.Next();
@@ -78,8 +78,8 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sa
                 if ( !bAllCharts )
                 {
                     ScRangeList aRanges;
-                    sal_Bool bColHeaders = sal_False;
-                    sal_Bool bRowHeaders = sal_False;
+                    sal_Bool bColHeaders = false;
+                    sal_Bool bRowHeaders = false;
                     pDoc->GetOldChartParameters( aName, aRanges, bColHeaders, bRowHeaders );
                     bHit = aRanges.In( rPos );
                 }
@@ -100,3 +100,4 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sa
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

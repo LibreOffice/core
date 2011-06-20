@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,6 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aDataPointPropertyMap(
         ::comphelper::MakeItemPropertyMap
-//        IPM_MAP_ENTRY( CHATTR_PIE_SEGMENT_OFFSET, "Offset", 0 )
         IPM_MAP_ENTRY( SCHATTR_STYLE_SHAPE, "Geometry3D", 0 )
         );
 
@@ -698,3 +698,5 @@ void DataPointItemConverter::FillSpecialItem(
 
 } //  namespace wrapper
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ using ::com::sun::star::accessibility::XAccessibleContext;
 using ::rtl::OUString;
 using ::rtl::OUStringHash;
 using ::std::vector;
-using ::std::hash_map;
+using ::boost::unordered_map;
 using ::std::auto_ptr;
 
 ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY, ScDocument* pDoc) :
@@ -310,7 +311,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sa
     PopupMenuFloatingWindow(pParent),
     maOpenTimer(this),
     maCloseTimer(this),
-    maName(OUString::createFromAscii("ScMenuFloatingWindow")),
+    maName(RTL_CONSTASCII_USTRINGPARAM("ScMenuFloatingWindow")),
     mnSelectedMenu(MENU_NOT_SELECTED),
     mnClickedMenu(MENU_NOT_SELECTED),
     mpDoc(pDoc),
@@ -326,7 +327,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sa
     maLabelFont.SetHeight(nPopupFontHeight);
     SetFont(maLabelFont);
 
-    SetText(OUString::createFromAscii("ScMenuFloatingWindow"));
+    SetText( OUString(RTL_CONSTASCII_USTRINGPARAM("ScMenuFloatingWindow")) );
     SetPopupModeEndHdl( LINK(this, ScMenuFloatingWindow, PopupEndHdl) );
 }
 
@@ -1009,7 +1010,6 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     Size aSize;
     getSectionPosSize(aPos, aSize, WHOLE);
     SetOutputSizePixel(aSize);
-    Size aOutSize = GetOutputSizePixel();
 
     getSectionPosSize(aPos, aSize, BTN_OK);
     maBtnOk.SetPosSizePixel(aPos, aSize);
@@ -1032,6 +1032,7 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     maChkToggleAll.SetPosSizePixel(aPos, aSize);
     maChkToggleAll.SetFont(getLabelFont());
     maChkToggleAll.SetText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_TOGGLE_ALL).GetString());
+    maChkToggleAll.SetTextColor(rStyle.GetMenuTextColor());
     maChkToggleAll.SetControlBackground(rStyle.GetMenuColor());
     maChkToggleAll.SetClickHdl( LINK(this, ScDPFieldPopupWindow, TriStateHdl) );
     maChkToggleAll.Show();
@@ -1039,14 +1040,14 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
     maBtnSelectSingle.SetPosSizePixel(aPos, aSize);
     maBtnSelectSingle.SetQuickHelpText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_SELECT_CURRENT).GetString());
-    maBtnSelectSingle.SetModeImage(Image(ScResId(RID_IMG_SELECT_CURRENT)), BMP_COLOR_NORMAL);
+    maBtnSelectSingle.SetModeImage(Image(ScResId(RID_IMG_SELECT_CURRENT)));
     maBtnSelectSingle.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
     maBtnSelectSingle.Show();
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);
     maBtnUnselectSingle.SetPosSizePixel(aPos, aSize);
     maBtnUnselectSingle.SetQuickHelpText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_UNSELECT_CURRENT).GetString());
-    maBtnUnselectSingle.SetModeImage(Image(ScResId(RID_IMG_UNSELECT_CURRENT)), BMP_COLOR_NORMAL);
+    maBtnUnselectSingle.SetModeImage(Image(ScResId(RID_IMG_UNSELECT_CURRENT)));
     maBtnUnselectSingle.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
     maBtnUnselectSingle.Show();
 }
@@ -1384,9 +1385,9 @@ const Size& ScDPFieldPopupWindow::getWindowSize() const
     return maWndSize;
 }
 
-void ScDPFieldPopupWindow::getResult(hash_map<OUString, bool, OUStringHash>& rResult)
+void ScDPFieldPopupWindow::getResult(boost::unordered_map<OUString, bool, OUStringHash>& rResult)
 {
-    typedef hash_map<OUString, bool, OUStringHash> ResultMap;
+    typedef boost::unordered_map<OUString, bool, OUStringHash> ResultMap;
     ResultMap aResult;
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
@@ -1420,3 +1421,4 @@ void ScDPFieldPopupWindow::setOKAction(Action* p)
     mpOKAction.reset(p);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

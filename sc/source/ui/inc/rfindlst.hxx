@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,25 +48,24 @@ struct ScRangeFindData
 
 class ScRangeFindList
 {
-    List        aEntries;
+    std::vector<ScRangeFindData> maEntries;
     String      aDocName;
-    sal_Bool        bHidden;
+    bool        bHidden;
 
 public:
             ScRangeFindList(const String& rName);
-            ~ScRangeFindList();
 
-    sal_uLong   Count() const                       { return aEntries.Count(); }
-    void    Insert( ScRangeFindData* pNew )     { aEntries.Insert(pNew, LIST_APPEND); }
-    ScRangeFindData* GetObject( sal_uLong nIndex ) const
-                        { return (ScRangeFindData*)aEntries.GetObject(nIndex); }
+    sal_uLong   Count() const                       { return maEntries.size(); }
+    void    Insert( const ScRangeFindData &rNew )       { maEntries.push_back(rNew); }
+
+    ScRangeFindData* GetObject( sal_uLong nIndex ) { return &(maEntries[nIndex]); }
 
     void    SetHidden( sal_Bool bSet )              { bHidden = bSet; }
 
     const String&   GetDocName() const          { return aDocName; }
-    sal_Bool            IsHidden() const            { return bHidden; }
+    bool            IsHidden() const            { return bHidden; }
 
-    static ColorData GetColorName( sal_uInt16 nIndex );
+    static ColorData GetColorName( size_t nIndex );
 };
 
 
@@ -73,3 +73,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -195,8 +196,6 @@ public:
     sal_uInt16          GetFieldCount() const;
     /** Returns the specified pivot cache field. */
     const XclExpPCField* GetField( sal_uInt16 nFieldIdx ) const;
-//UNUSED2009-05 /** Returns a pivot cache field by its name. */
-//UNUSED2009-05 const XclExpPCField* GetField( const String& rFieldName ) const;
     /** Returns true, if this pivot cache contains non-standard fields (e.g. grouping fields). */
     bool                HasAddFields() const;
 
@@ -225,6 +224,8 @@ private:
 
     /** Writes the DCONREF record containing the source range. */
     void                WriteDconref( XclExpStream& rStrm ) const;
+    /** DCONNAME record contains range name source. */
+    void                WriteDConName( XclExpStream& rStrm ) const;
 
     /** Creates the pivot cache storage stream and writes the cache. */
     void                WriteCacheStream();
@@ -242,6 +243,7 @@ private:
     XclPCInfo           maPCInfo;           /// Pivot cache settings (SXDB record).
     XclExpPCFieldList   maFieldList;        /// List of all pivot cache fields.
     String              maTabName;          /// Name of source data sheet.
+    ::rtl::OUString     maSrcRangeName;     /// Range name for source data.
     ScRange             maOrigSrcRange;     /// The original sheet source range.
     ScRange             maExpSrcRange;      /// The exported sheet source range.
     ScRange             maDocSrcRange;      /// The range used to build the cache fields and items.
@@ -298,8 +300,6 @@ public:
     /** Returns the index of the last inserted data info struct. */
     sal_uInt16          GetLastDataInfoIndex() const;
 
-//UNUSED2009-05 /** Returns an item by its name. */
-//UNUSED2009-05 const XclExpPTItem* GetItem( const String& rName ) const;
     /** Returns the list index of an item by its name.
         @param nDefaultIdx  This value will be returned, if the item could not be found. */
     sal_uInt16          GetItemIndex( const String& rName, sal_uInt16 nDefaultIdx ) const;
@@ -375,6 +375,7 @@ public:
 
     /** Writes the entire pivot table. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
     // ------------------------------------------------------------------------
 private:
@@ -484,3 +485,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,6 +78,7 @@
 #include "rangeutl.hxx"
 #include "client.hxx"
 #include "tabprotection.hxx"
+#include "formula/FormulaCompiler.hxx"
 
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
 
@@ -114,20 +116,17 @@ using namespace com::sun::star;
 // ---  Public-Funktionen
 //
 
-void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, sal_Bool bControl )
+void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
-    while (pDoc->IsHorOverlapped( nPosX, nPosY, nTab ))     //! ViewData !!!
-        --nPosX;
-    while (pDoc->IsVerOverlapped( nPosX, nPosY, nTab ))
-        --nPosY;
+    pDoc->SkipOverlapped(nPosX, nPosY, nTab);
 
-    sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
+    bool bRefMode = SC_MOD()->IsFormulaMode();
 
     if ( bRefMode )
     {
-        DoneRefMode( sal_False );
+        DoneRefMode( false );
 
         if (bControl)
             SC_MOD()->AddRefEntry();
@@ -146,7 +145,7 @@ void ScTabView::UpdateAutoFillMark()
 {
     // single selection or cursor
     ScRange aMarkRange;
-    sal_Bool bMarked = (aViewData.GetSimpleArea( aMarkRange ) == SC_MARK_SIMPLE);
+    bool bMarked = (aViewData.GetSimpleArea( aMarkRange ) == SC_MARK_SIMPLE);
 
     sal_uInt16 i;
     for (i=0; i<4; i++)
@@ -264,8 +263,12 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_ALIGN_ANY_VCENTER );
     rBindings.Invalidate( SID_ALIGN_ANY_BOTTOM );
 
-//  rBindings.Invalidate( SID_RANGE_VALUE );
-//  rBindings.Invalidate( SID_RANGE_FORMULA );
+    rBindings.Invalidate( SID_NUMBER_CURRENCY );
+    rBindings.Invalidate( SID_NUMBER_SCIENTIFIC );
+    rBindings.Invalidate( SID_NUMBER_DATE );
+    rBindings.Invalidate( SID_NUMBER_CURRENCY );
+    rBindings.Invalidate( SID_NUMBER_PERCENT );
+    rBindings.Invalidate( SID_NUMBER_TIME );
 }
 
 //      SetCursor - Cursor setzen, zeichnen, InputWin updaten
@@ -276,7 +279,7 @@ void ScTabView::InvalidateAttribs()
 #pragma optimize ( "", off )
 #endif
 
-void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, sal_Bool bNew )
+void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 {
     SCCOL nOldX = aViewData.GetCurX();
     SCROW nOldY = aViewData.GetCurY();
@@ -396,7 +399,6 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( FID_MERGE_TOGGLE );
     rBindings.Invalidate( SID_AUTOFILTER_HIDE );
     rBindings.Invalidate( SID_UNFILTER );
-//  rBindings.Invalidate( SID_IMPORT_DATA );        // jetzt wieder immer moeglich
     rBindings.Invalidate( SID_REIMPORT_DATA );
     rBindings.Invalidate( SID_REFRESH_DBAREA );
     rBindings.Invalidate( SID_OUTLINE_SHOW );
@@ -436,7 +438,6 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( SID_INSERT_POSTIT );
     rBindings.Invalidate( SID_CHARMAP );
     rBindings.Invalidate( SID_OPENDLG_FUNCTION );
-//  rBindings.Invalidate( FID_CONDITIONAL_FORMAT );
     rBindings.Invalidate( SID_OPENDLG_CONDFRMT );
     rBindings.Invalidate( FID_VALIDATION );
     rBindings.Invalidate( SID_EXTERNAL_SOURCE );
@@ -452,7 +453,7 @@ void ScTabView::SelectionChanged()
 
 void ScTabView::CursorPosChanged()
 {
-    sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
+    bool bRefMode = SC_MOD()->IsFormulaMode();
     if ( !bRefMode ) // Abfrage, damit RefMode bei Tabellenwechsel funktioniert
         aViewData.GetDocShell()->Broadcast( SfxSimpleHint( FID_KILLEDITVIEW ) );
 
@@ -474,7 +475,7 @@ void ScTabView::TestHintWindow()
 {
     //  show input help window and list drop-down button for validity
 
-    sal_Bool bListValButton = sal_False;
+    bool bListValButton = false;
     ScAddress aListValPos;
 
     ScDocument* pDoc = aViewData.GetDocument();
@@ -486,7 +487,7 @@ void ScTabView::TestHintWindow()
     if ( pItem->GetValue() )
     {
         const ScValidationData* pData = pDoc->GetValidationEntry( pItem->GetValue() );
-        DBG_ASSERT(pData,"ValidationData nicht gefunden");
+        OSL_ENSURE(pData,"ValidationData nicht gefunden");
         String aTitle, aMessage;
         if ( pData && pData->GetInput( aTitle, aMessage ) && aMessage.Len() > 0 )
         {
@@ -556,7 +557,7 @@ void ScTabView::TestHintWindow()
         if ( pData && pData->HasSelectionList() )
         {
             aListValPos.Set( aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo() );
-            bListValButton = sal_True;
+            bListValButton = true;
         }
     }
     else
@@ -619,8 +620,8 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
     ScSplitPos eActive = aViewData.GetActivePart();
     ScHSplitPos eActiveX = WhichH(eActive);
     ScVSplitPos eActiveY = WhichV(eActive);
-    sal_Bool bHFix = (aViewData.GetHSplitMode() == SC_SPLIT_FIX);
-    sal_Bool bVFix = (aViewData.GetVSplitMode() == SC_SPLIT_FIX);
+    bool bHFix = (aViewData.GetHSplitMode() == SC_SPLIT_FIX);
+    bool bVFix = (aViewData.GetVSplitMode() == SC_SPLIT_FIX);
     if (bHFix)
         if (eActiveX == SC_SPLIT_LEFT && nCurX >= (SCsCOL)aViewData.GetFixPosX())
         {
@@ -664,7 +665,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
         long nSpaceY = ( aScrSize.Height() - nCellSizeY ) / 2;
         //  nSpaceY: desired start position of cell for FOLLOW_JUMP, modified if dialog interferes
 
-        sal_Bool bForceNew = sal_False;     // force new calculation of JUMP position (vertical only)
+        bool bForceNew = false;     // force new calculation of JUMP position (vertical only)
 
         // VisibleCellsY == CellsAtY( GetPosY( eWhichY ), 1, eWhichY )
 
@@ -679,7 +680,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
             Window* pCare = lcl_GetCareWin( aViewData.GetViewShell()->GetViewFrame() );
             if (pCare)
             {
-                sal_Bool bLimit = sal_False;
+                bool bLimit = false;
                 Rectangle aDlgPixel;
                 Size aWinSize;
                 Window* pWin = GetActiveWin();
@@ -692,7 +693,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                     {
                         if ( nCurX < nDeltaX || nCurX >= nDeltaX+nSizeX ||
                              nCurY < nDeltaY || nCurY >= nDeltaY+nSizeY )
-                            bLimit = sal_True;          // es wird sowieso gescrollt
+                            bLimit = true;          // es wird sowieso gescrollt
                         else
                         {
                             //  Cursor ist auf dem Bildschirm
@@ -701,14 +702,14 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                             aViewData.GetMergeSizePixel( nCurX, nCurY, nCSX, nCSY );
                             Rectangle aCursor( aStart, Size( nCSX, nCSY ) );
                             if ( aCursor.IsOver( aDlgPixel ) )
-                                bLimit = sal_True;      // Zelle vom Dialog ueberdeckt
+                                bLimit = true;      // Zelle vom Dialog ueberdeckt
                         }
                     }
                 }
 
                 if (bLimit)
                 {
-                    sal_Bool bBottom = sal_False;
+                    bool bBottom = false;
                     long nTopSpace = aDlgPixel.Top();
                     long nBotSpace = aWinSize.Height() - aDlgPixel.Bottom();
                     if ( nBotSpace > 0 && nBotSpace > nTopSpace )
@@ -723,14 +724,14 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                         if ( nCurY >= nDiff )           // Pos. kann nicht negativ werden
                         {
                             nSpaceY = nDlgBot + ( nBotSpace - nCellSizeY ) / 2;
-                            bBottom = sal_True;
-                            bForceNew = sal_True;
+                            bBottom = true;
+                            bForceNew = true;
                         }
                     }
                     if ( !bBottom && nTopSpace > 0 )
                     {
                         nSpaceY = ( nTopSpace - nCellSizeY ) / 2;
-                        bForceNew = sal_True;
+                        bForceNew = true;
                     }
                 }
             }
@@ -739,7 +740,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
 
         SCsCOL nNewDeltaX = nDeltaX;
         SCsROW nNewDeltaY = nDeltaY;
-        sal_Bool bDoLine = sal_False;
+        bool bDoLine = false;
 
         switch (eMode)
         {
@@ -756,11 +757,11 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                     if (nNewDeltaY < 0) nNewDeltaY = 0;
                     nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
                 }
-                bDoLine = sal_True;
+                bDoLine = true;
                 break;
 
             case SC_FOLLOW_LINE:
-                bDoLine = sal_True;
+                bDoLine = true;
                 break;
 
             case SC_FOLLOW_FIX:
@@ -792,13 +793,13 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                     nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
                 }
 
-                bDoLine = sal_True;
+                bDoLine = true;
                 break;
 
             case SC_FOLLOW_NONE:
                 break;
             default:
-                DBG_ERROR("Falscher Cursormodus");
+                OSL_FAIL("Falscher Cursormodus");
                 break;
         }
 
@@ -858,22 +859,22 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
         }
 }
 
-sal_Bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
+bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // #i3875# *Hack*
-    sal_Bool bMod1Locked = aViewData.GetViewShell()->GetLockedModifiers() & KEY_MOD1 ? sal_True : sal_False;
+    bool bMod1Locked = aViewData.GetViewShell()->GetLockedModifiers() & KEY_MOD1 ? true : false;
     aViewData.SetSelCtrlMouseClick( rMEvt.IsMod1() || bMod1Locked );
 
     if ( pSelEngine )
     {
         bMoveIsShift = rMEvt.IsShift();
         bRet = pSelEngine->SelMouseButtonDown( rMEvt );
-        bMoveIsShift = sal_False;
+        bMoveIsShift = false;
     }
 
-    aViewData.SetSelCtrlMouseClick( sal_False ); // #i3875# *Hack*
+    aViewData.SetSelCtrlMouseClick( false ); // #i3875# *Hack*
 
     return bRet;
 }
@@ -883,7 +884,7 @@ sal_Bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
     //
 
 void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
-                                sal_Bool bShift, sal_Bool bControl, sal_Bool bKeepOld, sal_Bool bKeepSel )
+                               bool bShift, bool bControl, bool bKeepOld, bool bKeepSel )
 {
     if (!bKeepOld)
         aViewData.ResetOldCursor();
@@ -895,27 +896,41 @@ void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
 
     HideAllCursors();
 
-    if ( bShift && bNewStartIfMarking && IsBlockMode() )
-    {
-        //  used for ADD selection mode: start a new block from the cursor position
-        DoneBlockMode( sal_True );
-        InitBlockMode( aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo(), sal_True );
-    }
-
         //  aktiven Teil umschalten jetzt in AlignToCursor
 
     AlignToCursor( nCurX, nCurY, eMode );
     //!     auf OS/2: SC_FOLLOW_JUMP statt SC_FOLLOW_LINE, um Nachlaufen zu verhindern ???
 
     if (bKeepSel)
+    {
         SetCursor( nCurX, nCurY );      // Markierung stehenlassen
+
+        // If the cursor is in existing selection, it's a cursor movement by
+        // ENTER or TAB.  If not, then it's a new selection during ADD
+        // selection mode.
+
+        const ScMarkData& rMark = aViewData.GetMarkData();
+        ScRangeList aSelList;
+        rMark.FillRangeListWithMarks(&aSelList, false);
+        if (!aSelList.In(ScRange(nCurX, nCurY, aViewData.GetTabNo())))
+            // Cursor not in existing selection.  Start a new selection.
+            DoneBlockMode(true);
+    }
     else
     {
-        sal_Bool bSame = ( nCurX == aViewData.GetCurX() && nCurY == aViewData.GetCurY() );
+        if (!bShift)
+        {
+            // Remove all marked data on cursor movement unless the Shift is locked.
+            ScMarkData aData(aViewData.GetMarkData());
+            aData.ResetMark();
+            SetMarkData(aData);
+        }
+
+        bool bSame = ( nCurX == aViewData.GetCurX() && nCurY == aViewData.GetCurY() );
         bMoveIsShift = bShift;
         pSelEngine->CursorPosChanging( bShift, bControl );
-        bMoveIsShift = sal_False;
-        aFunctionSet.SetCursorAtCell( nCurX, nCurY, sal_False );
+        bMoveIsShift = false;
+        aFunctionSet.SetCursorAtCell( nCurX, nCurY, false );
 
         //  Wenn der Cursor nicht bewegt wurde, muss das SelectionChanged fuer das
         //  Aufheben der Selektion hier einzeln passieren:
@@ -927,7 +942,7 @@ void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
 }
 
 void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
-                                    sal_Bool bShift, sal_Bool bKeepSel )
+                               bool bShift, bool bKeepSel )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -962,163 +977,34 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
         nCurY = (nMovY != 0) ? nOldY+nMovY : (SCsROW) aViewData.GetOldCurY();
     }
 
-    sal_Bool bSkipCell = sal_False;
     aViewData.ResetOldCursor();
 
     if (nMovX != 0 && VALIDCOLROW(nCurX,nCurY))
-    {
-        sal_Bool bHFlip = sal_False;
-        do
-        {
-            SCCOL nLastCol = -1;
-            bSkipCell = pDoc->ColHidden(nCurX, nTab, nLastCol) || pDoc->IsHorOverlapped( nCurX, nCurY, nTab );
-            if (bSkipProtected && !bSkipCell)
-                bSkipCell = pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
-            if (bSkipUnprotected && !bSkipCell)
-                bSkipCell = !pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
-
-            if (bSkipCell)
-            {
-                if ( nCurX<=0 || nCurX>=MAXCOL )
-                {
-                    if (bHFlip)
-                    {
-                        nCurX = nOldX;
-                        bSkipCell = sal_False;
-                    }
-                    else
-                    {
-                        nMovX = -nMovX;
-                        if (nMovX > 0) ++nCurX; else --nCurX;       // zuruecknehmen
-                        bHFlip = sal_True;
-                    }
-                }
-                else
-                    if (nMovX > 0) ++nCurX; else --nCurX;
-            }
-        }
-        while (bSkipCell);
-
-        if (pDoc->IsVerOverlapped( nCurX, nCurY, nTab ))
-        {
-            aViewData.SetOldCursor( nCurX,nCurY );
-            while (pDoc->IsVerOverlapped( nCurX, nCurY, nTab ))
-                --nCurY;
-        }
-    }
+        SkipCursorHorizontal(nCurX, nCurY, nOldX, nMovX);
 
     if (nMovY != 0 && VALIDCOLROW(nCurX,nCurY))
-    {
-        sal_Bool bVFlip = sal_False;
-        do
-        {
-            SCROW nLastRow = -1;
-            bSkipCell = pDoc->RowHidden(nCurY, nTab, nLastRow) || pDoc->IsVerOverlapped( nCurX, nCurY, nTab );
-            if (bSkipProtected && !bSkipCell)
-                bSkipCell = pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
-            if (bSkipUnprotected && !bSkipCell)
-                bSkipCell = !pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
+        SkipCursorVertical(nCurX, nCurY, nOldY, nMovY);
 
-            if (bSkipCell)
-            {
-                if ( nCurY<=0 || nCurY>=MAXROW )
-                {
-                    if (bVFlip)
-                    {
-                        nCurY = nOldY;
-                        bSkipCell = sal_False;
-                    }
-                    else
-                    {
-                        nMovY = -nMovY;
-                        if (nMovY > 0) ++nCurY; else --nCurY;       // zuruecknehmen
-                        bVFlip = sal_True;
-                    }
-                }
-                else
-                    if (nMovY > 0) ++nCurY; else --nCurY;
-            }
-        }
-        while (bSkipCell);
-
-        if (pDoc->IsHorOverlapped( nCurX, nCurY, nTab ))
-        {
-            aViewData.SetOldCursor( nCurX,nCurY );
-            while (pDoc->IsHorOverlapped( nCurX, nCurY, nTab ))
-                --nCurX;
-        }
-    }
-
-    MoveCursorAbs( nCurX, nCurY, eMode, bShift, sal_False, sal_True, bKeepSel );
+    MoveCursorAbs( nCurX, nCurY, eMode, bShift, false, true, bKeepSel );
 }
 
-void ScTabView::MoveCursorPage( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, sal_Bool bShift, sal_Bool bKeepSel )
+void ScTabView::MoveCursorPage( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
 {
-    SCCOL nCurX;
-    SCROW nCurY;
-    aViewData.GetMoveCursor( nCurX,nCurY );
-
-    ScSplitPos eWhich = aViewData.GetActivePart();
-    ScHSplitPos eWhichX = WhichH( eWhich );
-    ScVSplitPos eWhichY = WhichV( eWhich );
-
     SCsCOL nPageX;
     SCsROW nPageY;
-    if (nMovX >= 0)
-        nPageX = ((SCsCOL) aViewData.CellsAtX( nCurX, 1, eWhichX )) * nMovX;
-    else
-        nPageX = ((SCsCOL) aViewData.CellsAtX( nCurX, -1, eWhichX )) * nMovX;
-
-    if (nMovY >= 0)
-        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, 1, eWhichY )) * nMovY;
-    else
-        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, -1, eWhichY )) * nMovY;
-
-    if (nMovX != 0 && nPageX == 0) nPageX = (nMovX>0) ? 1 : -1;
-    if (nMovY != 0 && nPageY == 0) nPageY = (nMovY>0) ? 1 : -1;
-
+    GetPageMoveEndPosition(nMovX, nMovY, nPageX, nPageY);
     MoveCursorRel( nPageX, nPageY, eMode, bShift, bKeepSel );
 }
 
-void ScTabView::MoveCursorArea( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, sal_Bool bShift, sal_Bool bKeepSel )
+void ScTabView::MoveCursorArea( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
 {
-    SCCOL nCurX;
-    SCROW nCurY;
-    aViewData.GetMoveCursor( nCurX,nCurY );
-    SCCOL nNewX = nCurX;
-    SCROW nNewY = nCurY;
-
-    ScDocument* pDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
-
-    //  FindAreaPos kennt nur -1 oder 1 als Richtung
-
-    SCsCOLROW i;
-    if ( nMovX > 0 )
-        for ( i=0; i<nMovX; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab,  1,  0 );
-    if ( nMovX < 0 )
-        for ( i=0; i<-nMovX; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab, -1,  0 );
-    if ( nMovY > 0 )
-        for ( i=0; i<nMovY; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab,  0,  1 );
-    if ( nMovY < 0 )
-        for ( i=0; i<-nMovY; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab,  0, -1 );
-
-    if (eMode==SC_FOLLOW_JUMP)                  // unten/rechts nicht zuviel grau anzeigen
-    {
-        if (nMovX != 0 && nNewX == MAXCOL)
-            eMode = SC_FOLLOW_LINE;
-        if (nMovY != 0 && nNewY == MAXROW)
-            eMode = SC_FOLLOW_LINE;
-    }
-
-    MoveCursorRel( ((SCsCOL)nNewX)-(SCsCOL)nCurX, ((SCsROW)nNewY)-(SCsROW)nCurY, eMode, bShift, bKeepSel );
+    SCsCOL nNewX;
+    SCsROW nNewY;
+    GetAreaMoveEndPosition(nMovX, nMovY, eMode, nNewX, nNewY, eMode);
+    MoveCursorRel(nNewX, nNewY, eMode, bShift, bKeepSel);
 }
 
-void ScTabView::MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, sal_Bool bShift, sal_Bool bKeepSel )
+void ScTabView::MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -1148,7 +1034,7 @@ void ScTabView::MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, s
     MoveCursorRel( ((SCsCOL)nNewX)-(SCsCOL)nCurX, ((SCsROW)nNewY)-(SCsROW)nCurY, eMode, bShift, bKeepSel );
 }
 
-void ScTabView::MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, sal_Bool bShift )
+void ScTabView::MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -1180,23 +1066,17 @@ void ScTabView::MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode
     else if (nMovY>0)
         nNewY=nPosY+nAddY;
 
-//  aViewData.ResetOldCursor();
     aViewData.SetOldCursor( nNewX,nNewY );
-
-    while (pDoc->IsHorOverlapped( nNewX, nNewY, nTab ))
-        --nNewX;
-    while (pDoc->IsVerOverlapped( nNewX, nNewY, nTab ))
-        --nNewY;
-
-    MoveCursorAbs( nNewX, nNewY, eMode, bShift, sal_False, sal_True );
+    pDoc->SkipOverlapped(nNewX, nNewY, nTab);
+    MoveCursorAbs( nNewX, nNewY, eMode, bShift, false, true );
 }
 
-void ScTabView::MoveCursorEnter( sal_Bool bShift )          // bShift -> hoch/runter
+void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> hoch/runter
 {
     const ScInputOptions& rOpt = SC_MOD()->GetInputOptions();
     if (!rOpt.GetMoveSelection())
     {
-        aViewData.UpdateInputHandler(sal_True);
+        aViewData.UpdateInputHandler(true);
         return;
     }
 
@@ -1229,14 +1109,14 @@ void ScTabView::MoveCursorEnter( sal_Bool bShift )          // bShift -> hoch/ru
         SCTAB nTab = aViewData.GetTabNo();
 
         ScDocument* pDoc = aViewData.GetDocument();
-        pDoc->GetNextPos( nNewX,nNewY, nTab, nMoveX,nMoveY, sal_True,sal_False, rMark );
+        pDoc->GetNextPos( nNewX,nNewY, nTab, nMoveX,nMoveY, true, false, rMark );
 
         MoveCursorRel( ((SCsCOL)nNewX)-(SCsCOL)nCurX, ((SCsROW)nNewY)-(SCsROW)nCurY,
-                            SC_FOLLOW_LINE, sal_False, sal_True );
+                            SC_FOLLOW_LINE, false, true );
 
         //  update input line even if cursor was not moved
         if ( nNewX == nCurX && nNewY == nCurY )
-            aViewData.UpdateInputHandler(sal_True);
+            aViewData.UpdateInputHandler(true);
     }
     else
     {
@@ -1253,12 +1133,12 @@ void ScTabView::MoveCursorEnter( sal_Bool bShift )          // bShift -> hoch/ru
             }
         }
 
-        MoveCursorRel( nMoveX,nMoveY, SC_FOLLOW_LINE, sal_False );
+        MoveCursorRel( nMoveX,nMoveY, SC_FOLLOW_LINE, false );
     }
 }
 
 
-sal_Bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
+bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
 {
     const KeyCode& rKCode = rKeyEvent.GetKeyCode();
 
@@ -1267,7 +1147,7 @@ sal_Bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
             (rKCode.IsMod2() ? MOD_BOTH : MOD_CTRL) :
             (rKCode.IsMod2() ? MOD_ALT : MOD_NONE);
 
-    sal_Bool bSel = rKCode.IsShift();
+    bool bSel = rKCode.IsShift();
     sal_uInt16 nCode = rKCode.GetCode();
 
     // CURSOR keys
@@ -1291,8 +1171,8 @@ sal_Bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
                 // added to avoid warnings
             }
         }
-        // always sal_True to suppress changes of col/row size (ALT+CURSOR)
-        return sal_True;
+        // always true to suppress changes of col/row size (ALT+CURSOR)
+        return true;
     }
 
     // PAGEUP/PAGEDOWN
@@ -1309,7 +1189,7 @@ sal_Bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
                 // added to avoid warnings
             }
         }
-        return sal_True;
+        return true;
     }
 
     // HOME/END
@@ -1326,20 +1206,20 @@ sal_Bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
                 // added to avoid warnings
             }
         }
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
         // naechste/vorherige nicht geschuetzte Zelle
-void ScTabView::FindNextUnprot( sal_Bool bShift, sal_Bool bInSelection )
+void ScTabView::FindNextUnprot( bool bShift, bool bInSelection )
 {
     short nMove = bShift ? -1 : 1;
 
     ScMarkData& rMark = aViewData.GetMarkData();
-    sal_Bool bMarked = bInSelection && (rMark.IsMarked() || rMark.IsMultiMarked());
+    bool bMarked = bInSelection && (rMark.IsMarked() || rMark.IsMultiMarked());
 
     SCCOL nCurX;
     SCROW nCurY;
@@ -1349,14 +1229,14 @@ void ScTabView::FindNextUnprot( sal_Bool bShift, sal_Bool bInSelection )
     SCTAB nTab = aViewData.GetTabNo();
 
     ScDocument* pDoc = aViewData.GetDocument();
-    pDoc->GetNextPos( nNewX,nNewY, nTab, nMove,0, bMarked,sal_True, rMark );
+    pDoc->GetNextPos( nNewX,nNewY, nTab, nMove,0, bMarked, true, rMark );
 
     SCCOL nTabCol = aViewData.GetTabStartCol();
     if ( nTabCol == SC_TABSTART_NONE )
         nTabCol = nCurX;                    // auf diese Spalte zurueck bei Enter
 
     MoveCursorRel( ((SCsCOL)nNewX)-(SCsCOL)nCurX, ((SCsROW)nNewY)-(SCsROW)nCurY,
-                        SC_FOLLOW_LINE, sal_False, sal_True );
+                   SC_FOLLOW_LINE, false, true );
 
     //  in MoveCursorRel wird die TabCol zurueckgesetzt...
     aViewData.SetTabStartCol( nTabCol );
@@ -1416,7 +1296,7 @@ void ScTabView::MarkRows()
     SelectionChanged();
 }
 
-void ScTabView::MarkDataArea( sal_Bool bIncludeCursor )
+void ScTabView::MarkDataArea( bool bIncludeCursor )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -1443,24 +1323,26 @@ void ScTabView::MarkMatrixFormula()
     ScRange aMatrix;
     if ( pDoc->GetMatrixFormulaRange( aCursor, aMatrix ) )
     {
-        MarkRange( aMatrix, sal_False );        // cursor is already within the range
+        MarkRange( aMatrix, false );        // cursor is already within the range
     }
 }
 
-void ScTabView::MarkRange( const ScRange& rRange, sal_Bool bSetCursor, sal_Bool bContinue )
+void ScTabView::MarkRange( const ScRange& rRange, bool bSetCursor, bool bContinue )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SetTabNo( nTab );
 
     HideAllCursors();
-    DoneBlockMode( bContinue ); // bContinue==sal_True -> clear old mark
+    DoneBlockMode( bContinue ); // bContinue==true -> clear old mark
     if (bSetCursor)             // Wenn Cursor gesetzt wird, immer auch alignen
     {
         SCCOL nAlignX = rRange.aStart.Col();
         SCROW nAlignY = rRange.aStart.Row();
-        if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL )
+        bool bCol = ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL ) && !aViewData.GetDocument()->IsInVBAMode();
+        bool bRow = ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW );
+        if ( bCol )
             nAlignX = aViewData.GetPosX(WhichH(aViewData.GetActivePart()));
-        if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW )
+        if ( bRow )
             nAlignY = aViewData.GetPosY(WhichV(aViewData.GetActivePart()));
         AlignToCursor( nAlignX, nAlignY, SC_FOLLOW_JUMP );
     }
@@ -1471,11 +1353,7 @@ void ScTabView::MarkRange( const ScRange& rRange, sal_Bool bSetCursor, sal_Bool 
         SCCOL nPosX = rRange.aStart.Col();
         SCROW nPosY = rRange.aStart.Row();
         ScDocument* pDoc = aViewData.GetDocument();
-
-        while (pDoc->IsHorOverlapped( nPosX, nPosY, nTab ))     //! ViewData !!!
-            --nPosX;
-        while (pDoc->IsVerOverlapped( nPosX, nPosY, nTab ))
-            --nPosY;
+        pDoc->SkipOverlapped(nPosX, nPosY, nTab);
 
         aViewData.ResetOldCursor();
         SetCursor( nPosX, nPosY );
@@ -1493,7 +1371,7 @@ void ScTabView::Unmark()
         SCCOL nCurX;
         SCROW nCurY;
         aViewData.GetMoveCursor( nCurX,nCurY );
-        MoveCursorAbs( nCurX, nCurY, SC_FOLLOW_NONE, sal_False, sal_False );
+        MoveCursorAbs( nCurX, nCurY, SC_FOLLOW_NONE, false, false );
 
         SelectionChanged();
     }
@@ -1515,10 +1393,10 @@ void ScTabView::MarkDataChanged()
     UpdateSelectionOverlay();
 }
 
-void ScTabView::SelectNextTab( short nDir, sal_Bool bExtendSelection )
+void ScTabView::SelectNextTab( short nDir, bool bExtendSelection )
 {
     if (!nDir) return;
-    DBG_ASSERT( nDir==-1 || nDir==1, "SelectNextTab: falscher Wert");
+    OSL_ENSURE( nDir==-1 || nDir==1, "SelectNextTab: falscher Wert");
 
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -1544,34 +1422,28 @@ void ScTabView::SelectNextTab( short nDir, sal_Bool bExtendSelection )
         }
     }
 
-    SetTabNo( nTab, sal_False, bExtendSelection );
+    SetTabNo( nTab, false, bExtendSelection );
     PaintExtras();
 }
 
-void ScTabView::UpdateVisibleRange()
-{
-    for (sal_uInt16 i=0; i<4; i++)
-        if (pGridWin[i] && pGridWin[i]->IsVisible())
-            pGridWin[i]->UpdateVisibleRange();
-}
 
 //  SetTabNo    - angezeigte Tabelle
 
-void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, bool bSameTabButMoved )
+void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSameTabButMoved )
 {
     if ( !ValidTab(nTab) )
     {
-        DBG_ERROR("SetTabNo: falsche Tabelle");
+        OSL_FAIL("SetTabNo: falsche Tabelle");
         return;
     }
 
     if ( nTab != aViewData.GetTabNo() || bNew )
     {
-        //  #57724# Die FormShell moechte vor dem Umschalten benachrichtigt werden
+        //  Die FormShell moechte vor dem Umschalten benachrichtigt werden
         FmFormShell* pFormSh = aViewData.GetViewShell()->GetFormShell();
         if (pFormSh)
         {
-            sal_Bool bAllowed = sal::static_int_cast<sal_Bool>( pFormSh->PrepareClose( sal_True ) );
+            bool bAllowed = static_cast<bool>(pFormSh->PrepareClose(true));
             if (!bAllowed)
             {
                 //! Fehlermeldung? oder macht das die FormShell selber?
@@ -1584,6 +1456,7 @@ void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, 
                                         //  nicht InputEnterHandler wegen Referenzeingabe !
 
         ScDocument* pDoc = aViewData.GetDocument();
+
         pDoc->MakeTable( nTab );
 
         // Update pending row heights before switching the sheet, so Reschedule from the progress bar
@@ -1594,14 +1467,14 @@ void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, 
         SCTAB nOldPos = nTab;
         while (!pDoc->IsVisible(nTab))              // naechste sichtbare suchen
         {
-            sal_Bool bUp = (nTab>=nOldPos);
+            bool bUp = (nTab>=nOldPos);
             if (bUp)
             {
                 ++nTab;
                 if (nTab>=nTabCount)
                 {
                     nTab = nOldPos;
-                    bUp = sal_False;
+                    bUp = false;
                 }
             }
 
@@ -1611,8 +1484,8 @@ void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, 
                     --nTab;
                 else
                 {
-                    DBG_ERROR("keine sichtbare Tabelle");
-                    pDoc->SetVisible( 0, sal_True );
+                    OSL_FAIL("keine sichtbare Tabelle");
+                    pDoc->SetVisible( 0, true );
                 }
             }
         }
@@ -1622,7 +1495,7 @@ void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, 
         DrawDeselectAll();
 
         ScModule* pScMod = SC_MOD();
-        sal_Bool bRefMode = pScMod->IsFormulaMode();
+        bool bRefMode = pScMod->IsFormulaMode();
         if ( !bRefMode ) // Abfrage, damit RefMode bei Tabellenwechsel funktioniert
         {
             DoneBlockMode();
@@ -1631,14 +1504,14 @@ void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, 
         }
 
         ScSplitPos eOldActive = aViewData.GetActivePart();      // before switching
-        sal_Bool bFocus = pGridWin[eOldActive]->HasFocus();
+        bool bFocus = pGridWin[eOldActive]->HasFocus();
 
         aViewData.SetTabNo( nTab );
         //  UpdateShow noch vor SetCursor, damit UpdateAutoFillMark die richtigen
         //  Fenster findet (wird aus SetCursor gerufen)
         UpdateShow();
         aViewData.ResetOldCursor();
-        SetCursor( aViewData.GetCurX(), aViewData.GetCurY(), sal_True );
+        SetCursor( aViewData.GetCurX(), aViewData.GetCurY(), true );
 
         SfxBindings& rBindings = aViewData.GetBindings();
         ScMarkData& rMark = aViewData.GetMarkData();
@@ -1667,7 +1540,7 @@ void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, 
             bExtendSelection = false;
 
         if (bExtendSelection)
-            rMark.SelectTable( nTab, sal_True );
+            rMark.SelectTable( nTab, true );
         else
         {
             rMark.SelectOneTable( nTab );
@@ -1683,13 +1556,13 @@ void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, 
 
         if ( bRefMode )     // hide EditView if necessary (after aViewData.SetTabNo !)
         {
-            for ( sal_uInt16 i=0; i<4; i++ )
-                if ( pGridWin[i] )
-                    if ( pGridWin[i]->IsVisible() )
-                        pGridWin[i]->UpdateEditViewPos();
+            for (sal_uInt16 i = 0; i < 4; ++i)
+                if (pGridWin[i] && pGridWin[i]->IsVisible())
+                    pGridWin[i]->UpdateEditViewPos();
         }
 
-        TabChanged( bSameTabButMoved );                                     // DrawView
+        TabChanged(bSameTabButMoved);                                       // DrawView
+        UpdateVisibleRange();
 
         aViewData.GetViewShell()->WindowChanged();          // falls das aktive Fenster anders ist
         if ( !bUnoRefDialog )
@@ -1731,24 +1604,21 @@ void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, 
 
             //  Fixierungen
 
-        sal_Bool bResize = sal_False;
+        bool bResize = false;
         if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX )
             if (aViewData.UpdateFixX())
-                bResize = sal_True;
+                bResize = true;
         if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX )
             if (aViewData.UpdateFixY())
-                bResize = sal_True;
+                bResize = true;
         if (bResize)
             RepeatResize();
         InvalidateSplit();
 
-        // #163911# Update the visible range in each GridWin directly, don't wait for the repaint event.
-        UpdateVisibleRange();
-
         if ( aViewData.IsPagebreakMode() )
             UpdatePageBreakData();              //! asynchron ??
 
-        //  #53551# Form-Layer muss den sichtbaren Ausschnitt der neuen Tabelle kennen
+        //  Form-Layer muss den sichtbaren Ausschnitt der neuen Tabelle kennen
         //  dafuer muss hier schon der MapMode stimmen
         for (sal_uInt16 i=0; i<4; i++)
             if (pGridWin[i])
@@ -1794,7 +1664,7 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
     DrawDeselectAll();
 
     if (pDrawView)
-        DrawEnableAnim( sal_False );
+        DrawEnableAnim( false );
 
     EditView* pSpellingView = aViewData.GetSpellingView();
 
@@ -1807,11 +1677,11 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
                 SCCOL nScrX = aViewData.GetPosX( eHWhich );
                 SCROW nScrY = aViewData.GetPosY( eVWhich );
 
-                sal_Bool bPosVisible =
+                bool bPosVisible =
                      ( nCol >= nScrX && nCol <= nScrX + aViewData.VisibleCellsX(eHWhich) + 1 &&
                        nRow >= nScrY && nRow <= nScrY + aViewData.VisibleCellsY(eVWhich) + 1 );
 
-                //  #102421# for the active part, create edit view even if outside the visible area,
+                //  for the active part, create edit view even if outside the visible area,
                 //  so input isn't lost (and the edit view may be scrolled into the visible area)
 
                 //  #i26433# during spelling, the spelling view must be active
@@ -1822,6 +1692,7 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
 
                     pGridWin[i]->DeleteCursorOverlay();
                     pGridWin[i]->DeleteAutoFillOverlay();
+                    pGridWin[i]->DeleteCopySourceOverlay();
 
                     // flush OverlayManager before changing MapMode to text edit
                     pGridWin[i]->flushOverlayManager();
@@ -1855,22 +1726,22 @@ void ScTabView::UpdateEditView()
                 static_cast<ScEditEngineDefaulter*>(pEditView->GetEditEngine()),
                 pGridWin[i], GetViewData()->GetCurX(), GetViewData()->GetCurY() );
             if ( (ScSplitPos)i == eActive )
-                pEditView->ShowCursor( sal_False );
+                pEditView->ShowCursor( false );
         }
 }
 
-void ScTabView::KillEditView( sal_Bool bNoPaint )
+void ScTabView::KillEditView( bool bNoPaint )
 {
     sal_uInt16 i;
     SCCOL nCol1 = aViewData.GetEditStartCol();
     SCROW nRow1 = aViewData.GetEditStartRow();
     SCCOL nCol2 = aViewData.GetEditEndCol();
     SCROW nRow2 = aViewData.GetEditEndRow();
-    sal_Bool bPaint[4];
-    sal_Bool bNotifyAcc(false);
+    bool bPaint[4];
+    bool bNotifyAcc = false;
 
-    sal_Bool bExtended = nRow1 != nRow2;                    // Col wird sowieso bis zum Ende gezeichnet
-    sal_Bool bAtCursor = nCol1 <= aViewData.GetCurX() &&
+    bool bExtended = nRow1 != nRow2;                    // Col wird sowieso bis zum Ende gezeichnet
+    bool bAtCursor = nCol1 <= aViewData.GetCurX() &&
                      nCol2 >= aViewData.GetCurX() &&
                      nRow1 == aViewData.GetCurY();
     for (i=0; i<4; i++)
@@ -1902,12 +1773,12 @@ void ScTabView::KillEditView( sal_Bool bNoPaint )
             }
 
     if (pDrawView)
-        DrawEnableAnim( sal_True );
+        DrawEnableAnim( true );
 
         //  GrabFocus immer dann, wenn diese View aktiv ist und
         //  die Eingabezeile den Focus hat
 
-    sal_Bool bGrabFocus = sal_False;
+    bool bGrabFocus = false;
     if (aViewData.IsActive())
     {
         ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
@@ -1915,7 +1786,7 @@ void ScTabView::KillEditView( sal_Bool bNoPaint )
         {
             ScInputWindow* pInputWin = pInputHdl->GetInputWindow();
             if (pInputWin && pInputWin->IsInputActive())
-                bGrabFocus = sal_True;
+                bGrabFocus = true;
         }
     }
 
@@ -1940,7 +1811,6 @@ void ScTabView::KillEditView( sal_Bool bNoPaint )
             {
                 pGridWin[i]->UpdateCursorOverlay();
                 pGridWin[i]->UpdateAutoFillOverlay();
-                // pGridWin[i]->UpdateAllOverlays();
             }
         }
 }
@@ -1986,7 +1856,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             {
                 ScHSplitPos eHWhich = WhichH( (ScSplitPos) i );
                 ScVSplitPos eVWhich = WhichV( (ScSplitPos) i );
-                sal_Bool bOut = sal_False;
+                bool bOut = false;
 
                 nCol1 = nStartCol;
                 nRow1 = nStartRow;
@@ -1998,19 +1868,19 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                 if (nCol1 < nScrX) nCol1 = nScrX;
                 if (nCol2 < nScrX)
                 {
-                    if ( eMode == SC_UPDATE_ALL )   // #91240# for UPDATE_ALL, paint anyway
+                    if ( eMode == SC_UPDATE_ALL )   // for UPDATE_ALL, paint anyway
                         nCol2 = nScrX;              // (because of extending strings to the right)
                     else
-                        bOut = sal_True;                // completely outside the window
+                        bOut = true;                // completely outside the window
                 }
                 if (nRow1 < nScrY) nRow1 = nScrY;
-                if (nRow2 < nScrY) bOut = sal_True;
+                if (nRow2 < nScrY) bOut = true;
 
                 SCCOL nLastX = nScrX + aViewData.VisibleCellsX( eHWhich ) + 1;
                 SCROW nLastY = nScrY + aViewData.VisibleCellsY( eVWhich ) + 1;
-                if (nCol1 > nLastX) bOut = sal_True;
+                if (nCol1 > nLastX) bOut = true;
                 if (nCol2 > nLastX) nCol2 = nLastX;
-                if (nRow1 > nLastY) bOut = sal_True;
+                if (nRow1 > nLastY) bOut = true;
                 if (nRow2 > nLastY) nRow2 = nLastY;
 
                 if (!bOut)
@@ -2019,7 +1889,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                         pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2, eMode );
                     else    // ALL oder MARKS
                     {
-                        sal_Bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+                        bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
                         long nLayoutSign = bLayoutRTL ? -1 : 1;
 
                         Point aStart = aViewData.GetScrPos( nCol1, nRow1, (ScSplitPos) i );
@@ -2033,14 +1903,14 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                         if ( eMode == SC_UPDATE_ALL && nRow2 >= MAXROW )
                             aEnd.Y() = pGridWin[i]->GetOutputSizePixel().Height();
 
-                        sal_Bool bShowChanges = sal_True;           //! ...
+                        bool bShowChanges = true;           //! ...
                         if (bShowChanges)
                         {
                             aStart.X() -= nLayoutSign;      // include change marks
                             aStart.Y() -= 1;
                         }
 
-                        sal_Bool bMarkClipped = aViewData.GetOptions().GetOption( VOPT_CLIPMARKS );
+                        bool bMarkClipped = aViewData.GetOptions().GetOption( VOPT_CLIPMARKS );
                         if (bMarkClipped)
                         {
                             //  dazu muesste ScColumn::IsEmptyBlock optimiert werden
@@ -2070,6 +1940,67 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     // is set (width or height changed).
 }
 
+void ScTabView::PaintRangeFinderEntry (ScRangeFindData* pData, const SCTAB nTab)
+{
+    ScRange aRef = pData->aRef;
+    aRef.Justify();                 // Justify fuer die Abfragen unten
+
+    if ( aRef.aStart == aRef.aEnd )     //! Tab ignorieren?
+        aViewData.GetDocument()->ExtendMerge(aRef);
+
+    if ( aRef.aStart.Tab() >= nTab && aRef.aEnd.Tab() <= nTab )
+    {
+        SCCOL nCol1 = aRef.aStart.Col();
+        SCROW nRow1 = aRef.aStart.Row();
+        SCCOL nCol2 = aRef.aEnd.Col();
+        SCROW nRow2 = aRef.aEnd.Row();
+
+        //  wegnehmen -> Repaint
+        //  SC_UPDATE_MARKS: Invalidate, nicht bis zum Zeilenende
+
+        bool bHiddenEdge = false;
+        SCROW nTmp;
+        ScDocument* pDoc = aViewData.GetDocument();
+        while ( nCol1 > 0 && pDoc->ColHidden(nCol1, nTab) )
+        {
+            --nCol1;
+            bHiddenEdge = true;
+        }
+        while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab) )
+        {
+            ++nCol2;
+            bHiddenEdge = true;
+        }
+        nTmp = pDoc->LastVisibleRow(0, nRow1, nTab);
+        if (!ValidRow(nTmp))
+            nTmp = 0;
+        if (nTmp < nRow1)
+        {
+            nRow1 = nTmp;
+            bHiddenEdge = true;
+        }
+        nTmp = pDoc->FirstVisibleRow(nRow2, MAXROW, nTab);
+        if (!ValidRow(nTmp))
+            nTmp = MAXROW;
+        if (nTmp > nRow2)
+        {
+            nRow2 = nTmp;
+            bHiddenEdge = true;
+        }
+
+        if ( nCol2 - nCol1 > 1 && nRow2 - nRow1 > 1 && !bHiddenEdge )
+        {
+            //  nur an den Raendern entlang
+            PaintArea( nCol1, nRow1, nCol2, nRow1, SC_UPDATE_MARKS );
+            PaintArea( nCol1, nRow1+1, nCol1, nRow2-1, SC_UPDATE_MARKS );
+            PaintArea( nCol2, nRow1+1, nCol2, nRow2-1, SC_UPDATE_MARKS );
+            PaintArea( nCol1, nRow2, nCol2, nRow2, SC_UPDATE_MARKS );
+        }
+        else    // alles am Stueck
+            PaintArea( nCol1, nRow1, nCol2, nRow2, SC_UPDATE_MARKS );
+    }
+}
+
 void ScTabView::PaintRangeFinder( long nNumber )
 {
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( aViewData.GetViewShell() );
@@ -2080,72 +2011,18 @@ void ScTabView::PaintRangeFinder( long nNumber )
         {
             SCTAB nTab = aViewData.GetTabNo();
             sal_uInt16 nCount = (sal_uInt16)pRangeFinder->Count();
-            for (sal_uInt16 i=0; i<nCount; i++)
-                if ( nNumber < 0 || nNumber == i )
-                {
-                    ScRangeFindData* pData = pRangeFinder->GetObject(i);
-                    if (pData)
-                    {
-                        ScRange aRef = pData->aRef;
-                        aRef.Justify();                 // Justify fuer die Abfragen unten
 
-                        if ( aRef.aStart == aRef.aEnd )     //! Tab ignorieren?
-                            aViewData.GetDocument()->ExtendMerge(aRef);
-
-                        if ( aRef.aStart.Tab() >= nTab && aRef.aEnd.Tab() <= nTab )
-                        {
-                            SCCOL nCol1 = aRef.aStart.Col();
-                            SCROW nRow1 = aRef.aStart.Row();
-                            SCCOL nCol2 = aRef.aEnd.Col();
-                            SCROW nRow2 = aRef.aEnd.Row();
-
-                            //  wegnehmen -> Repaint
-                            //  SC_UPDATE_MARKS: Invalidate, nicht bis zum Zeilenende
-
-                            sal_Bool bHiddenEdge = sal_False;
-                            SCROW nTmp;
-                            ScDocument* pDoc = aViewData.GetDocument();
-                            SCCOL nLastCol = -1;
-                            while ( nCol1 > 0 && pDoc->ColHidden(nCol1, nTab, nLastCol) )
-                            {
-                                --nCol1;
-                                bHiddenEdge = sal_True;
-                            }
-                            while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab, nLastCol) )
-                            {
-                                ++nCol2;
-                                bHiddenEdge = sal_True;
-                            }
-                            nTmp = pDoc->LastVisibleRow(0, nRow1, nTab);
-                            if (!ValidRow(nTmp))
-                                nTmp = 0;
-                            if (nTmp < nRow1)
-                            {
-                                nRow1 = nTmp;
-                                bHiddenEdge = sal_True;
-                            }
-                            nTmp = pDoc->FirstVisibleRow(nRow2, MAXROW, nTab);
-                            if (!ValidRow(nTmp))
-                                nTmp = MAXROW;
-                            if (nTmp > nRow2)
-                            {
-                                nRow2 = nTmp;
-                                bHiddenEdge = sal_True;
-                            }
-
-                            if ( nCol2 - nCol1 > 1 && nRow2 - nRow1 > 1 && !bHiddenEdge )
-                            {
-                                //  nur an den Raendern entlang
-                                PaintArea( nCol1, nRow1, nCol2, nRow1, SC_UPDATE_MARKS );
-                                PaintArea( nCol1, nRow1+1, nCol1, nRow2-1, SC_UPDATE_MARKS );
-                                PaintArea( nCol2, nRow1+1, nCol2, nRow2-1, SC_UPDATE_MARKS );
-                                PaintArea( nCol1, nRow2, nCol2, nRow2, SC_UPDATE_MARKS );
-                            }
-                            else    // alles am Stueck
-                                PaintArea( nCol1, nRow1, nCol2, nRow2, SC_UPDATE_MARKS );
-                        }
-                    }
-                }
+            if (nNumber < 0)
+            {
+                for (sal_uInt16 i=0; i<nCount; i++)
+                    PaintRangeFinderEntry(pRangeFinder->GetObject(i),nTab);
+            }
+            else
+            {
+                sal_uInt16 idx = nNumber;
+                if (idx < nCount)
+                    PaintRangeFinderEntry(pRangeFinder->GetObject(idx),nTab);
+            }
         }
     }
 }
@@ -2154,9 +2031,7 @@ void ScTabView::PaintRangeFinder( long nNumber )
 
 void ScTabView::AddHighlightRange( const ScRange& rRange, const Color& rColor )
 {
-    if (!pHighlightRanges)
-        pHighlightRanges = new ScHighlightRanges;
-    pHighlightRanges->Insert( new ScHighlightEntry( rRange, rColor ) );
+    maHighlightRanges.push_back( ScHighlightEntry( rRange, rColor ) );
 
     SCTAB nTab = aViewData.GetTabNo();
     if ( nTab >= rRange.aStart.Tab() && nTab <= rRange.aEnd.Tab() )
@@ -2166,32 +2041,24 @@ void ScTabView::AddHighlightRange( const ScRange& rRange, const Color& rColor )
 
 void ScTabView::ClearHighlightRanges()
 {
-    if (pHighlightRanges)
+    SCTAB nTab = aViewData.GetTabNo();
+    std::vector<ScHighlightEntry>::const_iterator pIter;
+    for ( pIter = maHighlightRanges.begin(); pIter != maHighlightRanges.end(); ++pIter)
     {
-        ScHighlightRanges* pTemp = pHighlightRanges;
-        pHighlightRanges = NULL;    // Repaint ohne Highlight
-
-        SCTAB nTab = aViewData.GetTabNo();
-        sal_uLong nCount = pTemp->Count();
-        for (sal_uLong i=0; i<nCount; i++)
-        {
-            ScHighlightEntry* pEntry = pTemp->GetObject( i );
-            if (pEntry)
-            {
-                ScRange aRange = pEntry->aRef;
-                if ( nTab >= aRange.aStart.Tab() && nTab <= aRange.aEnd.Tab() )
-                    PaintArea( aRange.aStart.Col(), aRange.aStart.Row(),
-                               aRange.aEnd.Col(), aRange.aEnd.Row(), SC_UPDATE_MARKS );
-            }
-        }
-        delete pTemp;
+        ScRange aRange = pIter->aRef;
+        if ( nTab >= aRange.aStart.Tab() && nTab <= aRange.aEnd.Tab() )
+            PaintArea( aRange.aStart.Col(), aRange.aStart.Row(),
+                       aRange.aEnd.Col(), aRange.aEnd.Row(), SC_UPDATE_MARKS );
     }
+
+    maHighlightRanges.clear();
 }
 
 void ScTabView::DoChartSelection(
     const uno::Sequence< chart2::data::HighlightedRange > & rHilightRanges )
 {
     ClearHighlightRanges();
+    const sal_Unicode sep = ::formula::FormulaCompiler::GetNativeSymbol(ocSep).GetChar(0);
 
     for( sal_Int32 i=0; i<rHilightRanges.getLength(); ++i )
     {
@@ -2199,10 +2066,12 @@ void ScTabView::DoChartSelection(
         ScRangeList aRangeList;
         ScDocument* pDoc = aViewData.GetDocShell()->GetDocument();
         if( ScRangeStringConverter::GetRangeListFromString(
-                aRangeList, rHilightRanges[i].RangeRepresentation, pDoc, pDoc->GetAddressConvention(), ';' ))
+                aRangeList, rHilightRanges[i].RangeRepresentation, pDoc, pDoc->GetAddressConvention(), sep ))
         {
-            for ( ScRangePtr p = aRangeList.First(); p; p = aRangeList.Next())
+            size_t nListSize = aRangeList.size();
+            for ( size_t j = 0; j < nListSize; ++j )
             {
+                ScRange* p = aRangeList[j];
                 if( rHilightRanges[i].Index == - 1 )
                     AddHighlightRange( *p, aSelColor );
                 else
@@ -2211,46 +2080,6 @@ void ScTabView::DoChartSelection(
         }
     }
 }
-
-//  DrawDragRect - Drag&Drop-Rechteck zeichnen (XOR)
-
-//UNUSED2008-05  void ScTabView::DrawDragRect( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
-//UNUSED2008-05                                ScSplitPos ePos )
-//UNUSED2008-05  {
-//UNUSED2008-05      if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX || aViewData.GetVSplitMode() == SC_SPLIT_FIX )
-//UNUSED2008-05      {
-//UNUSED2008-05          for (sal_uInt16  i=0; i<4; i++)
-//UNUSED2008-05              if (pGridWin[i])
-//UNUSED2008-05                  if (pGridWin[i]->IsVisible())
-//UNUSED2008-05                      pGridWin[i]->DrawDragRect( nStartX, nStartY, nEndX, nEndY );
-//UNUSED2008-05      }
-//UNUSED2008-05      else
-//UNUSED2008-05          pGridWin[ePos]->DrawDragRect( nStartX, nStartY, nEndX, nEndY );
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  // PaintCell - einzelne Zelle neu zeichnen
-//UNUSED2008-05
-//UNUSED2008-05  void ScTabView::PaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
-//UNUSED2008-05  {
-//UNUSED2008-05      if ( aViewData.GetTabNo() == nTab )
-//UNUSED2008-05      {
-//UNUSED2008-05          sal_uInt16 i;
-//UNUSED2008-05          for (i=0; i<4; i++)
-//UNUSED2008-05              if (pGridWin[i])
-//UNUSED2008-05                  if (pGridWin[i]->IsVisible())
-//UNUSED2008-05                      pGridWin[i]->Draw( nCol, nRow, nCol, nRow );
-//UNUSED2008-05      }
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void ScTabView::PaintLeftRow( SCROW nRow )
-//UNUSED2008-05  {
-//UNUSED2008-05      PaintLeftArea( nRow, nRow );
-//UNUSED2008-05  }
-//UNUSED2008-05
-//UNUSED2008-05  void ScTabView::PaintTopCol( SCCOL nCol )
-//UNUSED2008-05  {
-//UNUSED2008-05      PaintTopArea( nCol, nCol );
-//UNUSED2008-05  }
 
 //  PaintGrid - Datenbereiche neu zeichnen
 
@@ -2312,7 +2141,7 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
     if (nStartCol>0)
         --nStartCol;                //! allgemeiner ?
 
-    sal_Bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     for (sal_uInt16 i=0; i<2; i++)
@@ -2389,101 +2218,18 @@ void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )
     }
 }
 
-//  InvertBlockMark - Block invertieren
-
-void ScTabView::InvertBlockMark(SCCOL nStartX, SCROW nStartY,
-                                SCCOL nEndX, SCROW nEndY)
+bool ScTabView::PaintExtras()
 {
-    if ( !aViewData.IsActive() )
-        return;                                 // invertiert wird nur auf aktiver View
-
-    PutInOrder( nStartX, nEndX );
-    PutInOrder( nStartY, nEndY );
-
-    ScMarkData& rMark = aViewData.GetMarkData();
-    ScDocShell* pDocSh = aViewData.GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
-
-    if ( pDocSh->GetLockCount() )
-    {
-        //  if paint is locked, avoid repeated inverting
-        //  add repaint areas to paint lock data instead
-        pDocSh->PostPaint( nStartX,nStartY,nTab, nEndX,nEndY,nTab, PAINT_GRID );
-        return;
-    }
-
-    sal_Bool bSingle = rMark.IsMultiMarked();
-    sal_Bool bMerge = pDoc->HasAttrib( nStartX, nStartY, nTab, nEndX, nEndY, nTab,
-                                    HASATTR_MERGED | HASATTR_OVERLAPPED );
-
-    sal_uInt16 i;
-    if ( bMerge || bSingle )
-    {
-        for (i=0; i<4; i++)
-            if (pGridWin[i])
-                if (pGridWin[i]->IsVisible())
-                    pGridWin[i]->InvertSimple( nStartX, nStartY, nEndX, nEndY,
-                                                bMerge, bBlockNeg );
-    }
-    else
-    {
-        for (i=0; i<4; i++)
-            if (pGridWin[i])
-                if (pGridWin[i]->IsVisible())
-                {
-                    ScSplitPos ePos = (ScSplitPos) i;
-                    Point aStartPoint = aViewData.GetScrPos( nStartX, nStartY, ePos );
-                    Point aEndPoint = aViewData.GetScrPos( nEndX+1, nEndY+1, ePos );
-                    if ( pDoc->IsLayoutRTL( nTab ) )
-                    {
-                        long nTemp = aStartPoint.X();
-                        aStartPoint.X() = aEndPoint.X() + 1;    // +1 - excluding start of nEndX+1
-                        aEndPoint.X() = nTemp;
-                    }
-                    else
-                        aEndPoint.X() -= 1;
-                    aEndPoint.Y() -= 1;
-                    if ( aEndPoint.X() >= aStartPoint.X() && aEndPoint.Y() >= aStartPoint.Y() )
-                    {
-                        MapMode aOld = pGridWin[ePos]->GetMapMode();
-                        pGridWin[ePos]->SetMapMode(MAP_PIXEL);
-                        pGridWin[ePos]->Invert( Rectangle(aStartPoint,aEndPoint), INVERT_HIGHLIGHT );
-                        pGridWin[ePos]->SetMapMode(aOld);
-                        pGridWin[ePos]->CheckInverted();
-                    }
-                }
-    }
-
-        //
-        //  wenn Controls betroffen, neu malen
-        //
-
-    sal_Bool bHide = sal_True;                  // wird Teil der Markierung aufgehoben ?
-    if (rMark.IsMarked())
-    {
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
-        if ( aMarkRange.aStart.Col() <= nStartX && aMarkRange.aEnd.Col() >= nEndX &&
-             aMarkRange.aStart.Row() <= nStartY && aMarkRange.aEnd.Row() >= nEndY )
-        {
-            bHide = sal_False;              // der ganze Bereich ist markiert
-        }
-    }
-}
-
-sal_Bool ScTabView::PaintExtras()
-{
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
     if (!pDoc->HasTable(nTab))                  // Tabelle geloescht ?
     {
         SCTAB nCount = pDoc->GetTableCount();
         aViewData.SetTabNo(nCount-1);
-        bRet = sal_True;
+        bRet = true;
     }
-    pTabControl->UpdateStatus();                        // sal_True = active
+    pTabControl->UpdateStatus();                        // true = active
     return bRet;
 }
 
@@ -2497,8 +2243,8 @@ void ScTabView::RecalcPPT()
 
     aViewData.RefreshZoom();                            // pre-calculate new PPT values
 
-    sal_Bool bChangedX = ( aViewData.GetPPTX() != nOldX );
-    sal_Bool bChangedY = ( aViewData.GetPPTY() != nOldY );
+    bool bChangedX = ( aViewData.GetPPTX() != nOldX );
+    bool bChangedY = ( aViewData.GetPPTY() != nOldY );
     if ( bChangedX || bChangedY )
     {
         //  call view SetZoom (including draw scale, split update etc)
@@ -2506,7 +2252,7 @@ void ScTabView::RecalcPPT()
 
         Fraction aZoomX = aViewData.GetZoomX();
         Fraction aZoomY = aViewData.GetZoomY();
-        SetZoom( aZoomX, aZoomY, sal_False );
+        SetZoom( aZoomX, aZoomY, false );
 
         PaintGrid();
         if (bChangedX)
@@ -2516,7 +2262,7 @@ void ScTabView::RecalcPPT()
     }
 }
 
-void ScTabView::ActivateView( sal_Bool bActivate, sal_Bool bFirst )
+void ScTabView::ActivateView( bool bActivate, bool bFirst )
 {
     if ( bActivate == aViewData.IsActive() && !bFirst )
     {
@@ -2527,22 +2273,20 @@ void ScTabView::ActivateView( sal_Bool bActivate, sal_Bool bFirst )
 
     // wird nur bei MDI-(De)Activate gerufen
     // aViewData.Activate hinten wegen Cursor-Show bei KillEditView
-    //  Markierung nicht mehr loeschen - wenn an der ViewData Activate(sal_False) gesetzt ist,
+    //  Markierung nicht mehr loeschen - wenn an der ViewData Activate(false) gesetzt ist,
     //  wird die Markierung nicht ausgegeben
 
     if (!bActivate)
     {
         ScModule* pScMod = SC_MOD();
-        sal_Bool bRefMode = pScMod->IsFormulaMode();
+        bool bRefMode = pScMod->IsFormulaMode();
 
             //  Referenzeingabe nicht abbrechen, um Referenzen auf
             //  andere Dokumente zuzulassen
 
         if (!bRefMode)
         {
-            //pScMod->InputEnterHandler();
-
-            //  #80843# pass view to GetInputHdl, this view may not be current anymore
+            //  pass view to GetInputHdl, this view may not be current anymore
             ScInputHandler* pHdl = SC_MOD()->GetInputHdl(aViewData.GetViewShell());
             if (pHdl)
                 pHdl->EnterHandler();
@@ -2553,22 +2297,19 @@ void ScTabView::ActivateView( sal_Bool bActivate, sal_Bool bFirst )
 
     aViewData.Activate(bActivate);
 
-    PaintBlock(sal_False);                  // Repaint, Markierung je nach Active-Status
+    PaintBlock(false);                  // Repaint, Markierung je nach Active-Status
 
     if (!bActivate)
         HideAllCursors();               // Cursor
     else if (!bFirst)
         ShowAllCursors();
 
-    //HMHif (pDrawView)
-    //HMH   DrawShowMarkHdl(bActivate);     // Drawing-Markierung
-
     if (bActivate)
     {
         if ( bFirst )
         {
             ScSplitPos eWin = aViewData.GetActivePart();
-            DBG_ASSERT( pGridWin[eWin], "rottes Dokument, nicht alle SplitPos in GridWin" );
+            OSL_ENSURE( pGridWin[eWin], "rottes Dokument, nicht alle SplitPos in GridWin" );
             if ( !pGridWin[eWin] )
             {
                 eWin = SC_SPLIT_BOTTOMLEFT;
@@ -2583,7 +2324,7 @@ void ScTabView::ActivateView( sal_Bool bActivate, sal_Bool bFirst )
                             break;  // for
                         }
                     }
-                    DBG_ASSERT( i<4, "und BUMM" );
+                    OSL_ENSURE( i<4, "und BUMM" );
                 }
                 aViewData.SetActivePart( eWin );
             }
@@ -2603,11 +2344,11 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
     ScSplitPos eOld = aViewData.GetActivePart();
     if ( eOld != eWhich )
     {
-        bInActivatePart = sal_True;
+        bInActivatePart = true;
 
-        sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
+        bool bRefMode = SC_MOD()->IsFormulaMode();
 
-        //  #40565# the HasEditView call during SetCursor would fail otherwise
+        //  the HasEditView call during SetCursor would fail otherwise
         if ( aViewData.HasEditView(eOld) && !bRefMode )
             UpdateInputLine();
 
@@ -2615,11 +2356,11 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         ScVSplitPos eOldV = WhichV(eOld);
         ScHSplitPos eNewH = WhichH(eWhich);
         ScVSplitPos eNewV = WhichV(eWhich);
-        sal_Bool bTopCap  = pColBar[eOldH] && pColBar[eOldH]->IsMouseCaptured();
-        sal_Bool bLeftCap = pRowBar[eOldV] && pRowBar[eOldV]->IsMouseCaptured();
+        bool bTopCap  = pColBar[eOldH] && pColBar[eOldH]->IsMouseCaptured();
+        bool bLeftCap = pRowBar[eOldV] && pRowBar[eOldV]->IsMouseCaptured();
 
-        sal_Bool bFocus = pGridWin[eOld]->HasFocus();
-        sal_Bool bCapture = pGridWin[eOld]->IsMouseCaptured();
+        bool bFocus = pGridWin[eOld]->HasFocus();
+        bool bCapture = pGridWin[eOld]->IsMouseCaptured();
         if (bCapture)
             pGridWin[eOld]->ReleaseMouse();
         pGridWin[eOld]->ClickExtern();
@@ -2647,8 +2388,8 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
 
         if ( bTopCap && pColBar[eNewH] )
         {
-            pColBar[eOldH]->SetIgnoreMove(sal_True);
-            pColBar[eNewH]->SetIgnoreMove(sal_False);
+            pColBar[eOldH]->SetIgnoreMove(true);
+            pColBar[eNewH]->SetIgnoreMove(false);
             pHdrSelEng->SetWindow( pColBar[eNewH] );
             long nWidth = pColBar[eNewH]->GetOutputSizePixel().Width();
             pHdrSelEng->SetVisibleArea( Rectangle( 0, LONG_MIN, nWidth-1, LONG_MAX ) );
@@ -2656,8 +2397,8 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         }
         if ( bLeftCap && pRowBar[eNewV] )
         {
-            pRowBar[eOldV]->SetIgnoreMove(sal_True);
-            pRowBar[eNewV]->SetIgnoreMove(sal_False);
+            pRowBar[eOldV]->SetIgnoreMove(true);
+            pRowBar[eNewV]->SetIgnoreMove(false);
             pHdrSelEng->SetWindow( pRowBar[eNewV] );
             long nHeight = pRowBar[eNewV]->GetOutputSizePixel().Height();
             pHdrSelEng->SetVisibleArea( Rectangle( LONG_MIN, 0, LONG_MAX, nHeight-1 ) );
@@ -2669,9 +2410,9 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         pGridWin[eWhich]->ShowCursor();
 
         SfxInPlaceClient* pClient = aViewData.GetViewShell()->GetIPClient();
-        sal_Bool bOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
+        bool bOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
-        //  #103823# don't switch ViewShell's active window during RefInput, because the focus
+        //  don't switch ViewShell's active window during RefInput, because the focus
         //  might change, and subsequent SetReference calls wouldn't find the right EditView
         if ( !bRefMode && !bOleActive )
             aViewData.GetViewShell()->SetWindow( pGridWin[eWhich] );
@@ -2680,11 +2421,10 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         {
             //  GrabFocus nur, wenn vorher das andere GridWindow den Focus hatte
             //  (z.B. wegen Suchen & Ersetzen)
-//!         aViewData.GetViewShell()->GetViewFrame()->GetWindow().GrabFocus();
             pGridWin[eWhich]->GrabFocus();
         }
 
-        bInActivatePart = sal_False;
+        bInActivatePart = false;
     }
 }
 
@@ -2700,6 +2440,9 @@ void ScTabView::UpdateInputContext()
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
     if (pWin)
         pWin->UpdateInputContext();
+
+    if (pTabControl)
+        pTabControl->UpdateInputContext();
 }
 
 //  GetGridWidth - Breite eines Ausgabebereichs (fuer ViewData)
@@ -2756,15 +2499,7 @@ void ScTabView::ZoomChanged()
 
     SetNewVisArea();
 
-    /* the old code
-    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
-    if (pWin)
-    {
-        pWin->SetMapMode( pWin->GetDrawMapMode() ); // mit neuem Zoom
-        SetNewVisArea();                            // benutzt den gesetzten MapMode
-    } */
-
-    InterpretVisible();     // #69343# have everything calculated before painting
+    InterpretVisible();     // have everything calculated before painting
 
     SfxBindings& rBindings = aViewData.GetBindings();
     rBindings.Invalidate( SID_ATTR_ZOOM );
@@ -2780,7 +2515,7 @@ void ScTabView::ZoomChanged()
         // flush OverlayManager before changing the MapMode
         pWin->flushOverlayManager();
 
-        //  #93650# make sure the EditView's position and size are updated
+        //  make sure the EditView's position and size are updated
         //  with the right (logic, not drawing) MapMode
         pWin->SetMapMode( aViewData.GetLogicMode() );
         UpdateEditView();
@@ -2799,3 +2534,4 @@ void ScTabView::CheckNeedsRepaint()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

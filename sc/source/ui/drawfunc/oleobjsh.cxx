@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,11 +35,9 @@
 
 #include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
-//CHINA001 #include <svx/labdlg.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/tabline.hxx>
-//CHINA001 #include <svx/transfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
@@ -81,3 +80,4 @@ ScOleObjectShell::~ScOleObjectShell()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

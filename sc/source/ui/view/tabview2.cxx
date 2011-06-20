@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-
-
 #include <vcl/timer.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
@@ -59,16 +54,236 @@
 #include "waitoff.hxx"
 #include "globstr.hrc"
 #include "scmod.hxx"
+#include "tabprotection.hxx"
 
-#define SC_BLOCKMODE_NONE       0
-#define SC_BLOCKMODE_NORMAL     1
-#define SC_BLOCKMODE_OWN        2
+namespace {
 
+bool isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, bool bSelectLocked, bool bSelectUnlocked)
+{
+    bool bCellProtected = pDoc->HasAttrib(
+        nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_PROTECTED);
 
+    if (bCellProtected && !bSelectLocked)
+        return false;
 
-//
-//          Markier - Funktionen
-//
+    if (!bCellProtected && !bSelectUnlocked)
+        return false;
+
+    return true;
+}
+
+void moveCursorByProtRule(
+    SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY, SCTAB nTab, ScDocument* pDoc)
+{
+    bool bSelectLocked = true;
+    bool bSelectUnlocked = true;
+    ScTableProtection* pTabProtection = pDoc->GetTabProtection(nTab);
+    if (pTabProtection && pTabProtection->isProtected())
+    {
+        bSelectLocked   = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bSelectUnlocked = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+    }
+
+    if (nMovX > 0)
+    {
+        if (rCol < MAXCOL)
+        {
+            for (SCCOL i = 0; i < nMovX; ++i)
+            {
+                if (!isCellQualified(pDoc, rCol+1, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                    break;
+                ++rCol;
+            }
+        }
+    }
+    else if (nMovX < 0)
+    {
+        if (rCol > 0)
+        {
+            nMovX = -nMovX;
+            for (SCCOL i = 0; i < nMovX; ++i)
+            {
+                if (!isCellQualified(pDoc, rCol-1, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                    break;
+                --rCol;
+            }
+        }
+    }
+
+    if (nMovY > 0)
+    {
+        if (rRow < MAXROW)
+        {
+            for (SCROW i = 0; i < nMovY; ++i)
+            {
+                if (!isCellQualified(pDoc, rCol, rRow+1, nTab, bSelectLocked, bSelectUnlocked))
+                    break;
+                ++rRow;
+            }
+        }
+    }
+    else if (nMovY < 0)
+    {
+        if (rRow > 0)
+        {
+            nMovY = -nMovY;
+            for (SCROW i = 0; i < nMovY; ++i)
+            {
+                if (!isCellQualified(pDoc, rCol, rRow-1, nTab, bSelectLocked, bSelectUnlocked))
+                    break;
+                --rRow;
+            }
+        }
+    }
+}
+
+bool checkBoundary(SCCOL& rCol, SCROW& rRow)
+{
+    bool bGood = true;
+    if (rCol < 0)
+    {
+        rCol = 0;
+        bGood = false;
+    }
+    else if (rCol > MAXCOL)
+    {
+        rCol = MAXCOL;
+        bGood = false;
+    }
+
+    if (rRow < 0)
+    {
+        rRow = 0;
+        bGood = false;
+    }
+    else if (rRow > MAXROW)
+    {
+        rRow = MAXROW;
+        bGood = false;
+    }
+    return bGood;
+}
+
+void moveCursorByMergedCell(
+    SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY, SCTAB nTab,
+    ScDocument* pDoc, const ScViewData& rViewData)
+{
+    SCCOL nOrigX = rViewData.GetCurX();
+    SCROW nOrigY = rViewData.GetCurY();
+
+    ScTableProtection* pTabProtection = pDoc->GetTabProtection(nTab);
+    bool bSelectLocked = true;
+    bool bSelectUnlocked = true;
+    if (pTabProtection && pTabProtection->isProtected())
+    {
+        bSelectLocked   = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bSelectUnlocked = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+    }
+
+    const ScMergeAttr* pMergeAttr = static_cast<const ScMergeAttr*>(
+        pDoc->GetAttr(nOrigX, nOrigY, nTab, ATTR_MERGE));
+
+    bool bOriginMerged = false;
+    SCsCOL nColSpan = 1;
+    SCsROW nRowSpan = 1;
+    if (pMergeAttr && pMergeAttr->IsMerged())
+    {
+        nColSpan = pMergeAttr->GetColMerge();
+        nRowSpan = pMergeAttr->GetRowMerge();
+        bOriginMerged = true;
+    }
+
+    if (nMovX > 0)
+    {
+        SCCOL nOld = rCol;
+        if (bOriginMerged)
+        {
+            // Original cell is merged.  Push the block end outside the merged region.
+            if (nOrigX < MAXCOL && nOrigX < rCol && rCol <= nOrigX + nColSpan - 1)
+                rCol = nOrigX + nColSpan;
+        }
+        else
+        {
+            pDoc->SkipOverlapped(rCol, rRow, nTab);
+        }
+
+        if (nOld < rCol)
+        {
+            // The block end has moved.  Check the protection setting and move back if needed.
+            checkBoundary(rCol, rRow);
+            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                --rCol;
+        }
+    }
+    if (nMovX < 0)
+    {
+        SCCOL nOld = rCol;
+        if (bOriginMerged)
+        {
+            if (nOrigX > 0 && nOrigX <= rCol && rCol < nOrigX + nColSpan - 1)
+                // Block end is still within the merged region.  Push it outside.
+                rCol = nOrigX - 1;
+        }
+        else
+        {
+            pDoc->SkipOverlapped(rCol, rRow, nTab);
+        }
+
+        if (nOld > rCol)
+        {
+            // The block end has moved.  Check the protection setting and move back if needed.
+            checkBoundary(rCol, rRow);
+            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                ++rCol;
+        }
+    }
+    if (nMovY > 0)
+    {
+        SCROW nOld = rRow;
+        if (bOriginMerged)
+        {
+            // Original cell is merged.  Push the block end outside the merged region.
+            if (nOrigY < MAXROW && nOrigY < rRow && rRow <= nOrigY + nRowSpan - 1)
+                rRow = nOrigY + nRowSpan;
+        }
+        else
+        {
+            pDoc->SkipOverlapped(rCol, rRow, nTab);
+        }
+
+        if (nOld < rRow)
+        {
+            // The block end has moved.  Check the protection setting and move back if needed.
+            checkBoundary(rCol, rRow);
+            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                --rRow;
+        }
+    }
+    if (nMovY < 0)
+    {
+        SCROW nOld = rRow;
+        if (bOriginMerged)
+        {
+            if (nOrigY > 0 && nOrigY <= rRow && rRow < nOrigY + nRowSpan - 1)
+                // Block end is still within the merged region.  Push it outside.
+                rRow = nOrigY - 1;
+        }
+        else
+        {
+            pDoc->SkipOverlapped(rCol, rRow, nTab);
+        }
+
+        if (nOld > rRow)
+        {
+            // The block end has moved.  Check the protection setting and move back if needed.
+            checkBoundary(rCol, rRow);
+            if (!isCellQualified(pDoc, rCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                ++rRow;
+        }
+    }
+}
+
+}
 
 void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
@@ -77,8 +292,8 @@ void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
     if (!ValidRow(nEndRow)) nEndRow = MAXROW;
 
-    sal_Bool bLeft = (nStartCol==0 && nEndCol==MAXCOL);
-    sal_Bool bTop = (nStartRow==0 && nEndRow==MAXROW);
+    bool bLeft = (nStartCol==0 && nEndCol==MAXCOL);
+    bool bTop = (nStartRow==0 && nEndRow==MAXROW);
 
     if (bLeft)
         PaintLeftArea( nStartRow, nEndRow );
@@ -90,9 +305,9 @@ void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     PaintArea( nStartCol, nStartRow, nEndCol, nEndRow, SC_UPDATE_MARKS );
 }
 
-sal_Bool ScTabView::IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+bool ScTabView::IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    return bIsBlockMode
+    return IsBlockMode()
         && nBlockStartX == nCol
         && nBlockStartY == nRow
         && nBlockStartZ == nTab;
@@ -100,16 +315,15 @@ sal_Bool ScTabView::IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 
 void ScTabView::InitOwnBlockMode()
 {
-    if (!bIsBlockMode)
+    if (!IsBlockMode())
     {
         //  Wenn keine (alte) Markierung mehr da ist, Anker in SelectionEngine loeschen:
 
         ScMarkData& rMark = aViewData.GetMarkData();
         if (!rMark.IsMarked() && !rMark.IsMultiMarked())
-            GetSelEngine()->CursorPosChanging( sal_False, sal_False );
+            GetSelEngine()->CursorPosChanging( false, false );
 
-//      bIsBlockMode = sal_True;
-        bIsBlockMode = SC_BLOCKMODE_OWN;            //! Variable umbenennen!
+        meBlockMode = Own;
         nBlockStartX = 0;
         nBlockStartY = 0;
         nBlockStartZ = 0;
@@ -122,9 +336,9 @@ void ScTabView::InitOwnBlockMode()
 }
 
 void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
-                                sal_Bool bTestNeg, sal_Bool bCols, sal_Bool bRows )
+                               bool bTestNeg, bool bCols, bool bRows )
 {
-    if (!bIsBlockMode)
+    if (!IsBlockMode())
     {
         if (!ValidCol(nCurX)) nCurX = MAXCOL;
         if (!ValidRow(nCurY)) nCurY = MAXROW;
@@ -143,11 +357,10 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                 bBlockNeg = rMark.IsCellMarked( nCurX, nCurY );
         }
         else
-            bBlockNeg = sal_False;
+            bBlockNeg = false;
         rMark.SetMarkNegative(bBlockNeg);
 
-//      bIsBlockMode = sal_True;
-        bIsBlockMode = SC_BLOCKMODE_NORMAL;         //! Variable umbenennen!
+        meBlockMode = Normal;
         bBlockCols = bCols;
         bBlockRows = bRows;
         nBlockStartX = nBlockStartXOrig = nCurX;
@@ -171,31 +384,21 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
         rMark.SetMarkArea( ScRange( nBlockStartX,nBlockStartY, nTab, nBlockEndX,nBlockEndY, nTab ) );
 
-#ifdef OLD_SELECTION_PAINT
-        InvertBlockMark( nBlockStartX,nBlockStartY,nBlockEndX,nBlockEndY );
-#endif
         UpdateSelectionOverlay();
-
-        bNewStartIfMarking = sal_False;     // use only once
     }
 }
 
-void ScTabView::SetNewStartIfMarking()
-{
-    bNewStartIfMarking = sal_True;
-}
-
-void ScTabView::DoneBlockMode( sal_Bool bContinue )            // Default FALSE
+void ScTabView::DoneBlockMode( bool bContinue )
 {
     //  Wenn zwischen Tabellen- und Header SelectionEngine gewechselt wird,
     //  wird evtl. DeselectAll gerufen, weil die andere Engine keinen Anker hat.
     //  Mit bMoveIsShift wird verhindert, dass dann die Selektion aufgehoben wird.
 
-    if (bIsBlockMode && !bMoveIsShift)
+    if (IsBlockMode() && !bMoveIsShift)
     {
         ScMarkData& rMark = aViewData.GetMarkData();
-        sal_Bool bFlag = rMark.GetMarkingFlag();
-        rMark.SetMarking(sal_False);
+        bool bFlag = rMark.GetMarkingFlag();
+        rMark.SetMarking(false);
 
         if (bBlockNeg && !bContinue)
             rMark.MarkToMulti();
@@ -211,28 +414,32 @@ void ScTabView::DoneBlockMode( sal_Bool bContinue )            // Default FALSE
             SCTAB nTab = aViewData.GetTabNo();
             ScDocument* pDoc = aViewData.GetDocument();
             if ( pDoc->HasTable(nTab) )
-                PaintBlock( sal_True );                             // sal_True -> Block loeschen
+                PaintBlock( true );                             // true -> Block loeschen
             else
                 rMark.ResetMark();
         }
-//      bIsBlockMode = sal_False;
-        bIsBlockMode = SC_BLOCKMODE_NONE;           //! Variable umbenennen!
+        meBlockMode = None;
 
         rMark.SetMarking(bFlag);
-        rMark.SetMarkNegative(sal_False);
+        rMark.SetMarkNegative(false);
     }
 }
 
+bool ScTabView::IsBlockMode() const
+{
+    return meBlockMode != None;
+}
+
 void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
-                            sal_Bool bCols, sal_Bool bRows, sal_Bool bCellSelection )
+                            bool bCols, bool bRows, bool bCellSelection )
 {
     if (!ValidCol(nCurX)) nCurX = MAXCOL;
     if (!ValidRow(nCurY)) nCurY = MAXROW;
 
-    if (!bIsBlockMode)
+    if (!IsBlockMode())
     {
-        DBG_ERROR( "MarkCursor nicht im BlockMode" );
-        InitBlockMode( nCurX, nCurY, nCurZ, sal_False, bCols, bRows );
+        OSL_FAIL( "MarkCursor nicht im BlockMode" );
+        InitBlockMode( nCurX, nCurY, nCurZ, false, bCols, bRows );
     }
 
     if (bCols)
@@ -241,44 +448,31 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         nCurX = MAXCOL;
 
     ScMarkData& rMark = aViewData.GetMarkData();
-    DBG_ASSERT(rMark.IsMarked() || rMark.IsMultiMarked(), "MarkCursor, !IsMarked()");
+    OSL_ENSURE(rMark.IsMarked() || rMark.IsMultiMarked(), "MarkCursor, !IsMarked()");
     ScRange aMarkRange;
     rMark.GetMarkArea(aMarkRange);
     if (( aMarkRange.aStart.Col() != nBlockStartX && aMarkRange.aEnd.Col() != nBlockStartX ) ||
         ( aMarkRange.aStart.Row() != nBlockStartY && aMarkRange.aEnd.Row() != nBlockStartY ) ||
-        ( bIsBlockMode == SC_BLOCKMODE_OWN ))
+        ( meBlockMode == Own ))
     {
         //  Markierung ist veraendert worden
         //  (z.B. MarkToSimple, wenn per negativ alles bis auf ein Rechteck geloescht wurde)
         //  oder nach InitOwnBlockMode wird mit Shift-Klick weitermarkiert...
 
-        sal_Bool bOldShift = bMoveIsShift;
-        bMoveIsShift = sal_False;               //  wirklich umsetzen
-        DoneBlockMode(sal_False);               //! direkt Variablen setzen? (-> kein Geflacker)
+        bool bOldShift = bMoveIsShift;
+        bMoveIsShift = false;               //  wirklich umsetzen
+        DoneBlockMode(false);               //! direkt Variablen setzen? (-> kein Geflacker)
         bMoveIsShift = bOldShift;
 
         InitBlockMode( aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
                         nBlockStartZ, rMark.IsMarkNegative(), bCols, bRows );
     }
 
-    SCCOL nOldBlockEndX = nBlockEndX;
-    SCROW nOldBlockEndY = nBlockEndY;
-
     if ( nCurX != nOldCurX || nCurY != nOldCurY )
     {
         // Current cursor has moved
 
-        SCTAB       nTab = nCurZ;
-
-#ifdef OLD_SELECTION_PAINT
-        SCCOL       nDrawStartCol;
-        SCROW       nDrawStartRow;
-        SCCOL       nDrawEndCol;
-        SCROW       nDrawEndRow;
-#endif
-
-        // Set old selection area
-        ScUpdateRect aRect( nBlockStartX, nBlockStartY, nOldBlockEndX, nOldBlockEndY );
+        SCTAB nTab = nCurZ;
 
         if ( bCellSelection )
         {
@@ -288,7 +482,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             SCsCOL nBlockStartXOffset = 0;
             SCsROW nCurYOffset = 0;
             SCsROW nBlockStartYOffset = 0;
-            sal_Bool bBlockStartMerged = sal_False;
+            bool bBlockStartMerged = false;
             const ScMergeAttr* pMergeAttr = NULL;
             ScDocument* pDocument = aViewData.GetDocument();
 
@@ -310,9 +504,9 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                 {
                     nBlockStartX = nCurX >= nBlockStartXOrig ? nBlockStartXOrig : nBlockStartXOrig + nColSpan - 1;
                     nBlockStartY = nCurY >= nBlockStartYOrig ? nBlockStartYOrig : nBlockStartYOrig + nRowSpan - 1;
-                    nCurXOffset  = nCurX >= nBlockStartXOrig && nCurX < nBlockStartXOrig + nColSpan - 1 ?
+                    nCurXOffset  = (nCurX >= nBlockStartXOrig && nCurX < nBlockStartXOrig + nColSpan - 1) ?
                         nBlockStartXOrig - nCurX + nColSpan - 1 : 0;
-                    nCurYOffset  = nCurY >= nBlockStartYOrig && nCurY < nBlockStartYOrig + nRowSpan - 1 ?
+                    nCurYOffset  = (nCurY >= nBlockStartYOrig && nCurY < nBlockStartYOrig + nRowSpan - 1) ?
                         nBlockStartYOrig - nCurY + nRowSpan - 1 : 0;
                     bBlockStartMerged = sal_True;
                 }
@@ -336,19 +530,19 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                 {
                     if ( nBlockStartX <= nCurX + nColSpan - 1 )
                     {
-                        SCsCOL nCurXOffsetTemp = nCurX < nCurX + nColSpan - 1 ? nColSpan - 1 : 0;
+                        SCsCOL nCurXOffsetTemp = (nCurX < nCurX + nColSpan - 1) ? nColSpan - 1 : 0;
                         nCurXOffset = nCurXOffset > nCurXOffsetTemp ? nCurXOffset : nCurXOffsetTemp;
                     }
                     if ( nBlockStartY <= nCurY + nRowSpan - 1 )
                     {
-                        SCsROW nCurYOffsetTemp = nCurY < nCurY + nRowSpan - 1 ? nRowSpan - 1 : 0;
+                        SCsROW nCurYOffsetTemp = (nCurY < nCurY + nRowSpan - 1) ? nRowSpan - 1 : 0;
                         nCurYOffset = nCurYOffset > nCurYOffsetTemp ? nCurYOffset : nCurYOffsetTemp;
                     }
                     if ( !( nBlockStartX <= nCurX && nBlockStartY <= nCurY ) &&
                          !( nBlockStartX > nCurX + nColSpan - 1 && nBlockStartY > nCurY + nRowSpan - 1 ) )
                     {
-                        nBlockStartXOffset = nBlockStartX > nCurX && nBlockStartX <= nCurX + nColSpan - 1 ? nCurX - nBlockStartX : 0;
-                        nBlockStartYOffset = nBlockStartY > nCurY && nBlockStartY <= nCurY + nRowSpan - 1 ? nCurY - nBlockStartY : 0;
+                        nBlockStartXOffset = (nBlockStartX > nCurX && nBlockStartX <= nCurX + nColSpan - 1) ? nCurX - nBlockStartX : 0;
+                        nBlockStartYOffset = (nBlockStartY > nCurY && nBlockStartY <= nCurY + nRowSpan - 1) ? nCurY - nBlockStartY : 0;
                     }
                 }
             }
@@ -373,42 +567,382 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             nBlockEndX = nCurX;
             nBlockEndY = nCurY;
         }
-        // end of "if ( bCellSelection )"
 
         // Set new selection area
-        aRect.SetNew( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY );
         rMark.SetMarkArea( ScRange( nBlockStartX, nBlockStartY, nTab, nBlockEndX, nBlockEndY, nTab ) );
 
-#ifdef OLD_SELECTION_PAINT
-        sal_Bool bCont;
-        sal_Bool bDraw = aRect.GetXorDiff( nDrawStartCol, nDrawStartRow,
-                                        nDrawEndCol, nDrawEndRow, bCont );
-        if ( bDraw )
-        {
-//?         PutInOrder( nDrawStartCol, nDrawEndCol );
-//?         PutInOrder( nDrawStartRow, nDrawEndRow );
-
-            HideAllCursors();
-            InvertBlockMark( nDrawStartCol, nDrawStartRow, nDrawEndCol, nDrawEndRow );
-            if (bCont)
-            {
-                aRect.GetContDiff( nDrawStartCol, nDrawStartRow, nDrawEndCol, nDrawEndRow );
-                InvertBlockMark( nDrawStartCol, nDrawStartRow, nDrawEndCol, nDrawEndRow );
-            }
-            ShowAllCursors();
-        }
-#endif
         UpdateSelectionOverlay();
+        SelectionChanged();
 
         nOldCurX = nCurX;
         nOldCurY = nCurY;
 
         aViewData.GetViewShell()->UpdateInputHandler();
-//      InvalidateAttribs();
     }
 
     if ( !bCols && !bRows )
-        aHdrFunc.SetAnchorFlag( sal_False );
+        aHdrFunc.SetAnchorFlag( false );
+}
+
+void ScTabView::GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPageX, SCsROW& rPageY)
+{
+    SCCOL nCurX;
+    SCROW nCurY;
+    if (aViewData.IsRefMode())
+    {
+        nCurX = aViewData.GetRefEndX();
+        nCurY = aViewData.GetRefEndY();
+    }
+    else if (IsBlockMode())
+    {
+        // block end position.
+        nCurX = nBlockEndX;
+        nCurY = nBlockEndY;
+    }
+    else
+    {
+        // cursor position
+        nCurX = aViewData.GetCurX();
+        nCurY = aViewData.GetCurY();
+    }
+
+    ScSplitPos eWhich = aViewData.GetActivePart();
+    ScHSplitPos eWhichX = WhichH( eWhich );
+    ScVSplitPos eWhichY = WhichV( eWhich );
+
+    SCsCOL nPageX;
+    SCsROW nPageY;
+    if (nMovX >= 0)
+        nPageX = ((SCsCOL) aViewData.CellsAtX( nCurX, 1, eWhichX )) * nMovX;
+    else
+        nPageX = ((SCsCOL) aViewData.CellsAtX( nCurX, -1, eWhichX )) * nMovX;
+
+    if (nMovY >= 0)
+        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, 1, eWhichY )) * nMovY;
+    else
+        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, -1, eWhichY )) * nMovY;
+
+    if (nMovX != 0 && nPageX == 0) nPageX = (nMovX>0) ? 1 : -1;
+    if (nMovY != 0 && nPageY == 0) nPageY = (nMovY>0) ? 1 : -1;
+
+    rPageX = nPageX;
+    rPageY = nPageY;
+}
+
+void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
+                                       SCsCOL& rAreaX, SCsROW& rAreaY, ScFollowMode& rMode)
+{
+    SCCOL nNewX = -1;
+    SCROW nNewY = -1;
+    // current cursor position.
+    SCCOL nCurX = aViewData.GetCurX();
+    SCROW nCurY = aViewData.GetCurY();
+
+    if (aViewData.IsRefMode())
+    {
+        nNewX = aViewData.GetRefEndX();
+        nNewY = aViewData.GetRefEndY();
+    }
+    else if (IsBlockMode())
+    {
+        // block end position.
+        nNewX = nBlockEndX;
+        nNewY = nBlockEndY;
+    }
+    else
+    {
+        nNewX = nCurX;
+        nNewY = nCurY;
+    }
+
+    ScDocument* pDoc = aViewData.GetDocument();
+    SCTAB nTab = aViewData.GetTabNo();
+
+    //  FindAreaPos kennt nur -1 oder 1 als Richtung
+
+    SCsCOLROW i;
+    if ( nMovX > 0 )
+        for ( i=0; i<nMovX; i++ )
+            pDoc->FindAreaPos( nNewX, nCurY, nTab,  1,  0 );
+    if ( nMovX < 0 )
+        for ( i=0; i<-nMovX; i++ )
+            pDoc->FindAreaPos( nNewX, nCurY, nTab, -1,  0 );
+    if ( nMovY > 0 )
+        for ( i=0; i<nMovY; i++ )
+            pDoc->FindAreaPos( nCurX, nNewY, nTab,  0,  1 );
+    if ( nMovY < 0 )
+        for ( i=0; i<-nMovY; i++ )
+            pDoc->FindAreaPos( nCurX, nNewY, nTab,  0, -1 );
+
+    if (eMode==SC_FOLLOW_JUMP)                  // unten/rechts nicht zuviel grau anzeigen
+    {
+        if (nMovX != 0 && nNewX == MAXCOL)
+            eMode = SC_FOLLOW_LINE;
+        if (nMovY != 0 && nNewY == MAXROW)
+            eMode = SC_FOLLOW_LINE;
+    }
+
+    if (aViewData.IsRefMode())
+    {
+        rAreaX = nNewX - aViewData.GetRefEndX();
+        rAreaY = nNewY - aViewData.GetRefEndY();
+    }
+    else if (IsBlockMode())
+    {
+        rAreaX = nNewX - nBlockEndX;
+        rAreaY = nNewY - nBlockEndY;
+    }
+    else
+    {
+        rAreaX = nNewX - nCurX;
+        rAreaY = nNewY - nCurY;
+    }
+    rMode = eMode;
+}
+
+void ScTabView::SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nMovX)
+{
+    ScDocument* pDoc = aViewData.GetDocument();
+    SCTAB nTab = aViewData.GetTabNo();
+
+    bool bSkipProtected = false, bSkipUnprotected = false;
+    ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+    if (pProtect && pProtect->isProtected())
+    {
+        bSkipProtected   = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+    }
+
+    bool bSkipCell = false;
+    bool bHFlip = false;
+    do
+    {
+        bSkipCell = pDoc->ColHidden(rCurX, nTab) || pDoc->IsHorOverlapped(rCurX, rCurY, nTab);
+        if (bSkipProtected && !bSkipCell)
+            bSkipCell = pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+        if (bSkipUnprotected && !bSkipCell)
+            bSkipCell = !pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+
+        if (bSkipCell)
+        {
+            if (rCurX <= 0 || rCurX >= MAXCOL)
+            {
+                if (bHFlip)
+                {
+                    rCurX = nOldX;
+                    bSkipCell = false;
+                }
+                else
+                {
+                    nMovX = -nMovX;
+                    if (nMovX > 0)
+                        ++rCurX;
+                    else
+                        --rCurX;
+                    bHFlip = true;
+                }
+            }
+            else
+                if (nMovX > 0)
+                    ++rCurX;
+                else
+                    --rCurX;
+        }
+    }
+    while (bSkipCell);
+
+    if (pDoc->IsVerOverlapped(rCurX, rCurY, nTab))
+    {
+        aViewData.SetOldCursor(rCurX, rCurY);
+        while (pDoc->IsVerOverlapped(rCurX, rCurY, nTab))
+            --rCurY;
+    }
+}
+
+void ScTabView::SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, SCsROW nMovY)
+{
+    ScDocument* pDoc = aViewData.GetDocument();
+    SCTAB nTab = aViewData.GetTabNo();
+
+    bool bSkipProtected = false, bSkipUnprotected = false;
+    ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+    if (pProtect && pProtect->isProtected())
+    {
+        bSkipProtected   = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+    }
+
+    bool bSkipCell = false;
+    bool bVFlip = false;
+    do
+    {
+        SCROW nLastRow = -1;
+        bSkipCell = pDoc->RowHidden(rCurY, nTab, NULL, &nLastRow) || pDoc->IsVerOverlapped( rCurX, rCurY, nTab );
+        if (bSkipProtected && !bSkipCell)
+            bSkipCell = pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+        if (bSkipUnprotected && !bSkipCell)
+            bSkipCell = !pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+
+        if (bSkipCell)
+        {
+            if (rCurY <= 0 || rCurY >= MAXROW)
+            {
+                if (bVFlip)
+                {
+                    rCurY = nOldY;
+                    bSkipCell = false;
+                }
+                else
+                {
+                    nMovY = -nMovY;
+                    if (nMovY > 0)
+                        ++rCurY;
+                    else
+                        --rCurY;
+                    bVFlip = true;
+                }
+            }
+            else
+                if (nMovY > 0)
+                    ++rCurY;
+                else
+                    --rCurY;
+        }
+    }
+    while (bSkipCell);
+
+    if (pDoc->IsHorOverlapped(rCurX, rCurY, nTab))
+    {
+        aViewData.SetOldCursor(rCurX, rCurY);
+        while (pDoc->IsHorOverlapped(rCurX, rCurY, nTab))
+            --rCurX;
+    }
+}
+
+void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
+{
+    if (!nMovX && !nMovY)
+        // Nothing to do.  Bail out.
+        return;
+
+    ScTabViewShell* pViewShell = aViewData.GetViewShell();
+    bool bRefInputMode = pViewShell && pViewShell->IsRefInputMode();
+    if (bRefInputMode && !aViewData.IsRefMode())
+        // initialize formula reference mode if it hasn't already.
+        InitRefMode(aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo(), SC_REFTYPE_REF);
+
+    ScDocument* pDoc = aViewData.GetDocument();
+
+    if (aViewData.IsRefMode())
+    {
+        // formula reference mode
+
+        SCCOL nNewX = aViewData.GetRefEndX();
+        SCROW nNewY = aViewData.GetRefEndY();
+        SCTAB nRefTab = aViewData.GetRefEndZ();
+
+        bool bSelectLocked = true;
+        bool bSelectUnlocked = true;
+        ScTableProtection* pTabProtection = pDoc->GetTabProtection(nRefTab);
+        if (pTabProtection && pTabProtection->isProtected())
+        {
+            bSelectLocked   = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+            bSelectUnlocked = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+        }
+
+        moveCursorByProtRule(nNewX, nNewY, nMovX, nMovY, nRefTab, pDoc);
+        checkBoundary(nNewX, nNewY);
+
+        if (nMovX)
+        {
+            SCCOL nTempX = nNewX;
+            while (pDoc->IsHorOverlapped(nTempX, nNewY, nRefTab))
+            {
+                if (nMovX > 0)
+                    ++nTempX;
+                else
+                    --nTempX;
+                if (!checkBoundary(nTempX, nNewY))
+                    break;
+            }
+            if (isCellQualified(pDoc, nTempX, nNewY, nRefTab, bSelectLocked, bSelectUnlocked))
+                nNewX = nTempX;
+        }
+
+        if (nMovY)
+        {
+            SCROW nTempY = nNewY;
+            while (pDoc->IsVerOverlapped(nNewX, nTempY, nRefTab))
+            {
+                if (nMovY > 0)
+                    ++nTempY;
+                else
+                    --nTempY;
+                if (!checkBoundary(nNewX, nTempY))
+                    break;
+            }
+            if (isCellQualified(pDoc, nNewX, nTempY, nRefTab, bSelectLocked, bSelectUnlocked))
+                nNewY = nTempY;
+        }
+
+        pDoc->SkipOverlapped(nNewX, nNewY, nRefTab);
+        UpdateRef(nNewX, nNewY, nRefTab);
+        AlignToCursor(nNewX, nNewY, eMode);
+    }
+    else
+    {
+        // normal selection mode
+
+        SCTAB nTab = aViewData.GetTabNo();
+        SCCOL nOrigX = aViewData.GetCurX();
+        SCROW nOrigY = aViewData.GetCurY();
+
+        // Note that the origin position *never* moves during selection.
+
+        if (!IsBlockMode())
+            InitBlockMode(nOrigX, nOrigY, nTab, true);
+
+        moveCursorByProtRule(nBlockEndX, nBlockEndY, nMovX, nMovY, nTab, pDoc);
+        checkBoundary(nBlockEndX, nBlockEndY);
+        moveCursorByMergedCell(nBlockEndX, nBlockEndY, nMovX, nMovY, nTab, pDoc, aViewData);
+        checkBoundary(nBlockEndX, nBlockEndY);
+
+        MarkCursor(nBlockEndX, nBlockEndY, nTab, false, false, true);
+
+        // Check if the entire row(s) or column(s) are selected.
+        ScSplitPos eActive = aViewData.GetActivePart();
+        bool bRowSelected = (nBlockStartX == 0 && nBlockEndX == MAXCOL);
+        bool bColSelected = (nBlockStartY == 0 && nBlockEndY == MAXROW);
+        SCsCOL nAlignX = bRowSelected ? aViewData.GetPosX(WhichH(eActive)) : nBlockEndX;
+        SCsROW nAlignY = bColSelected ? aViewData.GetPosY(WhichV(eActive)) : nBlockEndY;
+        AlignToCursor(nAlignX, nAlignY, eMode);
+
+        SelectionChanged();
+    }
+}
+
+void ScTabView::ExpandBlockPage(SCsCOL nMovX, SCsROW nMovY)
+{
+    SCsCOL nPageX;
+    SCsROW nPageY;
+    GetPageMoveEndPosition(nMovX, nMovY, nPageX, nPageY);
+    ExpandBlock(nPageX, nPageY, SC_FOLLOW_FIX);
+}
+
+void ScTabView::ExpandBlockArea(SCsCOL nMovX, SCsROW nMovY)
+{
+    SCsCOL nAreaX;
+    SCsROW nAreaY;
+    ScFollowMode eMode;
+    GetAreaMoveEndPosition(nMovX, nMovY, SC_FOLLOW_JUMP, nAreaX, nAreaY, eMode);
+    ExpandBlock(nAreaX, nAreaY, eMode);
+}
+
+void ScTabView::UpdateCopySourceOverlay()
+{
+    for (sal_uInt8 i = 0; i < 4; ++i)
+        if (pGridWin[i] && pGridWin[i]->IsVisible())
+            pGridWin[i]->UpdateCopySourceOverlay();
 }
 
 void ScTabView::UpdateSelectionOverlay()
@@ -436,28 +970,26 @@ void ScTabView::UpdateAllOverlays()
 //! PaintBlock in zwei Methoden aufteilen: RepaintBlock und RemoveBlock o.ae.
 //!
 
-void ScTabView::PaintBlock( sal_Bool bReset )
+void ScTabView::PaintBlock( bool bReset )
 {
-    ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
     SCTAB nTab = aViewData.GetTabNo();
-    sal_Bool bMark = rMark.IsMarked();
-    sal_Bool bMulti = rMark.IsMultiMarked();
+    bool bMark = rMark.IsMarked();
+    bool bMulti = rMark.IsMultiMarked();
     if (bMark || bMulti)
     {
         ScRange aMarkRange;
         HideAllCursors();
         if (bMulti)
         {
-            sal_Bool bFlag = rMark.GetMarkingFlag();
-            rMark.SetMarking(sal_False);
+            bool bFlag = rMark.GetMarkingFlag();
+            rMark.SetMarking(false);
             rMark.MarkToMulti();
             rMark.GetMultiMarkArea(aMarkRange);
             rMark.MarkToSimple();
             rMark.SetMarking(bFlag);
 
             bMark = rMark.IsMarked();
-            bMulti = rMark.IsMultiMarked();
         }
         else
             rMark.GetMarkArea(aMarkRange);
@@ -469,7 +1001,7 @@ void ScTabView::PaintBlock( sal_Bool bReset )
         nBlockEndY = aMarkRange.aEnd.Row();
         nBlockEndZ = aMarkRange.aEnd.Tab();
 
-        sal_Bool bDidReset = sal_False;
+        bool bDidReset = false;
 
         if ( nTab>=nBlockStartZ && nTab<=nBlockEndZ )
         {
@@ -478,63 +1010,9 @@ void ScTabView::PaintBlock( sal_Bool bReset )
                 // Invertieren beim Loeschen nur auf aktiver View
                 if ( aViewData.IsActive() )
                 {
-                    sal_uInt16 i;
-                    if ( bMulti )
-                    {
-#ifdef OLD_SELECTION_PAINT
-                        for (i=0; i<4; i++)
-                            if (pGridWin[i] && pGridWin[i]->IsVisible())
-                                pGridWin[i]->InvertSimple( nBlockStartX, nBlockStartY,
-                                                            nBlockEndX, nBlockEndY,
-                                                            sal_True, sal_True );
-#endif
-                        rMark.ResetMark();
-                        UpdateSelectionOverlay();
-                        bDidReset = sal_True;
-                    }
-                    else
-                    {
-#ifdef OLD_SELECTION_PAINT
-                        // (mis)use InvertBlockMark to remove all of the selection
-                        // -> set bBlockNeg (like when removing parts of a selection)
-                        //    and convert everything to Multi
-
-                        rMark.MarkToMulti();
-                        sal_Bool bOld = bBlockNeg;
-                        bBlockNeg = sal_True;
-                        // #73130# (negative) MarkArea must be set in case of repaint
-                        rMark.SetMarkArea( ScRange( nBlockStartX,nBlockStartY, nTab,
-                                                    nBlockEndX,nBlockEndY, nTab ) );
-
-                        InvertBlockMark( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY );
-
-                        bBlockNeg = bOld;
-#endif
-                        rMark.ResetMark();
-                        UpdateSelectionOverlay();
-                        bDidReset = sal_True;
-                    }
-
-                    //  repaint if controls are touched (#69680# in both cases)
-                    // #i74768# Forms are rendered by DrawingLayer's EndDrawLayers()
-                    static bool bSuppressControlExtraStuff(true);
-
-                    if(!bSuppressControlExtraStuff)
-                    {
-                        Rectangle aMMRect = pDoc->GetMMRect(nBlockStartX,nBlockStartY,nBlockEndX,nBlockEndY, nTab);
-                        if (pDoc->HasControl( nTab, aMMRect ))
-                        {
-                            for (i=0; i<4; i++)
-                            {
-                                if (pGridWin[i] && pGridWin[i]->IsVisible())
-                                {
-                                    //  MapMode muss logischer (1/100mm) sein !!!
-                                    pDoc->InvalidateControls( pGridWin[i], nTab, aMMRect );
-                                    pGridWin[i]->Update();
-                                }
-                            }
-                        }
-                    }
+                    rMark.ResetMark();
+                    UpdateSelectionOverlay();
+                    bDidReset = true;
                 }
             }
             else
@@ -548,7 +1026,7 @@ void ScTabView::PaintBlock( sal_Bool bReset )
     }
 }
 
-void ScTabView::SelectAll( sal_Bool bContinue )
+void ScTabView::SelectAll( bool bContinue )
 {
     ScMarkData& rMark = aViewData.GetMarkData();
     SCTAB nTab = aViewData.GetTabNo();
@@ -572,16 +1050,12 @@ void ScTabView::SelectAllTables()
 {
     ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
-//    SCTAB nTab = aViewData.GetTabNo();
     SCTAB nCount = pDoc->GetTableCount();
 
     if (nCount>1)
     {
         for (SCTAB i=0; i<nCount; i++)
-            rMark.SelectTable( i, sal_True );
-
-        //      Markierungen werden per Default nicht pro Tabelle gehalten
-//      pDoc->ExtendMarksFromTable( nTab );
+            rMark.SelectTable( i, true );
 
         aViewData.GetDocShell()->PostPaintExtras();
         SfxBindings& rBind = aViewData.GetBindings();
@@ -606,7 +1080,7 @@ void ScTabView::DeselectAllTables()
     rBind.Invalidate( FID_TAB_DESELECTALL );
 }
 
-sal_Bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
+bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
                         long nWindowX, long nWindowY, ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         SCCOL nFixPosX, SCROW nFixPosY )
@@ -625,7 +1099,7 @@ sal_Bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
         {
             nBlockX += (long)(nColTwips * fScaleX);
             if (nBlockX > nWindowX)
-                return sal_False;
+                return false;
         }
     }
     for (nCol=nStartCol; nCol<=nEndCol; nCol++)
@@ -635,7 +1109,7 @@ sal_Bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
         {
             nBlockX += (long)(nColTwips * fScaleX);
             if (nBlockX > nWindowX)
-                return sal_False;
+                return false;
         }
     }
 
@@ -651,7 +1125,7 @@ sal_Bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
         {
             nBlockY += (long)(nRowTwips * fScaleY);
             if (nBlockY > nWindowY)
-                return sal_False;
+                return false;
         }
     }
     for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
@@ -661,11 +1135,11 @@ sal_Bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
         {
             nBlockY += (long)(nRowTwips * fScaleY);
             if (nBlockY > nWindowY)
-                return sal_False;
+                return false;
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
@@ -754,7 +1228,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                             else
                                 nMax = nTest-1;
                         }
-                        DBG_ASSERT( nMin == nMax, "Schachtelung ist falsch" );
+                        OSL_ENSURE( nMin == nMax, "Schachtelung ist falsch" );
                         nZoom = nMin;
 
                         if ( nZoom != nOldZoom )
@@ -782,12 +1256,12 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                                             pStylePool->Find( pDoc->GetPageStyle( nCurTab ),
                                                               SFX_STYLE_FAMILY_PAGE );
 
-                    DBG_ASSERT( pStyleSheet, "PageStyle not found :-/" );
+                    OSL_ENSURE( pStyleSheet, "PageStyle not found :-/" );
 
                     if ( pStyleSheet )
                     {
                         ScPrintFunc aPrintFunc( aViewData.GetDocShell(),
-                                                aViewData.GetViewShell()->GetPrinter(sal_True),
+                                                aViewData.GetViewShell()->GetPrinter(true),
                                                 nCurTab );
 
                         Size aPageSize = aPrintFunc.GetDataSize();
@@ -849,7 +1323,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                 break;
 
         default:
-            DBG_ERROR("Unknown Zoom-Revision");
+            OSL_FAIL("Unknown Zoom-Revision");
             nZoom = 0;
     }
 
@@ -887,7 +1361,7 @@ void ScTabView::MakeDrawLayer()
         aViewData.GetDocShell()->MakeDrawLayer();
 
         //  pDrawView wird per Notify gesetzt
-        DBG_ASSERT(pDrawView,"ScTabView::MakeDrawLayer funktioniert nicht");
+        OSL_ENSURE(pDrawView,"ScTabView::MakeDrawLayer funktioniert nicht");
 
         // #114409#
         for(sal_uInt16 a(0); a < 4; a++)
@@ -912,7 +1386,7 @@ void ScTabView::ErrorMessage( sal_uInt16 nGlobStrId )
 
     Window* pParent = aViewData.GetDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
-    sal_Bool bFocus = pParent && pParent->HasFocus();
+    bool bFocus = pParent && pParent->HasFocus();
 
     if(nGlobStrId==STR_PROTECTIONERR)
     {
@@ -946,7 +1420,7 @@ Window* ScTabView::GetParentOrChild( sal_uInt16 nChildId )
     return aViewData.GetDialogParent();
 }
 
-void ScTabView::UpdatePageBreakData( sal_Bool bForcePaint )
+void ScTabView::UpdatePageBreakData( bool bForcePaint )
 {
     ScPageBreakData* pNewData = NULL;
 
@@ -980,3 +1454,4 @@ void ScTabView::UpdatePageBreakData( sal_Bool bForcePaint )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

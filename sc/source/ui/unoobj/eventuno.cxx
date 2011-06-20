@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tokenuno.cxx,v $
- * $Revision: 1.6.108.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,10 +31,10 @@
 
 #include "eventuno.hxx"
 #include "miscuno.hxx"
-#include "unoguard.hxx"
 #include "docsh.hxx"
 #include "sheetevents.hxx"
 #include "unonames.hxx"
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -84,7 +82,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const rtl::OUString& aName, const
     throw(lang::IllegalArgumentException, container::NoSuchElementException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (!mpDocShell)
         throw uno::RuntimeException();
 
@@ -136,7 +134,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const rtl::OUString& aName, const
 uno::Any SAL_CALL ScSheetEventsObj::getByName( const rtl::OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     sal_Int32 nEvent = lcl_GetEventFromName(aName);
     if (nEvent < 0)
         throw container::NoSuchElementException();
@@ -154,10 +152,10 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const rtl::OUString& aName )
     {
         uno::Sequence<beans::PropertyValue> aPropSeq( 2 );
         aPropSeq[0] = beans::PropertyValue(
-                        rtl::OUString::createFromAscii("EventType"), -1,
-                        uno::makeAny( rtl::OUString::createFromAscii("Script") ), beans::PropertyState_DIRECT_VALUE );
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EventType")), -1,
+                        uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script")) ), beans::PropertyState_DIRECT_VALUE );
         aPropSeq[1] = beans::PropertyValue(
-                        rtl::OUString::createFromAscii("Script"), -1,
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script")), -1,
                         uno::makeAny( *pScript ), beans::PropertyState_DIRECT_VALUE );
         aRet <<= aPropSeq;
     }
@@ -167,7 +165,7 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const rtl::OUString& aName )
 
 uno::Sequence<rtl::OUString> SAL_CALL ScSheetEventsObj::getElementNames() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Sequence<rtl::OUString> aNames(SC_SHEETEVENT_COUNT);
     for (sal_Int32 nEvent=0; nEvent<SC_SHEETEVENT_COUNT; ++nEvent)
         aNames[nEvent] = ScSheetEvents::GetEventName(nEvent);
@@ -176,7 +174,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScSheetEventsObj::getElementNames() throw(
 
 sal_Bool SAL_CALL ScSheetEventsObj::hasByName( const ::rtl::OUString& aName ) throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     sal_Int32 nEvent = lcl_GetEventFromName(aName);
     return (nEvent >= 0);
 }
@@ -185,17 +183,18 @@ sal_Bool SAL_CALL ScSheetEventsObj::hasByName( const ::rtl::OUString& aName ) th
 
 uno::Type SAL_CALL ScSheetEventsObj::getElementType() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     return getCppuType((uno::Sequence<beans::PropertyValue>*)0);
 }
 
 sal_Bool SAL_CALL ScSheetEventsObj::hasElements() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (mpDocShell)
         return sal_True;
-    return sal_False;
+    return false;
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

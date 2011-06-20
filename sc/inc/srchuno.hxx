@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@ public:
     virtual void SAL_CALL   setSearchString( const ::rtl::OUString& aString )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // Search/Replace muss von aussen (vom XSearchable) gerufen werden...
+                            // search/replace should be called from outside (from XSearchable)...
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
@@ -127,3 +128,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

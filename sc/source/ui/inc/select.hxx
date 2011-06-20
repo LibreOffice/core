@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef SC_SELECT_HXX
 #define SC_SELECT_HXX
 
-#ifndef _SELENG_HXX //autogen
 #include <vcl/seleng.hxx>
-#endif
 
 #include "viewdata.hxx"     // ScSplitPos
 
@@ -65,6 +64,9 @@ private:
 
     ScSplitPos      GetWhich();
 
+    sal_uLong           CalcUpdateInterval( const Size& rWinSize, const Point& rEffPos,
+                                        bool bLeftScroll, bool bTopScroll, bool bRightScroll, bool bBottomScroll );
+
 public:
                     ScViewFunctionSet( ScViewData* pNewViewData );
 
@@ -76,7 +78,7 @@ public:
     virtual void    BeginDrag();
     virtual void    CreateAnchor();
     virtual void    DestroyAnchor();
-    virtual sal_Bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = sal_False );
+    virtual sal_Bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = false );
     virtual sal_Bool    IsSelectionAtPoint( const Point& rPointPixel );
     virtual void    DeselectAtPoint( const Point& rPointPixel );
     virtual void    DeselectAll();
@@ -107,7 +109,7 @@ public:
     virtual void    BeginDrag();
     virtual void    CreateAnchor();
     virtual void    DestroyAnchor();
-    virtual sal_Bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = sal_False );
+    virtual sal_Bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = false );
     virtual sal_Bool    IsSelectionAtPoint( const Point& rPointPixel );
     virtual void    DeselectAtPoint( const Point& rPointPixel );
     virtual void    DeselectAll();
@@ -125,3 +127,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

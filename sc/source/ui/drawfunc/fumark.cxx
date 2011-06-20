@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,8 +52,8 @@
 FuMarkRect::FuMarkRect(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
     FuPoor(pViewSh, pWin, pViewP, pDoc, rReq),
-    bVisible(sal_False),
-    bStartDrag(sal_False)
+    bVisible(false),
+    bStartDrag(false)
 {
 }
 
@@ -74,7 +75,7 @@ FuMarkRect::~FuMarkRect()
 
 sal_Bool FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     pWindow->CaptureMouse();
@@ -122,14 +123,14 @@ sal_Bool FuMarkRect::MouseMove(const MouseEvent& rMEvt)
 
 sal_Bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     if ( bVisible )
     {
         // Hide ZoomRect
         pViewShell->DrawMarkRect(aZoomRect);
-        bVisible = sal_False;
+        bVisible = false;
     }
 
     Size aZoomSizePixel = pWindow->LogicToPixel(aZoomRect).GetSize();
@@ -142,7 +143,7 @@ sal_Bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
         aZoomRect.SetSize(Size());      // dann ganz leer
     }
 
-    bStartDrag = sal_False;
+    bStartDrag = false;
     pWindow->ReleaseMouse();
 
     pViewShell->GetViewData()->GetDispatcher().
@@ -171,7 +172,7 @@ sal_uInt8 FuMarkRect::Command(const CommandEvent& rCEvt)
 {
     if ( COMMAND_STARTDRAG == rCEvt.GetCommand() )
     {
-        //  #29877# nicht anfangen, auf der Tabelle rumzudraggen,
+        //  nicht anfangen, auf der Tabelle rumzudraggen,
         //  aber Maus-Status nicht zuruecksetzen
         return SC_CMD_IGNORE;
     }
@@ -190,7 +191,7 @@ sal_uInt8 FuMarkRect::Command(const CommandEvent& rCEvt)
 
 sal_Bool FuMarkRect::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
+    sal_Bool bReturn = false;
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -269,8 +270,8 @@ void FuMarkRect::Deactivate()
     {
         // Hide ZoomRect
         pViewShell->DrawMarkRect(aZoomRect);
-        bVisible = sal_False;
-        bStartDrag = sal_False;
+        bVisible = false;
+        bStartDrag = false;
     }
 }
 
@@ -288,3 +289,4 @@ void FuMarkRect::ForcePointer(const MouseEvent* /* pMEvt */)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

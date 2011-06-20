@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,19 +49,21 @@ extern const XMLPropertyMapEntry aXMLScTableStylesImportProperties[];
 #define XML_SC_TYPE_CELLPROTECTION                  (XML_SC_TYPES_START +  1)
 #define XML_SC_TYPE_PRINTCONTENT                    (XML_SC_TYPES_START +  2)
 #define XML_SC_TYPE_HORIJUSTIFY                     (XML_SC_TYPES_START +  3)
-#define XML_SC_TYPE_HORIJUSTIFYSOURCE               (XML_SC_TYPES_START +  4)
-#define XML_SC_TYPE_HORIJUSTIFYREPEAT               (XML_SC_TYPES_START +  5)
-#define XML_SC_TYPE_ORIENTATION                     (XML_SC_TYPES_START +  6)
-#define XML_SC_TYPE_ROTATEANGLE                     (XML_SC_TYPES_START +  7)
-#define XML_SC_TYPE_ROTATEREFERENCE                 (XML_SC_TYPES_START +  8)
-#define XML_SC_TYPE_BORDERLEFT                      (XML_SC_TYPES_START +  9)
-#define XML_SC_TYPE_BORDERRIGHT                     (XML_SC_TYPES_START + 10)
-#define XML_SC_TYPE_BORDERTOP                       (XML_SC_TYPES_START + 11)
-#define XML_SC_TYPE_BORDERBOTTOM                    (XML_SC_TYPES_START + 12)
-#define XML_SC_TYPE_VERTJUSTIFY                     (XML_SC_TYPES_START + 13)
-#define XML_SC_ISTEXTWRAPPED                        (XML_SC_TYPES_START + 14)
-#define XML_SC_TYPE_EQUAL                           (XML_SC_TYPES_START + 15)
-#define XML_SC_TYPE_VERTICAL                        (XML_SC_TYPES_START + 16)
+#define XML_SC_TYPE_HORIJUSTIFY_METHOD              (XML_SC_TYPES_START +  4)
+#define XML_SC_TYPE_HORIJUSTIFYSOURCE               (XML_SC_TYPES_START +  5)
+#define XML_SC_TYPE_HORIJUSTIFYREPEAT               (XML_SC_TYPES_START +  6)
+#define XML_SC_TYPE_ORIENTATION                     (XML_SC_TYPES_START +  7)
+#define XML_SC_TYPE_ROTATEANGLE                     (XML_SC_TYPES_START +  8)
+#define XML_SC_TYPE_ROTATEREFERENCE                 (XML_SC_TYPES_START +  9)
+#define XML_SC_TYPE_BORDERLEFT                      (XML_SC_TYPES_START + 10)
+#define XML_SC_TYPE_BORDERRIGHT                     (XML_SC_TYPES_START + 11)
+#define XML_SC_TYPE_BORDERTOP                       (XML_SC_TYPES_START + 12)
+#define XML_SC_TYPE_BORDERBOTTOM                    (XML_SC_TYPES_START + 13)
+#define XML_SC_TYPE_VERTJUSTIFY                     (XML_SC_TYPES_START + 14)
+#define XML_SC_TYPE_VERTJUSTIFY_METHOD              (XML_SC_TYPES_START + 15)
+#define XML_SC_ISTEXTWRAPPED                        (XML_SC_TYPES_START + 16)
+#define XML_SC_TYPE_EQUAL                           (XML_SC_TYPES_START + 17)
+#define XML_SC_TYPE_VERTICAL                        (XML_SC_TYPES_START + 18)
 
 #define CTF_SC_HORIJUSTIFY                          (XML_SC_CTF_START +  1)
 #define CTF_SC_HORIJUSTIFY_SOURCE                   (XML_SC_CTF_START +  2)
@@ -247,6 +250,15 @@ public:
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
+class XmlScPropHdl_JustifyMethod : public XMLPropertyHandler
+{
+public:
+    virtual ~XmlScPropHdl_JustifyMethod();
+    virtual bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
 class XmlScPropHdl_HoriJustify : public XMLPropertyHandler
 {
 public:
@@ -347,3 +359,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

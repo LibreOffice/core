@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <tools/urlobj.hxx>
-//CHINA001 #include <svx/dlgname.hxx>
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/fmglob.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/fontwork.hxx>
@@ -66,7 +66,6 @@
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
-//CHINA001 #include "strindlg.hxx"
 #include "scresid.hxx"
 #include "undotab.hxx"
 #include "drwlayer.hxx"
@@ -92,29 +91,27 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
     if ( nMarkCount == 1 )              // URL-Button markiert ?
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
         if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
         {
             aHLinkItem.SetURL( pInfo->GetHlink() );
             aHLinkItem.SetInsertMode(HLINK_FIELD);
         }
-#endif
         SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj);
         if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
         {
             uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
-            DBG_ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+            OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
             if( !xControlModel.is() )
                 return;
 
             uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-            rtl::OUString sPropButtonType  = rtl::OUString::createFromAscii( "ButtonType" );
-            rtl::OUString sPropTargetURL   = rtl::OUString::createFromAscii( "TargetURL" );
-            rtl::OUString sPropTargetFrame = rtl::OUString::createFromAscii( "TargetFrame" );
-            rtl::OUString sPropLabel       = rtl::OUString::createFromAscii( "Label" );
+            rtl::OUString sPropButtonType(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ));
+            rtl::OUString sPropTargetURL(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
+            rtl::OUString sPropTargetFrame(RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" ));
+            rtl::OUString sPropLabel(RTL_CONSTASCII_USTRINGPARAM( "Label" ));
 
             if(xInfo->hasPropertyByName( sPropButtonType ))
             {
@@ -178,7 +175,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                     const String& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
-                    sal_Bool bDone = sal_False;
+                    sal_Bool bDone = false;
                     if ( eMode == HLINK_FIELD || eMode == HLINK_BUTTON )
                     {
                         ScDrawView* pView = pViewData->GetScDrawView();
@@ -191,27 +188,23 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                             {
                                 uno::Reference<awt::XControlModel> xControlModel =
                                                         pUnoCtrl->GetUnoControlModel();
-                                DBG_ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+                                OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
                                 if( !xControlModel.is() )
                                     return;
 
                                 uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
                                 uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-                                rtl::OUString sPropTargetURL =
-                                    rtl::OUString::createFromAscii( "TargetURL" );
+                                rtl::OUString sPropTargetURL(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
 
                                 // Darf man eine URL an dem Objekt setzen?
                                 if (xInfo->hasPropertyByName( sPropTargetURL ))
                                 {
                                     // Ja!
 
-                                    rtl::OUString sPropButtonType =
-                                        rtl::OUString::createFromAscii( "ButtonType" );
-                                    rtl::OUString sPropTargetFrame =
-                                        rtl::OUString::createFromAscii( "TargetFrame" );
-                                    rtl::OUString sPropLabel =
-                                        rtl::OUString::createFromAscii( "Label" );
+                                    rtl::OUString sPropButtonType(RTL_CONSTASCII_USTRINGPARAM( "ButtonType") );
+                                    rtl::OUString sPropTargetFrame(RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" ));
+                                    rtl::OUString sPropLabel(RTL_CONSTASCII_USTRINGPARAM( "Label" ));
 
                                     uno::Any aAny;
                                     if ( xInfo->hasPropertyByName( sPropLabel ) )
@@ -242,13 +235,11 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                                     bDone = sal_True;
                                 }
                             }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
                             else
                             {
                                 SetHlinkForObject( pObj, rURL );
                                 bDone = sal_True;
                             }
-#endif
                         }
                     }
 
@@ -261,7 +252,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
             }
             break;
         default:
-            DBG_ERROR("falscher Slot");
+            OSL_FAIL("falscher Slot");
     }
 }
 
@@ -299,7 +290,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             rBindings.Invalidate(SID_OBJECT_HEAVEN);
             rBindings.Invalidate(SID_OBJECT_HELL);
             //  leave draw shell if nothing selected (layer may be locked)
-            pViewData->GetViewShell()->UpdateDrawShell();
+            if ( pView->GetMarkedObjectList().GetMarkCount() == 0 )
+                pViewData->GetViewShell()->SetDrawShell( false );
             break;
 
         case SID_FRAME_TO_TOP:
@@ -369,12 +361,14 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         case SID_DELETE:
         case SID_DELETE_CONTENTS:
             pView->DeleteMarked();
-            pViewData->GetViewShell()->UpdateDrawShell();
+            if (!pTabView->IsDrawSelMode())
+                pViewData->GetViewShell()->SetDrawShell( false );
         break;
 
         case SID_CUT:
             pView->DoCut();
-            pViewData->GetViewShell()->UpdateDrawShell();
+            if (!pTabView->IsDrawSelMode())
+                pViewData->GetViewShell()->SetDrawShell( false );
             break;
 
         case SID_COPY:
@@ -382,8 +376,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_PASTE:
-            DBG_ERROR( "SdrView::PasteClipboard not supported anymore" );
-            // pView->PasteClipboard( pWin );
+            OSL_FAIL( "SdrView::PasteClipboard not supported anymore" );
             break;
 
         case SID_SELECTALL:
@@ -391,26 +384,26 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_ANCHOR_PAGE:
-            pView->SetAnchor( SCA_PAGE );
+            pView->SetPageAnchored();
             rBindings.Invalidate( SID_ANCHOR_PAGE );
             rBindings.Invalidate( SID_ANCHOR_CELL );
             break;
 
         case SID_ANCHOR_CELL:
-            pView->SetAnchor( SCA_CELL );
+            pView->SetCellAnchored();
             rBindings.Invalidate( SID_ANCHOR_PAGE );
             rBindings.Invalidate( SID_ANCHOR_CELL );
             break;
 
         case SID_ANCHOR_TOGGLE:
             {
-                switch( pView->GetAnchor() )
+                switch( pView->GetAnchorType() )
                 {
                     case SCA_CELL:
-                    pView->SetAnchor( SCA_PAGE );
+                    pView->SetPageAnchored();
                     break;
                     default:
-                    pView->SetAnchor( SCA_CELL );
+                    pView->SetCellAnchored();
                     break;
                 }
             }
@@ -490,7 +483,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_ENABLE_HYPHENATION:
             {
-                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, sal_False);
+                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, false);
                 if( pItem )
                 {
                     SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
@@ -720,7 +713,7 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
     }
     else
     {
-        sal_Bool bLock = sal_False;
+        sal_Bool bLock = false;
         const SfxItemSet *pArgs = rReq.GetArgs();
         if( pArgs && pArgs->Count() >= 1 )
             bLock = static_cast<const SfxBoolItem&>(pArgs->Get(SID_FORMATPAINTBRUSH)).GetValue();
@@ -755,3 +748,4 @@ ScDrawView* ScDrawShell::GetDrawView()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

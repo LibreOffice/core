@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@ class ScDPObject;
 class ScDPSaveData;
 class ScStrCollection;
 struct ScDPNumGroupInfo;
+struct ScSubTotalParam;
 
 // ---------------------------------------------------------------------------
 
@@ -52,7 +54,6 @@ private:
 
 public:
                     ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
-//UNUSED2008-05     ScDBFunc( Window* pParent, const ScDBFunc& rDBFunc, ScTabViewShell* pViewShell );
     virtual         ~ScDBFunc();
 
                     //  nur UISort wiederholt bei Bedarf die Teilergebnisse
@@ -74,22 +75,20 @@ public:
 
     sal_Bool            ImportData( const ScImportParam& rParam, sal_Bool bRecord = sal_True );
 
-    void            GotoDBArea( const String& rDBName );
+    void GotoDBArea( const ::rtl::OUString& rDBName );
 
                     // DB-Bereich vom Cursor
-    ScDBData*       GetDBData( sal_Bool bMarkArea = sal_True, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP );
+    ScDBData*       GetDBData( bool bMarkArea = true, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP);
+    ScDBData*       GetAnonymousDBData();
 
-    void            NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList );
+    void            NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::vector<ScRange> &rDelAreaList );
 
     void            Consolidate( const ScConsolidateParam& rParam, sal_Bool bRecord = sal_True );
 
     bool            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, sal_Bool bNewTable,
-                                    const ScDPObject& rSource, sal_Bool bApi = sal_False );
+                                    const ScDPObject& rSource, sal_Bool bApi = false );
     void            DeletePivotTable();
-    // Wang Xu Ming -- 2009-6-17
-    // DataPilot Migration
-    sal_uLong   RecalcPivotTable();
-    // End Comments
+    void            RecalcPivotTable();
     sal_Bool            HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts );
     sal_Bool            HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo );
     void            GroupDataPilot();
@@ -125,7 +124,7 @@ public:
     void            HideMarkedOutlines( sal_Bool bRecord = sal_True );
     sal_Bool            OutlinePossible(sal_Bool bHide);
 
-    void            UpdateCharts(sal_Bool bAllCharts = sal_False);      // Default: am Cursor
+    void            UpdateCharts(sal_Bool bAllCharts = false);      // Default: am Cursor
 
     static sal_uInt16   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool bAllCharts );
 };
@@ -134,3 +133,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

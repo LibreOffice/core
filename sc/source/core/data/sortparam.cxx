@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "queryparam.hxx"
-#include <tools/debug.hxx>
+#include "subtotalparam.hxx"
 
 
 //------------------------------------------------------------------------
@@ -47,12 +48,13 @@ ScSortParam::ScSortParam()
 //------------------------------------------------------------------------
 
 ScSortParam::ScSortParam( const ScSortParam& r ) :
-        nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),
+        nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nUserIndex(r.nUserIndex),
         bHasHeader(r.bHasHeader),bByRow(r.bByRow),bCaseSens(r.bCaseSens),
-        bUserDef(r.bUserDef),nUserIndex(r.nUserIndex),bIncludePattern(r.bIncludePattern),
-        bInplace(r.bInplace),
+        bNaturalSort(r.bNaturalSort),bUserDef(r.bUserDef),
+        bIncludePattern(r.bIncludePattern),bInplace(r.bInplace),
         nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
-        aCollatorLocale( r.aCollatorLocale ), aCollatorAlgorithm( r.aCollatorAlgorithm )
+        aCollatorLocale( r.aCollatorLocale ), aCollatorAlgorithm( r.aCollatorAlgorithm ),
+        nCompatHeader( r.nCompatHeader )
 {
     for (sal_uInt16 i=0; i<MAXSORT; i++)
     {
@@ -71,16 +73,16 @@ void ScSortParam::Clear()
     nCompatHeader = 2;
     nDestTab = 0;
     nUserIndex = 0;
-    bHasHeader=bCaseSens=bUserDef = sal_False;
-    bByRow=bIncludePattern=bInplace = sal_True;
+    bHasHeader=bCaseSens=bUserDef=bNaturalSort = false;
+    bByRow=bIncludePattern=bInplace = true;
     aCollatorLocale = ::com::sun::star::lang::Locale();
-    aCollatorAlgorithm.Erase();
+    aCollatorAlgorithm = ::rtl::OUString();
 
     for (sal_uInt16 i=0; i<MAXSORT; i++)
     {
-        bDoSort[i]    = sal_False;
+        bDoSort[i]    = false;
         nField[i]     = 0;
-        bAscending[i] = sal_True;
+        bAscending[i] = true;
     }
 }
 
@@ -92,11 +94,12 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     nRow1           = r.nRow1;
     nCol2           = r.nCol2;
     nRow2           = r.nRow2;
-    bHasHeader      = r.bHasHeader;
-    bCaseSens       = r.bCaseSens;
-    bByRow          = r.bByRow;
-    bUserDef        = r.bUserDef;
     nUserIndex      = r.nUserIndex;
+    bHasHeader      = r.bHasHeader;
+    bByRow          = r.bByRow;
+    bCaseSens       = r.bCaseSens;
+    bNaturalSort    = r.bNaturalSort;
+    bUserDef        = r.bUserDef;
     bIncludePattern = r.bIncludePattern;
     bInplace        = r.bInplace;
     nDestTab        = r.nDestTab;
@@ -104,6 +107,7 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     nDestRow        = r.nDestRow;
     aCollatorLocale         = r.aCollatorLocale;
     aCollatorAlgorithm      = r.aCollatorAlgorithm;
+    nCompatHeader   = r.nCompatHeader;
 
     for (sal_uInt16 i=0; i<MAXSORT; i++)
     {
@@ -117,9 +121,9 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
 
 //------------------------------------------------------------------------
 
-sal_Bool ScSortParam::operator==( const ScSortParam& rOther ) const
+bool ScSortParam::operator==( const ScSortParam& rOther ) const
 {
-    sal_Bool bEqual = sal_False;
+    bool bEqual = false;
     // Anzahl der Sorts gleich?
     sal_uInt16 nLast      = 0;
     sal_uInt16 nOtherLast = 0;
@@ -135,6 +139,7 @@ sal_Bool ScSortParam::operator==( const ScSortParam& rOther ) const
         && (bHasHeader      == rOther.bHasHeader)
         && (bByRow          == rOther.bByRow)
         && (bCaseSens       == rOther.bCaseSens)
+        && (bNaturalSort    == rOther.bNaturalSort)
         && (bUserDef        == rOther.bUserDef)
         && (nUserIndex      == rOther.nUserIndex)
         && (bIncludePattern == rOther.bIncludePattern)
@@ -148,7 +153,7 @@ sal_Bool ScSortParam::operator==( const ScSortParam& rOther ) const
         && (aCollatorAlgorithm          == rOther.aCollatorAlgorithm)
         )
     {
-        bEqual = sal_True;
+        bEqual = true;
         for ( sal_uInt16 i=0; i<=nLast && bEqual; i++ )
         {
             bEqual = (nField[i] == rOther.nField[i]) && (bAscending[i]  == rOther.bAscending[i]);
@@ -160,12 +165,13 @@ sal_Bool ScSortParam::operator==( const ScSortParam& rOther ) const
 //------------------------------------------------------------------------
 
 ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld ) :
-        nCol1(rSub.nCol1),nRow1(rSub.nRow1),nCol2(rSub.nCol2),nRow2(rSub.nRow2),
-        bHasHeader(sal_True),bByRow(sal_True),bCaseSens(rSub.bCaseSens),
-        bUserDef(rSub.bUserDef),nUserIndex(rSub.nUserIndex),bIncludePattern(rSub.bIncludePattern),
-        bInplace(sal_True),
+        nCol1(rSub.nCol1),nRow1(rSub.nRow1),nCol2(rSub.nCol2),nRow2(rSub.nRow2),nUserIndex(rSub.nUserIndex),
+        bHasHeader(true),bByRow(true),bCaseSens(rSub.bCaseSens),bNaturalSort(rOld.bNaturalSort),
+        bUserDef(rSub.bUserDef),bIncludePattern(rSub.bIncludePattern),
+        bInplace(true),
         nDestTab(0),nDestCol(0),nDestRow(0),
-        aCollatorLocale( rOld.aCollatorLocale ), aCollatorAlgorithm( rOld.aCollatorAlgorithm )
+        aCollatorLocale( rOld.aCollatorLocale ), aCollatorAlgorithm( rOld.aCollatorAlgorithm ),
+        nCompatHeader( rOld.nCompatHeader )
 {
     sal_uInt16 nNewCount = 0;
     sal_uInt16 i;
@@ -177,7 +183,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
             {
                 if (nNewCount < MAXSORT)
                 {
-                    bDoSort[nNewCount]    = sal_True;
+                    bDoSort[nNewCount]    = true;
                     nField[nNewCount]     = rSub.nField[i];
                     bAscending[nNewCount] = rSub.bAscending;
                     ++nNewCount;
@@ -189,15 +195,15 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
         if (rOld.bDoSort[i])
         {
             SCCOLROW nThisField = rOld.nField[i];
-            sal_Bool bDouble = sal_False;
+            bool bDouble = false;
             for (sal_uInt16 j=0; j<nNewCount; j++)
                 if ( nField[j] == nThisField )
-                    bDouble = sal_True;
+                    bDouble = true;
             if (!bDouble)               // ein Feld nicht zweimal eintragen
             {
                 if (nNewCount < MAXSORT)
                 {
-                    bDoSort[nNewCount]    = sal_True;
+                    bDoSort[nNewCount]    = true;
                     nField[nNewCount]     = nThisField;
                     bAscending[nNewCount] = rOld.bAscending[i];
                     ++nNewCount;
@@ -207,30 +213,31 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
 
     for (i=nNewCount; i<MAXSORT; i++)       // Rest loeschen
     {
-        bDoSort[i]    = sal_False;
+        bDoSort[i]    = false;
         nField[i]     = 0;
-        bAscending[i] = sal_True;
+        bAscending[i] = true;
     }
 }
 
 //------------------------------------------------------------------------
 
 ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
-        nCol1(nCol),nRow1(rParam.nRow1),nCol2(nCol),nRow2(rParam.nRow2),
-        bHasHeader(rParam.bHasHeader),bByRow(sal_True),bCaseSens(rParam.bCaseSens),
+        nCol1(nCol),nRow1(rParam.nRow1),nCol2(nCol),nRow2(rParam.nRow2),nUserIndex(0),
+        bHasHeader(rParam.bHasHeader),bByRow(true),bCaseSens(rParam.bCaseSens),
+        bNaturalSort(false),
 //! TODO: what about Locale and Algorithm?
-        bUserDef(sal_False),nUserIndex(0),bIncludePattern(sal_False),
-        bInplace(sal_True),
-        nDestTab(0),nDestCol(0),nDestRow(0)
+        bUserDef(false),bIncludePattern(false),
+        bInplace(true),
+        nDestTab(0),nDestCol(0),nDestRow(0), nCompatHeader(2)
 {
-    bDoSort[0] = sal_True;
+    bDoSort[0] = true;
     nField[0] = nCol;
-    bAscending[0] = sal_True;
+    bAscending[0] = true;
     for (sal_uInt16 i=1; i<MAXSORT; i++)
     {
-        bDoSort[i]    = sal_False;
+        bDoSort[i]    = false;
         nField[i]     = 0;
-        bAscending[i] = sal_True;
+        bAscending[i] = true;
     }
 }
 
@@ -253,11 +260,12 @@ void ScSortParam::MoveToDest()
             else
                 nField[i] += nDifY;
 
-        bInplace = sal_True;
+        bInplace = true;
     }
     else
     {
-        DBG_ERROR("MoveToDest, bInplace == TRUE");
+        OSL_FAIL("MoveToDest, bInplace == TRUE");
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

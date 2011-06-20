@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -140,7 +141,7 @@ public:
                                             nRow = 0;
                                         else if (nCols <= nCol || nRows <= nRow)
                                         {
-                                            DBG_ERROR("ScJumpMatrix::GetJump: dimension error");
+                                            OSL_FAIL("ScJumpMatrix::GetJump: dimension error");
                                             nCol = 0;
                                             nRow = 0;
                                         }
@@ -161,7 +162,7 @@ public:
             void                SetJumpParameters( ScTokenVec* p )
                                     { pParams = p; }
             const ScTokenVec*   GetJumpParameters() const { return pParams; }
-            ScMatrix*           GetResultMatrix() const { return pMat; }
+            ScMatrix*           GetResultMatrix() const { return pMat.get(); }
             void                GetPos( SCSIZE& rCol, SCSIZE& rRow ) const
                                     {
                                         rCol = nCurCol;
@@ -194,7 +195,7 @@ public:
                                     {
                                         if ( nNewCols > nResMatCols || nNewRows > nResMatRows )
                                         {
-                                            pMat = pMat->CloneAndExtend( nNewCols, nNewRows );
+                                            pMat = pMat->CloneAndExtend( nNewCols, nNewRows, pMat->GetDensityType() );
                                             if ( nResMatCols < nNewCols )
                                             {
                                                 pMat->FillDouble( CreateDoubleError(
@@ -220,3 +221,4 @@ public:
 
 #endif // SC_JUMPMATRIX_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

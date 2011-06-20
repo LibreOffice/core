@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -164,7 +165,7 @@ void XclExpScl::Shorten( sal_uInt16 nFactor )
 
 void XclExpScl::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF4 );
+    OSL_ENSURE_BIFF( rStrm.GetRoot().GetBiff() >= EXC_BIFF4 );
     rStrm << mnNum << mnDenom;
 }
 
@@ -177,7 +178,7 @@ XclExpPane::XclExpPane( const XclTabViewData& rData ) :
     maSecondXclPos( rData.maSecondXclPos ),
     mnActivePane( rData.mnActivePane )
 {
-    DBG_ASSERT( rData.IsSplit(), "XclExpPane::XclExpPane - no PANE record for unsplit view" );
+    OSL_ENSURE( rData.IsSplit(), "XclExpPane::XclExpPane - no PANE record for unsplit view" );
 }
 
 static const char* lcl_GetActivePane( sal_uInt8 nActivePane )
@@ -206,7 +207,7 @@ void XclExpPane::SaveXml( XclExpXmlStream& rStrm )
 void XclExpPane::WriteBody( XclExpStream& rStrm )
 {
     rStrm   << mnSplitX
-            << mnSplitY
+            << static_cast<sal_uInt16>( mnSplitY )
             << maSecondXclPos
             << mnActivePane;
     if( rStrm.GetRoot().GetBiff() >= EXC_BIFF5 )
@@ -313,7 +314,6 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
 
     const ScViewOptions& rViewOpt = GetDoc().GetViewOptions();
     maData.mbShowFormulas   = rViewOpt.GetOption( VOPT_FORMULAS );
-    maData.mbShowGrid       = rViewOpt.GetOption( VOPT_GRID );
     maData.mbShowHeadings   = rViewOpt.GetOption( VOPT_HEADER );
     maData.mbShowZeros      = rViewOpt.GetOption( VOPT_NULLVALS );
     maData.mbShowOutline    = rViewOpt.GetOption( VOPT_OUTLINER );
@@ -353,7 +353,7 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
                 maData.mnSplitX = static_cast< sal_uInt16 >( nFreezeScCol ) - maData.maFirstXclPos.mnCol;
             SCROW nFreezeScRow = rTabSett.maFreezePos.Row();
             if( (0 < nFreezeScRow) && (nFreezeScRow <= GetXclMaxPos().Row()) )
-                maData.mnSplitY = static_cast< sal_uInt16 >( nFreezeScRow ) - maData.maFirstXclPos.mnRow;
+                maData.mnSplitY = static_cast< sal_uInt32 >( nFreezeScRow ) - maData.maFirstXclPos.mnRow;
             // if both splits are left out (address overflow), remove the frozen flag
             maData.mbFrozenPanes = maData.IsSplit();
 
@@ -369,7 +369,7 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
         {
             // split window: position is in twips
             maData.mnSplitX = ulimit_cast< sal_uInt16 >( rTabSett.maSplitPos.X() );
-            maData.mnSplitY = ulimit_cast< sal_uInt16 >( rTabSett.maSplitPos.Y() );
+            maData.mnSplitY = ulimit_cast< sal_uInt32 >( rTabSett.maSplitPos.Y() );
         }
 
         // selection
@@ -388,6 +388,7 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
             else
                 maData.maGridColor = rGridColor;
         }
+        maData.mbShowGrid       = rTabSett.mbShowGrid;
 
         // view mode and zoom
         maData.mbPageMode       = (GetBiff() == EXC_BIFF8) && rTabSett.mbPageMode;
@@ -536,3 +537,4 @@ void XclExpTabViewSettings::WriteTabBgColor( XclExpStream& rStrm ) const
 }
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

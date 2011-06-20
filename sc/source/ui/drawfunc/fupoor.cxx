@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,8 +56,8 @@ FuPoor::FuPoor(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
     pDrDoc(pDoc),
     aSfxRequest(rReq),
     pDialog(NULL),
-    bIsInDragMode(sal_False),
-    // #95491# remember MouseButton state
+    bIsInDragMode(false),
+    // remember MouseButton state
     mnCode(0)
 {
     aScrollTimer.SetTimeoutHdl( LINK(this, FuPoor, ScrollHdl) );
@@ -169,7 +170,7 @@ IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
 {
     Point aPosPixel = pWindow->GetPointerPosPixel();
 
-    // #95491# use remembered MouseButton state to create correct
+    // use remembered MouseButton state to create correct
     // MouseEvents for this artifical MouseMove.
     MouseMove(MouseEvent(aPosPixel, 1, 0, GetMouseButtonCode()));
 
@@ -177,22 +178,22 @@ IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 
-// #95491# moved from inline to *.cxx
+// moved from inline to *.cxx
 sal_Bool FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    return sal_False;
+    return false;
 }
 
-// #95491# moved from inline to *.cxx
+// moved from inline to *.cxx
 sal_Bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -214,7 +215,7 @@ sal_Bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 
 sal_Bool FuPoor::KeyInput(const KeyEvent& /* rKEvt */)
 {
-    sal_Bool bReturn = sal_False;
+    sal_Bool bReturn = false;
 
     return(bReturn);
 }
@@ -320,9 +321,9 @@ sal_Bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
 {
     SdrPageView* pPV = pView->GetSdrPageView();
     if (!pPV)
-        return sal_False;
+        return false;
 
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
     SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
@@ -350,7 +351,7 @@ void FuPoor::StopDragTimer()
 
 /*************************************************************************
 |*
-|* #98185# Create default drawing objects via keyboard
+|* Create default drawing objects via keyboard
 |*
 \************************************************************************/
 
@@ -383,3 +384,5 @@ bool FuPoor::doConstructOrthogonal() const
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

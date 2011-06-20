@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 // -----------------------------------------------------------------------
 
 #include "userdat.hxx"
-#include <tools/debug.hxx>
 #include "drwlayer.hxx"
 #include "rechead.hxx"
 
@@ -59,7 +59,7 @@ IMPL_LINK_INLINE_START( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFac
             pObjFactory->pNewData = new ScMacroInfo;
         else
         {
-            DBG_ERROR("MakeUserData: falsche ID");
+            OSL_FAIL("MakeUserData: falsche ID");
         }
     }
     return 0;
@@ -125,3 +125,4 @@ SdrObjUserData* ScMacroInfo::Clone( SdrObject* /*pObj*/ ) const
    return new ScMacroInfo( *this );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

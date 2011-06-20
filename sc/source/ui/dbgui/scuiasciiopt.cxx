@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 #include "impex.hxx"
 #include "scuiasciiopt.hxx"
 #include "asciiopt.hrc"
-#include <tools/debug.hxx>
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
 // ause
@@ -50,8 +50,9 @@
 const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 
 
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // Defines - CSV Import Preserve Options
 #define FIXED_WIDTH         "FixedWidth"
@@ -96,7 +97,7 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
         xub_StrLen nCount = rList.GetTokenCount('\t');
         for ( xub_StrLen i=0; i<nCount; i+=2 )
         {
-            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.GetToken(i,'\t') ) )//CHINA001 if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.GetToken(i,'\t') ) )
+            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.GetToken(i,'\t') ) )
                 c = (sal_Unicode)rList.GetToken(i+1,'\t').ToInt32();
         }
         if (!c && aStr.Len())
@@ -121,17 +122,17 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
     const Any *pProperties;
     Sequence<OUString> aNames(9);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
+    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
 
-    pNames[0] = OUString::createFromAscii( MERGE_DELIMITERS );
-    pNames[1] = OUString::createFromAscii( SEPARATORS );
-    pNames[2] = OUString::createFromAscii( TEXT_SEPARATORS );
-    pNames[3] = OUString::createFromAscii( FIXED_WIDTH );
-    pNames[4] = OUString::createFromAscii( FROM_ROW );
-    pNames[5] = OUString::createFromAscii( CHAR_SET );
-    pNames[6] = OUString::createFromAscii( QUOTED_AS_TEXT );
-    pNames[7] = OUString::createFromAscii( DETECT_SPECIAL_NUM );
-    pNames[8] = OUString::createFromAscii( LANGUAGE );
+    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( MERGE_DELIMITERS ));
+    pNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATORS ));
+    pNames[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( TEXT_SEPARATORS ));
+    pNames[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH ));
+    pNames[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( FROM_ROW ));
+    pNames[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( CHAR_SET ));
+    pNames[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( QUOTED_AS_TEXT ));
+    pNames[7] = OUString(RTL_CONSTASCII_USTRINGPARAM( DETECT_SPECIAL_NUM ));
+    pNames[8] = OUString(RTL_CONSTASCII_USTRINGPARAM( LANGUAGE ));
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
     if( pProperties[1].hasValue() )
@@ -172,17 +173,17 @@ static void save_Separators(
     Any *pProperties;
     Sequence<OUString> aNames(9);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
+    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
 
-    pNames[0] = OUString::createFromAscii( MERGE_DELIMITERS );
-    pNames[1] = OUString::createFromAscii( SEPARATORS );
-    pNames[2] = OUString::createFromAscii( TEXT_SEPARATORS );
-    pNames[3] = OUString::createFromAscii( FIXED_WIDTH );
-    pNames[4] = OUString::createFromAscii( FROM_ROW );
-    pNames[5] = OUString::createFromAscii( CHAR_SET );
-    pNames[6] = OUString::createFromAscii( QUOTED_AS_TEXT );
-    pNames[7] = OUString::createFromAscii( DETECT_SPECIAL_NUM );
-    pNames[8] = OUString::createFromAscii( LANGUAGE );
+    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( MERGE_DELIMITERS ));
+    pNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATORS ));
+    pNames[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( TEXT_SEPARATORS ));
+    pNames[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH ));
+    pNames[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( FROM_ROW ));
+    pNames[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( CHAR_SET ));
+    pNames[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( QUOTED_AS_TEXT ));
+    pNames[7] = OUString(RTL_CONSTASCII_USTRINGPARAM( DETECT_SPECIAL_NUM ));
+    pNames[8] = OUString(RTL_CONSTASCII_USTRINGPARAM( LANGUAGE ));
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();
     pProperties[1] <<= sFieldSeparators;
@@ -201,7 +202,7 @@ static void save_Separators(
 // ----------------------------------------------------------------------------
 
 ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
-                                    SvStream* pInStream, sal_Unicode cSep ) :
+                                    SvStream* pInStream, sal_Unicode /*cSep*/ ) :
         ModalDialog ( pParent, ScResId( RID_SCDLG_ASCII ) ),
         mpDatStream  ( pInStream ),
         mnStreamPos( pInStream ? pInStream->Tell() : 0 ),
@@ -268,8 +269,9 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     }
     SetText( aName );
 
-    OUString sFieldSeparators;
-    OUString sTextSeparators;
+    // Default options
+    OUString sFieldSeparators(RTL_CONSTASCII_USTRINGPARAM("\t"));
+    OUString sTextSeparators(mcTextSep);
     bool bMergeDelimiters = false;
     bool bFixedWidth = false;
     bool bQuotedFieldAsText = false;
@@ -281,12 +283,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         // load separators only when importing csv files.
         load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
                          bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow, nCharSet, nLanguage);
-    else
-    {
-        // #i115474# otherwise use sensible defaults
-        sFieldSeparators = OUString( cSep );
-        sTextSeparators = OUString( ScAsciiOptions::cDefaultTextSep );
-    }
     maFieldSeparators = String(sFieldSeparators);
 
     if( bMergeDelimiters )
@@ -413,6 +409,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aLbType.Disable();
 
     // *** table box preview ***
+    maTableBox.Init();
     maTableBox.SetUpdateTextHdl( LINK( this, ScImportAsciiDlg, UpdateTextHdl ) );
     maTableBox.InitTypes( aLbType );
     maTableBox.SetColTypeHdl( LINK( this, ScImportAsciiDlg, ColTypeHdl ) );
@@ -496,7 +493,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, String &rText )
         mnStreamPos = mpDatStream->Tell();
     }
 
-    //  #107455# If the file content isn't unicode, ReadUniStringLine
+    //  If the file content isn't unicode, ReadUniStringLine
     //  may try to seek beyond the file's end and cause a CANTSEEK error
     //  (depending on the stream type). The error code has to be cleared,
     //  or further read operations (including non-unicode) will fail.
@@ -610,7 +607,7 @@ void ScImportAsciiDlg::UpdateVertical()
 
 IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 {
-    DBG_ASSERT( pButton, "ScImportAsciiDlg::RbSepFixHdl - missing sender" );
+    OSL_ENSURE( pButton, "ScImportAsciiDlg::RbSepFixHdl - missing sender" );
 
     if( (pButton == &aRbFixed) || (pButton == &aRbSeparated) )
     {
@@ -628,8 +625,8 @@ IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 
 IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
 {
-    DBG_ASSERT( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
-    DBG_ASSERT( !aRbFixed.IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
+    OSL_ENSURE( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
+    OSL_ENSURE( !aRbFixed.IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
 
     /*  #i41550# First update state of the controls. The GetSeparators()
         function needs final state of the check boxes. */
@@ -653,7 +650,7 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
 
 IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
 {
-    DBG_ASSERT( pCharSetBox, "ScImportAsciiDlg::CharSetHdl - missing sender" );
+    OSL_ENSURE( pCharSetBox, "ScImportAsciiDlg::CharSetHdl - missing sender" );
 
     if( (pCharSetBox == &aLbCharSet) && (pCharSetBox->GetSelectEntryCount() == 1) )
     {
@@ -672,14 +669,14 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
 
 IMPL_LINK( ScImportAsciiDlg, FirstRowHdl, NumericField*, pNumField )
 {
-    DBG_ASSERT( pNumField, "ScImportAsciiDlg::FirstRowHdl - missing sender" );
+    OSL_ENSURE( pNumField, "ScImportAsciiDlg::FirstRowHdl - missing sender" );
     maTableBox.Execute( CSVCMD_SETFIRSTIMPORTLINE, sal::static_int_cast<sal_Int32>( pNumField->GetValue() - 1 ) );
     return 0;
 }
 
 IMPL_LINK( ScImportAsciiDlg, LbColTypeHdl, ListBox*, pListBox )
 {
-    DBG_ASSERT( pListBox, "ScImportAsciiDlg::LbColTypeHdl - missing sender" );
+    OSL_ENSURE( pListBox, "ScImportAsciiDlg::LbColTypeHdl - missing sender" );
     if( pListBox == &aLbType )
         maTableBox.Execute( CSVCMD_SETCOLUMNTYPE, pListBox->GetSelectEntryPos() );
     return 0;
@@ -714,7 +711,7 @@ IMPL_LINK( ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox*, EMPTYARG )
 
 IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox*, pTableBox )
 {
-    DBG_ASSERT( pTableBox, "ScImportAsciiDlg::ColTypeHdl - missing sender" );
+    OSL_ENSURE( pTableBox, "ScImportAsciiDlg::ColTypeHdl - missing sender" );
 
     sal_Int32 nType = pTableBox->GetSelColumnType();
     sal_Int32 nTypeCount = aLbType.GetEntryCount();
@@ -734,3 +731,5 @@ IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox*, pTableBox )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

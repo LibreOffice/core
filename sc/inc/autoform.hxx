@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 /*************************************************************************
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-JP 20.07.95:
 
     Die akt. Struktur der Autoformatierung darf nicht mehr veraendert werden.
     Diese wird durch unterschiedlichen Code vom StartWriter und vom StarCalc
@@ -60,6 +60,7 @@ JP 20.07.95:
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/bolnitem.hxx>
@@ -265,7 +266,7 @@ private:
     sal_Bool                        bSaveLater;
 
 public:
-                                ScAutoFormat( sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False );
+                                ScAutoFormat( sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false );
                                 ScAutoFormat( const ScAutoFormat& AutoFormat );
     virtual                     ~ScAutoFormat();
     virtual                     ScDataObject*         Clone() const { return new ScAutoFormat( *this ); }
@@ -280,3 +281,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

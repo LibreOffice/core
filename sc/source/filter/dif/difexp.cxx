@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,8 +65,8 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* p
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     const ScRange&rRange, const CharSet eCharSet, sal_uInt32 nDifOption )
 {
-    DBG_ASSERT( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range unsortiert!" );
-    DBG_ASSERTWARNING( rRange.aStart.Tab() == rRange.aEnd.Tab(),
+    OSL_ENSURE( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range unsortiert!" );
+    OSL_ENSURE( rRange.aStart.Tab() == rRange.aEnd.Tab(),
         "ScExportDif(): nur eine Tabelle bidde!" );
 
     const CharSet eStreamCharSet = rOut.GetStreamCharSet();
@@ -79,7 +80,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
     {
         rOut.StartWritingUnicodeText();
-        bContextOrNotAsciiEncoding = sal_False;
+        bContextOrNotAsciiEncoding = false;
     }
     else
     {
@@ -95,7 +96,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 aStrDelimDecoded = String( aStrDelimEncoded, eCharSet );
         }
         else
-            bContextOrNotAsciiEncoding = sal_False;
+            bContextOrNotAsciiEncoding = false;
     }
 
     const sal_Char*     p2DoubleQuotes_LF = "\"\"\n";
@@ -123,7 +124,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     aPrgrsBar.SetState( 0 );
 
     // TABLE
-    DBG_ASSERT( pDoc->HasTable( nTab ), "*ScExportDif(): Tabelle nicht vorhanden!" );
+    OSL_ENSURE( pDoc->HasTable( nTab ), "*ScExportDif(): Tabelle nicht vorhanden!" );
 
     aOS = pKeyTABLE;
     aOS.AppendAscii( "\n0,1\n\"" );
@@ -315,3 +316,4 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

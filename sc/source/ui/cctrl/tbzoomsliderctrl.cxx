@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,21 +26,11 @@
  *
 ************************************************************************/
 #include "precompiled_sc.hxx"
-#ifndef _SC_ZOOMSLIDERTBCONTRL_HXX
 #include "tbzoomsliderctrl.hxx"
-#endif
-#ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
-#endif
 #include <svl/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
@@ -73,7 +64,7 @@ ScZoomSliderControl::ScZoomSliderControl(
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScZoomSliderControl::~ScZoomSliderControl()
+ScZoomSliderControl::~ScZoomSliderControl()
 {
 
 }
@@ -86,7 +77,7 @@ void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     sal_uInt16                  nId  = GetId();
     ToolBox&                rTbx = GetToolBox();
     ScZoomSliderWnd*        pBox = (ScZoomSliderWnd*)(rTbx.GetItemWindow( nId ));
-    DBG_ASSERT( pBox ,"Control not found!" );
+    OSL_ENSURE( pBox ,"Control not found!" );
 
     if ( SFX_ITEM_AVAILABLE != eState || pState->ISA( SfxVoidItem ) )
     {
@@ -97,10 +88,10 @@ void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     else
     {
         pBox->Enable();
-        DBG_ASSERT( pState->ISA( SvxZoomSliderItem ), "invalid item type" );
+        OSL_ENSURE( pState->ISA( SvxZoomSliderItem ), "invalid item type" );
         const SvxZoomSliderItem* pZoomSliderItem = dynamic_cast< const SvxZoomSliderItem* >( pState );
 
-        DBG_ASSERT( pZoomSliderItem, "Sc::ScZoomSliderControl::StateChanged(), wrong item type!" );
+        OSL_ENSURE( pZoomSliderItem, "Sc::ScZoomSliderControl::StateChanged(), wrong item type!" );
         if( pZoomSliderItem )
             pBox->UpdateFromItem( pZoomSliderItem );
     }
@@ -265,10 +256,9 @@ ScZoomSliderWnd::ScZoomSliderWnd( Window* pParent, const ::com::sun::star::uno::
                 m_xDispatchProvider( rDispatchProvider ),
                 m_xFrame( _xFrame )
 {
-    sal_Bool bIsHC                  = GetSettings().GetStyleSettings().GetHighContrastMode();
-    mpImpl->maSliderButton      = Image( SVX_RES( bIsHC ? RID_SVXBMP_SLIDERBUTTON_HC : RID_SVXBMP_SLIDERBUTTON ) );
-    mpImpl->maIncreaseButton    = Image( SVX_RES( bIsHC ? RID_SVXBMP_SLIDERINCREASE_HC : RID_SVXBMP_SLIDERINCREASE ) );
-    mpImpl->maDecreaseButton    = Image( SVX_RES( bIsHC ? RID_SVXBMP_SLIDERDECREASE_HC : RID_SVXBMP_SLIDERDECREASE ) );
+    mpImpl->maSliderButton      = Image( SVX_RES( RID_SVXBMP_SLIDERBUTTON   ) );
+    mpImpl->maIncreaseButton    = Image( SVX_RES( RID_SVXBMP_SLIDERINCREASE ) );
+    mpImpl->maDecreaseButton    = Image( SVX_RES( RID_SVXBMP_SLIDERDECREASE ) );
     Size  aSliderSize           = LogicToPixel( Size( aLogicalSize), MapMode( MAP_10TH_MM ) );
     SetSizePixel( Size( aSliderSize.Width() * nSliderWidth-1, aSliderSize.Height() + nSliderHeight ) );
 }
@@ -390,7 +380,7 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
         mpImpl->mnMinZoom     = pZoomSliderItem->GetMinZoom();
         mpImpl->mnMaxZoom     = pZoomSliderItem->GetMaxZoom();
 
-        DBG_ASSERT( mpImpl->mnMinZoom <= mpImpl->mnCurrentZoom &&
+        OSL_ENSURE( mpImpl->mnMinZoom <= mpImpl->mnCurrentZoom &&
             mpImpl->mnMinZoom <  mpImpl->mnSliderCenter &&
             mpImpl->mnMaxZoom >= mpImpl->mnCurrentZoom &&
             mpImpl->mnMaxZoom > mpImpl->mnSliderCenter,
@@ -538,3 +528,5 @@ void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
 }
 
 // -----------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

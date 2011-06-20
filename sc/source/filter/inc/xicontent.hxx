@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,8 +34,11 @@
 #include "xlcontent.hxx"
 #include "xistring.hxx"
 #include "xiroot.hxx"
+#include "validat.hxx"
 
 #include <map>
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/noncopyable.hpp>
 
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
@@ -81,7 +85,7 @@ private:
 // Hyperlinks =================================================================
 
 /** Provides importing hyperlinks and inserting them into a document. */
-class XclImpHyperlink : ScfNoInstance
+class XclImpHyperlink : private boost::noncopyable
 {
 public:
     /** Reads a HLINK record and inserts it into the document.
@@ -97,17 +101,29 @@ public:
     /** Convert the sheet name with invalid character(s) in URL when the URL is
         to a location within the same document (e.g. #'Sheet&Name'.A1). */
     static void         ConvertToValidTabName(String& rName);
+
+private:
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. To enforce this, the default constructor
+        is made private */
+    XclImpHyperlink();
 };
 
 // Label ranges ===============================================================
 
 /** Provides importing label ranges and inserting them into a document. */
-class XclImpLabelranges : ScfNoInstance
+class XclImpLabelranges : private  boost::noncopyable
 {
 public:
     /** Reads a LABELRANGES record and inserts the label ranges into the document.
         @descr  Import stream must be located at start of a LABELRANGES record. */
     static void         ReadLabelranges( XclImpStream& rStrm );
+
+private:
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. To enforce this, the default constructor
+        is made private */
+    XclImpLabelranges();
 };
 
 // Conditional formatting =====================================================
@@ -156,26 +172,41 @@ public:
     void                Apply();
 
 private:
-    typedef ScfDelList< XclImpCondFormat > XclImpCondFmtList;
+    typedef boost::ptr_vector< XclImpCondFormat > XclImpCondFmtList;
     XclImpCondFmtList   maCondFmtList;      /// List with all conditional formattings.
 };
 
 // Data Validation ============================================================
 
-/** Provides importing validation data and inserting it into a document. */
-class XclImpValidation : ScfNoInstance
+/** Imports validation data. */
+class XclImpValidationManager : protected XclImpRoot
 {
 public:
+    explicit            XclImpValidationManager( const XclImpRoot& rRoot );
+
     /** Reads a DVAL record and sets marks the dropdown arrow control to be ignored. */
-    static void         ReadDval( XclImpStream& rStrm );
+    void                ReadDval( XclImpStream& rStrm );
     /** Reads a DV record and inserts validation data into the document. */
-    static void         ReadDV( XclImpStream& rStrm );
+    void                ReadDV( XclImpStream& rStrm );
+
+    void                Apply();
+private:
+    struct DVItem
+    {
+        ScRangeList         maRanges;
+        ScValidationData    maValidData;
+
+        explicit DVItem ( const ScRangeList& rRanges, const ScValidationData& rValidData );
+    };
+    typedef ::boost::ptr_vector<DVItem> DVItemList;
+
+    DVItemList maDVItems;
 };
 
 // Web queries ================================================================
 
 /** Stores the data of one web query. */
-class XclImpWebQuery : ScfNoCopy
+class XclImpWebQuery : private boost::noncopyable
 {
 public:
     explicit            XclImpWebQuery( const ScRange& rDestRange );
@@ -231,19 +262,25 @@ public:
     void                Apply();
 
 private:
-    typedef ScfDelList< XclImpWebQuery > XclImpWebQueryList;
+    typedef boost::ptr_vector< XclImpWebQuery > XclImpWebQueryList;
     XclImpWebQueryList  maWQList;       /// List of the web query objects.
 };
 
 // Decryption =================================================================
 
 /** Provides static functions to import stream decryption settings. */
-class XclImpDecryptHelper : ScfNoInstance
+class XclImpDecryptHelper : private boost::noncopyable
 {
 public:
     /** Reads the FILEPASS record, queries a password and sets decryption algorihm.
         @return  Error code that may cause an error message after import. */
     static ErrCode      ReadFilepass( XclImpStream& rStrm );
+
+private:
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. To enforce this, the default constructor
+        is made private */
+    XclImpDecryptHelper();
 };
 
 // ============================================================================
@@ -304,8 +341,8 @@ private:
     ProtectedSheetMap   maProtectedSheets;
 };
 
-
 // ============================================================================
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

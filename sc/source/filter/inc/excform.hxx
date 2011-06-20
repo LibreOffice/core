@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ protected:
     const XclBiff       meBiff;
 
     // ---------------------------------------------------------------
-    void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs, sal_uInt8 mnMinParamCount = 0 );
+    void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs );
 
     void                ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData&, const sal_Bool bName );
 
@@ -61,7 +62,7 @@ public:
     virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
 
-    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula );
 
     virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
                                            const String& rUrl, const ::std::vector<String>& rTabNames );
@@ -72,10 +73,6 @@ public:
     const ScTokenArray* GetBoolErr( XclBoolError );
     sal_Bool                GetShrFmla( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen );
 
-#if 0
-                            // return = sal_True -> String-Record folgt!
-    static sal_Bool         SetCurVal( ScFormulaCell& rCell, double& rCurVal );
-#endif
     static void         SetError( ScFormulaCell& rCell, const ConvErr eErr );
 
     static inline sal_Bool  IsComplColRange( const sal_uInt16 nCol1, const sal_uInt16 nCol2 );
@@ -107,6 +104,7 @@ inline sal_Bool ExcelToSc::IsComplRowRange( const sal_uInt16 nRow1, const sal_uI
 // ============================================================================
 
 class XclImpLinkManager;
+class XclImpExtName;
 
 class ExcelToSc8 : public ExcelToSc
 {
@@ -114,9 +112,10 @@ public:
 
     struct ExternalTabInfo
     {
-        String      maTabName;
-        sal_uInt16  mnFileId;
-        bool        mbExternal;
+        ScRange         maRange;
+        ::rtl::OUString maTabName;
+        sal_uInt16      mnFileId;
+        bool            mbExternal;
 
         ExternalTabInfo();
     };
@@ -131,13 +130,14 @@ private:
 
     virtual bool        Read3DTabReference( sal_uInt16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo );
 
+    bool                HandleOleLink(sal_uInt16 nXtiIndex, const XclImpExtName& rExtName, ExternalTabInfo& rExtInfo);
 public:
                         ExcelToSc8( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc8();
 
     virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
 
-    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula );
 
     virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
                                            const String& rUrl, const ::std::vector<String>& rTabNames );
@@ -158,3 +158,5 @@ inline sal_Bool ExcelToSc8::IsComplRowRange( const sal_uInt16 nRow1, const sal_u
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-//using namespace ::com::sun::star::chart2;
 
 uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
             uno::Reference< lang::XMultiServiceFactory > xShapeFactory
@@ -64,3 +64,5 @@ uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

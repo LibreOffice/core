@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <editeng/eeitem.hxx>
 
 #include <tools/string.hxx>
+#include <tools/urlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -95,8 +97,10 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 #include "charthelper.hxx"
+#include "macromgr.hxx"
 #include "dpobject.hxx"
 #include "docuno.hxx"
+#include "scresid.hxx"
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
@@ -175,7 +179,7 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
         delete pOld;
     }
-    InvalidateTextWidth(NULL, NULL, sal_False);     // in both cases
+    InvalidateTextWidth(NULL, NULL, false);     // in both cases
 }
 
 //------------------------------------------------------------------------
@@ -183,7 +187,7 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
 void ScDocument::SetPrintOptions()
 {
     if ( !pPrinter ) GetPrinter(); // setzt pPrinter
-    DBG_ASSERT( pPrinter, "Error in printer creation :-/" );
+    OSL_ENSURE( pPrinter, "Error in printer creation :-/" );
 
     if ( pPrinter )
     {
@@ -208,9 +212,6 @@ VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
 {
     if (!pVirtualDevice_100th_mm)
     {
-//      pVirtualDevice_100th_mm = new VirtualDevice;
-//      pVirtualDevice_100th_mm->SetMapMode( MAP_100TH_MM );
-
         pVirtualDevice_100th_mm = new VirtualDevice( 1 );
         pVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
         MapMode aMapMode( pVirtualDevice_100th_mm->GetMapMode() );
@@ -268,8 +269,8 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                     InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
 
                 for (SCTAB nTab=0; nTab<=MAXTAB; ++nTab)
-                    if (pTab[nTab] && pTab[nTab]->IsStreamValid())
-                        pTab[nTab]->SetStreamValid( sal_False );
+                    if (maTabs[nTab] && maTabs[nTab]->IsStreamValid())
+                        maTabs[nTab]->SetStreamValid( false );
 
                 sal_uLong nOldFormat =
                     ((const SfxUInt32Item*)&rSet.Get(
@@ -294,7 +295,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 for (sal_uInt16 nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; nWhich++)
                 {
                     const SfxPoolItem* pItem;
-                    SfxItemState eState = rChanges.GetItemState( nWhich, sal_False, &pItem );
+                    SfxItemState eState = rChanges.GetItemState( nWhich, false, &pItem );
                     if ( eState == SFX_ITEM_SET )
                         rSet.Put( *pItem );
                     else if ( eState == SFX_ITEM_DONTCARE )
@@ -318,7 +319,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 
 void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 {
-    // #b5017505# number format exchange list has to be handled here, too
+    // number format exchange list has to be handled here, too
     NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
     xPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->xPoolHelper->GetStylePool() );
 }
@@ -328,8 +329,8 @@ void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 void ScDocument::InvalidateTextWidth( const String& rStyleName )
 {
     const SCTAB nCount = GetTableCount();
-    for ( SCTAB i=0; i<nCount && pTab[i]; i++ )
-        if ( pTab[i]->GetPageStyle() == rStyleName )
+    for ( SCTAB i=0; i<nCount && maTabs[i]; i++ )
+        if ( maTabs[i]->GetPageStyle() == rStyleName )
             InvalidateTextWidth( i );
 }
 
@@ -339,19 +340,19 @@ void ScDocument::InvalidateTextWidth( SCTAB nTab )
 {
     ScAddress aAdrFrom( 0,    0,        nTab );
     ScAddress aAdrTo  ( MAXCOL, MAXROW, nTab );
-    InvalidateTextWidth( &aAdrFrom, &aAdrTo, sal_False );
+    InvalidateTextWidth( &aAdrFrom, &aAdrTo, false );
 }
 
 //------------------------------------------------------------------------
 
 sal_Bool ScDocument::IsPageStyleInUse( const String& rStrPageStyle, SCTAB* pInTab )
 {
-    sal_Bool         bInUse = sal_False;
+    sal_Bool         bInUse = false;
     const SCTAB nCount = GetTableCount();
     SCTAB i;
 
-    for ( i = 0; !bInUse && i < nCount && pTab[i]; i++ )
-        bInUse = ( pTab[i]->GetPageStyle() == rStrPageStyle );
+    for ( i = 0; !bInUse && i < nCount && maTabs[i]; i++ )
+        bInUse = ( maTabs[i]->GetPageStyle() == rStrPageStyle );
 
     if ( pInTab )
         *pInTab = i-1;
@@ -363,14 +364,14 @@ sal_Bool ScDocument::IsPageStyleInUse( const String& rStrPageStyle, SCTAB* pInTa
 
 sal_Bool ScDocument::RemovePageStyleInUse( const String& rStyle )
 {
-    sal_Bool bWasInUse = sal_False;
+    sal_Bool bWasInUse = false;
     const SCTAB nCount = GetTableCount();
 
-    for ( SCTAB i=0; i<nCount && pTab[i]; i++ )
-        if ( pTab[i]->GetPageStyle() == rStyle )
+    for ( SCTAB i=0; i<nCount && maTabs[i]; i++ )
+        if ( maTabs[i]->GetPageStyle() == rStyle )
         {
             bWasInUse = sal_True;
-            pTab[i]->SetPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
+            maTabs[i]->SetPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
         }
 
     return bWasInUse;
@@ -378,14 +379,14 @@ sal_Bool ScDocument::RemovePageStyleInUse( const String& rStyle )
 
 sal_Bool ScDocument::RenamePageStyleInUse( const String& rOld, const String& rNew )
 {
-    sal_Bool bWasInUse = sal_False;
+    sal_Bool bWasInUse = false;
     const SCTAB nCount = GetTableCount();
 
-    for ( SCTAB i=0; i<nCount && pTab[i]; i++ )
-        if ( pTab[i]->GetPageStyle() == rOld )
+    for ( SCTAB i=0; i<nCount && maTabs[i]; i++ )
+        if ( maTabs[i]->GetPageStyle() == rOld )
         {
             bWasInUse = sal_True;
-            pTab[i]->SetPageStyle( rNew );
+            maTabs[i]->SetPageStyle( rNew );
         }
 
     return bWasInUse;
@@ -415,6 +416,13 @@ sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
     return sal::static_int_cast<sal_uInt8>(eRet);
 }
 
+ScMacroManager* ScDocument::GetMacroManager()
+{
+    if (!mpMacroMgr.get())
+        mpMacroMgr.reset(new ScMacroManager(this));
+    return mpMacroMgr.get();
+}
+
 //------------------------------------------------------------------------
 
 void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
@@ -425,17 +433,17 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
     {
         const SCTAB nTab = pAdrFrom->Tab();
 
-        if ( pTab[nTab] )
-            pTab[nTab]->InvalidateTextWidth( pAdrFrom, NULL, bNumFormatChanged, bBroadcast );
+        if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+            maTabs[nTab]->InvalidateTextWidth( pAdrFrom, NULL, bNumFormatChanged, bBroadcast );
     }
     else
     {
         const SCTAB nTabStart = pAdrFrom ? pAdrFrom->Tab() : 0;
         const SCTAB nTabEnd   = pAdrTo   ? pAdrTo->Tab()   : MAXTAB;
 
-        for ( SCTAB nTab=nTabStart; nTab<=nTabEnd; nTab++ )
-            if ( pTab[nTab] )
-                pTab[nTab]->InvalidateTextWidth( pAdrFrom, pAdrTo, bNumFormatChanged, bBroadcast );
+        for ( SCTAB nTab=nTabStart; nTab<=nTabEnd && nTab < static_cast<SCTAB>(maTabs.size()); nTab++ )
+            if ( maTabs[nTab] )
+                maTabs[nTab]->InvalidateTextWidth( pAdrFrom, pAdrTo, bNumFormatChanged, bBroadcast );
     }
 }
 
@@ -447,16 +455,11 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
 sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wieder versuchen
 {
     // #i75610# if a printer hasn't been set or created yet, don't create one for this
-    if ( bIdleDisabled || IsInLinkUpdate() || GetPrinter(sal_False) == NULL )
-        return sal_False;
+    if ( bIdleDisabled || IsInLinkUpdate() || GetPrinter(false) == NULL )
+        return false;
     bIdleDisabled = sal_True;
 
-// sal_uLong nMs = 0;
-// sal_uInt16 nIter = 0;
-
     const sal_uLong         nStart   = Time::GetSystemTicks();
-    double              nPPTX    = 0.0;
-    double              nPPTY    = 0.0;
     OutputDevice*       pDev     = NULL;
     MapMode             aOldMap;
     ScStyleSheet*       pStyle   = NULL;
@@ -467,18 +470,14 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
     SCTAB               nTab     = aCurTextWidthCalcPos.Tab();
     SCROW               nRow     = aCurTextWidthCalcPos.Row();
     SCsCOL              nCol     = aCurTextWidthCalcPos.Col();
-    sal_uInt16              nRestart = 0;
-    sal_uInt16              nZoom    = 0;
-    sal_Bool                bNeedMore= sal_False;
+    sal_Bool                bNeedMore= false;
 
     if ( !ValidRow(nRow) )
         nRow = 0, nCol--;
     if ( nCol < 0 )
         nCol = MAXCOL, nTab++;
-    if ( !ValidTab(nTab) || !pTab[nTab] )
+    if ( !ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )
         nTab = 0;
-
-//  DBG_ERROR( String("Start = ") + String(nTab) + String(',') + String(nCol) + String(',') + String(nRow)  );
 
     //  SearchMask/Family muss gemerkt werden,
     //  damit z.B. der Organizer nicht durcheinanderkommt, wenn zwischendurch eine
@@ -488,16 +487,18 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
     sal_uInt16 nOldMask = pStylePool->GetSearchMask();
     SfxStyleFamily eOldFam = pStylePool->GetSearchFamily();
 
-    pTable = pTab[nTab];
+    pTable = maTabs[nTab];
     pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL );
     pStyle = (ScStyleSheet*)pStylePool->Find( pTable->aPageStyle,
                                               SFX_STYLE_FAMILY_PAGE );
 
-    DBG_ASSERT( pStyle, "Missing StyleSheet :-/" );
+    OSL_ENSURE( pStyle, "Missing StyleSheet :-/" );
 
-    sal_Bool bProgress = sal_False;
+    sal_Bool bProgress = false;
     if ( pStyle && 0 == GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALETOPAGES) )
     {
+        sal_uInt16 nRestart = 0;
+        sal_uInt16 nZoom = 0;
         sal_uInt16 nCount = 0;
 
         nZoom    = GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALE);
@@ -511,6 +512,8 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
             {
                 if ( TEXTWIDTH_DIRTY == pCell->GetTextWidth() )
                 {
+                    double nPPTX = 0.0;
+                    double nPPTY = 0.0;
                     if ( !pDev )
                     {
                         pDev = GetPrinter();
@@ -524,19 +527,14 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                     if ( !bProgress && pCell->GetCellType() == CELLTYPE_FORMULA
                       && ((ScFormulaCell*)pCell)->GetDirty() )
                     {
-                        ScProgress::CreateInterpretProgress( this, sal_False );
+                        ScProgress::CreateInterpretProgress( this, false );
                         bProgress = sal_True;
                     }
-
-//                  DBG_ERROR( String("t,c,r = ") + String(nTab) + String(',') + String(nCol) + String(',') + String(nRow)  );
-//                  DBG_ERROR( String("nOldWidth = ") + String(pCell->GetTextWidth()) );
 
                     sal_uInt16 nNewWidth = (sal_uInt16)GetNeededSize( nCol, nRow, nTab,
                                                               pDev, nPPTX, nPPTY,
                                                               aZoomFract,aZoomFract, sal_True,
                                                               sal_True );   // bTotalSize
-
-//                  DBG_ERROR( String("nNewWidth = ") + String(nNewWidth) );
 
                     pCell->SetTextWidth( nNewWidth );
 
@@ -545,7 +543,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
             }
             else
             {
-                sal_Bool bNewTab = sal_False;
+                sal_Bool bNewTab = false;
 
                 nRow = 0;
                 nCol--;
@@ -557,7 +555,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                     bNewTab = sal_True;
                 }
 
-                if ( !ValidTab(nTab) || !pTab[nTab] )
+                if ( !ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )
                 {
                     nTab = 0;
                     nRestart++;
@@ -568,7 +566,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                 {
                     if ( bNewTab )
                     {
-                        pTable = pTab[nTab];
+                        pTable = maTabs[nTab];
                         pStyle = (ScStyleSheet*)pStylePool->Find( pTable->aPageStyle,
                                                                   SFX_STYLE_FAMILY_PAGE );
 
@@ -582,7 +580,7 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                         }
                         else
                         {
-                            DBG_ERROR( "Missing StyleSheet :-/" );
+                            OSL_FAIL( "Missing StyleSheet :-/" );
                         }
                     }
 
@@ -598,15 +596,12 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
                 }
             }
 
-// nIter = nCount;
-
             nCount++;
 
             // Idle Berechnung abbrechen, wenn Berechnungen laenger als
             // 50ms dauern, oder nach 32 Berechnungen mal nachschauen, ob
             // bestimmte Events anstehen, die Beachtung wuenschen:
 
-// nMs = SysTicksToMs( GetSysTicks() - nStart );
 
             if (   ( 50L < Time::GetSystemTicks() - nStart )
                 || ( !(nCount&31) && Application::AnyInput( ABORT_EVENTS ) ) )
@@ -621,8 +616,6 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
 
     delete pColIter;
 
-//  DBG_ERROR( String(nCount) + String(" End = ") + String(nTab) + String(',') + String(nCol) + String(',') + String(nRow)  );
-
     if (pDev)
         pDev->SetMapMode(aOldMap);
 
@@ -630,10 +623,8 @@ sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wie
     aCurTextWidthCalcPos.SetRow( nRow );
     aCurTextWidthCalcPos.SetCol( (SCCOL)nCol );
 
-// DBG_ERROR( String(nMs) + String(" ms (") + String(nIter) + String(')') );
-
     pStylePool->SetSearchMask( eOldFam, nOldMask );
-    bIdleDisabled = sal_False;
+    bIdleDisabled = false;
 
     return bNeedMore;
 }
@@ -645,7 +636,7 @@ class ScSpellStatus
 public:
     sal_Bool    bModified;
 
-    ScSpellStatus() : bModified(sal_False) {};
+    ScSpellStatus() : bModified(false) {};
 
     DECL_LINK (EventHdl, EditStatus*);
 };
@@ -679,19 +670,19 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
 
     sal_uInt16 nCellCount = 0;          // Zellen insgesamt
     sal_uInt16 nTestCount = 0;          // Aufrufe Spelling
-    sal_Bool bChanged = sal_False;          // Aenderungen?
+    sal_Bool bChanged = false;          // Aenderungen?
 
     SCCOL nCol = rSpellRange.aStart.Col();      // iterator always starts on the left edge
     SCROW nRow = rSpellPos.Row();
     SCTAB nTab = rSpellPos.Tab();
-    if ( !pTab[nTab] )                          // sheet deleted?
+    if ( nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )                           // sheet deleted?
     {
         nTab = rSpellRange.aStart.Tab();
         nRow = rSpellRange.aStart.Row();
-        if ( !pTab[nTab] )
+        if ( nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )
         {
             //  may happen for visible range
-            return sal_False;
+            return false;
         }
     }
     ScHorizontalCellIterator aIter( this, nTab,
@@ -713,7 +704,7 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
         {
             if (!pEngine)
             {
-                //  #71154# ScTabEditEngine is needed
+                //  ScTabEditEngine is needed
                 //  because MapMode must be set for some old documents
                 pEngine = new ScTabEditEngine( this );
                 pEngine->SetControlWord( pEngine->GetControlWord() |
@@ -731,7 +722,7 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
 
             const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
             pPattern->FillEditItemSet( pDefaults );
-            pEngine->SetDefaults( pDefaults, sal_False );               //! noetig ?
+            pEngine->SetDefaults( pDefaults, false );               //! noetig ?
 
             sal_uInt16 nCellLang = ((const SvxLanguageItem&)
                                     pPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
@@ -748,7 +739,7 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
             else
                 pEngine->SetText( *((ScEditCell*)pCell)->GetData() );
 
-            aStatus.bModified = sal_False;
+            aStatus.bModified = false;
             pEngine->CompleteOnlineSpelling();
             if ( aStatus.bModified )                // Fehler dazu oder weggekommen?
             {
@@ -776,10 +767,10 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
                 //  Paint
                 if (pShell)
                 {
-                    //  #47751# Seitenvorschau ist davon nicht betroffen
+                    //  Seitenvorschau ist davon nicht betroffen
                     //  (sollte jedenfalls nicht)
                     ScPaintHint aHint( ScRange( nCol, nRow, nTab ), PAINT_GRID );
-                    aHint.SetPrintFlag( sal_False );
+                    aHint.SetPrintFlag( false );
                     pShell->Broadcast( aHint );
                 }
 
@@ -809,7 +800,7 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
     if (!pCell)         // end of range reached -> next sheet
     {
         ++nTab;
-        if ( nTab > rSpellRange.aEnd.Tab() || !pTab[nTab] )
+        if ( nTab > rSpellRange.aEnd.Tab() || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )
             nTab = rSpellRange.aStart.Tab();
         nCol = rSpellRange.aStart.Col();
         nRow = rSpellRange.aStart.Row();
@@ -828,7 +819,7 @@ sal_Bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& 
 sal_Bool ScDocument::ContinueOnlineSpelling()
 {
     if ( bIdleDisabled || !pDocOptions->IsAutoSpell() || (pShell && pShell->IsReadOnly()) )
-        return sal_False;
+        return false;
 
     // #i48433# set bInsertingFromOtherDoc flag so there are no broadcasts when PutCell is called
     // (same behavior as in RemoveAutoSpellObj: just transfer the broadcaster)
@@ -837,7 +828,7 @@ sal_Bool ScDocument::ContinueOnlineSpelling()
 
     //! use one EditEngine for both calls
 
-    //  #41504# first check visible range
+    //  first check visible range
     sal_Bool bResult = OnlineSpellInRange( aVisSpellRange, aVisSpellPos, SPELL_MAXTEST_VIS );
 
     //  during first pass through visible range, always continue
@@ -901,8 +892,8 @@ void ScDocument::RemoveAutoSpellObj()
 {
     //  alle Spelling-Informationen entfernen
 
-    for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
-        pTab[nTab]->RemoveAutoSpellObj();
+    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]; nTab++)
+        maTabs[nTab]->RemoveAutoSpellObj();
 }
 
 void ScDocument::RepaintRange( const ScRange& rRange )
@@ -919,7 +910,7 @@ void ScDocument::RepaintRange( const ScRange& rRange )
 
 sal_Bool ScDocument::IdleCheckLinks()           // sal_True = demnaechst wieder versuchen
 {
-    sal_Bool bAnyLeft = sal_False;
+    sal_Bool bAnyLeft = false;
 
     if (GetLinkManager())
     {
@@ -998,7 +989,7 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
     }
 }
 
-sal_Bool ScDocument::HasDdeLinks() const
+bool ScDocument::HasDdeLinks() const
 {
     if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
     {
@@ -1006,17 +997,17 @@ sal_Bool ScDocument::HasDdeLinks() const
         sal_uInt16 nCount = rLinks.Count();
         for (sal_uInt16 i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScDdeLink))
-                return sal_True;
+                return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 void ScDocument::SetInLinkUpdate(sal_Bool bSet)
 {
     //  called from TableLink and AreaLink
 
-    DBG_ASSERT( bInLinkUpdate != bSet, "SetInLinkUpdate twice" );
+    OSL_ENSURE( bInLinkUpdate != bSet, "SetInLinkUpdate twice" );
     bInLinkUpdate = bSet;
 }
 
@@ -1025,7 +1016,7 @@ sal_Bool ScDocument::IsInLinkUpdate() const
     return bInLinkUpdate || IsInDdeLinkUpdate();
 }
 
-void ScDocument::UpdateExternalRefLinks()
+void ScDocument::UpdateExternalRefLinks(Window* pWin)
 {
     if (!GetLinkManager())
         return;
@@ -1040,8 +1031,25 @@ void ScDocument::UpdateExternalRefLinks()
         ScExternalRefLink* pRefLink = dynamic_cast<ScExternalRefLink*>(pBase);
         if (pRefLink)
         {
-            pRefLink->Update();
-            bAny = true;
+            if (pRefLink->Update())
+                bAny = true;
+            else
+            {
+                // Update failed.  Notify the user.
+
+                String aFile;
+                pLinkManager->GetDisplayNames(pRefLink, NULL, &aFile, NULL, NULL);
+                // Decode encoded URL for display friendliness.
+                INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);
+                aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+
+                rtl::OUStringBuffer aBuf;
+                aBuf.append(String(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
+                aBuf.appendAscii("\n\n");
+                aBuf.append(aFile);
+                ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
+                aBox.Execute();
+            }
         }
     }
     if (bAny)
@@ -1064,7 +1072,7 @@ void ScDocument::UpdateExternalRefLinks()
     }
 }
 
-void ScDocument::UpdateDdeLinks()
+void ScDocument::UpdateDdeLinks(Window* pWin)
 {
     if (GetLinkManager())
     {
@@ -1072,16 +1080,36 @@ void ScDocument::UpdateDdeLinks()
         sal_uInt16 nCount = rLinks.Count();
         sal_uInt16 i;
 
-        //  #49226# falls das Updaten laenger dauert, erstmal alle Werte
+        //  falls das Updaten laenger dauert, erstmal alle Werte
         //  zuruecksetzen, damit nichts altes (falsches) stehen bleibt
-        sal_Bool bAny = sal_False;
+        bool bAny = false;
         for (i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
+            ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
+            if (pDdeLink)
             {
-                ((ScDdeLink*)pBase)->ResetValue();
-                bAny = sal_True;
+                if (pDdeLink->Update())
+                    bAny = true;
+                else
+                {
+                    // Update failed.  Notify the user.
+                    rtl::OUString aFile = pDdeLink->GetTopic();
+                    rtl::OUString aElem = pDdeLink->GetItem();
+                    rtl::OUString aType = pDdeLink->GetAppl();
+
+                    rtl::OUStringBuffer aBuf;
+                    aBuf.append(String(ScResId(SCSTR_DDEDOC_NOT_LOADED)));
+                    aBuf.appendAscii("\n\n");
+                    aBuf.appendAscii("Source : ");
+                    aBuf.append(aFile);
+                    aBuf.appendAscii("\nElement : ");
+                    aBuf.append(aElem);
+                    aBuf.appendAscii("\nType : ");
+                    aBuf.append(aType);
+                    ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
+                    aBox.Execute();
+                }
             }
         }
         if (bAny)
@@ -1095,13 +1123,7 @@ void ScDocument::UpdateDdeLinks()
             //  (z.B. mit Invalidate am Window), muss hier ein Update erzwungen werden.
         }
 
-        //  nun wirklich updaten...
-        for (i=0; i<nCount; i++)
-        {
-            ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
-                ((ScDdeLink*)pBase)->TryUpdate();       // bei DDE-Links TryUpdate statt Update
-        }
+        pLinkManager->CloseCachedComps();
     }
 }
 
@@ -1111,7 +1133,7 @@ sal_Bool ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, c
     //  ResetValue() fuer einzelnen Link nicht noetig
     //! wenn's mal alles asynchron wird, aber auch hier
 
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
@@ -1131,6 +1153,7 @@ sal_Bool ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, c
                 }
             }
         }
+        pLinkManager->CloseCachedComps();
     }
     return bFound;
 }
@@ -1288,13 +1311,13 @@ const ScMatrix* ScDocument::GetDdeLinkResultMatrix( sal_uInt16 nDdePos ) const
     return pDdeLink ? pDdeLink->GetResult() : NULL;
 }
 
-bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, sal_uInt8 nMode, ScMatrix* pResults )
+bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, sal_uInt8 nMode, ScMatrixRef pResults )
 {
     /*  Create a DDE link without updating it (i.e. for Excel import), to prevent
         unwanted connections. First try to find existing link. Set result array
         on existing and new links. */
     //! store DDE links additionally at document (for efficiency)?
-    DBG_ASSERT( nMode != SC_DDE_IGNOREMODE, "ScDocument::CreateDdeLink - SC_DDE_IGNOREMODE not allowed here" );
+    OSL_ENSURE( nMode != SC_DDE_IGNOREMODE, "ScDocument::CreateDdeLink - SC_DDE_IGNOREMODE not allowed here" );
     if( GetLinkManager() && (nMode != SC_DDE_IGNOREMODE) )
     {
         ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, rAppl, rTopic, rItem, nMode );
@@ -1314,7 +1337,7 @@ bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const
     return false;
 }
 
-bool ScDocument::SetDdeLinkResultMatrix( sal_uInt16 nDdePos, ScMatrix* pResults )
+bool ScDocument::SetDdeLinkResultMatrix( sal_uInt16 nDdePos, ScMatrixRef pResults )
 {
     if( ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
@@ -1326,7 +1349,7 @@ bool ScDocument::SetDdeLinkResultMatrix( sal_uInt16 nDdePos, ScMatrix* pResults 
 
 //------------------------------------------------------------------------
 
-sal_Bool ScDocument::HasAreaLinks() const
+bool ScDocument::HasAreaLinks() const
 {
     if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
     {
@@ -1334,10 +1357,10 @@ sal_Bool ScDocument::HasAreaLinks() const
         sal_uInt16 nCount = rLinks.Count();
         for (sal_uInt16 i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScAreaLink))
-                return sal_True;
+                return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 void ScDocument::UpdateAreaLinks()
@@ -1493,17 +1516,17 @@ SfxBindings* ScDocument::GetViewBindings()
 
 void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType )
 {
-    DBG_ASSERT( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
+    OSL_ENSURE( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
 
     utl::TransliterationWrapper aTranslitarationWrapper( xServiceManager, nType );
     sal_Bool bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
     sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
 
-    ScEditEngineDefaulter* pEngine = NULL;      // not using pEditEngine member because of defaults
+    ScEditEngineDefaulter* pEngine = NULL;        // not using pEditEngine member because of defaults
 
     SCTAB nCount = GetTableCount();
     for (SCTAB nTab = 0; nTab < nCount; nTab++)
-        if ( pTab[nTab] && rMultiMark.GetTableSelect(nTab) )
+        if ( maTabs[nTab] && rMultiMark.GetTableSelect(nTab) )
         {
             SCCOL nCol = 0;
             SCROW nRow = 0;
@@ -1516,11 +1539,9 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
             {
                 const ScBaseCell* pCell = GetCell( ScAddress( nCol, nRow, nTab ) );
                 CellType eType = pCell ? pCell->GetCellType() : CELLTYPE_NONE;
-
-                // #i115128# TITLE_CASE/SENTENCE_CASE need the extra handling in EditEngine (loop over words/sentences).
+                // fdo#32786 TITLE_CASE/SENTENCE_CASE need the extra handling in EditEngine (loop over words/sentences).
                 // Still use TransliterationWrapper directly for text cells with other transliteration types,
                 // for performance reasons.
-
                 if ( eType == CELLTYPE_EDIT ||
                      ( eType == CELLTYPE_STRING && ( nType == com::sun::star::i18n::TransliterationModulesExtra::SENTENCE_CASE ||
                                                      nType == com::sun::star::i18n::TransliterationModulesExtra::TITLE_CASE ) ) )
@@ -1572,6 +1593,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                         }
                     }
                 }
+
                 else if ( eType == CELLTYPE_STRING )
                 {
                     String aOldStr;
@@ -1580,7 +1602,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 
                     if ( bConsiderLanguage )
                     {
-                        sal_uInt8 nScript = GetStringScriptType( aOldStr );     //! cell script type?
+                        sal_uInt8 nScript = GetStringScriptType( aOldStr );        //! cell script type?
                         sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
                                         ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE :
                                                                                 ATTR_FONT_LANGUAGE );
@@ -1593,11 +1615,10 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     if ( aNewStr != aOldStr )
                         PutCell( nCol, nRow, nTab, new ScStringCell( aNewStr ) );
                 }
-
                 bFound = GetNextMarkedCell( nCol, nRow, nTab, rMultiMark );
             }
         }
-
     delete pEngine;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

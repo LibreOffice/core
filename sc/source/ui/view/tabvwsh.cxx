@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
-#include <avmedia/mediaplayer.hxx>
 
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
@@ -92,7 +92,6 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_DIALOG);
     SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScSpellDialogChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION(ScValidityRefChildWin::GetChildWindowId());
 }
 
@@ -109,3 +108,5 @@ IMPL_LINK( ScTabViewShell, HtmlOptionsHdl, void*, EMPTYARG )
     GetViewFrame()->GetBindings().Invalidate(SID_DRAW_TEXT_MARQUEE);
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

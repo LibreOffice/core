@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -411,7 +412,7 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
                 case EXC_BOF_BIFF4: eBiff = EXC_BIFF4;  break;
                 case EXC_BOF_BIFF5: eBiff = EXC_BIFF5;  break;
                 case EXC_BOF_BIFF8: eBiff = EXC_BIFF8;  break;
-                default:    DBG_ERROR1( "XclImpStream::DetectBiffVersion - unknown BIFF version: 0x%04hX", nVersion );
+                default:    OSL_TRACE( "XclImpStream::DetectBiffVersion - unknown BIFF version: 0x%04hX", nVersion );
             }
         }
         break;
@@ -443,7 +444,7 @@ XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot, bool bCo
     mrStrm.Seek( STREAM_SEEK_TO_END );
     mnStreamSize = mrStrm.Tell();
     mrStrm.Seek( STREAM_SEEK_TO_BEGIN );
-    DBG_ASSERT( mnStreamSize < STREAM_SEEK_TO_END, "XclImpStream::XclImpStream - stream error" );
+    OSL_ENSURE( mnStreamSize < STREAM_SEEK_TO_END, "XclImpStream::XclImpStream - stream error" );
 }
 
 XclImpStream::~XclImpStream()
@@ -495,12 +496,6 @@ void XclImpStream::ResetRecord( bool bContLookup, sal_uInt16 nAltContId )
     }
 }
 
-void XclImpStream::RewindRecord()
-{
-    mnNextRecPos = maFirstRec.GetPos();
-    mbValid = mbValidRec = false;
-}
-
 void XclImpStream::SetDecrypter( XclImpDecrypterRef xDecrypter )
 {
     mxDecrypter = xDecrypter;
@@ -511,14 +506,14 @@ void XclImpStream::SetDecrypter( XclImpDecrypterRef xDecrypter )
 void XclImpStream::CopyDecrypterFrom( const XclImpStream& rStrm )
 {
     XclImpDecrypterRef xNewDecr;
-    if( rStrm.mxDecrypter.is() )
+    if( rStrm.mxDecrypter )
         xNewDecr = rStrm.mxDecrypter->Clone();
     SetDecrypter( xNewDecr );
 }
 
 bool XclImpStream::HasValidDecrypter() const
 {
-    return mxDecrypter.is() && mxDecrypter->IsValid();
+    return mxDecrypter && mxDecrypter->IsValid();
 }
 
 void XclImpStream::EnableDecryption( bool bEnable )
@@ -536,20 +531,13 @@ void XclImpStream::PushPosition()
 
 void XclImpStream::PopPosition()
 {
-    DBG_ASSERT( !maPosStack.empty(), "XclImpStream::PopPosition - stack empty" );
+    OSL_ENSURE( !maPosStack.empty(), "XclImpStream::PopPosition - stack empty" );
     if( !maPosStack.empty() )
     {
         RestorePosition( maPosStack.back() );
         maPosStack.pop_back();
     }
 }
-
-//UNUSED2008-05  void XclImpStream::RejectPosition()
-//UNUSED2008-05  {
-//UNUSED2008-05      DBG_ASSERT( !maPosStack.empty(), "XclImpStream::RejectPosition - stack empty" );
-//UNUSED2008-05      if( !maPosStack.empty() )
-//UNUSED2008-05          maPosStack.pop_back();
-//UNUSED2008-05  }
 
 void XclImpStream::StoreGlobalPosition()
 {
@@ -561,7 +549,7 @@ void XclImpStream::StoreGlobalPosition()
 
 void XclImpStream::SeekGlobalPosition()
 {
-    DBG_ASSERT( mbHasGlobPos, "XclImpStream::SeekGlobalPosition - no position stored" );
+    OSL_ENSURE( mbHasGlobPos, "XclImpStream::SeekGlobalPosition - no position stored" );
     if( mbHasGlobPos )
     {
         RestorePosition( maGlobPos );
@@ -743,13 +731,6 @@ XclImpStream& XclImpStream::operator>>( double& rfValue )
     return *this;
 }
 
-sal_Int8 XclImpStream::ReadInt8()
-{
-    sal_Int8 nValue(0);
-    operator>>( nValue );
-    return nValue;
-}
-
 sal_uInt8 XclImpStream::ReaduInt8()
 {
     sal_uInt8 nValue(0);
@@ -785,13 +766,6 @@ sal_uInt32 XclImpStream::ReaduInt32()
     return nValue;
 }
 
-float XclImpStream::ReadFloat()
-{
-    float fValue(0.0);
-    operator>>( fValue );
-    return fValue;
-}
-
 double XclImpStream::ReadDouble()
 {
     double fValue(0.0);
@@ -813,12 +787,12 @@ sal_Size XclImpStream::Read( void* pData, sal_Size nBytes )
             sal_uInt16 nReadRet = ReadRawData( pnBuffer, nReadSize );
             nRet += nReadRet;
             mbValid = (nReadSize == nReadRet);
-            DBG_ASSERT( mbValid, "XclImpStream::Read - stream read error" );
+            OSL_ENSURE( mbValid, "XclImpStream::Read - stream read error" );
             pnBuffer += nReadRet;
             nBytesLeft -= nReadRet;
             if( mbValid && (nBytesLeft > 0) )
                 JumpToNextContinue();
-            DBG_ASSERT( mbValid, "XclImpStream::Read - record overread" );
+            OSL_ENSURE( mbValid, "XclImpStream::Read - record overread" );
         }
     }
     return nRet;
@@ -888,7 +862,7 @@ void XclImpStream::Ignore( sal_Size nBytes )
         nBytesLeft -= nReadSize;
         if( nBytesLeft > 0 )
             JumpToNextContinue();
-        DBG_ASSERT( mbValid, "XclImpStream::Ignore - record overread" );
+        OSL_ENSURE( mbValid, "XclImpStream::Ignore - record overread" );
     }
 }
 
@@ -898,7 +872,7 @@ sal_Size XclImpStream::ReadUniStringExtHeader(
         bool& rb16Bit, bool& rbRich, bool& rbFareast,
         sal_uInt16& rnFormatRuns, sal_uInt32& rnExtInf, sal_uInt8 nFlags )
 {
-    DBG_ASSERT( !::get_flag( nFlags, EXC_STRF_UNKNOWN ), "XclImpStream::ReadUniStringExt - unknown flags" );
+    OSL_ENSURE( !::get_flag( nFlags, EXC_STRF_UNKNOWN ), "XclImpStream::ReadUniStringExt - unknown flags" );
     rb16Bit = ::get_flag( nFlags, EXC_STRF_16BIT );
     rbRich = ::get_flag( nFlags, EXC_STRF_RICH );
     rbFareast = ::get_flag( nFlags, EXC_STRF_FAREAST );
@@ -930,7 +904,7 @@ String XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
         if( b16Bit )
         {
             nReadSize = ::std::min< sal_uInt16 >( nCharsLeft, mnRawRecLeft / 2 );
-            DBG_ASSERT( (nReadSize <= nCharsLeft) || !(mnRawRecLeft & 0x1),
+            OSL_ENSURE( (nReadSize <= nCharsLeft) || !(mnRawRecLeft & 0x1),
                 "XclImpStream::ReadRawUniString - missing a byte" );
         }
         else
@@ -999,7 +973,7 @@ void XclImpStream::IgnoreRawUniString( sal_uInt16 nChars, bool b16Bit )
         if( b16Bit )
         {
             nReadSize = ::std::min< sal_uInt16 >( nCharsLeft, mnRawRecLeft / 2 );
-            DBG_ASSERT( (nReadSize <= nCharsLeft) || !(mnRawRecLeft & 0x1),
+            OSL_ENSURE( (nReadSize <= nCharsLeft) || !(mnRawRecLeft & 0x1),
                 "XclImpStream::IgnoreRawUniString - missing a byte" );
             Ignore( nReadSize * 2 );
         }
@@ -1026,11 +1000,6 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars, sal_uInt8 nFlags )
 void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
 {
     IgnoreUniString( nChars, ReaduInt8() );
-}
-
-void XclImpStream::IgnoreUniString()
-{
-    IgnoreUniString( ReaduInt16() );
 }
 
 // ----------------------------------------------------------------------------
@@ -1074,7 +1043,7 @@ bool XclImpStream::ReadNextRawRecHeader()
 
 void XclImpStream::SetupDecrypter()
 {
-    if( mxDecrypter.is() )
+    if( mxDecrypter )
         mxDecrypter->Update( mrStrm, mnRawRecSize );
 }
 
@@ -1116,7 +1085,7 @@ bool XclImpStream::JumpToNextContinue()
 
 bool XclImpStream::JumpToNextStringContinue( bool& rb16Bit )
 {
-    DBG_ASSERT( mnRawRecLeft == 0, "XclImpStream::JumpToNextStringContinue - unexpected garbage" );
+    OSL_ENSURE( mnRawRecLeft == 0, "XclImpStream::JumpToNextStringContinue - unexpected garbage" );
 
     if( mbCont && (GetRecLeft() > 0) )
     {
@@ -1146,7 +1115,7 @@ bool XclImpStream::EnsureRawReadSize( sal_uInt16 nBytes )
     {
         while( mbValid && !mnRawRecLeft ) JumpToNextContinue();
         mbValid = mbValid && (nBytes <= mnRawRecLeft);
-        DBG_ASSERT( mbValid, "XclImpStream::EnsureRawReadSize - record overread" );
+        OSL_ENSURE( mbValid, "XclImpStream::EnsureRawReadSize - record overread" );
     }
     return mbValid;
 }
@@ -1158,7 +1127,7 @@ sal_uInt16 XclImpStream::GetMaxRawReadSize( sal_Size nBytes ) const
 
 sal_uInt16 XclImpStream::ReadRawData( void* pData, sal_uInt16 nBytes )
 {
-    DBG_ASSERT( (nBytes <= mnRawRecLeft), "XclImpStream::ReadRawData - record overread" );
+    OSL_ENSURE( (nBytes <= mnRawRecLeft), "XclImpStream::ReadRawData - record overread" );
     sal_uInt16 nRet = 0;
     if( mbUseDecr )
         nRet = mxDecrypter->Read( mrStrm, pData, nBytes );
@@ -1170,3 +1139,4 @@ sal_uInt16 XclImpStream::ReadRawData( void* pData, sal_uInt16 nBytes )
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

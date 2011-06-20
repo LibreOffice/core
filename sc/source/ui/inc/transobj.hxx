@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,8 +53,6 @@ private:
     SCROW                           nNonFiltered;       // non-filtered rows
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
-//REMOVE        SvEmbeddedObjectRef             aDocShellRef;
-//REMOVE        SvEmbeddedObjectRef             aDrawPersistRef;
     SfxObjectShellRef               aDocShellRef;
     SfxObjectShellRef               aDrawPersistRef;
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges> xDragSourceRanges;
@@ -116,3 +115,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

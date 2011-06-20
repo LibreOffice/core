@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,8 +41,12 @@
 #include "document.hxx"
 #include "shellids.hxx"
 #include "refreshtimer.hxx"
+#include "optutil.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <cppuhelper/implbase1.hxx>
+
+#include <sot/sotref.hxx>
 
 class ScEditEngineDefaulter;
 class FontList;
@@ -67,11 +72,13 @@ class ScImportOptions;
 class ScDocShellModificator;
 class ScOptSolverSave;
 class ScSheetSaveData;
+class ScFlatBoolRowSegments;
+struct ScColWidthParam;
 
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
 
-typedef ::std::hash_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
+typedef ::boost::unordered_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
 
 //==================================================================
 
@@ -84,8 +91,8 @@ typedef ::std::hash_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
 
 class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 {
-    static const sal_Char __FAR_DATA pStarCalcDoc[];
-    static const sal_Char __FAR_DATA pStyleName[];
+    static const sal_Char pStarCalcDoc[];
+    static const sal_Char pStyleName[];
 
     ScDocument          aDocument;
 
@@ -147,7 +154,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     SC_DLLPRIVATE SCTAB         GetSaveTab();
 
     SC_DLLPRIVATE sal_uLong         DBaseImport( const String& rFullFileName, CharSet eCharSet,
-                                 sal_Bool bSimpleColWidth[MAXCOLCOUNT] );
+                                             ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc );
     SC_DLLPRIVATE sal_uLong         DBaseExport( const String& rFullFileName, CharSet eCharSet,
                                  sal_Bool& bHasMemo );
 
@@ -196,7 +203,7 @@ public:
                                String * pFullTypeName,
                                String * pShortTypeName,
                                sal_Int32 nFileFormat,
-                               sal_Bool bTemplate = sal_False ) const;
+                               sal_Bool bTemplate = false ) const;
 
     virtual sal_Bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     virtual sal_Bool    Load( SfxMedium& rMedium );
@@ -205,7 +212,7 @@ public:
     virtual sal_Bool    Save();
     virtual sal_Bool    SaveAs( SfxMedium& rMedium );
     virtual sal_Bool    ConvertTo( SfxMedium &rMedium );
-    virtual sal_uInt16  PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual sal_uInt16  PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = false );
     virtual void    PrepareReload();
     virtual sal_Bool    IsInformationLost();
     virtual void    LoadStyles( SfxObjectShell &rSource );
@@ -270,7 +277,7 @@ public:
                     /// If bJustQueryIfProtected==sal_True protection is not
                     /// changed and <TRUE/> is returned if not protected or
                     /// password was entered correctly.
-    sal_Bool            ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJustQueryIfProtected = sal_False );
+    sal_Bool            ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJustQueryIfProtected = false );
 
     void            SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages );
     sal_Bool            AdjustPrintZoom( const ScRange& rRange );
@@ -298,21 +305,29 @@ public:
                                     ScMarkData& rMark, sal_Bool bRecord = sal_True );
     void            ModifyScenario( SCTAB nTab, const String& rName, const String& rComment,
                                     const Color& rColor, sal_uInt16 nFlags );
+    sal_uLong TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
+                                SCTAB nDestPos, sal_Bool bInsertNew,
+                                sal_Bool bNotifyAndPaint );
+
     sal_Bool            MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, sal_Bool bRecord );
 
     void            DoRecalc( sal_Bool bApi );
     void            DoHardRecalc( sal_Bool bApi );
 
-    void            UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize = sal_False);
+    void            UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize = false);
     sal_Bool        IsOle();
 
     void            DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     ScDBData*       GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel );
+    ScDBData*       GetAnonymousDBData(const ScRange& rRange);
     ScDBData*       GetOldAutoDBRange();    // has to be deleted by caller!
     void            CancelAutoDBRange();    // called when dialog is cancelled
 
+    virtual void    ReconnectDdeLink(SfxObjectShell& rServer);
     void            UpdateLinks();          // Link-Eintraege aktuallisieren
     sal_Bool            ReloadTabLinks();       // Links ausfuehren (Inhalt aktualisieren)
+
+    virtual void    CheckConfigOptions();
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
 
@@ -410,10 +425,10 @@ public:
 
     const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     sal_Bool        AcceptStateUpdate() const;
-    //-->Added by PengYunQuan for Validity Cell Range Picker
     ScSheetSaveData* GetSheetSaveData();
+
+    void ResetKeyBindings( ScOptionsUtil::KeyBindingType eType );
 
     // passwword protection for Calc (derived from SfxObjectShell)
     // see also:    FID_CHG_RECORD, SID_CHG_PROTECT
@@ -461,3 +476,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

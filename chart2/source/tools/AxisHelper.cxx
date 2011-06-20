@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@
 #include "ChartModelHelper.hxx"
 #include "DataSourceHelper.hxx"
 
-#include <tools/debug.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
@@ -112,7 +112,7 @@ bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
 
 chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, const Reference< frame::XModel >& xChartModel )
 {
-    DBG_ASSERT(xChartModel.is(),"missing chart model");
+    OSL_ENSURE(xChartModel.is(),"missing chart model");
     ScaleData aScale = xAxis->getScaleData();
     Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
     if( aScale.AutoDateAxis && aScale.AxisType == AxisType::CATEGORY )
@@ -805,11 +805,11 @@ std::vector< Reference< XAxis > > AxisHelper::getAllAxesOfCoordinateSystem(
 
     if(xCooSys.is())
     {
-        sal_Int32 nDimensionIndex = 0;
         sal_Int32 nMaxDimensionIndex = xCooSys->getDimension() -1;
         if( nMaxDimensionIndex>=0 )
         {
-            for(nDimensionIndex=0; nDimensionIndex<=nMaxDimensionIndex; ++nDimensionIndex)
+            sal_Int32 nDimensionIndex = 0;
+            for(; nDimensionIndex<=nMaxDimensionIndex; ++nDimensionIndex)
             {
                 const sal_Int32 nMaximumAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
                 for(sal_Int32 nAxisIndex=0; nAxisIndex<=nMaximumAxisIndex; ++nAxisIndex)
@@ -1148,7 +1148,7 @@ Reference< XChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisInd
     Reference< XChartType > xChartType;
     ::std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     ::std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
-    for( ; aIter != aSeriesVector.end(); aIter++ )
+    for( ; aIter != aSeriesVector.end(); ++aIter )
     {
         sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );
         if( nAttachedAxisIndex == nCurrentIndex )
@@ -1170,3 +1170,5 @@ bool AxisHelper::isAxisPositioningEnabled()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 #include "XMLExportDDELinks.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -46,6 +45,7 @@ class ScMatrix;
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using ::rtl::OUStringBuffer;
 
 ScXMLExportDDELinks::ScXMLExportDDELinks(ScXMLExport& rTempExport)
     : rExport(rTempExport)
@@ -57,7 +57,7 @@ ScXMLExportDDELinks::~ScXMLExportDDELinks()
 }
 
 sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, const double& fPrevValue,
-                     const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue)
+                     const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue) const
 {
     if (bEmpty == bPrevEmpty)
         if (bEmpty)
@@ -68,108 +68,83 @@ sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bo
             else
                 return (fPrevValue == fValue);
         else
-            return sal_False;
+            return false;
     else
-        return sal_False;
+        return false;
 }
 
-void ScXMLExportDDELinks::WriteCell(const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue, const sal_Int32 nRepeat)
+void ScXMLExportDDELinks::WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat)
 {
-    rtl::OUStringBuffer sBuffer;
+    bool bString = ScMatrix::IsNonValueType(aVal.nType);
+    bool bEmpty = ScMatrix::IsEmptyType(aVal.nType);
+
     if (!bEmpty)
     {
         if (bString)
         {
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
-            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_STRING_VALUE, rtl::OUString(sValue));
+            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_STRING_VALUE, aVal.GetString());
         }
         else
         {
+            OUStringBuffer aBuf;
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT);
-            rExport.GetMM100UnitConverter().convertDouble(sBuffer, fValue);
-            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, sBuffer.makeStringAndClear());
+            rExport.GetMM100UnitConverter().convertDouble(aBuf, aVal.fVal);
+            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, aBuf.makeStringAndClear());
         }
     }
+
     if (nRepeat > 1)
     {
-        rExport.GetMM100UnitConverter().convertNumber(sBuffer, nRepeat);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, sBuffer.makeStringAndClear());
+        OUStringBuffer aBuf;
+        rExport.GetMM100UnitConverter().convertNumber(aBuf, nRepeat);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aBuf.makeStringAndClear());
     }
     SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True);
 }
 
 void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
 {
-    const ScMatrix* pMatrix(NULL);
-    if (rExport.GetDocument())
-        pMatrix = rExport.GetDocument()->GetDdeLinkResultMatrix( static_cast<sal_uInt16>(nPos) );
-    if (pMatrix)
+    ScDocument* pDoc = rExport.GetDocument();
+    if (!pDoc)
+        return;
+
+    const ScMatrix* pMatrix = pDoc->GetDdeLinkResultMatrix(static_cast<sal_uInt16>(nPos));
+    if (!pMatrix)
+        return;
+
+    SCSIZE nCols, nRows;
+    pMatrix->GetDimensions(nCols, nRows);
+
+    SvXMLElementExport aTableElem(rExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True);
+    if (nCols > 1)
     {
-        SCSIZE nuCol;
-        SCSIZE nuRow;
-        pMatrix->GetDimensions( nuCol, nuRow );
-        sal_Int32 nRowCount = static_cast<sal_Int32>(nuRow);
-        sal_Int32 nColCount = static_cast<sal_Int32>(nuCol);
-        SvXMLElementExport aTableElem(rExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True);
-        rtl::OUStringBuffer sBuffer;
-        if (nColCount > 1)
+        OUStringBuffer aBuf;
+        rExport.GetMM100UnitConverter().convertNumber(aBuf, static_cast<sal_Int32>(nCols));
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aBuf.makeStringAndClear());
+    }
+    {
+        SvXMLElementExport aElemCol(rExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True);
+    }
+
+    for (SCSIZE nRow = 0; nRow < nRows; ++nRow)
+    {
+        sal_Int32 nRepeat = 0;
+        ScMatrixValue aPrevVal;
+        SvXMLElementExport aElemRow(rExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True);
+        for (SCSIZE nCol = 0; nCol < nCols; ++nCol, ++nRepeat)
         {
-            rExport.GetMM100UnitConverter().convertNumber(sBuffer, nColCount);
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, sBuffer.makeStringAndClear());
-        }
-        {
-            SvXMLElementExport aElemCol(rExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True);
-        }
-        sal_Bool bPrevString(sal_True);
-        sal_Bool bPrevEmpty(sal_True);
-        double fPrevValue;
-        String sPrevValue;
-        sal_Int32 nRepeatColsCount(1);
-        for(sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
-        {
-            SvXMLElementExport aElemRow(rExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True);
-            for(sal_Int32 nColumn = 0; nColumn < nColCount; ++nColumn)
+            ScMatrixValue aVal = pMatrix->Get(nCol, nRow);
+            if (nCol > 0 && aVal != aPrevVal)
             {
-                ScMatValType nType = SC_MATVAL_VALUE;
-                const ScMatrixValue* pMatVal = pMatrix->Get( static_cast<SCSIZE>(nColumn), static_cast<SCSIZE>(nRow), nType );
-                sal_Bool bIsString = ScMatrix::IsNonValueType( nType);
-
-                if (nColumn == 0)
-                {
-                    bPrevEmpty = !pMatVal;
-                    bPrevString = bIsString;
-                    if( bIsString )
-                        sPrevValue = pMatVal->GetString();
-                    else
-                        fPrevValue = pMatVal->fVal;
-                }
-                else
-                {
-                    double fValue;
-                    String sValue;
-                    sal_Bool bEmpty(!pMatVal);
-                    sal_Bool bString(bIsString);
-                    if( bIsString )
-                        sValue = pMatVal->GetString();
-                    else
-                        fValue = pMatVal->fVal;
-
-                    if (CellsEqual(bPrevEmpty, bPrevString, sPrevValue, fPrevValue,
-                                bEmpty, bString, sValue, fValue))
-                        ++nRepeatColsCount;
-                    else
-                    {
-                        WriteCell(bPrevEmpty, bPrevString, sPrevValue, fPrevValue, nRepeatColsCount);
-                        nRepeatColsCount = 1;
-                        bPrevEmpty = bEmpty;
-                        fPrevValue = fValue;
-                        sPrevValue = sValue;
-                    }
-                }
+                // Cell value differs.  Flush the cell content.
+                WriteCell(aPrevVal, nRepeat);
+                nRepeat = 0;
             }
-            WriteCell(bPrevEmpty, bPrevString, sPrevValue, fPrevValue, nRepeatColsCount);
-            nRepeatColsCount = 1;
+            aPrevVal = aVal;
         }
+
+        WriteCell(aPrevVal, nRepeat);
     }
 }
 
@@ -219,3 +194,5 @@ void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocume
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

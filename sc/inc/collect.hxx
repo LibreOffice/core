@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,11 +90,11 @@ class SC_DLLPUBLIC  ScSortedCollection : public ScCollection
 private:
     sal_Bool    bDuplicates;
 protected:
-                        // fuer ScStrCollection Load/Store
+                        // for ScStrCollection load/store
             void        SetDups( sal_Bool bVal ) { bDuplicates = bVal; }
             sal_Bool        IsDups() const { return bDuplicates; }
 public:
-    ScSortedCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False);
+    ScSortedCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false);
     ScSortedCollection(const ScSortedCollection& rScSortedCollection) :
                             ScCollection(rScSortedCollection),
                             bDuplicates(rScSortedCollection.bDuplicates) {}
@@ -120,19 +121,17 @@ public:
                         StrData(const StrData& rData) : ScDataObject(), aStr(rData.aStr) {}
     virtual ScDataObject*   Clone() const;
     const String&       GetString() const { return aStr; }
-    // SetString nur, wenn StrData nicht in ScStrCollection ist! !!!
-    // z.B. fuer Searcher
+    // SetString only, if StrData is not in ScStrCollection! for example
+    // for Searcher
     void                SetString( const String& rNew ) { aStr = rNew; }
 };
-
-//------------------------------------------------------------------------
 
 class SvStream;
 
 class SC_DLLPUBLIC ScStrCollection : public ScSortedCollection
 {
 public:
-    ScStrCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False) :
+    ScStrCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false) :
                         ScSortedCollection  ( nLim, nDel, bDup ) {}
     ScStrCollection(const ScStrCollection& rScStrCollection) :
                         ScSortedCollection  ( rScStrCollection ) {}
@@ -154,9 +153,6 @@ public:
                 : aStrValue(rStr),
                   nValue(nVal),
                   nStrType(nType) {}
-
-//UNUSED2008-05  TypedStrData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-//UNUSED2008-05                  sal_Bool bAllStrings );
 
             TypedStrData( const TypedStrData& rCpy )
                 : ScDataObject(),
@@ -184,7 +180,7 @@ private:
     sal_Bool    bCaseSensitive;
 
 public:
-    TypedScStrCollection( sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False );
+    TypedScStrCollection( sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false );
 
     TypedScStrCollection( const TypedScStrCollection& rCpy )
         : ScSortedCollection( rCpy ) { bCaseSensitive = rCpy.bCaseSensitive; }
@@ -202,3 +198,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

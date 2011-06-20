@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef SC_FPROGRESSBAR_HXX
 #define SC_FPROGRESSBAR_HXX
 
+#include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include "globstr.hrc"
 #include "ftools.hxx"
 #include "scdllapi.h"
@@ -110,7 +113,7 @@ const sal_Int32 SCF_INV_SEGMENT = -1;
         // not allowed (second segment active):   aProgress.Progress();
         // not allowed (first segment not empty): aProgress.GetSegmentProgressBar( nSeg1 );
  */
-class ScfProgressBar : ScfNoCopy
+class ScfProgressBar : private boost::noncopyable
 {
 public:
     explicit            ScfProgressBar( SfxObjectShell* pDocShell, const String& rText );
@@ -152,7 +155,7 @@ private:
     void                Init( SfxObjectShell* pDocShell );
 
     /** Returns the segment specified by list index. */
-    ScfProgressSegment* GetSegment( sal_Int32 nSegment ) const;
+    ScfProgressSegment* GetSegment( sal_Int32 nSegment );
     /** Activates progress bar and sets current segment. */
     void                SetCurrSegment( ScfProgressSegment* pSegment );
     /** Increases mnTotalPos and calls the system progress bar. */
@@ -172,8 +175,8 @@ private:
                             ~ScfProgressSegment();
     };
 
-    typedef ::std::auto_ptr< ScProgress >       ScProgressPtr;
-    typedef ScfDelList< ScfProgressSegment >    ScfSegmentList;
+    typedef ::std::auto_ptr< ScProgress >           ScProgressPtr;
+    typedef boost::ptr_vector< ScfProgressSegment > ScfSegmentList;
 
     ScfSegmentList      maSegments;         /// List of progress segments.
     String              maText;             /// UI string for system progress.
@@ -220,7 +223,6 @@ private:
 class ScfStreamProgressBar
 {
 public:
-//UNUSED2008-05  explicit            ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, const String& rText );
     explicit            ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, sal_uInt16 nResId = STR_LOAD_DOC );
 
     /** Sets the progress bar to the current stream position. */
@@ -241,3 +243,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

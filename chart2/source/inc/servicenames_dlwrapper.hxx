@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,10 +33,12 @@ namespace chart
 {
 //.............................................................................
 
-#define CHART2_VIEW_DLWRAPPER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.DrawModelWrapper")
-#define CHART2_VIEW_DLWRAPPER_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.DrawModelWrapper")
+#define CHART2_VIEW_DLWRAPPER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DrawModelWrapper" ))
+#define CHART2_VIEW_DLWRAPPER_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DrawModelWrapper" ))
 
 //.............................................................................
 } //namespace chart
 //.............................................................................
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

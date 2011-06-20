@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,6 @@
 
 #include <vcl/svapp.hxx>
 
-#if defined( WNT ) && defined( erBEEP )
-#include <svwin.h>
-#define erBEEPER() Beep( 666, 66 )
-#else
-#define erBEEPER()
-#endif
-
 #include "document.hxx"
 #include "brdcst.hxx"
 #include "bcaslot.hxx"
@@ -61,11 +55,6 @@
 extern const ScFormulaCell* pLastFormulaTreeTop;    // cellform.cxx Err527 WorkAround
 
 // STATIC DATA -----------------------------------------------------------
-
-#ifdef erDEBUG
-sal_uLong erCountBCAInserts = 0;
-sal_uLong erCountBCAFinds = 0;
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -105,7 +94,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
     if ( !nHardRecalcState )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
-        sal_Bool bIsBroadcasted = sal_False;
+        sal_Bool bIsBroadcasted = false;
         ScBaseCell* pCell = rHint.GetCell();
         if ( pCell )
         {
@@ -127,8 +116,8 @@ void ScDocument::Broadcast( const ScHint& rHint )
     if ( rHint.GetAddress() != BCA_BRDCST_ALWAYS )
     {
         SCTAB nTab = rHint.GetAddress().Tab();
-        if (pTab[nTab] && pTab[nTab]->IsStreamValid())
-            pTab[nTab]->SetStreamValid(sal_False);
+        if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsStreamValid())
+            maTabs[nTab]->SetStreamValid(false);
     }
 }
 
@@ -202,25 +191,25 @@ void ScDocument::DelBroadcastAreasInRange( const ScRange& rRange )
 void ScDocument::StartListeningCell( const ScAddress& rAddress,
                                             SvtListener* pListener )
 {
-    DBG_ASSERT(pListener, "StartListeningCell: pListener Null");
+    OSL_ENSURE(pListener, "StartListeningCell: pListener Null");
     SCTAB nTab = rAddress.Tab();
-    if (pTab[nTab])
-        pTab[nTab]->StartListening( rAddress, pListener );
+    if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->StartListening( rAddress, pListener );
 }
 
 void ScDocument::EndListeningCell( const ScAddress& rAddress,
                                             SvtListener* pListener )
 {
-    DBG_ASSERT(pListener, "EndListeningCell: pListener Null");
+    OSL_ENSURE(pListener, "EndListeningCell: pListener Null");
     SCTAB nTab = rAddress.Tab();
-    if (pTab[nTab])
-        pTab[nTab]->EndListening( rAddress, pListener );
+    if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->EndListening( rAddress, pListener );
 }
 
 
 void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
 {
-    DBG_ASSERT( pCell, "PutInFormulaTree: pCell Null" );
+    OSL_ENSURE( pCell, "PutInFormulaTree: pCell Null" );
     RemoveFromFormulaTree( pCell );
     // anhaengen
     if ( pEOFormulaTree )
@@ -236,7 +225,7 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
 
 void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
 {
-    DBG_ASSERT( pCell, "RemoveFromFormulaTree: pCell Null" );
+    OSL_ENSURE( pCell, "RemoveFromFormulaTree: pCell Null" );
     ScFormulaCell* pPrev = pCell->GetPrevious();
     // wenn die Zelle die erste oder sonstwo ist
     if ( pPrev || pFormulaTree == pCell )
@@ -257,13 +246,13 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
             nFormulaCodeInTree -= nRPN;
         else
         {
-            DBG_ERRORFILE( "RemoveFromFormulaTree: nFormulaCodeInTree < nRPN" );
+            OSL_FAIL( "RemoveFromFormulaTree: nFormulaCodeInTree < nRPN" );
             nFormulaCodeInTree = 0;
         }
     }
     else if ( !pFormulaTree && nFormulaCodeInTree )
     {
-        DBG_ERRORFILE( "!pFormulaTree && nFormulaCodeInTree != 0" );
+        OSL_FAIL( "!pFormulaTree && nFormulaCodeInTree != 0" );
         nFormulaCodeInTree = 0;
     }
 }
@@ -277,13 +266,13 @@ sal_Bool ScDocument::IsInFormulaTree( ScFormulaCell* pCell ) const
 
 void ScDocument::CalcFormulaTree( sal_Bool bOnlyForced, sal_Bool bNoProgress )
 {
-    DBG_ASSERT( !IsCalculatingFormulaTree(), "CalcFormulaTree recursion" );
+    OSL_ENSURE( !IsCalculatingFormulaTree(), "CalcFormulaTree recursion" );
     // never ever recurse into this, might end up lost in infinity
     if ( IsCalculatingFormulaTree() )
         return ;
     bCalculatingFormulaTree = sal_True;
 
-    SetForcedFormulaPending( sal_False );
+    SetForcedFormulaPending( false );
     sal_Bool bOldIdleDisabled = IsIdleDisabled();
     DisableIdle( sal_True );
     sal_Bool bOldAutoCalc = GetAutoCalc();
@@ -377,7 +366,7 @@ void ScDocument::CalcFormulaTree( sal_Bool bOnlyForced, sal_Bool bNoProgress )
     }
     bAutoCalc = bOldAutoCalc;
     DisableIdle( bOldIdleDisabled );
-    bCalculatingFormulaTree = sal_False;
+    bCalculatingFormulaTree = false;
 }
 
 
@@ -397,7 +386,7 @@ void ScDocument::ClearFormulaTree()
 
 void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
 {
-    DBG_ASSERT( pCell, "AppendToFormulaTrack: pCell Null" );
+    OSL_ENSURE( pCell, "AppendToFormulaTrack: pCell Null" );
     // Zelle kann nicht in beiden Listen gleichzeitig sein
     RemoveFromFormulaTrack( pCell );
     RemoveFromFormulaTree( pCell );
@@ -414,7 +403,7 @@ void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
 
 void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
 {
-    DBG_ASSERT( pCell, "RemoveFromFormulaTrack: pCell Null" );
+    OSL_ENSURE( pCell, "RemoveFromFormulaTrack: pCell Null" );
     ScFormulaCell* pPrev = pCell->GetPreviousTrack();
     // wenn die Zelle die erste oder sonstwo ist
     if ( pPrev || pFormulaTrack == pCell )
@@ -452,7 +441,6 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
 
     if ( pFormulaTrack )
     {
-        erBEEPER();
         // outside the loop, check if any sheet has a "calculate" event script
         bool bCalcEvent = HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true );
         SvtBroadcaster* pBC;
@@ -474,7 +462,7 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
             pTrack = pTrack->GetNextTrack();
         } while ( pTrack );
         pTrack = pFormulaTrack;
-        sal_Bool bHaveForced = sal_False;
+        sal_Bool bHaveForced = false;
         do
         {
             pNext = pTrack->GetNextTrack();
@@ -494,15 +482,15 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
                 SetForcedFormulaPending( sal_True );
         }
     }
-    DBG_ASSERT( nFormulaTrackCount==0, "TrackFormulas: nFormulaTrackCount!=0" );
+    OSL_ENSURE( nFormulaTrackCount==0, "TrackFormulas: nFormulaTrackCount!=0" );
 }
 
 
 void ScDocument::StartAllListeners()
 {
-    for ( SCTAB i = 0; i <= MAXTAB; ++i )
-        if ( pTab[i] )
-            pTab[i]->StartAllListeners();
+    for ( SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i )
+        if ( maTabs[i] )
+            maTabs[i]->StartAllListeners();
 }
 
 void ScDocument::UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
@@ -532,3 +520,4 @@ void ScDocument::SetAutoCalc( sal_Bool bNewAutoCalc )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,10 +30,10 @@
 #define SC_OUTPUT_HXX
 
 #include "address.hxx"
-#include <tools/list.hxx>
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
 class Rectangle;
 class Font;
@@ -50,7 +51,6 @@ struct ScTableInfo;
 class ScTabViewShell;
 class ScPageBreakData;
 class FmFormView;
-class ScFieldEditEngine;
 
 // #i74769# SdrPaintWindow predefine
 class SdrPaintWindow;
@@ -70,6 +70,8 @@ class SdrPaintWindow;
 
 enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 
+class ScFieldEditEngine;
+
 class ScOutputData
 {
 friend class ScDrawStringsVars;
@@ -81,6 +83,69 @@ private:
         long        mnColWidth;
         bool        mbLeftClip;
         bool        mbRightClip;
+    };
+
+    class DrawEditParam
+    {
+    public:
+        SvxCellHorJustify       meHorJust;
+        SvxCellVerJustify       meVerJust;
+        SvxCellJustifyMethod    meHorJustMethod;
+        SvxCellJustifyMethod    meVerJustMethod;
+        SvxCellOrientation      meOrient;
+        SCSIZE                  mnArrY;
+        SCCOL                   mnX;
+        SCROW                   mnY;
+        SCCOL                   mnCellX;
+        SCROW                   mnCellY;
+        long                    mnPosX;
+        long                    mnPosY;
+        long                    mnInitPosX;
+        bool                    mbBreak;
+        bool                    mbCellIsValue;
+        bool                    mbAsianVertical;
+        bool                    mbPixelToLogic;
+        bool                    mbHyphenatorSet;
+        ScFieldEditEngine*      mpEngine;
+        ScBaseCell*             mpCell;
+        const ScPatternAttr*    mpPattern;
+        const SfxItemSet*       mpCondSet;
+        const ScPatternAttr*    mpOldPattern;
+        const SfxItemSet*       mpOldCondSet;
+        const RowInfo*          mpThisRowInfo;
+
+        explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
+
+        bool readCellContent(ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields);
+        void setPatternToEngine(bool bUseStyleColor);
+        void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
+        void calcPaperSize(Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
+        void getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const;
+        long getEngineWidth(ScFieldEditEngine* pEngine) const;
+        bool hasLineBreak() const;
+        bool isHyperlinkCell() const;
+
+        /**
+         * When the text is vertically oriented, the text is either rotated 90
+         * degrees to the right or 90 degrees to the left.   Note that this is
+         * different from being vertically stacked.
+         */
+        bool isVerticallyOriented() const;
+
+        /**
+         * Calculate offset position for vertically oriented (either
+         * top-bottom or bottom-top orientation) text.
+         *
+         * @param rLogicStart initial position in pixels.  When the call is
+         *                    finished, this parameter will store the new
+         *                    position.
+         */
+        void calcStartPosForVertical(Point& rLogicStart, long nCellWidth, long nEngineWidth, long nTopM, OutputDevice* pRefDevice);
+
+        void setAlignmentToEngine();
+        bool adjustHorAlignment(ScFieldEditEngine* pEngine);
+        void adjustForRTL();
+        void adjustForHyperlinkInPDF(Point aURLStart, OutputDevice* pDev);
     };
 
     OutputDevice* pDev;         // Device
@@ -122,14 +187,14 @@ private:
     SCCOL nEditCol;
     SCROW nEditRow;
 
-    sal_Bool bMetaFile;             // Ausgabe auf Metafile (nicht in Pixeln!)
-    sal_Bool bSingleGrid;           // beim Gitter bChanged auswerten
+    bool bMetaFile;             // Ausgabe auf Metafile (nicht in Pixeln!)
+    bool bSingleGrid;           // beim Gitter bChanged auswerten
 
-    sal_Bool bPagebreakMode;        // Seitenumbruch-Vorschau
-    sal_Bool bSolidBackground;      // weiss statt transparent
+    bool bPagebreakMode;        // Seitenumbruch-Vorschau
+    bool bSolidBackground;      // weiss statt transparent
 
-    sal_Bool bUseStyleColor;
-    sal_Bool bForceAutoColor;
+    bool bUseStyleColor;
+    bool bForceAutoColor;
 
     sal_Bool bSyntaxMode;           // Syntax-Highlighting
     Color* pValueColor;
@@ -138,18 +203,18 @@ private:
 
     Color   aGridColor;
 
-    sal_Bool    bShowNullValues;
-    sal_Bool    bShowFormulas;
-    sal_Bool    bShowSpellErrors;   // Spell-Errors in EditObjekten anzeigen
-    sal_Bool    bMarkClipped;
+    bool    bShowNullValues;
+    bool    bShowFormulas;
+    bool    bShowSpellErrors;   // Spell-Errors in EditObjekten anzeigen
+    bool    bMarkClipped;
 
-    sal_Bool    bSnapPixel;
+    bool    bSnapPixel;
 
-    sal_Bool    bAnyRotated;        // intern
-    sal_Bool    bAnyClipped;        // intern
-    sal_Bool    bTabProtected;
+    bool    bAnyRotated;        // intern
+    bool    bAnyClipped;        // intern
+    bool    bTabProtected;
     sal_uInt8   nTabTextDirection;  // EEHorizontalTextDirection values
-    sal_Bool    bLayoutRTL;
+    bool    bLayoutRTL;
 
     // #i74769# use SdrPaintWindow direct, remember it during BeginDrawLayers/EndDrawLayers
     SdrPaintWindow*     mpTargetPaintWindow;
@@ -183,7 +248,13 @@ private:
 
     void            DrawRotatedFrame( const Color* pForceColor );       // pixel
 
-    ScFieldEditEngine* CreateOutputEditEngine();
+    drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
+
+    void DrawEditStandard(DrawEditParam& rParam);
+    void DrawEditBottomTop(DrawEditParam& rParam);
+    void DrawEditTopBottom(DrawEditParam& rParam);
+    void DrawEditStacked(DrawEditParam& rParam);
+    void DrawEditAsianVertical(DrawEditParam& rParam);
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
@@ -225,7 +296,8 @@ public:
     void    SetSnapPixel( sal_Bool bSet = sal_True );
 
     void    DrawGrid( sal_Bool bGrid, sal_Bool bPage );
-    void    DrawStrings( sal_Bool bPixelToLogic = sal_False );
+    void    DrawStrings( sal_Bool bPixelToLogic = false );
+    void    DrawDocumentBackground();
     void    DrawBackground();
     void    DrawShadow();
     void    DrawExtraShadow(sal_Bool bLeft, sal_Bool bTop, sal_Bool bRight, sal_Bool bBottom);
@@ -253,9 +325,6 @@ public:
 
     void    FindChanged();
     void    SetPagebreakMode( ScPageBreakData* pPageData );
-#ifdef OLD_SELECTION_PAINT
-    void    DrawMark( Window* pWin );
-#endif
     void    DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                          SCCOL nRefEndX, SCROW nRefEndY,
                          const Color& rColor, sal_Bool bHandle );
@@ -273,3 +342,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,12 +57,12 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext(pTempDatabaseRangeContext),
     aFilterFields(),
-    bSkipDuplicates(sal_False),
-    bCopyOutputData(sal_False),
-    bUseRegularExpressions(sal_False),
+    bSkipDuplicates(false),
+    bCopyOutputData(false),
+    bUseRegularExpressions(false),
     bConnectionOr(sal_True),
     bNextConnectionOr(sal_True),
-    bConditionSourceRange(sal_False)
+    bConditionSourceRange(false)
 {
     ScDocument* pDoc(GetScImport().GetDocument());
 
@@ -158,7 +159,7 @@ void ScXMLFilterContext::EndElement()
         pDatabaseRangeContext->SetFilterCopyOutputData(bCopyOutputData);
     }
     else
-        pDatabaseRangeContext->SetFilterCopyOutputData(sal_False);
+        pDatabaseRangeContext->SetFilterCopyOutputData(false);
     pDatabaseRangeContext->SetFilterIsCaseSensitive(bIsCaseSensitive);
     pDatabaseRangeContext->SetFilterSkipDuplicates(bSkipDuplicates);
     pDatabaseRangeContext->SetFilterFields(aFilterFields);
@@ -175,7 +176,7 @@ ScXMLAndContext::ScXMLAndContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext)
 {
-    pFilterContext->OpenConnection(sal_False);
+    pFilterContext->OpenConnection(false);
 }
 
 ScXMLAndContext::~ScXMLAndContext()
@@ -275,7 +276,7 @@ ScXMLConditionContext::ScXMLConditionContext( ScXMLImport& rImport,
                                         ScXMLFilterContext* pTempFilterContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext),
-    bIsCaseSensitive(sal_False)
+    bIsCaseSensitive(false)
 {
     sDataType = GetXMLToken(XML_TEXT);
 
@@ -334,7 +335,7 @@ SvXMLImportContext *ScXMLConditionContext::CreateChildContext( sal_uInt16 nPrefi
 
 void ScXMLConditionContext::getOperatorXML(const rtl::OUString sTempOperator, sal_Int32& aFilterOperator, sal_Bool& bUseRegularExpressions) const
 {
-    bUseRegularExpressions = sal_False;
+    bUseRegularExpressions = false;
     if (IsXMLToken(sTempOperator, XML_MATCH))
     {
         bUseRegularExpressions = sal_True;
@@ -403,7 +404,7 @@ void ScXMLConditionContext::EndElement()
     else
     {
         aFilterField.StringValue = sConditionValue;
-        aFilterField.IsNumeric = sal_False;
+        aFilterField.IsNumeric = false;
     }
     pFilterContext->AddFilterField(aFilterField);
 }
@@ -420,12 +421,12 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
     pDataPilotTable(pTempDataPilotTableContext),
     aFilterFields(),
     nFilterFieldCount(0),
-    bSkipDuplicates(sal_False),
-    bCopyOutputData(sal_False),
-    bUseRegularExpressions(sal_False),
+    bSkipDuplicates(false),
+    bCopyOutputData(false),
+    bUseRegularExpressions(false),
     bConnectionOr(sal_True),
     bNextConnectionOr(sal_True),
-    bConditionSourceRange(sal_False)
+    bConditionSourceRange(false)
 {
     ScDocument* pDoc(GetScImport().GetDocument());
 
@@ -525,7 +526,7 @@ void ScXMLDPFilterContext::EndElement()
         pDataPilotTable->SetFilterCopyOutputData(bCopyOutputData);
     }
     else
-        pDataPilotTable->SetFilterCopyOutputData(sal_False);
+        pDataPilotTable->SetFilterCopyOutputData(false);
 //  pDataPilotTable->SetFilterIsCaseSensitive(bIsCaseSensitive);
 //  pDataPilotTable->SetFilterSkipDuplicates(bSkipDuplicates);
     pDataPilotTable->SetSourceQueryParam(aFilterFields);
@@ -551,7 +552,7 @@ ScXMLDPAndContext::ScXMLDPAndContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     pFilterContext = pTempFilterContext;
-    pFilterContext->OpenConnection(sal_False);
+    pFilterContext->OpenConnection(false);
 }
 
 ScXMLDPAndContext::~ScXMLDPAndContext()
@@ -652,7 +653,7 @@ ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext),
     sDataType(GetXMLToken(XML_TEXT)),
-    bIsCaseSensitive(sal_False)
+    bIsCaseSensitive(false)
 {
 
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
@@ -711,7 +712,7 @@ SvXMLImportContext *ScXMLDPConditionContext::CreateChildContext( sal_uInt16 nPre
 void ScXMLDPConditionContext::getOperatorXML(const rtl::OUString sTempOperator, ScQueryOp& aFilterOperator, sal_Bool& bUseRegularExpressions,
                                             double& dVal) const
 {
-    bUseRegularExpressions = sal_False;
+    bUseRegularExpressions = false;
     if (IsXMLToken(sTempOperator, XML_MATCH))
     {
         bUseRegularExpressions = sal_True;
@@ -765,7 +766,7 @@ void ScXMLDPConditionContext::EndElement()
     {
         aFilterField.nVal = sConditionValue.toDouble();
         *aFilterField.pStr = sConditionValue;
-        aFilterField.bQueryByString = sal_False;
+        aFilterField.bQueryByString = false;
         if (dVal != 0.0)
         {
             aFilterField.nVal = dVal;
@@ -783,3 +784,4 @@ void ScXMLDPConditionContext::EndElement()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

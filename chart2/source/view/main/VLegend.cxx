@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,25 +89,6 @@ double lcl_CalcViewFontSize(
             if( (xProp->getPropertyValue( C2U( "ReferencePageSize" )) >>= aPropRefSize) &&
                 (aPropRefSize.Height > 0))
             {
-                // todo: find out if asian text is really used
-//         Reference< beans::XPropertySetInfo >xInfo( xProp, uno::UNO_QUERY );
-//         float fFontHeight2 = fFontHeight;
-//         if( xInfo.is() &&
-//             xInfo->hasPropertyByName(C2U("CharHeightAsian")) &&
-//             (xProp->getPropertyValue(C2U("CharHeightAsian")) >>= fFontHeight2) &&
-//             fFontHeight2 > fFontHeight )
-//         {
-//             fFontHeight = fFontHeight2;
-//         }
-
-//         if( xInfo.is() &&
-//             xInfo->hasPropertyByName(C2U("CharHeightComplex")) &&
-//             (xProp->getPropertyValue(C2U("CharHeightComplex")) >>= fFontHeight2) &&
-//             fFontHeight2 > fFontHeight )
-//         {
-//             fFontHeight = fFontHeight2;
-//         }
-
                 fResult = ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize );
             }
         }
@@ -361,7 +343,6 @@ awt::Size lcl_placeLegendEntries(
     {
         sal_Int32 nCurrentRow=0;
         sal_Int32 nCurrentColumn=-1;
-        sal_Int32 nColumnCount=0;
         sal_Int32 nMaxColumnCount=-1;
         for( sal_Int32 nN=0; nN<static_cast<sal_Int32>(aTextShapes.size()); nN++ )
         {
@@ -410,7 +391,6 @@ awt::Size lcl_placeLegendEntries(
                     nN=-1;
                     nCurrentRow=0;
                     nCurrentColumn=-1;
-                    nColumnCount=0;
                     aColumnWidths.clear();
                 }
             }
@@ -918,8 +898,8 @@ void VLegend::createShapes(
                     RelativeSize aRelativeSize;
                     if ((xLegendProp->getPropertyValue( C2U( "RelativeSize" )) >>= aRelativeSize))
                     {
-                        aLegendSize.Width = static_cast<sal_Int32>( ::rtl::math::approxCeil( aRelativeSize.Primary * rPageSize.Width ) ); //i117185
-                        aLegendSize.Height = static_cast<sal_Int32>( ::rtl::math::approxCeil( aRelativeSize.Secondary * rPageSize.Height ) ); //i117185
+                        aLegendSize.Width = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Primary * rPageSize.Width ));
+                        aLegendSize.Height = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Secondary * rPageSize.Height ));
                     }
                     else
                         eExpansion = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
@@ -948,7 +928,7 @@ void VLegend::createShapes(
 
             ::std::vector< LegendEntryProvider* >::const_iterator       aIter = m_aLegendEntryProviderList.begin();
             const ::std::vector< LegendEntryProvider* >::const_iterator aEnd  = m_aLegendEntryProviderList.end();
-            for( aIter = m_aLegendEntryProviderList.begin(); aIter != aEnd; aIter++ )
+            for( aIter = m_aLegendEntryProviderList.begin(); aIter != aEnd; ++aIter )
             {
                 LegendEntryProvider* pLegendEntryProvider( *aIter );
                 if( pLegendEntryProvider )
@@ -965,7 +945,7 @@ void VLegend::createShapes(
             awt::Size aMaxSymbolExtent( nSymbolWidth, nSymbolHeigth );
 
             tViewLegendEntryContainer aViewEntries;
-            for( aIter = m_aLegendEntryProviderList.begin(); aIter != aEnd; aIter++ )
+            for( aIter = m_aLegendEntryProviderList.begin(); aIter != aEnd; ++aIter )
             {
                 LegendEntryProvider* pLegendEntryProvider( *aIter );
                 if( pLegendEntryProvider )
@@ -1048,3 +1028,5 @@ void VLegend::changePosition(
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

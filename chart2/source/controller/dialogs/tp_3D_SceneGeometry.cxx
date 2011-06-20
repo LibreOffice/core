@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,6 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
-//using namespace ::com::sun::star::chart2;
 
 namespace
 {
@@ -100,7 +100,7 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     fYAngle = BaseGFXHelper::Rad2Deg( fYAngle );
     fZAngle = BaseGFXHelper::Rad2Deg( fZAngle );
 
-    DBG_ASSERT( fZAngle>=-90 && fZAngle<=90, "z angle is out of valid range" );
+    OSL_ENSURE( fZAngle>=-90 && fZAngle<=90, "z angle is out of valid range" );
 
     lcl_SetMetricFieldLimits( m_aMFZRotation, 90 );
 
@@ -296,3 +296,5 @@ IMPL_LINK( ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, void*, EMPTYARG
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

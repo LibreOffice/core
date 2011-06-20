@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #include "dpsave.hxx"
 #include "queryparam.hxx"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 class ScXMLImport;
 class ScDPSaveNumGroupDimension;
@@ -79,7 +80,7 @@ public:
 
 class ScXMLDataPilotTableContext : public SvXMLImportContext
 {
-    typedef ::std::hash_set< ::rtl::OUString, ::rtl::OUStringHash > StringSet;
+    typedef ::boost::unordered_set< ::rtl::OUString, ::rtl::OUStringHash > StringSet;
     StringSet       maHiddenMemberFields;
 
     struct GrandTotalItem
@@ -96,6 +97,7 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     GrandTotalItem  maColGrandTotal;
     rtl::OUString   sDataPilotTableName;
     rtl::OUString   sApplicationData;
+    rtl::OUString   sGrandTotal;
     rtl::OUString   sDatabaseName;
     rtl::OUString   sSourceObject;
     rtl::OUString   sServiceName;
@@ -104,6 +106,7 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     rtl::OUString   sServiceUsername;
     rtl::OUString   sServicePassword;
     rtl::OUString   sButtons;
+    rtl::OUString   sSourceRangeName;
     ScRange         aSourceCellRangeAddress;
     ScRange         aTargetRangeAddress;
     ScRange         aFilterSourceRange;
@@ -125,6 +128,7 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     sal_Bool        bSourceCellRange;
     sal_Bool        bShowFilter;
     sal_Bool        bDrillDown;
+    sal_Bool        bHeaderGridLayout;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -154,6 +158,7 @@ public:
     void SetServiceSourceObject(const rtl::OUString& sValue) { sServiceSourceObject = sValue; }
     void SetServiceUsername(const rtl::OUString& sValue) { sServiceUsername = sValue; }
     void SetServicePassword(const rtl::OUString& sValue) { sServicePassword = sValue; }
+    void SetSourceRangeName(const rtl::OUString& sValue) { sSourceRangeName = sValue; bSourceCellRange = true; }
     void SetSourceCellRangeAddress(const ScRange& aValue) { aSourceCellRangeAddress = aValue; bSourceCellRange = sal_True; }
     void SetSourceQueryParam(const ScQueryParam& aValue) { aSourceQueryParam = aValue; }
 //  void SetFilterUseRegularExpressions(const sal_Bool bValue) { aSourceQueryParam.bRegExp = bValue; }
@@ -690,3 +695,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@ void OP_EOF( SvStream &aStream, sal_uInt16 nLaenge );
 void OP_Integer( SvStream &aStream, sal_uInt16 nLaenge );
 void OP_Number( SvStream &aStream, sal_uInt16 nLaenge );
 void OP_Label( SvStream &aStream, sal_uInt16 nLaenge );
-//UNUSED2009-05 void OP_Text( SvStream &aStream, sal_uInt16 nLaenge );      // WK3
 void OP_Integer3( SvStream &aStream, sal_uInt16 nLaenge );  // WK3
 void OP_Number3( SvStream &aStream, sal_uInt16 nLaenge );   // WK3
 void OP_Formula( SvStream &aStream, sal_uInt16 nLaenge );
@@ -68,3 +68,5 @@ void OP_VerAlign123(sal_uInt8 nAlignPattern, SfxItemSet& rPattern /*  const ScPa
 void OP_ApplyPatternArea123(SvStream& r);
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

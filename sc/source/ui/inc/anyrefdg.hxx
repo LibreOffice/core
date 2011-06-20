@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,39 +29,29 @@
 #ifndef SC_ANYREFDG_HXX
 #define SC_ANYREFDG_HXX
 
-#ifndef _IMAGEBTN_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _ACCEL_HXX
 #include <vcl/accel.hxx>
-#endif
 #include <sfx2/basedlgs.hxx>
+#include <sfx2/tabdlg.hxx>
 #include "address.hxx"
 #include "cell.hxx"
 #include "compiler.hxx"
 #include "formula/funcutl.hxx"
 #include "IAnyRefDialog.hxx"
 #include "scresid.hxx"
+#include "scmod.hxx"
+
 #include <memory>
 
 class SfxObjectShell;
 class ScRange;
 class ScDocument;
 class ScTabViewShell;
-//The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
-//class ScAnyRefDlg;
 class ScRefHandler;
 class ScRangeList;
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 class SfxShell;
-#include "scmod.hxx"
 
-typedef    formula::RefButton   ScRefButton;
-typedef        formula::RefEdit ScRefEdit;
-//-->Added by PengYunQuan for Validity Cell Range Picker
 class ScFormulaReferenceHelper
 {
     IAnyRefDialog*      m_pDlg;
@@ -100,7 +91,7 @@ public:
     void                ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     void                HideReference( sal_Bool bDoneRefMode = sal_True );
     void                RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    void                RefInputDone( sal_Bool bForced = sal_False );
+    void                RefInputDone( sal_Bool bForced = false );
     void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
 
     inline void         SetWindow(Window* _pWindow) { m_pWindow = _pWindow; }
@@ -110,28 +101,27 @@ public:
     void                ViewShellChanged( ScTabViewShell* pScViewShell );
 
     static              void enableInput(sal_Bool _bInput);
-//<!--Added by PengYunQuan for Validity Cell Range Picker
+
 protected:
     Window      *       GetWindow(){ return m_pWindow; }
+
 public:
-    bool                CanInputStart( const ScRefEdit *pEdit ){ return !!pEdit; }
+    bool                CanInputStart( const formula::RefEdit *pEdit ){ return !!pEdit; }
     bool                CanInputDone( sal_Bool bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 };
+
 //============================================================================
 
-//The class of ScAnyRefDlg is rewritten by PengYunQuan for Validity Cell Range Picker
 class SC_DLLPUBLIC ScRefHandler : //public SfxModelessDialog,
                     public IAnyRefDialog
 {
-//<!--Added by PengYunQuan for Validity Cell Range Picker
     Window &    m_rWindow;
     bool        m_bInRefMode;
+
 public:
     operator Window *(){ return &m_rWindow; }
     Window  * operator ->() { return static_cast<Window *>(*this); }
     template<class,bool> friend class ScRefHdlrImplBase;
-//-->Added by PengYunQuan for Validity Cell Range Picker
     friend class        formula::RefButton;
     friend class        formula::RefEdit;
 
@@ -156,7 +146,7 @@ protected:
     //virtual long        PreNotify( NotifyEvent& rNEvt );
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    virtual void        RefInputDone( sal_Bool bForced = sal_False );
+    virtual void        RefInputDone( sal_Bool bForced = false );
     void                ShowSimpleReference( const XubString& rStr );
     void                ShowFormulaReference( const XubString& rStr );
 
@@ -189,18 +179,15 @@ public:
     //Overwrite TWindow will implemented by ScRefHdlrImplBase
     //virtual void        StateChanged( StateChangedType nStateChange );
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 public:
     bool                EnterRefMode();
     bool                LeaveRefMode();
-    inline  bool        CanInputStart( const ScRefEdit *pEdit );
+    inline  bool        CanInputStart( const formula::RefEdit *pEdit );
     inline  bool        CanInputDone( sal_Bool bForced );
-//-->Added by PengYunQuan for Validity Cell Range Picker
 };
 
-
 //============================================================================
-//<!--Added by PengYunQuan for Validity Cell Range Picker
+
 template<  class TWindow, bool bBindRef = true >
 class ScRefHdlrImplBase:public TWindow, public ScRefHandler
 {
@@ -260,7 +247,7 @@ struct ScAnyRefDlg : ::ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>
 };
 //============================================================================
 
-inline bool ScRefHandler::CanInputStart( const ScRefEdit *pEdit )
+inline bool ScRefHandler::CanInputStart( const formula::RefEdit *pEdit )
 {
     return m_aHelper.CanInputStart( pEdit );
 }
@@ -272,10 +259,9 @@ inline  bool ScRefHandler::CanInputDone( sal_Bool bForced )
 
 template <> SC_DLLPUBLIC void ScRefHdlrImplBase<SfxModelessDialog,true>::StateChanged( StateChangedType nStateChange );
 template <> SC_DLLPUBLIC long ScRefHdlrImplBase<SfxModelessDialog,true>::PreNotify( NotifyEvent& rNEvt );
-#include <sfx2/tabdlg.hxx>
 template <> SC_DLLPUBLIC void ScRefHdlrImplBase<SfxTabDialog,false>::StateChanged( StateChangedType nStateChange );
 template <> SC_DLLPUBLIC long ScRefHdlrImplBase<SfxTabDialog,false>::PreNotify( NotifyEvent& rNEvt );
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 #endif // SC_ANYREFDG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

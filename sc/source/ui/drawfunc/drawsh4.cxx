@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,7 +69,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
         !((SdrTextObj*) pObj)->HasText() )
     {
         if ( pDlg )
-            pDlg->SetActive(sal_False);
+            pDlg->SetActive(false);
 
         rSet.DisableItem(XATTR_FORMTXTSTYLE);
         rSet.DisableItem(XATTR_FORMTXTADJUST);
@@ -102,7 +103,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
                 if ( pColorTable )
                     pDlg->SetColorTable( pColorTable );
                 else
-                    { DBG_ERROR( "ColorList not found :-/" ); }
+                    { OSL_FAIL( "ColorList not found :-/" ); }
             }
         }
         SfxItemSet aViewAttr(pDrView->GetModel()->GetItemPool());
@@ -113,3 +114,4 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

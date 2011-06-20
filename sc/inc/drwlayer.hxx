@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,8 +46,6 @@ class SdrOle2Obj;
 class ScRange;
 class ScAddress;
 
-// -----------------------------------------------------------------------
-
 class ScTabDeletedHint : public SfxHint
 {
 private:
@@ -71,10 +70,8 @@ public:
     SCTAB   GetTab()    { return nTab; }
 };
 
-// -----------------------------------------------------------------------
-//
-//  Das Anpassen der Detektiv-UserData muss zusammen mit den Draw-Undo's
-//  in der SdrUndoGroup liegen, darum von SdrUndoAction abgeleitet:
+//  Adjusting of detective UserData and draw undo's both have to be in SdrUndoGroup;
+//  therefore derived from SdrUndoAction
 
 class ScUndoObjData : public SdrUndoObj
 {
@@ -93,12 +90,9 @@ public:
     virtual void     Redo();
 };
 
-// -----------------------------------------------------------------------
-
 class SC_DLLPUBLIC ScDrawLayer : public FmFormModel
 {
 private:
-//REMOVE        SotStorageRef   xPictureStorage;
     String          aName;
     ScDocument*     pDoc;
     SdrUndoGroup*   pUndoGroup;
@@ -107,18 +101,16 @@ private:
     sal_Bool            bHyphenatorSet;
 
 private:
-    void            MoveAreaTwips( SCTAB nTab, const Rectangle& rArea, const Point& rMove,
-                                const Point& rTopLeft );
     void            MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCsCOL nDx,SCsROW nDy, bool bUpdateNoteCaptionPos );
 
-    void            RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos );
+    void            RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos );
 
 public:
                     ScDrawLayer( ScDocument* pDocument, const String& rName );
     virtual         ~ScDrawLayer();
 
-    virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage*  AllocPage(bool bMasterPage);
     virtual SdrModel* AllocModel() const;
     virtual void    SetChanged( sal_Bool bFlg = sal_True );
 
@@ -127,25 +119,23 @@ public:
 
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 
-//REMOVE        void            ReleasePictureStorage();
-
     sal_Bool            HasObjects() const;
 
     sal_Bool            ScAddPage( SCTAB nTab );
     void            ScRemovePage( SCTAB nTab );
     void            ScRenamePage( SCTAB nTab, const String& rNewName );
     void            ScMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
-                    // inkl. Inhalt, bAlloc=sal_False -> nur Inhalt
+                    // incl. content, bAlloc=FALSE -> only content
     void            ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool bAlloc );
 
     ScDocument*     GetDocument() const { return pDoc; }
 
-    void            UpdateBasic();              // DocShell-Basic in DrawPages setzen
+    void            UpdateBasic();              // set DocShell Basic in DrawPages
     void            UseHyphenator();
 
     sal_Bool            GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const;
 
-                    //      automatische Anpassungen
+                    //      automatic adjustments
 
     void            EnableAdjust( sal_Bool bSet = sal_True )    { bAdjustEnabled = bSet; }
 
@@ -156,17 +146,12 @@ public:
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCsCOL nDx,SCsROW nDy, sal_Bool bInsDel, bool bUpdateNoteCaptionPos = true );
-    void            WidthChanged( SCTAB nTab, SCCOL nCol, long nDifTwips );
-    void            HeightChanged( SCTAB nTab, SCROW nRow, long nDifTwips );
 
-        sal_Bool            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow, bool bIncludeNotes = true );
+    sal_Bool            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
 
     void            DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                                             SCCOL nCol2,SCROW nRow2 );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
-#if 0
-    void            DeleteObjects( SCTAB nTab );
-#endif
 
     void            CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle& rRange );
     void            CopyFromClip( ScDrawLayer* pClipModel,
@@ -193,12 +178,14 @@ public:
     String          GetNewGraphicName( long* pnCounter = NULL ) const;
     void            EnsureGraphicNames();
 
-    // Verankerung setzen und ermitteln
-    static void     SetAnchor( SdrObject*, ScAnchorType );
-    static ScAnchorType GetAnchor( const SdrObject* );
+    static void             SetPageAnchored( SdrObject& );
+    static void             SetCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
+    static void             SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab );
+    static void             UpdateCellAnchorFromPositionEnd( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab );
+    static ScAnchorType     GetAnchorType( const SdrObject& );
 
-    // Positionen fuer Detektivlinien
-    static ScDrawObjData* GetObjData( SdrObject* pObj, sal_Bool bCreate=sal_False );
+    // positions for detektive lines
+    static ScDrawObjData* GetObjData( SdrObject* pObj, sal_Bool bCreate=false );
 
     // The sheet information in ScDrawObjData isn't updated when sheets are inserted/deleted.
     // Use this method to get an object with positions on the specified sheet (should be the
@@ -217,10 +204,10 @@ public:
     static IMapObject* GetHitIMapObject( SdrObject* pObject,
                             const Point& rWinPoint, const Window& rCmpWnd );
 
-    static ScMacroInfo* GetMacroInfo( SdrObject* pObj, sal_Bool bCreate = sal_False );
+    static ScMacroInfo* GetMacroInfo( SdrObject* pObj, sal_Bool bCreate = false );
 
 private:
-    static SfxObjectShell* pGlobalDrawPersist;          // fuer AllocModel
+    static SfxObjectShell* pGlobalDrawPersist;          // for AllocModel
 public:
     static void     SetGlobalDrawPersist(SfxObjectShell* pPersist);
 protected:
@@ -231,3 +218,4 @@ protected:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

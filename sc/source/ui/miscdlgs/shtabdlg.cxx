@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,9 +104,10 @@ IMPL_LINK_INLINE_START( ScShowTabDlg, DblClkHdl, void *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( ScShowTabDlg, DblClkHdl, void *, EMPTYARG )
 
-__EXPORT ScShowTabDlg::~ScShowTabDlg()
+ScShowTabDlg::~ScShowTabDlg()
 {
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

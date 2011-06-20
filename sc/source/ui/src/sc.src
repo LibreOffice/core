@@ -27,21 +27,16 @@
 
 #include "sc.hrc" // -> #include <sfx.hrc>
 
-
-
 // App-Titel------------------------------------------------------
 
 String RID_APPTITLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? StarCalc 4.0 : StarCalc 3.1 */
     Text [ en-US ] = "%PRODUCTNAME Calc" ;
 };
 
  // About-Dialog --------------------------------------------------------------
 
  // Icons & Bitmaps: ----------------------------------------------------------
-
-
 
  // ???
 String 30001 { Text = "Dummy1" ; };

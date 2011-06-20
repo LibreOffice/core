@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ sal_Bool ScDrawTextObjectBar::IsNoteEdit()
 
 //  wenn kein Text editiert wird, Funktionen wie in drawsh
 
-void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
+void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 {
     ScTabView*   pTabView  = pViewData->GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();
@@ -83,7 +84,8 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
         case SID_CUT:
             pView->DoCut();
-            pViewData->GetViewShell()->UpdateDrawShell();
+            if (!pTabView->IsDrawSelMode())
+                pViewData->GetViewShell()->SetDrawShell( false );
             break;
 
         case SID_PASTE:
@@ -117,7 +119,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
         case SID_ENABLE_HYPHENATION:
             {
-                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, sal_False);
+                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, false);
                 if( pItem )
                 {
                     SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
@@ -146,7 +148,7 @@ void ScDrawTextObjectBar::GetGlobalClipState( SfxItemSet& rSet )
     }
 }
 
-void __EXPORT ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
+void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
 {
     ScTabView*   pTabView  = pViewData->GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();
@@ -250,7 +252,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
         !((SdrTextObj*) pObj)->HasText() )
     {
         if ( pDlg )
-            pDlg->SetActive(sal_False);
+            pDlg->SetActive(false);
 
         rSet.DisableItem(XATTR_FORMTXTSTYLE);
         rSet.DisableItem(XATTR_FORMTXTADJUST);
@@ -284,7 +286,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
                 if ( pColorTable )
                     pDlg->SetColorTable( pColorTable );
                 else
-                    { DBG_ERROR( "ColorList not found :-/" ); }
+                    { OSL_FAIL( "ColorList not found :-/" ); }
             }
         }
         SfxItemSet aViewAttr(pDrView->GetModel()->GetItemPool());
@@ -296,3 +298,4 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

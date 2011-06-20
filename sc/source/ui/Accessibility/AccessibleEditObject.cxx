@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,27 +31,20 @@
 #include "AccessibleEditObject.hxx"
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-#include "unoguard.hxx"
 #include "AccessibleText.hxx"
 #include "editsrc.hxx"
 #include "scmod.hxx"
 #include "inputhdl.hxx"
 
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
-#include <rtl/uuid.h>
-#include <tools/debug.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/svdmodel.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -67,7 +61,7 @@ ScAccessibleEditObject::ScAccessibleEditObject(
     mpEditView(pEditView),
     mpWindow(pWin),
     meObjectType(eObjectType),
-    mbHasFocus(sal_False)
+    mbHasFocus(false)
 {
     CreateTextHelper();
     SetName(rName);
@@ -87,7 +81,7 @@ ScAccessibleEditObject::~ScAccessibleEditObject()
 
 void SAL_CALL ScAccessibleEditObject::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (mpTextHelper)
         DELETEZ(mpTextHelper);
 
@@ -96,9 +90,9 @@ void SAL_CALL ScAccessibleEditObject::disposing()
 
 void ScAccessibleEditObject::LostFocus()
 {
-    mbHasFocus = sal_False;
+    mbHasFocus = false;
     if (mpTextHelper)
-        mpTextHelper->SetFocus(sal_False);
+        mpTextHelper->SetFocus(false);
     CommitFocusLost();
 }
 
@@ -119,7 +113,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPo
     uno::Reference<XAccessible> xRet;
     if (containsPoint(rPoint))
     {
-         ScUnoGuard aGuard;
+         SolarMutexGuard aGuard;
         IsObjectValid();
 
         if(!mpTextHelper)
@@ -198,7 +192,7 @@ sal_Int32 SAL_CALL
     ScAccessibleEditObject::getAccessibleChildCount(void)
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
@@ -210,7 +204,7 @@ uno::Reference< XAccessible > SAL_CALL
         throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
@@ -221,7 +215,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleEditObject::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -249,7 +243,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleEditObject::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-//    DBG_ERRORFILE("Should never be called, because is set in the constructor.")
+//    OSL_FAIL("Should never be called, because is set in the constructor.")
     return rtl::OUString();
 }
 
@@ -257,7 +251,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleEditObject::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    DBG_ERRORFILE("Should never be called, because is set in the constructor.");
+    OSL_FAIL("Should never be called, because is set in the constructor.");
     return rtl::OUString();
 }
 
@@ -297,19 +291,16 @@ void SAL_CALL
 
 //=====  XTypeProvider  =======================================================
 
+namespace
+{
+    class theScAccessibleEditObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleEditObjectImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleEditObject::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessibleEditObjectImplementationId::get().getSeq();
 }
 
     //====  internal  =========================================================
@@ -356,3 +347,4 @@ void ScAccessibleEditObject::CreateTextHelper()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

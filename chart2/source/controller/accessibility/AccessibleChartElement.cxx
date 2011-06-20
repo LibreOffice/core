@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,23 +45,6 @@
 // for SolarMutex
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
-
-// #ifndef _RTL_UUID_H_
-// #include <rtl/uuid.h>
-// #endif
-// #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
-// #include <cppuhelper/queryinterface.hxx>
-// #endif
-// #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-// #include <toolkit/helper/vclunohelper.hxx>
-// #endif
-// #ifndef _SV_WINDOW_HXX
-// #include <vcl/window.hxx>
-// #endif
-
-// #ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
-// #include <svx/AccessibleTextHelper.hxx>
-// #endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -146,30 +130,6 @@ void AccessibleChartElement::InitTextEdit()
             ASSERT_EXCEPTION( ex );
         }
 }
-//     OSL_ASSERT( m_pTextHelper == 0 );
-
-//     // /-- solar
-//     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-//     Window* pWindow( VCLUnoHelper::GetWindow( GetInfo().m_xWindow ));
-//     if( pWindow )
-//     {
-//         // we need ChartController::m_pDrawViewWrapper here
-//         SdrView * pView = 0;
-//         if( pView )
-//         {
-//             SdrObject * pTextObj = m_pDrawViewWrapper->getTextEditObject();
-//             if( pTextObj )
-//             {
-//                 SvxEditSource * pEditSource = new SvxEditSource( pTextObj, pView, pWindow );
-//                 m_pTextHelper = new ::accessibility::AccessibleTextHelper(
-//                     ::std::auto_ptr< SvxEditSource >( pEditSource ));
-//                 if( m_pTextHelper )
-//                     m_pTextHelper->SetEventSource( this );
-//             }
-//         }
-//     }
-//     // \-- solar
-// }
 
 // ____________________________________
 // ____________________________________
@@ -185,14 +145,7 @@ Reference< XAccessible > AccessibleChartElement::ImplGetAccessibleChildById( sal
     Reference< XAccessible > xResult;
 
     if( m_bHasText )
-    {
         xResult.set( m_xTextHelper->getAccessibleChild( i ));
-        // /-- solar
-//         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-//         if( m_pTextHelper )
-//             xResult.set( m_pTextHelper->GetChild( i ) );
-        // \-- solar
-    }
     else
         xResult.set( AccessibleBase::ImplGetAccessibleChildById( i ));
 
@@ -330,3 +283,5 @@ sal_Int32 SAL_CALL AccessibleChartElement::getBackground()
 
 
 } // namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

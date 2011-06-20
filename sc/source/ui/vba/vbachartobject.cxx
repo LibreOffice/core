@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -155,56 +156,4 @@ ScVbaChartObject::getServiceNames()
     return aServiceNames;
 }
 
-double
-ScVbaChartObject::getHeight()
-{
-    return oShapeHelper->getHeight();
-}
-
-void
-ScVbaChartObject::setHeight(double _fheight) throw ( script::BasicErrorException )
-{
-    oShapeHelper->setHeight(_fheight);
-}
-
-double
-ScVbaChartObject::getWidth()
-{
-        return oShapeHelper->getWidth();
-}
-
-void
-ScVbaChartObject::setWidth(double _fWidth) throw ( script::BasicErrorException )
-{
-    oShapeHelper->setWidth(_fWidth);
-}
-
-double
-ScVbaChartObject::getLeft()
-{
-        return oShapeHelper->getLeft();
-}
-
-void
-ScVbaChartObject::setLeft(double _fLeft)
-{
-    oShapeHelper->setLeft(_fLeft);
-}
-
-double
-ScVbaChartObject::getTop()
-{
-        return oShapeHelper->getTop();
-}
-
-void
-ScVbaChartObject::setTop(double _fTop)
-{
-    oShapeHelper->setTop(_fTop);
-}
-
-uno::Reference< uno::XInterface >
-ScVbaChartObject::getUnoObject() throw (script::BasicErrorException)
-{
-    return uno::Reference< uno::XInterface >( xShape, uno::UNO_QUERY );
-}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

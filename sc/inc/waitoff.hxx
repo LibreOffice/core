@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,15 @@
 #ifndef SC_WAITOFF_HXX
 #define SC_WAITOFF_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 
 class Window;
 
 class ScWaitCursorOff
 {
 private:
-    Window*             pWin;
-    sal_uLong               nWaiters;
+    Window*                 pWin;
+    sal_uInt32              nWaiters;
 public:
                         ScWaitCursorOff( Window* pWin );
                         ~ScWaitCursorOff();
@@ -44,3 +45,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

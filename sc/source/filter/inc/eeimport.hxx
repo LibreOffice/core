@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,10 +60,12 @@ public:
 
     virtual sal_uLong    Read( SvStream& rStream, const String& rBaseURL );
     virtual ScRange  GetRange() { return maRange; }
-    virtual void     WriteToDocument( sal_Bool bSizeColsRows = sal_False,
+    virtual void     WriteToDocument( sal_Bool bSizeColsRows = false,
                                       double nOutputFactor = 1.0,
                                       SvNumberFormatter* pFormatter = NULL,
                                       bool bConvertDate = true );
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

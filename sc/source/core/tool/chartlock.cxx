@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@ std::vector< WeakReference< frame::XModel > > lcl_getAllLivingCharts( ScDocument
         if (pDoc->HasTable(nTab))
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
 
             SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
             SdrObject* pObject = aIter.Next();
@@ -105,7 +106,7 @@ ScChartLockGuard::ScChartLockGuard( ScDocument* pDoc ) :
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR("Unexpected exception in ScChartLockGuard");
+            OSL_FAIL("Unexpected exception in ScChartLockGuard");
         }
     }
 }
@@ -124,7 +125,7 @@ ScChartLockGuard::~ScChartLockGuard()
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR("Unexpected exception in ScChartLockGuard");
+            OSL_FAIL("Unexpected exception in ScChartLockGuard");
         }
     }
 }
@@ -148,7 +149,7 @@ void ScChartLockGuard::AlsoLockThisChart( const Reference< frame::XModel >& xMod
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR("Unexpected exception in ScChartLockGuard");
+            OSL_FAIL("Unexpected exception in ScChartLockGuard");
         }
     }
 }
@@ -193,3 +194,5 @@ IMPL_LINK( ScTemporaryChartLock, TimeoutHdl, Timer*, EMPTYARG )
     mapScChartLockGuard.reset();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

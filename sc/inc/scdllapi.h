@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef INCLUDED_SCDLLAPI_H
 #define INCLUDED_SCDLLAPI_H
 
@@ -11,3 +12,5 @@
 #define SC_DLLPRIVATE SAL_DLLPRIVATE
 
 #endif /* INCLUDED_SCDLLAPI_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

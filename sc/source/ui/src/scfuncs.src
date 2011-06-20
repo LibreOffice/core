@@ -3468,7 +3468,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value for the y coordinate." ;
         };
     };
-
      // -=*# Resource for function DEG #*=-
     Resource SC_OPCODE_DEG
     {

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 #include "docsh.hxx"
 #include "scmod.hxx"
 #include "rangenam.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "tablink.hxx"          // fuer Loader
 #include "popmenu.hxx"
 #include "drwlayer.hxx"
@@ -87,7 +88,7 @@ static sal_uInt16 pTypeList[SC_CONTENT_COUNT] =
     SC_CONTENT_DRAWING
 };
 
-sal_Bool ScContentTree::bIsInDrag = sal_False;
+sal_Bool ScContentTree::bIsInDrag = false;
 
 
 ScDocShell* ScContentTree::GetManualOrCurrent()
@@ -127,9 +128,8 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
 ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     SvTreeListBox   ( pParent, rResId ),
     aEntryImages    ( ScResId( RID_IMAGELIST_NAVCONT ) ),
-    aHCEntryImages  ( ScResId( RID_IMAGELIST_H_NAVCONT ) ),
     nRootType       ( SC_CONTENT_ROOT ),
-    bHiddenDoc      ( sal_False ),
+    bHiddenDoc      ( false ),
     pHiddenDocument ( NULL )
 {
     sal_uInt16 i;
@@ -168,11 +168,7 @@ void ScContentTree::InitRoot( sal_uInt16 nType )
     String aName( ScResId( SCSTR_CONTENT_ROOT + nType ) );
     // wieder an die richtige Position:
     sal_uInt16 nPos = nRootType ? 0 : pPosList[nType]-1;
-    SvLBoxEntry* pNew = InsertEntry( aName, rImage, rImage, NULL, sal_False, nPos );
-
-    const Image& rHCImage = aHCEntryImages.GetImage( nType );
-    SetExpandedEntryBmp( pNew, rHCImage, BMP_COLOR_HIGHCONTRAST );
-    SetCollapsedEntryBmp( pNew, rHCImage, BMP_COLOR_HIGHCONTRAST );
+    SvLBoxEntry* pNew = InsertEntry( aName, rImage, rImage, NULL, false, nPos );
 
     pRootNodes[nType] = pNew;
 }
@@ -204,7 +200,7 @@ void ScContentTree::InsertContent( sal_uInt16 nType, const String& rValue )
 {
     if (nType >= SC_CONTENT_COUNT)
     {
-        DBG_ERROR("ScContentTree::InsertContent mit falschem Typ");
+        OSL_FAIL("ScContentTree::InsertContent mit falschem Typ");
         return;
     }
 
@@ -213,7 +209,7 @@ void ScContentTree::InsertContent( sal_uInt16 nType, const String& rValue )
         InsertEntry( rValue, pParent );
     else
     {
-        DBG_ERROR("InsertContent ohne Parent");
+        OSL_FAIL("InsertContent ohne Parent");
     }
 }
 
@@ -272,17 +268,12 @@ String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
     if (pDoc)
     {
         ScDBCollection* pDbNames = pDoc->GetDBCollection();
-        sal_uInt16 nCount = pDbNames->GetCount();
-        for ( sal_uInt16 i=0; i<nCount; i++ )
+        const ScDBData* pData = pDbNames->getNamedDBs().findByName(rDBName);
+        if (pData)
         {
-            ScDBData* pData = (*pDbNames)[i];
-            if ( pData->GetName() == rDBName )
-            {
-                ScRange aRange;
-                pData->GetArea(aRange);
-                aRange.Format( aRet, SCR_ABS_3D, pDoc );
-                break;
-            }
+            ScRange aRange;
+            pData->GetArea(aRange);
+            aRange.Format(aRet, SCR_ABS_3D, pDoc);
         }
     }
     return aRet;
@@ -317,7 +308,7 @@ IMPL_LINK( ScContentTree, ContentDoubleClickHdl, ScContentTree *, EMPTYARG )
 
             case SC_CONTENT_DBAREA:
             {
-                //  #47905# Wenn gleiche Bereichs- und DB-Namen existieren, wird
+                //  Wenn gleiche Bereichs- und DB-Namen existieren, wird
                 //  bei SID_CURRENTCELL der Bereichsname genommen.
                 //  DB-Bereiche darum direkt ueber die Adresse anspringen.
 
@@ -370,7 +361,7 @@ void ScContentTree::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ScContentTree::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_Bool bUsed = sal_False;
+    sal_Bool bUsed = false;
 
     const KeyCode aCode = rKEvt.GetKeyCode();
     if (aCode.GetCode() == KEY_RETURN)
@@ -413,16 +404,6 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 
-//sal_Bool __EXPORT ScContentTree::Drop( const DropEvent& rEvt )
-//{
-//  return pParentWindow->Drop(rEvt);           // Drop auf Navigator
-//}
-
-//sal_Bool __EXPORT ScContentTree::QueryDrop( DropEvent& rEvt )
-//{
-//  return pParentWindow->QueryDrop(rEvt);      // Drop auf Navigator
-//}
-
 sal_Int8 ScContentTree::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 {
     return DND_ACTION_NONE;
@@ -442,9 +423,9 @@ void ScContentTree::DragFinished( sal_Int8 /* nAction */ )
 {
 }
 
-void __EXPORT ScContentTree::Command( const CommandEvent& rCEvt )
+void ScContentTree::Command( const CommandEvent& rCEvt )
 {
-    sal_Bool bDone = sal_False;
+    sal_Bool bDone = false;
 
     switch ( rCEvt.GetCommand() )
     {
@@ -453,8 +434,6 @@ void __EXPORT ScContentTree::Command( const CommandEvent& rCEvt )
             //  (beim Umschalten auf einen anderen Dokument-Typ), das wuerde aber
             //  den StarView MouseMove-Handler, der Command() aufruft, umbringen.
             //  Deshalb Drag&Drop asynchron:
-
-//          DoDrag();
 
             Application::PostUserEvent( STATIC_LINK( this, ScContentTree, ExecDragHdl ) );
 
@@ -537,16 +516,16 @@ void __EXPORT ScContentTree::Command( const CommandEvent& rCEvt )
         SvTreeListBox::Command(rCEvt);
 }
 
-void __EXPORT ScContentTree::RequestHelp( const HelpEvent& rHEvt )
+void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
 {
-    sal_Bool bDone = sal_False;
+    sal_Bool bDone = false;
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
         SvLBoxEntry* pEntry = GetEntry( aPos );
         if ( pEntry )
         {
-            sal_Bool bRet = sal_False;
+            sal_Bool bRet = false;
             String aHelpText;
             SvLBoxEntry* pParent = GetParent(pEntry);
             if ( !pParent )                                 // Top-Level ?
@@ -631,7 +610,7 @@ void ScContentTree::Refresh( sal_uInt16 nType )
         if (!DrawNamesChanged(SC_CONTENT_DRAWING))
             return;
 
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
 
     ClearType( nType );
 
@@ -684,38 +663,29 @@ void ScContentTree::GetAreaNames()
         return;
 
     ScRangeName* pRangeNames = pDoc->GetRangeName();
-    sal_uInt16 nCount = pRangeNames->GetCount();
-    if ( nCount > 0 )
+    if (!pRangeNames->empty())
     {
-        sal_uInt16 nValidCount = 0;
         ScRange aDummy;
-        sal_uInt16 i;
-        for ( i=0; i<nCount; i++ )
+        ScRangeName::const_iterator itrBeg = pRangeNames->begin(), itrEnd = pRangeNames->end();
+        std::vector<const ScRangeData*> aSortArray;
+        for (ScRangeName::const_iterator itr = itrBeg; itr != itrEnd; ++itr)
         {
-            ScRangeData* pData = (*pRangeNames)[i];
-            if (pData->IsValidReference(aDummy))
-                nValidCount++;
+            if (itr->IsValidReference(aDummy))
+                aSortArray.push_back(&(*itr));
         }
-        if ( nValidCount )
+
+        if (!aSortArray.empty())
         {
-            ScRangeData** ppSortArray = new ScRangeData* [ nValidCount ];
-            sal_uInt16 j;
-            for ( i=0, j=0; i<nCount; i++ )
-            {
-                ScRangeData* pData = (*pRangeNames)[i];
-                if (pData->IsValidReference(aDummy))
-                    ppSortArray[j++] = pData;
-            }
 #ifndef ICC
-            qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
+            size_t n = aSortArray.size();
+            qsort( (void*)&aSortArray[0], n, sizeof(ScRangeData*),
                 &ScRangeData_QsortNameCompare );
 #else
-            qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
+            qsort( (void*)&aSortArray[0], n, sizeof(ScRangeData*),
                 ICCQsortNameCompare );
 #endif
-            for ( j=0; j<nValidCount; j++ )
-                InsertContent( SC_CONTENT_RANGENAME, ppSortArray[j]->GetName() );
-            delete [] ppSortArray;
+            for (size_t i = 0; i < n; ++i)
+                InsertContent(SC_CONTENT_RANGENAME, aSortArray[i]->GetName());
         }
     }
 }
@@ -730,21 +700,16 @@ void ScContentTree::GetDbNames()
         return;
 
     ScDBCollection* pDbNames = pDoc->GetDBCollection();
-    sal_uInt16 nCount = pDbNames->GetCount();
-    if ( nCount > 0 )
+    const ScDBCollection::NamedDBs& rDBs = pDbNames->getNamedDBs();
+    ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
+    for (; itr != itrEnd; ++itr)
     {
-        String aStrNoName( ScGlobal::GetRscString(STR_DB_NONAME) );
-        for ( sal_uInt16 i=0; i<nCount; i++ )
-        {
-            ScDBData* pData = (*pDbNames)[i];
-            String aStrName = pData->GetName();
-            if ( aStrName != aStrNoName )
-                InsertContent( SC_CONTENT_DBAREA, aStrName );
-        }
+        const::rtl::OUString& aStrName = itr->GetName();
+        InsertContent(SC_CONTENT_DBAREA, aStrName);
     }
 }
 
-bool ScContentTree::IsPartOfType( sal_uInt16 nContentType, sal_uInt16 nObjIdentifier )  // static
+bool ScContentTree::IsPartOfType( sal_uInt16 nContentType, sal_uInt16 nObjIdentifier )
 {
     bool bRet = false;
     switch ( nContentType )
@@ -759,7 +724,7 @@ bool ScContentTree::IsPartOfType( sal_uInt16 nContentType, sal_uInt16 nObjIdenti
             bRet = ( nObjIdentifier != OBJ_GRAF && nObjIdentifier != OBJ_OLE2 );    // everything else
             break;
         default:
-            DBG_ERROR("unknown content type");
+            OSL_FAIL("unknown content type");
     }
     return bRet;
 }
@@ -784,7 +749,7 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, eIter );
@@ -830,7 +795,7 @@ void ScContentTree::GetLinkNames()
         return;
 
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-    DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?");
+    OSL_ENSURE(pLinkManager, "kein LinkManager am Dokument?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     sal_uInt16 nCount = rLinks.Count();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -851,7 +816,7 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
 
     sal_uLong nFound = 0;
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-    DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?");
+    OSL_ENSURE(pLinkManager, "kein LinkManager am Dokument?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     sal_uInt16 nCount = rLinks.Count();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -865,7 +830,7 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
         }
     }
 
-    DBG_ERROR("Link nicht gefunden");
+    OSL_FAIL("Link nicht gefunden");
     return NULL;
 }
 
@@ -921,7 +886,7 @@ ScAddress ScContentTree::GetNotePos( sal_uLong nIndex )
         }
     }
 
-    DBG_ERROR("Notiz nicht gefunden");
+    OSL_FAIL("Notiz nicht gefunden");
     return ScAddress();
 }
 
@@ -929,11 +894,11 @@ sal_Bool ScContentTree::NoteStringsChanged()
 {
     ScDocument* pDoc = GetSourceDocument();
     if (!pDoc)
-        return sal_False;
+        return false;
 
     SvLBoxEntry* pParent = pRootNodes[SC_CONTENT_NOTE];
     if (!pParent)
-        return sal_False;
+        return false;
 
     SvLBoxEntry* pEntry = FirstChild( pParent );
 
@@ -948,11 +913,11 @@ sal_Bool ScContentTree::NoteStringsChanged()
             if( const ScPostIt* pNote = pCell->GetNote() )
             {
                 if ( !pEntry )
-                    bEqual = sal_False;
+                    bEqual = false;
                 else
                 {
                     if ( lcl_NoteString( *pNote ) != GetEntryText(pEntry) )
-                        bEqual = sal_False;
+                        bEqual = false;
 
                     pEntry = NextSibling( pEntry );
                 }
@@ -962,7 +927,7 @@ sal_Bool ScContentTree::NoteStringsChanged()
     }
 
     if ( pEntry )
-        bEqual = sal_False;             // kommt noch was
+        bEqual = false;             // kommt noch was
 
     return !bEqual;
 }
@@ -971,11 +936,11 @@ sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
 {
     ScDocument* pDoc = GetSourceDocument();
     if (!pDoc)
-        return sal_False;
+        return false;
 
     SvLBoxEntry* pParent = pRootNodes[nType];
     if (!pParent)
-        return sal_False;
+        return false;
 
     SvLBoxEntry* pEntry = FirstChild( pParent );
 
@@ -991,7 +956,7 @@ sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
         for (SCTAB nTab=0; nTab<nTabCount && bEqual; nTab++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            DBG_ASSERT(pPage,"Page ?");
+            OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
                 SdrObjListIter aIter( *pPage, eIter );
@@ -1001,11 +966,11 @@ sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
                     if ( IsPartOfType( nType, pObject->GetObjIdentifier() ) )
                     {
                         if ( !pEntry )
-                            bEqual = sal_False;
+                            bEqual = false;
                         else
                         {
                             if ( ScDrawLayer::GetVisibleName( pObject ) != GetEntryText(pEntry) )
-                                bEqual = sal_False;
+                                bEqual = false;
 
                             pEntry = NextSibling( pEntry );
                         }
@@ -1017,37 +982,41 @@ sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
     }
 
     if ( pEntry )
-        bEqual = sal_False;             // kommt noch was
+        bEqual = false;             // kommt noch was
 
     return !bEqual;
 }
 
-sal_Bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rName, ScRange& rRange )
+bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rName, ScRange& rRange )
 {
-    sal_Bool bFound = sal_False;
-    sal_uInt16 nPos;
+    bool bFound = false;
 
     if ( nType == SC_CONTENT_RANGENAME )
     {
         ScRangeName* pList = pDoc->GetRangeName();
         if (pList)
-            if (pList->SearchName( rName, nPos ))
-                if ( (*pList)[nPos]->IsValidReference( rRange ) )
-                    bFound = sal_True;
+        {
+            const ScRangeData* p = pList->findByName(rName);
+            if (p && p->IsValidReference(rRange))
+                bFound = true;
+        }
     }
     else if ( nType == SC_CONTENT_DBAREA )
     {
         ScDBCollection* pList = pDoc->GetDBCollection();
         if (pList)
-            if (pList->SearchName( rName, nPos ))
+        {
+            const ScDBData* p = pList->getNamedDBs().findByName(rName);
+            if (p)
             {
                 SCTAB nTab;
                 SCCOL nCol1, nCol2;
                 SCROW nRow1, nRow2;
-                (*pList)[nPos]->GetArea(nTab,nCol1,nRow1,nCol2,nRow2);
-                rRange = ScRange( nCol1,nRow1,nTab, nCol2,nRow2,nTab );
-                bFound = sal_True;
+                p->GetArea(nTab, nCol1, nRow1, nCol2, nRow2);
+                rRange = ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+                bFound = true;
             }
+        }
     }
 
     return bFound;
@@ -1160,7 +1129,7 @@ void ScContentTree::DoDrag()
             }
         }
 
-        sal_Bool bDoLinkTrans = sal_False;      // use ScLinkTransferObj
+        sal_Bool bDoLinkTrans = false;      // use ScLinkTransferObj
         String aLinkURL;                // for ScLinkTransferObj
         String aLinkText;
 
@@ -1270,7 +1239,7 @@ void ScContentTree::DoDrag()
         }
     }
 
-    bIsInDrag = sal_False;              // static Member
+    bIsInDrag = false;              // static Member
 
     delete pDocLoader;              // falls Dokument zum Draggen geladen wurde
 }
@@ -1284,17 +1253,6 @@ IMPL_STATIC_LINK(ScContentTree, ExecDragHdl, void*, EMPTYARG)
     return 0;
 }
 
-//UNUSED2008-05  void ScContentTree::AdjustTitle()
-//UNUSED2008-05  {
-//UNUSED2008-05      String aTitle = pParentWindow->aTitleBase;
-//UNUSED2008-05      if (bHiddenDoc)
-//UNUSED2008-05      {
-//UNUSED2008-05          aTitle.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " - " ));
-//UNUSED2008-05          aTitle += aHiddenTitle;
-//UNUSED2008-05      }
-//UNUSED2008-05      pParentWindow->SetText(aTitle);
-//UNUSED2008-05  }
-
 sal_Bool ScContentTree::LoadFile( const String& rUrl )
 {
     String aDocName = rUrl;
@@ -1302,7 +1260,7 @@ sal_Bool ScContentTree::LoadFile( const String& rUrl )
     if ( nPos != STRING_NOTFOUND )
         aDocName.Erase(nPos);           // nur der Name, ohne #...
 
-    sal_Bool bReturn = sal_False;
+    sal_Bool bReturn = false;
     String aFilter, aOptions;
     ScDocumentLoader aLoader( aDocName, aFilter, aOptions );
     if ( !aLoader.IsError() )
@@ -1315,7 +1273,6 @@ sal_Bool ScContentTree::LoadFile( const String& rUrl )
         Refresh();                      // Inhalte aus geladenem Dokument holen
 
         pHiddenDocument = NULL;
-//      AdjustTitle();
 
         pParentWindow->GetDocNames( &aHiddenTitle );            // Liste fuellen
     }
@@ -1370,7 +1327,7 @@ void ScContentTree::ToggleRoot()        // nach Selektion
 void ScContentTree::ResetManualDoc()
 {
     aManualDoc.Erase();
-    bHiddenDoc = sal_False;
+    bHiddenDoc = false;
 
     ActiveDocChanged();
 }
@@ -1433,9 +1390,7 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
     if ( rName.Copy( nNotActiveStart ) == pParentWindow->aStrNotActive )
         aRealName = rName.Copy( 0, nNotActiveStart );
 
-    //
-
-    sal_Bool bLoaded = sal_False;
+    sal_Bool bLoaded = false;
 
         // ist es ein normal geladenes Doc ?
 
@@ -1450,7 +1405,7 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
 
     if (bLoaded)
     {
-        bHiddenDoc = sal_False;
+        bHiddenDoc = false;
         SetManualDoc(aRealName);
     }
     else if (aHiddenTitle.Len())                // verstecktes ausgewaehlt
@@ -1460,7 +1415,7 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
     }
     else
     {
-        DBG_ERROR("SelectDoc: nicht gefunden");
+        OSL_FAIL("SelectDoc: nicht gefunden");
     }
 }
 
@@ -1526,3 +1481,4 @@ void ScContentTree::StoreSettings() const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

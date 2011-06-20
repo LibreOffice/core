@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -122,7 +123,7 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
     SfxShell(pData->GetViewShell()),
     pViewData(pData),
     pClipEvtLstnr(NULL),
-    bPastePossible(sal_False)
+    bPastePossible(false)
 {
     SetPool( pViewData->GetScDrawView()->GetDefaultAttr().GetPool() );
 
@@ -138,13 +139,13 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("DrawText")));
 }
 
-__EXPORT ScDrawTextObjectBar::~ScDrawTextObjectBar()
+ScDrawTextObjectBar::~ScDrawTextObjectBar()
 {
     if ( pClipEvtLstnr )
     {
-        pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), sal_False );
+        pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), false );
 
-        //  #122057# The listener may just now be waiting for the SolarMutex and call the link
+        //  The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
         pClipEvtLstnr->ClearCallbackLink();
 
@@ -158,7 +159,7 @@ __EXPORT ScDrawTextObjectBar::~ScDrawTextObjectBar()
 //
 //========================================================================
 
-void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
+void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 {
     ScDrawView* pView = pViewData->GetScDrawView();
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
@@ -230,13 +231,13 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 const SfxItemSet *pArgs = rReq.GetArgs();
                 const SfxPoolItem* pItem = 0;
                 if( pArgs )
-                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
+                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
 
                 if ( pItem )
                 {
                     aString = ((const SfxStringItem*)pItem)->GetValue();
                     const SfxPoolItem* pFtItem = NULL;
-                    pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
+                    pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
                     const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
                     if ( pFontItem )
                     {
@@ -277,7 +278,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     const String& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
-                    sal_Bool bDone = sal_False;
+                    sal_Bool bDone = false;
                     if ( pOutView && ( eMode == HLINK_DEFAULT || eMode == HLINK_FIELD ) )
                     {
                         const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
@@ -346,37 +347,16 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
         case SID_ENABLE_HYPHENATION:
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
-#if 0 // DR
-            if (IsNoteEdit())
-            {
-                pView->CaptionTextDirection( rReq.GetSlot());     // process Notes before we end the text edit.
-                ExecuteGlobal( rReq );
-                pViewData->GetDispatcher().Execute(pViewData->GetView()->GetDrawFuncPtr()->GetSlotID(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-            }
-            else
-#endif
-            {
-                pView->ScEndTextEdit(); // end text edit before switching direction
-                ExecuteGlobal( rReq );
-                // restore consistent state between shells and functions:
-                pViewData->GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
-            }
-            break;
-
-#if 0
-        // Hyphenation is handled above - text edit is ended
-        case SID_ENABLE_HYPHENATION:
-            // force loading of hyphenator (object is skipped in repaint)
-            ((ScDrawLayer*)pView->GetModel())->UseHyphenator();
-            pOutliner->SetHyphenator( LinguMgr::GetHyphenator() );
+            pView->ScEndTextEdit(); // end text edit before switching direction
             ExecuteGlobal( rReq );
+            // restore consistent state between shells and functions:
+            pViewData->GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             break;
-#endif
 
         case SID_THES:
             {
                 String aReplaceText;
-                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, false );
                 if (pItem2)
                     aReplaceText = pItem2->GetValue();
                 if (aReplaceText.Len() > 0)
@@ -393,11 +373,11 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
     }
 }
 
-void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
+void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
 {
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
     sal_Bool bHasFontWork = pViewFrm->HasChildWindow(SID_FONTWORK);
-    sal_Bool bDisableFontWork = sal_False;
+    sal_Bool bDisableFontWork = false;
 
     if (IsNoteEdit())
     {
@@ -417,7 +397,7 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
         if ( pOutView )
         {
-            sal_Bool bField = sal_False;
+            sal_Bool bField = false;
             const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
             if (pFieldItem)
             {
@@ -521,7 +501,7 @@ IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pData
     return 0;
 }
 
-void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
+void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
 {
     SdrView* pView = pViewData->GetScDrawView();
     if ( !pView->GetTextEditOutlinerView() )
@@ -582,7 +562,7 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
 //
 //========================================================================
 
-void __EXPORT ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
+void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 {
     //  Unterstreichung
 
@@ -636,7 +616,7 @@ void lcl_RemoveFields( OutlinerView& rOutView )
     xub_StrLen nNewEnd = aSel.nEndPos;
 
     sal_Bool bUpdate = pOutliner->GetUpdateMode();
-    sal_Bool bChanged = sal_False;
+    sal_Bool bChanged = false;
 
     //! GetPortions and GetAttribs should be const!
     EditEngine& rEditEng = (EditEngine&)pOutliner->GetEditEngine();
@@ -666,7 +646,7 @@ void lcl_RemoveFields( OutlinerView& rOutView )
                         if (!bChanged)
                         {
                             if (bUpdate)
-                                pOutliner->SetUpdateMode( sal_False );
+                                pOutliner->SetUpdateMode( false );
                             String aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
                             pOutliner->GetUndoManager().EnterListAction( aName, aName );
                             bChanged = sal_True;
@@ -697,7 +677,7 @@ void lcl_RemoveFields( OutlinerView& rOutView )
     rOutView.SetSelection( aOldSel );
 }
 
-void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
+void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 {
     SdrView*            pView = pViewData->GetScDrawView();
     const SfxItemSet*   pArgs = rReq.GetArgs();
@@ -731,7 +711,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 
                 rReq.Done( aEmptyAttr );
                 pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
-                bDone = sal_False; // bereits hier passiert
+                bDone = false; // bereits hier passiert
             }
             break;
 
@@ -896,7 +876,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     }
 }
 
-void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
+void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 {
     if ( IsNoteEdit() )
     {
@@ -1028,7 +1008,7 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     if( pOutl )
     {
         if( pOutl->IsVertical() )
-            bLeftToRight = sal_False;
+            bLeftToRight = false;
     }
     else
         bLeftToRight = ( (const SvxWritingModeItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
@@ -1093,3 +1073,4 @@ void ScDrawTextObjectBar::ExecuteTrans( SfxRequest& rReq )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

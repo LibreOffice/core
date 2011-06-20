@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
     sal_uInt16 nStyle;
     bool bEndOfSheet = false;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Read sheet (%d)\n", nTab );
 #endif
 
@@ -145,7 +146,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
     sal_uInt16 nVersion;
     sal_uInt16 i = 1, j = 1;
     SCTAB nTab = 0;
-    SetEof( sal_False );
+    SetEof( false );
 
     if( !recordsLeft() )
         return eERR_OPEN;
@@ -168,7 +169,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
                         String aName;
                         aName.Append( sal_Unicode( 'A' + nTab ) );
                         if (!nTab)
-                            pDoc->RenameTab( nTab, aName, sal_False, sal_False);
+                            pDoc->RenameTab( nTab, aName, false, false);
                         else
                             pDoc->InsertTab( nTab, aName );
                     }
@@ -228,3 +229,5 @@ void ScQProReader::readString( String &rString, sal_uInt16 nLength )
     rString = String( pText, mpStream->GetStreamCharSet() );
     delete [] pText;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

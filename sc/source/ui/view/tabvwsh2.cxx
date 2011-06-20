@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@
 #include "scmod.hxx"
 #include "appoptio.hxx"
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 #include <svx/svdpagv.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svdpage.hxx>
@@ -70,7 +71,7 @@
 
 // -----------------------------------------------------------------------
 
-SdrView* __EXPORT ScTabViewShell::GetDrawView() const
+SdrView* ScTabViewShell::GetDrawView() const
 {
     return ((ScTabViewShell*)this)->GetScDrawView();    // GetScDrawView ist nicht-const
 }
@@ -178,7 +179,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if (nNewId == SID_INSERT_FRAME)                     // vom Tbx-Button
         nNewId = SID_DRAW_TEXT;
 
-    //  #97016# CTRL-SID_OBJECT_SELECT is used to select the first object,
+    //  CTRL-SID_OBJECT_SELECT is used to select the first object,
     //  but not if SID_OBJECT_SELECT is the result of clicking a create function again,
     //  so this must be tested before changing nNewId below.
     sal_Bool bSelectFirst = ( nNewId == SID_OBJECT_SELECT && (rReq.GetModifier() & KEY_MOD1) );
@@ -186,8 +187,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     sal_Bool bEx = IsDrawSelMode();
     if ( rReq.GetModifier() & KEY_MOD1 )
     {
-        //  #97016# always allow keyboard selection also on background layer
-        //  #98185# also allow creation of default objects if the same object type
+        //  always allow keyboard selection also on background layer
+        //  also allow creation of default objects if the same object type
         //  was already active
         bEx = sal_True;
     }
@@ -199,11 +200,11 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
         //  SID_FM_CREATE_CONTROL mit nNewFormId==0 (ohne Parameter) kommt beim Deaktivieren
         //  aus FuConstruct::SimpleMouseButtonUp
-        //  #59280# Execute fuer die Form-Shell, um im Controller zu deselektieren
+        //  Execute fuer die Form-Shell, um im Controller zu deselektieren
         if ( nNewId == SID_FM_CREATE_CONTROL )
         {
             GetViewData()->GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
-            GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+            GetViewFrame()->GetBindings().InvalidateAll(false);
             //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
         }
 
@@ -217,7 +218,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     {
         //  Wechsel von Control- zu Zeichenfunktion -> im Control-Controller deselektieren
         GetViewData()->GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
-        GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+        GetViewFrame()->GetBindings().InvalidateAll(false);
         //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
     }
 
@@ -227,7 +228,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     if ( bSelectFirst )
     {
-        //  #97016# select first draw object if none is selected yet
+        //  select first draw object if none is selected yet
         if(!pView->AreObjectsMarked())
         {
             // select first object
@@ -253,7 +254,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             if ( bEx || pView->GetMarkedObjectList().GetMarkCount() != 0 )
                 SetDrawShellOrSub();
             else
-                SetDrawShell( sal_False );
+                SetDrawShell( false );
         }
     }
 
@@ -273,7 +274,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     switch (nNewId)
     {
         case SID_OBJECT_SELECT:
-            //@#70206# Nicht immer zurueckschalten
+            // Nicht immer zurueckschalten
             if(pView->GetMarkedObjectList().GetMarkCount() == 0) SetDrawShell(bEx);
             pTabView->SetDrawFuncPtr(new FuSelection(this, pWin, pView, pDoc, aNewReq));
             break;
@@ -287,7 +288,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
             pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, aNewReq));
-            pView->SetFrameDragSingles( sal_False );
+            pView->SetFrameDragSingles( false );
             rBindings.Invalidate( SID_BEZIER_EDIT );
             break;
 
@@ -318,7 +319,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             break;
 
         case SID_DRAW_CHART:
-//UNUSED2008-05  bChartDlgIsEdit = sal_False;
             pTabView->SetDrawFuncPtr(new FuMarkRect(this, pWin, pView, pDoc, aNewReq));
             break;
 
@@ -333,7 +333,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             pTabView->SetDrawFuncPtr( new FuConstCustomShape( this, pWin, pView, pDoc, aNewReq ));
             if ( nNewId != SID_DRAW_CS_ID )
             {
-                SFX_REQUEST_ARG( rReq, pEnumCommand, SfxStringItem, nNewId, sal_False );
+                SFX_REQUEST_ARG( rReq, pEnumCommand, SfxStringItem, nNewId, false );
                 if ( pEnumCommand )
                 {
                     aCurrShapeEnumCommand[ nNewId - SID_DRAWTBX_CS_BASIC ] = pEnumCommand->GetValue();
@@ -359,13 +359,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     rBindings.Invalidate( SID_INSERT_DRAW );
     rBindings.Update( SID_INSERT_DRAW );
 
-    // #98185# Create default drawing objects via keyboard
+    // Create default drawing objects via keyboard
     // with qualifier construct directly
     FuPoor* pFuActual = GetDrawFuncPtr();
 
     if(pFuActual && (rReq.GetModifier() & KEY_MOD1))
     {
-        // #98185# Create default drawing objects via keyboard
+        // Create default drawing objects via keyboard
         const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
         sal_uInt32 nDefaultObjectSizeWidth = rAppOpt.GetDefaultObjectSizeWidth();
         sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
@@ -395,7 +395,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
                     if ( nNewId == SID_DRAW_CAPTION || nNewId == SID_DRAW_CAPTION_VERTICAL )
                     {
-                        //  #105815# use KeyInput to start edit mode (FuText is created).
+                        //  use KeyInput to start edit mode (FuText is created).
                         //  For FuText objects, edit mode is handled within CreateDefaultObject.
                         //  KEY_F2 is handled in FuDraw::KeyInput.
 
@@ -469,7 +469,7 @@ sal_Bool ScTabViewShell::SelectObject( const String& rName )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     if (!pView)
-        return sal_False;
+        return false;
 
     sal_Bool bFound = pView->SelectObject( rName );
     // DrawShell etc. is handled in MarkListHasChanged
@@ -479,3 +479,4 @@ sal_Bool ScTabViewShell::SelectObject( const String& rName )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,6 @@ static const OUString lcl_aServiceName(
 
 enum
 {
-//     PROP_SOURCE_IDENTIFIER,
     PROP_NUMBERFORMAT_KEY,
     PROP_PROPOSED_ROLE,
     PROP_XML_RANGE
@@ -185,7 +185,6 @@ Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
     throw (uno::RuntimeException)
 {
     Sequence< double > aResult;
-    // /--
     MutexGuard aGuard( GetMutex() );
     if( m_xDataProvider.is())
     {
@@ -195,7 +194,6 @@ Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
                           aResult.getArray(), CommonFunctors::AnyToDouble());
     }
     return aResult;
-    // \--
 }
 
 // ________ XTextualDataSequence ________
@@ -203,7 +201,6 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
     throw (uno::RuntimeException)
 {
     Sequence< OUString > aResult;
-    // /--
     MutexGuard aGuard( GetMutex() );
     if( m_xDataProvider.is())
     {
@@ -213,19 +210,16 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
                           aResult.getArray(), CommonFunctors::AnyToString());
     }
     return aResult;
-    // \--
 }
 
 // ________ XDataSequence  ________
 Sequence< Any > SAL_CALL UncachedDataSequence::getData()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     if( m_xDataProvider.is())
         return m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation );
     return Sequence< Any >();
-    // \--
 }
 
 OUString SAL_CALL UncachedDataSequence::getSourceRangeRepresentation()
@@ -239,8 +233,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data:
     throw (uno::RuntimeException)
 {
     // auto-generated label is an empty string
-    static const Sequence< OUString > aOneEmptyString( 1 );
-    return aOneEmptyString;
+    return Sequence< OUString >(1);
 }
 
 ::sal_Int32 SAL_CALL UncachedDataSequence::getNumberFormatKeyByIndex( ::sal_Int32 )
@@ -257,7 +250,6 @@ void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const uno
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     Sequence< Any > aData( getData());
     if( Index < aData.getLength() &&
@@ -273,7 +265,7 @@ void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const uno
 ::sal_Int32 SAL_CALL UncachedDataSequence::getCount()
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Implement!" );
+    OSL_FAIL( "Implement!" );
     return 0;
 }
 
@@ -282,7 +274,7 @@ uno::Any SAL_CALL UncachedDataSequence::getByIndex( ::sal_Int32 )
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Implement!" );
+    OSL_FAIL( "Implement!" );
     return uno::Any();
 }
 
@@ -377,3 +369,5 @@ void UncachedDataSequence::fireModifyEvent()
 }
 
 }  // namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,19 +36,18 @@
 #include "redcom.hxx"
 #include "docsh.hxx"
 #include "tabvwsh.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 //------------------------------------------------------------------------
 
 ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
                     ScDocShell *pShell,ScChangeAction *pAction,sal_Bool bPrevNext)
 {
-    //CHINA001 pDlg = new SvxPostItDialog(pParent,rCoreSet,bPrevNext,sal_True);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext, sal_True );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext, true );
+        OSL_ENSURE(pDlg, "Dialog creation failed!");
         pDocShell=pShell;
         pDlg->DontChangeAuthor();
         pDlg->HideAuthor();
@@ -125,7 +125,7 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
         DateTime aDT = pChangeAction->GetDateTime();
         String aDate = ScGlobal::pLocaleData->getDate( aDT );
         aDate += ' ';
-        aDate += ScGlobal::pLocaleData->getTime( aDT, sal_False, sal_False );
+        aDate += ScGlobal::pLocaleData->getTime( aDT, false, false );
 
         pDlg->ShowLastAuthor(aAuthor, aDate);
         pDlg->SetNote(aComment);
@@ -184,3 +184,4 @@ IMPL_LINK(ScRedComDialog, NextHdl, AbstractSvxPostItDialog*, pDlgP )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

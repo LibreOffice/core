@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,7 +113,7 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
             }
             else if(bCreate)
             {
-                DBG_ERROR("need diagram for creation of legend");
+                OSL_FAIL("need diagram for creation of legend");
             }
         }
         catch( uno::Exception & ex )
@@ -141,3 +142,4 @@ bool LegendHelper::hasLegend( const uno::Reference< chart2::XDiagram > & xDiagra
 } //namespace chart
 //.............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,6 @@ private:
     RadioButton     aBtnDateSc10;
     RadioButton     aBtnDate1904;
 
-    FixedLine       aHSeparatorFL;
     CheckBox        aBtnCase;
     CheckBox        aBtnCalc;
     CheckBox        aBtnMatch;
@@ -100,3 +100,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

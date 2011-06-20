@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,23 +32,19 @@
 #include "address.hxx"
 #include "dpoutput.hxx"
 #include "dpcachetable.hxx"
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include "dptablecache.hxx"
-// End Comments
 #include <tools/string.hxx>
 
 #include <vector>
 #include <set>
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
 }}}}
 
-
-// -----------------------------------------------------------------------
 
 #define SC_DAPI_DATE_HIERARCHIES    3
 
@@ -67,7 +64,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 #define SC_DAPI_LEVEL_WEEKDAY   2
 
 
-// --------------------------------------------------------------------
 //
 //  base class ScDPTableData to allow implementation with tabular data
 //  by deriving only of this
@@ -92,18 +88,18 @@ class ScDPInitState;
 class ScDPResultMember;
 class ScDocument;
 
- class SC_DLLPUBLIC ScDPTableData
+/**
+ * Base class that abstracts different data source types of a datapilot
+ * table.
+ */
+class SC_DLLPUBLIC ScDPTableData : public ::boost::noncopyable
 {
     //  cached data for GetDatePart
     long    nLastDateVal;
     long    nLastHier;
     long    nLastLevel;
     long    nLastRet;
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
-    long                          mnCacheId;
-    const ScDocument*   mpDoc;
-    // End Comments
+    const ScDocument* mpDoc;
 public:
 
     /** This structure stores dimension information used when calculating
@@ -129,10 +125,7 @@ public:
         CalcInfo();
     };
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
-    ScDPTableData(ScDocument* pDoc, long nCacheId );
-    // End Comments
+    ScDPTableData(ScDocument* pDoc);
     virtual     ~ScDPTableData();
 
     long        GetDatePart( long nDateVal, long nHierarchy, long nLevel );
@@ -141,11 +134,7 @@ public:
                 //! or separate Str and ValueCollection
 
     virtual long                    GetColumnCount() = 0;
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     virtual   const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
-    long                                                     GetCacheId() const;
-    // End Comments
     virtual String                  getDimensionName(long nColumn) = 0;
     virtual sal_Bool                    getIsDataLayoutDimension(long nColumn) = 0;
     virtual sal_Bool                    IsDateDimension(long nDim) = 0;
@@ -157,9 +146,9 @@ public:
     virtual bool                    IsRepeatIfEmpty();
 
     virtual void                    CreateCacheTable() = 0;
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rDataDims) = 0;
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims) = 0;
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
-                                                     const ::std::hash_set<sal_Int32>& rCatDims,
+                                                     const ::boost::unordered_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData) = 0;
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) = 0;
     virtual const ScDPCacheTable&   GetCacheTable() const = 0;
@@ -173,26 +162,20 @@ public:
     virtual sal_Bool                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const;
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     virtual long                            GetMembersCount( long nDim );
     virtual const ScDPItemData*   GetMemberByIndex( long nDim, long nIndex );
     virtual const ScDPItemData*   GetMemberById( long nDim, long nId);
     virtual SCROW                        GetIdOfItemData( long  nDim, const ScDPItemData& rData );
     virtual long                GetSourceDim( long nDim );
     virtual long                Compare( long nDim, long nDataId1, long nDataId2);
-    // End Comments
 protected:
     /** This structure stores vector arrays that hold intermediate data for
         each row during cache table iteration. */
     struct CalcRowData
     {
-        // Wang Xu Ming -- 2009-8-17
-        // DataPilot Migration - Cache&&Performance
         ::std::vector< SCROW >  aColData;
         ::std::vector< SCROW >  aRowData;
         ::std::vector< SCROW >  aPageData;
-        // End Comments
         ::std::vector<ScDPValueData> aValues;
     };
 
@@ -201,11 +184,9 @@ protected:
     void            CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable, CalcInfo& rInfo, bool bAutoShow);
 
 private:
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     void            GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
                                           const ::std::vector<long>& rDims, ::std::vector< SCROW >& rItemData);
-    // End Comments
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

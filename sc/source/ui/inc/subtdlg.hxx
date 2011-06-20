@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,9 @@
 #ifndef SC_SUBTDLG_HXX
 #define SC_SUBTDLG_HXX
 
-#ifndef _SFX_HXX
-#endif
-
 #include <sfx2/tabdlg.hxx>
 
-#include "scui_def.hxx" //CHINA001
-//------------------------------------------------------------------------
-
-//CHINA001 #define SCRET_REMOVE 0x42
+#include "scui_def.hxx"
 
 //==================================================================
 
@@ -54,3 +49,4 @@ private:
 #endif // SC_SUBTDLG_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

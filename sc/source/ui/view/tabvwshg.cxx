@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,6 @@
 
 
 // INCLUDE ---------------------------------------------------------------
-
-//#define SI_VCDRAWOBJ
 
 #include <tools/urlobj.hxx>
 #include <svx/fmglob.hxx>
@@ -73,7 +72,6 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     MakeDrawLayer();
 
     ScTabView*  pView   = pViewData->GetView();
-//  SdrView*    pDrView = pView->GetSdrView();
     ScDrawView* pDrView = pView->GetScDrawView();
     SdrModel*   pModel  = pDrView->GetModel();
 
@@ -82,7 +80,7 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj);
 
     uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
-    DBG_ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+    OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
     if( !xControlModel.is() )
         return;
 
@@ -90,25 +88,24 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     uno::Any aAny;
 
     aAny <<= rtl::OUString(rName);
-    xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "Label" ), aAny );
+    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" )), aAny );
 
     ::rtl::OUString aTmp = INetURLObject::GetAbsURL( pDoc->GetDocumentShell()->GetMedium()->GetBaseURL(), rURL );
     aAny <<= aTmp;
-    xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "TargetURL" ), aAny );
+    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), aAny );
 
     if( rTarget.Len() )
     {
         aAny <<= rtl::OUString(rTarget);
-        xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "TargetFrame" ), aAny );
+        xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )), aAny );
     }
 
     form::FormButtonType eButtonType = form::FormButtonType_URL;
     aAny <<= eButtonType;
-    xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "ButtonType" ), aAny );
+    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aAny );
 
         if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
     {
-        // #105638# OJ
         aAny <<= sal_True;
         xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aAny );
     }
@@ -126,7 +123,6 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
         aPos.X() -= aSize.Width();
 
     pObj->SetLogicRect(Rectangle(aPos, aSize));
-//  pObj->Resize(Point(), Fraction(1, 1), Fraction(1, 1));
 
     //  am alten VC-Button musste die Position/Groesse nochmal explizit
     //  gesetzt werden - das scheint mit UnoControls nicht noetig zu sein
@@ -138,3 +134,4 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

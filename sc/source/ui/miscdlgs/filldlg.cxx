@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,7 +112,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScFillSeriesDlg::~ScFillSeriesDlg()
+ScFillSeriesDlg::~ScFillSeriesDlg()
 {
 }
 
@@ -223,7 +224,7 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
         rDoc.GetFormatTable()->GetInputLineString( fEndVal, 0, aEndTxt );
     aEdEndVal.SetText( aEndTxt );
 
-    bStartValFlag=sal_False;
+    bStartValFlag=false;
 
     aFlSep1.SetStyle( aFlSep1.GetStyle() | WB_VERT );
     aFlSep2.SetStyle( aFlSep2.GetStyle() | WB_VERT );
@@ -232,10 +233,9 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScFillSeriesDlg::CheckStartVal()
+sal_Bool ScFillSeriesDlg::CheckStartVal()
 {
-    sal_Bool bValOk = sal_False;
-    sal_uInt32 nKey = 0;
+    sal_Bool bValOk = false;
     String aStr( aEdStartVal.GetText() );
 
     if ( aStr.Len() == 0 || aBtnAutoFill.IsChecked())
@@ -244,15 +244,17 @@ sal_Bool __EXPORT ScFillSeriesDlg::CheckStartVal()
         bValOk = sal_True;
     }
     else
+    {
+        sal_uInt32 nKey = 0;
         bValOk = rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fStartVal );
-
+    }
     return bValOk;
 }
 
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScFillSeriesDlg::CheckIncrementVal()
+sal_Bool ScFillSeriesDlg::CheckIncrementVal()
 {
     sal_uInt32 nKey = 0;
     String aStr( aEdIncrement.GetText() );
@@ -263,10 +265,9 @@ sal_Bool __EXPORT ScFillSeriesDlg::CheckIncrementVal()
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScFillSeriesDlg::CheckEndVal()
+sal_Bool ScFillSeriesDlg::CheckEndVal()
 {
-    sal_Bool    bValOk = sal_False;
-    sal_uInt32 nKey = 0;
+    sal_Bool    bValOk = false;
     String  aStr( aEdEndVal.GetText() );
 
     if ( aStr.Len() == 0 )
@@ -275,8 +276,10 @@ sal_Bool __EXPORT ScFillSeriesDlg::CheckEndVal()
         bValOk  = sal_True;
     }
     else
+    {
+        sal_uInt32 nKey = 0;
         bValOk = rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fEndVal );
-
+    }
     return bValOk;
 }
 
@@ -345,17 +348,17 @@ IMPL_LINK( ScFillSeriesDlg, OKHdl, void *, EMPTYARG )
     Edit* pEdWrong = NULL;
     if ( !CheckStartVal() )
     {
-        bAllOk = sal_False;
+        bAllOk = false;
         pEdWrong = &aEdStartVal;
     }
     else if ( !CheckIncrementVal() )
     {
-        bAllOk = sal_False;
+        bAllOk = false;
         pEdWrong = &aEdIncrement;
     }
     else if ( !CheckEndVal() )
     {
-        bAllOk = sal_False;
+        bAllOk = false;
         pEdWrong = &aEdEndVal;
     }
     if ( bAllOk )
@@ -375,3 +378,4 @@ IMPL_LINK( ScFillSeriesDlg, OKHdl, void *, EMPTYARG )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

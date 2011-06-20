@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 #include "macros.hxx"
 #include "servicenames.hxx"
 
-// header for define DBG_ASSERT
-#include <tools/debug.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -69,3 +68,5 @@ void ChartViewHelper::setViewToDirtyState( const uno::Reference< frame::XModel >
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

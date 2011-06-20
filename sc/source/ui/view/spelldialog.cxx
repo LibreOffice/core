@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -157,6 +158,7 @@ void ScSpellDialogChildWindow::Reset()
     mxUndoDoc.reset();
     mxRedoDoc.reset();
     mxOldSel.reset();
+    mxOldRangeList.reset();
     mpViewShell = 0;
     mpViewData = 0;
     mpDocShell = 0;
@@ -189,6 +191,10 @@ void ScSpellDialogChildWindow::Init()
     SCTAB nTab = rCursor.Tab();
 
     ScMarkData& rMarkData = mpViewData->GetMarkData();
+
+    mxOldRangeList.reset(new ScRangeList);
+    rMarkData.FillRangeListWithMarks(mxOldRangeList.get(), true);
+
     rMarkData.MarkToMulti();
 
     switch( mxOldSel->GetSelectionType() )
@@ -216,11 +222,11 @@ void ScSpellDialogChildWindow::Init()
 //        break;
 
         default:
-            DBG_ERRORFILE( "ScSpellDialogChildWindow::Init - unknown selection type" );
+            OSL_FAIL( "ScSpellDialogChildWindow::Init - unknown selection type" );
     }
 
     mbOldIdleDisabled = mpDoc->IsIdleDisabled();
-    mpDoc->DisableIdle( sal_True );   // #42726# stop online spelling
+    mpDoc->DisableIdle( true );   // stop online spelling
 
     // *** create Undo/Redo documents *** -------------------------------------
 
@@ -254,7 +260,7 @@ void ScSpellDialogChildWindow::Init()
     Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
     pEditView->SetOutputArea( aRect );
     mxEngine->SetControlWord( EE_CNTRL_USECHARATTRIBS );
-    mxEngine->EnableUndo( sal_False );
+    mxEngine->EnableUndo( false );
     mxEngine->SetPaperSize( aRect.GetSize() );
     mxEngine->SetText( EMPTY_STRING );
     mxEngine->ClearModifyFlag();
@@ -264,16 +270,19 @@ void ScSpellDialogChildWindow::Init()
 
 bool ScSpellDialogChildWindow::IsSelectionChanged()
 {
-    if( !mxOldSel.get() || !mpViewShell || (mpViewShell != PTR_CAST( ScTabViewShell, SfxViewShell::Current() )) )
+    if( !mxOldRangeList.get() || !mpViewShell || (mpViewShell != PTR_CAST( ScTabViewShell, SfxViewShell::Current() )) )
         return true;
 
     if( EditView* pEditView = mpViewData->GetSpellingView() )
         if( pEditView->GetEditEngine() != mxEngine.get() )
             return true;
 
-    ScSelectionState aNewSel( *mpViewData );
-    return mxOldSel->GetSheetSelection() != aNewSel.GetSheetSelection();
+    ScRangeList aCurrentRangeList;
+    mpViewData->GetMarkData().FillRangeListWithMarks(&aCurrentRangeList, true);
+
+    return (*mxOldRangeList != aCurrentRangeList);
 }
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

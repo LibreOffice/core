@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -689,7 +690,7 @@ bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
     ::std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.find( rCommand ));
     if( aIt != m_aCommandAvailability.end())
         return aIt->second;
-    OSL_ENSURE( false, "commandAvailable: command not in availability map" );
+    OSL_FAIL( "commandAvailable: command not in availability map" );
     return false;
 }
 
@@ -803,3 +804,5 @@ void SAL_CALL ControllerCommandDispatch::selectionChanged( const lang::EventObje
 }
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

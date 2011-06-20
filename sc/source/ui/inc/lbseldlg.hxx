@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 
 #include <vcl/dialog.hxx>
@@ -57,14 +56,14 @@ public:
                                 sal_uInt16  nResId,
                           const String& aTitle,
                           const String& aLbTitle,
-                                List&   aEntryList );
+                          const std::vector<String> &rEntryList );
             ~ScSelEntryDlg();
 
     String GetSelectEntry() const;
-//UNUSED2008-05  sal_uInt16 GetSelectEntryPos() const;
 };
 
 
 #endif // SC_LBSELDLG_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,7 +32,6 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 274 , 190 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Tabelle einfügen : Tabelle einf³gen */
     Text [ en-US ] = "Insert Sheet" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -147,7 +146,6 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         HelpID = "sc:CheckBox:RID_SCDLG_INSERT_TABLE:CB_LINK";
         Pos = MAP_APPFONT ( 149 , 131 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Ver~knüpfen : Ver~kn³pfen */
         Text [ en-US ] = "Lin~k" ;
     };
     FixedText FT_PATH
@@ -156,39 +154,3 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Size = MAP_APPFONT ( 192 , 8 ) ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

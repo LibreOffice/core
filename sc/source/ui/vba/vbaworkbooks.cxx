@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,81 +62,13 @@
 #include "vbaworkbooks.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include <osl/file.hxx>
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 const sal_Int16 CUSTOM_CHAR = 5;
-
-void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& xDoc )
-{
-    uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
-    ScDocShell* pShell = excel::getDocShell( xModel );
-    if ( pShell )
-    {
-        String aPrjName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-        pShell->GetBasicManager()->SetName( aPrjName );
-
-        /*  Set library container to VBA compatibility mode. This will create
-            the VBA Globals object and store it in the Basic manager of the
-            document. */
-        uno::Reference<script::XLibraryContainer> xLibContainer = pShell->GetBasicContainer();
-        uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY_THROW );
-        xVBACompat->setVBACompatibilityMode( sal_True );
-
-        if( xLibContainer.is() )
-        {
-            if( !xLibContainer->hasByName( aPrjName ) )
-                xLibContainer->createLibrary( aPrjName );
-            uno::Any aLibAny = xLibContainer->getByName( aPrjName );
-            uno::Reference< container::XNameContainer > xLib;
-            aLibAny >>= xLib;
-            if( xLib.is()  )
-            {
-                uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
-                uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
-                uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider"))), uno::UNO_QUERY_THROW );
-                // set up the module info for the workbook and sheets in the nealy created
-                // spreadsheet
-                ScDocument* pDoc = pShell->GetDocument();
-                String sCodeName = pDoc->GetCodeName();
-                if ( sCodeName.Len() == 0 )
-                {
-                    sCodeName = String( RTL_CONSTASCII_USTRINGPARAM("ThisWorkbook") );
-                    pDoc->SetCodeName( sCodeName );
-                }
-
-                std::vector< rtl::OUString > sDocModuleNames;
-                sDocModuleNames.push_back( sCodeName );
-
-                uno::Reference<container::XNameAccess > xSheets( xDoc->getSheets(), uno::UNO_QUERY_THROW );
-                uno::Sequence< rtl::OUString > sSheets( xSheets->getElementNames() );
-
-                for ( sal_Int32 index=0; index < sSheets.getLength() ; ++index )
-                {
-                    sDocModuleNames.push_back( sSheets[ index ] );
-                }
-
-                std::vector<rtl::OUString>::iterator it_end = sDocModuleNames.end();
-
-                for ( std::vector<rtl::OUString>::iterator it = sDocModuleNames.begin(); it != it_end; ++it )
-                {
-                    script::ModuleInfo sModuleInfo;
-
-                    sModuleInfo.ModuleObject.set( xVBACodeNamedObjectAccess->getByName( *it ), uno::UNO_QUERY );
-                    sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
-                    xVBAModuleInfo->insertModuleInfo( *it, sModuleInfo );
-                    if( xLib->hasByName( *it ) )
-                        xLib->replaceByName( *it, uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n") ) ) );
-                    else
-                        xLib->insertByName( *it, uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) ) ) );
-                }
-            }
-        }
-    }
-}
 
 static uno::Any
 getWorkbook( uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSpreadsheetDocument > &xDoc, const uno::Reference< XHelperInterface >& xParent )
@@ -145,14 +78,19 @@ getWorkbook( uno::Reference< uno::XComponentContext >& xContext, const uno::Refe
     if( !xModel.is() )
         return uno::Any();
 
-    uno::Reference< excel::XWorkbook > xWb( getVBADocument( xModel ), uno::UNO_QUERY );
-    if ( xWb.is() )
+    ScDocShell* pShell = excel::getDocShell( xModel );
+    if ( pShell )
     {
-        OSL_TRACE(" *** Returning Module uno Object *** ");
-        return uno::Any( xWb );
+        String sCodeName = pShell->GetDocument()->GetCodeName();
+        uno::Reference< uno::XInterface > xIf = getUnoDocModule( sCodeName, pShell );
+                if ( xIf.is() )
+                {
+                    OSL_TRACE(" *** Returning Module uno Object *** ");
+                    return  uno::makeAny( xIf );
+                }
     }
 
-    ScVbaWorkbook *pWb = new ScVbaWorkbook( xParent, xContext, xModel );
+    ScVbaWorkbook *pWb = new ScVbaWorkbook(  xParent, xContext, xModel );
     return uno::Any( uno::Reference< excel::XWorkbook > (pWb) );
 }
 
@@ -236,7 +174,7 @@ ScVbaWorkbooks::Add( const uno::Any& Template ) throw (uno::RuntimeException)
     }
 
     // need to set up the document modules ( and vba mode ) here
-    setUpDocumentModules( xSpreadDoc );
+    excel::setUpDocumentModules( xSpreadDoc );
     if( xSpreadDoc.is() )
         return getWorkbook( mxContext, xSpreadDoc, mxParent );
     return uno::Any();
@@ -276,7 +214,7 @@ ScVbaWorkbooks::isSpreadSheetFile( const rtl::OUString& sType )
 rtl::OUString
 ScVbaWorkbooks::getFileFilterType( const rtl::OUString& rFileName )
 {
-    uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection"), mxContext), uno::UNO_QUERY_THROW );
+    uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection")), mxContext), uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > aMediaDesc(1);
     aMediaDesc[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ("URL" ) );
     aMediaDesc[ 0 ].Value <<= rFileName;
@@ -299,12 +237,12 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
         osl::FileBase::getFileURLFromSystemPath( rFileName, aURL );
 
     uno::Sequence< beans::PropertyValue > sProps(0);
-    sal_Int32 nIndex = 0;
 
     rtl::OUString sType = getFileFilterType( aURL );
     // A text file means it needs to be processed as a csv file
     if ( isTextFile( sType ) )
     {
+        sal_Int32 nIndex = 0;
         // Values for format
         // 1 Tabs
         // 2 Commas
@@ -390,3 +328,5 @@ ScVbaWorkbooks::getServiceNames()
     }
     return sNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,9 +32,9 @@
 #define BTN_ADD         3
 #define BTN_REMOVE      4
 #define BTN_HELP        5
-//
+
 #define LB_RANGE        11
-//
+
 #define FL_ASSIGN       12
 #define ED_AREA         13
 #define RB_AREA         14
@@ -43,4 +43,3 @@
 #define ED_DATA         17
 #define RB_DATA         18
 #define FT_DATA_LABEL   19
-//

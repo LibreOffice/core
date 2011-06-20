@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,27 +41,19 @@
 #include "document.hxx"
 #include "attrib.hxx"
 #include "miscuno.hxx"
-#include "unoguard.hxx"
 #include "editsrc.hxx"
 #include "dociter.hxx"
 #include "cell.hxx"
 
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
-#include <rtl/uuid.h>
-#include <tools/debug.hxx>
 #include <editeng/brshitem.hxx>
 #include <comphelper/sequence.hxx>
 #include <float.h>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -105,8 +98,8 @@ void ScAccessibleCell::Init()
 
 void SAL_CALL ScAccessibleCell::disposing()
 {
-    ScUnoGuard aGuard;
-    // #100593# dispose in AccessibleStaticTextBase
+    SolarMutexGuard aGuard;
+    // dispose in AccessibleStaticTextBase
     Dispose();
 
     if (mpViewShell)
@@ -139,7 +132,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAtPoint(
 void SAL_CALL ScAccessibleCell::grabFocus(  )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
+     SolarMutexGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is() && mpViewShell)
     {
@@ -232,7 +225,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleCell::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -270,7 +263,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
        ScAccessibleCell::getAccessibleRelationSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     utl::AccessibleRelationSetHelper* pRelationSet = NULL;
     if (mpAccDoc)
@@ -348,7 +341,7 @@ sal_Bool ScAccessibleCell::IsOpaque(
 
 sal_Bool ScAccessibleCell::IsSelected()
 {
-    sal_Bool bResult(sal_False);
+    sal_Bool bResult(false);
     if (mpViewShell && mpViewShell->GetViewData())
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
@@ -384,7 +377,7 @@ void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelatio
         {
             if (pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                sal_Bool bFound(sal_False);
+                sal_Bool bFound(false);
                 ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
                 ScRange aRef;
                 while ( !bFound && aIter.GetNextRef( aRef ) )
@@ -449,7 +442,7 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
                     ++nPos;
                 }
             }
-            DBG_ASSERT(nCount == nPos, "something wents wrong");
+            OSL_ENSURE(nCount == nPos, "something wents wrong");
         }
         AccessibleRelation aRelation;
         aRelation.RelationType = aRelationType;
@@ -457,3 +450,5 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
         pRelationSet->AddRelation(aRelation);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

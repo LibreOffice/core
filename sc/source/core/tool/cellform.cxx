@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -106,12 +107,12 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
                     pFCell->GetFormula( rString );
                 else
                 {
-                    // #62160# Ein via Interpreter gestartetes Makro, das hart
-                    // auf Formelzellen zugreift, bekommt einen CellText, auch
-                    // wenn dadurch ein weiterer Interpreter gestartet wird,
-                    // aber nicht wenn diese Zelle gerade interpretiert wird.
-                    // IdleCalc startet generell keine weiteren Interpreter,
-                    // um keine Err522 (zirkulaer) zu bekommen.
+                    // A macro started from the interpreter, which has
+                    // access to Formular Cells, becomes a CellText, even if
+                    // that triggers further interpretation, except if those
+                    // cells are already being interpreted.
+                    // IdleCalc generally doesn't trigger futher interpretation,
+                    // as not to get Err522 (circular).
                     if ( pFCell->GetDocument()->IsInInterpreter() &&
                             (!pFCell->GetDocument()->GetMacroInterpretLevel()
                             || pFCell->IsRunning()) )
@@ -122,7 +123,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rStr
                     {
                         sal_uInt16 nErrCode = pFCell->GetErrCode();
 
-                        // erst nach dem Interpretieren (GetErrCode) das Zahlformat holen:
+                        // get the number format only after interpretation (GetErrCode):
                         if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
                             nFormat = pFCell->GetStandardFormat( rFormatter,
                                 nFormat );
@@ -214,3 +215,4 @@ void ScCellFormat::GetInputString( ScBaseCell* pCell, sal_uLong nFormat, String&
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

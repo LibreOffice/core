@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef SC_POPMENU_HXX
 #define SC_POPMENU_HXX
 
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include "scdllapi.h"
 
 class SC_DLLPUBLIC ScPopupMenu : public PopupMenu
@@ -41,8 +40,8 @@ private:
 protected:
     virtual void Select();
 public:
-    ScPopupMenu() : nSel(0),bHit(sal_False) {}
-    ScPopupMenu(const ResId& rRes) : PopupMenu(rRes),nSel(0),bHit(sal_False) {}
+    ScPopupMenu() : nSel(0),bHit(false) {}
+    ScPopupMenu(const ResId& rRes) : PopupMenu(rRes),nSel(0),bHit(false) {}
     sal_uInt16  GetSelected() const { return nSel; }
     sal_Bool    WasHit() const      { return bHit; }
 };
@@ -51,3 +50,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

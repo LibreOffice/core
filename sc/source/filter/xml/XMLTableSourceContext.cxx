@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,18 +117,18 @@ void ScXMLTableSourceContext::EndElement()
         ScDocument* pDoc(GetScImport().GetDocument());
         if (xLinkable.is() && pDoc)
         {
-            GetScImport().LockSolarMutex();
-            if (pDoc->RenameTab( static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()),
-                GetScImport().GetTables().GetCurrentSheetName(), sal_False, sal_True))
+            ScXMLImport::MutexGuard aGuard(GetScImport());
+            if (pDoc->RenameTab( GetScImport().GetTables().GetCurrentSheet(),
+                GetScImport().GetTables().GetCurrentSheetName(), false, sal_True))
             {
-                 String aFileString(sLink);
+                String aFileString(sLink);
                 String aFilterString(sFilterName);
                 String aOptString(sFilterOptions);
                 String aSheetString(sTableName);
 
                 aFileString = ScGlobal::GetAbsDocName( aFileString, pDoc->GetDocumentShell() );
                 if ( !aFilterString.Len() )
-                    ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, sal_False, sal_False );
+                    ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, false, false );
 
                 sal_uInt8 nLinkMode = SC_LINK_NONE;
                 if ( nMode == sheet::SheetLinkMode_NORMAL )
@@ -135,12 +136,12 @@ void ScXMLTableSourceContext::EndElement()
                 else if ( nMode == sheet::SheetLinkMode_VALUE )
                     nLinkMode = SC_LINK_VALUE;
 
-                pDoc->SetLink( static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()),
+                pDoc->SetLink( GetScImport().GetTables().GetCurrentSheet(),
                     nLinkMode, aFileString, aFilterString, aOptString,
                     aSheetString, nRefresh );
             }
-            GetScImport().UnlockSolarMutex();
         }
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,13 +42,15 @@
 #include "scresid.hxx"
 #include "globstr.hrc"
 #include "namedlg.hrc"
-
-#define _NAMEDLG_CXX
 #include "namedlg.hxx"
-#undef _NAMEDLG_CXX
+#include "viewdata.hxx"
+
 #include <vcl/msgbox.hxx>
 
+#include <map>
+#include <memory>
 
+using ::std::auto_ptr;
 
 // defines -------------------------------------------------------------------
 
@@ -58,62 +61,29 @@
 #define ABS_SREF3D      ABS_SREF | SCA_TAB_3D
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
-
-//============================================================================
-// Hilfsklasse: Merken der aktuellen Bereichsoptionen,
-// wenn ein Name in der ComboBox gefunden wird.
-
-struct SaveData
+struct ScNameDlgImpl
 {
-    SaveData()
-        : bCriteria(sal_False),bPrintArea(sal_False),
-          bColHeader(sal_False),bRowHeader(sal_False),
-          bDirty(sal_False) {}
+    ScNameDlgImpl() :
+        bCriteria(false), bPrintArea(false),
+        bColHeader(false), bRowHeader(false),
+        bDirty(false) {}
 
     void Clear()
-        {
-            aStrSymbol.Erase();
-            bCriteria  = bPrintArea =
-            bColHeader = bRowHeader = sal_False;
-            bDirty = sal_True;
-        }
-
-    String  aStrSymbol;
-    sal_Bool    bCriteria:1;
-    sal_Bool    bPrintArea:1;
-    sal_Bool    bColHeader:1;
-    sal_Bool    bRowHeader:1;
-    sal_Bool    bDirty:1;
-};
-
-static SaveData* pSaveObj = NULL;
-
-#define SAVE_DATA() \
-    pSaveObj->aStrSymbol = aEdAssign.GetText();         \
-    pSaveObj->bCriteria  = aBtnCriteria.IsChecked();    \
-    pSaveObj->bPrintArea = aBtnPrintArea.IsChecked();   \
-    pSaveObj->bColHeader = aBtnColHeader.IsChecked();   \
-    pSaveObj->bRowHeader = aBtnRowHeader.IsChecked();   \
-    pSaveObj->bDirty     = sal_True;
-
-#define RESTORE_DATA() \
-    if ( pSaveObj->bDirty )                             \
-    {                                                   \
-        aEdAssign.SetText( pSaveObj->aStrSymbol );      \
-        aBtnCriteria.Check( pSaveObj->bCriteria );      \
-        aBtnPrintArea.Check( pSaveObj->bPrintArea );    \
-        aBtnColHeader.Check( pSaveObj->bColHeader );    \
-        aBtnRowHeader.Check( pSaveObj->bRowHeader );    \
-        pSaveObj->bDirty = sal_False;                       \
+    {
+        aStrSymbol = ::rtl::OUString();
+        bCriteria  = bPrintArea = bColHeader = bRowHeader = false;
+        bDirty = true;
     }
 
+    ::rtl::OUString aStrSymbol;
+    bool bCriteria:1;
+    bool bPrintArea:1;
+    bool bColHeader:1;
+    bool bRowHeader:1;
+    bool bDirty:1;
+};
+
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
-
-
-//============================================================================
-//  class ScNameDlg
-
-//----------------------------------------------------------------------------
 
 ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                       ScViewData*       ptrViewData,
@@ -121,6 +91,8 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_NAMES ),
         //
+        maFtScope( this, ScResId(FT_SCOPE) ),
+        maLbScope( this, ScResId(LB_SCOPE) ),
         aFlName         ( this, ScResId( FL_NAME ) ),
         aEdName         ( this, ScResId( ED_NAME ) ),
         //
@@ -141,41 +113,48 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
         //
-        bSaved          (sal_False),
+        bSaved          (false),
         aStrAdd         ( ScResId( STR_ADD ) ),
         aStrModify      ( ScResId( STR_MODIFY ) ),
         errMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
+        maGlobalNameStr( ResId::toString(ScResId(STR_GLOBAL_SCOPE)) ),
         //
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
-        aLocalRangeName ( *(pDoc->GetRangeName()) ),
-        theCursorPos    ( aCursorPos )  // zum Berechnen der Referenzen
+        maGlobalRangeName(*pDoc->GetRangeName()),
+        mpCurRangeName(&maGlobalRangeName),
+        theCursorPos    ( aCursorPos ),
+        mpImpl(new ScNameDlgImpl)
 {
-    pSaveObj = new SaveData;
+    // Copy sheet-local range names.
+    ScRangeName::TabNameCopyMap aOldNames;
+    pDoc->GetAllTabRangeNames(aOldNames);
+    ScRangeName::TabNameCopyMap::const_iterator itr = aOldNames.begin(), itrEnd = aOldNames.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        auto_ptr<ScRangeName> p(new ScRangeName(*itr->second));
+        maTabRangeNames.insert(itr->first, p);
+    }
+
     Init();
     FreeResource();
 
     aRbAssign.SetAccessibleRelationMemberOf(&aFlAssign);
 }
 
-
-//----------------------------------------------------------------------------
-
-__EXPORT ScNameDlg::~ScNameDlg()
+ScNameDlg::~ScNameDlg()
 {
-    DELETEZ( pSaveObj );
+    delete mpImpl;
 }
 
-
-//----------------------------------------------------------------------------
-
-void __EXPORT ScNameDlg::Init()
+void ScNameDlg::Init()
 {
     String  aAreaStr;
     ScRange aRange;
 
-    DBG_ASSERT( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
+    OSL_ENSURE( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
 
+    maLbScope.SetSelectHdl( LINK(this, ScNameDlg, ScopeChangedHdl) );
     aBtnOk.SetClickHdl      ( LINK( this, ScNameDlg, OkBtnHdl ) );
     aBtnCancel.SetClickHdl  ( LINK( this, ScNameDlg, CancelBtnHdl ) );
     aBtnAdd.SetClickHdl     ( LINK( this, ScNameDlg, AddBtnHdl ) );
@@ -195,6 +174,17 @@ void __EXPORT ScNameDlg::Init()
     aBtnMore.AddWindow( &aBtnPrintArea );
     aBtnMore.AddWindow( &aBtnColHeader );
     aBtnMore.AddWindow( &aBtnRowHeader );
+
+    // Initialize scope list.
+    maLbScope.InsertEntry(maGlobalNameStr);
+    maLbScope.SelectEntryPos(0);
+    SCTAB n = pDoc->GetTableCount();
+    for (SCTAB i = 0; i < n; ++i)
+    {
+        String aTabName;
+        pDoc->GetName(i, aTabName);
+        maLbScope.InsertEntry(aTabName);
+    }
 
     UpdateNames();
 
@@ -216,13 +206,9 @@ void __EXPORT ScNameDlg::Init()
     EdModifyHdl( 0 );
 
     bSaved=sal_True;
-    SAVE_DATA()
-
-    //@BugID 54702
-    //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
+    SaveControlStates();
 }
 
-//----------------------------------------------------------------------------
 sal_Bool ScNameDlg::IsRefInputMode() const
 {
     return aEdAssign.IsEnabled();
@@ -233,10 +219,6 @@ void ScNameDlg::RefInputDone( sal_Bool bForced)
     ScAnyRefDlg::RefInputDone(bForced);
     EdModifyHdl(&aEdAssign);
 }
-//----------------------------------------------------------------------------
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-// neue Selektion im Referenz-Edit angezeigt wird.
-
 
 void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -251,15 +233,10 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-
-//----------------------------------------------------------------------------
-sal_Bool __EXPORT ScNameDlg::Close()
+sal_Bool ScNameDlg::Close()
 {
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
-
-
-//----------------------------------------------------------------------------
 
 void ScNameDlg::SetActive()
 {
@@ -267,23 +244,16 @@ void ScNameDlg::SetActive()
     RefInputDone();
 }
 
-
-//----------------------------------------------------------------------------
-
-void __EXPORT ScNameDlg::UpdateChecks()
+void ScNameDlg::UpdateChecks()
 {
-    sal_uInt16       nCurPos=0;
-
-    if(aLocalRangeName.SearchName( aEdName.GetText(), nCurPos))
+    const ScRangeData* pData = mpCurRangeName->findByName(aEdName.GetText());
+    if (pData)
     {
-        ScRangeData* pData=(ScRangeData*)(aLocalRangeName.At( nCurPos ));
         aBtnCriteria .Check( pData->HasType( RT_CRITERIA ) );
         aBtnPrintArea.Check( pData->HasType( RT_PRINTAREA ) );
         aBtnColHeader.Check( pData->HasType( RT_COLHEADER ) );
         aBtnRowHeader.Check( pData->HasType( RT_ROWHEADER ) );
     }
-
-    // Falls Edit-Feld leer ist: Typ-CheckBoxen deaktivieren:
 
     if ( aEdName.GetText().Len() != 0 )
     {
@@ -312,58 +282,37 @@ void __EXPORT ScNameDlg::UpdateChecks()
     }
 }
 
-
-//----------------------------------------------------------------------------
-
-void __EXPORT ScNameDlg::UpdateNames()
+void ScNameDlg::UpdateNames()
 {
-    sal_uInt16  nRangeCount = aLocalRangeName.GetCount();
-
-    aEdName.SetUpdateMode( sal_False );
-    //-----------------------------------------------------------
+    aEdName.SetUpdateMode( false );
     sal_uInt16  nNamePos = aEdName.GetTopEntry();
     aEdName.Clear();
 
     aEdAssign.SetText( EMPTY_STRING );
 
-    if ( nRangeCount > 0 )
-    {
-        ScRangeData*    pRangeData = NULL;
-        String          aString;
-
-        for ( sal_uInt16 i=0; i<nRangeCount; i++ )
-        {
-            pRangeData = (ScRangeData*)(aLocalRangeName.At( i ));
-            if ( pRangeData )
-            {
-                if (   !pRangeData->HasType( RT_DATABASE )
-                    && !pRangeData->HasType( RT_SHARED ) )
-                {
-                    pRangeData->GetName( aString );
-                    aEdName.InsertEntry( aString );
-                }
-            }
-        }
-    }
-    else
+    if (mpCurRangeName->empty())
     {
         aBtnAdd.SetText( aStrAdd );
         aBtnAdd.Disable();
         aBtnRemove.Disable();
     }
-    //-----------------------------------------------------------
-    aEdName.SetUpdateMode( sal_True );
+    else
+    {
+        ScRangeName::const_iterator itr = mpCurRangeName->begin(), itrEnd = mpCurRangeName->end();
+        for (; itr != itrEnd; ++itr)
+        {
+            if (!itr->HasType(RT_DATABASE) && !itr->HasType(RT_SHARED))
+                aEdName.InsertEntry(itr->GetName());
+        }
+    }
+
+    aEdName.SetUpdateMode( true );
     aEdName.SetTopEntry(nNamePos);
     aEdName.Invalidate();
 }
 
-
-//----------------------------------------------------------------------------
-
-void __EXPORT ScNameDlg::CalcCurTableAssign( String& aAssign, sal_uInt16 nCurPos )
+void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
 {
-    ScRangeData* pRangeData = (ScRangeData*)(aLocalRangeName.At( nCurPos ));
-
     if ( pRangeData )
     {
         rtl::OUStringBuffer sBuffer;
@@ -376,42 +325,32 @@ void __EXPORT ScNameDlg::CalcCurTableAssign( String& aAssign, sal_uInt16 nCurPos
     }
 }
 
-
-//----------------------------------------------------------------------------
-// Handler:
-// ========
-
-IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
+void ScNameDlg::SaveControlStates()
 {
-    if ( aBtnAdd.IsEnabled() )
-        AddBtnHdl( 0 );
+    mpImpl->aStrSymbol = aEdAssign.GetText();
+    mpImpl->bCriteria  = aBtnCriteria.IsChecked();
+    mpImpl->bPrintArea = aBtnPrintArea.IsChecked();
+    mpImpl->bColHeader = aBtnColHeader.IsChecked();
+    mpImpl->bRowHeader = aBtnRowHeader.IsChecked();
+    mpImpl->bDirty = true;
+}
 
-    if ( !aBtnAdd.IsEnabled() && !aBtnRemove.IsEnabled() )
+void ScNameDlg::RestoreControlStates()
+{
+    if ( mpImpl->bDirty )
     {
-        ScDocShell* pDocSh = pViewData->GetDocShell();
-        ScDocFunc aFunc(*pDocSh);
-        aFunc.ModifyRangeNames( aLocalRangeName, sal_False );
-        Close();
+        aEdAssign.SetText( mpImpl->aStrSymbol );
+        aBtnCriteria.Check( mpImpl->bCriteria );
+        aBtnPrintArea.Check( mpImpl->bPrintArea );
+        aBtnColHeader.Check( mpImpl->bColHeader );
+        aBtnRowHeader.Check( mpImpl->bRowHeader );
+        mpImpl->bDirty = false;
     }
-    return 0;
 }
 
-
-//----------------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
+bool ScNameDlg::AddPushed()
 {
-    Close();
-    return 0;
-}
-IMPL_LINK_INLINE_END( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
-
-
-//----------------------------------------------------------------------------
-
-IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
-{
-    sal_Bool    bAdded    = sal_False;
+    bool bAdded = false;
     String  aNewEntry = aEdName.GetText();
     sal_uInt16  nNamePos = aEdName.GetTopEntry();
     aNewEntry.EraseLeadingChars( ' ' );
@@ -425,7 +364,6 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
             {
                 ScRangeData*    pNewEntry   = NULL;
                 RangeType       nType       = RT_NAME;
-                sal_uInt16          nFoundAt    = 0;
                 String          theSymbol   = aEdAssign.GetText();
                 String          aStrPos;
                 String          aStrArea;
@@ -450,22 +388,21 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                 //    in ein Token-Array uebersetzt werden?)
                 if ( 0 == pNewEntry->GetErrCode() )
                 {
-                    // Eintrag bereits vorhanden? Dann vorher entfernen (=Aendern)
-                    if ( aLocalRangeName.SearchName( aNewEntry, nFoundAt ) )
-                    {                                   // alten Index uebernehmen
-                        pNewEntry->SetIndex(
-                            ((ScRangeData*)(aLocalRangeName.At(nFoundAt)))->GetIndex() );
-                        aLocalRangeName.AtFree( nFoundAt );
+                    ScRangeData* pData = mpCurRangeName->findByName(aNewEntry);
+                    if (pData)
+                    {
+                        pNewEntry->SetIndex(pData->GetIndex());
+                        mpCurRangeName->erase(*pData);
                     }
                     else
-                        pSaveObj->Clear();
+                        mpImpl->Clear();
 
-                    if ( !aLocalRangeName.Insert( pNewEntry ) )
+                    if ( !mpCurRangeName->insert( pNewEntry ) )
                         delete pNewEntry;
 
                     UpdateNames();
-                    bSaved=sal_False;
-                    RESTORE_DATA()
+                    bSaved=false;
+                    RestoreControlStates();
                     aEdName.SetText(EMPTY_STRING);
                     aEdName.GrabFocus();
                     UpdateChecks();
@@ -473,12 +410,9 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                     aBtnAdd.Disable();
                     aBtnRemove.Disable();
 
-                    //@BugID 54702 raus mit dem Sch.
-                    //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
-
-                    bAdded = sal_True;
+                    bAdded = true;
                 }
-                else // theSymbol ungueltig
+                else
                 {
                     delete pNewEntry;
                     ERRORBOX( errMsgInvalidSym );
@@ -499,15 +433,11 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
     return bAdded;
 }
 
-
-//----------------------------------------------------------------------------
-
-IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
+void ScNameDlg::RemovePushed()
 {
-    sal_uInt16       nRemoveAt = 0;
     const String aStrEntry = aEdName.GetText();
-
-    if ( aLocalRangeName.SearchName( aStrEntry, nRemoveAt ) )
+    ScRangeData* pData = mpCurRangeName->findByName(aStrEntry);
+    if (pData)
     {
         String aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
         String aMsg       = aStrDelMsg.GetToken( 0, '#' );
@@ -518,49 +448,77 @@ IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
         if ( RET_YES ==
              QueryBox( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg ).Execute() )
         {
-            aLocalRangeName.AtFree( nRemoveAt );
+            mpCurRangeName->erase(*pData);
             UpdateNames();
             UpdateChecks();
-            bSaved=sal_False;
-            RESTORE_DATA()
+            bSaved=false;
+            RestoreControlStates();
             theCurSel = Selection( 0, SELECTION_MAX );
             aBtnAdd.SetText( aStrAdd );
             aBtnAdd.Disable();
             aBtnRemove.Disable();
         }
     }
-    return 0;
 }
 
-
-//----------------------------------------------------------------------------
-
-IMPL_LINK( ScNameDlg, NameSelectHdl, void *, EMPTYARG )
+void ScNameDlg::OKPushed()
 {
-    sal_uInt16 nAtPos;
+    if ( aBtnAdd.IsEnabled() )
+        AddPushed();
 
-    if ( aLocalRangeName.SearchName( aEdName.GetText(), nAtPos ) )
+    if ( !aBtnAdd.IsEnabled() && !aBtnRemove.IsEnabled() )
     {
-        String       aSymbol;
-        ScRangeData* pData  = (ScRangeData*)(aLocalRangeName.At( nAtPos ));
+        ScDocShell* pDocSh = pViewData->GetDocShell();
+        ScDocFunc aFunc(*pDocSh);
 
-        if ( pData )
-        {
-            pData->GetSymbol( aSymbol );
-            CalcCurTableAssign( aSymbol, nAtPos );
-            aEdAssign.SetText( aSymbol );
-            aBtnAdd.SetText( aStrModify );
-            theCurSel = Selection( 0, SELECTION_MAX );
-        }
+        // Store pointers to sheet local names instances.
+        ScRangeName::TabNameCopyMap aTabNames;
+        ScRangeName::copyLocalNames(maTabRangeNames, aTabNames);
+        aFunc.ModifyAllRangeNames(&maGlobalRangeName, aTabNames);
+        Close();
+    }
+}
+
+void ScNameDlg::NameSelected()
+{
+    ScRangeData* pData = mpCurRangeName->findByName(aEdName.GetText());
+    if (pData)
+    {
+        String aSymbol;
+        pData->GetSymbol( aSymbol );
+        CalcCurTableAssign( aSymbol, pData );
+        aEdAssign.SetText( aSymbol );
+        aBtnAdd.SetText( aStrModify );
+        theCurSel = Selection( 0, SELECTION_MAX );
     }
     UpdateChecks();
-    return 0;
 }
 
+void ScNameDlg::ScopeChanged()
+{
+    sal_uInt16 nPos = maLbScope.GetSelectEntryPos();
+    if (nPos == 0)
+        // Global scope
+        mpCurRangeName = &maGlobalRangeName;
+    else
+    {
+        // Sheet scope
+        SCTAB nTab = static_cast<SCTAB>(nPos-1);
+        ScRangeName::TabNameMap::iterator itr = maTabRangeNames.find(nTab);
+        if (itr == maTabRangeNames.end())
+        {
+            auto_ptr<ScRangeName> p(new ScRangeName);
+            ::std::pair<ScRangeName::TabNameMap::iterator, bool> r =
+                maTabRangeNames.insert(nTab, p);
+            itr = r.first;
+        }
+        mpCurRangeName = itr->second;
+    }
+    aEdName.SetText(rtl::OUString());
+    UpdateNames();
+}
 
-//----------------------------------------------------------------------------
-
-IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
+void ScNameDlg::NameModified(Edit* pEd)
 {
     String  theName     = aEdName.GetText();
     String  theSymbol   = aEdAssign.GetText();
@@ -578,8 +536,6 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
             aFlAssign.Disable();
             aEdAssign.Disable();
             aRbAssign.Disable();
-            //@BugID 54702 raus mit dem Sch.
-            //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
         }
         else
         {
@@ -592,8 +548,8 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
 
                 if(!bSaved)
                 {
-                    bSaved=sal_True;
-                    SAVE_DATA()
+                    bSaved=true;
+                    SaveControlStates();
                 }
                 NameSelectHdl( 0 );
             }
@@ -603,8 +559,8 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
                     aBtnAdd.SetText( aStrAdd );
                 aBtnRemove.Disable();
 
-                bSaved=sal_False;
-                RESTORE_DATA()
+                bSaved=false;
+                RestoreControlStates();
             }
             theSymbol = aEdAssign.GetText();
 
@@ -616,8 +572,6 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
             aFlAssign.Enable();
             aEdAssign.Enable();
             aRbAssign.Enable();
-            //@BugID 54702 raus mit dem Sch.
-            //SFX_APPWINDOW->Enable();
         }
         UpdateChecks();
         theCurSel = Selection( 0, SELECTION_MAX );
@@ -636,16 +590,53 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
             aBtnRemove.Disable();
         }
     }
+}
+
+IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
+{
+    OKPushed();
     return 0;
 }
 
-//------------------------------------------------------------------------
+IMPL_LINK( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
+{
+    Close();
+    return 0;
+}
 
-IMPL_LINK_INLINE_START( ScNameDlg, AssignGetFocusHdl, void *, EMPTYARG )
+IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
+{
+    return AddPushed();
+}
+
+IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
+{
+    RemovePushed();
+    return 0;
+}
+
+IMPL_LINK( ScNameDlg, NameSelectHdl, void *, EMPTYARG )
+{
+    NameSelected();
+    return 0;
+}
+
+IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
+{
+    NameModified(pEd);
+    return 0;
+}
+
+IMPL_LINK( ScNameDlg, AssignGetFocusHdl, void *, EMPTYARG )
 {
     EdModifyHdl( &aEdAssign );
     return 0;
 }
-IMPL_LINK_INLINE_END( ScNameDlg, AssignGetFocusHdl, void *, EMPTYARG )
 
+IMPL_LINK( ScNameDlg, ScopeChangedHdl, ListBox*, EMPTYARG )
+{
+    ScopeChanged();
+    return 0;
+}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

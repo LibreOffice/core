@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,15 +36,15 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "scdllapi.h"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ImageList;
 class Bitmap;
 class SfxItemSet;
 class Color;
 
-// Macro fuer den Call-Profiler unter WinNT
-// mit S_CAP kann eine Messung gestarted, mit E_CAP wieder gestoppt werden
+// Macro for call profiler (WinNT)
+// S_CAP starts a measurement, E_CAP stops it
 #if defined( WNT ) && defined( PROFILE )
 
 extern "C" {
@@ -57,46 +58,25 @@ extern "C" {
 
 #endif
 
-#if 0
-// I18N doesn't get this right, can't specify more than one to ignore
-#define SC_COLLATOR_IGNORES ( \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE | \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_KANA | \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_WIDTH )
-#else
 #define SC_COLLATOR_IGNORES ( \
     ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
-#endif
-#if 0
-// #107998# Don't ignore Width and Kana. The issue was mainly with AutoInput,
-// but affects also comparison of names in general.
-#define SC_TRANSLITERATION_IGNORECASE ( \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE | \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA | \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH )
-#define SC_TRANSLITERATION_CASESENSE ( \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA | \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH )
-#else
+
 #define SC_TRANSLITERATION_IGNORECASE ( \
     ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE )
 #define SC_TRANSLITERATION_CASESENSE 0
-#endif
 
-//------------------------------------------------------------------------
-
-//  die 1000 Namen des Calc...
-//  Clipboard-Namen sind jetzt in so3/soapp.hxx
-//  STRING_SCAPP war "scalc3", "scalc4", jetzt nur noch "scalc"
+//  Calc has lots of names...
+//  Clipboard names are in so3/soapp.hxx now
+//  STRING_SCAPP was "scalc3", "scalc4", now just "scalc"
 
 #define STRING_SCAPP    "scalc"
 #define STRING_SCSTREAM "StarCalcDocument"
 
 #define STRING_STANDARD "Standard"
 
-// characters -----------------------------------------------------------------
+// characters
 
-//  '\r' geht auf'm Mac nicht...
+//  '\r' does not work on a Mac...
 #define CHAR_CR     char(13)
 
 const sal_Unicode CHAR_NBSP     = 0x00A0;
@@ -115,25 +95,12 @@ const sal_Unicode CHAR_ZWNBSP   = 0x2060;
 #define MINZOOM     20
 #define MAXZOOM     400
 
-#ifdef SC_ROWLIMIT_TYPECONVERSION_NOCONVPASS
-const size_t MAXSUBTOTAL        = 3;
-const size_t MAXQUERY           = 8;
-#else
 const SCSIZE MAXSUBTOTAL        = 3;
 const SCSIZE MAXQUERY           = 8;
-#endif
 
 #define SC_START_INDEX_DB_COLL 50000
-                                        // Oberhalb dieser Grenze liegen
-                                        // die Indizes fuer DBBereiche
-
-/*
-#ifdef OS2
-#define PIXEL_PER_INCH      72.0
-#else
-#define PIXEL_PER_INCH      96.0
-#endif
-*/
+                                        // Above this threshold are indices
+                                        // for data base areas
 
 #define PIXEL_PER_INCH      96.0
 
@@ -152,8 +119,8 @@ const SCSIZE MAXQUERY           = 8;
 #define HMM_PER_TWIPS       (CM_PER_TWIPS * 1000.0)
 
 #define STD_COL_WIDTH       1285
-#define STD_EXTRA_WIDTH     113     // 2mm Extra fuer optimale Breite
-                                    // Standard Zeilenhoehe: Text + Rand - STD_ROWHEIGHT_DIFF
+#define STD_EXTRA_WIDTH     113     // 2mm extra for optimal width
+                                    // standard row height: text + margin - STD_ROWHEIGHT_DIFF
 
 
 #define MAX_EXTRA_WIDTH     23811   // 42cm in TWIPS
@@ -162,19 +129,19 @@ const SCSIZE MAXQUERY           = 8;
 #define MAX_COL_HEIGHT      56693
 
 #define STD_ROWHEIGHT_DIFF  23
-#define STD_FONT_HEIGHT     200     // entspricht 10 Punkt
+#define STD_FONT_HEIGHT     200     // equates 10 points
 
-//!     statt STD_ROW_HEIGHT ScGlobal::nStdRowHeight benutzen !
+//!     use ScGlobal::nStdRowHeight instead of STD_ROW_HEIGHT !
 
 #define STD_ROW_HEIGHT      (12.8 * TWIPS_PER_POINT)            // 256 Twips, 0.45 cm
 
-                                    // Standardgroesse als Ole-Server (Zellen)
+                                    // standard size as OLE server (cells)
 #define OLE_STD_CELLS_X     4
 #define OLE_STD_CELLS_Y     5
 
 #define SC_SIZE_OPTIMUM     0xFFFF
 
-                                    // Update-Flags
+                                    // update flags
 #define UF_SCROLL_LEFT      1
 #define UF_SCROLL_RIGHT     2
 #define UF_SCROLL_UP        4
@@ -182,24 +149,21 @@ const SCSIZE MAXQUERY           = 8;
 #define UF_ROW              16
 #define UF_VIEW             32
 
-                                    // Repaint-Flags (fuer Messages)
+                                    // repaint flags (for messages)
 #define PAINT_GRID          1
 #define PAINT_TOP           2
 #define PAINT_LEFT          4
 #define PAINT_EXTRAS        8
-#define PAINT_INVERT        16
-#define PAINT_MARKS         32
-#define PAINT_OBJECTS       64
-#define PAINT_SIZE          128
+#define PAINT_MARKS         16
+#define PAINT_OBJECTS       32
+#define PAINT_SIZE          64
 #define PAINT_ALL           ( PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS | PAINT_OBJECTS | PAINT_SIZE )
 
 
-                                    // Flags fuer Spalten / Zeilen
-                                    // FILTERED immer zusammen mit HIDDEN
-                                    // FILTERED und MANUALSIZE nur fuer Zeilen moeglich
+                                    // flags for columns / rows
+                                    // FILTERED always together with HIDDEN
+                                    // FILTERED and MANUALSIZE only valid for rows
 const sal_uInt8   CR_HIDDEN      = 1;
-//const sal_uInt8 CR_MARKED      = 2;
-//const sal_uInt8 CR_PAGEBREAK   = 4;
 const sal_uInt8   CR_MANUALBREAK = 8;
 const sal_uInt8   CR_FILTERED    = 16;
 const sal_uInt8   CR_MANUALSIZE  = 32;
@@ -210,7 +174,7 @@ const ScBreakType BREAK_NONE   = 0;
 const ScBreakType BREAK_PAGE   = 1;
 const ScBreakType BREAK_MANUAL = 2;
 
-// Insert-/Delete-Flags
+// insert/delete flags
 const sal_uInt16 IDF_NONE       = 0x0000;
 const sal_uInt16 IDF_VALUE      = 0x0001;   /// Numeric values (and numeric results if IDF_FORMULA is not set).
 const sal_uInt16 IDF_DATETIME   = 0x0002;   /// Dates, times, datetime values.
@@ -221,6 +185,7 @@ const sal_uInt16 IDF_HARDATTR   = 0x0020;   /// Hard cell attributes.
 const sal_uInt16 IDF_STYLES     = 0x0040;   /// Cell styles.
 const sal_uInt16 IDF_OBJECTS    = 0x0080;   /// Drawing objects.
 const sal_uInt16 IDF_EDITATTR   = 0x0100;   /// Rich-text attributes.
+const sal_uInt16 IDF_SPECIAL_BOOLEAN = 0x1000;
 const sal_uInt16 IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
 const sal_uInt16 IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA;
 const sal_uInt16 IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
@@ -238,7 +203,7 @@ const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
 #define PASTE_NONEMPTY      5
 
-                                        // Bits fuer HasAttr
+                                        // bits for HasAttr
 #define HASATTR_LINES           1
 #define HASATTR_MERGED          2
 #define HASATTR_OVERLAPPED      4
@@ -259,28 +224,28 @@ const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
 #define EMPTY_STRING ScGlobal::GetEmptyString()
 
-                                        //  Layer-ID's fuer Drawing
+                                        //  layer id's for drawing
 #define SC_LAYER_FRONT      0
 #define SC_LAYER_BACK       1
 #define SC_LAYER_INTERN     2
 #define SC_LAYER_CONTROLS   3
 #define SC_LAYER_HIDDEN     4
 
-                                        //  Tabellen linken
+                                        //  link tables
 #define SC_LINK_NONE        0
 #define SC_LINK_NORMAL      1
 #define SC_LINK_VALUE       2
 
-                                        //  Eingabe
+                                        //  input
 #define SC_ENTER_NORMAL     0
 #define SC_ENTER_BLOCK      1
 #define SC_ENTER_MATRIX     2
 
-                                        //  Step = 10pt, max. Einzug = 100 Schritte
+                                        //  step = 10pt, max. indention = 100 steps
 #define SC_INDENT_STEP      200
 #define SC_MAX_INDENT       20000
 
-                                        //  Szenario-Flags
+                                        //  scenario flags
 #define SC_SCENARIO_COPYALL     1
 #define SC_SCENARIO_SHOWFRAME   2
 #define SC_SCENARIO_PRINTFRAME  4
@@ -294,11 +259,11 @@ const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
 #endif
 
-                                    // Ist Bit in Set gesetzt?
+                                    // is bit set in set?
 #define IS_SET(bit,set)(((set)&(bit))==(bit))
 
-#define SEL_ALL         -1  // Eingabezeile: alles Selektieren
-#define RES_CANCEL      0   // Resultate der Funk.AutoPilot-Seiten
+#define SEL_ALL         -1  // input line: select all
+#define RES_CANCEL      0   // results of function AutoPilot pages
 #define RES_BACKWARD    1
 #define RES_END         2
 
@@ -310,8 +275,8 @@ enum CellType
         CELLTYPE_FORMULA,
         CELLTYPE_NOTE,
         CELLTYPE_EDIT,
-        CELLTYPE_SYMBOLS        // fuer Laden/Speichern
-#if DBG_UTIL
+        CELLTYPE_SYMBOLS        // for load/save
+#if OSL_DEBUG_LEVEL > 0
            ,CELLTYPE_DESTROYED
 #endif
     };
@@ -387,30 +352,29 @@ enum ScSizeMode
 enum ScInputMode
     {
         SC_INPUT_NONE,
-        SC_INPUT_TYPE,              // Eingabe, ohne im Inplace-Modus zu sein
-        SC_INPUT_TABLE,             // Textcursor in der Tabelle
-        SC_INPUT_TOP                // Textcursor in der Eingabezeile
+        SC_INPUT_TYPE,              // input, while not in inplace mode
+        SC_INPUT_TABLE,             // text cursor in the table
+        SC_INPUT_TOP                // text cursor in the input line
     };
 
-enum ScVObjMode                     // Ausgabemodi von Objekten auf einer Seite
+enum ScVObjMode                     // output modes of objects on a page
 {
     VOBJ_MODE_SHOW,
     VOBJ_MODE_HIDE
-    // #i80528# VOBJ_MODE_DUMMY removed, no longer supported
 };
 
-enum ScAnchorType                   // Verankerung eines Zeichenobjekts
+enum ScAnchorType                   // anchor of a character object
 {
     SCA_CELL,
     SCA_PAGE,
-    SCA_DONTKNOW                    // bei Mehrfachselektion
+    SCA_DONTKNOW                    // for multi selection
 };
 
 enum ScGetDBMode
 {
-    SC_DB_MAKE,     // wenn noetig, "unbenannt" anlegen
-    SC_DB_IMPORT,   // wenn noetig, "Importx" anlegen
-    SC_DB_OLD       // nicht neu anlegen
+    SC_DB_MAKE,     // create "untitled" (if necessary)
+    SC_DB_IMPORT,   // create "Importx" (if necessary)
+    SC_DB_OLD       // don't create
 };
 
 /// For ScDBFunc::GetDBData()
@@ -436,20 +400,14 @@ enum ScGetDBSelection
     SC_DBSEL_FORCE_MARK
 };
 
-enum ScLkUpdMode
-{                   //Verknuepfungen
-    LM_ALWAYS,      //immer aktualisieren
-    LM_NEVER,       //niemals
-    LM_ON_DEMAND,   //auf nachfrage
-    LM_UNKNOWN      //Shit happens
+enum ScLkUpdMode    // modes for updating links
+{
+    LM_ALWAYS,
+    LM_NEVER,
+    LM_ON_DEMAND,
+    LM_UNKNOWN
 };
 
-
-// -----------------------------------------------------------------------
-
-//==================================================================
-
-// -----------------------------------------------------------------------
 
 // enum with values equal to old DBObject enum from sdb
 enum ScDBObject
@@ -464,20 +422,19 @@ struct ScImportParam
     SCROW           nRow1;
     SCCOL           nCol2;
     SCROW           nRow2;
-    sal_Bool            bImport;
-    String          aDBName;                    // Alias der Datenbank
-    String          aStatement;
-    sal_Bool            bNative;
-    sal_Bool            bSql;                       // Statement oder Name?
-    sal_uInt8           nType;                      // enum DBObject
+    bool            bImport;
+    ::rtl::OUString aDBName;                    // alias of data base
+    ::rtl::OUString aStatement;
+    bool            bNative;
+    bool            bSql;                       // statement or name?
+    sal_uInt8       nType;                      // enum DBObject
 
     ScImportParam();
     ScImportParam( const ScImportParam& r );
     ~ScImportParam();
 
     ScImportParam&  operator=   ( const ScImportParam& r );
-    sal_Bool            operator==  ( const ScImportParam& r ) const;
-//UNUSED2009-05 void            Clear       ();
+    bool            operator==  ( const ScImportParam& r ) const;
 };
 
 struct ScStringHashCode
@@ -487,8 +444,6 @@ struct ScStringHashCode
         return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
     }
 };
-
-// -----------------------------------------------------------------------
 
 class ScDocument;
 class ScDocShell;
@@ -545,10 +500,6 @@ class ScGlobal
     static SvxBrushItem*    pProtectedBrushItem;
 
     static ImageList*       pOutlineBitmaps;
-    static ImageList*       pOutlineBitmapsHC;
-
-//  static Bitmap*          pAnchorBitmap;
-//  static Bitmap*          pGrayAnchorBitmap;
 
     static ScFunctionList*  pStarCalcFunctionList;
     static ScFunctionMgr*   pStarCalcFunctionMgr;
@@ -580,7 +531,7 @@ public:
     static IntlWrapper*         GetScIntlWrapper();
     static ::com::sun::star::lang::Locale*      GetLocale();
 
-    SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration(); //CHINA001
+    SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration();
     static ::utl::TransliterationWrapper* GetCaseTransliteration();
 
     SC_DLLPUBLIC static LanguageType            eLnge;
@@ -618,9 +569,9 @@ public:
     SC_DLLPUBLIC static long                nLastRowHeightExtra;
     static long             nLastColWidthExtra;
 
-    static void             Init();                     // am Anfang
+    static void             Init();                     // during start up
     static void             InitAddIns();
-    static void             Clear();                    // bei Programmende
+    static void             Clear();                    // at the end of the program
 
     static void             UpdatePPT(OutputDevice* pDev);
 
@@ -632,12 +583,8 @@ public:
     SC_DLLPUBLIC    static const String&    GetEmptyString();
     static const String&    GetScDocString();
 
-    /** Returns the specified image list with outline symbols.
-        @param bHC  false = standard symbols; true = high contrast symbols. */
-    static ImageList*       GetOutlineSymbols( bool bHC );
-
-//  static const Bitmap&    GetAnchorBitmap();
-//  static const Bitmap&    GetGrayAnchorBitmap();
+    /** Returns the specified image list with outline symbols. */
+    static ImageList*       GetOutlineSymbols();
 
     static bool             HasStarCalcFunctionList();
     static ScFunctionList*  GetStarCalcFunctionList();
@@ -730,8 +677,7 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
 };
 #endif
 
-//==================================================================
-// evtl. in dbdata.hxx auslagern (?):
+// maybe move to dbdata.hxx (?):
 
 enum ScQueryOp
     {
@@ -753,15 +699,11 @@ enum ScQueryOp
         SC_DOES_NOT_END_WITH
     };
 
-// -----------------------------------------------------------------------
-
 enum ScQueryConnect
     {
         SC_AND,
         SC_OR
     };
-
-// -----------------------------------------------------------------------
 
 enum ScSubTotalFunc
     {
@@ -779,13 +721,10 @@ enum ScSubTotalFunc
         SUBTOTAL_FUNC_VARP  = 11
     };
 
-
-// -----------------------------------------------------------------------
-
 /*
- * Dialog liefert die ausgezeichneten Feldwerte "leer"/"nicht leer"
- * als Konstanten SC_EMPTYFIELDS bzw. SC_NONEMPTYFIELDS in nVal in
- * Verbindung mit dem Schalter bQueryByString auf FALSE.
+ * dialog returns the special field values "empty"/"not empty"
+ * as constants SC_EMPTYFIELDS and SC_NONEMPTYFIELDS respectively in nVal in
+ * conjuctions with the flag bQueryByString = FALSE.
  */
 
 #define SC_EMPTYFIELDS      ((double)0x0042)
@@ -807,14 +746,14 @@ struct ScQueryEntry
     ScQueryConnect  eConnect;
     String*         pStr;
     double          nVal;
-    utl::SearchParam*   pSearchParam;       // falls RegExp, nicht gespeichert
-    utl::TextSearch*    pSearchText;        // falls RegExp, nicht gespeichert
+    utl::SearchParam*   pSearchParam;       // if RegExp, not saved
+    utl::TextSearch*    pSearchText;        // if RegExp, not saved
 
     ScQueryEntry();
     ScQueryEntry(const ScQueryEntry& r);
     ~ScQueryEntry();
 
-    // legt ggbf. pSearchParam und pSearchText an, immer RegExp!
+    // creates pSearchParam and pSearchText if necessary, always RegExp!
     utl::TextSearch*    GetSearchTextPtr( sal_Bool bCaseSens );
 
     void            Clear();
@@ -822,55 +761,19 @@ struct ScQueryEntry
     sal_Bool            operator==( const ScQueryEntry& r ) const;
 };
 
-// -----------------------------------------------------------------------
-
-struct SC_DLLPUBLIC ScSubTotalParam
-{
-    SCCOL           nCol1;          // Selektierter Bereich
-    SCROW           nRow1;
-    SCCOL           nCol2;
-    SCROW           nRow2;
-    sal_Bool            bRemoveOnly;
-    sal_Bool            bReplace;                   // vorhandene Ergebnisse ersetzen
-    sal_Bool            bPagebreak;                 // Seitenumbruch bei Gruppenwechsel
-    sal_Bool            bCaseSens;                  // Gross-/Kleinschreibung
-    sal_Bool            bDoSort;                    // vorher sortieren
-    sal_Bool            bAscending;                 // aufsteigend sortieren
-    sal_Bool            bUserDef;                   // Benutzer-def. Sort.Reihenfolge
-    sal_uInt16          nUserIndex;                 // Index auf Liste
-    sal_Bool            bIncludePattern;            // Formate mit sortieren
-    sal_Bool            bGroupActive[MAXSUBTOTAL];  // aktive Gruppen
-    SCCOL           nField[MAXSUBTOTAL];        // zugehoeriges Feld
-    SCCOL           nSubTotals[MAXSUBTOTAL];    // Anzahl der SubTotals
-    SCCOL*          pSubTotals[MAXSUBTOTAL];    // Array der zu berechnenden Spalten
-    ScSubTotalFunc* pFunctions[MAXSUBTOTAL];    // Array der zugehoerige Funktionen
-
-    ScSubTotalParam();
-    ScSubTotalParam( const ScSubTotalParam& r );
-
-    ScSubTotalParam&    operator=       ( const ScSubTotalParam& r );
-    sal_Bool                operator==      ( const ScSubTotalParam& r ) const;
-    void                Clear           ();
-    void                SetSubTotals    ( sal_uInt16                nGroup,
-                                          const SCCOL*          ptrSubTotals,
-                                          const ScSubTotalFunc* ptrFuncions,
-                                          sal_uInt16                nCount );
-};
-
-// -----------------------------------------------------------------------
 class ScArea;
 
 struct ScConsolidateParam
 {
-    SCCOL           nCol;                   // Cursor Position /
-    SCROW           nRow;                   // bzw. Anfang des Zielbereiches
+    SCCOL           nCol;                   // cursor position /
+    SCROW           nRow;                   // or start of destination area respectively
     SCTAB           nTab;
-    ScSubTotalFunc  eFunction;              // Berechnungsvorschrift
-    sal_uInt16          nDataAreaCount;         // Anzahl der Datenbereiche
-    ScArea**        ppDataAreas;            // Zeiger-Array auf Datenbereiche
-    sal_Bool            bByCol;                 // nach Spalten
-    sal_Bool            bByRow;                 // nach Zeilen
-    sal_Bool            bReferenceData;         // Quelldaten referenzieren
+    ScSubTotalFunc  eFunction;
+    sal_uInt16          nDataAreaCount;         // number of data areas
+    ScArea**        ppDataAreas;            // array of pointers into data areas
+    sal_Bool            bByCol;
+    sal_Bool            bByRow;
+    sal_Bool            bReferenceData;         // reference source data
 
     ScConsolidateParam();
     ScConsolidateParam( const ScConsolidateParam& r );
@@ -883,8 +786,6 @@ struct ScConsolidateParam
     void                SetAreas        ( ScArea* const* ppAreas, sal_uInt16 nCount );
 };
 
-// -----------------------------------------------------------------------
-extern ::utl::TransliterationWrapper* GetScGlobalpTransliteration();//CHINA001
-extern const LocaleDataWrapper* GetScGlobalpLocaleData();
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

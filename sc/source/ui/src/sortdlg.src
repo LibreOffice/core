@@ -25,6 +25,7 @@
  *
  ************************************************************************/
 #include "sortdlg.hrc"
+
 TabPage RID_SCPAGE_SORT_FIELDS
 {
     Hide = TRUE ;
@@ -125,6 +126,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ en-US ] = "T~hen by" ;
     };
 };
+
 TabPage RID_SCPAGE_SORT_OPTIONS
 {
     Hide = TRUE ;
@@ -163,10 +165,21 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ en-US ] = "Include ~formats" ;
         TabStop = TRUE ;
     };
-    CheckBox BTN_COPYRESULT
+    CheckBox BTN_NATURALSORT
     {
         HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_COPYRESULT";
         Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text [ de ] = "Enable ~natural sort" ;
+        Text [ en-US ] = "Enable ~natural sort" ;
+        Text [ cs ] = "Aktivovat přirozené třídění" ;
+        Text [ sk ] = "Aktivovať prirodzené triedenie" ;
+        TabStop = TRUE ;
+        Text [ x-comment ] = " " ;
+    };
+    CheckBox BTN_COPYRESULT
+    {
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "~Copy sort results to:" ;
         TabStop = TRUE ;
@@ -175,7 +188,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_OUTAREA";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 20 , 59 ) ;
+        Pos = MAP_APPFONT ( 20 , 73 ) ;
         Size = MAP_APPFONT ( 93 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -185,14 +198,14 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         HelpID = "sc:Edit:RID_SCPAGE_SORT_OPTIONS:ED_OUTAREA";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 119 , 59 ) ;
+        Pos = MAP_APPFONT ( 119 , 73 ) ;
         Size = MAP_APPFONT ( 132 , 12 ) ;
         TabStop = TRUE ;
     };
     CheckBox BTN_SORT_USER
     {
         HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_SORT_USER";
-        Pos = MAP_APPFONT ( 12 , 75 ) ;
+        Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "Custom sort ~order" ;
         TabStop = TRUE ;
@@ -202,14 +215,14 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_SORT_USER";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 20 , 86 ) ;
+        Pos = MAP_APPFONT ( 20 , 100 ) ;
         Size = MAP_APPFONT ( 231 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_LANGUAGE
     {
-        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 101 , 8 ) ;
         Text [ en-US ] = "~Language";
     };
@@ -217,7 +230,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_LANGUAGE";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 115 ) ;
+        Pos = MAP_APPFONT ( 12 , 129 ) ;
         Size = MAP_APPFONT ( 101 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -225,7 +238,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     FixedText FT_ALGORITHM
     {
-        Pos = MAP_APPFONT ( 119 , 104 ) ;
+        Pos = MAP_APPFONT ( 119 , 118 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
         Text [ en-US ] = "O~ptions";
     };
@@ -233,21 +246,21 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         HelpID = "sc:ListBox:RID_SCPAGE_SORT_OPTIONS:LB_ALGORITHM";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 119 , 115 ) ;
+        Pos = MAP_APPFONT ( 119 , 129 ) ;
         Size = MAP_APPFONT ( 132 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedLine FL_DIRECTION
     {
-        Pos = MAP_APPFONT ( 6 , 133 ) ;
+        Pos = MAP_APPFONT ( 6 , 147 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Direction" ;
     };
     RadioButton BTN_TOP_DOWN
     {
         HelpID = "sc:RadioButton:RID_SCPAGE_SORT_OPTIONS:BTN_TOP_DOWN";
-        Pos = MAP_APPFONT ( 12 , 144 ) ;
+        Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "~Top to bottom (sort rows)" ;
         TabStop = TRUE ;
@@ -255,18 +268,13 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     RadioButton BTN_LEFT_RIGHT
     {
         HelpID = "sc:RadioButton:RID_SCPAGE_SORT_OPTIONS:BTN_LEFT_RIGHT";
-        Pos = MAP_APPFONT ( 12 , 158 ) ;
+        Pos = MAP_APPFONT ( 12 , 172 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "L~eft to right (sort columns)" ;
         TabStop = TRUE ;
     };
-    FixedText FT_AREA_LABEL
-    {
-        Pos = MAP_APPFONT ( 6 , 171 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Data area:" ;
-    };
 };
+
 TabDialog RID_SCDLG_SORT
 {
     OutputSize = TRUE ;

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@
 #include "FormattedStringHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "DateHelper.hxx"
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <editeng/unoprnms.hxx>
 
@@ -123,7 +123,7 @@ void CandleStickChart::createShapes()
     if( m_nDimension!=2 )
         return;
 
-    DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"CandleStickChart is not proper initialized");
+    OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"CandleStickChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
@@ -207,7 +207,7 @@ void CandleStickChart::createShapes()
             pPosHelper->updateSeriesCount( aZSlotIter->size() );
 //=============================================================================
             //iterate through all x slots in this category
-            for( double fSlotX=0; aXSlotIter != aXSlotEnd; aXSlotIter++, fSlotX+=1.0 )
+            for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
@@ -216,7 +216,7 @@ void CandleStickChart::createShapes()
                 aSeriesIter = pSeriesList->begin();
     //=============================================================================
                 //iterate through all series in this x slot
-                for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     //collect data point information (logic coordinates, style ):
                     double fUnscaledX = (*aSeriesIter)->getXValue( nIndex );
@@ -388,3 +388,5 @@ void CandleStickChart::createShapes()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

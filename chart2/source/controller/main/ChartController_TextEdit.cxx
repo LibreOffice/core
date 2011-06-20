@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,11 +49,9 @@
 // header for class SdrOutliner
 #include <svx/svdoutl.hxx>
 #include <svx/svxdlg.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
@@ -62,7 +61,6 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-//using namespace ::com::sun::star::chart2;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -79,7 +77,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 {
     //the first marked object will be edited
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SdrObject* pTextObj = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObj)
         return;
@@ -88,10 +86,6 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     m_pTextActionUndoGuard.reset( new UndoGuard(
         String( SchResId( STR_ACTION_EDIT_TEXT ) ), m_xUndoManager ) );
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
-    //pOutliner->SetRefDevice(m_pChartWindow);
-    //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);
-    //pOutliner->SetDefaultLanguage( eLang );
-    //pOutliner->SetHyphenator( xHyphenator );
 
     //#i77362 change notification for changes on additional shapes are missing
     uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
@@ -109,12 +103,6 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
                     );
     if(bEdit)
     {
-        // set undo manager at topmost shell ( SdDrawTextObjectBar )
-        /*
-        if( pViewSh )
-            pViewSh->GetViewFrame()->GetDispatcher()->GetShell( 0 )->
-                SetUndoManager(&pOutliner->GetUndoManager());
-        */
         m_pDrawViewWrapper->SetEditMode();
 
         // #i12587# support for shapes in chart
@@ -184,13 +172,13 @@ bool ChartController::EndTextEdit()
 
 void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( m_pDrawViewWrapper && !m_pDrawViewWrapper->IsTextEdit() )
         this->StartTextEdit();
 
     SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT( pFact, "No dialog factory" );
+    OSL_ENSURE( pFact, "No dialog factory" );
 
     SfxAllItemSet aSet( m_pDrawModelWrapper->GetItemPool() );
     aSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
@@ -202,7 +190,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
     aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 
     SfxAbstractDialog * pDlg = pFact->CreateSfxDialog( m_pChartWindow, aSet, getFrame(), RID_SVXDLG_CHARMAP );
-    DBG_ASSERT( pDlg, "Couldn't create SvxCharacterMap dialog" );
+    OSL_ENSURE( pDlg, "Couldn't create SvxCharacterMap dialog" );
     if( pDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pSet = pDlg->GetOutputItemSet();
@@ -228,16 +216,12 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         // attributes become unique (sel. has to be erased anyway)
         pOutlinerView->InsertText(String());
 
-        //SfxUndoManager& rUndoMgr =  pOutliner->GetUndoManager();
-        //rUndoMgr.EnterListAction( String( SchResId( STR_UNDO_INSERT_SPECCHAR )), String( SchResId( STR_UNDO_INSERT_SPECCHAR )));
-        pOutlinerView->InsertText(aString, sal_True);
+        pOutlinerView->InsertText(aString, true);
 
         ESelection aSel = pOutlinerView->GetSelection();
         aSel.nStartPara = aSel.nEndPara;
         aSel.nStartPos = aSel.nEndPos;
         pOutlinerView->SetSelection(aSel);
-
-        //rUndoMgr.LeaveListAction();
 
         // show changes
         pOutliner->SetUpdateMode(sal_True);
@@ -260,3 +244,5 @@ uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

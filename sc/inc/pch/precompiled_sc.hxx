@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -194,7 +195,6 @@
 #include <tools/errinf.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
-#include <tools/list.hxx>
 #include <tools/rc.hxx>
 #include <tools/rtti.hxx>
 #include <tools/solar.h>
@@ -235,11 +235,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
-#include <tools/wintypes.hxx>
-#include <vos/macros.hxx>
-#include <vos/object.hxx>
-#include <vos/types.hxx>
+#include <vcl/wintypes.hxx>
 #include <wchar.h>
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,7 +69,7 @@ SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nInde
     VbaEventsHelperBase::checkArgument( rArgs, nIndex );
 
     // first try to extract a sheet index
-    sal_Int32 nTab = -1;
+    sal_Int16 nTab = -1;
     if( rArgs[ nIndex ] >>= nTab )
     {
         if( (nTab < 0) || (nTab > MAXTAB) )
@@ -405,7 +406,7 @@ void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEv
         }
     }
 
-    if( aRangeList.Count() > 0 )
+    if (!aRangeList.empty())
     {
         uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( mpDocShell, aRangeList ) );
         uno::Sequence< uno::Any > aArgs(1);
@@ -823,13 +824,13 @@ namespace {
 bool lclSelectionChanged( const ScRangeList& rLeft, const ScRangeList& rRight )
 {
     // one of the range lists empty? -> return false, if both lists empty
-    bool bLeftEmpty = rLeft.Count() == 0;
-    bool bRightEmpty = rRight.Count() == 0;
+    bool bLeftEmpty = rLeft.empty();
+    bool bRightEmpty = rRight.empty();
     if( bLeftEmpty || bRightEmpty )
         return !(bLeftEmpty && bRightEmpty);
 
     // check sheet indexes of the range lists (assuming that all ranges in a list are on the same sheet)
-    if( rLeft.GetObject( 0 )->aStart.Tab() != rRight.GetObject( 0 )->aStart.Tab() )
+    if (rLeft[0]->aStart.Tab() != rRight[0]->aStart.Tab())
         return false;
 
     // compare all ranges
@@ -920,3 +921,5 @@ extern sdecl::ServiceDecl const serviceDecl(
 }
 
 // ============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

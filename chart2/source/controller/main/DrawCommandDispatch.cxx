@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include "chartview/DrawModelWrapper.hxx"
 #include "macros.hxx"
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/adjitem.hxx>
@@ -384,7 +385,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
             DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
             if ( pDrawViewWrapper )
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 m_pChartController->setDrawMode( eDrawMode );
                 setInsertObj( sal::static_int_cast< sal_uInt16 >( eKind ) );
                 if ( bCreate )
@@ -464,7 +465,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
         SdrPage* pPage = GetSdrPageFromXDrawPage( xDrawPage );
         if ( pPage )
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             pObj = SdrObjFactory::MakeNewObject( pDrawViewWrapper->GetCurrentObjInventor(),
                 pDrawViewWrapper->GetCurrentObjIdentifier(), pPage );
             if ( pObj )
@@ -672,3 +673,5 @@ bool DrawCommandDispatch::parseCommandURL( const ::rtl::OUString& rCommandURL, s
 //.............................................................................
 } //  namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@ class ScGroupDlg : public ModalDialog
 public:
             ScGroupDlg( Window* pParent,
                         sal_uInt16  nResId,
-                        sal_Bool    bUnGroup = sal_False,
+                        sal_Bool    bUnGroup = false,
                         sal_Bool    bRows    = sal_True  );
             ~ScGroupDlg();
 
@@ -59,3 +60,4 @@ private:
 #endif // SC_STRINDLG_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

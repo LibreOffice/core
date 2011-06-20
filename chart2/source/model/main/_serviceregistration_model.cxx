@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include <cppuhelper/implementationentry.hxx>
-#ifndef _CHARTMODEL_HXX
 #include "ChartModel.hxx"
-#endif
 
 #include "Diagram.hxx"
 #include "Legend.hxx"
@@ -208,3 +207,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 }
 }
 //=========================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

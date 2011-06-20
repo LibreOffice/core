@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,28 +81,16 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
     aRemoveColorLB.SetSelectHdl( aLk );
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
-__EXPORT ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
+ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
 {
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
-SfxTabPage* __EXPORT ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new ScRedlineOptionsTabPage( pParent, rSet );
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
-sal_Bool __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
+sal_Bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
@@ -165,30 +154,25 @@ sal_Bool __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
     if (pDocSh)
         pDocSh->PostPaintGridAll();
 
-    return sal_False;
+    return false;
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
-void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
+void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 {
-
-    XColorTable* pColorTbl = XColorTable::GetStdColorTable();
     aContentColorLB.InsertEntry(aAuthorStr);
     aMoveColorLB.InsertEntry(aAuthorStr);
     aInsertColorLB.InsertEntry(aAuthorStr);
     aRemoveColorLB.InsertEntry(aAuthorStr);
 
-    aContentColorLB.SetUpdateMode( sal_False);
-    aMoveColorLB.SetUpdateMode( sal_False);
-    aInsertColorLB.SetUpdateMode( sal_False);
-    aRemoveColorLB.SetUpdateMode( sal_False);
+    aContentColorLB.SetUpdateMode( false);
+    aMoveColorLB.SetUpdateMode( false);
+    aInsertColorLB.SetUpdateMode( false);
+    aRemoveColorLB.SetUpdateMode( false);
 
-    for( sal_uInt16 i = 0; i < pColorTbl->Count(); ++i )
+    XColorTable& rColorTbl = XColorTable::GetStdColorTable();
+    for( sal_uInt16 i = 0; i < rColorTbl.Count(); ++i )
     {
-        XColorEntry* pEntry = pColorTbl->GetColor( i );
+        XColorEntry* pEntry = rColorTbl.GetColor( i );
         Color aColor = pEntry->GetColor();
         String sName = pEntry->GetName();
 
@@ -236,54 +220,7 @@ void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 
 IMPL_LINK( ScRedlineOptionsTabPage, ColorHdl, ColorListBox *, EMPTYARG )
 {
-/*
-    SvxFontPrevWindow *pPrev;
-    ListBox *pLB;
-
-    if (pColorLB == &aInsertColorLB)
-    {
-        pPrev = &aInsertPreviewWN;
-        pLB = &aInsertLB;
-    }
-    else
-    {
-        pPrev = &aDeletedPreviewWN;
-        pLB = &aDeletedLB;
-    }
-
-    SvxFont& rFont = pPrev->GetFont();
-    sal_uInt16 nPos = pLB->GetSelectEntryPos();
-    if (nPos == LISTBOX_ENTRY_NOTFOUND)
-        nPos = 0;
-
-    CharAttr *pAttr = (CharAttr *)pLB->GetEntryData(nPos);
-
-    if (pAttr->nItemId == SID_ATTR_BRUSH)
-    {
-        rFont.SetColor(Color(COL_BLACK));
-        nPos = pColorLB->GetSelectEntryPos();
-        if (nPos && nPos != LISTBOX_ENTRY_NOTFOUND)
-        {
-            Brush aBrush(Color(pColorLB->GetSelectEntryColor()));
-            pPrev->SetBrush(aBrush);
-        }
-        else
-        {
-            Brush aBrush(Color(COL_LIGHTGRAY));
-            pPrev->SetBrush(aBrush);
-        }
-    }
-    else
-    {
-        nPos = pColorLB->GetSelectEntryPos();
-        if (nPos && nPos != LISTBOX_ENTRY_NOTFOUND)
-            rFont.SetColor(pColorLB->GetEntryColor(nPos));
-        else
-            rFont.SetColor(Color(COL_RED));
-    }
-
-    pPrev->Invalidate();
-*/
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

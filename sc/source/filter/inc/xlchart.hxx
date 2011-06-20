@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,7 @@
 #include <map>
 #include <tools/gen.hxx>
 #include "fapihelper.hxx"
+#include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -569,9 +571,14 @@ const sal_uInt16 EXC_CHPICFORMAT_STRETCH        = 1;        /// Bitmap stretched
 const sal_uInt16 EXC_CHPICFORMAT_STACK          = 2;        /// Bitmap stacked.
 const sal_uInt16 EXC_CHPICFORMAT_SCALE          = 3;        /// Bitmap scaled to axis scale.
 
-const sal_uInt16 EXC_CHPICFORMAT_TOPBOTTOM      = 0x0200;
-const sal_uInt16 EXC_CHPICFORMAT_FRONTBACK      = 0x0400;
-const sal_uInt16 EXC_CHPICFORMAT_LEFTRIGHT      = 0x0800;
+const sal_uInt16 EXC_CHPICFORMAT_WMF            = 2;
+const sal_uInt16 EXC_CHPICFORMAT_BMP            = 9;
+const sal_uInt16 EXC_CHPICFORMAT_DEFAULT        = 19;
+
+const sal_uInt16 EXC_CHPICFORMAT_WINDOWS        = 0x0001;
+const sal_uInt16 EXC_CHPICFORMAT_MACOS          = 0x0002;
+const sal_uInt16 EXC_CHPICFORMAT_FORMATONLY     = 0x0100;
+const sal_uInt16 EXC_CHPICFORMAT_DEFAULTFLAGS   = 0x0E00;   /// Default flags for export.
 
 // (0x103D) CHDROPBAR ---------------------------------------------------------
 
@@ -836,8 +843,8 @@ class EscherPropertyContainer;
 
 struct XclChEscherFormat
 {
-    typedef ScfRef< SfxItemSet >                SfxItemSetRef;
-    typedef ScfRef< EscherPropertyContainer >   EscherPropSetRef;
+    typedef boost::shared_ptr< SfxItemSet >                SfxItemSetRef;
+    typedef boost::shared_ptr< EscherPropertyContainer >   EscherPropSetRef;
 
     SfxItemSetRef       mxItemSet;          /// Item set for Escher properties import.
     EscherPropSetRef    mxEscherSet;        /// Container for Escher properties export.
@@ -851,6 +858,7 @@ struct XclChEscherFormat
 struct XclChPicFormat
 {
     sal_uInt16          mnBmpMode;          /// Bitmap mode, e.g. stretched, stacked.
+    sal_uInt16          mnFormat;           /// Image data format (WMF, BMP).
     sal_uInt16          mnFlags;            /// Additional flags.
     double              mfScale;            /// Picture scaling (units).
 
@@ -1434,8 +1442,7 @@ public:
                             XclChObjectTable& rHatchTable,
                             XclChObjectTable& rBitmapTable,
                             const XclChEscherFormat& rEscherFmt,
-                            const XclChPicFormat* pPicFmt,
-                            sal_uInt32 nDffFillType,
+                            const XclChPicFormat& rPicFmt,
                             XclChPropertyMode ePropMode );
     /** Writes all marker properties to the passed property set. */
     void                WriteMarkerProperties(
@@ -1475,9 +1482,9 @@ private:
 /** Base struct for internal root data structs for import and export. */
 struct XclChRootData
 {
-    typedef ScfRef< XclChTypeInfoProvider >                 XclChTypeProvRef;
-    typedef ScfRef< XclChFormatInfoProvider >               XclChFmtInfoProvRef;
-    typedef ScfRef< XclChObjectTable >                      XclChObjectTableRef;
+    typedef boost::shared_ptr< XclChTypeInfoProvider >      XclChTypeProvRef;
+    typedef boost::shared_ptr< XclChFormatInfoProvider >    XclChFmtInfoProvRef;
+    typedef boost::shared_ptr< XclChObjectTable >           XclChObjectTableRef;
     typedef ::std::map< XclChTextKey, XclChGetShapeFunc >   XclChGetShapeFuncMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
@@ -1515,3 +1522,4 @@ struct XclChRootData
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

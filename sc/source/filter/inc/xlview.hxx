@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <tools/color.hxx>
 #include "ftools.hxx"
 #include "xladdress.hxx"
+#include <boost/shared_ptr.hpp>
 
 // Constants and enumerations =================================================
 
@@ -121,7 +123,7 @@ struct XclSelectionData
     inline explicit     XclSelectionData() : mnCursorIdx( 0 ) {}
 };
 
-typedef ScfRef< XclSelectionData > XclSelectionDataRef;
+typedef boost::shared_ptr< XclSelectionData > XclSelectionDataRef;
 
 // ----------------------------------------------------------------------------
 
@@ -135,7 +137,7 @@ struct XclTabViewData
     XclAddress          maFirstXclPos;      /// First visible cell.
     XclAddress          maSecondXclPos;     /// First visible cell in additional panes.
     sal_uInt16          mnSplitX;           /// Split X position, or number of frozen columns.
-    sal_uInt16          mnSplitY;           /// Split Y position, or number of frozen rows.
+    sal_uInt32          mnSplitY;           /// Split Y position, or number of frozen rows.
     sal_uInt16          mnNormalZoom;       /// Zoom factor for normal view.
     sal_uInt16          mnPageZoom;         /// Zoom factor for pagebreak preview.
     sal_uInt16          mnCurrentZoom;      /// Zoom factor for current view.
@@ -152,7 +154,7 @@ struct XclTabViewData
     bool                mbShowZeros;        /// true = Show zero value zells.
     bool                mbShowOutline;      /// true = Show outlines.
     Color               maTabBgColor;       /// Tab Color default = (COL_AUTO )
-    bool                IsDefaultTabBgColor() const { return maTabBgColor == Color(COL_AUTO) ? sal_True : sal_False; };
+    bool                IsDefaultTabBgColor() const { return maTabBgColor == Color(COL_AUTO) ? sal_True : false; };
     sal_uInt32          mnTabBgColorId;         /// pallette color id
 
     explicit            XclTabViewData();
@@ -176,3 +178,4 @@ struct XclTabViewData
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

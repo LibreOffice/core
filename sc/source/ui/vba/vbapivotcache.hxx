@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,10 @@ class ScVbaPivotCache : public PivotCacheImpl_BASE
     css::uno::Reference< css::sheet::XDataPilotTable > m_xTable;
 public:
     ScVbaPivotCache( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );
+
+    virtual ::sal_Int32 SAL_CALL getMissingItemsLimit() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setMissingItemsLimit( ::sal_Int32 aValue ) throw ( css::uno::RuntimeException);
+
     virtual void SAL_CALL Refresh() throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
@@ -47,3 +52,5 @@ public:
 };
 
 #endif //SC_VBA_PIVOTCACHE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

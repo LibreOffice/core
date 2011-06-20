@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include "pagepar.hxx"
 #include "editutil.hxx"
 
-#ifndef _PRINT_HXX //autogen
 #include <vcl/print.hxx>
-#endif
 
 class SfxPrinter;
 class SfxProgress;
@@ -225,7 +224,7 @@ private:
 
     ScHeaderFieldData   aFieldData;
 
-    List                aNotePosList;       //  Reihenfolge der Notizen
+    std::vector<ScAddress> aNotePosList;        //  Reihenfolge der Notizen
 
     ScPageBreakData*    pPageData;          // zum Eintragen der Umbrueche etc.
 
@@ -247,6 +246,14 @@ public:
                                  const ScPrintState& rState,
                                  const ScPrintOptions* pOptions );
 
+                    ScPrintFunc( ScDocShell* pShell, Window* pWindow, SCTAB nTab,
+                                 long nPage = 0, long nDocP = 0,
+                                 const ScRange* pArea = NULL,
+                                 const ScPrintOptions* pOptions = NULL );
+
+                    ScPrintFunc( ScDocShell* pShell, Window* pWindow,
+                                 const ScPrintState& rState,
+                                 const ScPrintOptions* pOptions );
                     ~ScPrintFunc();
 
     static void     DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrintFactor,
@@ -268,8 +275,10 @@ public:
 
     void            ApplyPrintSettings();       // aus DoPrint() schon gerufen
     long            DoPrint( const MultiSelection& rPageRanges,
-                                long nStartPage, long nDisplayStart, sal_Bool bDoPrint,
-                                ScPreviewLocationData* pLocationData );
+                                /*long nStartPage, long nDisplayStart, sal_Bool bDoPrint,
+                                SfxProgress* pProgress, ScPreviewLocationData* pLocationData );*/
+                                long nStartPage, long nDisplayStart, sal_Bool bDoPrint = sal_True,
+                                SfxProgress* pProgress = NULL, ScPreviewLocationData* pLocationData = NULL);
 
                     //  Werte abfragen - sofort
 
@@ -356,3 +365,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

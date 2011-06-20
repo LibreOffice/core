@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@ const short FLAG_DEPRECATED =1;
 const short FLAG_MODEL      =2;
 
 #define WRITE_PROPERTY( MediaName, nFlags )             \
-if(rProp.Name.equals(::rtl::OUString::createFromAscii(#MediaName))) \
+if(rProp.Name.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(#MediaName)))) \
 {                                                       \
     if( rProp.Value >>= MediaName )                     \
         ISSET_##MediaName = sal_True;                   \
@@ -219,3 +220,5 @@ MediaDescriptorHelper::~MediaDescriptorHelper()
     return m_aModelProperties;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

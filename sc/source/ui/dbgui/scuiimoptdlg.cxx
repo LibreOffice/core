@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,10 +69,10 @@ private:
 sal_uInt16 ScDelimiterTable::GetCode( const String& rDel ) const
 {
     sal_Unicode nCode = 0;
-    xub_StrLen i = 0;
 
     if ( nCount >= 2 )
     {
+        xub_StrLen i = 0;
         while ( i<nCount )
         {
             if ( rDel == theDelTab.GetToken( i, cSep ) )
@@ -92,10 +93,10 @@ sal_uInt16 ScDelimiterTable::GetCode( const String& rDel ) const
 String ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 {
     String aStrDel;
-    xub_StrLen i = 0;
 
     if ( nCount >= 2 )
     {
+        xub_StrLen i = 0;
         while ( i<nCount )
         {
             if ( nCode == (sal_Unicode) theDelTab.GetToken( i+1, cSep ).ToInt32() )
@@ -212,11 +213,11 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         SetSizePixel( aWinSize );
         aCbFixed.Show();
         aCbFixed.SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
-        aCbFixed.Check( sal_False );
+        aCbFixed.Check( false );
         aCbShown.Show();
         aCbShown.Check( sal_True );
         aCbQuoteAll.Show();
-        aCbQuoteAll.Check( sal_False );
+        aCbQuoteAll.Check( false );
     }
     else
     {
@@ -245,7 +246,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
 //------------------------------------------------------------------------
 
-__EXPORT ScImportOptionsDlg::~ScImportOptionsDlg()
+ScImportOptionsDlg::~ScImportOptionsDlg()
 {
     delete pFieldSepTab;
     delete pTextSepTab;
@@ -320,3 +321,5 @@ IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
     }
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

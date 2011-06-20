@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,9 +121,6 @@ void VCartesianCoordinateSystem::createVAxisList(
 {
     m_aAxisMap.clear();
 
-    //if(!m_xLogicTargetForAxes.is() || !m_xFinalTarget.is() || !m_xCooSysModel.is() )
-    //    return;
-
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     bool bSwapXAndY = this->getPropertySwapXAndYAxis();
 
@@ -165,7 +163,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             aAxisProperties.init(true);
             if(aAxisProperties.m_bDisplayLabels)
                 aAxisProperties.m_nNumberFormatKey = this->getNumberFormatKeyForAxis( xAxis, xNumberFormatsSupplier );
-            //-------------------
+
             ::boost::shared_ptr< VAxisBase > apVAxis( new VCartesianAxis(aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
             m_aAxisMap[aFullAxisIndex] = apVAxis;
@@ -231,3 +229,5 @@ void VCartesianCoordinateSystem::updateScalesAndIncrementsOnAxes()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,24 +32,12 @@
 
 // ============================================================================
 #include "csvtablebox.hxx"
-#include <tools/debug.hxx>
 #include <vcl/lstbox.hxx>
 
 // ause
 #include "editutil.hxx"
 
 // ============================================================================
-
-//UNUSED2009-05 ScCsvTableBox::ScCsvTableBox( Window* pParent ) :
-//UNUSED2009-05     ScCsvControl( pParent, maData, WB_BORDER | WB_TABSTOP | WB_DIALOGCONTROL ),
-//UNUSED2009-05     maRuler( *this ),
-//UNUSED2009-05     maGrid( *this ),
-//UNUSED2009-05     maHScroll( this, WB_HORZ | WB_DRAG ),
-//UNUSED2009-05     maVScroll( this, WB_VERT | WB_DRAG ),
-//UNUSED2009-05     maScrollBox( this )
-//UNUSED2009-05 {
-//UNUSED2009-05     Init();
-//UNUSED2009-05 }
 
 ScCsvTableBox::ScCsvTableBox( Window* pParent, const ResId& rResId ) :
     ScCsvControl( pParent, maData, rResId ),
@@ -58,7 +47,27 @@ ScCsvTableBox::ScCsvTableBox( Window* pParent, const ResId& rResId ) :
     maVScroll( this, WB_VERT | WB_DRAG ),
     maScrollBox( this )
 {
-    Init();
+    mbFixedMode = false;
+    mnFixedWidth = 1;
+
+    maHScroll.EnableRTL( false ); // RTL
+    maHScroll.SetLineSize( 1 );
+    maVScroll.SetLineSize( 1 );
+
+    Link aLink = LINK( this, ScCsvTableBox, CsvCmdHdl );
+    SetCmdHdl( aLink );
+    maRuler.SetCmdHdl( aLink );
+    maGrid.SetCmdHdl( aLink );
+
+    aLink = LINK( this, ScCsvTableBox, ScrollHdl );
+    maHScroll.SetScrollHdl( aLink );
+    maVScroll.SetScrollHdl( aLink );
+
+    aLink = LINK( this, ScCsvTableBox, ScrollEndHdl );
+    maHScroll.SetEndScrollHdl( aLink );
+    maVScroll.SetEndScrollHdl( aLink );
+
+    InitControls();
 }
 
 
@@ -105,27 +114,7 @@ void ScCsvTableBox::SetFixedWidthMode()
 
 void ScCsvTableBox::Init()
 {
-    mbFixedMode = false;
-    mnFixedWidth = 1;
-
-    maHScroll.EnableRTL( false ); // #107812# RTL
-    maHScroll.SetLineSize( 1 );
-    maVScroll.SetLineSize( 1 );
-
-    Link aLink = LINK( this, ScCsvTableBox, CsvCmdHdl );
-    SetCmdHdl( aLink );
-    maRuler.SetCmdHdl( aLink );
-    maGrid.SetCmdHdl( aLink );
-
-    aLink = LINK( this, ScCsvTableBox, ScrollHdl );
-    maHScroll.SetScrollHdl( aLink );
-    maVScroll.SetScrollHdl( aLink );
-
-    aLink = LINK( this, ScCsvTableBox, ScrollEndHdl );
-    maHScroll.SetEndScrollHdl( aLink );
-    maVScroll.SetEndScrollHdl( aLink );
-
-    InitControls();
+    maGrid.Init();
 }
 
 void ScCsvTableBox::InitControls()
@@ -222,25 +211,6 @@ void ScCsvTableBox::SetUniStrings(
     EnableRepaint();
 }
 
-//UNUSED2009-05 void ScCsvTableBox::SetByteStrings(
-//UNUSED2009-05         const ByteString* pTextLines, CharSet eCharSet,
-//UNUSED2009-05         const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep )
-//UNUSED2009-05 {
-//UNUSED2009-05     // assuming that pTextLines is a string array with size CSV_PREVIEW_LINES
-//UNUSED2009-05     // -> will be dynamic sometime
-//UNUSED2009-05     DisableRepaint();
-//UNUSED2009-05     sal_Int32 nEndLine = GetFirstVisLine() + CSV_PREVIEW_LINES;
-//UNUSED2009-05     const ByteString* pString = pTextLines;
-//UNUSED2009-05     for( sal_Int32 nLine = GetFirstVisLine(); nLine < nEndLine; ++nLine, ++pString )
-//UNUSED2009-05     {
-//UNUSED2009-05         if( mbFixedMode )
-//UNUSED2009-05             maGrid.ImplSetTextLineFix( nLine, String( *pString, eCharSet ) );
-//UNUSED2009-05         else
-//UNUSED2009-05             maGrid.ImplSetTextLineSep( nLine, String( *pString, eCharSet ), rSepChars, cTextSep, bMergeSep );
-//UNUSED2009-05     }
-//UNUSED2009-05     EnableRepaint();
-//UNUSED2009-05 }
-
 
 // column settings ------------------------------------------------------------
 
@@ -279,7 +249,7 @@ void ScCsvTableBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
 {
-    DBG_ASSERT( pCtrl, "ScCsvTableBox::CsvCmdHdl - missing sender" );
+    OSL_ENSURE( pCtrl, "ScCsvTableBox::CsvCmdHdl - missing sender" );
 
     const ScCsvCmd& rCmd = pCtrl->GetCmd();
     ScCsvCmdType eType = rCmd.GetType();
@@ -331,7 +301,7 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
         break;
 
         case CSVCMD_INSERTSPLIT:
-            DBG_ASSERT( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::InsertSplit - invalid call" );
+            OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::InsertSplit - invalid call" );
             if( maRuler.GetSplitCount() + 1 < sal::static_int_cast<sal_uInt32>(CSV_MAXCOLCOUNT) )
             {
                 maRuler.InsertSplit( nParam1 );
@@ -339,7 +309,7 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
             }
         break;
         case CSVCMD_REMOVESPLIT:
-            DBG_ASSERT( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::RemoveSplit - invalid call" );
+            OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::RemoveSplit - invalid call" );
             maRuler.RemoveSplit( nParam1 );
             maGrid.RemoveSplit( nParam1 );
         break;
@@ -347,12 +317,12 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
             Execute( maRuler.HasSplit( nParam1 ) ? CSVCMD_REMOVESPLIT : CSVCMD_INSERTSPLIT, nParam1 );
         break;
         case CSVCMD_MOVESPLIT:
-            DBG_ASSERT( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::MoveSplit - invalid call" );
+            OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::MoveSplit - invalid call" );
             maRuler.MoveSplit( nParam1, nParam2 );
             maGrid.MoveSplit( nParam1, nParam2 );
         break;
         case CSVCMD_REMOVEALLSPLITS:
-            DBG_ASSERT( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::RemoveAllSplits - invalid call" );
+            OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::RemoveAllSplits - invalid call" );
             maRuler.RemoveAllSplits();
             maGrid.RemoveAllSplits();
         break;
@@ -420,7 +390,7 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
 
 IMPL_LINK( ScCsvTableBox, ScrollHdl, ScrollBar*, pScrollBar )
 {
-    DBG_ASSERT( pScrollBar, "ScCsvTableBox::ScrollHdl - missing sender" );
+    OSL_ENSURE( pScrollBar, "ScCsvTableBox::ScrollHdl - missing sender" );
 
     if( pScrollBar == &maHScroll )
         Execute( CSVCMD_SETPOSOFFSET, pScrollBar->GetThumbPos() );
@@ -432,7 +402,7 @@ IMPL_LINK( ScCsvTableBox, ScrollHdl, ScrollBar*, pScrollBar )
 
 IMPL_LINK( ScCsvTableBox, ScrollEndHdl, ScrollBar*, pScrollBar )
 {
-    DBG_ASSERT( pScrollBar, "ScCsvTableBox::ScrollEndHdl - missing sender" );
+    OSL_ENSURE( pScrollBar, "ScCsvTableBox::ScrollEndHdl - missing sender" );
 
     if( pScrollBar == &maHScroll )
     {
@@ -462,3 +432,4 @@ ScAccessibleCsvControl* ScCsvTableBox::ImplCreateAccessible()
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@
 
 // -----------------------------------------------------------------------
 
-ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, sal_Bool bMasterPage) :
+ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, bool bMasterPage) :
     FmFormPage(rNewModel, pBasic, bMasterPage)
 {
     SetSize( Size( LONG_MAX, LONG_MAX ) );
@@ -51,7 +52,7 @@ ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, sal_Bool bMast
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScDrawPage::~ScDrawPage()
+ScDrawPage::~ScDrawPage()
 {
 }
 
@@ -63,3 +64,4 @@ __EXPORT ScDrawPage::~ScDrawPage()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

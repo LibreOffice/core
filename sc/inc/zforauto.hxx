@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,8 +46,8 @@ public:
     ScNumFormatAbbrev();
     ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat);
     ScNumFormatAbbrev(sal_uLong nFormat, SvNumberFormatter& rFormatter);
-    void Load( SvStream& rStream, CharSet eByteStrSet );            // Laden der Zahlenformate
-    void Save( SvStream& rStream, CharSet eByteStrSet ) const;   // Speichern der Zahlenformate
+    void Load( SvStream& rStream, CharSet eByteStrSet );            // loading of the numberformats
+    void Save( SvStream& rStream, CharSet eByteStrSet ) const;   // saving of the numberformats
     void PutFormatIndex(sal_uLong nFormat, SvNumberFormatter& rFormatter);
     sal_uLong GetFormatIndex( SvNumberFormatter& rFormatter);
     inline int operator==(const ScNumFormatAbbrev& rNumFormat) const
@@ -70,3 +71,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

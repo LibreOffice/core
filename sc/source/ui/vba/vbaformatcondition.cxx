@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@ ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const uno::Any& _aOperator, co
     try
     {
         ScVbaFormatConditions* pFormatConditions = lcl_getScVbaFormatConditionsPtr( moFormatConditions );
-        pFormatConditions->removeFormatCondition(msStyleName, sal_False);
+        pFormatConditions->removeFormatCondition(msStyleName, false);
         pFormatConditions->Add(_nType, _aOperator, _aFormula1, _aFormula2, mxStyle);
     }
     catch (uno::Exception& )
@@ -174,3 +175,5 @@ ScVbaFormatCondition::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

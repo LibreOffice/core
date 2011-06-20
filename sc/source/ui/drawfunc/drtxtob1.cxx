@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,25 +51,20 @@
 #include "drtxtob.hxx"
 #include "drawview.hxx"
 #include "viewdata.hxx"
-//CHINA001 #include "textdlgs.hxx"
 #include "scresid.hxx"
 
-#include "scabstdlg.hxx" //CHINA00
+#include "scabstdlg.hxx"
 //------------------------------------------------------------------------
 
 sal_Bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
-//CHINA001  ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(),
-//CHINA001  &rArgs,
-//CHINA001  pViewData->GetSfxDocShell() );
-//CHINA001
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  pViewData->GetDialogParent(), &rArgs,
                                                         pViewData->GetSfxDocShell(),RID_SCDLG_CHAR );
-    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+    OSL_ENSURE(pDlg, "Dialog create fail!");
     sal_Bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
@@ -100,20 +96,17 @@ sal_Bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     // Muss natuerlich noch geaendert werden
     // aNewAttr.Put( SvxParaDlgLimitsItem( 567 * 50, 5670) );
 
-    aNewAttr.Put( SvxHyphenZoneItem( sal_False, SID_ATTR_PARA_HYPHENZONE ) );
+    aNewAttr.Put( SvxHyphenZoneItem( false, SID_ATTR_PARA_HYPHENZONE ) );
     aNewAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, SID_ATTR_PARA_PAGEBREAK ) );
     aNewAttr.Put( SvxFmtSplitItem( sal_True, SID_ATTR_PARA_SPLIT)  );
     aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );
     aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
-//CHINA001  ScParagraphDlg* pDlg = new ScParagraphDlg( pViewData->GetDialogParent(),
-//CHINA001  &aNewAttr );
-//CHINA001
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
     SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg( pViewData->GetDialogParent(), &aNewAttr, RID_SCDLG_PARAGRAPH);
-    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+    OSL_ENSURE(pDlg, "Dialog create fail!");
     sal_Bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
@@ -154,3 +147,4 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

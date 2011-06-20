@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,6 @@ class ScChartHelper
 {
 public:
     static sal_uInt16 DoUpdateAllCharts( ScDocument* pDoc );
-    static sal_uInt16 DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc ); //use this to replace ScDBFunc::DoUpdateCharts in future
     static void AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab );
     static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > GetChartFromSdrObject( SdrObject* pObject );
     static void GetChartRanges( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc,
@@ -63,3 +63,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

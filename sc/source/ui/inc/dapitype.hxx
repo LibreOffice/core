@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef SC_DAPITYPE_HXX
 #define SC_DAPITYPE_HXX
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
@@ -44,8 +43,10 @@ class ScDataPilotSourceTypeDlg : public ModalDialog
 private:
     FixedLine       aFlFrame;
     RadioButton     aBtnSelection;
+    RadioButton     aBtnNamedRange;
     RadioButton     aBtnDatabase;
     RadioButton     aBtnExternal;
+    ListBox         aLbNamedRange;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
@@ -54,8 +55,14 @@ public:
             ScDataPilotSourceTypeDlg( Window* pParent, sal_Bool bEnableExternal );
             ~ScDataPilotSourceTypeDlg();
 
-    sal_Bool    IsDatabase() const;
-    sal_Bool    IsExternal() const;
+    bool IsDatabase() const;
+    bool IsExternal() const;
+    bool IsNamedRange() const;
+    rtl::OUString GetSelectedNamedRange() const;
+    void AppendNamedRange(const rtl::OUString& rNames);
+
+private:
+    DECL_LINK( RadioClickHdl, RadioButton * );
 };
 
 
@@ -93,3 +100,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

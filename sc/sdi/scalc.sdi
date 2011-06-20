@@ -1574,7 +1574,32 @@ SfxVoidItem DataSelect SID_DATA_SELECT
 
 //--------------------------------------------------------------------------
 SfxVoidItem DataSort SID_SORT
-(SfxBoolItem ByRows SID_SORT_BYROW,SfxBoolItem HasHeader SID_SORT_HASHEADER,SfxBoolItem CaseSensitive SID_SORT_CASESENS,SfxBoolItem IncludeAttribs SID_SORT_ATTRIBS,SfxUInt16Item UserDefIndex SID_SORT_USERDEF,SfxInt32Item Col1 FN_PARAM_1,SfxBoolItem Ascending1 FN_PARAM_2,SfxInt32Item Col2 FN_PARAM_3,SfxBoolItem Ascending2 FN_PARAM_4,SfxInt32Item Col3 FN_PARAM_5,SfxBoolItem Ascending3 FN_PARAM_6)
+(SfxBoolItem ByRows SID_SORT_BYROW,SfxBoolItem HasHeader SID_SORT_HASHEADER,SfxBoolItem CaseSensitive SID_SORT_CASESENS,SfxBoolItem NaturalSort SID_SORT_NATURALSORT,SfxBoolItem IncludeAttribs SID_SORT_ATTRIBS,SfxUInt16Item UserDefIndex SID_SORT_USERDEF,SfxInt32Item Col1 FN_PARAM_1,SfxBoolItem Ascending1 FN_PARAM_2,SfxInt32Item Col2 FN_PARAM_3,SfxBoolItem Ascending2 FN_PARAM_4,SfxInt32Item Col3 FN_PARAM_5,SfxBoolItem Ascending3 FN_PARAM_6)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DATA;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem DataForm SID_DATA_FORM
+()
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -2777,7 +2802,6 @@ SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
 ]
 
 //--------------------------------------------------------------------------
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 SfxVoidItem ValidityReference SID_VALIDITY_REFERENCE
 ()
 [
@@ -2795,13 +2819,12 @@ SfxVoidItem ValidityReference SID_VALIDITY_REFERENCE
     Synchron;
 
     /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 //--------------------------------------------------------------------------
 SfxVoidItem GoDownToEndOfData SID_CURSORBLKDOWN
@@ -5390,7 +5413,7 @@ SfxUInt16Item RowHeight FID_ROW_HEIGHT
 
 //--------------------------------------------------------------------------
 SfxVoidItem SbaImport SID_SBA_IMPORT
-(SfxUsrAnyItem Query SID_SBA_IMPORT,SfxStringItem Target FN_PARAM_1)
+(SfxStringItem Query SID_SBA_IMPORT,SfxStringItem Target FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6271,55 +6294,55 @@ SfxVoidItem StandardFonts SID_STANDARD_FONTS
 
 //--------------------------------------------------------------------------
 // ISSUE66550_HLINK_FOR_SHAPES
-//SfxVoidItem EditShapeHyperlink SID_DRAW_HLINK_EDIT
-//()
-//[
-//   /* flags: */
-//   AutoUpdate = FALSE,
-//   Cachable = Cachable,
-//   FastCall = TRUE,
-//   HasCoreId = FALSE,
-//   HasDialog = TRUE,
-//   ReadOnlyDoc = TRUE,
-//   Toggle = FALSE,
-//   Container = FALSE,
-//   RecordAbsolute = FALSE,
-//   RecordPerSet;
-//   Synchron;
-//
+SfxVoidItem EditShapeHyperlink SID_DRAW_HLINK_EDIT
+()
+[
+   /* flags: */
+   AutoUpdate = FALSE,
+   Cachable = Cachable,
+   FastCall = TRUE,
+   HasCoreId = FALSE,
+   HasDialog = TRUE,
+   ReadOnlyDoc = TRUE,
+   Toggle = FALSE,
+   Container = FALSE,
+   RecordAbsolute = FALSE,
+   RecordPerSet;
+   Synchron;
+
 //   /* config: */
-//   AccelConfig = TRUE,
-//   MenuConfig = FALSE,
-//   StatusBarConfig = FALSE,
-//   ToolBoxConfig = FALSE,
-//   GroupId = GID_DRAWING;
-//]
+   AccelConfig = TRUE,
+   MenuConfig = FALSE,
+   StatusBarConfig = FALSE,
+   ToolBoxConfig = FALSE,
+   GroupId = GID_DRAWING;
+]
 
 //--------------------------------------------------------------------------
 // ISSUE66550_HLINK_FOR_SHAPES
-//SfxVoidItem DeleteShapeHyperlink SID_DRAW_HLINK_DELETE
-//()
-//[
-//   /* flags: */
-//   AutoUpdate = TRUE,
-//   Cachable = Cachable,
-//   FastCall = TRUE,
-//   HasCoreId = FALSE,
-//   HasDialog = FALSE,
-//   ReadOnlyDoc = TRUE,
-//   Toggle = FALSE,
-//   Container = FALSE,
-//   RecordAbsolute = FALSE,
-//   RecordPerSet;
-//   Synchron;
-//
-//   /* config: */
-//   AccelConfig = TRUE,
-//   MenuConfig = FALSE,
-//   StatusBarConfig = FALSE,
-//   ToolBoxConfig = FALSE,
-//   GroupId = GID_DRAWING;
-//]
+SfxVoidItem DeleteShapeHyperlink SID_DRAW_HLINK_DELETE
+()
+[
+   /* flags: */
+   AutoUpdate = TRUE,
+   Cachable = Cachable,
+   FastCall = TRUE,
+   HasCoreId = FALSE,
+   HasDialog = FALSE,
+   ReadOnlyDoc = TRUE,
+   Toggle = FALSE,
+   Container = FALSE,
+   RecordAbsolute = FALSE,
+   RecordPerSet;
+   Synchron;
+
+   /* config: */
+   AccelConfig = TRUE,
+   MenuConfig = FALSE,
+   StatusBarConfig = FALSE,
+   ToolBoxConfig = FALSE,
+   GroupId = GID_DRAWING;
+]
 
 //--------------------------------------------------------------------------
 SfxVoidItem StandardTextAttributes SID_TEXT_STANDARD
@@ -7775,6 +7798,33 @@ SfxVoidItem ShareDocument SID_SHARE_DOC
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem ToggleSheetGrid FID_TAB_TOGGLE_GRID
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+
+
+//--------------------------------------------------------------------------
 SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR
 
 [
@@ -7799,6 +7849,106 @@ SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem MarkPrecedents SID_DETECTIVE_MARK_PRED
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem MarkDependents SID_DETECTIVE_MARK_SUCC
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem InsertCurrentDate SID_INSERT_CURRENT_DATE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem InsertCurrentTime SID_INSERT_CURRENT_TIME
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
 ]
 
 //--------------------------------------------------------------------------

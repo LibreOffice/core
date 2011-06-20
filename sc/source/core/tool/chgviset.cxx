@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,7 +117,7 @@ void ScChangeViewSettings::SetTheComment(const String& rString)
     if(rString.Len()>0)
     {
         utl::SearchParam aSearchParam( rString,
-            utl::SearchParam::SRCH_REGEXP,sal_False,sal_False,sal_False );
+            utl::SearchParam::SRCH_REGEXP,false,false,false );
 
         pCommentSearcher = new utl::TextSearch( aSearchParam, *ScGlobal::pCharClass );
     }
@@ -142,22 +143,13 @@ void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
                 if ( pLast )
                 {
                     aFirstDateTime = pLast->GetDateTime();
-#if 0
-// This would be the proper handling. But since the SvxTPFilter dialog uses
-// DateField/TimeField, and the filter dialog is used in ScAcceptChgDlg as the
-// controlling instance, and the TimeFields are used there without seconds or
-// 100ths, we'd display some extra entries between the floor of the minute and
-// the start of the next minute.
-                    // add one 100th second to point past last saved
-                    aFirstDateTime += Time( 0, 0, 0, 1 );
-#else
+
                     // Set the next minute as the start time and assume that
                     // the document isn't saved, reloaded, edited and filter set
                     // all together during the gap between those two times.
                     aFirstDateTime += Time( 0, 1 );
                     aFirstDateTime.SetSec(0);
                     aFirstDateTime.Set100Sec(0);
-#endif
                 }
             }
             if ( !pLast )
@@ -176,3 +168,4 @@ void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

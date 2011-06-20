@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,6 @@ class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-//UNUSED2008-05  ScTpPrintItem( sal_uInt16 nWhich );
                 ScTpPrintItem( sal_uInt16 nWhich,
                                const ScPrintOptions& rOpt );
                 ScTpPrintItem( const ScTpPrintItem& rItem );
@@ -97,3 +97,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

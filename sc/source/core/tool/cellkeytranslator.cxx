@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 using ::com::sun::star::lang::Locale;
 using ::com::sun::star::uno::Sequence;
 using ::std::list;
-using ::std::hash_map;
+using ::boost::unordered_map;
 using ::rtl::OUString;
 
 using namespace ::com::sun::star;
@@ -230,3 +231,5 @@ void ScCellKeywordTranslator::addToMap(const TransItem* pItems, const Locale& rL
     for (sal_uInt16 i = 0; pItems[i].from != NULL; ++i)
         addToMap(String(pItems[i].from), pItems[i].to, rLocale, pItems[i].func);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,8 +99,7 @@ sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    SCCOL nLastCol = -1;
-    if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab, nLastCol))
+    if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab))
         return 0;
     else
         return (sal_uInt16) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
@@ -127,7 +127,6 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         nSizeTwips = (sal_uInt16) ( nNewSize / pViewData->GetPPTX() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
-//  SCTAB nTab = pViewData->GetTabNo();
 
     SCCOLROW* pRanges = new SCCOLROW[MAXCOL+1];
     SCCOL nRangeCnt = 0;
@@ -216,8 +215,7 @@ sal_Bool ScColBar::IsDisabled()
 
 sal_Bool ScColBar::ResizeAllowed()
 {
-    return !pViewData->HasEditView( pViewData->GetActivePart() ) &&
-            !pViewData->GetDocShell()->IsReadOnly();
+    return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
 
 void ScColBar::DrawInvert( long nDragPosP )
@@ -267,7 +265,7 @@ sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     SCROW nLastRow = -1;
-    if (pDoc->RowHidden(nEntryNo, nTab, nLastRow))
+    if (pDoc->RowHidden(nEntryNo, nTab, NULL, &nLastRow))
         return 0;
     else
         return (sal_uInt16) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
@@ -294,7 +292,6 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         nSizeTwips = (sal_uInt16) ( nNewSize / pViewData->GetPPTY() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
-//  SCTAB nTab = pViewData->GetTabNo();
 
     SCCOLROW* pRanges = new SCCOLROW[MAXROW+1];
     SCROW nRangeCnt = 0;
@@ -328,7 +325,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         nRangeCnt = 1;
     }
 
-    pViewData->GetView()->SetWidthOrHeight( sal_False, nRangeCnt, pRanges, eMode, nSizeTwips );
+    pViewData->GetView()->SetWidthOrHeight( false, nRangeCnt, pRanges, eMode, nSizeTwips );
     delete[] pRanges;
 }
 
@@ -337,7 +334,7 @@ void ScRowBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
     SCCOLROW nRange[2];
     nRange[0] = nStart;
     nRange[1] = nEnd;
-    pViewData->GetView()->SetWidthOrHeight( sal_False, 1, nRange, SC_SIZE_DIRECT, 0 );
+    pViewData->GetView()->SetWidthOrHeight( false, 1, nRange, SC_SIZE_DIRECT, 0 );
 }
 
 void ScRowBar::SetMarking( sal_Bool bSet )
@@ -369,7 +366,7 @@ void ScRowBar::SelectWindow()
     }
     pViewSh->ActivatePart( eActive );
 
-    pFuncSet->SetColumn( sal_False );
+    pFuncSet->SetColumn( false );
     pFuncSet->SetWhich( eActive );
 
     pViewSh->ActiveGrabFocus();
@@ -383,8 +380,7 @@ sal_Bool ScRowBar::IsDisabled()
 
 sal_Bool ScRowBar::ResizeAllowed()
 {
-    return !pViewData->HasEditView( pViewData->GetActivePart() ) &&
-            !pViewData->GetDocShell()->IsReadOnly();
+    return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
 
 void ScRowBar::DrawInvert( long nDragPosP )
@@ -417,3 +413,4 @@ sal_Bool ScRowBar::IsMirrored()         // overloaded only for rows
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 #include <tabvwsh.hxx>
 #include <docuno.hxx>
 #include <sc.hrc>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
 #include "unonames.hxx"
@@ -55,7 +56,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlWindowState;
 
-typedef  std::hash_map< rtl::OUString,
+typedef  boost::unordered_map< rtl::OUString,
 SCTAB, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 
@@ -165,7 +166,7 @@ public:
 
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
-        return (sheets.size() > 0);
+        return ( !sheets.empty() );
     }
 
     //XNameAccess
@@ -299,7 +300,7 @@ ScVbaWindow::ScrollWorkbookTabs( const uno::Any& /*Sheets*/, const uno::Any& /*P
 /*
     sal_Int32 nSheets = 0;
     sal_Int32 nPosition = 0;
-    throw uno::RuntimeException( rtl::OUString::createFromAscii("No Implemented" ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No Implemented")), uno::Reference< uno::XInterface >() );
     sal_Bool bSheets = ( Sheets >>= nSheets );
     sal_Bool bPosition = ( Position >>= nPosition );
     if ( bSheets || bPosition ) // at least one param specified
@@ -878,3 +879,5 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ScVbaWindow",
     "ooo.vba.excel.Window" );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

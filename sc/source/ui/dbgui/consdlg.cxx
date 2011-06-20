@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 
 #include "tabvwsh.hxx"
 #include "uiitems.hxx"
-#include "dbcolect.hxx"
+#include "dbdata.hxx"
 #include "rangenam.hxx"
 #include "rangeutl.hxx"
 #include "reffact.hxx"
@@ -141,7 +142,7 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScConsolidateDlg::~ScConsolidateDlg()
+ScConsolidateDlg::~ScConsolidateDlg()
 {
     delete [] pAreaData;
     delete pRangeUtil;
@@ -152,7 +153,7 @@ __EXPORT ScConsolidateDlg::~ScConsolidateDlg()
 
 void ScConsolidateDlg::Init()
 {
-    DBG_ASSERT( pViewData && pDoc && pRangeUtil, "Error in Ctor" );
+    OSL_ENSURE( pViewData && pDoc && pRangeUtil, "Error in Ctor" );
 
     String aStr;
     sal_uInt16 i=0;
@@ -221,8 +222,8 @@ void ScConsolidateDlg::Init()
 
     ScRangeName*    pRangeNames  = pDoc->GetRangeName();
     ScDBCollection* pDbNames     = pDoc->GetDBCollection();
-    const sal_uInt16    nRangeCount  = pRangeNames ? pRangeNames->GetCount() : 0;
-    const sal_uInt16    nDbCount     = pDbNames    ? pDbNames   ->GetCount() : 0;
+    size_t nRangeCount = pRangeNames ? pRangeNames->size() : 0;
+    size_t nDbCount = pDbNames ? pDbNames->getNamedDBs().size() : 0;
 
     nAreaDataCount = nRangeCount+nDbCount;
     pAreaData      = NULL;
@@ -268,7 +269,7 @@ void ScConsolidateDlg::FillAreaLists()
     {
         String aString;
 
-        for ( sal_uInt16 i=0;
+        for ( size_t i=0;
               (i<nAreaDataCount) && (pAreaData[i].aStrName.Len()>0);
               i++ )
         {
@@ -314,7 +315,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 //----------------------------------------------------------------------------
 
-sal_Bool __EXPORT ScConsolidateDlg::Close()
+sal_Bool ScConsolidateDlg::Close()
 {
     return DoClose( ScConsolidateDlgWrapper::GetChildWindowId() );
 }
@@ -326,7 +327,7 @@ void ScConsolidateDlg::SetActive()
 {
     if ( bDlgLostFocus )
     {
-        bDlgLostFocus = sal_False;
+        bDlgLostFocus = false;
 
         if ( pRefInputEdit )
         {
@@ -343,7 +344,7 @@ void ScConsolidateDlg::SetActive()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScConsolidateDlg::Deactivate()
+void ScConsolidateDlg::Deactivate()
 {
     bDlgLostFocus = sal_True;
 }
@@ -355,10 +356,10 @@ sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
     if ( !pRangeUtil || !pDoc || !pViewData ||
          ((pEd != &aEdDataArea) && (pEd != &aEdDestArea)) )
-        return sal_False;
+        return false;
 
     SCTAB   nTab    = pViewData->GetTabNo();
-    sal_Bool    bEditOk = sal_False;
+    sal_Bool    bEditOk = false;
     String  theCompleteStr;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
@@ -449,7 +450,7 @@ IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
 
             ScConsolidateItem aOutItem( nWhichCons, &theOutParam );
 
-            SetDispatcherLock( sal_False );
+            SetDispatcherLock( false );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( SID_CONSOLIDATE,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -557,7 +558,7 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
             && (nAreaDataCount > 0)
             && (pAreaData != NULL) )
         {
-            if ( nSelPos <= nAreaDataCount )
+            if ( static_cast<size_t>(nSelPos) <= nAreaDataCount )
             {
                 String aString( pAreaData[nSelPos-1].aStrArea );
 
@@ -653,3 +654,4 @@ sal_uInt16 ScConsolidateDlg::FuncToLbPos( ScSubTotalFunc eFunc )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

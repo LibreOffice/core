@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <svx/optgrid.hxx>
 
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include "scdllapi.h"
 #include "optutil.hxx"
 #include "global.hxx"
@@ -135,7 +134,6 @@ class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-//UNUSED2008-05  ScTpViewItem( sal_uInt16 nWhich );
                 ScTpViewItem( sal_uInt16 nWhich, const ScViewOptions& rOpt );
                 ScTpViewItem( const ScTpViewItem&  rItem );
                 ~ScTpViewItem();
@@ -177,3 +175,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,11 +68,11 @@ public:
     static void         GetStringFromFunction(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::sheet::GeneralFunction eFunction,
-                            sal_Bool bAppendStr = sal_False );
+                            sal_Bool bAppendStr = false );
     static void         GetStringFromFunction(
                             ::rtl::OUString& rString,
                             const ScSubTotalFunc eFunction,
-                            sal_Bool bAppendStr = sal_False );
+                            sal_Bool bAppendStr = false );
 
 // IMPORT: DataPilotFieldOrientation
     static ::com::sun::star::sheet::DataPilotFieldOrientation
@@ -82,7 +83,7 @@ public:
     static void         GetStringFromOrientation(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::sheet::DataPilotFieldOrientation eOrientation,
-                            sal_Bool bAppendStr = sal_False );
+                            sal_Bool bAppendStr = false );
 
 // IMPORT: Detective
     static ScDetectiveObjType
@@ -96,11 +97,11 @@ public:
     static void         GetStringFromDetObjType(
                             ::rtl::OUString& rString,
                             const ScDetectiveObjType eObjType,
-                            sal_Bool bAppendStr = sal_False );
+                            sal_Bool bAppendStr = false );
     static void         GetStringFromDetOpType(
                             ::rtl::OUString& rString,
                             const ScDetOpType eOpType,
-                            sal_Bool bAppendStr = sal_False );
+                            sal_Bool bAppendStr = false );
 
 // IMPORT: Formulas
     static void         ParseFormula(
@@ -108,9 +109,6 @@ public:
                             const sal_Bool bIsFormula = sal_True);
 // EXPORT: Core Date Time
     static void         ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUStringBuffer& sDate);
-//UNUSED2008-05  // IMPORT: Core Date Time
-//UNUSED2008-05      static void         ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* pUnitConverter);
-
     static void         ConvertCoreToAPIDateTime(const DateTime& aDateTime, com::sun::star::util::DateTime& rDateTime);
 
     static void         ConvertAPIToCoreDateTime(const com::sun::star::util::DateTime& aDateTime, DateTime& rDateTime);
@@ -175,3 +173,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

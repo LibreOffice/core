@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,6 +72,7 @@ public:
     virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName ) throw (css::uno::RuntimeException);
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
     virtual void SAL_CALL Select( const css::uno::Any& Replace ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Copy ( const css::uno::Any& Before, const css::uno::Any& After) throw (css::uno::RuntimeException);
     // ScVbaWorksheets_BASE
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& Index2 ) throw
 (css::uno::RuntimeException);
@@ -81,3 +83,5 @@ public:
 };
 
 #endif /* SC_VBA_WORKSHEETS_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

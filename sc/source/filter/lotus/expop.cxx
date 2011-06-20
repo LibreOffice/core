@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,6 @@
 
 
 //------------------------------------------------------------------------
-
-#include <tools/debug.hxx>
 
 #include "dociter.hxx"
 #include "cell.hxx"
@@ -101,8 +100,8 @@ inline void ExportWK1::Dimensions()
 #endif
     sal_uInt16 nCol = static_cast<sal_uInt16>(nEndCol);
     sal_uInt16 nRow = static_cast<sal_uInt16>(nEndRow);
-    DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Dimensions(): Col > WK1MAXCOL" );
-    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Dimensions(): Row > WK1MAXROW" );
+    OSL_ENSURE( nCol <= WK1MAXCOL, "ExportWK1::Dimensions(): Col > WK1MAXCOL" );
+    OSL_ENSURE( nRow <= WK1MAXROW, "ExportWK1::Dimensions(): Row > WK1MAXROW" );
     aOut << nCol << nRow;   // Ending Col/Row
 }
 
@@ -142,8 +141,8 @@ inline void ExportWK1::Colw()
 void ExportWK1::Blank( const sal_uInt16 nCol, const sal_uInt16 nRow, const ScPatternAttr& aAttr )
 {   // (0x0C)
     // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
-    DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Blank(): Col > WK1MAXCOL" );
-    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Blank(): Row > WK1MAXROW" );
+    OSL_ENSURE( nCol <= WK1MAXCOL, "ExportWK1::Blank(): Col > WK1MAXCOL" );
+    OSL_ENSURE( nRow <= WK1MAXROW, "ExportWK1::Blank(): Row > WK1MAXROW" );
 
     aOut << ( sal_uInt16 ) 0x0C << ( sal_uInt16 ) 5 << GenFormByte( aAttr ) << nCol << nRow;
 }
@@ -152,8 +151,8 @@ void ExportWK1::Blank( const sal_uInt16 nCol, const sal_uInt16 nRow, const ScPat
 void ExportWK1::Number( const sal_uInt16 nCol, const sal_uInt16 nRow, const double fWert, const ScPatternAttr &aAttr )
 {   // (0x0E)
     // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
-    DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Number(): Col > WK1MAXCOL" );
-    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Number(): Row > WK1MAXROW" );
+    OSL_ENSURE( nCol <= WK1MAXCOL, "ExportWK1::Number(): Col > WK1MAXCOL" );
+    OSL_ENSURE( nRow <= WK1MAXROW, "ExportWK1::Number(): Row > WK1MAXROW" );
 
     aOut << ( sal_uInt16 ) 0x0E << ( sal_uInt16 ) 13 << GenFormByte( aAttr ) << nCol << nRow << fWert;
 }
@@ -162,8 +161,8 @@ void ExportWK1::Number( const sal_uInt16 nCol, const sal_uInt16 nRow, const doub
 void ExportWK1::Label( const sal_uInt16 nCol, const sal_uInt16 nRow, const String& rStr, const ScPatternAttr& aAttr )
 {   // (0x0F)
     // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
-    DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Label(): Col > WK1MAXCOL" );
-    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Label(): Row > WK1MAXROW" );
+    OSL_ENSURE( nCol <= WK1MAXCOL, "ExportWK1::Label(): Col > WK1MAXCOL" );
+    OSL_ENSURE( nRow <= WK1MAXROW, "ExportWK1::Label(): Row > WK1MAXROW" );
 
     ByteString  aStr( rStr, eZielChar );
 
@@ -189,8 +188,8 @@ void ExportWK1::Label( const sal_uInt16 nCol, const sal_uInt16 nRow, const Strin
 void ExportWK1::Formula( const sal_uInt16 nCol, const sal_uInt16 nRow, const ScFormulaCell* pFC, const ScPatternAttr& aAttr )
 {   // (0x10)
     // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
-    DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Formula(): Col > WK1MAXCOL" );
-    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Formula(): Row > WK1MAXROW" );
+    OSL_ENSURE( nCol <= WK1MAXCOL, "ExportWK1::Formula(): Col > WK1MAXCOL" );
+    OSL_ENSURE( nRow <= WK1MAXROW, "ExportWK1::Formula(): Row > WK1MAXROW" );
 
     sal_uInt16  nLaenge = 15;    // Bytes bis Formel
     double  fErgebnis;
@@ -268,8 +267,8 @@ inline void ExportWK1::Cursorw12()
 void ExportWK1::WKString( const sal_uInt16 /*nCol*/, const sal_uInt16 /*nRow*/, const ScFormulaCell* /*pFC*/, const ScPatternAttr& /*aAttr*/ )
 {   // (0x33)
     // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
-/*  DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Label(): Col > WK1MAXCOL" );
-    DBG_ASSERT( nRow <= WK1MAXROW, "ExportWK1::Label(): Row > WK1MAXROW" );
+/*  OSL_ENSURE( nCol <= WK1MAXCOL, "ExportWK1::Label(): Col > WK1MAXCOL" );
+    OSL_ENSURE( nRow <= WK1MAXROW, "ExportWK1::Label(): Row > WK1MAXROW" );
 
     String aStr;
     ( ( ScFormulaCell * ) pFC )->GetString( aStr );     // Formeltext zunaechst so belassen
@@ -398,7 +397,7 @@ FltError ExportWK1::Write()
                 case CELLTYPE_NONE:
                     break;
                 default:
-                    DBG_ASSERT( sal_False, "ExportWK1::Write(): unbekannter Celltype!" );
+                    OSL_ENSURE( false, "ExportWK1::Write(): unbekannter Celltype!" );
             }
         }
         while( aIter.GetNext() );
@@ -410,3 +409,4 @@ FltError ExportWK1::Write()
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

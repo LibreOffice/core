@@ -42,8 +42,6 @@
 #define SCROLL_DATA             93
 #define WND_DATA                13
 #define WND_SELECT              14
-#define WND_HSCROLL             17
-#define SCROLL_PAGE             98
 #define WND_PAGE                18
 #define FT_COL                  31
 #define FT_ROW                  32
@@ -81,4 +79,3 @@
 #define PIVOTSTR_DEV2           9
 #define PIVOTSTR_VAR            10
 #define PIVOTSTR_VAR2           11
-

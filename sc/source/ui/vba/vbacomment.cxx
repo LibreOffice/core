@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,14 +34,23 @@
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
+#include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XText.hpp>
 
+#include <cellsuno.hxx>
+#include <postit.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdocapt.hxx>
+#include <ooo/vba/msforms/XShape.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+
 #include <vbahelper/vbashape.hxx>
 #include "vbaglobals.hxx"
 #include "vbacomments.hxx"
-
+#include "vbacommentshape.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -178,7 +188,6 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
     aText >>= sText;
 
     uno::Reference< text::XSimpleText > xAnnoText( getAnnotation(), uno::UNO_QUERY_THROW );
-    rtl::OUString sAnnoText = xAnnoText->getString();
 
     if ( aStart.hasValue() )
     {
@@ -193,14 +202,14 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
             if ( bOverwrite )
             {
                 xTextCursor->collapseToStart();
-                xTextCursor->gotoStart( sal_False );
-                xTextCursor->goRight( nStart - 1, sal_False );
+                xTextCursor->gotoStart( false );
+                xTextCursor->goRight( nStart - 1, false );
                 xTextCursor->gotoEnd( sal_True );
             }
             else
             {
                 xTextCursor->collapseToStart();
-                xTextCursor->gotoStart( sal_False );
+                xTextCursor->gotoStart( false );
                 xTextCursor->goRight( nStart - 1 , sal_True );
             }
 
@@ -212,10 +221,12 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
     }
     else if ( aText.hasValue() )
     {
-        xAnnoText->setString( sText );
-        return sText;
+     uno::Reference< sheet::XCellAddressable > xCellAddr(mxRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
+     table::CellAddress aAddress = xCellAddr->getCellAddress();
+     getAnnotations()->insertNew( aAddress, sText );
     }
 
+    rtl::OUString sAnnoText = xAnnoText->getString();
     return sAnnoText;
 }
 
@@ -237,3 +248,5 @@ ScVbaComment::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

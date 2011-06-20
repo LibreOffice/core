@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,13 +37,15 @@
 #include "addincol.hxx"
 #include "funcdesc.hxx"
 #include <unotools/charclass.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
+#include <sal/macros.h>
 #include <string.h>
 
 #if OSL_DEBUG_LEVEL > 1
 // the documentation thingy
 #include <stdio.h>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
+#include <rtl/strbuf.hxx>
 #include "compiler.hxx"
 #include "sc.hrc"   // VAR_ARGS
 #endif
@@ -213,20 +216,20 @@ void ScParameterClassification::Init()
     memset( pData, 0, sizeof(RunData) * (SC_OPCODE_LAST_OPCODE_ID + 1));
 
     // init from specified static data above
-    for ( size_t i=0; i < sizeof(pRawData) / sizeof(RawData); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS(pRawData); ++i )
     {
         const RawData* pRaw = &pRawData[i];
         if ( pRaw->eOp > SC_OPCODE_LAST_OPCODE_ID )
         {
-            DBG_ASSERT( pRaw->eOp == ocNone, "RawData OpCode error");
+            OSL_ENSURE( pRaw->eOp == ocNone, "RawData OpCode error");
         }
         else
         {
             RunData* pRun = &pData[ pRaw->eOp ];
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             if ( pRun->aData.nParam[0] != Unknown )
             {
-                DBG_ERROR1( "already assigned: %d", pRaw->eOp);
+                OSL_TRACE( "already assigned: %d", pRaw->eOp);
             }
 #endif
             memcpy( &(pRun->aData), &(pRaw->aData), sizeof(CommonData));
@@ -347,7 +350,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
         }
     }
     else if ( (aUnoName = ScGlobal::GetAddInCollection()->FindFunction(
-                    aFuncName, sal_False)).Len() )
+                    aFuncName, false)).Len() )
     {
         // the relevant parts of ScUnoAddInCall without having to create one
         const ScUnoAddInFuncData* pFuncData =
@@ -405,7 +408,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
             continue;   // not an internal opcode or already done
 
         RunData* pRun = &pData[ pDesc->nFIndex ];
-        sal_uInt16 nArgs = pDesc->GetSuppressedArgCount();
+        sal_Int32 nArgs = pDesc->GetSuppressedArgCount();
         if ( nArgs >= VAR_ARGS )
         {
             nArgs -= VAR_ARGS - 1;
@@ -413,9 +416,12 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
         }
         if ( nArgs > CommonData::nMaxParams )
         {
-            DBG_ERROR2( "ScParameterClassification::Init: too many arguments in listed function: %s: %d",
-                    ByteString( *(pDesc->pFuncName),
-                        RTL_TEXTENCODING_UTF8).GetBuffer(), nArgs);
+            rtl::OStringBuffer aBuf;
+            aBuf.append("ScParameterClassification::Init: too many arguments in listed function: ");
+            aBuf.append(rtl::OUStringToOString(*(pDesc->pFuncName), RTL_TEXTENCODING_UTF8));
+            aBuf.append(": ");
+            aBuf.append(nArgs);
+            OSL_FAIL( aBuf.getStr());
             nArgs = CommonData::nMaxParams;
             pRun->aData.bRepeatLast = true;
         }
@@ -576,3 +582,4 @@ void ScParameterClassification::GenerateDocumentation()
 
 #endif // OSL_DEBUG_LEVEL
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -122,7 +123,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
 
         for( SCTAB nTab = 0, nTabCount = mrDoc.GetTableCount(); nTab < nTabCount; ++nTab )
         {
-            //  #69965# always change the cell on the visible tab,
+            //  always change the cell on the visible tab,
             //  on the other selected tabs only if they contain the same text
 
             if( (nTab == mnStartTab) ||
@@ -331,7 +332,7 @@ void ScSpellingEngine::ConvertAll( EditView& rEditView )
     if( FindNextConversionCell() )
         eState = rEditView.StartSpeller( static_cast< sal_Bool >( sal_True ) );
 
-    DBG_ASSERT( eState != EE_SPELL_NOSPELLER, "ScSpellingEngine::Convert - no spell checker" );
+    OSL_ENSURE( eState != EE_SPELL_NOSPELLER, "ScSpellingEngine::Convert - no spell checker" );
     if( eState == EE_SPELL_NOLANGUAGE )
     {
         Window* pParent = GetDialogParent();
@@ -456,3 +457,4 @@ bool ScTextConversionEngine::NeedsConversion()
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,15 +36,15 @@
 #include "AccessiblePreviewCell.hxx"
 #include "AccessibilityHints.hxx"
 #include "prevwsh.hxx"
-#include "unoguard.hxx"
 #include "prevloc.hxx"
 #include "document.hxx"
 #include <svx/AccessibleTextHelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <editeng/brshitem.hxx>
 #include <vcl/window.hxx>
+#include <vcl/svapp.hxx>
 #include <toolkit/helper/convert.hxx>
-
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star;
@@ -76,7 +77,7 @@ ScAccessiblePreviewCell::~ScAccessiblePreviewCell()
 
 void SAL_CALL ScAccessiblePreviewCell::disposing()
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);
@@ -112,7 +113,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtP
     uno::Reference<XAccessible> xRet;
     if (containsPoint(rPoint))
     {
-         ScUnoGuard aGuard;
+         SolarMutexGuard aGuard;
         IsObjectValid();
 
         if(!mpTextHelper)
@@ -126,7 +127,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtP
 
 void SAL_CALL ScAccessiblePreviewCell::grabFocus() throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
+     SolarMutexGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is())
     {
@@ -140,7 +141,7 @@ void SAL_CALL ScAccessiblePreviewCell::grabFocus() throw (uno::RuntimeException)
 
 sal_Int32 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount() throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
@@ -150,7 +151,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount() throw(uno:
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleChild(sal_Int32 nIndex)
                             throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
@@ -160,7 +161,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleChi
 uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessibleStateSet()
                             throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    SolarMutexGuard aGuard;
 
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
@@ -182,7 +183,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessi
         pStateSet->AddState(AccessibleStateType::TRANSIENT);
         if (isVisible())
             pStateSet->AddState(AccessibleStateType::VISIBLE);
-        // #111635# MANAGES_DESCENDANTS (for paragraphs)
+        // MANAGES_DESCENDANTS (for paragraphs)
         pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
     }
     return pStateSet;
@@ -210,19 +211,16 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServi
 
 //=====  XTypeProvider  =======================================================
 
+namespace
+{
+    class theScAccessiblePreviewCellImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessiblePreviewCellImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessiblePreviewCell::getImplementationId(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
+    return theScAccessiblePreviewCellImplementationId::get().getSeq();
 }
 
 //====  internal  =========================================================
@@ -276,7 +274,7 @@ sal_Bool ScAccessiblePreviewCell::IsDefunc(
 sal_Bool ScAccessiblePreviewCell::IsEditable(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool ScAccessiblePreviewCell::IsOpaque(
@@ -307,10 +305,11 @@ void ScAccessiblePreviewCell::CreateTextHelper()
         mpTextHelper = new ::accessibility::AccessibleTextHelper( pEditSource );
         mpTextHelper->SetEventSource( this );
 
-        // #111635# paragraphs in preview are transient
+        // paragraphs in preview are transient
         ::accessibility::AccessibleTextHelper::VectorOfStates aChildStates;
         aChildStates.push_back( AccessibleStateType::TRANSIENT );
         mpTextHelper->SetAdditionalChildStates( aChildStates );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,6 +109,7 @@ private:
     // #114409#
     ::sdr::overlay::OverlayObjectList*              mpOOCursors;
     ::sdr::overlay::OverlayObjectList*              mpOOSelection;
+    ::sdr::overlay::OverlayObjectList*              mpOOSelectionBorder;
     ::sdr::overlay::OverlayObjectList*              mpOOAutoFill;
     ::sdr::overlay::OverlayObjectList*              mpOODragRect;
     ::sdr::overlay::OverlayObjectList*              mpOOHeader;
@@ -263,19 +265,10 @@ private:
     void            DrawMarkDropObj( SdrObject* pObj );
     SdrObject*      GetEditObject();
     sal_Bool            IsMyModel(SdrEditView* pSdrView);
-    //void          DrawStartTimer();
 
     void            DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, sal_uLong nLayer );
     void            DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pContentDev );
-    //sal_Bool          DrawBeforeScroll();
-    void            DrawAfterScroll(/*sal_Bool bVal*/);
-    //void          DrawMarks();
-    //sal_Bool          NeedDrawMarks();
-    void            DrawComboButton( const Point&   rCellPos,
-                                     long           nCellSizeX,
-                                     long           nCellSizeY,
-                                     sal_Bool           bArrowState,
-                                     sal_Bool           bBtnIn  = sal_False );
+    void            DrawAfterScroll(/*BOOL bVal*/);
     Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );
 
     void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, OutputDevice* pContentDev );
@@ -363,16 +356,12 @@ public:
                         ScUpdateMode eMode = SC_UPDATE_ALL );
 
     void            InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    sal_Bool bTestMerge = sal_False, sal_Bool bRepeat = sal_False );
-
-//UNUSED2008-05  void           DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
+                                    sal_Bool bTestMerge = false, sal_Bool bRepeat = false );
 
     void            CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress);
 
     void            HideCursor();
     void            ShowCursor();
-    void            DrawCursor();
-    void            DrawAutoFillMark();
     void            UpdateAutoFillMark(sal_Bool bMarked, const ScRange& rMarkRange);
 
     void            UpdateListValPos( sal_Bool bVisible, const ScAddress& rPos );
@@ -380,7 +369,7 @@ public:
     sal_Bool            ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, sal_Bool bKeyboard );
     void            HideNoteMarker();
 
-    MapMode         GetDrawMapMode( sal_Bool bForce = sal_False );
+    MapMode         GetDrawMapMode( sal_Bool bForce = false );
 
     void            ContinueDrag();
 
@@ -394,13 +383,14 @@ public:
     void            CheckNeedsRepaint();
 
     void            UpdateDPFromFieldPopupMenu();
-
     void            UpdateVisibleRange();
 
     // #114409#
     void CursorChanged();
     void DrawLayerCreated();
 
+    void            DeleteCopySourceOverlay();
+    void            UpdateCopySourceOverlay();
     void            DeleteCursorOverlay();
     void            UpdateCursorOverlay();
     void            DeleteSelectionOverlay();
@@ -426,3 +416,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

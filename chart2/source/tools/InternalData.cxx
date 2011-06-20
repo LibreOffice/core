@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include "macros.hxx"
 
 #include <rtl/math.hxx>
+#include <algorithm>
 
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
@@ -89,6 +91,13 @@ InternalData::InternalData()
     , m_aColumnLabels( 0 )
 {}
 
+static const double fDefaultData[] = {
+    9.10, 3.20, 4.54,
+    2.40, 8.80, 9.65,
+    3.10, 1.50, 3.70,
+    4.30, 9.02, 6.20
+};
+
 void InternalData::createDefaultData()
 {
     const sal_Int32 nRowCount = 4;
@@ -100,12 +109,6 @@ void InternalData::createDefaultData()
     // @todo: localize this!
     const OUString aRowName( ::chart::SchResId::getResString( STR_ROW_LABEL ));
     const OUString aColName( ::chart::SchResId::getResString( STR_COLUMN_LABEL ));
-
-    const double fDefaultData[ nSize ] =
-        { 9.10, 3.20, 4.54,
-          2.40, 8.80, 9.65,
-          3.10, 1.50, 3.70,
-          4.30, 9.02, 6.20 };
 
     m_aData.resize( nSize );
     for( sal_Int32 i=0; i<nSize; ++i )
@@ -120,6 +123,31 @@ void InternalData::createDefaultData()
     m_aColumnLabels.reserve( m_nColumnCount );
     generate_n( back_inserter( m_aColumnLabels ), m_nColumnCount,
         lcl_NumberedStringGenerator( aColName, C2U("%COLUMNNUMBER") ));
+}
+
+bool InternalData::isDefaultData()
+{
+
+    if( m_nRowCount == 4 && m_nColumnCount == 3 )
+    {
+        for( sal_Int32 i=0; i<(4*3); ++i )
+            if( m_aData[i] != fDefaultData[i] )
+                return false;
+
+        return true;
+    }
+    return false;
+}
+
+void InternalData::clearDefaultData()
+{
+    if( isDefaultData() )
+    {
+        m_nRowCount = m_nColumnCount = 1;
+        m_aData.resize( 1 );
+        m_aRowLabels.clear();
+        m_aColumnLabels.clear();
+    }
 }
 
 void InternalData::setData( const Sequence< Sequence< double > >& rDataInRows )
@@ -338,7 +366,7 @@ void InternalData::insertColumn( sal_Int32 nAfterIndex )
     if( nAfterIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
         m_aColumnLabels.insert( m_aColumnLabels.begin() + (nAfterIndex + 1), vector< uno::Any >(1) );
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
     traceData();
 #endif
 }
@@ -390,7 +418,7 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
     if( nAfterIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
         m_aRowLabels.insert( m_aRowLabels.begin() + nIndex, vector< uno::Any > (1));
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
     traceData();
 #endif
 }
@@ -426,7 +454,7 @@ void InternalData::deleteColumn( sal_Int32 nAtIndex )
     if( nAtIndex < static_cast< sal_Int32 >( m_aColumnLabels.size()))
         m_aColumnLabels.erase( m_aColumnLabels.begin() + nAtIndex );
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
     traceData();
 #endif
 }
@@ -466,7 +494,7 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
     if( nAtIndex < static_cast< sal_Int32 >( m_aRowLabels.size()))
         m_aRowLabels.erase( m_aRowLabels.begin() + nAtIndex );
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
     traceData();
 #endif
 }
@@ -511,7 +539,7 @@ vector< vector< uno::Any > > InternalData::getComplexColumnLabels() const
     return m_aColumnLabels;
 }
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 1
 void InternalData::traceData() const
 {
     OSL_TRACE( "InternalData: Data in rows\n" );
@@ -528,3 +556,5 @@ void InternalData::traceData() const
 #endif
 
 } //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,13 +34,17 @@
 #include <limits>
 #include <memory>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
-#include <tools/debug.hxx>
+#include <sal/macros.h>
 #include <oox/helper/helper.hxx>
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include "filter.hxx"
 #include "scdllapi.h"
 
 // Common macros ==============================================================
+
+/** Expands to a pointer behind the last element of a STATIC data array (like STL end()). */
+#define STATIC_TABLE_END( array )   ((array)+SAL_N_ELEMENTS(array))
 
 /** Expands to a temporary String, created from an ASCII character array. */
 #define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
@@ -132,126 +137,6 @@ void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal
 
 // ============================================================================
 
-/** Deriving from this class prevents copy construction. */
-class ScfNoCopy
-{
-private:
-                        ScfNoCopy( const ScfNoCopy& );
-    ScfNoCopy&          operator=( const ScfNoCopy& );
-protected:
-    inline              ScfNoCopy() {}
-};
-
-// ----------------------------------------------------------------------------
-
-/** Deriving from this class prevents construction in general. */
-class ScfNoInstance : private ScfNoCopy {};
-
-// ============================================================================
-
-/** Simple shared pointer (NOT thread-save, but faster than boost::shared_ptr). */
-template< typename Type >
-class ScfRef
-{
-    template< typename > friend class ScfRef;
-
-public:
-    typedef Type        element_type;
-    typedef ScfRef      this_type;
-
-    inline explicit     ScfRef( element_type* pObj = 0 ) { eat( pObj ); }
-    inline /*implicit*/ ScfRef( const this_type& rRef ) { eat( rRef.mpObj, rRef.mpnCount ); }
-    template< typename Type2 >
-    inline /*implicit*/ ScfRef( const ScfRef< Type2 >& rRef ) { eat( rRef.mpObj, rRef.mpnCount ); }
-    inline              ~ScfRef() { rel(); }
-
-    inline void         reset( element_type* pObj = 0 ) { rel(); eat( pObj ); }
-    inline this_type&   operator=( const this_type& rRef ) { if( this != &rRef ) { rel(); eat( rRef.mpObj, rRef.mpnCount ); } return *this; }
-    template< typename Type2 >
-    inline this_type&   operator=( const ScfRef< Type2 >& rRef ) { rel(); eat( rRef.mpObj, rRef.mpnCount ); return *this; }
-
-    inline element_type* get() const { return mpObj; }
-    inline bool         is() const { return mpObj != 0; }
-
-    inline element_type* operator->() const { return mpObj; }
-    inline element_type& operator*() const { return *mpObj; }
-
-    inline bool         operator!() const { return mpObj == 0; }
-
-private:
-    inline void         eat( element_type* pObj, size_t* pnCount = 0 ) { mpObj = pObj; mpnCount = mpObj ? (pnCount ? pnCount : new size_t( 0 )) : 0; if( mpnCount ) ++*mpnCount; }
-    inline void         rel() { if( mpnCount && !--*mpnCount ) { DELETEZ( mpObj ); DELETEZ( mpnCount ); } }
-
-private:
-    Type*               mpObj;
-    size_t*             mpnCount;
-};
-
-template< typename Type >
-inline bool operator==( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() == rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator!=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() != rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator<( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() < rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator>( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() > rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator<=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() <= rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator>=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() >= rxRef2.get();
-}
-
-// ----------------------------------------------------------------------------
-
-/** Template for a map of ref-counted objects with additional accessor functions. */
-template< typename KeyType, typename ObjType >
-class ScfRefMap : public ::std::map< KeyType, ScfRef< ObjType > >
-{
-public:
-    typedef KeyType                             key_type;
-    typedef ScfRef< ObjType >                   ref_type;
-    typedef ::std::map< key_type, ref_type >    map_type;
-
-    /** Returns true, if the object accossiated to the passed key exists. */
-    inline bool         has( key_type nKey ) const
-                        {
-                            typename map_type::const_iterator aIt = find( nKey );
-                            return (aIt != this->end()) && aIt->second.is();
-                        }
-
-    /** Returns a reference to the object accossiated to the passed key, or 0 on error. */
-    inline ref_type     get( key_type nKey ) const
-                        {
-                            typename map_type::const_iterator aIt = find( nKey );
-                            if( aIt != this->end() ) return aIt->second;
-                            return ref_type();
-                        }
-};
-
-// ============================================================================
-
 class Color;
 class SfxPoolItem;
 class SfxItemSet;
@@ -263,7 +148,7 @@ class SotStorageStreamRef;
 class SvStream;
 
 /** Contains static methods used anywhere in the filters. */
-class ScfTools : ScfNoInstance
+class ScfTools : boost::noncopyable
 {
 public:
 
@@ -394,6 +279,10 @@ private:
     static const String& GetHTMLIndexPrefix();
     /** Returns the prefix for table names. */
     static const String& GetHTMLNamePrefix();
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static items. To enforce this, the default constructor
+        is made private */
+    ScfTools();
 };
 
 // Containers =================================================================
@@ -403,100 +292,10 @@ typedef ::std::vector< sal_Int16 >                  ScfInt16Vec;
 typedef ::std::vector< sal_uInt16 >                 ScfUInt16Vec;
 typedef ::std::vector< sal_Int32 >                  ScfInt32Vec;
 typedef ::std::vector< sal_uInt32 >                 ScfUInt32Vec;
-typedef ::std::vector< sal_Int64 >                  ScfInt64Vec;
-typedef ::std::vector< sal_uInt64 >                 ScfUInt64Vec;
-typedef ::std::vector< String >                     ScfStringVec;
+typedef ::std::vector< ::rtl::OUString >            ScfStringVec;
 
 // ----------------------------------------------------------------------------
 
-/** Template for a list that owns the contained objects.
-    @descr  This list stores pointers to objects and deletes the objects itself
-    on destruction. The Clear() method deletes all objects too. */
-template< typename Type > class ScfDelList
-{
-public:
-    inline explicit     ScfDelList( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 ) :
-                            maList( nInitSize, nResize ) {}
-    /** Creates a deep copy of the passed list (copy-constructs all contained objects). */
-    inline explicit     ScfDelList( const ScfDelList& rSrc ) { *this = rSrc; }
-    virtual             ~ScfDelList();
-
-    /** Creates a deep copy of the passed list (copy-constructs all contained objects). */
-    ScfDelList&         operator=( const ScfDelList& rSrc );
-
-    inline void         Insert( Type* pObj, sal_uLong nIndex )      { if( pObj ) maList.Insert( pObj, nIndex ); }
-    inline void         Append( Type* pObj )                    { if( pObj ) maList.Insert( pObj, LIST_APPEND ); }
-    /** Removes the object without deletion. */
-    inline Type*        Remove( sal_uLong nIndex )                  { return static_cast< Type* >( maList.Remove( nIndex ) ); }
-    /** Removes and deletes the object. */
-    inline void         Delete( sal_uLong nIndex )                  { delete Remove( nIndex ); }
-    /** Exchanges the contained object with the passed, returns the old. */
-    inline Type*        Exchange( Type* pObj, sal_uLong nIndex )    { return static_cast< Type* >( maList.Replace( pObj, nIndex ) ); }
-    /** Replaces (deletes) the contained object. */
-    inline void         Replace( Type* pObj, sal_uLong nIndex )     { delete Exchange( pObj, nIndex ); }
-
-    void                Clear();
-    inline sal_uLong        Count() const                           { return maList.Count(); }
-    inline bool         Empty() const                           { return maList.Count() == 0; }
-
-    inline Type*        GetCurObject() const                    { return static_cast< Type* >( maList.GetCurObject() ); }
-    inline sal_uLong        GetCurPos() const                       { return maList.GetCurPos(); }
-    inline Type*        GetObject( sal_uInt32 nIndex ) const    { return static_cast< Type* >( maList.GetObject( nIndex ) ); }
-
-    inline Type*        First() const                           { return static_cast< Type* >( maList.First() ); }
-    inline Type*        Last() const                            { return static_cast< Type* >( maList.Last() ); }
-    inline Type*        Next() const                            { return static_cast< Type* >( maList.Next() ); }
-    inline Type*        Prev() const                            { return static_cast< Type* >( maList.Prev() ); }
-
-private:
-    mutable List        maList;     /// The base container object.
-};
-
-template< typename Type > ScfDelList< Type >& ScfDelList< Type >::operator=( const ScfDelList& rSrc )
-{
-    Clear();
-    for( const Type* pObj = rSrc.First(); pObj; pObj = rSrc.Next() )
-        Append( new Type( *pObj ) );
-    return *this;
-}
-
-template< typename Type > ScfDelList< Type >::~ScfDelList()
-{
-    Clear();
-}
-
-template< typename Type > void ScfDelList< Type >::Clear()
-{
-    for( Type* pObj = First(); pObj; pObj = Next() )
-        delete pObj;
-    maList.Clear();
-}
-
-// ----------------------------------------------------------------------------
-
-/** Template for a stack that owns the contained objects.
-    @descr  This stack stores pointers to objects and deletes the objects
-    itself on destruction. The Clear() method deletes all objects too.
-    The Pop() method removes the top object from stack without deletion. */
-template< typename Type >
-class ScfDelStack : private ScfDelList< Type >
-{
-public:
-    inline              ScfDelStack( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 ) :
-                            ScfDelList< Type >( nInitSize, nResize ) {}
-
-    inline void         Push( Type* pObj )      { Append( pObj ); }
-    /** Removes the top object without deletion. */
-    inline Type*        Pop()                   { return Remove( Count() - 1 ); }
-
-    inline Type*        Top() const             { return GetObject( Count() - 1 ); }
-
-    using               ScfDelList< Type >::Clear;
-    using               ScfDelList< Type >::Count;
-    using               ScfDelList< Type >::Empty;
-};
-
-// ----------------------------------------------------------------------------
 class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
   public:
     ScFormatFilterPluginImpl();
@@ -513,7 +312,7 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
                  const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange );
     virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange,
-                                   double nOutputFactor = 1.0, sal_Bool bCalcWidthHeight = sal_True,
+                                   double nOutputFactor = 1.0, sal_Bool bCalcWidthHeight = true,
                                    SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange );
@@ -537,3 +336,5 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
 // ============================================================================
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

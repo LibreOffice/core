@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,13 +35,8 @@
 #include "ServiceMacros.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-// #ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
-// #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-// #endif
 
 #include <com/sun/star/chart2/XChartTypeManager.hpp>
-
-// #include <map>
 
 namespace chart
 {
@@ -48,7 +44,6 @@ namespace chart
 class ChartTypeManager :
         public ::cppu::WeakImplHelper2<
         ::com::sun::star::lang::XMultiServiceFactory,
-//     ::com::sun::star::lang::XMultiComponentFactory,
         ::com::sun::star::chart2::XChartTypeManager >
 {
 public:
@@ -90,3 +85,5 @@ private:
 
 // CHART_CHARTTYPEMANAGER_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

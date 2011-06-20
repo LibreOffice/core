@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,6 +46,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <svtools/embedtransfer.hxx>
 #include <sot/storage.hxx>
@@ -60,7 +62,7 @@
 #include <svl/itempool.hxx>
 #include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "drwtrans.hxx"
 #include "docsh.hxx"
@@ -100,12 +102,12 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     pModel( pClipModel ),
     aObjDesc( rDesc ),
     pBookmark( NULL ),
-    bGraphic( sal_False ),
-    bGrIsBit( sal_False ),
-    bOleObj( sal_False ),
+    bGraphic( false ),
+    bGrIsBit( false ),
+    bOleObj( false ),
     pDragSourceView( NULL ),
     nDragSourceFlags( 0 ),
-    bDragWasInternal( sal_False ),
+    bDragWasInternal( false ),
     nSourceDocID( 0 )
 {
     //
@@ -157,15 +159,15 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
             {
                 uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
-                DBG_ASSERT( xControlModel.is(), "uno control without model" );
+                OSL_ENSURE( xControlModel.is(), "uno control without model" );
                 if ( xControlModel.is() )
                 {
                     uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-                    rtl::OUString sPropButtonType = rtl::OUString::createFromAscii( "ButtonType" );
-                    rtl::OUString sPropTargetURL  = rtl::OUString::createFromAscii( "TargetURL" );
-                    rtl::OUString sPropLabel      = rtl::OUString::createFromAscii( "Label" );
+                    rtl::OUString sPropButtonType(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ));
+                    rtl::OUString sPropTargetURL(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
+                    rtl::OUString sPropLabel(RTL_CONSTASCII_USTRINGPARAM( "Label" ));
 
                     if(xInfo->hasPropertyByName( sPropButtonType ))
                     {
@@ -253,17 +255,17 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
 
 ScDrawTransferObj::~ScDrawTransferObj()
 {
-    Application::GetSolarMutex().acquire();     //! ???
+    SolarMutexGuard aSolarGuard;
 
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pDrawClipboard == this )
     {
-        DBG_ERROR("ScDrawTransferObj wasn't released");
+        OSL_FAIL("ScDrawTransferObj wasn't released");
         pScMod->SetClipObject( NULL, NULL );
     }
     if ( pScMod->GetDragData().pDrawTransfer == this )
     {
-        DBG_ERROR("ScDrawTransferObj wasn't released");
+        OSL_FAIL("ScDrawTransferObj wasn't released");
         pScMod->ResetDragObject();
     }
 
@@ -275,11 +277,8 @@ ScDrawTransferObj::~ScDrawTransferObj()
 
     delete pBookmark;
     delete pDragSourceView;
-
-    Application::GetSolarMutex().release();     //! ???
 }
 
-// static
 ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( Window* )
 {
     ScDrawTransferObj* pObj = SC_MOD()->GetClipData().pDrawClipboard;
@@ -288,7 +287,7 @@ ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( Window* )
 
 sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
 {
-    sal_Bool bOnlyControls = sal_False;         // default if there are no objects
+    sal_Bool bOnlyControls = false;         // default if there are no objects
 
     if ( pModel )
     {
@@ -304,7 +303,7 @@ sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
                 {
                     if (!pObj->ISA(SdrUnoObj))
                     {
-                        bOnlyControls = sal_False;
+                        bOnlyControls = false;
                         break;
                     }
                     pObj = aIter.Next();
@@ -375,7 +374,7 @@ void ScDrawTransferObj::AddSupportedFormats()
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( SOT_FORMATSTR_ID_DRAWING );
 
-        // #103556# leave out bitmap and metafile if there are only controls
+        // leave out bitmap and metafile if there are only controls
         if ( !lcl_HasOnlyControls( pModel ) )
         {
             AddFormat( SOT_FORMAT_BITMAP );
@@ -389,7 +388,7 @@ void ScDrawTransferObj::AddSupportedFormats()
 
 sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    sal_Bool bOK = sal_False;
+    sal_Bool bOK = false;
     sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
 
     if ( bOleObj && nFormat != SOT_FORMAT_GDIMETAFILE )
@@ -436,7 +435,7 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
             // SdrExchangeView aView( pModel );
             SdrView aView( pModel );
             SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
-            DBG_ASSERT( pPv, "pPv not there..." );
+            OSL_ENSURE( pPv, "pPv not there..." );
             aView.MarkAllObj( pPv );
             if ( nFormat == SOT_FORMAT_GDIMETAFILE )
                 bOK = SetGDIMetaFile( aView.GetAllMarkedMetaFile( sal_True ), rFlavor );
@@ -491,7 +490,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
 {
     // called from SetObject, put data into stream
 
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     switch (nUserObjectId)
     {
         case SCDRAWTRANS_TYPE_DRAWMODEL:
@@ -506,7 +505,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                 const SvxFontHeightItem& rDefaultFontHeight = (const SvxFontHeightItem&)rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT);
 
                 // SW should have no MasterPages
-                DBG_ASSERT(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
+                OSL_ENSURE(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
 
                 for(sal_uInt16 a(0); a < pModel->GetPageCount(); a++)
                 {
@@ -551,7 +550,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                     try
                     {
                         uno::Sequence < beans::PropertyValue > aSeq;
-                        ::rtl::OUString aDummyName = ::rtl::OUString::createFromAscii("Dummy");
+                        ::rtl::OUString aDummyName(RTL_CONSTASCII_USTRINGPARAM("Dummy"));
                         xPers->storeToEntry( xWorkStore, aDummyName, aSeq, aSeq );
                         if ( xWorkStore->isStreamElement( aDummyName ) )
                         {
@@ -592,11 +591,11 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                         ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
                     // write document storage
-                    pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, sal_False );
+                    pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
 
                     // mba: no relative ULRs for clipboard!
                     SfxMedium aMedium( xWorkStore, String() );
-                    bRet = pEmbObj->DoSaveObjectAs( aMedium, sal_False );
+                    bRet = pEmbObj->DoSaveObjectAs( aMedium, false );
                     pEmbObj->DoSaveCompleted();
 
                     uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
@@ -625,7 +624,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
             break;
 
         default:
-            DBG_ERROR("unknown object id");
+            OSL_FAIL("unknown object id");
     }
     return bRet;
 }
@@ -667,7 +666,7 @@ void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB nTab )
 {
     rDest.ShowSdrPage(rDest.GetModel()->GetPage(nTab));
     SdrPageView* pDestPV = rDest.GetSdrPageView();
-    DBG_ASSERT(pDestPV,"PageView ?");
+    OSL_ENSURE(pDestPV,"PageView ?");
 
     const SdrMarkList& rMarkList = rSource.GetMarkedObjectList();
     sal_uLong nCount = rMarkList.GetMarkCount();
@@ -773,7 +772,7 @@ void ScDrawTransferObj::InitDocShell()
         pDocSh->SetVisArea( aDestArea );
 
         ScViewOptions aViewOpt( pDestDoc->GetViewOptions() );
-        aViewOpt.SetOption( VOPT_GRID, sal_False );
+        aViewOpt.SetOption( VOPT_GRID, false );
         pDestDoc->SetViewOptions( aViewOpt );
 
         ScViewData aViewData( pDocSh, NULL );
@@ -785,17 +784,14 @@ void ScDrawTransferObj::InitDocShell()
     }
 }
 
+namespace
+{
+    class theScDrawTransferObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScDrawTransferObjUnoTunnelId > {};
+}
+
 const com::sun::star::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()
 {
-    static com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex           aCreateMutex;
-        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-    return aSeq;
+    return theScDrawTransferObjUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException )
@@ -812,3 +808,4 @@ sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const com::sun::star::uno::S
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

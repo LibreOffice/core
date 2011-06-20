@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include "attrib.hxx"
 
 class ScDocument;
+class ScEditDataArray;
 class ScMarkArray;
 class ScPatternAttr;
 class ScStyleSheet;
@@ -40,9 +42,10 @@ class ScFlatBoolRowSegments;
 class Rectangle;
 class SfxItemPoolCache;
 class SfxStyleSheetBase;
-class SvxBorderLine;
 class SvxBoxItem;
 class SvxBoxInfoItem;
+
+namespace editeng { class SvxBorderLine; }
 
 #define SC_LINE_EMPTY           0
 #define SC_LINE_SET             1
@@ -90,7 +93,7 @@ private:
     SCSIZE          nLimit;
     ScAttrEntry*    pData;
 
-friend class ScDocument;                // fuer FillInfo
+friend class ScDocument;                // for FillInfo
 friend class ScDocumentIterator;
 friend class ScAttrIterator;
 friend class ScHorizontalAttrIterator;
@@ -102,13 +105,16 @@ friend void lcl_IterGetNumberFormat( sal_uLong& nFormat,
                             SCROW nStartRow, SCROW nEndRow,
                             sal_Bool bLeft, SCCOL nDistRight, sal_Bool bTop, SCROW nDistBottom );
 
+    void RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
+                              const ScPatternAttr* pPattern, ScEditDataArray* pDataArray );
+
 public:
             ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc );
             ~ScAttrArray();
 
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
     void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     void    TestData() const;
 #endif
     void    Reset( const ScPatternAttr* pPattern, sal_Bool bAlloc = sal_True );
@@ -123,12 +129,15 @@ public:
     void    ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
                             SCROW nStartRow, SCROW nEndRow, sal_Bool bLeft, SCCOL nDistRight );
 
-    void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, sal_Bool bPutToPool = sal_False );
-    void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern, sal_Bool bPutToPool = sal_False);
+    void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, sal_Bool bPutToPool = false );
+    void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
+                            sal_Bool bPutToPool = false, ScEditDataArray* pDataArray = NULL );
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle );
-    void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache );
+    void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
+                            ScEditDataArray* pDataArray = NULL );
+    bool    SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize);
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
-                                const SvxBorderLine* pLine, sal_Bool bColorOnly );
+                                const ::editeng::SvxBorderLine* pLine, sal_Bool bColorOnly );
 
     void    ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWhich );
     void    ChangeIndent( SCROW nStartRow, SCROW nEndRow, sal_Bool bIncrement );
@@ -165,9 +174,6 @@ public:
 
     sal_Bool    IsEmpty() const;
 
-//UNUSED2008-05  SCROW  GetFirstEntryPos() const;
-//UNUSED2008-05  SCROW  GetLastEntryPos( sal_Bool bIncludeBottom ) const;
-
     sal_Bool    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
     sal_Bool    GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const;
     sal_Bool    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
@@ -186,13 +192,11 @@ public:
                         sal_Int16 nStripFlags = 0 );
 
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
-
-//UNUSED2008-05  void    ConvertFontsAfterLoad();     // old binary file format
 };
 
 
 //  ------------------------------------------------------------------------------
-//                              Iterator fuer Attribute
+//                              Iterator for attributes
 //  ------------------------------------------------------------------------------
 
 class ScAttrIterator
@@ -240,3 +244,4 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

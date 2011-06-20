@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,6 +106,7 @@
 #include <svx/xftshxy.hxx>
 #include <svx/xftsfit.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svx/grafctrl.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/shaditem.hxx>
@@ -124,7 +126,6 @@
 
 #include <svl/aeitem.hxx>
 #include <avmedia/mediaitem.hxx>
-#include <sfx2/frame.hxx>
 #include "attrib.hxx"
 
 #define SvxDrawToolItem             SfxAllEnumItem
@@ -134,3 +135,5 @@
 
 #define SFX_TYPEMAP
 #include "scslots.hxx"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

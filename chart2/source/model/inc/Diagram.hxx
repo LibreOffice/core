@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,13 +111,6 @@ protected:
 
     virtual void SAL_CALL getFastPropertyValue(
         ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
-
-//  virtual sal_Bool SAL_CALL convertFastPropertyValue
-//         ( ::com::sun::star::uno::Any & rConvertedValue,
-//           ::com::sun::star::uno::Any & rOldValue,
-//           sal_Int32 nHandle,
-//           const ::com::sun::star::uno::Any& rValue )
-//      throw (::com::sun::star::lang::IllegalArgumentException);
 
     // ____ XDiagram ____
     virtual ::com::sun::star::uno::Reference<
@@ -242,3 +236,5 @@ private:
 
 // CHART_DIAGRAM_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

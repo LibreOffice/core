@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 */
 #if OSL_DEBUG_LEVEL > 0
 #define ASSERT_EXCEPTION(ex)                   \
-  OSL_ENSURE( false, ::rtl::OUStringToOString( \
+  OSL_FAIL( ::rtl::OUStringToOString( \
     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +\
     ::rtl::OUString::createFromAscii( typeid( ex ).name()) +\
     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +\
@@ -51,3 +52,5 @@
 
 // CHART_MACROS_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@
 #include <ooo/vba/excel/XPageSetup.hpp>
 #include <ooo/vba/excel/XHPageBreaks.hpp>
 #include <ooo/vba/excel/XVPageBreaks.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include "address.hxx"
@@ -70,8 +72,6 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     css::uno::Reference< css::container::XNameAccess > getFormControls();
     css::uno::Any getControlShape( const rtl::OUString& sName );
 
-    css::uno::Reference< css::beans::XPropertySet > getFirstDBRangeProperties() throw (css::uno::RuntimeException);
-
 protected:
 
     ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext );
@@ -88,12 +88,15 @@ public:
     { return mxModel; }
     virtual css::uno::Reference< css::sheet::XSpreadsheet > getSheet()
     { return mxSheet; }
+    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    css::uno::Reference< ov::excel::XWorksheet > createSheetCopyInNewDoc( rtl::OUString);
+    css::uno::Reference< ov::excel::XWorksheet > createSheetCopy(css::uno::Reference< ov::excel::XWorksheet> xSheet, bool bAfter);
 
     // Attributes
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setName( const ::rtl::OUString &rName ) throw (css::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getVisible() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( sal_Int32 nVisible ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getVisible() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setVisible( ::sal_Int32 _Visible ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getStandardWidth() throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getStandardHeight() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectionMode() throw (css::uno::RuntimeException);
@@ -116,7 +119,7 @@ public:
 
     // Methods
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Select() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Select(const css::uno::Any& aReplace) throw (css::uno::RuntimeException); // add the input parameter to support expand selection
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Move( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException) ;
      virtual void SAL_CALL Copy( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException);
@@ -169,7 +172,10 @@ public:
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    // XUnoTunnel
+    virtual ::sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException);
 };
 
 #endif /* SC_VBA_WORKSHEET_HXX */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

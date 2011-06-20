@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef CHART_SCHWHICHPAIRS_HXX
 #define CHART_SCHWHICHPAIRS_HXX
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/xdef.hxx>
 #include <svx/svddef.hxx>
 #include <editeng/eeitem.hxx>
@@ -238,3 +237,5 @@ const sal_uInt16 nRegEquationWhichPairs[] =
 
 // CHART_SCHWHICHPAIRS_HXX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

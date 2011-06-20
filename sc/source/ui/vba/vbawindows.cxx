@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 #include "vbawindows.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -35,12 +36,11 @@
 #include <tools/urlobj.hxx>
 #include "vbawindow.hxx"
 #include "vbaglobals.hxx"
-//#include "vbaworkbook.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-typedef  std::hash_map< rtl::OUString,
+typedef  boost::unordered_map< rtl::OUString,
 sal_Int32, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 
@@ -80,7 +80,7 @@ public:
             m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
         uno::Reference< frame::XDesktop > xDesktop
-            (xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"), m_xContext), uno::UNO_QUERY_THROW );
+            (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), m_xContext), uno::UNO_QUERY_THROW );
         uno::Reference< container::XEnumeration > mxComponents = xDesktop->getComponents()->createEnumeration();
         while( mxComponents->hasMoreElements() )
         {
@@ -178,7 +178,7 @@ public:
 
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
-        return (m_windows.size() > 0);
+        return ( !m_windows.empty() );
     }
 
     //XNameAccess
@@ -262,3 +262,5 @@ ScVbaWindows::getServiceNames()
     }
     return sNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,14 +55,11 @@
 
 #include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
 
-#ifndef _BGFX_VECTOR_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
 #include <algorithm>
@@ -86,7 +84,7 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
     if(!xShape.is())
         return;
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -108,7 +106,7 @@ rtl::OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape 
     rtl::OUString aRet;
 
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -175,7 +173,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
 uno::Any createPolyPolygon_Cube(
             const drawing::Direction3D& rSize, double fRoundedEdge, bool bRounded = true )
 {
-    DBG_ASSERT(fRoundedEdge>=0, "fRoundedEdge needs to be >= 0");
+    OSL_PRECOND(fRoundedEdge>=0, "fRoundedEdge needs to be >= 0");
 
     // always use extra points, so set percent diagonal to 0.4 which is 0% in the UI (old Chart comment)
     if( fRoundedEdge == 0.0  && bRounded)
@@ -186,7 +184,6 @@ uno::Any createPolyPolygon_Cube(
     //fWidthH stands for Half Width
     const double fWidthH = rSize.DirectionX >=0.0?  rSize.DirectionX/2.0  : -rSize.DirectionX/2.0;
     const double fHeight = rSize.DirectionY;
-//     const double fDepth  = rSize.DirectionZ >=0.0?  rSize.DirectionZ      : -rSize.DirectionZ ;
 
     const double fHeightSign = fHeight >= 0.0 ? 1.0 : -1.0;
 
@@ -215,7 +212,6 @@ uno::Any createPolyPolygon_Cube(
 
     for(sal_Int32 nN = nPointCount; nN--;)
         *pInnerSequenceZ++ = 0.0;
-        //*pInnerSequenceZ++ = -fDepth/2.0;
 
     if(nPointCount == 5)
     {
@@ -270,7 +266,7 @@ uno::Any createPolyPolygon_Cylinder(
            , sal_Int32& nVerticalSegmentCount )
 {
     //fHeight may be negative
-    DBG_ASSERT(fRadius>0, "The radius of a cylinder needs to be > 0");
+    OSL_PRECOND(fRadius>0, "The radius of a cylinder needs to be > 0");
 
     //--------------------------------------
     drawing::PolyPolygonShape3D aPP;
@@ -356,7 +352,7 @@ uno::Any createPolyPolygon_Cylinder(
 uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeight
             , sal_Int32& nVerticalSegmentCount )
 {
-    DBG_ASSERT(fRadius>0, "The radius of a cone needs to be > 0");
+    OSL_PRECOND(fRadius>0, "The radius of a cone needs to be > 0");
 
     //for stacked charts we need cones without top -> fTopHeight != 0 resp. bTopless == true
     //fTopHeight indicates the high of the cutted top only (not the full height)
@@ -493,7 +489,7 @@ uno::Reference<drawing::XShape>
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -736,7 +732,7 @@ uno::Reference<drawing::XShape>
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -953,26 +949,6 @@ drawing::PolyPolygonBezierCoords getRingBezierCoords(
         fStartAngleRadian, fWidthAngleRadian, fUnitCircleInnerRadius, aTransformationFromUnitCircle, fAngleSubdivisionRadian );
     appendAndCloseBezierCoords( aReturn, aInnerArc, sal_True );
 
-    //fill rMarkHandlePoints
-    /*
-    {
-        rMarkHandlePoints.realloc(1);
-        rMarkHandlePoints[0].realloc(6);
-        sal_Int32 nHandleCount=0;
-        sal_Int32 nOuterArcCount = aOuterArc.Coordinates[0].getLength();
-        if(nOuterArcCount>0)
-            rMarkHandlePoints[0][nHandleCount++]=aOuterArc.Coordinates[0][0];
-        if(nOuterArcCount>1)
-            rMarkHandlePoints[0][nHandleCount++]=aOuterArc.Coordinates[0][nOuterArcCount-1];
-        sal_Int32 nInnerArcCount = aInnerArc.Coordinates[0].getLength();
-        if(nInnerArcCount>0)
-            rMarkHandlePoints[0][nHandleCount++]=aInnerArc.Coordinates[0][0];
-        if(nInnerArcCount>1)
-            rMarkHandlePoints[0][nHandleCount++]=aInnerArc.Coordinates[0][nInnerArcCount-1];
-        rMarkHandlePoints[0].realloc(nHandleCount);
-    }
-    */
-
     return aReturn;
 }
 
@@ -1002,7 +978,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1018,19 +994,6 @@ uno::Reference< drawing::XShape >
                 , aTransformationFromUnitCircle, fAngleSubdivisionRadian );
 
             xProp->setPropertyValue( C2U( "PolyPolygonBezier" ), uno::makeAny( aCoords ) );
-
-            //add shape for markhandles
-            /*
-            drawing::PointSequenceSequence aMarkHandlePoints(1); to be filled within getRingBezierCoords
-            if( xGroup.is() )
-            {
-                VLineProperties aHandleLineProperties;
-                aHandleLineProperties.LineStyle    = uno::makeAny( drawing::LineStyle_NONE );
-                uno::Reference< drawing::XShape > xHandleShape =
-                    this->createLine2D( xGroup, aMarkHandlePoints, &aHandleLineProperties );
-                this->setShapeName( xHandleShape, C2U("HandlesOnly") );
-            }
-            */
         }
         catch( uno::Exception& e )
         {
@@ -1068,7 +1031,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1148,7 +1111,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1207,7 +1170,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1267,7 +1230,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1494,7 +1457,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             break;
         }
     }
-    //return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
+
     return aPP;
 }
 
@@ -1518,7 +1481,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1580,7 +1543,7 @@ uno::Reference< drawing::XShape >
         ASSERT_EXCEPTION( e );
     }
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1645,13 +1608,13 @@ uno::Reference< drawing::XShapes >
 
         xTarget->add(xShape);
 
-        //it is necessary to set the transform matrix to initialize the scene properly (bug #106316#)
+        //it is necessary to set the transform matrix to initialize the scene properly
         //otherwise all objects which are placed into this Group will not be visible
         //the following should be unnecessary after a the bug is fixed
         {
             //set properties
             uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-            DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+            OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
             if( xProp.is())
             {
                 try
@@ -1713,7 +1676,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1749,7 +1712,7 @@ uno::Reference< drawing::XShape >
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1805,16 +1768,12 @@ uno::Reference< drawing::XShape >
     //create shape
     uno::Reference< drawing::XShape > xShape(
         m_xShapeFactory->createInstance( C2U(
-            //"com.sun.star.drawing.LineShape") ), uno::UNO_QUERY );
             "com.sun.star.drawing.PolyLineShape") ), uno::UNO_QUERY );
-            //"com.sun.star.drawing.PolyLinePathShape") ), uno::UNO_QUERY );
-            //"com.sun.star.drawing.PolyPolygonPathShape") ), uno::UNO_QUERY );
-            //"com.sun.star.drawing.PolyPolygonShape") ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
     if( xProp.is())
     {
         try
@@ -1874,7 +1833,7 @@ uno::Any ShapeFactory::makeTransformation( const awt::Point& rScreenPosition2D, 
 void ShapeFactory::makeShapeInvisible( const uno::Reference< drawing::XShape >& xShape )
 {
     uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xShapeProp.is(), "created shape offers no XPropertySet");
+    OSL_ENSURE(xShapeProp.is(), "created shape offers no XPropertySet");
     if( xShapeProp.is())
     {
         try
@@ -1997,7 +1956,7 @@ bool ShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShape3D& rPo
 
 void ShapeFactory::closePolygon( drawing::PolyPolygonShape3D& rPoly)
 {
-    DBG_ASSERT( rPoly.SequenceX.getLength() <= 1, "ShapeFactory::closePolygon - single polygon expected" );
+    OSL_ENSURE( rPoly.SequenceX.getLength() <= 1, "ShapeFactory::closePolygon - single polygon expected" );
     //add a last point == first point
     if(isPolygonEmptyOrSinglePoint(rPoly))
         return;
@@ -2099,3 +2058,5 @@ void ShapeFactory::removeSubShapes( const uno::Reference< drawing::XShapes >& xS
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,13 +81,7 @@ void VPolarCoordinateSystem::createVAxisList(
             )
 {
     m_aAxisMap.clear();
-
-    //if(!m_xLogicTargetForAxes.is() || !m_xFinalTarget.is() || !m_xCooSysModel.is() )
-    //    return;
-
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-//     bool bSwapXAndY = this->getPropertySwapXAndYAxis();
-
     sal_Int32 nDimensionIndex = 0;
 
     //create angle axis (dimension index 0)
@@ -102,7 +97,7 @@ void VPolarCoordinateSystem::createVAxisList(
             aAxisProperties.init();
             if(aAxisProperties.m_bDisplayLabels)
                 aAxisProperties.m_nNumberFormatKey = this->getNumberFormatKeyForAxis( xAxis, xNumberFormatsSupplier );
-            //-------------------
+
             ::boost::shared_ptr< VAxisBase > apVAxis( VPolarAxis::createAxis( aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
             m_aAxisMap[aFullAxisIndex] = apVAxis;
@@ -200,3 +195,5 @@ void VPolarCoordinateSystem::createGridShapes()
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

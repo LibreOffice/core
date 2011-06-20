@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,6 +45,10 @@ public:
 
     void        SetDefaults();
 
+    // Set or get the initial tab count for new spreadsheet, it is used by VBA API currently.
+    void    SetTabCountInNewSpreadsheet( SCTAB nCount )  { nTabCountInNewSpreadsheet = nCount; }
+    SCTAB   GetTabCountInNewSpreadsheet() const              { return nTabCountInNewSpreadsheet;   }
+
     void        SetAppMetric( FieldUnit eUnit ) { eMetric = eUnit;      }
     FieldUnit   GetAppMetric() const            { return eMetric;       }
     void        SetZoom( sal_uInt16 nNew )          { nZoom = nNew;         }
@@ -87,6 +92,7 @@ public:
     const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
 
 private:
+    SCTAB   nTabCountInNewSpreadsheet;
     FieldUnit   eMetric;
     sal_uInt16      nLRUFuncCount;
     sal_uInt16*     pLRUList;
@@ -147,3 +153,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

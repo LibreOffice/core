@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,7 +92,7 @@ ScHintWindow::~ScHintWindow()
 }
 
 
-void __EXPORT ScHintWindow::Paint( const Rectangle& /* rRect */ )
+void ScHintWindow::Paint( const Rectangle& /* rRect */ )
 {
     SetFont( aHeadFont );
     DrawText( Point(HINT_MARGIN,HINT_MARGIN), aTitle );
@@ -106,3 +107,5 @@ void __EXPORT ScHintWindow::Paint( const Rectangle& /* rRect */ )
         aLineStart.Y() += nTextHeight;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

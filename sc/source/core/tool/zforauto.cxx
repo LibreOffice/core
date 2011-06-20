@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,11 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/debug.hxx>
 
 #include "zforauto.hxx"
 #include "global.hxx"
 
-static const sal_Char __FAR_DATA pStandardName[] = "Standard";
+static const sal_Char pStandardName[] = "Standard";
 
 //------------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
     }
     else
     {
-        DBG_ERROR("SCNumFormatAbbrev:: unbekanntes Zahlformat");
+        OSL_FAIL("SCNumFormatAbbrev:: unbekanntes Zahlformat");
         eLnge = LANGUAGE_SYSTEM;
         eSysLnge = LANGUAGE_GERMAN;     // sonst passt "Standard" nicht
         sFormatstring.AssignAscii( RTL_CONSTASCII_STRINGPARAM( pStandardName ) );
@@ -104,3 +104,5 @@ sal_uLong ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
     return rFormatter.GetIndexPuttingAndConverting( sFormatstring, eLnge,
             eSysLnge, nType, bNewInserted, nCheckPos);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

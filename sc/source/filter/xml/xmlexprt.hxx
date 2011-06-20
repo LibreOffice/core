@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
@@ -64,6 +65,7 @@ class ScChartListener;
 class SfxItemPool;
 class ScAddress;
 class ScBaseCell;
+class ScXMLCachedRowAttrAccess;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -86,7 +88,7 @@ class ScXMLExport : public SvXMLExport
     UniReference < SvXMLExportPropertyMapper >  xRowStylesExportPropertySetMapper;
     UniReference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
-    typedef ::std::hash_map<sal_Int32, sal_Int32>  NumberFormatIndexMap;
+    typedef ::boost::unordered_map<sal_Int32, sal_Int32>  NumberFormatIndexMap;
     NumberFormatIndexMap                aNumFmtIndexMap;
     ScMySharedData*                     pSharedData;
     ScColumnStyles*                 pColumnStyles;
@@ -159,13 +161,14 @@ class ScXMLExport : public SvXMLExport
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
         const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet);
     void WriteRowContent();
-    void WriteRowStartTag(sal_Int32 nRow, const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nEmptyRows);
+    void WriteRowStartTag(sal_Int32 nRow, const sal_Int32 nIndex, const sal_Int32 nEmptyRows, bool bHidden, bool bFiltered);
     void OpenHeaderRows();
     void CloseHeaderRows();
-    void OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
-    void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag,
-        const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
-    void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow);
+    void OpenNewRow(const sal_Int32 nIndex, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows,
+                    bool bHidden, bool bFiltered);
+    void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows,
+                         bool bHidden, bool bFiltered);
+    void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow, ScXMLCachedRowAttrAccess& rRowAttr);
     void CloseRow(const sal_Int32 nRow);
     void GetColumnRowHeader(sal_Bool& bHasColumnHeader, com::sun::star::table::CellRangeAddress& aColumnHeaderRange,
         sal_Bool& bHasRowHeader, com::sun::star::table::CellRangeAddress& aRowHeaderRange,
@@ -173,31 +176,25 @@ class ScXMLExport : public SvXMLExport
     void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups();
 
-//UNUSED2008-05  sal_Bool GetMerge (const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
-//UNUSED2008-05                     sal_Int32 nCol, sal_Int32 nRow,
-//UNUSED2008-05                     com::sun::star::table::CellRangeAddress& aCellAddress);
-
     sal_Bool GetMerged (const com::sun::star::table::CellRangeAddress* pCellRange,
         const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable);
 
     sal_Bool GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) const;
 
-    void WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount);
+    void WriteTable(sal_Int32 nTable, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet>& xTable);
+    void WriteCell (ScMyCell& aCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
     void WriteAnnotation(ScMyCell& rMyCell);
     void WriteDetective(const ScMyCell& rMyCell);
     void ExportShape(const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape, com::sun::star::awt::Point* pPoint);
     void WriteShapes(const ScMyCell& rMyCell);
     void WriteTableShapes();
-    void SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgress);
+    void SetRepeatAttribute (const sal_Int32 nEqualCellCount);
 
     sal_Bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
      sal_Bool IsEditCell(const com::sun::star::table::CellAddress& aAddress, ScMyCell* pMyCell = NULL) const;
-//UNUSED2008-05  sal_Bool IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const;
     sal_Bool IsEditCell(ScMyCell& rCell) const;
     sal_Bool IsMultiLineFormulaCell(ScMyCell& rCell) const;
-//UNUSED2008-05  sal_Bool IsAnnotationEqual(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell1,
-//UNUSED2008-05                             const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);
     sal_Bool IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2);
 
     void WriteCalculationSettings(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
@@ -242,10 +239,6 @@ public:
     static sal_Int16 GetFieldUnit();
     inline ScDocument*          GetDocument()           { return pDoc; }
     inline const ScDocument*    GetDocument() const     { return pDoc; }
-//UNUSED2008-05  sal_Bool IsMatrix (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
-//UNUSED2008-05                     const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
-//UNUSED2008-05                     const sal_Int32 nCol, const sal_Int32 nRow,
-//UNUSED2008-05                     com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
     sal_Bool IsMatrix (const ScAddress& aCell,
         com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
 
@@ -291,3 +284,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

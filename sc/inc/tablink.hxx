@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,10 +34,6 @@
 #include <sfx2/lnkbase.hxx>
 
 #include <sfx2/objsh.hxx>
-//REMOVE    #ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE    #define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE    SO2_DECL_REF(SvEmbeddedObject)
-//REMOVE    #endif
 
 class ScDocShell;
 struct TableLink_Impl;
@@ -61,8 +58,8 @@ public:
                     const String& rFilter, const String& rOpt, sal_uLong nRefresh );
     virtual ~ScTableLink();
     virtual void Closed();
-    virtual void DataChanged( const String& rMimeType,
-                              const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
@@ -95,7 +92,7 @@ private:
 public:
                         ScDocumentLoader( const String& rFileName,
                                             String& rFilterName, String& rOptions,
-                                            sal_uInt32 nRekCnt = 0, sal_Bool bWithInteraction = sal_False );
+                                            sal_uInt32 nRekCnt = 0, sal_Bool bWithInteraction = false );
                         ~ScDocumentLoader();
     ScDocument*         GetDocument();
     ScDocShell*         GetDocShell()       { return pDocShell; }
@@ -115,7 +112,13 @@ public:
                                         String& rFilter, String& rOptions,
                                         sal_Bool bWithContent, sal_Bool bWithInteraction );
 
+    static bool         GetFilterName( const ::rtl::OUString& rFileName,
+                                       ::rtl::OUString& rFilter, ::rtl::OUString& rOptions,
+                                       bool bWithContent, bool bWithInteraction );
+
     static void         RemoveAppPrefix( String& rFilterName );
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

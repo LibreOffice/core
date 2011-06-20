@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,6 @@
 // header for class OUStringBuffer
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
-#include <tools/debug.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -92,8 +92,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using rtl::OUString;
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 VDataSeriesGroup::CachedYValues::CachedYValues()
@@ -128,7 +126,7 @@ void VDataSeriesGroup::deleteSeries()
     //delete all data series help objects:
     ::std::vector< VDataSeries* >::const_iterator       aIter = m_aSeriesVector.begin();
     const ::std::vector< VDataSeries* >::const_iterator aEnd  = m_aSeriesVector.end();
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
         delete *aIter;
     }
@@ -147,8 +145,6 @@ sal_Int32 VDataSeriesGroup::getSeriesCount() const
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeModel
                                , sal_Int32 nDimensionCount, bool bCategoryXAxis )
@@ -164,7 +160,7 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_pExplicitCategoriesProvider(0)
         , m_bPointsWereSkipped(false)
 {
-    DBG_ASSERT(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
+    OSL_POSTCOND(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
 }
 
 VSeriesPlotter::~VSeriesPlotter()
@@ -176,7 +172,7 @@ VSeriesPlotter::~VSeriesPlotter()
     {
         ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-        for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             aXSlotIter->deleteSeries();
         }
@@ -201,7 +197,7 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
 {
     //take ownership of pSeries
 
-    DBG_ASSERT( pSeries, "series to add is NULL" );
+    OSL_PRECOND( pSeries, "series to add is NULL" );
     if(!pSeries)
         return;
 
@@ -247,7 +243,7 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
             {
                 //move all existing series in the xSlot to next slot
                 //@todo
-                OSL_ENSURE( false, "Not implemented yet");
+                OSL_FAIL( "Not implemented yet");
             }
             else if( ySlot == -1 || ySlot >= nYSlotCount)
             {
@@ -260,7 +256,7 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
                 //insert at given y and x position
 
                 //@todo
-                OSL_ENSURE( false, "Not implemented yet");
+                OSL_FAIL( "Not implemented yet");
             }
         }
     }
@@ -291,7 +287,7 @@ void VSeriesPlotter::releaseShapes()
     {
         ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-        for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
@@ -299,7 +295,7 @@ void VSeriesPlotter::releaseShapes()
             const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
 
             //iterate through all series in this x slot
-            for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+            for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
             {
                 VDataSeries* pSeries( *aSeriesIter );
                 pSeries->releaseShapes();
@@ -420,7 +416,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
     {
         sal_Unicode cDecSeparator = '.';//@todo get this locale dependent
         aNumber = ::rtl::math::doubleToUString( fValue, rtl_math_StringFormat_G /*rtl_math_StringFormat*/
-            , 3/*DecPlaces*/ , cDecSeparator /*,sal_Int32 const * pGroups*/ /*,sal_Unicode cGroupSeparator*/ ,false /*bEraseTrailingDecZeros*/ );
+            , 3/*DecPlaces*/ , cDecSeparator, false /*bEraseTrailingDecZeros*/ );
     }
     return aNumber;
 }
@@ -701,7 +697,7 @@ double lcl_getErrorBarLogicLength(
                 uno::Reference< chart2::data::XDataSource > xErrorBarData( xProp, uno::UNO_QUERY );
                 if( xErrorBarData.is())
                     fResult = StatisticsHelper::getErrorFromDataSource(
-                        xErrorBarData, nIndex, bPositive /*, true */ /* y-error */ );
+                        xErrorBarData, nIndex, bPositive);
             }
             break;
         }
@@ -789,7 +785,6 @@ drawing::Position3D lcl_transformMixedToScene( PlottingPositionHelper* pPosHelpe
 
 } // anonymous namespace
 
-// virtual
 void VSeriesPlotter::createErrorBar(
       const uno::Reference< drawing::XShapes >& xTarget
     , const drawing::Position3D& rUnscaledLogicPosition
@@ -926,7 +921,6 @@ void VSeriesPlotter::createErrorBar(
 
 }
 
-// virtual
 void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogicPosition
                             , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
                             , const uno::Reference< drawing::XShapes >& xTarget
@@ -1090,7 +1084,6 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
 
             if( bShowCorrCoeff )
             {
-//                 xEquationProperties->getPropertyValue( C2U("Separator")) >>= aSep;
                 aFormula.append( aSep );
             }
         }
@@ -1140,15 +1133,6 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
             uno::Reference< drawing::XShape > xTextShape = m_pShapeFactory->createText(
                 xEquationTarget, aFormula.makeStringAndClear(),
                 aNames, aValues, ShapeFactory::makeTransformation( aScreenPosition2D ));
-
-//             // adapt font sizes
-//             awt::Size aOldRefSize;
-//             if( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
-//             {
-//                 uno::Reference< beans::XPropertySet > xShapeProp( xTextShape, uno::UNO_QUERY );
-//                 if( xShapeProp.is())
-//                     RelativeSizeHelper::adaptFontSizes( xShapeProp, aOldRefSize, m_aPageReferenceSize );
-//             }
 
             OSL_ASSERT( xTextShape.is());
             if( xTextShape.is())
@@ -1373,7 +1357,7 @@ void VSeriesPlotter::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximu
     {
         ::std::vector< VDataSeriesGroup >::const_iterator      aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-        for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             double fLocalMinimum, fLocalMaximum;
             aXSlotIter->getMinimumAndMaximiumX( fLocalMinimum, fLocalMaximum );
@@ -1400,7 +1384,7 @@ void VSeriesPlotter::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, d
     {
         ::std::vector< VDataSeriesGroup >::const_iterator      aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-        for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             double fLocalMinimum, fLocalMaximum;
             aXSlotIter->getMinimumAndMaximiumYInContinuousXRange( fLocalMinimum, fLocalMaximum, fMinX, fMaxX, nAxisIndex );
@@ -1428,7 +1412,7 @@ sal_Int32 VSeriesPlotter::getPointCount() const
         ::std::vector< VDataSeriesGroup >::const_iterator       aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
-        for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             sal_Int32 nPointCount = aXSlotIter->getPointCount();
             if( nPointCount>nRet )
@@ -1463,7 +1447,7 @@ sal_Int32 VDataSeriesGroup::getPointCount() const
     ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = m_aSeriesVector.begin();
     const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd = m_aSeriesVector.end();
 
-    for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+    for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter)
     {
         sal_Int32 nPointCount = (*aSeriesIter)->getTotalPointCount();
         if( nPointCount>nRet )
@@ -1498,7 +1482,7 @@ void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaxi
     ::rtl::math::setInf(&rfMinimum, false);
     ::rtl::math::setInf(&rfMaximum, true);
 
-    for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+    for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
     {
         sal_Int32 nPointCount = (*aSeriesIter)->getTotalPointCount();
         for(sal_Int32 nN=0;nN<nPointCount;nN++)
@@ -1527,7 +1511,7 @@ void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY,
     ::rtl::math::setInf(&rfMinY, false);
     ::rtl::math::setInf(&rfMaxY, true);
 
-    for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+    for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
     {
         sal_Int32 nPointCount = (*aSeriesIter)->getTotalPointCount();
         for(sal_Int32 nN=0;nN<nPointCount;nN++)
@@ -1849,11 +1833,11 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
         bool bFirstSeries = true;
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-        for( ; aZSlotIter!=aZSlotEnd && !bBreak; aZSlotIter++ )
+        for( ; aZSlotIter!=aZSlotEnd && !bBreak; ++aZSlotIter )
         {
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-            for( ; aXSlotIter!=aXSlotEnd && !bBreak; aXSlotIter++ )
+            for( ; aXSlotIter!=aXSlotEnd && !bBreak; ++aXSlotIter )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
@@ -1904,11 +1888,11 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
     ::std::vector< VDataSeries* > aAllSeries;
     ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator            aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
-    for( ; aZSlotIter != aZSlotEnd; aZSlotIter++ )
+    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
         ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-        for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             ::std::vector< VDataSeries* > aSeriesList = aXSlotIter->m_aSeriesVector;
             aAllSeries.insert( aAllSeries.end(), aSeriesList.begin(), aSeriesList.end() );
@@ -1972,7 +1956,7 @@ awt::Size VSeriesPlotter::getPreferredLegendKeyAspectRatio()
     ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = aAllSeries.begin();
     const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = aAllSeries.end();
     //iterate through all series
-    for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+    for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
     {
         if( bSeriesAllowsLines )
         {
@@ -2267,3 +2251,5 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
 //.............................................................................
 } //namespace chart
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

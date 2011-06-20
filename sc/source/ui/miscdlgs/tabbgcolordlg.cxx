@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabbgcolordlg.cxx,v $
- * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +37,6 @@
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
-#include <tools/debug.hxx>
 #include <tools/color.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/xtable.hxx>
@@ -100,11 +97,9 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     ::boost::scoped_ptr<XColorTable> pOwnColorTable; // locally instantiated in case the doc shell doesn't have one.
 
     const Size aSize15x15 = Size( 15, 15 );
-    const Size aSize10x10 = Size( 10, 10 );
-    const Size aSize5x5 = Size( 5, 5 );
     sal_uInt16 nSelectedItem = 0;
 
-    DBG_ASSERT( pDocSh, "DocShell not found!" );
+    OSL_ENSURE( pDocSh, "DocShell not found!" );
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
@@ -196,3 +191,5 @@ void ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
     }
     ValueSet::KeyInput(rKEvt);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

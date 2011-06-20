@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ ScAutoNameCache::~ScAutoNameCache()
 {
 }
 
-const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurences( const String& rName, SCTAB nTab )
+const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const String& rName, SCTAB nTab )
 {
     if ( nTab != nCurrentTab )
     {
@@ -91,7 +92,7 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurences( const String& rNa
                 case CELLTYPE_VALUE:
                 case CELLTYPE_NOTE:
                 case CELLTYPE_SYMBOLS:
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                 case CELLTYPE_DESTROYED:
 #endif
                     ;   // nothing, prevent compiler warning
@@ -107,3 +108,4 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurences( const String& rNa
     return rAddresses;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _CHART2_ACCSTATISTICSOBJECT_HXX
 #define _CHART2_ACCSTATISTICSOBJECT_HXX
 
-#ifndef _CHART2_ACCESSIBLE_CHART_ELEMENT_HXX_
 #include "AccessibleChartElement.hxx"
-#endif
 
 #include "ObjectIdentifier.hxx"
 
@@ -39,15 +38,6 @@ namespace chart
 class AccStatisticsObject : public AccessibleChartElement
 {
 public:
-    /*
-    enum StatisticsObjectType
-    {
-        MEAN_VAL_LINE = OBJECTTYPE_AVERAGEVALUE,
-        ERROR_BARS    = OBJECTTYPE_ERROR,
-        REGRESSION    = OBJECTTYPE_REGRESSION
-    };
-    */
-
     AccStatisticsObject( const AccessibleElementInfo& rAccInfo );
 
     virtual ~AccStatisticsObject();
@@ -57,12 +47,10 @@ public:
 
     // ________ XServiceInfo ________
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
-
-private:
-    //const StatisticsObjectType    m_eType;
-    //const sal_uInt16              m_nSeriesIndex;
 };
 
 }  // accessibility
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
