@@ -205,7 +205,7 @@ R=$(gb_Helper_REPODIR_NATIVE) && $(subst $(REPODIR)/,$$R/,$(subst $(gb_Helper_RE
 $(subst $(REPODIR)/,$$R/,$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,$(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,$(subst $(gb_Helper_OUTDIR_NATIVE)/,$$O/,$(subst $(gb_Helper_WORKDIR_NATIVE)/,$$W/,$(1)))))))))
 endef
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
@@ -216,7 +216,7 @@ $(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
 $(1)))))
 endef
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native

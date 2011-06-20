@@ -133,7 +133,7 @@ gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
 gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native

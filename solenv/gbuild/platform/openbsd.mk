@@ -57,7 +57,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(1))
 endef
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native

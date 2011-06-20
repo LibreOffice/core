@@ -41,7 +41,7 @@ include $(GBUILDDIR)/platform/unxgcc.mk
 
 gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib:/usr/pkg/lib:/usr/X11R7/lib
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native

@@ -243,7 +243,7 @@ endef
 
 gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
@@ -254,7 +254,7 @@ $(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
 $(1)))))
 endef
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
