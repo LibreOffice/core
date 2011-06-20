@@ -380,31 +380,6 @@ APureElement::inq_RefContent()
     return pContent;
 }
 
-
-
-//***************************     ASglTag           **************************//
-
-ASglTag::ASglTag( const String &   i_sTagName )
-    :   sTagName( i_sTagName )
-{
-}
-
-ASglTag::ASglTag( const char *  i_sTagName )
-    :   sTagName( i_sTagName )
-{
-}
-
-ASglTag::~ASglTag()
-{
-}
-
-const String &
-ASglTag::inq_TagName() const
-{
-    return sTagName;
-}
-
-
 //***************************       AnAttribute     **************************//
 AnAttribute::AnAttribute( const String &   i_sName,
                           const String &   i_sValue )

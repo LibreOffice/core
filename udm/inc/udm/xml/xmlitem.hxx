@@ -243,23 +243,6 @@ class APureElement : public PureElement
     Dyn< Item >         pContent;
 };
 
-class ASglTag : public SglTag
-{
-  public:
-                        ASglTag(
-                            const ::csv::String & i_sTagName );
-                        ASglTag(
-                            const char *          i_sTagName );
-                        ~ASglTag();
-  private:
-    // Interface Element:
-    virtual const ::csv::String &
-                        inq_TagName() const;
-    // DATA
-    ::csv::String         sTagName;
-};
-
-
 /* Standard Attribute implementation
 */
 class AnAttribute : public Attribute
