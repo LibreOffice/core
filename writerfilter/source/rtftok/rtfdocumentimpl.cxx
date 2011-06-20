@@ -492,10 +492,6 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_LISTLEVEL:
             m_aStates.top().nDestinationState = DESTINATION_LISTLEVEL;
             break;
-        case RTF_LISTTEXT:
-            // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
-            m_aStates.top().nDestinationState = DESTINATION_SKIP;
-            break;
         case RTF_LEVELTEXT:
             m_aStates.top().nDestinationState = DESTINATION_LEVELTEXT;
             break;
@@ -528,6 +524,15 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_SHPINST:
             m_aStates.top().nDestinationState = DESTINATION_SHAPEINSTRUCTION;
+            break;
+        case RTF_NESTTABLEPROPS:
+            m_aStates.top().nDestinationState = DESTINATION_NESTEDTABLEPROPERTIES;
+            break;
+        case RTF_LISTTEXT:
+            // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
+        case RTF_NONESTTABLES:
+            // This destination should be ignored by readers that support nested tables.
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         default:
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -596,6 +601,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             m_aStates.top().nInternalState = INTERNAL_HEX;
             break;
         case RTF_CELL:
+        case RTF_NESTCELL:
             {
                 if (m_bNeedPap)
                 {
@@ -605,7 +611,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                             );
                     Mapper().props(pParagraphProperties);
                 }
-                if (m_aStates.top().aTableCellsAttributes.size())
+                if (nKeyword == RTF_CELL && m_aStates.top().aTableCellsAttributes.size())
                 {
                     RTFSprms_t& rAttributes = *m_aStates.top().aTableCellsAttributes.front();
                     RTFSprms_t& rSprms = *m_aStates.top().aTableCellsSprms.front();
@@ -618,6 +624,17 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     m_aStates.top().aTableCellsAttributes.pop_front();
                     m_aStates.top().aTableCellsSprms.pop_front();
                 }
+                else
+                {
+                    RTFSprms_t aAttributes;
+                    RTFSprms_t aSprms;
+                    RTFValue::Pointer_t pValue(new RTFValue(1));
+                    aSprms.push_back(make_pair(NS_sprm::LN_PCell, pValue));
+                    writerfilter::Reference<Properties>::Pointer_t const pTableCellProperties(
+                            new RTFReferenceProperties(aAttributes, aSprms)
+                            );
+                    Mapper().props(pTableCellProperties);
+                }
 
                 sal_uInt8 sCellEnd[] = { 0xd };
                 Mapper().text(sCellEnd, 1);
@@ -627,6 +644,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             break;
         case RTF_ROW:
+        case RTF_NESTROW:
             {
                 writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
                         new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
@@ -934,6 +952,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_RIN: nSprm = 0x845d; break;
         case RTF_SB: nSprm = NS_sprm::LN_PDyaBefore; break;
         case RTF_SA: nSprm = NS_sprm::LN_PDyaAfter; break;
+        case RTF_ITAP: nSprm = NS_sprm::LN_PTableDepth; break;
         default: break;
     }
     if (nSprm > 0)
