@@ -222,8 +222,12 @@ void XGradientList::impDestroy()
     }
 }
 
-XGradientList::XGradientList( const String& rPath, XOutdevItemPool* pInPool, sal_uInt16 nInitSize, sal_uInt16 nReSize)
-:   XPropertyList(rPath, pInPool, nInitSize, nReSize),
+XGradientList::XGradientList(
+    const String& rPath,
+    XOutdevItemPool* pInPool,
+    sal_uInt16 nInitSize,
+    sal_uInt16 nReSize
+) : XPropertyList( rPath, pInPool ),
     mpData(0)
 {
     pBmpList = new List(nInitSize, nReSize);

@@ -288,17 +288,16 @@ void XPropertyTable::SetName( const String& rString )
 |*
 *************************************************************************/
 
-XPropertyList::XPropertyList( const String& rPath,
-                                XOutdevItemPool* pInPool,
-                                sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-            aName           ( pszStandard, 8 ),
-            aPath           ( rPath ),
-            pXPool          ( pInPool ),
-            aList           ( nInitSize, nReSize ),
-            pBmpList        ( NULL ),
-            bListDirty      ( sal_True ),
-            bBitmapsDirty   ( sal_True ),
-            bOwnPool        ( sal_False )
+XPropertyList::XPropertyList(
+    const String& rPath,
+    XOutdevItemPool* pInPool
+) : aName           ( pszStandard, 8 ),
+    aPath           ( rPath ),
+    pXPool          ( pInPool ),
+    pBmpList        ( NULL ),
+    bListDirty      ( sal_True ),
+    bBitmapsDirty   ( sal_True ),
+    bOwnPool        ( sal_False )
 {
     if( !pXPool )
     {
@@ -327,14 +326,12 @@ XPropertyList::XPropertyList( SvStream& /*rIn*/) :
 
 XPropertyList::~XPropertyList()
 {
-    XPropertyEntry* pEntry = (XPropertyEntry*)aList.First();
-    Bitmap* pBitmap = NULL;
-    for( sal_uIntPtr nIndex = 0; nIndex < aList.Count(); nIndex++ )
-    {
-        delete pEntry;
-        pEntry = (XPropertyEntry*)aList.Next();
+    for( size_t i = 0, n = aList.size(); i < n; ++i ) {
+        delete aList[ i ];
     }
+    aList.clear();
 
+    Bitmap* pBitmap = NULL;
     if( pBmpList )
     {
         pBitmap = (Bitmap*) pBmpList->First();
@@ -362,7 +359,10 @@ XPropertyList::~XPropertyList()
 
 void XPropertyList::Clear()
 {
-    aList.Clear();
+    for( size_t i = 0, n = aList.size(); i < n; ++i ) {
+        delete aList[ i ];
+    }
+    aList.clear();
     if( pBmpList )
         pBmpList->Clear();
 }
@@ -377,7 +377,7 @@ long XPropertyList::Count() const
         if( !( (XPropertyList*) this )->Load() )
             ( (XPropertyList*) this )->Create();
     }
-    return( aList.Count() );
+    return( aList.size() );
 }
 
 /*************************************************************************
@@ -394,7 +394,7 @@ XPropertyEntry* XPropertyList::Get( long nIndex, sal_uInt16 /*nDummy*/) const
         if( !( (XPropertyList*) this )->Load() )
             ( (XPropertyList*) this )->Create();
     }
-    return (XPropertyEntry*) aList.GetObject( (sal_uIntPtr) nIndex );
+    return ( (size_t)nIndex < aList.size() ) ? aList[ nIndex ] : NULL;
 }
 
 /*************************************************************************
@@ -411,15 +411,13 @@ long XPropertyList::Get(const XubString& rName)
         if( !Load() )
             Create();
     }
-    long nPos = 0;
-    XPropertyEntry* pEntry = (XPropertyEntry*)aList.First();
-    while (pEntry && pEntry->GetName() != rName)
-    {
-        nPos++;
-        pEntry = (XPropertyEntry*)aList.Next();
+
+    for( long i = 0, n = aList.size(); i < n; ++i ) {
+        if ( aList[ i ]->GetName() == rName ) {
+            return i;
+        }
     }
-    if (!pEntry) nPos = -1;
-    return nPos;
+    return -1;
 }
 
 /*************************************************************************
@@ -451,12 +449,17 @@ Bitmap* XPropertyList::GetBitmap( long nIndex ) const
 
 void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
 {
-    aList.Insert( pEntry, (sal_uIntPtr) nIndex );
+    if ( (size_t)nIndex < aList.size() ) {
+        aList.insert( aList.begin() + nIndex, pEntry );
+    } else {
+        aList.push_back( pEntry );
+    }
 
     if( pBmpList && !bBitmapsDirty )
     {
         Bitmap* pBmp = CreateBitmapForUI(
-                (sal_uIntPtr) nIndex < aList.Count() ? nIndex : aList.Count() - 1 );
+            (size_t)nIndex < aList.size() ? nIndex : aList.size() - 1
+        );
         pBmpList->Insert( pBmp, (sal_uIntPtr) nIndex );
     }
 }
@@ -469,7 +472,10 @@ void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
 
 XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 {
-    XPropertyEntry* pOldEntry = (XPropertyEntry*) aList.Replace( pEntry, (sal_uIntPtr) nIndex );
+    XPropertyEntry* pOldEntry = (size_t)nIndex < aList.size() ? aList[ nIndex ] : NULL;
+    if ( pOldEntry ) {
+        aList[ nIndex ] = pEntry;
+    }
 
     if( pBmpList && !bBitmapsDirty )
     {
@@ -495,7 +501,13 @@ XPropertyEntry* XPropertyList::Remove( long nIndex, sal_uInt16 /*nDummy*/)
         if( pOldBmp )
             delete pOldBmp;
     }
-    return (XPropertyEntry*) aList.Remove( (sal_uIntPtr) nIndex );
+
+    XPropertyEntry* pEntry = NULL;
+    if ( (size_t)nIndex < aList.size() ) {
+        pEntry = aList[ nIndex ];
+        aList.erase( aList.begin() + nIndex );
+    }
+    return pEntry;
 }
 
 /************************************************************************/

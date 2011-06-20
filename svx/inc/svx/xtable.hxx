@@ -241,6 +241,7 @@ public:
 // class XPropertyList
 // --------------------
 
+typedef ::std::vector< XPropertyEntry* > XPropertyEntryList_impl;
 class SVX_DLLPUBLIC XPropertyList
 {
 protected:
@@ -248,17 +249,17 @@ protected:
     String              aPath;
     XOutdevItemPool*    pXPool;
 
-    List                aList;
+    XPropertyEntryList_impl aList;
     List*               pBmpList;
 
     sal_Bool                bListDirty;
     sal_Bool                bBitmapsDirty;
     sal_Bool                bOwnPool;
 
-                        XPropertyList(  const String& rPath,
-                                        XOutdevItemPool* pXPool = NULL,
-                                        sal_uInt16 nInitSize = 16,
-                                        sal_uInt16 nReSize = 16 );
+                        XPropertyList(
+                            const String& rPath,
+                            XOutdevItemPool* pXPool = NULL
+                        );
                         XPropertyList( SvStream& rIn );
     void                Clear();
 

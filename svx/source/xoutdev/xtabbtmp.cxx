@@ -148,10 +148,12 @@ Bitmap* XBitmapTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 |*
 *************************************************************************/
 
-XBitmapList::XBitmapList( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyList( rPath, pInPool, nInitSize, nReSize)
+XBitmapList::XBitmapList(
+    const String& rPath,
+    XOutdevItemPool* pInPool,
+    sal_uInt16 /* nInitSize */,
+    sal_uInt16 /* nReSize */
+) : XPropertyList( rPath, pInPool )
 {
     // pBmpList = new List( nInitSize, nReSize );
 }

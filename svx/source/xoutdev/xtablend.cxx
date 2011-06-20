@@ -247,8 +247,12 @@ void XLineEndList::impDestroy()
     }
 }
 
-XLineEndList::XLineEndList(const String& rPath, XOutdevItemPool* _pXPool, sal_uInt16 nInitSize, sal_uInt16 nReSize)
-:   XPropertyList(rPath, _pXPool, nInitSize, nReSize),
+XLineEndList::XLineEndList(
+    const String& rPath,
+    XOutdevItemPool* _pXPool,
+    sal_uInt16 nInitSize,
+    sal_uInt16 nReSize
+) : XPropertyList( rPath, _pXPool ),
     mpData(0)
 {
     pBmpList = new List(nInitSize, nReSize);

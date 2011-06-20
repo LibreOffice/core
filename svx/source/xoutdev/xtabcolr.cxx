@@ -466,10 +466,12 @@ Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 |*
 *************************************************************************/
 
-XColorList::XColorList( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyList( rPath, pInPool, nInitSize, nReSize)
+XColorList::XColorList(
+    const String& rPath,
+    XOutdevItemPool* pInPool,
+    sal_uInt16 /* nInitSize */,
+    sal_uInt16 /* nReSize */
+) : XPropertyList( rPath, pInPool )
 {
     // pBmpList = new List( nInitSize, nReSize );
 }
