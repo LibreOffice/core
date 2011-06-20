@@ -239,9 +239,6 @@ class StreamStr : public bostream
                             Area                i_aStrToSearch,
                             Area                i_aReplacement );
 
-    StreamStr &         to_lower(
-                            position_type       i_nStart = 0,
-                            size_type           i_nLength = str::maxsize );
     StreamStr &         to_upper(
                             position_type       i_nStart = 0,
                             size_type           i_nLength = str::maxsize );
