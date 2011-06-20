@@ -60,6 +60,15 @@ $(eval $(call gb_Library_set_defs,sfx,\
     -DSFX2_DLLIMPLEMENTATION \
 ))
 
+ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
+$(eval $(call gb_Library_set_defs,sfx,\
+    $$(DEFS) \
+    -DENABLE_QUICKSTART_APPLET \
+    -DENABLE_SYSTRAY_GTK \
+    -DPLUGIN_NAME=libqstart_gtk$(gb_Library_OOOEXT) \
+))
+endif
+
 $(eval $(call gb_Library_add_linked_libs,sfx,\
     comphelper \
     cppu \
