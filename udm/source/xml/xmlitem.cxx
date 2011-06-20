@@ -309,13 +309,6 @@ SglTag::inq_Attrs() const
 
 //***************************       AnElement       **************************//
 
-AnElement::AnElement( const String &   i_sTagName )
-    :   sTagName( i_sTagName )
-        // pContent,
-        // aAttrs
-{
-}
-
 AnElement::AnElement( const char * i_sTagName )
     :   sTagName( i_sTagName )
         // pContent,

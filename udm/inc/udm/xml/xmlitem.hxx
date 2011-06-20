@@ -203,8 +203,6 @@ class AnElement : public Element
 {
   public:
                         AnElement(
-                            const ::csv::String& i_sTagName );
-                        AnElement(
                             const char *         i_sTagName );
                         ~AnElement();
   private:
