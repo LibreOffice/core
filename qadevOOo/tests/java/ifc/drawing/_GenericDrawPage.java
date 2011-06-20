@@ -61,10 +61,10 @@ public class _GenericDrawPage extends MultiPropertyTest {
                 res=true;
             }
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("an UnknownPropertyException occured");
+            log.println("an UnknownPropertyException occurred");
 
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("an WrappedTargetException occured");
+            log.println("an WrappedTargetException occurred");
         }
 
         tRes.tested("Number",res);
@@ -83,10 +83,10 @@ public class _GenericDrawPage extends MultiPropertyTest {
                 res=true;
             }
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("an UnknownPropertyException occured");
+            log.println("an UnknownPropertyException occurred");
 
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("an WrappedTargetException occured");
+            log.println("an WrappedTargetException occurred");
         }
 
         tRes.tested("UserDefinedAttributes",res);

@@ -52,7 +52,7 @@ Sub TestDB
     sCurrentMessage = cMessageDatabaseService + &quot; &quot; + cUnoDatabaseContext
 
     oDBContext = CreateUnoService(cUnoDatabaseContext)
-    sDBName=oDBContext.ElementNames(0) &apos;Names of Databases
+    sDBName=&quot;Bibliography&quot; &apos;Names of Databases
 
     gCurrentTestCase = cDBOpen
     sCurrentMessage = cMessageDatabaseOpen

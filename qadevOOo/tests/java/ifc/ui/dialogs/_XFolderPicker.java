@@ -49,7 +49,7 @@ public class _XFolderPicker extends MultiMethodTest {
 
     /**
     * Sets the current directory to SOffice temp dir. <p>
-    * Has <b>OK</b> status if no exceptions occured.
+    * Has <b>OK</b> status if no exceptions occurred.
     */
     public void _setDisplayDirectory() {
         boolean result = true ;

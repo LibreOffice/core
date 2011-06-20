@@ -58,7 +58,7 @@ end sub
 '-----------------------------------------------------------
 
 testcase tFormatDefaultFormatting
-'///<u><b>Format - Default Formatting</b></u>
+'///<u><b>Format - Clear Direct Formatting</b></u>
 
     '/// Opening new spreadsheet document for getting defined starting environment
     printlog " Opening new spreadsheet document for getting defined starting environment"
@@ -66,8 +66,8 @@ testcase tFormatDefaultFormatting
     '/// Select cell A1:D4
     printlog " Select cell A1:D4"
     call fCalcSelectRange ("A1:D4")
-    '/// Use 'Format – Default Formatting
-    printlog " Use 'Format – Default Formatting"
+    '/// Use 'Format – Clear Direct Formatting
+    printlog " Use 'Format – Clear Direct Formatting"
     FormatDefaultCalc
     '/// Close starting document
     printlog " Close starting document"

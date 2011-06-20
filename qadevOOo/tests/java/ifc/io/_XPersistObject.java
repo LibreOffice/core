@@ -177,7 +177,7 @@ public class _XPersistObject extends MultiMethodTest {
             }
 
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured : ");
+            log.println("Exception occurred : ");
             e.printStackTrace(log) ;
             bResult = false;
         }
@@ -196,7 +196,7 @@ public class _XPersistObject extends MultiMethodTest {
             initPipe();
             oObj.write(oStream);
         } catch (com.sun.star.io.IOException e) {
-            log.println("Exception occured while test. " + e);
+            log.println("Exception occurred while test. " + e);
             bResult = false;
         }
         tRes.tested("write()", bResult);

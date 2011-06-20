@@ -39,10 +39,8 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-#include "preextstl.h"
 #include "cppunit/Message.h"
 #include "cppunit/Protector.h"
-#include "postextstl.h"
 
 namespace {
 

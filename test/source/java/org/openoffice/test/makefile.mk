@@ -35,8 +35,10 @@ JAVAFILES = \
     FileHelper.java \
     OfficeConnection.java \
     OfficeFileUrl.java \
-    TestArgument.java
-JARFILES = juh.jar ridl.jar unoil.jar
+    TestArgument.java \
+    UnoApiTest.java \
+
+JARFILES = juh.jar ridl.jar unoil.jar OOoRunner.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
 JARTARGET        = $(TARGET).jar

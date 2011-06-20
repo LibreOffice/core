@@ -129,7 +129,7 @@ On Error Goto ErrHndl
         On Error goto ErrHndl1
             Out.Log("Trying to jump to deleted mark")
             oObj.jumpToMark(iMark1)
-            Out.Log("No exception occured. FAILED")
+            Out.Log("No exception occurred. FAILED")
             bOK = false
             goto Cont1
         ErrHndl1:
@@ -189,7 +189,7 @@ On Error Goto ErrHndl
         On Error goto ErrHndl2
             Out.Log("Trying to jump to Mark1")
             oObj.jumpToMark(iMark2)
-            Out.Log("No exception occured - FAILED")
+            Out.Log("No exception occurred - FAILED")
             bOK = false
             goto Cont2
         ErrHndl2:

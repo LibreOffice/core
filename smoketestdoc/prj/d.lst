@@ -1,4 +1,4 @@
-mkdir: %_DEST%\bin%_EXT%
+mkdir: %_DEST%\bin
 
-..\%__SRC%\bin\smoketestdoc.sxw %_DEST%\bin%_EXT%\smoketestdoc.sxw
-..\%__SRC%\bin\TestExtension.oxt %_DEST%\bin%_EXT%\TestExtension.oxt
+..\%__SRC%\bin\smoketestdoc.sxw %_DEST%\bin\smoketestdoc.sxw
+..\%__SRC%\bin\TestExtension.oxt %_DEST%\bin\TestExtension.oxt

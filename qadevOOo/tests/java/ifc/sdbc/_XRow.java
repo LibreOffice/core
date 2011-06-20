@@ -142,7 +142,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getString() {
         boolean result = true ;
@@ -164,7 +164,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getBoolean() {
         boolean result = true ;
@@ -186,7 +186,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getByte() {
         boolean result = true ;
@@ -208,7 +208,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getShort() {
         boolean result = true ;
@@ -230,7 +230,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getInt() {
         boolean result = true ;
@@ -250,7 +250,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getLong() {
         boolean result = true ;
@@ -270,7 +270,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getFloat() {
         boolean result = true ;
@@ -290,7 +290,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getDouble() {
         boolean result = true ;
@@ -310,7 +310,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getBytes() {
         boolean result = true ;
@@ -330,7 +330,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getDate() {
         boolean result = true ;
@@ -350,7 +350,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getTime() {
         boolean result = true ;
@@ -370,7 +370,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getTimestamp() {
         boolean result = true ;
@@ -390,7 +390,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getBinaryStream() {
         boolean result = true ;
@@ -410,7 +410,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getCharacterStream() {
         boolean result = true ;
@@ -430,7 +430,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getObject() {
         boolean result = true ;
@@ -450,7 +450,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getRef() {
         boolean result = true ;
@@ -470,7 +470,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getBlob() {
         boolean result = true ;
@@ -490,7 +490,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getClob() {
         boolean result = true ;
@@ -510,7 +510,7 @@ public class _XRow extends MultiMethodTest {
     }
 
     /**
-    * Has <b>OK</b> status if no exceptions occured in method call.
+    * Has <b>OK</b> status if no exceptions occurred in method call.
     */
     public void _getArray() {
         boolean result = true ;

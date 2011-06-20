@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,13 +40,14 @@
 
 #include <com/sun/star/test/performance/XPerformanceTest.hpp>
 
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::test::performance;
+
+using ::rtl::OUString;
 
 #define SERVICENAME     "com.sun.star.test.performance.PerformanceTestObject"
 #define IMPLNAME        "com.sun.star.comp.performance.PerformanceTestObject"
@@ -255,7 +257,7 @@ static Reference< XInterface > SAL_CALL ServiceImpl_create( const Reference< XMu
 extern "C"
 {
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -277,13 +279,13 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+            OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
     return sal_False;
 }
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
@@ -306,3 +308,5 @@ void * SAL_CALL component_getFactory(
     return pRet;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

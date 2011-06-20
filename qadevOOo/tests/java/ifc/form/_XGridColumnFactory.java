@@ -70,7 +70,7 @@ public class _XGridColumnFactory extends MultiMethodTest {
             tRes.tested("createColumn()",column!=null);
         }
         catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured while creating Column");
+            log.println("Exception occurred while creating Column");
             tRes.tested("createColumn()",false);
         }
     }

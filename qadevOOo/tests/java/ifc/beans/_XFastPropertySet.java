@@ -108,16 +108,16 @@ public class _XFastPropertySet extends MultiMethodTest {
                 oObj.setFastPropertyValue(handle, sValue);
                 sValue = oObj.getFastPropertyValue(handle);
             } catch (com.sun.star.beans.UnknownPropertyException e) {
-                log.println("Exception occured while trying to change property with handle = " + handle);
+                log.println("Exception occurred while trying to change property with handle = " + handle);
                 e.printStackTrace(log);
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println("Exception occured while trying to change property with handle = " + handle);
+                log.println("Exception occurred while trying to change property with handle = " + handle);
                 e.printStackTrace(log);
             } catch (com.sun.star.beans.PropertyVetoException e) {
-                log.println("Exception occured while trying to change property with handle = " + handle);
+                log.println("Exception occurred while trying to change property with handle = " + handle);
                 e.printStackTrace(log);
             }  catch (com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Exception occured while trying to change property with handle = " + handle);
+                log.println("Exception occurred while trying to change property with handle = " + handle);
                 e.printStackTrace(log);
             }
 
@@ -147,12 +147,12 @@ public class _XFastPropertySet extends MultiMethodTest {
             oObj.getFastPropertyValue(handle);
             tRes.tested("getFastPropertyValue()",true);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Exception occured while trying to get property '"
+            log.println("Exception occurred while trying to get property '"
                 + handle +"'");
             e.printStackTrace(log);
             tRes.tested("getFastPropertyValue()",false);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured while trying to get property '"
+            log.println("Exception occurred while trying to get property '"
                 + handle +"'");
             e.printStackTrace(log);
             tRes.tested("getFastPropertyValue()",false);

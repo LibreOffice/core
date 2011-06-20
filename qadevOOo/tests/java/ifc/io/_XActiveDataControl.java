@@ -216,7 +216,7 @@ public class _XActiveDataControl extends MultiMethodTest {
             throw new StatusException(Status.failed(e.getMessage()));
         }
 
-        // check, if any error occured
+        // check, if any error occurred
         if (errorCalled) {
             Status.failed("Unexpected error");
             log.println("Unexpected error " + error);

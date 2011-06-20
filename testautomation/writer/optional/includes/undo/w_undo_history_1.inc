@@ -135,8 +135,8 @@ testcase tUndoReplaceAll
     FindAndReplace.Close
 
     Kontext "DocumentWriter"
-    '/// string in Undo list has to be: Replace: '14 occurences of and'
-    Call CheckUndoStringInUndoList ( 5, "14 occurences of 'and'" )
+    '/// string in Undo list has to be: Replace: '14 occurrences of and'
+    Call CheckUndoStringInUndoList ( 5, "14 occurrences of 'and'" )
 
     '/// <U><B>CHECK: Delete</B></U>
     '///  Backspace 4 times to delete characters

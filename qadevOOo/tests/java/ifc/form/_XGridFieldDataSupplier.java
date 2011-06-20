@@ -47,7 +47,7 @@ public class _XGridFieldDataSupplier extends MultiMethodTest {
 
     /**
     * Calls the method and checks returned value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * and returned value is not null.
     */
      public void _queryFieldDataType() {
@@ -57,7 +57,7 @@ public class _XGridFieldDataSupplier extends MultiMethodTest {
 
     /**
     * Calls the method and checks returned value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * and returned value is not null.
     */
      public void _queryFieldData() {

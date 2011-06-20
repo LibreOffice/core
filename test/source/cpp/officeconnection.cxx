@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
@@ -33,12 +34,13 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/bootstrap.hxx"
-#include <preextstl.h>
+
 #include "cppunit/TestAssert.h"
-#include <postextstl.h>
+
 #include "osl/process.h"
 #include "osl/time.h"
 #include "sal/types.h"
+#include <sal/macros.h>
 #include "test/officeconnection.hxx"
 #include "test/toabsolutefileurl.hxx"
 #include "test/uniquepipename.hxx"
@@ -69,12 +71,14 @@ void OfficeConnection::setUp() {
             uniquePipeName(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oootest")));
         rtl::OUString noquickArg(
-            RTL_CONSTASCII_USTRINGPARAM("-quickstart=no"));
+            RTL_CONSTASCII_USTRINGPARAM("--quickstart=no"));
         rtl::OUString nofirstArg(
-            RTL_CONSTASCII_USTRINGPARAM("-nofirststartwizard"));
-        rtl::OUString norestoreArg(RTL_CONSTASCII_USTRINGPARAM("-norestore"));
+            RTL_CONSTASCII_USTRINGPARAM("--nofirststartwizard"));
+        rtl::OUString norestoreArg(RTL_CONSTASCII_USTRINGPARAM("--norestore"));
+        //Disable use of the unix standalone splash screen app for the tests
+        rtl::OUString noSplashArg(RTL_CONSTASCII_USTRINGPARAM("--nologo"));
         rtl::OUString acceptArg(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-accept=")) + desc +
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("--accept=")) + desc +
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";urp")));
         rtl::OUString argUser;
         CPPUNIT_ASSERT(
@@ -86,9 +90,12 @@ void OfficeConnection::setUp() {
             toAbsoluteFileUrl(argUser));
         rtl::OUString jreArg(
             RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_JREHOME=true"));
+        rtl::OUString classpathArg(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true"));
         rtl_uString * args[] = {
-            noquickArg.pData, nofirstArg.pData, norestoreArg.pData,
-            acceptArg.pData, userArg.pData, jreArg.pData };
+            noquickArg.pData, nofirstArg.pData, norestoreArg.pData, noSplashArg.pData,
+            acceptArg.pData, userArg.pData, jreArg.pData, classpathArg.pData };
         rtl_uString ** envs = 0;
         rtl::OUString argEnv;
         if (detail::getArgument(
@@ -101,7 +108,7 @@ void OfficeConnection::setUp() {
             osl_executeProcess(
                 toAbsoluteFileUrl(
                     argSoffice.copy(RTL_CONSTASCII_LENGTH("path:"))).pData,
-                args, sizeof args / sizeof args[0], 0, 0, 0, envs,
+                args, SAL_N_ELEMENTS( args ), 0, 0, 0, envs,
                 envs == 0 ? 0 : 1, &process_));
     } else if (argSoffice.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("connect:"))) {
         desc = argSoffice.copy(RTL_CONSTASCII_LENGTH("connect:"));
@@ -170,3 +177,5 @@ OfficeConnection::getComponentContext() const {
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

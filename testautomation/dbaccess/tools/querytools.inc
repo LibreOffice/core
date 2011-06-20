@@ -258,10 +258,7 @@ function fSaveQueryDesign(sName as String)
     
     sleep(1)
     Kontext "QueryDesignTable"
-        QueryDesignTable.UseMenu
-        
-        hMenuSelectNr(1) ' the file menu
-        hMenuSelectNr(6) ' the save
+        DatabaseSave
                 
     Kontext "DatabaseTableSaveAs"
         TableName.setText(sName)
@@ -278,11 +275,9 @@ function fSaveSQLQueryDesign(sName as String)
     '/// <u>parameter:</u>  the name of query   
     
     sleep(1)
+
     Kontext "QueryEditWindow"
-        QueryEditWindow.UseMenu
-        
-        hMenuSelectNr(1) ' the file menu
-        hMenuSelectNr(6) ' the save
+        DatabaseSaveAs
                 
     Kontext "DatabaseTableSaveAs"
         TableName.setText(sName)

@@ -73,7 +73,7 @@ public class _XColumnLocate extends MultiMethodTest {
             int colIdx = oObj.findColumn(colName) ;
             result = colIdx == 1 ;
         } catch (SQLException e) {
-            log.println("Exception occured:");
+            log.println("Exception occurred:");
             e.printStackTrace(log);
             result = false;
         }

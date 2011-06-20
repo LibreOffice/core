@@ -387,7 +387,7 @@ testcase i76637
     Kontext "DocumentWriter"
     FileReload
     printlog "reloading ..here the crash happened in i76637."
-    '///crash occured here
+    '///crash occurred here
 
     Call hCloseDocument
     Call hCloseDocument

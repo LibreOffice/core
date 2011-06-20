@@ -148,7 +148,7 @@ public class ScAutoFormatsObj extends TestCase{
 
             return tEnv;
         } catch (com.sun.star.uno.Exception e) {
-            log.println ("Exception occured while creating test Object.");
+            log.println ("Exception occurred while creating test Object.");
             e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
         }

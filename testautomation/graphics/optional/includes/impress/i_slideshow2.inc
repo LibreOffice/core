@@ -942,7 +942,7 @@ testcase tSlideshowBackgroundAllSlides
     Dim Background$ as string
     Dim i as integer
     Dim Zaehler as integer
-    Background$ = ConvertPath(gOfficeBasisPath + "share\gallery\emoticons\grin.gif")
+    Background$ = ConvertPath(gOfficeBasisPath + "share\gallery\www-back\chocolate.jpg")
     Datei$ = ConvertPath (gOfficePath + "user\work\background.odp")
 
     printlog "Create a new document"
@@ -996,8 +996,7 @@ testcase tSlideshowBackgroundSelectedSlide
     Dim Background$ as string
     Dim i as integer
     Dim Zaehler as integer
-
-    Background$ = ConvertPath(gOfficeBasisPath + "share\gallery\emoticons\grin.gif")
+    Background$ = ConvertPath(gOfficeBasisPath + "share\gallery\www-back\chocolate.jpg")
     Datei$ = ConvertPath (gOfficePath + "user\work\background.odp")
 
     printlog "Create a new document"

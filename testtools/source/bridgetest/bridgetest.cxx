@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,6 @@
 #include "currentcontextchecker.hxx"
 #include "multi.hxx"
 
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -69,6 +69,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::bridge;
 using namespace test::testtools::bridgetest;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 #define SERVICENAME     "com.sun.star.test.bridge.BridgeTest"
 #define IMPLNAME        "com.sun.star.comp.bridge.BridgeTest"
@@ -441,6 +445,26 @@ static sal_Bool performTest(
                 "getValues2 test");
         }
         {
+            TwoFloats aIn(1.1f, 2.2f);
+            TwoFloats aOut = xLBT->echoTwoFloats(aIn);
+            bRet = check( memcmp(&aIn, &aOut, sizeof(TwoFloats)) == 0, "two floats struct test" ) && bRet;
+        }
+        {
+            FourFloats aIn(3.3f, 4.4f, 5.5f, 6.6f);
+            FourFloats aOut = xLBT->echoFourFloats(aIn);
+            bRet = check( memcmp(&aIn, &aOut, sizeof(FourFloats)) == 0, "four floats struct test" ) && bRet;
+        }
+        {
+            MixedFloatAndInteger aIn(7.7f, 8);
+            MixedFloatAndInteger aOut = xLBT->echoMixedFloatAndInteger(aIn);
+            bRet = check( memcmp(&aIn, &aOut, sizeof(MixedFloatAndInteger)) == 0, "mixed float and integer struct test" ) && bRet;
+        }
+        {
+            ThreeByteStruct aIn(9, 10, 11);
+            ThreeByteStruct aOut = xLBT->echoThreeByteStruct(aIn);
+            bRet = check( memcmp(&aIn, &aOut, sizeof(ThreeByteStruct)) == 0, "three byte struct test" ) && bRet;
+        }
+        {
             TestData aRet;
             TestData aRet2;
             TestData aGVret(
@@ -516,13 +540,6 @@ static sal_Bool performTest(
                     "big struct test");
             }
             {
-                AllFloats aIn(1.1f, 2.2f, 3.3f, 4.4f);
-                AllFloats aOut(xLBT->echoAllFloats(aIn));
-                bRet &= check(
-                    memcmp(&aIn, &aOut, sizeof(AllFloats)) == 0,
-                    "all floats struct test");
-            }
-            {
                 sal_Int32 i2 = xLBT->testPPCAlignment(0, 0, 0, 0, 0xBEAF);
                 bRet &= check(i2 == 0xBEAF, "ppc-style alignment test");
             }
@@ -530,21 +547,21 @@ static sal_Bool performTest(
             try {
                 xLBT->getRaiseAttr1();
                 bRet &= check(false, "getRaiseAttr1 did not throw");
-            } catch (RuntimeException &) {
+            } catch (const RuntimeException &) {
             } catch (...) {
                 bRet &= check(false, "getRaiseAttr1 threw wrong type");
             }
             try {
                 xLBT->setRaiseAttr1(0);
                 bRet &= check(false, "setRaiseAttr1 did not throw");
-            } catch (IllegalArgumentException &) {
+            } catch (const IllegalArgumentException &) {
             } catch (...) {
                 bRet &= check(false, "setRaiseAttr1 threw wrong type");
             }
             try {
                 xLBT->getRaiseAttr2();
                 bRet &= check(false, "getRaiseAttr2 did not throw");
-            } catch (IllegalArgumentException &) {
+            } catch (const IllegalArgumentException &) {
             } catch (...) {
                 bRet &= check(false, "getRaiseAttr2 threw wrong type");
             }
@@ -890,7 +907,7 @@ static sal_Bool performTest(
         // available in Java, while the server is, the logic is reversed here:
         try {
             xBT2->testConstructorsService(xContext);
-        } catch (BadConstructorArguments &) {
+        } catch (const BadConstructorArguments &) {
             bRet = false;
         }
         if (!noCurrentContext) {
@@ -930,7 +947,7 @@ static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
         //        When it flies, it must contain the correct elements.
         xLBT->raiseRuntimeExceptionOneway( sCompare, x );
     }
-    catch( RuntimeException & e )
+    catch( const RuntimeException & e )
     {
         bReturn = (
 #if OSL_DEBUG_LEVEL == 0
@@ -958,14 +975,14 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
                     5, OUSTR(STRING_TEST_CONSTANT),
                     xLBT->getInterface() );
             }
-            catch (IllegalArgumentException aExc)
+            catch (const IllegalArgumentException &rExc)
             {
-                if (aExc.ArgumentPosition == 5 &&
+                if (rExc.ArgumentPosition == 5 &&
 #if OSL_DEBUG_LEVEL == 0
                     // java stack traces trash Message
-                    aExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0 &&
+                    rExc.Message.compareToAscii( STRING_TEST_CONSTANT ) == 0 &&
 #endif
-                    aExc.Context == xLBT->getInterface())
+                    rExc.Context == xLBT->getInterface())
                 {
 #ifdef COMPCHECK
                     //When we check if a new compiler still works then we must not call
@@ -1005,7 +1022,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
             xLBT->setRuntimeException( 0xcafebabe );
         }
     }
-    catch (Exception & rExc)
+    catch (const Exception & rExc)
     {
         if (rExc.Context == xLBT->getInterface()
 #if OSL_DEBUG_LEVEL == 0
@@ -1219,10 +1236,10 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
                 Reference< XInterface >() );
         }
     }
-    catch (Exception & exc)
+    catch (const Exception & exc)
     {
         OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        fprintf( stderr, "exception occured: %s\n", cstr.getStr() );
+        fprintf( stderr, "exception occurred: %s\n", cstr.getStr() );
         throw;
     }
 
@@ -1280,13 +1297,13 @@ static Reference< XInterface > SAL_CALL TestBridgeImpl_create(
 extern "C"
 {
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;
@@ -1309,3 +1326,5 @@ void * SAL_CALL component_getFactory(
     return pRet;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

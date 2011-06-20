@@ -128,19 +128,19 @@ public class ScAreaLinkObj extends TestCase {
             oObj = (XInterface) AnyConverter.toObject(
                         new Type(XInterface.class), links.getByIndex(0)) ;
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println ("Exception occured while creating test Object.") ;
+            log.println ("Exception occurred while creating test Object.") ;
             e.printStackTrace(log) ;
             throw new StatusException("Couldn't create test object", e);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println ("Exception occured while creating test Object.") ;
+            log.println ("Exception occurred while creating test Object.") ;
             e.printStackTrace(log) ;
             throw new StatusException("Couldn't create test object", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println ("Exception occured while creating test Object.") ;
+            log.println ("Exception occurred while creating test Object.") ;
             e.printStackTrace(log) ;
             throw new StatusException("Couldn't create test object", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println ("Exception occured while creating test Object.") ;
+            log.println ("Exception occurred while creating test Object.") ;
             e.printStackTrace(log) ;
             throw new StatusException("Couldn't create test object", e);
         }

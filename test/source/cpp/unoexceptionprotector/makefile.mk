@@ -32,12 +32,15 @@ VISIBILITY_HIDDEN = TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
+# --- Files --------------------------------------------------------
 DLLPRE =
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
-.IF "$(USE_SYSTEM_STL)" != "YES" && "$(SYSTEM_CPPUNIT)" == "YES"
-CFLAGSCXX += -DADAPT_EXT_STL
-.END
 
 SLOFILES = $(SLO)/unoexceptionprotector.obj
 

@@ -145,7 +145,7 @@ public class SimpleRegistry extends TestCase {
             copyFile(source, tmpDir + destroyF, log);
             copyFile(source, tmpDir + mergeF, log);
         } catch (java.io.IOException e) {
-            log.println("Exception occured while copying files");
+            log.println("Exception occurred while copying files");
             e.printStackTrace(log);
         }
 

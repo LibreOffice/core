@@ -104,15 +104,15 @@ public class PageStyle extends TestCase {
             log.println("Chosen pool style: "+oStyle.getName());
 
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         } catch ( com.sun.star.container.NoSuchElementException e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         }
@@ -126,7 +126,7 @@ public class PageStyle extends TestCase {
 //                oMSF.createInstanceWithArguments("com.sun.star.style.PageStyle",new Object[]{oStyle});
             oMyStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, oInt);
         } catch ( com.sun.star.uno.Exception e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         }

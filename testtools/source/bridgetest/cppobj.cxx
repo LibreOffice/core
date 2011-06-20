@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,13 +57,15 @@
 #include "currentcontextchecker.hxx"
 #include "multi.hxx"
 
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace test::testtools::bridgetest;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 #define SERVICENAME     "com.sun.star.test.bridge.CppTestObject"
 #define IMPLNAME        "com.sun.star.comp.bridge.CppTestObject"
@@ -219,7 +222,13 @@ public:
         { return rStruct; }
     virtual BigStruct SAL_CALL echoBigStruct(const BigStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
         { return rStruct; }
-    virtual AllFloats SAL_CALL echoAllFloats(const AllFloats& rStruct) throw(com::sun::star::uno::RuntimeException)
+    virtual TwoFloats SAL_CALL echoTwoFloats(const TwoFloats& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual FourFloats SAL_CALL echoFourFloats(const FourFloats& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual MixedFloatAndInteger SAL_CALL echoMixedFloatAndInteger(const MixedFloatAndInteger& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual ThreeByteStruct SAL_CALL echoThreeByteStruct(const ThreeByteStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
         { return rStruct; }
     virtual sal_Int32 SAL_CALL testPPCAlignment( sal_Int64, sal_Int64, sal_Int32, sal_Int64, sal_Int32 i2 ) throw(com::sun::star::uno::RuntimeException)
         { return i2; }
@@ -1175,13 +1184,13 @@ static Reference< XInterface > SAL_CALL Test_Impl_create( const Reference< XMult
 extern "C"
 {
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;
@@ -1205,3 +1214,4 @@ void * SAL_CALL component_getFactory(
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -146,17 +146,17 @@ public class _XValidatableFormComponent extends MultiMethodTest
         }
         catch (com.sun.star.beans.PropertyVetoException e)
         {
-            log.println("Exception occured while setting properties");
+            log.println("Exception occurred while setting properties");
             e.printStackTrace(log);
         }
         catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            log.println("Exception occured while setting properties");
+            log.println("Exception occurred while setting properties");
             e.printStackTrace(log);
         }
         catch (com.sun.star.lang.WrappedTargetException e)
         {
-            log.println("Exception occured while setting properties");
+            log.println("Exception occurred while setting properties");
             e.printStackTrace(log);
         }
          // end of try-catch

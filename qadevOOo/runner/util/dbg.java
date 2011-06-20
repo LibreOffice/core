@@ -133,7 +133,7 @@ public class dbg {
             }
         }
         catch (Exception ex) {
-            System.out.println("Exception occured while printing InterfaceInfo");
+            System.out.println("Exception occurred while printing InterfaceInfo");
             ex.printStackTrace();
         }
     }

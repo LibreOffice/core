@@ -184,7 +184,7 @@ public class XMLMetaImporter extends TestCase {
                         logF.println("Title returned = '" + title + "'") ;
                         return impTitle.equals(title) ;
                     } catch (com.sun.star.uno.Exception e) {
-                        logF.println("Exception occured while checking filter :") ;
+                        logF.println("Exception occurred while checking filter :") ;
                         e.printStackTrace(logF) ;
                         return false ;
                     }

@@ -675,7 +675,7 @@ public class IniFile implements Enumeration
         }
 
     /**
-     * Helper to count the occurence of Sections
+     * Helper to count the occurrence of Sections
      * @return returns the count of '^['.*']$' Elements
      */
     public int getElementCount()

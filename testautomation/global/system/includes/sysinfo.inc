@@ -59,7 +59,6 @@ Global Const SYS_LIN   = 10
 Global Const SYS_x86   = 11
 Global Const SYS_OSX   = 12
 Global Const SYS_PPC   = 13
-Global Const SYS_SCO   = 14
 Global Const SYS_AIX   = 15
 Global Const SYS_HP    = 17
 Global Const SYS_FBSD  = 18
@@ -88,7 +87,6 @@ sub PlatFormInit
 '///+<TR><TD>Linux</TD><TD>lin</TD><TD>unx</TD></TR>
 '///+<TR><TD>Mac OS X</TD><TD>osx</TD><TD>unx</TD></TR>
 '///+<TR><TD>Linux PPC</TD><TD>ppc</TD><TD>unx</TD></TR>
-'///+<TR><TD>SCO UNIX</TD><TD>sco</TD><TD>unx</TD></TR>
 '///+<TR><TD>AIX</TD><TD>aix</TD><TD>unx</TD></TR>
 '///+<TR><TD>HP UNIX</TD><TD>hp</TD><TD>unx</TD></TR>
 '///+<TR><TD>FreeBSD</TD><TD>fbsd</TD><TD>unx</TD></TR>
@@ -110,7 +108,6 @@ sub PlatFormInit
    PlatFormName(SYS_LIN)   = "Linux"          : PlatFormExt(SYS_LIN)  = "lin"
    PlatformName(SYS_OSX)   = "Mac OS X"       : PlatformExt(SYS_OSX)  = "osx"
    PlatformName(SYS_PPC)   = "Linux PPC"      : PlatformExt(SYS_PPC)  = "ppc"
-   PlatFormName(SYS_SCO)   = "SCO Unix"       : PlatFormExt(SYS_SCO)  = "sco"
    PlatFormName(SYS_AIX)   = "AIX"            : PlatFormExt(SYS_AIX)  = "aix"
    PlatFormName(SYS_HP)    = "HP UNIX"        : PlatFormExt(SYS_Hp)   = "hp"
    PlatFormName(SYS_FBSD)  = "FreeBSD"        : PlatFormExt(SYS_FBSD) = "fbsd"
@@ -132,7 +129,6 @@ sub PlatFormInit
    PlatFormGroup(SYS_LIN)  = "unx"
    PlatFormGroup(SYS_OSX)  = "unx"
    PlatFormGroup(SYS_PPC)  = "unx"
-   PlatFormGroup(SYS_SCO)  = "unx"
    PlatFormGroup(SYS_AIX)  = "unx"
    PlatFormGroup(SYS_HP)   = "unx"
    PlatFormGroup(SYS_FBSD) = "unx"
@@ -209,7 +205,6 @@ sub GetToolPlatform
 '///+<TR><TD>Solaris x86</TD><TD>05</TD></TR>
 '///+<TR><TD>Mac OS X</TD><TD>12</TD></TR>
 '///+<TR><TD>Linux PPC</TD><TD>13</TD></TR>
-'///+<TR><TD>SCO UNIX</TD><TD>02</TD></TR>
 '///+<TR><TD>AIX</TD><TD>04</TD></TR>
 '///+<TR><TD>HP UNIX</TD><TD>07</TD></TR>
 '///+<TR><TD>FreeBSD</TD><TD>08</TD></TR>
@@ -243,7 +238,7 @@ sub GetToolPlatform
          qaErrorLog("The GUI-entry in '" + gTesttoolIni + "' is missing!"+Chr(13)+"Please insert the correct number for your operating system! In Section [GUI Platform], entry Current= "+Chr(13)+"Win95....: 100"+Chr(13)+"Win98....: 395"+Chr(13)+"WinNT....: 351 or 400"+Chr(13)+"WinSE....: 410"+Chr(13)+"WinME....: 490"+Chr(13)+"Win2000..: 500"+Chr(13)+"WinXP....: 501")
        else
          iGuiVersion = 01
-         QAErrorLog("The GUI value in '" + gTesttoolIni + "' is missing!"+Chr(13)+"Please insert the correct number for your operating system! In Section [GUI Platform], entry Current= "+Chr(13)+"Solaris SPARC.: 01"+Chr(13)+"SCO UNIX......: 02"+Chr(13)+"Linux.........: 03"+Chr(13)+"AIX...........: 04"+Chr(13)+"Solaris x86...: 05"+Chr(13)+"HP-UX.........: 07"+Chr(13)+"FreeBSD........: 08"+Chr(13)+"Mac OS X......: 12"+Chr(13)+"Linux PPC.....: 13"+Chr(13)+"NetBSD.....: 14"+Chr(13)+"Linux 64 bit.....: 15"+Chr(13)+"Linux SPARC.....: 16")
+         QAErrorLog("The GUI value in '" + gTesttoolIni + "' is missing!"+Chr(13)+"Please insert the correct number for your operating system! In Section [GUI Platform], entry Current= "+Chr(13)+"Solaris SPARC.: 01"+Chr(13)+"Linux.........: 03"+Chr(13)+"AIX...........: 04"+Chr(13)+"Solaris x86...: 05"+Chr(13)+"HP-UX.........: 07"+Chr(13)+"FreeBSD........: 08"+Chr(13)+"Mac OS X......: 12"+Chr(13)+"Linux PPC.....: 13"+Chr(13)+"NetBSD.....: 14"+Chr(13)+"Linux 64 bit.....: 15"+Chr(13)+"Linux SPARC.....: 16")
       end if
    end if
 '///Get the variable <b>gSamePC</b>
@@ -287,7 +282,6 @@ sub GetToolPlatform
       'UNIX
          select case iGuiVersion
             case 01 :   gSystemnummer = SYS_SOL
-            case 02 :   gSystemnummer = SYS_SCO
             case 03 :   gSystemnummer = SYS_LIN
             case 04 :   gSystemnummer = SYS_AIX
             case 05 :   gSystemnummer = SYS_X86
@@ -331,7 +325,6 @@ sub GetOfficePlatform
 '///+<TR><TD>Solaris x86</TD><TD>X86</TD></TR>
 '///+<TR><TD>Mac OS X</TD><TD>OSX</TD></TR>
 '///+<TR><TD>Linux PPC</TD><TD>PPC</TD></TR>
-'///+<TR><TD>SCO UNIX</TD><TD>SCO</TD></TR>
 '///+<TR><TD>AIX</TD><TD>AIX</TD></TR>
 '///+<TR><TD>HP UNIX</TD><TD>HP</TD></TR>
 '///+<TR><TD>FreeBSD</TD><TD>FBSD</TD></TR>
@@ -359,7 +352,6 @@ sub GetOfficePlatform
          case "X86"     : GUI = 11
          case "OSX"     : GUI = 12
          case "PPC"     : GUI = 13         
-         case "SCO"     : GUI = 14
          case "AIX"     : GUI = 15
          case "HP"      : GUI = 17        
          case "FBSD"    : GUI = 18        

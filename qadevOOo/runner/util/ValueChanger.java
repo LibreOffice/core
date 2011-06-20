@@ -383,7 +383,7 @@ public class ValueChanger {
         com.sun.star.drawing.TextFitToSizeType TF1 = com.sun.star.drawing.TextFitToSizeType.ALLLINES;
         com.sun.star.drawing.TextFitToSizeType TF2 = com.sun.star.drawing.TextFitToSizeType.NONE;
         com.sun.star.drawing.TextFitToSizeType TF3 = com.sun.star.drawing.TextFitToSizeType.PROPORTIONAL;
-        com.sun.star.drawing.TextFitToSizeType TF4 = com.sun.star.drawing.TextFitToSizeType.RESIZEATTR;
+        com.sun.star.drawing.TextFitToSizeType TF4 = com.sun.star.drawing.TextFitToSizeType.AUTOFIT;
         if (oldValue.equals(TF1)) newValue = TF2;
         if (oldValue.equals(TF2)) newValue = TF3;
         if (oldValue.equals(TF3)) newValue = TF4;
@@ -773,7 +773,7 @@ public class ValueChanger {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Exception occured while changing Enumeration value:") ;
+            System.err.println("Exception occurred while changing Enumeration value:") ;
             e.printStackTrace(System.err) ;
         }
         if (newValue == null) newValue = oldValue ;

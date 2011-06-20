@@ -64,7 +64,7 @@ Status ~Bar
 Input M~ethod Status
 ~Ruler
 Gr~id
-~Guides
+~Snap Lines
 
 ~Zoom...
 ********** ~Insert
@@ -86,7 +86,7 @@ Float~ing Frame
 
 ~File...
 ********** F~ormat
-~Default Formatting
+Clear ~Direct Formatting
 
 C~haracter...
 P~aragraph...

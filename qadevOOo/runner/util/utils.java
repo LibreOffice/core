@@ -570,7 +570,7 @@ public class utils {
      * file already exists, the file is deleted.
      *
      * @returns <code>true</code> if the file was successfully copied,
-     * <code>false</code> if some errors occured (e.g. file is locked, used
+     * <code>false</code> if some errors occurred (e.g. file is locked, used
      * by another process).
      */
     public static boolean tryOverwriteFile(

@@ -357,7 +357,7 @@ public class RegistryTools {
                 out.println("") ;
             }
         } catch (com.sun.star.uno.Exception e) {
-            out.println("Exception occured : ") ;
+            out.println("Exception occurred : ") ;
             e.printStackTrace(out) ;
         } finally {
             key.closeKey() ;

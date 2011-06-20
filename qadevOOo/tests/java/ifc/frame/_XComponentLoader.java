@@ -139,12 +139,12 @@ public class _XComponentLoader extends MultiMethodTest {
 
         }
         catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occured while loading");
+            log.println("Exception occurred while loading");
             e.printStackTrace(log);
             result=false;
         }
         catch (com.sun.star.io.IOException e) {
-            log.println("Exception occured while loading");
+            log.println("Exception occurred while loading");
             e.printStackTrace(log);
             result=false;
         }

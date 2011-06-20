@@ -38,7 +38,14 @@ my_components = pythonloader
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 # --- Files --------------------------------------------------------
+.IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(L10N_framework)"==""
 PYEXC=$(DLLDEST)$/python$(EXECPOST)
 REGEXC=$(DLLDEST)$/regcomp$(EXECPOST)
@@ -55,7 +62,7 @@ PYTHONPATH:=$(SOLARLIBDIR)$/pyuno:$(PWD):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$
 .ENDIF                  # "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 
-.IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
+.IF "$(GUI)"!="WNT"
 TEST_ENV=export FOO=file://$(shell @pwd)$/$(DLLDEST) \
     UNO_TYPES=uno_types.rdb UNO_SERVICES=pyuno_services.rdb
 .ELSE # "$(GUI)" != "WNT"
@@ -81,8 +88,11 @@ ALL : 	\
     doc					\
     ALLTAR
 .ENDIF # L10N_framework
+.ENDIF # DISABLE_PYTHON
 
 .INCLUDE :  target.mk
+
+.IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(L10N_framework)"==""
 $(DLLDEST)$/%.py: %.py
     cp $? $@
@@ -110,4 +120,5 @@ doc .PHONY:
 runtest : ALL
     cd $(DLLDEST) && $(TEST_ENV) && $(PYTHON) main.py
 .ENDIF # L10N_framework
+.ENDIF # DISABLE_PYTHON
 

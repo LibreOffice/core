@@ -217,7 +217,7 @@ function fGetObjectWriter(sToolbar as String , sObject as String) as Integer
               case "Object rotation mode" : fGetObjectWriter  = 14
               case "Display Grid"         : fGetObjectWriter  = 15
               case "Snap to Grid"         : fGetObjectWriter  = 16
-              case "Guides When Moving"   : fGetObjectWriter  = 17
+              case "Helplines While Moving"   : fGetObjectWriter  = 17
                    '-----------------                           18
               case "Wrap Off"             : fGetObjectWriter  = 19
               case "Page Wrap"            : fGetObjectWriter  = 20
@@ -582,7 +582,7 @@ function fGetObjectCalc(sToolbar as String , sObject as String) as Integer
           Select case sObject
               case "Display Grid"       : fGetObjectCalc  = 21
               case "Snap to Grid"       : fGetObjectCalc  = 22
-              case "Guides When Moving" : fGetObjectCalc  = 23
+              case "Helplines While Moving" : fGetObjectCalc  = 23
               case else : QAErrorLog "The test does not support Object : " + sObject
                           fGetObjectCalc   = 0
           end select

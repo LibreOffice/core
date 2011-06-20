@@ -56,7 +56,7 @@ public class _XFilePicker extends MultiMethodTest {
 
     /**
     * Sets the current directory to the test document directory. <p>
-    * Has <b>OK</b> status if no exceptions occured.
+    * Has <b>OK</b> status if no exceptions occurred.
     */
     public void _setDisplayDirectory() {
         boolean result = true ;
@@ -95,7 +95,7 @@ public class _XFilePicker extends MultiMethodTest {
     /**
     * Sets default name to file name existing in test document
     * directory ('space-metal.jpg'). <p>
-    * Has <b>OK</b> status if no exceptions occured.
+    * Has <b>OK</b> status if no exceptions occurred.
     */
     public void _setDefaultName() {
         boolean result = true ;
@@ -113,7 +113,7 @@ public class _XFilePicker extends MultiMethodTest {
     /**
     * Just switch object to MultiSelectionMode. There is no ways
     * to check this method (only interactively). <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _setMultiSelectionMode() {
 

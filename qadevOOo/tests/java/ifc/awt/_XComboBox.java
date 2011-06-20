@@ -255,7 +255,7 @@ public class _XComboBox extends MultiMethodTest {
 
     /**
     * Gets line count and stores it. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getDropDownLineCount() {
 

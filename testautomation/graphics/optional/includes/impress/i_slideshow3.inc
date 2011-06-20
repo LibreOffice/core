@@ -696,6 +696,7 @@ testcase tExtrasIndividuellePraesentation
 
     IndividuellePraesentationDefinieren.OK
     sleep 2
+>>>>>>> ooo/DEV300_m101
   Kontext "IndividuellePraesentation"
     if IndividuellePraesentationBenutzen.IsChecked=False Then IndividuellePraesentationBenutzen.Check
     sleep 2

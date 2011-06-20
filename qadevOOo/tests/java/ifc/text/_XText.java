@@ -114,12 +114,12 @@ public class _XText extends MultiMethodTest {
         log.println( "test for insertTextContent" );
         try {
             oObj.insertTextContent(oCursor, null, false);
-            log.println("The expected Exception doesn't occured");
+            log.println("The expected Exception doesn't occurred");
             result &= false;
         }
         catch( com.sun.star.lang.IllegalArgumentException iaE ){
             // Some exception.FAILED
-            log.println("Expected Exception occured");
+            log.println("Expected Exception occurred");
             String msg = iaE.getMessage();
             if (msg.equals("")) {
                 log.println("But there is not detailed message");
@@ -161,7 +161,7 @@ public class _XText extends MultiMethodTest {
             return;
         }
 
-        // no exception occured so it works
+        // no exception occurred so it works
         tRes.tested( "removeTextContent()", true );
 
     }

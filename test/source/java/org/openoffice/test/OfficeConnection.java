@@ -46,19 +46,27 @@ import static org.junit.Assert.*;
     Details about the OOo instance are tunneled in via
     org.openoffice.test.arg.... system properties.
 */
+
 public final class OfficeConnection {
     /** Start up an OOo instance.
     */
     public void setUp() throws Exception {
         String sofficeArg = Argument.get("soffice");
         if (sofficeArg.startsWith("path:")) {
+            String headless_flags = "";
+            try {
+                if(Argument.get("headless").length() > 0) {
+                    headless_flags = "--headless";
+                }
+            } catch(Exception e) {}
             description = "pipe,name=oootest" + UUID.randomUUID();
             ProcessBuilder pb = new ProcessBuilder(
-                sofficeArg.substring("path:".length()), "-quickstart=no",
-                "-nofirststartwizard", "-norestore",
-                "-accept=" + description + ";urp",
+                sofficeArg.substring("path:".length()), "--quickstart=no",
+                "--nofirststartwizard", "--norestore", "--nologo",
+                "--accept=" + description + ";urp",
                 "-env:UserInstallation=" + Argument.get("user"),
-                "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
+                "-env:UNO_JAVA_JFW_ENV_JREHOME=true",
+                headless_flags);
             String envArg = Argument.get("env");
             if (envArg != null) {
                 Map<String, String> env = pb.environment();
@@ -96,6 +104,12 @@ public final class OfficeConnection {
                 assertNull(waitForProcess(process, 1000)); // 1 sec
             }
         }
+        try {
+            ProcessBuilder debugbp = new ProcessBuilder(
+                Argument.get("debugcommand").split(" "));
+            debugbp.start();
+            Thread.sleep(1000);
+        } catch(Exception e) {}
     }
 
     /** Shut down the OOo instance.

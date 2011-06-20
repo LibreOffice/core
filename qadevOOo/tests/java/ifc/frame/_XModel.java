@@ -156,7 +156,7 @@ public class _XModel extends MultiMethodTest {
             try {
                 selsupp.select(toSelect);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Exception occured while select:");
+                log.println("Exception occurred while select:");
                 e.printStackTrace(log);
 
                 return;

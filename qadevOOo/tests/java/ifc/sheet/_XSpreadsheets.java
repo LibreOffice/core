@@ -120,7 +120,7 @@ public class _XSpreadsheets extends MultiMethodTest {
     * the collection, removes the sheet, tries to insert the sheet with the
     * bad name returned by method <code>badName()</code>. <p>
     * Has <b> OK </b> status if the inserted sheet exists in the collection
-    * after first method call and if exception occured during the second call. <p>
+    * after first method call and if exception occurred during the second call. <p>
     */
     public void _insertNewByName() {
         boolean result = false;
@@ -152,7 +152,7 @@ public class _XSpreadsheets extends MultiMethodTest {
             oObj.removeByName(NewSheet);
         } catch (com.sun.star.uno.RuntimeException e) {
             log.println(
-                    "Expected exception occured during testing 'insertNewByName'");
+                    "Expected exception occurred during testing 'insertNewByName'");
             result &= true;
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.print("Can't remove sheet '" + NewSheet + "':");

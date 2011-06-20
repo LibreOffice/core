@@ -59,7 +59,7 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
 
     ' Iterators and number of documents, test values
     dim iObject as integer    ' Iterator
-    dim iObjectCount( 20 ) as integer
+    dim iObjectCount( 100 ) as integer
     dim iObjectSum as integer : iObjectSum = 0
     dim iObjectCountExpected as integer
 

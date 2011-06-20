@@ -47,7 +47,7 @@
 ' Return codes:
 ' Error 0: Success.
 ' Error 1: The basic action beeing applied caused a serious problem, e.g. a crash.
-' Error 2 TO 9: A functional problem occured.
+' Error 2 TO 9: A functional problem occurred.
 ' Error 11 TO 19: Wrong marginal conditions end up in failture, e.g. control not visible.
 ' NOTE: This errors can also be used for 'negative' testing.
 ' Error 42: Wrong input. Probably only of interest during test development.

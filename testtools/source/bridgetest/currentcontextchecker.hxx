@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "cppuhelper/implbase1.hxx"
-#ifndef OSL_DIAGNOSE_HXX_INCLUDED
 #include "osl/diagnose.hxx"
-#endif
 #include "sal/types.h"
 #include "test/testtools/bridgetest/XCurrentContextChecker.hpp"
 
@@ -71,3 +70,5 @@ private:
 } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

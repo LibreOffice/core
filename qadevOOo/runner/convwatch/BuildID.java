@@ -139,7 +139,7 @@ public class BuildID
 //    public static void main(String[] args)
 //        {
 //            String sApp;
-//            sApp = "/opt/staroffice8_m116/program/soffice -headless -accept=socket,host=localhost,port=8100;urp;";
+//            sApp = "/opt/staroffice8_m116/program/soffice --headless --accept=socket,host=localhost,port=8100;urp;";
 //            String sBuildID;
 //            sBuildID = getBuildID(sApp);
 //            System.out.println("BuildID is: " + sBuildID);

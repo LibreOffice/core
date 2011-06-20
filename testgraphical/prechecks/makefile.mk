@@ -47,7 +47,7 @@ TARGET=notargetyet
 
 # PERLDEBUG=-d:ptkdb
 ALLTAR: 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
     $(PERL) $(PERLDEBUG) softwaretests.pl -printerdriver -imagemagick -ghostscript $(P_VERBOSE) $(P_JAVA6)
 .ELSE
     $(PERL) $(PERLDEBUG) softwaretests.pl -imagemagick -ghostscript $(P_VERBOSE) $(P_JAVA6)

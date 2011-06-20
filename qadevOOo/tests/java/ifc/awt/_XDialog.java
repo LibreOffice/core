@@ -93,7 +93,7 @@ public class _XDialog extends MultiMethodTest {
     * As this call is blocking then the thread execution
     * must not be finished. <p>
     * Has <b>OK</b> status if thread wasn't finished and
-    * no exceptions occured.
+    * no exceptions occurred.
     */
     public void _execute() {
         boolean result = true ;

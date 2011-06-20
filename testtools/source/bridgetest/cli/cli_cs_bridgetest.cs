@@ -1024,7 +1024,7 @@ static bool raiseException(XBridgeTest xLBT )
 		catch (System.Exception exc)
 		{	
 			throw new unoidl.com.sun.star.uno.RuntimeException(
-				"cli_cs_bridgetest.cs: unexpected exception occured in XMain::run. Original exception: " +
+				"cli_cs_bridgetest.cs: unexpected exception occurred in XMain::run. Original exception: " +
 				exc.GetType().Name + "\n Message: " + exc.Message , null);
 		}
     }

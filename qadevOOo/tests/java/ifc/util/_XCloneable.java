@@ -51,7 +51,7 @@ public class _XCloneable extends MultiMethodTest {
 
     /**
      * calls the method. <p>
-     * Has <b>OK</b> status if no exception has occured. <p>
+     * Has <b>OK</b> status if no exception has occurred. <p>
      */
     public void _createClone() {
         boolean result = true;

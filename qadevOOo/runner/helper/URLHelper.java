@@ -68,8 +68,7 @@ public class URLHelper
         String sFileURL = null;
         try
         {
-            //sFileURL = aSystemPath.toURI().toURL().toString();
-            sFileURL = aSystemPath.toURL().toString();
+            sFileURL = aSystemPath.toURI().toURL().toString();
         }
         catch( MalformedURLException exWrong )
         {

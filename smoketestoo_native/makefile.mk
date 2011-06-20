@@ -35,13 +35,6 @@ ABORT_ON_ASSERTION = TRUE
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-#building with stlport, but cppunit was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF
-
 SLOFILES = $(SHL1OBJS)
 
 SHL1TARGET = smoketest
@@ -62,14 +55,9 @@ TEST_ARGUMENTS = smoketest.doc=$(OUTDIR)/bin$(UPDMINOREXT)/smoketestdoc.sxw
 CPPTEST_LIBRARY = $(SHL1TARGETN)
 
 .IF "$(OS)" != "WNT"
-$(installationtest_instpath).flag : $(shell ls \
-        $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).tar.gz)
-    $(COMMAND_ECHO)$(RM) -r $(installationtest_instpath)
-    $(COMMAND_ECHO)$(MKDIRHIER) $(installationtest_instpath)
-    $(COMMAND_ECHO)cd $(installationtest_instpath) && $(GNUTAR) xfz \
-        $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).tar.gz
-    $(COMMAND_ECHO)$(MV) $(installationtest_instpath)/OOo_*_install-arc_$(defaultlangiso) \
-        $(installationtest_instpath)/opt
-    $(COMMAND_ECHO)$(TOUCH) $@
-cpptest : $(installationtest_instpath).flag
+localinstall :
+    $(RM) -r $(installationtest_instpath)
+    $(MKDIRHIER) $(installationtest_instpath)
+    ooinstall -l $(installationtest_instpath)/opt
+cpptest : localinstall
 .END

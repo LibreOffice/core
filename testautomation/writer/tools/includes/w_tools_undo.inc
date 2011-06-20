@@ -92,7 +92,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 		' Replace all
 		case 5:
 			Select Case vShould
-				case "14 occurences of 'and'"
+				case "14 occurrences of 'and'"
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Replace: 14 occurrences of 'and'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 				                Case 34: if UndoStringFromUndoList <> "Reemplazar: 6 ocurrencias de 'and'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList

@@ -918,7 +918,7 @@ testcase tAssigningStyles6
     Call wTypeKeys "<Mod1 Home>"    
     Call wTypeKeys "<Right>"
     
-    printlog "Select 'Format / Default Formatting' in Style-Listbox"
+    printlog "Select 'Format / Clear Direct Formatting' in Style-Listbox"
     FormatDefaultWriter
     wait 500
 

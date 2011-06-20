@@ -208,7 +208,7 @@ public class XMLContentImporter extends TestCase {
                         logF.println("Page name returned = '" + gName + "'") ;
                         return impPageName.equals(gName) ;
                     } catch (com.sun.star.uno.Exception e) {
-                        logF.println("Exception occured while checking filter :") ;
+                        logF.println("Exception occurred while checking filter :") ;
                         e.printStackTrace(logF) ;
                         return false ;
                     }

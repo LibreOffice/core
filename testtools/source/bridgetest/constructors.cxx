@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -496,15 +497,17 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames2() {
     { 0, 0, 0, 0, 0, 0 } };
 }
 
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     char const * implName, void * serviceManager, void * registryKey)
 {
     return ::cppu::component_getFactoryHelper(
         implName, serviceManager, registryKey, entries);
 }
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     char const ** envTypeName, uno_Environment **)
 {
     *envTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

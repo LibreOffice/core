@@ -212,7 +212,7 @@ public class _XWindow extends MultiMethodTest {
     * chaged<p>
     *
     * Has <b> OK </b> status if methods of wListener were called when
-    * corresponding events occured. <p>
+    * corresponding events occurred. <p>
     *
     * The following method tests are to be executed before :
     * <ul>
@@ -356,7 +356,7 @@ public class _XWindow extends MultiMethodTest {
     * Test calls the method. Then we change focus and check that listener's
     * methods were called. <p>
     * Has <b> OK </b> status if methods of fListener were called when
-    * corresponding events occured. <p>
+    * corresponding events occurred. <p>
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> setFocus() </code>: sets the focus to the window </li>

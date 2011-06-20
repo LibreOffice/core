@@ -575,38 +575,6 @@ testcase tSVG
         '------------------------\
         if ( dir(OutputGrafikTBO+sExt) <> "") then
             Printlog "Ok :-) Saved as: '" & OutputGrafikTBO+sExt & "'"
-            '------------------------\
-            if (iSprache <> 82) then
-                hCloseDocument ()
-                sleep 5
-                sTextFilter = "Text"
-
-                hFileOpenWithFilter (OutputGrafikTBO+sExt, sTextFiltername, FALSE)
-                printlog "if dialog 'AsciiFilterOptionen' comes up, say OK"
-                Kontext "AsciiFilterOptionen"
-                '-------------------------------\
-                If AsciiFilterOptionen.Exists(3) then
-                    AsciiFilterOptionen.OK
-                else
-                    warnlog "No ASCII filter Options Dialog?"
-                endif
-                '-------------------------------/
-                sTemp = gApplication
-                gApplication = "WRITER"
-                sleep 5 ' wait for document to be loaded
-                bTemp = hFindeImDokument ("<!DOCTYPE svg PUBLIC " & chr(34)& "-//W3C//DTD SVG 1.1//EN" & chr(34)&" " & chr(34)&"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" & chr(34)&">",true)
-                '-------------------------------\
-                if (bTemp = TRUE) then
-                    Printlog "OK"
-                else
-                    warnlog "DOCTYPE not found in svg file :-("
-                endif
-                '-------------------------------/
-                gApplication = sTemp
-            else
-                qaerrorlog "disabled for 82: #111017#"
-            endif
-            '--------------------------/
         else
             warnlog "File didn't get saved :-("
         endif

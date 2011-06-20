@@ -117,7 +117,7 @@ public class _XAutoFormattable extends MultiMethodTest {
 
             bResult &= !bkgrnd1.equals(bkgrnd2);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured :");
+            log.println("Exception occurred :");
             e.printStackTrace(log);
             bResult = false;
         }

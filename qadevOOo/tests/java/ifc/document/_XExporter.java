@@ -67,7 +67,7 @@ public class _XExporter extends MultiMethodTest {
 
     /**
     * Just calls the method. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured.
+    * Has <b> OK </b> status if no runtime exceptions occurred.
         * Usually this interface is supported both with <code>XFilter</code>
         * where source document setting is checked.
     */

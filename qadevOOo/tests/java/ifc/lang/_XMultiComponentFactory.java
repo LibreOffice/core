@@ -58,7 +58,7 @@ public class _XMultiComponentFactory extends MultiMethodTest {
     /**
     * Calls the method with one of the available service names
     * obtained by method getAvailableServiceNames. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * and returned value is not null.
     */
     public void _createInstanceWithContext() {
@@ -81,7 +81,7 @@ public class _XMultiComponentFactory extends MultiMethodTest {
     /**
     * Calls the method with one of the available service names
     * obtained by method getAvailableServiceNames. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * and returned value is not null.
     */
     public void _createInstanceWithArgumentsAndContext() {
@@ -103,7 +103,7 @@ public class _XMultiComponentFactory extends MultiMethodTest {
 
     /**
     * Just calls the method. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * and returned value is not null.
     */
     public void _getAvailableServiceNames() {

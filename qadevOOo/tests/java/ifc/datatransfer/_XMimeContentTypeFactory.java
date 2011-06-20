@@ -74,7 +74,7 @@ public class _XMimeContentTypeFactory extends MultiMethodTest {
                 result = false ;
             }
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occured : " ) ;
+            log.println("Exception occurred : " ) ;
             e.printStackTrace(log) ;
             result = false ;
         }

@@ -422,7 +422,7 @@ testcase tToolsOptionsDrawView (sApplication as string)
     hToolsOptions (sApplication,"View")
 
     If LinealeSichtbar.IsChecked                Then WarnLog "Rulers Visible x"
-    If HilfslinienBeimBewegen.IsChecked         Then WarnLog "Guides When Moving x"
+    If HilfslinienBeimBewegen.IsChecked         Then WarnLog "Helplines While Moving x"
     If KontrolpunkteImBezierEditor.IsChecked    Then WarnLog "'All Control Points In B�zier Editor' x"
     If KonturFuerIndividuelleObjekte.IsChecked  Then WarnLog "'Contour of Each Individual Object' x"
 
@@ -441,7 +441,7 @@ testcase tToolsOptionsDrawView (sApplication as string)
     hToolsOptions (sApplication,"View")
 
     If True <> LinealeSichtbar.IsChecked               Then WarnLog "Rulers Visible o"
-    If True <> HilfslinienBeimBewegen.IsChecked        Then WarnLog "Guides When Moving o"
+    If True <> HilfslinienBeimBewegen.IsChecked        Then WarnLog "Helplines While Moving o"
     If True <> KontrolpunkteImBezierEditor.IsChecked   Then WarnLog "'All Control Points In B�zier Editor' o"
     If True <> KonturFuerIndividuelleObjekte.IsChecked Then WarnLog "'Contour of Each Individual Object' o"
 
@@ -561,7 +561,7 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
     hToolsOptions (sApplication,"Grid")
 
     If ( irgendwas(1) = FangrasterBenutzen.IsChecked      ) Then WarnLog "Snap to Grid state changed"
-    If ( irgendwas(2) = RasterSichtbar.IsChecked          ) Then WarnLog "Visible Grid state changed"
+    If ( irgendwas(2) = RasterSichtbar.IsChecked          ) Then WarnLog "Display Grid state changed"
 
     '      If ( irgendwas(3) = AchsenSynchronisieren.IsChecked   ) Then WarnLog "Synchronize Axes state changed"
     if ( AchsenSynchronisieren.IsChecked = TRUE ) Then WarnLog "Synchronize Axes state changed"
@@ -638,7 +638,7 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
     hToolsOptions (sApplication,"Grid")
 
     If FangrasterBenutzen.IsChecked     Then WarnLog "Snap to Grid x"
-    If RasterSichtbar.IsChecked         Then WarnLog "Visible Grid x"
+    If RasterSichtbar.IsChecked         Then WarnLog "Display Grid x"
 
     If AchsenSynchronisieren.IsChecked  Then WarnLog "Synchronize Axes x"
 
@@ -702,7 +702,7 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
     hToolsOptions (sApplication,"Grid")
 
     If True <> FangrasterBenutzen.IsChecked     Then WarnLog "Snap to Grid o"
-    If True <> RasterSichtbar.IsChecked         Then WarnLog "Visible Grid o"
+    If True <> RasterSichtbar.IsChecked         Then WarnLog "Display Grid o"
 
     If True <> AchsenSynchronisieren.IsChecked  Then WarnLog "Synchronize Axes o"
 

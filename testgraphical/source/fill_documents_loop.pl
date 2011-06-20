@@ -192,7 +192,7 @@ sub createDBEntriesForEveryDocument($)
     my $sStr = shift;
     if ($sStr =~ /^MySQL-Error/ )
     {
-        # we don't do anything if an error occured
+        # we don't do anything if an error occurred
         return;
     }
 

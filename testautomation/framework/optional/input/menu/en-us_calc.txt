@@ -93,7 +93,7 @@ Mo~vie and Sound
 Ch~art...
 Float~ing Frame
 ********** F~ormat
-~Default Formatting
+Clear ~Direct Formatting
 
 ~Cells...
 ~Row

@@ -34,16 +34,18 @@ ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
 .INCLUDE: settings.mk
+
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 .IF "$(L10N_framework)"==""
+
 DLLPRE = # no leading "lib" on .so files
 
 .IF "$(GUI)"=="WNT"
 BATCH_SUFFIX=.bat
-GIVE_EXEC_RIGHTS=@echo
-MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell @$(WRAPCMD) echo $(SOLARBINDIR))))
-MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)/$(CLASSDIR)/)))
-.ELIF "$(GUI)"=="OS2"
-BATCH_SUFFIX=.cmd
 GIVE_EXEC_RIGHTS=@echo
 MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell @$(WRAPCMD) echo $(SOLARBINDIR))))
 MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)/$(CLASSDIR)/)))
@@ -152,7 +154,7 @@ $(DLLDEST)/services.rdb :
 
 $(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
     echo $(DLLDEST)
-    $(GNUCOPY) $? $@
+    $(GNUCOPY) $(SOLARBINDIR)$/udkapi.rdb $@
     $(REGMERGE) $@ / $(BIN)$/bridgetest.rdb
 
 $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk

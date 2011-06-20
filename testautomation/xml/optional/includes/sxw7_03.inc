@@ -429,16 +429,16 @@ testcase tEventsToObjects
                     end if
                 else
                     if l = 1 then 
-                        warnlog "Event on Graphic failed! No Message Box occured!"
+                        warnlog "Event on Graphic failed! No Message Box occurred!"
                     end if
                     if l = 2 then 
-                        warnlog "Event on OLE object failed! No Message Box occured!"
+                        warnlog "Event on OLE object failed! No Message Box occurred!"
                     end if
                     if l = 3 then 
-                        warnlog "Event on text frame object failed! No Message Box occured!"
+                        warnlog "Event on text frame object failed! No Message Box occurred!"
                     end if
                     if l = 4 then 
-                        warnlog "Event on text frame object (frame style applied) failed! No Message Box occured!"
+                        warnlog "Event on text frame object (frame style applied) failed! No Message Box occurred!"
                     end if
                 end if
                 if l <> 4 then

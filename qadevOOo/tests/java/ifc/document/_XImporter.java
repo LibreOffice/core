@@ -52,7 +52,7 @@ public class _XImporter extends MultiMethodTest {
 
     /**
     * Retrieves relation and sets target document. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured,
+    * Has <b> OK </b> status if no runtime exceptions occurred,
     * really this method tested when the whole import result
     * checked.
     */

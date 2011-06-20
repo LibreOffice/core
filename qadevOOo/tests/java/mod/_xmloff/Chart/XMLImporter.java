@@ -191,7 +191,7 @@ public class XMLImporter extends TestCase {
                         return impValue.equals(title) ;
                     } catch (com.sun.star.uno.Exception e) {
                         logF.println
-                            ("Exception occured while checking filter :") ;
+                            ("Exception occurred while checking filter :") ;
                         e.printStackTrace(logF) ;
                         return false ;
                     }

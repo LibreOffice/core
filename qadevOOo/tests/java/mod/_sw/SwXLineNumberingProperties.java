@@ -103,7 +103,7 @@ public class SwXLineNumberingProperties extends TestCase {
             }
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             e.printStackTrace(log);
-            log.println("Exception occured: " + e);
+            log.println("Exception occurred: " + e);
         }
 
         XLineNumberingProperties oLNP = (XLineNumberingProperties)

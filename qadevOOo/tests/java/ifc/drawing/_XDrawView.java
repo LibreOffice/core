@@ -95,15 +95,15 @@ public class _XDrawView extends MultiMethodTest {
             oObj.setCurrentPage(the_page);
             tRes.tested("setCurrentPage()",eq);
         } catch (com.sun.star.lang.WrappedTargetException ex) {
-            log.println("Exception occured while checking 'setCurrentPage()'");
+            log.println("Exception occurred while checking 'setCurrentPage()'");
             ex.printStackTrace(log);
             tRes.tested("setCurrentPage()",false);
         } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
-            log.println("Exception occured while checking 'setCurrentPage()'");
+            log.println("Exception occurred while checking 'setCurrentPage()'");
             ex.printStackTrace(log);
             tRes.tested("setCurrentPage()",false);
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured while checking 'setCurrentPage()'");
+            log.println("Exception occurred while checking 'setCurrentPage()'");
             ex.printStackTrace(log);
             tRes.tested("setCurrentPage()",false);
         }
