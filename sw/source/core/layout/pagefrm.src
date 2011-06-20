@@ -4,4 +4,3 @@ Bitmap BMP_PAGE_SHADOW_MASK
 {
     File = "page-shadow-mask.png";
 };
-
