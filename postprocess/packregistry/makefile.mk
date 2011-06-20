@@ -39,6 +39,7 @@ MY_XCDS = \
     $(MISC)/calc.xcd \
     $(MISC)/cjk.xcd \
     $(MISC)/ctl.xcd \
+    $(MISC)/ctlseqcheck.xcd \
     $(MISC)/draw.xcd \
     $(MISC)/graphicfilter.xcd \
     $(MISC)/impress.xcd \
@@ -52,7 +53,6 @@ MY_XCDS = \
     $(MISC)/pocketexcel.xcd \
     $(MISC)/pocketword.xcd \
     $(MISC)/pyuno.xcd \
-    $(MISC)/w4w.xcd \
     $(MISC)/writer.xcd \
     $(MISC)/xsltfilter.xcd
 
@@ -326,6 +326,7 @@ MY_FILES_main += $(MY_MOD)/DataAccess/adabas.xcu
 .END
 .IF "$(ENABLE_EVOAB2)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/DataAccess/evoab2.xcu
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess-evoab2.xcu
 .END
 .IF "$(SOLAR_JAVA)" == "TRUE"
 MY_FILES_main += \
@@ -389,11 +390,6 @@ MY_FILES_pocketword = \
 MY_DEPS_pyuno = main
 MY_FILES_pyuno = \
     $(MY_MOD)/org/openoffice/Office/Scripting-python.xcu
-
-MY_DEPS_w4w = main
-MY_FILES_w4w = \
-    $(MY_MOD)/fcfg_w4w_filters.xcu \
-    $(MY_MOD)/fcfg_w4w_types.xcu
 
 MY_DEPS_writer = main
 MY_FILES_writer = \

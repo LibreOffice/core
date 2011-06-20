@@ -36,15 +36,12 @@ RSCCUSTOMIMG*=$(PRJ)
 
 IMAGES := $(COMMONBIN)$/images.zip
 SORTED_LIST=$(RES)$/img$/sorted.lst
-# Custom sets, at 24x24 & 16x16 fall-back to industrial preferentially
-CUSTOM_IMAGE_SETS=hicontrast industrial crystal oxygen tango classic
+# Custom sets, at 24x24 & 16x16 fall-back to Tango preferentially
+# (Tango fallbacks to Industrial for the missing icons)
+CUSTOM_IMAGE_SETS=$(WITH_THEMES)
 CUSTOM_IMAGES+=$(foreach,i,$(CUSTOM_IMAGE_SETS) images_$i)
 CUSTOM_PREFERRED_FALLBACK_1*=-c $(SOLARSRC)$/ooo_custom_images$/tango
 CUSTOM_PREFERRED_FALLBACK_2*=-c $(SOLARSRC)$/ooo_custom_images$/industrial
-
-CRYSTAL_TARBALL=$(SOLARSRC)$/external_images$/ooo_crystal_images-1.tar.gz
-OXYGEN_TARBALL=$(SOLARSRC)$/external_images$/ooo_oxygen_images-2009-06-17.tar.gz
-CLASSIC_TARBALL=$(SOLARSRC)$/ooo_custom_images$/classic/classic_images.tar.gz
 
 ALLTAR : $(IMAGES) $(CUSTOM_IMAGES) $(COMMONBIN)$/images_brand.zip
 
@@ -57,7 +54,7 @@ $(SORTED_LIST) : image-sort.lst
 $(RES)$/img$/commandimagelist.ilst .PHONY : $(SORTED_LIST)
     @@-$(MKDIR) $(RES)$/img
 #+-$(RM) $@ $@.$(INPATH)
-    $(FIND) $(SOLARSRC)$/$(RSCDEFIMG)/res/commandimagelist -name "*.png" | sed "s#$(SOLARSRC)$/$(RSCDEFIMG)/res#%GLOBALRES%#" | $(PERL) $(SOLARENV)$/bin$/sort.pl > $@.$(INPATH)
+    $(FIND) $(SOLARSRC)$/$(RSCDEFIMG)/cmd -name "*.png" | sed "s#$(SOLARSRC)$/$(RSCDEFIMG)#%MODULE%#" | $(PERL) $(SOLARENV)$/bin$/sort.pl > $@.$(INPATH)
     $(PERL) $(SOLARENV)$/bin$/diffmv.pl $@.$(INPATH) $@
 
 $(COMMONBIN)$/images.zip .PHONY: $(RES)$/img$/commandimagelist.ilst
@@ -69,41 +66,3 @@ images_% : $(RES)$/img$/commandimagelist.ilst
 # make sure to have one to keep packing happy
 $(COMMONBIN)$/images_brand.zip:
     @$(TOUCH) $@
-
-# generate the HiContrast icon set
-$(MISC)$/hicontrast.flag .PHONY :
-    $(PERL) $(SOLARENV)$/bin$/hicontrast-to-theme.pl $(SOLARSRC)$/default_images $(MISC)$/hicontrast && $(TOUCH) $@
-
-# unpack the Crystal icon set
-$(MISC)$/crystal.flag : $(CRYSTAL_TARBALL)
-    cd $(MISC) && gzip -d -c $(CRYSTAL_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
-.IF "$(GUI)"=="UNX"
-    chmod -R g+w $(MISC)$/crystal
-.ENDIF
-    @$(TYPE) $@ || echo "ERROR: unpacking $(CRYSTAL_TARBALL) failed"
-
-# unpack the Oxygen icon set
-$(MISC)$/oxygen.flag : $(OXYGEN_TARBALL)
-    cd $(MISC) && gzip -d -c $(OXYGEN_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
-.IF "$(GUI)"=="UNX"
-    chmod -R g+w $(MISC)$/oxygen
-.ENDIF
-    @$(TYPE) $@ || echo "ERROR: unpacking $(CRYSTAL_TARBALL) failed"
-
-# unpack the classic icon set
-$(MISC)$/classic.flag : $(CLASSIC_TARBALL)
-    cd $(MISC) && gunzip -c $(CLASSIC_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
-.IF "$(GUI)"=="UNX"
-    chmod -R g+w $(MISC)$/classic
-.ENDIF
-    @$(TYPE) $@ || echo "ERROR: unpacking $(CLASSIC_TARBALL) failed"
-
-# dependencies
-images_hicontrast : $(MISC)$/hicontrast.flag $(RES)$/img$/commandimagelist.ilst
-
-images_crystal : $(MISC)$/crystal.flag $(RES)$/img$/commandimagelist.ilst
-
-images_oxygen : $(MISC)$/oxygen.flag $(RES)$/img$/commandimagelist.ilst
-
-images_classic : $(MISC)$/classic.flag $(RES)$/img$/commandimagelist.ilst
-

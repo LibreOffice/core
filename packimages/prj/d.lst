@@ -1,2 +1,2 @@
-mkdir: %COMMON_DEST%\bin%_EXT%
-..\%__SRC%\bin\*.zip %COMMON_DEST%\bin%_EXT%
+mkdir: %COMMON_DEST%\bin
+..\%__SRC%\bin\*.zip %COMMON_DEST%\bin

@@ -48,32 +48,42 @@ my_components = \
     bib \
     cached1 \
     calc \
-    chartcontroller \
-    chartmodel \
-    charttools \
-    chartview \
+    component/chart2/source/controller/chartcontroller \
+    component/chart2/source/model/chartmodel \
+    component/chart2/source/tools/charttools \
+    component/chart2/source/view/chartview \
     component/canvas/source/factory/canvasfactory \
     component/canvas/source/simplecanvas/simplecanvas \
     component/canvas/source/vcl/vclcanvas \
     component/comphelper/util/comphelp \
-	component/dbaccess/source/ext/adabas/adabasui \
-	component/dbaccess/source/ext/macromigration/dbmm \
-	component/dbaccess/source/filter/xml/dbaxml \
-	component/dbaccess/util/dba \
-	component/dbaccess/util/dbu \
-	component/dbaccess/util/sdbt \
+    component/cui/util/cui \
+    component/dbaccess/source/ext/adabas/adabasui \
+    component/dbaccess/source/ext/macromigration/dbmm \
+    component/dbaccess/source/filter/xml/dbaxml \
+    component/dbaccess/util/dba \
+    component/dbaccess/util/dbu \
+    component/dbaccess/util/sdbt \
+    component/fileaccess/source/fileacc \
+    component/forms/util/frm \
+    component/formula/util/for \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
-    component/linguistic/source/lng \
-    component/oox/oox \
-	component/reportdesign/source/filter/xml/rptxml \
-   	component/reportdesign/util/rpt \
-    	component/reportdesign/util/rptui \
-    component/vbahelper/util/msforms \
-    component/sax/source/expatwrap/expwrap \
-    component/sax/source/fastparser/fastsax \
+    component/hwpfilter/source/hwp \
+    component/lotuswordpro/util/lwpfilter \
+    component/oox/util/oox \
+    component/reportdesign/util/rpt \
+    component/reportdesign/util/rptui \
+    component/reportdesign/util/rptxml \
+    component/sc/util/sc \
+    component/sc/util/scd \
+    component/sc/util/scfilt \
+    component/sc/util/vbaobj \
+    component/sd/util/sd \
+    component/sd/util/sdd \
+    component/sd/util/sdfilt \
     component/sfx2/util/sfx \
+    component/slideshow/util/slideshow \
     component/sot/util/sot \
     component/starmath/util/sm \
     component/starmath/util/smd \
@@ -92,8 +102,11 @@ my_components = \
     component/sw/util/vbaswobj \
     component/unotools/util/utl \
     component/toolkit/util/tk \
+    component/unotools/util/utl \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
+    component/vbahelper/util/msforms \
+    component/vcl/vcl \
     component/writerfilter/util/writerfilter \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
@@ -110,16 +123,12 @@ my_components = \
     dlgprov \
     embobj \
     evtatt \
-    fileacc \
     filterconfig1 \
     flash \
     flat \
-    for \
     fpicker \
     fps_office \
-    frm \
     guesslang \
-    hwp \
     hyphen \
     i18npool \
     i18nsearch \
@@ -128,9 +137,12 @@ my_components = \
     log \
     mcnttype \
     migrationoo2 \
+    mtfrenderer \
     msfilter \
+    msworksfilter \
     mysql \
     odbc \
+    odfflatxml \
     offacc \
     oooimprovecore \
     package2 \
@@ -139,18 +151,11 @@ my_components = \
     placeware \
     preload \
     protocolhandler \
-    pythonloader \
-    pythonscript \
     res \
     sb \
-    sc \
-    scd \
     scn \
     scriptframe \
-    sd \
     sdbc2 \
-    sdd \
-    slideshow \
     solver \
     spell \
     spl \
@@ -174,8 +179,9 @@ my_components = \
     updchk.uno \
     uui \
     vbaevents \
-    vbaobj \
+    visiofilter \
     wpft \
+    wpgfilter \
     xmlfa \
     xmlfd \
     xmx \
@@ -183,16 +189,14 @@ my_components = \
     xsltfilter \
     xstor
 
-.IF "$(OS)" == "MACOSX"
-my_components += component/vcl/vcl.macosx
-.ELSE
-.IF "$(OS)" == "WNT"
-my_components += component/vcl/vcl.windows
-.ELSE
-my_components += component/vcl/vcl.unx
-.ENDIF
+.IF "$(DISABLE_PYTHON)" != "TRUE"
+my_components += pythonloader
 .ENDIF
 
+.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX"
+my_components += splash
+.ENDIF
+    
 .IF "$(BUILD_SPECIAL)" != ""
 my_components += oooimprovement
 .END
@@ -234,20 +238,22 @@ my_components += kde4be1
 .END
 
 .IF "$(ENABLE_OGL)" == "TRUE"
-my_components += ogltrans
+my_components += component/slideshow/source/engine/OGLTrans/ogltrans
 .END
 
 .IF "$(ENABLE_SVCTAGS)" == "YES"
 my_components += productregistration.jar
 .END
 
+.IF "$(ENABLE_LOMENUBAR)" == "TRUE"
+my_components += component/framework/util/lomenubar
+.END
+
 .IF "$(SOLAR_JAVA)" == "TRUE"
 my_components += \
     LuceneHelpWrapper \
     ScriptFramework \
-    ScriptProviderForBeanShell \
     ScriptProviderForJava \
-    ScriptProviderForJavaScript \
     XMergeBridge \
     XSLTFilter.jar \
     XSLTValidate \
@@ -354,7 +360,7 @@ my_components += evoab
 .END
 
 .IF "$(OS)" != "WNT" && "$(ENABLE_GSTREAMER)" != ""
-my_components += avmediagst
+my_components += avmediagstreamer
 .END
 
 .IF "$(OS)" != "WNT" && "$(SOLAR_JAVA)" == "TRUE"
