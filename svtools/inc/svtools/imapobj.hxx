@@ -32,6 +32,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/string.hxx>
 #include <svl/macitem.hxx>
+#include <rtl/strbuf.hxx>
 
 class Point;
 class Rectangle;
@@ -77,7 +78,6 @@ class SVT_DLLPUBLIC IMapObject
     sal_Bool                bActive;
 
 protected:
-
     sal_uInt16              nReadVersion;
 
     // Binaer-Im-/Export
@@ -85,10 +85,10 @@ protected:
     virtual void        ReadIMapObject(  SvStream& rIStm ) = 0;
 
     // Hilfsmethoden
-    void                AppendCERNCoords( const Point& rPoint100, ByteString& rStr ) const;
-    void                AppendCERNURL( ByteString& rStr, const String& rBaseURL ) const;
-    void                AppendNCSACoords( const Point& rPoint100, ByteString& rStr ) const;
-    void                AppendNCSAURL( ByteString& rStr, const String& rBaseURL ) const;
+    void AppendCERNCoords(rtl::OStringBuffer& rBuf, const Point& rPoint100) const;
+    void AppendCERNURL(rtl::OStringBuffer& rBuf, const String& rBaseURL) const;
+    void AppendNCSACoords(rtl::OStringBuffer& rBuf, const Point& rPoint100) const;
+    void AppendNCSAURL(rtl::OStringBuffer&rBuf, const String& rBaseURL) const;
 
 public:
 

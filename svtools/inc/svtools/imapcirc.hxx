@@ -43,7 +43,7 @@ class Fraction;
 class SVT_DLLPUBLIC IMapCircleObject : public IMapObject
 {
     Point               aCenter;
-    sal_uLong               nRadius;
+    sal_Int32               nRadius;
 
     void                ImpConstruct( const Point& rCenter, sal_uLong nRad, sal_Bool bPixel );
 

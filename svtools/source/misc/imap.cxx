@@ -433,7 +433,7 @@ sal_Bool IMapCircleObject::IsHit( const Point& rPoint ) const
     const Point aPoint( aCenter - rPoint );
     sal_Bool        bRet = sal_False;
 
-    if ( (sal_uLong) sqrt( (double) aPoint.X() * aPoint.X() +
+    if ( (sal_Int32) sqrt( (double) aPoint.X() * aPoint.X() +
                        aPoint.Y() * aPoint.Y() ) <= nRadius )
     {
         bRet = sal_True;
