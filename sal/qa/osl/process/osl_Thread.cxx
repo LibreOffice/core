@@ -2099,9 +2099,6 @@ namespace osl_ThreadData
                     "ThreadData setData: ",
                     cData1 == 'a' && cData2 == 'b' && aChar == 'o'
                     );
-
-                delete [] pc2;
-                delete [] pc;
             }
 
         CPPUNIT_TEST_SUITE(setData);
@@ -2149,8 +2146,6 @@ namespace osl_ThreadData
                     "ThreadData setData: ",
                     cData1 == 'c' && cData2 == 'd' && aChar == 'i'
                     );
-
-                delete [] pc;
             }
 
         // setData then change the value in the address data pointer points,

@@ -68,7 +68,7 @@ typedef enum
 
 typedef sal_uInt32 oslThreadIdentifier;
 
-typedef sal_uInt32 oslThreadKey;
+typedef void* oslThreadKey;
 
 /** Create the thread, using the function-ptr pWorker as
     its main (worker) function. This functions receives in
