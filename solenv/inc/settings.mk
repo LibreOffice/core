@@ -1005,6 +1005,13 @@ LNTFLAGSOUTOBJ=-os
 
 DLLPOSTFIX=lo
 
+.IF "$(CROSS_COMPILING)" == "YES"
+# Assume always cross-compiling from Unix
+EXECPOST_FOR_BUILD=
+.ELSE
+EXECPOST_FOR_BUILD=$(EXECPOST)
+.ENDIF
+
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
 # Add SOLARLIBDIR at the begin of a (potentially previously undefined) library
 # path (LD_LIBRARY_PATH, PATH, etc.; prepending avoids fetching libraries from
