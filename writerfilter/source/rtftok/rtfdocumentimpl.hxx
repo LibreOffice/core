@@ -72,6 +72,17 @@ namespace writerfilter {
             CONTROL_VALUE // eg \fs (requires parameter)
         };
 
+        /// Minimalistic buffer elements for nested cells.
+        enum RTFBufferTypes
+        {
+            BUFFER_PROPS,
+            BUFFER_CELLEND,
+            BUFFER_ROWEND,
+            BUFFER_STARTRUN,
+            BUFFER_UTEXT,
+            BUFFER_ENDRUN
+        };
+
         /// An entry in the color table.
         class RTFColorTableEntry
         {
@@ -207,6 +218,10 @@ namespace writerfilter {
 
                 oox::StorageRef m_xStorage;
                 oox::GraphicHelper* m_pGraphicHelper;
+
+                /// Buffered nested table cells, till cell definitions are not reached.
+                std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aBuffer;
+                bool m_bNestedTable;
         };
     } // namespace rtftok
 } // namespace writerfilter
