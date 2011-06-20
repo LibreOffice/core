@@ -162,7 +162,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
             xProp->setPropertyValue( C2U("MediaType"), uno::makeAny( _sMediaType ));
         }
     }
-    catch( uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -226,7 +226,7 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
 
         OSL_ENSURE( xStorage.is(), "No Storage" );
     }
-    catch( uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -465,7 +465,7 @@ sal_Int32 XMLFilter::impl_Import(
                 xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
         }
     }
-    catch( uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
 
@@ -549,7 +549,7 @@ sal_Int32 XMLFilter::impl_ImportStream(
                         xDocHandler.set(xFactory->createInstanceWithArgumentsAndContext(m_sDocumentHandler,aArgs,m_xContext), uno::UNO_QUERY );
                         xImporter.set(xDocHandler,uno::UNO_QUERY);
                     }
-                    catch(uno::Exception&)
+                    catch (const uno::Exception&)
                     {
                         OSL_FAIL("Exception caught!");
                     }
@@ -561,24 +561,24 @@ sal_Int32 XMLFilter::impl_ImportStream(
             // load was successful
             nWarning = 0;
         }
-        catch( xml::sax::SAXParseException )
+        catch (const xml::sax::SAXParseException&)
         {
             // todo: if encrypted: ERRCODE_SFX_WRONGPASSWORD
         }
-        catch( xml::sax::SAXException )
+        catch (const xml::sax::SAXException&)
         {
             // todo: if encrypted: ERRCODE_SFX_WRONGPASSWORD
         }
-        catch( packages::zip::ZipIOException )
+        catch (const packages::zip::ZipIOException&)
         {
             nWarning = ERRCODE_IO_BROKENPACKAGE;
         }
-        catch( io::IOException )
+        catch (const io::IOException&)
         {
         }
-        catch( uno::Exception& aEx )
+        catch (const uno::Exception& rEx)
         {
-            ASSERT_EXCEPTION( aEx );
+            ASSERT_EXCEPTION(rEx);
         }
     }
 
@@ -647,7 +647,7 @@ sal_Int32 XMLFilter::impl_Export(
                 xDocHandler.set(xServiceFactory->createInstanceWithArguments(m_sDocumentHandler,aArgs), uno::UNO_QUERY );
                 xSaxWriter.set(xDocHandler,uno::UNO_QUERY);
             }
-            catch(uno::Exception&)
+            catch (const uno::Exception&)
             {
                 OSL_FAIL("Exception caught!");
             }
@@ -727,7 +727,7 @@ sal_Int32 XMLFilter::impl_Export(
         if ( xTransact.is() )
             xTransact->commit();
     }
-    catch( uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
 
@@ -772,7 +772,7 @@ sal_Int32 XMLFilter::impl_ExportStream(
             xStreamProp->setPropertyValue( C2U("Compressed"), uno::makeAny( sal_True ) );//@todo?
             xStreamProp->setPropertyValue( C2U("UseCommonStoragePasswordEncryption"), uno::makeAny( sal_True ) );
         }
-        catch( uno::Exception& rEx )
+        catch (const uno::Exception& rEx)
         {
             ASSERT_EXCEPTION( rEx );
         }
@@ -804,7 +804,7 @@ sal_Int32 XMLFilter::impl_ExportStream(
         //@todo? filter properties? ... url? ...
         xFilter->filter( aMediaDesc );
     }
-    catch( uno::Exception& rEx )
+    catch (const uno::Exception& rEx)
     {
         ASSERT_EXCEPTION( rEx );
     }

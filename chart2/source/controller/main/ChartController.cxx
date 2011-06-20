@@ -241,7 +241,7 @@ void ChartController::TheModel::tryTermination()
 
 #if OSL_DEBUG_LEVEL > 1
                 OSL_ENSURE( !m_bOwnership,
-                    "INFO: a well known owner has catched a CloseVetoException after calling close(true)" );
+                    "INFO: a well known owner has caught a CloseVetoException after calling close(true)" );
 #endif
 
                 m_bOwnership                = false;
