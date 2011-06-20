@@ -124,12 +124,15 @@ class TextDocument(object):
         mode in order to avoid the 'do u want to save' box'''
         if self.xTextDocument is not None:
             try:
-                self.xTextDocument.setModified(False)
+                self.xTextDocument.Modified = False
             except PropertyVetoException, e1:
                 traceback.print_exc()
+
         self.xTextDocument = OfficeDocument.load(
             self.xFrame, sDefaultTemplate, "_self", loadValues)
+
         self.DocSize = self.getPageSize()
+
         myViewHandler = ViewHandler(self.xTextDocument, self.xTextDocument)
         try:
             myViewHandler.setViewSetting(
@@ -142,7 +145,7 @@ class TextDocument(object):
 
     def getPageSize(self):
         try:
-            xNameAccess = self.xTextDocument.getStyleFamilies()
+            xNameAccess = self.xTextDocument.StyleFamilies
             xPageStyleCollection = xNameAccess.getByName("PageStyles")
             xPageStyle = xPageStyleCollection.getByName("First Page")
             return Helper.getUnoPropertyValue(xPageStyle, "Size")

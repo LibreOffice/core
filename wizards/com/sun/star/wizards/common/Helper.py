@@ -42,14 +42,11 @@ class Helper(object):
 
     @classmethod
     def getPropertyValue(self, CurPropertyValue, PropertyName):
-        MaxCount = len(CurPropertyValue)
-        i = 0
-        while i < MaxCount:
-            if CurPropertyValue[i] is not None:
-                if CurPropertyValue[i].Name.equals(PropertyName):
-                    return CurPropertyValue[i].Value
+        for i in  CurPropertyValue:
+            if i is not None:
+                if i.Name == PropertyName:
+                    return i.Value
 
-            i += 1
         raise RuntimeException()
 
     @classmethod
@@ -117,11 +114,9 @@ class Helper(object):
                 uno.invoke(xMultiPSetLst, "setPropertyValues",
                     (PropertyNames, PropertyValues))
             else:
-                i = 0
-                while i < len(PropertyNames):
+                for i in xrange(len(PropertyNames)):
                     self.setUnoPropertyValue(xMultiPSetLst, PropertyNames[i],
                         PropertyValues[i])
-                    i += 1
 
         except Exception, e:
             traceback.print_exc()

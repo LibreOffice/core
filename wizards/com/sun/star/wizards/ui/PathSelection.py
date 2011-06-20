@@ -89,8 +89,6 @@ class PathSelection(object):
 
     def triggerPathPicker(self):
         try:
-            print self.iTransferMode
-            print self.TransferMode.SAVE
             if self.iTransferMode == self.TransferMode.SAVE:
                 if self.iDialogType == self.DialogTypes.FOLDER:
                     #TODO: write code for picking a folder for saving

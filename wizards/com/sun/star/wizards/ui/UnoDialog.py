@@ -47,7 +47,7 @@ class UnoDialog(object):
     def setControlProperty(self, ControlName, PropertyName, PropertyValue):
         try:
             if PropertyValue is not None:
-                if self.xDialogModel.hasByName(ControlName) == False:
+                if not self.xDialogModel.hasByName(ControlName):
                     return
                 xPSet = self.xDialogModel.getByName(ControlName)
                 if isinstance(PropertyValue,bool):

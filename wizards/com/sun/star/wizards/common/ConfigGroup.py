@@ -16,13 +16,14 @@ class ConfigGroup(ConfigNode):
     def writeField(self, field, configView, prefix):
         propertyName = field[len(prefix):]
         field = getattr(self,field)
-        fieldType = type(field)
+
         if isinstance(field, ConfigNode):
             pass
-            #COMMENTED
+            #print configView
             #childView = Configuration.addConfigNode(configView, propertyName)
             #self.writeConfiguration(childView, prefix)
         else:
+            #print type(field)
             Configuration.Set(self.convertValue(field), propertyName,
                 configView)
 
