@@ -869,6 +869,11 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aTableCellSprms.push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_vAlign, pValue));
             }
             break;
+        case RTF_TRKEEP:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(1));
+                m_aStates.top().aTableRowSprms.push_back(make_pair(NS_sprm::LN_TCantSplit, pValue));
+            }
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
