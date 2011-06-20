@@ -79,7 +79,7 @@ cross-build-toolset:
 	  setup_native \
 	  icc; do \
 	    if grep -q gb_Module_add_targets $$D/Module_$$D.mk 2>/dev/null; then \
-	      (cd $$D && make -r -j@BUILD_MAX_JOBS@) \
+	      (cd $$D && make -sr -j@BUILD_MAX_JOBS@) \
 	    else \
 	      (cd $$D && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) \
 	    fi; \
