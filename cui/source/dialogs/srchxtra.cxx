@@ -189,7 +189,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
             {
                 rtl::OStringBuffer sError(
                     RTL_CONSTASCII_STRINGPARAM("no resource for slot id\nslot = "));
-                sError.append(nSlot);
+                sError.append(static_cast<sal_Int32>(nSlot));
                 DBG_ERRORFILE(sError.getStr());
             }
 
