@@ -21,7 +21,7 @@ class UnoDialog(object):
             self.BisHighContrastModeActivated = None
             self.m_oPeerConfig = None
             self.xWindowPeer = None
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()
 
     def getControlKey(self, EventObject, ControlList):
@@ -85,9 +85,9 @@ class UnoDialog(object):
 
     def getControlProperty(self, ControlName, PropertyName):
         try:
-            xPSet = self.xDialogModel().getByName(ControlName)
-            oPropValuezxPSet.getPropertyValue(PropertyName)
-        except com.sun.star.uno.Exception, exception:
+            xPSet = self.xDialogModel.getByName(ControlName)
+            return xPSet.getPropertyValue(PropertyName)
+        except Exception, exception:
             traceback.print_exc()
             return None
 
@@ -100,7 +100,7 @@ class UnoDialog(object):
             while i < allProps.length:
                 sName = allProps[i].Name
                 i += 1
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
 
     def getMAPConversionFactor(self, ControlName):

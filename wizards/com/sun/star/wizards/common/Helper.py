@@ -1,7 +1,6 @@
 import uno
 import traceback
 from datetime import date as DateTime
-from com.sun.star.uno import Exception as UnoException
 from com.sun.star.uno import RuntimeException
 from NumberFormatter import NumberFormatter
 
@@ -25,7 +24,7 @@ class Helper(object):
                 selementnames = xPSet.getPropertySetInfo().getProperties()
                 raise ValueError("No Such Property: '" + PropertyName + "'")
 
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
 
     @classmethod
@@ -36,7 +35,7 @@ class Helper(object):
             else:
                 raise RuntimeException();
 
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return None
 
@@ -63,7 +62,7 @@ class Helper(object):
 
                     i += 1
             return None
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return None
 
@@ -76,7 +75,7 @@ class Helper(object):
                     return oObject
             return None
 
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return None
 
@@ -88,7 +87,7 @@ class Helper(object):
                 if isinstance(oObject,list):
                     return getArrayValue(oObject)
 
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
 
         return None
@@ -102,7 +101,7 @@ class Helper(object):
                     return oObject
 
             return None
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return None
 
@@ -140,7 +139,7 @@ class Helper(object):
             else:
                 return oPropList
 
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return None
 

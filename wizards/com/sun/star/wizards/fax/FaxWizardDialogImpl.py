@@ -55,9 +55,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         except RuntimeException, e:
             # TODO Auto-generated catch block
             traceback.print_exc()
-        except UnoException, e:
-            # TODO Auto-generated catch blocksetMaxStep
-            traceback.print_exc()
         except Exception, e:
             # TODO Auto-generated catch blocksetMaxStep
             traceback.print_exc()
@@ -123,7 +120,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.removeTerminateListener()
             self.closeDocument()
             self.running = False
-        except UnoException, exception:
+        except Exception, exception:
             self.removeTerminateListener()
             traceback.print_exc()
             self.running = False
@@ -207,7 +204,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 pass
                 #TODO: Error Handling
 
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()
         finally:
             if endWizard:
@@ -413,7 +410,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.faxDA.append(UnoDataAware.attachEditControl(cgl,
                 "cp_TemplatePath", self.myPathSelection.xSaveTextBox,
                 None, True))
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
 
     def saveConfiguration(self):
@@ -422,7 +419,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 "/org.openoffice.Office.Writer/Wizards/Fax", True)
             self.myConfig.writeConfiguration(root, "cp_")
             Configuration.commit(root)
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()
 
     def setConfiguration(self):
@@ -620,7 +617,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def chkUseFooterItemChanged(self):
         try:
             bFooterPossible = (self.chkUseFooter.State is not 0) \
-                and bool(getControlProperty("chkUseFooter",
+                and bool(self.getControlProperty("chkUseFooter",
                     PropertyNames.PROPERTY_ENABLED))
             if self.chkFooterNextPages.State is not 0:
                 self.myFaxDoc.switchFooter("First Page", False,
@@ -642,17 +639,17 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 FaxWizardDialogImpl.RM_FOOTER)
             Helper.setUnoPropertyValue(BPaperItem,
                 PropertyNames.PROPERTY_ENABLED, bFooterPossible)
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
 
     def chkFooterNextPagesItemChanged(self):
-        chkUseFooterItemChanged()
+        self.chkUseFooterItemChanged()
 
     def chkFooterPageNumbersItemChanged(self):
-        chkUseFooterItemChanged()
+        self.chkUseFooterItemChanged()
 
     def txtFooterTextChanged(self):
-        chkUseFooterItemChanged()
+        self.chkUseFooterItemChanged()
 
     def chkUseSalutationItemChanged(self):
         self.myFaxDoc.switchUserField("Salutation",

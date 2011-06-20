@@ -1,6 +1,5 @@
 import uno
 from text.TextDocument import *
-from com.sun.star.uno import Exception as UnoException
 from text.TextSectionHandler import TextSectionHandler
 from text.TextFieldHandler import TextFieldHandler
 from common.Configuration import Configuration
@@ -26,7 +25,7 @@ class FaxDocument(TextDocument):
             oSection = \
                 mySectionHandler.xTextDocument.TextSections.getByName(sElement)
             Helper.setUnoPropertyValue(oSection, "IsVisible", bState)
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
 
     def updateDateFields(self):
@@ -44,7 +43,7 @@ class FaxDocument(TextDocument):
 
                 if bState:
                     xPageStyle.setPropertyValue("FooterIsOn", True)
-                    xFooterText = propertySet.getPropertyValue("FooterText")
+                    xFooterText = Helper.getUnoPropertyValue(xPageStyle, "FooterText")
                     xFooterText.String = sText
 
                     if bPageNumber:
@@ -55,11 +54,11 @@ class FaxDocument(TextDocument):
                             PARAGRAPH_BREAK, False)
                         myCursor.setPropertyValue("ParaAdjust", CENTER )
 
-                        xPageNumberField = xMSFDoc.createInstance(
+                        xPageNumberField = self.xTextDocument.createInstance(
                             "com.sun.star.text.TextField.PageNumber")
-                        xPageNumberField.setPropertyValue(
-                            "NumberingType", uno.Any("short",ARABIC))
                         xPageNumberField.setPropertyValue("SubType", CURRENT)
+                        uno.invoke(xPageNumberField, "setPropertyValue",
+                            ("NumberingType", uno.Any("short",ARABIC)))
                         xFooterText.insertTextContent(xFooterText.End,
                             xPageNumberField, False)
                 else:
@@ -67,7 +66,7 @@ class FaxDocument(TextDocument):
                         False)
 
                 self.xTextDocument.unlockControllers()
-            except UnoException, exception:
+            except Exception, exception:
                 traceback.print_exc()
 
     def hasElement(self, sElement):
@@ -105,7 +104,7 @@ class FaxDocument(TextDocument):
             myFieldHandler.changeUserFieldContent("Fax",
                 Helper.getUnoObjectbyName(oUserDataAccess,
                 "facsimiletelephonenumber"))
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
 
     def killEmptyUserFields(self):
@@ -126,5 +125,5 @@ class FaxDocument(TextDocument):
                 if xTF is not None:
                     xTF.dispose()
 
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()

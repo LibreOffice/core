@@ -9,7 +9,6 @@ from com.sun.star.ui.dialogs.TemplateDescription import FILESAVE_AUTOEXTENSION, 
 from com.sun.star.ui.dialogs.ExtendedFilePickerElementIds import CHECKBOX_AUTOEXTENSION
 from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt.WindowClass import MODALTOP
-from com.sun.star.uno import Exception as UnoException
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.awt.VclWindowPeerAttribute import OK
 
@@ -30,7 +29,7 @@ class SystemDialog(object):
                 prova = uno.Any("[]short",(Type,))
                 #uno.invoke(prova, "initialize", (uno.Any("short",(Type,)),))
 
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
 
     @classmethod
@@ -81,7 +80,7 @@ class SystemDialog(object):
                 sPathList = self.systemDialog.getFiles()
                 self.sStorePath = sPathList[0]
 
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
 
         return self.sStorePath
@@ -111,7 +110,7 @@ class SystemDialog(object):
             if self.execute(self.systemDialog):
                 return self.systemDialog.getFiles()
 
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
 
         return None
@@ -169,7 +168,7 @@ class SystemDialog(object):
                 i += 1
             raise NullPointerException(
                 "UIName property not found for Filter " + filterName);
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return None
 
@@ -233,6 +232,6 @@ class SystemDialog(object):
             xPathSubst = xMSF.createInstance(
                 "com.sun.star.util.PathSubstitution")
             return xPathSubst
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()
             return None
