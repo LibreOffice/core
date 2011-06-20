@@ -2884,7 +2884,14 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
                 << ::std::endl;
         }
 #endif
-    const SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
+
+    const SwCntntNode *pCntNd = pPaM->GetCntntNode();
+    const SwTxtNode* pNd = pCntNd ? pCntNd->GetTxtNode() : NULL;
+
+    OSL_ENSURE(pNd, "What the hell, where's my text node");
+
+    if (!pNd)
+        return;
 
     if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN-1)
     {
