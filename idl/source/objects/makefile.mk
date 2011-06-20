@@ -29,6 +29,7 @@ PRJ=..$/..
 
 PRJNAME=idl
 TARGET=objects
+ENABLE_EXCEPTIONS=true
 
 # --- Settings -----------------------------------------------------------
 

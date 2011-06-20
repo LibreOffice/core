@@ -29,6 +29,7 @@ PRJ=..$/..
 
 PRJNAME=idl
 TARGET=cmptools
+ENABLE_EXCEPTIONS=true
 
 # --- Settings -----------------------------------------------------------
 
