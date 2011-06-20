@@ -67,7 +67,7 @@ struct SfxChildWinInfo
     Size                aSize;
     sal_uInt16              nFlags;
     String              aExtraString;
-    ByteString          aWinState;
+    rtl::OString        aWinState;
 
                         SfxChildWinInfo()
                         {

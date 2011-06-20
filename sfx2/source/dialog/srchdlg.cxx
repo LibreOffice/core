@@ -93,7 +93,7 @@ void SearchDialog::LoadConfig()
     SvtViewOptions aViewOpt( E_DIALOG, m_sConfigName );
     if ( aViewOpt.Exists() )
     {
-        m_sWinState = ByteString( aViewOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US );
+        m_sWinState = rtl::OUStringToOString(aViewOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US);
         Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
         ::rtl::OUString aTemp;
         if ( aUserItem >>= aTemp )
@@ -120,7 +120,7 @@ void SearchDialog::LoadConfig()
 void SearchDialog::SaveConfig()
 {
     SvtViewOptions aViewOpt( E_DIALOG, m_sConfigName );
-    aViewOpt.SetWindowState( rtl::OUString::createFromAscii( m_sWinState.GetBuffer() ) );
+    aViewOpt.SetWindowState(rtl::OStringToOUString(m_sWinState, RTL_TEXTENCODING_ASCII_US));
     String sUserData;
     sal_uInt16 i = 0, nCount = Min( m_aSearchEdit.GetEntryCount(), MAX_SAVE_COUNT );
     for ( ; i < nCount; ++i )
@@ -180,7 +180,7 @@ void SearchDialog::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
-        if ( m_sWinState.Len() )
+        if (!m_sWinState.isEmpty())
             SetWindowState( m_sWinState );
         m_bIsConstructed = sal_True;
     }

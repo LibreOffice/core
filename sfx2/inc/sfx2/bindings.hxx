@@ -31,6 +31,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
+#include "rtl/strbuf.hxx"
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -216,15 +217,15 @@ public:
 #ifdef DBG_UTIL
 #define ENTERREGISTRATIONS() EnterRegistrations(__FILE__, __LINE__)
 #define LEAVEREGISTRATIONS() LeaveRegistrations(USHRT_MAX, __FILE__, __LINE__)
-#define DENTERREGISTRATIONS(  ) \
-        EnterRegistrations( (ByteString(__FILE__).Append('(').Append(ByteString::CreateFromInt64((sal_uIntPtr)this).Append(')'))).GetBufferAccess(), __LINE__ )
+#define DENTERREGISTRATIONS() \
+        EnterRegistrations( rtl::OStringBuffer(__FILE__).append('(').append(reinterpret_cast<sal_Int64>(this)).append(')').getStr(), __LINE__ )
 #define DLEAVEREGISTRATIONS(  ) \
-        LeaveRegistrations( USHRT_MAX, (ByteString(__FILE__).Append('(').Append(ByteString::CreateFromInt64((sal_uIntPtr)this).Append(')'))).GetBufferAccess(), __LINE__ )
+        LeaveRegistrations( USHRT_MAX, rtl::OStringBuffer(__FILE__).append('(').append(reinterpret_cast<sal_Int64>(this)).append(')').getStr(), __LINE__ )
 #else
 #define ENTERREGISTRATIONS() EnterRegistrations()
 #define LEAVEREGISTRATIONS() LeaveRegistrations()
-#define DENTERREGISTRATIONS(  ) EnterRegistrations()
-#define DLEAVEREGISTRATIONS(  ) LeaveRegistrations()
+#define DENTERREGISTRATIONS() EnterRegistrations()
+#define DLEAVEREGISTRATIONS() LeaveRegistrations()
 #endif
 
 //--------------------------------------------------------------------
