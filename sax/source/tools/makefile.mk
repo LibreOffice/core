@@ -45,7 +45,11 @@ SLOFILES =	\
         $(SLO)$/fshelper.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
+.IF "$(COM)" == "MSC"
 SHL1IMPLIB= i$(TARGET)
+.ELSE
+SHL1IMPLIB= $(TARGET)$(DLLPOSTFIX)
+.ENDIF
 
 SHL1STDLIBS= \
                 $(CPPULIB)		\

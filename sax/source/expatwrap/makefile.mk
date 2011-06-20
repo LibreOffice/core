@@ -54,7 +54,11 @@ SLOFILES =\
         $(SLO)$/saxwriter.obj
 
 SHL1TARGET= $(TARGET)
+.IF "$(COM)" == "MSC"
 SHL1IMPLIB= i$(TARGET)
+.ELSE
+SHL1IMPLIB= $(TARGET)
+.ENDIF
 
 SHL1STDLIBS= \
         $(SALLIB)  \
