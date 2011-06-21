@@ -31,8 +31,6 @@ PRJ=..$/..$/..$/..
 PRJNAME=setup_native
 TARGET=sellangmsi
 
-.IF "$(GUI)"=="WNT"
-
 # --- Settings -----------------------------------------------------
 
 ENABLE_EXCEPTIONS=TRUE
@@ -41,6 +39,8 @@ DYNAMIC_CRT=
 USE_DEFFILE=TRUE
 
 .INCLUDE : settings.mk
+
+.IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
 CFLAGS+=-D_STLP_USE_STATIC_LIB
 
@@ -51,11 +51,12 @@ UWINAPILIB=
 SLOFILES = \
     $(SLO)$/sellang.obj
 
-SHL1STDLIBS=	kernel32.lib\
-                user32.lib\
-                advapi32.lib\
-                shell32.lib\
-                msi.lib
+SHL1STDLIBS= \
+    $(KERNEL32LIB)\
+    $(USER32LIB)\
+    $(ADVAPI32LIB)\
+    $(SHELL32LIB)\
+    $(MSILIB)
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib
 
@@ -68,11 +69,10 @@ SHL1BASE = 0x1c000000
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
+.ENDIF
+
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
-
-
-.ENDIF

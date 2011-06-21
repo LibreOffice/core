@@ -40,7 +40,7 @@ DYNAMIC_CRT=
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
 UWINAPILIB=
 
@@ -62,9 +62,9 @@ DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
 .ENDIF
+
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
-

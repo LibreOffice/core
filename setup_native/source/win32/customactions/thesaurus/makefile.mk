@@ -31,8 +31,6 @@ PRJ=..$/..$/..$/..
 PRJNAME=setup_native
 TARGET=thidxmsi
 
-.IF "$(GUI)"=="WNT"
-
 # --- Settings -----------------------------------------------------
 
 ENABLE_EXCEPTIONS=TRUE
@@ -41,6 +39,8 @@ DYNAMIC_CRT=
 USE_DEFFILE=TRUE
 
 .INCLUDE : settings.mk
+
+.IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
 CFLAGS+=-D_STLP_USE_STATIC_LIB
 
@@ -68,11 +68,10 @@ SHL1BASE = 0x1c000000
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
+.ENDIF
+
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
-
-
-.ENDIF
