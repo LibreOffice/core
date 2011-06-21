@@ -74,19 +74,18 @@ $program_dir = 'openoffice.org/basis-link/MacOS' if ($ENV{OS} eq 'MACOSX'); # FI
 
 my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 
+my $dllre = '\.so$';
+$dllre = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
+
 my %replaceable = (
-    $program_dir => '\.so',
+    $program_dir => "($dllre|\.rdb)",
+    $ure_lib_dir => "$dllre",
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
     'basis-link/share/config' => '\.zip$',
-    $program_dir => '\.rdb',
     'ure/share/misc' => '\.rdb'
 #    'share/uno_packages' => '\.zip$'
 );
-
-# strangely enough, OSX has those small differences...
-$replaceable{$program_dir} = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
-$replaceable{$ure_lib_dir} = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
 
 my @search_dirs = ( 'lib', 'bin', 'class' );
 
