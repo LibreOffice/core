@@ -35,8 +35,7 @@ $(eval $(call gb_CppunitTest_set_include,sd_uimpress,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_CppunitTest_set_defs,sd_uimpress,\
-    $$(DEFS) \
+$(eval $(call gb_CppunitTest_add_defs,sd_uimpress,\
     -DSD_DLLIMPLEMENTATION \
 ))
 

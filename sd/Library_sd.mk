@@ -47,8 +47,7 @@ $(eval $(call gb_Library_set_include,sd,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,sd,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,sd,\
     -DSD_DLLIMPLEMENTATION \
 ))
 

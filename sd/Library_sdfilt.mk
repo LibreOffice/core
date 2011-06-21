@@ -37,14 +37,12 @@ $(eval $(call gb_Library_set_include,sdfilt,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,sdfilt,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,sdfilt,\
     -DSD_DLLIMPLEMENTATION \
 ))
 
 ifneq ($(strip $(dbg_anim_log)$(DBG_ANIM_LOG)),)
-$(eval $(call gb_Library_set_defs,sdfilt,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,sdfilt,\
     -DDBG_ANIM_LOG \
 ))
 endif

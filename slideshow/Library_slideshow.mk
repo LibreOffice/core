@@ -37,15 +37,13 @@ $(eval $(call gb_Library_set_include,slideshow,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,slideshow,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,slideshow,\
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
     $(if $(filter TRUE,$(VERBOSE)),-DVERBOSE) \
 ))
 
 ifneq ($(strip $(debug)$(DEBUG)),)
-$(eval $(call gb_Library_set_defs,slideshow,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,slideshow,\
     -DBOOST_SP_ENABLE_DEBUG_HOOKS \
 ))
 endif
