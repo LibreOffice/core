@@ -515,7 +515,7 @@ SvtFileDialog::~SvtFileDialog()
     {
         // save window state
         SvtViewOptions aDlgOpt( E_DIALOG, _pImp->_aIniKey );
-        aDlgOpt.SetWindowState( String( GetWindowState(), osl_getThreadTextEncoding() ) );
+        aDlgOpt.SetWindowState(::rtl::OStringToOUString(GetWindowState(), osl_getThreadTextEncoding()));
         String sUserData = _pFileView->GetConfigString();
         aDlgOpt.SetUserItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserData" )),
                              makeAny( ::rtl::OUString( sUserData ) ) );

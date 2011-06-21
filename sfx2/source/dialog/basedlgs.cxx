@@ -127,8 +127,8 @@ void SfxModalDialog::SetDialogData_Impl()
 {
     // save settings (position and user data)
     SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nUniqId ) );
-    aDlgOpt.SetWindowState(
-        OUString::createFromAscii( GetWindowState( WINDOWSTATE_MASK_POS ).GetBuffer() ) );
+    aDlgOpt.SetWindowState(OStringToOUString(
+        GetWindowState(WINDOWSTATE_MASK_POS), RTL_TEXTENCODING_ASCII_US));
     if ( aExtraData.Len() )
         aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aExtraData ) ) );
 }
