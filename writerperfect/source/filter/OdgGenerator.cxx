@@ -40,6 +40,173 @@
 // remove this
 #define MULTIPAGE_WORKAROUND 1
 
+static inline double getAngle(double bx, double by)
+{
+    return fmod(2*M_PI + (by > 0.0 ? 1.0 : -1.0) * acos( bx / sqrt(bx * bx + by * by) ), 2*M_PI);
+}
+
+static void getEllipticalArcBBox(double x1, double y1,
+                                 double rx, double ry, double phi, bool largeArc, bool sweep, double x2, double y2,
+                                 double &xmin, double &ymin, double &xmax, double &ymax)
+{
+    if (rx < 0.0)
+        rx *= -1.0;
+    if (ry < 0.0)
+        ry *= -1.0;
+
+    if (rx == 0.0 || ry == 0.0)
+    {
+        xmin = (x1 < x2 ? x1 : x2);
+        xmax = (x1 > x2 ? x1 : x2);
+        ymin = (y1 < y2 ? y1 : y2);
+        ymax = (y1 > y2 ? y1 : y2);
+        return;
+    }
+
+    // F.6.5.1
+    const double x1prime = cos(phi)*(x1 - x2)/2 + sin(phi)*(y1 - y2)/2;
+    const double y1prime = -sin(phi)*(x1 - x2)/2 + cos(phi)*(y1 - y2)/2;
+
+    // F.6.5.2
+    double radicant = (rx*rx*ry*ry - rx*rx*y1prime*y1prime - ry*ry*x1prime*x1prime)/(rx*rx*y1prime*y1prime + ry*ry*x1prime*x1prime);
+    double cxprime = 0.0;
+    double cyprime = 0.0;
+    if (radicant < 0.0)
+    {
+        double ratio = rx/ry;
+        radicant = y1prime*y1prime + x1prime*x1prime/(ratio*ratio);
+        if (radicant < 0.0)
+        {
+            xmin = (x1 < x2 ? x1 : x2);
+            xmax = (x1 > x2 ? x1 : x2);
+            ymin = (y1 < y2 ? y1 : y2);
+            ymax = (y1 > y2 ? y1 : y2);
+            return;
+        }
+        ry=sqrt(radicant);
+        rx=ratio*ry;
+    }
+    else
+    {
+        double factor = (largeArc==sweep ? -1.0 : 1.0)*sqrt(radicant);
+
+        cxprime = factor*rx*y1prime/ry;
+        cyprime = -factor*ry*x1prime/rx;
+    }
+
+    // F.6.5.3
+    double cx = cxprime*cos(phi) - cyprime*sin(phi) + (x1 + x2)/2;
+    double cy = cxprime*sin(phi) + cyprime*cos(phi) + (y1 + y2)/2;
+
+    // now compute bounding box of the whole ellipse
+
+    // Parametrick equation of an ellipse:
+    // x(theta) = cx + rx*cos(theta)*cos(phi) - ry*sin(theta)*sin(phi)
+    // y(theta) = cy + rx*cos(theta)*sin(phi) + ry*sin(theta)*cos(phi)
+
+    // Compute local extrems
+    // 0 = -rx*sin(theta)*cos(phi) - ry*cos(theta)*sin(phi)
+    // 0 = -rx*sin(theta)*sin(phi) - ry*cos(theta)*cos(phi)
+
+    // Local extrems for X:
+    // theta = -atan(ry*tan(phi)/rx)
+    // and
+    // theta = M_PI -atan(ry*tan(phi)/rx)
+
+    // Local extrems for Y:
+    // theta = atan(ry/(tan(phi)*rx))
+    // and
+    // theta = M_PI + atan(ry/(tan(phi)*rx))
+
+    double txmin, txmax, tymin, tymax;
+
+    // First handle special cases
+    if (phi == 0 || phi == M_PI)
+    {
+        xmin = cx - rx;
+        txmin = getAngle(-rx, 0);
+        xmax = cx + rx;
+        txmax = getAngle(rx, 0);
+        ymin = cy - ry;
+        tymin = getAngle(0, -ry);
+        ymax = cy + ry;
+        tymax = getAngle(0, ry);
+    }
+    else if (phi == M_PI / 2.0 || phi == 3.0*M_PI/2.0)
+    {
+        xmin = cx - ry;
+        txmin = getAngle(-ry, 0);
+        xmax = cx + ry;
+        txmax = getAngle(ry, 0);
+        ymin = cy - rx;
+        tymin = getAngle(0, -rx);
+        ymax = cy + rx;
+        tymax = getAngle(0, rx);
+    }
+    else
+    {
+        txmin = -atan(ry*tan(phi)/rx);
+        txmax = M_PI - atan (ry*tan(phi)/rx);
+        xmin = cx + rx*cos(txmin)*cos(phi) - ry*sin(txmin)*sin(phi);
+        xmax = cx + rx*cos(txmax)*cos(phi) - ry*sin(txmax)*sin(phi);
+        if (xmin > xmax)
+        {
+            std::swap(xmin,xmax);
+            std::swap(txmin,txmax);
+        }
+        double tmpY = cy + rx*cos(txmin)*sin(phi) + ry*sin(txmin)*cos(phi);
+        txmin = getAngle(xmin - cx, tmpY - cy);
+        tmpY = cy + rx*cos(txmax)*sin(phi) + ry*sin(txmax)*cos(phi);
+        txmax = getAngle(xmax - cx, tmpY - cy);
+
+
+        tymin = atan(ry/(tan(phi)*rx));
+        tymax = atan(ry/(tan(phi)*rx))+M_PI;
+        ymin = cy + rx*cos(tymin)*sin(phi) + ry*sin(tymin)*cos(phi);
+        ymax = cy + rx*cos(tymax)*sin(phi) + ry*sin(tymax)*cos(phi);
+        if (ymin > ymax)
+        {
+            std::swap(ymin,ymax);
+            std::swap(tymin,tymax);
+        }
+        double tmpX = cx + rx*cos(tymin)*cos(phi) - ry*sin(tymin)*sin(phi);
+        tymin = getAngle(tmpX - cx, ymin - cy);
+        tmpX = cx + rx*cos(tymax)*cos(phi) - ry*sin(tymax)*sin(phi);
+        tymax = getAngle(tmpX - cx, ymax - cy);
+    }
+    double angle1 = getAngle(x1 - cx, y1 - cy);
+    double angle2 = getAngle(x2 - cx, y2 - cy);
+
+    // for sweep == 0 it is normal to have delta theta < 0
+    // but we don't care about the rotation direction for bounding box
+    if (!sweep)
+        std::swap(angle1, angle2);
+
+    // We cannot check directly for whether an angle is included in
+    // an interval of angles that cross the 360/0 degree boundary
+    // So here we will have to check for their absence in the complementary
+    // angle interval
+    bool otherArc = false;
+    if (angle1 > angle2)
+    {
+        std::swap(angle1, angle2);
+        otherArc = true;
+    }
+
+    // Check txmin
+    if ((!otherArc && (angle1 > txmin || angle2 < txmin)) || (otherArc && !(angle1 > txmin || angle2 < txmin)))
+        xmin = x1 < x2 ? x1 : x2;
+    // Check txmax
+    if ((!otherArc && (angle1 > txmax || angle2 < txmax)) || (otherArc && !(angle1 > txmax || angle2 < txmax)))
+        xmax = x1 > x2 ? x1 : x2;
+    // Check tymin
+    if ((!otherArc && (angle1 > tymin || angle2 < tymin)) || (otherArc && !(angle1 > tymin || angle2 < tymin)))
+        ymin = y1 < y2 ? y1 : y2;
+    // Check tymax
+    if ((!otherArc && (angle1 > tymax || angle2 < tymax)) || (otherArc && !(angle1 > tymax || angle2 < tymax)))
+        ymax = y1 > y2 ? y1 : y2;
+}
+
 static WPXString doubleToString(const double value)
 {
     WPXString tempString;
@@ -581,6 +748,8 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
     double py = path[0]["svg:y"]->getDouble();
     double qx = path[0]["svg:x"]->getDouble();
     double qy = path[0]["svg:y"]->getDouble();
+    double lastX = path[0]["svg:x"]->getDouble();
+    double lastY = path[0]["svg:y"]->getDouble();
     for(unsigned k = 0; k < path.count(); k++)
     {
         if (!path[k]["svg:x"] || !path[k]["svg:y"])
@@ -600,15 +769,23 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
             qx = (qx < path[k]["svg:x2"]->getDouble()) ? path[k]["svg:x2"]->getDouble() : qx;
             qy = (qy < path[k]["svg:y2"]->getDouble()) ? path[k]["svg:y2"]->getDouble() : qy;
         }
-#if 0
         if(path[k]["libwpg:path-action"]->getStr() == "A")
         {
-            px = (px > path[k]["svg:x"]->getDouble()-2*path[k]["svg:rx"]->getDouble()) ? path[k]["svg:x"]->getDouble()-2*path[k]["svg:rx"]->getDouble() : px;
-            py = (py > path[k]["svg:y"]->getDouble()-2*path[k]["svg:ry"]->getDouble()) ? path[k]["svg:y"]->getDouble()-2*path[k]["svg:ry"]->getDouble() : py;
-            qx = (qx < path[k]["svg:x"]->getDouble()+2*path[k]["svg:rx"]->getDouble()) ? path[k]["svg:x"]->getDouble()+2*path[k]["svg:rx"]->getDouble() : qx;
-            qy = (qy < path[k]["svg:y"]->getDouble()+2*path[k]["svg:ry"]->getDouble()) ? path[k]["svg:y"]->getDouble()+2*path[k]["svg:ry"]->getDouble() : qy;
+            double xmin, xmax, ymin, ymax;
+
+            getEllipticalArcBBox(lastX, lastY, path[k]["svg:rx"]->getDouble(), path[k]["svg:ry"]->getDouble(),
+                                 2.0*M_PI*(path[k]["libwpg:rotate"] ? path[k]["libwpg:rotate"]->getDouble() : 0.0),
+                                 path[k]["libwpg:large-arc"] ? path[k]["libwpg:large-arc"]->getInt() : 1,
+                                 path[k]["libwpg:sweep"] ? path[k]["libwpg:sweep"]->getInt() : 1,
+                                 path[k]["svg:x"]->getDouble(), path[k]["svg:y"]->getDouble(), xmin, ymin, xmax, ymax);
+
+            px = (px > xmin ? xmin : px);
+            py = (py > ymin ? ymin : py);
+            qx = (qx < xmax ? xmax : qx);
+            qy = (qy < ymax ? ymax : qy);
         }
-#endif
+        lastX = path[k]["svg:x"]->getDouble();
+        lastY = path[k]["svg:y"]->getDouble();
     }
     double vw = qx - px;
     double vh = qy - py;
@@ -643,9 +820,7 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
                 (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
             sValue.append(sElement);
         }
-        else if (path[i]["libwpg:path-action"]->getStr() == "L"
-        // approximate for the time being the elliptic arc by a line
-            || path[i]["libwpg:path-action"]->getStr() == "A")
+        else if (path[i]["libwpg:path-action"]->getStr() == "L")
         {
             sElement.sprintf("L%i %i", (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540),
                 (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
@@ -659,15 +834,15 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
                 (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
             sValue.append(sElement);
         }
-#if 0
         else if (path[i]["libwpg:path-action"]->getStr() == "A")
         {
             sElement.sprintf("A%i %i %i %i %i %i %i", (unsigned)((path[i]["svg:rx"]->getDouble())*2540),
                 (int)((path[i]["svg:ry"]->getDouble())*2540), (path[i]["libwpg:rotate"] ? path[i]["libwpg:rotate"]->getInt() : 0),
-                0, 0, (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540), (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
+                (path[i]["libwpg:large-arc"] ? path[i]["libwpg:large-arc"]->getInt() : 1),
+                (path[i]["libwpg:sweep"] ? path[i]["libwpg:sweep"]->getInt() : 1),
+                (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540), (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
             sValue.append(sElement);
         }
-#endif
         else if (path[i]["libwpg:path-action"]->getStr() == "Z" && i >= (path.count() - 1))
             sValue.append(" Z");
     }
