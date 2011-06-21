@@ -125,13 +125,13 @@ int main( int argc, char** argv )
         }
         if (aBuf[0] == '@' )
         {
-            ByteString aToken;
+            rtl::OString aToken;
             String aRespName( &aBuf[1], gsl_getSystemTextEncoding());
             SimpleConfig aConfig( aRespName );
-            while ( (aToken = aConfig.GetNext()) != "")
+            while ((aToken = aConfig.getNext()).getLength())
             {
                 char aBuf2[255];
-                (void) strcpy( aBuf2, aToken.GetBuffer());
+                strcpy( aBuf2, aToken.getStr());
                 if ( aBuf[0] == '-' && aBuf[1] == 'p' && aBuf[2] == '=' )
                 {
                     strcpy(pFileNamePrefix, &aBuf[3]);

@@ -53,26 +53,26 @@ SimpleConfig::~SimpleConfig()
     aFileStream.Close ();
 }
 
-ByteString SimpleConfig::GetNext()
+rtl::OString SimpleConfig::getNext()
 {
-    if ( aStringBuffer =="" )
+    if (aStringBuffer == "")
       while ((aStringBuffer = GetNextLine()) == "\t") ; //solange bis != "\t"
-    if ( aStringBuffer =="" )
-        return ByteString();
+    if ( aStringBuffer == "" )
+        return rtl::OString();
 
-    ByteString aString = aStringBuffer.GetToken(0,'\t');
-    aStringBuffer.Erase(0, aString.Len()+1);
+    rtl::OString aString = aStringBuffer.GetToken(0,'\t');
+    aStringBuffer.Erase(0, aString.getLength()+1);
 
     aStringBuffer.EraseLeadingChars( '\t' );
 
     return aString;
 }
 
-ByteString  SimpleConfig::GetNextLine()
+rtl::OString SimpleConfig::GetNextLine()
 {
     aFileStream.ReadLine ( aTmpStr );
     if ( aTmpStr.Search( "#" ) == 0 )
-        return "\t";
+        return rtl::OString('\t');
     aTmpStr = aTmpStr.EraseLeadingChars();
     aTmpStr = aTmpStr.EraseTrailingChars();
     while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND ) ;
