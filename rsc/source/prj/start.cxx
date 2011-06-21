@@ -162,11 +162,7 @@ static sal_Bool CallPrePro( const ByteString& rPrePro,
         }
     }
 
-#if defined UNX
     nExit = spawnvp( P_WAIT, rPrePro.GetBuffer(), (char* const*)pCmdL->GetBlock() );
-#else
-    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char**)pCmdL->GetBlock() );
-#endif
 
     if ( fRspFile )
         #if OSL_DEBUG_LEVEL > 5
@@ -260,11 +256,7 @@ static sal_Bool CallRsc2( ByteString aRsc2Name,
         printf( "\n" );
     }
 
-#if defined UNX
     nExit = spawnvp( P_WAIT, aRsc2Name.GetBuffer(), (char* const*)aNewCmdL.GetBlock() );
-#else
-    nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (const char**)aNewCmdL.GetBlock() );
-#endif
 
     if( fRspFile )
         #if OSL_DEBUG_LEVEL > 5
