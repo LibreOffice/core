@@ -33,6 +33,7 @@ $(eval $(call gb_Library_set_componentfile,dbui,dbaccess/util/dbu))
 $(eval $(call gb_Library_set_include,dbui,\
 	-I$(SRCDIR)/dbaccess/inc \
 	-I$(SRCDIR)/dbaccess/source/ui/inc \
+	-I$(SRCDIR)/dbaccess/source/ui/dlg \
 	-I$(SRCDIR)/dbaccess/source/inc \
 	-I$(SRCDIR)/dbaccess/inc/pch \
 	$$(SOLARINC) \
@@ -83,6 +84,7 @@ $(eval $(call gb_Library_add_linked_libs,dbui,\
 	cppuhelper \
 	cppu \
 	dbtools \
+	editeng \
 	i18nisolang1 \
 	fwe \
 	sal \
@@ -90,7 +92,6 @@ $(eval $(call gb_Library_add_linked_libs,dbui,\
 	sfx \
 	svl \
 	svt \
-	stl \
 	vcl \
 	tl \
 	utl \
@@ -100,7 +101,6 @@ $(eval $(call gb_Library_add_linked_libs,dbui,\
 	tk \
 	sot \
 	dba \
-	vos3 \
     $(gb_STDLIBS) \
 ))
 ifeq ($(OS),WNT)

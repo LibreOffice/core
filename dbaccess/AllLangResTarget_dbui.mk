@@ -86,71 +86,11 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbui,\
 	dbaccess/source/ui/uno/dbinteraction.src \
 ))
 
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/dlg/admincontrols.src) : $(WORKDIR)/inc/dbaccess/AutoControls.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/dlg/AutoControls.src) : $(WORKDIR)/inc/dbaccess/AutoControls.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/dlg/ConnectionPage.src) : $(WORKDIR)/inc/dbaccess/AutoControls.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/dlg/dbadmin.src) : $(WORKDIR)/inc/dbaccess/AutoControls.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/dlg/dbadmin2.src) : $(WORKDIR)/inc/dbaccess/AutoControls.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/dlg/dbadminsetup.src) : $(WORKDIR)/inc/dbaccess/AutoControls.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/dlg/textconnectionsettings.src) : $(WORKDIR)/inc/dbaccess/AutoControls.hrc
+$(eval $(call gb_SrsTarget_add_templates,dbaccess/dbu,\
+    dbaccess/source/ui/dlg/AutoControls_tmpl.hrc \
+    dbaccess/source/ui/inc/toolbox_tmpl.hrc \
+))
 
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/app/app.src) : $(WORKDIR)/inc/dbaccess/toolbox.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/browser/sbabrw.src) : $(WORKDIR)/inc/dbaccess/toolbox.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/browser/sbagrid.src) : $(WORKDIR)/inc/dbaccess/toolbox.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/dlg/dbadmin2.src) : $(WORKDIR)/inc/dbaccess/toolbox.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/dlg/queryfilter.src) : $(WORKDIR)/inc/dbaccess/toolbox.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/querydesign/query.src) : $(WORKDIR)/inc/dbaccess/toolbox.hrc
-$(call gb_SrsPartTarget_get_target,dbaccess/source/ui/tabledesign/table.src) : $(WORKDIR)/inc/dbaccess/toolbox.hrc
-
-# hack !!!
-# just a temporary - globlmn.hrc about to be removed!
-ifeq ($(strip $(WITH_LANG)),)
-$(WORKDIR)/inc/dbaccess/AutoControls.hrc : $(SRCDIR)/dbaccess/source/ui/dlg/AutoControls_tmpl.hrc
-	echo copying $@
-	-mkdir -p $(WORKDIR)/inc/dbaccess
-	cp $(SRCDIR)/dbaccess/source/ui/dlg/AutoControls_tmpl.hrc $(WORKDIR)/inc/dbaccess/AutoControls.hrc
-	rm -f $(WORKDIR)/inc/dbaccess/lastrun.mk
-
-$(WORKDIR)/inc/dbaccess/toolbox.hrc : $(SRCDIR)/dbaccess/source/ui/inc/toolbox_tmpl.hrc
-	echo copying $@
-	-mkdir -p $(WORKDIR)/inc/dbaccess
-	cp $(SRCDIR)/dbaccess/source/ui/inc/toolbox_tmpl.hrc $(WORKDIR)/inc/dbaccess/toolbox.hrc
-	rm -f $(WORKDIR)/inc/dbaccess/lastrun.mk
-else
--include $(WORKDIR)/inc/dbaccess/lastrun.mk
-ifneq ($(gb_lastrun_globlmn),MERGED)
-.PHONY : $(WORKDIR)/inc/dbaccess/toolbox.hrc $(WORKDIR)/inc/dbaccess/AutoControls.hrc
-endif
-
-$(WORKDIR)/inc/dbaccess/AutoControls.hrc : $(SRCDIR)/dbaccess/source/ui/dlg/AutoControls_tmpl.hrc $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf
-	echo merging $@
-	-mkdir -p $(WORKDIR)/inc/dbaccess
-	rm -f $(WORKDIR)/inc/dbaccess/lastrun.mk
-	echo gb_lastrun_globlmn:=MERGED > $(WORKDIR)/inc/dbaccess/lastrun.mk
-	$(call gb_Helper_abbreviate_dirs_native, \
-		$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
-		-p svx \
-		 -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/dbaccess/inc/localize.sdf -l all)
-
-$(WORKDIR)/inc/dbaccess/toolbox.hrc : $(SRCDIR)/dbaccess/source/ui/inc/toolbox.hrc $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf
-	echo merging $@
-	-mkdir -p $(WORKDIR)/inc/dbaccess
-	rm -f $(WORKDIR)/inc/dbaccess/lastrun.mk
-	echo gb_lastrun_globlmn:=MERGED > $(WORKDIR)/inc/dbaccess/lastrun.mk
-	$(call gb_Helper_abbreviate_dirs_native, \
-		$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
-		-p svx \
-		 -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/dbaccess/inc/localize.sdf -l all)
-
-endif
-
-.PHONY : $(WORKDIR)/inc/dbaccess/toolbox.hrc_clean $(WORKDIR)/inc/dbaccess/AutoControls.hrc_clean
-$(WORKDIR)/inc/dbaccess/AutoControls.hrc_clean :
-	rm -f $(WORKDIR)/inc/dbaccess/lastrun.mk \
-		$(WORKDIR)/inc/dbaccess/AutoControls.hrc
-
-$(WORKDIR)/inc/dbaccess/toolbox.hrc_clean :
-	rm -f $(WORKDIR)/inc/dbaccess/lastrun.mk \
-		$(WORKDIR)/inc/dbaccess/toolbox.hrc
+$(call gb_SrsTarget_get_target,dbaccess/dbui) :| $(OUTDIR)/inc/svx/globlmn.hrc
 
 # vim: set noet sw=4 ts=4:

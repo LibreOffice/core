@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
+#include "SharedConnection.hxx"
 
 #include "datasource.hxx"
 #include "module_dba.hxx"
@@ -37,7 +38,6 @@
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include "connection.hxx"
-#include "SharedConnection.hxx"
 #include "databasedocument.hxx"
 #include "OAuthenticationContinuation.hxx"
 

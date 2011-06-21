@@ -24,7 +24,7 @@
  *
 ************************************************************************/
 
-#include "AutoControls.hrc"
+#include "AutoControlsDef.hrc"
 #include "dbu_dlg.hrc"
 #include "admincontrols.hrc"
 

@@ -48,7 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,rpt,\
     cppu \
     cppuhelper \
     dbtools \
-    dbu \
+    dbui \
     editeng \
     fwe \
     i18nisolang1 \

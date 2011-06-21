@@ -69,6 +69,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/docfilt.hxx>
+#include <AutoControlsDef.hrc>
 
 #ifdef _ADO_DATALINK_BROWSE_
 #include <vcl/sysdata.hxx>

@@ -40,15 +40,13 @@ $(eval $(call gb_Library_set_include,dbu,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,dbu,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,dbu,\
     -DDBACCESS_DLLIMPLEMENTATION \
     $(if $(filter YES,$(SYSTEM_ODBC_HEADERS)),-DSYSTEM_ODBC_HEADERS) \
 ))
 
 ifeq (,$(strip $(PROF_EDITION)))
-$(eval $(call gb_Library_set_defs,dbu,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,dbu,\
     -DWINDOWS_VISTA_PSDK \
 ))
 endif
