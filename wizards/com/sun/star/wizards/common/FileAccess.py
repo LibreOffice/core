@@ -3,7 +3,6 @@ from NoValidPathException import *
 from com.sun.star.ucb import CommandAbortedException
 from com.sun.star.awt.VclWindowPeerAttribute import OK, YES_NO
 import types
-from os import path as osPath
 
 '''
 This class delivers static convenience methods
@@ -406,14 +405,33 @@ class FileAccess(object):
                     NameVectorAppend(i)
                     TitleVectorAppend(xDocInterface.Title)
 
-            LocLayoutFiles[1] = sorted(NameVector)
-            LocLayoutFiles[0] = sorted(TitleVector)
+            LocLayoutFiles[1] = NameVector
+            LocLayoutFiles[0] = TitleVector
 
         except Exception, exception:
             traceback.print_exc()
 
-        return LocLayoutFiles
+        return self.__bubblesortList(LocLayoutFiles)
 
+    '''
+    This function bubble sorts an array of with 2 dimensions.
+    The default sorting order is the first dimension
+    Only if sort2ndValue is True the second dimension is
+    the relevant for the sorting order
+    '''
+
+    @classmethod
+    def __bubblesortList(self, SortList):
+        SortCount = len(SortList[0])
+        DimCount = len(SortList)
+        for i in xrange(SortCount):
+            for t in xrange(SortCount - i - 1):
+                if SortList[0][t] > SortList[0][t + 1]:
+                    for k in xrange(DimCount):
+                        DisplayDummy = SortList[k][t];
+                        SortList[k][t] = SortList[k][t + 1];
+                        SortList[k][t + 1] = DisplayDummy
+        return SortList
     '''
     We search in all given path for a given file
     @param _sPath
