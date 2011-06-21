@@ -698,8 +698,8 @@ void CustomAnimationCreateDialog::storePosition()
     // save settings (screen position and current page)
     SvtViewOptions aDlgOpt(
         E_TABDIALOG, String::CreateFromInt32( DLG_CUSTOMANIMATION_CREATE ) );
-    aDlgOpt.SetWindowState(
-        OUString::createFromAscii( GetWindowState( WINDOWSTATE_MASK_POS ).GetBuffer() ) );
+    aDlgOpt.SetWindowState(OStringToOUString(
+        GetWindowState(WINDOWSTATE_MASK_POS), RTL_TEXTENCODING_ASCII_US));
 }
 
 }
