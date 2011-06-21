@@ -60,8 +60,6 @@ class Directory : public Persistent
                         Directory(
                             const char *        i_rLocation );
                         Directory(
-                            const String &      i_rLocation );
-                        Directory(
                             const Directory &   i_rDir );
     virtual             ~Directory();
 

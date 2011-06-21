@@ -255,9 +255,6 @@ class NumeratedList : public csi::xml::AnElement
   public:
                         NumeratedList()
                                 :   csi::xml::AnElement("ol") {}
-
-    ListItem &          AddItem(
-                            DYN csi::xml::Item* let_dpItem = 0 );
   private:
     virtual bool        LineBreakAfterBeginTag() const;
 };

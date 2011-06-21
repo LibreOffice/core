@@ -55,10 +55,6 @@ class DirectoryChain
   public:
                         DirectoryChain();
                         DirectoryChain(
-                            const char *        i_sPath,
-                            bool                i_bPathIsAlwaysDir = false,
-                            const char *        i_sDelimiter = Delimiter() );
-                        DirectoryChain(
                             const DirectoryChain &
                                                 i_rDC );
                         ~DirectoryChain();

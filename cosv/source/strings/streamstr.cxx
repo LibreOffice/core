@@ -84,37 +84,6 @@ StreamStr::StreamStr( const char *  i_sInitStr,
     pEnd = pCur;
 }
 
-StreamStr::StreamStr( size_type         i_nGuessedCapacity,
-                      const char *      str1,
-                      const char *      str2,
-                                        ... )
-    :   bostream(),
-        nCapacity1( i_nGuessedCapacity + 1 ),
-        dpData( new char [i_nGuessedCapacity + 1] ),
-        pEnd(dpData),
-        pCur(dpData),
-        eMode(str::overwrite)
-{
-    *pEnd = '\0';
-
-    operator<<(str1);
-    operator<<(str2);
-
-    ::va_list ap;
-
-    va_start(ap, str2);
-    for ( const char * strAdd = va_arg(ap,const char*);
-          strAdd != 0;
-          strAdd = va_arg(ap,const char*) )
-    {
-        size_type nLen = strlen(strAdd);
-        ProvideAddingSize( nLen );
-        memcpy(pCur, strAdd, nLen);
-        Advance(nLen);
-    }  // end for
-    va_end(ap);
-}
-
 StreamStr::StreamStr( const self & i_rOther )
     :   bostream(),
         nCapacity1( i_rOther.nCapacity1 ),
@@ -124,25 +93,6 @@ StreamStr::StreamStr( const self & i_rOther )
         eMode(i_rOther.eMode)
 {
     strcpy( dpData, i_rOther.dpData );      // SAFE STRCPY (#100211# - checked)
-}
-
-StreamStr::StreamStr(csv::bstream & i_source)
-    :   bostream(),
-        nCapacity1(0),
-        dpData(0),
-        pEnd(0),
-        pCur(0),
-        eMode(str::overwrite)
-{
-    i_source.seek(0, csv::end);
-    nCapacity1 = static_cast<size_type>(i_source.position()) + 1;
-    i_source.seek(0);
-
-    dpData = new char[nCapacity1];
-    i_source.read(dpData, nCapacity1 - 1);
-    pCur = dpData + nCapacity1 - 1;
-    pEnd = pCur;
-    *pCur = '\0';
 }
 
 StreamStr::~StreamStr()
@@ -355,33 +305,6 @@ StreamStr::resize( size_type i_nMinimumCapacity )
     Resize(i_nMinimumCapacity);
 }
 
-void
-StreamStr::swap( StreamStr & io_swap )
-{
-    size_type
-        n = io_swap.nCapacity1;
-    io_swap.nCapacity1 = nCapacity1;
-    nCapacity1 = n;
-
-    char *
-        p = io_swap.dpData;
-    io_swap.dpData = dpData;
-    dpData = p;
-
-    p = io_swap.pEnd;
-    io_swap.pEnd = pEnd;
-    pEnd = p;
-
-    p = io_swap.pCur;
-    io_swap.pCur = pCur;
-    pCur = p;
-
-    insert_mode
-        m = io_swap.eMode;
-    io_swap.eMode = eMode;
-    eMode = m;
-}
-
 StreamStr &
 StreamStr::seekp( seek_type           i_nCount,
                   seek_dir            i_eDirection )
@@ -417,56 +340,6 @@ StreamStr::set_insert_mode( insert_mode i_eMode )
 {
     eMode = i_eMode;
     return *this;
-}
-
-void
-StreamStr::push_front( const char * i_str )
-{
-    insert_mode eOriginalMode = eMode;
-    char * pOriginalCur = pCur;
-    eMode = str::insert;
-    pCur = dpData;
-
-    operator<<(i_str);
-
-    eMode = eOriginalMode;
-    pCur = pOriginalCur + strlen(i_str);
-}
-
-void
-StreamStr::push_front( char i_c )
-{
-    insert_mode eOriginalMode = eMode;
-    char * pOriginalCur = pCur;
-    eMode = str::insert;
-    pCur = dpData;
-
-    operator<<(i_c);
-
-    eMode = eOriginalMode;
-    pCur = pOriginalCur + 1;
-}
-
-void
-StreamStr::push_back( const char * i_str )
-{
-    insert_mode eOriginalMode = eMode;
-    eMode = str::overwrite;
-
-    operator<<(i_str);
-
-    eMode = eOriginalMode;
-}
-
-void
-StreamStr::push_back( char i_c )
-{
-    insert_mode eOriginalMode = eMode;
-    eMode = str::overwrite;
-
-    operator<<(i_c);
-
-    eMode = eOriginalMode;
 }
 
 void
@@ -588,56 +461,6 @@ StreamStr::strip_frontback_whitespace()
 }
 
 void
-StreamStr::remove(  iterator            i_begin,
-                    iterator            i_end )
-{
-    csv_assert(i_begin >= dpData AND i_begin <= pEnd);
-    csv_assert(i_end >= dpData AND i_end <= pEnd);
-    csv_assert(i_end >= i_begin);
-    MoveData(i_end, pEnd, i_begin - i_end);
-    pCur = pEnd;
-}
-
-void
-StreamStr::replace( position_type       i_nStart,
-                    size_type           i_nSize,
-                    Area                i_aReplacement )
-{
-    if (i_nStart >= length() OR i_nSize < 1)
-      return;
-
-    insert_mode eOldMode = eMode;
-    eMode = str::insert;
-    pCur = dpData + i_nStart;
-
-    size_type anz = min( length() - i_nStart, i_nSize );
-
-    if ( anz < i_aReplacement.nLength )
-    {
-        ProvideAddingSize( i_aReplacement.nLength - anz );
-    }
-    else if ( anz > i_aReplacement.nLength )
-    {
-        seek_type nMove = seek_type(anz - i_aReplacement.nLength);
-
-        MoveData( dpData + i_nStart + anz,
-                  pEnd,
-                  -nMove );
-        pEnd -= nMove;
-        *pEnd = '\0';
-    }
-
-    if (i_aReplacement.nLength > 0)
-    {
-        memcpy( dpData + i_nStart, i_aReplacement.sStr, i_aReplacement.nLength );
-        Advance(i_aReplacement.nLength);
-    }
-
-    eMode = eOldMode;
-    pCur = pEnd;
-}
-
-void
 StreamStr::replace_all( char i_cCarToSearch,
                         char i_cReplacement )
 {
@@ -677,30 +500,6 @@ StreamStr::to_upper( position_type       i_nStart,
         }
     }
     return *this;
-}
-
-String
-StreamStr::token( position_type i_nNr,
-                  char          i_cSplit ) const
-{
-    // Find begin:
-    const char * pTokenBegin = dpData;
-       for ( position_type nNr = i_nNr;
-          nNr > 0;
-          --nNr )
-    {
-        pTokenBegin = strchr(pTokenBegin,i_cSplit);
-        if (pTokenBegin == 0)
-            return String("");
-        ++pTokenBegin;
-    }
-
-    // Find end:
-    const char * pTokenEnd = strchr(pTokenBegin, i_cSplit);
-    if (pTokenEnd == 0)
-        pTokenEnd = pEnd;
-
-    return String(pTokenBegin, size_type(pTokenEnd-pTokenBegin) );
 }
 
 class StreamStrPool

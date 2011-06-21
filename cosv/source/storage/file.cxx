@@ -36,14 +36,6 @@ namespace csv
 {
 
 
-File::File( uintt  i_nMode )
-    :   // aPath,
-        pStream(0),
-        nMode(i_nMode),
-        eLastIO(io_none)
-{
-}
-
 File::File( const ploc::Path &  i_rLocation,
             uintt               i_nMode )
     :   aPath(i_rLocation),
@@ -75,39 +67,6 @@ File::~File()
 {
     if ( inq_is_open() )
         close();
-}
-
-bool
-File::Assign( ploc::Path i_rLocation )
-{
-    if (is_open() )
-        return false;
-
-    InvalidatePath();
-    aPath = i_rLocation;
-    return true;
-}
-
-bool
-File::Assign( const char * i_sLocation )
-{
-    if (is_open() )
-        return false;
-
-    InvalidatePath();
-    aPath.Set( i_sLocation );
-    return true;
-}
-
-bool
-File::Assign( const String & i_sLocation )
-{
-    if (is_open() )
-        return false;
-
-    InvalidatePath();
-    aPath.Set( i_sLocation );
-    return true;
 }
 
 uintt

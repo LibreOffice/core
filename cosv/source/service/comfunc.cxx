@@ -48,19 +48,6 @@ X_Default::GetInfo( ostream & o_rOutputMedium ) const
                     << Endl;
 }
 
-intt
-count_chars(const char * str, char c)
-{
-    intt nCount = 0;
-    for ( const char * pSpc = strchr(str, c);
-          pSpc != 0;
-          pSpc = strchr(pSpc+1, c) )
-    {
-        nCount++;
-    }
-    return nCount;
-}
-
 }   // namespace csv
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

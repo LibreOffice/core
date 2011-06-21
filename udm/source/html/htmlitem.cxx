@@ -176,15 +176,6 @@ ListItem::LineBreakAfterEndTag() const
      return true;
 }
 
-
-
-
-ListItem &
-NumeratedList::AddItem( DYN csi::xml::Item* let_dpItem )
-{
-    return PushElem( *this, new ListItem, let_dpItem );
-}
-
 bool
 NumeratedList::LineBreakAfterBeginTag() const
 {

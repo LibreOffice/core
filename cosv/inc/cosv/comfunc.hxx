@@ -51,7 +51,6 @@ inline bool         in_range(E low, E val, E high);    // return low <= val < hi
 // string functions
 inline const char * valid_str(const char * str);
 inline bool         no_str(const char * str);       // return !str || !strlen(str)
-intt                count_chars(const char * str, char c);
 
 
 // IMPLEMENTATION

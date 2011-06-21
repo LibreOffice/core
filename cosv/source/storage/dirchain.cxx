@@ -45,13 +45,6 @@ DirectoryChain::DirectoryChain()
 {
 }
 
-DirectoryChain::DirectoryChain( const char *        i_sSubPath,
-                                bool                i_bPathIsAlwaysDir,
-                                const char *        i_sDelimiter        )
-{
-    Set( i_sSubPath, i_bPathIsAlwaysDir, i_sDelimiter );
-}
-
 DirectoryChain::~DirectoryChain()
 {
 }

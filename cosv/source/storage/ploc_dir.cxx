@@ -59,11 +59,6 @@ Directory::Directory( const char * i_rLocation )
 {
 }
 
-Directory::Directory( const String & i_rLocation )
-    :   aPath(i_rLocation.c_str(), true)
-{
-}
-
 Directory::~Directory()
 {
 }
