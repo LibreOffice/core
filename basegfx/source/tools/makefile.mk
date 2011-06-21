@@ -44,7 +44,8 @@ SLOFILES= $(SLO)$/b2dclipstate.obj	\
           $(SLO)$/keystoplerp.obj	\
           $(SLO)$/liangbarsky.obj	\
           $(SLO)$/tools.obj		    \
-          $(SLO)$/unopolypolygon.obj
+          $(SLO)$/unopolypolygon.obj\
+          $(SLO)$/unotools.obj
 
 # --- Targets ----------------------------------
 
