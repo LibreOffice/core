@@ -645,7 +645,7 @@ gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := $(gb_Helper_set_ld_path)
 # SrsPartTarget class
 
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc
-gb_SrsPartTarget_RSCCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_SrsPartTarget_RSCTARGET)
+gb_SrsPartTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_SrsPartTarget_RSCTARGET)
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_SrsPartTarget__command_dep
