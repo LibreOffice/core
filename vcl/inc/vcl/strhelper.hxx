@@ -58,14 +58,12 @@ ByteString VCL_DLLPUBLIC WhitespaceToSpace( const ByteString&, sal_Bool bProtect
 // parses the first double in the string; decimal is '.' only
 inline double VCL_DLLPUBLIC StringToDouble( const String& rStr )
 {
-    rtl_math_ConversionStatus eStatus;
-    return rtl::math::stringToDouble( rStr, sal_Unicode('.'), sal_Unicode(0), &eStatus, NULL);
+    return rtl::math::stringToDouble(rStr, sal_Unicode('.'), sal_Unicode(0));
 }
 
 inline double VCL_DLLPUBLIC StringToDouble( const ByteString& rStr )
 {
-    rtl_math_ConversionStatus eStatus;
-    return rtl::math::stringToDouble( rtl::OStringToOUString( rStr, osl_getThreadTextEncoding() ), sal_Unicode('.'), sal_Unicode(0), &eStatus, NULL);
+    return rtl::math::stringToDouble(rtl::OStringToOUString( rStr, osl_getThreadTextEncoding() ), sal_Unicode('.'), sal_Unicode(0));
 }
 
 // fills a character buffer with the string representation of a double
