@@ -34,7 +34,7 @@ TARFILE_MD5=bd30e9cf5523cdfc019b94f5e1d7fd19
     # from <https://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/
     #  cppunit-1.12.1.tar.gz/download>
 
-PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix.patch avoid-synthetised-destructor.patch
+PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix.patch avoid-synthetised-destructor.patch android.patch
     # solarisfinite.patch: see <https://sourceforge.net/tracker/?func=detail&
     #  aid=2912590&group_id=11795&atid=311795>
     # warnings.patch: see <https://sourceforge.net/tracker/?func=detail&
@@ -149,7 +149,7 @@ EXTRPATH = NONE
 OUT2LIB = ooo-install/lib/libcppunit-1.12.a
 .ELIF "$(OS)" == "OPENBSD"
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1.0
-.ELIF "$(OS)" == "IOS"
+.ELIF "$(OS)" == "IOS" || "$(OS)" == "ANDROID"
 OUT2LIB = ooo-install/lib/libcppunit.a
 .ELSE
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1
