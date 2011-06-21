@@ -740,6 +740,9 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
 {
     if(path.count() == 0)
         return;
+    // This must be a mistake and we do not want to crash lower
+    if(path[0]["libwpg:path-action"]->getStr() == "Z")
+        return;
 
     // try to find the bounding box
     // this is simple convex hull technique, the bounding box might not be
