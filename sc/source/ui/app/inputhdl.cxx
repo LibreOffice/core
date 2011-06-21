@@ -3082,7 +3082,7 @@ sal_Bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit /*
     sal_Bool bCursorKey = EditEngine::DoesKeyMoveCursor(rKEvt);
     sal_Bool bInsKey = ( nCode == KEY_INSERT && !nModi );   // Insert wie Cursortasten behandeln
     if ( !bUsed && !bSkip && ( bDoEnter || EditEngine::DoesKeyChangeText(rKEvt) ||
-                    ( eMode != SC_INPUT_NONE && ( bCursorKey || bInsKey ) ) ) && pActiveViewSh)
+                    ( eMode != SC_INPUT_NONE && ( bCursorKey || bInsKey ) ) ) )
     {
         HideTip();
         HideTipBelow();
