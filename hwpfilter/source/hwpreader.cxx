@@ -538,12 +538,12 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                         if( (fd = open( filename , O_CREAT | O_WRONLY , 0666)) >= 0 )
 #endif
                         {
-                            write( fd, emp->data, emp->size );
+                            size_t nWritten = write(fd, emp->data, emp->size);
+                            OSL_VERIFY(nWritten == emp->size);
                             close(fd);
                         }
 #ifdef _WIN32
-                        int j;
-                        for( j = 0 ; j < (int)strlen( dirname ) ; j++)
+                        for(int j = 0 ; j < (int)strlen( dirname ) ; j++)
                         {
                             if( dirname[j] == '\\' ) buf[j] = '/';
                             else buf[j] = dirname[j];
