@@ -31,15 +31,9 @@ $(eval $(call gb_Library_set_include,sm,\
         -I$(realpath $(SRCDIR)/starmath/inc/pch) \
         -I$(realpath $(SRCDIR)/starmath/inc) \
         -I$(WORKDIR)/SdiTarget/starmath/sdi \
-        -I$(WORKDIR)/Misc/starmath/ \
         $$(INCLUDE) \
         -I$(OUTDIR)/inc/offuh \
         -I$(OUTDIR)/inc \
-))
-
-$(eval $(call gb_Library_add_defs,sm,\
-        -DSMDLL \
-        -DSC_INFO_OSVERSION=\"$(OS)\" \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sm,\
@@ -59,7 +53,6 @@ $(eval $(call gb_Library_add_linked_libs,sm,\
         tl \
         utl \
         vcl \
-	ucbhelper \
 	xo \
 ))
 
@@ -73,6 +66,7 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/dialog \
         starmath/source/document \
         starmath/source/edit \
+        starmath/source/eqnolefilehdr \
         starmath/source/format \
         starmath/source/mathmlexport \
         starmath/source/mathmlimport \
@@ -80,8 +74,7 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/node \
         starmath/source/parse \
         starmath/source/rect \
-        starmath/source/register \
-	starmath/source/smdll \
+		starmath/source/smdll \
         starmath/source/smmod \
         starmath/source/symbol \
         starmath/source/toolbox \
