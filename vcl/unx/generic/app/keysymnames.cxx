@@ -583,7 +583,7 @@ static const keyboard_layout type6_layout[] =
 
 const char* SalDisplay::GetKeyboardName( bool bRefresh )
 {
-    if( bRefresh || ! m_aKeyboardName.Len() )
+    if (bRefresh || m_aKeyboardName.isEmpty())
     {
 #if defined(SOLARIS)
         if( IsLocal() )
@@ -665,10 +665,10 @@ const char* SalDisplay::GetKeyboardName( bool bRefresh )
             }
         }
 #endif
-        if( ! m_aKeyboardName.Len() )
+        if (m_aKeyboardName.isEmpty())
             m_aKeyboardName = "<unknown keyboard>";
     }
-    return m_aKeyboardName.GetBuffer();
+    return m_aKeyboardName.getStr();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
