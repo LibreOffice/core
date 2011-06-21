@@ -40,12 +40,12 @@
 #include <vcl/svapp.hxx>
 
 #include <cppuhelper/implbase2.hxx>
-#include "unopolyhelper.hxx"
 #include <svx/xdef.hxx>
 
 #include "svx/unoapi.hxx"
 #include <editeng/unoprnms.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/tools/unotools.hxx>
 
 using namespace com::sun::star;
 using namespace ::cppu;
@@ -383,7 +383,8 @@ uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw
 
     uno::Any aAny;
     drawing::PolyPolygonBezierCoords aBezier;
-    SvxConvertB2DPolyPolygonToPolyPolygonBezier( ((XLineEndEntry*)pEntry)->GetLineEnd(), aBezier );
+    basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( ((XLineEndEntry*)pEntry)->GetLineEnd(),
+                                                          aBezier );
     aAny <<= aBezier;
     return aAny;
 }
@@ -397,7 +398,7 @@ XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const uno:
     basegfx::B2DPolyPolygon aPolyPolygon;
     drawing::PolyPolygonBezierCoords* pCoords = (drawing::PolyPolygonBezierCoords*)rAny.getValue();
     if( pCoords->Coordinates.getLength() > 0 )
-        aPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon( pCoords );
+        aPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
 
     // #86265# make sure polygon is closed
     aPolyPolygon.setClosed(true);

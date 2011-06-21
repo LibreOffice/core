@@ -62,7 +62,6 @@
 #include "shapeimpl.hxx"
 #include "svx/unoshprp.hxx"
 #include <svx/svdoashp.hxx>
-#include "unopolyhelper.hxx"
 
 // #i29181#
 #include "svx/svdviter.hxx"
@@ -71,6 +70,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/tools/unotools.hxx>
 
 #include <comphelper/servicehelper.hxx>
 
@@ -1331,132 +1331,6 @@ SvxShapePolyPolygonBezier::~SvxShapePolyPolygonBezier() throw()
 {
 }
 
-basegfx::B2DPolyPolygon SvxConvertPolyPolygonBezierToB2DPolyPolygon(const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon)
-    throw( IllegalArgumentException )
-{
-    const sal_Int32 nOuterSequenceCount(pSourcePolyPolygon->Coordinates.getLength());
-    basegfx::B2DPolyPolygon aNewPolyPolygon;
-
-    if(pSourcePolyPolygon->Flags.getLength() != nOuterSequenceCount)
-    {
-        throw IllegalArgumentException();
-    }
-
-    // get pointers to inner sequence
-    const drawing::PointSequence* pInnerSequence = pSourcePolyPolygon->Coordinates.getConstArray();
-    const drawing::FlagSequence* pInnerSequenceFlags = pSourcePolyPolygon->Flags.getConstArray();
-
-    for(sal_Int32 a(0); a < nOuterSequenceCount; a++)
-    {
-        const sal_Int32 nInnerSequenceCount(pInnerSequence->getLength());
-
-        if(pInnerSequenceFlags->getLength() != nInnerSequenceCount)
-        {
-            throw IllegalArgumentException();
-        }
-
-        // prepare new polygon
-        basegfx::B2DPolygon aNewPolygon;
-        const awt::Point* pArray = pInnerSequence->getConstArray();
-        const drawing::PolygonFlags* pArrayFlags = pInnerSequenceFlags->getConstArray();
-
-        // get first point and flag
-        basegfx::B2DPoint aNewCoordinatePair(pArray->X, pArray->Y); pArray++;
-        XPolyFlags ePolyFlag((XPolyFlags)((sal_uInt16)*pArrayFlags)); pArrayFlags++;
-        basegfx::B2DPoint aControlA;
-        basegfx::B2DPoint aControlB;
-
-        // first point is not allowed to be a control point
-        if(XPOLY_CONTROL == ePolyFlag)
-        {
-            throw IllegalArgumentException();
-        }
-
-        // add first point as start point
-        aNewPolygon.append(aNewCoordinatePair);
-
-        for(sal_Int32 b(1); b < nInnerSequenceCount;)
-        {
-            // prepare loop
-            bool bControlA(false);
-            bool bControlB(false);
-
-            // get next point and flag
-            aNewCoordinatePair = basegfx::B2DPoint(pArray->X, pArray->Y);
-            ePolyFlag = XPolyFlags((XPolyFlags)((sal_uInt16)*pArrayFlags));
-            pArray++; pArrayFlags++; b++;
-
-            if(b < nInnerSequenceCount && XPOLY_CONTROL == ePolyFlag)
-            {
-                aControlA = aNewCoordinatePair;
-                bControlA = true;
-
-                // get next point and flag
-                aNewCoordinatePair = basegfx::B2DPoint(pArray->X, pArray->Y);
-                ePolyFlag = XPolyFlags((XPolyFlags)((sal_uInt16)*pArrayFlags));
-                pArray++; pArrayFlags++; b++;
-            }
-
-            if(b < nInnerSequenceCount && XPOLY_CONTROL == ePolyFlag)
-            {
-                aControlB = aNewCoordinatePair;
-                bControlB = true;
-
-                // get next point and flag
-                aNewCoordinatePair = basegfx::B2DPoint(pArray->X, pArray->Y);
-                ePolyFlag = XPolyFlags((XPolyFlags)((sal_uInt16)*pArrayFlags));
-                pArray++; pArrayFlags++; b++;
-            }
-
-            // two or no control points are consumed, another one would be an error.
-            // It's also an error if only one control point was read
-            if(XPOLY_CONTROL == ePolyFlag || bControlA != bControlB)
-            {
-                throw IllegalArgumentException();
-            }
-
-            // the previous writes used the B2DPolyPoygon -> PolyPolygon converter
-            // which did not create minimal PolyPolygons, but created all control points
-            // as null vectors (identical points). Because of the former P(CA)(CB)-norm of
-            // B2DPolygon and it's unused sign of being the zero-vector and CA and CB being
-            // relative to P, an empty edge was exported as P == CA == CB. Luckily, the new
-            // export format can be read without errors by the old OOo-versions, so we need only
-            // to correct here at read and do not need to export a wrong but compatible version
-            // for the future.
-            if(bControlA
-                && aControlA.equal(aControlB)
-                && aControlA.equal(aNewPolygon.getB2DPoint(aNewPolygon.count() - 1)))
-            {
-                bControlA = bControlB = false;
-            }
-
-            if(bControlA)
-            {
-                // add bezier edge
-                aNewPolygon.appendBezierSegment(aControlA, aControlB, aNewCoordinatePair);
-            }
-            else
-            {
-                // add edge
-                aNewPolygon.append(aNewCoordinatePair);
-            }
-        }
-
-        // next sequence
-        pInnerSequence++;
-        pInnerSequenceFlags++;
-
-        // #i72807# API import uses old line start/end-equal definition for closed,
-        // so we need to correct this to closed state here
-        basegfx::tools::checkClosed(aNewPolygon);
-
-        // add new subpolygon
-        aNewPolyPolygon.append(aNewPolygon);
-    }
-
-    return aNewPolyPolygon;
-}
-
 //----------------------------------------------------------------------
 
 bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -1467,7 +1341,9 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const ::rtl::OUString& rNa
     {
         if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PolyPolygonBezierCoords*)0) ) )
         {
-            basegfx::B2DPolyPolygon aNewPolyPolygon(SvxConvertPolyPolygonBezierToB2DPolyPolygon( (drawing::PolyPolygonBezierCoords*)rValue.getValue()));
+            basegfx::B2DPolyPolygon aNewPolyPolygon(
+                basegfx::unotools::polyPolygonBezierToB2DPolyPolygon(
+                    *(drawing::PolyPolygonBezierCoords*)rValue.getValue()));
             SetPolygon(aNewPolyPolygon);
             return true;
         }
@@ -1483,7 +1359,8 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const ::rtl::OUString& rNa
                 basegfx::B2DHomMatrix aNewHomogenMatrix;
 
                 mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-                aNewPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon((drawing::PolyPolygonBezierCoords*)rValue.getValue());
+                aNewPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon(
+                    *(drawing::PolyPolygonBezierCoords*)rValue.getValue());
                 mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
             }
             return true;
@@ -1497,44 +1374,6 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const ::rtl::OUString& rNa
     throw IllegalArgumentException();
 }
 
-void SvxConvertB2DPolyPolygonToPolyPolygonBezier( const basegfx::B2DPolyPolygon& rPolyPoly, drawing::PolyPolygonBezierCoords& rRetval )
-{
-    // use PolyPolygon converter as base. Since PolyPolygonBezierCoords uses
-    // integer coordinates, this is no precision loss at all.
-    const PolyPolygon aPolyPoly(rPolyPoly);
-
-    // Polygone innerhalb vrobereiten
-    rRetval.Coordinates.realloc((sal_Int32)aPolyPoly.Count());
-    rRetval.Flags.realloc((sal_Int32)aPolyPoly.Count());
-
-    // Zeiger auf aeussere Arrays holen
-    drawing::PointSequence* pOuterSequence = rRetval.Coordinates.getArray();
-    drawing::FlagSequence*  pOuterFlags = rRetval.Flags.getArray();
-
-    for(sal_uInt16 a=0;a<aPolyPoly.Count();a++)
-    {
-        // Einzelpolygon holen
-        const Polygon& rPoly = aPolyPoly[a];
-
-        // Platz in Arrays schaffen
-        pOuterSequence->realloc((sal_Int32)rPoly.GetSize());
-        pOuterFlags->realloc((sal_Int32)rPoly.GetSize());
-
-        // Pointer auf arrays holen
-        awt::Point* pInnerSequence = pOuterSequence->getArray();
-        drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
-
-        for(sal_uInt16 b=0;b<rPoly.GetSize();b++)
-        {
-            *pInnerSequence++ = awt::Point( rPoly[b].X(), rPoly[b].Y() );
-            *pInnerFlags++ = (drawing::PolygonFlags)((sal_uInt16)rPoly.GetFlags(b));
-        }
-
-        pOuterSequence++;
-        pOuterFlags++;
-    }
-}
-
 //----------------------------------------------------------------------
 
 bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -1546,7 +1385,7 @@ bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const ::rtl::OUString& rNa
         // PolyPolygon in eine struct PolyPolygon packen
         const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
         drawing::PolyPolygonBezierCoords aRetval;
-        SvxConvertB2DPolyPolygonToPolyPolygonBezier(rPolyPoly, aRetval );
+        basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier(rPolyPoly, aRetval);
 
         rValue <<= aRetval;
         break;
@@ -1558,7 +1397,7 @@ bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const ::rtl::OUString& rNa
         basegfx::B2DHomMatrix aNewHomogenMatrix;
         mpObj.get()->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
         drawing::PolyPolygonBezierCoords aRetval;
-        SvxConvertB2DPolyPolygonToPolyPolygonBezier(aNewPolyPolygon, aRetval);
+        basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier(aNewPolyPolygon, aRetval);
 
         rValue <<= aRetval;
         break;

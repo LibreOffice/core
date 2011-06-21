@@ -49,9 +49,9 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include "svx/svditer.hxx"
-#include "unopolyhelper.hxx"
 #include <uno/mapping.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/tools/unotools.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 
 // ---------------------------
@@ -446,7 +446,8 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
                 SdrObject::Free( pNewObj );
             }
             SdrObject::Free( pObj );
-            SvxConvertB2DPolyPolygonToPolyPolygonBezier( aPolyPolygon, aPolyPolygonBezierCoords );
+            basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( aPolyPolygon,
+                                                                  aPolyPolygonBezierCoords );
         }
     }
 
