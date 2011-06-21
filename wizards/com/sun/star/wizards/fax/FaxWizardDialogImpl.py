@@ -135,16 +135,12 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myFaxDoc.setWizardTemplateDocInfo( \
             self.resources.resFaxWizardDialog_title,
             self.resources.resTemplateDescription)
-        endWizard = True
         try:
             fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
             if self.sPath == "":
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
-                if self.sPath == "":
-                    endWizard = False
-                    return
 
             self.sPath = fileAccess.getURL(self.sPath)
             #first, if the filename was not changed, thus
@@ -206,9 +202,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         except Exception, e:
             traceback.print_exc()
         finally:
-            if endWizard:
-                self.xUnoDialog.endExecute()
-                self.running = False
+            self.xUnoDialog.endExecute()
+            self.running = False
 
         return True
 
