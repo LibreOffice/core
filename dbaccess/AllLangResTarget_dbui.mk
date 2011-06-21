@@ -86,7 +86,7 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbui,\
 	dbaccess/source/ui/uno/dbinteraction.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_templates,dbaccess/dbu,\
+$(eval $(call gb_SrsTarget_add_templates,dbaccess/dbui,\
     dbaccess/source/ui/dlg/AutoControls_tmpl.hrc \
     dbaccess/source/ui/inc/toolbox_tmpl.hrc \
 ))
