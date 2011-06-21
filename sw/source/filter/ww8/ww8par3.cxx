@@ -1684,7 +1684,10 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
     sal_uInt8 nActLevel)
 {
-    SwWW8StyInf &rStyleInf = pCollA[nStyle];
+    if (nStyle >= vColl.size())
+        return;
+
+    SwWW8StyInf &rStyleInf = vColl[nStyle];
     if (rStyleInf.bValid)
     {
         OSL_ENSURE(pAktColl, "Cannot be called outside of style import");
@@ -1720,7 +1723,11 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
 
 void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
 {
-    SwWW8StyInf &rStyleInf = pCollA[nStyle];
+
+    if (nStyle >= vColl.size())
+        return;
+
+    SwWW8StyInf &rStyleInf = vColl[nStyle];
     if (rStyleInf.bValid && rStyleInf.pFmt)
     {
         //Save old pre-list modified indent, which are the word indent values
@@ -2013,8 +2020,8 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             indentation.  Setting this flag will allow us to recover from this
             braindeadness
             */
-            if (pAktColl && (nLFOPosition == 2047-1))
-                pCollA[nAktColl].bHasBrokenWW6List = true;
+            if (pAktColl && (nLFOPosition == 2047-1) && nAktColl < vColl.size())
+                vColl[nAktColl].bHasBrokenWW6List = true;
 
             // die Streamdaten sind hier 1 basiert, wir ziehen EINS ab
             if (USHRT_MAX > nLFOPosition)

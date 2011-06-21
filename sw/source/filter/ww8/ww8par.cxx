@@ -957,9 +957,9 @@ void SwWW8ImplReader::Read_StyleCode( sal_uInt16, const sal_uInt8* pData, short 
         nColl = *pData;
     else
         nColl = SVBT16ToShort(pData);
-    if (nColl < nColls)
+    if (nColl < vColl.size())
     {
-        SetTxtFmtCollAndListLevel( *pPaM, pCollA[nColl] );
+        SetTxtFmtCollAndListLevel( *pPaM, vColl[nColl] );
         bCpxStyle = true;
     }
 }
@@ -1207,8 +1207,8 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
                 SfxItemState eState = SFX_ITEM_DEFAULT;
                 if (const SfxItemSet *pSet = pNd->GetpSwAttrSet())
                     eState = pSet->GetItemState(RES_LR_SPACE, false);
-                if (eState != SFX_ITEM_SET && rReader.pCollA != NULL)
-                    pItem = &(rReader.pCollA[rReader.nAktColl].maWordLR);
+                if (eState != SFX_ITEM_SET && !rReader.vColl.empty() && rReader.nAktColl < rReader.vColl.size())
+                    pItem = &(rReader.vColl[rReader.nAktColl].maWordLR);
             }
 
             /*
@@ -1368,16 +1368,18 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
     const SwTxtFmtColl* pSty = 0;
     sal_uInt16 nTabBase;
-    if (pAktColl)               // StyleDef
+    if (pAktColl && nAktColl < vColl.size())               // StyleDef
     {
-        nTabBase = pCollA[nAktColl].nBase;
-        if (nTabBase < nColls)              // Based On
-            pSty = (const SwTxtFmtColl*)pCollA[nTabBase].pFmt;
+        nTabBase = vColl[nAktColl].nBase;
+        if (nTabBase < vColl.size())              // Based On
+            pSty = (const SwTxtFmtColl*)vColl[nTabBase].pFmt;
     }
     else
     {                                       // Text
         nTabBase = nAktColl;
-        pSty = (const SwTxtFmtColl*)pCollA[nAktColl].pFmt;
+        if (nAktColl < vColl.size())
+            pSty = (const SwTxtFmtColl*)vColl[nAktColl].pFmt;
+        //TODO figure else here
     }
 
     bool bFound = false;
@@ -1394,11 +1396,11 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
             sal_uInt16 nOldTabBase = nTabBase;
             // If based on another
-            if (nTabBase < nColls)
-                nTabBase = pCollA[nTabBase].nBase;
+            if (nTabBase < vColl.size())
+                nTabBase = vColl[nTabBase].nBase;
 
             if (
-                    nTabBase < nColls &&
+                    nTabBase < vColl.size() &&
                     nOldTabBase != nTabBase &&
                     nTabBase != ww::stiNil
                )
@@ -1406,7 +1408,9 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
                 // #i61789: Stop searching when next style is the same as the
                 // current one (prevent loop)
                 aLoopWatch.insert(reinterpret_cast<size_t>(pSty));
-                pSty = (const SwTxtFmtColl*)pCollA[nTabBase].pFmt;
+                if (nTabBase < vColl.size())
+                   pSty = (const SwTxtFmtColl*)vColl[nTabBase].pFmt;
+                //TODO figure out the else branch
 
                 if (aLoopWatch.find(reinterpret_cast<size_t>(pSty)) !=
                     aLoopWatch.end())
@@ -2389,10 +2393,10 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
     {
         if (!maFontSrcCharSets.empty())
             eSrcCharSet = maFontSrcCharSets.top();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
-            eSrcCharSet = pCollA[nCharFmt].GetCharSet();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(nAktColl))
-            eSrcCharSet = pCollA[nAktColl].GetCharSet();
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
+            eSrcCharSet = vColl[nCharFmt].GetCharSet();
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(nAktColl) && nAktColl < vColl.size())
+            eSrcCharSet = vColl[nAktColl].GetCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
         { // patch from cmc for #i52786#
             /*
@@ -2449,12 +2453,12 @@ CharSet SwWW8ImplReader::GetCurrentCJKCharSet()
     {
         if (!maFontSrcCJKCharSets.empty())
             eSrcCharSet = maFontSrcCJKCharSets.top();
-        if (pCollA != NULL)
+        if (!vColl.empty())
         {
-            if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
-                eSrcCharSet = pCollA[nCharFmt].GetCJKCharSet();
-            if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-                eSrcCharSet = pCollA[nAktColl].GetCJKCharSet();
+            if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
+                eSrcCharSet = vColl[nCharFmt].GetCJKCharSet();
+            if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW && nAktColl < vColl.size())
+                eSrcCharSet = vColl[nAktColl].GetCJKCharSet();
         }
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
         { // patch from cmc for #i52786#
@@ -3182,7 +3186,7 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     nAktColl = pPlcxMan->GetColl();
 
     // Invalid Style-Id
-    if (nAktColl >= nColls || !pCollA[nAktColl].pFmt || !pCollA[nAktColl].bColl)
+    if (nAktColl >= vColl.size() || !vColl[nAktColl].pFmt || !vColl[nAktColl].bColl)
     {
         nAktColl = 0;
         bParaAutoBefore = false;
@@ -3190,9 +3194,12 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     }
     else
     {
-        bParaAutoBefore = pCollA[nAktColl].bParaAutoBefore;
-        bParaAutoAfter = pCollA[nAktColl].bParaAutoAfter;
+        bParaAutoBefore = vColl[nAktColl].bParaAutoBefore;
+        bParaAutoAfter = vColl[nAktColl].bParaAutoAfter;
     }
+
+    if (nOldColl >= vColl.size())
+        nOldColl = 0; //guess! TODO make sure this is what we want
 
     bool bTabRowEnd = false;
     if( pStartAttr && bCallProcessSpecial && !bInHyperlink )
@@ -3206,10 +3213,10 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
 
     if (!bTabRowEnd && StyleExists(nAktColl))
     {
-        SetTxtFmtCollAndListLevel( *pPaM, pCollA[ nAktColl ]);
-        ChkToggleAttr(pCollA[ nOldColl ].n81Flags, pCollA[ nAktColl ].n81Flags);
-        ChkToggleBiDiAttr(pCollA[nOldColl].n81BiDiFlags,
-            pCollA[nAktColl].n81BiDiFlags);
+        SetTxtFmtCollAndListLevel( *pPaM, vColl[ nAktColl ]);
+        ChkToggleAttr(vColl[ nOldColl ].n81Flags, vColl[ nAktColl ].n81Flags);
+        ChkToggleBiDiAttr(vColl[nOldColl].n81BiDiFlags,
+            vColl[nAktColl].n81BiDiFlags);
     }
 }
 
@@ -3345,8 +3352,8 @@ void SwWW8ImplReader::ReadAttrs(WW8_CP& rNext, WW8_CP& rTxtPos, bool& rbStartLin
 // nicht im Plcx.Fkp.papx eingetragen, d.h. ( nFlags & MAN_MASK_NEW_PAP )
 // ist false. Deshalb muss als Sonderbehandlung hier die Vorlage gesetzt
 // werden.
-        if (!bCpxStyle && nAktColl < nColls)
-            SetTxtFmtCollAndListLevel(*pPaM, pCollA[nAktColl]);
+        if (!bCpxStyle && nAktColl < vColl.size())
+            SetTxtFmtCollAndListLevel(*pPaM, vColl[nAktColl]);
         rbStartLine = false;
     }
 }
@@ -3600,7 +3607,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     pAktColl = 0;
     pLstManager = 0;
     pAktItemSet = 0;
-    pCollA = 0;
     pDfltTxtFmtColl = 0;
     pStandardFmtColl = 0;
     pHdFt = 0;
@@ -3610,7 +3616,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     pFmtOfJustInsertedApo = 0;
     pPreviousNumPaM = 0;
     pPrevNumRule = 0;
-    nColls = nAktColl = 0;
+    nAktColl = 0;
     nObjLocFc = nPicLocFc = 0;
     nInTable=0;
     bReadNoTbl = bPgSecBreak = bSpec = bObj = bTxbxFlySection
@@ -4429,7 +4435,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     ::SetProgressState(nProgress, mpDocShell);    // Update
     pStyles->PostProcessStyles();
 
-    if (pCollA)
+    if (!vColl.empty())
         SetOutLineStyles();
 
     pSBase = new WW8ScannerBase(pStrm,pTableStream,pDataStream,pWwFib);
@@ -4656,8 +4662,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     maInsertedTables.DelAndMakeTblFrms();
     maSectionManager.InsertSegments();
 
-    if (pCollA)
-        delete[] pCollA;
+    vColl.clear();
 
     DELETEZ( pStyles );
 
@@ -5150,16 +5155,16 @@ void SwWW8ImplReader::SetOutLineStyles()
         pick the one that affects most styles. If we're not importing a new
         document, we got to stick with what is already there.
         */
-        // use index in text format collection array <pCollA>
+        // use index in text format collection array <vColl>
         // as key of the outline numbering map <aRuleMap>
         // instead of the memory pointer of the outline numbering rule
         // to assure that, if two outline numbering rule affect the same
         // count of text formats, always the same outline numbering rule is chosen.
         std::map<sal_uInt16, int>aRuleMap;
         typedef std::map<sal_uInt16, int>::iterator myIter;
-        for (sal_uInt16 nI = 0; nI < nColls; ++nI)
+        for (sal_uInt16 nI = 0; nI < vColl.size(); ++nI)
         {
-            SwWW8StyInf& rSI = pCollA[ nI ];
+            SwWW8StyInf& rSI = vColl[ nI ];
             if (
                 (MAXLEVEL > rSI.nOutlineLevel) && rSI.pOutlineNumrule &&
                 rSI.pFmt
@@ -5182,7 +5187,10 @@ void SwWW8ImplReader::SetOutLineStyles()
             if (aIter->second > nMax)
             {
                 nMax = aIter->second;
-                mpChosenOutlineNumRule = pCollA[ aIter->first ].pOutlineNumrule;
+                if(aIter->first < vColl.size())
+                    mpChosenOutlineNumRule = vColl[ aIter->first ].pOutlineNumrule;
+                else
+                    mpChosenOutlineNumRule = 0; //TODO make sure this is what we want
             }
         }
 
@@ -5207,9 +5215,9 @@ void SwWW8ImplReader::SetOutLineStyles()
 
     sal_uInt16 nOldFlags = nFlagsStyleOutlLevel;
 
-    for (sal_uInt16 nI = 0; nI < nColls; ++nI)
+    for (sal_uInt16 nI = 0; nI < vColl.size(); ++nI)
     {
-        SwWW8StyInf& rSI = pCollA[nI];
+        SwWW8StyInf& rSI = vColl[nI];
 
         if (rSI.IsOutlineNumbered())
         {

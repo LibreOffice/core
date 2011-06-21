@@ -2778,9 +2778,9 @@ bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
     bool bExtras = false;
     //This is the case if the winword outline numbering is set while the
     //writer one is not
-    for (sal_uInt16 nI = 0; nI < nColls; ++nI)
+    for (sal_uInt16 nI = 0; nI < vColl.size(); ++nI)
     {
-        SwWW8StyInf& rSI = pCollA[nI];
+        SwWW8StyInf& rSI = vColl[nI];
         if (rSI.IsOutline())
         {
             const SwTxtFmtColl *pFmt = (const SwTxtFmtColl*)(rSI.pFmt);
@@ -3285,9 +3285,9 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                             // the entry correctly, but I currently have no clue how to obtain
                             // the tab stop position. It is _not_ set at the paragraph style.
                             SwForm* pForm = 0;
-                            for (sal_uInt16 nI = 0; nI < nColls; ++nI)
+                            for (sal_uInt16 nI = 0; nI < vColl.size(); ++nI)
                             {
-                                const SwWW8StyInf& rSI = pCollA[nI];
+                                const SwWW8StyInf& rSI = vColl[nI];
                                 if (rSI.IsOutlineNumbered())
                                 {
                                     sal_uInt16 nStyleLevel = rSI.nOutlineLevel;
