@@ -25,12 +25,12 @@
  * instead of those above.
  */
 
-#ifndef _VCL_IOS_SVSYS_H
-#define _VCL_IOS_SVSYS_H
+#ifndef _VCL_ANDROID_SVSYS_H
+#define _VCL_ANDROID_SVSYS_H
 
 
 // ?
 
-#endif // _VCL_IOS_SVSYS_H
+#endif // _VCL_ANDROID_SVSYS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

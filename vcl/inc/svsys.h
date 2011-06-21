@@ -36,6 +36,8 @@
 #include "os2/svsys.h"
 #elif defined IOS
 #include "ios/svsys.h"
+#elif defined ANDROID
+#include "android/svsys.h"
 #else
 #include "unx/svsys.h"
 #endif
