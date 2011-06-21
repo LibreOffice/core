@@ -191,12 +191,14 @@ gb_Helper_OUTDIR_NATIVE := $(OUTDIR)
 gb_Helper_REPODIR_NATIVE := $(REPODIR)
 endif
 
+# convert parameters filesystem root to native notation
 define gb_Helper_abbreviate_dirs_native
 R=$(gb_Helper_REPODIR_NATIVE) && $(subst $(REPODIR)/,$$R/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,O=$(gb_Helper_OUTDIR_NATIVE) && W=$(gb_Helper_WORKDIR_NATIVE) && S=$(gb_Helper_SRCDIR_NATIVE))) && \
 $(subst $(REPODIR)/,$$R/,$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,$(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,$(subst $(gb_Helper_OUTDIR_NATIVE)/,$$O/,$(subst $(gb_Helper_WORKDIR_NATIVE)/,$$W/,$(1)))))))))
 endef
 
-# convert parameters filesystem root to native notation
+# Set the proper enirotment variable so that our BUILD platform
+# build-time shared libraries are found.
 ifeq ($(OS_FOR_BUILD),WNT)
 gb_Helper_set_ld_path := PATH=$(OUTDIR_FOR_BUILD)/bin:$$PATH
 else ifeq ($(OS_FOR_BUILD),MACOSX)
