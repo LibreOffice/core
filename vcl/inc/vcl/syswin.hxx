@@ -231,8 +231,8 @@ public:
     const Size&     GetMaxOutputSizePixel() const;
     Size            GetResizeOutputSizePixel() const;
 
-    void            SetWindowState( const ByteString& rStr );
-    ByteString      GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const;
+    void            SetWindowState(const rtl::OString& rStr);
+    rtl::OString    GetWindowState(sal_uLong nMask = WINDOWSTATE_MASK_ALL) const;
 
     void            SetMenuBar( MenuBar* pMenuBar );
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
