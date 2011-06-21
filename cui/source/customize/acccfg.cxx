@@ -1041,7 +1041,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, Load, Button*, EMPTYARG )
 //-----------------------------------------------
 IMPL_LINK( SfxAcceleratorConfigPage, Save, Button*, EMPTYARG )
 {
-    StartFileDialog( WB_SAVEAS | WB_STDMODAL | WB_3DLOOK, aLoadAccelConfigStr );
+    StartFileDialog( WB_SAVEAS | WB_STDMODAL | WB_3DLOOK, aSaveAccelConfigStr );
     return 0;
 }
 
