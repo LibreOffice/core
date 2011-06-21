@@ -46,7 +46,7 @@
 
 # SrsPartMergeTarget class
 
-gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target,transex3)
+gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target_for_build,transex3)
 # gb_SrsPartMergeTarget_TRANSEXPRECOMMAND is set by the platforms
 
 gb_SrsPartMergeTarget_TRANSEXCOMMAND := $(gb_SrsPartMergeTarget_TRANSEXPRECOMMAND) $(gb_SrsPartMergeTarget_TRANSEXTARGET)
