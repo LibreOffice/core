@@ -141,8 +141,7 @@ class UnoDataAware(DataAware):
     @classmethod
     def attachCheckBox(self, data, prop, checkBox, listener, field):
         if field:
-            aux = DataAwareFields.getFieldValueFor(
-                data, prop, uno.Any("short",0))
+            aux = DataAwareFields.getFieldValueFor(data, prop, 0)
         else:
             aux = DataAware.PropertyValue (prop, data)
         uda = UnoDataAware(data, aux , checkBox, PropertyNames.PROPERTY_STATE)

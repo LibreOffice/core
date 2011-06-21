@@ -136,8 +136,7 @@ class UnoDialog2(UnoDialog):
                 PropertyNames.PROPERTY_POSITION_Y, "ScaleImage",
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_WIDTH),
-            (uno.Any("short",0), 10,
-                UIConsts.INFOIMAGEURL, _posx, _posy, False, _iStep, 10))
+            (0, 10, UIConsts.INFOIMAGEURL, _posx, _posy, False, _iStep, 10))
         return xImgControl
 
     '''

@@ -17,14 +17,12 @@ class Helper(object):
     @classmethod
     def setUnoPropertyValue(self, xPSet, PropertyName, PropertyValue):
         try:
-            if xPSet.getPropertySetInfo().hasPropertyByName(PropertyName):
-                uno.invoke(xPSet,"setPropertyValue",
-                    (PropertyName,PropertyValue))
-            else:
-                selementnames = xPSet.getPropertySetInfo().getProperties()
-                raise ValueError("No Such Property: '" + PropertyName + "'")
+            if PropertyValue is not None:
+                setattr(xPSet, PropertyName, PropertyValue)
 
-        except Exception, exception:
+        except AttributeError:
+            raise AttributeError, "No Such Property: '%s'" % PropertyName
+        except Exception:
             traceback.print_exc()
 
     @classmethod

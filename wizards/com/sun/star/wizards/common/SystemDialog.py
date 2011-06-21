@@ -25,9 +25,9 @@ class SystemDialog(object):
             self.xMSF = xMSF
             self.systemDialog = xMSF.createInstance(ServiceName)
             self.xStringSubstitution = self.createStringSubstitution(xMSF)
-            if self.systemDialog != None:
-                prova = uno.Any("[]short",(Type,))
-                #uno.invoke(prova, "initialize", (uno.Any("short",(Type,)),))
+            #if self.systemDialog != None:
+                #COMMENTED
+                #self.systemDialog.initialize(Type)
 
         except Exception, exception:
             traceback.print_exc()

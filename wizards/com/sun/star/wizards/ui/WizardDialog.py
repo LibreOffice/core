@@ -85,8 +85,7 @@ class WizardDialog(UnoDialog2):
         if self.oRoadmap != None:
             nCurItemID = self.getCurrentRoadmapItemID()
             if nCurItemID != ID:
-                Helper.setUnoPropertyValue(self.oRoadmap, "CurrentItemID",
-                    uno.Any("short",ID))
+                Helper.setUnoPropertyValue(self.oRoadmap, "CurrentItemID",ID)
 
     def getCurrentRoadmapItemID(self):
         try:
@@ -114,7 +113,7 @@ class WizardDialog(UnoDialog2):
                     PropertyNames.PROPERTY_TABINDEX, "Tabstop",
                     PropertyNames.PROPERTY_WIDTH),
                 ((iDialogHeight - 26), 0, 0, 0,
-                    uno.Any("short",0), True, uno.Any("short",85)))
+                    0, True, 85))
             self.oRoadmap.setPropertyValue(
                 PropertyNames.PROPERTY_NAME, "rdmNavi")
 
@@ -468,7 +467,7 @@ class WizardDialog(UnoDialog2):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),(
                     oFontDesc, 16, self.sRightPaneHeaders(i),
-                    True, 91, 8, i + 1, uno.Any("short",12), 212))
+                    True, 91, 8, i + 1, 12, 212))
             i += 1
 
     def cancelWizard(self):

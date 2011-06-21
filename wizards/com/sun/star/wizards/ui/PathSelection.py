@@ -1,5 +1,4 @@
 import traceback
-import uno
 from common.PropertyNames import *
 from common.FileAccess import *
 from common.SystemDialog import SystemDialog
@@ -41,7 +40,7 @@ class PathSelection(object):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (Enabled, 8, LabelText, XPos, YPos, DialogStep,
-                uno.Any("short",CurTabIndex), Width))
+                CurTabIndex, Width))
         self.xSaveTextBox = self.CurUnoDialog.insertTextField(
             "txtSavePath", "callXPathSelectionListener",
             (PropertyNames.PROPERTY_ENABLED,
@@ -53,7 +52,7 @@ class PathSelection(object):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (Enabled, 12, TxtHelpURL, XPos, YPos + 10, DialogStep,
-                uno.Any("short",(CurTabIndex + 1)), Width - 26), self)
+                (CurTabIndex + 1), Width - 26), self)
 
         self.CurUnoDialog.setControlProperty("txtSavePath",
                 PropertyNames.PROPERTY_ENABLED, False )
@@ -68,7 +67,7 @@ class PathSelection(object):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (Enabled, 14, BtnHelpURL, "...",XPos + Width - 16, YPos + 9,
-                DialogStep, uno.Any("short",(CurTabIndex + 2)), 16), self)
+                DialogStep, (CurTabIndex + 2), 16), self)
 
     def addSelectionListener(self, xAction):
         self.xAction = xAction

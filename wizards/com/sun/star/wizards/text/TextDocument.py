@@ -136,7 +136,7 @@ class TextDocument(object):
         myViewHandler = ViewHandler(self.xTextDocument, self.xTextDocument)
         try:
             myViewHandler.setViewSetting(
-                "ZoomType", uno.Any("short",ENTIRE_PAGE))
+                "ZoomType", ENTIRE_PAGE)
         except Exception, e:
             traceback.print_exc()
         myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
