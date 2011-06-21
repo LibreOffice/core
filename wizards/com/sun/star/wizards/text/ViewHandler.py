@@ -1,5 +1,3 @@
-import uno
-
 class ViewHandler(object):
     '''Creates a new instance of View '''
 
@@ -32,8 +30,7 @@ class ViewHandler(object):
             exception.printStackTrace(System.out)
 
     def setViewSetting(self, Setting, Value):
-        uno.invoke(self.xTextViewCursorSupplier.ViewSettings,"setPropertyValue",(
-            Setting, Value))
+        setattr(self.xTextViewCursorSupplier.ViewSettings, Setting, Value)
 
     def collapseViewCursorToStart(self):
         xTextViewCursor = self.xTextViewCursorSupplier.ViewCursor

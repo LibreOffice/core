@@ -33,7 +33,6 @@
 #**********************************************************************
 
 # OOo's libraries
-import uno
 import unohelper
 import inspect
 

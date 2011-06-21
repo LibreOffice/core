@@ -176,7 +176,7 @@ class TextFieldHandler(object):
     def changeExtendedUserFieldContent(self, UserDataPart, _FieldContent):
         try:
             xDependentTextFields = self.__getTextFieldsByProperty(
-                "UserDataType", uno.Any("short",UserDataPart), "Short")
+                "UserDataType", UserDataPart, "Short")
             if xDependentTextFields != None:
                 i = 0
                 while i < xDependentTextFields.length:

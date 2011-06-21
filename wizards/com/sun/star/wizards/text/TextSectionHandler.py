@@ -10,10 +10,11 @@ class TextSectionHandler(object):
     def removeTextSectionbyName(self, SectionName):
         try:
             xAllTextSections = self.xTextDocument.TextSections
-            if xAllTextSections.hasByName(SectionName) == True:
+            if xAllTextSections.hasByName(SectionName):
                 oTextSection = self.xTextDocument.TextSections.getByName(
                     SectionName)
-                removeTextSection(oTextSection)
+                self.removeTextSection(oTextSection)
+
 
         except Exception, exception:
             traceback.print_exc()
@@ -27,7 +28,7 @@ class TextSectionHandler(object):
             xAllTextSections = self.xTextDocument.TextSections
             oTextSection = xAllTextSections.getByIndex(
                 xAllTextSections.getCount() - 1)
-            removeTextSection(oTextSection)
+            self.removeTextSection(oTextSection)
         except Exception, exception:
             traceback.print_exc()
 

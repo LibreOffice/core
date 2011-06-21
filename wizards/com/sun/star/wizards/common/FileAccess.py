@@ -542,15 +542,18 @@ class FileAccess(object):
             "com.sun.star.ucb.FileContentProvider")
 
     def getURL(self, path, childPath=None):
-        if childPath is not None:
-            path = self.filenameConverter.getSystemPathFromFileURL(path)
-            f = open(path,childPath)
-        else:
-            f = open(path)
+        try:
+            if childPath is not None:
+                path = self.filenameConverter.getSystemPathFromFileURL(path)
+                f = open(path,childPath)
+            else:
+                f = open(path)
 
-        r = self.filenameConverter.getFileURLFromSystemPath(path,
-             osPath.abspath(path))
-        return r
+            r = self.filenameConverter.getFileURLFromSystemPath(path,
+                 osPath.abspath(path))
+            return r
+        except Exception:
+            return None
 
     def getPath(self, parentURL, childURL):
         string = ""
@@ -607,7 +610,7 @@ class FileAccess(object):
             return self.fileAccess.exists(filename)
         except CommandAbortedException, cax:
             pass
-        except com.sun.star.uno.Exception, ex:
+        except Exception:
             pass
 
         return defe

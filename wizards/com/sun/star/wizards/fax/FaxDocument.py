@@ -1,4 +1,3 @@
-import uno
 from text.TextDocument import *
 from text.TextSectionHandler import TextSectionHandler
 from text.TextFieldHandler import TextFieldHandler
@@ -24,7 +23,7 @@ class FaxDocument(TextDocument):
                 self.xTextDocument)
             oSection = \
                 mySectionHandler.xTextDocument.TextSections.getByName(sElement)
-            Helper.setUnoPropertyValue(oSection, "IsVisible", bState)
+            Helper.setUnoPropertyValue(oSection,"IsVisible",bState)
         except Exception, exception:
             traceback.print_exc()
 
@@ -57,8 +56,7 @@ class FaxDocument(TextDocument):
                         xPageNumberField = self.xTextDocument.createInstance(
                             "com.sun.star.text.TextField.PageNumber")
                         xPageNumberField.setPropertyValue("SubType", CURRENT)
-                        uno.invoke(xPageNumberField, "setPropertyValue",
-                            ("NumberingType", uno.Any("short",ARABIC)))
+                        xPageNumberField.NumberingType = ARABIC
                         xFooterText.insertTextContent(xFooterText.End,
                             xPageNumberField, False)
                 else:

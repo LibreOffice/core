@@ -50,34 +50,10 @@ class UnoDialog(object):
                 if not self.xDialogModel.hasByName(ControlName):
                     return
                 xPSet = self.xDialogModel.getByName(ControlName)
-                if isinstance(PropertyValue,bool):
-                    xPSet.setPropertyValue(PropertyName, PropertyValue)
-                else:
-                    methodname = "[]string"
-                    if not isinstance(PropertyValue,tuple):
-                        if isinstance(PropertyValue,list):
-                            methodname = "[]short"
-                            PropertyValue = tuple(PropertyValue)
-                        else:
-                            PropertyValue = (PropertyValue,)
-
-                    uno.invoke(xPSet, "setPropertyValue", (PropertyName,
-                        uno.Any( methodname, PropertyValue)))
+                setattr(xPSet,PropertyName, PropertyValue)
 
         except Exception, exception:
             traceback.print_exc()
-
-    def transform( self, struct , propName, value ):
-        myinv = self.inv.createInstanceWithArguments( (struct,) )
-        access = self.insp.inspect( myinv )
-        method = access.getMethod( "setValue" , -1 )
-        uno.invoke( method, "invoke", ( myinv, ( propName , value ) ))
-        method = access.getMethod( "getMaterial" , -1 )
-        ret,dummy = method.invoke(myinv,() )
-        return ret
-
-    def getResource(self):
-        return self.m_oResource
 
     def setControlProperties(
             self, ControlName, PropertyNames, PropertyValues):

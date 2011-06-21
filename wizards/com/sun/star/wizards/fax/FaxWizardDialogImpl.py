@@ -181,11 +181,11 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 loadValues[1] = uno.createUnoStruct( \
                     'com.sun.star.beans.PropertyValue')
                 loadValues[1].Name = "MacroExecutionMode"
-                loadValues[1].Value = uno.Any("short", ALWAYS_EXECUTE)
+                loadValues[1].Value = ALWAYS_EXECUTE
                 loadValues[2] = uno.createUnoStruct( \
                     'com.sun.star.beans.PropertyValue')
                 loadValues[2].Name = "UpdateDocMode"
-                loadValues[2].Value = uno.Any("short", FULL_UPDATE)
+                loadValues[2].Value = FULL_UPDATE
                 loadValues[3] = uno.createUnoStruct( \
                     'com.sun.star.beans.PropertyValue')
                 loadValues[3].Name = "InteractionHandler"
@@ -198,8 +198,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 oDoc = OfficeDocument.load(Desktop.getDesktop(self.xMSF),
                     self.sPath, "_default", loadValues)
                 myViewHandler = ViewHandler(self.xMSF, oDoc)
-                myViewHandler.setViewSetting("ZoomType",
-                    uno.Any("short",OPTIMAL))
+                myViewHandler.setViewSetting("ZoomType", OPTIMAL)
             else:
                 pass
                 #TODO: Error Handling
@@ -295,8 +294,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 tuple(self.BusinessFiles[0]))
             self.setControlProperty("lstPrivateStyle", "StringItemList",
                 tuple(self.PrivateFiles[0]))
-            self.setControlProperty("lstBusinessStyle", "SelectedItems", [0])
-            self.setControlProperty("lstPrivateStyle", "SelectedItems" , [0])
+            self.setControlProperty("lstBusinessStyle", "SelectedItems", (0,))
+            self.setControlProperty("lstPrivateStyle", "SelectedItems" , (0,))
             return True
         except NoValidPathException, e:
             # TODO Auto-generated catch block
@@ -313,7 +312,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.setControlProperty("chkUseDate",
             PropertyNames.PROPERTY_ENABLED,
             self.myFaxDoc.hasElement("Date"))
-        self.myFaxDoc.updateDateFields()
+        #COMMENTED
+        #self.myFaxDoc.updateDateFields()
 
     def initializeSalutation(self):
         self.setControlProperty("lstSalutation", "StringItemList",
