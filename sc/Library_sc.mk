@@ -39,8 +39,7 @@ $(eval $(call gb_Library_set_include,sc,\
         -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,sc,\
-        $$(DEFS) \
+$(eval $(call gb_Library_add_defs,sc,\
         -DSC_DLLIMPLEMENTATION \
         -DSC_INFO_OSVERSION=\"$(OS)\" \
 ))

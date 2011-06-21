@@ -38,8 +38,7 @@ $(eval $(call gb_Library_set_include,chartview,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,chartview,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,chartview,\
     -DOOO_DLLIMPLEMENTATION_CHARTVIEW \
 ))
 

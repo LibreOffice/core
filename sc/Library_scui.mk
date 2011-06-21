@@ -33,10 +33,6 @@ $(eval $(call gb_Library_set_include,scui,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,scui,\
-	$$(DEFS) \
-))
-
 $(eval $(call gb_Library_add_linked_libs,scui,\
 	comphelper \
 	cppu \

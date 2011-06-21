@@ -35,8 +35,7 @@ $(eval $(call gb_Library_set_include,vbaobj,\
 
 $(eval $(call gb_Library_set_componentfile,vbaobj,sc/util/vbaobj))
 
-$(eval $(call gb_Library_set_defs,vbaobj,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,vbaobj,\
 	-DVBA_OOBUILD_HACK \
 ))
 
@@ -132,13 +131,6 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
         sc/source/ui/vba/vbaworksheets \
         sc/source/ui/vba/vbawsfunction \
 ))
-
-ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
-$(eval $(call gb_Library_set_ldflags,vbaobj,\
-	$$(LDFLAGS) \
-	-Wl$(COMMA)-z$(COMMA)noexecstack \
-))
-endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,vbaobj,\
