@@ -2199,8 +2199,8 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
             -mrViewBox.GetY());
     if( bScale )
         aTransform.scale(
-            rObjectSize.Width / mrViewBox.GetWidth(),
-            rObjectSize.Height / mrViewBox.GetHeight());
+            (mrViewBox.GetWidth() ? rObjectSize.Width / mrViewBox.GetWidth() : 0),
+            (mrViewBox.GetHeight() ? rObjectSize.Height / mrViewBox.GetHeight() : 0));
     aTransform.translate( rObjectPos.X, rObjectPos.Y );
     aPoly.transform(aTransform);
 
