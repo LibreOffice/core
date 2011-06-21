@@ -88,7 +88,7 @@
 #define RUNTIME_X64_NAME    TEXT( "redist\\vcredist_x64.exe" )
 #define RUNTIME_X86_NAME    TEXT( "redist\\vcredist_x86.exe" )
 #define PRODUCTCODE_X86     TEXT( "{1F1C2DFC-2D24-3E06-BCB8-725134ADF989}" )
-#define PRODUCTCODE_X64     TEXT( "{4B6C7001-C7D6-3710-913E-5BC23FCE91E6}" )
+#define PRODUCTCODE_X64     TEXT( "{350AA351-21FA-3270-8B7A-835434E766AD}" )
 
 #define MSIAPI_DllGetVersion     "DllGetVersion"
 #define ADVAPI32API_CheckTokenMembership "CheckTokenMembership"
