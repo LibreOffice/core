@@ -43,19 +43,7 @@ $(eval $(call gb_Library_add_linked_libs,hwp,\
     $(gb_STDLIBS) \
 ))
 
-ifeq ($(SYSTEM_ZLIB),YES)
-$(eval $(call gb_Library_set_cxxflags,hwp,\
-    $$(CXXFLAGS) \
-    -DSYSTEM_ZLIB \
-))
-$(eval $(call gb_Library_add_linked_libs,hwp,\
-    z \
-))
-else
-$(eval $(call gb_Library_add_linked_static_libs,hwp,\
-    zlib \
-))
-endif
+$(call gb_Library_use_external,hwp,zlib)
 
 ifeq ($(OS),WNT)
 
