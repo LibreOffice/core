@@ -350,7 +350,7 @@ void OReportController::disposing()
     if ( m_pGroupsFloater )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_GROUPS_SORTING ) );
-        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pGroupsFloater->GetWindowState(WINDOWSTATE_MASK_ALL).GetBuffer() ) );
+        aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pGroupsFloater->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         ::std::auto_ptr<FloatingWindow> aTemp(m_pGroupsFloater);
         m_pGroupsFloater = NULL;
     }
@@ -2551,7 +2551,7 @@ void OReportController::openSortingAndGroupingDialog()
         m_pGroupsFloater = new OGroupsSortingDialog(getView(),!isEditable(),this);
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_GROUPS_SORTING ) );
         if ( aDlgOpt.Exists() )
-            m_pGroupsFloater->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
+            m_pGroupsFloater->SetWindowState(::rtl::OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pGroupsFloater->AddEventListener(LINK(this,OReportController,EventLstHdl));
     }
     else if ( isUiVisible() )

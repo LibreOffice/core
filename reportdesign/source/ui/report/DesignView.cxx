@@ -202,7 +202,7 @@ ODesignView::~ODesignView()
     if ( m_pAddField )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( UID_RPT_RPT_APP_VIEW ) );
-        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pAddField->GetWindowState(WINDOWSTATE_MASK_ALL).GetBuffer() ) );
+        aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pAddField->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         ::std::auto_ptr<Window> aTemp2(m_pAddField);
         m_pAddField = NULL;
@@ -210,7 +210,7 @@ ODesignView::~ODesignView()
     if ( m_pReportExplorer )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_NAVIGATOR ) );
-        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pReportExplorer->GetWindowState(WINDOWSTATE_MASK_ALL).GetBuffer() ) );
+        aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pReportExplorer->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         ::std::auto_ptr<Window> aTemp2(m_pReportExplorer);
         m_pReportExplorer = NULL;
@@ -559,7 +559,7 @@ void ODesignView::toggleReportExplorer()
         m_pReportExplorer = new ONavigator(this,rReportController);
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_NAVIGATOR ) );
         if ( aDlgOpt.Exists() )
-            m_pReportExplorer->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
+            m_pReportExplorer->SetWindowState(rtl::OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pReportExplorer->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
@@ -596,7 +596,7 @@ void ODesignView::toggleAddField()
         m_pAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( UID_RPT_RPT_APP_VIEW ) );
         if ( aDlgOpt.Exists() )
-            m_pAddField->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
+            m_pAddField->SetWindowState(::rtl::OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pAddField->Update();
         m_pAddField->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::AddWindow));
