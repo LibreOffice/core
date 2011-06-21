@@ -95,7 +95,7 @@ XColorEntry* XColorTable::Replace(long nIndex, XColorEntry* pEntry )
 
 XColorEntry* XColorTable::Remove(long nIndex)
 {
-    return (XColorEntry*) XPropertyTable::Remove(nIndex, 0);
+    return (XColorEntry*) XPropertyTable::Remove(nIndex);
 }
 
 /************************************************************************/

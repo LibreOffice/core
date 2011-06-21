@@ -104,7 +104,7 @@ XGradientEntry* XGradientTable::Replace(long nIndex, XGradientEntry* pEntry )
 
 XGradientEntry* XGradientTable::Remove(long nIndex)
 {
-    return (XGradientEntry*) XPropertyTable::Remove(nIndex, 0);
+    return (XGradientEntry*) XPropertyTable::Remove(nIndex);
 }
 
 /************************************************************************/

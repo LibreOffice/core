@@ -173,7 +173,7 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
             if( mpList )
                 delete mpList->Remove( i, 0 );
             else
-                delete mpTable->Remove( i, 0 );
+                delete mpTable->Remove( i );
             return;
         }
     }

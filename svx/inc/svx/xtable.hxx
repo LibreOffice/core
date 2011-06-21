@@ -198,9 +198,9 @@ protected:
     Table               aTable;
     Table*              pBmpTable;
 
-    sal_Bool                bTableDirty;
-    sal_Bool                bBitmapsDirty;
-    sal_Bool                bOwnPool;
+    sal_Bool            bTableDirty;
+    sal_Bool            bBitmapsDirty;
+    sal_Bool            bOwnPool;
 
                         XPropertyTable( const String& rPath,
                                         XOutdevItemPool* pXPool = NULL,
@@ -214,9 +214,9 @@ public:
 
     long                Count() const;
 
-    sal_Bool                Insert(long nIndex, XPropertyEntry* pEntry);
+    sal_Bool            Insert(long nIndex, XPropertyEntry* pEntry);
     XPropertyEntry*     Replace(long nIndex, XPropertyEntry* pEntry);
-    XPropertyEntry*     Remove(long nIndex, sal_uInt16 nDummy);
+    XPropertyEntry*     Remove(long nIndex);
     XPropertyEntry*     Get( long nIndex, sal_uInt16 nDummy ) const;
 
     long                Get(const String& rName);
@@ -226,14 +226,14 @@ public:
     void                SetName( const String& rString );
     const String&       GetPath() const { return aPath; }
     void                SetPath( const String& rString ) { aPath = rString; }
-    sal_Bool                IsDirty() const { return bTableDirty && bBitmapsDirty; }
+    sal_Bool            IsDirty() const { return bTableDirty && bBitmapsDirty; }
     void                SetDirty( sal_Bool bDirty = sal_True )
                             { bTableDirty = bDirty; bBitmapsDirty = bDirty; }
 
-    virtual sal_Bool        Load() = 0;
-    virtual sal_Bool        Save() = 0;
-    virtual sal_Bool        Create() = 0;
-    virtual sal_Bool        CreateBitmapsForUI() = 0;
+    virtual sal_Bool    Load() = 0;
+    virtual sal_Bool    Save() = 0;
+    virtual sal_Bool    Create() = 0;
+    virtual sal_Bool    CreateBitmapsForUI() = 0;
     virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True ) = 0;
 };
 

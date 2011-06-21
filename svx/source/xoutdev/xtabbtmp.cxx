@@ -93,7 +93,7 @@ XBitmapEntry* XBitmapTable::Replace(long nIndex, XBitmapEntry* pEntry )
 
 XBitmapEntry* XBitmapTable::Remove(long nIndex)
 {
-    return (XBitmapEntry*) XPropertyTable::Remove(nIndex, 0);
+    return (XBitmapEntry*) XPropertyTable::Remove(nIndex);
 }
 
 /************************************************************************/

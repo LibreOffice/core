@@ -102,7 +102,7 @@ XHatchEntry* XHatchTable::Replace(long nIndex, XHatchEntry* pEntry )
 
 XHatchEntry* XHatchTable::Remove(long nIndex)
 {
-    return (XHatchEntry*) XPropertyTable::Remove(nIndex, 0);
+    return (XHatchEntry*) XPropertyTable::Remove(nIndex);
 }
 
 /************************************************************************/

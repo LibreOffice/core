@@ -108,7 +108,7 @@ XDashEntry* XDashTable::Replace(long nIndex, XDashEntry* pEntry )
 
 XDashEntry* XDashTable::Remove(long nIndex)
 {
-    return (XDashEntry*) XPropertyTable::Remove(nIndex, 0);
+    return (XDashEntry*) XPropertyTable::Remove(nIndex);
 }
 
 /************************************************************************/

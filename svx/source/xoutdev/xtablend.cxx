@@ -115,7 +115,7 @@ XLineEndEntry* XLineEndTable::Replace(long nIndex, XLineEndEntry* pEntry )
 
 XLineEndEntry* XLineEndTable::Remove(long nIndex)
 {
-    return (XLineEndEntry*) XPropertyTable::Remove(nIndex, 0);
+    return (XLineEndEntry*) XPropertyTable::Remove(nIndex);
 }
 
 /************************************************************************/

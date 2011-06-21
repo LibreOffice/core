@@ -256,7 +256,7 @@ XPropertyEntry* XPropertyTable::Replace( long nIndex, XPropertyEntry* pEntry )
 |*
 *************************************************************************/
 
-XPropertyEntry* XPropertyTable::Remove( long nIndex, sal_uInt16 /*nDummy*/)
+XPropertyEntry* XPropertyTable::Remove( long nIndex )
 {
     if( pBmpTable && !bBitmapsDirty )
     {
