@@ -93,7 +93,7 @@ mkdir: %_DEST%\inc\basegfx\tools
 ..\inc\basegfx\tools\keystoplerp.hxx %_DEST%\inc\basegfx\tools\keystoplerp.hxx
 ..\inc\basegfx\tools\lerp.hxx %_DEST%\inc\basegfx\tools\lerp.hxx
 ..\inc\basegfx\tools\unopolypolygon.hxx %_DEST%\inc\basegfx\tools\unopolypolygon.hxx
-..\inc\basegfx\tools\unotools.hxx %_DEST%\inc%_EXT%\basegfx\tools\unotools.hxx
+..\inc\basegfx\tools\unotools.hxx %_DEST%\inc\basegfx\tools\unotools.hxx
 ..\inc\basegfx\tools\b2dclipstate.hxx %_DEST%\inc\basegfx\tools\b2dclipstate.hxx
 ..\inc\basegfx\tools\rectcliptools.hxx %_DEST%\inc\basegfx\tools\rectcliptools.hxx
 ..\inc\basegfx\tools\tools.hxx %_DEST%\inc\basegfx\tools\tools.hxx
