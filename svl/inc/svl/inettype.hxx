@@ -443,42 +443,6 @@ public:
     static bool parse(UniString const & rMediaType, UniString & rType,
                       UniString & rSubType,
                       INetContentTypeParameterList * pParameters = 0);
-
-    /** Append a parameter to the string representation of a MIME media type.
-
-        @param rMediaType  The string representation of a MIME media type.
-
-        @param rAttribute  The name of the parameter.  Must be a valid RFC
-        2045 token.
-
-        @param rValue  The value of the paramter.  Must only consist of US-
-        ASCII characters.
-
-        @return  The string representation of rMediaType with the new
-        parameter appended.  It is not checked whether a parameter with that
-        name already existed in rMediaType.
-     */
-    static ByteString appendUSASCIIParameter(ByteString const & rMediaType,
-                                             ByteString const & rAttribute,
-                                             ByteString const & rValue);
-
-    /** Append a parameter to the string representation of a MIME media type.
-
-        @param rMediaType  The string representation of a MIME media type.
-
-        @param rAttribute  The name of the parameter.  Must be a valid RFC
-        2045 token.
-
-        @param rValue  The value of the paramter.  Must only consist of US-
-        ASCII characters.
-
-        @return  The string representation of rMediaType with the new
-        parameter appended.  It is not checked whether a parameter with that
-        name already existed in rMediaType.
-     */
-    static UniString appendUSASCIIParameter(UniString const & rMediaType,
-                                            UniString const & rAttribute,
-                                            UniString const & rValue);
 };
 
 #endif // _INETTYPE_HXX
