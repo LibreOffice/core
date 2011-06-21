@@ -52,7 +52,7 @@ $$(call gb_ComponentTarget_get_target,%) : $$(call gb_ComponentTarget_get_source
 endef
 
 $(call gb_ComponentTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$$*,$(false),CMP,1)
+	$(call gb_Output_announce,$*,$(false),CMP,1)
 	rm -f $(call gb_ComponentTarget_get_outdir_target,$*) \
 		$(call gb_ComponentTarget_get_target,$*) \
 		$(call gb_ComponentTarget_get_outdir_inbuild_target,$*) \
