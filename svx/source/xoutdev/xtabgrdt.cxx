@@ -249,7 +249,7 @@ XGradientEntry* XGradientList::Replace(XGradientEntry* pEntry, long nIndex )
 
 XGradientEntry* XGradientList::Remove(long nIndex)
 {
-    return( (XGradientEntry*) XPropertyList::Remove( nIndex, 0 ) );
+    return( (XGradientEntry*) XPropertyList::Remove( nIndex ) );
 }
 
 XGradientEntry* XGradientList::GetGradient(long nIndex) const

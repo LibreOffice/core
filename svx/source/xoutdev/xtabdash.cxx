@@ -263,7 +263,7 @@ XDashEntry* XDashList::Replace(XDashEntry* pEntry, long nIndex )
 
 XDashEntry* XDashList::Remove(long nIndex)
 {
-    return (XDashEntry*) XPropertyList::Remove(nIndex, 0);
+    return (XDashEntry*) XPropertyList::Remove(nIndex);
 }
 
 XDashEntry* XDashList::GetDash(long nIndex) const

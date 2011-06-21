@@ -175,7 +175,7 @@ XBitmapEntry* XBitmapList::Replace(XBitmapEntry* pEntry, long nIndex )
 
 XBitmapEntry* XBitmapList::Remove(long nIndex)
 {
-    return (XBitmapEntry*) XPropertyList::Remove(nIndex, 0);
+    return (XBitmapEntry*) XPropertyList::Remove(nIndex);
 }
 
 /************************************************************************/

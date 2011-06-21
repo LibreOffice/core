@@ -270,7 +270,7 @@ XLineEndEntry* XLineEndList::Replace(XLineEndEntry* pEntry, long nIndex )
 
 XLineEndEntry* XLineEndList::Remove(long nIndex)
 {
-    return (XLineEndEntry*) XPropertyList::Remove(nIndex, 0);
+    return (XLineEndEntry*) XPropertyList::Remove(nIndex);
 }
 
 XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const

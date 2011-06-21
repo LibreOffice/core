@@ -493,7 +493,7 @@ XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 |*
 *************************************************************************/
 
-XPropertyEntry* XPropertyList::Remove( long nIndex, sal_uInt16 /*nDummy*/)
+XPropertyEntry* XPropertyList::Remove( long nIndex )
 {
     if( pBmpList && !bBitmapsDirty )
     {

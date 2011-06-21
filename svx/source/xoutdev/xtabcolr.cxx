@@ -493,7 +493,7 @@ XColorEntry* XColorList::Replace(XColorEntry* pEntry, long nIndex )
 
 XColorEntry* XColorList::Remove(long nIndex)
 {
-    return (XColorEntry*) XPropertyList::Remove(nIndex, 0);
+    return (XColorEntry*) XPropertyList::Remove(nIndex);
 }
 
 /************************************************************************/

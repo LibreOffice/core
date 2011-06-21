@@ -171,7 +171,7 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
         if( pEntry && pEntry->GetName() == aInternalName )
         {
             if( mpList )
-                delete mpList->Remove( i, 0 );
+                delete mpList->Remove( i );
             else
                 delete mpTable->Remove( i );
             return;

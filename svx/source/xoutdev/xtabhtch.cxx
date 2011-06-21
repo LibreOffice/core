@@ -257,7 +257,7 @@ XHatchEntry* XHatchList::Replace(XHatchEntry* pEntry, long nIndex )
 
 XHatchEntry* XHatchList::Remove(long nIndex)
 {
-    return (XHatchEntry*) XPropertyList::Remove(nIndex, 0);
+    return (XHatchEntry*) XPropertyList::Remove(nIndex);
 }
 
 XHatchEntry* XHatchList::GetHatch(long nIndex) const
