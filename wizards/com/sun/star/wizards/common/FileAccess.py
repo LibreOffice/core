@@ -3,6 +3,7 @@ from NoValidPathException import *
 from com.sun.star.ucb import CommandAbortedException
 from com.sun.star.awt.VclWindowPeerAttribute import OK, YES_NO
 import types
+from os import path as osPath
 
 '''
 This class delivers static convenience methods
@@ -571,6 +572,7 @@ class FileAccess(object):
                  osPath.abspath(path))
             return r
         except Exception:
+            traceback.print_exc()
             return None
 
     def getPath(self, parentURL, childURL):
