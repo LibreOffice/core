@@ -34,8 +34,8 @@
 #ifndef ICC
 #include <io.h>
 #endif
-#include <sys\types.h>
-#include <sys\stat.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <direct.h>
 
 #include <windows.h>
