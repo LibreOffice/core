@@ -197,20 +197,23 @@ available for Linux, MacOSX and Windows. (Trying to cross-compile from
 Windows will probably drive you insane.)
 
 Here is my autogen.lastrun for Android:
-SYSBASE=/home/tml/android-ndk-r5b/platforms/android-9/arch-arm
-CC=ccache /home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-gcc --sysroot /home/tml/android-ndk-r5b/platforms/android-9/arch-arm
-CXX=ccache /home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-g++ --sysroot /home/tml/android-ndk-r5b/platforms/android-9/arch-arm -I /home/tml/android-ndk-r5b/sources/cxx-stl/gnu-libstdc++/include -I/home/tml/android-ndk-r5b/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -L/home/tml/android-ndk-r5b/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a -fexceptions -frtti
-AR=/home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-ar
-NM=/home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-nm
-OBJDUMP=/home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-objdump
-RANLIB=/home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-ranlib
-STRIP=/home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-strip
+SYSBASE=/home/tml/android-ndk-r5c/platforms/android-9/arch-arm
+CC=ccache /home/tml/android-ndk-r5c/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-gcc --sysroot /home/tml/android-ndk-r5c/platforms/android-9/arch-arm
+CXX=ccache /home/tml/android-ndk-r5c/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-g++ --sysroot /home/tml/android-ndk-r5c/platforms/android-9/arch-arm -I /home/tml/android-ndk-r5c/sources/cxx-stl/gnu-libstdc++/include -I/home/tml/android-ndk-r5c/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -L/home/tml/android-ndk-r5c/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a -fexceptions -frtti
+AR=/home/tml/android-ndk-r5c/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-ar
+NM=/home/tml/android-ndk-r5c/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-nm
+OBJDUMP=/home/tml/android-ndk-r5c/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-objdump
+RANLIB=/home/tml/android-ndk-r5c/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-ranlib
+STRIP=/home/tml/android-ndk-r5c/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-strip
 CC_FOR_BUILD=ccache gcc
 CXX_FOR_BUILD=ccache g++
 --build=x86_64-unknown-linux-gnu
 --disable-zenity
 --with-distro=LibreOfficeAndroid
 --with-external-tar=/mnt/hemulen/ooo/git/master/src
+--disable-python
+--with-num-cpus=1
+--with-max-jobs=1
 
 
 PowerPC Mac OS X
