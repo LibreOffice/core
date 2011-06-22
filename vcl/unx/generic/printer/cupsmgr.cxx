@@ -436,7 +436,7 @@ extern "C"
 {
     static void lcl_signal_action(int nSignal)
     {
-        fprintf( stderr, "Signal %d during fontconfig initialization called, ignoring fontconfig\n", nSignal );
+        fprintf( stderr, "Signal %d during cups initialization called, ignoring cups\n", nSignal );
         siglongjmp( aViolationBuffer, 1 );
     }
 }

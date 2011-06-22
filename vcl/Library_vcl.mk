@@ -49,6 +49,7 @@ $(eval $(call gb_Library_set_include,vcl,\
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_set_cxxflags,vcl,\
     $$(CXXFLAGS) \
+    $$(FONTCONFIG_CFLAGS) \
     $$(FREETYPE_CFLAGS) \
 ))
 endif
@@ -83,12 +84,6 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     sal \
     $(gb_STDLIBS) \
 ))
-
-ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    freetype \
-))
-endif
 
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_set_cxxflags,vcl,\
@@ -442,6 +437,14 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     version \
 ))
 endif
+endif
+
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+	$$(FONTCONFIG_LIBS) \
+    $$(FREETYPE_LIBS) \
+))
 endif
 
 ifeq ($(OS),LINUX)

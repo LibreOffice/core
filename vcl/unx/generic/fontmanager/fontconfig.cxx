@@ -98,53 +98,8 @@ namespace
 
 class FontCfgWrapper
 {
-    oslModule       m_pLib;
     FcFontSet*      m_pOutlineSet;
 
-    int             m_nFcVersion;
-    FcBool          (*m_pFcInit)();
-    void            (*m_pFcFini)();
-    int             (*m_pFcGetVersion)();
-    FcConfig*       (*m_pFcConfigGetCurrent)();
-    FcObjectSet*    (*m_pFcObjectSetVaBuild)(const char*,va_list);
-    void            (*m_pFcObjectSetDestroy)(FcObjectSet* pSet);
-    FcPattern*      (*m_pFcPatternCreate)();
-    void            (*m_pFcPatternDestroy)(FcPattern*);
-    FcBool          (*m_pFcPatternEqual)(const FcPattern*,const FcPattern*);
-    FcFontSet*      (*m_pFcConfigGetFonts)(FcConfig*,FcSetName);
-    FcFontSet*      (*m_pFcFontSetCreate)();
-    FcCharSet*                (*m_pFcCharSetCreate)();
-    FcBool                    (*m_pFcCharSetAddChar)(FcCharSet *, FcChar32);
-    FcBool          (*m_pFcCharSetHasChar)(FcCharSet *, FcChar32);
-    void            (*m_pFcCharSetDestroy)(FcCharSet*);
-    void            (*m_pFcFontSetDestroy)(FcFontSet*);
-    FcBool          (*m_pFcFontSetAdd)(FcFontSet*,FcPattern*);
-    void            (*m_pFcPatternReference)(FcPattern*);
-    FcResult        (*m_pFcPatternGetCharSet)(const FcPattern*,const char*,int,FcCharSet**);
-    FcResult        (*m_pFcPatternGetString)(const FcPattern*,const char*,int,FcChar8**);
-    FcResult        (*m_pFcPatternGetInteger)(const FcPattern*,const char*,int,int*);
-    FcResult        (*m_pFcPatternGetDouble)(const FcPattern*,const char*,int,double*);
-    FcResult        (*m_pFcPatternGetBool)(const FcPattern*,const char*,int,FcBool*);
-    void            (*m_pFcDefaultSubstitute)(FcPattern *);
-    FcPattern*      (*m_pFcFontSetMatch)(FcConfig*,FcFontSet**, int, FcPattern*,FcResult*);
-    FcPattern*      (*m_pFcFontMatch)(FcConfig*,FcPattern*,FcResult*);
-    FcBool          (*m_pFcConfigAppFontAddFile)(FcConfig*, const FcChar8*);
-    FcBool          (*m_pFcConfigAppFontAddDir)(FcConfig*, const FcChar8*);
-    FcBool          (*m_pFcConfigParseAndLoad)(FcConfig*,const FcChar8*,FcBool);
-    FcBool          (*m_pFcConfigSubstitute)(FcConfig*,FcPattern*,FcMatchKind);
-
-    FcPattern*      (*m_pFcPatternDuplicate)(const FcPattern*);
-    FcBool          (*m_pFcPatternAddInteger)(FcPattern*,const char*,int);
-    FcBool                    (*m_pFcPatternAddDouble)(FcPattern*,const char*,double);
-    FcBool                    (*m_pFcPatternAddBool)(FcPattern*,const char*,FcBool);
-    FcBool                    (*m_pFcPatternAddCharSet)(FcPattern*,const char*,const FcCharSet*);
-    FcBool          (*m_pFcPatternAddString)(FcPattern*,const char*,const FcChar8*);
-    FcBool                    (*m_pFcPatternDel)(FcPattern*,const char*);
-
-    FT_UInt         (*m_pFcFreeTypeCharIndex)(FT_Face,FcChar32);
-    FcBool          (*m_pFcPatternAddFTFace)(FcPattern*,const char*,const FT_Face);
-
-    oslGenericFunction loadSymbol( const char* );
     void addFontSet( FcSetName );
 
     FontCfgWrapper();
@@ -154,127 +109,8 @@ public:
     static FontCfgWrapper& get();
     static void release();
 
-    bool isValid() const
-    { return m_pLib != NULL;}
-
     FcFontSet* getFontSet();
 
-    FcBool FcInit()
-    { return m_pFcInit(); }
-
-    void FcFini()
-    {
-        //To-Do: get gtk vclplug smoketest to pass
-        //if (m_pFcFini) m_pFcFini();
-    }
-
-    int FcGetVersion()
-    { return m_pFcGetVersion(); }
-
-    FcConfig* FcConfigGetCurrent()
-    { return m_pFcConfigGetCurrent(); }
-
-    FcObjectSet* FcObjectSetBuild( const char* first, ... )
-    {
-        va_list ap;
-        va_start( ap, first );
-        FcObjectSet* pSet = m_pFcObjectSetVaBuild( first, ap );
-        va_end( ap );
-        return pSet;
-    }
-
-    void FcObjectSetDestroy( FcObjectSet* pSet )
-    { m_pFcObjectSetDestroy( pSet ); }
-
-    FcPattern* FcPatternCreate()
-    { return m_pFcPatternCreate(); }
-
-    void FcPatternDestroy( FcPattern* pPattern )
-    { if (m_pFcPatternDestroy) m_pFcPatternDestroy( pPattern ); }
-
-    FcBool FcPatternEqual( const FcPattern* pPatternA, const FcPattern *pPatternB )
-    { return m_pFcPatternEqual( pPatternA, pPatternB ); }
-
-    FcFontSet* FcConfigGetFonts( FcConfig* pConfig, FcSetName eSet)
-    { return m_pFcConfigGetFonts( pConfig, eSet ); }
-
-    FcFontSet* FcFontSetCreate()
-    { return m_pFcFontSetCreate(); }
-
-    FcCharSet* FcCharSetCreate()
-    { return m_pFcCharSetCreate(); }
-
-    FcBool FcCharSetAddChar(FcCharSet *fcs, FcChar32 ucs4)
-    { return m_pFcCharSetAddChar(fcs, ucs4); }
-
-    FcBool FcCharSetHasChar(FcCharSet *fcs, FcChar32 ucs4)
-    { return m_pFcCharSetHasChar(fcs, ucs4); }
-
-    void FcCharSetDestroy( FcCharSet* pSet )
-    { m_pFcCharSetDestroy( pSet );}
-
-    void FcFontSetDestroy( FcFontSet* pSet )
-    { m_pFcFontSetDestroy( pSet );}
-
-    FcBool FcFontSetAdd( FcFontSet* pSet, FcPattern* pPattern )
-    { return m_pFcFontSetAdd( pSet, pPattern ); }
-
-    void FcPatternReference( FcPattern* pPattern )
-    { m_pFcPatternReference( pPattern ); }
-
-    FcResult FcPatternGetCharSet( const FcPattern* pPattern, const char* object, int n, FcCharSet** s )
-    { return m_pFcPatternGetCharSet( pPattern, object, n, s ); }
-
-    FcResult FcPatternGetString( const FcPattern* pPattern, const char* object, int n, FcChar8** s )
-    { return m_pFcPatternGetString( pPattern, object, n, s ); }
-
-    FcResult FcPatternGetInteger( const FcPattern* pPattern, const char* object, int n, int* s )
-    { return m_pFcPatternGetInteger( pPattern, object, n, s ); }
-
-    FcResult FcPatternGetDouble( const FcPattern* pPattern, const char* object, int n, double* s )
-    { return m_pFcPatternGetDouble( pPattern, object, n, s ); }
-
-    FcResult FcPatternGetBool( const FcPattern* pPattern, const char* object, int n, FcBool* s )
-    { return m_pFcPatternGetBool( pPattern, object, n, s ); }
-    FcBool FcConfigAppFontAddFile( FcConfig* pConfig, const FcChar8* pFileName )
-    { return m_pFcConfigAppFontAddFile( pConfig, pFileName ); }
-    FcBool FcConfigAppFontAddDir(FcConfig* pConfig, const FcChar8* pDirName )
-    { return m_pFcConfigAppFontAddDir( pConfig, pDirName ); }
-    FcBool FcConfigParseAndLoad( FcConfig* pConfig, const FcChar8* pFileName, FcBool bComplain )
-    { return m_pFcConfigParseAndLoad( pConfig, pFileName, bComplain ); }
-
-    void FcDefaultSubstitute( FcPattern* pPattern )
-    { m_pFcDefaultSubstitute( pPattern ); }
-    FcPattern* FcFontSetMatch( FcConfig* pConfig, FcFontSet **ppFontSet, int nset, FcPattern* pPattern, FcResult* pResult )
-    { return m_pFcFontSetMatch ? m_pFcFontSetMatch( pConfig, ppFontSet, nset, pPattern, pResult ) : 0; }
-    FcPattern* FcFontMatch( FcConfig* pConfig, FcPattern* pPattern, FcResult* pResult )
-    { return m_pFcFontMatch( pConfig, pPattern, pResult ); }
-    FcBool FcConfigSubstitute( FcConfig* pConfig, FcPattern* pPattern, FcMatchKind eKind )
-    { return m_pFcConfigSubstitute( pConfig, pPattern, eKind ); }
-
-    FcPattern* FcPatternDuplicate( const FcPattern* pPattern ) const
-    { return m_pFcPatternDuplicate( pPattern ); }
-    FcBool FcPatternAddInteger( FcPattern* pPattern, const char* pObject, int nValue )
-    { return m_pFcPatternAddInteger( pPattern, pObject, nValue ); }
-    FcBool FcPatternAddDouble( FcPattern* pPattern, const char* pObject, double nValue )
-    { return m_pFcPatternAddDouble( pPattern, pObject, nValue ); }
-    FcBool FcPatternAddString( FcPattern* pPattern, const char* pObject, const FcChar8* pString )
-    { return m_pFcPatternAddString( pPattern, pObject, pString ); }
-    FcBool FcPatternAddBool( FcPattern* pPattern, const char* pObject, bool nValue )
-    { return m_pFcPatternAddBool( pPattern, pObject, nValue ); }
-    FcBool FcPatternAddCharSet(FcPattern* pPattern,const char* pObject,const FcCharSet*pCharSet)
-    { return m_pFcPatternAddCharSet(pPattern,pObject,pCharSet); }
-    FcBool FcPatternDel(FcPattern* pPattern, const char* object)
-    { return m_pFcPatternDel( pPattern, object); }
-
-    FT_UInt FcFreeTypeCharIndex( FT_Face face, FcChar32 ucs4 )
-    { return m_pFcFreeTypeCharIndex ? m_pFcFreeTypeCharIndex( face, ucs4 ) : 0; }
-    FcBool FcPatternAddFTFace( FcPattern* pPattern, const char* pObject, const FT_Face nValue )
-    {
-        return m_pFcPatternAddFTFace
-            ? m_pFcPatternAddFTFace( pPattern, pObject, nValue )
-            : false;
-    }
 public:
     FcResult LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **family,
                                          const char *elementtype, const char *elementlangtype);
@@ -285,184 +121,10 @@ private:
     void cacheLocalizedFontNames(FcChar8 *origfontname, FcChar8 *bestfontname, const std::vector< lang_and_element > &lang_and_elements);
 };
 
-oslGenericFunction FontCfgWrapper::loadSymbol( const char* pSymbol )
-{
-    OUString aSym( OUString::createFromAscii( pSymbol ) );
-    oslGenericFunction pSym = osl_getFunctionSymbol( m_pLib, aSym.pData );
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "%s %s\n", pSymbol, pSym ? "found" : "not found" );
-#endif
-    return pSym;
-}
-
 FontCfgWrapper::FontCfgWrapper()
-        : m_pLib( NULL ),
-          m_pOutlineSet( NULL ),
-          m_nFcVersion( 0 )
+    : m_pOutlineSet( NULL )
 {
-    OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libfontconfig.so.1" ) );
-    m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
-    if( !m_pLib )
-    {
-        aLib = OUString( RTL_CONSTASCII_USTRINGPARAM( "libfontconfig.so" ) );
-        m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
-    }
-
-    if( ! m_pLib )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "no libfontconfig\n" );
-#endif
-        return;
-    }
-
-    m_pFcInit = (FcBool(*)())
-        loadSymbol( "FcInit" );
-    m_pFcFini = (void(*)())
-        loadSymbol( "FcFini" );
-    m_pFcGetVersion = (int(*)())
-        loadSymbol( "FcGetVersion" );
-    m_pFcConfigGetCurrent = (FcConfig *(*)())
-        loadSymbol( "FcConfigGetCurrent" );
-    m_pFcObjectSetVaBuild = (FcObjectSet*(*)(const char*,va_list))
-        loadSymbol( "FcObjectSetVaBuild" );
-    m_pFcObjectSetDestroy = (void(*)(FcObjectSet*))
-        loadSymbol( "FcObjectSetDestroy" );
-    m_pFcPatternCreate = (FcPattern*(*)())
-        loadSymbol( "FcPatternCreate" );
-    m_pFcPatternDestroy = (void(*)(FcPattern*))
-        loadSymbol( "FcPatternDestroy" );
-    m_pFcPatternEqual = (FcBool(*)(const FcPattern*,const FcPattern*))
-        loadSymbol( "FcPatternEqual" );
-    m_pFcConfigGetFonts = (FcFontSet*(*)(FcConfig*,FcSetName))
-        loadSymbol( "FcConfigGetFonts" );
-    m_pFcFontSetCreate = (FcFontSet*(*)())
-        loadSymbol( "FcFontSetCreate" );
-    m_pFcCharSetCreate = (FcCharSet*(*)())
-        loadSymbol( "FcCharSetCreate" );
-    m_pFcCharSetAddChar = (FcBool(*)(FcCharSet*, FcChar32))
-        loadSymbol( "FcCharSetAddChar" );
-    m_pFcCharSetHasChar = (FcBool(*)(FcCharSet*, FcChar32))
-        loadSymbol( "FcCharSetHasChar" );
-    m_pFcCharSetDestroy = (void(*)(FcCharSet*))
-        loadSymbol( "FcCharSetDestroy" );
-    m_pFcFontSetDestroy = (void(*)(FcFontSet*))
-        loadSymbol( "FcFontSetDestroy" );
-    m_pFcFontSetAdd = (FcBool(*)(FcFontSet*,FcPattern*))
-        loadSymbol( "FcFontSetAdd" );
-    m_pFcPatternReference = (void(*)(FcPattern*))
-        loadSymbol( "FcPatternReference" );
-    m_pFcPatternGetCharSet = (FcResult(*)(const FcPattern*,const char*,int,FcCharSet**))
-        loadSymbol( "FcPatternGetCharSet" );
-    m_pFcPatternGetString = (FcResult(*)(const FcPattern*,const char*,int,FcChar8**))
-        loadSymbol( "FcPatternGetString" );
-    m_pFcPatternGetInteger = (FcResult(*)(const FcPattern*,const char*,int,int*))
-        loadSymbol( "FcPatternGetInteger" );
-    m_pFcPatternGetDouble = (FcResult(*)(const FcPattern*,const char*,int,double*))
-        loadSymbol( "FcPatternGetDouble" );
-    m_pFcPatternGetBool = (FcResult(*)(const FcPattern*,const char*,int,FcBool*))
-        loadSymbol( "FcPatternGetBool" );
-    m_pFcConfigAppFontAddFile = (FcBool(*)(FcConfig*, const FcChar8*))
-        loadSymbol( "FcConfigAppFontAddFile" );
-    m_pFcConfigAppFontAddDir = (FcBool(*)(FcConfig*, const FcChar8*))
-        loadSymbol( "FcConfigAppFontAddDir" );
-    m_pFcConfigParseAndLoad = (FcBool(*)(FcConfig*, const FcChar8*, FcBool))
-        loadSymbol( "FcConfigParseAndLoad" );
-    m_pFcDefaultSubstitute = (void(*)(FcPattern *))
-        loadSymbol( "FcDefaultSubstitute" );
-    m_pFcFontSetMatch = (FcPattern*(*)(FcConfig*,FcFontSet**,int,FcPattern*,FcResult*))
-        loadSymbol( "FcFontSetMatch" );
-    m_pFcFontMatch = (FcPattern*(*)(FcConfig*,FcPattern*,FcResult*))
-        loadSymbol( "FcFontMatch" );
-    m_pFcConfigSubstitute = (FcBool(*)(FcConfig*,FcPattern*,FcMatchKind))
-        loadSymbol( "FcConfigSubstitute" );
-
-    m_pFcPatternDuplicate = (FcPattern*(*)(const FcPattern*))
-        loadSymbol( "FcPatternDuplicate" );
-    m_pFcPatternAddInteger = (FcBool(*)(FcPattern*,const char*,int))
-        loadSymbol( "FcPatternAddInteger" );
-    m_pFcPatternAddDouble = (FcBool(*)(FcPattern*,const char*,double))
-        loadSymbol( "FcPatternAddDouble" );
-    m_pFcPatternAddBool = (FcBool(*)(FcPattern*,const char*,FcBool))
-        loadSymbol( "FcPatternAddBool" );
-    m_pFcPatternAddCharSet = (FcBool(*)(FcPattern*,const char*,const FcCharSet *))
-        loadSymbol( "FcPatternAddCharSet" );
-    m_pFcPatternAddString = (FcBool(*)(FcPattern*,const char*,const FcChar8*))
-        loadSymbol( "FcPatternAddString" );
-    m_pFcPatternDel = (FcBool(*)(FcPattern*,const char*))
-        loadSymbol( "FcPatternDel" );
-
-    m_pFcFreeTypeCharIndex = (FT_UInt(*)(FT_Face,FcChar32))
-        loadSymbol( "FcFreeTypeCharIndex" );
-    m_pFcPatternAddFTFace = (FcBool(*)(FcPattern*,const char*,const FT_Face))
-        loadSymbol( "FcPatternAddFTFace" );
-
-    m_nFcVersion = FcGetVersion();
-#if (OSL_DEBUG_LEVEL > 1)
-    fprintf( stderr,"FC_VERSION = %05d\n", m_nFcVersion );
-#endif
-    // make minimum version configurable
-    const char* pMinFcVersion = getenv( "SAL_MIN_FC_VERSION");
-    if( pMinFcVersion )
-    {
-        const int nMinFcVersion = atoi( pMinFcVersion );
-        if( m_nFcVersion < nMinFcVersion )
-            m_pFcInit = NULL;
-    }
-
-    if( ! (
-            m_pFcInit                       &&
-            m_pFcGetVersion                 &&
-            m_pFcConfigGetCurrent           &&
-            m_pFcObjectSetVaBuild           &&
-            m_pFcObjectSetDestroy           &&
-            m_pFcPatternCreate              &&
-            m_pFcPatternDestroy             &&
-            m_pFcPatternEqual               &&
-            m_pFcConfigGetFonts             &&
-            m_pFcFontSetCreate              &&
-            m_pFcCharSetCreate              &&
-            m_pFcCharSetAddChar             &&
-            m_pFcCharSetHasChar             &&
-            m_pFcCharSetDestroy             &&
-            m_pFcFontSetDestroy             &&
-            m_pFcFontSetAdd                 &&
-            m_pFcPatternReference           &&
-            m_pFcPatternGetCharSet          &&
-            m_pFcPatternGetString           &&
-            m_pFcPatternGetInteger          &&
-            m_pFcPatternGetDouble           &&
-            m_pFcPatternGetBool             &&
-            m_pFcConfigAppFontAddFile               &&
-            m_pFcConfigAppFontAddDir                &&
-            m_pFcConfigParseAndLoad             &&
-            m_pFcFontMatch                  &&
-            m_pFcDefaultSubstitute          &&
-            m_pFcConfigSubstitute           &&
-            m_pFcPatternDuplicate           &&
-            m_pFcPatternAddInteger          &&
-            m_pFcPatternAddDouble                     &&
-            m_pFcPatternAddCharSet          &&
-            m_pFcPatternAddBool             &&
-            m_pFcPatternAddString           &&
-            m_pFcPatternDel
-            ) )
-    {
-        osl_unloadModule( (oslModule)m_pLib );
-        m_pLib = NULL;
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "not all needed symbols were found in libfontconfig\n" );
-#endif
-        return;
-    }
-
-
     FcInit();
-    if( ! FcConfigGetCurrent() )
-    {
-        osl_unloadModule( (oslModule)m_pLib );
-        m_pLib = NULL;
-    }
 }
 
 void FontCfgWrapper::addFontSet( FcSetName eSetName )
@@ -493,12 +155,12 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
 
 namespace
 {
-    int compareFontNames(FontCfgWrapper& rWrapper, const FcPattern *a, const FcPattern *b)
+    int compareFontNames(const FcPattern *a, const FcPattern *b)
     {
         FcChar8 *pNameA=NULL, *pNameB=NULL;
 
-        bool bHaveA = rWrapper.FcPatternGetString(a, FC_FAMILY, 0, &pNameA) == FcResultMatch;
-        bool bHaveB = rWrapper.FcPatternGetString(b, FC_FAMILY, 0, &pNameB) == FcResultMatch;
+        bool bHaveA = FcPatternGetString(a, FC_FAMILY, 0, &pNameA) == FcResultMatch;
+        bool bHaveB = FcPatternGetString(b, FC_FAMILY, 0, &pNameB) == FcResultMatch;
 
         if (bHaveA && bHaveB)
             return strcmp((const char*)pNameA, (const char*)pNameB);
@@ -510,21 +172,17 @@ namespace
     //those with higher version numbers first
     class SortFont : public ::std::binary_function< const FcPattern*, const FcPattern*, bool >
     {
-    private:
-        FontCfgWrapper& m_rWrapper;
     public:
-        SortFont(FontCfgWrapper& rWrapper) : m_rWrapper(rWrapper) {}
-
         bool operator()(const FcPattern *a, const FcPattern *b)
         {
-            int comp = compareFontNames(m_rWrapper, a, b);
+            int comp = compareFontNames(a, b);
             if (comp != 0)
                 return comp < 0;
 
             int nVersionA=0, nVersionB=0;
 
-            bool bHaveA = m_rWrapper.FcPatternGetInteger(a, FC_FONTVERSION, 0, &nVersionA) == FcResultMatch;
-            bool bHaveB = m_rWrapper.FcPatternGetInteger(b, FC_FONTVERSION, 0, &nVersionB) == FcResultMatch;
+            bool bHaveA = FcPatternGetInteger(a, FC_FONTVERSION, 0, &nVersionA) == FcResultMatch;
+            bool bHaveB = FcPatternGetInteger(b, FC_FONTVERSION, 0, &nVersionB) == FcResultMatch;
 
             if (bHaveA && bHaveB)
                 return nVersionA > nVersionB;
@@ -539,7 +197,7 @@ namespace
     //See if this font is a duplicate with equal attributes which has already been
     //inserted, or if it an older version of an inserted fonts. Depends on FcFontSet
     //on being sorted with SortFont
-    bool isPreviouslyDuplicateOrObsoleted(FontCfgWrapper& rWrapper, FcFontSet *pFSet, int i)
+    bool isPreviouslyDuplicateOrObsoleted(FcFontSet *pFSet, int i)
     {
         if (i == 0)
             return false;
@@ -547,27 +205,25 @@ namespace
         const FcPattern *a = pFSet->fonts[i];
         const FcPattern *b = pFSet->fonts[i-1];
 
-        if (compareFontNames(rWrapper, a, b) != 0)
+        if (compareFontNames(a, b) != 0)
             return false;
 
-        FcPattern* pTestPatternA = rWrapper.FcPatternDuplicate(a);
-        rWrapper.FcPatternDel(pTestPatternA, FC_FILE);
-        rWrapper.FcPatternDel(pTestPatternA, FC_CHARSET);
-        rWrapper.FcPatternDel(pTestPatternA, FC_CAPABILITY);
-        rWrapper.FcPatternDel(pTestPatternA, FC_FONTVERSION);
+        FcPattern* pTestPatternA = FcPatternDuplicate(a);
+        FcPatternDel(pTestPatternA, FC_FILE);
+        FcPatternDel(pTestPatternA, FC_CHARSET);
+        FcPatternDel(pTestPatternA, FC_CAPABILITY);
+        FcPatternDel(pTestPatternA, FC_FONTVERSION);
 
-        FcPattern* pTestPatternB = rWrapper.FcPatternDuplicate(b);
-        rWrapper.FcPatternDel(pTestPatternB, FC_FILE);
-        rWrapper.FcPatternDel(pTestPatternB, FC_CHARSET);
-        rWrapper.FcPatternDel(pTestPatternB, FC_CAPABILITY);
-        rWrapper.FcPatternDel(pTestPatternB, FC_FONTVERSION);
+        FcPattern* pTestPatternB = FcPatternDuplicate(b);
+        FcPatternDel(pTestPatternB, FC_FILE);
+        FcPatternDel(pTestPatternB, FC_CHARSET);
+        FcPatternDel(pTestPatternB, FC_CAPABILITY);
+        FcPatternDel(pTestPatternB, FC_FONTVERSION);
 
-        bool bIsDup = false;
-        if (rWrapper.FcPatternEqual(pTestPatternA, pTestPatternB))
-            bIsDup = true;
+        bool bIsDup = FcPatternEqual(pTestPatternA, pTestPatternB);
 
-        rWrapper.FcPatternDestroy(pTestPatternB);
-        rWrapper.FcPatternDestroy(pTestPatternA);
+        FcPatternDestroy(pTestPatternB);
+        FcPatternDestroy(pTestPatternA);
 
         return bIsDup;
     }
@@ -579,10 +235,10 @@ FcFontSet* FontCfgWrapper::getFontSet()
     {
         m_pOutlineSet = FcFontSetCreate();
         addFontSet( FcSetSystem );
-        if( m_nFcVersion > 20400 ) // #i85462# prevent crashes
+        if( FcGetVersion() > 20400 ) // #i85462# prevent crashes
             addFontSet( FcSetApplication );
 
-        ::std::sort(m_pOutlineSet->fonts,m_pOutlineSet->fonts+m_pOutlineSet->nfont,SortFont(*this));
+        ::std::sort(m_pOutlineSet->fonts,m_pOutlineSet->fonts+m_pOutlineSet->nfont,SortFont());
     }
 
     return m_pOutlineSet;
@@ -592,9 +248,8 @@ FontCfgWrapper::~FontCfgWrapper()
 {
     if( m_pOutlineSet )
         FcFontSetDestroy( m_pOutlineSet );
-    FcFini();
-    if( m_pLib )
-        osl_unloadModule( (oslModule)m_pLib );
+    //To-Do: get gtk vclplug smoketest to pass
+    //FcFini();
 }
 
 static FontCfgWrapper* pOneInstance = NULL;
@@ -724,9 +379,7 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
  */
 bool PrintFontManager::initFontconfig()
 {
-    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    if( ! rWrapper.isValid() )
-        return false;
+    FontCfgWrapper::get();
     return true;
 }
 
@@ -802,8 +455,6 @@ int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, i
     int nFonts = 0;
 
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    if( !rWrapper.isValid() )
-        return 0;
 
     FcFontSet* pFSet = rWrapper.getFontSet();
     if( pFSet )
@@ -822,14 +473,14 @@ int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, i
             int nCollectionEntry = -1;
             FcBool outline = false;
 
-            FcResult eFileRes         = rWrapper.FcPatternGetString( pFSet->fonts[i], FC_FILE, 0, &file );
+            FcResult eFileRes         = FcPatternGetString(pFSet->fonts[i], FC_FILE, 0, &file);
             FcResult eFamilyRes       = rWrapper.LocalizedElementFromPattern( pFSet->fonts[i], &family, FC_FAMILY, FC_FAMILYLANG );
             FcResult eStyleRes        = rWrapper.LocalizedElementFromPattern( pFSet->fonts[i], &style, FC_STYLE, FC_STYLELANG );
-            FcResult eSlantRes        = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_SLANT, 0, &slant );
-            FcResult eWeightRes       = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_WEIGHT, 0, &weight );
-            FcResult eSpacRes         = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_SPACING, 0, &spacing );
-            FcResult eOutRes          = rWrapper.FcPatternGetBool( pFSet->fonts[i], FC_OUTLINE, 0, &outline );
-            FcResult eIndexRes        = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_INDEX, 0, &nCollectionEntry );
+            FcResult eSlantRes        = FcPatternGetInteger(pFSet->fonts[i], FC_SLANT, 0, &slant);
+            FcResult eWeightRes       = FcPatternGetInteger(pFSet->fonts[i], FC_WEIGHT, 0, &weight);
+            FcResult eSpacRes         = FcPatternGetInteger(pFSet->fonts[i], FC_SPACING, 0, &spacing);
+            FcResult eOutRes          = FcPatternGetBool(pFSet->fonts[i], FC_OUTLINE, 0, &outline);
+            FcResult eIndexRes        = FcPatternGetInteger(pFSet->fonts[i], FC_INDEX, 0, &nCollectionEntry);
 
             if( eFileRes != FcResultMatch || eFamilyRes != FcResultMatch || eOutRes != FcResultMatch )
                 continue;
@@ -853,7 +504,7 @@ int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, i
             if( eOutRes == FcResultMatch && ! outline )
                 continue;
 
-            if (isPreviouslyDuplicateOrObsoleted(rWrapper, pFSet, i))
+            if (isPreviouslyDuplicateOrObsoleted(pFSet, i))
             {
 #if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "Ditching %s as duplicate/obsolete\n", file);
@@ -979,25 +630,15 @@ void PrintFontManager::deinitFontconfig()
     FontCfgWrapper::release();
 }
 
-int PrintFontManager::FreeTypeCharIndex( void *pFace, sal_uInt32 aChar )
-{
-    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    return rWrapper.isValid() ? rWrapper.FcFreeTypeCharIndex( (FT_Face)pFace, aChar ) : 0;
-}
-
 bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
 {
-    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    if( ! rWrapper.isValid() )
-        return false;
-
     // workaround for a stability problems in older FC versions
     // when handling application specifc fonts
-    const int nVersion = rWrapper.FcGetVersion();
+    const int nVersion = FcGetVersion();
     if( nVersion <= 20400 )
         return false;
     const char* pDirName = (const char*)rDirName.getStr();
-    bool bDirOk = (rWrapper.FcConfigAppFontAddDir( rWrapper.FcConfigGetCurrent(), (FcChar8*)pDirName ) == FcTrue);
+    bool bDirOk = (FcConfigAppFontAddDir(FcConfigGetCurrent(), (FcChar8*)pDirName ) == FcTrue);
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "FcConfigAppFontAddDir( \"%s\") => %d\n", pDirName, bDirOk );
@@ -1012,8 +653,8 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
     if( pCfgFile )
     {
         fclose( pCfgFile);
-        bool bCfgOk = rWrapper.FcConfigParseAndLoad( rWrapper.FcConfigGetCurrent(),
-                        (FcChar8*)aConfFileName.getStr(), FcTrue );
+        bool bCfgOk = FcConfigParseAndLoad(FcConfigGetCurrent(),
+                        (FcChar8*)aConfFileName.getStr(), FcTrue);
         if( !bCfgOk )
             fprintf( stderr, "FcConfigParseAndLoad( \"%s\") => %d\n", aConfFileName.getStr(), bCfgOk );
     }
@@ -1021,7 +662,7 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
     return true;
 }
 
-static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
+static void addtopattern(FcPattern *pPattern,
     FontItalic eItalic, FontWeight eWeight, FontWidth eWidth, FontPitch ePitch)
 {
     if( eItalic != ITALIC_DONTKNOW )
@@ -1029,12 +670,16 @@ static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
         int nSlant = FC_SLANT_ROMAN;
         switch( eItalic )
         {
-            case ITALIC_NORMAL:     nSlant = FC_SLANT_ITALIC;break;
-            case ITALIC_OBLIQUE:        nSlant = FC_SLANT_OBLIQUE;break;
+            case ITALIC_NORMAL:
+                nSlant = FC_SLANT_ITALIC;
+                break;
+            case ITALIC_OBLIQUE:
+                nSlant = FC_SLANT_OBLIQUE;
+                break;
             default:
                 break;
         }
-        rWrapper.FcPatternAddInteger( pPattern, FC_SLANT, nSlant );
+        FcPatternAddInteger(pPattern, FC_SLANT, nSlant);
     }
     if( eWeight != WEIGHT_DONTKNOW )
     {
@@ -1054,7 +699,7 @@ static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
             default:
                 break;
         }
-        rWrapper.FcPatternAddInteger( pPattern, FC_WEIGHT, nWeight );
+        FcPatternAddInteger(pPattern, FC_WEIGHT, nWeight);
     }
     if( eWidth != WIDTH_DONTKNOW )
     {
@@ -1073,7 +718,7 @@ static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
             default:
                 break;
         }
-        rWrapper.FcPatternAddInteger( pPattern, FC_WIDTH, nWidth );
+        FcPatternAddInteger(pPattern, FC_WIDTH, nWidth);
     }
     if( ePitch != PITCH_DONTKNOW )
     {
@@ -1085,9 +730,9 @@ static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,
             default:
                 break;
         }
-        rWrapper.FcPatternAddInteger( pPattern, FC_SPACING, nSpacing );
+        FcPatternAddInteger(pPattern, FC_SPACING, nSpacing);
         if (nSpacing == FC_MONO)
-            rWrapper.FcPatternAddString( pPattern, FC_FAMILY, (FcChar8*)"monospace");
+            FcPatternAddString(pPattern, FC_FAMILY, (FcChar8*)"monospace");
     }
 }
 
@@ -1098,18 +743,16 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
 {
     rtl::OUString aName;
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    if( ! rWrapper.isValid() )
-        return aName;
 
     // build pattern argument for fontconfig query
-    FcPattern* pPattern = rWrapper.FcPatternCreate();
+    FcPattern* pPattern = FcPatternCreate();
 
     // Prefer scalable fonts
-    rWrapper.FcPatternAddBool( pPattern, FC_SCALABLE, FcTrue );
+    FcPatternAddBool(pPattern, FC_SCALABLE, FcTrue);
 
     const rtl::OString aTargetName = rtl::OUStringToOString( rFontName, RTL_TEXTENCODING_UTF8 );
     const FcChar8* pTargetNameUtf8 = (FcChar8*)aTargetName.getStr();
-    rWrapper.FcPatternAddString( pPattern, FC_FAMILY, pTargetNameUtf8 );
+    FcPatternAddString(pPattern, FC_FAMILY, pTargetNameUtf8);
 
     if( rLangAttrib.getLength() )
     {
@@ -1118,42 +761,42 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
             pLangAttribUtf8 = (FcChar8*)"pa";
         else
             pLangAttribUtf8 = (FcChar8*)rLangAttrib.getStr();
-        rWrapper.FcPatternAddString( pPattern, FC_LANG, pLangAttribUtf8 );
+        FcPatternAddString(pPattern, FC_LANG, pLangAttribUtf8);
     }
 
     // Add required Unicode characters, if any
     if ( rMissingCodes.getLength() )
     {
-       FcCharSet *unicodes = rWrapper.FcCharSetCreate();
+       FcCharSet *unicodes = FcCharSetCreate();
        for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
        {
            // also handle unicode surrogates
            const sal_uInt32 nCode = rMissingCodes.iterateCodePoints( &nStrIndex );
-           rWrapper.FcCharSetAddChar( unicodes, nCode );
+           FcCharSetAddChar( unicodes, nCode );
        }
-       rWrapper.FcPatternAddCharSet( pPattern, FC_CHARSET, unicodes);
-       rWrapper.FcCharSetDestroy( unicodes );
+       FcPatternAddCharSet(pPattern, FC_CHARSET, unicodes);
+       FcCharSetDestroy(unicodes);
     }
 
-    addtopattern(rWrapper, pPattern, rItalic, rWeight, rWidth, rPitch);
+    addtopattern(pPattern, rItalic, rWeight, rWidth, rPitch);
 
     // query fontconfig for a substitute
-    rWrapper.FcConfigSubstitute( rWrapper.FcConfigGetCurrent(), pPattern, FcMatchPattern );
-    rWrapper.FcDefaultSubstitute( pPattern );
+    FcConfigSubstitute(FcConfigGetCurrent(), pPattern, FcMatchPattern);
+    FcDefaultSubstitute(pPattern);
 
     // process the result of the fontconfig query
     FcResult eResult = FcResultNoMatch;
     FcFontSet* pFontSet = rWrapper.getFontSet();
-    FcPattern* pResult = rWrapper.FcFontSetMatch( rWrapper.FcConfigGetCurrent(), &pFontSet, 1, pPattern, &eResult );
-    rWrapper.FcPatternDestroy( pPattern );
+    FcPattern* pResult = FcFontSetMatch(FcConfigGetCurrent(), &pFontSet, 1, pPattern, &eResult);
+    FcPatternDestroy( pPattern );
 
     FcFontSet*  pSet = NULL;
     if( pResult )
     {
-        pSet = rWrapper.FcFontSetCreate();
+        pSet = FcFontSetCreate();
         // info: destroying the pSet destroys pResult implicitly
         // since pResult was "added" to pSet
-        rWrapper.FcFontSetAdd( pSet, pResult );
+        FcFontSetAdd( pSet, pResult );
     }
 
     if( pSet )
@@ -1162,7 +805,7 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
         {
             //extract the closest match
             FcChar8* family = NULL;
-            FcResult eFileRes = rWrapper.FcPatternGetString( pSet->fonts[0], FC_FAMILY, 0, &family );
+            FcResult eFileRes = FcPatternGetString( pSet->fonts[0], FC_FAMILY, 0, &family );
 
             // get the family name
             if( eFileRes == FcResultMatch )
@@ -1175,13 +818,13 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
 
 
                 int val = 0;
-                if ( FcResultMatch == rWrapper.FcPatternGetInteger( pSet->fonts[0], FC_WEIGHT, 0, &val))
+                if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_WEIGHT, 0, &val))
                     rWeight = convertWeight(val);
-                if ( FcResultMatch == rWrapper.FcPatternGetInteger( pSet->fonts[0], FC_SLANT, 0, &val))
+                if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_SLANT, 0, &val))
                     rItalic = convertSlant(val);
-                if ( FcResultMatch == rWrapper.FcPatternGetInteger( pSet->fonts[0], FC_SPACING, 0, &val))
+                if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_SPACING, 0, &val))
                     rPitch = convertSpacing(val);
-                if ( FcResultMatch == rWrapper.FcPatternGetInteger( pSet->fonts[0], FC_WIDTH, 0, &val))
+                if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_WIDTH, 0, &val))
                     rWidth = convertWidth(val);
             }
 
@@ -1191,13 +834,13 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
                 sal_uInt32* pRemainingCodes = (sal_uInt32*)alloca( rMissingCodes.getLength() * sizeof(sal_uInt32) );
                 int nRemainingLen = 0;
                 FcCharSet* unicodes;
-                if( !rWrapper.FcPatternGetCharSet( pSet->fonts[0], FC_CHARSET, 0, &unicodes ) )
+                if (!FcPatternGetCharSet(pSet->fonts[0], FC_CHARSET, 0, &unicodes))
                 {
                        for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
                     {
                         // also handle unicode surrogates
                         const sal_uInt32 nCode = rMissingCodes.iterateCodePoints( &nStrIndex );
-                        if( rWrapper.FcCharSetHasChar( unicodes, nCode ) != FcTrue )
+                        if (FcCharSetHasChar(unicodes, nCode) != FcTrue)
                             pRemainingCodes[ nRemainingLen++ ] = nCode;
                     }
                 }
@@ -1205,7 +848,7 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
             }
         }
 
-        rWrapper.FcFontSetDestroy( pSet );
+        FcFontSetDestroy( pSet );
     }
 
     return aName;
@@ -1217,18 +860,12 @@ public:
     FontConfigFontOptions() : mpPattern(0) {}
     ~FontConfigFontOptions()
     {
-        FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-        if( rWrapper.isValid() )
-            rWrapper.FcPatternDestroy( mpPattern );
+        FcPatternDestroy(mpPattern);
     }
     virtual void *GetPattern(void * face, bool bEmbolden) const
     {
-        FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-        if( rWrapper.isValid() )
-        {
-            rWrapper.FcPatternAddFTFace(mpPattern, FC_FT_FACE, static_cast<FT_Face>(face));
-            rWrapper.FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
-        }
+        FcPatternAddFTFace(mpPattern, FC_FT_FACE, static_cast<FT_Face>(face));
+        FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
         return mpPattern;
     }
     FcPattern* mpPattern;
@@ -1238,12 +875,10 @@ ImplFontOptions* PrintFontManager::getFontOptions(
     const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void*)) const
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    if( ! rWrapper.isValid() )
-        return NULL;
 
     FontConfigFontOptions* pOptions = NULL;
-    FcConfig* pConfig = rWrapper.FcConfigGetCurrent();
-    FcPattern* pPattern = rWrapper.FcPatternCreate();
+    FcConfig* pConfig = FcConfigGetCurrent();
+    FcPattern* pPattern = FcPatternCreate();
 
     OString sFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );
 
@@ -1251,32 +886,33 @@ ImplFontOptions* PrintFontManager::getFontOptions(
     if (aI != rWrapper.m_aLocalizedToCanonical.end())
         sFamily = aI->second;
     if( sFamily.getLength() )
-        rWrapper.FcPatternAddString( pPattern, FC_FAMILY, (FcChar8*)sFamily.getStr() );
+        FcPatternAddString(pPattern, FC_FAMILY, (FcChar8*)sFamily.getStr());
 
-    addtopattern(rWrapper, pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
-    rWrapper.FcPatternAddDouble( pPattern, FC_PIXEL_SIZE, nSize);
+    addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
+    FcPatternAddDouble(pPattern, FC_PIXEL_SIZE, nSize);
 
     FcBool embitmap = true, antialias = true, autohint = true, hinting = true;
     int hintstyle = FC_HINT_FULL;
 
-    rWrapper.FcConfigSubstitute( pConfig, pPattern, FcMatchPattern );
-    if (subcallback) subcallback(pPattern);
-    rWrapper.FcDefaultSubstitute( pPattern );
+    FcConfigSubstitute(pConfig, pPattern, FcMatchPattern);
+    if (subcallback)
+        subcallback(pPattern);
+    FcDefaultSubstitute(pPattern);
 
     FcResult eResult = FcResultNoMatch;
     FcFontSet* pFontSet = rWrapper.getFontSet();
-    FcPattern* pResult = rWrapper.FcFontSetMatch( pConfig, &pFontSet, 1, pPattern, &eResult );
+    FcPattern* pResult = FcFontSetMatch( pConfig, &pFontSet, 1, pPattern, &eResult );
     if( pResult )
     {
-        FcResult eEmbeddedBitmap = rWrapper.FcPatternGetBool(pResult,
+        FcResult eEmbeddedBitmap = FcPatternGetBool(pResult,
             FC_EMBEDDED_BITMAP, 0, &embitmap);
-        FcResult eAntialias = rWrapper.FcPatternGetBool(pResult,
+        FcResult eAntialias = FcPatternGetBool(pResult,
             FC_ANTIALIAS, 0, &antialias);
-        FcResult eAutoHint = rWrapper.FcPatternGetBool(pResult,
+        FcResult eAutoHint = FcPatternGetBool(pResult,
             FC_AUTOHINT, 0, &autohint);
-        FcResult eHinting = rWrapper.FcPatternGetBool(pResult,
+        FcResult eHinting = FcPatternGetBool(pResult,
             FC_HINTING, 0, &hinting);
-        /*FcResult eHintStyle =*/ rWrapper.FcPatternGetInteger(pResult,
+        /*FcResult eHintStyle =*/ FcPatternGetInteger(pResult,
             FC_HINT_STYLE, 0, &hintstyle);
 
         pOptions = new FontConfigFontOptions;
@@ -1302,7 +938,7 @@ ImplFontOptions* PrintFontManager::getFontOptions(
     }
 
     // cleanup
-    rWrapper.FcPatternDestroy( pPattern );
+    FcPatternDestroy( pPattern );
 
     return pOptions;
 }
@@ -1310,11 +946,9 @@ ImplFontOptions* PrintFontManager::getFontOptions(
 bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale )
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    if( ! rWrapper.isValid() )
-        return false;
 
-    FcConfig* pConfig = rWrapper.FcConfigGetCurrent();
-    FcPattern* pPattern = rWrapper.FcPatternCreate();
+    FcConfig* pConfig = FcConfigGetCurrent();
+    FcPattern* pPattern = FcPatternCreate();
 
     OString aLangAttrib;
     // populate pattern with font characteristics
@@ -1330,29 +964,29 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
         aLangAttrib = OUStringToOString( aLang.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
     }
     if( aLangAttrib.getLength() )
-        rWrapper.FcPatternAddString( pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr() );
+        FcPatternAddString(pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr());
 
     OString aFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );
     if( aFamily.getLength() )
-        rWrapper.FcPatternAddString( pPattern, FC_FAMILY, (FcChar8*)aFamily.getStr() );
+        FcPatternAddString(pPattern, FC_FAMILY, (FcChar8*)aFamily.getStr());
 
-    addtopattern(rWrapper, pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
+    addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
 
-    rWrapper.FcConfigSubstitute( pConfig, pPattern, FcMatchPattern );
-    rWrapper.FcDefaultSubstitute( pPattern );
+    FcConfigSubstitute(pConfig, pPattern, FcMatchPattern);
+    FcDefaultSubstitute(pPattern);
     FcResult eResult = FcResultNoMatch;
     FcFontSet *pFontSet = rWrapper.getFontSet();
-    FcPattern* pResult = rWrapper.FcFontSetMatch( pConfig, &pFontSet, 1, pPattern, &eResult );
+    FcPattern* pResult = FcFontSetMatch(pConfig, &pFontSet, 1, pPattern, &eResult);
     bool bSuccess = false;
     if( pResult )
     {
-        FcFontSet* pSet = rWrapper.FcFontSetCreate();
-        rWrapper.FcFontSetAdd( pSet, pResult );
+        FcFontSet* pSet = FcFontSetCreate();
+        FcFontSetAdd( pSet, pResult );
         if( pSet->nfont > 0 )
         {
             //extract the closest match
             FcChar8* file = NULL;
-            FcResult eFileRes = rWrapper.FcPatternGetString( pSet->fonts[0], FC_FILE, 0, &file );
+            FcResult eFileRes = FcPatternGetString(pSet->fonts[0], FC_FILE, 0, &file);
             if( eFileRes == FcResultMatch )
             {
                 OString aDir, aBase, aOrgPath( (sal_Char*)file );
@@ -1365,11 +999,11 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
         }
         // info: destroying the pSet destroys pResult implicitly
         // since pResult was "added" to pSet
-        rWrapper.FcFontSetDestroy( pSet );
+        FcFontSetDestroy( pSet );
     }
 
     // cleanup
-    rWrapper.FcPatternDestroy( pPattern );
+    FcPatternDestroy( pPattern );
 
     return bSuccess;
 }
