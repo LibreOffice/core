@@ -70,7 +70,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_UINT32
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
-    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+    if (pUId->equalsL(RTL_CONSTASCII_STRINGPARAM("UID_ACTIVE")))
         Write(comm_UINT32(0));
     else
         Write(pUId);
@@ -82,7 +82,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_String
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
-    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+    if (pUId->equalsL(RTL_CONSTASCII_STRINGPARAM("UID_ACTIVE")))
         Write(comm_UINT32(0));
     else
         Write(pUId);
@@ -94,7 +94,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_BOOL b
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
-    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+    if (pUId->equalsL(RTL_CONSTASCII_STRINGPARAM("UID_ACTIVE")))
         Write(comm_UINT32(0));
     else
         Write(pUId);
@@ -106,7 +106,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_UINT32
 {
     Write(comm_UINT16(SIReturn));
     Write(nRet);
-    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+    if (pUId->equalsL(RTL_CONSTASCII_STRINGPARAM("UID_ACTIVE")))
         Write(comm_UINT32(0));
     else
         Write(pUId);
