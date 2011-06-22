@@ -1422,6 +1422,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                         NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_num, pValue);
             }
             break;
+        case RTF_COLSX:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
+                        NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_space, pValue);
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
