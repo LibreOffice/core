@@ -32,7 +32,6 @@ $(eval $(call gb_Library_set_include,vclplug_gtk3,\
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))
 
@@ -45,6 +44,11 @@ $(eval $(call gb_Library_set_defs,vclplug_gtk3,\
     $$(DEFS) \
     -DVCLPLUG_GTK_IMPLEMENTATION \
     -DVERSION=\"$(UPD)$(LAST_MINOR)\" \
+))
+
+$(eval $(call gb_Library_add_api,vclplug_gtk3,\
+    offapi \
+    udkapi \
 ))
 
 ifneq ($(ENABLE_DBUS),)
