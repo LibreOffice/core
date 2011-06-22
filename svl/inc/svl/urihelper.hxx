@@ -64,33 +64,6 @@ namespace URIHelper {
 */
 SVL_DLLPUBLIC UniString
 SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
-             ByteString const & rTheRelURIRef,
-             Link const & rMaybeFileHdl = Link(),
-             bool bCheckFileExists = true,
-             bool bIgnoreFragment = false,
-             INetURLObject::EncodeMechanism eEncodeMechanism
-                 = INetURLObject::WAS_ENCODED,
-             INetURLObject::DecodeMechanism eDecodeMechanism
-                 = INetURLObject::DECODE_TO_IURI,
-             rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-             bool bRelativeNonURIs = false,
-             INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT);
-
-/**
-   @ATT
-   Calling this function with defaulted arguments rMaybeFileHdl = Link() and
-   bCheckFileExists = true often leads to results that are not intended:
-   Whenever the given rTheBaseURIRef is a file URL, the given rTheRelURIRef is
-   relative, and rTheRelURIRef could also be smart-parsed as a non-file URL
-   (e.g., the relative URL "foo/bar" can be smart-parsed as "http://foo/bar"),
-   then SmartRel2Abs called with rMaybeFileHdl = Link() and bCheckFileExists =
-   true returns the non-file URL interpretation.  To avoid this, either pass
-   some non-null rMaybeFileHdl if you want to check generated file URLs for
-   existence (see URIHelper::GetMaybeFileHdl), or use bCheckFileExists = false
-   if you want to generate file URLs without checking for their existence.
-*/
-SVL_DLLPUBLIC UniString
-SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
              UniString const & rTheRelURIRef,
              Link const & rMaybeFileHdl = Link(),
              bool bCheckFileExists = true,

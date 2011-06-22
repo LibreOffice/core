@@ -148,24 +148,6 @@ inline UniString SmartRel2Abs_Impl(INetURLObject const & rTheBaseURIRef,
 
 UniString
 URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
-                        ByteString const & rTheRelURIRef,
-                        Link const & rMaybeFileHdl,
-                        bool bCheckFileExists,
-                        bool bIgnoreFragment,
-                        INetURLObject::EncodeMechanism eEncodeMechanism,
-                        INetURLObject::DecodeMechanism eDecodeMechanism,
-                        rtl_TextEncoding eCharset,
-                        bool bRelativeNonURIs,
-                        INetURLObject::FSysStyle eStyle)
-{
-    return SmartRel2Abs_Impl(rTheBaseURIRef, rTheRelURIRef, rMaybeFileHdl,
-                             bCheckFileExists, bIgnoreFragment,
-                             eEncodeMechanism, eDecodeMechanism, eCharset,
-                             bRelativeNonURIs, eStyle);
-}
-
-UniString
-URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                         UniString const & rTheRelURIRef,
                         Link const & rMaybeFileHdl,
                         bool bCheckFileExists,
