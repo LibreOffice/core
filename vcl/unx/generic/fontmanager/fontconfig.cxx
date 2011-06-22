@@ -36,53 +36,37 @@
 
 using namespace psp;
 
-#ifdef ENABLE_FONTCONFIG
-    #include <fontconfig/fontconfig.h>
-    #include <ft2build.h>
-    #include <fontconfig/fcfreetype.h>
-    // allow compile on baseline (currently with fontconfig 2.2.0)
-    #ifndef FC_WEIGHT_BOOK      // TODO: remove when baseline moves to fc>=2.2.1
-        #define FC_WEIGHT_BOOK 75
-    #endif
-    #ifndef FC_EMBEDDED_BITMAP  // TODO: remove when baseline moves to fc>=2.3.92
-        #define FC_EMBEDDED_BITMAP "embeddedbitmap"
-    #endif
-    #ifndef FC_FAMILYLANG       // TODO: remove when baseline moves to fc>=2.2.97
-        #define FC_FAMILYLANG "familylang"
-    #endif
-    #ifndef FC_CAPABILITY       // TODO: remove when baseline moves to fc>=2.2.97
-        #define FC_CAPABILITY "capability"
-    #endif
-    #ifndef FC_STYLELANG        // TODO: remove when baseline moves to fc>=2.2.97
-        #define FC_STYLELANG "stylelang"
-    #endif
-    #ifndef FC_HINT_STYLE       // TODO: remove when baseline moves to fc>=2.2.91
-        #define FC_HINT_STYLE  "hintstyle"
-        #define FC_HINT_NONE   0
-        #define FC_HINT_SLIGHT 1
-        #define FC_HINT_MEDIUM 2
-        #define FC_HINT_FULL   3
-    #endif
-    #ifndef FC_FT_FACE
-        #define FC_FT_FACE "ftface"
-    #endif
-    #ifndef FC_EMBOLDEN
-        #define FC_EMBOLDEN "embolden"
-    #endif
-#else
-    typedef void FcConfig;
-    typedef void FcObjectSet;
-    typedef void FcPattern;
-    typedef void FcFontSet;
-    typedef void FcCharSet;
-    typedef int FcResult;
-    typedef int FcBool;
-    typedef int FcMatchKind;
-    typedef char FcChar8;
-    typedef int FcChar32;
-    typedef unsigned int FT_UInt;
-    typedef void* FT_Face;
-    typedef int FcSetName;
+#include <fontconfig/fontconfig.h>
+#include <ft2build.h>
+#include <fontconfig/fcfreetype.h>
+// allow compile on baseline (currently with fontconfig 2.2.0)
+#ifndef FC_WEIGHT_BOOK      // TODO: remove when baseline moves to fc>=2.2.1
+    #define FC_WEIGHT_BOOK 75
+#endif
+#ifndef FC_EMBEDDED_BITMAP  // TODO: remove when baseline moves to fc>=2.3.92
+    #define FC_EMBEDDED_BITMAP "embeddedbitmap"
+#endif
+#ifndef FC_FAMILYLANG       // TODO: remove when baseline moves to fc>=2.2.97
+    #define FC_FAMILYLANG "familylang"
+#endif
+#ifndef FC_CAPABILITY       // TODO: remove when baseline moves to fc>=2.2.97
+    #define FC_CAPABILITY "capability"
+#endif
+#ifndef FC_STYLELANG        // TODO: remove when baseline moves to fc>=2.2.97
+    #define FC_STYLELANG "stylelang"
+#endif
+#ifndef FC_HINT_STYLE       // TODO: remove when baseline moves to fc>=2.2.91
+    #define FC_HINT_STYLE  "hintstyle"
+    #define FC_HINT_NONE   0
+    #define FC_HINT_SLIGHT 1
+    #define FC_HINT_MEDIUM 2
+    #define FC_HINT_FULL   3
+#endif
+#ifndef FC_FT_FACE
+    #define FC_FT_FACE "ftface"
+#endif
+#ifndef FC_EMBOLDEN
+    #define FC_EMBOLDEN "embolden"
 #endif
 
 #include <cstdio>
@@ -483,7 +467,6 @@ FontCfgWrapper::FontCfgWrapper()
 
 void FontCfgWrapper::addFontSet( FcSetName eSetName )
 {
-    #ifdef ENABLE_FONTCONFIG
     /*
       add only acceptable outlined fonts to our config,
       for future fontconfig use
@@ -506,12 +489,8 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
     }
 
     // TODO?: FcFontSetDestroy( pOrig );
-    #else
-    (void)eSetName; // prevent compiler warning about unused parameter
-    #endif
 }
 
-#ifdef ENABLE_FONTCONFIG
 namespace
 {
     int compareFontNames(FontCfgWrapper& rWrapper, const FcPattern *a, const FcPattern *b)
@@ -593,11 +572,9 @@ namespace
         return bIsDup;
     }
 }
-#endif
 
 FcFontSet* FontCfgWrapper::getFontSet()
 {
-    #ifdef ENABLE_FONTCONFIG
     if( !m_pOutlineSet )
     {
         m_pOutlineSet = FcFontSetCreate();
@@ -607,7 +584,6 @@ FcFontSet* FontCfgWrapper::getFontSet()
 
         ::std::sort(m_pOutlineSet->fonts,m_pOutlineSet->fonts+m_pOutlineSet->nfont,SortFont(*this));
     }
-    #endif
 
     return m_pOutlineSet;
 }
@@ -639,7 +615,6 @@ void FontCfgWrapper::release()
     }
 }
 
-#ifdef ENABLE_FONTCONFIG
 namespace
 {
     class localizedsorter
@@ -1262,10 +1237,6 @@ public:
 ImplFontOptions* PrintFontManager::getFontOptions(
     const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void*)) const
 {
-#ifndef ENABLE_FONTCONFIG
-    (void)rInfo;(void)nSize;(void)subcallback;(void)rOptions;
-    return NULL;
-#else // ENABLE_FONTCONFIG
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
     if( ! rWrapper.isValid() )
         return NULL;
@@ -1334,7 +1305,6 @@ ImplFontOptions* PrintFontManager::getFontOptions(
     rWrapper.FcPatternDestroy( pPattern );
 
     return pOptions;
-#endif
 }
 
 bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale )
@@ -1403,44 +1373,5 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
 
     return bSuccess;
 }
-
-#else // ENABLE_FONTCONFIG not defined
-
-bool PrintFontManager::initFontconfig()
-{
-    return false;
-}
-
-int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, int, rtl::OStringHash>& )
-{
-    return 0;
-}
-
-void PrintFontManager::deinitFontconfig()
-{}
-
-bool PrintFontManager::addFontconfigDir( const rtl::OString& )
-{
-    return false;
-}
-
-bool PrintFontManager::matchFont( FastPrintFontInfo&, const com::sun::star::lang::Locale& )
-{
-    return false;
-}
-
-int PrintFontManager::FreeTypeCharIndex( void*, sal_uInt32 )
-{
-    return 0;
-}
-
-rtl::OUString PrintFontManager::Substitute( const rtl::OUString&,
-    rtl::OUString&, const rtl::OString&, FontItalic, FontWeight, FontWidth, FontPitch) const
-{
-    rtl::OUString aName;
-    return aName;
-}
-
-#endif // ENABLE_FONTCONFIG
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

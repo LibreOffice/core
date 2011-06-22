@@ -177,19 +177,12 @@ $(eval $(call gb_Library_set_defs,vcl,\
     -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
-## handle fontconfig
-ifneq ($(ENABLE_FONTCONFIG),)
-$(eval $(call gb_Library_set_defs,vcl,\
-    $$(DEFS) \
-    -DENABLE_FONTCONFIG \
-))
 ## handle CUPS
 ifneq ($(ENABLE_CUPS),)
 $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DENABLE_CUPS \
 ))
-endif
 endif
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/glyphs/gcach_ftyp \
