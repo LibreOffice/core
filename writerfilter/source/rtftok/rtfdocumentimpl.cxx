@@ -697,6 +697,14 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                         );
                 Mapper().props(pParagraphProperties);
 
+                // Table width.
+                RTFValue::Pointer_t pUnitValue(new RTFValue(3));
+                lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
+                        NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_type, pUnitValue);
+                RTFValue::Pointer_t pWidthValue(new RTFValue(m_aStates.top().nCellX));
+                lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
+                        NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_w, pWidthValue);
+
                 RTFValue::Pointer_t pRowValue(new RTFValue(1));
                 m_aStates.top().aTableRowSprms.push_back(make_pair(NS_sprm::LN_PRow, pRowValue));
                 writerfilter::Reference<Properties>::Pointer_t const pTableRowProperties(
