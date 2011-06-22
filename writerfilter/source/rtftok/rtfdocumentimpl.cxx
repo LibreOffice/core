@@ -720,6 +720,14 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 m_aBuffer.clear();
             }
             break;
+        case RTF_COLUMN:
+            {
+                sal_uInt8 sBreak[] = { 0xe };
+                Mapper().startCharacterGroup();
+                Mapper().text(sBreak, 1);
+                Mapper().endCharacterGroup();
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
