@@ -290,7 +290,7 @@ static ::rtl::OUString RetrieveLabelFromCommand(
             aLabel = aStr;
         }
     }
-    catch ( css::uno::Exception& )
+    catch (const css::uno::Exception&)
     {
     }
 
@@ -425,10 +425,13 @@ enum ETypeFamily
 
         return sType;
     }
-    catch(const css::uno::RuntimeException& exRun)
-        { throw exRun; }
-    catch(const css::uno::Exception&)
-        {}
+    catch (const css::uno::RuntimeException& exRun)
+    {
+        throw;
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
 
     return ::rtl::OUString();
 }
@@ -528,7 +531,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                         }
                     }
                 }
-                catch ( Exception& )
+                catch (const Exception&)
                 {
                 }
             }
@@ -635,11 +638,11 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             {
                  aModule = xModuleManager->identify( xFrame );
             }
-            catch ( css::uno::RuntimeException& )
+            catch (const css::uno::RuntimeException&)
             {
                 throw;
             }
-            catch ( css::uno::Exception& )
+            catch (const css::uno::Exception&)
             {
             }
 
@@ -723,7 +726,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 {
                     xStorable->storeToURL( aFileURL, aArgs );
                 }
-                catch ( com::sun::star::io::IOException& )
+                catch (const com::sun::star::io::IOException&)
                 {
                     rReq.Done(sal_False);
                     return;
@@ -741,7 +744,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                                 xSystemShellExecute->execute(
                                                     aFileURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
                     }
-                    catch ( uno::Exception& )
+                    catch (const uno::Exception&)
                     {
                         SolarMutexGuard aGuard;
                         Window *pParent = SFX_APP()->GetTopWindow();
@@ -1883,7 +1886,7 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
             {
                 pIPClient->GetObject()->changeState( embed::EmbedStates::INPLACE_ACTIVE );
             }
-            catch ( uno::Exception& )
+            catch (const uno::Exception&)
             {
             }
         }
@@ -2147,7 +2150,7 @@ sal_Bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUStr
                     continue;
             }
         }
-        catch( uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             aIt.remove();
         }
@@ -2196,7 +2199,7 @@ void SfxViewShell::CheckOwnerShip_Impl()
                 xModel->close( sal_True );
                 bSuccess = sal_True;
             }
-            catch ( util::CloseVetoException& )
+            catch (const util::CloseVetoException&)
             {
             }
         }
@@ -2213,7 +2216,7 @@ void SfxViewShell::CheckOwnerShip_Impl()
             {
                 xFrame->close( sal_True );
             }
-            catch ( util::CloseVetoException& )
+            catch (const util::CloseVetoException&)
             {
             }
         }
@@ -2291,7 +2294,7 @@ void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransf
             }
         }
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
 }
