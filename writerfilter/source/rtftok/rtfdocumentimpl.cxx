@@ -465,7 +465,7 @@ void RTFDocumentImpl::text(OUString& rString)
         Mapper().startCharacterGroup();
     else
     {
-        RTFValue::Pointer_t pValue(new RTFValue(0));
+        RTFValue::Pointer_t pValue;
         m_aBuffer.push_back(make_pair(BUFFER_STARTRUN, pValue));
     }
     if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
@@ -489,7 +489,7 @@ void RTFDocumentImpl::text(OUString& rString)
         Mapper().endCharacterGroup();
     else
     {
-        RTFValue::Pointer_t pValue(new RTFValue(0));
+        RTFValue::Pointer_t pValue;
         m_aBuffer.push_back(make_pair(BUFFER_ENDRUN, pValue));
     }
     if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
@@ -617,7 +617,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     lcl_ParBreak(Mapper());
                 else
                 {
-                    RTFValue::Pointer_t pValue(new RTFValue(0));
+                    RTFValue::Pointer_t pValue;
                     m_aBuffer.push_back(make_pair(BUFFER_PAR, pValue));
                 }
                 // but don't emit properties yet, since they may change till the first text token arrives
@@ -667,7 +667,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     m_aBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
                 }
 
-                RTFValue::Pointer_t pValue(new RTFValue(0));
+                RTFValue::Pointer_t pValue;
                 m_aBuffer.push_back(make_pair(BUFFER_CELLEND, pValue));
                 m_bNeedPap = true;
             }
