@@ -970,6 +970,13 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 RTFValue::Pointer_t pValue(new RTFValue(1));
                 m_aStates.top().aTableRowSprms.push_back(make_pair(NS_sprm::LN_TCantSplit, pValue));
             }
+        case RTF_SECTUNLOCKED:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(!nParam));
+                lcl_putNestedSprm(m_aStates.top().aSectionSprms,
+                        NS_ooxml::LN_CT_PPr_sectPr, NS_ooxml::LN_EG_SectPrContents_formProt, pValue);
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
