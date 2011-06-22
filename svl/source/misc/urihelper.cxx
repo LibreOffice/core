@@ -65,10 +65,6 @@
 #include <unotools/charclass.hxx>
 #include "rtl/instance.hxx"
 
-namespace unnamed_svl_urihelper {}
-using namespace unnamed_svl_urihelper;
-    // unnamed namespaces don't work well yet...
-
 namespace css = com::sun::star;
 using namespace com::sun::star;
 
@@ -78,7 +74,7 @@ using namespace com::sun::star;
 //
 //============================================================================
 
-namespace unnamed_svl_urihelper {
+namespace {
 
 inline UniString toUniString(ByteString const & rString)
 {
@@ -422,7 +418,7 @@ rtl::OUString URIHelper::simpleNormalizedMakeRelative(
 //
 //============================================================================
 
-namespace unnamed_svl_urihelper {
+namespace {
 
 inline xub_StrLen nextChar(UniString const & rStr, xub_StrLen nPos)
 {
