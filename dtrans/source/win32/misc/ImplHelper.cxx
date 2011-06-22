@@ -47,6 +47,7 @@
 #pragma warning(pop)
 #endif
 #ifdef __MINGW32__
+#include <setjmp.h>
 #include <excpt.h>
 #endif
 
