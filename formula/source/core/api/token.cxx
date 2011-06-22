@@ -303,7 +303,7 @@ bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,Exter
             {
                 // long is svIndex, used for name / database area, or "byte" for spaces
                 sal_Int32 nValue = _aToken.Data.get<sal_Int32>();
-                if ( eOpCode == ocName || eOpCode == ocDBArea )
+                if ( eOpCode == ocDBArea )
                     AddToken( formula::FormulaIndexToken( eOpCode, static_cast<sal_uInt16>(nValue) ) );
                 else if ( eOpCode == ocSpaces )
                     AddToken( formula::FormulaByteToken( ocSpaces, static_cast<sal_uInt8>(nValue) ) );
@@ -1347,6 +1347,7 @@ bool FormulaStringOpToken::operator==( const FormulaToken& r ) const
 }
 
 sal_uInt16  FormulaIndexToken::GetIndex() const                  { return nIndex; }
+sal_uInt8   FormulaIndexToken::GetByte() const    {return static_cast<sal_uInt8>(mbGlobal); }
 void    FormulaIndexToken::SetIndex( sal_uInt16 n )              { nIndex = n; }
 bool FormulaIndexToken::operator==( const FormulaToken& r ) const
 {
