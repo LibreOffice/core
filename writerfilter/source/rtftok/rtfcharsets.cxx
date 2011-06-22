@@ -1,4 +1,5 @@
 #include <rtftypes.hxx>
+#include <sal/macros.h>
 
 namespace writerfilter {
 namespace rtftok {
@@ -36,10 +37,10 @@ RTFEncoding aRTFEncodings[] = {
     {222, 874}, // Thai
     {238, 1250}, // Eastern European
     {254, 437}, // PC 437
-    {255, 850} // OEM
+    {255, 850}, // OEM
 };
 
-int nRTFEncodings = sizeof(aRTFEncodings) / sizeof(RTFEncoding);
+int nRTFEncodings = SAL_N_ELEMENTS(aRTFEncodings);
 
 } // namespace rtftok
 } // namespace writerfilter

@@ -1,6 +1,7 @@
 #include <rtfdocumentimpl.hxx>
 #include <rtftypes.hxx>
 #include <rtfcontrolwords.hxx>
+#include <sal/macros.h>
 
 namespace writerfilter {
 namespace rtftok {
@@ -1817,9 +1818,9 @@ RTFSymbol aRTFControlWords[] = {
     {"zwbo", CONTROL_SYMBOL, RTF_ZWBO},
     {"zwj", CONTROL_SYMBOL, RTF_ZWJ},
     {"zwnbo", CONTROL_SYMBOL, RTF_ZWNBO},
-    {"zwnj", CONTROL_SYMBOL, RTF_ZWNJ}
+    {"zwnj", CONTROL_SYMBOL, RTF_ZWNJ},
 };
-int nRTFControlWords = sizeof(aRTFControlWords) / sizeof(RTFSymbol);
+int nRTFControlWords = SAL_N_ELEMENTS(aRTFControlWords);
 
 } // namespace rtftok
 } // namespace writerfilter
