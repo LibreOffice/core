@@ -174,38 +174,6 @@ class Desktop(object):
             scompname = _sElementName + _sSuffixSeparator + (a + 1)
         return ""
 
-    '''
-    @deprecated  use Configuration.getConfigurationRoot() with the same
-    arameters instead
-    @param xMSF
-    @param KeyName
-    @param bForUpdate
-    @return
-    '''
-
-    @classmethod
-    def getRegistryKeyContent(self, xMSF, KeyName, bForUpdate):
-        try:
-            aNodePath = range(1)
-            oConfigProvider = xMSF.createInstance(
-                "com.sun.star.configuration.ConfigurationProvider")
-            aNodePath[0] = uno.createUnoStruct(
-                'com.sun.star.beans.PropertyValue')
-            aNodePath[0].Name = "nodepath"
-            aNodePath[0].Value = KeyName
-            if bForUpdate:
-                return oConfigProvider.createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationUpdateAccess",
-                    aNodePath)
-            else:
-                return oConfigProvider.createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess",
-                    aNodePath)
-
-        except Exception, exception:
-            exception.printStackTrace(System.out)
-            return None
-
 class OfficePathRetriever:
 
     def OfficePathRetriever(self, xMSF):

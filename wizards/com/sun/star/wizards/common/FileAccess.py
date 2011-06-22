@@ -370,17 +370,6 @@ class FileAccess(object):
                 sMsgFilePathInvalid)
             return False
 
-    '''
-    searches a directory for files which start with a certain
-    prefix, and returns their URLs and document-titles.
-    @param xMSF
-    @param FilterName the prefix of the filename. a "-" is added to the prefix
-    @param FolderName the folder (URL) to look for files...
-    @return an array with two array members. The first one, with document
-    titles, the second with the corresponding URLs.
-    @deprecated please use the getFolderTitles() with ArrayList
-    '''
-
     @classmethod
     def getFolderTitles(self, xMSF, FilterName, FolderName):
         LocLayoutFiles = [[2],[]]
