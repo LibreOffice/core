@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,11 +30,8 @@
 #include <tokens/tkpstama.hxx>
 
 // NOT FULLY DECLARED SERVICES
-// #include <srcfind.hxx>
 #include <tokens/stmstarr.hxx>
-//#include <parseinc.hxx>
 #include <tools/tkpchars.hxx>
-
 
 const intt  C_nStatuslistResizeValue = 32;
 const intt  C_nTopStatus = 0;
@@ -158,8 +156,6 @@ StateMachine::CurrentStatus() const
     StmArrayStatus * pCurSt = Status(nCurrentStatus).AsArray();
 
     csv_assert(pCurSt != 0);
-//  if(pCurSt == 0)
-//      csv_assert(false);
     return *pCurSt;
 }
 
@@ -175,3 +171,5 @@ StateMachine::Peek(intt in_nBranch)
     StmArrayStatus & rSt = CurrentStatus();
     nPeekedStatus = rSt.NextBy(in_nBranch);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

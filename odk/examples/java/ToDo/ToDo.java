@@ -916,7 +916,7 @@ public class ToDo {
 
         /** Writing the stack trace from an exception to a string and calling
          * the method showMessage() with this string.
-         * @param exception The occured exception.
+         * @param exception The occurred exception.
          * @see showMessage
          */
         public void showExceptionMessage( Exception exception ) {

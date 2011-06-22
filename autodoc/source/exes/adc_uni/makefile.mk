@@ -76,11 +76,11 @@ APP1OBJS=   $(OBJ)$/main.obj
 APP1RPATH=SDK
 
 .IF "$(GUI)"=="WNT"
-APP1STDLIBS= $(LIBSTLPORT) $(COSVLIB) $(UDMLIB)
+APP1STDLIBS= $(COSVLIB) $(UDMLIB)
 .ELSE
 .IF "$(OS)"=="MACOSX"
 # See <http://porting.openoffice.org/servlets/ReadMsg?list=mac&msgNo=6911>:
-APP1STDLIBS= $(LIBSTLPORT) -Wl,-all_load -ludm -lcosv
+APP1STDLIBS= -Wl,-all_load -ludm -lcosv
 .ELSE
 APP1STDLIBS= -lcosv -ludm
 .ENDIF

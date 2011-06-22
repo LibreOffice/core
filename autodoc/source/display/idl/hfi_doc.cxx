@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -164,7 +165,7 @@ HF_IdlDocu::Produce_byDocuAndScope( const ce_info & i_rDocu,
         }
     }   // end for
 
-    if (aSeeAlsosWithoutText.size() > 0)
+    if (!aSeeAlsosWithoutText.empty())
     {
         HF_IdlTag
             aSeeAlsoTag(Env(),  i_rScopeGivingCe);
@@ -189,3 +190,5 @@ HF_IdlDocu::Produce_byDocuAndScope( const ce_info & i_rDocu,
                                  *(*itSee2) );
     }   // end for
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,69 +73,4 @@ classtest_String( csv::SimpleString & rSimpleString )
     return ret;
 }
 
-
-
-
-#if 0
-FUT_DECL( SimpleString, Ctor_Def );
-FUT_DECL( SimpleString, Seek );
-FUT_DECL( SimpleString, SeekBack );
-FUT_DECL( SimpleString, SeekRelative );
-
-
-
-FUT_DECL( SimpleString, Read )
-{
-    bool ret = true;
-
-    rSimpleString.SeekBack(0);
-    uintt nSourceSize = rSimpleString.Position();
-    rSimpleString.Seek(0);
-
-    char * pBuf = new char[nSourceSize+1];
-    uintt nCount = rSimpleString.Read(pBuf,nSourceSize);
-
-    UT_CHECK( Read, nCount == nSourceSize );
-
-    return ret;
-}
-
-FUT_DECL( SimpleString, Write )
-{
-    bool ret = true;
-
-
-
-    return ret;
-}
-
-FUT_DECL( SimpleString, Seek )
-{
-    bool ret = true;
-
-
-
-    return ret;
-}
-
-FUT_DECL( SimpleString, SeekBack )
-{
-    bool ret = true;
-
-
-
-    return ret;
-}
-
-FUT_DECL( SimpleString, SeekRelative )
-{
-    bool ret = true;
-
-
-
-    return ret;
-}
-
-#endif
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

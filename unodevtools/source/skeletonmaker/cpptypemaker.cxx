@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -419,8 +420,8 @@ void printMethods(std::ostream & o,
             o << "// ::com::sun::star::lang::XServiceName:\n"
                 "::rtl::OUString SAL_CALL " << classname << "getServiceName() "
                 "throw (css::uno::RuntimeException)\n{\n    "
-                "return ::rtl::OUString::createFromAscii("
-                "sADDIN_SERVICENAME);\n}\n";
+                "return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
+                "sADDIN_SERVICENAME));\n}\n";
             generated.add(type);
             return;
         } else if (type.equals("com/sun/star/sheet/XAddIn")) {
@@ -969,3 +970,4 @@ void generateDocumentation(std::ostream & o,
 } }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

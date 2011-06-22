@@ -27,8 +27,8 @@
 
 # used for sdk common files
 PRODUCT_RELEASE=3.4
-OFFICENAME=OpenOffice.org
-SDKDIRNAME=openoffice.org$(PRODUCT_RELEASE)_sdk
+OFFICENAME=LibreOffice
+SDKDIRNAME=libreoffice$(PRODUCT_RELEASE)_sdk
 OFFICEPRODUCTNAME=$(OFFICENAME) $(PRODUCT_RELEASE)
 TITLE=$(OFFICENAME) $(PRODUCT_RELEASE) SDK
 IDLDOCREFNAME="$(OFFICENAME) $(PRODUCT_RELEASE) API"
@@ -64,23 +64,15 @@ IDLOUT=$(SOLARIDLDIR)
 XMLOUT=$(SOLARXMLDIR)
 LIBOUT=$(SOLARLIBDIR)
 
-CONVERTTAGSCRIPT=$(SOLARENV)/bin/converttags.pl
-CONVERTTAGFLAGNAME=converttags_html_files.flag
-CONVERTTAGFLAG = $(MISC)/$(CONVERTTAGFLAGNAME)
-
 MY_AUTODOC=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/autodoc
 
-.IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
-MY_COPY=$(GNUCOPY)
-MY_COPY_RECURSIVE=$(GNUCOPY) -r
-.ELSE
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)"=="MACOSX" || \
+    "$(OS)"=="AIX" || "$(OS)"=="DRAGONFLY"
 MY_COPY=$(GNUCOPY)
 MY_COPY_RECURSIVE=$(GNUCOPY) -r
 .ELSE
 MY_COPY=$(GNUCOPY) -u
 MY_COPY_RECURSIVE=$(GNUCOPY) -urf
-.ENDIF
 .ENDIF
 
 MY_DELETE_RECURSIVE=rm -rf
@@ -90,8 +82,6 @@ MY_TEXTCOPY=@cp
 #--------------------
 # WNT ONLY
 #--------------------
-#MY_DELETE_RECURSIVE=+del /sxyf
-#MY_TEXTCOPY=cat
 
 MY_DLLPREFIX=
 MY_DLLPOSTFIX=.dll
@@ -110,11 +100,6 @@ DESTDIRCLI=$(DESTDIR)/cli
 
 .ELSE
 #--------------------
-# UNX ONLYDESTDIRCPPEXAMPLES=$(DESTDIR)/examples/cpp
-
-#--------------------
-#MY_DELETE_RECURSIVE=rm -rf
-#MY_TEXTCOPY= tr -d "\015"
 
 MY_DLLPREFIX=lib
 .IF "$(OS)"=="MACOSX"
@@ -126,56 +111,43 @@ MY_DLLOUT=$(OUT)/lib
 DLLOUT=$(SOLARLIBDIR)
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
-##############
 # SOLARIS SPARC
-##############
 DESTPLATFROM=solsparc
 
 .ELIF "$(OS)$(CPU)"=="SOLARISU"
-##############
 # SOLARIS SPARC 64
-##############
 DESTPLATFROM=solsparc64
 
 .ELIF "$(OS)$(CPU)"=="SOLARISI"
-##########
 # SOLARIS INTEL
-##########
 DESTPLATFROM=solintel
 
 .ELIF "$(OS)"=="LINUX"
-###########
 # LINUX
-###########
 DESTPLATFROM=linux
 
 .ELIF "$(OS)"=="NETBSD"
-###########
 # NETBSD
-###########
 DESTPLATFROM=netbsd
 
 .ELIF "$(OS)"=="FREEBSD"
-###########
 # FREEBSD
-###########
 DESTPLATFROM=freebsd
 
+.ELIF "$(OS)"=="DRAGONFLY"
+DESTPLATFROM=dragonfly
+
 .ELIF "$(OS)"=="MACOSX"
-###########
 # MACOSX
-###########
 DESTPLATFROM=macosx
+
+.ELIF "$(OS)"=="AIX"
+# MACOSX
+DESTPLATFROM=aix
+
 .ENDIF
 
-#DESTDIRBIN=$(DESTDIR)/$(DESTPLATFROM)/bin
-#DESTDIRLIB=$(DESTDIR)/$(DESTPLATFROM)/lib
-#DESTDIRDLL=$(DESTDIRLIB)
-
 .ENDIF
-
-#MY_TEXTCOPY_SOURCEPRE=<
-#MY_TEXTCOPY_TARGETPRE=>
 
 
 INCLUDETOPDIRLIST= \
@@ -188,8 +160,7 @@ INCLUDETOPDIRLIST= \
     $(INCOUT)/uno \
     $(INCOUT)/cppu \
     $(INCOUT)/cppuhelper \
-    $(INCOUT)/registry \
-    $(INCOUT)/stl
+    $(INCOUT)/registry
 
 .IF "$(GUI)"=="WNT"
 INCLUDETOPDIRLIST += $(INCOUT)/systools

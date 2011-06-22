@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,23 +33,23 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <slist>
+#include <list>
     // COMPONENTS
     // PARAMETERS
 
 
 
 template <class ELEM>
-class EStack : private std::slist<ELEM>
+class EStack : private std::list<ELEM>
 {
   private:
-    typedef std::slist<ELEM>    base;
+    typedef std::list<ELEM>    base;
     const base &        Base() const            { return *this; }
     base &              Base()                  { return *this; }
 
   public:
     typedef ELEM                                    value_type;
-    typedef typename std::slist<ELEM>::size_type    size_type;
+    typedef typename std::list<ELEM>::size_type    size_type;
 
     // LIFECYCLE
                         EStack()                {}
@@ -92,3 +93,4 @@ class EStack : private std::slist<ELEM>
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

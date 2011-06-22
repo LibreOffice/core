@@ -32,12 +32,7 @@ $main::OFFICE_HOME = "";
 
 $main::OFFICE_BASE_HOME = substr($main::sdkpath, 0, rindex($main::sdkpath, "/sdk"));
 
-if ( $main::operatingSystem =~ m/darwin/ )
-{
-#   $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
-} else {
-    $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
-}
+$main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
 chomp($main::OO_SDK_URE_HOME);
 
 $main::OO_SDK_MAKE_HOME = "";
@@ -654,9 +649,9 @@ sub searchMacOffice
 
 sub searchoffice
 {
-    my $offset = rindex($main::sdkpath, "/openoffice.org");
+    my $offset = rindex($main::sdkpath, "/libreoffice");
     my $tmpOffice = substr($main::sdkpath, 0, $offset);
-    my $officepath = "$tmpOffice/openoffice.org$main::OO_MAJORVERSION";
+    my $officepath = "$tmpOffice/libreoffice";
 
 #   if ( $main::OO_MINORVERSION > 0) {
 #       $officepath = "$officepath$main::OO_MINORVERSION";

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -108,12 +109,12 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else if(!pBegin->Name.compareToAscii(pUser))
         {
             pBegin->Value >>= aUID;
-            aDSN = aDSN + ::rtl::OUString::createFromAscii(";UID=") + aUID;
+            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";UID=")) + aUID;
         }
         else if(!pBegin->Name.compareToAscii(pPwd))
         {
             pBegin->Value >>= aPWD;
-            aDSN = aDSN + ::rtl::OUString::createFromAscii(";PWD=") + aPWD;
+            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";PWD=")) + aPWD;
         }
         else if(!pBegin->Name.compareToAscii(pUseCatalog))
         {
@@ -122,7 +123,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else if(!pBegin->Name.compareToAscii(pSysDrv))
         {
             pBegin->Value >>= aSysDrvSettings;
-            aDSN += ::rtl::OUString::createFromAscii(";");
+            aDSN += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
             aDSN += aSysDrvSettings;
         }
     }
@@ -400,3 +401,4 @@ void OConnection::disposing()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

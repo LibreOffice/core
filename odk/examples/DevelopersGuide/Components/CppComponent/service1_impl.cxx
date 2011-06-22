@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -35,6 +36,7 @@
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
+#include <rtl/instance.hpp>
 #include <cppuhelper/factory.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -171,24 +173,34 @@ Sequence< Type > MyService1Impl::getTypes()
     seq[ 2 ] = ::cppu::UnoType< Reference< ::my_module::XSomething > >::get();
     return seq;
 }
+namespace
+{
+    // class to create an unique id
+    class UniqueIdInit
+    {
+    private:
+        ::com::sun::star::uno::Sequence< sal_Int8 > m_aSeq;
+    public:
+        UniqueIdInitIdInit() : m_aSeq(16)
+        {
+            rtl_createUuid( (sal_uInt8*)m_aSeq.getArray(), 0, sal_True );
+        }
+        const ::com::sun::star::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
+    };
+    //A multi-thread safe UniqueIdInitIdInit singleton wrapper
+    class theService1ImplImplementationId
+        : public rtl::Static< UniqueIdInitIdInit,
+          theService1ImplImplementationId >
+    {
+    };
+}
 Sequence< sal_Int8 > MyService1Impl::getImplementationId()
     throw (RuntimeException)
 {
-    static Sequence< sal_Int8 > * s_pId = 0;
-    if (! s_pId)
-    {
-        // create unique id
-        Sequence< sal_Int8 > id( 16 );
-        ::rtl_createUuid( (sal_uInt8 *)id.getArray(), 0, sal_True );
-        // guard initialization with some mutex
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if (! s_pId)
-        {
-            static Sequence< sal_Int8 > s_id( id );
-            s_pId = &s_id;
-        }
-    }
-    return *s_pId;
+    //create a singleton that generates a unique id on
+    //first initialization and returns the same one
+    //on subsequent calls.
+    return theService1ImplImplementationId::get().getSeq();
 }
 
 // XSomething implementation
@@ -243,72 +255,4 @@ Reference< XInterface > SAL_CALL create_MyService2Impl(
 
 }
 
-/*
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    sal_Char const ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-// This method not longer necessary since OOo 3.4 where the component registration was
-// was changed to passive component registration. For more details see
-// http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
-//
-// extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-//     lang::XMultiServiceFactory * xMgr, registry::XRegistryKey * xRegistry )
-// {
-//     if (xRegistry)
-//     {
-//         try
-//         {
-//             // implementation of MyService1A
-//             Reference< registry::XRegistryKey > xKey(
-//                 xRegistry->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
-//                     "my_module.my_sc_implementation.MyService1/UNO/SERVICES") ) ) );
-//             // subkeys denote implemented services of implementation
-//             xKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
-//                 "my_module.MyService1") ) );
-//             // implementation of MyService1B
-//             xKey = xRegistry->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
-//                 "my_module.my_sc_implementation.MyService2/UNO/SERVICES") ) );
-//             // subkeys denote implemented services of implementation
-//             xKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(
-//                 "my_module.MyService2") ) );
-//             return sal_True; // success
-//         }
-//         catch (registry::InvalidRegistryException &)
-//         {
-//             // function fails if exception caught
-//         }
-//     }
-//     return sal_False;
-// }
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-    sal_Char const * implName, lang::XMultiServiceFactory * xMgr, void * )
-{
-    Reference< lang::XSingleComponentFactory > xFactory;
-    if (0 == ::rtl_str_compare( implName, "my_module.my_sc_implementation.MyService1" ))
-    {
-        // create component factory for MyService1 implementation
-        OUString serviceName( RTL_CONSTASCII_USTRINGPARAM("my_module.MyService1") );
-        xFactory = ::cppu::createSingleComponentFactory(
-            ::my_sc_impl::create_MyService1Impl,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_implementation.MyService1") ),
-            Sequence< OUString >( &serviceName, 1 ) );
-    }
-    else if (0 == ::rtl_str_compare( implName, "my_module.my_sc_implementation.MyService2" ))
-    {
-        // create component factory for MyService12 implementation
-        OUString serviceName( RTL_CONSTASCII_USTRINGPARAM("my_module.MyService2") );
-        xFactory = ::cppu::createSingleComponentFactory(
-            ::my_sc_impl::create_MyService2Impl,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_implementation.MyService2") ),
-            Sequence< OUString >( &serviceName, 1 ) );
-    }
-    if (xFactory.is())
-        xFactory->acquire();
-    return xFactory.get(); // return acquired interface pointer or null
-}
-*/
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -219,7 +220,7 @@ PE_Class::Result_FirstNameSegment() const
 }   // namespace cpp
 
 
-#if 0   // Branches
+/* // Branches
 
 class struct union
     -> Class
@@ -247,10 +248,8 @@ virtual
 
 using
     -> Using Declaration
-
-
-#endif // 0
-
+*/
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

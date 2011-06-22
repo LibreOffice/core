@@ -88,11 +88,7 @@ $(DESTDIR)/cfgWin.js : $(PRJ)/cfgWin.js
 
 $(DESTDIRSETTINGS)/%.mk : $(PRJ)/settings/%.mk
     @@-rm -f $@
-.IF "$(COMEX)"=="7"
-    $(MY_TEXTCOPY) $< | $(SED) -e 's/stlport_vc7/stlport_vc6/' $@
-.ELSE
     $(MY_TEXTCOPY) $< $@
-.ENDIF
 
 $(DESTDIRXML)/module-description.dtd : $(XMLOUT)/module-description.dtd
     @@-rm -f $@
@@ -141,7 +137,6 @@ $(DESTDIRJAR)/com/sun/star/lib/loader/%.class : $(CLASSDIR)/com/sun/star/lib/loa
 
 $(DESTDIRIDL)/% : $(IDLOUT)/%
     $(MY_TEXTCOPY) $< $@
-#	@touch $(IDL_DOCU_CLEANUP_FLAG)
 
 $(DESTDIRINC)/udkversion.mk :
     @@-rm -f $@

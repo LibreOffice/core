@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _MyJob_HXX
 
 #define _MyJob_HXX
@@ -148,3 +149,4 @@ SAL_CALL MyJob_createInstance( const ::com::sun::star::uno::Reference< ::com::su
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

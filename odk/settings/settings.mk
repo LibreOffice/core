@@ -72,7 +72,6 @@ CPPUHELPERLIB=icppuhelper.lib
 SALHELPERLIB=isalhelper.lib
 REGLIB=ireg.lib
 STORELIB=istore.lib
-STLPORTLIB=stlport_vc71$(STLDEBUG).lib
 
 BLANK= 
 EMPTYSTRING=
@@ -82,10 +81,8 @@ PATH_SEPARATOR=;
 CC_FLAGS_JNI=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
 CC_FLAGS=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
 ifeq "$(CPP_MANIFEST)" "true"
-#CC_FLAGS+=-EHa -Zc:wchar_t-
 LINK_MANIFEST=mt -manifest $@.manifest "-outputresource:$@;2"
 else
-#CC_FLAGS+=
 LINK_MANIFEST=
 endif
 ifeq "$(DEBUG)" "yes"
@@ -94,7 +91,6 @@ CC_FLAGS+=-Zi
 endif
 
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/win32"
 
 # define for used compiler necessary for UNO
@@ -104,9 +100,9 @@ CC_DEFINES_JNI=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=msci
 CC_DEFINES=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=msci
 CC_OUTPUT_SWITCH=-Fo
 
-LIBRARY_LINK_FLAGS=/NODEFAULTLIB /DLL /DEBUGTYPE:cv
+LIBRARY_LINK_FLAGS=/MD /DLL /DEBUGTYPE:cv
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) /DEF:$(PRJ)/settings/component.uno.def
-EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1b000000 /DEBUGTYPE:cv /NODEFAULTLIB  msvcrt.lib kernel32.lib
+EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1b000000 /DEBUGTYPE:cv /MD  msvcrt.lib kernel32.lib
 ifeq "$(DEBUG)" "yes"
 LIBRARY_LINK_FLAGS+=/DEBUG
 EXE_LINK_FLAGS+=/DEBUG
@@ -120,7 +116,7 @@ endif
 
 # use this for release version
 #EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1100000
-#LIBRARY_LINK_FLAGS=/NODEFAULTLIB /DLL
+#LIBRARY_LINK_FLAGS=/MD /DLL
 endif	
 
 
@@ -190,11 +186,6 @@ CPPUHELPERLIB=-luno_cppuhelperC52
 SALHELPERLIB=-luno_salhelperC52
 REGLIB=-lreg
 STORELIB=-lstore
-ifeq "$(PROCTYPE)" "sparc64"
-STLPORTLIB=-library=stlport4
-else
-STLPORTLIB=-lstlport_sunpro$(STLDEBUG)
-endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -206,7 +197,6 @@ CC_FLAGS_JNI+=-g
 CC_FLAGS+=-g
 endif
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/solaris"
 
 # define for used compiler necessary for UNO
@@ -256,27 +246,23 @@ PLATFORM=linux
 PACKAGE_LIB_DIR=linux_$(PROCTYPE).plt
 UNOPKG_PLATFORM=Linux_$(PROCTYPE)
 JAVA_PROC_TYPE=$(PROCTYPE)
-STLPORT=no
 
 ifeq "$(PROCTYPE)" "i386"
 PACKAGE_LIB_DIR=linux_x86.plt
 UNOPKG_PLATFORM=Linux_x86
 JAVA_PROC_TYPE=i386
-STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "powerpc"
 PACKAGE_LIB_DIR=linux_powerpc.plt
 UNOPKG_PLATFORM=Linux_PowerPC
 JAVA_PROC_TYPE=ppc
-STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "sparc"
 PACKAGE_LIB_DIR=linux_sparc.plt
 UNOPKG_PLATFORM=Linux_SPARC
 JAVA_PROC_TYPE=sparc
-STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "x86_64"
@@ -328,15 +314,6 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
-ifeq "$(STLPORT)" "yes"
-ifeq "$(STLPORT_VER)" "500"
-STLPORTLIB=-lstlport
-else
-STLPORTLIB=-lstlport_gcc$(STLDEBUG)
-endif
-else
-STLPORTLIB=
-endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -358,7 +335,6 @@ endif
 
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/linux"
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
 CC_DEFINES_JNI=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
 CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH) -DHAVE_GCC_VISIBILITY_FEATURE
 
@@ -376,7 +352,6 @@ endif
 #COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/component.uno.map
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
-#EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--no-whole-archive
 LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
@@ -489,7 +464,6 @@ endif
 
 SDK_JAVA_INCLUDES = -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers -I/System/Library/Frameworks/JavaVM.framework/Headers
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
 CC_DEFINES_JNI=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
 CC_DEFINES=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH) -DHAVE_GCC_VISIBILITY_FEATURE
 
@@ -528,9 +502,11 @@ PLATFORM=kfreebsd
 ifeq "$(PROCTYPE)" "x86_64"
 PACKAGE_LIB_DIR=kfreebsd_x86_64.plt
 UNOPKG_PLATFORM=kFreeBSD_x86_64
+STLPORT=no
 else
 PACKAGE_LIB_DIR=kfreebsd_x86.plt
 UNOPKG_PLATFORM=kFreeBSD_x86
+STLPORT=no
 endif
 else
 PLATFORM=freebsd
@@ -594,11 +570,10 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
-ifeq "$(STLPORT_VER)" "500"
-STLPORTLIB=-lstlport
-else
-STLPORTLIB=-lstlport_gcc$(STLDEBUG)
+ifeq "$(STLPORT)" "yes"
 endif
+else
+STLPORTLIB=
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -616,7 +591,6 @@ endif
 
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/freebsd"
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
 CC_DEFINES_JNI=-DUNX -DGCC -DFREEBSD -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
 CC_DEFINES=-DUNX -DGCC -DFREEBSD -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH) -DHAVE_GCC_VISIBILITY_FEATURE
 
@@ -627,7 +601,6 @@ LIBRARY_LINK_FLAGS=-shared '-Wl,-rpath,$$ORIGIN'
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined 
-#EXE_LINK_FLAGS+=-Wl,-export-dynamic -Wl,-z,defs
 LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)" $(PTHREAD_LIBS)
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 

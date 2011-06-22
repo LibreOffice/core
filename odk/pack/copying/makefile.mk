@@ -82,14 +82,6 @@ LIBLIST = \
     $(DESTDIRLIB)/icppuhelper.lib 	\
     $(DESTDIRLIB)/irmcxt.lib \
     $(DESTDIRLIB)/ipurpenvhelper3MSC.lib
-
-.IF "$(COMEX)"=="8"
-    LIBLIST += $(DESTDIRLIB)/stlport_vc7.lib
-.ELIF "$(COMEX)"=="10" || "$(COMEX)"=="11" || "$(COMEX)"=="12" 
-    LIBLIST += $(DESTDIRLIB)/stlport_vc71.lib
-.ELSE
-    LIBLIST += $(DESTDIRLIB)/stlport_vc6.lib
-.ENDIF
 .ENDIF
 
 .IF "$(OS)"=="LINUX"
@@ -239,10 +231,6 @@ $(DESTDIRSETTINGS)/dk.mk : dk.mk
     @@-rm -f $@
     -$(MKDIRHIER) $(@:d)
     tr -d "\015" < dk.mk | sed -e 's/@@RELEASE@@/$(PRODUCT_RELEASE)/' -e 's/@@BUILDID@@/$(RSCREVISION)/'> $@
-
-$(CONVERTTAGFLAG) : $(DOCUHTMLFILES)
-#    $(PERL) $(CONVERTTAGSCRIPT) 1 "$(TITLE)" "$(OFFICEPRODUCTNAME)" $(DOCUHTMLFILES)
-    @echo "tags converted" > $@
 
 $(IDL_DOCU_CLEANUP_FLAG) : $(IDL_CHAPTER_REFS) $(PRJ)/docs/common/ref/idl.css $(DESTIDLLIST)
     @@-$(MY_DELETE_RECURSIVE) $(DESTDIRGENIDLREF)

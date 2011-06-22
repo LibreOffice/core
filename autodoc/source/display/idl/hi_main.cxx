@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -762,3 +763,4 @@ MainDisplay_Idl::do_Typedef2s( const ary::idl::CodeEntity & i_ce )
     aUses.Write_ManualLinks(i_ce);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

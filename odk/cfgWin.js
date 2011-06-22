@@ -2,8 +2,8 @@
 // examples of the Office Development Kit. The script duplicates the template
 // script and inserts the variables into the copied script.
 // The Script was developed for the operating systems Microsoft Windows.
-var regKeyOfficeCurrentUser = "HKEY_CURRENT_USER\\Software\\OpenOffice.org\\UNO\\InstallPath\\";
-var regKeyOfficeLocaleMachine = "HKEY_LOCAL_MACHINE\\Software\\OpenOffice.org\\UNO\\InstallPath\\";
+var regKeyOfficeCurrentUser = "HKEY_CURRENT_USER\\Software\\LibreOffice\\UNO\\InstallPath\\";
+var regKeyOfficeLocaleMachine = "HKEY_LOCAL_MACHINE\\Software\\LibreOffice\\UNO\\InstallPath\\";
 var regKeyDotNetInstallRoot = "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\.NETFramework\\InstallRoot";
 var regKeyDotNet1_1 = "HKLM\\Software\\Microsoft\\.NETFramework\\policy\\v1.1\\4322";
 var sDirDotNet1_1 = "v1.1.4322";
@@ -31,7 +31,6 @@ stdout.WriteLine("\n" +
 " NOTE: This script is working only for Windows 2000, Windows XP or newer versions!\n");
 
 var oo_sdk_name=WshSysEnv("OO_SDK_NAME");
-var stldebug="";
 var oo_sdk_home=getSdkHome();
 var oo_user_sdk_dir=WshSysEnv("APPDATA") + "\\" + oo_sdk_name;
 var oo_user_sdk_env_script=oo_user_sdk_dir + "\\setsdkenv_windows.bat";
@@ -120,10 +119,6 @@ function getSdkHome()
                              "the path to a valid SDK installation.");
             continue;
         }
-
-        if (aFileSystemObject.FileExists(sHome + "\\lib\\stlport_vc71_stldebug.lib")) {
-		    stldebug="_stldebug";
-		}
 
         return sHome;
     }   
@@ -793,22 +788,22 @@ function writeBatFile(fdir, file)
         "REM are necessary for building the examples of the Office Development Kit.\n" +
         "REM The Script was developed for the operating systems Windows.\n" +
         "REM The SDK name\n" +
-        "REM Example: set OO_SDK_NAME=openoffice3.0_sdk\n" +
+        "REM Example: set OO_SDK_NAME=libreoffice3.4_sdk\n" +
         "set OO_SDK_NAME=" + oo_sdk_name  +
         "\n\n" +
         "REM Installation directory of the Software Development Kit.\n" +
-        "REM Example: set OO_SDK_HOME=C:\\Program Files\\OpenOffice.org\\Basic 3.0\\sdk\n" +
+        "REM Example: set OO_SDK_HOME=C:\\Program Files\\LibreOffice 3\\Basis\\sdk\n" +
         "set OO_SDK_HOME=" + oo_sdk_home  +
         "\n\n" +
         "REM Office installation directory.\n" +
-        "REM Example: set OFFICE_HOME=C:\\Program Files\\OpenOffice.org 3\n" +
+        "REM Example: set OFFICE_HOME=C:\\Program Files\\LibreOffice 3\n" +
         "set OFFICE_HOME=" + office_home +
         "\n\n" +
-        "REM Example: set OFFICE_HOME=C:\\Program Files\\OpenOffice.org\\Basis 3.0\n" +
+        "REM Example: set OFFICE_HOME=C:\\Program Files\\LibreOffice 3\\Basis\n" +
         "set OFFICE_BASE_HOME=" + office_base_home +
         "\n\n" +
         "REM URE installation directory.\n" +
-        "REM Example: set OO_SDK_URE_HOME=C:\\Program Files\\OpenOffice.org\\URE\n" +
+        "REM Example: set OO_SDK_URE_HOME=C:\\Program Files\\LibreOffice 3\\URE\n" +
         "set OO_SDK_URE_HOME=" + oo_sdk_ure_home +
         "\n\n" +
         "REM Directory of the make command.\n" +
@@ -841,11 +836,6 @@ function writeBatFile(fdir, file)
         "REM Example: set SDK_AUTO_DEPLOYMENT=YES\n" +
         "set SDK_AUTO_DEPLOYMENT=" + sdk_auto_deployment +
         "\n\n" +
-		"set STLDEBUG=" + stldebug + "\n" +
-		"REM check stlport lib in 4NT shell\n" +
-		"REM if exist \"%OO_SDK_HOME%\\windows\\lib\\stlport_vc71_stldebug.lib\". (\n" +
-		"REM   set STLDEBUG=_stldebug\n" +
-		"REM )\n\n" +
         "REM Check installation path for the Office Development Kit.\n" +
         "if not defined OO_SDK_HOME (\n" +
         "   echo Error: the variable OO_SDK_HOME is missing!\n" +

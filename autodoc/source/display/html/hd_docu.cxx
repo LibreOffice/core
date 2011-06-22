@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -181,8 +182,6 @@ Docu_Display::do_Process(const ary::doc::Documentation & i_rData)
 void
 Docu_Display::Display_StdTag( const StdTag & i_rData )
 {
-    csv_assert( uintt(i_rData.Std_Id()) < uintt(ary::info::C_eAtTag_NrOfClasses) );
-
     const ary::info::DocuText::TokenList &
         rText = i_rData.CText().Tokens();
     typedef ary::info::DocuText::TokenList::const_iterator TokenIterator;
@@ -484,3 +483,4 @@ Docu_Display::Write_QualifiedName( const ary::QualifiedName & i_sQuName )
         CurOut() << "()";
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

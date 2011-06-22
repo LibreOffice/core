@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -66,10 +67,9 @@ void REGISTER_PROVIDER(
         const Sequence< OUString>& Services,
         const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
 {
-    OUString aMainKeyName;
-    aMainKeyName = OUString::createFromAscii("/");
+    OUString aMainKeyName(RTL_CONSTASCII_USTRINGPARAM("/"));
     aMainKeyName += aServiceImplName;
-    aMainKeyName += OUString::createFromAscii("/UNO/SERVICES");
+    aMainKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "SKELETON::component_writeInfo : could not create a registry key !");
@@ -127,33 +127,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnviron
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-// This method not longer necessary since OOo 3.4 where the component registration was
-// was changed to passive component registration. For more details see
-// http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
-//---------------------------------------------------------------------------------------
-// extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-//              void* pServiceManager,
-//              void* pRegistryKey
-//          )
-// {
-//  if (pRegistryKey)
-//  try
-//  {
-//      Reference< ::com::sun::star::registry::XRegistryKey > xKey(reinterpret_cast< ::com::sun::star::registry::XRegistryKey*>(pRegistryKey));
-
-//      REGISTER_PROVIDER(
-//          SkeletonDriver::getImplementationName_Static(),
-//          SkeletonDriver::getSupportedServiceNames_Static(), xKey);
-
-//      return sal_True;
-//  }
-//  catch (::com::sun::star::registry::InvalidRegistryException& )
-//  {
-//      OSL_ENSURE(sal_False, "SKELETON::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
-//  }
-
-//  return sal_False;
-// }
 
 //---------------------------------------------------------------------------------------
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
@@ -182,3 +155,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
 };
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

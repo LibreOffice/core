@@ -410,7 +410,7 @@ public class FunctionHelper
         catch(com.sun.star.uno.Exception exUno)
         {
             // "createInstance()" method of used service manager can throw it.
-            // If it occured during creation of desktop service the frame already was created.
+            // If it occurred during creation of desktop service the frame already was created.
             // Free it by decresing his refcount. Changes on the desktop tree couldn't exist.
             // Without the desktop service that wasn't possible. So no further rollbacks must follow.
             if(xFrame!=null)
@@ -1025,7 +1025,7 @@ public class FunctionHelper
             // get file URL from the dialog
             try
             {
-                sFileURL = aChooser.getSelectedFile().toURL().toExternalForm();
+                sFileURL = aChooser.getSelectedFile().toURI().toURL().toExternalForm();
             }
             catch( MalformedURLException ex )
             {

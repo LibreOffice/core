@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,3 +71,5 @@ Ce_Compare::Lesser_( const key_type &    i_1,
 
 }   // namespace idl
 }   // namespace ary
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -739,7 +740,7 @@ void
 HF_IdlTypeText::write_TemplateParameterList(
                     const std::vector<ary::idl::Type_id> & i_templateParameters ) const
 {
-    if (i_templateParameters.size() == 0)
+    if (i_templateParameters.empty())
         return;
 
     HF_IdlTypeText
@@ -755,3 +756,5 @@ HF_IdlTypeText::write_TemplateParameterList(
     }
     CurOut() << " >";
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

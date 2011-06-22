@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,13 +40,6 @@ namespace ary
 namespace idl
 {
 
-namespace
-{
-    const Ce_2s aConstCe2sDummy;
-}
-
-
-
 CodeEntity::CodeEntity()
     :   aDocu(),
         p2s(0)
@@ -59,9 +53,7 @@ CodeEntity::~CodeEntity()
 const Ce_2s &
 CodeEntity::Secondaries() const
 {
-    if (p2s)
-        return *p2s;
-    return aConstCe2sDummy;
+    return const_cast<CodeEntity*>(this)->Secondaries();
 }
 
 Ce_2s &
@@ -73,8 +65,7 @@ CodeEntity::Secondaries()
     return *p2s;
 }
 
-
-
-
 }   // namespace idl
 }   // namespace ary
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

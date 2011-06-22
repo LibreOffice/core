@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ CharacterSource::LoadText(csv::bstream & io_rSource)
 void
 CharacterSource::InsertTextAtCurPos( const char * i_sText2Insert )
 {
-    if ( i_sText2Insert == 0 ? true : strlen(i_sText2Insert) == 0 )
+    if ( !i_sText2Insert || !i_sText2Insert[0] )
         return;
 
     aSourcesStack.push( S_SourceState(
@@ -157,3 +158,4 @@ S_SourceState::S_SourceState( DYN char *    dpSource_,
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

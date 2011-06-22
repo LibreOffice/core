@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,7 @@ class TokenParse2
         source code.
         @return true, if there was passed a valid token.
                 false, if the parsed stream is finished or
-                       an error occured.
+                       an error occurred.
     */
     bool                GetNextToken();
 
@@ -82,3 +83,4 @@ class TokenParse2
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

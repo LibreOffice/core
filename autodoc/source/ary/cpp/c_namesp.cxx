@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -206,8 +207,6 @@ Namespace::Search_LocalOperations( std::vector<Ce_id> & o_result,
     if ( (*itLower).first != i_sName )
         return;
 
-    operations_citer
-        itEnd = aLocalOperations.end();
     for ( operations_citer it = itLower;
           it != aLocalOperations.end() ? (*itLower).first == i_sName : false;
           ++it )
@@ -292,3 +291,5 @@ Namespace::inq_Create_Slot( SlotAccessId i_nSlot ) const
 
 }   // namespace cpp
 }   // namespace ary
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

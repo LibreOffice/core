@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@ class Type_2s
 
 /** Base of all IDL types.
 
-    Type represents the occurence of a type as base,
+    Type represents the occurrence of a type as base,
     parameter, return type or element type in UNO IDL code.
     Some of them relate to a ->CodeEntity, but
     the ->Type "MyInterface" is something different than
@@ -140,3 +141,5 @@ Type::FirstEnclosedNonSequenceType(const Gate & i_rGate) const
 }   // namespace idl
 }   // namespace ary
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

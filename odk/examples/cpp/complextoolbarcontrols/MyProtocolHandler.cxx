@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -169,13 +170,13 @@ Reference< XDispatch > SAL_CALL MyProtocolHandler::queryDispatch(   const URL& a
             // ohne ein entsprechendes Dokument funktioniert der Handler nicht
             return xRet;
 
-        if ( aURL.Path.equalsAscii("Command1" ) ||
-             aURL.Path.equalsAscii("Command2" ) ||
-             aURL.Path.equalsAscii("Command3" ) ||
-             aURL.Path.equalsAscii("Command4" ) ||
-             aURL.Path.equalsAscii("Command5" ) ||
-             aURL.Path.equalsAscii("Command6" ) ||
-             aURL.Path.equalsAscii("Command7" ) )
+        if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command1" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command2" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command3" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command4" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command5" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command6" ) ) ||
+             aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command7" ) ) )
         {
             xRet = aListenerHelper.GetDispatch( mxFrame, aURL.Path );
             if ( !xRet.is() )
@@ -205,7 +206,7 @@ Sequence < Reference< XDispatch > > SAL_CALL MyProtocolHandler::queryDispatches(
 ::rtl::OUString MyProtocolHandler_getImplementationName ()
     throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii(MYPROTOCOLHANDLER_IMPLEMENTATIONNAME);
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MYPROTOCOLHANDLER_IMPLEMENTATIONNAME));
 }
 
 sal_Bool SAL_CALL MyProtocolHandler_supportsService( const ::rtl::OUString& ServiceName )
@@ -213,7 +214,7 @@ sal_Bool SAL_CALL MyProtocolHandler_supportsService( const ::rtl::OUString& Serv
 {
     return (
             ServiceName.equalsAscii(MYPROTOCOLHANDLER_SERVICENAME  ) ||
-            ServiceName.equalsAscii("com.sun.star.frame.ProtocolHandler")
+            ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.ProtocolHandler"))
            );
 }
 
@@ -221,7 +222,7 @@ Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler_getSupportedServiceNames(
     throw (RuntimeException)
 {
     Sequence < ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString::createFromAscii(MYPROTOCOLHANDLER_SERVICENAME);
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MYPROTOCOLHANDLER_SERVICENAME));
     return aRet;
 }
 
@@ -268,9 +269,9 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         if ( !aURL.Path.compareToAscii("Command1" ) )
         {
             // open the OpenOffice.org web page
-            ::rtl::OUString sURL(::rtl::OUString::createFromAscii("http://www.openoffice.org"));
+            ::rtl::OUString sURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://www.openoffice.org")));
             Reference< XSystemShellExecute > xSystemShellExecute( mxMSF->createInstance(
-                ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), UNO_QUERY );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))), UNO_QUERY );
             if ( xSystemShellExecute.is() )
             {
                 try
@@ -290,7 +291,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             Sequence< NamedValue > aRemoveArgs( 1 );
             aRemoveArgs[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
             aRemoveArgs[0].Value <<= maComboBoxText;
-            SendCommand( aURL, ::rtl::OUString::createFromAscii( "RemoveEntryText" ), aRemoveArgs, sal_True );
+            SendCommand( aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveEntryText")), aRemoveArgs, sal_True );
 
             // add the new text to the start of the list
             Sequence< NamedValue > aInsertArgs( 2 );
@@ -298,7 +299,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             aInsertArgs[0].Value <<= sal_Int32( 0 );
             aInsertArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
             aInsertArgs[1].Value <<= maComboBoxText;
-            SendCommand( aURL, ::rtl::OUString::createFromAscii( "InsertEntry" ), aInsertArgs, sal_True );
+            SendCommand( aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InsertEntry")), aInsertArgs, sal_True );
         }
         else if ( !aURL.Path.compareToAscii("Command3" ) )
         {
@@ -315,15 +316,15 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
 
             // create new URL to address the combox box
             URL aCmdURL;
-            aCmdURL.Path = rtl::OUString::createFromAscii( "Command2" );
-            aCmdURL.Protocol = rtl::OUString::createFromAscii( "vnd.demo.complextoolbarcontrols.demoaddon:" );
+            aCmdURL.Path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command2"));
+            aCmdURL.Protocol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.demo.complextoolbarcontrols.demoaddon:"));
             aCmdURL.Complete = aCmdURL.Path + aCmdURL.Protocol;
 
             // set the selected item as text into the combobox
             Sequence< NamedValue > aArgs( 1 );
-            aArgs[0].Name = rtl::OUString::createFromAscii( "Text" );
+            aArgs[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text"));
             aArgs[0].Value <<= aText;
-            SendCommand( aCmdURL, ::rtl::OUString::createFromAscii( "SetText" ), aArgs, sal_True );
+            SendCommand( aCmdURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetText")), aArgs, sal_True );
         }
         else if ( !aURL.Path.compareToAscii("Command4" ) )
         {
@@ -341,15 +342,15 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             // just enable this command
 
             // set enable flag according to selection
-            if ( aText.equalsAscii( "Button Disabled" ))
+            if ( aText.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Button Disabled" ) ))
                 mbButtonEnabled = sal_False;
             else
                 mbButtonEnabled = sal_True;
 
             // create new URL to address the image button
             URL aCmdURL;
-            aCmdURL.Path = rtl::OUString::createFromAscii( "Command1" );
-            aCmdURL.Protocol = rtl::OUString::createFromAscii( "vnd.demo.complextoolbarcontrols.demoaddon:" );
+            aCmdURL.Path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command1"));
+            aCmdURL.Protocol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.demo.complextoolbarcontrols.demoaddon:"));
             aCmdURL.Complete = aCmdURL.Path + aCmdURL.Protocol;
 
             // create and initialize FeatureStateEvent with IsEnabled
@@ -372,9 +373,9 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
 
 void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL ) throw (RuntimeException)
 {
-    if ( aURL.Protocol.equalsAscii("vnd.demo.complextoolbarcontrols.demoaddon:") )
+    if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.demo.complextoolbarcontrols.demoaddon:")) )
     {
-        if ( aURL.Path.equalsAscii("Command1" ) )
+        if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command1" ) ) )
         {
             // just enable this command
             ::com::sun::star::frame::FeatureStateEvent aEvent;
@@ -385,7 +386,7 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             aEvent.State <<= Any();
             xControl->statusChanged( aEvent );
         }
-        else if ( aURL.Path.equalsAscii("Command2" ) )
+        else if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command2" ) ) )
         {
             // just enable this command
             ::com::sun::star::frame::FeatureStateEvent aEvent;
@@ -396,7 +397,7 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             aEvent.State <<= Any();
             xControl->statusChanged( aEvent );
         }
-        else if ( aURL.Path.equalsAscii("Command3" ) )
+        else if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command3" ) ) )
         {
             // A toggle dropdown box is normally used for a group of commands
             // where the user can select the last issued command easily.
@@ -405,20 +406,20 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
 
             // send command to set context menu content
             Sequence< rtl::OUString > aContextMenu( 3 );
-            aContextMenu[0] = rtl::OUString::createFromAscii( "Command 1" );
-            aContextMenu[1] = rtl::OUString::createFromAscii( "Command 2" );
-            aContextMenu[2] = rtl::OUString::createFromAscii( "Command 3" );
+            aContextMenu[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command 1"));
+            aContextMenu[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command 2"));
+            aContextMenu[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command 3"));
 
-            aArgs[0].Name = rtl::OUString::createFromAscii( "List" );
+            aArgs[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("List"));
             aArgs[0].Value <<= aContextMenu;
-            SendCommandTo( xControl, aURL, rtl::OUString::createFromAscii( "SetList" ), aArgs, sal_True );
+            SendCommandTo( xControl, aURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetList")), aArgs, sal_True );
 
             // send command to check item on pos=0
             aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pos" ));
             aArgs[0].Value <<= sal_Int32( 0 );
-            SendCommandTo( xControl, aURL, ::rtl::OUString::createFromAscii( "CheckItemPos" ), aArgs, sal_True );
+            SendCommandTo( xControl, aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CheckItemPos")), aArgs, sal_True );
         }
-        else if ( aURL.Path.equalsAscii("Command4" ) )
+        else if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command4" ) ) )
         {
             // A dropdown box is normally used for a group of dependent modes, where
             // the user can only select one. The modes cannot be combined.
@@ -427,12 +428,12 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
 
             // send command to set context menu content
             Sequence< rtl::OUString > aContextMenu( 2 );
-            aContextMenu[0] = rtl::OUString::createFromAscii( "Button Enabled" );
-            aContextMenu[1] = rtl::OUString::createFromAscii( "Button Disabled" );
+            aContextMenu[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Button Enabled"));
+            aContextMenu[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Button Disabled"));
 
-            aArgs[0].Name = rtl::OUString::createFromAscii( "List" );
+            aArgs[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("List"));
             aArgs[0].Value <<= aContextMenu;
-            SendCommandTo( xControl, aURL, rtl::OUString::createFromAscii( "SetList" ), aArgs, sal_True );
+            SendCommandTo( xControl, aURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetList")), aArgs, sal_True );
 
             // set position according to enable/disable state of button
             sal_Int32 nPos( mbButtonEnabled ? 0 : 1 );
@@ -440,28 +441,28 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             // send command to check item on pos=0
             aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pos" ));
             aArgs[0].Value <<= nPos;
-            SendCommandTo( xControl, aURL, ::rtl::OUString::createFromAscii( "CheckItemPos" ), aArgs, sal_True );
+            SendCommandTo( xControl, aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CheckItemPos")), aArgs, sal_True );
         }
-        else if ( aURL.Path.equalsAscii("Command5" ) )
+        else if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command5" ) ) )
         {
             // A spin button
             Sequence< NamedValue > aArgs( 5 );
 
             // send command to initialize spin button
-            aArgs[0].Name = rtl::OUString::createFromAscii( "Value" );
+            aArgs[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
             aArgs[0].Value <<= double( 0.0 );
-            aArgs[1].Name = rtl::OUString::createFromAscii( "UpperLimit" );
+            aArgs[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UpperLimit"));
             aArgs[1].Value <<= double( 10.0 );
-            aArgs[2].Name = rtl::OUString::createFromAscii( "LowerLimit" );
+            aArgs[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LowerLimit"));
             aArgs[2].Value <<= double( 0.0 );
-            aArgs[3].Name = rtl::OUString::createFromAscii( "Step" );
+            aArgs[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Step"));
             aArgs[3].Value <<= double( 0.1 );
-            aArgs[4].Name = rtl::OUString::createFromAscii( "OutputFormat" );
-            aArgs[4].Value <<= rtl::OUString::createFromAscii( "%.2f cm" );
+            aArgs[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputFormat"));
+            aArgs[4].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%.2f cm"));
 
-            SendCommandTo( xControl, aURL, rtl::OUString::createFromAscii( "SetValues" ), aArgs, sal_True );
+            SendCommandTo( xControl, aURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetValues")), aArgs, sal_True );
         }
-        else if ( aURL.Path.equalsAscii("Command7" ) )
+        else if ( aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Command7" ) ) )
         {
             // A dropdown box is normally used for a group of commands
             // where the user can select one of a defined set.
@@ -469,20 +470,20 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
 
             // send command to set context menu content
             Sequence< rtl::OUString > aList( 10 );
-            aList[0] = rtl::OUString::createFromAscii( "White" );
-            aList[1] = rtl::OUString::createFromAscii( "Black" );
-            aList[2] = rtl::OUString::createFromAscii( "Red" );
-            aList[3] = rtl::OUString::createFromAscii( "Blue" );
-            aList[4] = rtl::OUString::createFromAscii( "Green" );
-            aList[5] = rtl::OUString::createFromAscii( "Grey" );
-            aList[6] = rtl::OUString::createFromAscii( "Yellow" );
-            aList[7] = rtl::OUString::createFromAscii( "Orange" );
-            aList[8] = rtl::OUString::createFromAscii( "Brown" );
-            aList[9] = rtl::OUString::createFromAscii( "Pink" );
+            aList[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("White"));
+            aList[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Black"));
+            aList[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Red"));
+            aList[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Blue"));
+            aList[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Green"));
+            aList[5] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Grey"));
+            aList[6] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Yellow"));
+            aList[7] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Orange"));
+            aList[8] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Brown"));
+            aList[9] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pink"));
 
-            aArgs[0].Name = rtl::OUString::createFromAscii( "List" );
+            aArgs[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("List"));
             aArgs[0].Value <<= aList;
-            SendCommandTo( xControl, aURL, rtl::OUString::createFromAscii( "SetList" ), aArgs, sal_True );
+            SendCommandTo( xControl, aURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetList")), aArgs, sal_True );
         }
 
         aListenerHelper.AddListener( mxFrame, xControl, aURL.Path );
@@ -496,13 +497,13 @@ void SAL_CALL BaseDispatch::removeStatusListener( const Reference< XStatusListen
 
 void SAL_CALL BaseDispatch::controlEvent( const ControlEvent& Event ) throw (RuntimeException)
 {
-    if ( Event.aURL.Protocol.equalsAscii("vnd.demo.complextoolbarcontrols.demoaddon:" ))
+    if ( Event.aURL.Protocol.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.demo.complextoolbarcontrols.demoaddon:" ) ))
     {
-        if ( Event.aURL.Path.equalsAscii( "Command2" ))
+        if ( Event.aURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Command2" ) ))
         {
             // We get notifications whenever the text inside the combobox has been changed.
             // We store the new text into a member.
-            if ( Event.Event.equalsAscii( "TextChanged" ))
+            if ( Event.Event.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TextChanged" ) ))
             {
                 rtl::OUString aNewText;
                 sal_Bool      bHasText( sal_False );
@@ -537,3 +538,5 @@ BaseDispatch::~BaseDispatch()
     mxFrame.clear();
     mxMSF.clear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

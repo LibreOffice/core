@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,10 @@
 #include <precomp.h>
 #include "i2s_calculator.hxx"
 
-
 // NOT FULLY DEFINED SERVICES
 #include <algorithm>
 #include <string.h>
 #include <cosv/file.hxx>
-//#include <adc_manager.hxx>
-//#include <adc_options.hxx>
 #include <ary/qualiname.hxx>
 #include <ary/idl/i_enum.hxx>
 #include <ary/idl/i_exception.hxx>
@@ -64,7 +62,6 @@
 #include "it_explicit.hxx"
 #include "it_sequence.hxx"
 #include "it_xnameroom.hxx"
-
 
 
 namespace ary
@@ -251,23 +248,6 @@ void
 SecondariesCalculator::Make_Links2DeveloperManual(
                                 const String &      i_devman_reffilepath )
 {
-//    const autodoc::Options &
-//        rOptions = TheAutodocManager().TheOptions();
-//
-//    const String &
-//        rDeveloperManual_URL
-//            = rOptions.Get_Extra(autodoc::OPT_developer_guide);
-//    const String
-//        rDeveloperManual_ReferenceFile
-//            = rOptions.Get_Extra(autodoc::OPT_developer_guide_refs_file);
-
-//    if ( rDeveloperManual_URL.length() == 0
-//         OR
-//         rDeveloperManual_ReferenceFile.length() == 0 )
-//    {
-//        return;
-//    }
-
     csv::File
         aFile(i_devman_reffilepath, csv::CFM_READ);
     csv::OpenCloseGuard
@@ -990,3 +970,5 @@ SecondariesCalculator::Read_Links2DevManual( csv::bstream & i_file )
 
 }   // namespace idl
 }   // namespace ary
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

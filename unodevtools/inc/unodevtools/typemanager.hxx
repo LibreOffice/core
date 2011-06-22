@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,31 +32,20 @@
 #include <codemaker/typemanager.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 class RegistryKey;
 
 namespace typereg { class Reader; }
 
-#if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
-typedef ::std::__hash_map__
-<
-    ::rtl::OString, // Typename
-    RTTypeClass,    // TypeClass
-    HashString,
-    EqualString,
-    NewAlloc
-> T2TypeClassMap;
-#else
-typedef ::std::hash_map
+typedef boost::unordered_map
 <
     ::rtl::OString, // Typename
     RTTypeClass,    // TypeClass
     HashString,
     EqualString
 > T2TypeClassMap;
-#endif
 
 namespace unodevtools {
 
@@ -98,3 +88,5 @@ protected:
 }
 
 #endif // _UNODEVTOOLS_TYPEMANAGER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

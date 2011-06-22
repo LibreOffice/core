@@ -42,17 +42,7 @@ COMMONCPPLIBST=commoncpp.lib
 COMMONJAVALIBST=commonjava.lib
 .ENDIF
 
-.ELIF "$(GUI)"=="OS2"
-UNODEVTOOLSLIBDEPN=unodevtools.lib
-CODEMAKERLIBDEPN=codemaker.lib
-COMMONCPPLIBDEPN=commoncpp.lib
-COMMONJAVALIBDEPN=commonjava.lib
-UNODEVTOOLSLIBST=unodevtools.lib
-CODEMAKERLIBST=codemaker.lib
-COMMONCPPLIBST=commoncpp.lib
-COMMONJAVALIBST=commonjava.lib
 .ELSE
-
 UNODEVTOOLSLIBDEPN=libunodevtools.a
 CODEMAKERLIBDEPN=libcodemaker.a
 COMMONCPPLIBDEPN=libcommoncpp.a

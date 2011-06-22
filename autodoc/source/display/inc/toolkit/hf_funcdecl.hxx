@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,39 +36,6 @@
     // COMPONENTS
     // PARAMETERS
 
-
-#if 0   // old
-/** @resp
-    Provides three cells to put in a function declaration.
-*/
-class HF_FunctionDeclaration : public HtmlMaker
-{
-  public:
-                        HF_FunctionDeclaration(
-                            Xml::Element &      o_rParent );
-    virtual             ~HF_FunctionDeclaration();
-
-    /// Inserts empty line in 2nd and 3rd cell and returns first.
-    Xml::Element &      Add_ReturnLine();
-
-    /** Inserts empty line in 1st cell, "raises (" in 2nd
-        and returns 3rd.
-    */
-    Xml::Element &      Add_RaisesLine(
-                            const char *        i_sRaisesText,
-                            bool                i_bSuppressExtraLine = false );
-
-    Xml::Element &      Front()                 { return *pFront; }
-    Xml::Element &      Types()                 { return *pTypes; }
-    Xml::Element &      Names()                 { return *pNames; }
-
-  private:
-    Xml::Element *      pFront;
-    Xml::Element *      pTypes;
-    Xml::Element *      pNames;
-};
-#endif // 0  old
-
 class HF_FunctionDeclaration : public HtmlMaker
 {
   public:
@@ -102,3 +70,5 @@ class HF_FunctionDeclaration : public HtmlMaker
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

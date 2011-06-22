@@ -100,7 +100,7 @@ public class GraphicExportDemo
                aProps[0].Value = "WMF";
             */
             java.io.File destFile = new java.io.File(args[1]);
-            java.net.URL destUrl = destFile.toURL();
+            java.net.URL destUrl = destFile.toURI().toURL();
 
             aProps[1] = new PropertyValue();
             aProps[1].Name = "URL";

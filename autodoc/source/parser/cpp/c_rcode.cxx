@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,9 @@
 #include <precomp.h>
 #include "c_rcode.hxx"
 
-
 // NOT FULLY DECLARED SERVICES
 #include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_namesp.hxx>
-// #include <ary/cpp/c_groups.hxx>
 #include <ary/loc/locp_le.hxx>
 #include "cpp_pe.hxx"
 #include <adc_cl.hxx>
@@ -140,7 +139,7 @@ CodeExplorer::CurToken() const
 Cpp_PE &
 CodeExplorer::CurEnv() const
 {
-    csv_assert(aEnvironments.size() > 0);
+    csv_assert(!aEnvironments.empty());
     csv_assert(aEnvironments.back() != 0);
 
     return *aEnvironments.back();
@@ -159,3 +158,4 @@ CodeExplorer::PushEnv() const
 
 }   // namespace cpp
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

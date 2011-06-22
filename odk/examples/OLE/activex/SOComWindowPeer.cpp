@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -37,6 +38,7 @@
 #include "stdafx2.h"
 #include "so_activex.h"
 #include "SOComWindowPeer.h"
+#include <sal/macros.h>
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -48,7 +50,7 @@ STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
         &IID_ISOComWindowPeer,
     };
 
-    for (int i=0;i<sizeof(arr)/sizeof(arr[0]);i++)
+    for (int i=0;i<SAL_N_ELEMENTS(arr);i++)
     {
         if (InlineIsEqualGUID(*arr[i],riid))
             return S_OK;
@@ -56,3 +58,4 @@ STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
     return S_FALSE;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

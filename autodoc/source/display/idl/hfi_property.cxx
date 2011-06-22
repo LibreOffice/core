@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -328,7 +329,6 @@ HF_IdlCommentedRelationElement::produce_Summary( Environment &   io_env,
 {
     csv_assert( i_commentedRef.Info() );
 
-    const ary::idl::Type_id aType = i_commentedRef.Type();
     const ce_info &         rDocu = *i_commentedRef.Info();
 
     bool bShort = NOT rDocu.Short().IsEmpty();
@@ -449,3 +449,5 @@ HF_IdlCommentedRelationElement::write_Description( const client & i_ce ) const
 {
     produce_LinkDoc( Env(), i_ce, CurOut(), m_relation, doctype_complete );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

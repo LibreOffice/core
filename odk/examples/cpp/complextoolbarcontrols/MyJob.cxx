@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,9 +27,7 @@
  ************************************************************************/
 
 
-#ifndef _MyJob_HXX
 #include "MyJob.h"
-#endif
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -50,9 +49,9 @@ using com::sun::star::document::XEventBroadcaster;
 Any SAL_CALL MyJob::execute( const Sequence< NamedValue >& aArguments )
     throw ( IllegalArgumentException, Exception, RuntimeException )
 {
-    Reference < XEventBroadcaster > xBrd( mxMSF->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster") ), UNO_QUERY );
+    Reference < XEventBroadcaster > xBrd( mxMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster")) ), UNO_QUERY );
     Reference < com::sun::star::document::XEventListener > xLstner( mxMSF->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.comp.Office.MyListener" ) ), UNO_QUERY );
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Office.MyListener")) ), UNO_QUERY );
     if ( xBrd.is() )
         xBrd->addEventListener( xLstner );
     return Any();
@@ -107,3 +106,5 @@ Sequence< OUString > SAL_CALL MyJob::getSupportedServiceNames(  )
 {
     return MyJob_getSupportedServiceNames();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,8 +82,10 @@ int main( int argc, char *argv[] )
 
     if ( path != NULL )
     {
-#ifdef MACOSX
+#if defined(MACOSX)
         static const char* ENVVARNAME = "DYLD_LIBRARY_PATH";
+#elif defined(AIX)
+        static const char* ENVVARNAME = "LIBPATH";
 #else
         static const char* ENVVARNAME = "LD_LIBRARY_PATH";
 #endif
@@ -143,13 +146,15 @@ int main( int argc, char *argv[] )
             libpath = NULL;
             for (;;) {
                 size_t m;
-                libpath = realloc(libpath, n);
-                if (libpath == NULL) {
+                char * test = realloc(libpath, n);
+                if (test == NULL) {
                     fprintf(
                         stderr,
                         "Error: out of memory reading unoinfo output!\n");
+                    free(libpath);
                     exit(EXIT_FAILURE);
                 }
+                libpath = test;
                 m = fread(libpath + old, 1, n - old - 1, f);
                 if (m != n - old - 1) {
                     if (ferror(f)) {
@@ -226,7 +231,7 @@ int main( int argc, char *argv[] )
  * Gets the path of a UNO installation.
  *
  * @return the installation path or NULL, if no installation was specified or
- *         found, or if an error occured
+ *         found, or if an error occurred
  */
 char const* getPath()
 {
@@ -250,7 +255,7 @@ char const* getPath()
  *
  * @param argv0 specifies the argv[0] parameter of the main function
  *
- * @return the application's executable file name or NULL, if an error occured
+ * @return the application's executable file name or NULL, if an error occurred
  */
 char* createCommandName( char* argv0 )
 {
@@ -259,12 +264,14 @@ char* createCommandName( char* argv0 )
 
     char* cmdname = NULL;
     char* sep = NULL;
+#ifndef AIX
     Dl_info dl_info;
-    int pos;
+#endif
 
     /* get the executable file name from argv0 */
     prgname = argv0;
 
+#ifndef AIX
     /*
      * if argv0 doesn't contain an absolute path name, try to get the absolute
      * path name from dladdr; note that this only works for Solaris, not for
@@ -276,6 +283,7 @@ char* createCommandName( char* argv0 )
     {
         prgname = dl_info.dli_fname;
     }
+#endif
 
     /* prefix the executable file name by '_' */
     if ( prgname != NULL )
@@ -284,7 +292,7 @@ char* createCommandName( char* argv0 )
         sep = strrchr( prgname, SEPARATOR );
         if ( sep != NULL )
         {
-            pos = ++sep - prgname;
+            int pos = ++sep - prgname;
             strncpy( cmdname, prgname, pos );
             cmdname[ pos ] = '\0';
             strcat( cmdname, CMDPREFIX );
@@ -299,3 +307,5 @@ char* createCommandName( char* argv0 )
 
     return cmdname;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

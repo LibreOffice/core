@@ -31,7 +31,7 @@
 # Has to be inlcuded AFTER settings.mk !
 
 
-.IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="MSC"
 
 # RTTI
 CFLAGS+= -GR
@@ -50,8 +50,7 @@ CFLAGS+= -YX"precomp.h" /Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pcd -DNP_LOCALBU
 
 .ENDIF
 
-.IF "$(OS)"=="LINUX"
+.IF "$(COM)"=="GCC"
 # RTTI
 CFLAGSCXX+= -frtti
 .ENDIF
-

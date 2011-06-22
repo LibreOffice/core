@@ -178,7 +178,7 @@ public final class Loader {
                 if ( fJuh.exists() ) {
                     URL[] clurls = new URL[1];
                     try {
-                        clurls[0] = fJuh.toURL();
+                        clurls[0] = fJuh.toURI().toURL();
                         ClassLoader cl = new CustomURLClassLoader( clurls );
                         Class c = cl.loadClass(
                             "com.sun.star.comp.helper.UnoInfo" );
@@ -237,7 +237,7 @@ public final class Loader {
         StringTokenizer tokens = new StringTokenizer( data, delimiter );
         while ( tokens.hasMoreTokens() ) {
             try {
-                urls.add( new File( tokens.nextToken() ).toURL() );
+                urls.add( new File( tokens.nextToken() ).toURI().toURL() );
             } catch ( MalformedURLException e ) {
                 // don't add this class path entry to the list of class loader
                 // URLs

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,22 +35,16 @@
 
 namespace css = ::com::sun::star;
 
-/*-----------------------------------------------------
-    20.11.2003 11:31
------------------------------------------------------*/
+
 MyListener::MyListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : m_xSMGR(xSMGR)
 {}
 
-/*-----------------------------------------------------
-    20.11.2003 11:32
------------------------------------------------------*/
+
 MyListener::~MyListener()
 {}
 
-/*-----------------------------------------------------
-    20.11.2003 12:04
------------------------------------------------------*/
+
 css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
     throw (css::lang::IllegalArgumentException,
            css::uno::Exception,
@@ -62,7 +57,7 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
     const css::beans::NamedValue* p = lArguments.getConstArray();
     for (i=0; i<c; ++i)
     {
-        if (p[i].Name.equalsAscii("Environment"))
+        if (p[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Environment")))
         {
             p[i].Value >>= lEnv;
             break;
@@ -75,12 +70,12 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
     p = lEnv.getConstArray();
     for (i=0; i<c; ++i)
     {
-        if (p[i].Name.equalsAscii("Model"))
+        if (p[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Model")))
         {
             p[i].Value >>= xModel;
             break;
         }
-        if (p[i].Name.equalsAscii("Frame"))
+        if (p[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Frame")))
         {
             css::uno::Reference< css::frame::XController > xController;
             css::uno::Reference< css::frame::XFrame >      xFrame;
@@ -97,11 +92,11 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
         return css::uno::Any();
 
     css::uno::Reference< css::lang::XServiceInfo > xInfo(xModel, css::uno::UNO_QUERY);
-    sal_Bool bCalc   = xInfo->supportsService(::rtl::OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument"));
+    sal_Bool bCalc   = xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")));
     sal_Bool bWriter = (
-                         xInfo->supportsService(::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument"  )) &&
-                        !xInfo->supportsService(::rtl::OUString::createFromAscii("com.sun.star.text.WebDocument"   )) &&
-                        !xInfo->supportsService(::rtl::OUString::createFromAscii("com.sun.star.text.GlobalDocument"))
+                         xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"))) &&
+                        !xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.WebDocument"))) &&
+                        !xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalDocument")))
                        );
 
     // Wir interessieren uns nur für Writer und Calc. Werden hier aber für
@@ -124,44 +119,38 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
     return css::uno::Any();
 }
 
-/*-----------------------------------------------------
-    20.11.2003 12:13
------------------------------------------------------*/
+
 ::rtl::OUString SAL_CALL MyListener::getImplementationName()
     throw (css::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii(MYLISTENER_IMPLEMENTATIONNAME);
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MYLISTENER_IMPLEMENTATIONNAME));
 }
 
-/*-----------------------------------------------------
-    20.11.2003 12:13
------------------------------------------------------*/
+
 css::uno::Sequence< ::rtl::OUString > SAL_CALL MyListener::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     css::uno::Sequence< ::rtl::OUString > lNames(1);
-    lNames[0] = ::rtl::OUString::createFromAscii(MYLISTENER_SERVICENAME);
+    lNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MYLISTENER_SERVICENAME));
     return lNames;
 }
 
-/*-----------------------------------------------------
-    20.11.2003 12:14
------------------------------------------------------*/
+
 sal_Bool SAL_CALL MyListener::supportsService(const ::rtl::OUString& sServiceName)
     throw (css::uno::RuntimeException)
 {
     return (
-            sServiceName.equalsAscii(MYLISTENER_SERVICENAME) ||
-            sServiceName.equalsAscii("com.sun.star.task.Job"    )
+            sServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(MYLISTENER_SERVICENAME)) ||
+            sServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.task.Job"))
            );
 }
 
-/*-----------------------------------------------------
-    20.11.2003 11:31
------------------------------------------------------*/
+
 css::uno::Reference< css::uno::XInterface > MyListener::st_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     MyListener* pListener = new MyListener(xSMGR);
     css::uno::Reference< css::uno::XInterface > xListener(static_cast< css::task::XJob* >(pListener), css::uno::UNO_QUERY);
     return xListener;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

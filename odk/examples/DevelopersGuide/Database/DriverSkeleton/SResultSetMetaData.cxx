@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -79,7 +80,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("Column") + ::rtl::OUString::valueOf(column);
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Column")) + ::rtl::OUString::valueOf(column);
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
@@ -167,3 +168,4 @@ sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLEx
 }
 // -------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

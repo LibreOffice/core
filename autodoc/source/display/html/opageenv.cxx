@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -356,7 +357,7 @@ OuputPage_Environment::SetFile_AllDefs()
 void
 OuputPage_Environment::SetFile_Index( char i_cLetter )
 {
-    csv_assert( 'A' <= i_cLetter AND i_cLetter <= 'Z' OR i_cLetter == '_' );
+    csv_assert( ( 'A' <= i_cLetter AND i_cLetter <= 'Z' ) OR i_cLetter == '_' );
 
     static StreamStr sIndexFileName(40);
     sIndexFileName.seekp(0);
@@ -487,3 +488,5 @@ OuputPage_Environment::RepositoryTitle() const
 {
     return Gate().RepositoryTitle();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

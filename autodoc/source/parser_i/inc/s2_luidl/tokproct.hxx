@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@ class TokenProcessing_Types
         push_sure,      // push sub environment, which must be the correct one
         push_try,       // push sub environment, which is tried, if it may be the right one
         pop_success,    // return to parent environment, parsing was successful
-        pop_failure     // return to parent environment, but an error occured.
+        pop_failure     // return to parent environment, but an error occurred.
     };
 
     struct TokenProcessing_Result
@@ -91,3 +92,4 @@ class TokenProcessing_Types
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

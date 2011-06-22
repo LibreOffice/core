@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -140,11 +141,11 @@ sal_Bool XFlatXml::importer(
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         aName = aSourceData[i].Name;
-        if (aName.equalsAscii("InputStream"))
+        if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InputStream")))
             aSourceData[i].Value >>= xInputStream;
-        else if ( aName.equalsAscii("FileName"))
+        else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileName")))
             aSourceData[i].Value >>= aFileName;
-        else if ( aName.equalsAscii("URL"))
+        else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
             aSourceData[i].Value >>= aURL;
     }
 
@@ -161,7 +162,7 @@ sal_Bool XFlatXml::importer(
     // create SAX parser that will read the document file
     // and provide events to xHandler passed to this call
     Reference < XParser > xSaxParser( m_rServiceFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.xml.sax.Parser")), UNO_QUERY );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))), UNO_QUERY );
     OSL_ASSERT(xSaxParser.is());
     if(!xSaxParser.is())return sal_False;
 
@@ -178,7 +179,7 @@ sal_Bool XFlatXml::importer(
     catch( Exception &exc)
     {
         // something went wrong
-        OSL_ENSURE(0, exc.Message);
+        OSL_FAIL(exc.Message);
         return sal_False;
     }
 
@@ -202,9 +203,9 @@ sal_Bool XFlatXml::exporter(
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         aName = aSourceData[i].Name;
-        if ( aName.equalsAscii("OutputStream"))
+        if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OutputStream")))
             aSourceData[i].Value >>= rOutputStream;
-        else if ( aName.equalsAscii("URL" ))
+        else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL" ) ))
             aSourceData[i].Value >>= sURL;
     }
 
@@ -212,7 +213,7 @@ sal_Bool XFlatXml::exporter(
         // get the document writer
         m_rDocumentHandler = Reference<XExtendedDocumentHandler>(
             m_rServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Writer")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))),
                 UNO_QUERY);
         OSL_ASSERT(m_rDocumentHandler.is());
         if (!m_rDocumentHandler.is()) return sal_False;
@@ -302,8 +303,8 @@ Sequence< OUString > getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString::createFromAscii(
-                "devguide.officedev.samples.filter.FlatXmlCpp");
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "devguide.officedev.samples.filter.FlatXmlCpp"));
             pNames = &seqNames;
         }
     }
@@ -324,34 +325,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-// This method not longer necessary since OOo 3.4 where the component registration was
-// was changed to passive component registration. For more details see
-// http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
-//
-// SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKey )
-// {
-//     if (pRegistryKey)
-//  {
-//         try
-//         {
-//             Reference< XRegistryKey > xNewKey(
-//                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-//                     OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-
-//             const Sequence< OUString > & rSNL = getSupportedServiceNames();
-//             const OUString * pArray = rSNL.getConstArray();
-//             for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-//                 xNewKey->createKey( pArray[nPos] );
-
-//             return sal_True;
-//         }
-//         catch (InvalidRegistryException &)
-//         {
-//             OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-//         }
-//     }
-//     return sal_False;
-// }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
@@ -375,3 +348,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

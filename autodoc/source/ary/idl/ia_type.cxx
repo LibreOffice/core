@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -126,7 +127,7 @@ TypeAdmin::lhf_CheckIn_TypeName( const String &        i_sLocalName,
 {
     String sSearchLocalName( i_sLocalName );
     if ( i_templateParameters != 0
-         ?  i_templateParameters->size() > 0
+         ?  (!i_templateParameters->empty())
          :  false )
     {
         sSearchLocalName = MakeTemplateName(
@@ -362,3 +363,5 @@ MakeTemplateName( const String &                i_localName,
 
 }   // namespace idl
 }   // namespace ary
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

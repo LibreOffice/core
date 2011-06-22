@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -56,35 +57,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-// This method not longer necessary since OOo 3.4 where the component registration was
-// was changed to passive component registration. For more details see
-// http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
-//==================================================================================================
-// SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-//  void * pServiceManager, void * pRegistryKey )
-// {
-//  if (pRegistryKey)
-//  {
-//      try
-//      {
-//          Reference< XRegistryKey > xNewKey(
-//              reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( FilterDetect_getImplementationName() ) );
-//          xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
-
-//          const Sequence< OUString > & rSNL = FilterDetect_getSupportedServiceNames();
-//          const OUString * pArray = rSNL.getConstArray();
-//          for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-//              xNewKey->createKey( pArray[nPos] );
-
-//          return sal_True;
-//      }
-//      catch (InvalidRegistryException &)
-//      {
-//          OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-//      }
-//  }
-//  return sal_False;
-// }
 
 //==================================================================================================
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
@@ -110,3 +82,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

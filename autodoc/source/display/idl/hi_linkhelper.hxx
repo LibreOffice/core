@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,9 +85,7 @@ class LinkHelper
     const String &      XrefsSuffix() const;
 
   private:
-    // DATA
-    mutable HtmlEnvironment_Idl &
-                        rEnv;
+    HtmlEnvironment_Idl & rEnv;
 };
 
 inline const ary::idl::CodeEntity *
@@ -105,3 +104,5 @@ String              nameChainLinker(
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,12 @@
 #ifndef ADC_CPP_PE_ENUM_HXX
 #define ADC_CPP_PE_ENUM_HXX
 
-
-
-
 // USED SERVICES
     // BASE CLASSES
 #include "cpp_pe.hxx"
     // COMPONENTS
 #include <semantic/callf.hxx>
 #include <semantic/sub_peu.hxx>
-    // PARAMETERS
-// #include "all_toks.hxx"
-
 
 namespace cpp {
 
@@ -136,3 +131,4 @@ PE_Enum::Result_FirstNameSegment() const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
