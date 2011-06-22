@@ -1149,51 +1149,6 @@ INetContentType INetContentTypes::MapStringToContentType(UniString const &
 
 //============================================================================
 // static
-bool INetContentTypes::parse(ByteString const & rMediaType,
-                             ByteString & rType, ByteString & rSubType,
-                             INetContentTypeParameterList * pParameters)
-{
-    sal_Char const * p = rMediaType.GetBuffer();
-    sal_Char const * pEnd = p + rMediaType.Len();
-
-    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
-    sal_Char const * pToken = p;
-    bool bDowncase = false;
-    while (p != pEnd && INetMIME::isTokenChar(*p))
-    {
-        bDowncase = bDowncase || INetMIME::isUpperCase(*p);
-        ++p;
-    }
-    if (p == pToken)
-        return false;
-    rType = ByteString(pToken, sal::static_int_cast< xub_StrLen >(p - pToken));
-    if (bDowncase)
-        rType.ToLowerAscii();
-
-    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
-    if (p == pEnd || *p++ != '/')
-        return false;
-
-    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
-    pToken = p;
-    bDowncase = false;
-    while (p != pEnd && INetMIME::isTokenChar(*p))
-    {
-        bDowncase = bDowncase || INetMIME::isUpperCase(*p);
-        ++p;
-    }
-    if (p == pToken)
-        return false;
-    rSubType = ByteString(
-        pToken, sal::static_int_cast< xub_StrLen >(p - pToken));
-    if (bDowncase)
-        rSubType.ToLowerAscii();
-
-    return INetMIME::scanParameters(p, pEnd, pParameters) == pEnd;
-}
-
-//============================================================================
-// static
 bool INetContentTypes::parse(UniString const & rMediaType,
                              UniString & rType, UniString & rSubType,
                              INetContentTypeParameterList * pParameters)
