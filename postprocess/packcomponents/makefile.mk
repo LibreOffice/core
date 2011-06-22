@@ -57,7 +57,6 @@ my_components = \
     component/canvas/source/vcl/vclcanvas \
     component/comphelper/util/comphelp \
     component/cui/util/cui \
-    component/dbaccess/source/ext/adabas/adabasui \
     component/dbaccess/source/ext/macromigration/dbmm \
     component/dbaccess/source/filter/xml/dbaxml \
     component/dbaccess/util/dba \
@@ -106,7 +105,6 @@ my_components = \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
     component/vbahelper/util/msforms \
-    component/vcl/vcl \
     component/writerfilter/util/writerfilter \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
@@ -137,7 +135,6 @@ my_components = \
     log \
     mcnttype \
     migrationoo2 \
-    mtfrenderer \
     msfilter \
     msworksfilter \
     mysql \
