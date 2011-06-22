@@ -1207,7 +1207,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
                 SfxItemState eState = SFX_ITEM_DEFAULT;
                 if (const SfxItemSet *pSet = pNd->GetpSwAttrSet())
                     eState = pSet->GetItemState(RES_LR_SPACE, false);
-                if (eState != SFX_ITEM_SET && !rReader.vColl.empty() && rReader.nAktColl < rReader.vColl.size())
+                if (eState != SFX_ITEM_SET && rReader.nAktColl < rReader.vColl.size())
                     pItem = &(rReader.vColl[rReader.nAktColl].maWordLR);
             }
 
@@ -1393,7 +1393,6 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
             aAttr = *((const SvxTabStopItem*)pTabs);
         else
         {
-
             sal_uInt16 nOldTabBase = nTabBase;
             // If based on another
             if (nTabBase < vColl.size())
@@ -1409,7 +1408,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
                 // current one (prevent loop)
                 aLoopWatch.insert(reinterpret_cast<size_t>(pSty));
                 if (nTabBase < vColl.size())
-                   pSty = (const SwTxtFmtColl*)vColl[nTabBase].pFmt;
+                    pSty = (const SwTxtFmtColl*)vColl[nTabBase].pFmt;
                 //TODO figure out the else branch
 
                 if (aLoopWatch.find(reinterpret_cast<size_t>(pSty)) !=
