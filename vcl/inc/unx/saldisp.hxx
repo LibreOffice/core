@@ -420,8 +420,9 @@ public:
     bool            DispatchInternalEvent();
     void            PrintInfo() const;
 
-    void            PrintEvent( const ByteString &rComment,
-                                XEvent       *pEvent ) const;
+#ifdef DBG_UTIL
+    void DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) const;
+#endif
 
     void            Beep() const;
 

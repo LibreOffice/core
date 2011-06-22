@@ -2358,7 +2358,7 @@ void SalX11Display::Yield()
     if( pXLib_->HasXErrorOccurred() )
     {
         XFlush( pDisp_ );
-        PrintEvent( "SalDisplay::Yield (WasXError)", &aEvent );
+        DbgPrintDisplayEvent("SalDisplay::Yield (WasXError)", &aEvent);
     }
 #endif
     pXLib_->ResetXErrorOccurred();
@@ -2475,14 +2475,13 @@ long SalX11Display::Dispatch( XEvent *pEvent )
     return 0;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalDisplay::PrintEvent( const ByteString &rComment,
-                                   XEvent       *pEvent ) const
+#ifdef DBG_UTIL
+void SalDisplay::DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) const
 {
     if( pEvent->type <= MappingNotify )
     {
         fprintf( stderr, "[%s] %s s=%d w=%ld\n",
-                 rComment.GetBuffer(),
+                 pComment,
                  EventNames[pEvent->type],
                  pEvent->xany.send_event,
                  pEvent->xany.window );
@@ -2609,11 +2608,12 @@ void SalDisplay::PrintEvent( const ByteString &rComment,
     }
     else
         fprintf( stderr, "[%s] %d s=%d w=%ld\n",
-                 rComment.GetBuffer(),
+                 pComment,
                  pEvent->type,
                  pEvent->xany.send_event,
                  pEvent->xany.window );
 }
+#endif
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalDisplay::PrintInfo() const
