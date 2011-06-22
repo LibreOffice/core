@@ -136,6 +136,17 @@ void lcl_Break(Stream& rMapper, bool bMinimal = false)
     }
 }
 
+void lcl_ParBreak(Stream& rMapper)
+{
+    // end previous paragraph
+    rMapper.startCharacterGroup();
+    lcl_Break(rMapper, true);
+    rMapper.endCharacterGroup();
+    rMapper.endParagraphGroup();
+    // start new one
+    rMapper.startParagraphGroup();
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -602,13 +613,13 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_PAR:
             {
-                // end previous paragraph
-                Mapper().startCharacterGroup();
-                lcl_Break(Mapper(), true);
-                Mapper().endCharacterGroup();
-                Mapper().endParagraphGroup();
-                // start new one
-                Mapper().startParagraphGroup();
+                if (!m_bTable)
+                    lcl_ParBreak(Mapper());
+                else
+                {
+                    RTFValue::Pointer_t pValue(new RTFValue(0));
+                    m_aBuffer.push_back(make_pair(BUFFER_PAR, pValue));
+                }
                 // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
             }
@@ -1328,9 +1339,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                         Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aString.getStr()), aString.getLength());
                     }
                     else if (aPair.first == BUFFER_ENDRUN)
-                    {
                         Mapper().endCharacterGroup();
-                    }
+                    else if (aPair.first == BUFFER_PAR)
+                        lcl_ParBreak(Mapper());
                     else
                         OSL_FAIL("should not happen");
                 }

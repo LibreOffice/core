@@ -80,7 +80,8 @@ namespace writerfilter {
             BUFFER_NESTCELLEND,
             BUFFER_STARTRUN,
             BUFFER_UTEXT,
-            BUFFER_ENDRUN
+            BUFFER_ENDRUN,
+            BUFFER_PAR
         };
 
         /// An entry in the color table.
