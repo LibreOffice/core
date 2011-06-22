@@ -135,6 +135,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myFaxDoc.setWizardTemplateDocInfo( \
             self.resources.resFaxWizardDialog_title,
             self.resources.resTemplateDescription)
+        endWizard = True
         try:
             fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
@@ -149,9 +150,11 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             if not self.__filenameChanged:
                 if fileAccess.exists(self.sPath, True):
                     answer = SystemDialog.showMessageBox(
-                        self.xMSF, self.xUnoDialog.Peer, "MessBox",
-                        YES_NO + DEF_NO, self.resources.resOverwriteWarning)
-                    if answer == 3: # user said: no, do not overwrite...
+                        self.xMSF, "MessBox", YES_NO + DEF_NO,
+                        self.resources.resOverwriteWarning, self.xUnoDialog.Peer)
+                    if answer == 3:
+                        # user said: no, do not overwrite...
+                        endWizard = False
                         return False
 
 
@@ -164,7 +167,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 (self.chkUseCommunicationType.State is not 0)
             self.myFaxDoc.killEmptyFrames()
             self.bSaveSuccess = OfficeDocument.store(self.xMSF, self.xTextDocument,
-                self.sPath, "writer8_template", False)
+                self.sPath, "writer8_template")
             if self.bSaveSuccess:
                 self.saveConfiguration()
                 xIH = self.xMSF.createInstance( \
@@ -202,8 +205,9 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         except Exception, e:
             traceback.print_exc()
         finally:
-            self.xUnoDialog.endExecute()
-            self.running = False
+            if endWizard:
+                self.xUnoDialog.endExecute()
+                self.running = False
 
         return True
 
@@ -307,8 +311,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.setControlProperty("chkUseDate",
             PropertyNames.PROPERTY_ENABLED,
             self.myFaxDoc.hasElement("Date"))
-        #COMMENTED
-        #self.myFaxDoc.updateDateFields()
+        self.myFaxDoc.updateDateFields()
 
     def initializeSalutation(self):
         self.setControlProperty("lstSalutation", "StringItemList",

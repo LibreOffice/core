@@ -5,6 +5,7 @@ from ui.event.CommonListener import TerminateListenerProcAdapter
 from common.Desktop import Desktop
 from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt import Rectangle
+import unohelper
 
 #Window Constants
 com_sun_star_awt_WindowAttribute_BORDER \
@@ -172,7 +173,7 @@ class OfficeDocument(object):
         return xComponent
 
     @classmethod
-    def store(self, xMSF, xComponent, StorePath, FilterName, bStoreToUrl):
+    def store(self, xMSF, xComponent, StorePath, FilterName):
         try:
             if len(FilterName):
                 oStoreProperties = range(2)
@@ -188,10 +189,17 @@ class OfficeDocument(object):
             else:
                 oStoreProperties = range(0)
 
-            if bStoreToUrl:
-                xComponent.storeToURL(StorePath, tuple(oStoreProperties))
-            else:
-                xComponent.storeAsURL(StorePath, tuple(oStoreProperties))
+            if StorePath.startswith("file://"):
+                #Unix
+                StorePath = StorePath[7:]
+
+            sPath = StorePath[:(StorePath.rfind("/") + 1)]
+            sFile = StorePath[(StorePath.rfind("/") + 1):]
+            xComponent.storeToURL(
+                unohelper.absolutize(
+                    unohelper.systemPathToFileUrl(sPath),
+                    unohelper.systemPathToFileUrl(sFile)),
+                tuple(oStoreProperties))
 
             return True
         except Exception, exception:
