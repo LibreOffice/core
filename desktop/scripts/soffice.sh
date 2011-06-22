@@ -127,17 +127,6 @@ if echo "$checks" | grep -q "cc" ; then
     exit 1;
 fi
 
-if [ "$VALGRIND" != "" ]; then
-    VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes --trace-children-skip=*/java --error-exitcode=101"
-    export VALGRINDCHECK
-    if [ "$VALGRIND" = "memcheck" ]; then
-        G_SLICE=always-malloc
-        export G_SLICE
-        GLIBCXX_FORCE_NEW=1
-        export GLIBCXX_FORCE_NEW
-    fi
-fi
-
 case "`uname -s`" in
 NetBSD|OpenBSD|FreeBSD|DragonFly)
 # this is a temporary hack until we can live with the default search paths
