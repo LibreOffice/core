@@ -93,6 +93,8 @@
 
 #define UCALC_DEBUG_OUTPUT 0
 
+const int indeterminate = 2;
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -223,7 +225,7 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, bool bExpected);
+    void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, int nExpected);
     bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL);
 
     void testCollator();
@@ -626,7 +628,7 @@ bool Test::load(const rtl::OUString &rFilter, const rtl::OUString &rURL)
     return xDocShRef->DoLoad(&aSrcMed);
 }
 
-void Test::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, bool bExpected)
+void Test::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, int nExpected)
 {
     osl::Directory aDir(rURL);
 
@@ -638,12 +640,33 @@ void Test::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL
         aItem.getFileStatus(aFileStatus);
         rtl::OUString sURL = aFileStatus.getFileURL();
         if (aFileStatus.getFileType() == osl::FileStatus::Directory)
-            recursiveScan(rFilter, sURL, bExpected);
+            recursiveScan(rFilter, sURL, nExpected);
         else
         {
+            sal_Int32 nLastSlash = sURL.lastIndexOf('/');
+
+            //ignore .files
+            if (
+                 (nLastSlash != -1) && (nLastSlash+1 < sURL.getLength()) &&
+                 (sURL.getStr()[nLastSlash+1] == '.')
+               )
+            {
+                continue;
+            }
+
+            rtl::OString aRes(rtl::OUStringToOString(sURL,
+                osl_getThreadTextEncoding()));
+            if (nExpected == indeterminate)
+            {
+                fprintf(stderr, "loading %s\n", aRes.getStr());
+            }
             bool bRes = load(rFilter, sURL);
-            rtl::OString aRes(rtl::OUStringToOString(sURL, osl_getThreadTextEncoding()));
-            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == bExpected);
+            if (nExpected == indeterminate)
+            {
+                fprintf(stderr, "pass/fail was %d\n", bRes);
+                continue;
+            }
+            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
         }
     }
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
@@ -656,6 +679,9 @@ void Test::testCVEs()
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
         m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/qpro/fail")), false);
+
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/qpro/indeterminate")), indeterminate);
 }
 
 template<typename Evaluator>
