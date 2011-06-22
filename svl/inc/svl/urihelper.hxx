@@ -42,7 +42,6 @@ namespace com { namespace sun { namespace star {
     namespace uri { class XUriReference; }
 } } }
 namespace rtl { class OUString; }
-class ByteString;
 class CharClass;
 class UniString;
 
