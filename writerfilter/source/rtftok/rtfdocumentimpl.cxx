@@ -1454,17 +1454,11 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_COLW:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                RTFSprms_t& rAttributes = lcl_getColsAttributes(m_aStates);
-                rAttributes.push_back(make_pair(NS_ooxml::LN_CT_Column_w, pValue));
-            }
-            break;
         case RTF_COLSR:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 RTFSprms_t& rAttributes = lcl_getColsAttributes(m_aStates);
-                rAttributes.push_back(make_pair(NS_ooxml::LN_CT_Column_space, pValue));
+                rAttributes.push_back(make_pair((nKeyword == RTF_COLW ? NS_ooxml::LN_CT_Column_w : NS_ooxml::LN_CT_Column_space), pValue));
             }
             break;
         default:
