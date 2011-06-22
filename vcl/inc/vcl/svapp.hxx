@@ -166,7 +166,7 @@ class VCL_DLLPUBLIC ApplicationEvent
 {
 private:
     UniString           aSenderAppName; // Absender Applikationsname
-    ByteString          aEvent;         // Event
+    rtl::OString        m_aEvent;       // Event
     UniString           aData;          // Uebertragene Daten
     ApplicationAddress  aAppAddr;       // Absender Addresse
 
@@ -174,11 +174,11 @@ public:
                         ApplicationEvent() {}
                         ApplicationEvent( const UniString& rSenderAppName,
                                           const ApplicationAddress& rAppAddr,
-                                          const ByteString& rEvent,
+                                          const rtl::OString& rEvent,
                                           const UniString& rData );
 
     const UniString&    GetSenderAppName() const { return aSenderAppName; }
-    const ByteString&   GetEvent() const { return aEvent; }
+    const rtl::OString& GetEvent() const { return m_aEvent; }
     const UniString&    GetData() const { return aData; }
     const ApplicationAddress& GetAppAddress() const { return aAppAddr; }
 
@@ -188,10 +188,10 @@ public:
 
 inline ApplicationEvent::ApplicationEvent( const UniString& rSenderAppName,
                                            const ApplicationAddress& rAppAddr,
-                                           const ByteString& rEvent,
+                                           const rtl::OString& rEvent,
                                            const UniString& rData ) :
     aSenderAppName( rSenderAppName ),
-    aEvent( rEvent ),
+    m_aEvent( rEvent ),
     aData( rData ),
     aAppAddr( rAppAddr )
 {
