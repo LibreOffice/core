@@ -36,14 +36,14 @@
 
 VS_VERSION_INFO versioninfo
 #ifndef SUBVERSION
-	fileversion    VERSION, 0, VERVARIANT, VER_COUNT
-	productversion VERSION, 0, VERVARIANT, VER_COUNT
+	FILEVERSION    VERSION, 0, VERVARIANT, VER_COUNT
+	PRODUCTVERSION VERSION, 0, VERVARIANT, VER_COUNT
 #else
-	fileversion    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
-	productversion VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	FILEVERSION    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	PRODUCTVERSION VERSION, SUBVERSION, VERVARIANT, VER_COUNT
 #endif
-	fileflagsmask 0x3F
-	fileflags
+	FILEFLAGSMASK 0x3F
+	FILEFLAGS
 #if defined(DEBUG)
 	VS_FF_DEBUG |
 #endif
@@ -51,66 +51,66 @@ VS_VERSION_INFO versioninfo
 	VS_FF_PRERELEASE |
 #endif
 	0
-	fileos VOS_NT_WINDOWS32
-	filetype VFT_APP
+	FILEOS VOS_NT_WINDOWS32
+	FILETYPE VFT_APP
 	{
-		block "StringFileInfo"
+		BLOCK "StringFileInfo"
 		{
-			block "040904E4"
+			BLOCK "040904E4"
 			{
 				// International StringTable
-                value "CompanyName", 		"The Document Foundation\0"
-				value "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
-				value "FileVersion",		PPS(VER_LEVEL) "\0"
-				value "ProductVersion",		PPS(VER_LEVEL) "\0"
-				value "OriginalFilename",	"SOFFICE.EXE\0"
-				value "InternalName", 		"SOFFICE\0"
-				value "LegalCopyright", 	S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
+                VALUE "CompanyName", 		"The Document Foundation\0"
+				VALUE "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
+				VALUE "FileVersion",		PPS(VER_LEVEL) "\0"
+				VALUE "ProductVersion",		PPS(VER_LEVEL) "\0"
+				VALUE "OriginalFilename",	"SOFFICE.EXE\0"
+				VALUE "InternalName", 		"SOFFICE\0"
+				VALUE "LegalCopyright", 	S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
 			}
 		}
 
-		block "VarFileInfo"
+		BLOCK "VarFileInfo"
 		{
-			value "Translation", 0x0409, 1252
+			VALUE "Translation", 0x0409, 1252
 		}
 	}
 
-2 ICON "icons\\oasis-text.ico"
-3 ICON "icons\\oasis-text-template.ico"
-4 ICON "icons\\oasis-spreadsheet.ico"
-5 ICON "icons\\oasis-spreadsheet-template.ico"
-6 ICON "icons\\oasis-drawing.ico"
-7 ICON "icons\\oasis-drawing-template.ico"
-8 ICON "icons\\oasis-presentation.ico"
-9 ICON "icons\\oasis-presentation-template.ico"
-10 ICON "icons\\oasis-presentation-template.ico"
-11 ICON "icons\\oasis-master-document.ico"
-12 ICON "icons\\oasis-web-template.ico"
-13 ICON "icons\\oasis-empty-document.ico"
-14 ICON "icons\\oasis-database.ico"
-15 ICON "icons\\oasis-formula.ico"
-16 ICON "icons\\oasis-web-template.ico"
-17 ICON "icons\\empty-document.ico"
-18 ICON "icons\\empty-document.ico"
-19 ICON "icons\\so9_main_app.ico"
-20 ICON "icons\\empty-document.ico"
-21 ICON "icons\\so9_writer_app.ico"
-22 ICON "icons\\so9_calc_app.ico"
-23 ICON "icons\\so9_draw_app.ico"
-24 ICON "icons\\so9_impress_app.ico"
-25 ICON "icons\\so9_math_app.ico"
-26 ICON "icons\\so9_base_app.ico"
-27 ICON "icons\\oasis-empty-document.ico"
-28 ICON "icons\\text.ico"
-29 ICON "icons\\text-template.ico"
-30 ICON "icons\\spreadsheet.ico"
-31 ICON "icons\\spreadsheet-template.ico"
-32 ICON "icons\\drawing.ico"
-33 ICON "icons\\drawing-template.ico"
-34 ICON "icons\\presentation.ico"
-35 ICON "icons\\presentation-template.ico"
-36 ICON "icons\\master-document.ico"
-37 ICON "icons\\empty-document.ico"
-38 ICON "icons\\database.ico"
-39 ICON "icons\\formula.ico"
-40 ICON "icons\\oxt-extension.ico"
+2 ICON "icons/oasis-text.ico"
+3 ICON "icons/oasis-text-template.ico"
+4 ICON "icons/oasis-spreadsheet.ico"
+5 ICON "icons/oasis-spreadsheet-template.ico"
+6 ICON "icons/oasis-drawing.ico"
+7 ICON "icons/oasis-drawing-template.ico"
+8 ICON "icons/oasis-presentation.ico"
+9 ICON "icons/oasis-presentation-template.ico"
+10 ICON "icons/oasis-presentation-template.ico"
+11 ICON "icons/oasis-master-document.ico"
+12 ICON "icons/oasis-web-template.ico"
+13 ICON "icons/oasis-empty-document.ico"
+14 ICON "icons/oasis-database.ico"
+15 ICON "icons/oasis-formula.ico"
+16 ICON "icons/oasis-web-template.ico"
+17 ICON "icons/empty-document.ico"
+18 ICON "icons/empty-document.ico"
+19 ICON "icons/so9_main_app.ico"
+20 ICON "icons/empty-document.ico"
+21 ICON "icons/so9_writer_app.ico"
+22 ICON "icons/so9_calc_app.ico"
+23 ICON "icons/so9_draw_app.ico"
+24 ICON "icons/so9_impress_app.ico"
+25 ICON "icons/so9_math_app.ico"
+26 ICON "icons/so9_base_app.ico"
+27 ICON "icons/oasis-empty-document.ico"
+28 ICON "icons/text.ico"
+29 ICON "icons/text-template.ico"
+30 ICON "icons/spreadsheet.ico"
+31 ICON "icons/spreadsheet-template.ico"
+32 ICON "icons/drawing.ico"
+33 ICON "icons/drawing-template.ico"
+34 ICON "icons/presentation.ico"
+35 ICON "icons/presentation-template.ico"
+36 ICON "icons/master-document.ico"
+37 ICON "icons/empty-document.ico"
+38 ICON "icons/database.ico"
+39 ICON "icons/formula.ico"
+40 ICON "icons/oxt-extension.ico"
