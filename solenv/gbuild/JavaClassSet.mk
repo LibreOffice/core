@@ -31,14 +31,17 @@ gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
 define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
-	$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) -cp "$(CLASSPATH)" -d $(call gb_JavaClassSet_get_classdir,$(2)) $(if $(filter-out $(JARDEPS),$(3)),\
+	$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) \
+		-cp "$(CLASSPATH)" \
+		-d $(call gb_JavaClassSet_get_classdir,$(2)) \
+		$(if $(filter-out $(JARDEPS),$(3)),\
 			$(filter-out $(JARDEPS),$(3)),\
 			$(filter-out $(JARDEPS),$(4))) &&) \
 	touch $(1))
 
 endef
 
-$(call gb_JavaClassSet_get_clean_target,%) :
+$(call gb_JavaClassSet_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),JCS,3)
 	$(call gb_JavaClassSet__command,$@,$*,$?,$^)
 
