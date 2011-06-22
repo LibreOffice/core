@@ -161,7 +161,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aColorTable(),
     m_bFirstRun(true),
     m_bNeedPap(false),
-    m_bNeedSep(false),
     m_aListTableSprms(),
     m_xStorage(),
     m_aBuffer(),
@@ -451,23 +450,6 @@ void RTFDocumentImpl::text(OUString& rString)
         }
         m_bNeedPap = false;
     }
-    if (m_bNeedSep)
-    {
-        // Section properties are a paragraph sprm.
-        RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms));
-        RTFSprms_t aAttributes;
-        RTFSprms_t aSprms;
-        aSprms.push_back(make_pair(NS_ooxml::LN_CT_PPr_sectPr, pValue));
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(
-                new RTFReferenceProperties(aAttributes, aSprms)
-                );
-        Mapper().props(pProperties);
-        Mapper().endParagraphGroup();
-        Mapper().endSectionGroup();
-        Mapper().startSectionGroup();
-        Mapper().startParagraphGroup();
-        m_bNeedSep = false;
-    }
 
     if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
@@ -645,7 +627,22 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             break;
         case RTF_SECT:
-                m_bNeedSep = true;
+            {
+                // Section properties are a paragraph sprm.
+                RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms));
+                RTFSprms_t aAttributes;
+                RTFSprms_t aSprms;
+                aSprms.push_back(make_pair(NS_ooxml::LN_CT_PPr_sectPr, pValue));
+                writerfilter::Reference<Properties>::Pointer_t const pProperties(
+                        new RTFReferenceProperties(aAttributes, aSprms)
+                        );
+                // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
+                Mapper().props(pProperties);
+                Mapper().endParagraphGroup();
+                Mapper().endSectionGroup();
+                Mapper().startSectionGroup();
+                Mapper().startParagraphGroup();
+            }
             break;
         case RTF_BACKSLASH:
             if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)

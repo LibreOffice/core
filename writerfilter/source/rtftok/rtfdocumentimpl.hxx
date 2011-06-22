@@ -217,8 +217,6 @@ namespace writerfilter {
                 bool m_bFirstRun;
                 /// If paragraph properties should be emitted on next run.
                 bool m_bNeedPap;
-                /// If section properties should be emitted on next run.
-                bool m_bNeedSep;
                 /// The list table and list override table combined.
                 RTFSprms_t m_aListTableSprms;
 
