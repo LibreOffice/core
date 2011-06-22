@@ -313,6 +313,7 @@ public:
     void                SetCurEntry( SvLBoxEntry* );
     Point               GetEntryPosition( SvLBoxEntry* ) const;
     void                MakeVisible( SvLBoxEntry* pEntry, sal_Bool bMoveToTop=sal_False );
+    void                ScrollToAbsPos( long nPos );
 
     void                PaintDDCursor( SvLBoxEntry* );
 

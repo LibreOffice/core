@@ -853,6 +853,11 @@ void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
     NotifyEndScroll();
 }
 
+void SvTreeListBox::ScrollToAbsPos( long nPos )
+{
+    pImp->ScrollToAbsPos( nPos );
+}
+
 void SvTreeListBox::SetSelectionMode( SelectionMode eSelectMode )
 {
     DBG_CHKTHIS(SvTreeListBox,0);

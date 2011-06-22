@@ -1012,6 +1012,32 @@ void SvImpLBox::MakeVisible( SvLBoxEntry* pEntry, sal_Bool bMoveToTop )
     pView->Invalidate();
 }
 
+void SvImpLBox::ScrollToAbsPos( long nPos )
+{
+    long nLastEntryPos = pView->GetAbsPos( pView->Last() );
+
+    if( nPos < 0 )
+        nPos = 0;
+    else if( nPos > nLastEntryPos )
+        nPos = nLastEntryPos;
+
+    SvLBoxEntry* pEntry = (SvLBoxEntry*)pView->GetEntryAtAbsPos( nPos );
+    if( !pEntry || pEntry == pStartEntry )
+        return;
+
+    if( pStartEntry || (m_nStyle & WB_FORCE_MAKEVISIBLE) )
+        nFlags &= (~F_FILLING);
+
+    if( pView->IsEntryVisible(pEntry) )
+    {
+        pStartEntry = pEntry;
+        ShowCursor( sal_False );
+        aVerSBar.SetThumbPos( nPos );
+        ShowCursor( sal_True );
+        if (GetUpdateMode())
+            pView->Invalidate();
+    }
+}
 
 void SvImpLBox::RepaintSelectionItems()
 {
