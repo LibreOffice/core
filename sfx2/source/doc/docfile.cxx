@@ -3483,11 +3483,10 @@ void SfxMedium::CreateTempFileNoCopy()
                 ::rtl::OUString aField;
                 aAny >>= aField;
 
-                ::rtl::OString sContent = ::rtl::OUStringToOString( aField, RTL_TEXTENCODING_ASCII_US );
-                ByteString sType, sSubType;
+                String sType, sSubType;
                 INetContentTypeParameterList aParameters;
 
-                if( INetContentTypes::parse( sContent, sType, sSubType, &aParameters ) )
+                if (INetContentTypes::parse(aField, sType, sSubType, &aParameters))
                 {
                     const INetContentTypeParameter * pCharset = aParameters.find("charset");
                     if (pCharset != 0)
