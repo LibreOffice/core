@@ -41,7 +41,6 @@ SCP_PRODUCT_TYPE=osl
 
 PARFILES= canvascommons.par		\
           vclcanvas.par         \
-          mtfrenderer.par
 
 .IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"
 PARFILES+= cairocanvas.par

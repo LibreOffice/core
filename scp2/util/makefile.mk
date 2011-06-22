@@ -205,7 +205,6 @@ SCP1FILES += \
 
 SCP1FILES += \
              vclcanvas.par \
-             mtfrenderer.par
 
 .IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"
 SCP1FILES += cairocanvas.par
