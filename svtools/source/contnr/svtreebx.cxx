@@ -2452,6 +2452,28 @@ SvLBoxEntry* SvTreeListBox::GetNextEntryInView(SvLBoxEntry* pEntry ) const
     return pNext;
 }
 
+SvLBoxEntry* SvTreeListBox::GetLastEntryInView() const
+{
+    SvLBoxEntry* pEntry = GetFirstEntryInView();
+    SvLBoxEntry* pNext = 0;
+    while( pEntry )
+    {
+        pNext = (SvLBoxEntry*)NextVisible( pEntry );
+        if( pNext )
+        {
+          Point aPos( GetEntryPosition(pNext) );
+          const Size& rSize = pImp->GetOutputSize();
+          if( aPos.Y() < 0 || aPos.Y() >= rSize.Height() )
+              break;
+          else
+              pEntry = pNext;
+        }
+        else
+            break;
+    }
+    return pEntry;
+}
+
 void SvTreeListBox::ShowFocusRect( const SvLBoxEntry* pEntry )
 {
     pImp->ShowFocusRect( pEntry );
