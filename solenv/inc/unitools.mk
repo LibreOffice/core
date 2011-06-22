@@ -87,7 +87,9 @@ COPYUPDATE=-u
 ECHON=echo -n
 ECHONL=echo
 FIND*=find
+.IF "$(OS_FOR_BUILD)"=="WNT"
 FLIPCMD*=$(PERL) $(SOLARENV)/bin/slfl.pl
+.ENDIF
 GNUCOPY*=cp
 GNUMAKE*=make
 GREP*=grep
