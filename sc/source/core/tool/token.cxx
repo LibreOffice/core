@@ -56,6 +56,7 @@ using ::std::vector;
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
+#include <com/sun/star/sheet/NameToken.hpp>
 
 using namespace formula;
 using namespace com::sun::star;
@@ -1173,6 +1174,13 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                             AddDoubleReference( aComplRef );
                         else
                             bError = true;
+                    }
+                    else if ( aType.equals( cppu::UnoType<sheet::NameToken>::get() ) )
+                    {
+                        sheet::NameToken aTokenData;
+                        _aToken.Data >>= aTokenData;
+                        if ( eOpCode == ocName )
+                            AddRangeName(aTokenData.Index, aTokenData.Global);
                     }
                     else if ( aType.equals( cppu::UnoType<sheet::ExternalReference>::get() ) )
                     {
