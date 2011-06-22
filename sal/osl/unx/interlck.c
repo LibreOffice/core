@@ -149,17 +149,6 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     return --nCount;
 #endif
 }
-
-#elif ( __GNUC__ > 4 ) || (( __GNUC__ == 4) && ( __GNUC_MINOR__ >= 4 ))
-oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
-{
-    return __sync_add_and_fetch(pCount, 1);
-}
-
-oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
-{
-    return __sync_sub_and_fetch(pCount, 1);
-}
 #elif ( __GNUC__ > 4 ) || (( __GNUC__ == 4) && ( __GNUC_MINOR__ >= 4 ))
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
