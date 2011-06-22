@@ -108,7 +108,7 @@ dev-install:
 		echo open install/LibreOffice.app; \
 	else \
 		echo "cd @abs_builddir@/install/program" && \
-		echo ". ooenv" && \
+		echo ". ./ooenv" && \
 		echo "./soffice.bin"; \
 	fi
 
