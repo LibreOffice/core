@@ -477,7 +477,7 @@ bool PDFContainer::emitSubElements( EmitContext& rWriteContext ) const
         if( rWriteContext.m_bDecrypt )
         {
             const PDFName* pName = dynamic_cast<PDFName*>(m_aSubElements[i]);
-            if( pName && pName->m_aName.equals( rtl::OString("Encrypt") ) )
+            if (pName && pName->m_aName.equalsL(RTL_CONSTASCII_STRINGPARAM("Encrypt")))
             {
                 i++;
                 continue;
@@ -714,7 +714,7 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
             }
 
             // is the (first) filter FlateDecode ?
-            if( pFilter && pFilter->m_aName.equals( "FlateDecode" ) )
+            if (pFilter && pFilter->m_aName.equalsL(RTL_CONSTASCII_STRINGPARAM("FlateDecode")))
             {
                 bIsDeflated = true;
             }
@@ -869,7 +869,7 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                     if( it != pClone->m_pStream->m_pDict->m_aMap.end() )
                     {
                         PDFName* pFilter = dynamic_cast<PDFName*>(it->second);
-                        if( pFilter && pFilter->m_aName.equals( "FlateDecode" ) )
+                        if (pFilter && pFilter->m_aName.equalsL(RTL_CONSTASCII_STRINGPARAM("FlateDecode")))
                             pClone->m_pStream->m_pDict->eraseValue( "Filter" );
                         else
                         {
@@ -877,7 +877,7 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                             if( pArray && ! pArray->m_aSubElements.empty() )
                             {
                                 pFilter = dynamic_cast<PDFName*>(pArray->m_aSubElements.front());
-                                if( pFilter && pFilter->m_aName.equals( "FlateDecode" ) )
+                                if (pFilter && pFilter->m_aName.equalsL(RTL_CONSTASCII_STRINGPARAM("FlateDecode")))
                                 {
                                     delete pFilter;
                                     pArray->m_aSubElements.erase( pArray->m_aSubElements.begin() );
