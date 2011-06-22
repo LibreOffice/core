@@ -49,12 +49,18 @@ PATCH_FILES=rhino1_5R5.patch \
     rhino1_5R5-find_swing.patch \
     rhino1_5R5-updateToolTip.patch
 
+.IF "$(OS_FOR_BUILD)"=="WNT"
+FIXED_TARFILE_LOCATION=`cygpath -m -s "$(TARFILE_LOCATION)"`
+.ELSE
+FIXED_TARFILE_LOCATION=$(TARFILE_LOCATION)
+.ENDIF
+
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
 BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj jar
 .ELSE
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" jar
+BUILD_ACTION=TARFILE_LOCATION="$(FIXED_TARFILE_LOCATION)" $(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) jar
 .ENDIF
 
 # --- Targets ------------------------------------------------------

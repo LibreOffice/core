@@ -68,25 +68,15 @@ extern "C" {
 /* DLL Entry modifiers... */
 
 /* PC */
-#if defined(XP_OS2)
-#  ifdef XP_OS2_VACPP
-#     define JRI_PUBLIC_API(ResultType)     ResultType _Optlink
-#     define JRI_PUBLIC_VAR(VarType)        VarType
-#     define JRI_CALLBACK
-#  else
-#     define JRI_PUBLIC_API(ResultType)     ResultType
-#     define JRI_PUBLIC_VAR(VarType)        VarType
-#     define JRI_CALLBACK
-#  endif
-#elif defined(XP_PC) || defined(_WINDOWS) || defined(WIN32) || defined(_WIN32)
+#if defined(XP_PC) || defined(_WINDOWS) || defined(WIN32) || defined(_WIN32)
 #   include <windows.h>
 #   if defined(_MSC_VER) || defined(__MINGW32__)
 #       if defined(WIN32) || defined(_WIN32)
-#           define JRI_PUBLIC_API(ResultType)   _declspec(dllexport) ResultType
+#           define JRI_PUBLIC_API(ResultType)   __declspec(dllexport) ResultType
 #           define JRI_PUBLIC_VAR(VarType)      VarType
-#           define JRI_PUBLIC_VAR_EXP(VarType)  _declspec(dllexport) VarType
-#           define JRI_PUBLIC_VAR_IMP(VarType)  _declspec(dllimport) VarType
-#           define JRI_NATIVE_STUB(ResultType)  _declspec(dllexport) ResultType
+#           define JRI_PUBLIC_VAR_EXP(VarType)  __declspec(dllexport) VarType
+#           define JRI_PUBLIC_VAR_IMP(VarType)  __declspec(dllimport) VarType
+#           define JRI_NATIVE_STUB(ResultType)  __declspec(dllexport) ResultType
 #           define JRI_CALLBACK
 #       else /* !_WIN32 */
 #           if defined(_WINDLL)
@@ -171,14 +161,6 @@ extern "C" {
 
 /* Java Scalar Types */
 
-#if 0   /* now in jni.h */
-typedef short           jchar;
-typedef short           jshort;
-typedef float           jfloat;
-typedef double          jdouble;
-typedef juint           jsize;
-#endif
-
 /* moved from jni.h -- Sun's new jni.h doesn't have this anymore */
 #ifdef __cplusplus
 typedef class _jobject *jref;
@@ -216,16 +198,7 @@ typedef juint           jsize;
 
 #ifdef HAVE_LONG_LONG
 
-#ifdef OSF1
-
-/* long is default 64-bit on OSF1, -std1 does not allow long long */
-typedef long                  jlong;
-typedef unsigned long         julong;
-#define jlong_MAXINT          0x7fffffffffffffffL
-#define jlong_MININT          0x8000000000000000L
-#define jlong_ZERO            0x0L
-
-#elif (defined(WIN32) || defined(_WIN32))
+#if (defined(WIN32) || defined(_WIN32))
 
 typedef LONGLONG              jlong;
 typedef DWORDLONG             julong;

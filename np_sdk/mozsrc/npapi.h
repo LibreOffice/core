@@ -42,20 +42,11 @@
  *  Netscape client plug-in API spec
  */
 
-#ifndef _NPAPI_H_
+#if !defined(_NPAPI_H_) && !defined(npapi_h_)
 #define _NPAPI_H_
-
-#ifdef __OS2__
-#pragma pack(1)
-#endif
+#define npapi_h_
 
 #include "jri.h"                /* Java Runtime Interface */
-
-#if defined (__OS2__ ) || defined (OS2)
-#   ifndef XP_OS2
-#       define XP_OS2 1
-#   endif /* XP_OS2 */
-#endif /* __OS2__ */
 
 #ifdef _WINDOWS
 #   ifndef XP_WIN
@@ -388,13 +379,6 @@ typedef struct _NPEvent
   uint32 wParam;
   uint32 lParam;
 } NPEvent;
-#elif defined(XP_OS2)
-typedef struct _NPEvent
-{
-  uint32 event;
-  uint32 wParam;
-  uint32 lParam;
-} NPEvent;
 #elif defined (XP_UNIX) && !defined(NO_X11)
 typedef XEvent NPEvent;
 #else
@@ -521,11 +505,7 @@ enum NPEventType {
 #if defined(_WINDOWS) && !defined(WIN32)
 #define NP_LOADDS  _loadds
 #else
-#if defined(__OS2__)
-#define NP_LOADDS _System
-#else
 #define NP_LOADDS
-#endif
 #endif
 
 #ifdef __cplusplus
@@ -603,8 +583,5 @@ void    NP_LOADDS NPN_ForceRedraw(NPP instance);
 #endif
 
 #endif /* RC_INVOKED */
-#ifdef __OS2__
-#pragma pack()
-#endif
 
 #endif /* _NPAPI_H_ */

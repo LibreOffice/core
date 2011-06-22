@@ -1,5 +1,5 @@
---- misc/libtextcat-2.2/configure	Thu May 22 13:39:55 2003
-+++ misc/build/libtextcat-2.2/configure	Mon Mar 31 11:29:14 2008
+--- misc/build/libtextcat-2.2/configure
++++ misc/build/libtextcat-2.2/configure
 @@ -3451,7 +3451,7 @@
    ;;
  
@@ -366,6 +366,25 @@
  			lastnonspace = w;
  		}
  		*w++ = *p++;
+@@ -386,3 +386,18 @@
+ 	return dest;
+ }
+ 
++void *
++rpl_malloc (size_t n)
++{
++  if (n == 0)
++    n = 1;
++  return malloc (n);
++}
++
++void *
++rpl_realloc (void *ptr, size_t n)
++{
++  if (n == 0)
++    n = 1;
++  return realloc (ptr, n);
++}
 --- misc/libtextcat-2.2/src/common.h	Thu May 22 15:02:29 2003
 +++ misc/build/libtextcat-2.2/src/common.h	Mon Mar 31 11:29:14 2008
 @@ -1,28 +1,28 @@
@@ -3878,7 +3897,7 @@
  	-solaris1 | -solaris1.*)
  		os=`echo $os | sed -e 's|solaris1|sunos4|'`
  		;;
-@@ -1100,24 +1286,30 @@
+@@ -1100,24 +1286,31 @@
  	# Each alternative MUST END IN A *, to match a version number.
  	# -sysv* is not here because it comes later, after sysvr4.
  	-gnu* | -bsd* | -mach* | -minix* | -genix* | -ultrix* | -irix* \
@@ -3901,6 +3920,7 @@
  	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
  	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
 -	      | -chorusos* | -chorusrdb* \
++	      | -androideabi* \
 +	      | -chorusos* | -chorusrdb* | -cegcc* \
  	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
 -	      | -mingw32* | -linux-gnu* | -uxpv* | -beos* | -mpeix* | -udk* \

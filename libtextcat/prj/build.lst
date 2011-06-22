@@ -1,3 +1,3 @@
-ltc     libtextcat      :       stlport soltools solenv NULL
+ltc     libtextcat      :       soltools solenv NULL
 ltc     libtextcat              usr1    -       all ltc_mkout NULL
 ltc     libtextcat              nmake   -       all ltc_libtextcat NULL

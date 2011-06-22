@@ -39,11 +39,13 @@ TARGET=lpsolve
 TARFILE_NAME=lp_solve_5.5
 TARFILE_MD5=26b3e95ddf3d9c077c480ea45874b3b8
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI_FOR_BUILD)"=="WNT"
 PATCH_FILES=lp_solve_5.5-windows.patch
 .ELSE
-PATCH_FILES=lp_solve_5.5.patch
-ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.os2
+PATCH_FILES=\
+    lp_solve_5.5.patch \
+    lp_solve-aix.patch
+ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.ios
 .ENDIF
 
 CONFIGURE_DIR=
@@ -59,23 +61,31 @@ lpsolve_LDFLAGS=-shared-libgcc
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 lpsolve_LIBS=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
+.IF "$(GUI_FOR_BUILD)"=="WNT"
 BUILD_ACTION=lpsolve_LDFLAGS=$(lpsolve_LDFLAGS) lpsolve_LIBS=$(lpsolve_LIBS) cmd /c cgcc.bat
+.ELSE
+BUILD_ACTION=sh ccc
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.a
+.ENDIF
 .ELSE
 BUILD_ACTION=cmd /c cvc6.bat
 OUT2LIB=$(BUILD_DIR)$/lpsolve55.lib
 .ENDIF
 OUT2BIN=$(BUILD_DIR)$/lpsolve55.dll
-.ELIF "$(GUI)"=="OS2"
-BUILD_ACTION=sh ccc.os2
-OUT2LIB=$(BUILD_DIR)$/liblpsolve55.lib
 .ELSE
 .IF "$(OS)"=="MACOSX"
 .EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS
 BUILD_ACTION=sh ccc.osx
 OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dylib
+.ELIF "$(OS)"=="IOS"
+.EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS
+BUILD_ACTION=sh ccc.ios
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.a
 .ELSE
 .IF "$(COMNAME)"=="sunpro5"
 BUILD_ACTION=sh ccc.solaris
+.ELIF "$(OS)$(COM)"=="AIXGCC"
+BUILD_ACTION=lpsolve_LDFLAGS="$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)" sh ccc.aix.gcc
 .ELSE
 BUILD_ACTION=sh ccc
 .ENDIF

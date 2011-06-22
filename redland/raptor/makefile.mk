@@ -36,8 +36,8 @@ TARGET=so_raptor
 
 .IF "$(SYSTEM_REDLAND)" == "YES"
 all:
-    @echo "An already available installation of Redland RDF should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of Redland RDF should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -57,15 +57,23 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.ooo_build \
     $(TARFILE_NAME).patch.dmake \
     $(TARFILE_NAME).patch.win32 \
+    raptor-aix.patch
 
+.IF "$(CROSS_COMPILING)"=="YES"
+OOO_PATCH_FILES += \
+    $(TARFILE_NAME).patch.cross
+.ENDIF
 
 PATCH_FILES=$(OOO_PATCH_FILES)
 
+.IF "$(SYSTEM_LIBXML)" == "YES"
+PATCH_FILES+=raptor-1.4.18.libxml.patch
+.ENDIF
+.IF "$(SYSTEM_LIBXSLT)" == "YES"
+PATCH_FILES+=raptor-1.4.18.libxslt.patch
+.ENDIF
 
-.IF "$(OS)"=="OS2"
-BUILD_ACTION=dmake
-BUILD_DIR=$(CONFIGURE_DIR)$/src
-.ELIF "$(OS)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OOO_PATCH_FILES+=$(TARFILE_NAME).patch.mingw
 raptor_CC=$(CC) -mthreads
@@ -108,6 +116,10 @@ CFLAGS=-m64
 CPPFLAGS+:=-I$(SOLARINCDIR)$/external
 LDFLAGS+:=-L$(SOLARLIBDIR)
 
+.IF "$(OS)"=="AIX"
+LDFLAGS+:=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
+.ENDIF
+
 .IF "$(SYSBASE)"!=""
 CPPFLAGS+:=-I$(SYSBASE)$/usr$/include
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="LINUX"
@@ -126,13 +138,19 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS=--disable-shared
+.ELSE
+CONFIGURE_FLAGS=--disable-static
+.ENDIF
 # do not enable grddl parser (#i93768#)
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+CONFIGURE_FLAGS+= --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
-#INSTALL_ACTION=$(GNUMAKE) install
-#INSTALL_FLAGS+=DESTDIR=$(PWD)$/$(P_INSTALL_TARGET_DIR)
 .ENDIF
 
 
@@ -140,6 +158,12 @@ OUT2INC+=src$/raptor.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/libraptor.$(RAPTOR_MAJOR).dylib src$/.libs$/libraptor.dylib
+OUT2BIN+=src/raptor-config
+.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+OUT2LIB+=src$/.libs$/libraptor.a
+OUT2BIN+=src/raptor-config
+.ELIF "$(OS)"=="AIX"
+OUT2LIB+=src$/.libs$/libraptor.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -149,8 +173,6 @@ OUT2BIN+=src/raptor-config
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
-.ELIF "$(GUI)"=="OS2"
-# if we use dmake, this is done automagically
 .ELSE
 OUT2LIB+=src$/.libs$/libraptor.so.$(RAPTOR_MAJOR) src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config

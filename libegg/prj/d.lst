@@ -1,5 +1,0 @@
-mkdir: %_DEST%\inc%_EXT%\eggtray
-
-..\inc\eggtrayicon.h %_DEST%\inc%_EXT%\eggtray\eggtrayicon.h
-
-..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*

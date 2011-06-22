@@ -1,3 +1,14 @@
+--- misc/hyphen-2.7.1/config.sub
++++ misc/build/hyphen-2.7.1/config.sub
+@@ -1272,7 +1272,7 @@
+ 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+-	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
 --- misc/hyphen-2.7.1/Makefile.am	2010-07-19 11:23:17.000000000 +0200
 +++ misc/build/hyphen-2.7.1/Makefile.am	2010-12-02 10:15:44.390625000 +0100
 @@ -25,14 +25,13 @@

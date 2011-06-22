@@ -56,15 +56,13 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.autotools \
     $(TARFILE_NAME).patch.ooo_build \
     $(TARFILE_NAME).patch.dmake \
-    $(TARFILE_NAME).patch.win32
+    $(TARFILE_NAME).patch.win32 \
+    rasqal-aix.patch
 
 PATCH_FILES=$(OOO_PATCH_FILES)
 
 
-.IF "$(OS)"=="OS2"
-BUILD_ACTION=dmake
-BUILD_DIR=$(CONFIGURE_DIR)$/src
-.ELIF "$(OS)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 rasqal_CC=$(CC) -mthreads
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
@@ -104,6 +102,10 @@ CFLAGS=-m64
 CPPFLAGS+:=-I$(SOLARINCDIR)$/external
 LDFLAGS+:=-L$(SOLARLIBDIR)
 
+.IF "$(OS)"=="AIX"
+LDFLAGS+:=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
+.ENDIF
+
 .IF "$(SYSBASE)"!=""
 CPPFLAGS+:=-I$(SYSBASE)$/usr$/include
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="LINUX"
@@ -122,12 +124,18 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS=--disable-shared
+.ELSE
+CONFIGURE_FLAGS=--disable-static
+.ENDIF
+CONFIGURE_FLAGS+= --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
-#INSTALL_ACTION=$(GNUMAKE) install
-#INSTALL_FLAGS+=DESTDIR=$(PWD)$/$(P_INSTALL_TARGET_DIR)
 .ENDIF
 
 
@@ -135,6 +143,9 @@ OUT2INC+=src$/rasqal.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/librasqal.$(RASQAL_MAJOR).dylib src$/.libs$/librasqal.dylib
+OUT2BIN+=src/rasqal-config
+.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+OUT2LIB+=src$/.libs$/librasqal.a
 OUT2BIN+=src/rasqal-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -144,8 +155,6 @@ OUT2BIN+=src/rasqal-config
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
-.ELIF "$(OS)"=="OS2"
-# if we use dmake, this is done automagically
 .ELSE
 OUT2LIB+=src$/.libs$/librasqal.so.$(RASQAL_MAJOR) src$/.libs$/librasqal.so
 OUT2BIN+=src/rasqal-config

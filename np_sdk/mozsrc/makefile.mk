@@ -35,12 +35,13 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+.IF "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
 .IF "$(L10N_framework)"==""
 JDKINCS=
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
+.IF "$(GUI)" == "WNT"
 MOZFILES = $(SLO)$/npwin.obj
 .ELSE
 MOZFILES = $(SLO)$/npunix.obj
@@ -54,6 +55,6 @@ ALL: $(MOZFILES)
 
 # --- Targets ------------------------------------------------------
 .ENDIF 		# L10N_framework
+.ENDIF		# iOS or Android
 
 .INCLUDE :	target.mk
-

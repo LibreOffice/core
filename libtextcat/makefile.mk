@@ -46,8 +46,9 @@ TARFILE_NAME=libtextcat-2.2
 TARFILE_MD5=128cfc86ed5953e57fe0f5ae98b62c2e
 TARFILE_ROOTDIR=libtextcat-2.2
 
-PATCH_FILES=libtextcat-2.2.patch
-
+PATCH_FILES=\
+    libtextcat-2.2.patch \
+    libtextcat-aix.patch
 
 ADDITIONAL_FILES= \
                 src$/utf8misc.h \
@@ -57,22 +58,35 @@ ADDITIONAL_FILES= \
                 src$/libtextcat.map
 
 .IF "$(GUI)"=="UNX"
-#CONFIGURE_DIR=$(BUILD_DIR)
-
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=configure CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
+.IF "$(OS)"=="AIX"
+CONFIGURE_FLAGS+= CFLAGS=-D_LINUX_SOURCE_COMPAT
+.ENDIF
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS+= --disable-shared
+.ENDIF
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
 
 BUILD_ACTION=make
 
+.IF "$(OS)"=="ANDROID"
+# The libtool in the libtextcat-2.2 tarball doesn't build
+# shared libraries on Android, for some reason.
+OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat*.a
+.ELSE
 OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat*$(DLLPOST)
+.ENDIF
 
 .ENDIF # "$(GUI)"=="UNX"
 
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 BUILD_ACTION=cd src && dmake $(MAKEMACROS)
-.ENDIF # "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.ENDIF # "$(GUI)"=="WNT"
 
 
 OUT2INC= \

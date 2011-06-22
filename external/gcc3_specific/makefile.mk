@@ -11,6 +11,10 @@ TARGET=gcc3_specific
 
 .IF "$(GUI)" == "WNT"
 
+.IF "$(CROSS_COMPILING)" != "YES"
+# Don't do any of this weird and presumably obsolete crack when
+# cross-compiling
+
 .IF "$(COM)" == "GCC"
 
 .IF "$(MINGW_SHARED_GCCLIB)" == "YES"
@@ -38,14 +42,27 @@ $(MINGWGXXDLL) :
 
 .ENDIF
 
+.ENDIF
+
 .ELSE
 
 .IF "$(SYSTEM_STDLIBS)" != "YES" && "$(COMID)"=="gcc3"
 
-.IF "$(OS)"!="MACOSX"
-.IF "$(OS)"!="FREEBSD"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID" && "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD" && "$(OS)"!="DRAGONFLY"
 
 .EXPORT : CC
+
+.IF "$(OS)"=="AIX"
+
+all .SEQUENTIAL : $(LB)$/libstdc++.a $(LB)$/libgcc_s.a
+
+$(LB)$/libstdc++.a :
+    $(GCCINSTLIB) libstdc++.a $(LB)
+
+$(LB)$/libgcc_s.a :
+    $(GCCINSTLIB) libgcc_s.a $(LB)
+
+.ELSE
 
 all .SEQUENTIAL : $(LB)$/libstdc++.so.$(SHORTSTDCPP3) $(LB)$/libgcc_s.so.$(SHORTSTDC3)
 
@@ -57,6 +74,7 @@ $(LB)$/libgcc_s.so.$(SHORTSTDC3) :
     $(GCCINSTLIB) libgcc_s.so.$(SHORTSTDC3) $(LB)
 
 .ENDIF
+
 .ENDIF 
 
 .ENDIF

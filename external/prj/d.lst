@@ -1,65 +1,57 @@
-mkdir: %_DEST%\inc%_EXT%\external
-mkdir: %_DEST%\inc%_EXT%\external\glibc
-mkdir: %_DEST%\inc%_EXT%\external\mingw
-mkdir: %_DEST%\inc%_EXT%\external\mingw\include
-mkdir: %_DEST%\inc%_EXT%\external\mingw\include\atl
-mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
+mkdir: %_DEST%\inc\external
+mkdir: %_DEST%\inc\external\glibc
+mkdir: %_DEST%\inc\external\mingw
+mkdir: %_DEST%\inc\external\mingw\include
+mkdir: %_DEST%\inc\external\mingw\include\atl
+mkdir: %_DEST%\inc\external\mingw\include\sys
 
-..\glibc\rtufiles\config.h %_DEST%\inc%_EXT%\external\glibc\config.h
-..\glibc\rtufiles\getopt.h %_DEST%\inc%_EXT%\external\glibc\getopt.h
+..\glibc\rtufiles\config.h %_DEST%\inc\external\glibc\config.h
+..\glibc\rtufiles\getopt.h %_DEST%\inc\external\glibc\getopt.h
 
-..\%__SRC%\slb\gnu_getopt.lib %_DEST%\lib%_EXT%\gnu_getopt.lib
-..\%__SRC%\lib\libgnu_getopt.a %_DEST%\lib%_EXT%\libgnu_getopt.a
-..\%__SRC%\lib\libgnu_getopt_static.a %_DEST%\lib%_EXT%\libgnu_getopt_static.a
+..\%__SRC%\slb\gnu_getopt.lib %_DEST%\lib\gnu_getopt.lib
+..\%__SRC%\lib\libgnu_getopt.a %_DEST%\lib\libgnu_getopt.a
+..\%__SRC%\lib\libgnu_getopt_static.a %_DEST%\lib\libgnu_getopt_static.a
 
-..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\external\glibc\*.h
+..\%__SRC%\inc\*.h %_DEST%\inc\external\glibc\*.h
 
-..\%__SRC%\misc\mingw\include\*.h %_DEST%\inc%_EXT%\external\mingw\include\*
-..\%__SRC%\misc\mingw\include\atl\*.h %_DEST%\inc%_EXT%\external\mingw\include\atl\*
-..\%__SRC%\misc\mingw\include\sys\*.h %_DEST%\inc%_EXT%\external\mingw\include\sys\*
+..\%__SRC%\misc\mingw\include\*.h %_DEST%\inc\external\mingw\include\*
+..\%__SRC%\misc\mingw\include\atl\*.h %_DEST%\inc\external\mingw\include\atl\*
+..\%__SRC%\misc\mingw\include\sys\*.h %_DEST%\inc\external\mingw\include\sys\*
 
-..\%__SRC%\lib\libautorec*.* %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\lib\libautorec*.* %_DEST%\lib\lib*.*
 
-..\%__SRC%\lib\libgcc_s.so.* %_DEST%\lib%_EXT%\libgcc_s.so.*
-..\%__SRC%\lib\libstdc++.so.* %_DEST%\lib%_EXT%\libstdc++.so.*
+..\%__SRC%\lib\libgcc_s.so.* %_DEST%\lib\libgcc_s.so.*
+..\%__SRC%\lib\libstdc++.so.* %_DEST%\lib\libstdc++.so.*
 
-..\dbghelp\dbghelp.dll %_DEST%\bin%_EXT%\dbghelp.dll
+..\dbghelp\dbghelp.dll %_DEST%\bin\dbghelp.dll
 
-..\gdiplus\gdiplus.dll %_DEST%\bin%_EXT%\gdiplus.dll
+..\gdiplus\gdiplus.dll %_DEST%\bin\gdiplus.dll
 
-..\msvcp70\msvcp70.dll %_DEST%\bin%_EXT%\msvcp70.dll
-..\msvcp70\msvcr70.dll %_DEST%\bin%_EXT%\msvcr70.dll
+..\msvcp80\msvcm80*.dll %_DEST%\bin
+..\msvcp80\msvcp80*.dll %_DEST%\bin
+..\msvcp80\msvcr80*.dll %_DEST%\bin
+..\msvcp80\Microsoft.VC80.CRT.manifest %_DEST%\bin\Microsoft.VC80.CRT.manifest
+..\msvcp80\Microsoft.VC80.DebugCRT.manifest %_DEST%\bin\Microsoft.VC80.DebugCRT.manifest
 
-..\msvcp71\msvcp71*.dll %_DEST%\bin%_EXT%
-..\msvcp71\msvcr71*.dll %_DEST%\bin%_EXT%
+..\msvcp90\msvcm90*.dll %_DEST%\bin
+..\msvcp90\msvcp90*.dll %_DEST%\bin
+..\msvcp90\msvcr90*.dll %_DEST%\bin
+..\msvcp90\Microsoft.VC90.CRT.manifest %_DEST%\bin\Microsoft.VC90.CRT.manifest
+..\msvcp90\Microsoft.VC90.DebugCRT.manifest %_DEST%\bin\Microsoft.VC90.DebugCRT.manifest
+..\msm90\*.msm %_DEST%\bin
 
-..\msvcp80\msvcm80*.dll %_DEST%\bin%_EXT%
-..\msvcp80\msvcp80*.dll %_DEST%\bin%_EXT%
-..\msvcp80\msvcr80*.dll %_DEST%\bin%_EXT%
-..\msvcp80\Microsoft.VC80.CRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC80.CRT.manifest
-..\msvcp80\Microsoft.VC80.DebugCRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC80.DebugCRT.manifest
+..\unowinreg\unowinreg.dll %_DEST%\bin\unowinreg.dll
 
-..\msvcp90\msvcm90*.dll %_DEST%\bin%_EXT%
-..\msvcp90\msvcp90*.dll %_DEST%\bin%_EXT%
-..\msvcp90\msvcr90*.dll %_DEST%\bin%_EXT%
-..\msvcp90\Microsoft.VC90.CRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC90.CRT.manifest
-..\msvcp90\Microsoft.VC90.DebugCRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC90.DebugCRT.manifest
-..\msm90\*.msm %_DEST%\bin%_EXT%
+..\vcredist\vcredist_x86.exe %_DEST%\bin\vcredist_x86.exe
+..\vcredist\vcredist_x64.exe %_DEST%\bin\vcredist_x64.exe
 
-..\unicows\unicows.dll %_DEST%\bin%_EXT%\unicows.dll
+..\%__SRC%\bin\mingwm10.dll %_DEST%\bin\mingwm10.dll
+..\%__SRC%\bin\libgcc*.dll %_DEST%\bin\libgcc*.dll
+..\%__SRC%\bin\libstdc++*.dll %_DEST%\bin\libstdc++*.dll
 
-..\unowinreg\unowinreg.dll %_DEST%\bin%_EXT%\unowinreg.dll
+..\%__SRC%\lib\libmsvcrt*.* %_DEST%\lib\lib*.*
 
-..\msi\instmsia.exe %_DEST%\bin%_EXT%\instmsia.exe
-..\msi\instmsiw.exe %_DEST%\bin%_EXT%\instmsiw.exe
-
-..\%__SRC%\bin\mingwm10.dll %_DEST%\bin%_EXT%\mingwm10.dll
-..\%__SRC%\bin\libgcc*.dll %_DEST%\bin%_EXT%\libgcc*.dll
-..\%__SRC%\bin\libstdc++*.dll %_DEST%\bin%_EXT%\libstdc++*.dll
-
-..\%__SRC%\lib\libmsvcrt*.* %_DEST%\lib%_EXT%\lib*.*
-
-..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
+..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib\lib*static*.dylib
 
 linklib: libgcc_s.*.*
 

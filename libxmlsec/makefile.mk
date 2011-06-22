@@ -55,7 +55,8 @@ TARFILE_MD5=1f24ab1d39f4a51faf22244c94a6203f
 #xmlsec1-nssmangleciphers.patch: Dubious, do we still need this ?
 #xmlsec1-noverify.patch: As per readme.txt. 
 #xmlsec1-mingw32.patch: Mingw32 support. 
-#xmlsec1-mingw-customkeymanage-addmscrypto.patch builds the custom keymanager on mingw
+#xmlsec1-mingw-customkeymanage-addmscrypto.patch: builds the custom keymanager on mingw
+#xmlsec1-vc.path: support for Visual C++ 10
 PATCH_FILES=\
    xmlsec1-configure.patch \
    xmlsec1-configure-libxml-libxslt.patch \
@@ -65,8 +66,9 @@ PATCH_FILES=\
    xmlsec1-nssmangleciphers.patch \
    xmlsec1-noverify.patch \
    xmlsec1-mingw32.patch \
-   xmlsec1-mingw-keymgr-mscrypto.patch
-
+   xmlsec1-mingw-keymgr-mscrypto.patch \
+   xmlsec1-vc10.patch \
+   xmlsec1-1.2.14_fix_extern_c.patch
 
 ADDITIONAL_FILES= \
     include$/xmlsec$/mscrypto$/akmngr.h \
@@ -80,9 +82,6 @@ ADDITIONAL_FILES= \
 
 .IF "$(GUI)"=="WNT"
 CRYPTOLIB=mscrypto
-#CRYPTOLIB=nss
-#BASEINC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla;$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla$/nspr;$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla$/nss;$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/external
-#BASELIB=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
 .ELSE
 CRYPTOLIB=nss
 .ENDIF

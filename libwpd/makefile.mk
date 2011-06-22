@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,11 @@ TARGET=wpd
     @echo "Using system libwpd..."
 .ENDIF
 
-TARFILE_NAME=libwpd-0.8.8
-TARFILE_MD5=cd5997284f4ba1e8dde5d1e5869fc342
-PATCH_FILES=$(TARFILE_NAME).diff
+TARFILE_NAME=libwpd-0.9.2
+TARFILE_MD5=8d265a592619166f29c4672ea54812b7
+
+PATCH_FILES=$(TARFILE_NAME).patch
+
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib
 

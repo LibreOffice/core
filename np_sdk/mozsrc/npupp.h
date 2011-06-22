@@ -46,10 +46,6 @@
 #ifndef _NPUPP_H_
 #define _NPUPP_H_
 
-#if defined(__OS2__)
-#pragma pack(1)
-#endif
-
 #ifndef GENERATINGCFM
 #define GENERATINGCFM 0
 #endif
@@ -1223,35 +1219,16 @@ typedef OSErr (* NP_LOADDS BP_GetSupportedMIMETypesUPP)(BPSupportedMIMETypes*, U
 #if defined(_WINDOWS)
 #define OSCALL WINAPI
 #else
-#if defined(__OS2__)
-#define OSCALL _System
-#else
 #define OSCALL
 #endif
-#endif
 
-#if defined( _WINDOWS ) || defined (__OS2__)
+#if defined( _WINDOWS )
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* plugin meta member functions */
-#if defined(__OS2__)
-
-typedef struct _NPPluginData {   /* Alternate OS2 Plugin interface */
-    char *pMimeTypes;
-    char *pFileExtents;
-    char *pFileOpenTemplate;
-    char *pProductName;
-    char *pProductDescription;
-    unsigned long dwProductVersionMS;
-    unsigned long dwProductVersionLS;
-} NPPluginData;
-
-NPError OSCALL NP_GetPluginData(NPPluginData * pPluginData);
-
-#endif
 
 NPError OSCALL NP_GetEntryPoints(NPPluginFuncs* pFuncs);
 
@@ -1265,11 +1242,7 @@ char*   NP_GetMIMEDescription();
 }
 #endif
 
-#endif /* _WINDOWS || __OS2__ */
-
-#if defined(__OS2__)
-#pragma pack()
-#endif
+#endif /* _WINDOWS */
 
 #ifdef XP_UNIX
 

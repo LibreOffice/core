@@ -41,8 +41,11 @@ TARFILE_MD5=067201ea8b126597670b5eff72e1f66c
 
 ADDITIONAL_FILES += makefile.mk
 
-PATCH_FILES=mythes-1.2.0-vanilla-th-gen-idx.patch \
-    mythes-1.2.0-makefile-mk.diff
+PATCH_FILES=\
+    mythes-1.2.0-vanilla-th-gen-idx.patch \
+    mythes-1.2.0-makefile-mk.diff \
+    mythes-1.2.1-rhbz675806.patch \
+    mythes-1.2.0-android.patch
 
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)
@@ -61,6 +64,8 @@ CONFIGURE_FLAGS= --disable-shared --with-pic
 
 .IF "$(COM)"=="C52" && "$(CPU)"=="U"
 LCL_CONFIGURE_CFLAGS+=-m64
+.ELIF "$(OS)"=="AIX"
+LCL_CONFIGURE_CFLAG+=-D_LINUX_SOURCE_COMPAT
 .ENDIF
 
 .IF "$(SYSBASE)"!=""
@@ -74,6 +79,10 @@ CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
 
 .IF "$(LCL_CONFIGURE_CFLAGS)"!=""
 CONFIGURE_FLAGS+=CFLAGS='$(LCL_CONFIGURE_CFLAGS)'
+.ENDIF
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no
 .ENDIF
 
 BUILD_ACTION=make
@@ -96,11 +105,6 @@ BUILD_ACTION=dmake
 .ENDIF # "$(COM)"=="GCC"
 OUT2INC += mythes.hxx
 .ENDIF # "$(GUI)"=="WNT"
-
-.IF "$(GUI)"=="OS2"
-BUILD_ACTION=dmake
-OUT2INC += mythes.hxx
-.ENDIF # "$(GUI)"=="OS2"
 
 # --- Targets ------------------------------------------------------
 

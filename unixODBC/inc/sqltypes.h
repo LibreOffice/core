@@ -75,11 +75,7 @@ extern "C" {
 
 #define FAR
 #define CALLBACK
-#ifdef __OS2__
-#define SQL_API _System
-#else
 #define SQL_API
-#endif
 #define BOOL                int
 typedef void*               HWND;
 typedef char                CHAR;

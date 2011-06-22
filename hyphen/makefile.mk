@@ -51,7 +51,11 @@ CONFIGURE_DIR=$(BUILD_DIR)
 #relative to CONFIGURE_DIR
 # still needed also in system-hyphen case as it creates the makefile
 CONFIGURE_ACTION=configure
-CONFIGURE_FLAGS= --disable-shared --with-pic
+CONFIGURE_FLAGS=--disable-shared
+
+.IF "$(OS)"!="IOS"
+CONFIGURE_FLAGS+= --with-pic
+.ENDIF
 
 .IF "$(COM)"=="C52" && "$(CPU)"=="U"
 LCL_CONFIGURE_CFLAGS+=-m64
@@ -82,7 +86,6 @@ OUT2INC += hyphen.h
 
 .ENDIF # "$(GUI)"=="UNX"
 
-
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 CONFIGURE_ACTION=configure
@@ -96,10 +99,9 @@ BUILD_ACTION=dmake
 OUT2INC += hyphen.h
 .ENDIF # "$(GUI)"=="WNT"
 
-.IF "$(GUI)"=="OS2"
-BUILD_ACTION=dmake
-OUT2INC += hyphen.h
-.ENDIF # "$(GUI)"=="OS2"
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

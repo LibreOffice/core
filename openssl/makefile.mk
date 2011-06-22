@@ -53,7 +53,7 @@ TARFILE_MD5=63ddc5116488985e820075e65fbe6aa4
 
 CONFIGURE_DIR=.
 CONFIGURE_ACTION=config
-CONFIGURE_FLAGS=-I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib shared 
+CONFIGURE_FLAGS=-I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib shared no-idea
 
 BUILD_DIR=.
 BUILD_ACTION=make CC='$(CC)'
@@ -64,7 +64,7 @@ OUT2INC += include/openssl/*
 
 UNAME=$(shell uname)
 
-.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
+.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD" || "$(OS)" == "ANDROID"
     PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
         libcrypto_OOo_0_9_8o.map \
@@ -110,6 +110,12 @@ UNAME=$(shell uname)
     .ENDIF
 .ENDIF
 
+.IF "$(OS)" == "IOS"
+    PATCH_FILES=opensslios.patch
+    CONFIGURE_ACTION=Configure ios-armv7
+    CONFIGURE_FLAGS=no-shared no-idea
+.ENDIF
+
 .IF "$(OS)" == "WNT"
 
 .IF "$(COM)"=="GCC"
@@ -152,8 +158,13 @@ OUT2BIN += out/libeay32.dll
 
         #CONFIGURE_ACTION=cmd /c $(PERL:s!\!/!) configure
         CONFIGURE_ACTION=$(PERL) configure
-        CONFIGURE_FLAGS=VC-WIN32
-        BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
+.IF "$(CPU)" == "I"
+        OPENSSL_PLATFORM=VC-WIN32
+.ELSE
+        OPENSSL_PLATFORM=VC-WIN64A
+.ENDIF
+        CONFIGURE_FLAGS=$(OPENSSL_PLATFORM) no-idea
+        BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL))) $(OPENSSL_PLATFORM)" && nmake -f ms/ntdll.mak
 
         OUT2LIB = out32dll$/ssleay32.lib
         OUT2LIB += out32dll$/libeay32.lib
