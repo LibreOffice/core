@@ -1068,9 +1068,11 @@ $XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 $L10N_MODULE = PathFormat($SRC_ROOT."/translations");
 
 # Check for poor help localizations, i.e. no help translation at all...
-opendir(DIR,$L10N_MODULE . "/source");
-@languages = readdir(DIR);
-closedir(DIR);
+@languages=();
+if (opendir(DIR,$L10N_MODULE . "/source"))
+{  @languages = readdir(DIR);
+   closedir(DIR);
+}
 $WITH_POOR_HELP_LOCALIZATIONS = "";
 
 foreach $language (@languages)
