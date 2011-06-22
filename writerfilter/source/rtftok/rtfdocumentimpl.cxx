@@ -161,6 +161,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aColorTable(),
     m_bFirstRun(true),
     m_bNeedPap(false),
+    m_bNeedSep(false),
     m_aListTableSprms(),
     m_xStorage(),
     m_aBuffer(),
@@ -427,9 +428,6 @@ void RTFDocumentImpl::text(OUString& rString)
         return;
     }
 
-    writerfilter::Reference<Properties>::Pointer_t const pCharacterProperties(
-            new RTFReferenceProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms)
-            );
     writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
             new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
             );
@@ -453,6 +451,18 @@ void RTFDocumentImpl::text(OUString& rString)
         }
         m_bNeedPap = false;
     }
+    if (m_bNeedSep)
+    {
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(
+                new RTFReferenceProperties(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms)
+                );
+        Mapper().props(pProperties);
+        Mapper().endParagraphGroup();
+        Mapper().endSectionGroup();
+        Mapper().startSectionGroup();
+        Mapper().startParagraphGroup();
+        m_bNeedSep = false;
+    }
 
     if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
@@ -471,7 +481,12 @@ void RTFDocumentImpl::text(OUString& rString)
     if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
     {
         if (!m_bTable)
-            Mapper().props(pCharacterProperties);
+        {
+            writerfilter::Reference<Properties>::Pointer_t const pProperties(
+                    new RTFReferenceProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms)
+                    );
+            Mapper().props(pProperties);
+        }
         else
         {
             RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
@@ -623,6 +638,9 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
             }
+            break;
+        case RTF_SECT:
+                m_bNeedSep = true;
             break;
         case RTF_BACKSLASH:
             if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
@@ -839,6 +857,10 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
             m_bTable = false;
+            break;
+        case RTF_SECTD:
+            m_aStates.top().aSectionSprms = m_aDefaultState.aSectionSprms;
+            m_aStates.top().aSectionAttributes = m_aDefaultState.aSectionAttributes;
             break;
         case RTF_TROWD:
             m_aStates.top().aTableRowSprms = m_aDefaultState.aTableRowSprms;
@@ -1936,6 +1958,8 @@ RTFParserState::RTFParserState()
     aCharacterAttributes(),
     aParagraphSprms(),
     aParagraphAttributes(),
+    aSectionSprms(),
+    aSectionAttributes(),
     aTableRowSprms(),
     aTableRowAttributes(),
     aTableCellSprms(),

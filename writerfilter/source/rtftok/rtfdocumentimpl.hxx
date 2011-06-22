@@ -109,6 +109,9 @@ namespace writerfilter {
                 // reset by pard
                 RTFSprms_t aParagraphSprms;
                 RTFSprms_t aParagraphAttributes;
+                // reset by sectd
+                RTFSprms_t aSectionSprms;
+                RTFSprms_t aSectionAttributes;
                 // reset by trowd
                 RTFSprms_t aTableRowSprms;
                 RTFSprms_t aTableRowAttributes;
@@ -212,7 +215,10 @@ namespace writerfilter {
                 /// Color index <-> RGB color value map
                 std::vector<sal_uInt32> m_aColorTable;
                 bool m_bFirstRun;
+                /// If paragraph properties should be emitted on next run.
                 bool m_bNeedPap;
+                /// If section properties should be emitted on next run.
+                bool m_bNeedSep;
                 /// The list table and list override table combined.
                 RTFSprms_t m_aListTableSprms;
 
