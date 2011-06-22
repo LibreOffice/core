@@ -77,6 +77,7 @@ namespace writerfilter {
         {
             BUFFER_PROPS,
             BUFFER_CELLEND,
+            BUFFER_NESTCELLEND,
             BUFFER_STARTRUN,
             BUFFER_UTEXT,
             BUFFER_ENDRUN
@@ -220,9 +221,9 @@ namespace writerfilter {
                 oox::StorageRef m_xStorage;
                 oox::GraphicHelper* m_pGraphicHelper;
 
-                /// Buffered nested table cells, till cell definitions are not reached.
+                /// Buffered table cells, till cell definitions are not reached.
                 std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aBuffer;
-                bool m_bNestedTable;
+                bool m_bTable;
         };
     } // namespace rtftok
 } // namespace writerfilter
