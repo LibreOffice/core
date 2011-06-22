@@ -184,10 +184,6 @@ public:
     const UniString&    GetData() const { return aData; }
     const ApplicationAddress& GetAppAddress() const { return aAppAddr; }
 
-    sal_Bool                IsOpenEvent() const;
-    sal_Bool                IsPrintEvent() const;
-    sal_Bool                IsDiskInsertEvent() const;
-
     sal_uInt16              GetParamCount() const { return aData.GetTokenCount( APPEVENT_PARAM_DELIMITER ); }
     UniString           GetParam( sal_uInt16 nParam ) const { return aData.GetToken( nParam, APPEVENT_PARAM_DELIMITER ); }
 };
@@ -201,30 +197,6 @@ inline ApplicationEvent::ApplicationEvent( const UniString& rSenderAppName,
     aData( rData ),
     aAppAddr( rAppAddr )
 {
-}
-
-inline sal_Bool ApplicationEvent::IsOpenEvent() const
-{
-    if ( aEvent.Equals( APPEVENT_OPEN_STRING ))
-        return sal_True;
-    else
-        return sal_False;
-}
-
-inline sal_Bool ApplicationEvent::IsPrintEvent() const
-{
-    if ( aEvent.Equals( APPEVENT_PRINT_STRING ))
-        return sal_True;
-    else
-        return sal_False;
-}
-
-inline sal_Bool ApplicationEvent::IsDiskInsertEvent() const
-{
-    if ( aEvent.Equals( APPEVENT_DISKINSERT_STRING ))
-        return sal_True;
-    else
-        return sal_False;
 }
 
 class VCL_DLLPUBLIC PropertyHandler
