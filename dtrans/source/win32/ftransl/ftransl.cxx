@@ -36,7 +36,7 @@
 
 #include "ftransl.hxx"
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
-#include "..\misc\ImplHelper.hxx"
+#include "../misc/ImplHelper.hxx"
 
 #if defined _MSC_VER
 #pragma warning(push,1)

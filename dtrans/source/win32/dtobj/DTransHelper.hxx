@@ -41,7 +41,7 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include "..\misc\WinClip.hxx"
+#include "../misc/WinClip.hxx"
 
 //------------------------------------------------------------------------
 // defines

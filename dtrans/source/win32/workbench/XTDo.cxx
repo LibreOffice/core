@@ -34,7 +34,7 @@
 //------------------------------------------------------------------------
 #include <osl/diagnose.h>
 
-#include "..\DTransHelper.hxx"
+#include "../DTransHelper.hxx"
 
 #include "XTDo.hxx"
 

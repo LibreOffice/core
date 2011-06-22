@@ -53,7 +53,7 @@
 
 #include <process.h>
 
-#include "..\..\source\win32\ImplHelper.hxx"
+#include "../../source/win32/ImplHelper.hxx"
 
 
 //-------------------------------------------------------------

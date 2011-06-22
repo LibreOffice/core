@@ -36,7 +36,7 @@
 
 #include "XTDataObject.hxx"
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
-#include "..\misc\ImplHelper.hxx"
+#include "../misc/ImplHelper.hxx"
 #include "DTransHelper.hxx"
 #include "TxtCnvtHlp.hxx"
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>

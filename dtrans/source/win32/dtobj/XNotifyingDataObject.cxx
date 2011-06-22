@@ -30,9 +30,9 @@
 #include "precompiled_dtrans.hxx"
 #include <osl/diagnose.h>
 #include "XNotifyingDataObject.hxx"
-#include "..\clipb\WinClipbImpl.hxx"
-#include "..\clipb\WinClipboard.hxx"
-#include "..\..\inc\DtObjFactory.hxx"
+#include "../clipb/WinClipbImpl.hxx"
+#include "../clipb/WinClipboard.hxx"
+#include "../../inc/DtObjFactory.hxx"
 
 #ifdef __MINGW32__
 #define __uuidof(I) IID_##I

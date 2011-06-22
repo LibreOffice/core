@@ -40,7 +40,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
-#include "..\misc\WinClip.hxx"
+#include "../misc/WinClip.hxx"
 
 #include <vector>
 

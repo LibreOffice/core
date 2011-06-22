@@ -39,7 +39,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
-#include "..\..\inc\MtaOleClipb.hxx"
+#include "../../inc/MtaOleClipb.hxx"
 
 #if defined _MSC_VER
 #pragma warning(push,1)
