@@ -649,6 +649,30 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
     bool bParsed = true;
+    sal_uInt8 cCh = 0;
+
+    // Trivial symbols
+    switch (nKeyword)
+    {
+        case RTF_LINE: cCh = '\n'; break;
+        case RTF_TAB: cCh = '\t'; break;
+        case RTF_EMDASH: cCh = 151; break;
+        case RTF_ENDASH: cCh = 150; break;
+        case RTF_BULLET: cCh = 149; break;
+        case RTF_LQUOTE: cCh = 145; break;
+        case RTF_RQUOTE: cCh = 146; break;
+        case RTF_LDBLQUOTE: cCh = 147; break;
+        case RTF_RDBLQUOTE: cCh = 148; break;
+        default: break;
+    }
+    if (cCh > 0)
+    {
+        OUString aStr(OStringToOUString(OString(cCh), RTL_TEXTENCODING_MS_1252));
+        text(aStr);
+        skipDestination(bParsed);
+        return 0;
+    }
+
     switch (nKeyword)
     {
         case RTF_IGNORE:
@@ -692,12 +716,6 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_OPTHYPH:
             {
                 OUString aStr(SVT_SOFT_HYPHEN);
-                text(aStr);
-            }
-            break;
-        case RTF_TAB:
-            {
-                OUString aStr('\t');
                 text(aStr);
             }
             break;
