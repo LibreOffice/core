@@ -61,19 +61,6 @@ public:
                     }
     const String & GetCommand() const { return aCommand; }
     const String & GetArgument() const { return aArgument; }
-
-    friend SvStream& operator >> ( SvStream& rStm, SvCommand & rThis )
-                    {
-                        rStm.ReadByteString( rThis.aCommand, gsl_getSystemTextEncoding() );
-                        rStm.ReadByteString( rThis.aArgument, gsl_getSystemTextEncoding() );
-                        return rStm;
-                    }
-    friend SvStream& operator << ( SvStream& rStm, const SvCommand & rThis )
-                    {
-                        rStm.WriteByteString( rThis.aCommand, gsl_getSystemTextEncoding() );
-                        rStm.WriteByteString( rThis.aArgument, gsl_getSystemTextEncoding() );
-                        return rStm;
-                    }
 };
 
 typedef ::std::vector< SvCommand > SvCommandList_impl;
