@@ -625,10 +625,10 @@ static rtl::OString ImplWindowStateToStr(const WindowStateData& rData)
     rtl::OStringBuffer rStrBuf;
 
     if ( nValidMask & WINDOWSTATE_MASK_X )
-        rStrBuf.append(rData.GetX());
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetX()));
     rStrBuf.append(',');
     if ( nValidMask & WINDOWSTATE_MASK_Y )
-        rStrBuf.append(rData.GetY());
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetY()));
     rStrBuf.append(',');
     if ( nValidMask & WINDOWSTATE_MASK_WIDTH )
         rStrBuf.append(static_cast<sal_Int32>(rData.GetWidth()));
@@ -645,10 +645,10 @@ static rtl::OString ImplWindowStateToStr(const WindowStateData& rData)
     }
     rStrBuf.append(';');
     if ( nValidMask & WINDOWSTATE_MASK_MAXIMIZED_X )
-        rStrBuf.append(rData.GetMaximizedX());
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedX()));
     rStrBuf.append(',');
     if ( nValidMask & WINDOWSTATE_MASK_MAXIMIZED_Y )
-        rStrBuf.append(rData.GetMaximizedY());
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedY()));
     rStrBuf.append( ',' );
     if ( nValidMask & WINDOWSTATE_MASK_MAXIMIZED_WIDTH )
         rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedWidth()));
