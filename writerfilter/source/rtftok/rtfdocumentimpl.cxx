@@ -1830,7 +1830,6 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector<std::pair<rtl::OUString
         {
             RTFValue::Pointer_t pValue(new RTFValue(i->second));
             m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_descr, pValue));
-            OSL_TRACE("debug, adding wzDescription");
         }
         else
             OSL_TRACE("%s: TODO handle shape property '%s':'%s'", OSL_THIS_FUNC,
