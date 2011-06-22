@@ -38,7 +38,6 @@ namespace csv
 class Date
 {
   public:
-                        Date();
                         Date(
                             unsigned            i_nDay,
                             unsigned            i_nMonth,
@@ -48,8 +47,6 @@ class Date
     unsigned            Month() const           { return (nData & 0x00FF0000) >> 16; }
     unsigned            Year() const            { return nData & 0x0000FFFF; }
 
-    static const Date & Null_();
-
   private:
     UINT32              nData;
 };
@@ -57,7 +54,6 @@ class Date
 class Time
 {
   public:
-                        Time();
                         Time(
                             unsigned            i_nHour,
                             unsigned            i_nMinutes,
@@ -68,8 +64,6 @@ class Time
     unsigned            Minutes() const         { return (nData & 0x00FF0000) >> 16; }
     unsigned            Seconds() const         { return (nData & 0x0000FF00) >> 8; }
     unsigned            Seconds100() const      { return nData & 0x000000FF; }
-
-    static const Time & Null_();
 
   private:
     UINT32              nData;

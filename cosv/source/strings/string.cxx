@@ -223,23 +223,6 @@ compare( const String &      i_s1,
 }
 
 int
-compare( const char *              i_s1,
-         const String &      i_s2,
-         csv::str::position        i_nStartPosition2,
-         csv::str::size            i_nLength )
-{
-    const char * pS2 = str_from_StringOffset( i_s2, i_nStartPosition2 );
-
-    if ( i_nLength != csv::str::maxsize )
-        return strncmp( i_s1,
-                        pS2,
-                        i_nLength );
-    else
-        return strcmp( i_s1,
-                       pS2 );
-}
-
-int
 compare( const CharOrder_Table &            i_rOrder,
          const char *                       i_s1,
          const char *                       i_s2 )
@@ -249,46 +232,6 @@ compare( const CharOrder_Table &            i_rOrder,
     for ( ; i_rOrder(*it1) == i_rOrder(*it2) AND *it1 != '\0'; ++it1, ++it2 )
     {}
     return int( i_rOrder(*it1) - i_rOrder(*it2) );
-}
-
-int
-compare( const CharOrder_Table &   i_rOrder,
-         const String &      i_s1,
-         csv::str::position        i_nStartPosition1,
-         const char *              i_s2,
-         csv::str::size            i_nLength )
-{
-    const char * pS1 = str_from_StringOffset( i_s1, i_nStartPosition1 );
-
-    if ( i_nLength != csv::str::maxsize )
-        return compare( i_rOrder,
-                        pS1,
-                        i_s2,
-                        i_nLength );
-    else
-        return compare( i_rOrder,
-                        pS1,
-                        i_s2 );
-}
-
-int
-compare( const CharOrder_Table &   i_rOrder,
-         const char *              i_s1,
-         const String &            i_s2,
-         csv::str::position        i_nStartPosition2,
-         csv::str::size                 i_nLength )
-{
-    const char * pS2 = str_from_StringOffset( i_s2, i_nStartPosition2 );
-
-    if ( i_nLength != csv::str::maxsize )
-        return compare( i_rOrder,
-                        i_s1,
-                        pS2,
-                        i_nLength );
-    else
-        return compare( i_rOrder,
-                        i_s1,
-                        pS2 );
 }
 
 int
@@ -309,9 +252,6 @@ compare( const CharOrder_Table &            i_rOrder,
     else
         return 0;
 }
-
-
-
 
 }   // namespace csv
 

@@ -228,11 +228,6 @@ int                 compare(
                         csv::str::position      i_nStartPosition1,
                         const char *            i_s2,
                         csv::str::size          i_nLength );
-int                 compare(
-                        const char *            i_s1,
-                        const String &          i_s2,
-                        csv::str::position      i_nStartPosition2,
-                        csv::str::size          i_nLength );
 inline int          compare(
                         const char *            i_s1,
                         const char *            i_s2,
@@ -255,18 +250,6 @@ int                 compare(
 
     //*** Defined order, substrings
 
-int                 compare(
-                        const CharOrder_Table & i_rOrder,
-                        const String &          i_s1,
-                        csv::str::position      i_nStartPosition1,
-                        const char *            i_s2,
-                        csv::str::size          i_nLength2 );
-int                 compare(
-                        const CharOrder_Table & i_rOrder,
-                        const char *            i_s1,
-                        const String &          i_s2,
-                        csv::str::position      i_nStartPosition2,
-                        csv::str::size          i_nLength );
 int                 compare(
                         const CharOrder_Table & i_rOrder,
                         const char *            i_s1,

@@ -37,29 +37,10 @@
 namespace csv
 {
 
-
-Date::Date()
-    :   nData( 0 )
-{
-}
-
 Date::Date( unsigned            i_nDay,
             unsigned            i_nMonth,
             unsigned            i_nYear )
     :   nData( (i_nDay << 24) + (i_nMonth << 16) + i_nYear )
-{
-}
-
-const Date &
-Date::Null_()
-{
-    static const Date C_DateNull_(0,0,0);
-    return C_DateNull_;
-}
-
-
-Time::Time()
-    :   nData( 0 )
 {
 }
 
@@ -70,15 +51,6 @@ Time::Time( unsigned            i_nHour,
     :   nData( (i_nHour << 24) + (i_nMinutes << 16) + (i_nSeconds << 8) + i_nSeconds100 )
 {
 }
-
-const Time &
-Time::Null_()
-{
-    static const Time C_TimeNull_(0,0);
-    return C_TimeNull_;
-}
-
-
 
 }   // namespace csv
 

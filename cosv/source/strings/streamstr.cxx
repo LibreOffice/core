@@ -654,43 +654,6 @@ c_str()
     // Does nothing.
 }
 
-
-
-void
-Split( std::vector<String> &    o_list,
-       const char *             i_text )
-{
-    const char *
-        pCurrentToken = 0;
-    bool
-        white = false;
-    for (const char * p = i_text; *p != '\0'; ++p)
-    {
-        white = UINT8(*p) > 32;
-        if (pCurrentToken != 0)
-        {
-            if (white)
-            {
-                o_list.push_back(String(pCurrentToken, p));
-                pCurrentToken = 0;
-            }
-        }
-        else
-        {
-            if ( NOT white)
-                pCurrentToken = p;
-        }   // endif (bInToken) else
-    }   // end for
-
-    if (pCurrentToken != 0)
-    {
-        o_list.push_back(String(pCurrentToken));
-    }
-}
-
-
-
-
 }   // namespace csv
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

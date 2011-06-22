@@ -85,9 +85,6 @@ class Path
 
     /// Directories have a delimiter at the end, files not.
     void                Get(
-                            ostream &           o_rPath ) const;
-    /// Directories have a delimiter at the end, files not.
-    void                Get(
                             bostream &          o_rPath ) const;
     // ACCESS
     DirectoryChain &    DirChain()              { return aPath; }
@@ -104,17 +101,6 @@ class Path
 }   // namespace ploc
 }   // namespace csv
 
-
-
-/// Directories produce a delimiter at the end, files not.
-inline csv::ostream &
-operator<<( csv::ostream &           o_rOut,
-            const csv::ploc::Path &  i_rPath )
-{
-     i_rPath.Get(o_rOut);
-    return o_rOut;
-}
-
 /// Directories produce a delimiter at the end, files not.
 inline csv::bostream &
 operator<<( csv::bostream &         o_rOut,
@@ -123,8 +109,6 @@ operator<<( csv::bostream &         o_rOut,
      i_rPath.Get(o_rOut);
     return o_rOut;
 }
-
-
 
 #endif
 

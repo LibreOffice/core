@@ -268,20 +268,6 @@ class StreamStrLock
     StreamStr *         pStr;
 };
 
-/** Splits a string into tokens by whitespace.
-
-    The tokens are added to the end of o_list.
-*/
-void                Split(
-                        std::vector<String> &
-                                            o_list,
-                        const char *        i_text );
-inline void         Join(
-                        StreamStr &         o_text,
-                        std::vector<String> &
-                                            i_list,
-                        const char *        i_sLink = " ");
-
 // IMPLEMENTATION
 
 inline const char *
@@ -329,17 +315,6 @@ StreamStr::cur()
 inline StreamStr::iterator
 StreamStr::end()
     { return pEnd; }
-
-inline void
-Join( StreamStr &           o_text,
-      std::vector<String> & i_list,
-      const char *          i_sLink )
-{
-    o_text.operator_join(i_list.begin(),i_list.end(),i_sLink);
-}
-
-
-
 
 }   // namespace csv
 #endif
