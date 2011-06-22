@@ -860,6 +860,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aTableRowSprms = m_aDefaultState.aTableRowSprms;
             m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
             m_aStates.top().nCellX = 0;
+            m_aStates.top().aTableCellsSprms = m_aDefaultState.aTableCellsSprms;
+            m_aStates.top().aTableCellsAttributes = m_aDefaultState.aTableCellsAttributes;
             break;
         case RTF_NOWIDCTLPAR:
             {
