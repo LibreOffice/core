@@ -524,8 +524,8 @@ namespace cairocanvas
 
     ::cairo::SurfaceSharedPtr SpriteCanvasHelper::getCompositingSurface( const ::basegfx::B2ISize& rNeededSize )
     {
-        if( rNeededSize.getX() < maCompositingSurfaceSize.getX() ||
-            rNeededSize.getY() < maCompositingSurfaceSize.getY() )
+        if( rNeededSize.getX() > maCompositingSurfaceSize.getX() ||
+            rNeededSize.getY() > maCompositingSurfaceSize.getY() )
         {
             // need to give buffer more size
             mpCompositingSurface.reset();
