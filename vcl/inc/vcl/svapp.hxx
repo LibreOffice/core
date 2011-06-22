@@ -161,8 +161,6 @@ inline sal_Bool ApplicationAddress::IsConnectToSame( const ApplicationAddress& r
 
 #define APPEVENT_OPEN_STRING            "Open"
 #define APPEVENT_PRINT_STRING           "Print"
-#define APPEVENT_DISKINSERT_STRING      "DiskInsert"
-#define APPEVENT_SAVEDOCUMENTS_STRING   "SaveDocuments"
 
 class VCL_DLLPUBLIC ApplicationEvent
 {
