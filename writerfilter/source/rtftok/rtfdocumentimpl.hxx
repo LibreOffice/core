@@ -152,8 +152,6 @@ namespace writerfilter {
                 int nCellX;
                 std::deque<RTFSprms::Pointer_t> aTableCellsSprms;
                 std::deque<RTFSprms::Pointer_t> aTableCellsAttributes;
-                /// Number of cell definitions which should be popped after leaving the current group.
-                int nTableCellPops;
         };
 
         /// Implementation of the RTFDocument interface.

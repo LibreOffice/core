@@ -1641,7 +1641,6 @@ int RTFDocumentImpl::popState()
     std::vector<std::pair<rtl::OUString, rtl::OUString>> aShapeProperties;
     bool bPopShapeProperties = false;
     bool bPicPropEnd = false;
-    int nTableCellPops = 0;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -1753,7 +1752,6 @@ int RTFDocumentImpl::popState()
         aShapeProperties = m_aStates.top().aShapeProperties;
         bPicPropEnd = true;
     }
-    nTableCellPops = m_aStates.top().nTableCellPops;
 
     m_aStates.pop();
 
@@ -1792,13 +1790,6 @@ int RTFDocumentImpl::popState()
         m_aStates.top().aShapeProperties = aShapeProperties;
     else if (bPicPropEnd)
         resolveShapeProperties(aShapeProperties);
-    for (int i = 0; i < nTableCellPops; ++i)
-    {
-        if (m_aStates.top().aTableCellsAttributes.size())
-            m_aStates.top().aTableCellsAttributes.pop_front();
-        if (m_aStates.top().aTableCellsSprms.size())
-            m_aStates.top().aTableCellsSprms.pop_front();
-    }
 
     return 0;
 }
@@ -1967,8 +1958,7 @@ RTFParserState::RTFParserState()
     aShapeProperties(),
     nCellX(0),
     aTableCellsSprms(),
-    aTableCellsAttributes(),
-    nTableCellPops(0)
+    aTableCellsAttributes()
 {
 }
 
