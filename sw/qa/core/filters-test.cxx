@@ -178,9 +178,6 @@ bool FiltersTest::testLoad(const rtl::OUString &rFilter,
 
 void FiltersTest::testCVEs()
 {
-//To-Do: I know this works on Linux, please check if this test works under
-//windows and enable it if so
-#ifndef WNT
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Staroffice XML (Writer)")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/xml/pass")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")), true);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Staroffice XML (Writer)")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/xml/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")), false);
@@ -196,7 +193,6 @@ void FiltersTest::testCVEs()
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), false);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/indeterminate")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), indeterminate);
-#endif
 }
 
 FiltersTest::FiltersTest()
