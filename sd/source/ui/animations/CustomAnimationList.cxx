@@ -587,21 +587,51 @@ void stl_append_effect_func::operator()(CustomAnimationEffectPtr pEffect)
 void CustomAnimationList::update()
 {
     mbIgnorePaint = true;
+    SetUpdateMode( sal_False );
 
     CustomAnimationListEntry* pEntry = 0;
 
     std::list< CustomAnimationEffectPtr > aExpanded;
     std::list< CustomAnimationEffectPtr > aSelected;
 
-    CustomAnimationEffectPtr pFirstVisibleEffect;
+    CustomAnimationEffectPtr pFirstSelEffect;
+    CustomAnimationEffectPtr pLastSelEffect;
+    long nFirstVis = -1;
+    long nLastVis = -1;
+    long nFirstSelOld = -1;
+    long nFirstSelNew = -1;
+    long nLastSelOld = -1;
+    long nLastSelNew = -1;
+    bool bMoved = false;
+    bool bMovedUp = false;
+    bool bMovedDown = false;
 
     if( mpMainSequence.get() )
     {
-        // save selection and expand states
-        pEntry = static_cast<CustomAnimationListEntry*>(FirstVisible());
+        // save scroll position
+        pEntry = static_cast<CustomAnimationListEntry*>(GetFirstEntryInView());
         if( pEntry )
-            pFirstVisibleEffect = pEntry->getEffect();
+            nFirstVis = GetAbsPos( pEntry );
 
+        pEntry = static_cast<CustomAnimationListEntry*>(GetLastEntryInView());
+        if( pEntry )
+            nLastVis = GetAbsPos( pEntry );
+
+        pEntry = static_cast<CustomAnimationListEntry*>(FirstSelected());
+        if( pEntry )
+        {
+            pFirstSelEffect = pEntry->getEffect();
+            nFirstSelOld = GetAbsPos( pEntry );
+        }
+
+        pEntry = static_cast<CustomAnimationListEntry*>(LastSelected());
+        if( pEntry )
+        {
+            pLastSelEffect = pEntry->getEffect();
+            nLastSelOld = GetAbsPos( pEntry );
+        }
+
+        // save selection and expand states
         pEntry = static_cast<CustomAnimationListEntry*>(First());
 
         while( pEntry )
@@ -668,15 +698,59 @@ void CustomAnimationList::update()
                 if( std::find( aSelected.begin(), aSelected.end(), pEffect ) != aSelected.end() )
                     Select( pEntry );
 
-                if( pFirstVisibleEffect == pEffect )
-                    MakeVisible( pEntry );
+                if( pEffect == pFirstSelEffect )
+                    nFirstSelNew = GetAbsPos( pEntry );
+
+                if( pEffect == pLastSelEffect )
+                    nLastSelNew = GetAbsPos( pEntry );
             }
 
             pEntry = static_cast<CustomAnimationListEntry*>(Next( pEntry ));
         }
+
+        // Scroll to a selected entry, depending on where the selection moved.
+        bMoved = nFirstSelNew != nFirstSelOld;
+        bMovedUp = nFirstSelNew < nFirstSelOld;
+        bMovedDown = nFirstSelNew > nFirstSelOld;
+
+        if( bMoved && nLastSelOld < nFirstVis && nLastSelNew < nFirstVis )
+        {
+            // The selection is above the visible area.
+            // Scroll up to show the last few selected entries.
+            if( nLastSelNew - (nLastVis - nFirstVis) > nFirstSelNew)
+            {
+                // The entries in the selection range can't fit in view.
+                // Scroll so the last selected entry is last in view.
+                ScrollToAbsPos( nLastSelNew - (nLastVis - nFirstVis) );
+            }
+            else
+                ScrollToAbsPos( nFirstSelNew );
+        }
+        else if( bMoved && nFirstSelOld > nLastVis && nFirstSelNew > nLastVis )
+        {
+            // The selection is below the visible area.
+            // Scroll down to the first few selected entries.
+            ScrollToAbsPos( nFirstSelNew );
+        }
+        else if( bMovedUp && nFirstSelOld <= nFirstVis )
+        {
+            // A visible entry has moved up out of view; scroll up one.
+            ScrollToAbsPos( nFirstVis - 1 );
+        }
+        else if( bMovedDown && nLastSelOld >= nLastVis )
+        {
+            // An entry has moved down out of view; scroll down one.
+            ScrollToAbsPos( nFirstVis + 1 );
+        }
+        else
+        {
+            // The selection is still in view, or it hasn't moved.
+            ScrollToAbsPos( nFirstVis );
+        }
     }
 
     mbIgnorePaint = false;
+    SetUpdateMode( sal_True );
     Invalidate();
 }
 
