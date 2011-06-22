@@ -72,6 +72,61 @@ if [ -e $sd_prog/ooenv ] ; then
     . $sd_prog/ooenv
 fi
 
+# try to get some debug output?
+GDBTRACECHECK=
+STRACECHECK=
+VALGRINDCHECK=
+
+# count number of selected checks; only one is allowed
+checks=
+# force the --valgrind option if the VALGRIND variable is set
+test -n "$VALGRIND" && VALGRINDOPT="--vagrind" || VALGRINDOPT=
+
+for arg in $@ $VALGRINDOPT ; do
+    case "$arg" in
+        --backtrace)
+            if which gdb >/dev/null 2>&1 ; then
+                GDBTRACECHECK="gdb -nx --command=$sd_prog/gdbtrace --args"
+                checks="c$checks"
+            else
+                echo "Error: Can't find the tool \"gdb\", --backtrace option will be ignored."
+                exit 1
+            fi
+            ;;
+        --strace)
+            if which strace >/dev/null 2>&1 ; then
+                STRACECHECK="strace -o strace.log -f -tt -s 256"
+                checks="c$checks"
+            else
+                echo "Error: Can't find the tool \"strace\", --strace option will be ignored."
+                exit 1;
+            fi
+            ;;
+         --valgrind)
+            test -n "$VALGRINDCHECK" && continue;
+            if which valgrind >/dev/null 2>&1 ; then
+                # another valgrind tool might be forced via the environment variable
+                test -z "$VALGRIND" && VALGRIND="memcheck"
+                VALGRINDCHECK="valgrind --tool=$VALGRIND --log-file=valgrind.log --trace-children=yes --num-callers=50 --error-exitcode=101"
+                checks="c$checks"
+                if [ "$VALGRIND" = "memcheck" ] ; then
+                    export G_SLICE=always-malloc
+                    export GLIBCXX_FORCE_NEW=1
+                fi
+            else
+                echo "Error: Can't find the tool \"valgrind\", --valgrind option will be ignored"
+                exit 1
+            fi
+            ;;
+    esac
+done
+
+if echo "$checks" | grep -q "cc" ; then
+    echo "Error: The debug options --backtrace, --strace, and --valgrind cannot be used together."
+    echo "       Please, use them one by one."
+    exit 1;
+fi
+
 if [ "$VALGRIND" != "" ]; then
     VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes --trace-children-skip=*/java --error-exitcode=101"
     export VALGRINDCHECK
@@ -101,5 +156,10 @@ AIX)
     ;;
 esac
 
+# run soffice.bin directly when you want to get the backtrace
+if [ -n "$GDBTRACECHECK" ] ; then
+    exec $GDBTRACECHECK "$sd_prog/soffice.bin" "$@"
+fi
+
 # oosplash does the rest: forcing pages in, javaldx etc. are
-exec $VALGRINDCHECK "$sd_prog/oosplash.bin" "$@"
+exec $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash.bin" "$@"

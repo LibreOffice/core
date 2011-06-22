@@ -47,7 +47,8 @@ UNIXTEXT= \
     $(MISC)$/swriter.sh \
     $(MISC)$/mozwrapper.sh \
     $(MISC)$/unoinfo.sh \
-    $(MISC)$/unopkg.sh
+    $(MISC)$/unopkg.sh \
+    $(MISC)$/gdbtrace
 
 .IF "$(OS)" != "MACOSX"
 

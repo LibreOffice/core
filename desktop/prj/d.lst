@@ -110,6 +110,7 @@ mkdir: %_DEST%\bin\odf4ms
 ..\%__SRC%\misc\swriter.sh %_DEST%\bin\swriter
 ..\%__SRC%\misc\nswrapper.sh %_DEST%\bin\nswrapper
 ..\%__SRC%\misc\mozwrapper.sh %_DEST%\bin\mozwrapper
+..\%__SRC%\misc\gdbtrace %_DEST%\bin\gdbtrace
 
 mkdir: %COMMON_DEST%\pck\brand
 mkdir: %COMMON_DEST%\pck\brand_dev
