@@ -869,6 +869,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_KEEPN: nParam = NS_sprm::LN_PFKeepFollow; break;
         case RTF_WIDCTLPAR: nParam = NS_sprm::LN_PFWidowControl; break;
         case RTF_INTBL: m_bTable = true; nParam = NS_sprm::LN_PFInTable; break;
+        case RTF_PAGEBB: nParam = NS_sprm::LN_PFPageBreakBefore; break;
         default: break;
     }
     if (nParam >= 0)
