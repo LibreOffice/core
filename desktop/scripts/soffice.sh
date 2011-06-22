@@ -107,7 +107,16 @@ for arg in $@ $VALGRINDOPT ; do
             if which valgrind >/dev/null 2>&1 ; then
                 # another valgrind tool might be forced via the environment variable
                 test -z "$VALGRIND" && VALGRIND="memcheck"
-                VALGRINDCHECK="valgrind --tool=$VALGRIND --log-file=valgrind.log --trace-children=yes --num-callers=50 --error-exitcode=101"
+                # --trace-children-skip is pretty useful but supported only with valgrind >= 3.6.0
+                valgrind_ver=`valgrind --version | sed -e "s/valgrind-//"`
+                valgrind_ver_maj=`echo $valgrind_ver | awk -F. '{ print \$1 }'`
+                valgrind_ver_min=`echo $valgrind_ver | awk -F. '{ print \$2 }'`
+                valgrind_skip=
+                if [ "$valgrind_ver_maj" -gt 3 -o \( "$valgrind_ver_maj" -eq 3 -a "$valgrind_ver_min" -ge 6 \) ] ; then
+                    valgrind_skip='--trace-children-skip=*/java'
+                fi
+                # finally set the valgrind check
+                VALGRINDCHECK="valgrind --tool=$VALGRIND --log-file=valgrind.log --trace-children=yes $valgrind_skip --num-callers=50 --error-exitcode=101"
                 checks="c$checks"
                 if [ "$VALGRIND" = "memcheck" ] ; then
                     export G_SLICE=always-malloc
