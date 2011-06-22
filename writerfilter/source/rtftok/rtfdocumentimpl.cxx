@@ -99,9 +99,26 @@ void lcl_putNestedSprm(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer
 RTFSprms_t& lcl_getCellBordersAttributes(std::stack<RTFParserState>& aStates)
 {
     RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
-    OSL_ASSERT(p.get());
+    if (p->getSprms().size())
+        return p->getSprms().back().second->getAttributes();
+    else
+    {
+        OSL_FAIL("trying to set property when no border is defined");
+        return p->getSprms();
+    }
+}
+
+RTFSprms_t& lcl_getColsAttributes(std::stack<RTFParserState>& aStates)
+{
+    RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_cols);
     OSL_ASSERT(p->getSprms().size());
-    return p->getSprms().back().second->getAttributes();
+    if (p->getSprms().size())
+        return p->getSprms().back().second->getAttributes();
+    else
+    {
+        OSL_FAIL("trying to set property when no cell is defined");
+        return p->getSprms();
+    }
 }
 
 void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue::Pointer_t pValue)
@@ -1427,6 +1444,20 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                         NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_space, pValue);
+            }
+            break;
+        case RTF_COLNO:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                lcl_putNestedSprm(m_aStates.top().aSectionSprms,
+                        NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_col, pValue);
+            }
+            break;
+        case RTF_COLW:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                RTFSprms_t& rAttributes = lcl_getColsAttributes(m_aStates);
+                rAttributes.push_back(make_pair(NS_ooxml::LN_CT_Column_w, pValue));
             }
             break;
         default:
