@@ -67,12 +67,13 @@ $(call gb_ComponentTarget_get_external_target,%) :
 	$(call gb_Deliver_deliver,$<,$@)
 
 define gb_ComponentTarget_ComponentTarget
-$(call gb_ComponentTarget_get_target,$(4)) : LIBFILENAME := $(3)
+$(call gb_ComponentTarget_get_target,$(1)) : COMPONENTPREFIX := $(2)
+$(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(3)
+$(call gb_ComponentTarget_get_inbuild_target,$(1)) : COMPONENTPREFIX := $(call gb_Library__get_layer_componentprefix,NONE)
 $(call gb_ComponentTarget_get_inbuild_target,$(1)) : LIBFILENAME := $(3)
-$(call gb_ComponentTarget_get_outdir_target,$(1)) : $(call gb_ComponentTarget_get_target,$(4))
-$(call gb_ComponentTarget_get_inbuild_target,$(1)) : \
-	COMPONENTPREFIX := $(call gb_Library__get_layer_componentprefix,NONE)
+$(call gb_ComponentTarget_get_outdir_target,$(1)) : $(call gb_ComponentTarget_get_target,$(1))
 $(call gb_ComponentTarget_get_outdir_inbuild_target,$(1)) : $(call gb_ComponentTarget_get_inbuild_target,$(1))
+$(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_target,$(1)),$(call gb_ComponentTarget_get_target,$(1)))
 $(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_inbuild_target,$(1)),$(call gb_ComponentTarget_get_inbuild_target,$(1)))
 
 endef
