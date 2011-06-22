@@ -453,8 +453,13 @@ void RTFDocumentImpl::text(OUString& rString)
     }
     if (m_bNeedSep)
     {
+        // Section properties are a paragraph sprm.
+        RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms));
+        RTFSprms_t aAttributes;
+        RTFSprms_t aSprms;
+        aSprms.push_back(make_pair(NS_ooxml::LN_CT_PPr_sectPr, pValue));
         writerfilter::Reference<Properties>::Pointer_t const pProperties(
-                new RTFReferenceProperties(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms)
+                new RTFReferenceProperties(aAttributes, aSprms)
                 );
         Mapper().props(pProperties);
         Mapper().endParagraphGroup();
@@ -830,7 +835,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        lcl_putNestedSprm(m_aStates.top().aSectionSprms, NS_ooxml::LN_CT_PPr_sectPr, NS_sprm::LN_SBkc, pValue);
+        m_aStates.top().aSectionSprms.push_back(make_pair(NS_sprm::LN_SBkc, pValue));
         skipDestination(bParsed);
         return 0;
     }
@@ -973,8 +978,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_SECTUNLOCKED:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(!nParam));
-                lcl_putNestedSprm(m_aStates.top().aSectionSprms,
-                        NS_ooxml::LN_CT_PPr_sectPr, NS_ooxml::LN_EG_SectPrContents_formProt, pValue);
+                m_aStates.top().aSectionSprms.push_back(make_pair(NS_ooxml::LN_EG_SectPrContents_formProt, pValue));
             }
             break;
         default:
