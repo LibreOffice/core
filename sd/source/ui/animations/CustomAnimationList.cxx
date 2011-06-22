@@ -865,6 +865,8 @@ void CustomAnimationList::onSelectionChanged( Any aSelection )
 
 void CustomAnimationList::SelectHdl()
 {
+    if( mbIgnorePaint )
+        return;
     SvTreeListBox::SelectHdl();
     mpController->onSelect();
 }
