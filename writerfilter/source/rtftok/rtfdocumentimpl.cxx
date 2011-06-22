@@ -1460,6 +1460,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 rAttributes.push_back(make_pair(NS_ooxml::LN_CT_Column_w, pValue));
             }
             break;
+        case RTF_COLSR:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                RTFSprms_t& rAttributes = lcl_getColsAttributes(m_aStates);
+                rAttributes.push_back(make_pair(NS_ooxml::LN_CT_Column_space, pValue));
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
