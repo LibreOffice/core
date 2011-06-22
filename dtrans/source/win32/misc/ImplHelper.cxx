@@ -47,8 +47,7 @@
 #pragma warning(pop)
 #endif
 #ifdef __MINGW32__
-#include <setjmp.h>
-#include <excpt.h>
+#include <sehandler.hxx>
 #endif
 
 //------------------------------------------------------------------------
@@ -189,7 +188,7 @@ sal_Bool SAL_CALL IsOEMCP( sal_uInt32 codepage )
                               869, 874, 932, 936, 949, 950, 1361 };
 
     for ( sal_Int8 i = 0; i < ( sizeof( arrOEMCP )/sizeof( sal_uInt32 ) ); ++i )
-        if ( arrOEMCP[i] == codepage )
+        if ( (sal_uInt32) arrOEMCP[i] == codepage )
             return sal_True;
 
     return sal_False;
