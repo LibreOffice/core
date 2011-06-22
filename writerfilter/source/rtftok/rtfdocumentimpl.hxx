@@ -77,7 +77,6 @@ namespace writerfilter {
         {
             BUFFER_PROPS,
             BUFFER_CELLEND,
-            BUFFER_NESTCELLEND,
             BUFFER_STARTRUN,
             BUFFER_UTEXT,
             BUFFER_ENDRUN,

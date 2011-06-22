@@ -668,10 +668,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
 
                 RTFValue::Pointer_t pValue(new RTFValue(0));
-                if (nKeyword == RTF_CELL)
-                    m_aBuffer.push_back(make_pair(BUFFER_CELLEND, pValue));
-                else
-                    m_aBuffer.push_back(make_pair(BUFFER_NESTCELLEND, pValue));
+                m_aBuffer.push_back(make_pair(BUFFER_CELLEND, pValue));
                 m_bNeedPap = true;
             }
             break;
@@ -1320,7 +1317,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                 );
                         Mapper().props(pProp);
                     }
-                    else if (aPair.first == BUFFER_NESTCELLEND || aPair.first == BUFFER_CELLEND)
+                    else if (aPair.first == BUFFER_CELLEND)
                     {
                         RTFValue::Pointer_t pValue(new RTFValue(1));
                         m_aStates.top().aTableCellSprms.push_back(make_pair(NS_sprm::LN_PCell, pValue));
