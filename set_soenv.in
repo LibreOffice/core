@@ -1827,6 +1827,8 @@ ToFile( "ENABLE_CRASHDUMP",  "@ENABLE_CRASHDUMP@",  "e" );
 ToFile( "ENABLE_CUPS",       "@ENABLE_CUPS@",       "e" );
 ToFile( "ENABLE_RANDR",      "@ENABLE_RANDR@",      "e" );
 ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
+ToFile( "FONTCONFIG_LIBS",   "@FONTCONFIG_LIBS@",   "e");
+ToFile( "FONTCONFIG_CFLAGS", "@FONTCONFIG_CFLAGS@", "e");
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
 ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
 ToFile( "ENABLE_PCH",        "@ENABLE_PCH@",       "e" );
