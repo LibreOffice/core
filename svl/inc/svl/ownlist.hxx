@@ -98,9 +98,6 @@ public:
     sal_Bool FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
     void FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
 
-    SVL_DLLPUBLIC friend SvStream& operator >> ( SvStream& rStm, SvCommandList & );
-    SVL_DLLPUBLIC friend SvStream& operator << ( SvStream&, const SvCommandList & );
-
     size_t          size() const { return aCommandList.size(); }
 
     SvCommand       operator[]( size_t i) {

@@ -166,64 +166,6 @@ SvCommand & SvCommandList::Append
     return aCommandList.back();
 }
 
-//=========================================================================
-SvStream & operator >>
-(
-    SvStream & rStm,        /* Stream aus dem gelesen wird */
-    SvCommandList & rThis   /* Die zu f"ullende Liste */
-)
-/*  [Beschreibung]
-
-    Die Liste mit ihren Elementen wird gelesen. Das Format ist:
-    1. Anzahl der Elemente
-    2. Alle Elemente
-
-    [R"uckgabewert]
-
-    SvStream &      Der "ubergebene Stream.
-*/
-{
-    sal_uInt32 nCount = 0;
-    rStm >> nCount;
-    if( !rStm.GetError() )
-    {
-        while( nCount-- )
-        {
-            SvCommand aCmd;
-            rStm >> aCmd;
-            rThis.aCommandList.push_back( aCmd );
-        }
-    }
-    return rStm;
-}
-
-//=========================================================================
-SvStream & operator <<
-(
-    SvStream & rStm,            /* Stream in den geschrieben wird */
-    const SvCommandList & rThis /* Die zu schreibende Liste */
-)
-/*  [Beschreibung]
-
-    Die Liste mit ihren Elementen wir geschrieben. Das Format ist:
-    1. Anzahl der Elemente
-    2. Alle Elemente
-
-    [R"uckgabewert]
-
-    SvStream &      Der "ubergebene Stream.
-*/
-{
-    sal_uInt32 nCount = rThis.aCommandList.size();
-    rStm << nCount;
-
-    for( sal_uInt32 i = 0; i < nCount; i++ )
-    {
-        rStm << rThis.aCommandList[ i ];
-    }
-    return rStm;
-}
-
 sal_Bool SvCommandList::FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
 {
     const sal_Int32 nCount = aCommandSequence.getLength();
