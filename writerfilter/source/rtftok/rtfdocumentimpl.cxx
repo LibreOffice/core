@@ -817,6 +817,24 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         return 0;
     }
 
+    // Section breaks
+    switch (nKeyword)
+    {
+        case RTF_SBKNONE: nParam = 0; break;
+        case RTF_SBKCOL: nParam = 1; break;
+        case RTF_SBKPAGE: nParam = 2; break;
+        case RTF_SBKEVEN: nParam = 3; break;
+        case RTF_SBKODD: nParam = 4; break;
+        default: break;
+    }
+    if (nParam >= 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        lcl_putNestedSprm(m_aStates.top().aSectionSprms, NS_ooxml::LN_CT_PPr_sectPr, NS_sprm::LN_SBkc, pValue);
+        skipDestination(bParsed);
+        return 0;
+    }
+
     // Trivial paragraph flags
     switch (nKeyword)
     {
