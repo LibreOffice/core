@@ -12,96 +12,60 @@ use Cwd;
 
 $ENV{LC_ALL} = "C";
 
-# attempt to fix whitespace in one file
-# $1 - file to fix
-# $2 - list of lines containing whitespace errors
-sub fix_whitespace($$) {
-    my ( $file, $lines ) = @_;
-
-    open( IN, "$file" ) || die "Cannot open $file for reading";
-    my ( $out, $tmpfile ) = mkstemp( "/tmp/whitespace-fixing-XXXXXX" );
-
-    my $changed = 0;
-    my $line_no = 1;
-    while ( my $line = <IN> ) {
-        if ( $lines->{$line_no} && $line =~ /^(.*[^ \t])[ \t]+$/ ) {
-            $changed = 1;
-            print $out "$1\n";
-        }
-        elsif ( $lines->{$line_no} && $line =~ /^[ \t]+$/ ) {
-            $changed = 1;
-            print $out "\n";
-        }
-        else {
-            print $out $line;
-        }
-        ++$line_no;
-    }
-    close( $out );
-    close( IN );
-
-    if ( $changed )
-    {
-        move( $tmpfile, $file ) or die "Cannot move '$tmpfile' to '$file'";
-
-        system( "git add $file" );
-        print "Fixed whitespace in '$file'\n";
-    }
-}
-
-# go through the patch and collect lines to fix
-sub check_and_fix_whitespace($)
+sub check_whitespaces($)
 {
-    my ( $head ) = @_;
+    my ($h) = @_;
 
-    my $file = "";
-    my %lines = ();
-    my $line_no = 0;
-    my $line_max = -1;
-
-    my $stash = "";
-
-    # any not staged changes to stash away?
-    system( "git update-index -q --refresh" );
-    if ( `git diff --name-only --` ) {
-        my $fd;
-        ( $fd, $stash ) = mkstemp( "/tmp/unstaged-changes-XXXXXX" );
-        close( $fd );
-
-        # this will keep the staged changes
-        system( "git diff > $stash" );
-        system( "git checkout ." );
+    my $found_bad = 0;
+    my $filename;
+    my $reported_filename = "";
+    my $lineno;
+    sub bad_line {
+	my ($why, $line) = @_;
+	if (!$found_bad) {
+	    print STDERR "*\n";
+	    print STDERR "* You have some suspicious patch lines:\n";
+	    print STDERR "*\n";
+	    $found_bad = 1;
+	}
+	if ($reported_filename ne $filename) {
+	    print STDERR "* In $filename\n";
+	    $reported_filename = $filename;
+	}
+	print STDERR "* $why (line $lineno)\n";
+	print STDERR "$filename:$lineno:$line\n";
     }
-    open( FILES, "git diff-index --cached --diff-filter=ACM --name-only $head |" ) || die "Cannot run git diff-index.";
-    while( my $file = <FILES> ) {
-        chomp( $file );
-        if ( $file ne "GNUmakefile" &&
-           ( $file =~ /\.(c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|MK|pl|pm|pmk|py|sdi|sh|src|tab)/ ) ) {
-            open( F, "git diff-index -p --cached $head -- $file |" );
-            while ( my $line = <F> ) {
-                if ( $line =~ /^\+\+\+ (.*)/ ) {
-                    %lines = ();
-                    $line_no = 0;
-                    $line_max = -1;
-                }
-                elsif ( $line =~ /^@@ -[0-9]+,[0-9]+ \+([0-9]+),([0-9]+) @@/ ) {
-                    $line_no = $1;
-                    $line_max = $line_no + $2;
-                }
-                elsif ( ( $line_no < $line_max ) && ( $line =~ /^[ +]/ ) ) {
-                    if ( $line =~ /^\+.*[ \t]$/ ) {
-                        $lines{$line_no} = 1;
-                    }
-                    ++$line_no;
-                }
-            }
-            fix_whitespace( $file, \%lines );
-            close( IN );
-            if ($stash) {
-                system( "git apply < $stash" );
-                unlink( $stash );
-            }
-        }
+    open( FILES, "git-diff-index -p -M --cached $h |" ) ||  die "Cannot run git diff-index.";
+    while (<FILES>) {
+	if (m|^diff --git a/(.*) b/\1$|) {
+	    $filename = $1;
+	    next;
+	}
+	if (/^@@ -\S+ \+(\d+)/) {
+	    $lineno = $1 - 1;
+	    next;
+	}
+	if (/^ /) {
+	    $lineno++;
+	    next;
+	}
+	if (s/^\+//) {
+	    $lineno++;
+	    chomp;
+	    if (/\s$/) {
+		bad_line("trailing whitespace", $_);
+	    }
+	    if (/^\s* 	/) {
+		bad_line("indent SP followed by a TAB", $_);
+	    }
+	    if (/^(?:[<>=]){7}/) {
+		bad_line("unresolved merge conflict", $_);
+	    }
+	}
+    }
+    if ( $found_bad)
+    {
+	exit($found_bad);
     }
 }
 
@@ -222,7 +186,7 @@ EOM
 }
 
 # fix whitespace in code
-check_and_fix_whitespace( $against );
+check_whitespaces( $against );
 
 # check the rest of the files
 my $filter_patches=`git diff-index --check --cached $against -- | sed '/\.\(diff\|patch\):/,/.*/d'`;
