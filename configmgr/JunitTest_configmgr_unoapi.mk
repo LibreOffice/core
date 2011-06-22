@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_JunitTest_JunitTest,configmgr_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,configmgr_unoapi,SRCDIR))
 
 $(eval $(call gb_JunitTest_set_defs,configmgr_unoapi,\
     $$(DEFS) \
