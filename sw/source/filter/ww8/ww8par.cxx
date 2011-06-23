@@ -2622,9 +2622,6 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     // Unicode-Flag neu setzen und notfalls File-Pos korrigieren
     // merke: Seek kostet nicht viel, da inline geprueft wird,
     //        ob die korrekte FilePos nicht schon erreicht ist.
-    WW8_FC nStreamPos = pSBase->WW8Cp2Fc(nCpOfs+rPos, &bIsUnicode);
-    pStrm->Seek( nStreamPos );
-
     xub_StrLen nLen;
     if (nEnd - rPos <= (STRING_MAXLEN-1))
         nLen = writer_cast<xub_StrLen>(nEnd - rPos);
@@ -2633,6 +2630,16 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     OSL_ENSURE(nLen, "String is 0");
     if (!nLen)
         return true;
+
+    sal_Size nRequestedPos = pSBase->WW8Cp2Fc(nCpOfs+rPos, &bIsUnicode);
+    sal_Size nSeekedPos = pStrm->Seek(nRequestedPos);
+    OSL_ENSURE(nRequestedPos == nSeekedPos, "Document claimed to have more text than available");
+    if (nRequestedPos != nSeekedPos)
+    {
+        //Swallow missing range, e.g. #i95550#
+        rPos+=nLen;
+        return true;
+    }
 
     const CharSet eSrcCharSet = bVer67 ? GetCurrentCharSet() :
         RTL_TEXTENCODING_MS_1252;
