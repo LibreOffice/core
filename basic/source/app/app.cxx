@@ -569,7 +569,7 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     {
         Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
         aConf.SetGroup("WinGeom");
-        SetWindowState( aConf.ReadKey("WinParams", "") );
+        SetWindowState( ::rtl::OString(aConf.ReadKey("WinParams", "")) );
     }
 
     aLineNum.SetTimeoutHdl( LINK( this, BasicFrame, ShowLineNr ) );
