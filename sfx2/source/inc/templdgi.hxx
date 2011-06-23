@@ -129,6 +129,7 @@ private:
 
     void    ReadResource();
     void    ClearResource();
+    void impl_clear();
 
 protected:
 #define MAX_FAMILIES            5

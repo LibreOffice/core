@@ -950,6 +950,11 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 void SfxCommonTemplateDialog_Impl::ClearResource()
 {
     ClearFamilyList();
+    impl_clear();
+}
+
+void SfxCommonTemplateDialog_Impl::impl_clear()
+{
     DELETEX(pStyleFamilies);
     sal_uInt16 i;
     for ( i = 0; i < MAX_FAMILIES; ++i )
@@ -987,13 +992,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
     if ( bIsWater )
         Execute_Impl(SID_STYLE_WATERCAN, aEmpty, aEmpty, 0);
     GetWindow()->Hide();
-    DELETEX(pStyleFamilies);
-    DELETEZ( m_pStyleFamiliesId );
-    sal_uInt16 i;
-    for ( i = 0; i < MAX_FAMILIES; ++i )
-        DELETEX(pFamilyState[i]);
-    for ( i = 0; i < COUNT_BOUND_FUNC; ++i )
-        delete pBoundItems[i];
+    impl_clear();
     if ( pStyleSheetPool )
         EndListening(*pStyleSheetPool);
     pStyleSheetPool = NULL;
