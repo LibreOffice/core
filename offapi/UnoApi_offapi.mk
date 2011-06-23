@@ -2902,6 +2902,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/sheet/MemberResultFlags \
     offapi/com/sun/star/sheet/MoveDirection \
     offapi/com/sun/star/sheet/NamedRangeFlag \
+    offapi/com/sun/star/sheet/NameToken \
     offapi/com/sun/star/sheet/NoConvergenceException \
     offapi/com/sun/star/sheet/PasteOperation \
     offapi/com/sun/star/sheet/RangeSelectionEvent \
