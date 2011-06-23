@@ -36,8 +36,8 @@ TARGET=hunspell
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hunspell-1.3.1
-TARFILE_MD5=9ed97fce60a9a65852402248a6659492
+TARFILE_NAME=hunspell-1.3.2
+TARFILE_MD5=3121aaf3e13e5d88dfff13fb4a5f1ab8
 ADDITIONAL_FILES+=config.h
 
 PATCH_FILES=\
