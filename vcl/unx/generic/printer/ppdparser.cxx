@@ -696,7 +696,7 @@ PPDParser::PPDParser( const String& rFile ) :
         m_pTranslator( new PPDTranslator() )
 {
     // read in the file
-    std::list< ByteString > aLines;
+    std::list< rtl::OString > aLines;
     PPDDecompressStream aStream( m_aFile );
     bool bLanguageEncoding = false;
     if( aStream.IsOpen() )
@@ -897,11 +897,11 @@ static sal_uInt8 getNibble( sal_Char cChar )
     return nRet;
 }
 
-String PPDParser::handleTranslation( const ByteString& i_rString, bool bIsGlobalized )
+String PPDParser::handleTranslation(const rtl::OString& i_rString, bool bIsGlobalized)
 {
-    int nOrigLen = i_rString.Len();
+    sal_Int32 nOrigLen = i_rString.getLength();
     OStringBuffer aTrans( nOrigLen );
-    const sal_Char* pStr = i_rString.GetBuffer();
+    const sal_Char* pStr = i_rString.getStr();
     const sal_Char* pEnd = pStr + nOrigLen;
     while( pStr < pEnd )
     {
@@ -923,9 +923,9 @@ String PPDParser::handleTranslation( const ByteString& i_rString, bool bIsGlobal
     return OStringToOUString( aTrans.makeStringAndClear(), bIsGlobalized ? RTL_TEXTENCODING_UTF8 : m_aFileEncoding );
 }
 
-void PPDParser::parse( ::std::list< ByteString >& rLines )
+void PPDParser::parse( ::std::list< rtl::OString >& rLines )
 {
-    std::list< ByteString >::iterator line = rLines.begin();
+    std::list< rtl::OString >::iterator line = rLines.begin();
     PPDParser::hash_type::const_iterator keyit;
     while( line != rLines.end() )
     {
@@ -1027,7 +1027,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
                 {
                     // copy the newlines also
                     aLine += '\n';
-                    aLine += *line;
+                    aLine += ByteString(*line);
                     ++line;
                 }
             }
@@ -1142,7 +1142,9 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
             if( nPos != STRING_NOTFOUND )
             {
                 aKey.Erase( nPos );
-                String aOption( WhitespaceToSpace( aLine.Copy( nPos+9 ) ), RTL_TEXTENCODING_MS_1252 );
+                rtl::OUString aOption(rtl::OStringToOUString(
+                    WhitespaceToSpace(aLine.Copy(nPos+9)),
+                    RTL_TEXTENCODING_MS_1252));
                 keyit = m_aKeys.find( aKey );
                 if( keyit != m_aKeys.end() )
                 {
@@ -1171,7 +1173,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
     }
 }
 
-void PPDParser::parseOpenUI( const ByteString& rLine )
+void PPDParser::parseOpenUI(const rtl::OString& rLine)
 {
     String aTranslation;
     ByteString aKey = rLine;
@@ -1202,7 +1204,8 @@ void PPDParser::parseOpenUI( const ByteString& rLine )
     pKey->m_bUIOption = true;
     m_pTranslator->insertKey( pKey->getKey(), aTranslation );
 
-    ByteString aValue = WhitespaceToSpace( rLine.GetToken( 1, ':' ) );
+    sal_Int32 nIndex = 0;
+    ByteString aValue = WhitespaceToSpace( rLine.getToken( 1, ':', nIndex ) );
     if( aValue.CompareIgnoreCaseToAscii( "boolean" ) == COMPARE_EQUAL )
         pKey->m_eUIType = PPDKey::Boolean;
     else if( aValue.CompareIgnoreCaseToAscii( "pickmany" ) == COMPARE_EQUAL )
@@ -1218,9 +1221,9 @@ void PPDParser::parseOrderDependency(const rtl::OString& rLine)
     if( nPos != -1 )
         aLine = aLine.copy( nPos+1 );
 
-    int nOrder = GetCommandLineToken( 0, aLine ).ToInt32();
+    sal_Int32 nOrder = GetCommandLineToken( 0, aLine ).toInt32();
     ByteString aSetup = GetCommandLineToken( 1, aLine );
-    String aKey( GetCommandLineToken( 2, aLine ), RTL_TEXTENCODING_MS_1252 );
+    String aKey(rtl::OStringToOUString(GetCommandLineToken(2, aLine), RTL_TEXTENCODING_MS_1252));
     if( aKey.GetChar( 0 ) != '*' )
         return; // invalid order depency
     aKey.Erase( 0, 1 );
@@ -1250,12 +1253,12 @@ void PPDParser::parseOrderDependency(const rtl::OString& rLine)
         pKey->m_eSetupType = PPDKey::AnySetup;
 }
 
-void PPDParser::parseConstraint( const ByteString& rLine )
+void PPDParser::parseConstraint( const rtl::OString& rLine )
 {
     bool bFailed = false;
 
-    String aLine( rLine, RTL_TEXTENCODING_MS_1252 );
-    aLine.Erase( 0, rLine.Search( ':' )+1 );
+    String aLine(rtl::OStringToOUString(rLine, RTL_TEXTENCODING_MS_1252));
+    aLine.Erase(0, rLine.indexOf(':') + 1);
     PPDConstraint aConstraint;
     int nTokens = GetCommandLineTokenCount( aLine );
     for( int i = 0; i < nTokens; i++ )
@@ -1291,7 +1294,7 @@ void PPDParser::parseConstraint( const ByteString& rLine )
     if( ! aConstraint.m_pKey1 || ! aConstraint.m_pKey2 || bFailed )
     {
 #ifdef __DEBUG
-        fprintf( stderr, "Warning: constraint \"%s\" is invalid\n", rLine.GetStr() );
+        fprintf( stderr, "Warning: constraint \"%s\" is invalid\n", rLine.getStr() );
 #endif
     }
     else
