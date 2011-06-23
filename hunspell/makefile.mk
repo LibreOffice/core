@@ -73,7 +73,7 @@ CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 
-OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
+OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.3.a
 
 .ENDIF # "$(GUI)"=="UNX"
 
@@ -89,7 +89,7 @@ CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 
 BUILD_ACTION=make
-OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
+OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.3.a
 .ELSE
 BUILD_ACTION=cd src/hunspell && dmake
 .ENDIF
