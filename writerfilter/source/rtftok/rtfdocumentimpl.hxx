@@ -155,6 +155,9 @@ namespace writerfilter {
                 int nCellX;
                 std::deque<RTFSprms::Pointer_t> aTableCellsSprms;
                 std::deque<RTFSprms::Pointer_t> aTableCellsAttributes;
+
+                /// CJK or CTL?
+                bool bIsCjk;
         };
 
         /// Implementation of the RTFDocument interface.

@@ -1032,6 +1032,15 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aSectionSprms.push_back(make_pair(NS_ooxml::LN_EG_SectPrContents_formProt, pValue));
             }
             break;
+        case RTF_LOCH:
+            // Noop, dmapper detects this automatically.
+            break;
+        case RTF_HICH:
+            m_aStates.top().bIsCjk = true;
+            break;
+        case RTF_DBCH:
+            m_aStates.top().bIsCjk = false;
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
@@ -1064,7 +1073,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     // Trivial character sprms.
     switch (nKeyword)
     {
-        case RTF_AF: nSprm = NS_sprm::LN_CRgFtc1; break;
+        case RTF_AF: nSprm = (m_aStates.top().bIsCjk ? NS_sprm::LN_CRgFtc1 : NS_sprm::LN_CRgFtc2); break;
         case RTF_FS: nSprm = NS_sprm::LN_CHps; break;
         case RTF_AFS: nSprm = NS_sprm::LN_CHpsBi; break;
         case RTF_ANIMTEXT: nSprm = NS_sprm::LN_CSfxText; break;
@@ -2103,7 +2112,8 @@ RTFParserState::RTFParserState()
     aShapeProperties(),
     nCellX(0),
     aTableCellsSprms(),
-    aTableCellsAttributes()
+    aTableCellsAttributes(),
+    bIsCjk(false)
 {
 }
 
