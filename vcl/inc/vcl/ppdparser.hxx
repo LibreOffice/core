@@ -186,7 +186,7 @@ private:
     PPDParser( const String& rFile );
     ~PPDParser();
 
-    void parseOrderDependency( const ByteString& rLine );
+    void parseOrderDependency(const rtl::OString& rLine);
     void parseOpenUI( const ByteString& rLine );
     void parseConstraint( const ByteString& rLine );
     void parse( std::list< ByteString >& rLines );

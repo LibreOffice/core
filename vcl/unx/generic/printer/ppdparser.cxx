@@ -1211,12 +1211,12 @@ void PPDParser::parseOpenUI( const ByteString& rLine )
         pKey->m_eUIType = PPDKey::PickOne;
 }
 
-void PPDParser::parseOrderDependency( const ByteString& rLine )
+void PPDParser::parseOrderDependency(const rtl::OString& rLine)
 {
-    ByteString aLine( rLine );
-    int nPos = aLine.Search( ':' );
-    if( nPos != STRING_NOTFOUND )
-        aLine.Erase( 0, nPos+1 );
+    rtl::OString aLine(rLine);
+    sal_Int32 nPos = aLine.indexOf(':');
+    if( nPos != -1 )
+        aLine = aLine.copy( nPos+1 );
 
     int nOrder = GetCommandLineToken( 0, aLine ).ToInt32();
     ByteString aSetup = GetCommandLineToken( 1, aLine );
