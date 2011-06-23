@@ -1045,6 +1045,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
     bool bParsed = true;
     int nSprm = 0;
+    RTFValue::Pointer_t pIntValue(new RTFValue(nParam));
     // Trivial table sprms.
     switch (nKeyword)
     {
@@ -1056,8 +1057,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        m_aStates.top().aTableSprms.push_back(make_pair(nSprm, pValue));
+        m_aStates.top().aTableSprms.push_back(make_pair(nSprm, pIntValue));
         skipDestination(bParsed);
         return 0;
     }
@@ -1077,8 +1077,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        m_aStates.top().aCharacterSprms.push_back(make_pair(nSprm, pValue));
+        m_aStates.top().aCharacterSprms.push_back(make_pair(nSprm, pIntValue));
         skipDestination(bParsed);
         return 0;
     }
@@ -1097,8 +1096,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        m_aStates.top().aParagraphSprms.push_back(make_pair(nSprm, pValue));
+        m_aStates.top().aParagraphSprms.push_back(make_pair(nSprm, pIntValue));
         skipDestination(bParsed);
         return 0;
     }
@@ -1112,8 +1110,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        m_aStates.top().aTableAttributes.push_back(make_pair(nSprm, pValue));
+        m_aStates.top().aTableAttributes.push_back(make_pair(nSprm, pIntValue));
         skipDestination(bParsed);
         return 0;
     }
@@ -1127,8 +1124,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (nSprm > 0)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        m_aStates.top().aParagraphAttributes.push_back(make_pair(nSprm, pValue));
+        m_aStates.top().aParagraphAttributes.push_back(make_pair(nSprm, pIntValue));
         skipDestination(bParsed);
         return 0;
     }
@@ -1156,8 +1152,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().nCurrentFontIndex = nParam;
             else
             {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aCharacterSprms.push_back(make_pair(NS_sprm::LN_CRgFtc0, pValue));
+                m_aStates.top().aCharacterSprms.push_back(make_pair(NS_sprm::LN_CRgFtc0, pIntValue));
                 m_aStates.top().nCurrentEncoding = getEncodingTable(nParam);
             }
             break;
@@ -1188,56 +1183,38 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_CF:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
                 // NS_sprm::LN_CIco won't work, that would be an index in a static table
-                m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_Color_val, pValue));
+                m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_Color_val, pIntValue));
             }
             break;
         case RTF_S:
             if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
             {
                 m_aStates.top().nCurrentStyleIndex = nParam;
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pValue));
+                m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
             }
             else
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aParagraphAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pValue));
-            }
+                m_aStates.top().aParagraphAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
             break;
         case RTF_CS:
             if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
             {
                 m_aStates.top().nCurrentStyleIndex = nParam;
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pValue));
-                RTFValue::Pointer_t pTValue(new RTFValue(2));
-                m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_SGC, pTValue)); // character style
+                m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
+                RTFValue::Pointer_t pValue(new RTFValue(2));
+                m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_SGC, pValue)); // character style
             }
             else
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pValue));
-            }
+                m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
             break;
         case RTF_DEFF:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aDefaultState.aCharacterSprms.push_back(make_pair(NS_sprm::LN_CRgFtc0, pValue));
-            }
+                m_aDefaultState.aCharacterSprms.push_back(make_pair(NS_sprm::LN_CRgFtc0, pIntValue));
             break;
         case RTF_DEFLANG:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aDefaultState.aCharacterSprms.push_back(make_pair(NS_sprm::LN_CRgLid0, pValue));
-            }
+                m_aDefaultState.aCharacterSprms.push_back(make_pair(NS_sprm::LN_CRgLid0, pIntValue));
             break;
         case RTF_ADEFLANG:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                m_aDefaultState.aCharacterSprms.push_back(make_pair(NS_sprm::LN_CLidBi, pValue));
-            }
+                m_aDefaultState.aCharacterSprms.push_back(make_pair(NS_sprm::LN_CLidBi, pIntValue));
             break;
         case RTF_CHCBPAT:
             {
@@ -1298,10 +1275,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pValue(new RTFValue(true));
                 m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_EastAsianLayout_combine, pValue));
                 if (nParam > 0)
-                {
-                    RTFValue::Pointer_t pBValue(new RTFValue(nParam));
-                    m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_EastAsianLayout_combineBrackets, pBValue));
-                }
+                    m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_EastAsianLayout_combineBrackets, pIntValue));
             }
             break;
         case RTF_SLMULT:
@@ -1336,35 +1310,31 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_TX:
             {
                 RTFSprms_t& rAttributes = lcl_getTabsTab(m_aStates);
-                RTFValue::Pointer_t pTabposValue(new RTFValue(nParam));
-                rAttributes.push_back(make_pair(NS_ooxml::LN_CT_TabStop_pos, pTabposValue));
+                rAttributes.push_back(make_pair(NS_ooxml::LN_CT_TabStop_pos, pIntValue));
             }
             break;
         case RTF_ILVL:
             {
                 RTFSprms_t& rSprms = lcl_getNumPr(m_aStates);
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                rSprms.push_back(make_pair(NS_sprm::LN_PIlvl, pValue));
+                rSprms.push_back(make_pair(NS_sprm::LN_PIlvl, pIntValue));
             }
         case RTF_LISTTEMPLATEID:
         case RTF_LISTID:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 if (m_aStates.top().nDestinationState == DESTINATION_LISTENTRY)
-                    m_aStates.top().aTableAttributes.push_back(make_pair(NS_ooxml::LN_CT_AbstractNum_abstractNumId, pValue));
+                    m_aStates.top().aTableAttributes.push_back(make_pair(NS_ooxml::LN_CT_AbstractNum_abstractNumId, pIntValue));
                 else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
-                    m_aStates.top().aTableSprms.push_back(make_pair(NS_ooxml::LN_CT_Num_abstractNumId, pValue));
+                    m_aStates.top().aTableSprms.push_back(make_pair(NS_ooxml::LN_CT_Num_abstractNumId, pIntValue));
             }
             break;
         case RTF_LS:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
-                    m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_LSID, pValue));
+                    m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_LSID, pIntValue));
                 else
                 {
                     RTFSprms_t& rSprms = lcl_getNumPr(m_aStates);
-                    rSprms.push_back(make_pair(NS_sprm::LN_PIlfo, pValue));
+                    rSprms.push_back(make_pair(NS_sprm::LN_PIlfo, pIntValue));
                 }
             }
             break;
@@ -1456,46 +1426,35 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_TRRH:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
-                        NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_val, pValue);
+                        NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_val, pIntValue);
             }
             break;
         case RTF_COLS:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                        NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_num, pValue);
-            }
+                        NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_num, pIntValue);
             break;
         case RTF_COLSX:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                        NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_space, pValue);
-            }
+                        NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_space, pIntValue);
             break;
         case RTF_COLNO:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 lcl_putNestedSprm(m_aStates.top().aSectionSprms,
-                        NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_col, pValue);
-            }
+                        NS_ooxml::LN_EG_SectPrContents_cols, NS_ooxml::LN_CT_Columns_col, pIntValue);
             break;
         case RTF_COLW:
         case RTF_COLSR:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 RTFSprms_t& rAttributes = lcl_getColsAttributes(m_aStates);
-                rAttributes.push_back(make_pair((nKeyword == RTF_COLW ? NS_ooxml::LN_CT_Column_w : NS_ooxml::LN_CT_Column_space), pValue));
+                rAttributes.push_back(make_pair((nKeyword == RTF_COLW ? NS_ooxml::LN_CT_Column_w : NS_ooxml::LN_CT_Column_space),
+                            pIntValue));
             }
             break;
         case RTF_PAPERH:
         case RTF_PAPERW:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 lcl_putNestedSprm(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz,
-                        (nKeyword == RTF_PAPERH ? NS_ooxml::LN_CT_PageSz_h : NS_ooxml::LN_CT_PageSz_w), pValue);
+                        (nKeyword == RTF_PAPERH ? NS_ooxml::LN_CT_PageSz_h : NS_ooxml::LN_CT_PageSz_w), pIntValue);
             }
             break;
         default:
