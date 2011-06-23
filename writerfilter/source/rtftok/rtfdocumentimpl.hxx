@@ -227,7 +227,7 @@ namespace writerfilter {
                 oox::GraphicHelper* m_pGraphicHelper;
 
                 /// Buffered table cells, till cell definitions are not reached.
-                std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aBuffer;
+                std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aTableBuffer;
                 bool m_bTable;
         };
     } // namespace rtftok

@@ -205,7 +205,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bNeedPap(false),
     m_aListTableSprms(),
     m_xStorage(),
-    m_aBuffer(),
+    m_aTableBuffer(),
     m_bTable(false)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
@@ -488,7 +488,7 @@ void RTFDocumentImpl::text(OUString& rString)
         else
         {
             RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
-            m_aBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+            m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
         }
         m_bNeedPap = false;
     }
@@ -505,7 +505,7 @@ void RTFDocumentImpl::text(OUString& rString)
     else
     {
         RTFValue::Pointer_t pValue;
-        m_aBuffer.push_back(make_pair(BUFFER_STARTRUN, pValue));
+        m_aTableBuffer.push_back(make_pair(BUFFER_STARTRUN, pValue));
     }
     if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
     {
@@ -519,7 +519,7 @@ void RTFDocumentImpl::text(OUString& rString)
         else
         {
             RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
-            m_aBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+            m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
         }
     }
     if (!m_bTable)
@@ -527,14 +527,14 @@ void RTFDocumentImpl::text(OUString& rString)
     else
     {
         RTFValue::Pointer_t pValue(new RTFValue(rString));
-        m_aBuffer.push_back(make_pair(BUFFER_UTEXT, pValue));
+        m_aTableBuffer.push_back(make_pair(BUFFER_UTEXT, pValue));
     }
     if (!m_bTable)
         Mapper().endCharacterGroup();
     else
     {
         RTFValue::Pointer_t pValue;
-        m_aBuffer.push_back(make_pair(BUFFER_ENDRUN, pValue));
+        m_aTableBuffer.push_back(make_pair(BUFFER_ENDRUN, pValue));
     }
     if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
@@ -686,7 +686,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 else
                 {
                     RTFValue::Pointer_t pValue;
-                    m_aBuffer.push_back(make_pair(BUFFER_PAR, pValue));
+                    m_aTableBuffer.push_back(make_pair(BUFFER_PAR, pValue));
                 }
                 // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
@@ -729,11 +729,11 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 {
                     // There were no runs in the cell, so we need to send paragraph properties here.
                     RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
-                    m_aBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+                    m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
                 }
 
                 RTFValue::Pointer_t pValue;
-                m_aBuffer.push_back(make_pair(BUFFER_CELLEND, pValue));
+                m_aTableBuffer.push_back(make_pair(BUFFER_CELLEND, pValue));
                 m_bNeedPap = true;
             }
             break;
@@ -762,7 +762,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 
                 lcl_Break(Mapper());
                 m_bNeedPap = true;
-                m_aBuffer.clear();
+                m_aTableBuffer.clear();
             }
             break;
         case RTF_COLUMN:
@@ -1405,10 +1405,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pXValue(new RTFValue(nCellX));
                 m_aStates.top().aTableRowSprms.push_back(make_pair(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue));
 
-                while (m_aBuffer.size())
+                while (m_aTableBuffer.size())
                 {
-                    std::pair<RTFBufferTypes, RTFValue::Pointer_t> aPair = m_aBuffer.front();
-                    m_aBuffer.pop_front();
+                    std::pair<RTFBufferTypes, RTFValue::Pointer_t> aPair = m_aTableBuffer.front();
+                    m_aTableBuffer.pop_front();
                     if (aPair.first == BUFFER_PROPS)
                     {
                         writerfilter::Reference<Properties>::Pointer_t const pProp(
