@@ -3001,7 +3001,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
      * - which is not good since the window manager will now size the window back to this
      * wrong size at some point.
      */
-    if( (pThis->m_nStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_PLUG)) == SAL_FRAME_STYLE_SIZEABLE )
+    if( pThis->m_bFullscreen || (pThis->m_nStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_PLUG)) == SAL_FRAME_STYLE_SIZEABLE )
     {
         if( pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight )
         {
