@@ -959,12 +959,30 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_PBrcRight, pValue));
             }
             break;
+        case RTF_LTRSECT:
+        case RTF_RTLSECT:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_LTRSECT ? 0 : 1));
+                m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_STextFlow, pValue));
+            }
+            break;
         case RTF_LTRPAR:
         case RTF_RTLPAR:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_LTRPAR ? 0 : 1));
-                m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_STextFlow, pValue));
+                m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_PFrameTextFlow, pValue));
             }
+            break;
+        case RTF_LTRROW:
+        case RTF_RTLROW:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_LTRROW ? 0 : 1));
+                m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_TTextFlow, pValue));
+            }
+            break;
+        case RTF_LTRCH:
+        case RTF_RTLCH:
+            // dmapper does not support these.
             break;
         case RTF_ULNONE:
             {
