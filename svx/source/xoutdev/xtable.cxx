@@ -56,17 +56,19 @@ Color RGB_Color( ColorData nColorName )
 |*
 *************************************************************************/
 
-XPropertyTable::XPropertyTable( const String& rPath,
-                                XOutdevItemPool* pInPool,
-                                sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-            aName           ( pszStandard, 8 ),
-            aPath           ( rPath ),
-            pXPool          ( pInPool ),
-            aTable          ( nInitSize, nReSize ),
-            pBmpTable       ( NULL ),
-            bTableDirty     ( sal_True ),
-            bBitmapsDirty   ( sal_True ),
-            bOwnPool        ( sal_False )
+XPropertyTable::XPropertyTable(
+    const String& rPath,
+    XOutdevItemPool* pInPool,
+    sal_uInt16 nInitSize,
+    sal_uInt16 nReSize
+)   : aName         ( pszStandard, 8 )
+    , aPath         ( rPath )
+    , pXPool        ( pInPool )
+    , aTable        ( nInitSize, nReSize )
+    , pBmpTable     ( NULL )
+    , bTableDirty   ( sal_True )
+    , bBitmapsDirty ( sal_True )
+    , bOwnPool      ( sal_False )
 {
     if( !pXPool )
     {

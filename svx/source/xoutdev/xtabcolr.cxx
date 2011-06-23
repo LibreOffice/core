@@ -63,10 +63,11 @@ static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 |*
 *************************************************************************/
 
-XColorTable::XColorTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
+XColorTable::XColorTable(
+    const String& rPath,
+    XOutdevItemPool* pInPool
+) :
+    XPropertyTable( rPath, pInPool )
 {
     // ColorTable braucht keine eigene BmpTable
     // pBmpTable = new Table( nInitSize, nReSize );
@@ -468,9 +469,7 @@ Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 
 XColorList::XColorList(
     const String& rPath,
-    XOutdevItemPool* pInPool,
-    sal_uInt16 /* nInitSize */,
-    sal_uInt16 /* nReSize */
+    XOutdevItemPool* pInPool
 ) : XPropertyList( rPath, pInPool )
 {
     // pBmpList = new List( nInitSize, nReSize );

@@ -83,10 +83,13 @@ char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 |*
 *************************************************************************/
 
-XDashTable::XDashTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
+XDashTable::XDashTable(
+    const String& rPath,
+    XOutdevItemPool* pInPool,
+    sal_uInt16 nInitSize,
+    sal_uInt16 nReSize
+) :
+    XPropertyTable( rPath, pInPool, nInitSize, nReSize )
 {
     pBmpTable = new Table( nInitSize, nReSize );
 }
@@ -242,9 +245,7 @@ void XDashList::impDestroy()
 
 XDashList::XDashList(
     const String& rPath,
-    XOutdevItemPool* pInPool,
-    sal_uInt16 /* nInitSize */,
-    sal_uInt16 /* nReSize */
+    XOutdevItemPool* pInPool
 ) : XPropertyList( rPath, pInPool ),
     mpData(0)
 {

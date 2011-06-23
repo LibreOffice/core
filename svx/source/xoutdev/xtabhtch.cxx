@@ -77,10 +77,14 @@ char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };     // = 6.0
 |*
 *************************************************************************/
 
-XHatchTable::XHatchTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
+XHatchTable::XHatchTable(
+    const String& rPath,
+    XOutdevItemPool* pInPool,
+    sal_uInt16
+    nInitSize,
+    sal_uInt16 nReSize
+)
+    : XPropertyTable( rPath, pInPool, nInitSize, nReSize )
 {
     pBmpTable = new Table( nInitSize, nReSize );
 }
@@ -232,11 +236,9 @@ void XHatchList::impDestroy()
 
 XHatchList::XHatchList(
     const String& rPath,
-    XOutdevItemPool* pInPool,
-    sal_uInt16 /* nInitSize */,
-    sal_uInt16 /* nReSize */
-) : XPropertyList( rPath, pInPool ),
-    mpData(0)
+    XOutdevItemPool* pInPool
+)   : XPropertyList( rPath, pInPool )
+    , mpData(0)
 {
     pBmpList = new BitmapList_impl();
 }

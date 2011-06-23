@@ -90,10 +90,13 @@ static char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };       // = 6.0
 |*
 *************************************************************************/
 
-XLineEndTable::XLineEndTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
+XLineEndTable::XLineEndTable(
+    const String& rPath,
+    XOutdevItemPool* pInPool,
+    sal_uInt16 nInitSize,
+    sal_uInt16 nReSize
+)
+    : XPropertyTable( rPath, pInPool, nInitSize, nReSize)
 {
     pBmpTable = new Table( nInitSize, nReSize );
 }
@@ -249,11 +252,10 @@ void XLineEndList::impDestroy()
 
 XLineEndList::XLineEndList(
     const String& rPath,
-    XOutdevItemPool* _pXPool,
-    sal_uInt16 /* nInitSize */,
-    sal_uInt16 /* nReSize */
-) : XPropertyList( rPath, _pXPool ),
-    mpData(0)
+    XOutdevItemPool* _pXPool
+)
+    : XPropertyList( rPath, _pXPool )
+    , mpData(0)
 {
     pBmpList = new BitmapList_impl();
 }

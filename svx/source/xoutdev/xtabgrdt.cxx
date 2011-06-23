@@ -79,10 +79,13 @@ char const aChckXML[]       = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 |*
 *************************************************************************/
 
-XGradientTable::XGradientTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
+XGradientTable::XGradientTable(
+    const String& rPath,
+    XOutdevItemPool* pInPool,
+    sal_uInt16 nInitSize,
+    sal_uInt16 nReSize
+) :
+    XPropertyTable( rPath, pInPool, nInitSize, nReSize )
 {
     pBmpTable = new Table( nInitSize, nReSize );
 }
@@ -224,9 +227,7 @@ void XGradientList::impDestroy()
 
 XGradientList::XGradientList(
     const String& rPath,
-    XOutdevItemPool* pInPool,
-    sal_uInt16 /* nInitSize */,
-    sal_uInt16 /* nReSize */
+    XOutdevItemPool* pInPool
 ) : XPropertyList( rPath, pInPool ),
     mpData(0)
 {

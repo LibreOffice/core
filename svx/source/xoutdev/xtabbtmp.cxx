@@ -68,10 +68,12 @@ static char const aChckXML[]     = { 'P', 'K', 0x03, 0x04 };        // = 6.0
 |*
 *************************************************************************/
 
-XBitmapTable::XBitmapTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
+XBitmapTable::XBitmapTable(
+    const String& rPath,
+    XOutdevItemPool* pInPool,
+    sal_uInt16 nInitSize,
+    sal_uInt16 nReSize
+) : XPropertyTable( rPath, pInPool, nInitSize, nReSize )
 {
     pBmpTable = new Table( nInitSize, nReSize );
 }
@@ -150,9 +152,7 @@ Bitmap* XBitmapTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 
 XBitmapList::XBitmapList(
     const String& rPath,
-    XOutdevItemPool* pInPool,
-    sal_uInt16 /* nInitSize */,
-    sal_uInt16 /* nReSize */
+    XOutdevItemPool* pInPool
 ) : XPropertyList( rPath, pInPool )
 {
     // pBmpList = new List( nInitSize, nReSize );
