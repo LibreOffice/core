@@ -1092,7 +1092,14 @@ JAVA*:=$(JAVAINTERPRETER)
 SCPCOMP=$(PERL) $(SOLARENV)/bin/pre2par.pl
 SCPLINK=$(PERL) $(SOLARENV)/bin/par2script.pl
 LZIP*=lzip
+
+# Note that $(CPPLCC) is oddly enough only used when $(OS)==WNT, see pstrules.mk.
+# For the BUILD platform when cross-compiling (always Unix), it is called cpp.lcc
+.IF "$(CROSS_COMPILING)" == "YES"
+CPPLCC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpp.lcc
+.ELSE
 CPPLCC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpplcc
+.ENDIF
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""
 .INCLUDE : tg_compv.mk
