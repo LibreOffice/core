@@ -244,6 +244,7 @@ public:
 // --------------------
 
 typedef ::std::vector< XPropertyEntry* > XPropertyEntryList_impl;
+typedef ::std::vector< Bitmap* > BitmapList_impl;
 class SVX_DLLPUBLIC XPropertyList
 {
 protected:
@@ -252,7 +253,7 @@ protected:
     XOutdevItemPool*    pXPool;
 
     XPropertyEntryList_impl aList;
-    List*               pBmpList;
+    BitmapList_impl*        pBmpList;
 
     sal_Bool            bListDirty;
     sal_Bool            bBitmapsDirty;

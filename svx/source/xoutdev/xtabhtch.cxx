@@ -233,12 +233,12 @@ void XHatchList::impDestroy()
 XHatchList::XHatchList(
     const String& rPath,
     XOutdevItemPool* pInPool,
-    sal_uInt16 nInitSize,
-    sal_uInt16 nReSize
+    sal_uInt16 /* nInitSize */,
+    sal_uInt16 /* nReSize */
 ) : XPropertyList( rPath, pInPool ),
     mpData(0)
 {
-    pBmpList = new List(nInitSize, nReSize);
+    pBmpList = new BitmapList_impl();
 }
 
 XHatchList::~XHatchList()
@@ -335,7 +335,13 @@ sal_Bool XHatchList::CreateBitmapsForUI()
         DBG_ASSERT( pBmp, "XHatchList: Bitmap(UI) konnte nicht erzeugt werden!" );
 
         if( pBmp )
-            pBmpList->Insert( pBmp, i );
+        {
+            if ( (size_t)i < pBmpList->size() ) {
+                pBmpList->insert( pBmpList->begin() + i, pBmp );
+            } else {
+                pBmpList->push_back( pBmp );
+            }
+        }
     }
 
     impDestroy();

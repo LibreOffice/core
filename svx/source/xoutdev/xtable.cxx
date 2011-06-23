@@ -331,16 +331,12 @@ XPropertyList::~XPropertyList()
     }
     aList.clear();
 
-    Bitmap* pBitmap = NULL;
     if( pBmpList )
     {
-        pBitmap = (Bitmap*) pBmpList->First();
-
-        for( sal_uIntPtr nIndex = 0; nIndex < pBmpList->Count(); nIndex++ )
-        {
-            delete pBitmap;
-            pBitmap = (Bitmap*) pBmpList->Next();
+        for ( size_t i = 0, n = pBmpList->size(); i < n; ++i ) {
+            delete (*pBmpList)[ i ];
         }
+        pBmpList->clear();
         delete pBmpList;
         pBmpList = NULL;
     }
@@ -364,7 +360,12 @@ void XPropertyList::Clear()
     }
     aList.clear();
     if( pBmpList )
-        pBmpList->Clear();
+    {
+        for ( size_t i = 0, n = pBmpList->size(); i < n; ++i ) {
+            delete (*pBmpList)[ i ];
+        }
+        pBmpList->clear();
+    }
 }
 
 /************************************************************************/
@@ -435,10 +436,10 @@ Bitmap* XPropertyList::GetBitmap( long nIndex ) const
             ( (XPropertyList*) this )->bBitmapsDirty = sal_False;
             ( (XPropertyList*) this )->CreateBitmapsForUI();
         }
-        if( pBmpList->Count() >= (sal_uIntPtr) nIndex )
-            return (Bitmap*) pBmpList->GetObject( (sal_uIntPtr) nIndex );
+        if( (size_t)nIndex < pBmpList->size() )
+            return (*pBmpList)[ nIndex ];
     }
-    return( NULL );
+    return NULL;
 }
 
 /*************************************************************************
@@ -460,7 +461,11 @@ void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
         Bitmap* pBmp = CreateBitmapForUI(
             (size_t)nIndex < aList.size() ? nIndex : aList.size() - 1
         );
-        pBmpList->Insert( pBmp, (sal_uIntPtr) nIndex );
+        if ( (size_t)nIndex < pBmpList->size() ) {
+            pBmpList->insert( pBmpList->begin() + nIndex, pBmp );
+        } else {
+            pBmpList->push_back( pBmp );
+        }
     }
 }
 
@@ -480,9 +485,14 @@ XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
     if( pBmpList && !bBitmapsDirty )
     {
         Bitmap* pBmp = CreateBitmapForUI( (sal_uIntPtr) nIndex );
-        Bitmap* pOldBmp = (Bitmap*) pBmpList->Replace( pBmp, (sal_uIntPtr) nIndex );
-        if( pOldBmp )
-            delete pOldBmp;
+        if ( (size_t)nIndex < pBmpList->size() )
+        {
+            delete (*pBmpList)[ nIndex ];
+            (*pBmpList)[ nIndex ] = pBmp;
+        }
+        else {
+            pBmpList->push_back( pBmp );
+        }
     }
     return pOldEntry;
 }
@@ -497,9 +507,11 @@ XPropertyEntry* XPropertyList::Remove( long nIndex )
 {
     if( pBmpList && !bBitmapsDirty )
     {
-        Bitmap* pOldBmp = (Bitmap*) pBmpList->Remove( (sal_uIntPtr) nIndex );
-        if( pOldBmp )
-            delete pOldBmp;
+        if ( (size_t)nIndex < pBmpList->size() )
+        {
+            delete (*pBmpList)[ nIndex ];
+            pBmpList->erase( pBmpList->begin() + nIndex );
+        }
     }
 
     XPropertyEntry* pEntry = NULL;

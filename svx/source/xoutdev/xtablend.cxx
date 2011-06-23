@@ -250,12 +250,12 @@ void XLineEndList::impDestroy()
 XLineEndList::XLineEndList(
     const String& rPath,
     XOutdevItemPool* _pXPool,
-    sal_uInt16 nInitSize,
-    sal_uInt16 nReSize
+    sal_uInt16 /* nInitSize */,
+    sal_uInt16 /* nReSize */
 ) : XPropertyList( rPath, _pXPool ),
     mpData(0)
 {
-    pBmpList = new List(nInitSize, nReSize);
+    pBmpList = new BitmapList_impl();
 }
 
 XLineEndList::~XLineEndList()
@@ -355,7 +355,13 @@ sal_Bool XLineEndList::CreateBitmapsForUI()
         OSL_ENSURE(0 != pBmp, "XLineEndList: Bitmap(UI) could not be created!" );
 
         if( pBmp )
-            pBmpList->Insert( pBmp, i );
+        {
+            if ( (size_t)i < pBmpList->size() ) {
+                pBmpList->insert( pBmpList->begin() + i, pBmp );
+            } else {
+                pBmpList->push_back( pBmp );
+            }
+        }
     }
 
     impDestroy();
