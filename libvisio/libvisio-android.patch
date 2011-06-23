@@ -1,5 +1,5 @@
---- misc/build/libvisio-0.0.0/src/lib/VSDSVGGenerator.cpp
-+++ misc/build/libvisio-0.0.0/src/lib/VSDSVGGenerator.cpp
+--- misc/build/libvisio-0.0.1/src/lib/VSDSVGGenerator.cpp
++++ misc/build/libvisio-0.0.1/src/lib/VSDSVGGenerator.cpp
 @@ -33,7 +33,11 @@
  {
    std::ostringstream tempStream;

@@ -32,7 +32,7 @@ TARGET=visio
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	settings.mk
+.INCLUDE : settings.mk
 
 # --- Files --------------------------------------------------------
 
@@ -54,12 +54,15 @@ INCPRE+=$(LIBWPG_CFLAGS)
 INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpg
 .ENDIF
 
-TARFILE_NAME=libvisio-0.0.0
-TARFILE_MD5=763bb9b14eec5ba9a533d7a9279301db
+TARFILE_NAME=libvisio-0.0.1
+TARFILE_MD5=4bb835ea2225c8f5f6c2b2e63d25993c
 
 PATCH_FILES=\
+    libvisio-0.0.1.patch \
+    libvisio-0.0.1-warnings.patch \
     libvisio-mingw-cross.patch \
     libvisio-android.patch
+
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib
@@ -67,5 +70,5 @@ BUILD_DIR=src$/lib
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
-.INCLUDE :	target.mk
-.INCLUDE :	tg_ext.mk
+.INCLUDE : target.mk
+.INCLUDE : tg_ext.mk
