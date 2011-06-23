@@ -1463,10 +1463,11 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
 
     if( IsFollow() && IsFieldFollow() && rLine.GetStart() == GetOfst() )
     {
-        const SwLineLayout* pLine;
+        SwTxtFrm *pMaster = FindMaster();
+        OSL_ENSURE( pMaster, "SwTxtFrm::Format: homeless follow" );
+        const SwLineLayout* pLine=NULL;
+        if (pMaster)
         {
-            SwTxtFrm *pMaster = FindMaster();
-            OSL_ENSURE( pMaster, "SwTxtFrm::Format: homeless follow" );
             if( !pMaster->HasPara() )
                 pMaster->GetFormatted();
             SwTxtSizeInfo aInf( pMaster );
@@ -1474,8 +1475,8 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             aMasterLine.Bottom();
             pLine = aMasterLine.GetCurr();
         }
-        SwLinePortion* pRest =
-            rLine.MakeRestPortion( pLine, GetOfst() );
+        SwLinePortion* pRest = pLine ?
+            rLine.MakeRestPortion(pLine, GetOfst()) : NULL;
         if( pRest )
             rInf.SetRest( pRest );
         else

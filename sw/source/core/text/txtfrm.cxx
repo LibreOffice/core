@@ -646,9 +646,12 @@ void SwTxtFrm::HideAndShowObjects()
         }
     }
 
-    if ( IsFollow() )
+    if (IsFollow())
     {
-        FindMaster()->HideAndShowObjects();
+        SwTxtFrm *pMaster = FindMaster();
+        OSL_ENSURE(pMaster, "SwTxtFrm without master");
+        if (pMaster)
+            pMaster->HideAndShowObjects();
     }
 }
 

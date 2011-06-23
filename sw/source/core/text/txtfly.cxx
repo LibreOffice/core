@@ -890,7 +890,7 @@ sal_Bool SwTxtFly::IsAnyObj( const SwRect &rRect ) const
 const SwCntntFrm* SwTxtFly::_GetMaster()
 {
     pMaster = pCurrFrm;
-    while( pMaster->IsFollow() )
+    while( pMaster && pMaster->IsFollow() )
         pMaster = (SwCntntFrm*)pMaster->FindMaster();
     return pMaster;
 }
@@ -1551,7 +1551,9 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
 SwTwips SwTxtFly::CalcMinBottom() const
 {
     SwTwips nRet = 0;
-    const SwSortedObjs *pDrawObj = GetMaster()->GetDrawObjs();
+    const SwCntntFrm *pLclMaster = GetMaster();
+    OSL_ENSURE(pLclMaster, "SwTxtFly without master");
+    const SwSortedObjs *pDrawObj = pLclMaster ? pLclMaster->GetDrawObjs() : NULL;
     const sal_uInt32 nCount = pDrawObj ? pDrawObj->Count() : 0;
     if( nCount )
     {
