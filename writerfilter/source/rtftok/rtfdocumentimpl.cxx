@@ -1519,7 +1519,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
     bool bParsed = true;
-    int nSprm = 0;
+    int nSprm = -1;
+    RTFValue::Pointer_t pBoolValue(new RTFValue(!bParam || nParam != 0));
 
     // Map all underline keywords to a single sprm.
     switch (nKeyword)
@@ -1543,7 +1544,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_ULWAVE: nSprm = 11; break;
         default: break;
     }
-    if (nSprm > 0)
+    if (nSprm >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
         m_aStates.top().aCharacterSprms.push_back(make_pair(NS_sprm::LN_CKul, pValue));
@@ -1561,7 +1562,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_ACCUNDERDOT: nSprm = 4; break;
         default: break;
     }
-    if (nSprm > 0)
+    if (nSprm >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
         m_aStates.top().aCharacterSprms.push_back(make_pair(NS_sprm::LN_CKcd, pValue));
@@ -1584,17 +1585,25 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_STRIKED: nSprm = NS_sprm::LN_CFDStrike; break;
         case RTF_SCAPS: nSprm = NS_sprm::LN_CFSmallCaps; break;
         case RTF_IMPR: nSprm = NS_sprm::LN_CFImprint; break;
+        default: break;
+    }
+    if (nSprm >= 0)
+    {
+        m_aStates.top().aCharacterSprms.push_back(make_pair(nSprm, pBoolValue));
+        skipDestination(bParsed);
+        return 0;
+    }
+
+    switch (nKeyword)
+    {
+        case RTF_ASPALPHA:
+            m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_PFAutoSpaceDE, pBoolValue));
+            break;
         default:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
             break;
     }
-    if (nSprm > 0)
-    {
-        RTFValue::Pointer_t pValue(new RTFValue(!bParam || nParam != 0));
-        m_aStates.top().aCharacterSprms.push_back(make_pair(nSprm, pValue));
-    }
-
     skipDestination(bParsed);
     return 0;
 }
