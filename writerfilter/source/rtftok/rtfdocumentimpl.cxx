@@ -166,10 +166,6 @@ void lcl_ParBreak(Stream& rMapper)
 
 void lcl_SectBreak(Stream& rMapper, std::stack<RTFParserState>& aStates, bool bFinal = false)
 {
-    RTFValue::Pointer_t pBreak = RTFSprm::find(aStates.top().aSectionSprms, NS_sprm::LN_SBkc);
-    // In case the last section is a continous one, we don't need to output anything.
-    if (bFinal && pBreak.get() && !pBreak->getInt())
-            return;
     // Section properties are a paragraph sprm.
     RTFValue::Pointer_t pValue(new RTFValue(aStates.top().aSectionAttributes, aStates.top().aSectionSprms));
     RTFSprms_t aAttributes;
@@ -180,6 +176,10 @@ void lcl_SectBreak(Stream& rMapper, std::stack<RTFParserState>& aStates, bool bF
             );
     // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
     rMapper.props(pProperties);
+    RTFValue::Pointer_t pBreak = RTFSprm::find(aStates.top().aSectionSprms, NS_sprm::LN_SBkc);
+    // In case the last section is a continous one, we don't need to output anything.
+    if (bFinal && pBreak.get() && !pBreak->getInt())
+            return;
     rMapper.endParagraphGroup();
     rMapper.endSectionGroup();
     if (!bFinal)
@@ -1488,6 +1488,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
                 RTFSprms_t& rAttributes = lcl_getColsAttributes(m_aStates);
                 rAttributes.push_back(make_pair((nKeyword == RTF_COLW ? NS_ooxml::LN_CT_Column_w : NS_ooxml::LN_CT_Column_space), pValue));
+            }
+            break;
+        case RTF_PAPERH:
+        case RTF_PAPERW:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                lcl_putNestedSprm(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz,
+                        (nKeyword == RTF_PAPERH ? NS_ooxml::LN_CT_PageSz_h : NS_ooxml::LN_CT_PageSz_w), pValue);
             }
             break;
         default:
