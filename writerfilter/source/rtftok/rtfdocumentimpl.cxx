@@ -1451,11 +1451,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_PAPERH:
+                lcl_putNestedSprm(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue);
+            break;
         case RTF_PAPERW:
-            {
-                lcl_putNestedSprm(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz,
-                        (nKeyword == RTF_PAPERH ? NS_ooxml::LN_CT_PageSz_h : NS_ooxml::LN_CT_PageSz_w), pIntValue);
-            }
+                lcl_putNestedSprm(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue);
+            break;
+        case RTF_PGHSXN:
+                lcl_putNestedSprm(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue);
+            break;
+        case RTF_PGWSXN:
+                lcl_putNestedSprm(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue);
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
