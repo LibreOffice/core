@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="svx"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.Draw.GraphicExporter">
     <service name="com.sun.star.drawing.GraphicExportFilter"/>

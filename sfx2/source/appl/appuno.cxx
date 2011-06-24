@@ -2143,14 +2143,14 @@ SFX_IMPL_SINGLEFACTORY( TestMouseClickHandler );
 
 extern "C" {
 
-SFX2_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
+SFX2_DLLPUBLIC void SAL_CALL sfx_component_getImplementationEnvironment(
     const sal_Char**  ppEnvironmentTypeName ,
     uno_Environment** )
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
+SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
     const sal_Char* pImplementationName ,
     void*           pServiceManager     ,
     void*                                 )

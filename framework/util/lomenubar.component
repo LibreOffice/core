@@ -27,7 +27,7 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  *-->
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="lomenubar"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.libreoffice.comp.framework.lomenubar.FrameJob">
     <service name="com.sun.star.task.Job"/>
