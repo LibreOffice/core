@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="unordf"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="CBlankNode">
     <service name="com.sun.star.rdf.BlankNode"/>
