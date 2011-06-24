@@ -100,20 +100,6 @@ APP4STDLIBS=$(SALLIB)
 APP4DEPN=$(SLB)$/sal.lib
 
 #
-# tgetpwnam
-#
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD" || "$(OS)"=="OPENBSD" || \
-    "$(OS)"=="DRAGONFLY"
-OBJFILES+=\
-    $(OBJ)$/tgetpwnam.obj
-
-APP5TARGET=tgetpwnam
-APP5OBJS=$(OBJ)$/tgetpwnam.obj
-APP5STDLIBS=$(SALLIB)
-APP5DEPN=$(SLB)$/sal.lib
-.ENDIF # (netbsd | freebsd)
-
-#
 # measure_oustrings
 #
 OBJFILES+=\
