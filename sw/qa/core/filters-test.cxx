@@ -149,10 +149,12 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
             {
                 fprintf(stderr, "loading %s\n", aRes.getStr());
             }
+            sal_uInt32 nStartTime = osl_getGlobalTimer();
             bool bRes = load(rFilter, sURL, rUserData);
+            sal_uInt32 nEndTime = osl_getGlobalTimer();
             if (nExpected == indeterminate)
             {
-                fprintf(stderr, "pass/fail was %d\n", bRes);
+                fprintf(stderr, "pass/fail was %d (%d ms)\n", bRes, nEndTime-nStartTime);
                 continue;
             }
             CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
