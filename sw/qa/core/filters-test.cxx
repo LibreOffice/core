@@ -154,7 +154,8 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
             sal_uInt32 nEndTime = osl_getGlobalTimer();
             if (nExpected == indeterminate)
             {
-                fprintf(stderr, "pass/fail was %d (%d ms)\n", bRes, nEndTime-nStartTime);
+                fprintf(stderr, "pass/fail was %d ("SAL_PRIuUINT32" ms)\n",
+                    bRes, nEndTime-nStartTime);
                 continue;
             }
             CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
