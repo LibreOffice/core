@@ -742,7 +742,7 @@ void CustomAnimationList::update()
             // An entry has moved down out of view; scroll down one.
             ScrollToAbsPos( nFirstVis + 1 );
         }
-        else
+        else if ( nFirstVis != -1 )
         {
             // The selection is still in view, or it hasn't moved.
             ScrollToAbsPos( nFirstVis );
