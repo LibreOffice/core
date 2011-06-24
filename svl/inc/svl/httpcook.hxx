@@ -33,6 +33,7 @@
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <svl/poolitem.hxx>
+#include <vector>
 
 /*=======================================================================
  *
@@ -132,21 +133,28 @@ enum CntHTTPCookieRequestType
     CNTHTTP_COOKIE_REQUEST_SEND
 };
 
+typedef ::std::vector< CntHTTPCookie* > CntHTTPCookieList_impl;
+
 struct CntHTTPCookieRequest
 {
-    const String&            m_rURL;
-    List&                    m_rCookieList;
-    CntHTTPCookieRequestType m_eType;
-    sal_uInt16                   m_nRet;
+    const String&               m_rURL;
+    CntHTTPCookieList_impl&     m_rCookieList;
+    CntHTTPCookieRequestType    m_eType;
+    sal_uInt16                  m_nRet;
 
     CntHTTPCookieRequest (
         const String& rURL,
-        List& rCookieList,
+        CntHTTPCookieList_impl& rCookieList,
         CntHTTPCookieRequestType eType)
         : m_rURL (rURL),
           m_rCookieList (rCookieList),
           m_eType(eType),
           m_nRet (CNTHTTP_COOKIE_POLICY_BANNED) {}
+    ~CntHTTPCookieRequest() {
+        for ( size_t i = 0, n = m_rCookieList.size(); i < n; ++i ) {
+            delete m_rCookieList[ i ];
+        }
+    }
 };
 
 #endif // SVTOOLS_HTTPCOOK_HXX
