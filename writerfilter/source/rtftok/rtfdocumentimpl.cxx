@@ -142,22 +142,25 @@ void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue
     }
 }
 
-void lcl_Break(Stream& rMapper, bool bMinimal = false)
+void lcl_Break(Stream& rMapper)
 {
     sal_uInt8 sBreak[] = { 0xd };
     rMapper.text(sBreak, 1);
-    if (!bMinimal)
-    {
-        rMapper.endParagraphGroup();
-        rMapper.startParagraphGroup();
-    }
+}
+
+/// Table cell or row break.
+void lcl_TableBreak(Stream& rMapper)
+{
+    lcl_Break(rMapper);
+    rMapper.endParagraphGroup();
+    rMapper.startParagraphGroup();
 }
 
 void lcl_ParBreak(Stream& rMapper)
 {
     // end previous paragraph
     rMapper.startCharacterGroup();
-    lcl_Break(rMapper, true);
+    lcl_Break(rMapper);
     rMapper.endCharacterGroup();
     rMapper.endParagraphGroup();
     // start new one
@@ -768,7 +771,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                         );
                 Mapper().props(pTableRowProperties);
 
-                lcl_Break(Mapper());
+                lcl_TableBreak(Mapper());
                 m_bNeedPap = true;
                 m_aTableBuffer.clear();
                 m_pActiveBuffer = 0;
@@ -1432,7 +1435,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                 new RTFReferenceProperties(m_aStates.top().aTableCellAttributes, m_aStates.top().aTableCellSprms)
                                 );
                         Mapper().props(pTableCellProperties);
-                        lcl_Break(Mapper());
+                        lcl_TableBreak(Mapper());
                         break;
                     }
                     else if (aPair.first == BUFFER_STARTRUN)
