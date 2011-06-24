@@ -181,6 +181,7 @@ namespace writerfilter {
                 RTFSprms_t mergeSprms();
                 RTFSprms_t mergeAttributes();
                 int asHex(char ch);
+                void setSubstream(bool bIsSubtream);
             private:
                 int resolveParse();
                 int resolveKeyword();
@@ -230,6 +231,8 @@ namespace writerfilter {
                 /// Buffered table cells, till cell definitions are not reached.
                 std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aTableBuffer;
                 bool m_bTable;
+                /// If this is a substream.
+                bool m_bIsSubtream;
         };
     } // namespace rtftok
 } // namespace writerfilter

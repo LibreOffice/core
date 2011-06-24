@@ -207,7 +207,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aListTableSprms(),
     m_xStorage(),
     m_aTableBuffer(),
-    m_bTable(false)
+    m_bTable(false),
+    m_bIsSubtream(false)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -232,6 +233,11 @@ SvStream& RTFDocumentImpl::Strm()
 Stream& RTFDocumentImpl::Mapper()
 {
     return *m_pMapperStream;
+}
+
+void RTFDocumentImpl::setSubstream(bool bIsSubtream)
+{
+    m_bIsSubtream = bIsSubtream;
 }
 
 sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
