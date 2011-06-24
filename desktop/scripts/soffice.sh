@@ -80,7 +80,7 @@ VALGRINDCHECK=
 # count number of selected checks; only one is allowed
 checks=
 # force the --valgrind option if the VALGRIND variable is set
-test -n "$VALGRIND" && VALGRINDOPT="--vagrind" || VALGRINDOPT=
+test -n "$VALGRIND" && VALGRINDOPT="--valgrind" || VALGRINDOPT=
 
 for arg in $@ $VALGRINDOPT ; do
     case "$arg" in
