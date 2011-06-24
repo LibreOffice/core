@@ -990,8 +990,8 @@ void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
     //the real document
     if (rReader.pPlcxMan && rReader.pPlcxMan->GetDoingDrawTextBox())
     {
-        sal_uInt16 nCnt = static_cast< sal_uInt16 >(Count());
-        for (sal_uInt16 i=0; i < nCnt; ++i)
+        size_t nCnt = size();
+        for (size_t i=0; i < nCnt; ++i)
         {
             SwFltStackEntry* pEntry = (*this)[i];
             if (nAttrId == pEntry->pAttr->Which())
@@ -1236,7 +1236,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
     SwNodeIndex aNode( rPos.nNode, -1 );
     sal_uInt16 nIdx = rPos.nContent.GetIndex();
 
-    sal_uInt16 nSize = static_cast< sal_uInt16 >(Count());
+    size_t nSize = size();
     while (nSize)
     {
         const SwFltStackEntry* pEntry = (*this)[ --nSize ];
@@ -2868,6 +2868,9 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
 
         simpleAddTextToParagraph(sChunk);
 
+        fprintf(stderr, "adding %s to document\n",
+            rtl::OUStringToOString(sChunk, RTL_TEXTENCODING_UTF8).getStr());
+
         for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
         {
             if (aForced[i])
@@ -3542,7 +3545,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
                 // #i43118# - refine condition: the anchor
                 // control stack has to have entries, otherwise it's not needed
                 // to insert a text node.
-                if ( !bStartLine && pAnchorStck->Count() > 0 )
+                if (!bStartLine && !pAnchorStck->empty())
                 {
                     AppendTxtNode(*pPaM->GetPoint());
                 }

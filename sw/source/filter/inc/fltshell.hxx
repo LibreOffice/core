@@ -134,7 +134,8 @@ public:
     const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, sal_uInt16 nWhich);
     void Delete(const SwPaM &rPam);
 
-    Entries::size_type Count() { return maEntries.size(); }
+    bool empty() const { return maEntries.empty(); }
+    Entries::size_type size() const { return maEntries.size(); }
     SwFltStackEntry* operator[](Entries::size_type nIndex)
          { return maEntries[nIndex]; }
     void DeleteAndDestroy(Entries::size_type nCnt);

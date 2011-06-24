@@ -2183,8 +2183,8 @@ WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk)
 {
     //Close any open character properties and duplicate them inside the
     //first table cell
-    sal_uInt16 nCnt = static_cast< sal_uInt16 >(pCtrlStck->Count());
-    for (sal_uInt16 i=0; i < nCnt; i++)
+    size_t nCnt = pCtrlStck->size();
+    for (size_t i=0; i < nCnt; ++i)
     {
         const SwFltStackEntry* pEntry = (*pCtrlStck)[ i ];
         if(pEntry->bLocked)

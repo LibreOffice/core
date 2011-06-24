@@ -180,7 +180,7 @@ SwFltControlStack::SwFltControlStack(SwDoc* pDo, sal_uLong nFieldFl)
 
 SwFltControlStack::~SwFltControlStack()
 {
-    OSL_ENSURE(!Count(), "noch Attribute auf dem Stack");
+    OSL_ENSURE(maEntries.empty(), "There are still Attributes on the stack");
 }
 
 // MoveAttrs() ist fuer folgendes Problem:
@@ -193,12 +193,13 @@ SwFltControlStack::~SwFltControlStack()
 // nach rechts verschoben werden.
 void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
 {
-    sal_uInt16 nCnt = static_cast< sal_uInt16 >(Count());
+    size_t nCnt = maEntries.size();
     SwFltStackEntry* pEntry;
     sal_uLong nPosNd = rPos.nNode.GetIndex();
     sal_uInt16 nPosCt = rPos.nContent.GetIndex() - 1;
 
-    for (sal_uInt16 i=0; i < nCnt; i++){
+    for (size_t i=0; i < nCnt; ++i)
+    {
         pEntry = (*this)[ i ];
         if(( pEntry->nMkNode.GetIndex() + 1 == nPosNd )
            &&( pEntry->nMkCntnt >= nPosCt )){
@@ -219,8 +220,8 @@ void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
 
 void SwFltControlStack::MarkAllAttrsOld()
 {
-    sal_uInt16 nCnt = static_cast< sal_uInt16 >(Count());
-    for (sal_uInt16 i=0; i < nCnt; i++)
+    size_t nCnt = maEntries.size();
+    for (sal_uInt16 i=0; i < nCnt; ++i)
         (*this)[ i ]->bOld = sal_True;
 }
 
@@ -252,14 +253,12 @@ void SwFltControlStack::DeleteAndDestroy(Entries::size_type nCnt)
 // Wird fuer Grafik-Apos -> Grafiken benutzt.
 void SwFltControlStack::StealAttr(const SwPosition* pPos, sal_uInt16 nAttrId /* = 0 */)
 {
-    sal_uInt16 nCnt = static_cast< sal_uInt16 >(Count());
-
-    SwFltStackEntry* pEntry;
+    size_t nCnt = maEntries.size();
 
     while (nCnt)
     {
         nCnt --;
-        pEntry = (*this)[ nCnt ];
+        SwFltStackEntry* pEntry = (*this)[ nCnt ];
         if (pEntry->nPtNode.GetIndex()+1 == pPos->nNode.GetIndex() &&
             (!nAttrId || nAttrId == pEntry->pAttr->Which()))
             DeleteAndDestroy(nCnt);     // loesche aus dem Stack
@@ -276,12 +275,11 @@ void SwFltControlStack::KillUnlockedAttrs(const SwPosition& pPos)
     SwNodeIndex aAktNode( pPos.nNode, -1 );
     sal_uInt16 nAktIdx = pPos.nContent.GetIndex();
 
-    sal_uInt16 nCnt = static_cast< sal_uInt16 >(Count());
-    SwFltStackEntry* pEntry;
+    size_t nCnt = maEntries.size();
     while( nCnt )
     {
         nCnt --;
-        pEntry = (*this)[ nCnt ];
+        SwFltStackEntry* pEntry = (*this)[ nCnt ];
         if(    !pEntry->bOld
             && !pEntry->bLocked
             && (pEntry->nMkNode  == aAktNode)
@@ -306,13 +304,10 @@ void SwFltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
         (RES_FLTRATTR_BEGIN <= nAttrId && RES_FLTRATTR_END > nAttrId),
         "Falsche Id fuers Attribut");
 
-    sal_uInt16 nCnt = static_cast< sal_uInt16 >(Count());
-
-    SwFltStackEntry* pEntry;
-
-    for (sal_uInt16 i=0; i < nCnt; i++)
+    size_t nCnt = maEntries.size();
+    for (size_t i=0; i < nCnt; ++i)
     {
-        pEntry = (*this)[ i ];
+        SwFltStackEntry* pEntry = (*this)[i];
         if (pEntry->bLocked)
         {
             // setze das Ende vom Attribut
@@ -604,7 +599,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
 SfxPoolItem* SwFltControlStack::GetFmtStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos)
 {
     SwFltStackEntry* pEntry;
-    sal_uInt16 nSize = static_cast< sal_uInt16 >(Count());
+    size_t nSize = maEntries.size();
 
     while (nSize)
     {
@@ -652,7 +647,7 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
     if (aEndNode != aStartNode)
         return;
 
-    for (sal_uInt16 nSize = static_cast< sal_uInt16 >(Count()); nSize > 0;)
+    for (size_t nSize = maEntries.size(); nSize > 0;)
     {
         SwFltStackEntry* pEntry = (*this)[--nSize];
 

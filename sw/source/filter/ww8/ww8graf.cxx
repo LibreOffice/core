@@ -627,7 +627,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
     std::deque<Chunk> aChunks;
 
     //Here store stack location
-    sal_uInt16 nCurrentCount = static_cast< sal_uInt16 >(pCtrlStck->Count());
+    size_t nCurrentCount = pCtrlStck->size();
     while (nStart < nEndCp)
     {
         //nStart is the beginning of the attributes for this range, and
@@ -685,11 +685,11 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
             {
                 if (bStartAttr)
                 {
-                    sal_uInt16 nCount = static_cast< sal_uInt16 >(pCtrlStck->Count());
+                    size_t nCount = pCtrlStck->size();
                     if (maFieldStack.empty() && Read_Field(&aRes))
                     {
                         String sURL;
-                        for (sal_uInt16 nI = static_cast< sal_uInt16 >(pCtrlStck->Count()); nI > nCount; --nI)
+                        for (size_t nI = pCtrlStck->size(); nI > nCount; --nI)
                         {
                             const SfxPoolItem *pItem = ((*pCtrlStck)[nI-1])->pAttr;
                             sal_uInt16 nWhich = pItem->Which();
@@ -723,9 +723,9 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
             //Here read current properties and convert them into pS
             //and put those attrs into the draw box if they can be converted
             //to draw attributes
-            if (pCtrlStck->Count() - nCurrentCount)
+            if (pCtrlStck->size() - nCurrentCount)
             {
-                for (sal_uInt16 i = nCurrentCount; i < pCtrlStck->Count(); i++)
+                for (size_t i = nCurrentCount; i < pCtrlStck->size(); ++i)
                 {
                     const SfxPoolItem *pItem = ((*pCtrlStck)[i])->pAttr;
                     sal_uInt16 nWhich = pItem->Which();
@@ -764,7 +764,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
 
     //pop off as far as recorded location just in case there were some left
     //unclosed
-    for (sal_uInt16 nI = static_cast< sal_uInt16 >(pCtrlStck->Count()); nI > nCurrentCount; --nI)
+    for (size_t nI = pCtrlStck->size(); nI > nCurrentCount; --nI)
         pCtrlStck->DeleteAndDestroy(nI-1);
 
     typedef std::deque<Chunk>::iterator myIter;
@@ -3057,8 +3057,8 @@ void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrmFmt *pFmt)
 
 void SwWW8FltAnchorStack::Flush()
 {
-    sal_uInt16 nCnt = static_cast< sal_uInt16 >(Count());
-    for (sal_uInt16 i=0; i < nCnt; ++i)
+    size_t nCnt = size();
+    for (size_t i=0; i < nCnt; ++i)
     {
         SwFltStackEntry *pEntry = (*this)[i];
         SwPosition aDummy(pEntry->nMkNode);
