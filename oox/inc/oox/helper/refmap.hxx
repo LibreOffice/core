@@ -55,7 +55,7 @@ public:
     typedef typename container_type::key_compare                            key_compare;
 
 public:
-    /** Returns true, if the object accossiated to the passed key exists.
+    /** Returns true, if the object associated to the passed key exists.
         Returns false, if the key exists but points to an empty reference. */
     inline bool         has( key_type nKey ) const
                         {
@@ -63,7 +63,7 @@ public:
                             return pxRef && pxRef->get();
                         }
 
-    /** Returns a reference to the object accossiated to the passed key, or an
+    /** Returns a reference to the object associated to the passed key, or an
         empty reference on error. */
     inline mapped_type  get( key_type nKey ) const
                         {

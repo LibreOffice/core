@@ -3283,32 +3283,36 @@ EscherPersistTable::EscherPersistTable()
 
 EscherPersistTable::~EscherPersistTable()
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-        delete (EscherPersistEntry*)pPtr;
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        delete maPersistTable[ i ];
+    }
 }
 
 sal_Bool EscherPersistTable::PtIsID( sal_uInt32 nID )
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((EscherPersistEntry*)pPtr)->mnID == nID )
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        EscherPersistEntry* pPtr = maPersistTable[ i ];
+        if ( pPtr->mnID == nID ) {
             return sal_True;
+        }
     }
     return sal_False;
 }
 
 void EscherPersistTable::PtInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    maPersistTable.Insert( new EscherPersistEntry( nID, nOfs ) );
+    maPersistTable.push_back( new EscherPersistEntry( nID, nOfs ) );
 }
 
 sal_uInt32 EscherPersistTable::PtDelete( sal_uInt32 nID )
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
+    EscherPersistTable_impl::iterator it = maPersistTable.begin();
+    for( ; it != maPersistTable.end() ; ++it )
     {
-        if ( ((EscherPersistEntry*)pPtr)->mnID == nID )
-        {
-            delete (EscherPersistEntry*) maPersistTable.Remove();
+        if ( (*it)->mnID == nID ) {
+            delete *it;
+            maPersistTable.erase( it );
+            break;
         }
     }
     return 0;
@@ -3316,22 +3320,22 @@ sal_uInt32 EscherPersistTable::PtDelete( sal_uInt32 nID )
 
 sal_uInt32 EscherPersistTable::PtGetOffsetByID( sal_uInt32 nID )
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((EscherPersistEntry*)pPtr)->mnID == nID )
-            return ((EscherPersistEntry*)pPtr)->mnOffset;
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        EscherPersistEntry* pPtr = maPersistTable[ i ];
+        if ( pPtr->mnID == nID ) {
+            return pPtr->mnOffset;
+        }
     }
     return 0;
 };
 
 sal_uInt32 EscherPersistTable::PtReplace( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((EscherPersistEntry*)pPtr)->mnID == nID )
-        {
-            sal_uInt32 nRetValue = ((EscherPersistEntry*)pPtr)->mnOffset;
-            ((EscherPersistEntry*)pPtr)->mnOffset = nOfs;
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        EscherPersistEntry* pPtr = maPersistTable[ i ];
+        if ( pPtr->mnID == nID ) {
+            sal_uInt32 nRetValue = pPtr->mnOffset;
+            pPtr->mnOffset = nOfs;
             return nRetValue;
         }
     }
@@ -3340,12 +3344,11 @@ sal_uInt32 EscherPersistTable::PtReplace( sal_uInt32 nID, sal_uInt32 nOfs )
 
 sal_uInt32 EscherPersistTable::PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((EscherPersistEntry*)pPtr)->mnID == nID )
-        {
-            sal_uInt32 nRetValue = ((EscherPersistEntry*)pPtr)->mnOffset;
-            ((EscherPersistEntry*)pPtr)->mnOffset = nOfs;
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        EscherPersistEntry* pPtr = maPersistTable[ i ];
+        if ( pPtr->mnID == nID ) {
+            sal_uInt32 nRetValue = pPtr->mnOffset;
+            pPtr->mnOffset = nOfs;
             return nRetValue;
         }
     }
@@ -3355,10 +3358,10 @@ sal_uInt32 EscherPersistTable::PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOf
 
 sal_Bool EscherPropertyValueHelper::GetPropertyValue(
     ::com::sun::star::uno::Any& rAny,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-            const String& rString,
-                    sal_Bool bTestPropertyAvailability )
-{
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+    const String& rString,
+    sal_Bool bTestPropertyAvailability
+) {
     sal_Bool bRetValue = sal_True;
     if ( bTestPropertyAvailability )
     {
@@ -4140,33 +4143,35 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
 
 EscherSolverContainer::~EscherSolverContainer()
 {
-    void* pP;
-
-    for( pP = maShapeList.First(); pP; pP = maShapeList.Next() )
-        delete (EscherShapeListEntry*)pP;
-    for( pP = maConnectorList.First(); pP; pP = maConnectorList.Next() )
-        delete (EscherConnectorListEntry*)pP;
+    for( size_t i = 0, n = maShapeList.size(); i < n; ++i ) {
+        delete maShapeList[ i ];
+    }
+    for( size_t i = 0, n = maConnectorList.size(); i < n; ++i ) {
+        delete maConnectorList[ i ];
+    }
 }
 
 void EscherSolverContainer::AddShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape, sal_uInt32 nId )
 {
-    maShapeList.Insert( new EscherShapeListEntry( rXShape, nId ), LIST_APPEND );
+    maShapeList.push_back( new EscherShapeListEntry( rXShape, nId ) );
 }
 
-void EscherSolverContainer::AddConnector( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConnector,
-                                        const ::com::sun::star::awt::Point& rPA,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConA,
-                                        const ::com::sun::star::awt::Point& rPB,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConB )
+void EscherSolverContainer::AddConnector(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConnector,
+    const ::com::sun::star::awt::Point& rPA,
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConA,
+    const ::com::sun::star::awt::Point& rPB,
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConB
+)
 {
-    maConnectorList.Insert( new EscherConnectorListEntry( rConnector, rPA, rConA, rPB, rConB ), LIST_APPEND );
+    maConnectorList.push_back( new EscherConnectorListEntry( rConnector, rPA, rConA, rPB, rConB ) );
 }
 
 sal_uInt32 EscherSolverContainer::GetShapeId( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape ) const
 {
-    for ( EscherShapeListEntry* pPtr = (EscherShapeListEntry*)((List&)maShapeList).First();
-            pPtr; pPtr = (EscherShapeListEntry*)((List&)maShapeList).Next() )
+    for ( size_t i = 0, n = maShapeList.size(); i < n; ++i )
     {
+        EscherShapeListEntry* pPtr = maShapeList[ i ];
         if ( rXShape == pPtr->aXShape )
             return ( pPtr->n_EscherId );
     }
@@ -4175,7 +4180,7 @@ sal_uInt32 EscherSolverContainer::GetShapeId( const ::com::sun::star::uno::Refer
 
 void EscherSolverContainer::WriteSolver( SvStream& rStrm )
 {
-    sal_uInt32 nCount = maConnectorList.Count();
+    sal_uInt32 nCount = maConnectorList.size();
     if ( nCount )
     {
         sal_uInt32  nRecHdPos, nCurrentPos, nSize;
@@ -4187,10 +4192,10 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
 
         EscherConnectorRule aConnectorRule;
         aConnectorRule.nRuleId = 2;
-        for ( EscherConnectorListEntry* pPtr = (EscherConnectorListEntry*)maConnectorList.First();
-                pPtr; pPtr = (EscherConnectorListEntry*)maConnectorList.Next() )
+        for ( size_t i = 0, n = maConnectorList.size(); i < n; ++i )
         {
-            aConnectorRule.ncptiA = aConnectorRule.ncptiB = 0xffffffff;
+            EscherConnectorListEntry* pPtr = maConnectorList[ i ];
+            aConnectorRule.ncptiA  = aConnectorRule.ncptiB = 0xffffffff;
             aConnectorRule.nShapeC = GetShapeId( pPtr->mXConnector );
             aConnectorRule.nShapeA = GetShapeId( pPtr->mXConnectToA );
             aConnectorRule.nShapeB = GetShapeId( pPtr->mXConnectToB );
@@ -4407,11 +4412,12 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
     sal_uInt8*  pBuf;
 
     // Persist table anpassen
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        sal_uInt32 nOfs = ((EscherPersistEntry*)pPtr)->mnOffset;
-        if ( nOfs >= nCurPos )
-            ((EscherPersistEntry*)pPtr)->mnOffset += nBytes;
+    for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
+        EscherPersistEntry* pPtr = maPersistTable[ i ];
+        sal_uInt32 nOfs = pPtr->mnOffset;
+        if ( nOfs >= nCurPos ) {
+            pPtr->mnOffset += nBytes;
+        }
     }
 
     // container und atom sizes anpassen

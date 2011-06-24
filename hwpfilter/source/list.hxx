@@ -36,7 +36,7 @@
  * USE STL CONTAINERS FOR NEW CODE!
  *
  * The classes LinkedList and LinkedListIterator were originally
- * implemented in two files LinkedList.cpp/.h, whose license would not
+ * implemented in two files LinkedList.cxx/.h, whose license would not
  * allow re-distribution through OpenOffice.org. This file
  * re-implements the same functionality, based on the STL.
  */
@@ -92,7 +92,7 @@ public:
 
     void reset( );              /// set iterator to first element
 
-    // bug-compatible with original LinkedList.h/cpp: Ignore parameter!
+    // bug-compatible with original LinkedList.h/cxx: Ignore parameter!
     void operator++( int );   /// advance iterator by one step (ignore n !!!)
     void operator--( int );   /// go one step backwards (ignore n !!!)
 
@@ -261,7 +261,7 @@ void LinkedListIterator<T>::operator++( int )
 {
     ASSERT( mpList != NULL );
 
-    // bug-compatible with LinkedList.cpp: ignore parameter!
+    // bug-compatible with LinkedList.cxx: ignore parameter!
     mnPosition ++;
 }
 
@@ -270,7 +270,7 @@ void LinkedListIterator<T>::operator--( int )
 {
     ASSERT( mpList != NULL );
 
-    // bug-compatible with LinkedList.cpp: ignore parameter!
+    // bug-compatible with LinkedList.cxx: ignore parameter!
     mnPosition --;
 }
 

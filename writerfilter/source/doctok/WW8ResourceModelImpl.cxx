@@ -189,7 +189,7 @@ void WW8PropertiesReference::resolve(Properties & rHandler)
                 ++(*pIt);
             }
         }
-        catch (ExceptionOutOfBounds e)
+        catch (ExceptionOutOfBounds)
         {
         }
     }

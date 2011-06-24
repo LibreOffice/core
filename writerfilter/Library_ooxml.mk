@@ -36,7 +36,6 @@ $(eval $(call gb_Library_set_include,ooxml,\
     -I$(WORKDIR)/writerfilter/inc/ooxml \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
@@ -46,6 +45,11 @@ $(eval $(call gb_Library_set_defs,ooxml,\
 	-DWRITERFILTER_OOXML_DLLIMPLEMENTATION \
 	$(writerfilter_debug_flags) \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
+))
+
+$(eval $(call gb_Library_add_api,ooxml,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,ooxml,\

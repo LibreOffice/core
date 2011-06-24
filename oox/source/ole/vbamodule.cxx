@@ -123,7 +123,9 @@ public:
 
  // ============================================================================
 
-VbaModule::VbaModule( const Reference< XModel >& rxDocModel, const OUString& rName, rtl_TextEncoding eTextEnc, bool bExecutable ) :
+VbaModule::VbaModule( const Reference< XComponentContext >& rxContext, const Reference< XModel >& rxDocModel,
+        const OUString& rName, rtl_TextEncoding eTextEnc, bool bExecutable ) :
+    mxContext( rxContext ),
     mxDocModel( rxDocModel ),
     maName( rName ),
     meTextEnc( eTextEnc ),
@@ -228,7 +230,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNam
             // decompression starts at current stream position of aInStrm
             VbaInputStream aVbaStrm( aInStrm );
             // load the source code line-by-line, with some more processing
-            TextInputStream aVbaTextStrm( aVbaStrm, meTextEnc );
+            TextInputStream aVbaTextStrm( mxContext, aVbaStrm, meTextEnc );
             while( !aVbaTextStrm.isEof() )
             {
                 OUString aCodeLine = aVbaTextStrm.readLine();

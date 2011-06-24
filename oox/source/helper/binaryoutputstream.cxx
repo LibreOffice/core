@@ -28,6 +28,8 @@
 
 #include "oox/helper/binaryoutputstream.hxx"
 
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <osl/diagnose.h>
 #include <string.h>
 
@@ -46,61 +48,24 @@ const sal_Int32 OUTPUTSTREAM_BUFFERSIZE     = 0x8000;
 
 // ============================================================================
 
-void BinaryOutputStream::writeAtom( const void* pMem, sal_uInt8 nSize )
-{
-    writeMemory( pMem, nSize );
-}
-
-// ============================================================================
-
 BinaryXOutputStream::BinaryXOutputStream( const Reference< XOutputStream >& rxOutStrm, bool bAutoClose ) :
+    BinaryStreamBase( Reference< XSeekable >( rxOutStrm, UNO_QUERY ).is() ),
     BinaryXSeekableStream( Reference< XSeekable >( rxOutStrm, UNO_QUERY ) ),
     maBuffer( OUTPUTSTREAM_BUFFERSIZE ),
     mxOutStrm( rxOutStrm ),
-    mbAutoClose( bAutoClose )
+    mbAutoClose( bAutoClose && rxOutStrm.is() )
 {
     mbEof = !mxOutStrm.is();
 }
 
 BinaryXOutputStream::~BinaryXOutputStream()
 {
-    if( mbAutoClose )
-        close();
-}
-
-void BinaryXOutputStream::writeData( const StreamDataSequence& rData )
-{
-    try
-    {
-        OSL_ENSURE( mxOutStrm.is(), "BinaryXOutputStream::writeData - invalid call" );
-        mxOutStrm->writeBytes( rData );
-    }
-    catch( Exception& )
-    {
-        OSL_FAIL( "BinaryXOutputStream::writeData - stream read error" );
-    }
-}
-
-void BinaryXOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes )
-{
-    if( nBytes > 0 )
-    {
-        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, OUTPUTSTREAM_BUFFERSIZE );
-        const sal_uInt8* pnMem = reinterpret_cast< const sal_uInt8* >( pMem );
-        while( nBytes > 0 )
-        {
-            sal_Int32 nWriteSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, nBufferSize );
-            maBuffer.realloc( nWriteSize );
-            memcpy( maBuffer.getArray(), pnMem, static_cast< size_t >( nWriteSize ) );
-            writeData( maBuffer );
-            pnMem += nWriteSize;
-            nBytes -= nWriteSize;
-        }
-    }
+    close();
 }
 
 void BinaryXOutputStream::close()
 {
+    OSL_ENSURE( !mbAutoClose || mxOutStrm.is(), "BinaryXOutputStream::close - invalid call" );
     if( mxOutStrm.is() ) try
     {
         mxOutStrm->flush();
@@ -110,28 +75,62 @@ void BinaryXOutputStream::close()
     {
         OSL_FAIL( "BinaryXOutputStream::close - closing output stream failed" );
     }
+    mxOutStrm.clear();
+    mbAutoClose = false;
+    BinaryXSeekableStream::close();
+}
+
+void BinaryXOutputStream::writeData( const StreamDataSequence& rData, size_t /*nAtomSize*/ )
+{
+    if( mxOutStrm.is() ) try
+    {
+        mxOutStrm->writeBytes( rData );
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL( "BinaryXOutputStream::writeData - stream read error" );
+    }
+}
+
+void BinaryXOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize )
+{
+    if( mxOutStrm.is() && (nBytes > 0) )
+    {
+        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, (OUTPUTSTREAM_BUFFERSIZE / nAtomSize) * nAtomSize );
+        const sal_uInt8* pnMem = reinterpret_cast< const sal_uInt8* >( pMem );
+        while( nBytes > 0 )
+        {
+            sal_Int32 nWriteSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, nBufferSize );
+            maBuffer.realloc( nWriteSize );
+            memcpy( maBuffer.getArray(), pnMem, static_cast< size_t >( nWriteSize ) );
+            writeData( maBuffer, nAtomSize );
+            pnMem += nWriteSize;
+            nBytes -= nWriteSize;
+        }
+    }
 }
 
 // ============================================================================
 
 SequenceOutputStream::SequenceOutputStream( StreamDataSequence& rData ) :
+    BinaryStreamBase( true ),
     SequenceSeekableStream( rData )
 {
 }
 
-void SequenceOutputStream::writeData( const StreamDataSequence& rData )
+void SequenceOutputStream::writeData( const StreamDataSequence& rData, size_t nAtomSize )
 {
-    if( rData.hasElements() )
-        writeMemory( rData.getConstArray(), rData.getLength() );
+    if( mpData && rData.hasElements() )
+        writeMemory( rData.getConstArray(), rData.getLength(), nAtomSize );
 }
 
-void SequenceOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes )
+void SequenceOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size_t /*nAtomSize*/ )
 {
-    if( nBytes > 0 )
+    if( mpData && (nBytes > 0) )
     {
-        if( mrData.getLength() - mnPos < nBytes )
-            const_cast< StreamDataSequence& >( mrData ).realloc( mnPos + nBytes );
-        memcpy( const_cast< StreamDataSequence& >( mrData ).getArray() + mnPos, pMem, static_cast< size_t >( nBytes ) );
+        if( mpData->getLength() - mnPos < nBytes )
+            const_cast< StreamDataSequence* >( mpData )->realloc( mnPos + nBytes );
+        memcpy( const_cast< StreamDataSequence* >( mpData )->getArray() + mnPos, pMem, static_cast< size_t >( nBytes ) );
         mnPos += nBytes;
     }
 }

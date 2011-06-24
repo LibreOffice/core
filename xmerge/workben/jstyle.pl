@@ -396,7 +396,7 @@ if (0) {
     if (/\S\*\//) {
         do err("missing blank before close comment");
     }
-    # allow // at beginnging of line, often used to comment out code
+    # allow // at beginning of line, often used to comment out code
     if (/.\/\/\S/) {        # C++ comments
         do err("missing blank after start comment");
     }

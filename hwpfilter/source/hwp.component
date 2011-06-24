@@ -30,5 +30,6 @@
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.comp.hwpimport.HwpImportFilter">
     <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
 </component>

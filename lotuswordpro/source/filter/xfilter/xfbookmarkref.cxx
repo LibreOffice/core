@@ -82,12 +82,6 @@ void XFBookmarkRef::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("text:reference-format"), A2OUSTR("chapter") );
         pAttrList->AddAttribute( A2OUSTR("text:ref-name"), m_strBookmark );
     }
-    else if( m_eRefType == enumXFBookmarkPage )
-    {
-        pAttrList->AddAttribute( A2OUSTR("text:reference-format"), A2OUSTR("text") );
-        pAttrList->AddAttribute( A2OUSTR("text:ref-name"), m_strBookmark );
-
-    }
     else if( m_eRefType == enumXFBookmarkDir )
     {
         pAttrList->AddAttribute( A2OUSTR("text:reference-format"), A2OUSTR("direction") );
@@ -95,6 +89,7 @@ void XFBookmarkRef::ToXml(IXFStream *pStrm)
     }
     else if( m_eRefType == enumXFBookmarkDef )
     {
+        pAttrList->AddAttribute( A2OUSTR("text:reference-format"), A2OUSTR("text") );
         pAttrList->AddAttribute( A2OUSTR("text:ref-name"), m_strBookmark );
     }
     pStrm->StartElement( A2OUSTR("text:bookmark-ref") );

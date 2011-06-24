@@ -329,36 +329,32 @@ void CGMElements::DeleteTable( Table& rTable )
 
 // ---------------------------------------------------------------
 
-void CGMElements::DeleteAllBundles( List& rList )
+void CGMElements::DeleteAllBundles( BundleList& rList )
 {
-    void* pPtr = rList.First();
-    while( pPtr )
-    {
-        delete (Bundle*)pPtr;
-        pPtr = rList.Next();
+    for ( size_t i = 0, n = rList.size(); i < n; ++i ) {
+        delete rList[ i ];
     }
+    rList.clear();
 };
 
 
 // ---------------------------------------------------------------
 
-void CGMElements::CopyAllBundles( List& rSource, List& rDest )
+void CGMElements::CopyAllBundles( BundleList& rSource, BundleList& rDest )
 {
     DeleteAllBundles( rDest );
-    rDest.Clear();
 
-    void* pPtr = rSource.First();
-    while( pPtr )
+    for ( size_t i = 0, n = rSource.size(); i < n; ++i )
     {
-        Bundle* pTempBundle = ( (Bundle*)pPtr)->Clone();
-        rDest.Insert( pTempBundle, LIST_APPEND );
-        pPtr = rSource.Next();
+        Bundle* pPtr = rSource[ i ];
+        Bundle* pTempBundle = pPtr->Clone();
+        rDest.push_back( pTempBundle );
     }
 };
 
 // ---------------------------------------------------------------
 
-Bundle* CGMElements::GetBundleIndex( sal_uInt32 nIndex, List& rList, Bundle& rBundle )
+Bundle* CGMElements::GetBundleIndex( long nIndex, BundleList& rList, Bundle& rBundle )
 {
     rBundle.SetIndex( nIndex );
     Bundle* pBundle = GetBundle( rList, nIndex );
@@ -369,28 +365,33 @@ Bundle* CGMElements::GetBundleIndex( sal_uInt32 nIndex, List& rList, Bundle& rBu
 
 // ---------------------------------------------------------------
 
-Bundle* CGMElements::GetBundle( List& rList, long nIndex )
+Bundle* CGMElements::GetBundle( BundleList& rList, long nIndex )
 {
-    Bundle* pBundle = (Bundle*)rList.First();
-    while( pBundle && ( pBundle->GetIndex() != nIndex ) )
-    {
-        pBundle = (Bundle*)rList.Next();
+    for ( size_t i = 0, n = rList.size(); i < n; ++i ) {
+        if ( rList[ i ]->GetIndex() == nIndex ) {
+            return rList[ i ];
+        }
     }
-    return pBundle;
+    return NULL;
 }
 
 // ---------------------------------------------------------------
 
-Bundle* CGMElements::InsertBundle( List& rList, Bundle& rBundle )
+Bundle* CGMElements::InsertBundle( BundleList& rList, Bundle& rBundle )
 {
     Bundle* pBundle = GetBundle( rList, rBundle.GetIndex() );
     if ( pBundle )
     {
-        rList.Remove( pBundle );
-        delete pBundle;
+        for ( BundleList::iterator it = rList.begin(); it < rList.end(); ++it ) {
+            if ( *it == pBundle ) {
+                rList.erase( it );
+                delete pBundle;
+                break;
+            }
+        }
     }
     pBundle = rBundle.Clone();
-    rList.Insert( pBundle, LIST_APPEND );
+    rList.push_back( pBundle );
     return pBundle;
 };
 

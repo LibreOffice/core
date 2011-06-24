@@ -73,7 +73,7 @@ protected:
 
 public:
     WordPerfectImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
-        : mxMSF( rxMSF ) {}
+        : mxMSF( rxMSF ), meType((FilterType)0) {}
     virtual ~WordPerfectImportFilter() {}
 
     // XFilter

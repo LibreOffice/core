@@ -128,7 +128,7 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
                 pTableStyle = &const_cast< TableStyle& >( *aIter );
                 break;  // we get the correct style
             }
-            aIter++;
+            ++aIter;
         }
     }
     if ( !pTableStyle )

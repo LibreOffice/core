@@ -36,6 +36,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
@@ -69,7 +70,7 @@ class OleOutputStream : public OleOutputStreamBase
 {
 public:
     explicit            OleOutputStream(
-                            const Reference< XMultiServiceFactory >& rxFactory,
+                            const Reference< XComponentContext >& rxContext,
                             const Reference< XNameContainer >& rxStorage,
                             const OUString& rElementName );
     virtual             ~OleOutputStream();
@@ -96,14 +97,15 @@ private:
 
 // ----------------------------------------------------------------------------
 
-OleOutputStream::OleOutputStream( const Reference< XMultiServiceFactory >& rxFactory,
+OleOutputStream::OleOutputStream( const Reference< XComponentContext >& rxContext,
         const Reference< XNameContainer >& rxStorage, const OUString& rElementName ) :
     mxStorage( rxStorage ),
     maElementName( rElementName )
 {
     try
     {
-        mxTempFile.set( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
+        mxTempFile.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
         mxOutStrm = mxTempFile->getOutputStream();
         mxSeekable.set( mxOutStrm, UNO_QUERY );
     }
@@ -180,49 +182,40 @@ void OleOutputStream::ensureConnected() const throw( NotConnectedException )
 
 // ============================================================================
 
-OleStorage::OleStorage(
-        const Reference< XMultiServiceFactory >& rxFactory,
-        const Reference< XInputStream >& rxInStream,
-        bool bBaseStreamAccess ) :
+OleStorage::OleStorage( const Reference< XComponentContext >& rxContext,
+        const Reference< XInputStream >& rxInStream, bool bBaseStreamAccess ) :
     StorageBase( rxInStream, bBaseStreamAccess ),
-    mxFactory( rxFactory ),
+    mxContext( rxContext ),
     mpParentStorage( 0 )
 {
-    OSL_ENSURE( mxFactory.is(), "OleStorage::OleStorage - missing service factory" );
+    OSL_ENSURE( mxContext.is(), "OleStorage::OleStorage - missing component context" );
     initStorage( rxInStream );
 }
 
-OleStorage::OleStorage(
-        const Reference< XMultiServiceFactory >& rxFactory,
-        const Reference< XStream >& rxOutStream,
-        bool bBaseStreamAccess ) :
+OleStorage::OleStorage( const Reference< XComponentContext >& rxContext,
+        const Reference< XStream >& rxOutStream, bool bBaseStreamAccess ) :
     StorageBase( rxOutStream, bBaseStreamAccess ),
-    mxFactory( rxFactory ),
+    mxContext( rxContext ),
     mpParentStorage( 0 )
 {
-    OSL_ENSURE( mxFactory.is(), "OleStorage::OleStorage - missing service factory" );
+    OSL_ENSURE( mxContext.is(), "OleStorage::OleStorage - missing component context" );
     initStorage( rxOutStream );
 }
 
-OleStorage::OleStorage(
-        const OleStorage& rParentStorage,
-        const Reference< XNameContainer >& rxStorage,
-        const OUString& rElementName,
-        bool bReadOnly ) :
+OleStorage::OleStorage( const OleStorage& rParentStorage,
+        const Reference< XNameContainer >& rxStorage, const OUString& rElementName, bool bReadOnly ) :
     StorageBase( rParentStorage, rElementName, bReadOnly ),
-    mxFactory( rParentStorage.mxFactory ),
+    mxContext( rParentStorage.mxContext ),
     mxStorage( rxStorage ),
     mpParentStorage( &rParentStorage )
 {
     OSL_ENSURE( mxStorage.is(), "OleStorage::OleStorage - missing substorage elements" );
 }
 
-OleStorage::OleStorage(
-        const OleStorage& rParentStorage,
-        const Reference< XStream >& rxOutStream,
-        const OUString& rElementName ) :
+OleStorage::OleStorage( const OleStorage& rParentStorage,
+        const Reference< XStream >& rxOutStream, const OUString& rElementName ) :
     StorageBase( rParentStorage, rElementName, false ),
-    mxFactory( rParentStorage.mxFactory ),
+    mxContext( rParentStorage.mxContext ),
     mpParentStorage( &rParentStorage )
 {
     initStorage( rxOutStream );
@@ -240,7 +233,8 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
     Reference< XInputStream > xInStrm = rxInStream;
     if( !Reference< XSeekable >( xInStrm, UNO_QUERY ).is() ) try
     {
-        Reference< XStream > xTempFile( mxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< XStream > xTempFile( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
         {
             Reference< XOutputStream > xOutStrm( xTempFile->getOutputStream(), UNO_SET_THROW );
             /*  Pass false to both binary stream objects to keep the UNO
@@ -260,10 +254,11 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
     // create base storage object
     if( xInStrm.is() ) try
     {
+        Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
         Sequence< Any > aArgs( 2 );
         aArgs[ 0 ] <<= xInStrm;
         aArgs[ 1 ] <<= true;        // true = do not create a copy of the input stream
-        mxStorage.set( mxFactory->createInstanceWithArguments(
+        mxStorage.set( xFactory->createInstanceWithArguments(
             CREATE_OUSTRING( "com.sun.star.embed.OLESimpleStorage" ), aArgs ), UNO_QUERY_THROW );
     }
     catch( Exception& )
@@ -276,10 +271,11 @@ void OleStorage::initStorage( const Reference< XStream >& rxOutStream )
     // create base storage object
     if( rxOutStream.is() ) try
     {
+        Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
         Sequence< Any > aArgs( 2 );
         aArgs[ 0 ] <<= rxOutStream;
         aArgs[ 1 ] <<= true;        // true = do not create a copy of the stream
-        mxStorage.set( mxFactory->createInstanceWithArguments(
+        mxStorage.set( xFactory->createInstanceWithArguments(
             CREATE_OUSTRING( "com.sun.star.embed.OLESimpleStorage" ), aArgs ), UNO_QUERY_THROW );
     }
     catch( Exception& )
@@ -348,7 +344,8 @@ StorageRef OleStorage::implOpenSubStorage( const OUString& rElementName, bool bC
         if( !isReadOnly() && (bCreateMissing || xSubStorage.get()) ) try
         {
             // create new storage based on a temp file
-            Reference< XStream > xTempFile( mxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+            Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
+            Reference< XStream > xTempFile( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
             StorageRef xTempStorage( new OleStorage( *this, xTempFile, rElementName ) );
             // copy existing substorage into temp storage
             if( xSubStorage.get() )
@@ -380,7 +377,7 @@ Reference< XOutputStream > OleStorage::implOpenOutputStream( const OUString& rEl
 {
     Reference< XOutputStream > xOutStream;
     if( mxStorage.is() && (rElementName.getLength() > 0) )
-        xOutStream.set( new OleOutputStream( mxFactory, mxStorage, rElementName ) );
+        xOutStream.set( new OleOutputStream( mxContext, mxStorage, rElementName ) );
     return xOutStream;
 }
 

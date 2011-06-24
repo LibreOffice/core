@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_include,doctok,\
     -I$(WORKDIR)/writerfilter/inc/doctok \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
@@ -45,6 +44,11 @@ $(eval $(call gb_Library_set_defs,doctok,\
 	-DWRITERFILTER_DOCTOK_DLLIMPLEMENTATION \
 	$(writerfilter_debug_flags) \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
+))
+
+$(eval $(call gb_Library_add_api,doctok,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,doctok,\

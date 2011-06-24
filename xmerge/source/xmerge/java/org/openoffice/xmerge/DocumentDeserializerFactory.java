@@ -29,7 +29,7 @@ package org.openoffice.xmerge;
 
 /**
  *  <p>A <code>DocumentDeserializer</code> object is used to convert
- *  from the &quot;Device&quot; <code>Documetn</code> format to the
+ *  from the &quot;Device&quot; <code>Document</code> format to the
  *  &quot;Office&quot; <code>Document</code> format.</p>
  *
  *  <p>All plug-in implementations of the <code>PluginFactory</code>

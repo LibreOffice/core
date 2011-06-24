@@ -154,7 +154,7 @@ DEF4NAME = $(SHL4TARGET)
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(MISC)/wpft.component $(MISC)/wpgfilter.component $(MISC)/msworksfilter.component
+ALLTAR : $(MISC)/wpft.component $(MISC)/wpgfilter.component $(MISC)/msworksfilter.component $(MISC)/visiofilter.component
 
 $(MISC)/wpft.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         wpft.component

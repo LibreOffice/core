@@ -241,9 +241,9 @@ private:
 class ByteOrderConverter
 {
 public:
+#ifdef OSL_BIGENDIAN
     inline static void  convertLittleEndian( sal_Int8& ) {}     // present for usage in templates
     inline static void  convertLittleEndian( sal_uInt8& ) {}    // present for usage in templates
-#ifdef OSL_BIGENDIAN
     inline static void  convertLittleEndian( sal_Int16& rnValue )  { swap2( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
     inline static void  convertLittleEndian( sal_uInt16& rnValue ) { swap2( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
     inline static void  convertLittleEndian( sal_Int32& rnValue )  { swap4( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
@@ -252,15 +252,20 @@ public:
     inline static void  convertLittleEndian( sal_uInt64& rnValue ) { swap8( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
     inline static void  convertLittleEndian( float& rfValue )      { swap4( reinterpret_cast< sal_uInt8* >( &rfValue ) ); }
     inline static void  convertLittleEndian( double& rfValue )     { swap8( reinterpret_cast< sal_uInt8* >( &rfValue ) ); }
+
+    template< typename Type >
+    inline static void  convertLittleEndianArray( Type* pnArray, size_t nElemCount );
+
+    inline static void  convertLittleEndianArray( sal_Int8*, size_t ) {}
+    inline static void  convertLittleEndianArray( sal_uInt8*, size_t ) {}
+
 #else
-    inline static void  convertLittleEndian( sal_Int16& ) {}
-    inline static void  convertLittleEndian( sal_uInt16& ) {}
-    inline static void  convertLittleEndian( sal_Int32& ) {}
-    inline static void  convertLittleEndian( sal_uInt32& ) {}
-    inline static void  convertLittleEndian( sal_Int64& ) {}
-    inline static void  convertLittleEndian( sal_uInt64& ) {}
-    inline static void  convertLittleEndian( float& ) {}
-    inline static void  convertLittleEndian( double& ) {}
+    template< typename Type >
+    inline static void  convertLittleEndian( Type& ) {}
+
+    template< typename Type >
+    inline static void  convertLittleEndianArray( Type*, size_t ) {}
+
 #endif
 
     /** Reads a value from memory, assuming memory buffer in little-endian.
@@ -302,6 +307,13 @@ inline void ByteOrderConverter::writeLittleEndian( void* pDstBuffer, Type nValue
 }
 
 #ifdef OSL_BIGENDIAN
+template< typename Type >
+inline void ByteOrderConverter::convertLittleEndianArray( Type* pnArray, size_t nElemCount )
+{
+    for( Type* pnArrayEnd = pnArray + nElemCount; pnArray != pnArrayEnd; ++pnArray )
+        convertLittleEndian( *pnArray );
+}
+
 inline void ByteOrderConverter::swap2( sal_uInt8* pnData )
 {
     ::std::swap( pnData[ 0 ], pnData[ 1 ] );

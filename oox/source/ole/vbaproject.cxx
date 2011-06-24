@@ -156,11 +156,11 @@ void VbaMacroAttacherBase::resolveAndAttachMacro( const Reference< XVBAMacroReso
 VbaProject::VbaProject( const Reference< XComponentContext >& rxContext,
         const Reference< XModel >& rxDocModel, const OUString& rConfigCompName ) :
     VbaFilterConfig( rxContext, rConfigCompName ),
-    mxCompContext( rxContext ),
+    mxContext( rxContext ),
     mxDocModel( rxDocModel ),
     maPrjName( CREATE_OUSTRING( "Standard" ) )
 {
-    OSL_ENSURE( mxCompContext.is(), "VbaProject::VbaProject - missing component context" );
+    OSL_ENSURE( mxContext.is(), "VbaProject::VbaProject - missing component context" );
     OSL_ENSURE( mxDocModel.is(), "VbaProject::VbaProject - missing document model" );
 }
 
@@ -331,7 +331,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                 OSL_ENSURE( aName.getLength() > 0, "VbaProject::importVba - invalid module name" );
                 OSL_ENSURE( !aModules.has( aName ), "VbaProject::importVba - multiple modules with the same name" );
                 VbaModuleMap::mapped_type& rxModule = aModules[ aName ];
-                rxModule.reset( new VbaModule( mxDocModel, aName, eTextEnc, bExecutable ) );
+                rxModule.reset( new VbaModule( mxContext, mxDocModel, aName, eTextEnc, bExecutable ) );
                 // read all remaining records until the MODULEEND record
                 rxModule->importDirRecords( aDirStrm );
                 OSL_ENSURE( !aModulesByStrm.has( rxModule->getStreamName() ), "VbaProject::importVba - multiple modules with the same stream name" );
@@ -368,7 +368,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
     // do not exit if this stream does not exist, but proceed to load the modules below
     if( !aPrjStrm.isEof() )
     {
-        TextInputStream aPrjTextStrm( aPrjStrm, eTextEnc );
+        TextInputStream aPrjTextStrm( mxContext, aPrjStrm, eTextEnc );
         OUString aKey, aValue;
         bool bExitLoop = false;
         while( !bExitLoop && !aPrjTextStrm.isEof() )
@@ -412,7 +412,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
     {
         OSL_ENSURE( !aModules.has( aIt->first ) && !aDummyModules.has( aIt->first ), "VbaProject::importVba - multiple modules with the same name" );
         VbaModuleMap::mapped_type& rxModule = aDummyModules[ aIt->first ];
-        rxModule.reset( new VbaModule( mxDocModel, aIt->first, eTextEnc, bExecutable ) );
+        rxModule.reset( new VbaModule( mxContext, mxDocModel, aIt->first, eTextEnc, bExecutable ) );
         rxModule->setType( aIt->second );
     }
 
@@ -491,7 +491,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
 
                 // create and import the form
                 Reference< XNameContainer > xDialogLib( createDialogLibrary(), UNO_SET_THROW );
-                VbaUserForm aForm( mxCompContext, mxDocModel, rGraphicHelper, bDefaultColorBgr );
+                VbaUserForm aForm( mxContext, mxDocModel, rGraphicHelper, bDefaultColorBgr );
                 aForm.importForm( mxDocModel, xDialogLib, *xSubStrg, aModuleName, eTextEnc );
             }
             catch( Exception& )
@@ -508,14 +508,14 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
 
 void VbaProject::attachMacros()
 {
-    if( !maMacroAttachers.empty() && mxCompContext.is() ) try
+    if( !maMacroAttachers.empty() && mxContext.is() ) try
     {
-        Reference< XMultiComponentFactory > xFactory( mxCompContext->getServiceManager(), UNO_SET_THROW );
+        Reference< XMultiComponentFactory > xFactory( mxContext->getServiceManager(), UNO_SET_THROW );
         Sequence< Any > aArgs( 2 );
         aArgs[ 0 ] <<= mxDocModel;
         aArgs[ 1 ] <<= maPrjName;
         Reference< XVBAMacroResolver > xResolver( xFactory->createInstanceWithArgumentsAndContext(
-            CREATE_OUSTRING( "com.sun.star.script.vba.VBAMacroResolver" ), aArgs, mxCompContext ), UNO_QUERY_THROW );
+            CREATE_OUSTRING( "com.sun.star.script.vba.VBAMacroResolver" ), aArgs, mxContext ), UNO_QUERY_THROW );
         maMacroAttachers.forEachMem( &VbaMacroAttacherBase::resolveAndAttachMacro, ::boost::cref( xResolver ) );
     }
     catch( Exception& )
@@ -525,15 +525,14 @@ void VbaProject::attachMacros()
 
 void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
 {
-    if( mxCompContext.is() ) try
+    if( mxContext.is() ) try
     {
-        Reference< XMultiServiceFactory > xFactory( mxCompContext->getServiceManager(), UNO_QUERY_THROW );
         Reference< XStorageBasedDocument > xStorageBasedDoc( mxDocModel, UNO_QUERY_THROW );
         Reference< XStorage > xDocStorage( xStorageBasedDoc->getDocumentStorage(), UNO_QUERY_THROW );
         {
-            using namespace ::com::sun::star::embed::ElementModes;
-            Reference< XStream > xDocStream( xDocStorage->openStreamElement( CREATE_OUSTRING( "_MS_VBA_Macros" ), SEEKABLE | WRITE | TRUNCATE ), UNO_SET_THROW );
-            OleStorage aDestStorage( xFactory, xDocStream, false );
+            const sal_Int32 nOpenMode = ElementModes::SEEKABLE | ElementModes::WRITE | ElementModes::TRUNCATE;
+            Reference< XStream > xDocStream( xDocStorage->openStreamElement( CREATE_OUSTRING( "_MS_VBA_Macros" ), nOpenMode ), UNO_SET_THROW );
+            OleStorage aDestStorage( mxContext, xDocStream, false );
             rVbaPrjStrg.copyStorageToStorage( aDestStorage );
             aDestStorage.commit();
         }

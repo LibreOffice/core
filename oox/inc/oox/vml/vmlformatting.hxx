@@ -33,9 +33,8 @@
 
 namespace oox {
     class GraphicHelper;
-    class ModelObjectHelper;
-    class PropertyMap;
     namespace drawingml { class Color; }
+    namespace drawingml { class ShapePropertyMap; }
 }
 
 namespace oox {
@@ -92,7 +91,7 @@ public:
         @param bDefaultAsPixel  Set to true if omitted measure unit means
             pixel. Set to false if omitted measure unit means EMU.
      */
-    static sal_Int32    decodeMeasureToEmu(
+    static sal_Int64    decodeMeasureToEmu(
                             const GraphicHelper& rGraphicHelper,
                             const ::rtl::OUString& rValue,
                             sal_Int32 nRefValue,
@@ -180,8 +179,7 @@ struct StrokeModel
 
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
-                            PropertyMap& rPropMap,
-                            ModelObjectHelper& rModelObjectHelper,
+                            ::oox::drawingml::ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper ) const;
 };
 
@@ -194,12 +192,12 @@ struct FillModel
     OptValue< ::rtl::OUString > moColor;        /// Solid fill color.
     OptValue< double >  moOpacity;              /// Solid fill color opacity.
     OptValue< ::rtl::OUString > moColor2;       /// End color of gradient.
-    OptValue< double >  moOpacity2;             /// End color opycity of gradient.
+    OptValue< double >  moOpacity2;             /// End color opacity of gradient.
     OptValue< sal_Int32 > moType;               /// Fill type.
     OptValue< sal_Int32 > moAngle;              /// Gradient rotation angle.
     OptValue< double >  moFocus;                /// Linear gradient focus of second color.
-    OptValue< DoublePair > moFocusPos;          /// Rectanguar gradient focus position of second color.
-    OptValue< DoublePair > moFocusSize;         /// Rectanguar gradient focus size of second color.
+    OptValue< DoublePair > moFocusPos;          /// Rectangular gradient focus position of second color.
+    OptValue< DoublePair > moFocusSize;         /// Rectangular gradient focus size of second color.
     OptValue< ::rtl::OUString > moBitmapPath;   /// Path to fill bitmap fragment.
     OptValue< bool >    moRotate;               /// True = rotate gradient/bitmap with shape.
 
@@ -207,8 +205,7 @@ struct FillModel
 
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
-                            PropertyMap& rPropMap,
-                            ModelObjectHelper& rModelObjectHelper,
+                            ::oox::drawingml::ShapePropertyMap& rPropMap,
                             const GraphicHelper& rGraphicHelper ) const;
 };
 

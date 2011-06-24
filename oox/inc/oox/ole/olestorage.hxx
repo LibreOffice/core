@@ -33,7 +33,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
-    namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace oox {
@@ -46,12 +46,12 @@ class OOX_DLLPUBLIC OleStorage : public StorageBase
 {
 public:
     explicit            OleStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
                             bool bBaseStreamAccess );
 
     explicit            OleStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream,
                             bool bBaseStreamAccess );
 
@@ -102,8 +102,8 @@ private:
     virtual void        implCommit() const;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        mxFactory;          /// Factory for storage/stream creation.
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                        mxContext;          /// Component context with service manager.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         mxStorage;          /// Access to elements of this sub storage.
     const OleStorage*   mpParentStorage;    /// Parent OLE storage that contains this storage.

@@ -583,7 +583,7 @@ void DffPropSet::Merge( DffPropSet& rMaster ) const
             sal_uInt32 nCurrentFlags = mpContents[ nRecType ];
             sal_uInt32 nMergeFlags = rMaster.mpContents[ nRecType ];
             nMergeFlags &=  ( nMergeFlags >> 16 ) | 0xffff0000;             // clearing low word
-            nMergeFlags &= ( ( nCurrentFlags & 0xffff0000 )                 // remove allready hard set
+            nMergeFlags &= ( ( nCurrentFlags & 0xffff0000 )                 // remove already hard set
                             | ( nCurrentFlags >> 16 ) ) ^ 0xffffffff;       // attributes from mergeflags
             nCurrentFlags &= ( ( nMergeFlags & 0xffff0000 )                 // apply zero master bits
                             | ( nMergeFlags >> 16 ) ) ^ 0xffffffff;
@@ -894,9 +894,10 @@ SvxMSDffSolverContainer::SvxMSDffSolverContainer()
 
 SvxMSDffSolverContainer::~SvxMSDffSolverContainer()
 {
-    for ( SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)aCList.First();
-            pPtr; pPtr = (SvxMSDffConnectorRule*)aCList.Next() )
-        delete pPtr;
+    for( size_t i = 0, n = aCList.size(); i < n; ++i ) {
+        delete aCList[ i ];
+    }
+    aCList.clear();
 }
 
 SvStream& operator>>( SvStream& rIn, SvxMSDffSolverContainer& rContainer )
@@ -913,7 +914,7 @@ SvStream& operator>>( SvStream& rIn, SvxMSDffSolverContainer& rContainer )
             {
                 SvxMSDffConnectorRule* pRule = new SvxMSDffConnectorRule;
                 rIn >> *pRule;
-                rContainer.aCList.Insert( pRule, LIST_APPEND );
+                rContainer.aCList.push_back( pRule );
             }
             aCRule.SeekToEndOfRecord( rIn );
         }
@@ -923,10 +924,10 @@ SvStream& operator>>( SvStream& rIn, SvxMSDffSolverContainer& rContainer )
 
 void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
 {
-    sal_Int32 i, nCnt;
-    for ( i = 0, nCnt = rSolver.aCList.Count(); i < nCnt; i++ )
+    size_t i, nCnt;
+    for ( i = 0, nCnt = rSolver.aCList.size(); i < nCnt; i++ )
     {
-        SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)rSolver.aCList.GetObject( i );
+        SvxMSDffConnectorRule* pPtr = rSolver.aCList[ i ];
         if ( pPtr->pCObj )
         {
             for ( int nN = 0; nN < 2; nN++ )
@@ -1580,7 +1581,7 @@ void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& r
             }
         }
     }
-    if ( !rShadeColors.size() )
+    if ( rShadeColors.empty() )
     {
         rShadeColors.push_back( ShadeColor( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillBackColor, COL_WHITE ), DFF_Prop_fillBackColor ), 0 ) );
         rShadeColors.push_back( ShadeColor( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillColor, COL_WHITE ), DFF_Prop_fillColor ), 1 ) );
@@ -2615,7 +2616,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         aHandlePropVec.push_back( aProp );
                     }
                 }
-                if ( aHandlePropVec.size() )
+                if ( !aHandlePropVec.empty() )
                 {
                     PropSeq aHandlePropSeq( aHandlePropVec.size() );
                     aIter = aHandlePropVec.begin();
@@ -2931,7 +2932,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aPathPropVec.push_back( aProp );
         }
         // pushing the whole Path element
-        if ( aPathPropVec.size() )
+        if ( !aPathPropVec.empty() )
         {
             const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM ( "Path" ) );
             PropSeq aPathPropSeq( aPathPropVec.size() );
@@ -4036,18 +4037,25 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                             sal_uInt16 nLen = (sal_uInt16)aHd.nRecLen;
                             if(nLen)
                             {
+                                sal_uInt32 nMask;
                                 sal_uInt16 nVal1, nVal2, nVal3;
                                 sal_uInt16 nDefaultTab = 2540; // PPT def: 1 Inch //rOutliner.GetDefTab();
                                 sal_uInt16 nMostrightTab = 0;
                                 SfxItemSet aSet(rOutliner.GetEmptyItemSet());
                                 SvxTabStopItem aTabItem(0, 0, SVX_TAB_ADJUST_DEFAULT, EE_PARA_TABS);
 
-                                rSt >> nVal1;
-                                rSt >> nVal2;
+                                rSt >> nMask;
                                 nLen -= 4;
 
+                                if(nLen && (nMask & 0x0002))
+                                {
+                                    // number of indent levels
+                                    rSt >> nVal3;
+                                    nLen -= 2;
+                                }
+
                                 // Allg. TAB verstellt auf Wert in nVal3
-                                if(nLen && (nVal1 & 0x0001))
+                                if(nLen && (nMask & 0x0001))
                                 {
                                     rSt >> nVal3;
                                     nLen -= 2;
@@ -4055,7 +4063,7 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                                 }
 
                                 // Weitere, frei gesetzte TABs
-                                if(nLen && (nVal1 & 0x0004))
+                                if(nLen && (nMask & 0x0004))
                                 {
                                     rSt >> nVal1;
                                     nLen -= 2;

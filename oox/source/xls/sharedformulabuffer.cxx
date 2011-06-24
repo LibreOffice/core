@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include "oox/xls/sharedformulabuffer.hxx"
-
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/propertyset.hxx"

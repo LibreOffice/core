@@ -169,7 +169,7 @@ class XmlRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
 
 public:
     XmlRtfScannerHandler(uno::Reference<lang::XMultiServiceFactory> &xServiceFactory_, uno::Reference<com::sun::star::ucb::XSimpleFileAccess> &xFileAccess_) :
-    objDataLevel(0), numOfOLEs(0),
+    objDataLevel(0), numOfOLEs(0),hb(0),numOfOLEChars(0),
     xServiceFactory(xServiceFactory_),
     xFileAccess(xFileAccess_)
     {

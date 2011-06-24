@@ -164,7 +164,7 @@ public:
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw ();
 
     /**
-     * @descr   function of interface XExtendedFilterDetection. If this interface is registed, it will be called whenever
+     * @descr   function of interface XExtendedFilterDetection. If this interface is registered, it will be called whenever
      *          a file is to be loaded.
      */
     virtual ::rtl::OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException);

@@ -8,7 +8,8 @@ T4_DRAW = \
     pdf_Portable_Document_Format\
     draw8 \
     draw8_template \
-    draw_WordPerfect_Graphics
+    draw_WordPerfect_Graphics \
+    draw_Visio_Document
 
 # -----------------------------------------------
 # count = 9
@@ -18,7 +19,8 @@ F4_DRAW = \
     draw_pdf_Export \
     draw8 \
     draw8_template \
-    WordPerfectGraphics
+    WordPerfectGraphics \
+    VisioDocument
 
 
 # -----------------------------------------------

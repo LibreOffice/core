@@ -36,6 +36,7 @@ namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
     namespace frame { class XModel; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace oox {
@@ -52,6 +53,7 @@ class VbaModule
 {
 public:
     explicit            VbaModule(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
                             const ::rtl::OUString& rName,
                             rtl_TextEncoding eTextEnc,
@@ -97,6 +99,8 @@ private:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA ) const;
 
 private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                        mxContext;          /// Component context with service manager.
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         mxDocModel;         /// Document model used to import/export the VBA project.
     ::rtl::OUString     maName;

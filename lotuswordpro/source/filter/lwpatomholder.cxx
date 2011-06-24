@@ -70,7 +70,7 @@ LwpAtomHolder::~LwpAtomHolder()
 */
 void LwpAtomHolder::Read(LwpObjectStream *pStrm)
 {
-    //Refered to lwp: file40.cpp, QuickReadAtomHolder()
+    //Referred to lwp: file40.cpp, QuickReadAtomHolder()
 
     sal_uInt16 diskSize = pStrm->QuickReaduInt16();
     sal_uInt16 len = pStrm->QuickReaduInt16();
@@ -101,7 +101,7 @@ void LwpAtomHolder::Skip(LwpObjectStream *pStrm)
 */
 void LwpAtomHolder::ReadPathAtom(LwpObjectStream *pStrm)
 {
-    //Refered to lwp: file40.cpp, QuickReadPathAtom()
+    //Referred to lwp: file40.cpp, QuickReadPathAtom()
     // TODO:  Read the data. Now just skip it. The method to skip is same as above.
     Skip(pStrm);
 }

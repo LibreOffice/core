@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 28 2005            Created
- ************************************************************************/
 
 #include "lwplaypiece.hxx"
 
@@ -409,7 +405,7 @@ LwpLayoutRelativityGuts::LwpLayoutRelativityGuts()
     m_nFlags = 0;
 }
 /**************************************************************************
- * @descr: Read LayoutRelativityGuts' infomation.
+ * @descr: Read LayoutRelativityGuts' information.
  * @param:
  * @param:
  * @return:

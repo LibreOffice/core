@@ -469,7 +469,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
 {
     GfxLink aLink = rGraphic.GetLink ();
     OUString sMediaType;
-    const char* sExtension = NULL;
+    const char* pExtension = "";
     OUString sRelId;
 
     SvMemoryStream aStream;
@@ -479,42 +479,42 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
     switch ( aLink.GetType() ) {
         case GFX_LINK_TYPE_NATIVE_GIF:
             sMediaType = US( "image/gif" );
-            sExtension = ".gif";
+            pExtension = ".gif";
             break;
         case GFX_LINK_TYPE_NATIVE_JPG:
             sMediaType = US( "image/jpeg" );
-            sExtension = ".jpeg";
+            pExtension = ".jpeg";
             break;
         case GFX_LINK_TYPE_NATIVE_PNG:
             sMediaType = US( "image/png" );
-            sExtension = ".png";
+            pExtension = ".png";
             break;
         case GFX_LINK_TYPE_NATIVE_TIF:
             sMediaType = US( "image/tiff" );
-            sExtension = ".tiff";
+            pExtension = ".tiff";
             break;
         case GFX_LINK_TYPE_NATIVE_WMF:
             sMediaType = US( "image/x-wmf" );
-            sExtension = ".wmf";
+            pExtension = ".wmf";
             break;
         case GFX_LINK_TYPE_NATIVE_MET:
             sMediaType = US( "image/x-met" );
-            sExtension = ".met";
+            pExtension = ".met";
             break;
         case GFX_LINK_TYPE_NATIVE_PCT:
             sMediaType = US( "image/x-pict" );
-            sExtension = ".pct";
+            pExtension = ".pct";
             break;
         default: {
             GraphicType aType = rGraphic.GetType();
             if ( aType == GRAPHIC_BITMAP ) {
                 GraphicConverter::Export( aStream, rGraphic, CVT_PNG );
                 sMediaType = US( "image/png" );
-                sExtension = ".png";
+                pExtension = ".png";
             } else if ( aType == GRAPHIC_GDIMETAFILE ) {
                 GraphicConverter::Export( aStream, rGraphic, CVT_EMF );
                 sMediaType = US( "image/x-emf" );
-                sExtension = ".emf";
+                pExtension = ".emf";
             } else {
                 OSL_TRACE( "unhandled graphic type" );
                 break;
@@ -526,7 +526,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
             }
     }
 
-    const char *pComponent = NULL;
+    const char *pComponent = "";
     switch ( meDocumentType )
     {
         case DOCUMENT_DOCX: pComponent = "word"; break;
@@ -538,13 +538,13 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
                                                                       .appendAscii( pComponent )
                                                                       .appendAscii( "/media/image" )
                                                                       .append( (sal_Int32) mnImageCounter )
-                                                                      .appendAscii( sExtension )
+                                                                      .appendAscii( pExtension )
                                                                       .makeStringAndClear(),
                                                                       sMediaType );
     xOutStream->writeBytes( Sequence< sal_Int8 >( (const sal_Int8*) aData, nDataSize ) );
     xOutStream->closeOutput();
 
-    const char *pImagePrefix = NULL;
+    const char *pImagePrefix = "";
     switch ( meDocumentType )
     {
         case DOCUMENT_DOCX:
@@ -561,7 +561,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
                                 OUStringBuffer()
                                 .appendAscii( pImagePrefix )
                                 .append( (sal_Int32) mnImageCounter ++ )
-                                .appendAscii( sExtension )
+                                .appendAscii( pExtension )
                                 .makeStringAndClear() );
 
     return sRelId;

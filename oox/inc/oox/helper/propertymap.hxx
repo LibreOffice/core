@@ -60,7 +60,6 @@ class PropertyMap : public PropertyMapBase
 {
 public:
     explicit            PropertyMap();
-                        ~PropertyMap();
 
     /** Returns the name of the passed property identifier. */
     static const ::rtl::OUString& getPropertyName( sal_Int32 nPropId );
@@ -74,9 +73,18 @@ public:
 
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
+    inline bool         setAnyProperty( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue )
+                            { if( nPropId < 0 ) return false; (*this)[ nPropId ] = rValue; return true; }
+
+    /** Sets the specified property to the passed value. Does nothing, if the
+        identifier is invalid. */
     template< typename Type >
-    inline void         setProperty( sal_Int32 nPropId, const Type& rValue )
-                            { if( nPropId >= 0 ) (*this)[ nPropId ] <<= rValue; }
+    inline bool         setProperty( sal_Int32 nPropId, const Type& rValue )
+                            { if( nPropId < 0 ) return false; (*this)[ nPropId ] <<= rValue; return true; }
+
+    /** Inserts all properties contained in the passed property map. */
+    inline void         assignUsed( const PropertyMap& rPropMap )
+                            { insert( rPropMap.begin(), rPropMap.end() ); }
 
     /** Returns a sequence of property values, filled with all contained properties. */
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
@@ -87,7 +95,7 @@ public:
                             ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames,
                             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) const;
 
-    /** Creates and fills a new instance supporting the XPropertySet interface. */
+    /** Creates a property set supporting the XPropertySet interface and inserts all properties. */
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         makePropertySet() const;
 

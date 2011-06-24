@@ -41,7 +41,6 @@ INCLUDE_FRAGMENTS = \
      $(PRJ)$/source$/config$/fragments$/fcfg_writer.mk \
      $(PRJ)$/source$/config$/fragments$/fcfg_web.mk \
      $(PRJ)$/source$/config$/fragments$/fcfg_global.mk \
-     $(PRJ)$/source$/config$/fragments$/fcfg_w4w.mk \
      $(PRJ)$/source$/config$/fragments$/fcfg_calc.mk \
      $(PRJ)$/source$/config$/fragments$/fcfg_draw.mk \
      $(PRJ)$/source$/config$/fragments$/fcfg_impress.mk \

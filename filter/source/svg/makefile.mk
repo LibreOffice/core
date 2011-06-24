@@ -2,9 +2,13 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
+#
+# $RCSfile: makefile.mk,v $
+#
+# $Revision: 1.10.110.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,6 +46,8 @@ VISIBILITY_HIDDEN=TRUE
 SLOFILES= \
             $(SLO)$/b2dellipse.obj	\
             $(SLO)$/parserfragments.obj \
+            $(SLO)$/svgdialog.obj		\
+            $(SLO)$/impsvgdialog.obj	\
             $(SLO)$/svgexport.obj		\
             $(SLO)$/svgfilter.obj		\
             $(SLO)$/svgfontexport.obj	\
@@ -65,11 +71,11 @@ CFLAGS+=-DUSE_MODERN_SPIRIT
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS=\
-    $(EDITENGLIB)			\
     $(SVXCORELIB)			\
     $(BASEGFXLIB)		\
     $(XMLOFFLIB)		\
     $(SVTOOLLIB)	    \
+    $(EDITENGLIB)			\
     $(VCLLIB)			\
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\

@@ -57,7 +57,8 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mpSVGWriter( NULL ),
     mpDefaultSdrPage( NULL ),
     mpSdrModel( NULL ),
-    mbPresentation( sal_False )
+    mbPresentation( sal_False ),
+    mpObjects( NULL )
 {
 }
 
@@ -79,17 +80,17 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 {
     SolarMutexGuard aGuard;
     Window*     pFocusWindow = Application::GetFocusWindow();
-    sal_Int16   nCurrentPageNumber = -1;
     sal_Bool    bRet;
 
     if( pFocusWindow )
         pFocusWindow->EnterWait();
 
     if( mxDstDoc.is() )
-        bRet = implImport( rDescriptor );
+        bRet = sal_False;//implImport( rDescriptor );
     else
     if( mxSrcDoc.is() )
     {
+        sal_Int16   nCurrentPageNumber = -1;
         uno::Reference< frame::XDesktop > xDesktop( mxMSF->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
                                                     uno::UNO_QUERY);
         if( xDesktop.is() )
@@ -118,18 +119,18 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             }
         }
 
-        Sequence< PropertyValue > aNewDescritor( rDescriptor );
+        Sequence< PropertyValue > aNewDescriptor( rDescriptor );
 
         if( nCurrentPageNumber > 0 )
         {
             const sal_uInt32    nOldLength = rDescriptor.getLength();
 
-            aNewDescritor.realloc( nOldLength + 1 );
-            aNewDescritor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
-            aNewDescritor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
+            aNewDescriptor.realloc( nOldLength + 1 );
+            aNewDescriptor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
+            aNewDescriptor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
         }
 
-        bRet = implExport( aNewDescritor );
+        bRet = implExport( aNewDescriptor );
     }
     else
         bRet = sal_False;

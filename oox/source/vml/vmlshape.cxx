@@ -42,8 +42,10 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <rtl/math.hxx>
+#include <rtl/ustrbuf.hxx>
+#include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/graphichelper.hxx"
-#include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/ole/axcontrol.hxx"
 #include "oox/ole/axcontrolfragment.hxx"
@@ -353,9 +355,10 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
             xShape = implConvertAndInsert( rxShapes, aShapeRect );
             if( xShape.is() )
             {
-                // set shape name (imported or generated)
+                // set imported or generated shape name (not supported by form controls)
                 PropertySet aShapeProp( xShape );
-                aShapeProp.setProperty( PROP_Name, getShapeName() );
+                if( aShapeProp.hasProperty( PROP_Name ) )
+                    aShapeProp.setProperty( PROP_Name, getShapeName() );
 
                 /*  Notify the drawing that a new shape has been inserted. For
                     convenience, pass the rectangle that contains position and
@@ -401,15 +404,11 @@ Rectangle ShapeBase::calcShapeRectangle( const ShapeParentAnchor* pParentAnchor 
 
 void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) const
 {
-    ModelObjectHelper& rModelObjectHelper = mrDrawing.getFilter().getModelObjectHelper();
+    ::oox::drawingml::ShapePropertyMap aPropMap( mrDrawing.getFilter().getModelObjectHelper() );
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
-
-    PropertyMap aPropMap;
-    maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );
-    maTypeModel.maFillModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );
-
-    PropertySet aPropSet( rxShape );
-    aPropSet.setProperties( aPropMap );
+    maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rGraphicHelper );
+    maTypeModel.maFillModel.pushToPropMap( aPropMap, rGraphicHelper );
+    PropertySet( rxShape ).setProperties( aPropMap );
 }
 
 // ============================================================================

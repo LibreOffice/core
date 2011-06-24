@@ -68,7 +68,7 @@
 
 /**
  * @brief
- * Config infomation for OOo document, ie, line count config, endnote and footnote config.
+ * Config information for OOo document, ie, line count config, endnote and footnote config.
  * This object should only exist one instance.
  * Don't make this obejct an singleton because it's managed by XFStyleManager.
  */

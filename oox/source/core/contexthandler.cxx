@@ -43,7 +43,7 @@ using ::rtl::OUString;
 // ============================================================================
 
 ContextHandler::ContextHandler( ContextHandler& rParent ) :
-    ContextHandlerImplBase(),
+    ContextHandler_BASE(),
     mxBaseData( rParent.mxBaseData )
 {
 }

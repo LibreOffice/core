@@ -101,7 +101,7 @@ extern rtl::OUString pFilterStrings[];
 #define  CFGSET_FRAMELOADERS        _FILTER_CONFIG_FROM_ASCII_("FrameLoaders"   )
 #define  CFGSET_CONTENTHANDLERS     _FILTER_CONFIG_FROM_ASCII_("ContentHandlers")
 
-/** @short  used to adress some configuration keys directly.
+/** @short  used to address some configuration keys directly.
 
     @descr  Such direct keys should be used with function
             FilterCache::impl_getDirectCFGValue() only!
@@ -188,7 +188,7 @@ extern rtl::OUString pFilterStrings[];
 #define  SERVICE_URLTRANSFORMER             _FILTER_CONFIG_FROM_ASCII_("com.sun.star.util.URLTransformer"                     )
 #define  SERVICE_FILTERCONFIGREFRESH        _FILTER_CONFIG_FROM_ASCII_("com.sun.star.document.FilterConfigRefresh"            )
 
-/** @short  some configuration pathes.
+/** @short  some configuration paths.
  */
 #define  CFGPACKAGE_TD_TYPES           _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Types" )
 #define  CFGPACKAGE_TD_FILTERS         _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Filter")

@@ -30,8 +30,11 @@
 
 #include "main.hxx"
 #include <tools/table.hxx>
+#include <vector>
 
 #define nBackGroundColor    aColorTable[ 0 ]
+
+typedef ::std::vector< Bundle* > BundleList;
 
 class CGMElements
 {
@@ -40,20 +43,20 @@ class CGMElements
         CGM*                mpCGM;
         long                nMetaFileVersion;
 
-        sal_uInt32              nIntegerPrecision;  // maybe 1, 2, 4 Bytes
-        sal_uInt32              nIndexPrecision;    //   "      "       "
+        sal_uInt32          nIntegerPrecision;  // maybe 1, 2, 4 Bytes
+        sal_uInt32          nIndexPrecision;    //   "      "       "
         RealPrecision       eRealPrecision;
-        sal_uInt32              nRealSize;          // maybe 4 or 8 bytes
-        sal_uInt32              nColorPrecision;    //   "      "       "
-        sal_uInt32              nColorIndexPrecision;//  "      "       "
+        sal_uInt32          nRealSize;          // maybe 4 or 8 bytes
+        sal_uInt32          nColorPrecision;    //   "      "       "
+        sal_uInt32          nColorIndexPrecision;//  "      "       "
 
         ScalingMode         eScalingMode;
         double              nScalingFactor;
 
         VDCType             eVDCType;           // Integer / Real
-        sal_uInt32              nVDCIntegerPrecision;
+        sal_uInt32          nVDCIntegerPrecision;
         RealPrecision       eVDCRealPrecision;
-        sal_uInt32              nVDCRealSize;
+        sal_uInt32          nVDCRealSize;
         FloatRect           aVDCExtent;
         FloatRect           aVDCExtentMaximum;
 
@@ -71,42 +74,42 @@ class CGMElements
 
         ColorSelectionMode  eColorSelectionMode;
         ColorModel          eColorModel;
-        sal_uInt32              nColorMaximumIndex;             // default 63
-        sal_uInt32              nLatestColorMaximumIndex;       // default 63
-        sal_Int8                aColorTableEntryIs[ 256 ];
-        sal_uInt32              aColorTable[ 256 ];
-        sal_uInt32              aLatestColorTable[ 256 ];
-        sal_uInt32              nColorValueExtent[ 8 ]; // RGB, CMYK
+        sal_uInt32          nColorMaximumIndex;             // default 63
+        sal_uInt32          nLatestColorMaximumIndex;       // default 63
+        sal_Int8            aColorTableEntryIs[ 256 ];
+        sal_uInt32          aColorTable[ 256 ];
+        sal_uInt32          aLatestColorTable[ 256 ];
+        sal_uInt32          nColorValueExtent[ 8 ]; // RGB, CMYK
 
         // ASPECT SOURCE FLAGS
-        sal_uInt32              nAspectSourceFlags; // bit = 0 -> INDIVIDUAL
+        sal_uInt32          nAspectSourceFlags; // bit = 0 -> INDIVIDUAL
                                                 //       1 -> BUNDLED
 
         LineBundle*         pLineBundle;        // Pointer to the current LineBundleIndex
         LineBundle          aLineBundle;
-        List                aLineList;
+        BundleList          aLineList;
         SpecMode            eLineWidthSpecMode;
         LineCapType         eLineCapType;
         LineJoinType        eLineJoinType;
 
         MarkerBundle*       pMarkerBundle;      // Pointer to the current MarkerBundleIndex
         MarkerBundle        aMarkerBundle;
-        List                aMarkerList;
+        BundleList          aMarkerList;
         SpecMode            eMarkerSizeSpecMode;
 
         EdgeBundle*         pEdgeBundle;        // Pointer to the current EdgeBundleIndex
         EdgeBundle          aEdgeBundle;
-        List                aEdgeList;
+        BundleList          aEdgeList;
         EdgeVisibility      eEdgeVisibility;
         SpecMode            eEdgeWidthSpecMode;
 
         TextBundle*         pTextBundle;        // Pointer to the current TextBundleIndex
         TextBundle          aTextBundle;
-        List                aTextList;
+        BundleList          aTextList;
         double              nCharacterHeight;
         double              nCharacterOrientation[ 4 ];
         UnderlineMode       eUnderlineMode;
-        sal_uInt32              nUnderlineColor;
+        sal_uInt32          nUnderlineColor;
         TextPath            eTextPath;
         TextAlignmentH      eTextAlignmentH;
         TextAlignmentV      eTextAlignmentV;
@@ -119,27 +122,27 @@ class CGMElements
 
         FillBundle*         pFillBundle;        // Pointer to the current EdgeBundleIndex
         FillBundle          aFillBundle;
-        List                aFillList;
+        BundleList          aFillList;
         FloatPoint          aFillRefPoint;
         Table               aHatchTable;
 
         Transparency        eTransparency;
 
-        sal_uInt32              nAuxiliaryColor;
+        sal_uInt32          nAuxiliaryColor;
 
         // Delimiter Counts -> which will be increased by each 'begin' operation
         //                     and decreased by each 'end' operation
-        sal_Bool                bSegmentCount;
+        sal_Bool            bSegmentCount;
                             CGMElements( CGM& rCGM );
                             ~CGMElements();
         CGMElements&        operator=( CGMElements& );
         void                Init();
         void                DeleteTable( Table& );
-        Bundle*             GetBundleIndex( sal_uInt32 nIndex, List&, Bundle& );
-        Bundle*             GetBundle( List& rList, long nIndex );
-        Bundle*             InsertBundle( List&, Bundle& );
-        void                DeleteAllBundles( List& );
-        void                CopyAllBundles( List& Source, List& Dest );
+        Bundle*             GetBundleIndex( long nIndex, BundleList&, Bundle& );
+        Bundle*             GetBundle( BundleList& rList, long nIndex );
+        Bundle*             InsertBundle( BundleList&, Bundle& );
+        void                DeleteAllBundles( BundleList& );
+        void                CopyAllBundles( BundleList& Source, BundleList& Dest );
 };
 
 #endif

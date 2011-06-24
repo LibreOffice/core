@@ -85,7 +85,7 @@ enumXFContent XFParagraph::GetContentType()
 }
 
 /**
- * The paragraph obejct serial function,the ouput will be like:
+ * The paragraph object serial function,the output will be like:
  *      <text:p>
  *          <text:span text:style-name="T1">text content</text:span>
  *              text.

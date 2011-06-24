@@ -39,6 +39,7 @@
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/ole/olestorage.hxx"
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 namespace oox {
 namespace core {
@@ -57,8 +58,8 @@ using ::rtl::OUString;
 
 // ============================================================================
 
-FilterDetectDocHandler::FilterDetectDocHandler( OUString& rFilterName ) :
-    mrFilterName( rFilterName )
+FilterDetectDocHandler::FilterDetectDocHandler( const  Reference< XComponentContext >& rxContext, OUString& rFilterName ) :
+    mrFilterName( rFilterName ), mxContext( rxContext )
 {
     maContextStack.reserve( 2 );
 }
@@ -163,7 +164,24 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_Type, OUString() );
     if( aType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) ) )
-        maTargetPath = OUString( sal_Unicode( '/' ) ) + rAttribs.getString( XML_Target, OUString() );
+    {
+        Reference< com::sun::star::uri::XUriReferenceFactory > xFac =  com::sun::star::uri::UriReferenceFactory::create( mxContext );
+        try
+        {
+             // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
+             // keep the XUriReference implementation happy )
+             Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("file:///" ) ) );
+
+             Reference< com::sun::star::uri::XUriReference > xPart = xFac->parse(  rAttribs.getString( XML_Target, OUString() ) );
+             Reference< com::sun::star::uri::XUriReference > xAbs = xFac->makeAbsolute(  xBase, xPart, sal_True, com::sun::star::uri::RelativeUriExcessParentSegments_RETAIN );
+
+             if ( xAbs.is() )
+                 maTargetPath = xAbs->getPath();
+        }
+        catch( Exception& e)
+        {
+        }
+    }
 }
 
 OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType ) const
@@ -274,9 +292,9 @@ const sal_uInt32 ENCRYPT_HASH_SHA1          = 0x00008004;
 
 // ----------------------------------------------------------------------------
 
-bool lclIsZipPackage( const Reference< XMultiServiceFactory >& rxFactory, const Reference< XInputStream >& rxInStrm )
+bool lclIsZipPackage( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm )
 {
-    ZipStorage aZipStorage( rxFactory, rxInStrm );
+    ZipStorage aZipStorage( rxContext, rxInStrm );
     return aZipStorage.isStorage();
 }
 
@@ -504,109 +522,106 @@ PasswordVerifier::PasswordVerifier( const PackageEncryptionInfo& rEncryptInfo ) 
 
 Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescriptor& rMediaDesc ) const
 {
-    Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY );
-    if( xFactory.is() )
+    // try the plain input stream
+    Reference< XInputStream > xInStrm( rMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ], UNO_QUERY );
+    if( !xInStrm.is() || lclIsZipPackage( mxContext, xInStrm ) )
+        return xInStrm;
+
+    // check if a temporary file is passed in the 'ComponentData' property
+    Reference< XStream > xDecrypted( rMediaDesc.getComponentDataEntry( CREATE_OUSTRING( "DecryptedPackage" ) ), UNO_QUERY );
+    if( xDecrypted.is() )
     {
-        // try the plain input stream
-        Reference< XInputStream > xInStrm( rMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ], UNO_QUERY );
-        if( !xInStrm.is() || lclIsZipPackage( xFactory, xInStrm ) )
-            return xInStrm;
+        Reference< XInputStream > xDecrInStrm = xDecrypted->getInputStream();
+        if( lclIsZipPackage( mxContext, xDecrInStrm ) )
+            return xDecrInStrm;
+    }
 
-        // check if a temporary file is passed in the 'ComponentData' property
-        Reference< XStream > xDecrypted( rMediaDesc.getComponentDataEntry( CREATE_OUSTRING( "DecryptedPackage" ) ), UNO_QUERY );
-        if( xDecrypted.is() )
+    // try to decrypt an encrypted OLE package
+    ::oox::ole::OleStorage aOleStorage( mxContext, xInStrm, false );
+    if( aOleStorage.isStorage() ) try
+    {
+        // open the required input streams in the encrypted package
+        Reference< XInputStream > xEncryptionInfo( aOleStorage.openInputStream( CREATE_OUSTRING( "EncryptionInfo" ) ), UNO_SET_THROW );
+        Reference< XInputStream > xEncryptedPackage( aOleStorage.openInputStream( CREATE_OUSTRING( "EncryptedPackage" ) ), UNO_SET_THROW );
+
+        // read the encryption info stream
+        PackageEncryptionInfo aEncryptInfo;
+        BinaryXInputStream aInfoStrm( xEncryptionInfo, true );
+        bool bValidInfo = lclReadEncryptionInfo( aEncryptInfo, aInfoStrm );
+
+        // check flags and algorithm IDs, required are AES128 and SHA-1
+        bool bImplemented = bValidInfo &&
+            getFlag( aEncryptInfo.mnFlags, ENCRYPTINFO_CRYPTOAPI ) &&
+            getFlag( aEncryptInfo.mnFlags, ENCRYPTINFO_AES ) &&
+            // algorithm ID 0 defaults to AES128 too, if ENCRYPTINFO_AES flag is set
+            ((aEncryptInfo.mnAlgorithmId == 0) || (aEncryptInfo.mnAlgorithmId == ENCRYPT_ALGO_AES128)) &&
+            // hash algorithm ID 0 defaults to SHA-1 too
+            ((aEncryptInfo.mnAlgorithmIdHash == 0) || (aEncryptInfo.mnAlgorithmIdHash == ENCRYPT_HASH_SHA1)) &&
+            (aEncryptInfo.mnVerifierHashSize == 20);
+
+        if( bImplemented )
         {
-            Reference< XInputStream > xDecrInStrm = xDecrypted->getInputStream();
-            if( lclIsZipPackage( xFactory, xDecrInStrm ) )
-                return xDecrInStrm;
-        }
+            /*  "VelvetSweatshop" is the built-in default encryption
+                password used by MS Excel for the "workbook protection"
+                feature with password. Try this first before prompting the
+                user for a password. */
+            ::std::vector< OUString > aDefaultPasswords;
+            aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
 
-        // try to decrypt an encrypted OLE package
-        ::oox::ole::OleStorage aOleStorage( xFactory, xInStrm, false );
-        if( aOleStorage.isStorage() ) try
-        {
-            // open the required input streams in the encrypted package
-            Reference< XInputStream > xEncryptionInfo( aOleStorage.openInputStream( CREATE_OUSTRING( "EncryptionInfo" ) ), UNO_SET_THROW );
-            Reference< XInputStream > xEncryptedPackage( aOleStorage.openInputStream( CREATE_OUSTRING( "EncryptedPackage" ) ), UNO_SET_THROW );
+            /*  Use the comphelper password helper to request a password.
+                This helper returns either with the correct password
+                (according to the verifier), or with an empty string if
+                user has cancelled the password input dialog. */
+            PasswordVerifier aVerifier( aEncryptInfo );
+            Sequence< NamedValue > aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+                aVerifier, rMediaDesc, ::comphelper::DocPasswordRequestType_MS, &aDefaultPasswords );
 
-            // read the encryption info stream
-            PackageEncryptionInfo aEncryptInfo;
-            BinaryXInputStream aInfoStrm( xEncryptionInfo, true );
-            bool bValidInfo = lclReadEncryptionInfo( aEncryptInfo, aInfoStrm );
-
-            // check flags and agorithm IDs, requiered are AES128 and SHA-1
-            bool bImplemented = bValidInfo &&
-                getFlag( aEncryptInfo.mnFlags, ENCRYPTINFO_CRYPTOAPI ) &&
-                getFlag( aEncryptInfo.mnFlags, ENCRYPTINFO_AES ) &&
-                // algorithm ID 0 defaults to AES128 too, if ENCRYPTINFO_AES flag is set
-                ((aEncryptInfo.mnAlgorithmId == 0) || (aEncryptInfo.mnAlgorithmId == ENCRYPT_ALGO_AES128)) &&
-                // hash algorithm ID 0 defaults to SHA-1 too
-                ((aEncryptInfo.mnAlgorithmIdHash == 0) || (aEncryptInfo.mnAlgorithmIdHash == ENCRYPT_HASH_SHA1)) &&
-                (aEncryptInfo.mnVerifierHashSize == 20);
-
-            if( bImplemented )
+            if( aEncryptionData.getLength() == 0 )
             {
-                /*  "VelvetSweatshop" is the built-in default encryption
-                    password used by MS Excel for the "workbook protection"
-                    feature with password. Try this first before prompting the
-                    user for a password. */
-                ::std::vector< OUString > aDefaultPasswords;
-                aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
+                rMediaDesc[ MediaDescriptor::PROP_ABORTED() ] <<= true;
+            }
+            else
+            {
+                // create temporary file for unencrypted package
+                Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
+                Reference< XStream > xTempFile( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+                Reference< XOutputStream > xDecryptedPackage( xTempFile->getOutputStream(), UNO_SET_THROW );
+                BinaryXOutputStream aDecryptedPackage( xDecryptedPackage, true );
+                BinaryXInputStream aEncryptedPackage( xEncryptedPackage, true );
 
-                /*  Use the comphelper password helper to request a password.
-                    This helper returns either with the correct password
-                    (according to the verifier), or with an empty string if
-                    user has cancelled the password input dialog. */
-                PasswordVerifier aVerifier( aEncryptInfo );
-                Sequence< NamedValue > aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
-                    aVerifier, rMediaDesc, ::comphelper::DocPasswordRequestType_MS, &aDefaultPasswords );
+                EVP_CIPHER_CTX aes_ctx;
+                EVP_CIPHER_CTX_init( &aes_ctx );
+                EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, aVerifier.getKey(), 0 );
+                EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
 
-                if( aEncryptionData.getLength() == 0 )
+                sal_uInt8 pnInBuffer[ 1024 ];
+                sal_uInt8 pnOutBuffer[ 1024 ];
+                sal_Int32 nInLen;
+                int nOutLen;
+                aEncryptedPackage.skip( 8 ); // decrypted size
+                while( (nInLen = aEncryptedPackage.readMemory( pnInBuffer, sizeof( pnInBuffer ) )) > 0 )
                 {
-                    rMediaDesc[ MediaDescriptor::PROP_ABORTED() ] <<= true;
-                }
-                else
-                {
-                    // create temporary file for unencrypted package
-                    Reference< XStream > xTempFile( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
-                    Reference< XOutputStream > xDecryptedPackage( xTempFile->getOutputStream(), UNO_SET_THROW );
-                    BinaryXOutputStream aDecryptedPackage( xDecryptedPackage, true );
-                    BinaryXInputStream aEncryptedPackage( xEncryptedPackage, true );
-
-                    EVP_CIPHER_CTX aes_ctx;
-                    EVP_CIPHER_CTX_init( &aes_ctx );
-                    EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, aVerifier.getKey(), 0 );
-                    EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
-
-                    sal_uInt8 pnInBuffer[ 1024 ];
-                    sal_uInt8 pnOutBuffer[ 1024 ];
-                    sal_Int32 nInLen;
-                    int nOutLen;
-                    aEncryptedPackage.skip( 8 ); // decrypted size
-                    while( (nInLen = aEncryptedPackage.readMemory( pnInBuffer, sizeof( pnInBuffer ) )) > 0 )
-                    {
-                        EVP_DecryptUpdate( &aes_ctx, pnOutBuffer, &nOutLen, pnInBuffer, nInLen );
-                        aDecryptedPackage.writeMemory( pnOutBuffer, nOutLen );
-                    }
-                    EVP_DecryptFinal_ex( &aes_ctx, pnOutBuffer, &nOutLen );
+                    EVP_DecryptUpdate( &aes_ctx, pnOutBuffer, &nOutLen, pnInBuffer, nInLen );
                     aDecryptedPackage.writeMemory( pnOutBuffer, nOutLen );
-
-                    EVP_CIPHER_CTX_cleanup( &aes_ctx );
-                    xDecryptedPackage->flush();
-                    aDecryptedPackage.seekToStart();
-
-                    // store temp file in media descriptor to keep it alive
-                    rMediaDesc.setComponentDataEntry( CREATE_OUSTRING( "DecryptedPackage" ), Any( xTempFile ) );
-
-                    Reference< XInputStream > xDecrInStrm = xTempFile->getInputStream();
-                    if( lclIsZipPackage( xFactory, xDecrInStrm ) )
-                        return xDecrInStrm;
                 }
+                EVP_DecryptFinal_ex( &aes_ctx, pnOutBuffer, &nOutLen );
+                aDecryptedPackage.writeMemory( pnOutBuffer, nOutLen );
+
+                EVP_CIPHER_CTX_cleanup( &aes_ctx );
+                xDecryptedPackage->flush();
+                aDecryptedPackage.seekToStart();
+
+                // store temp file in media descriptor to keep it alive
+                rMediaDesc.setComponentDataEntry( CREATE_OUSTRING( "DecryptedPackage" ), Any( xTempFile ) );
+
+                Reference< XInputStream > xDecrInStrm = xTempFile->getInputStream();
+                if( lclIsZipPackage( mxContext, xDecrInStrm ) )
+                    return xDecrInStrm;
             }
         }
-        catch( Exception& )
-        {
-        }
+    }
+    catch( Exception& )
+    {
     }
 
     return Reference< XInputStream >();
@@ -638,7 +653,6 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
 {
     OUString aFilterName;
     MediaDescriptor aMediaDesc( rMediaDescSeq );
-    Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
 
     /*  Check that the user has not choosen to abort detection, e.g. by hitting
         'Cancel' in the password input dialog. This may happen because this
@@ -655,7 +669,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
         Reference< XInputStream > xInStrm( extractUnencryptedPackage( aMediaDesc ), UNO_SET_THROW );
 
         // stream must be a ZIP package
-        ZipStorage aZipStorage( xFactory, xInStrm );
+        ZipStorage aZipStorage( mxContext, xInStrm );
         if( aZipStorage.isStorage() )
         {
             // create the fast parser, register the XML namespaces, set document handler
@@ -663,7 +677,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.registerNamespace( NMSP_packageRel );
             aParser.registerNamespace( NMSP_officeRel );
             aParser.registerNamespace( NMSP_packageContentTypes );
-            aParser.setDocumentHandler( new FilterDetectDocHandler( aFilterName ) );
+            aParser.setDocumentHandler( new FilterDetectDocHandler( mxContext, aFilterName ) );
 
             /*  Parse '_rels/.rels' to get the target path and '[Content_Types].xml'
                 to determine the content type of the part at the target path. */
@@ -671,7 +685,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.parseStream( aZipStorage, CREATE_OUSTRING( "[Content_Types].xml" ) );
         }
     }
-    catch( Exception& )
+    catch( Exception& e )
     {
     }
 

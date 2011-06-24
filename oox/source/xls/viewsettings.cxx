@@ -735,7 +735,7 @@ void ViewSettings::finalizeImport()
     sal_Int16 nShowMode = getWorkbookSettings().getApiShowObjectMode();
 
     // view settings for all sheets
-    Reference< XNameContainer > xSheetsNC = ContainerHelper::createNameContainer( getGlobalFactory() );
+    Reference< XNameContainer > xSheetsNC = ContainerHelper::createNameContainer( getBaseFilter().getComponentContext() );
     if( !xSheetsNC.is() ) return;
     for( SheetPropertiesMap::const_iterator aIt = maSheetProps.begin(), aEnd = maSheetProps.end(); aIt != aEnd; ++aIt )
         ContainerHelper::insertByName( xSheetsNC, rWorksheets.getCalcSheetName( aIt->first ), aIt->second );
@@ -747,7 +747,7 @@ void ViewSettings::finalizeImport()
     if( !rxActiveSheetView )
         rxActiveSheetView.reset( new SheetViewModel );
 
-    Reference< XIndexContainer > xContainer = ContainerHelper::createIndexContainer( getGlobalFactory() );
+    Reference< XIndexContainer > xContainer = ContainerHelper::createIndexContainer( getBaseFilter().getComponentContext() );
     if( xContainer.is() ) try
     {
         PropertyMap aPropMap;

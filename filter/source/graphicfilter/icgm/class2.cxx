@@ -38,7 +38,7 @@ void CGM::ImplDoClass2()
     sal_uInt32  nUInteger;
     switch ( mnElementID )
     {
-        case 0x01 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Scaling Mode" )
+        case 0x01 : /*Scaling Mode*/
         {
             if ( mnElementSize )    // HACK (NASA.CGM)
             {
@@ -53,7 +53,7 @@ void CGM::ImplDoClass2()
             }
         }
         break;
-        case 0x02 : ComOut( CGM_LEVEL1, "Color Selection Mode" )
+        case 0x02 : /*Color Selection Mode*/
         {
             nUInteger = ImplGetUI16();
             switch( nUInteger )
@@ -64,7 +64,7 @@ void CGM::ImplDoClass2()
             }
         }
         break;
-        case 0x03 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Line Width Specification Mode" )
+        case 0x03 : /*Line Width Specification Mode*/
         {
             nUInteger = ImplGetUI16();
             switch( nUInteger )
@@ -75,7 +75,7 @@ void CGM::ImplDoClass2()
             }
         }
         break;
-        case 0x04 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Marker Size Specification Mode" )
+        case 0x04 : /*Marker Size Specification Mode*/
         {
             nUInteger = ImplGetUI16();
             switch( nUInteger )
@@ -86,7 +86,7 @@ void CGM::ImplDoClass2()
             }
         }
         break;
-        case 0x05 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Edge Width Specification Mode" )
+        case 0x05 : /*Edge Width Specification Mode*/
         {
             nUInteger = ImplGetUI16();
             switch( nUInteger )
@@ -97,23 +97,23 @@ void CGM::ImplDoClass2()
             }
         }
         break;
-        case 0x06 : ComOut( CGM_LEVEL1, "VDC Extent" )
+        case 0x06 : /*VDC Extent*/
         {
             ImplGetRectangleNS( pElement->aVDCExtent );
             ImplSetMapMode();
         }
         break;
-        case 0x07 : ComOut( CGM_LEVEL1, "Background Color" )
+        case 0x07 : /*Background Color*/
             pElement->nBackGroundColor = ImplGetBitmapColor( sal_True );
         break;
-        case 0x08 : ComOut( CGM_LEVEL2, "Device Viewport" )
+        case 0x08 : /*Device Viewport*/
         {
             if ( pElement->eVDCType == VDC_INTEGER )
                 ImplGetRectangle( pElement->aDeviceViewPort );
                 ImplSetMapMode();
         }
         break;
-        case 0x09 : ComOut( CGM_LEVEL2, "Device Viewport Specification Mode" )
+        case 0x09 : /*Device Viewport Specification Mode*/
         {
             nUInteger = ImplGetUI16( 8 );
             switch( nUInteger )
@@ -127,7 +127,7 @@ void CGM::ImplDoClass2()
             ImplSetMapMode();
         }
         break;
-        case 0x0a : ComOut( CGM_LEVEL2, "Device Viewport Mapping" )
+        case 0x0a : /*Device Viewport Mapping*/
         {
             switch( ImplGetUI16() )
             {
@@ -152,7 +152,7 @@ void CGM::ImplDoClass2()
             ImplSetMapMode();
         }
         break;
-        case 0x0b : ComOut( CGM_LEVEL2, "Line Representation" )
+        case 0x0b : /*Line Representation*/
         {
             LineBundle  aTempLineBundle;
             aTempLineBundle.SetIndex( ImplGetI( pElement->nIndexPrecision ) );
@@ -162,7 +162,7 @@ void CGM::ImplDoClass2()
             pElement->InsertBundle( pElement->aLineList, aTempLineBundle );
         }
         break;
-        case 0x0c : ComOut( CGM_LEVEL2, "Marker Representation" )
+        case 0x0c : /*Marker Representation*/
         {
             MarkerBundle aTempMarkerBundle;
             aTempMarkerBundle.SetIndex( ImplGetI( pElement->nIndexPrecision ) );
@@ -172,7 +172,7 @@ void CGM::ImplDoClass2()
             pElement->InsertBundle( pElement->aMarkerList, aTempMarkerBundle );
         }
         break;
-        case 0x0d : ComOut( CGM_LEVEL2, "Text Representation" )
+        case 0x0d : /*Text Representation*/
         {
             TextBundle aTempTextBundle;
             aTempTextBundle.SetIndex( ImplGetI( pElement->nIndexPrecision ) );
@@ -184,7 +184,7 @@ void CGM::ImplDoClass2()
             pElement->InsertBundle( pElement->aTextList, aTempTextBundle );
         }
         break;
-        case 0x0e : ComOut( CGM_LEVEL2, "Fill Representation" )
+        case 0x0e : /*Fill Representation*/
         {
             FillBundle aTempFillBundle;
             aTempFillBundle.SetIndex( ImplGetI( pElement->nIndexPrecision ) );
@@ -195,7 +195,7 @@ void CGM::ImplDoClass2()
             pElement->InsertBundle( pElement->aFillList, aTempFillBundle );
         }
         break;
-        case 0x0f : ComOut( CGM_LEVEL2, "Edge Representation" )
+        case 0x0f : /*Edge Representation*/
         {
             EdgeBundle aTempEdgeBundle;
             aTempEdgeBundle.SetIndex( ImplGetI( pElement->nIndexPrecision ) );
@@ -205,23 +205,23 @@ void CGM::ImplDoClass2()
             pElement->InsertBundle( pElement->aEdgeList, aTempEdgeBundle );
         }
         break;
-        case 0x10 : ComOut( CGM_LEVEL3, "Interior Style Specification Mode" ) break;    // NS
-        case 0x11 : ComOut( CGM_LEVEL3, "Line and Edge Type Definition" ) break;
-        case 0x12 : ComOut( CGM_LEVEL3, "Hatch Style Definition" ) break;               // NS
-        case 0x13 : ComOut( CGM_LEVEL3, "Geometric Pattern Definition" ) break;         // NS
-        case 0xff : ComOut( CGM_GDSF_ONLY, "inquire VDC EXTENT" ) break;
-        case 0xfe : ComOut( CGM_GDSF_ONLY, "inquire Background Color" ) break;
-        case 0xfd : ComOut( CGM_GDSF_ONLY, "inquire Device Viewport" ) break;
-        case 0xfc : ComOut( CGM_GDSF_ONLY, "set Font Selection Mode" ) break;
-        case 0xfb : ComOut( CGM_GDSF_ONLY, "inquire Color Selection Mode" ) break;
-        case 0xfa : ComOut( CGM_GDSF_ONLY, "inquire Font Selection Mode" ) break;
-        case 0xf9 : ComOut( CGM_GDSF_ONLY, "set Char Height Spec Mode" )
+        case 0x10 : /*Interior Style Specification Mode */break;    // NS
+        case 0x11 : /*Line and Edge Type Definition */break;
+        case 0x12 : /*Hatch Style Definition */break;               // NS
+        case 0x13 : /*Geometric Pattern Definition */break;         // NS
+        case 0xff : /*inquire VDC EXTENT */break;
+        case 0xfe : /*inquire Background Color */break;
+        case 0xfd : /*inquire Device Viewport */break;
+        case 0xfc : /*set Font Selection Mode */break;
+        case 0xfb : /*inquire Color Selection Mode */break;
+        case 0xfa : /*inquire Font Selection Mode */break;
+        case 0xf9 : /*set Char Height Spec Mode*/
         {
             ImplGetUI16(); // -Wall is this really needed?
         }
         break;
-        case 0xf8 : ComOut( CGM_GDSF_ONLY, "set Background Style" ) break;
-        default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;
+        case 0xf8 : /*set Background Style */break;
+        default: break;
     }
 };
 

@@ -38,12 +38,14 @@
 #include "oox/xls/commentsfragment.hxx"
 #include "oox/xls/condformatcontext.hxx"
 #include "oox/xls/drawingfragment.hxx"
+#include "oox/xls/drawingmanager.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/pivottablefragment.hxx"
 #include "oox/xls/querytablefragment.hxx"
 #include "oox/xls/scenariobuffer.hxx"
 #include "oox/xls/scenariocontext.hxx"
+#include "oox/xls/sheetdatabuffer.hxx"
 #include "oox/xls/sheetdatacontext.hxx"
 #include "oox/xls/tablefragment.hxx"
 #include "oox/xls/viewsettings.hxx"
@@ -124,32 +126,18 @@ ContextHandlerRef DataValidationsContext::onCreateContext( sal_Int32 nElement, c
     return 0;
 }
 
-namespace {
-
-ApiTokenSequence lclImportDataValFormula( FormulaParser& rParser, const OUString& rFormula, const CellAddress& rBaseAddress )
-{
-    TokensFormulaContext aContext( true, false );
-    aContext.setBaseAddress( rBaseAddress );
-    rParser.importFormula( aContext, rFormula );
-    return aContext.getTokens();
-}
-
-} // namespace
-
 void DataValidationsContext::onCharacters( const OUString& rChars )
 {
     if( mxValModel.get() ) switch( getCurrentElement() )
     {
         case XLS_TOKEN( formula1 ):
-            mxValModel->maTokens1 = lclImportDataValFormula(
-                getFormulaParser(), rChars, mxValModel->maRanges.getBaseAddress() );
+            mxValModel->maTokens1 = getFormulaParser().importFormula( mxValModel->maRanges.getBaseAddress(), rChars );
             // process string list of a list validation (convert to list of string tokens)
             if( mxValModel->mnType == XML_list )
                 getFormulaParser().convertStringToStringList( mxValModel->maTokens1, ',', true );
         break;
         case XLS_TOKEN( formula2 ):
-            mxValModel->maTokens2 = lclImportDataValFormula(
-                getFormulaParser(), rChars, mxValModel->maRanges.getBaseAddress() );
+            mxValModel->maTokens2 = getFormulaParser().importFormula( mxValModel->maRanges.getBaseAddress(), rChars );
         break;
     }
 }
@@ -213,12 +201,9 @@ void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
 
     // condition formula(s)
     FormulaParser& rParser = getFormulaParser();
-    TokensFormulaContext aContext( true, false );
-    aContext.setBaseAddress( aModel.maRanges.getBaseAddress() );
-    rParser.importFormula( aContext, rStrm );
-    aModel.maTokens1 = aContext.getTokens();
-    rParser.importFormula( aContext, rStrm );
-    aModel.maTokens2 = aContext.getTokens();
+    CellAddress aBaseAddr = aModel.maRanges.getBaseAddress();
+    aModel.maTokens1 = rParser.importFormula( aBaseAddr, FORMULATYPE_VALIDATION, rStrm );
+    aModel.maTokens2 = rParser.importFormula( aBaseAddr, FORMULATYPE_VALIDATION, rStrm );
     // process string list of a list validation (convert to list of string tokens)
     if( (aModel.mnType == XML_list) && getFlag( nFlags, BIFF_DATAVAL_STRINGLIST ) )
         rParser.convertStringToStringList( aModel.maTokens1, ',', true );
@@ -229,9 +214,8 @@ void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
 
 // ============================================================================
 
-WorksheetFragment::WorksheetFragment( const WorkbookHelper& rHelper,
-        const OUString& rFragmentPath, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
-    WorksheetFragmentBase( rHelper, rFragmentPath, rxProgressBar, eSheetType, nSheet )
+WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
+    WorksheetFragmentBase( rHelper, rFragmentPath )
 {
     // import data tables related to this worksheet
     RelationsRef xTableRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATION_TYPE( "table" ) );
@@ -542,14 +526,14 @@ void WorksheetFragment::importSheetFormatPr( const AttributeList& rAttribs )
 void WorksheetFragment::importCol( const AttributeList& rAttribs )
 {
     ColumnModel aModel;
-    aModel.mnFirstCol     = rAttribs.getInteger( XML_min, -1 );
-    aModel.mnLastCol      = rAttribs.getInteger( XML_max, -1 );
-    aModel.mfWidth        = rAttribs.getDouble( XML_width, 0.0 );
-    aModel.mnXfId         = rAttribs.getInteger( XML_style, -1 );
-    aModel.mnLevel        = rAttribs.getInteger( XML_outlineLevel, 0 );
-    aModel.mbShowPhonetic = rAttribs.getBool( XML_phonetic, false );
-    aModel.mbHidden       = rAttribs.getBool( XML_hidden, false );
-    aModel.mbCollapsed    = rAttribs.getBool( XML_collapsed, false );
+    aModel.maRange.mnFirst = rAttribs.getInteger( XML_min, -1 );
+    aModel.maRange.mnLast  = rAttribs.getInteger( XML_max, -1 );
+    aModel.mfWidth         = rAttribs.getDouble( XML_width, 0.0 );
+    aModel.mnXfId          = rAttribs.getInteger( XML_style, -1 );
+    aModel.mnLevel         = rAttribs.getInteger( XML_outlineLevel, 0 );
+    aModel.mbShowPhonetic  = rAttribs.getBool( XML_phonetic, false );
+    aModel.mbHidden        = rAttribs.getBool( XML_hidden, false );
+    aModel.mbCollapsed     = rAttribs.getBool( XML_collapsed, false );
     // set column properties in the current sheet
     setColumnModel( aModel );
 }
@@ -558,7 +542,7 @@ void WorksheetFragment::importMergeCell( const AttributeList& rAttribs )
 {
     CellRangeAddress aRange;
     if( getAddressConverter().convertToCellRange( aRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex(), true, true ) )
-        setMergedRange( aRange );
+        getSheetData().setMergedRange( aRange );
 }
 
 void WorksheetFragment::importHyperlink( const AttributeList& rAttribs )
@@ -660,11 +644,11 @@ void WorksheetFragment::importCol( SequenceInputStream& rStrm )
 
     sal_Int32 nWidth;
     sal_uInt16 nFlags;
-    rStrm >> aModel.mnFirstCol >> aModel.mnLastCol >> nWidth >> aModel.mnXfId >> nFlags;
+    rStrm >> aModel.maRange.mnFirst >> aModel.maRange.mnLast >> nWidth >> aModel.mnXfId >> nFlags;
 
     // column indexes are 0-based in BIFF12, but ColumnModel expects 1-based
-    ++aModel.mnFirstCol;
-    ++aModel.mnLastCol;
+    ++aModel.maRange.mnFirst;
+    ++aModel.maRange.mnLast;
     // width is stored as 1/256th of a character in BIFF12, convert to entire character
     aModel.mfWidth        = static_cast< double >( nWidth ) / 256.0;
     // equal flags in all BIFFs
@@ -682,7 +666,7 @@ void WorksheetFragment::importMergeCell( SequenceInputStream& rStrm )
     rStrm >> aBinRange;
     CellRangeAddress aRange;
     if( getAddressConverter().convertToCellRange( aRange, aBinRange, getSheetIndex(), true, true ) )
-        setMergedRange( aRange );
+        getSheetData().setMergedRange( aRange );
 }
 
 void WorksheetFragment::importHyperlink( SequenceInputStream& rStrm )
@@ -753,9 +737,8 @@ void WorksheetFragment::importEmbeddedOleData( StreamDataSequence& orEmbeddedDat
 
 // ============================================================================
 
-BiffWorksheetFragment::BiffWorksheetFragment( const BiffWorkbookFragmentBase& rParent,
-        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
-    BiffWorksheetFragmentBase( rParent, rxProgressBar, eSheetType, nSheet )
+BiffWorksheetFragment::BiffWorksheetFragment( const WorksheetHelper& rHelper, const BiffWorkbookFragmentBase& rParent ) :
+    BiffWorksheetFragmentBase( rHelper, rParent )
 {
 }
 
@@ -776,6 +759,7 @@ bool BiffWorksheetFragment::importFragment()
     SheetViewSettings& rSheetViewSett = getSheetViewSettings();
     CondFormatBuffer& rCondFormats    = getCondFormats();
     PageSettings& rPageSett           = getPageSettings();
+    BiffSheetDrawing& rDrawing        = getBiffDrawing();
 
     // process all record in this sheet fragment
     BiffInputStream& rStrm = getInputStream();
@@ -807,6 +791,7 @@ bool BiffWorksheetFragment::importFragment()
                 case BIFF_ID_HORPAGEBREAKS:     importPageBreaks( rStrm, true );            break;
                 case BIFF_ID_ITERATION:         rWorkbookSett.importIteration( rStrm );     break;
                 case BIFF_ID_LEFTMARGIN:        rPageSett.importLeftMargin( rStrm );        break;
+                case BIFF_ID_NOTE:              importNote( rStrm );                        break;
                 case BIFF_ID_PANE:              rSheetViewSett.importPane( rStrm );         break;
                 case BIFF_ID_PASSWORD:          rWorksheetSett.importPassword( rStrm );     break;
                 case BIFF_ID_PRINTGRIDLINES:    rPageSett.importPrintGridLines( rStrm );    break;
@@ -836,13 +821,13 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_DEFCOLWIDTH:   importDefColWidth( rStrm );                     break;
                         case BIFF3_ID_DEFROWHEIGHT: importDefRowHeight( rStrm );                    break;
                         case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
+                        case BIFF_ID_OBJ:           rDrawing.importObj( rStrm );                    break;
                         case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( rStrm );    break;
                         case BIFF_ID_SAVERECALC:    rWorkbookSett.importSaveRecalc( rStrm );        break;
                         case BIFF_ID_SHEETPR:       rWorksheetSett.importSheetPr( rStrm );          break;
                         case BIFF_ID_UNCALCED:      rWorkbookSett.importUncalced( rStrm );          break;
                         case BIFF_ID_VCENTER:       rPageSett.importVerCenter( rStrm );             break;
                         case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( rStrm );          break;
-
                     }
                     break;
 
@@ -851,6 +836,7 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_COLINFO:       importColInfo( rStrm );                         break;
                         case BIFF3_ID_DEFROWHEIGHT: importDefRowHeight( rStrm );                    break;
                         case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
+                        case BIFF_ID_OBJ:           rDrawing.importObj( rStrm );                    break;
                         case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( rStrm );    break;
                         case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( rStrm );             break;
                         case BIFF_ID_SAVERECALC:    rWorkbookSett.importSaveRecalc( rStrm );        break;
@@ -869,6 +855,7 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF3_ID_DEFROWHEIGHT: importDefRowHeight( rStrm );                    break;
                         case BIFF_ID_HCENTER:       rPageSett.importHorCenter( rStrm );             break;
                         case BIFF_ID_MERGEDCELLS:   importMergedCells( rStrm );                     break;  // #i62300# also in BIFF5
+                        case BIFF_ID_OBJ:           rDrawing.importObj( rStrm );                    break;
                         case BIFF_ID_OBJECTPROTECT: rWorksheetSett.importObjectProtect( rStrm );    break;
                         case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( rStrm );             break;
                         case BIFF_ID_PTDEFINITION:  importPTDefinition( rStrm );                    break;
@@ -896,6 +883,7 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_HYPERLINK:         importHyperlink( rStrm );                       break;
                         case BIFF_ID_LABELRANGES:       importLabelRanges( rStrm );                     break;
                         case BIFF_ID_MERGEDCELLS:       importMergedCells( rStrm );                     break;
+                        case BIFF_ID_OBJ:               rDrawing.importObj( rStrm );                    break;
                         case BIFF_ID_OBJECTPROTECT:     rWorksheetSett.importObjectProtect( rStrm );    break;
                         case BIFF_ID_PAGESETUP:         rPageSett.importPageSetup( rStrm );             break;
                         case BIFF_ID_PHONETICPR:        rWorksheetSett.importPhoneticPr( rStrm );       break;
@@ -958,15 +946,15 @@ void BiffWorksheetFragment::importColInfo( BiffInputStream& rStrm )
 
     ColumnModel aModel;
     // column indexes are 0-based in BIFF, but ColumnModel expects 1-based
-    aModel.mnFirstCol     = static_cast< sal_Int32 >( nFirstCol ) + 1;
-    aModel.mnLastCol      = static_cast< sal_Int32 >( nLastCol ) + 1;
+    aModel.maRange.mnFirst = static_cast< sal_Int32 >( nFirstCol ) + 1;
+    aModel.maRange.mnLast  = static_cast< sal_Int32 >( nLastCol ) + 1;
     // width is stored as 1/256th of a character in BIFF, convert to entire character
-    aModel.mfWidth        = static_cast< double >( nWidth ) / 256.0;
-    aModel.mnXfId         = nXfId;
-    aModel.mnLevel        = extractValue< sal_Int32 >( nFlags, 8, 3 );
-    aModel.mbShowPhonetic = getFlag( nFlags, BIFF_COLINFO_SHOWPHONETIC );
-    aModel.mbHidden       = getFlag( nFlags, BIFF_COLINFO_HIDDEN );
-    aModel.mbCollapsed    = getFlag( nFlags, BIFF_COLINFO_COLLAPSED );
+    aModel.mfWidth         = static_cast< double >( nWidth ) / 256.0;
+    aModel.mnXfId          = nXfId;
+    aModel.mnLevel         = extractValue< sal_Int32 >( nFlags, 8, 3 );
+    aModel.mbShowPhonetic  = getFlag( nFlags, BIFF_COLINFO_SHOWPHONETIC );
+    aModel.mbHidden        = getFlag( nFlags, BIFF_COLINFO_HIDDEN );
+    aModel.mbCollapsed     = getFlag( nFlags, BIFF_COLINFO_COLLAPSED );
     // set column properties in the current sheet
     setColumnModel( aModel );
 }
@@ -986,8 +974,8 @@ void BiffWorksheetFragment::importColWidth( BiffInputStream& rStrm )
 
     ColumnModel aModel;
     // column indexes are 0-based in BIFF, but ColumnModel expects 1-based
-    aModel.mnFirstCol = static_cast< sal_Int32 >( nFirstCol ) + 1;
-    aModel.mnLastCol = static_cast< sal_Int32 >( nLastCol ) + 1;
+    aModel.maRange.mnFirst = static_cast< sal_Int32 >( nFirstCol ) + 1;
+    aModel.maRange.mnLast = static_cast< sal_Int32 >( nLastCol ) + 1;
     // width is stored as 1/256th of a character in BIFF, convert to entire character
     aModel.mfWidth = static_cast< double >( nWidth ) / 256.0;
     // set column properties in the current sheet
@@ -1042,10 +1030,7 @@ ApiTokenSequence lclReadDataValFormula( BiffInputStream& rStrm, FormulaParser& r
 {
     sal_uInt16 nFmlaSize = rStrm.readuInt16();
     rStrm.skip( 2 );
-    // enable NUL characters, string list is single tStr token with NUL separators
-    TokensFormulaContext aContext( true, false, true );
-    rParser.importFormula( aContext, rStrm, &nFmlaSize );
-    return aContext.getTokens();
+    return rParser.importFormula( CellAddress(), FORMULATYPE_VALIDATION, rStrm, &nFmlaSize );
 }
 
 } // namespace
@@ -1164,7 +1149,12 @@ void BiffWorksheetFragment::importMergedCells( BiffInputStream& rStrm )
     ApiCellRangeList aRanges;
     getAddressConverter().convertToCellRangeList( aRanges, aBiffRanges, getSheetIndex(), true );
     for( ApiCellRangeList::const_iterator aIt = aRanges.begin(), aEnd = aRanges.end(); aIt != aEnd; ++aIt )
-        setMergedRange( *aIt );
+        getSheetData().setMergedRange( *aIt );
+}
+
+void BiffWorksheetFragment::importNote( BiffInputStream& rStrm )
+{
+    getComments().createComment()->importNote( rStrm );
 }
 
 void BiffWorksheetFragment::importPageBreaks( BiffInputStream& rStrm, bool bRowBreak )

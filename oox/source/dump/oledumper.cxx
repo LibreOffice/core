@@ -470,9 +470,9 @@ void OlePropertyStreamObject::dumpCodePageProperty( sal_uInt32 nStartPos )
         if( nType == OLEPROP_TYPE_INT16 )
         {
             sal_uInt16 nCodePage = dumpDec< sal_uInt16 >( "codepage", "CODEPAGES" );
-            rtl_TextEncoding nNewTextEnc = rtl_getTextEncodingFromWindowsCodePage( nCodePage );
-            if( nNewTextEnc != RTL_TEXTENCODING_DONTKNOW )
-                meTextEnc = nNewTextEnc;
+            rtl_TextEncoding eNewTextEnc = rtl_getTextEncodingFromWindowsCodePage( nCodePage );
+            if( eNewTextEnc != RTL_TEXTENCODING_DONTKNOW )
+                meTextEnc = eNewTextEnc;
             mbIsUnicode = nCodePage == CODEPAGE_UNICODE;
         }
         else
@@ -587,15 +587,8 @@ OUString OlePropertyStreamObject::dumpString8( const String& rName )
 
 OUString OlePropertyStreamObject::dumpCharArray8( const String& rName, sal_Int32 nLen )
 {
-    OUString aData;
-    size_t nNewLen = getLimitedValue< size_t, sal_Int32 >( nLen, 0, 1024 );
-    if( nNewLen > 0 )
-    {
-        ::std::vector< sal_Char > aBuffer( nNewLen + 1 );
-        mxStrm->readMemory( &aBuffer.front(), nNewLen );
-        aBuffer[ nNewLen ] = 0;
-        aData = OStringToOUString( OString( &aBuffer.front() ), meTextEnc );
-    }
+    sal_Int32 nNewLen = getLimitedValue< sal_Int32, sal_Int32 >( nLen, 0, 1024 );
+    OUString aData = mxStrm->readCharArrayUC( nNewLen, meTextEnc );
     writeStringItem( rName, aData );
     return aData;
 }
@@ -608,13 +601,8 @@ OUString OlePropertyStreamObject::dumpString16( const String& rName )
 
 OUString OlePropertyStreamObject::dumpCharArray16( const String& rName, sal_Int32 nLen )
 {
-    size_t nNewLen = getLimitedValue< size_t, sal_Int32 >( nLen, 0, 1024 );
-    ::std::vector< sal_Unicode > aBuffer;
-    aBuffer.reserve( nNewLen + 1 );
-    for( size_t nIdx = 0; nIdx < nNewLen; ++nIdx )
-        aBuffer.push_back( static_cast< sal_Unicode >( mxStrm->readuInt16() ) );
-    aBuffer.push_back( 0 );
-    OUString aData( &aBuffer.front() );
+    sal_Int32 nNewLen = getLimitedValue< sal_Int32, sal_Int32 >( nLen, 0, 1024 );
+    OUString aData = mxStrm->readUnicodeArray( nNewLen );
     writeStringItem( rName, aData );
     if( nNewLen & 1 ) dumpUnused( 2 ); // always padding to 32bit
     return aData;
@@ -688,7 +676,7 @@ void OleStorageObject::construct( const ObjectBase& rParent )
     StorageObjectBase::construct( rParent );
 }
 
-void OleStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, const OUString& /*rStrgPath*/, const OUString& rStrmName, const OUString& rSysFileName )
+void OleStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& /*rStrgPath*/, const OUString& rStrmName, const OUString& rSysFileName )
 {
     if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "\001CompObj" ) ) )
         OleCompObjObject( *this, rxStrm, rSysFileName ).dump();
@@ -1927,7 +1915,7 @@ void VbaFStreamObject::dumpSiteData()
         sal_uInt32 nSiteCount = dumpDec< sal_uInt32 >( "site-count" );
         sal_uInt32 nSiteLength = dumpDec< sal_uInt32 >( "site-data-size" );
         sal_Int64 nEndPos = mxStrm->tell() + nSiteLength;
-        if( ensureValid( nEndPos <= mxStrm->getLength() ) )
+        if( ensureValid( nEndPos <= mxStrm->size() ) )
         {
             mxOut->resetItemIndex();
             sal_uInt32 nSiteIdx = 0;
@@ -1985,7 +1973,7 @@ void VbaOStreamObject::implDump()
             writeDecItem( "control-id", aIt->mnId );
             writeInfoItem( "prog-id", aIt->maProgId );
             IndentGuard aIndGuard( mxOut );
-            RelativeInputStreamRef xRelStrm( new RelativeInputStream( *mxStrm, aIt->mnLength ) );
+            BinaryInputStreamRef xRelStrm( new RelativeInputStream( *mxStrm, aIt->mnLength ) );
             FormControlStreamObject( *this, xRelStrm, &aIt->maProgId ).dump();
         }
     }
@@ -2069,7 +2057,7 @@ VbaContainerStorageObject::VbaContainerStorageObject( const ObjectBase& rParent,
     addPreferredStream( "f" );
 }
 
-void VbaContainerStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
+void VbaContainerStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
     if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "f" ) ) )
         VbaFStreamObject( *this, rxStrm, rSysFileName, maFormData ).dump();
@@ -2281,7 +2269,7 @@ void VbaModuleStreamObject::implDump()
     writeEmptyItem( "source-code" );
     IndentGuard aIndGuard( mxOut );
     BinaryInputStreamRef xVbaStrm( new ::oox::ole::VbaInputStream( *mxStrm ) );
-    TextStreamObject( *this, xVbaStrm, mrVbaData.meTextEnc ).dump();
+    TextLineStreamObject( *this, xVbaStrm, mrVbaData.meTextEnc ).dump();
 }
 
 // ============================================================================
@@ -2293,7 +2281,7 @@ VbaStorageObject::VbaStorageObject( const ObjectBase& rParent, const StorageRef&
     addPreferredStream( "dir" );
 }
 
-void VbaStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
+void VbaStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
     if( (rStrgPath.getLength() == 0) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "dir" ) ) )
         VbaDirStreamObject( *this, rxStrm, rSysFileName, mrVbaData ).dump();
@@ -2311,10 +2299,10 @@ VbaFormStorageObject::VbaFormStorageObject( const ObjectBase& rParent, const Sto
 {
 }
 
-void VbaFormStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
+void VbaFormStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
     if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "\003VBFrame" ) ) )
-        TextStreamObject( *this, rxStrm, mrVbaData.meTextEnc, rSysFileName ).dump();
+        TextLineStreamObject( *this, rxStrm, mrVbaData.meTextEnc, rSysFileName ).dump();
     else
         VbaContainerStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );
 }
@@ -2327,10 +2315,10 @@ VbaProjectStorageObject::VbaProjectStorageObject( const ObjectBase& rParent, con
     addPreferredStorage( "VBA" );
 }
 
-void VbaProjectStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
+void VbaProjectStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
     if( (rStrgPath.getLength() == 0) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PROJECT" ) ) )
-        TextStreamObject( *this, rxStrm, maVbaData.meTextEnc, rSysFileName ).dump();
+        TextLineStreamObject( *this, rxStrm, maVbaData.meTextEnc, rSysFileName ).dump();
     else
         OleStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );
 }

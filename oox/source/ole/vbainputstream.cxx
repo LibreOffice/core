@@ -48,17 +48,38 @@ const sal_uInt16 VBACHUNK_LENMASK           = 0x0FFF;
 // ============================================================================
 
 VbaInputStream::VbaInputStream( BinaryInputStream& rInStrm ) :
-    mrInStrm( rInStrm ),
+    BinaryStreamBase( false ),
+    mpInStrm( &rInStrm ),
     mnChunkPos( 0 )
 {
     maChunk.reserve( 4096 );
 
-    sal_uInt8 nSig = mrInStrm.readuInt8();
+    sal_uInt8 nSig = rInStrm.readuInt8();
     OSL_ENSURE( nSig == VBASTREAM_SIGNATURE, "VbaInputStream::VbaInputStream - wrong signature" );
-    mbEof = nSig != VBASTREAM_SIGNATURE;
+    mbEof = mbEof || rInStrm.isEof() || (nSig != VBASTREAM_SIGNATURE);
 }
 
-sal_Int32 VbaInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes )
+sal_Int64 VbaInputStream::size() const
+{
+    return -1;
+}
+
+sal_Int64 VbaInputStream::tell() const
+{
+    return -1;
+}
+
+void VbaInputStream::seek( sal_Int64 )
+{
+}
+
+void VbaInputStream::close()
+{
+    mpInStrm = 0;
+    mbEof = true;
+}
+
+sal_Int32 VbaInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize )
 {
     sal_Int32 nRet = 0;
     if( !mbEof )
@@ -66,7 +87,7 @@ sal_Int32 VbaInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes
         orData.realloc( ::std::max< sal_Int32 >( nBytes, 0 ) );
         if( nBytes > 0 )
         {
-            nRet = readMemory( orData.getArray(), nBytes );
+            nRet = readMemory( orData.getArray(), nBytes, nAtomSize );
             if( nRet < nBytes )
                 orData.realloc( nRet );
         }
@@ -74,7 +95,7 @@ sal_Int32 VbaInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes
     return nRet;
 }
 
-sal_Int32 VbaInputStream::readMemory( void* opMem, sal_Int32 nBytes )
+sal_Int32 VbaInputStream::readMemory( void* opMem, sal_Int32 nBytes, size_t /*nAtomSize*/ )
 {
     sal_Int32 nRet = 0;
     sal_uInt8* opnMem = reinterpret_cast< sal_uInt8* >( opMem );
@@ -91,7 +112,7 @@ sal_Int32 VbaInputStream::readMemory( void* opMem, sal_Int32 nBytes )
     return nRet;
 }
 
-void VbaInputStream::skip( sal_Int32 nBytes )
+void VbaInputStream::skip( sal_Int32 nBytes, size_t /*nAtomSize*/ )
 {
     while( (nBytes > 0) && updateChunk() )
     {
@@ -109,8 +130,8 @@ bool VbaInputStream::updateChunk()
     if( mbEof || (mnChunkPos < maChunk.size()) ) return !mbEof;
 
     // try to read next chunk header, this may trigger EOF
-    sal_uInt16 nHeader = mrInStrm.readuInt16();
-    mbEof = mrInStrm.isEof();
+    sal_uInt16 nHeader = mpInStrm->readuInt16();
+    mbEof = mpInStrm->isEof();
     if( mbEof ) return false;
 
     // check header signature
@@ -127,15 +148,15 @@ bool VbaInputStream::updateChunk()
         maChunk.clear();
         sal_uInt8 nBitCount = 4;
         sal_uInt16 nChunkPos = 0;
-        while( !mbEof && !mrInStrm.isEof() && (nChunkPos < nChunkLen) )
+        while( !mbEof && !mpInStrm->isEof() && (nChunkPos < nChunkLen) )
         {
-            sal_uInt8 nTokenFlags = mrInStrm.readuInt8();
+            sal_uInt8 nTokenFlags = mpInStrm->readuInt8();
             ++nChunkPos;
-            for( int nBit = 0; !mbEof && !mrInStrm.isEof() && (nBit < 8) && (nChunkPos < nChunkLen); ++nBit, nTokenFlags >>= 1 )
+            for( int nBit = 0; !mbEof && !mpInStrm->isEof() && (nBit < 8) && (nChunkPos < nChunkLen); ++nBit, nTokenFlags >>= 1 )
             {
                 if( nTokenFlags & 1 )
                 {
-                    sal_uInt16 nCopyToken = mrInStrm.readuInt16();
+                    sal_uInt16 nCopyToken = mpInStrm->readuInt16();
                     nChunkPos = nChunkPos + 2;
                     // update bit count used for offset/length in the token
                     while( static_cast< size_t >( 1 << nBitCount ) < maChunk.size() ) ++nBitCount;
@@ -165,7 +186,7 @@ bool VbaInputStream::updateChunk()
                 else
                 {
                     maChunk.resize( maChunk.size() + 1 );
-                    mrInStrm >> maChunk.back();
+                    *mpInStrm >> maChunk.back();
                     ++nChunkPos;
                 }
             }
@@ -174,7 +195,7 @@ bool VbaInputStream::updateChunk()
     else
     {
         maChunk.resize( nChunkLen );
-        mrInStrm.readMemory( &maChunk.front(), nChunkLen );
+        mpInStrm->readMemory( &maChunk.front(), nChunkLen );
     }
 
     mnChunkPos = 0;

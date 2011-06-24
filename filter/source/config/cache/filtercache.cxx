@@ -156,7 +156,7 @@ void FilterCache::takeOver(const FilterCache& rClone)
 
     // c)
     // Take over only changed items!
-    // Otherwhise we risk the following scenario:
+    // Otherwise we risk the following scenario:
     // c1) clone_1 contains changed filters
     // c2) clone_2 container changed types
     // c3) clone_1 take over changed filters and unchanged types
@@ -226,7 +226,7 @@ void FilterCache::load(EFillState eRequired,
     }
 #endif
 
-    // Otherwhise load the missing items.
+    // Otherwise load the missing items.
 
     // ------------------------------------------
     // a) load some const values from configration.
@@ -1057,7 +1057,7 @@ void FilterCache::impl_validateAndOptimize()
     }
 
     // Create a log for all detected problems, which
-    // occure in the next feew lines.
+    // occur in the next few lines.
     // If there are some real errors throw a RuntimException!
     // If there are some warnings only, show an assertion.
     sal_Int32             nErrors   = 0;
@@ -1117,8 +1117,8 @@ void FilterCache::impl_validateAndOptimize()
         // its set list of extensions/url pattern. If its a "normal" type
         // set it at the end of this optimized list. But if its
         // a "Preferred" one - set it to the front of this list.
-        // Of course multiple "Preferred" registrations can occure
-        // (they shouldnt - but they can!) ... Ignore it. The last
+        // Of course multiple "Preferred" registrations can occur
+        // (they shouldn't - but they can!) ... Ignore it. The last
         // preferred type is useable in the same manner then every
         // other type!
         sal_Bool bPreferred = sal_False;
@@ -1127,7 +1127,7 @@ void FilterCache::impl_validateAndOptimize()
         const ::rtl::OUString* pExtensions = lExtensions.getConstArray();
         for (sal_Int32 e=0; e<ce; ++e)
         {
-            // Note: We must be shure that adress the right hash entry
+            // Note: We must be sure that address the right hash entry
             // does not depend from any upper/lower case problems ...
             ::rtl::OUString sNormalizedExtension = pExtensions[e].toAsciiLowerCase();
 
@@ -1372,7 +1372,7 @@ FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::
 
     EItemFlushState eState( E_ITEM_UNCHANGED );
 
-    // !? ... such situation can occure, if an item was added and(!) removed before it was flushed :-)
+    // !? ... such situation can occur, if an item was added and(!) removed before it was flushed :-)
     if (!bExistsInConfigLayer && !bExistsInMemory)
         eState = E_ITEM_UNCHANGED;
     else
@@ -1741,7 +1741,6 @@ void FilterCache::impl_savePatchUINames(const css::uno::Reference< css::containe
 }
 
 /*-----------------------------------------------
-    29.10.2003 13:17
     TODO
         clarify, how the real problem behind the
         wrong constructed CacheItem instance (which
@@ -1755,7 +1754,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     throw(css::uno::Exception)
 {
     // try to get an API object, which points directly to the
-    // requested item. If it fail an exception should occure and
+    // requested item. If it fail an exception should occur and
     // break this operation. Of course returned API object must be
     // checked too.
     css::uno::Reference< css::container::XNameAccess > xItem;
@@ -2053,7 +2052,6 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
 }
 
 /*-----------------------------------------------
-    20.10.2003 09:45
     static! => no locks neccessary
 -----------------------------------------------*/
 css::uno::Sequence< ::rtl::OUString > FilterCache::impl_convertFlagField2FlagNames(sal_Int32 nFlags)
@@ -2089,7 +2087,6 @@ css::uno::Sequence< ::rtl::OUString > FilterCache::impl_convertFlagField2FlagNam
 }
 
 /*-----------------------------------------------
-    27.06.2003 09:26
     static! => no locks neccessary
 -----------------------------------------------*/
 sal_Int32 FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequence< ::rtl::OUString >& lNames)
@@ -2302,7 +2299,6 @@ void FilterCache::impl_interpretDataVal4Filter(const ::rtl::OUString& sValue,
 }
 
 /*-----------------------------------------------
-    12.02.2004 08:30
     TODO work on a cache copy first, which can be flushed afterwards
          That would be usefully to gurantee a consistent cache.
 -----------------------------------------------*/

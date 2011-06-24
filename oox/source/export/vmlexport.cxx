@@ -102,7 +102,7 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 
         m_pShapeStyle->ensureCapacity( 200 );
 
-        // postpone the ouput so that we are able to write even the elements
+        // postpone the output so that we are able to write even the elements
         // that we learn inside Commit()
         m_pSerializer->mark();
     }

@@ -918,8 +918,7 @@ Reference< XTextContent > HeaderFooterParser::createField( const OUString& rServ
     Reference< XTextContent > xContent;
     try
     {
-        Reference< XMultiServiceFactory > xFactory( getDocument(), UNO_QUERY_THROW );
-        xContent.set( xFactory->createInstance( rServiceName ), UNO_QUERY_THROW );
+        xContent.set( getBaseFilter().getModelFactory()->createInstance( rServiceName ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {

@@ -29,11 +29,13 @@
 $(eval $(call gb_Library_Library,rtftok))
 
 $(eval $(call gb_Library_set_include,rtftok,\
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/writerfilter/inc) \
 	-I$(WORKDIR)/writerfilter/inc \
-    -I$(OUTDIR)/inc \
+	-I$(OUTDIR)/inc \
+	-I$(OUTDIR)/inc/offapi \
 	-I$(OUTDIR)/inc/offuh \
+	-I$(OUTDIR)/inc/udkapi \
 ))
 
 include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
@@ -45,15 +47,15 @@ $(eval $(call gb_Library_set_defs,rtftok,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,rtftok,\
-    cppu \
-    cppuhelper \
-    oox \
-    sal \
-    ucbhelper \
-    utl \
-    tl \
-    resourcemodel \
-    $(gb_STDLIBS) \
+	cppu \
+	cppuhelper \
+	oox \
+	sal \
+	ucbhelper \
+	utl \
+	tl \
+	resourcemodel \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,rtftok,\

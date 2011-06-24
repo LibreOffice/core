@@ -167,23 +167,23 @@ public class FCFGSplit
     private static java.lang.String m_sFragmentExtension;
 
     /** specify the sub directory to generate type fragments.
-     *  Its meaned relativ to m_sOutDir. */
+     *  Its meaned relative to m_sOutDir. */
     private static java.lang.String m_sSubDirTypes;
 
     /** specify the sub directory to generate filter fragments.
-     *  Its meaned relativ to m_sOutDir. */
+     *  Its meaned relative to m_sOutDir. */
     private static java.lang.String m_sSubDirFilters;
 
     /** specify the sub directory to generate detect service fragments.
-     *  Its meaned relativ to m_sOutDir. */
+     *  Its meaned relative to m_sOutDir. */
     private static java.lang.String m_sSubDirDetectServices;
 
     /** specify the sub directory to generate frame loader fragments.
-     *  Its meaned relativ to m_sOutDir. */
+     *  Its meaned relative to m_sOutDir. */
     private static java.lang.String m_sSubDirFrameLoaders;
 
     /** specify the sub directory to generate content handler fragments.
-     *  Its meaned relativ to m_sOutDir. */
+     *  Its meaned relative to m_sOutDir. */
     private static java.lang.String m_sSubDirContentHandlers;
 
     /** enable/disable generating of filter groups - seperated by

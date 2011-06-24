@@ -46,7 +46,7 @@ using namespace ::std;
 
 OOXMLFastDocumentHandler::OOXMLFastDocumentHandler
 (uno::Reference< uno::XComponentContext > const & context)
-: m_xContext(context)
+: m_xContext(context), mpStream(0), mpDocument(0)
 {}
 
 // ::com::sun::star::xml::sax::XFastContextHandler:

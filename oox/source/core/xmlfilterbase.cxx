@@ -538,13 +538,13 @@ XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProp
         writeCoreProperties( *this, xProperties );
         writeAppProperties( *this, xProperties );
         Sequence< ::com::sun::star::beans::NamedValue > aStats = xProperties->getDocumentStatistics();
-        printf( "# Document Statistics:\n" );
+        OSL_TRACE( "# Document Statistics:\n" );
         for( sal_Int32 i = 0, end = aStats.getLength(); i < end; ++i )
         {
             ::com::sun::star::uno::Any aValue = aStats[ i ].Value;
             ::rtl::OUString sValue;
             bool bHaveString = aValue >>= sValue;
-            printf ("#\t%s=%s [%s]\n",
+            OSL_TRACE ("#\t%s=%s [%s]\n",
                     OUStringToOString( aStats[ i ].Name, RTL_TEXTENCODING_UTF8 ).getStr(),
                     bHaveString
                         ? OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr()
@@ -570,12 +570,12 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return StorageRef( new ZipStorage( getServiceFactory(), rxInStream ) );
+    return StorageRef( new ZipStorage( getComponentContext(), rxInStream ) );
 }
 
 StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
 {
-    return StorageRef( new ZipStorage( getServiceFactory(), rxOutStream ) );
+    return StorageRef( new ZipStorage( getComponentContext(), rxOutStream ) );
 }
 
 // ============================================================================

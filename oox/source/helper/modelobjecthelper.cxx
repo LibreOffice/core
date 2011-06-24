@@ -49,12 +49,12 @@ using ::rtl::OUString;
 
 // ============================================================================
 
-ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxFactory, const OUString& rServiceName ) :
-    mxFactory( rxFactory ),
+ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxModelFactory, const OUString& rServiceName ) :
+    mxModelFactory( rxModelFactory ),
     maServiceName( rServiceName ),
     mnIndex( 0 )
 {
-    OSL_ENSURE( mxFactory.is(), "ObjectContainer::ObjectContainer - missing service factory" );
+    OSL_ENSURE( mxModelFactory.is(), "ObjectContainer::ObjectContainer - missing service factory" );
 }
 
 ObjectContainer::~ObjectContainer()
@@ -95,9 +95,10 @@ OUString ObjectContainer::insertObject( const OUString& rObjName, const Any& rOb
 
 void ObjectContainer::createContainer() const
 {
-    if( !mxContainer.is() && mxFactory.is() ) try
+    if( !mxContainer.is() && mxModelFactory.is() ) try
     {
-        mxContainer.set( mxFactory->createInstance( maServiceName ), UNO_QUERY_THROW );
+        mxContainer.set( mxModelFactory->createInstance( maServiceName ), UNO_QUERY_THROW );
+        mxModelFactory.clear();
     }
     catch( Exception& )
     {
@@ -108,13 +109,13 @@ void ObjectContainer::createContainer() const
 // ============================================================================
 
 ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
-    maMarkerContainer(   rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.MarkerTable" ) ),
-    maDashContainer(     rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.DashTable" ) ),
-    maGradientContainer( rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" ) ),
-    maBitmapContainer(   rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" ) ),
-    maDashNameBase( CREATE_OUSTRING( "msLineDash " ) ),
-    maGradientNameBase( CREATE_OUSTRING( "msFillGradient " ) ),
-    maBitmapNameBase( CREATE_OUSTRING( "msFillBitmap " ) )
+    maMarkerContainer(    rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.MarkerTable" ) ),
+    maDashContainer(      rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.DashTable" ) ),
+    maGradientContainer(  rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" ) ),
+    maBitmapUrlContainer( rxModelFactory, CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" ) ),
+    maDashNameBase(      CREATE_OUSTRING( "msLineDash " ) ),
+    maGradientNameBase(  CREATE_OUSTRING( "msFillGradient " ) ),
+    maBitmapUrlNameBase( CREATE_OUSTRING( "msFillBitmap " ) )
 {
 }
 
@@ -141,10 +142,10 @@ OUString ModelObjectHelper::insertFillGradient( const Gradient& rGradient )
     return maGradientContainer.insertObject( maGradientNameBase, Any( rGradient ), true );
 }
 
-OUString ModelObjectHelper::insertFillBitmap( const OUString& rGraphicUrl )
+OUString ModelObjectHelper::insertFillBitmapUrl( const OUString& rGraphicUrl )
 {
     if( rGraphicUrl.getLength() > 0 )
-        return maBitmapContainer.insertObject( maBitmapNameBase, Any( rGraphicUrl ), true );
+        return maBitmapUrlContainer.insertObject( maBitmapUrlNameBase, Any( rGraphicUrl ), true );
     return OUString();
 }
 

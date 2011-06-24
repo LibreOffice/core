@@ -158,13 +158,12 @@ void LwpGraphicObject::Read()
     m_bIsLinked = m_pObjStrm->QuickReadInt16();
     //OUString pLinkedFilePath;
     unsigned char * pFilterContext = NULL;
-    sal_uInt32 nFilterContextSize = 0;
 
     if (m_bIsLinked)
     {
         m_LinkedFilePath = m_pObjStrm->QuickReadStringPtr();
 
-        nFilterContextSize = m_pObjStrm->QuickReaduInt32();
+        sal_uInt32 nFilterContextSize = m_pObjStrm->QuickReaduInt32();
         if (nFilterContextSize > 0)
         {
             pFilterContext = new unsigned char[nFilterContextSize];
@@ -175,8 +174,6 @@ void LwpGraphicObject::Read()
 
             // read external file object stuff
             sal_uInt16 type = m_pObjStrm->QuickReaduInt16();
-//          if (EF_ODMA == type)
-//              ;
             if ((EF_ODMA != type) && (EF_NONE != type)) // don't know about this
             {
                 sal_uInt32 size = m_pObjStrm->QuickReaduInt32();
@@ -786,7 +783,6 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
         //total head length = 45
         sal_uInt32 nBegin = 45;
         sal_uInt32 nEnd = nDataLen -1;
-        sal_uInt32 nIndex = 0;
 
         if(pGrafData[nEnd] == '$' && pGrafData[nEnd-1]!= '\\')
         {
@@ -798,7 +794,7 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
         if(nEnd >= nBegin)
         {
             sal_uInt8* pEquData = new sal_uInt8[nEnd - nBegin + 1];
-            for(nIndex = 0; nIndex < nEnd - nBegin +1 ; nIndex++)
+            for(sal_uInt32 nIndex = 0; nIndex < nEnd - nBegin +1 ; nIndex++)
             {
                 pEquData[nIndex] = pGrafData[nBegin + nIndex];
             }

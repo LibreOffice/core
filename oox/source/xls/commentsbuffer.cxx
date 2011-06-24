@@ -38,9 +38,11 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/xls/addressconverter.hxx"
+#include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/drawingfragment.hxx"
 #include "svx/sdtaitm.hxx"
 #include "oox/xls/unitconverter.hxx"
+#include "oox/xls/drawingmanager.hxx"
 
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -58,6 +60,7 @@ namespace xls {
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
@@ -96,8 +99,18 @@ static sal_Int32 lcl_ToVertAlign( sal_Int32 nAlign )
 
 // ============================================================================
 
+namespace {
+
+const sal_uInt16 BIFF_NOTE_VISIBLE          = 0x0002;
+
+} // namespace
+
+// ============================================================================
+
 CommentModel::CommentModel() :
-    mnAuthorId( -1 )
+    mnAuthorId( -1 ),
+    mnObjId( BIFF_OBJ_INVALID_ID ),
+    mbVisible( false )
 {
 }
 
@@ -178,6 +191,35 @@ void Comment::importComment( SequenceInputStream& rStrm )
     getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, aBinRange, getSheetIndex() );
 }
 
+void Comment::importNote( BiffInputStream& rStrm )
+{
+    BinAddress aBinAddr;
+    rStrm >> aBinAddr;
+    // cell range will be checked while inserting the comment into the document
+    getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, BinRange( aBinAddr ), getSheetIndex() );
+
+    // remaining record data is BIFF dependent
+    switch( getBiff() )
+    {
+        case BIFF2:
+        case BIFF3:
+            importNoteBiff2( rStrm );
+        break;
+        case BIFF4:
+        case BIFF5:
+            importNoteBiff2( rStrm );
+            // in BIFF4 and BIFF5, comments can have an associated sound
+            if( (rStrm.getNextRecId() == BIFF_ID_NOTESOUND) && rStrm.startNextRecord() )
+                importNoteSound( rStrm );
+        break;
+        case BIFF8:
+            importNoteBiff8( rStrm );
+        break;
+        case BIFF_UNKNOWN:
+        break;
+    }
+}
+
 RichStringRef Comment::createText()
 {
     maModel.mxText.reset( new RichString( *this ) );
@@ -193,51 +235,108 @@ void Comment::finalizeImport()
     CellAddress aNotePos( maModel.maRange.Sheet, maModel.maRange.StartColumn, maModel.maRange.StartRow );
     if( getAddressConverter().checkCellAddress( aNotePos, true ) && maModel.mxText.get() ) try
     {
-        maModel.mxText->finalizeImport();
-        OUString aNoteText = maModel.mxText->getPlainText();
-        // non-empty string required by note implementation
-        if( aNoteText.getLength() > 0 )
+        Reference< XSheetAnnotationsSupplier > xAnnosSupp( getSheet(), UNO_QUERY_THROW );
+        Reference< XSheetAnnotations > xAnnos( xAnnosSupp->getAnnotations(), UNO_SET_THROW );
+        // non-empty string required by note implementation (real text will be added below)
+        xAnnos->insertNew( aNotePos, OUString( sal_Unicode( ' ' ) ) );
+
+        // receive created note from cell (insertNew does not return the note)
+        Reference< XSheetAnnotationAnchor > xAnnoAnchor( getCell( aNotePos ), UNO_QUERY_THROW );
+        Reference< XSheetAnnotation > xAnno( xAnnoAnchor->getAnnotation(), UNO_SET_THROW );
+        Reference< XSheetAnnotationShapeSupplier > xAnnoShapeSupp( xAnno, UNO_QUERY_THROW );
+        Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );
+
+        // convert shape formatting and visibility
+        sal_Bool bVisible = sal_True;
+        switch( getFilterType() )
         {
-            Reference< XSheetAnnotationsSupplier > xAnnosSupp( getSheet(), UNO_QUERY_THROW );
-            Reference< XSheetAnnotations > xAnnos( xAnnosSupp->getAnnotations(), UNO_SET_THROW );
-            xAnnos->insertNew( aNotePos, aNoteText );
-            // receive craeted note from cell (insertNew does not return the note)
-            Reference< XSheetAnnotationAnchor > xAnnoAnchor( getCell( aNotePos ), UNO_QUERY_THROW );
-            Reference< XSheetAnnotation > xAnno( xAnnoAnchor->getAnnotation(), UNO_SET_THROW );
-            Reference< XSheetAnnotationShapeSupplier > xAnnoShapeSupp( xAnno, UNO_QUERY_THROW );
-            Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );
-            Reference <XText> xText( xAnnoShape, UNO_QUERY_THROW );
-            Reference <XTextRange> xTextRange( xText, UNO_QUERY_THROW );
-            xTextRange->setString( OUString() ); // Clear contents
-            maModel.mxText->convert( xText, -1 );
+            case FILTER_OOXML:
+                {
+                    // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)
+                    PropertySet aCommentPr( xAnnoShape );
+                    aCommentPr.setProperty( PROP_TextFitToSize, maModel.mbAutoScale );
+                    aCommentPr.setProperty( PROP_MoveProtect, maModel.mbLocked );
+                    aCommentPr.setProperty( PROP_TextHorizontalAdjust, lcl_ToHorizAlign( maModel.mnTHA ) );
+                    aCommentPr.setProperty( PROP_TextVerticalAdjust, lcl_ToVertAlign( maModel.mnTVA ) );
+                    if( maModel.maAnchor.Width > 0 && maModel.maAnchor.Height > 0 )
+                    {
+                        xAnnoShape->setPosition( Point( maModel.maAnchor.X, maModel.maAnchor.Y ) );
+                        xAnnoShape->setSize( Size( maModel.maAnchor.Width, maModel.maAnchor.Height ) );
+                    }
 
-            // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)
-            PropertySet aCommentPr( xAnnoShape );
-            aCommentPr.setProperty( PROP_TextFitToSize, maModel.mbAutoScale );
-            aCommentPr.setProperty( PROP_MoveProtect, maModel.mbLocked );
-            aCommentPr.setProperty( PROP_TextHorizontalAdjust, lcl_ToHorizAlign( maModel.mnTHA ) );
-            aCommentPr.setProperty( PROP_TextVerticalAdjust, lcl_ToVertAlign( maModel.mnTVA ) );
-            if( maModel.maAnchor.Width > 0 && maModel.maAnchor.Height > 0 )
-            {
-                xAnnoShape->setPosition( Point( maModel.maAnchor.X, maModel.maAnchor.Y ) );
-                xAnnoShape->setSize( Size( maModel.maAnchor.Width, maModel.maAnchor.Height ) );
-            }
-
-
-            // convert shape formatting
-            if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
-            {
-                // position and formatting
-                pNoteShape->convertFormatting( xAnnoShape );
-                // visibility
-                const ::oox::vml::ClientData* pClientData = pNoteShape->getClientData();
-                xAnno->setIsVisible( pClientData && pClientData->mbVisible );
-            }
+                    // convert shape formatting
+                    if( const ::oox::vml::ShapeBase* pNoteShape = getVmlDrawing().getNoteShape( aNotePos ) )
+                    {
+                        // position and formatting
+                        pNoteShape->convertFormatting( xAnnoShape );
+                        // visibility
+                        const ::oox::vml::ClientData* pClientData = pNoteShape->getClientData();
+                        xAnno->setIsVisible( pClientData && pClientData->mbVisible );
+                    }
+                }
+            break;
+            case FILTER_BIFF:
+                bVisible = maModel.mbVisible;
+            break;
+            case FILTER_UNKNOWN:
+            break;
         }
+        xAnno->setIsVisible( bVisible );
+
+        // insert text and convert text formatting
+        maModel.mxText->finalizeImport();
+        Reference< XText > xAnnoText( xAnnoShape, UNO_QUERY_THROW );
+        maModel.mxText->convert( xAnnoText );
     }
     catch( Exception& )
     {
     }
+}
+
+// private --------------------------------------------------------------------
+
+void Comment::importNoteBiff2( BiffInputStream& rStrm )
+{
+    sal_uInt16 nTotalLen;
+    rStrm >> nTotalLen;
+    sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
+    RichStringRef xNoteText = createText();
+    xNoteText->importCharArray( rStrm, nPartLen, getTextEncoding() );
+
+    nTotalLen = nTotalLen - nPartLen;   // operator-=() gives compiler warning
+    while( (nTotalLen > 0) && (rStrm.getNextRecId() == BIFF_ID_NOTE) && rStrm.startNextRecord() )
+    {
+        sal_uInt16 nMarker;
+        rStrm >> nMarker;
+        rStrm.skip( 2 );
+        rStrm >> nPartLen;
+        OSL_ENSURE( nMarker == 0xFFFF, "Comment::importNoteBiff2 - missing continuation NOTE record" );
+        if( nMarker == 0xFFFF )
+        {
+            OSL_ENSURE( nPartLen <= nTotalLen, "Comment::importNoteBiff2 - string too long" );
+            // call to RichString::importCharArray() appends new text portion
+            xNoteText->importCharArray( rStrm, nPartLen, getTextEncoding() );
+            nTotalLen = nTotalLen - ::std::min( nTotalLen, nPartLen );
+        }
+        else
+        {
+            // seems to be a new note, rewind record, so worksheet fragment loop will find it
+            rStrm.rewindRecord();
+            nTotalLen = 0;
+        }
+    }
+}
+
+void Comment::importNoteBiff8( BiffInputStream& rStrm )
+{
+    sal_uInt16 nFlags;
+    rStrm >> nFlags >> maModel.mnObjId;
+    maModel.maAuthor = rStrm.readUniString();
+    maModel.mbVisible = getFlag( nFlags, BIFF_NOTE_VISIBLE );
+}
+
+void Comment::importNoteSound( BiffInputStream& /*rStrm*/ )
+{
 }
 
 // ============================================================================

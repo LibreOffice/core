@@ -49,6 +49,7 @@
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 #include "strings.hrc"
 
 #include <math.h>
@@ -295,7 +296,11 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
     // default values for the dialog options
     mnLevel = 2;
     mbGrayScale = sal_False;
+#ifdef UNX // don't compress by default on unix as ghostscript is unable to read LZW compressed eps
+    mbCompression = sal_False;
+#else
     mbCompression = sal_True;
+#endif
     mnTextMode = 0;         // default0 : export glyph outlines
 
     // try to get the dialog selection
@@ -312,12 +317,20 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
             String aVersionStr( RTL_CONSTASCII_USTRINGPARAM( "Version" ) );
             String aColorStr( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) );
             String aComprStr( RTL_CONSTASCII_USTRINGPARAM( "CompressionMode" ) );
+#ifdef UNX // don't put binary tiff preview ahead of postscript code by default on unix as ghostscript is unable to read it
+            mnPreview = pFilterConfigItem->ReadInt32( aPreviewStr, 0 );
+#else
             mnPreview = pFilterConfigItem->ReadInt32( aPreviewStr, 1 );
+#endif
             mnLevel = pFilterConfigItem->ReadInt32( aVersionStr, 2 );
             if ( mnLevel != 1 )
                 mnLevel = 2;
             mbGrayScale = pFilterConfigItem->ReadInt32( aColorStr, 1 ) == 2;
+#ifdef UNX // don't compress by default on unix as ghostscript is unable to read LZW compressed eps
+            mbCompression = pFilterConfigItem->ReadInt32( aComprStr, 0 ) != 0;
+#else
             mbCompression = pFilterConfigItem->ReadInt32( aComprStr, 1 ) == 1;
+#endif
             String sTextMode( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) );
             mnTextMode = pFilterConfigItem->ReadInt32( sTextMode, 0 );
             if ( mnTextMode > 2 )
@@ -815,7 +828,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 if ( mbGrayScale )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
                 Point aPoint = ( (const MetaBmpAction*) pMA )->GetPoint();
-                Size aSize = aBitmap.GetSizePixel();
+                Size aSize( rVDev.PixelToLogic( aBitmap.GetSizePixel() ) );
                 ImplBmp( &aBitmap, NULL, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
@@ -851,8 +864,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 if ( mbGrayScale )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
                 Bitmap aMask( aBitmapEx.GetMask() );
-                Point aPoint = ( (const MetaBmpExAction*) pMA)->GetPoint();
-                Size aSize = ( aBitmap.GetSizePixel() );
+                Point aPoint( ( (const MetaBmpExAction*) pMA )->GetPoint() );
+                Size aSize( rVDev.PixelToLogic( aBitmap.GetSizePixel() ) );
                 ImplBmp( &aBitmap, &aMask, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
@@ -1365,6 +1378,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                             case META_BMPSCALEPART_ACTION :
                                             case META_BMPEXSCALE_ACTION :
                                             case META_BMPEXSCALEPART_ACTION :
+                                            case META_RENDERGRAPHIC_ACTION :
                                             {
                                                 nBitmapCount++;
                                                 nBitmapAction = nCurAction;
@@ -1421,6 +1435,23 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         }
                     }
                 }
+            }
+            break;
+
+            case( META_RENDERGRAPHIC_ACTION ):
+            {
+                const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pMA;
+                const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
+                const BitmapEx                          aBmpEx( aRasterizer.Rasterize( rVDev.LogicToPixel( pA->GetSize() ) ) );
+                Bitmap                                  aBmp( aBmpEx.GetBitmap() );
+
+                if ( mbGrayScale )
+                    aBmp.Convert( BMP_CONVERSION_8BIT_GREYS );
+
+                Bitmap  aMask( aBmpEx.GetMask() );
+                Size    aSize( pA->GetSize() );
+
+                ImplBmp( &aBmp, &aMask, pA->GetPoint(), aSize.Width(), aSize.Height() );
             }
             break;
         }
@@ -1535,10 +1566,10 @@ void PSWriter::ImplRectFill( const Rectangle & rRect )
 
 void PSWriter::ImplAddPath( const Polygon & rPolygon )
 {
-    sal_uInt16 i = 1;
     sal_uInt16 nPointCount = rPolygon.GetSize();
     if ( nPointCount > 1 )
     {
+        sal_uInt16 i = 1;
         ImplMoveTo( rPolygon.GetPoint( 0 ) );
         while ( i < nPointCount )
         {
@@ -2451,9 +2482,9 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
     for ( sal_Int32 n = 0; n < nLength; n++ )
         *mpPS << aNumber1.GetChar( (sal_uInt16)n );
 
-    int zCount = 0;
     if ( nATemp )
     {
+        int zCount = 0;
         *mpPS << (sal_uInt8)'.';
         mnCursorPos++;
         const ByteString aNumber2( ByteString::CreateFromInt32( nATemp ) );

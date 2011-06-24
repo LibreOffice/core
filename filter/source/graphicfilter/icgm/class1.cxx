@@ -40,11 +40,11 @@ void CGM::ImplDoClass1()
 
     switch ( mnElementID )
     {
-        case 0x01 : ComOut( CGM_LEVEL1, "Metafile Version" )
+        case 0x01 : /*Metafile Version*/
             pElement->nMetaFileVersion = ImplGetI( pElement->nIntegerPrecision );
         break;
-        case 0x02 : ComOut( CGM_LEVEL1, "Metafile Description" ) break;
-        case 0x03 : ComOut( CGM_LEVEL1, "VDC Type" )
+        case 0x02 : /*Metafile Description */break;
+        case 0x03 : /*VDC Type*/
         {
             nUInteger = ImplGetUI16();
             switch( nUInteger )
@@ -55,7 +55,7 @@ void CGM::ImplDoClass1()
             }
         }
         break;
-        case 0x04 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Integer Precision" )
+        case 0x04 : /*Integer Precision*/
         {
             nInteger = ImplGetI( pElement->nIntegerPrecision );
             switch ( nInteger )
@@ -68,7 +68,7 @@ void CGM::ImplDoClass1()
             }
         }
         break;
-        case 0x05 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Real Precision" )
+        case 0x05 : /*Real Precision*/
         {
             nUInteger = ImplGetUI16( 4 );
             nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
@@ -110,7 +110,7 @@ void CGM::ImplDoClass1()
             }
         }
         break;
-        case 0x06 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Index Precision" )
+        case 0x06 : /*Index Precision*/
         {
             nInteger = ImplGetI( pElement->nIntegerPrecision );
             switch ( nInteger )
@@ -123,7 +123,7 @@ void CGM::ImplDoClass1()
             }
         }
         break;
-        case 0x07 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Color Precision" )
+        case 0x07 : /*Color Precision*/
         {
             nInteger = ImplGetI( pElement->nIntegerPrecision );
             switch ( nInteger )
@@ -136,7 +136,7 @@ void CGM::ImplDoClass1()
             }
         }
         break;
-        case 0x08 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Color Index Precision" )
+        case 0x08 : /*Color Index Precision*/
         {
             nInteger = ImplGetI( pElement->nIntegerPrecision );
             switch ( nInteger )
@@ -149,14 +149,14 @@ void CGM::ImplDoClass1()
             }
         }
         break;
-        case 0x09 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Maximum Colour Index" )
+        case 0x09 : /*Maximum Colour Index*/
         {
             pElement->nColorMaximumIndex = ImplGetUI( pElement->nColorIndexPrecision );
             if ( ( pElement->nColorMaximumIndex > 256 /*255*/ ) || ( pElement->nColorMaximumIndex == 0 ) )
                 mbStatus = sal_False;
         }
         break;
-        case 0x0a : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Color Value Extent" )
+        case 0x0a : /*Color Value Extent*/
         {
             if ( pElement->eColorModel == CM_RGB )
                 nI1 = 6;
@@ -171,8 +171,8 @@ void CGM::ImplDoClass1()
             }
         }
         break;
-        case 0x0b : ComOut( CGM_LEVEL1, "MetaFile Element List" ) break;
-        case 0x0c : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "MetaFile Default Replacement" )
+        case 0x0b : /*MetaFile Element List */break;
+        case 0x0c : /*MetaFile Default Replacement*/
         {
             if ( mnElementSize > 1 )
             {
@@ -187,7 +187,7 @@ void CGM::ImplDoClass1()
             mnParaSize = mnElementSize;
         }
         break;
-        case 0x0d : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Font List" )
+        case 0x0d : /*Font List*/
         {
             while ( mnParaSize < mnElementSize )
             {
@@ -198,7 +198,7 @@ void CGM::ImplDoClass1()
             }
         }
         break;
-        case 0x0e : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Character Set List" )
+        case 0x0e : /*Character Set List*/
         {
             while ( mnParaSize < mnElementSize )
             {
@@ -211,21 +211,21 @@ void CGM::ImplDoClass1()
             }
         }
         break;
-        case 0x0f : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Character Coding Announcer" )
+        case 0x0f : /*Character Coding Announcer*/
             pElement->eCharacterCodingA = (CharacterCodingA)ImplGetUI16();
         break;
-        case 0x10 : ComOut( CGM_LEVEL2, "Name Precision" ) break;                   // NS
-        case 0x11 : ComOut( CGM_LEVEL2, "Maximum VDC Extent" ) break;               // NS
-        case 0x12 : ComOut( CGM_LEVEL2, "Segment Priority Extent" ) break;          // NS
-        case 0x13 : ComOut( CGM_LEVEL3, "Color Model" ) break;                      // NS
-        case 0x14 : ComOut( CGM_LEVEL3, "Color Calibration" ) break;                // NS
-        case 0x15 : ComOut( CGM_LEVEL3, "Font Properties" ) break;                  // NS
-        case 0x16 : ComOut( CGM_LEVEL3, "Glyph Mapping" ) break;                    // NS
-        case 0x17 : ComOut( CGM_LEVEL3, "Symbol Library List" ) break;              // NS
-        case 0xfc : ComOut( CGM_GDSF_ONLY, "Inquire Function Support" ) break;
-        case 0xfa : ComOut( CGM_GDSF_ONLY, "End Metafile Defaults Replacement" ) break;
-        case 0xf8 : ComOut( CGM_GDSF_ONLY, "Set Color Value Desc Extent" ) break;
-        default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;
+        case 0x10 : /*Name Precision */break;                   // NS
+        case 0x11 : /*Maximum VDC Extent */break;               // NS
+        case 0x12 : /*Segment Priority Extent */break;          // NS
+        case 0x13 : /*Color Model */break;                      // NS
+        case 0x14 : /*Color Calibration */break;                // NS
+        case 0x15 : /*Font Properties */break;                  // NS
+        case 0x16 : /*Glyph Mapping */break;                    // NS
+        case 0x17 : /*Symbol Library List */break;              // NS
+        case 0xfc : /*Inquire Function Support */break;
+        case 0xfa : /*End Metafile Defaults Replacement */break;
+        case 0xf8 : /*Set Color Value Desc Extent */break;
+        default: break;
     }
 };
 

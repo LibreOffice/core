@@ -100,7 +100,7 @@ public:
 
     /**********************************************************************
      * @descr:      set the display value. ie. if you set format to '1',then
-                    the ouput would be:
+                    the output would be:
                         1 item1
                         2 item2
                     or if you set the format to 'a', then the output would be:

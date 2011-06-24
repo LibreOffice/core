@@ -289,7 +289,7 @@ void DXF2GDIMetaFile::DrawPointEntity(const DXFPointEntity & rE, const DXFTransf
 
 void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTransform & rTransform)
 {
-    double frx,fry,fAng;
+    double frx,fry;
     sal_uInt16 nPoints,i;
     DXFVector aC;
 
@@ -301,6 +301,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
                       (long)(aC.fx+frx+0.5),(long)(aC.fy+fry+0.5)));
     }
     else {
+        double fAng;
         nPoints=OptPointsPerCircle;
         Polygon aPoly(nPoints);
         for (i=0; i<nPoints; i++) {
@@ -330,7 +331,7 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
 
 void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform & rTransform)
 {
-    double frx,fry,fA1,fdA,fAng;
+    double frx,fry,fA1,fdA;
     sal_uInt16 nPoints,i;
     DXFVector aC;
     Point aPS,aPE;
@@ -363,6 +364,7 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
         );
     }
     else {
+        double fAng;
         nPoints=(sal_uInt16)(fdA/360.0*(double)OptPointsPerCircle+0.5);
         if (nPoints<2) nPoints=2;
         Polygon aPoly(nPoints);

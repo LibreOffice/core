@@ -73,7 +73,7 @@ public:
     /** Final processing after import of the drawing fragment. */
     void                finalizeFragmentImport();
 
-    /** Returns true, if this contaikner does not contain any shapes. */
+    /** Returns true, if this container does not contain any shapes. */
     inline bool         empty() const { return maShapes.empty(); }
 
     /** Returns the shape template with the passed identifier.

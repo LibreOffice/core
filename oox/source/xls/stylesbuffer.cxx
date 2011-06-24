@@ -212,7 +212,7 @@ const sal_uInt8 BIFF_FONTUNDERL_DOUBLE_ACC  = 34;
 const sal_uInt16 BIFF_XF_LOCKED             = 0x0001;
 const sal_uInt16 BIFF_XF_HIDDEN             = 0x0002;
 const sal_uInt16 BIFF_XF_STYLE              = 0x0004;
-const sal_uInt16 BIFF_XF_STYLEPARENT        = 0x0FFF;   /// Syles don't have a parent.
+const sal_uInt16 BIFF_XF_STYLEPARENT        = 0x0FFF;   /// Styles don't have a parent.
 const sal_uInt16 BIFF_XF_WRAPTEXT           = 0x0008;   /// Automatic line break.
 const sal_uInt16 BIFF_XF_JUSTLASTLINE       = 0x0080;
 const sal_uInt16 BIFF_XF_SHRINK             = 0x0010;   /// Shrink to fit into cell.
@@ -2537,6 +2537,41 @@ void Xf::writeToPropertySet( PropertySet& rPropSet ) const
 {
     PropertyMap aPropMap;
     writeToPropertyMap( aPropMap );
+    rPropSet.setProperties( aPropMap );
+}
+
+/*static*/ void Xf::writeBiff2CellFormatToPropertySet( const WorkbookHelper& rHelper,
+        PropertySet& rPropSet, sal_uInt8 nFlags1, sal_uInt8 nFlags2, sal_uInt8 nFlags3 )
+{
+    /*  Create an XF object and let it do the work. We will have access to its
+        private members here. Also, create temporary border and fill objects,
+        this prevents polluting the border and fill buffers with new temporary
+        objects per imported cell. */
+    Xf aXf( rHelper );
+    Border aBorder( rHelper, false );
+    Fill aFill( rHelper, false );
+
+    // no used flags available in BIFF2 (always true)
+    aXf.setAllUsedFlags( true );
+
+    // set the attributes
+    aXf.maModel.mnFontId = extractValue< sal_Int32 >( nFlags2, 6, 2 );
+    aXf.maModel.mnNumFmtId = extractValue< sal_Int32 >( nFlags2, 0, 6 );
+    aXf.maAlignment.setBiff2Data( nFlags3 );
+    aXf.maProtection.setBiff2Data( nFlags1 );
+    aBorder.setBiff2Data( nFlags3 );
+    aFill.setBiff2Data( nFlags3 );
+
+    // finalize the objects (convert model to API attributes)
+    aXf.finalizeImport();
+    aBorder.finalizeImport();
+    aFill.finalizeImport();
+
+    // write the properties to the property set
+    PropertyMap aPropMap;
+    aXf.writeToPropertyMap( aPropMap );
+    aBorder.writeToPropertyMap( aPropMap );
+    aFill.writeToPropertyMap( aPropMap );
     rPropSet.setProperties( aPropMap );
 }
 

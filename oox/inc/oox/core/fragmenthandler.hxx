@@ -82,9 +82,9 @@ struct RecordInfo
 
 // ============================================================================
 
-typedef ::cppu::ImplInheritanceHelper1< ContextHandler, ::com::sun::star::xml::sax::XFastDocumentHandler > FragmentHandlerImplBase;
+typedef ::cppu::ImplInheritanceHelper1< ContextHandler, ::com::sun::star::xml::sax::XFastDocumentHandler > FragmentHandler_BASE;
 
-class FragmentHandler : public FragmentHandlerImplBase
+class FragmentHandler : public FragmentHandler_BASE
 {
 public:
     explicit            FragmentHandler( XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath );

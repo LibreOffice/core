@@ -40,12 +40,12 @@ namespace core {
 
 // ============================================================================
 
-typedef ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo, ::com::sun::star::xml::sax::XFastTokenHandler > FastTokenHandlerBase;
+typedef ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo, ::com::sun::star::xml::sax::XFastTokenHandler > FastTokenHandler_BASE;
 
 /** Wrapper implementing the com.sun.star.xml.sax.XFastTokenHandler API interface
     that provides access to the tokens generated from the internal token name list.
  */
-class FastTokenHandler : public FastTokenHandlerBase
+class FastTokenHandler : public FastTokenHandler_BASE
 {
 public:
     explicit            FastTokenHandler();

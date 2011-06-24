@@ -201,12 +201,6 @@ sal_Bool LwpFontAttrEntry::IsSubOverridden()
 
 }
 
-sal_Bool LwpFontAttrEntry::IsSuperSubOverridden()
-{
-    return (0 != (m_nAttrOverrideBits
-        & (SUPERSCRIPT | SUBSCRIPT)));
-}
-
 sal_Bool LwpFontAttrEntry::IsUnderlineOverridden()
 {
     return (0 != (m_nAttrOverrideBits2 & UNDER));

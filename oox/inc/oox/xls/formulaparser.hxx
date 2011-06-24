@@ -88,6 +88,7 @@ private:
     const ApiToken*     getSingleToken( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
     const ApiToken*     skipParentheses( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
     const ApiToken*     findParameters( ParameterPosVector& rParams, const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
+    void                appendEmptyParameter( const FunctionInfo& rFuncInfo, size_t nParam );
     void                appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, size_t nParam );
     void                appendRequiredParameters( const FunctionInfo& rFuncInfo, size_t nParamCount );
 
@@ -114,38 +115,36 @@ public:
     virtual             ~FormulaParser();
 
     /** Converts an OOXML formula string. */
-    void                importFormula(
-                            FormulaContext& rContext,
+    ApiTokenSequence    importFormula(
+                            const ::com::sun::star::table::CellAddress& rBaseAddr,
                             const ::rtl::OUString& rFormulaString ) const;
 
     /** Imports and converts a BIFF12 token array from the passed stream. */
-    void                importFormula(
-                            FormulaContext& rContext,
+    ApiTokenSequence    importFormula(
+                            const ::com::sun::star::table::CellAddress& rBaseAddr,
+                            FormulaType eType,
                             SequenceInputStream& rStrm ) const;
 
     /** Imports and converts a BIFF2-BIFF8 token array from the passed stream.
         @param pnFmlaSize  Size of the token array. If null is passed, reads
         it from stream (1 byte in BIFF2, 2 bytes otherwise) first. */
-    void                importFormula(
-                            FormulaContext& rContext,
+    ApiTokenSequence    importFormula(
+                            const ::com::sun::star::table::CellAddress& rBaseAddr,
+                            FormulaType eType,
                             BiffInputStream& rStrm,
                             const sal_uInt16* pnFmlaSize = 0 ) const;
 
+    /** Converts the passed Boolean value to a similar formula. */
+    ApiTokenSequence    convertBoolToFormula( bool bValue ) const;
+
     /** Converts the passed BIFF error code to a similar formula. */
-    void                convertErrorToFormula(
-                            FormulaContext& rContext,
-                            sal_uInt8 nErrorCode ) const;
+    ApiTokenSequence    convertErrorToFormula( sal_uInt8 nErrorCode ) const;
 
     /** Converts the passed token index of a defined name to a formula calling that name. */
-    void                convertNameToFormula(
-                            FormulaContext& rContext,
-                            sal_Int32 nTokenIndex ) const;
+    ApiTokenSequence    convertNameToFormula( sal_Int32 nTokenIndex ) const;
 
     /** Converts the passed number into a HYPERLINK formula with the passed URL. */
-    void                convertNumberToHyperlink(
-                            FormulaContext& rContext,
-                            const ::rtl::OUString& rUrl,
-                            double fValue ) const;
+    ApiTokenSequence    convertNumberToHyperlink( const ::rtl::OUString& rUrl, double fValue ) const;
 
     /** Converts the passed XML formula to an OLE link target. */
     ::rtl::OUString     importOleTargetLink( const ::rtl::OUString& rFormulaString );
@@ -154,9 +153,7 @@ public:
     ::rtl::OUString     importOleTargetLink( SequenceInputStream& rStrm );
 
     /** Imports and converts an OLE link target from the passed stream. */
-    ::rtl::OUString     importOleTargetLink(
-                            BiffInputStream& rStrm,
-                            const sal_uInt16* pnFmlaSize = 0 ) const;
+    ::rtl::OUString     importOleTargetLink( BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 ) const;
 
     /** Converts the passed formula to a macro name for a drawing shape. */
     ::rtl::OUString     importMacroName( const ::rtl::OUString& rFormulaString );

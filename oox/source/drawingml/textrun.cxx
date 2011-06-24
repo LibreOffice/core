@@ -36,6 +36,7 @@
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/token/tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -82,13 +83,13 @@ sal_Int32 TextRun::insertAt(
             else
             {
                 OUString aLatinFontName, aSymbolFontName;
-                sal_Int16 nLatinFontPitch = 0, nSymbolFontPitch = 0;
-                sal_Int16 nLatinFontFamily = 0, nSymbolFontFamily = 0;
+                sal_Int16 nSymbolFontFamily = 0, nSymbolFontPitch = 0;
 
                 if ( !aTextCharacterProps.maSymbolFont.getFontData( aSymbolFontName, nSymbolFontPitch, nSymbolFontFamily, rFilterBase ) )
                     xText->insertString( xStart, getText(), sal_False );
                 else if ( getText().getLength() )
                 {   // !!#i113673<<<
+                    sal_Int16 nLatinFontPitch = 0, nLatinFontFamily = 0;
                     aTextCharacterProps.maLatinFont.getFontData( aLatinFontName, nLatinFontPitch, nLatinFontFamily, rFilterBase );
 
                     sal_Int32 nIndex = 0;
@@ -149,6 +150,16 @@ sal_Int32 TextRun::insertAt(
                 xText->insertTextContent( xStart, xContent, sal_False );
 
                 xTextFieldCursor->gotoEnd( sal_True );
+
+                if ( !maTextCharacterProperties.maCharColor.isUsed() )
+                    aTextCharacterProps.maCharColor.setSchemeClr( XML_hlink );
+                if ( !maTextCharacterProperties.moUnderline.has() )
+                    aTextCharacterProps.moUnderline.set( XML_sng );
+
+                Reference< XTextRange > xFieldRange( xTextFieldCursor, UNO_QUERY );
+                PropertySet aFieldTextPropSet( xFieldRange );
+                aTextCharacterProps.pushToPropSet( aFieldTextPropSet, rFilterBase );
+
                 oox::core::TextField aTextField;
                 aTextField.xText = xText;
                 aTextField.xTextCursor = xTextFieldCursor;

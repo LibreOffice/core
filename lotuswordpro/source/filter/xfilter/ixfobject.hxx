@@ -63,7 +63,7 @@
 class IXFStream;
 /*************************************************************************
  * @descr
- * This is the root interface for all object which will ouput something to
+ * This is the root interface for all object which will output something to
  * the Sax Stream.
  * I'll add reference management code later.
  ************************************************************************/

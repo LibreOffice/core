@@ -210,6 +210,7 @@ namespace dmapper {
                if (pProperties.get())
                {
                    MeasureHandlerPtr pHandler(new MeasureHandler);
+                   pProperties->resolve( *pHandler );
                    TablePropertyMapPtr pTblIndMap(new TablePropertyMap);
                    sal_uInt32 nTblInd = pHandler->getMeasureValue();
                    pTblIndMap->setValue( TablePropertyMap::LEFT_MARGIN, nTblInd);

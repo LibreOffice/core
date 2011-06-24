@@ -56,7 +56,7 @@ private:
     void                ImplWriteColor( sal_uInt16 );
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
-    void                ImplWritePixel( sal_uLong );
+    void                ImplWritePixel( sal_uLong ) const;
 
 public:
     XPMWriter(SvStream& rOStm);
@@ -226,7 +226,7 @@ void XPMWriter::ImplWriteNumber( sal_Int32 nNumber )
 
 // ------------------------------------------------------------------------
 
-void XPMWriter::ImplWritePixel( sal_uLong nCol )
+void XPMWriter::ImplWritePixel( sal_uLong nCol ) const
 {
     if ( mnColors > 26 )
     {

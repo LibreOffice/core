@@ -43,6 +43,8 @@
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
 
+#include <comphelper/servicehelper.hxx>
+
 #include <document.hxx>
 #include <attr.hxx>
 #include <childlist.hxx>
@@ -54,19 +56,9 @@
 
 using namespace ::com::sun::star;
 
-
-namespace {
-    struct UnoTunnelId
-        : public ::rtl::StaticWithInit< Sequence<sal_Int8>, UnoTunnelId >
-    {
-        Sequence<sal_Int8> operator() ()
-        {
-            Sequence<sal_Int8> ret(16);
-            rtl_createUuid(
-                reinterpret_cast<sal_uInt8*>(ret.getArray()), 0, sal_True);
-            return ret;
-        }
-    };
+namespace
+{
+    class theCNodeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theCNodeUnoTunnelId > {};
 }
 
 namespace DOM
@@ -87,8 +79,9 @@ namespace DOM
         // add node's namespaces to current context
         for (xmlNsPtr pNs = pNode->nsDef; pNs != 0; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix;
+            // prefix can be NULL when xmlns attribute is empty (xmlns="")
             OString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
-                           strlen(reinterpret_cast<const char*>(pPrefix)));
+                           pPrefix ? strlen(reinterpret_cast<const char*>(pPrefix)) : 0);
             const xmlChar *pHref = pNs->href;
             OUString val(reinterpret_cast<const sal_Char*>(pHref),
                 strlen(reinterpret_cast<const char*>(pHref)),
@@ -191,7 +184,7 @@ namespace DOM
         if (!xUnoTunnel.is()) { return 0; }
         CNode *const pCNode( reinterpret_cast< CNode* >(
                         ::sal::static_int_cast< sal_IntPtr >(
-                            xUnoTunnel->getSomething(UnoTunnelId::get()))));
+                            xUnoTunnel->getSomething(theCNodeUnoTunnelId::get().getSeq()))));
         return pCNode;
     }
 
@@ -1052,7 +1045,7 @@ namespace DOM
         throw (RuntimeException)
     {
         if ((rId.getLength() == 16) &&
-            (0 == rtl_compareMemory(UnoTunnelId::get().getConstArray(),
+            (0 == rtl_compareMemory(theCNodeUnoTunnelId::get().getSeq().getConstArray(),
                                     rId.getConstArray(), 16)))
         {
             return ::sal::static_int_cast< sal_Int64 >(

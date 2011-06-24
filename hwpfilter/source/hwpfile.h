@@ -44,9 +44,16 @@
 #include "hpara.h"
 #include "list.hxx"
 
+#define HWPIDLen    30
+#define V20SIGNATURE    "HWP Document File V2.00 \032\1\2\3\4\5"
+#define V21SIGNATURE    "HWP Document File V2.10 \032\1\2\3\4\5"
+#define V30SIGNATURE    "HWP Document File V3.00 \032\1\2\3\4\5"
+
 #define HWP_V20 20
 #define HWP_V21 21
 #define HWP_V30 30
+
+int detect_hwp_version(const char *str);
 
 struct  FBox;
 struct  EmPicture;
@@ -102,15 +109,10 @@ class DLLEXPORT HWPFile
 /**
  * Default constructor
  */
-        HWPFile( void );
-
-        ~HWPFile( void );
+        HWPFile();
+        ~HWPFile();
 
     public:
-/**
- * Initialize this object
- */
-        void Init();
 
 /**
  * Opens HStream to use it.

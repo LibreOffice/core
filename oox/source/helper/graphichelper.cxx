@@ -70,14 +70,13 @@ inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm 
 // ============================================================================
 
 GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
-    mxCompContext( rxContext ),
+    mxContext( rxContext ),
     mxStorage( rxStorage ),
     maGraphicObjScheme( CREATE_OUSTRING( "vnd.sun.star.GraphicObject:" ) )
 {
-    OSL_ENSURE( mxCompContext.is(), "GraphicHelper::GraphicHelper - missing component context" );
-    Reference< XMultiServiceFactory > xFactory( mxCompContext->getServiceManager(), UNO_QUERY_THROW );
+    OSL_ENSURE( mxContext.is(), "GraphicHelper::GraphicHelper - missing component context" );
+    Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY );
     OSL_ENSURE( xFactory.is(), "GraphicHelper::GraphicHelper - missing service factory" );
-
     if( xFactory.is() )
         mxGraphicProvider.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY );
 
@@ -320,9 +319,9 @@ Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStr
 OUString GraphicHelper::createGraphicObject( const Reference< XGraphic >& rxGraphic ) const
 {
     OUString aGraphicObjUrl;
-    if( mxCompContext.is() && rxGraphic.is() ) try
+    if( mxContext.is() && rxGraphic.is() ) try
     {
-        Reference< XGraphicObject > xGraphicObj( GraphicObject::create( mxCompContext ), UNO_SET_THROW );
+        Reference< XGraphicObject > xGraphicObj( GraphicObject::create( mxContext ), UNO_SET_THROW );
         xGraphicObj->setGraphic( rxGraphic );
         maGraphicObjects.push_back( xGraphicObj );
         aGraphicObjUrl = maGraphicObjScheme + xGraphicObj->getUniqueID();

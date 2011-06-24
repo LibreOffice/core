@@ -237,7 +237,7 @@
     <xsl:template match="w:body">
         <xsl:element name="office:body">
             <xsl:element name="office:text">
-                <!-- to add the sequece variable declaration at the begining of the office:body  G.Y.-->
+                <!-- to add the sequece variable declaration at the beginning of the office:body  G.Y.-->
                 <text:sequence-decls>
                     <xsl:call-template name="default_seqence_declaration"/>
                     <xsl:apply-templates select="/w:wordDocument/w:body//w:instrText[substring(normalize-space(text()),1,3) = 'SEQ' ] | /w:wordDocument/w:body//w:fldSimple[substring(normalize-space(@w:instr),1,3) = 'SEQ' ]  " mode="sequence_declare"/>

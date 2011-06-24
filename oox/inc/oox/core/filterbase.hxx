@@ -94,9 +94,9 @@ typedef ::cppu::WeakImplHelper5<
         ::com::sun::star::document::XImporter,
         ::com::sun::star::document::XExporter,
         ::com::sun::star::document::XFilter >
-    FilterBaseBase;
+    FilterBase_BASE;
 
-class OOX_DLLPUBLIC FilterBase : public FilterBaseBase, public ::cppu::BaseMutex
+class OOX_DLLPUBLIC FilterBase : public FilterBase_BASE, public ::cppu::BaseMutex
 {
 public:
     explicit            FilterBase(
@@ -213,7 +213,7 @@ public:
         the imported document. */
     ModelObjectHelper&  getModelObjectHelper() const;
 
-    /** Returns a helper for the handling of OLE obejcts. */
+    /** Returns a helper for the handling of OLE objects. */
     ::oox::ole::OleObjectHelper& getOleObjectHelper() const;
 
     /** Returns the VBA project manager. */

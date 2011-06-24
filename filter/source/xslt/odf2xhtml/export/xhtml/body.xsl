@@ -885,7 +885,7 @@
 
 
 
-	<!-- As draw:fame may occure within more elements than in text:p and draw:page -->
+	<!-- As draw:frame may occur within more elements than in text:p and draw:page -->
 	<xsl:template match="draw:frame">
 		<xsl:param name="globalData"/>
 		<xsl:param name="previousFrameWidths" select="0"/>
@@ -993,7 +993,7 @@
 		<!-- if the frame is anchored on a paragraph -->
 		<xsl:if test="@text:anchor-type='paragraph'">
 			<xsl:comment>Next 'div' is emulating the top hight of a draw:frame.</xsl:comment>
-			<!-- When the svg:y is set relativ to the paragraph content, the best way to emulate a positive height,
+			<!-- When the svg:y is set relative to the paragraph content, the best way to emulate a positive height,
 			 is to add an invisbile division inbetween with a height.
 			 Often text will flow into this 'gap', which is handled separately!
 			 -->
@@ -1079,7 +1079,6 @@
 		<xsl:element name="{$elem-name}">
 			<xsl:attribute name="style">
 				<xsl:call-template name="widthAndHeight"/>
-				<!-- MIB -->
 				<xsl:text> padding:0; </xsl:text>
 				<xsl:if test="@text:anchor-type!='as-char'">
 					<!-- all images float (CSS float reltaive) with a left position calculated by svg:x - parentMarginLeft - previousFrameWidths -->

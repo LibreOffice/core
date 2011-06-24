@@ -231,7 +231,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
                     xInputStream->closeInput();
                 }
-                catch (Exception e)
+                catch (Exception &e)
                 {
                     fprintf(stdout, "<exception>%s</exception>\n",
                             e.getText().c_str());

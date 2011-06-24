@@ -65,7 +65,7 @@ namespace filter{
                 should be available etc.
 
     @attention  The base class BaseLock must be the first of declared ones.
-                Otherwhise we cant be shure, that our own mutex member (which is
+                Otherwise we cant be shure, that our own mutex member (which is
                 present by this base class!) was full initialized inside our own
                 ctor as first!
  */
@@ -213,7 +213,7 @@ class BaseContainer : public BaseLock
 
             @note   The lifetime of this pointer is restricted to the time, where
                     the mutex of this BaseContainer instance is locked.
-                    Otherwhise may be the interface method flush() will destroy
+                    Otherwise may be the interface method flush() will destroy
                     m_pFlushCache and the here returned pointer will be invalid!
 
                     Use:

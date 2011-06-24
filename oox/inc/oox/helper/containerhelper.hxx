@@ -29,8 +29,8 @@
 #ifndef OOX_HELPER_CONTAINERHELPER_HXX
 #define OOX_HELPER_CONTAINERHELPER_HXX
 
-#include <vector>
 #include <map>
+#include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
@@ -41,10 +41,58 @@ namespace com { namespace sun { namespace star {
     namespace container { class XIndexContainer; }
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
-    namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace oox {
+
+// ============================================================================
+
+/** A range of signed 32-bit integer values. */
+struct ValueRange
+{
+    sal_Int32           mnFirst;
+    sal_Int32           mnLast;
+
+    inline explicit     ValueRange( sal_Int32 nValue = 0 ) : mnFirst( nValue ), mnLast( nValue ) {}
+    inline explicit     ValueRange( sal_Int32 nFirst, sal_Int32 nLast ) : mnFirst( nFirst ), mnLast( nLast ) {}
+
+    inline bool         operator==( const ValueRange& rRange ) const { return (mnFirst == rRange.mnFirst) && (mnLast == rRange.mnLast); }
+    inline bool         operator!=( const ValueRange& rRange ) const { return !(*this == rRange); }
+    inline bool         contains( sal_Int32 nValue ) const { return (mnFirst <= nValue) && (nValue <= mnLast); }
+    inline bool         contains( const ValueRange& rRange ) const { return (mnFirst <= rRange.mnFirst) && (rRange.mnLast <= mnLast); }
+    inline bool         intersects( const ValueRange& rRange ) const { return (mnFirst <= rRange.mnLast) && (rRange.mnFirst <= mnLast); }
+};
+
+// ----------------------------------------------------------------------------
+
+typedef ::std::vector< ValueRange > ValueRangeVector;
+
+// ----------------------------------------------------------------------------
+
+/** An ordered list of value ranges. The insertion operation will merge
+    consecutive value ranges.
+ */
+class ValueRangeSet
+{
+public:
+    inline explicit     ValueRangeSet() {}
+
+    /** Inserts the passed value into the range list. */
+    inline void         insert( sal_Int32 nValue ) { insert( ValueRange( nValue ) ); }
+    /** Inserts the passed value range into the range list. */
+    void                insert( const ValueRange& rRange );
+
+    /** Returns the ordered list of all value ranges. */
+    inline const ValueRangeVector& getRanges() const { return maRanges; }
+    /** Returns an intersection of the range list and the passed range. */
+    ValueRangeVector    getIntersection( const ValueRange& rRange ) const;
+
+private:
+    ValueRangeVector    maRanges;
+};
+
+// ============================================================================
 
 /** Template for a 2-dimensional array of objects.
 
@@ -123,7 +171,7 @@ public:
 
     /** Creates a new index container object from scratch. */
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
-                        createIndexContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                        createIndexContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     /** Inserts an object into an indexed container.
 
@@ -145,7 +193,7 @@ public:
 
     /** Creates a new name container object from scratch. */
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                        createNameContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                        createNameContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     /** Returns a name that is not used in the passed name container.
 

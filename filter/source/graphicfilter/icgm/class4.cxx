@@ -133,7 +133,7 @@ void CGM::ImplDoClass4()
     {
         switch ( mnElementID )
         {
-            case 0x01 : ComOut( CGM_LEVEL1, "PolyLine" )
+            case 0x01 : /*PolyLine*/
             {
                 sal_uInt32 nPoints = mnElementSize / ImplGetPointSize();
                 Polygon aPolygon( (sal_uInt16)nPoints );
@@ -150,7 +150,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x02 : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Disjoint PolyLine" )
+            case 0x02 : /*Disjoint PolyLine*/
             {
                 sal_uInt16 nPoints = sal::static_int_cast< sal_uInt16 >(
                     mnElementSize / ImplGetPointSize());
@@ -186,8 +186,8 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x03 : ComOut( CGM_LEVEL1, "PolyMarker" ) break;
-            case 0x04 : ComOut( CGM_LEVEL1, "Text" )
+            case 0x03 : /*PolyMarker*/ break;
+            case 0x04 : /*Text*/
             {
                 FloatPoint  aFloatPoint;
                 sal_uInt32      nType, nSize;
@@ -200,18 +200,15 @@ void CGM::ImplDoClass4()
                 nSize = ImplGetUI( 1 );
                 mpSource[ mnParaSize + nSize ] = 0;
 
-                ComOut( CGM_DESCRIPTION, (char*)mpSource + mnParaSize );
-
                 awt::Size aSize;
                 awt::Point aPoint( (long)aFloatPoint.X, (long)aFloatPoint.Y );
                 mpOutAct->DrawText( aPoint, aSize,
                                 (char*)mpSource + mnParaSize, nSize, (FinalFlag)nType );
-//              mnParaSize += nSize;
                 mnParaSize = mnElementSize;
             }
             break;
 
-            case 0x05 : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Restricted Text" )
+            case 0x05 : /*Restricted Text*/
             {
                 double      dx, dy;
                 FloatPoint  aFloatPoint;
@@ -239,18 +236,15 @@ void CGM::ImplDoClass4()
 
                 mpSource[ mnParaSize + nSize ] = 0;
 
-                ComOut( CGM_DESCRIPTION, (char*)mpSource + mnParaSize );
-
                 awt::Point aPoint( (long)aFloatPoint.X, (long)aFloatPoint.Y );
                 awt::Size aSize((long)dx, (long)dy);
                 mpOutAct->DrawText( aPoint, aSize ,
                                 (char*)mpSource + mnParaSize, nSize, (FinalFlag)nType );
-//              mnParaSize += nSize;
                 mnParaSize = mnElementSize;
             }
             break;
 
-            case 0x06 : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Append Text" )
+            case 0x06 : /*Append Text*/
             {
                 sal_uInt32 nSize;
                 sal_uInt32 nType = ImplGetUI16( 4 );
@@ -258,15 +252,12 @@ void CGM::ImplDoClass4()
                 nSize = ImplGetUI( 1 );
                 mpSource[ mnParaSize + nSize ] = 0;
 
-                ComOut( CGM_DESCRIPTION, (char*)mpSource + mnParaSize );
-
                 mpOutAct->AppendText( (char*)mpSource + mnParaSize, nSize, (FinalFlag)nType );
-//              mnParaSize += nSize;
                 mnParaSize = mnElementSize;
             }
             break;
 
-            case 0x07 : ComOut( CGM_LEVEL1, "Polygon" )
+            case 0x07 : /*Polygon*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -284,7 +275,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x08 : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Polygon Set" )
+            case 0x08 : /*Polygon Set*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -316,7 +307,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x09 : ComOut( CGM_LEVEL1, "Cell Array" )
+            case 0x09 : /*Cell Array*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -337,7 +328,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x0a : ComOut( CGM_LEVEL1, "Generalized Drawing Primitive" )
+            case 0x0a : /*Generalized Drawing Primitive*/
             {
                 ImplGetI( pElement->nIntegerPrecision );  //-Wall is this needed
                 ImplGetUI( pElement->nIntegerPrecision ); //-Wall is this needed
@@ -345,7 +336,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x0b : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Rectangle" )
+            case 0x0b : /*Rectangle*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -356,7 +347,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x0c : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Circle" )
+            case 0x0c : /*Circle*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -374,7 +365,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x0d : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Circular Arc 3 Point" )
+            case 0x0d : /*Circular Arc 3 Point*/
             {
                 FloatPoint aStartingPoint, aIntermediatePoint, aEndingPoint, aCenterPoint;
                 ImplGetPoint( aStartingPoint, sal_True );
@@ -445,7 +436,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x0e : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Circular Arc 3 Point Close" )
+            case 0x0e : /*Circular Arc 3 Point Close*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -511,7 +502,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x0f : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Circular Arc Centre" )
+            case 0x0f : /*Circular Arc Centre*/
             {
                 double fStartAngle, fEndAngle, vector[ 4 ];
                 FloatPoint aCenter, aRadius;
@@ -565,7 +556,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x10 : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Circular Arc Centre Close" )
+            case 0x10 : /*Circular Arc Centre Close*/
             {
                 double fOrientation, fStartAngle, fEndAngle, vector[ 4 ];
                 FloatPoint aCenter, aRadius;
@@ -610,7 +601,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x11 : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Ellipse" )
+            case 0x11 : /*Ellipse*/
             {
                 double fOrientation;
                 FloatPoint aCenter, aRadius;
@@ -623,7 +614,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x12 : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Elliptical Arc" )
+            case 0x12 : /*Elliptical Arc*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
@@ -654,7 +645,7 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x13 : ComOut( CGM_LEVEL1 | CGM_EXTENDED_PRIMITIVES_SET, "Elliptical Arc Close" )
+            case 0x13 : /*Elliptical Arc Close*/
             {
                 double fOrientation, fStartAngle, fEndAngle, vector[ 4 ];
                 FloatPoint aCenter, aRadius;
@@ -687,43 +678,43 @@ void CGM::ImplDoClass4()
                                 nType, fEndAngle, fStartAngle);
             }
             break;
-            case 0x14 : ComOut( CGM_LEVEL2, "Circular Arc Centre Reversed" )
+            case 0x14 : /*Circular Arc Centre Reversed*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x15 : ComOut( CGM_LEVEL2, "Connection Edge" )                         // NS
+            case 0x15 : /*Connection Edge   */                      // NS
             {
 //              if ( mbFigure )
 //                  mpOutAct->CloseRegion();
             }
             break;
-            case 0x16 : ComOut( CGM_LEVEL3, "Hyperbolic Arc" )                          // NS
+            case 0x16 : /*Hyperbolic Arc    */                      // NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x17 : ComOut( CGM_LEVEL3, "Parabolic Arc" )                           // NS
+            case 0x17 : /*Parabolic Arc */                      // NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x18 : ComOut( CGM_LEVEL3, "Non Uniform B-Spline" )                    // NS
+            case 0x18 : /*Non Uniform B-Spline  */              // NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x19 : ComOut( CGM_LEVEL3, "Non Uniform Rational B-Spline" )           // NS
+            case 0x19 : /*Non Uniform Rational B-Spline */      // NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x1a : ComOut( CGM_LEVEL3, "Polybezier" )
+            case 0x1a : /*Polybezier*/
             {
                 sal_uInt32 nOrder = ImplGetI( pElement->nIntegerPrecision );
 
@@ -767,92 +758,92 @@ void CGM::ImplDoClass4()
             }
             break;
 
-            case 0x1b : ComOut( CGM_LEVEL3, "Polysymbol" )                              // NS
+            case 0x1b : /*Polysymbol    */                          // NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x1c : ComOut( CGM_LEVEL3, "Bitonal Tile" )                            // NS
+            case 0x1c : /*Bitonal Tile  */                      // NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x1d : ComOut( CGM_LEVEL3, "Tile" )                                    // NS
+            case 0x1d : /*Tile  */                              // NS
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0x1e : ComOut( CGM_UNKNOWN_LEVEL, "Insert Object" )
+            case 0x1e : /*Insert Object*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xff : ComOut( CGM_GDSF_ONLY, "Polybezier" )
+            case 0xff : /*Polybezier*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xfe : ComOut( CGM_GDSF_ONLY, "Sharp Polybezier" )
+            case 0xfe : /*Sharp Polybezier*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xfd : ComOut( CGM_GDSF_ONLY, "Polyspline" )
+            case 0xfd : /*Polyspline*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xfc : ComOut( CGM_GDSF_ONLY, "Reounded Rectangle" )
+            case 0xfc : /*Reounded Rectangle*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xfb : ComOut( CGM_GDSF_ONLY, "Begin Cell Array" )
+            case 0xfb : /*Begin Cell Array*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xfa : ComOut( CGM_GDSF_ONLY, "End Cell Array" )
+            case 0xfa : /*End Cell Array*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xf9 : ComOut( CGM_GDSF_ONLY, "Insert File" )
+            case 0xf9 : /*Insert File*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xf8 : ComOut( CGM_GDSF_ONLY, "Block Text" )
+            case 0xf8 : /*Block Text*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xf7 : ComOut( CGM_GDSF_ONLY, "Variable Width Polyline" )
+            case 0xf7 : /*Variable Width Polyline*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xf6 : ComOut( CGM_GDSF_ONLY, "Elliptical Arc 3 Point" )
+            case 0xf6 : /*Elliptical Arc 3 Point*/
             {
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
             }
             break;
-            case 0xf1 : ComOut( CGM_GDSF_ONLY, "Hyperlink Definition" ) break;
-            default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;
+            case 0xf1 : /*Hyperlink Definition  */break;
+            default: break;
         }
     }
     else

@@ -123,7 +123,6 @@ sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::su
 
     OString aUtf8Passwd;
 
-#if 1
     WPDConfidence confidence = WPDocument::isFileFormatSupported(&input);
 
     if (WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence)
@@ -146,7 +145,6 @@ sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::su
                 return sal_False;
         }
     }
-#endif
 
     // An XML import service: what we push sax messages to..
     OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLOasisImporter" ) );
@@ -162,7 +160,7 @@ sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::su
 
     OdtGenerator collector(&xHandler, ODF_FLAT_XML);
     collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPG);
-    if (WPD_OK == WPDocument::parse(&input, &collector, aUtf8Passwd.getStr()))
+    if (WPD_OK == WPDocument::parse(&input, &collector, aUtf8Passwd.getLength() ? aUtf8Passwd.getStr() : 0))
         return sal_True;
     return sal_False;
 }
@@ -195,7 +193,7 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::detect: Got here!\n"));
 
     WPDConfidence confidence = WPD_CONFIDENCE_NONE;
-    OUString sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "" ) );
+    OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
     OUString sURL;

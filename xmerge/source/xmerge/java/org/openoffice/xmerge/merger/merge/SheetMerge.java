@@ -39,7 +39,7 @@ import org.openoffice.xmerge.merger.NodeMergeAlgorithm;
  *  The main difference between this implementation and
  *  <code>DocumentMerge</code>
  *  is that this merge will try to maintain unsupported features by
- *  examing the cell <code>node</code> objects one by one when it
+ *  examining the cell <code>node</code> objects one by one when it
  *  removes a node from the original <code>Iterator</code>.
  *
  * @author smak

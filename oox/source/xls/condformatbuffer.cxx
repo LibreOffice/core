@@ -194,10 +194,9 @@ void CondFormatRule::importCfRule( const AttributeList& rAttribs )
 
 void CondFormatRule::appendFormula( const OUString& rFormula )
 {
-    TokensFormulaContext aContext( true, false );
-    aContext.setBaseAddress( mrCondFormat.getRanges().getBaseAddress() );
-    getFormulaParser().importFormula( aContext, rFormula );
-    maModel.maFormulas.push_back( aContext );
+    CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
+    ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, rFormula );
+    maModel.maFormulas.push_back( aTokens );
 }
 
 void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
@@ -217,25 +216,24 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
     OSL_ENSURE( (nFmla1Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
     if( rStrm.getRemaining() >= 8 )
     {
-        TokensFormulaContext aContext( true, false );
-        aContext.setBaseAddress( mrCondFormat.getRanges().getBaseAddress() );
-        getFormulaParser().importFormula( aContext, rStrm );
-        maModel.maFormulas.push_back( aContext );
+        CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
+        ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm );
+        maModel.maFormulas.push_back( aTokens );
 
         // second formula
         OSL_ENSURE( (nFmla2Size >= 0) || (nFmla3Size == 0), "CondFormatRule::importCfRule - missing second formula" );
         OSL_ENSURE( (nFmla2Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
         if( rStrm.getRemaining() >= 8 )
         {
-            getFormulaParser().importFormula( aContext, rStrm );
-            maModel.maFormulas.push_back( aContext );
+            aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm );
+            maModel.maFormulas.push_back( aTokens );
 
             // third formula
             OSL_ENSURE( (nFmla3Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
             if( rStrm.getRemaining() >= 8 )
             {
-                getFormulaParser().importFormula( aContext, rStrm );
-                maModel.maFormulas.push_back( aContext );
+                aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm );
+                maModel.maFormulas.push_back( aTokens );
             }
         }
     }
@@ -420,14 +418,13 @@ void CondFormatRule::importCfRule( BiffInputStream& rStrm, sal_Int32 nPriority )
     OSL_ENSURE( (nFmla1Size > 0) || (nFmla2Size == 0), "CondFormatRule::importCfRule - missing first formula" );
     if( nFmla1Size > 0 )
     {
-        TokensFormulaContext aContext( true, false );
-        aContext.setBaseAddress( mrCondFormat.getRanges().getBaseAddress() );
-        getFormulaParser().importFormula( aContext, rStrm, &nFmla1Size );
-        maModel.maFormulas.push_back( aContext );
+        CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
+        ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm, &nFmla1Size );
+        maModel.maFormulas.push_back( aTokens );
         if( nFmla2Size > 0 )
         {
-            getFormulaParser().importFormula( aContext, rStrm, &nFmla2Size );
-            maModel.maFormulas.push_back( aContext );
+            aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm, &nFmla2Size );
+            maModel.maFormulas.push_back( aTokens );
         }
     }
 }
@@ -605,9 +602,9 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         ::std::vector< PropertyValue > aProps;
         // create condition properties
         lclAppendProperty( aProps, CREATE_OUSTRING( "Operator" ), eOperator );
-        lclAppendProperty( aProps, CREATE_OUSTRING( "Formula1" ), maModel.maFormulas[ 0 ].getTokens() );
+        lclAppendProperty( aProps, CREATE_OUSTRING( "Formula1" ), maModel.maFormulas[ 0 ] );
         if( maModel.maFormulas.size() >= 2 )
-            lclAppendProperty( aProps, CREATE_OUSTRING( "Formula2" ), maModel.maFormulas[ 1 ].getTokens() );
+            lclAppendProperty( aProps, CREATE_OUSTRING( "Formula2" ), maModel.maFormulas[ 1 ] );
 
         // style name for the formatting attributes
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
@@ -750,7 +747,6 @@ void CondFormatBuffer::finalizeImport()
 
 sal_Int32 CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
 {
-    using namespace ::com::sun::star::sheet;
     switch( nToken )
     {
         case XML_between:               return ConditionOperator2::BETWEEN;

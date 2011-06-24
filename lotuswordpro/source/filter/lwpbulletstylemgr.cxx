@@ -78,7 +78,6 @@ LwpBulletStyleMgr::LwpBulletStyleMgr() :
 m_pBulletList(NULL), m_bContinue(sal_True), m_bIsBulletSkipped(sal_False), m_nCurrentPos(0xFF)
 {
 }
-
 LwpBulletStyleMgr::~LwpBulletStyleMgr()
 {
     if (m_pBulletList)
@@ -530,30 +529,6 @@ void LwpBulletStyleMgr::OutputBulletListTail(IXFStream* pOutputStream, sal_uInt1
         }
         m_pBulletList->EndList(pOutputStream);
     }
-}
-
-rtl::OUString LwpBulletStyleMgr::GetDivisionName()
-{
-    if (!m_pFoundry)
-    {
-        return rtl::OUString();
-    }
-
-    rtl::OUString aRet = rtl::OUString();
-
-    LwpDocument* pDoc = m_pFoundry->GetDocument();
-    if (pDoc)
-    {
-        LwpObjectID* pID = pDoc->GetDivInfoID();
-        if (!pID->IsNull())
-        {
-            LwpDivInfo *pInfo = dynamic_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO));
-            if (pInfo)
-                aRet = pInfo->GetDivName();
-        }
-    }
-
-    return aRet;
 }
 
 rtl::OUString LwpBulletStyleMgr::GetSectionName(LwpPara* pPara)

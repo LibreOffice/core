@@ -140,7 +140,7 @@ public:
     /** Creates and returns a scenario collection for the passed sheet. */
     SheetScenarios&     createSheetScenarios( sal_Int16 nSheet );
 
-    /** Creates all scenarios in the Calc dcument. */
+    /** Creates all scenarios in the Calc document. */
     void                finalizeImport();
 
 private:

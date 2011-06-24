@@ -152,7 +152,7 @@ OUString SAL_CALL VisioImportFilter::detect( com::sun::star::uno::Sequence< Prop
 #ifdef DEBUG
     std::cerr << "VisioImportFilter::detect" << std::endl;
 #endif
-    OUString sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "" ) );
+    OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
     const PropertyValue * pValue = Descriptor.getConstArray();

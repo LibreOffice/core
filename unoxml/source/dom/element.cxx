@@ -579,7 +579,7 @@ namespace DOM
                     reinterpret_cast<xmlNodePtr>(res)).get()),
             UNO_QUERY_THROW);
 
-        // attribute adition event
+        // attribute addition event
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
