@@ -116,7 +116,7 @@ for arg in $@ $VALGRINDOPT ; do
                     valgrind_skip='--trace-children-skip=*/java'
                 fi
                 # finally set the valgrind check
-                VALGRINDCHECK="valgrind --tool=$VALGRIND --log-file=valgrind.log --trace-children=yes $valgrind_skip --num-callers=50 --error-exitcode=101"
+                VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes $valgrind_skip --num-callers=50 --error-exitcode=101"
                 checks="c$checks"
                 if [ "$VALGRIND" = "memcheck" ] ; then
                     export G_SLICE=always-malloc
@@ -157,6 +157,12 @@ esac
 # run soffice.bin directly when you want to get the backtrace
 if [ -n "$GDBTRACECHECK" ] ; then
     exec $GDBTRACECHECK "$sd_prog/soffice.bin" "$@"
+fi
+
+# valgrind --log-file=valgrind.log does not work well with --trace-children=yes
+if [ -n "$VALGRINDCHECK" ] ; then
+    echo "redirecting the standard and the error output to valgrind.log"
+    exec &>valgrind.log
 fi
 
 # oosplash does the rest: forcing pages in, javaldx etc. are
