@@ -149,7 +149,7 @@
  
      int index = -1;
 -    for (int i = 0; (index < 0) && handlers[i].type; i++)
-+    for (int j = 0; (index < 0) && handlers[j].type; i++)
++    for (int j = 0; (index < 0) && handlers[j].type; j++)
      {
 -      if (handlers[i].type == ptrType)
 -        index = i;
