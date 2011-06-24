@@ -52,7 +52,9 @@ EXTRA_FRAMEWORK_FLAG=-framework Python
 .IF "$(GUI)" == "UNX"
 PYUNORC=pyunorc
 .ELSE
+.IF "$(CROSS_COMPILING)" != "YES"
 .INCLUDE :  pyversion.mk
+.ENDIF
 PYUNORC=pyuno.ini
 DLLPOST=.pyd
 .ENDIF
