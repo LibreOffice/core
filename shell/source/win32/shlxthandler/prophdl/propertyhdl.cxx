@@ -32,7 +32,7 @@
 #include <osl/diagnose.h>
 
 #include "internal/global.hxx"
-#include "internal/PropertyHdl.hxx"
+#include "internal/propertyhdl.hxx"
 #include "internal/fileextensions.hxx"
 #include "internal/metainforeader.hxx"
 #include "internal/utilities.hxx"

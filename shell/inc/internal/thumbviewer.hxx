@@ -40,7 +40,9 @@
 using std::min;
 using std::max;
 #endif
+#ifndef DONT_HAVE_GDIPLUS
 #include <gdiplus.h>
+#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
