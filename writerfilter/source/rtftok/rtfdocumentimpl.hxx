@@ -238,6 +238,7 @@ namespace writerfilter {
                 /// If this is a substream.
                 bool m_bIsSubstream;
                 sal_uInt32 m_nHeaderPos;
+                sal_uInt32 m_nFooterPos;
                 sal_uInt32 m_nGroupStartPos;
         };
     } // namespace rtftok
