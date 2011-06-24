@@ -2096,6 +2096,8 @@ int RTFDocumentImpl::resolveParse()
                 case '}':
                     if ((ret = popState()))
                         return ret;
+                    if (m_bIsSubstream && m_nGroup == 0)
+                        return 0;
                     break;
                 case '\\':
                     if ((ret = resolveKeyword()))
