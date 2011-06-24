@@ -345,6 +345,17 @@ extern "C" {static void s_getFactory(va_list * pParam)
     *ppSSF = pSym(pImplName->getStr(), pSMgr, pKey);
 }}
 
+/* For backwards compatibility */
+Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
+    OUString const & rLibName, OUString const & rPath,
+    OUString const & rImplName,
+    Reference< lang::XMultiServiceFactory > const & xMgr,
+    Reference< registry::XRegistryKey > const & xKey )
+    SAL_THROW( (loader::CannotActivateFactoryException) )
+{
+    return loadSharedLibComponentFactory( rLibName, rPath, rImplName, xMgr, xKey, rtl::OUString() );
+}
+
 Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString const & rLibName, OUString const & rPath,
     OUString const & rImplName,

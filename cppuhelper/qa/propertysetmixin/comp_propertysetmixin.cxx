@@ -416,14 +416,14 @@ cppu::ImplementationEntry entries[] = {
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL mixin_component_getFactory(
     char const * implName, void * serviceManager, void * registryKey)
 {
     return cppu::component_getFactoryHelper(
         implName, serviceManager, registryKey, entries);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL mixin_component_getImplementationEnvironment(
     char const ** envTypeName, uno_Environment **)
 {
     *envTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;

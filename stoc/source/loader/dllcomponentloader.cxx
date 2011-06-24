@@ -202,8 +202,26 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
 
     throw(CannotActivateFactoryException, RuntimeException)
 {
+    rtl::OUString aPrefix;
+    if( xKey.is() )
+    {
+        Reference<XRegistryKey > xActivatorKey = xKey->openKey(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/ACTIVATOR") ) );
+        if (xActivatorKey.is() && xActivatorKey->getValueType() == RegistryValueType_ASCII )
+        {
+            Reference<XRegistryKey > xPrefixKey = xActivatorKey->openKey(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/PREFIX") ) );
+            if( xPrefixKey.is() && xPrefixKey->getValueType() == RegistryValueType_ASCII )
+            {
+                aPrefix = xPrefixKey->getAsciiValue();
+                if( aPrefix.getLength() != 0 )
+                    aPrefix = aPrefix + OUSTR("_");
+            }
+        }
+    }
+
     return loadSharedLibComponentFactory(
-        expand_url( rLibName ), OUString(), rImplName, m_xSMgr, xKey );
+        expand_url( rLibName ), OUString(), rImplName, m_xSMgr, xKey, aPrefix );
 }
 
 

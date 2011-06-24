@@ -856,7 +856,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
         if( xPrefixKey.is() && xPrefixKey->getValueType() == RegistryValueType_ASCII )
         {
             aPrefix = xPrefixKey->getAsciiValue();
-            if (aPrefix.getLength() != 0)
+            if( aPrefix.getLength() != 0 )
                 aPrefix = aPrefix + OUSTR("_");
         }
     }
