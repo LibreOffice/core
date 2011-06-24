@@ -235,13 +235,13 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FSStorageFactory::getSupportedServiceN
 
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
+SAL_DLLPUBLIC_EXPORT void SAL_CALL fsstorage_component_getImplementationEnvironment (
     const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL fsstorage_component_getFactory (
     const sal_Char * pImplementationName, void * pServiceManager, void * /* pRegistryKey */)
 {
     void * pResult = 0;

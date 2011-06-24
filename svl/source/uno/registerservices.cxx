@@ -55,13 +55,13 @@ DECLARE_CREATEINSTANCE( PathService )
 extern "C"
 {
 
-SVL_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment (
+SVL_DLLPUBLIC void SAL_CALL svl_component_getImplementationEnvironment (
     const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SVL_DLLPUBLIC void* SAL_CALL component_getFactory (
+SVL_DLLPUBLIC void* SAL_CALL svl_component_getFactory (
     const sal_Char * pImplementationName, void * _pServiceManager, void * /* _pRegistryKey*/)
 {
     void * pResult = 0;

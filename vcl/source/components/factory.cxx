@@ -83,14 +83,14 @@ namespace rsvg
 
 extern "C" {
 
-    VCL_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
+    VCL_DLLPUBLIC void SAL_CALL vcl_component_getImplementationEnvironment(
         const sal_Char** ppEnvTypeName,
         uno_Environment** /*ppEnv*/ )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    VCL_DLLPUBLIC void* SAL_CALL component_getFactory(
+    VCL_DLLPUBLIC void* SAL_CALL vcl_component_getFactory(
         const sal_Char* pImplementationName,
         void* pXUnoSMgr,
         void* /*pXUnoKey*/
