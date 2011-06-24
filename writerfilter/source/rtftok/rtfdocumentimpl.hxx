@@ -51,7 +51,8 @@ namespace writerfilter {
             DESTINATION_SHAPE,
             DESTINATION_SHAPEINSTRUCTION,
             DESTINATION_SHAPEPROPERTYVALUEPICT,
-            DESTINATION_NESTEDTABLEPROPERTIES
+            DESTINATION_NESTEDTABLEPROPERTIES,
+            DESTINATION_HEADER
         };
 
         enum RTFErrors
@@ -229,6 +230,7 @@ namespace writerfilter {
                 /// Buffered table cells, till cell definitions are not reached.
                 std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aTableBuffer;
                 bool m_bTable;
+                bool m_bHeader;
         };
     } // namespace rtftok
 } // namespace writerfilter

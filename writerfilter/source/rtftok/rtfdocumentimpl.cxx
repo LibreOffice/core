@@ -206,7 +206,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aListTableSprms(),
     m_xStorage(),
     m_aTableBuffer(),
-    m_bTable(false)
+    m_bTable(false),
+    m_bHeader(false)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -420,7 +421,7 @@ int RTFDocumentImpl::resolveChars(char ch)
     OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
 
     if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT
-            || m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
+            || m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT || m_aStates.top().nDestinationState == DESTINATION_HEADER)
         text(aOUStr);
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
@@ -507,7 +508,8 @@ void RTFDocumentImpl::text(OUString& rString)
         RTFValue::Pointer_t pValue;
         m_aTableBuffer.push_back(make_pair(BUFFER_STARTRUN, pValue));
     }
-    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
+    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT
+            || m_aStates.top().nDestinationState == DESTINATION_HEADER)
     {
         if (!m_bTable)
         {
@@ -627,6 +629,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_NESTTABLEPROPS:
             m_aStates.top().nDestinationState = DESTINATION_NESTEDTABLEPROPERTIES;
+            break;
+        case RTF_HEADER:
+            m_bHeader = true;
+            m_aStates.top().nDestinationState = DESTINATION_HEADER;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -1927,6 +1933,8 @@ int RTFDocumentImpl::popState()
         aShapeProperties = m_aStates.top().aShapeProperties;
         bPicPropEnd = true;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_HEADER)
+        m_bHeader = false;
 
     // This is the end of the doc, see if we need to close the last section.
     if (m_nGroup == 1)
