@@ -660,7 +660,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_HEADER:
             if (!m_bIsSubstream)
+            {
                 m_nHeaderPos = m_nGroupStartPos-1;
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            }
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
