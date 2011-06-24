@@ -339,8 +339,8 @@ void add_group_entries(
 
     for (size_t i = 0; i < key_count; i++)
     {
-        ByteString iso_lang = aConfig.GetKeyName(sal::static_int_cast<USHORT>(i));
-        ByteString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<USHORT>(i));
+        ByteString iso_lang = aConfig.GetKeyName(sal::static_int_cast<sal_uInt16>(i));
+        ByteString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<sal_uInt16>(i));
         iso_lang_identifier myiso_lang( iso_lang );
         LanguageType ltype = MsLangId::convertIsoNamesToLanguage(myiso_lang.language(), myiso_lang.country());
         if(  ( ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )
@@ -412,7 +412,7 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
     Config config(tmpfile_url.getStr());
     size_t grpcnt = config.GetGroupCount();
     for (size_t i = 0; i < grpcnt; i++)
-        add_group_entries(config, config.GetGroupName(sal::static_int_cast<USHORT>(i)), Substitutor);
+        add_group_entries(config, config.GetGroupName(sal::static_int_cast<sal_uInt16>(i)), Substitutor);
 }
 
 void read_file(
