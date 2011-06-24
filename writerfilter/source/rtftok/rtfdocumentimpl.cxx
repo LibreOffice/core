@@ -206,8 +206,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aListTableSprms(),
     m_xStorage(),
     m_aTableBuffer(),
-    m_bTable(false),
-    m_bHeader(false)
+    m_aHeaderBuffer(),
+    m_pActiveBuffer(0)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -484,12 +484,12 @@ void RTFDocumentImpl::text(OUString& rString)
     }
     if (m_bNeedPap)
     {
-        if (!m_bTable)
+        if (!m_pActiveBuffer)
             Mapper().props(pParagraphProperties);
         else
         {
             RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
-            m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+            m_pActiveBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
         }
         m_bNeedPap = false;
     }
@@ -501,17 +501,17 @@ void RTFDocumentImpl::text(OUString& rString)
         Mapper().text(sFieldStart, 1);
         Mapper().endCharacterGroup();
     }
-    if (!m_bTable)
+    if (!m_pActiveBuffer)
         Mapper().startCharacterGroup();
     else
     {
         RTFValue::Pointer_t pValue;
-        m_aTableBuffer.push_back(make_pair(BUFFER_STARTRUN, pValue));
+        m_pActiveBuffer->push_back(make_pair(BUFFER_STARTRUN, pValue));
     }
     if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT
             || m_aStates.top().nDestinationState == DESTINATION_HEADER)
     {
-        if (!m_bTable)
+        if (!m_pActiveBuffer)
         {
             writerfilter::Reference<Properties>::Pointer_t const pProperties(
                     new RTFReferenceProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms)
@@ -521,22 +521,22 @@ void RTFDocumentImpl::text(OUString& rString)
         else
         {
             RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
-            m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+            m_pActiveBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
         }
     }
-    if (!m_bTable)
+    if (!m_pActiveBuffer)
         Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
     else
     {
         RTFValue::Pointer_t pValue(new RTFValue(rString));
-        m_aTableBuffer.push_back(make_pair(BUFFER_UTEXT, pValue));
+        m_pActiveBuffer->push_back(make_pair(BUFFER_UTEXT, pValue));
     }
-    if (!m_bTable)
+    if (!m_pActiveBuffer)
         Mapper().endCharacterGroup();
     else
     {
         RTFValue::Pointer_t pValue;
-        m_aTableBuffer.push_back(make_pair(BUFFER_ENDRUN, pValue));
+        m_pActiveBuffer->push_back(make_pair(BUFFER_ENDRUN, pValue));
     }
     if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
@@ -631,7 +631,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_NESTEDTABLEPROPERTIES;
             break;
         case RTF_HEADER:
-            m_bHeader = true;
+            m_pActiveBuffer = &m_aHeaderBuffer;
             m_aStates.top().nDestinationState = DESTINATION_HEADER;
             break;
         case RTF_LISTTEXT:
@@ -687,12 +687,12 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_PAR:
             {
-                if (!m_bTable)
+                if (!m_pActiveBuffer)
                     lcl_ParBreak(Mapper());
                 else
                 {
                     RTFValue::Pointer_t pValue;
-                    m_aTableBuffer.push_back(make_pair(BUFFER_PAR, pValue));
+                    m_pActiveBuffer->push_back(make_pair(BUFFER_PAR, pValue));
                 }
                 // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
@@ -902,7 +902,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_KEEP: nParam = NS_sprm::LN_PFKeep; break;
         case RTF_KEEPN: nParam = NS_sprm::LN_PFKeepFollow; break;
         case RTF_WIDCTLPAR: nParam = NS_sprm::LN_PFWidowControl; break;
-        case RTF_INTBL: m_bTable = true; nParam = NS_sprm::LN_PFInTable; break;
+        case RTF_INTBL: m_pActiveBuffer = &m_aTableBuffer; nParam = NS_sprm::LN_PFInTable; break;
         case RTF_PAGEBB: nParam = NS_sprm::LN_PFPageBreakBefore; break;
         default: break;
     }
@@ -936,7 +936,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PARD:
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
-            m_bTable = false;
+            m_pActiveBuffer = 0;
             break;
         case RTF_SECTD:
             m_aStates.top().aSectionSprms = m_aDefaultState.aSectionSprms;
@@ -1934,7 +1934,7 @@ int RTFDocumentImpl::popState()
         bPicPropEnd = true;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_HEADER)
-        m_bHeader = false;
+        m_pActiveBuffer = 0;
 
     // This is the end of the doc, see if we need to close the last section.
     if (m_nGroup == 1)

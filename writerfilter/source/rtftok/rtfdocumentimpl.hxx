@@ -84,6 +84,9 @@ namespace writerfilter {
             BUFFER_PAR
         };
 
+        /// Buffered calls to dmapper
+        typedef std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> RTFBuffer_t;
+
         /// An entry in the color table.
         class RTFColorTableEntry
         {
@@ -228,9 +231,9 @@ namespace writerfilter {
                 oox::GraphicHelper* m_pGraphicHelper;
 
                 /// Buffered table cells, till cell definitions are not reached.
-                std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aTableBuffer;
-                bool m_bTable;
-                bool m_bHeader;
+                RTFBuffer_t m_aTableBuffer;
+                RTFBuffer_t m_aHeaderBuffer;
+                RTFBuffer_t* m_pActiveBuffer;
         };
     } // namespace rtftok
 } // namespace writerfilter
