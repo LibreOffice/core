@@ -182,6 +182,7 @@ namespace writerfilter {
                 RTFSprms_t mergeAttributes();
                 int asHex(char ch);
                 void setSubstream(bool bIsSubtream);
+                void seek(sal_uInt32 nPos);
             private:
                 int resolveParse();
                 int resolveKeyword();
@@ -200,8 +201,10 @@ namespace writerfilter {
                 int pushState();
                 int popState();
                 void text(rtl::OUString& rString);
+                void parBreak();
 
                 com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& m_xContext;
+                com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& m_xInputStream;
                 com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& m_xDstDoc;
                 com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const& m_xFrame;
                 com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xModelFactory;
@@ -232,7 +235,9 @@ namespace writerfilter {
                 std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aTableBuffer;
                 bool m_bTable;
                 /// If this is a substream.
-                bool m_bIsSubtream;
+                bool m_bIsSubstream;
+                sal_uInt32 m_nHeaderPos;
+                sal_uInt32 m_nGroupStartPos;
         };
     } // namespace rtftok
 } // namespace writerfilter

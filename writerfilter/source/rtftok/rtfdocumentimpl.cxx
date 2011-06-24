@@ -153,17 +153,6 @@ void lcl_Break(Stream& rMapper, bool bMinimal = false)
     }
 }
 
-void lcl_ParBreak(Stream& rMapper)
-{
-    // end previous paragraph
-    rMapper.startCharacterGroup();
-    lcl_Break(rMapper, true);
-    rMapper.endCharacterGroup();
-    rMapper.endParagraphGroup();
-    // start new one
-    rMapper.startParagraphGroup();
-}
-
 void lcl_SectBreak(Stream& rMapper, std::stack<RTFParserState>& aStates, bool bFinal = false)
 {
     // Section properties are a paragraph sprm.
@@ -194,6 +183,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
         uno::Reference<lang::XComponent> const& xDstDoc,
         uno::Reference<frame::XFrame>    const& xFrame)
     : m_xContext(xContext),
+    m_xInputStream(xInputStream),
     m_xDstDoc(xDstDoc),
     m_xFrame(xFrame),
     m_nGroup(0),
@@ -208,7 +198,9 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_xStorage(),
     m_aTableBuffer(),
     m_bTable(false),
-    m_bIsSubtream(false)
+    m_bIsSubstream(false),
+    m_nHeaderPos(0),
+    m_nGroupStartPos(0)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -237,7 +229,38 @@ Stream& RTFDocumentImpl::Mapper()
 
 void RTFDocumentImpl::setSubstream(bool bIsSubtream)
 {
-    m_bIsSubtream = bIsSubtream;
+    m_bIsSubstream = bIsSubtream;
+}
+
+void RTFDocumentImpl::parBreak()
+{
+    // end previous paragraph
+    Mapper().startCharacterGroup();
+    lcl_Break(Mapper(), true);
+
+    if (m_nHeaderPos > 0)
+    {
+        sal_uInt32 nPos = Strm().Tell();
+        // Seek to header position, parse, then seek back.
+        RTFDocumentImpl aImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame);
+        aImpl.setSubstream(true);
+        aImpl.seek(m_nHeaderPos);
+        OSL_TRACE("header substream start");
+        aImpl.resolve(Mapper());
+        OSL_TRACE("header substream end");
+        Strm().Seek(nPos);
+        m_nHeaderPos = 0;
+    }
+
+    Mapper().endCharacterGroup();
+    Mapper().endParagraphGroup();
+    // start new one
+    Mapper().startParagraphGroup();
+}
+
+void RTFDocumentImpl::seek(sal_uInt32 nPos)
+{
+    Strm().Seek(nPos);
 }
 
 sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
@@ -635,6 +658,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_NESTTABLEPROPS:
             m_aStates.top().nDestinationState = DESTINATION_NESTEDTABLEPROPERTIES;
             break;
+        case RTF_HEADER:
+            if (!m_bIsSubstream)
+                m_nHeaderPos = m_nGroupStartPos-1;
+            break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
         case RTF_NONESTTABLES:
@@ -689,7 +716,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_PAR:
             {
                 if (!m_bTable)
-                    lcl_ParBreak(Mapper());
+                    parBreak();
                 else
                 {
                     RTFValue::Pointer_t pValue;
@@ -1444,7 +1471,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     else if (aPair.first == BUFFER_ENDRUN)
                         Mapper().endCharacterGroup();
                     else if (aPair.first == BUFFER_PAR)
-                        lcl_ParBreak(Mapper());
+                        parBreak();
                     else
                         OSL_FAIL("should not happen");
                 }
@@ -1650,8 +1677,8 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
     if (m_aStates.top().nDestinationState == DESTINATION_SKIP)
         return 0;
-    //OSL_TRACE("%s: keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
-    //        rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));
+    OSL_TRACE("%s: keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
+            rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));
     int i, ret;
     for (i = 0; i < nRTFControlWords; i++)
     {
@@ -1756,6 +1783,7 @@ int RTFDocumentImpl::pushState()
 {
     //OSL_TRACE("%s before push: %d", OSL_THIS_FUNC, m_nGroup);
 
+    m_nGroupStartPos = Strm().Tell();
     RTFParserState aState;
     if (!m_aStates.empty())
     {
@@ -2047,6 +2075,7 @@ int RTFDocumentImpl::resolveParse()
 
     while ((Strm() >> ch, !Strm().IsEof()))
     {
+        OSL_TRACE("%s: parsing character '%c'", OSL_THIS_FUNC, ch);
         if (m_nGroup < 0)
             return ERROR_GROUP_UNDER;
         if (!m_aStates.empty() && m_aStates.top().nInternalState == INTERNAL_BIN)
