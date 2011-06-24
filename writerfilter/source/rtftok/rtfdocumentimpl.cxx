@@ -240,11 +240,17 @@ sal_uInt32 RTFDocumentImpl::getEncodingTable(sal_uInt32 nFontIndex)
     return 0;
 }
 
-void RTFDocumentImpl::parBreak()
+void RTFDocumentImpl::parBreak(bool bBuffered)
 {
     // end previous paragraph
     Mapper().startCharacterGroup();
     lcl_Break(Mapper());
+
+    if (!bBuffered && m_aHeaderBuffer.size())
+    {
+        // TODO Time to read the header buffer!
+    }
+
     Mapper().endCharacterGroup();
     Mapper().endParagraphGroup();
     // start new one
