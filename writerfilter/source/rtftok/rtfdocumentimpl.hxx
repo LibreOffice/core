@@ -51,8 +51,7 @@ namespace writerfilter {
             DESTINATION_SHAPE,
             DESTINATION_SHAPEINSTRUCTION,
             DESTINATION_SHAPEPROPERTYVALUEPICT,
-            DESTINATION_NESTEDTABLEPROPERTIES,
-            DESTINATION_HEADER
+            DESTINATION_NESTEDTABLEPROPERTIES
         };
 
         enum RTFErrors
@@ -83,9 +82,6 @@ namespace writerfilter {
             BUFFER_ENDRUN,
             BUFFER_PAR
         };
-
-        /// Buffered calls to dmapper
-        typedef std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> RTFBuffer_t;
 
         /// An entry in the color table.
         class RTFColorTableEntry
@@ -181,7 +177,6 @@ namespace writerfilter {
                 Stream& Mapper();
                 sal_uInt32 getColorTable(sal_uInt32 nIndex);
                 sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
-                void parBreak(bool bBuffered = false);
                 void skipDestination(bool bParsed);
                 RTFSprms_t mergeSprms();
                 RTFSprms_t mergeAttributes();
@@ -232,9 +227,8 @@ namespace writerfilter {
                 oox::GraphicHelper* m_pGraphicHelper;
 
                 /// Buffered table cells, till cell definitions are not reached.
-                RTFBuffer_t m_aTableBuffer;
-                RTFBuffer_t m_aHeaderBuffer;
-                RTFBuffer_t* m_pActiveBuffer;
+                std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aTableBuffer;
+                bool m_bTable;
         };
     } // namespace rtftok
 } // namespace writerfilter
