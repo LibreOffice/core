@@ -69,7 +69,9 @@ CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="MSC"
 CFLAGS+=-GR
+.ENDIF
 .ENDIF
 
 # --- General -----------------------------------------------------

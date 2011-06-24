@@ -42,7 +42,9 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="MSC"
 CFLAGS+=-GR
+.ENDIF
 .ENDIF
 
 # --- Shared-Library ---------------------------------------------------

@@ -38,7 +38,9 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :	settings.mk
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="MSC"
 CFLAGS+=-GR
+.ENDIF
 .ENDIF
 
 SLOFILES=$(SLO)$/DocGenerator.obj
