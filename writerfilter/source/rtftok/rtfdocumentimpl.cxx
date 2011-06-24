@@ -156,17 +156,6 @@ void lcl_TableBreak(Stream& rMapper)
     rMapper.startParagraphGroup();
 }
 
-void lcl_ParBreak(Stream& rMapper)
-{
-    // end previous paragraph
-    rMapper.startCharacterGroup();
-    lcl_Break(rMapper);
-    rMapper.endCharacterGroup();
-    rMapper.endParagraphGroup();
-    // start new one
-    rMapper.startParagraphGroup();
-}
-
 void lcl_SectBreak(Stream& rMapper, std::stack<RTFParserState>& aStates, bool bFinal = false)
 {
     // Section properties are a paragraph sprm.
@@ -249,6 +238,17 @@ sal_uInt32 RTFDocumentImpl::getEncodingTable(sal_uInt32 nFontIndex)
     if (nFontIndex < m_aFontEncodings.size())
         return m_aFontEncodings[nFontIndex];
     return 0;
+}
+
+void RTFDocumentImpl::parBreak()
+{
+    // end previous paragraph
+    Mapper().startCharacterGroup();
+    lcl_Break(Mapper());
+    Mapper().endCharacterGroup();
+    Mapper().endParagraphGroup();
+    // start new one
+    Mapper().startParagraphGroup();
 }
 
 void RTFDocumentImpl::resolve(Stream & rMapper)
@@ -692,7 +692,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             {
                 if (!m_pActiveBuffer)
                 {
-                    lcl_ParBreak(Mapper());
+                    parBreak();
                 }
                 else
                 {
@@ -1448,7 +1448,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     else if (aPair.first == BUFFER_ENDRUN)
                         Mapper().endCharacterGroup();
                     else if (aPair.first == BUFFER_PAR)
-                        lcl_ParBreak(Mapper());
+                        parBreak();
                     else
                         OSL_FAIL("should not happen");
                 }
