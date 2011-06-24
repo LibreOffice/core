@@ -47,7 +47,11 @@
 #if (defined UNX)
 void main( int argc, char * argv[] )
 #else
+#if (defined GCC)
+int _cdecl main( int argc, char * argv[] )
+#else
 void _cdecl main( int argc, char * argv[] )
+#endif
 #endif
 {
     static ::rtl::OUString sProcess(RTL_CONSTASCII_USTRINGPARAM(SOFFICE));
