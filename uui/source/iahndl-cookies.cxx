@@ -42,18 +42,6 @@ using namespace com::sun::star;
 
 namespace {
 
-class CookieList: public List
-{
-public:
-    ~CookieList() SAL_THROW(());
-};
-
-CookieList::~CookieList() SAL_THROW(())
-{
-    while (Count() != 0)
-        delete static_cast< CntHTTPCookie * >(Remove(Count() - 1));
-}
-
 void
 executeCookieDialog(Window * pParent, CntHTTPCookieRequest & rRequest)
     SAL_THROW((uno::RuntimeException))
@@ -84,7 +72,7 @@ handleCookiesRequest_(
         rContinuations)
     SAL_THROW((uno::RuntimeException))
 {
-    CookieList aCookies;
+    CntHTTPCookieList_impl* pCookies = new CntHTTPCookieList_impl();
     for (sal_Int32 i = 0; i < rRequest.Cookies.getLength(); ++i)
     {
         try
@@ -122,7 +110,7 @@ handleCookiesRequest_(
                 OSL_ASSERT(false);
                 break;
             }
-            aCookies.Insert(xCookie.get(), LIST_APPEND);
+            pCookies->push_back( xCookie.get() );
             xCookie.release();
         }
         catch (std::bad_alloc const &)
@@ -136,7 +124,7 @@ handleCookiesRequest_(
 
     CntHTTPCookieRequest
     aRequest(rRequest.URL,
-                 aCookies,
+                 *pCookies,
                  rRequest.Request == ucb::CookieRequest_RECEIVE
                      ? CNTHTTP_COOKIE_REQUEST_RECV
                      : CNTHTTP_COOKIE_REQUEST_SEND);
@@ -167,9 +155,7 @@ handleCookiesRequest_(
             for (sal_Int32 j = 0; j < rRequest.Cookies.getLength(); ++j)
                 if (rRequest.Cookies[j].Policy
                     == ucb::CookiePolicy_CONFIRM)
-                    switch (static_cast< CntHTTPCookie * >(aCookies.
-                                                           GetObject(j))->
-                            m_nPolicy)
+                    switch ( (*pCookies)[ j ]->m_nPolicy )
                     {
                     case CNTHTTP_COOKIE_POLICY_ACCEPTED:
                         xCookieHandling->

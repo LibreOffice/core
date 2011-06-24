@@ -85,12 +85,12 @@ CookiesDialog::CookiesDialog( Window* pParent,
     aMsg.SearchAndReplaceAscii( "${HOST}", aObj.GetHost() );
     aMsg.SearchAndReplaceAscii( "${PATH}", aObj.GetPath() );
     String aTemplate( ResId( STR_COOKIES_RECV_COOKIES, *pResMgr ) );
-    List& rList =mpCookieRequest->m_rCookieList;
+    CntHTTPCookieList_impl& rList =mpCookieRequest->m_rCookieList;
     String aPair, aCookie;
 
-    for ( sal_uInt16 i = (sal_uInt16)rList.Count(); i--; )
+    for ( sal_uInt16 i = (sal_uInt16)rList.size(); i--; )
     {
-        CntHTTPCookie* pCookie = (CntHTTPCookie*)rList.GetObject(i);
+        CntHTTPCookie* pCookie = rList[ i ];
 
         if ( CNTHTTP_COOKIE_POLICY_INTERACTIVE == pCookie->m_nPolicy )
         {
@@ -121,11 +121,11 @@ short CookiesDialog::Execute()
 
     if ( maInFutureIgnoreBtn.IsChecked() )
         nStatus = CNTHTTP_COOKIE_POLICY_BANNED;
-    List& rList = mpCookieRequest->m_rCookieList;
+    CntHTTPCookieList_impl& rList = mpCookieRequest->m_rCookieList;
 
-    for ( sal_uInt16 i = (sal_uInt16)rList.Count(); i--; )
+    for ( sal_uInt16 i = (sal_uInt16)rList.size(); i--; )
     {
-        sal_uInt16& rStatus = ( (CntHTTPCookie*)rList.GetObject(i) )->m_nPolicy;
+        sal_uInt16& rStatus = rList[ i ]->m_nPolicy;
 
         if ( rStatus == CNTHTTP_COOKIE_POLICY_INTERACTIVE )
             rStatus = nStatus;
