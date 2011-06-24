@@ -33,6 +33,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
 
+#ifdef WNT
 #include <tools/presys.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -42,6 +43,15 @@
 #pragma warning(pop)
 #endif
 #include <tools/postsys.h>
+#else
+// From MinGW
+typedef unsigned short WORD;
+#define PRIMARYLANGID(lgid) ((WORD)(lgid) & 0x3ff)
+#define SUBLANGID(lgid) ((WORD)(lgid) >> 10)
+#define LANG_SPANISH 0x0a
+#define SUBLANG_NEUTRAL 0x00
+#define SUBLANG_SPANISH 0x01
+#endif
 
 #define VCL_NEED_BASETSD
 
@@ -62,6 +72,10 @@
 #include <iterator>
 #include <algorithm>
 #include <string>
+
+#ifndef WNT
+#include <cstring>
+#endif
 
 namespace /* private */
 {
@@ -469,13 +483,20 @@ void start_language_section(
          ( subLangID == SUBLANG_SPANISH ) )
         subLangID = SUBLANG_NEUTRAL;
 
+#ifdef WNT
     _itoa(primLangID, buff, 16);
+#else
+    sprintf(buff, "%x", primLangID);
+#endif
     lang_section += std::string("0x") + std::string(buff);
 
     lang_section += std::string(" , ");
 
+#ifdef WNT
     _itoa(subLangID, buff, 16);
-
+#else
+    sprintf(buff, "%x", subLangID);
+#endif
     lang_section += std::string("0x") + std::string(buff);
     ostream_iter = lang_section;
 }
