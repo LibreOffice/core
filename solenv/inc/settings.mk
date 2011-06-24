@@ -34,24 +34,6 @@ MKFILENAME:=SETTINGS.MK
 force_dmake_to_error
 .ENDIF
 
-# If we are building a target that should run on the build platform,
-# set variables for suitable for that, and not the host ("target")
-# platform.
-.IF "$(CROSS_COMPILING)"!="" && "$(TARGETPLATFORM)"=="BUILD"
-# I wonder if one could use some dmake foreach loop here...
-COM:=$(COM_FOR_BUILD)
-GUI:=$(GUI_FOR_BUILD)
-GUIBASE:=$(GUIBASE_FOR_BUILD)
-OS:=$(OS_FOR_BUILD)
-CPU:=$(CPU_FOR_BUILD)
-CPUNAME:=$(CPUNAME_FOR_BUILD)
-CC:=$(CC_FOR_BUILD)
-CXX:=$(CXX_FOR_BUILD)
-GXX_INCLUDE_PATH:=$(GXX_INCLUDE_PATH_FOR_BUILD)
-MACOSX_DEPLOYMENT_TARGET:=$(MACOSX_DEPLOYMENT_TARGET_FOR_BUILD)
-.EXPORT: MACOSX_DEPLOYMENT_TARGET
-.ENDIF
-
 .INCLUDE .IGNORE : ooo_vendor.mk
 
 # --- common tool makros --------------------------------------
@@ -372,10 +354,6 @@ DBG_LEVEL=$(dbglevel)
 nodebug=$(NODEBUG)
 .ENDIF
 
-.IF "$(hbtoolkit)"!=""
-HBTOOLKIT=$(hbtoolkit)
-.ENDIF
-
 .IF "$(PRODUCT)"!=""
 product*=$(PRODUCT)
 .ENDIF
@@ -545,35 +523,36 @@ RSC_LANG_ISO+:=$(completelangiso)
 TARGETTYPE=CUI
 .ENDIF
 
-.IF "$(TARGETPLATFORM)"==""
-TARGETPLATFORM=HOST
-.ENDIF
-
 # --- Pfade setzen -------------------------------------------------
 
 # Output-Pfad
 # profile has to be first for not getting the .pro extension
 .IF "$(profile)"!=""
 OUT=$(PRJ)/$(OUTPATH).cap
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).cap
 ROUT=$(OUTPATH).cap
 .ELSE
 
 .IF "$(product)"!=""
 OUT=$(PRJ)/$(OUTPATH).pro
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).pro
 ROUT=$(OUTPATH).pro
 
 .ELSE
 .IF "$(profile)"!=""
 OUT=$(PRJ)/$(OUTPATH).cap
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).cap
 ROUT=$(OUTPATH).cap
 .ENDIF
 .IF "$(dbcs)"!=""
 OUT=$(PRJ)/$(OUTPATH).w
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).w
 ROUT=$(OUTPATH).w
 .ENDIF
 # could already be set by makefile.mk
 .IF "$(OUT)" == ""
 OUT*=$(PRJ)/$(OUTPATH)
+OUT_FOR_BUILD*=$(PRJ)/$(OUTPATH_FOR_BUILD)
 ROUT*=$(OUTPATH)
 .ENDIF
 .ENDIF
@@ -581,15 +560,13 @@ ROUT*=$(OUTPATH)
 
 .IF "$(bndchk)" != ""
 OUT:=$(PRJ)/$(OUTPATH).bnd
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).bnd
 ROUT=$(OUTPATH).bnd
 .ENDIF
 .IF "$(truetime)" != ""
 OUT=$(PRJ)/$(OUTPATH).tt
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).tt
 ROUT=$(OUTPATH).tt
-.ENDIF
-.IF "$(hbtoolkit)"!=""
-OUT=$(PRJ)/$(OUTPATH).tlk
-ROUT=$(OUTPATH).tlk
 .ENDIF
 
 .IF "$(PRJ)"!="."
@@ -623,6 +600,7 @@ COMMON_OUTDIR:=$(OUTPATH)
 #.ENDIF			# "$(common_build)"!=""
 
 LOCAL_OUT:=$(OUT)
+LOCAL_OUT_FOR_BUILD:=$(OUT_FOR_BUILD)
 LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 .EXPORT : LOCAL_OUT LOCAL_COMMON_OUT
 
@@ -656,6 +634,7 @@ MISCX=$(OUT)/umisc
 MISC=$(OUT)/umisc
 .ELSE
 MISC=$(OUT)/misc
+MISC_FOR_BUILD=$(OUT_FOR_BUILD)/misc
 # pointing to misc in common output tree if exists
 COMMONMISC={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))}
 .ENDIF
@@ -797,6 +776,7 @@ SOLARIDLDIR=$(SOLARVERSION)/$(INPATH)/idl
 SOLARRESDIR=$(SOLARVERSION)/$(INPATH)/res
 SOLARRESXDIR=$(SOLARVERSION)/$(INPATH)/res
 SOLARLIBDIR=$(SOLARVERSION)/$(INPATH)/lib
+SOLARLIBDIR_FOR_BUILD=$(SOLARVERSION)/$(INPATH_FOR_BUILD)/lib
 SOLARJAVADIR=$(SOLARVERSION)/$(INPATH)/java
 SOLARINCDIR=$(SOLARVERSION)/$(INPATH)/inc
 SOLARINCXDIR=$(SOLARVERSION)/$(INPATH)/inc
@@ -806,7 +786,7 @@ SOLARINCXDIR=$(SOLARVERSION)/$(INPATH)/inc/$(SOLARLANG)
 SOLARRESXDIR=$(SOLARVERSION)/$(INPATH)/res/$(SOLARLANG)
 .ENDIF
 .ENDIF
-SOLARBINDIR:=$(SOLARVERSION)/$(INPATH)/bin
+SOLARBINDIR:=$(SOLARVERSION)/$(INPATH_FOR_BUILD)/bin
 SOLARUCRDIR=$(SOLARVERSION)/$(INPATH)/ucr
 SOLARPARDIR=$(SOLARVERSION)/$(INPATH)/par
 SOLARXMLDIR=$(SOLARVERSION)/$(INPATH)/xml
@@ -1023,16 +1003,34 @@ LNTFLAGSOUTOBJ=-os
 .INCLUDE : unx.mk
 .ENDIF
 
+DLLPOSTFIX=lo
+
+.IF "$(CROSS_COMPILING)" == "YES"
+# Assume always cross-compiling from Unix
+EXECPOST_FOR_BUILD=
+.ELSE
+EXECPOST_FOR_BUILD=$(EXECPOST)
+.ENDIF
+
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
 # Add SOLARLIBDIR at the begin of a (potentially previously undefined) library
 # path (LD_LIBRARY_PATH, PATH, etc.; prepending avoids fetching libraries from
 # an existing office/URE installation; the ": &&" enables this to work at the
 # start of a recipe line that is not prefixed by "+" as well as in the middle of
 # an existing && chain:
+.IF "$(CROSS_COMPILING)"=="YES" && "$(OS)"=="WNT"
+# Sigh, special-case cross-compiling to Windows. Here OOO_LIBRARY_PATH_VAR is the correct one
+# for the BUILD platform but SOLARSHAREDBIN is the one for Windows, i.e. "foo/bin".
+AUGMENT_LIBRARY_PATH = : && \
+    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(SOLARLIBDIR_FOR_BUILD))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
+AUGMENT_LIBRARY_PATH_LOCAL = : && \
+    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
+.ELSE
 AUGMENT_LIBRARY_PATH = : && \
     $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
 AUGMENT_LIBRARY_PATH_LOCAL = : && \
     $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
+.ENDIF
 .END
 
 # for multiprocess building in external modules
@@ -1050,6 +1048,8 @@ VALGRINDTOOL=valgrind --tool=$(VALGRIND) --num-callers=50
 VALGRINDTOOL+=--leak-check=yes
 G_SLICE*:=always-malloc
 .EXPORT : G_SLICE
+GLIBCXX_FORCE_NEW*:=1
+.EXPORT : GLIBCXX_FORCE_NEW
 .ENDIF
 .ENDIF
 
@@ -1071,7 +1071,11 @@ CLIMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/climaker
 GDBCPPUNITTRACE=$(GDBTRACE)
 .ENDIF
 
+.IF "$(CROSS_COMPILING)" == "YES"
+CPPUNITTESTER=\#
+.ELSE
 CPPUNITTESTER=$(AUGMENT_LIBRARY_PATH_LOCAL) $(GDBCPPUNITTRACE) $(VALGRINDTOOL) $(SOLARBINDIR)/cppunit/cppunittester
+.ENDIF
 HELPEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/helpex
 LNGCONVEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/lngconvex
 HELPLINKER=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/HelpLinker
@@ -1088,7 +1092,14 @@ JAVA*:=$(JAVAINTERPRETER)
 SCPCOMP=$(PERL) $(SOLARENV)/bin/pre2par.pl
 SCPLINK=$(PERL) $(SOLARENV)/bin/par2script.pl
 LZIP*=lzip
+
+# Note that $(CPPLCC) is oddly enough only used when $(OS)==WNT, see pstrules.mk.
+# For the BUILD platform when cross-compiling (always Unix), it is called cpp.lcc
+.IF "$(CROSS_COMPILING)" == "YES"
+CPPLCC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpp.lcc
+.ELSE
 CPPLCC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpplcc
+.ENDIF
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""
 .INCLUDE : tg_compv.mk

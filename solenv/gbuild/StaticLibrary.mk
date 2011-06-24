@@ -70,7 +70,7 @@ $(call gb_StaticLibrary_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_StaticLibrary_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_StaticLibrary_StaticLibrary_platform,$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_StaticLibrary_get_clean_target,$(1))))
-$(call gb_Deliver_add_deliverable,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)))
+$(call gb_Deliver_add_deliverable,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
 
 endef
 
@@ -80,6 +80,7 @@ gb_StaticLibrary_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_StaticLibrary_get_
 endef
 
 $(eval $(foreach method,\
+	add_api \
 	add_cobject \
 	add_cobjects \
 	add_cxxobject \

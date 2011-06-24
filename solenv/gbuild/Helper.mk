@@ -158,7 +158,7 @@ gb_StaticLibrary_$(1) += $(2)
 endef
 
 define gb_Helper_execute
-$(call gb_Helper_set_ld_path) $(OUTDIR)/bin/$(1)
+$(call gb_Helper_set_ld_path) $(OUTDIR_FOR_BUILD)/bin/$(1)
 endef
 
 export gb_Helper_set_ld_path

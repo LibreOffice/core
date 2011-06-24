@@ -210,12 +210,12 @@ End
 
 WindowsCustomAction gid_Customaction_Register_Extensions
 	Name = "RegisterExtensions";
-	Typ = "65";
+	Typ = "1025";
 	Source = "shlxtmsi.dll";
 	Target = "RegisterExtensions";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
-	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "behind_SetInstalllocation");
+	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "behind_SetInstalllocation");
 End
 
 WindowsCustomAction gid_Customaction_Remove_Extensions
@@ -273,8 +273,8 @@ WindowsCustomAction gid_Customaction_CopyExtensionData
     Source = "shlxtmsi.dll";
     Target = "copyExtensionData";
     Inbinarytable = 1;
-    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "RegisterExtensions");
-    Assignment2 = ("AdminExecuteSequence", "", "RegisterExtensions");
+    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+    Assignment2 = ("AdminExecuteSequence", "", "end");
 End
 
 WindowsCustomAction gid_Customaction_RegCleanOld
@@ -459,24 +459,6 @@ WindowsCustomAction gid_Customaction_CheckVersions
 	Assignment2 = ("InstallUISequence", "NOT Installed", "NewProductFound");
 End
 
-WindowsCustomAction gid_Customaction_ShowReleaseNotes1
-	Name = "ShowReleaseNotesBefore";
-	Typ = "65";
-	Source = "relnotes.dll";
-	Target = "ShowReleaseNotesBefore";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "(Not Installed or ISPATCH) and Not REMOVE=\"ALL\"", "behind_InstallValidate");
-End
-
-WindowsCustomAction gid_Customaction_ShowReleaseNotes2
-	Name = "ShowReleaseNotesAfter";
-	Typ = "65";
-	Source = "relnotes.dll";
-	Target = "ShowReleaseNotesAfter";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "(Not Installed or ISPATCH) and Not REMOVE=\"ALL\"", "end");
-End
-
 WindowsCustomAction gid_Customaction_SelectLanguage
     Name = "SelectLanguage";
     Typ = "321";
@@ -492,8 +474,8 @@ WindowsCustomAction gid_Customaction_RebaseLibrariesonproperties
 	Source = "rebase.dll";
 	Target = "RebaseLibrariesOnProperties";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
-	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+	Assignment1 = ("InstallExecuteSequence", "VersionNT < 600 And Not REMOVE=\"ALL\"", "end");
+	Assignment2 = ("AdminExecuteSequence", "VersionNT < 600 And Not REMOVE=\"ALL\"", "end");
 End
 
 WindowsCustomAction gid_Customaction_LookForRegisteredExtensions

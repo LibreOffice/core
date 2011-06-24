@@ -1,5 +1,5 @@
 dnl -*- Mode: Autoconf; tab-width: 8; indent-tabs-mode: nil -*-
-dnl configure.in serves as input for the GNU autoconf package 
+dnl configure.in serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
 AC_INIT([LibreOffice], [3.5],,, [http://documentfoundation.org/])
@@ -79,11 +79,6 @@ AC_ARG_ENABLE(ext-presenter-minimizer,
         [Enables the Presentation Minimizer extension.]),
 ,)
 
-AC_ARG_ENABLE(ext-presenter-ui,
-    AS_HELP_STRING([--enable-ext-presenter-ui],
-        [Enables extra functionality during slideshows, e.g. selecting pen color.]),
-,)
-
 AC_ARG_ENABLE(ext-report-builder,
     AS_HELP_STRING([--enable-ext-report-builder],
         [Enables the build of the Report Builder extension.]),
@@ -97,11 +92,6 @@ AC_ARG_ENABLE(ext-scripting-beanshell,
 AC_ARG_ENABLE(ext-scripting-javascript,
     AS_HELP_STRING([--enable-ext-scripting-javascript],
         [Enables support for scripts in JavaScript.]),
-,)
-
-AC_ARG_ENABLE(ext-scripting-python,
-    AS_HELP_STRING([--enable-ext-scripting-python],
-        [Enables support for scripts in Python.]),
 ,)
 
 AC_ARG_ENABLE(ext-typo,
@@ -194,11 +184,6 @@ AC_ARG_ENABLE(cups,
     AS_HELP_STRING([--disable-cups],
         [Disable cups support in the psprint project.]))
 
-AC_ARG_ENABLE(fontconfig,
-    AS_HELP_STRING([--disable-fontconfig],
-        [Disable support for the fontconfig library.]),
-,enable_fontconfig=yes)
-
 AC_ARG_ENABLE(directx,
     AS_HELP_STRING([--disable-directx],
         [Remove DirectX implementation for the new XCanvas interface.
@@ -251,7 +236,7 @@ AC_ARG_ENABLE(debug,
     AS_HELP_STRING([--enable-debug],
         [Include debugging symbols from --enable-symbols plus extra debugging
          code. Extra large build! (enables -g compiler flag and dmake debug=true)
-         If you need even more verbose output, build a module with 
+         If you need even more verbose output, build a module with
          "build -- debug=true dbglevel=2".]))
 
 AC_ARG_ENABLE(dbgutil,
@@ -264,23 +249,32 @@ AC_ARG_ENABLE(crashdump,
         [Enable the crashdump feature.]))
 
 AC_ARG_ENABLE(python,
-    AS_HELP_STRING([--disable-python],
-        [Disable build of Python 2.x UNO API.]))
+    AS_HELP_STRING([--enable-python=<no/auto/system/internal>],
+        [Enables or disables Python support at run-time and build-time.
+         Also specifies what Python to use. 'auto' is the
+         default. Note that Python can be disabled with
+         --disable-python or --enable-python=no only if no
+         translations are required.]))
+
 AC_ARG_ENABLE(gtk,
     AS_HELP_STRING([--disable-gtk],
         [Determines whether to use Gtk+ vclplug on platforms where Gtk+ is available.]),
 ,enable_gtk=yes)
+
+AC_ARG_ENABLE(gtk3,
+    AS_HELP_STRING([--disable-gtk3],
+        [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
+,enable_gtk3=no)
 
 AC_ARG_ENABLE(systray,
     AS_HELP_STRING([--disable-systray],
         [Determines whether to build the systray quickstarter.]),
 ,enable_systray=yes)
 
-AC_ARG_ENABLE(cairo,
-    AS_HELP_STRING([--disable-cairo],
-        [Determines whether to use Cairo library on platforms where Cairo is
-         available.]),
-,enable_cairo=yes)
+AC_ARG_ENABLE(librsvg,
+    AS_HELP_STRING([--enable-librsvg=<no/auto/system/internal>],
+        [Enables or disables use of librsvg to render SVG at run-time.
+         Also specificed what librsvg to use. 'auto' is the default.]))
 
 AC_ARG_ENABLE(opengl,
     AS_HELP_STRING([--disable-opengl],
@@ -402,24 +396,6 @@ AC_ARG_ENABLE(neon,
         [Disable neon and the compilation of webdav binding.]),
 ,)
 
-AC_ARG_ENABLE(check-only,
-    AS_HELP_STRING([--enable-check-only],
-        [Use this option option if you just want to check your environment.
-         This option stops the generation of an ????env.set.])
-    [
-                          Usage:     --enable-check-only=yes
-    ],
-,)
-
-AC_ARG_ENABLE(ccache-skip,
-    AS_HELP_STRING([--enable-ccache-skip],
-        [Allow the use of --ccache-skip to escape compiler flags that would
-         otherwise prevent caching of the result (currently used on Mac only)
-         NOTE: requires patched version because of a bug in ccache (see issue
-         104567 for details and patch) explicitly enable if your version of
-         ccache doesn't identify as version 2.4_OOo. (default=auto)]),
-,enable_ccache_skip=auto)
-
 AC_ARG_ENABLE(build-unowinreg,
     AS_HELP_STRING([--enable-build-unowinreg],
         [Do not use the prebuilt unowinreg.dll. Build it instead. The MinGW C++
@@ -485,6 +461,12 @@ AC_ARG_ENABLE(lomenubar,
 	[Enable global menu support.]),
 ,)
 
+AC_ARG_ENABLE(online-update,
+    AS_HELP_STRING([--enable-online-update],
+	[Enable the online update service that will check for new versions of
+	 LibreOffice. By default, it is on on Windows and Mac, and off on Linux.]),
+,)
+
 AC_ARG_ENABLE(release-build,
     AS_HELP_STRING([--enable-release-build],
         [Enable release build.
@@ -517,7 +499,7 @@ AC_ARG_WITH(external-tar,
 
 AC_ARG_WITH(linked-git,
     AS_HELP_STRING([--with-linked-git=<OTHER_CLONE_DIR>],
-        [Specify another checkout's clonedir to re-use. This makes use of 
+        [Specify another checkout's clonedir to re-use. This makes use of
 		 git-new-workdir, and saves a lot of diskspace when having multiple
 		 trees side-by-side.]),
     GIT_LINK_SRC=$withval ,
@@ -593,9 +575,9 @@ AC_ARG_WITH(afms,
 
 AC_ARG_WITH(agfa-monotype-fonts,
      AS_HELP_STRING([--with-agfa-monotype-fonts],
-          [Do not include the proprietary Agfa Monotype fonts
-           (even if present) in the LibreOffice installation
-           set.])
+          [This switch should only be enabled for those who have the right
+           to use or distribute the proprietary Agfa Monotype
+           fonts.])
 ,)
 
 AC_ARG_WITH(epm,
@@ -727,11 +709,6 @@ AC_ARG_WITH(system-libxml,
         [Use libxml already on system.]),
 ,)
 
-AC_ARG_WITH(system-python,
-    AS_HELP_STRING([--with-system-python],
-        [Use python already on system.]),
-,with_system_python=yes)
-
 AC_ARG_WITH(system-translate-toolkit,
     AS_HELP_STRING([--with-system-translate-toolkit],
         [Use translate-toolkit already on system.]))
@@ -746,15 +723,15 @@ AC_ARG_WITH(system-poppler,
 
 AC_ARG_WITH(system-db,
     AS_HELP_STRING([--with-system-db],
-        [Use berkeley db already on system.]))
+        [Use Berkeley db already on system.]))
 
 AC_ARG_WITH(system-lucene,
     AS_HELP_STRING([--with-system-lucene],
-        [Use lucene already on system.]))
+        [Use Lucene already on system.]))
 
 AC_ARG_WITH(system-apache-commons,
     AS_HELP_STRING([--with-system-apache-commons],
-        [Use apache commons libraries already on system.]))
+        [Use Apache commons libraries already on system.]))
 
 AC_ARG_WITH(lucene-core-jar,
     AS_HELP_STRING([--with-lucene-core-jar=JARFILE],
@@ -982,6 +959,14 @@ AC_ARG_WITH(system-mozilla,
     WITH_SYSTEM_MOZILLA=$withval ,
 WITH_SYSTEM_MOZILLA=no)
 
+AC_ARG_WITH(system-gettext,
+    AS_HELP_STRING([--with-system-gettext],
+        [Use gettext runtime library already on system.]))
+
+AC_ARG_WITH(system-libpng,
+    AS_HELP_STRING([--with-system-libpng],
+        [Use libpng already on system.]))
+
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
         [Use linker with --hash-style=<style> when linking shared objects.
@@ -998,7 +983,7 @@ with_stlport=auto)
 AC_ARG_WITH(jdk-home,
     AS_HELP_STRING([--with-jdk-home],
         [If you have installed JDK 1.3 or later on your system please supply the
-         path here. Note that this is not the location of the Java binary but the
+         path here. Note that this is not the location of the java command but the
          location of the entire distribution.])
     [
                           Usage:     --with-jdk-home=<absolute path to JDK home>
@@ -1016,15 +1001,18 @@ AC_ARG_WITH(gxx_include_path,
 
 AC_ARG_WITH(java,
     AS_HELP_STRING([--with-java],
-        [Build with(out) Java support. If you use --without-java/--with-java=no
-         then the build will have no support for Java components, applets,
-         accessibility or XML filters.]),
-    if test "$withval" = "yes"; then
-        WITH_JAVA=java;
-    else
-        WITH_JAVA=$withval;
-    fi ,
-WITH_JAVA=java)
+        [Specify the name of the Java interpreter command. Typically "java"
+         which is the default.
+
+         To build without support for Java components, applets, accessibility
+         or the XML filters written in Java, use --without-java or --with-java=no.])
+    [
+                          Usage:     --with-java==<java command>
+                                     --without-java
+    ],
+    [ test -z "$with_java" -o "$with_java" = "yes" && with_java=java ],
+    [ with_java=java ]
+)
 
 AC_ARG_WITH(java_target_version,
     AS_HELP_STRING([--with-java-target-version],
@@ -1048,6 +1036,7 @@ AC_ARG_WITH(jvm-path,
                                  to find JRE/JDK in /usr/lib/jvm/
     ],
 ,)
+
 AC_ARG_WITH(ant-home,
     AS_HELP_STRING([--with-ant-home],
         [If you have installed Jakarta Ant on your system, please supply the path here.
@@ -1069,7 +1058,7 @@ AC_ARG_WITH(junit,
 
 AC_ARG_WITH(perl-home,
     AS_HELP_STRING([--with-perl-home],
-        [If you have installed the Perl 5 Distribution, on your system, please
+        [If you have installed Perl 5 Distribution, on your system, please
          supply the path here. Note that this is not the location of the Perl
          binary but the location of the entire distribution.])
     [
@@ -1120,10 +1109,10 @@ AC_ARG_WITH(nsis-path,
     AS_HELP_STRING([--with-nsis-path],
         [For Windows builds, please supply the directory where makensis
          is located. If makensis is found in PATH or this option is
-         supplied a self-contained  executable installer for LibreOffice will
-         be created.])
+         properly supplied a self-contained executable installer for
+         LibreOffice will be created.])
     [
-                          Usage:     --with-nsis-path=<abs. path to nsis.exe>
+                          Usage:     --with-nsis-path=<path to directory containing makensis>
     ],
 ,)
 
@@ -1239,14 +1228,6 @@ AC_ARG_WITH(os-version,
     ],
 ,)
 
-AC_ARG_WITH(zip-home,
-    AS_HELP_STRING([--with-zip-home],
-        [If you use a non standard zip, for example Windows please supply the path for zip.])
-    [
-                          Usage:     --with-zip-home=<path to zip executable>
-    ],
-,)
-
 AC_ARG_WITH(mingw-cross-compiler,
     AS_HELP_STRING([--with-mingw-cross-compiler],
         [Specify the MinGW cross-compiler to use.])
@@ -1312,6 +1293,7 @@ if test "$cross_compiling" = "yes"; then
   CROSS_COMPILING=YES
 else
   CROSS_COMPILING=
+  BUILD_TYPE="$BUILD_TYPE NATIVE"
 fi
 AC_SUBST(CROSS_COMPILING)
 
@@ -1372,7 +1354,6 @@ dnl Sequential to keep the logic very simple
 dnl These values may be checked and reset later.
 dnl ===================================================================
 #defaults unless the os test overrides this:
-test_cairo=yes
 test_randr=yes
 test_cups=yes
 test_fontconfig=yes
@@ -1421,11 +1402,10 @@ case "$host_os" in
         ;;
     gnu)
         test_randr=no
-        test_cairo=no
         test_cups=no
         _os=GNU
         ;;
-    cygwin*|interix*|mingw32*) # Windows
+    cygwin*|interix*|mingw32*)
 
         # When building on Windows normally with MSVC under Cygwin,
         # configure thinks that the host platform (the platform the
@@ -1445,7 +1425,6 @@ case "$host_os" in
         test_cups=no
         test_randr=no
         test_freetype=no
-        test_cairo=no
         test_fontconfig=no
         _os=WINNT
         # Confusingly, if the host OS matches "mingw32*", that means
@@ -1463,15 +1442,13 @@ case "$host_os" in
         test_randr=no
         test_freetype=no
         test_fontconfig=no
-        test_cairo=no
-        _os=Darwin
         if test "$host_cpu" = "arm"; then
-	    :
-        elif test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
-            AC_MSG_WARN([Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray])
-            echo "Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray" >>warn
-            enable_systray=no
+	    _os=iOS
+            test_gtk=no
+        else
+            _os=Darwin
         fi
+        enable_systray=no
         ;;
     freebsd*)
         test_gtk=yes
@@ -1506,14 +1483,12 @@ case "$host_os" in
         test_kde=no
         test_kde4=yes
         test_freetype=yes
-        PTHREAD_CFLAGS="-pthread"
         PTHREAD_LIBS="-pthread -lpthread"
         _os=NetBSD
         ;;
     aix*)
         test_cups=no
         test_randr=no
-        test_cairo=no
         test_freetype=yes
         PTHREAD_LIBS=-pthread
         _os=AIX
@@ -1537,7 +1512,6 @@ case "$host_os" in
         ;;
     androideabi*)
         build_gstreamer=no
-	test_cairo=no
 	test_cups=no
         test_fontconfig=no
         test_freetype=no
@@ -1558,20 +1532,21 @@ AC_SUBST(OSVERSION)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 
-if test $build_os = "cygwin"; then
-   AC_MSG_CHECKING([Cygwin build environment sanity])
-   dnl ===================================================================
-   dnl Sanity check! Native Windows programs cannot use Cygwin symlinks!
-   dnl ===================================================================
-   dnl As long as awk instead of $AWK is used somewhere in the sources,
-   dnl check for $AWK and awk. $AWK is pointing to gawk in Cygwin.
-   if test -L $AWK -o -L `which awk` -o -L `which tar` -o -L `which gunzip` ; then
-      AC_MSG_ERROR([$AWK, awk, tar or gunzip is a Cygwin symlink!
-Native Windows programs cannot use Cygwin symlinks. Remove the symbolic
-link, and copy the program to the name of the link.])
-   fi
-   AC_MSG_RESULT([ok])
+dnl It is useful to have a BUILD_TYPE keyword to distinguish "normal"
+dnl desktop OSes from "mobile" ones.
 
+dnl We assume that a non-DESKTOP build type is also a non-NATIVE one.
+dnl In other words, that when building for an OS that is not a
+dnl "desktop" one but a "mobile" one, we are always cross-compiling.
+
+dnl Note the direction of the implication; there is no assumption that
+dnl cross-compiling would imply a non-desktop OS.
+
+if test $_os != iOS -a $_os != Android; then
+    BUILD_TYPE="$BUILD_TYPE DESKTOP"
+fi
+
+if test $build_os = "cygwin"; then
    dnl ===================================================================
    dnl If $CC is set to a MinGW compiler, set WITH_MINGW
    dnl ===================================================================
@@ -1644,7 +1619,7 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
-   if test "$_os" = "Darwin" -a "$host_cpu" != "arm" -a "$GCCVER" -ge "040100" ; then
+   if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
       if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
          export CC=$GCC_HOME/bin/gcc-4.0
           dnl  export CC to have it available in set_soenv -> config.guess
@@ -1698,39 +1673,44 @@ m4_pattern_allow([PKG_CONFIG_FOR_BUILD])
 if test "$cross_compiling" = "yes"; then
   AC_MSG_CHECKING([for BUILD platform configuration])
   echo
-  export tmpdir=`mktemp -d conf-for-build.XXXXXX`
+  rm -rf CONF-FOR-BUILD Env.Build.sh
+  mkdir CONF-FOR-BUILD
   tar cf - \
 	configure \
 	config.guess \
 	oowintool \
 	solenv/inc/minor.mk \
 	solenv/inc/postset.mk \
+	solenv/inc/langlist.mk \
 	set_soenv.in \
 	bootstrap.1 \
 	post_download.in \
 	ooo.lst.in \
 	Makefile.in \
-	makefile.rc \
-	bin/repo-list.in | (cd $tmpdir && tar xf -)
+	bin/repo-list.in | (cd CONF-FOR-BUILD && tar xf -)
   (
     unset COM GUI GUIBASE OS CPU CPUNAME
-    unset CC CXX CFLAGS
+    unset CC CXX SYSBASE CFLAGS
     unset AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
     test -n "$CC_FOR_BUILD" && export CC="$CC_FOR_BUILD"
     test -n "$CXX_FOR_BUILD" && export CXX="$CXX_FOR_BUILD"
     test -n "$PKG_CONFIG_FOR_BUILD" && export PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
-    cd $tmpdir
+    cd CONF-FOR-BUILD
     sub_conf_opts=""
-    test -n $with_ant_home && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
+    test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
+    test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     ./configure \
 	--disable-mozilla \
 	--disable-build-mozilla \
+	--disable-zenity \
         $sub_conf_opts \
 	2>&1 | sed -e 's/^/    /'
     test -f ./*Env.Set.sh 2>/dev/null || exit
+    cp *Env.Set.sh ../Env.Build.sh
     . ./*Env.Set.sh
-    for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET; do
+    for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
+             SYSTEM_LIBXSLT; do
       VV='$'$V
       VV=`eval "echo $VV"`
       if test -n "$VV"; then
@@ -1738,12 +1718,23 @@ if test "$cross_compiling" = "yes"; then
         echo "$line" >>build-config
       fi
     done
+
+    for V in OUTDIR PATH SOLARINC SOLARLIB WORKDIR; do
+      VV='$'$V
+      VV=`eval "echo $VV"`
+      VV=`echo $VV | sed -e 's,/CONF-FOR-BUILD,,g'`
+      if test -n "$VV"; then
+	line="${V}_FOR_BUILD='$VV'"
+        echo "$line" >>build-config
+      fi
+    done
   )
-  test -f $tmpdir/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see $tmpdir/config.log])
-  eval `cat $tmpdir/build-config`
+  test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see CONF-FOR-BUILD/config.log])
+  test -f Env.Build.sh || AC_MSG_ERROR([A file called Env.Build.sh was supposed to have been copied here, but it isn't found])
+  perl -pi -e 's,/CONF-FOR-BUILD,,g' Env.Build.sh
+  eval `cat CONF-FOR-BUILD/build-config`
   AC_MSG_RESULT([checking for BUILD platform configuration... done])
-  rm -rf $tmpdir
-  unset tmpdir
+  rm -rf CONF-FOR-BUILD
 else
   CC_FOR_BUILD="$CC"
   CXX_FOR_BUILD="$CXX"
@@ -1757,7 +1748,16 @@ AC_SUBST(CPUNAME_FOR_BUILD)
 AC_SUBST(CC_FOR_BUILD)
 AC_SUBST(CXX_FOR_BUILD)
 AC_SUBST(GXX_INCLUDE_PATH_FOR_BUILD)
+AC_SUBST(INPATH_FOR_BUILD)
+AC_SUBST(OUTPATH_FOR_BUILD)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET_FOR_BUILD)
+AC_SUBST(SYSTEM_LIBXSLT_FOR_BUILD)
+
+AC_SUBST(OUTDIR_FOR_BUILD)
+AC_SUBST(PATH_FOR_BUILD)
+AC_SUBST(SOLARINC_FOR_BUILD)
+AC_SUBST(SOLARLIB_FOR_BUILD)
+AC_SUBST(WORKDIR_FOR_BUILD)
 
 if test -e solenv/inc/minor.mk; then
    # Get UPD number from ./solenv/inc/minor.mk
@@ -1824,15 +1824,22 @@ if test "$_os" = "WINNT"; then
    AC_SUBST(DISABLE_ACTIVEX)
 
    AC_MSG_CHECKING([whether to use ATL])
-   if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE" -o "$enable_atl" = ""; then
+   if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE"; then
       DISABLE_ATL=""
       AC_MSG_RESULT([yes])
+   elif test "$enable_atl" = ""; then
+      if test "$WITH_MINGW" = "yes"; then
+         DISABLE_ATL="TRUE"
+         AC_MSG_RESULT([no])
+      else
+         DISABLE_ATL=""
+         AC_MSG_RESULT([yes])
+      fi
    else
       DISABLE_ATL="TRUE"
       AC_MSG_RESULT([no])
    fi
    AC_SUBST(DISABLE_ATL)
-
 fi
 
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
@@ -1855,13 +1862,16 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
 if test -n "$enable_debug" && test "$enable_debug" != "no"; then
    ENABLE_DEBUG="TRUE"
+   ENABLE_DEBUG_STL="TRUE"
    enable_symbols="yes"
    AC_MSG_RESULT([yes])
 else
    ENABLE_DEBUG="FALSE"
+   ENABLE_DEBUG_STL="FALSE"
    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
+AC_SUBST(ENABLE_DEBUG_STL)
 
 dnl Set the ENABLE_DBGUTIL variable
 dnl ===================================================================
@@ -1929,8 +1939,8 @@ AC_SUBST(ENABLE_CUPS)
 
 
 # check for fontconfig support
-AC_MSG_CHECKING([whether to enable fontconfig support])
-if test "z$test_fontconfig" = "zyes" -a "z$enable_fontconfig" != "no"; then
+AC_MSG_CHECKING([whether we need fontconfig])
+if test "z$test_fontconfig" = "zyes"; then
    ENABLE_FONTCONFIG="TRUE"
    AC_MSG_RESULT([yes])
    PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.2.0])
@@ -1951,7 +1961,7 @@ AC_SUBST(TARFILE_LOCATION)
 
 if test "z$enable_fetch_external" != "zno" \
    && test -z "$with_system_libs" -a "$with_system_jars" != "no"; then
-   DO_FETCH_TARBALLS="yes"
+   DO_FETCH_TARBALLS="YES"
 fi
 AC_SUBST(DO_FETCH_TARBALLS)
 
@@ -2139,14 +2149,14 @@ if test "$GCC" = "yes" ; then
 	],[
 	  printf ("");
 	])],
-	[ if ./conftest$EXEEXT; then 
+	[ if ./conftest$EXEEXT; then
 	    HAVE_LD_HASH_STYLE=TRUE
 	    WITH_LINKER_HASH_STYLE=$hash_style
-          fi], 
+          fi],
 	[HAVE_LD_HASH_STYLE=FALSE])
        LDFLAGS=$hash_style_ldflags_save
    done
-   
+
    if test "$HAVE_LD_HASH_STYLE" = "TRUE"; then
      AC_MSG_RESULT( $WITH_LINKER_HASH_STYLE )
    else
@@ -2205,6 +2215,7 @@ fi
 dnl ===================================================================
 dnl  Check which Microsoft C/C++ or MinGW compiler is used for WINNT
 dnl ===================================================================
+SHOWINCLUDES_PREFIX=
 if test "$_os" = "WINNT"; then
     if test "$WITH_MINGW" != "yes"; then
         AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
@@ -2222,7 +2233,9 @@ if test "$_os" = "WINNT"; then
         else
             with_cl_home=`cygpath -u "$with_cl_home"`
         fi
-        AC_MSG_RESULT([done])
+        with_cl_home=`cygpath -d "$with_cl_home"`
+        with_cl_home=`cygpath -u "$with_cl_home"`
+        AC_MSG_RESULT([$with_cl_home])
 
         dnl ===========================================================
         dnl  Check for mspdb80.dll/mspdb100.dll
@@ -2255,7 +2268,7 @@ if test "$_os" = "WINNT"; then
         fi
 
         if test -z "$MSPDB_PATH"; then
-            AC_MSG_ERROR([You need a mspdb80.dllor mspdb100.dll, make sure it's in the path or use --with-mspdb-path])
+            AC_MSG_ERROR([You need a mspdb80.dllor mspdb100.dll, make sure it is in the path or use --with-mspdb-path])
         fi
         MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
         MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
@@ -2263,27 +2276,29 @@ if test "$_os" = "WINNT"; then
         PATH="$MSPDB_PATH:$PATH"
 
         AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
-        if test "$CL_X64" = ""; then
-            if test -x "$with_cl_home/bin/cl.exe"; then
-                CC="$with_cl_home/bin/cl.exe"
-            fi
-        else
-            if test -x "$with_cl_home/bin/amd64/cl.exe"; then
-                CC="$with_cl_home/bin/amd64/cl.exe"
-            fi
-        fi
         if test -z "$CC"; then
-            AC_PATH_PROG(CC, cl.exe)
-        fi
-
-        if test -e "$CC"; then
+            if test "$CL_X64" = ""; then
+                if test -x "$with_cl_home/bin/cl.exe"; then
+                    CC="$with_cl_home/bin/cl.exe"
+                fi
+            else
+                if test -x "$with_cl_home/bin/amd64/cl.exe"; then
+                    CC="$with_cl_home/bin/amd64/cl.exe"
+                fi
+            fi
+            if test -z "$CC"; then
+                AC_PATH_PROG(CC, cl.exe)
+            fi
             # This gives us a posix path with 8.3 filename restrictions
             CC=`cygpath -d "$CC"`
             CC=`cygpath -u "$CC"`
+        fi
+
+        if test -n "$CC"; then
             # Remove /cl.exe from CC case insensitive
             AC_MSG_RESULT([found ($CC)])
             if test "$CL_X64" = ""; then
-                COMPATH=`echo $CC | $SED 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
+                COMPATH=`echo $CC | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
             else
                 if test -n "$with_cl_home"; then
                     COMPATH=`echo $with_cl_home`
@@ -2313,6 +2328,19 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([found compiler version $CCNUMVER (MSVS $MSVSVER).])
         else
             AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
+        fi
+
+        dnl We need to guess the prefix of the -showIncludes output, it can be
+        dnl localized
+        AC_MSG_CHECKING([the dependency generation prefix (cl.exe -showIncludes)])
+        echo "#include <stdlib.h>" > conftest.c
+        SHOWINCLUDES_PREFIX=`$CC -c -showIncludes conftest.c 2>/dev/null | \
+            grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
+        rm -f conftest.c conftest.obj
+        if test -z "$SHOWINCLUDES_PREFIX" ; then
+            AC_MSG_ERROR([cannot determine the -showIncludes prefix])
+        else
+            AC_MSG_RESULT(["$SHOWINCLUDES_PREFIX"])
         fi
 
 	# Check for 64-bit (cross-)compiler to use to build the 64-bit
@@ -2355,7 +2383,7 @@ if test "$_os" = "WINNT"; then
 	fi
 	AC_SUBST(BUILD_X64)
 
-	# These are passed to the environment through set_soenv.in as usual, and then 
+	# These are passed to the environment through set_soenv.in as usual, and then
 	# used in set_wntx64.mk
 	AC_SUBST(CC_X64_BINARY)
 	AC_SUBST(CXX_X64_BINARY)
@@ -2380,6 +2408,14 @@ fi
 AC_SUBST(COMEX)
 AC_SUBST(MSPDB_PATH)
 AC_SUBST(USE_MINGW)
+AC_SUBST(SHOWINCLUDES_PREFIX)
+
+dnl ===================================================================
+dnl Check for pkg-config
+dnl ===================================================================
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+    PKG_PROG_PKG_CONFIG
+fi
 
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
 
@@ -2390,7 +2426,6 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
    AC_CHECK_TOOL(AR,ar)
    AC_CHECK_TOOL(NM,nm)
    AC_CHECK_TOOL(OBJDUMP,objdump)
-   AC_CHECK_TOOL(PKG_CONFIG,pkg-config)
    AC_CHECK_TOOL(RANLIB,ranlib)
    AC_CHECK_TOOL(STRIP,strip)
    if test "$_os" = "WINNT"; then
@@ -2406,6 +2441,25 @@ AC_SUBST(PKG_CONFIG)
 AC_SUBST(RANLIB)
 AC_SUBST(STRIP)
 AC_SUBST(WINDRES)
+
+dnl ===================================================================
+dnl pkg-config checks on Mac OS X
+dnl ===================================================================
+
+if test $_os = Darwin; then
+   AC_MSG_CHECKING([for bogus pkg-config])
+   if test -n "$PKG_CONFIG"; then
+      if test "$PKG_CONFIG" = /usr/bin/pkg-config && ls -l /usr/bin/pkg-config | grep -q Mono.framework; then
+         AC_MSG_RESULT([yes, from Mono])
+      else
+         AC_MSG_RESULT([yes, from unknown origin])
+      fi
+      AC_MSG_WARN([This might have unexpected consequences, please consider hiding $PKG_CONFIG])
+      echo "Having a $PKG_CONFIG might have unexpected consequences, please consider hiding it" >>warn
+   else
+      AC_MSG_RESULT([no])
+   fi
+fi
 
 dnl ===================================================================
 dnl  .NET needs special treatment
@@ -2548,7 +2602,7 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
    m4_pattern_allow([AC_CHECK_ALIGNOF])
    m4_ifdef([AC_CHECK_ALIGNOF],
       ,
-      [ 
+      [
          dnl We know that the ALIGNOF_ variables are used only when cross-compiling
          dnl in sal/typesconfig/makefile.mk...
          if test "$cross_compiling" = "yes"; then
@@ -2615,7 +2669,7 @@ AC_SUBST(ALIGNOF_LONG)
 AC_SUBST(ALIGNOF_DOUBLE)
 
 dnl ===================================================================
-dnl Check if valgrind.h is available 
+dnl Check if valgrind.h is available
 dnl ===================================================================
 if test "$cross_compiling" != "yes" -a "$enable_dbgutil" != "no"; then
    dnl Test $prefix (currently only testing for /usr and /usr/local)
@@ -2642,7 +2696,7 @@ dnl ===================================================================
 dnl Testing for C++ compiler and version...
 dnl ===================================================================
 if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
-   if test -e "$CC"; then
+   if test -n "$CC" -a -z "$CXX"; then
       CXX="$CC"
    fi
 fi
@@ -2659,7 +2713,7 @@ if test "$GXX" = "yes"; then
    _gpp_version=`$CXX -dumpversion`
    _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-   if test "$_os" = "Darwin" -a "$host_cpu" != "arm" -a "$_gpp_majmin" -ge "401" ; then
+   if test "$_os" = "Darwin" -a "$_gpp_majmin" -ge "401" ; then
       if test -z "$save_CXX" -a -x "$GCC_HOME/bin/g++-4.0" ; then
          CXX=$GCC_HOME/bin/g++-4.0
          _gpp_majmin_2=`"$CXX" -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
@@ -2724,14 +2778,16 @@ if test "$GXX" = "yes"; then
          with_gxx_include_path=`cd $with_gxx_include_path && pwd`
       fi
    fi
-fi
-dnl This is the original code...
-dnl with_gxx_include_path=`$CXX -print-search-dirs | grep instal |$AWK '{ print \$2 }'`/include
-if test -z "$with_gxx_include_path"; then
-   with_gxx_include_path="NO_GXX_INCLUDE"
-   AC_MSG_RESULT([no g++ includes])
+   dnl This is the original code...
+   dnl with_gxx_include_path=`$CXX -print-search-dirs | grep instal |$AWK '{ print \$2 }'`/include
+   if test -z "$with_gxx_include_path"; then
+      with_gxx_include_path="NO_GXX_INCLUDE"
+      AC_MSG_RESULT([none])
+   else
+      AC_MSG_RESULT([$with_gxx_include_path])
+   fi
 else
-   AC_MSG_RESULT([$with_gxx_include_path])
+   with_gxx_include_path="NO_GXX_INCLUDE"
 fi
 GXX_INCLUDE_PATH="$with_gxx_include_path"
 AC_SUBST(GXX_INCLUDE_PATH)
@@ -3083,19 +3139,14 @@ fi
 AC_SUBST(HAVE_CXX0X)
 
 # ===================================================================
-# use --ccache-skip?
+# use ccache?
 # ===================================================================
-dnl used to escape compiler options for ccache that otherwise prevent
+dnl need to check for ccache version: otherwise prevents
 dnl caching of the results (like "-x objective-c++" for Mac)
-AC_MSG_CHECKING([whether we are allowed and able to use --ccache-skip])
+AC_MSG_CHECKING([whether we are able to use --ccache-skip])
 if test "$_os" != "Darwin" ; then
    AC_MSG_RESULT([only used on Mac currently, skipping])
-elif test "$enable_ccache_skip" = "no" ; then
-   AC_MSG_RESULT([no - diabled explicitly])
-elif test "$enable_ccache_skip" = "yes" ; then
-   AC_MSG_RESULT([yes - enabled explicitly, skipping checks])
-   AC_SUBST([USE_CCACHE], [YES])
-elif test "$enable_ccache_skip" = "auto" ; then
+else
    # checking for ccache presence/version
    AC_MSG_RESULT([probing...])
    AC_PATH_PROG([CCACHE],[ccache],[not_found])
@@ -3105,7 +3156,8 @@ elif test "$enable_ccache_skip" = "auto" ; then
       # check ccache version
       AC_MSG_CHECKING([whether version of ccache is suitable])
       CCACHE_VERSION=`"$CCACHE" -V | "$AWK" '/^ccache version/{print $3}'`
-      if test "$CCACHE_VERSION" = "2.4_OOo"; then
+      CCACHE_NUMVER=`echo $CCACHE_VERSION | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+      if test "$CCACHE_VERSION" = "2.4_OOo" -o "$CCACHE_NUMVER" -ge "030100"; then
          AC_MSG_RESULT([yes])
          AC_MSG_CHECKING([whether ccache is actually used for the build])
          AC_LANG_PUSH([C++])
@@ -3124,11 +3176,9 @@ elif test "$enable_ccache_skip" = "auto" ; then
          AC_LANG_POP([C++])
       else
          AC_MSG_RESULT([no])
-         AC_MSG_NOTICE([ccache version $CCACHE_VERSION not accepted. See description for --enable-ccache-skip])
+         AC_MSG_NOTICE([ccache version $CCACHE_VERSION not accepted. ccache will not be used.])
       fi
    fi
-else
-   AC_MSG_ERROR([invalid option to --enable-ccache-skip. Valid values are "auto", "yes" and "no"])
 fi
 
 dnl ===================================================================
@@ -3274,17 +3324,25 @@ dnl ===================================================================
 dnl Java support enable
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build with Java support])
-if test "$WITH_JAVA" != "no"; then
+if test "$with_java" != "no"; then
    AC_MSG_RESULT([yes])
    SOLAR_JAVA="TRUE"
 else
    AC_MSG_RESULT([no])
    SOLAR_JAVA=""
-
-   AC_MSG_WARN([building without Java will mean some features will not be available])
-   echo "building without Java will mean some features will not be available" >>warn
 fi
+
 AC_SUBST(SOLAR_JAVA)
+
+dnl SOLAR_JAVA (yes, silly name, should rename) indicates whether we
+dnl want there to be *run-time* support for Java extensions in the
+dnl built LibreOffice. We might need a different test for whether
+dnl there is Java at *build-time*.
+
+dnl If we don't have access to Java at build-time we can't have
+dnl run-time Java support either. But I think there are some uses of
+dnl Java at build-time even if no run-time Java support is wanted. Or
+dnl is there? This is a bit unclear to me.
 
 if test "$_os" = "Linux" && test "$host_cpu" = "powerpc"; then
    # IBMs JDK needs this...
@@ -3303,7 +3361,7 @@ dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
 
    # Windows-specific tests
-   if test "$_os" = "WINNT"; then
+   if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
       if test "$CL_X64" != ""; then
 	 bitness="64-bit"
 	 otherbitness="32-bit"
@@ -3311,6 +3369,7 @@ if test "$SOLAR_JAVA" != ""; then
 	 bitness="32-bit"
 	 otherbitness="64-bit"
       fi
+
       if test -z "$with_jdk_home"; then
 
 	 # Unfortunately apparently no way to find, if needed, the 64-bit
@@ -3331,9 +3390,9 @@ if test "$SOLAR_JAVA" != ""; then
 
    JAVA_HOME=; export JAVA_HOME
    if test -z "$with_jdk_home"; then
-      AC_PATH_PROG(JAVAINTERPRETER, $WITH_JAVA)
+      AC_PATH_PROG(JAVAINTERPRETER, $with_java)
    else
-      _java_path="$with_jdk_home/bin/$WITH_JAVA"
+      _java_path="$with_jdk_home/bin/$with_java"
       dnl Check if there is a Java interpreter at all.
       if test -x "$_java_path"; then
          JAVAINTERPRETER=$_java_path
@@ -3344,6 +3403,8 @@ if test "$SOLAR_JAVA" != ""; then
 
    if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
       # Check that the JDK found is correct architecture
+      # Why is this necessary, we don't link with any library from the JDK I think,
+
       shortjdkhome=`cygpath -d "$with_jdk_home"`
       if test "$CL_X64" != "" -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | grep -i 64-bit`" = "" >/dev/null; then
 	 AC_MSG_WARN([You are building 64-bit binaries but the JDK $howfound is 32-bit])
@@ -3427,7 +3488,7 @@ you must use the "--with-jdk-home" configure option explicitly])
         fi
       fi
    else
-      AC_MSG_ERROR([JAVA not found. You need at least jdk-1.5, or gcj-4])
+      AC_MSG_ERROR([Java not found. You need at least jdk-1.5, or gcj-4])
    fi
 else
    dnl Java disabled
@@ -3477,7 +3538,7 @@ dnl Checks for javac
 dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
     if test "$JDK" = "gcj"; then
-        javacompiler=`echo $WITH_JAVA | $SED -e "s/gij/gcj/g" | $SED -e "s/java/javac/g"`
+        javacompiler=`echo $with_java | $SED -e "s/gij/gcj/g" | $SED -e "s/java/javac/g"`
     else
         javacompiler="javac"
     fi
@@ -3493,7 +3554,7 @@ if test "$SOLAR_JAVA" != ""; then
     if test -z "$JAVACOMPILER"; then
       AC_MSG_ERROR([$javacompiler not found set with_jdk_home])
     fi
-    if test "$_os" = "WINNT"; then
+    if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
        if test x`echo "$JAVACOMPILER" | grep -i '\.exe$'` = x; then
           JAVACOMPILER="${JAVACOMPILER}.exe"
        fi
@@ -3551,7 +3612,7 @@ if test "$SOLAR_JAVA" != ""; then
     if test -z "$JAVADOC"; then
       AC_MSG_ERROR([$_javadoc_path not found set with_jdk_home])
     fi
-    if test "$_os" = "WINNT"; then
+    if test "$build_os" = "cygwin" -a "$_os" = "WINNT"; then
         if test x`echo "$JAVADOC" | grep -i '\.exe$'` = x; then
             JAVADOC="${JAVADOC}.exe"
         fi
@@ -3635,7 +3696,7 @@ _ACEOF
           AC_MSG_ERROR([gij does not know its java.home - use --with-jdk-home])
         fi
       else
-        JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
+        JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$with_java,,p"`
       fi
     fi
 
@@ -3981,16 +4042,6 @@ fi
 AC_SUBST(GPERF)
 
 dnl ===================================================================
-dnl Check for pkg-config
-dnl # Note that if there is a possibility the first call to
-dnl # PKG_CHECK_MODULES might not happen, you should be sure to include an
-dnl # explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
-dnl ===================================================================
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-    PKG_PROG_PKG_CONFIG
-fi
-
-dnl ===================================================================
 dnl Check for building stax
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build the stax])
@@ -4010,7 +4061,7 @@ AC_MSG_CHECKING([whether to build the ODK])
 if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
    AC_MSG_RESULT([yes])
 
-   if test "$WITH_JAVA" != "no"; then
+   if test "$with_java" != "no"; then
       AC_MSG_CHECKING([whether to build unowinreg.dll])
       if test "$_os" = "WINNT" -a "z$enable_build_unowinreg" = "z" ; then
            # build on Win by default
@@ -4027,7 +4078,7 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
          if test -z "$with_mingw_cross_compiler"; then
             dnl Guess...
             AC_CHECK_PROGS(MINGWCXX,i386-mingw32msvc-g++ i586-pc-mingw32-g++ i686-pc-mingw32-g++ i686-w64-mingw32-g++,false)
-         elif test -x "$with_mingw_cross_compiler"; then 
+         elif test -x "$with_mingw_cross_compiler"; then
              MINGWCXX="$with_mingw_cross_compiler"
          else
             AC_CHECK_TOOL(MINGWCXX, "$with_mingw_cross_compiler", false)
@@ -4270,43 +4321,68 @@ if test -n "$with_system_libxml" -o -n "$with_system_libs" && \
     fi
 fi
 
-dnl ===================================================================
-dnl Check for system libxslt
-dnl ===================================================================
+# ===================================================================
+# Check for system libxslt
+# ===================================================================
 AC_MSG_CHECKING([which libxslt to use])
 if test -n "$with_system_libxslt" -o -n "$with_system_libs" -o \
        "$_os" = "Darwin" && \
    test "$with_system_libxslt" != "no"; then
-   AC_MSG_RESULT([external])
-   SYSTEM_LIBXSLT=YES
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBXSLT=YES
+    if test "$_os" = "Darwin"; then
+        dnl make sure to use SDK path
+        LIBXSLT_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/usr/include/libxml2"
+        dnl omit -L/usr/lib
+        LIBXSLT_LIBS="-lxslt -lxml2 -lz -lpthread -liconv -lm"
+    else
+        PKG_CHECK_MODULES(LIBXSLT, libxslt)
+    fi
 
-   PKG_CHECK_MODULES_MACHACK(LIBXSLT, xslt-config, libxslt)
-
-   dnl Check for xsltproc
-   AC_PATH_PROG(XSLTPROC, xsltproc, no)
-   if test "$XSLTPROC" = "no"; then
-      AC_MSG_ERROR([xsltproc is required])
-   fi
+    dnl Check for xsltproc
+    AC_PATH_PROG(XSLTPROC, xsltproc, no)
+    if test "$XSLTPROC" = "no"; then
+        AC_MSG_ERROR([xsltproc is required])
+    fi
 else
-   AC_MSG_RESULT([internal])
-   SYSTEM_LIBXSLT=NO
-   BUILD_TYPE="$BUILD_TYPE LIBXSLT"
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBXSLT=NO
+    BUILD_TYPE="$BUILD_TYPE LIBXSLT"
+
+    if test "$cross_compiling" = "yes"; then
+        AC_PATH_PROG(XSLTPROC, xsltproc, no)
+        if test "$XSLTPROC" = "no"; then
+            AC_MSG_ERROR([xsltproc is required])
+        fi
+    fi
 fi
 AC_SUBST(SYSTEM_LIBXSLT)
 AC_SUBST(LIBXSLT_CFLAGS)
 AC_SUBST(LIBXSLT_LIBS)
+AC_SUBST(XSLTPROC)
 
-
-dnl ===================================================================
-dnl Check for system libxml
-dnl ===================================================================
+# ===================================================================
+# Check for system libxml
+# ===================================================================
 AC_MSG_CHECKING([which libxml to use])
 if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
-            "$_os" = "Darwin" && \
+            "$_os" = "Darwin" -o $_os = iOS && \
     test "$with_system_libxml" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBXML=YES
-    PKG_CHECK_MODULES_MACHACK(LIBXML, xml2-config, libxml-2.0 >= 2.0)
+    if test "$_os" = "Darwin"; then
+        dnl make sure to use SDK path
+        LIBXML_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/usr/include/libxml2"
+        dnl omit -L/usr/lib
+        LIBXML_LIBS="-lxml2 -lz -lpthread -liconv -lm"
+    elif test $_os = iOS; then
+        dnl make sure to use SDK path
+        usr=`echo '#include <stdlib.h>' | $CC -E -MD - | grep usr/include/stdlib.h | head -1 | sed -e 's,# 1 ",,' -e 's,/usr/include/.*,/usr,'`
+        LIBXML_CFLAGS="-I$usr/include/libxml2"
+        LIBXML_LIBS="-L$usr/lib -lxml2 -liconv"
+    else
+        PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.0)
+    fi
     BUILD_TYPE="$BUILD_TYPE LIBXMLSEC"
 else
     AC_MSG_RESULT([internal])
@@ -4318,69 +4394,144 @@ AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
 
 dnl ===================================================================
-dnl Check for python
+dnl Checks for Python
 dnl ===================================================================
-AC_MSG_CHECKING([whether to enable Python 2.x UNO API])
-if test "$enable_python" != "no"; then
-   AC_MSG_RESULT([yes])
-   BUILD_TYPE="$BUILD_TYPE PYUNO"
-else
-   AC_MSG_RESULT([no])
+
+AC_MSG_CHECKING([which Python to use])
+
+case "$enable_python" in
+no|disable)
+   enable_python=no
+   AC_MSG_RESULT([none])
    DISABLE_PYTHON=TRUE
-   AC_SUBST(DISABLE_PYTHON)
+   ;;
+""|yes|auto)
+   if test $build_os = cygwin; then
+      dnl When building on Windows we don't attempt to use any installed
+      dnl "system"  Python.
+      dnl
+      dnl (When cross-compiling to Windows from Linux using the mingw32-cross
+      dnl compiler from OBS, use mingw32-python from OBS, and ditto for other
+      dnl MinGW cross-compilation setups.)
+      AC_MSG_RESULT([internal])
+      enable_python=internal
+   elif test $_os = Darwin; then
+      AC_MSG_RESULT([system, MacOSX10.4u.SDK (Python 2.3)])
+      enable_python=system
+      PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3"
+      PYTHON_LIBS="-framework Python"
+   else
+      AC_MSG_RESULT([checking below])
+      enable_python=auto       
+   fi
+   ;;
+internal)
+   AC_MSG_RESULT([internal])
+   ;;
+system)
+   AC_MSG_RESULT([system])
+   ;;
+*)
+   AC_MSG_ERROR([Incorrect --enable-python option])
+   ;;
+esac
+
+AC_SUBST(DISABLE_PYTHON)
+
+if test $_os = WINNT -a "$WITH_MINGW" != yes -a $enable_python = system; then
+   AC_MSG_ERROR([Must use internal Python when building with MSVC])
 fi
 
-AC_MSG_CHECKING([which python to use])
-if test "$_os" = "WINNT"; then
-   with_system_python=no
+if test $enable_python != no; then
+   BUILD_TYPE="$BUILD_TYPE PYUNO"
 fi
-if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
-   with_system_python=yes
-   AC_MSG_RESULT([compiling against MacOSX10.4u.sdk (python version 2.3)])
-   PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3"
-   PYTHON_LIBS="-framework Python"
-elif test -n "$with_system_python" -o -n "$with_system_libs" && \
-    test "$with_system_python" != "no"; then
-   with_system_python=yes
-   AC_MSG_RESULT([external])
-   AM_PATH_PYTHON([2.2])
 
-   python_include=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('INCLUDEPY'));"`
-   python_version=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
-   python_libs=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBS'));"`
-   python_libdir=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBDIR'));"`
-   PYTHON_CFLAGS="-I$python_include"
-   PYTHON_LIBS="-L$python_libdir -lpython$python_version $python_libs"
+if test "$cross_compiling" != yes; then
+   if test $enable_python = system; then
+      dnl This causes an error if no Python found
+      AM_PATH_PYTHON([2.2])
+   elif test $enable_python = auto; then
+      dnl This allows lack of system Python
+      AM_PATH_PYTHON([2.2],, [:])
+
+      if test "$PYTHON" = :; then
+         enable_python=internal
+      else
+         enable_python=system
+      fi
+   fi
 fi
-if test "$with_system_python" = "yes" ; then
+
+if test $enable_python = system; then
+   if test -n "$PYTHON_CFLAGS" -a -n "$PYTHON_LIBS"; then
+      dnl Fallback: Accept these in the environment.
+      :
+   elif test "$cross_compiling" != yes; then
+      python_include=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('INCLUDEPY'));"`
+      python_version=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
+      python_libs=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBS'));"`
+      python_libdir=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBDIR'));"`
+      PYTHON_CFLAGS="-I$python_include"
+      PYTHON_LIBS="-L$python_libdir -lpython$python_version $python_libs"
+   elif test "$cross_compiling" = yes; then
+      dnl How to find out the cross-compilation Python installation path?
+      dnl Let's hardocode what we know for different distributions for now...
+
+      for python_sysroot in /usr/i686-w64-mingw32/sys-root/mingw ; do
+         for python_version in 2.6 ; do
+            if test -f ${python_sysroot}/include/python${python_version}/Python.h; then
+               PYTHON_CFLAGS="-I ${python_sysroot}/include/python$python_version"
+               PYTHON_LIBS="-L ${python_sysroot}lib -lpython$python_version $python_libs"
+               break
+            fi
+         done
+         test -n "$PYTHON_CFLAGS" && break
+      done
+   fi
+fi
+
+dnl By now enable_python should be "system", "internal" or "no"
+case $enable_python in
+system)
    SYSTEM_PYTHON=YES
-   dnl check if the headers really work:
+
+   dnl Check if the headers really work
    save_CPPFLAGS="$CPPFLAGS"
    CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
    AC_CHECK_HEADER(Python.h, [],
-       [AC_MSG_ERROR(Python headers not found)], [])
+       [AC_MSG_ERROR([Python headers not found. You probably want to set both the PYTHON_CFLAGS and PYTHON_LIBS environment variables.])],
+       [])
    CPPFLAGS="$save_CPPFLAGS"
-else
+
+   dnl FIXME Check if the Python library can be linked with, too?
+   ;;
+
+internal)
    SYSTEM_PYTHON=NO
    BUILD_TYPE="$BUILD_TYPE PYTHON"
-   AC_MSG_RESULT([internal])
-   # Embedded python dies without Home set
+   # Embedded Python dies without Home set
    if test "z$HOME" = "z"; then
       export HOME="";
    fi
    # bz2 tarball and bzip2 is not standard
    if test -z "$BZIP2"; then
-    AC_PATH_PROG( BZIP2, bzip2)
-    if test -z "$BZIP2"; then
-           AC_MSG_ERROR([the internal Python module has a .tar.bz2. You need bzip2])
-       fi
+      AC_PATH_PROG( BZIP2, bzip2)
+      if test -z "$BZIP2"; then
+         AC_MSG_ERROR([the internal Python module has a .tar.bz2. You need bzip2])
+      fi
    fi
-fi
+   ;;
+no)
+   SYSTEM_PYTHON=NO
+   ;;
+*)
+   AC_MSG_ERROR([Internal configure script error, invalid enable_python value "$enable_python"])
+   ;;
+esac
+
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
-HOME=`echo $HOME | $SED 's:\\\\:/:g'`
-AC_SUBST(HOME)
 
 dnl ===================================================================
 dnl Check for system translate-toolkit
@@ -4451,20 +4602,20 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
     DB_LIB=
     for dbver in 5.1 5.0 5 4.8 4.7 4 ''; do
         for dash in - ''; do
-            AC_CHECK_LIB(db$dash$dbver, dbopen, 
+            AC_CHECK_LIB(db$dash$dbver, dbopen,
                 [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
-            AC_CHECK_LIB(db$dash$dbver, __db185_open, 
+            AC_CHECK_LIB(db$dash$dbver, __db185_open,
                 [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
          done
         test -n "$DB_LIB" && break
     done
 
     if test -z "$DB_LIB"; then
-        AC_CHECK_LIB(db, dbopen, 
+        AC_CHECK_LIB(db, dbopen,
             [ DB_LIB="db"; DB_CPPLIB="db_cxx" ])
     fi
 
-    if test -z "$DB_LIB" ; then 
+    if test -z "$DB_LIB" ; then
         AC_MSG_ERROR([db library not found. Use the correct -L flag,
 or install the Berkeley db development package.])
     fi
@@ -4844,31 +4995,47 @@ fi
 dnl ===================================================================
 dnl Check for system curl
 dnl ===================================================================
-if test "$_os" = "Darwin" && test "$with_system_curl" != "no"; then
+if test "$_os" = "Darwin" -a "$with_system_curl" != "no"; then
    with_system_curl=yes
 fi
-AC_MSG_CHECKING([which curl to use])
+AC_MSG_CHECKING([which libcurl to use])
 if test -n "$with_system_curl" -o -n "$with_system_libs" && \
     test "$with_system_curl" != "no"; then
    AC_MSG_RESULT([external])
    SYSTEM_CURL=YES
 
-   AC_PATH_PROG( CURLCONFIG, curl-config)
-   if test -z "$CURLCONFIG"; then
-      AC_MSG_ERROR([install curl to run this script])
+   curl_version=""
+   if test "$cross_compiling" = "yes"; then
+      dnl At least the OBS mingw32-libcurl-devel package
+      dnl comes with a proper .pc file
+      PKG_CHECK_MODULES(CURL, libcurl,, [:])
+      if test -n "CURL_PKG_ERRORS"; then
+         AC_MSG_RESULT([no])
+      else
+         curl_version=`$PKG_CONFIG --modversion libcurl`
+      fi
+   fi
+   if test -z "$curl_version"; then
+      AC_PATH_PROG(CURLCONFIG, curl-config)
+      if test -z "$CURLCONFIG"; then
+         AC_MSG_ERROR([install the libcurl development package])
+      fi
+      CURL_LIBS=`$CURLCONFIG --libs`
+      CURL_CFLAGS=`$CURLCONFIG --cflags`
+      curl_version=`$CURLCONFIG --version | $SED -e 's/^libcurl //'`
    fi
 
-   # check curl version
-   AC_MSG_CHECKING([whether curl is >= 7.13.1])
-   if test "`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $1 }'`" -gt "7" -a \
-    "`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $2 }'`" -gt "13" -a \
-    "`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $3 }'`" -gt "1"; then
-      AC_MSG_ERROR([no, you need at least curl 7.13,1])
-   else
-      AC_MSG_RESULT([yes])
-   fi
-   CURL_LIBS=`$CURLCONFIG --libs`
-   CURL_CFLAGS=`$CURLCONFIG --cflags`
+   AC_MSG_CHECKING([whether libcurl is >= 7.13.1])
+   case $curl_version in
+   dnl brackets doubled below because Autoconf uses them as m4 quote characters,
+   dnl so they need to be doubled to end up in the configure script
+   7.13.1|7.1[[4-9]].*|7.[[2-9]]?.*|7.???.*|[[8-9]].*|[[1-9]][[0-9]].*)
+      AC_MSG_RESULT([yes, you have $curl_version])
+      ;;
+   *)
+      AC_MSG_ERROR([no, you have $curl_version])
+      ;;
+   esac
 else
    AC_MSG_RESULT([internal])
    SYSTEM_CURL=NO
@@ -5315,7 +5482,7 @@ if test "$BUILD_MOZAB" = "TRUE"; then
    fi
    if test "$HAVE_MOZILLA_TARBALL" != "y"; then
       AC_MSG_ERROR([Mozilla/SeaMonkey source archive not found.
-Use "./fetch_tarballs.sh ooo.lst" to download.])
+Use "./download" to download.])
    fi
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for moztools binaries])
@@ -5494,14 +5661,17 @@ if test  "$_os" = "Darwin"; then
    fi
 fi
 
+if test $_os = iOS -o $_os = Android; then
+   enable_gtk=no
+fi
+
 dnl ***************************************
 dnl testing for X libraries and includes...
 dnl ***************************************
 if test "$_os" = "Darwin" -a "x$x_includes" = "xno_x_includes"; then
-   echo "Do Nothing for _os = Darwin"
    dnl Mac OS X using Aqua graphics. Don't check for X11.
    :
-elif test "$_os" != "WINNT" -a "$_os" != "Android"; then
+elif test "$_os" != "WINNT" -a "$_os" != "Android" -a "$_os" != "iOS"; then
    AC_PATH_X
    AC_PATH_XTRA
    CPPFLAGS="$CPPFLAGS $X_CFLAGS"
@@ -5551,7 +5721,7 @@ fi
 AC_SUBST(XLIB)
 AC_SUBST(XAU_LIBS)
 
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "Android"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "Android" -a "$_os" != "iOS"; then
    dnl ===================================================================
    dnl Check for Composite.h for Mozilla plugin
    dnl ===================================================================
@@ -6021,28 +6191,34 @@ if test "$_os" = "WINNT" ; then
         AC_PATH_PROG(NSIS_PATH, makensis)
         if test -n "$NSIS_PATH"; then
             NSIS_PATH=`dirname "$NSIS_PATH"`
+        elif test "$build_os" = "cygwin"; then
+            AC_MSG_CHECKING([for NSIS])
+            nsistest=`./oowintool --nsis-dir`;
+            nsistest=`cygpath -d -m "$nsistest"`
+            nsistest=`cygpath -u "$nsistest"`
+            if test -x "$nsistest/nsis.exe"; then
+                NSIS_PATH="$nsistest"
+                AC_MSG_RESULT([found ($NSIS_PATH)])
+            else
+                AC_MSG_RESULT([no, no self-contained installer will be built.])
+            fi
         fi
     else
-	AC_MSG_CHECKING([for NSIS])
+        AC_MSG_CHECKING([for NSIS])
         if test "$build_os" = "cygwin"; then
             with_nsis_path=`cygpath -u "$with_nsis_path"`
         fi
         if test -e "$with_nsis_path/makensis$EXEEXT_FOR_BUILD"; then
             NSIS_PATH="$with_nsis_path"
-        elif test "$build_os" = "cygwin"; then
-	    nsistest=`./oowintool --nsis-dir`;
-	    if test -x "$nsistest/nsis.exe"; then
-		NSIS_PATH="$nsistest"
-	    fi
         fi
         if test -z "$NSIS_PATH"; then
             AC_MSG_RESULT([no, no self-contained installer will be built.])
         else
-	    if test "$build_os" = "cygwin"; then
-		NSIS_PATH=`cygpath -d "$NSIS_PATH"`
-		NSIS_PATH=`cygpath -u "$NSIS_PATH"`
-	    fi
-	    AC_MSG_RESULT([found ($NSIS_PATH)])
+            if test "$build_os" = "cygwin"; then
+                NSIS_PATH=`cygpath -d "$NSIS_PATH"`
+                NSIS_PATH=`cygpath -u "$NSIS_PATH"`
+            fi
+            AC_MSG_RESULT([found ($NSIS_PATH)])
         fi
     fi
 fi
@@ -6105,7 +6281,12 @@ fi
 dnl We also need to check for --with-gnu-cp
 
 if test -z "$with_gnu_cp"; then
-   AC_PATH_PROGS(GNUCP, gnucp cp)
+   # check the place where the good stuff is hidden on Solaris...
+   if test -x /usr/gnu/bin/cp; then
+      GNUCP=/usr/gnu/bin/cp
+   else
+      AC_PATH_PROGS(GNUCP, gnucp cp)
+   fi
    if test -z $GNUCP; then
       AC_MSG_ERROR([Neither gnucp nor cp found. Install GNU cp and/or specify --with-gnu-cp=/path/to/it])
    fi
@@ -6123,13 +6304,15 @@ if $GNUCP --version 2>/dev/null | grep "coreutils" >/dev/null 2>/dev/null; then
 elif $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null; then
     AC_MSG_RESULT([yes])
 else
-    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" \
-         -o "$_os" = "FreeBSD" -o "$_os" = "DragonFly"; then
-        GNUCP=''
-        AC_MSG_RESULT([no gnucp found - using the system's cp command])
-    else
-        AC_MSG_ERROR([no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it])
-    fi
+    case "$build_os" in
+        darwin*|netbsd*|openbsd*|freebsd*|dragonfly*)
+            GNUCP=''
+            AC_MSG_RESULT([no gnucp found - using the system's cp command])
+            ;;
+        *)
+            AC_MSG_ERROR([no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it])
+            ;;
+    esac
 fi
 
 AC_SUBST(GNUPATCH)
@@ -6173,45 +6356,47 @@ ASM_HOME="$with_asm_home"
 AC_SUBST(ASM_HOME)
 
 dnl ===================================================================
-dnl Zip will be found where you tell me to find it
+dnl We need zip and unzip
 dnl ===================================================================
-if test -n "$with_zip_home" ; then
-    if test "$_os" = "WINNT"; then
-        with_zip_home=`cygpath -u "$with_zip_home"`
-    fi
-    ZIP="$with_zip_home/zip"
-    UNZIP="$with_zip_home/unzip"
-    ZIP_HOME="$with_zip_home"
-else
-    AC_PATH_PROG(ZIP, zip)
-    AC_PATH_PROG(UNZIP, unzip)
-    ZIP_HOME=`dirname "$ZIP"`
-fi
-dnl ===================================================================
-dnl Zip must be available or else it is an error, all platforms
-dnl ===================================================================
-if test -z "$ZIP" -o -z "$UNZIP"; then
-    AC_MSG_ERROR([Zip/Unzip are required to build, please install or use --with-zip-home],,)
-fi
+AC_PATH_PROG(ZIP, zip)
+test -z "$ZIP" && AC_MSG_ERROR([zip is required])
+AC_PATH_PROG(UNZIP, unzip)
+test -z "$ZIP" && AC_MSG_ERROR([unzip is required])
 
 dnl ===================================================================
 dnl Zip must be a specific type for different build types.
 dnl ===================================================================
-if test "$_os" = "WINNT"; then
+if test $build_os = cygwin; then
     if test -n "`$ZIP -h | grep -i WinNT`" ; then
-AC_MSG_ERROR([$ZIP found in the path is not the required Cygwin version of Info-ZIPs zip.exe.])
+        AC_MSG_ERROR([$ZIP is not the required Cygwin version of Info-ZIP's zip.exe.])
     fi
 fi
-AC_SUBST(ZIP_HOME)
 
 dnl ===================================================================
 dnl Test which vclplugs have to be built.
 dnl ===================================================================
+R=""
+GTK3_CFLAGS=""
+GTK3_LIBS=""
+ENABLE_GTK3=""
+if test "x$enable_gtk3" = "xyes"; then
+   if test "$with_system_cairo" != yes; then
+      echo "System cairo required for gtk3 support, please use --system-cairo"
+   fi
+   PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.0 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
+   if test "x$ENABLE_GTK3" = "xTRUE"; then
+      R="gtk3"
+   fi
+fi
+AC_SUBST(GTK3_LIBS)
+AC_SUBST(GTK3_CFLAGS)
+AC_SUBST(ENABLE_GTK3)
+
 AC_MSG_CHECKING([which VCLplugs shall be built])
 ENABLE_GTK=""
 if test "x$enable_gtk" = "xyes"; then
     ENABLE_GTK="TRUE"
-    R="gtk"
+    R="gtk $R"
 fi
 AC_SUBST(ENABLE_GTK)
 
@@ -6280,6 +6465,7 @@ if test  "$test_gtk" = "yes"; then
 
    if test "$ENABLE_GTK" = "TRUE" ; then
       PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.4 gdk-pixbuf-xlib-2.0 >= 2.2 ,,AC_MSG_ERROR([requirements to build the gtk-plugin not met. Use --disable-gtk or install the missing packages]))
+      PKG_CHECK_MODULES(GTHREAD, gthread-2.0,,AC_MSG_ERROR([requirements to build the gtk-plugin not met. Use --disable-gtk or install the missing packages]))
       BUILD_TYPE="$BUILD_TYPE GTK"
 
       if test "x$enable_systray" = "xyes"; then
@@ -6315,6 +6501,8 @@ AC_SUBST(ENABLE_DBUS)
 AC_SUBST(ENABLE_SYSTRAY_GTK)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
+AC_SUBST(GTHREAD_CFLAGS)
+AC_SUBST(GTHREAD_LIBS)
 
 PKG_CHECK_MODULES( LIBPNG, libpng, ENABLE_QUICKSTART_LIBPNG="TRUE", ENABLE_QUICKSTART_LIBPNG="" )
 AC_SUBST(LIBPNG_LIBS)
@@ -6330,32 +6518,26 @@ fi
 AC_SUBST(ENABLE_QUICKSTART_LIBPNG)
 
 dnl ===================================================================
-dnl Check whether the Cairo libraries are available.
+dnl Test whether to build cairo or rely on the system version
 dnl ===================================================================
 
-ENABLE_CAIRO=""
+dnl ENABLE_CAIRO will be set to empty later when necessary
+ENABLE_CAIRO="TRUE"
+
 BUILD_PIXMAN=""
 SYSTEM_CAIRO=""
 
-if test  "$test_cairo" = "yes"; then
+AC_MSG_CHECKING([whether to use the system cairo])
 
-    AC_MSG_CHECKING([whether to use cairo])
-    if test "x$enable_cairo" != "xno" ; then
-        ENABLE_CAIRO="TRUE"
+if test "$with_system_cairo" = yes -o \( "$with_system_libs" = yes -a "$with_system_cairo" != no \); then
+    SYSTEM_CAIRO=YES
     AC_MSG_RESULT([yes])
-        AC_MSG_CHECKING([which cairo to use])
-        if test -n "$with_system_cairo" -o -n "$with_system_libs" && \
-           test "$with_system_cairo" != "no"; then
-           AC_MSG_RESULT([external])
-           SYSTEM_CAIRO=YES
 
-           PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
-       if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$ENABLE_FONTCONFIG" != "TRUE" ; then
-          AC_MSG_ERROR([Cairo library requires fontconfig.])
-       fi
-           if test "$with_system_xrender_headers" = "yes"; then
-              AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
-              AC_TRY_RUN([
+    PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
+
+    if test "$with_system_xrender_headers" = "yes"; then
+        AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
+        AC_TRY_RUN([
 #include <X11/extensions/Xrender.h>
 
 int main(int argc, char **argv) {
@@ -6365,16 +6547,15 @@ int main(int argc, char **argv) {
       return 1;
 #endif
 }
-               ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no, X headers too old.])])
-           fi
-        else
-           BUILD_TYPE="$BUILD_TYPE CAIRO"
-           BUILD_PIXMAN=YES
-           AC_MSG_RESULT([internal])
-        fi
-    else
-       AC_MSG_RESULT([no])
+        ],
+        [AC_MSG_RESULT([yes])],
+        [AC_MSG_ERROR([no, X headers too old.])]
+        )
     fi
+else
+    AC_MSG_RESULT([no])
+    BUILD_TYPE="$BUILD_TYPE CAIRO"
+    BUILD_PIXMAN=YES
 fi
 
 AC_SUBST(ENABLE_CAIRO)
@@ -6458,17 +6639,6 @@ fi
 AC_SUBST(SYSTEM_MESA_HEADERS)
 AC_SUBST(ENABLE_OPENGL)
 
-# presenter extra ui extension?
-AC_MSG_CHECKING([whether to build extra presenter ui])
-AS_IF([test "x$enable_ext_presenter_ui" = "xyes"], [
-   AC_MSG_RESULT([yes])
-   ENABLE_PRESENTER_EXTRA_UI=YES
-],[
-   AC_MSG_RESULT([no])
-   ENABLE_PRESENTER_EXTRA_UI=NO
-])
-AC_SUBST(ENABLE_PRESENTER_EXTRA_UI)
-
 # presenter minimizer extension?
 AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
 AS_IF([test "x$enable_ext_presenter_minimizer" = "xyes"], [
@@ -6535,7 +6705,7 @@ AS_IF([test "x$enable_ext_wiki_publisher" = "xyes"], [
   AC_MSG_CHECKING([for swext module])
   ENABLE_MEDIAWIKI=YES
   BUILD_TYPE="$BUILD_TYPE SWEXT"
-  if test  "x$WITH_JAVA" = "xno"; then
+  if test  "x$with_java" = "xno"; then
     AC_MSG_ERROR([Wiki Publisher requires Java! Enable Java if you want to build it.])
   fi
 ],[
@@ -6565,7 +6735,7 @@ AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
-if test -n "$enable_ext_report_builder" -a "$enable_ext_report_builder" != "no" && test "$WITH_JAVA" != "no"; then
+if test -n "$enable_ext_report_builder" -a "$enable_ext_report_builder" != "no" && test "$with_java" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_REPORTBUILDER=YES
   AC_MSG_CHECKING([for reportbuilder module])
@@ -6862,16 +7032,13 @@ AS_IF([test "x$enable_ext_scripting_javascript" = "xyes"], [
 ])
 AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 
-# scripting provider for Python extension?
-AC_MSG_CHECKING([whether to build extension for support of scripts in Python])
-AS_IF([test "x$enable_ext_scripting_python" = "xyes"], [
-   AC_MSG_RESULT([yes])
-   ENABLE_SCRIPTING_PYTHON=YES
-],[
-   AC_MSG_RESULT([no])
+dnl Scripting provider for Python extension?
+dnl We always provide this unless we have disabled Python completely
+if test $enable_python = no; then
    ENABLE_SCRIPTING_PYTHON=NO
-   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_PYTHON"
-])
+else
+   ENABLE_SCRIPTING_PYTHON=YES
+fi
 AC_SUBST(ENABLE_SCRIPTING_PYTHON)
 
 supports_multilib=
@@ -7619,7 +7786,7 @@ else
   WITH_EXTRA_GALLERY=YES
   BUILD_TYPE="$BUILD_TYPE EXTRA_GALLERY"
   SCPDEFS="$SCPDEFS -DWITH_EXTRA_GALLERY"
-  OOOP_GALLERY_PACK="af9314c5972d95a5d6da23ffad818f68-OOOP-gallery-pack-2.8.0.0.zip"  
+  OOOP_GALLERY_PACK="af9314c5972d95a5d6da23ffad818f68-OOOP-gallery-pack-2.8.0.0.zip"
 fi
 AC_SUBST(WITH_EXTRA_GALLERY)
 AC_SUBST(OOOP_GALLERY_PACK)
@@ -7690,6 +7857,28 @@ else
   ENABLE_LOMENUBAR="TRUE"
 fi
 AC_SUBST(ENABLE_LOMENUBAR)
+
+dnl ===================================================================
+dnl Test whether to enable online update service
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable online update])
+ENABLE_ONLINE_UPDATE=
+if test "z$enable_online_update" = "z" ; then
+  if test "$_os" = "WINNT" -o "$_os" = "Darwin" ; then
+    AC_MSG_RESULT([yes])
+    ENABLE_ONLINE_UPDATE="TRUE"
+  else
+    AC_MSG_RESULT([no])
+  fi
+else
+  if test "z$enable_online_update" = "zyes" ; then
+    AC_MSG_RESULT([yes])
+    ENABLE_ONLINE_UPDATE="TRUE"
+  else
+    AC_MSG_RESULT([no])
+  fi
+fi
+AC_SUBST(ENABLE_ONLINE_UPDATE)
 
 dnl ===================================================================
 dnl Test whether build target is Release Build
@@ -7777,6 +7966,313 @@ else
 fi
 AC_SUBST(USE_XINERAMA)
 AC_SUBST(XINERAMA_LINK)
+
+dnl ===================================================================
+dnl Checks for librsvg
+dnl ===================================================================
+
+dnl ENABLE_LIBRSVG is set to "" (for NO), SYSTEM or INTERNAL. The
+dnl SYSTEM_LIBRSVG, SYSTEM_GDKPIXBUF etc are redundant.
+
+ENABLE_LIBRSVG=""
+LIBRSVG_CFLAGS=""
+LIBRSVG_LIBS=""
+
+AC_MSG_CHECKING([what librsvg to use])
+
+case "$enable_librsvg" in
+no|disable)
+   AC_MSG_RESULT([none])
+   enable_librsvg=no
+   ;;
+
+""|yes|auto)
+   if test $build_os = cygwin -o \
+           $_os = Darwin; then
+      dnl When building on/for these OSes always use the internal one,
+      dnl if at all. Add more OSes above as needed.
+      AC_MSG_RESULT([internal])
+      enable_librsvg=internal
+   elif test  $_os = iOS -o $_os = Android; then
+      AC_MSG_RESULT([none])
+      enable_librsvg=no
+   else
+      if test "$with_system_libs" = yes; then
+         AC_MSG_RESULT([system])
+         PKG_CHECK_MODULES(LIBRSVG, librsvg-2.0 >= 2.14)
+         enable_librsvg=system
+      elif test "$with_system_libs" = no; then
+         AC_MSG_RESULT([internal])
+         enable_librsvg=internal
+      else
+         AC_MSG_RESULT([checking further])
+         PKG_CHECK_MODULES(LIBRSVG, librsvg-2.0 >= 2.14,, [:])
+         if test -z "$LIBRSVG_PKG_ERRORS"; then
+            enable_librsvg=system
+         else
+            enable_librsvg=internal
+         fi
+      fi
+   fi
+   ;;
+
+internal)
+   AC_MSG_RESULT([internal])
+   ;;
+
+system)
+   if test $_os = WINNT -a "$WITH_MINGW" != yes; then
+      AC_MSG_ERROR([Must use internal librsvg when building with MSVC])
+   fi
+   AC_MSG_RESULT([system])
+   PKG_CHECK_MODULES(LIBRSVG, librsvg-2.0 >= 2.14)
+   ;;
+
+*)
+   AC_MSG_ERROR([Incorrect --enable-librsvg option])
+   ;;
+esac
+
+dnl By now enable_librsvg should be "system", "internal" or "no"
+case $enable_librsvg in
+system)
+   ENABLE_LIBRSVG=SYSTEM
+   SYSTEM_LIBRSVG=YES
+   ;;
+
+internal)
+   ENABLE_LIBRSVG=INTERNAL
+   SYSTEM_LIBRSVG=NO
+   BUILD_TYPE="$BUILD_TYPE LIBRSVG"
+   ;;
+
+no)
+   ENABLE_LIBRSVG=NO
+   SYSTEM_LIBRSVG=NO
+   ENABLE_CAIRO=
+   ;;
+
+*)
+   AC_MSG_ERROR([Internal configure script error, invalid enable_librsvg value "$enable_librsvg"])
+   ;;
+esac
+
+AC_SUBST(ENABLE_LIBRSVG)
+AC_SUBST(LIBRSVG_CFLAGS)
+AC_SUBST(LIBRSVG_LIBS)
+AC_SUBST(SYSTEM_LIBRSVG)
+
+dnl ===================================================================
+dnl Test whether to build gdk-pixbuf or rely on the system version
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to use the system gdk-pixbuf])
+
+dnl As long as the only thing we need gdk-pxbuf for is below
+dnl librsvg, use the same --enable-librsvg (possibly implied
+dnl by --with-system-libs) to override this.
+
+if test "$SYSTEM_LIBRSVG" = YES; then
+    SYSTEM_GDKPIXBUF=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_GDKPIXBUF=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_GDKPIXBUF=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
+AC_SUBST(SYSTEM_GDKPIXBUF)
+
+dnl ===================================================================
+dnl Test whether to build GLib or rely on the system version
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to use the system GLib])
+
+dnl As long as the only thing we need GLib for is below
+dnl librsvg, use the same --enable-librsvg (possibly implied
+dnl by --with-system-libs) to override this.
+
+if test "$SYSTEM_LIBRSVG" = YES; then
+    SYSTEM_GLIB=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_GLIB=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_GLIB=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
+AC_SUBST(SYSTEM_GLIB)
+
+dnl ===================================================================
+dnl Test whether to build gettext runtime (libintl) or rely on the
+dnl system version
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to use the system gettext runtime])
+
+if test "$with_system_gettext" = yes -o \( "$with_system_libs" = yes -a "$with_system_gettext" != no \); then
+    SYSTEM_GETTEXT=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_GETTEXT=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_GETTEXT=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
+AC_SUBST(SYSTEM_GETTEXT)
+
+dnl ===================================================================
+dnl Test whether to build libcroco or rely on the system version
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to use the system libcroco])
+
+dnl As long as the only thing we need libcroco for is below
+dnl librsvg, use the same --enable-librsvg (possibly implied
+dnl by --with-system-libs) to override this.
+
+if test "$SYSTEM_LIBRSVG" = YES; then
+    SYSTEM_LIBCROCO=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_LIBCROCO=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_LIBCROCO=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
+AC_SUBST(SYSTEM_LIBCROCO)
+
+dnl ===================================================================
+dnl Test whether to build Pango or rely on the system version
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to use the system pango])
+
+dnl As long as the only thing we need Pango for is below
+dnl librsvg, use the same --enable-librsvg (possibly implied
+dnl by --with-system-libs) to override this.
+
+if test "$SYSTEM_LIBRSVG" = YES; then
+    SYSTEM_PANGO=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_PANGO=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_PANGO=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
+AC_SUBST(SYSTEM_PANGO)
+
+dnl ===================================================================
+dnl Test whether to build libgsf or rely on the system version
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to use the system libgsf])
+
+dnl As long as the only thing we need libgsf for is below librsvg (is
+dnl it?), use the same --enable-librsvg (possibly implied by
+dnl --with-system-libs) to override this.
+
+if test "$SYSTEM_LIBRSVG" = YES; then
+    SYSTEM_LIBGSF=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_LIBGSF=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_LIBGSF=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
+AC_SUBST(SYSTEM_LIBGSF)
+
+dnl ===================================================================
+dnl Test whether to build libpng or rely on the system version
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to use the system libpng])
+
+dnl How should and does this interact with the checks for libpng
+dnl related to use of libpng in the quickstarter above? This needs to
+dnl be unified.
+
+if test "$with_system_libpng" = yes -o \( "$with_system_libs" = yes -a "$with_system_libpng" != no \); then
+    SYSTEM_LIBPNG=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_LIBPNG=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_LIBPNG=YES
+            AC_MSG_RESULT([no])
+            ;;
+    esac
+fi
+AC_SUBST(SYSTEM_LIBPNG)
+
+dnl ===================================================================
+dnl Test whether to build libjpeg or rely on the system version
+dnl ===================================================================
+dnl FIXME: this is currently because we have jpeg-6b for our filters
+dnl        and jpeg-8 as dependency for librsvg
+dnl        this should be unified into using only one version for both
+
+AC_MSG_CHECKING([whether to use the system libjpeg])
+
+if test "$SYSTEM_JPEG" == "YES"; then
+    SYSTEM_LIBJPEG=YES
+    AC_MSG_RESULT([yes])
+else
+    case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_LIBJPEG=NO
+            AC_MSG_RESULT([no])
+            ;;
+        *)
+            SYSTEM_LIBJPEG=YES
+            AC_MSG_RESULT([yes])
+            ;;
+    esac
+fi
+AC_SUBST(SYSTEM_LIBJPEG)
 
 dnl ===================================================================
 dnl Check for runtime JVM search path
@@ -7899,7 +8395,11 @@ if test "$ANT_HOME" != "NO_ANT_HOME"; then
                 if test -f $ANT_HOME/lib/ant/ant.jar; then
                     ANT_LIB="$ANT_HOME/lib/ant"
                 else
-                    AC_MSG_ERROR([Ant libraries not found!])
+                   if test -f /usr/share/lib/ant/ant.jar; then
+                       ANT_LIB=/usr/share/lib/ant
+                   else
+                       AC_MSG_ERROR([Ant libraries not found!])
+                   fi
                 fi
              fi
           fi
@@ -7982,7 +8482,11 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
         if test -e /usr/share/java/junit4.jar; then
             OOO_JUNIT_JAR=/usr/share/java/junit4.jar
         else
-            OOO_JUNIT_JAR=/usr/share/java/junit.jar
+           if test -e /usr/share/lib/java/junit.jar; then
+              OOO_JUNIT_JAR=/usr/share/lib/java/junit.jar
+           else
+              OOO_JUNIT_JAR=/usr/share/java/junit.jar
+           fi
         fi
     else
         OOO_JUNIT_JAR=$with_junit
@@ -8017,14 +8521,14 @@ dnl ===================================================================
 GIT_REPO_NAMES="artwork base calc components extensions extras filters help impress libs-core libs-extern libs-extern-sys libs-gui postprocess sdk testing ure writer"
 AC_MSG_CHECKING([which languages to be built])
 # get list of all languages
-# generate shell variable from completelangiso= from solenv/inc/postset.mk
+# generate shell variable from completelangiso= from solenv/inc/langlist.mk
 # the sed command does the following:
 #   + if a line ends with a backslash, append the next line to it
 #   + adds " on the beginning of the value (after =)
 #   + adds " at the end of the value
 #   + removes en-US; we want to put it on the beginning
 #   + prints just the section starting with 'completelangiso=' and ending with the " at the end of line
-[eval $(sed -e :a -e '/\\$/N; s/\\\n//; ta' -n -e 's/=/="/;s/\([^\\]\)$/\1"/;s/en-US//;/^completelangiso/p' solenv/inc/postset.mk)]
+[eval $(sed -e :a -e '/\\$/N; s/\\\n//; ta' -n -e 's/=/="/;s/\([^\\]\)$/\1"/;s/en-US//;/^completelangiso/p' solenv/inc/langlist.mk)]
 ALL_LANGS="en-US $completelangiso"
 # check the configured localizations
 WITH_LANG="$with_lang"
@@ -8037,6 +8541,7 @@ fi
 # check that the list is valid
 for lang in $WITH_LANG ; do
    test "$lang" = "ALL" && continue;
+   test "$lang" = "kid" && continue;
    # need to check for the exact string, so add space before and after the list of all languages
    all_langs=" $ALL_LANGS "
    test `echo "$all_langs" | sed "s|.* $lang .*|found|"` = "found" && continue;
@@ -8188,10 +8693,6 @@ dnl ===================================================================
 AC_MSG_CHECKING([for maximum of jobs per processor])
 BUILD_MAX_JOBS="1"
 if test "z$with_max_jobs" != "z"; then
-    if test "$with_max_jobs" -gt "10"; then
-        AC_MSG_WARN([dmake is limited to 10 jobs, using --with-max-jobs=10 (instead of $with_max_jobs).])
-        with_max_jobs="10"
-    fi
     BUILD_MAX_JOBS="$with_max_jobs"
 else
    if test -n "$enable_icecream" && test "$enable_icecream" != "no" ; then
@@ -8252,27 +8753,10 @@ else
    echo > set_soenv.stamp
 fi
 
-dnl Executing the set_soenv script to setup the environment variables.
-chmod a+x set_soenv
-if test -z "$enable_check_only"; then
-   './set_soenv'
-else
-   echo
-   echo Test Complete
-   echo No environment file will be generated
-   echo
-   num_warnings=`wc -l warn`
-   _num=`echo $num_warnings | $AWK '{ print $1 }'`
-   if test $_num -gt 0; then
-      echo The following warning\(s\) were generated by configure
-      echo ----------------------------------------------------
-      echo
-      cat warn
-      echo
-   else
-      echo There were no warnings
-   fi
-   echo
-fi
+dnl Run the set_soenv script to setup the *Env.sh script that sets
+dnl environment variables for the build.
+chmod +x set_soenv
+
+./set_soenv
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:

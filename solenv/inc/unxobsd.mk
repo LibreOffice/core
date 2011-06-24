@@ -44,6 +44,3 @@ CFLAGS_NO_EXCEPTIONS+=-DBOOST_NO_EXCEPTIONS
 
 # default linker flags
 LINKFLAGSDEFS:=
-
-# platform specific identifier for shared libs
-DLLPOSTFIX=ob

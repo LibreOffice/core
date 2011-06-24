@@ -34,12 +34,27 @@ gb_Deliver_CLEARONDELIVER := $(true)
 
 define gb_Deliver_init
 gb_Deliver_DELIVERABLES :=
+gb_Deliver_DELIVERABLES_INDEX := 
+
+endef
+
+define gb_Deliver_do_add
+$$(if $(3),,$$(error - missing third parameter for deliverable $(1)))
+gb_Deliver_DELIVERABLES_$(notdir $(3)) += $$(patsubst $(REPODIR)/%,%,$(2)):$$(patsubst $(REPODIR)/%,%,$(1))
+gb_Deliver_DELIVERABLES_INDEX := $(sort $(gb_Deliver_DELIVERABLES_INDEX) $(notdir $(3)))
+$(if $(gb_LOWRESTIME),.LOW_RESOLUTION_TIME : $(1),)
 
 endef
 
 define gb_Deliver_add_deliverable
-gb_Deliver_DELIVERABLES += $$(patsubst $(REPODIR)/%,%,$(2)):$$(patsubst $(REPODIR)/%,%,$(1))
-$(if $(gb_LOWRESTIME),.LOW_RESOLUTION_TIME : $(1),)
+ifeq ($(MAKECMDGOALS),showdeliverables)
+$(call gb_Deliver_do_add,$(OUTDIR)/$(1),$(2),$(3))
+else
+ifneq ($(CWS_WORK_STAMP),)
+else
+$(call gb_Deliver_do_add,$(OUTDIR)/$(1),$(2),$(3))
+endif
+endif
 
 endef
 
@@ -64,7 +79,7 @@ ifeq ($$(words $(gb_Module_ALLMODULES)),1)
 $$(eval $$(call gb_Output_announce,$$(strip $$(gb_Module_ALLMODULES)),$$(true),LOG,1))
 deliverlog : COMMAND := \
  mkdir -p $$(OUTDIR)/inc/$$(strip $$(gb_Module_ALLMODULES)) \
- && RESPONSEFILE=$$(call var2file,$(shell $(gb_MKTEMP)),100,$$(sort $$(gb_Deliver_DELIVERABLES))) \
+ && RESPONSEFILE=$$(call var2file,$(shell $(gb_MKTEMP)),100,$$(sort $$(foreach list,$$(gb_Deliver_DELIVERABLES_INDEX),$$(gb_Deliver_DELIVERABLES_$$(list))))) \
  && $(gb_AWK) -f $$(GBUILDDIR)/processdelivered.awk < $$$${RESPONSEFILE} \
 		> $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/gb_deliver.log \
  && rm -f $$$${RESPONSEFILE}
@@ -89,7 +104,7 @@ endef
 
 showdeliverables :
 	$(eval MAKEFLAGS := s)
-	$(foreach deliverable,$(sort $(gb_Deliver_DELIVERABLES)),\
+	$(foreach deliverable,$(sort $(foreach list,$(gb_Deliver_DELIVERABLES_INDEX),$(gb_Deliver_DELIVERABLES_$(list)))),\
 			$(call gb_Deliver_print_deliverable,$(REPODIR)/$(firstword $(subst :, ,$(deliverable))),$(REPODIR)/$(lastword $(subst :, ,$(deliverable)))))
 	true
 # vim: set noet sw=4:

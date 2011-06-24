@@ -28,7 +28,7 @@ sub read_new_icons($$)
     my @new_icons;
     my %new_icons;
     for my $icon (@images) {
-    my $iname = "res/commandimagelist/" . $prefix . $icon . ".png";
+    my $iname = "cmd/" . $prefix . $icon . ".png";
     if (!defined $global_hash{$iname} &&
         !defined $new_icons{$iname}) {
         push @new_icons, $iname;

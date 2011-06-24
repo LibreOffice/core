@@ -71,14 +71,6 @@
     };
 #### script id #####
 
-    ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
-    my $id_str = ' $Revision: 275224 $ ';
-    my $script_rev = 0;
-    $id_str =~ /Revision:\s+(\S+)\s+\$/
-      ? ($script_rev = $1) : ($script_rev = "-");
-
-    print "$script_name -- version: $script_rev\n";
-
 #########################
 #                       #
 #   Global Variables    #
@@ -233,9 +225,11 @@
         $deliver_env{'L10N_framework'}++;
     };
     my $workspace_path = get_workspace_path();   # This also sets $initial_module
+    my $build_error_log = Cwd::realpath(correct_path($workspace_path)) ."/build_error.log";
     my $source_config = SourceConfig -> new($workspace_path);
     check_partial_gnumake_build($initial_module);
 
+    system("rm -f $build_error_log");
     if ($html) {
         if (defined $html_path) {
             $html_file = correct_path($html_path . '/' . $ENV{INPATH}. '.build.html');
@@ -760,6 +754,7 @@ sub dmake_dir {
     my $job_name = shift;
     $jobs_hash{$job_name}->{START_TIME} = time();
     $jobs_hash{$job_name}->{STATUS} = 'building';
+
     if ($job_name =~ /(\s)/o && (!-d $job_name)) {
         $error_code = do_custom_job($job_name, \%local_deps_hash);
     } else {
@@ -1741,6 +1736,7 @@ sub store_error {
     }
 
     my $child_nick = $processes_hash{$pid};
+
     if ($ENV{GUI_FOR_BUILD} eq 'WNT') {
         if (!defined $had_error{$child_nick}) {
             $had_error{$child_nick}++;
@@ -2020,21 +2016,23 @@ sub run_job {
     chdir $path;
     getcwd();
 
-    if ($html || $verbose) {
-        my $log_file = $jobs_hash{$registered_name}->{LONG_LOG_PATH};
-        my $log_dir = File::Basename::dirname($log_file);
-        if (!-d $log_dir) {
-             system("$perl $mkout");
-        };
-        $error_code = system ("$job_to_do > $log_file 2>&1");
-        if ((!$grab_output || $verbose) && -f $log_file) {
-            open(LOGFILE, "< $log_file");
-            print while(<LOGFILE>);
-            close(LOGFILE);
-        };
-    } else {
-        $error_code = system ("$job_to_do");
+    my $log_file = $jobs_hash{$registered_name}->{LONG_LOG_PATH};
+    my $log_dir = File::Basename::dirname($log_file);
+    if (!-d $log_dir) {
+        system("$perl $mkout");
     };
+    open (MAKE, "$job_to_do 2>&1 |") or return 8;
+    open (LOGFILE, "> $log_file") or return 8;
+    while (<MAKE>) { print LOGFILE $_; print $_ }
+    close MAKE;
+    $error_code = $?;
+    close LOGFILE;
+    if ( $error_code != 0)
+    {
+        system("echo \"log for $path\" >> $build_error_log");
+        system("cat $log_file >> $build_error_log");
+    }
+
     return $error_code;
 };
 
@@ -3524,8 +3522,8 @@ sub check_partial_gnumake_build {
         print "This module has been migrated to GNU make.\n";
         print "You can only use build --all/--since here with build.pl.\n";
         print "To do the equivalent of 'build && deliver' call:\n";
-        print "\t$ENV{GNUMAKE} -sr\n";
-        print "in the module root (This will modify the solver).\n";
+        print "\t$ENV{GNUMAKE} -r\n";
+        print "in the module root.\n";
         exit 1;
     }
 }

@@ -54,6 +54,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Crashreport_Script,
              gid_Brand_File_Bin_Crashreport_Com,
              gid_Brand_File_Bin_Python,
+             gid_Brand_File_Gdb_Trace,
              gid_Brand_File_Bin_Soffice,
              gid_Brand_File_Bin_Soffice_Bin,
              gid_Brand_File_Bin_Soffice_Bin_Manifest,
@@ -483,6 +484,17 @@ File gid_Brand_File_Html_Thirdpartylicensereadme
     TXT_FILE_BODY;
 End
 
+#if defined UNX
+
+File gid_Brand_File_Gdb_Trace
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = gdbtrace;
+    Styles = (PACKED);
+End
+
+#endif
+
 File gid_Brand_File_Bin_Soffice
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -896,7 +908,7 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Userinstall
   #elif defined MACOSX
     Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
   #else
-    Value = "$SYSUSERCONFIG/.%LCONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
+    Value = "$SYSUSERCONFIG/%LCONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
   #endif
 End
 
@@ -1084,7 +1096,7 @@ ProfileItem gid_Brand_Profileitem_Version_Updateurl
     Section = "Version";
     Order = 15;
     Key = "UpdateURL";
-  #if defined(BUILD_SPECIAL)
+  #if defined(ENABLE_ONLINE_UPDATE)
   #ifdef WNT
     Value = "${UPDATEURL}";
   #else  // defined WNT

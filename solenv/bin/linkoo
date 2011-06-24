@@ -49,6 +49,7 @@ export PATH="$thisdir/:$thisdir/../basis-link/program:$thisdir/../basis-link/ure
 export GNOME_DISABLE_CRASH_DIALOG=1
 export STAR_RESOURCEPATH=$thisdir/../basis-link/program/resource
 # debugging assistance
+export SAL_DISABLE_FLOATGRAB=1
 export G_SLICE=always-malloc
 export MALLOC_CHECK_=2
 export OOO_DISABLE_RECOVERY=1
@@ -73,17 +74,18 @@ $program_dir = 'openoffice.org/basis-link/MacOS' if ($ENV{OS} eq 'MACOSX'); # FI
 
 my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 
+my $dllre = '\.so$';
+$dllre = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
+
 my %replaceable = (
-    $program_dir => '\.so',
+    $program_dir => "($dllre|\.rdb)",
+    $ure_lib_dir => "$dllre",
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
     'basis-link/share/config' => '\.zip$',
+    'ure/share/misc' => '\.rdb'
 #    'share/uno_packages' => '\.zip$'
 );
-
-# strangely enough, OSX has those small differences...
-$replaceable{$program_dir} = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
-$replaceable{$ure_lib_dir} = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
 
 my @search_dirs = ( 'lib', 'bin', 'class' );
 
@@ -302,25 +304,6 @@ sub link_iso_res()
     print "\n";
 }
 
-# Hack for (renamed) types.rdb (types.db)
-sub link_oovbaapi_rdb()
-{
-    print "oovbaapi.rdb case:";
-    my $src  = "$OOO_BUILD/oovbaapi/$TARGET/ucr";
-    my $dest = "$OOO_INSTALL/" . $program_dir;
-    do_link ($src, $dest, 'oovbaapi.db', 'oovbaapi.rdb');
-    print "\n";
-}
-
-sub link_types_rdb()
-{
-    print "Types.rdb case:";
-    my $src  = "$OOO_BUILD/offapi/$TARGET/ucr";
-    my $dest = "$OOO_INSTALL/" . $ure_misc_dir;
-    do_link ($src, $dest, 'types.db', 'types.rdb');
-    print "\n";
-}
-
 sub link_pagein_files()
 {
     print "pagein case:";
@@ -376,8 +359,6 @@ my $installed_files = build_installed_list ($OOO_INSTALL);
 
 scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
 link_iso_res();
-link_types_rdb();
-link_oovbaapi_rdb();
 link_pagein_files();
 
 if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {

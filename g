@@ -232,9 +232,6 @@ for REPO in $DIRS ; do
                     ;;
             esac
 
-            # check for changes
-            HEADREF=$(git show-ref --head HEAD)
-
             # do it!
             if [ "$COMMAND" != "clone" -o ! -d $DIR ] ; then
                 if [ "$REPORT_REPOS" = "1" -a "$COMMAND" != "grep" ] ; then
@@ -253,10 +250,6 @@ for REPO in $DIRS ; do
                 cd $DIR
                 update_hooks "$HOOKDIR"
             fi
-
-            # update stamp if the repo changed
-            NEWHEADREF=$(git show-ref --head HEAD)
-            [ "$HEADREF" != "$NEWHEADREF" ] && touch $CLONEDIR/repos_changed
 
             case "$COMMAND" in
                 pull|clone)

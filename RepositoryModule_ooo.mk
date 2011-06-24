@@ -38,7 +38,10 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     forms \
     formula \
     framework \
+    hwpfilter \
     lotuswordpro \
+    offapi \
+    oovbaapi \
     oox \
     padmin \
     sc \
@@ -52,6 +55,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sw \
     toolkit \
     tools \
+    udkapi \
     unotools \
     unoxml \
     xmloff \

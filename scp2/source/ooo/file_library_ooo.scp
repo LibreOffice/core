@@ -34,9 +34,6 @@ File gid_File_Lib_Accessbridge
     Name = "java_uno_accessbridge.dll";
 End
 #endif
-#if ((defined(WNT)) || (defined(LINUX)) || ((defined(SOLARIS)) && (defined(SPARC)))|| defined(NETBSD) )
-STD_LIB_FILE( gid_File_Lib_Adabas, adabas)
-#endif
 
 #if defined(WNT)
 STD_LIB_FILE( gid_File_Lib_Ado, ado)
@@ -602,7 +599,7 @@ File gid_File_Lib_Pixman
     Dir = gid_Dir_Program;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT3(libpixman-1,.0,UNXSUFFIX));
+       Name = "libpixman-1.a";
     #else
        Name = STRING(CONCAT3(libpixman-1,UNXSUFFIX,.0));
     #endif
@@ -797,17 +794,6 @@ File gid_File_Lib_sn_tools
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY, DONTRENAMEINPATCH);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "sn_tools.dll";
-End
-
-#endif
-
-#ifdef WNT
-
-File gid_File_Lib_relnotes
-    BIN_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY, DONTRENAMEINPATCH);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "relnotes.dll";
 End
 
 #endif
@@ -1060,6 +1046,14 @@ End
 #ifdef ENABLE_GTK
 File gid_File_Lib_Vclplug_Gtk
     Name = LIBNAME(vclplug_gtk);
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+End
+#endif
+#ifdef ENABLE_GTK3
+File gid_File_Lib_Vclplug_Gtk3
+    Name = LIBNAME(vclplug_gtk3);
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
@@ -1731,6 +1725,157 @@ STD_LIB_FILE(gid_File_Lib_Unordf, unordf)
 STD_LIB_FILE( gid_File_Lib_For, for)
 STD_LIB_FILE( gid_File_Lib_Forui, forui)
 
+// RSVG and dependencies
+#if ! defined (SYSTEM_GETTEXT)
+File gid_File_Lib_Intl
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libintl.8.dylib";
+    #elif defined WNT
+    Name = "intl.dll";
+    #endif
+End
+#endif
+
+#if ! defined SYSTEM_GLIB
+File gid_File_Lib_Glib
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libglib-2.0.0.dylib";
+    #elif defined WNT
+    Name = "gliblo.dll";
+    #endif
+End
+File gid_File_Lib_Gthread
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libgthread-2.0.0.dylib";
+    #elif defined WNT
+    Name = "gthreadlo.dll";
+    #endif
+End
+File gid_File_Lib_Gobject
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libgobject-2.0.0.dylib";
+    #elif defined WNT
+    Name = "gobjectlo.dll";
+    #endif
+End
+File gid_File_Lib_Gio
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libgio-2.0.0.dylib";
+    #elif defined WNT
+    Name = "giolo.dll";
+    #endif
+End
+File gid_File_Lib_Gmodule
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libgmodule-2.0.0.dylib";
+    #elif defined WNT
+    Name = "gmodulelo.dll";
+    #endif
+End
+#endif
+
+#if ENABLE_LIBRSVG
+
+#if ! defined SYSTEM_GDKPIXBUF
+File gid_File_Lib_Gdkpixbuf
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libgdk_pixbuf-2.0.0.dylib";
+    #elif defined WNT
+    Name = "libgdk_pixbuf-2.0-0.dll";
+    #endif
+End
+#endif
+
+#if ! defined SYSTEM_LIBCROCO
+File gid_File_Lib_Libcroco
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libcroco-0.6.3.0.1.dylib";
+    #elif defined WNT
+    Name = "libcroco-0.6-3.dll";
+    #endif
+End
+#endif
+
+#if ! defined SYSTEM_PANGO
+File gid_File_Lib_Libpango
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libpango-1.0.0.dylib";
+    #elif defined WNT
+    Name = "pangolo.dll";
+    #endif
+End
+File gid_File_Lib_Libpangocairo
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "libpangocairo-1.0.0.dylib";
+    #elif defined WNT
+    Name = "pangocairolo.dll";
+    #endif
+End
+#if defined WNT
+File gid_File_Lib_Libpangowin32
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = "pangowin32lo.dll";
+End
+#endif
+#endif
+
+#if ! defined SYSTEM_LIBGSF
+File gid_File_Lib_Libgsf
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+#ifdef WNT
+    Name = "gsf-1.dll";
+#endif
+End
+#endif
+
+#if ! defined SYSTEM_LIBRSVG
+File gid_File_Lib_Librsvg
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+    #ifdef MACOSX
+    Name = "librsvg-2.2.dylib";
+    #elif defined WNT
+    Name = "librsvg-2-2.dll";
+    #endif
+End
+#endif
+
+#endif
 
 #ifdef WNT
 File gid_File_Lib_sellangmsi

@@ -72,7 +72,6 @@ gb_CFLAGS := \
 	-Wendif-labels \
 	-Wextra \
 	-Wshadow \
-	-fPIC \
 	-fmessage-length=0 \
 	-fno-common \
 	-fno-strict-aliasing \
@@ -132,9 +131,9 @@ gb_COMPILERNOOPTFLAGS := -O0
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
-gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
@@ -216,25 +215,9 @@ endef
 
 # LinkTarget class
 
-define gb_LinkTarget__get_rpath_for_layer
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__RPATHS)))
-endef
-
-gb_LinkTarget__RPATHS := \
-	URELIB:@__________________________________________________URELIB/ \
-	UREBIN: \
-	OOO:@__________________________________________________OOO/ \
-	BRAND: \
-	SDKBIN: \
-	NONEBIN: \
-
-define gb_LinkTarget__get_installname
-$(if $(2),-install_name '$(2)$(1)',)
-endef
-
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
-gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
@@ -259,35 +242,13 @@ $(if $(filter Executable,$(1)),\
 	$$(call gb_Library_get_layer,$(2)))
 endef
 
-# FIXME the DYLIB_FILE mess is only necessary because
-# solver layout is different from installation layout
+# Just create a dummy executable
+# It is pointless to build actual iOS executables here anyway.
+# Hmm, except for the simulator? Nah, use Xcode for that, too.
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	DYLIB_FILE=`$(gb_MKTEMP)` && \
-	$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
-		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(subst \d,$$,$(RPATH)) $(LDFLAGS) \
-		$(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
-	$(gb_CXX) \
-		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(subst \d,$$,$(RPATH)) $(LDFLAGS) \
-		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
-		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
-		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
-		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
-		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
-		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
-		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
-		-o $(1) \
-		`cat $${DYLIB_FILE}` && \
-	$(if $(filter Library CppunitTest,$(TARGETTYPE)),\
-		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(1) && \
-		ln -sf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
-	rm -f $${DYLIB_FILE})
+	((echo '#!/bin/sh' && echo 'echo Nope.') >$(1)))
 endef
 
 # parameters: 1-linktarget 2-cobjects 3-cxxobjects
@@ -306,27 +267,21 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
-$(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
+$(if $(filter CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
+$(if $(filter Library StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
 
 # Library class
 
 gb_Library_DEFS :=
-gb_Library_TARGETTYPEFLAGS := -dynamiclib -single_module
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
-gb_Library_PLAINEXT := .dylib
+gb_Library_PLAINEXT := .a
 gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 
-ifeq ($(CPUNAME),INTEL)
-gb_Library_OOOEXT := mxi$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
-else # ifeq ($(CPUNAME),POWERPC)
-gb_Library_OOOEXT := mxp$(gb_Library_PLAINEXT)
-gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
-endif
 
 gb_Library__FRAMEWORKS := \
 
@@ -350,20 +305,15 @@ gb_Library_FILENAMES := \
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
-	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
-
-define gb_Library_get_rpath
-$(call gb_LinkTarget__get_installname,$(call gb_Library_get_filename,$(1)),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))))
-endef
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 
 define gb_Library_Library_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1))
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1))
 
 endef
@@ -389,19 +339,14 @@ gb_Executable_EXT :=
 gb_Executable_TARGETTYPEFLAGS := -bind_at_load
 
 gb_Executable_LAYER := \
-	$(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
-	$(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
+	$(foreach exe,$(gb_Executable_UREBIN),$(exe):OOO) \
+	$(foreach exe,$(gb_Executable_SDK),$(exe):OOO) \
 	$(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
-	$(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
-	$(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
+	$(foreach exe,$(gb_Executable_BRAND),$(exe):OOO) \
+	$(foreach exe,$(gb_Executable_NONE),$(exe):OOO) \
 
-
-define gb_Executable_get_rpath
-$(call gb_LinkTarget__get_installname,$(1),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1))))
-endef
 
 define gb_Executable_Executable_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Executable_get_rpath,$(1))
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Executable_get_layer,$(1))
 
 endef
@@ -409,14 +354,13 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_CppunitTest_CPPTESTPRECOMMAND := :
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .dylib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
 
 define gb_CppunitTest_CppunitTest_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := NONE
 
 endef
@@ -425,7 +369,7 @@ endef
 
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/OpenOffice.org.app/Contents/MacOS/soffice}" \
+	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/LibreOffice.app/Contents/MacOS/soffice}" \
 	-Dorg.openoffice.test.arg.env=DYLD_LIBRARY_PATH \
 	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
 
@@ -433,16 +377,16 @@ endef
 
 # SdiTarget class
 
-gb_SdiTarget_SVIDLPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_SdiTarget_SVIDLPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
 # SrsPartMergeTarget
 
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
 # SrsPartTarget class
 
-gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc
-gb_SrsPartTarget_RSCCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
+gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc
+gb_SrsPartTarget_RSCCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_SrsPartTarget_RSCTARGET)
 
 define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs,\
@@ -457,10 +401,23 @@ endef
 
 # ComponentTarget
 
-gb_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 gb_Library_COMPONENTPREFIXES := \
 	OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
 	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 
+
+# UnoApiTarget
+
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR_FOR_BUILD)/bin/idlc
+gb_UnoApiTarget_IDLCCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR_FOR_BUILD)/bin/regmerge
+gb_UnoApiTarget_REGMERGECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR_FOR_BUILD)/bin/regcompare
+gb_UnoApiTarget_REGCOMPARECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR_FOR_BUILD)/bin/cppumaker
+gb_UnoApiTarget_CPPUMAKERCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR_FOR_BUILD)/bin/regview
+gb_UnoApiTarget_REGVIEWCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # vim: set noet sw=4:

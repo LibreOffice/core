@@ -1,27 +1,27 @@
-..\%__SRC%\bin\osl\setup_osl.inf %_DEST%\bin%_EXT%\setup_osl.inf
-..\%__SRC%\bin\osl\setup_osl.ins %_DEST%\bin%_EXT%\setup_osl.ins
-..\%__SRC%\bin\osl\ure.inf %_DEST%\bin%_EXT%\ure.inf
-..\%__SRC%\bin\osl\ure.ins %_DEST%\bin%_EXT%\ure.ins
-..\%__SRC%\bin\osl\sdkoo.inf %_DEST%\bin%_EXT%\sdkoo.inf
-..\%__SRC%\bin\osl\sdkoo.ins %_DEST%\bin%_EXT%\sdkoo.ins
-..\%__SRC%\bin\osl\setup_osljre.inf %_DEST%\bin%_EXT%\setup_osljre.inf
-..\%__SRC%\bin\osl\setup_osljre.ins %_DEST%\bin%_EXT%\setup_osljre.ins
+..\%__SRC%\bin\osl\setup_osl.inf %_DEST%\bin\setup_osl.inf
+..\%__SRC%\bin\osl\setup_osl.ins %_DEST%\bin\setup_osl.ins
+..\%__SRC%\bin\osl\ure.inf %_DEST%\bin\ure.inf
+..\%__SRC%\bin\osl\ure.ins %_DEST%\bin\ure.ins
+..\%__SRC%\bin\osl\sdkoo.inf %_DEST%\bin\sdkoo.inf
+..\%__SRC%\bin\osl\sdkoo.ins %_DEST%\bin\sdkoo.ins
+..\%__SRC%\bin\osl\setup_osljre.inf %_DEST%\bin\setup_osljre.inf
+..\%__SRC%\bin\osl\setup_osljre.ins %_DEST%\bin\setup_osljre.ins
 
-mkdir: %_DEST%\par%_EXT%
+mkdir: %_DEST%\par
 
-mkdir: %_DEST%\par%_EXT%\osl
-mkdir: %_DEST%\par%_EXT%\fat
-mkdir: %_DEST%\par%_EXT%\fam
-mkdir: %_DEST%\par%_EXT%\ada
-mkdir: %_DEST%\par%_EXT%\adm
-mkdir: %_DEST%\par%_EXT%\omc
+mkdir: %_DEST%\par\osl
+mkdir: %_DEST%\par\fat
+mkdir: %_DEST%\par\fam
+mkdir: %_DEST%\par\ada
+mkdir: %_DEST%\par\adm
+mkdir: %_DEST%\par\omc
 
-..\%__SRC%\par\osl\*.par %_DEST%\par%_EXT%\osl\*.par
-..\%__SRC%\par\fat\*.par %_DEST%\par%_EXT%\fat\*.par
-..\%__SRC%\par\fam\*.par %_DEST%\par%_EXT%\fam\*.par
-..\%__SRC%\par\ada\*.par %_DEST%\par%_EXT%\ada\*.par
-..\%__SRC%\par\adm\*.par %_DEST%\par%_EXT%\adm\*.par
-..\%__SRC%\par\omc\*.par %_DEST%\par%_EXT%\omc\*.par
+..\%__SRC%\par\osl\*.par %_DEST%\par\osl\*.par
+..\%__SRC%\par\fat\*.par %_DEST%\par\fat\*.par
+..\%__SRC%\par\fam\*.par %_DEST%\par\fam\*.par
+..\%__SRC%\par\ada\*.par %_DEST%\par\ada\*.par
+..\%__SRC%\par\adm\*.par %_DEST%\par\adm\*.par
+..\%__SRC%\par\omc\*.par %_DEST%\par\omc\*.par
 
-..\inc\macros.inc %_DEST%\inc%_EXT%\macros.inc
-..\%__SRC%\inc\langmacros.inc %_DEST%\inc%_EXT%\langmacros.inc
+..\inc\macros.inc %_DEST%\inc\macros.inc
+..\%__SRC%\inc\langmacros.inc %_DEST%\inc\langmacros.inc

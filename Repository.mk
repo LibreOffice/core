@@ -43,8 +43,10 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     adabasui \
+    AppleRemote \
     avmedia \
     basegfx \
+    basebmp \
     canvastools \
     chartcontroller \
     chartmodel \
@@ -57,6 +59,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dbmm \
     dbtools \
     dbu \
+    desktop_detector \
     doctok \
     drawinglayer \
     editeng \
@@ -68,6 +71,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwk \
     fwl \
     fwm \
+    hwp \
     i18npaper \
     lng \
     lwpft \
@@ -112,6 +116,12 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     utl \
     vbahelper \
     vcl \
+    vclplug_gen \
+    vclplug_gtk \
+    vclplug_gtk3 \
+    vclplug_kde \
+    vclplug_kde4 \
+    vclplug_svp \
     writerfilter \
     xcr \
     xo \
@@ -130,6 +140,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     icui18n \
     icule \
     icuuc \
+    icule \
+    graphite2_off \
+    cppunit \
     rdf \
     ssl \
     xslt \
@@ -140,6 +153,7 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     comphelper \
     i18nisolang1 \
     i18nutil \
+    jvmaccess \
     ucbhelper \
 ))
 
@@ -171,6 +185,7 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     crypto \
+    graphite2_off \
     libeay32 \
     ssleay32 \
     jpeglib \

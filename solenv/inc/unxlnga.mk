@@ -29,5 +29,4 @@
 
 .INCLUDE : unxlng.mk
 CFLAGS+=-DIA64
-DLLPOSTFIX=la
 BUILD64=1

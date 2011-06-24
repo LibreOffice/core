@@ -60,7 +60,7 @@ APP1PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP1PRODUCTNAME)\"
 $(MISC)/$(APP1TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP1LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          #"$(APP1LIBS)"!=""
+.ENDIF          #"$(APP1LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)/$(APP1TARGETN:b)_linkinc.ls
@@ -76,7 +76,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -95,7 +94,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP1RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -103,7 +101,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
     @echo $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP1OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_1.cmd
@@ -114,7 +111,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -132,7 +128,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP1PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP1LINKRES)" != "" || "$(APP1RES)" != ""
     @cat $(APP1LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP1RESO)
@@ -144,12 +139,11 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP_LINKTYPE) $(APP1LIBSALCPPRT) \
         -Wl,--start-group $(APP1STDLIBS) -Wl,--end-group $(APP1STDLIB) \
         $(STDLIB1) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_1.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_1.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP1LINKER) @$(mktmp \
@@ -272,7 +266,7 @@ APP2PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP2PRODUCTNAME)\"
 $(MISC)/$(APP2TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP2LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          #"$(APP2LIBS)"!=""
+.ENDIF          #"$(APP2LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)/$(APP2TARGETN:b)_linkinc.ls
@@ -288,7 +282,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -307,7 +300,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP2RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -315,7 +307,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
     @echo $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP2OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_2.cmd
@@ -326,7 +317,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -344,7 +334,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP2PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP2LINKRES)" != "" || "$(APP2RES)" != ""
     @cat $(APP2LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP2RESO)
@@ -356,12 +345,11 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP_LINKTYPE) $(APP2LIBSALCPPRT) \
         -Wl,--start-group $(APP2STDLIBS) -Wl,--end-group $(APP2STDLIB) \
         $(STDLIB2) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_2.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_2.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP2LINKER) @$(mktmp \
@@ -484,7 +472,7 @@ APP3PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP3PRODUCTNAME)\"
 $(MISC)/$(APP3TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP3LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          #"$(APP3LIBS)"!=""
+.ENDIF          #"$(APP3LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)/$(APP3TARGETN:b)_linkinc.ls
@@ -500,7 +488,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -519,7 +506,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP3RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -527,7 +513,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
     @echo $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP3OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_3.cmd
@@ -538,7 +523,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -556,7 +540,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP3PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP3LINKRES)" != "" || "$(APP3RES)" != ""
     @cat $(APP3LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP3RESO)
@@ -568,12 +551,11 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP_LINKTYPE) $(APP3LIBSALCPPRT) \
         -Wl,--start-group $(APP3STDLIBS) -Wl,--end-group $(APP3STDLIB) \
         $(STDLIB3) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_3.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_3.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP3LINKER) @$(mktmp \
@@ -696,7 +678,7 @@ APP4PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP4PRODUCTNAME)\"
 $(MISC)/$(APP4TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP4LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          #"$(APP4LIBS)"!=""
+.ENDIF          #"$(APP4LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)/$(APP4TARGETN:b)_linkinc.ls
@@ -712,7 +694,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -731,7 +712,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP4RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -739,7 +719,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
     @echo $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP4OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_4.cmd
@@ -750,7 +729,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -768,7 +746,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP4PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP4LINKRES)" != "" || "$(APP4RES)" != ""
     @cat $(APP4LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP4RESO)
@@ -780,12 +757,11 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP_LINKTYPE) $(APP4LIBSALCPPRT) \
         -Wl,--start-group $(APP4STDLIBS) -Wl,--end-group $(APP4STDLIB) \
         $(STDLIB4) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_4.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_4.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP4LINKER) @$(mktmp \
@@ -908,7 +884,7 @@ APP5PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP5PRODUCTNAME)\"
 $(MISC)/$(APP5TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP5LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          #"$(APP5LIBS)"!=""
+.ENDIF          #"$(APP5LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)/$(APP5TARGETN:b)_linkinc.ls
@@ -924,7 +900,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -943,7 +918,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP5RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -951,7 +925,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
     @echo $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP5OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_5.cmd
@@ -962,7 +935,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -980,7 +952,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP5PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP5LINKRES)" != "" || "$(APP5RES)" != ""
     @cat $(APP5LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP5RESO)
@@ -992,12 +963,11 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP_LINKTYPE) $(APP5LIBSALCPPRT) \
         -Wl,--start-group $(APP5STDLIBS) -Wl,--end-group $(APP5STDLIB) \
         $(STDLIB5) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_5.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_5.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP5LINKER) @$(mktmp \
@@ -1120,7 +1090,7 @@ APP6PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP6PRODUCTNAME)\"
 $(MISC)/$(APP6TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP6LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          #"$(APP6LIBS)"!=""
+.ENDIF          #"$(APP6LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)/$(APP6TARGETN:b)_linkinc.ls
@@ -1136,7 +1106,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -1155,7 +1124,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP6RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -1163,7 +1131,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
     @echo $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP6OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_6.cmd
@@ -1174,7 +1141,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1192,7 +1158,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP6PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP6LINKRES)" != "" || "$(APP6RES)" != ""
     @cat $(APP6LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP6RESO)
@@ -1204,12 +1169,11 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP_LINKTYPE) $(APP6LIBSALCPPRT) \
         -Wl,--start-group $(APP6STDLIBS) -Wl,--end-group $(APP6STDLIB) \
         $(STDLIB6) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_6.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_6.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP6LINKER) @$(mktmp \
@@ -1332,7 +1296,7 @@ APP7PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP7PRODUCTNAME)\"
 $(MISC)/$(APP7TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP7LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          #"$(APP7LIBS)"!=""
+.ENDIF          #"$(APP7LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)/$(APP7TARGETN:b)_linkinc.ls
@@ -1348,7 +1312,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -1367,7 +1330,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP7RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -1375,7 +1337,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
     @echo $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP7OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_7.cmd
@@ -1386,7 +1347,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1404,7 +1364,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP7PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP7LINKRES)" != "" || "$(APP7RES)" != ""
     @cat $(APP7LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP7RESO)
@@ -1416,12 +1375,11 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP_LINKTYPE) $(APP7LIBSALCPPRT) \
         -Wl,--start-group $(APP7STDLIBS) -Wl,--end-group $(APP7STDLIB) \
         $(STDLIB7) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_7.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_7.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP7LINKER) @$(mktmp \
@@ -1544,7 +1502,7 @@ APP8PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP8PRODUCTNAME)\"
 $(MISC)/$(APP8TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP8LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          #"$(APP8LIBS)"!=""
+.ENDIF          #"$(APP8LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)/$(APP8TARGETN:b)_linkinc.ls
@@ -1560,7 +1518,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -1579,7 +1536,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP8RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -1587,7 +1543,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
     @echo $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP8OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_8.cmd
@@ -1598,7 +1553,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1616,7 +1570,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP8PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP8LINKRES)" != "" || "$(APP8RES)" != ""
     @cat $(APP8LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP8RESO)
@@ -1628,12 +1581,11 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP_LINKTYPE) $(APP8LIBSALCPPRT) \
         -Wl,--start-group $(APP8STDLIBS) -Wl,--end-group $(APP8STDLIB) \
         $(STDLIB8) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_8.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_8.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP8LINKER) @$(mktmp \
@@ -1756,7 +1708,7 @@ APP9PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP9PRODUCTNAME)\"
 $(MISC)/$(APP9TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP9LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          #"$(APP9LIBS)"!=""
+.ENDIF          #"$(APP9LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)/$(APP9TARGETN:b)_linkinc.ls
@@ -1772,7 +1724,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -1791,7 +1742,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP9RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -1799,7 +1749,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
     @echo $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP9OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_9.cmd
@@ -1810,7 +1759,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -1828,7 +1776,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP9PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP9LINKRES)" != "" || "$(APP9RES)" != ""
     @cat $(APP9LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP9RESO)
@@ -1840,12 +1787,11 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP_LINKTYPE) $(APP9LIBSALCPPRT) \
         -Wl,--start-group $(APP9STDLIBS) -Wl,--end-group $(APP9STDLIB) \
         $(STDLIB9) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_9.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_9.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP9LINKER) @$(mktmp \
@@ -1968,7 +1914,7 @@ APP10PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP10PRODUCTNAME)\"
 $(MISC)/$(APP10TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
     sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP10LIBS) $(i:s/.lib/.lin/)) >> $@
-.ENDIF          #"$(APP10LIBS)"!=""
+.ENDIF          #"$(APP10LIBS)"!="" 
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)/$(APP10TARGETN:b)_linkinc.ls
@@ -1984,7 +1930,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
     @-$(RM) $(MISC)/$(@:b).strip
@@ -2003,7 +1948,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP10RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -2011,7 +1955,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
     @echo $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP10OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_10.cmd
@@ -2022,7 +1965,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -2040,7 +1982,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP10PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP10LINKRES)" != "" || "$(APP10RES)" != ""
     @cat $(APP10LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP10RESO)
@@ -2052,12 +1993,11 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP_LINKTYPE) $(APP10LIBSALCPPRT) \
         -Wl,--start-group $(APP10STDLIBS) -Wl,--end-group $(APP10STDLIB) \
         $(STDLIB10) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_10.cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_10.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP10LINKER) @$(mktmp \

@@ -40,7 +40,7 @@ NO_DEFAULT_STL=TRUE
 # --- Files --------------------------------------------------------
 
 
-.IF "$(GUI)"=="UNX" && "$(CROSS_COMPILING)"==""
+.IF "$(GUI)"=="UNX" && "$(CROSS_COMPILING)"!="YES"
 LIBSALCPPRT=$(0)
 APP1TARGET	= 	checkdll
 APP1OBJS	=	$(OBJ)$/checkdll.obj
@@ -52,7 +52,7 @@ STDLIB += -ldl
 .IF "$(OS)"=="NETBSD"
 APP1STDLIBS	+= -Wl,--whole-archive -lgcc -Wl,--no-whole-archive
 .ENDIF
-.ENDIF # "$(GUI)"=="UNX" && "$(CROSS_COMPILING)"==""
+.ENDIF # "$(GUI)"=="UNX" && "$(CROSS_COMPILING)"!="YES"
 
 # --- Targets ------------------------------------------------------
 

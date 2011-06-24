@@ -35,22 +35,6 @@
 
 # --- Compiler ---
 
-.IF "$(COM)$(OS)$(CPU)" == "C50SOLARISS"
-.INCLUDE : unxsols2.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "C50SOLARISI"
-.INCLUDE : unxsoli2.mk
-.ENDIF
-
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS3"
-.INCLUDE : unxsols3.mk
-.ENDIF
-
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISI3"
-.INCLUDE : unxsoli3.mk
-.ENDIF
-
 .IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
 .INCLUDE : unxsols4.mk
 .ENDIF
@@ -61,10 +45,6 @@
 
 .IF "$(OS)$(CPU)$(COMEX)" == "SOLARISU4"
 .INCLUDE : unxsolu4.mk
-.ENDIF
-
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISX4"
-.INCLUDE : unxsolx4.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCSOLARISS"
@@ -119,20 +99,8 @@
 .INCLUDE : unxlnga.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDA"
-.INCLUDE : unxbsda.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDI"
-.INCLUDE : unxbsdi3.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDX"
-.INCLUDE : unxbsdx3.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDS"
-.INCLUDE : unxbsds.mk
+.IF "$(COM)$(OS)" == "GCCNETBSD"
+.INCLUDE : unxnbsd.mk
 .ENDIF
 
 .IF "$(COM)$(OS)" == "GCCFREEBSD"
@@ -190,11 +158,13 @@ YACCFLAGS*=-d -t
 EXECPOST=
 SCPPOST=.ins
 DLLDEST=$(LB)
-SOLARSHAREDBIN=$(SOLARLIBDIR)
+SOLARSHAREDBIN=$(SOLARLIBDIR_FOR_BUILD)
 SONAME_SWITCH*=-h
 
 .IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(OS)"!="IOS"
 DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
+.ENDIF
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
 # enable building/linking KDE-dependent code in both OOo and SO build environment

@@ -60,6 +60,7 @@ $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk
 endif
 $(call gb_Library_get_target,$(1)) : AUXTARGETS :=
 $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))
+$(call gb_Library_add_default_nativeres,$(1),default)
 
 endef
 
@@ -74,14 +75,14 @@ $(call gb_Library_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
 $$(eval $$(call gb_Module_register_target,$(call gb_Library_get_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
-$(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)))
+$(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
 
 endef
 
 define gb_Library_set_componentfile
-$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library__get_componentprefix,$(1)),$(call gb_Library_get_runtime_filename,$(1)))
-$(call gb_Library_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(2))
-$(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(2))
+$(call gb_ComponentTarget_ComponentTarget,$(or $(strip $(3)),$(strip $(2))),$(call gb_Library__get_componentprefix,$(1)),$(call gb_Library_get_runtime_filename,$(1)),$(2))
+$(call gb_Library_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(or $(strip $(3)),$(strip $(2))))
+$(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(or $(strip $(3)),$(strip $(2))))
 
 endef
 
@@ -124,6 +125,7 @@ $(eval $(foreach method,\
 	set_include \
 	set_ldflags \
 	set_library_path_flags \
+	add_api \
 	add_linked_libs \
 	add_linked_static_libs \
 	add_package_headers \

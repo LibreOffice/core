@@ -715,14 +715,14 @@ $(MISC)/%.sh : %.sh
 .IF "$(WITH_LANG)"!=""
 $(COMMONMISC)/$(TARGET)/%.ulf : %.ulf
     @echo "Making:   " $(@:f)
-    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
+    $(COMMAND_ECHO)-$(MKDIRHIER) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(ULFEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
 
 $(COMMONMISC)/$(TARGET)/%.xrb : %.xrb
-    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
+    $(COMMAND_ECHO)-$(MKDIRHIER) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(XMLEX) -t xrb -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@

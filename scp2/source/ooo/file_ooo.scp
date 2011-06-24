@@ -1173,21 +1173,29 @@ File gid_File_Share_Registry_Ctl_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED,MAKE_LANG_SPECIFIC);
     Dir = gid_Dir_Share_Registry;
-    Name (th) = "ctl.xcd";
-    Name (hi-IN) = "ctl.xcd";
-    Name (pa-IN) = "ctl.xcd";
-    Name (ta-IN) = "ctl.xcd";
-    Name (gu-IN) = "ctl.xcd";
     Name (ar) = "ctl.xcd";
-    Name (he) = "ctl.xcd";
-    Name (lo) = "ctl.xcd";
     Name (dz) = "ctl.xcd";
-    Name (km) = "ctl.xcd";
-    Name (gu-IN) = "ctl.xcd";
-    Name (or) = "ctl.xcd";
-    Name (ne) = "ctl.xcd";
     Name (fa) = "ctl.xcd";
+    Name (gu) = "ctl.xcd";
+    Name (he) = "ctl.xcd";
+    Name (hi) = "ctl.xcd";
+    Name (km) = "ctl.xcd";
+    Name (lo) = "ctl.xcd";
     Name (my) = "ctl.xcd";
+    Name (ne) = "ctl.xcd";
+    Name (or) = "ctl.xcd";
+    Name (pa-IN) = "ctl.xcd";
+    Name (ta) = "ctl.xcd";
+    Name (th) = "ctl.xcd";
+End
+
+File gid_File_Share_Registry_Ctlseqcheck_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED,MAKE_LANG_SPECIFIC);
+    Dir = gid_Dir_Share_Registry;
+    Name (km) = "ctlseqcheck.xcd";
+    Name (lo) = "ctlseqcheck.xcd";
+    Name (th) = "ctlseqcheck.xcd";
 End
 
 File gid_File_Scripts_Beanshell
@@ -2133,3 +2141,4 @@ End
 //    UnixRights = 444;
 // End
 // #endif
+

@@ -62,7 +62,6 @@ STDSHLGUIMT:=-ldl -lpthread -lm
 STDSHLCUIMT:=-ldl -lpthread -lm
 X11LINK_DYNAMIC:=-lXext -lX11
 
-DLLPOSTFIX:=ap
 
 CFLAGSDEBUG:=
 

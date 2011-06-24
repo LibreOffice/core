@@ -48,7 +48,6 @@ use installer::helppack;
 use installer::languagepack;
 use installer::languages;
 use installer::logger;
-use installer::mail;
 use installer::packagelist;
 use installer::packagepool;
 use installer::parameter;

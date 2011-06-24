@@ -143,12 +143,14 @@ $(eval $(call gb_Helper_init_registries))
 $(eval $(call gb_Helper_add_repositories,$(gb_REPOS)))
 $(eval $(call gb_Helper_collect_libtargets))
 
+gb_Library_DLLPOSTFIX := lo
+
 ifeq ($(OS),LINUX)
 include $(GBUILDDIR)/platform/linux-$(CPUNAME).mk
 else ifeq ($(OS),MACOSX)
 include $(GBUILDDIR)/platform/macosx.mk
 else ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
+ifeq ($(COM),GCC)
 include $(GBUILDDIR)/platform/winmingw.mk
 else
 include $(GBUILDDIR)/platform/windows.mk
@@ -165,9 +167,20 @@ else ifeq ($(OS),SOLARIS)
 include $(GBUILDDIR)/platform/solaris.mk
 else ifeq ($(OS),IOS)
 include $(GBUILDDIR)/platform/ios.mk
+else ifeq ($(OS),ANDROID)
+include $(GBUILDDIR)/platform/android.mk
 else
 $(eval $(call gb_Output_error,Unsupported OS: $(OS)))
 endif
+
+ifeq ($(CROSS_COMPILING),YES)
+# We can safely Assume all cross-compilation is from Unix systems.
+gb_Executable_EXT_for_build :=
+else
+gb_Executable_EXT_for_build := $(gb_Executable_EXT)
+endif
+
+include $(GBUILDDIR)/Tempfile.mk
 
 include $(GBUILDDIR)/Tempfile.mk
 
@@ -244,6 +257,8 @@ include $(GBUILDDIR)/Deliver.mk
 
 $(eval $(call gb_Deliver_init))
 
+include $(SOLARENV)/inc/minor.mk
+
 # We are using a set of scopes that we might as well call classes.
 
 # It is important to include them in the right order as that is
@@ -264,6 +279,7 @@ $(eval $(call gb_Deliver_init))
 include $(foreach class, \
 	ComponentTarget \
 	AllLangResTarget \
+	WinResTarget \
 	LinkTarget \
 	Library \
 	StaticLibrary \
@@ -277,6 +293,7 @@ include $(foreach class, \
 	JavaClassSet \
 	JunitTest \
 	Module \
+	UnoApiTarget \
 ,$(GBUILDDIR)/$(class).mk)
 
 # optional extensions that should never be essential
@@ -292,11 +309,11 @@ endif
 endef
 
 
-ifeq ($(SYSTEM_LIBXSLT),YES)
+ifeq ($(SYSTEM_LIBXSLT_FOR_BUILD),YES)
 gb_XSLTPROCTARGET :=
 gb_XSLTPROC := xsltproc
 else
-gb_XSLTPROCTARGET := $(call gb_Executable_get_target,xsltproc)
+gb_XSLTPROCTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
 gb_XSLTPROC := $(gb_XSLTPROCPRECOMMAND) $(gb_XSLTPROCTARGET)
 endif
 

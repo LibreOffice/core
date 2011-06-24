@@ -35,7 +35,6 @@ else
 gb_CPUDEFS := -D$(CPUNAME)
 endif
 
-gb_Library_DLLPOSTFIX := ob
 gb_COMPILERDEFAULTOPTFLAGS := -O2
 gb_STDLIBS := pthread
 
@@ -57,5 +56,25 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(subst -lpthread,$(PTHREAD_LIBS),$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
 		-o $(1))
 endef
+
+# convert parameters filesystem root to native notation
+# does some real work only on windows, make sure not to
+# break the dummy implementations on unx*
+define gb_Helper_convert_native
+$(1)
+endef
+
+# UnoApiTarget
+
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc
+gb_UnoApiTarget_IDLCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge
+gb_UnoApiTarget_REGMERGECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare
+gb_UnoApiTarget_REGCOMPARECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker
+gb_UnoApiTarget_CPPUMAKERCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
+gb_UnoApiTarget_REGVIEWCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # vim: set noet sw=4:

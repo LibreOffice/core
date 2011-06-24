@@ -105,13 +105,12 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(@:b).list
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP$(TNR)OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
     $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd` \
@@ -124,7 +123,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 # libraries at runtime
     @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
     @strip -i -R $(MISC)/$(@:b).strip -X $@
-    @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP$(TNR)RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
@@ -132,7 +130,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @macosx-create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
-    @echo unx
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
     $(APP$(TNR)OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
@@ -143,7 +140,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
   .IF "$(VERBOSE)" == "TRUE"
-    @ls -l $@
   .ENDIF
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
@@ -161,7 +157,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(COMMAND_ECHO)$(RC) -DWIN32 $(APP$(TNR)PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @echo mingw
 .IF "$(APP$(TNR)LINKRES)" != "" || "$(APP$(TNR)RES)" != ""
     @cat $(APP$(TNR)LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP$(TNR)RES)) >  $(MISC)/$(@:b)_all.res
     $(WINDRES) $(MISC)/$(@:b)_all.res $(APP$(TNR)RESO)
@@ -173,12 +168,11 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) \
         -Wl,--start-group $(APP$(TNR)STDLIBS) -Wl,--end-group $(APP$(TNR)STDLIB) \
         $(STDLIB$(TNR)) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-  # need this empty line, else dmake somehow gets confused by the .IFs and .ENDIFs
+# need this comment line, else dmake somehow gets confused by the .IFs and .ENDIFs
   .IF "$(VERBOSE)" == "TRUE"
     @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-    @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(COMMAND_ECHO)$(APP$(TNR)LINKER) @$(mktmp \

@@ -282,7 +282,7 @@ sub get_file_component_name
         }
         else
         {
-            if ( length($componentname) > 72 )
+            if ( length($componentname) > 60 )
             {
                 # Using md5sum needs much time
                 # chomp(my $shorter = `echo $componentname | md5sum | sed -e "s/ .*//g"`);
@@ -674,7 +674,15 @@ sub get_language_for_file
 
     if ( $fileref->{'specificlanguage'} ) { $language = $fileref->{'specificlanguage'}; }
 
-    if (!($language eq ""))
+    if ( $language eq "" )
+    {
+        $language = 0;  # language independent
+        # If this is not a font, the return value should be "0" (Check ICE 60)
+        my $styles = "";
+        if ( $fileref->{'Styles'} ) { $styles = $fileref->{'Styles'}; }
+        if ( $styles =~ /\bFONT\b/ ) { $language = ""; }
+    }
+    else
     {
         $language = installer::windows::language::get_windows_language($language);
     }

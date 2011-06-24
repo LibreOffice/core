@@ -64,12 +64,17 @@ SHL1IMPLIB=i$(TARGET)_t1
 .ENDIF			# "$(SHL1IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_1IMPLIB=-implib:$(LB)/$(SHL1IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL1IMPLIBN=$(LB)/$(SHL1IMPLIB).lib
+.ELSE
+USE_1IMPLIB=-Wl,--out-implib=$(SHL1IMPLIBN)
+SHL1IMPLIBN=$(LB)/lib$(SHL1IMPLIB).dll.a
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL1IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_1IMPLIB_DEPS=$(LB)/$(SHL1IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL1DEF=$(SHL1DEF)
@@ -185,7 +190,7 @@ $(USE_SHL1VERSIONMAP) .ERRREMOVE: $(SHL1VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL1SONAME=\"$(SONAME_SWITCH)$(SHL1TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -238,6 +243,10 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(COM)" == "GCC" && "$(SHL1IMPLIBN)" != ""
+$(SHL1IMPLIBN) : $(SHL1TARGETN)
+.ENDIF
+
 $(SHL1TARGETN) : \
                     $(SHL1OBJS)\
                     $(SHL1LIBS)\
@@ -268,10 +277,10 @@ $(SHL1TARGETN) : \
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 .IF "$(RCFLAGSOUTRES)"!=""
-    # rc, takes separate flag naming output file, source .rc file last
+# rc, takes separate flag naming output file, source .rc file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL1DEFAULTRES) $(MISC)/$(SHL1DEFAULTRES:b).rc
 .ELSE
-    # windres, just takes output file last
+# windres, just takes output file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL1DEFAULTRES:b).rc $(SHL1DEFAULTRES)
 .ENDIF
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
@@ -281,31 +290,48 @@ $(SHL1TARGETN) : \
     $(WINDRES) $(SHL1LINKRES) $(SHL1LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL1ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo $(DLLTOOL) --dllname $(SHL1TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_1.cmd
+.IF "$(COM)"=="GCC"
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL1LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL1DEF) \
+        $(USE_1IMPLIB) \
+        $(STDOBJ) \
+        $(SHL1VERSIONOBJ) $(SHL1OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL1LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL1STDLIBS) -Wl,--end-group \
+        $(SHL1STDSHL) $(STDSHL1) \
+        $(SHL1LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL1OBJLIST:=$(STDOBJ) $(SHL1OBJS) $(SHL1LINKRESO) $(shell $(TYPE) /dev/null $(SHL1LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB1NAME)"!=""	# do not have to include objs
     @noop $(assign DEF1OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF1OBJLIST) $(assign ALL1OBJLIST:=$(ALL1OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB1NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_1.cmd
-.IF "$(SHL1DEF)"!=""
-    @echo	--input-def $(SHL1DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_1.cmd
-.ELSE
-    @echo	$(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_1.cmd
-.ENDIF
-    @echo	$(ALL1OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_1.cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) $(SHL1OBJS) $(SHL1LINKRESO) \
-        `$(TYPE) /dev/null $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL1LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL1DEF) \
+        $(USE_1IMPLIB) \
+        $(STDOBJ) \
+        $(SHL1VERSIONOBJ) $(SHL1OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL1LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL1STDLIBS) -Wl,--end-group \
-        $(SHL1STDSHL) $(STDSHL1) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_1.cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_1.cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
+        $(SHL1STDSHL) $(STDSHL1) \
+        $(SHL1LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL1USE_EXPORTS)"!="name"
@@ -440,6 +466,9 @@ $(SHL1TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB1FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL1OBJS)) $(shell cat /dev/null $(LIB1TARGET) $(SHL1LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
     @echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1SONAME) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
@@ -462,7 +491,7 @@ $(SHL1TARGETN) : \
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL1TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL1TARGETN:f) $(SHL1TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -539,12 +568,17 @@ SHL2IMPLIB=i$(TARGET)_t2
 .ENDIF			# "$(SHL2IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_2IMPLIB=-implib:$(LB)/$(SHL2IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL2IMPLIBN=$(LB)/$(SHL2IMPLIB).lib
+.ELSE
+USE_2IMPLIB=-Wl,--out-implib=$(SHL2IMPLIBN)
+SHL2IMPLIBN=$(LB)/lib$(SHL2IMPLIB).dll.a
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL2IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_2IMPLIB_DEPS=$(LB)/$(SHL2IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL2DEF=$(SHL2DEF)
@@ -660,7 +694,7 @@ $(USE_SHL2VERSIONMAP) .ERRREMOVE: $(SHL2VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL2SONAME=\"$(SONAME_SWITCH)$(SHL2TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -713,6 +747,10 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(COM)" == "GCC" && "$(SHL2IMPLIBN)" != ""
+$(SHL2IMPLIBN) : $(SHL2TARGETN)
+.ENDIF
+
 $(SHL2TARGETN) : \
                     $(SHL2OBJS)\
                     $(SHL2LIBS)\
@@ -743,10 +781,10 @@ $(SHL2TARGETN) : \
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 .IF "$(RCFLAGSOUTRES)"!=""
-    # rc, takes separate flag naming output file, source .rc file last
+# rc, takes separate flag naming output file, source .rc file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL2DEFAULTRES) $(MISC)/$(SHL2DEFAULTRES:b).rc
 .ELSE
-    # windres, just takes output file last
+# windres, just takes output file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL2DEFAULTRES:b).rc $(SHL2DEFAULTRES)
 .ENDIF
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
@@ -756,31 +794,48 @@ $(SHL2TARGETN) : \
     $(WINDRES) $(SHL2LINKRES) $(SHL2LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL2ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo $(DLLTOOL) --dllname $(SHL2TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_2.cmd
+.IF "$(COM)"=="GCC"
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL2LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL2DEF) \
+        $(USE_2IMPLIB) \
+        $(STDOBJ) \
+        $(SHL2VERSIONOBJ) $(SHL2OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL2LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL2STDLIBS) -Wl,--end-group \
+        $(SHL2STDSHL) $(STDSHL2) \
+        $(SHL2LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL2OBJLIST:=$(STDOBJ) $(SHL2OBJS) $(SHL2LINKRESO) $(shell $(TYPE) /dev/null $(SHL2LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB2NAME)"!=""	# do not have to include objs
     @noop $(assign DEF2OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF2OBJLIST) $(assign ALL2OBJLIST:=$(ALL2OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB2NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_2.cmd
-.IF "$(SHL2DEF)"!=""
-    @echo	--input-def $(SHL2DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_2.cmd
-.ELSE
-    @echo	$(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_2.cmd
-.ENDIF
-    @echo	$(ALL2OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_2.cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) $(SHL2OBJS) $(SHL2LINKRESO) \
-        `$(TYPE) /dev/null $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL2LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL2DEF) \
+        $(USE_2IMPLIB) \
+        $(STDOBJ) \
+        $(SHL2VERSIONOBJ) $(SHL2OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL2LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL2STDLIBS) -Wl,--end-group \
-        $(SHL2STDSHL) $(STDSHL2) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_2.cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_2.cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
+        $(SHL2STDSHL) $(STDSHL2) \
+        $(SHL2LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL2USE_EXPORTS)"!="name"
@@ -915,6 +970,9 @@ $(SHL2TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB2FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL2OBJS)) $(shell cat /dev/null $(LIB2TARGET) $(SHL2LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
     @echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2SONAME) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
@@ -937,7 +995,7 @@ $(SHL2TARGETN) : \
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL2TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL2TARGETN:f) $(SHL2TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -1014,12 +1072,17 @@ SHL3IMPLIB=i$(TARGET)_t3
 .ENDIF			# "$(SHL3IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_3IMPLIB=-implib:$(LB)/$(SHL3IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL3IMPLIBN=$(LB)/$(SHL3IMPLIB).lib
+.ELSE
+USE_3IMPLIB=-Wl,--out-implib=$(SHL3IMPLIBN)
+SHL3IMPLIBN=$(LB)/lib$(SHL3IMPLIB).dll.a
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL3IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_3IMPLIB_DEPS=$(LB)/$(SHL3IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL3DEF=$(SHL3DEF)
@@ -1135,7 +1198,7 @@ $(USE_SHL3VERSIONMAP) .ERRREMOVE: $(SHL3VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL3SONAME=\"$(SONAME_SWITCH)$(SHL3TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -1188,6 +1251,10 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(COM)" == "GCC" && "$(SHL3IMPLIBN)" != ""
+$(SHL3IMPLIBN) : $(SHL3TARGETN)
+.ENDIF
+
 $(SHL3TARGETN) : \
                     $(SHL3OBJS)\
                     $(SHL3LIBS)\
@@ -1218,10 +1285,10 @@ $(SHL3TARGETN) : \
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 .IF "$(RCFLAGSOUTRES)"!=""
-    # rc, takes separate flag naming output file, source .rc file last
+# rc, takes separate flag naming output file, source .rc file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL3DEFAULTRES) $(MISC)/$(SHL3DEFAULTRES:b).rc
 .ELSE
-    # windres, just takes output file last
+# windres, just takes output file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL3DEFAULTRES:b).rc $(SHL3DEFAULTRES)
 .ENDIF
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
@@ -1231,31 +1298,48 @@ $(SHL3TARGETN) : \
     $(WINDRES) $(SHL3LINKRES) $(SHL3LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL3ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo $(DLLTOOL) --dllname $(SHL3TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_3.cmd
+.IF "$(COM)"=="GCC"
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL3LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL3DEF) \
+        $(USE_3IMPLIB) \
+        $(STDOBJ) \
+        $(SHL3VERSIONOBJ) $(SHL3OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL3LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL3STDLIBS) -Wl,--end-group \
+        $(SHL3STDSHL) $(STDSHL3) \
+        $(SHL3LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL3OBJLIST:=$(STDOBJ) $(SHL3OBJS) $(SHL3LINKRESO) $(shell $(TYPE) /dev/null $(SHL3LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB3NAME)"!=""	# do not have to include objs
     @noop $(assign DEF3OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF3OBJLIST) $(assign ALL3OBJLIST:=$(ALL3OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB3NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_3.cmd
-.IF "$(SHL3DEF)"!=""
-    @echo	--input-def $(SHL3DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_3.cmd
-.ELSE
-    @echo	$(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_3.cmd
-.ENDIF
-    @echo	$(ALL3OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_3.cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) $(SHL3OBJS) $(SHL3LINKRESO) \
-        `$(TYPE) /dev/null $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL3LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL3DEF) \
+        $(USE_3IMPLIB) \
+        $(STDOBJ) \
+        $(SHL3VERSIONOBJ) $(SHL3OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL3LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL3STDLIBS) -Wl,--end-group \
-        $(SHL3STDSHL) $(STDSHL3) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_3.cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_3.cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
+        $(SHL3STDSHL) $(STDSHL3) \
+        $(SHL3LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL3USE_EXPORTS)"!="name"
@@ -1390,6 +1474,9 @@ $(SHL3TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB3FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL3OBJS)) $(shell cat /dev/null $(LIB3TARGET) $(SHL3LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
     @echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3SONAME) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
@@ -1412,7 +1499,7 @@ $(SHL3TARGETN) : \
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL3TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL3TARGETN:f) $(SHL3TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -1489,12 +1576,17 @@ SHL4IMPLIB=i$(TARGET)_t4
 .ENDIF			# "$(SHL4IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_4IMPLIB=-implib:$(LB)/$(SHL4IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL4IMPLIBN=$(LB)/$(SHL4IMPLIB).lib
+.ELSE
+USE_4IMPLIB=-Wl,--out-implib=$(SHL4IMPLIBN)
+SHL4IMPLIBN=$(LB)/lib$(SHL4IMPLIB).dll.a
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL4IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_4IMPLIB_DEPS=$(LB)/$(SHL4IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL4DEF=$(SHL4DEF)
@@ -1610,7 +1702,7 @@ $(USE_SHL4VERSIONMAP) .ERRREMOVE: $(SHL4VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL4SONAME=\"$(SONAME_SWITCH)$(SHL4TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -1663,6 +1755,10 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(COM)" == "GCC" && "$(SHL4IMPLIBN)" != ""
+$(SHL4IMPLIBN) : $(SHL4TARGETN)
+.ENDIF
+
 $(SHL4TARGETN) : \
                     $(SHL4OBJS)\
                     $(SHL4LIBS)\
@@ -1693,10 +1789,10 @@ $(SHL4TARGETN) : \
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 .IF "$(RCFLAGSOUTRES)"!=""
-    # rc, takes separate flag naming output file, source .rc file last
+# rc, takes separate flag naming output file, source .rc file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL4DEFAULTRES) $(MISC)/$(SHL4DEFAULTRES:b).rc
 .ELSE
-    # windres, just takes output file last
+# windres, just takes output file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL4DEFAULTRES:b).rc $(SHL4DEFAULTRES)
 .ENDIF
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
@@ -1706,31 +1802,48 @@ $(SHL4TARGETN) : \
     $(WINDRES) $(SHL4LINKRES) $(SHL4LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL4ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo $(DLLTOOL) --dllname $(SHL4TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_4.cmd
+.IF "$(COM)"=="GCC"
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL4LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL4DEF) \
+        $(USE_4IMPLIB) \
+        $(STDOBJ) \
+        $(SHL4VERSIONOBJ) $(SHL4OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL4LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL4STDLIBS) -Wl,--end-group \
+        $(SHL4STDSHL) $(STDSHL4) \
+        $(SHL4LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL4OBJLIST:=$(STDOBJ) $(SHL4OBJS) $(SHL4LINKRESO) $(shell $(TYPE) /dev/null $(SHL4LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB4NAME)"!=""	# do not have to include objs
     @noop $(assign DEF4OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF4OBJLIST) $(assign ALL4OBJLIST:=$(ALL4OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB4NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_4.cmd
-.IF "$(SHL4DEF)"!=""
-    @echo	--input-def $(SHL4DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_4.cmd
-.ELSE
-    @echo	$(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_4.cmd
-.ENDIF
-    @echo	$(ALL4OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_4.cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) $(SHL4OBJS) $(SHL4LINKRESO) \
-        `$(TYPE) /dev/null $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL4LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL4DEF) \
+        $(USE_4IMPLIB) \
+        $(STDOBJ) \
+        $(SHL4VERSIONOBJ) $(SHL4OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL4LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL4STDLIBS) -Wl,--end-group \
-        $(SHL4STDSHL) $(STDSHL4) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_4.cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_4.cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
+        $(SHL4STDSHL) $(STDSHL4) \
+        $(SHL4LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL4USE_EXPORTS)"!="name"
@@ -1865,6 +1978,9 @@ $(SHL4TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB4FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL4OBJS)) $(shell cat /dev/null $(LIB4TARGET) $(SHL4LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
     @echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4SONAME) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
@@ -1887,7 +2003,7 @@ $(SHL4TARGETN) : \
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL4TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL4TARGETN:f) $(SHL4TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -1964,12 +2080,17 @@ SHL5IMPLIB=i$(TARGET)_t5
 .ENDIF			# "$(SHL5IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_5IMPLIB=-implib:$(LB)/$(SHL5IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL5IMPLIBN=$(LB)/$(SHL5IMPLIB).lib
+.ELSE
+USE_5IMPLIB=-Wl,--out-implib=$(SHL5IMPLIBN)
+SHL5IMPLIBN=$(LB)/lib$(SHL5IMPLIB).dll.a
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL5IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_5IMPLIB_DEPS=$(LB)/$(SHL5IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL5DEF=$(SHL5DEF)
@@ -2085,7 +2206,7 @@ $(USE_SHL5VERSIONMAP) .ERRREMOVE: $(SHL5VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL5SONAME=\"$(SONAME_SWITCH)$(SHL5TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -2138,6 +2259,10 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(COM)" == "GCC" && "$(SHL5IMPLIBN)" != ""
+$(SHL5IMPLIBN) : $(SHL5TARGETN)
+.ENDIF
+
 $(SHL5TARGETN) : \
                     $(SHL5OBJS)\
                     $(SHL5LIBS)\
@@ -2168,10 +2293,10 @@ $(SHL5TARGETN) : \
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 .IF "$(RCFLAGSOUTRES)"!=""
-    # rc, takes separate flag naming output file, source .rc file last
+# rc, takes separate flag naming output file, source .rc file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL5DEFAULTRES) $(MISC)/$(SHL5DEFAULTRES:b).rc
 .ELSE
-    # windres, just takes output file last
+# windres, just takes output file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL5DEFAULTRES:b).rc $(SHL5DEFAULTRES)
 .ENDIF
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
@@ -2181,31 +2306,48 @@ $(SHL5TARGETN) : \
     $(WINDRES) $(SHL5LINKRES) $(SHL5LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL5ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo $(DLLTOOL) --dllname $(SHL5TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_5.cmd
+.IF "$(COM)"=="GCC"
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL5LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL5DEF) \
+        $(USE_5IMPLIB) \
+        $(STDOBJ) \
+        $(SHL5VERSIONOBJ) $(SHL5OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL5LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL5STDLIBS) -Wl,--end-group \
+        $(SHL5STDSHL) $(STDSHL5) \
+        $(SHL5LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL5OBJLIST:=$(STDOBJ) $(SHL5OBJS) $(SHL5LINKRESO) $(shell $(TYPE) /dev/null $(SHL5LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB5NAME)"!=""	# do not have to include objs
     @noop $(assign DEF5OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF5OBJLIST) $(assign ALL5OBJLIST:=$(ALL5OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB5NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_5.cmd
-.IF "$(SHL5DEF)"!=""
-    @echo	--input-def $(SHL5DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_5.cmd
-.ELSE
-    @echo	$(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_5.cmd
-.ENDIF
-    @echo	$(ALL5OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_5.cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) $(SHL5OBJS) $(SHL5LINKRESO) \
-        `$(TYPE) /dev/null $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL5LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL5DEF) \
+        $(USE_5IMPLIB) \
+        $(STDOBJ) \
+        $(SHL5VERSIONOBJ) $(SHL5OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL5LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL5STDLIBS) -Wl,--end-group \
-        $(SHL5STDSHL) $(STDSHL5) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_5.cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_5.cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
+        $(SHL5STDSHL) $(STDSHL5) \
+        $(SHL5LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL5USE_EXPORTS)"!="name"
@@ -2340,6 +2482,9 @@ $(SHL5TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB5FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL5OBJS)) $(shell cat /dev/null $(LIB5TARGET) $(SHL5LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
     @echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5SONAME) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
@@ -2362,7 +2507,7 @@ $(SHL5TARGETN) : \
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL5TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL5TARGETN:f) $(SHL5TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -2439,12 +2584,17 @@ SHL6IMPLIB=i$(TARGET)_t6
 .ENDIF			# "$(SHL6IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_6IMPLIB=-implib:$(LB)/$(SHL6IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL6IMPLIBN=$(LB)/$(SHL6IMPLIB).lib
+.ELSE
+USE_6IMPLIB=-Wl,--out-implib=$(SHL6IMPLIBN)
+SHL6IMPLIBN=$(LB)/lib$(SHL6IMPLIB).dll.a
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL6IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_6IMPLIB_DEPS=$(LB)/$(SHL6IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL6DEF=$(SHL6DEF)
@@ -2560,7 +2710,7 @@ $(USE_SHL6VERSIONMAP) .ERRREMOVE: $(SHL6VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL6SONAME=\"$(SONAME_SWITCH)$(SHL6TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -2613,6 +2763,10 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(COM)" == "GCC" && "$(SHL6IMPLIBN)" != ""
+$(SHL6IMPLIBN) : $(SHL6TARGETN)
+.ENDIF
+
 $(SHL6TARGETN) : \
                     $(SHL6OBJS)\
                     $(SHL6LIBS)\
@@ -2643,10 +2797,10 @@ $(SHL6TARGETN) : \
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 .IF "$(RCFLAGSOUTRES)"!=""
-    # rc, takes separate flag naming output file, source .rc file last
+# rc, takes separate flag naming output file, source .rc file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL6DEFAULTRES) $(MISC)/$(SHL6DEFAULTRES:b).rc
 .ELSE
-    # windres, just takes output file last
+# windres, just takes output file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL6DEFAULTRES:b).rc $(SHL6DEFAULTRES)
 .ENDIF
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
@@ -2656,31 +2810,48 @@ $(SHL6TARGETN) : \
     $(WINDRES) $(SHL6LINKRES) $(SHL6LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL6ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo $(DLLTOOL) --dllname $(SHL6TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_6.cmd
+.IF "$(COM)"=="GCC"
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL6LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL6DEF) \
+        $(USE_6IMPLIB) \
+        $(STDOBJ) \
+        $(SHL6VERSIONOBJ) $(SHL6OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL6LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL6STDLIBS) -Wl,--end-group \
+        $(SHL6STDSHL) $(STDSHL6) \
+        $(SHL6LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL6OBJLIST:=$(STDOBJ) $(SHL6OBJS) $(SHL6LINKRESO) $(shell $(TYPE) /dev/null $(SHL6LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB6NAME)"!=""	# do not have to include objs
     @noop $(assign DEF6OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF6OBJLIST) $(assign ALL6OBJLIST:=$(ALL6OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB6NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_6.cmd
-.IF "$(SHL6DEF)"!=""
-    @echo	--input-def $(SHL6DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_6.cmd
-.ELSE
-    @echo	$(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_6.cmd
-.ENDIF
-    @echo	$(ALL6OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_6.cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) $(SHL6OBJS) $(SHL6LINKRESO) \
-        `$(TYPE) /dev/null $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL6LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL6DEF) \
+        $(USE_6IMPLIB) \
+        $(STDOBJ) \
+        $(SHL6VERSIONOBJ) $(SHL6OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL6LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL6STDLIBS) -Wl,--end-group \
-        $(SHL6STDSHL) $(STDSHL6) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_6.cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_6.cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
+        $(SHL6STDSHL) $(STDSHL6) \
+        $(SHL6LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL6USE_EXPORTS)"!="name"
@@ -2815,6 +2986,9 @@ $(SHL6TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB6FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL6OBJS)) $(shell cat /dev/null $(LIB6TARGET) $(SHL6LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
     @echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6SONAME) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
@@ -2837,7 +3011,7 @@ $(SHL6TARGETN) : \
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL6TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL6TARGETN:f) $(SHL6TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -2914,12 +3088,17 @@ SHL7IMPLIB=i$(TARGET)_t7
 .ENDIF			# "$(SHL7IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_7IMPLIB=-implib:$(LB)/$(SHL7IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL7IMPLIBN=$(LB)/$(SHL7IMPLIB).lib
+.ELSE
+USE_7IMPLIB=-Wl,--out-implib=$(SHL7IMPLIBN)
+SHL7IMPLIBN=$(LB)/lib$(SHL7IMPLIB).dll.a
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL7IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_7IMPLIB_DEPS=$(LB)/$(SHL7IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL7DEF=$(SHL7DEF)
@@ -3035,7 +3214,7 @@ $(USE_SHL7VERSIONMAP) .ERRREMOVE: $(SHL7VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL7SONAME=\"$(SONAME_SWITCH)$(SHL7TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -3088,6 +3267,10 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(COM)" == "GCC" && "$(SHL7IMPLIBN)" != ""
+$(SHL7IMPLIBN) : $(SHL7TARGETN)
+.ENDIF
+
 $(SHL7TARGETN) : \
                     $(SHL7OBJS)\
                     $(SHL7LIBS)\
@@ -3118,10 +3301,10 @@ $(SHL7TARGETN) : \
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 .IF "$(RCFLAGSOUTRES)"!=""
-    # rc, takes separate flag naming output file, source .rc file last
+# rc, takes separate flag naming output file, source .rc file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL7DEFAULTRES) $(MISC)/$(SHL7DEFAULTRES:b).rc
 .ELSE
-    # windres, just takes output file last
+# windres, just takes output file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL7DEFAULTRES:b).rc $(SHL7DEFAULTRES)
 .ENDIF
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
@@ -3131,31 +3314,48 @@ $(SHL7TARGETN) : \
     $(WINDRES) $(SHL7LINKRES) $(SHL7LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL7ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo $(DLLTOOL) --dllname $(SHL7TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_7.cmd
+.IF "$(COM)"=="GCC"
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL7LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL7DEF) \
+        $(USE_7IMPLIB) \
+        $(STDOBJ) \
+        $(SHL7VERSIONOBJ) $(SHL7OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL7LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL7STDLIBS) -Wl,--end-group \
+        $(SHL7STDSHL) $(STDSHL7) \
+        $(SHL7LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL7OBJLIST:=$(STDOBJ) $(SHL7OBJS) $(SHL7LINKRESO) $(shell $(TYPE) /dev/null $(SHL7LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB7NAME)"!=""	# do not have to include objs
     @noop $(assign DEF7OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF7OBJLIST) $(assign ALL7OBJLIST:=$(ALL7OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB7NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_7.cmd
-.IF "$(SHL7DEF)"!=""
-    @echo	--input-def $(SHL7DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_7.cmd
-.ELSE
-    @echo	$(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_7.cmd
-.ENDIF
-    @echo	$(ALL7OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_7.cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) $(SHL7OBJS) $(SHL7LINKRESO) \
-        `$(TYPE) /dev/null $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL7LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL7DEF) \
+        $(USE_7IMPLIB) \
+        $(STDOBJ) \
+        $(SHL7VERSIONOBJ) $(SHL7OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL7LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL7STDLIBS) -Wl,--end-group \
-        $(SHL7STDSHL) $(STDSHL7) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_7.cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_7.cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
+        $(SHL7STDSHL) $(STDSHL7) \
+        $(SHL7LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL7USE_EXPORTS)"!="name"
@@ -3290,6 +3490,9 @@ $(SHL7TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB7FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL7OBJS)) $(shell cat /dev/null $(LIB7TARGET) $(SHL7LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
     @echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7SONAME) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
@@ -3312,7 +3515,7 @@ $(SHL7TARGETN) : \
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL7TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL7TARGETN:f) $(SHL7TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -3389,12 +3592,17 @@ SHL8IMPLIB=i$(TARGET)_t8
 .ENDIF			# "$(SHL8IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_8IMPLIB=-implib:$(LB)/$(SHL8IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL8IMPLIBN=$(LB)/$(SHL8IMPLIB).lib
+.ELSE
+USE_8IMPLIB=-Wl,--out-implib=$(SHL8IMPLIBN)
+SHL8IMPLIBN=$(LB)/lib$(SHL8IMPLIB).dll.a
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL8IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_8IMPLIB_DEPS=$(LB)/$(SHL8IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL8DEF=$(SHL8DEF)
@@ -3510,7 +3718,7 @@ $(USE_SHL8VERSIONMAP) .ERRREMOVE: $(SHL8VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL8SONAME=\"$(SONAME_SWITCH)$(SHL8TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -3563,6 +3771,10 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(COM)" == "GCC" && "$(SHL8IMPLIBN)" != ""
+$(SHL8IMPLIBN) : $(SHL8TARGETN)
+.ENDIF
+
 $(SHL8TARGETN) : \
                     $(SHL8OBJS)\
                     $(SHL8LIBS)\
@@ -3593,10 +3805,10 @@ $(SHL8TARGETN) : \
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 .IF "$(RCFLAGSOUTRES)"!=""
-    # rc, takes separate flag naming output file, source .rc file last
+# rc, takes separate flag naming output file, source .rc file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL8DEFAULTRES) $(MISC)/$(SHL8DEFAULTRES:b).rc
 .ELSE
-    # windres, just takes output file last
+# windres, just takes output file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL8DEFAULTRES:b).rc $(SHL8DEFAULTRES)
 .ENDIF
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
@@ -3606,31 +3818,48 @@ $(SHL8TARGETN) : \
     $(WINDRES) $(SHL8LINKRES) $(SHL8LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL8ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo $(DLLTOOL) --dllname $(SHL8TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_8.cmd
+.IF "$(COM)"=="GCC"
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL8LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL8DEF) \
+        $(USE_8IMPLIB) \
+        $(STDOBJ) \
+        $(SHL8VERSIONOBJ) $(SHL8OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL8LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL8STDLIBS) -Wl,--end-group \
+        $(SHL8STDSHL) $(STDSHL8) \
+        $(SHL8LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL8OBJLIST:=$(STDOBJ) $(SHL8OBJS) $(SHL8LINKRESO) $(shell $(TYPE) /dev/null $(SHL8LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB8NAME)"!=""	# do not have to include objs
     @noop $(assign DEF8OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF8OBJLIST) $(assign ALL8OBJLIST:=$(ALL8OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB8NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_8.cmd
-.IF "$(SHL8DEF)"!=""
-    @echo	--input-def $(SHL8DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_8.cmd
-.ELSE
-    @echo	$(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_8.cmd
-.ENDIF
-    @echo	$(ALL8OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_8.cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) $(SHL8OBJS) $(SHL8LINKRESO) \
-        `$(TYPE) /dev/null $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL8LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL8DEF) \
+        $(USE_8IMPLIB) \
+        $(STDOBJ) \
+        $(SHL8VERSIONOBJ) $(SHL8OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL8LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL8STDLIBS) -Wl,--end-group \
-        $(SHL8STDSHL) $(STDSHL8) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_8.cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_8.cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
+        $(SHL8STDSHL) $(STDSHL8) \
+        $(SHL8LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL8USE_EXPORTS)"!="name"
@@ -3765,6 +3994,9 @@ $(SHL8TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB8FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL8OBJS)) $(shell cat /dev/null $(LIB8TARGET) $(SHL8LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
     @echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8SONAME) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
@@ -3787,7 +4019,7 @@ $(SHL8TARGETN) : \
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL8TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL8TARGETN:f) $(SHL8TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -3864,12 +4096,17 @@ SHL9IMPLIB=i$(TARGET)_t9
 .ENDIF			# "$(SHL9IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_9IMPLIB=-implib:$(LB)/$(SHL9IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL9IMPLIBN=$(LB)/$(SHL9IMPLIB).lib
+.ELSE
+USE_9IMPLIB=-Wl,--out-implib=$(SHL9IMPLIBN)
+SHL9IMPLIBN=$(LB)/lib$(SHL9IMPLIB).dll.a
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL9IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_9IMPLIB_DEPS=$(LB)/$(SHL9IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL9DEF=$(SHL9DEF)
@@ -3985,7 +4222,7 @@ $(USE_SHL9VERSIONMAP) .ERRREMOVE: $(SHL9VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL9SONAME=\"$(SONAME_SWITCH)$(SHL9TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -4038,6 +4275,10 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(COM)" == "GCC" && "$(SHL9IMPLIBN)" != ""
+$(SHL9IMPLIBN) : $(SHL9TARGETN)
+.ENDIF
+
 $(SHL9TARGETN) : \
                     $(SHL9OBJS)\
                     $(SHL9LIBS)\
@@ -4068,10 +4309,10 @@ $(SHL9TARGETN) : \
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 .IF "$(RCFLAGSOUTRES)"!=""
-    # rc, takes separate flag naming output file, source .rc file last
+# rc, takes separate flag naming output file, source .rc file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL9DEFAULTRES) $(MISC)/$(SHL9DEFAULTRES:b).rc
 .ELSE
-    # windres, just takes output file last
+# windres, just takes output file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL9DEFAULTRES:b).rc $(SHL9DEFAULTRES)
 .ENDIF
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
@@ -4081,31 +4322,48 @@ $(SHL9TARGETN) : \
     $(WINDRES) $(SHL9LINKRES) $(SHL9LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL9ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo $(DLLTOOL) --dllname $(SHL9TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_9.cmd
+.IF "$(COM)"=="GCC"
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL9LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL9DEF) \
+        $(USE_9IMPLIB) \
+        $(STDOBJ) \
+        $(SHL9VERSIONOBJ) $(SHL9OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL9LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL9STDLIBS) -Wl,--end-group \
+        $(SHL9STDSHL) $(STDSHL9) \
+        $(SHL9LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL9OBJLIST:=$(STDOBJ) $(SHL9OBJS) $(SHL9LINKRESO) $(shell $(TYPE) /dev/null $(SHL9LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB9NAME)"!=""	# do not have to include objs
     @noop $(assign DEF9OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF9OBJLIST) $(assign ALL9OBJLIST:=$(ALL9OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB9NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_9.cmd
-.IF "$(SHL9DEF)"!=""
-    @echo	--input-def $(SHL9DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_9.cmd
-.ELSE
-    @echo	$(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_9.cmd
-.ENDIF
-    @echo	$(ALL9OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_9.cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) $(SHL9OBJS) $(SHL9LINKRESO) \
-        `$(TYPE) /dev/null $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL9LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL9DEF) \
+        $(USE_9IMPLIB) \
+        $(STDOBJ) \
+        $(SHL9VERSIONOBJ) $(SHL9OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL9LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL9STDLIBS) -Wl,--end-group \
-        $(SHL9STDSHL) $(STDSHL9) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_9.cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_9.cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
+        $(SHL9STDSHL) $(STDSHL9) \
+        $(SHL9LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL9USE_EXPORTS)"!="name"
@@ -4240,6 +4498,9 @@ $(SHL9TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB9FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL9OBJS)) $(shell cat /dev/null $(LIB9TARGET) $(SHL9LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
     @echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9SONAME) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
@@ -4262,7 +4523,7 @@ $(SHL9TARGETN) : \
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL9TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL9TARGETN:f) $(SHL9TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -4339,12 +4600,17 @@ SHL10IMPLIB=i$(TARGET)_t10
 .ENDIF			# "$(SHL10IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_10IMPLIB=-implib:$(LB)/$(SHL10IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL10IMPLIBN=$(LB)/$(SHL10IMPLIB).lib
+.ELSE
+USE_10IMPLIB=-Wl,--out-implib=$(SHL10IMPLIBN)
+SHL10IMPLIBN=$(LB)/lib$(SHL10IMPLIB).dll.a
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL10IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_10IMPLIB_DEPS=$(LB)/$(SHL10IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL10DEF=$(SHL10DEF)
@@ -4460,7 +4726,7 @@ $(USE_SHL10VERSIONMAP) .ERRREMOVE: $(SHL10VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL10SONAME=\"$(SONAME_SWITCH)$(SHL10TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -4513,6 +4779,10 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(COM)" == "GCC" && "$(SHL10IMPLIBN)" != ""
+$(SHL10IMPLIBN) : $(SHL10TARGETN)
+.ENDIF
+
 $(SHL10TARGETN) : \
                     $(SHL10OBJS)\
                     $(SHL10LIBS)\
@@ -4543,10 +4813,10 @@ $(SHL10TARGETN) : \
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
 .IF "$(RCFLAGSOUTRES)"!=""
-    # rc, takes separate flag naming output file, source .rc file last
+# rc, takes separate flag naming output file, source .rc file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL10DEFAULTRES) $(MISC)/$(SHL10DEFAULTRES:b).rc
 .ELSE
-    # windres, just takes output file last
+# windres, just takes output file last
     $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL10DEFAULTRES:b).rc $(SHL10DEFAULTRES)
 .ENDIF
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
@@ -4556,31 +4826,48 @@ $(SHL10TARGETN) : \
     $(WINDRES) $(SHL10LINKRES) $(SHL10LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL10ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo $(DLLTOOL) --dllname $(SHL10TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_10.cmd
+.IF "$(COM)"=="GCC"
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL10LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL10DEF) \
+        $(USE_10IMPLIB) \
+        $(STDOBJ) \
+        $(SHL10VERSIONOBJ) $(SHL10OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL10LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL10STDLIBS) -Wl,--end-group \
+        $(SHL10STDSHL) $(STDSHL10) \
+        $(SHL10LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL10OBJLIST:=$(STDOBJ) $(SHL10OBJS) $(SHL10LINKRESO) $(shell $(TYPE) /dev/null $(SHL10LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB10NAME)"!=""	# do not have to include objs
     @noop $(assign DEF10OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF10OBJLIST) $(assign ALL10OBJLIST:=$(ALL10OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB10NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_10.cmd
-.IF "$(SHL10DEF)"!=""
-    @echo	--input-def $(SHL10DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_10.cmd
-.ELSE
-    @echo	$(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_10.cmd
-.ENDIF
-    @echo	$(ALL10OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_10.cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) $(SHL10OBJS) $(SHL10LINKRESO) \
-        `$(TYPE) /dev/null $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL10LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL10DEF) \
+        $(USE_10IMPLIB) \
+        $(STDOBJ) \
+        $(SHL10VERSIONOBJ) $(SHL10OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL10LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL10STDLIBS) -Wl,--end-group \
-        $(SHL10STDSHL) $(STDSHL10) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_10.cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_10.cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
+        $(SHL10STDSHL) $(STDSHL10) \
+        $(SHL10LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL10USE_EXPORTS)"!="name"
@@ -4715,6 +5002,9 @@ $(SHL10TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN)
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB10FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL10OBJS)) $(shell cat /dev/null $(LIB10TARGET) $(SHL10LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
     @echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10SONAME) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
@@ -4737,7 +5027,7 @@ $(SHL10TARGETN) : \
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL10TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL10TARGETN:f) $(SHL10TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -4761,6 +5051,7 @@ USELIB1DEPN+=$(SHL1LIBS)
 USE_SHL1TARGET=$(SHL1TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL1IMPLIBN):	\
                     $(SHL1DEF) \
@@ -4773,9 +5064,6 @@ $(SHL1IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    $(DLLTOOL) --output-lib=$(SHL1IMPLIBN) --input-def=$(SHL1DEF)
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL1IMPLIBN) \
@@ -4784,12 +5072,12 @@ $(SHL1IMPLIBN):	\
     @echo build of $(SHL1TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4806,6 +5094,7 @@ USELIB2DEPN+=$(SHL2LIBS)
 USE_SHL2TARGET=$(SHL2TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL2IMPLIBN):	\
                     $(SHL2DEF) \
@@ -4818,9 +5107,6 @@ $(SHL2IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    $(DLLTOOL) --output-lib=$(SHL2IMPLIBN) --input-def=$(SHL2DEF)
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL2IMPLIBN) \
@@ -4829,12 +5115,12 @@ $(SHL2IMPLIBN):	\
     @echo build of $(SHL2TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4851,6 +5137,7 @@ USELIB3DEPN+=$(SHL3LIBS)
 USE_SHL3TARGET=$(SHL3TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL3IMPLIBN):	\
                     $(SHL3DEF) \
@@ -4863,9 +5150,6 @@ $(SHL3IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    $(DLLTOOL) --output-lib=$(SHL3IMPLIBN) --input-def=$(SHL3DEF)
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL3IMPLIBN) \
@@ -4874,12 +5158,12 @@ $(SHL3IMPLIBN):	\
     @echo build of $(SHL3TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4896,6 +5180,7 @@ USELIB4DEPN+=$(SHL4LIBS)
 USE_SHL4TARGET=$(SHL4TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL4IMPLIBN):	\
                     $(SHL4DEF) \
@@ -4908,9 +5193,6 @@ $(SHL4IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    $(DLLTOOL) --output-lib=$(SHL4IMPLIBN) --input-def=$(SHL4DEF)
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL4IMPLIBN) \
@@ -4919,12 +5201,12 @@ $(SHL4IMPLIBN):	\
     @echo build of $(SHL4TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4941,6 +5223,7 @@ USELIB5DEPN+=$(SHL5LIBS)
 USE_SHL5TARGET=$(SHL5TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL5IMPLIBN):	\
                     $(SHL5DEF) \
@@ -4953,9 +5236,6 @@ $(SHL5IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    $(DLLTOOL) --output-lib=$(SHL5IMPLIBN) --input-def=$(SHL5DEF)
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL5IMPLIBN) \
@@ -4964,12 +5244,12 @@ $(SHL5IMPLIBN):	\
     @echo build of $(SHL5TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4986,6 +5266,7 @@ USELIB6DEPN+=$(SHL6LIBS)
 USE_SHL6TARGET=$(SHL6TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL6IMPLIBN):	\
                     $(SHL6DEF) \
@@ -4998,9 +5279,6 @@ $(SHL6IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    $(DLLTOOL) --output-lib=$(SHL6IMPLIBN) --input-def=$(SHL6DEF)
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL6IMPLIBN) \
@@ -5009,12 +5287,12 @@ $(SHL6IMPLIBN):	\
     @echo build of $(SHL6TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 
@@ -5031,6 +5309,7 @@ USELIB7DEPN+=$(SHL7LIBS)
 USE_SHL7TARGET=$(SHL7TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL7IMPLIBN):	\
                     $(SHL7DEF) \
@@ -5043,9 +5322,6 @@ $(SHL7IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    $(DLLTOOL) --output-lib=$(SHL7IMPLIBN) --input-def=$(SHL7DEF)
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL7IMPLIBN) \
@@ -5054,12 +5330,12 @@ $(SHL7IMPLIBN):	\
     @echo build of $(SHL7TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 
@@ -5076,6 +5352,7 @@ USELIB8DEPN+=$(SHL8LIBS)
 USE_SHL8TARGET=$(SHL8TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL8IMPLIBN):	\
                     $(SHL8DEF) \
@@ -5088,9 +5365,6 @@ $(SHL8IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    $(DLLTOOL) --output-lib=$(SHL8IMPLIBN) --input-def=$(SHL8DEF)
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL8IMPLIBN) \
@@ -5099,12 +5373,12 @@ $(SHL8IMPLIBN):	\
     @echo build of $(SHL8TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 
@@ -5121,6 +5395,7 @@ USELIB9DEPN+=$(SHL9LIBS)
 USE_SHL9TARGET=$(SHL9TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL9IMPLIBN):	\
                     $(SHL9DEF) \
@@ -5133,9 +5408,6 @@ $(SHL9IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    $(DLLTOOL) --output-lib=$(SHL9IMPLIBN) --input-def=$(SHL9DEF)
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL9IMPLIBN) \
@@ -5144,12 +5416,12 @@ $(SHL9IMPLIBN):	\
     @echo build of $(SHL9TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 
@@ -5166,6 +5438,7 @@ USELIB10DEPN+=$(SHL10LIBS)
 USE_SHL10TARGET=$(SHL10TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL10IMPLIBN):	\
                     $(SHL10DEF) \
@@ -5178,9 +5451,6 @@ $(SHL10IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    $(DLLTOOL) --output-lib=$(SHL10IMPLIBN) --input-def=$(SHL10DEF)
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL10IMPLIBN) \
@@ -5189,12 +5459,12 @@ $(SHL10IMPLIBN):	\
     @echo build of $(SHL10TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 

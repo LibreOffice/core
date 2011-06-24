@@ -326,24 +326,6 @@
         PACKED_LIB_FILE_BODY_PATCH; \
     End
 
-#define WINW4WFILTERFILENAME(name) STRING(CONCAT2(name,f32w.dll))
-
-#define STD_WIN_W4WFILTER_FILE(id,name) \
-    File id \
-        PACKED_FILTER_FILE_BODY; \
-        Name            = WINW4WFILTERFILENAME(name);  \
-    End
-
-#define SOLSW4WFILTERFILENAME(name) STRING(CONCAT2(w4w, name))
-
-#define STD_SOLS_W4WFILTER_FILE(id,name) \
-    File id \
-        BIN_FILE_BODY; \
-        Styles = (PACKED); \
-        Dir = gid_Dir_Filter; \
-        Name = SOLSW4WFILTERFILENAME(name); \
-    End
-
 #define SPECIAL_NO_WARNING_IF_NOT_EXISTS_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \

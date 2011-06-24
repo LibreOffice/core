@@ -149,7 +149,7 @@ Module gid_Module_Root_Extension_Dictionary_En
     Files = (gid_File_Extension_Dictionary_En);
     InstallOrder = "2000";
     Sortkey = "550";
-    Spellcheckerlanguage = "en-US";
+    Spellcheckerlanguage = "en";
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Dictionaries;
     Styles = ();

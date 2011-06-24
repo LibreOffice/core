@@ -77,7 +77,7 @@ LOCALPYFILES= \
     $(BIN)$/msgbox.py
 .ENDIF
 
-help_exist:=$(shell @find $(L10N_MODULE)/source/ -type d -name "helpcontent2" | sed -e "s|/helpcontent2||" -e "s|^.*/||" ) en-US
+help_exist:=$(shell @find $(L10N_MODULE)/source/ -type d -name "helpcontent2" 2>/dev/null | sed -e "s|/helpcontent2||" -e "s|^.*/||" ) en-US
 
 allhelplangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(help_exist) $(eq,$i,$j  $i $(NULL))))
 

@@ -8,11 +8,88 @@ else
 GBUILD_OPT:=--gmake
 endif
 
+ifeq (@CROSS_COMPILING@,YES)
+all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded cross-build-toolset
+else
 all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded
-
+endif
 	@. ./*Env.Set.sh && \
         cd instsetoo_native && \
         build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+
+ifeq (@CROSS_COMPILING@,YES)
+cross-build-toolset:
+# Build necessary modules for the *build* platform, i.e. those needed
+# by tools run at build time. Sure, in many of these modules only a
+# part of the produced binaries are actually used then in the build.
+# Once everything is handled by gbuild, this can hopefully be streamlined.
+	. ./Env.Build.sh && \
+	for D in \
+	  solenv \
+	  soltools \
+	  boost \
+	  external \
+	  cppunit \
+	  xml2cmp \
+	  lucene \
+	  sal \
+	  cosv \
+	  udm \
+	  autodoc \
+	  store \
+	  salhelper \
+	  registry \
+	  idlc \
+	  icu \
+	  udkapi \
+	  expat \
+	  libxml2 \
+	  xml2cmp \
+	  libxslt \
+	  offapi \
+	  oovbaapi \
+	  codemaker \
+	  cppu \
+	  cppuhelper \
+	  rdbmaker \
+	  cpputools \
+	  xmlreader \
+	  i18nutil \
+	  ridljar \
+	  jurt \
+	  jvmaccess \
+	  bridges \
+	  ucbhelper \
+	  comphelper \
+	  jvmfwk \
+	  regexp \
+	  berkeleydb \
+	  sax \
+	  stoc \
+	  i18npool \
+	  unodevtools \
+	  gettext \
+	  dictionaries \
+	  o3tl \
+	  basegfx \
+	  tools \
+	  idl \
+	  l10ntools \
+	  rsc \
+	  setup_native \
+	  icc \
+	  unoil \
+	  javaunohelper \
+	  unotools \
+	  xmlhelp \
+	  shell; do \
+	    if grep -q gb_Module_add_targets $$D/Module_$$D.mk 2>/dev/null; then \
+	      (cd $$D && make -sr -j@BUILD_MAX_JOBS@) \
+	    else \
+	      (cd $$D && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) \
+	    fi; \
+	done
+endif
 
 install:
 	@. ./*Env.Set.sh && \
@@ -24,27 +101,53 @@ install:
 
 dev-install:
 	@. ./*Env.Set.sh && \
-        ooinstall -l @abs_builddir@/install && \
-        echo "" && \
-        echo "Developer installation finished, you can now execute:" && \
-        echo "@abs_builddir@/install/program/soffice"
+        cd smoketestoo_native && \
+		export SAL_USE_VCLPLUGIN="svp" && \
+		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && \
+		cd @abs_builddir@ && ln -s $$SOLARVER/$$INPATH/installation/opt/ install && \
+		echo "" && \
+        echo "Developer installation finished, you can now execute:"
+	@if test `uname -s` = Darwin; then \
+		echo open install/LibreOffice.app; \
+	else \
+		echo "cd @abs_builddir@/install/program" && \
+		echo ". ./ooenv" && \
+		echo "./soffice.bin"; \
+	fi
 
-distclean: dmake/dmake@EXEEXT_FOR_BUILD@
-	@. ./*Env.Set.sh && \
-        dmake distclean
+distclean:
+	-rm config.cache
+	-rm config.log
+ifeq (@BUILD_DMAKE@,YES)
+	-$(GNUMAKE) -C dmake distclean
+endif
 
-clean: dmake/dmake@EXEEXT_FOR_BUILD@
-	@. ./*Env.Set.sh && \
-        dmake clean && \
-        if [ -n "$$USE_GMAKE" ] ; then make -f GNUmakefile.mk -sr clean ; fi
+clean:
+	. ./*Env.Set.sh && \
+	rm -rf */$$INPATH && \
+	rm -rf solver/*/$$INPATH && \
+	rm -rf install
+ifeq (@BUILD_DMAKE@,YES)
+	. ./*Env.Set.sh && \
+	(if [ -f dmake/Makefile ] ; then $$GNUMAKE -C dmake clean; fi) && \
+	rm -f solenv/*/bin/dmake*
+endif
+ifeq (@CROSS_COMPILING@,YES)
+	. ./*Env.Set.sh && \
+	rm -rf */$$INPATH_FOR_BUILD && \
+	rm -rf solver/*/$$INPATH_FOR_BUILD
+endif
 
 dmake/dmake@EXEEXT_FOR_BUILD@:
-	@. ./*Env.Set.sh && \
-        ./bootstrap
+	./bootstrap
 
 src.downloaded: ooo.lst download
+ifeq (@DO_FETCH_TARBALLS@,YES)
 	@. ./*Env.Set.sh && \
 	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
+else
+	@echo "Automatic fetching of external tarballs is disabled."
+endif
 
 fetch: src.downloaded
 
@@ -56,6 +159,7 @@ check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch
 	cd smoketestoo_native && \
 	export SAL_USE_VCLPLUGIN="svp" && \
         build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+	@. ./*Env.Set.sh && $$SOLARENV/bin/subsequenttests
 
 id:
 	@. ./*Env.Set.sh && \
@@ -68,3 +172,20 @@ tags:
 docs:
 	@. ./*Env.Set.sh && \
 		mkdocs.sh $$SRC_ROOT/docs $$SOLARENV/inc/doxygen.cfg
+
+findunusedcode:
+# experimental callcatcher target
+# http://www.skynet.ie/~caolan/Packages/callcatcher.html
+	@which callcatcher > /dev/null 2>&1 || \
+         (echo "callcatcher not installed" && false)
+	@. ./*Env.Set.sh && \
+            . ./solenv/bin/callcatchEnv.Set.sh && \
+            cd instsetoo_native && \
+            build.pl $(GBUILD_OPT) --all
+	@. ./*Env.Set.sh && \
+            . ./solenv/bin/callcatchEnv.Set.sh && \
+	    callanalyse \
+                $$OUTDIR/lib/* \
+                $$OUTDIR/bin/* \
+                */$$OUTPATH/bin/* \
+                */$$OUTPATH/lib/*

@@ -34,9 +34,7 @@ Directory gid_Dir_Bundle
     LangPackHostName = "%PRODUCTNAME Language Pack.app";
     PatchHostName = "%PRODUCTNAME Patch.app";
 End
-#endif
 
-#ifdef MACOSX
 Directory gid_Dir_Bundle_Contents
     ParentID = gid_Dir_Bundle;
     HostName = "Contents";

@@ -37,6 +37,7 @@ gb_CXX := cl
 gb_LINK := link
 gb_AWK := awk
 gb_CLASSPATHSEP := ;
+gb_RC := rc
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
@@ -63,10 +64,16 @@ gb_COMPILERDEFS := \
 	-D_DLL \
 	-DBOOST_MEM_FN_ENABLE_CDECL \
 	-DCPPU_ENV=msci \
-	-DFULL_DESK \
 	-DM1500 \
 
 gb_CPUDEFS := -DINTEL -D_X86_=1
+
+gb_RCDEFS := \
+	 -DWINVER=0x0400 \
+	 -DWIN32 \
+
+gb_RCFLAGS := \
+	 -V
 
 gb_CFLAGS := \
 	-Gd \
@@ -212,6 +219,16 @@ endif
 
 gb_COMPILERNOOPTFLAGS := -Od
 
+ifeq ($(gb_FULLDEPS),$(true))
+gb_COMPILERDEPFLAGS := -showIncludes
+define gb_create_deps
+| $(GBUILDDIR)/filter-showIncludes.pl $(2) $(1) $(3); exit $${PIPESTATUS[0]}
+endef
+else
+gb_COMPILERDEPFLAGS :=
+define gb_create_deps
+endef
+endif
 
 # Helper class
 gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
@@ -226,7 +243,18 @@ endef
 
 gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
+# does some real work only on windows, make sure not to
+# break the dummy implementations on unx*
+define gb_Helper_convert_native
+$(patsubst -I$(OUTDIR)%,-I$(gb_Helper_OUTDIR_NATIVE)%, \
+$(patsubst $(OUTDIR)%,$(gb_Helper_OUTDIR_NATIVE)%, \
+$(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%, \
+$(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
+$(1)))))
+endef
+
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
@@ -240,27 +268,6 @@ endef
 
 # CObject class
 
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_CObject__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
-		-I$(dir $(3)) \
-		$(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
-		$(3) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(1) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
-	> $(call gb_CObject_get_dep_target,$(2)))
-endef
-else
-CObject__command_deponcompile =
-endif
-
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -269,36 +276,15 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(gb_CC) \
 		$(DEFS) $(CFLAGS)  -Fd$(PDBFILE) \
 		$(PCHFLAGS) \
+		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
 		$(INCLUDE) \
 		-c $(realpath $(3)) \
-		-Fo$(1))
-$(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(CFLAGS),$(INCLUDE))
+		-Fo$(1)) $(call gb_create_deps,$(1),$(call gb_CObject_get_dep_target,$(2)),$(realpath $(3)))
 endef
 
 
 # CxxObject class
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_CxxObject__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
-		-I$(dir $(3)) \
-		$(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
-		$(3) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		 -v OBJECTFILE=$(1) \
-		 -v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		 -v REPODIR=$(REPODIR)/ \
-	> $(call gb_CxxObject_get_dep_target,$(2)))
- endef
-else
-gb_CxxObject__command_deponcompile =
-endif
 
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
@@ -308,40 +294,18 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(gb_CXX) \
 		$(DEFS) $(CXXFLAGS) -Fd$(PDBFILE)\
 		$(PCHFLAGS) \
+		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
 		$(INCLUDE_STL) $(INCLUDE) \
 		-c $(realpath $(3)) \
-		-Fo$(1))
-$(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(CFLAGS),$(INCLUDE))
+		-Fo$(1))  $(call gb_create_deps,$(1),$(call gb_CxxObject_get_dep_target,$(2)),$(realpath $(3)))
 endef
 
 
 # PrecompiledHeader class
 
 gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
-									   -Fp$(call gb_PrecompiledHeader_get_target,$(1))
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_PrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(4) $(5) \
-		-I$(dir $(3)) \
-		$(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
-		$(3) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(1) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
-	> $(call gb_PrecompiledHeader_get_dep_target,$(2)))
-endef
-else
-gb_PrecompiledHeader__command_deponcompile =
-endif
-
+	-Fp$(call gb_PrecompiledHeader_get_target,$(1))
 
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
@@ -350,39 +314,17 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
+		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
 		$(6) \
 		-c $(realpath $(3)) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
-$(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(1),$(call gb_PrecompiledHeader_get_dep_target,$(2)),$(realpath $(3)))
 endef
 
 # NoexPrecompiledHeader class
 
 gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
-										   -Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_NoexPrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(4) $(5) \
-		-I$(dir $(3)) \
-		$(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
-		$(3) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(1) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
-	> $(call gb_NoexPrecompiledHeader_get_dep_target,$(2)))
-endef
-else
-gb_NoexPrecompiledHeader__command_deponcompile =
-endif
-
+	-Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
 
 define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
@@ -391,13 +333,12 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
+		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
 		$(6) \
 		-c $(realpath $(3)) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
-$(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(1),$(call gb_NoexPrecompiledHeader,$(2)),$(realpath $(3)))
 endef
-
 
 # LinkTarget class
 
@@ -422,7 +363,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
-		$(PCHOBJS))) && \
+		$(PCHOBJS) $(NATIVERES))) && \
 	$(gb_LINK) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
@@ -448,8 +389,11 @@ gb_Library_PLAINEXT := .lib
 gb_Library_PLAINLIBS_NONE += \
 	advapi32 \
 	gdi32 \
+	gdiplus \
 	gnu_getopt \
+	imm32\
 	kernel32 \
+	msimg32 \
 	msvcrt \
 	msvcprt \
 	mpr \
@@ -462,6 +406,8 @@ gb_Library_PLAINLIBS_NONE += \
 	user32 \
 	uuid \
 	uwinapi \
+	version \
+	winspool \
 	z \
 
 gb_Library_LAYER := \
@@ -481,7 +427,7 @@ gb_Library_FILENAMES :=\
 gb_Library_DLLEXT := .dll
 gb_Library_MAJORVER := 3
 gb_Library_RTEXT := MSC$(gb_Library_DLLEXT)
-gb_Library_OOOEXT := mi$(gb_Library_DLLEXT)
+gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)
 gb_Library_RTVEREXT := $(gb_Library_MAJORVER)$(gb_Library_RTEXT)
@@ -519,10 +465,30 @@ $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS +=  \
 
 endif
 
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3))
+$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1))
 
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
+
+endef
+
+define gb_Library_add_default_nativeres
+$(call gb_WinResTarget_WinResTarget_init,$(1)/$(2))
+$(call gb_WinResTarget_add_file,$(1)/$(2),solenv/inc/shlinfo)
+$(call gb_WinResTarget_set_defs,$(1)/$(2),\
+		$$(DEFS) \
+		-DADDITIONAL_VERINFO1 \
+		-DADDITIONAL_VERINFO2 \
+		-DADDITIONAL_VERINFO3 \
+)
+$(call gb_Library_add_nativeres,$(1),$(2))
+$(call gb_Library_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_target,$(1)/$(2))
+
+endef
+
+define gb_Library_add_nativeres
+$(call gb_LinkTarget_get_target,$(call gb_Library__get_linktargetname,$(1))) : $(call gb_WinResTarget_get_target,$(1)/$(2))
+$(call gb_LinkTarget_get_target,$(call gb_Library__get_linktargetname,$(1))) : NATIVERES += $(call gb_WinResTarget_get_target,$(1)/$(2))
 
 endef
 
@@ -558,7 +524,7 @@ endef
 # Executable class
 
 gb_Executable_EXT := .exe
-gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG
+gb_Executable_TARGETTYPEFLAGS := -RELEASE -OPT:NOREF -INCREMENTAL:NO -DEBUG
 gb_Executable_get_rpath :=
 
 define gb_Executable_Executable_platform
@@ -570,7 +536,7 @@ $(call gb_LinkTarget_set_auxtargets,$(2),\
 
 $(call gb_Executable_get_target,$(1)) \
 $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS := $(call gb_Executable_get_target,$(1)).manifest
-$(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest,$(call gb_LinkTarget_get_target,$(2)).manifest)
+$(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest,$(call gb_LinkTarget_get_target,$(2)).manifest,$(1))
 
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
@@ -686,6 +652,45 @@ else
 gb_SrsPartTarget__command_dep =
 endif
 
+# WinResTarget class
+
+gb_WinResTarget_POSTFIX :=.res
+
+define gb_WinResTarget__command
+$(call gb_Output_announce,$(2),$(true),RES,3)
+$(call gb_Helper_abbreviate_dirs_native,\
+	mkdir -p $(dir $(1)) && \
+	$(gb_RC) \
+		$(DEFS) $(FLAGS) \
+		-I$(dir $(3)) \
+		$(INCLUDE) \
+		-Fo$(1) \
+		$(RCFILE) )
+endef
+
+$(eval $(call gb_Helper_make_dep_targets,\
+	WinResTarget \
+))
+
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_WinResTarget__command_dep
+$(call gb_Helper_abbreviate_dirs_native,\
+	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+		$(INCLUDE) \
+		$(DEFS) \
+		$(2) \
+		-f - \
+	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+		-v OBJECTFILE=$(call gb_WinResTarget_get_target,$(1)) \
+		-v OUTDIR=$(OUTDIR)/ \
+		-v WORKDIR=$(WORKDIR)/ \
+		-v SRCDIR=$(SRCDIR)/ \
+		-v REPODIR=$(REPODIR)/ \
+	> $(call gb_WinResTarget_get_dep_target,$(1)))
+endef
+else
+gb_WinResTarget__command_dep =
+endif
 
 # ComponentTarget
 
@@ -695,5 +700,18 @@ gb_XSLTPROCPRECOMMAND :=
 gb_Library_COMPONENTPREFIXES := \
 	OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
 	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
+
+# UnoApiTarget
+
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc.exe
+gb_UnoApiTarget_IDLCCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge.exe
+gb_UnoApiTarget_REGMERGECOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare.exe
+gb_UnoApiTarget_REGCOMPARECOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker.exe
+gb_UnoApiTarget_CPPUMAKERCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview.exe
+gb_UnoApiTarget_REGVIEWCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # vim: set noet sw=4:

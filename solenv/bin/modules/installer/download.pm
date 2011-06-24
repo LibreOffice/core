@@ -473,6 +473,7 @@ sub get_downloadname_productname
     if ( $allvariables->{'PRODUCTNAME'} eq "OxygenOffice" ) { $start = "OOOP"; }
 
 
+
     return $start;
 }
 
@@ -1335,7 +1336,7 @@ sub get_language_string_from_language_block
 ##################################################################
 # Windows: Replacing strings in NSIS nsh file
 # nsh file syntax:
-# !define MUI_TEXT_DIRECTORY_TITLE "Zielverzeichnis auswählen"
+# !define MUI_TEXT_DIRECTORY_TITLE "Zielverzeichnis auswï¿½hlen"
 ##################################################################
 
 sub replace_identifier_in_nshfile

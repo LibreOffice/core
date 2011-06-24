@@ -29,7 +29,6 @@
 
 #please make generic modifications to unxgcc.mk or linux.mk
 gb_CPUDEFS := -DX86
-gb_Library_DLLPOSTFIX := li
 gb_COMPILERDEFAULTOPTFLAGS := -Os
 
 include $(GBUILDDIR)/platform/linux.mk

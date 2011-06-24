@@ -90,6 +90,9 @@ CFLAGSCXX+=-fvisibility-inlines-hidden
 .IF "$(HAVE_CXX0X)" == "TRUE"
 CFLAGSCXX+=-std=c++0x -Wno-deprecated-declarations
 .ENDIF # "$(HAVE_CXX0X)" == "TRUE"
+.IF "$(ENABLE_DEBUG_STL)" == "TRUE"
+CFLAGSCXX += -D_GLIBCXX_DEBUG
+.ENDIF
 
 CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
 CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
@@ -138,11 +141,7 @@ CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-Werror
 
-# Once all modules on this platform compile without warnings, set
-# COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
-# settings.mk):
-MODULES_WITH_WARNINGS := \
-    lotuswordpro
+COMPILER_WARN_ERRORS=TRUE
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic

@@ -49,7 +49,7 @@ INCEXT*=.
 INCPRE*=.
 INCPOST*=.
 .IF "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
-UNOINCLUDES=$(SOLARINCDIR)/offuh
+UNOINCLUDES=$(SOLARINCDIR)/udkapi -I$(SOLARINCDIR)/offapi -I$(SOLARINCDIR)/oovbaapi
 .ENDIF			# "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
 SOLARINC+=$(JDKINCS)
 # make sure INCLUDE isn't set
@@ -206,7 +206,7 @@ DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell @$(FIND) . -name $i -print)
 .IF "$(JARFILES)"!=""
 LOCALJARS:=$(foreach,i,$(shell @@-cd $(JARDIR) && ls -1 $(JARFILES) ) $(JARDIR)/$i)
 NEWCLASS:=$(LOCALJARS)
-NEWCLASS+:=$(foreach,i,$(JARFILES) $(eq,$(LOCALJARS),$(subst,$i, $(LOCALJARS)) $(SOLARBINDIR)/$i $(NULL)))
+NEWCLASS+:=$(foreach,i,$(JARFILES) $(eq,$(LOCALJARS),$(subst,$i, $(LOCALJARS)) $(SOLARVERSION)$/$(INPATH)$/bin$/$i $(NULL)))
 .ENDIF			# "$(JARFILES)"!=""
 NEWCLASS+=$(EXTRAJARFILES)
 .IF "$(GENJAVACLASSFILES)"!=""

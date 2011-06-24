@@ -43,11 +43,6 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 275594 $ ';
-$id_str =~ /Revision:\s+(\S+)\s+\$/
-  ? ($script_rev = $1) : ($script_rev = "-");
-
-
 #### globals ####
 
 ### valid actions ###
@@ -140,8 +135,6 @@ use sigtrap 'handler' => \&cleanup_and_die, 'normal-signals';
 #### main ####
 
 parse_options();
-
-print "$script_name -- version: $script_rev\n" if !$opt_silent;
 
 if ( ! $opt_delete ) {
     if ( $ENV{GUI} eq 'WNT' ) {
@@ -238,7 +231,7 @@ sub do_linklib
     return unless $has_symlinks;
 
     $from_dir = expand_macros('../%__SRC%/lib');
-    $to_dir = expand_macros('%_DEST%/lib%_EXT%');
+    $to_dir = expand_macros('%_DEST%/lib');
 
     @globbed_files = glob("$from_dir/$lib");
 
@@ -445,7 +438,6 @@ sub parse_options
 
 sub init_globals
 {
-    my $ext;
     ($module, $repository, $base_dir, $dlst_file) =  get_base();
 
     # for CWS:
@@ -469,8 +461,6 @@ sub init_globals
             print_error("no environment", 0);
             exit(3);
     }
-
-    $ext = "";
 
     # Do we have common trees?
     if ( defined($ENV{'common_build'}) && $ENV{'common_build'} eq 'TRUE' ) {
@@ -511,14 +501,13 @@ sub init_globals
                 [ '%__PRJROOT%',        $base_dir       ],
                 [ '%__SRC%',            $inpath         ],
                 [ '%_DEST%',            $dest           ],
-                [ '%_EXT%',             $ext            ],
                 [ '%COMMON_OUTDIR%',    $common_outdir  ],
                 [ '%COMMON_DEST%',      $common_dest    ],
                 [ '%GUI%',              $gui            ]
               );
 
-    # find out if the system supports symlinks
-    $has_symlinks = eval { symlink("",""); 1 };
+    # find out if the *HOST* system supports symlinks. They all do except Windows
+    $has_symlinks = $ENV{GUI} ne 'WNT';
 }
 
 sub get_base
@@ -582,7 +571,7 @@ sub parse_dlst
             if ( /\.res\s/ ) {
                 my $imagelist = $_;
                 $imagelist =~ s/\.res/\.$ilst_ext/g;
-                $imagelist =~ s/\\bin%_EXT%\\/\\res%_EXT%\\img\\/;
+                $imagelist =~ s/DEST%\\bin\\/DEST%\\res\\img\\/;
                 push(@action_data, ['copy', $imagelist]);
             }
         }
@@ -998,33 +987,33 @@ sub push_default_actions
     if ( ! $opt_delete ) {
         # create all the subdirectories on solver
         foreach $subdir (@subdirs) {
-            push(@action_data, ['mkdir', "%_DEST%/$subdir%_EXT%"]);
+            push(@action_data, ['mkdir', "%_DEST%/$subdir"]);
         }
         if ( $common_build ) {
             foreach $subdir (@common_subdirs) {
-                push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir%_EXT%"]);
+                push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir"]);
             }
         }
     }
-    push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]);
+    push(@action_data, ['mkdir', "%_DEST%/inc/$module"]);
     if ( $common_build ) {
-        push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]);
-        push(@action_data, ['mkdir', "%COMMON_DEST%/res%_EXT%/img"]);
+        push(@action_data, ['mkdir', "%COMMON_DEST%/inc/$module"]);
+        push(@action_data, ['mkdir', "%COMMON_DEST%/res/img"]);
     } else {
-        push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img"]);
+        push(@action_data, ['mkdir', "%_DEST%/res/img"]);
     }
 
     # deliver build.lst to $dest/inc/$module
-    push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
+    push(@action_data, ['copy', "build.lst %_DEST%/inc/$module/build.lst"]);
     if ( $common_build ) {
         # ... and to $common_dest/inc/$module
-        push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc%_EXT%/$module/build.lst"]);
+        push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc/$module/build.lst"]);
     }
 
     # need to copy libstaticmxp.dylib for Mac OS X
     if ( $^O eq 'darwin' )
     {
-        push(@action_data, ['copy', "../%__SRC%/lib/lib*static*.dylib %_DEST%/lib%_EXT%/lib*static*.dylib"]);
+        push(@action_data, ['copy', "../%__SRC%/lib/lib*static*.dylib %_DEST%/lib/lib*static*.dylib"]);
     }
 }
 
@@ -1128,10 +1117,6 @@ sub push_on_loglist
     my $solarversion  = $ENV{'SOLARVERSION'};
     $solarversion =~ s#\\#/#g;
     $entry[2] =~ s/^\Q$solarversion\E\///;
-    # strip minor from 'to'
-    my $ext = "%_EXT%";
-    $ext = expand_macros($ext);
-    $entry[2] =~ s#$ext([\\\/])#$1#o;
 
     if ( $common ) {
         push @common_log_list, [@entry];
@@ -1147,20 +1132,17 @@ sub zip_files
     $zipexe .= ' -y' unless  $^O eq 'MSWin32';
 
     my ($platform_zip_file, $common_zip_file);
-    $platform_zip_file = "%_DEST%/zip%_EXT%/$module.zip";
+    $platform_zip_file = "%_DEST%/zip/$module.zip";
     $platform_zip_file = expand_macros($platform_zip_file);
     my (%dest_dir, %list_ref);
     $dest_dir{$platform_zip_file} = $dest;
     $list_ref{$platform_zip_file} = \@zip_list;
     if ( $common_build ) {
-        $common_zip_file = "%COMMON_DEST%/zip%_EXT%/$module.zip";
+        $common_zip_file = "%COMMON_DEST%/zip/$module.zip";
         $common_zip_file = expand_macros($common_zip_file);
         $dest_dir{$common_zip_file}   = $common_dest;
         $list_ref{$common_zip_file}   = \@common_zip_list;
     }
-
-    my $ext = "%_EXT%";
-    $ext = expand_macros($ext);
 
     my @zipfiles;
     $zipfiles[0] = $platform_zip_file;
@@ -1279,8 +1261,8 @@ sub get_tempfilename
 sub write_log
 {
     my (%log_file, %file_date);
-    $log_file{\@log_list} = "%_DEST%/inc%_EXT%/$module/deliver.log";
-    $log_file{\@common_log_list} = "%COMMON_DEST%/inc%_EXT%/$module/deliver.log";
+    $log_file{\@log_list} = "%_DEST%/inc/$module/deliver.log";
+    $log_file{\@common_log_list} = "%COMMON_DEST%/inc/$module/deliver.log";
     $file_date{\@log_list} = $logfiledate;
     $file_date{\@common_log_list} = $commonlogfiledate;
 

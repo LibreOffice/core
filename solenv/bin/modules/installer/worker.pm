@@ -39,7 +39,6 @@ use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::logger;
-use installer::mail;
 use installer::pathanalyzer;
 use installer::scpzipfiles;
 use installer::scriptitems;
@@ -412,12 +411,11 @@ sub analyze_and_save_logfile
 
     my $contains_error = installer::control::check_logfile(\@installer::globals::logfileinfo);
 
-    # Dependent from the success, the installation directory can be renamed and mails can be send.
+    # Dependent from the success, the installation directory can be renamed.
 
     if ( $contains_error )
     {
         my $errordir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_witherror");
-        if ( $installer::globals::updatepack ) { installer::mail::send_fail_mail($allsettingsarrayref, $languagestringref, $errordir); }
         # Error output to STDERR
         for ( my $j = 0; $j <= $#installer::globals::errorlogfileinfo; $j++ )
         {
@@ -443,7 +441,6 @@ sub analyze_and_save_logfile
                 if ( $installdir =~ /_packed/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", ""); }
                 else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
             }
-            installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $destdir);
         }
         else
         {
@@ -547,7 +544,7 @@ sub clean_jds_temp_dirs
 
 ###########################################################
 # Setting one language in the language independent
-# array of include pathes with $(LANG)
+# array of include paths with $(LANG)
 ###########################################################
 
 sub get_language_specific_include_pathes
@@ -2314,7 +2311,7 @@ sub add_variables_from_inc_to_hashref
 }
 
 ##############################################
-# Collecting all files from include pathes
+# Collecting all files from include paths
 ##############################################
 
 sub collect_all_files_from_includepathes
@@ -2322,7 +2319,7 @@ sub collect_all_files_from_includepathes
     my ($patharrayref) = @_;
 
     installer::logger::globallog("Reading all directories: Start");
-    installer::logger::print_message( "... reading include pathes ...\n" );
+    installer::logger::print_message( "... reading include paths ...\n" );
     # empty the global
 
     @installer::globals::allincludepathes =();

@@ -32,13 +32,18 @@ CFLAGS=-c $(EXTRA_CFLAGS)
 LINKC*=$(CC)
 LINK*=$(CXX)
 
+STDLIBCUIMT=-framework CoreFoundation
+STDLIBGUIMT=-framework CoreFoundation
+STDSHLCUIMT=-framework CoreFoundation
+STDSHLGUIMT=-framework CoreFoundation
+
 LIBMGR*=ar
 LIBFLAGS=-r
 
 PROCESSOR_DEFINES=-DARM32
 
-DLLPOST=
-DLLPOSTFIX=
+DLLPRE=lib
+DLLPOST=.a
 
 # flags to enable build with symbols
 CFLAGSENABLESYMBOLS=-g
@@ -67,4 +72,5 @@ YACCFLAGS*=-d -t
 EXECPOST=
 SCPPOST=.ins
 DLLDEST=$(LB)
-SOLARSHAREDBIN=$(SOLARLIBDIR)
+
+OOO_LIBRARY_PATH_VAR = DYLD_LIBRARY_PATH

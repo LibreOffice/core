@@ -87,7 +87,9 @@ COPYUPDATE=-u
 ECHON=echo -n
 ECHONL=echo
 FIND*=find
+.IF "$(OS_FOR_BUILD)"=="WNT"
 FLIPCMD*=$(PERL) $(SOLARENV)/bin/slfl.pl
+.ENDIF
 GNUCOPY*=cp
 GNUMAKE*=make
 GREP*=grep
@@ -107,10 +109,10 @@ PERL*=perl
 TYPE=cat
 CDD=cd
 COPY=cp -f
-.IF "$(OS)"=="MACOSX" || "$(OS)"=="NETBSD" || "$(OS)"=="OPENBSD" || \
-    "$(OS)"=="DRAGONFLY"
+.IF "$(OS_FOR_BUILD)"=="MACOSX" || "$(OS_FOR_BUILD)"=="NETBSD" || "$(OS_FOR_BUILD)"=="OPENBSD" || \
+    "$(OS_FOR_BUILD)"=="DRAGONFLY"
 COPYRECURSE=-R
-.ELSE #"$(OS)"=="MACOSX"
+.ELSE # Not BSD based ones:
 COPYRECURSE=-r
 .ENDIF
 .IF "$(OS)"=="SOLARIS"

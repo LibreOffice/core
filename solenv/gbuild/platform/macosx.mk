@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@ GUI := UNX
 COM := GCC
 
 # Darwin mktemp -t expects a prefix, not a pattern
-gb_MKTEMP := /usr/bin/mktemp -t gbuild.
+gb_MKTEMP ?= /usr/bin/mktemp -t gbuild.
 
 gb_CC := cc
 gb_CXX := g++
@@ -146,7 +146,14 @@ gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
 gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
+# does some real work only on windows, make sure not to
+# break the dummy implementations on unx*
+define gb_Helper_convert_native
+$(1)
+endef
+
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
@@ -246,7 +253,7 @@ endef
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
-gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
@@ -332,13 +339,8 @@ gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .dylib
 gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 
-ifeq ($(CPUNAME),INTEL)
-gb_Library_OOOEXT := mxi$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
-else # ifeq ($(CPUNAME),POWERPC)
-gb_Library_OOOEXT := mxp$(gb_Library_PLAINEXT)
-gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
-endif
 
 gb_Library__FRAMEWORKS := \
 	Cocoa \
@@ -444,7 +446,7 @@ endef
 
 define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/OpenOffice.org.app/Contents/MacOS/soffice}" \
+	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/LibreOffice.app/Contents/MacOS/soffice}" \
 	-Dorg.openoffice.test.arg.env=DYLD_LIBRARY_PATH \
 	-Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
 
@@ -480,6 +482,19 @@ gb_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_Library_COMPONENTPREFIXES := \
 	OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
 	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
+
+# UnoApiTarget
+
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc
+gb_UnoApiTarget_IDLCCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge
+gb_UnoApiTarget_REGMERGECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare
+gb_UnoApiTarget_REGCOMPARECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker
+gb_UnoApiTarget_CPPUMAKERCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
+gb_UnoApiTarget_REGVIEWCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 
 # vim: set noet sw=4:

@@ -120,6 +120,10 @@ ifeq ($(HAVE_CXX0X),TRUE)
 gb_CXXFLAGS += -std=c++0x -Wno-deprecated-declarations
 endif
 
+ifeq ($(ENABLE_DEBUG_STL),TRUE)
+gb_CXXFLAGS += -D_GLIBCXX_DEBUG
+endif
+
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
@@ -174,9 +178,9 @@ gb_COMPILERNOOPTFLAGS := -O0
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
-gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
@@ -298,12 +302,16 @@ gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 
 gb_Library_PLAINLIBS_NONE += \
 	dl \
+	freetype \
 	GL \
 	GLU \
+	ICE \
 	jpeg \
 	m \
 	pthread \
+	SM \
 	X11 \
+	Xext \
 	z
 
 gb_Library_FILENAMES := \
@@ -378,7 +386,7 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .so
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
@@ -401,16 +409,16 @@ endef
 
 # SdiTarget class
 
-gb_SdiTarget_SVIDLPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_SdiTarget_SVIDLPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
 # SrsPartMergeTarget
 
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
 # SrsPartTarget class
 
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc
-gb_SrsPartTarget_RSCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
+gb_SrsPartTarget_RSCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(OUTDIR_FOR_BUILD)/bin/rsc
 
 define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs,\
@@ -425,7 +433,7 @@ endef
 
 # ComponentTarget
 
-gb_XSLTPROCPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_XSLTPROCPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 gb_Library_COMPONENTPREFIXES := \
 	OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
 	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \

@@ -29,7 +29,7 @@
 # Platform MAKEFILE for Mac OS X and Darwin on both PowerPC and Intel
 ##########################################################################
 
-# PROCESSOR_DEFINES and DLLPOSTFIX are defined in the particular platform file
+# PROCESSOR_DEFINES is defined in the particular platform file
 
 ASM=
 AFLAGS=

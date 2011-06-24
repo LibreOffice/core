@@ -453,6 +453,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS := 
+$(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 ifneq ($(wildcard $(call gb_LinkTarget_get_dep_target,$(1))),)
@@ -550,6 +551,17 @@ endef
 
 define gb_LinkTarget_set_ldflags
 $(call gb_LinkTarget_get_target,$(1)) : LDFLAGS := $(2)
+endef
+
+define gb_LinkTarget_add_api
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
+	$$(foreach api,$(2),$$(call gb_Package_get_target,$$(api)_inc))
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += $$(foreach api,$(2),-I$(OUTDIR)/inc/$$(api))
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += $$(foreach api,$(2),-I$(OUTDIR)/inc/$$(api))
+endif
+
 endef
 
 define gb_LinkTarget_add_linked_libs
@@ -666,7 +678,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
 $(call gb_GenCxxObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_GenCxxObject_get_target,$(2)) : CXXFLAGS += $(3) $(gb_COMPILEROPTFLAGS)
+$(call gb_GenCxxObject_get_target,$(2)) : CXXFLAGS += $(3)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
@@ -737,7 +749,7 @@ $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(obj),$(3
 endef
 
 define gb_LinkTarget_add_generated_exception_object
-$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS))
+$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS))
 endef
 
 define gb_LinkTarget_add_generated_exception_objects

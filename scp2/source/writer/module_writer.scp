@@ -51,6 +51,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Lib_Wpft,
     gid_File_Lib_Msworks,
     gid_File_Lib_T602Filter,
+    gid_File_Lib_Writerfilter,
     gid_File_Lib_Wlwp,
     gid_File_Share_Config_Sofficecfg_Writer_Menubar_Xml,
     gid_File_Share_Config_Sofficecfg_Writerweb_Menubar_Xml,

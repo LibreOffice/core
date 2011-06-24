@@ -27,7 +27,6 @@
 
 # mk file for $(OS)$(COM)$(CPU)$(COMEX) == WNTMSC[IX]{12,13}
 
-FULL_DESK=TRUE
 JAVAFLAGSDEBUG=-g
 
 .IF "$(CL_X64)" == ""
@@ -114,11 +113,6 @@ CFLAGS+= -Z7
 .IF "$(debug)" == ""
 CFLAGS+= -Z7
 .ENDIF
-.ENDIF
-
-.IF "$(FULL_DESK)"!=""
-CDEFS+=-DFULL_DESK
-RSCDEFS+=-DFULL_DESK
 .ENDIF
 
 CFLAGSEXCEPTIONS=-EHa
@@ -348,11 +342,6 @@ MT=mt.exe
 MTFLAGS=$(NOLOGO)
 
 
-.IF "$(CL_X64)" == ""
-DLLPOSTFIX=mi
-.ELSE
-DLLPOSTFIX=mx
-.ENDIF
 PCHPOST=.pch
 
 CSC*=$(FLIPCMD) csc
