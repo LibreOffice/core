@@ -242,11 +242,11 @@ void RTFDocumentImpl::parBreak()
     {
         sal_uInt32 nPos = Strm().Tell();
         // Seek to header position, parse, then seek back.
-        RTFDocumentImpl aImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame);
-        aImpl.setSubstream(true);
-        aImpl.seek(m_nHeaderPos);
+        RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame));
+        pImpl->setSubstream(true);
+        pImpl->seek(m_nHeaderPos);
         OSL_TRACE("header substream start");
-        aImpl.resolve(Mapper());
+        Mapper().substream(NS_rtf::LN_headerr, pImpl);
         OSL_TRACE("header substream end");
         Strm().Seek(nPos);
         m_nHeaderPos = 0;

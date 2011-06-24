@@ -165,6 +165,7 @@ namespace writerfilter {
             : public RTFDocument
         {
             public:
+                typedef ::boost::shared_ptr<RTFDocumentImpl> Pointer_t;
                 RTFDocumentImpl(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& xContext,
                                 com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& xInputStream,
                                 com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& xDstDoc,
