@@ -201,7 +201,8 @@ namespace writerfilter {
                 void text(rtl::OUString& rString);
 
                 com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& m_xContext;
-                com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& m_xModel;
+                com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& m_xDstDoc;
+                com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const& m_xFrame;
                 com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xModelFactory;
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;

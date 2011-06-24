@@ -194,7 +194,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
         uno::Reference<lang::XComponent> const& xDstDoc,
         uno::Reference<frame::XFrame>    const& xFrame)
     : m_xContext(xContext),
-    m_xModel(xDstDoc),
+    m_xDstDoc(xDstDoc),
+    m_xFrame(xFrame),
     m_nGroup(0),
     m_aDefaultState(),
     m_bSkipUnknown(false),
@@ -213,7 +214,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
         throw uno::RuntimeException();
     m_pInStream = utl::UcbStreamHelper::CreateStream( xInputStream, sal_True );
 
-    m_xModelFactory.set(m_xModel, uno::UNO_QUERY);
+    m_xModelFactory.set(m_xDstDoc, uno::UNO_QUERY);
     OSL_ASSERT(m_xModelFactory.is());
 
     m_pGraphicHelper = new oox::GraphicHelper(m_xContext, xFrame, m_xStorage);
