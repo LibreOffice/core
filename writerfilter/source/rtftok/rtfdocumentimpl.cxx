@@ -688,7 +688,9 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_PAR:
             {
                 if (!m_pActiveBuffer)
+                {
                     lcl_ParBreak(Mapper());
+                }
                 else
                 {
                     RTFValue::Pointer_t pValue;
@@ -769,6 +771,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 lcl_Break(Mapper());
                 m_bNeedPap = true;
                 m_aTableBuffer.clear();
+                m_pActiveBuffer = 0;
             }
             break;
         case RTF_COLUMN:
@@ -936,7 +939,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PARD:
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
-            m_pActiveBuffer = 0;
             break;
         case RTF_SECTD:
             m_aStates.top().aSectionSprms = m_aDefaultState.aSectionSprms;
@@ -1772,6 +1774,8 @@ int RTFDocumentImpl::pushState()
     {
         m_aStates.top().nDestinationState = DESTINATION_STYLEENTRY;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_HEADER)
+        m_aStates.top().nDestinationState = DESTINATION_NORMAL;
 
     return 0;
 }
@@ -1934,7 +1938,9 @@ int RTFDocumentImpl::popState()
         bPicPropEnd = true;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_HEADER)
+    {
         m_pActiveBuffer = 0;
+    }
 
     // This is the end of the doc, see if we need to close the last section.
     if (m_nGroup == 1)
