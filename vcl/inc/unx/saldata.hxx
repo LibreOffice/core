@@ -46,7 +46,8 @@ class SalPrinter;
 // -=-= typedefs -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #if defined LINUX || defined NETBSD || defined AIX || \
-    defined FREEBSD || defined OPENBSD || defined DRAGONFLY
+    defined FREEBSD || defined OPENBSD || defined DRAGONFLY || \
+    defined ANDROID
 #include <pthread.h>
 #else
 typedef unsigned int pthread_t;
