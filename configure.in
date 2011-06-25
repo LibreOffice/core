@@ -1959,8 +1959,7 @@ if test -z "$TARFILE_LOCATION"; then
 fi
 AC_SUBST(TARFILE_LOCATION)
 
-if test "z$enable_fetch_external" != "zno" \
-   && test -z "$with_system_libs" -a "$with_system_jars" != "no"; then
+if test "z$enable_fetch_external" != "zno" ; then
    DO_FETCH_TARBALLS="YES"
 fi
 AC_SUBST(DO_FETCH_TARBALLS)
