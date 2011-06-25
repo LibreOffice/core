@@ -144,6 +144,7 @@ int splash_load_bmp( const char *filename )
     width = png_get_image_width( png_ptr, info_ptr );
     height = png_get_image_height( png_ptr, info_ptr );
 
+    fclose( file );
     return 1;
 }
 #else
