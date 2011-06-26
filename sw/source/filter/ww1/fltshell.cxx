@@ -131,31 +131,33 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
     m_aPtPos.SetPos(rEndPos);
 }
 
-bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck) const
+bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
+    const SwFltPosition &rMkPos, const SwFltPosition &rPtPos,
+    sal_uInt16 nWhich)
 {
     // does this range actually contain something?
     // empty range is allowed if at start of empty paragraph
     // fields are special: never have range, so leave them
     SwCntntNode *const pCntntNode(
-        SwNodeIndex(m_aMkPos.m_nNode, +1).GetNode().GetCntntNode());
-    if (m_aMkPos == m_aPtPos &&
-        ((0 != m_aPtPos.m_nCntnt) || (pCntntNode && (0 != pCntntNode->Len())))
-        && (RES_TXTATR_FIELD != pAttr->Which()))
+        SwNodeIndex(rMkPos.m_nNode, +1).GetNode().GetCntntNode());
+    if (rMkPos == rPtPos &&
+        ((0 != rPtPos.m_nCntnt) || (pCntntNode && (0 != pCntntNode->Len())))
+        && (RES_TXTATR_FIELD != nWhich))
     {
         return false;
     }
 
     // !!! Die Content-Indizies beziehen sich immer auf den Node !!!
-    rRegion.GetPoint()->nNode = m_aMkPos.m_nNode.GetIndex() + 1;
+    rRegion.GetPoint()->nNode = rMkPos.m_nNode.GetIndex() + 1;
     SwCntntNode* pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, sal_True);
-    rRegion.GetPoint()->nContent.Assign(pCNd, m_aMkPos.m_nCntnt);
+    rRegion.GetPoint()->nContent.Assign(pCNd, rMkPos.m_nCntnt);
     rRegion.SetMark();
-    if (m_aMkPos.m_nNode != m_aPtPos.m_nNode)
+    if (rMkPos.m_nNode != rPtPos.m_nNode)
     {
-        rRegion.GetPoint()->nNode = m_aPtPos.m_nNode.GetIndex() + 1;
+        rRegion.GetPoint()->nNode = rPtPos.m_nNode.GetIndex() + 1;
         pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, sal_False);
     }
-    rRegion.GetPoint()->nContent.Assign(pCNd, m_aPtPos.m_nCntnt);
+    rRegion.GetPoint()->nContent.Assign(pCNd, rPtPos.m_nCntnt);
 #if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( CheckNodesRange( rRegion.Start()->nNode,
                              rRegion.End()->nNode, sal_True ),
@@ -166,6 +168,12 @@ bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck) const
                                 rRegion.End()->nNode, sal_True );
     else
         return true;
+}
+
+bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck) const
+{
+    return MakeRegion(pDoc, rRegion, bCheck, m_aMkPos, m_aPtPos,
+        pAttr->Which());
 }
 
 SwFltControlStack::SwFltControlStack(SwDoc* pDo, sal_uLong nFieldFl)

@@ -3171,12 +3171,12 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
     {
         SwPaM aRegion(*pPaM->GetPoint());
 
-        SwFltStackEntry aEntry = *((*pCtrlStck)[nPos]);
-        aEntry.SetEndPos(*pPaM->GetPoint());
+        SwFltPosition aMkPos((*pCtrlStck)[nPos]->m_aMkPos);
+        SwFltPosition aPtPos(*pPaM->GetPoint());
 
         SwFrmFmt *pFlyFmt = 0;
         if (
-             aEntry.MakeRegion(&rDoc,aRegion,false) &&
+             SwFltStackEntry::MakeRegion(&rDoc,aRegion,false,aMkPos,aPtPos) &&
              0 != (pFlyFmt = ContainsSingleInlineGraphic(aRegion))
            )
         {
