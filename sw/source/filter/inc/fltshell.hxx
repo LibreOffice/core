@@ -84,7 +84,7 @@ public:
 
     void SetStartPos(const SwPosition & rStartPos);
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
-    SW_DLLPUBLIC sal_Bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bCheck );
+    SW_DLLPUBLIC bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck) const;
 };
 
 class SW_DLLPUBLIC SwFltControlStack

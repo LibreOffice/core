@@ -135,7 +135,7 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
     nPtCntnt = rEndPos.nContent.GetIndex();
 }
 
-sal_Bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bCheck )
+bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck) const
 {
     // does this range actually contain something?
     // empty range is allowed if at start of empty paragraph
@@ -146,7 +146,7 @@ sal_Bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bChec
         && ((0 != nPtCntnt) || (pCntntNode && (0 != pCntntNode->Len())))
         && (RES_TXTATR_FIELD != pAttr->Which()))
     {
-        return sal_False;
+        return false;
     }
 
     // !!! Die Content-Indizies beziehen sich immer auf den Node !!!
@@ -169,7 +169,7 @@ sal_Bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bChec
         return CheckNodesRange( rRegion.Start()->nNode,
                                 rRegion.End()->nNode, sal_True );
     else
-        return sal_True;
+        return true;
 }
 
 SwFltControlStack::SwFltControlStack(SwDoc* pDo, sal_uLong nFieldFl)
