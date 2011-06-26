@@ -3061,8 +3061,8 @@ void SwWW8FltAnchorStack::Flush()
     for (size_t i=0; i < nCnt; ++i)
     {
         SwFltStackEntry *pEntry = (*this)[i];
-        SwPosition aDummy(pEntry->nMkNode);
-        SetAttrInDoc(aDummy,pEntry);
+        SwPosition aDummy(pEntry->m_aMkPos.m_nNode);
+        SetAttrInDoc(aDummy, pEntry);
         DeleteAndDestroy(i--);
         --nCnt;
     }

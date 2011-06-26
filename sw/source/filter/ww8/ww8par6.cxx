@@ -2440,7 +2440,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
         rPam.GetPoint()->nNode = aPref;
         rPam.GetPoint()->nContent.Assign(pNode, pNode->GetTxt().Len());
         if (bStealAttr)
-            pCtrlStck->StealAttr(rPam.GetPoint());
+            pCtrlStck->StealAttr(rPam.GetPoint()->nNode);
 
         pNode->JoinNext();
 

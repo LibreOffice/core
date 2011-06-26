@@ -1233,8 +1233,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
 const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
     sal_uInt16 nWhich)
 {
-    SwNodeIndex aNode( rPos.nNode, -1 );
-    sal_uInt16 nIdx = rPos.nContent.GetIndex();
+    SwFltPosition aFltPos(rPos);
 
     size_t nSize = size();
     while (nSize)
@@ -1242,15 +1241,20 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
         const SwFltStackEntry* pEntry = (*this)[ --nSize ];
         if (pEntry->pAttr->Which() == nWhich)
         {
-            if ( (pEntry->bLocked) || (
-                (pEntry->nMkNode <= aNode) && (pEntry->nPtNode >= aNode) &&
-                (pEntry->nMkCntnt <= nIdx) && (pEntry->nPtCntnt > nIdx) ) )
+            if ( (pEntry->bLocked) ||
+                 (
+                  (pEntry->m_aMkPos.m_nNode <= aFltPos.m_nNode) &&
+                  (pEntry->m_aPtPos.m_nNode >= aFltPos.m_nNode) &&
+                  (pEntry->m_aMkPos.m_nCntnt <= aFltPos.m_nCntnt) &&
+                  (pEntry->m_aPtPos.m_nCntnt > aFltPos.m_nCntnt)
+                  )
+               )
                 /*
                  * e.g. half-open range [0-3) so asking for properties at 3
                  * means props that end at 3 are not included
                  */
             {
-                return (const SfxPoolItem*)pEntry->pAttr;
+                return pEntry->pAttr;
             }
         }
     }
@@ -1290,8 +1294,8 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         */
         case RES_TXTATR_FIELD:
         {
-            SwNodeIndex aIdx(pEntry->nMkNode, 1);
-            SwPaM aPaM(aIdx, pEntry->nMkCntnt);
+            SwNodeIndex aIdx(pEntry->m_aMkPos.m_nNode, 1);
+            SwPaM aPaM(aIdx, pEntry->m_aMkPos.m_nCntnt);
 
             SwFmtFld& rFmtFld   = *(SwFmtFld*)pEntry->pAttr;
             SwField* pFld = rFmtFld.GetFld();

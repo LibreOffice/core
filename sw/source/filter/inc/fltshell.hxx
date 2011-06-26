@@ -40,6 +40,7 @@
 #include <poolfmt.hxx>
 #include <fmtornt.hxx>
 #include <ndindex.hxx>
+#include <pam.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
 class SwTOXBase;
@@ -62,15 +63,57 @@ inline void SwFltSetFlag(sal_uLong& rFieldFlags, int no)
 inline sal_Bool SwFltGetFlag(sal_uLong nFieldFlags, int no)
     { return (nFieldFlags & (1L << no)) != 0; }
 
+//Subvert the Node/Content system to get positions which don't update as
+//content is appended to them
+struct SW_DLLPUBLIC SwFltPosition
+{
+public:
+    SwNodeIndex m_nNode;
+    xub_StrLen m_nCntnt;
+public:
+    SwFltPosition(const SwFltPosition &rOther)
+        : m_nNode(rOther.m_nNode)
+        , m_nCntnt(rOther.m_nCntnt)
+    {
+    }
+    SwFltPosition &operator=(const SwFltPosition &rOther)
+    {
+        m_nNode = rOther.m_nNode;
+        m_nCntnt = rOther.m_nCntnt;
+        return *this;
+    }
+    bool operator==(const SwFltPosition &rOther) const
+    {
+        return (m_nCntnt == rOther.m_nCntnt &&
+                m_nNode == rOther.m_nNode);
+    }
+    void SetPos(SwNodeIndex &rNode, sal_uInt16 nIdx)
+    {
+        m_nNode = rNode;
+        m_nCntnt = nIdx;
+    }
+    //operators with SwPosition, where the node is hacked to the previous one,
+    //and the offset to content is de-dynamic-ified
+    SwFltPosition(const SwPosition &rPos)
+        : m_nNode(rPos.nNode, -1)
+        , m_nCntnt(rPos.nContent.GetIndex())
+    {
+    }
+    void SetPos(const SwPosition &rPos)
+    {
+        m_nNode = rPos.nNode.GetIndex()-1;
+        m_nCntnt = rPos.nContent.GetIndex();
+    }
+};
+
 // Stack-Eintrag fuer die Attribute Es werden immer Pointer auf neue Attribute uebergeben.
 class SwFltStackEntry
 {
 public:
-    SwNodeIndex nMkNode;
-    SwNodeIndex nPtNode;
+    SwFltPosition m_aMkPos;
+    SwFltPosition m_aPtPos;
+
     SfxPoolItem * pAttr;// Format Attribute
-    xub_StrLen nMkCntnt;// Nachbildung von Mark()
-    xub_StrLen nPtCntnt;// Nachbildung von GetPoint()
 
     sal_Bool bOld;          // to mark Attributes *before* skipping field results
     sal_Bool bLocked;
@@ -126,7 +169,7 @@ public:
 
     virtual void SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand = LONG_MAX, sal_Bool consumedByField=sal_False);
 
-    void StealAttr(const SwPosition* pPos, sal_uInt16 nAttrId = 0);
+    void StealAttr(const SwNodeIndex& rNode, sal_uInt16 nAttrId = 0);
     void MarkAllAttrsOld();
     void KillUnlockedAttrs(const SwPosition& pPos);
     SfxPoolItem* GetFmtStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos = 0);

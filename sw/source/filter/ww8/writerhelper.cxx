@@ -706,7 +706,7 @@ namespace sw
 
         void SetInDocAndDelete::operator()(SwFltStackEntry *pEntry)
         {
-            SwPaM aRegion(pEntry->nMkNode);
+            SwPaM aRegion(pEntry->m_aMkPos.m_nNode);
             if (
                 pEntry->MakeRegion(&mrDoc, aRegion, true) &&
                 (*aRegion.GetPoint() != *aRegion.GetMark())
