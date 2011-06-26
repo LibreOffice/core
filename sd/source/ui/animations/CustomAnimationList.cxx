@@ -533,6 +533,7 @@ void CustomAnimationList::select( CustomAnimationEffectPtr pEffect, bool bSelect
         if( pEntry->getEffect() == pEffect )
         {
             Select( pEntry, bSelect );
+            MakeVisible( pEntry );
             break;
         }
         pEntry = static_cast< CustomAnimationListEntry* >(Next( pEntry ));
