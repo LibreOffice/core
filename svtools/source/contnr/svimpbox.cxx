@@ -1014,6 +1014,8 @@ void SvImpLBox::MakeVisible( SvLBoxEntry* pEntry, sal_Bool bMoveToTop )
 
 void SvImpLBox::ScrollToAbsPos( long nPos )
 {
+    if( pView->GetVisibleCount() == 0 )
+        return;
     long nLastEntryPos = pView->GetAbsPos( pView->Last() );
 
     if( nPos < 0 )
