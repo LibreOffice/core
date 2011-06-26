@@ -1419,7 +1419,7 @@ of a set or ask field, either by word, or in some special cases by the import
 filter itself.
 */
 SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
-    SwFltStackEntry *pEntry)
+    SwFltStackEntry &rEntry)
 {
     SwFltStackEntry *pRet=0;
     if (pFld && RES_GETREFFLD == pFld->Which())
@@ -1433,10 +1433,10 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
         {
             SwGetExpField aFld( (SwGetExpFieldType*)
                 pDoc->GetSysFldType(RES_GETEXPFLD), rName, nsSwGetSetExpType::GSE_STRING, 0);
-            delete pEntry->pAttr;
+            delete rEntry.pAttr;
             SwFmtFld aTmp(aFld);
-            pEntry->pAttr = aTmp.Clone();
-            pRet = pEntry;
+            rEntry.pAttr = aTmp.Clone();
+            pRet = &rEntry;
         }
     }
     return pRet;

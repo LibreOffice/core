@@ -367,7 +367,7 @@ private:
         const SwTxtNode &rTxtNode);
 protected:
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
-        SwFltStackEntry* pEntry);
+        SwFltStackEntry& rEntry);
 
 public:
     SwWW8FltControlStack(SwDoc* pDo, sal_uLong nFieldFl, SwWW8ImplReader& rReader_ )
@@ -457,9 +457,9 @@ public:
     //an additional pseudo bookmark
     std::map<String, String, ltstr> aFieldVarNames;
 protected:
-    SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry *pEntry);
+    SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry& rEntry);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
-        SwFltStackEntry* pEntry);
+        SwFltStackEntry& rEntry);
 private:
     //No copying
     SwWW8FltRefStack(const SwWW8FltRefStack&);

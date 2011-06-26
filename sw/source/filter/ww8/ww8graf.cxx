@@ -691,7 +691,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
                         String sURL;
                         for (size_t nI = pCtrlStck->size(); nI > nCount; --nI)
                         {
-                            const SfxPoolItem *pItem = ((*pCtrlStck)[nI-1])->pAttr;
+                            const SfxPoolItem *pItem = ((*pCtrlStck)[nI-1]).pAttr;
                             sal_uInt16 nWhich = pItem->Which();
                             if (nWhich == RES_TXTATR_INETFMT)
                             {
@@ -727,7 +727,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
             {
                 for (size_t i = nCurrentCount; i < pCtrlStck->size(); ++i)
                 {
-                    const SfxPoolItem *pItem = ((*pCtrlStck)[i])->pAttr;
+                    const SfxPoolItem *pItem = ((*pCtrlStck)[i]).pAttr;
                     sal_uInt16 nWhich = pItem->Which();
                     if( nWhich < RES_FLTRATTR_BEGIN ||
                         nWhich >= RES_FLTRATTR_END )
@@ -3060,9 +3060,9 @@ void SwWW8FltAnchorStack::Flush()
     size_t nCnt = size();
     for (size_t i=0; i < nCnt; ++i)
     {
-        SwFltStackEntry *pEntry = (*this)[i];
-        SwPosition aDummy(pEntry->m_aMkPos.m_nNode);
-        SetAttrInDoc(aDummy, pEntry);
+        SwFltStackEntry &rEntry = (*this)[i];
+        SwPosition aDummy(rEntry.m_aMkPos.m_nNode);
+        SetAttrInDoc(aDummy, rEntry);
         DeleteAndDestroy(i--);
         --nCnt;
     }

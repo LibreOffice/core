@@ -2186,17 +2186,17 @@ WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk)
     size_t nCnt = pCtrlStck->size();
     for (size_t i=0; i < nCnt; ++i)
     {
-        const SwFltStackEntry* pEntry = (*pCtrlStck)[ i ];
-        if(pEntry->bLocked)
+        const SwFltStackEntry& rEntry = (*pCtrlStck)[ i ];
+        if (rEntry.bLocked)
         {
-            if (isCHRATR(pEntry->pAttr->Which()))
+            if (isCHRATR(rEntry.pAttr->Which()))
             {
-                aChrSet.Put( *pEntry->pAttr );
+                aChrSet.Put( *rEntry.pAttr );
 
             }
-            else if (isPARATR(pEntry->pAttr->Which()))
+            else if (isPARATR(rEntry.pAttr->Which()))
             {
-                aParSet.Put( *pEntry->pAttr );
+                aParSet.Put( *rEntry.pAttr );
             }
         }
     }
@@ -3171,7 +3171,7 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
     {
         SwPaM aRegion(*pPaM->GetPoint());
 
-        SwFltPosition aMkPos((*pCtrlStck)[nPos]->m_aMkPos);
+        SwFltPosition aMkPos((*pCtrlStck)[nPos].m_aMkPos);
         SwFltPosition aPtPos(*pPaM->GetPoint());
 
         SwFrmFmt *pFlyFmt = 0;

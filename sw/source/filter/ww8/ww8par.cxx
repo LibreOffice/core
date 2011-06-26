@@ -993,8 +993,8 @@ void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
         size_t nCnt = size();
         for (size_t i=0; i < nCnt; ++i)
         {
-            SwFltStackEntry* pEntry = (*this)[i];
-            if (nAttrId == pEntry->pAttr->Which())
+            SwFltStackEntry& rEntry = (*this)[i];
+            if (nAttrId == rEntry.pAttr->Which())
             {
                 DeleteAndDestroy(i--);
                 --nCnt;
@@ -1086,9 +1086,9 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
 }
 
 void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
-    SwFltStackEntry* pEntry)
+    SwFltStackEntry& rEntry)
 {
-    switch( pEntry->pAttr->Which() )
+    switch (rEntry.pAttr->Which())
     {
         case RES_LR_SPACE:
             {
@@ -1101,9 +1101,9 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 */
                 using namespace sw::util;
                 SwPaM aRegion(rTmpPos);
-                if (pEntry->MakeRegion(pDoc, aRegion, false))
+                if (rEntry.MakeRegion(pDoc, aRegion, false))
                 {
-                    SvxLRSpaceItem aNewLR( *(SvxLRSpaceItem*)pEntry->pAttr );
+                    SvxLRSpaceItem aNewLR( *(SvxLRSpaceItem*)rEntry.pAttr );
                     sal_uLong nStart = aRegion.Start()->nNode.GetIndex();
                     sal_uLong nEnd   = aRegion.End()->nNode.GetIndex();
                     for(; nStart <= nEnd; ++nStart)
@@ -1157,7 +1157,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         case RES_TXTATR_INETFMT:
             {
                 SwPaM aRegion(rTmpPos);
-                if (pEntry->MakeRegion(pDoc, aRegion, false))
+                if (rEntry.MakeRegion(pDoc, aRegion, false))
                 {
                     SwFrmFmt *pFrm;
                     //If we have just one single inline graphic then
@@ -1166,7 +1166,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     if (0 != (pFrm = rReader.ContainsSingleInlineGraphic(aRegion)))
                     {
                         const SwFmtINetFmt *pAttr = (const SwFmtINetFmt *)
-                            pEntry->pAttr;
+                            rEntry.pAttr;
                         SwFmtURL aURL;
                         aURL.SetURL(pAttr->GetValue(), false);
                         aURL.SetTargetFrameName(pAttr->GetTargetFrame());
@@ -1174,13 +1174,13 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     }
                     else
                     {
-                        pDoc->InsertPoolItem(aRegion, *pEntry->pAttr, 0);
+                        pDoc->InsertPoolItem(aRegion, *rEntry.pAttr, 0);
                     }
                 }
             }
             break;
         default:
-            SwFltControlStack::SetAttrInDoc(rTmpPos, pEntry);
+            SwFltControlStack::SetAttrInDoc(rTmpPos, rEntry);
             break;
     }
 }
@@ -1238,15 +1238,15 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
     size_t nSize = size();
     while (nSize)
     {
-        const SwFltStackEntry* pEntry = (*this)[ --nSize ];
-        if (pEntry->pAttr->Which() == nWhich)
+        const SwFltStackEntry& rEntry = (*this)[ --nSize ];
+        if (rEntry.pAttr->Which() == nWhich)
         {
-            if ( (pEntry->bLocked) ||
+            if ( (rEntry.bLocked) ||
                  (
-                  (pEntry->m_aMkPos.m_nNode <= aFltPos.m_nNode) &&
-                  (pEntry->m_aPtPos.m_nNode >= aFltPos.m_nNode) &&
-                  (pEntry->m_aMkPos.m_nCntnt <= aFltPos.m_nCntnt) &&
-                  (pEntry->m_aPtPos.m_nCntnt > aFltPos.m_nCntnt)
+                  (rEntry.m_aMkPos.m_nNode <= aFltPos.m_nNode) &&
+                  (rEntry.m_aPtPos.m_nNode >= aFltPos.m_nNode) &&
+                  (rEntry.m_aMkPos.m_nCntnt <= aFltPos.m_nCntnt) &&
+                  (rEntry.m_aPtPos.m_nCntnt > aFltPos.m_nCntnt)
                   )
                )
                 /*
@@ -1254,7 +1254,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
                  * means props that end at 3 are not included
                  */
             {
-                return pEntry->pAttr;
+                return rEntry.pAttr;
             }
         }
     }
@@ -1283,9 +1283,9 @@ bool SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBk
 }
 
 void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
-        SwFltStackEntry* pEntry)
+    SwFltStackEntry& rEntry)
 {
-    switch( pEntry->pAttr->Which() )
+    switch (rEntry.pAttr->Which())
     {
         /*
         Look up these in our lists of bookmarks that were changed to
@@ -1294,14 +1294,14 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         */
         case RES_TXTATR_FIELD:
         {
-            SwNodeIndex aIdx(pEntry->m_aMkPos.m_nNode, 1);
-            SwPaM aPaM(aIdx, pEntry->m_aMkPos.m_nCntnt);
+            SwNodeIndex aIdx(rEntry.m_aMkPos.m_nNode, 1);
+            SwPaM aPaM(aIdx, rEntry.m_aMkPos.m_nCntnt);
 
-            SwFmtFld& rFmtFld   = *(SwFmtFld*)pEntry->pAttr;
+            SwFmtFld& rFmtFld   = *(SwFmtFld*)rEntry.pAttr;
             SwField* pFld = rFmtFld.GetFld();
 
             // <NOT> got lost from revision 1.128 to 1.129
-            if (!RefToVar(pFld,pEntry))
+            if (!RefToVar(pFld, rEntry))
             {
                 sal_uInt16 nBkmNo;
                 if( IsFtnEdnBkmField(rFmtFld, nBkmNo) )
@@ -1328,17 +1328,17 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
 
-            pDoc->InsertPoolItem(aPaM, *pEntry->pAttr, 0);
+            pDoc->InsertPoolItem(aPaM, *rEntry.pAttr, 0);
             MoveAttrs(*aPaM.GetPoint());
         }
         break;
         case RES_FLTR_TOX:
-            SwFltEndStack::SetAttrInDoc(rTmpPos, pEntry);
+            SwFltEndStack::SetAttrInDoc(rTmpPos, rEntry);
             break;
         default:
         case RES_FLTR_BOOKMARK:
             OSL_ENSURE(!this, "EndStck used with non field, not what we want");
-            SwFltEndStack::SetAttrInDoc(rTmpPos, pEntry);
+            SwFltEndStack::SetAttrInDoc(rTmpPos, rEntry);
             break;
     }
 }

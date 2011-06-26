@@ -28,8 +28,6 @@
 #ifndef _FLTSHELL_HXX
 #define _FLTSHELL_HXX
 
-#include <deque>
-
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -44,6 +42,7 @@
 #include <IDocumentRedlineAccess.hxx>
 
 #include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_deque.hpp>
 
 class SwTOXBase;
 class SwFltShell;
@@ -135,7 +134,7 @@ public:
 
 class SW_DLLPUBLIC SwFltControlStack
 {
-    typedef std::deque<SwFltStackEntry*> Entries;
+    typedef boost::ptr_deque<SwFltStackEntry> Entries;
     typedef Entries::iterator myEIter;
     Entries maEntries;
     friend class SwFltShell;
@@ -148,7 +147,7 @@ protected:
     sal_Bool bIsEndStack;
 
     void MoveAttrs( const SwPosition&  rPos );
-    virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry);
+    virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry& rEntry);
 
 public:
     enum Flags
@@ -182,7 +181,7 @@ public:
 
     bool empty() const { return maEntries.empty(); }
     Entries::size_type size() const { return maEntries.size(); }
-    SwFltStackEntry* operator[](Entries::size_type nIndex)
+    SwFltStackEntry& operator[](Entries::size_type nIndex)
          { return maEntries[nIndex]; }
     void DeleteAndDestroy(Entries::size_type nCnt);
 };

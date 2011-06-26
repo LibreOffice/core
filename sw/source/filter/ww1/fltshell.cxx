@@ -192,24 +192,24 @@ void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
 
     for (size_t i=0; i < nCnt; ++i)
     {
-        SwFltStackEntry* pEntry = (*this)[ i ];
+        SwFltStackEntry& rEntry = maEntries[i];
         if (
-            (pEntry->m_aMkPos.m_nNode.GetIndex()+1 == nPosNd) &&
-            (pEntry->m_aMkPos.m_nCntnt >= nPosCt)
+            (rEntry.m_aMkPos.m_nNode.GetIndex()+1 == nPosNd) &&
+            (rEntry.m_aMkPos.m_nCntnt >= nPosCt)
            )
         {
-            pEntry->m_aMkPos.m_nCntnt++;
-            OSL_ENSURE( pEntry->m_aMkPos.m_nCntnt
+            rEntry.m_aMkPos.m_nCntnt++;
+            OSL_ENSURE( rEntry.m_aMkPos.m_nCntnt
                 <= pDoc->GetNodes()[nPosNd]->GetCntntNode()->Len(),
                     "Attribut-Anfang hinter Zeilenende" );
         }
         if (
-            (pEntry->m_aPtPos.m_nNode.GetIndex()+1 == nPosNd) &&
-            (pEntry->m_aPtPos.m_nCntnt >= nPosCt)
+            (rEntry.m_aPtPos.m_nNode.GetIndex()+1 == nPosNd) &&
+            (rEntry.m_aPtPos.m_nCntnt >= nPosCt)
            )
         {
-            pEntry->m_aPtPos.m_nCntnt++;
-            OSL_ENSURE( pEntry->m_aPtPos.nCntnt
+            rEntry.m_aPtPos.m_nCntnt++;
+            OSL_ENSURE( rEntry.m_aPtPos.nCntnt
                 <= pDoc->GetNodes()[nPosNd]->GetCntntNode()->Len(),
                     "Attribut-Ende hinter Zeilenende" );
         }
@@ -220,7 +220,7 @@ void SwFltControlStack::MarkAllAttrsOld()
 {
     size_t nCnt = maEntries.size();
     for (sal_uInt16 i=0; i < nCnt; ++i)
-        (*this)[ i ]->bOld = sal_True;
+        maEntries[i].bOld = sal_True;
 }
 
 void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr )
@@ -239,7 +239,6 @@ void SwFltControlStack::DeleteAndDestroy(Entries::size_type nCnt)
     if (nCnt < maEntries.size())
     {
         myEIter aElement = maEntries.begin() + nCnt;
-        delete *aElement;
         maEntries.erase(aElement);
     }
 }
@@ -256,9 +255,9 @@ void SwFltControlStack::StealAttr(const SwNodeIndex& rNode, sal_uInt16 nAttrId)
     while (nCnt)
     {
         nCnt --;
-        SwFltStackEntry* pEntry = (*this)[ nCnt ];
-        if (pEntry->m_aPtPos.m_nNode.GetIndex()+1 == rNode.GetIndex() &&
-            (!nAttrId || nAttrId == pEntry->pAttr->Which()))
+        SwFltStackEntry& rEntry = maEntries[nCnt];
+        if (rEntry.m_aPtPos.m_nNode.GetIndex()+1 == rNode.GetIndex() &&
+            (!nAttrId || nAttrId == rEntry.pAttr->Which()))
         {
             DeleteAndDestroy(nCnt);     // loesche aus dem Stack
         }
@@ -278,11 +277,11 @@ void SwFltControlStack::KillUnlockedAttrs(const SwPosition& rPos)
     while( nCnt )
     {
         nCnt --;
-        SwFltStackEntry* pEntry = (*this)[ nCnt ];
-        if(    !pEntry->bOld
-            && !pEntry->bLocked
-            && (pEntry->m_aMkPos == aFltPos)
-            && (pEntry->m_aPtPos == aFltPos))
+        SwFltStackEntry& rEntry = maEntries[nCnt];
+        if(    !rEntry.bOld
+            && !rEntry.bLocked
+            && (rEntry.m_aMkPos == aFltPos)
+            && (rEntry.m_aPtPos == aFltPos))
         {
             DeleteAndDestroy( nCnt ); // loesche aus dem Stack
         }
@@ -304,24 +303,25 @@ void SwFltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
     size_t nCnt = maEntries.size();
     for (size_t i=0; i < nCnt; ++i)
     {
-        SwFltStackEntry* pEntry = (*this)[i];
-        if (pEntry->bLocked)
+        SwFltStackEntry& rEntry = maEntries[i];
+        if (rEntry.bLocked)
         {
             // setze das Ende vom Attribut
             bool bF = false;
             if (!nAttrId ){
                 bF = true;
-            }else if( nAttrId == pEntry->pAttr->Which()){
+            }else if( nAttrId == rEntry.pAttr->Which()){
                 if( nAttrId != RES_FLTR_BOOKMARK ){     // Handle abfragen
                     bF = true;
-                }else if( nHand == ((SwFltBookmark*)(pEntry->pAttr))->GetHandle() )
+                }else if( nHand == ((SwFltBookmark*)(rEntry.pAttr))->GetHandle() )
                 {
                     bF = true;
                 }
             }
-            if (bF) {
-                pEntry->bConsumedByField = consumedByField;
-                pEntry->SetEndPos(rPos);
+            if (bF)
+            {
+                rEntry.bConsumedByField = consumedByField;
+                rEntry.SetEndPos(rPos);
             }
             continue;
         }
@@ -332,34 +332,35 @@ void SwFltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
         // Beim Ende-Stack niemals ausser am DocEnde reinsetzen
         if (bTstEnde)
         {
-            if (bIsEndStack || pEntry->m_aPtPos.m_nNode.GetIndex()+1 ==
+            if (bIsEndStack || rEntry.m_aPtPos.m_nNode.GetIndex()+1 ==
                         rPos.nNode.GetIndex())
             continue;
         }
-        SetAttrInDoc(rPos, pEntry);
+        SetAttrInDoc(rPos, rEntry);
         DeleteAndDestroy(i);        // loesche aus dem Stack
         i--; nCnt--;        // Danach rutschen alle folgenden nach unten
     }
 }
 
-static void MakePoint(SwFltStackEntry* pEntry, SwDoc* pDoc, SwPaM& rRegion)
+static void MakePoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
+    SwPaM& rRegion)
 {
     // der Anker ist der Point vom Pam. Dieser wird beim Einfugen von Text usw.
     // veraendert; darum wird er auf dem Stack gespeichert. Das Attribut muss
     // nur noch im Format gesetzt werden.
     rRegion.DeleteMark();
-    rRegion.GetPoint()->nNode = pEntry->m_aMkPos.m_nNode.GetIndex() + 1;
+    rRegion.GetPoint()->nNode = rEntry.m_aMkPos.m_nNode.GetIndex() + 1;
     SwCntntNode* pCNd = GetCntntNode(pDoc, rRegion.GetPoint()->nNode, sal_True);
-    rRegion.GetPoint()->nContent.Assign(pCNd, pEntry->m_aMkPos.m_nCntnt);
+    rRegion.GetPoint()->nContent.Assign(pCNd, rEntry.m_aMkPos.m_nCntnt);
 }
 
 // MakeBookRegionOrPoint() ist wie MakeRegionOrPoint, aber die besonderen
 // Beschraenkungen von Bookmarks in Tabellen werden beachtet.
 // ( Anfang und Ende muessen in selber Zelle sein )
-static void MakeBookRegionOrPoint(SwFltStackEntry* pEntry, SwDoc* pDoc,
+static void MakeBookRegionOrPoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
                     SwPaM& rRegion, sal_Bool bCheck )
 {
-    if (pEntry->MakeRegion(pDoc, rRegion, bCheck )){
+    if (rEntry.MakeRegion(pDoc, rRegion, bCheck )){
 //      sal_Bool b1 = rNds[rRegion.GetPoint()->nNode]->FindTableNode() != 0;
         if (rRegion.GetPoint()->nNode.GetNode().FindTableBoxStartNode()
               != rRegion.GetMark()->nNode.GetNode().FindTableBoxStartNode())
@@ -368,7 +369,7 @@ static void MakeBookRegionOrPoint(SwFltStackEntry* pEntry, SwDoc* pDoc,
             rRegion.DeleteMark();       // -> beide auf Mark
         }
     }else{
-        MakePoint(pEntry, pDoc, rRegion);
+        MakePoint(rEntry, pDoc, rRegion);
     }
 }
 
@@ -403,18 +404,19 @@ static sal_Bool IterateNumrulePiece( const SwNodeIndex& rEnd,
     return rTmpStart <= rTmpEnd;                    // gueltig ?
 }
 
-void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry)
+void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
+    SwFltStackEntry& rEntry)
 {
     SwPaM aRegion( rTmpPos );
 
-    switch(pEntry->pAttr->Which())
+    switch(rEntry.pAttr->Which())
     {
     case RES_FLTR_ANCHOR:
         {
-            SwFrmFmt* pFmt = ((SwFltAnchor*)pEntry->pAttr)->GetFrmFmt();
+            SwFrmFmt* pFmt = ((SwFltAnchor*)rEntry.pAttr)->GetFrmFmt();
             if (pFmt != NULL)
             {
-                MakePoint(pEntry, pDoc, aRegion);
+                MakePoint(rEntry, pDoc, aRegion);
                 SwFmtAnchor aAnchor(pFmt->GetAnchor());
                 aAnchor.SetAnchor(aRegion.GetPoint());
                 pFmt->SetFmtAttr(aAnchor);
@@ -436,11 +438,11 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         break;
     case RES_FLTR_NUMRULE:          // Numrule 'reinsetzen
         {
-            const String& rNumNm = ((SfxStringItem*)pEntry->pAttr)->GetValue();
+            const String& rNumNm = ((SfxStringItem*)rEntry.pAttr)->GetValue();
             SwNumRule* pRul = pDoc->FindNumRulePtr( rNumNm );
             if( pRul )
             {
-                if( pEntry->MakeRegion(pDoc, aRegion, sal_True))
+                if( rEntry.MakeRegion(pDoc, aRegion, sal_True))
                 {
                     SwNodeIndex aTmpStart( aRegion.Start()->nNode );
                     SwNodeIndex aTmpEnd( aTmpStart );
@@ -465,15 +467,15 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         break;
     case RES_FLTR_BOOKMARK:         // eigentlich nur fuer den Ende-Stack
         {
-            SwFltBookmark* pB = (SwFltBookmark*)pEntry->pAttr;
-            const String& rName = ((SwFltBookmark*)pEntry->pAttr)->GetName();
+            SwFltBookmark* pB = (SwFltBookmark*)rEntry.pAttr;
+            const String& rName = ((SwFltBookmark*)rEntry.pAttr)->GetName();
 
             if (IsFlagSet(BOOK_TO_VAR_REF))
             {
                 if (pB->IsPgRef() && !pB->IsRef())
                 {
                             // XRefs und Bookmarks sind bereits geUpcased
-                    MakeBookRegionOrPoint(pEntry, pDoc, aRegion, sal_True);
+                    MakeBookRegionOrPoint(rEntry, pDoc, aRegion, sal_True);
                     pDoc->InsertPoolItem(aRegion, SwFmtRefMark(rName), 0);
                 }
                 else if( !pB->IsOnlyRef() )
@@ -487,26 +489,26 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                     SwSetExpField aFld((SwSetExpFieldType*)pFT,
                                         pB->GetValSys());
                     aFld.SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
-                    MakePoint(pEntry, pDoc, aRegion);
+                    MakePoint(rEntry, pDoc, aRegion);
                     pDoc->InsertPoolItem(aRegion, SwFmtFld(aFld), 0);
                     MoveAttrs( *(aRegion.GetPoint()) );
                 }
             }
             if( !pB->IsOnlyRef() &&
-                ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) && !pEntry->bConsumedByField)
+                ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) && !rEntry.bConsumedByField)
             {
-                MakeBookRegionOrPoint(pEntry, pDoc, aRegion, sal_True);
+                MakeBookRegionOrPoint(rEntry, pDoc, aRegion, sal_True);
                 pDoc->getIDocumentMarkAccess()->makeMark( aRegion, rName, IDocumentMarkAccess::BOOKMARK);
             }
         }
         break;
     case RES_FLTR_TOX:
         {
-            MakePoint(pEntry, pDoc, aRegion);
+            MakePoint(rEntry, pDoc, aRegion);
 
             SwPosition* pPoint = aRegion.GetPoint();
 
-            SwFltTOX* pTOXAttr = (SwFltTOX*)pEntry->pAttr;
+            SwFltTOX* pTOXAttr = (SwFltTOX*)rEntry.pAttr;
 
             // test if on this node there had been a pagebreak BEFORE the
             //     tox attribut was put on the stack
@@ -545,20 +547,20 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         }
         break;
     case RES_FLTR_SECTION:
-        MakePoint(pEntry, pDoc, aRegion);   // bislang immer Point==Mark
+        MakePoint(rEntry, pDoc, aRegion);   // bislang immer Point==Mark
         pDoc->InsertSwSection(aRegion,
-                *(static_cast<SwFltSection*>(pEntry->pAttr))->GetSectionData(),
+                *(static_cast<SwFltSection*>(rEntry.pAttr))->GetSectionData(),
                 0, 0, false);
-        delete (((SwFltSection*)pEntry->pAttr)->GetSectionData());
+        delete (((SwFltSection*)rEntry.pAttr)->GetSectionData());
         break;
     case RES_FLTR_REDLINE:
         {
-            if (pEntry->MakeRegion(pDoc, aRegion, sal_True))
+            if (rEntry.MakeRegion(pDoc, aRegion, sal_True))
             {
               pDoc->SetRedlineMode((RedlineMode_t)(   nsRedlineMode_t::REDLINE_ON
                                               | nsRedlineMode_t::REDLINE_SHOW_INSERT
                                               | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
-                SwFltRedline& rFltRedline = *((SwFltRedline*)pEntry->pAttr);
+                SwFltRedline& rFltRedline = *((SwFltRedline*)rEntry.pAttr);
 
                 if( USHRT_MAX != rFltRedline.nAutorNoPrev )
                 {
@@ -584,9 +586,9 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         }
         break;
     default:
-        if (pEntry->MakeRegion(pDoc, aRegion, sal_False))
+        if (rEntry.MakeRegion(pDoc, aRegion, sal_False))
         {
-            pDoc->InsertPoolItem(aRegion, *pEntry->pAttr, 0);
+            pDoc->InsertPoolItem(aRegion, *rEntry.pAttr, 0);
         }
         break;
     }
@@ -594,19 +596,18 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
 
 SfxPoolItem* SwFltControlStack::GetFmtStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos)
 {
-    SwFltStackEntry* pEntry;
     size_t nSize = maEntries.size();
 
     while (nSize)
     {
         // ist es das gesuchte Attribut ? (gueltig sind nur gelockte,
         // also akt. gesetzte Attribute!!)
-        if ((pEntry = (*this)[ --nSize ])->bLocked &&
-            pEntry->pAttr->Which() == nWhich)
+        SwFltStackEntry &rEntry = maEntries[--nSize];
+        if (rEntry.bLocked && rEntry.pAttr->Which() == nWhich)
         {
             if (pPos)
                 *pPos = nSize;
-            return (SfxPoolItem*)pEntry->pAttr;     // Ok, dann Ende
+            return (SfxPoolItem*)rEntry.pAttr;      // Ok, dann Ende
         }
     }
     return 0;
@@ -645,27 +646,27 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
 
     for (size_t nSize = maEntries.size(); nSize > 0;)
     {
-        SwFltStackEntry* pEntry = (*this)[--nSize];
+        SwFltStackEntry& rEntry = maEntries[--nSize];
 
         bool bEntryStartAfterSelStart =
-            (pEntry->m_aMkPos.m_nNode == aStartNode &&
-             pEntry->m_aMkPos.m_nCntnt >= nStartIdx);
+            (rEntry.m_aMkPos.m_nNode == aStartNode &&
+             rEntry.m_aMkPos.m_nCntnt >= nStartIdx);
 
         bool bEntryStartBeforeSelEnd =
-            (pEntry->m_aMkPos.m_nNode == aEndNode &&
-             pEntry->m_aMkPos.m_nCntnt <= nEndIdx);
+            (rEntry.m_aMkPos.m_nNode == aEndNode &&
+             rEntry.m_aMkPos.m_nCntnt <= nEndIdx);
 
         bool bEntryEndAfterSelStart = false;
         bool bEntryEndBeforeSelEnd = false;
-        if (!pEntry->bLocked)
+        if (!rEntry.bLocked)
         {
             bEntryEndAfterSelStart =
-                (pEntry->m_aPtPos.m_nNode == aStartNode &&
-                 pEntry->m_aPtPos.m_nCntnt >= nStartIdx);
+                (rEntry.m_aPtPos.m_nNode == aStartNode &&
+                 rEntry.m_aPtPos.m_nCntnt >= nStartIdx);
 
             bEntryEndBeforeSelEnd =
-                (pEntry->m_aPtPos.m_nNode == aEndNode &&
-                 pEntry->m_aPtPos.m_nCntnt <= nEndIdx);
+                (rEntry.m_aPtPos.m_nNode == aEndNode &&
+                 rEntry.m_aPtPos.m_nCntnt <= nEndIdx);
         }
 
         bool bTotallyContained = false;
@@ -692,23 +693,23 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
             if (bEntryStartBeforeSelEnd)
             {
                 //move start to new start
-                pEntry->m_aMkPos.SetPos(aStartNode, nStartIdx);
+                rEntry.m_aMkPos.SetPos(aStartNode, nStartIdx);
             }
             else
-                pEntry->m_aMkPos.m_nCntnt -= nCntntDiff;
+                rEntry.m_aMkPos.m_nCntnt -= nCntntDiff;
         }
 
         if (bEntryEndAfterSelStart)
         {
             if (bEntryEndBeforeSelEnd)
-                pEntry->m_aPtPos.SetPos(aStartNode, nStartIdx);
+                rEntry.m_aPtPos.SetPos(aStartNode, nStartIdx);
             else
-                pEntry->m_aPtPos.m_nCntnt -= nCntntDiff;
+                rEntry.m_aPtPos.m_nCntnt -= nCntntDiff;
         }
 
         //That's what locked is, end equal to start, and nPtCntnt is invalid
-        if (pEntry->bLocked)
-            pEntry->m_aPtPos = pEntry->m_aMkPos;
+        if (rEntry.bLocked)
+            rEntry.m_aPtPos = rEntry.m_aMkPos;
     }
 }
 
