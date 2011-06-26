@@ -69,7 +69,6 @@ public:
     SwNodeIndex nMkNode;
     SwNodeIndex nPtNode;
     SfxPoolItem * pAttr;// Format Attribute
-    long nHandle;       // fuer verschachtelte Attrs, z.B. Bookmarks
     xub_StrLen nMkCntnt;// Nachbildung von Mark()
     xub_StrLen nPtCntnt;// Nachbildung von GetPoint()
 

@@ -2868,9 +2868,6 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
 
         simpleAddTextToParagraph(sChunk);
 
-        fprintf(stderr, "adding %s to document\n",
-            rtl::OUStringToOString(sChunk, RTL_TEXTENCODING_UTF8).getStr());
-
         for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
         {
             if (aForced[i])
