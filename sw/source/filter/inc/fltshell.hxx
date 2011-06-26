@@ -43,6 +43,8 @@
 #include <pam.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
+#include <boost/noncopyable.hpp>
+
 class SwTOXBase;
 class SwFltShell;
 class SwField;
@@ -107,7 +109,7 @@ public:
 };
 
 // Stack-Eintrag fuer die Attribute Es werden immer Pointer auf neue Attribute uebergeben.
-class SwFltStackEntry
+class SwFltStackEntry : private ::boost::noncopyable
 {
 public:
     SwFltPosition m_aMkPos;
@@ -121,7 +123,6 @@ public:
     sal_Bool bConsumedByField;
 
     SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );
-    SW_DLLPUBLIC SwFltStackEntry(const SwFltStackEntry& rEntry);
     SW_DLLPUBLIC ~SwFltStackEntry();
 
     void SetStartPos(const SwPosition & rStartPos);

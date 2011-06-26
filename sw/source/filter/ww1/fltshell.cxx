@@ -102,17 +102,6 @@ SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, SfxPoolItem* pHt)
     bConsumedByField = sal_False;
 }
 
-SwFltStackEntry::SwFltStackEntry(const SwFltStackEntry& rEntry)
-    : m_aMkPos(rEntry.m_aMkPos)
-    , m_aPtPos(rEntry.m_aPtPos)
-{
-    pAttr = rEntry.pAttr->Clone();
-    bOld    = rEntry.bOld;
-    bLocked = bCopied = sal_True; // when rEntry were NOT bLocked we would never have been called
-    bConsumedByField = rEntry.bConsumedByField;
-}
-
-
 SwFltStackEntry::~SwFltStackEntry()
 {
     // Attribut kam zwar als Pointer, wird aber hier geloescht
