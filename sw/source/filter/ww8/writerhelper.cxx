@@ -696,13 +696,10 @@ namespace sw
             return false;
         }
 
-
-
         void RedlineStack::closeall(const SwPosition& rPos)
         {
-            std::for_each(maStack.begin(), maStack.end(), CloseIfOpen(rPos));
+            std::for_each(maStack.begin(), maStack.end(), SetEndIfOpen(rPos));
         }
-
 
         void SetInDocAndDelete::operator()(SwFltStackEntry *pEntry)
         {

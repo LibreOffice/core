@@ -401,12 +401,12 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
          */
-        class CloseIfOpen       //Subclass from something ?
+        class SetEndIfOpen       //Subclass from something ?
         {
         private:
             const SwPosition &mrPos;
         public:
-            explicit CloseIfOpen(const SwPosition &rPos) : mrPos(rPos) {}
+            explicit SetEndIfOpen(const SwPosition &rPos) : mrPos(rPos) {}
                 void operator()(SwFltStackEntry *pEntry) const
             {
                 if (pEntry->bOpen)
@@ -414,7 +414,7 @@ namespace sw
             }
         private:
             //No assignment
-            CloseIfOpen& operator=(const CloseIfOpen&);
+            SetEndIfOpen& operator=(const SetEndIfOpen&);
         };
 
         /**
