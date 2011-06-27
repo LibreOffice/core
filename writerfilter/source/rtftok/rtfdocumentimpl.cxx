@@ -241,6 +241,20 @@ void RTFDocumentImpl::setSubstream(bool bIsSubtream)
     m_bIsSubstream = bIsSubtream;
 }
 
+void RTFDocumentImpl::resolveSubstream(sal_uInt32& nPos, Id nId)
+{
+    sal_uInt32 nCurrent = Strm().Tell();
+    // Seek to header position, parse, then seek back.
+    RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame));
+    pImpl->setSubstream(true);
+    pImpl->seek(nPos);
+    OSL_TRACE("substream start");
+    Mapper().substream(nId, pImpl);
+    OSL_TRACE("substream end");
+    Strm().Seek(nCurrent);
+    nPos = 0;
+}
+
 void RTFDocumentImpl::parBreak()
 {
     // end previous paragraph
@@ -248,31 +262,9 @@ void RTFDocumentImpl::parBreak()
     lcl_Break(Mapper(), true);
 
     if (m_nHeaderPos > 0)
-    {
-        sal_uInt32 nPos = Strm().Tell();
-        // Seek to header position, parse, then seek back.
-        RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame));
-        pImpl->setSubstream(true);
-        pImpl->seek(m_nHeaderPos);
-        OSL_TRACE("header substream start");
-        Mapper().substream(NS_rtf::LN_headerr, pImpl);
-        OSL_TRACE("header substream end");
-        Strm().Seek(nPos);
-        m_nHeaderPos = 0;
-    }
+        resolveSubstream(m_nHeaderPos, NS_rtf::LN_headerr);
     if (m_nFooterPos > 0)
-    {
-        sal_uInt32 nPos = Strm().Tell();
-        // Seek to footer position, parse, then seek back.
-        RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame));
-        pImpl->setSubstream(true);
-        pImpl->seek(m_nFooterPos);
-        OSL_TRACE("footer substream start");
-        Mapper().substream(NS_rtf::LN_footerr, pImpl);
-        OSL_TRACE("footer substream end");
-        Strm().Seek(nPos);
-        m_nFooterPos = 0;
-    }
+        resolveSubstream(m_nFooterPos, NS_rtf::LN_footerr);
 
     Mapper().endCharacterGroup();
     Mapper().endParagraphGroup();
@@ -681,16 +673,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_NESTEDTABLEPROPERTIES;
             break;
         case RTF_HEADER:
-            if (!m_bIsSubstream)
-            {
-                m_nHeaderPos = m_nGroupStartPos-1;
-                m_aStates.top().nDestinationState = DESTINATION_SKIP;
-            }
-            break;
         case RTF_FOOTER:
             if (!m_bIsSubstream)
             {
-                m_nFooterPos = m_nGroupStartPos-1;
+                (nKeyword == RTF_HEADER ? m_nHeaderPos : m_nFooterPos ) = m_nGroupStartPos-1;
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
             break;
