@@ -411,7 +411,7 @@ namespace sw
             explicit CloseIfOpen(const SwPosition &rPos) : mrPos(rPos) {}
                 void operator()(SwFltStackEntry *pEntry) const
             {
-                if (pEntry->bLocked)
+                if (pEntry->bOpen)
                     pEntry->SetEndPos(mrPos);
             }
         private:

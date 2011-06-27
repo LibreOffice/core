@@ -679,7 +679,7 @@ namespace sw
             {
                 const SwFltRedline *pTest = static_cast<const SwFltRedline *>
                     (pEntry->pAttr);
-                return (pEntry->bLocked && (pTest->eType == meType));
+                return (pEntry->bOpen && (pTest->eType == meType));
             }
         };
 

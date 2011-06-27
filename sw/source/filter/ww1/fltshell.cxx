@@ -97,7 +97,7 @@ SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, SfxPoolItem* pHt)
 {
     pAttr = pHt;        // speicher eine Kopie vom Attribut
     bOld    = sal_False;    // used for marking Attributes *before* skipping field results
-    bLocked = sal_True;     // locke das Attribut --> darf erst
+    bOpen = sal_True;   // locke das Attribut --> darf erst
     bConsumedByField = sal_False;
 }
 
@@ -115,7 +115,7 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
     // Cursor-Position auch der Bereich vom Attribut weiter
     // verschoben wird.
     // Das ist aber nicht das gewollte!
-    bLocked = sal_False;                    // freigeben und das ENDE merken
+    bOpen = sal_False;                  // freigeben und das ENDE merken
     m_aPtPos.SetPos(rEndPos);
 }
 
@@ -251,7 +251,7 @@ void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr
         //from. If so we merge it with this one and elide adding another
         //to the stack
         pExtendCandidate->SetEndPos(rPos);
-        pExtendCandidate->bLocked=true;
+        pExtendCandidate->bOpen=true;
     }
     else
         maEntries.push_back(new SwFltStackEntry(rPos, rAttr.Clone()));
@@ -303,7 +303,7 @@ void SwFltControlStack::KillUnlockedAttrs(const SwPosition& rPos)
         nCnt --;
         SwFltStackEntry& rEntry = maEntries[nCnt];
         if(    !rEntry.bOld
-            && !rEntry.bLocked
+            && !rEntry.bOpen
             && (rEntry.m_aMkPos == aFltPos)
             && (rEntry.m_aPtPos == aFltPos))
         {
@@ -333,7 +333,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
     while (aI != maEntries.end())
     {
         SwFltStackEntry& rEntry = *aI;
-        if (rEntry.bLocked)
+        if (rEntry.bOpen)
         {
             // setze das Ende vom Attribut
             bool bF = false;
@@ -664,7 +664,7 @@ SfxPoolItem* SwFltControlStack::GetFmtStackAttr(sal_uInt16 nWhich, sal_uInt16 * 
         // ist es das gesuchte Attribut ? (gueltig sind nur gelockte,
         // also akt. gesetzte Attribute!!)
         SwFltStackEntry &rEntry = maEntries[--nSize];
-        if (rEntry.bLocked && rEntry.pAttr->Which() == nWhich)
+        if (rEntry.bOpen && rEntry.pAttr->Which() == nWhich)
         {
             if (pPos)
                 *pPos = nSize;
@@ -719,7 +719,7 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
 
         bool bEntryEndAfterSelStart = false;
         bool bEntryEndBeforeSelEnd = false;
-        if (!rEntry.bLocked)
+        if (!rEntry.bOpen)
         {
             bEntryEndAfterSelStart =
                 (rEntry.m_aPtPos.m_nNode == aStartNode &&
@@ -768,8 +768,8 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
                 rEntry.m_aPtPos.m_nCntnt -= nCntntDiff;
         }
 
-        //That's what locked is, end equal to start, and nPtCntnt is invalid
-        if (rEntry.bLocked)
+        //That's what Open is, end equal to start, and nPtCntnt is invalid
+        if (rEntry.bOpen)
             rEntry.m_aPtPos = rEntry.m_aMkPos;
     }
 }

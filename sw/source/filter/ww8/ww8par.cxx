@@ -1243,13 +1243,13 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
         const SwFltStackEntry& rEntry = (*this)[ --nSize ];
         if (rEntry.pAttr->Which() == nWhich)
         {
-            if ( (rEntry.bLocked) ||
+            if ( (rEntry.bOpen) ||
                  (
                   (rEntry.m_aMkPos.m_nNode <= aFltPos.m_nNode) &&
                   (rEntry.m_aPtPos.m_nNode >= aFltPos.m_nNode) &&
                   (rEntry.m_aMkPos.m_nCntnt <= aFltPos.m_nCntnt) &&
                   (rEntry.m_aPtPos.m_nCntnt > aFltPos.m_nCntnt)
-                  )
+                 )
                )
                 /*
                  * e.g. half-open range [0-3) so asking for properties at 3

@@ -117,7 +117,7 @@ public:
     SfxPoolItem * pAttr;// Format Attribute
 
     sal_Bool bOld;          // to mark Attributes *before* skipping field results
-    sal_Bool bLocked;
+    sal_Bool bOpen;     //Entry open, awaiting being closed
     sal_Bool bConsumedByField;
 
     SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );

@@ -2187,7 +2187,7 @@ WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk)
     for (size_t i=0; i < nCnt; ++i)
     {
         const SwFltStackEntry& rEntry = (*pCtrlStck)[ i ];
-        if (rEntry.bLocked)
+        if (rEntry.bOpen)
         {
             if (isCHRATR(rEntry.pAttr->Which()))
             {
