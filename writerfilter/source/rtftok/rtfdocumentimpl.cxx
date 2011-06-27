@@ -161,32 +161,6 @@ void lcl_Break(Stream& rMapper, bool bMinimal = false)
     }
 }
 
-void lcl_SectBreak(Stream& rMapper, std::stack<RTFParserState>& aStates, bool bFinal = false, bool bIsSubstream = false)
-{
-    // Section properties are a paragraph sprm.
-    RTFValue::Pointer_t pValue(new RTFValue(aStates.top().aSectionAttributes, aStates.top().aSectionSprms));
-    RTFSprms_t aAttributes;
-    RTFSprms_t aSprms;
-    aSprms.push_back(make_pair(NS_ooxml::LN_CT_PPr_sectPr, pValue));
-    writerfilter::Reference<Properties>::Pointer_t const pProperties(
-            new RTFReferenceProperties(aAttributes, aSprms)
-            );
-    // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
-    rMapper.props(pProperties);
-    RTFValue::Pointer_t pBreak = RTFSprm::find(aStates.top().aSectionSprms, NS_sprm::LN_SBkc);
-    // In case the last section is a continous one, we don't need to output anything.
-    if (bFinal && pBreak.get() && !pBreak->getInt())
-            return;
-    rMapper.endParagraphGroup();
-    if (!bIsSubstream)
-        rMapper.endSectionGroup();
-    if (!bFinal)
-    {
-        rMapper.startSectionGroup();
-        rMapper.startParagraphGroup();
-    }
-}
-
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -272,6 +246,32 @@ void RTFDocumentImpl::parBreak()
     Mapper().endParagraphGroup();
     // start new one
     Mapper().startParagraphGroup();
+}
+
+void RTFDocumentImpl::sectBreak(bool bFinal = false)
+{
+    // Section properties are a paragraph sprm.
+    RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms));
+    RTFSprms_t aAttributes;
+    RTFSprms_t aSprms;
+    aSprms.push_back(make_pair(NS_ooxml::LN_CT_PPr_sectPr, pValue));
+    writerfilter::Reference<Properties>::Pointer_t const pProperties(
+            new RTFReferenceProperties(aAttributes, aSprms)
+            );
+    // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
+    Mapper().props(pProperties);
+    RTFValue::Pointer_t pBreak = RTFSprm::find(m_aStates.top().aSectionSprms, NS_sprm::LN_SBkc);
+    // In case the last section is a continous one, we don't need to output anything.
+    if (bFinal && pBreak.get() && !pBreak->getInt())
+            return;
+    Mapper().endParagraphGroup();
+    if (!m_bIsSubstream)
+        Mapper().endSectionGroup();
+    if (!bFinal)
+    {
+        Mapper().startSectionGroup();
+        Mapper().startParagraphGroup();
+    }
 }
 
 void RTFDocumentImpl::seek(sal_uInt32 nPos)
@@ -754,7 +754,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             break;
         case RTF_SECT:
-                lcl_SectBreak(Mapper(), m_aStates);
+                sectBreak();
             break;
         case RTF_BACKSLASH:
             if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
@@ -2000,7 +2000,7 @@ int RTFDocumentImpl::popState()
 
     // This is the end of the doc, see if we need to close the last section.
     if (m_nGroup == 1)
-        lcl_SectBreak(Mapper(), m_aStates, true, m_bIsSubstream);
+        sectBreak(true);
 
     m_aStates.pop();
 

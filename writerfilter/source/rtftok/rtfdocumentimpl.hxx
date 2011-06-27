@@ -205,6 +205,7 @@ namespace writerfilter {
                 int popState();
                 void text(rtl::OUString& rString);
                 void parBreak();
+                void sectBreak(bool bFinal);
 
                 com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& m_xContext;
                 com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& m_xInputStream;
