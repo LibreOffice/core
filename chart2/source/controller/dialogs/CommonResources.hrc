@@ -51,25 +51,4 @@ HelpButton BTN_HELP \
 #define BUTTONS_OK_CANCEL_HELP_STACKED( xPos ) \
 BUTTONS_OK_CANCEL_HELP( xPos, 6, 0, 17 )
 
-#define BUTTONS_HELP_OK_CANCEL( xPos, yPos, xOffset, yOffset ) \
-HelpButton BTN_HELP \
-{ \
-    Pos = MAP_APPFONT ( xPos , yPos ) ; \
-    Size = MAP_APPFONT ( 50 , 14 ) ; \
-    TabStop = TRUE ; \
-}; \
-OKButton BTN_OK \
-{ \
-    Pos = MAP_APPFONT ( xPos+xOffset , yPos+yOffset  ) ; \
-    Size = MAP_APPFONT ( 50 , 14 ) ; \
-    TabStop = TRUE ; \
-    DefButton = TRUE ; \
-}; \
-CancelButton BTN_CANCEL \
-{ \
-    Pos = MAP_APPFONT ( xPos+xOffset+xOffset , yPos+yOffset+yOffset  ) ; \
-    Size = MAP_APPFONT ( 50 , 14 ) ; \
-    TabStop = TRUE ; \
-};
-
 #endif
