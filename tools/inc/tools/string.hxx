@@ -206,7 +206,6 @@ public:
     static ByteString   CreateFromInt32( sal_Int32 n, sal_Int16 nRadix = 10 );
     static ByteString   CreateFromInt64( sal_Int64 n, sal_Int16 nRadix = 10 );
     static ByteString   CreateFromFloat( float f );
-    static ByteString   CreateFromDouble( double d );
     static const ByteString& EmptyString();
     sal_Int32           ToInt32() const;
     sal_Int64           ToInt64() const;
