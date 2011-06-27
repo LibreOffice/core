@@ -183,6 +183,7 @@ namespace writerfilter {
                 RTFSprms_t mergeAttributes();
                 int asHex(char ch);
                 void setSubstream(bool bIsSubtream);
+                void setSectionProperties(RTFSprms_t& rAttributes, RTFSprms_t& rSprms);
                 void resolveSubstream(sal_uInt32& nPos, Id nId);
                 void seek(sal_uInt32 nPos);
             private:

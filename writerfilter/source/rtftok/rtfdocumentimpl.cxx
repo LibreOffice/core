@@ -161,7 +161,7 @@ void lcl_Break(Stream& rMapper, bool bMinimal = false)
     }
 }
 
-void lcl_SectBreak(Stream& rMapper, std::stack<RTFParserState>& aStates, bool bFinal = false)
+void lcl_SectBreak(Stream& rMapper, std::stack<RTFParserState>& aStates, bool bFinal = false, bool bIsSubstream = false)
 {
     // Section properties are a paragraph sprm.
     RTFValue::Pointer_t pValue(new RTFValue(aStates.top().aSectionAttributes, aStates.top().aSectionSprms));
@@ -178,7 +178,8 @@ void lcl_SectBreak(Stream& rMapper, std::stack<RTFParserState>& aStates, bool bF
     if (bFinal && pBreak.get() && !pBreak->getInt())
             return;
     rMapper.endParagraphGroup();
-    rMapper.endSectionGroup();
+    if (!bIsSubstream)
+        rMapper.endSectionGroup();
     if (!bFinal)
     {
         rMapper.startSectionGroup();
@@ -248,6 +249,7 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32& nPos, Id nId)
     RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame));
     pImpl->setSubstream(true);
     pImpl->seek(nPos);
+    pImpl->setSectionProperties(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms);
     OSL_TRACE("substream start");
     Mapper().substream(nId, pImpl);
     OSL_TRACE("substream end");
@@ -275,6 +277,12 @@ void RTFDocumentImpl::parBreak()
 void RTFDocumentImpl::seek(sal_uInt32 nPos)
 {
     Strm().Seek(nPos);
+}
+
+void RTFDocumentImpl::setSectionProperties(RTFSprms_t& rAttributes, RTFSprms_t& rSprms)
+{
+    m_aDefaultState.aSectionAttributes = rAttributes;
+    m_aDefaultState.aSectionSprms = rSprms;
 }
 
 sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
@@ -520,7 +528,8 @@ void RTFDocumentImpl::text(OUString& rString)
     if (m_bFirstRun)
     {
         // start initial paragraph after the optional font/color/stylesheet tables
-        Mapper().startSectionGroup();
+        if (!m_bIsSubstream)
+            Mapper().startSectionGroup();
         Mapper().startParagraphGroup();
         Mapper().props(pParagraphProperties);
         m_bFirstRun = false;
@@ -1811,10 +1820,10 @@ int RTFDocumentImpl::pushState()
 
     m_nGroupStartPos = Strm().Tell();
     RTFParserState aState;
-    if (!m_aStates.empty())
-    {
+    if (m_aStates.empty())
+        aState = m_aDefaultState;
+    else
         aState = m_aStates.top();
-    }
     m_aStates.push(aState);
 
     m_nGroup++;
@@ -1991,7 +2000,7 @@ int RTFDocumentImpl::popState()
 
     // This is the end of the doc, see if we need to close the last section.
     if (m_nGroup == 1)
-        lcl_SectBreak(Mapper(), m_aStates, true);
+        lcl_SectBreak(Mapper(), m_aStates, true, m_bIsSubstream);
 
     m_aStates.pop();
 
