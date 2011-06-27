@@ -982,9 +982,10 @@ void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
     SwFltControlStack::NewAttr(rPos, rAttr);
 }
 
-void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
+SwFltStackEntry* SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
     sal_Bool bTstEnde, long nHand, sal_Bool )
 {
+    SwFltStackEntry *pRet = NULL;
     //Doing a textbox, and using the control stack only as a temporary
     //collection point for properties which will are not to be set into
     //the real document
@@ -1002,7 +1003,8 @@ void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
         }
     }
     else //Normal case, set the attribute into the document
-        SwFltControlStack::SetAttr(rPos, nAttrId, bTstEnde, nHand);
+        pRet = SwFltControlStack::SetAttr(rPos, nAttrId, bTstEnde, nHand);
+    return pRet;
 }
 
 long GetListFirstLineIndent(const SwNumFmt &rFmt)

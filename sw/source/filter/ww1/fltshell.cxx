@@ -222,14 +222,39 @@ void SwFltControlStack::MarkAllAttrsOld()
         maEntries[i].bOld = sal_True;
 }
 
-void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr )
+namespace
 {
-    SwFltStackEntry *pTmp = new SwFltStackEntry(rPos, rAttr.Clone() );
-    sal_uInt16 nWhich = pTmp->pAttr->Which();
-    SetAttr(rPos, nWhich);// Ende von evtl. gleichen Attributen auf dem Stack
-                                // Setzen, damit sich die Attribute nicht auf
-                                // dem Stack haeufen
-    maEntries.push_back(pTmp);
+    bool couldExtendEntry(const SwFltStackEntry *pExtendCandidate,
+        const SfxPoolItem& rAttr)
+    {
+        return (pExtendCandidate &&
+                !pExtendCandidate->bConsumedByField &&
+                //potentially more, but lets keep it simple
+                (isPARATR_LIST(rAttr.Which()) || isCHRATR(rAttr.Which())) &&
+                *(pExtendCandidate->pAttr) == rAttr);
+    }
+}
+
+void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr)
+{
+    sal_uInt16 nWhich = rAttr.Which();
+    // Ende von evtl. gleichen Attributen auf dem Stack Setzen, damit sich die
+    // Attribute nicht auf dem Stack haeufen
+    SwFltStackEntry *pExtendCandidate = SetAttr(rPos, nWhich);
+    if (couldExtendEntry(pExtendCandidate, rAttr))
+    {
+        //Here we optimize by seeing if there is an attribute uncommited
+        //to the document which
+        //
+        //a) has the same value as this attribute
+        //b) is already open, or ends at the same place as where we're starting
+        //from. If so we merge it with this one and elide adding another
+        //to the stack
+        pExtendCandidate->SetEndPos(rPos);
+        pExtendCandidate->bLocked=true;
+    }
+    else
+        maEntries.push_back(new SwFltStackEntry(rPos, rAttr.Clone()));
 }
 
 void SwFltControlStack::DeleteAndDestroy(Entries::size_type nCnt)
@@ -291,28 +316,39 @@ void SwFltControlStack::KillUnlockedAttrs(const SwPosition& rPos)
 // alle anderen im Document setzen und wieder aus dem Stack loeschen
 // Returned, ob das gesuchte Attribut / die gesuchten Attribute
 // ueberhaupt auf dem Stack standen
-void SwFltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
-                                sal_Bool bTstEnde, long nHand, sal_Bool consumedByField )
+SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
+    sal_uInt16 nAttrId, sal_Bool bTstEnde, long nHand,
+    sal_Bool consumedByField)
 {
+    SwFltStackEntry *pRet = NULL;
+
+    SwFltPosition aFltPos(rPos);
+
     OSL_ENSURE(!nAttrId ||
         (POOLATTR_BEGIN <= nAttrId && POOLATTR_END > nAttrId) ||
         (RES_FLTRATTR_BEGIN <= nAttrId && RES_FLTRATTR_END > nAttrId),
         "Falsche Id fuers Attribut");
 
-    size_t nCnt = maEntries.size();
-    for (size_t i=0; i < nCnt; ++i)
+    myEIter aI = maEntries.begin();
+    while (aI != maEntries.end())
     {
-        SwFltStackEntry& rEntry = maEntries[i];
+        SwFltStackEntry& rEntry = *aI;
         if (rEntry.bLocked)
         {
             // setze das Ende vom Attribut
             bool bF = false;
-            if (!nAttrId ){
+            if (!nAttrId )
+            {
                 bF = true;
-            }else if( nAttrId == rEntry.pAttr->Which()){
-                if( nAttrId != RES_FLTR_BOOKMARK ){     // Handle abfragen
+            }
+            else if (nAttrId == rEntry.pAttr->Which())
+            {
+                if( nAttrId != RES_FLTR_BOOKMARK )
+                {
+                    // Handle abfragen
                     bF = true;
-                }else if( nHand == ((SwFltBookmark*)(rEntry.pAttr))->GetHandle() )
+                }
+                else if (nHand == ((SwFltBookmark*)(rEntry.pAttr))->GetHandle())
                 {
                     bF = true;
                 }
@@ -321,7 +357,14 @@ void SwFltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
             {
                 rEntry.bConsumedByField = consumedByField;
                 rEntry.SetEndPos(rPos);
+                if (nAttrId == rEntry.pAttr->Which())
+                {
+                    //potential candidate for merging with an identical
+                    //property beginning at rPos
+                    pRet = &rEntry;
+                }
             }
+            ++aI;
             continue;
         }
 
@@ -331,14 +374,33 @@ void SwFltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
         // Beim Ende-Stack niemals ausser am DocEnde reinsetzen
         if (bTstEnde)
         {
-            if (bIsEndStack || rEntry.m_aPtPos.m_nNode.GetIndex()+1 ==
-                        rPos.nNode.GetIndex())
-            continue;
+            if (bIsEndStack)
+            {
+                ++aI;
+                continue;
+            }
+
+            //defer inserting this attribute into the document until
+            //we advance to the next node, or finish processing the document
+            if (rEntry.m_aPtPos.m_nNode.GetIndex() == aFltPos.m_nNode.GetIndex())
+            {
+                if (nAttrId == rEntry.pAttr->Which() &&
+                    rEntry.m_aPtPos.m_nCntnt == aFltPos.m_nCntnt)
+                {
+                    //potential candidate for merging with an identical
+                    //property beginning at rPos
+                    pRet = &rEntry;
+                }
+
+                ++aI;
+                continue;
+            }
         }
         SetAttrInDoc(rPos, rEntry);
-        DeleteAndDestroy(i);        // loesche aus dem Stack
-        i--; nCnt--;        // Danach rutschen alle folgenden nach unten
+        aI = maEntries.erase(aI);
     }
+
+    return pRet;
 }
 
 static void MakePoint(const SwFltStackEntry& rEntry, SwDoc* pDoc,
