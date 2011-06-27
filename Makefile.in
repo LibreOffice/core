@@ -179,6 +179,7 @@ findunusedcode:
 	@which callcatcher > /dev/null 2>&1 || \
          (echo "callcatcher not installed" && false)
 	@. ./*Env.Set.sh && \
+            source <(sed -e s,$$INPATH,callcatcher,g ./*Env.Set.sh) && \
             . ./solenv/bin/callcatchEnv.Set.sh && \
             cd instsetoo_native && \
             build.pl $(GBUILD_OPT) --all
