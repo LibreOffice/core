@@ -26,7 +26,7 @@ using rtl::OUStringToOString;
 namespace writerfilter {
 namespace rtftok {
 
-RTFSprms_t& lcl_getNumPr(std::stack<RTFParserState>& aStates)
+static RTFSprms_t& lcl_getNumPr(std::stack<RTFParserState>& aStates)
 {
     // insert the numpr sprm if necessary
     RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_numPr);
@@ -41,7 +41,7 @@ RTFSprms_t& lcl_getNumPr(std::stack<RTFParserState>& aStates)
     return p->getSprms();
 }
 
-Id lcl_getBorderTable(sal_uInt32 nIndex)
+static Id lcl_getBorderTable(sal_uInt32 nIndex)
 {
     static const Id aBorderIds[] =
     {
@@ -51,7 +51,7 @@ Id lcl_getBorderTable(sal_uInt32 nIndex)
     return aBorderIds[nIndex];
 }
 
-void lcl_putNestedAttribute(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue,
+static void lcl_putNestedAttribute(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue,
         bool bOverwrite = false, bool bAttribute = true)
 {
     RTFValue::Pointer_t pParent = RTFSprm::find(rSprms, nParent);
@@ -73,12 +73,12 @@ void lcl_putNestedAttribute(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Po
     rAttributes.push_back(make_pair(nId, pValue));
 }
 
-void lcl_putNestedSprm(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue, bool bOverwrite = false)
+static void lcl_putNestedSprm(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue, bool bOverwrite = false)
 {
     lcl_putNestedAttribute(rSprms, nParent, nId, pValue, bOverwrite, false);
 }
 
-RTFSprms_t& lcl_getCellBordersAttributes(std::stack<RTFParserState>& aStates)
+static RTFSprms_t& lcl_getCellBordersAttributes(std::stack<RTFParserState>& aStates)
 {
     RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
     if (p->getSprms().size())
@@ -90,7 +90,7 @@ RTFSprms_t& lcl_getCellBordersAttributes(std::stack<RTFParserState>& aStates)
     }
 }
 
-RTFSprms_t& lcl_getColsAttributes(std::stack<RTFParserState>& aStates)
+static RTFSprms_t& lcl_getColsAttributes(std::stack<RTFParserState>& aStates)
 {
     RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_cols);
     OSL_ASSERT(p->getSprms().size());
@@ -103,7 +103,7 @@ RTFSprms_t& lcl_getColsAttributes(std::stack<RTFParserState>& aStates)
     }
 }
 
-void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue::Pointer_t pValue)
+static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue::Pointer_t pValue)
 {
     // Paragraph or cell property?
     if (!aStates.top().aTableCellSprms.size())
@@ -124,13 +124,13 @@ void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue
     }
 }
 
-void lcl_Break(Stream& rMapper)
+static void lcl_Break(Stream& rMapper)
 {
     sal_uInt8 sBreak[] = { 0xd };
     rMapper.text(sBreak, 1);
 }
 
-void lcl_TableBreak(Stream& rMapper)
+static void lcl_TableBreak(Stream& rMapper)
 {
     lcl_Break(rMapper);
     rMapper.endParagraphGroup();
