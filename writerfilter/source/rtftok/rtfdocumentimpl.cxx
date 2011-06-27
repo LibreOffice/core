@@ -90,6 +90,18 @@ static RTFSprms_t& lcl_getCellBordersAttributes(std::stack<RTFParserState>& aSta
     }
 }
 
+static RTFSprms_t& lcl_getPageBordersAttributes(std::stack<RTFParserState>& aStates)
+{
+    RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders);
+    if (p->getSprms().size())
+        return p->getSprms().back().second->getAttributes();
+    else
+    {
+        OSL_FAIL("trying to set property when no border is defined");
+        return p->getSprms();
+    }
+}
+
 static RTFSprms_t& lcl_getColsAttributes(std::stack<RTFParserState>& aStates)
 {
     RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_cols);
@@ -119,6 +131,12 @@ static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, R
     {
         // Attributes of the last border type
         RTFSprms_t& rAttributes = lcl_getCellBordersAttributes(aStates);
+        rAttributes.push_back(make_pair(nId, pValue));
+    }
+    else if (aStates.top().nBorderState == BORDER_PAGE)
+    {
+        // Attributes of the last border type
+        RTFSprms_t& rAttributes = lcl_getPageBordersAttributes(aStates);
         rAttributes.push_back(make_pair(nId, pValue));
     }
 }
@@ -1062,6 +1080,26 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 }
                 lcl_putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders, nParam, pValue);
                 m_aStates.top().nBorderState = BORDER_CELL;
+            }
+            break;
+        case RTF_PGBRDRT:
+        case RTF_PGBRDRL:
+        case RTF_PGBRDRB:
+        case RTF_PGBRDRR:
+            {
+                RTFSprms_t aAttributes;
+                RTFSprms_t aSprms;
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+                switch (nKeyword)
+                {
+                    case RTF_PGBRDRT: nParam = NS_ooxml::LN_CT_PageBorders_top; break;
+                    case RTF_PGBRDRL: nParam = NS_ooxml::LN_CT_PageBorders_left; break;
+                    case RTF_PGBRDRB: nParam = NS_ooxml::LN_CT_PageBorders_bottom; break;
+                    case RTF_PGBRDRR: nParam = NS_ooxml::LN_CT_PageBorders_right; break;
+                    default: break;
+                }
+                lcl_putNestedSprm(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders, nParam, pValue);
+                m_aStates.top().nBorderState = BORDER_PAGE;
             }
             break;
         case RTF_CLVMGF:

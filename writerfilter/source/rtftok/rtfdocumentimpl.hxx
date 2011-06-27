@@ -61,7 +61,8 @@ namespace writerfilter {
         {
             BORDER_NONE,
             BORDER_PARAGRAPH,
-            BORDER_CELL
+            BORDER_CELL,
+            BORDER_PAGE
         };
 
         enum RTFErrors
