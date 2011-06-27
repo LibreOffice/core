@@ -161,26 +161,6 @@ sal_Int64 ByteString::ToInt64() const
 
 // -----------------------------------------------------------------------
 
-float ByteString::ToFloat() const
-{
-    DBG_CHKTHIS( ByteString, DbgCheckByteString );
-
-    OSL_FAIL("ByteString::ToFloat unusable");
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-double ByteString::ToDouble() const
-{
-    DBG_CHKTHIS( ByteString, DbgCheckByteString );
-
-    OSL_FAIL("ByteString::ToDouble unusable");
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool ByteString::IsLowerAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );

@@ -154,8 +154,6 @@ class TOOLS_DLLPUBLIC ByteString
 {
     friend              class UniString;
 
-    TOOLS_DLLPRIVATE void InitStringRes( const UniString& rStr );
-
 private:
     ByteStringData*     mpData;
 
@@ -212,8 +210,6 @@ public:
     static const ByteString& EmptyString();
     sal_Int32           ToInt32() const;
     sal_Int64           ToInt64() const;
-    float               ToFloat() const;
-    double              ToDouble() const;
 
     ByteString&         Assign( const ByteString& rStr );
     ByteString&         Assign( const rtl::OString& rStr );
