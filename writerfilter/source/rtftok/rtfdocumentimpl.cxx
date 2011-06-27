@@ -78,21 +78,9 @@ static void lcl_putNestedSprm(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::
     lcl_putNestedAttribute(rSprms, nParent, nId, pValue, bOverwrite, false);
 }
 
-static RTFSprms_t& lcl_getCellBordersAttributes(std::stack<RTFParserState>& aStates)
+static RTFSprms_t& lcl_getBordersAttributes(RTFSprms_t& rSprms, Id nId)
 {
-    RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
-    if (p->getSprms().size())
-        return p->getSprms().back().second->getAttributes();
-    else
-    {
-        OSL_FAIL("trying to set property when no border is defined");
-        return p->getSprms();
-    }
-}
-
-static RTFSprms_t& lcl_getPageBordersAttributes(std::stack<RTFParserState>& aStates)
-{
-    RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders);
+    RTFValue::Pointer_t p = RTFSprm::find(rSprms, nId);
     if (p->getSprms().size())
         return p->getSprms().back().second->getAttributes();
     else
@@ -130,13 +118,13 @@ static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, R
     else if (aStates.top().nBorderState == BORDER_CELL)
     {
         // Attributes of the last border type
-        RTFSprms_t& rAttributes = lcl_getCellBordersAttributes(aStates);
+        RTFSprms_t& rAttributes = lcl_getBordersAttributes(aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
         rAttributes.push_back(make_pair(nId, pValue));
     }
     else if (aStates.top().nBorderState == BORDER_PAGE)
     {
         // Attributes of the last border type
-        RTFSprms_t& rAttributes = lcl_getPageBordersAttributes(aStates);
+        RTFSprms_t& rAttributes = lcl_getBordersAttributes(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders);
         rAttributes.push_back(make_pair(nId, pValue));
     }
 }
