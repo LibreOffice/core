@@ -77,7 +77,8 @@ Id lcl_getBorderTable(sal_uInt32 nIndex)
     return aBorderIds[nIndex];
 }
 
-void lcl_putNestedAttribute(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue, bool bAttribute = true)
+void lcl_putNestedAttribute(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue,
+        bool bOverwrite = false, bool bAttribute = true)
 {
     RTFValue::Pointer_t pParent = RTFSprm::find(rSprms, nParent);
     if (!pParent.get())
@@ -88,12 +89,19 @@ void lcl_putNestedAttribute(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Po
         pParent = pParentValue;
     }
     RTFSprms_t& rAttributes = (bAttribute ? pParent->getAttributes() : pParent->getSprms());
+    if (bOverwrite)
+        for (RTFSprms_t::iterator i = rAttributes.begin(); i != rAttributes.end(); ++i)
+            if (i->first == nId)
+            {
+                i->second = pValue;
+                return;
+            }
     rAttributes.push_back(make_pair(nId, pValue));
 }
 
-void lcl_putNestedSprm(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue)
+void lcl_putNestedSprm(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue, bool bOverwrite = false)
 {
-    lcl_putNestedAttribute(rSprms, nParent, nId, pValue, false);
+    lcl_putNestedAttribute(rSprms, nParent, nId, pValue, bOverwrite, false);
 }
 
 RTFSprms_t& lcl_getCellBordersAttributes(std::stack<RTFParserState>& aStates)
