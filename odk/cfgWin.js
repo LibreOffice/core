@@ -923,8 +923,8 @@ function writeBatFile(fdir, file)
         "\n" +
         "REM Add directory of the Win SDK to the path, if necessary.\n" +
         "if defined CPP_WINDOWS_SDK (\n" +
-		"   set PATH=%CPP_WINDOWS_SDK\\bin%;%PATH%\n" + 
-		"   set INCLUDE=%CPP_WINDOWS_SDK\\Include%;%INCLUDE%\n" + 
+		"   set PATH=%CPP_WINDOWS_SDK%\\bin;%PATH%\n" + 
+		"   set INCLUDE=%CPP_WINDOWS_SDK%\\Include;%INCLUDE%\n" + 
         ")\n" +
         "REM Add directory of the C# and VB.NET compilers to the path, if necessary.\n" + 
         "if defined OO_SDK_CLI_HOME set PATH=%OO_SDK_CLI_HOME%;%PATH%\n" + 
