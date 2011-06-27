@@ -41,7 +41,7 @@ static RTFSprms_t& lcl_getNumPr(std::stack<RTFParserState>& aStates)
     return p->getSprms();
 }
 
-static Id lcl_getBorderTable(sal_uInt32 nIndex)
+static Id lcl_getParagraphBorder(sal_uInt32 nIndex)
 {
     static const Id aBorderIds[] =
     {
@@ -105,18 +105,17 @@ static RTFSprms_t& lcl_getColsAttributes(std::stack<RTFParserState>& aStates)
 
 static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue::Pointer_t pValue)
 {
-    // Paragraph or cell property?
-    if (!aStates.top().aTableCellSprms.size())
+    if (aStates.top().nBorderState == BORDER_PARAGRAPH)
         for (int i = 0; i < 4; i++)
         {
-            RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aParagraphSprms, lcl_getBorderTable(i));
+            RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aParagraphSprms, lcl_getParagraphBorder(i));
             if (p.get())
             {
                 RTFSprms_t& rAttributes = p->getAttributes();
                 rAttributes.push_back(make_pair(nId, pValue));
             }
         }
-    else
+    else if (aStates.top().nBorderState == BORDER_CELL)
     {
         // Attributes of the last border type
         RTFSprms_t& rAttributes = lcl_getCellBordersAttributes(aStates);
@@ -1008,6 +1007,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_PBrcLeft, pValue));
                 m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_PBrcBottom, pValue));
                 m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_PBrcRight, pValue));
+                m_aStates.top().nBorderState = BORDER_PARAGRAPH;
             }
             break;
         case RTF_LTRSECT:
@@ -1061,6 +1061,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     default: break;
                 }
                 lcl_putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders, nParam, pValue);
+                m_aStates.top().nBorderState = BORDER_CELL;
             }
             break;
         case RTF_CLVMGF:
@@ -2199,6 +2200,7 @@ int RTFDocumentImpl::resolveParse()
 RTFParserState::RTFParserState()
     : nInternalState(INTERNAL_NORMAL),
     nDestinationState(DESTINATION_NORMAL),
+    nBorderState(BORDER_NONE),
     aTableSprms(),
     aTableAttributes(),
     aCharacterSprms(),

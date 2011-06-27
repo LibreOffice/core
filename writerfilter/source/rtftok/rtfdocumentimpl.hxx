@@ -57,6 +57,13 @@ namespace writerfilter {
             DESTINATION_NESTEDTABLEPROPERTIES
         };
 
+        enum RTFBorderState
+        {
+            BORDER_NONE,
+            BORDER_PARAGRAPH,
+            BORDER_CELL
+        };
+
         enum RTFErrors
         {
             ERROR_OK,
@@ -103,6 +110,7 @@ namespace writerfilter {
                 RTFParserState();
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
+                RTFBorderState nBorderState;
                 // font table, stylesheet table
                 RTFSprms_t aTableSprms;
                 RTFSprms_t aTableAttributes;
