@@ -98,7 +98,6 @@ SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, SfxPoolItem* pHt)
     pAttr = pHt;        // speicher eine Kopie vom Attribut
     bOld    = sal_False;    // used for marking Attributes *before* skipping field results
     bLocked = sal_True;     // locke das Attribut --> darf erst
-    bCopied = sal_False;    // gesetzt werden, wenn es wieder geunlocked ist
     bConsumedByField = sal_False;
 }
 

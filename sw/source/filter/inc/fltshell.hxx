@@ -118,7 +118,6 @@ public:
 
     sal_Bool bOld;          // to mark Attributes *before* skipping field results
     sal_Bool bLocked;
-    sal_Bool bCopied;
     sal_Bool bConsumedByField;
 
     SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );
