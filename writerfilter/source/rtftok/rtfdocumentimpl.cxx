@@ -238,20 +238,20 @@ void RTFDocumentImpl::parBreak()
     // end previous paragraph
     Mapper().startCharacterGroup();
     lcl_Break(Mapper());
-
-    if (m_nHeaderPos > 0)
-        resolveSubstream(m_nHeaderPos, NS_rtf::LN_headerr);
-    if (m_nFooterPos > 0)
-        resolveSubstream(m_nFooterPos, NS_rtf::LN_footerr);
-
     Mapper().endCharacterGroup();
     Mapper().endParagraphGroup();
+
     // start new one
     Mapper().startParagraphGroup();
 }
 
 void RTFDocumentImpl::sectBreak(bool bFinal = false)
 {
+    if (m_nHeaderPos > 0)
+        resolveSubstream(m_nHeaderPos, NS_rtf::LN_headerr);
+    if (m_nFooterPos > 0)
+        resolveSubstream(m_nFooterPos, NS_rtf::LN_footerr);
+
     RTFValue::Pointer_t pBreak = RTFSprm::find(m_aStates.top().aSectionSprms, NS_sprm::LN_SBkc);
     // In case the last section is a continous one, we don't need to output a section break.
     if (bFinal && pBreak.get() && !pBreak->getInt())
