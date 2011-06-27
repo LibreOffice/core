@@ -115,16 +115,6 @@ ByteString ByteString::CreateFromInt64( sal_Int64 n, sal_Int16 nRadix )
 
 // -----------------------------------------------------------------------
 
-ByteString ByteString::CreateFromFloat( float f )
-{
-    sal_Char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
-    BOOST_STATIC_ASSERT(RTL_STR_MAX_VALUEOFFLOAT <= STRING_MAXLEN);
-    return ByteString(
-        aBuf, static_cast< xub_StrLen >(rtl_str_valueOfFloat( aBuf, f )) );
-}
-
-// -----------------------------------------------------------------------
-
 namespace { struct Empty : public rtl::Static< const ByteString, Empty> {}; }
 const ByteString& ByteString::EmptyString()
 {
