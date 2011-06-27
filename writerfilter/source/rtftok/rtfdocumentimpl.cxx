@@ -1583,6 +1583,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             lcl_putNestedSprm(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue);
             break;
+        case RTF_HEADERY:
+            lcl_putNestedSprm(m_aStates.top().aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_header, pIntValue);
+            break;
+        case RTF_FOOTERY:
+            lcl_putNestedSprm(m_aStates.top().aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_footer, pIntValue);
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
