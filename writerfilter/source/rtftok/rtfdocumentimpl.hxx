@@ -4,14 +4,17 @@
 #include <memory>
 #include <stack>
 #include <vector>
+
 #include <rtl/strbuf.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/helper/storagebase.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <rtftok/RTFDocument.hxx>
 #include <rtfcontrolwords.hxx>
 #include <rtfreferencetable.hxx>
 #include <rtfsprm.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 class SvStream;
 
@@ -241,8 +244,7 @@ namespace writerfilter {
                 bool m_bTable;
                 /// If this is a substream.
                 bool m_bIsSubstream;
-                sal_uInt32 m_nHeaderPos;
-                sal_uInt32 m_nFooterPos;
+                std::deque<std::pair<Id, sal_uInt32>> m_nHeaderFooterPositions;
                 sal_uInt32 m_nGroupStartPos;
         };
     } // namespace rtftok

@@ -158,8 +158,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aTableBuffer(),
     m_bTable(false),
     m_bIsSubstream(false),
-    m_nHeaderPos(0),
-    m_nFooterPos(0),
+    m_nHeaderFooterPositions(),
     m_nGroupStartPos(0)
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
@@ -220,10 +219,12 @@ void RTFDocumentImpl::parBreak()
 
 void RTFDocumentImpl::sectBreak(bool bFinal = false)
 {
-    if (m_nHeaderPos > 0)
-        resolveSubstream(m_nHeaderPos, NS_rtf::LN_headerr);
-    if (m_nFooterPos > 0)
-        resolveSubstream(m_nFooterPos, NS_rtf::LN_footerr);
+    while (m_nHeaderFooterPositions.size())
+    {
+        std::pair<Id, sal_uInt32> aPair = m_nHeaderFooterPositions.front();
+        m_nHeaderFooterPositions.pop_front();
+        resolveSubstream(aPair.second, aPair.first);
+    }
 
     RTFValue::Pointer_t pBreak = RTFSprm::find(m_aStates.top().aSectionSprms, NS_sprm::LN_SBkc);
     // In case the last section is a continous one, we don't need to output a section break.
@@ -646,9 +647,29 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_HEADER:
         case RTF_FOOTER:
+        case RTF_HEADERL:
+        case RTF_HEADERR:
+        case RTF_HEADERF:
+        case RTF_FOOTERL:
+        case RTF_FOOTERR:
+        case RTF_FOOTERF:
             if (!m_bIsSubstream)
             {
-                (nKeyword == RTF_HEADER ? m_nHeaderPos : m_nFooterPos ) = m_nGroupStartPos-1;
+                Id nId = 0;
+                sal_uInt32 nPos = m_nGroupStartPos - 1;
+                switch (nKeyword)
+                {
+                    case RTF_HEADER: nId = NS_rtf::LN_headerr; break;
+                    case RTF_FOOTER: nId = NS_rtf::LN_footerr; break;
+                    case RTF_HEADERL: nId = NS_rtf::LN_headerl; break;
+                    case RTF_HEADERR: nId = NS_rtf::LN_headerr; break;
+                    case RTF_HEADERF: nId = NS_rtf::LN_headerr; break; // TODO figure out how to use NS_rtf::LN_headerf
+                    case RTF_FOOTERL: nId = NS_rtf::LN_footerl; break;
+                    case RTF_FOOTERR: nId = NS_rtf::LN_footerr; break;
+                    case RTF_FOOTERF: nId = NS_rtf::LN_footerr; break; // same here, NS_rtf::LN_footerf could be used
+                    default: break;
+                }
+                m_nHeaderFooterPositions.push_back(make_pair(nId, nPos));
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
             break;
