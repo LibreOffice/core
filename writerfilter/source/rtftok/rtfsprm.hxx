@@ -28,6 +28,7 @@ namespace writerfilter {
                 virtual std::string getName() const;
                 virtual std::string toString() const;
                 static RTFValue::Pointer_t find(RTFSprms_t& rVector, Id nKeyword);
+                static void erase(RTFSprms_t& rVector, Id nKeyword);
             private:
                 Id m_nKeyword;
                 RTFValue::Pointer_t& m_pValue;

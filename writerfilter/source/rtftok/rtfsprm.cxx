@@ -78,6 +78,16 @@ RTFValue::Pointer_t RTFSprm::find(RTFSprms_t &rVector, Id nKeyword)
     return pValue;
 }
 
+void RTFSprm::erase(RTFSprms_t &rVector, Id nKeyword)
+{
+    for (RTFSprms_t::iterator i = rVector.begin(); i != rVector.end(); ++i)
+        if (i->first == nKeyword)
+        {
+            rVector.erase(i);
+            return;
+        }
+}
+
 } // namespace rtftok
 } // namespace writerfilter
 
