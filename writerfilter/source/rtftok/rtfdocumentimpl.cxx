@@ -26,32 +26,6 @@ using rtl::OUStringToOString;
 namespace writerfilter {
 namespace rtftok {
 
-RTFSprms_t& lcl_getTabsTab(std::stack<RTFParserState>& aStates)
-{
-    // insert the tabs sprm if necessary
-    RTFValue::Pointer_t pTabs = RTFSprm::find(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_tabs);
-    if (!pTabs.get())
-    {
-        RTFSprms_t aTabsAttributes;
-        RTFSprms_t aTabsSprms;
-        RTFValue::Pointer_t pTabsValue(new RTFValue(aTabsAttributes, aTabsSprms));
-        aStates.top().aParagraphSprms.push_back(make_pair(NS_ooxml::LN_CT_PPrBase_tabs, pTabsValue));
-        pTabs = RTFSprm::find(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_tabs);
-    }
-    RTFSprms_t& rSprms = pTabs->getSprms();
-
-    // insert the tab sprm if necessary
-    RTFValue::Pointer_t pTab = RTFSprm::find(rSprms, NS_ooxml::LN_CT_Tabs_tab);
-    if (!pTab.get())
-    {
-        RTFSprms_t aTabAttributes;
-        RTFValue::Pointer_t pTabValue(new RTFValue(aTabAttributes));
-        rSprms.push_back(make_pair(NS_ooxml::LN_CT_Tabs_tab, pTabValue));
-        pTab = RTFSprm::find(rSprms, NS_ooxml::LN_CT_Tabs_tab);
-    }
-    return pTab->getAttributes();
-}
-
 RTFSprms_t& lcl_getNumPr(std::stack<RTFParserState>& aStates)
 {
     // insert the numpr sprm if necessary
@@ -865,9 +839,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
     if (nParam >= 0)
     {
-        RTFSprms_t& rAttributes = lcl_getTabsTab(m_aStates);
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        rAttributes.push_back(make_pair(NS_ooxml::LN_CT_TabStop_val, pValue));
+        m_aStates.top().aTabAttributes.push_back(make_pair(NS_ooxml::LN_CT_TabStop_val, pValue));
         skipDestination(bParsed);
         return 0;
     }
@@ -885,9 +858,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
     if (nParam >= 0)
     {
-        RTFSprms_t& rAttributes = lcl_getTabsTab(m_aStates);
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        rAttributes.push_back(make_pair(NS_ooxml::LN_CT_TabStop_leader, pValue));
+        m_aStates.top().aTabAttributes.push_back(make_pair(NS_ooxml::LN_CT_TabStop_leader, pValue));
         skipDestination(bParsed);
         return 0;
     }
@@ -1386,8 +1358,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_TX:
             {
-                RTFSprms_t& rAttributes = lcl_getTabsTab(m_aStates);
-                rAttributes.push_back(make_pair(NS_ooxml::LN_CT_TabStop_pos, pIntValue));
+                m_aStates.top().aTabAttributes.push_back(make_pair(NS_ooxml::LN_CT_TabStop_pos, pIntValue));
+                RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aTabAttributes));
+                lcl_putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_tabs, NS_ooxml::LN_CT_Tabs_tab, pValue);
+                m_aStates.top().aTabAttributes.clear();
             }
             break;
         case RTF_ILVL:
@@ -2190,6 +2164,7 @@ RTFParserState::RTFParserState()
     aTableRowAttributes(),
     aTableCellSprms(),
     aTableCellAttributes(),
+    aTabAttributes(),
     aFontTableEntries(),
     nCurrentFontIndex(0),
     aCurrentColor(),

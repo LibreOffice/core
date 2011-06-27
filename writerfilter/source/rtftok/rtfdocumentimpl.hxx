@@ -118,6 +118,8 @@ namespace writerfilter {
                 // reset by cellx
                 RTFSprms_t aTableCellSprms;
                 RTFSprms_t aTableCellAttributes;
+                // reset by tx
+                RTFSprms_t aTabAttributes;
 
                 RTFReferenceTable::Entries_t aFontTableEntries;
                 int nCurrentFontIndex;
