@@ -592,13 +592,6 @@ void RTFDocumentImpl::text(OUString& rString)
         Mapper().text(sFieldSep, 1);
         Mapper().endCharacterGroup();
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
-    {
-        sal_uInt8 sFieldEnd[] = { 0x15 };
-        Mapper().startCharacterGroup();
-        Mapper().text(sFieldEnd, 1);
-        Mapper().endCharacterGroup();
-    }
 }
 
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
@@ -1945,6 +1938,13 @@ int RTFDocumentImpl::popState()
     {
         OUString aOUStr(OStringToOUString(m_aStates.top().aFieldInstruction.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
         text(aOUStr);
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
+    {
+        sal_uInt8 sFieldEnd[] = { 0x15 };
+        Mapper().startCharacterGroup();
+        Mapper().text(sFieldEnd, 1);
+        Mapper().endCharacterGroup();
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
     {
