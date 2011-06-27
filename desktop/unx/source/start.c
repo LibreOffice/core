@@ -866,6 +866,10 @@ exec_javaldx (Args *args)
     if( err != osl_Process_E_None)
     {
         fprintf (stderr, "Warning: failed to launch javaldx - java may not fuction correctly\n");
+        if (javaldx)
+            osl_freeProcessHandle(javaldx);
+        if (fileOut)
+            osl_closeFile(fileOut);
         return;
     } else {
         char *chomp;
@@ -876,6 +880,10 @@ exec_javaldx (Args *args)
 
         if (bytes_read <= 0) {
             fprintf (stderr, "Warning: failed to read path from javaldx\n");
+            if (javaldx)
+                osl_freeProcessHandle(javaldx);
+            if (fileOut)
+                osl_closeFile(fileOut);
             return;
         }
         newpath[bytes_read] = '\0';
@@ -889,7 +897,10 @@ exec_javaldx (Args *args)
 #endif
     extend_library_path (newpath);
 
-    osl_freeProcessHandle(javaldx);
+    if (javaldx)
+        osl_freeProcessHandle(javaldx);
+    if (fileOut)
+        osl_closeFile(fileOut);
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
