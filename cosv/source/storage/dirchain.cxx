@@ -95,18 +95,6 @@ DirectoryChain::PopBack( uintt i_nCount )
 }
 
 void
-DirectoryChain::Get( ostream &      o_rPath,
-                     const char *   i_sDelimiter ) const
-{
-    for ( std::vector<String>::const_iterator it = aPath.begin();
-          it != aPath.end();
-          ++it )
-    {
-        o_rPath << (*it).c_str() << i_sDelimiter;
-    }
-}
-
-void
 DirectoryChain::Get( bostream &      o_rPath,
                      const char *    i_sDelimiter ) const
 {

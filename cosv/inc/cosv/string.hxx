@@ -247,16 +247,6 @@ int                 compare(
                         const CharOrder_Table & i_rOrder,
                         const char *            i_s1,
                         const char *            i_s2 );
-
-    //*** Defined order, substrings
-
-int                 compare(
-                        const CharOrder_Table & i_rOrder,
-                        const char *            i_s1,
-                        const char *            i_s2,
-                        csv::str::size          i_nLength );
-
-
 }   // namespace csv
 
 
@@ -506,9 +496,6 @@ operator<<( csv::ostream &        o_rOut,
     { o_rOut << i_rSrc.c_str(); return o_rOut; }
 
 
-
-
-
 //******************    typedefs   *********************//
 
 namespace csv
@@ -517,9 +504,6 @@ namespace csv
 typedef std::vector<String>   StringVector;
 
 }
-
-
-
 
 #endif
 
