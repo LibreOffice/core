@@ -1552,43 +1552,43 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue);
             break;
         case RTF_MARGL:
-            lcl_putNestedSprm(m_aDefaultState.aSectionSprms,
+            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue);
             break;
         case RTF_MARGR:
-            lcl_putNestedSprm(m_aDefaultState.aSectionSprms,
+            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue);
             break;
         case RTF_MARGT:
-            lcl_putNestedSprm(m_aDefaultState.aSectionSprms,
+            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue);
             break;
         case RTF_MARGB:
-            lcl_putNestedSprm(m_aDefaultState.aSectionSprms,
+            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue);
             break;
         case RTF_MARGLSXN:
-            lcl_putNestedSprm(m_aStates.top().aSectionSprms,
+            lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue);
             break;
         case RTF_MARGRSXN:
-            lcl_putNestedSprm(m_aStates.top().aSectionSprms,
+            lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue);
             break;
         case RTF_MARGTSXN:
-            lcl_putNestedSprm(m_aStates.top().aSectionSprms,
+            lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue);
             break;
         case RTF_MARGBSXN:
-            lcl_putNestedSprm(m_aStates.top().aSectionSprms,
+            lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue);
             break;
         case RTF_HEADERY:
-            lcl_putNestedSprm(m_aStates.top().aSectionSprms,
+            lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_header, pIntValue);
             break;
         case RTF_FOOTERY:
-            lcl_putNestedSprm(m_aStates.top().aSectionSprms,
+            lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_footer, pIntValue);
             break;
         default:
