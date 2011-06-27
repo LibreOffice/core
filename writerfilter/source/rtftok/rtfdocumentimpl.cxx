@@ -225,7 +225,6 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32& nPos, Id nId)
     RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame));
     pImpl->setSubstream(true);
     pImpl->seek(nPos);
-    pImpl->setSectionProperties(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms);
     OSL_TRACE("substream start");
     Mapper().substream(nId, pImpl);
     OSL_TRACE("substream end");
@@ -280,12 +279,6 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
 void RTFDocumentImpl::seek(sal_uInt32 nPos)
 {
     Strm().Seek(nPos);
-}
-
-void RTFDocumentImpl::setSectionProperties(RTFSprms_t& rAttributes, RTFSprms_t& rSprms)
-{
-    m_aDefaultState.aSectionAttributes = rAttributes;
-    m_aDefaultState.aSectionSprms = rSprms;
 }
 
 sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
