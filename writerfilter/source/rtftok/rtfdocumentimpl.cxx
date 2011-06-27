@@ -252,6 +252,11 @@ void RTFDocumentImpl::parBreak()
 
 void RTFDocumentImpl::sectBreak(bool bFinal = false)
 {
+    RTFValue::Pointer_t pBreak = RTFSprm::find(m_aStates.top().aSectionSprms, NS_sprm::LN_SBkc);
+    // In case the last section is a continous one, we don't need to output a section break.
+    if (bFinal && pBreak.get() && !pBreak->getInt())
+        RTFSprm::erase(m_aStates.top().aSectionSprms, NS_sprm::LN_SBkc);
+
     // Section properties are a paragraph sprm.
     RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms));
     RTFSprms_t aAttributes;
@@ -262,10 +267,6 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
             );
     // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
     Mapper().props(pProperties);
-    RTFValue::Pointer_t pBreak = RTFSprm::find(m_aStates.top().aSectionSprms, NS_sprm::LN_SBkc);
-    // In case the last section is a continous one, we don't need to output anything.
-    if (bFinal && pBreak.get() && !pBreak->getInt())
-            return;
     Mapper().endParagraphGroup();
     if (!m_bIsSubstream)
         Mapper().endSectionGroup();
