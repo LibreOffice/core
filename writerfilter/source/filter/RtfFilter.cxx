@@ -36,6 +36,7 @@
 #include <dmapper/DomainMapper.hxx>
 #include <rtftok/RTFDocument.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <svtools/miscopt.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -70,8 +71,8 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     }
     else if ( m_xDstDoc.is() )
     {
-        bool bUseDomainMapper = true;
-        if (bUseDomainMapper)
+        SvtMiscOptions aMiscOptions;
+        if (aMiscOptions.IsExperimentalMode())
         {
             MediaDescriptor aMediaDesc( aDescriptor );
 #ifdef DEBUG_IMPORT
