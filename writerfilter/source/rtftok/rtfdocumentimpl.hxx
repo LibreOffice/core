@@ -235,6 +235,8 @@ namespace writerfilter {
                 bool m_bNeedPap;
                 /// The list table and list override table combined.
                 RTFSprms_t m_aListTableSprms;
+                /// The settings table.
+                RTFSprms_t m_aSettingsTableSprms;
 
                 oox::StorageRef m_xStorage;
                 oox::GraphicHelper* m_pGraphicHelper;

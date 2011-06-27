@@ -154,6 +154,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bFirstRun(true),
     m_bNeedPap(false),
     m_aListTableSprms(),
+    m_aSettingsTableSprms(),
     m_xStorage(),
     m_aTableBuffer(),
     m_bTable(false),
@@ -498,7 +499,14 @@ void RTFDocumentImpl::text(OUString& rString)
 
     if (m_bFirstRun)
     {
-        // start initial paragraph after the optional font/color/stylesheet tables
+        // output settings table
+        RTFSprms_t aDummyAttributes;
+        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aDummyAttributes, m_aSettingsTableSprms));
+        RTFReferenceTable::Entries_t aSettingsTableEntries;
+        aSettingsTableEntries.insert(make_pair(0, pProp));
+        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aSettingsTableEntries));
+        Mapper().table(NS_ooxml::LN_settings_settings, pTable);
+        // start initial paragraph
         if (!m_bIsSubstream)
             Mapper().startSectionGroup();
         Mapper().startParagraphGroup();
@@ -1592,6 +1600,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_FOOTERY:
             lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_footer, pIntValue, true);
+            break;
+        case RTF_DEFTAB:
+            m_aSettingsTableSprms.push_back(make_pair(NS_ooxml::LN_CT_Settings_defaultTabStop, pIntValue));
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
