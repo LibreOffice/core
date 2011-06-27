@@ -525,6 +525,7 @@ protected:
 private:
 
     void DoWriteBookmarks( );
+    void WritePostponedGraphic();
 
     void StartField_Impl( FieldInfos& rInfos, sal_Bool bWriteRun = sal_False );
     void DoWriteCmd( String& rCmd );
@@ -590,6 +591,14 @@ private:
         EndInThisRun
     };
     HyperLinkCloseState m_nCloseHyperlinkStatus;
+
+    struct PostponedGraphic
+    {
+        PostponedGraphic( const SwGrfNode* n, Size s ) : grfNode( n ), size( s ) {};
+        const SwGrfNode* grfNode;
+        Size size;
+    };
+    std::list< PostponedGraphic >* m_postponedGraphic;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
