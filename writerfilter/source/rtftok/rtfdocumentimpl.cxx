@@ -1539,20 +1539,20 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_PAPERH:
-            lcl_putNestedSprm(m_aDefaultState.aSectionSprms,
-                    NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue);
+            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue, true);
             break;
         case RTF_PAPERW:
-            lcl_putNestedSprm(m_aDefaultState.aSectionSprms,
-                    NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue);
+            lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, true);
             break;
         case RTF_PGHSXN:
-            lcl_putNestedSprm(m_aStates.top().aSectionSprms,
-                    NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue);
+            lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue, true);
             break;
         case RTF_PGWSXN:
-            lcl_putNestedSprm(m_aStates.top().aSectionSprms,
-                    NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue);
+            lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, true);
             break;
         case RTF_MARGL:
             lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
