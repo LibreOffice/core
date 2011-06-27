@@ -43,6 +43,8 @@
 #include <shellio.hxx>
 #include <svl/zforlist.hxx>
 
+#include <boost/noncopyable.hpp>
+
 #define CREATE_CONST_ASC(s) String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(s))
 
 class SwDoc;
@@ -363,7 +365,7 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
          */
-        class RedlineStack
+        class RedlineStack : public boost::noncopyable
         {
         private:
             std::vector<SwFltStackEntry *> maStack;
@@ -377,10 +379,6 @@ namespace sw
                 WW8TabDesc* pTabDesc );
             void closeall(const SwPosition& rPos);
             ~RedlineStack();
-        private:
-            //No copying
-            RedlineStack(const RedlineStack&);
-            RedlineStack& operator=(const RedlineStack&);
         };
 
         /**
@@ -432,16 +430,12 @@ namespace sw
                 const;
         };
 
-        class WrtRedlineAuthor
+        class WrtRedlineAuthor : public boost::noncopyable
         {
         protected:
             std::vector<String> maAuthors;          // Array of Sw - Bookmarknames
 
             sal_uInt16 GetPos( const String& rNm );
-
-            //No copying
-            WrtRedlineAuthor(const WrtRedlineAuthor&);
-            WrtRedlineAuthor& operator=(const WrtRedlineAuthor&);
         public:
             WrtRedlineAuthor() {}
             virtual ~WrtRedlineAuthor() {}
