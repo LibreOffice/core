@@ -78,27 +78,14 @@ static void lcl_putNestedSprm(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::
     lcl_putNestedAttribute(rSprms, nParent, nId, pValue, bOverwrite, false);
 }
 
-static RTFSprms_t& lcl_getBordersAttributes(RTFSprms_t& rSprms, Id nId)
+static RTFSprms_t& lcl_getLastAttributes(RTFSprms_t& rSprms, Id nId)
 {
     RTFValue::Pointer_t p = RTFSprm::find(rSprms, nId);
     if (p->getSprms().size())
         return p->getSprms().back().second->getAttributes();
     else
     {
-        OSL_FAIL("trying to set property when no border is defined");
-        return p->getSprms();
-    }
-}
-
-static RTFSprms_t& lcl_getColsAttributes(std::stack<RTFParserState>& aStates)
-{
-    RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_cols);
-    OSL_ASSERT(p->getSprms().size());
-    if (p->getSprms().size())
-        return p->getSprms().back().second->getAttributes();
-    else
-    {
-        OSL_FAIL("trying to set property when no cell is defined");
+        OSL_FAIL("trying to set property when no type is defined");
         return p->getSprms();
     }
 }
@@ -118,13 +105,13 @@ static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, R
     else if (aStates.top().nBorderState == BORDER_CELL)
     {
         // Attributes of the last border type
-        RTFSprms_t& rAttributes = lcl_getBordersAttributes(aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
+        RTFSprms_t& rAttributes = lcl_getLastAttributes(aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
         rAttributes.push_back(make_pair(nId, pValue));
     }
     else if (aStates.top().nBorderState == BORDER_PAGE)
     {
         // Attributes of the last border type
-        RTFSprms_t& rAttributes = lcl_getBordersAttributes(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders);
+        RTFSprms_t& rAttributes = lcl_getLastAttributes(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders);
         rAttributes.push_back(make_pair(nId, pValue));
     }
 }
@@ -1567,7 +1554,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_COLW:
         case RTF_COLSR:
             {
-                RTFSprms_t& rAttributes = lcl_getColsAttributes(m_aStates);
+                RTFSprms_t& rAttributes = lcl_getLastAttributes(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_cols);
                 rAttributes.push_back(make_pair((nKeyword == RTF_COLW ? NS_ooxml::LN_CT_Column_w : NS_ooxml::LN_CT_Column_space),
                             pIntValue));
             }
