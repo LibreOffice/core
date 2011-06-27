@@ -41,6 +41,12 @@ USE_DEBUG_RUNTIME=
 
 .INCLUDE :  settings.mk
 
+.IF "$(COM)" == "GCC"
+ALL :
+    @echo This does not build with MinGW anyway, so bypass for now
+.ENDIF
+
+
 UWINAPILIB =
 UWINAPILIB_X64 =
 

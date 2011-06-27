@@ -40,6 +40,12 @@ USE_DEFFILE_X64=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(COM)" == "GCC"
+ALL :
+    @echo This does not build with MinGW
+.ENDIF
+
+
 UWINAPILIB =
 UWINAPILIB_X64 =
 
