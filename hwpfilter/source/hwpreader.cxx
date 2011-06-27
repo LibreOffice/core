@@ -543,7 +543,8 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                             close(fd);
                         }
 #ifdef _WIN32
-                        for(int j = 0 ; j < (int)strlen( dirname ) ; j++)
+                        int j;
+                        for(j = 0 ; j < (int)strlen( dirname ) ; j++)
                         {
                             if( dirname[j] == '\\' ) buf[j] = '/';
                             else buf[j] = dirname[j];
