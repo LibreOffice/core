@@ -72,8 +72,4 @@ CancelButton BTN_CANCEL \
     TabStop = TRUE ; \
 };
 
-#define BUTTONS_HELP_OK_CANCEL_NEXT( xPos, yPos ) \
-BUTTONS_HELP_OK_CANCEL( xPos, yPos, 53, 0 )
-
-
 #endif
