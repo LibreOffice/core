@@ -1111,6 +1111,12 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DBCH:
             m_aStates.top().bIsCjk = false;
             break;
+        case RTF_TITLEPG:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(1));
+                m_aStates.top().aSectionSprms.push_back(make_pair(NS_ooxml::LN_EG_SectPrContents_titlePg, pValue));
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
