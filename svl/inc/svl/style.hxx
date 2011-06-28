@@ -54,7 +54,7 @@ class SvStream;
 
 /*
 Everyone changing instances of SfxStyleSheetBasePool or SfxStyleSheetBase
-mußt broadcast this using <SfxStyleSheetBasePool::GetBroadcaster()> broadcasten.
+must broadcast this using <SfxStyleSheetBasePool::GetBroadcaster()> broadcasts.
 The class <SfxStyleSheetHint> is used for this, it contains an Action-Id and a
 pointer to the <SfxStyleSheetBase>. The actions are:
 
