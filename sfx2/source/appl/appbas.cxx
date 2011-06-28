@@ -100,22 +100,6 @@ using namespace ::com::sun::star::script;
 
 using ::basic::BasicManagerRepository;
 
-//------------------------------------------------------------------------
-String lcl_GetVersionString()
-{
-    ::rtl::OUString aDefault;
-    String aVersion( utl::Bootstrap::getBuildIdData( aDefault ));
-
-    if ( aVersion.Len() == 0 )
-    {
-        OSL_FAIL( "No BUILDID in bootstrap file found" );
-    }
-
-    aVersion.Erase( 0, aVersion.Search( ':' ) + 1 );
-    aVersion.Erase( aVersion.Search( ')' ) );
-    return aVersion;
-}
-
 //=========================================================================
 sal_uInt16 SfxApplication::SaveBasicManager() const
 {
