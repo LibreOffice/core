@@ -72,14 +72,10 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_STR_COPYRIGHT
     {
-        Text[ en-US ] = "Copyright © 2000, 2010 LibreOffice contributors and/or their affiliates. All rights reserved.\nThis product was created by %OOOVENDOR, based on OpenOffice.org, which is Copyright 2000, 2010 Oracle and/or its affiliates.\n%OOOVENDOR acknowledges all community members, please find more info at the link below:";
+        Text[ en-US ] = "Copyright © 2000, 2010 LibreOffice contributors and/or their affiliates. All rights reserved.\n\nThis product was created by %OOOVENDOR, based on OpenOffice.org, which is Copyright 2000, 2010 Oracle and/or its affiliates.\n\n%OOOVENDOR acknowledges all community members, please find more info at the link below:";
     };
     String ABOUT_STR_LINK
     {
         Text[ en-US ] = "http://www.libreoffice.org/credits.html";
-    };
-    String ABOUT_STR_ACCEL
-    {
-        Text = "SDT" ;
     };
 };

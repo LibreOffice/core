@@ -53,19 +53,10 @@ private:
     MultiLineEdit       aCopyrightText;
     svt::FixedHyperlink aInfoLink;
 
-//    ResStringArray    aDeveloperAry; // RIP ...
-    String          aAccelStr;
     String          aVersionData;
     String          aVersionTextStr;
     String          aCopyrightTextStr;
     String          aLinkStr;
-
-    AccelList       aAccelList;
-
-    AutoTimer       aTimer;
-    long            nOff;
-    long            m_nDeltaWidth;
-    int             m_nPendingScrolls;
 
 protected:
     virtual sal_Bool Close();
@@ -73,10 +64,7 @@ protected:
 
 public:
     AboutDialog( Window* pParent, const ResId& rId);
-    ~AboutDialog();
 
-    DECL_LINK( TimerHdl, Timer * );
-    DECL_LINK( AccelSelectHdl, Accelerator * );
     DECL_LINK( HandleHyperlink, svt::FixedHyperlink * );
 };
 

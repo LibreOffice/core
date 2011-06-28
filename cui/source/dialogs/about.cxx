@@ -90,14 +90,9 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
     aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
     aInfoLink       ( this,     ResId( ABOUT_FTXT_LINK, *rId.GetResMgr() ) ),
-    aAccelStr       (           ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
     aVersionTextStr(            ResId( ABOUT_STR_VERSION, *rId.GetResMgr() ) ),
     aCopyrightTextStr(          ResId( ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) ),
-    aLinkStr        (           ResId( ABOUT_STR_LINK, *rId.GetResMgr() ) ),
-    aTimer          (),
-    nOff            ( 0 ),
-    m_nDeltaWidth   ( 0 ),
-    m_nPendingScrolls( 0 )
+    aLinkStr        (           ResId( ABOUT_STR_LINK, *rId.GetResMgr() ) )
 {
     rtl::OUString sProduct;
     utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
@@ -121,28 +116,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     sVersion += aBuildString;
 #endif
     aVersionText.SetText( sVersion );
-
-    // Initialization call for developers
-    if ( aAccelStr.Len() && ByteString(U2S(aAccelStr)).IsAlphaAscii() )
-    {
-        Accelerator *pAccel = 0, *pPrevAccel = 0, *pFirstAccel = 0;
-        aAccelStr.ToUpperAscii();
-
-        for ( sal_uInt16 i = 0; i < aAccelStr.Len(); ++i )
-        {
-            pPrevAccel = pAccel;
-            pAccel = new Accelerator;
-            aAccelList.push_back( pAccel );
-            sal_uInt16 nKey = aAccelStr.GetChar(i) - 'A' + KEY_A;
-            pAccel->InsertItem( 1, KeyCode( nKey, KEY_MOD1 ) );
-            if ( i > 0 )
-                pPrevAccel->SetAccel( 1, pAccel );
-            if ( i == 0 )
-                pFirstAccel = pAccel;
-        }
-        pAccel->SetSelectHdl( LINK( this, AboutDialog, AccelSelectHdl ) );
-        GetpApp()->InsertAccel( pFirstAccel );
-    }
 
     // set for background and text the correct system color
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
@@ -183,101 +156,61 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     Size aVTSize = aVersionText.CalcMinimumSize();
     long nY          = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
     long nDlgMargin  = a6Size.Width() * 3 ;
-    long nCtrlMargin = aVTSize.Height() + ( a6Size.Height() * 2 );
+    long nCtrlMargin = a6Size.Height() * 2;
     long nTextWidth  = aOutSiz.Width() - nDlgMargin;
 
     // finally set the aVersionText widget position and size
     Size aVTCopySize = aVTSize;
     Point aVTCopyPnt;
-    aVTCopySize.Width()  = nTextWidth;
+    aVTCopySize.Width() = nTextWidth;
     aVTCopyPnt.X() = ( aOutSiz.Width() - aVTCopySize.Width() ) / 2;
     aVTCopyPnt.Y() = nY;
     aVersionText.SetPosSizePixel( aVTCopyPnt, aVTCopySize );
 
+    nY += aVTSize.Height();
     nY += nCtrlMargin;
 
-    // OK-Button-Position (at the bottom and centered)
-    Size aOKSiz = aOKButton.GetSizePixel();
-    Point aOKPnt = aOKButton.GetPosPixel();
+    // Multiline edit with Copyright-Text
+    // preferred Version widget size
+    Size aCTSize = aCopyrightText.CalcMinimumSize();
+
+    Size aCTCopySize = aCTSize;
+    Point aCTCopyPnt;
+    aCTCopySize.Width()  = nTextWidth;
+    aCTCopyPnt.X() = ( aOutSiz.Width() - aCTCopySize.Width() ) / 2;
+    aCTCopyPnt.Y() = nY;
+    aCopyrightText.SetPosSizePixel( aCTCopyPnt, aCTCopySize );
+
+    nY += aCTSize.Height();
+    nY += nCtrlMargin;
 
     // FixedHyperlink with more info link
-    Point aLinkPnt = aInfoLink.GetPosPixel();
-    Size aLinkSize = aInfoLink.GetSizePixel();
-
-    // Multiline edit with Copyright-Text
-    Point aCopyPnt = aCopyrightText.GetPosPixel();
-    Size aCopySize = aCopyrightText.GetSizePixel();
-    aCopySize.Width()  = nTextWidth;
-    aCopySize.Height() = aOutSiz.Height() - nY - ( aOKSiz.Height() * 2 ) - 3*aLinkSize.Height() - nCtrlMargin;
-
-    aCopyPnt.X() = ( aOutSiz.Width() - aCopySize.Width() ) / 2;
-    aCopyPnt.Y() = nY;
-    aCopyrightText.SetPosSizePixel( aCopyPnt, aCopySize );
-
-    nY += aCopySize.Height() + aLinkSize.Height();
-
-    aLinkSize.Width() = aInfoLink.CalcMinimumSize().Width();
+    Size aLinkSize = aInfoLink.CalcMinimumSize();
+    Point aLinkPnt;
     aLinkPnt.X() = ( aOutSiz.Width() - aLinkSize.Width() ) / 2;
     aLinkPnt.Y() = nY;
     aInfoLink.SetPosSizePixel( aLinkPnt, aLinkSize );
 
     nY += aLinkSize.Height() + nCtrlMargin;
 
+    // OK-Button-Position (at the bottom and centered)
+    Size aOKSiz = aOKButton.GetSizePixel();
+    Point aOKPnt;
     aOKPnt.X() = ( aOutSiz.Width() - aOKSiz.Width() ) / 2;
     aOKPnt.Y() = nY;
     aOKButton.SetPosPixel( aOKPnt );
 
-    // Change the width of the dialog
+    nY += aOKSiz.Height() + nCtrlMargin;
+
+    aOutSiz.Height() = nY;
+
+    // Change the size of the dialog
     SetOutputSizePixel( aOutSiz );
 
     FreeResource();
 
     // explicit Help-Id
     SetHelpId( CMD_SID_ABOUT );
-}
-
-// -----------------------------------------------------------------------
-
-AboutDialog::~AboutDialog()
-{
-    // Clearing the developers call
-    if ( !aAccelList.empty() )
-    {
-        GetpApp()->RemoveAccel( aAccelList.front() );
-
-        for ( size_t i = 0, n = aAccelList.size(); i < n; ++i )
-            delete aAccelList[ i ];
-        aAccelList.clear();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( AboutDialog, TimerHdl, Timer *, pTimer )
-{
-    (void)pTimer; //unused
-    ++m_nPendingScrolls;
-    Invalidate( INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
-{
-    (void)pAccelerator; //unused
-    // init Timer
-    aTimer.SetTimeoutHdl( LINK( this, AboutDialog, TimerHdl ) );
-
-    // init scroll mode
-    nOff = GetOutputSizePixel().Height();
-    MapMode aMapMode( MAP_PIXEL );
-    SetMapMode( aMapMode );
-
-    // start scroll Timer
-    aTimer.SetTimeout( SCROLL_TIMER );
-    aTimer.Start();
-    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -312,15 +245,12 @@ IMPL_LINK( AboutDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
 void AboutDialog::Paint( const Rectangle& rRect )
 {
     SetClipRegion( rRect );
-
-    Point aPos( m_nDeltaWidth / 2, 0 );
+    Point aPos( 0, 0 );
     DrawImage( aPos, aAppLogo );
 }
 
 sal_Bool AboutDialog::Close()
 {
-    // stop Timer and finish the dialog
-    aTimer.Stop();
     EndDialog( RET_OK );
     return sal_False;
 }
