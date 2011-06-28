@@ -81,6 +81,7 @@ GetBuildId()
     //strip trailing - from ./g log
     if (!sBuildId.isEmpty() && sBuildId.getStr()[sBuildId.getLength()-1] == '-')
     {
+        sBuildId = sBuildId.copy(0, sBuildId.getLength()-1);
         rtl::OUStringBuffer aBuffer;
         sal_Int32 nIndex = 0;
         do
@@ -89,10 +90,13 @@ GetBuildId()
             if (!aToken.isEmpty())
             {
                 aBuffer.append(aToken);
-                if (nIndex % 5)
-                    aBuffer.append(static_cast<sal_Unicode>('-'));
-                else
-                    aBuffer.append(static_cast<sal_Unicode>('\n'));
+                if (nIndex >= 0)
+                {
+                    if (nIndex % 5)
+                        aBuffer.append(static_cast<sal_Unicode>('-'));
+                    else
+                        aBuffer.append(static_cast<sal_Unicode>('\n'));
+                }
             }
         }
         while ( nIndex >= 0 );
