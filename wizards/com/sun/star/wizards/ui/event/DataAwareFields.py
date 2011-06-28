@@ -34,8 +34,11 @@ class DataAwareFields(object):
                 return self.__ConvertedStringValue(fieldname, value)
             elif isinstance(f,int):
                 return self.__IntFieldValue(fieldname, value)
+            elif isinstance(f,float):
+                pass
+                #return self.__IntFieldValue(fieldname, value)
             else:
-                return SimpleFieldValue(f)
+                return self.__IntFieldValue(fieldname, value)
 
         except AttributeError, ex:
             traceback.print_exc()

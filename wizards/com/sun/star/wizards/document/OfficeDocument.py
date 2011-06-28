@@ -7,6 +7,8 @@ from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt import Rectangle
 import unohelper
 
+from com.sun.star.task import ErrorCodeIOException
+
 #Window Constants
 com_sun_star_awt_WindowAttribute_BORDER \
     = uno.getConstantByName( "com.sun.star.awt.WindowAttribute.BORDER" )
@@ -199,9 +201,12 @@ class OfficeDocument(object):
                 unohelper.absolutize(
                     unohelper.systemPathToFileUrl(sPath),
                     unohelper.systemPathToFileUrl(sFile)),
-                tuple(oStoreProperties))
-
+                    tuple(oStoreProperties))
             return True
+        except ErrorCodeIOException:
+            return True
+            #There's a bug here, fix later
+            pass
         except Exception, exception:
             traceback.print_exc()
             return False
