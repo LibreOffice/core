@@ -72,13 +72,34 @@ Image SfxApplication::GetApplicationLogo()
     return Image( aBitmap );
 }
 
-/* intense magic to get strong version information */
+/* get good version information */
 static String
 GetBuildId()
 {
     rtl::OUString sDefault;
-    String sBuildId( utl::Bootstrap::getBuildIdData( sDefault ) );
-    OSL_ENSURE( sBuildId.Len() > 0, "No BUILDID in bootstrap file" );
+    rtl::OUString sBuildId( utl::Bootstrap::getBuildIdData( sDefault ) );
+    //strip trailing - from ./g log
+    if (!sBuildId.isEmpty() && sBuildId.getStr()[sBuildId.getLength()-1] == '-')
+    {
+        rtl::OUStringBuffer aBuffer;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            rtl::OUString aToken = sBuildId.getToken( 0, '-', nIndex );
+            if (!aToken.isEmpty())
+            {
+                aBuffer.append(aToken);
+                if (nIndex % 5)
+                    aBuffer.append(static_cast<sal_Unicode>('-'));
+                else
+                    aBuffer.append(static_cast<sal_Unicode>('\n'));
+            }
+        }
+        while ( nIndex >= 0 );
+        sBuildId = aBuffer.makeStringAndClear();
+    }
+
+    OSL_ENSURE( sBuildId.getLength() > 0, "No BUILDID in bootstrap file" );
     return sBuildId;
 }
 
