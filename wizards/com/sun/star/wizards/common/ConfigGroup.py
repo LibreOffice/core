@@ -20,6 +20,7 @@ class ConfigGroup(ConfigNode):
             child.writeConfiguration(configView.getByName(propertyName),
                 prefix)
         else:
+            print getattr(self,field)
             configView.setHierarchicalPropertyValue(propertyName,getattr(self,field))
 
 
