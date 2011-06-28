@@ -92,7 +92,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aInfoLink       ( this,     ResId( ABOUT_FTXT_LINK, *rId.GetResMgr() ) ),
     aVersionTextStr(            ResId( ABOUT_STR_VERSION, *rId.GetResMgr() ) ),
     aCopyrightTextStr(          ResId( ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) ),
-    aLinkStr        (           ResId( ABOUT_STR_LINK, *rId.GetResMgr() ) )
+    aLinkStr        (           ResId( ABOUT_STR_LINK, *rId.GetResMgr() ) ),
+    m_sBuildStr(ResId(ABOUT_STR_BUILD, *rId.GetResMgr()))
 {
     rtl::OUString sProduct;
     utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
@@ -109,6 +110,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     String sVersion = aVersionTextStr;
     sVersion.SearchAndReplaceAscii( "$(VER)", Application::GetDisplayName() );
     sVersion += '\n';
+    sVersion += m_sBuildStr;
+    sVersion += ' ';
     sVersion += GetBuildId();
 #ifdef BUILD_VER_STRING
     String aBuildString( DEFINE_CONST_UNICODE( BUILD_VER_STRING ) );
@@ -146,52 +149,51 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     if (aAppLogoSiz.Width() < 300)
         aAppLogoSiz.Width() = 300;
 
-    Size aOutSiz     = GetOutputSizePixel();
-    aOutSiz.Width()  = aAppLogoSiz.Width();
+    Size aOutSiz = GetOutputSizePixel();
+    aOutSiz.Width() = aAppLogoSiz.Width();
 
     // analyze size of the aVersionText widget
     // character size
     Size a6Size      = aVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     // preferred Version widget size
-    Size aVTSize = aVersionText.CalcMinimumSize();
     long nY          = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
     long nDlgMargin  = a6Size.Width() * 3 ;
     long nCtrlMargin = a6Size.Height() * 2;
     long nTextWidth  = aOutSiz.Width() - nDlgMargin;
 
     // finally set the aVersionText widget position and size
-    Size aVTCopySize = aVTSize;
-    Point aVTCopyPnt;
-    aVTCopySize.Width() = nTextWidth;
-    aVTCopyPnt.X() = ( aOutSiz.Width() - aVTCopySize.Width() ) / 2;
-    aVTCopyPnt.Y() = nY;
-    aVersionText.SetPosSizePixel( aVTCopyPnt, aVTCopySize );
+    Size aVTSize = aVersionText.GetSizePixel();
+    aVTSize.Width() = nTextWidth;
+    aVersionText.SetSizePixel(aVTSize);
+    aVTSize = aVersionText.CalcMinimumSize();
+    Point aVTPnt;
+    aVTPnt.X() = ( aOutSiz.Width() - aVTSize.Width() ) / 2;
+    aVTPnt.Y() = nY;
+    aVersionText.SetPosSizePixel( aVTPnt, aVTSize );
 
-    nY += aVTSize.Height();
-    nY += nCtrlMargin;
+    nY += aVTSize.Height() + nCtrlMargin;
 
     // Multiline edit with Copyright-Text
     // preferred Version widget size
-    Size aCTSize = aCopyrightText.CalcMinimumSize();
+    Size aCTSize = aCopyrightText.GetSizePixel();
+    aCTSize.Width()  = nTextWidth;
+    aCopyrightText.SetSizePixel(aCTSize);
+    aCTSize = aCopyrightText.CalcMinimumSize();
+    Point aCTPnt;
+    aCTPnt.X() = ( aOutSiz.Width() - aCTSize.Width() ) / 2;
+    aCTPnt.Y() = nY;
+    aCopyrightText.SetPosSizePixel( aCTPnt, aCTSize );
 
-    Size aCTCopySize = aCTSize;
-    Point aCTCopyPnt;
-    aCTCopySize.Width()  = nTextWidth;
-    aCTCopyPnt.X() = ( aOutSiz.Width() - aCTCopySize.Width() ) / 2;
-    aCTCopyPnt.Y() = nY;
-    aCopyrightText.SetPosSizePixel( aCTCopyPnt, aCTCopySize );
-
-    nY += aCTSize.Height();
-    nY += nCtrlMargin;
+    nY += aCTSize.Height() + nCtrlMargin;
 
     // FixedHyperlink with more info link
-    Size aLinkSize = aInfoLink.CalcMinimumSize();
-    Point aLinkPnt;
-    aLinkPnt.X() = ( aOutSiz.Width() - aLinkSize.Width() ) / 2;
-    aLinkPnt.Y() = nY;
-    aInfoLink.SetPosSizePixel( aLinkPnt, aLinkSize );
+    Size aLTSize = aInfoLink.CalcMinimumSize();
+    Point aLTPnt;
+    aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
+    aLTPnt.Y() = nY;
+    aInfoLink.SetPosSizePixel( aLTPnt, aLTSize );
 
-    nY += aLinkSize.Height() + nCtrlMargin;
+    nY += aLTSize.Height() + nCtrlMargin;
 
     // OK-Button-Position (at the bottom and centered)
     Size aOKSiz = aOKButton.GetSizePixel();

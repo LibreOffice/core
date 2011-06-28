@@ -57,6 +57,7 @@ private:
     String          aVersionTextStr;
     String          aCopyrightTextStr;
     String          aLinkStr;
+    String m_sBuildStr;
 
 protected:
     virtual sal_Bool Close();

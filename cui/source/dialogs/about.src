@@ -80,4 +80,8 @@ ModalDialog RID_DEFAULTABOUT
     {
         Text[ en-US ] = "http://www.libreoffice.org/credits.html";
     };
+    String ABOUT_STR_BUILD
+    {
+        Text[ en-US ] = "Build ID:";
+    };
 };
