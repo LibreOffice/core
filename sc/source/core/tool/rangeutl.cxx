@@ -286,8 +286,13 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
 
     if( eScope==RUTL_NAMES )
     {
-        const ScRangeName& rRangeNames = *pDoc->GetRangeName();
-        const ScRangeData* pData = rRangeNames.findByName(rName);
+        //first check for local range names
+        ScRangeName* pRangeNames = pDoc->GetRangeName( nCurTab );
+        ScRangeData* pData = NULL;
+        if ( pRangeNames )
+            pData = pRangeNames->findByName(rName);
+        if (!pData)
+            pData = pDoc->GetRangeName()->findByName(rName);
         if (pData)
         {
             String       aStrArea;
