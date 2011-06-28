@@ -802,7 +802,10 @@ sub replace_setup_variables
 
     if ( $localbuild =~ /^\s*(\w+?)(\d+)\s*$/ ) { $localbuild = $2; }   # using "680" instead of "src680"
 
-    my $buildidstring = $localbuild . $localminor . "(Build:" . $installer::globals::buildid . ")";
+    my $buildidstring = `$ENV{'SRC_ROOT'}/g -s log -n 1 --pretty=format:%h-`;
+    if (!$buildidstring) {
+        $buildidstring = $localbuild . $localminor . "(Build:" . $installer::globals::buildid . ")";
+    }
 
     # the environment variable CWS_WORK_STAMP is set only in CWS
     if ( $ENV{'CWS_WORK_STAMP'} ) { $buildidstring = $buildidstring . "\[CWS\:" . $ENV{'CWS_WORK_STAMP'} . "\]"; }
