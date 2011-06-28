@@ -241,8 +241,6 @@ typedef void *                   sal_Handle;
 
 #if defined(SAL_W32) || defined(SAL_UNX)
 #   define SAL_MAX_ENUM 0x7fffffff
-#elif defined(SAL_W16)
-#   define SAL_MAX_ENUM 0x7fff
 #endif
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
