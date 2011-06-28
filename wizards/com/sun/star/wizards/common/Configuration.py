@@ -24,7 +24,7 @@ class Configuration(object):
 
     @classmethod
     def Set(self, value, name, parent):
-        parent.setHierarchicalPropertyValue(name, value)
+        setattr(parent, name, value)
 
     '''
     @param name
@@ -131,13 +131,12 @@ class Configuration(object):
         if configView is None:
             return configView.getByName(name)
         else:
-            print configView
+            # the new element is the result !
+            print type(configView)
+            newNode = configView.createInstance()
             # insert it - this also names the element
-            try:
-                configView.insertByName(name, configView.createInstance())
-            except Exception,e:
-                traceback.print_exc()
-            #return newNode
+            configView.insertByName(name, newNode)
+            return newNode
 
     @classmethod
     def removeNode(self, configView, name):

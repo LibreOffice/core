@@ -134,6 +134,7 @@ class UnoDataAware(DataAware):
         return self.__attachTextControl(
             data, prop, unoControl, listener, "Time", field, 0)
 
+    @classmethod
     def attachNumericControl(self, data, prop, unoControl, listener, field):
         return self.__attachTextControl(
             data, prop, unoControl, listener, "Value", field, float(0))
