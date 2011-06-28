@@ -250,7 +250,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
         pEditEngine->SetDefTab( sal_uInt16( GetTextWidth( C2S("XXXX") ) ) );
 
-        SetEditEngineDefaultFonts( *pEditEngine, *pEditEngineItemPool );
+        SetEditEngineDefaultFonts(*pEditEngineItemPool);
 
         // forces new settings to be used
         // unfortunately this resets the whole edit engine

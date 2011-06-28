@@ -325,9 +325,7 @@ void SmDocShell::ArrangeFormula()
 }
 
 
-void SetEditEngineDefaultFonts(
-        EditEngine &/*rEditEngine*/,
-        SfxItemPool &rEditEngineItemPool )
+void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
 {
         //
         // set fonts to be used
@@ -394,7 +392,7 @@ EditEngine& SmDocShell::GetEditEngine()
 
         pEditEngineItemPool = EditEngine::CreatePool();
 
-        SetEditEngineDefaultFonts( *pEditEngine, *pEditEngineItemPool );
+        SetEditEngineDefaultFonts(*pEditEngineItemPool);
 
         pEditEngine = new EditEngine( pEditEngineItemPool );
 
