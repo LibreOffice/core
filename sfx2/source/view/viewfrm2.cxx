@@ -245,9 +245,9 @@ String SfxViewFrame::UpdateTitle()
     ::rtl::OUString aDocServiceName( GetObjectShell()->GetFactory().GetDocumentServiceName() );
     aTitle += String( GetModuleName_Impl( aDocServiceName ) );
 #ifdef DBG_UTIL
-    ::rtl::OUString aDefault;
+    ::rtl::OUString aDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
     aTitle += DEFINE_CONST_UNICODE(" [");
-    String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
+    String aVerId( utl::Bootstrap::getProductSource( aDefault ));
     aTitle += aVerId;
     aTitle += ']';
 #endif
