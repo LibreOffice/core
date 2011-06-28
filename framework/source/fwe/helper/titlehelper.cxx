@@ -609,12 +609,11 @@ void TitleHelper::impl_appendModuleName (::rtl::OUStringBuffer& sTitle)
 #ifdef DBG_UTIL
 void TitleHelper::impl_appendDebugVersion (::rtl::OUStringBuffer& sTitle)
 {
-        ::rtl::OUString sDefault ;
-        ::rtl::OUString sVersion = ::utl::Bootstrap::getBuildIdData( sDefault );
-
-        sTitle.appendAscii (" ["    );
-        sTitle.append      (sVersion);
-        sTitle.appendAscii ("]"     );
+    ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
+    ::rtl::OUString sVersion = ::utl::Bootstrap::getProductSource(sDefault);
+    sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ["));
+    sTitle.append(sVersion);
+    sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM("]"));
 }
 #else
 void TitleHelper::impl_appendDebugVersion (::rtl::OUStringBuffer&)
