@@ -33,7 +33,6 @@ ModalDialog RID_DEFAULTABOUT
     Size = MAP_APPFONT ( 245 , 280 ) ;
     Moveable = TRUE ;
     SVLook = TRUE ;
-//    TEXT_DEFAULTABOUT
     OKButton ABOUT_BTN_OK
     {
         DefButton = TRUE ;
@@ -57,6 +56,9 @@ ModalDialog RID_DEFAULTABOUT
         IgnoreTab = TRUE ;
         ReadOnly = TRUE ;
         AutoVScroll = TRUE ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
     };
     FixedText ABOUT_FTXT_LINK
     {
