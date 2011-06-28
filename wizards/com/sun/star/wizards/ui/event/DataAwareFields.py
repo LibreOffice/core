@@ -29,15 +29,19 @@ class DataAwareFields(object):
         try:
             f = getattr(owner, fieldname)
             if isinstance(f,bool):
+                pass
                 return self.__BooleanFieldValue(fieldname, value)
             elif isinstance(f,str):
+                pass
                 return self.__ConvertedStringValue(fieldname, value)
             elif isinstance(f,int):
+                pass
                 return self.__IntFieldValue(fieldname, value)
             elif isinstance(f,float):
                 pass
-                #return self.__IntFieldValue(fieldname, value)
+                return self.__IntFieldValue(fieldname, value)
             else:
+                pass
                 return self.__IntFieldValue(fieldname, value)
 
         except AttributeError, ex:

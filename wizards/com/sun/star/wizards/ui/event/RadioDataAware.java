@@ -92,6 +92,7 @@ public class RadioDataAware extends DataAware
                 ? DataAwareFields.getFieldValueFor(data, dataProp, new Integer(0))
                 : new DataAware.PropertyValue(dataProp, data), buttons);
         XItemListener xil = UnoDataAware.itemListener(da, listener);
+        System.out.println(listener);
         for (int i = 0; i < da.radioButtons.length; i++)
         {
             da.radioButtons[i].addItemListener(xil);
