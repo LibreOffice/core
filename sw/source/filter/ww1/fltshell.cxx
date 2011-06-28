@@ -208,7 +208,7 @@ void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
            )
         {
             rEntry.m_aPtPos.m_nCntnt++;
-            OSL_ENSURE( rEntry.m_aPtPos.nCntnt
+            OSL_ENSURE( rEntry.m_aPtPos.m_nCntnt
                 <= pDoc->GetNodes()[nPosNd]->GetCntntNode()->Len(),
                     "Attribut-Ende hinter Zeilenende" );
         }
