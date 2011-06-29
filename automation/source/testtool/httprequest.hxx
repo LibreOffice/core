@@ -35,8 +35,8 @@
 #define HTTP_REQUEST_DONE       3
 #define HTTP_REQUEST_ERROR      4
 
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
+#include <rtl/string.hxx>
 
 namespace osl
 {
@@ -46,37 +46,37 @@ namespace osl
 
 class HttpRequest
 {
-    ByteString aRequestPath;
-    ByteString aRequestHost;
+    rtl::OString aRequestPath;
+    rtl::OString aRequestHost;
     sal_uInt16 nRequestPort;
-    ByteString aProxyHost;
+    rtl::OString aProxyHost;
     sal_uInt16 nProxyPort;
 
     sal_uInt16 nStatus;
     osl::ConnectorSocket *pOutSocket;
 
-    ByteString aHeader;
+    rtl::OString aHeader;
     sal_uInt16 nResultId;
-    ByteString aContentType;
+    rtl::OString aContentType;
     SvMemoryStream* pStream;
 
-    void SendString( osl::StreamSocket* pSocket, ByteString aText );
-    sal_Bool IsItem( ByteString aItem, ByteString aLine );
+    void SendString( osl::StreamSocket* pSocket, ::rtl::OString aText );
+    sal_Bool IsItem( rtl::OString aItem, rtl::OString aLine );
     void Init();
 public:
     HttpRequest();
     ~HttpRequest();
 
-    void SetRequest( ByteString aHost, ByteString aPath, sal_uInt16 nPort );
-    void SetProxy( ByteString aHost, sal_uInt16 nPort );
+    void SetRequest( rtl::OString aHost, rtl::OString aPath, sal_uInt16 nPort );
+    void SetProxy( rtl::OString aHost, sal_uInt16 nPort );
 
     sal_Bool Execute();
     void Abort();
 
-    ByteString GetHeader() const { return aHeader; }
+    rtl::OString GetHeader() const { return aHeader; }
     SvMemoryStream* GetBody();
 
-    ByteString GetContentType() const { return aContentType; }
+    rtl::OString GetContentType() const { return aContentType; }
     sal_uInt16 GetResultId() const { return nResultId; }
 
     sal_uInt16 GetStatus();
