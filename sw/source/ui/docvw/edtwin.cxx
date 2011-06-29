@@ -2596,6 +2596,16 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
+    sal_Bool bOverHdrFtr = rSh.IsOverHeaderFooterPos( aDocPos );
+    if ( ( rSh.IsHeaderFooterEdit( ) && !bOverHdrFtr ) ||
+         ( !rSh.IsHeaderFooterEdit() && bOverHdrFtr ) )
+    {
+        if ( rMEvt.GetButtons() == MOUSE_LEFT && rMEvt.GetClicks( ) == 2 )
+            rSh.ToggleHeaderFooterEdit();
+        else
+            return;
+    }
+
     if ( IsChainMode() )
     {
         SetChainMode( sal_False );

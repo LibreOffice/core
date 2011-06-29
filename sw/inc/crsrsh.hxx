@@ -495,6 +495,8 @@ public:
     void SetReadOnlyAvailable( sal_Bool bFlag );
     sal_Bool IsOverReadOnlyPos( const Point& rPt ) const;
 
+    sal_Bool IsOverHeaderFooterPos( const Point& rPt ) const;
+
     // Methods for aFlyMacroLnk.
     void        SetFlyMacroLnk( const Link& rLnk ) { aFlyMacroLnk = rLnk; }
     const Link& GetFlyMacroLnk() const             { return aFlyMacroLnk; }

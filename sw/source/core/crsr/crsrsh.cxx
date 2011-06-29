@@ -2326,6 +2326,15 @@ sal_Bool SwCrsrShell::IsOverReadOnlyPos( const Point& rPt ) const
     return aPam.HasReadonlySel( GetViewOptions()->IsFormView() );
 }
 
+sal_Bool SwCrsrShell::IsOverHeaderFooterPos( const Point& rPt ) const
+{
+    Point aPt( rPt );
+    SwPaM aPam( *pCurCrsr->GetPoint() );
+    GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
+
+    return GetDoc()->IsInHeaderFooter( aPam.GetPoint()->nNode );
+}
+
 
     // returne die Anzahl der Cursor im Ring (Flag besagt ob man nur
     // aufgepspannte haben will - sprich etwas selektiert ist (Basic))

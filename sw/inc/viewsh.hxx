@@ -156,6 +156,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
     sal_Bool  bEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
                                     // of scrollbars.
     sal_Bool  bEndActionByVirDev:1; // Paints from EndAction always via virtual device
+    sal_Bool  bHeaderFooterEdit;
                                     // (e.g. when browsing).
 
     // boolean, indicating that class in in constructor.
@@ -562,6 +563,9 @@ public:
 
     const SwPostItMgr* GetPostItMgr() const { return (const_cast<ViewShell*>(this))->GetPostItMgr(); }
     SwPostItMgr* GetPostItMgr();
+
+    void ToggleHeaderFooterEdit( ) { bHeaderFooterEdit = !bHeaderFooterEdit; }
+    sal_Bool IsHeaderFooterEdit( ) const { return bHeaderFooterEdit; }
 };
 
 //---- class CurrShell manages global ShellPointer -------------------
