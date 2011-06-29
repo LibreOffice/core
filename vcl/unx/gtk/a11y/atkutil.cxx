@@ -66,7 +66,14 @@
 
 using namespace ::com::sun::star;
 
-static uno::WeakReference< accessibility::XAccessible > xNextFocusObject;
+namespace
+{
+    struct theNextFocusObject :
+        public rtl::Static< uno::WeakReference< accessibility::XAccessible >, theNextFocusObject>
+    {
+    };
+}
+
 static guint focus_notify_handler = 0;
 
 /*****************************************************************************/
@@ -80,7 +87,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
 
     focus_notify_handler = 0;
 
-    uno::Reference< accessibility::XAccessible > xAccessible = xNextFocusObject;
+    uno::Reference< accessibility::XAccessible > xAccessible = theNextFocusObject::get();
     if( xAccessible.get() == reinterpret_cast < accessibility::XAccessible * > (data) )
     {
         AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : NULL;
@@ -135,7 +142,7 @@ atk_wrapper_focus_tracker_notify_when_idle( const uno::Reference< accessibility:
     if( focus_notify_handler )
         g_source_remove(focus_notify_handler);
 
-    xNextFocusObject = xAccessible;
+    theNextFocusObject::get() = xAccessible;
 
     focus_notify_handler = g_idle_add (atk_wrapper_focus_idle_handler, xAccessible.get());
 }
