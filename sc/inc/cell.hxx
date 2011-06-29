@@ -404,7 +404,6 @@ public:
     void            SetTableOpDirty();
     sal_Bool            IsDirtyOrInTableOpDirty() const;
     sal_Bool            GetDirty() const { return bDirty; }
-    void                ResetDirty() { bDirty = false; }
     sal_Bool            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( sal_Bool bVar ) { bNeedListening = bVar; }
     void            Compile(const String& rFormula,

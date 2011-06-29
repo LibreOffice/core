@@ -1400,12 +1400,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             pCode->SetCodeError( errNoCode );
             // This is worth an assertion; if encountered in daily work
             // documents we might need another solution. Or just confirm correctness.
-            OSL_FAIL( "ScFormulaCell::Interpret: no UPN, no error, no token, but string -> Try compiling it." );
-            // Force Compilation
-            String aFormula = aResult.GetHybridFormula();
-            aResult.SetHybridFormula( String() );
-            Compile( aFormula );
-            InterpretTail( eTailParam );
+            OSL_FAIL( "ScFormulaCell::Interpret: no UPN, no error, no token, but string" );
             return;
         }
         CompileTokenArray();
