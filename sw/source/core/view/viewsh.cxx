@@ -77,6 +77,7 @@
 #include "../../ui/inc/view.hxx"
 #include <PostItMgr.hxx>
 #include <vcl/virdev.hxx>
+#include <rootfrm.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -95,6 +96,12 @@ DBG_NAME(LayoutIdle)
 TYPEINIT0(ViewShell);
 
 using namespace ::com::sun::star;
+
+void ViewShell::ToggleHeaderFooterEdit( ) {
+    bHeaderFooterEdit = !bHeaderFooterEdit;
+    // Repaint everything to update the colors of the selected area
+    Paint( VisArea().SVRect() );
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // #i72754# 2nd set of Pre/PostPaints

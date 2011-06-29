@@ -909,6 +909,8 @@ public:
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
     void dumpChildrenAsXml(xmlTextWriterPtr writer);
     bool IsCollapse() const;
+
+    sal_uInt64 SetHeaderFooterEditMask( OutputDevice* pOut ) const;
 };
 
 inline sal_Bool SwFrm::IsInDocBody() const

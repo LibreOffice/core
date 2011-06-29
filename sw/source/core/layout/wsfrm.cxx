@@ -130,6 +130,20 @@ void SwFrm::RegisterToFormat( SwFmt& rFmt )
     rFmt.Add( this );
 }
 
+sal_uInt64 SwFrm::SetHeaderFooterEditMask( OutputDevice* pOut ) const
+{
+    ViewShell* pShell = getRootFrm()->GetCurrShell();
+    bool bInHdrFtr = FindFooterOrHeader( ) != NULL;
+    bool bEditHdrFtr = pShell->IsHeaderFooterEdit();
+    sal_uInt64 nOldDrawMode = pOut->GetDrawMode();
+    if ( ( bInHdrFtr && !bEditHdrFtr ) || ( !bInHdrFtr && bEditHdrFtr ) )
+        pOut->SetDrawMode( DRAWMODE_GHOSTEDLINE | DRAWMODE_GHOSTEDFILL |
+                DRAWMODE_GHOSTEDTEXT | DRAWMODE_GHOSTEDBITMAP |
+                DRAWMODE_GHOSTEDGRADIENT );
+
+    return nOldDrawMode;
+}
+
 void SwFrm::CheckDir( sal_uInt16 nDir, sal_Bool bVert, sal_Bool bOnlyBiDi, sal_Bool bBrowse )
 {
     if( FRMDIR_ENVIRONMENT == nDir || ( bVert && bOnlyBiDi ) )

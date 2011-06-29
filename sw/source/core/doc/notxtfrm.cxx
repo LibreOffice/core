@@ -248,6 +248,10 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         return;
 
     const ViewShell* pSh = getRootFrm()->GetCurrShell();
+    OutputDevice *pOut = pSh->GetOut();
+
+    sal_uInt64 nOldDrawMode = SetHeaderFooterEditMask( pOut );
+
     if( !pSh->GetViewOptions()->IsGraphic() )
     {
         StopAnimation();
@@ -262,6 +266,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 aTxt = FindFlyFrm()->GetFmt()->GetName();
             lcl_PaintReplacement( Frm(), aTxt, *pSh, this, sal_False );
         }
+        pOut->SetDrawMode( nOldDrawMode );
         return;
     }
 
@@ -272,7 +277,6 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     SfxProgress::EnterLock(); //Keine Progress-Reschedules im Paint (SwapIn)
 
-    OutputDevice *pOut = pSh->GetOut();
     pOut->Push();
     sal_Bool bClip = sal_True;
     PolyPolygon aPoly;
@@ -329,6 +333,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         pGrfNd->SetFrameInPaint( sal_False );
 
     pOut->Pop();
+    pOut->SetDrawMode( nOldDrawMode );
     SfxProgress::LeaveLock();
 }
 

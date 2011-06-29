@@ -3486,6 +3486,8 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     aRect._Intersection( Frm() );
 
     OutputDevice* pOut = pGlobalShell->GetOut();
+    sal_uInt64 nOldDrawMode = SetHeaderFooterEditMask( pOut );
+
     pOut->Push( PUSH_CLIPREGION );
     pOut->SetClipRegion();
     const SwPageFrm* pPage = FindPageFrm();
@@ -3693,6 +3695,8 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     pOut->Pop();
 
+    pOut->SetDrawMode( nOldDrawMode );
+
     if ( pProgress && pNoTxt )
         pProgress->Reschedule();
 }
@@ -3704,6 +3708,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
 void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
+    sal_uInt64 nOldDrawMode = SetHeaderFooterEditMask( pGlobalShell->GetOut() );
     if ( pGlobalShell->GetViewOptions()->IsTable() )
     {
         // #i29550#
@@ -3740,6 +3745,8 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 DrawRect( pGlobalShell->GetOut(), aTabOutRect, COL_LIGHTGRAY );
     }
     ((SwTabFrm*)this)->ResetComplete();
+
+    pGlobalShell->GetOut()->SetDrawMode( nOldDrawMode );
 }
 
 /*************************************************************************
@@ -5779,6 +5786,9 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             aRect.Intersection( rRect );
 
             OutputDevice *pOut = pSh->GetOut();
+            sal_uInt64 nOldDrawMode = pOut->GetDrawMode();
+            if ( !IsPageFrm() && !IsRootFrm() )
+                SetHeaderFooterEditMask( pOut );
 
             if ( aRect.HasArea() )
             {
@@ -5817,6 +5827,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                 if( pCol )
                     delete pNewItem;
             }
+            pOut->SetDrawMode( nOldDrawMode );
         }
         else
             bLowMode = bLowerMode ? sal_True : sal_False;
