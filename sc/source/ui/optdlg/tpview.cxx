@@ -62,7 +62,8 @@ ScTpContentOptions::ScTpContentOptions( Window*         pParent,
     SfxTabPage(pParent, ScResId( RID_SCPAGE_CONTENT ), rArgSet),
 
     aLinesGB( this,         ScResId(GB_LINES          )),
-    aGridCB( this,          ScResId(CB_GRID         )),
+    aGridFT( this,         ScResId(FT_GRID            )),
+    aGridLB( this,         ScResId(LB_GRID            )),
     aColorFT( this,         ScResId(FT_COLOR            )),
     aColorLB( this,         ScResId(LB_COLOR            )),
     aBreakCB( this,         ScResId(CB_PAGEBREAKS       )),
@@ -108,6 +109,7 @@ ScTpContentOptions::ScTpContentOptions( Window*         pParent,
     aObjGrfLB.  SetSelectHdl(aSelObjHdl);
     aDiagramLB. SetSelectHdl(aSelObjHdl);
     aDrawLB.    SetSelectHdl(aSelObjHdl);
+    aGridLB.    SetSelectHdl( LINK( this, ScTpContentOptions, GridHdl ) );
 
     Link aCBHdl(LINK( this, ScTpContentOptions, CBHdl ) );
     aFormulaCB  .SetClickHdl(aCBHdl);
@@ -127,7 +129,6 @@ ScTpContentOptions::ScTpContentOptions( Window*         pParent,
     aBigHandleCB.SetClickHdl(aCBHdl);
     aRowColHeaderCB.SetClickHdl(aCBHdl);
 
-    aGridCB     .SetClickHdl( LINK( this, ScTpContentOptions, GridHdl ) );
 }
 
 ScTpContentOptions::~ScTpContentOptions()
@@ -153,7 +154,7 @@ sal_Bool    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
         aObjGrfLB   .GetSavedValue() != aObjGrfLB   .GetSelectEntryPos() ||
         aDiagramLB  .GetSavedValue() != aDiagramLB  .GetSelectEntryPos() ||
         aDrawLB     .GetSavedValue() != aDrawLB     .GetSelectEntryPos() ||
-        aGridCB         .GetSavedValue() != aGridCB.IsChecked() ||
+        aGridLB         .GetSavedValue() != aGridLB .GetSelectEntryPos() ||
         aRowColHeaderCB .GetSavedValue() != aRowColHeaderCB.IsChecked() ||
         aHScrollCB      .GetSavedValue() != aHScrollCB     .IsChecked() ||
         aVScrollCB      .GetSavedValue() != aVScrollCB     .IsChecked() ||
@@ -239,7 +240,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet& rCoreSet )
     aVScrollCB      .SaveValue();
     aTblRegCB       .SaveValue();
     aOutlineCB      .SaveValue();
-    aGridCB         .SaveValue();
+    aGridLB         .SaveValue();
     aColorLB        .SaveValue();
     aBreakCB        .SaveValue();
     aGuideLineCB    .SaveValue();
@@ -310,19 +311,30 @@ IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
 
 void ScTpContentOptions::InitGridOpt()
 {
-    sal_Bool bGrid = pLocalOptions->GetOption( VOPT_GRID );
-
-    aGridCB.Check( bGrid );
+    sal_Bool    bGrid = pLocalOptions->GetOption( VOPT_GRID );
+    sal_Bool    bGridOnTop = pLocalOptions->GetOption( VOPT_GRID_ONTOP );
+    sal_uInt16  nSelPos = 0;
 
     if ( bGrid )
+    {
         aColorFT.Enable(), aColorLB.Enable();
+        if ( !bGridOnTop )
+            nSelPos = 0;
+        else
+            nSelPos = 1;
+    }
     else
+    {
         aColorFT.Disable(), aColorLB.Disable();
+        nSelPos = 2;
+    }
+
+    aGridLB.SelectEntryPos (nSelPos);
 
     if ( aColorLB.GetEntryCount() == 0 )
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
-        // hier koennte auch eine andere DocShell kommen!
+        // there might be another DocShell here
         pDocSh = PTR_CAST(ScDocShell, pDocSh);
 
         XColorTable* pColorTable = NULL;
@@ -344,7 +356,7 @@ void ScTpContentOptions::InitGridOpt()
 
         aColorLB.SetUpdateMode( false );
 
-        //  Eintraege aus der Colortable
+        // items from ColorTable
 
         long nCount = pColorTable->Count();
         for ( long n=0; n<nCount; n++ )
@@ -353,9 +365,9 @@ void ScTpContentOptions::InitGridOpt()
             aColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
 
-        //  Standard-Gitterfarbe
+        // default GridColor
 
-        Color aStdCol( SC_STD_GRIDCOLOR );          // wie Default in ScViewOptions
+        Color aStdCol( SC_STD_GRIDCOLOR );          // same default as in ScViewOptions
         if ( LISTBOX_ENTRY_NOTFOUND ==
                 aColorLB.GetEntryPos( aStdCol ) )
             aColorLB.InsertEntry( aStdCol, ScGlobal::GetRscString( STR_GRIDCOLOR ) );
@@ -369,7 +381,7 @@ void ScTpContentOptions::InitGridOpt()
 
     String  aName;
     Color   aCol    = pLocalOptions->GetGridColor( &aName );
-    sal_uInt16  nSelPos = aColorLB.GetEntryPos( aCol );
+    nSelPos = aColorLB.GetEntryPos( aCol );
 
     if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
         aColorLB.SelectEntryPos( nSelPos );
@@ -377,12 +389,16 @@ void ScTpContentOptions::InitGridOpt()
         aColorLB.SelectEntryPos( aColorLB.InsertEntry( aCol, aName ) );
 }
 
-IMPL_LINK( ScTpContentOptions, GridHdl, CheckBox*, pBox )
+IMPL_LINK( ScTpContentOptions, GridHdl, ListBox*, pLb )
 {
-    sal_Bool bChecked = pBox->IsChecked();
-    aColorFT.Enable(bChecked);
-    aColorLB.Enable(bChecked);
-    pLocalOptions->SetOption( VOPT_GRID, bChecked );
+    sal_uInt16  nSelPos = pLb->GetSelectEntryPos();
+    sal_Bool    bGrid = ( nSelPos <= 1 );
+    sal_Bool    bGridOnTop = ( nSelPos == 1 );
+
+    aColorFT.Enable(bGridOnTop);
+    aColorLB.Enable(bGridOnTop);
+    pLocalOptions->SetOption( VOPT_GRID, bGrid );
+    pLocalOptions->SetOption( VOPT_GRID_ONTOP, bGridOnTop );
     return 0;
 }
 
