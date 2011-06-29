@@ -929,6 +929,20 @@ void SAL_CALL Cell::setFormula( const OUString& aFormula ) throw (RuntimeExcepti
 
 // -----------------------------------------------------------------------------
 
+void SAL_CALL Cell::setFormulaString( const OUString& aFormula ) throw (RuntimeException)
+{
+    setFormula( aFormula );
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL Cell::setFormulaResult( const double nValue ) throw (RuntimeException)
+{
+    mfValue = nValue;
+}
+
+// -----------------------------------------------------------------------------
+
 double SAL_CALL Cell::getValue(  ) throw (RuntimeException)
 {
     return mfValue;
