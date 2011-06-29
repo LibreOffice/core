@@ -947,17 +947,6 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
     }
 }
 
-void SwXCell::setFormulaString(const OUString& /*rFormula*/) throw( uno::RuntimeException )
-{
-    return;
-}
-
-void SwXCell::setFormulaResult(double /*nValue*/) throw( uno::RuntimeException )
-{
-    SolarMutexGuard aGuard;
-    return;
-}
-
 double SwXCell::getValue(void) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
