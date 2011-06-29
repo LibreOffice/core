@@ -673,6 +673,13 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
             break;
+        case RTF_FOOTNOTE:
+            if (!m_bIsSubstream)
+            {
+                resolveSubstream(m_nGroupStartPos - 1, NS_rtf::LN_footnote);
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            }
+            break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
         case RTF_NONESTTABLES:
