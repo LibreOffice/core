@@ -37,16 +37,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :	settings.mk
 DLLPRE =
 
-# --- Nothing to do if we're compiling with --disable-cairo -----------
-.IF "$(ENABLE_CAIRO)" != "TRUE"
-@all:
-    @echo "Building without cairo support..."
-.ELSE
 # --- X11 Mac build currently doesn't work with cairo -----------
 .IF "$(OS)" == "MACOSX" && "$(GUIBASE)" == "unx"
 @all:   
     @echo "Cannot build cairocanvas with X11..."
-.ENDIF
 .ENDIF
 
 # --- Common ----------------------------------------------------------

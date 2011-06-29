@@ -64,6 +64,17 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
     $(gb_STDLIBS) \
 ))
 
+ifeq ($(SYSTEM_CAIRO),YES)
+$(eval $(call gb_Library_set_ldflags,vclplug_gen,\
+    $$(LDFLAGS) \
+    $$(CAIRO_LIBS) \
+))
+else
+$(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
+    cairo \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/app/i18n_cb \
     vcl/unx/generic/app/i18n_ic \
@@ -119,6 +130,11 @@ $(eval $(call gb_Library_set_defs,vclplug_gen,\
     -DVCLPLUG_GEN_IMPLEMENTATION \
 ))
 
+## unconditional cairo
+$(eval $(call gb_Library_set_cxxflags,vclplug_gen,\
+    $$(CXXFLAGS) \
+    $$(CAIRO_CFLAGS) \
+))
 
 ## handle RandR 
 ifneq ($(ENABLE_RANDR),)

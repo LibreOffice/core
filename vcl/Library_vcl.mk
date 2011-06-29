@@ -90,12 +90,6 @@ $(eval $(call gb_Library_set_cxxflags,vcl,\
     $$(CXXFLAGS) \
     $$(OBJCXXFLAGS) \
 ))
-ifeq ($(ENABLE_CAIRO),TRUE)
-$(eval $(call gb_Library_set_defs,vclplug_gen,\
-    $$(DEFS) \
-    -DCAIRO \
-))
-endif
 $(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/aqua/source/a11y/aqua11yactionwrapper \
     vcl/aqua/source/a11y/aqua11ycomponentwrapper \

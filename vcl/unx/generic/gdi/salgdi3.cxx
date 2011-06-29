@@ -78,28 +78,15 @@
 #include "salframe.hxx"
 #include "outdev.h"
 
-
-
 #ifdef ENABLE_GRAPHITE
 #include <graphite_layout.hxx>
 #include <graphite_serverfont.hxx>
 #endif
 
-struct cairo_surface_t;
-struct cairo_t;
-struct cairo_font_face_t;
-typedef void* FT_Face;
-struct cairo_matrix_t {
-    double xx; double yx;
-    double xy; double yy;
-    double x0; double y0;
-};
-struct cairo_glyph_t
-{
-    unsigned long index;
-    double x;
-    double y;
-};
+#include <cairo.h>
+#include <cairo-ft.h>
+#include <cairo-xlib-xrender.h>
+
 struct BOX
 {
     short x1, x2, y1, y2;
@@ -249,183 +236,12 @@ void ImplServerFontEntry::HandleFontOptions( void )
 
 //--------------------------------------------------------------------------
 
-namespace {
-
-class CairoWrapper
+namespace
 {
-private:
-    osl::Module mpCairoLib;
-
-    cairo_surface_t* (*mp_xlib_surface_create_with_xrender_format)(Display *, Drawable , Screen *, XRenderPictFormat *, int , int );
-    void (*mp_surface_destroy)(cairo_surface_t *);
-    cairo_t* (*mp_create)(cairo_surface_t *);
-    void (*mp_destroy)(cairo_t*);
-    void (*mp_clip)(cairo_t*);
-    void (*mp_rectangle)(cairo_t*, double, double, double, double);
-    cairo_font_face_t * (*mp_ft_font_face_create_for_ft_face)(FT_Face, int);
-    cairo_font_face_t * (*mp_ft_font_face_create_for_pattern)(void*);
-    void (*mp_set_font_face)(cairo_t *, cairo_font_face_t *);
-    void (*mp_font_face_destroy)(cairo_font_face_t *);
-    void (*mp_matrix_init_identity)(cairo_matrix_t *);
-    void (*mp_matrix_scale)(cairo_matrix_t *, double, double);
-    void (*mp_matrix_rotate)(cairo_matrix_t *, double);
-    void (*mp_set_font_matrix)(cairo_t *, const cairo_matrix_t *);
-    void (*mp_show_glyphs)(cairo_t *, const cairo_glyph_t *, int );
-    void (*mp_set_source_rgb)(cairo_t *, double , double , double );
-    void (*mp_set_font_options)(cairo_t *, const void *);
-    void (*mp_ft_font_options_substitute)(const void*, void*);
-
-    bool canEmbolden() const { return mp_ft_font_face_create_for_pattern != NULL; }
-
-    CairoWrapper();
-public:
-    static CairoWrapper& get();
-    bool isValid() const { return (mpCairoLib != NULL); }
-    bool isCairoRenderable(const ServerFont& rFont);
-
-    cairo_surface_t* xlib_surface_create_with_xrender_format(Display *pDisplay, Drawable drawable, Screen *pScreen, XRenderPictFormat *pFormat, int width, int height)
-        { return (*mp_xlib_surface_create_with_xrender_format)(pDisplay, drawable, pScreen, pFormat, width, height); }
-    void surface_destroy(cairo_surface_t *surface) { (*mp_surface_destroy)(surface); }
-    cairo_t* create(cairo_surface_t *surface) { return (*mp_create)(surface); }
-    void destroy(cairo_t *cr) { (*mp_destroy)(cr); }
-    void clip(cairo_t *cr) { (*mp_clip)(cr); }
-    void rectangle(cairo_t *cr, double x, double y, double width, double height)
-        { (*mp_rectangle)(cr, x, y, width, height); }
-    cairo_font_face_t* ft_font_face_create_for_ft_face(FT_Face face, int load_flags)
-        { return (*mp_ft_font_face_create_for_ft_face)(face, load_flags); }
-    cairo_font_face_t* ft_font_face_create_for_pattern(void *pattern)
+    bool isCairoRenderable(const ServerFont& rFont)
     {
-        return mp_ft_font_face_create_for_pattern
-            ? (*mp_ft_font_face_create_for_pattern)(pattern)
-            : NULL;
+        return rFont.GetFtFace() && rFont.GetAntialiasAdvice();
     }
-    void set_font_face(cairo_t *cr, cairo_font_face_t *font_face)
-        { (*mp_set_font_face)(cr, font_face); }
-    void font_face_destroy(cairo_font_face_t *font_face)
-        { (*mp_font_face_destroy)(font_face); }
-    void matrix_init_identity(cairo_matrix_t *matrix)
-        { (*mp_matrix_init_identity)(matrix); }
-    void matrix_scale(cairo_matrix_t *matrix, double sx, double sy)
-        { (*mp_matrix_scale)(matrix, sx, sy); }
-    void matrix_rotate(cairo_matrix_t *matrix, double radians)
-        { (*mp_matrix_rotate)(matrix, radians); }
-    void set_font_matrix(cairo_t *cr, const cairo_matrix_t *matrix)
-        { (*mp_set_font_matrix)(cr, matrix); }
-    void show_glyphs(cairo_t *cr, const cairo_glyph_t *glyphs, int no_glyphs)
-        { (*mp_show_glyphs)(cr, glyphs, no_glyphs); }
-    void set_source_rgb(cairo_t *cr, double red, double green, double blue)
-        { (*mp_set_source_rgb)(cr, red, green, blue); }
-    void set_font_options(cairo_t *cr, const void *options)
-        { (*mp_set_font_options)(cr, options); }
-    void ft_font_options_substitute(const void *options, void *pattern)
-        { (*mp_ft_font_options_substitute)(options, pattern); }
-};
-
-static CairoWrapper* pCairoInstance = NULL;
-
-CairoWrapper& CairoWrapper::get()
-{
-    if( ! pCairoInstance )
-        pCairoInstance = new CairoWrapper();
-    return *pCairoInstance;
-}
-
-CairoWrapper::CairoWrapper()
-{
-    static const char* pDisableCairoText = getenv( "SAL_DISABLE_CAIROTEXT" );
-    if( pDisableCairoText && (pDisableCairoText[0] != '0') )
-        return;
-
-    int nDummy;
-    if( !XQueryExtension( GetX11SalData()->GetDisplay()->GetDisplay(), "RENDER", &nDummy, &nDummy, &nDummy ) )
-        return;
-
-#ifdef MACOSX
-    OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.2.dylib" ));
-#else
-    OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.so.2" ));
-#endif
-    if ( !mpCairoLib.load( aLibName, SAL_LOADMODULE_DEFAULT ) )
-        return;
-
-#ifdef DEBUG
-    // check cairo version
-    int (*p_version)();
-    p_version = (int(*)()) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_version" );
-    const int nVersion = p_version ? (*p_version)() : 0;
-    fprintf( stderr, "CAIRO version=%d\n", nVersion );
-#endif
-
-    mp_xlib_surface_create_with_xrender_format = (cairo_surface_t* (*)(Display *, Drawable , Screen *, XRenderPictFormat *, int , int ))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_xlib_surface_create_with_xrender_format" );
-    mp_surface_destroy = (void(*)(cairo_surface_t*))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_surface_destroy" );
-    mp_create = (cairo_t*(*)(cairo_surface_t*))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_create" );
-    mp_destroy = (void(*)(cairo_t*))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_destroy" );
-    mp_clip = (void(*)(cairo_t*))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_clip" );
-    mp_rectangle = (void(*)(cairo_t*, double, double, double, double))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_rectangle" );
-    mp_ft_font_face_create_for_ft_face = (cairo_font_face_t * (*)(FT_Face, int))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_ft_font_face_create_for_ft_face" );
-    mp_ft_font_face_create_for_pattern = (cairo_font_face_t * (*)(void*))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_ft_font_face_create_for_pattern" );
-    mp_set_font_face = (void (*)(cairo_t *, cairo_font_face_t *))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_set_font_face" );
-    mp_font_face_destroy = (void (*)(cairo_font_face_t *))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_font_face_destroy" );
-    mp_matrix_init_identity = (void (*)(cairo_matrix_t *))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_matrix_init_identity" );
-    mp_matrix_scale = (void (*)(cairo_matrix_t *, double, double))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_matrix_scale" );
-    mp_matrix_rotate = (void (*)(cairo_matrix_t *, double))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_matrix_rotate" );
-    mp_set_font_matrix = (void (*)(cairo_t *, const cairo_matrix_t *))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_set_font_matrix" );
-    mp_show_glyphs = (void (*)(cairo_t *, const cairo_glyph_t *, int ))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_show_glyphs" );
-    mp_set_source_rgb = (void (*)(cairo_t *, double , double , double ))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_set_source_rgb" );
-    mp_set_font_options = (void (*)(cairo_t *, const void *options ))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_set_font_options" );
-    mp_ft_font_options_substitute = (void (*)(const void *, void *))
-        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_ft_font_options_substitute" );
-
-    if( !(
-            mp_xlib_surface_create_with_xrender_format &&
-            mp_surface_destroy &&
-            mp_create &&
-            mp_destroy &&
-            mp_clip &&
-            mp_rectangle &&
-            mp_ft_font_face_create_for_ft_face &&
-            mp_set_font_face &&
-            mp_font_face_destroy &&
-            mp_matrix_init_identity &&
-            mp_matrix_scale &&
-            mp_matrix_rotate &&
-            mp_set_font_matrix &&
-            mp_show_glyphs &&
-            mp_set_source_rgb &&
-            mp_set_font_options &&
-            mp_ft_font_options_substitute
-        ) )
-    {
-        mpCairoLib.unload();
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "not all needed symbols were found\n" );
-#endif
-    }
-}
-
-bool CairoWrapper::isCairoRenderable(const ServerFont& rFont)
-{
-    return rFont.GetFtFace() && isValid() && rFont.GetAntialiasAdvice() &&
-        (rFont.NeedsArtificialBold() ? canEmbolden() : true);
-}
-
 } //namespace
 
 CairoFontsCache::LRUFonts CairoFontsCache::maLRUFonts;
@@ -441,10 +257,9 @@ CairoFontsCache::~CairoFontsCache()
     --mnRefCount;
     if (!mnRefCount && !maLRUFonts.empty())
     {
-        CairoWrapper &rCairo = CairoWrapper::get();
         LRUFonts::iterator aEnd = maLRUFonts.end();
         for (LRUFonts::iterator aI = maLRUFonts.begin(); aI != aEnd; ++aI)
-            rCairo.font_face_destroy((cairo_font_face_t*)aI->first);
+            cairo_font_face_destroy((cairo_font_face_t*)aI->first);
     }
 }
 
@@ -453,8 +268,7 @@ void CairoFontsCache::CacheFont(void *pFont, const CairoFontsCache::CacheId &rId
     maLRUFonts.push_front( std::pair<void*, CairoFontsCache::CacheId>(pFont, rId) );
     if (maLRUFonts.size() > 8)
     {
-        CairoWrapper &rCairo = CairoWrapper::get();
-        rCairo.font_face_destroy((cairo_font_face_t*)maLRUFonts.back().first);
+        cairo_font_face_destroy((cairo_font_face_t*)maLRUFonts.back().first);
         maLRUFonts.pop_back();
     }
 }
@@ -493,11 +307,9 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
     if( !pVisualFormat )
         return;
 
-    CairoWrapper &rCairo = CairoWrapper::get();
-
     Display* pDisplay = GetXDisplay();
 
-    cairo_surface_t *surface = rCairo.xlib_surface_create_with_xrender_format (pDisplay,
+    cairo_surface_t *surface = cairo_xlib_surface_create_with_xrender_format (pDisplay,
         hDrawable_, ScreenOfDisplay(pDisplay, m_nScreen), pVisualFormat, SAL_MAX_INT16, SAL_MAX_INT16);
 
     /*
@@ -506,26 +318,26 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
      * least change the SalFrame etc impls to dtor the SalGraphics *before* the
      * destruction of the windows they reference
     */
-    cairo_t *cr = rCairo.create(surface);
-    rCairo.surface_destroy(surface);
+    cairo_t *cr = cairo_create(surface);
+    cairo_surface_destroy(surface);
 
     if (const void *pOptions = Application::GetSettings().GetStyleSettings().GetCairoFontOptions())
-        rCairo.set_font_options( cr, pOptions);
+        cairo_set_font_options(cr, static_cast<const cairo_font_options_t*>(pOptions));
 
     if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
     {
         for (long i = 0; i < mpClipRegion->numRects; ++i)
         {
-            rCairo.rectangle(cr,
-            mpClipRegion->rects[i].x1,
-            mpClipRegion->rects[i].y1,
-            mpClipRegion->rects[i].x2 - mpClipRegion->rects[i].x1,
-            mpClipRegion->rects[i].y2 - mpClipRegion->rects[i].y1);
+            cairo_rectangle(cr,
+                mpClipRegion->rects[i].x1,
+                mpClipRegion->rects[i].y1,
+                mpClipRegion->rects[i].x2 - mpClipRegion->rects[i].x1,
+                mpClipRegion->rects[i].y2 - mpClipRegion->rects[i].y1);
         }
-        rCairo.clip(cr);
+        cairo_clip(cr);
     }
 
-    rCairo.set_source_rgb(cr,
+    cairo_set_source_rgb(cr,
         SALCOLOR_RED(nTextColor_)/255.0,
         SALCOLOR_GREEN(nTextColor_)/255.0,
         SALCOLOR_BLUE(nTextColor_)/255.0);
@@ -545,30 +357,30 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
         const ImplFontOptions *pOptions = rFont.GetFontOptions().get();
         void *pPattern = pOptions ? pOptions->GetPattern(pFace, aId.mbEmbolden) : NULL;
         if (pPattern)
-            font_face = rCairo.ft_font_face_create_for_pattern(pPattern);
+            font_face = cairo_ft_font_face_create_for_pattern(reinterpret_cast<FcPattern*>(pPattern));
         if (!font_face)
-            font_face = rCairo.ft_font_face_create_for_ft_face(pFace, rFont.GetLoadFlags());
+            font_face = cairo_ft_font_face_create_for_ft_face(reinterpret_cast<FT_Face>(pFace), rFont.GetLoadFlags());
         m_aCairoFontsCache.CacheFont(font_face, aId);
     }
 
-    rCairo.set_font_face(cr, font_face);
+    cairo_set_font_face(cr, font_face);
 
     cairo_matrix_t m;
     const ImplFontSelectData& rFSD = rFont.GetFontSelData();
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : rFSD.mnHeight;
 
-    rCairo.matrix_init_identity(&m);
+    cairo_matrix_init_identity(&m);
 
     if (rLayout.GetOrientation())
-        rCairo.matrix_rotate(&m, (3600 - rLayout.GetOrientation()) * M_PI / 1800.0);
+        cairo_matrix_rotate(&m, (3600 - rLayout.GetOrientation()) * M_PI / 1800.0);
 
-    rCairo.matrix_scale(&m, nWidth, rFSD.mnHeight);
+    cairo_matrix_scale(&m, nWidth, rFSD.mnHeight);
     if (rFont.NeedsArtificialItalic())
         m.xy = -m.xx * 0x6000L / 0x10000L;
 
-    rCairo.set_font_matrix(cr, &m);
-    rCairo.show_glyphs(cr, &cairo_glyphs[0], cairo_glyphs.size());
-    rCairo.destroy(cr);
+    cairo_set_font_matrix(cr, &m);
+    cairo_show_glyphs(cr, &cairo_glyphs[0], cairo_glyphs.size());
+    cairo_destroy(cr);
 }
 
 //--------------------------------------------------------------------------
@@ -928,7 +740,7 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     ServerFont& rFont = rLayout.GetServerFont();
     const bool bVertical = rFont.GetFontSelData().mbVertical;
 
-    if( !bVertical && CairoWrapper::get().isCairoRenderable(rFont) )
+    if( !bVertical && isCairoRenderable(rFont) )
         DrawCairoAAFontString( rLayout );
     else
     {
@@ -1087,16 +899,14 @@ void X11SalGraphics::GetDevFontSubstList( OutputDevice* )
 
 // ----------------------------------------------------------------------------
 
-void cairosubcallback( void* pPattern )
+void cairosubcallback(void* pPattern)
 {
-    CairoWrapper& rCairo = CairoWrapper::get();
-    if( !rCairo.isValid() )
-        return;
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const void* pFontOptions = rStyleSettings.GetCairoFontOptions();
     if( !pFontOptions )
         return;
-    rCairo.ft_font_options_substitute( pFontOptions, pPattern );
+    cairo_ft_font_options_substitute(static_cast<const cairo_font_options_t*>(pFontOptions),
+        static_cast<FcPattern*>(pPattern));
 }
 
 ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize)
