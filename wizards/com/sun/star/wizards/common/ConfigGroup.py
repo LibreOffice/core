@@ -20,9 +20,10 @@ class ConfigGroup(ConfigNode):
             child.writeConfiguration(configView.getByName(propertyName),
                 prefix)
         else:
-            print getattr(self,field)
-            configView.setHierarchicalPropertyValue(propertyName,getattr(self,field))
-
+            try:
+                setattr(configView,propertyName,getattr(self,field))
+            except Exception:
+                pass
 
     def readConfiguration(self, configurationView, param):
         for name,data in inspect.getmembers(self):

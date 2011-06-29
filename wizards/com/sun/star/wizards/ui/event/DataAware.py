@@ -1,6 +1,7 @@
 from common.PropertyNames import *
 from abc import ABCMeta, abstractmethod
 import traceback
+from ui.event.CommonListener import *
 
 '''
 @author rpiterman
@@ -32,27 +33,6 @@ class DataAware(object):
         self._value = value_
 
     '''
-    Sets the given value to the data object.
-    this method delegates the job to the
-    Value object, but can be overwritten if
-    another kind of Data is needed.
-    @param newValue the new value to set to the DataObject.
-    '''
-
-    def setToData(self, newValue):
-        self._value.set(newValue, self._dataObject)
-
-    '''
-    gets the current value from the data obejct.
-    this method delegates the job to
-    the value object.
-    @return the current value of the data object.
-    '''
-
-    def getFromData(self):
-        return self._value.get(self._dataObject)
-
-    '''
     sets the given value to the UI control
     @param newValue the value to set to the ui control.
     '''
@@ -75,7 +55,7 @@ class DataAware(object):
     '''
 
     def updateUI(self):
-        data = self.getFromData()
+        data = self._value.get(self._dataObject)
         ui = self.getFromUI()
         if data is not ui:
             try:
@@ -90,15 +70,13 @@ class DataAware(object):
     '''
 
     def updateData(self):
-        data = self.getFromData()
-        ui = self.getFromUI()
-        if not equals(data, ui):
-            setToData(ui)
-
-    class Listener(object):
-        @abstractmethod
-        def eventPerformed (self, event):
-            pass
+        try:
+            data = self._value.get(self._dataObject)
+            ui = self.getFromUI()
+            if data is not ui:
+                self._value.Set(ui, self._dataObject)
+        except Exception:
+            traceback.print_exc()
 
     '''
     compares the two given objects.
@@ -168,135 +146,3 @@ class DataAware(object):
     def setDataObjects(self, dataAwares, dataObject, updateUI):
         for i in dataAwares:
             i.setDataObject(dataObject, updateUI)
-
-    '''
-    Value objects read and write a value from and
-    to an object. Typically using reflection and JavaBeans properties
-    or directly using memeber reflection API.
-    DataAware delegates the handling of the DataObject
-    to a Value object.
-    2 implementations currently exist: PropertyValue,
-    using JavaBeans properties reflection, and DataAwareFields classes
-    which implement different memeber types.
-    '''
-    class Value (object):
-
-        '''gets a value from the given object.
-        @param target the object to get the value from.
-        @return the value from the given object.
-        '''
-        @abstractmethod
-        def Get (self, target):
-            pass
-
-        '''
-        sets a value to the given object.
-        @param value the value to set to the object.
-        @param target the object to set the value to.
-        '''
-        @abstractmethod
-        def Set (self, value, target):
-            pass
-
-        '''
-        checks if this Value object can handle
-        the given object type as a target.
-        @param type the type of a target to check
-        @return true if the given class is acceptible for
-        the Value object. False if not.
-        '''
-        @abstractmethod
-        def isAssifrom(self, Type):
-            pass
-
-    '''
-    implementation of Value, handling JavaBeans properties through
-    reflection.
-    This Object gets and sets a value a specific
-    (JavaBean-style) property on a given object.
-    @author rp143992
-    '''
-    class PropertyValue(Value):
-
-        __EMPTY_ARRAY = range(0)
-
-        '''
-        creates a PropertyValue for the property with
-        the given name, of the given JavaBean object.
-        @param propertyName the property to access. Must be a Cup letter
-        (e.g. PropertyNames.PROPERTY_NAME for getName() and setName("..."). )
-        @param propertyOwner the object which "own" or "contains" the property
-        '''
-
-        def __init__(self, propertyName, propertyOwner):
-            self.getMethod = createGetMethod(propertyName, propertyOwner)
-            self.setMethod = createSetMethod(
-                propertyName, propertyOwner, self.getMethod.getReturnType())
-
-        '''
-        called from the constructor, and creates a get method reflection object
-        for the given property and object.
-        @param propName the property name0
-        @param obj the object which contains the property.
-        @return the get method reflection object.
-        '''
-
-        def createGetMethod(self, propName, obj):
-            m = None
-            try:
-                #try to get a "get" method.
-                m = obj.getClass().getMethod(
-                    "get" + propName, self.__class__.__EMPTY_ARRAY)
-            except NoSuchMethodException, ex1:
-                raise IllegalArgumentException (
-                    "get" + propName + "() method does not exist on " + \
-                    obj.Class.Name)
-
-            return m
-
-        def Get(self, target):
-            try:
-                return self.getMethod.invoke(
-                    target, self.__class__.__EMPTY_ARRAY)
-            except IllegalAccessException, ex1:
-                ex1.printStackTrace()
-            except InvocationTargetException, ex2:
-                ex2.printStackTrace()
-            except NullPointerException, npe:
-                if isinstance(self.getMethod.getReturnType(),str):
-                    return ""
-
-                if isinstance(self.getMethod.getReturnType(),int ):
-                    return 0
-
-                if isinstance(self.getMethod.getReturnType(),tuple):
-                    return 0
-
-                if isinstance(self.getMethod.getReturnType(),list ):
-                    return []
-
-            return None
-
-        def createSetMethod(self, propName, obj, paramClass):
-            m = None
-            try:
-                m = obj.getClass().getMethod("set" + propName, [paramClass])
-            except NoSuchMethodException, ex1:
-                raise IllegalArgumentException ("set" + propName + "(" + \
-                    self.getMethod.getReturnType().getName() + \
-                    ") method does not exist on " + obj.Class.Name);
-
-            return m
-
-        def Set(self, value, target):
-            try:
-                self.setMethod.invoke(target, [value])
-            except IllegalAccessException, ex1:
-                ex1.printStackTrace()
-            except InvocationTargetException, ex2:
-                ex2.printStackTrace()
-
-        def isAssignable(self, type):
-            return self.getMethod.getDeclaringClass().isAssignableFrom(type) \
-                and self.setMethod.getDeclaringClass().isAssignableFrom(type)
-

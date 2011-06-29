@@ -1,5 +1,5 @@
 from DataAware import *
-from DataAwareFields import *
+from DataAwareField import DataAwareField
 from common.Helper import *
 
 '''
@@ -84,10 +84,12 @@ class UnoDataAware(DataAware):
     def __attachTextControl(
         self, data, prop, unoText, unoProperty, field, value):
         if field:
-            aux = DataAwareFields.getFieldValueFor(data, prop, value)
+            aux = DataAwareField(prop, value)
         else:
             aux = DataAware.PropertyValue (prop, data)
         uda = UnoDataAware(data, aux, unoText, unoProperty)
+        method = getattr(uda,"updateData")
+        unoText.addTextListener(TextListenerProcAdapter(method))
         return uda
 
     @classmethod
@@ -112,15 +114,17 @@ class UnoDataAware(DataAware):
     @classmethod
     def attachCheckBox(self, data, prop, checkBox, field):
         if field:
-            aux = DataAwareFields.getFieldValueFor(data, prop, 0)
+            aux = DataAwareField(prop, 0)
         else:
             aux = DataAware.PropertyValue (prop, data)
         uda = UnoDataAware(data, aux , checkBox, PropertyNames.PROPERTY_STATE)
+        method = getattr(uda,"updateData")
+        checkBox.addItemListener(ItemListenerProcAdapter(method))
         return uda
 
     def attachLabel(self, data, prop, label, field):
         if field:
-            aux = DataAwareFields.getFieldValueFor(data, prop, "")
+            aux = DataAwareField(prop, "")
         else:
             aux = DataAware.PropertyValue (prop, data)
         return UnoDataAware(data, aux, label, PropertyNames.PROPERTY_LABEL)
@@ -128,11 +132,12 @@ class UnoDataAware(DataAware):
     @classmethod
     def attachListBox(self, data, prop, listBox, field):
         if field:
-            aux = DataAwareFields.getFieldValueFor(
-                data, prop, uno.Any("short",0))
+            aux = DataAwareField(prop, uno.Any("short",0))
         else:
             aux = DataAware.PropertyValue (prop, data)
         uda = UnoDataAware(data, aux, listBox, "SelectedItems")
+        method = getattr(uda,"updateData")
+        listBox.addItemListener(ItemListenerProcAdapter(method))
         return uda
 
     def setEnabled(self, control, enabled):

@@ -157,7 +157,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                         endWizard = False
                         return False
 
-
             self.myFaxDoc.setWizardTemplateDocInfo( \
                 self.resources.resFaxWizardDialog_title,
                 self.resources.resTemplateDescription)

@@ -1,5 +1,5 @@
 from DataAware import *
-from DataAwareFields import *
+from DataAwareField import DataAwareField
 from UnoDataAware import *
 import time
 '''
@@ -34,9 +34,12 @@ class RadioDataAware(DataAware):
     @classmethod
     def attachRadioButtons(self, data, dataProp, buttons, field):
         if field:
-            aux = DataAwareFields.getFieldValueFor(data, dataProp, 0)
+            aux = DataAwareField(dataProp, 0)
         else:
-            aux = DataAware.PropertyValue (dataProp, data)
+            aux = DataAware.PropertyValue(dataProp, data)
 
         da = RadioDataAware(data, aux , buttons)
+        method = getattr(da,"updateData")
+        for i in da.radioButtons:
+            i.addItemListener(ItemListenerProcAdapter(method))
         return da
