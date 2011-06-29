@@ -43,6 +43,7 @@
 
 #include <tools/solar.h>
 
+
 #define SWAPNIBBLES(c)      \
 unsigned char nSwapTmp=c;   \
 nSwapTmp <<= 4;             \
@@ -717,6 +718,15 @@ sal_Bool SvStream::ReadLine( ByteString& rStr )
     if ( bEnd )
         bIsEof = sal_False;
     return bEnd;
+}
+
+sal_Bool SvStream::ReadLine( rtl::OString& rStr )
+{
+    ByteString aFoo;
+    sal_Bool   ret;
+    ret = ReadLine(aFoo);
+    rStr = aFoo;
+    return ret;
 }
 
 sal_Bool SvStream::ReadUniStringLine( String& rStr )

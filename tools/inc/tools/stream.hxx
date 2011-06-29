@@ -34,6 +34,7 @@
 #include <tools/errinf.hxx>
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
+#include <rtl/string.hxx>
 
 class FileCopier;
 class StreamData;
@@ -403,6 +404,7 @@ public:
     sal_Bool        ReadCString( String& rStr ) { return ReadCString( rStr, GetStreamCharSet()); }
 
     sal_Bool        ReadLine( ByteString& rStr );
+    sal_Bool        ReadLine( rtl::OString& rStr );
     sal_Bool        WriteLine( const ByteString& rStr );
     sal_Bool        WriteLines( const ByteString& rStr );
 
