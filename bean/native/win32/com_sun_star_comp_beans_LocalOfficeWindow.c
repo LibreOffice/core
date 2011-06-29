@@ -34,12 +34,33 @@
 #pragma warning(pop)
 #endif
 
+#include <windows.h>
+#define JAWT_GetAWT hidden_JAWT_GetAWT
 #include "jawt.h"
+#undef JAWT_GetAWT
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
-#include "jawt_md.h"
+/* When cross-compiling to Windows we don't have any Windows JDK
+ * available. Copying this short snippet from win32/jawt_md.h can
+ * surely not be against its license. The intent is to enable
+ * interoperation with real Oracle Java after all. We leave out the
+ * informative comments that might have "artistic merit" and be more
+ * copyrightable. Use this also for native Windows compilation for
+ * simplicity.
+ */
+typedef struct jawt_Win32DrawingSurfaceInfo {
+    union {
+        HWND hwnd;
+        HBITMAP hbitmap;
+        void* pbits;
+    };
+    HDC hdc;
+    HPALETTE hpalette;
+} JAWT_Win32DrawingSurfaceInfo;
+
+extern __declspec(dllimport) unsigned char __stdcall JAWT_GetAWT(JNIEnv *, JAWT *);
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
