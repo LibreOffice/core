@@ -235,8 +235,6 @@ public:
     ScStyleSheetPool&   GetStyleSheetPool() const;
     /** Returns the defined names container of the Calc document. */
     ScRangeName&        GetNamedRanges() const;
-    /** Returns the defined names container of the Calc sheet. */
-    ScRangeName*        GetNamedRanges(SCTAB nTab) const;
     /** Returns the database ranges container of the Calc document. */
     ScDBCollection&     GetDatabaseRanges() const;
     /** Returns the drawing layer page of the passed sheet, if present. */
