@@ -381,6 +381,8 @@ public:
                                        const sal_Char *pVal );
     inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
                                        const ByteString& rVal );
+    inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
+                                       const rtl::OString& rVal );
     inline void OutCSS1_Property( const sal_Char *pProp, const String& rVal );
     void OutCSS1_Property( const sal_Char *pProp, const sal_Char *pVal,
                            const String *pSVal );
@@ -512,6 +514,12 @@ inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,
                                                  const ByteString& rVal )
 {
     OutCSS1_Property( pProp, rVal.GetBuffer(), 0 );
+}
+
+inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,
+                                                 const rtl::OString& rVal )
+{
+    OutCSS1_Property( pProp, rVal.getStr(), 0 );
 }
 
 inline void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,

@@ -101,6 +101,8 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <numrule.hxx>
 
+#include <rtl/strbuf.hxx>
+
 using ::editeng::SvxBorderLine;
 
 /*
@@ -321,13 +323,14 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         Strm() << sOut.GetBuffer();
 }
 
-static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
+static void AddUnitPropertyValue(rtl::OStringBuffer &rOut, long nVal,
+    FieldUnit eUnit)
 {
     if( nVal < 0 )
     {
         // Vorzeichen extra behandeln
         nVal = -nVal;
-        rOut += '-';
+        rOut.append('-');
     }
 
     // Die umgerechnete Einheit ergibt sich aus (x * nMul)/(nDiv*nFac*10)
@@ -416,12 +419,12 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
             rOut += (long)(nBigVal / nBigFac);
             if( !(nBigVal % nBigFac).IsZero() )
             {
-                rOut += '.';
+                rOut.append('.');
                 while( nFac > 1 && !(nBigVal % nBigFac).IsZero() )
                 {
                     nFac /= 10;
                     nBigFac = nFac;
-                    rOut += (int)((nBigVal / nBigFac) % nBig10 );
+                    rOut.append(static_cast<sal_Int32>((nBigVal / nBigFac) % nBig10));
                 }
             }
             bOutLongVal = sal_False;
@@ -440,15 +443,14 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
         }
         else
         {
-            rOut += ByteString::CreateFromInt64( nBigVal / (sal_Int64)nFac );
+            rOut.append(nBigVal / (sal_Int64)nFac);
             if( (nBigVal % (sal_Int64)nFac) != 0 )
             {
-                rOut += '.';
+                rOut.append('.');
                 while( nFac > 1 && (nBigVal % (sal_Int64)nFac) != 0 )
                 {
                     nFac /= 10;
-                    rOut += ByteString::CreateFromInt64(
-                                (nBigVal / (sal_Int64)nFac) % (sal_Int64)10 );
+                    rOut.append((nBigVal / (sal_Int64)nFac) % (sal_Int64)10);
                 }
             }
             bOutLongVal = sal_False;
@@ -465,26 +467,26 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
 
     if( bOutLongVal )
     {
-        rOut += ByteString::CreateFromInt32( nLongVal/nFac );
+        rOut.append(static_cast<sal_Int32>(nLongVal/nFac));
         if( (nLongVal % nFac) != 0 )
         {
-            rOut += '.';
+            rOut.append('.');
             while( nFac > 1 && (nLongVal % nFac) != 0 )
             {
                 nFac /= 10;
-                rOut += ByteString::CreateFromInt32( (nLongVal / nFac) % 10 );
+                rOut.append(static_cast<sal_Int32>((nLongVal / nFac) % 10));
             }
         }
     }
 
-    rOut.Append( pUnit );
+    rOut.append(pUnit);
 }
 
 void SwHTMLWriter::OutCSS1_UnitProperty( const sal_Char *pProp, long nVal )
 {
-    ByteString sOut;
-    AddUnitPropertyValue( nVal, eCSS1Unit, sOut );
-    OutCSS1_PropertyAscii( pProp, sOut );
+    rtl::OStringBuffer sOut;
+    AddUnitPropertyValue(sOut, nVal, eCSS1Unit);
+    OutCSS1_PropertyAscii(pProp, sOut.makeStringAndClear());
 }
 
 void SwHTMLWriter::OutCSS1_PixelProperty( const sal_Char *pProp, long nVal,
@@ -1856,11 +1858,11 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     }
     else
     {
-        ByteString sVal;
-        AddUnitPropertyValue( rSz.Width(), rHTMLWrt.GetCSS1Unit(), sVal );
-        sVal += ' ';
-        AddUnitPropertyValue( rSz.Height(), rHTMLWrt.GetCSS1Unit(), sVal );
-        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_size, sVal );
+        rtl::OStringBuffer sVal;
+        AddUnitPropertyValue(sVal, rSz.Width(), rHTMLWrt.GetCSS1Unit());
+        sVal.append(' ');
+        AddUnitPropertyValue(sVal, rSz.Height(), rHTMLWrt.GetCSS1Unit());
+        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_size, sVal);
     }
 
     // Die Abstand-Attribute koennen auf gwohnte Weise exportiert werden
@@ -2418,8 +2420,8 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
         }
 
         ByteString sOut;
-        GetCSS1Color( aColor, sOut );
-        OutCSS1_PropertyAscii( sCSS1_P_background, sOut );
+        GetCSS1Color(aColor, sOut);
+        OutCSS1_PropertyAscii(sCSS1_P_background, sOut);
     }
 }
 
@@ -3647,14 +3649,14 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( nTopDist == nBottomDist && nLeftDist == nRightDist )
     {
-        ByteString sVal;
-        AddUnitPropertyValue( nTopDist, rHTMLWrt.GetCSS1Unit(), sVal );
+        rtl::OStringBuffer sVal;
+        AddUnitPropertyValue(sVal, nTopDist, rHTMLWrt.GetCSS1Unit());
         if( nTopDist != nLeftDist )
         {
-            sVal += ' ';
-            AddUnitPropertyValue( nLeftDist, rHTMLWrt.GetCSS1Unit(), sVal );
+            sVal.append(' ');
+            AddUnitPropertyValue(sVal, nLeftDist, rHTMLWrt.GetCSS1Unit());
         }
-        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_padding, sVal );
+        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_padding, sVal.makeStringAndClear());
     }
     else
     {
