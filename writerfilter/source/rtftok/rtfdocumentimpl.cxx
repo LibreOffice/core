@@ -1348,13 +1348,15 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aCharacterSprms.push_back(make_pair(0x6877, pValue));
             }
             break;
-        case RTF_UP:
+        case RTF_SUPER:
+        case RTF_UP: // TODO handle when point size is not shrinking
             {
                 OUString aValue(RTL_CONSTASCII_USTRINGPARAM("superscript"));
                 RTFValue::Pointer_t pValue(new RTFValue(aValue));
                 m_aStates.top().aCharacterSprms.push_back(make_pair(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue));
             }
             break;
+        case RTF_SUB:
         case RTF_DN:
             {
                 OUString aValue(RTL_CONSTASCII_USTRINGPARAM("subscript"));
