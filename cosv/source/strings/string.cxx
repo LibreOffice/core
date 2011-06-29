@@ -234,25 +234,6 @@ compare( const CharOrder_Table &            i_rOrder,
     return int( i_rOrder(*it1) - i_rOrder(*it2) );
 }
 
-int
-compare( const CharOrder_Table &            i_rOrder,
-         const char *                       i_s1,
-         const char *                       i_s2,
-         csv::str::size                     i_nLength )
-{
-    const char * sEnd = i_s1 + i_nLength;
-
-    const char * it1 = i_s1;
-    const char * it2 = i_s2;
-    for ( ; i_rOrder(*it1) == i_rOrder(*it2) AND *it1 != '\0' AND it1 != sEnd; ++it1, ++it2 )
-    {}
-
-    if ( it1 != sEnd )
-        return int( i_rOrder(*it1) - i_rOrder(*it2) );
-    else
-        return 0;
-}
-
 }   // namespace csv
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
