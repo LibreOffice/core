@@ -55,7 +55,7 @@ namespace desktop
     //     [OK]
 
     const char *aCmdLineHelp_version =
-        "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION %BUILDID\n"\
+        "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION\n"\
         "\n";
     const char *aCmdLineHelp_head =
         "Usage: %CMDNAME [options] [documents...]\n"\
@@ -147,9 +147,6 @@ namespace desktop
         String aHelpMessage_right(aCmdLineHelp_right, RTL_TEXTENCODING_ASCII_US);
         String aHelpMessage_bottom(aCmdLineHelp_bottom, RTL_TEXTENCODING_ASCII_US);
         ReplaceStringHookProc(aHelpMessage_version);
-        ::rtl::OUString aDefault;
-        String aVerId( ::utl::Bootstrap::getBuildIdData( aDefault ));
-        aHelpMessage_version.SearchAndReplaceAscii( "%BUILDID", aVerId );
         aHelpMessage_head.SearchAndReplaceAscii( "%CMDNAME", String( "soffice", RTL_TEXTENCODING_ASCII_US) );
 #ifdef UNX
         // on unix use console for output
@@ -184,11 +181,8 @@ namespace desktop
     {
         String aVersionMsg(aCmdLineHelp_version, RTL_TEXTENCODING_ASCII_US);
         ReplaceStringHookProc(aVersionMsg);
-        ::rtl::OUString aDefault;
-        String aVerId = ::utl::Bootstrap::getBuildIdData(aDefault);
-        aVersionMsg.SearchAndReplaceAscii("%BUILDID", aVerId);
 #ifdef UNX
-        fprintf(stdout, "%s", ByteString(aVersionMsg, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+        fprintf(stdout, "%s", rtl::OUStringToOString(aVersionMsg, RTL_TEXTENCODING_ASCII_US).getStr());
 #else
         // Just re-use the help dialog for now.
         CmdlineHelpDialog aDlg;

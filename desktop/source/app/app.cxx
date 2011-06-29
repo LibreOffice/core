@@ -1682,9 +1682,9 @@ int Desktop::Main()
 
 #ifdef DBG_UTIL
         //include version ID in non product builds
-        ::rtl::OUString aDefault;
+        ::rtl::OUString aDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
         aTitle += DEFINE_CONST_UNICODE(" [");
-        String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
+        String aVerId( utl::Bootstrap::getProductSource(aDefault));
         aTitle += aVerId;
         aTitle += ']';
 #endif
