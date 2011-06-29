@@ -760,6 +760,20 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_FOOTNOTE:
             if (!m_bIsSubstream)
             {
+                Id nId = NS_rtf::LN_footnote;
+
+                // Check if this is an endnote.
+                OStringBuffer aBuf;
+                char ch;
+                for (int i = 0; i < 7; ++i)
+                {
+                    Strm() >> ch;
+                    aBuf.append(ch);
+                }
+                OString aKeyword = aBuf.makeStringAndClear();
+                if (aKeyword.equals("\\ftnalt"))
+                    nId = NS_rtf::LN_endnote;
+
                 m_bHasFootnote = true;
                 m_bSuper = false;
                 bool bCustomMark = false;
@@ -777,7 +791,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 m_aStates.top().nDestinationState = DESTINATION_FOOTNOTE;
                 if (bCustomMark)
                     Mapper().startCharacterGroup();
-                resolveSubstream(m_nGroupStartPos - 1, NS_rtf::LN_footnote, aCustomMark);
+                resolveSubstream(m_nGroupStartPos - 1, nId, aCustomMark);
                 if (bCustomMark)
                 {
                     m_aStates.top().aCharacterAttributes.clear();
