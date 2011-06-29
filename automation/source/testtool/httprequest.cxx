@@ -38,8 +38,8 @@
 void HttpRequest::Init()
 {
     nResultId = 0;
-    aHeader.Erase();
-    aContentType.Erase();
+    aHeader = rtl::OString();
+    aContentType = rtl::OString();
     delete pStream;
     pStream = NULL;
 }
@@ -59,7 +59,7 @@ HttpRequest::~HttpRequest()
     pOutSocket = NULL;
 }
 
-void HttpRequest::SetRequest( ByteString aHost, ByteString aPath, sal_uInt16 nPort )
+void HttpRequest::SetRequest( rtl::OString aHost, rtl::OString aPath, sal_uInt16 nPort )
 {
     nStatus = HTTP_REQUEST_SET;
     Init();
@@ -68,7 +68,7 @@ void HttpRequest::SetRequest( ByteString aHost, ByteString aPath, sal_uInt16 nPo
     nRequestPort = nPort;
 }
 
-void HttpRequest::SetProxy( ByteString aHost, sal_uInt16 nPort )
+void HttpRequest::SetProxy( rtl::OString aHost, sal_uInt16 nPort )
 {
     nStatus = HTTP_REQUEST_SET;
     Init();
@@ -84,13 +84,13 @@ sal_Bool HttpRequest::Execute()
     // Open channel to standard redir host
     osl::SocketAddr aConnectAddr;
 
-    if ( aProxyHost.Len() )
+    if ( aProxyHost.getLength() )
     {
-        aConnectAddr = osl::SocketAddr( rtl::OUString( UniString( aProxyHost, RTL_TEXTENCODING_UTF8 ) ), nProxyPort );
+        aConnectAddr = osl::SocketAddr( rtl::OStringToOUString( aProxyHost, RTL_TEXTENCODING_UTF8 ), nProxyPort );
     }
     else
     {
-        aConnectAddr = osl::SocketAddr( rtl::OUString( UniString( aRequestHost, RTL_TEXTENCODING_UTF8 ) ), nRequestPort );
+        aConnectAddr = osl::SocketAddr( rtl::OStringToOUString( aRequestHost, RTL_TEXTENCODING_UTF8 ), nRequestPort );
     }
 
     TimeValue aTV;
@@ -107,13 +107,13 @@ sal_Bool HttpRequest::Execute()
     }
 
     SendString( pOutSocket, "GET " );
-    if ( aProxyHost.Len() )
+    if ( aProxyHost.getLength() )
     {
         //GET http://staroffice-doc.germany.sun.com/cgi-bin/htdig/binarycopy.sh?CopyIt=++CopyIt++ HTTP/1.0
         SendString( pOutSocket, "http://" );
         SendString( pOutSocket, aRequestHost );
         SendString( pOutSocket, ":" );
-        SendString( pOutSocket, ByteString::CreateFromInt32( nRequestPort ) );
+        SendString( pOutSocket, rtl::OString::valueOf( (sal_Int32) nRequestPort ) );
         SendString( pOutSocket, aRequestPath );
         SendString( pOutSocket, " HTTP/1.0\n" );
 
@@ -156,21 +156,24 @@ sal_Bool HttpRequest::Execute()
 
     pStream->Seek( 0 );
 
-    ByteString aLine;
+    rtl::OString aLine;
     sal_Bool bInsideHeader = sal_True;
+    sal_Int32 nIndex;
     while ( bInsideHeader )
     {
         pStream->ReadLine( aLine );
-        if ( !aLine.Len() )
+        if ( !aLine.getLength() )
             bInsideHeader = sal_False;
         else
         {
-            if ( IsItem( "HTTP/", aLine ) )
-                nResultId = (sal_uInt16)aLine.GetToken( 1, ' ' ).ToInt32();
+            if ( IsItem( "HTTP/", aLine ) ) {
+                nIndex = 0;
+                nResultId = (sal_uInt16)aLine.getToken( (sal_Int32)1, ' ', nIndex ).toInt32();
+            }
             if ( IsItem( "Content-Type:", aLine ) )
             {
-                aContentType = aLine.Copy( 13 );
-                aContentType.EraseLeadingAndTrailingChars();
+                aContentType = aLine.copy( 13 );
+                aContentType.trim();
             }
             aHeader += aLine;
             aHeader += "\n";
@@ -200,15 +203,15 @@ Servlet-Engine: Tomcat Web Server/3.2.1 (JSP 1.1; Servlet 2.2; Java 1.3.0; Linux
 Connection: close
 Content-Type: text/xml; charset=ISO-8859-1
   */
-void HttpRequest::SendString( osl::StreamSocket* pSocket , ByteString aText )
+void HttpRequest::SendString( osl::StreamSocket* pSocket , rtl::OString aText )
 {
     if ( nStatus == HTTP_REQUEST_PENDING )
-        pSocket->write( aText.GetBuffer(), aText.Len() );
+        pSocket->write( aText.getStr(), aText.getLength() );
 }
 
-sal_Bool HttpRequest::IsItem( ByteString aItem, ByteString aLine )
+sal_Bool HttpRequest::IsItem( rtl::OString aItem, rtl::OString aLine )
 {
-    return aItem.Match( aLine ) == STRING_MATCH;
+    return aItem.match( aLine );
 }
 
 
