@@ -10417,3 +10417,30 @@ SfxVoidItem NavigateForward FN_NAVIGATION_FORWARD
     ToolBoxConfig = TRUE,
     GroupId = GID_NAVIGATION;
 ]
+
+//--------------------------------------------------------------------------
+SfxVoidItem EditHeaderFooter FN_EDIT_HEADER_FOOTER
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
+

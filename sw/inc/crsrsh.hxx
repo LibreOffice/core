@@ -190,6 +190,7 @@ private:
     SwShellCrsr* pCurCrsr;      // current cursor
     SwShellCrsr* pCrsrStk;      // stack for the cursor
     SwVisCrsr *pVisCrsr;        // the visible cursor
+    SwShellCrsr* pCrsrBack;     // Backup cursor for header/footer edit mode
 
     IBlockCursor *pBlockCrsr;   // interface of cursor for block (=rectangular) selection
 
@@ -850,6 +851,8 @@ public:
     String GetCrsrDescr() const;
 
     SwRect GetRectOfCurrentChar();
+
+    virtual void ToggleHeaderFooterEdit( );
 };
 
 // Cursor Inlines:

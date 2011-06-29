@@ -373,6 +373,12 @@ interface BaseText
         StateMethod = GetState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    FN_EDIT_HEADER_FOOTER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     FN_TABLE_UNSET_READ_ONLY // status(final|play)
     [
         ExecMethod = Execute ;

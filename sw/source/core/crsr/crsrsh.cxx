@@ -2540,7 +2540,7 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
 
 SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     : ViewShell( rShell, pInitWin ),
-    SwModify( 0 ), pCrsrStk( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
+    SwModify( 0 ), pCrsrStk( 0 ), pCrsrBack( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
     pBoxIdx( 0 ), pBoxPtr( 0 ), nCrsrMove( 0 ), nBasicActionCnt( 0 ),
     eMvState( MV_NONE ),
     sMarkedListId(),
@@ -2568,7 +2568,7 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
 SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
                             const SwViewOption *pInitOpt )
     : ViewShell( rDoc, pInitWin, pInitOpt ),
-    SwModify( 0 ), pCrsrStk( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
+    SwModify( 0 ), pCrsrStk( 0 ), pCrsrBack( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
     pBoxIdx( 0 ), pBoxPtr( 0 ), nCrsrMove( 0 ), nBasicActionCnt( 0 ),
     eMvState( MV_NONE ), // state for crsr-travelling - GetCrsrOfst
     sMarkedListId(),
@@ -2629,6 +2629,9 @@ SwCrsrShell::~SwCrsrShell()
             delete pCrsrStk->GetNext();
         delete pCrsrStk;
     }
+
+    if( pCrsrBack )
+        delete pCrsrBack;
 
     // JP 27.07.98: Bug 54025 - ggfs. den HTML-Parser, der als Client in
     //              der CursorShell haengt keine Chance geben, sich an den
@@ -3438,6 +3441,48 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             rSelectRect = aStartRect.Union( aEndRect );
             Pop(sal_False);
         }
+    }
+}
+
+
+void SwCrsrShell::ToggleHeaderFooterEdit( )
+{
+    ViewShell::ToggleHeaderFooterEdit();
+
+    SET_CURR_SHELL( this );
+
+    if ( IsHeaderFooterEdit() )
+    {
+        pCrsrBack = new SwShellCrsr( *this, *pCurCrsr->GetPoint(),
+                                    pCurCrsr->GetPtPos() );
+
+        if ( pCurCrsr->HasMark() )
+        {
+            pCrsrBack->SetMark();
+            *pCrsrBack->GetMark() = *pCurCrsr->GetMark();
+        }
+
+        SetCrsrInHdFt();
+    }
+    else
+    {
+        SwPosition& rPos = *pCurCrsr->GetPoint();
+        rPos.nNode = pCrsrBack->GetPoint()->nNode;
+        rPos.nContent = pCrsrBack->GetPoint()->nContent;
+
+        if ( pCrsrBack->HasMark( ) )
+        {
+            pCurCrsr->SetMark();
+            rPos = *pCurCrsr->GetMark();
+            rPos.nNode = pCrsrBack->GetMark()->nNode;
+            rPos.nContent = pCrsrBack->GetMark()->nContent;
+        }
+
+        delete pCrsrBack;
+        pCrsrBack = NULL;
+
+        UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
+                    SwCrsrShell::READONLY );
     }
 }
 

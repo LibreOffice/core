@@ -75,6 +75,7 @@
 #include <editeng/frmdiritem.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+#include <viewopt.hxx>
 
 
 using namespace ::com::sun::star;
@@ -132,14 +133,19 @@ void SwFrm::RegisterToFormat( SwFmt& rFmt )
 
 sal_uInt64 SwFrm::SetHeaderFooterEditMask( OutputDevice* pOut ) const
 {
-    ViewShell* pShell = getRootFrm()->GetCurrShell();
-    bool bInHdrFtr = FindFooterOrHeader( ) != NULL;
-    bool bEditHdrFtr = pShell->IsHeaderFooterEdit();
     sal_uInt64 nOldDrawMode = pOut->GetDrawMode();
-    if ( ( bInHdrFtr && !bEditHdrFtr ) || ( !bInHdrFtr && bEditHdrFtr ) )
-        pOut->SetDrawMode( DRAWMODE_GHOSTEDLINE | DRAWMODE_GHOSTEDFILL |
-                DRAWMODE_GHOSTEDTEXT | DRAWMODE_GHOSTEDBITMAP |
-                DRAWMODE_GHOSTEDGRADIENT );
+    ViewShell* pShell = getRootFrm()->GetCurrShell();
+    if ( !pShell->IsPreView() &&
+         !pShell->GetViewOptions()->IsPDFExport() &&
+         !pShell->GetViewOptions()->IsPrinting() )
+    {
+        bool bInHdrFtr = FindFooterOrHeader( ) != NULL;
+        bool bEditHdrFtr = pShell->IsHeaderFooterEdit();
+        if ( ( bInHdrFtr && !bEditHdrFtr ) || ( !bInHdrFtr && bEditHdrFtr ) )
+            pOut->SetDrawMode( DRAWMODE_GHOSTEDLINE | DRAWMODE_GHOSTEDFILL |
+                    DRAWMODE_GHOSTEDTEXT | DRAWMODE_GHOSTEDBITMAP |
+                    DRAWMODE_GHOSTEDGRADIENT );
+    }
 
     return nOldDrawMode;
 }
