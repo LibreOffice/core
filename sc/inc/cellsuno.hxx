@@ -929,6 +929,10 @@ public:
     virtual ::rtl::OUString SAL_CALL getFormula() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setFormula( const ::rtl::OUString& aFormula )
                                 throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setFormulaResult( const double nValue )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setFormulaString( const ::rtl::OUString& aFormula )
+                                throw(::com::sun::star::uno::RuntimeException);
     virtual double SAL_CALL getValue() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setValue( double nValue ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::table::CellContentType SAL_CALL getType()

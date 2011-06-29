@@ -6512,6 +6512,31 @@ void SAL_CALL ScCellObj::setValue( double nValue ) throw(uno::RuntimeException)
     SetValue_Impl(nValue);
 }
 
+void SAL_CALL ScCellObj::setFormulaString( const rtl::OUString& aFormula) throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    ScDocShell *pDocSh = GetDocShell();
+    if( pDocSh )
+    {
+        ScDocFunc aFunc( *pDocSh );
+        ScFormulaCell* pCell = new ScFormulaCell( pDocSh->GetDocument(), aCellPos );
+        pCell->SetHybridFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE );
+        aFunc.PutCell( aCellPos, pCell, sal_True );
+    }
+}
+void SAL_CALL ScCellObj::setFormulaResult( double nValue ) throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh && pDocSh->GetDocument()->GetCellType( aCellPos ) == CELLTYPE_FORMULA )
+    {
+        ScFormulaCell* pCell = (ScFormulaCell *)pDocSh->GetDocument()->GetCell( aCellPos );
+        pCell->SetHybridDouble( nValue );
+        pCell->ResetDirty();
+        pCell->ResetChanged();
+    }
+}
+
 table::CellContentType SAL_CALL ScCellObj::getType() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;

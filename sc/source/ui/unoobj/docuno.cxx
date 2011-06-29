@@ -1602,11 +1602,18 @@ void SAL_CALL ScModelObj::setPropertyValue(
         ScDocument* pDoc = pDocShell->GetDocument();
         const ScDocOptions& rOldOpt = pDoc->GetDocOptions();
         ScDocOptions aNewOpt = rOldOpt;
+        //  Don't recalculate while loading XML, when the formula text is stored
+        //  Recalculation after loading is handled separately.
+        bool bHardRecalc = !pDoc->IsImportingXML();
 
         sal_Bool bOpt = ScDocOptionsHelper::setPropertyValue( aNewOpt, *aPropSet.getPropertyMap(), aPropertyName, aValue );
         if (bOpt)
         {
             // done...
+            if ( aString.EqualsAscii( SC_UNO_IGNORECASE ) ||
+                 aString.EqualsAscii( SC_UNONAME_REGEXP ) ||
+                 aString.EqualsAscii( SC_UNO_LOOKUPLABELS ) )
+                bHardRecalc = false;
         }
         else if ( aString.EqualsAscii( SC_UNONAME_CLOCAL ) )
         {
@@ -1713,10 +1720,8 @@ void SAL_CALL ScModelObj::setPropertyValue(
         if ( aNewOpt != rOldOpt )
         {
             pDoc->SetDocOptions( aNewOpt );
-            //  Don't recalculate while loading XML, when the formula text is stored.
-            //  Recalculation after loading is handled separately.
             //! Recalc only for options that need it?
-            if ( !pDoc->IsImportingXML() )
+            if ( bHardRecalc )
                 pDocShell->DoHardRecalc( sal_True );
             pDocShell->SetDocumentModified();
         }
