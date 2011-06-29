@@ -491,6 +491,8 @@ gb_Library_OOODLLEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
 gb_Library_UNODLLEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVERDLLEXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_DLLEXT)
 
+gb_Library_win32_OLDNAMES := moldname
+
 gb_Library_PLAINLIBS_NONE += \
 	mingwthrd \
 	mingw32 \
@@ -500,10 +502,13 @@ gb_Library_PLAINLIBS_NONE += \
 	advapi32 \
 	gdi32 \
 	gnu_getopt \
+	imm32 \
 	kernel32 \
+	msimg32 \
 	msvcrt \
 	msvcprt \
 	mpr \
+	$(gb_Library_win32_OLDNAMES) \
 	ole32 \
 	oleaut32 \
 	shell32 \
@@ -512,6 +517,8 @@ gb_Library_PLAINLIBS_NONE += \
 	user32 \
 	uuid \
 	uwinapi \
+	version \
+	winspool \
 	z \
 
 gb_Library_LAYER := \

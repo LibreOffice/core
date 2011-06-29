@@ -386,6 +386,8 @@ gb_Library_get_rpath :=
 gb_Library_SYSPRE := i
 gb_Library_PLAINEXT := .lib
 
+gb_Library_win32_OLDNAMES := oldnames
+
 gb_Library_PLAINLIBS_NONE += \
 	advapi32 \
 	gdi32 \
@@ -397,7 +399,7 @@ gb_Library_PLAINLIBS_NONE += \
 	msvcrt \
 	msvcprt \
 	mpr \
-	oldnames \
+	$(gb_Library_win32_OLDNAMES) \
 	ole32 \
 	oleaut32 \
 	shell32 \
