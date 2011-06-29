@@ -30,6 +30,7 @@
 
 #include <vector>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <svl/svarray.hxx>
 #include <editeng/borderline.hxx>
 #include "swtypes.hxx"  // fuer SwTwips
@@ -527,6 +528,7 @@ public:
     void PaintBorderLine( const SwRect&, const SwRect&, const SwPageFrm*,
                           const Color *pColor, const editeng::SvxBorderStyle = editeng::SOLID ) const;
 
+    drawinglayer::processor2d::BaseProcessor2D * CreateProcessor2D( ) const;
     void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSequence& rSequence ) const;
 
     //Retouche, nicht im Bereich des uebergebenen Rect!
