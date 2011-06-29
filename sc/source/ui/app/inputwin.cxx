@@ -1694,7 +1694,7 @@ void ScPosWnd::DoEnter()
                     {
                         // Note that SID_CURRENTCELL always expects address to
                         // be in Calc A1 format.  Convert the text.
-                        ScRange aRange;
+                        ScRange aRange(0,0,pViewData->GetTabNo());
                         aRange.ParseAny(aText, pDoc, pDoc->GetAddressConvention());
                         aRange.Format(aText, SCR_ABS_3D, pDoc, ::formula::FormulaGrammar::CONV_OOO);
                     }

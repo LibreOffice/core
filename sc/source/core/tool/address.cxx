@@ -1424,7 +1424,7 @@ sal_uInt16 ScRange::ParseAny( const String& r, ScDocument* pDoc,
 
     if ( (nRet & nValid) != nValid )
     {
-        ScAddress aAdr;
+        ScAddress aAdr(aStart);//initialize with currentPos as fallback for table number
         nRet = aAdr.Parse( r, pDoc, rDetails );
         if ( nRet & SCA_VALID )
             aStart = aEnd = aAdr;
