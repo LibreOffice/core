@@ -86,6 +86,8 @@
 #include <svx/svdogrp.hxx>
 #include <sortedobjs.hxx>
 #include <EnhancedPDFExportHelper.hxx>
+#include <fesh.hxx>
+#include <svx/svdpage.hxx>
 // <--
 // --> OD #i76669#
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
@@ -2960,6 +2962,20 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 
                 if ( pSh->Imp()->HasDrawView() )
                 {
+                    // Loop over the drawing object to mark them as in or outside a group
+                    SdrObjList* pObjs = pSh->Imp()->GetPageView()->GetObjList();
+                    for ( sal_uInt32 i = 0; pObjs && i < pObjs->GetObjCount(); i++ )
+                    {
+                        SdrObject* pDrawObj = pObjs->GetObj( i );
+                        const SwContact* pContact = ::GetUserCall( pDrawObj );
+                        const SwAnchoredObject* pObj = pContact->GetAnchoredObj( pDrawObj );
+
+                        bool bInHeaderFooter = pObj->GetAnchorFrm()->FindFooterOrHeader() != NULL;
+                        bool bHeaderFooterEdit = pSh->IsHeaderFooterEdit();
+
+                        pDrawObj->SetGhosted( bHeaderFooterEdit ^ bInHeaderFooter );
+                    }
+
                     pLines->LockLines( sal_True );
                     const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
                     pSh->Imp()->PaintLayer( pIDDMA->GetHellId(),
