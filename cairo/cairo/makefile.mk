@@ -35,14 +35,9 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF  "$(ENABLE_CAIRO)" == ""
+.IF "$(SYSTEM_CAIRO)" == "YES"
 all:
-    @echo "Nothing to do (Cairo not enabled)."
-
-.ELIF "$(SYSTEM_CAIRO)" == "YES"
-all:
-    @echo "Nothing to do, using system cairo."
-
+    @echo "Not building cairo."
 .ENDIF
 
 # --- Files --------------------------------------------------------
