@@ -402,7 +402,7 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     aConf.SetGroup("Misc");
 
     String aST;
-    GETSET( aST, "ServerTimeout", ByteString::CreateFromInt64(Time(0,0,45).GetTime()) );     // 45 Sekunden Initial
+    GETSET( aST, "ServerTimeout", rtl::OString::valueOf(Time(0,0,45).GetTime()) );     // 45 Sekunden Initial
     pImpl->aServerTimeout = Time(sal_uLong(aST.ToInt64()));
 
     String aSOSE;
