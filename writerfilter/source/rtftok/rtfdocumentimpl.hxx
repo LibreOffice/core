@@ -54,7 +54,8 @@ namespace writerfilter {
             DESTINATION_SHAPE,
             DESTINATION_SHAPEINSTRUCTION,
             DESTINATION_SHAPEPROPERTYVALUEPICT,
-            DESTINATION_NESTEDTABLEPROPERTIES
+            DESTINATION_NESTEDTABLEPROPERTIES,
+            DESTINATION_FOOTNOTE
         };
 
         enum RTFBorderState
@@ -197,7 +198,9 @@ namespace writerfilter {
                 RTFSprms_t mergeAttributes();
                 int asHex(char ch);
                 void setSubstream(bool bIsSubtream);
-                void resolveSubstream(sal_uInt32& nPos, Id nId);
+                void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
+                void resolveSubstream(sal_uInt32 nPos, Id nId);
+                void resolveSubstream(sal_uInt32 nPos, Id nId, rtl::OUString& rIgnoreFirst);
                 void seek(sal_uInt32 nPos);
             private:
                 int resolveParse();
@@ -219,6 +222,7 @@ namespace writerfilter {
                 void text(rtl::OUString& rString);
                 void parBreak();
                 void sectBreak(bool bFinal);
+                void replayBuffer(std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>>& rBuffer);
 
                 com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& m_xContext;
                 com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& m_xInputStream;
@@ -253,10 +257,16 @@ namespace writerfilter {
                 /// Buffered table cells, till cell definitions are not reached.
                 std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aTableBuffer;
                 bool m_bTable;
+                /// Buffered superscript, till footnote is reached (or not).
+                std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aSuperBuffer;
+                bool m_bSuper;
+                bool m_bHasFootnote;
                 /// If this is a substream.
                 bool m_bIsSubstream;
                 std::deque<std::pair<Id, sal_uInt32>> m_nHeaderFooterPositions;
                 sal_uInt32 m_nGroupStartPos;
+                /// Ignore the first occurrence of this text.
+                rtl::OUString m_aIgnoreFirst;
         };
     } // namespace rtftok
 } // namespace writerfilter

@@ -150,6 +150,9 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_xStorage(),
     m_aTableBuffer(),
     m_bTable(false),
+    m_aSuperBuffer(),
+    m_bSuper(false),
+    m_bHasFootnote(false),
     m_bIsSubstream(false),
     m_nHeaderFooterPositions(),
     m_nGroupStartPos(0)
@@ -184,12 +187,23 @@ void RTFDocumentImpl::setSubstream(bool bIsSubtream)
     m_bIsSubstream = bIsSubtream;
 }
 
-void RTFDocumentImpl::resolveSubstream(sal_uInt32& nPos, Id nId)
+void RTFDocumentImpl::setIgnoreFirst(OUString& rIgnoreFirst)
+{
+    m_aIgnoreFirst = rIgnoreFirst;
+}
+
+void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId)
+{
+    OUString aStr;
+    resolveSubstream(nPos, nId, aStr);
+}
+void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnoreFirst)
 {
     sal_uInt32 nCurrent = Strm().Tell();
     // Seek to header position, parse, then seek back.
     RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame));
     pImpl->setSubstream(true);
+    pImpl->setIgnoreFirst(rIgnoreFirst);
     pImpl->seek(nPos);
     OSL_TRACE("substream start");
     Mapper().substream(nId, pImpl);
@@ -484,6 +498,11 @@ void RTFDocumentImpl::text(OUString& rString)
         m_aStates.top().aLevelText.append(rString);
         return;
     }
+    if (m_aIgnoreFirst.getLength() && m_aIgnoreFirst.equals(rString))
+    {
+        m_aIgnoreFirst = OUString();
+        return;
+    }
 
     writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
             new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
@@ -507,12 +526,15 @@ void RTFDocumentImpl::text(OUString& rString)
     }
     if (m_bNeedPap)
     {
-        if (!m_bTable)
+        if (!m_bTable && !m_bSuper)
             Mapper().props(pParagraphProperties);
         else
         {
             RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
-            m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+            if (m_bTable)
+                m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+            else
+                m_aSuperBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
         }
         m_bNeedPap = false;
     }
@@ -524,16 +546,19 @@ void RTFDocumentImpl::text(OUString& rString)
         Mapper().text(sFieldStart, 1);
         Mapper().endCharacterGroup();
     }
-    if (!m_bTable)
+    if (!m_bTable && !m_bSuper && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
         Mapper().startCharacterGroup();
     else
     {
         RTFValue::Pointer_t pValue;
-        m_aTableBuffer.push_back(make_pair(BUFFER_STARTRUN, pValue));
+        if (m_bTable)
+            m_aTableBuffer.push_back(make_pair(BUFFER_STARTRUN, pValue));
+        else
+            m_aSuperBuffer.push_back(make_pair(BUFFER_STARTRUN, pValue));
     }
     if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
     {
-        if (!m_bTable)
+        if (!m_bTable && !m_bSuper)
         {
             writerfilter::Reference<Properties>::Pointer_t const pProperties(
                     new RTFReferenceProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms)
@@ -543,22 +568,40 @@ void RTFDocumentImpl::text(OUString& rString)
         else
         {
             RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
-            m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+            if (m_bTable)
+                m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+            else
+                m_aSuperBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
         }
     }
-    if (!m_bTable)
+    if (!m_bTable && !m_bSuper)
+    {
+        OSL_TRACE("not table or super");
         Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
+    }
     else
     {
         RTFValue::Pointer_t pValue(new RTFValue(rString));
-        m_aTableBuffer.push_back(make_pair(BUFFER_UTEXT, pValue));
+        if (m_bTable)
+        {
+            OSL_TRACE("table");
+            m_aTableBuffer.push_back(make_pair(BUFFER_UTEXT, pValue));
+        }
+        else
+        {
+            OSL_TRACE("pushing utext to super buffer");
+            m_aSuperBuffer.push_back(make_pair(BUFFER_UTEXT, pValue));
+        }
     }
-    if (!m_bTable)
+    if (!m_bTable && !m_bSuper && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
         Mapper().endCharacterGroup();
     else
     {
         RTFValue::Pointer_t pValue;
-        m_aTableBuffer.push_back(make_pair(BUFFER_ENDRUN, pValue));
+        if (m_bTable)
+            m_aTableBuffer.push_back(make_pair(BUFFER_ENDRUN, pValue));
+        else
+            m_aSuperBuffer.push_back(make_pair(BUFFER_ENDRUN, pValue));
     }
     if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
@@ -567,6 +610,47 @@ void RTFDocumentImpl::text(OUString& rString)
         Mapper().text(sFieldSep, 1);
         Mapper().endCharacterGroup();
     }
+}
+
+void RTFDocumentImpl::replayBuffer(std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>>& rBuffer)
+{
+    while (rBuffer.size())
+    {
+        std::pair<RTFBufferTypes, RTFValue::Pointer_t> aPair = rBuffer.front();
+        rBuffer.pop_front();
+        if (aPair.first == BUFFER_PROPS)
+        {
+            writerfilter::Reference<Properties>::Pointer_t const pProp(
+                    new RTFReferenceProperties(aPair.second->getAttributes(), aPair.second->getSprms())
+                    );
+            Mapper().props(pProp);
+        }
+        else if (aPair.first == BUFFER_CELLEND)
+        {
+            RTFValue::Pointer_t pValue(new RTFValue(1));
+            m_aStates.top().aTableCellSprms.push_back(make_pair(NS_sprm::LN_PCell, pValue));
+            writerfilter::Reference<Properties>::Pointer_t const pTableCellProperties(
+                    new RTFReferenceProperties(m_aStates.top().aTableCellAttributes, m_aStates.top().aTableCellSprms)
+                    );
+            Mapper().props(pTableCellProperties);
+            lcl_TableBreak(Mapper());
+            break;
+        }
+        else if (aPair.first == BUFFER_STARTRUN)
+            Mapper().startCharacterGroup();
+        else if (aPair.first == BUFFER_UTEXT)
+        {
+            OUString aString(aPair.second->getString());
+            Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aString.getStr()), aString.getLength());
+        }
+        else if (aPair.first == BUFFER_ENDRUN)
+            Mapper().endCharacterGroup();
+        else if (aPair.first == BUFFER_PAR)
+            parBreak();
+        else
+            OSL_FAIL("should not happen");
+    }
+
 }
 
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
@@ -676,7 +760,33 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_FOOTNOTE:
             if (!m_bIsSubstream)
             {
-                resolveSubstream(m_nGroupStartPos - 1, NS_rtf::LN_footnote);
+                m_bHasFootnote = true;
+                m_bSuper = false;
+                bool bCustomMark = false;
+                OUString aCustomMark;
+                while (m_aSuperBuffer.size())
+                {
+                    std::pair<RTFBufferTypes, RTFValue::Pointer_t> aPair = m_aSuperBuffer.front();
+                    m_aSuperBuffer.pop_front();
+                    if (aPair.first == BUFFER_UTEXT)
+                    {
+                        aCustomMark = aPair.second->getString();
+                        bCustomMark = true;
+                    }
+                }
+                m_aStates.top().nDestinationState = DESTINATION_FOOTNOTE;
+                if (bCustomMark)
+                    Mapper().startCharacterGroup();
+                resolveSubstream(m_nGroupStartPos - 1, NS_rtf::LN_footnote, aCustomMark);
+                if (bCustomMark)
+                {
+                    m_aStates.top().aCharacterAttributes.clear();
+                    m_aStates.top().aCharacterSprms.clear();
+                    RTFValue::Pointer_t pValue(new RTFValue(1));
+                    m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_FtnEdnRef_customMarkFollows, pValue));
+                    text(aCustomMark);
+                    Mapper().endCharacterGroup();
+                }
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
             break;
@@ -824,6 +934,9 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 Mapper().text(sBreak, 1);
                 Mapper().endCharacterGroup();
             }
+            break;
+        case RTF_CHFTN:
+            // Nothing to do, dmapper assumes this is the default.
             break;
         default:
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -1146,6 +1259,21 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aSectionSprms.push_back(make_pair(NS_ooxml::LN_EG_SectPrContents_titlePg, pValue));
             }
             break;
+        case RTF_SUPER:
+            {
+                m_bSuper = true;
+                OUString aValue(RTL_CONSTASCII_USTRINGPARAM("superscript"));
+                RTFValue::Pointer_t pValue(new RTFValue(aValue));
+                m_aStates.top().aCharacterSprms.push_back(make_pair(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue));
+            }
+            break;
+        case RTF_SUB:
+            {
+                OUString aValue(RTL_CONSTASCII_USTRINGPARAM("subscript"));
+                RTFValue::Pointer_t pValue(new RTFValue(aValue));
+                m_aStates.top().aCharacterSprms.push_back(make_pair(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue));
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
@@ -1355,7 +1483,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aCharacterSprms.push_back(make_pair(0x6877, pValue));
             }
             break;
-        case RTF_SUPER:
         case RTF_UP: // TODO handle when point size is not shrinking
             {
                 OUString aValue(RTL_CONSTASCII_USTRINGPARAM("superscript"));
@@ -1363,7 +1490,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aCharacterSprms.push_back(make_pair(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue));
             }
             break;
-        case RTF_SUB:
         case RTF_DN:
             {
                 OUString aValue(RTL_CONSTASCII_USTRINGPARAM("subscript"));
@@ -1496,42 +1622,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pXValue(new RTFValue(nCellX));
                 m_aStates.top().aTableRowSprms.push_back(make_pair(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue));
 
-                while (m_aTableBuffer.size())
-                {
-                    std::pair<RTFBufferTypes, RTFValue::Pointer_t> aPair = m_aTableBuffer.front();
-                    m_aTableBuffer.pop_front();
-                    if (aPair.first == BUFFER_PROPS)
-                    {
-                        writerfilter::Reference<Properties>::Pointer_t const pProp(
-                                new RTFReferenceProperties(aPair.second->getAttributes(), aPair.second->getSprms())
-                                );
-                        Mapper().props(pProp);
-                    }
-                    else if (aPair.first == BUFFER_CELLEND)
-                    {
-                        RTFValue::Pointer_t pValue(new RTFValue(1));
-                        m_aStates.top().aTableCellSprms.push_back(make_pair(NS_sprm::LN_PCell, pValue));
-                        writerfilter::Reference<Properties>::Pointer_t const pTableCellProperties(
-                                new RTFReferenceProperties(m_aStates.top().aTableCellAttributes, m_aStates.top().aTableCellSprms)
-                                );
-                        Mapper().props(pTableCellProperties);
-                        lcl_TableBreak(Mapper());
-                        break;
-                    }
-                    else if (aPair.first == BUFFER_STARTRUN)
-                        Mapper().startCharacterGroup();
-                    else if (aPair.first == BUFFER_UTEXT)
-                    {
-                        OUString aString(aPair.second->getString());
-                        Mapper().utext(reinterpret_cast<sal_uInt8 const*>(aString.getStr()), aString.getLength());
-                    }
-                    else if (aPair.first == BUFFER_ENDRUN)
-                        Mapper().endCharacterGroup();
-                    else if (aPair.first == BUFFER_PAR)
-                        parBreak();
-                    else
-                        OSL_FAIL("should not happen");
-                }
+                replayBuffer(m_aTableBuffer);
 
                 // Reset cell properties.
                 RTFSprms::Pointer_t pTableCellSprms(new RTFSprms_t(m_aStates.top().aTableCellSprms));
@@ -2079,6 +2170,12 @@ int RTFDocumentImpl::popState()
         m_aStates.top().aShapeProperties = aShapeProperties;
     else if (bPicPropEnd)
         resolveShapeProperties(aShapeProperties);
+    if (m_bSuper)
+    {
+        if (!m_bHasFootnote)
+            replayBuffer(m_aSuperBuffer);
+        m_bSuper = m_bHasFootnote = false;
+    }
 
     return 0;
 }
