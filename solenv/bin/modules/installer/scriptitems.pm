@@ -806,6 +806,9 @@ sub replace_setup_variables
     if (!$buildidstring) {
         $buildidstring = $localbuild . $localminor . "(Build:" . $installer::globals::buildid . ")";
     }
+    else {
+        $buildidstring = substr($buildidstring, 0, -1);
+    }
 
     # the environment variable CWS_WORK_STAMP is set only in CWS
     if ( $ENV{'CWS_WORK_STAMP'} ) { $buildidstring = $buildidstring . "\[CWS\:" . $ENV{'CWS_WORK_STAMP'} . "\]"; }
