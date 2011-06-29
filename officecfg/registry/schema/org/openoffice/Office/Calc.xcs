@@ -297,6 +297,15 @@
 					</info>
 					<value>true</value>
 				</prop>
+                <prop oor:name="GridOnColoredCells" oor:type="xs:boolean">
+                    <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Visual Aids -->
+                    <info>
+                        <author>André Schnabel</author>
+                        <desc>Specifies whether grid lines should be displayed on top of colored cells.</desc>
+                        <label>Grid lines on colored background</label>
+                    </info>
+                    <value>false</value>
+                </prop>
 				<prop oor:name="GridLineColor" oor:type="xs:int">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
