@@ -1930,7 +1930,6 @@ ToFile( "POPPLER_LIBS",      "@POPPLER_LIBS@",     "e" );
 ToFile( "GSTREAMER_CFLAGS",  "@GSTREAMER_CFLAGS@", "e" );
 ToFile( "GSTREAMER_LIBS",    "@GSTREAMER_LIBS@",   "e" );
 ToFile( "SYSTEM_CAIRO",      "@SYSTEM_CAIRO@",     "e" );
-ToFile( "BUILD_PIXMAN",      "@BUILD_PIXMAN@",     "e" );
 ToFile( "CAIRO_CFLAGS",      "@CAIRO_CFLAGS@",     "e" );
 ToFile( "CAIRO_LIBS",        "@CAIRO_LIBS@",       "e" );
 ToFile( "XRANDR_CFLAGS",     "@XRANDR_CFLAGS@",    "e" );

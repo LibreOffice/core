@@ -45,6 +45,7 @@ endif
 ifeq ($(OS),WNT)
 
 ifeq ($(COM),GCC)
+gb_Library_FILENAMES := $(patsubst cairo:icairo%,cairo:libcairo$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sb:isb%,sb:basic%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sfx:isfx%,sfx:sfx%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst svt:isvt%,svt:svtool%,$(gb_Library_FILENAMES))
@@ -76,6 +77,7 @@ gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
 
 else
+gb_Library_FILENAMES := $(patsubst cairo:icairo%,cairo:libcairo%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:icppunit_dll%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst crypto:libcrypto%,crypto:libcrypto_static%,$(gb_Library_FILENAMES))
@@ -146,6 +148,10 @@ endif
 gb_Library_FILENAMES := $(patsubst writerfilter_uno:writerfilter_uno%,writerfilter_uno:writerfilter%,$(gb_Library_FILENAMES))
 
 # we do not require a known rule for these, when using system libs
+
+ifeq ($(SYSTEM_CAIRO),YES)
+gb_Library_TARGETS := $(filter-out cairo,$(gb_Library_TARGETS))
+endif
 
 ifeq ($(SYSTEM_LIBXML),YES)
 gb_Library_TARGETS := $(filter-out xml2,$(gb_Library_TARGETS))

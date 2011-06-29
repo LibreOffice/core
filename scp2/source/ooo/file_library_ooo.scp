@@ -572,7 +572,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 
 
-#if (defined(ENABLE_CAIRO) && ! defined (SYSTEM_CAIRO))
+#ifndef SYSTEM_CAIRO
 
 File gid_File_Lib_Cairo
     TXT_FILE_BODY;

@@ -6520,10 +6520,6 @@ dnl ===================================================================
 dnl Test whether to build cairo or rely on the system version
 dnl ===================================================================
 
-dnl ENABLE_CAIRO will be set to empty later when necessary
-ENABLE_CAIRO="TRUE"
-
-BUILD_PIXMAN=""
 SYSTEM_CAIRO=""
 
 AC_MSG_CHECKING([whether to use the system cairo])
@@ -6554,11 +6550,8 @@ int main(int argc, char **argv) {
 else
     AC_MSG_RESULT([no])
     BUILD_TYPE="$BUILD_TYPE CAIRO"
-    BUILD_PIXMAN=YES
 fi
 
-AC_SUBST(ENABLE_CAIRO)
-AC_SUBST(BUILD_PIXMAN)
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
@@ -8048,7 +8041,6 @@ internal)
 no)
    ENABLE_LIBRSVG=NO
    SYSTEM_LIBRSVG=NO
-   ENABLE_CAIRO=
    ;;
 
 *)
