@@ -65,11 +65,21 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
 ))
 
 ifeq ($(SYSTEM_CAIRO),YES)
+$(eval $(call gb_Library_set_cxxflags,vclplug_gen,\
+    $$(CXXFLAGS) \
+    $$(CAIRO_CFLAGS) \
+    -DSYSTEM_CAIRO \
+))
 $(eval $(call gb_Library_set_ldflags,vclplug_gen,\
     $$(LDFLAGS) \
     $$(CAIRO_LIBS) \
 ))
 else
+$(eval $(call gb_Library_set_cxxflags,vclplug_gen,\
+    $$(CXXFLAGS) \
+    $$(FONTCONFIG_CFLAGS) \
+    $$(FREETYPE_CFLAGS) \
+))
 $(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
     cairo \
 ))
@@ -128,12 +138,6 @@ $(eval $(call gb_Library_set_defs,vclplug_gen,\
     $$(DEFS) \
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
     -DVCLPLUG_GEN_IMPLEMENTATION \
-))
-
-## unconditional cairo
-$(eval $(call gb_Library_set_cxxflags,vclplug_gen,\
-    $$(CXXFLAGS) \
-    $$(CAIRO_CFLAGS) \
 ))
 
 ## handle RandR 

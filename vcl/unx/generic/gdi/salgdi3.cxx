@@ -83,9 +83,15 @@
 #include <graphite_serverfont.hxx>
 #endif
 
+#ifdef SYSTEM_CAIRO
 #include <cairo.h>
 #include <cairo-ft.h>
 #include <cairo-xlib-xrender.h>
+#else
+#include <cairo/cairo.h>
+#include <cairo/cairo-ft.h>
+#include <cairo/cairo-xlib-xrender.h>
+#endif
 
 struct BOX
 {
