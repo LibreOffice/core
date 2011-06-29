@@ -28,9 +28,9 @@ class DataAware(object):
     @param value_
     '''
 
-    def __init__(self, dataObject_, value_):
+    def __init__(self, dataObject_, field_):
         self._dataObject = dataObject_
-        self._value = value_
+        self._field = field_
 
     '''
     sets the given value to the UI control
@@ -55,7 +55,7 @@ class DataAware(object):
     '''
 
     def updateUI(self):
-        data = self._value.get(self._dataObject)
+        data = getattr(self._dataObject, self._field)
         ui = self.getFromUI()
         if data is not ui:
             try:
@@ -71,36 +71,15 @@ class DataAware(object):
 
     def updateData(self):
         try:
-            data = self._value.get(self._dataObject)
+            data = getattr(self._dataObject, self._field)
             ui = self.getFromUI()
             if data is not ui:
-                self._value.Set(ui, self._dataObject)
+                if isinstance(ui,tuple):
+                    #Selected Element listbox
+                    ui = ui[0]
+                setattr(self._dataObject, self._field, ui)
         except Exception:
             traceback.print_exc()
-
-    '''
-    compares the two given objects.
-    This method is null safe and returns true also if both are null...
-    If both are arrays, treats them as array of short and compares them.
-    @param a first object to compare
-    @param b second object to compare.
-    @return true if both are null or both are equal.
-    '''
-
-    def equals(self, a, b):
-        if not a and not b :
-            return True
-
-        if not a or not b:
-            return False
-
-        if a.getClass().isArray():
-            if b.getClass().isArray():
-                return Arrays.equals(a, b)
-            else:
-                return False
-
-        return a.equals(b)
 
     '''
     given a collection containing DataAware objects,
@@ -124,7 +103,7 @@ class DataAware(object):
 
     def setDataObject(self, dataObject, updateUI):
         if dataObject is not None:
-            if not (type(self._value) is not
+            if not (type(self._field) is not
                 type(dataObject)):
                 raise ClassCastException (
                     "can not cast new DataObject to original Class")
