@@ -40,11 +40,7 @@ ODMA_LIB_LIB=
 #
 #externe libs in plattform.mk
 #
-.IF "$(GUI)$(COM)"=="WNTGCC"
-AWTLIB*=$(JAVA_HOME)/lib/jawt.lib
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 AWTLIB*=-ljawt
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 AVMEDIALIB=-lavmedia$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC" && "$(SYSTEM_ICU)"!="YES"
 ICUINLIB=-licuin$(ICU_MAJOR)$(ICU_MINOR)
