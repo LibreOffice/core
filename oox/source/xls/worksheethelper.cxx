@@ -1654,19 +1654,6 @@ void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue ) con
     if( xCell.is() ) xCell->setValue( fValue );
 }
 
-void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fValue ) const
-{
-    Reference< XCell > xCell = getCell( rAddress );
-    OSL_ENSURE( xCell.is(), "WorksheetHelper::putFormulaResult - missing cell interface" );
-    if( xCell.is() ) xCell->setFormulaResult( fValue );
-}
-
-void WorksheetHelper::putFormulaString( const CellAddress& rAddress, const OUString& rFormula ) const
-{
-    Reference< XCell > xCell = getCell( rAddress );
-    if( xCell.is() ) xCell->setFormulaString( rFormula );
-}
-
 void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText ) const
 {
     Reference< XText > xText( getCell( rAddress ), UNO_QUERY );

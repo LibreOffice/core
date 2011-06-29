@@ -323,13 +323,6 @@ public:
     void                putValue(
                             const ::com::sun::star::table::CellAddress& rAddress,
                             double fValue ) const;
-    void                putFormulaResult(
-                            const ::com::sun::star::table::CellAddress& rAddress,
-                            double fValue ) const;
-    void                putFormulaString(
-                            const ::com::sun::star::table::CellAddress& rAddress,
-                            const ::rtl::OUString& rText ) const;
-
     /** Inserts a string cell directly into the Calc sheet. */
     void                putString(
                             const ::com::sun::star::table::CellAddress& rAddress,

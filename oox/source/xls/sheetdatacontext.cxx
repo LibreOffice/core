@@ -163,8 +163,8 @@ void SheetDataContext::onCharacters( const OUString& rChars )
             maCellValue = rChars;
         break;
         case XLS_TOKEN( f ):
-            maCellValue = rChars;
-            mrSheetData.putFormulaString( maCellData.maCellAddr, maCellValue );
+            if( maFmlaData.mnFormulaType != XML_TOKEN_INVALID )
+                maTokens = mrFormulaParser.importFormula( maCellData.maCellAddr, rChars );
         break;
     }
 }
@@ -177,8 +177,8 @@ void SheetDataContext::onEndElement()
         if( mbHasFormula ) switch( maFmlaData.mnFormulaType )
         {
             case XML_normal:
-                //mrSheetData.setFormulaCell( maCellData, maTokens );
-                break;
+                mrSheetData.setFormulaCell( maCellData, maTokens );
+            break;
             case XML_shared:
                 if( maFmlaData.mnSharedId >= 0 )
                 {
@@ -239,13 +239,6 @@ void SheetDataContext::onEndElement()
                 maCellData.mnCellType = XML_TOKEN_INVALID;
                 mrSheetData.setBlankCell( maCellData );
             }
-        }
-        else if( maCellValue.getLength() > 0 ) switch( maCellData.mnCellType )
-        {
-            case XML_n:
-                /* Set the pre-loaded value */
-                mrSheetData.putFormulaResult( maCellData.maCellAddr, maCellValue.toDouble() );
-                break;
         }
     }
 }

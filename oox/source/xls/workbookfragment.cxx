@@ -29,7 +29,6 @@
 #include "oox/xls/workbookfragment.hxx"
 
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/sheet/XCalculatable.hpp>
 #include "oox/core/filterbase.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -60,7 +59,6 @@ namespace xls {
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::sheet;
 using namespace ::oox::core;
 
 using ::oox::drawingml::ThemeFragmentHandler;
@@ -315,11 +313,6 @@ void WorkbookFragment::finalizeImport()
 
     // final conversions, e.g. calculation settings and view settings
     finalizeWorkbookImport();
-
-    // Recalculate (only changed ones)
-    Reference< XCalculatable > xCalculatable( getDocument(), UNO_QUERY );
-    if( xCalculatable.is() )
-        xCalculatable->calculate();
 }
 
 // private --------------------------------------------------------------------
