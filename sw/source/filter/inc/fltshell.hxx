@@ -131,7 +131,7 @@ public:
         sal_uInt16 nWhich=0);
 };
 
-class SW_DLLPUBLIC SwFltControlStack
+class SW_DLLPUBLIC SwFltControlStack : private ::boost::noncopyable
 {
     typedef boost::ptr_deque<SwFltStackEntry> Entries;
     typedef Entries::iterator myEIter;
