@@ -31,7 +31,7 @@ set -o posix
 # Change these to taste
 FirstLine='/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */'
 LastLine='/* vim:set shiftwidth=4 softtabstop=4 expandtab: */'
-SourceFiles='*.cxx *.cpp *.hxx *.hpp *.c *.h'
+SourceFiles='*.cxx *.cpp *.hxx *.hpp *.c *.h *.mm'
 
 # Set defaults (don't change these)
 ModelineReplace="false"
@@ -160,11 +160,11 @@ if [ -z "$findPath" ]; then
 fi
 
 for FileType in ${SourceFiles}; do
-    findArgs="$findArgs"' ( -iname '"$FileType"' -print ) , '
+    findArgs="$findArgs"' ( -iname '"$FileType"' -print -o -true ) -a '
 done
 
-# This gets rid of the final " , " in the find argument list
-findArgs="${findArgs:0:(${#findArgs}-2)}"
+# This gets rid of the final " -a " in the find argument list
+findArgs="${findArgs:0:(${#findArgs}-3)}"
 
 for file in $($findCMD $findArgs); do
     EditFile "$file"
