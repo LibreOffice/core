@@ -48,6 +48,7 @@
 // class FileBase
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace osl;
 
@@ -355,11 +356,13 @@ sal_uInt16 SvFileStream::IsA() const
 sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
-    ByteString aTraceStr( "SvFileStream::GetData(): " );
-    aTraceStr += ByteString::CreateFromInt64(nSize);
-    aTraceStr += " Bytes from ";
-    aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
-    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
+    rtl::OStringBuffer aTraceStr(
+        RTL_CONSTASCII_STRINGPARAM("SvFileStream::GetData(): "));
+    aTraceStr.append(static_cast<sal_Int64>(nSize));
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" Bytes from "));
+    aTraceStr.append(rtl::OUStringToOString(aFilename,
+        osl_getThreadTextEncoding()));
+    OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
     int nRead = 0;
@@ -381,11 +384,13 @@ sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
-    ByteString aTraceStr( "SvFileStrean::PutData: " );
-    aTraceStr += ByteString::CreateFromInt64(nSize);
-    aTraceStr += " Bytes to ";
-    aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
-    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
+    rtl::OStringBuffer aTraceStr(
+        RTL_CONSTASCII_STRINGPARAM("SvFileStream::PutData(): "));
+    aTraceStr.append(static_cast<sal_Int64>(nSize));
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" Bytes to "));
+    aTraceStr.append(rtl::OUStringToOString(aFilename,
+        osl_getThreadTextEncoding()));
+    OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
     int nWrite = 0;

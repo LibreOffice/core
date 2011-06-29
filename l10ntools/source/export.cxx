@@ -1268,7 +1268,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
                     sOutput += sLID; sOutput += "\t";
                     sOutput += pResData->sHelpId; sOutput   += "\t";
                     sOutput += pResData->sPForm; sOutput    += "\t";
-                    sOutput += ByteString::CreateFromInt64( pResData->nWidth ); sOutput += "\t";
+                    sOutput += ByteString(rtl::OString::valueOf(static_cast<sal_Int64>(pResData->nWidth))); sOutput += "\t";
                     sOutput += sCur; sOutput += "\t";
 
 
@@ -1369,7 +1369,7 @@ sal_Bool Export::WriteExportList( ResData *pResData, ExportList *pExportList,
         // ByteString a("Export::WriteExportList::pEntry");
         // Export::DumpMap( a,  *pEntry );
 
-        ByteString sLID( ByteString::CreateFromInt64( i + 1 ));
+        ByteString sLID(rtl::OString::valueOf(static_cast<sal_Int64>(i + 1)));
         for( unsigned int n = 0; n < aLanguages.size(); n++ ){
             sCur = aLanguages[ n ];
             if ( (*pEntry)[ SOURCE_LANGUAGE ].Len() )
@@ -1520,7 +1520,7 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
             a.Append( "." );
             a.Append( pResData->sId );
             sal_Int64 x = nListIndex+1;
-            ByteString b( ByteString::CreateFromInt64( x ) );
+            ByteString b(rtl::OString::valueOf(x));
             ByteString sKey = MergeDataFile::CreateKey( sPlist , a , b  , sFilename );
             pResData->addFallbackData( sKey , rText );
         }

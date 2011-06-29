@@ -485,7 +485,7 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
                 rDest += *pBuffer++;
 
             (((rDest += '&') += '#') +=
-                    ByteString::CreateFromInt64( (sal_uInt32)c )) += ';';
+                    ByteString(rtl::OString::valueOf(static_cast<sal_Int64>(c)))) += ';';
             if( pNonConvertableChars &&
                 STRING_NOTFOUND == pNonConvertableChars->Search( c ) )
                 pNonConvertableChars->Append( c );
