@@ -464,8 +464,8 @@ public:
      * Get all range names that are local to each table.  It only returns
      * non-empty range name set.
      */
-    void GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rRangeNames) const;
-    void SetAllTabRangeNames(const ScRangeName::TabNameCopyMap& rRangeNames);
+    SC_DLLPUBLIC void GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rRangeNames) const;
+    SC_DLLPUBLIC void SetAllTabRangeNames(const ScRangeName::TabNameCopyMap& rRangeNames);
     SC_DLLPUBLIC ScRangeName* GetRangeName(SCTAB nTab) const;
     SC_DLLPUBLIC ScRangeName* GetRangeName() const;
     void SetRangeName(SCTAB nTab, ScRangeName* pNew);

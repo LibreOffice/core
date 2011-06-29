@@ -317,6 +317,11 @@ ScRangeName& XclRoot::GetNamedRanges() const
     return *GetDoc().GetRangeName();
 }
 
+ScRangeName* XclRoot::GetNamedRanges(SCTAB nTab) const
+{
+    return GetDoc().GetRangeName(nTab);
+}
+
 ScDBCollection& XclRoot::GetDatabaseRanges() const
 {
     return *GetDoc().GetDBCollection();
