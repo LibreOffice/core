@@ -50,6 +50,7 @@ ULFFILES= \
     documents.ulf \
     launcher_comment.ulf \
     launcher_genericname.ulf \
+    launcher_unityquicklist.ulf \
     launcher_name.ulf
 
 LAUNCHERLIST = writer calc draw impress math base printeradmin qstart startcenter javafilter
@@ -145,7 +146,7 @@ ALLTAR : $(LAUNCHERFLAGFILE) $(SPECFILES) $(COMMONMISC)$/{$(PRODUCTLIST)}$/build
 # merge-in the translations. 
 #
 
-$(LAUNCHERFLAGFILE) : ../productversion.mk brand.pl translate.pl $(ULFDIR)$/launcher_name.ulf $(ULFDIR)$/launcher_comment.ulf $(ULFDIR)/launcher_genericname.ulf
+$(LAUNCHERFLAGFILE) : ../productversion.mk brand.pl translate.pl $(ULFDIR)$/launcher_name.ulf $(ULFDIR)$/launcher_comment.ulf $(ULFDIR)/launcher_genericname.ulf $(ULFDIR)/launcher_unityquicklist.ulf
 $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) 
     @@-$(MKDIRHIER) $(@:db).$(INPATH).$(@:f)
     @echo Creating desktop entries for $(@:f) ..
@@ -154,6 +155,7 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN)
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -b '$${{PRODUCTNAME_BR}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -b '$${{PRODUCTNAME_BR}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -p '$${{PRODUCTNAME_BR}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "GenericName" $(ULFDIR)$/launcher_genericname.ulf
+    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -p '$${{PRODUCTNAME_BR}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "UnityQuicklist" $(ULFDIR)$/launcher_unityquicklist.ulf
 .IF "$(WITH_LIBSN)"=="YES"
     @noop x$(foreach,i,$(LAUNCHERLIST) $(shell @echo "StartupNotify=true" >> $(@:db).$(INPATH).$(@:f)/$i.desktop))x
 .ENDIF
