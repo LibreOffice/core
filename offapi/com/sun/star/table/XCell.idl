@@ -59,6 +59,28 @@ published interface XCell: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
+    /** sets a formula result into the cell.
+
+        <p>When assigned, the formula cell's result will be set to this
+        value and will not be calculated - unless a HardRecalc is
+        executed.</p>
+      */
+    void setFormulaResult( [in] double nValue );
+
+    //-------------------------------------------------------------------------
+
+    /** sets a formula string into the cell.
+
+        <p>When assigned, the formula is set into the string. But is not
+        compiled, tokenized or calculated. Its useful when loading a
+        document and setFormulaResult() is used. Otherwise it is compiled
+        on trying to fetch a result value.
+        </p>
+      */
+    void setFormulaString( [in] string aFormula );
+
+    //-------------------------------------------------------------------------
+
     /** sets a formula into the cell.
 
         <p>When assigned, the string will be interpreted and a value, text
