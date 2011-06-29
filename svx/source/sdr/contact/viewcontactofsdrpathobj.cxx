@@ -35,6 +35,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdr/primitive2d/sdrpathprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -137,7 +138,17 @@ namespace sdr
                     aAttribute,
                     aUnitPolyPolygon));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            drawinglayer::primitive2d::Primitive2DSequence xRetval(&xReference, 1);
+
+            if (GetPathObj().IsGhosted())
+            {
+                const basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
+                const basegfx::BColorModifier aBColorModifier(aRGBWhite, 0.5, basegfx::BCOLORMODIFYMODE_INTERPOLATE);
+                const drawinglayer::primitive2d::Primitive2DReference xGhostedRef(
+                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(xRetval, aBColorModifier));
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xGhostedRef, 1);
+            }
+            return xRetval;
         }
     } // end of namespace contact
 } // end of namespace sdr

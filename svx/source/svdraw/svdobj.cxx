@@ -388,6 +388,7 @@ SdrObject::SdrObject()
     bNoPrint         =sal_False;
     bEmptyPresObj    =sal_False;
     bNotVisibleAsMaster=sal_False;
+    mbGhosted        = sal_False;
     bClosedObj       =sal_False;
     mbVisible        = true;
 
