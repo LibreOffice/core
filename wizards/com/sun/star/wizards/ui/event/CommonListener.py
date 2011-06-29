@@ -34,7 +34,6 @@
 
 # OOo's libraries
 import unohelper
-import inspect
 
 from com.sun.star.awt import XActionListener
 class ActionListenerProcAdapter( unohelper.Base, XActionListener ):

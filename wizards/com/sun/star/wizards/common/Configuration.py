@@ -132,7 +132,6 @@ class Configuration(object):
             return configView.getByName(name)
         else:
             # the new element is the result !
-            print type(configView)
             newNode = configView.createInstance()
             # insert it - this also names the element
             configView.insertByName(name, newNode)
