@@ -496,8 +496,6 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
     if( !bSinglePage )
     {
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", B2UCONST( "http://xml.openoffice.org/svg/export" ) );
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "onclick", B2UCONST( "onClick(evt)" ) );
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "onkeypress", B2UCONST( "onKeyPress(evt)" ) );
     }
 
 
@@ -587,10 +585,10 @@ sal_Bool SVGFilter::implGenerateMetaData( const Reference< XDrawPages >& /* rxMa
     if( rxDrawPages->getCount() )
     {
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", B2UCONST( "meta_slides" ) );
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "numberOfSlides", OUString::valueOf( rxDrawPages->getCount() ) );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "ooo:numberOfSlides", OUString::valueOf( rxDrawPages->getCount() ) );
 
         {
-            SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "ooo:slidesInfo", sal_True, sal_True );
+            SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
             const OUString      aId( B2UCONST( "meta_slide" ) );
 
             for( sal_Int32 i = 0, nCount = rxDrawPages->getCount(); i < nCount; ++i )
@@ -618,12 +616,12 @@ sal_Bool SVGFilter::implGenerateMetaData( const Reference< XDrawPages >& /* rxMa
                     aMasterVisibility = B2UCONST( "hidden" );
 
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aSlideId );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "slide", implGetValidIDFromInterface( xDrawPage ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "master", implGetValidIDFromInterface( xMasterPage ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "master-visibility", aMasterVisibility );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "ooo:slide", implGetValidIDFromInterface( xDrawPage ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "ooo:master", implGetValidIDFromInterface( xMasterPage ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "ooo:master-visibility", aMasterVisibility );
 
                 {
-                    SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "ooo:slideInfo", sal_True, sal_True );
+                    SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
                 }
             }
         }
@@ -650,6 +648,9 @@ sal_Bool SVGFilter::implGenerateScript( const Reference< XDrawPages >& /* rxMast
         {
             xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript1 ) );
             xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript2 ) );
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript3 ) );
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript4 ) );
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript5 ) );
         }
     }
 

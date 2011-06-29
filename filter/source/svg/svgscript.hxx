@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-static const char aSVGScript1[] =
+static const char aSVGScriptA[] =
 "<![CDATA[\n\
     var nCurSlide = 0;\n\
     var nSlides = 0;\n\
@@ -72,7 +72,7 @@ static const char aSVGScript1[] =
 \n\
 ";
 
-static const char aSVGScript2[] =
+static const char aSVGScriptB[] =
 "   function switchSlide( aEvt, nOffset ) \n\
     {\n\
         var nNextSlide = nCurSlide + nOffset;\n\
@@ -118,5 +118,134 @@ static const char aSVGScript2[] =
 \n\
     init();\n\
 ]]>";
+
+static const char aSVGScript1[] =
+"<![CDATA[\n\
+\n\
+    window.onload = init;\n\
+        \n\
+    // Keycodes.\n\
+    var LEFT_KEY = 37;          // cursor left keycode\n\
+    var UP_KEY = 38;            // cursor up keycode\n\
+    var RIGHT_KEY = 39;         // cursor right keycode\n\
+    var DOWN_KEY = 40;          // cursor down keycode\n\
+    var PAGE_UP_KEY = 33;       // page up keycode\n\
+    var PAGE_DOWN_KEY = 34;     // page down keycode\n\
+    var HOME_KEY = 36;          // home keycode\n\
+    var END_KEY = 35;           // end keycode\n\
+    var ENTER_KEY = 13;         \n\
+    var SPACE_KEY = 32;\n\
+    var ESCAPE_KEY = 27;\n\
+    \n\
+    \n\
+    var nCurSlide = 0;\n\
+    var nSlides = 0;\n\
+    var aSlides = new Array();\n\
+    var aMasters = new Array();\n\
+    var aMasterVisibilities = new Array();\n\
+\n\
+\n\
+\n\
+\n\
+";
+
+
+static const char aSVGScript2[] =
+"   function onClick( aEvt )\n\
+    {\n\
+        if (!aEvt)\n\
+            aEvt = window.event;\n\
+    \n\
+        var nOffset = 0;\n\
+    \n\
+        if( aEvt.button == 0 )  \n\
+            nOffset = 1;\n\
+        else if( aEvt.button == 2 ) \n\
+            nOffset = -1;\n\
+    \n\
+        if( 0 != nOffset )\n\
+            switchSlide( aEvt, nOffset );\n\
+    }\n\
+    document.onclick = onClick;\n\
+    \n\
+    \n\
+";
+
+static const char aSVGScript3[] =
+"   function onKeyPress( aEvt )\n\
+    {\n\
+        if (!aEvt)\n\
+            aEvt = window.event;\n\
+    \n\
+        var nCode = aEvt.keyCode || aEvt.charCode;\n\
+        var nOffset = 0;\n\
+        if( nCode == SPACE_KEY || nCode == PAGE_DOWN_KEY || nCode == RIGHT_KEY )\n\
+        {\n\
+            nOffset = 1;\n\
+        }\n\
+        else if( nCode == PAGE_UP_KEY ||nCode == LEFT_KEY )\n\
+        {\n\
+            nOffset = -1;\n\
+        }\n\
+    \n\
+        if( 0 != nOffset )\n\
+            switchSlide( aEvt, nOffset );\n\
+    }\n\
+    document.onkeypress = onKeyPress;   \n\
+    \n\
+";
+
+static const char aSVGScript4[] =
+"   function switchSlide( aEvt, nOffset ) \n\
+    {\n\
+        var nNextSlide = nCurSlide + nOffset;\n\
+\n\
+        if( nNextSlide < 0 && nSlides > 0 )\n\
+            nNextSlide = nSlides - 1;\n\
+        else if( nNextSlide >= nSlides ) \n\
+            nNextSlide = 0;\n\
+\n\
+        aSlides[ nCurSlide ].setAttribute( \"visibility\", \"hidden\" );\n\
+        aSlides[ nNextSlide ].setAttribute( \"visibility\", \"visible\" );\n\
+\n\
+        var aCurMaster = aMasters[ nCurSlide ];\n\
+        var aCurMasterVisibility = aMasterVisibilities[ nCurSlide ];\n\
+        \n\
+        var aNextMaster = aMasters[ nNextSlide ];\n\
+        var aNextMasterVisibility = aMasterVisibilities[ nNextSlide ];\n\
+\n\
+        if( ( aCurMaster != aNextMaster ) || ( aCurMasterVisibility != aNextMasterVisibility ) ) \n\
+        {\n\
+            if( aCurMaster != aNextMaster )\n\
+                aCurMaster.setAttribute(\"visibility\", \"hidden\" );\n\
+            \n\
+            aNextMaster.setAttribute( \"visibility\", aNextMasterVisibility );\n\
+        }\n\
+\n\
+        nCurSlide = nNextSlide; \n\
+    }\n\
+\n\
+";
+
+static const char aSVGScript5[] =
+"   function init() \n\
+    {\n\
+        nSlides = document.getElementById( \"meta_slides\" ).getAttribute( \"ooo:numberOfSlides\" );\n\
+\n\
+        for( i = 0; i < nSlides; i++ )\n\
+        {\n\
+            var aMetaSlide = document.getElementById( \"meta_slide\" + i );\n\
+            if( aMetaSlide )\n\
+            {\n\
+                aSlides.push( document.getElementById( aMetaSlide.getAttribute( \"ooo:slide\" ) ) );\n\
+                aMasters.push( document.getElementById( aMetaSlide.getAttribute( \"ooo:master\" ) ) );\n\
+                aMasterVisibilities.push( aMetaSlide.getAttribute( \"ooo:master-visibility\" ) );\n\
+            }\n\
+        }\n\
+    }\n\
+ \n\
+]]>";
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
