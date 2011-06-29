@@ -866,17 +866,17 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
     ByteString aNameStr( (const UniString&)GetName(), RTL_TEXTENCODING_ASCII_US );
     ByteString aClassNameStr( (const UniString&)aClassName, RTL_TEXTENCODING_ASCII_US );
     rStrm << "Object( "
-          << ByteString::CreateFromInt64( (sal_uIntPtr) this ).GetBuffer() << "=='"
+          << rtl::OString::valueOf(reinterpret_cast<sal_Int64>(this)).getStr()<< "=='"
           << ( aNameStr.Len() ? aNameStr.GetBuffer() : "<unnamed>" ) << "', "
           << "of class '" << aClassNameStr.GetBuffer() << "', "
           << "counts "
-          << ByteString::CreateFromInt64( GetRefCount() ).GetBuffer()
+          << rtl::OString::valueOf(static_cast<sal_Int64>(GetRefCount())).getStr()
           << " refs, ";
     if ( GetParent() )
     {
         ByteString aParentNameStr( (const UniString&)GetName(), RTL_TEXTENCODING_ASCII_US );
         rStrm << "in parent "
-              << ByteString::CreateFromInt64( (sal_uIntPtr) GetParent() ).GetBuffer()
+              << rtl::OString::valueOf(reinterpret_cast<sal_Int64>(GetParent())).getStr()
               << "=='" << ( aParentNameStr.Len() ? aParentNameStr.GetBuffer() : "<unnamed>" ) << "'";
     }
     else

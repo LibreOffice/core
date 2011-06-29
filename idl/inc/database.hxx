@@ -126,7 +126,7 @@ public:
     void                    Write( const ByteString & rText );
     void                    WriteError( const ByteString & rErrWrn,
                                     const ByteString & rFileName,
-                                    const ByteString & rErrorText,
+                                    const rtl::OString& rErrorText,
                                     sal_uLong nRow = 0, sal_uLong nColumn = 0 ) const;
     void                    WriteError( SvTokenStream & rInStm );
     void                    SetError( const ByteString & rError, SvToken * pTok );

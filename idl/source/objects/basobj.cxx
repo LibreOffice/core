@@ -401,8 +401,8 @@ void SvMetaName::WriteAttributes( SvIdlDataBase &, SvStream & rOutStm,
     {
         WriteTab( rOutStm, nTab );
         rOutStm << "helpcontext("
-                << ByteString::CreateFromInt64(
-                    GetHelpContext().GetValue() ).GetBuffer()
+                << rtl::OString::valueOf(static_cast<sal_Int64>(
+                    GetHelpContext().GetValue())).getStr()
                 << ")," << endl;
     }
 }

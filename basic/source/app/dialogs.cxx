@@ -556,7 +556,8 @@ void CrashreportOptions::Save( Config &aConfig )
         aConfig.WriteKey( "UseProxy", "false" );
 
     aConfig.WriteKey( "ProxyServer", ByteString( aEDCRHost.GetText(), RTL_TEXTENCODING_UTF8 ) );
-    aConfig.WriteKey( "ProxyPort", ByteString::CreateFromInt64( aNFCRPort.GetValue() ) );
+    aConfig.WriteKey("ProxyPort",
+        rtl::OString::valueOf(static_cast<sal_Int64>(aNFCRPort.GetValue())));
 
     if ( aCBAllowContact.IsChecked() )
         aConfig.WriteKey( "AllowContact", "true" );
@@ -644,8 +645,10 @@ void MiscOptions::Save( Config &aConfig )
 {
     aConfig.SetGroup("Communication");
     aConfig.WriteKey( "Host", ByteString( aEDHost.GetText(), RTL_TEXTENCODING_UTF8 ) );
-    aConfig.WriteKey( "TTPort", ByteString::CreateFromInt64( aNFTTPort.GetValue() ) );
-    aConfig.WriteKey( "UnoPort", ByteString::CreateFromInt64( aNFUNOPort.GetValue() ) );
+    aConfig.WriteKey("TTPort",
+        rtl::OString::valueOf(static_cast<sal_Int64>(aNFTTPort.GetValue())));
+    aConfig.WriteKey("UnoPort",
+        rtl::OString::valueOf(static_cast<sal_Int64>(aNFUNOPort.GetValue())));
 
     aConfig.SetGroup("Misc");
     aConfig.WriteKey( "ServerTimeout", ByteString::CreateFromInt32( aServerTimeout.GetTime().GetTime() ) );
@@ -656,7 +659,8 @@ void MiscOptions::Save( Config &aConfig )
     sal_uInt16 n;
     for ( n = nOldMaxLRU ; n > aTFMaxLRU.GetValue() ; n-- )
         aConfig.DeleteKey( ByteString("LRU").Append( ByteString::CreateFromInt32( n ) ) );
-    aConfig.WriteKey( "MaxLRU", ByteString::CreateFromInt64( aTFMaxLRU.GetValue() ) );
+    aConfig.WriteKey("MaxLRU",
+        rtl::OString::valueOf(static_cast<sal_Int64>(aTFMaxLRU.GetValue())));
 
     aConfig.SetGroup("OOoProgramDir");
     aConfig.WriteKey( C_KEY_AKTUELL, ByteString( aEDProgDir.GetText(), RTL_TEXTENCODING_UTF8 ) );
