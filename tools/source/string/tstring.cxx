@@ -104,21 +104,14 @@ ByteString ByteString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
 
 // -----------------------------------------------------------------------
 
-ByteString ByteString::CreateFromInt64( sal_Int64 n, sal_Int16 nRadix )
+namespace
 {
-    sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
-    BOOST_STATIC_ASSERT(RTL_STR_MAX_VALUEOFINT64 <= STRING_MAXLEN);
-    return ByteString(
-        aBuf,
-        static_cast< xub_StrLen >(rtl_str_valueOfInt64( aBuf, n, nRadix )) );
+    struct theEmpty : public rtl::Static< const ByteString, theEmpty> {};
 }
 
-// -----------------------------------------------------------------------
-
-namespace { struct Empty : public rtl::Static< const ByteString, Empty> {}; }
 const ByteString& ByteString::EmptyString()
 {
-    return Empty::get();
+    return theEmpty::get();
 }
 
 // -----------------------------------------------------------------------
