@@ -338,7 +338,13 @@ MYTHESLIB=$(MYTHES_LIBS)
 MYTHESLIB=-lmythes-1.2
 .ENDIF
 PYUNOLIB=-lpyuno
+.IF "$(SYSTEM_LPSOLVE)" == "YES"
+# FIXME. Even with -L/usr/lib/lp_solve -llpsolve55 the liblpsolve55.a from
+# /usr/lib gets picked and we get a static link...
+LPSOLVELIB = /usr/lib/lp_solve/liblpsolve55.so -Wl,-rpath=/usr/lib/lp_solve
+.ELSE
 LPSOLVELIB=-llpsolve55
+.ENDIF
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
