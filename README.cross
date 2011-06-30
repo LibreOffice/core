@@ -169,7 +169,7 @@ thought yet.
 The Apple tool-chain for iOS cross-building is available only for
 MacOSX, so that is where I have been doing it.
 
-Here is my autogen.lastrun for iOS:
+Here is my autogen.lastrun for iOS (device):
 CXX=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/g++-4.2 -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
 CC=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc-4.2 -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0
@@ -178,6 +178,18 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
 --with-external-tar=/Volumes/ooo/git/master/src
 --with-num-cpus=1
 --with-max-jobs=1
+
+And here for the iOS simulator:
+CXX=ccache /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++-4.2 -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.3.sdk
+CC=ccache /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.3.sdk
+CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0
+CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
+--with-distro=LibreOfficeiOS
+--with-external-tar=/Volumes/ooo/git/master/src
+--with-num-cpus=1
+--with-max-jobs=1
+--disable-librsvg
+--enable-debug
 
 
 Android
