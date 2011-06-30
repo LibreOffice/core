@@ -1288,6 +1288,13 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aCharacterSprms.push_back(make_pair(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue));
             }
             break;
+        case RTF_LINECONT:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(2));
+                lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
+                        NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_restart, pValue);
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
@@ -1731,6 +1738,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_DEFTAB:
             m_aSettingsTableSprms.push_back(make_pair(NS_ooxml::LN_CT_Settings_defaultTabStop, pIntValue));
+            break;
+        case RTF_LINEMOD:
+            lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_countBy, pIntValue);
+            break;
+        case RTF_LINEX:
+            lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
+                    NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_distance, pIntValue);
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
