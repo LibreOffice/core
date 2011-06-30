@@ -78,11 +78,10 @@ GetBuildId()
 {
     rtl::OUString sDefault;
     rtl::OUString sBuildId( utl::Bootstrap::getBuildIdData( sDefault ) );
-    //strip trailing - from ./g log
-    if (!sBuildId.isEmpty() && sBuildId.getStr()[sBuildId.getLength()-1] == '-')
+    if (!sBuildId.isEmpty() && sBuildId.getLength() > 50)
     {
-        sBuildId = sBuildId.copy(0, sBuildId.getLength()-1);
         rtl::OUStringBuffer aBuffer;
+        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\t"));
         sal_Int32 nIndex = 0;
         do
         {
@@ -95,7 +94,7 @@ GetBuildId()
                     if (nIndex % 5)
                         aBuffer.append(static_cast<sal_Unicode>('-'));
                     else
-                        aBuffer.append(static_cast<sal_Unicode>('\n'));
+                        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\t"));
                 }
             }
         }
@@ -171,19 +170,27 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     // determine size and position of the dialog & elements
     Size aAppLogoSiz = aAppLogo.GetSizePixel();
 
-    if (aAppLogoSiz.Width() < 300)
-        aAppLogoSiz.Width() = 300;
-
-    Size aOutSiz = GetOutputSizePixel();
-    aOutSiz.Width() = aAppLogoSiz.Width();
-
     // analyze size of the aVersionText widget
     // character size
     Size a6Size      = aVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     // preferred Version widget size
     long nY          = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
-    long nDlgMargin  = a6Size.Width() * 3 ;
+    long nDlgMargin  = a6Size.Width() * 2;
     long nCtrlMargin = a6Size.Height() * 2;
+
+    aVersionText.SetSizePixel(Size(800,600));
+    Size aVersionTextSize = aVersionText.CalcMinimumSize();
+    aVersionTextSize.Width() += nDlgMargin;
+
+    Size aOutSiz = GetOutputSizePixel();
+    aOutSiz.Width() = aAppLogoSiz.Width();
+
+    if (aOutSiz.Width() < aVersionTextSize.Width())
+        aOutSiz.Width() = aVersionTextSize.Width();
+
+    if (aOutSiz.Width() < 300)
+        aOutSiz.Width() = 300;
+
     long nTextWidth  = aOutSiz.Width() - nDlgMargin;
 
     // finally set the aVersionText widget position and size
