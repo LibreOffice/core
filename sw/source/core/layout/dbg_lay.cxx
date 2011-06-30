@@ -129,8 +129,9 @@
 #include "ndtxt.hxx"
 #include "dflyobj.hxx"
 #include <fntcache.hxx>
-// OD 2004-05-24 #i28701#
-#include <sortedobjs.hxx>
+#include <sortedobjs.hxx> // #i28701#
+
+#include <rtl/strbuf.hxx>
 
 sal_uLong SwProtocol::nRecord = 0;
 SwImplProtocol* SwProtocol::pImpl = NULL;
@@ -152,7 +153,7 @@ class SwImplProtocol
     SvFileStream *pStream;      // Ausgabestream
     std::set<sal_uInt16> *pFrmIds;      // welche FrmIds sollen aufgezeichnet werden ( NULL == alle )
     std::vector<long> aVars;    // Variables
-    ByteString aLayer;          // Einrueckung der Ausgabe ("  " pro Start/End)
+    rtl::OStringBuffer aLayer;          // Einrueckung der Ausgabe ("  " pro Start/End)
     sal_uInt16 nTypes;              // welche Typen sollen aufgezeichnet werden
     sal_uInt16 nLineCount;          // Ausgegebene Zeilen
     sal_uInt16 nMaxLines;           // Maximal auszugebende Zeilen
@@ -162,7 +163,7 @@ class SwImplProtocol
     void _Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam );
     sal_Bool NewStream();
     void CheckLine( ByteString& rLine );
-    void SectFunc( ByteString &rOut, const SwFrm* pFrm, sal_uLong nAct, void* pParam );
+    void SectFunc( rtl::OStringBuffer& rOut, const SwFrm* pFrm, sal_uLong nAct, void* pParam );
 public:
     SwImplProtocol();
     ~SwImplProtocol();
@@ -470,21 +471,21 @@ void SwImplProtocol::FileInit()
  * lcl_Start sorgt fuer Einrueckung um zwei Blanks bei ACT_START
  * und nimmt diese bei ACT_END wieder zurueck.
  * --------------------------------------------------*/
-void lcl_Start( ByteString& rOut, ByteString& rLay, sal_uLong nAction )
+void lcl_Start(rtl::OStringBuffer& rOut, rtl::OStringBuffer& rLay, sal_uLong nAction)
 {
     if( nAction == ACT_START )
     {
-        rLay += "  ";
-        rOut += " On";
+        rLay.append(RTL_CONSTASCII_STRINGPARAM("  "));
+        rOut.append(RTL_CONSTASCII_STRINGPARAM(" On"));
     }
     else if( nAction == ACT_END )
     {
-        if( rLay.Len() > 1 )
+        if( rLay.getLength() > 1 )
         {
-            rLay.Erase( rLay.Len() - 2 );
-            rOut.Erase( 0, 2 );
+            rLay.remove(rLay.getLength() - 2, rLay.getLength());
+            rOut.remove(0, 2);
         }
-        rOut += " Off";
+        rOut.append(RTL_CONSTASCII_STRINGPARAM(" Off"));
     }
 }
 
@@ -493,63 +494,63 @@ void lcl_Start( ByteString& rOut, ByteString& rLay, sal_uLong nAction )
  * des Frames aus, "+" fuer valid, "-" fuer invalid.
  * --------------------------------------------------*/
 
-void lcl_Flags( ByteString& rOut, const SwFrm* pFrm )
+void lcl_Flags(rtl::OStringBuffer& rOut, const SwFrm* pFrm)
 {
-    rOut += " Sz";
-    rOut += pFrm->GetValidSizeFlag() ? '+' : '-';
-    rOut += " Ps";
-    rOut += pFrm->GetValidPosFlag() ? '+' : '-';
-    rOut += " PA";
-    rOut += pFrm->GetValidPrtAreaFlag() ? '+' : '-';
+    rOut.append(RTL_CONSTASCII_STRINGPARAM(" Sz"));
+    rOut.append(pFrm->GetValidSizeFlag() ? '+' : '-');
+    rOut.append(RTL_CONSTASCII_STRINGPARAM(" Ps"));
+    rOut.append(pFrm->GetValidPosFlag() ? '+' : '-');
+    rOut.append(RTL_CONSTASCII_STRINGPARAM(" PA"));
+    rOut.append(pFrm->GetValidPrtAreaFlag() ? '+' : '-');
 }
 
 /* --------------------------------------------------
  * lcl_FrameType gibt den Typ des Frames in Klartext aus.
  * --------------------------------------------------*/
 
-void lcl_FrameType( ByteString& rOut, const SwFrm* pFrm )
+void lcl_FrameType( rtl::OStringBuffer& rOut, const SwFrm* pFrm )
 {
     if( pFrm->IsTxtFrm() )
-        rOut += "Txt ";
+        rOut.append(RTL_CONSTASCII_STRINGPARAM("Txt "));
     else if( pFrm->IsLayoutFrm() )
     {
         if( pFrm->IsPageFrm() )
-            rOut += "Page ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Page "));
         else if( pFrm->IsColumnFrm() )
-            rOut += "Col ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Col "));
         else if( pFrm->IsBodyFrm() )
         {
             if( pFrm->GetUpper() && pFrm->IsColBodyFrm() )
-                rOut += "(Col)";
-            rOut += "Body ";
+                rOut.append(RTL_CONSTASCII_STRINGPARAM("(Col)"));
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Body "));
         }
         else if( pFrm->IsRootFrm() )
-            rOut += "Root ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Root "));
         else if( pFrm->IsCellFrm() )
-            rOut += "Cell ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Cell "));
         else if( pFrm->IsTabFrm() )
-            rOut += "Tab ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Tab "));
         else if( pFrm->IsRowFrm() )
-            rOut += "Row ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Row "));
         else if( pFrm->IsSctFrm() )
-            rOut += "Sect ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Sect "));
         else if( pFrm->IsHeaderFrm() )
-            rOut += "Header ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Header "));
         else if( pFrm->IsFooterFrm() )
-            rOut += "Footer ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Footer "));
         else if( pFrm->IsFtnFrm() )
-            rOut += "Ftn ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Ftn "));
         else if( pFrm->IsFtnContFrm() )
-            rOut += "FtnCont ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("FtnCont "));
         else if( pFrm->IsFlyFrm() )
-            rOut += "Fly ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Fly "));
         else
-            rOut += "Layout ";
+            rOut.append(RTL_CONSTASCII_STRINGPARAM("Layout "));
     }
     else if( pFrm->IsNoTxtFrm() )
-        rOut += "NoTxt ";
+        rOut.append(RTL_CONSTASCII_STRINGPARAM("NoTxt "));
     else
-        rOut += "Not impl. ";
+        rOut.append(RTL_CONSTASCII_STRINGPARAM("Not impl. "));
 }
 
 /* --------------------------------------------------
@@ -586,75 +587,92 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
     if( 1 == nTestMode && nFunction != PROT_TESTFORMAT )
         return; // Wir sollen nur innerhalb einer Testformatierung aufzeichnen
     sal_Bool bTmp = sal_False;
-    ByteString aOut = aLayer;
-    aOut += ByteString::CreateFromInt64( lcl_GetFrameId( pFrm ) );
-    aOut += ' ';
+    rtl::OStringBuffer aOut(aLayer);
+    aOut.append(static_cast<sal_Int64>(lcl_GetFrameId(pFrm)));
+    aOut.append(' ');
     lcl_FrameType( aOut, pFrm );    // dann den FrameType
     switch ( nFunction )            // und die Funktion
     {
         case PROT_SNAPSHOT: lcl_Flags( aOut, pFrm );
                             break;
-        case PROT_MAKEALL:  aOut += "MakeAll";
+        case PROT_MAKEALL:  aOut.append(RTL_CONSTASCII_STRINGPARAM("MakeAll"));
                             lcl_Start( aOut, aLayer, nAct );
                             if( nAct == ACT_START )
                                 lcl_Flags( aOut, pFrm );
                             break;
         case PROT_MOVE_FWD: bTmp = sal_True; // NoBreak
-        case PROT_MOVE_BWD: aOut += ( nFunction == bTmp ) ? "Fwd" : "Bwd";
+        case PROT_MOVE_BWD:
+                            if (nFunction == bTmp)
+                                aOut.append(RTL_CONSTASCII_STRINGPARAM("Fwd"));
+                            else
+                                aOut.append(RTL_CONSTASCII_STRINGPARAM("Bwd"));
                             lcl_Start( aOut, aLayer, nAct );
                             if( pParam )
                             {
-                                aOut += ' ';
-                                aOut += ByteString::CreateFromInt32( *((sal_uInt16*)pParam) );
+                                aOut.append(' ');
+                                aOut.append(static_cast<sal_Int32>(*((sal_uInt16*)pParam)));
                             }
                             break;
         case PROT_GROW_TST: if( ACT_START != nAct )
                                 return;
-                            aOut += "TestGrow";
+                            aOut.append(RTL_CONSTASCII_STRINGPARAM("TestGrow"));
                             break;
         case PROT_SHRINK_TST: if( ACT_START != nAct )
                                 return;
-                            aOut += "TestShrink";
+                            aOut.append(RTL_CONSTASCII_STRINGPARAM("TestShrink"));
                             break;
         case PROT_ADJUSTN :
         case PROT_SHRINK:   bTmp = sal_True; // NoBreak
-        case PROT_GROW:     aOut += !bTmp ? "Grow" :
-                                    ( nFunction == PROT_SHRINK ? "Shrink" : "AdjustNgbhd" );
+        case PROT_GROW:
+                            if (!bTmp)
+                                aOut.append(RTL_CONSTASCII_STRINGPARAM("Grow"));
+                            else
+                            {
+                                if (nFunction == PROT_SHRINK)
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM("Shrink"));
+                                else
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM("AdjustNgbhd"));
+                            }
                             lcl_Start( aOut, aLayer, nAct );
                             if( pParam )
                             {
-                                aOut += ' ';
-                                aOut += ByteString::CreateFromInt64( *((long*)pParam) );
+                                aOut.append(' ');
+                                aOut.append(static_cast<sal_Int64>(*((long*)pParam)));
                             }
                             break;
         case PROT_POS:      break;
-        case PROT_PRTAREA:  aOut += "PrtArea";
+        case PROT_PRTAREA:  aOut.append(RTL_CONSTASCII_STRINGPARAM("PrtArea"));
                             lcl_Start( aOut, aLayer, nAct );
                             break;
-        case PROT_SIZE:     aOut += "Size";
+        case PROT_SIZE:     aOut.append(RTL_CONSTASCII_STRINGPARAM("Size"));
                             lcl_Start( aOut, aLayer, nAct );
-                            aOut += ' ';
-                            aOut += ByteString::CreateFromInt64( pFrm->Frm().Height() );
+                            aOut.append(' ');
+                            aOut.append(static_cast<sal_Int64>(pFrm->Frm().Height()));
                             break;
-        case PROT_LEAF:     aOut += "Prev/NextLeaf";
+        case PROT_LEAF:     aOut.append(RTL_CONSTASCII_STRINGPARAM("Prev/NextLeaf"));
                             lcl_Start( aOut, aLayer, nAct );
-                            aOut += ' ';
+                            aOut.append(' ');
                             if( pParam )
                             {
-                                aOut += ' ';
-                                aOut += ByteString::CreateFromInt64( lcl_GetFrameId( (SwFrm*)pParam ) );
+                                aOut.append(' ');
+                                aOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                             }
                             break;
         case PROT_FILE_INIT: FileInit();
-                             aOut = "Initialize";
+                            aOut.append(RTL_CONSTASCII_STRINGPARAM("Initialize"));
                             break;
-        case PROT_SECTION:  SectFunc( aOut, pFrm, nAct, pParam );
+        case PROT_SECTION:  SectFunc(aOut, pFrm, nAct, pParam);
                             break;
         case PROT_CUT:      bTmp = sal_True; // NoBreak
-        case PROT_PASTE:    aOut += bTmp ? "Cut from " : "Paste to ";
-                            aOut += ByteString::CreateFromInt64( lcl_GetFrameId( (SwFrm*)pParam ) );
+        case PROT_PASTE:
+                            if (bTmp)
+                                aOut.append(RTL_CONSTASCII_STRINGPARAM("Cut from "));
+                            else
+                                aOut.append(RTL_CONSTASCII_STRINGPARAM("Paste to "));
+                            aOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                             break;
-        case PROT_TESTFORMAT: aOut += "Test";
+        case PROT_TESTFORMAT:
+                            aOut.append(RTL_CONSTASCII_STRINGPARAM("Test"));
                             lcl_Start( aOut, aLayer, nAct );
                             if( ACT_START == nAct )
                                 nTestMode |= 2;
@@ -666,36 +684,36 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                                 SwRect& rFrm = *((SwRect*)pParam);
                                 if( pFrm->Frm().Pos() != rFrm.Pos() )
                                 {
-                                    aOut += "PosChg: (";
-                                    aOut += ByteString::CreateFromInt64(rFrm.Left());
-                                    aOut += ", ";
-                                    aOut += ByteString::CreateFromInt64(rFrm.Top());
-                                    aOut += ") (";
-                                    aOut += ByteString::CreateFromInt64(pFrm->Frm().Left());
-                                    aOut += ", ";
-                                    aOut += ByteString::CreateFromInt64(pFrm->Frm().Top());
-                                    aOut += ") ";
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM("PosChg: ("));
+                                    aOut.append(static_cast<sal_Int64>(rFrm.Left()));
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(", "));
+                                    aOut.append(static_cast<sal_Int64>(rFrm.Top()));
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(") ("));
+                                    aOut.append(static_cast<sal_Int64>(pFrm->Frm().Left()));
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(", "));
+                                    aOut.append(static_cast<sal_Int64>(pFrm->Frm().Top()));
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(") "));
                                 }
                                 if( pFrm->Frm().Height() != rFrm.Height() )
                                 {
-                                    aOut += "Height: ";
-                                    aOut += ByteString::CreateFromInt64(rFrm.Height());
-                                    aOut += " -> ";
-                                    aOut += ByteString::CreateFromInt64(pFrm->Frm().Height());
-                                    aOut += " ";
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM("Height: "));
+                                    aOut.append(static_cast<sal_Int64>(rFrm.Height()));
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(" -> "));
+                                    aOut.append(static_cast<sal_Int64>(pFrm->Frm().Height()));
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(" "));
                                 }
                                 if( pFrm->Frm().Width() != rFrm.Width() )
                                 {
-                                    aOut += "Width: ";
-                                    aOut += ByteString::CreateFromInt64(rFrm.Width());
-                                    aOut += " -> ";
-                                    aOut += ByteString::CreateFromInt64(pFrm->Frm().Width());
-                                    aOut += " ";
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM("Width: "));
+                                    aOut.append(static_cast<sal_Int64>(rFrm.Width()));
+                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(" -> "));
+                                    aOut.append(static_cast<sal_Int64>(pFrm->Frm().Width()));
+                                    aOut.append(' ');
                                 }
                                 break;
                             }
     }
-    *pStream << aOut.GetBuffer() << endl;   // Ausgabe
+    *pStream << aOut.getStr() << endl;  // Ausgabe
     pStream->Flush();   // Gleich auf die Platte, damit man mitlesen kann
     if( ++nLineCount >= nMaxLines )     // Maximale Ausgabe erreicht?
         SwProtocol::SetRecord( 0 );        // => Ende der Aufzeichnung
@@ -706,23 +724,29 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
  * hier werden die Ausgaben rund um SectionFrms abgehandelt.
  * --------------------------------------------------*/
 
-void SwImplProtocol::SectFunc( ByteString &rOut, const SwFrm* , sal_uLong nAct, void* pParam )
+void SwImplProtocol::SectFunc(rtl::OStringBuffer &rOut, const SwFrm* , sal_uLong nAct, void* pParam)
 {
     sal_Bool bTmp = sal_False;
     switch( nAct )
     {
-        case ACT_MERGE:         rOut += "Merge Section ";
-                                rOut += ByteString::CreateFromInt64( lcl_GetFrameId( (SwFrm*)pParam ) );
+        case ACT_MERGE:         rOut.append(RTL_CONSTASCII_STRINGPARAM("Merge Section "));
+                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                                 break;
         case ACT_CREATE_MASTER: bTmp = sal_True; // NoBreak
-        case ACT_CREATE_FOLLOW: rOut += "Create Section ";
-                                rOut += bTmp ? "Master to " : "Follow from ";
-                                rOut += ByteString::CreateFromInt64( lcl_GetFrameId( (SwFrm*)pParam ) );
+        case ACT_CREATE_FOLLOW: rOut.append(RTL_CONSTASCII_STRINGPARAM("Create Section "));
+                                if (bTmp)
+                                    rOut.append(RTL_CONSTASCII_STRINGPARAM("Master to "));
+                                else
+                                    rOut.append(RTL_CONSTASCII_STRINGPARAM("Follow from "));
+                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                                 break;
         case ACT_DEL_MASTER:    bTmp = sal_True; // NoBreak
-        case ACT_DEL_FOLLOW:    rOut += "Delete Section ";
-                                rOut += bTmp ? "Master to " : "Follow from ";
-                                rOut += ByteString::CreateFromInt64( lcl_GetFrameId( (SwFrm*)pParam ) );
+        case ACT_DEL_FOLLOW:    rOut.append(RTL_CONSTASCII_STRINGPARAM("Delete Section "));
+                                if (bTmp)
+                                    rOut.append(RTL_CONSTASCII_STRINGPARAM("Master to "));
+                                else
+                                    rOut.append(RTL_CONSTASCII_STRINGPARAM("Follow from "));
+                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                                 break;
     }
 }
@@ -767,7 +791,7 @@ void SwImplProtocol::SnapShot( const SwFrm* pFrm, sal_uLong nFlags )
         _Record( pFrm, PROT_SNAPSHOT, 0, 0);
         if( pFrm->GetDrawObjs() && nFlags & SNAP_FLYFRAMES )
         {
-            aLayer += "[ ";
+            aLayer.append(RTL_CONSTASCII_STRINGPARAM("[ "));
             const SwSortedObjs &rObjs = *pFrm->GetDrawObjs();
             for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
@@ -775,16 +799,16 @@ void SwImplProtocol::SnapShot( const SwFrm* pFrm, sal_uLong nFlags )
                 if ( pObj->ISA(SwFlyFrm) )
                     SnapShot( static_cast<SwFlyFrm*>(pObj), nFlags );
             }
-            if( aLayer.Len() > 1 )
-                aLayer.Erase( aLayer.Len() - 2 );
+            if (aLayer.getLength() > 1)
+                aLayer.remove(aLayer.getLength() - 2, aLayer.getLength());
         }
         if( pFrm->IsLayoutFrm() && nFlags & SNAP_LOWER &&
             ( !pFrm->IsTabFrm() || nFlags & SNAP_TABLECONT ) )
         {
-            aLayer += "  ";
+            aLayer.append(RTL_CONSTASCII_STRINGPARAM("  "));
             SnapShot( ((SwLayoutFrm*)pFrm)->Lower(), nFlags );
-            if( aLayer.Len() > 1 )
-                aLayer.Erase( aLayer.Len() - 2 );
+            if (aLayer.getLength() > 1)
+                aLayer.remove(aLayer.getLength() - 2, aLayer.getLength());
         }
         pFrm = pFrm->GetNext();
     }
