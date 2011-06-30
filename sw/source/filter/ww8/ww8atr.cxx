@@ -1828,7 +1828,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
 
         if ( bHandleBookmark )
         {
-            // retrieve reference destionation - the name of the bookmark
+            // retrieve reference destination - the name of the bookmark
             String aLinkStr;
             const sal_uInt16 nSubType = pFld->GetSubType();
             const SwGetRefField& rRFld = *(static_cast<const SwGetRefField*>(pFld));
