@@ -53,18 +53,9 @@ namespace css = ::com::sun::star;
 
 namespace
 {
-    void ShrinkToFit( FixedImage& _rImage );
-    void AdjustPosAndSize( Control& _rCtrl, Point& _rStartIn_EndOut, long _nXOffset = 0 );
-
     void ShrinkToFit( FixedImage& _rImg )
     {
         _rImg.SetSizePixel( _rImg.GetImage().GetSizePixel() );
-    }
-
-    void AdjustPosAndSize( Control& _rCtrl, Point& _rStartIn_EndOut, long _nOffs )
-    {
-        _rCtrl.SetPosPixel( _rStartIn_EndOut );
-        _rStartIn_EndOut.X() += XmlSec::ShrinkToFitWidth( _rCtrl, _nOffs );
     }
 }
 
