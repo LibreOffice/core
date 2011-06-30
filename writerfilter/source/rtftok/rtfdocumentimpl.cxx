@@ -129,6 +129,26 @@ static void lcl_TableBreak(Stream& rMapper)
     rMapper.startParagraphGroup();
 }
 
+static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(int nPos, OUString& rString)
+{
+    RTFSprms_t aAttributes;
+    RTFValue::Pointer_t pPos(new RTFValue(nPos));
+    if (rString.getLength())
+    {
+        // If present, this should be sent first.
+        RTFValue::Pointer_t pString(new RTFValue(rString));
+        aAttributes.push_back(make_pair(NS_rtf::LN_BOOKMARKNAME, pString));
+    }
+    aAttributes.push_back(make_pair(NS_rtf::LN_IBKL, pPos));
+    return writerfilter::Reference<Properties>::Pointer_t(new RTFReferenceProperties(aAttributes));
+}
+
+static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(int nPos)
+{
+    OUString aStr;
+    return lcl_getBookmarkProperties(nPos, aStr);
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -503,28 +523,14 @@ void RTFDocumentImpl::text(OUString& rString)
     else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
     {
         int nPos = m_aBookmarks.size();
-        OSL_TRACE("debug, pushing bookmark #%d", nPos);
         m_aBookmarks[rString] = nPos;
-
-        RTFSprms_t aAttributes;
-        RTFValue::Pointer_t pPos(new RTFValue(nPos));
-        aAttributes.push_back(make_pair(NS_rtf::LN_IBKL, pPos));
-        RTFValue::Pointer_t pString(new RTFValue(rString));
-        aAttributes.push_back(make_pair(NS_rtf::LN_BOOKMARKNAME, pString));
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
-        Mapper().props(pProperties);
+        Mapper().props(lcl_getBookmarkProperties(nPos, rString));
         return;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKEND)
     {
         int nPos = m_aBookmarks[rString];
-        OSL_TRACE("debug, looked up bookmark #%d", nPos);
-
-        RTFSprms_t aAttributes;
-        RTFValue::Pointer_t pPos(new RTFValue(nPos));
-        aAttributes.push_back(make_pair(NS_rtf::LN_IBKL, pPos));
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
-        Mapper().props(pProperties);
+        Mapper().props(lcl_getBookmarkProperties(nPos));
         return;
     }
     if (m_aIgnoreFirst.getLength() && m_aIgnoreFirst.equals(rString))
