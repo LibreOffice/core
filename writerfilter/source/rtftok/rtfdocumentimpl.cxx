@@ -544,13 +544,6 @@ void RTFDocumentImpl::text(OUString& rString)
         m_aStates.top().aLevelText.append(rString);
         return;
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
-    {
-        int nPos = m_aBookmarks.size();
-        m_aBookmarks[rString] = nPos;
-        Mapper().props(lcl_getBookmarkProperties(nPos, rString));
-        return;
-    }
     else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKEND)
     {
         int nPos = m_aBookmarks[rString];
@@ -596,6 +589,14 @@ void RTFDocumentImpl::text(OUString& rString)
                 m_aSuperBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
         }
         m_bNeedPap = false;
+    }
+
+    if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
+    {
+        int nPos = m_aBookmarks.size();
+        m_aBookmarks[rString] = nPos;
+        Mapper().props(lcl_getBookmarkProperties(nPos, rString));
+        return;
     }
 
     if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
