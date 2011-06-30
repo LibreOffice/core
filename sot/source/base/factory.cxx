@@ -39,6 +39,7 @@
 #include <sot/sotdata.hxx>
 #include <sot/clsids.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/strbuf.hxx>
 
 /************** class SotData_Impl *********************************************/
 /*************************************************************************
@@ -78,9 +79,9 @@ void SotFactory::DeInit()
     if( pSotData->nSvObjCount )
     {
 #ifdef DBG_UTIL
-        ByteString aStr( "Objects alive: " );
-        aStr.Append( ByteString::CreateFromInt32( pSotData->nSvObjCount ) );
-        DBG_WARNING(  aStr.GetBuffer()  );
+        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Objects alive: "));
+        aStr.append(static_cast<sal_Int32>(pSotData->nSvObjCount));
+        DBG_WARNING(aStr.getStr());
 #endif
         return;
     }

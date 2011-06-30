@@ -212,7 +212,7 @@ void MkFilter::Filter()
                 {
                     MkLine *pMkLine = (*pLine->pPrivateTnrLst)[ i ];
                     ByteString aLine = pMkLine->aLine;
-                    while( aLine.SearchAndReplace( aTnr, ByteString::CreateFromInt32( n )) != (sal_uInt16)-1 ) ;
+                    while( aLine.SearchAndReplace( aTnr, rtl::OString::valueOf(static_cast<sal_Int32>(n)) ) != (sal_uInt16)-1 ) ;
                     fputs( aLine.GetBuffer(), pOut );
                     fprintf( stderr, "o" );
                 }

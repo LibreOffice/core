@@ -45,6 +45,7 @@
 #include <tools/debug.hxx>
 #include <tools/config.hxx>
 #include <osl/security.h>
+#include <rtl/strbuf.hxx>
 
 #define MAXBUFLEN   1024        // Fuer Buffer bei VOS-Funktionen
 
@@ -1188,13 +1189,15 @@ sal_uInt16 Config::GetKeyCount() const
 ByteString Config::GetKeyName( sal_uInt16 nKey ) const
 {
 #ifdef DBG_UTIL
-    ByteString aTraceStr( "Config::GetKeyName( " );
-    aTraceStr += ByteString::CreateFromInt32(nKey);
-    aTraceStr += " ) from ";
-    aTraceStr += GetGroup();
-    aTraceStr += " in ";
-    aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
+    rtl::OStringBuffer aTraceStr(
+        RTL_CONSTASCII_STRINGPARAM("Config::GetKeyName( "));
+    aTraceStr.append(static_cast<sal_Int32>(nKey));
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" ) from "));
+    aTraceStr.append(GetGroup());
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(rtl::OUStringToOString(
+        maFileName, RTL_TEXTENCODING_UTF8));
+    OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
     // Key suchen und Name zurueckgeben
@@ -1223,13 +1226,15 @@ ByteString Config::GetKeyName( sal_uInt16 nKey ) const
 ByteString Config::ReadKey( sal_uInt16 nKey ) const
 {
 #ifdef DBG_UTIL
-    ByteString aTraceStr( "Config::ReadKey( " );
-    aTraceStr += ByteString::CreateFromInt32( nKey );
-    aTraceStr += " ) from ";
-    aTraceStr += GetGroup();
-    aTraceStr += " in ";
-    aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
+    rtl::OStringBuffer aTraceStr(
+        RTL_CONSTASCII_STRINGPARAM("Config::ReadKey( "));
+    aTraceStr.append(static_cast<sal_Int32>(nKey));
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" ) from "));
+    aTraceStr.append(GetGroup());
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(rtl::OUStringToOString(maFileName,
+        RTL_TEXTENCODING_UTF8));
+    OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
     // Key suchen und Value zurueckgeben

@@ -762,10 +762,11 @@ sal_uInt32 SvPersistStream::ReadObj
             if( !pFunc )
             {
 #ifdef DBG_UTIL
-                ByteString aStr( "no class with id: " );
-                aStr += ByteString::CreateFromInt32( nClassId );
-                aStr += " registered";
-                DBG_WARNING( aStr.GetBuffer() );
+                rtl::OStringBuffer aStr(
+                    RTL_CONSTASCII_STRINGPARAM("no class with id: " ));
+                aStr.append(static_cast<sal_Int32>(nClassId));
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(" registered"));
+                DBG_WARNING(aStr.getStr());
 #else
                 (void)nObjLen;
 #endif
@@ -790,11 +791,12 @@ sal_uInt32 SvPersistStream::ReadObj
 #ifdef DBG_UTIL
             if( nObjLen + nObjPos != Tell() )
             {
-                ByteString aStr( "false object len: read = " );
-                aStr += ByteString::CreateFromInt32( (long)(Tell() - nObjPos) );
-                aStr += ", should = ";
-                aStr += ByteString::CreateFromInt32( nObjLen );
-                OSL_FAIL( aStr.GetBuffer() );
+                rtl::OStringBuffer aStr(
+                    RTL_CONSTASCII_STRINGPARAM("false object len: read = "));
+                aStr.append(static_cast<sal_Int64>((long)(Tell() - nObjPos)));
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(", should = "));
+                aStr.append(static_cast<sal_Int32>(nObjLen));
+                OSL_FAIL(aStr.getStr());
             }
 #endif
             rpObj->RestoreNoDelete();

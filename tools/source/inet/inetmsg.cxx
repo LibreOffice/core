@@ -34,6 +34,7 @@
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <stdio.h>
 
@@ -367,41 +368,47 @@ sal_Bool INetRFC822Message::GenerateDateField (
         (rDateTime.GetHour() > 23)    ) return sal_False;
 
     // Prepare output string.
-    ByteString rDateField;
+    rtl::OStringBuffer aDateField;
 
     // Insert Date.
-    rDateField += wkdays[(sal_uInt16)(rDateTime.GetDayOfWeek())];
-    rDateField += ", ";
+    aDateField.append(wkdays[(sal_uInt16)(rDateTime.GetDayOfWeek())]);
+    aDateField.append(RTL_CONSTASCII_STRINGPARAM(", "));
 
     sal_uInt16 nNum = rDateTime.GetDay();
-    if (nNum < 10) rDateField += '0';
-    rDateField += ByteString::CreateFromInt32(nNum);
-    rDateField += ' ';
+    if (nNum < 10)
+        aDateField.append('0');
+    aDateField.append(static_cast<sal_Int32>(nNum));
+    aDateField.append(' ');
 
-    rDateField += months[(sal_uInt16)(rDateTime.GetMonth() - 1)];
-    rDateField += ' ';
+    aDateField.append(months[(sal_uInt16)(rDateTime.GetMonth() - 1)]);
+    aDateField.append(' ');
 
-    rDateField += ByteString::CreateFromInt32(rDateTime.GetYear());
-    rDateField += ' ';
+    aDateField.append(static_cast<sal_Int32>(rDateTime.GetYear()));
+    aDateField.append(' ');
 
     // Insert Time.
     nNum = rDateTime.GetHour();
-    if (nNum < 10) rDateField += '0';
-    rDateField += ByteString::CreateFromInt32(nNum);
-    rDateField += ':';
+    if (nNum < 10)
+        aDateField.append('0');
+    aDateField.append(static_cast<sal_Int32>(nNum));
+    aDateField.append(':');
 
     nNum = rDateTime.GetMin();
-    if (nNum < 10) rDateField += '0';
-    rDateField += ByteString::CreateFromInt32(nNum);
-    rDateField += ':';
+    if (nNum < 10)
+        aDateField.append('0');
+    aDateField.append(static_cast<sal_Int32>(nNum));
+    aDateField.append(':');
 
     nNum = rDateTime.GetSec();
-    if (nNum < 10) rDateField += '0';
-    rDateField += ByteString::CreateFromInt32(nNum);
-    rDateField += " GMT";
+    if (nNum < 10)
+        aDateField.append('0');
+    aDateField.append(static_cast<sal_Int32>(nNum));
+    aDateField.append(RTL_CONSTASCII_STRINGPARAM(" GMT"));
 
     // Done.
-    rDateFieldW = UniString (rDateField, RTL_TEXTENCODING_ASCII_US);
+    rDateFieldW = rtl::OStringToOUString(aDateField.makeStringAndClear(),
+        RTL_TEXTENCODING_ASCII_US);
+
     return sal_True;
 }
 

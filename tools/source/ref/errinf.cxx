@@ -34,6 +34,7 @@
 #include <tools/debug.hxx>
 #include <tools/errinf.hxx>
 #include <tools/string.hxx>
+#include <rtl/strbuf.hxx>
 
 class ErrorHandler;
 
@@ -429,30 +430,33 @@ sal_Bool SimpleErrorHandler::CreateString(
     const ErrorInfo *pInfo, String &rStr, sal_uInt16 &) const
 {
     sal_uIntPtr nId = pInfo->GetErrorCode();
-    ByteString aStr;
-    aStr="Id ";
-    aStr+=ByteString::CreateFromInt32(nId);
-    aStr+=" only handled by SimpleErrorHandler";
-    aStr+="\nErrorCode: ";
-    aStr+=ByteString::CreateFromInt32(nId & ((1L <<  ERRCODE_CLASS_SHIFT)  - 1 ));
-    aStr+="\nErrorClass: ";
-    aStr+=ByteString::CreateFromInt32((nId & ERRCODE_CLASS_MASK) >> ERRCODE_CLASS_SHIFT);
-    aStr+="\nErrorArea: ";
-    aStr+=ByteString::CreateFromInt32((nId & ERRCODE_ERROR_MASK &
-            ~((1 << ERRCODE_AREA_SHIFT ) -1 ) ) >> ERRCODE_AREA_SHIFT);
+    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Id "));
+    aStr.append(static_cast<sal_Int32>(nId));
+    aStr.append(RTL_CONSTASCII_STRINGPARAM(
+        " only handled by SimpleErrorHandler"));
+    aStr.append(RTL_CONSTASCII_STRINGPARAM("\nErrorCode: "));
+    aStr.append(static_cast<sal_Int32>(
+        nId & ((1L <<  ERRCODE_CLASS_SHIFT)  - 1 )));
+    aStr.append(RTL_CONSTASCII_STRINGPARAM("\nErrorClass: "));
+    aStr.append(static_cast<sal_Int32>(
+        (nId & ERRCODE_CLASS_MASK) >> ERRCODE_CLASS_SHIFT));
+    aStr.append(RTL_CONSTASCII_STRINGPARAM("\nErrorArea: "));
+    aStr.append(static_cast<sal_Int32>((nId & ERRCODE_ERROR_MASK &
+            ~((1 << ERRCODE_AREA_SHIFT ) -1 ) ) >> ERRCODE_AREA_SHIFT));
     DynamicErrorInfo *pDyn=PTR_CAST(DynamicErrorInfo,pInfo);
     if(pDyn)
     {
-        aStr+="\nDId ";
-        aStr+=ByteString::CreateFromInt32((sal_uIntPtr)*pDyn);
+        aStr.append(RTL_CONSTASCII_STRINGPARAM("\nDId "));
+        aStr.append(static_cast<sal_Int32>(*pDyn));
     }
     StandardErrorInfo *pStd=PTR_CAST(StandardErrorInfo,pInfo);
     if(pStd)
     {
-        aStr+="\nXId ";
-        aStr+=ByteString::CreateFromInt32(pStd->GetExtendedErrorCode());
+        aStr.append(RTL_CONSTASCII_STRINGPARAM("\nXId "));
+        aStr.append(static_cast<sal_Int32>(pStd->GetExtendedErrorCode()));
     }
-    rStr = String( aStr, RTL_TEXTENCODING_ASCII_US );
+    rStr = rtl::OStringToOUString(aStr.makeStringAndClear(),
+        RTL_TEXTENCODING_ASCII_US);
     return sal_True;
 }
 
