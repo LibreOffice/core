@@ -18,7 +18,6 @@ class UnoDialog(object):
             self.xUnoDialog = xMSF.createInstance(
                 "com.sun.star.awt.UnoControlDialog")
             self.xUnoDialog.setModel(self.xDialogModel)
-            self.BisHighContrastModeActivated = None
             self.m_oPeerConfig = None
             self.xWindowPeer = None
         except Exception, e:
@@ -459,8 +458,6 @@ class UnoDialog(object):
 
         if self.xWindowPeer == None:
             self.createWindowPeer()
-        #COMMENTED
-        #self.BisHighContrastModeActivated = self.isHighContrastModeActivated()
         return self.xUnoDialog.execute()
 
     def setVisible(self, parent):
@@ -545,163 +542,11 @@ class UnoDialog(object):
         Helper.setUnoPropertyValue(
             getModel(control), PropertyNames.PROPERTY_ENABLED, enabled)
 
-    '''
-    @author bc93774
-    @param oControlModel the model of a control
-    @return the LabelType according to UIConsts.CONTROLTYPE
-    '''
-
-    @classmethod
-    def getControlModelType(self, oControlModel):
-        if oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlFixedTextModel"):
-            return UIConsts.CONTROLTYPE.FIXEDTEXT
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlButtonModel"):
-            return UIConsts.CONTROLTYPE.BUTTON
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlCurrencyFieldModel"):
-            return UIConsts.CONTROLTYPE.CURRENCYFIELD
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlDateFieldModel"):
-            return UIConsts.CONTROLTYPE.DATEFIELD
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlFixedLineModel"):
-            return UIConsts.CONTROLTYPE.FIXEDLINE
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlFormattedFieldModel"):
-            return UIConsts.CONTROLTYPE.FORMATTEDFIELD
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlRoadmapModel"):
-            return UIConsts.CONTROLTYPE.ROADMAP
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlNumericFieldModel"):
-            return UIConsts.CONTROLTYPE.NUMERICFIELD
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlPatternFieldModel"):
-            return UIConsts.CONTROLTYPE.PATTERNFIELD
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlHyperTextModel"):
-            return UIConsts.CONTROLTYPE.HYPERTEXT
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlProgressBarModel"):
-            return UIConsts.CONTROLTYPE.PROGRESSBAR
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlTimeFieldModel"):
-            return UIConsts.CONTROLTYPE.TIMEFIELD
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlImageControlModel"):
-            return UIConsts.CONTROLTYPE.IMAGECONTROL
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlRadioButtonModel"):
-            return UIConsts.CONTROLTYPE.RADIOBUTTON
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlCheckBoxModel"):
-            return UIConsts.CONTROLTYPE.CHECKBOX
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlEditModel"):
-            return UIConsts.CONTROLTYPE.EDITCONTROL
-        elif oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlComboBoxModel"):
-            return UIConsts.CONTROLTYPE.COMBOBOX
-        else:
-            if (oControlModel.supportsService(
-                "com.sun.star.awt.UnoControlListBoxModel")):
-                return UIConsts.CONTROLTYPE.LISTBOX
-            else:
-                return UIConsts.CONTROLTYPE.UNKNOWN
-
-    '''
-    @author bc93774
-    @param oControlModel
-    @return the name of the property that contains the value of a controlmodel
-    '''
-
-    @classmethod
-    def getDisplayProperty(self, oControlModel):
-        itype = getControlModelType(oControlModel)
-        return getDisplayProperty(itype)
-
-    '''
-    @param itype The type of the control conforming to UIConst.ControlType
-    @return the name of the property that contains the value of a controlmodel
-    '''
-
-    '''
-    @classmethod
-    def getDisplayProperty(self, itype):
-        # String propertyname = "";
-        tmp_switch_var1 = itype
-        if 1:
-            pass
-        else:
-            return ""
-    '''
-
     def addResourceHandler(self, _Unit, _Module):
         self.m_oResource = Resource(self.xMSF, _Unit, _Module)
 
     def setInitialTabindex(self, _istep):
         return (short)(_istep * 100)
-
-    def isHighContrastModeActivated(self):
-        if self.xContainerWindow != None:
-            if self.BisHighContrastModeActivated == None:
-                try:
-                    nUIColor = int(self.xContainerWindow.getProperty(
-                        "DisplayBackgroundColor"))
-                except IllegalArgumentException, e:
-                    traceback.print_exc()
-                    return False
-
-                #TODO: The following methods could be wrapped
-                # in an own class implementation
-                nRed = self.getRedColorShare(nUIColor)
-                nGreen = self.getGreenColorShare(nUIColor)
-                nBlue = self.getBlueColorShare(nUIColor)
-                nLuminance = ((nBlue * 28 + nGreen * 151 + nRed * 77) / 256)
-                bisactivated = (nLuminance <= 25)
-                self.BisHighContrastModeActivated = bisactivated
-                return bisactivated
-            else:
-                return self.BisHighContrastModeActivated.booleanValue()
-
-        else:
-            return False
-
-    def getRedColorShare(self, _nColor):
-        nRed = _nColor / 65536
-        nRedModulo = _nColor % 65536
-        nGreen = (int)(nRedModulo / 256)
-        nGreenModulo = (nRedModulo % 256)
-        nBlue = nGreenModulo
-        return nRed
-
-    def getGreenColorShare(self, _nColor):
-        nRed = _nColor / 65536
-        nRedModulo = _nColor % 65536
-        nGreen = (int)(nRedModulo / 256)
-        return nGreen
-
-    def getBlueColorShare(self, _nColor):
-        nRed = _nColor / 65536
-        nRedModulo = _nColor % 65536
-        nGreen = (int)(nRedModulo / 256)
-        nGreenModulo = (nRedModulo % 256)
-        nBlue = nGreenModulo
-        return nBlue
-
-    def getWizardImageUrl(self, _nResId, _nHCResId):
-        if isHighContrastModeActivated():
-            return "private:resource/wzi/image/" + _nHCResId
-        else:
-            return "private:resource/wzi/image/" + _nResId
-
-    def getImageUrl(self, _surl, _shcurl):
-        if isHighContrastModeActivated():
-            return _shcurl
-        else:
-            return _surl
 
     def getListBoxLineCount(self):
         return 20
