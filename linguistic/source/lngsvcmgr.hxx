@@ -136,9 +136,6 @@ class LngSvcMgr :
 
     sal_Bool    SaveCfgSvcs( const String &rServiceName );
 
-    void    SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
-                    const SvcInfoArray &rAvailSvcs );
-
     // utl::ConfigItem (to allow for listening of changes of relevant properties)
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
     virtual void    Commit();
