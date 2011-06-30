@@ -115,7 +115,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
             #disable the document, so that the user cannot change anything:
             self.myFaxDoc.xFrame.ComponentWindow.Enable = False
-
             self.executeDialogFromComponent(self.myFaxDoc.xFrame)
             self.removeTerminateListener()
             self.closeDocument()
