@@ -90,11 +90,6 @@ void write(FileStream & file, void const * buffer, sal_uInt64 size) {
     }
 }
 
-void writeU1(FileStream & file, sal_uInt8 data) {
-    unsigned char buf[] = { static_cast< unsigned char >(data) };
-    write(file, &buf, sizeof buf);
-}
-
 void writeU2(FileStream & file, sal_uInt16 data) {
     unsigned char buf[] = {
         static_cast< unsigned char >(data >> 8),
