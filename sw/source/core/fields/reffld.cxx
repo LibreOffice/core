@@ -73,7 +73,7 @@
 #include <set>
 #include <map>
 
-#include "../../../../../libs-core/sfx2/inc/sfx2/childwin.hxx"
+#include <sfx2/childwin.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
