@@ -207,10 +207,9 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     // Multiline edit with Copyright-Text
     // preferred Version widget size
-    Size aCTSize = aCopyrightText.GetSizePixel();
-    aCTSize.Width()  = nTextWidth;
-    aCopyrightText.SetSizePixel(aCTSize);
-    aCTSize = aCopyrightText.CalcMinimumSize();
+    aCopyrightText.SetSizePixel(Size(nTextWidth,600));
+    Size aCTSize = aCopyrightText.CalcMinimumSize();
+    aCTSize.Width()= nTextWidth;
     Point aCTPnt;
     aCTPnt.X() = ( aOutSiz.Width() - aCTSize.Width() ) / 2;
     aCTPnt.Y() = nY;
