@@ -54,7 +54,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         lw.startWizard(xLocMSF, None)
 
     def startWizard(self, xMSF, CurPropertyValue):
-        LetterWizardDialogImpl.running = True
+        self.running = True
         try:
             #Number of steps on WizardDialog
             self.nMaxStep = 6
@@ -120,16 +120,16 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.executeDialogFromComponent(self.myLetterDoc.xFrame)
             self.removeTerminateListener()
             self.closeDocument()
-            LetterWizardDialogImpl.running = False
+            self.running = False
         except Exception, exception:
             self.removeTerminateListener()
             traceback.print_exc()
-            LetterWizardDialogImpl.running = False
+            self.running = False
             return
 
     def cancelWizard(self):
-        xDialog.endExecute()
-        LetterWizardDialogImpl.running = False
+        self.xUnoDialog.endExecute()
+        self.running = False
 
     def finishWizard(self):
         switchToStep(getCurrentStep(), getMaxStep())
@@ -195,7 +195,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             traceback.print_exc()
         finally:
             xDialog.endExecute()
-            LetterWizardDialogImpl.running = False
+            self.running = False
 
         return True;
 
