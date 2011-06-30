@@ -10,6 +10,12 @@ RTFReferenceProperties::RTFReferenceProperties(RTFSprms_t rAttributes, RTFSprms_
 {
 }
 
+RTFReferenceProperties::RTFReferenceProperties(RTFSprms_t rAttributes)
+    : m_rAttributes(rAttributes),
+    m_rSprms()
+{
+}
+
 RTFReferenceProperties::~RTFReferenceProperties()
 {
 }

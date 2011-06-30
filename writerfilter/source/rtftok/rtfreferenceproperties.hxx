@@ -15,6 +15,7 @@ namespace writerfilter {
         {
             public:
                 RTFReferenceProperties(RTFSprms_t rAttributes, RTFSprms_t rSprms);
+                RTFReferenceProperties(RTFSprms_t rAttributes);
                 virtual ~RTFReferenceProperties();
                 virtual void resolve(Properties & rHandler);
                 virtual std::string getType() const;

@@ -511,8 +511,7 @@ void RTFDocumentImpl::text(OUString& rString)
         aAttributes.push_back(make_pair(NS_rtf::LN_IBKL, pPos));
         RTFValue::Pointer_t pString(new RTFValue(rString));
         aAttributes.push_back(make_pair(NS_rtf::LN_BOOKMARKNAME, pString));
-        RTFSprms_t aSprms;
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
         Mapper().props(pProperties);
         return;
     }
@@ -524,8 +523,7 @@ void RTFDocumentImpl::text(OUString& rString)
         RTFSprms_t aAttributes;
         RTFValue::Pointer_t pPos(new RTFValue(nPos));
         aAttributes.push_back(make_pair(NS_rtf::LN_IBKL, pPos));
-        RTFSprms_t aSprms;
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
         Mapper().props(pProperties);
         return;
     }
@@ -542,8 +540,8 @@ void RTFDocumentImpl::text(OUString& rString)
     if (m_bFirstRun)
     {
         // output settings table
-        RTFSprms_t aDummyAttributes;
-        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aDummyAttributes, m_aSettingsTableSprms));
+        RTFSprms_t aAttributes;
+        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aAttributes, m_aSettingsTableSprms));
         RTFReferenceTable::Entries_t aSettingsTableEntries;
         aSettingsTableEntries.insert(make_pair(0, pProp));
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aSettingsTableEntries));
@@ -606,23 +604,14 @@ void RTFDocumentImpl::text(OUString& rString)
         }
     }
     if (!m_bTable && !m_bSuper)
-    {
-        OSL_TRACE("not table or super");
         Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
-    }
     else
     {
         RTFValue::Pointer_t pValue(new RTFValue(rString));
         if (m_bTable)
-        {
-            OSL_TRACE("table");
             m_aTableBuffer.push_back(make_pair(BUFFER_UTEXT, pValue));
-        }
         else
-        {
-            OSL_TRACE("pushing utext to super buffer");
             m_aSuperBuffer.push_back(make_pair(BUFFER_UTEXT, pValue));
-        }
     }
     if (!m_bTable && !m_bSuper && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
         Mapper().endCharacterGroup();
@@ -2094,8 +2083,8 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDETABLE)
     {
-        RTFSprms_t aDummyAttributes;
-        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aDummyAttributes, m_aListTableSprms));
+        RTFSprms_t aListTableAttributes;
+        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aListTableAttributes, m_aListTableSprms));
         RTFReferenceTable::Entries_t aListTableEntries;
         aListTableEntries.insert(make_pair(0, pProp));
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aListTableEntries));
