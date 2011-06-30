@@ -55,7 +55,9 @@ namespace writerfilter {
             DESTINATION_SHAPEINSTRUCTION,
             DESTINATION_SHAPEPROPERTYVALUEPICT,
             DESTINATION_NESTEDTABLEPROPERTIES,
-            DESTINATION_FOOTNOTE
+            DESTINATION_FOOTNOTE,
+            DESTINATION_BOOKMARKSTART,
+            DESTINATION_BOOKMARKEND
         };
 
         enum RTFBorderState
@@ -267,6 +269,8 @@ namespace writerfilter {
                 sal_uInt32 m_nGroupStartPos;
                 /// Ignore the first occurrence of this text.
                 rtl::OUString m_aIgnoreFirst;
+                /// Bookmark name <-> index map.
+                std::map<rtl::OUString, int> m_aBookmarks;
         };
     } // namespace rtftok
 } // namespace writerfilter

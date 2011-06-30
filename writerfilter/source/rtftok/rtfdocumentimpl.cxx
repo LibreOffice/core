@@ -155,7 +155,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bHasFootnote(false),
     m_bIsSubstream(false),
     m_nHeaderFooterPositions(),
-    m_nGroupStartPos(0)
+    m_nGroupStartPos(0),
+    m_aBookmarks()
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -450,7 +451,8 @@ int RTFDocumentImpl::resolveChars(char ch)
     OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
 
     if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT
-            || m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
+            || m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT || m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART
+            || m_aStates.top().nDestinationState == DESTINATION_BOOKMARKEND)
         text(aOUStr);
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
@@ -496,6 +498,35 @@ void RTFDocumentImpl::text(OUString& rString)
     if (m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
     {
         m_aStates.top().aLevelText.append(rString);
+        return;
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
+    {
+        int nPos = m_aBookmarks.size();
+        OSL_TRACE("debug, pushing bookmark #%d", nPos);
+        m_aBookmarks[rString] = nPos;
+
+        RTFSprms_t aAttributes;
+        RTFValue::Pointer_t pPos(new RTFValue(nPos));
+        aAttributes.push_back(make_pair(NS_rtf::LN_IBKL, pPos));
+        RTFValue::Pointer_t pString(new RTFValue(rString));
+        aAttributes.push_back(make_pair(NS_rtf::LN_BOOKMARKNAME, pString));
+        RTFSprms_t aSprms;
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+        Mapper().props(pProperties);
+        return;
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKEND)
+    {
+        int nPos = m_aBookmarks[rString];
+        OSL_TRACE("debug, looked up bookmark #%d", nPos);
+
+        RTFSprms_t aAttributes;
+        RTFValue::Pointer_t pPos(new RTFValue(nPos));
+        aAttributes.push_back(make_pair(NS_rtf::LN_IBKL, pPos));
+        RTFSprms_t aSprms;
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+        Mapper().props(pProperties);
         return;
     }
     if (m_aIgnoreFirst.getLength() && m_aIgnoreFirst.equals(rString))
@@ -803,6 +834,12 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 }
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
+            break;
+        case RTF_BKMKSTART:
+            m_aStates.top().nDestinationState = DESTINATION_BOOKMARKSTART;
+            break;
+        case RTF_BKMKEND:
+            m_aStates.top().nDestinationState = DESTINATION_BOOKMARKEND;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
