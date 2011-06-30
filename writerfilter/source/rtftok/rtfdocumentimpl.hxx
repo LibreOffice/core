@@ -198,7 +198,6 @@ namespace writerfilter {
                 void skipDestination(bool bParsed);
                 RTFSprms_t mergeSprms();
                 RTFSprms_t mergeAttributes();
-                int asHex(char ch);
                 void setSubstream(bool bIsSubtream);
                 void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
                 void resolveSubstream(sal_uInt32 nPos, Id nId);

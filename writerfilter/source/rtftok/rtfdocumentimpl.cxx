@@ -149,6 +149,30 @@ static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(
     return lcl_getBookmarkProperties(nPos, aStr);
 }
 
+static int lcl_AsHex(char ch)
+{
+    int ret = 0;
+    if (isdigit(ch))
+        ret = ch - '0';
+    else
+    {
+        if (islower(ch))
+        {
+            if (ch < 'a' || ch > 'f')
+                return -1;
+            ret = ch - 'a';
+        }
+        else
+        {
+            if (ch < 'A' || ch > 'F')
+                return -1;
+            ret = ch - 'A';
+        }
+        ret += 10;
+    }
+    return ret;
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -336,7 +360,7 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
         if (ch != 0x0d && ch != 0x0a)
         {
             b = b << 4;
-            char parsed = asHex(ch);
+            char parsed = lcl_AsHex(ch);
             if (parsed == -1)
                 return ERROR_HEX_INVALID;
             b += parsed;
@@ -2279,30 +2303,6 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector<std::pair<rtl::OUString
     }
 }
 
-int RTFDocumentImpl::asHex(char ch)
-{
-    int ret = 0;
-    if (isdigit(ch))
-        ret = ch - '0';
-    else
-    {
-        if (islower(ch))
-        {
-            if (ch < 'a' || ch > 'f')
-                return -1;
-            ret = ch - 'a';
-        }
-        else
-        {
-            if (ch < 'A' || ch > 'F')
-                return -1;
-            ret = ch - 'A';
-        }
-        ret += 10;
-    }
-    return ret;
-}
-
 int RTFDocumentImpl::resolveParse()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
@@ -2351,7 +2351,7 @@ int RTFDocumentImpl::resolveParse()
                     {
                         OSL_TRACE("%s: hex internal state", OSL_THIS_FUNC);
                         b = b << 4;
-                        char parsed = asHex(ch);
+                        char parsed = lcl_AsHex(ch);
                         if (parsed == -1)
                             return ERROR_HEX_INVALID;
                         b += parsed;
