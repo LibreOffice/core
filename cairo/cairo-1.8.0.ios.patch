@@ -1,0 +1,64 @@
+--- misc/build/cairo-1.8.0.org/src/cairo-quartz.h
++++ misc/build/cairo-1.8.0/src/cairo-quartz.h
+@@ -57,26 +57,28 @@
+ cairo_public CGContextRef
+ cairo_quartz_surface_get_cg_context (cairo_surface_t *surface);
+ 
++#endif /* CAIRO_HAS_QUARTZ_SURFACE */
++
+ #if CAIRO_HAS_QUARTZ_FONT
+ 
+ /*
+  * Quartz font support
+  */
+ 
++#include <CoreGraphics/CoreGraphics.h>
++
+ cairo_public cairo_font_face_t *
+ cairo_quartz_font_face_create_for_cgfont (CGFontRef font);
+ 
++#if 0
++
+ cairo_public cairo_font_face_t *
+ cairo_quartz_font_face_create_for_atsu_font_id (ATSUFontID font_id);
++
++#endif /* 0 */
+ 
+ #endif /* CAIRO_HAS_QUARTZ_FONT */
+ 
+ CAIRO_END_DECLS
+ 
+-#else
+-
+-# error Cairo was not compiled with support for the quartz backend
+-
+-#endif /* CAIRO_HAS_QUARTZ_SURFACE */
+-
+ #endif /* CAIRO_QUARTZ_H */
+--- misc/build/cairo-1.8.0.org/src/cairo-quartz-font.c
++++ misc/build/cairo-1.8.0/src/cairo-quartz-font.c
+@@ -39,7 +39,9 @@
+ #include <dlfcn.h>
+ 
+ #include "cairo-quartz.h"
++#if 0
+ #include "cairo-quartz-private.h"
++#endif
+ 
+ /* CreateWithFontName exists in 10.5, but not in 10.4; CreateWithName isn't public in 10.4 */
+ static CGFontRef (*CGFontCreateWithFontNamePtr) (CFStringRef) = NULL;
+@@ -766,6 +766,8 @@
+ }
+ 
+ 
++#if 0
++
+ /*
+  * compat with old ATSUI backend
+  */
+@@ -808,3 +808,5 @@
+ {
+     return cairo_quartz_font_face_create_for_atsu_font_id (font_id);
+ }
++
++#endif /* 0 */
