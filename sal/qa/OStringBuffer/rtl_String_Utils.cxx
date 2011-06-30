@@ -286,44 +286,6 @@ sal_uInt32 UStringLen( const sal_Unicode *pUStr )
 
 //------------------------------------------------------------------------
 
-sal_Bool AStringIsValid( const sal_Char  *pAStr )
-{
-    if ( pAStr != NULL )
-    {
-        sal_uInt32 nLen  = AStringLen( pAStr );
-        sal_uChar  uChar = 0;
-
-        while ( *pAStr )
-        {
-            uChar = (unsigned char)*pAStr;
-
-            if ( uChar > 127 )
-            {
-                return sal_False;
-            } // if
-
-            pAStr++;
-
-            // Since we are dealing with unsigned integers
-            // we want to make sure that the last number is
-            // indeed zero.
-
-            if ( nLen > 0 )
-            {
-                nLen--;
-            } // if
-            else
-            {
-                break;
-            } // else
-        } // while
-    } // if
-
-    return sal_True;
-} // AStringIsValid
-
-//------------------------------------------------------------------------
-
 sal_Bool AStringNIsValid( const sal_Char   *pAStr,
                           const sal_uInt32  nStrLen
                         )

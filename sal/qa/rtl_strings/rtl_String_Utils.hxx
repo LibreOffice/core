@@ -75,8 +75,6 @@ sal_Bool AStringToDoubleCompare ( const sal_Char  *pStr,
 
 //------------------------------------------------------------------------
 
-sal_Bool AStringIsValid( const sal_Char  *pAStr );
-
 sal_Bool AStringNIsValid( const sal_Char   *pAStr,
                           const sal_uInt32  nStrLen
                         );
