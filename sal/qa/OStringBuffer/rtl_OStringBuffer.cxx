@@ -319,6 +319,53 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
+
+    class  remove : public CppUnit::TestFixture
+    {
+    public:
+        void setUp()
+        {
+        }
+
+        void tearDown()
+        {
+        }
+
+        void remove_001()
+        {
+            ::rtl::OStringBuffer sb(
+                RTL_CONSTASCII_STRINGPARAM("Red Hat, Inc."));
+
+            sb.remove(0, 4);
+            CPPUNIT_ASSERT(sb.toString().equalsL(
+                RTL_CONSTASCII_STRINGPARAM("Hat, Inc.")));
+
+            sb.remove(3, 9);
+            CPPUNIT_ASSERT(sb.toString().equalsL(
+                RTL_CONSTASCII_STRINGPARAM("Hat")));
+
+            sb.remove(0, 100);
+
+            CPPUNIT_ASSERT(sb.toString().isEmpty());
+
+            sb.append(RTL_CONSTASCII_STRINGPARAM("Red Hat, Inc."));
+
+            sb.remove(3, 100);
+
+            CPPUNIT_ASSERT(sb.toString().equalsL(
+                RTL_CONSTASCII_STRINGPARAM("Red")));
+
+            sb.remove(0, sb.getLength());
+
+            CPPUNIT_ASSERT(sb.toString().isEmpty());
+        }
+
+        CPPUNIT_TEST_SUITE(remove);
+        CPPUNIT_TEST(remove_001);
+        CPPUNIT_TEST_SUITE_END();
+    };
+
+
 // -----------------------------------------------------------------------------
 
     class  getLength : public CppUnit::TestFixture
@@ -16555,6 +16602,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_008_float);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_008_Float_Negative);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_009_double);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_009_Double_Negative);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::remove);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

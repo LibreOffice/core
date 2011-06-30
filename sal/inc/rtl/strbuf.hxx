@@ -54,7 +54,7 @@ namespace rtl
     is compiled to the equivalent of:
     <p><blockquote><pre>
         x = new OStringBuffer().append("a").append(4).append("c")
-                              .toString()
+                              .makeStringAndClear()
     </pre></blockquote><p>
     The principal operations on a <code>OStringBuffer</code> are the
     <code>append</code> and <code>insert</code> methods, which are
@@ -670,6 +670,33 @@ public:
         sal_Char sz[RTL_STR_MAX_VALUEOFDOUBLE];
         return insert( offset, sz, rtl_str_valueOfDouble( sz, d ) );
     }
+
+    /**
+        Removes the characters in a substring of this sequence.
+
+        The substring begins at the specified <code>start</code> and
+        extends to the character at index <code>end - 1</code> or to
+        the end of the sequence if no such character exists. If
+        <code>start</code> is equal to <code>end</code>, no changes
+        are made.
+
+        start must be >= 0 && <= getLength() && <= end
+
+        As is usual for the rtl string classes, this is based
+        on an analogous Java StringBuffer member. In this
+        case <code>delete</code>, but because that's a reserved
+        keyword in C++, this is named <code>remove</code>.
+
+        @param  start       The beginning index, inclusive
+        @param  end         The ending index, exclusive
+        @return this string buffer.
+     */
+    OStringBuffer & remove( sal_Int32 start, sal_Int32 end )
+    {
+        rtl_stringbuffer_remove( &pData, start, end );
+        return *this;
+    }
+
 private:
     /**
         A pointer to the data structur which contains the data.

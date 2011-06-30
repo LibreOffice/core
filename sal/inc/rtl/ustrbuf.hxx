@@ -53,7 +53,7 @@ namespace rtl
     is compiled to the equivalent of:
     <p><blockquote><pre>
         x = new OUStringBuffer().append("a").append(4).append("c")
-                              .toString()
+                              .makeStringAndClear()
     </pre></blockquote><p>
     The principal operations on a <code>OUStringBuffer</code> are the
     <code>append</code> and <code>insert</code> methods, which are
@@ -95,7 +95,7 @@ public:
         Allocates a new string buffer that contains the same sequence of
         characters as the string buffer argument.
 
-        @param   value   a <code>OStringBuffer</code>.
+        @param   value   a <code>OUStringBuffer</code>.
      */
     OUStringBuffer( const OUStringBuffer & value )
         : pData(NULL)
@@ -279,7 +279,6 @@ public:
         of this OUStringBuffer.
      */
     const OUString toString() const { return OUString(pData->buffer); }
-
 
     /**
         The character at the specified index of this string buffer is set
@@ -736,6 +735,32 @@ public:
      */
     OUStringBuffer & insertUtf32(sal_Int32 offset, sal_uInt32 c) {
         rtl_uStringbuffer_insertUtf32(&pData, &nCapacity, offset, c);
+        return *this;
+    }
+
+    /**
+        Removes the characters in a substring of this sequence.
+
+        The substring begins at the specified <code>start</code> and
+        extends to the character at index <code>end - 1</code> or to
+        the end of the sequence if no such character exists. If
+        <code>start</code> is equal to <code>end</code>, no changes
+        are made.
+
+        start must be >= 0 && <= getLength() && <= end
+
+        As is usual for the rtl string classes, this is based
+        on an analogous Java StringBuffer member. In this
+        case <code>delete</code>, but because that's a reserved
+        keyword in C++, this is named <code>remove</code>.
+
+        @param  start       The beginning index, inclusive
+        @param  end         The ending index, exclusive
+        @return this string buffer.
+     */
+    OUStringBuffer & remove( sal_Int32 start, sal_Int32 end )
+    {
+        rtl_uStringbuffer_remove( &pData, start, end );
         return *this;
     }
 

@@ -146,4 +146,37 @@ void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
     }
 }
 
+/*************************************************************************
+ *  rtl_stringbuffer_remove
+ */
+void SAL_CALL rtl_stringbuffer_remove( rtl_String ** This,
+                                       sal_Int32 start,
+                                       sal_Int32 end )
+{
+    sal_Int32 nTailLen;
+    sal_Char * pBuf;
+    sal_Int32 n;
+
+    if (end > (*This)->length)
+        end = (*This)->length;
+
+    n = end - start;
+
+    //remove nothing
+    if (!n)
+        return;
+
+    pBuf = (*This)->buffer;
+    nTailLen = (*This)->length - end;
+
+    if (nTailLen)
+    {
+        /* move the tail */
+        rtl_moveMemory(pBuf + start, pBuf + end, nTailLen * sizeof(sal_Char));
+    }
+
+    (*This)->length-=n;
+    pBuf[ (*This)->length ] = 0;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
