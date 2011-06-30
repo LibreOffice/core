@@ -459,8 +459,8 @@ class UnoDialog(object):
 
         if self.xWindowPeer == None:
             self.createWindowPeer()
-
-        self.BisHighContrastModeActivated = self.isHighContrastModeActivated()
+        #COMMENTED
+        #self.BisHighContrastModeActivated = self.isHighContrastModeActivated()
         return self.xUnoDialog.execute()
 
     def setVisible(self, parent):
@@ -539,14 +539,6 @@ class UnoDialog(object):
         xControl = self.xUnoDialog.getControl(ControlName)
         xVclWindowPeer = self.xControl.getPeer()
         self.xContainerWindow.setProperty(PropertyName, PropertyValue)
-
-    @classmethod
-    def getModel(self, control):
-        return control.getModel()
-
-    @classmethod
-    def setEnabled(self, control, enabled):
-        setEnabled(control, enabled)
 
     @classmethod
     def setEnabled(self, control, enabled):
