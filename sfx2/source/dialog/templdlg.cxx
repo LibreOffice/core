@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <vcl/menu.hxx>
@@ -117,6 +118,39 @@ TYPEINIT1(SfxTemplateCatalog_Impl,SfxCommonTemplateDialog_Impl);
 SFX_IMPL_DOCKINGWINDOW(SfxTemplateDialogWrapper, SID_STYLE_DESIGNER)
 
 //-------------------------------------------------------------------------
+
+class SfxCommonTemplateDialog_Impl::DeletionWatcher : private boost::noncopyable
+{
+    typedef void (DeletionWatcher::* bool_type)();
+
+public:
+    explicit DeletionWatcher(SfxCommonTemplateDialog_Impl& rDialog)
+        : m_pDialog(&rDialog)
+    {
+        m_pDialog->impl_setDeletionWatcher(this);
+    }
+
+    ~DeletionWatcher()
+    {
+        if (m_pDialog)
+            m_pDialog->impl_setDeletionWatcher(0);
+    }
+
+    // Signal that the dialog was deleted
+    void signal()
+    {
+        m_pDialog = 0;
+    }
+
+    // Return true if the dialog was deleted
+    operator bool_type() const
+    {
+        return m_pDialog ? 0 : &DeletionWatcher::signal;
+    }
+
+private:
+    SfxCommonTemplateDialog_Impl* m_pDialog;
+};
 
 // Re-direct functions
 
@@ -743,7 +777,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     pCurObjShell            ( NULL ),
     xModuleManager          ( ::comphelper::getProcessServiceFactory()->createInstance(
                                 DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY ),
-    pbDeleted               ( NULL ),
+    m_pDeletionWatcher      ( NULL ),
 
     aFmtLb                  ( this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH ),
     aFilterLb               ( pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP ),
@@ -788,7 +822,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Mod
     pStyleSheetPool         ( NULL ),
     pTreeBox                ( NULL ),
     pCurObjShell            ( NULL ),
-    pbDeleted               ( NULL ),
+    m_pDeletionWatcher      ( NULL ),
 
     aFmtLb                  ( this, SfxResId( BT_VLIST ) ),
     aFilterLb               ( pW, SfxResId( BT_FLIST ) ),
@@ -966,6 +1000,11 @@ void SfxCommonTemplateDialog_Impl::impl_clear()
     DELETEZ( m_pStyleFamiliesId );
 }
 
+void SfxCommonTemplateDialog_Impl::impl_setDeletionWatcher(DeletionWatcher* pNewWatcher)
+{
+    m_pDeletionWatcher = pNewWatcher;
+}
+
 //-------------------------------------------------------------------------
 
 void SfxCommonTemplateDialog_Impl::Initialize()
@@ -998,11 +1037,8 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
     pStyleSheetPool = NULL;
     delete pTreeBox;
     delete pTimer;
-    if ( pbDeleted )
-    {
-        pbDeleted->bDead = true;
-        pbDeleted = NULL;
-    }
+    if ( m_pDeletionWatcher )
+        m_pDeletionWatcher->signal();
 }
 
 //-------------------------------------------------------------------------
@@ -1703,15 +1739,15 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 
     pItems[ nCount++ ] = 0;
 
-    Deleted aDeleted;
-    pbDeleted = &aDeleted;
+    DeletionWatcher aDeleted(*this);
     sal_uInt16 nModi = pModifier ? *pModifier : 0;
     const SfxPoolItem* pItem = rDispatcher.Execute(
         nId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
         pItems, nModi );
 
-    // FIXME: Dialog can be destroyed while in Execute() check stack variable for dtor flag!
-    if ( !pItem || aDeleted() )
+    // Dialog can be destroyed while in Execute() because started
+    // subdialogs are not modal to it (#i97888#).
+    if ( !pItem || aDeleted )
         return sal_False;
 
     if ( nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId )
@@ -1733,10 +1769,6 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
         }
     }
 
-    // Reset destroyed flag otherwise we use the pointer in the dtor
-    // where the local stack object is already destroyed. This would
-    // overwrite objects on the stack!! See #i100110
-    pbDeleted = NULL;
     return sal_True;
 }
 

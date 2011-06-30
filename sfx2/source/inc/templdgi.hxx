@@ -103,18 +103,12 @@ public:
 
 // class SfxCommonTemplateDialog_Impl ------------------------------------
 
-struct Deleted
-{
-    bool bDead;
-
-    Deleted() : bDead(false) {}
-
-    inline bool operator()() { return bDead; }
-};
-
 class SfxCommonTemplateDialog_Impl : public SfxListener
 {
 private:
+    class DeletionWatcher;
+    friend class DeletionWatcher;
+
     class ISfxTemplateCommon_Impl : public ISfxTemplateCommon
     {
     private:
@@ -130,6 +124,7 @@ private:
     void    ReadResource();
     void    ClearResource();
     void impl_clear();
+    void impl_setDeletionWatcher(DeletionWatcher* pNewWatcher);
 
 protected:
 #define MAX_FAMILIES            5
@@ -157,7 +152,7 @@ protected:
     SfxObjectShell*             pCurObjShell;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >
                                 xModuleManager;
-    Deleted*                    pbDeleted;
+    DeletionWatcher*            m_pDeletionWatcher;
 
     SfxActionListBox            aFmtLb;
     ListBox                     aFilterLb;
