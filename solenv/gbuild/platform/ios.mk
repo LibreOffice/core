@@ -31,21 +31,19 @@ COM := GCC
 # Darwin mktemp -t expects a prefix, not a pattern
 gb_MKTEMP := /usr/bin/mktemp -t gbuild.
 
-gb_CC := "gcc-4.2 -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk"
-gb_CXX := "g++-4.2 -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk"
-gb_GCCP := "gcc-4.2 -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk"
+ifeq ($(CC),)
+$(error You must set CC in the environment. See README.cross for example.)
+endif
+ifeq ($(CXX),)
+$(error You must set CXX in the environment. See README.cross for example.)
+endif
+
+gb_CC := $(CC)
+gb_CXX := $(CXX)
+gb_GCCP := $(CC)
 gb_AR := ar
 gb_AWK := awk
 gb_CLASSPATHSEP := :
-
-# use CC/CXX if they are nondefaults
-ifneq ($(origin CC),default)
-gb_CC := $(CC)
-gb_GCCP := $(CC)
-endif
-ifneq ($(origin CXX),default)
-gb_CXX := $(CXX)
-endif
 
 gb_OSDEFS := \
 	-D$(OS) \
@@ -63,11 +61,7 @@ gb_COMPILERDEFS := \
 
 gb_CPUDEFS := -DARM32
 
-gb_SDKDIR := /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
-
-
 gb_CFLAGS := \
-	-isysroot $(gb_SDKDIR) \
 	-Wall \
 	-Wendif-labels \
 	-Wextra \
@@ -78,7 +72,6 @@ gb_CFLAGS := \
 	-pipe \
 
 gb_CXXFLAGS := \
-	-isysroot $(gb_SDKDIR) \
 	-Wall \
 	-Wendif-labels \
 	-Wextra \
@@ -115,7 +108,6 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-fno-exceptions \
 
 gb_LinkTarget_LDFLAGS := \
-	-Wl,-syslibroot,$(gb_SDKDIR) \
 	$(subst -L../lib , ,$(SOLARLIB)) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 
