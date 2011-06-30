@@ -345,22 +345,16 @@ public:
     static void QuotHTML( ByteString &rString );
     static bool CopyFile( const ByteString& source , const ByteString& dest );
 
-    static void QuotHTMLXRM( ByteString &rString );
     static void UnquotHTML( ByteString &rString );
 
     static const char* GetEnv( const char *pVar );
-    static int getCurrentDirectory( rtl::OUString& base_fqurl , rtl::OUString& base );
 
     static bool isSourceLanguage( const ByteString &sLanguage );
     static bool isAllowed( const ByteString &sLanguage );
 
-    static bool LanguageAllowed( const ByteString &nLanguage );
     static void Languages( std::vector<ByteString>::const_iterator& begin , std::vector<ByteString>::const_iterator& end );
     static void getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix  );
-    static void getRandomName( ByteString& sRandStr );
     static void getCurrentDir( std::string& dir );
-
-    static void replaceEncoding( ByteString& rString );
 
     static ByteString GetFallbackLanguage( const ByteString nLanguage );
     static void FillInFallbacks( ResData *pResData );
@@ -377,8 +371,6 @@ private:
     static std::vector<ByteString> aLanguages;
     static std::vector<ByteString> aForcedLanguages;
 
-    sal_Bool ListExists( ResData *pResData, sal_uInt16 nLst );
-
     sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False );// called befor dest. cur ResData
     sal_Bool WriteExportList( ResData *pResData, ExportList *pExportList,
                         const ByteString &rTyp, sal_Bool bCreateNew = sal_False );
@@ -393,7 +385,6 @@ private:
     ByteString GetPairedListString  ( const ByteString& sText );
     ByteString StripList    ( const ByteString& sText );
 
-    void UnmergeUTF8( ByteString& sOrig );
     void InsertListEntry( const ByteString &rText, const ByteString &rLine );
     void CleanValue( ByteString &rValue );
     ByteString GetText( const ByteString &rSource, int nToken );

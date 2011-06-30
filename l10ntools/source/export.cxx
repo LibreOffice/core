@@ -1155,31 +1155,6 @@ void Export::CutComment( ByteString &rText )
     }
 }
 
-void Export::UnmergeUTF8( ByteString& sOrig ){
-    sal_uInt16 nPos1 = sOrig.Search('\"');
-    sal_uInt16 nPos2 = sOrig.SearchBackward('\"');
-    if( nPos1 > 0 && nPos2 > 0 && nPos1 < nPos2){
-        ByteString sPart = sOrig.Copy(nPos1+1 , nPos2-1);
-        ByteString sPartUTF8 = sPart;
-        sPartUTF8.Convert( RTL_TEXTENCODING_MS_1252 , RTL_TEXTENCODING_UTF8 );
-        sOrig.SearchAndReplace( sPart , sPartUTF8 );
-    }
-}
-
-/*****************************************************************************/
-sal_Bool Export::ListExists( ResData *pResData, sal_uInt16 nLst )
-/*****************************************************************************/
-{
-    switch ( nLst ) {
-        case LIST_STRING: return pResData->pStringList != NULL;
-        case LIST_FILTER: return pResData->pFilterList != NULL;
-        case LIST_ITEM: return pResData->pItemList != NULL;
-        case LIST_PAIRED: return pResData->pPairedList != NULL;
-        case LIST_UIENTRIES: return pResData->pUIEntries != NULL;
-    }
-    return sal_False;
-}
-
 /*****************************************************************************/
 sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
 /*****************************************************************************/

@@ -454,7 +454,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 
     static const ByteString INPATH = Export::GetEnv( "INPATH" );
     Export::getRandomName( sPath , sTempFile , INPATH );
-      Export::getRandomName( sPath , sTempFileCopy , INPATH );
+    Export::getRandomName( sPath , sTempFileCopy , INPATH );
     // Write in the temp file
     bool hasNoError = file->Write ( sTempFile );
     if( !hasNoError )

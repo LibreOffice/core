@@ -648,7 +648,6 @@ void XRMResMerge::WorkOnText(
                 {
                     rText = sContent;
                     ConvertStringToXMLFormat( rText );
-                    //Export::QuotHTMLXRM( rText );
                 }
             }
     }
