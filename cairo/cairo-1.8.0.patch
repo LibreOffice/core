@@ -197,6 +197,14 @@ diff -ur misc/build/cairo-1.8.0.org/configure misc/build/cairo-1.8.0/configure
  
  
  { echo "$as_me:$LINENO: checking for X" >&5
+@@ -29865,7 +29865,6 @@
+ quartz_font_NONPKGCONFIG_LIBS="$ac_env_quartz_font_NONPKGCONFIG_LIBS_value"
+ 
+ 
+-  use_quartz_font=$use_quartz
+ 
+ 			cairo_cv_quartz_font_use=$use_quartz_font
+ 			cairo_cv_quartz_font_cache_vars=" BASE REQUIRES CFLAGS NONPKGCONFIG_CFLAGS LIBS NONPKGCONFIG_LIBS"
 @@ -31723,7 +31723,7 @@
  
    if test "x$png_REQUIRES" = x; then
@@ -283,3 +291,67 @@ diff -ur misc/build/cairo-1.8.0.org/src/cairo-ps-surface.c misc/build/cairo-1.8.
      decimal_point_len = strlen (decimal_point);
  
      assert (decimal_point_len != 0);
+--- misc/build/cairo-1.8.0.org/src/cairo-quartz.h
++++ misc/build/cairo-1.8.0/src/cairo-quartz.h
+@@ -57,26 +57,28 @@
+ cairo_public CGContextRef
+ cairo_quartz_surface_get_cg_context (cairo_surface_t *surface);
+ 
++#endif /* CAIRO_HAS_QUARTZ_SURFACE */
++
+ #if CAIRO_HAS_QUARTZ_FONT
+ 
+ /*
+  * Quartz font support
+  */
+ 
++#include <CoreGraphics/CoreGraphics.h>
++
+ cairo_public cairo_font_face_t *
+ cairo_quartz_font_face_create_for_cgfont (CGFontRef font);
+ 
++#if !TARGET_OS_IPHONE
++
+ cairo_public cairo_font_face_t *
+ cairo_quartz_font_face_create_for_atsu_font_id (ATSUFontID font_id);
++
++#endif /* !TARGET_OS_IPHONE */
+ 
+ #endif /* CAIRO_HAS_QUARTZ_FONT */
+ 
+ CAIRO_END_DECLS
+ 
+-#else
+-
+-# error Cairo was not compiled with support for the quartz backend
+-
+-#endif /* CAIRO_HAS_QUARTZ_SURFACE */
+-
+ #endif /* CAIRO_QUARTZ_H */
+--- misc/build/cairo-1.8.0.org/src/cairo-quartz-font.c
++++ misc/build/cairo-1.8.0/src/cairo-quartz-font.c
+@@ -39,7 +39,9 @@
+ #include <dlfcn.h>
+ 
+ #include "cairo-quartz.h"
++#if !TARGET_OS_IPHONE
+ #include "cairo-quartz-private.h"
++#endif
+ 
+ /* CreateWithFontName exists in 10.5, but not in 10.4; CreateWithName isn't public in 10.4 */
+ static CGFontRef (*CGFontCreateWithFontNamePtr) (CFStringRef) = NULL;
+@@ -766,6 +766,8 @@
+ }
+ 
+ 
++#if !TARGET_OS_IPHONE
++
+ /*
+  * compat with old ATSUI backend
+  */
+@@ -808,3 +808,5 @@
+ {
+     return cairo_quartz_font_face_create_for_atsu_font_id (font_id);
+ }
++
++#endif /* !TARGET_OS_IPHONE */

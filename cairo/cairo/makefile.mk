@@ -143,21 +143,21 @@ cairo_CFLAGS+=-march=i486
 
 CONFIGURE_DIR=
 
-.IF "$(OS)"=="ANDROID"
-# No pkg-config in the Android NDK
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+# No pkg-config on MacOSX (for iOS) or in the Android NDK
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
 .ELSE
 CONFIGURE_ACTION=.$/configure
 .ENDIF
 
 .IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS=--disable-shared
+CONFIGURE_FLAGS=--disable-shared --disable-xlib --disable-quartz --enable-quartz-font=yes
 .ELSE
 CONFIGURE_FLAGS=--disable-static --enable-xlib
 .ENDIF
 
-.IF "$(OS)"=="ANDROID"
-CONFIGURE_FLAGS+=--disable-ft
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+CONFIGURE_FLAGS+=--disable-ft PKG_CONFIG=./dummy_pkg_config
 .ELSE
 CONFIGURE_FLAGS+=--enable-ft
 .ENDIF
@@ -222,7 +222,7 @@ OUT2LIB+=src$/release$/*.lib
 OUT2BIN+=src$/release$/*.dll
 .ENDIF
 .ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
-OUT2LIB+=src$/.libs$/libcairo-1.a
+OUT2LIB+=src$/.libs$/libcairo*.a
 .ELSE
 OUT2LIB+=src$/.libs$/libcairo.so*
 .ENDIF
