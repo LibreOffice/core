@@ -35,6 +35,18 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
+#include <cppunit/Protector.h>
+
+namespace cppunittester
+{
+    class LibreOfficeProtecter : public CppUnit::Protector
+    {
+    public:
+        virtual bool protect(CppUnit::Functor const & functor) = 0;
+        using CppUnit::Protector::protect;
+    };
+}
+
 #undef CPPUNIT_PLUGIN_EXPORT
 #define CPPUNIT_PLUGIN_EXPORT extern "C" SAL_DLLPUBLIC_EXPORT
 
