@@ -310,6 +310,24 @@ UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
 XMLREADERLIB=-lxmlreader
 
+.IF "$(OS)" == "IOS"
+
+# As we build static libraries for iOS, we append to each library its
+# dependencies, recursively. Start from the bottom of the dependency
+# stack. This is experimental and obviously incomplete.
+
+UCBHELPERLIB+=$(SALHELPERLIB)
+
+UNOTOOLSLIB+=$(I18NISOLANGLIB)
+UNOTOOLSLIB+=$(UCBHELPERLIB)
+
+TOOLSLIB+=$(BASEGFXLIB)
+TOOLSLIB+=$(ZLIB3RDLIB)
+
+VCLLIB+=$(ICUUCLIB)
+
+.ENDIF
+
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
 ODMA_LIB_LIB=odma_lib.lib
