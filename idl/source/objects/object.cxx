@@ -356,7 +356,8 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
             if( nId1 == nId2 && nId1 != 0 )
             {
                 OSL_FAIL( "Gleiche Id in MetaClass : " );
-                OSL_FAIL( ByteString::CreateFromInt32( pS->GetSlotId().GetValue() ).GetBuffer() );
+                OSL_FAIL(rtl::OString::valueOf(static_cast<sal_Int32>(
+                    pS->GetSlotId().GetValue())).getStr());
                 OSL_FAIL( pS->GetSlotId().GetBuffer() );
                 OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
 
@@ -719,8 +720,12 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
     << '{' << endl
     << "\tSvGlobalName aN( " << ByteString( pMod->GetUUId().GetctorName(), RTL_TEXTENCODING_UTF8 ).GetBuffer() << " );" << endl;
     rOutStm << "\t*pGN = aN;" << endl
-    << "\t*pMajor = " << ByteString::CreateFromInt32(pMod->GetVersion().GetMajorVersion()).GetBuffer() << ';' << endl
-    << "\t*pMinor = " << ByteString::CreateFromInt32(pMod->GetVersion().GetMinorVersion()).GetBuffer() << ';' << endl
+    << "\t*pMajor = "
+    << rtl::OString::valueOf(static_cast<sal_Int32>(pMod->GetVersion().GetMajorVersion())).getStr()
+    << ';' << endl
+    << "\t*pMinor = "
+    << rtl::OString::valueOf(static_cast<sal_Int32>(pMod->GetVersion().GetMinorVersion())).getStr()
+    << ';' << endl
     << "\treturn sal_True;" << endl
     << '}' << endl;
 
@@ -730,8 +735,12 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
     << "\t                               sal_uInt16 * pMinor ) const" << endl;
     rOutStm << '{' << endl
     << "\t*pName = \"" << pMod->GetTypeLibFileName().GetBuffer()  << "\";" << endl
-    << "\t*pMajor = " << ByteString::CreateFromInt32(pMod->GetVersion().GetMajorVersion()).GetBuffer() << ';' << endl
-    << "\t*pMinor = " << ByteString::CreateFromInt32(pMod->GetVersion().GetMinorVersion()).GetBuffer() << ';' << endl
+    << "\t*pMajor = "
+    << rtl::OString::valueOf(static_cast<sal_Int32>(pMod->GetVersion().GetMajorVersion())).getStr()
+    << ';' << endl
+    << "\t*pMinor = "
+    << rtl::OString::valueOf(static_cast<sal_Int32>(pMod->GetVersion().GetMinorVersion())).getStr()
+    << ';' << endl
     << "\treturn sal_True;" << endl
     << '}' << endl;
 

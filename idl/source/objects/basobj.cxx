@@ -587,8 +587,11 @@ void SvMetaExtern::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
     WriteTab( rOutStm, nTab );
     rOutStm << "uuid(" << ByteString( GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8 ).GetBuffer() << ")," << endl;
     WriteTab( rOutStm, nTab );
-    rOutStm << "version(" << ByteString::CreateFromInt32( aVersion.GetMajorVersion() ).GetBuffer() << '.'
-             << ByteString::CreateFromInt32( aVersion.GetMinorVersion() ).GetBuffer() << ")," << endl;
+    rOutStm << "version("
+        << rtl::OString::valueOf(static_cast<sal_Int32>(aVersion.GetMajorVersion())).getStr()
+        << '.'
+        << rtl::OString::valueOf(static_cast<sal_Int32>(aVersion.GetMinorVersion())).getStr()
+        << ")," << endl;
 }
 
 #endif // IDL_COMPILER

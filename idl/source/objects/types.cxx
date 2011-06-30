@@ -425,8 +425,8 @@ void SvMetaAttribute::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm
             {
                 WriteTab( rOutStm, nTab );
                 rOutStm << "id("
-                        << ByteString::CreateFromInt32(MakeSlotValue( rBase, bVar )).GetBuffer()
-                        << ")," << endl;
+                    << rtl::OString::valueOf(static_cast<sal_Int32>(MakeSlotValue(rBase,bVar))).getStr()
+                    << ")," << endl;
             }
             if( bVar && (bReadonly || IsMethod()) )
             {
@@ -467,7 +467,7 @@ void SvMetaAttribute::WriteCSource( SvIdlDataBase & rBase, SvStream & rOutStm,
         }
     }
     rOutStm << "pODKCallFunction( "
-            << ByteString::CreateFromInt32(MakeSlotValue( rBase, IsVariable() )).GetBuffer();
+        << rtl::OString::valueOf(static_cast<sal_Int32>(MakeSlotValue(rBase, IsVariable()))).getStr();
     rOutStm << ',' << endl;
     WriteTab( rOutStm, 3 );
     rOutStm << " h" << rBase.aIFaceName.GetBuffer() << " , ";
@@ -1428,7 +1428,8 @@ void SvMetaType::WriteSfxItem(
     ByteString  aTypeName = "SfxType";
     ByteString  aAttrArray;
     sal_uLong   nAttrCount = MakeSfx( &aAttrArray );
-    ByteString  aAttrCount( ByteString::CreateFromInt32( nAttrCount ) );
+    ByteString  aAttrCount(
+        rtl::OString::valueOf(static_cast<sal_Int32>(nAttrCount)));
     aTypeName += aAttrCount;
 
     rOutStm << "extern " << aTypeName.GetBuffer()
