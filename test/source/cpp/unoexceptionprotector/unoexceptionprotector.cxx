@@ -28,6 +28,7 @@
 
 #include <limits>
 #include <string>
+#include <iostream>
 
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Any.hxx"
@@ -39,8 +40,8 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
+#include "protectorfactory.hxx"
 #include "cppunit/Message.h"
-#include "cppunit/Protector.h"
 
 namespace {
 
@@ -57,7 +58,8 @@ std::string convert(rtl::OUString const & s16) {
          : static_cast< std::string::size_type >(s8.getLength())));
 }
 
-class Prot: public CppUnit::Protector, private boost::noncopyable {
+class Prot : public cppunittester::LibreOfficeProtector, private boost::noncopyable
+{
 public:
     Prot() {}
 
@@ -66,6 +68,8 @@ public:
     virtual bool protect(
         CppUnit::Functor const & functor,
         CppUnit::ProtectorContext const & context);
+
+    virtual bool protect(CppUnit::Functor const & functor);
 };
 
 bool Prot::protect(
@@ -73,7 +77,7 @@ bool Prot::protect(
 {
     try {
         return functor();
-    } catch (css::uno::Exception & e) {
+    } catch (const css::uno::Exception &e) {
         css::uno::Any a(cppu::getCaughtException());
         reportError(
             context,
@@ -81,9 +85,27 @@ bool Prot::protect(
                 convert(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
-                            "uncaught exception of type "))
+                            "An uncaught exception of type "))
                     + a.getValueTypeName()),
                 convert(e.Message)));
+    }
+    return false;
+}
+
+bool Prot::protect(CppUnit::Functor const & functor)
+{
+    try {
+        return functor();
+    } catch (const css::uno::Exception &e) {
+        css::uno::Any a(cppu::getCaughtException());
+        std::cerr
+            << convert(rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "An uncaught exception of type "))
+                        + a.getValueTypeName())
+            << std::endl << "Exception Message was: " << convert(e.Message)
+            << std::endl;
+        throw;
     }
     return false;
 }
