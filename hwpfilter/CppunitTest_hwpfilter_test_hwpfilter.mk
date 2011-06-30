@@ -67,6 +67,7 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,hwpfilter_test_hwpfilter,\
 $(eval $(call gb_CppunitTest_set_args,hwpfilter_test_hwpfilter,\
     --headless \
     --invisible \
+    --protector unoexceptionprotector$(gb_Library_PLAINEXT) unoexceptionprotector \
 ))
 
 $(eval $(call gb_RdbTarget_RdbTarget,hwpfilter_test_hwpfilter))
