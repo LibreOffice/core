@@ -177,16 +177,16 @@ findunusedcode:
 # experimental callcatcher target
 # http://www.skynet.ie/~caolan/Packages/callcatcher.html
 	@which callcatcher > /dev/null 2>&1 || \
-         (echo "callcatcher not installed" && false)
+	 (echo "callcatcher not installed" && false)
 	@. ./*Env.Set.sh && \
-            source <(sed -e s,$$INPATH,callcatcher,g ./*Env.Set.sh) && \
-            . ./solenv/bin/callcatchEnv.Set.sh && \
-            cd instsetoo_native && \
-            build.pl $(GBUILD_OPT) --all
+	   source <(sed -e s,$$INPATH,callcatcher,g ./*Env.Set.sh) && \
+	   . ./solenv/bin/callcatchEnv.Set.sh && \
+	   cd instsetoo_native && \
+	   build.pl $(GBUILD_OPT) --all
 	@. ./*Env.Set.sh && \
-            . ./solenv/bin/callcatchEnv.Set.sh && \
-	    callanalyse \
-                $$OUTDIR/lib/* \
-                $$OUTDIR/bin/* \
-                */$$OUTPATH/bin/* \
-                */$$OUTPATH/lib/*
+	   source <(sed -e s,$$INPATH,callcatcher,g ./*Env.Set.sh) && \
+	   callanalyse \
+	       $$OUTDIR/lib/* \
+	       $$OUTDIR/bin/* \
+	       */$$OUTPATH/bin/* \
+	       */$$OUTPATH/lib/* > unusedcode
