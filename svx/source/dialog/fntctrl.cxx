@@ -187,6 +187,7 @@ public:
         cStartBracket( 0 ), cEndBracket( 0 ), nFontWidthScale( 100 ),
         bSelection( sal_False ), bGetSelection( sal_False ), bUseResText( sal_False ),
         bDrawBaseLine( sal_True ), bPreviewBackgroundToCharacter( sal_False ), bTwoLines( sal_False ),
+        bNoLines( sal_False ),
         bIsCJKUI( sal_False ), bIsCTLUI( sal_False ),
         bUseFontNameAsText( sal_False ), bTextInited( sal_False )
         {
