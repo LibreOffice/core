@@ -90,6 +90,7 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,starmath_qa_cppunit,\
 $(eval $(call gb_CppunitTest_set_args,starmath_qa_cppunit,\
     --headless \
     --invisible \
+    --protector unoexceptionprotector$(gb_Library_PLAINEXT) unoexceptionprotector \
 ))
 
 $(eval $(call gb_RdbTarget_RdbTarget,starmath_qa_cppunit))
