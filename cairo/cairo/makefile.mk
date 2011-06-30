@@ -184,12 +184,10 @@ OUT2INC+=src$/cairo-xlib.h \
 .IF "$(OS)" != "WNT" || "$(COM)" == "GCC"
 # all other platforms except vanilla WNT, which does not use configure
 
-.IF "$(BUILD_PIXMAN)" == "YES"
 # pixman is in this module
 # We include paths to this module also in LDFLAGS/CFLAGS to guarantee search order.
 # However pixman_* vars need to be also set for configure to work properly on all platforms.
 CONFIGURE_FLAGS+=pixman_CFLAGS="-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc" pixman_LIBS="-L$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/lib -lpixman-1"
-.ENDIF
 
 .IF "$(debug)"!=""
 cairo_CFLAGS+=-g
