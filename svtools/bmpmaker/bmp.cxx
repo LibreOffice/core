@@ -40,7 +40,6 @@ using namespace std;
 #include <vcl/svapp.hxx>
 
 #include "svl/solar.hrc"
-#include <svtools/filedlg.hxx>
 #include "bmpcore.hxx"
 #include "bmp.hrc"
 

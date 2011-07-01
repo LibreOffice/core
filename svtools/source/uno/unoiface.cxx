@@ -34,7 +34,6 @@
 #include <vcl/svapp.hxx>
 #include <svtools/svmedit.hxx>
 #include <unoiface.hxx>
-#include <svtools/filedlg.hxx>
 #include <svtools/filectrl.hxx>
 #include <svtools/roadmap.hxx>
 #include <svtools/fixedhyper.hxx>
