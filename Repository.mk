@@ -84,6 +84,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     rpt \
     rptui \
     rptxml \
+    rtftok \
     sax \
     sb \
     sc \
