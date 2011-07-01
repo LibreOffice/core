@@ -295,6 +295,7 @@ gb_Library_TARGETTYPEFLAGS := -shared -Wl,-z,noexecstack
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .so
+gb_Library_DLLEXT := .so
 gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)

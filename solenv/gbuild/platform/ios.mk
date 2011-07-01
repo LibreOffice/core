@@ -270,6 +270,7 @@ gb_Library_DEFS :=
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .a
+gb_Library_DLLEXT := .a
 gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)

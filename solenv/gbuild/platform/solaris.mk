@@ -243,6 +243,7 @@ gb_Library_TARGETTYPEFLAGS := -Bdynamic -z text -G
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .so
+gb_Library_DLLEXT := .so
 gb_Library_RTEXT := C52$(gb_Library_PLAINEXT)
 
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
