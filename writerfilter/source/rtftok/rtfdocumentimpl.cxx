@@ -566,17 +566,7 @@ int RTFDocumentImpl::resolveChars(char ch)
 
     OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
 
-    if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
-    {
-        // this is a font name, drop the ; at the end if it's there
-        if (aOUStr.endsWithAsciiL(";", 1))
-        {
-            aOUStr = aOUStr.copy(0, aOUStr.getLength() - 1);
-        }
-        RTFValue::Pointer_t pValue(new RTFValue(aOUStr));
-        m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_XSZFFN, pValue));
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_COLORTABLE)
+    if (m_aStates.top().nDestinationState == DESTINATION_COLORTABLE)
     {
         // we hit a ';' at the end of each color entry
         sal_uInt32 color = (m_aStates.top().aCurrentColor.nRed << 16) | ( m_aStates.top().aCurrentColor.nGreen << 8)
@@ -622,9 +612,15 @@ void RTFDocumentImpl::text(OUString& rString)
     {
         // this is an author name, drop the ; at the end if it's there
         if (rString.endsWithAsciiL(";", 1))
-        {
             rString = rString.copy(0, rString.getLength() - 1);
-        }
+        m_aDestinationText.append(rString);
+        return;
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
+    {
+        // this is a font name, drop the ; at the end if it's there
+        if (rString.endsWithAsciiL(";", 1))
+            rString = rString.copy(0, rString.getLength() - 1);
         m_aDestinationText.append(rString);
         return;
     }
@@ -2219,6 +2215,9 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
+        RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
+        m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_XSZFFN, pValue));
+
         bFontEntryEnd = true;
         writerfilter::Reference<Properties>::Pointer_t const pProp(
                 new RTFReferenceProperties(m_aStates.top().aTableAttributes, m_aStates.top().aTableSprms)
