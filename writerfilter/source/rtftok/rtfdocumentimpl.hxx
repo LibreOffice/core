@@ -146,8 +146,6 @@ namespace writerfilter {
 
                 rtl_TextEncoding nCurrentEncoding;
 
-                rtl::OStringBuffer aFieldInstruction;
-
                 /// Current \uc value.
                 int nUc;
                 /// Characters to skip, set to nUc by \u.

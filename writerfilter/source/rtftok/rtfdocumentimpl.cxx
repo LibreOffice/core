@@ -494,7 +494,9 @@ int RTFDocumentImpl::resolveChars(char ch)
 
     OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
 
-    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT
+    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL
+            || m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION
+            || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT
             || m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT || m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART
             || m_aStates.top().nDestinationState == DESTINATION_BOOKMARKEND)
         text(aOUStr);
@@ -527,8 +529,6 @@ int RTFDocumentImpl::resolveChars(char ch)
         RTFValue::Pointer_t pValue(new RTFValue(aOUStr));
         m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_XSTZNAME1, pValue));
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
-        m_aStates.top().aFieldInstruction.append(aStr);
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME)
         m_aStates.top().aShapeProperties.push_back(make_pair(aOUStr, OUString()));
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE)
@@ -599,13 +599,6 @@ void RTFDocumentImpl::text(OUString& rString)
         return;
     }
 
-    if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
-    {
-        sal_uInt8 sFieldStart[] = { 0x13 };
-        Mapper().startCharacterGroup();
-        Mapper().text(sFieldStart, 1);
-        Mapper().endCharacterGroup();
-    }
     if (!m_bTable && !m_bSuper && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
         Mapper().startCharacterGroup();
     else
@@ -653,13 +646,6 @@ void RTFDocumentImpl::text(OUString& rString)
             m_aTableBuffer.push_back(make_pair(BUFFER_ENDRUN, pValue));
         else
             m_aSuperBuffer.push_back(make_pair(BUFFER_ENDRUN, pValue));
-    }
-    if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
-    {
-        sal_uInt8 sFieldSep[] = { 0x14 };
-        Mapper().startCharacterGroup();
-        Mapper().text(sFieldSep, 1);
-        Mapper().endCharacterGroup();
     }
 }
 
@@ -724,7 +710,13 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             // A field consists of an fldinst and an fldrslt group.
             break;
         case RTF_FLDINST:
-            m_aStates.top().nDestinationState = DESTINATION_FIELDINSTRUCTION;
+            {
+                sal_uInt8 sFieldStart[] = { 0x13 };
+                Mapper().startCharacterGroup();
+                Mapper().text(sFieldStart, 1);
+                Mapper().endCharacterGroup();
+                m_aStates.top().nDestinationState = DESTINATION_FIELDINSTRUCTION;
+            }
             break;
         case RTF_FLDRSLT:
             m_aStates.top().nDestinationState = DESTINATION_FIELDRESULT;
@@ -889,6 +881,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     {
         case RTF_LINE: cCh = '\n'; break;
         case RTF_TAB: cCh = '\t'; break;
+        case RTF_BACKSLASH: cCh = '\\'; break;
         case RTF_EMDASH: cCh = 151; break;
         case RTF_ENDASH: cCh = 150; break;
         case RTF_BULLET: cCh = 149; break;
@@ -927,12 +920,6 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_SECT:
                 sectBreak();
-            break;
-        case RTF_BACKSLASH:
-            if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
-                m_aStates.top().aFieldInstruction.append('\\');
-            else
-                OSL_TRACE("%s: TODO handle symbol '%s' outside fields", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             break;
         case RTF_NOBREAK:
             {
@@ -2163,8 +2150,10 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
-        OUString aOUStr(OStringToOUString(m_aStates.top().aFieldInstruction.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
-        text(aOUStr);
+        sal_uInt8 sFieldSep[] = { 0x14 };
+        Mapper().startCharacterGroup();
+        Mapper().text(sFieldSep, 1);
+        Mapper().endCharacterGroup();
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
     {
@@ -2407,7 +2396,6 @@ RTFParserState::RTFParserState()
     aStyleTableEntries(),
     nCurrentStyleIndex(0),
     nCurrentEncoding(0),
-    aFieldInstruction(),
     nUc(1),
     nCharsToSkip(0),
     nListLevelNum(0),
