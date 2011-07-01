@@ -545,7 +545,7 @@ public:
     void appendTableManager( )
     {
         boost::shared_ptr< DomainMapperTableManager > pMngr(
-                new DomainMapperTableManager( m_eDocumentType == DOCUMENT_OOXML ) );
+                new DomainMapperTableManager( m_eDocumentType == DOCUMENT_OOXML || m_eDocumentType == DOCUMENT_RTF ) );
         m_aTableManagers.push( pMngr );
     }
 
@@ -561,6 +561,8 @@ public:
     DeletableTabStop                m_aCurrentTabStop;
 
     bool IsOOXMLImport() const { return m_eDocumentType == DOCUMENT_OOXML; }
+
+    bool IsRTFImport() const { return m_eDocumentType == DOCUMENT_RTF; }
 
     void InitPageMargins() { m_aPageMargins = _PageMar(); }
     void SetPageMarginTwip( PageMarElement eElement, sal_Int32 nValue );

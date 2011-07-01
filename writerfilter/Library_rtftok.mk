@@ -29,8 +29,13 @@
 $(eval $(call gb_Library_Library,rtftok))
 
 $(eval $(call gb_Library_set_include,rtftok,\
-    $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
+	$$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/writerfilter/inc) \
+	-I$(WORKDIR)/writerfilter/inc \
+	-I$(OUTDIR)/inc \
+	-I$(OUTDIR)/inc/offapi \
+	-I$(OUTDIR)/inc/offuh \
+	-I$(OUTDIR)/inc/udkapi \
 ))
 
 include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
@@ -42,22 +47,26 @@ $(eval $(call gb_Library_set_defs,rtftok,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,rtftok,\
-    cppu \
-    cppuhelper \
-    sal \
-    $(gb_STDLIBS) \
+	cppu \
+	cppuhelper \
+	oox \
+	sal \
+	ucbhelper \
+	utl \
+	tl \
+	resourcemodel \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,rtftok,\
-    writerfilter/source/rtftok/RTFParseException \
+	writerfilter/source/rtftok/rtfdocumentfactory \
+	writerfilter/source/rtftok/rtfdocumentimpl \
+	writerfilter/source/rtftok/rtfcontrolwords \
+	writerfilter/source/rtftok/rtfcharsets \
+	writerfilter/source/rtftok/rtfreferenceproperties \
+	writerfilter/source/rtftok/rtfreferencetable \
+	writerfilter/source/rtftok/rtfvalue \
+	writerfilter/source/rtftok/rtfsprm \
 ))
-
-$(eval $(call gb_Library_add_generated_exception_objects,rtftok,\
-    writerfilter/source/rtftok/RTFScanner \
-))
-
-$(call gb_GenCxxObject_get_source,writerfilter/source/rtftok/RTFScanner) : $(SRCDIR)/writerfilter/source/rtftok/FlexLexer.h $(SRCDIR)/writerfilter/source/rtftok/RTFScanner.skl $(SRCDIR)/writerfilter/source/rtftok/RTFScanner.lex
-	mkdir -p $(dir $@) && \
-		flex -+ -S$(SRCDIR)/writerfilter/source/rtftok/RTFScanner.skl -o$@ $(SRCDIR)/writerfilter/source/rtftok/RTFScanner.lex
 
 # vim: set noet ts=4 sw=4:

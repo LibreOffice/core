@@ -916,7 +916,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
 void ListsManager::lcl_entry( int /* pos */,
                           writerfilter::Reference<Properties>::Pointer_t ref )
 {
-    if( m_rDMapper.IsOOXMLImport() )
+    if( m_rDMapper.IsOOXMLImport() || m_rDMapper.IsRTFImport() )
     {
         ref->resolve(*this);
     }
