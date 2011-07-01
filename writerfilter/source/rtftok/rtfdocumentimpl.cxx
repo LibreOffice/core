@@ -200,7 +200,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bIsSubstream(false),
     m_nHeaderFooterPositions(),
     m_nGroupStartPos(0),
-    m_aBookmarks()
+    m_aBookmarks(),
+    m_aAuthors()
 {
     OSL_ENSURE(xInputStream.is(), "no input stream");
     if (!xInputStream.is())
@@ -533,6 +534,15 @@ int RTFDocumentImpl::resolveChars(char ch)
         m_aStates.top().aShapeProperties.push_back(make_pair(aOUStr, OUString()));
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE)
         m_aStates.top().aShapeProperties.back().second += aOUStr;
+    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
+    {
+        // this is an author name, drop the ; at the end if it's there
+        if (aOUStr.endsWithAsciiL(";", 1))
+        {
+            aOUStr = aOUStr.copy(0, aOUStr.getLength() - 1);
+        }
+        m_aAuthors[m_aAuthors.size()] = aOUStr;
+    }
 
     return 0;
 }
@@ -852,6 +862,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_BKMKEND:
             m_aStates.top().nDestinationState = DESTINATION_BOOKMARKEND;
+            break;
+        case RTF_REVTBL:
+            m_aStates.top().nDestinationState = DESTINATION_REVISIONTABLE;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -2039,6 +2052,8 @@ int RTFDocumentImpl::pushState()
         m_aStates.top().nDestinationState = DESTINATION_STYLEENTRY;
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
+    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTABLE)
+        m_aStates.top().nDestinationState = DESTINATION_REVISIONENTRY;
 
     return 0;
 }

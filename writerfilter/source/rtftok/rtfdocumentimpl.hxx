@@ -57,7 +57,9 @@ namespace writerfilter {
             DESTINATION_NESTEDTABLEPROPERTIES,
             DESTINATION_FOOTNOTE,
             DESTINATION_BOOKMARKSTART,
-            DESTINATION_BOOKMARKEND
+            DESTINATION_BOOKMARKEND,
+            DESTINATION_REVISIONTABLE,
+            DESTINATION_REVISIONENTRY
         };
 
         enum RTFBorderState
@@ -268,6 +270,8 @@ namespace writerfilter {
                 rtl::OUString m_aIgnoreFirst;
                 /// Bookmark name <-> index map.
                 std::map<rtl::OUString, int> m_aBookmarks;
+                /// Revision index <-> author map.
+                std::map<int, rtl::OUString> m_aAuthors;
         };
     } // namespace rtftok
 } // namespace writerfilter
