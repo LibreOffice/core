@@ -33,8 +33,6 @@
 
 #include <ide_pch.hxx>
 
-#include <svtools/filedlg.hxx>
-
 #include <sot/storinfo.hxx>
 
 #include <moduldlg.hrc>

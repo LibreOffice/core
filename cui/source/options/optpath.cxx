@@ -35,7 +35,6 @@
 #include <sfx2/app.hxx>
 #include <svl/aeitem.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/filedlg.hxx>
 #include <tools/config.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
