@@ -414,7 +414,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             root = Configuration.getConfigurationRoot(self.xMSF,
                 "/org.openoffice.Office.Writer/Wizards/Fax", True)
             self.myConfig.writeConfiguration(root, "cp_")
-            Configuration.commit(root)
+            root.commitChanges()
         except Exception, e:
             traceback.print_exc()
 
@@ -645,7 +645,9 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.chkUseFooterItemChanged()
 
     def txtFooterTextChanged(self):
-        self.chkUseFooterItemChanged()
+        self.myFaxDoc.switchFooter("First Page", True,
+                    (self.chkFooterPageNumbers.State is not 0),
+                    self.txtFooter.Text)
 
     def chkUseSalutationItemChanged(self):
         self.myFaxDoc.switchUserField("Salutation",

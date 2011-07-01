@@ -19,25 +19,6 @@ in hierarchy form from the root of the registry.
 class Configuration(object):
 
     @classmethod
-    def getNode(self, name, parent):
-        return parent.getByName(name)
-
-    @classmethod
-    def Set(self, value, name, parent):
-        setattr(parent, name, value)
-
-    '''
-    @param name
-    @param parent
-    @return
-    @throws Exception
-    '''
-
-    @classmethod
-    def getConfigurationNode(self, name, parent):
-        return parent.getByName(name)
-
-    @classmethod
     def getConfigurationRoot(self, xmsf, sPath, updateable):
         oConfigProvider = xmsf.createInstance(
             "com.sun.star.configuration.ConfigurationProvider")
@@ -60,10 +41,6 @@ class Configuration(object):
             sView = "com.sun.star.configuration.ConfigurationAccess"
 
         return oConfigProvider.createInstanceWithArguments(sView, tuple(args))
-
-    @classmethod
-    def getChildrenNames(self, configView):
-        return configView.getElementNames()
 
     @classmethod
     def getProductName(self, xMSF):
@@ -112,40 +89,11 @@ class Configuration(object):
             traceback.print_exc()
             return None
 
-    '''
-    This method creates a new configuration node and adds it
-    to the given view. Note that if a node with the given name
-    already exists it will be completely removed from
-    the configuration.
-    @param configView
-    @param name
-    @return the new created configuration node.
-    @throws com.sun.star.lang.WrappedTargetException
-    @throws ElementExistException
-    @throws NoSuchElementException
-    @throws com.sun.star.uno.Exception
-    '''
-
-    @classmethod
-    def addConfigNode(self, configView, name):
-        if configView is None:
-            return configView.getByName(name)
-        else:
-            # the new element is the result !
-            newNode = configView.createInstance()
-            # insert it - this also names the element
-            configView.insertByName(name, newNode)
-            return newNode
-
     @classmethod
     def removeNode(self, configView, name):
 
         if configView.hasByName(name):
             configView.removeByName(name)
-
-    @classmethod
-    def commit(self, configView):
-        configView.commitChanges()
 
     @classmethod
     def updateConfiguration(self, xmsf, path, name, node, param):
@@ -262,5 +210,4 @@ class Configuration(object):
                 i += 1
         except Exception, e:
             traceback.print_exc()
-
         return None
