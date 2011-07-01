@@ -644,13 +644,13 @@ void CfgExport::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
     if ( pOutputStream && bLocalize ) {
-    if (( pStackData->sText[ ByteString("en-US") ].Len()
+    if (( pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength()
         ) ||
             ( bForce &&
-                ( pStackData->sText[ ByteString("de") ].Len() ||
-                    pStackData->sText[ ByteString("en-US") ].Len() )))
+                ( pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("de"))].getLength() ||
+                    pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength() )))
         {
-            ByteString sFallback = pStackData->sText[ ByteString("en-US") ];
+            ByteString sFallback = pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))];
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
             if ( aStack.size() == 1 ) {
@@ -663,29 +663,29 @@ void CfgExport::WorkOnRessourceEnd()
 
             ByteString sTimeStamp( Export::GetTimeStamp());
 
-            ByteString sCur;
-            for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-                sCur = aLanguages[ n ];
+            for (size_t n = 0; n < aLanguages.size(); n++)
+            {
+                ByteString sCur = aLanguages[ n ];
 
-                    ByteString sText = pStackData->sText[ sCur ];
-                    if ( !sText.Len())
-                        sText = sFallback;
+                ByteString sText = pStackData->sText[ sCur ];
+                if ( !sText.Len())
+                    sText = sFallback;
 
-                    Export::UnquotHTML( sText );
+                Export::UnquotHTML( sText );
 
-                    ByteString sOutput( sPrj ); sOutput += "\t";
-                    sOutput += sPath;
-                    sOutput += "\t0\t";
-                    sOutput += pStackData->sResTyp; sOutput += "\t";
-                    sOutput += sGroupId; sOutput += "\t";
-                    sOutput += sLocalId; sOutput += "\t\t\t0\t";
-                    sOutput += sCur;
-                    sOutput += "\t";
+                ByteString sOutput( sPrj ); sOutput += "\t";
+                sOutput += sPath;
+                sOutput += "\t0\t";
+                sOutput += pStackData->sResTyp; sOutput += "\t";
+                sOutput += sGroupId; sOutput += "\t";
+                sOutput += sLocalId; sOutput += "\t\t\t0\t";
+                sOutput += sCur;
+                sOutput += "\t";
 
-                    sOutput += sText; sOutput += "\t\t\t\t";
-                    sOutput += sTimeStamp;
+                sOutput += sText; sOutput += "\t\t\t\t";
+                sOutput += sTimeStamp;
 
-                    pOutputStream->WriteLine( sOutput );
+                pOutputStream->WriteLine( sOutput );
             }
         }
     }

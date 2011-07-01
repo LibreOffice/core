@@ -316,10 +316,13 @@ sal_Bool LngParser::Merge(
                 nPos++;
         }
         ByteString sCur;
-        if ( nLastLangPos ) {
-            for( unsigned int n = 0; n < aLanguages.size(); n++ ){
+        if ( nLastLangPos )
+        {
+            for(size_t n = 0; n < aLanguages.size(); ++n)
+            {
                 sCur = aLanguages[ n ];
-                if( !sCur.EqualsIgnoreCaseAscii("en-US") && !Text[ sCur ].Len() && pEntrys ) {
+                if( !sCur.EqualsIgnoreCaseAscii("en-US") && Text[sCur].isEmpty() && pEntrys )
+                {
 
                     ByteString sNewText;
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, sal_True );

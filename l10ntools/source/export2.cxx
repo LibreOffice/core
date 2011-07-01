@@ -381,25 +381,27 @@ ByteString Export::GetFallbackLanguage( const ByteString nLanguage )
 void Export::FillInFallbacks( ResData *pResData )
 /*****************************************************************************/
 {
-    ByteString sCur;
-    for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-        sCur = aLanguages[ n ];
-        if( isAllowed( sCur )  ){
+    for (size_t n = 0; n < aLanguages.size(); ++n)
+    {
+        ByteString sCur = aLanguages[ n ];
+        if (isAllowed(sCur))
+        {
             ByteString nFallbackIndex = GetFallbackLanguage( sCur );
-            if( nFallbackIndex.Len() ){
-                if ( !pResData->sText[ sCur ].Len())
+            if( nFallbackIndex.Len() )
+            {
+                if (pResData->sText[ sCur ].isEmpty())
                     pResData->sText[ sCur ] =
                         pResData->sText[ nFallbackIndex ];
 
-                if ( !pResData->sHelpText[ sCur ].Len())
+                if (pResData->sHelpText[ sCur ].isEmpty())
                     pResData->sHelpText[ sCur ] =
                         pResData->sHelpText[ nFallbackIndex ];
 
-                if ( !pResData->sQuickHelpText[ sCur ].Len())
+                if (pResData->sQuickHelpText[ sCur ].isEmpty())
                     pResData->sQuickHelpText[ sCur ] =
                         pResData->sQuickHelpText[ nFallbackIndex ];
 
-                if ( !pResData->sTitle[ sCur ].Len())
+                if (!pResData->sTitle[ sCur ].isEmpty())
                     pResData->sTitle[ sCur ] =
                         pResData->sTitle[ nFallbackIndex ];
 
@@ -432,11 +434,12 @@ void Export::FillInListFallbacks(
     ExportList *pList, const ByteString &nSource, const ByteString &nFallback )
 /*****************************************************************************/
 {
-
-    for ( size_t i = 0; i < pList->size(); i++ ) {
+    for (size_t i = 0; i < pList->size(); ++i)
+    {
         ExportListEntry *pEntry = (*pList)[ i ];
-        if ( !( *pEntry )[ nSource ].Len()){
-             ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
+        if ( (*pEntry )[nSource].isEmpty() )
+        {
+            ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
             ByteString x = ( *pEntry )[ nSource ];
             ByteString y = ( *pEntry )[ nFallback ];
         }

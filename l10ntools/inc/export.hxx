@@ -84,8 +84,7 @@ class PFormEntrys;
 class MergeData;
 typedef std::set<ByteString , lessByteString > ByteStringSet;
 
-typedef boost::unordered_map<ByteString , ByteString , hashByteString,equalByteString>
-                                ByteStringHashMap;
+typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash> ByteStringHashMap;
 
 typedef boost::unordered_map<ByteString , bool , hashByteString,equalByteString>
                                 ByteStringBoolHashMap;
@@ -197,8 +196,8 @@ public:
     void addFallbackData( ByteString& sId , const ByteString& sText );
     bool getFallbackData( ByteString& sId , ByteString& sText);
 
-    void addMergedLanguage( ByteString& sLang );
-    bool isMerged( ByteString& sLang );
+    void addMergedLanguage(rtl::OString& rLang);
+    bool isMerged(rtl::OString& rLang);
     ResData( const ByteString &rPF, const ByteString &rGId )
             :
             nWidth( 0 ),
@@ -307,7 +306,7 @@ private:
     sal_Bool bNextMustBeDefineEOL;          // define but no \ at lineend
     sal_uLong nLevel;                       // res. recursiv? how deep?
     sal_uInt16 nList;                       // cur. res. is String- or FilterList
-    ByteString nListLang;
+    rtl::OString m_sListLang;
     sal_uLong nListIndex;
     sal_uLong nListLevel;
     bool bSkipFile;
@@ -389,8 +388,8 @@ private:
     void CleanValue( ByteString &rValue );
     ByteString GetText( const ByteString &rSource, int nToken );
 
-    sal_Bool PrepareTextToMerge( ByteString &rText, sal_uInt16 nTyp,
-        ByteString &nLangIndex, ResData *pResData );
+    sal_Bool PrepareTextToMerge(ByteString &rText, sal_uInt16 nTyp,
+        rtl::OString &rLangIndex, ResData *pResData);
 
     void MergeRest( ResData *pResData, sal_uInt16 nMode = MERGE_MODE_NORMAL );
     void ConvertMergeContent( ByteString &rText );

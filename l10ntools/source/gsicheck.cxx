@@ -32,7 +32,8 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 
-// local includes
+#include <rtl/strbuf.hxx>
+
 #include "tagtest.hxx"
 #include "gsicheck.hxx"
 
@@ -165,7 +166,10 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
         // limit GID and LID to MAX_GID_LID_LEN chars each for database conformity, see #137575#
         if ( rLine.GetToken( 4, '\t' ).Len() > MAX_GID_LID_LEN || rLine.GetToken( 5, '\t' ).Len() > MAX_GID_LID_LEN )
         {
-            PrintError( ByteString("GID and LID may only be ").Append( ByteString::CreateFromInt32(MAX_GID_LID_LEN) ).Append( " chars long each!" ), "Line format", aLangId, sal_True, GetLineNumber(), GetUniqId() );
+            PrintError(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("GID and LID may only be "))
+                 .append(static_cast<sal_Int32>(MAX_GID_LID_LEN))
+                 .append(RTL_CONSTASCII_STRINGPARAM(" chars long each!" )).getStr(),
+                "Line format", aLangId, sal_True, GetLineNumber(), GetUniqId());
             NotOK();
         }
     }
@@ -521,7 +525,9 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
     if ( !IsUTF8( pTestee->GetText(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
         ByteString aContext( pTestee->GetText().Copy( nErrorPos, 20 ) );
-        PrintError( aErrorMsg.Append(" in Text at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
+        PrintError(rtl::OStringBuffer(aErrorMsg).append(RTL_CONSTASCII_STRINGPARAM(" in Text at Position "))
+             .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
+            "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
         bError = sal_True;
         if ( bHasBeenFixed )
         {
@@ -532,7 +538,9 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
     if ( !IsUTF8( pTestee->GetQuickHelpText(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
         ByteString aContext( pTestee->GetQuickHelpText().Copy( nErrorPos, 20 ) );
-        PrintError( aErrorMsg.Append(" in QuickHelpText at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
+        PrintError(rtl::OStringBuffer(aErrorMsg).append(RTL_CONSTASCII_STRINGPARAM(" in QuickHelpText at Position "))
+             .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
+            "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
         bError = sal_True;
         if ( bHasBeenFixed )
         {
@@ -543,7 +551,9 @@ sal_Bool GSIBlock::TestUTF8( GSILine* pTestee, sal_Bool bFixTags )
     if ( !IsUTF8( pTestee->GetTitle(), bFixTags, nErrorPos, aErrorMsg, bHasBeenFixed, aFixed ) )
     {
         ByteString aContext( pTestee->GetTitle().Copy( nErrorPos, 20 ) );
-        PrintError( aErrorMsg.Append(" in Title at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
+        PrintError(rtl::OStringBuffer(aErrorMsg).append(RTL_CONSTASCII_STRINGPARAM(" in Title at Position "))
+             .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
+            "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
         bError = sal_True;
         if ( bHasBeenFixed )
         {
@@ -568,7 +578,9 @@ sal_Bool GSIBlock::HasSuspiciousChars( GSILine* pTestee, GSILine* pSource )
             String aUTF8Tester = String( pTestee->GetText(), 0, nPos, RTL_TEXTENCODING_UTF8 );
             sal_uInt16 nErrorPos = aUTF8Tester.Len();
             ByteString aContext( pTestee->GetText().Copy( nPos, 20 ) );
-            PrintError( ByteString("Found double questionmark in translation only. Looks like an encoding problem at Position " ).Append( ByteString::CreateFromInt32( nErrorPos ) ), "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId() );
+            PrintError(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Found double questionmark in translation only. Looks like an encoding problem at Position "))
+                 .append(static_cast<sal_Int32>(nErrorPos)).getStr(),
+                "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
             pTestee->NotOK();
             return sal_True;
         }
@@ -747,7 +759,8 @@ void Help()
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
     fprintf( stdout, "         checks for inconsistencies and malicious UTF8 encoding\n" );
     fprintf( stdout, "         checks tags in Online Help\n" );
-    fprintf( stdout, "         checks for *new* KeyIDs and relax GID/LID length to %s\n", ByteString::CreateFromInt32(MAX_GID_LID_LEN).GetBuffer() );
+    fprintf( stdout, "         checks for *new* KeyIDs and relax GID/LID length to %s\n",
+        rtl::OString::valueOf(static_cast<sal_Int32>(MAX_GID_LID_LEN)).getStr() );
     fprintf( stdout, "\n" );
     fprintf( stdout, "Syntax: gsicheck [ -c ] [-f] [ -we ] [ -wef ErrorFilename ] [ -wc ]\n" );
     fprintf( stdout, "                 [ -wcf CorrectFilename ] [ -s | -t ] [ -l LanguageID ]\n" );

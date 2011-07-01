@@ -35,9 +35,10 @@
 #include "tokens.h"
 #include <iostream>
 #include <vector>
+#include <rtl/strbuf.hxx>
 
-extern "C" { int yyerror( char * ); }
-extern "C" { int YYWarning( char * ); }
+extern "C" { int yyerror( const char * ); }
+extern "C" { int YYWarning( const char * ); }
 
 Export *pExport = 0L;
 
@@ -363,11 +364,14 @@ bool ResData::getFallbackData( ByteString& sId_in , ByteString& sText_inout ){
     return sText_inout.Len() > 0;
 }
 
-void ResData::addMergedLanguage( ByteString& sLang ){
-    aMergedLanguages[ sLang ]=ByteString("1");
+void ResData::addMergedLanguage(rtl::OString& rLang)
+{
+    aMergedLanguages[rLang] = rtl::OString(RTL_CONSTASCII_STRINGPARAM("1"));
 }
-bool ResData::isMerged( ByteString& sLang ){
-    return aMergedLanguages[ sLang ].Equals("1");
+
+bool ResData::isMerged(rtl::OString& rLang)
+{
+    return aMergedLanguages[rLang].equalsL(RTL_CONSTASCII_STRINGPARAM("1"));
 }
 
 /*****************************************************************************/
@@ -379,10 +383,10 @@ sal_Bool ResData::SetId( const ByteString &rId, sal_uInt16 nLevel )
         nIdLevel = nLevel;
         sId = rId;
 
-        if ( bChild && bChildWithText ) {
-            ByteString sError( "ResId after child definition" );
-            yyerror( sError.GetBufferAccess());
-            sError.ReleaseBufferAccess();
+        if ( bChild && bChildWithText )
+        {
+            rtl::OString sError(RTL_CONSTASCII_STRINGPARAM("ResId after child definition"));
+            yyerror(sError.getStr());
             SetError();
         }
 
@@ -500,7 +504,7 @@ void Export::Init()
     bNextMustBeDefineEOL = sal_False;
     nLevel = 0;
     nList = LIST_NON;
-    nListLang = ByteString( String::CreateFromAscii(""),RTL_TEXTENCODING_ASCII_US );
+    m_sListLang = ByteString( String::CreateFromAscii(""),RTL_TEXTENCODING_ASCII_US );
     nListIndex = 0;
     for ( size_t i = 0, n = aResStack.size(); i < n;  ++i )
         delete aResStack[ i ];
@@ -789,21 +793,21 @@ int Export::Execute( int nToken, const char * pToken )
             else if ( sKey == "STRINGLIST" ) {
                 pResData->bList = sal_True;
                 nList = LIST_STRING;
-                nListLang = SOURCE_LANGUAGE;
+                m_sListLang = SOURCE_LANGUAGE;
                 nListIndex = 0;
                 nListLevel = 0;
             }
             else if ( sKey == "FILTERLIST" ) {
                 pResData->bList = sal_True;
                 nList = LIST_FILTER;
-                nListLang = SOURCE_LANGUAGE;
+                m_sListLang = SOURCE_LANGUAGE;
                 nListIndex = 0;
                 nListLevel = 0;
             }
             else if ( sKey == "UIENTRIES" ) {
                 pResData->bList = sal_True;
                 nList = LIST_UIENTRIES;
-                nListLang = SOURCE_LANGUAGE;
+                m_sListLang = SOURCE_LANGUAGE;
                 nListIndex = 0;
                 nListLevel = 0;
             }
@@ -830,14 +834,14 @@ int Export::Execute( int nToken, const char * pToken )
                 if ( sKey.ToUpperAscii() ==  "STRINGLIST" ) {
                     pResData->bList = sal_True;
                     nList = LIST_STRING;
-                    nListLang = SOURCE_LANGUAGE;
+                    m_sListLang = SOURCE_LANGUAGE;
                     nListIndex = 0;
                     nListLevel = 0;
                 }
                 else if ( sKey == "FILTERLIST" ) {
                     pResData->bList = sal_True;
                     nList = LIST_FILTER;
-                    nListLang = SOURCE_LANGUAGE;
+                    m_sListLang = SOURCE_LANGUAGE;
                     nListIndex = 0;
                     nListLevel = 0;
                 }
@@ -845,7 +849,7 @@ int Export::Execute( int nToken, const char * pToken )
                 else if ( sKey ==  "PAIREDLIST" ) {
                     pResData->bList = sal_True;
                     nList = LIST_PAIRED;
-                    nListLang = SOURCE_LANGUAGE;
+                    m_sListLang = SOURCE_LANGUAGE;
                     nListIndex = 0;
                     nListLevel = 0;
                 }
@@ -853,14 +857,14 @@ int Export::Execute( int nToken, const char * pToken )
                 else if ( sKey ==  "ITEMLIST" ) {
                     pResData->bList = sal_True;
                     nList = LIST_ITEM;
-                    nListLang = SOURCE_LANGUAGE;
+                    m_sListLang = SOURCE_LANGUAGE;
                     nListIndex = 0;
                     nListLevel = 0;
                 }
                 else if ( sKey ==  "UIENTRIES" ) {
                     pResData->bList = sal_True;
                     nList = LIST_UIENTRIES;
-                    nListLang = SOURCE_LANGUAGE;
+                    m_sListLang = SOURCE_LANGUAGE;
                     nListIndex = 0;
                     nListLevel = 0;
                 }
@@ -883,7 +887,7 @@ int Export::Execute( int nToken, const char * pToken )
                 if ( nList ) {
                     ByteString sLang=sToken.GetToken( 1, '[' ).GetToken( 0, ']' );
                     CleanValue( sLang );
-                    nListLang = sLang;
+                    m_sListLang = sLang;
                     nListIndex = 0;
                     nListLevel = 0;
                 }
@@ -902,8 +906,9 @@ int Export::Execute( int nToken, const char * pToken )
                 if ( sEntry == "\\\"" )
                     sEntry = "\"";
                 InsertListEntry( sEntry, sOrig );
-                if ( bMergeMode && ( sEntry != "\"" )) {
-                    PrepareTextToMerge( sOrig, nList, nListLang, pResData );
+                if ( bMergeMode && ( sEntry != "\"" ))
+                {
+                    PrepareTextToMerge( sOrig, nList, m_sListLang, pResData );
                 }
             }
         }
@@ -926,7 +931,7 @@ int Export::Execute( int nToken, const char * pToken )
                      sLang = sToken.GetToken( 0, '=' ).GetToken( 1, '[' ).GetToken( 0, ']' );
                     CleanValue( sLang );
                 }
-                ByteString nLangIndex = sLang;
+                rtl::OString sLangIndex = sLang;
                 ByteString sOrigKey = sKey;
                 if ( sText.Len() && sLang.Len() ) {
                     if (( sKey.ToUpperAscii() == "TEXT" ) ||
@@ -936,69 +941,82 @@ int Export::Execute( int nToken, const char * pToken )
                         ( sKey == "UINAME" ))
                     {
                         SetChildWithText();
-                        if ( Export::isSourceLanguage( nLangIndex ) )
+                        if ( Export::isSourceLanguage( sLangIndex ) )
                             pResData->SetId( sText, ID_LEVEL_TEXT );
 
                         pResData->bText = sal_True;
                         pResData->sTextTyp = sOrigKey;
                         if ( bMergeMode ) {
-                            PrepareTextToMerge( sOrig, STRING_TYP_TEXT, nLangIndex, pResData );
+                            PrepareTextToMerge( sOrig, STRING_TYP_TEXT, sLangIndex, pResData );
                         }
-                        else {
-                            if ( pResData->sText[ nLangIndex ].Len()) {
-                                ByteString sError( "Language " );
-                                sError += nLangIndex;
-                                sError += " defined twice";
+                        else
+                        {
+                            if (pResData->sText[ sLangIndex ].getLength())
+                            {
+                                rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                sError.append(sLangIndex);
+                                sError.append(RTL_CONSTASCII_STRINGPARAM("defined twice"));
+                                yyerror(sError.getStr());
                             }
-                            pResData->sText[ nLangIndex ] = sText;
+                            pResData->sText[ sLangIndex ] = sText;
                         }
                     }
                     else if ( sKey == "HELPTEXT" ) {
                         SetChildWithText();
                         pResData->bHelpText = sal_True;
-                        if ( bBreakWhenHelpText ) {
-                            ByteString sError( "\"HelpText\" found in source\n" );
-                            YYWarning( sError.GetBufferAccess());
-                            sError.ReleaseBufferAccess();
+                        if ( bBreakWhenHelpText )
+                        {
+                            rtl::OString sError(
+                                RTL_CONSTASCII_STRINGPARAM("\"HelpText\" found in source\n"));
+                            YYWarning(sError.getStr());
                             SetError();
                         }
                         if ( bMergeMode )
-                            PrepareTextToMerge( sOrig, STRING_TYP_HELPTEXT, nLangIndex, pResData );
-                        else {
-                            if ( pResData->sHelpText[ nLangIndex ].Len()) {
-                                ByteString sError( "Language " );
-                                sError += nLangIndex;
-                                sError += " defined twice";
+                            PrepareTextToMerge( sOrig, STRING_TYP_HELPTEXT, sLangIndex, pResData );
+                        else
+                        {
+                            if (pResData->sHelpText[ sLangIndex ].getLength())
+                            {
+                                rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                sError.append(sLangIndex);
+                                sError.append(" defined twice");
+                                YYWarning(sError.getStr());
                             }
-                            pResData->sHelpText[ nLangIndex ] = sText;
+                            pResData->sHelpText[ sLangIndex ] = sText;
                         }
                     }
                     else if ( sKey == "QUICKHELPTEXT" ) {
                         SetChildWithText();
                         pResData->bQuickHelpText = sal_True;
                         if ( bMergeMode )
-                            PrepareTextToMerge( sOrig, STRING_TYP_QUICKHELPTEXT, nLangIndex, pResData );
-                        else {
-                            if ( pResData->sQuickHelpText[ nLangIndex ].Len()) {
-                                ByteString sError( "Language " );
-                                sError += nLangIndex;
-                                sError += " defined twice";
+                            PrepareTextToMerge( sOrig, STRING_TYP_QUICKHELPTEXT, sLangIndex, pResData );
+                        else
+                        {
+                            if (pResData->sQuickHelpText[ sLangIndex ].getLength())
+                            {
+                                rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                sError.append(sLangIndex);
+                                sError.append(RTL_CONSTASCII_STRINGPARAM(" defined twice"));
+                                YYWarning(sError.getStr());
                             }
-                            pResData->sQuickHelpText[ nLangIndex ] = sText;
+                            pResData->sQuickHelpText[ sLangIndex ] = sText;
                         }
                     }
                     else if ( sKey == "TITLE" ) {
                         SetChildWithText();
                         pResData->bTitle = sal_True;
                         if ( bMergeMode )
-                            PrepareTextToMerge( sOrig, STRING_TYP_TITLE, nLangIndex, pResData );
-                        else {
-                            if ( pResData->sTitle[ nLangIndex ].Len()) {
-                                ByteString sError( "Language " );
-                                sError += nLangIndex;
-                                sError += " defined twice";
+                            PrepareTextToMerge( sOrig, STRING_TYP_TITLE, sLangIndex, pResData );
+                        else
+                        {
+                            if ( pResData->sTitle[ sLangIndex ].getLength())
+                            {
+                                rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                sError.append(sLangIndex);
+                                sError.append(RTL_CONSTASCII_STRINGPARAM(" defined twice"));
+                                YYWarning(sError.getStr());
                             }
-                            pResData->sTitle[ nLangIndex ] = sText;
+                            pResData->sTitle[ sLangIndex ] = sText;
                         }
                     }
                     else if ( sKey == "ACCESSPATH" ) {
@@ -1169,13 +1187,13 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
 
        // mandatory to export: en-US
 
-     if (( pResData->sText[ SOURCE_LANGUAGE ].Len())
+     if (( pResData->sText[ SOURCE_LANGUAGE ].getLength())
         ||
-        (  pResData->sHelpText[ SOURCE_LANGUAGE ].Len())
+        (  pResData->sHelpText[ SOURCE_LANGUAGE ].getLength())
         ||
-        (  pResData->sQuickHelpText[ SOURCE_LANGUAGE ].Len())
+        (  pResData->sQuickHelpText[ SOURCE_LANGUAGE ].getLength())
          ||
-        (  pResData->sTitle[ SOURCE_LANGUAGE ].Len()))
+        (  pResData->sTitle[ SOURCE_LANGUAGE ].getLength()))
 
        {
         FillInFallbacks( pResData );
@@ -1198,35 +1216,35 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         for( unsigned int n = 0; n < aLanguages.size(); n++ ){
             sCur = aLanguages[ n ];
                 if ( !sCur.EqualsIgnoreCaseAscii("x-comment") ){
-                    if ( pResData->sText[ sCur ].Len())
+                    if (pResData->sText[ sCur ].getLength())
                         sXText = pResData->sText[ sCur ];
                     else {
                         sXText = pResData->sText[ SOURCE_LANGUAGE ];
                     }
 
-                    if ( pResData->sHelpText[ sCur ].Len())
+                    if (pResData->sHelpText[ sCur ].getLength())
                         sXHText = pResData->sHelpText[ sCur ];
                     else {
                         sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
                     }
 
-                    if ( pResData->sQuickHelpText[ sCur ].Len())
+                    if (pResData->sQuickHelpText[ sCur ].getLength())
                         sXQHText = pResData->sQuickHelpText[ sCur ];
                     else {
                         sXQHText = pResData->sQuickHelpText[ SOURCE_LANGUAGE ];
                     }
 
-                    if ( pResData->sTitle[ sCur ].Len())
+                    if (pResData->sTitle[ sCur ].getLength())
                         sXTitle = pResData->sTitle[ sCur ];
-                    else {
+                    else
                         sXTitle = pResData->sTitle[ SOURCE_LANGUAGE ];
-                    }
 
                     if ( !sXText.Len())
                         sXText = "-";
 
-                    if ( !sXHText.Len()) {
-                        if ( pResData->sHelpText[ SOURCE_LANGUAGE ].Len())
+                    if ( !sXHText.Len())
+                    {
+                        if (pResData->sHelpText[ SOURCE_LANGUAGE ].getLength())
                             sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
                     }
                 }
@@ -1345,44 +1363,47 @@ sal_Bool Export::WriteExportList( ResData *pResData, ExportList *pExportList,
         // Export::DumpMap( a,  *pEntry );
 
         ByteString sLID(rtl::OString::valueOf(static_cast<sal_Int64>(i + 1)));
-        for( unsigned int n = 0; n < aLanguages.size(); n++ ){
+        for (unsigned int n = 0; n < aLanguages.size(); ++n)
+        {
             sCur = aLanguages[ n ];
-            if ( (*pEntry)[ SOURCE_LANGUAGE ].Len() )
+            if ((*pEntry)[ SOURCE_LANGUAGE ].getLength())
+            {
+                if ( bEnableExport )
                 {
-                    if ( bEnableExport )
+                    ByteString sText((*pEntry)[ SOURCE_LANGUAGE ] );
+
+                    // Strip PairList Line String
+                    if( rTyp.EqualsIgnoreCaseAscii("pairedlist") )
                     {
-                        ByteString sText((*pEntry)[ SOURCE_LANGUAGE ] );
-
-                        // Strip PairList Line String
-                        if( rTyp.EqualsIgnoreCaseAscii("pairedlist") ){
-                            sLID = GetPairedListID( sText );
-                            if ((*pEntry)[ sCur ].Len())
-                                sText = (*pEntry)[ sCur ];
-                            sText = GetPairedListString( sText );
-                        }
-                        else{
-                                    sText = StripList( (*pEntry)[ sCur ] );
-                                    if( sText == "\\\"" )
-                                        sText = "\"";
-                        }
-
-                        ByteString sOutput( sProject ); sOutput += "\t";
-                        if ( sRoot.Len())
-                            sOutput += sActFileName;
-                        sOutput += "\t0\t";
-                        sOutput += rTyp; sOutput += "\t";
-                        sOutput += sGID; sOutput += "\t";
-                        sOutput += sLID; sOutput += "\t\t";
-                        sOutput += pResData->sPForm; sOutput += "\t0\t";
-                        sOutput += sCur; sOutput += "\t";
-
-                        sOutput += sText; sOutput += "\t\t\t\t";
-                        sOutput += sTimeStamp;
-
-                        aOutput.WriteLine( sOutput );
-
+                        sLID = GetPairedListID( sText );
+                        if ((*pEntry)[ sCur ].getLength())
+                            sText = (*pEntry)[ sCur ];
+                        sText = GetPairedListString( sText );
                     }
+                    else
+                    {
+                        sText = StripList( (*pEntry)[ sCur ] );
+                        if( sText == "\\\"" )
+                            sText = "\"";
+                    }
+
+                    ByteString sOutput( sProject ); sOutput += "\t";
+                    if ( sRoot.Len())
+                        sOutput += sActFileName;
+                    sOutput += "\t0\t";
+                    sOutput += rTyp; sOutput += "\t";
+                    sOutput += sGID; sOutput += "\t";
+                    sOutput += sLID; sOutput += "\t\t";
+                    sOutput += pResData->sPForm; sOutput += "\t0\t";
+                    sOutput += sCur; sOutput += "\t";
+
+                    sOutput += sText; sOutput += "\t\t\t\t";
+                    sOutput += sTimeStamp;
+
+                    aOutput.WriteLine( sOutput );
+
                 }
+            }
         }
         if ( bCreateNew )
             delete [] pEntry;
@@ -1408,11 +1429,11 @@ ByteString Export::FullId()
             }
         }
     }
-    if ( sFull.Len() > 255 ) {
-        ByteString sError( "GroupId > 255 chars" );
-        printf("GroupID = %s\n",sFull.GetBuffer());
-        yyerror( sError.GetBufferAccess());
-        sError.ReleaseBufferAccess();
+    if ( sFull.Len() > 255 )
+    {
+        rtl::OString sError(RTL_CONSTASCII_STRINGPARAM("GroupId > 255 chars"));
+        printf("GroupID = %s\n", sFull.GetBuffer());
+        yyerror(sError.getStr());
     }
 
     return sFull;
@@ -1468,21 +1489,22 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
     else
         return;
 
-    if ( nListIndex + 1 > pList->size()) {
+    if ( nListIndex + 1 > pList->size())
+    {
         ExportListEntry *pNew = new ExportListEntry();
-        (*pNew)[ LIST_REFID ] = ByteString::CreateFromInt32( REFID_NONE );
-        pList->push_back( pNew );
+        (*pNew)[LIST_REFID] = rtl::OString::valueOf(static_cast<sal_Int32>(REFID_NONE));
+        pList->push_back(pNew);
     }
     ExportListEntry *pCurEntry = (*pList)[ nListIndex ];
 
     // For paired list use the line to set proper lid
     if( nList == LIST_PAIRED ){
-        (*pCurEntry)[ nListLang ] = rLine;
+        (*pCurEntry)[ m_sListLang ] = rLine;
     }else
-        (*pCurEntry)[ nListLang ] = rText;
+        (*pCurEntry)[ m_sListLang ] = rText;
 
     // Remember en-US fallback string, so each list has the same amount of elements
-    if ( Export::isSourceLanguage( nListLang ) ) {
+    if ( Export::isSourceLanguage( m_sListLang ) ) {
         if( nList == LIST_PAIRED ){
             const ByteString sPlist("pairedlist");
             ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sId , GetPairedListID( rLine ) , sFilename );
@@ -1502,7 +1524,7 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
         // new fallback
     }
 
-    if ( Export::isSourceLanguage( nListLang ) ) {
+    if ( Export::isSourceLanguage( m_sListLang ) ) {
         if( nList == LIST_PAIRED ){
             (*pCurEntry)[ SOURCE_LANGUAGE ] = rLine;
         }
@@ -1512,7 +1534,7 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
         pList->NewSourceLanguageListEntry();
     }
 
-    //printf("Export::InsertListEntry ResData.id = %s ResData.ListData = %s\n",pResData->sId.GetBuffer() ,(*pCurEntry)[ nListLang ].GetBuffer());
+    //printf("Export::InsertListEntry ResData.id = %s ResData.ListData = %s\n",pResData->sId.GetBuffer() ,(*pCurEntry)[ m_sListLang ].GetBuffer());
     nListIndex++;
 }
 
@@ -1727,10 +1749,8 @@ void Export::ConvertMergeContent( ByteString &rText )
         rText += "\"";
 }
 
-/*****************************************************************************/
-sal_Bool Export::PrepareTextToMerge( ByteString &rText, sal_uInt16 nTyp,
-                                ByteString &nLangIndex, ResData *pResData )
-/*****************************************************************************/
+sal_Bool Export::PrepareTextToMerge(ByteString &rText, sal_uInt16 nTyp,
+    rtl::OString &rLangIndex, ResData *pResData)
 {
     // position to merge in:
     sal_uInt16 nStart = 0;
@@ -1780,13 +1800,14 @@ sal_Bool Export::PrepareTextToMerge( ByteString &rText, sal_uInt16 nTyp,
                 break;
 
             }
-            if ( pList ) {
+            if (pList)
+            {
                 ExportListEntry *pCurEntry = (*pList)[ nListIndex - 1 ];
-                if ( pCurEntry ) {
+                if ( pCurEntry )
+                {
                     rText = (*pCurEntry)[ SOURCE_LANGUAGE ];
-                    if( nTyp == LIST_PAIRED ){
-                        pResData->addMergedLanguage( nLangIndex );
-                    }
+                    if( nTyp == LIST_PAIRED )
+                        pResData->addMergedLanguage(rLangIndex);
                 }
             }
 
@@ -1818,7 +1839,7 @@ sal_Bool Export::PrepareTextToMerge( ByteString &rText, sal_uInt16 nTyp,
             if ( pResData->sResTyp.EqualsIgnoreCaseAscii( "pairedlist" ) ){
                pResData->sId = GetPairedListID( sLastListLine );
             }
-            else pResData->sId = ByteString::CreateFromInt32( nListIndex );
+            else pResData->sId = rtl::OString::valueOf(static_cast<sal_Int32>(nListIndex));
 
             if ( pResData->sGId.Len())
                 pResData->sGId += ".";
@@ -1893,15 +1914,15 @@ sal_Bool Export::PrepareTextToMerge( ByteString &rText, sal_uInt16 nTyp,
     }
 
     ByteString sContent;
-    pEntrys->GetTransex3Text( sContent, nTyp, nLangIndex );
-    if ( !sContent.Len() && ( ! Export::isSourceLanguage( nLangIndex ) )) {
+    pEntrys->GetTransex3Text(sContent, nTyp, rLangIndex);
+    if (!sContent.Len() && (!Export::isSourceLanguage(rLangIndex)))
+    {
         rText = sOrigText;
         return sal_False; // no data found
     }
 
-    if ( Export::isSourceLanguage( nLangIndex ) ) {
+    if (Export::isSourceLanguage(rLangIndex))
         return sal_False;
-    }
 
     ByteString sPostFix( rText.Copy( ++nEnd ));
     rText.Erase( nStart );
@@ -2103,8 +2124,9 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                         case LIST_ITEM : pResData->sResTyp = "itemlist"; pList = pResData->pItemList;       bPairedList = false; break;
                         case LIST_PAIRED : pResData->sResTyp = "pairedlist"; pList = pResData->pPairedList; bPairedList = true;  break;
                     }
-                    ByteString sCur;
-                    for( unsigned int n = 0; n < aLanguages.size(); n++ ){
+                    rtl::OString sCur;
+                    for( unsigned int n = 0; n < aLanguages.size(); n++ )
+                    {
                         sCur = aLanguages[ n ];
                         sal_uInt16 nIdx = 1;
 
@@ -2130,46 +2152,65 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                 bText = pEntrys->GetTransex3Text( sText , STRING_TYP_TEXT, SOURCE_LANGUAGE , sal_False );
 
                             // Use fallback, if data is missing in sdf file
-                            if( !bText && bPairedList ){
-                                if( pResData->isMerged( sCur ) ) break;
+                            if( !bText && bPairedList )
+                            {
+                                if( pResData->isMerged( sCur ) )
+                                    break;
                                 const ByteString sPlist("pairedlist");
                                 ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sGId , pResData->sId , sFilename );
                                 bText = pResData->getFallbackData( sKey , sText );
-                            }else if ( !bText ){// new fallback
+                            }
+                            else if ( !bText ) // new fallback
+                            {
                                 if( pResData->isMerged( sCur ) ) break;
                                 const ByteString sPlist("list");
                                 ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sGId , pResData->sId , sFilename );
                                 bText = pResData->getFallbackData( sKey , sText );
                             } // new fallback
 
-                            if ( bText && sText.Len()) {
-                                if ( nIdx == 1 ) {
-                                    ByteString sHead;
+                            if ( bText && sText.Len())
+                            {
+                                if ( nIdx == 1 )
+                                {
+                                    rtl::OStringBuffer sHead;
                                     if ( bNextMustBeDefineEOL )
-                                        sHead = "\\\n\t";
-                                    sHead += sSpace;
-                                    switch ( nT ) {
-                                        case LIST_STRING : sHead += "StringList "; break;
-                                        case LIST_FILTER : sHead += "FilterList "; break;
-                                        case LIST_ITEM : sHead += "ItemList "; break;
-                                        case LIST_PAIRED : sHead += "PairedList "; break;
-                                        case LIST_UIENTRIES : sHead += "UIEntries "; break;
+                                        sHead.append(RTL_CONSTASCII_STRINGPARAM("\\\n\t"));
+                                    sHead.append(sSpace);
+                                    switch ( nT )
+                                    {
+                                        case LIST_STRING:
+                                            sHead.append(RTL_CONSTASCII_STRINGPARAM("StringList "));
+                                            break;
+                                        case LIST_FILTER:
+                                            sHead.append(RTL_CONSTASCII_STRINGPARAM("FilterList "));
+                                            break;
+                                        case LIST_ITEM:
+                                            sHead.append(RTL_CONSTASCII_STRINGPARAM("ItemList "));
+                                            break;
+                                        case LIST_PAIRED:
+                                            sHead.append(RTL_CONSTASCII_STRINGPARAM("PairedList "));
+                                            break;
+                                        case LIST_UIENTRIES:
+                                            sHead.append(RTL_CONSTASCII_STRINGPARAM("UIEntries "));
+                                            break;
                                     }
-                                      sHead += "[ ";
-                                    sHead += sCur;
-                                    sHead += " ] ";
+                                    sHead.append(RTL_CONSTASCII_STRINGPARAM("[ "));
+                                    sHead.append(sCur);
+                                    sHead.append(RTL_CONSTASCII_STRINGPARAM(" ] "));
                                     //}
-                                    if ( bDefine || bNextMustBeDefineEOL ) {
-                                        sHead += "= \\\n";
-                                        sHead += sSpace;
-                                        sHead += "\t{\\\n\t";
+                                    if ( bDefine || bNextMustBeDefineEOL )
+                                    {
+                                        sHead.append(RTL_CONSTASCII_STRINGPARAM("= \\\n"));
+                                        sHead.append(sSpace);
+                                        sHead.append(RTL_CONSTASCII_STRINGPARAM("\t{\\\n\t"));
                                     }
-                                    else {
-                                        sHead += "= \n";
-                                        sHead += sSpace;
-                                        sHead += "\t{\n\t";
+                                    else
+                                    {
+                                        sHead.append(RTL_CONSTASCII_STRINGPARAM("= \n"));
+                                        sHead.append(sSpace);
+                                        sHead.append(RTL_CONSTASCII_STRINGPARAM("\t{\n\t"));
                                     }
-                                    WriteToMerged( sHead , true);
+                                    WriteToMerged(sHead.makeStringAndClear() , true);
                                 }
                                 ByteString sLine;
                                 if ( pList && (*pList)[ nLIndex ] )
@@ -2229,7 +2270,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                     }
                                 }
                                 else
-                                    pResData->sId = ByteString::CreateFromInt32( ++nIdx );
+                                    pResData->sId = rtl::OString::valueOf(static_cast<sal_Int32>(++nIdx));
                             }
                             else
                                 break;
@@ -2291,7 +2332,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                 }
             }
 
-            while( PrepareTextToMerge( sLine, nList, nListLang, pResData ) && ( nListIndex <= nMaxIndex )) {
+            while( PrepareTextToMerge( sLine, nList, m_sListLang, pResData ) && ( nListIndex <= nMaxIndex )) {
                 ByteString sText( "\t" );
                 sText += sLine;
                 sText += " ;";
