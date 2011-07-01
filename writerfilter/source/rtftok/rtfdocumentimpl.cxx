@@ -566,13 +566,7 @@ int RTFDocumentImpl::resolveChars(char ch)
 
     OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
 
-    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL
-            || m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION
-            || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT
-            || m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT || m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART
-            || m_aStates.top().nDestinationState == DESTINATION_BOOKMARKEND)
-        text(aOUStr);
-    else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
+    if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
         // this is a font name, drop the ; at the end if it's there
         if (aOUStr.endsWithAsciiL(";", 1))
@@ -614,6 +608,8 @@ int RTFDocumentImpl::resolveChars(char ch)
         }
         m_aAuthors[m_aAuthors.size()] = aOUStr;
     }
+    else
+        text(aOUStr);
 
     return 0;
 }
