@@ -589,19 +589,15 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_LEVELTEXT:
             m_aStates.top().aLevelText.append(rString);
             break;
-        case DESTINATION_BOOKMARKEND:
-            Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[rString]));
-            break;
         case DESTINATION_FONTENTRY:
         case DESTINATION_STYLEENTRY:
         case DESTINATION_REVISIONENTRY:
-            {
-                // drop the ; at the end if it's there
-                if (rString.endsWithAsciiL(";", 1))
-                    rString = rString.copy(0, rString.getLength() - 1);
-            }
+            // drop the ; at the end if it's there
+            if (rString.endsWithAsciiL(";", 1))
+                rString = rString.copy(0, rString.getLength() - 1);
         case DESTINATION_SHAPEPROPERTYNAME:
         case DESTINATION_SHAPEPROPERTYVALUE:
+        case DESTINATION_BOOKMARKEND:
             m_aDestinationText.append(rString);
             break;
         default: bRet = false; break;
@@ -650,11 +646,10 @@ void RTFDocumentImpl::text(OUString& rString)
         m_bNeedPap = false;
     }
 
+    // Don't return earlier, a bookmark start has to be in a paragraph group.
     if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
     {
-        int nPos = m_aBookmarks.size();
-        m_aBookmarks[rString] = nPos;
-        Mapper().props(lcl_getBookmarkProperties(nPos, rString));
+        m_aDestinationText.append(rString);
         return;
     }
 
@@ -2310,6 +2305,15 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
         m_aAuthors[m_aAuthors.size()] = m_aDestinationText.makeStringAndClear();
+    else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
+    {
+        OUString aStr = m_aDestinationText.makeStringAndClear();
+        int nPos = m_aBookmarks.size();
+        m_aBookmarks[aStr] = nPos;
+        Mapper().props(lcl_getBookmarkProperties(nPos, aStr));
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKEND)
+        Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[m_aDestinationText.makeStringAndClear()]));
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);
