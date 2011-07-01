@@ -593,6 +593,8 @@ File gid_File_Lib_Cairo
   #endif
 End
 
+#ifndef WNT
+
 File gid_File_Lib_Pixman
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -603,10 +605,10 @@ File gid_File_Lib_Pixman
     #else
        Name = STRING(CONCAT3(libpixman-1,UNXSUFFIX,.0));
     #endif
-  #elif defined(WNT)
-    Name = "libpixman-1-0.dll";
   #endif
 End
+
+#endif
 
 #endif
 
