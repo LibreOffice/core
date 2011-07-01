@@ -244,6 +244,15 @@ static int lcl_AsHex(char ch)
     return ret;
 }
 
+static const char* lcl_RtfToString(RTFKeyword nKeyword)
+{
+    for (int i = 0; i < nRTFControlWords; i++)
+    {
+        if (nKeyword == aRTFControlWords[i].nIndex)
+            return aRTFControlWords[i].sKeyword;
+    }
+    return NULL;
+}
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -255,7 +264,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_nGroup(0),
     m_aDefaultState(),
     m_bSkipUnknown(false),
-    m_pCurrentKeyword(0),
     m_aFontEncodings(),
     m_aColorTable(),
     m_bFirstRun(true),
@@ -915,7 +923,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         default:
-            OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
             // Make sure we skip destinations (even without \*) till we don't handle them
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             bParsed = false;
@@ -1054,7 +1062,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             // Nothing to do, dmapper assumes this is the default.
             break;
         default:
-            OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
             bParsed = false;
             break;
     }
@@ -1398,7 +1406,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
             break;
         default:
-            OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
             bParsed = false;
             break;
     }
@@ -1874,7 +1882,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         default:
-            OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
             bParsed = false;
             break;
     }
@@ -1974,7 +1982,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
             }
             break;
         default:
-            OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
+            OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
             bParsed = false;
             break;
     }
@@ -2014,7 +2022,6 @@ int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
         return 0;
     }
 
-    m_pCurrentKeyword = &rKeyword;
     switch (aRTFControlWords[i].nControlType)
     {
         case CONTROL_FLAG:

@@ -262,8 +262,6 @@ namespace writerfilter {
                 /// Read by RTF_PARD.
                 RTFParserState m_aDefaultState;
                 bool m_bSkipUnknown;
-                /// For debugging purposes, where int value would not be enough
-                rtl::OString* m_pCurrentKeyword;
                 /// Font index <-> encoding map, *not* part of the parser state
                 std::map<int, rtl_TextEncoding> m_aFontEncodings;
                 /// Color index <-> RGB color value map
