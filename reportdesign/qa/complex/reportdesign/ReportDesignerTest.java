@@ -250,7 +250,6 @@ public class ReportDesignerTest
 
     private String m_sMailAddress = null;
     private String m_sUPDMinor;
-    private String m_sCWS_WORK_STAMP;
 
     private static final int WRITER = 1;
     private static final int CALC = 2;
@@ -272,8 +271,6 @@ public class ReportDesignerTest
             System.out.println("Assumed mail address: " + m_sMailAddress);
 
             m_sUPDMinor = System.getProperty("UPDMINOR");
-            m_sCWS_WORK_STAMP = System.getProperty("CWS_WORK_STAMP");
-            System.out.println("Current CWS: " + m_sCWS_WORK_STAMP);
             System.out.println("Current MWS: " + m_sUPDMinor);
 
 //                sAppExecutionCommand = sAppExecutionCommand.replaceAll( "\\$\\{USERNAME\\}", sUser);
@@ -383,11 +380,7 @@ public class ReportDesignerTest
             String sDBConnection = ""; // (String)param.get( convwatch.PropertyName.DB_CONNECTION_STRING );
             System.out.println("DBConnection: " + sDBConnection);
             DB.init(sDBConnection);
-            String sDestinationVersion = m_sCWS_WORK_STAMP;
-            if (sDestinationVersion.length() == 0)
-            {
-                sDestinationVersion = m_sUPDMinor;
-            }
+            String sDestinationVersion = m_sUPDMinor;
             String sDestinationName = "";
             String sDestinationCreatorType = "";
             String sDocumentPoolDir = getOutputPath(_nType);
