@@ -346,7 +346,7 @@ public:
 
     /** Append locale info to string, used with locale data checking.
         A string similar to "de_DE requested\n en_US loaded" is appended. */
-            String&             appendLocaleInfo( String& rDebugMsg ) const;
+    rtl::OUString appendLocaleInfo(const rtl::OUString& rDebugMsg) const;
 
     /** Ouput a message during locale data checking. The (UTF-8) string is
         written to stderr and in a non-product build or if DBG_UTIL is enabled

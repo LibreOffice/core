@@ -51,6 +51,7 @@
 
 #include <com/sun/star/i18n/NumberFormatIndex.hdl>
 #include <rtl/instance.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 
 #define LOCALEDATA_LIBRARYNAME "i18npool"
@@ -770,7 +771,7 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
     {
         if (areChecksEnabled())
         {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
                         "LocaleDataWrapper::getCurrSymbolsImpl: no default currency"));
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
@@ -882,7 +883,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     {   // bad luck
         if (areChecksEnabled())
         {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
                         "LocaleDataWrapper::getCurrFormatsImpl: no currency formats"));
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
@@ -931,7 +932,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     scanCurrFormatImpl( pFormatArr[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
     if (areChecksEnabled() && (nNum == STRING_NOTFOUND || nSym == STRING_NOTFOUND))
     {
-        String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+        rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
                     "LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?"));
         outputCheckMessage( appendLocaleInfo( aMsg ) );
     }
@@ -962,7 +963,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
                     nSym == STRING_NOTFOUND || (nPar == STRING_NOTFOUND &&
                         nSign == STRING_NOTFOUND)))
         {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
                         "LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?"));
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
@@ -1098,7 +1099,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
         {
             if (areChecksEnabled())
             {
-                String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
                             "LocaleDataWrapper::scanDateFormat: not all DMY present"));
                 outputCheckMessage( appendLocaleInfo( aMsg ) );
             }
@@ -1121,7 +1122,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
     {
         if (areChecksEnabled())
         {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
                         "LocaleDataWrapper::scanDateFormat: no magic applyable"));
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
@@ -1140,7 +1141,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
     {   // bad luck
         if (areChecksEnabled())
         {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
                         "LocaleDataWrapper::getDateFormatsImpl: no date formats"));
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
@@ -1185,7 +1186,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
     {
         if (areChecksEnabled())
         {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
                         "LocaleDataWrapper::getDateFormatsImpl: no edit"));
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
@@ -1193,7 +1194,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
         {
             if (areChecksEnabled())
             {
-                String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
                             "LocaleDataWrapper::getDateFormatsImpl: no default"));
                 outputCheckMessage( appendLocaleInfo( aMsg ) );
             }
@@ -1930,20 +1931,21 @@ String LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
 }
 
 
-String& LocaleDataWrapper::appendLocaleInfo( String& rDebugMsg ) const
+rtl::OUString LocaleDataWrapper::appendLocaleInfo(const rtl::OUString& rDebugMsg) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
-    rDebugMsg += '\n';
-    rDebugMsg += String( aLocale.Language);
-    rDebugMsg += '_';
-    rDebugMsg += String( aLocale.Country);
-    rDebugMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " requested\n" ) );
+    rtl::OUStringBuffer aDebugMsg(rDebugMsg);
+    aDebugMsg.append(static_cast<sal_Unicode>('\n'));
+    aDebugMsg.append(aLocale.Language);
+    aDebugMsg.append(static_cast<sal_Unicode>('_'));
+    aDebugMsg.append(aLocale.Country);
+    aDebugMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM(" requested\n"));
     lang::Locale aLoaded = getLoadedLocale();
-    rDebugMsg += String( aLoaded.Language);
-    rDebugMsg += '_';
-    rDebugMsg += String( aLoaded.Country);
-    rDebugMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " loaded" ) );
-    return rDebugMsg;
+    aDebugMsg.append(aLoaded.Language);
+    aDebugMsg.append(static_cast<sal_Unicode>('_'));
+    aDebugMsg.append(aLoaded.Country);
+    aDebugMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM(" loaded"));
+    return aDebugMsg.makeStringAndClear();
 }
 
 
