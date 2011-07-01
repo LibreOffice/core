@@ -4,9 +4,10 @@
 #include <rtfvalue.hxx>
 #include <rtfsprm.hxx>
 #include <rtfreferenceproperties.hxx>
-#include <doctok/sprmids.hxx> // NS_sprm
-#include <doctok/resourceids.hxx> // NS_rtf
-#include <ooxml/resourceids.hxx> // NS_ooxml
+#include <doctok/sprmids.hxx> // NS_sprm namespace
+#include <doctok/resourceids.hxx> // NS_rtf namespace
+#include <ooxml/resourceids.hxx> // NS_ooxml namespace
+#include <ooxml/OOXMLFastTokens.hxx> // ooxml namespace
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -1812,6 +1813,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_start, pIntValue);
             break;
+        case RTF_REVAUTHDEL:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(m_aAuthors[nParam]));
+                lcl_putNestedAttribute(m_aStates.top().aCharacterSprms,
+                        NS_ooxml::LN_trackchange, NS_ooxml::LN_CT_TrackChange_author, pValue);
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
             bParsed = false;
@@ -1903,6 +1911,13 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     {
         case RTF_ASPALPHA:
             m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_PFAutoSpaceDE, pBoolValue));
+            break;
+        case RTF_DELETED:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(ooxml::OOXML_del));
+                lcl_putNestedAttribute(m_aStates.top().aCharacterSprms,
+                        NS_ooxml::LN_trackchange, NS_ooxml::LN_token, pValue);
+            }
             break;
         default:
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, m_pCurrentKeyword->getStr());
@@ -2223,6 +2238,17 @@ int RTFDocumentImpl::popState()
     {
         aShapeProperties = m_aStates.top().aShapeProperties;
         bPicPropEnd = true;
+    }
+
+    // See if we need to end a track change
+    RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);
+    if (pTrackchange.get())
+    {
+        RTFSprms_t aTCAttributes;
+        RTFValue::Pointer_t pValue(new RTFValue(0));
+        aTCAttributes.push_back(make_pair(NS_ooxml::LN_endtrackchange, pValue));
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aTCAttributes));
+        Mapper().props(pProperties);
     }
 
     // This is the end of the doc, see if we need to close the last section.
