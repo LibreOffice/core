@@ -299,6 +299,8 @@ namespace writerfilter {
                 std::map<rtl::OUString, int> m_aBookmarks;
                 /// Revision index <-> author map.
                 std::map<int, rtl::OUString> m_aAuthors;
+                /// Text from special destinations.
+                rtl::OUStringBuffer m_aDestinationText;
         };
     } // namespace rtftok
 } // namespace writerfilter

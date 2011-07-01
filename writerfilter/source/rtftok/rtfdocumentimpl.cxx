@@ -599,15 +599,6 @@ int RTFDocumentImpl::resolveChars(char ch)
         m_aStates.top().aShapeProperties.push_back(make_pair(aOUStr, OUString()));
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE)
         m_aStates.top().aShapeProperties.back().second += aOUStr;
-    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
-    {
-        // this is an author name, drop the ; at the end if it's there
-        if (aOUStr.endsWithAsciiL(";", 1))
-        {
-            aOUStr = aOUStr.copy(0, aOUStr.getLength() - 1);
-        }
-        m_aAuthors[m_aAuthors.size()] = aOUStr;
-    }
     else
         text(aOUStr);
 
@@ -625,6 +616,16 @@ void RTFDocumentImpl::text(OUString& rString)
     {
         int nPos = m_aBookmarks[rString];
         Mapper().props(lcl_getBookmarkProperties(nPos));
+        return;
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
+    {
+        // this is an author name, drop the ; at the end if it's there
+        if (rString.endsWithAsciiL(";", 1))
+        {
+            rString = rString.copy(0, rString.getLength() - 1);
+        }
+        m_aDestinationText.append(rString);
         return;
     }
     if (m_aIgnoreFirst.getLength() && m_aIgnoreFirst.equals(rString))
@@ -2316,6 +2317,8 @@ int RTFDocumentImpl::popState()
         aShapeProperties = m_aStates.top().aShapeProperties;
         bPicPropEnd = true;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
+        m_aAuthors[m_aAuthors.size()] = m_aDestinationText.makeStringAndClear();
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);
