@@ -937,6 +937,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_LINE: cCh = '\n'; break;
         case RTF_TAB: cCh = '\t'; break;
         case RTF_BACKSLASH: cCh = '\\'; break;
+        case RTF_LBRACE: cCh = '{'; break;
+        case RTF_RBRACE: cCh = '}'; break;
         case RTF_EMDASH: cCh = 151; break;
         case RTF_ENDASH: cCh = 150; break;
         case RTF_BULLET: cCh = 149; break;
