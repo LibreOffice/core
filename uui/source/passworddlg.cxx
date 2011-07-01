@@ -30,7 +30,6 @@
 #include "passworddlg.hrc"
 #include "ids.hrc"
 
-#include <svtools/filedlg.hxx>
 #include <vcl/msgbox.hxx>
 
 

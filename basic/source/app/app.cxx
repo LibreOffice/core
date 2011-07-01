@@ -38,7 +38,6 @@
 
 #include <basic/ttstrhlp.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/filedlg.hxx>
 
 #include <osl/module.h>
 
