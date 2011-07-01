@@ -575,16 +575,6 @@ int RTFDocumentImpl::resolveChars(char ch)
         // set components back to zero
         m_aStates.top().aCurrentColor = RTFColorTableEntry();
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
-    {
-        // this is a style name, drop the ; at the end if it's there
-        if (aOUStr.endsWithAsciiL(";", 1))
-        {
-            aOUStr = aOUStr.copy(0, aOUStr.getLength() - 1);
-        }
-        RTFValue::Pointer_t pValue(new RTFValue(aOUStr));
-        m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_XSTZNAME1, pValue));
-    }
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME)
         m_aStates.top().aShapeProperties.push_back(make_pair(aOUStr, OUString()));
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE)
@@ -619,6 +609,14 @@ void RTFDocumentImpl::text(OUString& rString)
     else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
     {
         // this is a font name, drop the ; at the end if it's there
+        if (rString.endsWithAsciiL(";", 1))
+            rString = rString.copy(0, rString.getLength() - 1);
+        m_aDestinationText.append(rString);
+        return;
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
+    {
+        // this is a style name, drop the ; at the end if it's there
         if (rString.endsWithAsciiL(";", 1))
             rString = rString.copy(0, rString.getLength() - 1);
         m_aDestinationText.append(rString);
@@ -2227,6 +2225,9 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
     {
+        RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
+        m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_XSTZNAME1, pValue));
+
         bStyleEntryEnd = true;
         writerfilter::Reference<Properties>::Pointer_t const pProp(
                 new RTFReferenceProperties(mergeAttributes(), mergeSprms())
