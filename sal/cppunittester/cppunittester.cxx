@@ -143,6 +143,7 @@ SAL_IMPLEMENT_MAIN() {
                 testlib = rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
                 args += testlib;
             }
+            else
             {
                 args += ' ';
                 args += rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
