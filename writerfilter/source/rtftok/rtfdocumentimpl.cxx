@@ -587,41 +587,30 @@ int RTFDocumentImpl::resolveChars(char ch)
 
 void RTFDocumentImpl::text(OUString& rString)
 {
-    if (m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
+    bool bRet = true;
+    switch (m_aStates.top().nDestinationState)
     {
-        m_aStates.top().aLevelText.append(rString);
-        return;
+        case DESTINATION_LEVELTEXT:
+            m_aStates.top().aLevelText.append(rString);
+            break;
+        case DESTINATION_BOOKMARKEND:
+            Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[rString]));
+            break;
+        case DESTINATION_FONTENTRY:
+        case DESTINATION_STYLEENTRY:
+        case DESTINATION_REVISIONENTRY:
+            {
+                // drop the ; at the end if it's there
+                if (rString.endsWithAsciiL(";", 1))
+                    rString = rString.copy(0, rString.getLength() - 1);
+                m_aDestinationText.append(rString);
+            }
+            break;
+        default: bRet = false; break;
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKEND)
-    {
-        int nPos = m_aBookmarks[rString];
-        Mapper().props(lcl_getBookmarkProperties(nPos));
+    if (bRet)
         return;
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
-    {
-        // this is an author name, drop the ; at the end if it's there
-        if (rString.endsWithAsciiL(";", 1))
-            rString = rString.copy(0, rString.getLength() - 1);
-        m_aDestinationText.append(rString);
-        return;
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
-    {
-        // this is a font name, drop the ; at the end if it's there
-        if (rString.endsWithAsciiL(";", 1))
-            rString = rString.copy(0, rString.getLength() - 1);
-        m_aDestinationText.append(rString);
-        return;
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
-    {
-        // this is a style name, drop the ; at the end if it's there
-        if (rString.endsWithAsciiL(";", 1))
-            rString = rString.copy(0, rString.getLength() - 1);
-        m_aDestinationText.append(rString);
-        return;
-    }
+
     if (m_aIgnoreFirst.getLength() && m_aIgnoreFirst.equals(rString))
     {
         m_aIgnoreFirst = OUString();
