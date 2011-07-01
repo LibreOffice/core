@@ -126,7 +126,6 @@
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
-using namespace ::drawinglayer;
 
 #define GETOBJSHELL()       ((SfxObjectShell*)rSh.GetDoc()->GetDocShell())
 
@@ -3342,8 +3341,8 @@ void SwHeadFootFrm::Paint( const SwRect& rRect, SwPrintData const*const pPrintDa
         const String aStyleName = FindPageFrm()->GetPageDesc()->GetName();
         aText += aStyleName;
 
-        primitive2d::Primitive2DSequence aSeq( 4 );
-        processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
+        drawinglayer::primitive2d::Primitive2DSequence aSeq( 4 );
+        drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
 
         // Colors
         basegfx::BColor aLineColor( 3.0 / 255.0, 105.0 / 255.0, 163.0 / 255.0 );
@@ -3360,13 +3359,13 @@ void SwHeadFootFrm::Paint( const SwRect& rRect, SwPrintData const*const pPrintDa
         aLinePolygon.append( basegfx::B2DPoint( double( rRect.Left() ), nLineY ) );
         aLinePolygon.append( basegfx::B2DPoint( double( rRect.Right() ), nLineY ) );
 
-        primitive2d::PolyPolygonStrokePrimitive2D * pLine =
-                new primitive2d::PolyPolygonStrokePrimitive2D (
+        drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D * pLine =
+                new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
                     basegfx::B2DPolyPolygon( aLinePolygon ),
                     drawinglayer::attribute::LineAttribute( aLineColor, 20.0 ),
                     drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
 
-        aSeq[1] = primitive2d::Primitive2DReference( pLine );
+        aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pLine );
 
         // Compute the text primitive
         basegfx::B2DVector aFontSize;
@@ -3375,7 +3374,7 @@ void SwHeadFootFrm::Paint( const SwRect& rRect, SwPrintData const*const pPrintDa
         Font aFont = pOut->GetSettings().GetStyleSettings().GetAppFont();
         aFont.SetHeight( 8 * 20 ); // 8pt to twips
 
-        drawinglayer::attribute::FontAttribute aFontAttr = primitive2d::getFontAttributeFromVclFont(
+        drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
                 aFontSize, aFont, false, false );
 
         FontMetric aFontMetric = pOut->GetFontMetric( aFont );
@@ -3388,15 +3387,15 @@ void SwHeadFootFrm::Paint( const SwRect& rRect, SwPrintData const*const pPrintDa
                     rRect.Left() + 80.0, nLineY + nTextOffsetY ) );
 
 
-        primitive2d::TextSimplePortionPrimitive2D * pText =
-                new primitive2d::TextSimplePortionPrimitive2D(
+        drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
+                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                     aTextMatrix,
                     aText, 0, aText.Len(),
                     std::vector< double >(),
                     aFontAttr,
                     lang::Locale(),
                     aLineColor );
-        aSeq[3] = primitive2d::Primitive2DReference( pText );
+        aSeq[3] = drawinglayer::primitive2d::Primitive2DReference( pText );
         basegfx::B2DRange aTextRange = pText->getB2DRange( pProcessor->getViewInformation2D() );
 
         // Draw the polygon around the flag
@@ -3420,14 +3419,15 @@ void SwHeadFootFrm::Paint( const SwRect& rRect, SwPrintData const*const pPrintDa
         aFlagPolygon.append( aNextPt );
 
         // Compute the flag background color primitive
-        aSeq[0] = primitive2d::Primitive2DReference(
-                new primitive2d::PolyPolygonColorPrimitive2D(
+        aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
+                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon( aFlagPolygon ),
                     aFillColor ) );
 
-        primitive2d::PolygonHairlinePrimitive2D * pBoxLine = new primitive2d::PolygonHairlinePrimitive2D(
+        drawinglayer::primitive2d::PolygonHairlinePrimitive2D * pBoxLine =
+            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                 aFlagPolygon, aLineColor );
-        aSeq[2] = primitive2d::Primitive2DReference( pBoxLine );
+        aSeq[2] = drawinglayer::primitive2d::Primitive2DReference( pBoxLine );
 
 
         // Compute the range to invalidate
@@ -4761,7 +4761,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
     return pRet;
 }
 
-processor2d::BaseProcessor2D * SwFrm::CreateProcessor2D( ) const
+drawinglayer::processor2d::BaseProcessor2D * SwFrm::CreateProcessor2D( ) const
 {
     basegfx::B2DRange aViewRange;
 
@@ -4781,7 +4781,7 @@ processor2d::BaseProcessor2D * SwFrm::CreateProcessor2D( ) const
 
 void SwFrm::ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSequence& rSequence ) const
 {
-    processor2d::BaseProcessor2D * pProcessor2D = CreateProcessor2D();
+    drawinglayer::processor2d::BaseProcessor2D * pProcessor2D = CreateProcessor2D();
 
     if ( pProcessor2D )
     {
