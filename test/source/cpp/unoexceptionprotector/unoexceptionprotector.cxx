@@ -95,9 +95,12 @@ bool Prot::protect(
 
 bool Prot::protect(CppUnit::Functor const & functor)
 {
-    try {
-        return functor();
-    } catch (const css::uno::Exception &e) {
+    bool bRet = false;
+    try
+    {
+        bRet = functor();
+    } catch (const css::uno::Exception &e)
+    {
         css::uno::Any a(cppu::getCaughtException());
         std::cerr
             << convert(rtl::OUString(
@@ -108,7 +111,7 @@ bool Prot::protect(CppUnit::Functor const & functor)
             << std::endl;
         throw;
     }
-    return false;
+    return bRet;
 }
 
 }
