@@ -1642,6 +1642,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 rSprms.push_back(make_pair(NS_sprm::LN_PIlvl, pIntValue));
             }
         case RTF_LISTTEMPLATEID:
+            // This one is not referenced anywhere, so it's pointless to store it at the moment.
+            break;
         case RTF_LISTID:
             {
                 if (m_aStates.top().nDestinationState == DESTINATION_LISTENTRY)
