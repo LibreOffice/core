@@ -20,10 +20,7 @@ class ConfigGroup(ConfigNode):
             child.writeConfiguration(configView.getByName(propertyName),
                 prefix)
         else:
-            try:
-                setattr(configView,propertyName,getattr(self,field))
-            except Exception:
-                pass
+            setattr(configView,propertyName,getattr(self,field))
 
     def readConfiguration(self, configurationView, param):
         for name,data in inspect.getmembers(self):
