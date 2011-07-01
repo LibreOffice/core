@@ -1856,6 +1856,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
                     NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_start, pIntValue);
             break;
+        case RTF_REVAUTH:
         case RTF_REVAUTHDEL:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(m_aAuthors[nParam]));
@@ -1863,6 +1864,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                         NS_ooxml::LN_trackchange, NS_ooxml::LN_CT_TrackChange_author, pValue);
             }
             break;
+        case RTF_REVDTTM:
         case RTF_REVDTTMDEL:
             {
                 OUString aStr(OStringToOUString(lcl_DTTM22OString(nParam), m_aStates.top().nCurrentEncoding));
@@ -1964,8 +1966,9 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
             m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_PFAutoSpaceDE, pBoolValue));
             break;
         case RTF_DELETED:
+        case RTF_REVISED:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(ooxml::OOXML_del));
+                RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_DELETED ? ooxml::OOXML_del : ooxml::OOXML_ins));
                 lcl_putNestedAttribute(m_aStates.top().aCharacterSprms,
                         NS_ooxml::LN_trackchange, NS_ooxml::LN_token, pValue);
             }
