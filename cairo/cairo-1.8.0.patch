@@ -197,14 +197,6 @@ diff -ur misc/build/cairo-1.8.0.org/configure misc/build/cairo-1.8.0/configure
  
  
  { echo "$as_me:$LINENO: checking for X" >&5
-@@ -29865,7 +29865,6 @@
- quartz_font_NONPKGCONFIG_LIBS="$ac_env_quartz_font_NONPKGCONFIG_LIBS_value"
- 
- 
--  use_quartz_font=$use_quartz
- 
- 			cairo_cv_quartz_font_use=$use_quartz_font
- 			cairo_cv_quartz_font_cache_vars=" BASE REQUIRES CFLAGS NONPKGCONFIG_CFLAGS LIBS NONPKGCONFIG_LIBS"
 @@ -31723,7 +31723,7 @@
  
    if test "x$png_REQUIRES" = x; then
