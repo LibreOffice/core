@@ -3106,6 +3106,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,\
     offapi/com/sun/star/table/TableSortFieldType \
     offapi/com/sun/star/table/XAutoFormattable \
     offapi/com/sun/star/table/XCell \
+    offapi/com/sun/star/table/XCell2 \
     offapi/com/sun/star/table/XCellCursor \
     offapi/com/sun/star/table/XCellRange \
     offapi/com/sun/star/table/XColumnRowRange \
