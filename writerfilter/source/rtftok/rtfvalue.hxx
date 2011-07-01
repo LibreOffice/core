@@ -17,7 +17,7 @@ namespace writerfilter {
                 RTFValue(int nValue, rtl::OUString sValue, std::vector<std::pair<Id, RTFValue::Pointer_t>> rAttributes,
                         std::vector<std::pair<Id, RTFValue::Pointer_t>> rSprms, uno::Reference<drawing::XShape> rShape);
                 RTFValue(int nValue);
-                RTFValue(rtl::OUString sValue);
+                RTFValue(rtl::OUString sValue, bool bForce = false);
                 RTFValue(std::vector<std::pair<Id, RTFValue::Pointer_t>> rAttributes);
                 RTFValue(std::vector<std::pair<Id, RTFValue::Pointer_t>> rAttributes,
                         std::vector<std::pair<Id, RTFValue::Pointer_t>> rSprms);
@@ -39,6 +39,7 @@ namespace writerfilter {
                 std::vector<std::pair<Id, RTFValue::Pointer_t>> m_rAttributes;
                 std::vector<std::pair<Id, RTFValue::Pointer_t>> m_rSprms;
                 uno::Reference<drawing::XShape> m_rShape;
+                bool m_bForceString;
         };
     } // namespace rtftok
 } // namespace writerfilter

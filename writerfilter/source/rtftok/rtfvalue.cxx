@@ -15,7 +15,8 @@ RTFValue::RTFValue(int nValue, rtl::OUString sValue, RTFSprms_t rAttributes,
     m_sValue(sValue),
     m_rAttributes(rAttributes),
     m_rSprms(rSprms),
-    m_rShape(rShape)
+    m_rShape(rShape),
+    m_bForceString(false)
 {
 }
 
@@ -24,16 +25,18 @@ RTFValue::RTFValue(int nValue)
     m_sValue(),
     m_rAttributes(),
     m_rSprms(),
-    m_rShape()
+    m_rShape(),
+    m_bForceString(false)
 {
 }
 
-RTFValue::RTFValue(OUString sValue)
+RTFValue::RTFValue(OUString sValue, bool bForce)
     : m_nValue(),
     m_sValue(sValue),
     m_rAttributes(),
     m_rSprms(),
-    m_rShape()
+    m_rShape(),
+    m_bForceString(bForce)
 {
 }
 
@@ -42,7 +45,8 @@ RTFValue::RTFValue(RTFSprms_t rAttributes)
     m_sValue(),
     m_rAttributes(rAttributes),
     m_rSprms(),
-    m_rShape()
+    m_rShape(),
+    m_bForceString(false)
 {
 }
 
@@ -51,7 +55,8 @@ RTFValue::RTFValue(RTFSprms_t rAttributes, RTFSprms_t rSprms)
     m_sValue(),
     m_rAttributes(rAttributes),
     m_rSprms(rSprms),
-    m_rShape()
+    m_rShape(),
+    m_bForceString(false)
 {
 }
 
@@ -60,7 +65,8 @@ RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
     m_sValue(),
     m_rAttributes(),
     m_rSprms(),
-    m_rShape(rShape)
+    m_rShape(rShape),
+    m_bForceString(false)
 {
 }
 
@@ -71,7 +77,7 @@ int RTFValue::getInt() const
 
 OUString RTFValue::getString() const
 {
-    if (m_sValue.getLength() > 0)
+    if (m_sValue.getLength() > 0 || m_bForceString)
         return m_sValue;
     else
         return OUString::valueOf(sal_Int32(m_nValue));
@@ -85,7 +91,7 @@ void RTFValue::setString(OUString sValue)
 uno::Any RTFValue::getAny() const
 {
     uno::Any ret;
-    if (m_sValue.getLength() > 0)
+    if (m_sValue.getLength() > 0 || m_bForceString)
         ret <<= m_sValue;
     else if (m_rShape.is())
         ret <<= m_rShape;
@@ -114,7 +120,7 @@ writerfilter::Reference<BinaryObj>::Pointer_t RTFValue::getBinary()
 
 std::string RTFValue::toString() const
 {
-    if (m_sValue.getLength() > 0)
+    if (m_sValue.getLength() > 0 || m_bForceString)
         return OUStringToOString(m_sValue, RTL_TEXTENCODING_UTF8).getStr();
     else
         return OString::valueOf(static_cast<sal_Int32>(m_nValue)).getStr();
