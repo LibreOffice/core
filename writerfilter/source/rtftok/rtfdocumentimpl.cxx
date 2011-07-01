@@ -1804,8 +1804,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_countBy, pIntValue);
             break;
         case RTF_LINEX:
-            lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                    NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_distance, pIntValue);
+            if (nParam)
+                lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
+                        NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_distance, pIntValue);
             break;
         case RTF_LINESTARTS:
             lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
