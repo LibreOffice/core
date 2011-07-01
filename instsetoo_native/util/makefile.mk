@@ -84,11 +84,10 @@ allhelplangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(help_exist) $(eq,$i,$j  
 xxxx:
     echo $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product LibreOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml
 
-.IF "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
+.IF "$(GUI)"!="WNT" && "$(EPM)"=="NO"
 ALLTAR  : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
-.ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
-.IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
+.ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
 .IF "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
 ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack)
@@ -102,10 +101,7 @@ ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(
 ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack) sdkoodev_en-US ure_en-US
 .ENDIF
 .ENDIF # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
-.ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
-ALLTAR : updatepack
-.ENDIF			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
-.ENDIF			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
+.ENDIF			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
 
 .IF "$(FORCE2ARCHIVE)" == "TRUE"
 PKGFORMAT = archive
