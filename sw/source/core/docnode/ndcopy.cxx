@@ -186,14 +186,25 @@ namespace
             // Explicitly try to get exactly the same name as in the source
             // because NavigatorReminders, DdeBookmarks etc. ignore the proposed name
             pDestDoc->getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
+
+            // copying additional attributes for bookmarks or fieldmarks
             ::sw::mark::IBookmark* const pNewBookmark =
                 dynamic_cast< ::sw::mark::IBookmark* const >(pNewMark);
-            if(pNewBookmark) /* copying additional attributes for bookmarks */
+            if(pNewBookmark)
             {
                 const ::sw::mark::IBookmark* const pOldBookmark = dynamic_cast< const ::sw::mark::IBookmark* >(pMark);
                 pNewBookmark->SetKeyCode(pOldBookmark->GetKeyCode());
                 pNewBookmark->SetShortName(pOldBookmark->GetShortName());
             }
+            ::sw::mark::IFieldmark* const pNewFieldmark =
+                dynamic_cast< ::sw::mark::IFieldmark* const >(pNewMark);
+            if(pNewFieldmark)
+            {
+                const ::sw::mark::IFieldmark* const pOldFieldmark = dynamic_cast< const ::sw::mark::IFieldmark* >(pMark);
+                pNewFieldmark->SetFieldname(pOldFieldmark->GetFieldname());
+                pNewFieldmark->SetFieldHelptext(pOldFieldmark->GetFieldHelptext());
+            }
+
             ::sfx2::Metadatable const*const pMetadatable(
                     dynamic_cast< ::sfx2::Metadatable const* >(pMark));
             ::sfx2::Metadatable      *const pNewMetadatable(
