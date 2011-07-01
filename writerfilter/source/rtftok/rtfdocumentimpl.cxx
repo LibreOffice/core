@@ -2046,13 +2046,11 @@ int RTFDocumentImpl::pushState()
     m_nGroup++;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
-    {
         m_aStates.top().nDestinationState = DESTINATION_FONTENTRY;
-    }
     else if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
-    {
         m_aStates.top().nDestinationState = DESTINATION_STYLEENTRY;
-    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
+        m_aStates.top().nDestinationState = DESTINATION_NORMAL;
 
     return 0;
 }
