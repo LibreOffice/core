@@ -185,9 +185,6 @@ namespace writerfilter {
                 /// List level entries, which will form a list entry later.
                 RTFSprms_t aListLevelEntries;
 
-                /// Text from leveltext destination.
-                rtl::OUStringBuffer aLevelText;
-
                 /// List of character positions in leveltext to replace.
                 std::vector<sal_Int32> aLevelNumbers;
 

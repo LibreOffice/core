@@ -586,15 +586,13 @@ void RTFDocumentImpl::text(OUString& rString)
     bool bRet = true;
     switch (m_aStates.top().nDestinationState)
     {
-        case DESTINATION_LEVELTEXT:
-            m_aStates.top().aLevelText.append(rString);
-            break;
         case DESTINATION_FONTENTRY:
         case DESTINATION_STYLEENTRY:
         case DESTINATION_REVISIONENTRY:
             // drop the ; at the end if it's there
             if (rString.endsWithAsciiL(";", 1))
                 rString = rString.copy(0, rString.getLength() - 1);
+        case DESTINATION_LEVELTEXT:
         case DESTINATION_SHAPEPROPERTYNAME:
         case DESTINATION_SHAPEPROPERTYVALUE:
         case DESTINATION_BOOKMARKEND:
@@ -2254,7 +2252,7 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
     {
-        OUString aStr = m_aStates.top().aLevelText.makeStringAndClear();
+        OUString aStr = m_aDestinationText.makeStringAndClear();
 
         // The first character is the length of the string (the rest should be ignored).
         sal_Int32 nLength(aStr.toChar());
@@ -2516,7 +2514,6 @@ RTFParserState::RTFParserState()
     nCharsToSkip(0),
     nListLevelNum(0),
     aListLevelEntries(),
-    aLevelText(),
     aLevelNumbers(),
     nPictureScaleX(0),
     nPictureScaleY(0),
