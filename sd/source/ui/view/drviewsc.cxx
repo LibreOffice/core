@@ -592,14 +592,13 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_IMAP:
         {
-            SvxIMapDlg* pDlg;
             sal_uInt16      nId = SvxIMapDlgChildWindow::GetChildWindowId();
 
             GetViewFrame()->ToggleChildWindow( nId );
             GetViewFrame()->GetBindings().Invalidate( SID_IMAP );
 
             if ( GetViewFrame()->HasChildWindow( nId )
-                && ( ( pDlg = ViewShell::Implementation::GetImageMapDialog() ) != NULL ) )
+                && ( ( ViewShell::Implementation::GetImageMapDialog() ) != NULL ) )
             {
                 const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
 

@@ -177,7 +177,6 @@ void SlideSorterCacheDisplay::Resize (void)
                 else
                     ++nC;
             }
-            double nAspect2 = double(nC) / double(nR);
 
             mnRowCount = nR;
             mnColumnCount = nC;
