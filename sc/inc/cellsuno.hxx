@@ -73,6 +73,7 @@
 #include <com/sun/star/util/XSortable.hpp>
 #include <com/sun/star/util/XImportable.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/table/XCell2.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
@@ -817,7 +818,7 @@ public:
 class SC_DLLPUBLIC ScCellObj : public ScCellRangeObj,
                   public com::sun::star::text::XText,
                   public com::sun::star::container::XEnumerationAccess,
-                  public com::sun::star::table::XCell,
+                  public com::sun::star::table::XCell2,
                   public com::sun::star::sheet::XFormulaTokens,
                   public com::sun::star::sheet::XCellAddressable,
                   public com::sun::star::sheet::XSheetAnnotationAnchor,
@@ -928,6 +929,10 @@ public:
                             // XCell
     virtual ::rtl::OUString SAL_CALL getFormula() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setFormula( const ::rtl::OUString& aFormula )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setFormulaResult( const double nValue )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setFormulaString( const ::rtl::OUString& aFormula )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual double SAL_CALL getValue() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setValue( double nValue ) throw(::com::sun::star::uno::RuntimeException);

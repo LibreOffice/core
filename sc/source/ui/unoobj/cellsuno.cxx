@@ -6088,6 +6088,7 @@ void ScCellObj::RefChanged()
 uno::Any SAL_CALL ScCellObj::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
 {
     SC_QUERYINTERFACE( table::XCell )
+    SC_QUERYINTERFACE( table::XCell2 )
     SC_QUERYINTERFACE( sheet::XFormulaTokens )
     SC_QUERYINTERFACE( sheet::XCellAddressable )
     SC_QUERYINTERFACE( text::XText )
@@ -6121,7 +6122,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes() throw(uno::RuntimeExcept
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 8 );
+        aTypes.realloc( nParentLen + 9 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<table::XCell>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<sheet::XCellAddressable>*)0);
@@ -6131,6 +6132,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes() throw(uno::RuntimeExcept
         pPtr[nParentLen + 5] = getCppuType((const uno::Reference<text::XTextFieldsSupplier>*)0);
         pPtr[nParentLen + 6] = getCppuType((const uno::Reference<document::XActionLockable>*)0);
         pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XFormulaTokens>*)0);
+        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<table::XCell2>*)0);
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -6510,6 +6512,31 @@ void SAL_CALL ScCellObj::setValue( double nValue ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     SetValue_Impl(nValue);
+}
+
+void SAL_CALL ScCellObj::setFormulaString( const rtl::OUString& aFormula) throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    ScDocShell *pDocSh = GetDocShell();
+    if( pDocSh )
+    {
+        ScDocFunc aFunc( *pDocSh );
+        ScFormulaCell* pCell = new ScFormulaCell( pDocSh->GetDocument(), aCellPos );
+        pCell->SetHybridFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE );
+        aFunc.PutCell( aCellPos, pCell, sal_True );
+    }
+}
+void SAL_CALL ScCellObj::setFormulaResult( double nValue ) throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh && pDocSh->GetDocument()->GetCellType( aCellPos ) == CELLTYPE_FORMULA )
+    {
+        ScFormulaCell* pCell = (ScFormulaCell *)pDocSh->GetDocument()->GetCell( aCellPos );
+        pCell->SetHybridDouble( nValue );
+        pCell->ResetDirty();
+        pCell->ResetChanged();
+    }
 }
 
 table::CellContentType SAL_CALL ScCellObj::getType() throw(uno::RuntimeException)
