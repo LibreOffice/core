@@ -57,6 +57,7 @@
 #include <unotools/digitgroupingiterator.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <math.h>
 #include <limits>
@@ -2091,8 +2092,9 @@ sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
     if ( !nCnt )
         return -1;
     if (bCheckCorrectness && LocaleDataWrapper::areChecksEnabled())
-    {   // check the locale data for correctness
-        ByteString aMsg;
+    {
+        // check the locale data for correctness
+        rtl::OStringBuffer aMsg;
         sal_Int32 nElem, nShort, nMedium, nLong, nShortDef, nMediumDef, nLongDef;
         nShort = nMedium = nLong = nShortDef = nMediumDef = nLongDef = -1;
         for ( nElem = 0; nElem < nCnt; nElem++ )
@@ -2109,7 +2111,7 @@ sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
                     nLong = nElem;
                 break;
                 default:
-                    aMsg = "unknown type";
+                    aMsg.append(RTL_CONSTASCII_STRINGPARAM("unknown type"));
             }
             if ( pFormatArr[nElem].Default )
             {
@@ -2117,47 +2119,44 @@ sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
                 {
                     case i18n::KNumberFormatType::SHORT :
                         if ( nShortDef != -1 )
-                            aMsg = "dupe short type default";
+                            aMsg.append(RTL_CONSTASCII_STRINGPARAM("dupe short type default"));
                         nShortDef = nElem;
                     break;
                     case i18n::KNumberFormatType::MEDIUM :
                         if ( nMediumDef != -1 )
-                            aMsg = "dupe medium type default";
+                            aMsg.append(RTL_CONSTASCII_STRINGPARAM("dupe medium type default"));
                         nMediumDef = nElem;
                     break;
                     case i18n::KNumberFormatType::LONG :
                         if ( nLongDef != -1 )
-                            aMsg = "dupe long type default";
+                            aMsg.append(RTL_CONSTASCII_STRINGPARAM("dupe long type default"));
                         nLongDef = nElem;
                     break;
                 }
             }
-            if ( aMsg.Len() )
+            if (aMsg.getLength())
             {
-                aMsg.Insert( "SvNumberFormatter::ImpAdjustFormatCodeDefault: ", 0 );
-                aMsg += "\nXML locale data FormatElement formatindex: ";
-                aMsg += ByteString::CreateFromInt32( pFormatArr[nElem].Index );
-                String aUMsg( aMsg, RTL_TEXTENCODING_ASCII_US);
-                LocaleDataWrapper::outputCheckMessage(
-                        xLocaleData->appendLocaleInfo( aUMsg));
-                aMsg.Erase();
+                aMsg.insert(0, RTL_CONSTASCII_STRINGPARAM("SvNumberFormatter::ImpAdjustFormatCodeDefault: "));
+                aMsg.append(RTL_CONSTASCII_STRINGPARAM("\nXML locale data FormatElement formatindex: "));
+                aMsg.append(static_cast<sal_Int32>(pFormatArr[nElem].Index));
+                rtl::OUString aUMsg(rtl::OStringToOUString(aMsg.makeStringAndClear(),
+                    RTL_TEXTENCODING_ASCII_US));
+                LocaleDataWrapper::outputCheckMessage(xLocaleData->appendLocaleInfo(aUMsg));
             }
         }
         if ( nShort != -1 && nShortDef == -1 )
-            aMsg += "no short type default  ";
+            aMsg.append(RTL_CONSTASCII_STRINGPARAM("no short type default  "));
         if ( nMedium != -1 && nMediumDef == -1 )
-            aMsg += "no medium type default  ";
+            aMsg.append(RTL_CONSTASCII_STRINGPARAM("no medium type default  "));
         if ( nLong != -1 && nLongDef == -1 )
-            aMsg += "no long type default  ";
-        if ( aMsg.Len() )
+            aMsg.append(RTL_CONSTASCII_STRINGPARAM("no long type default  "));
+        if (aMsg.getLength())
         {
-            aMsg.Insert( "SvNumberFormatter::ImpAdjustFormatCodeDefault: ", 0 );
-            aMsg += "\nXML locale data FormatElement group of: ";
-            String aUMsg( aMsg, RTL_TEXTENCODING_ASCII_US);
-            aUMsg += String( pFormatArr[0].NameID );
+            aMsg.insert(0, RTL_CONSTASCII_STRINGPARAM("SvNumberFormatter::ImpAdjustFormatCodeDefault: "));
+            aMsg.append(RTL_CONSTASCII_STRINGPARAM("\nXML locale data FormatElement group of: "));
+            rtl::OUString aUMsg(rtl::OStringToOUString(aMsg.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US));
             LocaleDataWrapper::outputCheckMessage(
-                    xLocaleData->appendLocaleInfo( aUMsg));
-            aMsg.Erase();
+                xLocaleData->appendLocaleInfo(aUMsg + pFormatArr[0].NameID));
         }
     }
     // find the default (medium preferred, then long) and reset all other defaults
@@ -3533,21 +3532,12 @@ void SvNumberFormatter::GetCompatibilityCurrency( String& rSymbol, String& rAbbr
 
 void lcl_CheckCurrencySymbolPosition( const NfCurrencyEntry& rCurr )
 {
-    short nPos = -1;        // -1:=unknown, 0:=vorne, 1:=hinten
-    short nNeg = -1;
     switch ( rCurr.GetPositiveFormat() )
     {
         case 0:                                         // $1
-            nPos = 0;
-        break;
         case 1:                                         // 1$
-            nPos = 1;
-        break;
         case 2:                                         // $ 1
-            nPos = 0;
-        break;
         case 3:                                         // 1 $
-            nPos = 1;
         break;
         default:
             LocaleDataWrapper::outputCheckMessage(
@@ -3557,74 +3547,26 @@ void lcl_CheckCurrencySymbolPosition( const NfCurrencyEntry& rCurr )
     switch ( rCurr.GetNegativeFormat() )
     {
         case 0:                                         // ($1)
-            nNeg = 0;
-        break;
         case 1:                                         // -$1
-            nNeg = 0;
-        break;
         case 2:                                         // $-1
-            nNeg = 0;
-        break;
         case 3:                                         // $1-
-            nNeg = 0;
-        break;
         case 4:                                         // (1$)
-            nNeg = 1;
-        break;
         case 5:                                         // -1$
-            nNeg = 1;
-        break;
         case 6:                                         // 1-$
-            nNeg = 1;
-        break;
         case 7:                                         // 1$-
-            nNeg = 1;
-        break;
         case 8:                                         // -1 $
-            nNeg = 1;
-        break;
         case 9:                                         // -$ 1
-            nNeg = 0;
-        break;
         case 10:                                        // 1 $-
-            nNeg = 1;
-        break;
         case 11:                                        // $ -1
-            nNeg = 0;
-        break;
         case 12 :                                       // $ 1-
-            nNeg = 0;
-        break;
         case 13 :                                       // 1- $
-            nNeg = 1;
-        break;
         case 14 :                                       // ($ 1)
-            nNeg = 0;
-        break;
         case 15 :                                       // (1 $)
-            nNeg = 1;
         break;
         default:
             LocaleDataWrapper::outputCheckMessage(
                     "lcl_CheckCurrencySymbolPosition: unknown NegativeFormat");
         break;
-    }
-    if ( nPos >= 0 && nNeg >= 0 && nPos != nNeg )
-    {
-        ByteString aStr( "positions of currency symbols differ\nLanguage: " );
-        aStr += ByteString::CreateFromInt32( rCurr.GetLanguage() );
-        aStr += " <";
-        aStr += ByteString( rCurr.GetSymbol(), RTL_TEXTENCODING_UTF8 );
-        aStr += "> positive: ";
-        aStr += ByteString::CreateFromInt32( rCurr.GetPositiveFormat() );
-        aStr += ( nPos ? " (postfix)" : " (prefix)" );
-        aStr += ", negative: ";
-        aStr += ByteString::CreateFromInt32( rCurr.GetNegativeFormat() );
-        aStr += ( nNeg ? " (postfix)" : " (prefix)" );
-#if 0
-// seems that there really are some currencies which differ, e.g. YugoDinar
-        DBG_ERRORFILE( aStr.GetBuffer() );
-#endif
     }
 }
 
