@@ -3358,8 +3358,8 @@ void SwHeadFootFrm::Paint( const SwRect& rRect, SwPrintData const*const pPrintDa
         primitive2d::PolyPolygonStrokePrimitive2D * pLine =
                 new primitive2d::PolyPolygonStrokePrimitive2D (
                     basegfx::B2DPolyPolygon( aLinePolygon ),
-                    attribute::LineAttribute( aLineColor, 20.0 ),
-                    attribute::StrokeAttribute( aStrokePattern ) );
+                    drawinglayer::attribute::LineAttribute( aLineColor, 20.0 ),
+                    drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
 
         aSeq[1] = primitive2d::Primitive2DReference( pLine );
 
@@ -3370,7 +3370,7 @@ void SwHeadFootFrm::Paint( const SwRect& rRect, SwPrintData const*const pPrintDa
         Font aFont = pOut->GetSettings().GetStyleSettings().GetAppFont();
         aFont.SetHeight( 8 * 20 ); // 8pt to twips
 
-        attribute::FontAttribute aFontAttr = primitive2d::getFontAttributeFromVclFont(
+        drawinglayer::attribute::FontAttribute aFontAttr = primitive2d::getFontAttributeFromVclFont(
                 aFontSize, aFont, false, false );
 
         FontMetric aFontMetric = pOut->GetFontMetric( aFont );
