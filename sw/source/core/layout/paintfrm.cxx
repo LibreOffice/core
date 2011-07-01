@@ -2982,7 +2982,12 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                             const SwContact* pContact = ::GetUserCall( pDrawObj );
                             const SwAnchoredObject* pObj = pContact->GetAnchoredObj( pDrawObj );
 
-                            bool bInHeaderFooter = pObj->GetAnchorFrm()->FindFooterOrHeader() != NULL;
+                            const SwFrm* pAnchorFrm = pObj->GetAnchorFrm();
+                            bool bInHeaderFooter = false;
+
+                            // Handle all non anchored as character objects... others are handled elsewere
+                            if ( pAnchorFrm )
+                                bInHeaderFooter = pAnchorFrm->FindFooterOrHeader() != NULL;
                             bool bHeaderFooterEdit = pSh->IsHeaderFooterEdit();
 
                             pDrawObj->SetGhosted( bHeaderFooterEdit ^ bInHeaderFooter );
