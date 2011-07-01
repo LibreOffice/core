@@ -92,7 +92,7 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,sc_ucalc,\
 $(eval $(call gb_CppunitTest_set_args,sc_ucalc,\
     --headless \
     --invisible \
-    --protector unoexceptionprotector$(gb_Library_PLAINEXT) unoexceptionprotector \
+    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
 $(eval $(call gb_RdbTarget_RdbTarget,sc_ucalc))
