@@ -2255,7 +2255,7 @@ void DomainMapper_Impl::handleToc
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
         if( sTemplate.getLength() )
         {
-                            //the string contains coma separated the names and related levels
+                            //the string contains comma separated the names and related levels
                             //like: "Heading 1,1,Heading 2,2"
             TOCStyleMap aMap;
             sal_Int32 nLevel;
