@@ -54,6 +54,101 @@ GtkSalSystem::~GtkSalSystem()
 {
 }
 
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+unsigned int GtkSalSystem::GetDisplayScreenCount()
+{
+    return 1;
+}
+
+bool GtkSalSystem::IsMultiDisplay()
+{
+    return false;
+}
+
+unsigned int GtkSalSystem::GetDefaultDisplayNumber()
+{
+    return 0;
+}
+
+Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
+{
+    g_warning ("FIXME: GetDisplayScreenPosSizePixel unimplemented");
+    return Rectangle (0, 0, 1024, 768);
+}
+
+Rectangle GtkSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
+{
+    return GetDisplayScreenPosSizePixel( nScreen );
+}
+
+rtl::OUString GtkSalSystem::GetScreenName( unsigned int nScreen )
+{
+    return rtl::OUString::createFromAscii( "Jim" );
+}
+
+// FIXME: shocking cut/paste from X11SalSystem ... [!] - push me lower ...
+#include <vcl/msgbox.hxx>
+#include <vcl/button.hxx>
+
+int GtkSalSystem::ShowNativeMessageBox( const String& rTitle,
+                                        const String& rMessage,
+                                        int nButtonCombination,
+                                        int nDefaultButton)
+{
+    int nDefButton = 0;
+    std::list< String > aButtons;
+    int nButtonIds[5], nBut = 0;
+
+    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK ||
+        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL )
+    {
+        aButtons.push_back( Button::GetStandardText( BUTTON_OK ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK;
+    }
+    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL ||
+        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO )
+    {
+        aButtons.push_back( Button::GetStandardText( BUTTON_YES ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES;
+        aButtons.push_back( Button::GetStandardText( BUTTON_NO ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO;
+        if( nDefaultButton == SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO )
+            nDefButton = 1;
+    }
+    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL ||
+        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL ||
+        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL )
+    {
+        if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL )
+        {
+            aButtons.push_back( Button::GetStandardText( BUTTON_RETRY ) );
+            nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY;
+        }
+        aButtons.push_back( Button::GetStandardText( BUTTON_CANCEL ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL;
+        if( nDefaultButton == SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL )
+            nDefButton = aButtons.size()-1;
+    }
+    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE )
+    {
+        aButtons.push_back( Button::GetStandardText( BUTTON_ABORT ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_ABORT;
+        aButtons.push_back( Button::GetStandardText( BUTTON_RETRY ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY;
+        aButtons.push_back( Button::GetStandardText( BUTTON_IGNORE ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE;
+        switch( nDefaultButton )
+        {
+            case SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY: nDefButton = 1;break;
+            case SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE: nDefButton = 2;break;
+        }
+    }
+    int nResult = ShowNativeDialog( rTitle, rMessage, aButtons, nDefButton );
+
+    return nResult != -1 ? nButtonIds[ nResult ] : 0;
+}
+#endif
+
 // convert ~ to indicate mnemonic to '_'
 static rtl::OString MapToGtkAccelerator(const String &rStr)
 {

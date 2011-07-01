@@ -38,6 +38,7 @@
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <osl/conditn.h>
 
 #include <list>
 
@@ -77,6 +78,37 @@ inline void widget_set_can_default(GtkWidget *widget, gboolean can_default)
 #endif
 }
 
+class GtkXLib : public SalXLib
+{
+    GtkSalDisplay       *m_pGtkSalDisplay;
+    std::list<GSource *> m_aSources;
+    GSource             *m_pTimeout;
+    GSource				*m_pUserEvent;
+    oslMutex             m_aDispatchMutex;
+    oslCondition         m_aDispatchCondition;
+    XIOErrorHandler      m_aOrigGTKXIOErrorHandler;
+
+public:
+    static gboolean      timeoutFn(gpointer data);
+    static gboolean      userEventFn(gpointer data);
+
+    GtkXLib();
+    virtual ~GtkXLib();
+
+    virtual void    Init();
+    virtual void    Yield( bool bWait, bool bHandleAllCurrentEvents );
+    virtual void    Insert( int fd, void* data,
+                            YieldFunc	pending,
+                            YieldFunc	queued,
+                            YieldFunc	handle );
+    virtual void    Remove( int fd );
+
+    virtual void    StartTimer( sal_uLong nMS );
+    virtual void    StopTimer();
+    virtual void    Wakeup();
+    virtual void    PostUserEvent();
+};
+
 #if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
 class GtkData : public SalData
 #else
@@ -93,8 +125,10 @@ public:
     virtual void deInitNWF();
 
     GtkSalDisplay *pDisplay;
+    GtkSalDisplay *GetDisplay() { return pDisplay; }
 #if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
     GtkXLib *pXLib_;
+    SalXLib *GetLib() { return pXLib_; }
 #endif
 };
 
@@ -121,10 +155,10 @@ public:
 
     GdkDisplay* GetGdkDisplay() const { return m_pGdkDisplay; }
 
+    virtual void registerFrame( SalFrame* pFrame );
     virtual void deregisterFrame( SalFrame* pFrame );
     GdkCursor *getCursor( PointerStyle ePointerStyle );
     virtual int CaptureMouse( SalFrame* pFrame );
-    virtual long Dispatch( XEvent *pEvent );
     virtual void initScreen( int nScreen ) const;
 
     virtual int GetDefaultMonitorNumber() const;
@@ -139,15 +173,44 @@ public:
     void errorTrapPush();
     void errorTrapPop();
 
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
-    bool IsXinerama() { return false; }
-    std::vector<Rectangle> GetXineramaScreens() { return std::vector<Rectangle>(); }
-    void  SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT );
-    void            CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
-#else
     inline bool HasMoreEvents()     { return m_aUserEvents.size() > 1; }
     inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
     inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
+
+#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+    virtual long Dispatch( XEvent *pEvent );
+#else
+    bool IsXinerama() { return false; }
+    int  GetDefaultScreenNumber() const { return 0; }
+    int  GetScreenCount() const { return 1; }
+    std::vector<Rectangle> GetXineramaScreens() { return std::vector<Rectangle>(); }
+    Size GetScreenSize( int screen );
+    void  SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT );
+    void            CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
+    bool			DispatchInternalEvent();
+
+    SalFrame *m_pCapture;
+    sal_Bool MouseCaptured( const SalFrame *pFrameData ) const
+    { return m_pCapture == pFrameData; }
+    SalFrame*	GetCaptureFrame() const
+    { return m_pCapture; }
+
+    struct SalUserEvent
+    {
+        SalFrame*		m_pFrame;
+        void*			m_pData;
+        sal_uInt16			m_nEvent;
+
+        SalUserEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT )
+                : m_pFrame( pFrame ),
+                  m_pData( pData ),
+                  m_nEvent( nEvent )
+        {}
+    };
+
+    oslMutex        hEventGuard_;
+    std::list< SalUserEvent > m_aUserEvents;
+    guint32 GetLastUserEventTime( bool b ) { return GDK_CURRENT_TIME; } // horrible hack
 #endif
 };
 

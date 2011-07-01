@@ -46,6 +46,8 @@
 #include <saldatabasic.hxx>
 #include <vcl/solarmutex.hxx>
 
+// FIXME: split off into a separate, standalone module to aid linking
+#ifndef GTK3_INCLUDED
 // plugin factory function
 extern "C"
 {
@@ -58,6 +60,7 @@ extern "C"
         return pInstance;
     }
 }
+#endif
 
 bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
 {
@@ -188,6 +191,8 @@ void SvpSalInstance::Wakeup()
     OSL_VERIFY(write (m_pTimeoutFDS[1], "", 1) == 1);
 }
 
+// FIXME: share this with unx/generic [!] ....
+#ifndef GTK3_INCLUDED
 // -=-= timeval =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline int operator >= ( const timeval &t1, const timeval &t2 )
 {
@@ -212,6 +217,7 @@ inline int operator > ( const timeval &t1, const timeval &t2 )
         return t1.tv_usec > t2.tv_usec;
     return t1.tv_sec > t2.tv_sec;
 }
+#endif
 
 bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
 {

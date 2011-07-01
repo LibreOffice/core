@@ -31,6 +31,8 @@
 
 #include <unx/salinst.h>
 #include <unx/salsys.h>
+#include <unx/headless/svpinst.hxx>
+#include <gtk/gtk.h>
 
 class GtkYieldMutex : public SalYieldMutex
 {
@@ -77,11 +79,20 @@ public:
 
 #define GTK_YIELD_GRAB() GtkYieldMutex::GtkYieldGuard aLocalGtkYieldGuard( static_cast<GtkYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex()) )
 
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+class GtkInstance : public SvpSalInstance
+{
+    SalYieldMutex *mpSalYieldMutex;
+public:
+    GtkInstance( SalYieldMutex* pMutex )
+        : SvpSalInstance(), mpSalYieldMutex( pMutex )
+#else
 class GtkInstance : public X11SalInstance
 {
 public:
     GtkInstance( SalYieldMutex* pMutex )
             : X11SalInstance( pMutex )
+#endif
     {}
     virtual ~GtkInstance();
 
@@ -95,13 +106,41 @@ public:
                                                      sal_uInt16 nBitCount,
                                                      const SystemGraphicsData* );
     virtual SalBitmap*			CreateSalBitmap();
+
+    virtual osl::SolarMutex*    GetYieldMutex();
+    virtual sal_uIntPtr			ReleaseYieldMutex();
+    virtual void				AcquireYieldMutex( sal_uIntPtr nCount );
+    virtual bool                CheckYieldMutex();
+    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
+    virtual bool				AnyInput( sal_uInt16 nType );
 };
 
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+class GtkSalSystem : public SalSystem
+{
+public:
+    GtkSalSystem() : SalSystem() {}
+#else
 class GtkSalSystem : public X11SalSystem
 {
 public:
     GtkSalSystem() : X11SalSystem() {}
+#endif
     virtual ~GtkSalSystem();
+
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+    virtual unsigned int GetDisplayScreenCount();
+    virtual bool IsMultiDisplay();
+    virtual unsigned int GetDefaultDisplayNumber();
+    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
+    virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
+    virtual rtl::OUString GetScreenName( unsigned int nScreen );
+    virtual int ShowNativeMessageBox( const String& rTitle,
+                                      const String& rMessage,
+                                      int nButtonCombination,
+                                      int nDefaultButton);
+#endif
+
     virtual int ShowNativeDialog( const String& rTitle,
                                   const String& rMessage,
                                   const std::list< String >& rButtons,

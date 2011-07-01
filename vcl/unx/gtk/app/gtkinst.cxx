@@ -436,4 +436,75 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 #endif
 }
 
+// FIXME: these should all be in a more generic, shared base of unix's salinst.cxx
+
+osl::SolarMutex* GtkInstance::GetYieldMutex()
+{
+    return mpSalYieldMutex;
+}
+
+sal_uIntPtr GtkInstance::ReleaseYieldMutex()
+{
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
+    if ( pYieldMutex->GetThreadId() ==
+         osl::Thread::getCurrentIdentifier() )
+    {
+        sal_uLong nCount = pYieldMutex->GetAcquireCount();
+        sal_uLong n = nCount;
+        while ( n )
+        {
+            pYieldMutex->release();
+            n--;
+        }
+
+        return nCount;
+    }
+    else
+        return 0;
+}
+
+void GtkInstance::AcquireYieldMutex( sal_uIntPtr nCount )
+{
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
+    while ( nCount )
+    {
+        pYieldMutex->acquire();
+        nCount--;
+    }
+}
+
+bool GtkInstance::CheckYieldMutex()
+{
+    bool bRet = true;
+
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
+    if ( pYieldMutex->GetThreadId() != osl::Thread::getCurrentIdentifier() )
+        bRet = false;
+
+    return bRet;
+}
+
+void GtkInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
+{
+    GetGtkSalData()->GetLib()->Yield( bWait, bHandleAllCurrentEvents );
+}
+
+bool GtkInstance::AnyInput( sal_uInt16 nType )
+{
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+    g_warning ("any input returning false");
+    return false;
+#else
+    return X11SalInstance::AnyInput( nType );
+#endif
+}
+
+// FIXME: these above should all be in a more generic, shared base of unix's salinst.cxx
+
+
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#define GTK3_INCLUDED
+#include "../../headless/svpinst.cxx"
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
