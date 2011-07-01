@@ -170,17 +170,17 @@ RscId::operator sal_Int32() const
 *************************************************************************/
 ByteString RscId::GetName() const
 {
-    ByteString aStr;
+    rtl::OStringBuffer aStr;
 
     if ( !aExp.IsNothing() )
     {
         if( bNames )
-            aExp.GetMacro( aStr );
+            aExp.AppendMacro(aStr);
         else
-            aStr = ByteString::CreateFromInt32( GetNumber() );
+            aStr.append(GetNumber());
     }
 
-    return aStr;
+    return aStr.makeStringAndClear();
 }
 
 /*************************************************************************
@@ -190,14 +190,14 @@ ByteString RscId::GetName() const
 *************************************************************************/
 ByteString RscId::GetMacro() const
 {
-    ByteString aStr;
+    rtl::OStringBuffer aStr;
 
     if ( aExp.IsDefinition() )
-        aStr = aExp.aExp.pDef->GetMacro();
+        aStr.append(aExp.aExp.pDef->GetMacro());
     else
-        aExp.GetMacro( aStr );
+        aExp.AppendMacro(aStr);
 
-    return aStr;
+    return aStr.makeStringAndClear();
 }
 
 /****************** R s c D e f i n e ************************************/
@@ -259,7 +259,7 @@ void RscDefine::DefineToNumber()
     if( pExp )
         delete pExp;
     pExp = NULL;
-    SetName( ByteString::CreateFromInt32( lId ) );
+    SetName(rtl::OString::valueOf(lId));
 }
 
 /*************************************************************************
@@ -314,7 +314,7 @@ ByteString RscDefine::GetMacro()
 {
     if( pExp )
         return pExp->GetMacro();
-    return ByteString::CreateFromInt32( lId );
+    return rtl::OString::valueOf(lId);
 }
 
 /****************** R s c D e f i n e L i s t ****************************/
@@ -459,23 +459,14 @@ sal_Bool RscExpType::Evaluate( sal_Int32 * plValue ) const{
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscExpType::GetMacro()
-|*
-*************************************************************************/
-void RscExpType::GetMacro( ByteString & rStr ) const
+void RscExpType::AppendMacro(rtl::OStringBuffer& rStr) const
 {
-    ByteString aStr;
-
     if( IsDefinition() )
-    {
-        rStr += aExp.pDef->GetName();
-    }
+        rStr.append(aExp.pDef->GetName());
     else if( IsExpression() )
-        rStr += aExp.pExp->GetMacro();
+        rStr.append(aExp.pExp->GetMacro());
     else if( IsNumber() )
-        rStr += ByteString::CreateFromInt32( GetLong() );
+        rStr.append(GetLong());
 }
 
 
@@ -555,38 +546,38 @@ sal_Bool RscExpression::Evaluate( sal_Int32 * plValue ){
 *************************************************************************/
 ByteString RscExpression::GetMacro()
 {
-    ByteString aLeft;
+    rtl::OStringBuffer aLeft;
 
     // Ausgabeoptimierung
     if( aLeftExp.IsNothing() )
     {
         if ( '-' == cOperation )
         {
-            aLeft += '(';
-            aLeft += '-';
+            aLeft.append('(');
+            aLeft.append('-');
         }
-        aRightExp.GetMacro( aLeft );
+        aRightExp.AppendMacro(aLeft);
         if( '-' == cOperation )
-            aLeft += ')';
+            aLeft.append(')');
     }
     else if( aRightExp.IsNothing() )
-        aLeftExp.GetMacro( aLeft );
+        aLeftExp.AppendMacro(aLeft);
     else{
-        aLeft += '(';
+        aLeft.append('(');
         // linken Zweig auswerten
-        aLeftExp.GetMacro( aLeft );
+        aLeftExp.AppendMacro(aLeft);
 
-        aLeft += cOperation;
+        aLeft.append(cOperation);
 
-        aLeft += '(';
+        aLeft.append('(');
         // rechten Zweig auswerten
-        aRightExp.GetMacro( aLeft );
-        aLeft += ')';
+        aRightExp.AppendMacro(aLeft);
+        aLeft.append(')');
 
-        aLeft += ')';
+        aLeft.append(')');
     }
 
-    return aLeft;
+    return aLeft.makeStringAndClear();
 }
 
 /****************** R s c F i l e ****************************************/

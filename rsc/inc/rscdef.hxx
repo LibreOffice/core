@@ -30,6 +30,7 @@
 
 #include <tools/unqidx.hxx>
 #include <rsctree.hxx>
+#include <rtl/strbuf.hxx>
 #include <vector>
 
 /****************** C L A S S E S ****************************************/
@@ -70,7 +71,7 @@ public:
                     ((sal_Int32)aExp.aLong.nHi << 16);
          }
     sal_Bool Evaluate( sal_Int32 * pValue ) const;
-    void GetMacro( ByteString & ) const;
+    void AppendMacro( rtl::OStringBuffer & ) const;
 };
 
 /*********** R s c I d ***************************************************/

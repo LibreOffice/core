@@ -52,7 +52,7 @@ REResourceList * InsertList( Atom nClassName, const RscId& rId,
     if( pStrClass )
         aStrClass = pStrClass;
     else
-        aStrClass = ByteString::CreateFromInt32( (long)nClassName );
+        aStrClass = rtl::OString::valueOf(static_cast<sal_Int32>(nClassName));
 
     pSubList = new REResourceList( pList, aStrClass, rId );
 

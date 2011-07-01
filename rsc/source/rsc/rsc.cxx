@@ -1248,7 +1248,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                             sal_Int32   nNumber = atoi( aLine.GetBuffer() );
 
                             if( nNumber < 10000 )
-                                aBaseFileName += ByteString::CreateFromInt32( 0 );
+                                aBaseFileName += '0';
 
                             if( GetImageFilePath( rOutputFile, rContext, aBaseFileName += aLine , aFilePath, pSysListFile ) )
                                 aEntryVector.push_back( ::std::pair< ByteString, sal_Int32 >( aFilePath, nNumber ) );
@@ -1276,14 +1276,15 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
                     for( sal_uInt32 i = 0; i < aEntryVector.size(); ++i )
                     {
-                        ByteString aEntryString( "< \"" );
+                        rtl::OStringBuffer aEntryString(
+                            RTL_CONSTASCII_STRINGPARAM("< \""));
 
-                        aEntryString += aEntryVector[ i ].first;
-                        aEntryString += "\"; ";
-                        aEntryString += ByteString::CreateFromInt32( aEntryVector[ i ].second );
-                        aEntryString += "; >;";
+                        aEntryString.append(aEntryVector[i].first);
+                        aEntryString.append(RTL_CONSTASCII_STRINGPARAM("\"; "));
+                        aEntryString.append(static_cast<sal_Int32>(aEntryVector[ i ].second));
+                        aEntryString.append(RTL_CONSTASCII_STRINGPARAM("; >;"));
 
-                        aOStm.WriteLine( aEntryString );
+                        aOStm.WriteLine(aEntryString.makeStringAndClear());
                     }
 
                     aOStm.WriteLine( "};" );
