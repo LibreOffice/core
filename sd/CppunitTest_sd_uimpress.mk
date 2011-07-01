@@ -92,7 +92,7 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,sd_uimpress,\
 $(eval $(call gb_CppunitTest_set_args,sd_uimpress,\
     --headless \
     --invisible \
-    --protector unoexceptionprotector$(gb_Library_PLAINEXT) unoexceptionprotector \
+    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
 $(eval $(call gb_RdbTarget_RdbTarget,sd_uimpress))
