@@ -100,7 +100,7 @@ $(call gb_CppunitTest_get_target,sw_swdoc_test) : \
 $(eval $(call gb_CppunitTest_set_args,sw_swdoc_test,\
     --headless \
     --invisible \
-    --protector unoexceptionprotector$(gb_Library_PLAINEXT) unoexceptionprotector \
+    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
 $(eval $(call gb_RdbTarget_RdbTarget,sw_swdoc_test))
