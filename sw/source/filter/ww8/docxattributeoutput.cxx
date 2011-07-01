@@ -4041,23 +4041,8 @@ void DocxAttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
     pGridAttrList->add( FSNS( XML_w, XML_linePitch ),
             OString::valueOf( sal_Int32( nHeight ) ).getStr( ) );
 
-    MSWordStyles * pStyles = m_rExport.pStyles;
-    SwFmt * pSwFmt = pStyles->GetSwFmt();
-
-    sal_uInt32 nPageCharSize = 0;
-
-    if (pSwFmt != NULL)
-    {
-        nPageCharSize = ItemGet<SvxFontHeightItem>
-        (*pSwFmt, RES_CHRATR_FONTSIZE).GetHeight();
-    }
-
-    sal_uInt16 nPitch = rGrid.IsSquaredMode() ? rGrid.GetBaseHeight() :
-        rGrid.GetBaseWidth( );
-    sal_Int32 nCharSpace = ( nPitch - nPageCharSize ) * 4096 / 20;
-
     pGridAttrList->add( FSNS( XML_w, XML_charSpace ),
-            OString::valueOf( sal_Int32( nCharSpace ) ).getStr( ) );
+            OString::valueOf( sal_Int32( GridCharacterPitch( rGrid ) ) ).getStr( ) );
 
     m_pSerializer->singleElementNS( XML_w, XML_docGrid, pGridAttrList );
 }
