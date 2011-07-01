@@ -203,6 +203,14 @@ namespace
                 const ::sw::mark::IFieldmark* const pOldFieldmark = dynamic_cast< const ::sw::mark::IFieldmark* >(pMark);
                 pNewFieldmark->SetFieldname(pOldFieldmark->GetFieldname());
                 pNewFieldmark->SetFieldHelptext(pOldFieldmark->GetFieldHelptext());
+                ::sw::mark::IFieldmark::parameter_map_t* pNewParams = pNewFieldmark->GetParameters();
+                const ::sw::mark::IFieldmark::parameter_map_t* pOldParams = pOldFieldmark->GetParameters();
+                ::sw::mark::IFieldmark::parameter_map_t::const_iterator pIt = pOldParams->begin();
+                while ( pIt != pOldParams->end() )
+                {
+                    pNewParams->insert( *pIt );
+                    pIt++;
+                }
             }
 
             ::sfx2::Metadatable const*const pMetadatable(
