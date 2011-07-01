@@ -130,6 +130,49 @@ static void lcl_TableBreak(Stream& rMapper)
     rMapper.startParagraphGroup();
 }
 
+// NEEDSWORK: DocxAttributeOutput's impl_AppendTwoDigits does the same.
+static void lcl_AppendTwoDigits(OStringBuffer &rBuffer, sal_Int32 nNum)
+{
+    if ( nNum < 0 || nNum > 99 )
+    {
+        rBuffer.append( "00" );
+        return;
+    }
+
+    if ( nNum < 10 )
+        rBuffer.append( '0' );
+
+    rBuffer.append( nNum );
+}
+
+// NEEDSWORK: sw::ms::DTTM2DateTime and DocxAttributeOutput's
+// impl_DateTimeToOString could be combined to do the same.
+static OString lcl_DTTM22OString(long lDTTM)
+{
+    sal_uInt16 lMin = (sal_uInt16)(lDTTM & 0x0000003F);
+    lDTTM >>= 6;
+    sal_uInt16 lHour= (sal_uInt16)(lDTTM & 0x0000001F);
+    lDTTM >>= 5;
+    sal_uInt16 lDay = (sal_uInt16)(lDTTM & 0x0000001F);
+    lDTTM >>= 5;
+    sal_uInt16 lMon = (sal_uInt16)(lDTTM & 0x0000000F);
+    lDTTM >>= 4;
+    sal_uInt16 lYear= (sal_uInt16)(lDTTM & 0x000001FF) + 1900;
+
+    OStringBuffer aBuf;
+    aBuf.append(sal_Int32(lYear));
+    aBuf.append('-');
+    lcl_AppendTwoDigits(aBuf, lMon);
+    aBuf.append('-');
+    lcl_AppendTwoDigits(aBuf, lDay);
+    aBuf.append('T');
+    lcl_AppendTwoDigits(aBuf, lHour);
+    aBuf.append(':');
+    lcl_AppendTwoDigits(aBuf, lMin);
+    aBuf.append(":00Z");
+    return aBuf.makeStringAndClear();
+}
+
 static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(int nPos, OUString& rString)
 {
     RTFSprms_t aAttributes;
@@ -1818,6 +1861,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pValue(new RTFValue(m_aAuthors[nParam]));
                 lcl_putNestedAttribute(m_aStates.top().aCharacterSprms,
                         NS_ooxml::LN_trackchange, NS_ooxml::LN_CT_TrackChange_author, pValue);
+            }
+            break;
+        case RTF_REVDTTMDEL:
+            {
+                OUString aStr(OStringToOUString(lcl_DTTM22OString(nParam), m_aStates.top().nCurrentEncoding));
+                RTFValue::Pointer_t pValue(new RTFValue(aStr));
+                lcl_putNestedAttribute(m_aStates.top().aCharacterSprms,
+                        NS_ooxml::LN_trackchange, NS_ooxml::LN_CT_TrackChange_date, pValue);
             }
             break;
         default:
