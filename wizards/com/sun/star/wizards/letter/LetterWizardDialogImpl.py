@@ -10,6 +10,8 @@ from CGLetterWizard import CGLetterWizard
 from ui.event.UnoDataAware import *
 from ui.event.RadioDataAware import *
 from document.OfficeDocument import OfficeDocument
+from ui.XPathSelectionListener import XPathSelectionListener
+from text.TextFieldHandler import TextFieldHandler
 
 class LetterWizardDialogImpl(LetterWizardDialog):
     RM_TYPESTYLE = 1
@@ -246,11 +248,11 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.setControlProperty("lstPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, False)
         self.setControlProperty("lblPrivateStyle", PropertyNames.PROPERTY_ENABLED, True)
         self.setControlProperty("lstPrivateStyle", PropertyNames.PROPERTY_ENABLED, True)
-        lstPrivateStyleItemChanged()
-        disableBusinessPaper()
-        disableSenderReceiver()
-        setPossibleFooter(False)
-        if self.myPathSelection.xSaveTextBox.Text.equalsIgnoreCase(""):
+        self.lstPrivateStyleItemChanged()
+        self.disableBusinessPaper()
+        self.disableSenderReceiver()
+        self.setPossibleFooter(False)
+        if self.myPathSelection.xSaveTextBox.Text.lower() == "":
             self.myPathSelection.initializePath()
 
     def optSenderPlaceholderItemChanged(self):
@@ -273,11 +275,11 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.setControlProperty("txtSenderPostCode", PropertyNames.PROPERTY_ENABLED, True)
         self.setControlProperty("txtSenderState", PropertyNames.PROPERTY_ENABLED, True)
         self.setControlProperty("txtSenderCity", PropertyNames.PROPERTY_ENABLED, True)
-        txtSenderNameTextChanged()
-        txtSenderStreetTextChanged()
-        txtSenderPostCodeTextChanged()
-        txtSenderStateTextChanged()
-        txtSenderCityTextChanged()
+        self.txtSenderNameTextChanged()
+        self.txtSenderStreetTextChanged()
+        self.txtSenderPostCodeTextChanged()
+        self.txtSenderStateTextChanged()
+        self.txtSenderCityTextChanged()
 
     def optCreateLetterItemChanged(self):
         self.bEditTemplate = False
@@ -549,23 +551,23 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def txtSenderNameTextChanged(self):
         myFieldHandler = TextFieldHandler(self.myLetterDoc.xMSF, self.xTextDocument)
-        myFieldHandler.changeUserFieldContent("Company", txtSenderName.Text)
+        myFieldHandler.changeUserFieldContent("Company", self.txtSenderName.Text)
 
     def txtSenderStreetTextChanged(self):
         myFieldHandler = TextFieldHandler(self.myLetterDoc.xMSF, self.xTextDocument)
-        myFieldHandler.changeUserFieldContent("Street", txtSenderStreet.Text)
+        myFieldHandler.changeUserFieldContent("Street", self.txtSenderStreet.Text)
 
     def txtSenderCityTextChanged(self):
         myFieldHandler = TextFieldHandler(self.myLetterDoc.xMSF, self.xTextDocument)
-        myFieldHandler.changeUserFieldContent("City", txtSenderCity.Text)
+        myFieldHandler.changeUserFieldContent("City", self.txtSenderCity.Text)
 
     def txtSenderPostCodeTextChanged(self):
         myFieldHandler = TextFieldHandler(self.myLetterDoc.xMSF, self.xTextDocument)
-        myFieldHandler.changeUserFieldContent("PostCode", txtSenderPostCode.Text)
+        myFieldHandler.changeUserFieldContent("PostCode", self.txtSenderPostCode.Text)
 
     def txtSenderStateTextChanged(self):
         myFieldHandler = TextFieldHandler(self.myLetterDoc.xMSF, self.xTextDocument)
-        myFieldHandler.changeUserFieldContent(PropertyNames.PROPERTY_STATE, txtSenderState.Text)
+        myFieldHandler.changeUserFieldContent(PropertyNames.PROPERTY_STATE, self.txtSenderState.Text)
 
     def txtTemplateNameTextChanged(self):
         xDocProps = self.xTextDocument.DocumentProperties
@@ -825,7 +827,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.setRoadmapComplete(True)
         self.setCurrentRoadmapItemID(1)
 
-    class myPathSelectionListener:
+    class myPathSelectionListener(XPathSelectionListener):
 
         def validatePath(self):
             if self.myPathSelection.usedPathPicker:
@@ -839,7 +841,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.myPathSelection.sDefaultDirectory = self.sUserTemplatePath
         self.myPathSelection.sDefaultName = "myLetterTemplate.ott"
         self.myPathSelection.sDefaultFilter = "writer8_template"
-        self.myPathSelection.addSelectionListener(None)
+        self.myPathSelection.addSelectionListener(self.myPathSelectionListener())
 
     def initConfiguration(self):
         try:
