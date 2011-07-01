@@ -57,7 +57,7 @@ NETWORK_BUILD:=TRUE
 PLATFORMID = $(RTL_OS:l)_$(RTL_ARCH:l)
 EXTNAME*=$(EXTENSIONNAME)_in
 
-.IF "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
+.IF "$(UPDATER)"!=""
 
 .IF "$(SOURCEVERSION)"!="$(WORK_STAMP)"
 .ERROR : ; @echo Forced error: minor.mk in solenv/inc does not match your version!
@@ -69,7 +69,7 @@ WRONG_SOURCEVERSION
     @@-$(MKDIRHIER) $(SOLARVERSION)/$(INPATH)/inc
     @@$(COPY) $(SOLARENV)/inc/minor.mk $(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk
     @@$(TOUCH) $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg
-.ENDIF          # "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
+.ENDIF          # "$(UPDATER)"!=""
 
 # Force creation of $(SOLARVERSION)/$(INPATH)/inc/
 # $(UPD)minor.mk could be empty as it's contents were already included from minor.mk

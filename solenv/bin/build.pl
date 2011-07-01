@@ -248,7 +248,6 @@
         exit 0;
     }
     get_module_and_buildlist_paths();
-    provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($ENV{COMMON_ENV_TOOLS}));
 
     $deliver_command .= ' -verbose' if ($html || $verbose);
     $deliver_command .= ' '. $dlv_switch if ($dlv_switch);
@@ -2191,22 +2190,6 @@ sub modules_classify {
 };
 
 #
-# This procedure provides consistency for cws
-# and optimized build (ie in case of --with_branches, -all:prj_name
-# and -since switches)
-#
-sub provide_consistency {
-    check_dir();
-    foreach my $var_ref (\$build_all_cont, \$build_since) {
-        if ($$var_ref) {
-            return if (defined $module_paths{$$var_ref});
-            print_error("Cannot find module '$$var_ref'", 9);
-            return;
-        };
-    };
-};
-
-#
 # Procedure clears up module for incompatible build
 #
 sub ensure_clear_module {
@@ -2359,7 +2342,7 @@ sub prepare_incompatible_build {
     @modules_built = keys %$deps_hash;
     %add_to_config = %$deps_hash;
     if ($prepare) {
-        if ((!(defined $ENV{UPDATER} && (!defined $ENV{CWS_WORK_STAMP}))) || (defined $ENV{CWS_WORK_STAMP})) {
+        if (!(defined $ENV{UPDATER})) {
             $source_config->add_active_modules([keys %add_to_config], 0);
         }
         clear_delivered();
@@ -2570,9 +2553,8 @@ sub read_ssolar_vars {
 
     my ($source_root, $cwsname);
     $source_root = '-sourceroot' if (defined $ENV{SOURCE_ROOT_USED});
-    my $cws_name = "-cwsname $ENV{CWS_WORK_STAMP}" if (defined $ENV{CWS_WORK_STAMP});
 
-    my $param = "-$ENV{WORK_STAMP} $source_root $cws_name $pro $platform";
+    my $param = "-$ENV{WORK_STAMP} $source_root $pro $platform";
     my $ss_command = "$perl $setsolar -file $tmp_file $param $nul";
     if (system($ss_command)) {
         unlink $tmp_file;
@@ -2720,8 +2702,7 @@ sub generate_html_file {
     my $build_duration = get_time_line(time - $build_time);
     my $temp_html_file = File::Temp::tmpnam($tmp_dir);
     my $title;
-    $title = $ENV{CWS_WORK_STAMP} . ': ' if (defined $ENV{CWS_WORK_STAMP});
-    $title .= $ENV{INPATH};
+    $title = $ENV{INPATH};
     die("Cannot open $temp_html_file") if (!open(HTML, ">$temp_html_file"));
     print HTML '<html><head>';
     print HTML '<TITLE id=MainTitle>' . $title . '</TITLE>';

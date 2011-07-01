@@ -74,9 +74,6 @@ sub get_arpcomments_for_property_table
 
     my $buildidstring = "(" . $installer::globals::build . $localminor . "(Build:" . $installer::globals::buildid . "))";
 
-    # the environment variable CWS_WORK_STAMP is set only in CWS
-    if ( $ENV{'CWS_WORK_STAMP'} ) { $buildidstring = $buildidstring . "\[CWS\:" . $ENV{'CWS_WORK_STAMP'} . "\]"; }
-
     $comment = $comment . " " . $buildidstring;
 
     return $comment;

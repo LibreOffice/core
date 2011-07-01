@@ -524,7 +524,6 @@ sub set_mspfilename
         my $hotfixaddon = "hotfix_";
         $hotfixaddon = $hotfixaddon . $installer::globals::buildid;
         my $cwsname = "";
-        if ( $ENV{'CWS_WORK_STAMP'} ) { $hotfixaddon = $ENV{'CWS_WORK_STAMP'}; }
         if ( $allvariables->{'OVERWRITE_CWSNAME'} ) { $hotfixaddon = $allvariables->{'OVERWRITE_CWSNAME'}; }
         $databasename = $databasename . "_" . $hotfixaddon;
     }
@@ -904,10 +903,6 @@ sub change_patchmetadata_table
     my $displayaddon = "";
     if ( $allvariables->{'PATCHDISPLAYADDON'} ) { $displayaddon = $allvariables->{'PATCHDISPLAYADDON'}; }
 
-    my $cwsname = "";
-    if ( $ENV{'CWS_WORK_STAMP'} ) { $cwsname = $ENV{'CWS_WORK_STAMP'}; }
-    if (( $cwsname ne "" ) && ( $allvariables->{'OVERWRITE_CWSNAME'} )) { $cwsname = $allvariables->{'OVERWRITE_CWSNAME'}; }
-
     my $patchsequence = get_patchsequence($allvariables);
 
     if (( $allvariables->{'SERVICEPACK'} ) && ( $allvariables->{'SERVICEPACK'} == 1 ))
@@ -917,8 +912,8 @@ sub change_patchmetadata_table
     }
     else
     {
-        $displaynamevalue = $base . " Hotfix " . $cwsname . " " . $displayaddon . " " . $patchsequence . " Build: " . $installer::globals::buildid;
-        $descriptionvalue = $base . " Hotfix " . $cwsname . " " . $displayaddon . " " . $patchsequence . " Build: " . $installer::globals::buildid;
+        $displaynamevalue = $base . " Hotfix " . $displayaddon . " " . $patchsequence . " Build: " . $installer::globals::buildid;
+        $descriptionvalue = $base . " Hotfix " . $displayaddon . " " . $patchsequence . " Build: " . $installer::globals::buildid;
         $displaynamevalue =~ s/    / /g;
         $descriptionvalue =~ s/    / /g;
         $displaynamevalue =~ s/   / /g;

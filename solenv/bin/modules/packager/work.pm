@@ -268,7 +268,6 @@ sub do_broadcast
 
     if ( ! $ENV{'WORK_STAMP'} ) { packager::exiter::exit_program("ERROR: Environment variable WORK_STAMP not set!", "do_broadcast"); }
     my $workstamp = $ENV{WORK_STAMP};
-    my $cwsworkstamp = $ENV{CWS_WORK_STAMP};
 
     my $prjdir = $tempdir;
     $prjdir =~ s/$prj/$prjname/;
@@ -280,14 +279,8 @@ sub do_broadcast
     if ( ! $tmpfile_handle ) {
         packager::exiter::exit_program("ERROR: Couldn't open temporary file \"$tmpfile_name\"!", "do_broadcast");
     }
-    if (defined($cwsworkstamp)) {
-        print $tmpfile_handle "\"$cwsworkstamp;$platform;$prjname;$prjdir;nobase;$prjdep\"";
-        print "to tmpfile: \"$cwsworkstamp;$platform;$prjname;$prjdir;nobase;$prjdep\"\n";
-    }
-    else {
-        print $tmpfile_handle "\"$workstamp;$platform;$prjname;$prjdir;nobase;$prjdep\"";
-        print "to tmpfile: \"$workstamp;$platform;$prjname;$prjdir;nobase;$prjdep\"\n";
-    }
+    print $tmpfile_handle "\"$workstamp;$platform;$prjname;$prjdir;nobase;$prjdep\"";
+    print "to tmpfile: \"$workstamp;$platform;$prjname;$prjdir;nobase;$prjdep\"\n";
     close $tmpfile_handle;
     my $returnvalue = system("cmd_bcst -s 18 \@$tmpfile_name");
     print "cmd_bcst -s 18 \@$tmpfile_name\n";

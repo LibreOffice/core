@@ -810,9 +810,6 @@ sub replace_setup_variables
         $buildidstring = substr($buildidstring, 0, -1);
     }
 
-    # the environment variable CWS_WORK_STAMP is set only in CWS
-    if ( $ENV{'CWS_WORK_STAMP'} ) { $buildidstring = $buildidstring . "\[CWS\:" . $ENV{'CWS_WORK_STAMP'} . "\]"; }
-
     if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
 
     my $updateid = $productname . "_" . $userdirproductversion . "_" . $$languagestringref;

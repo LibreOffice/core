@@ -478,11 +478,8 @@ sub check_updatepack
         $infoline = "\nEnvironment variable UPDATER set\n";
         push(@installer::globals::globallogfileinfo, $infoline);
 
-        if ( ! $ENV{'CWS_WORK_STAMP'} ) # the environment variable CWS_WORK_STAMP must not be set (set only in CWS)
+        # There are no CWSes any more, no environment variable CWS_WORK_STAMP
         {
-            $infoline = "Environment variable CWS_WORK_STAMP not set\n";
-            push(@installer::globals::globallogfileinfo, $infoline);
-
             if ( $ENV{'SHIPDRIVE'} )    # the environment variable SHIPDRIVE must be set
             {
                 $shipdrive = $ENV{'SHIPDRIVE'};
@@ -583,11 +580,6 @@ sub check_updatepack
                 $infoline = "Environment variable SHIPDRIVE not set: No updatepack\n";
                 push(@installer::globals::globallogfileinfo, $infoline);
             }
-        }
-        else
-        {
-            $infoline = "Environment variable CWS_WORK_STAMP defined: No updatepack\n";
-            push(@installer::globals::globallogfileinfo, $infoline);
         }
     }
 

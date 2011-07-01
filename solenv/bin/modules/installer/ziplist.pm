@@ -734,9 +734,6 @@ sub replace_variables_in_ziplist_variables
 
     my $buildidstringcws = $installer::globals::build . $localminor . "(Build:" . $installer::globals::buildid . ")";
 
-    # the environment variable CWS_WORK_STAMP is set only in CWS
-    if ( $ENV{'CWS_WORK_STAMP'} ) { $buildidstringcws = $buildidstringcws . "\[CWS\:" . $ENV{'CWS_WORK_STAMP'} . "\]"; }
-
     for ( my $i = 0; $i <= $#{$blockref}; $i++ )
     {
         if ($installer::globals::lastminor) { ${$blockref}[$i] =~ s/\{milestone\}/$milestonevariable/; }

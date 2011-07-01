@@ -50,10 +50,7 @@ define gb_Deliver_add_deliverable
 ifeq ($(MAKECMDGOALS),showdeliverables)
 $(call gb_Deliver_do_add,$(OUTDIR)/$(1),$(2),$(3))
 else
-ifneq ($(CWS_WORK_STAMP),)
-else
 $(call gb_Deliver_do_add,$(OUTDIR)/$(1),$(2),$(3))
-endif
 endif
 
 endef
