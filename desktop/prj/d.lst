@@ -147,7 +147,6 @@ mkdir: %_DEST%\xml\registry\spool\org\openoffice\Office\Jobs
 ..\%__SRC%\misc\migrationoo2.component %_DEST%\xml\migrationoo2.component
 ..\%__SRC%\misc\migrationoo3.component %_DEST%\xml\migrationoo3.component
 ..\%__SRC%\misc\offacc.component %_DEST%\xml\offacc.component
-..\%__SRC%\misc\productregistration.jar.component %_DEST%\xml\productregistration.jar.component
 ..\%__SRC%\misc\socomp.component %_DEST%\xml\socomp.component
 ..\%__SRC%\misc\spl.component %_DEST%\xml\spl.component
 ..\%__SRC%\misc\splash.component %_DEST%\xml\splash.component
