@@ -147,7 +147,6 @@ my_components = \
     pcr \
     pdffilter \
     placeware \
-    preload \
     protocolhandler \
     res \
     sax \
