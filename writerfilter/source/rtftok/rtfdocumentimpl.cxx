@@ -709,7 +709,7 @@ void RTFDocumentImpl::text(OUString& rString)
     }
 }
 
-void RTFDocumentImpl::replayBuffer(std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>>& rBuffer)
+void RTFDocumentImpl::replayBuffer(std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> >& rBuffer)
 {
     while (rBuffer.size())
     {
@@ -2177,7 +2177,7 @@ int RTFDocumentImpl::popState()
     bool bListLevelEnd = false;
     bool bListOverrideEntryEnd = false;
     bool bLevelTextEnd = false;
-    std::vector<std::pair<rtl::OUString, rtl::OUString>> aShapeProperties;
+    std::vector< std::pair<rtl::OUString, rtl::OUString> > aShapeProperties;
     bool bPopShapeProperties = false;
     bool bPicPropEnd = false;
 
@@ -2384,9 +2384,9 @@ int RTFDocumentImpl::popState()
     return 0;
 }
 
-void RTFDocumentImpl::resolveShapeProperties(std::vector<std::pair<rtl::OUString, rtl::OUString>>& rShapeProperties)
+void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUString, rtl::OUString> >& rShapeProperties)
 {
-    for (std::vector<std::pair<rtl::OUString, rtl::OUString>>::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
+    for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
     {
         if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
         {

@@ -190,7 +190,7 @@ namespace writerfilter {
 
                 float nPictureScaleX;
                 float nPictureScaleY;
-                std::vector<std::pair<rtl::OUString, rtl::OUString>> aShapeProperties;
+                std::vector< std::pair<rtl::OUString, rtl::OUString> > aShapeProperties;
 
                 /// Current cellx value.
                 int nCellX;
@@ -230,7 +230,7 @@ namespace writerfilter {
             private:
                 int resolveParse();
                 int resolveKeyword();
-                void resolveShapeProperties(std::vector<std::pair<rtl::OUString, rtl::OUString>>& rShapeProperties);
+                void resolveShapeProperties(std::vector< std::pair<rtl::OUString, rtl::OUString> >& rShapeProperties);
 
                 int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
                 int dispatchFlag(RTFKeyword nKeyword);
@@ -247,7 +247,7 @@ namespace writerfilter {
                 void text(rtl::OUString& rString);
                 void parBreak();
                 void sectBreak(bool bFinal);
-                void replayBuffer(std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>>& rBuffer);
+                void replayBuffer(std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> >& rBuffer);
 
                 com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& m_xContext;
                 com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& m_xInputStream;
@@ -278,15 +278,15 @@ namespace writerfilter {
                 oox::GraphicHelper* m_pGraphicHelper;
 
                 /// Buffered table cells, till cell definitions are not reached.
-                std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aTableBuffer;
+                std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > m_aTableBuffer;
                 bool m_bTable;
                 /// Buffered superscript, till footnote is reached (or not).
-                std::deque<std::pair<RTFBufferTypes, RTFValue::Pointer_t>> m_aSuperBuffer;
+                std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > m_aSuperBuffer;
                 bool m_bSuper;
                 bool m_bHasFootnote;
                 /// If this is a substream.
                 bool m_bIsSubstream;
-                std::deque<std::pair<Id, sal_uInt32>> m_nHeaderFooterPositions;
+                std::deque< std::pair<Id, sal_uInt32> > m_nHeaderFooterPositions;
                 sal_uInt32 m_nGroupStartPos;
                 /// Ignore the first occurrence of this text.
                 rtl::OUString m_aIgnoreFirst;
