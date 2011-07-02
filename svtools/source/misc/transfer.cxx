@@ -65,6 +65,7 @@
 #include <svtools/wmf.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
+#include <rtl/strbuf.hxx>
 #include <cstdio>
 
 // --------------
@@ -879,15 +880,16 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
     {
         case( SOT_FORMATSTR_ID_SOLK ):
         {
-            ByteString sURL( rBmk.GetURL(), eSysCSet ),
-                       sDesc( rBmk.GetDescription(), eSysCSet );
-            ByteString sOut( ByteString::CreateFromInt32( sURL.Len() ));
-            ( sOut += '@' ) += sURL;
-            sOut += ByteString::CreateFromInt32( sDesc.Len() );
-            ( sOut += '@' ) += sDesc;
+            rtl::OString sURL(rtl::OUStringToOString(rBmk.GetURL(), eSysCSet));
+            rtl::OString sDesc(rtl::OUStringToOString(rBmk.GetDescription(), eSysCSet));
+            rtl::OStringBuffer sOut;
+            sOut.append(sURL.getLength());
+            sOut.append('@').append(sURL);
+            sOut.append(sDesc.getLength());
+            sOut.append('@').append(sDesc);
 
-            Sequence< sal_Int8 > aSeq( sOut.Len() );
-            memcpy( aSeq.getArray(), sOut.GetBuffer(), sOut.Len() );
+            Sequence< sal_Int8 > aSeq(sOut.getLength());
+            memcpy(aSeq.getArray(), sOut.getStr(), sOut.getLength());
             maAny <<= aSeq;
         }
         break;
