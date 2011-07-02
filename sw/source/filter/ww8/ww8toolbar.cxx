@@ -906,12 +906,13 @@ bool Tcg255::Read(SvStream *pS)
 {
     OSL_TRACE("Tcg255::Read() stream pos 0x%x", pS->Tell() );
     nOffSet = pS->Tell();
-    sal_uInt8 nId = 0; //
+    sal_uInt8 nId = 0x40;
     *pS >> nId;
     while (  nId != 0x40  )
     {
         if ( !processSubStruct( nId, pS ) )
             return false;
+        nId = 0x40;
         *pS >> nId;
     }
     return true;
@@ -948,9 +949,10 @@ bool Tcg255SubStruct::Read(SvStream *pS)
     return true;
 }
 
-PlfMcd::PlfMcd( bool bReadId ): Tcg255SubStruct( bReadId ), rgmcd( NULL )
+PlfMcd::PlfMcd( bool bReadId ): Tcg255SubStruct( bReadId ), iMac(0), rgmcd( NULL )
 {
 }
+
 PlfMcd::~PlfMcd()
 {
     if ( rgmcd )
