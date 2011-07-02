@@ -772,30 +772,30 @@ bool PrinterInfoManager::writePrinterConfig()
             pConfig->DeleteGroup( it->second.m_aGroup ); // else some old keys may remain
             pConfig->SetGroup( it->second.m_aGroup );
 
-            ByteString aValue( String( it->second.m_aInfo.m_aDriverName ), RTL_TEXTENCODING_UTF8 );
-            aValue += '/';
-            aValue += ByteString( String( it->first ), RTL_TEXTENCODING_UTF8 );
-            pConfig->WriteKey( "Printer", aValue );
+            rtl::OStringBuffer aValue(rtl::OUStringToOString(it->second.m_aInfo.m_aDriverName, RTL_TEXTENCODING_UTF8));
+            aValue.append('/');
+            aValue.append(rtl::OUStringToOString(it->first, RTL_TEXTENCODING_UTF8));
+            pConfig->WriteKey("Printer", aValue.makeStringAndClear());
             pConfig->WriteKey( "DefaultPrinter", it->first == m_aDefaultPrinter ? "1" : "0" );
             pConfig->WriteKey( "Location", ByteString( String( it->second.m_aInfo.m_aLocation ), RTL_TEXTENCODING_UTF8 ) );
             pConfig->WriteKey( "Comment", ByteString( String( it->second.m_aInfo.m_aComment ), RTL_TEXTENCODING_UTF8 ) );
             pConfig->WriteKey( "Command", ByteString( String( it->second.m_aInfo.m_aCommand ), RTL_TEXTENCODING_UTF8 ) );
             pConfig->WriteKey( "QuickCommand", ByteString( String( it->second.m_aInfo.m_aQuickCommand ), RTL_TEXTENCODING_UTF8 ) );
             pConfig->WriteKey( "Features", ByteString( String( it->second.m_aInfo.m_aFeatures ), RTL_TEXTENCODING_UTF8 ) );
-            pConfig->WriteKey( "Copies", ByteString::CreateFromInt32( it->second.m_aInfo.m_nCopies ) );
+            pConfig->WriteKey("Copies", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nCopies)));
             pConfig->WriteKey( "Orientation", it->second.m_aInfo.m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait" );
-            pConfig->WriteKey( "PSLevel", ByteString::CreateFromInt32( it->second.m_aInfo.m_nPSLevel ) );
-            pConfig->WriteKey( "PDFDevice", ByteString::CreateFromInt32( it->second.m_aInfo.m_nPDFDevice ) );
-            pConfig->WriteKey( "ColorDevice", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDevice ) );
-            pConfig->WriteKey( "ColorDepth", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDepth ) );
-            aValue = ByteString::CreateFromInt32( it->second.m_aInfo.m_nLeftMarginAdjust );
-            aValue += ',';
-            aValue += ByteString::CreateFromInt32( it->second.m_aInfo.m_nRightMarginAdjust );
-            aValue += ',';
-            aValue += ByteString::CreateFromInt32( it->second.m_aInfo.m_nTopMarginAdjust );
-            aValue += ',';
-            aValue += ByteString::CreateFromInt32( it->second.m_aInfo.m_nBottomMarginAdjust );
-            pConfig->WriteKey( "MarginAdjust", aValue );
+            pConfig->WriteKey("PSLevel", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nPSLevel)));
+            pConfig->WriteKey("PDFDevice", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nPDFDevice)));
+            pConfig->WriteKey("ColorDevice", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nColorDevice)));
+            pConfig->WriteKey("ColorDepth", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nColorDepth)));
+            aValue.append(static_cast<sal_Int32>(it->second.m_aInfo.m_nLeftMarginAdjust));
+            aValue.append(',');
+            aValue.append(static_cast<sal_Int32>(it->second.m_aInfo.m_nRightMarginAdjust));
+            aValue.append(',');
+            aValue.append(static_cast<sal_Int32>(it->second.m_aInfo.m_nTopMarginAdjust));
+            aValue.append(',');
+            aValue.append(static_cast<sal_Int32>(it->second.m_aInfo.m_nBottomMarginAdjust));
+            pConfig->WriteKey("MarginAdjust", aValue.makeStringAndClear());
 
             if( it->second.m_aInfo.m_aDriverName.compareToAscii( "CUPS:", 5 ) != 0 )
             {
@@ -807,8 +807,11 @@ bool PrinterInfoManager::writePrinterConfig()
                     aKey += ByteString( pKey->getKey(), RTL_TEXTENCODING_ISO_8859_1 );
 
                     const PPDValue* pValue = it->second.m_aInfo.m_aContext.getValue( pKey );
-                    aValue = pValue ? ByteString( pValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ) : ByteString( "*nil" );
-                    pConfig->WriteKey( aKey, aValue );
+                    if (pValue)
+                        aValue.append(rtl::OUStringToOString(pValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1));
+                    else
+                        aValue.append(RTL_CONSTASCII_STRINGPARAM("*nil"));
+                    pConfig->WriteKey(aKey, aValue.makeStringAndClear());
                 }
             }
 

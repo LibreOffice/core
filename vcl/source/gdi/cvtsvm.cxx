@@ -41,6 +41,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/cvtsvm.hxx>
+#include <rtl/strbuf.hxx>
 
 // -----------
 // - Defines -
@@ -2431,10 +2432,11 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 #ifdef DBG_UTIL
             default:
             {
-                ByteString aStr( "Missing implementation for Action#: " );
-                aStr += ByteString::CreateFromInt32( pAction->GetType() );
-                aStr += '!';
-                OSL_FAIL( aStr.GetBuffer() );
+                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                    "Missing implementation for Action#: "));
+                aStr.append(static_cast<sal_Int32>(pAction->GetType()));
+                aStr.append('!');
+                OSL_FAIL(aStr.getStr());
             }
             break;
 #endif
