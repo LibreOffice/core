@@ -402,18 +402,18 @@ void ODbaseIndex::createINFEntry()
     aInfFile.SetGroup(dBASE_III_GROUP);
 
     sal_uInt16 nSuffix = aInfFile.GetKeyCount();
-    ByteString aNewEntry,aKeyName;
+    rtl::OString aNewEntry,aKeyName;
     sal_Bool bCase = isCaseSensitive();
-    while (!aNewEntry.Len())
+    while (aNewEntry.isEmpty())
     {
-        aNewEntry = "NDX";
-        aNewEntry += ByteString::CreateFromInt32(++nSuffix);
+        aNewEntry = rtl::OString(RTL_CONSTASCII_STRINGPARAM("NDX"));
+        aNewEntry += rtl::OString::valueOf(static_cast<sal_Int32>(++nSuffix));
         for (sal_uInt16 i = 0; i < aInfFile.GetKeyCount(); i++)
         {
             aKeyName = aInfFile.GetKeyName(i);
-            if (bCase ? aKeyName == aNewEntry : aKeyName.EqualsIgnoreCaseAscii(aNewEntry))
+            if (bCase ? aKeyName.equals(aNewEntry) : aKeyName.equalsIgnoreAsciiCase(aNewEntry))
             {
-                aNewEntry.Erase();
+                aNewEntry = rtl::OString();
                 break;
             }
         }
