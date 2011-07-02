@@ -97,7 +97,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnviron
                 uno_Environment ** /*ppEnv*/
             )
 {
-    pcr_initializeModule();
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
@@ -107,6 +106,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     void* pServiceManager,
                     void* /*pRegistryKey*/)
 {
+    pcr_initializeModule();
+
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
     {
