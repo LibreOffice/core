@@ -80,21 +80,6 @@ rtl::OUString xmlchar_to_ous( const xmlChar* pChar, int length )
 }
 
 /**
- * The input parameter is NULL terminated
- */
-rtl::OUString xmlstr_to_ous( const xmlChar* pStr )
-{
-    if( pStr != NULL )
-    {
-        return xmlchar_to_ous( pStr , xmlStrlen( pStr ) ) ;
-    }
-    else
-    {
-        return rtl::OUString() ;
-    }
-}
-
-/**
  * The return value and the referenced value must be NULL terminated.
  * The application has the responsibilty to deallocte the return value.
  */
