@@ -113,7 +113,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnviron
                 uno_Environment **
             )
 {
-    createRegistryInfo_DBU();
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
@@ -123,6 +122,8 @@ extern "C"  SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     void* pServiceManager,
                     void* /*pRegistryKey*/)
 {
+    createRegistryInfo_DBU();
+
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
     {
