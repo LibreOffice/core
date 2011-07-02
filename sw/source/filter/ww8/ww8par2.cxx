@@ -3701,11 +3701,11 @@ void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)
         nSprmsLen = nLen;
     }
 
-    while ( nLen > 0 )
+    WW8SprmIter aSprmIter(pSprms, nLen, maSprmParser);
+    while (const sal_uInt8* pSprm = aSprmIter.GetSprms())
     {
-        sal_uInt16 nL1 = pIo->ImportSprm(pSprms);
-        nLen = nLen - nL1;
-        pSprms += nL1;
+        pIo->ImportSprm(pSprm);
+        aSprmIter.advance();
     }
 
     pParaSprms = 0;
