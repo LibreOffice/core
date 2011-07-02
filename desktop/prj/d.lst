@@ -50,7 +50,6 @@ mkdir: %_DEST%\bin\odf4ms
 ..\%__SRC%\misc\soffice.bin.manifest %_DEST%\bin\soffice.bin.manifest
 ..\%__SRC%\bin\wrp*.dll %_DEST%\bin\wrp*.dll
 ..\%__SRC%\bin\spl*.dll %_DEST%\bin\spl*.dll
-..\%__SRC%\bin\socomp.dll %_DEST%\bin\socomp.dll
 ..\%__SRC%\obj\officeloader.obj %_DEST%\lib\officeloader.obj
 ..\%__SRC%\obj\extendloaderenvironment.obj %_DEST%\lib\extendloaderenvironment.obj
 ..\%__SRC%\obj\copyright_ascii_sun.obj %_DEST%\lib\copyright_ascii_sun.obj
@@ -59,8 +58,6 @@ mkdir: %_DEST%\bin\odf4ms
 ..\%__SRC%\lib\libwrp*.dylib %_DEST%\lib\libwrp*.dylib
 ..\%__SRC%\lib\libspl*.so %_DEST%\lib\libspl*.so
 ..\%__SRC%\lib\libspl*.dylib %_DEST%\lib\libspl*.dylib
-..\%__SRC%\lib\libsocomp.so %_DEST%\lib\libsocomp.so
-..\%__SRC%\lib\libsocomp.dylib %_DEST%\lib\libsocomp.dylib
 ..\%__SRC%\bin\offacc*.dll %_DEST%\bin\offacc*.dll
 ..\%__SRC%\lib\liboffacc*.so %_DEST%\lib\liboffacc*.so
 ..\%__SRC%\lib\liboffacc*.dylib %_DEST%\lib\liboffacc*.dylib
@@ -147,6 +144,5 @@ mkdir: %_DEST%\xml\registry\spool\org\openoffice\Office\Jobs
 ..\%__SRC%\misc\migrationoo2.component %_DEST%\xml\migrationoo2.component
 ..\%__SRC%\misc\migrationoo3.component %_DEST%\xml\migrationoo3.component
 ..\%__SRC%\misc\offacc.component %_DEST%\xml\offacc.component
-..\%__SRC%\misc\socomp.component %_DEST%\xml\socomp.component
 ..\%__SRC%\misc\spl.component %_DEST%\xml\spl.component
 ..\%__SRC%\misc\splash.component %_DEST%\xml\splash.component

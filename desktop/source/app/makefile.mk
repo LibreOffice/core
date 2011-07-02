@@ -61,7 +61,6 @@ SHL1OBJS = \
     $(SLO)$/appfirststart.obj \
     $(SLO)$/appinit.obj \
     $(SLO)$/appsys.obj \
-    $(SLO)$/checkinstall.obj \
     $(SLO)$/check_ext_deps.obj \
     $(SLO)$/cmdlineargs.obj \
     $(SLO)$/cmdlinehelp.obj \

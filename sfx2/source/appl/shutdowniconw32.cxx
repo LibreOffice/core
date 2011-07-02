@@ -50,24 +50,13 @@
 #include "app.hrc"
 #include <shlobj.h>
 #include <objidl.h>
-#include <stdio.h>
-#include <io.h>
 #include <osl/thread.h>
 #include <setup_native/qswin32.h>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/task/XJob.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 
 #include <set>
 
 using namespace ::rtl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
 using namespace ::osl;
 
 
@@ -442,21 +431,6 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 // -------------------------------
 
-static sal_Bool checkOEM() {
-    Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
-    Reference<XJob> rOemJob(rFactory->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.OEMPreloadJob"))),
-        UNO_QUERY );
-    Sequence<NamedValue> args;
-    sal_Bool bResult = sal_False;
-    if (rOemJob.is())
-    {
-        Any aResult = rOemJob->execute(args);
-        aResult >>= bResult;
-    } else bResult = sal_True;
-    return bResult;
-}
-
 LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -471,35 +445,29 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             {
 #if defined(USE_APP_SHORTCUTS)
                 case IDM_OPEN:
-                    if ( !ShutdownIcon::bModalMode && checkOEM() )
+                    if ( !ShutdownIcon::bModalMode )
                         ShutdownIcon::FileOpen();
                 break;
                 case IDM_WRITER:
-                    if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( WRITER_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_CALC:
-                    if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( CALC_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_IMPRESS:
-                    if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( IMPRESS_WIZARD_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_DRAW:
-                    if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( DRAW_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_BASE:
-                    if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( BASE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_MATH:
-                    if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( MATH_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_TEMPLATE:
-                    if ( !ShutdownIcon::bModalMode && checkOEM())
+                    if ( !ShutdownIcon::bModalMode )
                         ShutdownIcon::FromTemplate();
                 break;
 #endif

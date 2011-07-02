@@ -43,7 +43,6 @@
 #include "dispatchwatcher.hxx"
 #include "configinit.hxx"
 #include "lockfile.hxx"
-#include "checkinstall.hxx"
 #include "cmdlinehelp.hxx"
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
@@ -1672,14 +1671,6 @@ int Desktop::Main()
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
 
-        // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
-        OUString aTitleString( aTitle );
-        bCheckOk = CheckInstallation( aTitleString );
-        if ( !bCheckOk )
-            return EXIT_FAILURE;
-        else
-            aTitle = aTitleString;
-
 #ifdef DBG_UTIL
         //include version ID in non product builds
         ::rtl::OUString aDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
@@ -2232,23 +2223,6 @@ void Desktop::EnableOleAutomation()
     xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.bridge.OleApplicationRegistration"));
     xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.comp.ole.EmbedServer"));
 #endif
-}
-
-sal_Bool Desktop::CheckOEM()
-{
-    Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
-    Reference<XJob> rOemJob(rFactory->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.OEMPreloadJob"))),
-        UNO_QUERY );
-    Sequence<NamedValue> args;
-    sal_Bool bResult = sal_False;
-    if (rOemJob.is()) {
-        Any aResult = rOemJob->execute(args);
-        aResult >>= bResult;
-        return bResult;
-    } else {
-        return sal_True;
-    }
 }
 
 void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
