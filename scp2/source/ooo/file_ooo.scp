@@ -1746,15 +1746,6 @@ File gid_File_Config_Javasettingsunopkginstall
   #endif
 End
 
-#ifdef ENABLE_SVCTAGS
-File gid_File_Jar_Productregistration
-    TXT_FILE_BODY;
-    Name = "productregistration.jar";
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED);
-End
-#endif
-
 #ifdef THEME_DEFAULT
 File gid_File_Images_Zip
     TXT_FILE_BODY;
