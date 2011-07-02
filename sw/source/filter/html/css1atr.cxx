@@ -186,7 +186,7 @@ static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
                                         sal_Bool bDeep );
 static Writer& OutCSS1_SwFmtLayoutSplit( Writer& rWrt, const SfxPoolItem& rHt );
 
-static void ConvToHex( sal_uInt16 nHex, ByteString& rStr )
+static rtl::OString ConvToHex(sal_uInt16 nHex)
 {
     sal_Char aNToABuf[] = "00";
 
@@ -200,16 +200,19 @@ static void ConvToHex( sal_uInt16 nHex, ByteString& rStr )
         nHex >>= 4;
     }
 
-    rStr.Append( aNToABuf );
+    return rtl::OString(aNToABuf, 2);
 }
 
-static void GetCSS1Color( const Color& rColor, ByteString& rStr )
+static rtl::OString GetCSS1Color(const Color& rColor)
 {
-    rStr += '#';
+    rtl::OStringBuffer aStr;
+    aStr.append('#');
 
-    ConvToHex( rColor.GetRed(), rStr );
-    ConvToHex( rColor.GetGreen(), rStr );
-    ConvToHex( rColor.GetBlue(), rStr );
+    aStr.append(ConvToHex(rColor.GetRed()));
+    aStr.append(ConvToHex(rColor.GetGreen()));
+    aStr.append(ConvToHex(rColor.GetBlue()));
+
+    return aStr.makeStringAndClear();
 }
 
 class SwCSS1OutMode
@@ -501,9 +504,10 @@ void SwHTMLWriter::OutCSS1_PixelProperty( const sal_Char *pProp, long nVal,
             nVal = 1;
     }
 
-    ByteString sOut( ByteString::CreateFromInt32( nVal ) );
-    sOut.Append( sCSS1_UNIT_px );
-    OutCSS1_PropertyAscii( pProp, sOut );
+    rtl::OStringBuffer sOut;
+    sOut.append(static_cast<sal_Int32>(nVal));
+    sOut.append(sCSS1_UNIT_px);
+    OutCSS1_PropertyAscii(pProp, sOut.makeStringAndClear());
 }
 
 void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
@@ -2419,9 +2423,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
                 aColor = pVSh->GetViewOptions()->GetRetoucheColor().GetColor();
         }
 
-        ByteString sOut;
-        GetCSS1Color(aColor, sOut);
-        OutCSS1_PropertyAscii(sCSS1_P_background, sOut);
+        OutCSS1_PropertyAscii(sCSS1_P_background, GetCSS1Color(aColor));
     }
 }
 
@@ -2603,10 +2605,7 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
     if( COL_AUTO == aColor.GetColor() )
         aColor.SetColor( COL_BLACK );
 
-    ByteString sOut;
-    GetCSS1Color( aColor, sOut );
-
-    rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_color, sOut );
+    rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_color, GetCSS1Color(aColor));
 
     return rWrt;
 }
@@ -2683,11 +2682,12 @@ static Writer& OutCSS1_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
         if( rHTMLWrt.aFontHeights[nSize-1] == nHeight )
             return rWrt;
     }
-    ByteString sHeight( ByteString::CreateFromInt32(
-                                            (sal_Int32)(nHeight/20) ) );
-    sHeight.Append( sCSS1_UNIT_pt );
 
-    rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_size, sHeight );
+    rtl::OStringBuffer sHeight;
+    sHeight.append(static_cast<sal_Int32>(nHeight/20));
+    sHeight.append(sCSS1_UNIT_pt);
+    rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_font_size,
+        sHeight.makeStringAndClear());
 
     return rWrt;
 }
@@ -2741,21 +2741,22 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
     sal_Int16 nValue = ((const SvxKerningItem&)rHt).GetValue();
     if( nValue )
     {
-        ByteString sOut;
+        rtl::OStringBuffer sOut;
         if( nValue < 0 )
         {
-            sOut = '-';
+            sOut.append('-');
             nValue = -nValue;
         }
 
         // Breite als n.n pt
         nValue = (nValue + 1) / 2;  // 1/10pt
-        sOut.Append( ByteString::CreateFromInt32( (sal_Int32)(nValue  / 10) ) );
-        sOut.Append( '.' );
-        sOut.Append( ByteString::CreateFromInt32( (sal_Int32)(nValue % 10) ) );
-        sOut.Append( sCSS1_UNIT_pt );
+        sOut.append(static_cast<sal_Int32>(nValue  / 10));
+        sOut.append('.');
+        sOut.append(static_cast<sal_Int32>(nValue % 10));
+        sOut.append(sCSS1_UNIT_pt);
 
-        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_letter_spacing, sOut );
+        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_letter_spacing,
+            sOut.makeStringAndClear());
     }
     else
     {
@@ -2924,14 +2925,14 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_line_height, (long)nHeight );
     else if( nPrcHeight )
     {
-        ByteString sHeight(
-                ByteString::CreateFromInt32( (sal_Int32)nPrcHeight ) );
-        sHeight += '%';
-        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_line_height, sHeight );
+        rtl::OStringBuffer sHeight;
+        sHeight.append(static_cast<sal_Int32>(nPrcHeight));
+        sHeight.append('%');
+        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_line_height,
+            sHeight.makeStringAndClear());
     }
 
     return rWrt;
-
 }
 
 static Writer& OutCSS1_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
@@ -2989,8 +2990,8 @@ static Writer& OutCSS1_SvxWidows( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    ByteString aStr(
-        ByteString::CreateFromInt32( ((const SvxWidowsItem&)rHt).GetValue() ) );
+    rtl::OString aStr(rtl::OString::valueOf(static_cast<sal_Int32>(
+        ((const SvxWidowsItem&)rHt).GetValue())));
     rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_widows, aStr );
 
     return rWrt;
@@ -3000,8 +3001,8 @@ static Writer& OutCSS1_SvxOrphans( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    ByteString aStr(
-       ByteString::CreateFromInt32( ((const SvxOrphansItem&)rHt).GetValue() ) );
+    rtl::OString aStr(rtl::OString::valueOf(static_cast<sal_Int32>(
+       ((const SvxOrphansItem&)rHt).GetValue())));
     rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_orphans, aStr );
 
     return rWrt;
@@ -3015,9 +3016,10 @@ static void OutCSS1_SwFmtDropAttrs( SwHTMLWriter& rHWrt,
     rHWrt.OutCSS1_PropertyAscii( sCSS1_P_float, sCSS1_PV_left );
 
     // Anzahl der Zeilen -> %-Angabe fuer Font-Hoehe!
-    ByteString sOut( ByteString::CreateFromInt32( rDrop.GetLines()*100 ) );
-    sOut += '%';
-    rHWrt.OutCSS1_PropertyAscii( sCSS1_P_font_size, sOut );
+    rtl::OStringBuffer sOut;
+    sOut.append(static_cast<sal_Int32>(rDrop.GetLines()*100));
+    sOut.append('%');
+    rHWrt.OutCSS1_PropertyAscii(sCSS1_P_font_size, sOut.makeStringAndClear());
 
     // Abstand zum Text = rechter Rand
     sal_uInt16 nDistance = rDrop.GetDistance();
@@ -3064,7 +3066,6 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    ByteString sOut;
     const SwFmtFrmSize& rFSItem = (const SwFmtFrmSize&)rHt;
 
     if( nMode & CSS1_FRMSIZE_WIDTH )
@@ -3072,8 +3073,11 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
         sal_uInt8 nPrcWidth = rFSItem.GetWidthPercent();
         if( nPrcWidth )
         {
-            (sOut = ByteString::CreateFromInt32( nPrcWidth) ) += '%';
-            rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_width, sOut );
+            rtl::OStringBuffer sOut;
+            sOut.append(static_cast<sal_Int32>(nPrcWidth));
+            sOut.append('%');
+            rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_width,
+                sOut.makeStringAndClear());
         }
         else if( nMode & CSS1_FRMSIZE_PIXEL )
         {
@@ -3111,8 +3115,11 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
             sal_uInt8 nPrcHeight = rFSItem.GetHeightPercent();
             if( nPrcHeight )
             {
-                (sOut = ByteString::CreateFromInt32( nPrcHeight ) ) += '%';
-                rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_height, sOut );
+                rtl::OStringBuffer sOut;
+                sOut.append(static_cast<sal_Int32>(nPrcHeight));
+                sOut.append('%');
+                rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_height,
+                    sOut.makeStringAndClear());
             }
             else if( nMode & CSS1_FRMSIZE_PIXEL )
             {
@@ -3493,9 +3500,9 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     {
         if( bColor )
         {
-            ByteString sTmp;
-            GetCSS1Color( aColor, sTmp );
-            sOut += String( sTmp, RTL_TEXTENCODING_ASCII_US );
+            rtl::OString sTmp(GetCSS1Color(aColor));
+            sOut += String(rtl::OStringToOUString(sTmp,
+                RTL_TEXTENCODING_ASCII_US));
         }
 
         if( pLink )
@@ -3550,38 +3557,37 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
 
     sal_Int32 nWidth = pLine->GetWidth();
 
-    ByteString sOut;
+    rtl::OStringBuffer sOut;
     if( Application::GetDefaultDevice() &&
         nWidth <= Application::GetDefaultDevice()->PixelToLogic(
                     Size( 1, 1 ), MapMode( MAP_TWIP) ).Width() )
     {
         // Wenn die Breite kleiner ist als ein Pixel, dann als 1px
         // ausgeben, damit Netscape und IE die Linie auch darstellen.
-        sOut += "1px";
+        sOut.append(RTL_CONSTASCII_STRINGPARAM("1px"));
     }
     else
     {
         nWidth *= 5;    // 1/100pt
 
         // Breite als n.nn pt
-        sOut += ByteString::CreateFromInt32( nWidth / 100 );
-        (((sOut += '.')
-            += ByteString::CreateFromInt32((nWidth/10) % 10))
-            += ByteString::CreateFromInt32(nWidth % 10)) += sCSS1_UNIT_pt;
+        sOut.append(static_cast<sal_Int32>(nWidth / 100));
+        sOut.append('.').append(static_cast<sal_Int32>((nWidth/10) % 10)).
+            append(static_cast<sal_Int32>(nWidth % 10)).append(sCSS1_UNIT_pt);
     }
 
     // Linien-Stil: solid oder double
-    sOut += ' ';
+    sOut.append(' ');
     switch ( pLine->GetStyle( ) )
     {
         case ::editeng::SOLID:
-            sOut += sCSS1_PV_solid;
+            sOut.append(sCSS1_PV_solid);
             break;
         case ::editeng::DOTTED:
-            sOut += sCSS1_PV_dotted;
+            sOut.append(sCSS1_PV_dotted);
             break;
         case ::editeng::DASHED:
-            sOut += sCSS1_PV_dashed;
+            sOut.append(sCSS1_PV_dashed);
             break;
         case ::editeng::DOUBLE:
         case ::editeng::THINTHICK_SMALLGAP:
@@ -3590,29 +3596,29 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
         case ::editeng::THICKTHIN_SMALLGAP:
         case ::editeng::THICKTHIN_MEDIUMGAP:
         case ::editeng::THICKTHIN_LARGEGAP:
-            sOut += sCSS1_PV_double;
+            sOut.append(sCSS1_PV_double);
             break;
         case ::editeng::EMBOSSED:
-            sOut += sCSS1_PV_ridge;
+            sOut.append(sCSS1_PV_ridge);
             break;
         case ::editeng::ENGRAVED:
-            sOut += sCSS1_PV_groove;
+            sOut.append(sCSS1_PV_groove);
             break;
         case ::editeng::INSET:
-            sOut += sCSS1_PV_inset;
+            sOut.append(sCSS1_PV_inset);
             break;
         case ::editeng::OUTSET:
-            sOut += sCSS1_PV_outset;
+            sOut.append(sCSS1_PV_outset);
             break;
         default:
-            sOut += sCSS1_PV_none;
+            sOut.append(sCSS1_PV_none);
     }
-    sOut += ' ';
+    sOut.append(' ');
 
     // und noch die Farbe
-    GetCSS1Color( pLine->GetColor(), sOut );
+    sOut.append(GetCSS1Color(pLine->GetColor()));
 
-    rHTMLWrt.OutCSS1_PropertyAscii( pProperty, sOut );
+    rHTMLWrt.OutCSS1_PropertyAscii(pProperty, sOut.makeStringAndClear());
 }
 
 Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )

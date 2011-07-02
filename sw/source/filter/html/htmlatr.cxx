@@ -91,6 +91,7 @@
 #include <wrthtml.hxx>
 #include <htmlfly.hxx>
 #include <numrule.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;
 
@@ -147,13 +148,14 @@ static Writer& OutHTML_HoriSpacer( Writer& rWrt, sal_Int16 nSize )
             ->LogicToPixel( Size(nSize,0), MapMode(MAP_TWIP) ).Width();
     }
 
-    ByteString sOut( '<' );
-    (((((((((sOut += OOO_STRING_SVTOOLS_HTML_spacer)
-        += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=') += OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal)
-        += ' ') += OOO_STRING_SVTOOLS_HTML_O_size) += '=')
-                        +=ByteString::CreateFromInt32(nSize)) += '>';
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_spacer).append(' ').
+         append(OOO_STRING_SVTOOLS_HTML_O_type).append('=').
+         append(OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal).append(' ').
+         append(OOO_STRING_SVTOOLS_HTML_O_size).append('=').
+         append(static_cast<sal_Int32>(nSize)).append('>');
 
-    rWrt.Strm() << sOut.GetBuffer();
+    rWrt.Strm() << sOut.getStr();
 
     return rWrt;
 }
@@ -920,13 +922,15 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // ggf ein List-Item aufmachen
     if( rInfo.bInNumBulList && bNumbered )
     {
-        ByteString sOut( '<' );
-        sOut += OOO_STRING_SVTOOLS_HTML_li;
+        rtl::OStringBuffer sOut;
+        sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_li);
         if( USHRT_MAX != nNumStart )
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_value) += '=')
-                += ByteString::CreateFromInt32(nNumStart);
-        sOut += '>';
-        rWrt.Strm() << sOut.GetBuffer();
+        {
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).
+                 append('=').append(static_cast<sal_Int32>(nNumStart));
+        }
+        sOut.append('>');
+        rWrt.Strm() << sOut.getStr();
     }
 
     if( rHWrt.nDefListLvl > 0 && !bForceDL )
@@ -2855,14 +2859,14 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.bTagOn )
     {
-        ByteString sOut( '<' );
-        sOut += OOO_STRING_SVTOOLS_HTML_font;
+        rtl::OStringBuffer sOut;
+        sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_font);
 
         sal_uInt32 nHeight = ((const SvxFontHeightItem&)rHt).GetHeight();
         sal_uInt16 nSize = rHTMLWrt.GetHTMLFontSize( nHeight );
-        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_size) += '=')
-            += ByteString::CreateFromInt32( nSize );
-        rWrt.Strm() << sOut.GetBuffer();
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).append('=').
+             append(static_cast<sal_Int32>(nSize));
+        rWrt.Strm() << sOut.getStr();
 
         if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr &&
             rHTMLWrt.aFontHeights[nSize-1] != nHeight )
