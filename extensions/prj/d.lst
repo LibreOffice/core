@@ -49,7 +49,6 @@ mkdir: %_DEST%\xml\registry\spool\org\openoffice\Office\Logging
 ..\%__SRC%\misc\oooimprovement.component %_DEST%\xml\oooimprovement.component
 ..\%__SRC%\misc\pcr.component %_DEST%\xml\pcr.component
 ..\%__SRC%\misc\pl.component %_DEST%\xml\pl.component
-..\%__SRC%\misc\preload.component %_DEST%\xml\preload.component
 ..\%__SRC%\misc\res.component %_DEST%\xml\res.component
 ..\%__SRC%\misc\scn.component %_DEST%\xml\scn.component
 ..\%__SRC%\misc\updatefeed.component %_DEST%\xml\updatefeed.component
