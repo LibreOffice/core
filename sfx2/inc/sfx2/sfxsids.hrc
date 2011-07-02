@@ -206,9 +206,6 @@
 #define SID_BASEURL                         (SID_SFX_START + 1518)
 #define SID_TEMPLATE                        (SID_SFX_START + 1519)
 
-#define SID_ONLINE_REGISTRATION             (SID_SFX_START + 1537)
-
-#define SID_ONLINE_REGISTRATION_DLG         (SID_SFX_START + 1540)
 #define SID_CONTENTTYPE                     (SID_SFX_START + 1541)
 
 #define SID_SAVETO                          (SID_SFX_START + 1546)

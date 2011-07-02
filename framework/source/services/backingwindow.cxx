@@ -905,25 +905,6 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
         pNodePath = "/org.openoffice.Office.Common/Help/StartCenter";
         pNode = "AddFeatureURL";
         break;
-    case nItemId_Reg:
-        try
-        {
-            // create the Desktop component which can load components
-            Reference < lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-            if( xFactory.is() )
-            {
-                Reference< task::XJobExecutor > xProductRegistration(
-                    xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.setup.ProductRegistration" ) ) ),
-                    UNO_QUERY_THROW );
-
-                 // tell it that the user wants to register
-                 xProductRegistration->trigger( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RegistrationRequired" ) ) );
-            }
-        }
-        catch (const Exception&)
-        {
-        }
-        break;
     case nItemId_Info:
         pNodePath = "/org.openoffice.Office.Common/Help/StartCenter";
         pNode = "InfoURL";

@@ -782,7 +782,6 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
 void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::CheckAndAddMenuExtension" );
-    static const char REFERENCECOMMAND_AFTER[]          = ".uno:OnlineRegistrationDlg";
     static const char REFERENCECOMMAND_BEFORE[]         = ".uno:About";
 
     // retrieve menu extension item
@@ -793,24 +792,18 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
         // remove all old window list entries from menu
         sal_uInt16 nNewItemId( 0 );
         sal_uInt16 nInsertPos( MENU_APPEND );
-        sal_uInt16 nAfterPos( MENU_APPEND );
         sal_uInt16 nBeforePos( MENU_APPEND );
-        String     aCommandAfter( String::CreateFromAscii ( REFERENCECOMMAND_AFTER ));
         String     aCommandBefore( String::CreateFromAscii ( REFERENCECOMMAND_BEFORE ));
         for ( sal_uInt16 n = 0; n < pMenu->GetItemCount(); n++ )
         {
             sal_uInt16 nItemId = pMenu->GetItemId( n );
             nNewItemId = std::max( nItemId, nNewItemId );
-            if ( pMenu->GetItemCommand( nItemId ) == aCommandAfter )
-                nAfterPos = n+1;
-            else if ( pMenu->GetItemCommand( nItemId ) == aCommandBefore )
+            if ( pMenu->GetItemCommand( nItemId ) == aCommandBefore )
                 nBeforePos = n;
         }
         ++nNewItemId;
 
-        if ( nAfterPos != MENU_APPEND )
-            nInsertPos = nAfterPos;
-        else if ( nBeforePos != MENU_APPEND )
+        if ( nBeforePos != MENU_APPEND )
             nInsertPos = nBeforePos;
 
         pMenu->InsertItem( nNewItemId, aMenuItem.aLabel, 0, nInsertPos );
