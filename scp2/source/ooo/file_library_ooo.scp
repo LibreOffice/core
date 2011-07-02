@@ -1025,8 +1025,6 @@ STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Preload, preload)
-
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Productregistration, productregistration.uno )
 
 #if defined(UNX) && ! defined(QUARTZ)
