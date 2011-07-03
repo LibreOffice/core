@@ -89,7 +89,6 @@ $(MISC)$/$(SHL1TARGET).def:  makefile.mk
     @echo DATA        READ WRITE NONSHARED                          >>$@
 .ENDIF
     @echo EXPORTS                                                   >>$@
-    @echo   component_getImplementationEnvironment @24              >>$@
     @echo   component_writeInfo @25                                 >>$@
     @echo   component_getFactory @26                                >>$@
 .ENDIF
