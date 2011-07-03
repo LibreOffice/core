@@ -65,10 +65,6 @@ public:
     sal_Bool                isValid(const ::rtl::OString& option);
     const ::rtl::OString    getOption(const ::rtl::OString& option)
         throw( IllegalArgument );
-    const OptionMap&        getOptions();
-
-    const ::rtl::OString    getInputFile(sal_uInt16 index)
-        throw( IllegalArgument );
 
     const StringVector& getInputFiles();
 

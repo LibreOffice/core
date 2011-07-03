@@ -64,23 +64,6 @@ const OString Options::getOption(const OString& option)
     }
 }
 
-const OptionMap& Options::getOptions()
-{
-    return m_options;
-}
-
-const OString Options::getInputFile(sal_uInt16 index)
-    throw( IllegalArgument )
-{
-    if (index < m_inputFiles.size())
-    {
-        return m_inputFiles[index];
-    } else
-    {
-        throw IllegalArgument("index is out of bound.");
-    }
-}
-
 const StringVector& Options::getInputFiles()
 {
     return m_inputFiles;
