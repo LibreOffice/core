@@ -331,13 +331,6 @@ const Pointer& MediaWindowImpl::getPointer() const
 
 // ---------------------------------------------------------------------
 
-bool MediaWindowImpl::hasInternalMediaControl() const
-{
-    return( mpMediaWindowControl != NULL );
-}
-
-// ---------------------------------------------------------------------
-
 void MediaWindowImpl::Resize()
 {
     uno::Reference< media::XPlayerWindow >  xPlayerWindow( getPlayerWindow() );
