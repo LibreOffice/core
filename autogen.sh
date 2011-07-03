@@ -11,6 +11,9 @@ sub clean()
     print "cleaned the build tree\n";
 }
 
+# Alloc $ACLOCAL to specify which aclocal to use
+my $aclocal = $ENV{ACLOCAL} ? $ENV{ACLOCAL} : 'aclocal';
+
 # check we have various vital tools
 sub sanity_checks($)
 {
@@ -20,7 +23,7 @@ sub sanity_checks($)
       (
        'pkg-config' => "pkg-config is required to be installed",
        'autoconf'   => "autoconf is required",
-       'aclocal'    => "aclocal is required",
+       $aclocal     => "$aclocal is required",
       );
 
     for my $elem (@path) {
@@ -119,7 +122,7 @@ $aclocal_flags = "-I ./m4/mac" if (($aclocal_flags eq "") && ($system eq 'Darwin
 
 $ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
 
-system ("aclocal $aclocal_flags") && die "Failed to run aclocal";
+system ("$aclocal $aclocal_flags") && die "Failed to run aclocal";
 unlink ("configure");
 system ("autoconf") && die "Failed to run autoconf";
 die "failed to generate configure" if (! -x "configure");
