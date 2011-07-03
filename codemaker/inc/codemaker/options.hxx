@@ -72,7 +72,6 @@ public:
 
     const StringVector& getInputFiles();
 
-    ::rtl::OString getExtraInputFile(sal_uInt16 index) const throw( IllegalArgument );
     inline sal_uInt16 getNumberOfExtraInputFiles() const
         { return (sal_uInt16)m_extra_input_files.size(); }
     inline const StringVector& getExtraInputFiles() const

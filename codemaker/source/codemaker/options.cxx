@@ -86,16 +86,4 @@ const StringVector& Options::getInputFiles()
     return m_inputFiles;
 }
 
-OString Options::getExtraInputFile(sal_uInt16 index) const
-    throw( IllegalArgument )
-{
-    if (index < m_extra_input_files.size())
-    {
-        return m_extra_input_files[index];
-    } else
-    {
-        throw IllegalArgument("index is out of bound.");
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
