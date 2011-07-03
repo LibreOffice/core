@@ -110,17 +110,6 @@ struct ProviderRequest
 /* }}} */
 
 
-/* {{{ component_getImplementationEnvironment -I- */
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char  **ppEnvTypeName,
-                uno_Environment ** /* ppEnv */
-            )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-/* }}} */
-
-
 /* {{{ component_writeInfo -I- */
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void * /* pServiceManager */, void * pRegistryKey)
 {
