@@ -1321,7 +1321,7 @@ if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 $SOLARINC            .= '/SC5 ';
 }
 # Platform dependent include path at the top of this list of include paths
-if ($platform =~ m/solaris/)
+if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 {
     $SOLARINC         .= $I.$COMPATH.$INCLUDE;
 }
