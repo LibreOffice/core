@@ -43,9 +43,5 @@ extern "C" sal_Bool SAL_CALL firstfunc( sal_Bool bRes )
 {
    return ( bRes = sal_True );
 }
-extern "C" void SAL_CALL secondfunc()
-{
-   printf("second func called.\n");
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
