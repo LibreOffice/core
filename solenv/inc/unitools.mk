@@ -117,9 +117,10 @@ COPYRECURSE=-r
 .ENDIF
 .IF "$(OS)"=="SOLARIS"
 AWK*=nawk
-GNUCOPY*=gnucp
-GNUPATCH*=gnupatch
+GNUCOPY*=/usr/gnu/bin/cp
+GNUPATCH*=/usr/gnu/bin/patch
 GNUTAR*=/usr/sfw/bin/gtar
+GNUMAKE=/usr/sfw/bin/make
 DEREFERENCE=
 .ELIF "$(OS)"=="AIX"
 AWK*=/opt/freeware/bin/awk
