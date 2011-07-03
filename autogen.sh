@@ -11,8 +11,7 @@ sub clean()
     print "cleaned the build tree\n";
 }
 
-# Alloc $ACLOCAL to specify which aclocal to use
-my $aclocal = $ENV{ACLOCAL} ? $ENV{ACLOCAL} : 'aclocal';
+my $aclocal;
 
 # check we have various vital tools
 sub sanity_checks($)
@@ -108,6 +107,14 @@ for my $arg (@cmdline_args) {
         push @args, $arg;
     }
 }
+for my $arg (@args) {
+    if ($arg =~ /^([A-Z]+)=(.*)/) {
+        $ENV{$1} = $2;
+    }
+}
+
+# Alloc $ACLOCAL to specify which aclocal to use
+$aclocal = $ENV{ACLOCAL} ? $ENV{ACLOCAL} : 'aclocal';
 
 system ("touch ChangeLog");
 
