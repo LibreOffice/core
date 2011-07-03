@@ -236,11 +236,6 @@ extern void * SAL_CALL comp_Layout_component_getFactory( const char * implName, 
 extern "C"
 {
 
-TOOLKIT_DLLPUBLIC void SAL_CALL tk_component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 TOOLKIT_DLLPUBLIC void* SAL_CALL tk_component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* _pRegistryKey )
 {
     void* pRet = NULL;

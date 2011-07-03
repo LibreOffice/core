@@ -81,13 +81,6 @@ sal_Bool writeInfo( void * pRegistryKey,
 }
 
 //=========================================================================
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//=========================================================================
 extern "C" sal_Bool SAL_CALL component_writeInfo(
     void * /*pServiceManager*/, void * pRegistryKey )
 {

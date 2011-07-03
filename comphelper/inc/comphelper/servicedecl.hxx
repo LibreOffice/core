@@ -387,12 +387,6 @@ BOOST_PP_REPEAT_FROM_TO(1, COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS,
 #define COMPHELPER_SERVICEDECL_make_exports(varargs_ )  \
 extern "C" \
 { \
-    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char**  ppEnvTypeName, \
-                                                          uno_Environment** /*ppEnv*/ ) \
-    { \
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME; \
-    } \
- \
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( sal_Char const*                                pImplName, \
                                          ::com::sun::star::lang::XMultiServiceFactory*  pServiceManager, \
                                          ::com::sun::star::registry::XRegistryKey*      pRegistryKey ) \

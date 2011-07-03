@@ -484,14 +484,6 @@ throw ( ::css::uno::RuntimeException )
     return ::cppu::createSingleComponentFactory( XTempFile_createInstance, getImplementationName_Static(), getSupportedServiceNames_Static() );
 }
 
-// C functions to implement this as a component
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL utl_component_getImplementationEnvironment(
-                const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 /**
  * This function is called to get service factories for an implementation.
  * @param pImplName name of implementation
