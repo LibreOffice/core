@@ -53,10 +53,4 @@ ModalDialogGROSSER_TEST_DLG::ModalDialogGROSSER_TEST_DLG( Window * pParent, cons
     if( bFreeRes ) FreeResource();
 }
 
-MenuMENU_CLIENT::MenuMENU_CLIENT( const ResId & rResId, sal_Bool )
-    : MenuBar( rResId )
-{
-    // No subresources, automatic free resource
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
