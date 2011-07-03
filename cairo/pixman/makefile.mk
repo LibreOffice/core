@@ -35,7 +35,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF "$(SYSTEM_CAIRO)" == "YES"
+.IF "$(SYSTEM_CAIRO)" == "YES" || "$(GUIBASE)" == "android"
 all:
     @echo "Not building pixman."
 
