@@ -395,12 +395,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     return  pRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 
 // XTestSequence ============================================================================
 Sequence<sal_Int8> SAL_CALL OComponent::methodByte(const Sequence< sal_Int8 >& aSeq) throw( RuntimeException )
