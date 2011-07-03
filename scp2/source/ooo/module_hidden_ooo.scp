@@ -772,7 +772,10 @@ Module gid_Module_Root_Files_Images
              gid_File_ImagesHicontrast_Zip,
 #endif
 #ifdef THEME_TANGO
-             gid_File_ImagesTango_Zip
+             gid_File_ImagesTango_Zip,
+#endif
+#ifdef THEME_HUMAN
+             gid_File_ImagesHuman_Zip
 #endif
 	);
 End

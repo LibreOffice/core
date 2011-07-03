@@ -1818,6 +1818,15 @@ File gid_File_ImagesTango_Zip
 End
 #endif
 
+#ifdef THEME_HUMAN
+File gid_File_ImagesHuman_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_human.zip";
+    Styles = (PACKED);
+End
+#endif
+
 File gid_File_Share_Registry_Lingucomponent_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
