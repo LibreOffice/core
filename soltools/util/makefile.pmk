@@ -38,5 +38,7 @@ HELP_COMPATH:=$(subst,/binx, $(COMPATH:+"x"))
 .ELSE			# "$(COMPATH:+"x")" == "$(COMPATH:s/binx//)/binx"
 HELP_COMPATH:=$(COMPATH)
 .ENDIF			# "$(COMPATH:+"x")" == "$(COMPATH:s/binx//)/binx"
+.IF "$(COM)"!="GCC"
 SOLARINC+=-I$(HELP_COMPATH)/prod/include/CC/Cstd
+.ENDIF
 .ENDIF
