@@ -413,38 +413,4 @@ ERRTYPE parser( RscFileInst * pFileInst )
     return( aError );
 }
 
-RscExpression * MacroParser( RscFileInst & rFileInst )
-{
-    ERRTYPE       aError;
-    RscExpression * pExpression;
-
-    InitParser( &rFileInst );
-
-    //Ziel auf macro_expression setzen
-    aKeyVal[ 0 ].nKeyWord = MACROTARGET;
-    bTargetDefined = sal_True;
-    aError = yyparse();
-
-    pExpression = pExp;
-    //EndParser() wuerde pExp loeschen
-    if( pExp )
-        pExp = NULL;
-
-    EndParser();
-
-    // yyparser gibt 0 zurueck, wenn erfolgreich
-    if( 0 == aError )
-        aError.Clear();
-    if( rFileInst.pTypCont->pEH->nErrors )
-        aError = ERR_ERROR;
-    rFileInst.SetError( aError );
-
-    //im Fehlerfall pExpression loeschen
-    if( aError.IsError() && pExpression ){
-        delete pExpression;
-        pExpression = NULL;
-    };
-    return( pExpression );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

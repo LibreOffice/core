@@ -88,7 +88,6 @@ public:
 /******************* F u n c t i o n *************************************/
 void IncludeParser( RscFileInst * pFileInst );
 ERRTYPE parser( RscFileInst * pFileInst );
-RscExpression * MacroParser( RscFileInst & rFileInst );
 
 #endif // _RSCPAR_HXX
 
