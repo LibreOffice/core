@@ -116,8 +116,6 @@ for my $arg (@args) {
 # Alloc $ACLOCAL to specify which aclocal to use
 $aclocal = $ENV{ACLOCAL} ? $ENV{ACLOCAL} : 'aclocal';
 
-system ("touch ChangeLog");
-
 my $system = `uname -s`;
 chomp $system;
 
