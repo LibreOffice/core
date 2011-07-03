@@ -1636,13 +1636,6 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
    else
       AC_MSG_RESULT([checked (gcc $_gcc_version)])
    fi
-   if test "$_os" = "SunOS"; then
-      AC_MSG_CHECKING([gcc linker])
-      if $CC -Wl,--version 2>&1 |head -n 1| grep -v GNU > /dev/null;then
-          AC_MSG_ERROR([failed (not GNU ld). Use GNU ld instead of Sun ld on Solaris])
-      fi
-      AC_MSG_RESULT([ok (GNU ld)])
-   fi
 fi
 
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
