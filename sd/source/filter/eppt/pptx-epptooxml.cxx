@@ -2218,9 +2218,6 @@ OUString PowerPointExport::implGetImplementationName() const
 }
 
 // UNO component
-// ------------------------------------------
-// - component_getImplementationEnvironment -
-// ------------------------------------------
 
 static struct cppu::ImplementationEntry g_entries[] =
 {
@@ -2238,11 +2235,6 @@ static struct cppu::ImplementationEntry g_entries[] =
 extern "C"
 {
 #endif
-
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
 
 // ------------------------
 // - component_getFactory -
