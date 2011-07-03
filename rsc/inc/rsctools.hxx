@@ -51,7 +51,6 @@ enum RSCBYTEORDER_TYPE { RSC_BIGENDIAN, RSC_LITTLEENDIAN, RSC_SYSTEMENDIAN };
 ByteString GetTmpFileName();
 sal_Bool Append( ByteString aDestFile, ByteString aSourceFile );
 sal_Bool Append( FILE * fDest, ByteString aSourceFile );
-ByteString InputFile ( const char * pInput, const char * pExt );
 ByteString OutputFile( ByteString aInput, const char * ext );
 char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
                      sal_uInt32 nArgc );
