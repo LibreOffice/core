@@ -52,13 +52,13 @@ BEGIN {
     x = match( $0, /[0-9]*\.[0-9]*\.[0-9]*/ )
     CCversion = substr( $0, RSTART, RLENGTH)
 }
-/^[0-9]*[.][0-9]*\x0d*$/ {
+/^[0-9]*[.][0-9]*\r*$/ {
     if ( compiler_matched == 0 ) {
 # need to blow to x.xx.xx for comparing
     	CCversion = $0 ".0"
     }
 }
-/^[0-9]*[.][0-9]*[.][0-9]*\x0d*$/ {
+/^[0-9]*[.][0-9]*[.][0-9]*\r*$/ {
     if ( compiler_matched == 0 ) {
         CCversion = $0
     }
