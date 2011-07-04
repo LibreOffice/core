@@ -35,6 +35,9 @@ gb_CFLAGS += -fno-omit-frame-pointer
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
+# No unit testing can be run
+gb_CppunitTest_CPPTESTPRECOMMAND := :
+
 # Set the proper enirotment variable so that our BUILD platform
 # build-time shared libraries are found.
 ifeq ($(OS_FOR_BUILD),MACOSX)
