@@ -2194,7 +2194,6 @@ int RTFDocumentImpl::popState()
     bool bLevelTextEnd = false;
     std::vector< std::pair<rtl::OUString, rtl::OUString> > aShapeProperties;
     bool bPopShapeProperties = false;
-    bool bPicPropEnd = false;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -2322,8 +2321,7 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_PICPROP)
     {
-        aShapeProperties = m_aStates.top().aShapeProperties;
-        bPicPropEnd = true;
+        resolveShapeProperties(m_aStates.top().aShapeProperties);
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
         m_aAuthors[m_aAuthors.size()] = m_aDestinationText.makeStringAndClear();
@@ -2391,8 +2389,6 @@ int RTFDocumentImpl::popState()
     }
     else if (bPopShapeProperties)
         m_aStates.top().aShapeProperties = aShapeProperties;
-    else if (bPicPropEnd)
-        resolveShapeProperties(aShapeProperties);
     if (m_bSuper)
     {
         if (!m_bHasFootnote)
