@@ -80,7 +80,7 @@ else
     exit 0
   fi
   # mozilla derivates may need -remote semantics
-  for i in firefox mozilla netscape; do
+  for i in firefox seamonkey netscape; do
     browser=`which $i`
     if [ ! -z "$browser" ]; then
       run_mozilla "$browser" "$1"
