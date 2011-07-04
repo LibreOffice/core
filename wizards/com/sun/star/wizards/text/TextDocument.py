@@ -251,6 +251,7 @@ class TextDocument(object):
     def removeTextContent(self, oTextContent):
         try:
             self.xText.removeTextContent(oxTextContent)
+            print "remove"
             return True
         except NoSuchElementException, e:
             traceback.print_exc()
