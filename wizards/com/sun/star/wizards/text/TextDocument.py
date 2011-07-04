@@ -17,12 +17,13 @@ from com.sun.star.i18n.NumberFormatIndex import DATE_SYS_DDMMYY
 
 class TextDocument(object):
 
+    xTextDocument = None
+
     def __init__(self, xMSF,listener=None,bShowStatusIndicator=None,
         FrameName=None,_sPreviewURL=None,_moduleIdentifier=None,
         _textDocument=None, xArgs=None):
 
         self.xMSF = xMSF
-        self.xTextDocument = None
 
         if listener is not None:
             if FrameName is not None:
@@ -37,19 +38,19 @@ class TextDocument(object):
                 '''creates an instance of TextDocument by
                 loading a given URL as preview'''
                 self.xFrame = OfficeDocument.createNewFrame(xMSF, listener)
-                self.xTextDocument = self.loadAsPreview(_sPreviewURL, True)
+                TextDocument.xTextDocument = self.loadAsPreview(_sPreviewURL, True)
 
             elif xArgs is not None:
                 '''creates an instance of TextDocument
                 and creates a frame and loads a document'''
                 self.xDesktop = Desktop.getDesktop(xMSF);
                 self.xFrame = OfficeDocument.createNewFrame(xMSF, listener)
-                self.xTextDocument = OfficeDocument.load(
+                TextDocument.xTextDocument = OfficeDocument.load(
                     xFrame, URL, "_self", xArgs);
                 self.xWindowPeer = xFrame.getComponentWindow()
-                self.m_xDocProps = self.xTextDocument.DocumentProperties
+                self.m_xDocProps = TextDocument.xTextDocument.DocumentProperties
                 CharLocale = Helper.getUnoStructValue(
-                    self.xTextDocument, "CharLocale");
+                    TextDocument.xTextDocument, "CharLocale");
                 return
 
             else:
@@ -57,26 +58,26 @@ class TextDocument(object):
                 the desktop's current frame'''
                 self.xDesktop = Desktop.getDesktop(xMSF);
                 self.xFrame = self.xDesktop.getActiveFrame()
-                self.xTextDocument = self.xFrame.getController().Model
+                TextDocument.xTextDocument = self.xFrame.getController().Model
 
         elif _moduleIdentifier is not None:
             try:
                 '''create the empty document, and set its module identifier'''
-                self.xTextDocument = xMSF.createInstance(
+                TextDocument.xTextDocument = xMSF.createInstance(
                     "com.sun.star.text.TextDocument")
-                self.xTextDocument.initNew()
-                self.xTextDocument.setIdentifier(_moduleIdentifier.Identifier)
+                TextDocument.xTextDocument.initNew()
+                TextDocument.xTextDocument.setIdentifier(_moduleIdentifier.Identifier)
                 # load the document into a blank frame
                 xDesktop = Desktop.getDesktop(xMSF)
                 loadArgs = range(1)
                 loadArgs[0] = "Model"
                 loadArgs[0] = -1
-                loadArgs[0] = self.xTextDocument
+                loadArgs[0] = TextDocument.xTextDocument
                 loadArgs[0] = DIRECT_VALUE
                 xDesktop.loadComponentFromURL(
                     "private:object", "_blank", 0, loadArgs)
                 # remember some things for later usage
-                self.xFrame = self.xTextDocument.CurrentController.Frame
+                self.xFrame = TextDocument.xTextDocument.CurrentController.Frame
             except Exception, e:
                 traceback.print_exc()
 
@@ -84,17 +85,17 @@ class TextDocument(object):
             '''creates an instance of TextDocument
             from a given XTextDocument'''
             self.xFrame = _textDocument.CurrentController.Frame
-            self.xTextDocument = _textDocument
+            TextDocument.xTextDocument = _textDocument
         if bShowStatusIndicator:
             self.showStatusIndicator()
         self.init()
 
     def init(self):
         self.xWindowPeer = self.xFrame.getComponentWindow()
-        self.m_xDocProps = self.xTextDocument.getDocumentProperties()
+        self.m_xDocProps = TextDocument.xTextDocument.getDocumentProperties()
         self.CharLocale = Helper.getUnoStructValue(
-            self.xTextDocument, "CharLocale")
-        self.xText = self.xTextDocument.Text
+            TextDocument.xTextDocument, "CharLocale")
+        self.xText = TextDocument.xTextDocument.Text
 
     def showStatusIndicator(self):
         self.xProgressBar = self.xFrame.createStatusIndicator()
@@ -122,30 +123,30 @@ class TextDocument(object):
         loadValues[2].Value = True
         '''set the preview document to non-modified
         mode in order to avoid the 'do u want to save' box'''
-        if self.xTextDocument is not None:
+        if TextDocument.xTextDocument is not None:
             try:
-                self.xTextDocument.Modified = False
+                TextDocument.xTextDocument.Modified = False
             except PropertyVetoException, e1:
                 traceback.print_exc()
 
-        self.xTextDocument = OfficeDocument.load(
+        TextDocument.xTextDocument = OfficeDocument.load(
             self.xFrame, sDefaultTemplate, "_self", loadValues)
 
         self.DocSize = self.getPageSize()
 
-        myViewHandler = ViewHandler(self.xTextDocument, self.xTextDocument)
+        myViewHandler = ViewHandler(TextDocument.xTextDocument, TextDocument.xTextDocument)
         try:
             myViewHandler.setViewSetting(
                 "ZoomType", ENTIRE_PAGE)
         except Exception, e:
             traceback.print_exc()
-        myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
+        myFieldHandler = TextFieldHandler(self.xMSF, TextDocument.xTextDocument)
         myFieldHandler.updateDocInfoFields()
-        return self.xTextDocument
+        return TextDocument.xTextDocument
 
     def getPageSize(self):
         try:
-            xNameAccess = self.xTextDocument.StyleFamilies
+            xNameAccess = TextDocument.xTextDocument.StyleFamilies
             xPageStyleCollection = xNameAccess.getByName("PageStyles")
             xPageStyle = xPageStyleCollection.getByName("First Page")
             return Helper.getUnoPropertyValue(xPageStyle, "Size")
@@ -168,14 +169,14 @@ class TextDocument(object):
 
     def getCharWidth(self, ScaleString):
         iScale = 200
-        self.xTextDocument.lockControllers()
+        TextDocument.xTextDocument.lockControllers()
         iScaleLen = ScaleString.length()
-        xTextCursor = createTextCursor(self.xTextDocument.Text)
+        xTextCursor = createTextCursor(TextDocument.xTextDocument.Text)
         xTextCursor.gotoStart(False)
         com.sun.star.wizards.common.Helper.setUnoPropertyValue(
             xTextCursor, "PageDescName", "First Page")
         xTextCursor.String = ScaleString
-        xViewCursor = self.xTextDocument.CurrentController
+        xViewCursor = TextDocument.xTextDocument.CurrentController
         xTextViewCursor = xViewCursor.ViewCursor
         xTextViewCursor.gotoStart(False)
         iFirstPos = xTextViewCursor.Position.X
@@ -189,11 +190,11 @@ class TextDocument(object):
         return iScale
 
     def unlockallControllers(self):
-        while self.xTextDocument.hasControllersLocked() == True:
-            self.xTextDocument.unlockControllers()
+        while TextDocument.xTextDocument.hasControllersLocked() == True:
+            TextDocument.xTextDocument.unlockControllers()
 
     def refresh(self):
-        self.xTextDocument.refresh()
+        TextDocument.xTextDocument.refresh()
 
     '''
     This method sets the Author of a Wizard-generated template correctly
@@ -220,10 +221,10 @@ class TextDocument(object):
             currentDate.Year = year
             currentDate.Month = month
             dateObject = dateTimeObject(int(year), int(month), int(day))
-            du = Helper.DateUtils(self.xMSF, self.xTextDocument)
+            du = Helper.DateUtils(self.xMSF, TextDocument.xTextDocument)
             ff = du.getFormat(DATE_SYS_DDMMYY)
             myDate = du.format(ff, dateObject)
-            xDocProps2 = self.xTextDocument.DocumentProperties
+            xDocProps2 = TextDocument.xTextDocument.DocumentProperties
             xDocProps2.Author = fullname
             xDocProps2.ModifiedBy = fullname
             description = xDocProps2.Description
@@ -269,6 +270,7 @@ class TextDocument(object):
         xPC.jumpToLastPage()
         return xPC.getPage()
 
+    @classmethod
     def getFrameByName(self, sFrameName, xTD):
         if xTD.TextFrames.hasByName(sFrameName):
             return xTD.TextFrames.getByName(sFrameName)

@@ -1,13 +1,24 @@
 from text.TextDocument import *
 from text.TextSectionHandler import TextSectionHandler
+from text.TextFieldHandler import TextFieldHandler
+from com.sun.star.table import BorderLine
 from common.PropertyNames import PropertyNames
 
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
 from com.sun.star.style.ParagraphAdjust import CENTER
 from com.sun.star.text.PageNumberType import CURRENT
 from com.sun.star.style.NumberingType import ARABIC
+from com.sun.star.text.HoriOrientation import NONE as NONEHORI
+from com.sun.star.text.VertOrientation import NONE as NONEVERT
+from com.sun.star.text.RelOrientation import PAGE_FRAME
+from com.sun.star.text.TextContentAnchorType import AT_PAGE
+from com.sun.star.text.SizeType import FIX
+from com.sun.star.text.WrapTextMode import THROUGHT
+from com.sun.star.awt.FontWeight import BOLD
 
 class LetterDocument(TextDocument):
+
+    TextDocument = None
 
     def __init__(self, xMSF, listener):
         super(LetterDocument,self).__init__(xMSF, listener, None,
@@ -20,53 +31,65 @@ class LetterDocument(TextDocument):
 
     def switchElement(self, sElement, bState):
         try:
-            mySectionHandler = TextSectionHandler(self.xMSF, self.xTextDocument)
-            oSection = mySectionHandler.xTextDocument.TextSections.getByName(sElement)
+            mySectionHandler = TextSectionHandler(
+                self.xMSF, TextDocument.xTextDocument)
+            oSection = \
+                mySectionHandler.xTextDocument.TextSections.getByName(sElement)
             Helper.setUnoPropertyValue(oSection, "IsVisible", bState)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def updateDateFields(self):
-        FH = TextFieldHandler(self.xTextDocument, self.xTextDocument)
+        FH = TextFieldHandler(
+            TextDocument.xTextDocument, TextDocument.xTextDocument)
         FH.updateDateFields()
 
     def switchFooter(self, sPageStyle, bState, bPageNumber, sText):
-        if self.xTextDocument is not None:
-            self.xTextDocument.lockControllers()
+        if TextDocument.xTextDocument != None:
             try:
-                xNameAccess = self.xTextDocument.StyleFamilies
+                TextDocument.xTextDocument.lockControllers()
+                xNameAccess = TextDocument.xTextDocument.StyleFamilies
                 xPageStyleCollection = xNameAccess.getByName("PageStyles")
                 xPageStyle = xPageStyleCollection.getByName(sPageStyle)
                 if bState:
-                    Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn",True)
-                    xFooterText = Helper.getUnoPropertyValue(xPageStyle, "FooterText")
+                    Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", True)
+                    xFooterText = \
+                        Helper.getUnoPropertyValue(xPageStyle, "FooterText")
                     xFooterText.String = sText
                     if bPageNumber:
                         #Adding the Page Number
-                        myCursor = xFooterText.createTextCursor()
+                        myCursor = xFooterText.Text.createTextCursor()
                         myCursor.gotoEnd(False)
-                        xFooterText.insertControlCharacter(myCursor, PARAGRAPH_BREAK, False)
-                        myCursor.setPropertyValue("ParaAdjust", CENTER)
-                        xPageNumberField = self.xTextDocument.createInstance("com.sun.star.text.TextField.PageNumber")
-                        xPageNumberField.setPropertyValue("SubType", CURRENT)
-                        xPageNumberField.setPropertyValue("NumberingType", ARABIC)
-                        xFooterText.insertTextContent(xFooterText.getEnd(), xPageNumberField, False)
-                else:
-                    Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", False)
+                        xFooterText.insertControlCharacter(myCursor,
+                            PARAGRAPH_BREAK, False)
+                        myCursor.setPropertyValue("ParaAdjust", CENTER )
 
-                self.xTextDocument.unlockControllers()
-            except Exception, exception:
+                        xPageNumberField = \
+                            TextDocument.xTextDocument.createInstance(
+                                "com.sun.star.text.TextField.PageNumber")
+                        xPageNumberField.setPropertyValue("SubType", CURRENT)
+                        xPageNumberField.NumberingType = ARABIC
+                        xFooterText.insertTextContent(xFooterText.End,
+                            xPageNumberField, False)
+
+                else:
+                    Helper.setUnoPropertyValue(
+                        xPageStyle, "FooterIsOn", False)
+
+                TextDocument.xTextDocument.unlockControllers()
+            except Exception:
                 traceback.print_exc()
 
     def hasElement(self, sElement):
-        if self.xTextDocument is not None:
-            SH = TextSectionHandler(self.xMSF, self.xTextDocument)
+        if TextDocument.xTextDocument != None:
+            SH = TextSectionHandler(self.xMSF, TextDocument.xTextDocument)
             return SH.hasTextSectionByName(sElement)
         else:
             return False
 
     def switchUserField(self, sFieldName, sNewContent, bState):
-        myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
+        myFieldHandler = TextFieldHandler(
+            self.xMSF, TextDocument.xTextDocument)
         if bState:
             myFieldHandler.changeUserFieldContent(sFieldName, sNewContent)
         else:
@@ -74,107 +97,163 @@ class LetterDocument(TextDocument):
 
     def fillSenderWithUserData(self):
         try:
-            myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
-            oUserDataAccess = Configuration.getConfigurationRoot(self.xMSF, "org.openoffice.UserProfile/Data", False)
-            myFieldHandler.changeUserFieldContent("Company", Helper.getUnoObjectbyName(oUserDataAccess, "o"))
-            myFieldHandler.changeUserFieldContent("Street", Helper.getUnoObjectbyName(oUserDataAccess, "street"))
-            myFieldHandler.changeUserFieldContent("PostCode", Helper.getUnoObjectbyName(oUserDataAccess, "postalcode"))
-            myFieldHandler.changeUserFieldContent("City", Helper.getUnoObjectbyName(oUserDataAccess, "l"))
-            myFieldHandler.changeUserFieldContent(PropertyNames.PROPERTY_STATE, Helper.getUnoObjectbyName(oUserDataAccess, "st"))
-        except Exception, exception:
+            myFieldHandler = TextFieldHandler(
+                TextDocument.xTextDocument, TextDocument.xTextDocument)
+            oUserDataAccess = Configuration.getConfigurationRoot(
+                self.xMSF, "org.openoffice.UserProfile/Data", False)
+            myFieldHandler.changeUserFieldContent(
+                "Company", Helper.getUnoObjectbyName(oUserDataAccess, "o"))
+            myFieldHandler.changeUserFieldContent(
+                "Street", Helper.getUnoObjectbyName(oUserDataAccess, "street"))
+            myFieldHandler.changeUserFieldContent(
+                "PostCode",
+                Helper.getUnoObjectbyName(oUserDataAccess, "postalcode"))
+            myFieldHandler.changeUserFieldContent(
+                "City", Helper.getUnoObjectbyName(oUserDataAccess, "l"))
+            myFieldHandler.changeUserFieldContent(
+                PropertyNames.PROPERTY_STATE,
+                Helper.getUnoObjectbyName(oUserDataAccess, "st"))
+        except Exception:
             traceback.print_exc()
 
     def killEmptyUserFields(self):
-        myFieldHandler = TextFieldHandle(self.xMSF, self.xTextDocument)
+        myFieldHandler = TextFieldHandler(
+            self.xMSF, TextDocument.xTextDocument)
         myFieldHandler.removeUserFieldByContent("")
 
     def killEmptyFrames(self):
         try:
             if not self.keepLogoFrame:
-                xTF = TextFrameHandler.getFrameByName("Company Logo", self.xTextDocument)
-            if xTF is not None:
-                xTF.dispose()
+                xTF = self.getFrameByName(
+                    "Company Logo", TextDocument.xTextDocument)
+                if xTF != None:
+                    xTF.dispose()
 
             if not self.keepBendMarksFrame:
-                xTF = TextFrameHandler.getFrameByName("Bend Marks", self.xTextDocument)
-            if xTF is not None:
-                xTF.dispose()
+                xTF = self.getFrameByName(
+                    "Bend Marks", TextDocument.xTextDocument)
+                if xTF != None:
+                    xTF.dispose()
 
             if not self.keepLetterSignsFrame:
-                xTF = TextFrameHandler.getFrameByName("Letter Signs", self.xTextDocument)
-            if xTF is not None:
-                xTF.dispose()
+                xTF = self.getFrameByName(
+                    "Letter Signs", TextDocument.xTextDocument)
+                if xTF != None:
+                    xTF.dispose()
 
             if not self.keepSenderAddressRepeatedFrame:
-                xTF = TextFrameHandler.getFrameByName("Sender Address Repeated", self.xTextDocument)
-            if xTF is not None:
-                xTF.dispose()
+                xTF = self.getFrameByName(
+                    "Sender Address Repeated", TextDocument.xTextDocument)
+                if xTF != None:
+                    xTF.dispose()
 
             if not self.keepAddressFrame:
-                xTF = TextFrameHandler.getFrameByName("Sender Address", self.xTextDocument)
-            if xTF is not None:
-                xTF.dispose()
-
-        except Exception, e:
-            traceback.print_exc()
-
-class BusinessPaperObject(object):
-
-    def __init__(self, FrameText, Width, Height, XPos, YPos):
-        self.iWidth = Width
-        self.iHeight = Height
-        self.iXPos = XPos
-        self.iYPos = YPos
-
-        try:
-            xFrame = self.xTextDocument.createInstance("com.sun.star.text.TextFrame")
-            self.setFramePosition()
-            Helper.setUnoPropertyValue(xFrame, "AnchorType", TextContentAnchorType.AT_PAGE)
-            Helper.setUnoPropertyValue(xFrame, "SizeType", SizeType.FIX)
-
-            Helper.setUnoPropertyValue(xFrame, "TextWrap", WrapTextMode.THROUGHT)
-            Helper.setUnoPropertyValue(xFrame, "Opaque", Boolean.TRUE)
-            Helper.setUnoPropertyValue(xFrame, "BackColor", 15790320)
-
-            myBorder = BorderLine()
-            myBorder.OuterLineWidth = 0
-            Helper.setUnoPropertyValue(xFrame, "LeftBorder", myBorder)
-            Helper.setUnoPropertyValue(xFrame, "RightBorder", myBorder)
-            Helper.setUnoPropertyValue(xFrame, "TopBorder", myBorder)
-            Helper.setUnoPropertyValue(xFrame, "BottomBorder", myBorder)
-            Helper.setUnoPropertyValue(xFrame, "Print", False)
-
-            xTextCursor = self.xTextDocument.Text.createTextCursor()
-            xTextCursor.gotoEnd(True)
-            xText = self.xTextDocument.Text
-            xText.insertTextContent(xTextCursor, xFrame, False)
-
-            xFrameText = xFrame.Text
-            xFrameCursor = xFrameText.createTextCursor()
-            xFrameCursor.setPropertyValue("CharWeight", com.sun.star.awt.FontWeight.BOLD)
-            xFrameCursor.setPropertyValue("CharColor", 16777215)
-            xFrameCursor.setPropertyValue("CharFontName", "Albany")
-            xFrameCursor.setPropertyValue("CharHeight", 18)
-
-            xFrameText.insertString(xFrameCursor, FrameText, False)
+                xTF = self.getFrameByName(
+                    "Sender Address", TextDocument.xTextDocument)
+                if xTF != None:
+                    xTF.dispose()
 
         except Exception:
             traceback.print_exc()
 
-    def setFramePosition(self):
-        Helper.setUnoPropertyValue(xFrame, "HoriOrient", HoriOrientation.NONE)
-        Helper.setUnoPropertyValue(xFrame, "VertOrient", VertOrientation.NONE)
-        Helper.setUnoPropertyValue(xFrame, PropertyNames.PROPERTY_HEIGHT, iHeight)
-        Helper.setUnoPropertyValue(xFrame, PropertyNames.PROPERTY_WIDTH, iWidth)
-        Helper.setUnoPropertyValue(xFrame, "HoriOrientPosition", iXPos)
-        Helper.setUnoPropertyValue(xFrame, "VertOrientPosition", iYPos)
-        Helper.setUnoPropertyValue(xFrame, "HoriOrientRelation", RelOrientation.PAGE_FRAME)
-        Helper.setUnoPropertyValue(xFrame, "VertOrientRelation", RelOrientation.PAGE_FRAME)
+    class BusinessPaperObject(object):
 
-    def removeFrame(self):
-        if xFrame is not None:
+        xFrame = None
+
+        def __init__(self, FrameText, Width, Height, XPos, YPos):
+            self.iWidth = Width
+            self.iHeight = Height
+            self.iXPos = XPos
+            self.iYPos = YPos
             try:
-                self.xTextDocument.Text.removeTextContent(xFrame)
+                LetterDocument.BusinessPaperObject.xFrame = \
+                    TextDocument.xTextDocument.createInstance(
+                        "com.sun.star.text.TextFrame")
+                self.setFramePosition()
+                Helper.setUnoPropertyValue(
+                    LetterDocument.BusinessPaperObject.xFrame,
+                    "AnchorType", AT_PAGE)
+                Helper.setUnoPropertyValue(
+                    LetterDocument.BusinessPaperObject.xFrame,
+                    "SizeType", FIX)
+
+                Helper.setUnoPropertyValue(
+                    LetterDocument.BusinessPaperObject.xFrame,
+                    "TextWrap", THROUGHT)
+                Helper.setUnoPropertyValue(
+                    LetterDocument.BusinessPaperObject.xFrame,
+                    "Opaque", True);
+                Helper.setUnoPropertyValue(
+                    LetterDocument.BusinessPaperObject.xFrame,
+                    "BackColor", 15790320)
+
+                myBorder = BorderLine()
+                myBorder.OuterLineWidth = 0
+                Helper.setUnoPropertyValue(
+                    LetterDocument.BusinessPaperObject.xFrame,
+                    "LeftBorder", myBorder)
+                Helper.setUnoPropertyValue(
+                    LetterDocument.BusinessPaperObject.xFrame,
+                    "RightBorder", myBorder)
+                Helper.setUnoPropertyValue(
+                    LetterDocument.BusinessPaperObject.xFrame,
+                    "TopBorder", myBorder)
+                Helper.setUnoPropertyValue(
+                    LetterDocument.BusinessPaperObject.xFrame,
+                    "BottomBorder", myBorder)
+                Helper.setUnoPropertyValue(
+                    LetterDocument.BusinessPaperObject.xFrame,
+                    "Print", False)
+
+                xTextCursor = \
+                    TextDocument.xTextDocument.Text.createTextCursor()
+                xTextCursor.gotoEnd(True)
+                xText = TextDocument.xTextDocument.Text
+                xText.insertTextContent(
+                    xTextCursor, LetterDocument.BusinessPaperObject.xFrame,
+                    False)
+
+                xFrameText = LetterDocument.BusinessPaperObject.xFrame.Text
+                xFrameCursor = xFrameText.createTextCursor()
+                xFrameCursor.setPropertyValue("CharWeight", BOLD)
+                xFrameCursor.setPropertyValue("CharColor", 16777215)
+                xFrameCursor.setPropertyValue("CharFontName", "Albany")
+                xFrameCursor.setPropertyValue("CharHeight", 18)
+
+                xFrameText.insertString(xFrameCursor, FrameText, False)
             except Exception:
                 traceback.print_exc()
 
+        def setFramePosition(self):
+            Helper.setUnoPropertyValue(
+                LetterDocument.BusinessPaperObject.xFrame,
+                "HoriOrient", NONEHORI)
+            Helper.setUnoPropertyValue(
+                LetterDocument.BusinessPaperObject.xFrame,
+                "VertOrient", NONEVERT)
+            Helper.setUnoPropertyValue(
+                LetterDocument.BusinessPaperObject.xFrame,
+                PropertyNames.PROPERTY_HEIGHT, self.iHeight)
+            Helper.setUnoPropertyValue(
+                LetterDocument.BusinessPaperObject.xFrame,
+                PropertyNames.PROPERTY_WIDTH, self.iWidth)
+            Helper.setUnoPropertyValue(
+                LetterDocument.BusinessPaperObject.xFrame,
+                "HoriOrientPosition", self.iXPos)
+            Helper.setUnoPropertyValue(
+                LetterDocument.BusinessPaperObject.xFrame,
+                "VertOrientPosition", self.iYPos)
+            Helper.setUnoPropertyValue(
+                LetterDocument.BusinessPaperObject.xFrame,
+                "HoriOrientRelation", PAGE_FRAME)
+            Helper.setUnoPropertyValue(
+                LetterDocument.BusinessPaperObject.xFrame,
+                "VertOrientRelation", PAGE_FRAME)
+
+        def removeFrame(self):
+            if LetterDocument.BusinessPaperObject.xFrame is not None:
+                try:
+                    TextDocument.xTextDocument.Text.removeTextContent(
+                        LetterDocument.BusinessPaperObject.xFrame)
+                except Exception:
+                    traceback.print_exc()

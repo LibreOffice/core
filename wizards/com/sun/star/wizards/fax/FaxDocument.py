@@ -20,29 +20,30 @@ class FaxDocument(TextDocument):
     def switchElement(self, sElement, bState):
         try:
             mySectionHandler = TextSectionHandler(self.xMSF,
-                self.xTextDocument)
+                TextDocument.xTextDocument)
             oSection = \
                 mySectionHandler.xTextDocument.TextSections.getByName(sElement)
             Helper.setUnoPropertyValue(oSection,"IsVisible",bState)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def updateDateFields(self):
-        FH = TextFieldHandler(self.xTextDocument, self.xTextDocument)
+        FH = TextFieldHandler(
+            TextDocument.xTextDocument, TextDocument.xTextDocument)
         FH.updateDateFields()
 
     def switchFooter(self, sPageStyle, bState, bPageNumber, sText):
-        if self.xTextDocument is not None:
-            self.xTextDocument.lockControllers()
+        if TextDocument.xTextDocument is not None:
+            TextDocument.xTextDocument.lockControllers()
             try:
-
                 xPageStyleCollection = \
-                    self.xTextDocument.StyleFamilies.getByName("PageStyles")
+                    TextDocument.xTextDocument.StyleFamilies.getByName("PageStyles")
                 xPageStyle = xPageStyleCollection.getByName(sPageStyle)
 
                 if bState:
                     xPageStyle.setPropertyValue("FooterIsOn", True)
-                    xFooterText = Helper.getUnoPropertyValue(xPageStyle, "FooterText")
+                    xFooterText = \
+                        Helper.getUnoPropertyValue(xPageStyle, "FooterText")
                     xFooterText.String = sText
 
                     if bPageNumber:
@@ -53,8 +54,9 @@ class FaxDocument(TextDocument):
                             PARAGRAPH_BREAK, False)
                         myCursor.setPropertyValue("ParaAdjust", CENTER )
 
-                        xPageNumberField = self.xTextDocument.createInstance(
-                            "com.sun.star.text.TextField.PageNumber")
+                        xPageNumberField = \
+                            TextDocument.xTextDocument.createInstance(
+                                "com.sun.star.text.TextField.PageNumber")
                         xPageNumberField.setPropertyValue("SubType", CURRENT)
                         xPageNumberField.NumberingType = ARABIC
                         xFooterText.insertTextContent(xFooterText.End,
@@ -63,20 +65,21 @@ class FaxDocument(TextDocument):
                     Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn",
                         False)
 
-                self.xTextDocument.unlockControllers()
-            except Exception, exception:
+                TextDocument.xTextDocument.unlockControllers()
+            except Exception:
                 traceback.print_exc()
 
     def hasElement(self, sElement):
-        if self.xTextDocument is not None:
+        if TextDocument.xTextDocument is not None:
             mySectionHandler = TextSectionHandler(self.xMSF,
-                self.xTextDocument)
+                TextDocument.xTextDocument)
             return mySectionHandler.hasTextSectionByName(sElement)
         else:
             return False
 
     def switchUserField(self, sFieldName, sNewContent, bState):
-        myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
+        myFieldHandler = TextFieldHandler(
+            self.xMSF, TextDocument.xTextDocument)
         if bState:
             myFieldHandler.changeUserFieldContent(sFieldName, sNewContent)
         else:
@@ -84,8 +87,8 @@ class FaxDocument(TextDocument):
 
     def fillSenderWithUserData(self):
         try:
-            myFieldHandler = TextFieldHandler(self.xTextDocument,
-                self.xTextDocument)
+            myFieldHandler = TextFieldHandler(TextDocument.xTextDocument,
+                TextDocument.xTextDocument)
             oUserDataAccess = Configuration.getConfigurationRoot(
                 self.xMSF, "org.openoffice.UserProfile/Data", False)
             myFieldHandler.changeUserFieldContent("Company",
@@ -102,26 +105,27 @@ class FaxDocument(TextDocument):
             myFieldHandler.changeUserFieldContent("Fax",
                 Helper.getUnoObjectbyName(oUserDataAccess,
                 "facsimiletelephonenumber"))
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def killEmptyUserFields(self):
-        myFieldHandler = TextFieldHandler(self.xMSF, self.xTextDocument)
+        myFieldHandler = TextFieldHandler(
+            self.xMSF, TextDocument.xTextDocument)
         myFieldHandler.removeUserFieldByContent("")
 
     def killEmptyFrames(self):
         try:
             if not self.keepLogoFrame:
                 xTF = self.getFrameByName("Company Logo",
-                self.xTextDocument)
+                TextDocument.xTextDocument)
                 if xTF is not None:
                     xTF.dispose()
 
             if not self.keepTypeFrame:
                 xTF = self.getFrameByName("Communication Type",
-                self.xTextDocument)
+                TextDocument.xTextDocument)
                 if xTF is not None:
                     xTF.dispose()
 
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
