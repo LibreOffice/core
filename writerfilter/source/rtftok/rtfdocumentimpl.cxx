@@ -449,18 +449,21 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
     }
 }
 
-int RTFDocumentImpl::resolvePict(char ch, bool bInline)
+int RTFDocumentImpl::resolvePict(bool bInline)
 {
     SvMemoryStream aStream;
     int b = 0, count = 2;
 
-    // TODO this discards properties after the 'pib' property
     if (!bInline)
+        // TODO this discards properties after the 'pib' property
         resolveShapeProperties(m_aStates.top().aShapeProperties);
 
-    // Read the group.
-    while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
+    // Feed the destination text to a stream.
+    OString aStr = OUStringToOString(m_aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
+    const char *str = aStr.getStr();
+    for (int i = 0; i < aStr.getLength(); ++i)
     {
+        char ch = str[i];
         if (ch != 0x0d && ch != 0x0a)
         {
             b = b << 4;
@@ -476,9 +479,7 @@ int RTFDocumentImpl::resolvePict(char ch, bool bInline)
                 b = 0;
             }
         }
-        Strm() >> ch;
     }
-    Strm().SeekRel(-1);
 
     // Store, and get its URL.
     aStream.Seek(0);
@@ -565,10 +566,6 @@ int RTFDocumentImpl::resolveChars(char ch)
 {
     OStringBuffer aBuf;
 
-    if (m_aStates.top().nDestinationState == DESTINATION_PICT)
-        return resolvePict(ch, true);
-    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUEPICT)
-        return resolvePict(ch, false);
     while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
     {
         if (ch != 0x0d && ch != 0x0a)
@@ -628,6 +625,8 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_SHAPEPROPERTYNAME:
         case DESTINATION_SHAPEPROPERTYVALUE:
         case DESTINATION_BOOKMARKEND:
+        case DESTINATION_PICT:
+        case DESTINATION_SHAPEPROPERTYVALUEPICT:
             m_aDestinationText.append(rString);
             break;
         default: bRet = false; break;
@@ -2337,6 +2336,10 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKEND)
         Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[m_aDestinationText.makeStringAndClear()]));
+    else if (m_aStates.top().nDestinationState == DESTINATION_PICT)
+        resolvePict(true);
+    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUEPICT)
+        resolvePict(false);
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);

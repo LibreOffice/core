@@ -241,7 +241,7 @@ namespace writerfilter {
 
                 int resolveChars(char ch);
                 /// Resolve a picture: If not inline, then anchored.
-                int resolvePict(char ch, bool bInline);
+                int resolvePict(bool bInline);
                 int pushState();
                 int popState();
                 void text(rtl::OUString& rString);
