@@ -405,39 +405,39 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.activate()
 
     def numLogoHeightTextChanged(self):
-        self.BusCompanyLogo.iHeight = numLogoHeight.Value * 1000
+        self.BusCompanyLogo.iHeight = int(self.numLogoHeight.Value * 1000)
         self.BusCompanyLogo.setFramePosition()
 
     def numLogoWidthTextChanged(self):
-        self.BusCompanyLogo.iWidth = numLogoWidth.Value * 1000
+        self.BusCompanyLogo.iWidth = int(self.numLogoWidth.Value * 1000)
         self.BusCompanyLogo.setFramePosition()
 
     def numLogoXTextChanged(self):
-        self.BusCompanyLogo.iXPos = numLogoX.Value * 1000
+        self.BusCompanyLogo.iXPos = int(self.numLogoX.Value * 1000)
         self.BusCompanyLogo.setFramePosition()
 
     def numLogoYTextChanged(self):
-        self.BusCompanyLogo.iYPos = numLogoY.Value * 1000
+        self.BusCompanyLogo.iYPos = int(self.numLogoY.Value * 1000)
         self.BusCompanyLogo.setFramePosition()
 
     def numAddressWidthTextChanged(self):
-        self.BusCompanyAddress.iWidth = self.numAddressWidth.Value * 1000
+        self.BusCompanyAddress.iWidth = int(self.numAddressWidth.Value * 1000)
         self.BusCompanyAddress.setFramePosition()
 
     def numAddressXTextChanged(self):
-        self.BusCompanyAddress.iXPos = self.numAddressX.Value * 1000
+        self.BusCompanyAddress.iXPos = int(self.numAddressX.Value * 1000)
         self.BusCompanyAddress.setFramePosition()
 
     def numAddressYTextChanged(self):
-        self.BusCompanyAddress.iYPos = self.numAddressY.Value * 1000
+        self.BusCompanyAddress.iYPos = int(self.numAddressY.Value * 1000)
         self.BusCompanyAddress.setFramePosition()
 
     def numAddressHeightTextChanged(self):
-        self.BusCompanyAddress.iHeight = self.numAddressHeight.Value * 1000
+        self.BusCompanyAddress.iHeight = int(self.numAddressHeight.Value * 1000)
         self.BusCompanyAddress.setFramePosition()
 
     def numFooterHeightTextChanged(self):
-        self.BusFooter.iHeight = self.numFooterHeight.Value * 1000
+        self.BusFooter.iHeight = int(self.numFooterHeight.Value * 1000)
         self.BusFooter.iYPos = \
             self.myLetterDoc.DocSize.Height - self.BusFooter.iHeight
         self.BusFooter.setFramePosition()
@@ -449,9 +449,10 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
             if self.numLogoHeight.Value == 0:
                 self.numLogoHeight.Value = 0.1
-            self.BusCompanyLogo = LetterDocument.BusinessPaperObject(
-                "Company Logo", self.numLogoWidth.Value * 1000,
-                self.numLogoHeight.Value * 1000, self.numLogoX.Value * 1000,
+            self.BusCompanyLogo = BusinessPaperObject(
+                "Company Logo", int(self.numLogoWidth.Value * 1000),
+                int(self.numLogoHeight.Value * 1000),
+                int(self.numLogoX.Value * 1000),
                 self.numLogoY.Value * 1000)
             self.setControlProperty(
             "numLogoHeight", PropertyNames.PROPERTY_ENABLED, True)
@@ -500,10 +501,11 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             if self.numAddressHeight.Value == 0:
                 self.numAddressHeight.Value = 0.1
 
-            self.BusCompanyAddress = LetterDocument.BusinessPaperObject(
-                "Company Address", self.numAddressWidth.Value * 1000,
-                self.numAddressHeight.Value * 1000,
-                self.numAddressX.Value * 1000, self.numAddressY.Value * 1000)
+            self.BusCompanyAddress = BusinessPaperObject(
+                "Company Address", int(self.numAddressWidth.Value * 1000),
+                int(self.numAddressHeight.Value * 1000),
+                int(self.numAddressX.Value * 1000),
+                int(self.numAddressY.Value * 1000))
             self.setControlProperty(
             "self.numAddressHeight", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
@@ -571,10 +573,9 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 iFrameY = int(Helper.getUnoPropertyValue(
                     xReceiverFrame, "VertOrientPosition"))
                 iReceiverHeight = int(0.5 * 1000)
-                self.BusCompanyAddressReceiver = \
-                    LetterDocument.BusinessPaperObject(
-                        " ", iFrameWidth, iReceiverHeight, iFrameX,
-                        iFrameY - iReceiverHeight)
+                self.BusCompanyAddressReceiver = BusinessPaperObject(
+                    " ", iFrameWidth, iReceiverHeight, iFrameX,
+                    iFrameY - iReceiverHeight)
                 self.setPossibleAddressReceiver(False)
             except NoSuchElementException:
                 traceback.print_exc()
@@ -601,11 +602,11 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             if self.numFooterHeight.Value == 0:
                 self.numFooterHeight.Value = 0.1
 
-            self.BusFooter = LetterDocument.BusinessPaperObject(
+            self.BusFooter = BusinessPaperObject(
                 "Footer", self.myLetterDoc.DocSize.Width,
-                self.numFooterHeight.Value * 1000, 0,
-                self.myLetterDoc.DocSize.Height - \
-                    (self.numFooterHeight.Value * 1000))
+                int(self.numFooterHeight.Value * 1000), 0,
+                int(self.myLetterDoc.DocSize.Height - \
+                    (self.numFooterHeight.Value * 1000)))
             self.setControlProperty(
             "self.numFooterHeight", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
@@ -619,7 +620,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             "self.numFooterHeight", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
             "lblFooterHeight", PropertyNames.PROPERTY_ENABLED, False)
-            setPossibleFooter(True)
+            self.setPossibleFooter(True)
 
     def chkUseLogoItemChanged(self):
         try:
