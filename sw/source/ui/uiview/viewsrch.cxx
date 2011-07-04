@@ -589,17 +589,78 @@ void SwView::Replace()
     {
         if (GetPostItMgr()->HasActiveSidebarWin())
             GetPostItMgr()->Replace(pSrchItem);
-        sal_Bool bReplaced = pWrtShell->SwEditShell::Replace( pSrchItem->GetReplaceString(),
-                                            pSrchItem->GetRegExp());
 
-        if( bReplaced && pReplList && pReplList->Count() && pWrtShell->HasSelection() )
+        sal_Bool bReqReplace = true;
+
+        if(pWrtShell->HasSelection())
         {
-            SfxItemSet aReplSet( pWrtShell->GetAttrPool(),
-                                    aTxtFmtCollSetRange );
-            if( pReplList->Get( aReplSet ).Count() )
+            /* check that the selection has the same length as the required string */
+            if (pWrtShell->SwCrsrShell::GetSelTxt().Len() != pSrchItem->GetSearchString().Len() )
             {
-                ::SfxToSwPageDescAttr( *pWrtShell, aReplSet );
-                pWrtShell->SwEditShell::SetAttr( aReplSet );
+                //it differs, therefore do not replace the selection
+                bReqReplace = false;
+                //next call to replace will find the next matching string
+            }
+            else
+            {
+                /* check that the selection match the search string*/
+                //save state
+                SwPosition aStartPos = (* pWrtShell->GetSwCrsr()->Start());
+                SwPosition aEndPos = (* pWrtShell->GetSwCrsr()->End());
+                sal_Bool   bHasSelection = pSrchItem->GetSelection();
+                sal_uInt16 nOldCmd = pSrchItem->GetCommand();
+
+                //set state for checking if current selection has a match
+                pSrchItem->SetCommand( SVX_SEARCHCMD_FIND );
+                pSrchItem->SetSelection(true);
+
+                //check if it matchs
+                SwSearchOptions aOpts( pWrtShell, pSrchItem->GetBackward() );
+                if( ! FUNC_Search(aOpts) )
+                {
+
+                    //no matching therefore should not replace selection
+                    // => remove selection
+
+                    if(! pSrchItem->GetBackward() )
+                    {
+                        (* pWrtShell->GetSwCrsr()->Start()) = aStartPos;
+                        (* pWrtShell->GetSwCrsr()->End()) = aEndPos;
+                    }
+                    else
+                    {
+                        (* pWrtShell->GetSwCrsr()->Start()) = aEndPos;
+                        (* pWrtShell->GetSwCrsr()->End()) = aStartPos;
+                    }
+                    bReqReplace = false;
+                }
+
+                //set back old search state
+                pSrchItem->SetCommand( nOldCmd );
+                pSrchItem->SetSelection(bHasSelection);
+            }
+        }
+        /*
+         * remove current selection
+         * otherwise it is always replaced
+         * no matter if the search string exists or not in the selection
+         * Now the selection is removed and the next matching string is selected
+         */
+
+        if( bReqReplace )
+        {
+
+            sal_Bool bReplaced = pWrtShell->SwEditShell::Replace( pSrchItem->GetReplaceString(),
+                                                                  pSrchItem->GetRegExp());
+            if( bReplaced && pReplList && pReplList->Count() && pWrtShell->HasSelection() )
+            {
+                SfxItemSet aReplSet( pWrtShell->GetAttrPool(),
+                                     aTxtFmtCollSetRange );
+                if( pReplList->Get( aReplSet ).Count() )
+                {
+                    ::SfxToSwPageDescAttr( *pWrtShell, aReplSet );
+                    pWrtShell->SwEditShell::SetAttr( aReplSet );
+                }
             }
         }
     }
