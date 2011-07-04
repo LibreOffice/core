@@ -561,22 +561,18 @@
 #elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
         MN_PAGE_MENU
 #endif
-        SEPARATOR
-        MN_CAPTUREPOINT
-        SEPARATOR
-        MN_LEAVE_GROUP
-        SEPARATOR
         MN_NAVIGATOR
-        SEPARATOR
-        MN_GRID
-        SEPARATOR
-        MN_HELPLINES
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
-        SEPARATOR
         MN_OUTLINEMODE
         MN_DIAMODE
         MN_PRESENTATION
 #endif
+        SEPARATOR
+        MN_GRID
+        MN_HELPLINES
+        MN_CAPTUREPOINT
+        SEPARATOR
+        MN_LEAVE_GROUP
     };
 };
 
