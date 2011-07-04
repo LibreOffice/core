@@ -549,8 +549,10 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     to see if we are still in that frame.
     */
 
-    aRet.mpSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
-    aRet.mpSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
+    aRet.m_bHasSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
+    const sal_uInt8 *pSrpm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
+    aRet.m_bHasSprm29 = pSrpm29 != NULL;
+    aRet.m_nSprm29 = pSrpm29 ? *pSrpm29 : 0;
 
     // Is there some frame data here
     bool bNowApo = aRet.HasFrame() || pTopLevelTable;

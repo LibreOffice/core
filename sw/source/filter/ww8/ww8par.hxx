@@ -245,13 +245,12 @@ struct WW8FlyPara
                                 // enthaltene Grafik anders als zeichengebunden
                                 // zu positionieren
     bool mbVertSet;             // true if vertical positioning has been set
-    sal_uInt8 nOrigSp29;
 
     WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = 0);
     bool operator==(const WW8FlyPara& rSrc) const;
-    void Read(const sal_uInt8* pSprm29, WW8PLCFx_Cp_FKP* pPap);
-    void ReadFull(const sal_uInt8* pSprm29, SwWW8ImplReader* pIo);
-    void Read(const sal_uInt8* pSprm29, WW8RStyle* pStyle);
+    void Read(sal_uInt8 nSprm29, WW8PLCFx_Cp_FKP* pPap);
+    void ReadFull(sal_uInt8 nSprm29, SwWW8ImplReader* pIo);
+    void Read(sal_uInt8 nSprm29, WW8RStyle* pStyle);
     void ApplyTabPos(const WW8_TablePos *pTabPos);
     bool IsEmpty() const;
 };
@@ -880,14 +879,15 @@ struct ApoTestResults
 {
     bool mbStartApo;
     bool mbStopApo;
-    const sal_uInt8* mpSprm37;
-    const sal_uInt8* mpSprm29;
+    bool m_bHasSprm37;
+    bool m_bHasSprm29;
+    sal_uInt8 m_nSprm29;
     WW8FlyPara* mpStyleApo;
-    ApoTestResults() :
-        mbStartApo(false), mbStopApo(false), mpSprm37(0), mpSprm29(0),
-        mpStyleApo(0) {}
+    ApoTestResults()
+        : mbStartApo(false), mbStopApo(false), m_bHasSprm37(false)
+        , m_bHasSprm29(false), m_nSprm29(0), mpStyleApo(0) {}
     bool HasStartStop() const { return (mbStartApo || mbStopApo); }
-    bool HasFrame() const { return (mpSprm29 || mpSprm37 || mpStyleApo); }
+    bool HasFrame() const { return (m_bHasSprm29 || m_bHasSprm37 || mpStyleApo); }
 };
 
 struct ANLDRuleMap

@@ -1616,11 +1616,8 @@ bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
 }
 
 // Read fuer normalen Text
-void WW8FlyPara::Read(const sal_uInt8* pSprm29, WW8PLCFx_Cp_FKP* pPap)
+void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
 {
-    if (pSprm29)
-        nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
-
     const sal_uInt8* pS = 0;
     if( bVer67 )
     {
@@ -1671,12 +1668,12 @@ void WW8FlyPara::Read(const sal_uInt8* pSprm29, WW8PLCFx_Cp_FKP* pPap)
         nSp29 = nOrigSp29;
 }
 
-void WW8FlyPara::ReadFull(const sal_uInt8* pSprm29, SwWW8ImplReader* pIo)
+void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
 {
     WW8PLCFMan* pPlcxMan = pIo->pPlcxMan;
     WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
 
-    Read(pSprm29, pPap);    // Lies Apo-Parameter
+    Read(nOrigSp29, pPap);    // Lies Apo-Parameter
 
     do{             // Block zum rausspringen
         if( nSp45 != 0 /* || nSp28 != 0 */ )
@@ -1722,7 +1719,7 @@ void WW8FlyPara::ReadFull(const sal_uInt8* pSprm29, SwWW8ImplReader* pIo)
 
             WW8FlyPara aF(bVer67, pNowStyleApo);
                                                 // Neuer FlaPara zum Vergleich
-            aF.Read( pS, pPap );                // WWPara fuer neuen Para
+            aF.Read( *pS, pPap );               // WWPara fuer neuen Para
             if( !( aF == *this ) )              // selber APO ? ( oder neuer ? )
                 bGrafApo = true;                // nein -> 1-zeiliger APO
                                                 //      -> Grafik-APO
@@ -1736,11 +1733,8 @@ void WW8FlyPara::ReadFull(const sal_uInt8* pSprm29, SwWW8ImplReader* pIo)
 
 
 // Read fuer Apo-Defs in Styledefs
-void WW8FlyPara::Read(const sal_uInt8* pSprm29, WW8RStyle* pStyle)
+void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle* pStyle)
 {
-    if (pSprm29)
-        nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
-
     const sal_uInt8* pS = 0;
     if (bVer67)
     {
@@ -2315,7 +2309,7 @@ WW8FlyPara *SwWW8ImplReader::ConstructApo(const ApoTestResults &rApo,
 
     // APO-Parameter ermitteln und Test auf bGrafApo
     if (rApo.HasFrame())
-        pRet->ReadFull(rApo.mpSprm29, this);
+        pRet->ReadFull(rApo.m_nSprm29, this);
 
     pRet->ApplyTabPos(pTabPos);
 
@@ -2592,7 +2586,7 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
     WW8FlyPara aF(bVer67, rApo.mpStyleApo);
     // WWPara fuer akt. Para
     if (rApo.HasFrame())
-        aF.Read(rApo.mpSprm29, pPlcxMan->GetPapPLCF());
+        aF.Read(rApo.m_nSprm29, pPlcxMan->GetPapPLCF());
     aF.ApplyTabPos(pTabPos);
 
     return aF == *pWFlyPara;
@@ -4867,7 +4861,7 @@ void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
         SwWW8StyInf& rSI = vColl[nAktColl];
         WW8FlyPara* pFly = rSI.pWWFly ? rSI.pWWFly : new WW8FlyPara(bVer67);
         vColl[nAktColl].pWWFly = pFly;
-        pFly->Read(pData, pStyles);
+        pFly->Read(*pData, pStyles);
         if (pFly->IsEmpty())
             delete vColl[nAktColl].pWWFly, vColl[nAktColl].pWWFly = 0;
     }
