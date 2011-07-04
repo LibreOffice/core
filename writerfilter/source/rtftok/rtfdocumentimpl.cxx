@@ -44,6 +44,8 @@
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+
 using std::make_pair;
 using rtl::OString;
 using rtl::OStringBuffer;
@@ -1893,16 +1895,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_SHPLEFT:
-            m_aStates.top().aShape.nLeft = nParam;
+            m_aStates.top().aShape.nLeft = TWIP_TO_MM100(nParam);
             break;
         case RTF_SHPTOP:
-            m_aStates.top().aShape.nTop = nParam;
+            m_aStates.top().aShape.nTop = TWIP_TO_MM100(nParam);
             break;
         case RTF_SHPRIGHT:
-            m_aStates.top().aShape.nRight = nParam;
+            m_aStates.top().aShape.nRight = TWIP_TO_MM100(nParam);
             break;
         case RTF_SHPBOTTOM:
-            m_aStates.top().aShape.nBottom = nParam;
+            m_aStates.top().aShape.nBottom = TWIP_TO_MM100(nParam);
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
