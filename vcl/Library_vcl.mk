@@ -245,7 +245,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/components/dtranscomp \
     vcl/source/components/factory \
     vcl/source/components/fontident \
-    vcl/source/components/rasterizer_rsvg \
     vcl/source/components/stringmirror \
     vcl/source/control/button \
     vcl/source/control/combobox \
@@ -434,6 +433,16 @@ endif
 endif
 
 ## handle Cairo
+ifneq ($(ENABLE_LIBRSVG),NO)
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/components/rasterizer_rsvg \
+))
+
+$(eval $(call gb_Library_set_defs,vcl,\
+    $$(DEFS) \
+    -DENABLE_LIBRSVG \
+))
 ifeq ($(SYSTEM_CAIRO),YES)
 $(eval $(call gb_Library_set_cxxflags,vcl,\
     $$(CXXFLAGS) \
@@ -448,6 +457,7 @@ else
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     cairo \
 ))
+endif
 endif
 
 ifeq ($(GUIBASE),unx)
