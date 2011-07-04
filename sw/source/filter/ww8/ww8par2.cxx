@@ -612,8 +612,6 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     //unit no matter what else happens. So if we are not in a table at
     //all, or if we are in the first cell then test that the last frame
     //data is the same as the current one
-    fprintf(stderr, "apo is %d\n", bNowApo);
-    fprintf(stderr, "equal-apo is %d\n", InEqualApo(nCellLevel));
     if (bNowApo && InEqualApo(nCellLevel))
     {
         // two bordering eachother
