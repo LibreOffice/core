@@ -337,8 +337,32 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnor
     nPos = 0;
 }
 
+void RTFDocumentImpl::checkFirstRun()
+{
+    if (m_bFirstRun)
+    {
+        writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
+                new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
+                );
+        // output settings table
+        RTFSprms_t aAttributes;
+        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aAttributes, m_aSettingsTableSprms));
+        RTFReferenceTable::Entries_t aSettingsTableEntries;
+        aSettingsTableEntries.insert(make_pair(0, pProp));
+        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aSettingsTableEntries));
+        Mapper().table(NS_ooxml::LN_settings_settings, pTable);
+        // start initial paragraph
+        if (!m_bIsSubstream)
+            Mapper().startSectionGroup();
+        Mapper().startParagraphGroup();
+        Mapper().props(pParagraphProperties);
+        m_bFirstRun = false;
+    }
+}
+
 void RTFDocumentImpl::parBreak()
 {
+    checkFirstRun();
     // end previous paragraph
     Mapper().startCharacterGroup();
     lcl_Break(Mapper());
@@ -621,22 +645,7 @@ void RTFDocumentImpl::text(OUString& rString)
             new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
             );
 
-    if (m_bFirstRun)
-    {
-        // output settings table
-        RTFSprms_t aAttributes;
-        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aAttributes, m_aSettingsTableSprms));
-        RTFReferenceTable::Entries_t aSettingsTableEntries;
-        aSettingsTableEntries.insert(make_pair(0, pProp));
-        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aSettingsTableEntries));
-        Mapper().table(NS_ooxml::LN_settings_settings, pTable);
-        // start initial paragraph
-        if (!m_bIsSubstream)
-            Mapper().startSectionGroup();
-        Mapper().startParagraphGroup();
-        Mapper().props(pParagraphProperties);
-        m_bFirstRun = false;
-    }
+    checkFirstRun();
     if (m_bNeedPap)
     {
         if (!m_bTable && !m_bSuper)

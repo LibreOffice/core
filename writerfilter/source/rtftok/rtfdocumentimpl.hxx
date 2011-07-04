@@ -246,6 +246,8 @@ namespace writerfilter {
                 int popState();
                 void text(rtl::OUString& rString);
                 void parBreak();
+                /// If this is the first run of the document, starts the initial paragraph.
+                void checkFirstRun();
                 void sectBreak(bool bFinal);
                 void replayBuffer(std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> >& rBuffer);
 
