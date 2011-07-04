@@ -2471,6 +2471,8 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         case 3: // ellipse
             aService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.EllipseShape"));
             break;
+        case 11: // plus sign
+        case 16: // cube
         case 56: // pentagon
             aService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape"));
             break;
@@ -2484,11 +2486,14 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
 
     switch (nType)
     {
+        case 11:
+        case 16:
         case 56:
             {
+                // createCustomShapeDefaults() will crash without adding the shape to the draw page.
                 m_xDrawPage->add(xShape);
                 uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
-                xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(56)));
+                xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(nType)));
             }
             break;
         default:
