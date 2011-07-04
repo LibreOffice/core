@@ -2406,20 +2406,13 @@ int RTFDocumentImpl::popState()
 
 void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUString, rtl::OUString> >& rShapeProperties)
 {
+    int nType = -1;
     bool bPib = false;
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
     {
         if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
         {
-            int nValue = i->second.toInt32();
-            switch (nValue)
-            {
-                case 75: // picture frame
-                    break;
-                default:
-                    OSL_TRACE("%s: TODO handle shape type '%d'", OSL_THIS_FUNC, nValue);
-                    break;
-            }
+            nType = i->second.toInt32();
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzName")))
         {
@@ -2442,8 +2435,25 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
                     OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr(),
                     OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr());
     }
-    if (bPib)
-        resolvePict(false);
+    switch (nType)
+    {
+        case 75: // picture frame
+            if (bPib)
+                resolvePict(false);
+            break;
+        case 1: // rectangle
+            {
+                uno::Reference<drawing::XShape> xShape;
+                OUString aService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape"));
+                xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
+                Mapper().startShape(xShape);
+                Mapper().endShape();
+            }
+            break;
+        default:
+            OSL_TRACE("%s: TODO handle shape type '%d'", OSL_THIS_FUNC, nType);
+            break;
+    }
 }
 
 int RTFDocumentImpl::resolveParse()
