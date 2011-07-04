@@ -164,7 +164,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.myFaxDoc.keepTypeFrame = \
                 (self.chkUseCommunicationType.State is not 0)
             self.myFaxDoc.killEmptyFrames()
-            self.bSaveSuccess = OfficeDocument.store(self.xMSF, self.xTextDocument,
+            self.bSaveSuccess = OfficeDocument.store(self.xMSF, TextDocument.xTextDocument,
                 self.sPath, "writer8_template")
             if self.bSaveSuccess:
                 self.saveConfiguration()
@@ -440,7 +440,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.__enableSenderReceiver()
         self.__setPossibleFooter(True)
     def lstBusinessStyleItemChanged(self):
-        self.xTextDocument = self.myFaxDoc.loadAsPreview( \
+        TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview( \
             self.BusinessFiles[1][self.lstBusinessStyle.SelectedItemPos],
                 False)
         self.initializeElements()
@@ -462,14 +462,14 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.__setPossibleFooter(False)
 
     def lstPrivateStyleItemChanged(self):
-        self.xTextDocument = self.myFaxDoc.loadAsPreview( \
+        TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview( \
             self.PrivateFiles[1][self.lstPrivateStyle.SelectedItemPos],
                 False)
         self.initializeElements()
         self.setElements()
 
     def txtTemplateNameTextChanged(self):
-        xDocProps = self.xTextDocument.DocumentProperties
+        xDocProps = TextDocument.xTextDocument.DocumentProperties
         xDocProps.Title = self.txtTemplateName.Text
 
     def optSenderPlaceholderItemChanged(self):
@@ -518,7 +518,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             PropertyNames.PROPERTY_ENABLED, True)
 
         self.myFieldHandler = TextFieldHandler(self.myFaxDoc.xMSF,
-            self.xTextDocument)
+            TextDocument.xTextDocument)
         self.txtSenderNameTextChanged()
         self.txtSenderStreetTextChanged()
         self.txtSenderPostCodeTextChanged()
@@ -527,11 +527,11 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.txtSenderFaxTextChanged()
 
     def optReceiverPlaceholderItemChanged(self):
-        OfficeDocument.attachEventCall(self.xTextDocument, "OnNew",
+        OfficeDocument.attachEventCall(TextDocument.xTextDocument, "OnNew",
             "StarBasic", "macro:#/Template.Correspondence.Placeholder()")
 
     def optReceiverDatabaseItemChanged(self):
-        OfficeDocument.attachEventCall(self.xTextDocument, "OnNew",
+        OfficeDocument.attachEventCall(TextDocument.xTextDocument, "OnNew",
             "StarBasic", "macro:#/Template.Correspondence.Database()")
 
     def optCreateFaxItemChanged(self):

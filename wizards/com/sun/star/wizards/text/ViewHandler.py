@@ -4,7 +4,7 @@ class ViewHandler(object):
     def __init__ (self, xMSF, xTextDocument):
         self.xMSFDoc = xMSF
         self.xTextDocument = xTextDocument
-        self.xTextViewCursorSupplier = self.xTextDocument.CurrentController
+        self.xTextViewCursorSupplier = xTextDocument.CurrentController
 
     def selectFirstPage(self, oTextTableHandler):
         try:
