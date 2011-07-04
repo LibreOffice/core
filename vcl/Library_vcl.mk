@@ -433,6 +433,23 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 endif
 endif
 
+## handle Cairo
+ifeq ($(SYSTEM_CAIRO),YES)
+$(eval $(call gb_Library_set_cxxflags,vcl,\
+    $$(CXXFLAGS) \
+    $$(CAIRO_CFLAGS) \
+    -DSYSTEM_CAIRO \
+))
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+    $$(CAIRO_LIBS) \
+))
+else
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    cairo \
+))
+endif
+
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_set_ldflags,vcl,\
     $$(LDFLAGS) \
