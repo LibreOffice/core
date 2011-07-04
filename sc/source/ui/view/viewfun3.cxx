@@ -924,9 +924,9 @@ sal_Bool ScViewFunc::PasteOnDrawObject( const uno::Reference<datatransfer::XTran
 sal_Bool lcl_SelHasAttrib( ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         const ScMarkData& rTabSelection, sal_uInt16 nMask )
 {
-    SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-        if ( rTabSelection.GetTableSelect(nTab) && pDoc->HasAttrib( nCol1, nRow1, nTab, nCol2, nRow2, nTab, nMask ) )
+    ScMarkData::iterator itr = rTabSelection.begin(), itrEnd = rTabSelection.end();
+    for (; itr != itrEnd; ++itr)
+        if ( pDoc->HasAttrib( nCol1, nRow1, *itr, nCol2, nRow2, *itr, nMask ) )
             return sal_True;
     return false;
 }
@@ -959,13 +959,10 @@ private:
 bool lcl_checkDestRangeForOverwrite(const ScRange& rDestRange, const ScDocument* pDoc, const ScMarkData& rMark, Window* pParentWnd)
 {
     bool bIsEmpty = true;
-    SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB nTab=0; nTab < nTabCount && bIsEmpty; ++nTab)
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && bIsEmpty; ++itr)
     {
-        if (!rMark.GetTableSelect(nTab))
-            continue;
-
-        bIsEmpty = pDoc->IsBlockEmpty(nTab, rDestRange.aStart.Col(), rDestRange.aStart.Row(),
+        bIsEmpty = pDoc->IsBlockEmpty(*itr, rDestRange.aStart.Col(), rDestRange.aStart.Row(),
                                       rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
     }
 
@@ -1732,7 +1729,6 @@ void ScViewFunc::PostPasteFromClip(const ScRange& rPasteRange, const ScMarkData&
 {
     ScViewData* pViewData = GetViewData();
     ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument* pDoc = pViewData->GetDocument();
     pDocSh->UpdateOle(pViewData);
 
     SelectionChanged();
@@ -1742,16 +1738,13 @@ void ScViewFunc::PostPasteFromClip(const ScRange& rPasteRange, const ScMarkData&
     if ( pModelObj && pModelObj->HasChangesListeners() )
     {
         ScRangeList aChangeRanges;
-        SCTAB nTabCount = pDoc->GetTableCount();
-        for ( SCTAB i = 0; i < nTabCount; ++i )
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd; ++itr)
         {
-            if ( rMark.GetTableSelect( i ) )
-            {
-                ScRange aChangeRange(rPasteRange);
-                aChangeRange.aStart.SetTab( i );
-                aChangeRange.aEnd.SetTab( i );
-                aChangeRanges.Append( aChangeRange );
-            }
+            ScRange aChangeRange(rPasteRange);
+            aChangeRange.aStart.SetTab( *itr );
+            aChangeRange.aEnd.SetTab( *itr );
+            aChangeRanges.Append( aChangeRange );
         }
         pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
     }

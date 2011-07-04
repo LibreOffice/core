@@ -259,24 +259,24 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
     SCROW nEndRow = aMultiArea.aEnd.Row();
 
     bool bChanged = false;
-    SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-        if ( rMark.GetTableSelect(nTab ) )
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        SCTAB nTab = *itr;
+        for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
         {
-            for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
+            SCROW nLastRow = nRow;
+            if (pDoc->RowFiltered(nRow, nTab, NULL, &nLastRow))
             {
-                SCROW nLastRow = nRow;
-                if (pDoc->RowFiltered(nRow, nTab, NULL, &nLastRow))
-                {
-                    // use nStartCol/nEndCol, so the multi mark area isn't extended to all columns
-                    // (visible in repaint for indentation)
-                    rMark.SetMultiMarkArea(
-                        ScRange(nStartCol, nRow, nTab, nEndCol, nLastRow, nTab), false);
-                    bChanged = true;
-                    nRow = nLastRow;
-                }
+                // use nStartCol/nEndCol, so the multi mark area isn't extended to all columns
+                // (visible in repaint for indentation)
+                rMark.SetMultiMarkArea(
+                    ScRange(nStartCol, nRow, nTab, nEndCol, nLastRow, nTab), false);
+                bChanged = true;
+                nRow = nLastRow;
             }
         }
+    }
 
     if ( bChanged && !rMark.HasAnyMultiMarks() )
         rMark.ResetMark();

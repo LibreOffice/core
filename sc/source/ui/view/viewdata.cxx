@@ -591,12 +591,8 @@ void ScViewData::SetZoomType( SvxZoomType eNew, sal_Bool bAll )
     std::vector< SCTAB > vTabs; // Empty for all tabs
     if ( !bAll ) // get selected tabs
     {
-        SCTAB nTabCount = pDoc->GetTableCount();
-        for (SCTAB i=0; i<nTabCount; i++)
-        {
-            if ( aMarkData.GetTableSelect(i)  )
-                vTabs.push_back( i );
-        }
+        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+        vTabs.insert(vTabs.begin(), itr, itrEnd);
     }
     SetZoomType( eNew, vTabs );
 }
@@ -680,12 +676,8 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, sal_Bool
     std::vector< SCTAB > vTabs;
     if ( !bAll ) // get selected tabs
     {
-        SCTAB nTabCount = pDoc->GetTableCount();
-        for (SCTAB i=0; i<nTabCount; i++)
-        {
-            if ( aMarkData.GetTableSelect(i)  )
-                vTabs.push_back( i );
-        }
+        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+        vTabs.insert(vTabs.begin(), itr, itrEnd);
     }
     SetZoom( rNewX, rNewY, vTabs );
 }
@@ -1434,10 +1426,9 @@ void ScViewData::CreateTabData( SCTAB nNewTab )
 
 void ScViewData::CreateSelectedTabData()
 {
-    SCTAB nTabCount = aMarkData.GetLastSelected();
-    for (SCTAB i=0; i<nTabCount; i++)
-        if ( aMarkData.GetTableSelect(i))
-            CreateTabData(i);
+    ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+    for (; itr != itrEnd; ++itr)
+        CreateTabData(*itr);
 }
 
 void ScViewData::EnsureTabDataSize(size_t nSize)

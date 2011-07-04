@@ -227,9 +227,10 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
 
         if ( rMark.GetSelectCount() > 1 )
         {
-            for (SCTAB i=0; i<nTabCount; i++)
-                if ( rMark.GetTableSelect(i) && i != nTab )
-                    pUndoDoc->AddUndoTab( i, i );
+            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+            for (; itr != itrEnd; ++itr)
+                if ( *itr != nTab )
+                    pUndoDoc->AddUndoTab( *itr, *itr );
         }
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
@@ -241,41 +242,40 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
     GetViewData()->GetMultiArea( xRanges );
     size_t nCount = xRanges->size();
 
-    for (SCTAB i=0; i<nTabCount; i++)
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd; ++itr)
     {
-        if (rMark.GetTableSelect(i))
+        SCTAB i = *itr;
+        for (size_t j = 0; j < nCount; ++j)
         {
-            for (size_t j = 0; j < nCount; ++j)
+            ScRange aRange = *(*xRanges)[j];
+            aRange.aStart.SetTab(i);
+            aRange.aEnd.SetTab(i);
+            ScCellIterator aIter( pDoc, aRange );
+            ScBaseCell* pCell = aIter.GetFirst();
+            while ( pCell )
             {
-                ScRange aRange = *(*xRanges)[j];
-                aRange.aStart.SetTab(i);
-                aRange.aEnd.SetTab(i);
-                ScCellIterator aIter( pDoc, aRange );
-                ScBaseCell* pCell = aIter.GetFirst();
-                while ( pCell )
+                if (pCell->GetCellType() == CELLTYPE_FORMULA)
                 {
-                    if (pCell->GetCellType() == CELLTYPE_FORMULA)
+                    String aOld;
+                    ((ScFormulaCell*)pCell)->GetFormula(aOld);
+                    xub_StrLen nLen = aOld.Len();
+                    ScRefFinder aFinder( aOld, aIter.GetPos(), pDoc, pDoc->GetAddressConvention() );
+                    aFinder.ToggleRel( 0, nLen );
+                    if (aFinder.GetFound())
                     {
-                        String aOld;
-                        ((ScFormulaCell*)pCell)->GetFormula(aOld);
-                        xub_StrLen nLen = aOld.Len();
-                        ScRefFinder aFinder( aOld, aIter.GetPos(), pDoc, pDoc->GetAddressConvention() );
-                        aFinder.ToggleRel( 0, nLen );
-                        if (aFinder.GetFound())
-                        {
-                            ScAddress aPos = ((ScFormulaCell*)pCell)->aPos;
-                            String aNew = aFinder.GetText();
-                            ScCompiler aComp( pDoc, aPos);
-                            aComp.SetGrammar(pDoc->GetGrammar());
-                            ScTokenArray* pArr = aComp.CompileString( aNew );
-                            ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aPos,
-                                                        pArr,formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE );
-                            pDoc->PutCell( aPos, pNewCell );
-                            bOk = sal_True;
-                        }
+                        ScAddress aPos = ((ScFormulaCell*)pCell)->aPos;
+                        String aNew = aFinder.GetText();
+                        ScCompiler aComp( pDoc, aPos);
+                        aComp.SetGrammar(pDoc->GetGrammar());
+                        ScTokenArray* pArr = aComp.CompileString( aNew );
+                        ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aPos,
+                                                    pArr,formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE );
+                        pDoc->PutCell( aPos, pNewCell );
+                        bOk = sal_True;
                     }
-                    pCell = aIter.GetNext();
                 }
+                pCell = aIter.GetNext();
             }
         }
     }
@@ -287,9 +287,10 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
 
         if ( rMark.GetSelectCount() > 1 )
         {
-            for (SCTAB i=0; i<nTabCount; i++)
-                if ( rMark.GetTableSelect(i) && i != nTab )
-                    pRedoDoc->AddUndoTab( i, i );
+            itr = rMark.begin();
+            for (; itr != itrEnd; ++itr)
+                if ( *itr != nTab )
+                    pRedoDoc->AddUndoTab( *itr, *itr );
         }
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
@@ -518,12 +519,12 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Boo
 
         if ( rMark.GetSelectCount() > 1 )
         {
-            SCTAB nTabCount = pDoc->GetTableCount();
-            for (SCTAB i=0; i<nTabCount; i++)
-                if ( rMark.GetTableSelect(i) && i != nTab )
+            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+            for (; itr != itrEnd; ++itr)
+                if ( *itr != nTab )
                 {
-                    pUndoDoc->AddUndoTab( i, i );
-                    pRedoDoc->AddUndoTab( i, i );
+                    pUndoDoc->AddUndoTab( *itr, *itr );
+                    pRedoDoc->AddUndoTab( *itr, *itr );
                 }
         }
     }

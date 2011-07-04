@@ -237,13 +237,13 @@ void ScSpellDialogChildWindow::Init()
 
     if ( rMarkData.GetSelectCount() > 1 )
     {
-        SCTAB nTabCount = mpDoc->GetTableCount();
-        for( SCTAB nOtherTab = 0; nOtherTab < nTabCount; ++nOtherTab )
+        ScMarkData::iterator itr = rMarkData.begin(), itrEnd = rMarkData.end();
+        for (; itr != itrEnd; ++itr)
         {
-            if( rMarkData.GetTableSelect( nOtherTab ) && (nOtherTab != nTab) )
+            if( *itr != nTab )
             {
-                mxUndoDoc->AddUndoTab( nOtherTab, nOtherTab );
-                mxRedoDoc->AddUndoTab( nOtherTab, nOtherTab );
+                mxUndoDoc->AddUndoTab( *itr, *itr );
+                mxRedoDoc->AddUndoTab( *itr, *itr );
             }
         }
     }
