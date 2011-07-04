@@ -136,6 +136,17 @@ namespace writerfilter {
                 sal_uInt8 nBlue;
         };
 
+        /// Stores the properties of a shape.
+        class RTFShape
+        {
+            public:
+                std::vector< std::pair<rtl::OUString, rtl::OUString> > aProperties;
+                int nLeft;
+                int nTop;
+                int nRight;
+                int nBottom;
+        };
+
         /// State of the parser, which gets saved / restored when changing groups.
         class RTFParserState
         {
@@ -190,7 +201,7 @@ namespace writerfilter {
 
                 float nPictureScaleX;
                 float nPictureScaleY;
-                std::vector< std::pair<rtl::OUString, rtl::OUString> > aShapeProperties;
+                RTFShape aShape;
 
                 /// Current cellx value.
                 int nCellX;

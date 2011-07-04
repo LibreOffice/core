@@ -2188,7 +2188,7 @@ int RTFDocumentImpl::popState()
     bool bListLevelEnd = false;
     bool bListOverrideEntryEnd = false;
     bool bLevelTextEnd = false;
-    std::vector< std::pair<rtl::OUString, rtl::OUString> > aShapeProperties;
+    RTFShape aShape;
     bool bPopShapeProperties = false;
     bool bPopPictureProperties = false;
 
@@ -2309,17 +2309,17 @@ int RTFDocumentImpl::popState()
             || m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE
             || m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTY)
     {
-        aShapeProperties = m_aStates.top().aShapeProperties;
+        aShape = m_aStates.top().aShape;
         aAttributes = m_aStates.top().aCharacterAttributes;
         if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME)
-            aShapeProperties.push_back(make_pair(m_aDestinationText.makeStringAndClear(), OUString()));
+            aShape.aProperties.push_back(make_pair(m_aDestinationText.makeStringAndClear(), OUString()));
         else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE)
-            aShapeProperties.back().second = m_aDestinationText.makeStringAndClear();
+            aShape.aProperties.back().second = m_aDestinationText.makeStringAndClear();
         bPopShapeProperties = true;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_PICPROP
             || m_aStates.top().nDestinationState == DESTINATION_SHAPEINSTRUCTION)
-        resolveShapeProperties(m_aStates.top().aShapeProperties);
+        resolveShapeProperties(m_aStates.top().aShape.aProperties);
     else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
         m_aAuthors[m_aAuthors.size()] = m_aDestinationText.makeStringAndClear();
     else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
@@ -2389,7 +2389,7 @@ int RTFDocumentImpl::popState()
     }
     else if (bPopShapeProperties)
     {
-        m_aStates.top().aShapeProperties = aShapeProperties;
+        m_aStates.top().aShape = aShape;
         m_aStates.top().aCharacterAttributes = aAttributes;
     }
     if (bPopPictureProperties)
@@ -2565,7 +2565,7 @@ RTFParserState::RTFParserState()
     aLevelNumbers(),
     nPictureScaleX(0),
     nPictureScaleY(0),
-    aShapeProperties(),
+    aShape(),
     nCellX(0),
     aTableCellsSprms(),
     aTableCellsAttributes(),
