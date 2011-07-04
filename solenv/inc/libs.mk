@@ -328,6 +328,17 @@ VCLLIB+=$(ICUUCLIB)
 
 .ENDIF
 
+.IF "$(OS)" == "ANDROID"
+
+# Some of the external libraries get built as static libraries for
+# Android, mostly by accident, because we haven't bothered fixing up
+# their configury to realize that it would work to build shared
+# libraries.
+
+CURLLIB+=$(ZLIB3RDLIB)
+
+.ENDIF
+
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
 ODMA_LIB_LIB=odma_lib.lib
