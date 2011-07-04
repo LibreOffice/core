@@ -340,7 +340,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT(sb.toString().equalsL(
                 RTL_CONSTASCII_STRINGPARAM("Hat, Inc.")));
 
-            sb.remove(3, 9);
+            sb.remove(3, 6);
             CPPUNIT_ASSERT(sb.toString().equalsL(
                 RTL_CONSTASCII_STRINGPARAM("Hat")));
 

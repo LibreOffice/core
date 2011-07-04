@@ -116,19 +116,16 @@ void SAL_CALL rtl_stringbuffer_insert( /*inout*/rtl_String ** This,
     Removes the characters in a substring of this sequence.
 
     The substring begins at the specified <code>start</code> and
-    extends to the character at index <code>end - 1</code> or to
-    the end of the sequence if no such character exists. If
-    <code>start</code> is equal to <code>end</code>, no changes
-    are made.
+    is <code>len</code> characters long.
 
-    start must be >= 0 && <= This->length && <= end
+    start must be >= 0 && <= This->length
 
     @param  start       The beginning index, inclusive
-    @param  end         The ending index, exclusive
+    @param  len         The substring length
  */
 void SAL_CALL rtl_stringbuffer_remove( /*inout*/rtl_String ** This,
                                        sal_Int32 start,
-                                       sal_Int32 end );
+                                       sal_Int32 len );
 
 #ifdef __cplusplus
 }

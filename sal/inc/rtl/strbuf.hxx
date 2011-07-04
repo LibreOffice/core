@@ -675,25 +675,17 @@ public:
         Removes the characters in a substring of this sequence.
 
         The substring begins at the specified <code>start</code> and
-        extends to the character at index <code>end - 1</code> or to
-        the end of the sequence if no such character exists. If
-        <code>start</code> is equal to <code>end</code>, no changes
-        are made.
+        is <code>len</code> characters long.
 
         start must be >= 0 && <= getLength() && <= end
 
-        As is usual for the rtl string classes, this is based
-        on an analogous Java StringBuffer member. In this
-        case <code>delete</code>, but because that's a reserved
-        keyword in C++, this is named <code>remove</code>.
-
         @param  start       The beginning index, inclusive
-        @param  end         The ending index, exclusive
+        @param  len         The substring length
         @return this string buffer.
      */
-    OStringBuffer & remove( sal_Int32 start, sal_Int32 end )
+    OStringBuffer & remove( sal_Int32 start, sal_Int32 len )
     {
-        rtl_stringbuffer_remove( &pData, start, end );
+        rtl_stringbuffer_remove( &pData, start, len );
         return *this;
     }
 

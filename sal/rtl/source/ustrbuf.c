@@ -211,31 +211,28 @@ void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
  */
 void SAL_CALL rtl_uStringbuffer_remove( rtl_uString ** This,
                                        sal_Int32 start,
-                                       sal_Int32 end )
+                                       sal_Int32 len )
 {
     sal_Int32 nTailLen;
     sal_Unicode * pBuf;
-    sal_Int32 n;
 
-    if (end > (*This)->length)
-        end = (*This)->length;
-
-    n = end - start;
+    if (len > (*This)->length - start)
+        len = (*This)->length - start;
 
     //remove nothing
-    if (!n)
+    if (!len)
         return;
 
     pBuf = (*This)->buffer;
-    nTailLen = (*This)->length - end;
+    nTailLen = (*This)->length - ( start + len );
 
     if (nTailLen)
     {
         /* move the tail */
-        rtl_moveMemory(pBuf + start, pBuf + end, nTailLen * sizeof(sal_Unicode));
+        rtl_moveMemory(pBuf + start, pBuf + start + len, nTailLen * sizeof(sal_Unicode));
     }
 
-    (*This)->length-=n;
+    (*This)->length-=len;
     pBuf[ (*This)->length ] = 0;
 }
 
