@@ -916,6 +916,13 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_REVTBL:
             m_aStates.top().nDestinationState = DESTINATION_REVISIONTABLE;
             break;
+        case RTF_ANNOTATION:
+            if (!m_bIsSubstream)
+            {
+                resolveSubstream(m_nGroupStartPos - 1, NS_rtf::LN_annotation);
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            }
+            break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
         case RTF_NONESTTABLES:
