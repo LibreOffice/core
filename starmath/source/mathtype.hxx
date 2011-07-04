@@ -64,14 +64,16 @@ class MathType
 public:
     MathType(String &rIn) :
         rRet(rIn), nHAlign(0), nVAlign(0), nDefaultSize(12),
-        nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), bIsSilent(sal_False)
+        nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), bIsSilent(sal_False),
+        nTypeFace(0)
     {
         Init();
     }
 
     MathType(String &rIn,SmNode *pIn) :
         rRet(rIn), pTree(pIn), nHAlign(2), nVAlign(0), nInsertion(0), nDefaultSize(12),
-        nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), nSpec(0), bIsSilent(sal_False)
+        nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), nSpec(0), bIsSilent(sal_False),
+        nTypeFace(0)
     {
         Init();
     }
