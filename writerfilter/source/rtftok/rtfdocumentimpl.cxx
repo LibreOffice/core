@@ -1892,6 +1892,18 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                         NS_ooxml::LN_trackchange, NS_ooxml::LN_CT_TrackChange_date, pValue);
             }
             break;
+        case RTF_SHPLEFT:
+            m_aStates.top().aShape.nLeft = nParam;
+            break;
+        case RTF_SHPTOP:
+            m_aStates.top().aShape.nTop = nParam;
+            break;
+        case RTF_SHPRIGHT:
+            m_aStates.top().aShape.nRight = nParam;
+            break;
+        case RTF_SHPBOTTOM:
+            m_aStates.top().aShape.nBottom = nParam;
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
             bParsed = false;
@@ -2446,6 +2458,11 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
                 uno::Reference<drawing::XShape> xShape;
                 OUString aService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape"));
                 xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
+
+                xShape->setPosition(awt::Point(m_aStates.top().aShape.nLeft, m_aStates.top().aShape.nTop));
+                xShape->setSize(awt::Size(m_aStates.top().aShape.nRight - m_aStates.top().aShape.nLeft,
+                            m_aStates.top().aShape.nBottom - m_aStates.top().aShape.nTop));
+
                 Mapper().startShape(xShape);
                 Mapper().endShape();
             }
