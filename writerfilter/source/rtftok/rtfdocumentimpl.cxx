@@ -2449,30 +2449,37 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
                     OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr(),
                     OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr());
     }
+
+    if (nType == 75) // picture frame
+    {
+        if (bPib)
+            resolvePict(false);
+        return;
+    }
+
+    OUString aService;
     switch (nType)
     {
-        case 75: // picture frame
-            if (bPib)
-                resolvePict(false);
-            break;
         case 1: // rectangle
-            {
-                uno::Reference<drawing::XShape> xShape;
-                OUString aService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape"));
-                xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
-
-                xShape->setPosition(awt::Point(m_aStates.top().aShape.nLeft, m_aStates.top().aShape.nTop));
-                xShape->setSize(awt::Size(m_aStates.top().aShape.nRight - m_aStates.top().aShape.nLeft,
-                            m_aStates.top().aShape.nBottom - m_aStates.top().aShape.nTop));
-
-                Mapper().startShape(xShape);
-                Mapper().endShape();
-            }
+            aService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape"));
+            break;
+        case 3: // ellipse
+            aService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.EllipseShape"));
             break;
         default:
             OSL_TRACE("%s: TODO handle shape type '%d'", OSL_THIS_FUNC, nType);
-            break;
+            return;
     }
+
+    uno::Reference<drawing::XShape> xShape;
+    xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
+
+    xShape->setPosition(awt::Point(m_aStates.top().aShape.nLeft, m_aStates.top().aShape.nTop));
+    xShape->setSize(awt::Size(m_aStates.top().aShape.nRight - m_aStates.top().aShape.nLeft,
+                m_aStates.top().aShape.nBottom - m_aStates.top().aShape.nTop));
+
+    Mapper().startShape(xShape);
+    Mapper().endShape();
 }
 
 int RTFDocumentImpl::resolveParse()
