@@ -31,6 +31,10 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx,vcl/vcl))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows,vcl/vcl))
+else ifeq ($(GUIBASE),android)
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android,vcl/vcl))
+else ifeq ($(OS),IOS)
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios,vcl/vcl))
 else
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx,vcl/vcl))
 endif
@@ -188,6 +192,19 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/unx/generic/printer/printerinfomanager \
+))
+endif
+
+ifeq ($(GUIBASE),android)
+$(eval $(call gb_Library_set_defs,vcl,\
+    $$(DEFS) \
+    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
+    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
+    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/unx/generic/plugadapt/salplug \
+    vcl/null/printerinfomanager \
 ))
 endif
 
