@@ -1196,12 +1196,15 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 
             // Don't select header / footer objects in body edition and vice-versa
             SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
-            const SwPosition& rPos = pContact->GetCntntAnchor();
-            bool bInHdrFtr = GetDoc()->IsInHeaderFooter( rPos.nNode );
-            if ( ( IsHeaderFooterEdit() && !bInHdrFtr ) ||
-                 ( !IsHeaderFooterEdit() && bInHdrFtr ) )
+            if ( !pContact->ObjAnchoredAtPage() )
             {
-                bRet = sal_False;
+                const SwPosition& rPos = pContact->GetCntntAnchor();
+                bool bInHdrFtr = GetDoc()->IsInHeaderFooter( rPos.nNode );
+                if ( ( IsHeaderFooterEdit() && !bInHdrFtr ) ||
+                     ( !IsHeaderFooterEdit() && bInHdrFtr ) )
+                {
+                    bRet = sal_False;
+                }
             }
 
             if ( bRet )
