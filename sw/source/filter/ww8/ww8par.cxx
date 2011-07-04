@@ -5661,6 +5661,8 @@ bool SwWW8ImplReader::InEqualApo(int nLvl) const
     //the table.
     if (nLvl)
         --nLvl;
+    if (nLvl < 0 || static_cast<size_t>(nLvl) >= maApos.size())
+        return false;
     return maApos[nLvl];
 }
 
