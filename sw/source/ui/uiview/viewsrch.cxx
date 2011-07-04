@@ -594,51 +594,41 @@ void SwView::Replace()
 
         if(pWrtShell->HasSelection())
         {
-            /* check that the selection has the same length as the required string */
-            if (pWrtShell->SwCrsrShell::GetSelTxt().Len() != pSrchItem->GetSearchString().Len() )
-            {
-                //it differs, therefore do not replace the selection
-                bReqReplace = false;
-                //next call to replace will find the next matching string
-            }
-            else
-            {
-                /* check that the selection match the search string*/
-                //save state
-                SwPosition aStartPos = (* pWrtShell->GetSwCrsr()->Start());
-                SwPosition aEndPos = (* pWrtShell->GetSwCrsr()->End());
-                sal_Bool   bHasSelection = pSrchItem->GetSelection();
-                sal_uInt16 nOldCmd = pSrchItem->GetCommand();
+            /* check that the selection match the search string*/
+            //save state
+            SwPosition aStartPos = (* pWrtShell->GetSwCrsr()->Start());
+            SwPosition aEndPos = (* pWrtShell->GetSwCrsr()->End());
+            sal_Bool   bHasSelection = pSrchItem->GetSelection();
+            sal_uInt16 nOldCmd = pSrchItem->GetCommand();
 
-                //set state for checking if current selection has a match
-                pSrchItem->SetCommand( SVX_SEARCHCMD_FIND );
-                pSrchItem->SetSelection(true);
+            //set state for checking if current selection has a match
+            pSrchItem->SetCommand( SVX_SEARCHCMD_FIND );
+            pSrchItem->SetSelection(true);
 
-                //check if it matchs
-                SwSearchOptions aOpts( pWrtShell, pSrchItem->GetBackward() );
-                if( ! FUNC_Search(aOpts) )
+            //check if it matchs
+            SwSearchOptions aOpts( pWrtShell, pSrchItem->GetBackward() );
+            if( ! FUNC_Search(aOpts) )
+            {
+
+                //no matching therefore should not replace selection
+                // => remove selection
+
+                if(! pSrchItem->GetBackward() )
                 {
-
-                    //no matching therefore should not replace selection
-                    // => remove selection
-
-                    if(! pSrchItem->GetBackward() )
-                    {
-                        (* pWrtShell->GetSwCrsr()->Start()) = aStartPos;
-                        (* pWrtShell->GetSwCrsr()->End()) = aEndPos;
-                    }
-                    else
-                    {
-                        (* pWrtShell->GetSwCrsr()->Start()) = aEndPos;
-                        (* pWrtShell->GetSwCrsr()->End()) = aStartPos;
-                    }
-                    bReqReplace = false;
+                    (* pWrtShell->GetSwCrsr()->Start()) = aStartPos;
+                    (* pWrtShell->GetSwCrsr()->End()) = aEndPos;
                 }
-
-                //set back old search state
-                pSrchItem->SetCommand( nOldCmd );
-                pSrchItem->SetSelection(bHasSelection);
+                else
+                {
+                    (* pWrtShell->GetSwCrsr()->Start()) = aEndPos;
+                    (* pWrtShell->GetSwCrsr()->End()) = aStartPos;
+                }
+                bReqReplace = false;
             }
+
+            //set back old search state
+            pSrchItem->SetCommand( nOldCmd );
+            pSrchItem->SetSelection(bHasSelection);
         }
         /*
          * remove current selection
