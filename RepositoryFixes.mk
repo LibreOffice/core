@@ -144,6 +144,15 @@ gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salh
 
 endif
 
+# Some external libraries get built as static libraries for Android
+# because we haven't bothered fixing their configury to recognize that
+# shared libraries can be built for the platform.
+ifeq ($(OS),ANDROID)
+gb_Library_FILENAMES := $(patsubst cppunit:%.so,cppunit:%.a,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst xml2:%.so,xml2:%.a,$(gb_Library_FILENAMES))
+
+endif
+
 gb_Library_FILENAMES := $(patsubst writerfilter_uno:writerfilter_uno%,writerfilter_uno:writerfilter%,$(gb_Library_FILENAMES))
 
 # we do not require a known rule for these, when using system libs
