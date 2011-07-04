@@ -37,10 +37,14 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :	settings.mk
 DLLPRE =
 
-# --- X11 Mac build currently doesn't work with cairo -----------
 .IF "$(OS)" == "MACOSX" && "$(GUIBASE)" == "unx"
 @all:   
     @echo "Cannot build cairocanvas with X11..."
+.ENDIF
+
+.IF "$(OS)" == "ANDROID"
+@all:   
+    @echo "Cannot build cairocanvas without cairo..."
 .ENDIF
 
 # --- Common ----------------------------------------------------------
