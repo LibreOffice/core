@@ -116,6 +116,14 @@ public:
     //  adjust table marking:
     void        InsertTab( SCTAB nTab );
     void        DeleteTab( SCTAB nTab );
+
+    // iterators for table access
+    typedef std::set<SCTAB>::iterator iterator;
+    typedef std::set<SCTAB>::const_iterator const_iterator;
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
 };
 
 
