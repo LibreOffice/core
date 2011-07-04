@@ -454,10 +454,6 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     SvMemoryStream aStream;
     int b = 0, count = 2;
 
-    if (!bInline)
-        // TODO this discards properties after the 'pib' property
-        resolveShapeProperties(m_aStates.top().aShapeProperties);
-
     // Feed the destination text to a stream.
     OString aStr = OUStringToOString(m_aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
     const char *str = aStr.getStr();
@@ -2194,6 +2190,7 @@ int RTFDocumentImpl::popState()
     bool bLevelTextEnd = false;
     std::vector< std::pair<rtl::OUString, rtl::OUString> > aShapeProperties;
     bool bPopShapeProperties = false;
+    bool bPopPictureProperties = false;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -2313,16 +2310,16 @@ int RTFDocumentImpl::popState()
             || m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTY)
     {
         aShapeProperties = m_aStates.top().aShapeProperties;
+        aAttributes = m_aStates.top().aCharacterAttributes;
         if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME)
             aShapeProperties.push_back(make_pair(m_aDestinationText.makeStringAndClear(), OUString()));
         else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE)
             aShapeProperties.back().second = m_aDestinationText.makeStringAndClear();
         bPopShapeProperties = true;
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_PICPROP)
-    {
+    else if (m_aStates.top().nDestinationState == DESTINATION_PICPROP
+            || m_aStates.top().nDestinationState == DESTINATION_SHAPEINSTRUCTION)
         resolveShapeProperties(m_aStates.top().aShapeProperties);
-    }
     else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
         m_aAuthors[m_aAuthors.size()] = m_aDestinationText.makeStringAndClear();
     else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
@@ -2337,7 +2334,10 @@ int RTFDocumentImpl::popState()
     else if (m_aStates.top().nDestinationState == DESTINATION_PICT)
         resolvePict(true);
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUEPICT)
-        resolvePict(false);
+    {
+        bPopPictureProperties = true;
+        aAttributes = m_aStates.top().aCharacterAttributes;
+    }
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);
@@ -2388,7 +2388,12 @@ int RTFDocumentImpl::popState()
         m_aStates.top().aTableSprms.push_back(make_pair(NS_ooxml::LN_CT_Lvl_lvlText, pValue));
     }
     else if (bPopShapeProperties)
+    {
         m_aStates.top().aShapeProperties = aShapeProperties;
+        m_aStates.top().aCharacterAttributes = aAttributes;
+    }
+    if (bPopPictureProperties)
+        m_aStates.top().aCharacterAttributes = aAttributes;
     if (m_bSuper)
     {
         if (!m_bHasFootnote)
@@ -2401,6 +2406,7 @@ int RTFDocumentImpl::popState()
 
 void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUString, rtl::OUString> >& rShapeProperties)
 {
+    bool bPib = false;
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
     {
         if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
@@ -2425,11 +2431,19 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
             RTFValue::Pointer_t pValue(new RTFValue(i->second));
             m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_descr, pValue));
         }
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pib")))
+        {
+            m_aDestinationText.setLength(0);
+            m_aDestinationText.append(i->second);
+            bPib = true;
+        }
         else
             OSL_TRACE("%s: TODO handle shape property '%s':'%s'", OSL_THIS_FUNC,
                     OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr(),
                     OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr());
     }
+    if (bPib)
+        resolvePict(false);
 }
 
 int RTFDocumentImpl::resolveParse()
