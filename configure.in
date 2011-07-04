@@ -6529,46 +6529,6 @@ fi
 AC_SUBST(ENABLE_QUICKSTART_LIBPNG)
 
 dnl ===================================================================
-dnl Test whether to build cairo or rely on the system version
-dnl ===================================================================
-
-SYSTEM_CAIRO=""
-
-AC_MSG_CHECKING([whether to use the system cairo])
-
-if test "$with_system_cairo" = yes -o \( "$with_system_libs" = yes -a "$with_system_cairo" != no \); then
-    SYSTEM_CAIRO=YES
-    AC_MSG_RESULT([yes])
-
-    PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
-
-    if test "$with_system_xrender_headers" = "yes"; then
-         AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
-         AC_TRY_RUN([
-#include <X11/extensions/Xrender.h>
-
-int main(int argc, char **argv) {
-#ifdef PictStandardA8
-      return 0;
-#else
-      return 1;
-#endif
-}
-        ],
-        [AC_MSG_RESULT([yes])],
-        [AC_MSG_ERROR([no, X headers too old.])]
-        )
-    fi
-else
-    AC_MSG_RESULT([no])
-    BUILD_TYPE="$BUILD_TYPE CAIRO"
-fi
-
-AC_SUBST(SYSTEM_CAIRO)
-AC_SUBST(CAIRO_CFLAGS)
-AC_SUBST(CAIRO_LIBS)
-
-dnl ===================================================================
 dnl Check whether the GStreamer libraries are available.
 dnl ===================================================================
 
@@ -8065,12 +8025,66 @@ AC_SUBST(LIBRSVG_LIBS)
 AC_SUBST(SYSTEM_LIBRSVG)
 
 dnl ===================================================================
+dnl Test whether to build cairo or rely on the system version
+dnl ===================================================================
+
+SYSTEM_CAIRO=""
+
+AC_MSG_CHECKING([whether to use the system cairo])
+
+if test "$with_system_cairo" = yes -o \( "$with_system_libs" = yes -a "$with_system_cairo" != no \); then
+    SYSTEM_CAIRO=YES
+    AC_MSG_RESULT([yes])
+
+    PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
+
+    if test "$with_system_xrender_headers" = "yes"; then
+         AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
+         AC_TRY_RUN([
+#include <X11/extensions/Xrender.h>
+
+int main(int argc, char **argv) {
+#ifdef PictStandardA8
+      return 0;
+#else
+      return 1;
+#endif
+}
+        ],
+        [AC_MSG_RESULT([yes])],
+        [AC_MSG_ERROR([no, X headers too old.])]
+        )
+    fi
+else
+    AC_MSG_RESULT([no])
+    dnl we only need cairo on windows if we
+    dnl building librsvg
+
+    dnl for iOS and Android cairo isn't
+    dnl buildable yet anyway.
+    if test "$ENABLE_LIBRSVG" != NO; then
+      case "$_os" in
+        WINNT|iOS|Android)
+          ;;
+      *)
+        BUILD_TYPE="$BUILD_TYPE CAIRO"
+          ;;
+      esac
+    fi
+fi
+
+AC_SUBST(SYSTEM_CAIRO)
+AC_SUBST(CAIRO_CFLAGS)
+AC_SUBST(CAIRO_LIBS)
+
+
+dnl ===================================================================
 dnl Test whether to build gdk-pixbuf or rely on the system version
 dnl ===================================================================
 
 AC_MSG_CHECKING([whether to use the system gdk-pixbuf])
 
-dnl As long as the only thing we need gdk-pxbuf for is below
+dnl As long as the only thing we need gdk-pixbuf for is below
 dnl librsvg, use the same --enable-librsvg (possibly implied
 dnl by --with-system-libs) to override this.
 
