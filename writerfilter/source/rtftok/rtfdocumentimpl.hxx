@@ -36,6 +36,7 @@
 #include <oox/helper/graphichelper.hxx>
 #include <oox/helper/storagebase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <rtftok/RTFDocument.hxx>
@@ -267,6 +268,7 @@ namespace writerfilter {
                 com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& m_xDstDoc;
                 com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const& m_xFrame;
                 com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xModelFactory;
+                com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> m_xDrawPage;
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
                 /// Same as m_aStates.size(), except that this can be negative for invalid input.

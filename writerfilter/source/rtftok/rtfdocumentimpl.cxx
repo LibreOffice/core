@@ -43,6 +43,8 @@
 #include <editeng/borderline.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
@@ -284,15 +286,18 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aBookmarks(),
     m_aAuthors()
 {
-    OSL_ENSURE(xInputStream.is(), "no input stream");
-    if (!xInputStream.is())
-        throw uno::RuntimeException();
-    m_pInStream = utl::UcbStreamHelper::CreateStream( xInputStream, sal_True );
+    OSL_ASSERT(xInputStream.is());
+    m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
 
     m_xModelFactory.set(m_xDstDoc, uno::UNO_QUERY);
     OSL_ASSERT(m_xModelFactory.is());
 
     m_pGraphicHelper = new oox::GraphicHelper(m_xContext, xFrame, m_xStorage);
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawings(m_xDstDoc, uno::UNO_QUERY);
+    OSL_ASSERT(xDrawings.is());
+    m_xDrawPage.set(xDrawings->getDrawPage(), uno::UNO_QUERY);
+    OSL_ASSERT(m_xDrawPage.is());
 }
 
 RTFDocumentImpl::~RTFDocumentImpl()
@@ -2466,6 +2471,9 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         case 3: // ellipse
             aService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.EllipseShape"));
             break;
+        case 56: // pentagon
+            aService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape"));
+            break;
         default:
             OSL_TRACE("%s: TODO handle shape type '%d'", OSL_THIS_FUNC, nType);
             return;
@@ -2473,6 +2481,19 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
 
     uno::Reference<drawing::XShape> xShape;
     xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
+
+    switch (nType)
+    {
+        case 56:
+            {
+                m_xDrawPage->add(xShape);
+                uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
+                xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(56)));
+            }
+            break;
+        default:
+            break;
+    }
 
     xShape->setPosition(awt::Point(m_aStates.top().aShape.nLeft, m_aStates.top().aShape.nTop));
     xShape->setSize(awt::Size(m_aStates.top().aShape.nRight - m_aStates.top().aShape.nLeft,
