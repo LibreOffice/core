@@ -1168,7 +1168,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                 if ( SfxViewFrame::Current() && SfxViewFrame::Current()->GetDispatcher() )
                     pPtr = (const OfaPtrItem*)SfxViewFrame::Current()->
                         GetDispatcher()->Execute( SID_GET_COLORTABLE, SFX_CALLMODE_SYNCHRON );
-                pColorTab = pPtr ? (XColorTable*)pPtr->GetValue() : XColorTable::GetStdColorTable();
+                pColorTab = pPtr ? (XColorTable*)pPtr->GetValue() : &XColorTable::GetStdColorTable();
 
                 rColPage.SetColorTable( pColorTab );
                 rColPage.SetPageType( &nUnknownType );

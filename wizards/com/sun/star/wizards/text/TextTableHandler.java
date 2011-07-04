@@ -69,9 +69,9 @@ public class TextTableHandler
             this.xMSFDoc = xMSF;
             this.xTextDocument = xTextDocument;
             xText = xTextDocument.getText();
-            xTextTablesSupplier = (XTextTablesSupplier) UnoRuntime.queryInterface(XTextTablesSupplier.class, xTextDocument);
-            xSimpleText = (XSimpleText) UnoRuntime.queryInterface(XSimpleText.class, xTextDocument.getText());
-            XNumberFormatsSupplier xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+            xTextTablesSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, xTextDocument);
+            xSimpleText = UnoRuntime.queryInterface(XSimpleText.class, xTextDocument.getText());
+            XNumberFormatsSupplier xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
             aCharLocale = (Locale) Helper.getUnoStructValue((Object) xTextDocument, "CharLocale");
             oNumberFormatter = new NumberFormatter(xNumberFormatsSupplier, aCharLocale);
         }
@@ -95,7 +95,7 @@ public class TextTableHandler
             if (xAllTextTables.hasByName(_sTableName))
             {
                 Object oTable = xAllTextTables.getByName(_sTableName);
-                xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
+                xTextTable = UnoRuntime.queryInterface(XTextTable.class, oTable);
             }
         }
         catch (Exception exception)
@@ -109,11 +109,10 @@ public class TextTableHandler
     {
         try
         {
-            XIndexAccess xAllTextTables = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSupplier.getTextTables());
+            XIndexAccess xAllTextTables = UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSupplier.getTextTables());
             int MaxIndex = xAllTextTables.getCount() - 1;
             Object oTable = xAllTextTables.getByIndex(MaxIndex);
-            XTextTable xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
-            return xTextTable;
+            return UnoRuntime.queryInterface(XTextTable.class, oTable);
         }
         catch (Exception exception)
         {
@@ -127,7 +126,7 @@ public class TextTableHandler
         try
         {
             com.sun.star.uno.XInterface xTextTable = (XInterface) xMSFDoc.createInstance("com.sun.star.text.TextTable");
-            XTextContent xTextContentTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextTable);
+            XTextContent xTextContentTable = UnoRuntime.queryInterface(XTextContent.class, xTextTable);
             if (xTextCursor == null)
             {
                 xTextCursor = xTextDocument.getText().createTextCursor();
@@ -145,7 +144,7 @@ public class TextTableHandler
     {
         try
         {
-            XIndexAccess xAllTextTables = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSupplier.getTextTables());
+            XIndexAccess xAllTextTables = UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSupplier.getTextTables());
             int TextTableCount = xAllTextTables.getCount();
             for (int i = TextTableCount - 1; i >= 0; i--)
             {
@@ -162,7 +161,7 @@ public class TextTableHandler
     {
         try
         {
-            XIndexAccess xAllTextTables = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSupplier.getTextTables());
+            XIndexAccess xAllTextTables = UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSupplier.getTextTables());
             Object oTextTable = xAllTextTables.getByIndex(xAllTextTables.getCount() - 1);
             removeTextTable(oTextTable);
         }
@@ -176,7 +175,7 @@ public class TextTableHandler
     {
         try
         {
-            XTextContent xTextContentTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextTable);
+            XTextContent xTextContentTable = UnoRuntime.queryInterface(XTextContent.class, oTextTable);
             xTextDocument.getText().removeTextContent(xTextContentTable);
         }
         catch (Exception exception)
@@ -190,7 +189,7 @@ public class TextTableHandler
         try
         {
             XNameAccess xAllTextTables = xTextTablesSupplier.getTextTables();
-            if (xAllTextTables.hasByName(TableName) == true)
+            if (xAllTextTables.hasByName(TableName))
             {
                 removeTextTable(xAllTextTables.getByName(TableName));
             }
@@ -209,7 +208,7 @@ public class TextTableHandler
             if (xTextTableNames.hasByName(OldTableName))
             {
                 Object oTextTable = xTextTableNames.getByName(OldTableName);
-                XNamed xTextTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, oTextTable);
+                XNamed xTextTableName = UnoRuntime.queryInterface(XNamed.class, oTextTable);
                 xTextTableName.setName(NewTableName);
             }
         }
@@ -236,10 +235,10 @@ public class TextTableHandler
         {
             XFrame xFrame = this.xTextDocument.getCurrentController().getFrame();
             int ColCount = xTextTable.getColumns().getCount();
-            XCellRange xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, xTextTable);
+            XCellRange xCellRange = UnoRuntime.queryInterface(XCellRange.class, xTextTable);
             XCellRange xLocCellRange = xCellRange.getCellRangeByPosition(0, 0, ColCount - 1, 1);
             short iHoriOrient = AnyConverter.toShort(Helper.getUnoPropertyValue(xTextTable, "HoriOrient"));
-            XSelectionSupplier xSelection = (XSelectionSupplier) UnoRuntime.queryInterface(XSelectionSupplier.class, xTextDocument.getCurrentController());
+            XSelectionSupplier xSelection = UnoRuntime.queryInterface(XSelectionSupplier.class, xTextDocument.getCurrentController());
             xSelection.select(xLocCellRange);
             Desktop.dispatchURL(_xMSF, ".Uno:DistributeColumns", xFrame);
             Desktop.dispatchURL(_xMSF, ".Uno:SetOptimalColumnWidth", xFrame);

@@ -91,13 +91,6 @@ ElementCollector::ElementCollector(
     m_type = cssxc::sax::ElementMarkType_ELEMENTCOLLECTOR;
 }
 
-/*
-bool ElementCollector::isInternalNotificationSuppressed() const
-{
-    return m_bInternalNotificationSuppressed;
-}
-*/
-
 cssxc::sax::ElementMarkPriority ElementCollector::getPriority() const
 {
     return m_nPriority;

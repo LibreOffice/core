@@ -30,7 +30,7 @@
 #include "precompiled_accessibility.hxx"
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
 #include <svtools/accessibletable.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 //
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -280,13 +280,15 @@ void SAL_CALL AccessibleGridControlBase::removeEventListener(
 
 // XTypeProvider --------------------------------------------------------------
 
+namespace
+{
+    class theAccessibleGridControlBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleGridControlBaseImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL AccessibleGridControlBase::getImplementationId()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslGlobalMutex() );
-    static Sequence< sal_Int8 > aId;
-    implCreateUuid( aId );
-    return aId;
+    return theAccessibleGridControlBaseImplementationId::get().getSeq();
 }
 
 // XServiceInfo ---------------------------------------------------------------
@@ -409,17 +411,7 @@ void AccessibleGridControlBase::commitEvent(
 
     AccessibleEventNotifier::addEvent( getClientId( ), aEvent );
 }
-// -----------------------------------------------------------------------------
 
-void AccessibleGridControlBase::implCreateUuid( Sequence< sal_Int8 >& rId )
-{
-    if( !rId.hasElements() )
-    {
-        rId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( rId.getArray() ), 0, sal_True );
-    }
-}
-// -----------------------------------------------------------------------------
 sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
     throw ( uno::RuntimeException )
 {

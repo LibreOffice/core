@@ -38,22 +38,22 @@
 #include <osl/endian.h>
 
 #ifndef MAKEDWORD
-#define MAKEDWORD(wl, wh)   ((comm_DWORD)((wl) & 0xFFFF) | (((comm_DWORD)(wh) & 0xFFFF) << 16))
+#define MAKEDWORD(wl, wh)   ((sal_uInt32)((wl) & 0xFFFF) | (((sal_uInt32)(wh) & 0xFFFF) << 16))
 #endif
 #ifndef LOWORD
-#define LOWORD(d)           ((comm_WORD)((comm_DWORD)(d) & 0xFFFF))
+#define LOWORD(d)           ((sal_uInt16)((sal_uInt32)(d) & 0xFFFF))
 #endif
 #ifndef HIWORD
-#define HIWORD(d)           ((comm_WORD)(((comm_DWORD)(d) >> 16) & 0xFFFF))
+#define HIWORD(d)           ((sal_uInt16)(((sal_uInt32)(d) >> 16) & 0xFFFF))
 #endif
 #ifndef MAKEWORD
-#define MAKEWORD(bl, bh)    ((comm_WORD)((bl) & 0xFF) | (((comm_WORD)(bh) & 0xFF) << 8))
+#define MAKEWORD(bl, bh)    ((sal_uInt16)((bl) & 0xFF) | (((sal_uInt16)(bh) & 0xFF) << 8))
 #endif
 #ifndef LOBYTE
-#define LOBYTE(w)           ((comm_BYTE)((comm_WORD)(w) & 0xFF))
+#define LOBYTE(w)           ((comm_BYTE)((sal_uInt16)(w) & 0xFF))
 #endif
 #ifndef HIBYTE
-#define HIBYTE(w)           ((comm_BYTE)(((comm_WORD)(w) >> 8) & 0xFF))
+#define HIBYTE(w)           ((comm_BYTE)(((sal_uInt16)(w) >> 8) & 0xFF))
 #endif
 #ifndef MAKEBYTE
 #define MAKEBYTE(nl, nh)    ((comm_BYTE)(((nl) & 0x0F) | (((nh) & 0x0F) << 4)))
@@ -74,10 +74,10 @@
 
 #ifdef OSL_BIGENDIAN
 #ifndef NETWORD
-#define NETWORD(w)          (comm_WORD)(w)
+#define NETWORD(w)          (sal_uInt16)(w)
 #endif
 #ifndef NETDWORD
-#define NETDWORD(d)         (comm_DWORD)(d)
+#define NETDWORD(d)         (sal_uInt32)(d)
 #endif
 #endif // OSL_BIGENDIAN
 
@@ -123,8 +123,8 @@ typedef comm_UINT16 CMProtocol;
 #define CM_PROTOCOL_BROADCASTER     (CMProtocol)0x0002
 #define CM_PROTOCOL_USER_START      (CMProtocol)0x0100
 
-typedef comm_USHORT HandshakeType;
-typedef comm_USHORT CommunicationOption;
+typedef comm_UINT16 HandshakeType;
+typedef comm_UINT16 CommunicationOption;
 
 #define CH_NoHeader                 0x0000
 #define CH_SimpleMultiChannel       0x0001

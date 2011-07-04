@@ -41,12 +41,6 @@ ENABLE_EXCEPTIONS = TRUE
 CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
 .ENDIF
 
-.IF "$(CRYPTO_ENGINE)" != "nss"
-LIBTARGET=NO
-.ENDIF
-
-.IF "$(CRYPTO_ENGINE)" == "nss"
-
 .IF "$(WITH_MOZILLA)" == "NO" || "$(ENABLE_NSS_MODULE)"!="YES"
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 @all:
@@ -93,7 +87,11 @@ $(MOZ_INC)$/profile \
 -I$(MOZ_INC)$/embed_base
 .ENDIF
 
-CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
+.IF "$(CRYPTO_ENGINE)" == "nss"
+CDEFS += -DXMLSEC_CRYPTO_NSS
+.ENDIF
+
+CDEFS += -DXMLSEC_NO_XSLT
 
 # --- Files --------------------------------------------------------
 
@@ -109,17 +107,22 @@ SOLARINC += -I$(NSS_INC)
 .ENDIF
 
 SLOFILES = \
+    $(SLO)$/nssinitializer.obj \
+    $(SLO)$/digestcontext.obj \
+    $(SLO)$/ciphercontext.obj \
+    $(SLO)$/xsec_nss.obj
+
+.IF "$(CRYPTO_ENGINE)" == "nss"
+SLOFILES += \
     $(SLO)$/securityenvironment_nssimpl.obj \
+    $(SLO)$/seinitializer_nssimpl.obj \
     $(SLO)$/xmlencryption_nssimpl.obj \
     $(SLO)$/xmlsecuritycontext_nssimpl.obj \
     $(SLO)$/xmlsignature_nssimpl.obj \
     $(SLO)$/x509certificate_nssimpl.obj \
-    $(SLO)$/seinitializer_nssimpl.obj \
-    $(SLO)$/xsec_nss.obj \
-        $(SLO)$/secerror.obj
+    $(SLO)$/sanextension_nssimpl.obj \
+    $(SLO)$/secerror.obj
 
-
-    
 .ENDIF
 
 # --- Targets ------------------------------------------------------

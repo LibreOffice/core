@@ -66,14 +66,14 @@ public class SystemDialog
         try
         {
             this.xMSF = xMSF;
-            systemDialog = (XInterface) xMSF.createInstance(ServiceName);
-            xFilePicker = (XFilePicker) UnoRuntime.queryInterface(XFilePicker.class, systemDialog);
-            xFolderPicker = (XFolderPicker) UnoRuntime.queryInterface(XFolderPicker.class, systemDialog);
-            xFilterManager = (XFilterManager) UnoRuntime.queryInterface(XFilterManager.class, systemDialog);
-            xInitialize = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, systemDialog);
-            xExecutable = (XExecutableDialog) UnoRuntime.queryInterface(XExecutableDialog.class, systemDialog);
-            xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, systemDialog);
-            xFilePickerControlAccess = (XFilePickerControlAccess) UnoRuntime.queryInterface(XFilePickerControlAccess.class, systemDialog);
+            systemDialog = xMSF.createInstance(ServiceName);
+            xFilePicker = UnoRuntime.queryInterface(XFilePicker.class, systemDialog);
+            xFolderPicker = UnoRuntime.queryInterface(XFolderPicker.class, systemDialog);
+            xFilterManager = UnoRuntime.queryInterface(XFilterManager.class, systemDialog);
+            xInitialize = UnoRuntime.queryInterface(XInitialization.class, systemDialog);
+            xExecutable = UnoRuntime.queryInterface(XExecutableDialog.class, systemDialog);
+            xComponent = UnoRuntime.queryInterface(XComponent.class, systemDialog);
+            xFilePickerControlAccess = UnoRuntime.queryInterface(XFilePickerControlAccess.class, systemDialog);
             xStringSubstitution = createStringSubstitution(xMSF);
             Short[] listAny = new Short[]
             {
@@ -114,12 +114,7 @@ public class SystemDialog
     {
         try
         {
-            //System.out.println("SystemDialog.subst:");
-            //System.out.println(path);
-            String s = xStringSubstitution.substituteVariables(path, false);
-            //System.out.println(s);
-            return s;
-
+            return xStringSubstitution.substituteVariables(path, false);
         }
         catch (Exception ex)
         {
@@ -157,7 +152,7 @@ public class SystemDialog
         sStorePath = null;
         try
         {
-            xFilePickerControlAccess.setValue(com.sun.star.ui.dialogs.ExtendedFilePickerElementIds.CHECKBOX_AUTOEXTENSION, (short) 0, new Boolean(true));
+            xFilePickerControlAccess.setValue(com.sun.star.ui.dialogs.ExtendedFilePickerElementIds.CHECKBOX_AUTOEXTENSION, (short) 0, Boolean.TRUE);
             xFilePicker.setDefaultName(defaultName);
             xFilePicker.setDisplayDirectory(subst(displayDir));
             if (execute(xExecutable))
@@ -351,7 +346,7 @@ public class SystemDialog
                 return 0;
             }
             XFrame xFrame = Desktop.getActiveFrame(xMSF);
-            XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
+            XWindowPeer xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
             return showMessageBox(xMSF, xWindowPeer, windowServiceName, windowAttribute, MessageText);
         }
         catch (Exception exception)
@@ -382,15 +377,15 @@ public class SystemDialog
         try
         {
             XInterface xAWTToolkit = (XInterface) xMSF.createInstance("com.sun.star.awt.Toolkit");
-            XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface(XToolkit.class, xAWTToolkit);
+            XToolkit xToolkit = UnoRuntime.queryInterface(XToolkit.class, xAWTToolkit);
             com.sun.star.awt.WindowDescriptor oDescriptor = new com.sun.star.awt.WindowDescriptor();
             oDescriptor.WindowServiceName = windowServiceName;
             oDescriptor.Parent = peer;
             oDescriptor.Type = com.sun.star.awt.WindowClass.MODALTOP;
             oDescriptor.WindowAttributes = windowAttribute;
             XWindowPeer xMsgPeer = xToolkit.createWindow(oDescriptor);
-            XMessageBox xMsgbox = (XMessageBox) UnoRuntime.queryInterface(XMessageBox.class, xMsgPeer);
-            XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xMsgbox);
+            XMessageBox xMsgbox = UnoRuntime.queryInterface(XMessageBox.class, xMsgPeer);
+            XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, xMsgbox);
             xMsgbox.setMessageText(MessageText);
             iMessage = xMsgbox.execute();
             xComponent.dispose();
@@ -417,7 +412,7 @@ public class SystemDialog
         }
         if (xPathSubst != null)
         {
-            return (XStringSubstitution) UnoRuntime.queryInterface(
+            return UnoRuntime.queryInterface(
                     XStringSubstitution.class, xPathSubst);
         }
         else

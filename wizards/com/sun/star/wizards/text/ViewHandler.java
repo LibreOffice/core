@@ -59,26 +59,26 @@ public class ViewHandler
     {
         this.xMSFDoc = xMSF;
         this.xTextDocument = xTextDocument;
-        xTextViewCursorSupplier = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xTextDocument.getCurrentController());
-        xViewSettingsSupplier = (XViewSettingsSupplier) UnoRuntime.queryInterface(XViewSettingsSupplier.class, xTextDocument.getCurrentController());
-        xStyleFamiliesSupplier = (XStyleFamiliesSupplier) UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
+        xTextViewCursorSupplier = UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xTextDocument.getCurrentController());
+        xViewSettingsSupplier = UnoRuntime.queryInterface(XViewSettingsSupplier.class, xTextDocument.getCurrentController());
+        xStyleFamiliesSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
     }
 
     public void selectFirstPage(TextTableHandler oTextTableHandler)
     {
         try
         {
-            XPageCursor xPageCursor = (XPageCursor) UnoRuntime.queryInterface(XPageCursor.class, xTextViewCursorSupplier.getViewCursor());
-            XTextCursor xViewTextCursor = (XTextCursor) UnoRuntime.queryInterface(XTextCursor.class, xPageCursor);
+            XPageCursor xPageCursor = UnoRuntime.queryInterface(XPageCursor.class, xTextViewCursorSupplier.getViewCursor());
+            XTextCursor xViewTextCursor = UnoRuntime.queryInterface(XTextCursor.class, xPageCursor);
             xPageCursor.jumpToFirstPage();
             xPageCursor.jumpToStartOfPage();
             Helper.setUnoPropertyValue(xPageCursor, "PageDescName", "First Page");
             Object oPageStyles = xStyleFamiliesSupplier.getStyleFamilies().getByName("PageStyles");
-            XNameAccess xName = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oPageStyles);
+            XNameAccess xName = UnoRuntime.queryInterface(XNameAccess.class, oPageStyles);
             Object oPageStyle = xName.getByName("First Page");
-            XIndexAccess xAllTextTables = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, oTextTableHandler.xTextTablesSupplier.getTextTables());
-            XTextContent xTextTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xAllTextTables.getByIndex(0));
-            XTextRange xRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xTextTable.getAnchor().getText());
+            XIndexAccess xAllTextTables = UnoRuntime.queryInterface(XIndexAccess.class, oTextTableHandler.xTextTablesSupplier.getTextTables());
+            XTextContent xTextTable = UnoRuntime.queryInterface(XTextContent.class, xAllTextTables.getByIndex(0));
+            XTextRange xRange = UnoRuntime.queryInterface(XTextRange.class, xTextTable.getAnchor().getText());
             xViewTextCursor.gotoRange(xRange, false);
 //            if (xPageCursor.getPage() == (short) 1) {
 //                Helper.setUnoPropertyValue(xTextTable, "PageDescName", "First Page");

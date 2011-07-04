@@ -196,6 +196,7 @@ IMPL_LINK( SvxDefaultColorOptPage, ResetToDefaults, void *, EMPTYARG )
 
         aLbChartColors.GetFocus();
         aLbChartColors.SelectEntryPos( 0 );
+        aPBRemove.Enable( sal_True );
     }
 
     return 0L;
@@ -217,6 +218,7 @@ IMPL_LINK( SvxDefaultColorOptPage, AddChartColor, void *, EMPTYARG )
 
         aLbChartColors.GetFocus();
         aLbChartColors.SelectEntryPos( pColorConfig->GetColorTable().size() - 1 );
+        aPBRemove.Enable( sal_True );
     }
 
     return 0L;
@@ -251,6 +253,8 @@ IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
                 aLbChartColors.SelectEntryPos( pColorConfig->GetColorTable().size() - 1 );
             else if (aLbChartColors.GetEntryCount() > 0)
                 aLbChartColors.SelectEntryPos( nIndex );
+            else
+                aPBRemove.Enable( sal_False );
         }
     }
 

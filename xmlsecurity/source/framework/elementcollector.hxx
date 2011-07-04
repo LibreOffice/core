@@ -86,7 +86,6 @@ public:
             xReferenceResolvedListener);
     virtual ~ElementCollector() {};
 
-    //bool isInternalNotificationSuppressed() const;
     com::sun::star::xml::crypto::sax::ElementMarkPriority getPriority() const;
     bool getModify() const;
     void notifyListener();

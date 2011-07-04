@@ -71,7 +71,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(8), reslblQueryTitle, new Integer(95), new Integer(27), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(52)
+                    8, reslblQueryTitle, 95, 27, new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), 52
                 });
         m_aTxtTitle = m_queryWizard.insertTextField("txtQueryTitle", "changeTitle", this, new String[]
                 {
@@ -79,7 +79,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(12), HelpIds.getHelpIdString(curHelpIndex++), new Integer(95), new Integer(37), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(90)
+                    12, HelpIds.getHelpIdString(curHelpIndex++), 95, 37, new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), 90
                 });
         m_queryWizard.insertLabel("lblHowGoOn", new String[]
                 {
@@ -87,7 +87,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(16), reslblHowGoOn, Boolean.TRUE, new Integer(192), new Integer(27), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(112)
+                    16, reslblHowGoOn, Boolean.TRUE, 192, 27, new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), 112
                 });
         this.xRadioDisplayQuery = m_queryWizard.insertRadioButton("optDisplayQuery",
                 new String[]
@@ -96,7 +96,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(9), HelpIds.getHelpIdString(curHelpIndex++), resoptDisplayQuery, new Integer(192), new Integer(46), new Short((short) 1), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
+                    9, HelpIds.getHelpIdString(curHelpIndex++), resoptDisplayQuery, 192, 46, new Short((short) 1), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), 118
                 });
 
         m_queryWizard.insertRadioButton("optModifyQuery",
@@ -106,7 +106,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(10), HelpIds.getHelpIdString(curHelpIndex++), resoptModifyQuery, new Integer(192), new Integer(56), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
+                    10, HelpIds.getHelpIdString(curHelpIndex++), resoptModifyQuery, 192, 56, new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), 118
                 });
         m_queryWizard.insertFixedLine("flnSummary", new String[]
                 {
@@ -114,15 +114,15 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(10), resflnSummary, new Integer(95), new Integer(68), new Integer(8), new Short(curtabindex++), new Integer(209)
+                    10, resflnSummary, 95, 68, 8, new Short(curtabindex++), 209
                 });
         m_queryWizard.insertTextField("txtSummary", 0, null, new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ReadOnly", PropertyNames.PROPERTY_STEP, "VScroll", PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.READ_ONLY, PropertyNames.PROPERTY_STEP, "VScroll", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    new Integer(96), HelpIds.getHelpIdString(curHelpIndex++), Boolean.TRUE, new Integer(95), new Integer(80), Boolean.TRUE, new Integer(8), Boolean.TRUE, new Integer(209)
+                    96, HelpIds.getHelpIdString(curHelpIndex++), Boolean.TRUE, 95, 80, Boolean.TRUE, 8, Boolean.TRUE, 209
                 });
     }
 
@@ -142,7 +142,7 @@ public class Finalizer
             String sCurQueryName = AnyConverter.toString(Helper.getUnoPropertyValue(UnoDialog.getModel(m_aTxtTitle), "Text"));
             if (sCurQueryName != null)
             {
-                if (sCurQueryName.equals(""))
+                if (sCurQueryName.equals(PropertyNames.EMPTY_STRING))
                 {
                     String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
                     sCurQueryName = resQuery + "_" + sCommandNames[0];
@@ -158,14 +158,13 @@ public class Finalizer
         catch (com.sun.star.uno.Exception exception)
         {
             exception.printStackTrace(System.out);
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
     }
 
     private String getTitle()
     {
-        final String sTitle = (String) Helper.getUnoPropertyValue(UnoDialog.getModel(m_aTxtTitle), "Text");
-        return sTitle;
+        return (String) Helper.getUnoPropertyValue(UnoDialog.getModel(m_aTxtTitle), "Text");
     }
 
     public String finish()
@@ -176,7 +175,7 @@ public class Finalizer
             )
             return queryName;
 
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public final boolean displayQueryDesign()

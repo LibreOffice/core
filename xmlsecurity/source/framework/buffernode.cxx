@@ -286,12 +286,6 @@ rtl::OUString BufferNode::printChildren() const
         }
 
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "(" ));
-        /*
-        if (((ElementCollector*)(*ii))->isInternalNotificationSuppressed())
-        {
-            rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*IN-Suppressed* " ));
-        }
-        */
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SecID=" ));
         rc += rtl::OUString::valueOf(((ElementCollector*)(*ii))->getSecurityId());
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));

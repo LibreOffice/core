@@ -34,6 +34,7 @@
 #include "accessibility/extended/AccessibleGridControlHeaderCell.hxx"
 #include "accessibility/extended/AccessibleGridControlTableCell.hxx"
 #include <svtools/accessibletable.hxx>
+#include <comphelper/servicehelper.hxx>
 
 
 // ============================================================================
@@ -227,13 +228,15 @@ OUString SAL_CALL AccessibleGridControlHeader::getImplementationName()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleGridControlHeader" ) );
 }
 
+namespace
+{
+    class theAccessibleGridControlHeaderImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleGridControlHeaderImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL AccessibleGridControlHeader::getImplementationId()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslGlobalMutex() );
-    static Sequence< sal_Int8 > aId;
-    implCreateUuid( aId );
-    return aId;
+    return theAccessibleGridControlHeaderImplementationId::get().getSeq();
 }
 
 // internal virtual methods ---------------------------------------------------

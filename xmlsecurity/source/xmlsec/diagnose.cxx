@@ -34,8 +34,7 @@
 
 namespace xmlsecurity {
 
-struct UseDiagnose : public rtl::StaticWithInit<
-    const bool, UseDiagnose>
+struct UseDiagnose : public rtl::StaticWithInit< bool, UseDiagnose>
 {
     bool operator () () const
     {

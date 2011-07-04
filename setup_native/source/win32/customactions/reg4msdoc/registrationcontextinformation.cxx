@@ -53,6 +53,18 @@ std::wstring RegistrationContextInformation::GetWordDocumentDefaultShellCommand(
     return std::wstring(TEXT("open"));
 }
 
+std::wstring RegistrationContextInformation::GetMOOXWordDocumentDisplayName() const
+{
+    std::wstring str;
+    str = TEXT("Microsoft Word 2007 Document");
+    return str;
+}
+
+std::wstring RegistrationContextInformation::GetMOOXWordDocumentFileExtension() const
+{
+    return std::wstring(TEXT(".docx"));
+}
+
 std::wstring RegistrationContextInformation::GetWordTemplateDisplayName() const
 {
     std::wstring str;
@@ -125,6 +137,18 @@ std::wstring RegistrationContextInformation::GetExcelSheetDefaultShellCommand() 
     return std::wstring(TEXT("open"));
 }
 
+std::wstring RegistrationContextInformation::GetMOOXExcelSheetDisplayName() const
+{
+    std::wstring str;
+    str = TEXT("Microsoft Excel 2007 Spreadsheet");
+    return str;
+}
+
+std::wstring RegistrationContextInformation::GetMOOXExcelSheetFileExtension() const
+{
+    return std::wstring(TEXT(".xlsx"));
+}
+
 std::wstring RegistrationContextInformation::GetExcelTemplateDisplayName() const
 {
     std::wstring str;
@@ -171,6 +195,18 @@ std::wstring RegistrationContextInformation::GetPowerPointDocumentDefaultIconEnt
 std::wstring RegistrationContextInformation::GetPowerPointDocumentDefaultShellCommand() const
 {
     return std::wstring(TEXT("open"));
+}
+
+std::wstring RegistrationContextInformation::GetMOOXPowerPointDocumentDisplayName() const
+{
+    std::wstring str;
+    str = TEXT("Microsoft PowerPoint 2007 Presentation");
+    return str;
+}
+
+std::wstring RegistrationContextInformation::GetMOOXPowerPointDocumentFileExtension() const
+{
+    return std::wstring(TEXT(".pptx"));
 }
 
 std::wstring RegistrationContextInformation::GetPowerPointTemplateDisplayName() const

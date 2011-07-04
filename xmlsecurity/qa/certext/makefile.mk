@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,45 +23,49 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#***********************************************************************/
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE 
 
-PRJ=..$/..
-PRJNAME=extensions
-TARGET=svg
+PRJ = ../..
+PRJNAME = xmlsecurity
+TARGET = qa_certext
 
-ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS = TRUE
 
-# --- Settings ----------------------------------
+.INCLUDE: settings.mk
+.INCLUDE :	$(PRJ)$/util$/target.pmk
 
-.INCLUDE :	$(PRJ)$/util$/makefile.pmk
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-# --- Files -------------------------------------
+SHL1IMPLIB = i$(SHL1TARGET)
+SHL1OBJS = $(SLOFILES)
+SHL1RPATH = NONE
+SHL1STDLIBS = $(CPPUNITLIB)     \
+              $(SALLIB)         \
+              $(NEON3RDLIB)     \
+              $(CPPULIB)        \
+              $(XMLOFFLIB)      \
+              $(CPPUHELPERLIB)	\
+              $(SVLLIB)			\
+              $(TOOLSLIB)	    \
+              $(COMPHELPERLIB) \
+              $(TESTLIB)
 
-SLOFILES=	$(SLO)$/svgprinter.obj								\
-            $(SLO)$/svguno.obj									\
-            $(SLO)$/svgwriter.obj								\
-            $(SLO)$/svgaction.obj								
+SHL1TARGET = qa_CertExt
+SHL1VERSIONMAP = $(PRJ)/qa/certext/export.map
+DEF1NAME = $(SHL1TARGET)
 
-# --- Library -----------------------------------
+SLOFILES = $(SLO)/SanCertExt.obj
 
-SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
-SHL1IMPLIB=i$(SHL1TARGET)
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
+ALLTAR : cpptest
 
-SHL1STDLIBS=\
-    $(XMLOFFLIB)		\
-    $(VCLLIB)			\
-    $(TOOLSLIB)			\
-    $(CPPUHELPERLIB)	\
-    $(CPPULIB)			\
-    $(SALLIB)
+cpptest : $(SHL1TARGETN)
 
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
+CPPTEST_LIBRARY = $(SHL1TARGETN)
 
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+.END

@@ -116,17 +116,17 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], sPageStyles, new Integer(92), new Integer(25), IStyleStep, new Short(curtabindex++), new Integer(90)
+                        UIConsts.INTEGERS[8], sPageStyles, 92, 25, IStyleStep, new Short(curtabindex++), 90
                     });
 
             lstStyles = CurUnoDialog.insertListBox("lstStyles", null, SCHANGELAYOUT, this,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "SelectedItems", PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.SELECTED_ITEMS, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
-                        new Integer(143), "HID:WIZARDS_HID_DLGFORM_LSTSTYLES", new Integer(92), new Integer(35), SelLayoutPos, IStyleStep, this.StyleNames, new Short(curtabindex++), new Integer(90)
+                        143, "HID:WIZARDS_HID_DLGFORM_LSTSTYLES", 92, 35, SelLayoutPos, IStyleStep, this.StyleNames, new Short(curtabindex++), 90
                     });
 
             optNoBorder = CurUnoDialog.insertRadioButton("otpNoBorder", SCHANGEBORDERTYPE, this,
@@ -136,7 +136,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDNOBORDER", sNoBorder, new Integer(196), new Integer(39), IStyleStep, new Short(curtabindex++), "0", new Integer(93)
+                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDNOBORDER", sNoBorder, 196, 39, IStyleStep, new Short(curtabindex++), "0", 93
                     });
 
             opt3DLook = CurUnoDialog.insertRadioButton("otp3DLook", SCHANGEBORDERTYPE, this,
@@ -146,7 +146,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER", s3DLook, new Integer(196), new Integer(53), new Short((short) 1), IStyleStep, new Short(curtabindex++), "1", new Integer(93)
+                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER", s3DLook, 196, 53, new Short((short) 1), IStyleStep, new Short(curtabindex++), "1", 93
                     });
 
             optFlat = CurUnoDialog.insertRadioButton("otpFlat", SCHANGEBORDERTYPE, this,
@@ -156,7 +156,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDSIMPLEBORDER", sFlat, new Integer(196), new Integer(67), IStyleStep, new Short(curtabindex++), "2", new Integer(93)
+                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDSIMPLEBORDER", sFlat, 196, 67, IStyleStep, new Short(curtabindex++), "2", 93
                     });
 
             CurUnoDialog.insertFixedLine("lnFieldBorder",
@@ -166,7 +166,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], sFieldBorder, new Integer(192), new Integer(25), IStyleStep, new Short(curtabindex++), new Integer(98)
+                        UIConsts.INTEGERS[8], sFieldBorder, 192, 25, IStyleStep, new Short(curtabindex++), 98
                     });
 //        }
 //        catch (Exception e)
@@ -177,7 +177,7 @@ public class StyleApplier
 
     /*  public void initialize(short _iStyleindex){
     if (_iStyleindex < lstStyles.getItemCount()){
-    Helper.setUnoPropertyValue(UnoDialog.getModel(lstStyles), "SelectedItems", new short[]{_iStyleindex});
+    Helper.setUnoPropertyValue(UnoDialog.getModel(lstStyles), PropertyNames.SELECTED_ITEMS, new short[]{_iStyleindex});
     applyStyle(true, false);
     }
     }
@@ -187,7 +187,7 @@ public class StyleApplier
         try
         {
             Object oRootNode = Configuration.getConfigurationRoot(xMSF, "org.openoffice.Office.FormWizard/FormWizard/Styles", false);
-            XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oRootNode);
+            XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, oRootNode);
             StyleNodeNames = xNameAccess.getElementNames();
             StyleNames = new String[StyleNodeNames.length];
             FileNames = new String[StyleNodeNames.length];
@@ -208,7 +208,7 @@ public class StyleApplier
     {
         try
         {
-            short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(lstStyles), "SelectedItems"));
+            short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(lstStyles), PropertyNames.SELECTED_ITEMS));
             if (SelFields != null)
             {
                 return SelFields[0];
@@ -281,10 +281,10 @@ public class StyleApplier
             for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
             {
                 FormDocument.ControlForm curControlForm = ((FormDocument.ControlForm) curFormDocument.oControlForms.get(m));
-                if (curControlForm.getArrangemode() == FormWizard.SOGRID)
+                if (curControlForm.getArrangemode() == FormWizard.AS_GRID)
                 {
                     GridControl oGridControl = curControlForm.getGridControl();
-                    oGridControl.xPropertySet.setPropertyValue("Border", IBorderValue);
+                    oGridControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
                 }
                 else
                 {
@@ -297,17 +297,17 @@ public class StyleApplier
                             for (int i = 0; i < 2; i++)
                             {
                                 XPropertySet xPropertySet = oTimeStampControl.getControlofGroupShapeByIndex(i);
-                                if (xPropertySet.getPropertySetInfo().hasPropertyByName("Border"))
+                                if (xPropertySet.getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_BORDER))
                                 {
-                                    xPropertySet.setPropertyValue("Border", IBorderValue);
+                                    xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
                                 }
                             }
                         }
                         else
                         {
-                            if (DBControls[n].xPropertySet.getPropertySetInfo().hasPropertyByName("Border"))
+                            if (DBControls[n].xPropertySet.getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_BORDER))
                             {
-                                DBControls[n].xPropertySet.setPropertyValue("Border", IBorderValue);
+                                DBControls[n].xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
                             }
                         }
                     }
@@ -331,7 +331,7 @@ public class StyleApplier
         int index = JavaTools.FieldInList(_sDataList, _sHeader);
         if (index > -1)
         {
-            String sPropName = "";
+            String sPropName = PropertyNames.EMPTY_STRING;
             int iStyleColor;
             while (((sPropName.indexOf("}") < 0) && (index < _sDataList.length - 1)))
             {
@@ -345,8 +345,8 @@ public class StyleApplier
                         sPropValue = sPropValue.trim();
                         if (sPropValue.indexOf("#") > 0)
                         {
-                            sPropValue = JavaTools.replaceSubString(sPropValue, "", ";");
-                            sPropValue = JavaTools.replaceSubString(sPropValue, "", " ");
+                            sPropValue = JavaTools.replaceSubString(sPropValue, PropertyNames.EMPTY_STRING, PropertyNames.SEMI_COLON);
+                            sPropValue = JavaTools.replaceSubString(sPropValue, PropertyNames.EMPTY_STRING, PropertyNames.SPACE);
                             return Integer.decode(sPropValue).intValue();
                         }
                     }
@@ -367,7 +367,7 @@ public class StyleApplier
         try
         {
             // TODO: check different languages in header layouts
-            aStylePaths = FileAccess.getOfficePaths(getMSF(), "Config", "", "");
+            aStylePaths = FileAccess.getOfficePaths(getMSF(), "Config", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
             FileAccess.combinePaths(getMSF(), aStylePaths, "/wizard/form/styles");
 
             String[][] LayoutFiles = FileAccess.getFolderTitles(getMSF(), null, aStylePaths, ".css");
@@ -384,10 +384,10 @@ public class StyleApplier
     private String getStylePath()
         {
 // TODO: umstellen auf mehrere Pfade
-            String StylesPath = "";
+            String StylesPath = PropertyNames.EMPTY_STRING;
             try
             {
-                StylesPath = FileAccess.getOfficePath(xMSF, "Config", "", "");
+                StylesPath = FileAccess.getOfficePath(xMSF, "Config", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
                 StylesPath = FileAccess.combinePaths(xMSF, StylesPath, "/wizard/form/styles");
             }
             catch (NoValidPathException e)
@@ -439,7 +439,7 @@ public class StyleApplier
             for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
             {
                 FormDocument.ControlForm curControlForm = ((FormDocument.ControlForm) curFormDocument.oControlForms.get(m));
-                if (curControlForm.getArrangemode() == FormWizard.SOGRID)
+                if (curControlForm.getArrangemode() == FormWizard.AS_GRID)
                 {
                     if (_iStyleColors[SOLABELTEXTCOLOR] > -1)
                     {

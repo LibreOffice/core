@@ -142,8 +142,7 @@ public class FieldColumn
      */
     private String getOnlyFieldName(String _DisplayFieldName, String _CommandName)
     {
-        final String sName = _DisplayFieldName.substring(_CommandName.length() + 1, _DisplayFieldName.length());
-        return sName;
+        return _DisplayFieldName.substring(_CommandName.length() + 1, _DisplayFieldName.length());
     }
 
     public static String composeDisplayFieldName(String _sCommandName, String _sFieldName)
@@ -155,12 +154,12 @@ public class FieldColumn
     {
         try
         {
-            m_xColPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xColumns.getByName(m_sFieldName));
+            m_xColPropertySet = UnoRuntime.queryInterface(XPropertySet.class, _xColumns.getByName(m_sFieldName));
             ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), m_sFieldName) + 1;
             m_nFieldType = AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Type"));
             getTyperelatedFieldData();
 
-             if (bFormatKeysInitialized == false)
+             if (!bFormatKeysInitialized)
              {
                 final NumberFormatter aNumberFormatter = oCommandMetaData.getNumberFormatter();
 
@@ -393,67 +392,67 @@ public class FieldColumn
         {
             case DataType.BIT: // ==  -7;
             case DataType.BOOLEAN:
-                DefaultValue = (Object) Integer.valueOf("1");
+                DefaultValue = Integer.valueOf("1");
                 break;
 
             case DataType.TINYINT: // ==  -6;
-                DefaultValue = (Object) Integer.valueOf("98");
+                DefaultValue = Integer.valueOf("98");
                 break;
 
             case DataType.SMALLINT: // ==   5;
-                DefaultValue = (Object) Integer.valueOf("987");
+                DefaultValue = Integer.valueOf("987");
                 break;
 
             case DataType.INTEGER: // ==   4;
-                DefaultValue = (Object) Integer.valueOf("9876");
+                DefaultValue = Integer.valueOf("9876");
                 break;
 
             case DataType.BIGINT: // ==  -5;
-                DefaultValue = (Object) Integer.valueOf("98765");
+                DefaultValue = Integer.valueOf("98765");
                 break;
 
             case DataType.CHAR: // ==   1;
-                DefaultValue = (Object) String.valueOf('x');
+                DefaultValue = String.valueOf('x');
                 break;
 
             case DataType.VARCHAR: // ==  12;
-                DefaultValue = (Object) BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
+                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
                 break;
 
             case DataType.LONGVARCHAR: // ==  -1;
-                DefaultValue = (Object) BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
+                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
                 break;
 
             case DataType.NUMERIC: // ==   2;
-                DefaultValue = (Object) Double.valueOf("9876.5");
+                DefaultValue = Double.valueOf("9876.5");
                 break;
 
             case DataType.DECIMAL: // ==   3;  [mit Nachkommastellen]
-                DefaultValue = (Object) Double.valueOf("9876.5");
+                DefaultValue = Double.valueOf("9876.5");
                 break;
 
             case DataType.FLOAT: // ==   6;
-                DefaultValue = (Object) Double.valueOf("9876.5");
+                DefaultValue = Double.valueOf("9876.5");
                 break;
 
             case DataType.REAL: // ==   7;
-                DefaultValue = (Object) Double.valueOf("9876.5");
+                DefaultValue = Double.valueOf("9876.5");
                 break;
 
             case DataType.DOUBLE: // ==   8;
-                DefaultValue = (Object) Double.valueOf("9876.54");
+                DefaultValue = Double.valueOf("9876.54");
                 break;
 
             case DataType.DATE: // ==  91;
-                DefaultValue = (Object) Double.valueOf("42510");
+                DefaultValue = Double.valueOf("42510");
                 break;
 
             case DataType.TIME: // ==  92;
-                DefaultValue = (Object) Double.valueOf("10");
+                DefaultValue = Double.valueOf("10");
                 break;
 
             case DataType.TIMESTAMP: // ==  93;
-                DefaultValue = (Object) Double.valueOf("5454110");
+                DefaultValue = Double.valueOf("5454110");
                 break;
 
             default:

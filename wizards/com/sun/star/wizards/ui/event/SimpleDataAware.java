@@ -69,7 +69,7 @@ public class SimpleDataAware extends DataAware
     return (Boolean)value;
     else if (value.getClass().isArray())
     return ((short[])value).length != 0 ? Boolean.TRUE : Boolean.FALSE;
-    else if (value.equals("")) return Boolean.FALSE;
+    else if (value.equals(PropertyNames.EMPTY_STRING)) return Boolean.FALSE;
     else return Boolean.TRUE;
     }
 

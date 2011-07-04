@@ -59,7 +59,8 @@ class SearchProgress;
 class TakeProgress;
 class TPGalleryThemeProperties;
 
-typedef ::std::vector< UniString*  > StringList;
+typedef ::std::vector< UniString* > StringList;
+typedef ::std::vector< sal_uLong > TokenList_impl;
 
 // ---------------
 // - FilterEntry -
@@ -137,14 +138,18 @@ private:
 
     TakeProgress*               mpProgress;
     TPGalleryThemeProperties*   mpBrowser;
-    List&                       mrTakenList;
+    TokenList_impl&             mrTakenList;
 
     virtual void SAL_CALL       run();
     virtual void SAL_CALL       onTerminated();
 
 public:
 
-                                TakeThread( TakeProgress* pProgess, TPGalleryThemeProperties* pBrowser, List& rTakenList );
+                                TakeThread(
+                                    TakeProgress* pProgess,
+                                    TPGalleryThemeProperties* pBrowser,
+                                    TokenList_impl& rTakenList
+                                );
     virtual                     ~TakeThread();
 };
 
@@ -160,7 +165,7 @@ private:
     FixedLine           aFLTakeProgress;
     CancelButton        aBtnCancel;
     TakeThread          maTakeThread;
-    List                maTakenList;
+    TokenList_impl      maTakenList;
 
                         DECL_LINK( ClickCancelBtn, void* );
     void                Terminate();

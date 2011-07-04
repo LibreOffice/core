@@ -103,6 +103,14 @@ public interface IReportBuilderLayouter
     public void insertGroupNames(String[] _aGroupFieldNames);
 
     /**
+     * Insert the names of the groups which should be used as sorting, the group names are names out of the field names.
+     *
+     * If a group name is given here, it will not shown in the fields/titles, but must be in the field string list.
+     * @param _aSortFieldNames
+     */
+    public void insertSortingNames(String[][] _aSortFieldNames);
+
+    /**
      * This method redraws the whole layout with all it's content
      */
     public void layout();

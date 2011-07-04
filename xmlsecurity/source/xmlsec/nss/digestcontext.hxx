@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,38 +25,44 @@
  *
  ************************************************************************/
 
-#ifndef _SVGWRITER_HXX
-#define _SVGWRITER_HXX
+#ifndef _DIGESTCONTEXT_HXX
+#define _DIGESTCONTEXT_HXX
 
-#include "svgcom.hxx"
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
-// -------------
-// - SVGWriter -
-// -------------
+#include <cppuhelper/implbase1.hxx>
+#include <osl/mutex.hxx>
 
-class SVGWriter : public NMSP_CPPU::OWeakObject, NMSP_SVG::XSVGWriter
+class ODigestContext : public cppu::WeakImplHelper1< ::com::sun::star::xml::crypto::XDigestContext >
 {
 private:
+    ::osl::Mutex m_aMutex;
 
-    REF( NMSP_LANG::XMultiServiceFactory )  mxFact;
+    PK11Context* m_pContext;
+    sal_Int32 m_nDigestLength;
+    bool m_b1KData;
+    sal_Int32 m_nDigested;
 
-                                            SVGWriter();
+    bool m_bDisposed;
+    bool m_bBroken;
 
 public:
+    ODigestContext( PK11Context* pContext, sal_Int32 nDigestLength, bool b1KData )
+    : m_pContext( pContext )
+    , m_nDigestLength( nDigestLength )
+    , m_b1KData( b1KData )
+    , m_nDigested( 0 )
+    , m_bDisposed( false )
+    , m_bBroken( false )
+    {}
 
-                                            SVGWriter( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr );
-    virtual                                 ~SVGWriter();
+    virtual ~ODigestContext();
 
-    // XInterface
-    virtual ANY SAL_CALL                    queryInterface( const NMSP_UNO::Type & rType ) throw( NMSP_UNO::RuntimeException );
-    virtual void SAL_CALL                   acquire() throw();
-    virtual void SAL_CALL                   release() throw();
 
-    // XSVGWriter
-    virtual void SAL_CALL                   write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHandler,
-                                                   const SEQ( sal_Int8 )& rMtfSeq ) throw( NMSP_UNO::RuntimeException );
+    // XDigestContext
+    virtual void SAL_CALL updateDigest( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
 };
 
 #endif
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

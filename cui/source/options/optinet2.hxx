@@ -53,11 +53,7 @@ class SvtInetOptions;
 #define CACHE_CONTROLS  20
 #define INET_SEARCH     19
 
-#if defined(OS2)
-#define TYPE_CONTROLS  20
-#else
 #define TYPE_CONTROLS  18
-#endif
 
 namespace svx {
     class SecurityOptionsDialog;

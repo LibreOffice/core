@@ -47,7 +47,7 @@ public class RadioDataAware extends DataAware
         radioButtons = new XRadioButton[radioButs.length];
         for (int i = 0; i < radioButs.length; i++)
         {
-            radioButtons[i] = (XRadioButton) UnoRuntime.queryInterface(XRadioButton.class, radioButs[i]);
+            radioButtons[i] = UnoRuntime.queryInterface(XRadioButton.class, radioButs[i]);
         }
     }
 
@@ -89,7 +89,7 @@ public class RadioDataAware extends DataAware
     {
         final RadioDataAware da = new RadioDataAware(data,
                 field
-                ? DataAwareFields.getFieldValueFor(data, dataProp, new Integer(0))
+                ? DataAwareFields.getFieldValueFor(data, dataProp, 0)
                 : new DataAware.PropertyValue(dataProp, data), buttons);
         XItemListener xil = UnoDataAware.itemListener(da, listener);
         for (int i = 0; i < da.radioButtons.length; i++)

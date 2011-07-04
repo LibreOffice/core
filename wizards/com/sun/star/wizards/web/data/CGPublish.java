@@ -27,6 +27,7 @@
 package com.sun.star.wizards.web.data;
 
 import com.sun.star.wizards.common.ConfigGroup;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  *
@@ -82,13 +83,13 @@ public class CGPublish extends ConfigGroup
         catch (Exception e)
         {
             e.printStackTrace();
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
     }
 
     private String ftpURL()
     {
         return "ftp://" + cp_Username +
-                ((password != null && password.length() > 0) ? ":" + password : "") + "@" + cp_URL.substring(7);
+                ((password != null && password.length() > 0) ? ":" + password : PropertyNames.EMPTY_STRING) + "@" + cp_URL.substring(7);
     }
 }

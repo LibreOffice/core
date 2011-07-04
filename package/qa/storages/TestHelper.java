@@ -1434,24 +1434,24 @@ public class TestHelper  {
 
         try
         {
-            byte pData[][] = new byte[1][22];
-            if ( xHeadRawStream.readBytes( pData, 22 ) != 22 )
+            byte pData[][] = new byte[1][38];
+            if ( xHeadRawStream.readBytes( pData, 38 ) != 38 )
             {
                 Error( "Can't read header of encrypted stream '" + sStreamName + "' raw representations!" );
                 return false;
             }
 
-            if ( pData[0][0] != 0x4d || pData[0][1] != 0x47 || pData[0][2] != 0x02 || pData[0][3] != 0x05 )
+            if ( pData[0][0] != 0x4d || pData[0][1] != 0x4d || pData[0][2] != 0x02 || pData[0][3] != 0x05 )
             {
                 Error( "No signature in the header of encrypted stream '" + sStreamName + "' raw representations!" );
                 return false;
             }
 
             int nVariableHeaderLength =
-                        ( pData[0][14] + pData[0][15] * 0x100 ) // salt length
-                        + ( pData[0][16] + pData[0][17] * 0x100 ) // iv length
-                        + ( pData[0][18] + pData[0][19] * 0x100 ) // digest length
-                        + ( pData[0][20] + pData[0][21] * 0x100 ); // mediatype length
+                        ( pData[0][30] + pData[0][31] * 0x100 ) // salt length
+                        + ( pData[0][32] + pData[0][33] * 0x100 ) // iv length
+                        + ( pData[0][34] + pData[0][35] * 0x100 ) // digest length
+                        + ( pData[0][36] + pData[0][37] * 0x100 ); // mediatype length
 
             xHeadRawStream.skipBytes( nVariableHeaderLength );
 
@@ -1467,7 +1467,7 @@ public class TestHelper  {
 
                 if ( nRead1 != nRead2 )
                 {
-                    Error( "The encrypted stream '" + sStreamName + "' raw representations have different size!" );
+                    Error( "The encrypted stream '" + sStreamName + "' raw representations have different size! nRead1 - nRead2 = " + ( new Integer( nRead1 - nRead2 ) ).toString() );
                     return false;
                 }
 

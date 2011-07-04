@@ -124,66 +124,66 @@ SfxTabPage* OfaHtmlTabPage::Create( Window* pParent,
 
 sal_Bool OfaHtmlTabPage::FillItemSet( SfxItemSet& )
 {
-    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
+    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     if(aSize1NF.GetSavedValue() != aSize1NF.GetText())
-        pHtmlOpt->SetFontSize(0, (sal_uInt16)aSize1NF.GetValue());
+        rHtmlOpt.SetFontSize(0, (sal_uInt16)aSize1NF.GetValue());
     if(aSize2NF.GetSavedValue() != aSize2NF.GetText())
-        pHtmlOpt->SetFontSize(1, (sal_uInt16)aSize2NF.GetValue());
+        rHtmlOpt.SetFontSize(1, (sal_uInt16)aSize2NF.GetValue());
     if(aSize3NF.GetSavedValue() != aSize3NF.GetText())
-        pHtmlOpt->SetFontSize(2, (sal_uInt16)aSize3NF.GetValue());
+        rHtmlOpt.SetFontSize(2, (sal_uInt16)aSize3NF.GetValue());
     if(aSize4NF.GetSavedValue() != aSize4NF.GetText())
-        pHtmlOpt->SetFontSize(3, (sal_uInt16)aSize4NF.GetValue());
+        rHtmlOpt.SetFontSize(3, (sal_uInt16)aSize4NF.GetValue());
     if(aSize5NF.GetSavedValue() != aSize5NF.GetText())
-        pHtmlOpt->SetFontSize(4, (sal_uInt16)aSize5NF.GetValue());
+        rHtmlOpt.SetFontSize(4, (sal_uInt16)aSize5NF.GetValue());
     if(aSize6NF.GetSavedValue() != aSize6NF.GetText())
-        pHtmlOpt->SetFontSize(5, (sal_uInt16)aSize6NF.GetValue());
+        rHtmlOpt.SetFontSize(5, (sal_uInt16)aSize6NF.GetValue());
     if(aSize7NF.GetSavedValue() != aSize7NF.GetText())
-        pHtmlOpt->SetFontSize(6, (sal_uInt16)aSize7NF.GetValue());
+        rHtmlOpt.SetFontSize(6, (sal_uInt16)aSize7NF.GetValue());
 
     if(aNumbersEnglishUSCB.IsChecked() != aNumbersEnglishUSCB.GetSavedValue())
-        pHtmlOpt->SetNumbersEnglishUS(aNumbersEnglishUSCB.IsChecked());
+        rHtmlOpt.SetNumbersEnglishUS(aNumbersEnglishUSCB.IsChecked());
 
     if(aUnknownTagCB.IsChecked() != aUnknownTagCB.GetSavedValue())
-        pHtmlOpt->SetImportUnknown(aUnknownTagCB.IsChecked());
+        rHtmlOpt.SetImportUnknown(aUnknownTagCB.IsChecked());
 
     if(aIgnoreFontNamesCB.IsChecked() != aIgnoreFontNamesCB.GetSavedValue())
-        pHtmlOpt->SetIgnoreFontFamily(aIgnoreFontNamesCB.IsChecked());
+        rHtmlOpt.SetIgnoreFontFamily(aIgnoreFontNamesCB.IsChecked());
 
     if(aExportLB.GetSelectEntryPos() != aExportLB.GetSavedValue())
-        pHtmlOpt->SetExportMode(aPosToExportArr[aExportLB.GetSelectEntryPos()]);
+        rHtmlOpt.SetExportMode(aPosToExportArr[aExportLB.GetSelectEntryPos()]);
 
     if(aStarBasicCB.IsChecked() != aStarBasicCB.GetSavedValue())
-        pHtmlOpt->SetStarBasic(aStarBasicCB.IsChecked());
+        rHtmlOpt.SetStarBasic(aStarBasicCB.IsChecked());
 
     if(aStarBasicWarningCB.IsChecked() != aStarBasicWarningCB.GetSavedValue())
-        pHtmlOpt->SetStarBasicWarning(aStarBasicWarningCB.IsChecked());
+        rHtmlOpt.SetStarBasicWarning(aStarBasicWarningCB.IsChecked());
 
     if(aSaveGrfLocalCB.IsChecked() != aSaveGrfLocalCB.GetSavedValue())
-        pHtmlOpt->SetSaveGraphicsLocal(aSaveGrfLocalCB.IsChecked());
+        rHtmlOpt.SetSaveGraphicsLocal(aSaveGrfLocalCB.IsChecked());
 
     if(aPrintExtensionCB.IsChecked() != aPrintExtensionCB.GetSavedValue())
-        pHtmlOpt->SetPrintLayoutExtension(aPrintExtensionCB.IsChecked());
+        rHtmlOpt.SetPrintLayoutExtension(aPrintExtensionCB.IsChecked());
 
-    if( aCharSetLB.GetSelectTextEncoding() != pHtmlOpt->GetTextEncoding() )
-        pHtmlOpt->SetTextEncoding( aCharSetLB.GetSelectTextEncoding() );
+    if( aCharSetLB.GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )
+        rHtmlOpt.SetTextEncoding( aCharSetLB.GetSelectTextEncoding() );
 
     return sal_False;
 }
 
 void OfaHtmlTabPage::Reset( const SfxItemSet& )
 {
-    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-    aSize1NF.SetValue(pHtmlOpt->GetFontSize(0));
-    aSize2NF.SetValue(pHtmlOpt->GetFontSize(1));
-    aSize3NF.SetValue(pHtmlOpt->GetFontSize(2));
-    aSize4NF.SetValue(pHtmlOpt->GetFontSize(3));
-    aSize5NF.SetValue(pHtmlOpt->GetFontSize(4));
-    aSize6NF.SetValue(pHtmlOpt->GetFontSize(5));
-    aSize7NF.SetValue(pHtmlOpt->GetFontSize(6));
-    aNumbersEnglishUSCB.Check(pHtmlOpt->IsNumbersEnglishUS());
-    aUnknownTagCB.Check(pHtmlOpt->IsImportUnknown());
-    aIgnoreFontNamesCB.Check(pHtmlOpt->IsIgnoreFontFamily());
-    sal_uInt16 nExport = pHtmlOpt->GetExportMode();
+    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+    aSize1NF.SetValue(rHtmlOpt.GetFontSize(0));
+    aSize2NF.SetValue(rHtmlOpt.GetFontSize(1));
+    aSize3NF.SetValue(rHtmlOpt.GetFontSize(2));
+    aSize4NF.SetValue(rHtmlOpt.GetFontSize(3));
+    aSize5NF.SetValue(rHtmlOpt.GetFontSize(4));
+    aSize6NF.SetValue(rHtmlOpt.GetFontSize(5));
+    aSize7NF.SetValue(rHtmlOpt.GetFontSize(6));
+    aNumbersEnglishUSCB.Check(rHtmlOpt.IsNumbersEnglishUS());
+    aUnknownTagCB.Check(rHtmlOpt.IsImportUnknown());
+    aIgnoreFontNamesCB.Check(rHtmlOpt.IsIgnoreFontFamily());
+    sal_uInt16 nExport = rHtmlOpt.GetExportMode();
     if( nExport >= SAL_N_ELEMENTS( aExportToPosArr ) )
         nExport = 4;    // default for bad config entry is NS 4.0
     sal_uInt16 nPosArr = aExportToPosArr[ nExport ];
@@ -194,11 +194,11 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
 
     ExportHdl_Impl(&aExportLB);
 
-    aStarBasicCB .Check(pHtmlOpt->IsStarBasic());
-    aStarBasicWarningCB .Check(pHtmlOpt->IsStarBasicWarning());
+    aStarBasicCB .Check(rHtmlOpt.IsStarBasic());
+    aStarBasicWarningCB .Check(rHtmlOpt.IsStarBasicWarning());
     aStarBasicWarningCB.Enable(!aStarBasicCB.IsChecked());
-    aSaveGrfLocalCB.Check(pHtmlOpt->IsSaveGraphicsLocal());
-    aPrintExtensionCB.Check(pHtmlOpt->IsPrintLayoutExtension());
+    aSaveGrfLocalCB.Check(rHtmlOpt.IsSaveGraphicsLocal());
+    aPrintExtensionCB.Check(rHtmlOpt.IsPrintLayoutExtension());
 
     aPrintExtensionCB.SaveValue();
     aStarBasicCB .SaveValue();
@@ -215,9 +215,9 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
     aUnknownTagCB.SaveValue();
     aIgnoreFontNamesCB.SaveValue();
 
-    if( !pHtmlOpt->IsDefaultTextEncoding() &&
-        aCharSetLB.GetSelectTextEncoding() != pHtmlOpt->GetTextEncoding() )
-        aCharSetLB.SelectTextEncoding( pHtmlOpt->GetTextEncoding() );
+    if( !rHtmlOpt.IsDefaultTextEncoding() &&
+        aCharSetLB.GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )
+        aCharSetLB.SelectTextEncoding( rHtmlOpt.GetTextEncoding() );
 }
 
 IMPL_LINK(OfaHtmlTabPage, ExportHdl_Impl, ListBox*, pBox)

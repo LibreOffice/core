@@ -32,6 +32,8 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/xml/crypto/XCipherContext.hpp>
+
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 #include <Inflater.hxx>
@@ -44,7 +46,6 @@
 #define UNBUFF_STREAM_WRAPPEDRAW    2
 
 class EncryptionData;
-typedef void* rtlCipher;
 class XUnbufferedStream : public cppu::WeakImplHelper1
 <
     com::sun::star::io::XInputStream
@@ -57,8 +58,9 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > mxZipSeek;
     com::sun::star::uno::Sequence < sal_Int8 > maCompBuffer, maHeader;
     ZipEntry maEntry;
-    rtl::Reference < EncryptionData > mxData;
-    rtlCipher maCipher;
+    ::rtl::Reference< EncryptionData > mxData;
+    sal_Int32 mnBlockSize;
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
     ZipUtils::Inflater maInflater;
     sal_Bool mbRawStream, mbWrappedRaw, mbFinished;
     sal_Int16 mnHeaderToRead;
@@ -68,18 +70,21 @@ protected:
 
 public:
     XUnbufferedStream(
+                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
                  SotMutexHolderRef aMutexHolder,
                  ZipEntry & rEntry,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
-                 const rtl::Reference < EncryptionData > &rData,
+                 const ::rtl::Reference< EncryptionData >& rData,
                  sal_Int8 nStreamMode,
                  sal_Bool bIsEncrypted,
                  const ::rtl::OUString& aMediaType,
                  sal_Bool bRecoveryMode );
 
     // allows to read package raw stream
-    XUnbufferedStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xRawStream,
-                 const rtl::Reference < EncryptionData > &rData );
+    XUnbufferedStream(
+                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                 const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xRawStream,
+                 const ::rtl::Reference< EncryptionData >& rData );
 
 
     virtual ~XUnbufferedStream();

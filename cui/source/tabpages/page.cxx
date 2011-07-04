@@ -560,11 +560,6 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
     bool bOrientationSupport =
         pImpl->mpDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
-#ifdef OS2
-    // unter OS/2 wird bei HasSupport() immer sal_True returned
-    // aber nur als Dummy, deshalb FALSE
-    bOrientationSupport = sal_False;
-#endif
 
     if ( !bOrientationSupport &&
          aPaperSize.Width() > aPaperSize.Height() )
@@ -1645,13 +1640,13 @@ IMPL_LINK_INLINE_END( SvxPageDescPage, CenterHdl_Impl, CheckBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-void SvxPageDescPage::SetCollectionList(const List* pList)
+void SvxPageDescPage::SetCollectionList(const std::vector<String> &aList)
 {
-    sStandardRegister = *(String*)pList->GetObject(0);
-    for( sal_uInt16 i = 1; i < pList->Count(); i++   )
-    {
-        aRegisterLB.InsertEntry(*(String*)pList->GetObject(i));
-    }
+    OSL_ENSURE(!aList.empty(), "Empty string list");
+
+    sStandardRegister = aList[0];
+    for( sal_uInt16 i = 1; i < aList.size(); i++   )
+        aRegisterLB.InsertEntry(aList[i]);
 
     aRegisterCB  .Show();
     aRegisterFT  .Show();

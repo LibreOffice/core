@@ -105,7 +105,6 @@ protected:
     /*
      * the status of the operation
      */
-    //bool      m_bOperationSucceed;
     com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
 
     /*

@@ -299,12 +299,6 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry = pairIssuer.first;
     aDetails = pairIssuer.second;
     InsertElement( String( XMLSEC_RES( STR_ISSUER ) ), aLBEntry, aDetails );
-    /*
-    aSeq = xCert->getIssuerUniqueID();
-    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
-    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( XMLSEC_RES( STR_ISSUER_ID ) ), aLBEntry, aDetails, true );
-    */
 
     DateTime aDateTime;
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
@@ -323,12 +317,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry = pairSubject.first;
     aDetails = pairSubject.second;
     InsertElement( String( XMLSEC_RES( STR_SUBJECT ) ), aLBEntry, aDetails );
-    /*
-    aSeq = xCert->getSubjectUniqueID();
-    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
-    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( XMLSEC_RES( STR_SUBJECT_ID ) ), aLBEntry, aDetails, true );
-    */
+
     aLBEntry = aDetails = xCert->getSubjectPublicKeyAlgorithm();
     InsertElement( String( XMLSEC_RES( STR_SUBJECT_PUBKEY_ALGO ) ), aLBEntry, aDetails );
     aSeq = xCert->getSubjectPublicKeyValue();

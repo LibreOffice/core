@@ -66,7 +66,7 @@ public class DataEntrySetter
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTNEWDATAONLY", sNewDataOnly, new Integer(98), new Integer(25), IDataStep, new Short(curtabindex++), new Integer(195)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTNEWDATAONLY", sNewDataOnly, 98, 25, IDataStep, new Short(curtabindex++), 195
                 });
 
         optDisplayAllData = CurUnoDialog.insertRadioButton("optDisplayAllData", "toggleCheckBoxes", this,
@@ -76,7 +76,7 @@ public class DataEntrySetter
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTDISPLAYALLDATA", sDisplayAllData, new Integer(98), new Integer(50), new Short((short) 1), IDataStep, new Short(curtabindex++), new Integer(197)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTDISPLAYALLDATA", sDisplayAllData, 98, 50, new Short((short) 1), IDataStep, new Short(curtabindex++), 197
                 });
         chknomodification = CurUnoDialog.insertCheckBox("chknomodification", null,
                 new String[]
@@ -85,7 +85,7 @@ public class DataEntrySetter
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_CHKNOMODIFICATION", sNoModification, new Integer(108), new Integer(62), new Short((short) 0), IDataStep, new Short(curtabindex++), new Integer(189)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_CHKNOMODIFICATION", sNoModification, 108, 62, new Short((short) 0), IDataStep, new Short(curtabindex++), 189
                 });
         chknodeletion = CurUnoDialog.insertCheckBox("chknodeletion", null,
                 new String[]
@@ -94,7 +94,7 @@ public class DataEntrySetter
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_CHKNODELETION", sNoDeletion, new Integer(108), new Integer(74), new Short((short) 0), IDataStep, new Short(curtabindex++), new Integer(189)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_CHKNODELETION", sNoDeletion, 108, 74, new Short((short) 0), IDataStep, new Short(curtabindex++), 189
                 });
         chknoaddition = CurUnoDialog.insertCheckBox("chknoaddition", null,
                 new String[]
@@ -103,7 +103,7 @@ public class DataEntrySetter
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_CHKNOADDITION", sNoAddition, new Integer(108), new Integer(86), new Short((short) 0), IDataStep, new Short(curtabindex++), new Integer(191)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_CHKNOADDITION", sNoAddition, 108, 86, new Short((short) 0), IDataStep, new Short(curtabindex++), 191
                 });
         CurUnoDialog.insertLabel("lbldontdisplayExistingData",
                 new String[]
@@ -112,7 +112,7 @@ public class DataEntrySetter
                 },
                 new Object[]
                 {
-                    new Integer(8), sdontdisplayExistingData, new Integer(108), new Integer(33), IDataStep, new Short(curtabindex++), new Integer(134)
+                    8, sdontdisplayExistingData, 108, 33, IDataStep, new Short(curtabindex++), 134
                 });
     }
 
@@ -125,14 +125,14 @@ public class DataEntrySetter
             boolean bAllowUpdates = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknomodification), PropertyNames.PROPERTY_STATE)).shortValue()) != 1;
             boolean bAllowDeletes = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknodeletion), PropertyNames.PROPERTY_STATE)).shortValue()) != 1;
             boolean bAllowInserts = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknoaddition), PropertyNames.PROPERTY_STATE)).shortValue()) != 1;
-            retProperties[0] = Properties.createProperty("AllowUpdates", new Boolean(bAllowUpdates));
-            retProperties[1] = Properties.createProperty("AllowDeletes", new Boolean(bAllowDeletes));
-            retProperties[2] = Properties.createProperty("AllowInserts", new Boolean(bAllowInserts));
+            retProperties[0] = Properties.createProperty("AllowUpdates", Boolean.valueOf(bAllowUpdates));
+            retProperties[1] = Properties.createProperty("AllowDeletes", Boolean.valueOf(bAllowDeletes));
+            retProperties[2] = Properties.createProperty("AllowInserts", Boolean.valueOf(bAllowInserts));
         }
         else
         {
             retProperties = new PropertyValue[1];
-            retProperties[0] = Properties.createProperty("IgnoreResult", new Boolean(true));
+            retProperties[0] = Properties.createProperty("IgnoreResult", Boolean.TRUE);
         }
         return retProperties;
 
@@ -141,8 +141,8 @@ public class DataEntrySetter
     public void toggleCheckBoxes()
     {
         boolean bdisplayalldata = optDisplayAllData.getState();
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknomodification), PropertyNames.PROPERTY_ENABLED, new Boolean(bdisplayalldata));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknodeletion), PropertyNames.PROPERTY_ENABLED, new Boolean(bdisplayalldata));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknoaddition), PropertyNames.PROPERTY_ENABLED, new Boolean(bdisplayalldata));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chknomodification), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdisplayalldata));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chknodeletion), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdisplayalldata));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chknoaddition), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdisplayalldata));
     }
 }

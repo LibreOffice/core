@@ -29,11 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
 
-#ifdef OS2
-#define INCL_DOS
-#include <svpm.h>
-#endif
-
 #include "sysdir_win.hxx"
 #include "registry_win.hxx"
 #include "sttresid.hxx"
@@ -174,7 +169,7 @@ void ControlDef::Write( SvStream &aStream )
     if ( pData->aUId.HasString() )
         aStream.WriteByteString( pData->aUId.GetStr(), RTL_TEXTENCODING_UTF8 );
     else
-        aStream << static_cast<comm_ULONG>(pData->aUId.GetNum()); //GetNum() sal_uLong != comm_ULONG on 64bit
+        aStream << static_cast<comm_UINT32>(pData->aUId.GetNum()); //GetNum() sal_uLong != comm_UINT32 on 64bit
     if ( pSons )
         for ( sal_uInt16 i = 0 ; pSons->Count() > i ; i++ )
             ((ControlDef*)(*pSons)[i])->Write(aStream);
@@ -445,8 +440,6 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "15" );  // Linux x86-64
 #elif defined LINUX && defined SPARC
     abGP.Append( "16" );  // Linux SPARC
-#elif defined OS2
-    abGP.Append( "17" );
 #elif defined LINUX && defined MIPS
     abGP.Append( "18" );  // Linux MIPS
 #elif defined LINUX && defined ARM
@@ -479,6 +472,68 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     GetHostConfig();
     GetTTPortConfig();
     GetUnoPortConfig();
+
+    aConf.SetGroup("Crashreporter");
+
+    String aUP;
+    GETSET( aUP, "UseProxy", "false" );
+    String aPS;
+    GETSET( aPS, "ProxyServer", "" );
+    String aPP;
+    GETSET( aPP, "ProxyPort", "" );
+    String aAC;
+    GETSET( aAC, "AllowContact", "false" );
+    String aRA;
+    GETSET( aRA, "ReturnAddress", "" );
+
+    OUString sPath;
+    if( osl_getExecutableFile( (rtl_uString**)&sPath ) == osl_Process_E_None)
+    {
+        sPath = sPath.copy(7); // strip file://
+
+        int i = sPath.lastIndexOf('/');
+        if (i >= 0)
+            i = sPath.lastIndexOf('/', i-1 );
+
+        if (i >= 0)
+        {
+            sPath = sPath.copy(0, i);
+            ByteString bsPath( sPath.getStr(), sPath.getLength(),
+                               RTL_TEXTENCODING_UTF8 );
+
+            aConf.SetGroup( "OOoProgramDir" );
+            String aOPD;
+            // testtool is installed in Basis3.x/program/ dir nowadays
+            bsPath += "/../program";
+            GETSET( aOPD, "Current", bsPath);
+
+            ByteString aSrcRoot(getenv("SRC_ROOT"));
+            aConf.SetGroup( "_profile_Default" );
+            if (aSrcRoot.Len())
+            {
+                String aPBD;
+                aSrcRoot += "/testautomation";
+                GETSET( aPBD, "BaseDir", aSrcRoot );
+
+                String aPHD;
+                aSrcRoot += "/global/hid";
+                GETSET( aPHD, "HIDDir", aSrcRoot );
+            }
+            else
+            {
+                String aPBD;
+                bsPath += "/qatesttool";
+                GETSET( aPBD, "BaseDir", bsPath );
+
+                String aPHD;
+                bsPath += "/global/hid";
+                GETSET( aPHD, "HIDDir", bsPath );
+            }
+
+            String aLD;
+            GETSET( aLD, "LogBaseDir", ByteString( "/tmp" ) );
+        }
+    }
 }
 
 #define MAKE_TT_KEYWORD( cName, aType, aResultType, nID )                       \
@@ -1142,9 +1197,6 @@ void TestToolObj::WaitForAnswer ()
         while ( !bReturnOK && aTimer.IsActive() && pCommunicationManager->IsCommunicationRunning()
                 && aRun.IsValid() && aRun.IsRun() )
         {
-            #ifdef OS2
-            DosSleep(100);
-            #endif
             GetpApp()->Yield();
             if ( BasicRuntimeAccess::HasRuntime() )
                 aRun = BasicRuntimeAccess::GetRuntime();
@@ -1296,9 +1348,6 @@ void TestToolObj::EndBlock()
             aTimer.Start();
             while ( aTimer.IsActive() && pCommunicationManager->IsCommunicationRunning() )
             {
-                #ifdef OS2
-                DosSleep(100);
-                #endif
                 GetpApp()->Yield();
             }
         }
@@ -1414,7 +1463,7 @@ sal_Bool TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pC
         }
         else
         {
-            comm_ULONG nUId;
+            comm_UINT32 nUId;
             aStream >> nUId;
             aUId = rtl::OString();// nUId;
         }
@@ -2306,14 +2355,6 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             osl::FileBase::getSystemPathFromFileURL( aUrl, aPath );
                             pVar->PutString( String( aPath ) );
                         }
-#elif defined OS2
-                        {
-                            char* etc = getenv("ETC");
-                            if (etc)
-                               pVar->PutString( CUniString( etc ) );
-                            else
-                               pVar->PutString( CUniString( "/etc" ) );
-                        }
 #else
 #if UNX
                         pVar->PutString( CUniString( "/etc" ) );
@@ -2641,7 +2682,8 @@ void TestToolObj::DebugFindNoErrors( sal_Bool bDebugFindNoErrors )
 
 SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 {
-    if ( BasicRuntimeAccess::IsRunInit() )            // wegen Find im "Global" Befehl des Basic
+    if ( BasicRuntimeAccess::IsRunInit()
+    || ( aStr == String( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) ) ) )            // wegen Find im "Global" Befehl des Basic
         return NULL;
 
     SbxVariableRef Old = SbxObject::Find(aStr, aType );
@@ -3189,7 +3231,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
             }
             else
             {
-                comm_ULONG nUId;
+                comm_UINT32 nUId;
                 pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
                 // FIXME: HELPID
                 #if 0
@@ -3199,14 +3241,14 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
             pRetStream->Read(nParams);
 
             sal_uInt16 nNr1 = 0;
-            comm_ULONG nLNr1 = 0;
+            comm_UINT32 nLNr1 = 0;
             String aString1;
             sal_Bool bBool1 = sal_False;
             SbxValueRef xValue1 = new SbxValue;
 
-            if( nParams & PARAM_USHORT_1 )
+            if( nParams & PARAM_UINT16_1 )
                 pRetStream->Read( nNr1 );
-            if( nParams & PARAM_ULONG_1 )
+            if( nParams & PARAM_UINT32_1 )
                 pRetStream->Read( nLNr1 );
             if( nParams & PARAM_STR_1 )
             {
@@ -3243,14 +3285,14 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                     {
                         if ( aNextReturnId.equals( aUId ) )
                         {
-                            if( nParams & PARAM_ULONG_1 )   // FIXME this is to allow negative numbers, hoping that no large numbers are interpreted wrong. should have new PARAM_LONG_1 instead
+                            if( nParams & PARAM_UINT32_1 )   // FIXME this is to allow negative numbers, hoping that no large numbers are interpreted wrong. should have new PARAM_LONG_1 instead
                             {
                                 if ( nLNr1 > 0x7fffffff )
                                     pImpl->pNextReturn->PutLong( long(nLNr1 - 0xffffffff) -1 );
                                 else
                                     pImpl->pNextReturn->PutULong( nLNr1 );
                             }
-                            if( nParams & PARAM_USHORT_1 )      pImpl->pNextReturn->PutUShort( nNr1 );
+                            if( nParams & PARAM_UINT16_1 )      pImpl->pNextReturn->PutUShort( nNr1 );
                             if( nParams & PARAM_STR_1 )         pImpl->pNextReturn->PutString( aString1 );
                             if( nParams & PARAM_BOOL_1 )        pImpl->pNextReturn->PutBool( bBool1 );
                             if( nParams & PARAM_SBXVALUE_1 )    // FIXME: allow generic datatype
@@ -3389,7 +3431,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                 aStrm.Close();
                             }
                         }
-                        if ( nParams & PARAM_ULONG_1 )
+                        if ( nParams & PARAM_UINT32_1 )
                         {
                             switch ( nUId )
                             {
@@ -3553,7 +3595,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         }
 
                         aULongNames.Erase();
-                        if( (nParams & PARAM_ULONG_1) && (nNr1 & M_RET_NUM_CONTROL) )
+                        if( (nParams & PARAM_UINT32_1) && (nNr1 & M_RET_NUM_CONTROL) )
                         {
                             if ( m_pReverseControls )
                             {
@@ -3750,7 +3792,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                             }
                             aCommand.AppendAscii( "\"" );
                         }
-                        if( nParams & PARAM_ULONG_1 )
+                        if( nParams & PARAM_UINT32_1 )
                         {
                             if ( bWasParam )
                                 aCommand.AppendAscii( ", " );
@@ -3806,7 +3848,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
             }
             else
             {
-                comm_ULONG nUId;
+                comm_UINT32 nUId;
                 pRetStream->Read( nUId );         // bei Sequence einfach die Sequence
                 // FIXME: HELPID
                 #if 0
