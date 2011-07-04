@@ -43,13 +43,22 @@ if ($Dest =~ /--help/ || @ARGV < 1) {
 
 foreach $File (@ARGV) {
     my $string;
-    my $normalized_file = $File;
-    $normalized_file =~ s/\.so\.\d+/.so/;
-    open (GCCOut, "LANGUAGE=C LC_ALL=C $cc -print-file-name=$normalized_file|") || die "Failed to exec $cc -print-file-name=$normalized_file $!";
-    $string=<GCCOut>;
-    chomp ($string);
-    $SrcAndDest{$string} = "$Dest/$File";
-    close (GCCOut);
+
+    my $NormFile = $File;
+    $NormFile =~ s/\.so\.\d+/.so/;
+    @search = ($File, $NormFile);
+
+    foreach $entry (@search) {
+        open (GCCOut, "LANGUAGE=C LC_ALL=C $cc -print-file-name=$entry|") ||
+            next;
+        $string=<GCCOut>;
+        chomp ($string);
+        close (GCCOut);
+        if (-e $string) {
+            $SrcAndDest{$string} = "$Dest/$File";
+            last;
+        }
+    }
 }
 
 while (($Src, $FullDest) = each %SrcAndDest) {
