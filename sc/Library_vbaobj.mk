@@ -123,7 +123,6 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
         sc/source/ui/vba/vbaquerytable \
         sc/source/ui/vba/vbarange \
         sc/source/ui/vba/vbasheetobject \
-        sc/source/ui/vba/vbasheetobjects \
         sc/source/ui/vba/vbastyle \
         sc/source/ui/vba/vbastyles \
         sc/source/ui/vba/vbatextboxshape \
@@ -137,6 +136,20 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
         sc/source/ui/vba/vbaworksheets \
         sc/source/ui/vba/vbawsfunction \
 ))
+
+#32bit Fedora gcc 4.6.1 fails to link sc without this
+#TO-DO: make standalone reproducer for this and file
+#gcc bug
+ifeq ($(strip $(COM)),GCC)
+$(eval $(call gb_Library_add_cxxobjects,vbaobj,\
+        sc/source/ui/vba/vbasheetobjects \
+        , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+))
+else
+$(eval $(call gb_Library_add_exception_objects,vbaobj,\
+    sc/source/ui/vba/vbasheetobjects \
+))
+endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,vbaobj,\
