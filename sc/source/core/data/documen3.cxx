@@ -1046,12 +1046,13 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const 
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
-    for (SCTAB i=0; i < static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i])
-            if (rMark.GetTableSelect(i))
-                maTabs[i]->Fill(nCol1, nRow1, nCol2, nRow2,
-                                nFillCount, eFillDir, eFillCmd, eFillDateCmd,
-                                nStepValue, nMaxValue);
+    SCTAB nMax = maTabs.size();
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if (maTabs[*itr])
+            maTabs[*itr]->Fill(nCol1, nRow1, nCol2, nRow2,
+                            nFillCount, eFillDir, eFillCmd, eFillDateCmd,
+                            nStepValue, nMaxValue);
 }
 
 String ScDocument::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY )
@@ -1068,10 +1069,11 @@ void ScDocument::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
 {
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartRow, nEndRow );
-    for (SCTAB i=0; i < static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i])
-            if (rMark.GetTableSelect(i))
-                maTabs[i]->AutoFormat( nStartCol, nStartRow, nEndCol, nEndRow, nFormatNo );
+    SCTAB nMax = maTabs.size();
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if (maTabs[*itr])
+            maTabs[*itr]->AutoFormat( nStartCol, nStartRow, nEndCol, nEndRow, nFormatNo );
 }
 
 void ScDocument::GetAutoFormatData(SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
@@ -1195,16 +1197,15 @@ sal_Bool ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
         if ( nCommand == SVX_SEARCHCMD_FIND_ALL ||
              nCommand == SVX_SEARCHCMD_REPLACE_ALL )
         {
-            for (nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
-                if (maTabs[nTab])
+            SCTAB nMax = maTabs.size();
+            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+            for (; itr != itrEnd && *itr < nMax; ++itr)
+                if (maTabs[*itr])
                 {
-                    if (rMark.GetTableSelect(nTab))
-                    {
-                        nCol = 0;
-                        nRow = 0;
-                        bFound |= maTabs[nTab]->SearchAndReplace(
-                                    rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc );
-                    }
+                    nCol = 0;
+                    nRow = 0;
+                    bFound |= maTabs[*itr]->SearchAndReplace(
+                                rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc );
                 }
 
             //  Markierung wird innen schon komplett gesetzt

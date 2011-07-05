@@ -276,9 +276,10 @@ void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
         return;
 
     SCTAB nTabCount = GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-        if (maTabs[nTab] && rMark.GetTableSelect(nTab))
-            pDrawLayer->DeleteObjectsInArea( nTab, nCol1, nRow1, nCol2, nRow2 );
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nTabCount; ++itr)
+        if (maTabs[*itr])
+            pDrawLayer->DeleteObjectsInArea( *itr, nCol1, nRow1, nCol2, nRow2 );
 }
 
 void ScDocument::DeleteObjectsInSelection( const ScMarkData& rMark )

@@ -1040,7 +1040,7 @@ void lcl_GetFirstTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, const ScM
             if (pTabMark->GetTableSelect(nTab))
             {
                 // find first range of consecutive selected sheets
-                rTabRangeStart = nTab;
+                rTabRangeStart = pTabMark->GetFirstSelected();
                 while ( nTab+1 < aMaxTab && pTabMark->GetTableSelect(nTab+1) )
                     ++nTab;
                 rTabRangeEnd = nTab;
@@ -2210,10 +2210,11 @@ void ScDocument::UpdateRangeNamesInFormulas(
         {
             do
             {
-                for (SCTAB k = 0; k < static_cast<SCTAB>(maTabs.size()); k++)
+                ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+                for (; itr != itrEnd; ++itr)
                 {
-                    if ( maTabs[k] && rMark.GetTableSelect(k) )
-                        maTabs[k]->ReplaceRangeNamesInUse(nC1, nR1,
+                    if ( maTabs[*itr] )
+                        maTabs[*itr]->ReplaceRangeNamesInUse(nC1, nR1,
                             nC2, nR2, rRangeNames.maRangeMap);
                 }
                 nC1 = nC2 + 1;
@@ -2256,10 +2257,11 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
 {
     if (nInsFlag & IDF_CONTENTS)
     {
-        for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
-            if (maTabs[i])
-                if (rMark.GetTableSelect(i))
-                    maTabs[i]->StartListeningInArea( nCol1, nRow1, nCol2, nRow2 );
+        SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd && *itr < nMax; ++itr)
+            if (maTabs[*itr])
+                maTabs[*itr]->StartListeningInArea( nCol1, nRow1, nCol2, nRow2 );
     }
 }
 
@@ -2271,10 +2273,11 @@ void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
     if (nInsFlag & IDF_CONTENTS)
     {
         ScBulkBroadcast aBulkBroadcast( GetBASM());
-        for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
-            if (maTabs[i])
-                if (rMark.GetTableSelect(i))
-                    maTabs[i]->BroadcastInArea( nCol1, nRow1, nCol2, nRow2 );
+        SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd && *itr < nMax; ++itr)
+            if (maTabs[*itr])
+                maTabs[*itr]->BroadcastInArea( nCol1, nRow1, nCol2, nRow2 );
     }
 }
 
@@ -2495,13 +2498,15 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             //  die Draw-Seitengroesse neu berechnet werden muss
             //! nur wenn ganze Zeilen/Spalten kopiert werden?
 
-            for (SCTAB j = 0; j < static_cast<SCTAB>(maTabs.size()); j++)
-                if (maTabs[j] && rMark.GetTableSelect(j))
+            SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+            for (; itr != itrEnd && *itr < nMax; ++itr)
+                if (maTabs[*itr])
                 {
-                    if ( j < aCBFCP.nTabStart )
-                        aCBFCP.nTabStart = j;
-                    aCBFCP.nTabEnd = j;
-                    maTabs[j]->IncRecalcLevel();
+                    if ( *itr < aCBFCP.nTabStart )
+                        aCBFCP.nTabStart = *itr;
+                    aCBFCP.nTabEnd = *itr;
+                    maTabs[*itr]->IncRecalcLevel();
                 }
 
             ScRangeList aLocalRangeList;
@@ -2581,9 +2586,10 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
             ScColumn::bDoubleAlloc = bOldDouble;
 
-            for (SCTAB k = 0; k < static_cast<SCTAB>(maTabs.size()); k++)
-                if (maTabs[k] && rMark.GetTableSelect(k))
-                    maTabs[k]->DecRecalcLevel();
+            itr = rMark.begin();
+            for (; itr != itrEnd && *itr < nMax; ++itr)
+                if (maTabs[*itr] )
+                    maTabs[*itr]->DecRecalcLevel();
 
             bInsertingFromOtherDoc = false;
 
@@ -2647,14 +2653,16 @@ void ScDocument::CopyMultiRangeFromClip(
     aCBFCP.nTabStart = MAXTAB;
     aCBFCP.nTabEnd = 0;
 
-    for (SCTAB j = 0; j < static_cast<SCTAB>(maTabs.size()); ++j)
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
     {
-        if (maTabs[j] && rMark.GetTableSelect(j))
+        if (maTabs[*itr])
         {
-            if ( j < aCBFCP.nTabStart )
-                aCBFCP.nTabStart = j;
-            aCBFCP.nTabEnd = j;
-            maTabs[j]->IncRecalcLevel();
+            if ( *itr < aCBFCP.nTabStart )
+                aCBFCP.nTabStart = *itr;
+            aCBFCP.nTabEnd = *itr;
+            maTabs[*itr]->IncRecalcLevel();
         }
     }
 
@@ -2717,9 +2725,10 @@ void ScDocument::CopyMultiRangeFromClip(
             nCol1 += p->aEnd.Col() - p->aStart.Col() + 1;
     }
 
-    for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i] && rMark.GetTableSelect(i))
-            maTabs[i]->DecRecalcLevel();
+    itr = rMark.begin();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if (maTabs[*itr])
+            maTabs[*itr]->DecRecalcLevel();
 
     bInsertingFromOtherDoc = false;
 
@@ -2886,9 +2895,11 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
         SetAutoCalc( false );                   // avoid multiple calculations
 
         SCTAB nCount = static_cast<SCTAB>(maTabs.size());
-        for (SCTAB i=0; i<nCount; i++)
-            if ( i!=nSrcTab && maTabs[i] && rMark.GetTableSelect(i) )
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd && *itr < nCount; ++itr)
+            if ( *itr!=nSrcTab && maTabs[*itr])
             {
+                SCTAB i = *itr;
                 if (bDoMix)
                 {
                     if (!pMixDoc)
@@ -2945,9 +2956,11 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
         SCROW nEndRow = aArea.aEnd.Row();
 
         SCTAB nCount = static_cast<SCTAB>(maTabs.size());
-        for (SCTAB i=0; i<nCount; i++)
-            if ( i!=nSrcTab && maTabs[i] && rMark.GetTableSelect(i) )
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd && *itr < nCount; ++itr)
+            if ( *itr!=nSrcTab && maTabs[*itr] )
             {
+                SCTAB i = *itr;
                 if (bDoMix)
                 {
                     if (!pMixDoc)
@@ -4245,9 +4258,11 @@ void ScDocument::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow,
                         const ScPatternAttr& rAttr,
                         ScEditDataArray* pDataArray )
 {
-    for (SCTAB i=0; i < static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i] && rMark.GetTableSelect(i))
-            maTabs[i]->ApplyPatternArea( nStartCol, nStartRow, nEndCol, nEndRow, rAttr, pDataArray );
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if (maTabs[*itr])
+            maTabs[*itr]->ApplyPatternArea( nStartCol, nStartRow, nEndCol, nEndRow, rAttr, pDataArray );
 }
 
 
@@ -4270,9 +4285,11 @@ bool ScDocument::SetAttrEntries(SCCOL nCol, SCTAB nTab, ScAttrEntry* pData, SCSI
 void ScDocument::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         const ScMarkData& rMark, const ScPatternAttr& rPattern, short nNewType )
 {
-    for (SCTAB i=0; i < static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i] && rMark.GetTableSelect(i))
-            maTabs[i]->ApplyPatternIfNumberformatIncompatible( rRange, rPattern, nNewType );
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if (maTabs[*itr])
+            maTabs[*itr]->ApplyPatternIfNumberformatIncompatible( rRange, rPattern, nNewType );
 }
 
 
@@ -4289,9 +4306,11 @@ void ScDocument::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow,
                         const ScMarkData& rMark,
                         const ScStyleSheet& rStyle)
 {
-    for (SCTAB i=0; i < static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i] && rMark.GetTableSelect(i))
-            maTabs[i]->ApplyStyleArea( nStartCol, nStartRow, nEndCol, nEndRow, rStyle );
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if (maTabs[*itr])
+            maTabs[*itr]->ApplyStyleArea( nStartCol, nStartRow, nEndCol, nEndRow, rStyle );
 }
 
 
@@ -4316,9 +4335,11 @@ void ScDocument::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkDat
     }
     else
     {
-        for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
-            if ( maTabs[i] && rMark.GetTableSelect(i) )
-                    maTabs[i]->ApplySelectionStyle( rStyle, rMark );
+        SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd && *itr < nMax; ++itr)
+            if ( maTabs[*itr] )
+                    maTabs[*itr]->ApplySelectionStyle( rStyle, rMark );
     }
 }
 
@@ -4329,9 +4350,11 @@ void ScDocument::ApplySelectionLineStyle( const ScMarkData& rMark,
     if ( bColorOnly && !pLine )
         return;
 
-    for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i] && rMark.GetTableSelect(i))
-            maTabs[i]->ApplySelectionLineStyle( rMark, pLine, bColorOnly );
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if (maTabs[*itr])
+            maTabs[*itr]->ApplySelectionLineStyle( rMark, pLine, bColorOnly );
 }
 
 
@@ -4353,10 +4376,13 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
     const ScStyleSheet* pNewStyle;
 
     if ( rMark.IsMultiMarked() )
-        for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()) && bEqual; i++)
-            if (maTabs[i] && rMark.GetTableSelect(i))
+    {
+        SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd && *itr < nMax; ++itr)
+            if (maTabs[*itr])
             {
-                pNewStyle = maTabs[i]->GetSelectionStyle( rMark, bFound );
+                pNewStyle = maTabs[*itr]->GetSelectionStyle( rMark, bFound );
                 if (bFound)
                 {
                     if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
@@ -4364,6 +4390,7 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
                     pStyle = pNewStyle;
                 }
             }
+    }
     if ( rMark.IsMarked() )
     {
         ScRange aRange;
@@ -4495,17 +4522,21 @@ ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, sal_
 
     if ( rMark.IsMultiMarked() )                                // multi selection
     {
-        for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
-            if (maTabs[i] && rMark.GetTableSelect(i))
-                maTabs[i]->MergeSelectionPattern( aState, rMark, bDeep );
+        SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd && *itr < nMax; ++itr)
+            if (maTabs[*itr])
+                maTabs[*itr]->MergeSelectionPattern( aState, rMark, bDeep );
     }
     if ( rMark.IsMarked() )                                     // simle selection
     {
         ScRange aRange;
         rMark.GetMarkArea(aRange);
-        for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
-            if (maTabs[i] && rMark.GetTableSelect(i))
-                maTabs[i]->MergePatternArea( aState,
+        SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd && *itr < nMax; ++itr)
+            if (maTabs[*itr])
+                maTabs[*itr]->MergePatternArea( aState,
                                 aRange.aStart.Col(), aRange.aStart.Row(),
                                 aRange.aEnd.Col(), aRange.aEnd.Row(), bDeep );
     }
@@ -4550,9 +4581,11 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
         rMark.GetMarkArea(aRange);
         rLineInner.EnableHor( aRange.aStart.Row() != aRange.aEnd.Row() );
         rLineInner.EnableVer( aRange.aStart.Col() != aRange.aEnd.Col() );
-        for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
-            if (maTabs[i] && rMark.GetTableSelect(i))
-                maTabs[i]->MergeBlockFrame( &rLineOuter, &rLineInner, aFlags,
+        SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd && *itr < nMax; ++itr)
+            if (maTabs[*itr])
+                maTabs[*itr]->MergeBlockFrame( &rLineOuter, &rLineInner, aFlags,
                                           aRange.aStart.Col(), aRange.aStart.Row(),
                                           aRange.aEnd.Col(),   aRange.aEnd.Row() );
     }
@@ -4795,13 +4828,15 @@ sal_Bool ScDocument::IsSelectionEditable( const ScMarkData& rMark,
 
     sal_Bool bOk = sal_True;
     sal_Bool bMatrix = ( pOnlyNotBecauseOfMatrix != NULL );
-    for ( SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()) && (bOk || bMatrix); i++ )
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax && (bOk || bMatrix); ++itr)
     {
-        if ( maTabs[i] && rMark.GetTableSelect(i) )
+        if ( maTabs[*itr] )
         {
             if (rMark.IsMarked())
             {
-                if ( !maTabs[i]->IsBlockEditable( aRange.aStart.Col(),
+                if ( !maTabs[*itr]->IsBlockEditable( aRange.aStart.Col(),
                         aRange.aStart.Row(), aRange.aEnd.Col(),
                         aRange.aEnd.Row(), pOnlyNotBecauseOfMatrix ) )
                 {
@@ -4812,7 +4847,7 @@ sal_Bool ScDocument::IsSelectionEditable( const ScMarkData& rMark,
             }
             if (rMark.IsMultiMarked())
             {
-                if ( !maTabs[i]->IsSelectionEditable( rMark, pOnlyNotBecauseOfMatrix ) )
+                if ( !maTabs[*itr]->IsSelectionEditable( rMark, pOnlyNotBecauseOfMatrix ) )
                 {
                     bOk = false;
                     if ( pOnlyNotBecauseOfMatrix )
@@ -4834,9 +4869,11 @@ sal_Bool ScDocument::HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nSta
                                 const ScMarkData& rMark ) const
 {
     sal_Bool bOk = sal_True;
-    for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()) && bOk; i++)
-        if (maTabs[i] && rMark.GetTableSelect(i))
-            if (maTabs[i]->HasBlockMatrixFragment( nStartCol, nStartRow, nEndCol, nEndRow ))
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax && bOk; ++itr)
+        if (maTabs[*itr])
+            if (maTabs[*itr]->HasBlockMatrixFragment( nStartCol, nStartRow, nEndCol, nEndRow ))
                 bOk = false;
 
     return !bOk;
@@ -4962,12 +4999,14 @@ sal_Bool ScDocument::ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
     SCCOL nOldEndCol = rEndCol;
     SCROW nOldEndRow = rEndRow;
 
-    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
-        if ( maTabs[nTab] && rMark.GetTableSelect(nTab) )
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if ( maTabs[*itr] )
         {
             SCCOL nThisEndCol = nOldEndCol;
             SCROW nThisEndRow = nOldEndRow;
-            if ( ExtendMerge( nStartCol, nStartRow, nThisEndCol, nThisEndRow, nTab, bRefresh, bAttrs ) )
+            if ( ExtendMerge( nStartCol, nStartRow, nThisEndCol, nThisEndRow, *itr, bRefresh, bAttrs ) )
                 bFound = sal_True;
             if ( nThisEndCol > rEndCol )
                 rEndCol = nThisEndCol;
@@ -5190,14 +5229,16 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
     ScRangeList aRangeList;
     rMark.FillRangeListWithMarks( &aRangeList, false );
     size_t nRangeCount = aRangeList.size();
-    for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
     {
-        if (maTabs[i] && rMark.GetTableSelect(i))
+        if (maTabs[*itr])
         {
             for ( size_t j=0; j < nRangeCount; j++ )
             {
                 ScRange aRange = *aRangeList[ j ];
-                maTabs[i]->ApplyBlockFrame( pLineOuter, pLineInner,
+                maTabs[*itr]->ApplyBlockFrame( pLineOuter, pLineInner,
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(),   aRange.aEnd.Row() );
             }
@@ -5242,10 +5283,11 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
         else
         {
             SfxItemPoolCache aCache( xPoolHelper->GetDocPool(), pSet );
-            for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++)
-                if (maTabs[nTab])
-                    if (rMark.GetTableSelect(nTab))
-                        maTabs[nTab]->ApplySelectionCache( &aCache, rMark, pDataArray );
+            SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+            for (; itr != itrEnd && *itr < nMax; ++itr)
+                if (maTabs[*itr])
+                    maTabs[*itr]->ApplySelectionCache( &aCache, rMark, pDataArray );
         }
     }
 }
@@ -5253,25 +5295,31 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
 
 void ScDocument::ChangeSelectionIndent( sal_Bool bIncrement, const ScMarkData& rMark )
 {
-    for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i] && rMark.GetTableSelect(i))
-            maTabs[i]->ChangeSelectionIndent( bIncrement, rMark );
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if (maTabs[*itr])
+            maTabs[*itr]->ChangeSelectionIndent( bIncrement, rMark );
 }
 
 
 void ScDocument::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark )
 {
-    for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i] && rMark.GetTableSelect(i))
-            maTabs[i]->ClearSelectionItems( pWhich, rMark );
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if (maTabs[*itr])
+            maTabs[*itr]->ClearSelectionItems( pWhich, rMark );
 }
 
 
 void ScDocument::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
 {
-    for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i] && rMark.GetTableSelect(i))
-            maTabs[i]->DeleteSelection( nDelFlag, rMark );
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if (maTabs[*itr])
+            maTabs[*itr]->DeleteSelection( nDelFlag, rMark );
 }
 
 
