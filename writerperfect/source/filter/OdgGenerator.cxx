@@ -926,31 +926,76 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
         mGraphicsStrokeDashStyles.push_back(new TagCloseElement("draw:stroke-dash"));
     }
 #endif
-    if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "gradient" && mxGradient.count() >= 2)
+    if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "gradient")
     {
         TagOpenElement *pDrawGradientElement = new TagOpenElement("draw:gradient");
-        pDrawGradientElement->addAttribute("draw:style", "linear");
+        if (mxStyle["draw:style"])
+            pDrawGradientElement->addAttribute("draw:style", mxStyle["draw:style"]->getStr());
         WPXString sValue;
         sValue.sprintf("Gradient_%i", miGradientIndex++);
         pDrawGradientElement->addAttribute("draw:name", sValue);
 
         // ODG angle unit is 0.1 degree
-        double angle = mxStyle["draw:angle"] ? -mxStyle["draw:angle"]->getDouble() : 0.0;
+        double angle = mxStyle["draw:angle"] ? mxStyle["draw:angle"]->getDouble() : 0.0;
         while(angle < 0)
             angle += 360;
         while(angle > 360)
             angle -= 360;
-
         sValue.sprintf("%i", (unsigned)(angle*10));
         pDrawGradientElement->addAttribute("draw:angle", sValue);
 
-        pDrawGradientElement->addAttribute("draw:start-color", mxGradient[0]["svg:stop-color"]->getStr().cstr());
-        pDrawGradientElement->addAttribute("draw:end-color", mxGradient[1]["svg:stop-color"]->getStr().cstr());
-        pDrawGradientElement->addAttribute("draw:start-intensity", "100%");
-        pDrawGradientElement->addAttribute("draw:end-intensity", "100%");
-        pDrawGradientElement->addAttribute("draw:border", "0%");
-        mGraphicsGradientStyles.push_back(pDrawGradientElement);
-        mGraphicsGradientStyles.push_back(new TagCloseElement("draw:gradient"));
+        if (!mxGradient.count())
+        {
+            if (mxStyle["draw:start-color"])
+                pDrawGradientElement->addAttribute("draw:start-color", mxStyle["draw:start-color"]->getStr());
+            if (mxStyle["draw:end-color"])
+                pDrawGradientElement->addAttribute("draw:end-color", mxStyle["draw:end-color"]->getStr());
+
+            if (mxStyle["draw:border"])
+                pDrawGradientElement->addAttribute("draw:border", mxStyle["draw:border"]->getStr());
+            else
+                pDrawGradientElement->addAttribute("draw:border", "0%");
+
+            if (mxStyle["svg:cx"])
+                pDrawGradientElement->addAttribute("draw:cx", mxStyle["svg:cx"]->getStr());
+            else if (mxStyle["draw:cx"])
+                pDrawGradientElement->addAttribute("draw:cx", mxStyle["draw:cx"]->getStr());
+
+            if (mxStyle["svg:cy"])
+                pDrawGradientElement->addAttribute("draw:cy", mxStyle["svg:cy"]->getStr());
+            else if (mxStyle["draw:cx"])
+                pDrawGradientElement->addAttribute("draw:cx", mxStyle["svg:cx"]->getStr());
+
+            if (mxStyle["draw:start-intensity"])
+                pDrawGradientElement->addAttribute("draw:start-intensity", mxStyle["draw:start-intensity"]->getStr());
+            else
+                pDrawGradientElement->addAttribute("draw:start-intensity", "100%");
+
+            if (mxStyle["draw:border"])
+                pDrawGradientElement->addAttribute("draw:end-intensity", mxStyle["draw:end-intensity"]->getStr());
+            else
+                pDrawGradientElement->addAttribute("draw:end-intensity", "100%");
+
+            mGraphicsGradientStyles.push_back(pDrawGradientElement);
+            mGraphicsGradientStyles.push_back(new TagCloseElement("draw:gradient"));
+        }
+        else if(mxGradient.count() >= 2)
+        {
+            sValue.sprintf("%i", (unsigned)(angle*10));
+            pDrawGradientElement->addAttribute("draw:angle", sValue);
+
+            pDrawGradientElement->addAttribute("draw:start-color", mxGradient[1]["svg:stop-color"]->getStr());
+            pDrawGradientElement->addAttribute("draw:end-color", mxGradient[0]["svg:stop-color"]->getStr());
+            if (mxStyle["svg:cx"])
+                pDrawGradientElement->addAttribute("draw:cx", mxStyle["svg:cx"]->getStr());
+            if (mxStyle["svg:cy"])
+                pDrawGradientElement->addAttribute("draw:cy", mxStyle["svg:cy"]->getStr());
+            pDrawGradientElement->addAttribute("draw:start-intensity", "100%");
+            pDrawGradientElement->addAttribute("draw:end-intensity", "100%");
+            pDrawGradientElement->addAttribute("draw:border", "0%");
+            mGraphicsGradientStyles.push_back(pDrawGradientElement);
+            mGraphicsGradientStyles.push_back(new TagCloseElement("draw:gradient"));
+        }
     }
 
     TagOpenElement *pStyleStyleElement = new TagOpenElement("style:style");
@@ -1002,14 +1047,22 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
 
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "gradient")
     {
-        if (mxGradient.count() >= 2)
+        if (!mxGradient.count() || mxGradient.count() >= 2)
         {
             pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "gradient");
             sValue.sprintf("Gradient_%i", miGradientIndex-1);
             pStyleGraphicsPropertiesElement->addAttribute("draw:fill-gradient-name", sValue);
         }
         else
-            pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "none");
+        {
+            if (mxGradient[0]["svg:stop-color"])
+            {
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "solid");
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-color", mxGradient[0]["svg:stop-color"]->getStr());
+            }
+            else
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "solid");
+        }
     }
 
     mGraphicsAutomaticStyles.push_back(pStyleGraphicsPropertiesElement);
