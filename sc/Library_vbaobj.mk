@@ -138,13 +138,6 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
         sc/source/ui/vba/vbawsfunction \
 ))
 
-ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
-$(eval $(call gb_Library_set_ldflags,vbaobj,\
-	$$(LDFLAGS) \
-	-Wl$(COMMA)-z$(COMMA)noexecstack \
-))
-endif
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,vbaobj,\
 	advapi32 \
