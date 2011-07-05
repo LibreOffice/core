@@ -33,6 +33,6 @@ gb_COMPILERDEFAULTOPTFLAGS := -O2
 gb_CXXFLAGS += -fsigned-char
 gb_CFLAGS += -fsigned-char
 
-include $(GBUILDDIR)/platform/unxgcc.mk
+include $(GBUILDDIR)/platform/linux.mk
 
 # vim: set noet sw=4:

@@ -34,6 +34,6 @@ gb_CXXFLAGS += -fsigned-char -fno-omit-frame-pointer
 gb_CFLAGS += -fsigned-char -fno-omit-frame-pointer
 gb_LinkTarget_LDFLAGS += -Wl,--no-relax
 
-include $(GBUILDDIR)/platform/unxgcc.mk
+include $(GBUILDDIR)/platform/linux.mk
 
 # vim: set noet sw=4:
