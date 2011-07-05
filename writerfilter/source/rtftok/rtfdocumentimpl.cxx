@@ -258,6 +258,15 @@ static const char* lcl_RtfToString(RTFKeyword nKeyword)
     }
     return NULL;
 }
+
+sal_uInt32 lcl_BrgToRgb(sal_uInt32 nBrg)
+{
+    sal_uInt32 nBlue = (nBrg & 0xff0000) >> 16;
+    sal_uInt32 nGreen = (nBrg & 0x00ff00) >> 8;
+    sal_uInt32 nRed = nBrg & 0x0000ff;
+    return (nRed << 16) | (nGreen << 8) | nBlue;
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -2424,6 +2433,7 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
     OUString aService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape"));
     uno::Reference<drawing::XShape> xShape;
     xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
 
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
     {
@@ -2446,6 +2456,12 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
             m_aDestinationText.setLength(0);
             m_aDestinationText.append(i->second);
             bPib = true;
+        }
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillColor")))
+        {
+            uno::Any aColor;
+            aColor <<= lcl_BrgToRgb(i->second.toInt32());
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aColor);
         }
         else
             OSL_TRACE("%s: TODO handle shape property '%s':'%s'", OSL_THIS_FUNC,
