@@ -1233,7 +1233,7 @@ sal_Bool ScViewFunc::RemoveMerge( sal_Bool bRecord )
         do
         {
             bExtended = false;
-            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+            ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd; ++itr)
             {
                 SCTAB i = *itr;

@@ -104,7 +104,7 @@ void ScEditableTester::TestSelectedBlock( ScDocument* pDoc,
                         const ScMarkData& rMark )
 {
     SCTAB nTabCount = pDoc->GetTableCount();
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
         TestBlock( pDoc, *itr, nStartCol, nStartRow, nEndCol, nEndRow );
 }

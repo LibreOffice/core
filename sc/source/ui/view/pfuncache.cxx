@@ -111,7 +111,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
 
     ScDocument* pDoc = pDocSh->GetDocument();
     SCTAB nTabCount = pDoc->GetTableCount();
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && (*itr) < nTabCount; ++itr)
     {
         SCTAB nTab = *itr;

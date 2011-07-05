@@ -672,7 +672,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     String aUndo = ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
                     pUndoManager->EnterListAction( aUndo, aUndo );
 
-                    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+                    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
                     for (; itr != itrEnd; ++itr)
                         aFunc.SetLayoutRTL( *itr, bSet, false );
 

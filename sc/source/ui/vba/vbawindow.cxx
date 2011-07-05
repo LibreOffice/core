@@ -126,7 +126,7 @@ public:
         sheets.reserve( nTabCount );
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadSheet( m_xModel, uno::UNO_QUERY_THROW );
         uno::Reference <container::XIndexAccess> xIndex( xSpreadSheet->getSheets(), uno::UNO_QUERY_THROW );
-        ScMarkData::iterator itr = rMarkData.begin(), itrEnd = rMarkData.end();
+        ScMarkData::const_iterator itr = rMarkData.begin(), itrEnd = rMarkData.end();
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
         {
             uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex( *itr ), uno::UNO_QUERY_THROW );

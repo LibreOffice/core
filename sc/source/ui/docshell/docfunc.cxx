@@ -633,7 +633,7 @@ sal_Bool ScDocFunc::DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
     {
         bObjects = sal_True;
         SCTAB nTabCount = pDoc->GetTableCount();
-        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
             if (pDoc->IsTabProtected(*itr))
                 bObjects = false;
@@ -740,7 +740,7 @@ sal_Bool ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
 
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
-        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
             if (*itr != nStartTab)
                 pUndoDoc->AddUndoTab( *itr, *itr );
@@ -1323,7 +1323,7 @@ sal_Bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const String& rStyleNam
         SCTAB nStartTab = aMultiRange.aStart.Tab();
         SCTAB nTabCount = pDoc->GetTableCount();
         pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
-        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
             if (*itr != nStartTab)
                 pUndoDoc->AddUndoTab( *itr, *itr );
@@ -3623,7 +3623,7 @@ sal_Bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, sal_Bool bIncrement, 
 
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
-        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
             if (*itr != nStartTab)
                 pUndoDoc->AddUndoTab( *itr, *itr );
