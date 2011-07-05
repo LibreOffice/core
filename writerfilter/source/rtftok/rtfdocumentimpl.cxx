@@ -386,7 +386,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     while (m_nHeaderFooterPositions.size())
     {
         std::pair<Id, sal_uInt32> aPair = m_nHeaderFooterPositions.front();
-        m_nHeaderFooterPositions.pop_front();
+        m_nHeaderFooterPositions.pop();
         resolveSubstream(aPair.second, aPair.first);
     }
 
@@ -868,7 +868,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     case RTF_FOOTERF: nId = NS_rtf::LN_footerr; break; // same here, NS_rtf::LN_footerf could be used
                     default: break;
                 }
-                m_nHeaderFooterPositions.push_back(make_pair(nId, nPos));
+                m_nHeaderFooterPositions.push(make_pair(nId, nPos));
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
             break;

@@ -31,6 +31,7 @@
 #include <memory>
 #include <stack>
 #include <vector>
+#include <queue>
 
 #include <rtl/strbuf.hxx>
 #include <oox/helper/graphichelper.hxx>
@@ -299,7 +300,7 @@ namespace writerfilter {
                 bool m_bHasFootnote;
                 /// If this is a substream.
                 bool m_bIsSubstream;
-                std::deque< std::pair<Id, sal_uInt32> > m_nHeaderFooterPositions;
+                std::queue< std::pair<Id, sal_uInt32> > m_nHeaderFooterPositions;
                 sal_uInt32 m_nGroupStartPos;
                 /// Ignore the first occurrence of this text.
                 rtl::OUString m_aIgnoreFirst;
