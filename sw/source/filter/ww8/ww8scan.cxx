@@ -2458,12 +2458,29 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
     mnIMax = maRawData[511];
 
     sal_uInt8 *pStart = maRawData;
-    // Pointer to Offset-Location in maRawData
-    sal_uInt8* pOfs = maRawData + (mnIMax + 1) * 4;
+    // Offset-Location in maRawData
+    size_t nRawDataStart = (mnIMax + 1) * 4;
 
     for (mnIdx = 0; mnIdx < mnIMax; ++mnIdx)
     {
-        unsigned int nOfs = (*(pOfs + mnIdx * nItemSize)) * 2;
+        size_t nRawDataOffset = nRawDataStart + mnIdx * nItemSize;
+
+        //clip to available data, corrupt fkp
+        if (nRawDataOffset >= 511)
+        {
+            mnIMax = mnIdx;
+            break;
+        }
+
+        unsigned int nOfs = maRawData[nRawDataStart] * 2;
+
+        //clip to available data, corrupt fkp
+        if (nOfs >= 511)
+        {
+            mnIMax = mnIdx;
+            break;
+        }
+
         Entry aEntry(Get_Long(pStart));
 
         if (nOfs)
