@@ -721,7 +721,7 @@ void RTFDocumentImpl::text(OUString& rString)
     }
 }
 
-void RTFDocumentImpl::replayBuffer(std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> >& rBuffer)
+void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
 {
     while (rBuffer.size())
     {

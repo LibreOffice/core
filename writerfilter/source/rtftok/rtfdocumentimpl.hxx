@@ -128,6 +128,9 @@ namespace writerfilter {
             BUFFER_PAR
         };
 
+        /// A buffer storing dmapper calls.
+        typedef std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > RTFBuffer_t;
+
         /// An entry in the color table.
         class RTFColorTableEntry
         {
@@ -260,7 +263,7 @@ namespace writerfilter {
                 /// If this is the first run of the document, starts the initial paragraph.
                 void checkFirstRun();
                 void sectBreak(bool bFinal);
-                void replayBuffer(std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> >& rBuffer);
+                void replayBuffer(RTFBuffer_t& rBuffer);
 
                 com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& m_xContext;
                 com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& m_xInputStream;
@@ -292,10 +295,10 @@ namespace writerfilter {
                 oox::GraphicHelper* m_pGraphicHelper;
 
                 /// Buffered table cells, till cell definitions are not reached.
-                std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > m_aTableBuffer;
+                RTFBuffer_t m_aTableBuffer;
                 bool m_bTable;
                 /// Buffered superscript, till footnote is reached (or not).
-                std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > m_aSuperBuffer;
+                RTFBuffer_t m_aSuperBuffer;
                 bool m_bSuper;
                 bool m_bHasFootnote;
                 /// If this is a substream.
