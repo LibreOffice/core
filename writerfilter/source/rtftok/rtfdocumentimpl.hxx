@@ -296,10 +296,9 @@ namespace writerfilter {
 
                 /// Buffered table cells, till cell definitions are not reached.
                 RTFBuffer_t m_aTableBuffer;
-                bool m_bTable;
                 /// Buffered superscript, till footnote is reached (or not).
                 RTFBuffer_t m_aSuperBuffer;
-                bool m_bSuper;
+                RTFBuffer_t* m_pCurrentBuffer;
                 bool m_bHasFootnote;
                 /// If this is a substream.
                 bool m_bIsSubstream;

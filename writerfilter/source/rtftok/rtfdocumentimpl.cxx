@@ -277,9 +277,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aSettingsTableSprms(),
     m_xStorage(),
     m_aTableBuffer(),
-    m_bTable(false),
     m_aSuperBuffer(),
-    m_bSuper(false),
+    m_pCurrentBuffer(0),
     m_bHasFootnote(false),
     m_bIsSubstream(false),
     m_nHeaderFooterPositions(),
@@ -651,15 +650,12 @@ void RTFDocumentImpl::text(OUString& rString)
     checkFirstRun();
     if (m_bNeedPap)
     {
-        if (!m_bTable && !m_bSuper)
+        if (!m_pCurrentBuffer)
             Mapper().props(pParagraphProperties);
         else
         {
             RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
-            if (m_bTable)
-                m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
-            else
-                m_aSuperBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+            m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
         }
         m_bNeedPap = false;
     }
@@ -671,19 +667,16 @@ void RTFDocumentImpl::text(OUString& rString)
         return;
     }
 
-    if (!m_bTable && !m_bSuper && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
+    if (!m_pCurrentBuffer && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
         Mapper().startCharacterGroup();
-    else
+    else if (m_pCurrentBuffer)
     {
         RTFValue::Pointer_t pValue;
-        if (m_bTable)
-            m_aTableBuffer.push_back(make_pair(BUFFER_STARTRUN, pValue));
-        else
-            m_aSuperBuffer.push_back(make_pair(BUFFER_STARTRUN, pValue));
+        m_pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, pValue));
     }
     if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
     {
-        if (!m_bTable && !m_bSuper)
+        if (!m_pCurrentBuffer)
         {
             writerfilter::Reference<Properties>::Pointer_t const pProperties(
                     new RTFReferenceProperties(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms)
@@ -693,31 +686,22 @@ void RTFDocumentImpl::text(OUString& rString)
         else
         {
             RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
-            if (m_bTable)
-                m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
-            else
-                m_aSuperBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+            m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
         }
     }
-    if (!m_bTable && !m_bSuper)
+    if (!m_pCurrentBuffer)
         Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
     else
     {
         RTFValue::Pointer_t pValue(new RTFValue(rString));
-        if (m_bTable)
-            m_aTableBuffer.push_back(make_pair(BUFFER_UTEXT, pValue));
-        else
-            m_aSuperBuffer.push_back(make_pair(BUFFER_UTEXT, pValue));
+        m_pCurrentBuffer->push_back(make_pair(BUFFER_UTEXT, pValue));
     }
-    if (!m_bTable && !m_bSuper && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
+    if (!m_pCurrentBuffer && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
         Mapper().endCharacterGroup();
-    else
+    else if(m_pCurrentBuffer)
     {
         RTFValue::Pointer_t pValue;
-        if (m_bTable)
-            m_aTableBuffer.push_back(make_pair(BUFFER_ENDRUN, pValue));
-        else
-            m_aSuperBuffer.push_back(make_pair(BUFFER_ENDRUN, pValue));
+        m_pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, pValue));
     }
 }
 
@@ -890,7 +874,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     nId = NS_rtf::LN_endnote;
 
                 m_bHasFootnote = true;
-                m_bSuper = false;
+                m_pCurrentBuffer = 0;
                 bool bCustomMark = false;
                 OUString aCustomMark;
                 while (m_aSuperBuffer.size())
@@ -991,12 +975,12 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_PAR:
             {
-                if (!m_bTable)
+                if (!m_pCurrentBuffer)
                     parBreak();
                 else
                 {
                     RTFValue::Pointer_t pValue;
-                    m_aTableBuffer.push_back(make_pair(BUFFER_PAR, pValue));
+                    m_pCurrentBuffer->push_back(make_pair(BUFFER_PAR, pValue));
                 }
                 // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
@@ -1201,7 +1185,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_KEEP: nParam = NS_sprm::LN_PFKeep; break;
         case RTF_KEEPN: nParam = NS_sprm::LN_PFKeepFollow; break;
         case RTF_WIDCTLPAR: nParam = NS_sprm::LN_PFWidowControl; break;
-        case RTF_INTBL: m_bTable = true; nParam = NS_sprm::LN_PFInTable; break;
+        case RTF_INTBL: m_pCurrentBuffer = &m_aTableBuffer; nParam = NS_sprm::LN_PFInTable; break;
         case RTF_PAGEBB: nParam = NS_sprm::LN_PFPageBreakBefore; break;
         default: break;
     }
@@ -1235,7 +1219,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PARD:
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
-            m_bTable = false;
+            m_pCurrentBuffer = 0;
             break;
         case RTF_SECTD:
             m_aStates.top().aSectionSprms = m_aDefaultState.aSectionSprms;
@@ -1401,7 +1385,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_SUPER:
             {
-                m_bSuper = true;
+                m_pCurrentBuffer = &m_aSuperBuffer;
                 OUString aValue(RTL_CONSTASCII_USTRINGPARAM("superscript"));
                 RTFValue::Pointer_t pValue(new RTFValue(aValue));
                 m_aStates.top().aCharacterSprms.push_back(make_pair(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue));
@@ -2410,11 +2394,12 @@ int RTFDocumentImpl::popState()
     }
     if (bPopPictureProperties)
         m_aStates.top().aCharacterAttributes = aAttributes;
-    if (m_bSuper)
+    if (m_pCurrentBuffer == &m_aSuperBuffer)
     {
         if (!m_bHasFootnote)
             replayBuffer(m_aSuperBuffer);
-        m_bSuper = m_bHasFootnote = false;
+        m_pCurrentBuffer = 0;
+        m_bHasFootnote = false;
     }
 
     return 0;
