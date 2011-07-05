@@ -50,6 +50,13 @@ DrawingFragment::DrawingFragment( XmlFilterBase& rFilter, const OUString& rFragm
     FragmentHandler2( rFilter, rFragmentPath, false ),  // do not trim whitespace, has been preprocessed by the input stream
     mrDrawing( rDrawing )
 {
+    RelationsRef xLegacyRels = getRelations().getRelationsFromType( CREATE_MSOFFICE_RELATION_TYPE( "legacyDiagramText" ) );
+    for( Relations::const_iterator aIt = xLegacyRels->begin(), aEnd = xLegacyRels->end(); aIt != aEnd; ++aIt )
+    {
+        OUString aLegacyFragmentPath = getFragmentPathFromRelation( aIt->second );
+        // TODO: import legacyDiagramText from aLegacyFragmentPath - this is a binary import.
+        // printf("legacyDiagram: %s\n", ::rtl::OUStringToOString( aLegacyFragmentPath, RTL_TEXTENCODING_UTF8).getStr());
+    }
 }
 
 Reference< XInputStream > DrawingFragment::openFragmentStream() const
