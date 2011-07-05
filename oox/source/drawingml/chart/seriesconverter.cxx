@@ -35,6 +35,7 @@
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <basegfx/numeric/ftools.hxx>
 #include "oox/drawingml/chart/datasourceconverter.hxx"
 #include "oox/drawingml/chart/seriesmodel.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
@@ -58,6 +59,15 @@ using ::rtl::OUString;
 // ============================================================================
 
 namespace {
+
+/** nastied-up sgn function - employs some gratuity around 0 - values
+   smaller than 0.33 are clamped to 0
+ */
+int lclSgn( double nVal )
+{
+    const int intVal=nVal*3;
+    return intVal == 0 ? 0 : (intVal < 0 ? -1 : 1);
+}
 
 Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
         const ConverterRoot& rParent,
@@ -178,6 +188,27 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     {
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false );
+
+        if( !mrModel.mxLayout->mbAutoLayout )
+        {
+            // bnc#694340 - nasty hack - chart2 cannot individually
+            // place data labels, let's try to find a useful
+            // compromise instead
+            namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
+            const sal_Int32 aPositionsLookupTable[] =
+                {
+                    csscd::TOP_LEFT,    csscd::TOP,    csscd::TOP_RIGHT,
+                    csscd::LEFT,        csscd::CENTER, csscd::RIGHT,
+                    csscd::BOTTOM_LEFT, csscd::BOTTOM, csscd::BOTTOM_RIGHT
+                };
+            const double nMax=std::max(
+                fabs(mrModel.mxLayout->mfX),
+                fabs(mrModel.mxLayout->mfY));
+            const int simplifiedX=lclSgn(mrModel.mxLayout->mfX/nMax);
+            const int simplifiedY=lclSgn(mrModel.mxLayout->mfY/nMax);
+            aPropSet.setProperty( PROP_LabelPlacement,
+                                  aPositionsLookupTable[ simplifiedX+1 + 3*(simplifiedY+1) ] );
+        }
     }
     catch( Exception& )
     {
