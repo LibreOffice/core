@@ -2420,6 +2420,11 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
 {
     int nType = -1;
     bool bPib = false;
+
+    OUString aService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape"));
+    uno::Reference<drawing::XShape> xShape;
+    xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
+
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
     {
         if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
@@ -2455,40 +2460,10 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         return;
     }
 
-    OUString aService;
-    bool bCustomShape = false;
-    switch (nType)
-    {
-        case 1: // rectangle
-            aService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape"));
-            break;
-        case 3: // ellipse
-            aService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.EllipseShape"));
-            break;
-        default:
-            if (nType > mso_sptMin && nType < mso_sptMax)
-            {
-                aService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape"));
-                bCustomShape = true;
-            }
-            else
-            {
-                OSL_TRACE("%s: TODO handle shape type '%d'", OSL_THIS_FUNC, nType);
-                return;
-            }
-            break;
-    }
-
-    uno::Reference<drawing::XShape> xShape;
-    xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
-
-    if (bCustomShape)
-    {
-        // createCustomShapeDefaults() will crash without adding the shape to the draw page.
-        m_xDrawPage->add(xShape);
-        uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
-        xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(nType)));
-    }
+    // createCustomShapeDefaults() needs shape added to a draw page.
+    m_xDrawPage->add(xShape);
+    uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
+    xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(nType)));
 
     xShape->setPosition(awt::Point(m_aStates.top().aShape.nLeft, m_aStates.top().aShape.nTop));
     xShape->setSize(awt::Size(m_aStates.top().aShape.nRight - m_aStates.top().aShape.nLeft,
