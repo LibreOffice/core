@@ -29,6 +29,7 @@
 #include "oox/ppt/backgroundproperties.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/core/contexthandler2.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -38,27 +39,22 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace ppt {
 // ---------------------------------------------------------------------
 
-BackgroundPropertiesContext::BackgroundPropertiesContext( ContextHandler& rParent, ::oox::drawingml::FillProperties& rFillProperties ) throw()
-: ContextHandler( rParent )
+BackgroundPropertiesContext::BackgroundPropertiesContext( FragmentHandler2& rParent, ::oox::drawingml::FillProperties& rFillProperties )
+: FragmentHandler2( rParent )
 , mrFillProperties( rFillProperties )
 {
 }
 
-Reference< XFastContextHandler > BackgroundPropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+::oox::core::ContextHandlerRef BackgroundPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( aElementToken )
     {
     case PPT_TOKEN( fill ): // a:CT_FillEffect
-        break;
+        return this;
     }
 
     // FillPropertiesGroupContext
-    if( !xRet.is() )
-        xRet = ::oox::drawingml::FillPropertiesContext::createFillContext( *this, aElementToken, xAttribs, mrFillProperties );
-
-    return xRet;
+    return dynamic_cast <ContextHandler *> (::oox::drawingml::FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs.getFastAttributeList(), mrFillProperties ).get());
 }
 
 } }

@@ -31,23 +31,20 @@
 
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include "oox/ppt/timenode.hxx"
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 
 #include <stack>
 #include <vector>
 
 namespace oox { namespace ppt {
 
-class SlideTimingContext : public ::oox::core::ContextHandler
+class SlideTimingContext : public ::oox::core::FragmentHandler2
 {
 public:
-    SlideTimingContext( ::oox::core::ContextHandler& rParent, TimeNodePtrList & aTimeNodeList ) throw();
+    SlideTimingContext( ::oox::core::FragmentHandler2& rParent, TimeNodePtrList & aTimeNodeList ) throw();
     virtual ~SlideTimingContext() throw();
 
-    virtual void SAL_CALL endDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL endFastElement( sal_Int32 aElement ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
 private:
     TimeNodePtrList & maTimeNodeList;

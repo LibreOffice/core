@@ -29,7 +29,7 @@
 #ifndef OOX_PPT_TIMENODELISTCONTEXT
 #define OOX_PPT_TIMENODELISTCONTEXT
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/ppt/timenode.hxx"
 
 #include <com/sun/star/animations/XTimeContainer.hpp>
@@ -37,15 +37,15 @@
 namespace oox { namespace ppt {
 
 
-    class TimeNodeContext : public ::oox::core::ContextHandler
+    class TimeNodeContext : public ::oox::core::FragmentHandler2
     {
     public:
         virtual ~TimeNodeContext() throw();
 
-        static TimeNodeContext * SAL_CALL makeContext( ::oox::core::ContextHandler& rParent, sal_Int32  aElement, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode );
+        static TimeNodeContext * SAL_CALL makeContext( ::oox::core::FragmentHandler2& rParent, sal_Int32  aElement, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode );
 
     protected:
-        TimeNodeContext( ::oox::core::ContextHandler& rParent, sal_Int32  aElement, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode ) throw();
+        TimeNodeContext( ::oox::core::FragmentHandler2& rParent, sal_Int32  aElement, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode ) throw();
 
         sal_Int32 mnElement;
         TimeNodePtr mpNode;
@@ -54,17 +54,14 @@ namespace oox { namespace ppt {
 
 
 /** FastParser context for XML_tnLst, XML_subTnLst and XML_childTnLst */
-class TimeNodeListContext : public ::oox::core::ContextHandler
+class TimeNodeListContext : public ::oox::core::FragmentHandler2
 {
 public:
-    TimeNodeListContext( ::oox::core::ContextHandler& rParent, TimeNodePtrList & aList ) throw();
+    TimeNodeListContext( ::oox::core::FragmentHandler2& rParent, TimeNodePtrList & aList ) throw();
 
     virtual ~TimeNodeListContext() throw();
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-    createFastChildContext( ::sal_Int32 Element,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
-        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
     TimeNodePtrList & maList;

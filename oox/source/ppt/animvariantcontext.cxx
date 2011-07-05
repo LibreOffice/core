@@ -48,8 +48,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-    AnimVariantContext::AnimVariantContext( ContextHandler& rParent, sal_Int32 aElement, Any & aValue )
-        : ContextHandler( rParent )
+    AnimVariantContext::AnimVariantContext( FragmentHandler2& rParent, sal_Int32 aElement, Any & aValue )
+        : FragmentHandler2( rParent )
             , mnElement( aElement )
             , maValue( aValue )
     {
@@ -59,63 +59,52 @@ namespace oox { namespace ppt {
     {
     }
 
-    void SAL_CALL AnimVariantContext::endFastElement( sal_Int32 aElement )
-        throw ( SAXException, RuntimeException)
+    void AnimVariantContext::onEndElement()
     {
-        if( ( aElement == mnElement ) && maColor.isUsed() )
+        if( isCurrentElement( mnElement ) && maColor.isUsed() )
         {
             maValue = makeAny( maColor.getColor( getFilter().getGraphicHelper() ) );
         }
     }
 
 
-    Reference< XFastContextHandler >
-    SAL_CALL AnimVariantContext::createFastChildContext( ::sal_Int32 aElementToken,
-                             const Reference< XFastAttributeList >& xAttribs )
-        throw ( SAXException, RuntimeException )
+    ContextHandlerRef AnimVariantContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
-        Reference< XFastContextHandler > xRet;
-        AttributeList attribs(xAttribs);
-
         switch( aElementToken )
         {
         case PPT_TOKEN( boolVal ):
         {
-            bool val = attribs.getBool( XML_val, false );
+            bool val = rAttribs.getBool( XML_val, false );
             maValue = makeAny( val );
-            break;
+            return this;
         }
         case PPT_TOKEN( clrVal ):
-            xRet.set( new ::oox::drawingml::ColorContext( *this, maColor ) );
+            return new ::oox::drawingml::ColorContext( *this, maColor );
             // we'll defer setting the Any until the end.
-            break;
         case PPT_TOKEN( fltVal ):
         {
-            double val = attribs.getDouble( XML_val, 0.0 );
+            double val = rAttribs.getDouble( XML_val, 0.0 );
             maValue = makeAny( val );
-            break;
+            return this;
         }
         case PPT_TOKEN( intVal ):
         {
-            sal_Int32 val = attribs.getInteger( XML_val, 0 );
+            sal_Int32 val = rAttribs.getInteger( XML_val, 0 );
             maValue = makeAny( val );
-            break;
+            return this;
         }
         case PPT_TOKEN( strVal ):
         {
-            OUString val = attribs.getString( XML_val, OUString() );
+            OUString val = rAttribs.getString( XML_val, OUString() );
             convertMeasure( val ); // ignore success or failure if it fails, use as is
             maValue = makeAny( val );
-            break;
+            return this;
         }
         default:
             break;
         }
 
-        if( !xRet.is() )
-            xRet.set( this );
-
-        return xRet;
+        return this;
     }
 
 

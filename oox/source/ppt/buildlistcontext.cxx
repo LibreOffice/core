@@ -38,10 +38,10 @@ using ::rtl::OUString;
 
 namespace oox { namespace ppt {
 
-    BuildListContext::BuildListContext( ContextHandler& rParent,
+    BuildListContext::BuildListContext( FragmentHandler2& rParent,
                 const Reference< XFastAttributeList >& /*xAttribs*/,
                 TimeNodePtrList & aTimeNodeList)
-        : ContextHandler( rParent )
+        : FragmentHandler2( rParent )
         , maTimeNodeList( aTimeNodeList )
         , mbInBldGraphic( false )
         ,   mbBuildAsOne( false )
@@ -52,9 +52,9 @@ namespace oox { namespace ppt {
     {
     }
 
-    void SAL_CALL BuildListContext::endFastElement( sal_Int32 aElement ) throw ( SAXException, RuntimeException)
+    void BuildListContext::onEndElement()
     {
-        switch( aElement )
+        switch( getCurrentElement() )
         {
         case PPT_TOKEN( bldGraphic ):
             mbInBldGraphic = false;
@@ -64,12 +64,8 @@ namespace oox { namespace ppt {
         }
     }
 
-    Reference< XFastContextHandler > SAL_CALL BuildListContext::createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                                                                                         const Reference< XFastAttributeList >& xAttribs )
-        throw ( SAXException, RuntimeException )
+    ::oox::core::ContextHandlerRef BuildListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
-        Reference< XFastContextHandler > xRet;
-
         switch( aElementToken )
         {
         case PPT_TOKEN( bldAsOne ):
@@ -77,36 +73,31 @@ namespace oox { namespace ppt {
             {
                 mbBuildAsOne = true;
             }
-            break;
+            return this;
         case PPT_TOKEN( bldSub ):
             if( mbInBldGraphic )
             {
             }
-            break;
+            return this;
         case PPT_TOKEN( bldGraphic ):
         {
             mbInBldGraphic = true;
-            AttributeList attribs( xAttribs );
-            OUString sShapeId = xAttribs->getOptionalValue( XML_spid );
+            OUString sShapeId = rAttribs.getString( XML_spid, OUString() );
 // TODO
-//      bool uiExpand = attribs.getBool( XML_uiExpand, true );
+//      bool uiExpand = rAttribs.getBool( XML_uiExpand, true );
                 /* this is unsigned */
-//      sal_uInt32 nGroupId =  attribs.getUnsignedInteger( XML_grpId, 0 );
-            break;
+//      sal_uInt32 nGroupId =  rAttribs.getUnsignedInteger( XML_grpId, 0 );
+        return this;
         }
         case A_TOKEN( bldDgm ):
         case A_TOKEN( bldOleChart ):
         case A_TOKEN( bldP ):
-
-            break;
+            return this;
         default:
             break;
         }
 
-        if( !xRet.is() )
-            xRet.set(this);
-
-        return xRet;
+        return this;
     }
 
 

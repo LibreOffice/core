@@ -49,8 +49,8 @@ using namespace ::com::sun::star::container;
 
 namespace oox { namespace ppt {
 
-SlideTimingContext::SlideTimingContext( ContextHandler& rParent, TimeNodePtrList & aTimeNodeList ) throw()
-    : ContextHandler( rParent )
+SlideTimingContext::SlideTimingContext( FragmentHandler2& rParent, TimeNodePtrList & aTimeNodeList ) throw()
+    : FragmentHandler2( rParent )
     , maTimeNodeList( aTimeNodeList )
 {
 }
@@ -60,42 +60,26 @@ SlideTimingContext::~SlideTimingContext() throw()
 
 }
 
-void SlideTimingContext::endFastElement( sal_Int32 /*aElement*/ ) throw ( SAXException, RuntimeException)
+::oox::core::ContextHandlerRef SlideTimingContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-}
-
-
-Reference< XFastContextHandler > SlideTimingContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
-
     switch( aElementToken )
     {
     case PPT_TOKEN( bldLst ):
-        xRet.set( new BuildListContext( *this, xAttribs, maTimeNodeList ) );
-        break;
+        return new BuildListContext( *this, rAttribs.getFastAttributeList(), maTimeNodeList );
     case PPT_TOKEN( extLst ):
-        return xRet;
+        return this;
     case PPT_TOKEN( tnLst ):
         // timing nodes
     {
-        xRet.set( new TimeNodeListContext( *this, maTimeNodeList ) );
+        return new TimeNodeListContext( *this, maTimeNodeList );
     }
     break;
 
     default:
-        break;
+        return this;
     }
 
-    if( !xRet.is() )
-        xRet.set(this);
-
-    return xRet;
-}
-
-void SAL_CALL SlideTimingContext::endDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
-{
-
+    return this;
 }
 
 } }

@@ -31,7 +31,7 @@
 #ifndef OOX_POWERPOINT_CUSTOMSHOWLISTCONTEXT_HXX
 #define OOX_POWERPOINT_CUSTOMSHOWLISTCONTEXT_HXX
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include <vector>
 
 namespace oox { namespace ppt {
@@ -45,18 +45,16 @@ namespace oox { namespace ppt {
     };
 
     /** CT_ */
-    class CustomShowListContext : public ::oox::core::ContextHandler
+    class CustomShowListContext : public ::oox::core::FragmentHandler2
     {
         std::vector< CustomShow >& mrCustomShowList;
 
     public:
-        CustomShowListContext( ::oox::core::ContextHandler& rParent,
+        CustomShowListContext( ::oox::core::FragmentHandler2& rParent,
                 std::vector< CustomShow >& rCustomShowList );
 
         ~CustomShowListContext( );
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-            createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& /*xAttribs*/ )
-                throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
     };
 
 } }

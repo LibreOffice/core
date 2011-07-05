@@ -29,26 +29,24 @@
 #ifndef OOX_PPT_SLIDETRANSITIONCONTEXT
 #define OOX_PPT_SLIDETRANSITIONCONTEXT
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/ppt/slidetransition.hxx"
 
 namespace oox { class PropertyMap; }
 
 namespace oox { namespace ppt {
 
-    class SlideTransitionContext : public ::oox::core::ContextHandler
+    class SlideTransitionContext : public ::oox::core::FragmentHandler2
     {
     public:
-        SlideTransitionContext( ::oox::core::ContextHandler& rParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes,
+        SlideTransitionContext( ::oox::core::FragmentHandler2& rParent,
+            const AttributeList& rAttributes,
             PropertyMap & aProperties ) throw();
         virtual ~SlideTransitionContext() throw();
 
-    virtual void SAL_CALL endFastElement( sal_Int32 aElement ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-        createFastChildContext( ::sal_Int32 Element,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
-            throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void onEndElement();
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
+
 
     private:
         PropertyMap&                    maSlideProperties;

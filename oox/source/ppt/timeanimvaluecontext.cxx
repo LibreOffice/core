@@ -36,10 +36,10 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-    TimeAnimValueListContext::TimeAnimValueListContext( ContextHandler& rParent,
+    TimeAnimValueListContext::TimeAnimValueListContext( FragmentHandler2& rParent,
                 const Reference< XFastAttributeList >& /*xAttribs*/,
                 TimeAnimationValueList & aTavList )
-        : ContextHandler( rParent )
+        : FragmentHandler2( rParent )
             , maTavList( aTavList )
             , mbInValue( false )
     {
@@ -51,21 +51,17 @@ namespace oox { namespace ppt {
     }
 
 
-    void SAL_CALL TimeAnimValueListContext::endFastElement( sal_Int32 aElement )
-        throw ( SAXException, RuntimeException)
+    void TimeAnimValueListContext::onEndElement()
     {
-        if( aElement == PPT_TOKEN( tav ) )
+        if( isCurrentElement( PPT_TOKEN( tav ) ) )
         {
             mbInValue = false;
         }
     }
 
 
-    Reference< XFastContextHandler > SAL_CALL TimeAnimValueListContext::createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                                                                                                            const Reference< XFastAttributeList >& xAttribs )
-        throw ( SAXException, RuntimeException )
+    ::oox::core::ContextHandlerRef TimeAnimValueListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
-        Reference< XFastContextHandler > xRet;
 
         switch ( aElementToken )
         {
@@ -73,26 +69,23 @@ namespace oox { namespace ppt {
         {
             mbInValue = true;
             TimeAnimationValue val;
-            val.msFormula = xAttribs->getOptionalValue( XML_fmla );
-            val.msTime =  xAttribs->getOptionalValue( XML_tm );
+            val.msFormula = rAttribs.getString( XML_fmla, rtl::OUString() );
+            val.msTime =  rAttribs.getString( XML_tm, rtl::OUString() );
             maTavList.push_back( val );
-            break;
+            return this;
         }
         case PPT_TOKEN( val ):
             if( mbInValue )
             {
                 // CT_TLAnimVariant
-                xRet.set( new AnimVariantContext( *this, aElementToken, maTavList.back().maValue ) );
+                return new AnimVariantContext( *this, aElementToken, maTavList.back().maValue );
             }
             break;
         default:
             break;
         }
 
-        if( !xRet.is() )
-            xRet.set( this );
-
-        return xRet;
+        return this;
     }
 
 

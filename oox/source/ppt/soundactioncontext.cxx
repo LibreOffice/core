@@ -44,8 +44,8 @@ using namespace ::com::sun::star::uno;
 namespace oox { namespace ppt {
 
 
-    SoundActionContext::SoundActionContext( ContextHandler& rParent, PropertyMap & aProperties ) throw()
-    : ContextHandler( rParent )
+    SoundActionContext::SoundActionContext( FragmentHandler2& rParent, PropertyMap & aProperties ) throw()
+    : FragmentHandler2( rParent )
     , maSlideProperties( aProperties )
     , mbHasStartSound( false )
     , mbLoopSound( false )
@@ -59,9 +59,9 @@ namespace oox { namespace ppt {
     }
 
 
-    void SoundActionContext::endFastElement( sal_Int32 aElement ) throw (SAXException, RuntimeException)
+    void SoundActionContext::onEndElement()
     {
-        if ( aElement == PPT_TOKEN( sndAc ) )
+        if ( isCurrentElement( PPT_TOKEN( sndAc ) ) )
         {
             if( mbHasStartSound )
             {
@@ -97,37 +97,32 @@ namespace oox { namespace ppt {
     }
 
 
-    Reference< XFastContextHandler > SoundActionContext::createFastChildContext( ::sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+    ::oox::core::ContextHandlerRef SoundActionContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
-        Reference< XFastContextHandler > xRet;
-        AttributeList attribs(xAttribs);
-
-        switch( aElement )
+        switch( aElementToken )
         {
         case PPT_TOKEN( snd ):
             if( mbHasStartSound )
             {
                 drawingml::EmbeddedWAVAudioFile aAudio;
-                drawingml::getEmbeddedWAVAudioFile( getRelations(), xAttribs, aAudio);
+                drawingml::getEmbeddedWAVAudioFile( getRelations(), rAttribs.getFastAttributeList(), aAudio);
 
                 msSndName = ( aAudio.mbBuiltIn ? aAudio.msName : aAudio.msEmbed );
             }
-            break;
+            return this;
         case PPT_TOKEN( endSnd ):
             // CT_Empty
             mbStopSound = true;
-            break;
+            return this;
         case PPT_TOKEN( stSnd ):
             mbHasStartSound = true;
-            mbLoopSound = attribs.getBool( XML_loop, false );
+            mbLoopSound = rAttribs.getBool( XML_loop, false );
+            return this;
         default:
             break;
         }
 
-        if( !xRet.is() )
-            xRet.set( this );
-
-        return xRet;
+        return this;
     }
 
 

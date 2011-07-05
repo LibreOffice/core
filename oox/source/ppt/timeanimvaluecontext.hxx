@@ -31,26 +31,25 @@
 #ifndef OOX_PPT_TIMEANIMVALUELISTCONTEXT
 #define OOX_PPT_TIMEANIMVALUELISTCONTEXT
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/ppt/animationspersist.hxx"
 
 namespace oox { namespace ppt {
 
     /** CT_TLTimeAnimateValueList */
     class TimeAnimValueListContext
-        : public ::oox::core::ContextHandler
+        : public ::oox::core::FragmentHandler2
     {
     public:
-        TimeAnimValueListContext( ::oox::core::ContextHandler& rParent,
+        TimeAnimValueListContext( ::oox::core::FragmentHandler2& rParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
             TimeAnimationValueList & aTavList );
 
         ~TimeAnimValueListContext( );
 
-        virtual void SAL_CALL endFastElement( sal_Int32 aElement ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+        virtual void onEndElement();
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& /*xAttribs*/ ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
     private:
         TimeAnimationValueList & maTavList;

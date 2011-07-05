@@ -32,16 +32,16 @@
 #define OOX_PPT_HEADERFOOTERCONTEXT
 
 #include "oox/ppt/headerfooter.hxx"
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 
 namespace oox { namespace ppt {
 
     /** CT_HeaderFooter */
-    class HeaderFooterContext : public ::oox::core::ContextHandler
+    class HeaderFooterContext : public ::oox::core::FragmentHandler2
     {
     public:
-        HeaderFooterContext( ::oox::core::ContextHandler& rParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs, HeaderFooter& rHeaderFooter );
+        HeaderFooterContext( ::oox::core::FragmentHandler2& rParent,
+            const AttributeList& rAttribs, HeaderFooter& rHeaderFooter );
 
         ~HeaderFooterContext( );
     };

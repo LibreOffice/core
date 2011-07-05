@@ -31,7 +31,7 @@
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include "oox/helper/propertymap.hxx"
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/ppt/slidepersist.hxx"
 
 #include <stack>
@@ -40,14 +40,14 @@
 
 namespace oox { namespace ppt {
 
-class SlideFragmentHandler : public ::oox::core::FragmentHandler
+class SlideFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     SlideFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, SlidePersistPtr pPersistPtr, const ShapeLocation eShapeLocation ) throw();
     virtual ~SlideFragmentHandler() throw();
 
-    virtual void SAL_CALL endDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void finalizeImport();
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
 protected:
     SlidePersistPtr     mpSlidePersistPtr;

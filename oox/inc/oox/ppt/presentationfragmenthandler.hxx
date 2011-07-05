@@ -33,7 +33,9 @@
 #include <com/sun/star/awt/Size.hpp>
 #include "oox/drawingml/textliststyle.hxx"
 #include "oox/ppt/slidepersist.hxx"
+#include "oox/core/contexthandler.hxx"
 #include "oox/core/fragmenthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/core/relations.hxx"
 #include "oox/ppt/customshowlistcontext.hxx"
 
@@ -42,15 +44,13 @@
 
 namespace oox { namespace ppt {
 
-class PresentationFragmentHandler : public ::oox::core::FragmentHandler
+class PresentationFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     PresentationFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath ) throw();
     virtual ~PresentationFragmentHandler() throw();
-
-    virtual void SAL_CALL startDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void finalizeImport();
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
 protected:
     bool importSlide( const ::oox::core::FragmentHandlerRef& rxSlideFragmentHandler,
