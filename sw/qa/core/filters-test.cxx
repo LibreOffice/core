@@ -83,10 +83,6 @@ public:
     void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected);
     bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
 
-    bool testLoad(const rtl::OUString &rFilter,
-        const rtl::OUString &rUserData,
-        const rtl::OUString &rURL);
-
     /**
      * Ensure CVEs remain unbroken
      */
@@ -162,21 +158,6 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
         }
     }
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
-}
-
-bool FiltersTest::testLoad(const rtl::OUString &rFilter,
-    const rtl::OUString &rUserData,
-    const rtl::OUString &rURL)
-{
-    SfxFilter aFilter(
-        rFilter,
-        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
-        rUserData, rtl::OUString() );
-
-    SwDocShellRef xDocShRef = new SwDocShell;
-    SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
-    aSrcMed.SetFilter(&aFilter);
-    return xDocShRef->DoLoad(&aSrcMed);
 }
 
 void FiltersTest::testCVEs()
