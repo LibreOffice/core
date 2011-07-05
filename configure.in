@@ -8057,19 +8057,19 @@ int main(int argc, char **argv) {
     fi
 else
     AC_MSG_RESULT([no])
-    dnl we only need cairo on windows if we
-    dnl building librsvg
 
-    dnl for iOS and Android cairo isn't
-    dnl buildable yet anyway.
-    if test "$ENABLE_LIBRSVG" != NO; then
-      case "$_os" in
-        WINNT|iOS|Android)
-          ;;
-      *)
+    if test $_os = Android; then
+        dnl For Android cairo isn't
+        dnl buildable yet.
+        :
+    elif test $_os = WINNT; then
+        dnl We only need cairo for Windows if we
+        dnl build librsvg
+        if test "$ENABLE_LIBRSVG" != NO; then
+            BUILD_TYPE="$BUILD_TYPE CAIRO"
+        fi
+    else
         BUILD_TYPE="$BUILD_TYPE CAIRO"
-          ;;
-      esac
     fi
 fi
 
