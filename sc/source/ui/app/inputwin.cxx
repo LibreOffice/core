@@ -75,8 +75,10 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include "AccessibleEditObject.hxx"
 #include "AccessibleText.hxx"
+#include <svtools/miscopt.hxx>
 
 #define TEXT_STARTPOS       3
+#define TEXT_MULTI_STARTPOS 5
 #define THESIZE             1000000 //!!! langt... :-)
 #define TBX_WINDOW_HEIGHT   22 // in Pixeln - fuer alle Systeme gleich?
 
@@ -128,16 +130,29 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 //==================================================================
 
 #define IMAGE(id) pImgMgr->SeekImage(id)
+bool lcl_isExperimentalMode()
+{
+    SvtMiscOptions aMiscOptions;
+    return aMiscOptions.IsExperimentalMode();
+}
 
 //==================================================================
 //  class ScInputWindow
 //==================================================================
 
+ScTextWndBase* lcl_chooseRuntimeImpl( Window* pParent )
+{
+    if ( !lcl_isExperimentalMode() )
+        return new ScTextWnd( pParent );
+    return new ScInputBarGroup( pParent );
+}
+
 ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
 // mit WB_CLIPCHILDREN, sonst Flicker
         ToolBox         ( pParent, WinBits(WB_BORDER|WB_3DLOOK|WB_CLIPCHILDREN) ),
         aWndPos         ( this ),
-        aTextWindow     ( this ),
+        pRuntimeWindow ( lcl_chooseRuntimeImpl( this ) ),
+        aTextWindow    ( *pRuntimeWindow ),
         pInputHdl       ( NULL ),
         pBindings       ( pBind ),
         aTextOk         ( ScResId( SCSTR_QHELP_BTNOK ) ),       // nicht immer neu aus Resource
@@ -189,7 +204,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     SetHelpId( HID_SC_INPUTWIN );   // fuer die ganze Eingabezeile
 
     aWndPos     .Show();
-    aTextWindow .Show();
+    aTextWindow.Show();
 
     pInputHdl = SC_MOD()->GetInputHdl( pViewSh, false );    // use own handler even if ref-handler is set
     if (pInputHdl)
@@ -488,6 +503,12 @@ void ScInputWindow::Resize()
     Size aSize  = aTextWindow.GetSizePixel();
 
     aSize.Width() = Max( ((long)(nWidth - nLeft - 5)), (long)0 );
+    if ( lcl_isExperimentalMode() )
+    {
+        aSize.Height()= TBX_WINDOW_HEIGHT;
+        aTextWindow.SetSizePixel( aSize );
+        aTextWindow.Resize();
+    }
     aTextWindow.SetSizePixel( aSize );
     aTextWindow.Invalidate();
 }
@@ -703,17 +724,141 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 //========================================================================
+//                  ScInputBarGroup
+//========================================================================
+
+ScInputBarGroup::ScInputBarGroup(Window* pParent)
+    :   ScTextWndBase        ( pParent, WinBits(WB_HIDE) ),
+        aTextWindow      ( this ),
+        bIsMultiLine    ( false )
+{
+      aTextWindow.Show();
+      aTextWindow.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
+      aTextWindow.SetHelpId     ( HID_INSWIN_INPUT );
+}
+
+ScInputBarGroup::~ScInputBarGroup()
+{
+
+}
+
+void
+ScInputBarGroup::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
+{
+    aTextWindow.InsertAccessibleTextData( rTextData );
+}
+
+void
+ScInputBarGroup::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
+{
+    aTextWindow.RemoveAccessibleTextData( rTextData );
+}
+
+const String&
+ScInputBarGroup::GetTextString() const
+{
+    return aTextWindow.GetTextString();
+}
+
+void ScInputBarGroup::SetTextString( const String& rString )
+{
+    aTextWindow.SetTextString(rString);
+}
+
+void ScInputBarGroup::Resize()
+{
+    long nWidth = GetSizePixel().Width();
+    long nLeft  = aTextWindow.GetPosPixel().X();
+    Size aSize  = aTextWindow.GetSizePixel();
+
+    aSize.Width() = Max( ((long)(nWidth - nLeft - 40)), (long)0 );
+    aSize.Height()=22;
+    aTextWindow.SetSizePixel( aSize );
+    aTextWindow.Invalidate();
+}
+
+void ScInputBarGroup::GainFocus()
+{
+    aTextWindow.GrabFocus();
+}
+
+
+void ScInputBarGroup::StopEditEngine( sal_Bool bAll )
+{
+    aTextWindow.StopEditEngine( bAll );
+}
+
+void ScInputBarGroup::StartEditEngine()
+{
+    aTextWindow.StartEditEngine();
+}
+
+void ScInputBarGroup::MakeDialogEditView()
+{
+    aTextWindow.MakeDialogEditView();
+}
+
+
+EditView* ScInputBarGroup::GetEditView()
+{
+    return aTextWindow.GetEditView();
+}
+
+sal_Bool ScInputBarGroup::IsInputActive()
+{
+    return aTextWindow.IsInputActive();
+}
+
+void ScInputBarGroup::SetFormulaMode(sal_Bool bSet)
+{
+    aTextWindow.SetFormulaMode(bSet);
+}
+
+ScMultiTextWnd::ScMultiTextWnd( Window* pParen ) : ScTextWnd( pParen )
+{
+    nTextStartPos = TEXT_MULTI_STARTPOS;
+}
+
+void ScMultiTextWnd::Paint( const Rectangle& rRec )
+{
+    // We always use edit engine to draw text at all times.
+    if (!pEditEngine)
+        InitEditEngine(SfxObjectShell::Current());
+
+    if (pEditView)
+    {
+        pEditView->Paint(rRec);
+    }
+}
+
+void ScMultiTextWnd::Resize()
+{
+    if (pEditView)
+    {
+        Size aSize = GetOutputSizePixel();
+
+        Size bSize = LogicToPixel(Size(0,pEditEngine->GetLineHeight(0,0)));
+        int nDiff=(aSize.Height()-bSize.Height())/2;
+        Point aPos(nTextStartPos,nDiff*aSize.Height()/aSize.Height());
+        Point aPos2(aSize.Width()-5,(aSize.Height()-nDiff)*aSize.Height()/aSize.Height());
+        pEditView->SetOutputArea(
+            PixelToLogic(Rectangle(aPos, aPos2)));
+    }
+}
+
+//========================================================================
 //                          Eingabefenster
 //========================================================================
 
 ScTextWnd::ScTextWnd( Window* pParent )
-    :   Window       ( pParent, WinBits(WB_HIDE | WB_BORDER) ),
+    :   ScTextWndBase        ( pParent, WinBits(WB_HIDE | WB_BORDER) ),
         DragSourceHelper( this ),
         pEditEngine  ( NULL ),
         pEditView    ( NULL ),
         bIsInsertMode( sal_True ),
         bFormulaMode ( false ),
-        bInputMode   ( false )
+        bInputMode   ( false ),
+        nTextStartPos ( TEXT_STARTPOS )
 {
     EnableRTL( false );     // EditEngine can't be used with VCL EnableRTL
 
@@ -767,11 +912,11 @@ void ScTextWnd::Paint( const Rectangle& rRec )
                     - LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
 //      if (nDiff<2) nDiff=2;       // mind. 1 Pixel
 
-        long nStartPos = TEXT_STARTPOS;
+        long nStartPos = nTextStartPos;
         if ( bIsRTL )
         {
             //  right-align
-            nStartPos += GetOutputSizePixel().Width() - 2*TEXT_STARTPOS -
+            nStartPos += GetOutputSizePixel().Width() - 2*nTextStartPos -
                         LogicToPixel( Size( GetTextWidth( aString ), 0 ) ).Width();
 
             //  LayoutMode isn't changed as long as ModifyRTLDefaults doesn't include SvxFrameDirectionItem
@@ -789,10 +934,10 @@ void ScTextWnd::Resize()
         long nDiff =  aSize.Height()
                     - LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
 
-        aSize.Width() -= 2 * TEXT_STARTPOS - 1;
+        aSize.Width() -= 2 * nTextStartPos - 1;
 
         pEditView->SetOutputArea(
-            PixelToLogic( Rectangle( Point( TEXT_STARTPOS, (nDiff > 0) ? nDiff/2 : 1 ),
+            PixelToLogic( Rectangle( Point( nTextStartPos, (nDiff > 0) ? nDiff/2 : 1 ),
                                      aSize ) ) );
     }
 }
@@ -1013,6 +1158,117 @@ void lcl_ModifyRTLVisArea( EditView* pEditView )
     pEditView->SetVisArea(aVisArea);
 }
 
+void ScMultiTextWnd::StartEditEngine()
+{
+    //  Bei "eigener Modalitaet" (Doc-modale Dialoge) nicht aktivieren
+
+    SfxObjectShell* pObjSh = SfxObjectShell::Current();
+    if ( pObjSh && pObjSh->IsInModalMode() )
+        return;
+
+    if ( !pEditView || !pEditEngine )
+    {
+        InitEditEngine(pObjSh);
+    }
+
+    SC_MOD()->SetInputMode( SC_INPUT_TOP );
+
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (pViewFrm)
+        pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
+}
+
+void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
+{
+    ScFieldEditEngine* pNew;
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+    if ( pViewSh )
+    {
+        const ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+        pNew = new ScFieldEditEngine( pDoc->GetEnginePool(), pDoc->GetEditPool() );
+    }
+    else
+        pNew = new ScFieldEditEngine( EditEngine::CreatePool(), NULL, sal_True );
+    pNew->SetExecuteURL( false );
+    pEditEngine = pNew;
+
+    Size barSize=GetOutputSizePixel();
+
+    long barHeight=barSize.Height();
+    long textHeight=LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
+    long nDiff =  barHeight - textHeight;
+
+    barSize.Height()=nDiff+barHeight;
+    barSize.Width() -= 2*nTextStartPos-4;
+    pEditEngine->SetUpdateMode( false );
+    pEditEngine->SetPaperSize( PixelToLogic(Size(barSize.Width(),10000)) );
+    pEditEngine->SetWordDelimiters(
+                    ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
+
+    UpdateAutoCorrFlag();
+
+    {
+        SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
+        pEditEngine->SetFontInfoInItemSet( *pSet, aTextFont );
+        lcl_ExtendEditFontAttribs( *pSet );
+        // turn off script spacing to match DrawText output
+        pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
+        if ( bIsRTL )
+            lcl_ModifyRTLDefaults( *pSet );
+        pEditEngine->SetDefaults( pSet );
+    }
+
+    //  Wenn in der Zelle URL-Felder enthalten sind, muessen die auch in
+    //  die Eingabezeile uebernommen werden, weil sonst die Positionen nicht stimmen.
+
+    sal_Bool bFilled = false;
+    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    if ( pHdl )         //! Testen, ob's der richtige InputHdl ist?
+        bFilled = pHdl->GetTextAndFields( *pEditEngine );
+
+    pEditEngine->SetUpdateMode( sal_True );
+
+    //  aString ist die Wahrheit...
+    if ( bFilled && pEditEngine->GetText() == aString )
+        Invalidate();                       // Repaint fuer (hinterlegte) Felder
+    else
+        pEditEngine->SetText(aString);      // dann wenigstens den richtigen Text
+
+    pEditView = new EditView( pEditEngine, this );
+    pEditView->SetInsertMode(bIsInsertMode);
+
+    // Text aus Clipboard wird als ASCII einzeilig uebernommen
+    sal_uLong n = pEditView->GetControlWord();
+    pEditView->SetControlWord( n | EV_CNTRL_SINGLELINEPASTE );
+
+    pEditEngine->InsertView( pEditView, EE_APPEND );
+
+    Resize();
+
+    if ( bIsRTL )
+        lcl_ModifyRTLVisArea( pEditView );
+
+    pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, NotifyHdl));
+
+    if (!maAccTextDatas.empty())
+        maAccTextDatas.back()->StartEdit();
+
+    //  as long as EditEngine and DrawText sometimes differ for CTL text,
+    //  repaint now to have the EditEngine's version visible
+//        SfxObjectShell* pObjSh = SfxObjectShell::Current();
+    if ( pObjSh && pObjSh->ISA(ScDocShell) )
+    {
+        ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();    // any document
+        sal_uInt8 nScript = pDoc->GetStringScriptType( aString );
+        if ( nScript & SCRIPTTYPE_COMPLEX )
+            Invalidate();
+    }
+}
+
+void ScMultiTextWnd::StopEditEngine( sal_Bool /*bAll*/ )
+{
+}
+
 void ScTextWnd::StartEditEngine()
 {
     //  Bei "eigener Modalitaet" (Doc-modale Dialoge) nicht aktivieren
@@ -1206,7 +1462,7 @@ void ScTextWnd::SetTextString( const String& rNewString )
                     nDifPos = 0;
 
                                                 // -1 wegen Rundung und "A"
-                Point aLogicStart = PixelToLogic(Point(TEXT_STARTPOS-1,0));
+                Point aLogicStart = PixelToLogic(Point(nTextStartPos-1,0));
                 long nStartPos = aLogicStart.X();
                 long nInvPos = nStartPos;
                 if (nDifPos)
