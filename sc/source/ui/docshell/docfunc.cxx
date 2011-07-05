@@ -1807,7 +1807,6 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
     SCCOL nPaintEndX = nEndCol;
     SCROW nPaintEndY = nEndRow;
     sal_uInt16 nPaintFlags = PAINT_GRID;
-    SCTAB i;
 
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
@@ -1818,7 +1817,7 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
     else
     {
         SCTAB nCount = 0;
-        for( i=0; i<nTabCount; i++ )
+        for(SCTAB i=0; i<nTabCount; i++ )
         {
             if( !pDoc->IsScenario(i) )
             {
@@ -1902,7 +1901,7 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
     itr = aMark.begin();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
-        i = *itr;
+        SCTAB i = *itr;
         if ( pDoc->HasAttrib( nUndoStartX, nUndoStartY, i, nMergeTestEndX, nMergeTestEndY, i, HASATTR_MERGED | HASATTR_OVERLAPPED ))
         {
             SCCOL nMergeStartX = nUndoStartX;
@@ -2052,7 +2051,7 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
             for( SCTAB j = *itr+1; j<nTabCount && pDoc->IsScenario(j); j++ )
                 nScenarioCount ++;
 
-            pDoc->CopyToDocument( nUndoStartX, nUndoStartY, *itr, nUndoEndX, nUndoEndY, i+nScenarioCount,
+            pDoc->CopyToDocument( nUndoStartX, nUndoStartY, *itr, nUndoEndX, nUndoEndY, *itr+nScenarioCount,
                 IDF_ALL | IDF_NOCAPTIONS, false, pUndoDoc );
         }
 
@@ -2237,7 +2236,7 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
 
         //  ganze Zeilen loeschen: nichts anpassen
         if ( eCmd == DEL_DELROWS || !AdjustRowHeight(ScRange( 0, nPaintStartY, *itr, MAXCOL, nPaintEndY, *itr+nScenarioCount )) )
-            rDocShell.PostPaint( nPaintStartX, nPaintStartY, *itr, nPaintEndX, nPaintEndY, i+nScenarioCount, nPaintFlags,  nExtFlags );
+            rDocShell.PostPaint( nPaintStartX, nPaintStartY, *itr, nPaintEndX, nPaintEndY, *itr+nScenarioCount, nPaintFlags,  nExtFlags );
         else
         {
             //  paint only what is not done by AdjustRowHeight
