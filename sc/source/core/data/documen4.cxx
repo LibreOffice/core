@@ -139,7 +139,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     i = 0;
     bool bStop = false;
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nMax; ++itr)
     {
         if (maTabs[i])
@@ -232,7 +232,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     i = 0;
     bool bStop = false;
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nMax; ++itr)
     {
         if (maTabs[*itr])
@@ -512,7 +512,7 @@ sal_Bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
     SCROW nEndRow = aSingle.aEnd.Row();
 
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nMax && !aData.bError; ++itr)
         if (maTabs[*itr])
             maTabs[*itr]->UpdateSelectionFunction( aData,

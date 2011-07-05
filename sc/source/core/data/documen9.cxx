@@ -276,7 +276,7 @@ void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
         return;
 
     SCTAB nTabCount = GetTableCount();
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
         if (maTabs[*itr])
             pDrawLayer->DeleteObjectsInArea( *itr, nCol1, nRow1, nCol2, nRow2 );

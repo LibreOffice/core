@@ -1111,7 +1111,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
     rMark.GetMultiMarkArea( aMarkRange );
 
     SCTAB nTabCount = pDoc->GetTableCount();
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
         SCTAB nTab = *itr;
