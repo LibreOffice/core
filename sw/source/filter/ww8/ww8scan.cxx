@@ -7319,4 +7319,9 @@ SEPr::SEPr() :
     memset(rgdxaColumnWidthSpacing, 0, sizeof(rgdxaColumnWidthSpacing));
 }
 
+bool checkSeek(SvStream &rSt, WW8_FC nOffset)
+{
+    return (rSt.Seek(nOffset) == static_cast<sal_Size>(nOffset));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

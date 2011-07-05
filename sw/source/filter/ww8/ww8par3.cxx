@@ -1072,27 +1072,33 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     //
     // 1. PLCF LST auslesen und die Listen Vorlagen im Writer anlegen
     //
-    rSt.Seek( rFib.fcPlcfLst );
-    sal_uInt16 nListCount;
-    rSt >> nListCount;
-    bool bOk = 0 < nListCount;
+    bool bOk = checkSeek(rSt, rFib.fcPlcfLst);
+    sal_uInt16 nListCount(0);
+    if (bOk)
+    {
+        rSt >> nListCount;
+        bOk = 0 < nListCount;
+    }
     if( bOk )
     {
-        WW8LST aLST;
         //
         // 1.1 alle LST einlesen
         //
         for (sal_uInt16 nList=0; nList < nListCount; ++nList)
         {
             bOk = false;
+
+            if (rSt.IsEof())
+                break;
+
+            WW8LST aLST;
             memset(&aLST, 0, sizeof( aLST ));
-            sal_uInt16 nLevel;
             //
             // 1.1.1 Daten einlesen
             //
             rSt >> aLST.nIdLst;
             rSt >> aLST.nTplC;
-            for (nLevel = 0; nLevel < nMaxLevel; ++nLevel)
+            for (sal_uInt16 nLevel = 0; nLevel < nMaxLevel; ++nLevel)
                 rSt >> aLST.aIdSty[ nLevel ];
 
 
@@ -1138,7 +1144,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         //
         // 1.2 alle LVL aller aLST einlesen
         //
-        sal_uInt8 nLevel;
         sal_uInt16 nLSTInfos = static_cast< sal_uInt16 >(maLSTInfos.size());
         for (sal_uInt16 nList = 0; nList < nLSTInfos; ++nList)
         {
@@ -1153,7 +1158,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             std::deque<bool> aNotReallyThere;
             aNotReallyThere.resize(nMaxLevel);
             pListInfo->maParaSprms.resize(nMaxLevel);
-            for (nLevel = 0; nLevel < nLvlCount; ++nLevel)
+            for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
             {
                 SwNumFmt aNumFmt( rMyNumRule.Get( nLevel ) );
                 // LVLF einlesen
@@ -1171,16 +1176,16 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             // 1.2.2 die ItemPools mit den CHPx Einstellungen der verschiedenen
             //       Level miteinander vergleichen und ggfs. Style(s) erzeugen
             //
-            bool bDummy;
-            for (nLevel = 0; nLevel < nLvlCount; ++nLevel)
+            for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
             {
+                bool bDummy;
                 AdjustLVL( nLevel, rMyNumRule, pListInfo->aItemSet,
                                                pListInfo->aCharFmt, bDummy );
             }
             //
             // 1.2.3 ItemPools leeren und loeschen
             //
-            for (nLevel = 0; nLevel < nLvlCount; ++nLevel)
+            for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
                 delete pListInfo->aItemSet[ nLevel ];
             bOk = true;
         }
@@ -1196,9 +1201,12 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     // 2. PLF LFO auslesen und speichern
     //
     long nLfoCount(0);
+
+    if (bOk)
+        bOk = checkSeek(rSt, rFib.fcPlfLfo);
+
     if (bOk)
     {
-        rSt.Seek(rFib.fcPlfLfo);
         rSt >> nLfoCount;
         if (0 >= nLfoCount)
             bOk = false;
@@ -1206,14 +1214,19 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
     if(bOk)
     {
-        WW8LFO aLFO;
         //
         // 2.1 alle LFO einlesen
         //
         for (sal_uInt16 nLfo = 0; nLfo < nLfoCount; ++nLfo)
         {
             bOk = false;
+
+            if (rSt.IsEof())
+                break;
+
+            WW8LFO aLFO;
             memset(&aLFO, 0, sizeof( aLFO ));
+
             rSt >> aLFO.nIdLst;
             rSt.SeekRel( 8 );
             rSt >> aLFO.nLfoLvl;

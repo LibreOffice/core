@@ -1780,6 +1780,8 @@ std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx);
 
 sal_uLong SafeReadString(ByteString &rStr,sal_uInt16 nLen,SvStream &rStrm);
 
+bool checkSeek(SvStream &rSt, WW8_FC nOffset);
+
 //MS has a (slightly) inaccurate view of how many twips
 //are in the default letter size of a page
 const sal_uInt16 lLetterWidth = 12242;
