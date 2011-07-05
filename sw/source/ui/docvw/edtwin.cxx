@@ -2607,7 +2607,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
          ( !rSh.IsHeaderFooterEdit() && bOverHdrFtr ) )
     {
         if ( rMEvt.GetButtons() == MOUSE_LEFT && rMEvt.GetClicks( ) == 2 )
-            rSh.ToggleHeaderFooterEdit( );
+            rSh.SwCrsrShell::SetCrsr( aDocPos );
 
         return;
     }

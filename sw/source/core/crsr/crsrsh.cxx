@@ -3466,8 +3466,6 @@ void SwCrsrShell::ToggleHeaderFooterEdit( )
             pCrsrBack->SetMark();
             *pCrsrBack->GetMark() = *pCurCrsr->GetMark();
         }
-
-        SetCrsrInHdFt();
     }
     else
     {
