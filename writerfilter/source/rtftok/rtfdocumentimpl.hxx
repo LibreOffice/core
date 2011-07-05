@@ -56,6 +56,9 @@ namespace writerfilter {
             INTERNAL_HEX
         };
 
+        // Note that this is not a 1:1 mapping between destination control
+        // words, e.g. RTF_PICT gets mapped to DESTINATION_PICT or
+        // DESTINATION_SHAPEPROPERTYVALUEPICT, etc.
         enum RTFDesitnationState
         {
             DESTINATION_NORMAL,
@@ -88,7 +91,8 @@ namespace writerfilter {
             DESTINATION_BOOKMARKSTART,
             DESTINATION_BOOKMARKEND,
             DESTINATION_REVISIONTABLE,
-            DESTINATION_REVISIONENTRY
+            DESTINATION_REVISIONENTRY,
+            DESTINATION_SHAPETEXT
         };
 
         enum RTFBorderState
@@ -298,7 +302,11 @@ namespace writerfilter {
                 RTFBuffer_t m_aTableBuffer;
                 /// Buffered superscript, till footnote is reached (or not).
                 RTFBuffer_t m_aSuperBuffer;
+                /// Buffered shape text.
+                RTFBuffer_t m_aShapetextBuffer;
+                /// Points to the active buffer, if there is one.
                 RTFBuffer_t* m_pCurrentBuffer;
+
                 bool m_bHasFootnote;
                 /// If this is a substream.
                 bool m_bIsSubstream;

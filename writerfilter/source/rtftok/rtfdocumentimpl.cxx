@@ -278,6 +278,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_xStorage(),
     m_aTableBuffer(),
     m_aSuperBuffer(),
+    m_aShapetextBuffer(),
     m_pCurrentBuffer(0),
     m_bHasFootnote(false),
     m_bIsSubstream(false),
@@ -674,7 +675,9 @@ void RTFDocumentImpl::text(OUString& rString)
         RTFValue::Pointer_t pValue;
         m_pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, pValue));
     }
-    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
+    if (m_aStates.top().nDestinationState == DESTINATION_NORMAL
+            || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT
+            || m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT)
     {
         if (!m_pCurrentBuffer)
         {
@@ -918,6 +921,11 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 resolveSubstream(m_nGroupStartPos - 1, NS_rtf::LN_annotation);
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
+            break;
+        case RTF_SHPTXT:
+            m_aStates.top().nDestinationState = DESTINATION_SHAPETEXT;
+            OSL_ENSURE(!m_aShapetextBuffer.size(), "shapetext buffer is not empty");
+            m_pCurrentBuffer = &m_aShapetextBuffer;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -2338,6 +2346,8 @@ int RTFDocumentImpl::popState()
         bPopPictureProperties = true;
         aAttributes = m_aStates.top().aCharacterAttributes;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT)
+        m_pCurrentBuffer = 0; // Just disable buffering, don't empty it yet.
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);
@@ -2484,6 +2494,7 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
                 m_aStates.top().aShape.nBottom - m_aStates.top().aShape.nTop));
 
     Mapper().startShape(xShape);
+    replayBuffer(m_aShapetextBuffer);
     Mapper().endShape();
 }
 
