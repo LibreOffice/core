@@ -1245,8 +1245,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aTableRowSprms = m_aDefaultState.aTableRowSprms;
             m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
             m_aStates.top().nCellX = 0;
-            m_aStates.top().aTableCellsSprms = m_aDefaultState.aTableCellsSprms;
-            m_aStates.top().aTableCellsAttributes = m_aDefaultState.aTableCellsAttributes;
             break;
         case RTF_NOWIDCTLPAR:
             {
@@ -1778,9 +1776,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 
                 // Reset cell properties.
                 RTFSprms::Pointer_t pTableCellSprms(new RTFSprms_t(m_aStates.top().aTableCellSprms));
-                m_aStates.top().aTableCellsSprms.push_back(pTableCellSprms);
                 RTFSprms::Pointer_t pTableCellAttributes(new RTFSprms_t(m_aStates.top().aTableCellAttributes));
-                m_aStates.top().aTableCellsAttributes.push_back(pTableCellAttributes);
                 m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
                 m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
             }
@@ -2617,8 +2613,6 @@ RTFParserState::RTFParserState()
     nPictureScaleY(0),
     aShape(),
     nCellX(0),
-    aTableCellsSprms(),
-    aTableCellsAttributes(),
     bIsCjk(false)
 {
 }
