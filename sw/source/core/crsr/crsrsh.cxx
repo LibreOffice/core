@@ -676,6 +676,11 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
         // -> zurueck
         return bRet;
 
+    // Toggle the Header/Footer mode if needed
+    bool bInHeaderFooter = pFrm && ( pFrm->IsHeaderFrm() || pFrm->IsFooterFrm() );
+    if ( bInHeaderFooter ^ IsHeaderFooterEdit() )
+        ToggleHeaderFooterEdit();
+
     if( pBlockCrsr && bBlock )
     {
         pBlockCrsr->setEndPoint( rLPt );
