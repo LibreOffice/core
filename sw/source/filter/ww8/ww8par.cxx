@@ -4415,7 +4415,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         pWwFib->lcbSttbFnm, bVer67 ? 2 : 0, eStructCharSet,
         aLinkStrings, &aStringIds);
 
-    for (size_t i=0; i < aLinkStrings.size(); ++i)
+    for (size_t i=0; i < aLinkStrings.size() && i < aStringIds.size(); ++i)
     {
         ww::bytes stringId = aStringIds[i];
         WW8_STRINGID *stringIdStruct = (WW8_STRINGID*)(&stringId[0]);
