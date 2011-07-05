@@ -6187,12 +6187,11 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     if( rFib.lcbSttbfffn <= 2 )
     {
         OSL_ENSURE( !this, "Fonttabelle kaputt! (rFib.lcbSttbfffn < 2)" );
-        pFontA = 0;
-        nMax = 0;
         return;
     }
 
-    rSt.Seek( rFib.fcSttbfffn );
+    if (!checkSeek(rSt, rFib.fcSttbfffn))
+        return;
 
     sal_Int32 nFFn = rFib.lcbSttbfffn - 2;
 
@@ -6244,8 +6243,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
         pFontA = new WW8_FFN[ nMax ];
         p = pFontA;
 
-    if( eVersion <= ww::eWW2 )
-    {
+        if( eVersion <= ww::eWW2 )
+        {
             WW8_FFN_BASE* pVer2 = (WW8_FFN_BASE*)pA;
             for(sal_uInt16 i=0; i<nMax; ++i, ++p)
             {
@@ -6269,7 +6268,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 p->sFontname = String ( (((const sal_Char*)pVer2) + 1 + 2), eEnc);
                 pVer2 = (WW8_FFN_BASE*)( ((sal_uInt8*)pVer2) + pVer2->cbFfnM1 + 1 );
             }
-    }
+        }
         else if( eVersion < ww::eWW8 )
         {
             WW8_FFN_Ver6* pVer6 = (WW8_FFN_Ver6*)pA;
