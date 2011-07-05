@@ -155,7 +155,7 @@ CONFIGURE_ACTION=.$/configure
 .ENDIF
 
 .IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS=--disable-shared --disable-xlib --disable-quartz --enable-quartz-font=yes
+CONFIGURE_FLAGS=--disable-shared --disable-xlib --enable-quartz --enable-quartz-font
 .ELSE
 CONFIGURE_FLAGS=--disable-static --enable-xlib
 .ENDIF
