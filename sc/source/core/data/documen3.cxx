@@ -1047,7 +1047,7 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const 
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
     SCTAB nMax = maTabs.size();
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nMax; ++itr)
         if (maTabs[*itr])
             maTabs[*itr]->Fill(nCol1, nRow1, nCol2, nRow2,
@@ -1070,7 +1070,7 @@ void ScDocument::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartRow, nEndRow );
     SCTAB nMax = maTabs.size();
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nMax; ++itr)
         if (maTabs[*itr])
             maTabs[*itr]->AutoFormat( nStartCol, nStartRow, nEndCol, nEndRow, nFormatNo );
