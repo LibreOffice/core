@@ -985,7 +985,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             {
                 if (!m_pCurrentBuffer)
                     parBreak();
-                else
+                else if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)
                 {
                     RTFValue::Pointer_t pValue;
                     m_pCurrentBuffer->push_back(make_pair(BUFFER_PAR, pValue));
@@ -2145,7 +2145,8 @@ int RTFDocumentImpl::pushState()
         m_aStates.top().nDestinationState = DESTINATION_FONTENTRY;
     else if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
         m_aStates.top().nDestinationState = DESTINATION_STYLEENTRY;
-    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
+    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT ||
+            m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT)
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
     else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTABLE)
         m_aStates.top().nDestinationState = DESTINATION_REVISIONENTRY;
