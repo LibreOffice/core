@@ -320,12 +320,13 @@ void ScUndoFillTable::SetChangeTrack()
         ScRange aWorkRange(aRange);
         nStartChangeAction = 0;
         sal_uLong nTmpAction;
-        for ( SCTAB i = 0; i < nTabCount; i++ )
+        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+        for (; itr != itrEnd && *itr < nTabCount; ++itr)
         {
-            if (i != nSrcTab && aMarkData.GetTableSelect(i))
+            if (*itr != nSrcTab)
             {
-                aWorkRange.aStart.SetTab(i);
-                aWorkRange.aEnd.SetTab(i);
+                aWorkRange.aStart.SetTab(*itr);
+                aWorkRange.aEnd.SetTab(*itr);
                 pChangeTrack->AppendContentRange( aWorkRange, pUndoDoc,
                     nTmpAction, nEndChangeAction );
                 if ( !nStartChangeAction )
@@ -350,13 +351,14 @@ void ScUndoFillTable::DoChange( const sal_Bool bUndo )
     {
         SCTAB nTabCount = pDoc->GetTableCount();
         ScRange aWorkRange(aRange);
-        for ( SCTAB i = 0; i < nTabCount; i++ )
-            if (i != nSrcTab && aMarkData.GetTableSelect(i))
+        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+        for (; itr != itrEnd && *itr < nTabCount; ++itr)
+            if (*itr != nSrcTab)
             {
-                aWorkRange.aStart.SetTab(i);
-                aWorkRange.aEnd.SetTab(i);
+                aWorkRange.aStart.SetTab(*itr);
+                aWorkRange.aEnd.SetTab(*itr);
                 if (bMulti)
-                    pDoc->DeleteSelectionTab( i, IDF_ALL, aMarkData );
+                    pDoc->DeleteSelectionTab( *itr, IDF_ALL, aMarkData );
                 else
                     pDoc->DeleteAreaTab( aWorkRange, IDF_ALL );
                 pUndoDoc->CopyToDocument( aWorkRange, IDF_ALL, bMulti, pDoc, &aMarkData );
@@ -653,22 +655,20 @@ void ScUndoAutoFill::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
 
     SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+    ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+    for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
-        if (aMarkData.GetTableSelect(nTab))
-        {
-            ScRange aWorkRange = aBlockRange;
-            aWorkRange.aStart.SetTab(nTab);
-            aWorkRange.aEnd.SetTab(nTab);
+        ScRange aWorkRange = aBlockRange;
+        aWorkRange.aStart.SetTab(*itr);
+        aWorkRange.aEnd.SetTab(*itr);
 
-            sal_uInt16 nExtFlags = 0;
-            pDocShell->UpdatePaintExt( nExtFlags, aWorkRange );
-            pDoc->DeleteAreaTab( aWorkRange, IDF_AUTOFILL );
-            pUndoDoc->CopyToDocument( aWorkRange, IDF_AUTOFILL, false, pDoc );
+        sal_uInt16 nExtFlags = 0;
+        pDocShell->UpdatePaintExt( nExtFlags, aWorkRange );
+        pDoc->DeleteAreaTab( aWorkRange, IDF_AUTOFILL );
+        pUndoDoc->CopyToDocument( aWorkRange, IDF_AUTOFILL, false, pDoc );
 
-            pDoc->ExtendMerge( aWorkRange, sal_True );
-            pDocShell->PostPaint( aWorkRange, PAINT_GRID, nExtFlags );
-        }
+        pDoc->ExtendMerge( aWorkRange, sal_True );
+        pDocShell->PostPaint( aWorkRange, PAINT_GRID, nExtFlags );
     }
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

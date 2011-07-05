@@ -991,18 +991,18 @@ void ScUndoPaste::DoChange( const sal_Bool bUndo )
 
     SCTAB nFirstSelected = aMarkData.GetFirstSelected();
     ScRange aTabSelectRange = aBlockRange;
-    SCTAB nTab;
 
     if ( !bUndo && pRedoDoc )       // Redo: UndoToDocument before handling RefData
     {
         aTabSelectRange.aStart.SetTab( nFirstSelected );
         aTabSelectRange.aEnd.SetTab( nFirstSelected );
         pRedoDoc->UndoToDocument( aTabSelectRange, nUndoFlags, false, pDoc );
-        for (nTab=0; nTab<nTabCount; nTab++)
-            if (nTab != nFirstSelected && aMarkData.GetTableSelect(nTab))
+        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+        for (; itr != itrEnd && *itr < nTabCount; ++itr)
+            if (*itr != nFirstSelected)
             {
-                aTabSelectRange.aStart.SetTab( nTab );
-                aTabSelectRange.aEnd.SetTab( nTab );
+                aTabSelectRange.aStart.SetTab( *itr );
+                aTabSelectRange.aEnd.SetTab( *itr );
                 pRedoDoc->CopyToDocument( aTabSelectRange, nUndoFlags, false, pDoc );
             }
     }
@@ -1022,11 +1022,12 @@ void ScUndoPaste::DoChange( const sal_Bool bUndo )
         aTabSelectRange.aStart.SetTab( nFirstSelected );
         aTabSelectRange.aEnd.SetTab( nFirstSelected );
         pUndoDoc->UndoToDocument( aTabSelectRange, nUndoFlags, false, pDoc );
-        for (nTab=0; nTab<nTabCount; nTab++)
-            if (nTab != nFirstSelected && aMarkData.GetTableSelect(nTab))
+        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+        for (; itr != itrEnd && *itr < nTabCount; ++itr)
+            if (*itr != nFirstSelected)
             {
-                aTabSelectRange.aStart.SetTab( nTab );
-                aTabSelectRange.aEnd.SetTab( nTab );
+                aTabSelectRange.aStart.SetTab( *itr );
+                aTabSelectRange.aEnd.SetTab( *itr );
                 pUndoDoc->UndoToDocument( aTabSelectRange, nUndoFlags, false, pDoc );
             }
     }

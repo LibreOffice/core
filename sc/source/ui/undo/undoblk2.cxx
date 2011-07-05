@@ -128,26 +128,25 @@ void ScUndoWidthOrHeight::Undo()
         pDoc->SetOutlineTable( nStartTab, pUndoTab );
 
     SCTAB nTabCount = pDoc->GetTableCount();
-    SCTAB nTab;
-    for (nTab=0; nTab<nTabCount; nTab++)
-        if (aMarkData.GetTableSelect(nTab))
+    ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+    for (; itr != itrEnd && *itr < nTabCount; ++itr)
+    {
+        if (bWidth) // Width
         {
-            if (bWidth) // Width
-            {
-                pUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
-                        static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE,
-                        false, pDoc );
-                pDoc->UpdatePageBreaks( nTab );
-                pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, nTab,
-                        MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_TOP );
-            }
-            else        // Height
-            {
-                pUndoDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, false, pDoc );
-                pDoc->UpdatePageBreaks( nTab );
-                pDocShell->PostPaint( 0, nPaintStart, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_LEFT );
-            }
+            pUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, *itr,
+                    static_cast<SCCOL>(nEnd), MAXROW, *itr, IDF_NONE,
+                    false, pDoc );
+            pDoc->UpdatePageBreaks( *itr );
+            pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, *itr,
+                    MAXCOL, MAXROW, *itr, PAINT_GRID | PAINT_TOP );
         }
+        else        // Height
+        {
+            pUndoDoc->CopyToDocument( 0, nStart, *itr, MAXCOL, nEnd, *itr, IDF_NONE, false, pDoc );
+            pDoc->UpdatePageBreaks( *itr );
+            pDocShell->PostPaint( 0, nPaintStart, *itr, MAXCOL, MAXROW, *itr, PAINT_GRID | PAINT_LEFT );
+        }
+    }
 
     DoSdrUndoAction( pDrawUndo, pDoc );
 

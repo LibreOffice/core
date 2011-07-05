@@ -1111,62 +1111,63 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
     rMark.GetMultiMarkArea( aMarkRange );
 
     SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB nTab=0; nTab<=nTabCount; nTab++)
-        if ( rMark.GetTableSelect( nTab ) )
+    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nTabCount; ++itr)
+    {
+        SCTAB nTab = *itr;
+        SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
+        if (pPage)
         {
-            SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-            if (pPage)
+            pPage->RecalcObjOrdNums();
+            sal_uLong   nObjCount = pPage->GetObjCount();
+            if (nObjCount)
             {
-                pPage->RecalcObjOrdNums();
-                sal_uLong   nObjCount = pPage->GetObjCount();
-                if (nObjCount)
+                long nDelCount = 0;
+                //  Rechteck um die ganze Selektion
+                Rectangle aMarkBound = pDoc->GetMMRect(
+                            aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
+                            aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), nTab );
+
+                SdrObject** ppObj = new SdrObject*[nObjCount];
+
+                SdrObjListIter aIter( *pPage, IM_FLAT );
+                SdrObject* pObject = aIter.Next();
+                while (pObject)
                 {
-                    long nDelCount = 0;
-                    //  Rechteck um die ganze Selektion
-                    Rectangle aMarkBound = pDoc->GetMMRect(
-                                aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
-                                aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), nTab );
-
-                    SdrObject** ppObj = new SdrObject*[nObjCount];
-
-                    SdrObjListIter aIter( *pPage, IM_FLAT );
-                    SdrObject* pObject = aIter.Next();
-                    while (pObject)
+                    // do not delete note caption, they are always handled by the cell note
+                    // TODO: detective objects are still deleted, is this desired?
+                    if (!IsNoteCaption( pObject ))
                     {
-                        // do not delete note caption, they are always handled by the cell note
-                        // TODO: detective objects are still deleted, is this desired?
-                        if (!IsNoteCaption( pObject ))
+                        Rectangle aObjRect = pObject->GetCurrentBoundRect();
+                        if ( aMarkBound.IsInside( aObjRect ) )
                         {
-                            Rectangle aObjRect = pObject->GetCurrentBoundRect();
-                            if ( aMarkBound.IsInside( aObjRect ) )
-                            {
-                                ScRange aRange = pDoc->GetRange( nTab, aObjRect );
-                                if (rMark.IsAllMarked(aRange))
-                                    ppObj[nDelCount++] = pObject;
-                            }
+                            ScRange aRange = pDoc->GetRange( nTab, aObjRect );
+                            if (rMark.IsAllMarked(aRange))
+                                ppObj[nDelCount++] = pObject;
                         }
-
-                        pObject = aIter.Next();
                     }
 
-                    //  Objekte loeschen (rueckwaerts)
-
-                    long i;
-                    if (bRecording)
-                        for (i=1; i<=nDelCount; i++)
-                            AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
-
-                    for (i=1; i<=nDelCount; i++)
-                        pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
-
-                    delete[] ppObj;
+                    pObject = aIter.Next();
                 }
-            }
-            else
-            {
-                OSL_FAIL("pPage?");
+
+                //  Objekte loeschen (rueckwaerts)
+
+                long i;
+                if (bRecording)
+                    for (i=1; i<=nDelCount; i++)
+                        AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
+
+                for (i=1; i<=nDelCount; i++)
+                    pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
+
+                delete[] ppObj;
             }
         }
+        else
+        {
+            OSL_FAIL("pPage?");
+        }
+    }
 }
 
 void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle& rRange )

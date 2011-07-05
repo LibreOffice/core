@@ -4015,10 +4015,11 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                 ScMarkData aMark(*GetMarkData());
 
                 SCTAB nTabCount = pDoc->GetTableCount();
-                sal_Bool bProtected = !pDocShell->IsEditable();
-                for (SCTAB i=0; i<nTabCount; i++)
-                    if ( aMark.GetTableSelect(i) && pDoc->IsTabProtected(i) )
-                        bProtected = sal_True;
+                bool bProtected = !pDocShell->IsEditable();
+                ScMarkData::iterator itr = aMark.begin(), itrEnd = aMark.end();
+                for (; itr != itrEnd && *itr < nTabCount; ++itr)
+                    if ( pDoc->IsTabProtected(*itr) )
+                        bProtected = true;
                 if (bProtected)
                 {
                     //! Exception, oder was?
@@ -4036,9 +4037,10 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
                         pUndoDoc->InitUndo( pDoc, nTab, nTab );
                     }
-                    for (SCTAB i=0; i<nTabCount; i++)
-                        if ( aMark.GetTableSelect(i) && i != nTab && bUndo)
-                            pUndoDoc->AddUndoTab( i, i );
+                    itr = aMark.begin();
+                    for (; itr != itrEnd && *itr < nTabCount; ++itr)
+                        if ( *itr != nTab && bUndo)
+                            pUndoDoc->AddUndoTab( *itr, *itr );
                     ScMarkData* pUndoMark = NULL;
                     if (bUndo)
                         pUndoMark = new ScMarkData(aMark);

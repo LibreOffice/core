@@ -1525,9 +1525,11 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
     ScEditEngineDefaulter* pEngine = NULL;        // not using pEditEngine member because of defaults
 
     SCTAB nCount = GetTableCount();
-    for (SCTAB nTab = 0; nTab < nCount; nTab++)
-        if ( maTabs[nTab] && rMultiMark.GetTableSelect(nTab) )
+    ScMarkData::iterator itr = rMultiMark.begin(), itrEnd = rMultiMark.end();
+    for (; itr != itrEnd && *itr < nCount; ++itr)
+        if ( maTabs[*itr] )
         {
+            SCTAB nTab = *itr;
             SCCOL nCol = 0;
             SCROW nRow = 0;
 
