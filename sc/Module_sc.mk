@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 
 $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_ucalc \
+	CppunitTest_sc_test_filters \
 ))
 
 
