@@ -3,6 +3,7 @@
 ..\%__SRC%\lib\lib*.so %_DEST%\lib\lib*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
 ..\%__SRC%\lib\*.jnilib %_DEST%\lib\*.jnilib
+..\%__SRC%\lib\*.a %_DEST%\lib\*.a
 ..\%__SRC%\slb\connectivity*.* %_DEST%\lib\connectivity*.*
 ..\%__SRC%\lib\idbt* %_DEST%\lib\idbt*
 ..\source\cpool\*.xml %_DEST%\xml\*.xml
