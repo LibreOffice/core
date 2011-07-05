@@ -1363,11 +1363,21 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
         return;
     }
 
-    short i;
-    const sal_uInt8* pDel = pData + 1;                       // Del - Array
-    sal_uInt8 nDel = pData[0];
+    sal_uInt8 nDel = (nLen > 0) ? pData[0] : 0;
+    const sal_uInt8* pDel = pData + 1;                   // Del - Array
+
+    sal_uInt8 nIns = (nLen > nDel*2+1) ? pData[nDel*2+1] : 0;
     const sal_uInt8* pIns = pData + 2*nDel + 2;          // Ins - Array
-    sal_uInt8 nIns = pData[nDel*2+1];
+
+    short nRequiredLength = 2 + 2*nDel + 2*nIns + 1*nIns;
+    if (nRequiredLength > nLen)
+    {
+        //would require more data than available to describe!, discard invalid
+        //record
+        nIns = 0;
+        nDel = 0;
+    }
+
     WW8_TBD* pTyp = (WW8_TBD*)(pData + 2*nDel + 2*nIns + 2);// Typ - Array
 
     SvxTabStopItem aAttr(0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP);
@@ -1427,14 +1437,14 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     }
 
     SvxTabStop aTabStop;
-    for (i=0; i < nDel; ++i)
+    for (short i=0; i < nDel; ++i)
     {
         sal_uInt16 nPos = aAttr.GetPos(SVBT16ToShort(pDel + i*2));
         if( nPos != SVX_TAB_NOTFOUND )
             aAttr.Remove( nPos, 1 );
     }
 
-    for (i=0; i < nIns; ++i)
+    for (short i=0; i < nIns; ++i)
     {
         short nPos = SVBT16ToShort(pIns + i*2);
         aTabStop.GetTabPos() = nPos;
