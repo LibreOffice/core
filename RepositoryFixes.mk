@@ -150,6 +150,8 @@ endif
 ifeq ($(OS),ANDROID)
 gb_Library_FILENAMES := $(patsubst cppunit:%.so,cppunit:%.a,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xml2:%.so,xml2:%.a,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst rdf:%.so,rdf:%.a,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst xslt:%.so,xslt:%.a,$(gb_Library_FILENAMES))
 
 endif
 
