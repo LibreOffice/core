@@ -2019,9 +2019,8 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
 //              WW8PLCFspecial
 //-----------------------------------------
 
-// Bei nStartPos < 0 wird das erste Element des PLCFs genommen
 WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
-    long nStruct, long nStartPos)
+    long nStruct)
     : nIdx(0), nStru(nStruct)
 {
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
@@ -2041,8 +2040,6 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
         pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
     else
         pPLCF_Contents = 0;                         // kein Inhalt
-    if( nStartPos >= 0 )
-        SeekPos( nStartPos );
 
     pSt->Seek( nOldPos );
 }
