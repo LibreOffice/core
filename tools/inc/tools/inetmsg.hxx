@@ -242,36 +242,6 @@ public:
 
 /*=======================================================================
  *
- * INetMessageHeaderIterator Interface.
- *
- *=====================================================================*/
-class INetMessageHeaderIterator
-{
-    sal_uIntPtr     nValueCount;
-    List      aValueList;
-    UniString aEmptyString;
-
-public:
-    INetMessageHeaderIterator (
-        const INetMessage& rMsg, const UniString& rHdrName);
-    virtual ~INetMessageHeaderIterator (void);
-
-    sal_uIntPtr GetValueCount (void) const { return nValueCount; }
-    const UniString& GetValue (sal_uIntPtr nIndex) const
-    {
-        if (nIndex < nValueCount)
-        {
-            return *((UniString*)(aValueList.GetObject(nIndex)));
-        }
-        else
-        {
-            return aEmptyString;
-        }
-    }
-};
-
-/*=======================================================================
- *
  * INetRFC822Message Interface.
  *
  *=====================================================================*/

@@ -199,34 +199,6 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
 
 /*=======================================================================
  *
- * INetMessageHeaderIterator Implementation.
- *
- *=====================================================================*/
-INetMessageHeaderIterator::INetMessageHeaderIterator (
-    const INetMessage& rMsg, const UniString& rHdrName)
-{
-    sal_uIntPtr i, n = rMsg.GetHeaderCount();
-    for (i = 0; i < n; i++)
-    {
-        if (rHdrName.CompareIgnoreCaseToAscii (rMsg.GetHeaderName(i)) == 0)
-        {
-            UniString *pValue = new UniString (rMsg.GetHeaderValue(i));
-            aValueList.Insert (pValue, LIST_APPEND);
-        }
-    }
-    nValueCount = aValueList.Count();
-}
-
-INetMessageHeaderIterator::~INetMessageHeaderIterator (void)
-{
-    sal_uIntPtr i, n = aValueList.Count();
-    for (i = 0; i < n; i++)
-        delete ((UniString*)(aValueList.GetObject(i)));
-    aValueList.Clear();
-}
-
-/*=======================================================================
- *
  * INetRFC822Message Implementation.
  *
  *=====================================================================*/
