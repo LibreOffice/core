@@ -2439,6 +2439,11 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
     xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
 
+    // Defaults
+    uno::Any aColor;
+    aColor <<= (sal_uInt32)0xffffff; // White
+    xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aColor);
+
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
     {
         if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
@@ -2463,7 +2468,6 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillColor")))
         {
-            uno::Any aColor;
             aColor <<= lcl_BGRToRGB(i->second.toInt32());
             xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aColor);
         }
