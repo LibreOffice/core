@@ -141,11 +141,15 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                         // then write as unicode - character
                         if (*pUCMode != nLen)
                         {
-                          rStream << "\\uc" << ByteString::CreateFromInt32(nLen).GetBuffer() << " "; // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
+                            // #i47831# add an additional whitespace, so that
+                            // "document whitespaces" are not ignored.;
+                            rStream << "\\uc"
+                                << rtl::OString::valueOf(nLen).getStr() << " ";
                             *pUCMode = nLen;
                         }
-                        ByteString sNo(ByteString::CreateFromInt32(c));
-                         rStream << "\\u" << sNo.GetBuffer();
+                        rStream << "\\u"
+                            << rtl::OString::valueOf(
+                                static_cast<sal_Int32>(c)).getStr();
                     }
 
                     for (sal_Int32 nI = 0; nI < nLen; ++nI)
