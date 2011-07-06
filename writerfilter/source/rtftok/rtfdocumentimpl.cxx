@@ -941,6 +941,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_SHAPETEXT;
             OSL_ENSURE(!m_aShapetextBuffer.size(), "shapetext buffer is not empty");
             m_pCurrentBuffer = &m_aShapetextBuffer;
+            m_bNeedPap = true;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -2517,7 +2518,12 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
                 m_aStates.top().aShape.nBottom - m_aStates.top().aShape.nTop));
 
     Mapper().startShape(xShape);
+    Mapper().startParagraphGroup();
     replayBuffer(m_aShapetextBuffer);
+    Mapper().startCharacterGroup();
+    lcl_Break(Mapper());
+    Mapper().endCharacterGroup();
+    Mapper().endParagraphGroup();
     Mapper().endShape();
 }
 
