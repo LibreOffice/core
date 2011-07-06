@@ -315,7 +315,7 @@ void ScTpContentOptions::InitGridOpt()
     sal_Bool    bGridOnTop = pLocalOptions->GetOption( VOPT_GRID_ONTOP );
     sal_uInt16  nSelPos = 0;
 
-    if ( bGrid )
+    if ( bGrid || bGridOnTop )
     {
         aColorFT.Enable(), aColorLB.Enable();
         if ( !bGridOnTop )
@@ -395,8 +395,8 @@ IMPL_LINK( ScTpContentOptions, GridHdl, ListBox*, pLb )
     sal_Bool    bGrid = ( nSelPos <= 1 );
     sal_Bool    bGridOnTop = ( nSelPos == 1 );
 
-    aColorFT.Enable(bGridOnTop);
-    aColorLB.Enable(bGridOnTop);
+    aColorFT.Enable(bGrid);
+    aColorLB.Enable(bGrid);
     pLocalOptions->SetOption( VOPT_GRID, bGrid );
     pLocalOptions->SetOption( VOPT_GRID_ONTOP, bGridOnTop );
     return 0;
