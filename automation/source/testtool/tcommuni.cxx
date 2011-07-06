@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
 
             if ( bSucc )
             {
-                aFirstRetryCall = Time() + Time( 0, 1 );    // Max eine Minute Zeit
+                aFirstRetryCall = Time() + Time( 0, 1 );	// Max eine Minute Zeit
                 for ( int i = 10 ; i-- ; )
                     GetpApp()->Reschedule();
             }
@@ -159,7 +159,7 @@ sal_uLong GetTTPortConfig()
 #endif
           )
         {
-            aPortToTalk = Application::GetCommandLineParam( i ).Copy(6);
+            aPortToTalk = Application::GetCommandLineParam( i ).Copy(6);                
             return (sal_uLong)aPortToTalk.ToInt64();
         }
     }
@@ -168,7 +168,8 @@ sal_uLong GetTTPortConfig()
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Communication");
 
-    GETSET( abPortToTalk, "TTPort", ByteString::CreateFromInt32( TESTTOOL_DEFAULT_PORT ) );
+    GETSET( abPortToTalk, "TTPort",
+        rtl::OString::valueOf(static_cast<sal_Int32>(TESTTOOL_DEFAULT_PORT)) );
     return (sal_uLong)abPortToTalk.ToInt64();
 }
 
@@ -194,7 +195,8 @@ sal_uLong GetUnoPortConfig()
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Communication");
 
-    GETSET( abPortToTalk, "UnoPort", ByteString::CreateFromInt32( UNO_DEFAULT_PORT ) );
+    GETSET( abPortToTalk, "UnoPort",
+        rtl::OString::valueOf(static_cast<sal_Int32>(UNO_DEFAULT_PORT)) );
     return (sal_uLong)abPortToTalk.ToInt64();
 }
 
