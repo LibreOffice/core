@@ -4663,7 +4663,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                     aRecHd2.SeekToBegOfRecord( rSt );
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportGroup( aRecHd2, rSt, pClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
-                    if ( pTmp )
+                    if ( pTmp && pRet && ((SdrObjGroup*)pRet)->GetSubList() )
                     {
                         ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pTmp );
                         if( nShapeId )
@@ -4675,7 +4675,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                     aRecHd2.SeekToBegOfRecord( rSt );
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportShape( aRecHd2, rSt, pClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
-                    if ( pTmp )
+                    if ( pTmp && pRet && ((SdrObjGroup*)pRet)->GetSubList())
                     {
                         ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pTmp );
                         if( nShapeId )
