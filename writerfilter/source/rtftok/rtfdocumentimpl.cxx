@@ -2440,9 +2440,9 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
 
     // Defaults
-    uno::Any aColor;
-    aColor <<= (sal_uInt32)0xffffff; // White in Word, kind of blue in Writer.
-    xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aColor);
+    uno::Any aAny;
+    aAny <<= (sal_uInt32)0xffffff; // White in Word, kind of blue in Writer.
+    xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
 
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
     {
@@ -2468,13 +2468,21 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillColor")))
         {
-            aColor <<= lcl_BGRToRGB(i->second.toInt32());
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aColor);
+            aAny <<= lcl_BGRToRGB(i->second.toInt32());
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lineColor")))
         {
-            aColor <<= lcl_BGRToRGB(i->second.toInt32());
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")), aColor);
+            aAny <<= lcl_BGRToRGB(i->second.toInt32());
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")), aAny);
+        }
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("txflTextFlow")))
+        {
+            if (i->second.toInt32() == 1)
+            {
+                aAny <<= (long)27000;
+                xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("RotateAngle")), aAny);
+            }
         }
         else
             OSL_TRACE("%s: TODO handle shape property '%s':'%s'", OSL_THIS_FUNC,
