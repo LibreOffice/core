@@ -762,7 +762,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     for(nLevelB = 0; nLevelB <= nLevel; ++nLevelB)
     {
         sal_uInt8 nPos = aOfsNumsXCH[nLevelB];
-        if (nPos && sNumString.GetChar(nPos-1) < nMaxLevel)
+        if (nPos && nPos < sNumString.Len()  && sNumString.GetChar(nPos-1) < nMaxLevel)
         {
             if (rNotReallyThere[nLevelB])
                 aOfsNumsXCH[nLevelB] = 0;
