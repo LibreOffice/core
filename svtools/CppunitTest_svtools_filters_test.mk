@@ -60,16 +60,10 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,svtools_filters_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_service_rdbs,svtools_filters_test,\
-    svtools_filters_test \
-))
-
 $(eval $(call gb_CppunitTest_set_args,svtools_filters_test,\
     --headless \
     --invisible \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
-
-$(eval $(call gb_RdbTarget_RdbTarget,svtools_filters_test))
 
 # vim: set noet sw=4 ts=4:
