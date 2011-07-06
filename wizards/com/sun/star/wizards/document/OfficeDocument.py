@@ -188,7 +188,7 @@ class OfficeDocument(object):
                 oStoreProperties[1].Name = "InteractionHandler"
                 oStoreProperties[1].Value = xMSF.createInstance(
                     "com.sun.star.comp.uui.UUIInteractionHandler")
-            else:
+            else:              
                 oStoreProperties = range(0)
 
             if StorePath.startswith("file://"):
@@ -200,7 +200,7 @@ class OfficeDocument(object):
             xComponent.storeToURL(
                 unohelper.absolutize(
                     unohelper.systemPathToFileUrl(sPath),
-                    unohelper.systemPathToFileUrl(sFile)),
+                    unohelper.systemPathToFileUrl(sFile)), 
                     tuple(oStoreProperties))
             return True
         except ErrorCodeIOException:

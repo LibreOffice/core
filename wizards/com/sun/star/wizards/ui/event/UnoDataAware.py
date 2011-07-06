@@ -67,7 +67,7 @@ class UnoDataAware(DataAware):
         return UnoDataAware(data, prop, label, PropertyNames.PROPERTY_LABEL)
 
     @classmethod
-    def attachListBox(self, data, prop, listBox, field):
+    def attachListBox(self, data, prop, listBox, field):       
         uda = UnoDataAware(data, prop, listBox, "SelectedItems", True)
         method = getattr(uda,"updateData")
         listBox.addItemListener(ItemListenerProcAdapter(method))

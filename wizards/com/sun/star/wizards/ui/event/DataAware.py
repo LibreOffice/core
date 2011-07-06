@@ -30,7 +30,7 @@ class DataAware(object):
 
     def __init__(self, dataObject_, field_):
         self._dataObject = dataObject_
-        self._field = field_
+        self._field = field_    
 
     '''
     sets the given value to the UI control
