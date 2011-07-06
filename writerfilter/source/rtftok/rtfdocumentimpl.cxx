@@ -259,12 +259,16 @@ static const char* lcl_RtfToString(RTFKeyword nKeyword)
     return NULL;
 }
 
-sal_uInt32 lcl_BrgToRgb(sal_uInt32 nBrg)
+// NEEDSWORK: wwUtility::BGRToRGB does the same.
+sal_uInt32 lcl_BGRToRGB(sal_uInt32 nColor)
 {
-    sal_uInt32 nBlue = (nBrg & 0xff0000) >> 16;
-    sal_uInt32 nGreen = (nBrg & 0x00ff00) >> 8;
-    sal_uInt32 nRed = nBrg & 0x0000ff;
-    return (nRed << 16) | (nGreen << 8) | nBlue;
+    sal_uInt8
+        r(static_cast<sal_uInt8>(nColor&0xFF)),
+        g(static_cast<sal_uInt8>(((nColor)>>8)&0xFF)),
+        b(static_cast<sal_uInt8>((nColor>>16)&0xFF)),
+        t(static_cast<sal_uInt8>((nColor>>24)&0xFF));
+    nColor = (t<<24) + (r<<16) + (g<<8) + b;
+    return nColor;
 }
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
@@ -2460,7 +2464,7 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillColor")))
         {
             uno::Any aColor;
-            aColor <<= lcl_BrgToRgb(i->second.toInt32());
+            aColor <<= lcl_BGRToRGB(i->second.toInt32());
             xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aColor);
         }
         else
