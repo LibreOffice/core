@@ -485,9 +485,9 @@ class FileAccess(object):
         try:
             if childPath is not None:
                 path = self.filenameConverter.getSystemPathFromFileURL(path)
-                f = open(path,childPath)
+                f = open(path,childPath, 'w')
             else:
-                f = open(path)
+                f = open(path, 'w')
 
             r = self.filenameConverter.getFileURLFromSystemPath(path,
                  osPath.abspath(path))
