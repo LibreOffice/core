@@ -1056,7 +1056,9 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
 
     TagOpenElement *pStyleGraphicsPropertiesElement = new TagOpenElement("style:graphic-properties");
 
-    if((mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "none") || (mxStyle["svg:stroke-width"] && mxStyle["svg:stroke-width"]->getDouble() == 0.0))
+    if((mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "none") ||
+       (mxStyle["svg:stroke-width"] && mxStyle["svg:stroke-width"]->getDouble() == 0.0) ||
+       (mxStyle["svg:stroke-color"] && mxStyle["svg:stroke-color"]->getStr() == "none"))
         pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "none");
     else
     {
@@ -1065,6 +1067,7 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
 
         if (mxStyle["svg:stroke-color"])
             pStyleGraphicsPropertiesElement->addAttribute("svg:stroke-color", mxStyle["svg:stroke-color"]->getStr());
+
         if (mxStyle["svg:stroke-opacity"] && mxStyle["svg:stroke-opacity"]->getDouble() != 1.0)
             pStyleGraphicsPropertiesElement->addAttribute("svg:stroke-opacity", mxStyle["svg:stroke-opacity"]->getStr());
 
