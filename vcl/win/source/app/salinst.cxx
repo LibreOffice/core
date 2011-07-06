@@ -516,8 +516,6 @@ SalInstance* CreateSalInstance()
 
     // determine the windows version
     aSalShlData.mbWXP        = 0;
-    aSalShlData.mbWPrinter   = 0;
-    WORD nVer = (WORD)GetVersion();
     rtl_zeroMemory( &aSalShlData.maVersionInfo, sizeof(aSalShlData.maVersionInfo) );
     aSalShlData.maVersionInfo.dwOSVersionInfoSize = sizeof( aSalShlData.maVersionInfo );
     if ( GetVersionEx( &aSalShlData.maVersionInfo ) )
@@ -526,8 +524,6 @@ SalInstance* CreateSalInstance()
         if ( aSalShlData.maVersionInfo.dwMajorVersion > 5 ||
            ( aSalShlData.maVersionInfo.dwMajorVersion == 5 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
             aSalShlData.mbWXP = 1;
-        if( aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
-            aSalShlData.mbWPrinter = 1;
     }
 
     pSalData->mnAppThreadId = GetCurrentThreadId();

@@ -37,15 +37,12 @@
 
 // WNT3
 #define SAL_DRIVERDATA_SYSSIGN              ((sal_uIntPtr)0x574E5433)
-#define SAL_DRIVERDATA_VERSION_A            1
-#define SAL_DRIVERDATA_VERSION_W            2
 
 #pragma pack( 1 )
 
 struct SalDriverData
 {
     sal_uIntPtr                 mnSysSignature;
-    sal_uInt16                  mnVersion;
     sal_uInt16                  mnDriverOffset;
     BYTE                    maDriverData[1];
 };

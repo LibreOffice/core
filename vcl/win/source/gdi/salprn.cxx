@@ -110,24 +110,11 @@ static char aImplWindows[] = "windows";
 static char aImplDevices[] = "devices";
 static char aImplDevice[]  = "device";
 
-static LPDEVMODEA SAL_DEVMODE_A( const ImplJobSetup* pSetupData )
-{
-    LPDEVMODEA pRet = NULL;
-    SalDriverData* pDrv = (SalDriverData*)pSetupData->mpDriverData;
-    if( pDrv->mnVersion == SAL_DRIVERDATA_VERSION_A &&
-        pSetupData->mnDriverDataLen >= sizeof(DEVMODEA)+sizeof(SalDriverData)-1
-        )
-        pRet = ((LPDEVMODEA)((pSetupData->mpDriverData) + (pDrv->mnDriverOffset)));
-    return pRet;
-}
-
 static LPDEVMODEW SAL_DEVMODE_W( const ImplJobSetup* pSetupData )
 {
     LPDEVMODEW pRet = NULL;
     SalDriverData* pDrv = (SalDriverData*)pSetupData->mpDriverData;
-    if( pDrv->mnVersion == SAL_DRIVERDATA_VERSION_W &&
-        pSetupData->mnDriverDataLen >= sizeof(DEVMODEW)+sizeof(SalDriverData)-1
-        )
+    if( pSetupData->mnDriverDataLen >= sizeof(DEVMODEW)+sizeof(SalDriverData)-1 )
         pRet = ((LPDEVMODEW)((pSetupData->mpDriverData) + (pDrv->mnDriverOffset)));
     return pRet;
 }
@@ -192,140 +179,8 @@ static sal_uLong ImplWinQueueStatusToSal( DWORD nWinStatus )
 
 // -----------------------------------------------------------------------
 
-static void getPrinterQueueInfoOldStyle( ImplPrnQueueList* pList )
-{
-    DWORD           i;
-    DWORD           n;
-    DWORD           nBytes = 0;
-    DWORD           nInfoPrn2;
-    sal_Bool            bFound = FALSE;
-    PRINTER_INFO_2* pWinInfo2 = NULL;
-    PRINTER_INFO_2* pGetInfo2;
-    EnumPrintersA( PRINTER_ENUM_LOCAL, NULL, 2, NULL, 0, &nBytes, &nInfoPrn2 );
-    if ( nBytes )
-    {
-        pWinInfo2 = (PRINTER_INFO_2*) rtl_allocateMemory( nBytes );
-        if ( EnumPrintersA( PRINTER_ENUM_LOCAL, NULL, 2, (LPBYTE)pWinInfo2, nBytes, &nBytes, &nInfoPrn2 ) )
-        {
-            pGetInfo2 = pWinInfo2;
-            for ( i = 0; i < nInfoPrn2; i++ )
-            {
-                SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
-                pInfo->maPrinterName = ImplSalGetUniString( pGetInfo2->pPrinterName );
-                pInfo->maDriver      = ImplSalGetUniString( pGetInfo2->pDriverName );
-                XubString aPortName;
-                if ( pGetInfo2->pPortName )
-                    aPortName = ImplSalGetUniString( pGetInfo2->pPortName );
-                // pLocation can be 0 (the Windows docu doesn't describe this)
-                if ( pGetInfo2->pLocation && strlen( pGetInfo2->pLocation ) )
-                    pInfo->maLocation = ImplSalGetUniString( pGetInfo2->pLocation );
-                else
-                    pInfo->maLocation = aPortName;
-                // pComment can be 0 (the Windows docu doesn't describe this)
-                if ( pGetInfo2->pComment )
-                    pInfo->maComment = ImplSalGetUniString( pGetInfo2->pComment );
-                pInfo->mnStatus      = ImplWinQueueStatusToSal( pGetInfo2->Status );
-                pInfo->mnJobs        = pGetInfo2->cJobs;
-                pInfo->mpSysData     = new XubString( aPortName );
-                pList->Add( pInfo );
-                pGetInfo2++;
-            }
-
-            bFound = TRUE;
-        }
-    }
-
-    // read printers from win.ini
-    // TODO: MSDN: GetProfileString() should not be called from server
-    // code because it is just there for WIN16 compatibility
-    UINT    nSize = 4096;
-    char*   pBuf = new char[nSize];
-    UINT    nRead = GetProfileStringA( aImplDevices, NULL, "", pBuf, nSize );
-    while ( nRead >= nSize-2 )
-    {
-        nSize += 2048;
-        delete []pBuf;
-        pBuf = new char[nSize];
-        nRead = GetProfileStringA( aImplDevices, NULL, "", pBuf, nSize );
-    }
-
-    // extract printer names from buffer and fill list
-    char* pName = pBuf;
-    while ( *pName )
-    {
-        char*   pPortName;
-        char*   pTmp;
-        char    aPortBuf[256];
-        GetProfileStringA( aImplDevices, pName, "", aPortBuf, sizeof( aPortBuf ) );
-
-        pPortName = aPortBuf;
-
-        // create name
-        xub_StrLen nNameLen = sal::static_int_cast<xub_StrLen>(strlen( pName ));
-        XubString aName( ImplSalGetUniString( pName, nNameLen ) );
-
-        // get driver name
-        pTmp = pPortName;
-        while ( *pTmp != ',' )
-            pTmp++;
-        XubString aDriver( ImplSalGetUniString( pPortName, (sal_uInt16)(pTmp-pPortName) ) );
-        pPortName = pTmp;
-
-        // get port names
-        do
-        {
-            pPortName++;
-            pTmp = pPortName;
-            while ( *pTmp && (*pTmp != ',') )
-                pTmp++;
-
-            String aPortName( ImplSalGetUniString( pPortName, (sal_uInt16)(pTmp-pPortName) ) );
-
-            // create new entry
-            // look up if printer was already found in first loop
-            sal_Bool bAdd = TRUE;
-            if ( pWinInfo2 )
-            {
-                pGetInfo2 = pWinInfo2;
-                for ( n = 0; n < nInfoPrn2; n++ )
-                {
-                    if ( aName.EqualsIgnoreCaseAscii( pGetInfo2->pPrinterName ) )
-                    {
-                        bAdd = FALSE;
-                        break;
-                    }
-                    pGetInfo2++;
-                }
-            }
-            // if it's a new printer, add it
-            if ( bAdd )
-            {
-                SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
-                pInfo->maPrinterName = aName;
-                pInfo->maDriver      = aDriver;
-                pInfo->maLocation    = aPortName;
-                pInfo->mnStatus      = 0;
-                pInfo->mnJobs        = QUEUE_JOBS_DONTKNOW;
-                pInfo->mpSysData     = new XubString( aPortName );
-                pList->Add( pInfo );
-            }
-        }
-        while ( *pTmp == ',' );
-
-        pName += nNameLen + 1;
-    }
-
-    delete []pBuf;
-    rtl_freeMemory( pWinInfo2 );
-}
-
 void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
-    if( ! aSalShlData.mbWPrinter )
-    {
-        getPrinterQueueInfoOldStyle( pList );
-        return;
-    }
     DWORD           i;
     DWORD           nBytes = 0;
     DWORD           nInfoPrn4 = 0;
@@ -352,59 +207,8 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 
 // -----------------------------------------------------------------------
 
-static void getPrinterQueueStateOldStyle( SalPrinterQueueInfo* pInfo )
-{
-    DWORD               nBytes = 0;
-    DWORD               nInfoRet;
-    PRINTER_INFO_2*     pWinInfo2;
-    EnumPrintersA( PRINTER_ENUM_LOCAL, NULL, 2, NULL, 0, &nBytes, &nInfoRet );
-    if ( nBytes )
-    {
-        pWinInfo2 = (PRINTER_INFO_2*) rtl_allocateMemory( nBytes );
-        if ( EnumPrintersA( PRINTER_ENUM_LOCAL, NULL, 2, (LPBYTE)pWinInfo2, nBytes, &nBytes, &nInfoRet ) )
-        {
-            PRINTER_INFO_2* pGetInfo2 = pWinInfo2;
-            for ( DWORD i = 0; i < nInfoRet; i++ )
-            {
-                if ( pInfo->maPrinterName.EqualsAscii( pGetInfo2->pPrinterName ) &&
-                     ( pInfo->maDriver.Len() == 0 ||
-                       pInfo->maDriver.EqualsAscii( pGetInfo2->pDriverName ) )
-                       )
-                {
-                    XubString aPortName;
-                    if ( pGetInfo2->pPortName )
-                        aPortName = ImplSalGetUniString( pGetInfo2->pPortName );
-                    // pLocation can be 0 (the Windows docu doesn't describe this)
-                    if ( pGetInfo2->pLocation && strlen( pGetInfo2->pLocation ) )
-                        pInfo->maLocation = ImplSalGetUniString( pGetInfo2->pLocation );
-                    else
-                        pInfo->maLocation = aPortName;
-                    // pComment can be 0 (the Windows docu doesn't describe this)
-                    if ( pGetInfo2->pComment )
-                        pInfo->maComment = ImplSalGetUniString( pGetInfo2->pComment );
-                    pInfo->mnStatus      = ImplWinQueueStatusToSal( pGetInfo2->Status );
-                    pInfo->mnJobs        = pGetInfo2->cJobs;
-                    if( ! pInfo->mpSysData )
-                        pInfo->mpSysData     = new XubString( aPortName );
-                    break;
-                }
-
-                pGetInfo2++;
-            }
-        }
-
-        rtl_freeMemory( pWinInfo2 );
-    }
-}
-
 void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
 {
-    if( ! aSalShlData.mbWPrinter )
-    {
-        getPrinterQueueStateOldStyle( pInfo );
-        return;
-    }
-
     HANDLE hPrinter = 0;
     LPWSTR pPrnName = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pInfo->maPrinterName.GetBuffer()));
     if( OpenPrinterW( pPrnName, &hPrinter, NULL ) )
@@ -451,43 +255,19 @@ void WinSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 // -----------------------------------------------------------------------
 XubString WinSalInstance::GetDefaultPrinter()
 {
-    static bool bGetDefPrtAPI = true;
-    static sal_Bool(WINAPI*pGetDefaultPrinter)(LPWSTR,LPDWORD) = NULL;
-    // try to use GetDefaultPrinter API (not available prior to W2000)
-    if( bGetDefPrtAPI )
+    DWORD   nChars = 0;
+    GetDefaultPrinterW( NULL, &nChars );
+    if( nChars )
     {
-        bGetDefPrtAPI = false;
-        // check for W2k and XP
-        if( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
+        LPWSTR  pStr = (LPWSTR)rtl_allocateMemory(nChars*sizeof(WCHAR));
+        XubString aDefPrt;
+        if( GetDefaultPrinterW( pStr, &nChars ) )
         {
-            OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "winspool.drv" ) );
-            oslModule pLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-            oslGenericFunction pFunc = NULL;
-            if( pLib )
-            {
-                OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "GetDefaultPrinterW" ) );
-                pFunc = osl_getFunctionSymbol( pLib, queryFuncName.pData );
-            }
-
-            pGetDefaultPrinter = (sal_Bool(WINAPI*)(LPWSTR,LPDWORD)) pFunc;
+            aDefPrt = reinterpret_cast<sal_Unicode* >(pStr);
         }
-    }
-    if( pGetDefaultPrinter )
-    {
-        DWORD   nChars = 0;
-        pGetDefaultPrinter( NULL, &nChars );
-        if( nChars )
-        {
-            LPWSTR  pStr = (LPWSTR)rtl_allocateMemory(nChars*sizeof(WCHAR));
-            XubString aDefPrt;
-            if( pGetDefaultPrinter( pStr, &nChars ) )
-            {
-                aDefPrt = reinterpret_cast<sal_Unicode* >(pStr);
-            }
-            rtl_freeMemory( pStr );
-            if( aDefPrt.Len() )
-                return aDefPrt;
-        }
+        rtl_freeMemory( pStr );
+        if( aDefPrt.Len() )
+            return aDefPrt;
     }
 
     // get default printer from win.ini
@@ -511,30 +291,15 @@ XubString WinSalInstance::GetDefaultPrinter()
 static DWORD ImplDeviceCaps( WinSalInfoPrinter* pPrinter, WORD nCaps,
                              BYTE* pOutput, const ImplJobSetup* pSetupData )
 {
-    if( aSalShlData.mbWPrinter )
-    {
-        DEVMODEW* pDevMode;
-        if ( !pSetupData || !pSetupData->mpDriverData )
-            pDevMode = NULL;
-        else
-            pDevMode = SAL_DEVMODE_W( pSetupData );
-
-        return DeviceCapabilitiesW( reinterpret_cast<LPCWSTR>(pPrinter->maDeviceName.GetBuffer()),
-                                    reinterpret_cast<LPCWSTR>(pPrinter->maPortName.GetBuffer()),
-                                    nCaps, (LPWSTR)pOutput, pDevMode );
-    }
+    DEVMODEW* pDevMode;
+    if ( !pSetupData || !pSetupData->mpDriverData )
+        pDevMode = NULL;
     else
-    {
-        DEVMODEA* pDevMode;
-        if ( !pSetupData || !pSetupData->mpDriverData )
-            pDevMode = NULL;
-        else
-            pDevMode = SAL_DEVMODE_A( pSetupData );
+        pDevMode = SAL_DEVMODE_W( pSetupData );
 
-        return DeviceCapabilitiesA( ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(),
-                                ImplSalGetWinAnsiString( pPrinter->maPortName, TRUE ).GetBuffer(),
-                                nCaps, (LPSTR)pOutput, pDevMode );
-    }
+    return DeviceCapabilitiesW( reinterpret_cast<LPCWSTR>(pPrinter->maDeviceName.GetBuffer()),
+                                reinterpret_cast<LPCWSTR>(pPrinter->maPortName.GetBuffer()),
+                                nCaps, (LPWSTR)pOutput, pDevMode );
 }
 
 // -----------------------------------------------------------------------
@@ -549,25 +314,15 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
 
         // initialize versions from jobsetup
         // those will be overwritten with driver's version
-        DEVMODEA* pDevModeA = NULL;
         DEVMODEW* pDevModeW = NULL;
         LONG dmSpecVersion = -1;
         LONG dmDriverVersion = -1;
         SalDriverData* pSalDriverData = (SalDriverData*)pSetupData->mpDriverData;
         BYTE* pDriverData = ((BYTE*)pSalDriverData) + pSalDriverData->mnDriverOffset;
-        if( pSalDriverData->mnVersion == SAL_DRIVERDATA_VERSION_W )
-        {
-            if( aSalShlData.mbWPrinter )
-                pDevModeW = (DEVMODEW*)pDriverData;
-        }
-        else if( pSalDriverData->mnVersion == SAL_DRIVERDATA_VERSION_A )
-        {
-            if( ! aSalShlData.mbWPrinter )
-                pDevModeA = (DEVMODEA*)pDriverData;
-        }
+        pDevModeW = (DEVMODEW*)pDriverData;
 
         long nSysJobSize = -1;
-        if( pPrinter && ( pDevModeA || pDevModeW ) )
+        if( pPrinter && pDevModeW )
         {
             // just too many driver crashes in that area -> check the dmSpecVersion and dmDriverVersion fields always !!!
             // this prevents using the jobsetup between different Windows versions (eg from XP to 9x) but we
@@ -576,31 +331,16 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
             ByteString aPrinterNameA= ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE );
             HANDLE hPrn;
             LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.GetBuffer()));
-            if ( ! aSalShlData.mbWPrinter )
-            {
-                if ( !OpenPrinterA( (LPSTR)aPrinterNameA.GetBuffer(), &hPrn, NULL ) )
-                    return FALSE;
-            }
-            else
-                if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
-                    return FALSE;
+            if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
+                return FALSE;
 
             // #131642# hPrn==HGDI_ERROR even though OpenPrinter() succeeded!
             if( hPrn == HGDI_ERROR )
                 return FALSE;
 
-            if( aSalShlData.mbWPrinter )
-            {
-                nSysJobSize = DocumentPropertiesW( 0, hPrn,
-                                                   pPrinterNameW,
-                                                   NULL, NULL, 0 );
-            }
-            else
-            {
-                nSysJobSize = DocumentPropertiesA( 0, hPrn,
-                                                   (LPSTR)aPrinterNameA.GetBuffer(),
-                                                   NULL, NULL, 0 );
-            }
+            nSysJobSize = DocumentPropertiesW( 0, hPrn,
+                                               pPrinterNameW,
+                                               NULL, NULL, 0 );
 
             if( nSysJobSize < 0 )
             {
@@ -609,18 +349,9 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
             }
             BYTE *pBuffer = (BYTE*)_alloca( nSysJobSize );
             LONG nRet = -1;
-            if( aSalShlData.mbWPrinter )
-            {
-                nRet = DocumentPropertiesW( 0, hPrn,
-                                            pPrinterNameW,
-                                            (LPDEVMODEW)pBuffer, NULL, DM_OUT_BUFFER );
-            }
-            else
-            {
-                nRet = DocumentPropertiesA( 0, hPrn,
-                                            (LPSTR)aPrinterNameA.GetBuffer(),
-                                            (LPDEVMODEA)pBuffer, NULL, DM_OUT_BUFFER );
-            }
+            nRet = DocumentPropertiesW( 0, hPrn,
+                                        pPrinterNameW,
+                                        (LPDEVMODEW)pBuffer, NULL, DM_OUT_BUFFER );
             if( nRet < 0 )
             {
                 ClosePrinter( hPrn );
@@ -630,8 +361,8 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
             // the spec version differs between the windows platforms, ie 98,NT,2000/XP
             // this allows us to throw away printer settings from other platforms that might crash a buggy driver
             // we check the driver version as well
-            dmSpecVersion = aSalShlData.mbWPrinter ? ((DEVMODEW*)pBuffer)->dmSpecVersion : ((DEVMODEA*)pBuffer)->dmSpecVersion;
-            dmDriverVersion = aSalShlData.mbWPrinter ? ((DEVMODEW*)pBuffer)->dmDriverVersion : ((DEVMODEA*)pBuffer)->dmDriverVersion;
+            dmSpecVersion = ((DEVMODEW*)pBuffer)->dmSpecVersion;
+            dmDriverVersion = ((DEVMODEW*)pBuffer)->dmDriverVersion;
 
             ClosePrinter( hPrn );
         }
@@ -642,10 +373,6 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
              (long)(pSetupData->mnDriverDataLen - pSetupDriverData->mnDriverOffset) == nSysJobSize &&
              pSetupDriverData->mnSysSignature == SAL_DRIVERDATA_SYSSIGN )
         {
-            if( pDevModeA &&
-                (dmSpecVersion == pDevModeA->dmSpecVersion) &&
-                (dmDriverVersion == pDevModeA->dmDriverVersion) )
-                return TRUE;
             if( pDevModeW &&
                 (dmSpecVersion == pDevModeW->dmSpecVersion) &&
                 (dmDriverVersion == pDevModeW->dmDriverVersion) )
@@ -670,16 +397,8 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
     ByteString aPrinterNameA = ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE );
     HANDLE hPrn;
     LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.GetBuffer()));
-    if( aSalShlData.mbWPrinter )
-    {
-        if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
-            return FALSE;
-    }
-    else
-    {
-        if ( !OpenPrinterA( (LPSTR)aPrinterNameA.GetBuffer(), &hPrn, NULL ) )
-            return FALSE;
-    }
+    if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
+        return FALSE;
     // #131642# hPrn==HGDI_ERROR even though OpenPrinter() succeeded!
     if( hPrn == HGDI_ERROR )
         return FALSE;
@@ -692,16 +411,9 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
     SalDriverData*  pOutBuffer = NULL;
     BYTE*           pInBuffer = NULL;
 
-    if( aSalShlData.mbWPrinter )
-    {
-        nSysJobSize = DocumentPropertiesW( hWnd, hPrn,
-                                           pPrinterNameW,
-                                           NULL, NULL, 0 );
-    }
-    else
-        nSysJobSize = DocumentPropertiesA( hWnd, hPrn,
-                                           (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(),
-                                           NULL, NULL, 0 );
+    nSysJobSize = DocumentPropertiesW( hWnd, hPrn,
+                                       pPrinterNameW,
+                                       NULL, NULL, 0 );
     if ( nSysJobSize < 0 )
     {
         ClosePrinter( hPrn );
@@ -712,7 +424,6 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
     nDriverDataLen              = sizeof(SalDriverData) + nSysJobSize-1;
     pOutBuffer                  = (SalDriverData*)rtl_allocateZeroMemory( nDriverDataLen );
     pOutBuffer->mnSysSignature  = SAL_DRIVERDATA_SYSSIGN;
-    pOutBuffer->mnVersion       = aSalShlData.mbWPrinter ? SAL_DRIVERDATA_VERSION_W : SAL_DRIVERDATA_VERSION_A;
     // calculate driver data offset including structure padding
     pOutBuffer->mnDriverOffset  = sal::static_int_cast<sal_uInt16>(
                                     (char*)pOutBuffer->maDriverData -
@@ -738,18 +449,9 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
         nMutexCount = ImplSalReleaseYieldMutex();
 
     BYTE* pOutDevMode = (((BYTE*)pOutBuffer) + pOutBuffer->mnDriverOffset);
-    if( aSalShlData.mbWPrinter )
-    {
-        nRet = DocumentPropertiesW( hWnd, hPrn,
-                                    pPrinterNameW,
-                                    (LPDEVMODEW)pOutDevMode, (LPDEVMODEW)pInBuffer, nMode );
-    }
-    else
-    {
-        nRet = DocumentPropertiesA( hWnd, hPrn,
-                                    (LPSTR)ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ).GetBuffer(),
-                                    (LPDEVMODEA)pOutDevMode, (LPDEVMODEA)pInBuffer, nMode );
-    }
+    nRet = DocumentPropertiesW( hWnd, hPrn,
+                                pPrinterNameW,
+                                (LPDEVMODEW)pOutDevMode, (LPDEVMODEW)pInBuffer, nMode );
     if ( pVisibleDlgParent )
         ImplSalAcquireYieldMutex( nMutexCount );
     ClosePrinter( hPrn );
@@ -761,35 +463,17 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
     }
 
     // fill up string buffers with 0 so they do not influence a JobSetup's memcmp
-    if( aSalShlData.mbWPrinter )
+    if( ((LPDEVMODEW)pOutDevMode)->dmSize >= 64 )
     {
-        if( ((LPDEVMODEW)pOutDevMode)->dmSize >= 64 )
-        {
-            sal_Int32 nLen = rtl_ustr_getLength( (const sal_Unicode*)((LPDEVMODEW)pOutDevMode)->dmDeviceName );
-            if ( nLen < sizeof( ((LPDEVMODEW)pOutDevMode)->dmDeviceName )/sizeof(sal_Unicode) )
-                memset( ((LPDEVMODEW)pOutDevMode)->dmDeviceName+nLen, 0, sizeof( ((LPDEVMODEW)pOutDevMode)->dmDeviceName )-(nLen*sizeof(sal_Unicode)) );
-        }
-        if( ((LPDEVMODEW)pOutDevMode)->dmSize >= 166 )
-        {
-            sal_Int32 nLen = rtl_ustr_getLength( (const sal_Unicode*)((LPDEVMODEW)pOutDevMode)->dmFormName );
-            if ( nLen < sizeof( ((LPDEVMODEW)pOutDevMode)->dmFormName )/sizeof(sal_Unicode) )
-                memset( ((LPDEVMODEW)pOutDevMode)->dmFormName+nLen, 0, sizeof( ((LPDEVMODEW)pOutDevMode)->dmFormName )-(nLen*sizeof(sal_Unicode)) );
-        }
+        sal_Int32 nLen = rtl_ustr_getLength( (const sal_Unicode*)((LPDEVMODEW)pOutDevMode)->dmDeviceName );
+        if ( nLen < sizeof( ((LPDEVMODEW)pOutDevMode)->dmDeviceName )/sizeof(sal_Unicode) )
+            memset( ((LPDEVMODEW)pOutDevMode)->dmDeviceName+nLen, 0, sizeof( ((LPDEVMODEW)pOutDevMode)->dmDeviceName )-(nLen*sizeof(sal_Unicode)) );
     }
-    else
+    if( ((LPDEVMODEW)pOutDevMode)->dmSize >= 166 )
     {
-        if( ((LPDEVMODEA)pOutDevMode)->dmSize >= 32 )
-        {
-            sal_Int32 nLen = strlen( (const char*)((LPDEVMODEA)pOutDevMode)->dmDeviceName );
-            if ( nLen < sizeof( ((LPDEVMODEA)pOutDevMode)->dmDeviceName ) )
-                memset( ((LPDEVMODEA)pOutDevMode)->dmDeviceName+nLen, 0, sizeof( ((LPDEVMODEA)pOutDevMode)->dmDeviceName )-nLen );
-        }
-        if( ((LPDEVMODEA)pOutDevMode)->dmSize >= 102 )
-        {
-            sal_Int32 nLen = strlen( (const char*)((LPDEVMODEA)pOutDevMode)->dmFormName );
-            if ( nLen < sizeof( ((LPDEVMODEA)pOutDevMode)->dmFormName ) )
-                memset( ((LPDEVMODEA)pOutDevMode)->dmFormName+nLen, 0, sizeof( ((LPDEVMODEA)pOutDevMode)->dmFormName )-nLen );
-        }
+        sal_Int32 nLen = rtl_ustr_getLength( (const sal_Unicode*)((LPDEVMODEW)pOutDevMode)->dmFormName );
+        if ( nLen < sizeof( ((LPDEVMODEW)pOutDevMode)->dmFormName )/sizeof(sal_Unicode) )
+            memset( ((LPDEVMODEW)pOutDevMode)->dmFormName+nLen, 0, sizeof( ((LPDEVMODEW)pOutDevMode)->dmFormName )-(nLen*sizeof(sal_Unicode)) );
     }
 
     // update data
@@ -805,13 +489,12 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
 // -----------------------------------------------------------------------
 
 #define DECLARE_DEVMODE( i )\
-    DEVMODEA* pDevModeA = SAL_DEVMODE_A(i);\
     DEVMODEW* pDevModeW = SAL_DEVMODE_W(i);\
-    if( pDevModeA == NULL && pDevModeW == NULL )\
+    if( pDevModeW == NULL )\
         return
 
 #define CHOOSE_DEVMODE(i)\
-    (pDevModeW ? pDevModeW->i : pDevModeA->i)
+    (pDevModeW->i)
 
 static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData, sal_uLong nFlags )
 {
@@ -1379,75 +1062,27 @@ static HDC ImplCreateICW_WithCatch( LPWSTR pDriver,
     return hDC;
 }
 
-static HDC ImplCreateICA_WithCatch( char* pDriver,
-                                    char* pDevice,
-                                    LPDEVMODEA pDevMode )
-{
-    HDC hDC = 0;
-    CATCH_DRIVER_EX_BEGIN;
-    hDC = CreateICA( pDriver, pDevice, 0, pDevMode );
-    CATCH_DRIVER_EX_END_2( "exception in CreateICW" );
-    return hDC;
-}
-
-
 static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData )
 {
     HDC hDC = 0;
-    if( aSalShlData.mbWPrinter )
-    {
-        LPDEVMODEW pDevMode;
-        if ( pSetupData && pSetupData->mpDriverData )
-            pDevMode = SAL_DEVMODE_W( pSetupData );
-        else
-            pDevMode = NULL;
-        // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateIC, although declared const - so provide some space
-        // pl: does this hold true for Unicode functions ?
-        if( pPrinter->maDriverName.Len() > 2048 || pPrinter->maDeviceName.Len() > 2048 )
-            return 0;
-        sal_Unicode pDriverName[ 4096 ];
-        sal_Unicode pDeviceName[ 4096 ];
-        rtl_copyMemory( pDriverName, pPrinter->maDriverName.GetBuffer(), pPrinter->maDriverName.Len()*sizeof(sal_Unicode));
-        memset( pDriverName+pPrinter->maDriverName.Len(), 0, 32 );
-        rtl_copyMemory( pDeviceName, pPrinter->maDeviceName.GetBuffer(), pPrinter->maDeviceName.Len()*sizeof(sal_Unicode));
-        memset( pDeviceName+pPrinter->maDeviceName.Len(), 0, 32 );
-        hDC = ImplCreateICW_WithCatch( reinterpret_cast< LPWSTR >(pDriverName),
-                                       reinterpret_cast< LPCWSTR >(pDeviceName),
-                                       pDevMode );
-    }
+    LPDEVMODEW pDevMode;
+    if ( pSetupData && pSetupData->mpDriverData )
+        pDevMode = SAL_DEVMODE_W( pSetupData );
     else
-    {
-        LPDEVMODEA pDevMode;
-        if ( pSetupData && pSetupData->mpDriverData )
-            pDevMode = SAL_DEVMODE_A( pSetupData );
-        else
-            pDevMode = NULL;
-        // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateIC, although declared const - so provide some space
-        ByteString aDriver ( ImplSalGetWinAnsiString( pPrinter->maDriverName, TRUE ) );
-        ByteString aDevice ( ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE ) );
-        int n = aDriver.Len() > aDevice.Len() ? aDriver.Len() : aDevice.Len();
-            // #125813# under some circumstances many printer drivers really
-        // seem to have a problem with the names and their conversions.
-        // We need to get on to of this, but haven't been able to reproduce
-        // the problem yet. Put the names on the stack so we get them
-        // with an eventual crash report.
-        if( n >= 2048 )
-            return 0;
-        n += 2048;
-        char lpszDriverName[ 4096 ];
-        char lpszDeviceName[ 4096 ];
-        strncpy( lpszDriverName, aDriver.GetBuffer(), n );
-        strncpy( lpszDeviceName, aDevice.GetBuffer(), n );
-        // HDU: the crashes usually happen in a MBCS to unicode conversion,
-        // so I suspect the MBCS string's end is not properly recognized.
-        // The longest MBCS encoding I'm aware of has six bytes per code
-        // => add a couple of zeroes...
-        memset( lpszDriverName+aDriver.Len(), 0, 16 );
-        memset( lpszDeviceName+aDevice.Len(), 0, 16 );
-        hDC = ImplCreateICA_WithCatch( lpszDriverName,
-                                       lpszDeviceName,
-                                       pDevMode );
-    }
+        pDevMode = NULL;
+    // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateIC, although declared const - so provide some space
+    // pl: does this hold true for Unicode functions ?
+    if( pPrinter->maDriverName.Len() > 2048 || pPrinter->maDeviceName.Len() > 2048 )
+        return 0;
+    sal_Unicode pDriverName[ 4096 ];
+    sal_Unicode pDeviceName[ 4096 ];
+    rtl_copyMemory( pDriverName, pPrinter->maDriverName.GetBuffer(), pPrinter->maDriverName.Len()*sizeof(sal_Unicode));
+    memset( pDriverName+pPrinter->maDriverName.Len(), 0, 32 );
+    rtl_copyMemory( pDeviceName, pPrinter->maDeviceName.GetBuffer(), pPrinter->maDeviceName.Len()*sizeof(sal_Unicode));
+    memset( pDeviceName+pPrinter->maDeviceName.Len(), 0, 32 );
+    hDC = ImplCreateICW_WithCatch( reinterpret_cast< LPWSTR >(pDriverName),
+                                   reinterpret_cast< LPCWSTR >(pDeviceName),
+                                   pDevMode );
     return hDC;
 }
 
@@ -1567,28 +1202,14 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
         pPaperSizes = (POINT*)rtl_allocateZeroMemory(nCount*sizeof(POINT));
         ImplDeviceCaps( this, DC_PAPERSIZE, (BYTE*)pPaperSizes, pSetupData );
 
-        if( aSalShlData.mbWPrinter )
+        sal_Unicode* pNamesBuffer = (sal_Unicode*)rtl_allocateMemory(nCount*64*sizeof(sal_Unicode));
+        ImplDeviceCaps( this, DC_PAPERNAMES, (BYTE*)pNamesBuffer, pSetupData );
+        for( DWORD i = 0; i < nCount; ++i )
         {
-            sal_Unicode* pNamesBuffer = (sal_Unicode*)rtl_allocateMemory(nCount*64*sizeof(sal_Unicode));
-            ImplDeviceCaps( this, DC_PAPERNAMES, (BYTE*)pNamesBuffer, pSetupData );
-            for( DWORD i = 0; i < nCount; ++i )
-            {
-                PaperInfo aInfo(pPaperSizes[i].x * 10, pPaperSizes[i].y * 10);
-                m_aPaperFormats.push_back( aInfo );
-            }
-            rtl_freeMemory( pNamesBuffer );
+            PaperInfo aInfo(pPaperSizes[i].x * 10, pPaperSizes[i].y * 10);
+            m_aPaperFormats.push_back( aInfo );
         }
-        else
-        {
-            char* pNamesBuffer = (char*)rtl_allocateMemory(nCount*64);
-            ImplDeviceCaps( this, DC_PAPERNAMES, (BYTE*)pNamesBuffer, pSetupData );
-            for( DWORD i = 0; i < nCount; ++i )
-            {
-                PaperInfo aInfo(pPaperSizes[i].x * 10, pPaperSizes[i].y * 10);
-                m_aPaperFormats.push_back( aInfo );
-            }
-            rtl_freeMemory( pNamesBuffer );
-        }
+        rtl_freeMemory( pNamesBuffer );
         rtl_freeMemory( pPaperSizes );
     }
 
@@ -1683,22 +1304,11 @@ XubString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sa
     DWORD nBins = ImplDeviceCaps( this, DC_BINNAMES, NULL, pSetupData );
     if ( (nPaperBin < nBins) && (nBins != GDI_ERROR) )
     {
-        if( aSalShlData.mbWPrinter )
-        {
-            sal_Unicode* pBuffer = new sal_Unicode[nBins*24];
-            DWORD nRet = ImplDeviceCaps( this, DC_BINNAMES, (BYTE*)pBuffer, pSetupData );
-            if ( nRet && (nRet != GDI_ERROR) )
-                aPaperBinName = pBuffer + (nPaperBin*24);
-            delete [] pBuffer;
-        }
-        else
-        {
-            char* pBuffer = new char[nBins*24];
-            DWORD nRet = ImplDeviceCaps( this, DC_BINNAMES, (BYTE*)pBuffer, pSetupData );
-            if ( nRet && (nRet != GDI_ERROR) )
-                aPaperBinName = ImplSalGetUniString( (const char*)(pBuffer + (nPaperBin*24)) );
-            delete [] pBuffer;
-        }
+        sal_Unicode* pBuffer = new sal_Unicode[nBins*24];
+        DWORD nRet = ImplDeviceCaps( this, DC_BINNAMES, (BYTE*)pBuffer, pSetupData );
+        if ( nRet && (nRet != GDI_ERROR) )
+            aPaperBinName = pBuffer + (nPaperBin*24);
+        delete [] pBuffer;
     }
 
     return aPaperBinName;
@@ -1832,29 +1442,6 @@ BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
 
 // -----------------------------------------------------------------------
 
-static LPDEVMODEA ImplSalSetCopies( LPDEVMODEA pDevMode, sal_uLong nCopies, sal_Bool bCollate )
-{
-    LPDEVMODEA pNewDevMode = pDevMode;
-    if ( pDevMode && (nCopies > 1) )
-    {
-        if ( nCopies > 32765 )
-            nCopies = 32765;
-        sal_uLong nDevSize = pDevMode->dmSize+pDevMode->dmDriverExtra;
-        pNewDevMode = (LPDEVMODEA)rtl_allocateMemory( nDevSize );
-        memcpy( pNewDevMode, pDevMode, nDevSize );
-        pDevMode = pNewDevMode;
-        pDevMode->dmFields |= DM_COPIES;
-        pDevMode->dmCopies  = (short)(sal_uInt16)nCopies;
-        pDevMode->dmFields |= DM_COLLATE;
-        if ( bCollate )
-            pDevMode->dmCollate = DMCOLLATE_TRUE;
-        else
-            pDevMode->dmCollate = DMCOLLATE_FALSE;
-    }
-
-    return pNewDevMode;
-}
-
 static LPDEVMODEW ImplSalSetCopies( LPDEVMODEW pDevMode, sal_uLong nCopies, sal_Bool bCollate )
 {
     LPDEVMODEW pNewDevMode = pDevMode;
@@ -1951,15 +1538,6 @@ static int lcl_StartDocW( HDC hDC, DOCINFOW* pInfo, WinSalPrinter* pPrt )
     return nRet;
 }
 
-static int lcl_StartDocA( HDC hDC, DOCINFOA* pInfo, WinSalPrinter* pPrt )
-{
-    int nRet = 0;
-    CATCH_DRIVER_EX_BEGIN;
-    nRet = ::StartDocA( hDC, pInfo );
-    CATCH_DRIVER_EX_END( "exception in StartDocW", pPrt );
-    return nRet;
-}
-
 sal_Bool WinSalPrinter::StartJob( const XubString* pFileName,
                            const XubString& rJobName,
                            const XubString&,
@@ -1973,64 +1551,27 @@ sal_Bool WinSalPrinter::StartJob( const XubString* pFileName,
     mnCopies        = nCopies;
     mbCollate   = bCollate;
 
-    LPDEVMODEA  pOrgDevModeA = NULL;
-    LPDEVMODEA  pDevModeA = NULL;
     LPDEVMODEW  pOrgDevModeW = NULL;
     LPDEVMODEW  pDevModeW = NULL;
     HDC hDC = 0;
-    if( aSalShlData.mbWPrinter )
+    if ( pSetupData && pSetupData->mpDriverData )
     {
-        if ( pSetupData && pSetupData->mpDriverData )
-        {
-            pOrgDevModeW = SAL_DEVMODE_W( pSetupData );
-            pDevModeW = ImplSalSetCopies( pOrgDevModeW, nCopies, bCollate );
-        }
-        else
-            pDevModeW = NULL;
-
-        // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateDC, although declared const - so provide some space
-        sal_Unicode aDrvBuf[4096];
-        sal_Unicode aDevBuf[4096];
-        rtl_copyMemory( aDrvBuf, mpInfoPrinter->maDriverName.GetBuffer(), (mpInfoPrinter->maDriverName.Len()+1)*sizeof(sal_Unicode));
-        rtl_copyMemory( aDevBuf, mpInfoPrinter->maDeviceName.GetBuffer(), (mpInfoPrinter->maDeviceName.Len()+1)*sizeof(sal_Unicode));
-        hDC = CreateDCW( reinterpret_cast<LPCWSTR>(aDrvBuf),
-                         reinterpret_cast<LPCWSTR>(aDevBuf),
-                         NULL,
-                         pDevModeW );
-
-        if ( pDevModeW != pOrgDevModeW )
-            rtl_freeMemory( pDevModeW );
+        pOrgDevModeW = SAL_DEVMODE_W( pSetupData );
+        pDevModeW = ImplSalSetCopies( pOrgDevModeW, nCopies, bCollate );
     }
-    else
-    {
-        if ( pSetupData && pSetupData->mpDriverData )
-        {
-            pOrgDevModeA = SAL_DEVMODE_A( pSetupData );
-            pDevModeA = ImplSalSetCopies( pOrgDevModeA, nCopies, bCollate );
-        }
-        else
-            pDevModeA = NULL;
 
-        // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateDC, although declared const - so provide some space
-        ByteString aDriver ( ImplSalGetWinAnsiString( mpInfoPrinter->maDriverName, TRUE ) );
-        ByteString aDevice ( ImplSalGetWinAnsiString( mpInfoPrinter->maDeviceName, TRUE ) );
-        int n = aDriver.Len() > aDevice.Len() ? aDriver.Len() : aDevice.Len();
-        n += 2048;
-        char *lpszDriverName = new char[n];
-        char *lpszDeviceName = new char[n];
-        strncpy( lpszDriverName, aDriver.GetBuffer(), n );
-        strncpy( lpszDeviceName, aDevice.GetBuffer(), n );
-        hDC = CreateDCA( lpszDriverName,
-                         lpszDeviceName,
-                         NULL,
-                         pDevModeA );
+    // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateDC, although declared const - so provide some space
+    sal_Unicode aDrvBuf[4096];
+    sal_Unicode aDevBuf[4096];
+    rtl_copyMemory( aDrvBuf, mpInfoPrinter->maDriverName.GetBuffer(), (mpInfoPrinter->maDriverName.Len()+1)*sizeof(sal_Unicode));
+    rtl_copyMemory( aDevBuf, mpInfoPrinter->maDeviceName.GetBuffer(), (mpInfoPrinter->maDeviceName.Len()+1)*sizeof(sal_Unicode));
+    hDC = CreateDCW( reinterpret_cast<LPCWSTR>(aDrvBuf),
+                     reinterpret_cast<LPCWSTR>(aDevBuf),
+                     NULL,
+                     pDevModeW );
 
-        delete [] lpszDriverName;
-        delete [] lpszDeviceName;
-
-        if ( pDevModeA != pOrgDevModeA )
-            rtl_freeMemory( pDevModeA );
-    }
+    if ( pDevModeW != pOrgDevModeW )
+        rtl_freeMemory( pDevModeW );
 
     if ( !hDC )
     {
@@ -2112,71 +1653,33 @@ sal_Bool WinSalPrinter::StartJob( const XubString* pFileName,
         }
     }
 
-    if( aSalShlData.mbWPrinter )
+    DOCINFOW aInfo;
+    memset( &aInfo, 0, sizeof( DOCINFOW ) );
+    aInfo.cbSize = sizeof( aInfo );
+    aInfo.lpszDocName = (LPWSTR)rJobName.GetBuffer();
+    if ( pFileName || aOutFileName.getLength() )
     {
-        DOCINFOW aInfo;
-        memset( &aInfo, 0, sizeof( DOCINFOW ) );
-        aInfo.cbSize = sizeof( aInfo );
-        aInfo.lpszDocName = (LPWSTR)rJobName.GetBuffer();
-        if ( pFileName || aOutFileName.getLength() )
+        if ( (pFileName && pFileName->Len()) || aOutFileName.getLength() )
         {
-            if ( (pFileName && pFileName->Len()) || aOutFileName.getLength() )
-            {
-                aInfo.lpszOutput = (LPWSTR)( (pFileName && pFileName->Len()) ? pFileName->GetBuffer() : aOutFileName.getStr());
-            }
-            else
-                aInfo.lpszOutput = L"FILE:";
+            aInfo.lpszOutput = (LPWSTR)( (pFileName && pFileName->Len()) ? pFileName->GetBuffer() : aOutFileName.getStr());
         }
         else
-            aInfo.lpszOutput = NULL;
-
-        // start Job
-        int nRet = lcl_StartDocW( hDC, &aInfo, this );
-
-        if ( nRet <= 0 )
-        {
-            long nError = GetLastError();
-            if ( (nRet == SP_USERABORT) || (nRet == SP_APPABORT) || (nError == ERROR_PRINT_CANCELLED) || (nError == ERROR_CANCELLED) )
-                mnError = SAL_PRINTER_ERROR_ABORT;
-            else
-                mnError = SAL_PRINTER_ERROR_GENERALERROR;
-            return FALSE;
-        }
+            aInfo.lpszOutput = L"FILE:";
     }
     else
+        aInfo.lpszOutput = NULL;
+
+    // start Job
+    int nRet = lcl_StartDocW( hDC, &aInfo, this );
+
+    if ( nRet <= 0 )
     {
-        // Both strings must exist, if StartJob() is called
-        ByteString aJobName( ImplSalGetWinAnsiString( rJobName, TRUE ) );
-        ByteString aFileName;
-
-        DOCINFOA aInfo;
-        memset( &aInfo, 0, sizeof( DOCINFOA ) );
-        aInfo.cbSize = sizeof( aInfo );
-        aInfo.lpszDocName = (LPCSTR)aJobName.GetBuffer();
-        if ( pFileName || aOutFileName.getLength() )
-        {
-            if ( pFileName->Len() || aOutFileName.getLength() )
-            {
-                aFileName = ImplSalGetWinAnsiString( pFileName ? *pFileName : static_cast<const XubString>(aOutFileName), TRUE );
-                aInfo.lpszOutput = (LPCSTR)aFileName.GetBuffer();
-            }
-            else
-                aInfo.lpszOutput = "FILE:";
-        }
+        long nError = GetLastError();
+        if ( (nRet == SP_USERABORT) || (nRet == SP_APPABORT) || (nError == ERROR_PRINT_CANCELLED) || (nError == ERROR_CANCELLED) )
+            mnError = SAL_PRINTER_ERROR_ABORT;
         else
-            aInfo.lpszOutput = NULL;
-
-        // start Job
-        int nRet = lcl_StartDocA( hDC, &aInfo, this );
-        if ( nRet <= 0 )
-        {
-            long nError = GetLastError();
-            if ( (nRet == SP_USERABORT) || (nRet == SP_APPABORT) || (nError == ERROR_PRINT_CANCELLED) || (nError == ERROR_CANCELLED) )
-                mnError = SAL_PRINTER_ERROR_ABORT;
-            else
-                mnError = SAL_PRINTER_ERROR_GENERALERROR;
-            return FALSE;
-        }
+            mnError = SAL_PRINTER_ERROR_GENERALERROR;
+        return FALSE;
     }
 
     return TRUE;
@@ -2285,26 +1788,13 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJo
     HDC hDC = mhDC;
     if ( pSetupData && pSetupData->mpDriverData && bNewJobData )
     {
-        if( aSalShlData.mbWPrinter )
-        {
-            LPDEVMODEW  pOrgDevModeW;
-            LPDEVMODEW  pDevModeW;
-            pOrgDevModeW = SAL_DEVMODE_W( pSetupData );
-            pDevModeW = ImplSalSetCopies( pOrgDevModeW, mnCopies, mbCollate );
-            ResetDCW( hDC, pDevModeW );
-            if ( pDevModeW != pOrgDevModeW )
-                rtl_freeMemory( pDevModeW );
-        }
-        else
-        {
-            LPDEVMODEA  pOrgDevModeA;
-            LPDEVMODEA  pDevModeA;
-            pOrgDevModeA = SAL_DEVMODE_A( pSetupData );
-            pDevModeA = ImplSalSetCopies( pOrgDevModeA, mnCopies, mbCollate );
-            ResetDCA( hDC, pDevModeA );
-            if ( pDevModeA != pOrgDevModeA )
-                rtl_freeMemory( pDevModeA );
-        }
+        LPDEVMODEW  pOrgDevModeW;
+        LPDEVMODEW  pDevModeW;
+        pOrgDevModeW = SAL_DEVMODE_W( pSetupData );
+        pDevModeW = ImplSalSetCopies( pOrgDevModeW, mnCopies, mbCollate );
+        ResetDCW( hDC, pDevModeW );
+        if ( pDevModeW != pOrgDevModeW )
+            rtl_freeMemory( pDevModeW );
     }
     int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;
