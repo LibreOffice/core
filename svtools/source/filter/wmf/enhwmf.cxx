@@ -261,22 +261,27 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
     }
     bEMFPlus = true;
 
+    sal_Size pos = pWMF->Tell();
     void *buffer = malloc( length );
-
-    int pos = pWMF->Tell();
     pOut->PassEMFPlus( buffer, pWMF->Read( buffer, length ) );
+    free( buffer );
     pWMF->Seek( pos );
 
     bHaveDC = false;
 
-    length -= 4;
+    OSL_ASSERT(length >= 4);
+    //reduce by 32bit length itself, skip in SeekRel if
+    //impossibly unavailble
+    sal_uInt32 nRemainder = length >= 4 ? length-4 : length;
 
-    while (length > 0) {
-        sal_uInt16 type, flags;
-        sal_uInt32 size, dataSize;
-        sal_uInt32 next;
+    const size_t nRequiredHeaderSize = 12;
+    while (nRemainder > nRequiredHeaderSize)
+    {
+        sal_uInt16 type(0), flags(0);
+        sal_uInt32 size(0), dataSize(0);
 
         *pWMF >> type >> flags >> size >> dataSize;
+        nRemainder -= nRequiredHeaderSize;
 
         EMFP_DEBUG(printf ("\t\tEMF+ record type: %d\n", type));
 
@@ -286,14 +291,16 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
             EMFP_DEBUG(printf ("\t\tEMF+ lock DC (device context)\n", type));
         }
 
-        next = pWMF->Tell() + ( size - 12 );
-
-        length -= size;
-
-        pWMF->Seek( next );
+        //Get the length of the remaining data of this record based
+        //on the alleged size
+        sal_uInt32 nRemainingRecordData = size >= nRequiredHeaderSize ?
+            size-nRequiredHeaderSize : 0;
+        //clip to available size
+        nRemainingRecordData = std::min(nRemainingRecordData, nRemainder);
+        pWMF->SeekRel(nRemainingRecordData);
+        nRemainder -= nRemainingRecordData;
     }
-
-    free( buffer );
+    pWMF->SeekRel(nRemainder);
 }
 
 void EnhWMFReader::ReadGDIComment()
