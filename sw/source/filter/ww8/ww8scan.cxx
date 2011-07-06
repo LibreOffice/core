@@ -3447,7 +3447,7 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
                 nArrMax = nSprmSiz;                 // Hole mehr Speicher
                 pSprms = new sal_uInt8[nArrMax];
             }
-            pStrm->Read( pSprms, nSprmSiz );        // read Sprms
+            nSprmSiz = pStrm->Read(pSprms, nSprmSiz); // read Sprms
 
             p->nSprmsLen = nSprmSiz;
             p->pMemPos = pSprms;                    // return Position
