@@ -1065,7 +1065,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     // Arrays anlegen
     pLFOInfos = new WW8LFOInfos;
     bool bLVLOk = true;
-    sal_uInt8  aBits1;
 
     nLastLFOPosition = USHRT_MAX;
     long nOriginalPos = rSt.Tell();
@@ -1101,7 +1100,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             for (sal_uInt16 nLevel = 0; nLevel < nMaxLevel; ++nLevel)
                 rSt >> aLST.aIdSty[ nLevel ];
 
-
+            sal_uInt8 aBits1(0);
             rSt >> aBits1;
 
             rSt.SeekRel( 1 );
@@ -1189,12 +1188,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 delete pListInfo->aItemSet[ nLevel ];
             bOk = true;
         }
-    }
-    if( !bOk )
-    {
-        // Fehler aufgetreten - LSTInfos abraeumen !!!
-
-        ;
     }
 
     //
@@ -1326,13 +1319,15 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 sal_uInt32 nTest;
                 rSt >> nTest;
                 do
+                {
+                    nTest = 0;
                     rSt >> nTest;
+                }
                 while (nTest == 0xFFFFFFFF);
                 rSt.SeekRel(-4);
 
                 std::deque<bool> aNotReallyThere(WW8ListManager::nMaxLevel);
-                sal_uInt8 nLevel = 0;
-                for (nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
+                for (sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                 {
                     WW8LFOLVL aLFOLVL;
                     bLVLOk = false;
@@ -1341,6 +1336,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     // 2.2.2.1 den LFOLVL einlesen
                     //
                     rSt >> aLFOLVL.nStartAt;
+                    sal_uInt8 aBits1(0);
                     rSt >> aBits1;
                     rSt.SeekRel( 3 );
                     if (rSt.GetError())
@@ -1402,7 +1398,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 //
                 sal_uInt16 aFlagsNewCharFmt = 0;
                 bool bNewCharFmtCreated = false;
-                for (nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
+                for (sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                 {
                     AdjustLVL( nLevel, *pLFOInfo->pNumRule, aItemSet, aCharFmt,
                         bNewCharFmtCreated, sPrefix );
@@ -1412,16 +1408,11 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 //
                 // 2.2.4 ItemPools leeren und loeschen
                 //
-                for (nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
+                for (sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                     delete aItemSet[ nLevel ];
                 bOk = true;
             }
         }
-    }
-    if( !bOk )
-    {
-        // Fehler aufgetreten - LSTInfos und LFOInfos abraeumen !!!
-        ;
     }
     // und schon sind wir fertig!
     rSt.Seek( nOriginalPos );
