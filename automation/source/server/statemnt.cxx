@@ -1001,7 +1001,8 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                             aID.Assign("Help");
                             break;
                         default:
-                            aID = ByteString::CreateFromInt32( pBD->GetButtonId(i) );
+                            aID = rtl::OString::valueOf(
+                                static_cast<sal_Int32>(pBD->GetButtonId(i)));
                             break;
                     }
 

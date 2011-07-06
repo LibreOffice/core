@@ -168,7 +168,8 @@ sal_uLong GetTTPortConfig()
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Communication");
 
-    GETSET( abPortToTalk, "TTPort", ByteString::CreateFromInt32( TESTTOOL_DEFAULT_PORT ) );
+    GETSET( abPortToTalk, "TTPort",
+        rtl::OString::valueOf(static_cast<sal_Int32>(TESTTOOL_DEFAULT_PORT)) );
     return (sal_uLong)abPortToTalk.ToInt64();
 }
 
@@ -194,7 +195,8 @@ sal_uLong GetUnoPortConfig()
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Communication");
 
-    GETSET( abPortToTalk, "UnoPort", ByteString::CreateFromInt32( UNO_DEFAULT_PORT ) );
+    GETSET( abPortToTalk, "UnoPort",
+        rtl::OString::valueOf(static_cast<sal_Int32>(UNO_DEFAULT_PORT)) );
     return (sal_uLong)abPortToTalk.ToInt64();
 }
 
