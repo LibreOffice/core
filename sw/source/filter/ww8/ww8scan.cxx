@@ -6196,6 +6196,30 @@ void lcl_checkFontname( String& sString )
     }
 }
 
+namespace
+{
+    sal_uInt16 calcMaxFonts(sal_uInt8 *p, sal_Int32 nFFn)
+    {
+        // Figure out the max number of fonts defined here
+        sal_uInt16 nMax = 0;
+        sal_Int32 nRemaining = nFFn;
+        while (nRemaining)
+        {
+            //p[0] is cbFfnM1, the alleged total length of FFN - 1.
+            sal_uInt16 cbFfnM1 = *p++;
+            --nRemaining;
+
+            if (cbFfnM1 > nRemaining)
+                break;
+
+            nMax++;
+            nRemaining -= cbFfnM1;
+            p += cbFfnM1;
+        }
+        return nMax;
+    }
+}
+
 WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     : pFontA(0), nMax(0)
 {
@@ -6213,9 +6237,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     sal_Int32 nFFn = rFib.lcbSttbfffn - 2;
 
     // allocate Font Array
-    sal_uInt8* pA   = new sal_uInt8[ nFFn ];
+    sal_uInt8* pA = new sal_uInt8[nFFn];
     memset(pA, 0, nFFn);
-    WW8_FFN* p = (WW8_FFN*)pA;
 
     ww::WordVersion eVersion = rFib.GetFIBVersion();
 
@@ -6231,34 +6254,23 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     rSt.SeekRel( 2 );
 
     // read all font information
-    nFFn = rSt.Read( pA, nFFn );
+    nFFn = rSt.Read(pA, nFFn);
+    sal_uInt16 nCalcMax = calcMaxFonts(pA, nFFn);
 
-    if( eVersion < ww::eWW8 )
+    if (eVersion < ww::eWW8)
+        nMax = nCalcMax;
+    else
     {
-        // try to figure out how many fonts are defined here
-        nMax = 0;
-        long nLeft = nFFn;
-        for(;;)
-        {
-            short nNextSiz;
-
-            nNextSiz = p->cbFfnM1 + 1;
-            if( nNextSiz > nLeft )
-                break;
-            nMax++;
-            nLeft -= nNextSiz;
-            if( nLeft < 1 )     // can we read the given ammount of bytes ?
-                break;
-            // increase p by nNextSiz Bytes
-            p = (WW8_FFN *)( ( (sal_uInt8*)p ) + nNextSiz );
-        }
+        //newer versions include purportive count of fonts, so take min of that
+        //and calced max
+        nMax = std::min(nMax, nCalcMax);
     }
 
     if( nMax )
     {
         // allocate Index Array
         pFontA = new WW8_FFN[ nMax ];
-        p = pFontA;
+        WW8_FFN* p = pFontA;
 
         if( eVersion <= ww::eWW2 )
         {
