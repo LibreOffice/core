@@ -572,28 +572,19 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                     {
                         awt::Point aPoint;
                         if ( aWindowState[n].Value >>= aPoint )
-                        {
-                            rElementData.m_aDockedData.m_aPos.X() = aPoint.X;
-                            rElementData.m_aDockedData.m_aPos.Y() = aPoint.Y;
-                        }
+                            rElementData.m_aDockedData.m_aPos = aPoint;
                     }
                     else if ( aWindowState[n].Name == m_aPropPos )
                     {
                         awt::Point aPoint;
                         if ( aWindowState[n].Value >>= aPoint )
-                        {
-                            rElementData.m_aFloatingData.m_aPos.X() = aPoint.X;
-                            rElementData.m_aFloatingData.m_aPos.Y() = aPoint.Y;
-                        }
+                            rElementData.m_aFloatingData.m_aPos = aPoint;
                     }
                     else if ( aWindowState[n].Name == m_aPropSize )
                     {
                         awt::Size aSize;
                         if ( aWindowState[n].Value >>= aSize )
-                        {
-                            rElementData.m_aFloatingData.m_aSize.Width() = aSize.Width;
-                            rElementData.m_aFloatingData.m_aSize.Height() = aSize.Height;
-                        }
+                            rElementData.m_aFloatingData.m_aSize = aSize;
                     }
                     else if ( aWindowState[n].Name == m_aPropUIName )
                         aWindowState[n].Value >>= rElementData.m_aUIName;
@@ -708,22 +699,14 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
             aWindowState[2].Name  = m_aPropDockingArea;
             aWindowState[2].Value = makeAny( static_cast< DockingArea >( rElementData.m_aDockedData.m_nDockedArea ) );
 
-            awt::Point aPos;
-            aPos.X = rElementData.m_aDockedData.m_aPos.X();
-            aPos.Y = rElementData.m_aDockedData.m_aPos.Y();
             aWindowState[3].Name = m_aPropDockPos;
-            aWindowState[3].Value <<= aPos;
+            aWindowState[3].Value <<= rElementData.m_aDockedData.m_aPos;
 
-            aPos.X = rElementData.m_aFloatingData.m_aPos.X();
-            aPos.Y = rElementData.m_aFloatingData.m_aPos.Y();
             aWindowState[4].Name = m_aPropPos;
-            aWindowState[4].Value <<= aPos;
+            aWindowState[4].Value <<= rElementData.m_aFloatingData.m_aPos;
 
-            awt::Size aSize;
-            aSize.Width = rElementData.m_aFloatingData.m_aSize.Width();
-            aSize.Height = rElementData.m_aFloatingData.m_aSize.Height();
             aWindowState[5].Name  = m_aPropSize;
-            aWindowState[5].Value <<= aSize;
+            aWindowState[5].Value <<= rElementData.m_aFloatingData.m_aSize;
             aWindowState[6].Name  = m_aPropUIName;
             aWindowState[6].Value = makeAny( rElementData.m_aUIName );
             aWindowState[7].Name  = m_aPropLocked;
@@ -1536,7 +1519,7 @@ throw (RuntimeException)
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ))
         {
-            // PB 2004-12-15 #i38743# don't create a menubar if frame isn't top
+            // #i38743# don't create a menubar if frame isn't top
             if ( !bInPlaceMenu && !m_xMenuBar.is() && implts_isFrameOrWindowTop( xFrame ))
                 {
                 m_xMenuBar = implts_createElement( aName );

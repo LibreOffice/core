@@ -61,10 +61,9 @@
 namespace framework
 {
 
-bool hasEmptySize( const:: Size& aSize );
-bool hasDefaultPosValue( const ::Point& aPos );
-bool isDefaultPos( const ::com::sun::star::awt::Point& aPos );
-bool isDefaultPos( const ::Point& aPos );
+bool hasEmptySize( const ::com::sun::star::awt::Size& rSize );
+bool hasDefaultPosValue( const ::com::sun::star::awt::Point& rPos );
+bool isDefaultPos( const ::com::sun::star::awt::Point& rPos );
 bool isToolboxHorizontalAligned( ToolBox* pToolBox );
 bool isReverseOrderDockingArea( const sal_Int32 nDockArea );
 bool isHorizontalDockingArea( const sal_Int32 nDockArea );

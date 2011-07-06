@@ -232,7 +232,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         // layout methods
         //---------------------------------------------------------------------------------------------------------
         void             implts_setDockingAreaWindowSizes( const ::com::sun::star::awt::Rectangle& rBorderSpace );
-        ::Point          implts_findNextCascadeFloatingPos();
+        ::com::sun::star::awt::Point implts_findNextCascadeFloatingPos();
         void             implts_renumberRowColumnData( ::com::sun::star::ui::DockingArea eDockingArea, DockingOperation eDockingOperation, const UIElement& rUIElement );
         void             implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockingArea,
                                                                     sal_Int32 nOffset,
@@ -276,7 +276,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
 
         void             implts_getDockingAreaElementInfos( ::com::sun::star::ui::DockingArea DockingArea, std::vector< SingleRowColumnWindowData >& rRowColumnsWindowData );
         void             implts_getDockingAreaElementInfoOnSingleRowCol( ::com::sun::star::ui::DockingArea, sal_Int32 nRowCol, SingleRowColumnWindowData& rRowColumnWindowData );
-        void             implts_findNextDockingPos( ::com::sun::star::ui::DockingArea DockingArea, const ::Size& aUIElementSize, ::Point& rVirtualPos, ::Point& rPixelPos );
+        void             implts_findNextDockingPos( ::com::sun::star::ui::DockingArea DockingArea, const ::Size& aUIElementSize, ::com::sun::star::awt::Point& rVirtualPos, ::Point& rPixelPos );
         void             implts_setTrackingRect( ::com::sun::star::ui::DockingArea eDockingArea, const ::Point& rMousePos, ::Rectangle& rTrackingRect );
 
         //---------------------------------------------------------------------------------------------------------
