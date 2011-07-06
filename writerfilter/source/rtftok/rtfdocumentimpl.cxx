@@ -47,6 +47,7 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
@@ -2481,8 +2482,8 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         {
             if (i->second.toInt32() == 1)
             {
-                aAny <<= (long)27000;
-                xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("RotateAngle")), aAny);
+                aAny <<= text::WritingMode_TB_RL;
+                xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TextWritingMode")), aAny);
             }
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fLine")))
