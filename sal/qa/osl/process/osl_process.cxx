@@ -477,6 +477,7 @@ public:
         );
 
         std::string line;
+        line.reserve(1024);
         while (std::getline(file, line, '\0'))
             env_container->push_back(line);
         tidy_container(*env_container);
