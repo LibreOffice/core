@@ -257,6 +257,7 @@ gb_STDLIBS := \
 gb_Library_PLAINLIBS_NONE += \
 	$(gb_STDLIBS) \
 	dl \
+	fontconfig \
 	freetype \
 	GL \
 	GLU \
