@@ -218,10 +218,10 @@ private:
     sal_uInt8*  pPLCF_Contents;  ///< Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;             ///< Anzahl der Elemente
     long nIdx;              ///< Merker, wo wir gerade sind
-    long nStru;
+    sal_uInt32 nStru;
 public:
-    WW8PLCFspecial( SvStream* pSt, long nFilePos, long nPLCF,
-        long nStruct );
+    WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
+        sal_uInt32 nStruct);
     ~WW8PLCFspecial() { delete[] pPLCF_PosArray; }
     long GetIdx() const { return nIdx; }
     void SetIdx( long nI ) { nIdx = nI; }
@@ -328,9 +328,10 @@ friend class WW8PLCFpcd_Iter;
     sal_Int32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
     sal_uInt8*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;
-    long nStru;
+    sal_uInt32 nStru;
 public:
-    WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct );
+    WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
+        sal_uInt32 nStruct);
     ~WW8PLCFpcd(){ delete[] pPLCF_PosArray; }
 };
 
@@ -1780,7 +1781,8 @@ std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx);
 
 sal_uLong SafeReadString(ByteString &rStr,sal_uInt16 nLen,SvStream &rStrm);
 
-bool checkSeek(SvStream &rSt, WW8_FC nOffset);
+bool checkSeek(SvStream &rSt, sal_uInt32 nOffset);
+bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength);
 
 //MS has a (slightly) inaccurate view of how many twips
 //are in the default letter size of a page

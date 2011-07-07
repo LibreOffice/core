@@ -926,9 +926,9 @@ void WW8SprmIter::UpdateMyMembers()
 
 const sal_uInt8* WW8SprmIter::FindSprm(sal_uInt16 nId)
 {
-    while(GetSprms())
+    while (GetSprms())
     {
-        if( GetAktId() == nId )
+        if (GetAktId() == nId)
             return GetAktParams();              // SPRM found!
         advance();
     }
@@ -1713,7 +1713,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
     }
 
     // PLCF fuer TextBox-Stories im Maintext
-    long nLenTxBxS = (8 > pWw8Fib->nVersion) ? 0 : 22;
+    sal_uInt32 nLenTxBxS = (8 > pWw8Fib->nVersion) ? 0 : 22;
     if( pWwFib->fcPlcftxbxTxt && pWwFib->lcbPlcftxbxTxt )
     {
         pMainTxbx = new WW8PLCFspecial( pTblSt, pWwFib->fcPlcftxbxTxt,
@@ -2019,18 +2019,25 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
 //              WW8PLCFspecial
 //-----------------------------------------
 
-WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
-    long nStruct)
+WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
+    sal_uInt32 nPLCF, sal_uInt32 nStruct)
     : nIdx(0), nStru(nStruct)
 {
-    nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
+    const sal_uInt32 nValidMin=4;
+
+    sal_Size nOldPos = pSt->Tell();
+    bool bValid = checkSeek(*pSt, nFilePos);
+    nPLCF = bValid ? std::min(nPLCF, nValidMin) : nValidMin;
+
     // Pointer auf Pos- u. Struct-Array
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];
+    pPLCF_PosArray[0] = 0;
 
-    long nOldPos = pSt->Tell();
+    nPLCF = bValid ? pSt->Read(pPLCF_PosArray, nPLCF) : nValidMin;
 
-    pSt->Seek( nFilePos );
-    pSt->Read( pPLCF_PosArray, nPLCF );
+    nPLCF = std::min(nPLCF, nValidMin);
+
+    nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 #ifdef OSL_BIGENDIAN
     for( nIdx = 0; nIdx <= nIMax; nIdx++ )
         pPLCF_PosArray[nIdx] = SWAPLONG( pPLCF_PosArray[nIdx] );
@@ -2041,7 +2048,7 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
     else
         pPLCF_Contents = 0;                         // kein Inhalt
 
-    pSt->Seek( nOldPos );
+    pSt->Seek(nOldPos);
 }
 
 // WW8PLCFspecial::SeekPos() stellt den WW8PLCFspecial auf die Stelle nPos, wobei auch noch der
@@ -2173,23 +2180,18 @@ WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
 
 void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF )
 {
-    bool failure = false;
-
-    // Pointer auf Pos-Array
-    pPLCF_PosArray = new WW8_CP[ ( nPLCF + 3 ) / 4 ];
-
     sal_Size nOldPos = pSt->Tell();
 
-    pSt->Seek( nFilePos );
-    failure = pSt->GetError();
+    bool bValid = checkSeek(*pSt, nFilePos);
 
-    if (!failure)
+    if (bValid)
     {
-        pSt->Read( pPLCF_PosArray, nPLCF );
-        failure = pSt->GetError();
+        // Pointer auf Pos-Array
+        pPLCF_PosArray = new WW8_CP[ ( nPLCF + 3 ) / 4 ];
+        bValid = checkRead(*pSt, pPLCF_PosArray, nPLCF);
     }
 
-    if (!failure)
+    if (bValid)
     {
 #ifdef OSL_BIGENDIAN
         for( nIdx = 0; nIdx <= nIMax; nIdx++ )
@@ -2200,12 +2202,12 @@ void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF )
         pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
     }
 
-    pSt->Seek( nOldPos );
+    OSL_ENSURE(bValid, "Document has corrupt PLCF, ignoring it");
 
-    OSL_ENSURE( !failure, "Document has corrupt PLCF, ignoring it" );
-
-    if (failure)
+    if (!bValid)
         MakeFailedPLCF();
+
+    pSt->Seek(nOldPos);
 }
 
 void WW8PLCF::MakeFailedPLCF()
@@ -2341,16 +2343,23 @@ WW8_CP WW8PLCF::Where() const
 //              WW8PLCFpcd
 //-----------------------------------------
 
-WW8PLCFpcd::WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct )
-    :nStru( nStruct )
+WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
+    sal_uInt32 nPLCF, sal_uInt32 nStruct)
+    : nStru( nStruct )
 {
-    nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
+    const sal_uInt32 nValidMin=4;
+
+    sal_Size nOldPos = pSt->Tell();
+    bool bValid = checkSeek(*pSt, nFilePos);
+    nPLCF = bValid ? std::min(nPLCF, nValidMin) : nValidMin;
+
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];    // Pointer auf Pos-Array
+    pPLCF_PosArray[0] = 0;
 
-    long nOldPos = pSt->Tell();
+    nPLCF = bValid ? pSt->Read(pPLCF_PosArray, nPLCF) : nValidMin;
+    nPLCF = std::min(nPLCF, nValidMin);
 
-    pSt->Seek( nFilePos );
-    pSt->Read( pPLCF_PosArray, nPLCF );
+    nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 #ifdef OSL_BIGENDIAN
     for( long nI = 0; nI <= nIMax; nI++ )
       pPLCF_PosArray[nI] = SWAPLONG( pPLCF_PosArray[nI] );
@@ -2565,7 +2574,8 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                             aEntry.mpData =
                                 new sal_uInt8[aEntry.mnLen + nOrigLen];
                             aEntry.mbMustDelete = true;
-                            pDataSt->Read(aEntry.mpData, aEntry.mnLen);
+                            aEntry.mnLen =
+                                pDataSt->Read(aEntry.mpData, aEntry.mnLen);
 
                             pDataSt->Seek( nCurr );
 
@@ -7311,12 +7321,16 @@ sal_uInt8* wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
     while (nLen > (getVersion()?1:0))
     {
         sal_uInt16 nAktId = GetSprmId(pSprms);
-        if (nAktId == nId) // Sprm found
-            return pSprms + DistanceToData(nId);
-
         // gib Zeiger auf Daten
         sal_uInt16 nSize = GetSprmSize(nAktId, pSprms);
-        OSL_ENSURE(nSize <= nLen, "sprm longer than remaining bytes");
+
+        bool bValid = nSize <= nLen;
+
+        OSL_ENSURE(bValid, "sprm longer than remaining bytes");
+
+        if (nAktId == nId && bValid) // Sprm found
+            return pSprms + DistanceToData(nId);
+
         //Clip to available size if wrong
         nSize = std::min(nSize, nLen);
         pSprms += nSize;
@@ -7344,9 +7358,14 @@ SEPr::SEPr() :
     memset(rgdxaColumnWidthSpacing, 0, sizeof(rgdxaColumnWidthSpacing));
 }
 
-bool checkSeek(SvStream &rSt, WW8_FC nOffset)
+bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
 {
     return (rSt.Seek(nOffset) == static_cast<sal_Size>(nOffset));
+}
+
+bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
+{
+    return (rSt.Read(pDest, nLength) == static_cast<sal_Size>(nLength));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
