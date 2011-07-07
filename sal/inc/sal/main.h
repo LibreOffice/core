@@ -41,6 +41,60 @@ extern "C" {
 void SAL_CALL sal_detail_initialize(int argc, char ** argv);
 void SAL_CALL sal_detail_deinitialize();
 
+#ifdef IOS
+
+#include <premac.h>
+#import <UIKit/UIKit.h>
+#include <postmac.h>
+
+static int sal_argc;
+static char **sal_argv;
+
+#define SAL_MAIN_WITH_ARGS_IMPL \
+int SAL_CALL main(int argc, char ** argv) \
+{ \
+    sal_argc = argc; \
+    sal_argv = argv; \
+    sal_detail_initialize(argc, argv);   \
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; \
+    int retVal = UIApplicationMain (argc, argv, @"UIApplication", @"salAppDelegate"); \
+ \
+    [pool release]; \
+ \
+    sal_detail_deinitialize(); \
+    return retVal; \
+}
+
+#define SAL_MAIN_IMPL \
+SAL_MAIN_WITH_ARGS_IMPL \
+ \
+int \
+sal_main_with_args(int argc, char ** argv) \
+{ \
+    return sal_main(); \
+}
+
+@interface salAppDelegate : NSObject <UIApplicationDelegate> {
+}
+@end
+
+int sal_main_with_args(int argc, char **argv);
+
+@implementation salAppDelegate
+
+- (BOOL)application: (UIApplication *) application didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
+{
+  UIWindow *uiw = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+  uiw.backgroundColor = [UIColor redColor];
+  [uiw release];
+
+  sal_main_with_args(sal_argc, sal_argv);
+}
+
+@end
+
+#else
+
 #define SAL_MAIN_WITH_ARGS_IMPL \
 int SAL_CALL main(int argc, char ** argv) \
 { \
@@ -60,6 +114,9 @@ int SAL_CALL main(int argc, char ** argv) \
     sal_detail_deinitialize(); \
     return ret; \
 }
+
+#endif
+
 
 /* Definition macros for CRT entries */
 
