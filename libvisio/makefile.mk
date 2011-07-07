@@ -54,14 +54,11 @@ INCPRE+=$(LIBWPG_CFLAGS)
 INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpg
 .ENDIF
 
-TARFILE_NAME=libvisio-0.0.1
-TARFILE_MD5=4bb835ea2225c8f5f6c2b2e63d25993c
+TARFILE_NAME=libvisio-0.0.2
+TARFILE_MD5=979a3f3da4dc176e80fe8c6b759cb7f4
 
 PATCH_FILES=\
-    libvisio-0.0.1.patch \
-    libvisio-0.0.1-warnings.patch \
-    libvisio-mingw-cross.patch \
-    libvisio-android.patch
+    libvisio-0.0.2.patch
 
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
