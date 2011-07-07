@@ -2490,11 +2490,15 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
             aAny <<= lcl_BGRToRGB(i->second.toInt32());
             xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
         }
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillBackColor")))
+            ; // Ignore: complementer of fillColor
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lineColor")))
         {
             aAny <<= lcl_BGRToRGB(i->second.toInt32());
             xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")), aAny);
         }
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lineBackColor")))
+            ; // Ignore: complementer of lineColor
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("txflTextFlow")))
         {
             if (i->second.toInt32() == 1)
