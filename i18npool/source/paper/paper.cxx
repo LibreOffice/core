@@ -247,7 +247,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
         // try user-defined locale setting
         xConfigNA->getByName( CREATE_OUSTRING( "ooSetupSystemLocale" ) ) >>= aLocaleStr;
     }
-    catch( Exception& )
+    catch(const Exception&)
     {
     }
 
@@ -377,7 +377,9 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
             xConfigNA->getByName( CREATE_OUSTRING( "Locale" ) ) >>= aLocaleStr;
         }
     }
-    catch( Exception& ) {}
+    catch(const Exception&)
+    {
+    }
 
     if (aLocaleStr.getLength() == 0)
         aLocaleStr = CREATE_OUSTRING("en-US");
