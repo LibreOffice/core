@@ -65,6 +65,8 @@
 #include <editdoc.hxx>
 #include <editdbg.hxx>
 
+#include <rtl/strbuf.hxx>
+
 #if defined( DBG_UTIL ) || ( OSL_DEBUG_LEVEL > 1 )
 
 ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
@@ -536,20 +538,20 @@ ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
     return aDebStr;
 }
 
-ByteString EditDbg::GetTextPortionInfo( TextPortionList& rPortions )
+rtl::OString EditDbg::GetTextPortionInfo(TextPortionList& rPortions)
 {
-    ByteString aDebStr;
-    for ( sal_uInt16 z = 0; z < rPortions.Count(); z++ )
+    rtl::OStringBuffer aDebStr;
+    for (sal_uInt16 z = 0; z < rPortions.Count(); ++z)
     {
         TextPortion* pPortion = rPortions.GetObject( z );
-        aDebStr += " ";
-        aDebStr += ByteString::CreateFromInt32( pPortion->GetLen() );
-        aDebStr += "(";
-        aDebStr += ByteString::CreateFromInt32( pPortion->GetSize().Width() );
-        aDebStr += ")";
-        aDebStr += ";";
+        aDebStr.append(' ');
+        aDebStr.append(static_cast<sal_Int32>(pPortion->GetLen()));
+        aDebStr.append('(');
+        aDebStr.append(static_cast<sal_Int32>(pPortion->GetSize().Width()));
+        aDebStr.append(')');
+        aDebStr.append(';');
     }
-    return aDebStr;
+    return aDebStr.makeStringAndClear();
 }
 
 void EditDbg::ShowPortionData( ParaPortion* pPortion )

@@ -980,13 +980,17 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             }
             // SWG:
             if ( nEsc )
-                rOutput << "{\\*\\updnprop" << ByteString::CreateFromInt32( nProp100 ).GetBuffer() << '}';
+            {
+                rOutput << "{\\*\\updnprop" << rtl::OString::valueOf(
+                    static_cast<sal_Int32>(nProp100)).getStr() << '}';
+            }
             long nUpDown = nFontHeight * Abs( nEsc ) / 100;
-            ByteString aUpDown = ByteString::CreateFromInt32( nUpDown );
+            rtl::OString aUpDown = rtl::OString::valueOf(
+                static_cast<sal_Int32>(nUpDown));
             if ( nEsc < 0 )
-                rOutput << OOO_STRING_SVTOOLS_RTF_DN << aUpDown.GetBuffer();
+                rOutput << OOO_STRING_SVTOOLS_RTF_DN << aUpDown.getStr();
             else if ( nEsc > 0 )
-                rOutput << OOO_STRING_SVTOOLS_RTF_UP << aUpDown.GetBuffer();
+                rOutput << OOO_STRING_SVTOOLS_RTF_UP << aUpDown.getStr();
         }
         break;
     }

@@ -50,7 +50,7 @@ public:
     static void         ShowEditEngineData( EditEngine* pEditEngine, sal_Bool bInfoBox = sal_True );
     static void         ShowPortionData( ParaPortion* pPortion );
     static ByteString   GetPortionInfo( ParaPortion* pPPortion );
-    static ByteString   GetTextPortionInfo( TextPortionList& rPortions );
+    static rtl::OString GetTextPortionInfo(TextPortionList& rPortions);
     static ByteString   GetUndoDebStr( EditUndoList* pUndoList );
 };
 
