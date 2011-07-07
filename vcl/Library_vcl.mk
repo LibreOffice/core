@@ -474,6 +474,12 @@ else
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     cairo \
 ))
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    freetype \
+    fontconfig \
+))
+endif
 endif
 endif
 
