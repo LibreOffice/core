@@ -414,63 +414,6 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
 
     aConf.SetGroup("GUI Platform");
 
-    String aGP;
-    ByteString abGP;
-#if defined WNT && defined INTEL
-    abGP.Append( "501" );  // Windows on x86
-#elif defined WNT && defined X86_64
-    abGP.Append( "502" );  // Windows on x64
-#elif defined SOLARIS && defined SPARC
-    abGP.Append( "01" );  // Solaris SPARC
-#elif defined LINUX && defined INTEL
-    abGP.Append( "03" );  // Linux
-#elif defined AIX
-    abGP.Append( "04" );
-#elif defined SOLARIS && defined INTEL
-    abGP.Append( "05" );  // Solaris x86
-#elif defined FREEBSD
-    abGP.Append( "08" );
-#elif defined MACOSX
-    abGP.Append( "12" );
-#elif defined LINUX && defined PPC
-    abGP.Append( "13" );
-#elif defined NETBSD && defined INTEL
-    abGP.Append( "14" );  // NetBSD/i386
-#elif defined LINUX && defined X86_64
-    abGP.Append( "15" );  // Linux x86-64
-#elif defined LINUX && defined SPARC
-    abGP.Append( "16" );  // Linux SPARC
-#elif defined LINUX && defined MIPS
-    abGP.Append( "18" );  // Linux MIPS
-#elif defined LINUX && defined ARM
-    abGP.Append( "19" );  // Linux ARM
-#elif defined LINUX && defined IA64
-    abGP.Append( "20" );  // Linux ia64
-#elif defined LINUX && defined S390
-    abGP.Append( "21" );  // Linux S390
-#elif defined LINUX && defined HPPA
-    abGP.Append( "22" );  // Linux PA-RISC
-#elif defined LINUX && defined AXP
-    abGP.Append( "23" );  // Linux ALPHA
-#elif defined NETBSD && defined X86_64
-    abGP.Append( "24" );  // NetBSD/amd64
-#elif defined OPENBSD && defined X86
-    abGP.Append( "25" );  // OpenBSD/i386
-#elif defined OPENBSD && defined X86_64
-    abGP.Append( "26" );  // OpenBSD/amd64
-#elif defined DRAGONFLY && defined X86
-    abGP.Append( "27" );  // DragonFly/i386
-#elif defined DRAGONFLY && defined X86_64
-    abGP.Append( "28" );  // DragonFly/x86-64
-#elif defined IOS && defined ARM
-    abGP.Append( "29" );  // iOS
-#elif defined ANDROID && defined ARM
-    abGP.Append( "30" );  // Android
-#else
-#error ("unknown platform. please request an ID for your platform on qa/dev")
-#endif
-    GETSET( aGP, "Current", abGP );
-
 // #i68804# Write default Communication section to testtoolrc/.ini
 //  this is not fastest but too keep defaultsettings in one place in the code
     GetHostConfig();
