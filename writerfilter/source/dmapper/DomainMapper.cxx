@@ -3161,7 +3161,8 @@ void DomainMapper::lcl_startParagraphGroup()
     static ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("Standard") );
     if (m_pImpl->GetTopContext())
     {
-        m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, true, uno::makeAny( sDefault ) );
+        if (!m_pImpl->IsInShape())
+            m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, true, uno::makeAny( sDefault ) );
         if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, true, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE) );
         else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))

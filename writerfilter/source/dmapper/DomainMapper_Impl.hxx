@@ -474,6 +474,7 @@ public:
     bool        IsStyleSheetImport()const { return m_bInStyleSheetImport;}
     void        SetAnyTableImport( bool bSet ) { m_bInAnyTableImport = bSet;}
     bool        IsAnyTableImport()const { return m_bInAnyTableImport;}
+    bool        IsInShape()const { return m_bIsInShape;}
 
     void PushShapeContext( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     void PopShapeContext();
