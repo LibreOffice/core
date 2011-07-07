@@ -1208,7 +1208,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         case RTF_KEEP: nParam = NS_sprm::LN_PFKeep; break;
         case RTF_KEEPN: nParam = NS_sprm::LN_PFKeepFollow; break;
-        case RTF_WIDCTLPAR: nParam = NS_sprm::LN_PFWidowControl; break;
         case RTF_INTBL: m_pCurrentBuffer = &m_aTableBuffer; nParam = NS_sprm::LN_PFInTable; break;
         case RTF_PAGEBB: nParam = NS_sprm::LN_PFPageBreakBefore; break;
         default: break;
@@ -1254,9 +1253,10 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
             m_aStates.top().nCellX = 0;
             break;
+        case RTF_WIDCTLPAR:
         case RTF_NOWIDCTLPAR:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(0));
+                RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_WIDCTLPAR));
                 m_aStates.top().aParagraphSprms.push_back(make_pair(NS_sprm::LN_PFWidowControl, pValue));
             }
             break;
