@@ -47,15 +47,6 @@ class WizardDialog(UnoDialog2):
     def getResource(self):
         return self.__oWizardResource
 
-    def activate(self):
-        try:
-            if self.xUnoDialog is not None:
-                self.xUnoDialog.toFront()
-
-        except Exception, ex:
-            pass
-            # do nothing;
-
     def itemStateChanged(self, itemEvent):
         try:
             self.nNewStep = itemEvent.ItemId

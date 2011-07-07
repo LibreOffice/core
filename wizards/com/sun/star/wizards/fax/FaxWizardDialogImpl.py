@@ -422,7 +422,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         #set correct Configuration tree:
         if self.optBusinessFax.State:
             self.optBusinessFaxItemChanged()
-        if self.optPrivateFax.State:
+        elif self.optPrivateFax.State:
             self.optPrivateFaxItemChanged()
 
     def optBusinessFaxItemChanged(self):

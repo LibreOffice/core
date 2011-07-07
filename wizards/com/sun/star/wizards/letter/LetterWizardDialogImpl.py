@@ -77,7 +77,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.buildStep4()
             self.buildStep5()
             self.buildStep6()
-
             self.__initializePaths()
             self.initializeNorms()
             self.initializeSalutation()
@@ -379,7 +378,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.chkBusinessPaperItemChanged()
         self.setElements(False)
         self.myLetterDoc.xTextDocument.unlockControllers()
-        self.activate()
 
     def lstPrivOfficialStyleItemChanged(self):
         TextDocument.xTextDocument = \
@@ -391,7 +389,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.setPossibleSenderData(True)
         self.setElements(False)
         self.myLetterDoc.xTextDocument.unlockControllers()
-        self.activate()
 
     def lstPrivateStyleItemChanged(self):
         TextDocument.xTextDocument = \
@@ -402,7 +399,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.initializeElements()
         self.setElements(True)
         self.myLetterDoc.xTextDocument.unlockControllers()
-        self.activate()
 
     def numLogoHeightTextChanged(self):
         self.BusCompanyLogo.iHeight = int(self.numLogoHeight.Value * 1000)
@@ -892,10 +888,10 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         if self.optBusinessLetter.State:
             self.lstBusinessStyleItemChanged()
 
-        if optPrivOfficialLetter.State:
+        elif optPrivOfficialLetter.State:
             self.lstPrivOfficialStyleItemChanged()
 
-        if optPrivateLetter.State:
+        elif optPrivateLetter.State:
             self.lstPrivateStyleItemChanged()
 
     def initializeSalutation(self):
@@ -928,6 +924,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         found = False
         cIsoCode = ""
         MSID = ""
+        LanguageLabels = []
 
         for i in nameList:
             found = False
@@ -950,13 +947,10 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             if found:
                 self.Norms.append(cIsoCode)
                 self.NormPaths.append(i)
-                #LanguageLabelsVector.add(lc.getLanguageString(MSID))
+                #LanguageLabels.append(lc.getLanguageString(MSID))
 
-        #COMMENTED
-        #LanguageLabels = [LanguageLabelsVector.size()]
-        #LanguageLabelsVector.toArray(LanguageLabels)
-        #self.setControlProperty(
-        #    "lstLetterNorm", "StringItemList", LanguageLabels)
+        self.setControlProperty(
+            "lstLetterNorm", "StringItemList", tuple(LanguageLabels))
 
     def getCurrentLetter(self):
         if self.myConfig.cp_LetterType == 0:
@@ -1029,10 +1023,10 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         if self.optBusinessLetter.State:
             self.optBusinessLetterItemChanged()
 
-        if self.optPrivOfficialLetter.State:
+        elif self.optPrivOfficialLetter.State:
             self.optPrivOfficialLetterItemChanged()
 
-        if self.optPrivateLetter.State:
+        elif self.optPrivateLetter.State:
             self.optPrivateLetterItemChanged()
 
     def setElements(self, privLetter):
