@@ -156,21 +156,23 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
                      UNO_QUERY);
             }
 #if OSL_DEBUG_LEVEL > 1
-    catch(Exception& rEx)
-    {
-        static sal_Bool bMessage = sal_True;
-        if(bMessage)
-        {
-            bMessage = sal_False;
-            OString sMsg("CreateInstance with arguments exception: ");
-            sMsg += OString(rEx.Message.getStr(),
-                        rEx.Message.getLength(),
-                        RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(sMsg.getStr());
-        }
-    }
+            catch (const Exception& rEx)
+            {
+                static sal_Bool bMessage = sal_True;
+                if(bMessage)
+                {
+                    bMessage = sal_False;
+                    OString sMsg("CreateInstance with arguments exception: ");
+                    sMsg += OString(rEx.Message.getStr(),
+                                rEx.Message.getLength(),
+                                RTL_TEXTENCODING_ASCII_US);
+                    OSL_FAIL(sMsg.getStr());
+                }
+            }
 #else
-    catch(Exception&){}
+            catch (const Exception&)
+            {
+            }
 #endif
         }
     }
@@ -282,7 +284,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
                     OUString::createFromAscii(pAccessSrvc),
                     aArgs);
         }
-        catch(Exception& rEx)
+        catch (const Exception& rEx)
         {
             if (CONFIG_MODE_PROPAGATE_ERRORS & rCfgItem.GetMode())
             {
@@ -489,7 +491,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
                 aArgs);
 
     }
-    catch(Exception&){}
+    catch (const Exception&)
+    {
+    }
     Reference<XNameAccess> xDirectAccess(xIFace, UNO_QUERY);
     if(xDirectAccess.is())
     {
@@ -514,7 +518,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         {
             aRet = xDirectAccess->getByName(sProperty);
         }
-        catch(Exception&)
+        catch (const Exception&)
         {
             #if OSL_DEBUG_LEVEL > 0
             rtl::OStringBuffer aBuf(256);
@@ -619,7 +623,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
                     aArgs);
         }
 #if OSL_DEBUG_LEVEL > 1
-        catch(Exception& rEx)
+        catch (const Exception& rEx)
         {
             OString sMsg("CreateInstance exception: ");
             sMsg += OString(rEx.Message.getStr(),
@@ -628,7 +632,9 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
             OSL_FAIL(sMsg.getStr());
         }
 #else
-        catch(Exception&){}
+        catch (const Exception&)
+        {
+        }
 #endif
     }
     return Reference<XHierarchicalNameAccess>(xIFace, UNO_QUERY);
@@ -650,7 +656,7 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
             aRet = xAccess->getByName(sProperty);
     }
 #if OSL_DEBUG_LEVEL > 1
-    catch(Exception& rEx)
+    catch (const Exception& rEx)
     {
         OString sMsg("GetLocalProperty: ");
         sMsg += OString(rEx.Message.getStr(),
@@ -659,7 +665,9 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
         OSL_FAIL(sMsg.getStr());
     }
 #else
-    catch(Exception&){}
+    catch (const Exception&)
+    {
+    }
 #endif
     return aRet;
 }
@@ -680,7 +688,7 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
             xNodeReplace->replaceByName(sProperty, rValue);
         }
 #if OSL_DEBUG_LEVEL > 1
-        catch(Exception& rEx)
+        catch (const Exception& rEx)
         {
             OString sMsg("PutLocalProperty: ");
             sMsg += OString(rEx.Message.getStr(),
@@ -689,7 +697,9 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
             OSL_FAIL(sMsg.getStr());
         }
 #else
-        catch(Exception& ){}
+        catch (const Exception&)
+        {
+        }
 #endif
     }
 }
