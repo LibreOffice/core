@@ -1388,6 +1388,7 @@ void DomainMapper_Impl::PopShapeContext()
 {
     if ( m_bShapeContextAdded )
     {
+        RemoveLastParagraph();
         m_aTextAppendStack.pop();
         m_bShapeContextAdded = false;
     }
