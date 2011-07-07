@@ -38,6 +38,7 @@
 #include <oox/helper/storagebase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <rtftok/RTFDocument.hxx>
@@ -249,6 +250,9 @@ namespace writerfilter {
                 int resolveParse();
                 int resolveKeyword();
                 void resolveShapeProperties(std::vector< std::pair<rtl::OUString, rtl::OUString> >& rShapeProperties);
+                void createShape(rtl::OUString aService,
+                        com::sun::star::uno::Reference<drawing::XShape>& xShape,
+                        com::sun::star::uno::Reference<beans::XPropertySet>& xPropertySet);
 
                 int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
                 int dispatchFlag(RTFKeyword nKeyword);

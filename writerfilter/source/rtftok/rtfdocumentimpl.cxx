@@ -43,7 +43,6 @@
 #include <editeng/borderline.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/msdffdef.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -2433,15 +2432,20 @@ int RTFDocumentImpl::popState()
     return 0;
 }
 
+void RTFDocumentImpl::createShape(OUString aStr, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet)
+{
+    xShape.set(m_xModelFactory->createInstance(aStr), uno::UNO_QUERY);
+    xPropertySet.set(xShape, uno::UNO_QUERY);
+}
+
 void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUString, rtl::OUString> >& rShapeProperties)
 {
     int nType = -1;
     bool bPib = false;
 
-    OUString aService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape"));
     uno::Reference<drawing::XShape> xShape;
-    xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    createShape(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")), xShape, xPropertySet);
 
     // Defaults
     uno::Any aAny;
