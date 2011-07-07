@@ -124,6 +124,13 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
 
     bool bShowValue   = !rDataLabel.mbDeleted && rDataLabel.mobShowVal.get( false );
     bool bShowPercent = !rDataLabel.mbDeleted && rDataLabel.mobShowPercent.get( false ) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE);
+    if( bShowValue &&
+        !bShowPercent && rTypeInfo.meTypeCategory == TYPECATEGORY_PIE &&
+        rDataLabel.maNumberFormat.maFormatCode.indexOfAsciiL("%", 1) >= 0 )
+    {
+        bShowValue = false;
+        bShowPercent = true;
+    }
     bool bShowCateg   = !rDataLabel.mbDeleted && rDataLabel.mobShowCatName.get( false );
     bool bShowSymbol  = !rDataLabel.mbDeleted && rDataLabel.mobShowLegendKey.get( false );
 
@@ -237,6 +244,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     // data point label settings
     for( DataLabelsModel::DataLabelVector::iterator aIt = mrModel.maPointLabels.begin(), aEnd = mrModel.maPointLabels.end(); aIt != aEnd; ++aIt )
     {
+        (*aIt)->maNumberFormat.maFormatCode = mrModel.maNumberFormat.maFormatCode;
         DataLabelConverter aLabelConv( *this, **aIt );
         aLabelConv.convertFromModel( rxDataSeries, rTypeGroup );
     }
@@ -627,6 +635,12 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     ModelRef< DataLabelsModel > xLabels = mrModel.mxLabels.is() ? mrModel.mxLabels : rTypeGroup.getModel().mxLabels;
     if( xLabels.is() )
     {
+        if( xLabels->maNumberFormat.maFormatCode.isEmpty() )
+        {
+            // Use number format code from Value series
+            DataSourceModel* pValues = mrModel.maSources.get( SeriesModel::VALUES ).get();
+            xLabels->maNumberFormat.maFormatCode = pValues->mxDataSeq->maFormatCode;
+        }
         DataLabelsConverter aLabelsConv( *this, *xLabels );
         aLabelsConv.convertFromModel( xDataSeries, rTypeGroup );
     }
