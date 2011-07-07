@@ -853,7 +853,10 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
             }
             else
             {
-                rIo.SetError( SVSTREAM_CANNOT_MAKE );
+                // bnc#682484: There are some really broken docs out there
+        // that contain duplicate entries in 'Directory' section
+        // so don't set the error flag here and just skip those
+        // (was: rIo.SetError( SVSTREAM_CANNOT_MAKE );)
                 delete pCur; pCur = NULL;
                 return;
             }
