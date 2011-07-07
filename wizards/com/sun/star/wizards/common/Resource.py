@@ -23,7 +23,6 @@ class Resource(object):
 
             self.xStringIndexAccess = xResource.getByName("String")
             self.xStringListIndexAccess = xResource.getByName("StringList")
-
             if self.xStringListIndexAccess is None:
                 raise Exception ("could not initialize xStringListIndexAccess")
 
