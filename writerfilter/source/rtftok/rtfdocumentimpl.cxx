@@ -2442,21 +2442,32 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
 {
     int nType = -1;
     bool bPib = false;
+    bool bCustom = false;
 
     uno::Reference<drawing::XShape> xShape;
     uno::Reference<beans::XPropertySet> xPropertySet;
+    // Create this early, as custom shapes may have properties before the type arrives.
     createShape(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")), xShape, xPropertySet);
-
-    // Defaults
     uno::Any aAny;
-    aAny <<= (sal_uInt32)0xffffff; // White in Word, kind of blue in Writer.
-    xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
 
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
     {
         if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
         {
             nType = i->second.toInt32();
+            switch (nType)
+            {
+                case 20: // Line
+                    createShape(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape")), xShape, xPropertySet);
+                    break;
+                default:
+                    bCustom = true;
+                    break;
+            }
+
+            // Defaults
+            aAny <<= (sal_uInt32)0xffffff; // White in Word, kind of blue in Writer.
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzName")))
         {
@@ -2513,10 +2524,12 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         return;
     }
 
-    // createCustomShapeDefaults() needs shape added to a draw page.
     m_xDrawPage->add(xShape);
-    uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
-    xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(nType)));
+    if (bCustom)
+    {
+        uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
+        xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(nType)));
+    }
 
     xShape->setPosition(awt::Point(m_aStates.top().aShape.nLeft, m_aStates.top().aShape.nTop));
     xShape->setSize(awt::Size(m_aStates.top().aShape.nRight - m_aStates.top().aShape.nLeft,
