@@ -1664,7 +1664,6 @@ int Desktop::Main()
         }
 
         // create title string
-        sal_Bool bCheckOk = sal_False;
         ::com::sun::star::lang::Locale aLocale;
         String aMgrName = String::CreateFromAscii( "ofa" );
         ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( "ofa", aLocale );
