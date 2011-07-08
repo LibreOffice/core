@@ -28,6 +28,8 @@
 #ifndef _RTFSDRIMPORT_HXX_
 #define _RTFSDRIMPORT_HXX_
 
+#include <com/sun/star/drawing/XDrawPage.hpp>
+
 #include <rtfdocumentimpl.hxx>
 
 namespace writerfilter {
@@ -36,7 +38,8 @@ namespace writerfilter {
         class RTFSdrImport
         {
             public:
-                RTFSdrImport(RTFDocumentImpl& rDocument);
+                RTFSdrImport(RTFDocumentImpl& rImport,
+                        com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& xDstDoc);
                 virtual ~RTFSdrImport();
 
                 void resolve(RTFShape& rShape);
@@ -46,6 +49,7 @@ namespace writerfilter {
                         com::sun::star::uno::Reference<beans::XPropertySet>& xPropertySet);
 
                 RTFDocumentImpl& m_rImport;
+                com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> m_xDrawPage;
         };
     } // namespace rtftok
 } // namespace writerfilter

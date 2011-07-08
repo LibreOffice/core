@@ -58,9 +58,14 @@ static sal_uInt32 lcl_BGRToRGB(sal_uInt32 nColor)
 namespace writerfilter {
 namespace rtftok {
 
-RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument)
+RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
+        uno::Reference<lang::XComponent> const& xDstDoc)
     : m_rImport(rDocument)
 {
+    uno::Reference<drawing::XDrawPageSupplier> xDrawings(xDstDoc, uno::UNO_QUERY);
+    OSL_ASSERT(xDrawings.is());
+    m_xDrawPage.set(xDrawings->getDrawPage(), uno::UNO_QUERY);
+    OSL_ASSERT(m_xDrawPage.is());
 }
 
 RTFSdrImport::~RTFSdrImport()
@@ -275,7 +280,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         return;
     }
 
-    m_rImport.getDrawPage()->add(xShape);
+    m_xDrawPage->add(xShape);
     if (bCustom)
     {
         uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);

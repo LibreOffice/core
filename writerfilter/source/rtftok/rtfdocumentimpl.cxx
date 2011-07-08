@@ -25,6 +25,19 @@
  * instead of those above.
  */
 
+#include <editeng/borderline.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/tencinfo.h>
+#include <svl/lngmisc.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
+
+#include <doctok/sprmids.hxx> // NS_sprm namespace
+#include <doctok/resourceids.hxx> // NS_rtf namespace
+#include <ooxml/resourceids.hxx> // NS_ooxml namespace
+#include <ooxml/OOXMLFastTokens.hxx> // ooxml namespace
+
 #include <rtfdocumentimpl.hxx>
 #include <rtfsdrimport.hxx>
 #include <rtftypes.hxx>
@@ -32,25 +45,6 @@
 #include <rtfvalue.hxx>
 #include <rtfsprm.hxx>
 #include <rtfreferenceproperties.hxx>
-#include <doctok/sprmids.hxx> // NS_sprm namespace
-#include <doctok/resourceids.hxx> // NS_rtf namespace
-#include <ooxml/resourceids.hxx> // NS_ooxml namespace
-#include <ooxml/OOXMLFastTokens.hxx> // ooxml namespace
-#include <unotools/ucbstreamhelper.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/tencinfo.h>
-#include <svl/lngmisc.hxx>
-#include <editeng/borderline.hxx>
-#include <unotools/streamwrap.hxx>
-#include <svx/msdffdef.hxx>
-#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
@@ -288,12 +282,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
 
     m_pGraphicHelper = new oox::GraphicHelper(m_xContext, xFrame, m_xStorage);
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawings(m_xDstDoc, uno::UNO_QUERY);
-    OSL_ASSERT(xDrawings.is());
-    m_xDrawPage.set(xDrawings->getDrawPage(), uno::UNO_QUERY);
-    OSL_ASSERT(m_xDrawPage.is());
-
-    m_pSdrImport = new RTFSdrImport(*this);
+    m_pSdrImport = new RTFSdrImport(*this, m_xDstDoc);
 }
 
 RTFDocumentImpl::~RTFDocumentImpl()
@@ -2525,11 +2514,6 @@ void RTFDocumentImpl::setDestinationText(OUString& rString)
 void RTFDocumentImpl::replayShapetext()
 {
     replayBuffer(m_aShapetextBuffer);
-}
-
-com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> RTFDocumentImpl::getDrawPage()
-{
-    return m_xDrawPage;
 }
 
 RTFParserState::RTFParserState()

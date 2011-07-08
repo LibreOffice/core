@@ -33,12 +33,11 @@
 #include <vector>
 #include <queue>
 
-#include <rtl/strbuf.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/helper/storagebase.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <rtl/strbuf.hxx>
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <rtftok/RTFDocument.hxx>
@@ -245,7 +244,6 @@ namespace writerfilter {
                 void setDestinationText(rtl::OUString& rString);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);
-                com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> getDrawPage();
                 void runBreak();
                 void replayShapetext();
             private:
@@ -284,7 +282,6 @@ namespace writerfilter {
                 com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& m_xDstDoc;
                 com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const& m_xFrame;
                 com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xModelFactory;
-                com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> m_xDrawPage;
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
                 RTFSdrImport* m_pSdrImport;
