@@ -4309,12 +4309,12 @@ DocxExport& DocxAttributeOutput::GetExport()
     return m_rExport;
 }
 
-bool DocxAttributeOutput::HasFootnotes()
+bool DocxAttributeOutput::HasFootnotes() const
 {
     return !m_pFootnotesList->isEmpty();
 }
 
-bool DocxAttributeOutput::HasEndnotes()
+bool DocxAttributeOutput::HasEndnotes() const
 {
     return !m_pEndnotesList->isEmpty();
 }

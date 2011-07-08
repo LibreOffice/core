@@ -616,10 +616,10 @@ public:
     ::sax_fastparser::FSHelperPtr GetSerializer( ) { return m_pSerializer; }
 
     /// Do we have any footnotes?
-    bool HasFootnotes();
+    bool HasFootnotes() const;
 
     /// Do we have any endnotes?
-    bool HasEndnotes();
+    bool HasEndnotes() const;
 
     /// Output the content of the footnotes.xml resp. endnotes.xml
     void FootnotesEndnotes( bool bFootnotes );
