@@ -186,6 +186,6 @@ findunusedcode:
 	@. ./*Env.Set.sh && \
 	   source <(sed -e s,$$INPATH,callcatcher,g ./*Env.Set.sh) && \
 	   callanalyse \
-	       $$OUTDIR/callcatcher/workdir/LinkTarget/*/* \
+	       $$WORKDIR/LinkTarget/*/* \
 	       */$$OUTPATH/bin/* \
 	       */$$OUTPATH/lib/* > unusedcode
