@@ -2027,7 +2027,7 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
 
     sal_Size nOldPos = pSt->Tell();
     bool bValid = checkSeek(*pSt, nFilePos);
-    nPLCF = bValid ? std::min(nPLCF, nValidMin) : nValidMin;
+    nPLCF = bValid ? std::max(nPLCF, nValidMin) : nValidMin;
 
     // Pointer auf Pos- u. Struct-Array
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];
@@ -2035,7 +2035,7 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
 
     nPLCF = bValid ? pSt->Read(pPLCF_PosArray, nPLCF) : nValidMin;
 
-    nPLCF = std::min(nPLCF, nValidMin);
+    nPLCF = std::max(nPLCF, nValidMin);
 
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 #ifdef OSL_BIGENDIAN
@@ -2351,13 +2351,13 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
 
     sal_Size nOldPos = pSt->Tell();
     bool bValid = checkSeek(*pSt, nFilePos);
-    nPLCF = bValid ? std::min(nPLCF, nValidMin) : nValidMin;
+    nPLCF = bValid ? std::max(nPLCF, nValidMin) : nValidMin;
 
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];    // Pointer auf Pos-Array
     pPLCF_PosArray[0] = 0;
 
     nPLCF = bValid ? pSt->Read(pPLCF_PosArray, nPLCF) : nValidMin;
-    nPLCF = std::min(nPLCF, nValidMin);
+    nPLCF = std::max(nPLCF, nValidMin);
 
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 #ifdef OSL_BIGENDIAN
@@ -2478,7 +2478,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
             break;
         }
 
-        unsigned int nOfs = maRawData[nRawDataStart] * 2;
+        unsigned int nOfs = maRawData[nRawDataOffset] * 2;
 
         //clip to available data, corrupt fkp
         if (nOfs >= 511)
