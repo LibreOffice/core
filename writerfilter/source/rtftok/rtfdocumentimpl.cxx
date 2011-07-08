@@ -46,6 +46,9 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
@@ -2449,6 +2452,9 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
     // Create this early, as custom shapes may have properties before the type arrives.
     createShape(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")), xShape, xPropertySet);
     uno::Any aAny;
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+    uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+    awt::Rectangle aViewBox;
 
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
     {
@@ -2515,6 +2521,106 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
                 xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LineStyle")), aAny);
             }
         }
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pVerticies")))
+        {
+            sal_Int32 nSize = 0; // Size of a token (it's value is hardwired in the exporter)
+            sal_Int32 nCount = 0; // Number of tokens
+            sal_Int32 nCharIndex = 0; // Character index
+            sal_Int32 nIndex = 0; // Array index
+            do
+            {
+                OUString aToken = i->second.getToken(0, ';', nCharIndex);
+                if (!nSize)
+                    nSize = aToken.toInt32();
+                else if (!nCount)
+                {
+                    nCount = aToken.toInt32();
+                    aCoordinates.realloc(nCount);
+                }
+                else
+                {
+                    // The coordinates are in an (x,y) form.
+                    aToken = aToken.copy(1, aToken.getLength() - 2);
+                    sal_Int32 nI = 0;
+                    sal_Int32 nX = 0;
+                    sal_Int32 nY = 0;
+                    do
+                    {
+                        OUString aPoint = aToken.getToken(0, ',', nI);
+                        if (!nX)
+                            nX = aPoint.toInt32();
+                        else
+                            nY = aPoint.toInt32();
+                    }
+                    while (nI >= 0);
+                    aCoordinates[nIndex].First.Value <<= nX;
+                    aCoordinates[nIndex].Second.Value <<= nY;
+                    nIndex++;
+                }
+            }
+            while (nCharIndex >= 0);
+        }
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pSegmentInfo")))
+        {
+            sal_Int32 nSize = 0;
+            sal_Int32 nCount = 0;
+            sal_Int32 nCharIndex = 0;
+            sal_Int32 nIndex = 0;
+            do
+            {
+                sal_Int32 nSeg = i->second.getToken(0, ';', nCharIndex).toInt32();
+                if (!nSize)
+                    nSize = nSeg;
+                else if (!nCount)
+                {
+                    nCount = nSeg;
+                    aSegments.realloc(nCount);
+                }
+                else
+                {
+                    switch (nSeg)
+                    {
+                        case 0x0001: // lineto
+                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                            aSegments[nIndex].Count = sal_Int32(1);
+                            break;
+                        case 0x4000: // moveto
+                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
+                            aSegments[nIndex].Count = sal_Int32(1);
+                            break;
+                        case 0x2001: // curveto
+                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
+                            aSegments[nIndex].Count = sal_Int32(1);
+                            break;
+                        case 0xb300: // arcto
+                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
+                            aSegments[nIndex].Count = sal_Int32(0);
+                            break;
+                        case 0xac00:
+                        case 0xaa00: // nofill
+                        case 0xab00: // nostroke
+                        case 0x6001: // close
+                            break;
+                        case 0x8000: // end
+                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+                            aSegments[nIndex].Count = sal_Int32(0);
+                            break;
+                        default:
+                            OSL_TRACE("%s: unhandled segment '%x' in the path", OSL_THIS_FUNC, nSeg);
+                            break;
+                    }
+                    nIndex++;
+                }
+            } while (nCharIndex >= 0);
+        }
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoLeft")))
+            aViewBox.X = i->second.toInt32();
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoTop")))
+            aViewBox.Y = i->second.toInt32();
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoRight")))
+            aViewBox.Width = i->second.toInt32();
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoBottom")))
+            aViewBox.Height = i->second.toInt32();
         else
             OSL_TRACE("%s: TODO handle shape property '%s':'%s'", OSL_THIS_FUNC,
                     OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr(),
@@ -2533,6 +2639,24 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
     {
         uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
         xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(nType)));
+    }
+
+    if (nType == 0)
+    {
+        uno::Sequence< beans::PropertyValue > aPathPropSeq(2);
+
+        aPathPropSeq[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Coordinates"));
+        aPathPropSeq[0].Value <<= aCoordinates;
+
+        aPathPropSeq[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Segments"));
+        aPathPropSeq[1].Value <<= aSegments;
+
+        uno::Sequence<beans::PropertyValue> aGeoPropSeq(2);
+        aGeoPropSeq[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("ViewBox"));
+        aGeoPropSeq[0].Value <<= uno::Any(aViewBox);
+        aGeoPropSeq[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Path"));
+        aGeoPropSeq[1].Value <<= aPathPropSeq;
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CustomShapeGeometry")), uno::Any(aGeoPropSeq));
     }
 
     xShape->setPosition(awt::Point(m_aStates.top().aShape.nLeft, m_aStates.top().aShape.nTop));
