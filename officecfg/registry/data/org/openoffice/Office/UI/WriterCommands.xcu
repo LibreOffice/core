@@ -57,7 +57,7 @@
             </node>
             <node oor:name=".uno:InsertGraphicRuler" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Hori~zontal Ruler...</value>
+                    <value xml:lang="en-US">Hori~zontal Rule...</value>
                 </prop>
             </node>
             <node oor:name=".uno:SetAnchorAtChar" oor:op="replace">
