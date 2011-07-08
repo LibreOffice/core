@@ -125,10 +125,10 @@ public:
                     ::com::sun::star::beans::XPropertySet > rPropSet ) const
                     { return _Filter(rPropSet, sal_False); }
 
-    /** Like Filter(), excepti that:
+    /** Like Filter(), except that:
       * - only properties that have the map flag MID_FLAG_DEFAULT_ITEM_EXPORT
       *   set are exported,
-      * - instead of the property's value, its defualt value is exported.
+      * - instead of the property's value, its default value is exported.
       */
     ::std::vector< XMLPropertyState > FilterDefaults(
             const ::com::sun::star::uno::Reference<
