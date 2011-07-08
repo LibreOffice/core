@@ -2453,8 +2453,6 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
     createShape(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")), xShape, xPropertySet);
     uno::Any aAny;
     beans::PropertyValue aPropertyValue;
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
-    uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
     awt::Rectangle aViewBox;
     std::vector<beans::PropertyValue> aPathPropVec;
 
@@ -2526,6 +2524,7 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pVerticies")))
         {
+            uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
             sal_Int32 nSize = 0; // Size of a token (it's value is hardwired in the exporter)
             sal_Int32 nCount = 0; // Number of tokens
             sal_Int32 nCharIndex = 0; // Character index
@@ -2568,6 +2567,7 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pSegmentInfo")))
         {
+            uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
             sal_Int32 nSize = 0;
             sal_Int32 nCount = 0;
             sal_Int32 nCharIndex = 0;
