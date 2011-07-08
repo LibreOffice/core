@@ -53,24 +53,25 @@ typedef std::list< xub_StrLen > PositionList;
 
 class SwScanner
 {
-    XubString aWord;
+    rtl::OUString aWord;
     const SwTxtNode& rNode;
-    const String& rText;
+    const rtl::OUString& rText;
     const LanguageType* pLanguage;
     const ModelToViewHelper::ConversionMap* pConversionMap;
-    xub_StrLen nStartPos;
-    xub_StrLen nEndPos;
-    xub_StrLen nBegin;
-    xub_StrLen nLen;
+    sal_Int32 nStartPos;
+    sal_Int32 nEndPos;
+    sal_Int32 nBegin;
+    sal_Int32 nLen;
     LanguageType aCurrLang;
     sal_uInt16 nWordType;
     sal_Bool bClip;
 
 public:
-    SwScanner( const SwTxtNode& rNd, const String& rTxt, const LanguageType* pLang,
+    SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
+               const LanguageType* pLang,
                const ModelToViewHelper::ConversionMap* pConvMap,
                sal_uInt16 nWordType,
-               xub_StrLen nStart, xub_StrLen nEnde, sal_Bool bClip = sal_False );
+               sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClip = sal_False );
 
 
     // This next word function tries to find the language for the next word
@@ -78,11 +79,11 @@ public:
     // ! bReverse
     sal_Bool NextWord();
 
-    const XubString& GetWord() const    { return aWord; }
+    const rtl::OUString& GetWord() const    { return aWord; }
 
-    xub_StrLen GetBegin() const         { return nBegin; }
-    xub_StrLen GetEnd() const           { return nBegin + nLen; }
-    xub_StrLen GetLen() const           { return nLen; }
+    sal_Int32 GetBegin() const         { return nBegin; }
+    sal_Int32 GetEnd() const           { return nBegin + nLen; }
+    sal_Int32 GetLen() const           { return nLen; }
 
     LanguageType GetCurrentLanguage() const {return aCurrLang;}
 };
