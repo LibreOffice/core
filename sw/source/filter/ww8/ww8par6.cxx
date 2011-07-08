@@ -917,6 +917,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         aNewSection.maSep.fEvenlySpaced =
             ReadBSprm(pSep, (eVer <= ww::eWW7 ? 138 : 0x3005), 1) ? true : false;
 
+        const sal_uInt8 numrgda = SAL_N_ELEMENTS(aNewSection.maSep.rgdxaColumnWidthSpacing);
         if (aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced)
         {
             aNewSection.maSep.rgdxaColumnWidthSpacing[0] = 0;
@@ -930,7 +931,8 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
                 OSL_ENSURE( pSW, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
                 sal_uInt16 nWidth = pSW ? SVBT16ToShort(pSW + 1) : 1440;
 
-                aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
+                if (++nIdx < numrgda)
+                    aNewSection.maSep.rgdxaColumnWidthSpacing[nIdx] = nWidth;
 
                 if (i < nCols-1)
                 {
@@ -941,7 +943,8 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
                     if( pSD )
                     {
                         nWidth = SVBT16ToShort(pSD + 1);
-                        aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
+                        if (++nIdx < numrgda)
+                            aNewSection.maSep.rgdxaColumnWidthSpacing[nIdx] = nWidth;
                     }
                 }
             }
