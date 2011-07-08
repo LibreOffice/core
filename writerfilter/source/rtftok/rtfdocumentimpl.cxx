@@ -2456,7 +2456,6 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
     awt::Rectangle aViewBox;
     std::vector<beans::PropertyValue> aPathPropVec;
 
-
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
     {
         if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
@@ -2651,26 +2650,39 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(nType)));
     }
 
-    // pushing the whole Path element
+    // Creating Path property
     uno::Sequence<beans::PropertyValue> aPathPropSeq(aPathPropVec.size());
     beans::PropertyValue* pPathValues = aPathPropSeq.getArray();
     for (std::vector<beans::PropertyValue>::iterator i = aPathPropVec.begin(); i != aPathPropVec.end(); ++i)
         *pPathValues++ = *i;
 
-    if (nType == 0)
+    // Creating CustomShapeGeometry property
+    std::vector<beans::PropertyValue> aGeomPropVec;
+    if (aViewBox.X || aViewBox.Y || aViewBox.Width || aViewBox.Height)
     {
-        uno::Sequence<beans::PropertyValue> aGeoPropSeq(2);
-        aGeoPropSeq[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("ViewBox"));
-        aGeoPropSeq[0].Value <<= uno::Any(aViewBox);
-        aGeoPropSeq[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Path"));
-        aGeoPropSeq[1].Value <<= aPathPropSeq;
-        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CustomShapeGeometry")), uno::Any(aGeoPropSeq));
+        aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("ViewBox"));
+        aPropertyValue.Value <<= aViewBox;
+        aGeomPropVec.push_back(aPropertyValue);
     }
+    if (aPathPropSeq.getLength())
+    {
+        aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Path"));
+        aPropertyValue.Value <<= aPathPropSeq;
+        aGeomPropVec.push_back(aPropertyValue);
+    }
+    uno::Sequence<beans::PropertyValue> aGeomPropSeq(aGeomPropVec.size());
+    beans::PropertyValue* pGeomValues = aGeomPropSeq.getArray();
+    for (std::vector<beans::PropertyValue>::iterator i = aGeomPropVec.begin(); i != aGeomPropVec.end(); ++i)
+        *pGeomValues++ = *i;
+    if (aGeomPropSeq.getLength())
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CustomShapeGeometry")), uno::Any(aGeomPropSeq));
 
+    // Set position and size
     xShape->setPosition(awt::Point(m_aStates.top().aShape.nLeft, m_aStates.top().aShape.nTop));
     xShape->setSize(awt::Size(m_aStates.top().aShape.nRight - m_aStates.top().aShape.nLeft,
                 m_aStates.top().aShape.nBottom - m_aStates.top().aShape.nTop));
 
+    // Send it to dmapper
     Mapper().startShape(xShape);
     Mapper().startParagraphGroup();
     replayBuffer(m_aShapetextBuffer);
