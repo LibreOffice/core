@@ -69,236 +69,230 @@
 
 #if defined( DBG_UTIL ) || ( OSL_DEBUG_LEVEL > 1 )
 
-ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
+rtl::OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
 {
-    ByteString aDebStr;
+    rtl::OStringBuffer aDebStr;
     switch ( rItem.Which() )
     {
         case EE_PARA_WRITINGDIR:
-            aDebStr += "WritingDir=";
-            aDebStr += ByteString::CreateFromInt32( ((SvxFrameDirectionItem&)rItem).GetValue() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("WritingDir="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxFrameDirectionItem&)rItem).GetValue()));
         break;
         case EE_PARA_OUTLLRSPACE:
         case EE_PARA_LRSPACE:
-            aDebStr += "FI=";
-            aDebStr += ByteString::CreateFromInt32( ((SvxLRSpaceItem&)rItem).GetTxtFirstLineOfst() );
-            aDebStr += ", LI=";
-            aDebStr += ByteString::CreateFromInt32( ((SvxLRSpaceItem&)rItem).GetTxtLeft() );
-            aDebStr += ", RI=";
-            aDebStr += ByteString::CreateFromInt32( ((SvxLRSpaceItem&)rItem).GetRight() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("FI="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxLRSpaceItem&)rItem).GetTxtFirstLineOfst()));
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM(", LI="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxLRSpaceItem&)rItem).GetTxtLeft()));
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM(", RI="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxLRSpaceItem&)rItem).GetRight()));
         break;
         case EE_PARA_NUMBULLET:
-            {
-            aDebStr += "NumItem ";
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("NumItem "));
             for ( sal_uInt16 nLevel = 0; nLevel < 3; nLevel++ )
             {
-                aDebStr += "Level";
-                aDebStr += ByteString::CreateFromInt32( nLevel );
-                aDebStr += "=";
+                aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Level"));
+                aDebStr.append(static_cast<sal_Int32>(nLevel));
+                aDebStr.append('=');
                 const SvxNumberFormat* pFmt = ((const SvxNumBulletItem&)rItem).GetNumRule()->Get( nLevel );
                 if ( pFmt )
                 {
-                    aDebStr += "(";
-                    aDebStr += ByteString::CreateFromInt32( pFmt->GetFirstLineOffset() );
-                    aDebStr += ",";
-                    aDebStr += ByteString::CreateFromInt32( pFmt->GetAbsLSpace() );
-                    aDebStr += ",";
+                    aDebStr.append('(');
+                    aDebStr.append(static_cast<sal_Int32>(pFmt->GetFirstLineOffset()));
+                    aDebStr.append(',');
+                    aDebStr.append(static_cast<sal_Int32>(pFmt->GetAbsLSpace()));
+                    aDebStr.append(',');
                     if ( pFmt->GetNumberingType() == SVX_NUM_BITMAP )
-                    {
-                        aDebStr += "Bitmap";
-                    }
+                        aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Bitmap"));
                     else if( pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL )
-                    {
-                        aDebStr += "Number";
-                    }
+                        aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Number"));
                     else
                     {
-                        aDebStr += "Char=[";
-                        aDebStr += ByteString::CreateFromInt32( pFmt->GetBulletChar() );
-                        aDebStr += "]";
+                        aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Char=["));
+                        aDebStr.append(static_cast<sal_Int32>(pFmt->GetBulletChar()));
+                        aDebStr.append(']');
                     }
-                    aDebStr += ") ";
+                    aDebStr.append(RTL_CONSTASCII_STRINGPARAM(") "));
                 }
-            }
             }
         break;
         case EE_PARA_BULLETSTATE:
-            aDebStr += "ShowBullet=";
-            aDebStr += ByteString::CreateFromInt32( ((SfxBoolItem&)rItem).GetValue() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("ShowBullet="));
+            aDebStr.append(static_cast<sal_Int32>(((SfxBoolItem&)rItem).GetValue()));
         break;
         case EE_PARA_HYPHENATE:
-            aDebStr += "Hyphenate=";
-            aDebStr += ByteString::CreateFromInt32( ((SfxBoolItem&)rItem).GetValue() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Hyphenate="));
+            aDebStr.append(static_cast<sal_Int32>(((SfxBoolItem&)rItem).GetValue()));
         break;
         case EE_PARA_OUTLLEVEL:
-            aDebStr += "Level=";
-            aDebStr += ByteString::CreateFromInt32( ((SfxInt16Item&)rItem).GetValue() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Level="));
+            aDebStr.append(static_cast<sal_Int32>(((SfxInt16Item&)rItem).GetValue()));
         break;
         case EE_PARA_ULSPACE:
-            aDebStr += "SB=";
-            aDebStr += ByteString::CreateFromInt32( ((SvxULSpaceItem&)rItem).GetUpper() );
-            aDebStr += ", SA=";
-            aDebStr += ByteString::CreateFromInt32( ((SvxULSpaceItem&)rItem).GetLower() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("SB="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxULSpaceItem&)rItem).GetUpper()));
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM(", SA="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxULSpaceItem&)rItem).GetLower()));
         break;
         case EE_PARA_SBL:
-            aDebStr += "SBL=";
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("SBL="));
             if ( ((SvxLineSpacingItem&)rItem).GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
             {
-                aDebStr += "Min: ";
-                aDebStr += ByteString::CreateFromInt32( ((SvxLineSpacingItem&)rItem).GetInterLineSpace() );
+                aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Min: "));
+                aDebStr.append(static_cast<sal_Int32>(((SvxLineSpacingItem&)rItem).GetInterLineSpace()));
             }
             else if ( ((SvxLineSpacingItem&)rItem).GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
             {
-                aDebStr += "Prop: ";
-                aDebStr += ByteString::CreateFromInt32( (sal_uLong)((SvxLineSpacingItem&)rItem).GetPropLineSpace() );
+                aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Prop: "));
+                aDebStr.append(static_cast<sal_Int32>(((SvxLineSpacingItem&)rItem).GetPropLineSpace()));
             }
             else
-                aDebStr += "Unsupported Type!";
+                aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Unsupported Type!"));
         break;
         case EE_PARA_JUST:
-            aDebStr += "SvxAdust=";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxAdjustItem&)rItem).GetAdjust() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("SvxAdust="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxAdjustItem&)rItem).GetAdjust()));
         break;
         case EE_PARA_TABS:
         {
-            aDebStr += "Tabs: ";
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Tabs: "));
             const SvxTabStopItem& rTabs = (const SvxTabStopItem&) rItem;
-            aDebStr += ByteString::CreateFromInt32( rTabs.Count() );
+            aDebStr.append(static_cast<sal_Int32>(rTabs.Count()));
             if ( rTabs.Count() )
             {
-                aDebStr += "( ";
-                for ( sal_uInt16 i = 0; i < rTabs.Count(); i++ )
+                aDebStr.append(RTL_CONSTASCII_STRINGPARAM("( "));
+                for (sal_uInt16 i = 0; i < rTabs.Count(); ++i)
                 {
                     const SvxTabStop& rTab = rTabs[i];
-                    aDebStr += ByteString::CreateFromInt32( rTab.GetTabPos() );
-                    aDebStr += " ";
+                    aDebStr.append(static_cast<sal_Int32>(rTab.GetTabPos()));
+                    aDebStr.append(' ');
                 }
-                aDebStr += ")";
+                aDebStr.append(')');
             }
         }
         break;
         case EE_CHAR_LANGUAGE:
         case EE_CHAR_LANGUAGE_CJK:
         case EE_CHAR_LANGUAGE_CTL:
-            aDebStr += "Language=";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxLanguageItem&)rItem).GetLanguage() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Language="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxLanguageItem&)rItem).GetLanguage()));
         break;
         case EE_CHAR_COLOR:
         {
-            aDebStr += "Color= ";
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Color= "));
             Color aColor( ((SvxColorItem&)rItem).GetValue() );
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)aColor.GetRed() );
-            aDebStr += ", ";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)aColor.GetGreen() );
-            aDebStr += ", ";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)aColor.GetBlue() );
+            aDebStr.append(static_cast<sal_Int32>(aColor.GetRed()));
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM(", "));
+            aDebStr.append(static_cast<sal_Int32>(aColor.GetGreen()));
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM(", "));
+            aDebStr.append(static_cast<sal_Int32>(aColor.GetBlue()));
         }
         break;
         case EE_CHAR_FONTINFO:
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
         {
-            aDebStr += "Font=";
-            aDebStr += ByteString( ((SvxFontItem&)rItem).GetFamilyName(), RTL_TEXTENCODING_ASCII_US );
-            aDebStr += " (CharSet: ";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxFontItem&)rItem).GetCharSet() );
-            aDebStr += ')';
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Font="));
+            aDebStr.append(rtl::OUStringToOString(((SvxFontItem&)rItem).GetFamilyName(), RTL_TEXTENCODING_ASCII_US));
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM(" (CharSet: "));
+            aDebStr.append(static_cast<sal_Int32>(((SvxFontItem&)rItem).GetCharSet()));
+            aDebStr.append(')');
         }
         break;
         case EE_CHAR_FONTHEIGHT:
         case EE_CHAR_FONTHEIGHT_CJK:
         case EE_CHAR_FONTHEIGHT_CTL:
         {
-            aDebStr += "Groesse=";
-            aDebStr += ByteString::CreateFromInt32( ((SvxFontHeightItem&)rItem).GetHeight() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Groesse="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxFontHeightItem&)rItem).GetHeight()));
             Size aSz( 0, ((SvxFontHeightItem&)rItem).GetHeight() );
             SfxMapUnit eUnit = rPool.GetMetric( rItem.Which() );
             MapMode aItemMapMode( (MapUnit) eUnit );
             MapMode aPntMap( MAP_POINT );
             aSz = OutputDevice::LogicToLogic( aSz, aItemMapMode, aPntMap );
-            aDebStr += " Points=";
-            aDebStr += ByteString::CreateFromInt32( aSz.Height() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM(" Points="));
+            aDebStr.append(static_cast<sal_Int32>(aSz.Height()));
         }
         break;
         case EE_CHAR_FONTWIDTH:
         {
-            aDebStr += "Breite=";
-            aDebStr += ByteString::CreateFromInt32( ((SvxCharScaleWidthItem&)rItem).GetValue() );
-            aDebStr += "%";
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Breite="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxCharScaleWidthItem&)rItem).GetValue()));
+            aDebStr.append('%');
         }
         break;
         case EE_CHAR_WEIGHT:
         case EE_CHAR_WEIGHT_CJK:
         case EE_CHAR_WEIGHT_CTL:
-            aDebStr += "FontWeight=";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxWeightItem&)rItem).GetWeight() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("FontWeight="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxWeightItem&)rItem).GetWeight()));
         break;
         case EE_CHAR_UNDERLINE:
-            aDebStr += "FontUnderline=";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxUnderlineItem&)rItem).GetLineStyle() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("FontUnderline="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxUnderlineItem&)rItem).GetLineStyle()));
         break;
         case EE_CHAR_OVERLINE:
-            aDebStr += "FontOverline=";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxOverlineItem&)rItem).GetLineStyle() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("FontOverline="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxOverlineItem&)rItem).GetLineStyle()));
         break;
         case EE_CHAR_EMPHASISMARK:
-            aDebStr += "FontUnderline=";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxEmphasisMarkItem&)rItem).GetEmphasisMark() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("FontUnderline="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxEmphasisMarkItem&)rItem).GetEmphasisMark()));
         break;
         case EE_CHAR_RELIEF:
-            aDebStr += "FontRelief=";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxCharReliefItem&)rItem).GetValue() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("FontRelief="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxCharReliefItem&)rItem).GetValue()));
         break;
         case EE_CHAR_STRIKEOUT:
-            aDebStr += "FontStrikeout=";
-            aDebStr +=ByteString::CreateFromInt32(  (sal_uInt16)((SvxCrossedOutItem&)rItem).GetStrikeout() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("FontStrikeout="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxCrossedOutItem&)rItem).GetStrikeout()));
         break;
         case EE_CHAR_ITALIC:
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
-            aDebStr += "FontPosture=";
-            aDebStr +=ByteString::CreateFromInt32(  (sal_uInt16)((SvxPostureItem&)rItem).GetPosture() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("FontPosture="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxPostureItem&)rItem).GetPosture()));
         break;
         case EE_CHAR_OUTLINE:
-            aDebStr += "FontOutline=";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxContourItem&)rItem).GetValue() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("FontOutline="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxContourItem&)rItem).GetValue()));
         break;
         case EE_CHAR_SHADOW:
-            aDebStr += "FontShadowed=";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxShadowedItem&)rItem).GetValue() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("FontShadowed="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxShadowedItem&)rItem).GetValue()));
         break;
         case EE_CHAR_ESCAPEMENT:
-            aDebStr += "Escape=";
-            aDebStr += ByteString::CreateFromInt32( (short)((SvxEscapementItem&)rItem).GetEsc() );
-            aDebStr += ", ";
-            aDebStr += ByteString::CreateFromInt32( (short)((SvxEscapementItem&)rItem).GetProp() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Escape="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxEscapementItem&)rItem).GetEsc()));
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM(", "));
+            aDebStr.append(static_cast<sal_Int32>(((SvxEscapementItem&)rItem).GetProp()));
         break;
         case EE_CHAR_PAIRKERNING:
-            aDebStr += "PairKerning=";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxAutoKernItem&)rItem).GetValue() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("PairKerning="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxAutoKernItem&)rItem).GetValue()));
         break;
         case EE_CHAR_KERNING:
         {
-            aDebStr += "Kerning=";
-            aDebStr += ByteString::CreateFromInt32( (short)((SvxKerningItem&)rItem).GetValue() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("Kerning="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxKerningItem&)rItem).GetValue()));
             Size aSz( 0, (short)((SvxKerningItem&)rItem).GetValue() );
             SfxMapUnit eUnit = rPool.GetMetric( rItem.Which() );
             MapMode aItemMapMode( (MapUnit) eUnit );
             MapMode aPntMap( MAP_POINT );
             aSz = OutputDevice::LogicToLogic( aSz, aItemMapMode, aPntMap );
-            aDebStr += " Points=";
-            aDebStr += ByteString::CreateFromInt32( aSz.Height() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM(" Points="));
+            aDebStr.append(static_cast<sal_Int32>(aSz.Height()));
         }
         break;
         case EE_CHAR_WLM:
-            aDebStr += "WordLineMode=";
-            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxWordLineModeItem&)rItem).GetValue() );
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("WordLineMode="));
+            aDebStr.append(static_cast<sal_Int32>(((SvxWordLineModeItem&)rItem).GetValue()));
         break;
         case EE_CHAR_XMLATTRIBS:
-            aDebStr += "XMLAttribs=...";
+            aDebStr.append(RTL_CONSTASCII_STRINGPARAM("XMLAttribs=..."));
         break;
     }
-    return aDebStr;
+    return aDebStr.makeStringAndClear();
 }
 
 void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, sal_Bool bSearchInParent, sal_Bool bShowALL )
@@ -358,18 +352,18 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
         {
             EditCharAttrib* pAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs().GetObject( z );
-            ByteString aCharAttribs;
-            aCharAttribs += "\nA";
-            aCharAttribs += ByteString::CreateFromInt32( nPortion );
-            aCharAttribs += ":  ";
-            aCharAttribs += ByteString::CreateFromInt32( pAttr->GetItem()->Which() );
-            aCharAttribs += '\t';
-            aCharAttribs += ByteString::CreateFromInt32( pAttr->GetStart() );
-            aCharAttribs += '\t';
-            aCharAttribs += ByteString::CreateFromInt32( pAttr->GetEnd() );
+            rtl::OStringBuffer aCharAttribs;
+            aCharAttribs.append(RTL_CONSTASCII_STRINGPARAM("\nA"));
+            aCharAttribs.append(static_cast<sal_Int32>(nPortion));
+            aCharAttribs.append(RTL_CONSTASCII_STRINGPARAM(":  "));
+            aCharAttribs.append(static_cast<sal_Int32>(pAttr->GetItem()->Which()));
+            aCharAttribs.append('\t');
+            aCharAttribs.append(static_cast<sal_Int32>(pAttr->GetStart()));
+            aCharAttribs.append('\t');
+            aCharAttribs.append(static_cast<sal_Int32>(pAttr->GetEnd()));
             if ( pAttr->IsEmpty() )
                 bZeroAttr = sal_True;
-            fprintf( fp, "%s => ", aCharAttribs.GetBuffer() );
+            fprintf(fp, "%s => ", aCharAttribs.getStr());
 
             ByteString aDebStr = DbgOutItem( rPool, *pAttr->GetItem() );
             fprintf( fp, "%s", aDebStr.GetBuffer() );
@@ -378,38 +372,39 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
             fprintf( fp, "\nNULL-Attribute!" );
 
         sal_uInt16 nTextPortions = pPPortion->GetTextPortions().Count();
-        ByteString aPortionStr("\nText portions: #");
-        aPortionStr += ByteString::CreateFromInt32( nTextPortions );
-        aPortionStr += " \nA";
-        aPortionStr += ByteString::CreateFromInt32( nPortion );
-        aPortionStr += ": Paragraph Length = ";
-        aPortionStr += ByteString::CreateFromInt32( pPPortion->GetNode()->Len() );
-        aPortionStr += "\nA";
-        aPortionStr += ByteString::CreateFromInt32( nPortion );
-        aPortionStr += ": ";
+        rtl::OStringBuffer aPortionStr(
+            RTL_CONSTASCII_STRINGPARAM("\nText portions: #"));
+        aPortionStr.append(static_cast<sal_Int32>(nTextPortions));
+        aPortionStr.append(RTL_CONSTASCII_STRINGPARAM(" \nA"));
+        aPortionStr.append(static_cast<sal_Int32>(nPortion));
+        aPortionStr.append(
+            RTL_CONSTASCII_STRINGPARAM(": Paragraph Length = "));
+        aPortionStr.append(static_cast<sal_Int32>(pPPortion->GetNode()->Len()));
+        aPortionStr.append(RTL_CONSTASCII_STRINGPARAM("\nA"));
+        aPortionStr.append(static_cast<sal_Int32>(nPortion));
+        aPortionStr.append(RTL_CONSTASCII_STRINGPARAM(": "));
         sal_uLong n = 0;
         for ( z = 0; z < nTextPortions; z++ )
         {
             TextPortion* pPortion = pPPortion->GetTextPortions().GetObject( z );
-            aPortionStr += " ";
-            aPortionStr += ByteString::CreateFromInt32( pPortion->GetLen() );
-            aPortionStr += "(";
-            aPortionStr += ByteString::CreateFromInt32( pPortion->GetSize().Width() );
-            aPortionStr += ")";
-            aPortionStr += "[";
-            aPortionStr += ByteString::CreateFromInt32( (sal_uInt16)pPortion->GetKind() );
-            aPortionStr += "]";
-            aPortionStr += ";";
+            aPortionStr.append(' ');
+            aPortionStr.append(static_cast<sal_Int32>(pPortion->GetLen()));
+            aPortionStr.append('(');
+            aPortionStr.append(static_cast<sal_Int32>(pPortion->GetSize().Width()));
+            aPortionStr.append(')');
+            aPortionStr.append('[');
+            aPortionStr.append(static_cast<sal_Int32>(pPortion->GetKind()));
+            aPortionStr.append(']');
+            aPortionStr.append(';');
             n += pPortion->GetLen();
         }
-        aPortionStr += "\nA";
-        aPortionStr += ByteString::CreateFromInt32( nPortion );
-        aPortionStr += ": Total length: ";
-        aPortionStr += ByteString::CreateFromInt32( n );
+        aPortionStr.append(RTL_CONSTASCII_STRINGPARAM("\nA"));
+        aPortionStr.append(static_cast<sal_Int32>(nPortion));
+        aPortionStr.append(RTL_CONSTASCII_STRINGPARAM(": Total length: "));
+        aPortionStr.append(static_cast<sal_Int32>(n));
         if ( pPPortion->GetNode()->Len() != n )
-            aPortionStr += " => Error !!!";
-        fprintf( fp, "%s", aPortionStr.GetBuffer() );
-
+            aPortionStr.append(RTL_CONSTASCII_STRINGPARAM(" => Error !!!"));
+        fprintf(fp, "%s", aPortionStr.getStr());
 
         fprintf( fp, "\n\nLines:" );
         // First the content ...
