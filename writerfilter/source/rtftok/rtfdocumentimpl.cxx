@@ -2456,6 +2456,8 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
     uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
     awt::Rectangle aViewBox;
+    std::vector<beans::PropertyValue> aPathPropVec;
+
 
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
     {
@@ -2560,6 +2562,9 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
                 }
             }
             while (nCharIndex >= 0);
+            aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Coordinates"));
+            aPropertyValue.Value <<= aCoordinates;
+            aPathPropVec.push_back(aPropertyValue);
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pSegmentInfo")))
         {
@@ -2612,7 +2617,11 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
                     }
                     nIndex++;
                 }
-            } while (nCharIndex >= 0);
+            }
+            while (nCharIndex >= 0);
+            aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Segments"));
+            aPropertyValue.Value <<= aSegments;
+            aPathPropVec.push_back(aPropertyValue);
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoLeft")))
             aViewBox.X = i->second.toInt32();
@@ -2642,23 +2651,14 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
         xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(nType)));
     }
 
+    // pushing the whole Path element
+    uno::Sequence<beans::PropertyValue> aPathPropSeq(aPathPropVec.size());
+    beans::PropertyValue* pPathValues = aPathPropSeq.getArray();
+    for (std::vector<beans::PropertyValue>::iterator i = aPathPropVec.begin(); i != aPathPropVec.end(); ++i)
+        *pPathValues++ = *i;
+
     if (nType == 0)
     {
-        std::vector<beans::PropertyValue> aPathPropVec;
-
-        aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Coordinates"));
-        aPropertyValue.Value <<= aCoordinates;
-        aPathPropVec.push_back(aPropertyValue);
-
-        aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Segments"));
-        aPropertyValue.Value <<= aSegments;
-        aPathPropVec.push_back(aPropertyValue);
-
-        uno::Sequence<beans::PropertyValue> aPathPropSeq(aPathPropVec.size());
-        beans::PropertyValue* pPathValues = aPathPropSeq.getArray();
-        for (std::vector<beans::PropertyValue>::iterator i = aPathPropVec.begin(); i != aPathPropVec.end(); ++i)
-            *pPathValues++ = *i;
-
         uno::Sequence<beans::PropertyValue> aGeoPropSeq(2);
         aGeoPropSeq[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("ViewBox"));
         aGeoPropSeq[0].Value <<= uno::Any(aViewBox);
