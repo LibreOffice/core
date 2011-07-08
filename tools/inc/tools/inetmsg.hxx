@@ -455,19 +455,19 @@ enum INetMessageContainerType
     INETMSG_MULTIPART_FORM_DATA
 };
 
+class INetMIMEMessage;
+typedef ::std::vector< INetMIMEMessage* > INetMIMEMessgeList_impl;
 class TOOLS_DLLPUBLIC INetMIMEMessage : public INetRFC822Message
 {
-    sal_uIntPtr           m_nIndex[INETMSG_MIME_NUMHDR];
+    sal_uIntPtr             m_nIndex[INETMSG_MIME_NUMHDR];
 
-    INetMIMEMessage *pParent;
-    sal_uIntPtr           nNumChildren;
-    List            aChildren;
-    ByteString      m_aBoundary;
-    sal_Bool            bHeaderParsed;
+    INetMIMEMessage*        pParent;
+    INetMIMEMessgeList_impl aChildren;
+    ByteString              m_aBoundary;
+    sal_Bool                bHeaderParsed;
 
     friend class INetMIMEMessageStream;
 
-    void SetChildCount (sal_uIntPtr nCount) { nNumChildren = nCount; }
     const ByteString& GetMultipartBoundary (void) const { return m_aBoundary; }
     void SetMultipartBoundary (const ByteString& rBnd) { m_aBoundary = rBnd; }
 
@@ -554,10 +554,9 @@ public:
         return (aType.CompareIgnoreCaseToAscii("multipart/", 10) == 0);
     }
 
-    sal_uIntPtr GetChildCount (void) const { return nNumChildren; }
     INetMIMEMessage* GetChild (sal_uIntPtr nIndex) const
     {
-        return ((INetMIMEMessage *)(aChildren.GetObject (nIndex)));
+        return ( nIndex < aChildren.size() ) ? aChildren[ nIndex ] : NULL;
     }
     INetMIMEMessage* GetParent (void) const { return pParent; }
 

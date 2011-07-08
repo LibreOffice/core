@@ -960,7 +960,6 @@ enum _ImplINetMIMEMessageHeaderState
 INetMIMEMessage::INetMIMEMessage (void)
     : INetRFC822Message (),
       pParent       (NULL),
-      nNumChildren  (0),
       bHeaderParsed (sal_False)
 {
     for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
@@ -1008,9 +1007,10 @@ INetMIMEMessage::~INetMIMEMessage (void)
  */
 void INetMIMEMessage::CleanupImp (void)
 {
-    INetMIMEMessage *pChild = NULL;
-    while ((pChild = (INetMIMEMessage *)(aChildren.Remove())) != NULL)
-        if (pChild->pParent == this) delete pChild;
+    for( size_t i = 0, n = aChildren.size(); i < n; ++i ) {
+        delete aChildren[ i ];
+    }
+    aChildren.clear();
 }
 
 /*
@@ -1020,24 +1020,22 @@ void INetMIMEMessage::CopyImp (const INetMIMEMessage& rMsg)
 {
     bHeaderParsed = rMsg.bHeaderParsed;
 
-    sal_uInt16 i;
+    size_t i;
     for (i = 0; i < INETMSG_MIME_NUMHDR; i++)
         m_nIndex[i] = rMsg.m_nIndex[i];
 
     m_aBoundary = rMsg.m_aBoundary;
-    nNumChildren = rMsg.nNumChildren;
 
-    for (i = 0; i < rMsg.aChildren.Count(); i++)
+    for (i = 0; i < rMsg.aChildren.size(); i++)
     {
-        INetMIMEMessage *pChild =
-            (INetMIMEMessage *)(rMsg.aChildren.GetObject (i));
+        INetMIMEMessage *pChild = rMsg.aChildren[ i ];
 
         if (pChild->pParent == &rMsg)
         {
             pChild = pChild->CreateMessage (*pChild);
             pChild->pParent = this;
         }
-        aChildren.Insert (pChild, LIST_APPEND);
+        aChildren.push_back( pChild );
     }
 }
 
@@ -1366,8 +1364,7 @@ sal_Bool INetMIMEMessage::AttachChild (
     if (IsContainer() /*&& rChildMsg.GetContentType().Len() */)
     {
         if (bOwner) rChildMsg.pParent = this;
-        aChildren.Insert (&rChildMsg, LIST_APPEND);
-        nNumChildren = aChildren.Count();
+        aChildren.push_back( &rChildMsg );
 
         return sal_True;
     }
@@ -1582,7 +1579,7 @@ SvStream& INetMIMEMessage::operator<< (SvStream& rStrm) const
 #else
     rStrm.WriteByteString (m_aBoundary);
 #endif
-    rStrm << static_cast<sal_uInt32>(nNumChildren);
+    rStrm << static_cast<sal_uInt32>(aChildren.size());
 
     return rStrm;
 }
@@ -1607,7 +1604,6 @@ SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
     rStrm.ReadByteString (m_aBoundary);
 #endif
     rStrm >> nTemp;
-    nNumChildren = nTemp;
 
     return rStrm;
 }

@@ -1621,7 +1621,6 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                 if( !pChildStrm )
                 {
                     // Encapsulated message.
-                    pMsg->SetChildCount( pMsg->GetChildCount() + 1);
                     INetMIMEMessage* pNewMessage = new INetMIMEMessage;
                     pNewMessage->SetDocumentLB (
                         new SvAsyncLockBytes(new SvCacheStream, sal_False));
@@ -1731,7 +1730,6 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                                 != COMPARE_EQUAL )
                             {
                                 // Encapsulated message.
-                                pMsg->SetChildCount(pMsg->GetChildCount() + 1);
                                 INetMIMEMessage* pNewMessage =
                                     new INetMIMEMessage;
                                 pNewMessage->SetDocumentLB (
