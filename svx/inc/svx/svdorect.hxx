@@ -31,6 +31,7 @@
 
 #include <svx/svdotext.hxx>
 #include "svx/svxdllapi.h"
+#include <boost/shared_ptr.hpp>
 
 //************************************************************
 //   Vorausdeklarationen
@@ -60,7 +61,7 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    XPolygon*                   mpXPoly;
+    ::boost::shared_ptr< XPolygon >                 mpXPoly;
 
 protected:
     // Liefert sal_True, wenn das Painten ein Polygon erfordert.
