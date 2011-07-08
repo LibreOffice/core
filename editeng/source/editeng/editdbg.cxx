@@ -492,50 +492,50 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         InfoBox(0, String( RTL_CONSTASCII_USTRINGPARAM( "D:\\DEBUG.LOG !" ) ) ).Execute();
 }
 
-ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
+rtl::OString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
 {
     sal_uInt16 z;
 
-    ByteString aDebStr( "Paragraph Length = " );
-    aDebStr += ByteString::CreateFromInt32( pPPortion->GetNode()->Len() );
+    rtl::OStringBuffer aDebStr(RTL_CONSTASCII_STRINGPARAM("Paragraph Length = "));
+    aDebStr.append(static_cast<sal_Int32>(pPPortion->GetNode()->Len()));
 
-    aDebStr += "\nCharacter attribute:";
+    aDebStr.append(RTL_CONSTASCII_STRINGPARAM("\nCharacter attribute:"));
     for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
     {
         EditCharAttrib* pAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs().GetObject( z );
-        aDebStr += "\n  ";
-        aDebStr += ByteString::CreateFromInt32( pAttr->GetItem()->Which() );
-        aDebStr += '\t';
-        aDebStr += ByteString::CreateFromInt32( pAttr->GetStart() );
-        aDebStr += '\t';
-        aDebStr += ByteString::CreateFromInt32( pAttr->GetEnd() );
+        aDebStr.append(RTL_CONSTASCII_STRINGPARAM("\n  "));
+        aDebStr.append(static_cast<sal_Int32>(pAttr->GetItem()->Which()));
+        aDebStr.append('\t');
+        aDebStr.append(static_cast<sal_Int32>(pAttr->GetStart()));
+        aDebStr.append('\t');
+        aDebStr.append(static_cast<sal_Int32>(pAttr->GetEnd()));
     }
 
-    aDebStr += "\nText portions:";
+    aDebStr.append(RTL_CONSTASCII_STRINGPARAM("\nText portions:"));
     sal_uInt16 n = 0;
     for ( z = 0; z < pPPortion->GetTextPortions().Count(); z++ )
     {
         TextPortion* pPortion = pPPortion->GetTextPortions().GetObject( z );
-        aDebStr += " ";
-        aDebStr += ByteString::CreateFromInt32( pPortion->GetLen() );
-        aDebStr += "(";
-        aDebStr += ByteString::CreateFromInt32( pPortion->GetSize().Width() );
-        aDebStr += ")";
-        aDebStr += ";";
+        aDebStr.append(' ');
+        aDebStr.append(static_cast<sal_Int32>(pPortion->GetLen()));
+        aDebStr.append('(');
+        aDebStr.append(static_cast<sal_Int32>(pPortion->GetSize().Width()));
+        aDebStr.append(')');
+        aDebStr.append(';');
         n = n + pPortion->GetLen();
     }
-    aDebStr += "\nTotal length: ";
-    aDebStr += ByteString::CreateFromInt32( n );
-    aDebStr += "\nSorted after Start:";
+    aDebStr.append(RTL_CONSTASCII_STRINGPARAM("\nTotal length: "));
+    aDebStr.append(static_cast<sal_Int32>(n));
+    aDebStr.append(RTL_CONSTASCII_STRINGPARAM("\nSorted after Start:"));
     for ( sal_uInt16 x = 0; x < pPPortion->GetNode()->GetCharAttribs().Count(); x++ )
     {
         EditCharAttrib* pCurAttrib = pPPortion->GetNode()->GetCharAttribs().GetAttribs().GetObject( x );
-        aDebStr += "\nStart: ";
-        aDebStr += ByteString::CreateFromInt32( pCurAttrib->GetStart() );
-        aDebStr += "\tEnd: ";
-        aDebStr += ByteString::CreateFromInt32( pCurAttrib->GetEnd() );
+        aDebStr.append(RTL_CONSTASCII_STRINGPARAM("\nStart: "));
+        aDebStr.append(static_cast<sal_Int32>(pCurAttrib->GetStart()));
+        aDebStr.append(RTL_CONSTASCII_STRINGPARAM("\tEnd: "));
+        aDebStr.append(static_cast<sal_Int32>(pCurAttrib->GetEnd()));
     }
-    return aDebStr;
+    return aDebStr.makeStringAndClear();
 }
 
 rtl::OString EditDbg::GetTextPortionInfo(TextPortionList& rPortions)
