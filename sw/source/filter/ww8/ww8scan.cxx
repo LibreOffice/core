@@ -2026,7 +2026,8 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
     const sal_uInt32 nValidMin=4;
 
     sal_Size nOldPos = pSt->Tell();
-    bool bValid = checkSeek(*pSt, nFilePos);
+
+    bool bValid = (nPLCF >= nValidMin) && checkSeek(*pSt, nFilePos);
     nPLCF = bValid ? std::max(nPLCF, nValidMin) : nValidMin;
 
     // Pointer auf Pos- u. Struct-Array
@@ -2350,7 +2351,8 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
     const sal_uInt32 nValidMin=4;
 
     sal_Size nOldPos = pSt->Tell();
-    bool bValid = checkSeek(*pSt, nFilePos);
+
+    bool bValid = (nPLCF >= nValidMin) && checkSeek(*pSt, nFilePos);
     nPLCF = bValid ? std::max(nPLCF, nValidMin) : nValidMin;
 
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];    // Pointer auf Pos-Array
@@ -6213,6 +6215,7 @@ namespace
         while (nRemaining)
         {
             //p[0] is cbFfnM1, the alleged total length of FFN - 1.
+            //i.e. length after cbFfnM1
             sal_uInt16 cbFfnM1 = *p++;
             --nRemaining;
 
@@ -6292,7 +6295,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
                 p->wWeight   = ( *(((sal_uInt8*)pVer2) + 1) );
                 p->chs   = ( *(((sal_uInt8*)pVer2) + 2) );
-            /*
+                /*
                  #i8726# 7- seems to encode the name in the same encoding as
                  the font, e.g load the doc in 97 and save to see the unicode
                  ver of the asian fontnames in that example to confirm.
@@ -6352,48 +6355,80 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
         }
         else
         {
-            WW8_FFN_Ver8* pVer8 = (WW8_FFN_Ver8*)pA;
-            sal_uInt8 c2;
-            for(sal_uInt16 i=0; i<nMax; ++i, ++p)
+            //count of bytes in minimum FontFamilyInformation payload
+            const sal_uInt8 cbMinFFNPayload = 41;
+            sal_uInt16 nValidFonts = 0;
+            sal_Int32 nRemainingFFn = nFFn;
+            sal_uInt8* pRaw = pA;
+            for (sal_uInt16 i=0; i < nMax && nRemainingFFn; ++i, ++p)
             {
-                p->cbFfnM1   = pVer8->cbFfnM1;
-                c2           = *(((sal_uInt8*)pVer8) + 1);
+                //pRaw[0] is cbFfnM1, the alleged total length of FFN - 1
+                //i.e. length after cbFfnM1
+                sal_uInt8 cbFfnM1 = *pRaw++;
+                --nRemainingFFn;
 
-                p->prg       =  c2 & 0x02;
+                if (cbFfnM1 > nRemainingFFn)
+                    break;
+
+                if (cbFfnM1 < cbMinFFNPayload)
+                    break;
+
+                p->cbFfnM1 = cbFfnM1;
+
+                sal_uInt8 *pVer8 = pRaw;
+
+                sal_uInt8 c2 = *pVer8++;
+                --cbFfnM1;
+
+                p->prg = c2 & 0x02;
                 p->fTrueType = (c2 & 0x04) >> 2;
                 // ein Reserve-Bit ueberspringen
-                p->ff        = (c2 & 0x70) >> 4;
+                p->ff = (c2 & 0x70) >> 4;
 
-                p->wWeight   = SVBT16ToShort( *(SVBT16*)&pVer8->wWeight );
-                p->chs       = pVer8->chs;
-                p->ibszAlt   = pVer8->ibszAlt;
+                p->wWeight = SVBT16ToShort(*(SVBT16*)pVer8);
+                pVer8+=2;
+                cbFfnM1-=2;
 
-#ifdef __WW8_NEEDS_COPY
-                {
-                    sal_uInt8 nLen = 0x28;
-                    sal_uInt8 nLength = sizeof( pVer8->szFfn ) / sizeof( SVBT16 );
-                    nLength = std::min( nLength, sal_uInt8( pVer8->cbFfnM1+1 ) );
-                    for( sal_uInt16* pTmp = pVer8->szFfn;
-                        nLen < nLength; ++pTmp, nLen+=2 )
-                    {
-                        *pTmp = SVBT16ToShort( *(SVBT16*)pTmp );
-                    }
-                }
-#endif // defined __WW8_NEEDS_COPY
+                p->chs = *pVer8++;
+                --cbFfnM1;
 
-                p->sFontname = pVer8->szFfn;
-                if (p->ibszAlt)
+                p->ibszAlt = *pVer8++;
+                --cbFfnM1;
+
+                pVer8 += 10; //PANOSE
+                cbFfnM1-=10;
+                pVer8 += 24; //FONTSIGNATURE
+                cbFfnM1-=24;
+
+                OSL_ASSERT(cbFfnM1 >= 2);
+
+                sal_uInt8 nMaxNullTerminatedPossible = cbFfnM1/2 - 1;
+                sal_Unicode *pPrimary = reinterpret_cast<sal_Unicode*>(pVer8);
+                pPrimary[nMaxNullTerminatedPossible] = 0;
+#ifdef OSL_BIGENDIAN
+                swapEndian(pPrimary);
+#endif
+                p->sFontname = pPrimary;
+                if (p->ibszAlt && p->ibszAlt < nMaxNullTerminatedPossible)
                 {
                     p->sFontname.Append(';');
-                    p->sFontname.Append(pVer8->szFfn+p->ibszAlt);
+                    sal_Unicode *pSecondary = pPrimary + p->ibszAlt;
+#ifdef OSL_BIGENDIAN
+                    swapEndian(pSecondary);
+#endif
+                    p->sFontname.Append(pSecondary);
                 }
 
                 // #i43762# check font name for illegal characters
                 lcl_checkFontname( p->sFontname );
 
                 // Zeiger auf Ursprungsarray einen Font nach hinten setzen
-                pVer8 = (WW8_FFN_Ver8*)( ((sal_uInt8*)pVer8) + pVer8->cbFfnM1 + 1 );
+                pRaw += p->cbFfnM1;
+                nRemainingFFn -= p->cbFfnM1;
+                ++nValidFonts;
             }
+            OSL_ENSURE(nMax == nValidFonts, "Font count differs with availability");
+            nMax = std::min(nMax, nValidFonts);
         }
     }
     delete[] pA;
@@ -7366,6 +7401,12 @@ bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
 bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
 {
     return (rSt.Read(pDest, nLength) == static_cast<sal_Size>(nLength));
+}
+
+void swapEndian(sal_Unicode *pString)
+{
+    for (sal_Unicode *pWork = pString; *pWork; ++pWork)
+        *pWork = SWAPSHORT(*pWork);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -351,6 +351,8 @@ struct WW8LST   // nur DIE Eintraege, die WIR benoetigen!
                                                         //   true if the list should start numbering over
 };                                                      //   at the beginning of each section
 
+const sal_uInt32 cbLSTF=28;
+
 struct WW8LFO   // nur DIE Eintraege, die WIR benoetigen!
 {
     SwNumRule*      pNumRule;   // Parent NumRule
@@ -1059,8 +1061,8 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     // LST und LFO gibts erst ab WW8
     if(    ( 8 > rFib.nVersion )
             || ( rFib.fcPlcfLst == rFib.fcPlfLfo )
-            || ( !rFib.lcbPlcfLst )
-            || ( !rFib.lcbPlfLfo ) ) return; // offensichtlich keine Listen da
+            || ( rFib.lcbPlcfLst < 2 )
+            || ( rFib.lcbPlfLfo < 2) ) return; // offensichtlich keine Listen da
 
     // Arrays anlegen
     pLFOInfos = new WW8LFOInfos;
@@ -1072,187 +1074,182 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     // 1. PLCF LST auslesen und die Listen Vorlagen im Writer anlegen
     //
     bool bOk = checkSeek(rSt, rFib.fcPlcfLst);
+
+    if (!bOk)
+        return;
+
+    sal_uInt32 nRemainingPlcfLst = rFib.lcbPlcfLst;
+
     sal_uInt16 nListCount(0);
-    if (bOk)
+    rSt >> nListCount;
+    nRemainingPlcfLst -= 2;
+    bOk = nListCount > 0;
+
+    if (!bOk)
+        return;
+
+    //
+    // 1.1 alle LST einlesen
+    //
+    for (sal_uInt16 nList=0; nList < nListCount; ++nList)
     {
-        rSt >> nListCount;
-        bOk = 0 < nListCount;
-    }
-    if( bOk )
-    {
+        if (nRemainingPlcfLst < cbLSTF)
+            break;
+
+        WW8LST aLST;
+        memset(&aLST, 0, sizeof( aLST ));
+
         //
-        // 1.1 alle LST einlesen
+        // 1.1.1 Daten einlesen
         //
-        for (sal_uInt16 nList=0; nList < nListCount; ++nList)
-        {
-            bOk = false;
+        rSt >> aLST.nIdLst;
+        rSt >> aLST.nTplC;
+        for (sal_uInt16 nLevel = 0; nLevel < nMaxLevel; ++nLevel)
+            rSt >> aLST.aIdSty[ nLevel ];
 
-            if (rSt.IsEof())
-                break;
+        sal_uInt8 aBits1(0);
+        rSt >> aBits1;
 
-            WW8LST aLST;
-            memset(&aLST, 0, sizeof( aLST ));
-            //
-            // 1.1.1 Daten einlesen
-            //
-            rSt >> aLST.nIdLst;
-            rSt >> aLST.nTplC;
-            for (sal_uInt16 nLevel = 0; nLevel < nMaxLevel; ++nLevel)
-                rSt >> aLST.aIdSty[ nLevel ];
+        rSt.SeekRel( 1 );
 
-            sal_uInt8 aBits1(0);
-            rSt >> aBits1;
+        if( aBits1 & 0x01 )
+            aLST.bSimpleList = true;
+        if( aBits1 & 0x02 )
+            aLST.bRestartHdn = true;
 
-            rSt.SeekRel( 1 );
+        // 1.1.2 new NumRule inserted in Doc and  WW8LSTInfo marked
 
-            if (rSt.GetError())
-                break;
+        /*
+        #i1869#
+        In word 2000 microsoft got rid of creating new "simple lists" with
+        only 1 level, all new lists are created with 9 levels. To hack it
+        so that the list types formerly known as simple lists still have
+        their own tab page to themselves one of the reserved bits is used
+        to show that a given list is to be in the simple list tabpage.
+        This has now nothing to do with the actual number of list level a
+        list has, only how many will be shown in the user interface.
 
-            if( aBits1 & 0x01 )
-                aLST.bSimpleList = true;
-            if( aBits1 & 0x02 )
-                aLST.bRestartHdn = true;
+        i.e. create a simple list in 2000 and open it in 97 and 97 will
+        claim (correctly) that it is an outline list. We can set our
+        continous flag in these lists to store this information.
+        */
+        SwNumRule* pMyNumRule = CreateNextRule(
+            aLST.bSimpleList || (aBits1 & 0x10));
 
-            // 1.1.2 new NumRule inserted in Doc and  WW8LSTInfo marked
+        WW8LSTInfo* pLSTInfo = new WW8LSTInfo(pMyNumRule, aLST);
+        maLSTInfos.push_back(pLSTInfo);
 
-            /*
-            #i1869#
-            In word 2000 microsoft got rid of creating new "simple lists" with
-            only 1 level, all new lists are created with 9 levels. To hack it
-            so that the list types formerly known as simple lists still have
-            their own tab page to themselves one of the reserved bits is used
-            to show that a given list is to be in the simple list tabpage.
-            This has now nothing to do with the actual number of list level a
-            list has, only how many will be shown in the user interface.
-
-            i.e. create a simple list in 2000 and open it in 97 and 97 will
-            claim (correctly) that it is an outline list. We can set our
-            continous flag in these lists to store this information.
-            */
-            SwNumRule* pMyNumRule = CreateNextRule(
-                aLST.bSimpleList || (aBits1 & 0x10));
-
-            WW8LSTInfo* pLSTInfo = new WW8LSTInfo(pMyNumRule, aLST);
-            maLSTInfos.push_back(pLSTInfo);
-            bOk = true;
-        }
+        nRemainingPlcfLst -= cbLSTF;
     }
 
-    if( bOk )
+    //
+    // 1.2 alle LVL aller aLST einlesen
+    //
+    sal_uInt16 nLSTInfos = static_cast< sal_uInt16 >(maLSTInfos.size());
+    for (sal_uInt16 nList = 0; nList < nLSTInfos; ++nList)
     {
+        WW8LSTInfo* pListInfo = maLSTInfos[nList];
+        if( !pListInfo || !pListInfo->pNumRule ) break;
+        SwNumRule& rMyNumRule = *pListInfo->pNumRule;
         //
-        // 1.2 alle LVL aller aLST einlesen
+        // 1.2.1 betreffende(n) LVL(s) fuer diese aLST einlesen
         //
-        sal_uInt16 nLSTInfos = static_cast< sal_uInt16 >(maLSTInfos.size());
-        for (sal_uInt16 nList = 0; nList < nLSTInfos; ++nList)
+        sal_uInt16 nLvlCount = static_cast< sal_uInt16 >(pListInfo->bSimpleList ? nMinLevel : nMaxLevel);
+        std::deque<bool> aNotReallyThere;
+        aNotReallyThere.resize(nMaxLevel);
+        pListInfo->maParaSprms.resize(nMaxLevel);
+        for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
         {
-            bOk = false;
-            WW8LSTInfo* pListInfo = maLSTInfos[nList];
-            if( !pListInfo || !pListInfo->pNumRule ) break;
-            SwNumRule& rMyNumRule = *pListInfo->pNumRule;
-            //
-            // 1.2.1 betreffende(n) LVL(s) fuer diese aLST einlesen
-            //
-            sal_uInt16 nLvlCount = static_cast< sal_uInt16 >(pListInfo->bSimpleList ? nMinLevel : nMaxLevel);
-            std::deque<bool> aNotReallyThere;
-            aNotReallyThere.resize(nMaxLevel);
-            pListInfo->maParaSprms.resize(nMaxLevel);
-            for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
-            {
-                SwNumFmt aNumFmt( rMyNumRule.Get( nLevel ) );
-                // LVLF einlesen
-                bLVLOk = ReadLVL( aNumFmt, pListInfo->aItemSet[nLevel],
-                    pListInfo->aIdSty[nLevel], true, aNotReallyThere, nLevel,
-                    pListInfo->maParaSprms[nLevel]);
-                if( !bLVLOk )
-                    break;
-                // und in die rMyNumRule aufnehmen
-                rMyNumRule.Set( nLevel, aNumFmt );
-            }
+            SwNumFmt aNumFmt( rMyNumRule.Get( nLevel ) );
+            // LVLF einlesen
+            bLVLOk = ReadLVL( aNumFmt, pListInfo->aItemSet[nLevel],
+                pListInfo->aIdSty[nLevel], true, aNotReallyThere, nLevel,
+                pListInfo->maParaSprms[nLevel]);
             if( !bLVLOk )
                 break;
-            //
-            // 1.2.2 die ItemPools mit den CHPx Einstellungen der verschiedenen
-            //       Level miteinander vergleichen und ggfs. Style(s) erzeugen
-            //
-            for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
-            {
-                bool bDummy;
-                AdjustLVL( nLevel, rMyNumRule, pListInfo->aItemSet,
-                                               pListInfo->aCharFmt, bDummy );
-            }
-            //
-            // 1.2.3 ItemPools leeren und loeschen
-            //
-            for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
-                delete pListInfo->aItemSet[ nLevel ];
-            bOk = true;
+            // und in die rMyNumRule aufnehmen
+            rMyNumRule.Set( nLevel, aNumFmt );
         }
+        if( !bLVLOk )
+            break;
+        //
+        // 1.2.2 die ItemPools mit den CHPx Einstellungen der verschiedenen
+        //       Level miteinander vergleichen und ggfs. Style(s) erzeugen
+        //
+        for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
+        {
+            bool bDummy;
+            AdjustLVL( nLevel, rMyNumRule, pListInfo->aItemSet,
+                                           pListInfo->aCharFmt, bDummy );
+        }
+        //
+        // 1.2.3 ItemPools leeren und loeschen
+        //
+        for (sal_uInt8 nLevel = 0; nLevel < nLvlCount; ++nLevel)
+            delete pListInfo->aItemSet[ nLevel ];
     }
 
     //
     // 2. PLF LFO auslesen und speichern
     //
-    long nLfoCount(0);
+    bOk = checkSeek(rSt, rFib.fcPlfLfo);
 
-    if (bOk)
-        bOk = checkSeek(rSt, rFib.fcPlfLfo);
+    if (!bOk)
+        return;
 
-    if (bOk)
+    sal_Int32 nLfoCount(0);
+    rSt >> nLfoCount;
+    bOk = nLfoCount > 0;
+
+    if (!bOk)
+        return;
+
+    //
+    // 2.1 alle LFO einlesen
+    //
+    for (sal_uInt16 nLfo = 0; nLfo < nLfoCount; ++nLfo)
     {
-        rSt >> nLfoCount;
-        if (0 >= nLfoCount)
-            bOk = false;
-    }
+        bOk = false;
 
-    if(bOk)
-    {
-        //
-        // 2.1 alle LFO einlesen
-        //
-        for (sal_uInt16 nLfo = 0; nLfo < nLfoCount; ++nLfo)
+        if (rSt.IsEof())
+            break;
+
+        WW8LFO aLFO;
+        memset(&aLFO, 0, sizeof( aLFO ));
+
+        rSt >> aLFO.nIdLst;
+        rSt.SeekRel( 8 );
+        rSt >> aLFO.nLfoLvl;
+        rSt.SeekRel( 3 );
+        // soviele Overrides existieren
+        if ((nMaxLevel < aLFO.nLfoLvl) || rSt.GetError())
+            break;
+
+        // die Parent NumRule der entsprechenden Liste ermitteln
+        WW8LSTInfo* pParentListInfo = GetLSTByListId(aLFO.nIdLst);
+        if (pParentListInfo)
         {
-            bOk = false;
+            // hier, im ersten Schritt, erst mal diese NumRule festhalten
+            aLFO.pNumRule = pParentListInfo->pNumRule;
 
-            if (rSt.IsEof())
-                break;
-
-            WW8LFO aLFO;
-            memset(&aLFO, 0, sizeof( aLFO ));
-
-            rSt >> aLFO.nIdLst;
-            rSt.SeekRel( 8 );
-            rSt >> aLFO.nLfoLvl;
-            rSt.SeekRel( 3 );
-            // soviele Overrides existieren
-            if ((nMaxLevel < aLFO.nLfoLvl) || rSt.GetError())
-                break;
-
-            // die Parent NumRule der entsprechenden Liste ermitteln
-            WW8LSTInfo* pParentListInfo = GetLSTByListId(aLFO.nIdLst);
-            if (pParentListInfo)
-            {
-                // hier, im ersten Schritt, erst mal diese NumRule festhalten
-                aLFO.pNumRule = pParentListInfo->pNumRule;
-
-                // hat die Liste mehrere Level ?
-                aLFO.bSimpleList = pParentListInfo->bSimpleList;
-            }
-            // und rein ins Merk-Array mit dem Teil
-            WW8LFOInfo* pLFOInfo = new WW8LFOInfo(aLFO);
-            if (pParentListInfo)
-            {
-                //Copy the basic paragraph properties for each level from the
-                //original list into the list format override levels.
-                int nMaxSize = pParentListInfo->maParaSprms.size();
-                pLFOInfo->maParaSprms.resize(nMaxSize);
-                for (int i = 0; i < nMaxSize; ++i)
-                    pLFOInfo->maParaSprms[i] = pParentListInfo->maParaSprms[i];
-            }
-            pLFOInfos->Insert(pLFOInfo, pLFOInfos->Count());
-            bOk = true;
+            // hat die Liste mehrere Level ?
+            aLFO.bSimpleList = pParentListInfo->bSimpleList;
         }
+        // und rein ins Merk-Array mit dem Teil
+        WW8LFOInfo* pLFOInfo = new WW8LFOInfo(aLFO);
+        if (pParentListInfo)
+        {
+            //Copy the basic paragraph properties for each level from the
+            //original list into the list format override levels.
+            int nMaxSize = pParentListInfo->maParaSprms.size();
+            pLFOInfo->maParaSprms.resize(nMaxSize);
+            for (int i = 0; i < nMaxSize; ++i)
+                pLFOInfo->maParaSprms[i] = pParentListInfo->maParaSprms[i];
+        }
+        pLFOInfos->Insert(pLFOInfo, pLFOInfos->Count());
+        bOk = true;
     }
+
     if( bOk )
     {
         //
