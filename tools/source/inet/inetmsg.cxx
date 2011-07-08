@@ -64,7 +64,6 @@ inline sal_Unicode ascii_toLowerCase( sal_Unicode ch )
  *
  *=====================================================================*/
 #define CONSTASCII_STRINGPARAM(a) (a), RTL_TEXTENCODING_ASCII_US
-#define HEADERFIELD INetMessageHeader
 
 /*
  * ~INetMessage.
@@ -80,10 +79,10 @@ INetMessage::~INetMessage (void)
 void INetMessage::ListCleanup_Impl (void)
 {
     // Cleanup.
-    sal_uIntPtr i, n = m_aHeaderList.Count();
+    sal_uIntPtr i, n = m_aHeaderList.size();
     for (i = 0; i < n; i++)
-        delete ((HEADERFIELD*)(m_aHeaderList.GetObject(i)));
-    m_aHeaderList.Clear();
+        delete m_aHeaderList[ i ];
+    m_aHeaderList.clear();
 }
 
 /*
@@ -100,8 +99,8 @@ void INetMessage::ListCopy (const INetMessage &rMsg)
         sal_uIntPtr i, n = rMsg.GetHeaderCount();
         for (i = 0; i < n; i++)
         {
-            HEADERFIELD *p = (HEADERFIELD*)(rMsg.m_aHeaderList.GetObject(i));
-            m_aHeaderList.Insert (new HEADERFIELD(*p), LIST_APPEND);
+            INetMessageHeader *p = rMsg.m_aHeaderList[ i ];
+            m_aHeaderList.push_back( new INetMessageHeader(*p) );
         }
     }
 }
@@ -156,11 +155,11 @@ SvStream& INetMessage::operator<< (SvStream& rStrm) const
     rStrm << static_cast<sal_uInt32>(m_nDocSize);
     rStrm.WriteByteString (m_aDocName, RTL_TEXTENCODING_UTF8);
 
-    sal_uIntPtr i, n = m_aHeaderList.Count();
+    sal_uIntPtr i, n = m_aHeaderList.size();
     rStrm << static_cast<sal_uInt32>(n);
 
     for (i = 0; i < n; i++)
-        rStrm << *((HEADERFIELD *)(m_aHeaderList.GetObject(i)));
+        rStrm << *( m_aHeaderList[ i ] );
 
     return rStrm;
 }
@@ -188,9 +187,9 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
 
     for (i = 0; i < n; i++)
     {
-        HEADERFIELD *p = new HEADERFIELD();
+        INetMessageHeader *p = new INetMessageHeader();
         rStrm >> *p;
-        m_aHeaderList.Insert (p, LIST_APPEND);
+        m_aHeaderList.push_back( p );
     }
 
     // Done.
@@ -740,7 +739,7 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
             case INETMSG_RFC822_OK:
                 pData = pStop;
                 SetHeaderField_Impl (
-                    HEADERFIELD (HDR(nIdx), rHeader.GetValue()),
+                    INetMessageHeader (HDR(nIdx), rHeader.GetValue()),
                     m_nIndex[nIdx]);
                 nNewIndex = m_nIndex[nIdx];
                 break;
@@ -1186,7 +1185,7 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
             case INETMSG_MIME_OK:
                 pData = pStop;
                 SetHeaderField_Impl (
-                    HEADERFIELD (MIMEHDR(nIdx), rHeader.GetValue()),
+                    INetMessageHeader (MIMEHDR(nIdx), rHeader.GetValue()),
                     m_nIndex[nIdx]);
                 nNewIndex = m_nIndex[nIdx];
                 break;
