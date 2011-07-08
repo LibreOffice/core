@@ -795,8 +795,8 @@ sal_Bool SVGFilter::implExportDocument()
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", B2UCONST( "userSpaceOnUse" ) );
             SvXMLElementExport aClipPathElem( *mpSVGExport, XML_NAMESPACE_NONE, "clipPath", sal_True, sal_True );
             {
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::valueOf( 0 ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::valueOf( 0 ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::valueOf( sal_Int32(0) ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::valueOf( sal_Int32(0) ) );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::valueOf( nDocWidth ) );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::valueOf( nDocHeight ) );
                 SvXMLElementExport aRectElem( *mpSVGExport, XML_NAMESPACE_NONE, "rect", sal_True, sal_True );
@@ -1897,7 +1897,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                         case SVX_ARABIC: ;
                         // in case the numbering type is not handled we fall back on arabic numbering
                         default:
-                            aRepresentation = OUString::valueOf( nPageNumber );
+                            aRepresentation = OUString::valueOf( sal_Int32(nPageNumber) );
                             break;
                     }
                 }
