@@ -6,6 +6,7 @@ from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.frame import TerminationVetoException
 from common.HelpIds import *
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
+from ui.XPathSelectionListener import XPathSelectionListener
 
 class WizardDialog(UnoDialog2):
 
@@ -488,3 +489,11 @@ class WizardDialog(UnoDialog2):
     def queryTermination(self):
         self.activate()
         raise TerminationVetoException()
+
+    class myPathSelectionListener(XPathSelectionListener):
+
+        def validatePath(self):
+            if self.myPathSelection.usedPathPicker:
+                self.filenameChanged = True
+
+            self.myPathSelection.usedPathPicker = False

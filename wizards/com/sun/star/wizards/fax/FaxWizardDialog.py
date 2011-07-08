@@ -4,12 +4,6 @@ from FaxWizardDialogConst import *
 from com.sun.star.awt.FontUnderline import SINGLE
 
 class FaxWizardDialog(WizardDialog):
-    #Image Control
-    #Fixed Line
-    #File Control
-    #Image Control
-    #Font Descriptors as Class members.
-    #Resources Object
 
     def __init__(self, xmsf):
         super(FaxWizardDialog,self).__init__(xmsf, HIDMAIN )
@@ -42,8 +36,9 @@ class FaxWizardDialog(WizardDialog):
         self.fontDescriptor4.Weight = 100
         self.fontDescriptor5.Weight = 150
 
-    #build components
-
+    '''
+    build components
+    '''
     def buildStep1(self):
         self.optBusinessFax = self.insertRadioButton("optBusinessFax",
             OPTBUSINESSFAX_ITEM_CHANGED,

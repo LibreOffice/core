@@ -5,7 +5,6 @@ from ui.PathSelection import *
 from common.FileAccess import *
 from ui.event.UnoDataAware import *
 from ui.event.RadioDataAware import *
-from ui.XPathSelectionListener import XPathSelectionListener
 from common.Configuration import *
 from document.OfficeDocument import OfficeDocument
 from text.TextFieldHandler import TextFieldHandler
@@ -39,7 +38,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.mainDA = []
         self.faxDA = []
         self.bSaveSuccess = False
-        self.__filenameChanged = False
+        self.filenameChanged = False
         self.UserTemplatePath = ""
         self.sTemplatePath = ""
 
@@ -146,7 +145,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             #first, if the filename was not changed, thus
             #it is coming from a saved session, check if the
             # file exists and warn the user.
-            if not self.__filenameChanged:
+            if not self.filenameChanged:
                 if fileAccess.exists(self.sPath, True):
                     answer = SystemDialog.showMessageBox(
                         self.xMSF, "MessBox", YES_NO + DEF_NO,
@@ -241,14 +240,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.setRoadmapComplete(True)
         self.setCurrentRoadmapItemID(1)
 
-    class __myPathSelectionListener(XPathSelectionListener):
-
-        def validatePath(self):
-            if self.myPathSelection.usedPathPicker:
-                self.__filenameChanged = True
-
-            self.myPathSelection.usedPathPicker = False
-
     def insertPathSelectionControl(self):
         self.myPathSelection = PathSelection(self.xMSF,
             self, PathSelection.TransferMode.SAVE,
@@ -261,7 +252,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myPathSelection.sDefaultName = "myFaxTemplate.ott"
         self.myPathSelection.sDefaultFilter = "writer8_template"
         self.myPathSelection.addSelectionListener( \
-            self.__myPathSelectionListener())
+            self.myPathSelectionListener())
 
     def __updateUI(self):
         UnoDataAware.updateUIs(self.mainDA)
