@@ -26,6 +26,7 @@
  */
 
 #include <rtfdocumentimpl.hxx>
+#include <rtfsdrimport.hxx>
 #include <rtftypes.hxx>
 #include <rtfcontrolwords.hxx>
 #include <rtfvalue.hxx>
@@ -153,19 +154,6 @@ static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, R
     }
 }
 
-static void lcl_Break(Stream& rMapper)
-{
-    sal_uInt8 sBreak[] = { 0xd };
-    rMapper.text(sBreak, 1);
-}
-
-static void lcl_TableBreak(Stream& rMapper)
-{
-    lcl_Break(rMapper);
-    rMapper.endParagraphGroup();
-    rMapper.startParagraphGroup();
-}
-
 // NEEDSWORK: DocxAttributeOutput's impl_AppendTwoDigits does the same.
 static void lcl_AppendTwoDigits(OStringBuffer &rBuffer, sal_Int32 nNum)
 {
@@ -263,18 +251,6 @@ static const char* lcl_RtfToString(RTFKeyword nKeyword)
     return NULL;
 }
 
-// NEEDSWORK: wwUtility::BGRToRGB does the same.
-sal_uInt32 lcl_BGRToRGB(sal_uInt32 nColor)
-{
-    sal_uInt8
-        r(static_cast<sal_uInt8>(nColor&0xFF)),
-        g(static_cast<sal_uInt8>(((nColor)>>8)&0xFF)),
-        b(static_cast<sal_uInt8>((nColor>>16)&0xFF)),
-        t(static_cast<sal_uInt8>((nColor>>24)&0xFF));
-    nColor = (t<<24) + (r<<16) + (g<<8) + b;
-    return nColor;
-}
-
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -316,10 +292,13 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     OSL_ASSERT(xDrawings.is());
     m_xDrawPage.set(xDrawings->getDrawPage(), uno::UNO_QUERY);
     OSL_ASSERT(m_xDrawPage.is());
+
+    m_pSdrImport = new RTFSdrImport(*this);
 }
 
 RTFDocumentImpl::~RTFDocumentImpl()
 {
+    delete m_pSdrImport;
 }
 
 SvStream& RTFDocumentImpl::Strm()
@@ -385,12 +364,25 @@ void RTFDocumentImpl::checkFirstRun()
     }
 }
 
+void RTFDocumentImpl::runBreak()
+{
+    sal_uInt8 sBreak[] = { 0xd };
+    Mapper().text(sBreak, 1);
+}
+
+void RTFDocumentImpl::tableBreak()
+{
+    runBreak();
+    Mapper().endParagraphGroup();
+    Mapper().startParagraphGroup();
+}
+
 void RTFDocumentImpl::parBreak()
 {
     checkFirstRun();
     // end previous paragraph
     Mapper().startCharacterGroup();
-    lcl_Break(Mapper());
+    runBreak();
     Mapper().endCharacterGroup();
     Mapper().endParagraphGroup();
 
@@ -746,7 +738,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
                     new RTFReferenceProperties(m_aStates.top().aTableCellAttributes, m_aStates.top().aTableCellSprms)
                     );
             Mapper().props(pTableCellProperties);
-            lcl_TableBreak(Mapper());
+            tableBreak();
             break;
         }
         else if (aPair.first == BUFFER_STARTRUN)
@@ -1075,7 +1067,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                         );
                 Mapper().props(pTableRowProperties);
 
-                lcl_TableBreak(Mapper());
+                tableBreak();
                 m_bNeedPap = true;
                 m_aTableBuffer.clear();
             }
@@ -2347,7 +2339,7 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_PICPROP
             || m_aStates.top().nDestinationState == DESTINATION_SHAPEINSTRUCTION)
-        resolveShapeProperties(m_aStates.top().aShape.aProperties);
+        m_pSdrImport->resolve(m_aStates.top().aShape);
     else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
         m_aAuthors[m_aAuthors.size()] = m_aDestinationText.makeStringAndClear();
     else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
@@ -2435,264 +2427,6 @@ int RTFDocumentImpl::popState()
     return 0;
 }
 
-void RTFDocumentImpl::createShape(OUString aStr, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet)
-{
-    xShape.set(m_xModelFactory->createInstance(aStr), uno::UNO_QUERY);
-    xPropertySet.set(xShape, uno::UNO_QUERY);
-}
-
-void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUString, rtl::OUString> >& rShapeProperties)
-{
-    int nType = -1;
-    bool bPib = false;
-    bool bCustom = false;
-
-    uno::Reference<drawing::XShape> xShape;
-    uno::Reference<beans::XPropertySet> xPropertySet;
-    // Create this early, as custom shapes may have properties before the type arrives.
-    createShape(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")), xShape, xPropertySet);
-    uno::Any aAny;
-    beans::PropertyValue aPropertyValue;
-    awt::Rectangle aViewBox;
-    std::vector<beans::PropertyValue> aPathPropVec;
-
-    for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShapeProperties.begin(); i != rShapeProperties.end(); ++i)
-    {
-        if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("shapeType")))
-        {
-            nType = i->second.toInt32();
-            switch (nType)
-            {
-                case 20: // Line
-                    createShape(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape")), xShape, xPropertySet);
-                    break;
-                default:
-                    bCustom = true;
-                    break;
-            }
-
-            // Defaults
-            aAny <<= (sal_uInt32)0xffffff; // White in Word, kind of blue in Writer.
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
-        }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzName")))
-        {
-            RTFValue::Pointer_t pValue(new RTFValue(i->second));
-            m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_name, pValue));
-        }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzDescription")))
-        {
-            RTFValue::Pointer_t pValue(new RTFValue(i->second));
-            m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_descr, pValue));
-        }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pib")))
-        {
-            m_aDestinationText.setLength(0);
-            m_aDestinationText.append(i->second);
-            bPib = true;
-        }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillColor")))
-        {
-            aAny <<= lcl_BGRToRGB(i->second.toInt32());
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
-        }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillBackColor")))
-            ; // Ignore: complementer of fillColor
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lineColor")))
-        {
-            aAny <<= lcl_BGRToRGB(i->second.toInt32());
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")), aAny);
-        }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lineBackColor")))
-            ; // Ignore: complementer of lineColor
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("txflTextFlow")))
-        {
-            if (i->second.toInt32() == 1)
-            {
-                aAny <<= text::WritingMode_TB_RL;
-                xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TextWritingMode")), aAny);
-            }
-        }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fLine")))
-        {
-            if (i->second.toInt32() == 0)
-            {
-                aAny <<= drawing::LineStyle_NONE;
-                xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LineStyle")), aAny);
-            }
-        }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pVerticies")))
-        {
-            uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
-            sal_Int32 nSize = 0; // Size of a token (it's value is hardwired in the exporter)
-            sal_Int32 nCount = 0; // Number of tokens
-            sal_Int32 nCharIndex = 0; // Character index
-            sal_Int32 nIndex = 0; // Array index
-            do
-            {
-                OUString aToken = i->second.getToken(0, ';', nCharIndex);
-                if (!nSize)
-                    nSize = aToken.toInt32();
-                else if (!nCount)
-                {
-                    nCount = aToken.toInt32();
-                    aCoordinates.realloc(nCount);
-                }
-                else
-                {
-                    // The coordinates are in an (x,y) form.
-                    aToken = aToken.copy(1, aToken.getLength() - 2);
-                    sal_Int32 nI = 0;
-                    sal_Int32 nX = 0;
-                    sal_Int32 nY = 0;
-                    do
-                    {
-                        OUString aPoint = aToken.getToken(0, ',', nI);
-                        if (!nX)
-                            nX = aPoint.toInt32();
-                        else
-                            nY = aPoint.toInt32();
-                    }
-                    while (nI >= 0);
-                    aCoordinates[nIndex].First.Value <<= nX;
-                    aCoordinates[nIndex].Second.Value <<= nY;
-                    nIndex++;
-                }
-            }
-            while (nCharIndex >= 0);
-            aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Coordinates"));
-            aPropertyValue.Value <<= aCoordinates;
-            aPathPropVec.push_back(aPropertyValue);
-        }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pSegmentInfo")))
-        {
-            uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
-            sal_Int32 nSize = 0;
-            sal_Int32 nCount = 0;
-            sal_Int32 nCharIndex = 0;
-            sal_Int32 nIndex = 0;
-            do
-            {
-                sal_Int32 nSeg = i->second.getToken(0, ';', nCharIndex).toInt32();
-                if (!nSize)
-                    nSize = nSeg;
-                else if (!nCount)
-                {
-                    nCount = nSeg;
-                    aSegments.realloc(nCount);
-                }
-                else
-                {
-                    switch (nSeg)
-                    {
-                        case 0x0001: // lineto
-                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
-                            aSegments[nIndex].Count = sal_Int32(1);
-                            break;
-                        case 0x4000: // moveto
-                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
-                            aSegments[nIndex].Count = sal_Int32(1);
-                            break;
-                        case 0x2001: // curveto
-                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
-                            aSegments[nIndex].Count = sal_Int32(1);
-                            break;
-                        case 0xb300: // arcto
-                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
-                            aSegments[nIndex].Count = sal_Int32(0);
-                            break;
-                        case 0xac00:
-                        case 0xaa00: // nofill
-                        case 0xab00: // nostroke
-                        case 0x6001: // close
-                            break;
-                        case 0x8000: // end
-                            aSegments[nIndex].Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
-                            aSegments[nIndex].Count = sal_Int32(0);
-                            break;
-                        default:
-                            OSL_TRACE("%s: unhandled segment '%x' in the path", OSL_THIS_FUNC, nSeg);
-                            break;
-                    }
-                    nIndex++;
-                }
-            }
-            while (nCharIndex >= 0);
-            aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Segments"));
-            aPropertyValue.Value <<= aSegments;
-            aPathPropVec.push_back(aPropertyValue);
-        }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoLeft")))
-            aViewBox.X = i->second.toInt32();
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoTop")))
-            aViewBox.Y = i->second.toInt32();
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoRight")))
-            aViewBox.Width = i->second.toInt32();
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoBottom")))
-            aViewBox.Height = i->second.toInt32();
-        else
-            OSL_TRACE("%s: TODO handle shape property '%s':'%s'", OSL_THIS_FUNC,
-                    OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr(),
-                    OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr());
-    }
-
-    if (nType == 75) // picture frame
-    {
-        if (bPib)
-            resolvePict(false);
-        return;
-    }
-
-    m_xDrawPage->add(xShape);
-    if (bCustom)
-    {
-        uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
-        xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(nType)));
-    }
-
-    // Creating Path property
-    uno::Sequence<beans::PropertyValue> aPathPropSeq(aPathPropVec.size());
-    beans::PropertyValue* pPathValues = aPathPropSeq.getArray();
-    for (std::vector<beans::PropertyValue>::iterator i = aPathPropVec.begin(); i != aPathPropVec.end(); ++i)
-        *pPathValues++ = *i;
-
-    // Creating CustomShapeGeometry property
-    std::vector<beans::PropertyValue> aGeomPropVec;
-    if (aViewBox.X || aViewBox.Y || aViewBox.Width || aViewBox.Height)
-    {
-        aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("ViewBox"));
-        aPropertyValue.Value <<= aViewBox;
-        aGeomPropVec.push_back(aPropertyValue);
-    }
-    if (aPathPropSeq.getLength())
-    {
-        aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Path"));
-        aPropertyValue.Value <<= aPathPropSeq;
-        aGeomPropVec.push_back(aPropertyValue);
-    }
-    uno::Sequence<beans::PropertyValue> aGeomPropSeq(aGeomPropVec.size());
-    beans::PropertyValue* pGeomValues = aGeomPropSeq.getArray();
-    for (std::vector<beans::PropertyValue>::iterator i = aGeomPropVec.begin(); i != aGeomPropVec.end(); ++i)
-        *pGeomValues++ = *i;
-    if (aGeomPropSeq.getLength())
-        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CustomShapeGeometry")), uno::Any(aGeomPropSeq));
-
-    // Set position and size
-    xShape->setPosition(awt::Point(m_aStates.top().aShape.nLeft, m_aStates.top().aShape.nTop));
-    xShape->setSize(awt::Size(m_aStates.top().aShape.nRight - m_aStates.top().aShape.nLeft,
-                m_aStates.top().aShape.nBottom - m_aStates.top().aShape.nTop));
-
-    // Send it to dmapper
-    Mapper().startShape(xShape);
-    Mapper().startParagraphGroup();
-    replayBuffer(m_aShapetextBuffer);
-    Mapper().startCharacterGroup();
-    lcl_Break(Mapper());
-    Mapper().endCharacterGroup();
-    Mapper().endParagraphGroup();
-    Mapper().endShape();
-}
-
 int RTFDocumentImpl::resolveParse()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
@@ -2770,6 +2504,32 @@ int RTFDocumentImpl::resolveParse()
 ::std::string RTFDocumentImpl::getType() const
 {
     return "RTFDocumentImpl";
+}
+
+com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> RTFDocumentImpl::getModelFactory()
+{
+    return m_xModelFactory;
+}
+
+RTFParserState& RTFDocumentImpl::getState()
+{
+    return m_aStates.top();
+}
+
+void RTFDocumentImpl::setDestinationText(OUString& rString)
+{
+    m_aDestinationText.setLength(0);
+    m_aDestinationText.append(rString);
+}
+
+void RTFDocumentImpl::replayShapetext()
+{
+    replayBuffer(m_aShapetextBuffer);
+}
+
+com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> RTFDocumentImpl::getDrawPage()
+{
+    return m_xDrawPage;
 }
 
 RTFParserState::RTFParserState()

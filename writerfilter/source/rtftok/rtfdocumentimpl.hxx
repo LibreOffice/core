@@ -220,6 +220,8 @@ namespace writerfilter {
                 bool bIsCjk;
         };
 
+        class RTFSdrImport;
+
         /// Implementation of the RTFDocument interface.
         class RTFDocumentImpl
             : public RTFDocument
@@ -234,25 +236,30 @@ namespace writerfilter {
                 virtual void resolve(Stream & rHandler);
                 virtual std::string getType() const;
 
-                SvStream& Strm();
                 Stream& Mapper();
+                void setSubstream(bool bIsSubtream);
+                void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
+                void seek(sal_uInt32 nPos);
+                com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> getModelFactory();
+                RTFParserState& getState();
+                void setDestinationText(rtl::OUString& rString);
+                /// Resolve a picture: If not inline, then anchored.
+                int resolvePict(bool bInline);
+                com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> getDrawPage();
+                void runBreak();
+                void replayShapetext();
+            private:
+                SvStream& Strm();
                 sal_uInt32 getColorTable(sal_uInt32 nIndex);
                 sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
                 void skipDestination(bool bParsed);
                 RTFSprms_t mergeSprms();
                 RTFSprms_t mergeAttributes();
-                void setSubstream(bool bIsSubtream);
-                void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
                 void resolveSubstream(sal_uInt32 nPos, Id nId);
                 void resolveSubstream(sal_uInt32 nPos, Id nId, rtl::OUString& rIgnoreFirst);
-                void seek(sal_uInt32 nPos);
-            private:
+
                 int resolveParse();
                 int resolveKeyword();
-                void resolveShapeProperties(std::vector< std::pair<rtl::OUString, rtl::OUString> >& rShapeProperties);
-                void createShape(rtl::OUString aService,
-                        com::sun::star::uno::Reference<drawing::XShape>& xShape,
-                        com::sun::star::uno::Reference<beans::XPropertySet>& xPropertySet);
 
                 int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
                 int dispatchFlag(RTFKeyword nKeyword);
@@ -262,12 +269,11 @@ namespace writerfilter {
                 int dispatchValue(RTFKeyword nKeyword, int nParam);
 
                 int resolveChars(char ch);
-                /// Resolve a picture: If not inline, then anchored.
-                int resolvePict(bool bInline);
                 int pushState();
                 int popState();
                 void text(rtl::OUString& rString);
                 void parBreak();
+                void tableBreak();
                 /// If this is the first run of the document, starts the initial paragraph.
                 void checkFirstRun();
                 void sectBreak(bool bFinal);
@@ -281,6 +287,7 @@ namespace writerfilter {
                 com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> m_xDrawPage;
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
+                RTFSdrImport* m_pSdrImport;
                 /// Same as m_aStates.size(), except that this can be negative for invalid input.
                 int m_nGroup;
                 std::stack<RTFParserState> m_aStates;
