@@ -1,0 +1,86 @@
+#!/bin/sh
+
+. ./*[Ee]nv.[Ss]et.sh
+
+if test -d $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk ; then
+
+    echo "SDK installation clean up"
+
+    # bin potential .orig files
+    find $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk -name "*.orig" -exec rm -f {} \;
+
+    # move some SDK directories to the right place according to FHS
+    # note that examples must stay in $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk because there are used
+    # relative paths to $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/setting and it does not work via
+    # a symlink
+    mkdir -p $DESTDIR$PREFIXDIR/include
+    mkdir -p $DESTDIR$DATADIR/idl
+    mkdir -p $DESTDIR$DATADIR/$INSTALLDIRNAME/sdk
+    mkdir -p $DESTDIR$DOCDIR/sdk
+    mv $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/include      $DESTDIR$PREFIXDIR/include/$INSTALLDIRNAME
+    if [ -d $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/classes ]; then
+        mv $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/classes      $DESTDIR$DATADIR/$INSTALLDIRNAME/sdk/classes
+    fi
+    mv $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/idl          $DESTDIR$DATADIR/idl/$INSTALLDIRNAME
+    mv $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/docs         $DESTDIR$DOCDIR/sdk
+    mv $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/share/readme $DESTDIR$DOCDIR/sdk/readme
+    mv $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/index.html   $DESTDIR$DOCDIR/sdk
+
+    # compat symlinks
+    ln -sf $PREFIXDIR/include/$INSTALLDIRNAME                        $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/include
+    ln -sf $DATADIR/$INSTALLDIRNAME/sdk/classes                      $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/classes
+    ln -sf $DATADIR/idl/$INSTALLDIRNAME                              $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/idl
+    ln -sf $DOCDIR/sdk/docs                                          $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/
+    ln -sf $DOCDIR/sdk/index.html                                    $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/index.html
+    ln -sf $INSTALLDIR/basis$PRODUCTVERSION/sdk/examples         $DESTDIR$DOCDIR/sdk/examples
+
+    # fix file list
+    sed -e "s|^\(%dir \)\?$INSTALLDIR/basis$PRODUCTVERSION/sdk/include|\1$PREFIXDIR/include/$INSTALLDIRNAME|" \
+	-e "s|^\(%dir \)\?$INSTALLDIR/basis$PRODUCTVERSION/sdk/classes|\1$DATADIR/$INSTALLDIRNAME/sdk/classes|" \
+	-e "s|^\(%dir \)\?$INSTALLDIR/basis$PRODUCTVERSION/sdk/idl|\1$DATADIR/idl/$INSTALLDIRNAME|" \
+	-e "s|^\(%dir \)\?$INSTALLDIR/basis$PRODUCTVERSION/sdk/docs|\1$DOCDIR/sdk/docs|" \
+	-e "s|^\(%dir \)\?$INSTALLDIR/basis$PRODUCTVERSION/sdk/share/readme|\1$DOCDIR/sdk/readme|" \
+	-e "s|^$INSTALLDIR/basis$PRODUCTVERSION/sdk/index.html$|$DOCDIR/sdk/index.html|" \
+	-e "s|^\(%dir \)\?$INSTALLDIR/basis$PRODUCTVERSION/sdk/share.*$||" \
+	-e "/\.orig$/D" \
+	-e "/^$/D" \
+	$DESTDIR/gid_Module_Root_SDK | sort -u \
+	>$DESTDIR/gid_Module_Root_SDK.new
+    mv $DESTDIR/gid_Module_Root_SDK.new $DESTDIR/gid_Module_Root_SDK
+    #
+    echo "%dir $DATADIR/$INSTALLDIRNAME/sdk"                    >>$DESTDIR/gid_Module_Root_SDK
+    echo "%dir $DATADIR/$INSTALLDIRNAME"                        >>$DESTDIR/gid_Module_Root_SDK
+    echo "%dir $DATADIR/idl"                                    >>$DESTDIR/gid_Module_Root_SDK
+    echo "%dir $DOCDIR/sdk/docs"                                >>$DESTDIR/gid_Module_Root_SDK
+    echo "%dir $DOCDIR/sdk"                                     >>$DESTDIR/gid_Module_Root_SDK
+    echo "%dir $DOCDIR"                                         >>$DESTDIR/gid_Module_Root_SDK
+    echo "$INSTALLDIR/basis$PRODUCTVERSION/sdk/include"     >>$DESTDIR/gid_Module_Root_SDK
+    echo "$INSTALLDIR/basis$PRODUCTVERSION/sdk/classes"     >>$DESTDIR/gid_Module_Root_SDK
+    echo "$INSTALLDIR/basis$PRODUCTVERSION/sdk/idl"         >>$DESTDIR/gid_Module_Root_SDK
+    echo "$INSTALLDIR/basis$PRODUCTVERSION/sdk/docs"        >>$DESTDIR/gid_Module_Root_SDK
+    echo "$INSTALLDIR/basis$PRODUCTVERSION/sdk/index.html"  >>$DESTDIR/gid_Module_Root_SDK
+    echo "$DOCDIR/sdk/examples"                                 >>$DESTDIR/gid_Module_Root_SDK
+
+    # generate default profiles
+    for file in setsdkenv_unix.csh setsdkenv_unix.sh ; do
+        sed -e "s,@OO_SDK_NAME@,openoffice.org${PRODUCTVERSION}_sdk," \
+	    -e "s,@OO_SDK_HOME@,$INSTALLDIR/basis$PRODUCTVERSION/sdk," \
+	    -e "s,@OFFICE_HOME@,$INSTALLDIR," \
+	    -e "s,@OFFICE_BASE_HOME@,$INSTALLDIR/basis$PRODUCTVERSION," \
+	    -e "s,@OO_SDK_URE_HOME@,$INSTALLDIR/basis$PRODUCTVERSION/ure-link," \
+	    -e "s,@OO_SDK_MAKE_HOME@,/usr/bin," \
+	    -e "s,@OO_SDK_ZIP_HOME@,/usr/bin," \
+	    -e "s,@OO_SDK_CPP_HOME@,/usr/bin," \
+	    -e "s,@OO_SDK_CC_55_OR_HIGHER@,," \
+	    -e "s,@OO_SDK_JAVA_HOME@,$JAVA_HOME," \
+	    -e "s,@OO_SDK_OUTPUT_DIR@,\$HOME," \
+	    -e "s,@SDK_AUTO_DEPLOYMENT@,NO," \
+            $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/$file.in \
+	    > $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/$file
+	chmod 755 $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/$file
+	echo $INSTALLDIR/basis$PRODUCTVERSION/sdk/$file >>$DESTDIR/gid_Module_Root_SDK
+    done
+    
+    # FIXME: I rather set this file to be non-world-writttable for now, i#64812
+    chmod go-w $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/settings/component.uno.map
+fi

@@ -20,11 +20,17 @@ all: Makefile dmake/dmake@EXEEXT@ src.downloaded
 
 install:
 	@. ./*[Ee]nv.[Ss]et.sh && \
-	echo "Installing in $${libdir:-@libdir@}/@INSTALL_DIRNAME@..." && \
-	ooinstall "$${libdir:-@libdir@}/@INSTALL_DIRNAME@" && \
+	echo "Installing in @INSTALLDIR@..." && \
+	ooinstall "@INSTALLDIR@" && \
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
-	echo "$${libdir:-@libdir@}/@INSTALL_DIRNAME@/program/soffice"
+	echo "@INSTALLDIR@/program/soffice"
+
+distro-pack-install: install
+	./bin/distro-install-clean-up
+	./bin/distro-install-desktop-integration
+	./bin/distro-install-sdk
+	./bin/distro-install-file-lists
 
 dev-install:
 	@. ./*[Ee]nv.[Ss]et.sh && \
