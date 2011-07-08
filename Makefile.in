@@ -151,7 +151,7 @@ endif
 
 fetch: src.downloaded
 
-Makefile: configure.in set_soenv.in Makefile.in
+Makefile: configure.in ooo.lst.in set_soenv.in Makefile.in
 	./autogen.sh
 
 check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch
