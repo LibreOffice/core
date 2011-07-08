@@ -34,7 +34,7 @@ import java.awt.Color;
  * Utility class mapping RGB colour specifications to the colour indices used
  * in the Pocket PC. The original converter was written for use with Pocket
  * Word it was later put into the utils so Pocket excel could use this code
- * also. For this reason the defualt values are those used by Pocket Word but
+ * also. For this reason the default values are those used by Pocket Word but
  * a colour table can be passed in through the constructor to map the 16
  * values to a colour table.
  *
