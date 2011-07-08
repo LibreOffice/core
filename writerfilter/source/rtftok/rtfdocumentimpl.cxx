@@ -2452,6 +2452,7 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
     // Create this early, as custom shapes may have properties before the type arrives.
     createShape(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")), xShape, xPropertySet);
     uno::Any aAny;
+    beans::PropertyValue aPropertyValue;
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
     uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
     awt::Rectangle aViewBox;
@@ -2643,13 +2644,20 @@ void RTFDocumentImpl::resolveShapeProperties(std::vector< std::pair<rtl::OUStrin
 
     if (nType == 0)
     {
-        uno::Sequence< beans::PropertyValue > aPathPropSeq(2);
+        std::vector<beans::PropertyValue> aPathPropVec;
 
-        aPathPropSeq[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Coordinates"));
-        aPathPropSeq[0].Value <<= aCoordinates;
+        aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Coordinates"));
+        aPropertyValue.Value <<= aCoordinates;
+        aPathPropVec.push_back(aPropertyValue);
 
-        aPathPropSeq[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Segments"));
-        aPathPropSeq[1].Value <<= aSegments;
+        aPropertyValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Segments"));
+        aPropertyValue.Value <<= aSegments;
+        aPathPropVec.push_back(aPropertyValue);
+
+        uno::Sequence<beans::PropertyValue> aPathPropSeq(aPathPropVec.size());
+        beans::PropertyValue* pPathValues = aPathPropSeq.getArray();
+        for (std::vector<beans::PropertyValue>::iterator i = aPathPropVec.begin(); i != aPathPropVec.end(); ++i)
+            *pPathValues++ = *i;
 
         uno::Sequence<beans::PropertyValue> aGeoPropSeq(2);
         aGeoPropSeq[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("ViewBox"));
