@@ -363,7 +363,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
             pPage = (SwPageFrm*)pPage->GetNext();
         while( pPage )
         {
-            if( nIndex >= pImpl->Count() )
+            if( nIndex >= pImpl->size() )
             {
                 if( bRet )
                     bRet = sal_False;
@@ -811,7 +811,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
           pImpl->GetBreakIndex( nIndex ) == nNodeIndex ) ) )
         bFirst = sal_False;
 #if OSL_DEBUG_LEVEL > 1
-    sal_uLong nBreakIndex = ( pImpl && nIndex < pImpl->Count() ) ?
+    sal_uLong nBreakIndex = ( pImpl && nIndex < pImpl->size() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
     (void)nBreakIndex;
 #endif
@@ -826,7 +826,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
             if( pImpl || bLongTab )
             {
 #if OSL_DEBUG_LEVEL > 1
-                sal_uLong nBrkIndex = ( pImpl && nIndex < pImpl->Count() ) ?
+                sal_uLong nBrkIndex = ( pImpl && nIndex < pImpl->size() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
                 (void)nBrkIndex;
 #endif
