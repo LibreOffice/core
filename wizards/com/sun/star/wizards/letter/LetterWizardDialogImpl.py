@@ -10,7 +10,6 @@ from CGLetterWizard import CGLetterWizard
 from ui.event.UnoDataAware import *
 from ui.event.RadioDataAware import *
 from document.OfficeDocument import OfficeDocument
-from ui.XPathSelectionListener import XPathSelectionListener
 from text.TextFieldHandler import TextFieldHandler
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 
@@ -145,6 +144,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def finishWizard(self):
         self.switchToStep(self.getCurrentStep(), self.nMaxStep)
+        endWizard = True
         try:
             fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
@@ -160,6 +160,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                         self.resources.resOverwriteWarning, 
                         self.xUnoDialog.Peer)
                     if answer == 3:
+                        # user said: no, do not overwrite...
+                        endWizard = False
                         return False
 
             self.myLetterDoc.setWizardTemplateDocInfo(
@@ -227,8 +229,9 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         except Exception, e:
             traceback.print_exc()
         finally:
-            self.xUnoDialog.endExecute()
-            self.running = False
+            if endWizard:
+                self.xUnoDialog.endExecute()
+                self.running = False
 
         return True;
 
@@ -1085,14 +1088,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.setRoadmapInteractive(True)
         self.setRoadmapComplete(True)
         self.setCurrentRoadmapItemID(1)
-
-    class myPathSelectionListener(XPathSelectionListener):
-
-        def validatePath(self):
-            if self.myPathSelection.usedPathPicker:
-                self.filenameChanged = True
-
-            self.myPathSelection.usedPathPicker = False
 
     def insertPathSelectionControl(self):
         self.myPathSelection = \
