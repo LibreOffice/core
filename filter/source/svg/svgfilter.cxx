@@ -37,6 +37,30 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XDesktop.hdl>
 #include <com/sun/star/frame/XController.hdl>
+
+
+#include <com/sun/star/view/XSelectionSupplier.hdl>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/drawing/XDrawSubController.hdl>
+#include <com/sun/star/drawing/XDrawSubController.hpp>
+#include <com/sun/star/container/XNamed.hdl>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/uno/XComponentContext.hdl>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/drawing/framework/XControllerManager.hdl>
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#include <com/sun/star/drawing/framework/XConfigurationController.hdl>
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <com/sun/star/drawing/framework/XResource.hdl>
+#include <com/sun/star/drawing/framework/XResource.hpp>
+#include <com/sun/star/drawing/framework/XView.hdl>
+#include <com/sun/star/drawing/framework/XView.hpp>
+#include <com/sun/star/drawing/framework/ResourceId.hpp>
+#include <comphelper/processfactory.hxx>
+
+
+
+
 #include <osl/mutex.hxx>
 
 #include "svgfilter.hxx"
@@ -58,7 +82,9 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mpDefaultSdrPage( NULL ),
     mpSdrModel( NULL ),
     mbPresentation( sal_False ),
+    mbExportAll( sal_False ),
     mpObjects( NULL )
+
 {
 }
 
@@ -75,6 +101,7 @@ SVGFilter::~SVGFilter()
 
 // -----------------------------------------------------------------------------
 
+
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
@@ -90,47 +117,102 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     else
     if( mxSrcDoc.is() )
     {
-        sal_Int16   nCurrentPageNumber = -1;
-        uno::Reference< frame::XDesktop > xDesktop( mxMSF->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
-                                                    uno::UNO_QUERY);
-        if( xDesktop.is() )
+        if( !mbExportAll )
         {
-            uno::Reference< frame::XFrame > xFrame( xDesktop->getCurrentFrame() );
-
-            if( xFrame.is() )
+            uno::Reference< frame::XDesktop > xDesktop( mxMSF->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
+                                                        uno::UNO_QUERY);
+            if( xDesktop.is() )
             {
-                uno::Reference< frame::XController > xController( xFrame->getController() );
+                uno::Reference< frame::XFrame > xFrame( xDesktop->getCurrentFrame() );
 
-                if( xController.is() )
+                if( xFrame.is() )
                 {
-                    uno::Reference< drawing::XDrawView > xDrawView( xController, uno::UNO_QUERY );
+                    uno::Reference< frame::XController > xController( xFrame->getController() );
 
-                    if( xDrawView.is() )
+                    if( xController.is() )
                     {
-                        uno::Reference< drawing::XDrawPage > xDrawPage( xDrawView->getCurrentPage() );
-
-                        if( xDrawPage.is() )
+                        /*
+                         *  Get the selection from the Slide Sorter Center Pane
+                         */
+                        if( !mSelectedPages.hasElements() )
                         {
-                            uno::Reference< beans::XPropertySet >( xDrawPage, uno::UNO_QUERY )->
-                                getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Number" ) ) ) >>= nCurrentPageNumber;
+                            uno::Reference< beans::XPropertySet > xControllerPropertySet( xController, uno::UNO_QUERY );
+                            uno::Reference< drawing::XDrawSubController > xSubController;
+                            xControllerPropertySet->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SubController" ) ) )
+                                    >>= xSubController;
+
+                            if( xSubController.is() )
+                            {
+                                uno::Any aSelection = xSubController->getSelection();
+                                if( aSelection.hasValue() )
+                                {
+                                    ObjectSequence aSelectedPageSequence;
+                                    aSelection >>= aSelectedPageSequence;
+                                    mSelectedPages.realloc( aSelectedPageSequence.getLength() );
+                                    for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
+                                    {
+                                        uno::Reference< drawing::XDrawPage > xDrawPage( aSelectedPageSequence[i],  uno::UNO_QUERY );
+                                        mSelectedPages[i] = xDrawPage;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }
 
-        Sequence< PropertyValue > aNewDescriptor( rDescriptor );
-
-        if( nCurrentPageNumber > 0 )
+        /*
+         * Export all slides
+         */
+        if( !mSelectedPages.hasElements() )
         {
-            const sal_uInt32    nOldLength = rDescriptor.getLength();
+            uno::Reference< drawing::XMasterPagesSupplier >        xMasterPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
+            uno::Reference< drawing::XDrawPagesSupplier >        xDrawPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
 
-            aNewDescriptor.realloc( nOldLength + 1 );
-            aNewDescriptor[ nOldLength ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PagePos" ) );
-            aNewDescriptor[ nOldLength ].Value <<= static_cast< sal_Int16 >( nCurrentPageNumber - 1 );
+            if( xMasterPagesSupplier.is() && xDrawPagesSupplier.is() )
+            {
+                uno::Reference< drawing::XDrawPages >   xMasterPages( xMasterPagesSupplier->getMasterPages(), uno::UNO_QUERY );
+                uno::Reference< drawing::XDrawPages >   xDrawPages( xDrawPagesSupplier->getDrawPages(), uno::UNO_QUERY );
+                if( xMasterPages.is() && xMasterPages->getCount() &&
+                    xDrawPages.is() && xDrawPages->getCount() )
+                {
+                    sal_Int32 nDPCount = xDrawPages->getCount();
+
+                    mSelectedPages.realloc( nDPCount );
+                    sal_Int32 i;
+                    for( i = 0; i < nDPCount; ++i )
+                    {
+                        uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
+                        mSelectedPages[i] = xDrawPage;
+                    }
+                }
+            }
         }
 
-        bRet = implExport( aNewDescriptor );
+        /*
+         *  We get all master page that are targeted by at least one draw page.
+         *  The master page are put in an unordered set.
+         */
+        ObjectSet aMasterPageTargetSet;
+        for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
+        {
+            uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( mSelectedPages[i], uno::UNO_QUERY );
+            if( xMasterPageTarget.is() )
+            {
+                aMasterPageTargetSet.insert( xMasterPageTarget->getMasterPage() );
+            }
+        }
+        // Later we move them to a uno::Sequence so we can get them by index
+        mMasterPageTargets.realloc( aMasterPageTargetSet.size() );
+        ObjectSet::const_iterator aElem = aMasterPageTargetSet.begin();
+        for( sal_Int32 i = 0; aElem != aMasterPageTargetSet.end(); ++aElem, ++i)
+        {
+            uno::Reference< drawing::XDrawPage > xMasterPage( *aElem,  uno::UNO_QUERY );
+            mMasterPageTargets[i] = xMasterPage;
+        }
+
+        bRet = implExport( rDescriptor );
     }
     else
         bRet = sal_False;

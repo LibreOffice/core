@@ -1174,7 +1174,14 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
     }
 
+    // this class attribute is used by the JavaScript based presentation engine
+    // to modify the text content of placeholder text shapes of the master slide
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextBlock" ) );
+
     mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
+
+    // for each line of text there should be at least one group element of class TextBlock
+    SvXMLElementExport aSVGGElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_False );
 
     if( nLen > 1 )
     {
@@ -1840,7 +1847,10 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         ImplMap( Size( 0, aFont.GetHeight() ), aSz );
 
                         aFont.SetHeight( aSz.Height() );
-                        mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
+                        // lead to a browser error since it duplicates the stroke and
+                        // the fill attributes on the first glyph of each line when
+                        // the text font is the same
+                        //mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
                         mpContext->SetFontAttr( aFont );
                         ImplWriteText( pA->GetPoint(), aText, NULL, 0 );
                     }
@@ -1862,7 +1872,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         ImplMap( Size( 0, aFont.GetHeight() ), aSz );
 
                         aFont.SetHeight( aSz.Height() );
-                        mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
+                        //mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
                         mpContext->SetFontAttr( aFont );
                         ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), NULL, 0 );
                     }
@@ -1885,7 +1895,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         ImplMap( Size( 0, aFont.GetHeight() ), aSz );
 
                         aFont.SetHeight( aSz.Height() );
-                        mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
+                        //mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
                         mpContext->SetFontAttr( aFont );
                         ImplWriteText( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
                     }
@@ -1908,7 +1918,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         ImplMap( Size( 0, aFont.GetHeight() ), aSz );
 
                         aFont.SetHeight( aSz.Height() );
-                        mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
+                        //mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
                         mpContext->SetFontAttr( aFont );
                         ImplWriteText( pA->GetPoint(), aText, NULL, pA->GetWidth() );
                     }
