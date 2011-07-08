@@ -30,6 +30,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "emfwr.hxx"
+#include <rtl/strbuf.hxx>
 #include <vcl/salbtype.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
