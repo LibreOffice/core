@@ -4289,26 +4289,6 @@ void MA_FASTCALL lcl_SubTopBottom( SwRect&              _iorRect,
     }
 }
 
-// method called for top and bottom border rectangles.
-void MA_FASTCALL lcl_SubLeftRight( SwRect&           rRect,
-                                   const SvxBoxItem& rBox,
-                                   const SwRectFn&   rRectFn )
-{
-    if ( rBox.GetLeft() && rBox.GetLeft()->GetInWidth() )
-    {
-        const long nDist = ::lcl_MinWidthDist( rBox.GetLeft()->GetDistance() )
-                           + ::lcl_AlignWidth( rBox.GetLeft()->GetOutWidth() );
-        (rRect.*rRectFn->fnSubLeft)( -nDist );
-    }
-
-    if ( rBox.GetRight() && rBox.GetRight()->GetInWidth() )
-    {
-        const long nDist = ::lcl_MinWidthDist( rBox.GetRight()->GetDistance() )
-                           + ::lcl_AlignWidth( rBox.GetRight()->GetOutWidth() );
-        (rRect.*rRectFn->fnAddRight)( -nDist );
-    }
-}
-
 sal_uInt16 lcl_GetLineWidth( const SvxBorderLine* pLine )
 {
     sal_uInt16 result = 0;
