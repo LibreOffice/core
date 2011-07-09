@@ -377,30 +377,6 @@ sal_Int32 lcl_getSequenceLengthByRole(
     return 0;
 }
 
-bool lcl_hasChartType( const Reference< chart2::XDiagram > & xDiagram, const OUString & rChartType )
-{
-    try
-    {
-        Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
-        {
-            Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
-            Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
-            for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
-            {
-                if( aChartTypes[nCTIdx]->getChartType().equals( rChartType ))
-                    return true;
-            }
-        }
-    }
-    catch( uno::Exception & )
-    {
-        OSL_FAIL( "Exception while searching for chart type in diagram" );
-    }
-    return false;
-}
-
 OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
 {
     OUStringBuffer aResult;
