@@ -111,7 +111,6 @@
 
 void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet );
 void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
-sal_Bool lcl_FontChangedHint( const SfxHint &rHint );
 
 // namespaces
 using ::rtl::OUString;
@@ -2628,23 +2627,6 @@ void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemS
     rWin.SetOutputSizePixel( aSize );
 }
 
-// -----------------------------------------------------------------------
-
-sal_Bool lcl_FontChangedHint( const SfxHint &rHint )
-{
-    SfxPoolItemHint *pItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
-    if ( pItemHint )
-    {
-        SfxPoolItem *pItem = pItemHint->GetObject();
-        return ( pItem->Which() == SID_ATTR_CHAR_FONTLIST );
-    }
-    else
-    {
-        SfxSimpleHint* pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
-        return pSimpleHint && ( SFX_HINT_DATACHANGED ==
-                            ( pSimpleHint->GetId() & SFX_HINT_DATACHANGED ) );
-    }
-}
 // -----------------------------------------------------------------------------
 Reference< ::com::sun::star::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
 {
