@@ -102,13 +102,6 @@ sal_Bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetSt
 
 // -----------------------------------------------------------------------------
 
-sal_Bool WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rMTF )
-{
-    return WMFWriter().WriteWMF( rMTF, rStream, NULL );
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )
 {
     return WMFWriter().WriteWMF( rMTF, rStream, NULL, sal_False );
