@@ -88,7 +88,6 @@ struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold memb
 class SfxViewFrame;
 
 sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID );
-sal_Bool SupportsCommandGroup( sal_Int16 nCommandGroup );
 sal_Int16 MapCommandGroupToGroupID( sal_Int16 nCommandGroup );
 
 //________________________________________________________________________________________________________

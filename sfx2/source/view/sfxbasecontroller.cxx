@@ -217,14 +217,6 @@ sal_Int16 MapCommandGroupToGroupID( sal_Int16 nCommandGroup )
     return -1;
 }
 
-sal_Bool SupportsCommandGroup( sal_Int16 nCommandGroup )
-{
-    if (( nCommandGroup >= 0 ) && ( nCommandGroup <= MAX_COMMANDGROUP ))
-        return sal_True;
-    else
-        return sal_False;
-}
-
 sal_uInt32 Get10ThSec()
 {
     sal_uInt32 n10Ticks = 10 * (sal_uInt32)clock();
