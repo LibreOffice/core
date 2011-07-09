@@ -484,18 +484,6 @@ String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
 
     return aTmp;
 }
-
-String TempFile::GetTempNameBaseDirectory()
-{
-    const ::rtl::OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
-    if ( !rTempNameBase_Impl.getLength() )
-        return String();
-
-    rtl::OUString aTmp;
-    FileBase::getSystemPathFromFileURL( rTempNameBase_Impl, aTmp );
-    return aTmp;
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
