@@ -103,4 +103,8 @@ $(eval $(call gb_RdbTarget_add_old_components,sw_filters_test,\
     ucpfile1 \
 ))
 
+# we need to explicitly depend on library msword because it is not implied
+# by a link relation
+$(call gb_CppunitTest_get_target,sw_filters_test) : $(call gb_Library_get_target,msword)
+
 # vim: set noet sw=4:
