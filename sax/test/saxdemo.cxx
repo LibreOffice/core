@@ -36,6 +36,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <cstring>
 
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -92,7 +93,7 @@ public:
         {
             return readBytes( aData, nMaxBytesToRead );
         }
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+    virtual void SAL_CALL skipBytes( sal_Int32 /* nBytesToSkip */ )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
         {
             // not implemented
@@ -107,8 +108,8 @@ public:
         {
             // not needed
         }
-    sal_Int32 nPos;
     Sequence< sal_Int8> m_seq;
+    sal_Int32 nPos;
 };
 
 //-------------------------------
@@ -155,11 +156,11 @@ public: // Error handler
             Reference < XInterface >() ,
             aSAXParseException );
     }
-    virtual void SAL_CALL fatalError(const Any& aSAXParseException) throw (SAXException, RuntimeException)
+    virtual void SAL_CALL fatalError(const Any& /* aSAXParseException */) throw (SAXException, RuntimeException)
     {
         printf( "Fatal Error !\n" );
     }
-    virtual void SAL_CALL warning(const Any& aSAXParseException) throw (SAXException, RuntimeException)
+    virtual void SAL_CALL warning(const Any& /* aSAXParseException */) throw (SAXException, RuntimeException)
     {
         printf( "Warning !\n" );
     }
@@ -182,7 +183,7 @@ public: // ExtendedDocumentHandler
                 m_iElementCount, m_iAttributeCount, m_iWhitespaceCount , m_iCharCount );
 
     }
-    virtual void SAL_CALL startElement(const OUString& aName,
+    virtual void SAL_CALL startElement(const OUString& /* aName */,
                               const Reference< XAttributeList > & xAttribs)
         throw (SAXException,RuntimeException)
     {
@@ -190,7 +191,7 @@ public: // ExtendedDocumentHandler
         m_iAttributeCount += xAttribs->getLength();
     }
 
-    virtual void SAL_CALL endElement(const OUString& aName) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL endElement(const OUString& /* aName */) throw (SAXException,RuntimeException)
     {
         // ignored
     }
@@ -204,12 +205,12 @@ public: // ExtendedDocumentHandler
         m_iWhitespaceCount += aWhitespaces.getLength();
     }
 
-    virtual void SAL_CALL processingInstruction(const OUString& aTarget, const OUString& aData) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL processingInstruction(const OUString& /* aTarget */, const OUString& /* aData */) throw (SAXException,RuntimeException)
     {
         // ignored
     }
 
-    virtual void SAL_CALL setDocumentLocator(const Reference< XLocator> & xLocator)
+    virtual void SAL_CALL setDocumentLocator(const Reference< XLocator> & /* xLocator */)
         throw (SAXException,RuntimeException)
     {
         // ignored
@@ -218,7 +219,7 @@ public: // ExtendedDocumentHandler
     virtual InputSource SAL_CALL resolveEntity(
         const OUString& sPublicId,
         const OUString& sSystemId)
-        throw (SAXException,RuntimeException)
+        throw (RuntimeException)
     {
         InputSource source;
         source.sSystemId = sSystemId;
@@ -233,13 +234,13 @@ public: // ExtendedDocumentHandler
     virtual void SAL_CALL startCDATA(void) throw (SAXException,RuntimeException)
     {
     }
-    virtual void SAL_CALL endCDATA(void) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL endCDATA(void) throw (RuntimeException)
     {
     }
-    virtual void SAL_CALL comment(const OUString& sComment) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL comment(const OUString& /* sComment */) throw (SAXException,RuntimeException)
     {
     }
-    virtual void SAL_CALL unknown(const OUString& sString) throw (SAXException,RuntimeException)
+    virtual void SAL_CALL unknown(const OUString& /* sString */) throw (SAXException,RuntimeException)
     {
     }
 
@@ -289,13 +290,13 @@ private:
 struct TagAttribute
 {
     TagAttribute(){}
-    TagAttribute( const OUString &sName,
-                  const OUString &sType ,
-                  const OUString &sValue )
+    TagAttribute( const OUString &s_Name,
+                  const OUString &s_Type ,
+                  const OUString &s_Value )
     {
-        this->sName     = sName;
-        this->sType     = sType;
-        this->sValue    = sValue;
+        this->sName     = s_Name;
+        this->sType     = s_Type;
+        this->sValue    = s_Value;
     }
 
     OUString sName;
@@ -329,7 +330,7 @@ AttributeListImpl::AttributeListImpl( const AttributeListImpl &r )
 
 OUString AttributeListImpl::getNameByIndex(sal_Int16 i) throw  (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
+    if( i < sal::static_int_cast<sal_Int16>(m_pImpl->vecAttribute.size()) ) {
         return m_pImpl->vecAttribute[i].sName;
     }
     return OUString();
@@ -338,7 +339,7 @@ OUString AttributeListImpl::getNameByIndex(sal_Int16 i) throw  (RuntimeException
 
 OUString AttributeListImpl::getTypeByIndex(sal_Int16 i) throw  (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
+    if( i < sal::static_int_cast<sal_Int16>(m_pImpl->vecAttribute.size()) ) {
         return m_pImpl->vecAttribute[i].sType;
     }
     return OUString();
@@ -346,7 +347,7 @@ OUString AttributeListImpl::getTypeByIndex(sal_Int16 i) throw  (RuntimeException
 
 OUString AttributeListImpl::getValueByIndex(sal_Int16 i) throw  (RuntimeException)
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
+    if( i < sal::static_int_cast<sal_Int16>(m_pImpl->vecAttribute.size()) ) {
         return m_pImpl->vecAttribute[i].sValue;
     }
     return OUString();
@@ -418,11 +419,12 @@ void writeParagraphHelper(
 {
     int nMax = s.getLength();
     int nStart = 0;
+    int n = 1;
 
     Sequence<sal_uInt16> seq( s.getLength() );
     memcpy( seq.getArray() , s.getStr() , s.getLength() * sizeof( sal_uInt16 ) );
 
-    for( int n = 1 ; n < nMax ; n++ ){
+    for( n = 1 ; n < nMax ; n++ ){
         if( 32 == seq.getArray()[n] ) {
             r->allowLineBreak();
             r->characters( s.copy( nStart , n - nStart ) );
