@@ -455,10 +455,12 @@ void Animation::ImplRestartTimer( sal_uLong nTimeout )
 }
 
 // -----------------------------------------------------------------------
+typedef ::std::vector< AInfo* > AInfoList_impl;
 
 IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
 {
     const size_t nAnimCount = maList.size();
+    AInfoList_impl aAInfoList;
 
     if( nAnimCount )
     {
@@ -471,13 +473,14 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
 
             // create AInfo-List
             for( pView = (ImplAnimView*) mpViewList->First(); pView; pView = (ImplAnimView*) mpViewList->Next() )
-                maAInfoList.Insert( pView->ImplCreateAInfo() );
+                aAInfoList.push_back( pView->ImplCreateAInfo() );
 
             maNotifyLink.Call( this );
 
             // set view state from AInfo structure
-            for( pAInfo = (AInfo*) maAInfoList.First(); pAInfo; pAInfo = (AInfo*) maAInfoList.Next() )
+            for( size_t i = 0, n = aAInfoList.size(); i < n; ++i )
             {
+                pAInfo = aAInfoList[ i ];
                 if( !pAInfo->pViewData )
                 {
                     pView = new ImplAnimView( this, pAInfo->pOutDev,
@@ -493,9 +496,9 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
             }
 
             // delete AInfo structures
-            for( pAInfo = (AInfo*) maAInfoList.First(); pAInfo; pAInfo = (AInfo*) maAInfoList.Next() )
-                delete (AInfo*) pAInfo;
-            maAInfoList.Clear();
+            for( size_t i = 0, n = aAInfoList.size(); i < n; ++i )
+                delete aAInfoList[ i ];
+            aAInfoList.clear();
 
             // delete all unmarked views and reset marked state
             pView = (ImplAnimView*) mpViewList->First();

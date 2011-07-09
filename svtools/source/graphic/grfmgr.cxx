@@ -547,11 +547,6 @@ void GraphicObject::SetAnimationNotifyHdl( const Link& rLink )
     maGraphic.SetAnimationNotifyHdl( rLink );
 }
 
-List* GraphicObject::GetAnimationInfoList() const
-{
-    return maGraphic.GetAnimationInfoList();
-}
-
 sal_Bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                           const GraphicAttr* pAttr, sal_uLong nFlags )
 {

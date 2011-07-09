@@ -662,13 +662,6 @@ void Graphic::ResetAnimationLoopCount()
 
 // ------------------------------------------------------------------------
 
-List* Graphic::GetAnimationInfoList() const
-{
-    return mpImpGraphic->ImplGetAnimationInfoList();
-}
-
-// ------------------------------------------------------------------------
-
 GraphicReader* Graphic::GetContext()
 {
     return mpImpGraphic->ImplGetContext();

@@ -409,7 +409,6 @@ public:
     sal_Bool                HasRenderGraphic() const { return mbHasRenderGraphic; }
 
     void                    ResetAnimationLoopCount();
-    List*                   GetAnimationInfoList() const;
     Link                    GetAnimationNotifyHdl() const { return maGraphic.GetAnimationNotifyHdl(); }
     void                    SetAnimationNotifyHdl( const Link& rLink );
 

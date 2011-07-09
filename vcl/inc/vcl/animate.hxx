@@ -152,7 +152,6 @@ class VCL_DLLPUBLIC Animation
     SAL_DLLPRIVATE static sal_uLong     mnAnimCount;
 
     AnimationBitmapList_impl    maList;
-    List                    maAInfoList;
     Link                    maNotifyLink;
     BitmapEx                maBitmapEx;
     Timer                   maTimer;
@@ -241,7 +240,6 @@ public:
     const AnimationBitmap&  Get( sal_uInt16 nAnimation ) const;
     void                    Replace( const AnimationBitmap& rNewAnimationBmp, sal_uInt16 nAnimation );
 
-    List*                   GetAInfoList() { return &maAInfoList; }
     sal_uLong               GetSizeBytes() const;
     sal_uLong               GetChecksum() const;
 

@@ -178,8 +178,6 @@ public:
     sal_uLong               GetAnimationLoopCount() const;
     void                ResetAnimationLoopCount();
 
-    List*               GetAnimationInfoList() const;
-
     sal_uLong               GetChecksum() const;
 
 public:
