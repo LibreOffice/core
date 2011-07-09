@@ -143,35 +143,6 @@ inline int IsUpperLetter( sal_Int32 nCharType )
             0 == ( ::com::sun::star::i18n::KCharacterType::LOWER & nCharType);
 }
 
-bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const String& rTxt,
-                           xub_StrLen nStt, xub_StrLen nEnd )
-{
-    for( ; nStt < nEnd; ++nStt )
-    {
-        short nScript = rCC.getScript( rTxt, nStt );
-        switch( nScript )
-        {
-            case ::com::sun::star::i18n::UnicodeScript_kCJKRadicalsSupplement:
-            case ::com::sun::star::i18n::UnicodeScript_kHangulJamo:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKSymbolPunctuation:
-            case ::com::sun::star::i18n::UnicodeScript_kHiragana:
-            case ::com::sun::star::i18n::UnicodeScript_kKatakana:
-            case ::com::sun::star::i18n::UnicodeScript_kHangulCompatibilityJamo:
-            case ::com::sun::star::i18n::UnicodeScript_kEnclosedCJKLetterMonth:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibility:
-            case ::com::sun::star::i18n::UnicodeScript_k_CJKUnifiedIdeographsExtensionA:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKUnifiedIdeograph:
-            case ::com::sun::star::i18n::UnicodeScript_kHangulSyllable:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibilityIdeograph:
-            case ::com::sun::star::i18n::UnicodeScript_kHalfwidthFullwidthForm:
-                return true;
-            default: ; //do nothing
-        }
-
-    }
-    return false;
-}
-
 sal_Bool lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
                            xub_StrLen nStt, xub_StrLen nEnd )
 {
