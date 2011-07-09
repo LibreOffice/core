@@ -7403,10 +7403,12 @@ bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
     return (rSt.Read(pDest, nLength) == static_cast<sal_Size>(nLength));
 }
 
+#ifdef OSL_BIGENDIAN
 void swapEndian(sal_Unicode *pString)
 {
     for (sal_Unicode *pWork = pString; *pWork; ++pWork)
         *pWork = SWAPSHORT(*pWork);
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

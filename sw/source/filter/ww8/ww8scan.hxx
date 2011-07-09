@@ -1789,7 +1789,9 @@ bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength);
 const sal_uInt16 lLetterWidth = 12242;
 const sal_uInt16 lLetterHeight = 15842;
 
+#ifdef OSL_BIGENDIAN
 void swapEndian(sal_Unicode *pString);
+#endif
 
 #endif
 
