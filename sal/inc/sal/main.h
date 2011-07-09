@@ -68,7 +68,7 @@ int SAL_CALL main(int argc, char ** argv) \
 #define SAL_MAIN_IMPL \
 SAL_MAIN_WITH_ARGS_IMPL \
  \
-int \
+static int \
 sal_main_with_args(int argc, char ** argv) \
 { \
     return sal_main(); \
@@ -78,7 +78,7 @@ sal_main_with_args(int argc, char ** argv) \
 }
 @end
 
-int sal_main_with_args(int argc, char **argv);
+static int sal_main_with_args(int argc, char **argv);
 
 @implementation salAppDelegate
 
