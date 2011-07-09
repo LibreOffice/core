@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -279,17 +279,11 @@ sal_Bool SAXParser::Parse( ParseAction aAct )
         }
         catch( class SAXParseException & rPEx)
         {
-#ifdef DBG_ERROR
-            String aMemo( rPEx.Message );
-            aMemo = String( aMemo );
-#endif
+            // TODO
         }
         catch( class Exception & rEx)
         {
-#ifdef DBG_ERROR
-            String aMemo( rEx.Message );
-            aMemo = String( aMemo );
-#endif
+            // TODO
         }
         xParser->setErrorHandler( NULL );   // otherwile Object holds itself
         if ( aAction == COLLECT_DATA || aAction == COLLECT_DATA_IGNORE_WHITESPACE )
@@ -357,7 +351,7 @@ void SAXParser::startElement( const ::rtl::OUString& aName, const ::com::sun::st
 
 void SAXParser::endElement( const ::rtl::OUString& aName ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
-    (void) aName; /* avoid warning about unused parameter */
+    (void) aName; /* avoid warning about unused parameter */ 
     xCurrentNode = xCurrentNode->GetParent();
 }
 
@@ -381,18 +375,18 @@ void SAXParser::characters( const ::rtl::OUString& aChars ) throw (::com::sun::s
 
 void SAXParser::ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
-    (void) aWhitespaces; /* avoid warning about unused parameter */
+    (void) aWhitespaces; /* avoid warning about unused parameter */ 
 }
 
 void SAXParser::processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
-    (void) aTarget; /* avoid warning about unused parameter */
-    (void) aData; /* avoid warning about unused parameter */
+    (void) aTarget; /* avoid warning about unused parameter */ 
+    (void) aData; /* avoid warning about unused parameter */ 
 }
 
 void SAXParser::setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
-    (void) xLocator; /* avoid warning about unused parameter */
+    (void) xLocator; /* avoid warning about unused parameter */ 
 #if OSL_DEBUG_LEVEL > 1
     ::rtl::OUString aTester;
     aTester = xLocator->getPublicId();
@@ -496,7 +490,7 @@ void StatementCommand::HandleSAXParser()
             break;
         case RC_SAXGetNodeType:
             {
-                   pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)pSAXParser->GetCurrentNode()->GetNodeType() );
+                   pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)pSAXParser->GetCurrentNode()->GetNodeType() );
             }
             break;
         case RC_SAXGetAttributeCount:
@@ -514,17 +508,17 @@ void StatementCommand::HandleSAXParser()
                             pRet->GenReturn ( RET_Value, nMethodId, pElementNode->GetNodeName() );
                             break;
                         case RC_SAXGetChildCount:
-                            pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)pElementNode->GetChildCount() );
+                            pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)pElementNode->GetChildCount() );
                             break;
                         case RC_SAXGetAttributeCount:
                             if ( xAttributeList.is() )
-                                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)xAttributeList->getLength() );
+                                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)xAttributeList->getLength() );
                             else
-                                pRet->GenReturn ( RET_Value, nMethodId, (comm_ULONG)0 );
+                                pRet->GenReturn ( RET_Value, nMethodId, (comm_UINT32)0 );
                             break;
                         case RC_SAXGetAttributeName:
                             {
-                                if( (nParams & PARAM_USHORT_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
+                                if( (nParams & PARAM_UINT16_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
                                 {
                                     String aRet( xAttributeList->getNameByIndex( nNr1-1 ) );
                                     pRet->GenReturn ( RET_Value, nMethodId, aRet );
@@ -536,7 +530,7 @@ void StatementCommand::HandleSAXParser()
                         case RC_SAXGetAttributeValue:
                             // Number or String
                             {
-                                if( (nParams & PARAM_USHORT_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
+                                if( (nParams & PARAM_UINT16_1) && ValueOK( rtl::OString(), RcString( nMethodId ), nNr1, xAttributeList.is()?xAttributeList->getLength():0 ) )
                                 {
                                     String aRet( xAttributeList->getValueByIndex( nNr1-1 ) );
                                     pRet->GenReturn ( RET_Value, nMethodId, aRet );
@@ -578,7 +572,7 @@ void StatementCommand::HandleSAXParser()
             {
                 sal_Bool bCheckOnly = nMethodId == RC_SAXHasElement;
 
-                if( (nParams & PARAM_USHORT_1) && !(nParams & PARAM_STR_1) )
+                if( (nParams & PARAM_UINT16_1) && !(nParams & PARAM_STR_1) )
                 {
                     if ( nNr1 == 0 )
                     {
@@ -623,7 +617,7 @@ void StatementCommand::HandleSAXParser()
                     else if ( pElementNode )
                     {
                         sal_uInt16 nNthOccurrence;
-                        if( (nParams & PARAM_USHORT_1) )
+                        if( (nParams & PARAM_UINT16_1) )
                             nNthOccurrence = nNr1;
                         else
                             nNthOccurrence = 1;
