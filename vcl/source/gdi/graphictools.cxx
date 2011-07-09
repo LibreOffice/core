@@ -675,26 +675,6 @@ void SvtGraphicFill::setHatchColor( Color aHatchColor )
     maHatchColor = aHatchColor;
 }
 
-void SvtGraphicFill::setGradientType( GradientType aGradType )
-{
-    maGradientType = aGradType;
-}
-
-void SvtGraphicFill::setGradient1stColor( Color aColor )
-{
-    maGradient1stColor = aColor;
-}
-
-void SvtGraphicFill::setGradient2ndColor( Color aColor )
-{
-    maGradient2ndColor = aColor;
-}
-
-void SvtGraphicFill::setGradientStepCount( int aCount )
-{
-    maGradientStepCount = aCount;
-}
-
 void SvtGraphicFill::setGraphic( const Graphic& rGraphic )
 {
     maFillGraphic = rGraphic;
