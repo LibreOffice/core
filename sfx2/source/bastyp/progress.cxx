@@ -59,22 +59,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
-void AddNumber_Impl( String& aNumber, sal_uInt32 nArg )
-{
-    if ( nArg >= 10240 )
-    {
-        aNumber += String::CreateFromInt32( (sal_uInt16)( ( nArg + 512 ) / 1024 ) );
-        aNumber += ' ';
-        aNumber += SfxResId( STR_KB );
-    }
-    else
-    {
-        aNumber += String::CreateFromInt32( nArg );
-        aNumber += ' ';
-        aNumber += SfxResId( STR_BYTES );
-    }
-}
-
 struct SfxProgress_Impl
 {
     Reference < XStatusIndicator > xStatusInd;
