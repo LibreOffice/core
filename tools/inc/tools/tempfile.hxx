@@ -72,7 +72,6 @@ public:
                     // The argument must be a simple name, not a complete URL.
                     // The return value of both methods is the complete URL of the tempname base folder.
     static String   SetTempNameBaseDirectory( const String &rBaseName );
-    static String   GetTempNameBaseDirectory();
 };
 
 #endif
