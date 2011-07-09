@@ -145,11 +145,13 @@ struct AInfo
 // - AnimationBitmap -
 // -------------------
 
+typedef ::std::vector< AnimationBitmap* > AnimationBitmapList_impl;
+
 class VCL_DLLPUBLIC Animation
 {
-    SAL_DLLPRIVATE static sal_uLong         mnAnimCount;
+    SAL_DLLPRIVATE static sal_uLong     mnAnimCount;
 
-    List                    maList;
+    AnimationBitmapList_impl    maList;
     List                    maAInfoList;
     Link                    maNotifyLink;
     BitmapEx                maBitmapEx;
@@ -159,7 +161,7 @@ class VCL_DLLPUBLIC Animation
     void*                   mpExtraData;
     long                    mnLoopCount;
     long                    mnLoops;
-    long                    mnPos;
+    size_t                  mnPos;
     Disposal                meLastDisposal;
     CycleMode               meCycleMode;
     sal_Bool                mbFirst;
@@ -234,7 +236,7 @@ public:
     void                    SetNotifyHdl( const Link& rLink ) { maNotifyLink = rLink; }
     const Link&             GetNotifyHdl() const { return maNotifyLink; }
 
-    sal_uInt16              Count() const { return (sal_uInt16) maList.Count(); }
+    size_t                  Count() const { return maList.size(); }
     sal_Bool                Insert( const AnimationBitmap& rAnimationBitmap );
     const AnimationBitmap&  Get( sal_uInt16 nAnimation ) const;
     void                    Replace( const AnimationBitmap& rNewAnimationBmp, sal_uInt16 nAnimation );
