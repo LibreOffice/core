@@ -76,25 +76,6 @@ static const sal_uInt16 nDefBulletWidth = 700;
 static const sal_uInt16 pDefBulletIndents[nDefStyles]=  { 1400, 800, 800 };
 static const sal_uInt16 pDefBulletWidths[nDefStyles] =  { 1000, 850, 700 };
 
-sal_uInt16 lcl_ImplGetDefBulletWidth( sal_Int16 nDepth )
-{
-    return ( nDepth < nDefStyles ) ? pDefBulletWidths[nDepth] : nDefBulletWidth;
-}
-
-sal_uInt16 lcl_ImplGetDefBulletIndent( sal_Int16 nDepth )
-{
-    sal_uInt16 nI = 0;
-
-    if( nDepth >= 0 )
-    {
-        for ( sal_Int16 n = 0; n <= nDepth; n++ )
-            nI = nI +
-                ( ( n < nDefStyles ) ? pDefBulletIndents[n] : nDefBulletIndent );
-    }
-    return nI;
-}
-
-
 // ----------------------------------------------------------------------
 // Outliner
 // ----------------------------------------------------------------------
