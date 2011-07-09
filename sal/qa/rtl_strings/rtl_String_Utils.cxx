@@ -206,43 +206,6 @@ sal_uInt32 UStringLen( const sal_Unicode *pUStr )
 
 //------------------------------------------------------------------------
 
-sal_Bool AStringNIsValid( const sal_Char   *pAStr,
-                          const sal_uInt32  nStrLen
-                        )
-{
-    sal_uInt32 nLen  = nStrLen;
-    sal_uChar  uChar = 0;
-
-    while ( ( nLen >= 0 ) && ( *pAStr ) )
-    {
-        uChar = (unsigned char)*pAStr;
-
-        if ( uChar > 127 )
-        {
-            return sal_False;
-        } // if
-
-        pAStr++;
-
-        // Since we are dealing with unsigned integers
-        // we want to make sure that the last number is
-        // indeed zero.
-
-        if ( nLen > 0 )
-        {
-            nLen--;
-        } // if
-        else
-        {
-            break;
-        } // else
-    } // while
-
-    return sal_True;
-} // AStringNIsValid
-
-//------------------------------------------------------------------------
-
 static inline sal_Int32 ACharToUCharCompare( const sal_Unicode *pUStr,
                                              const sal_Char    *pAStr
                                            )
@@ -255,69 +218,5 @@ static inline sal_Int32 ACharToUCharCompare( const sal_Unicode *pUStr,
 
     return  nCmp;
 } // ACharToUCharCompare
-
-//------------------------------------------------------------------------
-
-sal_Int32 AStringToUStringCompare( const sal_Unicode *pUStr,
-                                   const sal_Char    *pAStr
-                                 )
-{
-     sal_Int32 nCmp = kErrCompareAStringToUString;
-
-    if ( ( pUStr != NULL ) && ( pAStr != NULL ) )
-    {
-        nCmp = ACharToUCharCompare( pUStr, pAStr );
-
-        while ( ( nCmp == 0 ) && ( *pAStr ) )
-        {
-            pUStr++;
-            pAStr++;
-
-            nCmp = ACharToUCharCompare( pUStr, pAStr );
-        } // while
-    } // if
-
-    return nCmp;
-} // AStringToUStringCompare
-
-//------------------------------------------------------------------------
-
-sal_Int32 AStringToUStringNCompare( const sal_Unicode  *pUStr,
-                                    const sal_Char     *pAStr,
-                                    const sal_uInt32    nAStrCount
-                                   )
-{
-    sal_Int32 nCmp = kErrCompareNAStringToUString;
-
-    if ( ( pUStr != NULL ) && ( pAStr != NULL ) )
-    {
-        sal_uInt32 nCount = nAStrCount;
-
-        nCmp = ACharToUCharCompare( pUStr, pAStr );
-
-        while ( ( nCmp == 0 ) && ( *pAStr ) && ( nCount ) )
-        {
-            pUStr++;
-            pAStr++;
-
-            nCmp = ACharToUCharCompare( pUStr, pAStr );
-
-            // Since we are dealing with unsigned integers
-            // we want to make sure that the last number is
-            // indeed zero.
-
-            if ( nCount > 0 )
-            {
-                nCount--;
-            } // if
-            else
-            {
-                break;
-            } // else
-        } // while
-    } // if
-
-    return nCmp;
-} // AStringToUStringNCompare
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
