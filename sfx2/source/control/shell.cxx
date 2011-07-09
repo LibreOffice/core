@@ -93,31 +93,6 @@ struct SfxShell_Impl: public SfxBroadcaster
     ~SfxShell_Impl() { delete pExecuter; delete pUpdater;}
 };
 
-//====================================================================
-#ifdef DBG_UTIL
-
-String SfxShellIdent_Impl( const SfxShell *pSh )
-
-/*  [Description]
-
-    Internal helper function. Returns a SfxShell 'pSh' descriptive string.
-    For instance: SfxApplication [StarWriter]
-*/
-
-{
-    String aIdent( pSh->ISA(SfxApplication) ? DEFINE_CONST_UNICODE("SfxApplication") :
-                   pSh->ISA(SfxViewFrame) ? DEFINE_CONST_UNICODE("SfxViewFrame") :
-                   pSh->ISA(SfxViewShell) ? DEFINE_CONST_UNICODE("SfxViewShell") :
-                   pSh->ISA(SfxObjectShell) ? DEFINE_CONST_UNICODE("SfxObjectShell") : DEFINE_CONST_UNICODE("SfxShell") );
-    aIdent += '[';
-    aIdent += pSh->GetName();
-    aIdent += ']';
-    return aIdent;
-}
-
-#endif
-//====================================================================
-
 //=========================================================================
 // SfxShell
 //=========================================================================
