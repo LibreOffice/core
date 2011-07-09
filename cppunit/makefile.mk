@@ -118,11 +118,16 @@ MY_LIBS = -lm
 .END
 
 CONFIGURE_ACTION = ./configure
+
+.IF "$(debug)"!=""
+DEBUGFLAG=-g
+.ENDIF
+
 CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     pwd $(PWDFLAGS))/$(TARFILE_ROOTDIR)/ooo-install \
     --disable-dependency-tracking --disable-static --disable-doxygen \
     --disable-html-docs --disable-latex-docs CC='$(CC)' CXX='$(CXX)' \
-    CXXFLAGS='$(EXTRA_CFLAGS)' \
+    CXXFLAGS='$(EXTRA_CFLAGS) $(DEBUGFLAG)' \
     LDFLAGS='$(LDFLAGS)' \
     LIBS='$(MY_LIBS)'
 
