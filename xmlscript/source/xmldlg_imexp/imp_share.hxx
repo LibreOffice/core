@@ -193,7 +193,6 @@ public:
 
     inline css::uno::Reference< css::frame::XModel > getDocOwner() { return _xDoc; }
 
-    css::uno::Reference< css::script::XLibraryContainer > getScriptLibraryContainer();
     // XRoot
     virtual void SAL_CALL startDocument(
         css::uno::Reference< css::xml::input::XNamespaceMapping >

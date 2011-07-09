@@ -2027,28 +2027,7 @@ Reference< xml::input::XElement > DialogImport::getStyle(
     }
     return 0;
 }
-//__________________________________________________________________________________________________
-Reference< script::XLibraryContainer > DialogImport::getScriptLibraryContainer()
-{
-    if( !_xScriptLibraryContainer.is() )
-    {
-        try
-        {
-            Reference< beans::XPropertySet > xProps( _xDoc, UNO_QUERY );
-            if( xProps.is() )
-                _xScriptLibraryContainer.set( xProps->getPropertyValue( OUSTR("BasicLibraries") ), UNO_QUERY );
-        }
-        catch( const Exception& )
-        {
-        }
-    }
 
-    return _xScriptLibraryContainer;
-}
-
-//##################################################################################################
-
-//==================================================================================================
 Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     Reference< container::XNameContainer > const & xDialogModel,
     Reference< XComponentContext > const & xContext,
