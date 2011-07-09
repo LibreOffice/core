@@ -480,15 +480,6 @@ sal_Bool hasUno( void );
 // (Implemented in methods.cxx)
 String getFullPath( const String& aRelPath );
 
-// Sets (virtual) current path for UCB file access
-void implChDir( const String& aDir );
-
-// Sets (virtual) current drive for UCB file access
-void implChDrive( const String& aDrive );
-
-// Returns (virtual) current path for UCB file access
-String implGetCurDir( void );
-
 // Implementation of StepRENAME with UCB
 // (Implemented in methods.cxx, so step0.cxx
 // has not to be infected with UNO)
