@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-static const char aSVGScript[] =
+static const char aSVGScript1[] =
 "<![CDATA[\n\
 \n\
     /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \n\
@@ -335,8 +335,10 @@ static const char aSVGScript[] =
         else\n\
             return nIndex;\n\
     }\n\
-\n\
-\n\
+\n\ ";
+
+static const char aSVGScript2[] =
+"\n\
     // ------------------------------------------------------------------------------------------ //\n\
     /******************\n\
      ** Core Classes **\n\
@@ -714,8 +716,10 @@ static const char aSVGScript[] =
 \n\
         this.textElement = getElementByClassName( aParentElem, 'PlaceholderContent' );\n\
     };\n\
-\n\
-    \n\
+\n\ ";
+
+static const char aSVGScript3[] =
+"\n\
     // ------------------------------------------------------------------------------------------ //\n\
     /********************************\n\
      ** Text Field Class Hierarchy **\n\
@@ -837,9 +841,10 @@ static const char aSVGScript[] =
         // TODO handle page numbering type\n\
         return String( nSlideNumber );\n\
     };\n\
-    \n\
-    \n\
-    \n\
+\n\ ";
+
+static const char aSVGScript4[] =
+"\n\
     //------------------------------------------------------------------------------------------- //\n\
     /********************************\n\
      ** Slide Index Classes **\n\
@@ -1065,8 +1070,10 @@ static const char aSVGScript[] =
         ROOT_NODE.unsuspendRedraw( suspendHandle );\n\
         ROOT_NODE.forceRedraw();   \n\
     };\n\
-    \n\
-    \n\
+    \n\ ";
+
+static const char aSVGScript5[] =
+"\n\
     /** Class Thumbnail **\n\
      *  This class handles a slide thumbnail.\n\
      */\n\
@@ -1258,8 +1265,10 @@ static const char aSVGScript[] =
     };\n\
     \n\
     \n\
-    \n\
-\n\
+    \n\ ";
+
+static const char aSVGScript6[] =
+"\n\
     // ------------------------------------------------------------------------------------------ //\n\
     /** Initialization function.\n\
      *  The whole presentation is set-up in this function.\n\
@@ -1396,8 +1405,10 @@ static const char aSVGScript[] =
 \n\
         return charCodeDict;\n\
     }\n\
-    \n\
-\n\
+    \n\ ";
+
+static const char aSVGScript7[] =
+"\n\
     function slideOnMouseDown( aEvt )\n\
     {\n\
         if (!aEvt)\n\

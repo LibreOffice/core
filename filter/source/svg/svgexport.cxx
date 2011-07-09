@@ -1110,7 +1110,13 @@ sal_Bool SVGFilter::implGenerateScript()
 
         if( xExtDocHandler.is() )
         {
-            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript ) );
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript1 ) );
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript2 ) );
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript3 ) );
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript4 ) );
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript5 ) );
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript6 ) );
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript7 ) );
         }
     }
 
