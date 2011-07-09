@@ -75,7 +75,6 @@ extern "C"
     int    listSkipForward(list, int n);
     int    listToFirst(list);
     int    listToLast(list);
-    int    listPositionAt(list, int n);               /* Expensive! */
 
 /*- adding and removing elements */
     list   listAppend(list, void *);

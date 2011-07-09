@@ -201,21 +201,6 @@ int    listToLast(list this)
     return 0;
 }
 
-int    listPositionAt(list this, int n)                     /*- returns the actual position number */
-{
-    int m = 0;
-    assert(this != 0);
-
-    this->cptr = this->head;
-    while (n != 0) {
-        if (this->cptr->next == 0) break;
-        this->cptr = this->cptr->next;
-        n--;
-        m++;
-    }
-    return m;
-}
-
 list   listAppend(list this, void *el)
 {
     assert(this != 0);
