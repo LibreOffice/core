@@ -140,24 +140,6 @@ int   listIsEmpty(list this)
     return this->aCount == 0;
 }
 
-int    listFind(list this, void *el)
-{
-    lnode *ptr;
-    assert(this != 0);
-
-    ptr = this->head;
-
-    while (ptr) {
-        if (ptr->value == el) {
-            this->cptr = ptr;
-            return 1;
-        }
-        ptr = ptr->next;
-    }
-
-    return 0;
-}
-
 int    listNext(list this)
 {
     return listSkipForward(this, 1);

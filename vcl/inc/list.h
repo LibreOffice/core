@@ -66,8 +66,6 @@ extern "C"
     int    listAtLast(list);
     int    listPosition(list);                        /* Expensive! */
 #endif
-/*- search */
-    int    listFind(list, void *);                    /* Returns true/false */
 
 /*- positioning functions */
 /*- return the number of elements by which the current position in the list changes */
