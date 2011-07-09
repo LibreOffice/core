@@ -67,28 +67,6 @@ public:
     inline UniString const & GetEmailAddress(sal_Int32 nIndex) const;
 
     inline UniString const &GetRealName(sal_Int32 nIndex) const;
-
-    /** Create an RFC 822 <mailbox> (i.e., 'e-mail address').
-
-        @param rPhrase  Either an empty string (the <mailbox> will have no
-        <phrase> an will be of the form <addr-spec>), or some text that will
-        become the <phrase> part of a <phrase route-addr> form <mailbox>.  Non
-        US-ASCII characters within the text are put into a <qouted-string>
-        verbatim, so the result may actually not be a valid RFC 822 <mailbox>,
-        but a more human-readable representation.
-
-        @param rAddrSpec  A valid RFC 822 <addr-spec>.  (An RFC 822 <mailbox>
-        including a <route> cannot be created by this method.)
-
-        @param rMailbox  If this method returns true, this parameter returns
-        the created RFC 822 <mailbox> (rather, a more human-readable
-        representation thereof).  Otherwise, this parameter is not modified.
-
-        @return  True, if rAddrSpec is a valid RFC 822 <addr-spec>.
-     */
-    static bool createRFC822Mailbox(String const & rPhrase,
-                                    String const & rAddrSpec,
-                                    String & rMailbox);
 };
 
 inline UniString const & SvAddressParser::GetEmailAddress(sal_Int32 nIndex)
