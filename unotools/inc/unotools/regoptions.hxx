@@ -111,12 +111,6 @@ namespace utl
             <p>If this method is called, the reminder for the dialog will be removed.
         */
         void                removeReminder();
-
-        /** checks if the reminder date has come
-
-            <p>Returns <true/> if the current date is greater or equal the reminder date.
-        */
-        bool                hasReminderDateCome() const;
     };
 
 //........................................................................
