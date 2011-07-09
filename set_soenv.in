@@ -1291,13 +1291,14 @@ elsif ($platform =~ m/cygwin|mingw32/)
                         $L.'$SOLARVER'.$ds.'$INPATH'.$LIB;
 }
 elsif ($platform =~ m/darwin/)
-{  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
-                        $L.$USR_LIB;
+{  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB;
+   if ($platform !~ m/^arm-apple/)
+   {  $SOLARLIB      .= $L.$USR_LIB;
+   }
     # [ed] 6/15/02 Add in X11 libraries onto the library path
     if ($GUIBASE eq "unx") {
        $SOLARLIB      .= $L.$XLIB;
     }
-
 }
 
 if ($SYSTEM_MOZILLA eq "YES")
