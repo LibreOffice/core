@@ -92,8 +92,6 @@ void MirrorXPoly(XPolyPolygon& rPoly, const Point& rRef1, const Point& rRef2);
 inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear = false);
 SVX_DLLPUBLIC void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
 void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
-void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
-void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
 
 // rPnt.X bzw rPnt.Y wird auf rCenter.X bzw. rCenter.Y gesetzt!
 // anschliessend muss rPnt nur noch um rCenter gedreht werden.

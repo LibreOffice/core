@@ -250,24 +250,6 @@ void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
     }
 }
 
-void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ShearPoly(rPoly[i],rRef,tn,bVShear);
-    }
-}
-
-void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ShearXPoly(rPoly[i],rRef,tn,bVShear);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
                          const Point& rRad, double& rSin, double& rCos, bool bVert)
 {
