@@ -59,6 +59,9 @@
 using namespace ::rtl;
 using namespace ::osl;
 
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::beans::PropertyValue;
+
 
 #define EXECUTER_WINDOWCLASS    "SO Executer Class"
 #define EXECUTER_WINDOWNAME     "SO Executer Window"
