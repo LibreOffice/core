@@ -1360,19 +1360,6 @@ void SfxBindings::UpdateSlotServer_Impl()
 
 //--------------------------------------------------------------------
 
-int SAL_CALL CmpUS_Impl(const void *p1, const void *p2)
-
-/*  [Description]
-
-    Internal Comparison function for qsort.
-*/
-
-{
-    return *(sal_uInt16 *)p1 - *(sal_uInt16 *)p2;
-}
-
-//--------------------------------------------------------------------
-
 SfxItemSet* SfxBindings::CreateSet_Impl
 (
     SfxStateCache*&         pCache,     // in: Status-Cache from nId
