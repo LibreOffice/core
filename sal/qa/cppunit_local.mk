@@ -25,6 +25,10 @@
 
 # cppunittester is built in this module; cannot use delivered version
 # this should be kept in sync with the definition in solenv/inc/settings.mk
+.IF "$(CROSS_COMPILING)"=="YES"
+CPPUNITTESTER=\#
+.ELSE
 CPPUNITTESTER = $(AUGMENT_LIBRARY_PATH_LOCAL) $(GDBCPPUNITTRACE) $(VALGRINDTOOL) $(BIN)/cppunittester
+.ENDIF
 
 .INCLUDE : _cppunit.mk
