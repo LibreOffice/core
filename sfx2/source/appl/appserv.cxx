@@ -145,16 +145,6 @@ using namespace ::com::sun::star::document;
 
 namespace css = com::sun::star;
 
-//-------------------------------------------------------------------------
-long QuitAgain_Impl( void* pObj, void* pArg )
-{
-    SfxApplication* pApp = (SfxApplication*)pObj;
-    Timer* pTimer = (Timer*)pArg;
-    delete pTimer;
-    pApp->GetDispatcher_Impl()->Execute( SID_QUITAPP, SFX_CALLMODE_ASYNCHRON );
-    return 0;
-}
-
 /// Find the correct location of the document (LICENSE.odt, etc.), and return
 /// it in rURL if found.
 static sal_Bool checkURL( const char *pName, const char *pExt, rtl::OUString &rURL )
