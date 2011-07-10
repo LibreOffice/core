@@ -35,8 +35,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(CROSS_COMPILING)"!="YES"
-
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -78,8 +76,6 @@ SHL2DEPN=$(APP3TARGETN) \
 # do this here, so we get right dependencies
 
 SLOFILES=$(SHL1OBJS) $(SHL2OBJS)
-
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

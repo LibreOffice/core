@@ -36,7 +36,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(CROSS_COMPILING)"!="YES"
+.IF "$(OS)" == "IOS"
+CFLAGSCXX += -DCPPUNIT_PLUGIN_EXPORTED_NAME=cppunitTest_$(TARGET)
+.ENDIF
 
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
@@ -72,9 +74,8 @@ SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME    =$(SHL2TARGET)
 SHL2VERSIONMAP= $(PRJ)$/qa$/export.map
-# END ------------------------------------------------------------------
 
-.ENDIF
+SLOFILES = $(SHL2OBJS)
 
 # --- Targets ------------------------------------------------------
 

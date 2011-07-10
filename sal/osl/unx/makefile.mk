@@ -49,6 +49,10 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
+.IF "$(OS)" == "IOS"
+CFLAGSCXX+=-D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
@@ -113,7 +117,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/readwrite_helper.obj
             
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="IOS"
 SLOFILES += $(SLO)$/osxlocale.obj
 .ENDIF
 

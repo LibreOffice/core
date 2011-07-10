@@ -63,11 +63,15 @@ const char pTestString[17] = "Sun Microsystems";
 //------------------------------------------------------------------------
 // condition names
 //------------------------------------------------------------------------
-OSLTEST_DECLARE_USTRING( NullURL,  "" );
 
-::rtl::OUString aLogonUser( aNullURL ), aLogonPasswd( aNullURL ), aFileServer( aNullURL ), aStringForward( aNullURL );
-::rtl::OUString strUserName( aNullURL ) , strComputerName( aNullURL ) , strHomeDirectory( aNullURL );
-::rtl::OUString strConfigDirectory( aNullURL ), strUserID( aNullURL );
+// Intentionally different from the aNullURL in osl_File_Const.h to avoid
+// duplicate symbols as all the unit tests here get linked together for iOS...
+
+OSLTEST_DECLARE_USTRING( NullUrl,  "" );
+
+::rtl::OUString aLogonUser( aNullUrl ), aLogonPasswd( aNullUrl ), aFileServer( aNullUrl ), aStringForward( aNullUrl );
+::rtl::OUString strUserName( aNullUrl ) , strComputerName( aNullUrl ) , strHomeDirectory( aNullUrl );
+::rtl::OUString strConfigDirectory( aNullUrl ), strUserID( aNullUrl );
 
 sal_Bool isAdmin = sal_False;
 
