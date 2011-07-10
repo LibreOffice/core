@@ -71,23 +71,6 @@ Fix ImpMultBig2( const Fix& a, const Fix& b )
 
 /**************************************************************************
 |*
-|*    ImpMultBig2()
-|*
-|*    Beschreibung       Multiplikation fuer FixPoint-Berechnungen
-|*
-**************************************************************************/
-
-//  first parameter should be the bigger one
-
-FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb )
-{
-    Fix rr = ImpMultBig2(ra.r,rb.r)-ImpMultBig2(ra.i,rb.i);
-    Fix ii = ImpMultBig2(ra.r,rb.i)+ImpMultBig2(ra.i,rb.r);
-    return FixCpx( rr,ii );
-}
-
-/**************************************************************************
-|*
 |*    ImpSqrt()
 |*
 |*    Beschreibung       Wurzelfunktion fuer FixPoint-Berechnungen

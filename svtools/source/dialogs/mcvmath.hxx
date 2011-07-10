@@ -75,8 +75,6 @@ private:
     friend  class FixCpx;
     friend  class ColWheel;
 
-//  friend  Fix ImpMultBig2( const Fix& a, const Fix& b );
-
 public:
     long            x;
 
@@ -122,8 +120,6 @@ public:
 
 class FixCpx
 {
-//  friend  FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb );
-
 public:
     Fix             r;
     Fix             i;
@@ -217,7 +213,6 @@ inline FixCpx operator/ ( const FixCpx& a, const FixCpx& b )
 // -----------------------------------------------------------------------
 
 Fix ImpMultBig2( const Fix& a, const Fix& b );
-FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb );
 
 sal_uInt16 ImpSqrt( sal_uLong nRadi );
 sal_uInt16 ImpATan2( const short x, const short y );
