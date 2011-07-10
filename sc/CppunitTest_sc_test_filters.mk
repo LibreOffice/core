@@ -33,8 +33,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_filters_test, \
     sc/qa/unit/filters-test \
 ))
 
-$(call gb_CxxObject_get_target,sc/qa/unit/filters-test): $(WORKDIR)/AllLangRes/sc
-
 $(eval $(call gb_CppunitTest_add_linked_libs,sc_filters_test, \
     sc \
     sfx \
@@ -102,5 +100,11 @@ $(eval $(call gb_RdbTarget_add_old_components,sc_filters_test,\
     ucb1 \
     ucpfile1 \
 ))
+
+# we need to
+# a) explicitly depend on library msword because it is not implied by a link
+#    relation
+# b) explicitly depend on the sc resource files needed at unit-test runtime
+$(call gb_CppunitTest_get_target,sc_filters_test) : $(call gb_Library_get_target,scfilt) $(WORKDIR)/AllLangRes/sc
 
 # vim: set noet sw=4:
