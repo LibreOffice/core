@@ -315,49 +315,6 @@ void Impl_OlePres::Write( SvStream & rStm )
     rStm.Seek( nEndPos );
 }
 
-Impl_OlePres * CreateCache_Impl( SotStorage * pStor )
-{
-    SotStorageStreamRef xOleObjStm =pStor->OpenSotStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Ole-Object" ) ),
-                                                        STREAM_READ | STREAM_NOCREATE );
-    if( xOleObjStm->GetError() )
-        return NULL;
-    SotStorageRef xOleObjStor = new SotStorage( *xOleObjStm );
-    if( xOleObjStor->GetError() )
-        return NULL;
-
-    String aStreamName;
-    if( xOleObjStor->IsContained( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres000" ) ) ) )
-        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres000" ) );
-    else if( xOleObjStor->IsContained( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole10Native" ) ) ) )
-        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole10Native" ) );
-
-    if( aStreamName.Len() == 0 )
-        return NULL;
-
-
-    for( sal_uInt16 i = 1; i < 10; i++ )
-    {
-        SotStorageStreamRef xStm = xOleObjStor->OpenSotStream( aStreamName,
-                                                STREAM_READ | STREAM_NOCREATE );
-        if( xStm->GetError() )
-            break;
-
-        xStm->SetBufferSize( 8192 );
-        Impl_OlePres * pEle = new Impl_OlePres( 0 );
-        if( pEle->Read( *xStm ) && !xStm->GetError() )
-        {
-            if( pEle->GetFormat() == FORMAT_GDIMETAFILE || pEle->GetFormat() == FORMAT_BITMAP )
-                return pEle;
-        }
-        delete pEle;
-        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres00" ) );
-        aStreamName += String( i );
-    };
-    return NULL;
-}
-
-
-
 //---------------------------------------------------------------------------
 //  Hilfs Klassen aus MSDFFDEF.HXX
 //---------------------------------------------------------------------------
