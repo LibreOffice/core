@@ -49,8 +49,6 @@ class SvXMLNamespaceMap;
 
 com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_createXFormsModel();
 
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_createXFormsBinding();
-
 void lcl_addXFormsModel(
     const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xDocument,
     const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xModel );

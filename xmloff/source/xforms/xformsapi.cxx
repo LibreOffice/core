@@ -85,11 +85,6 @@ Reference<XPropertySet> lcl_createXFormsModel()
     return lcl_createPropertySet( OUSTRING( "com.sun.star.xforms.Model" ) );
 }
 
-Reference<XPropertySet> lcl_createXFormsBinding()
-{
-    return lcl_createPropertySet( OUSTRING( "com.sun.star.xforms.Binding" ) );
-}
-
 void lcl_addXFormsModel(
     const Reference<frame::XModel>& xDocument,
     const Reference<XPropertySet>& xModel )
