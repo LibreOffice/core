@@ -38,7 +38,6 @@
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
 #include <rtl/tencinfo.h>
-#include <rtl/instance.hxx>
 
 #include <tools/string.hxx>
 #include <impstrg.hxx>
@@ -100,18 +99,6 @@ ByteString ByteString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
     return ByteString(
         aBuf,
         static_cast< xub_StrLen >(rtl_str_valueOfInt32( aBuf, n, nRadix )) );
-}
-
-// -----------------------------------------------------------------------
-
-namespace
-{
-    struct theEmpty : public rtl::Static< const ByteString, theEmpty> {};
-}
-
-const ByteString& ByteString::EmptyString()
-{
-    return theEmpty::get();
 }
 
 // -----------------------------------------------------------------------
