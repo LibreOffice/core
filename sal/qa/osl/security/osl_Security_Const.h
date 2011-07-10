@@ -63,7 +63,6 @@ const char pTestString[17] = "Sun Microsystems";
 //------------------------------------------------------------------------
 // condition names
 //------------------------------------------------------------------------
-OSLTEST_DECLARE_USTRING( TestSec,  "testsecurity" );
 OSLTEST_DECLARE_USTRING( NullURL,  "" );
 
 ::rtl::OUString aLogonUser( aNullURL ), aLogonPasswd( aNullURL ), aFileServer( aNullURL ), aStringForward( aNullURL );
