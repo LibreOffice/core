@@ -204,19 +204,6 @@ sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID )
         return com::sun::star::frame::CommandGroup::INTERNAL;
 }
 
-sal_Int16 MapCommandGroupToGroupID( sal_Int16 nCommandGroup )
-{
-    sal_Int32 i = 0;
-    while ( GroupIDCommandGroupMap[i].nGroupID != 0 )
-    {
-        if ( GroupIDCommandGroupMap[i].nCommandGroup == nCommandGroup )
-            return GroupIDCommandGroupMap[i].nGroupID;
-        ++i;
-    }
-
-    return -1;
-}
-
 sal_uInt32 Get10ThSec()
 {
     sal_uInt32 n10Ticks = 10 * (sal_uInt32)clock();
