@@ -149,7 +149,6 @@ sal_UCS4 GetVerticalChar( sal_UCS4 );
 // #i80090# GetMirroredChar also needed outside vcl, moved to svapp.hxx
 // VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 );
 sal_UCS4 GetLocalizedChar( sal_UCS4, LanguageType );
-VCL_PLUGIN_PUBLIC const char* GetAutofallback( sal_UCS4 ) ;
 
 // -------------
 // - SalLayout -
