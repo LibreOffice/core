@@ -30,3 +30,4 @@ sa sal\qa\rtl\cipher nmake - all sa_qa_rtl_cipher sa_cppunittester sa_util NULL
 sa sal\qa\rtl\doublelock nmake - all sa_qa_rtl_doublelock sa_cppunittester sa_util NULL
 sa sal\qa\rtl\locale nmake - all sa_qa_rtl_locale sa_cppunittester sa_util NULL
 sa sal\qa\sal nmake - all sa_qa_sal sa_cppunittester sa_util NULL
+sa sal\qa\static nmake - u sal_qa_static sa_qa_sal NULL
