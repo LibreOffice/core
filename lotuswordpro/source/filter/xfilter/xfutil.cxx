@@ -114,33 +114,6 @@ rtl::OUString   OEMToOUString(const std::string& /*str*/)
     return rtl::OUString();
 }
 
-rtl::OUString   ColorToOUString( sal_uInt32 color)
-{
-    unsigned int    c = color&0x00ffffff;
-    unsigned char   r;
-    unsigned char   g;
-    unsigned char   b;
-    char            buf[8];
-
-    unsigned int    temp = c;
-    r = temp&0x000000ff;
-
-    temp = c;
-    g = (temp&0x0000ff00)>>8;
-
-    temp = c;
-    b = (temp&0x00ff0000)>>16;
-
-    rtl_zeroMemory(buf,8);
-    sprintf(buf,"#%2x%2x%2x",r,g,b);
-    for( int i=0; i<6; i++ )
-    {
-        if( buf[i] == ' ' )
-            buf[i] = '0';
-    }
-    return rtl::OUString::createFromAscii(buf);
-}
-
 rtl::OUString   DateTimeToOUString(XFDateTime& dt)
 {
     rtl::OUStringBuffer buf;
