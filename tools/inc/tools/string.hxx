@@ -315,7 +315,6 @@ public:
     xub_StrLen          Search( const sal_Char* pCharStr, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          SearchBackward( sal_Char c, xub_StrLen nIndex = STRING_LEN ) const;
     xub_StrLen          SearchChar( const sal_Char* pChars, xub_StrLen nIndex = 0 ) const;
-    xub_StrLen          SearchCharBackward( const sal_Char* pChars, xub_StrLen nIndex = STRING_LEN ) const;
 
     xub_StrLen          SearchAndReplace( sal_Char c, sal_Char cRep, xub_StrLen nIndex = 0 );
     xub_StrLen          SearchAndReplace( const ByteString& rStr, const ByteString& rRepStr,
@@ -608,7 +607,6 @@ public:
     xub_StrLen          SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          SearchBackward( sal_Unicode c, xub_StrLen nIndex = STRING_LEN ) const;
     xub_StrLen          SearchChar( const sal_Unicode* pChars, xub_StrLen nIndex = 0 ) const;
-    xub_StrLen          SearchCharBackward( const sal_Unicode* pChars, xub_StrLen nIndex = STRING_LEN ) const;
 
     xub_StrLen          SearchAndReplace( sal_Unicode c, sal_Unicode cRep,
                                           xub_StrLen nIndex = 0 );
