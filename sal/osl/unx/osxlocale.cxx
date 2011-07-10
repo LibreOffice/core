@@ -33,7 +33,9 @@
 #include <assert.h>
 
 #include <premac.h>
+#ifndef IOS
 #include <CoreServices/CoreServices.h>
+#endif
 #include <CoreFoundation/CoreFoundation.h>
 #include <postmac.h>
 
