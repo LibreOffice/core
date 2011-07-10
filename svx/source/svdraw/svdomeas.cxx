@@ -62,7 +62,6 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <unotools/syslocale.hxx>
-#include "svdoimp.hxx"
 #include <svx/sdr/properties/measureproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmeasureobj.hxx>
 #include <basegfx/point/b2dpoint.hxx>

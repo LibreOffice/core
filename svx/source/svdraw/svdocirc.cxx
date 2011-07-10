@@ -51,7 +51,6 @@
 #include "svx/svdglob.hxx"   // StringCache
 #include "svx/svdstr.hrc"    // Objektname
 #include <editeng/eeitem.hxx>
-#include "svdoimp.hxx"
 #include <svx/sdr/properties/circleproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <basegfx/point/b2dpoint.hxx>

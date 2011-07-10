@@ -57,7 +57,6 @@
 #include <svx/polypolygoneditor.hxx>
 #include <svx/xlntrit.hxx>
 #include <vcl/salbtype.hxx>     // FRound
-#include "svdoimp.hxx"
 #include <svx/sdr/contact/viewcontactofsdrpathobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
