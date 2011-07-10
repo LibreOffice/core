@@ -54,7 +54,6 @@ APP1LIBS += \
     $(SLB)/qa_ostringbuffer.lib \
     $(SLB)/qa_osl_condition.lib \
     $(SLB)/qa_osl_file.lib \
-    $(SLB)/qa_osl_process.lib \
     $(SLB)/qa_osl_security.lib
 
 APP1STDLIBS = $(CPPUNITLIB) $(SALLIB)

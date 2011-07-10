@@ -49,6 +49,8 @@
 #include "cppunit/TestResult.h"
 #include "cppunit/TestResultCollector.h"
 #include "cppunit/TestRunner.h"
+#include "cppunit/plugin/TestPlugIn.h"
+#include "cppunit/plugin/PlugInParameters.h"
 #include "cppunit/extensions/TestFactoryRegistry.h"
 #include "cppunit/portability/Stream.h"
 
@@ -111,12 +113,33 @@ public:
 };
 }
 
+extern "C" CppUnitTestPlugIn *cppunitTest_qa_ByteSequence(void),
+           *cppunitTest_qa_ostringbuffer(void),
+           *cppunitTest_qa_osl_condition(void),
+           *cppunitTest_qa_osl_File(void),
+           *cppunitTest_tcwf(void),
+           *cppunitTest_osl_old_test_file(void),
+           *cppunitTest_qa_osl_security(void);
+
 SAL_IMPLEMENT_MAIN() {
+    TestPlugInSignature plugs[] = {
+        cppunitTest_qa_ByteSequence,
+        cppunitTest_qa_ostringbuffer,
+        cppunitTest_qa_osl_condition,
+        cppunitTest_qa_osl_File,
+        cppunitTest_tcwf,
+        cppunitTest_osl_old_test_file,
+        cppunitTest_qa_osl_security,
+        NULL
+    };
     CppUnit::TestResult result;
-    cppunittester::LibreOfficeProtector *throw_protector = 0;
     std::string args;
-    sal_uInt32 index = 0;
     bool ok = false;
+    for (TestPlugInSignature *plug = plugs; *plug != NULL; plug++) {
+        CppUnitTestPlugIn *iface;
+        iface = (*plug)();
+        iface->initialize(&CppUnit::TestFactoryRegistry::getRegistry(), CppUnit::PlugInParameters());
+    }
     ProtectedFixtureFunctor tests(args, result);
     ok = tests.run();
 

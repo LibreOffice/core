@@ -208,7 +208,8 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     sal_Bool result = sal_False;
-#ifndef NO_DL_FUNCTIONS
+/* Bah, we do want to use dladdr here also on iOS, I think? */
+#if !defined(NO_DL_FUNCTIONS) || defined(IOS)
 #if defined(AIX)
     int i;
     int size = 4 * 1024;
