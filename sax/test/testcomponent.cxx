@@ -195,7 +195,7 @@ int main (int argc, char **argv)
         Sequence<OUString> seqWarnings = xTest->getWarnings();
         if( seqWarnings.getLength() > nWarningCount )
         {
-            printf( "Warnings during test %d!\n" , nHandle );
+            printf( "Warnings during test %" SAL_PRIxUINT32 "!\n" , nHandle );
             for( ; nWarningCount < seqWarnings.getLength() ; nWarningCount ++ )
             {
                 OString o = OUStringToOString(
@@ -206,7 +206,7 @@ int main (int argc, char **argv)
 
 
         if( seqErrors.getLength() > nErrorCount ) {
-            printf( "Errors during test %d!\n" , nHandle );
+            printf( "Errors during test %" SAL_PRIxUINT32 "!\n" , nHandle );
             for( ; nErrorCount < seqErrors.getLength() ; nErrorCount ++ ) {
                 OString o = OUStringToOString(
                     seqErrors.getArray()[nErrorCount], RTL_TEXTENCODING_ASCII_US );
