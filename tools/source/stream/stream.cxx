@@ -949,14 +949,6 @@ sal_Bool SvStream::WriteLines( const ByteString& rStr )
     return (sal_Bool)(nError == SVSTREAM_OK);
 }
 
-sal_Bool SvStream::WriteUniStringLines( const String& rStr )
-{
-    String aStr( rStr );
-    aStr.ConvertLineEnd( eLineDelimiter );
-    WriteUniStringLine( aStr );
-    return nError == SVSTREAM_OK;
-}
-
 /*************************************************************************
 |*
 |*    Stream::WriteUniOrByteChar()

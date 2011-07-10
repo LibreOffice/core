@@ -446,8 +446,6 @@ public:
                     { return WriteUnicodeOrByteText( rStr, GetStreamCharSet() ); }
                 /// Write a line of Unicode and append line end (endlu())
     sal_Bool        WriteUniStringLine( const String& rStr );
-                /// Write multiple lines of Unicode (with CovertLineEnd) and append line end (endlu())
-    sal_Bool        WriteUniStringLines( const String& rStr );
 
                 /// Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise write as Bytecode converted to eDestCharSet.
