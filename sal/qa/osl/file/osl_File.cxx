@@ -5819,7 +5819,7 @@ namespace osl_Directory
             nError1 = ::osl::Directory::getVolumeInfo( aTmpName3, aVolumeInfo );
 
 // LLA: in Windows, it reply no error, it did not pass in (W32).
-#ifdef UNX
+#if defined(UNX) && !defined(IOS)
             CPPUNIT_ASSERT_MESSAGE( "test for getVolumeInfo function: non-existence test. ",
                                     ( osl::FileBase::E_NOENT == nError1 ) );
 #endif
