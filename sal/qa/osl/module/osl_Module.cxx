@@ -190,8 +190,6 @@ namespace osl_Module
             ::osl::Module aMod;
             bRes = aMod.is();
 
-            printf ("Here we are\n");
-
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor without parameter.",
                                     sal_False == bRes  );
         }
