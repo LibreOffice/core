@@ -305,7 +305,6 @@ public:
                     SvStream( SvLockBytes *pLockBytes);
     virtual         ~SvStream();
 
-    ErrCode         SetLockBytes( SvLockBytesRef& rBytes );
     SvLockBytes*    GetLockBytes() const { return xLockBytes; }
 
     sal_uInt32  GetError() const { return ERRCODE_TOERROR(nError); }
@@ -515,7 +514,6 @@ public:
 
     void            RefreshBuffer();
     SvStream&       PutBack( char aCh );
-    void            EatWhite();
 
     sal_Bool            IsWritable() const { return bIsWritable; }
     StreamMode      GetStreamMode() const { return eStreamMode; }

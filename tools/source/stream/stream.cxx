@@ -373,13 +373,6 @@ sal_Size SvStream::GetData( void* pData, sal_Size nSize )
     else return 0;
 }
 
-ErrCode SvStream::SetLockBytes( SvLockBytesRef& rLB )
-{
-    xLockBytes = rLB;
-    RefreshBuffer();
-    return ERRCODE_NONE;
-}
-
 //========================================================================
 
 sal_Size SvStream::PutData( const void* pData, sal_Size nSize )
@@ -1824,91 +1817,6 @@ void SvStream::Flush()
     }
     if( bIsWritable )
         FlushData();
-}
-
-
-/*************************************************************************
-|*
-|*    Stream::PutBack()
-|*
-*************************************************************************/
-
-/*
-    4 Faelle :
-
-    1. Datenzeiger steht mitten im Puffer (nBufActualPos >= 1)
-    2. Datenzeiger auf Position 0, Puffer ist voll
-    3. Datenzeiger auf Position 0, Puffer ist teilweise gefuellt
-    4. Datenzeiger auf Position 0, Puffer ist leer -> Fehler!
-*/
-
-SvStream& SvStream::PutBack( char aCh )
-{
-    // wenn kein Buffer oder Zurueckscrollen nicht moeglich -> Fehler
-    if( !pRWBuf || !nBufActualLen || ( !nBufActualPos && !nBufFilePos ) )
-    {
-        // 4. Fall
-        SetError( SVSTREAM_GENERALERROR );
-        return *this;
-    }
-
-    // Flush() (Phys. Flushen aber nicht notwendig, deshalb selbst schreiben)
-    if( bIsConsistent && bIsDirty  )
-    {
-        SeekPos( nBufFilePos );
-        if( nCryptMask )
-            CryptAndWriteBuffer( pRWBuf, nBufActualLen );
-        else
-            PutData( pRWBuf, nBufActualLen );
-        bIsDirty = sal_False;
-    }
-    bIsConsistent = sal_False;  // Puffer enthaelt jetzt TRASH
-    if( nBufActualPos )
-    {
-        // 1. Fall
-        nBufActualPos--;
-        pBufPos--;
-        *pBufPos = aCh;
-        nBufFree++;
-    }
-    else  // Puffer muss verschoben werden
-    {
-        // Ist Puffer am Anschlag ?
-        if( nBufSize == nBufActualLen )
-        {
-            // 2. Fall
-            memmove( pRWBuf+1, pRWBuf, nBufSize-1 );
-            // nBufFree behaelt den Wert!
-        }
-        else
-        {
-            // 3. Fall -> Puffer vergroessern
-            memmove( pRWBuf+1, pRWBuf, (sal_uInt16)nBufActualLen );
-            nBufActualLen++;
-            nBufFree++;
-        }
-        nBufFilePos--;
-        *pRWBuf = aCh;
-    }
-    eIOMode = STREAM_IO_DONTKNOW;
-    bIsEof = sal_False;
-    return *this;
-}
-
-/*************************************************************************
-|*
-|*    Stream::EatWhite()
-|*
-*************************************************************************/
-
-void SvStream::EatWhite()
-{
-    char aCh;
-    Read(&aCh, sizeof(char) );
-    while( !bIsEof && isspace((int)aCh) )  //( aCh == ' ' || aCh == '\t' ) )
-        Read(&aCh, sizeof(char) );
-    if( !bIsEof ) // konnte das letzte Char gelesen werden ?
-        SeekRel( -1L );
 }
 
 /*************************************************************************
