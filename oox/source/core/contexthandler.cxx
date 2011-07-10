@@ -42,7 +42,7 @@ using ::rtl::OUString;
 
 // ============================================================================
 
-ContextHandler::ContextHandler( ContextHandler& rParent ) :
+ContextHandler::ContextHandler( const ContextHandler& rParent ) :
     ContextHandler_BASE(),
     mxBaseData( rParent.mxBaseData )
 {
