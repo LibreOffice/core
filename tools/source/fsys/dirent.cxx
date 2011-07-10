@@ -331,6 +331,7 @@ ByteString ImplCutPath( const ByteString& rStr, sal_uInt16 nMax, char cAccDel )
     return aCutPath;
 }
 
+#if defined(WNT)
 /*************************************************************************
 |*
 |*    DirEntry::ImpParseOs2Name()
@@ -502,6 +503,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
         aName = rPfad;
     return nErr;
 }
+#endif
 
 /*************************************************************************
 |*
@@ -1726,6 +1728,7 @@ const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
     return *pRes;
 }
 
+#if !defined(WNT)
 /*************************************************************************
 |*
 |*    DirEntry::ImpParseUnixName()
@@ -1841,6 +1844,7 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
 
     return FSYS_ERR_OK;
 }
+#endif
 
 #define MAX_EXT_MAX       250
 #define MAX_LEN_MAX       255

@@ -251,9 +251,12 @@ private:
 
     TOOLS_DLLPRIVATE FSysError          ImpParseName( const ByteString& rIntiName,
                                       FSysPathStyle eParser );
+#if defined(WNT)
     TOOLS_DLLPRIVATE FSysError          ImpParseOs2Name( const ByteString& rPfad,
                                          FSysPathStyle eStyle );
+#else
     TOOLS_DLLPRIVATE FSysError          ImpParseUnixName( const ByteString& rPfad,
+#endif
                                           FSysPathStyle eStyle );
     TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
     TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
