@@ -194,42 +194,6 @@ sal_Char* createName( sal_Char* dst, const sal_Char* meth, sal_uInt32 cnt )
 }
 
 //------------------------------------------------------------------------
-//  testing the method compareTo( const OString & aStr )
-//------------------------------------------------------------------------
-void makeComment( char *com, const char *str1, const char *str2,
-                                                            sal_Int32 sgn )
-{
-    cpystr(com, str1);
-    int str1Length = AStringLen( str1 );
-    const char *sign = (sgn == 0) ? " == " : (sgn > 0) ? " > " : " < " ;
-    cpystr(com + str1Length, sign);
-    int signLength = AStringLen(sign);
-    cpystr(com + str1Length + signLength, str2);
-    com[str1Length + signLength + AStringLen(str2)] = 0;
-}
-
-//------------------------------------------------------------------------
-
-sal_uInt32 UStringLen( const sal_Unicode *pUStr )
-{
-    sal_uInt32 nUStrLen = 0;
-
-    if ( pUStr != NULL )
-    {
-        const sal_Unicode *pTempUStr = pUStr;
-
-        while( *pTempUStr )
-        {
-            pTempUStr++;
-        } // while
-
-        nUStrLen = (sal_uInt32)( pTempUStr - pUStr );
-    } // if
-
-    return nUStrLen;
-} // UStringLen
-
-//------------------------------------------------------------------------
 
 static inline sal_Int32 ACharToUCharCompare( const sal_Unicode *pUStr,
                                              const sal_Char    *pAStr

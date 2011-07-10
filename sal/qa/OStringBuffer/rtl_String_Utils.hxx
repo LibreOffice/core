@@ -55,12 +55,9 @@ sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2, sal_uInt32 l
 sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 );
 
 sal_Char* createName( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt );
-void makeComment(char *com, const char *str1, const char *str2, sal_Int32 sgn);
 
 
 sal_uInt32 AStringLen( const sal_Char *pAStr );
-
-sal_uInt32 UStringLen( const sal_Unicode *pUStr );
 
 //------------------------------------------------------------------------
 
