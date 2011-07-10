@@ -220,8 +220,6 @@ Fix ImpMultBig2( const Fix& a, const Fix& b );
 FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb );
 
 void ImpCartToPolar( const short x, const short y, Fix& rRad, sal_uInt16& rPhi );
-void ImpPolarToCart( const Fix& rR, const sal_uInt16 Phi, short& rX, short& rY );
-
 sal_uInt16 ImpSqrt( sal_uLong nRadi );
 sal_uInt16 ImpATan2( const short x, const short y );
 FixCpx ImpExPI( sal_uInt16 nPhi );

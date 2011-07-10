@@ -271,21 +271,4 @@ void ImpCartToPolar( const short x, const short y, Fix& rRad, sal_uInt16& rPhi )
     }
 }
 
-/**************************************************************************
-|*
-|*    ImpPolarToCart()
-|*
-|*    Beschreibung       Koordinaaten-Wandlung
-|*
-**************************************************************************/
-
-void ImpPolarToCart( const Fix& rR, const sal_uInt16 Phi, short& rX, short& rY )
-{
-    FixCpx fc = ImpExPI( Phi );  // calculate sin() & cos()
-    fc.GetReal().MultBig( rR );
-    rX = sal::static_int_cast< short >(long( fc.GetReal() ));
-    fc.GetImag().MultBig( rR );
-    rY = sal::static_int_cast< short >(long( fc.GetImag() ));
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

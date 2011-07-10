@@ -561,18 +561,6 @@ sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
     return(bRet);
 }
 
-
-/*************************************************************************
-|*
-|*    SgfFilterPScr()
-|*
-*************************************************************************/
-sal_Bool SgfFilterPScr(SvStream&, SgfHeader&, SgfEntry&)
-{
-    return sal_False;  // PostSrcipt wird noch nicht unterstuetzt !
-}
-
-
 /*************************************************************************
 |*
 |*    CheckSgfTyp()
