@@ -293,13 +293,6 @@ FieldUnit MapToFieldUnit( const SfxMapUnit eUnit )
 
 // -----------------------------------------------------------------------
 
-MapUnit FieldToMapUnit( const SfxFieldUnit /*eUnit*/ )
-{
-    return MAP_APPFONT;
-}
-
-// -----------------------------------------------------------------------
-
 long ConvertValueToMap( long nVal, SfxMapUnit eUnit )
 {
     long nNew = nVal;

@@ -51,7 +51,6 @@ SVT_DLLPUBLIC long      ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit 
 SVT_DLLPUBLIC long      ControlToItem( long nIn, SfxFieldUnit eCtrl, SfxMapUnit eItem );
 
 SVT_DLLPUBLIC FieldUnit MapToFieldUnit( const SfxMapUnit eUnit );
-SVT_DLLPUBLIC MapUnit   FieldToMapUnit( const SfxFieldUnit eUnit );
 
 SVT_DLLPUBLIC long      ConvertValueToMap( long nVal, SfxMapUnit eUnit );
 SVT_DLLPUBLIC long      ConvertValueToUnit( long nVal, SfxMapUnit eUnit );
