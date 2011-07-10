@@ -453,8 +453,6 @@ public:
                          FSysSort nSort, ... );
                     ~Dir();
 
-    FSysError       SetSort( FSysSort nSort, ... );
-
     void            Reset();
     sal_uInt16          Scan( sal_uInt16 nCount = 5 );
     size_t          Count( sal_Bool bUpdated = sal_True ) const;
