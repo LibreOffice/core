@@ -819,32 +819,6 @@ void SdrModel::SetTextDefaults() const
     SetTextDefaults( pItemPool, nDefTextHgt );
 }
 
-void ImpGetDefaultFontsLanguage( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rComplex)
-{
-    const sal_uInt16 nItemCnt = 3;
-    static struct {
-        sal_uInt16 nFntType, nLanguage;
-    }  aOutTypeArr[ nItemCnt ] = {
-        {  DEFAULTFONT_LATIN_TEXT, LANGUAGE_ENGLISH_US },
-        {  DEFAULTFONT_CJK_TEXT, LANGUAGE_ENGLISH_US },
-        {  DEFAULTFONT_CTL_TEXT, LANGUAGE_ARABIC_SAUDI_ARABIA }
-    };
-    SvxFontItem* aItemArr[ nItemCnt ] = { &rLatin, &rAsian, &rComplex };
-
-    for( sal_uInt16 n = 0; n < nItemCnt; ++n )
-    {
-        Font aFnt( OutputDevice::GetDefaultFont(
-            aOutTypeArr[ n ].nFntType, aOutTypeArr[ n ].nLanguage,
-            DEFAULTFONT_FLAGS_ONLYONE, 0 ));
-        SvxFontItem* pI = aItemArr[ n ];
-        pI->SetFamily( aFnt.GetFamily());
-        pI->SetFamilyName( aFnt.GetName());
-        pI->SetStyleName( String() );
-        pI->SetPitch( aFnt.GetPitch());
-        pI->SetCharSet( aFnt.GetCharSet() );
-    }
-}
-
 void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt )
 {
     // #95114# set application-language specific dynamic pool language defaults
