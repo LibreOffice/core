@@ -100,7 +100,6 @@ Animation::Animation() :
 {
     DBG_CTOR( Animation, NULL );
     maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
-    mpViewList = new List;
 }
 
 // -----------------------------------------------------------------------
@@ -121,7 +120,6 @@ Animation::Animation( const Animation& rAnimation ) :
         maList.push_back( new AnimationBitmap( *rAnimation.maList[ i ] ) );
 
     maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
-    mpViewList = new List;
     mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
 }
 
@@ -137,10 +135,8 @@ Animation::~Animation()
     for( size_t i = 0, n = maList.size(); i < n; ++i )
         delete maList[ i ];
 
-    for( void* pView = mpViewList->First(); pView; pView = mpViewList->Next() )
-        delete (ImplAnimView*) pView;
-
-    delete mpViewList;
+    for( size_t i = 0, n = maViewList.size(); i < n; ++i )
+        delete maViewList[ i ];
 }
 
 // -----------------------------------------------------------------------
@@ -233,9 +229,9 @@ void Animation::SetEmpty()
         delete maList[ i ];
     maList.clear();
 
-    for( void* pView = mpViewList->First(); pView; pView = mpViewList->Next() )
-        delete (ImplAnimView*) pView;
-    mpViewList->Clear();
+    for( size_t i = 0, n = maViewList.size(); i < n; ++i )
+        delete maViewList[ i ];
+    maViewList.clear();
 }
 
 // -----------------------------------------------------------------------
@@ -344,8 +340,9 @@ sal_Bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size&
             ImplAnimView*   pView;
             ImplAnimView*   pMatch = NULL;
 
-            for( pView = (ImplAnimView*) mpViewList->First(); pView; pView = (ImplAnimView*) mpViewList->Next() )
+            for( size_t i = 0; i < maViewList.size(); ++i )
             {
+                pView = maViewList[ i ];
                 if( pView->ImplMatches( pOut, nExtraData ) )
                 {
                     if( pView->ImplGetOutPos() == rDestPt &&
@@ -356,7 +353,8 @@ sal_Bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size&
                     }
                     else
                     {
-                        delete (ImplAnimView*) mpViewList->Remove( pView );
+                        delete maViewList[ i ];
+                        maViewList.erase( maViewList.begin() + i );
                         pView = NULL;
                     }
 
@@ -364,7 +362,7 @@ sal_Bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size&
                 }
             }
 
-            if( !mpViewList->Count() )
+            if( maViewList.empty() )
             {
                 maTimer.Stop();
                 mbIsInAnimation = sal_False;
@@ -372,7 +370,7 @@ sal_Bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size&
             }
 
             if( !pMatch )
-                mpViewList->Insert( new ImplAnimView( this, pOut, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev ), LIST_APPEND );
+                maViewList.push_back( new ImplAnimView( this, pOut, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev ) );
 
             if( !mbIsInAnimation )
             {
@@ -393,20 +391,21 @@ sal_Bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size&
 
 void Animation::Stop( OutputDevice* pOut, long nExtraData )
 {
-    ImplAnimView* pView = (ImplAnimView*) mpViewList->First();
-
-    while( pView )
+    for( size_t i = 0; i < maViewList.size(); )
     {
+
+
+        ImplAnimView* pView = maViewList[ i ];
         if( pView->ImplMatches( pOut, nExtraData ) )
         {
-            delete (ImplAnimView*) mpViewList->Remove( pView );
-            pView = (ImplAnimView*) mpViewList->GetCurObject();
+            delete pView;
+            maViewList.erase( maViewList.begin() + i );
         }
         else
-            pView = (ImplAnimView*) mpViewList->Next();
+            i++;
     }
 
-    if( !mpViewList->Count() )
+    if( maViewList.empty() )
     {
         maTimer.Stop();
         mbIsInAnimation = sal_False;
@@ -472,8 +471,8 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
             AInfo* pAInfo;
 
             // create AInfo-List
-            for( pView = (ImplAnimView*) mpViewList->First(); pView; pView = (ImplAnimView*) mpViewList->Next() )
-                aAInfoList.push_back( pView->ImplCreateAInfo() );
+            for( size_t i = 0, n = maViewList.size(); i < n; ++i )
+                aAInfoList.push_back( maViewList[ i ]->ImplCreateAInfo() );
 
             maNotifyLink.Call( this );
 
@@ -486,7 +485,7 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
                     pView = new ImplAnimView( this, pAInfo->pOutDev,
                                               pAInfo->aStartOrg, pAInfo->aStartSize, pAInfo->nExtraData );
 
-                    mpViewList->Insert( pView, LIST_APPEND );
+                    maViewList.push_back( pView );
                 }
                 else
                     pView = (ImplAnimView*) pAInfo->pViewData;
@@ -501,13 +500,13 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
             aAInfoList.clear();
 
             // delete all unmarked views and reset marked state
-            pView = (ImplAnimView*) mpViewList->First();
-            while( pView )
+            for( size_t i = 0; i < maViewList.size(); )
             {
+                pView = maViewList[ i ];
                 if( !pView->ImplIsMarked() )
                 {
-                    delete (ImplAnimView*) mpViewList->Remove( pView );
-                    pView = (ImplAnimView*) mpViewList->GetCurObject();
+                    delete pView;
+                    maViewList.erase( maViewList.begin() + i );
                 }
                 else
                 {
@@ -515,14 +514,14 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
                         bGlobalPause = sal_False;
 
                     pView->ImplSetMarked( sal_False );
-                    pView = (ImplAnimView*) mpViewList->Next();
+                    i++;
                 }
             }
         }
         else
             bGlobalPause = sal_False;
 
-        if( !mpViewList->Count() )
+        if( maViewList.empty() )
             Stop();
         else if( bGlobalPause )
             ImplRestartTimer( 10 );
@@ -554,22 +553,22 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
             // marked; in this case remove view, because area of output
             // lies out of display area of window; mark state is
             // set from view itself
-            pView = (ImplAnimView*) mpViewList->First();
-            while( pView )
+            for( size_t i = 0; i < maViewList.size(); )
             {
+                pView = maViewList[ i ];
                 pView->ImplDraw( mnPos );
 
                 if( pView->ImplIsMarked() )
                 {
-                    delete (ImplAnimView*) mpViewList->Remove( pView );
-                    pView = (ImplAnimView*) mpViewList->GetCurObject();
+                    delete pView;
+                    maViewList.erase( maViewList.begin() + i );
                 }
                 else
-                    pView = (ImplAnimView*) mpViewList->Next();
+                    i++;
             }
 
             // stop or restart timer
-            if( !mpViewList->Count() )
+            if( maViewList.empty() )
                 Stop();
             else
                 ImplRestartTimer( pStepBmp->nWait );

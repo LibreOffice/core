@@ -145,18 +145,20 @@ struct AInfo
 // - AnimationBitmap -
 // -------------------
 
+class ImplAnimView;
 typedef ::std::vector< AnimationBitmap* > AnimationBitmapList_impl;
+typedef ::std::vector< ImplAnimView* > AnimViewList_impl;
 
 class VCL_DLLPUBLIC Animation
 {
     SAL_DLLPRIVATE static sal_uLong     mnAnimCount;
 
     AnimationBitmapList_impl    maList;
+    AnimViewList_impl           maViewList;
     Link                    maNotifyLink;
     BitmapEx                maBitmapEx;
     Timer                   maTimer;
     Size                    maGlobalSize;
-    List*                   mpViewList;
     void*                   mpExtraData;
     long                    mnLoopCount;
     long                    mnLoops;
