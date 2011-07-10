@@ -109,7 +109,6 @@ static const sal_Char
 static const sal_Char sImplWordChars[] = "-'";
 
 void EncryptBlockName_Imp( String& rName );
-void DecryptBlockName_Imp( String& rName );
 
 
 // FileVersions Number for the Substitution-/Exception list separately
@@ -1734,25 +1733,6 @@ void GeneratePackageName ( const String& rShort, String& rPackageName )
     {
         rPackageName.SetChar( nPos, '_' );
         ++nPos;
-    }
-}
-
-void DecryptBlockName_Imp( String& rName )
-{
-    if( '#' == rName.GetChar( 0 ) )
-    {
-        rName.Erase( 0, 1 );
-        sal_Unicode* pName = rName.GetBufferAccess();
-        xub_StrLen nLen, nPos;
-        for ( nLen = rName.Len(), nPos = 0; nPos < nLen; ++nPos, ++pName )
-            switch( *pName )
-            {
-            case 0x01:  *pName = '!';   break;
-            case 0x0A:  *pName = ':';   break;
-            case 0x0C:  *pName = '\\';  break;
-            case 0x0E:  *pName = '.';   break;
-            case 0x0F:  *pName = '/';   break;
-            }
     }
 }
 
