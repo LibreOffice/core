@@ -34,8 +34,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_swdoc_test, \
     sw/qa/core/Test-BigPtrArray \
 ))
 
-$(call gb_CxxObject_get_target,sw/qa/core/swdoc-test): $(WORKDIR)/AllLangRes/sw
-
 $(eval $(call gb_CppunitTest_add_library_objects,sw_swdoc_test,sw))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sw_swdoc_test, \
@@ -118,5 +116,9 @@ $(eval $(call gb_RdbTarget_add_old_components,sw_swdoc_test,\
     ucb1 \
     ucpfile1 \
 ))
+
+# we need to explicitly depend on the sw resource files needed at unit-test
+# runtime
+$(call gb_CppunitTest_get_target,sw_swdoc_test) : $(WORKDIR)/AllLangRes/sw
 
 # vim: set noet sw=4:
