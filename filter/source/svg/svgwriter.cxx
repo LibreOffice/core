@@ -32,6 +32,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
+#include "svgfilter.hxx"
 #include "svgfontexport.hxx"
 #include "svgwriter.hxx"
 #include <vcl/unohelp.hxx>
@@ -1174,73 +1175,100 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
     }
 
-    // this class attribute is used by the JavaScript based presentation engine
-    // to modify the text content of placeholder text shapes of the master slide
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextBlock" ) );
 
     mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
 
-    // for each line of text there should be at least one group element of class TextBlock
+    // for each line of text there should be at least one group element
     SvXMLElementExport aSVGGElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_False );
 
-    if( nLen > 1 )
+    sal_Bool bIsPlaceholderField = sal_False;
+
+    if( mbIsPlacehlolderShape )
     {
-        aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar(  nLen - 1 ) );
-
-        if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
+        OUString sTextContent = rText;
+        bIsPlaceholderField = sTextContent.match( sPlaceholderTag );
+        // for a placeholder text field we export only one <text> svg element
+        if( bIsPlaceholderField )
         {
-            const double fFactor = (double) nWidth / aNormSize.Width();
-
-            for( long i = 0; i < ( nLen - 1 ); i++ )
-                pDX[ i ] = FRound( pDX[ i ] * fFactor );
-        }
-        else
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBI( ::vcl::unohelper::CreateBreakIterator() );
-            const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
-            sal_Int32 nCurPos = 0, nLastPos = 0, nX = aPos.X();
-
-            // write single glyphs at absolute text positions
-            for( sal_Bool bCont = sal_True; bCont; )
+            OUString sCleanTextContent;
+            static const sal_Int32 nFrom = sPlaceholderTag.getLength();
+            if( sTextContent.getLength() > nFrom )
             {
-                sal_Int32 nCount = 1;
-
-                nLastPos = nCurPos;
-                nCurPos = xBI->nextCharacters( rText, nCurPos, rLocale,
-                                            ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL,
-                                            nCount, nCount );
-
-                nCount = nCurPos - nLastPos;
-                bCont = ( nCurPos < rText.Len() ) && nCount;
-
-                if( nCount )
-                {
-                    const ::rtl::OUString aGlyph( rText.Copy( nLastPos, nCount ) );
-
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( nX ) );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
-
-                    {
-                        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
-                        mrExport.GetDocHandler()->characters( aGlyph );
-                    }
-
-                    if( bCont )
-                        nX = aPos.X() + pDXArray[ nCurPos - 1 ];
-                }
+                sCleanTextContent = sTextContent.copy( nFrom );
+            }
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "PlaceholderText" ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( aPos.X() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
+            {
+                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
+                // At least for the single slide case we need really to  export placeholder text
+                mrExport.GetDocHandler()->characters( sCleanTextContent );
             }
         }
     }
-    else
-    {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( aPos.X() ) );
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
 
+    if( !bIsPlaceholderField )
+    {
+        if( nLen > 1 )
         {
-            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
-            mrExport.GetDocHandler()->characters( rText );
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar(  nLen - 1 ) );
+
+            if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
+            {
+                const double fFactor = (double) nWidth / aNormSize.Width();
+
+                for( long i = 0; i < ( nLen - 1 ); i++ )
+                    pDX[ i ] = FRound( pDX[ i ] * fFactor );
+            }
+            else
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBI( ::vcl::unohelper::CreateBreakIterator() );
+                const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
+                sal_Int32 nCurPos = 0, nLastPos = 0, nX = aPos.X();
+
+                // write single glyphs at absolute text positions
+                for( sal_Bool bCont = sal_True; bCont; )
+                {
+                    sal_Int32 nCount = 1;
+
+                    nLastPos = nCurPos;
+                    nCurPos = xBI->nextCharacters( rText, nCurPos, rLocale,
+                                                ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL,
+                                                nCount, nCount );
+
+                    nCount = nCurPos - nLastPos;
+                    bCont = ( nCurPos < rText.Len() ) && nCount;
+
+                    if( nCount )
+                    {
+                        const ::rtl::OUString aGlyph( rText.Copy( nLastPos, nCount ) );
+
+                        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( nX ) );
+                        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
+
+                        {
+                            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
+                            mrExport.GetDocHandler()->characters( aGlyph );
+                        }
+
+                        if( bCont )
+                            nX = aPos.X() + pDXArray[ nCurPos - 1 ];
+                    }
+                }
+            }
+        }
+        else
+        {
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( aPos.X() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
+
+            {
+                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
+                mrExport.GetDocHandler()->characters( rText );
+            }
         }
     }
+
 
     if( !mrExport.IsUseNativeTextDecoration() )
     {
@@ -1338,6 +1366,14 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 {
     if( mnInnerMtfCount )
         nWriteFlags |= SVGWRITER_NO_SHAPE_COMMENTS;
+
+    mbIsPlacehlolderShape = false;
+    if( pElementId != NULL && ( *pElementId == sPlaceholderTag ) )
+    {
+        mbIsPlacehlolderShape = true;
+        // since we utilize pElementId in an improper way we reset it to NULL before to go on
+        pElementId = NULL;
+    }
 
     for( sal_uLong nCurAction = 0, nCount = rMtf.GetActionSize(); nCurAction < nCount; nCurAction++ )
     {

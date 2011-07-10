@@ -107,7 +107,7 @@ private:
     Font                       maCurFont;
     Color                      maCurLineColor;
     Color                      maCurFillColor;
-    SVGExport&                mrExport;
+    SVGExport&                 mrExport;
     SVGFontExport&             mrFontExport;
     SvXMLElementExport*        mpElemFont;
     SvXMLElementExport*        mpElemPaint;
@@ -165,28 +165,30 @@ class SVGActionWriter
 {
 private:
 
-    sal_Int32                               mnCurGradientId;
-    sal_Int32                               mnCurMaskId;
-    sal_Int32                               mnCurPatternId;
-    Stack                   maContextStack;
-    ::std::auto_ptr< SVGShapeDescriptor >   mapCurShape;
-    SVGExport&                                mrExport;
-    SVGFontExport&                          mrFontExport;
-    SVGAttributeWriter*                     mpContext;
-    VirtualDevice*          mpVDev;
-    MapMode                 maTargetMapMode;
-    sal_uInt32                              mnInnerMtfCount;
-    sal_Bool                mbDestroyVDev;
-    sal_Bool                mbPaintAttrChanged;
-    sal_Bool                mbFontAttrChanged;
-    sal_Bool                                mbClipAttrChanged;
+    sal_Int32                                   mnCurGradientId;
+    sal_Int32                                   mnCurMaskId;
+    sal_Int32                                   mnCurPatternId;
+    Stack                                       maContextStack;
+    ::std::auto_ptr< SVGShapeDescriptor >       mapCurShape;
+    SVGExport&                                  mrExport;
+    SVGFontExport&                              mrFontExport;
+    SVGAttributeWriter*                         mpContext;
+    VirtualDevice*                              mpVDev;
+    MapMode                                     maTargetMapMode;
+    sal_uInt32                                  mnInnerMtfCount;
+    sal_Bool                                    mbDestroyVDev;
+    sal_Bool                                    mbPaintAttrChanged;
+    sal_Bool                                    mbFontAttrChanged;
+    sal_Bool                                    mbClipAttrChanged;
+    sal_Bool                                    mbIsPlacehlolderShape;
+
 
     SVGAttributeWriter*     ImplAcquireContext() { maContextStack.Push( mpContext = new SVGAttributeWriter( mrExport, mrFontExport ) ); return mpContext; }
     void                    ImplReleaseContext() { delete (SVGAttributeWriter*)    maContextStack.Pop(); mpContext = (SVGAttributeWriter*) maContextStack.Top(); }
 
     long                    ImplMap( sal_Int32 nVal ) const;
-    Point&                    ImplMap( const Point& rPt, Point& rDstPt ) const;
-    Size&                    ImplMap( const Size& rSz, Size& rDstSz ) const;
+    Point&                  ImplMap( const Point& rPt, Point& rDstPt ) const;
+    Size&                   ImplMap( const Size& rSz, Size& rDstSz ) const;
     Rectangle&              ImplMap( const Rectangle& rRect, Rectangle& rDstRect ) const;
     Polygon&                ImplMap( const Polygon& rPoly, Polygon& rDstPoly ) const;
     PolyPolygon&            ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon& rDstPolyPoly ) const;
@@ -220,7 +222,7 @@ private:
 
 public:
 
-    static ::rtl::OUString    GetPathString( const PolyPolygon& rPolyPoly, sal_Bool bLine );
+    static ::rtl::OUString  GetPathString( const PolyPolygon& rPolyPoly, sal_Bool bLine );
 
 public:
 

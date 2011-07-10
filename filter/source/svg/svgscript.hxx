@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
@@ -27,44 +28,47 @@
  ************************************************************************/
 
 
-static const char aSVGScript1[] =
+
+#define N_SVGSCRIPT_FRAGMENTS 9
+
+static const char aSVGScript0[] =
 "<![CDATA[\n\
 \n\
-    /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \n\
-     * - Presentation Engine v4.6 -\n\
-     * \n\
-     ** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \n\
-     *  This program is free software: you can redistribute it and/or modify \n\
-     *  it under the terms of the GNU General Public License as published by \n\
-     *  the Free Software Foundation, either version 3 of the License, or    \n\
-     *  (at your option) any later version.                                  \n\
-     *                                                                         \n\
-     *  This program is distributed in the hope that it will be useful,      \n\
-     *  but WITHOUT ANY WARRANTY; without even the implied warranty of       \n\
-     *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        \n\
-     *  GNU General Public License for more details.                         \n\
-     *                                                                           \n\
-     *  You should have received a copy of the GNU General Public License    \n\
-     *  along with this program.  If not, see http://www.gnu.org/licenses/.  \n\
-     * \n\
-     ** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \n\
+    /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n\
+     * - Presentation Engine v4.7 -\n\
+     *\n\
+     ** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n\
+     *  This program is free software: you can redistribute it and/or modify\n\
+     *  it under the terms of the GNU General Public License as published by\n\
+     *  the Free Software Foundation, either version 3 of the License, or\n\
+     *  (at your option) any later version.\n\
+     *\n\
+     *  This program is distributed in the hope that it will be useful,\n\
+     *  but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+     *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
+     *  GNU General Public License for more details.\n\
+     *\n\
+     *  You should have received a copy of the GNU General Public License\n\
+     *  along with this program.  If not, see http://www.gnu.org/licenses/.\n\
+     *\n\
+     ** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n\
      *  Some parts of this script are based on the JessyInk project:\n\
      *  http://code.google.com/p/jessyink/\n\
-     * \n\
+     *\n\
      ** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */\n\
 \n\
     window.onload = init;\n\
-    \n\
-    \n\
+\n\
+\n\
     // ooo elements\n\
     var aOOOElemMetaSlides = 'ooo:meta_slides';\n\
     var aOOOElemMetaSlide = 'ooo:meta_slide';\n\
     var aOOOElemTextField = 'ooo:text_field';\n\
-    \n\
+\n\
     // ooo attributes\n\
     var aOOOAttrNumberOfSlides = 'number-of-slides';\n\
     var aOOOAttrNumberingType = 'page-numbering-type';\n\
-    \n\
+\n\
     var aOOOAttrSlide = 'slide';\n\
     var aOOOAttrMaster = 'master';\n\
     var aOOOAttrBackgroundVisibility = 'background-visibility';\n\
@@ -76,17 +80,17 @@ static const char aSVGScript1[] =
     var aOOOAttrDateTimeField = 'date-time-field';\n\
     var aOOOAttrFooterField = 'footer-field';\n\
     var aOOOAttrHeaderField = 'header-field';\n\
-    \n\
+\n\
     var aOOOAttrDateTimeFormat = 'date-time-format';\n\
-    \n\
+\n\
     var aOOOAttrTextAdjust = 'text-adjust';\n\
-    \n\
+\n\
     // Placeholder class names\n\
     var aSlideNumberClassName = 'Slide_Number';\n\
     var aDateTimeClassName = 'Date/Time';\n\
     var aFooterClassName = 'Footer';\n\
     var aHeaderClassName = 'Header';\n\
-    \n\
+\n\
     // Creating a namespace dictionary.\n\
     var NSS = new Object();\n\
     NSS['svg']='http://www.w3.org/2000/svg';\n\
@@ -98,13 +102,13 @@ static const char aSVGScript1[] =
     // Presentation modes.\n\
     var SLIDE_MODE = 1;\n\
     var INDEX_MODE = 2;\n\
-    \n\
+\n\
     // Mouse handler actions.\n\
     var MOUSE_UP = 1;\n\
     var MOUSE_DOWN = 2;\n\
     var MOUSE_MOVE = 3;\n\
     var MOUSE_WHEEL = 4;\n\
-        \n\
+\n\
     // Keycodes.\n\
     var LEFT_KEY = 37;          // cursor left keycode\n\
     var UP_KEY = 38;            // cursor up keycode\n\
@@ -114,17 +118,17 @@ static const char aSVGScript1[] =
     var PAGE_DOWN_KEY = 34;     // page down keycode\n\
     var HOME_KEY = 36;          // home keycode\n\
     var END_KEY = 35;           // end keycode\n\
-    var ENTER_KEY = 13;            \n\
+    var ENTER_KEY = 13;\n\
     var SPACE_KEY = 32;\n\
     var ESCAPE_KEY = 27;\n\
-    \n\
+\n\
     // Visibility Values\n\
     var HIDDEN = 0;\n\
     var VISIBLE = 1;\n\
     var INHERIT = 2;\n\
     var aVisibilityAttributeValue = [ 'hidden', 'visible', 'inherit' ];\n\
     var aVisibilityValue = { 'hidden' : HIDDEN, 'visible' : VISIBLE, 'inherit' : INHERIT };\n\
-    \n\
+\n\
     // Parameters\n\
     var ROOT_NODE = document.getElementsByTagNameNS( NSS['svg'], 'svg' )[0];\n\
     var WIDTH = 0;\n\
@@ -135,29 +139,29 @@ static const char aSVGScript1[] =
     // Initialization.\n\
     var theMetaDoc;\n\
     var theSlideIndexPage;\n\
-    var currentMode = SLIDE_MODE;    \n\
+    var currentMode = SLIDE_MODE;\n\
     var processingEffect = false;\n\
     var nCurSlide = 0;\n\
 \n\
     // Initialize char and key code dictionaries.\n\
     var charCodeDictionary = getDefaultCharCodeDictionary();\n\
     var keyCodeDictionary = getDefaultKeyCodeDictionary();\n\
-    \n\
+\n\
     // Initialize mouse handler dictionary.\n\
     var mouseHandlerDictionary = getDefaultMouseHandlerDictionary();\n\
-    \n\
+\n\
     /***************************\n\
      ** OOP support functions **\n\
      ***************************/\n\
-    \n\
+\n\
     function object( aObject )\n\
     {\n\
         var F = function() {};\n\
         F.prototype = aObject;\n\
         return new F();\n\
     }\n\
-    \n\
-    function extend( aSubType, aSuperType ) \n\
+\n\
+    function extend( aSubType, aSuperType )\n\
     {\n\
         if (!aSuperType || !aSubType) {\n\
             alert('extend failed, verify dependencies');\n\
@@ -177,35 +181,35 @@ static const char aSVGScript1[] =
 \n\
         return aSubType;\n\
     }\n\
-    \n\
+\n\
     // ------------------------------------------------------------------------------------------ //\n\
     /**********************************\n\
      ** Helper functions and classes **\n\
      **********************************/\n\
-    \n\
+\n\
     function Rectangle( aSVGRectElem )\n\
     {\n\
         var x = parseInt( aSVGRectElem.getAttribute( 'x' ) );\n\
         var y = parseInt( aSVGRectElem.getAttribute( 'y' ) );\n\
         var width = parseInt( aSVGRectElem.getAttribute( 'width' ) );\n\
         var height = parseInt( aSVGRectElem.getAttribute( 'height' ) );\n\
-        \n\
+\n\
         this.left = x;\n\
         this.right = x + width;\n\
         this.top = y;\n\
         this.bottom = y + height;\n\
     }\n\
-    \n\
+\n\
     function log( message )\n\
     {\n\
         if( typeof console == 'object' )\n\
         {\n\
             console.log( message );\n\
-        } \n\
+        }\n\
         else if( typeof opera == 'object' )\n\
         {\n\
             opera.postError( message );\n\
-        } \n\
+        }\n\
         else if( typeof java == 'object' && typeof java.lang == 'object' )\n\
         {\n\
             java.lang.System.out.println( message );\n\
@@ -221,13 +225,17 @@ static const char aSVGScript1[] =
         }\n\
         return null;\n\
     }\n\
-    \n\
+\n\
     function getOOOAttribute( aElem, sAttrName )\n\
     {\n\
         return getNSAttribute( 'ooo', aElem, sAttrName );\n\
     }\n\
-        \n\
+\n\
     function setNSAttribute( sNSPrefix, aElem, sAttrName, aValue )\n\
+";
+
+static const char aSVGScript1[] =
+"\
     {\n\
         if( !aElem ) return false;\n\
         if( 'setAttributeNS' in aElem )\n\
@@ -241,18 +249,18 @@ static const char aSVGScript1[] =
             return true;\n\
         }\n\
     }\n\
-    \n\
+\n\
     function setOOOAttribute( aElem, sAttrName, aValue )\n\
     {\n\
         return setNSAttribute( 'ooo', aElem, sAttrName, aValue );\n\
     }\n\
-    \n\
+\n\
     function checkElemAndSetAttribute( aElem, sAttrName, aValue )\n\
     {\n\
-        if( aElem ) \n\
+        if( aElem )\n\
             aElem.setAttribute( sAttrName, aValue );\n\
     }\n\
-    \n\
+\n\
     function getElementsByProperty( node, name )\n\
     {\n\
         var elems = new Array();\n\
@@ -270,7 +278,7 @@ static const char aSVGScript1[] =
 \n\
     function getElementsByClassName( aElem, sClassName )\n\
     {\n\
-        \n\
+\n\
         var aElementSet = new Array();\n\
         // not all browsers support the 'getElementsByClassName' method\n\
         if( 'getElementsByClassName' in aElem )\n\
@@ -278,7 +286,7 @@ static const char aSVGScript1[] =
             aElementSet = aElem.getElementsByClassName( sClassName );\n\
         }\n\
         else\n\
-        {            \n\
+        {\n\
             var aElementSetByClassProperty = getElementsByProperty( aElem, 'class' );\n\
             for( var i = 0; i < aElementSetByClassProperty.length; ++i )\n\
             {\n\
@@ -291,7 +299,7 @@ static const char aSVGScript1[] =
         }\n\
         return aElementSet;\n\
     }\n\
-    \n\
+\n\
     function getElementByClassName( aElem, sClassName /*, sTagName */)\n\
     {\n\
         var aElementSet = getElementsByClassName( aElem, sClassName );\n\
@@ -300,14 +308,14 @@ static const char aSVGScript1[] =
         else\n\
             return null;\n\
     }\n\
-    \n\
+\n\
     function getClassAttribute(  aElem )\n\
     {\n\
         if( aElem )\n\
             return aElem.getAttribute( 'class' );\n\
         return '';\n\
     }\n\
-        \n\
+\n\
     function initVisibilityProperty( aElement )\n\
     {\n\
         var nVisibility = VISIBLE;\n\
@@ -315,7 +323,7 @@ static const char aSVGScript1[] =
         if( sVisibility ) nVisibility = aVisibilityValue[ sVisibility ];\n\
         return nVisibility;\n\
     }\n\
-    \n\
+\n\
     function setElementVisibility( aElement, nCurrentVisibility, nNewVisibility )\n\
     {\n\
         if( nCurrentVisibility !=  nNewVisibility )\n\
@@ -325,7 +333,7 @@ static const char aSVGScript1[] =
         }\n\
         return nCurrentVisibility;\n\
     }\n\
-    \n\
+\n\
     function getSafeIndex( nIndex, nMin, nMax )\n\
     {\n\
         if( nIndex < nMin )\n\
@@ -335,24 +343,22 @@ static const char aSVGScript1[] =
         else\n\
             return nIndex;\n\
     }\n\
-\n\ ";
-
-static const char aSVGScript2[] =
-"\n\
+\n\
+\n\
     // ------------------------------------------------------------------------------------------ //\n\
     /******************\n\
      ** Core Classes **\n\
      ******************/\n\
-    \n\
+\n\
     /** Class MetaDocument **\n\
-     *  This class provides a pool of properties related to the whole presentation and \n\
-     *  it is responsible for initializing the set of MetaSlide objects that handle \n\
+     *  This class provides a pool of properties related to the whole presentation and\n\
+     *  it is responsible for initializing the set of MetaSlide objects that handle\n\
      *  the meta information for each slide.\n\
      */\n\
     function MetaDocument( aMetaDocElem )\n\
     {\n\
         this.nNumberOfSlides = parseInt( aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrNumberOfSlides ) );\n\
-        assert( typeof this.nNumberOfSlides == 'number' && this.nNumberOfSlides > 0, \n\
+        assert( typeof this.nNumberOfSlides == 'number' && this.nNumberOfSlides > 0,\n\
                 'MetaDocument: number of slides is zero or undefined.' );\n\
         this.startSlideNumber = 0;\n\
         this.sPageNumberingType = aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrNumberingType ) || 'arabic';\n\
@@ -360,7 +366,7 @@ static const char aSVGScript2[] =
         this.aMasterPageSet = new Object();\n\
         this.aTextFieldSet = new Array();\n\
         this.slideNumberField =  new SlideNumberField( this.sPageNumberingType );\n\
-        \n\
+\n\
         for( var i = 0; i < this.nNumberOfSlides; ++i )\n\
         {\n\
             var sMetaSlideId = aOOOElemMetaSlide + '_' + i;\n\
@@ -370,16 +376,16 @@ static const char aSVGScript2[] =
                 'MetaDocument: aMetaSlideSet.length != nNumberOfSlides.' );\n\
         this.aMetaSlideSet[ this.startSlideNumber ].show();\n\
     }\n\
-    \n\
+\n\
     MetaDocument.prototype.initPlaceholderShapes = function()\n\
     {\n\
         this.aMetaSlideSet[0].initPlaceholderShapes();\n\
     };\n\
-    \n\
-    \n\
+\n\
+\n\
     /** Class MetaSlide **\n\
-     *  This class is responsible for managing the visibility of all master page shapes \n\
-     *  and background related to a given slide element; it performs the creation and \n\
+     *  This class is responsible for managing the visibility of all master page shapes\n\
+     *  and background related to a given slide element; it performs the creation and\n\
      *  the initialization of each Text Field object.\n\
      */\n\
     function MetaSlide( sMetaSlideId, aMetaDoc )\n\
@@ -395,7 +401,7 @@ static const char aSVGScript2[] =
         assert( this.slideElement, 'MetaSlide: slide element <' + this.slideId + '> not found.' );\n\
         // - Initialize the Target Master Page Element -\n\
         this.masterPage = this.initMasterPage();\n\
-        // - Initialize Background - \n\
+        // - Initialize Background -\n\
         //this.aBackground                 = getElementByClassName( this.aSlide, 'Background' );\n\
         // - Initialize Visibility Properties -\n\
         this.nAreMasterObjectsVisible     = this.initVisibilityProperty( aOOOAttrMasterObjectsVisibility,  VISIBLE );\n\
@@ -411,18 +417,18 @@ static const char aSVGScript2[] =
         this.aMPTextFieldSet[aFooterClassName]        = this.initFixedTextField( aOOOAttrFooterField );\n\
         this.aMPTextFieldSet[aHeaderClassName]        = this.initFixedTextField( aOOOAttrHeaderField );\n\
     }\n\
-    \n\
+\n\
     /*** MetaSlide methods ***/\n\
     MetaSlide.prototype =\n\
-    {    \n\
+    {\n\
         /*** public methods ***/\n\
             hide : function()\n\
             {\n\
                 checkElemAndSetAttribute( this.slideElement, 'visibility', 'hidden' );\n\
-                \n\
+\n\
                 this.masterPage.hide();\n\
                 this.masterPage.hideBackground();\n\
-                \n\
+\n\
                 var aFieldSet = this.aMPTextFieldSet;\n\
                 var aShapeSet = this.masterPage.aPlaceholderShapeSet;\n\
                 if( aFieldSet[aSlideNumberClassName] )         aFieldSet[aSlideNumberClassName].hide( aShapeSet[aSlideNumberClassName] );\n\
@@ -430,16 +436,20 @@ static const char aSVGScript2[] =
                 if( aFieldSet[aFooterClassName] )              aFieldSet[aFooterClassName].hide( aShapeSet[aFooterClassName] );\n\
                 if( aFieldSet[aHeaderClassName] )              aFieldSet[aHeaderClassName].hide( aShapeSet[aHeaderClassName] );\n\
             },\n\
-            \n\
+";
+
+static const char aSVGScript2[] =
+"\
+\n\
             hideExceptMaster : function()\n\
             {\n\
                 checkElemAndSetAttribute( this.slideElement, 'visibility', 'hidden' );\n\
             },\n\
-            \n\
+\n\
             show : function()\n\
             {\n\
                 checkElemAndSetAttribute( this.slideElement, 'visibility', 'visible' );\n\
-                \n\
+\n\
                 this.masterPage.setVisibility( this.nAreMasterObjectsVisible );\n\
                 this.masterPage.setVisibilityBackground( this.nIsBackgroundVisible );\n\
 \n\
@@ -454,22 +464,22 @@ static const char aSVGScript2[] =
         {\n\
             return this.masterPage.id;\n\
         },\n\
-        \n\
+\n\
         getMasterPageElement : function()\n\
         {\n\
             return this.masterPage.element;\n\
         },\n\
-        \n\
+\n\
         getBackground : function()\n\
         {\n\
             return getElementByClassName( this.slideElement, 'Background' );\n\
         },\n\
-        \n\
+\n\
         getMasterPageBackground : function()\n\
         {\n\
             return this.masterPage.background;\n\
         },\n\
-        \n\
+\n\
         /*** private methods ***/\n\
         initMasterPage : function()\n\
         {\n\
@@ -478,7 +488,7 @@ static const char aSVGScript2[] =
                 this.theMetaDoc.aMasterPageSet[ sMasterPageId ] = new MasterPage( sMasterPageId );\n\
             return this.theMetaDoc.aMasterPageSet[ sMasterPageId ];\n\
         },\n\
-        \n\
+\n\
         initVisibilityProperty : function( aVisibilityAttribute, nDefaultValue )\n\
         {\n\
             var nVisibility = nDefaultValue;\n\
@@ -487,12 +497,12 @@ static const char aSVGScript2[] =
                 nVisibility = aVisibilityValue[ sVisibility ];\n\
             return nVisibility;\n\
         },\n\
-    \n\
+\n\
         initSlideNumberField : function()\n\
         {\n\
             return this.theMetaDoc.slideNumberField;\n\
         },\n\
-        \n\
+\n\
         initDateTimeField : function( aOOOAttrDateTimeField )\n\
         {\n\
             var sTextFieldId = getOOOAttribute( this.element, aOOOAttrDateTimeField );\n\
@@ -501,9 +511,9 @@ static const char aSVGScript2[] =
             var nLength = aOOOElemTextField.length + 1;\n\
             var nIndex = parseInt(sTextFieldId.substring( nLength ) );\n\
             if( typeof nIndex != 'number') return null;\n\
-            \n\
+\n\
             if( !this.theMetaDoc.aTextFieldSet[ nIndex ] )\n\
-            {   \n\
+            {\n\
                 var aTextField;\n\
                 var aTextFieldElem = document.getElementById( sTextFieldId );\n\
                 var sClassName = getClassAttribute( aTextFieldElem );\n\
@@ -523,25 +533,25 @@ static const char aSVGScript2[] =
             }\n\
             return this.theMetaDoc.aTextFieldSet[ nIndex ];\n\
         },\n\
-        \n\
+\n\
         initFixedTextField : function( aOOOAttribute )\n\
         {\n\
             var sTextFieldId = getOOOAttribute( this.element, aOOOAttribute );\n\
             if( !sTextFieldId ) return null;\n\
-            \n\
+\n\
             var nLength = aOOOElemTextField.length + 1;\n\
             var nIndex = parseInt( sTextFieldId.substring( nLength ) );\n\
             if( typeof nIndex != 'number') return null;\n\
-            \n\
+\n\
             if( !this.theMetaDoc.aTextFieldSet[ nIndex ] )\n\
             {\n\
                 var aTextFieldElem = document.getElementById( sTextFieldId );\n\
-                this.theMetaDoc.aTextFieldSet[ nIndex ] \n\
+                this.theMetaDoc.aTextFieldSet[ nIndex ]\n\
                     = new FixedTextField( aTextFieldElem );\n\
             }\n\
             return this.theMetaDoc.aTextFieldSet[ nIndex ];\n\
         },\n\
-        \n\
+\n\
         setTextFieldVisibility : function( sClassName, nVisible )\n\
         {\n\
             var aTextField = this.aMPTextFieldSet[ sClassName ];\n\
@@ -550,9 +560,9 @@ static const char aSVGScript2[] =
             aTextField.setVisibility( this.nAreMasterObjectsVisible & nVisible, aPlaceholderShape );\n\
         }\n\
     };\n\
-    \n\
+\n\
     /** Class MasterPage **\n\
-     *  This class gives access to a master page element, its background and \n\
+     *  This class gives access to a master page element, its background and\n\
      *  each placeholder shape present in the master page element.\n\
      */\n\
     function MasterPage( sMasterPageId )\n\
@@ -569,16 +579,16 @@ static const char aSVGScript2[] =
         this.aPlaceholderShapeSet = new Object();\n\
         this.initPlaceholderShapes();\n\
     }\n\
-    \n\
+\n\
     /*** MasterPage methods ***/\n\
     MasterPage.prototype =\n\
     {\n\
-         /*** public method ***/    \n\
+         /*** public method ***/\n\
         setVisibility : function( nVisibility )\n\
         {\n\
             this.backgroundObjectsVisibility = setElementVisibility( this.backgroundObjects, this.backgroundObjectsVisibility, nVisibility );\n\
         },\n\
-        \n\
+\n\
         setVisibilityBackground : function( nVisibility )\n\
         {\n\
             this.backgroundVisibility = setElementVisibility( this.background, this.backgroundVisibility, nVisibility );\n\
@@ -588,22 +598,22 @@ static const char aSVGScript2[] =
         {\n\
             this.setVisibility( HIDDEN );\n\
         },\n\
-        \n\
+\n\
         show : function()\n\
         {\n\
             this.setVisibility( VISIBLE );\n\
         },\n\
-        \n\
+\n\
         hideBackground : function()\n\
         {\n\
             this.setVisibilityBackground( HIDDEN );\n\
         },\n\
-        \n\
+\n\
         showBackground : function()\n\
         {\n\
             this.setVisibilityBackground( VISIBLE );\n\
         },\n\
-        \n\
+\n\
         /*** private method ***/\n\
         initPlaceholderShapes : function()\n\
         {\n\
@@ -613,9 +623,9 @@ static const char aSVGScript2[] =
             this.aPlaceholderShapeSet[ aHeaderClassName ] = new PlaceholderShape( this, aHeaderClassName );\n\
         }\n\
     };\n\
-    \n\
+\n\
     /** Class PlaceholderShape **\n\
-     *  This class manages the visibility and the text content of a placeholder shape. \n\
+     *  This class manages the visibility and the text content of a placeholder shape.\n\
      */\n\
     function PlaceholderShape( aMasterPage, sClassName )\n\
     {\n\
@@ -623,51 +633,59 @@ static const char aSVGScript2[] =
         this.className = sClassName;\n\
         this.element = null;\n\
         this.textElement = null;\n\
-            \n\
+\n\
         this.init();\n\
     }\n\
-    \n\
+\n\
     /* public methods */\n\
     PlaceholderShape.prototype.setTextContent = function( sText )\n\
     {\n\
+";
+
+static const char aSVGScript3[] =
+"\
         if( !this.textElement )\n\
         {\n\
-            log( 'error: PlaceholderShape.setTextContent: text element is not valid in placeholder of type ' \n\
+            log( 'error: PlaceholderShape.setTextContent: text element is not valid in placeholder of type '\n\
                     + this.className + ' that belongs to master slide ' + this.masterPage.id );\n\
-            return;            \n\
+            return;\n\
         }\n\
         this.textElement.textContent = sText;\n\
     };\n\
-    \n\
+\n\
     PlaceholderShape.prototype.setVisibility = function( nVisibility )\n\
     {\n\
         this.element.setAttribute( 'visibility', aVisibilityAttributeValue[nVisibility] );\n\
     };\n\
-    \n\
+\n\
     PlaceholderShape.prototype.show = function()\n\
     {\n\
         this.element.setAttribute( 'visibility', 'visible' );\n\
     };\n\
-    \n\
+\n\
     PlaceholderShape.prototype.hide = function()\n\
     {\n\
         this.element.setAttribute( 'visibility', 'hidden' );\n\
     };\n\
-    \n\
+\n\
     /* private methods */\n\
     PlaceholderShape.prototype.init = function()\n\
     {\n\
         var aShapeElem = getElementByClassName( this.masterPage.backgroundObjects, this.className );\n\
         if( !aShapeElem ) return;\n\
-        \n\
+\n\
         this.element = aShapeElem;\n\
         this.element.setAttribute( 'visibility', 'hidden' );\n\
-        \n\
+\n\
+        this.textElement = getElementByClassName( this.element , 'PlaceholderText' );\n\
+        if( !this.textElement )  return;\n\
+\n\
+\n\
         var aSVGRectElemSet = this.element.getElementsByTagName( 'rect' );\n\
         if( aSVGRectElemSet.length != 1) return;\n\
-        \n\
+\n\
         var aRect = new Rectangle( aSVGRectElemSet[0] );\n\
-                    \n\
+\n\
         var sTextAdjust = getOOOAttribute( this.element, aOOOAttrTextAdjust ) || 'left';\n\
         var sTextAnchor, sX;\n\
         if( sTextAdjust == 'left' )\n\
@@ -686,61 +704,34 @@ static const char aSVGScript2[] =
             var nMiddle = ( aRect.left + aRect.right ) / 2;\n\
             sX = String( parseInt( String( nMiddle ) ) );\n\
         }\n\
-        \n\
-        \n\
-        var aTextBlockElemArray = getElementsByClassName( this.element, 'TextBlock' );\n\
-        if( aTextBlockElemArray.length == 0 ) return;\n\
-        \n\
-        var aParentElem = aTextBlockElemArray[0].parentNode;\n\
-        var aTextBlockElem = aTextBlockElemArray[0].cloneNode( false /* no deep clone */ );\n\
-        \n\
-        var aGlyphElemArray = aTextBlockElemArray[0].getElementsByTagName( 'text' );\n\
-        //var aGlyphElemArray = getElementsByClassName( aTextBlockElemArray[0], 'Glyph' );\n\
-        if( aGlyphElemArray.length == 0 ) return;\n\
-        var sY = String( aGlyphElemArray[0].getAttribute( 'y' ) );        \n\
-        \n\
-              \n\
-        var aTextElem = document.createElementNS( NSS['svg'], 'text' );\n\
-        aTextElem.setAttribute( 'class', 'PlaceholderContent' );\n\
-        aTextElem.setAttribute( 'text-anchor', sTextAnchor );\n\
-        aTextElem.setAttribute( 'x', sX );\n\
-        aTextElem.setAttribute( 'y', sY );\n\
-        aTextBlockElem.appendChild( aTextElem );\n\
-        aParentElem.replaceChild( aTextBlockElem, aTextBlockElemArray[0] );\n\
-        \n\
-        var nLast = aTextBlockElemArray.length - 1;\n\
-        for( var i = nLast; i > 0 ; --i )\n\
-        {\n\
-            aParentElem.removeChild( aTextBlockElemArray[i] );\n\
-        }\n\
 \n\
-        this.textElement = getElementByClassName( aParentElem, 'PlaceholderContent' );\n\
+\n\
+        this.textElement.setAttribute( 'text-anchor', sTextAnchor );\n\
+        this.textElement.setAttribute( 'x', sX );\n\
     };\n\
-\n\ ";
-
-static const char aSVGScript3[] =
-"\n\
+\n\
+\n\
     // ------------------------------------------------------------------------------------------ //\n\
     /********************************\n\
      ** Text Field Class Hierarchy **\n\
      ********************************/\n\
-    \n\
+\n\
     /** Class TextField **\n\
      *  This class is the root abstract class of the hierarchy.\n\
-     *  The 'shapeElement' property is the shape element to which \n\
+     *  The 'shapeElement' property is the shape element to which\n\
      *  this TextField object provides the text content.\n\
      */\n\
     function TextField( aTextFieldElem )\n\
     {\n\
         this.bIsUpdated = false;\n\
     }\n\
-    \n\
+\n\
     /*** TextField public methods ***/\n\
     TextField.prototype.getShapeElement = function()\n\
     {\n\
         return this.shapeElement;\n\
     };\n\
-    \n\
+\n\
     TextField.prototype.setVisibility = function( nVisibility, aPlaceholderShape )\n\
     {\n\
         if( !this.bIsUpdated )\n\
@@ -752,24 +743,24 @@ static const char aSVGScript3[] =
             }\n\
             aPlaceholderShape.setVisibility( nVisibility );\n\
         }\n\
-        else if( !nVisibility ) \n\
+        else if( !nVisibility )\n\
         {\n\
             aPlaceholderShape.hide();\n\
             this.bIsUpdated = false;\n\
         }\n\
     };\n\
-    \n\
+\n\
     TextField.prototype.show = function( aPlaceholderShape )\n\
     {\n\
         this.setVisibility( VISIBLE, aPlaceholderShape );\n\
     };\n\
-    \n\
+\n\
     TextField.prototype.hide = function( aPlaceholderShape )\n\
     {\n\
         this.setVisibility( HIDDEN, aPlaceholderShape );\n\
     };\n\
-    \n\
-    \n\
+\n\
+\n\
     /** Class FixedTextField **\n\
      *  This class handles text field with a fixed text.\n\
      *  The text content is provided by the 'text' property.\n\
@@ -780,15 +771,15 @@ static const char aSVGScript3[] =
         this.text = aTextFieldElem.textContent;\n\
     }\n\
     extend( FixedTextField, TextField );\n\
-    \n\
+\n\
     FixedTextField.prototype.update = function( aPlaceholderShape )\n\
-    {        \n\
+    {\n\
         aPlaceholderShape.setTextContent( this.text );\n\
     };\n\
 \n\
-            \n\
+\n\
     /** Class VariableDateTimeField **\n\
-     *  Provide the text content for the related shape by generating the current \n\
+     *  Provide the text content for the related shape by generating the current\n\
      *  date/time in the format specified by the 'dateTimeFormat' property.\n\
      */\n\
     function VariableDateTimeField( aTextFieldElem )\n\
@@ -797,14 +788,14 @@ static const char aSVGScript3[] =
         this.dateTimeFormat = getOOOAttribute( aTextFieldElem, aOOOAttrDateTimeFormat );\n\
     }\n\
     extend( VariableDateTimeField, TextField );\n\
-    \n\
+\n\
     /*** public methods ***/\n\
     VariableDateTimeField.prototype.update = function( aPlaceholderShape )\n\
-    {        \n\
+    {\n\
         var sText = this.createDateTimeText( this.dateTimeFormat );\n\
         aPlaceholderShape.setTextContent( sText );\n\
     };\n\
-    \n\
+\n\
     VariableDateTimeField.prototype.createDateTimeText = function( sDateTimeFormat )\n\
     {\n\
         // TODO handle date/time format\n\
@@ -812,9 +803,9 @@ static const char aSVGScript3[] =
         var sDate = aDate.toLocaleString();\n\
         return sDate;\n\
     };\n\
-    \n\
+\n\
     /** Class SlideNumberField **\n\
-     *  Provides the text content to the related shape by generating \n\
+     *  Provides the text content to the related shape by generating\n\
      *  the current page number in the given page numbering type.\n\
      */\n\
     function SlideNumberField( sPageNumberingType )\n\
@@ -823,37 +814,40 @@ static const char aSVGScript3[] =
         this.pageNumberingType = sPageNumberingType;\n\
     }\n\
     extend( SlideNumberField, TextField );\n\
-    \n\
+\n\
     /*** public methods ***/\n\
     SlideNumberField.prototype.getNumberingType = function()\n\
     {\n\
         return this.pageNumberingType;\n\
     };\n\
-    \n\
+\n\
     SlideNumberField.prototype.update = function( aPlaceholderShape )\n\
-    {      \n\
+    {\n\
         var sText = this.createSlideNumberText( nCurSlide + 1, this.getNumberingType() );\n\
         aPlaceholderShape.setTextContent( sText );\n\
     };\n\
-    \n\
+\n\
     SlideNumberField.prototype.createSlideNumberText = function( nSlideNumber, sNumberingType )\n\
     {\n\
         // TODO handle page numbering type\n\
         return String( nSlideNumber );\n\
     };\n\
-\n\ ";
-
-static const char aSVGScript4[] =
-"\n\
+\n\
+\n\
+\n\
     //------------------------------------------------------------------------------------------- //\n\
     /********************************\n\
      ** Slide Index Classes **\n\
      ********************************/\n\
-    \n\
+\n\
     /** Class SlideIndePagex **\n\
      *  This class is responsible for handling the slide index page\n\
      */\n\
     function SlideIndexPage()\n\
+";
+
+static const char aSVGScript4[] =
+"\
     {\n\
         this.pageElementId = 'slide_index';\n\
         this.pageBgColor = 'rgb(252,252,252)';\n\
@@ -862,7 +856,7 @@ static const char aSVGScript4[] =
         this.indexColumns = INDEX_COLUMNS_DEFAULT;\n\
         this.totalThumbnails = this.indexColumns * this.indexColumns;\n\
         this.selectedSlideIndex = nCurSlide;\n\
-        \n\
+\n\
         // set up layout paramers\n\
         this.xSpacingFactor = 600/28000;\n\
         this.ySpacingFactor = 450/21000;\n\
@@ -871,21 +865,21 @@ static const char aSVGScript4[] =
         this.halfBorderWidthFactor = ( 300/28000 ) * ( this.indexColumns / 3 );\n\
         this.halfBorderWidth = WIDTH * this.halfBorderWidthFactor;\n\
         this.borderWidth = 2 * this.halfBorderWidth;\n\
-        // the following formula is used to compute the slide shrinking factor: \n\
+        // the following formula is used to compute the slide shrinking factor:\n\
         // scaleFactor = ( WIDTH - ( columns + 1 ) * xSpacing ) / ( columns * ( WIDTH + borderWidth ) )\n\
         // indeed we can divide everything by WIDTH:\n\
-        this.scaleFactor = ( 1 - ( this.indexColumns + 1 ) * this.xSpacingFactor ) / \n\
+        this.scaleFactor = ( 1 - ( this.indexColumns + 1 ) * this.xSpacingFactor ) /\n\
                                 ( this.indexColumns * ( 1 + 2 * this.halfBorderWidthFactor ) );\n\
-        \n\
-        // We create a Thumbnail Border and Thumbnail MouseArea rectangle template that will be \n\
-        // used by every Thumbnail. The Mouse Area rectangle is used in order to trigger the \n\
+\n\
+        // We create a Thumbnail Border and Thumbnail MouseArea rectangle template that will be\n\
+        // used by every Thumbnail. The Mouse Area rectangle is used in order to trigger the\n\
         // mouseover event properly even when the slide background is hidden.\n\
         this.thumbnailMouseAreaTemplateId = 'thumbnail_mouse_area';\n\
         this.thumbnailMouseAreaTemplateElement = null;\n\
         this.thumbnailBorderTemplateId = 'thumbnail_border';\n\
         this.thumbnailBorderTemplateElement = null;\n\
         this.createTemplateElements();\n\
-        \n\
+\n\
         // Now we create the grid of thumbnails\n\
         this.aThumbnailSet = new Array( this.totalThumbnails );\n\
         for( var i = 0; i < this.totalThumbnails; ++i )\n\
@@ -893,32 +887,32 @@ static const char aSVGScript4[] =
             this.aThumbnailSet[i] = new Thumbnail( this, i );\n\
             this.aThumbnailSet[i].updateView();\n\
         }\n\
-        \n\
+\n\
         this.curThumbnailIndex = this.selectedSlideIndex % this.totalThumbnails;\n\
         this.aThumbnailSet[ this.curThumbnailIndex ].select();\n\
     }\n\
-    \n\
-    \n\
+\n\
+\n\
     /* public methods */\n\
     SlideIndexPage.prototype.getTotalThumbnails = function()\n\
     {\n\
         return this.totalThumbnails;\n\
     };\n\
-    \n\
+\n\
     SlideIndexPage.prototype.show = function()\n\
     {\n\
-        this.pageElement.setAttribute( 'display', 'inherit' ); \n\
+        this.pageElement.setAttribute( 'display', 'inherit' );\n\
     };\n\
-    \n\
+\n\
     SlideIndexPage.prototype.hide = function()\n\
     {\n\
         this.pageElement.setAttribute( 'display', 'none' );\n\
     };\n\
-    \n\
+\n\
     /** setSelection\n\
-     * \n\
+     *\n\
      * Change the selected thumbnail from the current one to the thumbnail with index nIndex.\n\
-     * \n\
+     *\n\
      * @param nIndex - the thumbnail index\n\
      */\n\
     SlideIndexPage.prototype.setSelection = function( nIndex )\n\
@@ -932,13 +926,13 @@ static const char aSVGScript4[] =
         }\n\
         this.selectedSlideIndex = this.aThumbnailSet[ nIndex ].slideIndex;\n\
     };\n\
-    \n\
+\n\
     SlideIndexPage.prototype.createPageElement = function()\n\
     {\n\
         var aPageElement = document.createElementNS( NSS['svg'], 'g' );\n\
         aPageElement.setAttribute( 'id', this.pageElementId );\n\
         aPageElement.setAttribute( 'display', 'none' );\n\
-        \n\
+\n\
         // the slide index page background\n\
         var sPageBgColor = this.pageBgColor + ';';\n\
         var aRectElement = document.createElementNS( NSS['svg'], 'rect' );\n\
@@ -947,18 +941,18 @@ static const char aSVGScript4[] =
         aRectElement.setAttribute( 'width', WIDTH );\n\
         aRectElement.setAttribute( 'height', HEIGHT );\n\
         aRectElement.setAttribute( 'style', 'stroke:none;fill:' + sPageBgColor );\n\
-        \n\
+\n\
         aPageElement.appendChild( aRectElement );\n\
-        // The index page is appended after all slide elements \n\
+        // The index page is appended after all slide elements\n\
         // so when it is displayed it covers them all\n\
         ROOT_NODE.appendChild( aPageElement );\n\
         return( document.getElementById( this.pageElementId ) );\n\
     };\n\
-    \n\
+\n\
     SlideIndexPage.prototype.createTemplateElements = function()\n\
-    {   \n\
+    {\n\
         // We define a Rect element as a template of thumbnail border for all slide-thumbnails.\n\
-        // The stroke color is defined individually by each thumbnail according to \n\
+        // The stroke color is defined individually by each thumbnail according to\n\
         // its selection status.\n\
         var aDefsElement = document.createElementNS( NSS['svg'], 'defs' );\n\
         var aRectElement = document.createElementNS( NSS['svg'], 'rect' );\n\
@@ -972,7 +966,7 @@ static const char aSVGScript4[] =
         aRectElement.setAttribute( 'stroke-width', this.borderWidth );\n\
         aRectElement.setAttribute( 'fill', 'none' );\n\
         aDefsElement.appendChild( aRectElement );\n\
-        \n\
+\n\
         // We define a Rect element as a template of mouse area for triggering the mouseover event.\n\
         // A copy is used by each thumbnail element.\n\
         aRectElement = document.createElementNS( NSS['svg'], 'rect' );\n\
@@ -983,67 +977,67 @@ static const char aSVGScript4[] =
         aRectElement.setAttribute( 'height', HEIGHT );\n\
         aRectElement.setAttribute( 'fill', this.pageBgColor );\n\
         aDefsElement.appendChild( aRectElement );\n\
-      \n\
+\n\
         this.pageElement.appendChild( aDefsElement );\n\
-        \n\
+\n\
         this.thumbnailMouseAreaTemplateElement = document.getElementById( this.thumbnailMouseAreaTemplateId );\n\
         this.thumbnailBorderTemplateElement = document.getElementById( this.thumbnailBorderTemplateId );\n\
     };\n\
-    \n\
+\n\
     SlideIndexPage.prototype.decreaseNumberOfColumns  = function()\n\
     {\n\
         this.setNumberOfColumns( this.indexColumns - 1 );\n\
     };\n\
-    \n\
+\n\
     SlideIndexPage.prototype.increaseNumberOfColumns  = function()\n\
     {\n\
         this.setNumberOfColumns( this.indexColumns + 1 );\n\
     };\n\
-    \n\
+\n\
     SlideIndexPage.prototype.resetNumberOfColumns  = function()\n\
     {\n\
         this.setNumberOfColumns( INDEX_COLUMNS_DEFAULT );\n\
     };\n\
-    \n\
+\n\
     /** setNumberOfColumns\n\
-     * \n\
+     *\n\
      * Change the size of the thumbnail grid.\n\
-     * \n\
+     *\n\
      * @param nNumberOfColumns - the new number of columns/rows of the thumbnail grid\n\
      */\n\
     SlideIndexPage.prototype.setNumberOfColumns  = function( nNumberOfColumns )\n\
     {\n\
         if( this.indexColumns == nNumberOfColumns )  return;\n\
         if( nNumberOfColumns < 2 || nNumberOfColumns > 6 ) return;\n\
-        \n\
+\n\
         var suspendHandle = ROOT_NODE.suspendRedraw(500);\n\
-        \n\
+\n\
         var nOldTotalThumbnails = this.totalThumbnails;\n\
         this.indexColumns = nNumberOfColumns;\n\
         this.totalThumbnails = nNumberOfColumns * nNumberOfColumns;;\n\
-        \n\
+\n\
         this.aThumbnailSet[this.curThumbnailIndex].unselect();\n\
-        \n\
+\n\
         // if we decreased the number of used columns we remove the exceding thumbnail elements\n\
         for( var i = this.totalThumbnails; i < nOldTotalThumbnails; ++i )\n\
         {\n\
             this.aThumbnailSet[i].removeElement();\n\
         };\n\
-        \n\
+\n\
         // if we increased the number of used columns we create the needed thumbnail objects\n\
         for( var i = nOldTotalThumbnails; i < this.totalThumbnails; ++i )\n\
         {\n\
             this.aThumbnailSet[i] = new Thumbnail( this, i );\n\
         };\n\
-        \n\
+\n\
         // we set up layout parameters that depend on the number of columns\n\
         this.halfBorderWidthFactor = ( 300/28000 ) * ( this.indexColumns / 3 );\n\
         this.halfBorderWidth = WIDTH * this.halfBorderWidthFactor;\n\
         this.borderWidth = 2 * this.halfBorderWidth;\n\
         // scaleFactor = ( WIDTH - ( columns + 1 ) * xSpacing ) / ( columns * ( WIDTH + borderWidth ) )\n\
-        this.scaleFactor = ( 1 - ( this.indexColumns + 1 ) * this.xSpacingFactor ) / \n\
+        this.scaleFactor = ( 1 - ( this.indexColumns + 1 ) * this.xSpacingFactor ) /\n\
                                 ( this.indexColumns * ( 1 + 2 * this.halfBorderWidthFactor ) );\n\
-        \n\
+\n\
         // update the thumbnail border size\n\
         var aRectElement = this.thumbnailBorderTemplateElement;\n\
         aRectElement.setAttribute( 'x', -this.halfBorderWidth );\n\
@@ -1053,7 +1047,11 @@ static const char aSVGScript4[] =
         aRectElement.setAttribute( 'width', WIDTH + this.halfBorderWidth );\n\
         aRectElement.setAttribute( 'height', HEIGHT + this.halfBorderWidth );\n\
         aRectElement.setAttribute( 'stroke-width', this.borderWidth );\n\
-        \n\
+\n\
+";
+
+static const char aSVGScript5[] =
+"\
         // now we update the displacement on the index page of each thumbnail (old and new)\n\
         for( var i = 0; i < this.totalThumbnails; ++i )\n\
         {\n\
@@ -1062,18 +1060,16 @@ static const char aSVGScript4[] =
 \n\
         this.curThumbnailIndex = this.selectedSlideIndex % this.totalThumbnails;\n\
         this.aThumbnailSet[this.curThumbnailIndex].select();\n\
-        \n\
+\n\
         // needed for forcing the indexSetPageSlide routine to update the INDEX_OFFSET\n\
-        INDEX_OFFSET = -1; \n\
+        INDEX_OFFSET = -1;\n\
         indexSetPageSlide( this.selectedSlideIndex );\n\
-        \n\
+\n\
         ROOT_NODE.unsuspendRedraw( suspendHandle );\n\
-        ROOT_NODE.forceRedraw();   \n\
+        ROOT_NODE.forceRedraw();\n\
     };\n\
-    \n\ ";
-
-static const char aSVGScript5[] =
-"\n\
+\n\
+\n\
     /** Class Thumbnail **\n\
      *  This class handles a slide thumbnail.\n\
      */\n\
@@ -1083,36 +1079,36 @@ static const char aSVGScript5[] =
         this.index = nIndex;//= getSafeIndex( nIndex, 0, this.container.getTotalThumbnails() );\n\
         this.pageElement = this.container.pageElement;\n\
         this.thumbnailId = 'thumbnail' + this.index;\n\
-        this.thumbnailElement = this.createThumbnailElement();        \n\
+        this.thumbnailElement = this.createThumbnailElement();\n\
         this.slideElement = getElementByClassName( this.thumbnailElement, 'Slide' );\n\
         this.backgroundElement = getElementByClassName( this.thumbnailElement, 'Background' );\n\
         this.backgroundObjectsElement = getElementByClassName( this.thumbnailElement, 'BackgroundObjects' );\n\
         this.borderElement = getElementByClassName( this.thumbnailElement, 'Border' );\n\
         this.aTransformSet = new Array( 3 );\n\
-        this.visibility = VISIBLE;        \n\
-        this.isSelected = false;      \n\
+        this.visibility = VISIBLE;\n\
+        this.isSelected = false;\n\
     };\n\
-    \n\
+\n\
     /* static const class member */\n\
     Thumbnail.prototype.sNormalBorderColor = 'rgb(216,216,216)';\n\
     Thumbnail.prototype.sSelectionBorderColor = 'rgb(92,92,255)';\n\
-    \n\
-    /* public methods */    \n\
+\n\
+    /* public methods */\n\
     Thumbnail.prototype.removeElement = function()\n\
     {\n\
         if( this.thumbnailElement )\n\
             this.container.pageElement.removeChild( this.thumbnailElement );\n\
     };\n\
-    \n\
+\n\
     Thumbnail.prototype.show = function()\n\
     {\n\
         if( this.visibility == HIDDEN )\n\
-        {           \n\
+        {\n\
             this.thumbnailElement.setAttribute( 'display', 'inherit' );\n\
             this.visibility = VISIBLE;\n\
         }\n\
     };\n\
-    \n\
+\n\
     Thumbnail.prototype.hide = function()\n\
     {\n\
         if( this.visibility == VISIBLE )\n\
@@ -1121,7 +1117,7 @@ static const char aSVGScript5[] =
             this.visibility = HIDDEN;\n\
         }\n\
     };\n\
-   \n\
+\n\
     Thumbnail.prototype.select = function()\n\
     {\n\
         if( !this.isSelected )\n\
@@ -1130,7 +1126,7 @@ static const char aSVGScript5[] =
             this.isSelected = true;\n\
         }\n\
     };\n\
-    \n\
+\n\
     Thumbnail.prototype.unselect = function()\n\
     {\n\
         if( this.isSelected )\n\
@@ -1139,13 +1135,13 @@ static const char aSVGScript5[] =
             this.isSelected = false;\n\
         }\n\
     };\n\
-    \n\
+\n\
     /** updateView\n\
-     * \n\
-     *  This method updates the displacement of the thumbnail on the slide index page, \n\
+     *\n\
+     *  This method updates the displacement of the thumbnail on the slide index page,\n\
      *  the value of the row, column coordinates of the thumbnail in the grid, and\n\
      *  the onmouseover property of the thumbnail element.\n\
-     *  \n\
+     *\n\
      */\n\
     Thumbnail.prototype.updateView = function()\n\
     {\n\
@@ -1161,17 +1157,17 @@ static const char aSVGScript5[] =
         this.thumbnailElement.setAttribute( 'transform', sTransformAttrValue );\n\
         this.thumbnailElement.setAttribute( 'onmouseover', 'theSlideIndexPage.aThumbnailSet[' + this.index  + '].onMouseOver()' );\n\
     };\n\
-    \n\
+\n\
     /** update\n\
-     * \n\
+     *\n\
      * This method update the content of the thumbnail view\n\
-     * \n\
+     *\n\
      * @param nIndex - the index of the slide to be shown in the thumbnail\n\
-     */     \n\
+     */\n\
     Thumbnail.prototype.update = function( nIndex )\n\
     {\n\
        if( this.slideIndex == nIndex )  return;\n\
-       \n\
+\n\
        var aMetaSlide = theMetaDoc.aMetaSlideSet[nIndex];\n\
        setNSAttribute( 'xlink', this.slideElement, 'href', '#' + aMetaSlide.slideId );\n\
        if( aMetaSlide.nIsBackgroundVisible )\n\
@@ -1194,21 +1190,21 @@ static const char aSVGScript5[] =
        }\n\
        this.slideIndex = nIndex;\n\
     };\n\
-    \n\
+\n\
     Thumbnail.prototype.clear = function( nIndex )\n\
-    {  \n\
+    {\n\
        setNSAttribute( 'xlink', this.slideElement, 'href', '' );\n\
        setNSAttribute( 'xlink', this.backgroundElement, 'href', '' );\n\
        setNSAttribute( 'xlink', this.backgroundObjectsElement, 'href', '' );\n\
     };\n\
-    \n\
+\n\
     /* private methods */\n\
     Thumbnail.prototype.createThumbnailElement = function()\n\
     {\n\
         var aThumbnailElement = document.createElementNS( NSS['svg'], 'g' );\n\
         aThumbnailElement.setAttribute( 'id', this.thumbnailId );\n\
         aThumbnailElement.setAttribute( 'display', 'inherit' );\n\
-        \n\
+\n\
         var aMouseAreaElement = document.createElementNS( NSS['svg'], 'use' );\n\
         setNSAttribute( 'xlink', aMouseAreaElement, 'href', '#' + this.container.thumbnailMouseAreaTemplateId );\n\
         aMouseAreaElement.setAttribute( 'class', 'MouseArea' );\n\
@@ -1219,63 +1215,65 @@ static const char aSVGScript5[] =
         aBackgroundElement.setAttribute( 'visibility', 'inherit');\n\
         aBackgroundElement.setAttribute( 'class', 'Background' );\n\
         aThumbnailElement.appendChild( aBackgroundElement );\n\
-        \n\
+\n\
         var aBackgroundObjectsElement = document.createElementNS( NSS['svg'], 'use' );\n\
         setNSAttribute( 'xlink', aBackgroundObjectsElement, 'href', '' );\n\
         aBackgroundObjectsElement.setAttribute( 'visibility', 'inherit');\n\
         aBackgroundObjectsElement.setAttribute( 'class', 'BackgroundObjects' );\n\
         aThumbnailElement.appendChild( aBackgroundObjectsElement );\n\
-        \n\
+\n\
         var aSlideElement = document.createElementNS( NSS['svg'], 'use' );\n\
         setNSAttribute( 'xlink', aSlideElement, 'href', '' );\n\
         aSlideElement.setAttribute( 'class', 'Slide' );\n\
         aThumbnailElement.appendChild( aSlideElement );\n\
-        \n\
+\n\
         var aBorderElement = document.createElementNS( NSS['svg'], 'use' );\n\
         setNSAttribute( 'xlink', aBorderElement, 'href', '#' + this.container.thumbnailBorderTemplateId );\n\
         aBorderElement.setAttribute( 'stroke', this.sNormalBorderColor );\n\
         aBorderElement.setAttribute( 'class', 'Border' );\n\
         aThumbnailElement.appendChild( aBorderElement );\n\
-        \n\
+\n\
         this.container.pageElement.appendChild( aThumbnailElement );\n\
-        return( document.getElementById( this.thumbnailId ) ); \n\
+        return( document.getElementById( this.thumbnailId ) );\n\
     };\n\
 \n\
     Thumbnail.prototype.computeTransform = function()\n\
-    {                \n\
+    {\n\
         var nXSpacing = this.container.xSpacing;\n\
         var nYSpacing = this.container.ySpacing;\n\
-        \n\
+\n\
         var nXOffset = nXSpacing + ( this.width + nXSpacing ) * this.column;\n\
         var nYOffset = nYSpacing + ( this.height + nYSpacing ) * this.row;\n\
-        \n\
+\n\
         this.aTransformSet[0] = 'translate(' + nXOffset + ' ' + nYOffset + ')';\n\
-        \n\
+\n\
         sTransform = this.aTransformSet.join( ' ' );\n\
-        \n\
+\n\
         return sTransform;\n\
     };\n\
-    \n\
+\n\
+";
+
+static const char aSVGScript6[] =
+"\
     Thumbnail.prototype.onMouseOver = function()\n\
     {\n\
-        if( ( currentMode == INDEX_MODE ) && ( this.container.curThumbnailIndex !=  this.index ) ) \n\
+        if( ( currentMode == INDEX_MODE ) && ( this.container.curThumbnailIndex !=  this.index ) )\n\
         {\n\
             this.container.setSelection( this.index );\n\
         }\n\
     };\n\
-    \n\
-    \n\
-    \n\ ";
-
-static const char aSVGScript6[] =
-"\n\
+\n\
+\n\
+\n\
+\n\
     // ------------------------------------------------------------------------------------------ //\n\
     /** Initialization function.\n\
      *  The whole presentation is set-up in this function.\n\
      */\n\
-    function init() \n\
+    function init()\n\
     {\n\
-        \n\
+\n\
         var VIEWBOX = ROOT_NODE.getAttribute('viewBox');\n\
 \n\
         if( VIEWBOX )\n\
@@ -1289,18 +1287,18 @@ static const char aSVGScript6[] =
         theMetaDoc =  new MetaDocument( aMetaDocElem );\n\
         theSlideIndexPage = new SlideIndexPage();\n\
 \n\
-        \n\
+\n\
     }\n\
-    \n\
+\n\
     function presentationEngineStop()\n\
     {\n\
         alert( 'We are sorry! An unexpected error occurred.\\nThe presentation engine will be stopped' );\n\
         document.onkeydown = null;\n\
-        document.onkeypress = null;  \n\
+        document.onkeypress = null;\n\
         document.onclick = null;\n\
         window.onmousewheel = null;\n\
     }\n\
-    \n\
+\n\
     function assert( condition, message )\n\
     {\n\
        if (!condition)\n\
@@ -1347,7 +1345,7 @@ static const char aSVGScript6[] =
         if ( !processingEffect && charCodeDictionary[currentMode] && charCodeDictionary[currentMode][str] )\n\
             return charCodeDictionary[currentMode][str]();\n\
     }\n\
-    \n\
+\n\
     /** Function to supply the default key code dictionary.\n\
      *\n\
      * @returns default key code dictionary\n\
@@ -1355,7 +1353,7 @@ static const char aSVGScript6[] =
     function getDefaultKeyCodeDictionary()\n\
     {\n\
         var keyCodeDict = new Object();\n\
-        \n\
+\n\
         keyCodeDict[SLIDE_MODE] = new Object();\n\
         keyCodeDict[INDEX_MODE] = new Object();\n\
 \n\
@@ -1368,7 +1366,7 @@ static const char aSVGScript6[] =
         keyCodeDict[SLIDE_MODE][HOME_KEY] = function() { return slideSetActiveSlide(0); };\n\
         keyCodeDict[SLIDE_MODE][END_KEY] = function() { return slideSetActiveSlide(theMetaDoc.nNumberOfSlides - 1); };\n\
         keyCodeDict[SLIDE_MODE][SPACE_KEY] = function() { return dispatchEffects(1); };\n\
-        \n\
+\n\
         keyCodeDict[INDEX_MODE][LEFT_KEY] = function() { return indexSetPageSlide( theSlideIndexPage.selectedSlideIndex - 1 ); };\n\
         keyCodeDict[INDEX_MODE][RIGHT_KEY] = function() { return indexSetPageSlide( theSlideIndexPage.selectedSlideIndex + 1 ); };\n\
         keyCodeDict[INDEX_MODE][UP_KEY] = function() { return indexSetPageSlide( theSlideIndexPage.selectedSlideIndex - theSlideIndexPage.indexColumns ); };\n\
@@ -1394,9 +1392,9 @@ static const char aSVGScript6[] =
 \n\
         charCodeDict[SLIDE_MODE] = new Object();\n\
         charCodeDict[INDEX_MODE] = new Object();\n\
-        \n\
+\n\
         charCodeDict[SLIDE_MODE]['i'] = function () { return toggleSlideIndex(); };\n\
-        \n\
+\n\
         charCodeDict[INDEX_MODE]['i'] = function () { return toggleSlideIndex(); };\n\
         charCodeDict[INDEX_MODE]['-'] = function () { return theSlideIndexPage.decreaseNumberOfColumns(); };\n\
         charCodeDict[INDEX_MODE]['='] = function () { return theSlideIndexPage.increaseNumberOfColumns(); };\n\
@@ -1405,26 +1403,24 @@ static const char aSVGScript6[] =
 \n\
         return charCodeDict;\n\
     }\n\
-    \n\ ";
-
-static const char aSVGScript7[] =
-"\n\
+\n\
+\n\
     function slideOnMouseDown( aEvt )\n\
     {\n\
         if (!aEvt)\n\
             aEvt = window.event;\n\
-    \n\
+\n\
         var nOffset = 0;\n\
-    \n\
-        if( aEvt.button == 0 )  \n\
+\n\
+        if( aEvt.button == 0 )\n\
             nOffset = 1;\n\
-        else if( aEvt.button == 2 ) \n\
+        else if( aEvt.button == 2 )\n\
             nOffset = -1;\n\
-    \n\
+\n\
         if( 0 != nOffset )\n\
             switchSlide( nOffset );\n\
     }\n\
-    \n\
+\n\
     /** Event handler for mouse wheel events in slide mode.\n\
      *  based on http://adomas.org/javascript-mouse-wheel/\n\
      *\n\
@@ -1456,16 +1452,20 @@ static const char aSVGScript7[] =
 \n\
         aEvt.returnValue = false;\n\
     }\n\
-    \n\
+\n\
     // Mozilla\n\
     if( window.addEventListener )\n\
     {\n\
+";
+
+static const char aSVGScript7[] =
+"\
         window.addEventListener( 'DOMMouseScroll', function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_WHEEL ); }, false );\n\
     }\n\
 \n\
     // Opera Safari OK - may not work in IE\n\
-    window.onmousewheel = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_WHEEL ); };    \n\
-    \n\
+    window.onmousewheel = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_WHEEL ); };\n\
+\n\
     /** Function to handle all mouse events.\n\
     *\n\
     *  @param  aEvt    event\n\
@@ -1475,29 +1475,29 @@ static const char aSVGScript7[] =
     {\n\
         if( !aEvt )\n\
             aEvt = window.event;\n\
-    \n\
+\n\
         var retVal = true;\n\
-    \n\
+\n\
         if ( mouseHandlerDictionary[currentMode] && mouseHandlerDictionary[currentMode][anAction] )\n\
         {\n\
             var subRetVal = mouseHandlerDictionary[currentMode][anAction]( aEvt );\n\
-    \n\
+\n\
             if( subRetVal != null && subRetVal != undefined )\n\
                 retVal = subRetVal;\n\
         }\n\
-    \n\
+\n\
         if( aEvt.preventDefault && !retVal )\n\
             aEvt.preventDefault();\n\
-    \n\
+\n\
         aEvt.returnValue = retVal;\n\
-    \n\
+\n\
         return retVal;\n\
     }\n\
 \n\
     // Set mouse event handler.\n\
     document.onmousedown = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_DOWN ); };\n\
     //document.onmousemove = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_MOVE ); };\n\
-   \n\
+\n\
     /** Function to supply the default mouse handler dictionary.\n\
     *\n\
     * @returns default mouse handler dictionary\n\
@@ -1505,16 +1505,16 @@ static const char aSVGScript7[] =
     function getDefaultMouseHandlerDictionary()\n\
     {\n\
         var mouseHandlerDict = new Object();\n\
-        \n\
+\n\
         mouseHandlerDict[SLIDE_MODE] = new Object();\n\
         mouseHandlerDict[INDEX_MODE] = new Object();\n\
-        \n\
-          \n\
+\n\
+\n\
         mouseHandlerDict[SLIDE_MODE][MOUSE_DOWN] = function( aEvt ) { return slideOnMouseDown( aEvt ); };\n\
         mouseHandlerDict[SLIDE_MODE][MOUSE_WHEEL] = function( aEvt ) { return slideOnMouseWheel( aEvt ); };\n\
-        \n\
+\n\
         mouseHandlerDict[INDEX_MODE][MOUSE_DOWN] = function( aEvt ) { return toggleSlideIndex(); };\n\
-        \n\
+\n\
         return mouseHandlerDict;\n\
     }\n\
 \n\
@@ -1527,7 +1527,7 @@ static const char aSVGScript7[] =
         // TODO to be implemented\n\
         switchSlide(dir);\n\
     }\n\
-    \n\
+\n\
     /** Function to skip effects and directly either put the slide into start or end state or change slides.\n\
      *\n\
      *  @param dir direction of the change (1 = forwards, -1 = backwards)\n\
@@ -1537,17 +1537,17 @@ static const char aSVGScript7[] =
         // TODO to be implemented\n\
         switchSlide(dir);\n\
     }\n\
-    \n\
+\n\
     /** Function to change between slides.\n\
      *\n\
      *  @param nOffset direction (1 = forwards, -1 = backwards)\n\
      */\n\
-    function switchSlide( nOffset ) \n\
+    function switchSlide( nOffset )\n\
     {\n\
         var nNextSlide = nCurSlide + nOffset;\n\
         slideSetActiveSlide( nNextSlide );\n\
     }\n\
-    \n\
+\n\
     /** Function to display the index sheet.\n\
     *\n\
     *  @param offsetNumber offset number\n\
@@ -1559,7 +1559,7 @@ static const char aSVGScript7[] =
 \n\
        var nTotalThumbnails = theSlideIndexPage.getTotalThumbnails();\n\
        var nEnd = Math.min( offsetNumber + nTotalThumbnails, aMetaSlideSet.length);\n\
-       \n\
+\n\
        var aThumbnailSet = theSlideIndexPage.aThumbnailSet;\n\
        var j = 0;\n\
        for( var i = offsetNumber; i < nEnd; ++i, ++j )\n\
@@ -1571,12 +1571,12 @@ static const char aSVGScript7[] =
        {\n\
            aThumbnailSet[j].hide();\n\
        }\n\
-       \n\
+\n\
        //do we need to save the current offset?\n\
        if (INDEX_OFFSET != offsetNumber)\n\
            INDEX_OFFSET = offsetNumber;\n\
    }\n\
-    \n\
+\n\
     /** Function to set the active slide in the slide view.\n\
      *\n\
      *  @param nNewSlide index of the active slide\n\
@@ -1587,21 +1587,21 @@ static const char aSVGScript7[] =
         var nSlides = aMetaDoc.nNumberOfSlides;\n\
         if( nNewSlide < 0 && nSlides > 0 )\n\
             nNewSlide = nSlides - 1;\n\
-        else if( nNewSlide >= nSlides ) \n\
+        else if( nNewSlide >= nSlides )\n\
             nNewSlide = 0;\n\
-        \n\
+\n\
         if( nNewSlide == nCurSlide ) return;\n\
         var nOldSlide = nCurSlide;\n\
         nCurSlide = nNewSlide;\n\
-        \n\
+\n\
         var oldMetaSlide = aMetaDoc.aMetaSlideSet[nOldSlide];\n\
         var newMetaSlide = aMetaDoc.aMetaSlideSet[nNewSlide];\n\
-        \n\
+\n\
         oldMetaSlide.hide();\n\
         newMetaSlide.show();\n\
     }\n\
-        \n\
-    /** Function to set the page and active slide in index view. \n\
+\n\
+    /** Function to set the page and active slide in index view.\n\
     *\n\
     *  @param nIndex index of the active slide\n\
     *\n\
@@ -1643,9 +1643,9 @@ static const char aSVGScript7[] =
     {\n\
         var suspendHandle = ROOT_NODE.suspendRedraw(500);\n\
         var aMetaSlideSet = theMetaDoc.aMetaSlideSet;\n\
-        \n\
+\n\
         if (currentMode == SLIDE_MODE)\n\
-        {    \n\
+        {\n\
             aMetaSlideSet[nCurSlide].hide();\n\
             for( var counter = 0; counter < aMetaSlideSet.length; ++counter )\n\
             {\n\
@@ -1660,17 +1660,21 @@ static const char aSVGScript7[] =
         }\n\
         else if (currentMode == INDEX_MODE)\n\
         {\n\
+";
+
+static const char aSVGScript8[] =
+"\
             theSlideIndexPage.hide();\n\
             nCurSlide = theSlideIndexPage.selectedSlideIndex;\n\
-            \n\
+\n\
             for( var counter = 0; counter < aMetaSlideSet.length; ++counter )\n\
             {\n\
                 var aMetaSlide = aMetaSlideSet[counter];\n\
                 aMetaSlide.slideElement.setAttribute( 'visibility', 'hidden' );\n\
                 aMetaSlide.masterPage.setVisibilityBackground( HIDDEN );\n\
-                aMetaSlide.masterPage.setVisibility( HIDDEN );                   \n\
+                aMetaSlide.masterPage.setVisibility( HIDDEN );\n\
             }\n\
-            \n\
+\n\
             aMetaSlideSet[nCurSlide].show();\n\
             //activeEffect = 0;\n\
 \n\
@@ -1679,18 +1683,19 @@ static const char aSVGScript7[] =
         }\n\
 \n\
         ROOT_NODE.unsuspendRedraw(suspendHandle);\n\
-        ROOT_NODE.forceRedraw();   \n\
+        ROOT_NODE.forceRedraw();\n\
     }\n\
-    \n\
+\n\
     /** Function that exit from the index mode without changing the shown slide\n\
-     * \n\
+     *\n\
      */\n\
     function abandonIndexMode()\n\
     {\n\
         theSlideIndexPage.selectedSlideIndex = nCurSlide;\n\
         toggleSlideIndex();\n\
     }\n\
-\n\
 ]]>";
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

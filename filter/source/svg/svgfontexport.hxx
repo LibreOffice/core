@@ -33,12 +33,19 @@
 #define SVGFONTEXPORT_HXX
 
 #include <comphelper/stl_types.hxx>
-#include "svgfilter.hxx"
-#include "svgwriter.hxx"
+#include <tools/fontenum.hxx>
+
 
 // -----------------
 // - SVGFontExport -
 // -----------------
+
+
+class ObjectRepresentation;
+class SVGExport;
+class Font;
+class OutputDevice;
+
 
 class SVGFontExport
 {

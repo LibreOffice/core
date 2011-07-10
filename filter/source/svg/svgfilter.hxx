@@ -89,11 +89,6 @@
 #include <svx/svdobj.hxx>
 #include <xmloff/xmlexp.hxx>
 
-#include "svgfilter.hxx"
-#include "svgscript.hxx"
-//#include "local/helpfunc.hpp"
-
-//using namespace ::com::sun::star;
 #include <cstdio>
 
 using namespace ::com::sun::star::uno;
@@ -115,6 +110,15 @@ using namespace ::std;
 // -----------
 
 #define SVG_EXPORT_ALLPAGES ((sal_Int32)-1)
+
+
+// -----------
+// - statics -
+// -----------
+
+// Placeholder tag used into the ImplWriteActions method to filter text placeholder fields
+static const ::rtl::OUString sPlaceholderTag = ::rtl::OUString::createFromAscii( "<[:isPlaceholder:]>" );
+
 
 // -------------
 // - SVGExport -
@@ -327,7 +331,7 @@ private:
     ::rtl::OUString                     implGetClassFromShape( const Reference< XShape >& rxShape );
     ::rtl::OUString                     implGetValidIDFromInterface( const Reference< XInterface >& rxIf, sal_Bool bUnique = sal_False );
     sal_Bool                            implLookForFirstVisiblePage();
-    Any                            implSafeGetPagePropSet( const ::rtl::OUString & sPropertyName,
+    Any                                 implSafeGetPagePropSet( const ::rtl::OUString & sPropertyName,
                                                                 const Reference< XPropertySet > & rxPropSet,
                                                                 const Reference< XPropertySetInfo > & rxPropSetInfo );
                                         DECL_LINK( CalcFieldHdl, EditFieldInfo* );
@@ -352,6 +356,8 @@ public:
     explicit SVGFilter( const Reference< XComponentContext >& rxCtx );
     virtual    ~SVGFilter();
 };
+
+
 
 // -----------------------------------------------------------------------------
 

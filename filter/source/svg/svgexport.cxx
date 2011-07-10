@@ -37,6 +37,7 @@
 #include "svgwriter.hxx"
 #include "svgfontexport.hxx"
 #include "svgfilter.hxx"
+#include "svgscript.hxx"
 #include "impsvgdialog.hxx"
 
 #include <svtools/FilterConfigItem.hxx>
@@ -50,6 +51,9 @@
 #include <comphelper/processfactory.hxx>
 #include <i18npool/lang.h>
 #include <svl/zforlist.hxx>
+
+#include <boost/preprocessor/repetition/repeat.hpp>
+
 
 using ::rtl::OUString;
 
@@ -88,7 +92,6 @@ static const char    aOOOAttrDateTimeFormat[] = NSPREFIX "date-time-format";
 
 // ooo xml attributes for Placeholder Shapes
 static const char    aOOOAttrTextAdjust[] = NSPREFIX "text-adjust";
-
 
 
 
@@ -1100,6 +1103,9 @@ sal_Bool SVGFilter::implGenerateMetaData()
 
 // -----------------------------------------------------------------------------
 
+#define SVGFILTER_EXPORT_SVGSCRIPT( z, n, aFragment ) \
+        xExtDocHandler->unknown( OUString::createFromAscii( aFragment ## n ) );
+
 sal_Bool SVGFilter::implGenerateScript()
 {
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "type", B2UCONST( "text/ecmascript" ) );
@@ -1110,13 +1116,7 @@ sal_Bool SVGFilter::implGenerateScript()
 
         if( xExtDocHandler.is() )
         {
-            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript1 ) );
-            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript2 ) );
-            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript3 ) );
-            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript4 ) );
-            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript5 ) );
-            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript6 ) );
-            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript7 ) );
+            BOOST_PP_REPEAT( N_SVGSCRIPT_FRAGMENTS, SVGFILTER_EXPORT_SVGSCRIPT, aSVGScript )
         }
     }
 
@@ -1394,9 +1394,10 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 
             if( !bRet && mpObjects->find( rxShape ) !=  mpObjects->end() )
             {
-                 Reference< XText >                  xText( rxShape, UNO_QUERY );
-                ::com::sun::star::awt::Rectangle     aBoundRect;
-                const GDIMetaFile&                   rMtf = (*mpObjects)[ rxShape ].GetRepresentation();
+                const ::rtl::OUString*                    pElementId = NULL;
+
+                ::com::sun::star::awt::Rectangle    aBoundRect;
+                const GDIMetaFile&                  rMtf = (*mpObjects)[ rxShape ].GetRepresentation();
 
                 xShapePropSet->getPropertyValue( B2UCONST( "BoundRect" ) ) >>= aBoundRect;
 
@@ -1414,6 +1415,10 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                         sal_Bool bIsDateTime = aShapeClass.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Date/Time" ) );
                         if( bIsPageNumber || bIsDateTime || bIsFooter )
                         {
+                            // to notify to the SVGActionWriter::ImplWriteActions method
+                            // that we are dealing with a placeholder shape
+                            pElementId = &sPlaceholderTag;
+
                             // if the text field does not belong to the visible page its svg:visibility
                             // attribute is set to 'hidden'; else it depends on the related property of the visible page
                             OUString aAttrVisibilityValue( B2UCONST( "hidden" ) );
@@ -1478,7 +1483,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 
                     {
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
-                        mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_ALL);
+                        mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_ALL, pElementId );
                     }
                 }
 
@@ -1710,19 +1715,31 @@ OUString SVGFilter::implGetValidIDFromInterface( const Reference< XInterface >& 
 
 IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
 {
-    OUString   aRepresentation;
     sal_Bool       bFieldProcessed = sal_False;
     if( pInfo && mbPresentation )
     {
         bFieldProcessed = true;
+        // to notify to the SVGActionWriter::ImplWriteText method
+        // that we are dealing with a placeholder shape
+        OUString   aRepresentation = sPlaceholderTag;
 
         if( !mbSinglePage )
         {
+            if( !mCreateOjectsCurrentMasterPage.is() )
+            {
+                OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
+                return 0;
+            }
+            if( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() )
+            {
+                OSL_FAIL( "error: mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end()" );
+                return 0;
+            }
+
             static const ::rtl::OUString aHeaderId( B2UCONST( aOOOAttrHeaderField ) );
             static const ::rtl::OUString aFooterId( B2UCONST( aOOOAttrFooterField ) );
             static const ::rtl::OUString aDateTimeId( B2UCONST( aOOOAttrDateTimeField ) );
             static const ::rtl::OUString aVariableDateTimeId( B2UCONST( aOOOAttrDateTimeField ) + B2UCONST( "-variable" ) );
-
 
             const UCharSet * pCharSet = NULL;
             UCharSetMap & aCharSetMap = mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ];
@@ -1786,7 +1803,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                     }
                     // Independently of the date format, we always put all these characters by default.
                     // They should be enough to cover every time format.
-                    aRepresentation = B2UCONST( "0123456789.:/-APM" );
+                    aRepresentation += B2UCONST( "0123456789.:/-APM" );
 
                     if( eDateFormat )
                     {
@@ -1832,22 +1849,22 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                 switch( mVisiblePagePropSet.nPageNumberingType )
                 {
                     case SVX_CHARS_UPPER_LETTER:
-                        aRepresentation = B2UCONST( "QWERTYUIOPASDFGHJKLZXCVBNM" );
+                        aRepresentation += B2UCONST( "QWERTYUIOPASDFGHJKLZXCVBNM" );
                         break;
                     case SVX_CHARS_LOWER_LETTER:
-                        aRepresentation = B2UCONST( "qwertyuiopasdfghjklzxcvbnm" );
+                        aRepresentation += B2UCONST( "qwertyuiopasdfghjklzxcvbnm" );
                         break;
                     case SVX_ROMAN_UPPER:
-                        aRepresentation = B2UCONST( "IVXLCDM" );
+                        aRepresentation += B2UCONST( "IVXLCDM" );
                         break;
                     case SVX_ROMAN_LOWER:
-                        aRepresentation = B2UCONST( "ivxlcdm" );
+                        aRepresentation += B2UCONST( "ivxlcdm" );
                         break;
                     // arabic numbering type is the default
                     case SVX_ARABIC: ;
                     // in case the numbering type is not handled we fall back on arabic numbering
                     default:
-                        aRepresentation = B2UCONST( "0123456789" );
+                        aRepresentation += B2UCONST( "0123456789" );
                         break;
                 }
             }
@@ -1860,8 +1877,6 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                     aRepresentation += OUString::valueOf( *aChar );
                 }
             }
-            if( aRepresentation.isEmpty()  )
-                aRepresentation = B2UCONST( "MM" );
             pInfo->SetRepresentation( aRepresentation );
         }
         else
@@ -1871,16 +1886,16 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                 const SvxFieldData* pField = pInfo->GetField().GetField();
                 if( ( pField->GetClassId() == SVX_HEADERFIELD ) && mVisiblePagePropSet.bIsHeaderFieldVisible )
                 {
-                    aRepresentation = mVisiblePagePropSet.sHeaderText;
+                    aRepresentation += mVisiblePagePropSet.sHeaderText;
                 }
                 else if( ( pField->GetClassId() == SVX_FOOTERFIELD ) && mVisiblePagePropSet.bIsFooterFieldVisible )
                 {
-                    aRepresentation = mVisiblePagePropSet.sFooterText;
+                    aRepresentation += mVisiblePagePropSet.sFooterText;
                 }
                 else if( ( pField->GetClassId() == SVX_DATEFIMEFIELD ) && mVisiblePagePropSet.bIsDateTimeFieldVisible )
                 {
                     // TODO: implement the variable case
-                    aRepresentation = mVisiblePagePropSet.sDateTimeText;
+                    aRepresentation += mVisiblePagePropSet.sDateTimeText;
                 }
                 else if( ( pField->GetClassId() == SVX_PAGEFIELD ) && mVisiblePagePropSet.bIsPageNumberFieldVisible )
                 {
@@ -1888,22 +1903,22 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                     switch( mVisiblePagePropSet.nPageNumberingType )
                     {
                         case SVX_CHARS_UPPER_LETTER:
-                            aRepresentation = OUString::valueOf( (sal_Unicode)(char)( ( nPageNumber - 1 ) % 26 + 'A' ) );
+                            aRepresentation += OUString::valueOf( (sal_Unicode)(char)( ( nPageNumber - 1 ) % 26 + 'A' ) );
                             break;
                         case SVX_CHARS_LOWER_LETTER:
-                            aRepresentation = OUString::valueOf( (sal_Unicode)(char)( ( nPageNumber - 1 ) % 26 + 'a' ) );
+                            aRepresentation += OUString::valueOf( (sal_Unicode)(char)( ( nPageNumber - 1 ) % 26 + 'a' ) );
                             break;
                         case SVX_ROMAN_UPPER:
-                            aRepresentation = SvxNumberFormat::CreateRomanString( nPageNumber, true /* upper */ );
+                            aRepresentation += SvxNumberFormat::CreateRomanString( nPageNumber, true /* upper */ );
                             break;
                         case SVX_ROMAN_LOWER:
-                            aRepresentation = SvxNumberFormat::CreateRomanString( nPageNumber, false /* lower */ );
+                            aRepresentation += SvxNumberFormat::CreateRomanString( nPageNumber, false /* lower */ );
                             break;
                         // arabic numbering type is the default
                         case SVX_ARABIC: ;
                         // in case the numbering type is not handled we fall back on arabic numbering
                         default:
-                            aRepresentation = OUString::valueOf( sal_Int32(nPageNumber) );
+                            aRepresentation += OUString::valueOf( sal_Int32(nPageNumber) );
                             break;
                     }
                 }
