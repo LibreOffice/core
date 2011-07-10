@@ -215,7 +215,6 @@ inline FixCpx operator/ ( const FixCpx& a, const FixCpx& b )
 Fix ImpMultBig2( const Fix& a, const Fix& b );
 
 sal_uInt16 ImpSqrt( sal_uLong nRadi );
-sal_uInt16 ImpATan2( const short x, const short y );
 FixCpx ImpExPI( sal_uInt16 nPhi );
 
 #endif // _MCVMATH_HXX

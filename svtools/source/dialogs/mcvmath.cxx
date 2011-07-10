@@ -207,26 +207,4 @@ static sal_uInt16 ImpATanx2( const Fix& rX, const Fix& rY )
     return phi0+phi;
 }
 
-/**************************************************************************
-|*
-|*    ImpATan2()
-|*
-|*    Beschreibung       ATAN-Funktion fuer FixPoint-Berechnungen
-|*
-**************************************************************************/
-
-sal_uInt16 ImpATan2( const short x, const short y )
-{
-    Fix rRad = ImpSqrt(sal_uLong(long(x)*x+long(y)*y));
-
-    if ( !rRad.x )
-        return 0;
-    Fix fx = x;
-    fx.DivBig( rRad );            // Normiere auf Einheitskreis
-    Fix fy = y;
-    fy.DivBig( rRad );
-
-    return ImpATanx2( fx, fy );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
