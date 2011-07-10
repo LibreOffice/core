@@ -44,6 +44,8 @@ SLOFILES=   \
         $(SLO)$/textconversion_ko.obj \
         $(SLO)$/textconversion_zh.obj
 
+.IF "$(CROSS_COMPILING)" != "YES"
+
 OBJFILES   = $(OBJ)$/genconv_dict.obj
 
 APP1TARGET = genconv_dict
@@ -52,6 +54,8 @@ APP1RPATH = NONE
 APP1OBJS   = $(OBJ)$/genconv_dict.obj
 
 APP1STDLIBS = $(SALLIB)
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

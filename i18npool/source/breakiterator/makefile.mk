@@ -57,6 +57,8 @@ SLOFILES=   \
         $(SLO)/xdictionary.obj \
         $(subst,$(MISC)/,$(SLO)/ $(MY_MISC_CXXFILES:s/.c/.obj/))
 
+.IF "$(CROSS_COMPILING)" != "YES"
+
 OBJFILES   = $(OBJ)/gendict.obj
 
 APP1TARGET = gendict
@@ -66,6 +68,8 @@ DEPOBJFILES   = $(OBJ)/gendict.obj
 APP1OBJS   = $(DEPOBJFILES)
 
 APP1STDLIBS = $(SALLIB)
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

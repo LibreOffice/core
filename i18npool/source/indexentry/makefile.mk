@@ -37,7 +37,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :	settings.mk
 
-
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
@@ -46,6 +45,8 @@ SLOFILES=   \
             $(SLO)$/indexentrysupplier_ja_phonetic.obj \
             $(SLO)$/indexentrysupplier_default.obj \
             $(SLO)$/indexentrysupplier_common.obj
+
+.IF "$(CROSS_COMPILING)" != "YES"
 
 OBJFILES   = $(OBJ)$/genindex_data.obj
 
@@ -59,6 +60,8 @@ APP1STDLIBS = $(SALLIB) \
         $(ICUINLIB) \
         $(ICUUCLIB) \
         $(ICUDATALIB)
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
