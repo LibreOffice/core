@@ -246,29 +246,4 @@ sal_uInt16 ImpATan2( const short x, const short y )
     return ImpATanx2( fx, fy );
 }
 
-/**************************************************************************
-|*
-|*    ImpCartToPolar()
-|*
-|*    Beschreibung       Koordinaaten-Wandlung
-|*
-**************************************************************************/
-
-void ImpCartToPolar( const short x, const short y, Fix& rRad, sal_uInt16& rPhi )
-{
-    rRad = Fix( ImpSqrt( sal_uLong( long(x)*x+long(y)*y ) ) );
-
-    if ( !rRad.x )
-        rPhi=0;
-    else
-    {
-        // Normiere auf Einheitskreis
-        Fix fx = x;
-        fx.DivBig(rRad);
-        Fix fy = y;
-        fy.DivBig(rRad);
-        rPhi = ImpATanx2(fx, fy);
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
