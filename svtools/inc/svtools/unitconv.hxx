@@ -52,9 +52,6 @@ SVT_DLLPUBLIC long      ControlToItem( long nIn, SfxFieldUnit eCtrl, SfxMapUnit 
 
 SVT_DLLPUBLIC FieldUnit MapToFieldUnit( const SfxMapUnit eUnit );
 
-SVT_DLLPUBLIC long      ConvertValueToMap( long nVal, SfxMapUnit eUnit );
-SVT_DLLPUBLIC long      ConvertValueToUnit( long nVal, SfxMapUnit eUnit );
-
 SVT_DLLPUBLIC void      SetMetricValue( MetricField& rField, long lCoreValue, SfxMapUnit eUnit );
 SVT_DLLPUBLIC long      GetCoreValue( const MetricField& rField, SfxMapUnit eUnit );
 

@@ -293,57 +293,6 @@ FieldUnit MapToFieldUnit( const SfxMapUnit eUnit )
 
 // -----------------------------------------------------------------------
 
-long ConvertValueToMap( long nVal, SfxMapUnit eUnit )
-{
-    long nNew = nVal;
-
-    switch ( eUnit )
-    {
-        case SFX_MAPUNIT_10TH_MM:
-        case SFX_MAPUNIT_10TH_INCH:
-            nNew *= 10;
-            break;
-
-        case SFX_MAPUNIT_100TH_MM:
-        case SFX_MAPUNIT_100TH_INCH:
-            nNew *= 100;
-            break;
-
-        case SFX_MAPUNIT_1000TH_INCH:
-            nNew *= 1000;
-        default: ;//prevent warning
-    }
-    return nNew;
-}
-
-// -----------------------------------------------------------------------
-
-long ConvertValueToUnit( long nVal, SfxMapUnit eUnit )
-{
-    long nNew = nVal;
-
-    switch ( eUnit )
-    {
-        case SFX_MAPUNIT_10TH_MM:
-        case SFX_MAPUNIT_10TH_INCH:
-            nNew /= 10;
-            break;
-
-        case SFX_MAPUNIT_100TH_MM:
-        case SFX_MAPUNIT_100TH_INCH:
-            nNew /= 100;
-            break;
-
-        case SFX_MAPUNIT_1000TH_INCH:
-            nNew /= 1000;
-        break;
-        default: ;//prevent warning
-    }
-    return nNew;
-}
-
-// -----------------------------------------------------------------------
-
 long CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFaktor )
 {
     DBG_ASSERT( eUnit == SFX_MAPUNIT_TWIP       ||
