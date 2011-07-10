@@ -166,7 +166,7 @@ CONFIGURE_FLAGS+=--disable-ft PKG_CONFIG=./dummy_pkg_config
 CONFIGURE_FLAGS+=--enable-ft
 .ENDIF
 
-CONFIGURE_FLAGS+=--disable-svg --enable-gtk-doc=no --enable-test-surfaces=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
+CONFIGURE_FLAGS+=--disable-svg --disable-ps --disable-pdf --enable-gtk-doc=no --enable-test-surfaces=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
 
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
