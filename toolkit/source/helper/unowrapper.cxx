@@ -206,12 +206,12 @@ void UnoWrapper::SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Ref
 
 void UnoWrapper::ReleaseAllGraphics( OutputDevice* pOutDev )
 {
-    List* pLst = pOutDev->GetUnoGraphicsList();
+    VCLXGraphicsList_impl* pLst = pOutDev->GetUnoGraphicsList();
     if ( pLst )
     {
-        for ( sal_uInt32 n = 0; n < pLst->Count(); n++ )
+        for ( size_t n = 0; n < pLst->size(); n++ )
         {
-            VCLXGraphics* pGrf = (VCLXGraphics*)pLst->GetObject( n );
+            VCLXGraphics* pGrf = (*pLst)[ n ];
             pGrf->SetOutputDevice( NULL );
         }
     }

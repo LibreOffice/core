@@ -282,6 +282,9 @@ class VirtualDevice;
 class Printer;
 class ImplFontSelectData;
 class ImplFontMetricData;
+class VCLXGraphics;
+
+typedef ::std::vector< VCLXGraphics* > VCLXGraphicsList_impl;
 
 const char* ImplDbgCheckOutputDevice( const void* pObj );
 
@@ -305,17 +308,17 @@ private:
     mutable SalGraphics*        mpGraphics;
     mutable OutputDevice*       mpPrevGraphics;
     mutable OutputDevice*       mpNextGraphics;
-    GDIMetaFile*        mpMetaFile;
+    GDIMetaFile*                mpMetaFile;
     mutable ImplFontEntry*      mpFontEntry;
     mutable ImplFontCache*      mpFontCache;
     mutable ImplDevFontList*    mpFontList;
     mutable ImplGetDevFontList* mpGetDevFontList;
     mutable ImplGetDevSizeList* mpGetDevSizeList;
-    ImplObjStack*       mpObjStack;
-    ImplOutDevData*     mpOutDevData;
-    List*               mpUnoGraphicsList;
-    vcl::PDFWriterImpl* mpPDFWriter;
-    vcl::ExtOutDevData* mpExtOutDevData;
+    ImplObjStack*               mpObjStack;
+    ImplOutDevData*             mpOutDevData;
+    VCLXGraphicsList_impl*      mpUnoGraphicsList;
+    vcl::PDFWriterImpl*         mpPDFWriter;
+    vcl::ExtOutDevData*         mpExtOutDevData;
 
     // TEMP TEMP TEMP
     VirtualDevice*      mpAlphaVDev;
@@ -1141,8 +1144,12 @@ public:
         ::com::sun::star::rendering::XCanvas > GetCanvas() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >    CreateUnoGraphics();
-    List*               GetUnoGraphicsList() const      { return mpUnoGraphicsList; }
-    List*               CreateUnoGraphicsList()         { mpUnoGraphicsList = new List; return mpUnoGraphicsList; }
+    VCLXGraphicsList_impl*  GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
+    VCLXGraphicsList_impl*  CreateUnoGraphicsList()
+                            {
+                                mpUnoGraphicsList = new VCLXGraphicsList_impl();
+                                return mpUnoGraphicsList;
+                            }
 
     static void         BeginFontSubstitution();
     static void         EndFontSubstitution();

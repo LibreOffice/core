@@ -73,9 +73,17 @@ VCLXGraphics::VCLXGraphics()
 
 VCLXGraphics::~VCLXGraphics()
 {
-    List* pLst = mpOutputDevice ? mpOutputDevice->GetUnoGraphicsList() : NULL;
+    VCLXGraphicsList_impl* pLst = mpOutputDevice ? mpOutputDevice->GetUnoGraphicsList() : NULL;
     if ( pLst )
-        pLst->Remove( this );
+    {
+        for( VCLXGraphicsList_impl::iterator it = pLst->begin(); it < pLst->end(); ++it )
+        {
+            if( *it == this ) {
+                pLst->erase( it );
+                break;
+            }
+        }
+    }
 
     delete mpClipRegion;
 }
@@ -100,10 +108,10 @@ void VCLXGraphics::Init( OutputDevice* pOutDev )
     mpClipRegion    = NULL;
 
     // Register at OutputDevice
-    List* pLst = mpOutputDevice->GetUnoGraphicsList();
+    VCLXGraphicsList_impl* pLst = mpOutputDevice->GetUnoGraphicsList();
     if ( !pLst )
         pLst = mpOutputDevice->CreateUnoGraphicsList();
-    pLst->Insert( this, LIST_APPEND );
+    pLst->push_back( this );
 }
 
 void VCLXGraphics::InitOutputDevice( sal_uInt16 nFlags )
