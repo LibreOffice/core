@@ -62,8 +62,6 @@ public:
     void    Init();  // ctor initialisieren
             RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
                          sal_uLong lFileIndex, FILE * fFile );
-            RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
-                         sal_uLong lFileIndex, const ByteString & );
             ~RscFileInst();
     sal_Bool    IsEof() const { return bEof; }
     void    SetFileIndex( sal_uLong lFIndex ) { lFileIndex = lFIndex;  }
