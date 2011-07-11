@@ -1335,6 +1335,7 @@ void DomainMapper_Impl::PushAnnotation()
 
 void DomainMapper_Impl::PopFootOrEndnote()
 {
+    RemoveLastParagraph();
     m_aTextAppendStack.pop();
 }
 
