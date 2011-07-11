@@ -620,8 +620,6 @@ public:
 
     bool SetPort(sal_uInt32 nThePort);
 
-    void makePortCanonic();
-
     //========================================================================
     // Path:
 

@@ -4350,33 +4350,6 @@ bool INetURLObject::SetPort(sal_uInt32 nThePort)
 }
 
 //============================================================================
-void INetURLObject::makePortCanonic()
-{
-    if (m_aPort.isPresent())
-    {
-        sal_Unicode const * p = m_aAbsURIRef.getStr() + m_aPort.getBegin();
-        sal_Unicode const * pEnd = p + m_aPort.getLength();
-        sal_uInt32 nThePort;
-        if (INetMIME::scanUnsigned(p, pEnd, true, nThePort) && p == pEnd)
-        {
-            sal_Int32 nDelta;
-            if (nThePort != 0 && nThePort == getSchemeInfo().m_nDefaultPort)
-            {
-                lcl_Erase(m_aAbsURIRef, m_aPort.getBegin() - 1,
-                                   m_aPort.getLength() + 1);
-                nDelta = m_aPort.clear() - 1;
-            }
-            else
-                nDelta = m_aPort.set(m_aAbsURIRef,
-                                 rtl::OUString::valueOf(sal_Int64(nThePort)));
-            m_aPath += nDelta;
-            m_aQuery += nDelta;
-            m_aFragment += nDelta;
-        }
-    }
-}
-
-//============================================================================
 sal_Int32 INetURLObject::getSegmentCount(bool bIgnoreFinalSlash) const
 {
     if (!checkHierarchical())
