@@ -40,6 +40,7 @@
 
 #include <rtfdocumentimpl.hxx>
 #include <rtfsdrimport.hxx>
+#include <rtftokenizer.hxx>
 #include <rtftypes.hxx>
 #include <rtfcontrolwords.hxx>
 #include <rtfvalue.hxx>
@@ -211,30 +212,6 @@ static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(
     return lcl_getBookmarkProperties(nPos, aStr);
 }
 
-static int lcl_AsHex(char ch)
-{
-    int ret = 0;
-    if (isdigit(ch))
-        ret = ch - '0';
-    else
-    {
-        if (islower(ch))
-        {
-            if (ch < 'a' || ch > 'f')
-                return -1;
-            ret = ch - 'a';
-        }
-        else
-        {
-            if (ch < 'A' || ch > 'F')
-                return -1;
-            ret = ch - 'A';
-        }
-        ret += 10;
-    }
-    return ret;
-}
-
 #if OSL_DEBUG_LEVEL > 1
 static const char* lcl_RtfToString(RTFKeyword nKeyword)
 {
@@ -287,11 +264,13 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
 
     m_pGraphicHelper = new oox::GraphicHelper(m_xContext, xFrame, m_xStorage);
 
+    m_pTokenizer = new RTFTokenizer(*this, m_pInStream);
     m_pSdrImport = new RTFSdrImport(*this, m_xDstDoc);
 }
 
 RTFDocumentImpl::~RTFDocumentImpl()
 {
+    delete m_pTokenizer;
     delete m_pSdrImport;
 }
 
@@ -308,6 +287,11 @@ Stream& RTFDocumentImpl::Mapper()
 void RTFDocumentImpl::setSubstream(bool bIsSubtream)
 {
     m_bIsSubstream = bIsSubtream;
+}
+
+bool RTFDocumentImpl::isSubstream()
+{
+    return m_bIsSubstream;
 }
 
 void RTFDocumentImpl::setIgnoreFirst(OUString& rIgnoreFirst)
@@ -440,7 +424,7 @@ sal_uInt32 RTFDocumentImpl::getEncodingTable(sal_uInt32 nFontIndex)
 void RTFDocumentImpl::resolve(Stream & rMapper)
 {
     m_pMapperStream = &rMapper;
-    switch (resolveParse())
+    switch (m_pTokenizer->resolveParse())
     {
         case ERROR_OK:
             OSL_TRACE("%s: finished without errors", OSL_THIS_FUNC);
@@ -474,7 +458,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         if (ch != 0x0d && ch != 0x0a)
         {
             b = b << 4;
-            char parsed = lcl_AsHex(ch);
+            char parsed = m_pTokenizer->asHex(ch);
             if (parsed == -1)
                 return ERROR_HEX_INVALID;
             b += parsed;
@@ -2064,111 +2048,6 @@ void RTFDocumentImpl::skipDestination(bool bParsed)
     }
 }
 
-int RTFDocumentImpl::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
-{
-    if (m_aStates.top().nDestinationState == DESTINATION_SKIP)
-        return 0;
-    /*OSL_TRACE("%s: keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
-            rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));*/
-    int i, ret;
-    for (i = 0; i < nRTFControlWords; i++)
-    {
-        if (!strcmp(rKeyword.getStr(), aRTFControlWords[i].sKeyword))
-            break;
-    }
-    if (i == nRTFControlWords)
-    {
-        OSL_TRACE("%s: unknown keyword '\\%s'", OSL_THIS_FUNC, rKeyword.getStr());
-        skipDestination(false);
-        return 0;
-    }
-
-    switch (aRTFControlWords[i].nControlType)
-    {
-        case CONTROL_FLAG:
-            // flags ignore any parameter by definition
-            if ((ret = dispatchFlag(aRTFControlWords[i].nIndex)))
-                return ret;
-            break;
-        case CONTROL_DESTINATION:
-            // same for destinations
-            if ((ret = dispatchDestination(aRTFControlWords[i].nIndex)))
-                return ret;
-            break;
-        case CONTROL_SYMBOL:
-            // and symbols
-            if ((ret = dispatchSymbol(aRTFControlWords[i].nIndex)))
-                return ret;
-            break;
-        case CONTROL_TOGGLE:
-            if ((ret = dispatchToggle(aRTFControlWords[i].nIndex, bParam, nParam)))
-                return ret;
-            break;
-        case CONTROL_VALUE:
-            // values require a parameter by definition
-            if (bParam && (ret = dispatchValue(aRTFControlWords[i].nIndex, nParam)))
-                return ret;
-            break;
-    }
-
-    return 0;
-}
-
-int RTFDocumentImpl::resolveKeyword()
-{
-    char ch;
-    OStringBuffer aBuf;
-    bool bNeg = false;
-    bool bParam = false;
-    int nParam = 0;
-
-    Strm() >> ch;
-    if (Strm().IsEof())
-        return ERROR_EOF;
-
-    if (!isalpha(ch))
-    {
-        aBuf.append(ch);
-        OString aKeyword = aBuf.makeStringAndClear();
-        // control symbols aren't followed by a space, so we can return here
-        // without doing any SeekRel()
-        return dispatchKeyword(aKeyword, bParam, nParam);
-    }
-    while(isalpha(ch))
-    {
-        aBuf.append(ch);
-        Strm() >> ch;
-    }
-
-    if (ch == '-')
-    {
-        // in case we'll have a parameter, that will be negative
-        bNeg = true;
-        Strm() >> ch;
-        if (Strm().IsEof())
-            return ERROR_EOF;
-    }
-    if (isdigit(ch))
-    {
-        OStringBuffer aParameter;
-
-        // we have a parameter
-        bParam = true;
-        while(isdigit(ch))
-        {
-            aParameter.append(ch);
-            Strm() >> ch;
-        }
-        nParam = aParameter.makeStringAndClear().toInt32();
-        if (bNeg)
-            nParam = -nParam;
-    }
-    if (ch != ' ')
-        Strm().SeekRel(-1);
-    OString aKeyword = aBuf.makeStringAndClear();
-    return dispatchKeyword(aKeyword, bParam, nParam);
-}
-
 int RTFDocumentImpl::pushState()
 {
     //OSL_TRACE("%s before push: %d", OSL_THIS_FUNC, m_nGroup);
@@ -2426,7 +2305,7 @@ int RTFDocumentImpl::popState()
             if (ch != 0x0d && ch != 0x0a)
             {
                 b = b << 4;
-                char parsed = lcl_AsHex(ch);
+                char parsed = m_pTokenizer->asHex(ch);
                 if (parsed == -1)
                     return ERROR_HEX_INVALID;
                 b += parsed;
@@ -2524,80 +2403,6 @@ int RTFDocumentImpl::popState()
     return 0;
 }
 
-int RTFDocumentImpl::resolveParse()
-{
-    OSL_TRACE("%s", OSL_THIS_FUNC);
-    char ch;
-    int ret;
-    // for hex chars
-    int b = 0, count = 2;
-
-    while ((Strm() >> ch, !Strm().IsEof()))
-    {
-        //OSL_TRACE("%s: parsing character '%c'", OSL_THIS_FUNC, ch);
-        if (m_nGroup < 0)
-            return ERROR_GROUP_UNDER;
-        if (!m_aStates.empty() && m_aStates.top().nInternalState == INTERNAL_BIN)
-        {
-            OSL_TRACE("%s: TODO, binary internal state", OSL_THIS_FUNC);
-        }
-        else
-        {
-            switch (ch)
-            {
-                case '{':
-                    if ((ret = pushState()))
-                        return ret;
-                    break;
-                case '}':
-                    if ((ret = popState()))
-                        return ret;
-                    if (m_bIsSubstream && m_nGroup == 0)
-                        return 0;
-                    break;
-                case '\\':
-                    if ((ret = resolveKeyword()))
-                        return ret;
-                    break;
-                case 0x0d:
-                case 0x0a:
-                    break; // ignore these
-                default:
-                    if (m_aStates.top().nInternalState == INTERNAL_NORMAL)
-                    {
-                        if ((ret = resolveChars(ch)))
-                            return ret;
-                    }
-                    else
-                    {
-                        OSL_TRACE("%s: hex internal state", OSL_THIS_FUNC);
-                        b = b << 4;
-                        char parsed = lcl_AsHex(ch);
-                        if (parsed == -1)
-                            return ERROR_HEX_INVALID;
-                        b += parsed;
-                        count--;
-                        if (!count)
-                        {
-                            if ((ret = resolveChars(b)))
-                                return ret;
-                            count = 2;
-                            b = 0;
-                            m_aStates.top().nInternalState = INTERNAL_NORMAL;
-                        }
-                    }
-                    break;
-            }
-        }
-    }
-
-    if (m_nGroup < 0)
-        return ERROR_GROUP_UNDER;
-    else if (m_nGroup > 0)
-        return ERROR_GROUP_OVER;
-    return 0;
-}
-
 ::std::string RTFDocumentImpl::getType() const
 {
     return "RTFDocumentImpl";
@@ -2611,6 +2416,16 @@ com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> RTFDo
 RTFParserState& RTFDocumentImpl::getState()
 {
     return m_aStates.top();
+}
+
+int RTFDocumentImpl::getGroup()
+{
+    return m_nGroup;
+}
+
+bool RTFDocumentImpl::isEmpty()
+{
+    return m_aStates.empty();
 }
 
 void RTFDocumentImpl::setDestinationText(OUString& rString)

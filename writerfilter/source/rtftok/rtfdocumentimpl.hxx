@@ -232,6 +232,7 @@ namespace writerfilter {
                 bool bIsCjk;
         };
 
+        class RTFTokenizer;
         class RTFSdrImport;
 
         /// Implementation of the RTFDocument interface.
@@ -250,38 +251,40 @@ namespace writerfilter {
 
                 Stream& Mapper();
                 void setSubstream(bool bIsSubtream);
+                bool isSubstream();
                 void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
                 void seek(sal_uInt32 nPos);
                 com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> getModelFactory();
                 RTFParserState& getState();
+                /// If the stack of states is empty.
+                bool isEmpty();
+                int getGroup();
                 void setDestinationText(rtl::OUString& rString);
+                void skipDestination(bool bParsed);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);
                 void runBreak();
                 void replayShapetext();
-            private:
-                SvStream& Strm();
-                sal_uInt32 getColorTable(sal_uInt32 nIndex);
-                sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
-                void skipDestination(bool bParsed);
-                RTFSprms_t mergeSprms();
-                RTFSprms_t mergeAttributes();
-                void resolveSubstream(sal_uInt32 nPos, Id nId);
-                void resolveSubstream(sal_uInt32 nPos, Id nId, rtl::OUString& rIgnoreFirst);
 
-                int resolveParse();
-                int resolveKeyword();
-
-                int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
+                // These callbacks are invoked by the tokenizer.
+                int resolveChars(char ch);
+                int pushState();
+                int popState();
                 int dispatchFlag(RTFKeyword nKeyword);
                 int dispatchDestination(RTFKeyword nKeyword);
                 int dispatchSymbol(RTFKeyword nKeyword);
                 int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam);
                 int dispatchValue(RTFKeyword nKeyword, int nParam);
+            private:
+                SvStream& Strm();
+                sal_uInt32 getColorTable(sal_uInt32 nIndex);
+                sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
+                RTFSprms_t mergeSprms();
+                RTFSprms_t mergeAttributes();
+                void resolveSubstream(sal_uInt32 nPos, Id nId);
+                void resolveSubstream(sal_uInt32 nPos, Id nId, rtl::OUString& rIgnoreFirst);
 
-                int resolveChars(char ch);
-                int pushState();
-                int popState();
+
                 void text(rtl::OUString& rString);
                 void parBreak();
                 void tableBreak();
@@ -298,6 +301,7 @@ namespace writerfilter {
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
                 RTFSdrImport* m_pSdrImport;
+                RTFTokenizer* m_pTokenizer;
                 /// Same as m_aStates.size(), except that this can be negative for invalid input.
                 int m_nGroup;
                 std::stack<RTFParserState> m_aStates;
