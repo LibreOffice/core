@@ -272,7 +272,9 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_nHeaderFooterPositions(),
     m_nGroupStartPos(0),
     m_aBookmarks(),
-    m_aAuthors()
+    m_aAuthors(),
+    m_aFormfieldSprms(),
+    m_aFormfieldAttributes()
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
@@ -629,6 +631,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_BOOKMARKEND:
         case DESTINATION_PICT:
         case DESTINATION_SHAPEPROPERTYVALUEPICT:
+        case DESTINATION_FORMFIELDNAME:
             m_aDestinationText.append(rString);
             break;
         default: bRet = false; break;
@@ -929,6 +932,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_FORMFIELD:
             m_aStates.top().nDestinationState = DESTINATION_FORMFIELD;
+            break;
+        case RTF_FFNAME:
+            m_aStates.top().nDestinationState = DESTINATION_FORMFIELDNAME;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -2149,7 +2155,8 @@ int RTFDocumentImpl::pushState()
     else if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
         m_aStates.top().nDestinationState = DESTINATION_STYLEENTRY;
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT ||
-            m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT)
+            m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT ||
+            m_aStates.top().nDestinationState == DESTINATION_FORMFIELD)
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
     else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTABLE)
         m_aStates.top().nDestinationState = DESTINATION_REVISIONENTRY;
@@ -2352,6 +2359,22 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT)
         m_pCurrentBuffer = 0; // Just disable buffering, don't empty it yet.
+    else if (m_aStates.top().nDestinationState == DESTINATION_FORMFIELDNAME)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
+        m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFData_name, pValue));
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_FORMFIELD)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(m_aFormfieldAttributes, m_aFormfieldSprms));
+        RTFSprms_t aFFAttributes;
+        RTFSprms_t aFFSprms;
+        aFFSprms.push_back(make_pair(NS_ooxml::LN_ffdata, pValue));
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aFFAttributes, aFFSprms));
+        Mapper().props(pProperties);
+        aFFAttributes = RTFSprms_t();
+        aFFSprms = RTFSprms_t();
+    }
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);

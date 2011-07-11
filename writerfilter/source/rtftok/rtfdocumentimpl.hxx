@@ -93,7 +93,8 @@ namespace writerfilter {
             DESTINATION_REVISIONTABLE,
             DESTINATION_REVISIONENTRY,
             DESTINATION_SHAPETEXT,
-            DESTINATION_FORMFIELD
+            DESTINATION_FORMFIELD,
+            DESTINATION_FORMFIELDNAME
         };
 
         enum RTFBorderState
@@ -329,6 +330,9 @@ namespace writerfilter {
                 std::map<int, rtl::OUString> m_aAuthors;
                 /// Text from special destinations.
                 rtl::OUStringBuffer m_aDestinationText;
+
+                RTFSprms_t m_aFormfieldSprms;
+                RTFSprms_t m_aFormfieldAttributes;
         };
     } // namespace rtftok
 } // namespace writerfilter
