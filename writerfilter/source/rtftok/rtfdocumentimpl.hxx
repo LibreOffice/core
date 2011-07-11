@@ -333,6 +333,7 @@ namespace writerfilter {
 
                 RTFSprms_t m_aFormfieldSprms;
                 RTFSprms_t m_aFormfieldAttributes;
+                int m_nFormFieldType;
         };
     } // namespace rtftok
 } // namespace writerfilter

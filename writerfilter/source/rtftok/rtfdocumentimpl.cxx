@@ -274,7 +274,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aBookmarks(),
     m_aAuthors(),
     m_aFormfieldSprms(),
-    m_aFormfieldAttributes()
+    m_aFormfieldAttributes(),
+    m_nFormFieldType(0)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
@@ -1908,6 +1909,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_SHPBOTTOM:
             m_aStates.top().aShape.nBottom = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_FFTYPE:
+            m_nFormFieldType = nParam;
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
