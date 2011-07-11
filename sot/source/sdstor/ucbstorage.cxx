@@ -1336,15 +1336,6 @@ void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
     }
 }
 
-UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey )
-{
-    // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
-    // to class UCBStorageStream !
-    pImp = new UCBStorageStream_Impl( rName, nMode, this, bDirect, pKey );
-    pImp->AddRef();             // use direct refcounting because in header file only a pointer should be used
-    StorageBase::m_nMode = pImp->m_nMode;
-}
-
 UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey, sal_Bool bRepair, Reference< XProgressHandler > xProgress )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
