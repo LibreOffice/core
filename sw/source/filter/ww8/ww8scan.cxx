@@ -2546,10 +2546,28 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                         {
                             if (aEntry.mnLen >= 2)
                             {
-                                aEntry.mnIStd = SVBT16ToShort(maRawData+nOfs+1+nDelta);
+                                //len byte + optional extra len byte
+                                sal_Size nDataOffset = nOfs + 1 + nDelta;
+                                aEntry.mnIStd = nDataOffset <= sizeof(maRawData)-sizeof(aEntry.mnIStd) ?
+                                    SVBT16ToShort(maRawData+nDataOffset) : 0;
                                 aEntry.mnLen-=2; //istd
-                                //skip istd, len byte + optional extra len byte
-                                aEntry.mpData = maRawData + nOfs + 3 + nDelta;
+                                if (aEntry.mnLen)
+                                {
+                                    //additional istd
+                                    nDataOffset += sizeof(aEntry.mnIStd);
+                                    OSL_ENSURE(nDataOffset < sizeof(maRawData),
+                                        "sprm offset is out of range, ignoring");
+                                    if (nDataOffset < sizeof(maRawData))
+                                    {
+                                        aEntry.mpData = maRawData + nDataOffset;
+                                        sal_uInt16 nAvailableData = sizeof(maRawData)-nDataOffset;
+                                        OSL_ENSURE(aEntry.mnLen <= nAvailableData,
+                                            "srpm len is out of range, clipping");
+                                        aEntry.mnLen = std::min(aEntry.mnLen, nAvailableData);
+                                    }
+                                    else
+                                        aEntry.mnLen = 0;
+                                }
                             }
                             else
                                 aEntry.mnLen=0; //Too short, ignore
@@ -2565,27 +2583,28 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                         bool bExpand = IsExpandableSprm(nSpId);
                         if (IsReplaceAllSprm(nSpId) || bExpand)
                         {
-                            sal_uInt16 nOrigLen = bExpand ? aEntry.mnLen : 0;
-                            sal_uInt8 *pOrigData = bExpand ? aEntry.mpData : 0;
-
                             sal_uInt32 nCurr = pDataSt->Tell();
-
                             sal_uInt32 nPos = SVBT32ToUInt32(aEntry.mpData + 2);
-                            pDataSt->Seek(nPos);
-                            *pDataSt >> aEntry.mnLen;
-                            aEntry.mpData =
-                                new sal_uInt8[aEntry.mnLen + nOrigLen];
-                            aEntry.mbMustDelete = true;
-                            aEntry.mnLen =
-                                pDataSt->Read(aEntry.mpData, aEntry.mnLen);
-
-                            pDataSt->Seek( nCurr );
-
-                            if (pOrigData)
+                            if (checkSeek(*pDataSt, nPos))
                             {
-                                memcpy(aEntry.mpData + aEntry.mnLen,
-                                    pOrigData, nOrigLen);
-                                aEntry.mnLen = aEntry.mnLen + nOrigLen;
+                                sal_uInt16 nOrigLen = bExpand ? aEntry.mnLen : 0;
+                                sal_uInt8 *pOrigData = bExpand ? aEntry.mpData : 0;
+
+                                *pDataSt >> aEntry.mnLen;
+                                aEntry.mpData =
+                                    new sal_uInt8[aEntry.mnLen + nOrigLen];
+                                aEntry.mbMustDelete = true;
+                                aEntry.mnLen =
+                                    pDataSt->Read(aEntry.mpData, aEntry.mnLen);
+
+                                pDataSt->Seek( nCurr );
+
+                                if (pOrigData)
+                                {
+                                    memcpy(aEntry.mpData + aEntry.mnLen,
+                                        pOrigData, nOrigLen);
+                                    aEntry.mnLen = aEntry.mnLen + nOrigLen;
+                                }
                             }
                         }
                     }
