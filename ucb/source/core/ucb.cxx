@@ -204,7 +204,7 @@ bool createContentProviderData(
                         "Error getting item value!" );
         }
     }
-    catch (container::NoSuchElementException &)
+    catch (const container::NoSuchElementException&)
     {
         return false;
     }
@@ -408,7 +408,7 @@ UniversalContentBroker::registerContentProvider(
     {
         aIt = m_aProviders.find(Scheme);
     }
-    catch (IllegalArgumentException const &)
+    catch (const IllegalArgumentException&)
     {
         return 0; //@@@
     }
@@ -422,7 +422,7 @@ UniversalContentBroker::registerContentProvider(
         {
             m_aProviders.add(Scheme, aList, false);
         }
-        catch (IllegalArgumentException const &)
+        catch (const IllegalArgumentException&)
         {
             return 0; //@@@
         }
@@ -454,7 +454,7 @@ void SAL_CALL UniversalContentBroker::deregisterContentProvider(
     {
         aMapIt = m_aProviders.find(Scheme);
     }
-    catch (IllegalArgumentException const &)
+    catch (const IllegalArgumentException&)
     {
         return; //@@@
     }
@@ -905,7 +905,7 @@ bool UniversalContentBroker::getContentProviderData(
 
                     rListToFill.push_back( aInfo );
                 }
-                catch ( container::NoSuchElementException& )
+                catch (const container::NoSuchElementException&)
                 {
                     // getByHierarchicalName
                     OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
@@ -914,12 +914,12 @@ bool UniversalContentBroker::getContentProviderData(
             }
         }
     }
-    catch ( uno::RuntimeException& )
+    catch (const uno::RuntimeException&)
     {
         OSL_FAIL( "UniversalContentBroker::getContentProviderData - caught RuntimeException!" );
         return false;
     }
-    catch ( uno::Exception& )
+    catch (const uno::Exception&)
     {
         // createInstance, createInstanceWithArguments
 
