@@ -130,8 +130,6 @@ public:
     sal_Bool                IsActive() const { return bActive; }
     void                SetActive( sal_Bool bSetActive = sal_True ) { bActive = bSetActive; }
 
-    static Point        GetPixelPoint( const Point& rLogPoint );
-
     sal_Bool                IsEqual( const IMapObject& rEqObj );
 
     // IMap-Events

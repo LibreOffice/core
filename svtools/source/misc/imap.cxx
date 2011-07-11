@@ -165,18 +165,6 @@ void IMapObject::Read( SvStream& rIStm, const String& rBaseURL )
 
 /******************************************************************************
 |*
-|* Konvertierung der logischen Koordianten in Pixel
-|*
-\******************************************************************************/
-
-Point IMapObject::GetPixelPoint( const Point& rLogPoint )
-{
-    return Application::GetDefaultDevice()->LogicToPixel( rLogPoint, MapMode( MAP_100TH_MM ) );
-}
-
-
-/******************************************************************************
-|*
 |*
 |*
 \******************************************************************************/
