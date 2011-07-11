@@ -180,17 +180,6 @@ SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const String& rStr,
     return rStream;
 }
 
-SvStream& RTFOutFuncs::Out_Fontname(SvStream& rStream, const String& rStr,
-    rtl_TextEncoding eDestEnc, sal_Bool bWriteHelpFile)
-{
-    //Fontnames in word have a quirk in that \uc and usage of ansi replacement
-    //chars after a \u don't work and in wordpad \u doesn't work, so we are
-    //left with forcing ansi characters only for fontnames
-    for (xub_StrLen n = 0; n < rStr.Len(); ++n)
-        Out_Char(rStream, rStr.GetChar(n), 0, eDestEnc, bWriteHelpFile);
-    return rStream;
-}
-
 SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
 {
     sal_Char aNToABuf[] = "0000000000000000";
