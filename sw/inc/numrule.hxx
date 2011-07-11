@@ -105,6 +105,13 @@ class SW_DLLPUBLIC SwNumRule
 public:
     typedef std::vector< SwTxtNode* > tTxtNodeList;
     typedef std::vector< SwTxtFmtColl* > tParagraphStyleList;
+
+    struct Extremities
+    {
+        sal_uInt16 nPrefixChars;
+        sal_uInt16 nSuffixChars;
+    };
+
 private:
     friend void _FinitCore();
 
@@ -171,7 +178,8 @@ public:
     String MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                           const sal_Bool bInclStrings = sal_True,
                           const sal_Bool bOnlyArabic = sal_False,
-                          const unsigned int _nRestrictToThisLevel = MAXLEVEL ) const;
+                          const unsigned int _nRestrictToThisLevel = MAXLEVEL,
+                          Extremities* pExtremities = 0 ) const;
     String MakeRefNumString( const SwNodeNum& rNodeNum,
                              const bool bInclSuperiorNumLabels = false,
                              const sal_uInt8 nRestrictInclToThisLevel = 0 ) const;

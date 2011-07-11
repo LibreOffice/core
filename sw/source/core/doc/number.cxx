@@ -671,11 +671,15 @@ String SwNumRule::MakeNumString( const SwNodeNum& rNum, sal_Bool bInclStrings,
 String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                                  const sal_Bool bInclStrings,
                                  const sal_Bool bOnlyArabic,
-                                 const unsigned int _nRestrictToThisLevel ) const
+                                 const unsigned int _nRestrictToThisLevel,
+                                 SwNumRule::Extremities* pExtremities ) const
 {
     String aStr;
 
     unsigned int nLevel = rNumVector.size() - 1;
+
+    if ( pExtremities )
+        pExtremities->nPrefixChars = pExtremities->nSuffixChars = 0;
 
     if ( nLevel > _nRestrictToThisLevel )
     {
@@ -734,8 +738,16 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                 SVX_NUM_CHAR_SPECIAL != rMyNFmt.GetNumberingType() &&
                 SVX_NUM_BITMAP != rMyNFmt.GetNumberingType() )
             {
-                aStr.Insert( rMyNFmt.GetPrefix(), 0 );
-                aStr += rMyNFmt.GetSuffix();
+                String const &rPrefix = rMyNFmt.GetPrefix();
+                String const &rSuffix = rMyNFmt.GetSuffix();
+
+                aStr.Insert( rPrefix, 0 );
+                aStr += rSuffix;
+                if ( pExtremities )
+                {
+                    pExtremities->nPrefixChars = rPrefix.Len();
+                    pExtremities->nSuffixChars = rSuffix.Len();
+                }
             }
         }
     }
@@ -752,6 +764,8 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
 
     if ( rNodeNum.GetLevelInListTree() >= 0 )
     {
+        sal_Bool bOldHadPrefix = sal_True;
+
         const SwNodeNum* pWorkingNodeNum( &rNodeNum );
         do
         {
@@ -768,11 +782,45 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                    pWorkingNodeNum->GetTxtNode() &&
                    pWorkingNodeNum->GetTxtNode()->HasNumber() ) )
             {
-                aRefNumStr.Insert( MakeNumString( pWorkingNodeNum->GetNumberVector() ), 0 );
+                Extremities aExtremities;
+                String aPrevStr = MakeNumString( pWorkingNodeNum->GetNumberVector(),
+                                                 sal_True, sal_False, MAXLEVEL,
+                                                 &aExtremities);
+                int        nLen = aPrevStr.Len();
+                int        nStrip = 0;
+                sal_Unicode        c;
+
+
+                while ( nStrip < aExtremities.nPrefixChars &&
+                       ( '\t' == ( c = aPrevStr.GetChar( nStrip ) ) ||
+                         ' ' == c) )
+                {
+                        ++nStrip;
+                }
+
+                if (nStrip)
+                {
+                        aPrevStr.Erase( 0, nStrip );
+                        aExtremities.nPrefixChars -= nStrip;
+                        nLen -= nStrip;
+                }
+
+                if ( bOldHadPrefix &&
+                     aExtremities.nSuffixChars &&
+                     !aExtremities.nPrefixChars
+                   )
+                {
+                        aPrevStr.Erase( nLen - aExtremities.nSuffixChars, aExtremities.nSuffixChars );
+                }
+                bOldHadPrefix = ( aExtremities.nPrefixChars >  0);
+
+                aRefNumStr.Insert( aPrevStr, 0 );
+
             }
             else if ( aRefNumStr.Len() > 0 )
             {
                 aRefNumStr.Insert( String::CreateFromAscii(" "), 0 );
+                bOldHadPrefix = true;
             }
 
             if ( bInclSuperiorNumLabels && pWorkingNodeNum->GetLevelInListTree() > 0 )
