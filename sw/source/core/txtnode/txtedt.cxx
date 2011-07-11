@@ -666,7 +666,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
     sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClp )
     : rNode( rNd ), rText( rTxt), pLanguage( pLang ), pConversionMap( pConvMap ), nLen( 0 ), nWordType( nType ), bClip( bClp )
 {
-    OSL_ENSURE( rText.Len(), "SwScanner: EmptyString" );
+    OSL_ENSURE( !rText.isEmpty(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
     nEndPos = nEnde;
 
