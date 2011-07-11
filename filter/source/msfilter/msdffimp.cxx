@@ -609,7 +609,10 @@ bool DffPropSet::GetPropertyBool( sal_uInt32 nId, bool bDefault ) const
     if( (nBufferSize > 0) && SeekToContent( nId, rStrm ) )
     {
         sal_Int32 nStrLen = static_cast< sal_Int32 >( nBufferSize / 2 );
-        aBuffer.ensureCapacity( nStrLen );
+        //clip initial size of buffer to something sane in case of silly length
+        //strings. If there really is a silly amount of data available it still
+        //works out ok of course
+        aBuffer.ensureCapacity(std::min(nStrLen,static_cast<sal_Int32>(8192)));
         for( sal_Int32 nCharIdx = 0; nCharIdx < nStrLen; ++nCharIdx )
         {
             sal_uInt16 nChar = 0;
