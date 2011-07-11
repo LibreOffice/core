@@ -573,8 +573,6 @@ public:
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return setUser(rTheUser, false, eMechanism, eCharset); }
 
-    void makeAuthCanonic();
-
     inline bool SetPass(ByteString const & rThePassword,
                         EncodeMechanism eMechanism = WAS_ENCODED,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);

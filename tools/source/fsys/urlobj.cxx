@@ -4294,22 +4294,6 @@ bool INetURLObject::hasPassword() const
 }
 
 //============================================================================
-void INetURLObject::makeAuthCanonic()
-{
-    if (m_eScheme == INET_PROT_IMAP && m_aAuth.getLength() == 1
-        && m_aAbsURIRef.charAt(m_aAuth.getBegin()) == '*')
-    {
-        lcl_Erase(m_aAbsURIRef, m_aAuth.getBegin()
-                               - RTL_CONSTASCII_LENGTH(";AUTH="),
-                           RTL_CONSTASCII_LENGTH(";AUTH=*"));
-        sal_Int32 nDelta = m_aAuth.clear() - RTL_CONSTASCII_LENGTH(";AUTH=");
-        m_aPath += nDelta;
-        m_aQuery += nDelta;
-        m_aFragment += nDelta;
-    }
-}
-
-//============================================================================
 rtl::OUString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
                                      rtl_TextEncoding eCharset)
 {
