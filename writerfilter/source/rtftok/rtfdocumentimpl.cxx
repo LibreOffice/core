@@ -1927,10 +1927,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_FFDEFRES:
             if (m_nFormFieldType == 1)
                 m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFCheckBox_default, pIntValue));
+            else if (m_nFormFieldType == 2)
+                m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFDDList_default, pIntValue));
             break;
         case RTF_FFRES:
             if (m_nFormFieldType == 1)
                 m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFCheckBox_checked, pIntValue));
+            else if (m_nFormFieldType == 2)
+                m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFDDList_result, pIntValue));
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
