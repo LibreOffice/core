@@ -3683,31 +3683,6 @@ bool INetURLObject::setFragment(rtl::OUString const & rTheFragment,
 }
 
 //============================================================================
-INetURLObject::FTPType INetURLObject::getFTPType() const
-{
-    if (m_eScheme == INET_PROT_FTP
-        && m_aPath.getLength() >= RTL_CONSTASCII_LENGTH(";type=") + 1
-        && rtl::OUString(m_aAbsURIRef).copy(
-            m_aPath.getEnd() - (RTL_CONSTASCII_LENGTH(";type=") + 1),
-            RTL_CONSTASCII_LENGTH(";type=")).equalsIgnoreAsciiCaseAscii(";type="))
-        switch (m_aAbsURIRef.charAt(m_aPath.getEnd()))
-        {
-            case 'A':
-            case 'a':
-                return FTP_TYPE_A;
-
-            case 'D':
-            case 'd':
-                return FTP_TYPE_D;
-
-            case 'I':
-            case 'i':
-                return FTP_TYPE_I;
-        }
-    return FTP_TYPE_NONE;
-}
-
-//============================================================================
 bool INetURLObject::hasDosVolume(FSysStyle eStyle) const
 {
     sal_Unicode const * p = m_aAbsURIRef.getStr() + m_aPath.getBegin();

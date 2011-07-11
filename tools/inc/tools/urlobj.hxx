@@ -1430,12 +1430,6 @@ private:
         rtl::OUString const & rTheMark, bool bOctets,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
-    // FTP URLs:
-
-    enum FTPType { FTP_TYPE_NONE, FTP_TYPE_A, FTP_TYPE_I, FTP_TYPE_D };
-
-    TOOLS_DLLPRIVATE FTPType getFTPType() const;
-
     // FILE URLs:
 
     TOOLS_DLLPRIVATE bool hasDosVolume(FSysStyle eStyle) const;
