@@ -379,7 +379,6 @@ public:
 
     static sal_uLong                GetReservedKeyCodeCount();
     static const KeyCode*       GetReservedKeyCode( sal_uLong i );
-    static String               GetReservedKeyCodeDescription( sal_uLong i );
 
     static void                 SetDefDialogParent( Window* pWindow );
     static Window*              GetDefDialogParent();

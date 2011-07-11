@@ -417,18 +417,6 @@ const KeyCode*  Application::GetReservedKeyCode( sal_uLong i )
         return &ImplReservedKeys::get()->first[i].mKeyCode;
 }
 
-String Application::GetReservedKeyCodeDescription( sal_uLong i )
-{
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( ! pResMgr )
-        return String();
-    ImplReservedKey *pImplReservedKeys = ImplReservedKeys::get()->first;
-    if( i >= GetReservedKeyCodeCount() || ! pImplReservedKeys[i].mnResId )
-        return String();
-    else
-        return String( ResId( pImplReservedKeys[i].mnResId, *pResMgr ) );
-}
-
 // -----------------------------------------------------------------------
 
 void Application::Execute()
