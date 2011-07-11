@@ -297,7 +297,7 @@ String SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
 {
     String aValue;
     // read size field (signed 32-bit)
-    sal_Int32 nSize;
+    sal_Int32 nSize(0);
     rStrm >> nSize;
     // size field includes trailing NUL character
     DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF), "SfxOleStringHelper::ImplLoadString8 - invalid string" );
@@ -316,7 +316,7 @@ String SfxOleStringHelper::ImplLoadString16( SvStream& rStrm ) const
 {
     String aValue;
     // read size field (signed 32-bit), may be buffer size or character count
-    sal_Int32 nSize;
+    sal_Int32 nSize(0);
     rStrm >> nSize;
     DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF), "SfxOleStringHelper::ImplLoadString16 - invalid string" );
     // size field includes trailing NUL character
@@ -466,7 +466,7 @@ SfxOleBoolProperty::SfxOleBoolProperty( sal_Int32 nPropId, bool bValue ) :
 
 void SfxOleBoolProperty::ImplLoad( SvStream& rStrm )
 {
-    sal_Int16 nValue;
+    sal_Int16 nValue(0);
     rStrm >> nValue;
     mbValue = nValue != 0;
 }
@@ -569,7 +569,7 @@ SfxOleFileTimeProperty::SfxOleFileTimeProperty( sal_Int32 nPropId, const util::D
 
 void SfxOleFileTimeProperty::ImplLoad( SvStream& rStrm )
 {
-    sal_uInt32 nLower, nUpper;
+    sal_uInt32 nLower(0), nUpper(0);
     rStrm >> nLower >> nUpper;
     ::DateTime aDateTime = DateTime::CreateFromWin32FileDateTime( nLower, nUpper );
     // note: editing duration is stored as offset to TIMESTAMP_INVALID_DATETIME
@@ -715,7 +715,7 @@ void SfxOleDictionaryProperty::ImplLoad( SvStream& rStrm )
     maPropNameMap.clear();
     for( sal_Int32 nIdx = 0; (nIdx < nNameCount) && (rStrm.GetErrorCode() == SVSTREAM_OK) && !rStrm.IsEof(); ++nIdx )
     {
-        sal_Int32 nPropId;
+        sal_Int32 nPropId(0);
         rStrm >> nPropId;
         // name always stored as byte string
         maPropNameMap[ nPropId ] = LoadString8( rStrm );
@@ -937,8 +937,8 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
 {
     // read section header
     mnStartPos = rStrm.Tell();
-    sal_uInt32 nSize;
-    sal_Int32 nPropCount;
+    sal_uInt32 nSize(0);
+    sal_Int32 nPropCount(0);
     rStrm >> nSize >> nPropCount;
 
     // read property ID/position pairs
@@ -946,8 +946,8 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     SfxOlePropPosMap aPropPosMap;
     for( sal_Int32 nPropIdx = 0; (nPropIdx < nPropCount) && (rStrm.GetErrorCode() == SVSTREAM_OK) && !rStrm.IsEof(); ++nPropIdx )
     {
-        sal_Int32 nPropId;
-        sal_uInt32 nPropPos;
+        sal_Int32 nPropId(0);
+        sal_uInt32 nPropPos(0);
         rStrm >> nPropId >> nPropPos;
         aPropPosMap[ nPropId ] = nPropPos;
     }
@@ -957,7 +957,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     if( (aCodePageIt != aPropPosMap.end()) && SeekToPropertyPos( rStrm, aCodePageIt->second ) )
     {
         // codepage property must be of type signed int-16
-        sal_Int32 nPropType;
+        sal_Int32 nPropType(0);
         rStrm >> nPropType;
         if( nPropType == PROPTYPE_INT16 )
             LoadObject( rStrm, maCodePageProp );
@@ -973,7 +973,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
         if( mbSupportsDict )
         {
             // dictionary property contains number of pairs in property type field
-            sal_Int32 nNameCount;
+            sal_Int32 nNameCount(0);
             rStrm >> nNameCount;
             maDictProp.SetNameCount( nNameCount );
             LoadObject( rStrm, maDictProp );
@@ -1031,7 +1031,7 @@ bool SfxOleSection::SeekToPropertyPos( SvStream& rStrm, sal_uInt32 nPropPos ) co
 void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
 {
     // property data type
-    sal_Int32 nPropType;
+    sal_Int32 nPropType(0);
     rStrm >> nPropType;
     // create empty property object
     SfxOlePropertyRef xProp;
