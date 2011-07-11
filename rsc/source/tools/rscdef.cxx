@@ -1046,30 +1046,6 @@ sal_Bool RscFileTab::ChangeDef( const ByteString & rDefName,
 
 /*************************************************************************
 |*
-|*    RscFileTab::ChangeDefName()
-|*
-*************************************************************************/
-sal_Bool RscFileTab::ChangeDefName( const ByteString & rDefName,
-                                const ByteString & rNewName )
-{
-    RscDefine * pDef = FindDef( rDefName );
-
-    //Name gefunden ?
-    if( pDef ){
-        // und neuer Name noch nicht bekannt ?
-        if( !FindDef( pDef->GetFileKey(), rNewName ) ){
-            aDefTree.Remove( pDef );
-            pDef->SetName( rNewName );
-            aDefTree.Insert( pDef );
-            return( sal_True );
-        }
-    };
-
-    return( sal_False );
-}
-
-/*************************************************************************
-|*
 |*    RscFileTab::DeleteFileContext()
 |*
 *************************************************************************/

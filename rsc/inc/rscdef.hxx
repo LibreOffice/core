@@ -270,8 +270,6 @@ public:
 
     sal_Bool IsDefUsed( const ByteString & );
     void DeleteDef( const ByteString & );
-    sal_Bool ChangeDefName( const ByteString & rDefName,
-                        const ByteString & rNewName );
 
            // Alle Defines die in dieser Datei Definiert sind loeschen
     void   DeleteFileContext( sal_uLong lKey );
