@@ -1457,8 +1457,6 @@ class WW8Style
 protected:
     WW8Fib& rFib;
     SvStream& rSt;
-    long nStyleStart;
-    long nStyleLen;
 
     sal_uInt16  cstd;                      // Count of styles in stylesheet
     sal_uInt16  cbSTDBaseInFile;           // Length of STD Base as stored in a file

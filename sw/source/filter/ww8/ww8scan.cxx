@@ -5940,23 +5940,35 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
     stiMaxWhenSaved(0), istdMaxFixedWhenSaved(0), nVerBuiltInNamesWhenSaved(0),
     ftcAsci(0), ftcFE(0), ftcOther(0), ftcBi(0)
 {
-    nStyleStart = rFib.fcStshf;
-    nStyleLen = rFib.lcbStshf;
-
-    rSt.Seek(nStyleStart);
+    if (!checkSeek(rSt, rFib.fcStshf))
+        return;
 
     sal_uInt16 cbStshi = 0; //  2 bytes size of the following STSHI structure
+    sal_uInt32 nRemaining = rFib.lcbStshf;
+    const sal_uInt32 nMinValidStshi = 4;
 
     if (rFib.GetFIBVersion() <= ww::eWW2)
     {
         cbStshi = 0;
         cstd = 256;
     }
-    else if (rFib.nFib < 67) // old Version ? (need to find this again to fix)
-        cbStshi = 4;    // -> Laengenfeld fehlt
-    else    // neue Version:
-        // lies die Laenge der in der Datei gespeicherten Struktur
-        rSt >> cbStshi;
+    else
+    {
+        if (rFib.nFib < 67) // old Version ? (need to find this again to fix)
+            cbStshi = nMinValidStshi;
+        else    // new version
+        {
+            if (nRemaining < sizeof(cbStshi))
+                return;
+            // lies die Laenge der in der Datei gespeicherten Struktur
+            rSt >> cbStshi;
+            nRemaining-=2;
+        }
+    }
+
+    cbStshi = std::min(static_cast<sal_uInt32>(cbStshi), nRemaining);
+    if (cbStshi < nMinValidStshi)
+        return;
 
     sal_uInt16 nRead = cbStshi;
     do
@@ -6003,10 +6015,16 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
     while( !this ); // Trick: obiger Block wird genau einmal durchlaufen
                     //   und kann vorzeitig per "break" verlassen werden.
 
-    if( 0 != rSt.GetError() )
-    {
-        // wie denn nun den Error melden?
-    }
+    nRemaining -= cbStshi;
+
+    //There will be stshi.cstd (cbSTD, STD) pairs in the file following the
+    //STSHI. Note that styles can be empty, i.e. cbSTD == 0
+    const sal_uInt32 nMinRecordSize = sizeof(sal_uInt16);
+    sal_uInt16 nMaxPossibleRecords = nRemaining/nMinRecordSize;
+
+    OSL_ENSURE(cstd <= nMaxPossibleRecords,
+        "allegedly more styles that available data\n");
+    cstd = std::min(cstd, nMaxPossibleRecords);
 }
 
 // Read1STDFixed() liest ein Style ein. Wenn der Style vollstaendig vorhanden
@@ -6017,7 +6035,7 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
 {
     WW8_STD* pStd = 0;
 
-    sal_uInt16 cbStd;
+    sal_uInt16 cbStd(0);
     rSt >> cbStd;   // lies Laenge
 
     sal_uInt16 nRead = cbSTDBaseInFile;
@@ -6034,6 +6052,7 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
             sal_uInt16 a16Bit;
 
             if( 2 > nRead ) break;
+            a16Bit = 0;
             rSt >> a16Bit;
             pStd->sti          =        a16Bit & 0x0fff  ;
             pStd->fScratch     = 0 != ( a16Bit & 0x1000 );
@@ -6042,20 +6061,24 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
             pStd->fMassCopy    = 0 != ( a16Bit & 0x8000 );
 
             if( 4 > nRead ) break;
+            a16Bit = 0;
             rSt >> a16Bit;
             pStd->sgc      =   a16Bit & 0x000f       ;
             pStd->istdBase = ( a16Bit & 0xfff0 ) >> 4;
 
             if( 6 > nRead ) break;
+            a16Bit = 0;
             rSt >> a16Bit;
             pStd->cupx     =   a16Bit & 0x000f       ;
             pStd->istdNext = ( a16Bit & 0xfff0 ) >> 4;
 
             if( 8 > nRead ) break;
+            a16Bit = 0;
             rSt >> pStd->bchUpe;
 
             // ab Ver8 sollten diese beiden Felder dazukommen:
             if(10 > nRead ) break;
+            a16Bit = 0;
             rSt >> a16Bit;
             pStd->fAutoRedef =   a16Bit & 0x0001       ;
             pStd->fHidden    = ( a16Bit & 0x0002 ) >> 2;

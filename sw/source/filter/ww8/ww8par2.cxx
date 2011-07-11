@@ -3680,14 +3680,13 @@ void WW8RStyle::ImportSprms(sal_Size nPosFc, short nLen, bool bPap)
     if (!nLen)
         return;
 
-    sal_uInt8 *pSprms = new sal_uInt8[nLen];
-
-    pStStrm->Seek(nPosFc);
-    pStStrm->Read(pSprms, nLen);
-
-    ImportSprms(pSprms, nLen, bPap);
-
-    delete[] pSprms;
+    if (checkSeek(*pStStrm, nPosFc))
+    {
+        sal_uInt8 *pSprms = new sal_uInt8[nLen];
+        nLen = pStStrm->Read(pSprms, nLen);
+        ImportSprms(pSprms, nLen, bPap);
+        delete[] pSprms;
+    }
 }
 
 static inline short WW8SkipOdd(SvStream* pSt )
@@ -3714,8 +3713,6 @@ static inline short WW8SkipEven(SvStream* pSt )
 
 short WW8RStyle::ImportUPX(short nLen, bool bPAP, bool bOdd)
 {
-    sal_Int16 cbUPX;
-
     if( 0 < nLen ) // Empty ?
     {
         if (bOdd)
@@ -3723,6 +3720,7 @@ short WW8RStyle::ImportUPX(short nLen, bool bPAP, bool bOdd)
         else
             nLen = nLen - WW8SkipOdd( pStStrm );
 
+        sal_Int16 cbUPX(0);
         *pStStrm >> cbUPX;
 
         nLen-=2;
