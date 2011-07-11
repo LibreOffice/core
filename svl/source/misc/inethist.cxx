@@ -157,7 +157,6 @@ class INetURLHistory_Impl
     void initialize (void);
 
     void downheap (hash_entry a[], sal_uInt16 n, sal_uInt16 k);
-    void heapsort (hash_entry a[], sal_uInt16 n);
 
     /** capacity.
     */
@@ -272,25 +271,6 @@ void INetURLHistory_Impl::downheap (hash_entry a[], sal_uInt16 n, sal_uInt16 k)
         k = i;
     }
     a[k] = h;
-}
-
-/*
- * heapsort.
- */
-void INetURLHistory_Impl::heapsort (hash_entry a[], sal_uInt16 n)
-{
-    hash_entry h;
-
-    for (sal_uInt16 k = (n - 1) / 2 + 1; k > 0; k--)
-        downheap (a, n, k - 1);
-
-    while (n > 0)
-    {
-        h        = a[0    ];
-        a[0    ] = a[n - 1];
-        a[n - 1] = h;
-        downheap (a, --n, 0);
-    }
 }
 
 /*
