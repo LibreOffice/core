@@ -88,8 +88,6 @@ public:
 
     Image           GetColorTransformedImage( ImageColorTransform eColorTransform ) const;
 
-    void            Invert();
-
     sal_Bool            operator!() const { return( !mpImplData ? true : false ); }
     Image&          operator=( const Image& rImage );
     sal_Bool            operator==( const Image& rImage ) const;

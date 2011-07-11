@@ -276,15 +276,6 @@ uno::Reference< graphic::XGraphic > Image::GetXGraphic() const
 
 // -----------------------------------------------------------------------
 
-void Image::Invert()
-{
-    BitmapEx aInvertedBmp( GetBitmapEx() );
-    aInvertedBmp.Invert();
-    *this = aInvertedBmp;
-}
-
-// -----------------------------------------------------------------------
-
 Image& Image::operator=( const Image& rImage )
 {
     DBG_CHKTHIS( Image, NULL );
