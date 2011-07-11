@@ -2909,29 +2909,6 @@ bool INetURLObject::parseHostOrNetBiosName(
 }
 
 //============================================================================
-// static
-rtl::OUString INetURLObject::encodeHostPort(rtl::OUString const & rTheHostPort,
-                                        bool bOctets,
-                                        EncodeMechanism eMechanism,
-                                        rtl_TextEncoding eCharset)
-{
-    sal_Int32 nPort = rTheHostPort.getLength();
-    if (nPort != 0)
-    {
-        sal_Int32 i = nPort - 1;
-        while (i != 0 && INetMIME::isDigit(rTheHostPort.getStr()[i]))
-            --i;
-        if (rTheHostPort.getStr()[i] == ':')
-            nPort = i;
-    }
-    rtl::OUString aResult(encodeText(rTheHostPort.copy(0, nPort), bOctets,
-                                 PART_HOST_EXTRA, '%', eMechanism, eCharset,
-                                 true));
-    aResult += rTheHostPort.copy(nPort);
-    return aResult;
-}
-
-//============================================================================
 bool INetURLObject::setHost(rtl::OUString const & rTheHost, bool bOctets,
                             EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
