@@ -560,16 +560,6 @@ sal_Bool Accelerator::IsIdValid( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Accelerator::IsKeyCodeValid( const KeyCode rKeyCode ) const
-{
-    DBG_CHKTHIS( Accelerator, NULL );
-
-    ImplAccelEntry* pEntry = ImplGetAccelData( rKeyCode );
-    return (pEntry != NULL);
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Accelerator::Call( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
 {
     DBG_CHKTHIS( Accelerator, NULL );

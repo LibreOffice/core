@@ -98,7 +98,6 @@ public:
     sal_uInt16          GetItemId( const KeyCode& rKeyCode ) const;
     KeyCode         GetKeyCode( sal_uInt16 nItemId ) const;
     sal_Bool            IsIdValid( sal_uInt16 nItemId ) const;
-    sal_Bool            IsKeyCodeValid( const KeyCode rKeyCode ) const;
     sal_Bool            Call( const KeyCode& rKeyCode, sal_uInt16 nRepeat = 0 );
 
     void            SetAccel( sal_uInt16 nItemId, Accelerator* pAccel );
