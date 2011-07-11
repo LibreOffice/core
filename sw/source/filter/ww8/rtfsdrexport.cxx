@@ -441,13 +441,6 @@ void RtfSdrExport::AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Re
     rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(rRectangle.Bottom());
 }
 
-void RtfSdrExport::AddShapeAttribute( sal_Int32 /*nAttribute*/, const rtl::OString& /*rValue*/ )
-{
-    OSL_TRACE("%s", OSL_THIS_FUNC);
-
-    /* noop */
-}
-
 extern const char* pShapeTypes[];
 
 void lcl_AppendSP( ::rtl::OStringBuffer& rRunText, const char cName[], const ::rtl::OString& rValue)
