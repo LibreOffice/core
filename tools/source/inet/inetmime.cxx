@@ -2233,19 +2233,6 @@ void INetMIME::writeDateTime(INetMIMEOutputSink & rSink,
 // static
 void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     HeaderFieldType eType,
-                                    const ByteString & rBody,
-                                    rtl_TextEncoding ePreferredEncoding,
-                                    bool bInitialSpace)
-{
-    writeHeaderFieldBody(rSink, eType,
-                         UniString(rBody, RTL_TEXTENCODING_UTF8),
-                         ePreferredEncoding, bInitialSpace);
-}
-
-//============================================================================
-// static
-void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
-                                    HeaderFieldType eType,
                                     const UniString & rBody,
                                     rtl_TextEncoding ePreferredEncoding,
                                     bool bInitialSpace)

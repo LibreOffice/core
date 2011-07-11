@@ -599,12 +599,6 @@ public:
 
     static void writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                      HeaderFieldType eType,
-                                     const ByteString & rBody,
-                                     rtl_TextEncoding ePreferredEncoding,
-                                     bool bInitialSpace = true);
-
-    static void writeHeaderFieldBody(INetMIMEOutputSink & rSink,
-                                     HeaderFieldType eType,
                                      const UniString & rBody,
                                      rtl_TextEncoding ePreferredEncoding,
                                      bool bInitialSpace = true);
