@@ -235,6 +235,7 @@ static int lcl_AsHex(char ch)
     return ret;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 static const char* lcl_RtfToString(RTFKeyword nKeyword)
 {
     for (int i = 0; i < nRTFControlWords; i++)
@@ -244,6 +245,7 @@ static const char* lcl_RtfToString(RTFKeyword nKeyword)
     }
     return NULL;
 }
+#endif
 
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
