@@ -285,36 +285,6 @@ void Image::Invert()
 
 // -----------------------------------------------------------------------
 
-void Image::GetColorTransformArrays( ImageColorTransform eColorTransform,
-                                     Color*& rpSrcColor, Color*& rpDstColor, sal_uLong& rColorCount )
-{
-    if( IMAGECOLORTRANSFORM_HIGHCONTRAST == eColorTransform )
-    {
-        rpSrcColor = new Color[ 4 ];
-        rpDstColor = new Color[ 4 ];
-        rColorCount = 4;
-
-        rpSrcColor[ 0 ] = Color( COL_BLACK );
-        rpDstColor[ 0 ] = Color( COL_WHITE );
-
-        rpSrcColor[ 1 ] = Color( COL_WHITE );
-        rpDstColor[ 1 ] = Color( COL_BLACK );
-
-        rpSrcColor[ 2 ] = Color( COL_BLUE );
-        rpDstColor[ 2 ] = Color( COL_WHITE );
-
-        rpSrcColor[ 3 ] = Color( COL_LIGHTBLUE );
-        rpDstColor[ 3 ] = Color( COL_WHITE );
-    }
-    else
-    {
-        rpSrcColor = rpDstColor = NULL;
-        rColorCount = 0;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 Image& Image::operator=( const Image& rImage )
 {
     DBG_CHKTHIS( Image, NULL );
