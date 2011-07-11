@@ -295,7 +295,6 @@ public:
 
     /** Header fields.
      */
-    void      SetBCC (const UniString& rBCC);
     UniString GetBCC (void) const
     {
         return GetHeaderValue_Impl (
@@ -303,7 +302,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetCC (const UniString& rCC);
     UniString GetCC (void) const
     {
         return GetHeaderValue_Impl (
@@ -311,7 +309,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetComments (const UniString& rComments);
     UniString GetComments (void) const
     {
         return GetHeaderValue_Impl (
@@ -319,7 +316,6 @@ public:
             INetMIME::HEADER_FIELD_TEXT);
     }
 
-    void      SetDate (const UniString& rDate);
     UniString GetDate (void) const
     {
         return GetHeaderValue_Impl (
@@ -327,7 +323,6 @@ public:
             INetMIME::HEADER_FIELD_STRUCTURED);
     }
 
-    void      SetFrom (const UniString& rFrom);
     UniString GetFrom (void) const
     {
         return GetHeaderValue_Impl (
@@ -335,7 +330,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetInReplyTo (const UniString& rInReplyTo);
     UniString GetInReplyTo (void) const
     {
         return GetHeaderValue_Impl (
@@ -343,7 +337,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS); // ??? MESSAGE_ID ???
     }
 
-    void      SetKeywords (const UniString& rKeywords);
     UniString GetKeywords (void) const
     {
         return GetHeaderValue_Impl (
@@ -351,7 +344,6 @@ public:
             INetMIME::HEADER_FIELD_PHRASE);
     }
 
-    void      SetMessageID (const UniString& rMessageID);
     UniString GetMessageID (void) const
     {
         return GetHeaderValue_Impl (
@@ -359,7 +351,6 @@ public:
             INetMIME::HEADER_FIELD_MESSAGE_ID);
     }
 
-    void      SetReferences (const UniString& rReferences);
     UniString GetReferences (void) const
     {
         return GetHeaderValue_Impl (
@@ -367,7 +358,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetReplyTo (const UniString& rReplyTo);
     UniString GetReplyTo (void) const
     {
         return GetHeaderValue_Impl (
@@ -375,7 +365,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetReturnPath (const UniString& rReturnPath);
     UniString GetReturnPath (void) const
     {
         return GetHeaderValue_Impl (
@@ -383,7 +372,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetReturnReceiptTo (const UniString& rReturnReceiptTo);
     UniString GetReturnReceiptTo (void) const
     {
         return GetHeaderValue_Impl (
@@ -391,7 +379,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetSender (const UniString& rSender);
     UniString GetSender (void) const
     {
         return GetHeaderValue_Impl (
@@ -399,7 +386,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetSubject (const UniString& rSubject);
     UniString GetSubject (void) const
     {
         return GetHeaderValue_Impl (
@@ -407,7 +393,6 @@ public:
             INetMIME::HEADER_FIELD_TEXT);
     }
 
-    void      SetTo (const UniString& rTo);
     UniString GetTo (void) const
     {
         return GetHeaderValue_Impl (
