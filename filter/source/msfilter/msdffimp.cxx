@@ -211,7 +211,9 @@ sal_Bool Impl_OlePres::Read( SvStream & rStm )
     }
 
     rStm.ResetError();
-    rStm.Seek( nBeginPos );
+    if (nBeginPos != rStm.Seek(nBeginPos))
+        return sal_False;
+
     nFormat = ReadClipboardFormat( rStm );
     // JobSetup, bzw. TargetDevice ueberlesen
     // Information aufnehmen, um sie beim Schreiben nicht zu verlieren
@@ -231,7 +233,7 @@ sal_Bool Impl_OlePres::Read( SvStream & rStm )
         rStm.SetError( SVSTREAM_GENERALERROR );
         return sal_False;
     }
-    sal_uInt32 nAsp;
+    sal_uInt32 nAsp(0);
     rStm >> nAsp;
     sal_uInt16 nSvAsp = sal_uInt16( nAsp );
     SetAspect( nSvAsp );
@@ -4572,7 +4574,9 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
     if( pShapeId )
         *pShapeId = 0;
 
-    rHd.SeekToContent( rSt );
+    if (!rHd.SeekToContent(rSt))
+        return pRet;
+
     DffRecordHeader aRecHd;     // the first atom has to be the SpContainer for the GroupObject
     rSt >> aRecHd;
     if ( aRecHd.nRecType == DFF_msofbtSpContainer )
@@ -4580,7 +4584,8 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
         sal_Int32 nGroupRotateAngle = 0;
         sal_Int32 nSpFlags = 0;
         mnFix16Angle = 0;
-        aRecHd.SeekToBegOfRecord( rSt );
+        if (!aRecHd.SeekToBegOfRecord(rSt))
+            return pRet;
         pRet = ImportObj( rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId );
         if ( pRet )
         {
@@ -4608,7 +4613,9 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
             }
 
             // now importing the inner objects of the group
-            aRecHd.SeekToEndOfRecord( rSt );
+            if (!aRecHd.SeekToEndOfRecord(rSt))
+                return pRet;
+
             while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
             {
                 DffRecordHeader aRecHd2;
@@ -4617,7 +4624,8 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                 {
                     Rectangle aGroupClientAnchor, aGroupChildAnchor;
                     GetGroupAnchors( aRecHd2, rSt, aGroupClientAnchor, aGroupChildAnchor, aClientRect, aGlobalChildRect );
-                    aRecHd2.SeekToBegOfRecord( rSt );
+                    if (!aRecHd2.SeekToBegOfRecord(rSt))
+                        return pRet;
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportGroup( aRecHd2, rSt, pClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
                     if ( pTmp && pRet && ((SdrObjGroup*)pRet)->GetSubList() )
@@ -4629,7 +4637,8 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                 }
                 else if ( aRecHd2.nRecType == DFF_msofbtSpContainer )
                 {
-                    aRecHd2.SeekToBegOfRecord( rSt );
+                    if (!aRecHd2.SeekToBegOfRecord(rSt))
+                        return pRet;
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportShape( aRecHd2, rSt, pClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
                     if ( pTmp && pRet && ((SdrObjGroup*)pRet)->GetSubList())
@@ -4639,7 +4648,8 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                             insertShapeId( nShapeId, pTmp );
                     }
                 }
-                aRecHd2.SeekToEndOfRecord( rSt );
+                if (!aRecHd2.SeekToEndOfRecord(rSt))
+                    return pRet;
             }
 
             if ( nGroupRotateAngle )
@@ -4673,7 +4683,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     if( pShapeId )
         *pShapeId = 0;
 
-    rHd.SeekToBegOfRecord( rSt );
+    if (!rHd.SeekToBegOfRecord(rSt))
+        return pRet;
+
     DffObjData aObjData( rHd, rClientRect, nCalledByGroup );
     maShapeRecords.Consume( rSt, sal_False );
     aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp, SEEK_FROM_BEGINNING );
@@ -4701,7 +4713,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     aObjData.bOpt = maShapeRecords.SeekToContent( rSt, DFF_msofbtOPT, SEEK_FROM_CURRENT_AND_RESTART );
     if ( aObjData.bOpt )
     {
-        maShapeRecords.Current()->SeekToBegOfRecord( rSt );
+        if (!maShapeRecords.Current()->SeekToBegOfRecord(rSt))
+            return pRet;
 #ifdef DBG_AUTOSHAPE
         ReadPropSet( rSt, pClientData, (sal_uInt32)aObjData.eShapeType );
 #else
@@ -5265,7 +5278,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvStream& rSt, Rectangle& aClientRect )
 {
     Rectangle aChildAnchor;
-    rHd.SeekToContent( rSt );
+    if (!rHd.SeekToContent(rSt))
+        return aChildAnchor;
+
     while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
     {
         DffRecordHeader aShapeHd;
@@ -5316,10 +5331,12 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                     aChildAnchor.Union( aChild );
                     break;
                 }
-                aShapeAtom.SeekToEndOfRecord( rSt );
+                if (!aShapeAtom.SeekToEndOfRecord(rSt))
+                    break;
             }
         }
-        aShapeHd.SeekToEndOfRecord( rSt );
+        if (!aShapeHd.SeekToEndOfRecord(rSt))
+            break;
     }
     return aChildAnchor;
 }
@@ -5328,8 +5345,10 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
                             Rectangle& rGroupClientAnchor, Rectangle& rGroupChildAnchor,
                                 const Rectangle& rClientRect, const Rectangle& rGlobalChildRect )
 {
+    if (!rHd.SeekToContent(rSt))
+        return;
+
     sal_Bool bFirst = sal_True;
-    rHd.SeekToContent( rSt );
     DffRecordHeader aShapeHd;
     while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
     {
@@ -5376,10 +5395,12 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
                         rGroupChildAnchor.Union( aChild );
                     break;
                 }
-                aShapeAtom.SeekToEndOfRecord( rSt );
+                if (!aShapeAtom.SeekToEndOfRecord(rSt))
+                    break;
             }
         }
-        aShapeHd.SeekToEndOfRecord( rSt );
+        if (!aShapeHd.SeekToEndOfRecord(rSt))
+            break;
     }
 }
 
@@ -5971,7 +5992,7 @@ SV_IMPL_OP_PTRARR_SORT(MSDffImportRecords, MSDffImportRec_Ptr)
 
 SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  const String& rBaseURL,
-                                 long      nOffsDgg_,
+                                 sal_uInt32 nOffsDgg_,
                                  SvStream* pStData_,
                                  SdrModel* pSdrModel_,// s. unten: SetModel()
                                  long      nApplicationScale,
@@ -6067,7 +6088,7 @@ SvxMSDffManager::~SvxMSDffManager()
     delete[] mpFidcls;
 }
 
-void SvxMSDffManager::InitSvxMSDffManager( long nOffsDgg_, SvStream* pStData_, sal_uInt32 nOleConvFlags )
+void SvxMSDffManager::InitSvxMSDffManager( sal_uInt32 nOffsDgg_, SvStream* pStData_, sal_uInt32 nOleConvFlags )
 {
     nOffsDgg = nOffsDgg_;
     pStData = pStData_;
@@ -6107,13 +6128,15 @@ void SvxMSDffManager::SetDgContainer( SvStream& rSt )
     }
 }
 
-void SvxMSDffManager::GetFidclData( long nOffsDggL )
+void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
 {
-    if ( nOffsDggL )
-    {
-        sal_uInt32 nDummy, nMerk = rStCtrl.Tell();
-        rStCtrl.Seek( nOffsDggL );
+    if (!nOffsDggL)
+        return;
 
+    sal_uInt32 nDummy, nMerk = rStCtrl.Tell();
+
+    if (nOffsDggL == rStCtrl.Seek(nOffsDggL))
+    {
         DffRecordHeader aRecHd;
         rStCtrl >> aRecHd;
 
@@ -6139,8 +6162,8 @@ void SvxMSDffManager::GetFidclData( long nOffsDggL )
                 }
             }
         }
-        rStCtrl.Seek( nMerk );
     }
+    rStCtrl.Seek( nMerk );
 }
 
 void SvxMSDffManager::CheckTxBxStoryChain()
@@ -6217,13 +6240,14 @@ void SvxMSDffManager::CheckTxBxStoryChain()
     und merken des File-Offsets fuer jedes Blip
                    ============
 ******************************************************************************/
-void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
+void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
 {
     // Start Offset unbedingt merken, falls wir nochmal aufsetzen muessen
-    long nOffsDggL = nOffsDgg_;
+    sal_uInt32 nOffsDggL = nOffsDgg_;
 
     // Kontroll Stream positionieren
-    rStCtrl.Seek( nOffsDggL );
+    if (nOffsDggL != rStCtrl.Seek(nOffsDggL))
+        return;
 
     sal_uInt8   nVer;
     sal_uInt16 nInst;
@@ -6239,21 +6263,23 @@ void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
     {
         GetDrawingGroupContainerData( rStCtrl, nLength );
 
-         rStCtrl.Seek( STREAM_SEEK_TO_END );
+        rStCtrl.Seek( STREAM_SEEK_TO_END );
         sal_uInt32 nMaxStrPos = rStCtrl.Tell();
 
         nPos += nLength;
         unsigned long nDrawingContainerId = 1;
         do
         {
-            rStCtrl.Seek( nPos );
+            if (nPos != rStCtrl.Seek(nPos))
+                break;
 
             bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) && ( DFF_msofbtDgContainer == nFbt );
 
             if( !bOk )
             {
                 nPos++;
-                rStCtrl.Seek( nPos );
+                if (nPos != rStCtrl.Seek(nPos))
+                    break;
                 bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength )
                         && ( DFF_msofbtDgContainer == nFbt );
             }

@@ -78,9 +78,20 @@ public:
     bool        IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
     sal_uLong   GetRecBegFilePos() const { return nFilePos; }
     sal_uLong   GetRecEndFilePos() const { return nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen; }
-    void SeekToEndOfRecord(SvStream& rIn) const { rIn.Seek(nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen ); }
-    void SeekToContent(    SvStream& rIn) const { rIn.Seek(nFilePos + DFF_COMMON_RECORD_HEADER_SIZE ); }
-    void SeekToBegOfRecord(SvStream& rIn) const { rIn.Seek( nFilePos ); }
+    bool SeekToEndOfRecord(SvStream& rIn) const
+    {
+        sal_Size nPos = nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen;
+        return nPos == rIn.Seek(nPos);
+    }
+    bool SeekToContent(SvStream& rIn) const
+    {
+        sal_Size nPos = nFilePos + DFF_COMMON_RECORD_HEADER_SIZE;
+        return nPos == rIn.Seek(nPos);
+    }
+    bool SeekToBegOfRecord(SvStream& rIn) const
+    {
+        return nFilePos == rIn.Seek(nFilePos);
+    }
 
     MSFILTER_DLLPUBLIC friend SvStream& operator>>(SvStream& rIn, DffRecordHeader& rRec);
 
@@ -447,13 +458,13 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
     SvxMSDffShapeInfos*     pShapeInfos;
     SvxMSDffShapeOrders*    pShapeOrders;
     sal_uLong               nDefaultFontHeight;
-    long                    nOffsDgg;
+    sal_uInt32              nOffsDgg;
     sal_uInt16              nBLIPCount;
     sal_uInt16              nShapeCount;
     sal_uInt32              nGroupShapeFlags;
 
     void CheckTxBxStoryChain();
-    void GetFidclData( long nOffsDgg );
+    void GetFidclData(sal_uInt32 nOffsDgg);
 
 protected :
 
@@ -488,7 +499,7 @@ protected :
     */
     SvxMSDffShapeIdContainer    maShapeIdContainer;
 
-    void GetCtrlData( long nOffsDgg );
+    void GetCtrlData(sal_uInt32 nOffsDgg);
     void GetDrawingGroupContainerData( SvStream& rSt,
                                        sal_uLong nLenDgg );
     // #156763#
@@ -610,7 +621,7 @@ public:
 */
     SvxMSDffManager( SvStream& rStCtrl,
                      const String& rBaseURL,
-                     long      nOffsDgg,
+                     sal_uInt32 nOffsDgg,
                      SvStream* pStData,
                      SdrModel* pSdrModel_           =  0,
                      long      nApplicationScale    =  0,
@@ -622,7 +633,7 @@ public:
     // in PPT werden die Parameter DGGContainerOffset und PicStream
     // mit Hilfe einer Init Routine Uebergeben.
     SvxMSDffManager( SvStream& rStCtrl, const String& rBaseURL, MSFilterTracer* pTracer );
-    void InitSvxMSDffManager( long nOffsDgg_, SvStream* pStData_, sal_uInt32 nSvxMSDffOLEConvFlags );
+    void InitSvxMSDffManager(sal_uInt32 nOffsDgg_, SvStream* pStData_, sal_uInt32 nSvxMSDffOLEConvFlags);
     void SetDgContainer( SvStream& rSt );
 
     virtual ~SvxMSDffManager();
