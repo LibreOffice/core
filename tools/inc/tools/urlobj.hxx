@@ -1434,10 +1434,6 @@ private:
 
     TOOLS_DLLPRIVATE bool hasDosVolume(FSysStyle eStyle) const;
 
-    // IMAP URLs:
-
-    TOOLS_DLLPRIVATE sal_uInt32 getIMAPUID() const;
-
     // Coding:
 
     static inline rtl::OUString extend(ByteString const & rOctets)

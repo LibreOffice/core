@@ -3695,33 +3695,6 @@ bool INetURLObject::hasDosVolume(FSysStyle eStyle) const
 }
 
 //============================================================================
-sal_uInt32 INetURLObject::getIMAPUID() const
-{
-    if (m_eScheme == INET_PROT_IMAP
-        && m_aPath.getLength() >= RTL_CONSTASCII_LENGTH("/;uid=") + 1)
-    {
-        sal_Unicode const * pBegin = m_aAbsURIRef.getStr()
-                                         + m_aPath.getBegin()
-                                         + RTL_CONSTASCII_LENGTH("/;uid=");
-        sal_Unicode const * pEnd = pBegin + m_aPath.getLength();
-        sal_Unicode const * p = pEnd;
-        while (p > pBegin && INetMIME::isDigit(p[-1]))
-            --p;
-        if (p < pEnd && *--p != '0'
-            && rtl::OUString(m_aAbsURIRef).copy(
-                p - RTL_CONSTASCII_LENGTH("/;uid=") - m_aAbsURIRef.getStr(),
-                RTL_CONSTASCII_LENGTH("/;uid=")).equalsIgnoreAsciiCaseAscii("/;uid=")
-           )
-        {
-            sal_uInt32 nUID;
-            if (INetMIME::scanUnsigned(p, pEnd, false, nUID))
-                return nUID;
-        }
-    }
-    return 0;
-}
-
-//============================================================================
 // static
 rtl::OUString INetURLObject::encodeText(sal_Unicode const * pBegin,
                                     sal_Unicode const * pEnd, bool bOctets,
