@@ -32,6 +32,7 @@
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
+#include <com/sun/star/sheet/NameToken.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
 #include "oox/core/filterbase.hxx"
@@ -2798,7 +2799,10 @@ void FormulaParser::convertNameToFormula( FormulaContext& rContext, sal_Int32 nT
     {
         ApiTokenSequence aTokens( 1 );
         aTokens[ 0 ].OpCode = OPCODE_NAME;
-        aTokens[ 0 ].Data <<= nTokenIndex;
+        NameToken aNameTokenData;
+        aNameTokenData.Global = sal_True;
+        aNameTokenData.Index= nTokenIndex;
+        aTokens[ 0 ].Data <<= aNameTokenData;
         mxImpl->setFormula( rContext, aTokens );
     }
     else
