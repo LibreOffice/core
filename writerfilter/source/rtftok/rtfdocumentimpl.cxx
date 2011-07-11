@@ -633,6 +633,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_PICT:
         case DESTINATION_SHAPEPROPERTYVALUEPICT:
         case DESTINATION_FORMFIELDNAME:
+        case DESTINATION_DATAFIELD:
             m_aDestinationText.append(rString);
             break;
         default: bRet = false; break;
@@ -937,6 +938,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_FFNAME:
             m_aStates.top().nDestinationState = DESTINATION_FORMFIELDNAME;
+            break;
+        case RTF_DATAFIELD:
+            m_aStates.top().nDestinationState = DESTINATION_DATAFIELD;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -2290,6 +2294,17 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
+        if (m_aFormfieldAttributes.size() || m_aFormfieldSprms.size())
+        {
+            RTFValue::Pointer_t pValue(new RTFValue(m_aFormfieldAttributes, m_aFormfieldSprms));
+            RTFSprms_t aFFAttributes;
+            RTFSprms_t aFFSprms;
+            aFFSprms.push_back(make_pair(NS_ooxml::LN_ffdata, pValue));
+            writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aFFAttributes, aFFSprms));
+            Mapper().props(pProperties);
+            m_aFormfieldAttributes.clear();
+            m_aFormfieldSprms.clear();
+        }
         sal_uInt8 sFieldSep[] = { 0x14 };
         Mapper().startCharacterGroup();
         Mapper().text(sFieldSep, 1);
@@ -2377,16 +2392,49 @@ int RTFDocumentImpl::popState()
         RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
         m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFData_name, pValue));
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_FORMFIELD)
+    else if (m_aStates.top().nDestinationState == DESTINATION_DATAFIELD)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(m_aFormfieldAttributes, m_aFormfieldSprms));
-        RTFSprms_t aFFAttributes;
-        RTFSprms_t aFFSprms;
-        aFFSprms.push_back(make_pair(NS_ooxml::LN_ffdata, pValue));
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aFFAttributes, aFFSprms));
-        Mapper().props(pProperties);
-        aFFAttributes = RTFSprms_t();
-        aFFSprms = RTFSprms_t();
+        OString aStr = OUStringToOString(m_aDestinationText.makeStringAndClear(), m_aStates.top().nCurrentEncoding);
+        // decode hex dump
+        OStringBuffer aBuf;
+        const char *str = aStr.getStr();
+        int b = 0, count = 2;
+        for (int i = 0; i < aStr.getLength(); ++i)
+        {
+            char ch = str[i];
+            if (ch != 0x0d && ch != 0x0a)
+            {
+                b = b << 4;
+                char parsed = lcl_AsHex(ch);
+                if (parsed == -1)
+                    return ERROR_HEX_INVALID;
+                b += parsed;
+                count--;
+                if (!count)
+                {
+                    aBuf.append((char)b);
+                    count = 2;
+                    b = 0;
+                }
+            }
+        }
+        aStr = aBuf.makeStringAndClear();
+        // ignore the first bytes
+        if (aStr.getLength() > 8)
+            aStr = aStr.copy(8);
+        // extract name
+        int nLength = aStr.toChar();
+        aStr = aStr.copy(1);
+        OString aName = aStr.copy(0, nLength);
+        aStr = aStr.copy(nLength+1); // zero-terminated string
+        // extract default text
+        nLength = aStr.toChar();
+        aStr = aStr.copy(1);
+        OString aDefaultText = aStr.copy(0, nLength);
+        RTFValue::Pointer_t pNValue(new RTFValue(OStringToOUString(aName, m_aStates.top().nCurrentEncoding)));
+        m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFData_name, pNValue));
+        RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, m_aStates.top().nCurrentEncoding)));
+        m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFTextInput_default, pDValue));
     }
 
     // See if we need to end a track change
