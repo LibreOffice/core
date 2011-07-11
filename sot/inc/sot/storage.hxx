@@ -208,9 +208,6 @@ public:
     SotStorageStream *  OpenSotStream( const String & rEleName,
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = 0 );
-    SotStorageStream *  OpenEncryptedSotStream( const String & rEleName, const ByteString& rKey,
-                                    StreamMode = STREAM_STD_READWRITE,
-                                    StorageMode = 0 );
     SotStorage *        OpenSotStorage( const String & rEleName,
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = STORAGE_TRANSACTED );

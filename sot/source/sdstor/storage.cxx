@@ -987,38 +987,6 @@ sal_Bool SotStorage::Revert()
     return SVSTREAM_OK == GetError();
 }
 
-/*************************************************************************
-|*    SotStorage::OpenStream()
-|*
-|*    Beschreibung
-*************************************************************************/
-SotStorageStream * SotStorage::OpenEncryptedSotStream( const String & rEleName, const ByteString& rKey,
-                                             StreamMode nMode,
-                                             StorageMode nStorageMode )
-{
-    DBG_ASSERT( !nStorageMode, "StorageModes ignored" );
-    SotStorageStream * pStm = NULL;
-    DBG_ASSERT( Owner(), "must be owner" );
-    if( m_pOwnStg )
-    {
-        // volle Ole-Patches einschalten
-        // egal was kommt, nur exclusiv gestattet
-        nMode |= STREAM_SHARE_DENYALL;
-        ErrCode nE = m_pOwnStg->GetError();
-        BaseStorageStream* p = m_pOwnStg->OpenStream( rEleName, nMode,
-                            (nStorageMode & STORAGE_TRANSACTED) ? sal_False : sal_True, &rKey );
-        pStm = new SotStorageStream( p );
-
-        if( !nE )
-            m_pOwnStg->ResetError(); // kein Fehler setzen
-        if( nMode & STREAM_TRUNC )
-            pStm->SetSize( 0 );
-    }
-    else
-        SetError( SVSTREAM_GENERALERROR );
-    return pStm;
-}
-
 SotStorageStream * SotStorage::OpenSotStream( const String & rEleName,
                                              StreamMode nMode,
                                              StorageMode nStorageMode )
