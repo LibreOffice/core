@@ -1012,26 +1012,6 @@ LanguageType MsLangId::convertIsoStringToLanguage(
 
 // -----------------------------------------------------------------------
 
-// static
-LanguageType MsLangId::convertIsoByteStringToLanguage(
-        const rtl::OString& rString, sal_Char cSep )
-{
-    rtl::OString  aLang;
-    rtl::OString  aCountry;
-    sal_Int32  nSepPos = rString.indexOf( cSep );
-    if ( nSepPos >= 0 )
-    {
-        aLang = rString.copy( 0, nSepPos );
-        aCountry = rString.copy( nSepPos+1 );
-    }
-    else
-        aLang = rString;
-
-    return convertIsoNamesToLanguage( aLang, aCountry );
-}
-
-// -----------------------------------------------------------------------
-
 struct IsoLangGLIBCModifiersEntry
 {
     LanguageType  mnLang;

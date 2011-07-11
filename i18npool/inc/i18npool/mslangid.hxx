@@ -184,8 +184,6 @@ public:
             const rtl::OString& rCountry );
     static LanguageType convertIsoStringToLanguage(
             const rtl::OUString& rString, sal_Unicode cSep = '-' );
-    static LanguageType convertIsoByteStringToLanguage(
-            const rtl::OString& rString, sal_Char cSep = '-' );
     static LanguageType convertUnxByteStringToLanguage(
             const rtl::OString& rString );
 
