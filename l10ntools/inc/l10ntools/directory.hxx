@@ -47,7 +47,6 @@ class Directory
 
     Directory( const rtl::OUString sFullPath );
     Directory( const rtl::OUString sFullPath , const rtl::OUString sEntry ) ;
-    Directory( const ByteString sFullPath );
 
     static bool lessDir ( const Directory& rKey1, const Directory& rKey2 ) ;
 };
