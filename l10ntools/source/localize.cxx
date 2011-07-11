@@ -221,7 +221,6 @@ public:
         { sLanguageRestriction = rRestrictions; }
     int getFileCnt();
     sal_Bool Extract( const ByteString &rDestinationFile );
-    sal_Bool Merge( const ByteString &rSourceFile , const ByteString &rOutput );
     int GetFileCnt();
     virtual void OnExecuteDirectory( const rtl::OUString &rDirectory );
 };
@@ -794,24 +793,6 @@ sal_Bool SourceTreeLocalizer::ExecuteMerge( )
     }
     return bReturn;
 
-}
-
-/*****************************************************************************/
-sal_Bool SourceTreeLocalizer::Merge( const ByteString &rSourceFile , const ByteString &rOutput )
-/*****************************************************************************/
-{
-    sOutputFile = rOutput;
-    nMode = LOCALIZE_MERGE;
-    aSDF.Open( String( rSourceFile, RTL_TEXTENCODING_ASCII_US ),
-        STREAM_STD_READ );
-
-    sal_Bool bReturn = aSDF.IsOpen();
-    if ( bReturn ) {
-        bReturn = ExecuteMerge();
-    }
-    aSDF.Close();
-    nMode = LOCALIZE_NONE;
-    return bReturn;
 }
 
 }
