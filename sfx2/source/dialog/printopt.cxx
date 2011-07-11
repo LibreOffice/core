@@ -461,32 +461,4 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton
     return 0;
 }
 
-TransparencyPrintWarningBox::TransparencyPrintWarningBox( Window* pParent ) :
-    ModalDialog( pParent, SfxResId( RID_WARN_PRINTTRANSPARENCY ) ),
-    aWarnFI     ( this, SfxResId( FI_PRINTTRANSWARN ) ),
-    aWarnFT     ( this, SfxResId( FT_PRINTTRANSWARN ) ),
-    aYesBtn     ( this, SfxResId( BTN_PRINTTRANS_YES ) ),
-    aNoBtn      ( this, SfxResId( BTN_PRINTTRANS_NO ) ),
-    aCancelBtn  ( this, SfxResId( BTN_PRINTTRANS_CANCEL ) ),
-    aNoWarnCB   ( this, SfxResId( CBX_NOPRINTTRANSWARN ) )
-{
-    FreeResource();
-
-    aWarnFT.SetStyle( aWarnFT.GetStyle() | WB_INFO );
-    aWarnFI.SetImage( WarningBox::GetStandardImage() );
-
-    aNoBtn.SetClickHdl( LINK( this, TransparencyPrintWarningBox, ClickNoBtn ) );
-}
-
-TransparencyPrintWarningBox::~TransparencyPrintWarningBox()
-{
-}
-
-IMPL_LINK( TransparencyPrintWarningBox, ClickNoBtn, PushButton*, pButton )
-{
-    (void)pButton; //unused
-    EndDialog( RET_NO );
-    return 0;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

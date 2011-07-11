@@ -55,10 +55,3 @@
 #define CB_PAPERSIZE                    51
 #define CB_PAPERORIENTATION             52
 #define CB_TRANSPARENCY                 53
-
-#define FI_PRINTTRANSWARN               60
-#define FT_PRINTTRANSWARN               61
-#define BTN_PRINTTRANS_YES              62
-#define BTN_PRINTTRANS_NO               63
-#define BTN_PRINTTRANS_CANCEL           64
-#define CBX_NOPRINTTRANSWARN            65
