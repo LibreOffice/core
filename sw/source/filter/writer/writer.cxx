@@ -466,14 +466,6 @@ void Writer::PutEditEngFontsInAttrPool( sal_Bool bIncl_CJK_CTL )
     }
 }
 
-void Writer::PutCJKandCTLFontsInAttrPool()
-{
-    SfxItemPool& rPool = pDoc->GetAttrPool();
-    _AddFontItems( rPool, RES_CHRATR_CJK_FONT );
-    _AddFontItems( rPool, RES_CHRATR_CTL_FONT );
-}
-
-
 void Writer::_AddFontItems( SfxItemPool& rPool, sal_uInt16 nW )
 {
     const SvxFontItem* pFont = (const SvxFontItem*)&rPool.GetDefaultItem( nW );
