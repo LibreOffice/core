@@ -177,18 +177,6 @@ Point IMapObject::GetPixelPoint( const Point& rLogPoint )
 
 /******************************************************************************
 |*
-|* Konvertierung der logischen Koordianten in Pixel
-|*
-\******************************************************************************/
-
-Point IMapObject::GetLogPoint( const Point& rPixelPoint )
-{
-    return Application::GetDefaultDevice()->PixelToLogic( rPixelPoint, MapMode( MAP_100TH_MM ) );
-}
-
-
-/******************************************************************************
-|*
 |*
 |*
 \******************************************************************************/
