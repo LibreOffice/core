@@ -5137,19 +5137,6 @@ rtl::OUString INetURLObject::getFSysPath(FSysStyle eStyle,
 }
 
 //============================================================================
-bool INetURLObject::HasMsgId() const
-{
-    if (m_eScheme != INET_PROT_POP3)
-        return false;
-    sal_Unicode const * p = m_aAbsURIRef.getStr() + m_aPath.getBegin();
-    sal_Unicode const * pEnd = p + m_aPath.getLength();
-    for (; p < pEnd; ++p)
-        if (*p == '<')
-            return true;
-    return false;
-}
-
-//============================================================================
 rtl::OUString INetURLObject::GetMsgId(DecodeMechanism eMechanism,
                                   rtl_TextEncoding eCharset) const
 {
