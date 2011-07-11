@@ -270,16 +270,13 @@ static OUString makeComponentPath(
 }
 
 //==============================================================================
-static OUString getLibEnv(OUString         const & aModulePath,
-                          oslModule                lib,
+static OUString getLibEnv(oslModule                lib,
                           uno::Environment       * pEnv,
                           OUString               * pSourceEnv_name,
                           uno::Environment const & cTargetEnv,
                           OUString         const & cImplName = OUString(),
                           OUString         const & rPrefix = OUString())
 {
-    OUString aExcMsg;
-
     sal_Char const * pEnvTypeName = NULL;
 
     OUString aGetEnvNameExt = rPrefix + OUSTR(COMPONENT_GETENVEXT);
@@ -300,13 +297,8 @@ static OUString getLibEnv(OUString         const & aModulePath,
         if (pGetImplEnv)
             pGetImplEnv(&pEnvTypeName, (uno_Environment **)pEnv);
 
-        else
-        {
-            aExcMsg = aModulePath;
-            aExcMsg += OUSTR(": cannot get symbol: ");
-            aExcMsg += aGetEnvName;
-            aExcMsg += OUSTR("- nor: ");
-        }
+        else // this symbol used to be mandatory, but is no longer
+            pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
     if (!pEnv->is() && pEnvTypeName)
@@ -328,10 +320,8 @@ static OUString getLibEnv(OUString         const & aModulePath,
                 }
             } while( nIndex != -1 );
         }
-
     }
-
-    return aExcMsg;
+    return OUString();
 }
 
 extern "C" {static void s_getFactory(va_list * pParam)
@@ -389,7 +379,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
     OUString aEnvTypeName;
 
-    OUString aExcMsg = getLibEnv(aModulePath, lib, &env, &aEnvTypeName, currentEnv, rImplName, rPrefix);
+    OUString aExcMsg = getLibEnv(lib, &env, &aEnvTypeName, currentEnv, rImplName, rPrefix);
     if (!aExcMsg.getLength())
     {
         OUString aGetFactoryName = rPrefix + OUSTR(COMPONENT_GETFACTORY);
@@ -535,7 +525,7 @@ void SAL_CALL writeSharedLibComponentInfo(
     uno::Environment env;
 
     OUString aEnvTypeName;
-    OUString aExcMsg = getLibEnv(aModulePath, lib, &env, &aEnvTypeName, currentEnv);
+    OUString aExcMsg = getLibEnv(lib, &env, &aEnvTypeName, currentEnv);
     if (!aExcMsg.getLength())
     {
         OUString aWriteInfoName = OUSTR(COMPONENT_WRITEINFO);
