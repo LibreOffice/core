@@ -125,7 +125,7 @@ namespace writerfilter {
             CONTROL_VALUE // eg \fs (requires parameter)
         };
 
-        /// Minimalistic buffer elements for nested cells.
+        /// Minimalistic buffer of elements for nested cells.
         enum RTFBufferTypes
         {
             BUFFER_PROPS,
@@ -134,6 +134,15 @@ namespace writerfilter {
             BUFFER_UTEXT,
             BUFFER_ENDRUN,
             BUFFER_PAR
+        };
+
+        /// Form field types
+        enum RTFFormFieldTypes
+        {
+            FORMFIELD_NONE,
+            FORMFIELD_TEXT,
+            FORMFIELD_CHECKBOX,
+            FORMFIELD_LIST
         };
 
         /// A buffer storing dmapper calls.
@@ -335,7 +344,7 @@ namespace writerfilter {
 
                 RTFSprms_t m_aFormfieldSprms;
                 RTFSprms_t m_aFormfieldAttributes;
-                int m_nFormFieldType;
+                RTFFormFieldTypes m_nFormFieldType;
         };
     } // namespace rtftok
 } // namespace writerfilter
