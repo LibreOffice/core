@@ -932,7 +932,8 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_pCurrentBuffer = &m_aShapetextBuffer;
             break;
         case RTF_FORMFIELD:
-            m_aStates.top().nDestinationState = DESTINATION_FORMFIELD;
+            if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
+                m_aStates.top().nDestinationState = DESTINATION_FORMFIELD;
             break;
         case RTF_FFNAME:
             m_aStates.top().nDestinationState = DESTINATION_FORMFIELDNAME;
