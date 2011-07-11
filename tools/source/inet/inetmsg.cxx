@@ -296,13 +296,8 @@ INetRFC822Message::~INetRFC822Message (void)
 }
 
 /*
- * <Generate|Parse>DateField and local helper functions.
+ * ParseDateField and local helper functions.
  *
- * GenerateDateField.
- * Generates a String from Date and Time objects in format:
- *   Wkd, 00 Mon 0000 00:00:00 [GMT]            (rfc822, rfc1123)
- *
- * ParseDateField.
  * Parses a String in (implied) GMT format into class Date and Time objects.
  * Four formats are accepted:
  *
@@ -320,68 +315,6 @@ static const sal_Char *months[12] =
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 };
-
-static const sal_Char *wkdays[7] =
-{
-    "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
-};
-
-/*
- * GenerateDateField.
- */
-sal_Bool INetRFC822Message::GenerateDateField (
-    const DateTime& rDateTime, UniString& rDateFieldW)
-{
-    // Check arguments.
-    if (!rDateTime.IsValid()       ||
-        (rDateTime.GetSec()  > 59) ||
-        (rDateTime.GetMin()  > 59) ||
-        (rDateTime.GetHour() > 23)    ) return sal_False;
-
-    // Prepare output string.
-    rtl::OStringBuffer aDateField;
-
-    // Insert Date.
-    aDateField.append(wkdays[(sal_uInt16)(rDateTime.GetDayOfWeek())]);
-    aDateField.append(RTL_CONSTASCII_STRINGPARAM(", "));
-
-    sal_uInt16 nNum = rDateTime.GetDay();
-    if (nNum < 10)
-        aDateField.append('0');
-    aDateField.append(static_cast<sal_Int32>(nNum));
-    aDateField.append(' ');
-
-    aDateField.append(months[(sal_uInt16)(rDateTime.GetMonth() - 1)]);
-    aDateField.append(' ');
-
-    aDateField.append(static_cast<sal_Int32>(rDateTime.GetYear()));
-    aDateField.append(' ');
-
-    // Insert Time.
-    nNum = rDateTime.GetHour();
-    if (nNum < 10)
-        aDateField.append('0');
-    aDateField.append(static_cast<sal_Int32>(nNum));
-    aDateField.append(':');
-
-    nNum = rDateTime.GetMin();
-    if (nNum < 10)
-        aDateField.append('0');
-    aDateField.append(static_cast<sal_Int32>(nNum));
-    aDateField.append(':');
-
-    nNum = rDateTime.GetSec();
-    if (nNum < 10)
-        aDateField.append('0');
-    aDateField.append(static_cast<sal_Int32>(nNum));
-    aDateField.append(RTL_CONSTASCII_STRINGPARAM(" GMT"));
-
-    // Done.
-    rDateFieldW = rtl::OStringToOUString(aDateField.makeStringAndClear(),
-        RTL_TEXTENCODING_ASCII_US);
-
-    return sal_True;
-}
 
 /*
  * ParseDateField and local helper functions.

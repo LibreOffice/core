@@ -282,8 +282,6 @@ public:
 
     INetRFC822Message& operator= (const INetRFC822Message& rMsg);
 
-    static sal_Bool GenerateDateField (
-        const DateTime& rDateTime, UniString& rDateField);
     static sal_Bool ParseDateField (
         const UniString& rDateField, DateTime& rDateTime);
 
