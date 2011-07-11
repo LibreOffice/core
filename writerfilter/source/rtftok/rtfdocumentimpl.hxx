@@ -92,7 +92,8 @@ namespace writerfilter {
             DESTINATION_BOOKMARKEND,
             DESTINATION_REVISIONTABLE,
             DESTINATION_REVISIONENTRY,
-            DESTINATION_SHAPETEXT
+            DESTINATION_SHAPETEXT,
+            DESTINATION_FORMFIELD
         };
 
         enum RTFBorderState

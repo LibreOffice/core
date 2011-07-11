@@ -927,6 +927,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             OSL_ENSURE(!m_aShapetextBuffer.size(), "shapetext buffer is not empty");
             m_pCurrentBuffer = &m_aShapetextBuffer;
             break;
+        case RTF_FORMFIELD:
+            m_aStates.top().nDestinationState = DESTINATION_FORMFIELD;
+            break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
         case RTF_NONESTTABLES:
