@@ -3220,7 +3220,9 @@ void DffRecordManager::Consume( SvStream& rIn, sal_Bool bAppend, sal_uInt32 nStO
             if ( pCList->nCount == DFF_RECORD_MANAGER_BUF_SIZE )
                 pCList = new DffRecordList( pCList );
             rIn >> pCList->mHd[ pCList->nCount ];
-            pCList->mHd[ pCList->nCount++ ].SeekToEndOfRecord( rIn );
+            bool bSeekSucceeded = pCList->mHd[ pCList->nCount++ ].SeekToEndOfRecord(rIn);
+            if (!bSeekSucceeded)
+                break;
         }
         rIn.Seek( nOldPos );
     }
