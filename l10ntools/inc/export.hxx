@@ -515,8 +515,6 @@ class MergeDataFile
             const ByteString &sFilename, bool bCaseSensitive
             );
         ByteString Dump();
-        void WriteError( const ByteString &rLine );
-
     public:
         MergeDataFile( const ByteString &rFileName, const ByteString& rFile , sal_Bool bErrLog, CharSet aCharSet, bool bCaseSensitive = false );
         ~MergeDataFile();

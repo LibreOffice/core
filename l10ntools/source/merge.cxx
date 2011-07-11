@@ -269,18 +269,6 @@ ByteString MergeDataFile::Dump(){
     return sRet;
 }
 
-void MergeDataFile::WriteError( const ByteString &rLine )
-{
-    if ( bErrorLog )
-    {
-        if ( !aErrLog.IsOpen())
-            aErrLog.Open( String( sErrorLog, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
-        aErrLog.WriteLine( rLine );
-    }
-    else
-        fprintf( stderr, "%s\n", rLine.GetBuffer());
-}
-
 std::vector<ByteString> MergeDataFile::GetLanguages(){
     return std::vector<ByteString>(aLanguageSet.begin(),aLanguageSet.end());
 }
