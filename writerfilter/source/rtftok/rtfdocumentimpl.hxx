@@ -95,6 +95,7 @@ namespace writerfilter {
             DESTINATION_SHAPETEXT,
             DESTINATION_FORMFIELD,
             DESTINATION_FORMFIELDNAME,
+            DESTINATION_FORMFIELDLIST,
             DESTINATION_DATAFIELD
         };
 

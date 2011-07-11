@@ -635,6 +635,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_PICT:
         case DESTINATION_SHAPEPROPERTYVALUEPICT:
         case DESTINATION_FORMFIELDNAME:
+        case DESTINATION_FORMFIELDLIST:
         case DESTINATION_DATAFIELD:
             m_aDestinationText.append(rString);
             break;
@@ -940,6 +941,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_FFNAME:
             m_aStates.top().nDestinationState = DESTINATION_FORMFIELDNAME;
+            break;
+        case RTF_FFL:
+            m_aStates.top().nDestinationState = DESTINATION_FORMFIELDLIST;
             break;
         case RTF_DATAFIELD:
             m_aStates.top().nDestinationState = DESTINATION_DATAFIELD;
@@ -2393,6 +2397,11 @@ int RTFDocumentImpl::popState()
     {
         RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
         m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFData_name, pValue));
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_FORMFIELDLIST)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
+        m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFDDList_listEntry, pValue));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_DATAFIELD)
     {
