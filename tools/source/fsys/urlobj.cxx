@@ -5593,14 +5593,6 @@ void INetURLObject::SetName(rtl::OUString const & rTheName,
 }
 
 //============================================================================
-rtl::OUString INetURLObject::CutName(DecodeMechanism eMechanism,
-                                 rtl_TextEncoding eCharset)
-{
-    rtl::OUString aTheName(getName(LAST_SEGMENT, true, eMechanism, eCharset));
-    return removeSegment(LAST_SEGMENT, true) ? aTheName : rtl::OUString();
-}
-
-//============================================================================
 void INetURLObject::SetExtension(rtl::OUString const & rTheExtension,
                                  EncodeMechanism eMechanism,
                                  rtl_TextEncoding eCharset)

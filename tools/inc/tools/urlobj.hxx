@@ -1279,9 +1279,6 @@ public:
                                  = RTL_TEXTENCODING_UTF8) const
     { return GetLastName(eMechanism, eCharset); }
 
-    rtl::OUString CutName(DecodeMechanism eMechanism = DECODE_TO_IURI,
-                      rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
-
     void SetExtension(rtl::OUString const & rTheExtension,
                       EncodeMechanism eMechanism = WAS_ENCODED,
                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
