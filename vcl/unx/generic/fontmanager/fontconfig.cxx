@@ -864,7 +864,10 @@ public:
     }
     virtual void *GetPattern(void * face, bool bEmbolden) const
     {
-        FcPatternAddFTFace(mpPattern, FC_FT_FACE, static_cast<FT_Face>(face));
+        FcValue value;
+        value.type = FcTypeFTFace;
+        value.u.f = face;
+        FcPatternAdd (mpPattern, FC_FT_FACE, value, FcTrue);
         FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
         return mpPattern;
     }
