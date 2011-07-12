@@ -94,7 +94,8 @@ SvpSalGraphics::SvpSalGraphics() :
     m_aFillColor( COL_WHITE ),
     m_aTextColor( COL_BLACK ),
     m_aDrawMode( DrawMode_PAINT ),
-    m_eTextFmt( Format::EIGHT_BIT_GREY )
+    m_eTextFmt( Format::EIGHT_BIT_GREY ),
+    m_bClipSetup( false )
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
         m_pServerFont[i] = NULL;
@@ -106,9 +107,8 @@ SvpSalGraphics::~SvpSalGraphics()
 
 void SvpSalGraphics::setDevice( BitmapDeviceSharedPtr& rDevice )
 {
-    m_aDevice = rDevice;
     m_aOrigDevice = rDevice;
-    m_aClipMap.reset();
+    ResetClipRegion();
 
     // determine matching bitmap format for masks
     sal_uInt32 nDeviceFmt = m_aDevice->getScanlineFormat();
@@ -142,7 +142,7 @@ long SvpSalGraphics::GetGraphicsWidth() const
 {
     if( m_aDevice.get() )
     {
-        B2IVector aSize = m_aDevice->getSize();
+        B2IVector aSize = m_aOrigDevice->getSize();
         return aSize.getX();
     }
     return 0;
@@ -152,40 +152,137 @@ void SvpSalGraphics::ResetClipRegion()
 {
     m_aDevice = m_aOrigDevice;
     m_aClipMap.reset();
+    m_bClipSetup = true;
+    m_aClipRegion.SetNull();
 }
 
+
+// verify clip for the whole area is setup
+void SvpSalGraphics::ensureClip()
+{
+    if (m_bClipSetup)
+        return;
+
+    m_aDevice = m_aOrigDevice;
+    B2IVector aSize = m_aDevice->getSize();
+    m_aClipMap = createBitmapDevice( aSize, false, Format::ONE_BIT_MSB_GREY );
+    m_aClipMap->clear( basebmp::Color(0xFFFFFFFF) );
+
+    // fprintf( stderr, "non rect clip region set with %d rects:\n",
+    //         (int)m_aClipRegion.GetRectCount() );
+    ImplRegionInfo aInfo;
+    long nX, nY, nW, nH;
+    bool bRegionRect = m_aClipRegion.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+    while( bRegionRect )
+    {
+        if ( nW && nH )
+        {
+            B2DPolyPolygon aFull;
+            aFull.append( tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nW, nY+nH ) ) );
+            m_aClipMap->fillPolyPolygon( aFull, basebmp::Color(0), DrawMode_PAINT );
+        }
+    //    fprintf( stderr, "\t %ld,%ld %ldx%ld\n", nX, nY, nW, nH );
+        bRegionRect = m_aClipRegion.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+    }
+    m_bClipSetup = true;
+}
+
+SvpSalGraphics::ClipUndoHandle::~ClipUndoHandle()
+{
+    if( m_aDevice.get() )
+        m_rGfx.m_aDevice = m_aDevice;
+}
+
+// setup a clip rectangle -only- iff we have to; if aRange
+// is entirely contained inside an existing clip frame, we
+// will avoid setting up the clip bitmap.
+SvpSalGraphics::ClipUndoHandle SvpSalGraphics::ensureClipFor( const basegfx::B2IRange &aRange )
+{
+    ClipUndoHandle aRet(this);
+
+    if (m_bClipSetup)
+        return aRet;
+
+    // fprintf( stderr, "ensureClipFor: %d, %d %dx%d\n",
+    //         aRange.getMinX(), aRange.getMinY(),
+    //         (int)aRange.getWidth(), (int)aRange.getHeight() );
+
+    // first see if aRange is purely internal to one of the clip regions
+    Rectangle aRect( Point( aRange.getMinX(), aRange.getMinY() ),
+                     Size( aRange.getWidth(), aRange.getHeight() ) );
+
+    // then see if we are overlapping with just one
+    int nHit = 0;
+    Rectangle aIterRect, aHitRect;
+    RegionHandle aHnd = m_aClipRegion.BeginEnumRects();
+    while( m_aClipRegion.GetNextEnumRect( aHnd, aIterRect ) )
+    {
+        if( aIterRect.IsOver( aRect ) )
+        {
+            aHitRect = aIterRect;
+            nHit++;
+        }
+    }
+    m_aClipRegion.EndEnumRects (aHnd);
+
+    if( nHit == 0 )
+    {
+        // degenerate case - we're all clipped ... hmm.
+        fprintf (stderr, "FIXME: denegerate case detected ...\n");
+    }
+    else if( nHit == 1 )
+    {
+        if( aIterRect.IsInside( aRect ) )
+        {
+    //        fprintf (stderr, " is inside ! avoid deeper clip ...\n");
+            return aRet;
+        }
+    //    fprintf (stderr, " operation only overlaps with a single clip zone\n" );
+        aRet.m_aDevice = m_aDevice;
+        m_aDevice = basebmp::subsetBitmapDevice( m_aOrigDevice,
+                                                 basegfx::B2IRange (aHitRect.Left(),
+                                                                    aHitRect.Top(),
+                                                                    aHitRect.Right(),
+                                                                    aHitRect.Bottom()) );
+        return aRet;
+    }
+    // else
+    //    fprintf (stderr, "URK: complex & slow clipping case\n" );
+
+    ensureClip();
+    return aRet;
+}
+
+
+// Clipping by creating unconditional mask bitmaps is horribly
+// slow so defer it, as much as possible. It is common to get
+// 3 rectangles pushed, and have to create a vast off-screen
+// mask only to destroy it shortly afterwards. That is
+// particularly galling if we render only to a small,
+// well defined rectangular area inside one of these clip
+// rectangles.
+//
+// ensureClipFor() or ensureClip() need to be called before
+// real rendering. FIXME: we should prolly push this down to
+// bitmapdevice instead.
 bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
 {
+    m_aClipRegion = i_rClip;
     if( i_rClip.IsEmpty() )
+    {
         m_aClipMap.reset();
+        m_bClipSetup = true;
+    }
     else if( i_rClip.GetRectCount() == 1 )
     {
         m_aClipMap.reset();
         Rectangle aBoundRect( i_rClip.GetBoundRect() );
         m_aDevice = basebmp::subsetBitmapDevice( m_aOrigDevice,
                                                  basegfx::B2IRange(aBoundRect.Left(),aBoundRect.Top(),aBoundRect.Right(),aBoundRect.Bottom()) );
+        m_bClipSetup = true;
     }
     else
-    {
-        m_aDevice = m_aOrigDevice;
-        B2IVector aSize = m_aDevice->getSize();
-        m_aClipMap = createBitmapDevice( aSize, false, Format::ONE_BIT_MSB_GREY );
-        m_aClipMap->clear( basebmp::Color(0xFFFFFFFF) );
-
-        ImplRegionInfo aInfo;
-        long nX, nY, nW, nH;
-        bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
-        while( bRegionRect )
-        {
-            if ( nW && nH )
-            {
-                B2DPolyPolygon aFull;
-                aFull.append( tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nW, nY+nH ) ) );
-                m_aClipMap->fillPolyPolygon( aFull, basebmp::Color(0), DrawMode_PAINT );
-            }
-            bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
-        }
-    }
+        m_bClipSetup = false;
     return true;
 }
 
@@ -258,17 +355,21 @@ void SvpSalGraphics::SetTextColor( SalColor nSalColor )
 void SvpSalGraphics::drawPixel( long nX, long nY )
 {
     if( m_bUseLineColor )
+    {
+        ensureClip();
         m_aDevice->setPixel( B2IPoint( nX, nY ),
                              m_aLineColor,
                              m_aDrawMode,
                              m_aClipMap
                              );
+    }
     dbgOut( m_aDevice );
 }
 
 void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
     basebmp::Color aColor( nSalColor );
+    ensureClip();
     m_aDevice->setPixel( B2IPoint( nX, nY ),
                          aColor,
                          m_aDrawMode,
@@ -280,11 +381,14 @@ void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
     if( m_bUseLineColor )
+    {
+        ensureClip(); // FIXME: for ...
         m_aDevice->drawLine( B2IPoint( nX1, nY1 ),
                              B2IPoint( nX2, nY2 ),
                              m_aLineColor,
                              m_aDrawMode,
                              m_aClipMap );
+    }
     dbgOut( m_aDevice );
 }
 
@@ -293,6 +397,7 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     if( m_bUseLineColor || m_bUseFillColor )
     {
         B2DPolygon aRect = tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) );
+        ensureClip(); // FIXME: for ...
         if( m_bUseFillColor )
         {
             B2DPolyPolygon aPolyPoly( aRect );
@@ -313,6 +418,7 @@ void SvpSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
         for( sal_uLong i = 1; i < nPoints; i++ )
             aPoly.setB2DPoint( i, B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
         aPoly.setClosed( false );
+        ensureClip(); // FIXME: for ...
         m_aDevice->drawPolygon( aPoly, m_aLineColor, m_aDrawMode, m_aClipMap );
     }
     dbgOut( m_aDevice );
@@ -326,6 +432,7 @@ void SvpSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
         aPoly.append( B2DPoint( pPtAry->mnX, pPtAry->mnY ), nPoints );
         for( sal_uLong i = 1; i < nPoints; i++ )
             aPoly.setB2DPoint( i, B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
+        ensureClip(); // FIXME: for ...
         if( m_bUseFillColor )
         {
             aPoly.setClosed( true );
@@ -361,6 +468,7 @@ void SvpSalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
                 aPolyPoly.append( aPoly );
             }
         }
+        ensureClip(); // FIXME: for ...
         if( m_bUseFillColor )
         {
             aPolyPoly.setClosed( true );
@@ -421,6 +529,9 @@ void SvpSalGraphics::copyArea( long nDestX,
 {
     B2IRange aSrcRect( nSrcX, nSrcY, nSrcX+nSrcWidth, nSrcY+nSrcHeight );
     B2IRange aDestRect( nDestX, nDestY, nDestX+nSrcWidth, nDestY+nSrcHeight );
+    // fprintf( stderr, "copyArea %ld pixels - clip region %d\n",
+    //         (long)(nSrcWidth * nSrcHeight), m_aClipMap.get() != NULL );
+    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRect );
     m_aDevice->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
@@ -436,6 +547,7 @@ void SvpSalGraphics::copyBits( const SalTwoRect* pPosAry,
     B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
                         pPosAry->mnDestX+pPosAry->mnDestWidth,
                         pPosAry->mnDestY+pPosAry->mnDestHeight );
+    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRect );
     m_aDevice->drawBitmap( pSrc->m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
@@ -450,6 +562,7 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
                         pPosAry->mnDestX+pPosAry->mnDestWidth,
                         pPosAry->mnDestY+pPosAry->mnDestHeight );
+    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRect );
     m_aDevice->drawBitmap( rSrc.getBitmap(), aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
@@ -473,6 +586,7 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
                         pPosAry->mnDestX+pPosAry->mnDestWidth,
                         pPosAry->mnDestY+pPosAry->mnDestHeight );
+    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRect );
     m_aDevice->drawMaskedBitmap( rSrc.getBitmap(), rSrcTrans.getBitmap(), aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
@@ -500,6 +614,8 @@ void SvpSalGraphics::drawMask( const SalTwoRect* pPosAry,
 
     basebmp::Color aColor( nMaskColor );
     B2IRange aSrcRect2( 0, 0, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight );
+    const B2IRange aClipRect( aDestPoint, B2ITuple( aSrcRect.getWidth(), aSrcRect.getHeight() ) );
+    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aClipRect );
     m_aDevice->drawMaskedColor( aColor, aCopy, aSrcRect, aDestPoint, m_aClipMap );
     dbgOut( m_aDevice );
 }
@@ -511,6 +627,7 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
                            m_aDevice );
     B2IRange aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
     B2IRange aDestRect( 0, 0, nWidth, nHeight );
+    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRect );
     aCopy->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT );
 
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
@@ -520,7 +637,7 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
 
 SalColor SvpSalGraphics::getPixel( long nX, long nY )
 {
-    basebmp::Color aColor( m_aDevice->getPixel( B2IPoint( nX, nY ) ) );
+    basebmp::Color aColor( m_aOrigDevice->getPixel( B2IPoint( nX, nY ) ) );
     return aColor.toInt32();
 }
 
@@ -529,6 +646,7 @@ void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     // FIXME: handle SAL_INVERT_50 and SAL_INVERT_TRACKFRAME
     B2DPolygon aRect = tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) );
     B2DPolyPolygon aPolyPoly( aRect );
+    ensureClip(); // FIXME for ...
     m_aDevice->fillPolyPolygon( aPolyPoly, basebmp::Color( 0xffffff ), DrawMode_XOR, m_aClipMap );
     dbgOut( m_aDevice );
 }
@@ -541,6 +659,7 @@ void SvpSalGraphics::invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInver
     for( sal_uLong i = 1; i < nPoints; i++ )
         aPoly.setB2DPoint( i, B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
     aPoly.setClosed( true );
+    ensureClip(); // FIXME for ...
     m_aDevice->fillPolyPolygon( B2DPolyPolygon(aPoly), basebmp::Color( 0xffffff ), DrawMode_XOR, m_aClipMap );
     dbgOut( m_aDevice );
 }

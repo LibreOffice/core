@@ -41,7 +41,6 @@ class SvpSalGraphics : public SalGraphics
 {
     basebmp::BitmapDeviceSharedPtr       m_aDevice;
     basebmp::BitmapDeviceSharedPtr       m_aOrigDevice;
-    basebmp::BitmapDeviceSharedPtr       m_aClipMap;
 
     bool                                 m_bUseLineColor;
     basebmp::Color                       m_aLineColor;
@@ -53,6 +52,22 @@ class SvpSalGraphics : public SalGraphics
 
     ServerFont*                          m_pServerFont[ MAX_FALLBACK ];
     sal_uInt32                           m_eTextFmt;
+
+    basebmp::BitmapDeviceSharedPtr       m_aClipMap;
+
+protected:
+    Region                               m_aClipRegion;
+    basegfx::B2IVector                   GetSize() { return m_aOrigDevice->getSize(); }
+private:
+    bool                                 m_bClipSetup;
+    struct ClipUndoHandle {
+        SvpSalGraphics                &m_rGfx;
+        basebmp::BitmapDeviceSharedPtr m_aDevice;
+        ClipUndoHandle( SvpSalGraphics *pGfx ) : m_rGfx( *pGfx ) {}
+        ~ClipUndoHandle();
+    };
+    ClipUndoHandle  ensureClipFor( const basegfx::B2IRange &aRange );
+    void            ensureClip();
 
 protected:
     virtual bool drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap );
@@ -76,8 +91,7 @@ public:
     virtual void            SetLineColor();
     virtual void            SetLineColor( SalColor nSalColor );
     virtual void            SetFillColor();
-
-    virtual void                        SetFillColor( SalColor nSalColor );
+    virtual void            SetFillColor( SalColor nSalColor );
 
     virtual void            SetXORMode( bool bSet, bool );
 
