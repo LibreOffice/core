@@ -82,7 +82,8 @@ int main (int argc, char **argv)
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
     }
-    catch( Exception & ) {
+    catch (const Exception&)
+    {
         printf( "Couldn't create ImplementationRegistration service\n" );
         exit(1);
     }
@@ -107,7 +108,8 @@ int main (int argc, char **argv)
                 xSimpleReg );
         }
     }
-    catch( Exception &e ) {
+    catch (const Exception &e)
+    {
         printf( "Couldn't reach dll %s\n" , szBuf );
         printf( "%s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() );
 
@@ -134,7 +136,7 @@ int main (int argc, char **argv)
             aDllName,
             xSimpleReg );
     }
-    catch( Exception & e )
+    catch (const Exception&)
     {
         printf( "Couldn't reach dll %s\n" , szBuf );
         exit(1);
@@ -178,12 +180,13 @@ int main (int argc, char **argv)
             nNewHandle = xTest->test(
                 OStringToOUString( argv[1] , RTL_TEXTENCODING_ASCII_US ) , x , nHandle );
         }
-        catch( Exception & e ) {
+        catch (const Exception &e)
+        {
             OString o  = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
             printf( "testcomponent : uncaught exception %s\n" , o.getStr() );
             exit(1);
         }
-        catch( ... )
+        catch (...)
         {
             printf( "testcomponent : uncaught unknown exception\n"  );
             exit(1);
