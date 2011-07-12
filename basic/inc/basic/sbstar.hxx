@@ -193,9 +193,6 @@ public:
     // #60175 sal_True: SFX-Resource is not displayed on basic errors
     static void StaticSuppressSfxResource( sal_Bool bSuppress );
 
-    // #91147 sal_True: Reschedule is enabled (default>, sal_False: No reschedule
-    static void StaticEnableReschedule( sal_Bool bReschedule );
-
     SbxObjectRef getRTL( void ) { return pRtl; }
     sal_Bool IsDocBasic() { return bDocBasic; }
     SbxVariable* VBAFind( const String& rName, SbxClassType t );
