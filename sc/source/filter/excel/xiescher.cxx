@@ -115,6 +115,10 @@
 
 #include "namebuff.hxx"
 #include <boost/shared_ptr.hpp>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <sfx2/docfile.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -125,6 +129,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
+using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XIndexContainer;
@@ -3132,6 +3137,12 @@ bool XclImpSimpleDffConverter::GetColorFromPalette( sal_uInt16 nIndex, Color& rC
 }
 
 // ----------------------------------------------------------------------------
+Reference< XComponentContext >
+lcl_getUnoCtx()
+{
+    comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
+    return aCtx.getUNOContext();
+}
 
 XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(
         XclImpDrawing& rDrawing, SdrModel& rSdrModel, SdrPage& rSdrPage ) :
@@ -3142,13 +3153,12 @@ XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(
     mbHasCtrlForm( false )
 {
 }
-
 // ----------------------------------------------------------------------------
 
 XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
     XclImpSimpleDffConverter( rRoot, rDffStrm ),
-    SvxMSConvertOCXControls( rRoot.GetDocShell(), 0 ),
     maStdFormName( CREATE_OUSTRING( "Standard" ) ),
+    maFormCtrlHelper( GetMedium().GetInputStream(),  lcl_getUnoCtx(), GetDocShell()->GetModel() ),
     mnOleImpFlags( 0 )
 {
     if( SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get() )
@@ -3312,8 +3322,19 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicObj,
                 mxCtlsStrm->Seek( rPicObj.GetCtlsStreamPos() );
                 // read from mxCtlsStrm into xShape, insert the control model into the form
                 Reference< XShape > xShape;
-                if( GetConvData().mxCtrlForm.is() && ReadOCXExcelKludgeStream( mxCtlsStrm, &xShape, sal_True ) )
-                    xSdrObj.reset( rPicObj.CreateSdrObjectFromShape( xShape, rAnchorRect ) );
+                if( GetConvData().mxCtrlForm.is() )
+                {
+                     Reference< XFormComponent >  xFComp;
+                     com::sun::star::awt::Size aSz;  // not used in import
+                     maFormCtrlHelper.importFormControlFromCtls( xFComp, rPicObj.GetCtlsStreamPos(),  rPicObj.GetCtlsStreamSize() );
+                     // recreate the method formally known as
+                     // ReadOCXExcelKludgeStream( )
+                     if ( xFComp.is() )
+                     {
+                         InsertControl( xFComp, aSz,&xShape,true);
+                         xSdrObj.reset( rPicObj.CreateSdrObjectFromShape( xShape, rAnchorRect ) );
+                     }
+                }
             }
             catch( Exception& )
             {
