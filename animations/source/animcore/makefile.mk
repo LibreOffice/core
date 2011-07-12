@@ -45,12 +45,12 @@ SLOFILES = 	$(SLO)$/animcore.obj\
             $(SLO)$/targetpropertiescreator.obj
 
 SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP=$(SOLARENV)/src/unloadablecomponent.map
+SHL1VERSIONMAP=$(SOLARENV)/src/unloadablecomponentnogetimpl.map
 
 SHL1STDLIBS= \
         $(SALLIB) 	 \
         $(CPPULIB)	 \
-        $(CPPUHELPERLIB) 
+        $(CPPUHELPERLIB)
 
 
 SHL1DEPN=
