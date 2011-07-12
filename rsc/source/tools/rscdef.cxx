@@ -246,26 +246,6 @@ void RscDefine::DefineToNumber()
 
 /*************************************************************************
 |*
-|*    RscDefine::ChangeMacro()
-|*
-*************************************************************************/
-void RscDefine::ChangeMacro( RscExpression * pExpression ){
-    if( pExp )
-        delete pExp;
-    pExp = pExpression;
-    pExp->Evaluate( &lId );
-}
-
-void RscDefine::ChangeMacro( sal_Int32 lIdentifier ){
-    if( pExp ){
-        delete pExp;
-        pExp = NULL;
-    }
-    lId = lIdentifier;
-}
-
-/*************************************************************************
-|*
 |*    RscDefine::Evaluate()
 |*
 *************************************************************************/
@@ -339,23 +319,6 @@ RscDefine * RscDefineList::New( sal_uLong lFileKey, const ByteString & rDefName,
         maList.push_back( pDef );
     }
     return pDef;
-}
-
-/*************************************************************************
-|*
-|*    RscDefineList::Remove()
-|*
-*************************************************************************/
-sal_Bool RscDefineList::Remove( RscDefine * pDef ) {
-    for ( RscSubDefList::iterator it = maList.begin(); it < maList.end(); ++it ) {
-        if ( *it == pDef ) {
-            (*it)->DefineToNumber();
-            (*it)->DecRef();
-            maList.erase( it );
-            return sal_True;
-        }
-    }
-    return sal_False;
 }
 
 sal_Bool RscDefineList::Remove() {
@@ -610,25 +573,6 @@ sal_Bool RscFile :: InsertDependFile( sal_uLong lIncFile, size_t lPos )
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscFile::RemoveDependFile()
-|*
-*************************************************************************/
-void RscFile :: RemoveDependFile( sal_uLong lDepFile )
-{
-    for ( size_t i = aDepLst.size(); i > 0; )
-    {
-        RscDepend* pDep = aDepLst[ --i ];
-        if( pDep->GetFileKey() == lDepFile ) {
-            RscDependList::iterator it = aDepLst.begin();
-            ::std::advance( it, i );
-            delete *it;
-            aDepLst.erase( it );
-        }
-    }
-}
-
 /****************** R s c D e f T r e e **********************************/
 /*************************************************************************
 |*
@@ -705,10 +649,6 @@ sal_Bool RscDefTree::Evaluate( RscDefine * pDef ){
     return sal_True;
 }
 
-sal_Bool RscDefTree::Evaluate(){
-    return Evaluate( pDefRoot );
-}
-
 /****************** R s c F i l e T a b **********************************/
 /*************************************************************************
 |*
@@ -762,23 +702,6 @@ sal_uLong  RscFileTab :: Find( const ByteString & rName )
 *************************************************************************/
 RscDefine * RscFileTab::FindDef( const char * pName ){
     return aDefTree.Search( pName );
-}
-
-/*************************************************************************
-|*
-|*    RscFileTab::FindDef()
-|*
-*************************************************************************/
-RscDefine * RscFileTab::FindDef( sal_uLong lFileKey, const ByteString & rName )
-{
-    RscDefine   * pDef = FindDef( rName );
-
-    if( pDef )
-        //befindet sich das DEFINE in einer Include-Datei in der
-        //Datei lFileKey
-        if( Depend( lFileKey, pDef->GetFileKey() ) )
-            return pDef;
-    return NULL;
 }
 
 /*************************************************************************

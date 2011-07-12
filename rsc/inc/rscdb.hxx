@@ -336,7 +336,6 @@ public:
                     aBaseLst.push_back( pType );
                 }
     RscTop  *   SearchType( Atom nTypId );
-    RscTop  *   Search( Atom typ );
                 // loescht alle Resourceobjekte diese Datei
     void        Delete( sal_uLong lFileKey );
     RscTop  *   GetRoot()         { return( pRoot ); };

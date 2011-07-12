@@ -140,8 +140,6 @@ protected:
     void    DecRef();
     void    DefineToNumber();
     void    SetName( const ByteString & rNewName ){ aName = rNewName; }
-    void    ChangeMacro( RscExpression * pExpression );
-    void    ChangeMacro( sal_Int32 lIdentifier );
 
     using StringNode::Search;
 public:
@@ -164,7 +162,6 @@ private:
                      sal_Int32 lDefId, size_t lPos );
     RscDefine * New( sal_uLong lFileKey, const ByteString & rDefName,
                      RscExpression * pExpression, size_t lPos );
-    sal_Bool        Remove( RscDefine * pDef );
     sal_Bool        Remove();
     size_t      GetPos( RscDefine* item ) {
                     for ( size_t i = 0, n = maList.size(); i < n; ++i )
@@ -217,7 +214,6 @@ public:
                     RscFile();
                     ~RscFile();
     sal_Bool            InsertDependFile( sal_uLong lDepFile, size_t lPos );
-    void            RemoveDependFile( sal_uLong lDepFile );
     sal_Bool            Depend( sal_uLong lDepend, sal_uLong lFree );
     void            SetIncFlag(){ bIncFile = sal_True; };
     sal_Bool            IsIncFile(){  return bIncFile; };
@@ -233,7 +229,6 @@ public:
                 RscDefTree(){ pDefRoot = NULL; }
                 ~RscDefTree();
     void        Remove();
-    sal_Bool        Evaluate();
     RscDefine * Search( const char * pName );
     void        Insert( RscDefine * pDef );
     void        Remove( RscDefine * pDef );
@@ -248,7 +243,6 @@ public:
 
     RscDefine * FindDef( const char * );
     RscDefine * FindDef( const ByteString& rStr ) { return FindDef( rStr.GetBuffer() ); }
-    RscDefine * FindDef( sal_uLong lKey, const ByteString & );
 
     sal_Bool        Depend( sal_uLong lDepend, sal_uLong lFree );
     sal_Bool        TestDef( sal_uLong lFileKey, size_t lPos,
