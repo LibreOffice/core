@@ -94,8 +94,6 @@ class SVX_DLLPUBLIC Viewport3D
     void SetVUV(const basegfx::B3DVector& rNewVUV);
     void SetPRP(const basegfx::B3DPoint& rNewPRP);
     void SetVPD(double fNewVPD);
-    void SetNearClipDist(double fNewNCD);
-    void SetFarClipDist(double fNewFCD);
 
     const basegfx::B3DPoint&    GetVRP() const  { return aVRP; }
     const basegfx::B3DVector&   GetVPN() const  { return aVPN; }
@@ -114,20 +112,12 @@ class SVX_DLLPUBLIC Viewport3D
     AspectMapType GetAspectMapping() { return eAspectMapping; }
 
     void SetViewWindow(double fX, double fY, double fW, double fH);
-    void GetViewWindow(double& rX, double& rY, double& rW, double& rH) const;
 
     void SetDeviceWindow(const Rectangle& rRect);
     const Rectangle& GetDeviceWindow() const { return aDeviceRect; }
 
     // Beobachterstandpunkt in Weltkoordinaten zurueckgeben
     const basegfx::B3DPoint&    GetViewPoint();
-
-    // View-Transformationen
-    const basegfx::B3DHomMatrix&    GetViewTransform();
-
-    // Projektion und Mapping
-    basegfx::B3DPoint DoProjection(const basegfx::B3DPoint& rVec) const;
-    basegfx::B3DPoint   MapToDevice(const basegfx::B3DPoint& rVec) const;
 };
 
 #endif      // _VIEWPT3D_HXX
