@@ -423,11 +423,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL mixin_component_getFactory(
         implName, serviceManager, registryKey, entries);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL mixin_component_getImplementationEnvironment(
-    char const ** envTypeName, uno_Environment **)
-{
-    *envTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

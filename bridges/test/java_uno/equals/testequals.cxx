@@ -162,12 +162,6 @@ css::uno::Reference< css::uno::XInterface > Service::createInstance(
     return static_cast< cppu::OWeakObject * >(new Service(rContext));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    sal_Char const ** pEnvTypeName, uno_Environment **)
-{
-    *pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char const * pImplName,
                                                 void * pServiceManager, void *)
 {
