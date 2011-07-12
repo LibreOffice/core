@@ -168,7 +168,6 @@ public:
     static sal_uInt16   GetVBErrorCode( SbError nError );
     static SbError  GetSfxFromVBError( sal_uInt16 nError );
     static void     SetGlobalLanguageMode( SbLanguageMode eLangMode );
-    static SbLanguageMode GetGlobalLanguageMode();
     // Local settings
     void SetLanguageMode( SbLanguageMode eLangMode )
         { eLanguageMode = eLangMode; }

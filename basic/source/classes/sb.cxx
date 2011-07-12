@@ -1476,10 +1476,6 @@ void StarBASIC::SetGlobalLanguageMode( SbLanguageMode eLanguageMode )
 {
     GetSbData()->eLanguageMode = eLanguageMode;
 }
-SbLanguageMode StarBASIC::GetGlobalLanguageMode()
-{
-    return GetSbData()->eLanguageMode;
-}
 // Local settings
 SbLanguageMode StarBASIC::GetLanguageMode()
 {
