@@ -1476,15 +1476,6 @@ void StarBASIC::SetGlobalLanguageMode( SbLanguageMode eLanguageMode )
 {
     GetSbData()->eLanguageMode = eLanguageMode;
 }
-// Local settings
-SbLanguageMode StarBASIC::GetLanguageMode()
-{
-    // Use global settings?
-    if( eLanguageMode == SB_LANG_GLOBAL )
-        return GetSbData()->eLanguageMode;
-    else
-        return eLanguageMode;
-}
 
 // From 1996-03-29:
 // The mapping between the old and the new error codes take place by searching

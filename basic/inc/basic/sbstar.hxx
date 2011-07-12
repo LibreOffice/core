@@ -171,7 +171,6 @@ public:
     // Local settings
     void SetLanguageMode( SbLanguageMode eLangMode )
         { eLanguageMode = eLangMode; }
-    SbLanguageMode GetLanguageMode();
 
     // Specific for break handler
     sal_Bool            IsBreak() const             { return bBreak; }
