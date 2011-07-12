@@ -7987,11 +7987,6 @@ PREFIXDIR="$prefix"
 AC_MSG_RESULT([$PREFIXDIR])
 AC_SUBST(PREFIXDIR)
 
-AC_MSG_CHECKING([for install dir])
-INSTALLDIR="$libdir/$INSTALLDIRNAME"
-AC_MSG_RESULT([$INSTALLDIR])
-AC_SUBST(INSTALLDIR)
-
 AC_MSG_CHECKING([for libdir])
 LIBDIR=[$(eval echo $(eval echo $libdir))]
 AC_MSG_RESULT([$LIBDIR])
@@ -8011,6 +8006,11 @@ AC_MSG_CHECKING([for doc dir])
 DOCDIR=[$(eval echo $(eval echo $docdir))]
 AC_MSG_RESULT([$DOCDIR])
 AC_SUBST(DOCDIR)
+
+AC_MSG_CHECKING([for install dir])
+INSTALLDIR="$LIBDIR/$INSTALLDIRNAME"
+AC_MSG_RESULT([$INSTALLDIR])
+AC_SUBST(INSTALLDIR)
 
 AC_MSG_CHECKING([whether to statically link to Gtk])
 if test -n "$enable_static_gtk" && test "$enable_static_gtk" != "no"; then
