@@ -147,7 +147,6 @@ public:
     void Reset();
 
     // ObjectTrans
-    void SetObjectTrans(const basegfx::B3DHomMatrix& rObj);
     const basegfx::B3DHomMatrix& GetObjectTrans() { return maObjectTrans; }
     const basegfx::B3DHomMatrix& GetInvObjectTrans() { return maInvObjectTrans; }
 
@@ -156,7 +155,6 @@ public:
         basegfx::B3DPoint aVRP = basegfx::B3DPoint(0.0,0.0,1.0),
         basegfx::B3DVector aVPN = basegfx::B3DVector(0.0,0.0,1.0),
         basegfx::B3DVector aVUP = basegfx::B3DVector(0.0,1.0,0.0));
-    void SetOrientation(basegfx::B3DHomMatrix& mOrient);
     const basegfx::B3DHomMatrix& GetOrientation() { return maOrientation; }
     const basegfx::B3DHomMatrix& GetInvOrientation() { return maInvOrientation; }
 
@@ -166,20 +164,15 @@ public:
     const basegfx::B3DHomMatrix& GetInvProjection();
 
     // Texture
-    void SetTexture(const basegfx::B2DHomMatrix& rTxt);
     const basegfx::B2DHomMatrix& GetTexture() { return maTexture; }
 
     // Seitenverhaeltnis und Modus zu dessen Aufrechterhaltung
     double GetRatio() { return mfRatio; }
     void SetRatio(double fNew=1.0);
     Base3DRatio GetRatioMode() { return meRatio; }
-    void SetRatioMode(Base3DRatio eNew=Base3DRatioGrow);
 
     // Parameter der ViewportTransformation
     void SetDeviceRectangle(double fL=-1.0, double fR=1.0, double fB=-1.0, double fT=1.0, sal_Bool bBroadCastChange=sal_True);
-    void SetDeviceVolume(const basegfx::B3DRange& rVol, sal_Bool bBroadCastChange=sal_True);
-    void GetDeviceRectangle(double &fL, double &fR, double& fB, double& fT);
-    basegfx::B3DRange GetDeviceVolume();
     double GetDeviceRectangleWidth() const { return mfRightBound - mfLeftBound; }
     double GetDeviceRectangleHeight() const { return mfTopBound - mfBottomBound; }
     void SetFrontClippingPlane(double fF=0.0);
@@ -193,9 +186,6 @@ public:
     const Rectangle& GetViewportRectangle() { return maViewportRectangle; }
     void CalcViewport();
 
-    // Spezielle Matritzen anfordern
-    basegfx::B3DHomMatrix GetMatFromObjectToView();
-
     // Transponierte Inverse fuer Vectortransformationen
     const basegfx::B3DHomMatrix& GetInvTransObjectToEye();
 
@@ -207,7 +197,6 @@ public:
     const basegfx::B3DHomMatrix& GetInvMatFromWorldToView();
 
     // Bounds des Viewports lesen
-    const Rectangle& GetLogicalViewportBounds();
     const basegfx::B3DVector& GetScale();
     const basegfx::B3DVector& GetTranslate();
 

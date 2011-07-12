@@ -182,16 +182,6 @@ void B3dTransformationSet::Reset()
 |*
 \************************************************************************/
 
-void B3dTransformationSet::SetObjectTrans(const basegfx::B3DHomMatrix& rObj)
-{
-    maObjectTrans = rObj;
-
-    mbObjectToDeviceValid = sal_False;
-    mbInvTransObjectToEyeValid = sal_False;
-
-    PostSetObjectTrans();
-}
-
 void B3dTransformationSet::PostSetObjectTrans()
 {
     // Zuweisen und Inverse bestimmen
@@ -209,17 +199,6 @@ void B3dTransformationSet::SetOrientation( basegfx::B3DPoint aVRP, basegfx::B3DV
 {
     maOrientation.identity();
     Orientation(maOrientation, aVRP, aVPN, aVUP);
-
-    mbInvTransObjectToEyeValid = sal_False;
-    mbObjectToDeviceValid = sal_False;
-    mbWorldToViewValid = sal_False;
-
-    PostSetOrientation();
-}
-
-void B3dTransformationSet::SetOrientation(basegfx::B3DHomMatrix& mOrient)
-{
-    maOrientation = mOrient;
 
     mbInvTransObjectToEyeValid = sal_False;
     mbObjectToDeviceValid = sal_False;
@@ -277,12 +256,6 @@ void B3dTransformationSet::PostSetProjection()
 |* Texturtransformation
 |*
 \************************************************************************/
-
-void B3dTransformationSet::SetTexture(const basegfx::B2DHomMatrix& rTxt)
-{
-    maTexture = rTxt;
-    PostSetTexture();
-}
 
 void B3dTransformationSet::PostSetTexture()
 {
@@ -425,17 +398,6 @@ void B3dTransformationSet::SetRatio(double fNew)
     }
 }
 
-void B3dTransformationSet::SetRatioMode(Base3DRatio eNew)
-{
-    if(meRatio != eNew)
-    {
-        meRatio = eNew;
-        mbProjectionValid = sal_False;
-        mbObjectToDeviceValid = sal_False;
-        mbWorldToViewValid = sal_False;
-    }
-}
-
 void B3dTransformationSet::SetDeviceRectangle(double fL, double fR, double fB, double fT,
     sal_Bool bBroadCastChange)
 {
@@ -456,37 +418,8 @@ void B3dTransformationSet::SetDeviceRectangle(double fL, double fR, double fB, d
     }
 }
 
-void B3dTransformationSet::SetDeviceVolume(const basegfx::B3DRange& rVol, sal_Bool bBroadCastChange)
-{
-    SetDeviceRectangle(rVol.getMinX(), rVol.getMaxX(), rVol.getMinY(), rVol.getMaxY(), bBroadCastChange);
-    SetFrontClippingPlane(rVol.getMinZ());
-    SetBackClippingPlane(rVol.getMaxZ());
-}
-
 void B3dTransformationSet::DeviceRectangleChange()
 {
-}
-
-void B3dTransformationSet::GetDeviceRectangle(double &fL, double &fR, double& fB, double& fT)
-{
-    fL = mfLeftBound;
-    fR = mfRightBound;
-    fB = mfBottomBound;
-    fT = mfTopBound;
-
-    mbProjectionValid = sal_False;
-    mbObjectToDeviceValid = sal_False;
-    mbWorldToViewValid = sal_False;
-}
-
-basegfx::B3DRange B3dTransformationSet::GetDeviceVolume()
-{
-    basegfx::B3DRange aRet;
-
-    aRet.expand(basegfx::B3DTuple(mfLeftBound, mfBottomBound, mfNearBound));
-    aRet.expand(basegfx::B3DTuple(mfRightBound, mfTopBound, mfFarBound));
-
-    return aRet;
 }
 
 void B3dTransformationSet::SetFrontClippingPlane(double fF)
@@ -537,13 +470,6 @@ void B3dTransformationSet::SetViewportRectangle(Rectangle& rRect, Rectangle& rVi
 
 void B3dTransformationSet::PostSetViewport()
 {
-}
-
-const Rectangle& B3dTransformationSet::GetLogicalViewportBounds()
-{
-    if(!mbProjectionValid)
-        CalcViewport();
-    return maSetBound;
 }
 
 const basegfx::B3DVector& B3dTransformationSet::GetScale()
@@ -607,18 +533,6 @@ const basegfx::B3DHomMatrix& B3dTransformationSet::GetInvTransObjectToEye()
     if(!mbInvTransObjectToEyeValid)
         CalcMatInvTransObjectToEye();
     return maInvTransObjectToEye;
-}
-
-basegfx::B3DHomMatrix B3dTransformationSet::GetMatFromObjectToView()
-{
-    basegfx::B3DHomMatrix aFromObjectToView = GetObjectToDevice();
-
-    const basegfx::B3DVector& rScale(GetScale());
-    aFromObjectToView.scale(rScale.getX(), rScale.getY(), rScale.getZ());
-    const basegfx::B3DVector& rTranslate(GetTranslate());
-    aFromObjectToView.translate(rTranslate.getX(), rTranslate.getY(), rTranslate.getZ());
-
-    return aFromObjectToView;
 }
 
 void B3dTransformationSet::CalcMatFromWorldToView()
