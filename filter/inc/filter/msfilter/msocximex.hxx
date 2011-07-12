@@ -96,17 +96,11 @@ public:
     virtual ~SvxMSConvertOCXControls();
 
     //Reads a control from the given storage, constructed shape in pShapeRef
-    sal_Bool ReadOCXStream( SotStorageRef& rSrc1,
+    virtual sal_Bool ReadOCXStream( SotStorageRef& rSrc1,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShapeRef=0,
-        sal_Bool bFloatingCtrl=sal_False );
+        sal_Bool bFloatingCtrl=sal_False ) = 0;
 
-
-    //Excel has a nasty kludged mechanism for this, read
-    //the comments in the source to follow it
-    sal_Bool ReadOCXExcelKludgeStream(SotStorageStreamRef& rSrc1,
-        com::sun::star::uno::Reference <
-        com::sun::star::drawing::XShape > *pShapeRef,sal_Bool bFloatingCtrl);
 
 
     //Writes the given Uno Control into the given storage

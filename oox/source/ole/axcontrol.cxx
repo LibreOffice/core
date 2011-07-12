@@ -61,6 +61,7 @@
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
+#include "tools/string.hxx"
 
 namespace oox {
 namespace ole {
@@ -1748,6 +1749,103 @@ void AxUserFormModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 
+HtmlSelectModel::HtmlSelectModel()
+{
+}
+
+bool
+HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    static OUString sTerm( RTL_CONSTASCII_USTRINGPARAM("</SELECT") );
+    static String sMultiple( RTL_CONSTASCII_USTRINGPARAM("<SELECT MULTIPLE") );
+    static String sSelected( RTL_CONSTASCII_USTRINGPARAM("OPTION SELECTED") );
+
+    OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
+
+    String data = sStringContents;
+
+    // replace crlf with lf
+    data.SearchAndReplaceAll( String( RTL_CONSTASCII_USTRINGPARAM( "\x0D\x0A" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "\x0A" ) ) );
+    std::vector< rtl::OUString > listValues;
+    std::vector< sal_Int16 > selectedIndices;
+
+    // Ultra hacky parser for the info
+    sal_Int32 nTokenCount = data.GetTokenCount( '\n' );
+
+    for ( sal_Int32 nToken = 0; nToken < nTokenCount; ++nToken )
+    {
+        String sLine( data.GetToken( nToken, '\n' ) );
+        if ( !nToken ) // first line will tell us if multiselect is enabled
+        {
+            if ( sLine.CompareTo( sMultiple, sMultiple.Len() ) == COMPARE_EQUAL )
+                mnMultiSelect = true;
+        }
+        // skip first and last lines, no data there
+        else if ( nToken < nTokenCount - 1)
+        {
+            if ( sLine.GetTokenCount( '>' ) )
+            {
+                String displayValue  = sLine.GetToken( 1, '>' );
+                if ( displayValue.Len() )
+                {
+                    // Really we should be using a proper html parser
+                    // escaping some common bits to be escaped
+                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&lt;" ) ), String( RTL_CONSTASCII_USTRINGPARAM("<") ) );
+                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&gt;" ) ), String( RTL_CONSTASCII_USTRINGPARAM(">") ) );
+                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&quot;" ) ), String( RTL_CONSTASCII_USTRINGPARAM("\"") ) );
+                    displayValue.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "&amp;" ) ), String( RTL_CONSTASCII_USTRINGPARAM("&") ) );
+                    listValues.push_back( displayValue );
+                    if( sLine.Search( sSelected ) != STRING_NOTFOUND )
+                        selectedIndices.push_back( static_cast< sal_Int16 >( listValues.size() ) - 1 );
+                }
+            }
+        }
+    }
+    if ( listValues.size() )
+    {
+        msListData.realloc( listValues.size() );
+        sal_Int32 index = 0;
+        for( std::vector< rtl::OUString >::iterator it = listValues.begin(); it != listValues.end(); ++it, ++index )
+             msListData[ index ] = *it;
+    }
+    if ( selectedIndices.size() )
+    {
+        msIndices.realloc( selectedIndices.size() );
+        sal_Int32 index = 0;
+        for( std::vector< sal_Int16 >::iterator it = selectedIndices.begin(); it != selectedIndices.end(); ++it, ++index )
+             msIndices[ index ] = *it;
+    }
+    return sal_True;
+}
+
+
+void
+HtmlSelectModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
+{
+   rPropMap.setProperty( PROP_StringItemList, msListData );
+   rPropMap.setProperty( PROP_SelectedItems, msIndices );
+   rPropMap.setProperty( PROP_Dropdown, true );
+   AxListBoxModel::convertProperties( rPropMap, rConv );
+}
+
+HtmlTextBoxModel::HtmlTextBoxModel()
+{
+}
+
+bool
+HtmlTextBoxModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
+#ifdef DEBUG
+    // in msocximex ( where this is ported from, it appears *nothing* is read
+    // from the control stream ), surely there is some useful info there ?
+    OSL_TRACE("HtmlTextBoxModel::importBinaryModel - string contents of stream :");
+    OSL_TRACE("%s", rtl::OUStringToOString( sStringContents, RTL_TEXTENCODING_UTF8 ).getStr() );
+#else
+    (void) rInStrm;
+#endif
+    return true;
+}
 // ============================================================================
 
 EmbeddedControl::EmbeddedControl( const OUString& rName ) :
@@ -1776,6 +1874,8 @@ ControlModelBase* EmbeddedControl::createModelFromGuid( const OUString& rClassId
     if( aClassId.equalsAscii( AX_GUID_SCROLLBAR ) )         return &createModel< AxScrollBarModel >();
     if( aClassId.equalsAscii( AX_GUID_FRAME ) )             return &createModel< AxFrameModel >();
     if( aClassId.equalsAscii( COMCTL_GUID_SCROLLBAR_60 ) )  return &createModel< ComCtlScrollBarModel >( COMCTL_VERSION_60 );
+    if( aClassId.equalsAscii( HTML_GUID_SELECT ) )  return &createModel< HtmlSelectModel >();
+    if( aClassId.equalsAscii( HTML_GUID_TEXTBOX ) ) return &createModel< HtmlTextBoxModel >();
 
     mxModel.reset();
     return 0;

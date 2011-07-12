@@ -31,14 +31,28 @@
 
 #include <rtl/ustring.hxx>
 #include "oox/helper/binarystreambase.hxx"
+#include "oox/helper/storagebase.hxx"
+#include "oox/helper/graphichelper.hxx"
+#include "com/sun/star/form/XFormComponent.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/frame/XModel.hpp"
+#include "com/sun/star/frame/XFrame.hpp"
+#include "com/sun/star/awt/XControl.hpp"
+#include "com/sun/star/io/XInputStream.hpp"
+#include "oox/dllapi.h"
 
 namespace oox {
     class BinaryInputStream;
+    class BinaryXInputStream;
     class GraphicHelper;
 }
 
 namespace oox {
+
+typedef ::boost::shared_ptr< oox::BinaryXInputStream > BinaryXInputStreamRef;
+
 namespace ole {
+
 
 // ============================================================================
 
@@ -87,7 +101,7 @@ struct StdHlinkInfo
 // ============================================================================
 
 /** Static helper functions for OLE import/export. */
-class OleHelper
+class OOX_DLLPUBLIC OleHelper
 {
 public:
     /** Returns the UNO RGB color from the passed encoded OLE color.
@@ -139,6 +153,30 @@ private:
                         ~OleHelper();       // not implemented
 };
 
+class OOX_DLLPUBLIC OleFormCtrlImportHelper
+{
+    ::oox::StorageRef mpRoot;
+    ::oox::StorageRef mpPoolStrg;
+    ::oox::BinaryXInputStreamRef mpCtlsStrm;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxCtx;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
+    ::oox::GraphicHelper maGrfHelper;
+    bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
+                                  ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
+                                  const ::rtl::OUString& rGuidString );
+    bool importControlFromStorage( ::oox::StorageRef rxObjStrg,
+                                  ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp );
+public:
+    OleFormCtrlImportHelper( const ::com::sun::star::uno::Reference< com::sun::star::io::XInputStream > & xInStrm,
+                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxCtx,
+                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
+    ~OleFormCtrlImportHelper();
+    bool importFormControlFromObjStorage( ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp);
+    bool importFormControlFromCtls( ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
+                                   sal_Int32 nPos, sal_Int32 nSize );
+    bool importFormControlFromObjPool( ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
+                                   const ::rtl::OUString& rPoolName );
+};
 // ============================================================================
 
 } // namespace ole

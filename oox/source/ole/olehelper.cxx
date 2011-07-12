@@ -32,6 +32,11 @@
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/token/tokens.hxx"
+#include "oox/ole/axcontrol.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include "oox/helper/propertymap.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "oox/ole/olestorage.hxx"
 
 namespace oox {
 namespace ole {
@@ -40,6 +45,12 @@ namespace ole {
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+
+using ::com::sun::star::form::XFormComponent;
+using ::com::sun::star::awt::XControlModel;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
 
 // ============================================================================
 
@@ -306,6 +317,132 @@ StdFontInfo::StdFontInfo( const ::rtl::OUString& rName, sal_uInt32 nHeight,
         orHlinkInfo.maLocation = lclReadStdHlinkString( rInStrm, true );
 
     return !rInStrm.isEof();
+}
+
+Reference< ::com::sun::star::frame::XFrame >
+lcl_getFrame( const  Reference< ::com::sun::star::frame::XModel >& rxModel )
+{
+    Reference< ::com::sun::star::frame::XFrame > xFrame;
+    if ( rxModel.is() )
+    {
+        Reference< ::com::sun::star::frame::XController > xController =  rxModel->getCurrentController();
+        xFrame =  xController.is() ? xController->getFrame() : NULL;
+    }
+    return xFrame;
+}
+
+OleFormCtrlImportHelper::OleFormCtrlImportHelper( const Reference< com::sun::star::io::XInputStream > & rxInStrm, const Reference< ::com::sun::star::uno::XComponentContext >& rxCtx, const Reference< ::com::sun::star::frame::XModel >& rxModel ) : mpRoot(  new ::oox::ole::OleStorage( rxCtx, rxInStrm, true ) ), mxCtx( rxCtx ), mxModel( rxModel ), maGrfHelper( rxCtx, lcl_getFrame( rxModel ), mpRoot )
+{
+}
+
+OleFormCtrlImportHelper::~OleFormCtrlImportHelper()
+{
+}
+
+bool
+OleFormCtrlImportHelper::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const ::rtl::OUString& rGuidString )
+{
+    ::oox::ole::EmbeddedControl aControl( CREATE_OUSTRING( "Unknown" ) );
+    if( ::oox::ole::ControlModelBase* pModel = aControl.createModelFromGuid( rGuidString  ) )
+    {
+        pModel->importBinaryModel( rInStrm );
+        rxFormComp.set( mxCtx->getServiceManager()->createInstanceWithContext( pModel->getServiceName(), mxCtx ), UNO_QUERY );
+        Reference< XControlModel > xCtlModel( rxFormComp, UNO_QUERY );
+        ::oox::ole::ControlConverter aConv(  mxModel, maGrfHelper );
+        aControl.convertProperties( xCtlModel, aConv );
+    }
+    return rxFormComp.is();
+}
+
+bool
+OleFormCtrlImportHelper::importFormControlFromCtls( Reference< XFormComponent > & rxFormComp,
+                                   sal_Int32 nPos,
+                                   sal_Int32 nStreamSize)
+{
+    if ( mpRoot.get() && mpRoot->isStorage() )
+    {
+        if ( !mpCtlsStrm.get() )
+            mpCtlsStrm.reset( new BinaryXInputStream( mpRoot->openInputStream( CREATE_OUSTRING( "Ctls" ) ), true ) );
+        mpCtlsStrm->seek( nPos );
+        OUString aStrmClassId = ::oox::ole::OleHelper::importGuid( *mpCtlsStrm );
+
+        bool bOneOfHtmlControls = false;
+        if ( aStrmClassId.toAsciiUpperCase().equalsAscii( HTML_GUID_SELECT )
+          || aStrmClassId.toAsciiUpperCase().equalsAscii( HTML_GUID_TEXTBOX ) )
+            bOneOfHtmlControls = false;
+
+        if ( bOneOfHtmlControls )
+        {
+            // html controls don't seem have a handy record length following the GUID
+            // in the binary stream.
+            // Given the control stream length create a stream of nStreamSize bytes starting from
+            // nPos ( offset by the guid already read in )
+            const int nGuidSize = 0x10;
+            StreamDataSequence aDataSeq;
+            sal_Int32 nBytesToRead = nStreamSize - nGuidSize;
+            while ( nBytesToRead )
+                nBytesToRead -= mpCtlsStrm->readData( aDataSeq, nBytesToRead );
+            SequenceInputStream aInSeqStream( aDataSeq );
+            importControlFromStream( aInSeqStream, rxFormComp, aStrmClassId );
+        }
+        else
+        {
+            importControlFromStream( *mpCtlsStrm, rxFormComp, aStrmClassId );
+        }
+    }
+    return rxFormComp.is();
+}
+
+bool OleFormCtrlImportHelper::importControlFromStorage( ::oox::StorageRef xObjStrg,
+                                  Reference< XFormComponent > & rxFormComp )
+{
+    if ( xObjStrg.get() && xObjStrg->isStorage() )
+    {
+        BinaryXInputStream aNameStream( xObjStrg->openInputStream( CREATE_OUSTRING("\3OCXNAME") ), true );
+        BinaryXInputStream aInStrm( xObjStrg->openInputStream( CREATE_OUSTRING("contents") ), true );
+        BinaryXInputStream aClsStrm( xObjStrg->openInputStream( CREATE_OUSTRING("\1CompObj") ), true );
+        aClsStrm.skip(12);
+        OUString aStrmClassId = ::oox::ole::OleHelper::importGuid( aClsStrm );
+        if ( importControlFromStream(  aInStrm,  rxFormComp, aStrmClassId ) )
+        {
+            OUString aName = aNameStream.readNulUnicodeArray();
+            Reference< XControlModel > xCtlModel( rxFormComp, UNO_QUERY );
+            if ( aName.getLength() && xCtlModel.is() )
+            {
+                PropertyMap aPropMap;
+                aPropMap.setProperty( PROP_Name, aName );
+                PropertySet aPropSet( xCtlModel );
+                aPropSet.setProperties( aPropMap );
+            }
+        }
+    }
+    return rxFormComp.is();
+}
+
+bool
+OleFormCtrlImportHelper::importFormControlFromObjStorage( Reference< XFormComponent > & rxFormComp )
+{
+    return importControlFromStorage( mpRoot, rxFormComp );
+}
+
+bool
+OleFormCtrlImportHelper::importFormControlFromObjPool( Reference< XFormComponent > & rxFormComp,
+                                   const ::rtl::OUString& rPoolName )
+{
+    bool bRet = false;
+    if ( mpRoot.get() )
+    {
+        if ( !mpPoolStrg.get() )
+            mpPoolStrg = mpRoot->openSubStorage( CREATE_OUSTRING( "ObjectPool" ), false );
+        if ( !mpPoolStrg.get() )
+            return false;
+        if ( mpPoolStrg->isStorage() )
+        {
+            StorageRef xObjStrg = mpPoolStrg->openSubStorage( rPoolName, false );
+            bRet = importControlFromStorage( xObjStrg,  rxFormComp );
+        }
+    }
+    return bRet;
 }
 
 // ============================================================================

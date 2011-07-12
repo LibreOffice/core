@@ -48,6 +48,7 @@ $(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/refmap.hxx,oox/helper/r
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/refvector.hxx,oox/helper/refvector.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/storagebase.hxx,oox/helper/storagebase.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/zipstorage.hxx,oox/helper/zipstorage.hxx))
+$(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/olehelper.hxx,oox/ole/olehelper.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/oleobjecthelper.hxx,oox/ole/oleobjecthelper.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/olestorage.hxx,oox/ole/olestorage.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/vbaproject.hxx,oox/ole/vbaproject.hxx))

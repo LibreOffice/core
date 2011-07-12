@@ -127,6 +127,7 @@
 #include <vcl/virdev.hxx>
 #include <algorithm>
 #include <set>
+#include <unotools/streamwrap.hxx>
 
 // PPT ColorScheme Slots
 #define PPT_COLSCHEME                       (0x08000000)
@@ -1676,6 +1677,24 @@ SdrPowerPointImport::~SdrPowerPointImport()
     delete[] pPersistPtr;
 }
 
+sal_Bool PPTConvertOCXControls::ReadOCXStream( SotStorageRef& /*rSrc1*/,
+        com::sun::star::uno::Reference<
+        com::sun::star::drawing::XShape > *pShapeRef,
+        sal_Bool bFloatingCtrl )
+{
+    bool bRes = false;
+    uno::Reference< form::XFormComponent > xFComp;
+    if ( mpPPTImporter && mpPPTImporter->ReadFormControl( mxInStrm, xFComp ) )
+    {
+        if ( xFComp.is() )
+        {
+            com::sun::star::awt::Size aSz;  // not used in import
+            bRes = InsertControl( xFComp, aSz,pShapeRef,bFloatingCtrl);
+        }
+    }
+    return bRes;
+}
+
 sal_Bool PPTConvertOCXControls::InsertControl(
         const com::sun::star::uno::Reference<
         com::sun::star::form::XFormComponent > &rFComp,
@@ -1731,7 +1750,6 @@ sal_Bool PPTConvertOCXControls::InsertControl(
     }
     return bRetValue;
 };
-
 const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& PPTConvertOCXControls::GetDrawPage()
 {
     if( !xDrawPage.is() && pDocSh )
@@ -1890,10 +1908,12 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                 }
                                 if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
                                 {
-                                    PPTConvertOCXControls aPPTConvertOCXControls( pOe->pShell, eAktPageKind );
+                                    uno::Reference< io::XInputStream > xIStrm = new utl::OSeekableInputStreamWrapper(*pDest );
+                                    PPTConvertOCXControls aPPTConvertOCXControls( this, xIStrm, pOe->pShell, eAktPageKind );
                                     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
                                     if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape, sal_False ) )
                                         pRet = GetSdrObjectFromXShape( xShape );
+
                                 }
                                 if ( !pRet )
                                 {
