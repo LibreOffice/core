@@ -139,6 +139,7 @@ ByteArr::Contains(char) const
 ByteArr::Insert(unsigned short, char)
 ByteArr::Remove(char)
 ByteArr::~ByteArr()
+ByteString::CompareIgnoreCaseToAscii(ByteString const&, unsigned short) const
 CAT::Inverse() const
 CAT::makeChromaticAdaptationTag() const
 CDEIntegrator::CDEIntegrator()
@@ -483,7 +484,6 @@ GraphicManager::GetFreeCacheSize() const
 GraphicManager::GetMaxCacheSize() const
 GraphicManager::GetMaxObjCacheSize() const
 GraphicManager::GetUsedCacheSize() const
-GraphicObject::GetAnimationInfoList() const
 GraphicObject::GetChecksum() const
 GraphicObject::GetSwapStreamHdl() const
 GraphicObject::GraphicObject(Graphic const&, String const&, GraphicManager const*)
@@ -598,6 +598,7 @@ ImplRegionBand::IsOver(long, long)
 ImplTaskBarFloat::ImplTaskBarFloat(TaskBar*)
 ImplWin::GetModeImage() const
 ImplWin::SetModeImage(Image const&)
+Impl_OlePres::Read(SvStream&)
 IniParser::Dump()
 InsCapOptArr::Insert(InsCapOptArr const*, unsigned short, unsigned short)
 InsCapOptArr::Insert(InsCaptionOpt* const&, unsigned short&)
@@ -933,6 +934,7 @@ RscFileTab::ChangeDef(ByteString const&, RscExpression*)
 RscFileTab::ChangeDef(ByteString const&, int)
 RscFileTab::DeleteDef(ByteString const&)
 RscFileTab::DeleteFile(unsigned long)
+RscFileTab::FindDef(unsigned long, ByteString const&)
 RscFileTab::IsDefUsed(ByteString const&)
 RscFirstSysDepend::RscFirstSysDepend(unsigned int, unsigned int, RscTop*)
 RscId::GetMacro() const
@@ -943,7 +945,6 @@ RscTypCont::Delete(unsigned int, RscId const&)
 RscTypCont::FillNameIdList(REResourceList*, unsigned long)
 RscTypCont::MakeConsistent()
 RscTypCont::Search(unsigned int, RscId const&)
-RtfSdrExport::AddShapeAttribute(int, rtl::OString const&)
 Ruler::GetArrowCount() const
 Ruler::GetArrows() const
 Ruler::GetBorderCount() const
@@ -1087,6 +1088,7 @@ ScDocument::HasControl(short, Rectangle const&)
 ScDocument::InvalidateControls(Window*, short, Rectangle const&)
 ScDocument::IsLoadingMedium() const
 ScDocument::ValidNewTabName(std::vector<String, std::allocator<String> > const&) const
+ScExternalRefManager::setCacheTableReferencedPermanently(unsigned short, rtl::OUString const&, unsigned long)
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 ScFormulaCell::ScFormulaCell()
 ScGridWindow::InvertSimple(short, int, short, int, unsigned char, unsigned char)
@@ -1817,6 +1819,7 @@ SvPropertyLine::IsShownAsHyperlink()
 SvPropertyLine::IsVisibleXButton()
 SvPropertyLine::SvPropertyLine(Window*, ResId const&)
 SvPtrarr::Replace(void* const*, unsigned short, unsigned short)
+SvStream::WriteUniStringLine(String const&)
 SvStringsISort::DeleteAndDestroy(unsigned short, unsigned short)
 SvStringsISort::Insert(String* const&)
 SvStringsISort::Insert(String* const&, unsigned short&)
@@ -2101,6 +2104,7 @@ SvxBmpMask::ImpMask(BitmapEx const&)
 SvxBrushItem::CreateCntWallpaperItem() const
 SvxBrushItem::PurgeGraphic() const
 SvxBulletItem::GetBitmap() const
+SvxBulletItem::SetBitmap(Bitmap const&)
 SvxBulletItem::SvxBulletItem(Bitmap const&, unsigned short)
 SvxBulletItem::SvxBulletItem(Font const&, unsigned short, unsigned short)
 SvxBulletItem::SvxBulletItem(GraphicObject const&, unsigned short)
@@ -2461,7 +2465,6 @@ TaskStatusBar::ModifyStatusFieldItem(unsigned short, TaskStatusFieldItem const&)
 TaskStatusBar::RemoveStatusFieldItem(unsigned short)
 TaskStatusBar::SetFieldFlags(unsigned short)
 TaskStatusFieldItem::TaskStatusFieldItem(ITaskStatusNotify*, Image const&, String const&, String const&, unsigned short)
-TempFile::GetTempNameBaseDirectory()
 TempFile::SetTempNameBaseDirectory(String const&)
 TestToolObj::TestToolObj(String, String)
 TextAttrib::Clone() const
@@ -2519,6 +2522,8 @@ Type1Emitter::Type1Emitter(char const*, bool)
 TypeName::TypeName(char*, unsigned int, unsigned int, unsigned short, int, int)
 UCBStorage::IsStorageFile(String const&)
 UCBStream::UCBStream(com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>&)
+UNOStorageHolder::GetStorageName()
+UNOStorageHolder::UNOStorageHolder(SotStorage&, SotStorage&, com::sun::star::uno::Reference<com::sun::star::embed::XStorage>, utl::TempFile*)
 URIHelper::queryFSysStyle(String const&, bool)
 UShortCont::Sort()
 UniqueIdContainer::CreateFreeId(unsigned long)
@@ -2804,6 +2809,7 @@ XMLVisAreaExport::~XMLVisAreaExport()
 XOutBitmap::CreateQuickDrawBitmapEx(Graphic const&, OutputDevice const&, MapMode const&, Size const&, Point const&, Size const&)
 XOutBitmap::DrawQuickDrawBitmapEx(OutputDevice*, Point const&, Size const&, BitmapEx const&)
 XOutBitmap::DrawTiledBitmapEx(OutputDevice*, Point const&, Size const&, Rectangle const&, BitmapEx const&)
+XPolyPolygon::Move(long, long)
 XPolyPolygon::Replace(XPolygon const&, unsigned short)
 XPolyPolygon::Rotate(Point const&, unsigned short)
 XPolyPolygon::Rotate20()
@@ -3183,6 +3189,7 @@ binfilter::EECharAttribArray::Remove(unsigned short, unsigned short)
 binfilter::EECharAttribArray::Replace(binfilter::EECharAttrib const&, unsigned short)
 binfilter::EECharAttribArray::Replace(binfilter::EECharAttrib const*, unsigned short, unsigned short)
 binfilter::EECharAttribArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::EECharAttrib const&, void*), void*)
+binfilter::EditEngine::IsModified() const
 binfilter::FmFormPageImpl::write(com::sun::star::uno::Reference<com::sun::star::io::XObjectOutputStream> const&) const
 binfilter::GeometryIndexValueBucketMemArr::Insert(binfilter::GeometryIndexValueBucketMemArr const*, unsigned short, unsigned short, unsigned short)
 binfilter::GeometryIndexValueBucketMemArr::Replace(char const*&, unsigned short)
@@ -3299,6 +3306,8 @@ binfilter::SfxItemPool::SetStoringRange(unsigned short, unsigned short)
 binfilter::SfxItemPool::StoreItem(SvStream&, binfilter::SfxPoolItem const&, bool) const
 binfilter::SfxMacroConfig::LinkStubCallbackHdl_Impl(void*, void*)
 binfilter::SfxMacroConfig::LinkStubEventHdl_Impl(void*, void*)
+binfilter::SfxMedium::GetHdl()
+binfilter::SfxMedium::ReOpen()
 binfilter::SfxMultiMixRecordWriter::NewContent(unsigned short, unsigned char)
 binfilter::SfxMultiVarRecordWriter::NewContent()
 binfilter::SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(SvStream*, unsigned short, unsigned char)
@@ -3320,6 +3329,7 @@ binfilter::ShellResource::~ShellResource()
 binfilter::SmFntFmtListEntryArr::Insert(binfilter::SmFntFmtListEntryArr const*, unsigned short, unsigned short, unsigned short)
 binfilter::SmFntFmtListEntryArr::Remove(unsigned short, unsigned short)
 binfilter::SmFntFmtListEntryArr::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::SmFntFmtListEntry const&, void*), void*)
+binfilter::SmXMLWrapper::WriteThroughComponent(binfilter::SvStorage*, com::sun::star::uno::Reference<com::sun::star::lang::XComponent>, char const*, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>&, char const*, unsigned char)
 binfilter::SoDll::~SoDll()
 binfilter::SortedPositions::Insert(binfilter::SortedPositions const*, unsigned short, unsigned short)
 binfilter::SortedPositions::Insert(unsigned int const&, unsigned short&)
@@ -4366,7 +4376,6 @@ oox::drawingml::chart::ObjectFormatter::isAutomaticLine(oox::drawingml::chart::M
 oox::drawingml::lcl_SequenceHasUnhiddenData(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&)
 oox::drawingml::lcl_getSequenceLengthByRole(com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::chart2::data::XLabeledDataSequence> > const&, rtl::OUString const&)
 oox::drawingml::lcl_getValueFromSequence(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&, int)
-oox::drawingml::lcl_hasChartType(com::sun::star::uno::Reference<com::sun::star::chart2::XDiagram> const&, rtl::OUString const&)
 oox::drawingml::table::TableProperties::apply(boost::shared_ptr<oox::drawingml::table::TableProperties> const&)
 oox::ole::VbaHelper::getBasicScriptUrl(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 oox::ole::VbaProject::hasDialog(rtl::OUString const&) const
