@@ -148,7 +148,6 @@ public:
     void            InitAllModules( StarBASIC* pBasicNotToInit = NULL );
     void            DeInitAllModules( void );
     void            ClearAllModuleVars( void );
-    void            ActivateObject( const String*, sal_Bool );
     sal_Bool            LoadOldModules( SvStream& );
 
     // #43011 For TestTool; deletes global vars

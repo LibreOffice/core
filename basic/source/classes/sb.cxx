@@ -1434,40 +1434,6 @@ sal_Bool StarBASIC::IsRunning()
 
 /**************************************************************************
 *
-*    Object factories and others
-*
-**************************************************************************/
-
-// Activation of an object. There is no need to access active objects
-// with name via BASIC. If NULL is given, everything is activated.
-void StarBASIC::ActivateObject( const String* pName, sal_Bool bActivate )
-{
-    if( pName )
-    {
-        SbxObject* p = (SbxObject*) SbxObject::Find( *pName, SbxCLASS_OBJECT );
-        if( p )
-        {
-            if( bActivate )
-                p->SetFlag( SBX_EXTSEARCH );
-            else
-                p->ResetFlag( SBX_EXTSEARCH );
-        }
-    }
-    else
-    {
-        for( sal_uInt16 i = 0; i < GetObjects()->Count(); i++ )
-        {
-            SbxObject* p = (SbxObject*) GetObjects()->Get( i );
-            if( bActivate )
-                p->SetFlag( SBX_EXTSEARCH );
-            else
-                p->ResetFlag( SBX_EXTSEARCH );
-        }
-    }
-}
-
-/**************************************************************************
-*
 *    Debugging and error handling
 *
 **************************************************************************/
