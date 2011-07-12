@@ -214,23 +214,6 @@ public:
     // Direkter Zugriff auf verschiedene Transformationen
     const basegfx::B3DPoint WorldToEyeCoor(const basegfx::B3DPoint& rVec);
     const basegfx::B3DPoint EyeToWorldCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint EyeToViewCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ViewToEyeCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint WorldToViewCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ViewToWorldCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint DeviceToViewCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ViewToDeviceCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ObjectToWorldCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint WorldToObjectCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ObjectToViewCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ViewToObjectCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ObjectToEyeCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint EyeToObjectCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint DeviceToEyeCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint EyeToDeviceCoor(const basegfx::B3DPoint& rVec);
-
-    const basegfx::B3DPoint InvTransObjectToEye(const basegfx::B3DPoint& rVec);
-    const basegfx::B2DPoint TransTextureCoor(const basegfx::B2DPoint& rVec);
 
     static void Frustum(
         basegfx::B3DHomMatrix& rTarget,
