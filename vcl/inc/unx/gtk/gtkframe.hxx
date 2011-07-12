@@ -182,8 +182,8 @@ class GtkSalFrame : public SalFrame, basebmp::BitmapDeviceDamageTracker
     GtkWidget*                      m_pWindow;
 #if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
     basebmp::BitmapDeviceSharedPtr  m_aFrame;
-    int                             m_nDuringRender;
 #endif
+    int                             m_nDuringRender;
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
     GdkWindow*                      m_pForeignTopLevel;
@@ -323,6 +323,11 @@ public:
     Pixmap getBackgroundPixmap() const { return m_hBackgroundPixmap; }
     int getScreenNumber() const { return m_nScreen; }
     void updateScreenNumber();
+
+    // only for gtk3 ...
+    void pushIgnoreDamage();
+    void popIgnoreDamage();
+    void renderArea( cairo_t *cr, cairo_rectangle_t *src );
 
     void moveToScreen( int nScreen );
 

@@ -53,8 +53,13 @@ public:
 };
 #else
 class GtkSalGraphics : public SvpSalGraphics {
+    GtkSalFrame *mpFrame;
 public:
     GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
+    virtual void copyArea( long nDestX, long nDestY,
+                           long nSrcX, long nSrcY,
+                           long nSrcWidth, long nSrcHeight,
+                           sal_uInt16 /*nFlags*/ );
 };
 #endif // GTK3_X11_RENDER
 
