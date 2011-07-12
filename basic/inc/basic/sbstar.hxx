@@ -182,7 +182,6 @@ public:
     Link            GetErrorHdl() const { return aErrorHdl; }
     void            SetErrorHdl( const Link& r ) { aErrorHdl = r; }
 
-    static Link     GetGlobalBreakHdl();
     static void     SetGlobalBreakHdl( const Link& rNewHdl );
     Link            GetBreakHdl() const { return aBreakHdl; }
     void            SetBreakHdl( const Link& r ) { aBreakHdl = r; }

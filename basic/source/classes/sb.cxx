@@ -1818,12 +1818,6 @@ void StarBASIC::SetGlobalErrorHdl( const Link& rLink )
     GetSbData()->aErrHdl = rLink;
 }
 
-
-Link StarBASIC::GetGlobalBreakHdl()
-{
-    return GetSbData()->aBreakHdl;
-}
-
 void StarBASIC::SetGlobalBreakHdl( const Link& rLink )
 {
     GetSbData()->aBreakHdl = rLink;
