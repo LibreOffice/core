@@ -60,6 +60,11 @@ typedef boost::shared_ptr< const std::vector<Color> >   PaletteMemorySharedVecto
 
 struct ImplBitmapDevice;
 
+class BitmapDeviceDamageTracker {
+  public:
+    virtual void damaged (const basegfx::B2IRange& rDamageRect) = 0;
+};
+
 /** Definition of BitmapDevice interface
 
     Use the createBitmapDevice() factory method to create instances.
@@ -107,6 +112,8 @@ public:
         after this object has been deleted.
      */
     RawMemorySharedArray getBuffer() const;
+
+    BitmapDeviceDamageTracker *getDamageTracker() const;
 
     /** Get pointer to palette
 
@@ -541,7 +548,8 @@ protected:
                   sal_Int32                        nScanlineStride,
                   sal_uInt8*                       pFirstScanline,
                   const RawMemorySharedArray&      rMem,
-                  const PaletteMemorySharedVector& rPalette );
+                  const PaletteMemorySharedVector& rPalette,
+                  BitmapDeviceDamageTracker*       pDamage = NULL );
 
     virtual ~BitmapDevice();
 
@@ -641,7 +649,8 @@ private:
  */
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
                                           bool                      bTopDown,
-                                          sal_Int32                 nScanlineFormat );
+                                          sal_Int32                 nScanlineFormat,
+                                          BitmapDeviceDamageTracker* pDamage = NULL );
 
 /** Factory method to create a BitmapDevice for given scanline format
     with the given palette
