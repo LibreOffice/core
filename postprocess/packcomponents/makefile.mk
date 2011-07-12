@@ -69,6 +69,7 @@ my_components = \
     component/framework/util/fwl \
     component/framework/util/fwm \
     component/hwpfilter/source/hwp \
+    component/linguistic/source/lng \
     component/lotuswordpro/util/lwpfilter \
     component/oox/util/oox \
     component/reportdesign/util/rpt \
@@ -291,7 +292,8 @@ my_components += \
     avmediaQuickTime \
     fps_aqua \
     macab1 \
-    macbe1
+    macbe1 \
+    component/vcl/vcl.macosx
 .END
 
 .IF "$(OS)" == "WNT"
@@ -305,7 +307,14 @@ my_components += \
     java_uno_accessbridge \
     smplmail \
     sysdtrans \
-    wininetbe1
+    wininetbe1 \
+    component/vcl/vcl.windows
+.END
+
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT"
+my_components += \
+    desktopbe1 \
+    component/vcl/vcl.unx
 .END
 
 .IF "$(OS)" == "WNT" && "$(DISABLE_ATL)" == ""
@@ -335,10 +344,6 @@ my_components += adabas
 my_components += mozab
 .ELSE
 my_components += mozbootstrap
-.END
-
-.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT"
-my_components += desktopbe1
 .END
 
 .IF "$(GTK_TWO_FOUR)" != ""
