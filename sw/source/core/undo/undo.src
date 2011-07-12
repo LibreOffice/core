@@ -139,7 +139,7 @@ String STR_DRAG_AND_MOVE
 };
 String STR_INSERT_RULER
 {
-    Text [ en-US ] = "Insert horizontal ruler" ;
+    Text [ en-US ] = "Insert horizontal rule" ;
 };
 String STR_INSERT_CHART
 {
