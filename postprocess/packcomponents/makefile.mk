@@ -99,7 +99,6 @@ my_components = \
     component/sw/util/sw \
     component/sw/util/swd \
     component/sw/util/vbaswobj \
-    component/unotools/util/utl \
     component/toolkit/util/tk \
     component/unotools/util/utl \
     component/unoxml/source/rdf/unordf \
