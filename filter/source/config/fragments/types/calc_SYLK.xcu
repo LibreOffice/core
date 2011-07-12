@@ -1,8 +1,8 @@
     <node oor:name="calc_SYLK" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.comp.calc.FormatDetector</value></prop>
         <prop oor:name="URLPattern"/>
-        <prop oor:name="Extensions"><value>slk</value></prop>
-        <prop oor:name="MediaType"/>
+        <prop oor:name="Extensions"><value>slk sylk</value></prop>
+        <prop oor:name="MediaType"><value>text/spreadsheet</value></prop>
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>SYLK</value></prop>
         <prop oor:name="UIName">
