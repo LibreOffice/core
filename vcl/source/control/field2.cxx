@@ -3323,26 +3323,6 @@ TimeBox::TimeBox( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-TimeBox::TimeBox( Window* pParent, const ResId& rResId ) :
-    ComboBox( WINDOW_TIMEBOX )
-{
-    rResId.SetRT( RSC_TIMEBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ComboBox::ImplInit( pParent, nStyle );
-    SetField( this );
-    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, sal_False, sal_False ) );
-    ComboBox::ImplLoadRes( rResId );
-    ResMgr* pMgr = rResId.GetResMgr();
-    if( pMgr )
-        TimeFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
-    Reformat();
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
 TimeBox::~TimeBox()
 {
 }
@@ -3412,60 +3392,6 @@ void TimeBox::ReformatAll()
     }
     TimeFormatter::Reformat();
     SetUpdateMode( sal_True );
-}
-
-// -----------------------------------------------------------------------
-
-void TimeBox::InsertTime( const Time& rTime, sal_uInt16 nPos )
-{
-    Time aTime = rTime;
-    if ( aTime > GetMax() )
-        aTime = GetMax();
-    else if ( aTime < GetMin() )
-        aTime = GetMin();
-
-    sal_Bool bSec    = sal_False;
-    sal_Bool b100Sec = sal_False;
-    if ( GetFormat() == TIMEF_SEC )
-        bSec = sal_True;
-    if ( GetFormat() == TIMEF_100TH_SEC || GetFormat() == TIMEF_SEC_CS )
-        bSec = b100Sec = sal_True;
-    ComboBox::InsertEntry( ImplGetLocaleDataWrapper().getTime( aTime, bSec, b100Sec ), nPos );
-}
-
-// -----------------------------------------------------------------------
-
-void TimeBox::RemoveTime( const Time& rTime )
-{
-    sal_Bool bSec    = sal_False;
-    sal_Bool b100Sec = sal_False;
-    if ( GetFormat() == TIMEF_SEC )
-        bSec = sal_True;
-    if ( GetFormat() == TIMEF_100TH_SEC || TIMEF_SEC_CS )
-        bSec = b100Sec = sal_True;
-    ComboBox::RemoveEntry( ImplGetLocaleDataWrapper().getTime( rTime, bSec, b100Sec ) );
-}
-
-// -----------------------------------------------------------------------
-
-Time TimeBox::GetTime( sal_uInt16 nPos ) const
-{
-    Time aTime( 0, 0, 0 );
-    ImplTimeGetValue( ComboBox::GetEntry( nPos ), aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper() );
-    return aTime;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16 TimeBox::GetTimePos( const Time& rTime ) const
-{
-    sal_Bool bSec    = sal_False;
-    sal_Bool b100Sec = sal_False;
-    if ( GetFormat() == TIMEF_SEC )
-        bSec = sal_True;
-    if ( GetFormat() == TIMEF_100TH_SEC || TIMEF_SEC_CS )
-        bSec = b100Sec = sal_True;
-    return ComboBox::GetEntryPos( ImplGetLocaleDataWrapper().getTime( rTime, bSec, b100Sec ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

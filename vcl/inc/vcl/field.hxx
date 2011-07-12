@@ -866,7 +866,6 @@ class VCL_DLLPUBLIC TimeBox : public ComboBox, public TimeFormatter
 {
 public:
                             TimeBox( Window* pParent, WinBits nWinStyle );
-                            TimeBox( Window* pParent, const ResId& rResId );
                             ~TimeBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
@@ -876,12 +875,6 @@ public:
     virtual void            Modify();
 
     virtual void            ReformatAll();
-
-    void                    InsertTime( const Time& rTime, sal_uInt16 nPos = COMBOBOX_APPEND );
-    void                    RemoveTime( const Time& rTime );
-    using TimeFormatter::GetTime;
-    Time                    GetTime( sal_uInt16 nPos ) const;
-    sal_uInt16                  GetTimePos( const Time& rTime ) const;
 };
 
 #endif // _SV_FIELD_HXX
