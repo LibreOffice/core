@@ -2701,7 +2701,7 @@ void SwPageFrm::UpdateFtnNum()
                             SwPageFrm* pPage = pTmpBoss->FindPageFrm();
                             pFtn = NULL;
                             lcl_NextFtnBoss( pTmpBoss, pPage, sal_False );
-                            SwFtnContFrm *pCont = pTmpBoss->FindNearestFtnCont();
+                            SwFtnContFrm *pCont = pTmpBoss ? pTmpBoss->FindNearestFtnCont() : NULL;
                             if ( pCont )
                                 pFtn = (SwFtnFrm*)pCont->Lower();
                         }

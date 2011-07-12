@@ -98,6 +98,7 @@ protected:
     SdrObjectWeakRef    mxTextObj;
     Link                aOldLink;
     sal_Bool                bFirstObjCreated;
+    bool                bJustEndedEdit;
 
     SfxRequest&         rRequest;
 

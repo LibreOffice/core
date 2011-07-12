@@ -40,6 +40,10 @@ using namespace ::com::sun::star::uno;
 
 +(id)simpleMapNativeRoleFrom: (XAccessibleContext *) accessibleContext {
     id nativeRole = nil;
+
+    if (accessibleContext == NULL)
+        return nativeRole;
+
     switch( accessibleContext -> getAccessibleRole() ) {
 #define MAP(a,b) \
         case a: nativeRole = b; break

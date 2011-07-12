@@ -3641,6 +3641,37 @@ void WW8AttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* /*pSecti
     m_rWW8Export.ReplaceCr( nC );
 }
 
+sal_uInt32 AttributeOutputBase::GridCharacterPitch( const SwTextGridItem& rGrid ) const
+{
+    MSWordStyles * pStyles = GetExport().pStyles;
+    SwFmt * pSwFmt = pStyles->GetSwFmt();
+
+    sal_uInt32 nPageCharSize = 0;
+
+    if (pSwFmt != NULL)
+    {
+        nPageCharSize = ItemGet<SvxFontHeightItem>
+            (*pSwFmt, RES_CHRATR_FONTSIZE).GetHeight();
+    }
+    sal_uInt16 nPitch = rGrid.IsSquaredMode() ? rGrid.GetBaseHeight() :
+        rGrid.GetBaseWidth( );
+
+    sal_Int32 nCharWidth = nPitch - nPageCharSize;
+    sal_Int32 nFraction = nCharWidth % 20;
+    if ( nCharWidth < 0 )
+        nFraction = 20 + nFraction;
+    nFraction = ( nFraction * 0xFFF ) / 20;
+    nFraction = ( nFraction & 0x00000FFF );
+
+    sal_Int32 nMain = nCharWidth / 20;
+    if ( nCharWidth < 0 )
+        nMain -= 1;
+    nMain = nMain * 0x1000;
+    nMain = ( nMain & 0xFFFFF000 );
+
+    return sal_uInt32( nFraction + nMain );
+}
+
 void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
 {
     if ( m_rWW8Export.bOutPageDescs && m_rWW8Export.bWrtWW8 )
@@ -3670,22 +3701,8 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         m_rWW8Export.InsUInt16( NS_sprm::LN_SDyaLinePitch );
         m_rWW8Export.InsUInt16( nHeight );
 
-        MSWordStyles * pStyles = m_rWW8Export.pStyles;
-        SwFmt * pSwFmt = pStyles->GetSwFmt();
-
-        sal_uInt32 nPageCharSize = 0;
-
-        if (pSwFmt != NULL)
-        {
-            nPageCharSize = ItemGet<SvxFontHeightItem>
-            (*pSwFmt, RES_CHRATR_FONTSIZE).GetHeight();
-        }
-        sal_uInt16 nPitch = rGrid.IsSquaredMode() ? rGrid.GetBaseHeight() :
-            rGrid.GetBaseWidth( );
-        sal_Int32 nCharSpace = ( nPitch - nPageCharSize ) * 4096 / 20;
-
         m_rWW8Export.InsUInt16( NS_sprm::LN_SDxtCharSpace );
-        m_rWW8Export.InsUInt32( nCharSpace );
+        m_rWW8Export.InsUInt32( GridCharacterPitch( rGrid ) );
     }
 }
 

@@ -798,7 +798,7 @@ void* StgDataStrm::GetPtr( sal_Int32 Pos, sal_Bool bForce, sal_Bool bDirty )
     if( Pos2Page( Pos ) )
     {
         StgPage* pPg = rIo.Get( nPage, bForce );
-        if( pPg )
+        if (pPg && nOffset < pPg->GetSize())
         {
             pPg->SetOwner( pEntry );
             if( bDirty )

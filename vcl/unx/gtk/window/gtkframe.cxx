@@ -1405,7 +1405,7 @@ void GtkSalFrame::setMinMaxSize()
         int aHints = 0;
         if( m_nStyle & SAL_FRAME_STYLE_SIZEABLE )
         {
-            if( m_aMinSize.Width() && m_aMinSize.Height() )
+            if( m_aMinSize.Width() && m_aMinSize.Height() && ! m_bFullscreen )
             {
                 aGeo.min_width  = m_aMinSize.Width()+CONTAINER_ADJUSTMENT;
                 aGeo.min_height = m_aMinSize.Height()+CONTAINER_ADJUSTMENT;
@@ -1420,11 +1420,12 @@ void GtkSalFrame::setMinMaxSize()
         }
         else
         {
-            aGeo.min_width = maGeometry.nWidth;
-            aGeo.min_height = maGeometry.nHeight;
-            aHints |= GDK_HINT_MIN_SIZE;
             if( ! m_bFullscreen )
             {
+                aGeo.min_width = maGeometry.nWidth;
+                aGeo.min_height = maGeometry.nHeight;
+                aHints |= GDK_HINT_MIN_SIZE;
+
                 aGeo.max_width = maGeometry.nWidth;
                 aGeo.max_height = maGeometry.nHeight;
                 aHints |= GDK_HINT_MAX_SIZE;
@@ -3001,7 +3002,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
      * - which is not good since the window manager will now size the window back to this
      * wrong size at some point.
      */
-    if( (pThis->m_nStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_PLUG)) == SAL_FRAME_STYLE_SIZEABLE )
+    if( pThis->m_bFullscreen || (pThis->m_nStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_PLUG)) == SAL_FRAME_STYLE_SIZEABLE )
     {
         if( pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight )
         {

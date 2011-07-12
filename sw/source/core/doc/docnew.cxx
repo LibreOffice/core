@@ -909,39 +909,40 @@ void SwDoc::UpdateLinks( sal_Bool bUI )
 {
     SfxObjectCreateMode eMode;
     sal_uInt16 nLinkMode = getLinkUpdateMode( true );
-    sal_uInt16 nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
-    if( GetDocShell() &&
-            (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
-        GetLinkManager().GetLinks().Count() &&
-        SFX_CREATE_MODE_INTERNAL !=
-                    ( eMode = GetDocShell()->GetCreateMode()) &&
-        SFX_CREATE_MODE_ORGANIZER != eMode &&
-        SFX_CREATE_MODE_PREVIEW != eMode &&
-        !GetDocShell()->IsPreview() )
-    {
-        ViewShell* pVSh = 0;
-        sal_Bool bAskUpdate = nLinkMode == MANUAL;
-        sal_Bool bUpdate = sal_True;
-        switch(nUpdateDocMode)
+    if ( GetDocShell()) {
+        sal_uInt16 nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
+        if( (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
+            GetLinkManager().GetLinks().Count() &&
+            SFX_CREATE_MODE_INTERNAL !=
+                        ( eMode = GetDocShell()->GetCreateMode()) &&
+            SFX_CREATE_MODE_ORGANIZER != eMode &&
+            SFX_CREATE_MODE_PREVIEW != eMode &&
+            !GetDocShell()->IsPreview() )
         {
-            case document::UpdateDocMode::NO_UPDATE:   bUpdate = sal_False;break;
-            case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = sal_False; break;
-            case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = sal_True; break;
-        }
-        if( bUpdate && (bUI || !bAskUpdate) )
-        {
-            SfxMedium* pMedium = GetDocShell()->GetMedium();
-            SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
-            Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
-            if( GetCurrentViewShell() && !GetEditShell( &pVSh ) && !pVSh )  //swmod 071108//swmod 071225
+            ViewShell* pVSh = 0;
+            sal_Bool bAskUpdate = nLinkMode == MANUAL;
+            sal_Bool bUpdate = sal_True;
+            switch(nUpdateDocMode)
             {
-                ViewShell aVSh( *this, 0, 0 );
-
-                SET_CURR_SHELL( &aVSh );
-                GetLinkManager().UpdateAllLinks( bAskUpdate , sal_True, sal_False, pDlgParent );
+                case document::UpdateDocMode::NO_UPDATE:   bUpdate = sal_False;break;
+                case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = sal_False; break;
+                case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = sal_True; break;
             }
-            else
-                GetLinkManager().UpdateAllLinks( bAskUpdate, sal_True, sal_False, pDlgParent );
+            if( bUpdate && (bUI || !bAskUpdate) )
+            {
+                SfxMedium* pMedium = GetDocShell()->GetMedium();
+                SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
+                Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
+                if( GetCurrentViewShell() && !GetEditShell( &pVSh ) && !pVSh )  //swmod 071108//swmod 071225
+                {
+                    ViewShell aVSh( *this, 0, 0 );
+
+                    SET_CURR_SHELL( &aVSh );
+                    GetLinkManager().UpdateAllLinks( bAskUpdate , sal_True, sal_False, pDlgParent );
+                }
+                else
+                    GetLinkManager().UpdateAllLinks( bAskUpdate, sal_True, sal_False, pDlgParent );
+            }
         }
     }
 

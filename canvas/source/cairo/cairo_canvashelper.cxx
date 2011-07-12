@@ -128,13 +128,11 @@ namespace cairocanvas
     {
         if( rColor.getLength() > 3 )
         {
-            const double alpha = rColor[3];
-
             cairo_set_source_rgba( pCairo,
-                                   alpha*rColor[0],
-                                   alpha*rColor[1],
-                                   alpha*rColor[2],
-                                   alpha );
+                                   rColor[0],
+                                   rColor[1],
+                                   rColor[2],
+                                   rColor[3] );
         }
         else if( rColor.getLength() == 3 )
             cairo_set_source_rgb( pCairo,

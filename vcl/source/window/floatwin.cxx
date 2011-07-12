@@ -696,13 +696,22 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
     // so they can be compared across different frames
     // !!! rRect is expected to be in screen coordinates of the parent frame window !!!
     maFloatRect             = rRect;
-    if( GetParent()->ImplHasMirroredGraphics() )
+
+    Window *pReference =  GetParent();
+
+    // compare coordinates in absolute screen coordinates
+    // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
+    if( pReference->ImplHasMirroredGraphics()  )
     {
-        maFloatRect.SetPos( GetParent()->ScreenToOutputPixel( rRect.TopLeft() ) );
-        maFloatRect = GetParent()->ImplOutputToUnmirroredAbsoluteScreenPixel( maFloatRect );
+        if(!pReference->IsRTLEnabled() )
+            // --- RTL --- re-mirror back to get device coordiantes
+            pReference->ImplReMirror(maFloatRect);
+
+        maFloatRect.SetPos(pReference->ScreenToOutputPixel(maFloatRect.TopLeft()));
+        maFloatRect = pReference->ImplOutputToUnmirroredAbsoluteScreenPixel(maFloatRect);
     }
     else
-        maFloatRect.SetPos( GetParent()->OutputToAbsoluteScreenPixel( GetParent()->ScreenToOutputPixel( rRect.TopLeft() ) ) );
+        maFloatRect.SetPos(pReference->OutputToAbsoluteScreenPixel(pReference->ScreenToOutputPixel(rRect.TopLeft())));
 
     maFloatRect.Left()     -= 2;
     maFloatRect.Top()      -= 2;

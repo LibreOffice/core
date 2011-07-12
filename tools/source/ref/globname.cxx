@@ -208,10 +208,10 @@ sal_Bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
     else if( Data2_a == Data2_b )
     {
         sal_uInt32 Data1_a;
-        memcpy(&Data1_a, pImp->szData+4, sizeof(sal_uInt32));
+        memcpy(&Data1_a, pImp->szData, sizeof(sal_uInt32));
 
         sal_uInt32 Data1_b;
-        memcpy(&Data1_b, rObj.pImp->szData+4, sizeof(sal_uInt32));
+        memcpy(&Data1_b, rObj.pImp->szData, sizeof(sal_uInt32));
 
         return Data1_a  < Data1_b;
     }
