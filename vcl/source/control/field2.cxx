@@ -3050,35 +3050,6 @@ Time TimeFormatter::GetTime() const
 
 // -----------------------------------------------------------------------
 
-Time TimeFormatter::GetRealTime() const
-{
-    Time aTime( 0, 0, 0 );
-
-    if ( GetField() )
-    {
-        sal_Bool bAllowMailformed = ImplAllowMalformedInput();
-        if ( !ImplTimeGetValue( GetField()->GetText(), aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper(), !bAllowMailformed ) )
-            if ( bAllowMailformed )
-                aTime = GetInvalidTime();
-    }
-
-    return aTime;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool TimeFormatter::IsTimeModified() const
-{
-    if ( ImplGetEmptyFieldValue() )
-        return !IsEmptyTime();
-    else if ( GetTime() != maFieldTime )
-        return sal_True;
-    else
-        return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
 void TimeFormatter::Reformat()
 {
     if ( !GetField() )

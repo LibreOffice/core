@@ -475,8 +475,6 @@ public:
     void                    SetTime( const Time& rNewTime );
     void                    SetUserTime( const Time& rNewTime );
     Time                    GetTime() const;
-    Time                    GetRealTime() const;
-    sal_Bool                    IsTimeModified() const;
     void                    SetEmptyTime() { FormatterBase::SetEmptyFieldValue(); }
     sal_Bool                    IsEmptyTime() const { return FormatterBase::IsEmptyFieldValue(); }
     Time                    GetCorrectedTime() const { return maCorrectedTime; }
