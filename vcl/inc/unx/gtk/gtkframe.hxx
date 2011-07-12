@@ -61,7 +61,7 @@ typedef XLIB_Window GdkNativeWindow;
 #define gdk_window_foreign_new_for_display(a,b) gdk_x11_window_foreign_new_for_display(a,b)
 #endif
 
-class GtkSalFrame : public SalFrame
+class GtkSalFrame : public SalFrame, basebmp::BitmapDeviceDamageTracker
 {
     static const int nMaxGraphics = 2;
 
@@ -180,6 +180,7 @@ class GtkSalFrame : public SalFrame
     GtkWidget*                      m_pWindow;
 #if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
     basebmp::BitmapDeviceSharedPtr  m_aFrame;
+    int                             m_nDuringRender;
 #endif
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
@@ -426,6 +427,8 @@ public:
     virtual void                    EndSetClipRegion();
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
+
+    virtual void damaged (const basegfx::B2IRange& rDamageRect);
 };
 
 

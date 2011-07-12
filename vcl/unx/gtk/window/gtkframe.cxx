@@ -53,6 +53,7 @@
 #include <svids.hrc>
 #include <sal/macros.h>
 
+#include <basegfx/range/b2irange.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 
 #include <algorithm>
@@ -335,6 +336,8 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
     return aAlternate;
 }
 
+static int queuePureRedraw = 0;
+
 void GtkSalFrame::doKeyCallback( guint state,
                                  guint keyval,
                                  guint16 hardware_keycode,
@@ -352,6 +355,18 @@ void GtkSalFrame::doKeyCallback( guint state,
     aEvent.mnRepeat         = 0;
 
     vcl::DeletionListener aDel( this );
+
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+    // shift-zero forces a re-draw and event is swallowed
+    if (keyval == GDK_0) // && (state & GDK_SHIFT_MASK))
+    {
+        queuePureRedraw += 2;
+        fprintf( stderr, "force re-draw %d\n", queuePureRedraw );
+        gtk_widget_queue_draw (m_pWindow);
+        return;
+    }
+#endif
+
     /* #i42122# translate all keys with Ctrl and/or Alt to group 0
     *  else shortcuts (e.g. Ctrl-o) will not work but be inserted by
     *  the application
@@ -414,6 +429,9 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, sal_uLong nStyle )
 {
     m_nScreen = getDisplay()->GetDefaultScreenNumber();
     getDisplay()->registerFrame( this );
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+    m_nDuringRender = 0;
+#endif
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SAL_FRAME_STYLE_SIZEABLE) && ! pParent );
     m_bWindowIsGtkPlug  = false;
@@ -1518,11 +1536,12 @@ void GtkSalFrame::AllocateFrame()
             aFrameSize.setX( 1 );
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
-        fprintf( stderr, "allocate m_aFrame size of %dx%d\n",
-                 (int)maGeometry.nWidth, (int)maGeometry.nHeight );
         m_aFrame = basebmp::createBitmapDevice( aFrameSize, true,
-                                                basebmp::Format::TWENTYFOUR_BIT_TC_MASK );
+                                                basebmp::Format::TWENTYFOUR_BIT_TC_MASK,
+                                                this );
 //                                              basebmp::Format::THIRTYTWO_BIT_TC_MASK_ARGB );
+        fprintf( stderr, "allocate m_aFrame size of %dx%d \n",
+                 (int)maGeometry.nWidth, (int)maGeometry.nHeight );
 
 #if OSL_DEBUG_LEVEL > 0
         m_aFrame->clear( basebmp::Color( 255, 127, 0 ) );
@@ -2926,6 +2945,24 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
     return sal_True;
 }
 
+void GtkSalFrame::damaged (const basegfx::B2IRange& rDamageRect)
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    if (m_nDuringRender)
+        return;
+    /*    fprintf (stderr, "bitmap damaged  %d %d (%dx%d)\n",
+             (int) rDamageRect.getMinX(),
+             (int) rDamageRect.getMinY(),
+             (int) rDamageRect.getWidth(),
+             (int) rDamageRect.getHeight() ); */
+    gtk_widget_queue_draw_area( m_pWindow,
+                                rDamageRect.getMinX(),
+                                rDamageRect.getMinY(),
+                                rDamageRect.getWidth(),
+                                rDamageRect.getHeight() );
+#endif
+}
+
 #if GTK_CHECK_VERSION(3,0,0)
 // This is unpleasant: we assume that a draw event was an expose earlier in life ...
 // We also hope & pray (for gtk 3.0.0) that the window was realised/mapped before draw
@@ -2937,13 +2974,21 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
     double x1 = 0.0, y1 = 0.0, x2 = 0.0, y2 = 0.0;
     cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
 
-    // FIXME: qutie possibly we have some co-ordinate system / translation madness here.
-    // pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height );
     struct SalPaintEvent aEvent( x1, y1, x2 - x1, y2 - y1 );
     aEvent.mbImmediateUpdate = true;
 
     GTK_YIELD_GRAB();
-    pThis->CallCallback( SALEVENT_PAINT, &aEvent );
+    // FIXME: we quite probably want to stop re-rendering of pieces
+    // that we know are just damaged and hence rendered already ...
+    if (queuePureRedraw <= 0) {
+        pThis->m_nDuringRender++;
+        fprintf (stderr, "paint %d\n", queuePureRedraw);
+        pThis->CallCallback( SALEVENT_PAINT, &aEvent );
+        pThis->m_nDuringRender--;
+    } else {
+        queuePureRedraw--;
+        fprintf (stderr, "signalDraw %d\n", queuePureRedraw);
+    }
 
 #if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
     if( !pThis->m_aFrame.get() )
@@ -2953,12 +2998,11 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
     basegfx::B2IVector size = pThis->m_aFrame->getSize();
     sal_Int32 nStride = pThis->m_aFrame->getScanlineStride();
 
-    // Get the data from our m_aFrame to cairo ...
-    g_warning ("Get pixels from bmpdev to cairo (%g,%g %gx%g) vs %dx%d stride %d",
-               x1, y1, x2 - x1, y2 - y1, (int)size.getX(), (int)size.getY(), (int)nStride);
+    // FIXME: this is horribly inefficient ...
+
     // ARGB == ARGB32 ... map straight across from bmpdev (?) ...
 
-#if 1
+#if 0
     // Draw flat white rectangle first:
     cairo_save( cr );
     cairo_set_line_width( cr, 1.0 );
@@ -2974,7 +3018,7 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
     cairo_save( cr );
 
     int cairo_stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, size.getX());
-    // This is incredibly lame ... but so is cairo's insistance on -exactly-
+    // FIXME: This is incredibly lame ... but so is cairo's insistance on -exactly-
     // its own stride - neither more nor less - particularly not more aligned
     // we like 8byte aligned, it likes 4 - most odd.
     unsigned char *p, *src, *mem = (unsigned char *)malloc (32 * cairo_stride * size.getY());
@@ -2996,30 +3040,25 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
                                              CAIRO_FORMAT_ARGB32,
                                              size.getX(), size.getY(),
                                              cairo_stride );
-    g_warning( "Fixed cairo status %d %d strides: %d vs %d, mask %d\n",
+    /*    g_warning( "Fixed cairo status %d %d strides: %d vs %d, mask %d\n",
                (int) cairo_status( cr ),
                (int) cairo_surface_status( pSurface ),
                (int) nStride,
                (int) cairo_stride,
-               (int) (cairo_stride & (sizeof (uint32_t)-1)) );
+               (int) (cairo_stride & (sizeof (uint32_t)-1)) ); */
 #endif
-    if (!pSurface)
-        g_warning ("null surface!");
-    //    cairo_scale( cr, x2 - x1, y2 - y1 );
     cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
     cairo_set_source_surface( cr, pSurface, 0, 0 );
     cairo_paint( cr );
     cairo_surface_destroy( pSurface );
     free (mem);
     cairo_restore( cr );
-    }
 
-#if 0
+#if 1
     cairo_save( cr );
     cairo_set_line_width( cr, 1.0 );
     cairo_set_source_rgb( cr, 1.0, 1.0, 0 );
-    cairo_rectangle( cr, 30, 30, size.getX()/2, size.getY()/2 );
-    cairo_fill( cr );
+    cairo_rectangle( cr, x1 + 1, y1 + 1, x2 - x1 - 2, y2 - y1 - 2 );
     cairo_stroke( cr );
     cairo_restore( cr );
 #endif
