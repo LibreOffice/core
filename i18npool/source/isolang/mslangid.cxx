@@ -90,29 +90,6 @@ inline LanguageType MsLangId::simplifySystemLanguages( LanguageType nLang )
     return nLang;
 }
 
-
-// static
-LanguageType MsLangId::getRealLanguageWithoutConfig( LanguageType nLang )
-{
-    switch (simplifySystemLanguages( nLang))
-    {
-        case LANGUAGE_SYSTEM :
-            nLang = getSystemLanguage();
-            break;
-        case LANGUAGE_NONE :
-            nLang = getSystemUILanguage();
-            break;
-        default:
-            /* TODO: would this be useful here? */
-            //nLang = MsLangId::getReplacementForObsoleteLanguage( nLang);
-            ;   // nothing
-    }
-    if (nLang == LANGUAGE_DONTKNOW)
-        nLang = LANGUAGE_ENGLISH_US;
-    return nLang;
-}
-
-
 // static
 LanguageType MsLangId::getRealLanguage( LanguageType nLang )
 {
@@ -251,14 +228,6 @@ LanguageType MsLangId::convertLocaleToLanguageWithFallback(
 
     return lookupFallbackLocale( rLocale);
 }
-
-
-// static
-LanguageType MsLangId::getFallbackLanguage( LanguageType nLang )
-{
-    return lookupFallbackLanguage( MsLangId::getRealLanguage( nLang));
-}
-
 
 // static
 bool MsLangId::isRightToLeft( LanguageType nLang )

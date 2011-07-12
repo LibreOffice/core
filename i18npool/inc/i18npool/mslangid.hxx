@@ -75,9 +75,7 @@ public:
                 special value.
 
         @descr: NOTE: The "system" values may be overridden by the
-                application's configuration. If you need to access the system
-                values use <method>getRealLanguageWithoutConfig()</method>
-                instead.
+                application's configuration.
 
         @returns
             case LANGUAGE_PROCESS_OR_USER_DEFAULT : configured or system language
@@ -154,13 +152,6 @@ public:
     static ::com::sun::star::lang::Locale getFallbackLocale(
             const ::com::sun::star::lang::Locale & rLocale );
 
-
-    /** Get fall-back LanguageType for LanguageType, resolving LANGUAGE_SYSTEM.
-        Returns the same LanguageType if an exact match was found.
-      */
-    static LanguageType getFallbackLanguage( LanguageType nLang );
-
-
     // -----------------------------
     // - ConvertLanguageToIsoNames -
     // -----------------------------
@@ -186,29 +177,6 @@ public:
             const rtl::OUString& rString, sal_Unicode cSep = '-' );
     static LanguageType convertUnxByteStringToLanguage(
             const rtl::OString& rString );
-
-
-    /** @short: A real language/locale if the nLang parameter designates some
-                special value.
-
-        @descr: NOTE: This is a raw interface to the system and does not take
-                any application configuration into account. If that is wanted,
-                which is most likely, use <method>getRealLanguage()</method>
-                instead.
-
-        @returns
-            case LANGUAGE_PROCESS_OR_USER_DEFAULT : getSystemLanguage()
-            case LANGUAGE_SYSTEM_DEFAULT :          getSystemLanguage()
-            case LANGUAGE_SYSTEM :                  getSystemLanguage()
-            case LANGUAGE_NONE :                    getSystemUILanguage()
-            case LANGUAGE_DONTKNOW :                LANGUAGE_ENGLISH_US
-            else: nLang
-
-            In case getSystemLanguage() or getSystemUILanguage() returned
-            LANGUAGE_DONTKNOW, LANGUAGE_ENGLISH_US is returned instead.
-      */
-    static LanguageType getRealLanguageWithoutConfig( LanguageType nLang );
-
 
     static LanguageType resolveSystemLanguageByScriptType( LanguageType nLang, sal_Int16 nType );
 
