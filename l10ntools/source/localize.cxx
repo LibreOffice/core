@@ -204,7 +204,6 @@ private:
         const ByteString &rCollectMode
     );
     void WorkOnDirectory( const ByteString &rDirectory );
-    sal_Bool ExecuteMerge();
     sal_Bool MergeSingleFile(
         const ByteString &rPrj,
         const ByteString &rFile,
@@ -698,101 +697,6 @@ sal_Bool SourceTreeLocalizer::MergeSingleFile(
             }   // else
         }
     return sal_True;
-}
-/*****************************************************************************/
-sal_Bool SourceTreeLocalizer::ExecuteMerge( )
-/*****************************************************************************/
-{
-    DirEntry aEntry( Export::GetTempFile());
-    sal_Bool bReturn = sal_True;
-    bool bMerged = false;
-
-    ByteString sFileName;
-    ByteString sCurFile;
-    ByteString sLine;
-    ByteString sFileKey;
-
-    SvFileStream aFile;
-
-    ByteString sOutputFileName = sOutputFile;
-    ByteString sInpath(".");
-    sInpath += Export::GetEnv("INPATH");
-    ByteString sBlank("");
-
-    sOutputFileName.SearchAndReplaceAll( sInpath , sBlank );
-
-    String sDel = DirEntry::GetAccessDelimiter();
-    ByteString sBDel( sDel.GetBuffer() , sDel.Len() , RTL_TEXTENCODING_UTF8 );
-    if( bLocal ){
-        xub_StrLen nPos = sOutputFileName.SearchBackward( sBDel.GetChar(0) );
-        sOutputFileName = sOutputFileName.Copy( nPos+1 , sOutputFileName.Len()-nPos-1 );
-    }
-    ByteStringBoolHashMap aFileHM;
-    // Read all possible files
-    while ( !aSDF.IsEof()) {
-        aSDF.ReadLine( sLine );
-        sFileName = sLine.GetToken( 0, '\t' );
-        sFileName += "#";
-        sFileName += sLine.GetToken( 1, '\t' );
-        aFileHM[sFileName]=true;
-    }
-
-    for( ByteStringBoolHashMap::iterator iter = aFileHM.begin(); iter != aFileHM.end(); ++iter ){
-        sFileKey = iter->first;
-        aSDF.Seek( 0 );
-        aFile.Open( aEntry.GetFull(), STREAM_STD_WRITE |STREAM_TRUNC );
-
-        while ( !aSDF.IsEof()) {
-            aSDF.ReadLine( sLine );
-            sFileName = sLine.GetToken( 0, '\t' );
-            sFileName += "#";
-            sFileName += sLine.GetToken( 1, '\t' );
-            if( sFileName.Len() && ( sFileName.CompareTo(sFileKey) == COMPARE_EQUAL ) ){
-                if ( aFile.IsOpen() && sLine.Len())
-                    aFile.WriteLine( sLine );
-            }
-        }
-        if ( aFile.IsOpen())
-            aFile.Close();
-
-        ByteString sPrj( sFileKey.GetToken( 0, '#' ));
-        ByteString sFile( sFileKey.GetToken( 1, '#' ));
-        ByteString sSDFFile( aFile.GetFileName(), RTL_TEXTENCODING_ASCII_US );
-
-        //printf("localize test sPrj = %s , sFile = %s , sSDFFile = %s sOutputFileName = %s\n",sPrj.GetBuffer(), sFile.GetBuffer() , sSDFFile.GetBuffer() , sOutputFileName.GetBuffer() );
-
-        // Test
-        bLocal = true;
-        // Test
-
-        if( bLocal ){
-            sal_uInt16 nPos = sFile.SearchBackward( '\\' );
-            ByteString sTmp = sFile.Copy( nPos+1 , sFile.Len()-nPos-1 );
-            //printf("'%s'='%s'\n",sTmp.GetBuffer(), sOutputFileName.GetBuffer());
-            if( sTmp.CompareTo(sOutputFileName) == COMPARE_EQUAL ){
-                    bMerged = true;
-                    if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
-                        bReturn = sal_False;
-            }else{
-                bMerged = true;
-                //printf("MergeSingleFile('%s','%s','%s')\n",sPrj.GetBuffer(),sFile.GetBuffer(),sSDFFile.GetBuffer());
-                if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
-                    bReturn = sal_False;
-            }
-        }
-    }
-    aEntry.Kill();
-    // If Outputfile not included in the SDF file copy it without merge
-
-    if( bLocal && !bMerged ){
-        DirEntry aSourceFile( sOutputFileName.GetBuffer() );
-        FSysError aErr = aSourceFile.CopyTo( DirEntry ( sOutputFile.GetBuffer() ) , FSYS_ACTION_COPYFILE );
-        if( aErr != FSYS_ERR_OK ){
-            printf("ERROR: Can't copy file '%s' to '%s' %d\n",sOutputFileName.GetBuffer(),sOutputFile.GetBuffer(),sal::static_int_cast<int>(aErr));
-        }
-    }
-    return bReturn;
-
 }
 
 }
