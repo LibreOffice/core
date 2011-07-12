@@ -41,6 +41,9 @@
 
 #include <list>
 
+class GtkXLib;
+class GtkSalDisplay;
+
 inline GdkWindow * widget_get_window(GtkWidget *widget)
 {
 #if GTK_CHECK_VERSION(3,0,0)
@@ -74,7 +77,11 @@ inline void widget_set_can_default(GtkWidget *widget, gboolean can_default)
 #endif
 }
 
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+class GtkData : public SalData
+#else
 class GtkData : public X11SalData
+#endif
 {
 public:
     GtkData() {}
@@ -84,11 +91,23 @@ public:
 
     virtual void initNWF();
     virtual void deInitNWF();
+
+    GtkSalDisplay *pDisplay;
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+    GtkXLib *pXLib_;
+#endif
 };
+
+inline GtkData* GetGtkSalData()
+{ return (GtkData*)ImplGetSVData()->mpSalData; }
 
 class GtkSalFrame;
 
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+class GtkSalDisplay
+#else
 class GtkSalDisplay : public SalDisplay
+#endif
 {
     GdkDisplay*                     m_pGdkDisplay;
     GdkCursor                      *m_aCursors[ POINTER_COUNT ];
@@ -112,13 +131,24 @@ public:
 
     GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
                                     GdkEvent* event );
-    inline bool HasMoreEvents()     { return m_aUserEvents.size() > 1; }
-    inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
-    inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
     void startupNotificationCompleted() { m_bStartupCompleted = true; }
 
     void screenSizeChanged( GdkScreen* );
     void monitorsChanged( GdkScreen* );
+
+    void errorTrapPush();
+    void errorTrapPop();
+
+#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+    bool IsXinerama() { return false; }
+    std::vector<Rectangle> GetXineramaScreens() { return std::vector<Rectangle>(); }
+    void  SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT );
+    void            CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
+#else
+    inline bool HasMoreEvents()     { return m_aUserEvents.size() > 1; }
+    inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
+    inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
+#endif
 };
 
 

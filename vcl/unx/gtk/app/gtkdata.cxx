@@ -69,7 +69,7 @@ using namespace vcl_sal;
 using ::rtl::OUString;
 
 /***************************************************************************
- * class GtkDisplay                                                        *
+ * class GtkSalDisplay                                                        *
  ***************************************************************************/
 extern "C" {
 GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
@@ -92,6 +92,9 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay )
     Init ();
 
     gdk_window_add_filter( NULL, call_filterGdkEvent, this );
+
+    if ( getenv( "SAL_IGNOREXERRORS" ) )
+        errorTrapPush(); // and leak the trap
 }
 
 GtkSalDisplay::~GtkSalDisplay()
@@ -107,6 +110,25 @@ GtkSalDisplay::~GtkSalDisplay()
             gdk_cursor_unref( m_aCursors[ i ] );
 
     pDisp_ = NULL;
+}
+
+void GtkSalDisplay::errorTrapPush()
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    gdk_error_trap_push ();
+#else
+    GetXLib()->PushXErrorLevel( true );
+#endif
+}
+
+void GtkSalDisplay::errorTrapPop()
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    gdk_error_trap_pop_ignored ();
+#else
+    XSync( GetDisplay(), False );
+    GetXLib()->PopXErrorLevel();
+#endif
 }
 
 void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
@@ -718,9 +740,10 @@ void GtkXLib::Init()
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
 
-    //gtk_init_check sets XError/XIOError handlers, we want our own one
+#if !GTK_CHECK_VERSION(3,0,0)
+    // gtk_init_check sets XError/XIOError handlers, ours are inferior: so use them ! (hmm)
     m_aOrigGTKXIOErrorHandler = XSetIOErrorHandler ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
-    PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
+#endif
 
     for (i = 0; i < nParams; i++ )
         g_free( pCmdLineAry[i] );
@@ -764,15 +787,18 @@ void GtkXLib::Init()
     Display *pDisp = gdk_x11_display_get_xdisplay( pGdkDisp );
 
     m_pGtkSalDisplay = new GtkSalDisplay( pGdkDisp );
+    GetGtkSalData()->pDisplay = m_pGtkSalDisplay;
 
-    PushXErrorLevel( true );
+#if !GTK_CHECK_VERSION(3,0,0)
+    m_pGtkSalDisplay->errorTrapPush();
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
     XSync( pDisp, False );
-
     pKbdExtension->UseExtension( ! HasXErrorOccurred() );
-    PopXErrorLevel();
-
+    m_pGtkSalDisplay->errorTrapPop();
     m_pGtkSalDisplay->SetKbdExtension( pKbdExtension );
+#else
+#  warning unwind keyboard extension bits
+#endif
 
     g_signal_connect( G_OBJECT(gdk_keymap_get_default()), "keys_changed", G_CALLBACK(signalKeysChanged), m_pGtkSalDisplay );
 

@@ -162,6 +162,8 @@ class GtkSalFrame : public SalFrame, basebmp::BitmapDeviceDamageTracker
         void            endExtTextInput( sal_uInt16 nFlags );
         bool            handleKeyEvent( GdkEventKey* pEvent );
         void            focusChanged( bool bFocusIn );
+        void            errorTrapPush();
+        void            errorTrapPop();
 
         void            doCallEndExtTextInput();
         void            sendEmptyCommit();
@@ -430,7 +432,6 @@ public:
 
     virtual void damaged (const basegfx::B2IRange& rDamageRect);
 };
-
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()
 
