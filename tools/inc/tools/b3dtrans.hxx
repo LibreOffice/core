@@ -294,22 +294,16 @@ public:
     virtual ~B3dCamera();
 
     // Positionen
-    void SetPosition(const basegfx::B3DPoint& rNewPos);
     const basegfx::B3DPoint& GetPosition() const { return aPosition; }
-    void SetLookAt(const basegfx::B3DVector& rNewLookAt);
     const basegfx::B3DVector& GetLookAt() const { return aLookAt; }
-    void SetPositionAndLookAt(const basegfx::B3DPoint& rNewPos, const basegfx::B3DVector& rNewLookAt);
 
     // Brennweite in mm
-    void SetFocalLength(double fLen);
     double GetFocalLength() const { return fFocalLength; }
 
     // Neigung links/rechts
-    void SetBankAngle(double fAngle);
     double GetBankAngle() const { return fBankAngle; }
 
     // FocalLength Flag
-    void SetUseFocalLength(sal_Bool bNew);
     sal_Bool GetUseFocalLength() const { return (sal_Bool)bUseFocalLength; }
 
 protected:
