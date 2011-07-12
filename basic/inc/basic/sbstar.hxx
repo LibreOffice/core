@@ -166,7 +166,6 @@ public:
     static sal_Bool     IsCompilerError();
     static sal_uInt16   GetVBErrorCode( SbError nError );
     static SbError  GetSfxFromVBError( sal_uInt16 nError );
-    static void     SetGlobalLanguageMode( SbLanguageMode eLangMode );
     // Local settings
     void SetLanguageMode( SbLanguageMode eLangMode )
         { eLanguageMode = eLangMode; }

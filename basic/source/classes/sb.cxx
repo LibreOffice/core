@@ -1472,10 +1472,6 @@ sal_uInt16 StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
 SbError StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
 const String& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
 sal_Bool StarBASIC::IsCompilerError()       { return GetSbData()->bCompiler; }
-void StarBASIC::SetGlobalLanguageMode( SbLanguageMode eLanguageMode )
-{
-    GetSbData()->eLanguageMode = eLanguageMode;
-}
 
 // From 1996-03-29:
 // The mapping between the old and the new error codes take place by searching
