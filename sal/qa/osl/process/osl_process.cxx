@@ -80,14 +80,6 @@
     const rtl::OUString EXECUTABLE_NAME (RTL_CONSTASCII_USTRINGPARAM("osl_process_child"));
 #endif
 
-
-//########################################
-std::string OUString_to_std_string(const rtl::OUString& oustr)
-{
-    rtl::OString ostr = rtl::OUStringToOString(oustr, osl_getThreadTextEncoding());
-    return std::string(ostr.getStr());
-}
-
 //########################################
 using namespace osl;
 
