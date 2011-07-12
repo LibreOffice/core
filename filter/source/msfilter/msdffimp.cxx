@@ -6671,10 +6671,10 @@ sal_Bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
         sal_uLong nOldPosCtrl = rStCtrl.Tell();
         sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
         // das Shape im Steuer Stream anspringen
-        rStCtrl.Seek( rInfo.nFilePos );
+        bool bSeeked = (rInfo.nFilePos == rStCtrl.Seek(rInfo.nFilePos));
 
         // Falls missglueckt, den Fehlerstatus zuruecksetzen und Pech gehabt!
-        if( rStCtrl.GetError() )
+        if (!bSeeked || rStCtrl.GetError())
             rStCtrl.ResetError();
         else
             rpShape = ImportObj( rStCtrl, &rData, rData.aParentRect, rData.aParentRect );
