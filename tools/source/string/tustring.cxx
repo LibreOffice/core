@@ -471,4 +471,34 @@ sal_Bool STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr, xub_StrLen nInd
     return (ImplStringICompare( mpData->maStr+nIndex, pCharStr, nLen ) == 0);
 }
 
+// -----------------------------------------------------------------------
+
+StringCompare STRING::CompareIgnoreCaseToAscii( const STRING& rStr,
+                                                xub_StrLen nLen ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
+
+    // Auf Gleichheit der Pointer testen
+    if ( mpData == rStr.mpData )
+        return COMPARE_EQUAL;
+
+    // Maximale Laenge ermitteln
+    if ( mpData->mnLen < nLen )
+        nLen = static_cast< xub_StrLen >(mpData->mnLen+1);
+    if ( rStr.mpData->mnLen < nLen )
+        nLen = static_cast< xub_StrLen >(rStr.mpData->mnLen+1);
+
+    // String vergleichen
+    sal_Int32 nCompare = ImplStringICompareWithoutZero( mpData->maStr, rStr.mpData->maStr, nLen );
+
+    // Rueckgabewert anpassen
+    if ( nCompare == 0 )
+        return COMPARE_EQUAL;
+    else if ( nCompare < 0 )
+        return COMPARE_LESS;
+    else
+        return COMPARE_GREATER;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

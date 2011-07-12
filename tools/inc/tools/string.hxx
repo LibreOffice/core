@@ -286,8 +286,6 @@ public:
                                    xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareTo( const sal_Char* pCharStr,
                                    xub_StrLen nLen = STRING_LEN ) const;
-    StringCompare       CompareIgnoreCaseToAscii( const ByteString& rStr,
-                                                  xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareIgnoreCaseToAscii( const sal_Char* pCharStr,
                                                   xub_StrLen nLen = STRING_LEN ) const;
     sal_Bool                Equals( const ByteString& rStr ) const;
