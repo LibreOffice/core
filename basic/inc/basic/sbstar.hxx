@@ -190,9 +190,6 @@ public:
     void SetVBAEnabled( sal_Bool bEnabled );
     sal_Bool isVBAEnabled();
 
-    // #60175 sal_True: SFX-Resource is not displayed on basic errors
-    static void StaticSuppressSfxResource( sal_Bool bSuppress );
-
     SbxObjectRef getRTL( void ) { return pRtl; }
     sal_Bool IsDocBasic() { return bDocBasic; }
     SbxVariable* VBAFind( const String& rName, SbxClassType t );

@@ -1601,31 +1601,15 @@ struct BasicStringList_Impl : private Resource
 };
 //----------------------------------------------------------------
 
-// Flag, that prevent the activation of the SFX-Resources at a Basic error
-static sal_Bool bStaticSuppressSfxResource = sal_False;
-
-void StarBASIC::StaticSuppressSfxResource( sal_Bool bSuppress )
-{
-    bStaticSuppressSfxResource = bSuppress;
-}
-
-// Hack for #83750, use bStaticSuppressSfxResource as setup flag
 sal_Bool runsInSetup( void )
 {
-    return bStaticSuppressSfxResource;
+    return sal_False;
 }
 
 
 void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 {
     SolarMutexGuard aSolarGuard;
-
-    if( bStaticSuppressSfxResource )
-    {
-        GetSbData()->aErrMsg = String( RTL_CONSTASCII_USTRINGPARAM("No resource: Error message not available") );
-        return;
-    }
-
     sal_uInt16 nOldID = GetVBErrorCode( nId );
 
     // intantiate the help class
