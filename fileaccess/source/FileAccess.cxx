@@ -865,13 +865,6 @@ Sequence< rtl::OUString > FileAccess_getSupportedServiceNames()
 
 extern "C"
 {
-//==================================================================================================
-SAL_DLLPUBLIC_EXPORT void SAL_CALL fileacc_component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL fileacc_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {

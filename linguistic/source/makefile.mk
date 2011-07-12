@@ -93,7 +93,6 @@ DEF1DES     =Linguistic main DLL
 
 .IF "$(GUI)"=="WNT"
 DEF1EXPORT1 = component_getFactory
-DEF1EXPORT2 = component_getImplementationEnvironment
 .ENDIF
 
 # --- Targets ------------------------------------------------------

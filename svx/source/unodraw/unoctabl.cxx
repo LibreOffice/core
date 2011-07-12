@@ -256,12 +256,6 @@ extern uno::Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedS
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL svx_component_getImplementationEnvironment (
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
     const sal_Char * pImplName, void * pServiceManager, void *  )
 {

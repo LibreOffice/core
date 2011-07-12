@@ -508,20 +508,11 @@ const Reference< XMultiServiceFactory >& xServiceManager )
 
 } // namespace scripting_protocolhandler
 
-/* exported functions for registration */
 extern "C"
 {
 
 #undef css
 #define css ::com::sun::star
-
-    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char** ppEnvironmentTypeName, uno_Environment** ppEnvironment )
-    {
-        (void)ppEnvironment;
-
-        *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
-    }
 
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char * pImplementationName ,
                                          void * pServiceManager ,

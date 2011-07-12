@@ -46,8 +46,6 @@
         #include <service2.hxx>
         #endif
 
-        COMPONENTGETIMPLEMENTATIONENVIRONMENT
-
         COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
@@ -75,8 +73,6 @@
 #include <uielement/newmenucontroller.hxx>
 #include <uielement/toolbarsmenucontroller.hxx>
 #include <uielement/popupmenucontroller.hxx>
-
-COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )
                         IFFACTORY( ::framework::MailToDispatcher                        ) else

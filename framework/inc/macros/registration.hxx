@@ -57,7 +57,6 @@
     Please use follow public macros only!
 
     IFFACTORY( CLASS )                          => use it as parameter for COMPONENT_GETFACTORY( IFFACTORIES )
-    COMPONENTGETIMPLEMENTATIONENVIRONMENT       => use it to define exported function component_getImplementationEnvironment()
     COMPONENTGETFACTORY( IFFACTORIES )          => use it to define exported function component_getFactory()
 
 _________________________________________________________________________________________________________________*/
@@ -75,17 +74,6 @@ ________________________________________________________________________________
         /* ... then create right factory for this service.                                  */                                          \
         /* xFactory and xServiceManager are local variables of method which use this macro. */                                          \
         xFactory = CLASS::impl_createFactory( xServiceManager );                                                                        \
-    }
-
-//*****************************************************************************************************************
-//  public
-//  define helper to get information about service environment
-//*****************************************************************************************************************
-#define COMPONENTGETIMPLEMENTATIONENVIRONMENT                                                                                           \
-    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char**          ppEnvironmentTypeName   ,               \
-                                                                             uno_Environment**                          )               \
-    {                                                                                                                                   \
-        *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;                                                                   \
     }
 
 //*****************************************************************************************************************

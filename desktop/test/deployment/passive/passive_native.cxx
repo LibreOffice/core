@@ -281,9 +281,3 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     return cppu::component_getFactoryHelper(
         pImplName, pServiceManager, pRegistryKey, services);
 }
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    char const ** ppEnvTypeName, uno_Environment **)
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}

@@ -164,11 +164,6 @@ extern "C"
 {
 #endif
 
-XMLOFF_DLLPUBLIC void SAL_CALL xo_component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 #define SINGLEFACTORY(classname)\
         if( classname##_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )\
         {\
