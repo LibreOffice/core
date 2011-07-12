@@ -190,8 +190,6 @@ public:
     SbxArrayRef     getUnoListeners( void );
 
     static SbxBase* FindSBXInCurrentScope( const String& rName );
-    static SbxVariable* FindVarInCurrentScopy
-                    ( const String& rName, sal_uInt16& rStatus );
     static SbMethod* GetActiveMethod( sal_uInt16 nLevel = 0 );
     static SbModule* GetActiveModule();
     void SetVBAEnabled( sal_Bool bEnabled );

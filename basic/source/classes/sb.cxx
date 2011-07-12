@@ -1394,23 +1394,6 @@ SbxBase* StarBASIC::FindSBXInCurrentScope( const String& rName )
     return pINST->pRun->FindElementExtern( rName );
 }
 
-// Preserve old interface
-SbxVariable* StarBASIC::FindVarInCurrentScopy
-( const String& rName, sal_uInt16& rStatus )
-{
-    rStatus = 1;              // Presumption: nothing found
-    SbxVariable* pVar = NULL;
-    SbxBase* pSbx = FindSBXInCurrentScope( rName );
-    if( pSbx )
-    {
-        if( !pSbx->ISA(SbxMethod) && !pSbx->ISA(SbxObject) )
-            pVar = PTR_CAST(SbxVariable,pSbx);
-    }
-    if( pVar )
-        rStatus = 0;      // We found something
-    return pVar;
-}
-
 void StarBASIC::QuitAndExitApplication()
 {
     Stop();
