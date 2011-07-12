@@ -76,12 +76,10 @@ public:
     std::list<OutputFile>                                   m_aOutputFiles;
     std::list< std::pair< rtl::OString, rtl::OString > >    m_aReplacements;
 
-                    RscCmdLine( int argc, char ** argv, RscError * pEH );
-                    RscCmdLine();
+    RscCmdLine( int argc, char ** argv, RscError * pEH );
+    ~RscCmdLine();
 
-                    ~RscCmdLine();
-
-  ::rtl::OString     substitutePaths( const ::rtl::OString& rIn );
+    ::rtl::OString     substitutePaths( const ::rtl::OString& rIn );
 };
 /****************** R s c ************************************************/
 
@@ -97,7 +95,6 @@ private:
 
     void            CreateResFile( const char * pRc );
     void            Append( const ByteString& rOutputSrs, const ByteString& rTmpFile );
-    void            OpenInput( const ByteString& rInput );
 
     bool            GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                        const WriteRcContext& rContext,
@@ -119,7 +116,6 @@ public:
                     ~RscCompiler();
 
     ERRTYPE         Start();
-    ByteString      GetTmpFileName();   // Die Dateien werden geloescht
 
                     // Include Statements lesen
     ERRTYPE         IncludeParser( sal_uLong lFileKey );

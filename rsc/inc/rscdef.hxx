@@ -103,11 +103,9 @@ public:
 
             RscId& operator = ( const RscId& rRscId );
 
-    static sal_Bool    IsSetNames();
     static void    SetNames( sal_Bool bSet = sal_True );
     operator         sal_Int32() const;   // Gibt Nummer zurueck
     ByteString     GetName()  const;   // Gibt den Namen des Defines zurueck
-    ByteString     GetMacro()  const;  // Gibt das Macro zurueck
     sal_Bool    operator <  ( const RscId& rRscId ) const;
     sal_Bool    operator >  ( const RscId& rRscId ) const;
     sal_Bool    operator == ( const RscId& rRscId ) const;
@@ -166,9 +164,7 @@ private:
                      sal_Int32 lDefId, size_t lPos );
     RscDefine * New( sal_uLong lFileKey, const ByteString & rDefName,
                      RscExpression * pExpression, size_t lPos );
-    sal_Bool        Befor( const RscDefine * pFree, const RscDefine * pDepend );
     sal_Bool        Remove( RscDefine * pDef );
-    sal_Bool        Remove( size_t nIndex );
     sal_Bool        Remove();
     size_t      GetPos( RscDefine* item ) {
                     for ( size_t i = 0, n = maList.size(); i < n; ++i )
@@ -265,15 +261,8 @@ public:
     RscDefine * NewDef( sal_uLong lKey, const ByteString & rDefName,
                         RscExpression *, sal_uLong lPos );
 
-    sal_Bool        ChangeDef( const ByteString & rDefName, sal_Int32 lId );
-    sal_Bool        ChangeDef( const ByteString & rDefName, RscExpression * );
-
-    sal_Bool IsDefUsed( const ByteString & );
-    void DeleteDef( const ByteString & );
-
            // Alle Defines die in dieser Datei Definiert sind loeschen
     void   DeleteFileContext( sal_uLong lKey );
-    void   DeleteFile( sal_uLong lKey );
     sal_uLong  NewCodeFile( const ByteString & rName );
     sal_uLong  NewIncFile( const ByteString & rName, const ByteString & rPath );
     RscFile * GetFile( sal_uLong lFileKey ){ return Get( lFileKey ); }

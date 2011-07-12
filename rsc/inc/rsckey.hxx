@@ -48,11 +48,9 @@ public:
             ~RscNameTable();
     void    SetSort( sal_Bool bSorted = sal_True );
     Atom  Put( Atom nName, sal_uInt32 nTyp, long nValue );
-    Atom  Put( Atom nName, sal_uInt32 nTyp );
     Atom  Put( const char * pName, sal_uInt32 nTyp, long nValue );
     Atom  Put( const char * pName, sal_uInt32 nTyp );
     Atom  Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass );
-    Atom  Put( const char * pName, sal_uInt32 nTyp, RscTop * pClass );
 
             // sal_True, wurde gefunden
     sal_Bool    Get( Atom nName, KEY_STRUCT * pEle );

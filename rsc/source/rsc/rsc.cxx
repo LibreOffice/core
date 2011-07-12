@@ -113,18 +113,6 @@ void RscCmdLine::Init()
 |*    Beschreibung      Kommandozeile interpretierten
 |*
 *************************************************************************/
-RscCmdLine::RscCmdLine()
-{
-    Init();
-}
-
-/*************************************************************************
-|*
-|*    RscCmdLine::RscCmdLine()
-|*
-|*    Beschreibung      Kommandozeile interpretierten
-|*
-*************************************************************************/
 RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
 {
     char *          pStr;
@@ -1046,39 +1034,6 @@ void RscCompiler::Append( const ByteString& rOutputSrs,
         aTemp += rTmpFile;
         pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTemp.GetBuffer() );
     }
-}
-
-/********************************************************************/
-/*                                                                  */
-/*  Function    :   GetTmpFileName()                                */
-/*                                                                  */
-/*  Description :   Packt einen Dateinamen in Tmp-Dateiliste.       */
-/*                                                                  */
-/********************************************************************/
-ByteString RscCompiler::GetTmpFileName()
-{
-    ByteString aFileName;
-
-    aFileName = ::GetTmpFileName();
-    return( aFileName );
-}
-
-/********************************************************************/
-/*                                                                  */
-/*  Function    :   sal_Bool openinput()                            */
-/*                                                                  */
-/*  Description :   Check to see if the input file exists and can   */
-/*  be opened for reading.                                          */
-/********************************************************************/
-
-void RscCompiler::OpenInput( const ByteString& rInput )
-{
-    FILE *fp;
-                        /* try to open the input file               */
-    if( NULL == (fp = fopen( rInput.GetBuffer(), "r")))
-        pTC->pEH->FatalError( ERR_OPENFILE, RscId(), rInput.GetBuffer() );
-
-    fclose( fp );
 }
 
 /*************************************************************************

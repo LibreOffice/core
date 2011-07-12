@@ -322,47 +322,6 @@ RscTop * RscTypCont :: Search( Atom nRT ){
     return( (RscTop *)pRoot->Search( nRT ) );
 }
 
-CLASS_DATA RscTypCont :: Search( Atom nRT, const RscId & rId ){
-    ObjNode *pObjNode;
-    RscTop  *pRscTop;
-
-    if( NULL != (pRscTop = Search( nRT )) ){
-        if( NULL != (pObjNode = pRscTop->GetObjNode( rId )) ){
-            return( pObjNode->GetRscObj() );
-        }
-    }
-    return( (CLASS_DATA)0 );
-}
-
-/*************************************************************************
-|*
-|*    RscTypCont :: Delete()
-|*
-*************************************************************************/
-void RscTypCont :: Delete( Atom nRT, const RscId & rId ){
-    ObjNode *   pObjNode;
-    RscTop  *   pRscTop;
-
-    if( NULL != (pRscTop = Search( nRT )) ){
-        if( NULL != (pObjNode = pRscTop->GetObjNode()) ){
-            pObjNode = pObjNode->Search( rId );
-
-            if( pObjNode ){
-                //Objekt aus Baum entfernen
-                pRscTop->pObjBiTree =
-                    (ObjNode *)pRscTop->pObjBiTree->Remove( pObjNode );
-
-                if( pObjNode->GetRscObj() ){
-                    pRscTop->Destroy( RSCINST( pRscTop,
-                                               pObjNode->GetRscObj() ) );
-                    rtl_freeMemory( pObjNode->GetRscObj() );
-                }
-                delete pObjNode;
-            }
-        }
-    }
-}
-
 /*************************************************************************
 |*
 |*    RscTypCont :: PutSysName()
@@ -969,11 +928,6 @@ void RscTypCont :: Delete( sal_uLong lFileKey ){
     aFileTab.DeleteFileContext( lFileKey );
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont :: MakeConsistent()
-|*
-*************************************************************************/
 sal_Bool IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop )
 {
     sal_Bool bRet = sal_True;
@@ -1019,10 +973,6 @@ sal_Bool MakeConsistent( RscTop * pRscTop )
     };
 
     return bRet;
-}
-
-sal_Bool RscTypCont :: MakeConsistent(){
-    return( ::MakeConsistent( pRoot ) );
 }
 
 sal_uInt32 RscTypCont::PutTranslatorKey( sal_uInt64 nKey )

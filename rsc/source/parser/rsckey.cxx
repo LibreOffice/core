@@ -122,11 +122,6 @@ Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp, long nValue )
     return( Put( pHS->getID( pName ), nTyp, nValue ) );
 };
 
-Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp )
-{
-    return( Put( nName, nTyp, (long)nName ) );
-};
-
 Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp )
 {
     Atom  nId;
@@ -138,11 +133,6 @@ Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp )
 Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass )
 {
     return( Put( nName, nTyp, (long)pClass ) );
-};
-
-Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp, RscTop * pClass )
-{
-    return( Put( pHS->getID( pName ), nTyp, (long)pClass ) );
 };
 
 /*************************************************************************

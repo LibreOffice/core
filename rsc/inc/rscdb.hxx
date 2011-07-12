@@ -337,8 +337,6 @@ public:
                 }
     RscTop  *   SearchType( Atom nTypId );
     RscTop  *   Search( Atom typ );
-    CLASS_DATA  Search( Atom typ, const RscId & rId );
-    void        Delete( Atom typ, const RscId & rId );
                 // loescht alle Resourceobjekte diese Datei
     void        Delete( sal_uLong lFileKey );
     RscTop  *   GetRoot()         { return( pRoot ); };
@@ -353,8 +351,6 @@ public:
                           const ByteString & rHxxName );
     void        WriteSyntax( FILE * fOutput );
     void        WriteRcCtor( FILE * fOutput );
-    void        FillNameIdList( REResourceList * pList, sal_uLong lFileKey );
-    sal_Bool        MakeConsistent();
     sal_uInt32      PutTranslatorKey( sal_uInt64 nKey );
     void        IncFilePos( sal_uLong nOffset ){ nFilePos += nOffset; }
 };
