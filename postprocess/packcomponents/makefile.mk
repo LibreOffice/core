@@ -74,6 +74,8 @@ my_components = \
     component/reportdesign/util/rpt \
     component/reportdesign/util/rptui \
     component/reportdesign/util/rptxml \
+    component/sax/source/expatwrap/expwrap \
+    component/sax/source/fastparser/fastsax \
     component/sc/util/sc \
     component/sc/util/scd \
     component/sc/util/scfilt \
