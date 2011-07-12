@@ -164,6 +164,19 @@ void FiltersTest::testCVEs()
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
         m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/qpro/indeterminate")), rtl::OUString(), indeterminate);
+
+    //warning, the current "sylk filter" in sc (docsh.cxx) automatically
+    //chains on failure on trying as csv, rtf, etc. so "success" may
+    //not indicate that it imported as .slk.
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/slk/pass")), rtl::OUString(), true);
+
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/slk/fail")), rtl::OUString(), false);
+
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/slk/indeterminate")), rtl::OUString(), indeterminate);
+
 }
 
 FiltersTest::FiltersTest()
