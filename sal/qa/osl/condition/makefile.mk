@@ -43,8 +43,6 @@ CFLAGSCXX += -DCPPUNIT_PLUGIN_EXPORTED_NAME=cppunitTest_$(TARGET)
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:Condition by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/osl_Condition.obj
 

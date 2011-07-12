@@ -55,8 +55,7 @@ DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 
 #------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 

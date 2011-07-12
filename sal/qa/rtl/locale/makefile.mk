@@ -44,8 +44,6 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:locale by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/rtl_locale.obj
 
@@ -58,13 +56,9 @@ SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
-# auto generated Target:locale
-# END ------------------------------------------------------------------
-
 
 #------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 

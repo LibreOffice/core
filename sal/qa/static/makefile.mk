@@ -54,7 +54,13 @@ APP1LIBS += \
     $(SLB)/qa_ostringbuffer.lib \
     $(SLB)/qa_osl_condition.lib \
     $(SLB)/qa_osl_file.lib \
-    $(SLB)/qa_osl_security.lib
+    $(SLB)/qa_osl_security.lib \
+    $(SLB)/qa_rtl_alloc.lib \
+    $(SLB)/qa_rtl_cipher.lib \
+    $(SLB)/qa_rtl_crc32.lib \
+    $(SLB)/qa_rtl_doublelock.lib \
+    $(SLB)/qa_rtl_locale.lib \
+    $(SLB)/qa_sal.lib
 
 APP1STDLIBS = $(CPPUNITLIB) $(SALLIB)
 APP1TARGET = $(TARGET)

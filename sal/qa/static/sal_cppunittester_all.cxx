@@ -119,7 +119,13 @@ extern "C" CppUnitTestPlugIn *cppunitTest_qa_ByteSequence(void),
            *cppunitTest_qa_osl_File(void),
            *cppunitTest_tcwf(void),
            *cppunitTest_osl_old_test_file(void),
-           *cppunitTest_qa_osl_security(void);
+           *cppunitTest_qa_osl_security(void),
+           *cppunitTest_qa_rtl_alloc(void),
+           *cppunitTest_qa_rtl_cipher(void),
+           *cppunitTest_qa_rtl_crc32(void),
+           *cppunitTest_qa_rtl_doublelock(void),
+           *cppunitTest_qa_rtl_locale(void),
+           *cppunitTest_qa_sal(void);
 
 SAL_IMPLEMENT_MAIN() {
     TestPlugInSignature plugs[] = {
@@ -130,6 +136,12 @@ SAL_IMPLEMENT_MAIN() {
         cppunitTest_tcwf,
         cppunitTest_osl_old_test_file,
         cppunitTest_qa_osl_security,
+        cppunitTest_qa_rtl_alloc,
+        cppunitTest_qa_rtl_cipher,
+        cppunitTest_qa_rtl_crc32,
+        cppunitTest_qa_rtl_doublelock,
+        cppunitTest_qa_rtl_locale,
+        cppunitTest_qa_sal,
         NULL
     };
     CppUnit::TestResult result;

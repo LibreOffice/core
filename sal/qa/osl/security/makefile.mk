@@ -43,8 +43,6 @@ CFLAGSCXX += -DCPPUNIT_PLUGIN_EXPORTED_NAME=cppunitTest_$(TARGET)
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:Security by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/osl_Security.obj
 
