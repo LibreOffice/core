@@ -1896,11 +1896,6 @@ sal_Bool StarBASIC::StoreData( SvStream& r ) const
     return sal_True;
 }
 
-sal_Bool StarBASIC::LoadOldModules( SvStream& )
-{
-    return sal_False;
-}
-
 bool StarBASIC::GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut )
 {
     bool bRes = false;
