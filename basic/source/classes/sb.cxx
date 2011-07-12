@@ -1601,12 +1601,6 @@ struct BasicStringList_Impl : private Resource
 };
 //----------------------------------------------------------------
 
-sal_Bool runsInSetup( void )
-{
-    return sal_False;
-}
-
-
 void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 {
     SolarMutexGuard aSolarGuard;
