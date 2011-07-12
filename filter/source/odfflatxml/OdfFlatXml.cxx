@@ -235,8 +235,6 @@ Reference< XInterface > SAL_CALL OdfFlatXml::impl_createInstance(const Reference
 
 }
 
-_COMPHELPER_COMPONENT_GETIMPLEMENTATIONENVIRONMENT
-
 // extern "C" component_getFactory()
 _COMPHELPER_COMPONENT_GETFACTORY
 (

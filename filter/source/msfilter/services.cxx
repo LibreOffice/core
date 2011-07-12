@@ -59,17 +59,7 @@ static ::cppu::ImplementationEntry const spServices[] =
 
 } // namespace
 
-// ----------------------------------------------------------------------------
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char** ppEnvironmentTypeName, uno_Environment** /*ppEnvironment*/ )
-{
-    *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const char* pImplName, void* pServiceManager, void* pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, spServices );
 }
-
-// ============================================================================

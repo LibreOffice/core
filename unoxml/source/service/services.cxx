@@ -55,11 +55,6 @@ using namespace ::com::sun::star::registry;
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL unoxml_component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, uno_Environment ** /*ppEnvironment */)
-{
-    *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
-}
-
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL unoxml_component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void * /*pRegistryKey*/)
 {
     void* pReturn = NULL ;

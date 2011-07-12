@@ -43,15 +43,6 @@ static REF( NMSP_UNO::XInterface ) SAL_CALL create_FilterTracer( const REF( NMSP
     return REF( NMSP_UNO::XInterface )( *new FilterTracer( rxFact ) );
 }
 
-// ------------------------------------------
-// - component_getImplementationEnvironment -
-// ------------------------------------------
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 // ------------------------
 // - component_getFactory -
 // ------------------------
