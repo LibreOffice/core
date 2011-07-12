@@ -323,7 +323,7 @@ elsif ( $platform =~ m/freebsd/ )
       $OS             = "FREEBSD";
       $PATH_SEPERATOR = $ps;
       $OSVERSION      = '@OSVERSION@';
-   if ($platform =~ m/^amd64/)
+   if ($platform =~ m/^(amd64|x86_64)/)
    {  my ( $JAVA_OS );
       print "Setting FreeBSD AMD64 specific values... ";
       $outfile        = "FreeBSDAMDEnv.Set.sh";
