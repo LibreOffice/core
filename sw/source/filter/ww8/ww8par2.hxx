@@ -53,32 +53,6 @@ private:
     SfxItemSet aChrSet,aParSet;
 };
 
-struct WW8FlyPara
-{                       // WinWord-Attribute
-                        // Achtung: *Nicht* umsortieren, da Teile mit
-                        // memcmp verglichen werden
-    bool bVer67;
-    sal_Int16 nSp26, nSp27;         // rohe Position
-    sal_Int16 nSp45, nSp28;         // Breite / Hoehe
-    sal_Int16 nLeMgn, nRiMgn, nUpMgn, nLoMgn;           // Raender
-    sal_uInt8 nSp29;                 // rohe Bindung + Alignment
-    sal_uInt8 nSp37;                 // Wrap-Mode ( 1 / 2; 0 = no Apo ? )
-    WW8_BRC5 brc;               // Umrandung Top, Left, Bottom, Right, Between
-    bool bBorderLines;          // Umrandungslinien
-    bool bGrafApo;              // true: Dieser Rahmen dient allein dazu, die
-                                // enthaltene Grafik anders als zeichengebunden
-                                // zu positionieren
-    bool mbVertSet;             // true if vertical positioning has been set
-    sal_uInt8 nOrigSp29;
-
-    WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = 0);
-    bool operator==(const WW8FlyPara& rSrc) const;
-    void Read(const sal_uInt8* pSprm29, WW8PLCFx_Cp_FKP* pPap);
-    void ReadFull(const sal_uInt8* pSprm29, SwWW8ImplReader* pIo);
-    void Read(const sal_uInt8* pSprm29, WW8RStyle* pStyle);
-    void ApplyTabPos(const WW8_TablePos *pTabPos);
-    bool IsEmpty() const;
-};
 
 struct WW8SwFlyPara
 {
@@ -120,101 +94,6 @@ struct WW8SwFlyPara
 
     void BoxUpWidth( long nWidth );
     SwWW8FltAnchorStack *pOldAnchorStck;
-};
-
-class SwWW8StyInf
-{
-    String      sWWStyleName;
-    sal_uInt16      nWWStyleId;
-public:
-    rtl_TextEncoding eLTRFontSrcCharSet;    // rtl_TextEncoding fuer den Font
-    rtl_TextEncoding eRTLFontSrcCharSet;    // rtl_TextEncoding fuer den Font
-    rtl_TextEncoding eCJKFontSrcCharSet;    // rtl_TextEncoding fuer den Font
-    SwFmt*      pFmt;
-    WW8FlyPara* pWWFly;
-    SwNumRule*  pOutlineNumrule;
-    long        nFilePos;
-    sal_uInt16      nBase;
-    sal_uInt16      nFollow;
-    sal_uInt16      nLFOIndex;
-    sal_uInt8        nListLevel;
-    sal_uInt8        nOutlineLevel;      // falls Gliederungs-Style
-    sal_uInt16  n81Flags;           // Fuer Bold, Italic, ...
-    sal_uInt16  n81BiDiFlags;       // Fuer Bold, Italic, ...
-    SvxLRSpaceItem maWordLR;
-    bool bValid;            // leer oder Valid
-    bool bImported;         // fuers rekursive Importieren
-    bool bColl;             // true-> pFmt ist SwTxtFmtColl
-    bool bImportSkipped;    // nur true bei !bNewDoc && vorh. Style
-    bool bHasStyNumRule;    // true-> Benannter NumRule in Style
-    bool bHasBrokenWW6List; // true-> WW8+ style has a WW7- list
-    bool bListReleventIndentSet; //true if this style's indent has
-                                 //been explicitly set, it's set to the value
-                                 //of pFmt->GetItemState(RES_LR_SPACE, false)
-                                 //if it was possible to get the ItemState
-                                 //for L of the LR space independantly
-    bool bParaAutoBefore;   // For Auto spacing before a paragraph
-    bool bParaAutoAfter;    // For Auto Spacing after a paragraph
-
-    SwWW8StyInf() :
-        sWWStyleName( aEmptyStr ),
-        nWWStyleId( 0 ),
-        eLTRFontSrcCharSet(0),
-        eRTLFontSrcCharSet(0),
-        eCJKFontSrcCharSet(0),
-        pFmt( 0 ),
-        pWWFly( 0 ),
-        pOutlineNumrule( 0 ),
-        nFilePos( 0 ),
-        nBase( 0 ),
-        nFollow( 0 ),
-        nLFOIndex( USHRT_MAX ),
-        nListLevel(WW8ListManager::nMaxLevel),
-        nOutlineLevel( MAXLEVEL ),
-        n81Flags( 0 ),
-        n81BiDiFlags(0),
-        maWordLR( RES_LR_SPACE ),
-        bValid(false),
-        bImported(false),
-        bColl(false),
-        bImportSkipped(false),
-        bHasStyNumRule(false),
-        bHasBrokenWW6List(false),
-        bListReleventIndentSet(false),
-        bParaAutoBefore(false),
-        bParaAutoAfter(false)
-
-    {}
-
-    ~SwWW8StyInf()
-    {
-        delete pWWFly;
-    }
-
-    void SetOrgWWIdent( const String& rName, const sal_uInt16 nId )
-    {
-        sWWStyleName = rName;
-        nWWStyleId = nId;
-    }
-    sal_uInt16 GetWWStyleId() const { return nWWStyleId; }
-    const String& GetOrgWWName() const
-    {
-        return sWWStyleName;
-    }
-    bool IsOutline() const
-    {
-        return (pFmt && (MAXLEVEL > nOutlineLevel));
-    }
-    bool IsOutlineNumbered() const
-    {
-        return pOutlineNumrule && IsOutline();
-    }
-    const SwNumRule* GetOutlineNumrule() const
-    {
-        return pOutlineNumrule;
-    }
-    CharSet GetCharSet() const;
-    CharSet GetCJKCharSet() const;
 };
 
 class WW8RStyle: public WW8Style

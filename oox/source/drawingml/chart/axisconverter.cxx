@@ -315,7 +315,11 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         // number format ------------------------------------------------------
 
         if( (aScaleData.AxisType == cssc2::AxisType::REALNUMBER) || (aScaleData.AxisType == cssc2::AxisType::PERCENT) )
+        {
+            if( mrModel.maNumberFormat.maFormatCode.indexOfAsciiL("%",1) >= 0)
+                mrModel.maNumberFormat.mbSourceLinked = false;
             getFormatter().convertNumberFormat( aAxisProp, mrModel.maNumberFormat );
+        }
 
         // position of crossing axis ------------------------------------------
 

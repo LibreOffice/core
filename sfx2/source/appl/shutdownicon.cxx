@@ -90,7 +90,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 # endif
 #endif
 
-#if defined(UNX) && defined(ENABLE_SYSTRAY_GTK)
+#if defined(UNX) && defined(ENABLE_SYSTRAY_GTK) && !defined(PLUGIN_NAME)
 #define PLUGIN_NAME "libqstart_gtkli.so"
 #endif
 

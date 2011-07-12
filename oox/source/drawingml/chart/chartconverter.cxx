@@ -59,7 +59,7 @@ static const sal_Unicode API_TOKEN_ARRAY_CLOSE     = '}';
 static const sal_Unicode API_TOKEN_ARRAY_ROWSEP    = '|';
 static const sal_Unicode API_TOKEN_ARRAY_COLSEP    = ';';
 
-// Code similar to oox/source/xls/FormulaParser.cxx
+// Code similar to oox/source/xls/formulabase.cxx
 static OUString lclGenerateApiString( const OUString& rString )
 {
     OUString aRetString = rString;
@@ -69,7 +69,7 @@ static OUString lclGenerateApiString( const OUString& rString )
     return OUStringBuffer().append( sal_Unicode( '"' ) ).append( aRetString ).append( sal_Unicode( '"' ) ).makeStringAndClear();
 }
 
-    static ::rtl::OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
+static ::rtl::OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
 {
     OSL_ENSURE( !rMatrix.empty(), "ChartConverter::lclGenerateApiArray - missing matrix values" );
     OUStringBuffer aBuffer;
@@ -156,7 +156,7 @@ Reference< XDataSequence > ChartConverter::createDataSequence( const Reference< 
         }
         catch( Exception& )
         {
-            OSL_FAIL( "ExcelChartConverter::createDataSequence - cannot create data sequence" );
+            OSL_FAIL( "ChartConverter::createDataSequence - cannot create data sequence" );
         }
     }
 

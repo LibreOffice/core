@@ -166,6 +166,7 @@ IDLFILES=\
     NamedRangeFlag.idl\
     NamedRanges.idl\
     NamedRangesEnumeration.idl\
+    NameToken.idl\
     NoConvergenceException.idl\
     PasteOperation.idl\
     RangeSelectionArguments.idl\

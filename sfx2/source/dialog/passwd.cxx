@@ -124,6 +124,7 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     maMinLenPwdStr  ( SfxResId( STR_PASSWD_MIN_LEN ) ),
     maEmptyPwdStr   ( SfxResId( STR_PASSWD_EMPTY ) ),
     maMainPwdStr    ( ),
+    mnMinLen        ( 5 ),
     mnExtras        ( 0 ),
     mbAsciiOnly     ( false )
 

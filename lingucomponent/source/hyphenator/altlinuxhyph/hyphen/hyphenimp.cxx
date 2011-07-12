@@ -487,7 +487,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const ::rtl::OUStri
                     }
                     case CAPTYPE_INITCAP:
                     {
-                        if (nHyphenationPosAlt == 0)
+                        if (nHyphenationPosAlt == -1)
                             repHyph = makeInitCap(repHyphlow, pCC);
                         else
                              repHyph = repHyphlow;

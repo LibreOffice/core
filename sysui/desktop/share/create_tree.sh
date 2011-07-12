@@ -43,7 +43,7 @@ fi
 
 mkdir -p ${DESTDIR}/usr/bin
 
-office_prefix=/opt
+test -n "$OFFICE_PREFIX" && office_prefix="$OFFICE_PREFIX" || office_prefix=/opt
 office_root=${office_prefix}/${PREFIX}
 
 #this symlink is needed to have the API boostrap functions running right

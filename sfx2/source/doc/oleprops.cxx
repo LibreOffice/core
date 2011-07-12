@@ -1156,7 +1156,7 @@ void SfxOlePropertySet::ImplLoad( SvStream& rStrm )
     sal_uInt16 nOsMinor;
     sal_uInt16 nOsType;
     SvGlobalName aGuid;
-    sal_Int32 nSectCount;
+    sal_Int32 nSectCount(0);
     rStrm >> nByteOrder >> nVersion >> nOsMinor >> nOsType >> aGuid >> nSectCount;
 
     // read sections

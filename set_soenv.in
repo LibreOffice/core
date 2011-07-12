@@ -1068,9 +1068,11 @@ $XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 $L10N_MODULE = PathFormat($SRC_ROOT."/translations");
 
 # Check for poor help localizations, i.e. no help translation at all...
-opendir(DIR,$L10N_MODULE . "/source");
-@languages = readdir(DIR);
-closedir(DIR);
+@languages=();
+if (opendir(DIR,$L10N_MODULE . "/source"))
+{  @languages = readdir(DIR);
+   closedir(DIR);
+}
 $WITH_POOR_HELP_LOCALIZATIONS = "";
 
 foreach $language (@languages)
@@ -1590,10 +1592,12 @@ ToFile( "Empty",             $empty,             "n" );
 ToFile( "Platform independent constant values.", $empty, "c" );
 # Languages
 ToFile( "WITH_LANG",         "@WITH_LANG@",      "e" );
+ToFile( "WITH_LANG_LIST",    "@WITH_LANG_LIST@", "e" );
 ToFile( "INTRO_BITMAP",      "@INTRO_BITMAP@",   "e" );
 ToFile( "ABOUT_BITMAP",      "@ABOUT_BITMAP@",   "e" );
 ToFile( "OOO_VENDOR",        "@OOO_VENDOR@",     "e" );
 ToFile( "OOODMAKEMODE",      "YES",              "e" );
+ToFile( "PRODUCTVERSION",    "@PRODUCTVERSION@", "e" );
 ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 
 ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
@@ -1620,8 +1624,17 @@ ToFile( "EXTERNAL_WARNINGS_NOT_ERRORS", "TRUE",  "e" );
 ToFile( "PRODUCT",           "@PRODUCT@",        "e" );
 ToFile( "PROFULLSWITCH",     "@PROFULLSWITCH@",  "e" );
 ToFile( "PROEXT",            $PROEXT,            "e" );
-ToFile( "VALGRIND_CFLAGS",   "@VALGRIND_CFLAGS@",  "e" );
+ToFile( "VALGRIND_CFLAGS",   "@VALGRIND_CFLAGS@","e" );
+ToFile( "WITH_COMPAT_OOWRAPPERS", "@WITH_COMPAT_OOWRAPPERS@", "e" );
 ToFile( "UNIXWRAPPERNAME",   "@UNIXWRAPPERNAME@","e" );
+ToFile( "PRODUCTNAME",       "@PRODUCTNAME@",    "e" );
+ToFile( "INSTALLDIRNAME",    "@INSTALLDIRNAME@", "e" );
+ToFile( "PREFIXDIR",         "@PREFIXDIR@",      "e" );
+ToFile( "INSTALLDIR",        "@INSTALLDIR@",     "e" );
+ToFile( "LIBDIR",            "@LIBDIR@",         "e" );
+ToFile( "DATADIR",           "@DATADIR@",        "e" );
+ToFile( "MANDIR",            "@MANDIR@",         "e" );
+ToFile( "DOCDIR",            "@DOCDIR@",          "e" );
 ToFile( "BUILD_MOZAB",       "@BUILD_MOZAB@",    "e" );
 ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
 ToFile( "MOZILLA_VERSION",   $MOZILLA_VERSION,   "e" );
@@ -1640,6 +1653,8 @@ ToFile( "ENABLE_SYSTRAY_GTK", "@ENABLE_SYSTRAY_GTK@", "e" );
 ToFile( "ENABLE_STATIC_GTK", "@ENABLE_STATIC_GTK@", "e" );
 ToFile( "ENABLE_CAIRO",      "@ENABLE_CAIRO@",     "e" );
 ToFile( "ENABLE_BROFFICE",   "@ENABLE_BROFFICE@",  "e" );
+ToFile( "SPLIT_APP_MODULES", "@SPLIT_APP_MODULES@","e" );
+ToFile( "SPLIT_OPT_FEATURES","@SPLIT_OPT_FEATURES@","e" );
 ToFile( "ENABLE_OPENGL",     "@ENABLE_OPENGL@",    "e" );
 ToFile( "ENABLE_PDFIMPORT",  "@ENABLE_PDFIMPORT@", "e" );
 ToFile( "ENABLE_MINIMIZER",   "@ENABLE_MINIMIZER@","e" );
@@ -1694,7 +1709,6 @@ ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
 ToFile( "nodep",             "@nodep@",          "e" );
 ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
-ToFile( "DO_FETCH_TARBALLS", "@DO_FETCH_TARBALLS@",  "e" );
 ToFile( "GIT_LINK_SRC", "@GIT_LINK_SRC@",  "e" );
 ToFile( "GIT_REPO_NAMES", "@GIT_REPO_NAMES@",  "e" );
 
@@ -1984,6 +1998,7 @@ ToFile( "DB_CPPLIB",         "@DB_CPPLIB@",        "e" );
 ToFile( "DB_INCLUDES",       "@DB_INCLUDES@",      "e" );
 ToFile( "ENABLE_MYSQLC",     "@ENABLE_MYSQLC@",    "e" );
 ToFile( "ENABLE_LOMENUBAR",  "@ENABLE_LOMENUBAR@", "e" );
+ToFile( "ENABLE_ONLINE_UPDATE","@ENABLE_ONLINE_UPDATE@", "e" );
 ToFile( "SYSTEM_MYSQL",      "@SYSTEM_MYSQL@",     "e" );
 ToFile( "SYSTEM_MYSQL_CPPCONN","@SYSTEM_MYSQL_CPPCONN@","e" );
 ToFile( "MYSQL_INC",         "@MYSQL_INC@",        "e" );

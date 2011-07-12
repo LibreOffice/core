@@ -470,20 +470,7 @@ SV_IMPL_PTRARR( WW8LFOInfos, WW8LFOInfo_Ptr );
 sal_uInt8* WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
     sal_uInt8 nLen)
 {
-    sal_uInt8* pSprms = &rSprms;
-    sal_uInt16 nRemLen=nLen;
-    while (nRemLen > (maSprmParser.getVersion()?1:0))
-    {
-        sal_uInt16 nAktId = maSprmParser.GetSprmId(pSprms);
-        if( nAktId == nId ) // Sprm found
-            return pSprms + maSprmParser.DistanceToData(nId);
-
-        // gib Zeiger auf Daten
-        sal_uInt16 nSize = maSprmParser.GetSprmSize(nAktId, pSprms);
-        pSprms += nSize;
-        nRemLen -= nSize;
-    }
-    return 0;                           // Sprm not found
+    return maSprmParser.findSprmData(nId, &rSprms, nLen);
 }
 
 class ListWithId : public std::unary_function<const WW8LSTInfo *, bool>
@@ -775,7 +762,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     for(nLevelB = 0; nLevelB <= nLevel; ++nLevelB)
     {
         sal_uInt8 nPos = aOfsNumsXCH[nLevelB];
-        if (nPos && sNumString.GetChar(nPos-1) < nMaxLevel)
+        if (nPos && nPos < sNumString.Len()  && sNumString.GetChar(nPos-1) < nMaxLevel)
         {
             if (rNotReallyThere[nLevelB])
                 aOfsNumsXCH[nLevelB] = 0;
@@ -1702,7 +1689,10 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
     sal_uInt8 nActLevel)
 {
-    SwWW8StyInf &rStyleInf = pCollA[nStyle];
+    if (nStyle >= vColl.size())
+        return;
+
+    SwWW8StyInf &rStyleInf = vColl[nStyle];
     if (rStyleInf.bValid)
     {
         OSL_ENSURE(pAktColl, "Cannot be called outside of style import");
@@ -1738,7 +1728,11 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
 
 void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
 {
-    SwWW8StyInf &rStyleInf = pCollA[nStyle];
+
+    if (nStyle >= vColl.size())
+        return;
+
+    SwWW8StyInf &rStyleInf = vColl[nStyle];
     if (rStyleInf.bValid && rStyleInf.pFmt)
     {
         //Save old pre-list modified indent, which are the word indent values
@@ -1786,10 +1780,12 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 
     if (pLstManager) // sind die Listendeklarationen gelesen?
     {
-        std::vector<sal_uInt8> aParaSprms;
         SwTxtNode* pTxtNd = pPaM->GetNode()->GetTxtNode();
-        OSL_ENSURE(pTxtNd, "Kein Text-Node an PaM-Position");
+        OSL_ENSURE(pTxtNd, "No Text-Node at PaM-Position");
+        if (!pTxtNd)
+            return;
 
+        std::vector<sal_uInt8> aParaSprms;
         const SwNumRule* pRule = bSetAttr ?
             pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
                 aParaSprms, pTxtNd) : 0;
@@ -2033,8 +2029,8 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             indentation.  Setting this flag will allow us to recover from this
             braindeadness
             */
-            if (pAktColl && (nLFOPosition == 2047-1))
-                pCollA[nAktColl].bHasBrokenWW6List = true;
+            if (pAktColl && (nLFOPosition == 2047-1) && nAktColl < vColl.size())
+                vColl[nAktColl].bHasBrokenWW6List = true;
 
             // die Streamdaten sind hier 1 basiert, wir ziehen EINS ab
             if (USHRT_MAX > nLFOPosition)

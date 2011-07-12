@@ -487,7 +487,7 @@ void ScDrawView::MarkListHasChanged()
         uno::Reference < embed::XEmbeddedObject > xObj = pOle2Obj->GetObjRef();
         DBG_ASSERT( xObj.is(), "SdrOle2Obj ohne ObjRef" );
         if (xObj.is())
-            xObj->getSupportedVerbs();
+            aVerbs = xObj->getSupportedVerbs();
     }
     pViewSh->SetVerbs( aVerbs );
 

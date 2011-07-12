@@ -2749,7 +2749,6 @@ void SvNumberFormatter::GenerateFormat(String& sString,
     const String& rThSep = GetNumThousandSep();
 
     SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(nIndex);
-    sal_Bool insertBrackets = pFormat->IsNegativeInBracket();
 
     if (nAnzLeading == 0)
     {
@@ -2843,36 +2842,42 @@ void SvNumberFormatter::GenerateFormat(String& sString,
             sString += ';';
         sString += sNegStr;
     }
-    if ( (IsRed || insertBrackets ) && eType != NUMBERFORMAT_CURRENCY)
+    if (eType != NUMBERFORMAT_CURRENCY)
     {
-        String sTmpStr = sString;
+        bool insertBrackets = false;
+        if ( eType != NUMBERFORMAT_UNDEFINED)
+            insertBrackets = pFormat->IsNegativeInBracket();
+        if (IsRed || insertBrackets)
+        {
+            String sTmpStr = sString;
 
-        if ( pFormat->HasPositiveBracketPlaceholder() )
-        {
-             sTmpStr += '_';
-             sTmpStr += ')';
-        }
-        sTmpStr += ';';
+            if ( pFormat->HasPositiveBracketPlaceholder() )
+            {
+                 sTmpStr += '_';
+                 sTmpStr += ')';
+            }
+            sTmpStr += ';';
 
-        if (IsRed)
-        {
-            sTmpStr += '[';
-            sTmpStr += pFormatScanner->GetRedString();
-            sTmpStr += ']';
-        }
+            if (IsRed)
+            {
+                sTmpStr += '[';
+                sTmpStr += pFormatScanner->GetRedString();
+                sTmpStr += ']';
+            }
 
-        if (insertBrackets)
-        {
-            sTmpStr += '(';
-            sTmpStr += sString;
-            sTmpStr += ')';
-        }
-        else
-        {
-            sTmpStr += '-';
-            sTmpStr +=sString;
-        }
-        sString = sTmpStr;
+            if (insertBrackets)
+            {
+                sTmpStr += '(';
+                sTmpStr += sString;
+                sTmpStr += ')';
+            }
+            else
+            {
+                sTmpStr += '-';
+                sTmpStr +=sString;
+            }
+            sString = sTmpStr;
+            }
     }
 }
 

@@ -1,0 +1,89 @@
+#!/bin/sh
+
+. ./*[Ee]nv.[Ss]et.sh
+
+echo "Cleaning up ...";
+
+remove_help_localization()
+{
+    lang=$1
+
+    # nothing to be done if the localization is en-US if it does not exist
+    # or if it is already removed
+    test "$lang" = "en-US" -o \
+          ! -e $DESTDIR$INSTALLDIR/help/$lang -o \
+	  -L $DESTDIR$INSTALLDIR/help/$lang && return;
+
+    echo "... remove \"$lang\""
+
+    rm -rf $DESTDIR$INSTALLDIR/help/$lang
+    grep -v "$INSTALLDIR/help/$lang" $DESTDIR/gid_Module_Root.$lang >$DESTDIR/gid_Module_Root.$lang.new
+    mv -f $DESTDIR/gid_Module_Root.$lang.new $DESTDIR/gid_Module_Root.$lang
+    # FIXME: the following code could be used without the condition
+    #        and should replace the lines above after only the milestones
+    #	     providing gid_Module_Helppack_Help and fixed gid_Module_Root.$lang
+    #        are supported
+    # Note: The problem with gid_Module_Root.$lang is that it still includes
+    #       %dir */help/* entries.
+    # Note: It was still necessary on ppc with gcj (OOo-2.0.2). Strange. Have to
+    # investigate it later.
+    if test -f $DESTDIR/gid_Module_Helppack_Help.$lang ; then
+	grep -v "$INSTALLDIR/help/$lang" $DESTDIR/gid_Module_Helppack_Help.$lang >$DESTDIR/gid_Module_Helppack_Help.$lang.new
+	mv -f $DESTDIR/gid_Module_Helppack_Help.$lang.new $DESTDIR/gid_Module_Helppack_Help.$lang
+    fi
+
+    # Note: We created a compat symlink in the past. It is no longer necessary.
+    # We do not want it because RPM has problems with update when we remove
+    # poor localizations in never packages
+}
+
+# Check if the English help is installed and is in the main package (is first on the list)
+# Note that Java-disabled builds do not create help at all.
+if test -f $DESTDIR$INSTALLDIR/help/en/sbasic.cfg -a \
+        "`for lang in $WITH_LANG_LIST ; do echo $lang ; break ; done`" = "en-US" ; then
+
+    echo "Removing duplicated English help..."
+  
+    for lang in $WITH_LANG_LIST ; do
+	test ! -f $DESTDIR$INSTALLDIR/help/en/sbasic.cfg -o ! -f $DESTDIR$INSTALLDIR/help/$lang/sbasic.cfg && continue;
+	if diff $DESTDIR$INSTALLDIR/help/en/sbasic.cfg $DESTDIR$INSTALLDIR/help/$lang/sbasic.cfg >/dev/null 2>&1 ; then
+	    remove_help_localization $lang
+	fi
+    done
+    
+    echo "Removing poor help localizations..."
+
+    for lang in $WITH_POOR_HELP_LOCALIZATIONS ; do
+	remove_help_localization $lang
+    done
+fi
+
+echo "Fixing permissions..."
+for dir in $DOCDIR $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/examples ; do
+    if test -d $dir -a -w $dir ; then
+	find "$dir" -type f \( -name "*.txt" -o -name "*.java" -o -name "*.xml"    -o \
+			       -name "*.xcu" -o -name "*.xcs"  -o -name "*.html"   -o \
+			       -name "*.pdf" -o -name "*.ps"   -o -name "*.gif"    -o \
+			       -name "*.png" -o -name "*.jpg"  -o -name "Makefile" -o \
+			       -name "manifest.mf" \) -exec chmod 644 {} \;
+    fi
+done
+
+if test "z$DESTDIR" != "z" ; then
+    echo "Checking for DESTDIR inside installed files..."
+    found_destdir=
+    for file in `find $DESTDIR -type f` ; do
+	grep -q "$DESTDIR" $file && echo "$file: includes the string \"$DESTDIR\"" && found_destdir=1
+    done
+    if test "z$found_destdir" != "z" ; then
+	echo "!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!"
+	echo "The path DESTDIR:$DESTDIR was found inside some"
+	echo "installed files. It is probably a bug."
+	echo 
+	echo "Especially, if the DESTDIR is set to \$RPM_BUILD_ROOT"
+	echo "when creating RPM packages. Even it could be a security hole"
+	echo "if the application searches /var/tmp for binaries or"
+	echo "config files because the directory is world-writable."
+	echo "!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!"
+    fi
+fi

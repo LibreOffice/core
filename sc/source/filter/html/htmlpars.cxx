@@ -1012,7 +1012,9 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
             nColOffsetStart = nColOffset;
         }
 
-        ScEEParseEntry* pE = maList.back();
+        ScEEParseEntry* pE = NULL;
+        if (maList.size())
+            pE = maList.back();
         NewActEntry( pE );      // neuer freifliegender pActEntry
         xLockedList = new ScRangeList;
     }

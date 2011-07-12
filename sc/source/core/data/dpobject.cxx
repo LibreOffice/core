@@ -1860,9 +1860,6 @@ sal_Bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
     // ppLabelArr / nLabels is not changed
 
     SCCOL nSrcColOffset = 0;
-    if (IsSheetData())
-        // source data column offset is only for internal sheet source.
-        nSrcColOffset = pSheetDesc->GetSourceRange().aStart.Col();
 
     bool bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
     lcl_FillOldFields(
