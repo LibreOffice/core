@@ -254,8 +254,6 @@ public:
     B3dViewport();
     virtual ~B3dViewport();
 
-    void SetVRP(const basegfx::B3DPoint& rNewVRP);
-    void SetVPN(const basegfx::B3DVector& rNewVPN);
     void SetVUV(const basegfx::B3DVector& rNewVUV);
     void SetViewportValues(
         const basegfx::B3DPoint& rNewVRP,

@@ -603,18 +603,6 @@ B3dViewport::~B3dViewport()
 {
 }
 
-void B3dViewport::SetVRP(const basegfx::B3DPoint& rNewVRP)
-{
-    aVRP = rNewVRP;
-    CalcOrientation();
-}
-
-void B3dViewport::SetVPN(const basegfx::B3DVector& rNewVPN)
-{
-    aVPN = rNewVPN;
-    CalcOrientation();
-}
-
 void B3dViewport::SetVUV(const basegfx::B3DVector& rNewVUV)
 {
     aVUV = rNewVUV;
