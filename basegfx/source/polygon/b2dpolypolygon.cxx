@@ -93,21 +93,10 @@ public:
 
     void insert(sal_uInt32 nIndex, const basegfx::B2DPolyPolygon& rPolyPolygon)
     {
-        const sal_uInt32 nCount = rPolyPolygon.count();
-
-        if(nCount)
-        {
-            // add nCount polygons from rPolyPolygon
-            maPolygons.reserve(maPolygons.size() + nCount);
-            PolygonVector::iterator aIndex(maPolygons.begin());
-            aIndex += nIndex;
-
-            for(sal_uInt32 a(0L); a < nCount; a++)
-            {
-                aIndex = maPolygons.insert(aIndex, rPolyPolygon.getB2DPolygon(a));
-                ++aIndex;
-            }
-        }
+        // add all polygons from rPolyPolygon
+        PolygonVector::iterator aIndex(maPolygons.begin());
+        aIndex += nIndex;
+        maPolygons.insert(aIndex, rPolyPolygon.begin(), rPolyPolygon.end());
     }
 
     void remove(sal_uInt32 nIndex, sal_uInt32 nCount)
