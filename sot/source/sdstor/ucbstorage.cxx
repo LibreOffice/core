@@ -3266,7 +3266,7 @@ sal_Bool UCBStorage::IsStorageFile( SvStream* pFile )
         return sal_False;
 
     pFile->Seek(0);
-    sal_uInt32 nBytes;
+    sal_uInt32 nBytes(0);
     *pFile >> nBytes;
 
     // search for the magic bytes
@@ -3277,6 +3277,7 @@ sal_Bool UCBStorage::IsStorageFile( SvStream* pFile )
         bRet = ( nBytes == 0x08074b50 );
         if ( bRet )
         {
+            nBytes = 0;
             *pFile >> nBytes;
             bRet = ( nBytes == 0x04034b50 );
         }
