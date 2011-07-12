@@ -76,19 +76,26 @@ sal_main_with_args(int argc, char ** argv) \
 
 @interface salAppDelegate : NSObject <UIApplicationDelegate> {
 }
+@property (nonatomic, retain) UIWindow *window;
 @end
 
 static int sal_main_with_args(int argc, char **argv);
 
 @implementation salAppDelegate
 
+@synthesize window=_window;
+
 - (BOOL)application: (UIApplication *) application didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
 {
   UIWindow *uiw = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   uiw.backgroundColor = [UIColor redColor];
+  self.window = uiw;
   [uiw release];
 
   sal_main_with_args(sal_argc, sal_argv);
+
+  [self.window makeKeyAndVisible];
+  return YES;
 }
 
 @end
