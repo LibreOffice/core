@@ -55,6 +55,7 @@
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <editeng/lrspitem.hxx>
+#include <oox/ole/olehelper.hxx>
 
 class SwDoc;
 class SwPaM;
@@ -670,8 +671,7 @@ public:
 class SwMSConvertControls: public SvxMSConvertOCXControls
 {
 public:
-    SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) :
-        SvxMSConvertOCXControls( pDSh,pP ) {}
+    SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP );
     virtual sal_Bool InsertFormula( WW8FormulaControl &rFormula);
     virtual sal_Bool InsertControl(const com::sun::star::uno::Reference<
         com::sun::star::form::XFormComponent >& rFComp,
@@ -679,6 +679,12 @@ public:
         com::sun::star::uno::Reference <
         com::sun::star::drawing::XShape > *pShape,sal_Bool bFloatingCtrl);
     bool ExportControl(WW8Export &rWrt, const SdrObject *pObj);
+    virtual sal_Bool ReadOCXStream( SotStorageRef& rSrc1,
+        com::sun::star::uno::Reference<
+        com::sun::star::drawing::XShape > *pShapeRef=0,
+        sal_Bool bFloatingCtrl=false );
+private:
+    ::oox::ole::OleFormCtrlImportHelper   maFormCtrlHelper;
 };
 
 class SwMSDffManager : public SvxMSDffManager

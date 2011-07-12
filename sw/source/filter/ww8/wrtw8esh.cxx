@@ -100,6 +100,16 @@
 #include "escher.hxx"
 #include <ndtxt.hxx>
 #include "WW8FFData.hxx"
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/form/XFormComponent.hpp>
+#include <comphelper/processfactory.hxx>
+#include "docsh.hxx"
+#include <oox/ole/olehelper.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <fstream>
 
 using ::editeng::SvxBorderLine;
 using namespace com::sun::star;
@@ -2766,6 +2776,34 @@ sal_uInt32 SwEscherEx::QueryTextID(
         nId *= 0x10000;
     }
     return nId;
+}
+
+uno::Reference< uno::XComponentContext >
+lcl_getUnoCtx()
+{
+    comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
+    return aCtx.getUNOContext();
+}
+
+
+SwMSConvertControls::SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) : SvxMSConvertOCXControls( pDSh,pP ),  maFormCtrlHelper( pDocSh->GetMedium()->GetInputStream(),  lcl_getUnoCtx(), pDocSh->GetModel() )
+{
+}
+
+// in transitioning away old filter for ole/ocx controls, ReadOCXStream has been made pure virtual in
+// filter/source/msocximex.cxx, so.. we need an implementation here
+sal_Bool  SwMSConvertControls::ReadOCXStream( SotStorageRef& rSrc1,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShape > *pShapeRef,
+        sal_Bool bFloatingCtrl )
+{
+    uno::Reference< form::XFormComponent > xFComp;
+    sal_Bool bRes = maFormCtrlHelper.importFormControlFromObjPool( xFComp, rtl::OUString( rSrc1->GetName() ) );
+    if ( bRes && xFComp.is() )
+    {
+        com::sun::star::awt::Size aSz;  // not used in import
+        bRes = InsertControl( xFComp, aSz,pShapeRef,bFloatingCtrl);
+    }
+    return bRes;
 }
 
 bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pObj)
