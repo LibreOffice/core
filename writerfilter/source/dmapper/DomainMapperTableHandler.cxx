@@ -747,7 +747,7 @@ void DomainMapperTableHandler::startRow(unsigned int nCells,
     m_aRowProperties.push_back( pProps );
     m_aCellProperties.push_back( PropertyMapVector1() );
 
-#if DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("table.row");
     dmapper_logger->attribute("cells", nCells);
     if (pProps != NULL)
@@ -782,7 +782,7 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
         m_aCellProperties[nRow - 1].push_back( pEmptyProps );
     }
 
-#if DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("table.cell");
     dmapper_logger->startElement("table.cell.start");
     dmapper_logger->chars(toString(start));
