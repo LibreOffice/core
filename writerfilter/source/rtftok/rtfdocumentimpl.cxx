@@ -1969,6 +1969,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             else if (m_nFormFieldType == FORMFIELD_LIST)
                 m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFDDList_result, pIntValue));
             break;
+        case RTF_EDMINS:
+            m_xDocumentProperties->setEditingDuration(nParam);
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
             bParsed = false;
