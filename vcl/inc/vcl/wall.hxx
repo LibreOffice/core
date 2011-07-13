@@ -112,17 +112,14 @@ public:
     WallpaperStyle  GetStyle() const;
 
     void            SetBitmap( const BitmapEx& rBitmap );
-    void            SetBitmap();
     BitmapEx        GetBitmap() const;
     sal_Bool            IsBitmap() const;
 
     void            SetGradient( const Gradient& rGradient );
-    void            SetGradient();
     Gradient        GetGradient() const;
     sal_Bool            IsGradient() const;
 
     void            SetRect( const Rectangle& rRect );
-    void            SetRect();
     Rectangle       GetRect() const;
     sal_Bool            IsRect() const;
 

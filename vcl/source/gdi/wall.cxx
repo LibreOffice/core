@@ -366,20 +366,6 @@ void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
 
 // -----------------------------------------------------------------------
 
-void Wallpaper::SetBitmap()
-{
-    DBG_CHKTHIS( Wallpaper, NULL );
-
-    if ( mpImplWallpaper->mpBitmap )
-    {
-        ImplMakeUnique();
-        delete mpImplWallpaper->mpBitmap;
-        mpImplWallpaper->mpBitmap = NULL;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 BitmapEx Wallpaper::GetBitmap() const
 {
     DBG_CHKTHIS( Wallpaper, NULL );
@@ -418,20 +404,6 @@ void Wallpaper::SetGradient( const Gradient& rGradient )
 
     if( WALLPAPER_NULL == mpImplWallpaper->meStyle || WALLPAPER_APPLICATIONGRADIENT == mpImplWallpaper->meStyle )
         mpImplWallpaper->meStyle = WALLPAPER_TILE;
-}
-
-// -----------------------------------------------------------------------
-
-void Wallpaper::SetGradient()
-{
-    DBG_CHKTHIS( Wallpaper, NULL );
-
-    if ( mpImplWallpaper->mpGradient )
-    {
-        ImplMakeUnique();
-        delete mpImplWallpaper->mpGradient;
-        mpImplWallpaper->mpGradient = NULL;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -499,20 +471,6 @@ void Wallpaper::SetRect( const Rectangle& rRect )
             *(mpImplWallpaper->mpRect) = rRect;
         else
             mpImplWallpaper->mpRect = new Rectangle( rRect );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void Wallpaper::SetRect()
-{
-    DBG_CHKTHIS( Wallpaper, NULL );
-
-    if ( mpImplWallpaper->mpRect )
-    {
-        ImplMakeUnique( sal_False );
-        delete mpImplWallpaper->mpRect;
-        mpImplWallpaper->mpRect = NULL;
     }
 }
 
