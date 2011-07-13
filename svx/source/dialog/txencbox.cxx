@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
+#include <rtl/strbuf.hxx>
 #include <osl/nlsupport.h>
 
 //========================================================================
@@ -202,9 +203,9 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uI
     else
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: " );
-        aMsg += ByteString::CreateFromInt32( nEnc );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: "));
+        aMsg.append(static_cast<sal_Int32>(nEnc));
+        DBG_ERRORFILE(aMsg.getStr());
 #endif
     }
 }
