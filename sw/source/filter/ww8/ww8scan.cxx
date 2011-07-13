@@ -3345,8 +3345,14 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
 
                             if (nSmallest <= nLimitFC)
                             {
-                                p->nEndPos = nCpEnd -
+                                WW8_CP nEndPos = nCpEnd -
                                     (nLimitFC-nSmallest) / (bIsUnicode ? 2 : 1);
+
+                                OSL_ENSURE(nEndPos >= p->nStartPos, "EndPos before StartPos");
+
+                                if (nEndPos >= p->nStartPos)
+                                    p->nEndPos = nEndPos;
+
                                 break;
                             }
                         }
