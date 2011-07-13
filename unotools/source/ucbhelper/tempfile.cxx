@@ -443,6 +443,47 @@ void TempFile::CloseStream()
     }
 }
 
+String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
+{
+    if( !rBaseName.Len() )
+        return String();
+
+    rtl::OUString aUnqPath( rBaseName );
+
+    // remove trailing slash
+    if ( rBaseName.GetChar( rBaseName.Len() - 1 ) == sal_Unicode( '/' ) )
+        aUnqPath = rBaseName.Copy( 0, rBaseName.Len() - 1 );
+
+    // try to create the directory
+    sal_Bool bRet = sal_False;
+    osl::FileBase::RC err = osl::Directory::create( aUnqPath );
+    if ( err != FileBase::E_None && err != FileBase::E_EXIST )
+        // perhaps parent(s) don't exist
+        bRet = ensuredir( aUnqPath );
+    else
+        bRet = sal_True;
+
+    // failure to create base directory means returning an empty string
+    rtl::OUString aTmp;
+    if ( bRet )
+    {
+        // append own internal directory
+        bRet = sal_True;
+        ::rtl::OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
+        rTempNameBase_Impl = rBaseName;
+        rTempNameBase_Impl += String( '/' );
+
+        TempFile aBase( NULL, sal_True );
+        if ( aBase.IsValid() )
+            // use it in case of success
+            rTempNameBase_Impl = aBase.pImp->aName;
+
+        // return system path of used directory
+        FileBase::getSystemPathFromFileURL( rTempNameBase_Impl, aTmp );
+    }
+
+    return aTmp;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

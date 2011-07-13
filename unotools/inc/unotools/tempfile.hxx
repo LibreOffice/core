@@ -143,6 +143,17 @@ public:
                     conversion functions of osl.
                     */
     static String   CreateTempName( const String* pParent=NULL );
+
+                    /**
+                    The TempNameBaseDirectory is a subfolder in the folder that is passed as a "physical" file name in the
+                    SetTempNameBaseDirectory method.
+                    This subfolder will be used if a TempFile or TempName is created without a parent name or a parent name
+                    that does not belong to the local file system.
+                    The caller of the SetTempNameBase is responsible for deleting this folder and all temporary files in it.
+                    The return value of both methods is the complete "physical" name of the tempname base folder.
+                    It is not a URL because alle URLs must be "UCB compatible", so there may be no suitable URL at all.
+                    */
+    static String   SetTempNameBaseDirectory( const String &rBaseName );
 };
 
 }
