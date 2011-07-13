@@ -267,26 +267,4 @@ String TempFile::GetName() const
     return aTmp;
 }
 
-String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
-{
-    String aName( rBaseName );
-
-    ::rtl::OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
-
-    FileBase::RC err= Directory::create( aName );
-    if ( err == FileBase::E_None || err == FileBase::E_EXIST )
-    {
-        rTempNameBase_Impl  = aName;
-        rTempNameBase_Impl += String( '/' );
-
-        TempFile aBase( NULL, sal_True );
-        if ( aBase.IsValid() )
-            rTempNameBase_Impl = aBase.pImp->aName;
-    }
-
-    rtl::OUString aTmp;
-    aTmp = rTempNameBase_Impl;
-    return aTmp;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
