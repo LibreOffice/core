@@ -610,6 +610,7 @@ void splash_close_window()
 {
     if (display)
         XCloseDisplay( display );
+    display = NULL;
 #ifdef USE_LIBPNG
     png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
 #else
