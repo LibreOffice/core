@@ -42,39 +42,6 @@ Application::IsUserActive(unsigned short)
 Application::PostUserEvent(unsigned long, void*)
 Application::RemoveHotKey(unsigned long)
 Application::SetFontPath(String const&)
-B3dCamera::SetBankAngle(double)
-B3dCamera::SetFocalLength(double)
-B3dCamera::SetLookAt(basegfx::B3DVector const&)
-B3dCamera::SetPosition(basegfx::B3DPoint const&)
-B3dCamera::SetPositionAndLookAt(basegfx::B3DPoint const&, basegfx::B3DVector const&)
-B3dCamera::SetUseFocalLength(unsigned char)
-B3dTransformationSet::DeviceToEyeCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::DeviceToViewCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::EyeToDeviceCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::EyeToObjectCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::EyeToViewCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::GetDeviceRectangle(double&, double&, double&, double&)
-B3dTransformationSet::GetDeviceVolume()
-B3dTransformationSet::GetLogicalViewportBounds()
-B3dTransformationSet::GetMatFromObjectToView()
-B3dTransformationSet::InvTransObjectToEye(basegfx::B3DPoint const&)
-B3dTransformationSet::ObjectToEyeCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::ObjectToViewCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::ObjectToWorldCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::SetDeviceVolume(basegfx::B3DRange const&, unsigned char)
-B3dTransformationSet::SetObjectTrans(basegfx::B3DHomMatrix const&)
-B3dTransformationSet::SetOrientation(basegfx::B3DHomMatrix&)
-B3dTransformationSet::SetRatioMode(Base3DRatio)
-B3dTransformationSet::SetTexture(basegfx::B2DHomMatrix const&)
-B3dTransformationSet::TransTextureCoor(basegfx::B2DPoint const&)
-B3dTransformationSet::ViewToDeviceCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::ViewToEyeCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::ViewToObjectCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::ViewToWorldCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::WorldToObjectCoor(basegfx::B3DPoint const&)
-B3dTransformationSet::WorldToViewCoor(basegfx::B3DPoint const&)
-B3dViewport::SetVPN(basegfx::B3DVector const&)
-B3dViewport::SetVRP(basegfx::B3DPoint const&)
 BasicError::BasicError()
 BasicIDEDLL::Exit()
 BasicIDEShell::LinkStubAccelSelectHdl(void*, void*)
@@ -2476,13 +2443,6 @@ TextView::IsHighlightSelection() const
 TextView::IsPaintSelection() const
 TextView::SetHighlightSelection(unsigned char)
 TextView::Write(SvStream&)
-TimeBox::GetTime(unsigned short) const
-TimeBox::GetTimePos(Time const&) const
-TimeBox::InsertTime(Time const&, unsigned short)
-TimeBox::RemoveTime(Time const&)
-TimeBox::TimeBox(Window*, ResId const&)
-TimeFormatter::GetRealTime() const
-TimeFormatter::IsTimeModified() const
 ToolBox::CopyItems(ToolBox const&)
 ToolBox::EndCustomizeMode()
 ToolBox::GetDisplayItemId(long) const
@@ -2557,12 +2517,6 @@ VbaFoundFilesEnum::SetFileList(com::sun::star::uno::Sequence<rtl::OUString>&)
 VbaFoundFilesEnum::VbaFoundFilesEnum()
 VclEventListeners2::~VclEventListeners2()
 ViewShell::getIDocumentFieldsAccess() const
-Viewport3D::DoProjection(basegfx::B3DPoint const&) const
-Viewport3D::GetViewTransform()
-Viewport3D::GetViewWindow(double&, double&, double&, double&) const
-Viewport3D::MapToDevice(basegfx::B3DPoint const&) const
-Viewport3D::SetFarClipDist(double)
-Viewport3D::SetNearClipDist(double)
 WP1FixedLengthGroup::isGroupConsistent(WPXInputStream*, WPXEncryption*, unsigned char)
 WP3Resource::getResourceTypeString() const
 WP3ResourceFork::getResourcesByID(unsigned int) const
