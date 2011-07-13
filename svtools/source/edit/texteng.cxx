@@ -1953,9 +1953,6 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     }
 
     DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "Keine Portions?!" );
-#ifdef EDITDEBUG
-    DBG_ASSERT( pTEParaPortion->DbgCheckTextPortions(), "Portions kaputt?" );
-#endif
 }
 
 void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short nNewChars )
@@ -2048,10 +2045,6 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
         }
         DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "RecalcTextPortions: Keine mehr da!" );
     }
-
-#ifdef EDITDEBUG
-    DBG_ASSERT( pTEParaPortion->DbgCheckTextPortions(), "Portions kaputt?" );
-#endif
 }
 
 void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange, TextSelection const* pSelection )
@@ -2242,13 +2235,6 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                             pOutDev->Erase( aTabArea );
                                         }
                                     }
-#ifdef EDITDEBUG
-                                    Rectangle aTabArea( aTmpPos, Point( aTmpPos.X()+nTxtWidth, aTmpPos.Y()+mnCharHeight-1 ) );
-                                    Color aOldColor = pOutDev->GetFillColor();
-                                    pOutDev->SetFillColor( (y%2) ? COL_RED : COL_GREEN );
-                                    pOutDev->DrawRect( aTabArea );
-                                    pOutDev->SetFillColor( aOldColor );
-#endif
                                 }
                                 break;
                                 default:    OSL_FAIL( "ImpPaint: Unknown Portion-Type !" );

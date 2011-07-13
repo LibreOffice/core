@@ -307,10 +307,6 @@ void TextNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew )
 
     if ( bResort )
         maCharAttribs.ResortAttribs();
-
-#ifdef EDITDEBUG
-    DBG_ASSERT( CheckOrderedList( (TextCharAttribs*)&maCharAttribs ), "Expand: Start-Liste verdreht" );
-#endif
 }
 
 void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
@@ -374,10 +370,6 @@ void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
 
     if ( bResort )
         maCharAttribs.ResortAttribs();
-
-#ifdef EDITDEBUG
-    DBG_ASSERT( CheckOrderedList( (TextCharAttribs)&maCharAttribs ), "Collaps: Start-Liste verdreht" );
-#endif
 }
 
 void TextNode::InsertText( sal_uInt16 nPos, const String& rText )
@@ -460,10 +452,6 @@ void TextNode::Append( const TextNode& rNode )
 
     maText += rNode.GetText();
 
-#ifdef EDITDEBUG
-    DBG_ASSERT( maCharAttribs.DbgCheckAttribs(), "Attribute VOR AppendAttribs kaputt" );
-#endif
-
     const sal_uInt16 nAttribs = rNode.GetCharAttribs().Count();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
@@ -499,10 +487,6 @@ void TextNode::Append( const TextNode& rNode )
             maCharAttribs.InsertAttrib( pNewAttrib );
         }
     }
-
-#ifdef EDITDEBUG
-    DBG_ASSERT( maCharAttribs.DbgCheckAttribs(), "Attribute NACH AppendAttribs kaputt" );
-#endif
 }
 
 // -------------------------------------------------------------------------
