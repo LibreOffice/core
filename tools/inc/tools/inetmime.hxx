@@ -370,13 +370,6 @@ public:
      */
     static sal_uInt32 getHexDigit(int nWeight);
 
-    /** Get a Base 64 digit encoded as US-ASCII.
-
-        @param nWeight  Must be in the range 0--63, inclusive.
-
-        @return  The Base 64 digit corresponding to nWeight (US-ASCII 'A'--
-        'Z', 'a'--'z', '0'--'9', '+' or '/').
-     */
     static inline bool isHighSurrogate(sal_uInt32 nUTF16);
 
     static inline bool isLowSurrogate(sal_uInt32 nUTF16);
