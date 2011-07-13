@@ -384,7 +384,7 @@ CBenTOCReader::ReadSegment(pCBenValue pValue, BenByte * pLookAhead)
 
     UtBool Immediate = UT_FALSE;
     UtBool EightByteOffset = UT_FALSE;
-    unsigned long Offset(0), Length;
+    unsigned long Offset(0), Length(0);
 
     switch (*pLookAhead)
     {
