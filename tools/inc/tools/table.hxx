@@ -65,7 +65,6 @@ public:
                 { return Container::GetObject( (nPos*2)+1 ); }
     sal_uIntPtr GetObjectKey( sal_uIntPtr nPos ) const
                 { return (sal_uIntPtr)Container::GetObject( nPos*2 ); }
-    sal_uIntPtr GetUniqueKey( sal_uIntPtr nStartKey = 1 ) const;
     sal_uIntPtr SearchKey( sal_uIntPtr nKey, sal_uIntPtr* pPos = NULL ) const;
 
     void*   Seek( sal_uIntPtr nKey );
@@ -102,7 +101,6 @@ public:                                                                 \
                 using Table::Count;                                     \
                 using Table::GetCurKey;                                 \
                 using Table::GetObjectKey;                              \
-                using Table::GetUniqueKey;                              \
                 using Table::SearchKey;                                 \
                 using Table::IsKeyValid;                                \
                                                                         \

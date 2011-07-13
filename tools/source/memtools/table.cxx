@@ -257,45 +257,6 @@ sal_Bool Table::IsKeyValid( sal_uIntPtr nKey ) const
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Table::GetUniqueKey( sal_uIntPtr nStartKey ) const
-{
-    DBG_ASSERT( (nStartKey > 1) && (nStartKey < 0xFFFFFFFF),
-                "Table::GetUniqueKey() - nStartKey == 0 or nStartKey >= 0xFFFFFFFF" );
-
-    if ( !nCount )
-        return nStartKey;
-
-    sal_uIntPtr nLastKey = (sal_uIntPtr)Container::GetObject( (nCount*2)-2 );
-    if ( nLastKey < nStartKey )
-        return nStartKey;
-    else
-    {
-        if ( nLastKey < 0xFFFFFFFE )
-            return nLastKey+1;
-        else
-        {
-            sal_uIntPtr nPos;
-            sal_uIntPtr nTempPos = ImplGetIndex( nStartKey, &nPos );
-            if ( nTempPos != TABLE_ENTRY_NOTFOUND )
-                nPos = nTempPos;
-            nLastKey = (sal_uIntPtr)Container::GetObject( nPos );
-            if ( nStartKey < nLastKey )
-                return nStartKey;
-            while ( nLastKey < 0xFFFFFFFE )
-            {
-                nPos += 2;
-                nLastKey++;
-                if ( nLastKey != (sal_uIntPtr)Container::GetObject( nPos ) )
-                    return nLastKey;
-            }
-        }
-    }
-
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 sal_uIntPtr Table::SearchKey( sal_uIntPtr nKey, sal_uIntPtr* pPos ) const
 {
     *pPos = 0;
