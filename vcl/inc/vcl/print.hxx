@@ -272,7 +272,6 @@ private:
     static SAL_DLLPRIVATE sal_uLong ImplSalPrinterErrorCodeToVCL( sal_uLong nError );
 
 private:
-    SAL_DLLPRIVATE void         ImplEndPrint();
     SAL_DLLPRIVATE sal_Bool         EndJob();
     SAL_DLLPRIVATE              Printer( const Printer& rPrinter );
     SAL_DLLPRIVATE Printer&     operator =( const Printer& rPrinter );
@@ -281,7 +280,6 @@ public:
     SAL_DLLPRIVATE void         ImplEndPage();
 public:
     void                        DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const Gradient& rGradient );
-    void                        DrawGradientEx( OutputDevice* pOut, const PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
 protected:
 
@@ -290,7 +288,6 @@ protected:
 
 public:
                                 Printer();
-                                Printer( const Window* pWindow );
                                 Printer( const JobSetup& rJobSetup );
                                 Printer( const QueueInfo& rQueueInfo );
                                 Printer( const XubString& rPrinterName );
@@ -329,7 +326,6 @@ public:
 
     sal_Bool                        SetOrientation( Orientation eOrient );
     Orientation                 GetOrientation() const;
-    DuplexMode                  GetDuplexMode() const;
     sal_Bool                        SetDuplexMode( DuplexMode );
     // returns the angle that a landscape page will be turned counterclockwise
     // wrt to portrait. The return value may be only valid for
@@ -363,7 +359,6 @@ public:
 
     sal_Bool                        IsPrinting() const { return mbPrinting; }
 
-    sal_Bool                        AbortJob();
     const XubString&            GetCurJobName() const { return maJobName; }
     sal_uInt16                      GetCurPage() const { return mnCurPage; }
     sal_Bool                        IsJobActive() const { return mbJobActive; }

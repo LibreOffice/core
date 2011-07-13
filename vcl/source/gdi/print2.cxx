@@ -1579,47 +1579,4 @@ void Printer::DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const 
         pOut->DrawGradient( rRect, rGradient );
 }
 
-// -----------------------------------------------------------------------------
-
-void Printer::DrawGradientEx( OutputDevice* pOut, const PolyPolygon& rPolyPoly, const Gradient& rGradient )
-{
-    const PrinterOptions& rPrinterOptions = GetPrinterOptions();
-
-    if( rPrinterOptions.IsReduceGradients() )
-    {
-        if( PRINTER_GRADIENT_STRIPES == rPrinterOptions.GetReducedGradientMode() )
-        {
-            if( !rGradient.GetSteps() || ( rGradient.GetSteps() > rPrinterOptions.GetReducedGradientStepCount() ) )
-            {
-                Gradient aNewGradient( rGradient );
-
-                aNewGradient.SetSteps( rPrinterOptions.GetReducedGradientStepCount() );
-                pOut->DrawGradient( rPolyPoly, aNewGradient );
-            }
-            else
-                pOut->DrawGradient( rPolyPoly, rGradient );
-        }
-        else
-        {
-            const Color&    rStartColor = rGradient.GetStartColor();
-            const Color&    rEndColor = rGradient.GetEndColor();
-            const long      nR = ( ( (long) rStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100L +
-                                   ( (long) rEndColor.GetRed() * rGradient.GetEndIntensity() ) / 100L ) >> 1;
-            const long      nG = ( ( (long) rStartColor.GetGreen() * rGradient.GetStartIntensity() ) / 100L +
-                                   ( (long) rEndColor.GetGreen() * rGradient.GetEndIntensity() ) / 100L ) >> 1;
-            const long      nB = ( ( (long) rStartColor.GetBlue() * rGradient.GetStartIntensity() ) / 100L +
-                                   ( (long) rEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100L ) >> 1;
-            const Color     aColor( (sal_uInt8) nR, (sal_uInt8) nG, (sal_uInt8) nB );
-
-            pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-            pOut->SetLineColor( aColor );
-            pOut->SetFillColor( aColor );
-            pOut->DrawPolyPolygon( rPolyPoly );
-            pOut->Pop();
-        }
-    }
-    else
-        pOut->DrawGradient( rPolyPoly, rGradient );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
