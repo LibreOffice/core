@@ -209,12 +209,6 @@ public:
         }
     }
 
-    sal_uIntPtr SetHeaderField (
-        const UniString& rName,
-        const UniString& rValue,
-        sal_uIntPtr  nIndex = ((sal_uIntPtr)-1)
-    );
-
     virtual sal_uIntPtr SetHeaderField (
         const INetMessageHeader &rField,
         sal_uIntPtr nIndex = ((sal_uIntPtr)-1)

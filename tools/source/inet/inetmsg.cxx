@@ -125,20 +125,6 @@ void INetMessage::SetHeaderField_Impl (
  * SetHeaderField.
  */
 sal_uIntPtr INetMessage::SetHeaderField (
-    const UniString& rName, const UniString& rValue, sal_uIntPtr nIndex)
-{
-    sal_uIntPtr nResult = nIndex;
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
-        ByteString (rName, RTL_TEXTENCODING_ASCII_US), rValue,
-        nResult);
-    return nResult;
-}
-
-/*
- * SetHeaderField.
- */
-sal_uIntPtr INetMessage::SetHeaderField (
     const INetMessageHeader &rHeader, sal_uIntPtr nIndex)
 {
     sal_uIntPtr nResult = nIndex;
