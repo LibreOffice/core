@@ -635,6 +635,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_DATAFIELD:
         case DESTINATION_AUTHOR:
         case DESTINATION_OPERATOR:
+        case DESTINATION_COMPANY:
             m_aDestinationText.append(rString);
             break;
         default: bRet = false; break;
@@ -963,6 +964,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_OPERATOR:
             m_aStates.top().nDestinationState = DESTINATION_OPERATOR;
+            break;
+        case RTF_COMPANY:
+            m_aStates.top().nDestinationState = DESTINATION_COMPANY;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -2430,10 +2434,13 @@ int RTFDocumentImpl::popState()
         m_xDocumentProperties->setPrintDate(lcl_getDateTime(m_aStates));
     else if (m_aStates.top().nDestinationState == DESTINATION_AUTHOR)
         m_xDocumentProperties->setAuthor(m_aDestinationText.makeStringAndClear());
-    else if (m_aStates.top().nDestinationState == DESTINATION_OPERATOR)
+    else if (m_aStates.top().nDestinationState == DESTINATION_OPERATOR
+            || m_aStates.top().nDestinationState == DESTINATION_COMPANY)
     {
+        OUString aName = m_aStates.top().nDestinationState == DESTINATION_OPERATOR ?
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Operator")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Company"));
         uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
-        xUserDefinedProperties->addProperty(OUString(RTL_CONSTASCII_USTRINGPARAM("Operator")), beans::PropertyAttribute::REMOVEABLE,
+        xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVEABLE,
                 uno::makeAny(m_aDestinationText.makeStringAndClear()));
     }
 

@@ -103,7 +103,8 @@ namespace writerfilter {
             DESTINATION_REVISIONTIME,
             DESTINATION_PRINTTIME,
             DESTINATION_AUTHOR,
-            DESTINATION_OPERATOR
+            DESTINATION_OPERATOR,
+            DESTINATION_COMPANY
         };
 
         enum RTFBorderState
