@@ -49,6 +49,11 @@ namespace dbmm
 } // namespace dbmm
 //........................................................................
 
-IMPLEMENT_COMPONENT_LIBRARY_API( ::dbmm::MacroMigrationModule, ::dbmm::initializeModule )
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbmm_component_getFactory(
+    const sal_Char* pImplementationName, void* pServiceManager, void* pRegistryKey )
+{
+    ::dbmm::initializeModule();
+    return ::dbmm::MacroMigrationModule::getInstance().getComponentFactory( pImplementationName, pServiceManager, pRegistryKey );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
