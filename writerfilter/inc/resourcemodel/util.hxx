@@ -44,8 +44,8 @@ namespace writerfilter
     string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC propertysetToString
     (uno::Reference<beans::XPropertySet> const & rProps);
 
-    string toString(uno::Reference< text::XTextRange > textRange);
-    string toString(const string & rString);
+    string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC toString(uno::Reference< text::XTextRange > textRange);
+    string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC toString(const string & rString);
 #endif
 }
 #endif // INCLUDED_RESOURCEMODEL_UTIL_HXX
