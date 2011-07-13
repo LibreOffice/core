@@ -67,33 +67,6 @@ public:
 }; // class b3dhommatrix
 
 
-class b3dhompoint : public CppUnit::TestFixture
-{
-public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
-    // insert your test code here.
-    void EmptyMethod()
-    {
-    }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    CPPUNIT_TEST_SUITE(b3dhompoint);
-    CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
-}; // class b3dhompoint
-
-
 class b3dpoint : public CppUnit::TestFixture
 {
 public:
@@ -207,7 +180,6 @@ public:
 
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3dhommatrix);
-CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3dhompoint);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3dpoint);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3drange);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx3d::b3dtuple);

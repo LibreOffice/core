@@ -20,7 +20,6 @@ mkdir: %_DEST%\inc\basegfx\point
 ..\inc\basegfx\point\b2ipoint.hxx %_DEST%\inc\basegfx\point\b2ipoint.hxx
 ..\inc\basegfx\point\b3ipoint.hxx %_DEST%\inc\basegfx\point\b3ipoint.hxx
 ..\inc\basegfx\point\b2dhompoint.hxx %_DEST%\inc\basegfx\point\b2dhompoint.hxx
-..\inc\basegfx\point\b3dhompoint.hxx %_DEST%\inc\basegfx\point\b3dhompoint.hxx
 
 mkdir: %_DEST%\inc\basegfx\range
 ..\inc\basegfx\range\rangeexpander.hxx %_DEST%\inc\basegfx\range\rangeexpander.hxx

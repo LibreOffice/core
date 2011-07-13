@@ -39,7 +39,6 @@ SLOFILES= \
                 $(SLO)$/b2dpoint.obj		\
                 $(SLO)$/b2dhompoint.obj		\
                 $(SLO)$/b3dpoint.obj		\
-                $(SLO)$/b3dhompoint.obj		\
                 $(SLO)$/b2ipoint.obj		\
                 $(SLO)$/b3ipoint.obj
 
