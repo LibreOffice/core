@@ -244,36 +244,6 @@ void SystemWindow::Resizing( Size& )
 
 // -----------------------------------------------------------------------
 
-void SystemWindow::SetZLevel( sal_uInt8 nLevel )
-{
-    Window* pWindow = this;
-    while ( pWindow->mpWindowImpl->mpBorderWindow )
-        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
-    if ( pWindow->mpWindowImpl->mbOverlapWin && !pWindow->mpWindowImpl->mbFrame )
-    {
-        sal_uInt8 nOldLevel = pWindow->mpWindowImpl->mpOverlapData->mnTopLevel;
-        pWindow->mpWindowImpl->mpOverlapData->mnTopLevel = nLevel;
-        // Wenn der neue Level groesser als der alte ist, schieben
-        // wir das Fenster nach hinten
-        if ( !IsReallyVisible() && (nLevel > nOldLevel) && pWindow->mpWindowImpl->mpNext )
-        {
-            // Fenster aus der Liste entfernen
-            if ( pWindow->mpWindowImpl->mpPrev )
-                pWindow->mpWindowImpl->mpPrev->mpWindowImpl->mpNext = pWindow->mpWindowImpl->mpNext;
-            else
-                pWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap = pWindow->mpWindowImpl->mpNext;
-            pWindow->mpWindowImpl->mpNext->mpWindowImpl->mpPrev = pWindow->mpWindowImpl->mpPrev;
-            pWindow->mpWindowImpl->mpNext = NULL;
-            // und Fenster wieder in die Liste am Ende eintragen
-            pWindow->mpWindowImpl->mpPrev = pWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap;
-            pWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap = pWindow;
-            pWindow->mpWindowImpl->mpPrev->mpWindowImpl->mpNext = pWindow;
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void SystemWindow::SetRepresentedURL( const rtl::OUString& i_rURL )
 {
     bool bChanged = (i_rURL != mpImplData->maRepresentedURL);
@@ -287,12 +257,6 @@ void SystemWindow::SetRepresentedURL( const rtl::OUString& i_rURL )
         if ( pWindow->mpWindowImpl->mbFrame )
             pWindow->mpWindowImpl->mpFrame->SetRepresentedURL( i_rURL );
     }
-}
-// -----------------------------------------------------------------------
-
-const rtl::OUString& SystemWindow::GetRepresentedURL() const
-{
-    return mpImplData->maRepresentedURL;
 }
 
 // -----------------------------------------------------------------------
@@ -313,19 +277,6 @@ void SystemWindow::SetIcon( sal_uInt16 nIcon )
         if ( pWindow->mpWindowImpl->mbFrame )
             pWindow->mpWindowImpl->mpFrame->SetIcon( nIcon );
     }
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt8 SystemWindow::GetZLevel() const
-{
-    const Window* pWindow = this;
-    while ( pWindow->mpWindowImpl->mpBorderWindow )
-        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
-    if ( pWindow->mpWindowImpl->mpOverlapData )
-        return pWindow->mpWindowImpl->mpOverlapData->mnTopLevel;
-    else
-        return sal_False;
 }
 
 // -----------------------------------------------------------------------

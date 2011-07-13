@@ -204,10 +204,6 @@ public:
     // for systems like MacOSX which can display the URL a document is loaded from
     // separately from the window title
     void            SetRepresentedURL( const rtl::OUString& );
-    const rtl::OUString& GetRepresentedURL() const;
-
-    void            SetZLevel( sal_uInt8 nLevel );
-    sal_uInt8            GetZLevel() const;
 
     void            EnableSaveBackground( sal_Bool bSave = sal_True );
     sal_Bool            IsSaveBackgroundEnabled() const;
