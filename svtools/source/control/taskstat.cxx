@@ -110,21 +110,6 @@ TaskStatusFieldItem::TaskStatusFieldItem( const TaskStatusFieldItem& rItem ) :
 
 // -----------------------------------------------------------------------
 
-TaskStatusFieldItem::TaskStatusFieldItem( ITaskStatusNotify* pNotify,
-                                          const Image& rImage,
-                                          const XubString& rQuickHelpText,
-                                          const XubString& rHelpText,
-                                          sal_uInt16 nFlags ) :
-    mpNotify( pNotify ),
-    maImage( rImage ),
-    maQuickHelpText( rQuickHelpText ),
-    maHelpText( rHelpText ),
-    mnFlags( nFlags )
-{
-}
-
-// -----------------------------------------------------------------------
-
 TaskStatusFieldItem::~TaskStatusFieldItem()
 {
 }
