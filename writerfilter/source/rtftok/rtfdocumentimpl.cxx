@@ -1972,6 +1972,36 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_EDMINS:
             m_xDocumentProperties->setEditingDuration(nParam);
             break;
+        case RTF_NOFPAGES:
+        case RTF_NOFWORDS:
+        case RTF_NOFCHARS:
+            {
+                uno::Sequence<beans::NamedValue> aSet = m_xDocumentProperties->getDocumentStatistics();
+                OUString aName;
+                switch (nKeyword)
+                {
+                    case RTF_NOFPAGES: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount")); break;
+                    case RTF_NOFWORDS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("WordCount")); break;
+                    case RTF_NOFCHARS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount")); break;
+                    default: break;
+                }
+                if (aName.getLength())
+                {
+                    bool bFound = false;
+                    int nLen = aSet.getLength();
+                    for (int i = 0; i < nLen; ++i)
+                        if (aSet[i].Name.equals(aName))
+                            aSet[i].Value = uno::makeAny(sal_Int32(nParam));
+                    if (!bFound)
+                    {
+                        aSet.realloc(nLen + 1);
+                        aSet[nLen].Name = aName;
+                        aSet[nLen].Value = uno::makeAny(sal_Int32(nParam));
+                    }
+                    m_xDocumentProperties->setDocumentStatistics(aSet);
+                }
+            }
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
             bParsed = false;
