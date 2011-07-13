@@ -112,27 +112,6 @@ sal_Bool Help::IsContextHelpEnabled()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::StartContextHelp()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if ( pSVData->maHelpData.mbContextHelp )
-    {
-        Window* pWindow = pSVData->maWinData.mpFocusWin;
-        if ( pWindow )
-        {
-            Point       aMousePos = pWindow->OutputToScreenPixel( pWindow->GetPointerPosPixel() );
-            HelpEvent   aHelpEvent( aMousePos, HELPMODE_CONTEXT );
-            pWindow->RequestHelp( aHelpEvent );
-            return sal_True;
-        }
-    }
-
-    return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
 void Help::EnableExtHelp()
 {
     ImplGetSVData()->maHelpData.mbExtHelp = sal_True;
@@ -187,13 +166,6 @@ sal_Bool Help::EndExtHelp()
     }
 
     return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool Help::IsExtHelpActive()
-{
-    return ImplGetSVData()->maHelpData.mbExtHelpMode;
 }
 
 // -----------------------------------------------------------------------
