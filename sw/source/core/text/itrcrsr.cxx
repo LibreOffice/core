@@ -537,7 +537,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         SwLinePortion *pPor = pCurr->GetFirstPortion();
         SwBidiPortion* pLastBidiPor = 0;
         SwTwips nLastBidiPorWidth = 0;
-        SvUShorts* pKanaComp = pCurr->GetpKanaComp();
+        std::deque<sal_uInt16>* pKanaComp = pCurr->GetpKanaComp();
         MSHORT nSpaceIdx = 0;
         MSHORT nKanaIdx = 0;
         long nSpaceAdd = pCurr->IsSpaceAdd() ? pCurr->GetLLSpaceAdd( 0 ) : 0;
@@ -573,7 +573,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         nSpaceAdd = 0;
                 }
 
-                if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->size() )
                     ++nKanaIdx;
             }
             if( pPor->InFixMargGrp() )
@@ -591,7 +591,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             nSpaceAdd = 0;
                     }
 
-                    if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                    if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->size() )
                         ++nKanaIdx;
                 }
             }
@@ -648,7 +648,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             }
 
                             if ( pKanaComp &&
-                                ( nKanaIdx + 1 ) < pKanaComp->Count()
+                                ( nKanaIdx + 1 ) < pKanaComp->size()
                                 )
                                 ++nKanaIdx;
                         }
@@ -668,7 +668,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                     nSpaceAdd = 0;
                             }
 
-                            if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                            if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->size() )
                                 ++nKanaIdx;
                         }
 
@@ -988,7 +988,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 nSpaceAdd = 0;
                         }
 
-                        if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                        if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->size() )
                             ++nKanaIdx;
                     }
                     if ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
@@ -1006,7 +1006,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             nSpaceAdd = 0;
                     }
 
-                    if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                    if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->size() )
                         ++nKanaIdx;
                 }
                 if( !pPor->IsFlyPortion() )
@@ -1298,10 +1298,10 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     sal_Bool bHolePortion = sal_False;
     sal_Bool bLastHyph = sal_False;
 
-    SvUShorts *pKanaComp = pCurr->GetpKanaComp();
+    std::deque<sal_uInt16> *pKanaComp = pCurr->GetpKanaComp();
     xub_StrLen nOldIdx = GetInfo().GetIdx();
     MSHORT nSpaceIdx = 0;
-    MSHORT nKanaIdx = 0;
+    size_t nKanaIdx = 0;
     long nSpaceAdd = pCurr->IsSpaceAdd() ? pCurr->GetLLSpaceAdd( 0 ) : 0;
     short nKanaComp = pKanaComp ? (*pKanaComp)[0] : 0;
 
@@ -1330,7 +1330,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
             if( pKanaComp )
             {
-                if ( nKanaIdx + 1 < pKanaComp->Count() )
+                if ( nKanaIdx + 1 < pKanaComp->size() )
                     nKanaComp = (*pKanaComp)[++nKanaIdx];
                 else
                     nKanaComp = 0;
@@ -1375,7 +1375,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
                 if ( pKanaComp )
                 {
-                    if( nKanaIdx + 1 < pKanaComp->Count() )
+                    if( nKanaIdx + 1 < pKanaComp->size() )
                         nKanaComp = (*pKanaComp)[++nKanaIdx];
                     else
                         nKanaComp = 0;

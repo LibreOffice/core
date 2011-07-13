@@ -339,8 +339,8 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
             // Die FlyPortion wird ausgesogen ...
             pLeft->Join( (SwGluePortion*)pPos );
             pPos = pLeft->GetPortion();
-            if( GetpKanaComp() )
-                GetKanaComp().Remove( 0, 1 );
+            if( GetpKanaComp() && !GetKanaComp().empty() )
+                GetKanaComp().pop_front();
         }
         else
             pPos = 0;

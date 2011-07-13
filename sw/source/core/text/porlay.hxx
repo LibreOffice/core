@@ -37,6 +37,7 @@
 #include "swfont.hxx"
 
 #include <vector>
+#include <deque>
 
 class SwMarginPortion;
 class SwDropPortion;
@@ -101,7 +102,7 @@ class SwLineLayout : public SwTxtPortion
 private:
     SwLineLayout *pNext;                // Die naechste Zeile.
     std::vector<long>* pLLSpaceAdd;     // Used for justified alignment.
-    SvUShorts* pKanaComp;               // Used for Kana compression.
+    std::deque<sal_uInt16>* pKanaComp;  // Used for Kana compression.
     KSHORT nRealHeight;                 // Die aus Zeilenabstand/Register resultierende Hoehe.
     sal_Bool bFormatAdj : 1;
     sal_Bool bDummy     : 1;
@@ -210,10 +211,10 @@ public:
     //
     // STUFF FOR KANA COMPRESSION
     //
-    inline void SetKanaComp( SvUShorts* pNew ){ pKanaComp = pNew; }
+    inline void SetKanaComp( std::deque<sal_uInt16>* pNew ){ pKanaComp = pNew; }
     inline void FinishKanaComp() { delete pKanaComp; pKanaComp = NULL; }
-    inline SvUShorts* GetpKanaComp() const { return pKanaComp; }
-    inline SvUShorts& GetKanaComp() { return *pKanaComp; }
+    inline std::deque<sal_uInt16>* GetpKanaComp() const { return pKanaComp; }
+    inline std::deque<sal_uInt16>& GetKanaComp() { return *pKanaComp; }
 
     /** determine ascent and descent for positioning of as-character anchored
         object
