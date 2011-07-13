@@ -943,6 +943,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_CREATIM:
             m_aStates.top().nDestinationState = DESTINATION_CREATIONTIME;
             break;
+        case RTF_REVTIM:
+            m_aStates.top().nDestinationState = DESTINATION_REVISIONTIME;
+            break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
         case RTF_NONESTTABLES:
@@ -2368,6 +2371,12 @@ int RTFDocumentImpl::popState()
         util::DateTime aDateTime(0 /*100sec*/, 0 /*sec*/, m_aStates.top().nMinute, m_aStates.top().nHour,
                 m_aStates.top().nDay, m_aStates.top().nMonth, m_aStates.top().nYear);
         m_xDocumentProperties->setCreationDate(aDateTime);
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTIME)
+    {
+        util::DateTime aDateTime(0 /*100sec*/, 0 /*sec*/, m_aStates.top().nMinute, m_aStates.top().nHour,
+                m_aStates.top().nDay, m_aStates.top().nMonth, m_aStates.top().nYear);
+        m_xDocumentProperties->setModificationDate(aDateTime);
     }
 
     // See if we need to end a track change

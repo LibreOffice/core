@@ -99,7 +99,8 @@ namespace writerfilter {
             DESTINATION_FORMFIELDLIST,
             DESTINATION_DATAFIELD,
             DESTINATION_INFO,
-            DESTINATION_CREATIONTIME
+            DESTINATION_CREATIONTIME,
+            DESTINATION_REVISIONTIME
         };
 
         enum RTFBorderState
