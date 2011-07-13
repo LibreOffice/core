@@ -1427,22 +1427,6 @@ void TextView::InsertText( const XubString& rStr, sal_Bool bSelect )
 }
 */
 
-// OLD
-TextPaM TextView::CursorLeft( const TextPaM& rPaM, sal_Bool bWordMode )
-{
-    return bWordMode ? CursorWordLeft( rPaM ) : CursorLeft( rPaM, (sal_uInt16)i18n::CharacterIteratorMode::SKIPCELL );
-
-    // Remove (sal_uInt16) typecasts in this file when removing this method!
-}
-
-// OLD
-TextPaM TextView::CursorRight( const TextPaM& rPaM, sal_Bool bWordMode )
-{
-    return bWordMode ? CursorWordRight( rPaM ) : CursorRight( rPaM, (sal_uInt16)i18n::CharacterIteratorMode::SKIPCELL );
-
-    // Remove (sal_uInt16) typecasts in this file when removing this method!
-}
-
 TextPaM TextView::CursorLeft( const TextPaM& rPaM, sal_uInt16 nCharacterIteratorMode )
 {
     TextPaM aPaM( rPaM );
@@ -2006,25 +1990,11 @@ void TextView::SetPaintSelection( sal_Bool bPaint )
     }
 }
 
-void TextView::SetHighlightSelection( sal_Bool bSelectByHighlight )
-{
-    if ( bSelectByHighlight != mpImpl->mbHighlightSelection )
-    {
-        // Falls umschalten zwischendurch moeglich...
-        mpImpl->mbHighlightSelection = bSelectByHighlight;
-    }
-}
-
 sal_Bool TextView::Read( SvStream& rInput )
 {
     sal_Bool bDone = mpImpl->mpTextEngine->Read( rInput, &mpImpl->maSelection );
     ShowCursor();
     return bDone;
-}
-
-sal_Bool TextView::Write( SvStream& rOutput )
-{
-    return mpImpl->mpTextEngine->Read( rOutput, &mpImpl->maSelection );
 }
 
 bool TextView::ImplTruncateNewText( rtl::OUString& rNewText ) const
@@ -2439,18 +2409,12 @@ const Point&        TextView::GetStartDocPos() const
 { return mpImpl->maStartDocPos; }
 void                TextView::SetAutoIndentMode( sal_Bool bAutoIndent )
 { mpImpl->mbAutoIndent = bAutoIndent; }
-sal_Bool                TextView::IsAutoIndentMode() const
-{ return mpImpl->mbAutoIndent; }
 sal_Bool                TextView::IsReadOnly() const
 { return mpImpl->mbReadOnly; }
 void                TextView::SetAutoScroll( sal_Bool bAutoScroll )
 { mpImpl->mbAutoScroll = bAutoScroll; }
 sal_Bool                TextView::IsAutoScroll() const
 { return mpImpl->mbAutoScroll; }
-sal_Bool                TextView::IsPaintSelection() const
-{ return mpImpl->mbPaintSelection; }
-sal_Bool                TextView::IsHighlightSelection() const
-{ return mpImpl->mbHighlightSelection; }
 sal_Bool                TextView::HasSelection() const
 { return mpImpl->maSelection.HasRange(); }
 sal_Bool                TextView::IsInsertMode() const
