@@ -198,16 +198,6 @@ void SystemChildWindow::EnableEraseBackground( sal_Bool bEnable )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SystemChildWindow::IsEraseBackgroundEnabled()
-{
-    if ( mpWindowImpl->mpSysObj )
-        return mpWindowImpl->mpSysObj->IsEraseBackgroundEnabled();
-    else
-        return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
 void SystemChildWindow::ImplTestJavaException( void* pEnv )
 {
 #ifdef SOLAR_JAVA
