@@ -68,9 +68,6 @@ public:
     virtual ~INetIStream (void);
 
     int Read (sal_Char *pData, sal_uIntPtr nSize);
-
-    static void Decode64 (SvStream& rIn, SvStream& rOut);
-    static void Encode64 (SvStream& rIn, SvStream& rOut);
 };
 
 /*

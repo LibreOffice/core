@@ -173,48 +173,6 @@ int INetIStream::Read (sal_Char *pData, sal_uIntPtr nSize)
     return GetData (pData, nSize);
 }
 
-/*
- * Decode64.
- */
-void INetIStream::Decode64 (SvStream& rIn, SvStream& rOut)
-{
-    INetMessage aMsg;
-    aMsg.SetDocumentLB(new SvAsyncLockBytes(&rOut, sal_False));
-
-    INetMessageDecode64Stream_Impl aStream (8192);
-    aStream.SetTargetMessage (&aMsg);
-
-    sal_Char* pBuf = new sal_Char[8192];
-
-    int nRead = 0;
-    while ((nRead = rIn.Read (pBuf, 8192)) > 0)
-        aStream.Write( pBuf, nRead );
-    aStream.Write ("\r\n", 2);
-
-    delete[] pBuf;
-}
-
-/*
- * Encode64.
- */
-void INetIStream::Encode64 (SvStream& rIn, SvStream& rOut)
-{
-    INetMessage aMsg;
-    aMsg.SetDocumentLB (
-        new SvLockBytes (&rIn, sal_False));
-
-    INetMessageEncode64Stream_Impl aStream (8192);
-    aStream.SetSourceMessage (&aMsg);
-
-    sal_Char* pBuf = new sal_Char[8192];
-
-    int nRead = 0;
-    while ((nRead = aStream.Read (pBuf, 8192)) > 0)
-        rOut.Write( pBuf, nRead );
-
-    delete[] pBuf;
-}
-
 /*=========================================================================
  *
  * INetOStream Implementation.
