@@ -972,6 +972,12 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_COMMENT:
             m_aStates.top().nDestinationState = DESTINATION_COMMENT;
             break;
+        case RTF_OBJECT:
+            m_aStates.top().nDestinationState = DESTINATION_OBJECT;
+            break;
+        case RTF_RESULT:
+            m_aStates.top().nDestinationState = DESTINATION_RESULT;
+            break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
         case RTF_NONESTTABLES:

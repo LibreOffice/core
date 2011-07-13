@@ -105,7 +105,9 @@ namespace writerfilter {
             DESTINATION_AUTHOR,
             DESTINATION_OPERATOR,
             DESTINATION_COMPANY,
-            DESTINATION_COMMENT
+            DESTINATION_COMMENT,
+            DESTINATION_OBJECT,
+            DESTINATION_RESULT
         };
 
         enum RTFBorderState
