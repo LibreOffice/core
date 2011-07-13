@@ -1975,6 +1975,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_NOFPAGES:
         case RTF_NOFWORDS:
         case RTF_NOFCHARS:
+        case RTF_NOFCHARSWS:
             {
                 uno::Sequence<beans::NamedValue> aSet = m_xDocumentProperties->getDocumentStatistics();
                 OUString aName;
@@ -1983,6 +1984,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     case RTF_NOFPAGES: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount")); break;
                     case RTF_NOFWORDS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("WordCount")); break;
                     case RTF_NOFCHARS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount")); break;
+                    case RTF_NOFCHARSWS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("NonWhitespaceCharacterCount")); break;
                     default: break;
                 }
                 if (aName.getLength())
