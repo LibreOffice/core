@@ -281,11 +281,6 @@ void PrinterSetupDialog::SetOptionsHdl( const Link& rLink )
     maBtnOptions.Show( rLink.IsSet() );
 }
 
-const Link& PrinterSetupDialog::GetOptionsHdl() const
-{
-    return maBtnOptions.GetClickHdl();
-}
-
 void PrinterSetupDialog::ImplSetInfo()
 {
     const QueueInfo* pInfo = Printer::GetQueueInfo(maLbName.GetSelectEntry(), true);

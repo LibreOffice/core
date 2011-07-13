@@ -90,7 +90,6 @@ public:
     virtual short   Execute();
 
     void                SetOptionsHdl( const Link& rLink );
-    const Link&         GetOptionsHdl() const;
 };
 
 // --------------------------------------
