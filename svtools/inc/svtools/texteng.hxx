@@ -245,13 +245,11 @@ public:
     void                SetFont( const Font& rFont );
     const Font&         GetFont() const { return maFont; }
 
-    void                SetDefTab( sal_uInt16 nDefTab );
     sal_uInt16              GetDefTab() const;
 
     void                SetLeftMargin( sal_uInt16 n );
     sal_uInt16              GetLeftMargin() const;
 
-    void                SetUpdateMode( sal_Bool bUpdate );
     sal_Bool                GetUpdateMode() const { return mbUpdate; }
 
     sal_uInt16              GetViewCount() const;
@@ -325,7 +323,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > GetBreakIterator();
 
     static sal_Bool         DoesKeyChangeText( const KeyEvent& rKeyEvent );
-    static sal_Bool         DoesKeyMoveCursor( const KeyEvent& rKeyEvent );
     static sal_Bool         IsSimpleCharInput( const KeyEvent& rKeyEvent );
 };
 

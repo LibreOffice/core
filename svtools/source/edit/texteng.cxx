@@ -253,12 +253,6 @@ void TextEngine::SetFont( const Font& rFont )
     }
 }
 
-void TextEngine::SetDefTab( sal_uInt16 nDefTab )
-{
-    mnDefTab = nDefTab;
-    // evtl neu setzen?
-}
-
 void TextEngine::SetMaxTextLen( sal_uLong nLen )
 {
     mnMaxTextLen = nLen;
@@ -343,43 +337,6 @@ sal_uLong TextEngine::GetTextLen( const TextSelection& rSel, LineEnd aSeparator 
 sal_uInt16 TextEngine::GetTextLen( sal_uLong nPara ) const
 {
     return mpDoc->GetNodes().GetObject( nPara )->GetText().Len();
-}
-
-void TextEngine::SetUpdateMode( sal_Bool bUpdate )
-{
-    if ( bUpdate != mbUpdate )
-    {
-        mbUpdate = bUpdate;
-        if ( mbUpdate )
-        {
-            FormatAndUpdate( GetActiveView() );
-            if ( GetActiveView() )
-                GetActiveView()->ShowCursor();
-        }
-    }
-}
-
-sal_Bool TextEngine::DoesKeyMoveCursor( const KeyEvent& rKeyEvent )
-{
-    sal_Bool bDoesMove = sal_False;
-
-    switch ( rKeyEvent.GetKeyCode().GetCode() )
-    {
-        case KEY_UP:
-        case KEY_DOWN:
-        case KEY_LEFT:
-        case KEY_RIGHT:
-        case KEY_HOME:
-        case KEY_END:
-        case KEY_PAGEUP:
-        case KEY_PAGEDOWN:
-        {
-            if ( !rKeyEvent.GetKeyCode().IsMod2() )
-                bDoesMove = sal_True;
-        }
-        break;
-    }
-    return bDoesMove;
 }
 
 sal_Bool TextEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
