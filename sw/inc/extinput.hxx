@@ -28,18 +28,15 @@
 #ifndef _EXTINPUT_HXX
 #define _EXTINPUT_HXX
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
 #include <pam.hxx>
 #include <i18npool/lang.h>
+#include <vector>
 
 class CommandExtTextInputData;
 
 class SwExtTextInput : public SwPaM
 {
-    SvUShorts aAttrs;
+    std::vector<sal_uInt16> aAttrs;
     String sOverwriteText;
     sal_Bool bInsText : 1;
     sal_Bool bIsOverwriteCursor : 1;
@@ -49,7 +46,7 @@ public:
     virtual ~SwExtTextInput();
 
     void SetInputData( const CommandExtTextInputData& rData );
-    const SvUShorts& GetAttrs() const   { return aAttrs; }
+    const std::vector<sal_uInt16>& GetAttrs() const { return aAttrs; }
     void SetInsText( sal_Bool bFlag )       { bInsText = bFlag; }
     sal_Bool IsOverwriteCursor() const      { return bIsOverwriteCursor; }
     void SetOverwriteCursor( sal_Bool bFlag );

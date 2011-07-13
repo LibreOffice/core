@@ -204,10 +204,12 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
 
         GetPoint()->nContent = nSttCnt;
 
-        if( aAttrs.Count() )
-            aAttrs.Remove( 0, aAttrs.Count() );
+        aAttrs.clear();
         if( rData.GetTextAttr() )
-            aAttrs.Insert( rData.GetTextAttr(), rData.GetText().Len(), 0 );
+        {
+            const sal_uInt16 *pAttrs = rData.GetTextAttr();
+            aAttrs.insert( aAttrs.begin(), pAttrs, pAttrs + rData.GetText().Len() );
+        }
     }
 }
 

@@ -149,7 +149,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
         MSHORT nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
         if( pExtInp || MSHRT_MAX != nRedlPos )
         {
-            const SvUShorts* pArr = 0;
+            const std::vector<sal_uInt16> *pArr = 0;
             xub_StrLen nInputStt = 0;
             if( pExtInp )
             {
@@ -185,8 +185,9 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
  *************************************************************************/
 
 SwRedlineItr::SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt,
-    SwAttrHandler& rAH, MSHORT nRed, sal_Bool bShw, const SvUShorts *pArr,
-    xub_StrLen nExtStart )
+                            SwAttrHandler& rAH, MSHORT nRed, sal_Bool bShw,
+                            const std::vector<sal_uInt16> *pArr,
+                            xub_StrLen nExtStart )
     : rDoc( *rTxtNd.GetDoc() ), rNd( rTxtNd ), rAttrHandler( rAH ), pSet( 0 ),
       nNdIdx( rTxtNd.GetIndex() ), nFirst( nRed ),
       nAct( MSHRT_MAX ), bOn( sal_False ), bShow( bShw )
@@ -492,7 +493,7 @@ xub_StrLen SwExtend::Next( xub_StrLen nNext )
     {
         MSHORT nIdx = nPos - nStart;
         MSHORT nAttr = rArr[ nIdx ];
-        while( ++nIdx < rArr.Count() && nAttr == rArr[ nIdx ] )
+        while( ++nIdx < rArr.size() && nAttr == rArr[ nIdx ] )
             ; //nothing
         nIdx = nIdx + nStart;
         if( nNext > nIdx )
