@@ -728,60 +728,11 @@ GridId IcnGridMap_Impl::GetUnoccupiedGrid( sal_Bool bOccupyFound )
 // ein Eintrag belegt nur das unter seinem Zentrum liegende GridRect
 // diese Variante ist bedeutend schneller als die Belegung ueber das
 // Bounding-Rect, kann aber zu kleinen Ueberlappungen fuehren
-#define OCCUPY_CENTER
-
 void IcnGridMap_Impl::OccupyGrids( const SvxIconChoiceCtrlEntry* pEntry, sal_Bool bOccupy )
 {
     if( !_pGridMap || !_pView->IsBoundingRectValid( pEntry->aRect ))
         return;
-#ifndef OCCUPY_CENTER
-    OccupyGrids( pEntry->aRect, bOccupy );
-#else
     OccupyGrid( GetGrid( pEntry->aRect.Center()), bOccupy );
-#endif
-
-}
-
-void IcnGridMap_Impl::OccupyGrids( const Rectangle& rRect, sal_Bool bUsed )
-{
-    if( !_pGridMap )
-        return;
-
-    if( bUsed )
-    {
-        if( _aLastOccupiedGrid == rRect )
-            return;
-        _aLastOccupiedGrid = rRect;
-    }
-    else
-        _aLastOccupiedGrid.SetEmpty();
-
-    sal_Bool bTopLeftClipped, bBottomRightClipped;
-    GridId nIdTL = GetGrid( rRect.TopLeft(), &bTopLeftClipped );
-    GridId nIdBR = GetGrid( rRect.BottomRight(), &bBottomRightClipped );
-
-    if( bTopLeftClipped && bBottomRightClipped )
-        return;
-
-    sal_uInt16 nX1,nX2,nY1,nY2;
-    GetGridCoord( nIdTL, nX1, nY1 );
-    GetGridCoord( nIdBR, nX2, nY2 );
-    sal_uInt16 nTemp;
-    if( nX1 > nX2 )
-    {
-        nTemp = nX1;
-        nX1 = nX2;
-        nX2 = nTemp;
-    }
-    if( nY1 > nY2 )
-    {
-        nTemp = nY1;
-        nY1 = nY2;
-        nY2 = nTemp;
-    }
-    for( ; nX1 <= nX2; nX1++ )
-        for( ; nY1 <= nY2; nY1++ )
-            OccupyGrid( GetGrid( nX1, nY1 ) );
 }
 
 void IcnGridMap_Impl::Clear()

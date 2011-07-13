@@ -609,7 +609,6 @@ public:
     GridId          GetGrid( sal_uInt16 nGridX, sal_uInt16 nGridY );
     GridId          GetUnoccupiedGrid( sal_Bool bOccupyFound=sal_True );
 
-    void            OccupyGrids( const Rectangle&, sal_Bool bOccupy = sal_True );
     void            OccupyGrids( const SvxIconChoiceCtrlEntry*, sal_Bool bOccupy = sal_True );
     void            OccupyGrid( GridId nId, sal_Bool bOccupy = sal_True )
                     {
