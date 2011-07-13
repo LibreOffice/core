@@ -52,9 +52,6 @@ namespace basegfx
         B3DHomMatrix(const B3DHomMatrix& rMat);
         ~B3DHomMatrix();
 
-        /// unshare this matrix with all internally shared instances
-        void makeUnique();
-
         double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
         void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
 
@@ -66,19 +63,11 @@ namespace basegfx
         /// Reset to the identity matrix
         void identity();
 
-        bool isInvertible() const;
         /// Invert the matrix (if possible)
         bool invert();
 
-        bool isNormalized() const;
-        /// Normalize (i.e. force w=1) the matrix
-        void normalize();
-
         /// Calc the matrix determinant
         double determinant() const;
-
-        /// Calc the matrix trace
-        double trace() const;
 
         /// Transpose the matrix
         void transpose();
@@ -94,8 +83,6 @@ namespace basegfx
 
         // Shearing-Matrices
         void shearXY(double fSx, double fSy);
-        void shearYZ(double fSy, double fSz);
-        void shearXZ(double fSx, double fSz);
 
         // Projection matrices, used for converting between eye and
         // clip coordinates
