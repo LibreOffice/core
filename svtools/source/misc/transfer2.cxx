@@ -475,15 +475,6 @@ sal_Bool TransferDataContainer::GetData( const
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::ClearData()
-{
-    delete pImpl;
-    pImpl = new TransferDataContainer_Impl;
-    ClearFormats();
-}
-
-// -----------------------------------------------------------------------------
-
 void TransferDataContainer::CopyINetBookmark( const INetBookmark& rBkmk )
 {
     if( !pImpl->pBookmk )

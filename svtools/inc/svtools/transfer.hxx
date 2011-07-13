@@ -565,8 +565,6 @@ public:
                         TransferDataContainer();
                         ~TransferDataContainer();
 
-    void                ClearData();
-
     void                CopyINetBookmark( const INetBookmark& rBkmk );
     void                CopyINetImage( const INetImage& rINtImg );
     void                CopyImageMap( const ImageMap& rImgMap );
