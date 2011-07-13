@@ -356,7 +356,7 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
 {
     sal_uInt16 nRet = 0, nWh;
     SvPtrarr* pArr;
-    SvUShorts* pNum;
+    std::vector<sal_uInt16> *pNum;
     if( rTxtFtn.GetFtn().IsEndNote() )
     {
         pArr = &aEndSects;
@@ -374,7 +374,7 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
     for( sal_uInt16 n = pArr->Count(); n; )
         if( pArr->GetObject( --n ) == pNd )
         {
-            nRet = ++pNum->GetObject( n );
+            nRet = ++((*pNum)[ n ]);
             break;
         }
 
@@ -384,7 +384,7 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
         nRet = ((SwFmtFtnEndAtTxtEnd&)rNd.GetSection().GetFmt()->
                                 GetFmtAttr( nWh )).GetOffset();
         ++nRet;
-        pNum->Insert( nRet, pNum->Count() );
+        pNum->push_back( nRet );
     }
     return nRet;
 }
