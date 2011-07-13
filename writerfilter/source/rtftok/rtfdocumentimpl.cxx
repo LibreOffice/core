@@ -25,6 +25,8 @@
  * instead of those above.
  */
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <editeng/borderline.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -261,6 +263,9 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
 
     m_xModelFactory.set(m_xDstDoc, uno::UNO_QUERY);
     OSL_ASSERT(m_xModelFactory.is());
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(m_xDstDoc, uno::UNO_QUERY);
+    m_xDocumentProperties.set(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
 
     m_pGraphicHelper = new oox::GraphicHelper(m_xContext, xFrame, m_xStorage);
 
@@ -932,6 +937,12 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_DATAFIELD:
             m_aStates.top().nDestinationState = DESTINATION_DATAFIELD;
             break;
+        case RTF_INFO:
+            m_aStates.top().nDestinationState = DESTINATION_INFO;
+            break;
+        case RTF_CREATIM:
+            m_aStates.top().nDestinationState = DESTINATION_CREATIONTIME;
+            break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
         case RTF_NONESTTABLES:
@@ -1527,6 +1538,22 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aCharacterAttributes.push_back(make_pair(nSprm, pValue));
+        skipDestination(bParsed);
+        return 0;
+    }
+
+    // Info group.
+    switch (nKeyword)
+    {
+        case RTF_YR: m_aStates.top().nYear = nParam; nSprm = 1; break;
+        case RTF_MO: m_aStates.top().nMonth = nParam; nSprm = 1; break;
+        case RTF_DY: m_aStates.top().nDay = nParam; nSprm = 1; break;
+        case RTF_HR: m_aStates.top().nHour = nParam; nSprm = 1; break;
+        case RTF_MIN: m_aStates.top().nMinute = nParam; nSprm = 1; break;
+        default: break;
+    }
+    if (nSprm > 0)
+    {
         skipDestination(bParsed);
         return 0;
     }
@@ -2336,6 +2363,12 @@ int RTFDocumentImpl::popState()
         RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, m_aStates.top().nCurrentEncoding)));
         m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFTextInput_default, pDValue));
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_CREATIONTIME)
+    {
+        util::DateTime aDateTime(0 /*100sec*/, 0 /*sec*/, m_aStates.top().nMinute, m_aStates.top().nHour,
+                m_aStates.top().nDay, m_aStates.top().nMonth, m_aStates.top().nYear);
+        m_xDocumentProperties->setCreationDate(aDateTime);
+    }
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);
@@ -2471,7 +2504,12 @@ RTFParserState::RTFParserState()
     nPictureScaleY(0),
     aShape(),
     nCellX(0),
-    bIsCjk(false)
+    bIsCjk(false),
+    nYear(0),
+    nMonth(0),
+    nDay(0),
+    nHour(0),
+    nMinute(0)
 {
 }
 

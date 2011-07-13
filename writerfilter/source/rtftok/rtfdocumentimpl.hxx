@@ -35,6 +35,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/helper/storagebase.hxx>
 #include <rtl/strbuf.hxx>
@@ -96,7 +97,9 @@ namespace writerfilter {
             DESTINATION_FORMFIELD,
             DESTINATION_FORMFIELDNAME,
             DESTINATION_FORMFIELDLIST,
-            DESTINATION_DATAFIELD
+            DESTINATION_DATAFIELD,
+            DESTINATION_INFO,
+            DESTINATION_CREATIONTIME
         };
 
         enum RTFBorderState
@@ -230,6 +233,13 @@ namespace writerfilter {
 
                 /// CJK or CTL?
                 bool bIsCjk;
+
+                // Info group.
+                int nYear;
+                int nMonth;
+                int nDay;
+                int nHour;
+                int nMinute;
         };
 
         class RTFTokenizer;
@@ -275,6 +285,7 @@ namespace writerfilter {
                 int dispatchSymbol(RTFKeyword nKeyword);
                 int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam);
                 int dispatchValue(RTFKeyword nKeyword, int nParam);
+
             private:
                 SvStream& Strm();
                 sal_uInt32 getColorTable(sal_uInt32 nIndex);
@@ -283,7 +294,6 @@ namespace writerfilter {
                 RTFSprms_t mergeAttributes();
                 void resolveSubstream(sal_uInt32 nPos, Id nId);
                 void resolveSubstream(sal_uInt32 nPos, Id nId, rtl::OUString& rIgnoreFirst);
-
 
                 void text(rtl::OUString& rString);
                 void parBreak();
@@ -298,6 +308,7 @@ namespace writerfilter {
                 com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& m_xDstDoc;
                 com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const& m_xFrame;
                 com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xModelFactory;
+                com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties> m_xDocumentProperties;
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
                 RTFSdrImport* m_pSdrImport;
