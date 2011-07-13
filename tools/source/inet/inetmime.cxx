@@ -517,40 +517,6 @@ sal_uInt32 INetMIME::getHexDigit(int nWeight)
 
 //============================================================================
 // static
-sal_uInt32 INetMIME::getBase64Digit(int nWeight)
-{
-    DBG_ASSERT(nWeight >= 0 && nWeight < 64,
-               "INetMIME::getBase64Digit(): Bad weight");
-
-    static const sal_Char aDigits[64]
-        = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/' };
-    return aDigits[nWeight];
-}
-
-//============================================================================
-// static
-bool INetMIME::equalIgnoreCase(const sal_Char * pBegin1,
-                               const sal_Char * pEnd1,
-                               const sal_Char * pBegin2,
-                               const sal_Char * pEnd2)
-{
-    DBG_ASSERT(pBegin1 && pBegin1 <= pEnd1 && pBegin2 && pBegin2 <= pEnd2,
-               "INetMIME::equalIgnoreCase(): Bad sequences");
-
-    if (pEnd1 - pBegin1 != pEnd2 - pBegin2)
-        return false;
-    while (pBegin1 != pEnd1)
-        if (toUpperCase(*pBegin1++) != toUpperCase(*pBegin2++))
-            return false;
-    return true;
-}
-
-//============================================================================
-// static
 bool INetMIME::equalIgnoreCase(const sal_Char * pBegin1,
                                const sal_Char * pEnd1,
                                const sal_Char * pString2)
@@ -579,35 +545,6 @@ bool INetMIME::equalIgnoreCase(const sal_Unicode * pBegin1,
             || toUpperCase(*pBegin1++) != toUpperCase(*pString2++))
             return false;
     return pBegin1 == pEnd1;
-}
-
-//============================================================================
-// static
-const sal_Char * INetMIME::skipLinearWhiteSpace(const sal_Char * pBegin,
-                                                const sal_Char * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIME::skipLinearWhiteSpace(): Bad sequence");
-
-    while (pBegin != pEnd)
-        switch (*pBegin)
-        {
-            case '\t':
-            case ' ':
-                ++pBegin;
-                break;
-
-            case 0x0D: // CR
-                if (startsWithLineFolding(pBegin, pEnd))
-                    pBegin += 3;
-                else
-                    return pBegin;
-                break;
-
-            default:
-                return pBegin;
-        }
-    return pBegin;
 }
 
 //============================================================================
@@ -842,26 +779,6 @@ const sal_Unicode * INetMIME::skipQuotedString(const sal_Unicode * pBegin,
 
 //============================================================================
 // static
-const sal_Char * INetMIME::scanAtom(const sal_Char * pBegin,
-                                    const sal_Char * pEnd)
-{
-    while (pBegin != pEnd && isAtomChar(*pBegin))
-        ++pBegin;
-    return pBegin;
-}
-
-//============================================================================
-// static
-const sal_Unicode * INetMIME::scanAtom(const sal_Unicode * pBegin,
-                                       const sal_Unicode * pEnd)
-{
-    while (pBegin != pEnd && isAtomChar(*pBegin))
-        ++pBegin;
-    return pBegin;
-}
-
-//============================================================================
-// static
 bool INetMIME::scanUnsigned(const sal_Char *& rBegin, const sal_Char * pEnd,
                             bool bLeadingZeroes, sal_uInt32 & rValue)
 {
@@ -905,127 +822,6 @@ bool INetMIME::scanUnsigned(const sal_Unicode *& rBegin,
     rBegin = p;
     rValue = sal_uInt32(nTheValue);
     return true;
-}
-
-//============================================================================
-// static
-bool INetMIME::scanUnsignedHex(const sal_Char *& rBegin,
-                               const sal_Char * pEnd, bool bLeadingZeroes,
-                               sal_uInt32 & rValue)
-{
-    sal_uInt64 nTheValue = 0;
-    const sal_Char * p = rBegin;
-    for ( p = rBegin; p != pEnd; ++p)
-    {
-        int nWeight = getHexWeight(*p);
-        if (nWeight < 0)
-            break;
-        nTheValue = nTheValue << 4 | nWeight;
-        if (nTheValue > std::numeric_limits< sal_uInt32 >::max())
-            return false;
-    }
-    if (nTheValue == 0 && (p == rBegin || (!bLeadingZeroes && p - rBegin != 1)))
-        return false;
-    rBegin = p;
-    rValue = sal_uInt32(nTheValue);
-    return true;
-}
-
-//============================================================================
-// static
-bool INetMIME::scanUnsignedHex(const sal_Unicode *& rBegin,
-                               const sal_Unicode * pEnd, bool bLeadingZeroes,
-                               sal_uInt32 & rValue)
-{
-    sal_uInt64 nTheValue = 0;
-    const sal_Unicode * p = rBegin;
-    for ( ; p != pEnd; ++p)
-    {
-        int nWeight = getHexWeight(*p);
-        if (nWeight < 0)
-            break;
-        nTheValue = nTheValue << 4 | nWeight;
-        if (nTheValue > std::numeric_limits< sal_uInt32 >::max())
-            return false;
-    }
-    if (nTheValue == 0 && (p == rBegin || (!bLeadingZeroes && p - rBegin != 1)))
-        return false;
-    rBegin = p;
-    rValue = sal_uInt32(nTheValue);
-    return true;
-}
-
-//============================================================================
-// static
-const sal_Char * INetMIME::scanQuotedBlock(const sal_Char * pBegin,
-                                           const sal_Char * pEnd,
-                                           sal_uInt32 nOpening,
-                                           sal_uInt32 nClosing,
-                                           sal_Size & rLength,
-                                           bool & rModify)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIME::scanQuotedBlock(): Bad sequence");
-
-    if (pBegin != pEnd && static_cast< unsigned char >(*pBegin) == nOpening)
-    {
-        ++rLength;
-        ++pBegin;
-        while (pBegin != pEnd)
-            if (static_cast< unsigned char >(*pBegin) == nClosing)
-            {
-                ++rLength;
-                return ++pBegin;
-            }
-            else
-            {
-                sal_uInt32 c = *pBegin++;
-                switch (c)
-                {
-                    case 0x0D: // CR
-                        if (pBegin != pEnd && *pBegin == 0x0A) // LF
-                            if (pEnd - pBegin >= 2 && isWhiteSpace(pBegin[1]))
-                            {
-                                ++rLength;
-                                rModify = true;
-                                pBegin += 2;
-                            }
-                            else
-                            {
-                                rLength += 3;
-                                rModify = true;
-                                ++pBegin;
-                            }
-                        else
-                            ++rLength;
-                        break;
-
-                    case '\\':
-                        ++rLength;
-                        if (pBegin != pEnd)
-                        {
-                            if (startsWithLineBreak(pBegin, pEnd)
-                                && (pEnd - pBegin < 3
-                                    || !isWhiteSpace(pBegin[2])))
-                            {
-                                rLength += 3;
-                                rModify = true;
-                                pBegin += 2;
-                            }
-                            else
-                                ++pBegin;
-                        }
-                        break;
-
-                    default:
-                        ++rLength;
-                        if (!isUSASCII(c))
-                            rModify = true;
-                        break;
-                }
-            }
-    }
-    return pBegin;
 }
 
 //============================================================================
@@ -1767,14 +1563,6 @@ rtl_TextEncoding INetMIME::getCharsetEncoding(sal_Char const * pBegin,
 
 //============================================================================
 // static
-rtl_TextEncoding INetMIME::getCharsetEncoding(sal_Unicode const * pBegin,
-                                              sal_Unicode const * pEnd)
-{
-    return getCharsetEncoding_Impl(pBegin, pEnd);
-}
-
-//============================================================================
-// static
 INetMIMECharsetList_Impl *
 INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
 {
@@ -2183,50 +1971,6 @@ void INetMIME::writeUnsigned(INetMIMEOutputSink & rSink, sal_uInt32 nValue,
         rSink << '0';
     while (p != aBuffer)
         rSink << *--p;
-}
-
-//============================================================================
-// static
-void INetMIME::writeDateTime(INetMIMEOutputSink & rSink,
-                             const DateTime & rUTC)
-{
-    static const sal_Char aDay[7][3]
-        = { { 'M', 'o', 'n' },
-            { 'T', 'u', 'e' },
-            { 'W', 'e', 'd' },
-            { 'T', 'h', 'u' },
-            { 'F', 'r', 'i' },
-            { 'S', 'a', 't' },
-            { 'S', 'u', 'n' } };
-    const sal_Char * pTheDay = aDay[rUTC.GetDayOfWeek()];
-    rSink.write(pTheDay, pTheDay + 3);
-    rSink << ", ";
-    writeUnsigned(rSink, rUTC.GetDay());
-    rSink << ' ';
-    static const sal_Char aMonth[12][3]
-        = { { 'J', 'a', 'n' },
-            { 'F', 'e', 'b' },
-            { 'M', 'a', 'r' },
-            { 'A', 'p', 'r' },
-            { 'M', 'a', 'y' },
-            { 'J', 'u', 'n' },
-            { 'J', 'u', 'l' },
-            { 'A', 'u', 'g' },
-            { 'S', 'e', 'p' },
-            { 'O', 'c', 't' },
-            { 'N', 'o', 'v' },
-            { 'D', 'e', 'c' } };
-    const sal_Char * pTheMonth = aMonth[rUTC.GetMonth() - 1];
-    rSink.write(pTheMonth, pTheMonth + 3);
-    rSink << ' ';
-    writeUnsigned(rSink, rUTC.GetYear());
-    rSink << ' ';
-    writeUnsigned(rSink, rUTC.GetHour(), 2);
-    rSink << ':';
-    writeUnsigned(rSink, rUTC.GetMin(), 2);
-    rSink << ':';
-    writeUnsigned(rSink, rUTC.GetSec(), 2);
-    rSink << " +0000";
 }
 
 //============================================================================
