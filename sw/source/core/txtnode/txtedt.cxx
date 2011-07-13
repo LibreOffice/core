@@ -1803,6 +1803,10 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     {   // not counting hidden paras
         return;
     }
+
+    // count of non-empty paras
+    ++rStat.nPara;
+
     // Shortcut when counting whole paragraph and current count is clean
     if ( isCountAll && !IsWordCountDirty() )
     {
@@ -1841,8 +1845,6 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     sal_uInt32 nTmpWords = 0;        // count of all contiguous blocks of non-white chars
     sal_uInt32 nTmpChars = 0;        // count of all chars
     sal_uInt32 nTmpCharsExcludingSpaces = 0;  // all non-white chars
-
-    ++rStat.nPara;      // count of non-empty paras
 
     // count words in masked and expanded text:
     if( pBreakIt->GetBreakIter().is() )
