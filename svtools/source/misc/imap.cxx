@@ -719,8 +719,8 @@ sal_Bool IMapPolygonObject::IsEqual( const IMapPolygonObject& rEqObj )
 |*
 \******************************************************************************/
 
-ImageMap::ImageMap( const String& rName ) :
-            aName   ( rName )
+ImageMap::ImageMap( const String& rName )
+:   aName( rName )
 {
 }
 
@@ -735,24 +735,24 @@ ImageMap::ImageMap( const ImageMap& rImageMap )
 {
     DBG_CTOR( ImageMap, NULL );
 
-    sal_uInt16 nCount = rImageMap.GetIMapObjectCount();
+    size_t nCount = rImageMap.GetIMapObjectCount();
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( size_t i = 0; i < nCount; i++ )
     {
         IMapObject* pCopyObj = rImageMap.GetIMapObject( i );
 
         switch( pCopyObj->GetType() )
         {
             case( IMAP_OBJ_RECTANGLE ):
-                maList.Insert( new IMapRectangleObject( *(IMapRectangleObject*) pCopyObj ), LIST_APPEND );
+                maList.push_back( new IMapRectangleObject( *(IMapRectangleObject*) pCopyObj ) );
             break;
 
             case( IMAP_OBJ_CIRCLE ):
-                maList.Insert( new IMapCircleObject( *(IMapCircleObject*) pCopyObj ), LIST_APPEND );
+                maList.push_back( new IMapCircleObject( *(IMapCircleObject*) pCopyObj ) );
             break;
 
             case( IMAP_OBJ_POLYGON ):
-                maList.Insert( new IMapPolygonObject( *(IMapPolygonObject*) pCopyObj ), LIST_APPEND );
+                maList.push_back( new IMapPolygonObject( *(IMapPolygonObject*) pCopyObj ) );
             break;
 
             default:
@@ -786,15 +786,9 @@ ImageMap::~ImageMap()
 
 void ImageMap::ClearImageMap()
 {
-    IMapObject* pObj = (IMapObject*) maList.First();
-
-    while ( pObj )
-    {
-        delete pObj;
-        pObj = (IMapObject*) maList.Next();
-    }
-
-    maList.Clear();
+    for( size_t i = 0, n = maList.size(); i < n; ++i )
+        delete maList[ i ];
+    maList.clear();
 
     aName = String();
 }
@@ -808,26 +802,26 @@ void ImageMap::ClearImageMap()
 
 ImageMap& ImageMap::operator=( const ImageMap& rImageMap )
 {
-    sal_uInt16 nCount = rImageMap.GetIMapObjectCount();
+    size_t nCount = rImageMap.GetIMapObjectCount();
 
     ClearImageMap();
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( size_t i = 0; i < nCount; i++ )
     {
         IMapObject* pCopyObj = rImageMap.GetIMapObject( i );
 
         switch( pCopyObj->GetType() )
         {
             case( IMAP_OBJ_RECTANGLE ):
-                maList.Insert( new IMapRectangleObject( *(IMapRectangleObject*) pCopyObj ), LIST_APPEND );
+                maList.push_back( new IMapRectangleObject( *(IMapRectangleObject*) pCopyObj ) );
             break;
 
             case( IMAP_OBJ_CIRCLE ):
-                maList.Insert( new IMapCircleObject( *(IMapCircleObject*) pCopyObj ), LIST_APPEND );
+                maList.push_back( new IMapCircleObject( *(IMapCircleObject*) pCopyObj ) );
             break;
 
             case( IMAP_OBJ_POLYGON ):
-                maList.Insert( new IMapPolygonObject( *(IMapPolygonObject*) pCopyObj ), LIST_APPEND );
+                maList.push_back( new IMapPolygonObject( *(IMapPolygonObject*) pCopyObj ) );
             break;
 
             default:
@@ -849,17 +843,17 @@ ImageMap& ImageMap::operator=( const ImageMap& rImageMap )
 
 sal_Bool ImageMap::operator==( const ImageMap& rImageMap )
 {
-    const sal_uInt16    nCount = (sal_uInt16) maList.Count();
-    const sal_uInt16    nEqCount = rImageMap.GetIMapObjectCount();
-    sal_Bool            bRet = sal_False;
+    const size_t    nCount = maList.size();
+    const size_t    nEqCount = rImageMap.GetIMapObjectCount();
+    sal_Bool        bRet = sal_False;
 
     if ( nCount == nEqCount )
     {
         sal_Bool bDifferent = ( aName != rImageMap.aName );
 
-        for ( sal_uInt16 i = 0; ( i < nCount ) && !bDifferent; i++ )
+        for ( size_t i = 0; ( i < nCount ) && !bDifferent; i++ )
         {
-            IMapObject* pObj = (IMapObject*) maList.GetObject( i );
+            IMapObject* pObj = maList[ i ];
             IMapObject* pEqObj = rImageMap.GetIMapObject( i );
 
             if ( pObj->GetType() == pEqObj->GetType() )
@@ -938,15 +932,15 @@ void ImageMap::InsertIMapObject( const IMapObject& rIMapObject )
     switch( rIMapObject.GetType() )
     {
         case( IMAP_OBJ_RECTANGLE ):
-            maList.Insert( new IMapRectangleObject( (IMapRectangleObject&) rIMapObject ), LIST_APPEND );
+            maList.push_back( new IMapRectangleObject( (IMapRectangleObject&) rIMapObject ) );
         break;
 
         case( IMAP_OBJ_CIRCLE ):
-            maList.Insert( new IMapCircleObject( (IMapCircleObject&) rIMapObject ), LIST_APPEND );
+            maList.push_back( new IMapCircleObject( (IMapCircleObject&) rIMapObject ) );
         break;
 
         case( IMAP_OBJ_POLYGON ):
-            maList.Insert( new IMapPolygonObject( (IMapPolygonObject&) rIMapObject ), LIST_APPEND );
+            maList.push_back( new IMapPolygonObject( (IMapPolygonObject&) rIMapObject ) );
         break;
 
         default:
@@ -981,13 +975,12 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
     }
 
     // Alle Objekte durchlaufen und HitTest ausfuehren
-    IMapObject* pObj = (IMapObject*) maList.First();
-    while ( pObj )
-    {
-        if ( pObj->IsHit( aRelPoint ) )
+    IMapObject* pObj = NULL;
+    for( size_t i = 0, n = maList.size(); i < n; ++i ) {
+        if ( maList[ i ]->IsHit( aRelPoint ) ) {
+            pObj = maList[ i ];
             break;
-
-        pObj = (IMapObject*) maList.Next();
+        }
     }
 
     return( pObj ? ( pObj->IsActive() ? pObj : NULL ) : NULL );
@@ -1003,10 +996,10 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
 Rectangle ImageMap::GetBoundRect() const
 {
     Rectangle   aBoundRect;
-    sal_uLong       nCount = maList.Count();
+    size_t      nCount = maList.size();
 
-    for ( sal_uLong i = 0; i < nCount; i++ )
-        aBoundRect.Union( ( (IMapObject*) maList.GetObject( i ) )->GetBoundRect() );
+    for ( size_t i = 0; i < nCount; i++ )
+        aBoundRect.Union( maList[ i ]->GetBoundRect() );
 
     return aBoundRect;
 }
@@ -1020,11 +1013,11 @@ Rectangle ImageMap::GetBoundRect() const
 
 void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
 {
-    sal_uInt16 nCount = (sal_uInt16) maList.Count();
+    size_t nCount = maList.size();
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( size_t i = 0; i < nCount; i++ )
     {
-        IMapObject* pObj = GetIMapObject( i );
+        IMapObject* pObj = maList[ i ];
 
         switch( pObj->GetType() )
         {
@@ -1056,11 +1049,11 @@ void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
 void ImageMap::ImpWriteImageMap( SvStream& rOStm, const String& rBaseURL ) const
 {
     IMapObject* pObj;
-    sal_uInt16      nCount = (sal_uInt16) maList.Count();
+    size_t      nCount = maList.size();
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( size_t i = 0; i < nCount; i++ )
     {
-        pObj = (IMapObject*) maList.GetObject( i );
+        pObj = maList[ i ];
         pObj->Write( rOStm, rBaseURL );
     }
 }
@@ -1072,10 +1065,10 @@ void ImageMap::ImpWriteImageMap( SvStream& rOStm, const String& rBaseURL ) const
 |*
 \******************************************************************************/
 
-void ImageMap::ImpReadImageMap( SvStream& rIStm, sal_uInt16 nCount, const String& rBaseURL )
+void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const String& rBaseURL )
 {
     // neue Objekte einlesen
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( size_t i = 0; i < nCount; i++ )
     {
         sal_uInt16 nType;
 
@@ -1088,7 +1081,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, sal_uInt16 nCount, const String
             {
                 IMapRectangleObject* pObj = new IMapRectangleObject;
                 pObj->Read( rIStm, rBaseURL );
-                maList.Insert( pObj, LIST_APPEND );
+                maList.push_back( pObj );
             }
             break;
 
@@ -1096,7 +1089,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, sal_uInt16 nCount, const String
             {
                 IMapCircleObject* pObj = new IMapCircleObject;
                 pObj->Read( rIStm, rBaseURL );
-                maList.Insert( pObj, LIST_APPEND );
+                maList.push_back( pObj );
             }
             break;
 
@@ -1104,7 +1097,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, sal_uInt16 nCount, const String
             {
                 IMapPolygonObject* pObj = new IMapPolygonObject;
                 pObj->Read( rIStm, rBaseURL );
-                maList.Insert( pObj, LIST_APPEND );
+                maList.push_back( pObj );
             }
             break;
 

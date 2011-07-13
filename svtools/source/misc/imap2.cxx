@@ -169,11 +169,11 @@ void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const String& rBaseURL
 void ImageMap::ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const
 {
     IMapObject* pObj;
-    sal_uInt16      nCount = (sal_uInt16) maList.Count();
+    size_t      nCount = maList.size();
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( size_t i = 0; i < nCount; i++ )
     {
-        pObj = GetIMapObject( i );
+        pObj = maList[ i ];
 
         switch( pObj->GetType() )
         {
@@ -198,13 +198,13 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const
 void ImageMap::ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
 {
     IMapObject* pObj;
-    sal_uInt16      nCount = (sal_uInt16) maList.Count();
+    size_t      nCount = maList.size();
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( size_t i = 0; i < nCount; i++ )
     {
-        pObj = GetIMapObject( i );
+        pObj = maList[ i ];
 
-            switch( pObj->GetType() )
+        switch( pObj->GetType() )
         {
             case( IMAP_OBJ_RECTANGLE ):
                 ( (IMapRectangleObject*) pObj )->WriteNCSA( rOStm, rBaseURL );
@@ -290,7 +290,7 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL 
             const Rectangle aRect( aTopLeft, aBottomRight );
 
             IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, String(), String(), String(), String() );
-            maList.Insert( pObj, LIST_APPEND );
+            maList.push_back( pObj );
         }
         else if ( ( aToken == "circle" ) || ( aToken == "circ" ) )
         {
@@ -299,7 +299,7 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL 
             const String    aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
 
             IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, String(), String(), String(), String() );
-            maList.Insert( pObj, LIST_APPEND );
+            maList.push_back( pObj );
         }
         else if ( ( aToken == "polygon" ) || ( aToken == "poly" ) )
         {
@@ -313,7 +313,7 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL 
             aURL = ImpReadCERNURL( &pStr, rBaseURL );
 
             IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, String(), String(), String(), String() );
-            maList.Insert( pObj, LIST_APPEND );
+            maList.push_back( pObj );
         }
     }
 }
@@ -433,7 +433,7 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL 
             const Rectangle aRect( aTopLeft, aBottomRight );
 
             IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, String(), String(), String(), String() );
-            maList.Insert( pObj, LIST_APPEND );
+            maList.push_back( pObj );
         }
         else if ( aToken == "circle" )
         {
@@ -444,7 +444,7 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL 
                                                    (double) aDX.Y() * aDX.Y() );
 
             IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, String(), String(), String(), String() );
-            maList.Insert( pObj, LIST_APPEND );
+            maList.push_back( pObj );
         }
         else if ( aToken == "poly" )
         {
@@ -456,7 +456,7 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL 
                 aPoly[ i ] = ImpReadNCSACoords( &pStr );
 
             IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, String(), String(), String(), String() );
-            maList.Insert( pObj, LIST_APPEND );
+            maList.push_back( pObj );
         }
     }
 }

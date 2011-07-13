@@ -32,6 +32,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
+#include <vector>
 
 class Point;
 class Rectangle;
@@ -45,22 +46,26 @@ class IMapObject;
 |*
 \******************************************************************************/
 
+typedef ::std::vector< IMapObject* > IMapObjectList_impl;
+
 class SVT_DLLPUBLIC ImageMap
 {
-    List                maList;
+private:
+
+    IMapObjectList_impl maList;
     String              aName;
 
 protected:
 
     // Binaer laden/speichern
     void                ImpWriteImageMap( SvStream& rOStm, const String& ) const ;
-    void                ImpReadImageMap( SvStream& rIStm, sal_uInt16 nCount, const String& );
+    void                ImpReadImageMap( SvStream& rIStm, size_t nCount, const String& );
 
     // Im-/Export
     void                ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const;
     void                ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL ) const;
-    sal_uLong               ImpReadCERN( SvStream& rOStm, const String& rBaseURL );
-    sal_uLong               ImpReadNCSA( SvStream& rOStm, const String& rBaseURL );
+    sal_uLong           ImpReadCERN( SvStream& rOStm, const String& rBaseURL );
+    sal_uLong           ImpReadNCSA( SvStream& rOStm, const String& rBaseURL );
 
     void                ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL );
     Point               ImpReadCERNCoords( const char** ppStr );
@@ -71,7 +76,7 @@ protected:
     String              ImpReadNCSAURL( const char** ppStr, const String& rBaseURL );
     Point               ImpReadNCSACoords( const char** ppStr );
 
-    sal_uLong               ImpDetectFormat( SvStream& rIStm );
+    sal_uLong           ImpDetectFormat( SvStream& rIStm );
 
 public:
 
@@ -98,11 +103,10 @@ public:
 
     // Zugriff auf einzelne IMapObjekte; die Objekte
     // duerfen von aussen _nicht_ zerstoert werden
-    IMapObject*         GetFirstIMapObject() { return (IMapObject*) maList.First(); }
-    IMapObject*         GetNextIMapObject() { return (IMapObject*) maList.Next(); }
-    IMapObject*         GetLastIMapObject() { return (IMapObject*) maList.Last(); }
-    IMapObject*         GetPrevIMapObject() { return (IMapObject*) maList.Prev(); }
-    IMapObject*         GetIMapObject( sal_uInt16 nPos ) const { return (IMapObject*) maList.GetObject( nPos ); }
+    IMapObject*         GetIMapObject( size_t nPos ) const
+                        {
+                            return ( nPos < maList.size() ) ? maList[ nPos ] : NULL;
+                        }
 
     // Gibt das Objekt zurueck, das zuerst getroffen wurde oder NULL;
     // Groessen- und Positionsangaben sind in 1/100mm;
@@ -116,13 +120,13 @@ public:
                                           sal_uLong nFlags = 0 );
 
     // Gibt die Gesamtanzahl der IMap-Objekte zurueck
-    sal_uInt16              GetIMapObjectCount() const { return (sal_uInt16) maList.Count(); }
+    size_t              GetIMapObjectCount() const { return maList.size(); }
 
     // Loescht alle internen Objekte
     void                ClearImageMap();
 
     // liefert die aktuelle Versionsnummer
-    sal_uInt16              GetVersion() const;
+    sal_uInt16          GetVersion() const;
 
     // liefert / setzt den Namen der ImageMap
     const String&       GetName() const { return aName; }
