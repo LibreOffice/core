@@ -636,6 +636,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_AUTHOR:
         case DESTINATION_OPERATOR:
         case DESTINATION_COMPANY:
+        case DESTINATION_COMMENT:
             m_aDestinationText.append(rString);
             break;
         default: bRet = false; break;
@@ -967,6 +968,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_COMPANY:
             m_aStates.top().nDestinationState = DESTINATION_COMPANY;
+            break;
+        case RTF_COMMENT:
+            m_aStates.top().nDestinationState = DESTINATION_COMMENT;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -2016,6 +2020,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_VERSION:
             m_xDocumentProperties->setEditingCycles(nParam);
             break;
+        case RTF_VERN:
+            // Ignore this for now, later the RTF writer version could be used to add hacks for older buggy writers.
+            break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
             bParsed = false;
@@ -2434,6 +2441,8 @@ int RTFDocumentImpl::popState()
         m_xDocumentProperties->setPrintDate(lcl_getDateTime(m_aStates));
     else if (m_aStates.top().nDestinationState == DESTINATION_AUTHOR)
         m_xDocumentProperties->setAuthor(m_aDestinationText.makeStringAndClear());
+    else if (m_aStates.top().nDestinationState == DESTINATION_COMMENT)
+        m_xDocumentProperties->setGenerator(m_aDestinationText.makeStringAndClear());
     else if (m_aStates.top().nDestinationState == DESTINATION_OPERATOR
             || m_aStates.top().nDestinationState == DESTINATION_COMPANY)
     {
