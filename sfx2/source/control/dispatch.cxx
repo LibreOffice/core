@@ -2432,19 +2432,22 @@ sal_Bool SfxDispatcher::_FillState
             for ( const SfxPoolItem *pItem = aIter.FirstItem();
                   pItem;
                   pItem = aIter.NextItem() )
+            {
                 if ( !IsInvalidItem(pItem) && !pItem->ISA(SfxVoidItem) )
                 {
                     sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());
                     if ( !pItem->IsA(pIF->GetSlot(nSlotId)->GetType()->Type()) )
                     {
-                        ByteString aMsg( "item-type unequal to IDL (=> no BASIC)" );
-                        aMsg += "\nwith SID: ";
-                        aMsg += ByteString::CreateFromInt32( nSlotId );
-                        aMsg += "\nin ";
-                        aMsg += pIF->GetClassName();
-                        DbgOut( aMsg.GetBuffer(), DBG_OUT_ERROR, __FILE__, __LINE__);
+                        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
+                            "item-type unequal to IDL (=> no BASIC)"));
+                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("\nwith SID: "));
+                        aMsg.append(static_cast<sal_Int32>(nSlotId));
+                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("\nin "));
+                        aMsg.append(pIF->GetClassName());
+                        DbgOut(aMsg.getStr(), DBG_OUT_ERROR, __FILE__, __LINE__);
                     }
                 }
+            }
         }
 #endif
 
