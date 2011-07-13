@@ -828,13 +828,6 @@ MediaTypeEntry const * seekEntry(UniString const & rTypeName,
 
 }
 
-//============================================================================
-//
-//  INetContentTypes
-//
-//============================================================================
-
-//============================================================================
 //static
 INetContentType INetContentTypes::RegisterContentType(UniString const &
                                                           rTypeName,
