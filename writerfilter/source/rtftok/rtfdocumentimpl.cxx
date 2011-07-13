@@ -226,6 +226,12 @@ static const char* lcl_RtfToString(RTFKeyword nKeyword)
 }
 #endif
 
+static util::DateTime lcl_getDateTime(std::stack<RTFParserState>& aStates)
+{
+    return util::DateTime(0 /*100sec*/, 0 /*sec*/, aStates.top().nMinute, aStates.top().nHour,
+            aStates.top().nDay, aStates.top().nMonth, aStates.top().nYear);
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -2367,17 +2373,9 @@ int RTFDocumentImpl::popState()
         m_aFormfieldSprms.push_back(make_pair(NS_ooxml::LN_CT_FFTextInput_default, pDValue));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_CREATIONTIME)
-    {
-        util::DateTime aDateTime(0 /*100sec*/, 0 /*sec*/, m_aStates.top().nMinute, m_aStates.top().nHour,
-                m_aStates.top().nDay, m_aStates.top().nMonth, m_aStates.top().nYear);
-        m_xDocumentProperties->setCreationDate(aDateTime);
-    }
+        m_xDocumentProperties->setCreationDate(lcl_getDateTime(m_aStates));
     else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTIME)
-    {
-        util::DateTime aDateTime(0 /*100sec*/, 0 /*sec*/, m_aStates.top().nMinute, m_aStates.top().nHour,
-                m_aStates.top().nDay, m_aStates.top().nMonth, m_aStates.top().nYear);
-        m_xDocumentProperties->setModificationDate(aDateTime);
-    }
+        m_xDocumentProperties->setModificationDate(lcl_getDateTime(m_aStates));
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);
