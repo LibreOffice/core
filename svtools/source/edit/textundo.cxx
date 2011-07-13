@@ -43,7 +43,6 @@ TYPEINIT1( TextUndoConnectParas, TextUndo );
 TYPEINIT1( TextUndoSplitPara, TextUndo );
 TYPEINIT1( TextUndoInsertChars, TextUndo );
 TYPEINIT1( TextUndoRemoveChars, TextUndo );
-TYPEINIT1( TextUndoSetAttribs, TextUndo );
 
 
 TextUndoManager::TextUndoManager( TextEngine* p )
@@ -294,46 +293,6 @@ void TextUndoRemoveChars::Redo()
     aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.Len();
     TextPaM aPaM = GetTextEngine()->ImpDeleteText( aSel );
     SetSelection( aPaM );
-}
-
-
-TextUndoSetAttribs::TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelection& rSel )
-    : TextUndo( pTextEngine ), maSelection( rSel )
-{
-    maSelection.Justify();
-//  aNewAttribs.Set( rNewItems );
-//  mbSetIsRemove = sal_False;
-//  mnRemoveWhich = 0;
-//  mnSpecial = 0;
-}
-
-TextUndoSetAttribs::~TextUndoSetAttribs()
-{
-    // ...............
-}
-
-void TextUndoSetAttribs::Undo()
-{
-    for ( sal_uLong nPara = maSelection.GetStart().GetPara(); nPara <= maSelection.GetEnd().GetPara(); nPara++ )
-    {
-//      ContentAttribsInfo* pInf = aPrevAttribs[ (sal_uInt16)(nPara-aESel.nStartPara) ];
-//      GetTextEngine()->RemoveCharAttribs( nPara );
-//      TextNode* pNode = GetTextEngine()->GetTextDoc().GetObject( nPara );
-//      for ( sal_uInt16 nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
-//      {
-//          GetTextEngine()->GetTextDoc().InsertAttrib( pNode, pX->GetStart(), pX->GetEnd(), *pX->GetItem() );
-//      }
-    }
-    SetSelection( maSelection );
-}
-
-void TextUndoSetAttribs::Redo()
-{
-//  if ( !bSetIsRemove )
-//      GetTextEngine()->SetAttribs( aSel, aNewAttribs, nSpecial );
-//  else
-//      GetTextEngine()->RemoveCharAttribs( aSel, bRemoveParaAttribs, nRemoveWhich );
-    SetSelection( maSelection );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
