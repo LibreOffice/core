@@ -1077,9 +1077,9 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 RTFValue::Pointer_t pUnitValue(new RTFValue(3));
                 lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
                         NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_type, pUnitValue);
-                RTFValue::Pointer_t pWidthValue(new RTFValue(m_aStates.top().nCellX));
+                RTFValue::Pointer_t pWValue(new RTFValue(m_aStates.top().nCellX));
                 lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
-                        NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_w, pWidthValue);
+                        NS_ooxml::LN_CT_TblPrBase_tblW, NS_ooxml::LN_CT_TblWidth_w, pWValue);
 
                 RTFValue::Pointer_t pRowValue(new RTFValue(1));
                 m_aStates.top().aTableRowSprms.push_back(make_pair(NS_sprm::LN_PRow, pRowValue));
@@ -2003,6 +2003,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     m_xDocumentProperties->setDocumentStatistics(aSet);
                 }
             }
+            break;
+        case RTF_VERSION:
+            m_xDocumentProperties->setEditingCycles(nParam);
             break;
         default:
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
