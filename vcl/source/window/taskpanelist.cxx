@@ -262,41 +262,6 @@ sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 
 // --------------------------------------------------
 
-//  returns next valid pane
-Window* TaskPaneList::FindNextPane( Window *pWindow, sal_Bool bForward )
-{
-    if( bForward )
-        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
-    else
-        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSortBackward() );
-
-    ::std::vector< Window* >::iterator p = mTaskPanes.begin();
-    while( p != mTaskPanes.end() )
-    {
-        if( *p == pWindow )
-        {
-            unsigned n = mTaskPanes.size();
-            while( --n )
-            {
-                if( ++p == mTaskPanes.end() )
-                    p = mTaskPanes.begin();
-                if( (*p)->IsReallyVisible() && !(*p)->IsDialog() && !(*p)->ImplIsSplitter() )
-                {
-                    pWindow = *p;
-                    break;
-                }
-            }
-            break;
-        }
-        else
-            ++p;
-    }
-
-    return pWindow;
-}
-
-// --------------------------------------------------
-
 // returns next splitter
 Window* TaskPaneList::FindNextSplitter( Window *pWindow, sal_Bool bForward )
 {
