@@ -79,7 +79,6 @@ private:
     ByteString GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY );
     bool MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const ByteString& sLanguage , ByteString sPath );
 
-    void Process( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
     void ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
     void MakeDir( const ByteString& sPath );
 };
