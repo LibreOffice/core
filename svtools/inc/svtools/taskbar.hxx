@@ -440,30 +440,39 @@ class ImplWindowArrangeList;
 // - class WindowArrange -
 // -----------------------
 
+typedef ::std::vector< Window* > WindowList_impl;
+
 class SVT_DLLPUBLIC WindowArrange
 {
 private:
-    List*                   mpWinList;
-    void*                   mpDummy;
-    sal_uLong                   mnDummy;
+    WindowList_impl     maWinList;
 
 #ifdef _TASKBAR_CXX
-    SVT_DLLPRIVATE void                    ImplTile( const Rectangle& rRect );
-    SVT_DLLPRIVATE void                    ImplHorz( const Rectangle& rRect );
-    SVT_DLLPRIVATE void                    ImplVert( const Rectangle& rRect );
-    SVT_DLLPRIVATE void                    ImplCascade( const Rectangle& rRect );
+    SVT_DLLPRIVATE void ImplTile( const Rectangle& rRect );
+    SVT_DLLPRIVATE void ImplHorz( const Rectangle& rRect );
+    SVT_DLLPRIVATE void ImplVert( const Rectangle& rRect );
+    SVT_DLLPRIVATE void ImplCascade( const Rectangle& rRect );
 #endif
 
 public:
-                            WindowArrange();
-                            ~WindowArrange();
+                        WindowArrange();
+                        ~WindowArrange();
 
-    void                    AddWindow( Window* pWindow, sal_uLong nPos = LIST_APPEND )
-                                { mpWinList->Insert( (void*)pWindow, nPos ); }
-    void                    RemoveAllWindows()
-                                { mpWinList->Clear(); }
+    void                AddWindow( Window* pWindow, size_t nPos = size_t(-1) )
+                        {
+                            if ( nPos < maWinList.size() ) {
+                                maWinList.insert( maWinList.begin() + nPos, pWindow );
+                            } else {
+                                maWinList.push_back( pWindow );
+                            }
+                        }
 
-    void                    Arrange( sal_uInt16 nType, const Rectangle& rRect );
+    void                RemoveAllWindows()
+                        {
+                            maWinList.clear();
+                        }
+
+    void                Arrange( sal_uInt16 nType, const Rectangle& rRect );
 };
 
 #endif  // _TASKBAR_HXX
