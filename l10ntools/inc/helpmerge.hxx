@@ -48,13 +48,13 @@ private:
 /// @PRECOND 0 < langIdx_in < MAX_IDX
     static void FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in );
 
-/// Debugmethod, prints the content of the map to stdout
-    static  void Dump(  LangHashMap* rElem_in , const ByteString sKey_in );
+#if OSL_DEBUG_LEVEL > 2
+    /// Debugmethod, prints the content of the map to stdout
+    static void Dump(LangHashMap* rElem_in , const ByteString sKey_in);
 
-/// Debugmethod, prints the content of the map to stdout
-    static  void Dump(  XMLHashMap* rElem_in ) ;
-
-
+    /// Debugmethod, prints the content of the map to stdout
+    static void Dump(XMLHashMap* rElem_in);
+#endif
 
 public:
     HelpParser( const ByteString &rHelpFile, bool bUTF8 , bool bHasInputList );

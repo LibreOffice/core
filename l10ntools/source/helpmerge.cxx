@@ -88,26 +88,29 @@ void HelpParser::FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in
     }
 }
 
-/*****************************************************************************/
-void HelpParser::Dump(XMLHashMap* rElem_in) {
-/*****************************************************************************/
-    for(XMLHashMap::iterator pos = rElem_in->begin();pos != rElem_in->end(); ++pos){
+#if OSL_DEBUG_LEVEL > 2
+void HelpParser::Dump(XMLHashMap* rElem_in)
+{
+    for(XMLHashMap::iterator pos = rElem_in->begin();pos != rElem_in->end(); ++pos)
+    {
         Dump(pos->second,pos->first);
     }
 }
-/*****************************************************************************/
-void HelpParser::Dump(LangHashMap* rElem_in,const ByteString sKey_in) {
-/*****************************************************************************/
+
+void HelpParser::Dump(LangHashMap* rElem_in,const ByteString sKey_in)
+{
     ByteString x;
     OString y;
     fprintf(stdout,"+------------%s-----------+\n",sKey_in.GetBuffer() );
-    for(LangHashMap::iterator posn=rElem_in->begin();posn!=rElem_in->end();++posn){
+    for(LangHashMap::iterator posn=rElem_in->begin();posn!=rElem_in->end();++posn)
+    {
         x=posn->first;
         y=posn->second->ToOString();
         fprintf(stdout,"key=%s value=%s\n",x.GetBuffer(),y.getStr());
     }
     fprintf(stdout,"+--------------------------+\n");
 }
+#endif
 
 HelpParser::HelpParser( const ByteString &rHelpFile, bool rUTF8 , bool rHasInputList  )
         : sHelpFile( rHelpFile ),
@@ -436,9 +439,11 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
     {
 
         aLangHM             = pos->second;
-        //printf("*********************DUMPING HASHMAP***************************************");
-        //Dump( aXMLStrHM );
-        //printf("DBG: sHelpFile = %s\n",sHelpFile.GetBuffer() );
+#if OSL_DEBUG_LEVEL > 2
+        printf("*********************DUMPING HASHMAP***************************************");
+        Dump(aXMLStrHM);
+        printf("DBG: sHelpFile = %s\n",sHelpFile.GetBuffer() );
+#endif
 
         pResData.sGId      =  pos->first;
         pResData.sFilename  =  sHelpFile;
