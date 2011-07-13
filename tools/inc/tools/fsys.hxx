@@ -342,7 +342,9 @@ public:
 #ifdef UNX
                             return rWith.aName.CompareTo( aName );
 #else
-                            return rWith.aName.CompareIgnoreCaseToAscii( aName );
+                            rtl::OString aThis(rtl::OString(aName).toAsciiLowerCase());
+                            rtl::OString aWith(rtl::OString(rWith.aName).toAsciiLowerCase());
+                            return static_cast<StringCompare>(aWith.compareTo(aThis));
 #endif
                         }
 

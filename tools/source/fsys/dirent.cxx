@@ -403,9 +403,15 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
                 else
                 {
                     // liegt ein anderes Drive auf dem Stack?
-                    if ( aStack.Count() &&
-                         COMPARE_EQUAL != aStack.Bottom()->aName.CompareIgnoreCaseToAscii(aName) )
-                        aStack.Clear();
+                    if ( aStack.Count() )
+                    {
+                        rtl::OString aThis(aStack.Bottom()->aName);
+                        aThis = aThis.toAsciiLowerCase();
+                        rtl::OString aOther(aName);
+                        aOther = aOther.toAsciiLowerCase();
+                        if (aThis.compareTo(aOther) != 0)
+                            aStack.Clear();
+                    }
 
                     // liegt jetzt nichts mehr auf dem Stack?
                     if ( !aStack.Count() )
