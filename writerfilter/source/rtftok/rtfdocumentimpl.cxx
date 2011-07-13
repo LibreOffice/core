@@ -25,6 +25,7 @@
  * instead of those above.
  */
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <editeng/borderline.hxx>
@@ -633,6 +634,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_FORMFIELDLIST:
         case DESTINATION_DATAFIELD:
         case DESTINATION_AUTHOR:
+        case DESTINATION_OPERATOR:
             m_aDestinationText.append(rString);
             break;
         default: bRet = false; break;
@@ -958,6 +960,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_AUTHOR:
             m_aStates.top().nDestinationState = DESTINATION_AUTHOR;
+            break;
+        case RTF_OPERATOR:
+            m_aStates.top().nDestinationState = DESTINATION_OPERATOR;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -2425,6 +2430,12 @@ int RTFDocumentImpl::popState()
         m_xDocumentProperties->setPrintDate(lcl_getDateTime(m_aStates));
     else if (m_aStates.top().nDestinationState == DESTINATION_AUTHOR)
         m_xDocumentProperties->setAuthor(m_aDestinationText.makeStringAndClear());
+    else if (m_aStates.top().nDestinationState == DESTINATION_OPERATOR)
+    {
+        uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
+        xUserDefinedProperties->addProperty(OUString(RTL_CONSTASCII_USTRINGPARAM("Operator")), beans::PropertyAttribute::REMOVEABLE,
+                uno::makeAny(m_aDestinationText.makeStringAndClear()));
+    }
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);
