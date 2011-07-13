@@ -106,7 +106,6 @@ ByteArr::Contains(char) const
 ByteArr::Insert(unsigned short, char)
 ByteArr::Remove(char)
 ByteArr::~ByteArr()
-ByteString::CompareIgnoreCaseToAscii(ByteString const&, unsigned short) const
 CAT::Inverse() const
 CAT::makeChromaticAdaptationTag() const
 CDEIntegrator::CDEIntegrator()
@@ -475,7 +474,6 @@ HeaderBar::SetItemData(unsigned short, void*)
 HeaderBar::SetItemImage(unsigned short, Image const&)
 Help::IsExtHelpActive()
 Help::StartContextHelp()
-HelpInterceptor_Impl::SetStartURL(String const&)
 HelpParser::Dump(boost::unordered_map<ByteString, boost::unordered_map<ByteString, XMLElement*, hashByteString, equalByteString, std::allocator<std::pair<ByteString const, XMLElement*> > >*, hashByteString, equalByteString, std::allocator<std::pair<ByteString const, boost::unordered_map<ByteString, XMLElement*, hashByteString, equalByteString, std::allocator<std::pair<ByteString const, XMLElement*> > >*> > >*)
 HelpParser::Process(boost::unordered_map<ByteString, XMLElement*, hashByteString, equalByteString, std::allocator<std::pair<ByteString const, XMLElement*> > >*, ByteString const&, ResData*, MergeDataFile&)
 HelpTextWindow::RegisterAccessibleParent()
@@ -503,7 +501,6 @@ INetMIMEMessage::DetachChild(unsigned long, INetMIMEMessage&) const
 INetMIMEMessage::SetContentDescription(String const&)
 INetMIMEMessage::SetContentID(String const&)
 INetMessage::SetHeaderField(String const&, String const&, unsigned long)
-INetURLHistory_Impl::downheap(INetURLHistory_Impl::hash_entry*, unsigned short, unsigned short)
 INetURLObject::hasPassword() const
 IcnGridMap_Impl::OccupyGrids(Rectangle const&, unsigned char)
 IconChoiceDialog::RemoveResetButton()
@@ -718,8 +715,6 @@ MiscSettings::SetEnableATToolSupport(unsigned char)
 ModulWindow::LinkStubBasicErrorHdl(void*, void*)
 MoreButton::RemoveWindow(Window*)
 MouseEvent::InitMouseEvent(com::sun::star::awt::MouseEvent&) const
-MsLangId::getFallbackLanguage(unsigned short)
-MsLangId::getRealLanguageWithoutConfig(unsigned short)
 MultiLineEdit::GetHScrollBar() const
 MultiLineEdit::GetLeftMargin() const
 MultiLineEdit::GetTextLines() const
@@ -731,7 +726,6 @@ MultiPropertySetHelper::MultiPropertySetHelper(rtl::OUString const*)
 MultiSelection::Append(long)
 NameNode::IsOrderTree() const
 NameTranslator_Impl::NameTranslator_Impl()
-NameTranslator_Impl::UpdateTranslationTable()
 NativeNumberWrapper::isValidNatNum(com::sun::star::lang::Locale const&, short) const
 NfCurrencyEntry::ApplyVariableInformation(NfCurrencyEntry const&)
 NfCurrencyEntry::IsEuro() const
@@ -750,7 +744,6 @@ OEMToOUString(std::basic_string<char, std::char_traits<char>, std::allocator<cha
 OLEObjCache::SetSize(unsigned long)
 ONSSInitializer_createInstance(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 ORegKey::acquireKey(void*)
-OUString_to_std_string(rtl::OUString const&)
 OUStringsSort_Impl::DeleteAndDestroy(unsigned short, unsigned short)
 OUStringsSort_Impl::Insert(OUStringsSort_Impl const*, unsigned short, unsigned short)
 OUStringsSort_Impl::Insert(rtl::OUString* const&)
@@ -891,13 +884,6 @@ PushButton::GetSymbolAlign() const
 REResourceList::REResourceList()
 REResourceList::~REResourceList()
 ResData::Dump()
-RscDefTree::Evaluate()
-RscDefine::ChangeMacro(RscExpression*)
-RscDefine::ChangeMacro(int)
-RscDefineList::Remove(RscDefine*)
-RscFile::RemoveDependFile(unsigned long)
-RscFileTab::FindDef(unsigned long, ByteString const&)
-RscTypCont::Search(unsigned int)
 Ruler::GetArrowCount() const
 Ruler::GetArrows() const
 Ruler::GetBorderCount() const
