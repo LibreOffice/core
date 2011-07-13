@@ -28,20 +28,8 @@
 #ifndef _RTFTYPES_HXX_
 #define _RTFTYPES_HXX_
 
-#include <rtfcontrolwords.hxx>
-
 namespace writerfilter {
     namespace rtftok {
-        /// Respresents an RTF Control Word
-        typedef struct
-        {
-            const char *sKeyword;
-            int nControlType;
-            RTFKeyword nIndex;
-        } RTFSymbol;
-        extern RTFSymbol aRTFControlWords[];
-        extern int nRTFControlWords;
-
         /// RTF legacy charsets
         typedef struct
         {

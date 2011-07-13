@@ -25,8 +25,6 @@
  * instead of those above.
  */
 
-#include <rtfdocumentimpl.hxx>
-#include <rtftypes.hxx>
 #include <rtfcontrolwords.hxx>
 #include <sal/macros.h>
 
