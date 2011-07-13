@@ -195,6 +195,8 @@ public:
                     DECL_LINK( SelectHdl, Accelerator* );
 
     void            StartCustomizeMode();
+    void            EndCustomizeMode();
+    sal_Bool            IsCustomizeMode() { return mbCustomizeMode; }
     sal_Bool            IsResizeMode() { return mbResizeMode; }
 };
 
@@ -5477,14 +5479,6 @@ void ToolBox::EnableCustomize( sal_Bool bEnable )
         else
             pMgr->erase( this );
     }
-}
-
-// -----------------------------------------------------------------------
-
-void ToolBox::EndCustomizeMode()
-{
-    ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
-    pMgr->EndCustomizeMode();
 }
 
 // -----------------------------------------------------------------------
