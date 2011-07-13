@@ -504,7 +504,6 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
         //aRowOfCellsIterator points to a vector of PropertyMapPtr
         PropertyMapVector1::const_iterator aCellIterator = aRowOfCellsIterator->begin();
         PropertyMapVector1::const_iterator aCellIteratorEnd = aRowOfCellsIterator->end();
-        PropertyMapVector1::const_iterator aLastCellIterator = aRowOfCellsIterator->end() - 1;
 
         // Get the row style properties
         sal_Int32 nRowStyleMask = sal_Int32( 0 );
@@ -531,6 +530,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
         {
             PropertyMapPtr pAllCellProps( new PropertyMap );
 
+            PropertyMapVector1::const_iterator aLastCellIterator = aRowOfCellsIterator->end() - 1;
             bool bIsEndCol = aCellIterator == aLastCellIterator;
             bool bIsEndRow = aRowOfCellsIterator == aLastRowIterator;
 
