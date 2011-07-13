@@ -403,13 +403,8 @@ public:
 
     void                    Format();
 
-    void                    SetLines( sal_uInt16 nLines );
     sal_uInt16                  GetLines() const { return mnLines; }
-    void                    EnableAutoHide( sal_Bool bAutoHide = sal_True );
     sal_Bool                    IsAutoHideEnabled() const { return mbAutoHide; }
-
-    void                    ShowStatusText( const String& rText );
-    void                    HideStatusText();
 
     void                    SetStatusSize( long nNewSize )
                                 { mnStatusWidth=nNewSize; Resize(); }
