@@ -161,7 +161,7 @@ void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any&
     Invalidate();
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#if OSL_DEBUG_LEVEL > 1
 void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
 {
     pLogger->startElement("PropertyMap");
