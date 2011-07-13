@@ -49,53 +49,29 @@
 #include "file_url.h"
 #endif
 
-/*****************************************************************/
-/* osl_getTempFirURL                                             */
-/*****************************************************************/
-
 oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
 {
-#ifdef MACOSX
+    oslFileError error;
+    /* described in environ(7) */
     const char *pValue = getenv( "TMPDIR" );
 
-    /* If TMPDIR environment variable is not set, use "/tmp" instead
-       of P_tmpdir because its value is "/var/tmp" and it is not
-       deleted on system start up */
     if ( !pValue )
-        pValue = "/tmp";
-#else
-
-    const char *pValue = getenv( "TEMP" );
+        pValue = getenv( "TEMP" );
 
     if ( !pValue )
         pValue = getenv( "TMP" );
 
-#if defined(NETBSD)
-    if ( !pValue )
-        pValue = _PATH_TMP;
-#else
-    if ( !pValue )
-        pValue = P_tmpdir;
-#endif
-
     if ( !pValue )
         pValue = "/tmp";
-#endif /* MACOSX */
 
-    if ( pValue )
-    {
-        oslFileError error;
-        rtl_uString *ustrTempPath = NULL;
+    rtl_uString *ustrTempPath = NULL;
 
-        rtl_string2UString( &ustrTempPath, pValue, strlen( pValue ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
-        OSL_ASSERT(ustrTempPath != NULL);
-        error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
-        rtl_uString_release( ustrTempPath );
+    rtl_string2UString( &ustrTempPath, pValue, strlen( pValue ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+    OSL_ASSERT(ustrTempPath != NULL);
+    error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
+    rtl_uString_release( ustrTempPath );
 
-        return error;
-    }
-    else
-        return osl_File_E_NOENT;
+    return error;
 }
 
 /******************************************************************
