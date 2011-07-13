@@ -1868,7 +1868,6 @@ const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
 class Type1Emitter
 {
 public:
-    explicit    Type1Emitter( const char* pOutFileName, bool bPfbSubset = true);
     explicit    Type1Emitter( FILE* pOutFile, bool bPfbSubset = true);
     /*virtual*/ ~Type1Emitter( void);
     void        setSubsetName( const char* );
@@ -1892,20 +1891,6 @@ public:
     bool        mbPfbSubset;
     int         mnHexLineCol;
 };
-
-// --------------------------------------------------------------------
-
-Type1Emitter::Type1Emitter( const char* pPfbFileName, bool bPfbSubset)
-:   mpFileOut( NULL)
-,   mbCloseOutfile( true)
-,   mnEECryptR( 55665)  // default eexec seed, TODO: mnEECryptSeed
-,   mpPtr( maBuffer)
-,   mbPfbSubset( bPfbSubset)
-,   mnHexLineCol( 0)
-{
-    mpFileOut = fopen( pPfbFileName, "wb");
-    maSubsetName[0] = '\0';
-}
 
 // --------------------------------------------------------------------
 
