@@ -500,7 +500,6 @@ public:
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_DISPOSITION]);
     }
 
-    void      SetContentID (const UniString& rID);
     UniString GetContentID (void) const
     {
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_ID]);
@@ -547,8 +546,6 @@ public:
         INetMessageContainerType eType = INETMSG_MULTIPART_MIXED);
     sal_Bool AttachChild (
         INetMIMEMessage& rChildMsg, sal_Bool bOwner = sal_True);
-    sal_Bool DetachChild (
-        sal_uIntPtr nIndex, INetMIMEMessage& rChildMsg) const;
 
     /** Stream operators.
      */
