@@ -256,8 +256,8 @@ private:
                                          FSysPathStyle eStyle );
 #else
     TOOLS_DLLPRIVATE FSysError          ImpParseUnixName( const ByteString& rPfad,
-#endif
                                           FSysPathStyle eStyle );
+#endif
     TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
     TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
 
