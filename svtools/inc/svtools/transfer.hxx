@@ -267,10 +267,7 @@ protected:
     sal_Bool            SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     sal_Bool            SetINetBookmark( const INetBookmark& rBmk, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     sal_Bool            SetINetImage( const INetImage& rINtImg, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetFileList( const FileList& rFileList, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     sal_Bool            SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf,
-                                      const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
 protected:
 

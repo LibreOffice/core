@@ -975,22 +975,6 @@ sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableHelper::SetFileList( const FileList& rFileList,
-                                          const ::com::sun::star::datatransfer::DataFlavor& )
-{
-    SvMemoryStream aMemStm( 4096, 4096 );
-
-    aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-    aMemStm << rFileList;
-
-    maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
-                                       aMemStm.Seek( STREAM_SEEK_TO_END ) );
-
-    return( maAny.hasValue() );
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const DataFlavor& rFlavor )
 {
     SotStorageStreamRef xStm( new SotStorageStream( String() ) );
@@ -1017,15 +1001,6 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
             maAny <<= aSeq;
     }
 
-    return( maAny.hasValue() );
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool TransferableHelper::SetInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf,
-                                           const ::com::sun::star::datatransfer::DataFlavor& )
-{
-    maAny <<= rIf;
     return( maAny.hasValue() );
 }
 
