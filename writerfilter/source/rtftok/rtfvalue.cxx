@@ -37,12 +37,14 @@ using rtl::OString;
 using rtl::OUString;
 
 RTFValue::RTFValue(int nValue, rtl::OUString sValue, RTFSprms_t rAttributes,
-        RTFSprms_t rSprms, uno::Reference<drawing::XShape> rShape)
+        RTFSprms_t rSprms, uno::Reference<drawing::XShape> rShape,
+        uno::Reference<io::XInputStream> rStream)
     : m_nValue(nValue),
     m_sValue(sValue),
     m_rAttributes(rAttributes),
     m_rSprms(rSprms),
     m_rShape(rShape),
+    m_rStream(rStream),
     m_bForceString(false)
 {
 }
@@ -53,6 +55,7 @@ RTFValue::RTFValue(int nValue)
     m_rAttributes(),
     m_rSprms(),
     m_rShape(),
+    m_rStream(),
     m_bForceString(false)
 {
 }
@@ -63,6 +66,7 @@ RTFValue::RTFValue(OUString sValue, bool bForce)
     m_rAttributes(),
     m_rSprms(),
     m_rShape(),
+    m_rStream(),
     m_bForceString(bForce)
 {
 }
@@ -73,6 +77,7 @@ RTFValue::RTFValue(RTFSprms_t rAttributes)
     m_rAttributes(rAttributes),
     m_rSprms(),
     m_rShape(),
+    m_rStream(),
     m_bForceString(false)
 {
 }
@@ -83,6 +88,7 @@ RTFValue::RTFValue(RTFSprms_t rAttributes, RTFSprms_t rSprms)
     m_rAttributes(rAttributes),
     m_rSprms(rSprms),
     m_rShape(),
+    m_rStream(),
     m_bForceString(false)
 {
 }
@@ -93,6 +99,18 @@ RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
     m_rAttributes(),
     m_rSprms(),
     m_rShape(rShape),
+    m_rStream(),
+    m_bForceString(false)
+{
+}
+
+RTFValue::RTFValue(uno::Reference<io::XInputStream> rStream)
+    : m_nValue(),
+    m_sValue(),
+    m_rAttributes(),
+    m_rSprms(),
+    m_rShape(),
+    m_rStream(rStream),
     m_bForceString(false)
 {
 }
@@ -122,6 +140,8 @@ uno::Any RTFValue::getAny() const
         ret <<= m_sValue;
     else if (m_rShape.is())
         ret <<= m_rShape;
+    else if (m_rStream.is())
+        ret <<= m_rStream;
     else
         ret <<= static_cast<sal_Int32>(m_nValue);
     return ret;
@@ -155,7 +175,7 @@ std::string RTFValue::toString() const
 
 RTFValue* RTFValue::Clone()
 {
-    return new RTFValue(m_nValue, m_sValue, m_rAttributes, m_rSprms, m_rShape);
+    return new RTFValue(m_nValue, m_sValue, m_rAttributes, m_rSprms, m_rShape, m_rStream);
 }
 
 RTFSprms_t& RTFValue::getAttributes()

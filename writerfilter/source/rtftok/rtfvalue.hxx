@@ -32,6 +32,7 @@
 #include <map>
 #include <rtl/ustrbuf.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
+#include <com/sun/star/io/XInputStream.hpp>
 
 namespace writerfilter {
     namespace rtftok {
@@ -42,13 +43,15 @@ namespace writerfilter {
             public:
                 typedef ::boost::shared_ptr<RTFValue> Pointer_t;
                 RTFValue(int nValue, rtl::OUString sValue, std::vector< std::pair<Id, RTFValue::Pointer_t> > rAttributes,
-                        std::vector< std::pair<Id, RTFValue::Pointer_t> > rSprms, uno::Reference<drawing::XShape> rShape);
+                        std::vector< std::pair<Id, RTFValue::Pointer_t> > rSprms, uno::Reference<drawing::XShape> rShape,
+                        uno::Reference<io::XInputStream> rStream);
                 RTFValue(int nValue);
                 RTFValue(rtl::OUString sValue, bool bForce = false);
                 RTFValue(std::vector< std::pair<Id, RTFValue::Pointer_t> > rAttributes);
                 RTFValue(std::vector< std::pair<Id, RTFValue::Pointer_t> > rAttributes,
                         std::vector< std::pair<Id, RTFValue::Pointer_t> > rSprms);
                 RTFValue(uno::Reference<drawing::XShape> rShape);
+                RTFValue(uno::Reference<io::XInputStream> rStream);
                 void setString(rtl::OUString sValue);
                 virtual int getInt() const;
                 virtual rtl::OUString getString() const;
@@ -66,6 +69,7 @@ namespace writerfilter {
                 std::vector< std::pair<Id, RTFValue::Pointer_t> > m_rAttributes;
                 std::vector< std::pair<Id, RTFValue::Pointer_t> > m_rSprms;
                 uno::Reference<drawing::XShape> m_rShape;
+                uno::Reference<io::XInputStream> m_rStream;
                 bool m_bForceString;
         };
     } // namespace rtftok
