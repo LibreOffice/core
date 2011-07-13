@@ -412,7 +412,7 @@ IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
 
     aTypeBox.Clear();
     aHiddenSortTypeBox.Clear();
-    GetParent()->TypeIds().Remove( 0, GetParent()->TypeIds().Count() );
+    GetParent()->TypeIds().clear();
 
     const String aMake = aMakeBox.GetSelectEntry();
     GetParent()->ReplaceGroup( aMake );
@@ -443,9 +443,9 @@ IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
         }
         if(bInsert)
         {
-            GetParent()->TypeIds().Insert(i, GetParent()->TypeIds().Count());
+            GetParent()->TypeIds().push_back(i);
             if ( !nLstType && aType == String(aItem.aLstType) )
-                nLstType = GetParent()->TypeIds().Count();
+                nLstType = GetParent()->TypeIds().size();
         }
     }
     for(sal_uInt16 nEntry = 0; nEntry < aHiddenSortTypeBox.GetEntryCount(); nEntry++)

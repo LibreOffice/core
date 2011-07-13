@@ -30,12 +30,13 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #endif
 #include <sfx2/tabdlg.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <labelcfg.hxx>
+#include <vector>
+
 class SwLabRec;
 class SwLabRecs;
 class SwLabItem;
@@ -49,7 +50,7 @@ class SwLabDlg : public SfxTabDialog
     SwNewDBMgr*     pNewDBMgr;
     SwLabPrtPage*   pPrtPage;
 
-    SvUShorts       aTypeIds;
+    std::vector<sal_uInt16> aTypeIds;
     SvStringsDtor   aMakes;
 
     SwLabRecs*      pRecs;
@@ -73,8 +74,8 @@ public:
           SwLabRecs &Recs()           { return *pRecs;   }
     const SwLabRecs &Recs()     const { return *pRecs;   }
 
-          SvUShorts  &TypeIds()       { return aTypeIds; }
-    const SvUShorts  &TypeIds() const { return aTypeIds; }
+          std::vector<sal_uInt16> &TypeIds()       { return aTypeIds; }
+    const std::vector<sal_uInt16> &TypeIds() const { return aTypeIds; }
 
           SvStringsDtor  &Makes()         { return aMakes;   }
     const SvStringsDtor  &Makes()   const { return aMakes;   }
