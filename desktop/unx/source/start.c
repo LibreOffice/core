@@ -39,6 +39,7 @@
 #include <stdio.h>
 #include <libgen.h>
 #include <string.h>
+#include <errno.h>
 
 #include <osl/nlsupport.h>
 #include <osl/process.h>
@@ -679,8 +680,11 @@ read_percent( ChildInfo *info, int *pPercent )
     /* read data */
     nRead = read( child_info_get_status_fd (info),
                   pBuffer + nNotProcessed, BUFFER_LEN - nNotProcessed );
-    if ( nRead < 0 )
-        return sal_False;
+    if ( nRead < 0 ) {
+        if (errno == EINTR)
+            return ProgressContinue;
+        return ProgressExit;
+    }
 
     nRead += nNotProcessed;
     pBuffer[nRead] = '\0';
