@@ -88,9 +88,7 @@ TaskStatusBar kann auch ein Notify-Object gesetzt werden, wenn man
 benachrichtigt werden will, wenn die Uhrzeit oder die TaskStatusBar
 angeklickt wird. Wenn der Notify fuer die Uhrzeit kommt, ist die
 Id TASKSTATUSBAR_CLOCKID, wenn er fuer die TaskStatusBar kommt, ist
-die Id 0. Mit SetFieldFlags() kann am TaskStatusBar auch die Flags
-hinterher umgesetzt werden, um zum Beispiel die Uhrzeit ein- und
-auszuschalten.
+die Id 0.
 
 
 TaskBar
@@ -331,16 +329,9 @@ public:
                                            sal_uInt16 nFlags = TASKSTATUSFIELD_CLOCK );
     void                RemoveStatusField()
                             { maTimer.Stop(); RemoveItem( TASKSTATUSBAR_STATUSFIELDID ); }
-    void                SetFieldFlags( sal_uInt16 nFlags );
     sal_uInt16              GetFieldFlags() const { return mnFieldFlags; }
     void                SetNotifyObject( ITaskStatusNotify* pNotify ) { mpNotify = pNotify; }
     ITaskStatusNotify*  GetNotifyObject() const { return mpNotify; }
-
-    void                AddStatusFieldItem( sal_uInt16 nItemId, const TaskStatusFieldItem& rItem,
-                                            sal_uInt16 nPos = 0xFFFF );
-    void                ModifyStatusFieldItem( sal_uInt16 nItemId, const TaskStatusFieldItem& rItem );
-    void                RemoveStatusFieldItem( sal_uInt16 nItemId );
-    sal_Bool                GetStatusFieldItem( sal_uInt16 nItemId, TaskStatusFieldItem& rItem ) const;
 };
 
 // -----------
