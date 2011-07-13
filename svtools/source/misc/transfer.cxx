@@ -2214,15 +2214,6 @@ sal_Bool TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, Refe
 
 // -----------------------------------------------------------------------------
 
-
-sal_Bool TransferableDataHelper::GetInterface( SotFormatStringId nFormat, Reference< XInterface >& rIf )
-{
-    DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetInterface( aFlavor, rIf ) );
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool TransferableDataHelper::GetInterface( const DataFlavor& rFlavor, Reference< XInterface >& rIf )
 {
     const Any aAny( GetAny( rFlavor ) );

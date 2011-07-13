@@ -398,7 +398,6 @@ public:
     sal_Bool                    GetInputStream( SotFormatStringId nFormat, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
     sal_Bool                    GetInputStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
 
-    sal_Bool                    GetInterface( SotFormatStringId nFormat, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf );
     sal_Bool                    GetInterface( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf );
 
 public:
