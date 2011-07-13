@@ -27,7 +27,6 @@
 
 #include <tools/stream.hxx>
 
-#include <rtftypes.hxx>
 #include <rtftokenizer.hxx>
 
 using rtl::OString;

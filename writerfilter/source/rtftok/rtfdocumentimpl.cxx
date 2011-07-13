@@ -43,7 +43,7 @@
 #include <rtfdocumentimpl.hxx>
 #include <rtfsdrimport.hxx>
 #include <rtftokenizer.hxx>
-#include <rtftypes.hxx>
+#include <rtfcharsets.hxx>
 #include <rtfcontrolwords.hxx>
 #include <rtfvalue.hxx>
 #include <rtfsprm.hxx>

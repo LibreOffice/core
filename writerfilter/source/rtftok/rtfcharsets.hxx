@@ -25,8 +25,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFTYPES_HXX_
-#define _RTFTYPES_HXX_
+#ifndef _RTFCHARSETS_HXX_
+#define _RTFCHARSETS_HXX_
 
 namespace writerfilter {
     namespace rtftok {
@@ -41,6 +41,6 @@ namespace writerfilter {
     } // namespace rtftok
 } // namespace writerfilter
 
-#endif // _RTFTYPES_HXX_
+#endif // _RTFCHARSETS_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

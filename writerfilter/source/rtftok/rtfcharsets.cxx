@@ -25,7 +25,7 @@
  * instead of those above.
  */
 
-#include <rtftypes.hxx>
+#include <rtfcharsets.hxx>
 #include <sal/macros.h>
 
 namespace writerfilter {
