@@ -944,25 +944,6 @@ UniString INetContentTypes::GetPresentation(INetContentType eTypeID,
 
 //============================================================================
 //static
-UniString INetContentTypes::GetExtension(UniString const & rTypeName)
-{
-    MediaTypeEntry const * pEntry = seekEntry(rTypeName, aStaticTypeNameMap,
-                                              CONTENT_TYPE_LAST + 1);
-    if (pEntry)
-        return UniString::CreateFromAscii(pEntry->m_pExtension);
-
-    UniString aExtension = Registration::GetExtension(rTypeName);
-    if (aExtension.Len() != 0)
-        return aExtension;
-    // special handling of text types, which come in uncounted variations:
-    return rTypeName.EqualsIgnoreCaseAscii("text", 0,
-                                           RTL_CONSTASCII_LENGTH("text")) ?
-               UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("txt")) :
-               UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("tmp"));
-}
-
-//============================================================================
-//static
 INetContentType INetContentTypes::GetContentType4Extension(UniString const &
                                                                rExtension)
 {
