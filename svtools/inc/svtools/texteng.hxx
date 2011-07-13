@@ -196,7 +196,6 @@ protected:
     void                FormatAndUpdate( TextView* pCurView = 0 );
     sal_Bool                IsFormatting() const { return mbIsFormatting; }
     void                UpdateViews( TextView* pCurView = 0 );
-    void                SetUpdateMode( sal_Bool bUp, TextView* pCurView, sal_Bool bForceUpdate );
 
     void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0 );
 
@@ -250,6 +249,7 @@ public:
     void                SetLeftMargin( sal_uInt16 n );
     sal_uInt16              GetLeftMargin() const;
 
+    void                SetUpdateMode( sal_Bool bUpdate );
     sal_Bool                GetUpdateMode() const { return mbUpdate; }
 
     sal_uInt16              GetViewCount() const;

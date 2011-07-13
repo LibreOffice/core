@@ -339,6 +339,20 @@ sal_uInt16 TextEngine::GetTextLen( sal_uLong nPara ) const
     return mpDoc->GetNodes().GetObject( nPara )->GetText().Len();
 }
 
+void TextEngine::SetUpdateMode( sal_Bool bUpdate )
+{
+    if ( bUpdate != mbUpdate )
+    {
+        mbUpdate = bUpdate;
+        if ( mbUpdate )
+        {
+            FormatAndUpdate( GetActiveView() );
+            if ( GetActiveView() )
+                GetActiveView()->ShowCursor();
+        }
+    }
+}
+
 sal_Bool TextEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
 {
     sal_Bool bDoesChange = sal_False;
@@ -1466,11 +1480,7 @@ void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, Font& rFont, Outp
         if ( ( ( pAttrib->GetStart() < nPos ) && ( pAttrib->GetEnd() >= nPos ) )
                     || !pNode->GetText().Len() )
         {
-            if ( pAttrib->Which() != TEXTATTR_FONTCOLOR )
-            {
-                pAttrib->GetAttr().SetFont( rFont );
-            }
-            else
+            if ( pAttrib->Which() == TEXTATTR_FONTCOLOR )
             {
                 if ( pOutDev )
                     pOutDev->SetTextColor( ((TextAttribFontColor&)pAttrib->GetAttr()).GetColor() );
@@ -1508,15 +1518,6 @@ void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, Font& rFont, Outp
 //              pOut->SetTextLineColor( Color( COL_LIGHTGRAY ) );
         }
     }
-}
-
-void TextEngine::SetUpdateMode( sal_Bool bUp, TextView* pCurView, sal_Bool bForceUpdate )
-{
-    sal_Bool bChanged = ( GetUpdateMode() != bUp );
-
-    mbUpdate = bUp;
-    if ( mbUpdate && ( bChanged || bForceUpdate ) )
-        FormatAndUpdate( pCurView );
 }
 
 void TextEngine::FormatAndUpdate( TextView* pCurView )
