@@ -216,23 +216,6 @@ void TextCharAttribList::DeleteEmptyAttribs()
     mbHasEmptyAttribs = sal_False;
 }
 
-#ifdef  DBG_UTIL
-sal_Bool TextCharAttribList::DbgCheckAttribs()
-{
-    sal_Bool bOK = sal_True;
-    for ( sal_uInt16 nAttr = 0; nAttr < Count(); nAttr++ )
-    {
-        TextCharAttrib* pAttr = GetObject( nAttr );
-        if ( pAttr->GetStart() > pAttr->GetEnd() )
-        {
-            bOK = sal_False;
-            OSL_FAIL( "Attr verdreht" );
-        }
-    }
-    return bOK;
-}
-#endif
-
 // -------------------------------------------------------------------------
 // (+) class TextNode
 // -------------------------------------------------------------------------
