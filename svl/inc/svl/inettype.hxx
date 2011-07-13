@@ -352,8 +352,6 @@ enum INetContentType
 class SVL_DLLPUBLIC INetContentTypes
 {
 public:
-    static void Uninitialize();
-
     static INetContentType RegisterContentType(UniString const & rTypeName,
                                                UniString const &
                                                    rPresentation,
@@ -369,8 +367,6 @@ public:
     static UniString GetPresentation(INetContentType eTypeID,
                                      const ::com::sun::star::lang::Locale& aLocale);
 
-    static UniString GetExtension(UniString const & rTypeName);
-
     static INetContentType GetContentType4Extension(UniString const &
                                                         rExtension);
 
@@ -378,9 +374,6 @@ public:
 
     static bool GetExtensionFromURL(UniString const & rURL,
                                     UniString & rExtension);
-
-    static INetContentType MapStringToContentType(UniString const &
-                                                      rPresentation);
 
     /** Parse the body of an RFC 2045 Content-Type header field.
 

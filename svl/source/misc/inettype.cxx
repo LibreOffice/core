@@ -116,8 +116,6 @@ public:
 
     static UniString GetPresentation(INetContentType eTypeID);
 
-    static UniString GetExtension(const UniString & rTypeName);
-
     static INetContentType GetContentType4Extension(UniString const &
                                                         rExtension);
 
@@ -768,24 +766,6 @@ UniString Registration::GetPresentation(INetContentType eTypeID)
 
 //============================================================================
 // static
-UniString Registration::GetExtension(UniString const & rTypeName)
-{
-    if (!m_pRegistration)
-        m_pRegistration = new Registration;
-
-    UniString aTheTypeName = rTypeName;
-    aTheTypeName.ToLowerAscii();
-    sal_uInt16 nPos;
-    return m_pRegistration->m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos) ?
-               static_cast< TypeNameMapEntry * >(m_pRegistration->
-                                                     m_aTypeNameMap.
-                                                         GetObject(nPos))->
-                   m_aExtension :
-               UniString();
-}
-
-//============================================================================
-// static
 INetContentType Registration::GetContentType4Extension(UniString const &
                                                            rExtension)
 {
@@ -853,12 +833,6 @@ MediaTypeEntry const * seekEntry(UniString const & rTypeName,
 //  INetContentTypes
 //
 //============================================================================
-
-//static
-void INetContentTypes::Uninitialize()
-{
-    Registration::deinitialize();
-}
 
 //============================================================================
 //static
@@ -1133,18 +1107,6 @@ bool INetContentTypes::GetExtensionFromURL(UniString const & rURL,
         return true;
     }
     return false;
-}
-
-//============================================================================
-//static
-INetContentType INetContentTypes::MapStringToContentType(UniString const &
-                                                             rPresentation)
-{
-    MediaTypeEntry const * pEntry = seekEntry(rPresentation,
-                                              aStaticPresentationMap,
-                                              sizeof aStaticPresentationMap
-                                                  / sizeof (MediaTypeEntry));
-    return pEntry ? pEntry->m_eTypeID : CONTENT_TYPE_UNKNOWN;
 }
 
 //============================================================================
