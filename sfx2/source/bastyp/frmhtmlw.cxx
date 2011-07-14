@@ -56,6 +56,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <rtl/bootstrap.hxx>
+#include <rtl/strbuf.hxx>
 
 
 // -----------------------------------------------------------------------
@@ -262,7 +263,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
 {
     try
     {
-        ByteString sOut;
+        rtl::OStringBuffer sOut;
         ::rtl::OUString aStr;
         uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")) );
         if ( (aAny >>= aStr) && aStr.getLength() )
@@ -272,29 +273,37 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             {
                 aURL = URIHelper::simpleNormalizedMakeRelative(
                     rBaseURL, aURL );
-                ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_src) += "=\"";
-                rOut << sOut.GetBuffer();
+                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src)
+                    .append(RTL_CONSTASCII_STRINGPARAM("=\""));
+                rOut << sOut.makeStringAndClear().getStr();
                 HTMLOutFuncs::Out_String( rOut, aURL, eDestEnc, pNonConvertableChars );
-                sOut = '\"';
+                sOut.append('\"');
             }
         }
 
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")) );
         if ( (aAny >>= aStr) && aStr.getLength() )
         {
-            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
-            rOut << sOut.GetBuffer();
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
+                .append(RTL_CONSTASCII_STRINGPARAM("=\""));
+            rOut << sOut.makeStringAndClear().getStr();
             HTMLOutFuncs::Out_String( rOut, aStr, eDestEnc, pNonConvertableChars );
-            sOut = '\"';
+            sOut.append('\"');
         }
 
         sal_Int32 nVal = SIZE_NOT_SET;
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")) );
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_marginwidth) += '=') += ByteString::CreateFromInt32( nVal );
+        {
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_marginwidth)
+                .append('=').append(nVal);
+        }
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")) );
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_marginheight) += '=') += ByteString::CreateFromInt32( nVal );
+        {
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_marginheight)
+                .append('=').append(nVal);
+        }
 
         sal_Bool bVal = sal_True;
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")) );
@@ -304,7 +313,8 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             if ( aAny >>= bVal )
             {
                 const sal_Char *pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
-                (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_scrolling) += '=') += pStr;
+                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrolling)
+                    .append(pStr);
             }
         }
 
@@ -316,12 +326,13 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             if ( aAny >>= bVal )
             {
                 const char* pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
-                (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_frameborder) += '=') += pStr;
+                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_frameborder)
+                    .append('=').append(pStr);
             }
         }
-            rOut << sOut.GetBuffer();
+        rOut << sOut.getStr();
     }
-    catch ( uno::Exception& )
+    catch (uno::Exception& )
     {
     }
 }
