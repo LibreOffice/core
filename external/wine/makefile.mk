@@ -32,8 +32,8 @@ TARGET=gdiplus
 .IF "$(OS)$(COM)" == "WNTGCC"
 
 ALL:
-    -$(MKDIRHIER) $(OUT)/inc/gdiplus
-    cp include/* $(OUT)/inc/gdiplus
+    -$(MKDIRHIER) $(OUT)/inc/wine
+    cp include/* $(OUT)/inc/wine
     $(DLLTOOL) --input-def lib/gdiplus.def --dllname=gdiplus.dll --output-lib=$(OUT)/lib/libgdiplus.dll.a
 
 .ENDIF

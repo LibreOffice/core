@@ -1,10 +1,10 @@
 mkdir: %_DEST%\inc\external
 mkdir: %_DEST%\inc\external\glibc
-mkdir: %_DEST%\inc\external\gdiplus
 mkdir: %_DEST%\inc\external\mingw
 mkdir: %_DEST%\inc\external\mingw\include
 mkdir: %_DEST%\inc\external\mingw\include\atl
 mkdir: %_DEST%\inc\external\mingw\include\sys
+mkdir: %_DEST%\inc\external\wine
 
 ..\glibc\rtufiles\config.h %_DEST%\inc\external\glibc\config.h
 ..\glibc\rtufiles\getopt.h %_DEST%\inc\external\glibc\getopt.h
@@ -15,7 +15,7 @@ mkdir: %_DEST%\inc\external\mingw\include\sys
 
 ..\%__SRC%\inc\*.h %_DEST%\inc\external\glibc\*.h
 
-..\%__SRC%\inc\gdiplus\*.h %_DEST%\inc\external\gdiplus\*.h
+..\%__SRC%\inc\wine\*.h %_DEST%\inc\external\wine\*.h
 
 ..\%__SRC%\misc\mingw\include\*.h %_DEST%\inc\external\mingw\include\*
 ..\%__SRC%\misc\mingw\include\atl\*.h %_DEST%\inc\external\mingw\include\atl\*
