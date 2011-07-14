@@ -318,7 +318,6 @@ namespace sw
         public:
             String msPrimary;
             String msSecondary;
-            bool HasDistinctSecondary() const;
             FontMapExport(const String &rFontDescription);
         };
 
