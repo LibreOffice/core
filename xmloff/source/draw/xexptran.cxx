@@ -147,14 +147,6 @@ void Imp_SkipNumberAndSpacesAndCommas(const OUString& rStr, sal_Int32& rPos,
     Imp_SkipSpacesAndCommas(rStr, rPos, nLen);
 }
 
-// #100617# Allow to skip doubles, too.
-void Imp_SkipDoubleAndSpacesAndCommas(const OUString& rStr, sal_Int32& rPos,
-    const sal_Int32 nLen)
-{
-    Imp_SkipDouble(rStr, rPos, nLen);
-    Imp_SkipSpacesAndCommas(rStr, rPos, nLen);
-}
-
 void Imp_PutNumberChar(OUString& rStr, sal_Int32 nValue)
 {
     OUStringBuffer sStringBuffer;

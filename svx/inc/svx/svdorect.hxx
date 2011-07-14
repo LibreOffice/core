@@ -64,10 +64,6 @@ protected:
     ::boost::shared_ptr< XPolygon >                 mpXPoly;
 
 protected:
-    // Liefert sal_True, wenn das Painten ein Polygon erfordert.
-    bool PaintNeedsXPoly(long nEckRad) const;
-
-protected:
     XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const;
     void SetXPolyDirty();
 

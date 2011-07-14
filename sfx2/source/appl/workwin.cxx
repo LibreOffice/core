@@ -644,14 +644,6 @@ SfxWorkWindow::~SfxWorkWindow()
         m_xLayoutManagerListener->dispose();
 }
 
-SystemWindow* SfxWorkWindow::GetTopWindow() const
-{
-    Window* pRet = pWorkWin;
-    while ( pRet && !pRet->IsSystemWindow() )
-        pRet = pRet->GetParent();
-    return (SystemWindow*) pRet;
-}
-
 void SfxWorkWindow::Lock_Impl( sal_Bool bLock )
 {
     if ( bLock )
@@ -666,37 +658,6 @@ void SfxWorkWindow::Lock_Impl( sal_Bool bLock )
 
     if ( !m_nLock )
         ArrangeChilds_Impl();
-}
-
-void SfxWorkWindow::ChangeWindow_Impl( Window *pNew )
-{
-    Window *pOld = pWorkWin;
-    pWorkWin = pNew;
-    for ( sal_uInt16 nPos = 0; nPos < pChilds->Count(); ++nPos )
-    {
-        SfxChild_Impl *pCli = (*pChilds)[nPos];
-        if ( pCli && pCli->pWin && pCli->pWin->GetParent() == pOld )
-        {
-            pCli->pWin->SetParent( pNew );
-        }
-    }
-}
-
-void SfxWorkWindow::SaveStatus_Impl()
-{
-    sal_uInt16 nCount = pChildWins->Count();
-    for ( sal_uInt16 n=0; n<nCount; n++ )
-    {
-        SfxChildWin_Impl* pCW = (*pChildWins)[n];
-        SfxChildWindow *pChild = pCW->pWin;
-        if (pChild)
-        {
-            sal_uInt16 nFlags = pCW->aInfo.nFlags;
-            pCW->aInfo = pChild->GetInfo();
-            pCW->aInfo.nFlags |= nFlags;
-            SaveStatus_Impl(pChild, pCW->aInfo);
-        }
-    }
 }
 
 //--------------------------------------------------------------------
@@ -989,25 +950,6 @@ SvBorder SfxWorkWindow::Arrange_Impl()
     return IsDockingAllowed() ? aBorder : SvBorder();
 }
 
-//--------------------------------------------------------------------
-// Close-Handler: The Configuration of the ChildWindows is saved.
-
-void SfxWorkWindow::Close_Impl()
-{
-    for (sal_uInt16 n=0; n<pChildWins->Count(); n++)
-    {
-        SfxChildWin_Impl *pCW  = (*pChildWins)[n];
-        SfxChildWindow *pChild = pCW->pWin;
-        if (pChild)
-        {
-            sal_uInt16 nFlags = pCW->aInfo.nFlags;
-            pCW->aInfo = pChild->GetInfo();
-            pCW->aInfo.nFlags |= nFlags;
-            SaveStatus_Impl(pChild, pCW->aInfo);
-        }
-    }
-}
-
 sal_Bool SfxWorkWindow::PrepareClose_Impl()
 {
     for (sal_uInt16 n=0; n<pChildWins->Count(); n++)
@@ -1043,30 +985,6 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( Window& rWindow,
     bSorted = sal_False;
     nChilds++;
     return (*pChilds)[pChilds->Count()-1];
-}
-
-//--------------------------------------------------------------------
-
-void SfxWorkWindow::AlignChild_Impl( Window& rWindow,
-                                            const Size& rNewSize,
-                                            SfxChildAlignment eAlign )
-{
-    DBG_CHKTHIS(SfxWorkWindow, 0);
-    DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
-
-    SfxChild_Impl *pChild = FindChild_Impl(rWindow);
-    if ( pChild )
-    {
-        if (pChild->eAlign != eAlign)
-            bSorted = sal_False;
-
-        pChild->eAlign = eAlign;
-        pChild->aSize = rNewSize;
-        pChild->bResize = sal_True;
-    }
-    else {
-        OSL_FAIL( "aligning unregistered child" );
-    }
 }
 
 //--------------------------------------------------------------------
@@ -1224,15 +1142,6 @@ void SfxWorkWindow::ResetObjectBars_Impl()
         (*pChildWins)[n]->nId = 0;
 }
 
-void SfxWorkWindow::NextObjectBar_Impl( sal_uInt16 )
-{
-}
-
-sal_uInt16 SfxWorkWindow::HasNextObjectBar_Impl( sal_uInt16, String* )
-{
-    return 0;
-}
-
 //------------------------------------------------------------------------
 
 void SfxWorkWindow::SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
@@ -1315,12 +1224,6 @@ sal_Bool SfxWorkWindow::IsVisible_Impl( sal_uInt16 nMode ) const
     }
 }
 
-Window* SfxWorkWindow::GetObjectBar_Impl( sal_uInt16, sal_uInt32 )
-{
-    return NULL;
-}
-
-//------------------------------------------------------------------------
 void SfxFrameWorkWin_Impl::UpdateObjectBars_Impl()
 {
     if ( pFrame->IsClosing_Impl() )
@@ -1730,36 +1633,6 @@ void SfxWorkWindow::SetStatusBar_Impl( sal_uInt32 nResId, SfxShell*, SfxBindings
 }
 
 #define SFX_ITEMTYPE_STATBAR 4
-
-void SfxWorkWindow::SetTempStatusBar_Impl( sal_Bool bSet )
-{
-    if ( aStatBar.bTemp != bSet && bShowStatusBar && IsVisible_Impl() )
-    {
-        sal_Bool bOn = sal_False;
-        sal_Bool bReset = sal_False;
-        if ( bSet && !aStatBar.nId )
-        {
-            bReset = sal_True;
-            SetStatusBar_Impl( SFX_ITEMTYPE_STATBAR, SFX_APP(), GetBindings() );
-        }
-
-        if ( aStatBar.nId && aStatBar.bOn && !bIsFullScreen )
-            bOn = sal_True;
-
-        aStatBar.bTemp = bSet;
-        if ( !bOn || bReset || (!bSet && aStatBar.nId ) )
-        {
-            // Just do something if the temp settings really are causing
-            // anything
-            UpdateStatusBar_Impl();
-            ArrangeChilds_Impl();
-            ShowChilds_Impl();
-        }
-
-        if ( bReset )
-            ResetStatusBar_Impl();
-    }
-}
 
 void SfxWorkWindow::UpdateStatusBar_Impl()
 {
@@ -2885,11 +2758,6 @@ SfxChildWinController_Impl::SfxChildWinController_Impl( sal_uInt16 nID, SfxWorkW
     , pWorkwin( pWork )
 {}
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SfxWorkWindow::CreateDispatch( const String& )
-{
-    return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >();
-}
-
 void SfxChildWinController_Impl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* )
 {
@@ -2915,11 +2783,6 @@ void SfxWorkWindow::DisableChildWindow_Impl( sal_uInt16 nId, sal_Bool bDisable )
 void SfxWorkWindow::SetActiveChild_Impl( Window *pChild )
 {
     pActiveChild = pChild;
-}
-
-Window* SfxWorkWindow::GetActiveChild_Impl()
-{
-    return pActiveChild;
 }
 
 sal_Bool SfxWorkWindow::ActivateNextChild_Impl( sal_Bool bForward )
@@ -3034,10 +2897,6 @@ sal_Bool SfxWorkWindow::ActivateNextChild_Impl( sal_Bool bForward )
     }
 
     return sal_False;
-}
-
-void SfxWorkWindow::SetObjectBarCustomizeMode_Impl( sal_Bool )
-{
 }
 
 void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& )

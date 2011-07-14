@@ -2801,24 +2801,6 @@ sal_Bool SfxDispatcher::IsReadOnlyShell_Impl( sal_uInt16 nShell ) const
 class StackAccess_Impl : public SfxShellStack_Implarr_
 {};
 
-void SfxDispatcher::InsertShell_Impl( SfxShell& rShell, sal_uInt16 nPos )
-{
-    Flush();
-
-    // The cast is because SfxShellStack_Impl member has non of its own
-    ((StackAccess_Impl*) (&pImp->aStack))->Insert( nPos, &rShell );
-    rShell.SetDisableFlags( pImp->nDisableFlags );
-    rShell.DoActivate_Impl(pImp->pFrame, sal_True);
-
-    if ( !SFX_APP()->IsDowning() )
-    {
-        pImp->bUpdated = sal_False;
-        pImp->pCachedServ1 = 0;
-        pImp->pCachedServ2 = 0;
-        InvalidateBindings_Impl(sal_True);
-    }
-}
-
 void SfxDispatcher::RemoveShell_Impl( SfxShell& rShell )
 {
     Flush();

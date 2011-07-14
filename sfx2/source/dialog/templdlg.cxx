@@ -869,18 +869,6 @@ void SfxTemplateDialog_Impl::EnableEdit(sal_Bool bEnable)
 
 //-------------------------------------------------------------------------
 
-
-sal_uInt16 SfxCommonTemplateDialog_Impl::InfoOffsetToStyleNr(sal_uInt16 nId)
-{
-    for ( size_t i = 0; i < pStyleFamilies->size(); i++ )
-        if ( SfxFamilyIdToNId(pStyleFamilies->at( i )->GetFamily()) == nId+1 )
-            return i;
-    OSL_FAIL("Style Nummer not found");
-    return 0;
-}
-
-//-------------------------------------------------------------------------
-
 void SfxCommonTemplateDialog_Impl::ReadResource()
 {
     // Read global user resource

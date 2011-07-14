@@ -66,7 +66,6 @@ public:
     static sal_Bool             MoveTo( const String& rSource, const String& rDest, sal_Int32 nNameClash = com::sun::star::ucb::NameClash::ERROR );
 
     static sal_Bool             MakeFolder( const String& rFolder );
-    static ErrCode              QueryDiskSpace( const String& rPath, sal_Int64& rFreeBytes );
     static sal_uIntPtr              GetSize( const String& rContent );
 
     // please don't use this!

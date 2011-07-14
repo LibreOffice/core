@@ -788,32 +788,6 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
 
 // -----------------------------------------------------------------------
 
-ErrCode SfxContentHelper::QueryDiskSpace( const String& rPath, sal_Int64& rFreeBytes )
-{
-    ErrCode nErr = 0;
-    rFreeBytes = 0;
-    INetURLObject aObj( rPath );
-    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-    try
-    {
-        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
-        aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FreeSpace")) ) >>= rFreeBytes;
-    }
-    catch( const ucb::CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "CommandAbortedException" );
-        nErr = ERRCODE_IO_GENERAL;
-    }
-    catch( const uno::Exception& )
-    {
-        DBG_ERRORFILE( "Any other exception" );
-        nErr = ERRCODE_IO_GENERAL;
-    }
-    return nErr;
-}
-
-// -----------------------------------------------------------------------
-
 sal_uIntPtr SfxContentHelper::GetSize( const String& rContent )
 {
     sal_uIntPtr nSize = 0;

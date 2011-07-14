@@ -278,8 +278,6 @@ protected:
     void                    CreateChildWin_Impl(SfxChildWin_Impl*,sal_Bool);
     void                    RemoveChildWin_Impl(SfxChildWin_Impl*);
     void                    Sort_Impl();
-    void                    AlignChild_Impl( Window& rWindow, const Size& rNewSize,
-                                     SfxChildAlignment eAlign );
     SfxChild_Impl*          FindChild_Impl( const Window& rWindow ) const;
     virtual sal_Bool            RequestTopToolSpacePixel_Impl( SvBorder aBorder );
     virtual Rectangle       GetTopRect_Impl();
@@ -290,7 +288,6 @@ protected:
 public:
                             SfxWorkWindow( Window *pWin, SfxBindings& rBindings, SfxWorkWindow* pParent = NULL);
     virtual                 ~SfxWorkWindow();
-    SystemWindow*           GetTopWindow() const;
     SfxBindings&            GetBindings()
                             { return *pBindings; }
     Window*                 GetWindow() const
@@ -306,7 +303,6 @@ public:
                             { return bInternalDockingAllowed; }
     SfxWorkWindow*          GetParent_Impl() const
                             { return pParent; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          CreateDispatch( const String& );
 
     // Methods for all Child windows
     void                    DataChanged_Impl( const DataChangedEvent& rDCEvt );
@@ -314,11 +310,9 @@ public:
     SfxChild_Impl*          RegisterChild_Impl( Window& rWindow, SfxChildAlignment eAlign, sal_Bool bCanGetFocus=sal_False );
     void                    ShowChilds_Impl();
     void                    HideChilds_Impl();
-    void                    Close_Impl();
     sal_Bool                    PrepareClose_Impl();
     virtual void            ArrangeChilds_Impl( sal_Bool bForce = sal_True );
     void                    DeleteControllers_Impl();
-    void                    SaveStatus_Impl();
     void                    HidePopups_Impl(sal_Bool bHide, sal_Bool bParent=sal_False, sal_uInt16 nId=0);
     void                    ConfigChild_Impl(SfxChildIdentifier,
                                              SfxDockingConfig, sal_uInt16);
@@ -334,16 +328,12 @@ public:
     void                    ResetObjectBars_Impl();
     void                    SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
                                     SfxInterface *pIFace, const String* pName=0 );
-    Window*                 GetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId );
     bool                    KnowsObjectBar_Impl( sal_uInt16 nPos ) const;
     sal_Bool                    IsVisible_Impl();
     void                    MakeVisible_Impl( sal_Bool );
     void                    SetObjectBarVisibility_Impl( sal_uInt16 nVis );
     sal_Bool                    IsContainer_Impl() const;
     void                    Lock_Impl( sal_Bool );
-    void                    NextObjectBar_Impl( sal_uInt16 nPos );
-    sal_uInt16                  HasNextObjectBar_Impl( sal_uInt16 nPos, String* pStr=0 );
-    void                    SetObjectBarCustomizeMode_Impl( sal_Bool );
 
     // Methods for ChildWindows
     void                    UpdateChildWindows_Impl();
@@ -361,14 +351,11 @@ public:
     sal_Bool                    IsVisible_Impl( sal_uInt16 nMode ) const;
     void                    DisableChildWindow_Impl( sal_uInt16 nId, sal_Bool bDisable );
     sal_Bool                    IsFloating( sal_uInt16 nId );
-    void                    ChangeWindow_Impl( Window *pNew );
     void                    SetActiveChild_Impl( Window *pChild );
-    Window*                 GetActiveChild_Impl();
     virtual sal_Bool            ActivateNextChild_Impl( sal_Bool bForward = sal_True );
     bool                    AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW ) const;
 
     // Methods for StatusBar
-    void                    SetTempStatusBar_Impl( sal_Bool bSet );
     void                    ResetStatusBar_Impl();
     void                    SetStatusBar_Impl(sal_uInt32 nResId, SfxShell *pShell, SfxBindings& );
     void                    UpdateStatusBar_Impl();

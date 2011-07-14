@@ -123,12 +123,6 @@ void SdrRectObj::SetXPolyDirty()
     mpXPoly.reset();
 }
 
-bool SdrRectObj::PaintNeedsXPoly(long nEckRad) const
-{
-    bool bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || nEckRad!=0;
-    return bNeed;
-}
-
 XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const
 {
     XPolygon aXPoly(rRect1,nRad1,nRad1);

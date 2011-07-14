@@ -116,7 +116,6 @@ public:
 
     SvxGraphicPosition  GetGraphicPos() const       { return eGraphicPos; }
 
-    void                PurgeGraphic() const;
     void                PurgeMedium() const;
 
     const Graphic*          GetGraphic() const;
@@ -134,7 +133,6 @@ public:
 
     static SvxGraphicPosition   WallpaperStyle2GraphicPos( WallpaperStyle eStyle );
     static WallpaperStyle       GraphicPos2WallpaperStyle( SvxGraphicPosition ePos );
-    CntWallpaperItem*           CreateCntWallpaperItem() const;
 };
 
 #endif // #ifndef _SVX_BRSHITEM_HXX

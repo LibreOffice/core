@@ -3849,19 +3849,6 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
 }
 
 // -----------------------------------------------------------------------
-// cast away const, since const is to be understood as a logical const
-// if GetGraphic() is called, the item should take care of getting a linked
-// graphic.
-// -----------------------------------------------------------------------
-
-void SvxBrushItem::PurgeGraphic() const
-{
-    PurgeMedium();
-    DELETEZ( pImpl->pGraphicObject );
-    ((SvxBrushItem*)this)->bLoadAgain = sal_True;
-}
-
-// -----------------------------------------------------------------------
 
 void SvxBrushItem::PurgeMedium() const
 {
@@ -4074,25 +4061,6 @@ SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) 
         pStrLink    = new String( rItem.GetBitmapURL() );
         SetGraphicPos( WallpaperStyle2GraphicPos((WallpaperStyle)rItem.GetStyle() ) );
     }
-}
-
-CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
-{
-    CntWallpaperItem* pItem = new CntWallpaperItem( 0 );
-    pItem->SetColor( aColor.GetColor() );
-    pItem->SetStyle( (sal_uInt16)GraphicPos2WallpaperStyle( GetGraphicPos() ) );
-    sal_Bool bLink = (pStrLink != 0);
-    if( bLink )
-    {
-        String aURL = *pStrLink;
-        pItem->SetBitmapURL( aURL );
-    }
-    if( pImpl->pGraphicObject )
-    {
-        DBG_ERRORFILE( "Don't know what to do with a graphic" );
-    }
-
-    return pItem;
 }
 
 #ifdef _MSC_VER
