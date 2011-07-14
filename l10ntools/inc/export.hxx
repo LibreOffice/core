@@ -480,7 +480,6 @@ public:
     MergeData( const ByteString &rTyp, const ByteString &rGID, const ByteString &rLID , const ByteString &rFilename )
             : sTyp( rTyp ), sGID( rGID ), sLID( rLID ) , sFilename( rFilename ) {};
     ~MergeData();
-    PFormEntrys* InsertEntry( const ByteString &rPForm );
     PFormEntrys* GetPFormEntrys( ResData *pResData );
 
     void Insert( const ByteString& rPFO , PFormEntrys* pfEntrys );

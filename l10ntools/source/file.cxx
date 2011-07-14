@@ -34,11 +34,6 @@
 namespace transex
 {
 
-File::File( const rtl::OUString sFile )
-{
-    sFileName = sFile;
-}
-
 File::File( const rtl::OUString sFullPath , const rtl::OUString sFile )
 {
     sFileName = sFile;

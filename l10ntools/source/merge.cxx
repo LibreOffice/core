@@ -155,14 +155,6 @@ PFormEntrys* MergeData::GetPFObject( const ByteString& rPFO ){
     return NULL;
 }
 
-
-PFormEntrys *MergeData::InsertEntry( const ByteString &rPForm )
-{
-    PFormEntrys* pFEntrys = new PFormEntrys( rPForm );
-    aMap.insert( PFormEntrysHashMap::value_type( rPForm , pFEntrys ) );
-    return pFEntrys;
-}
-
 sal_Bool MergeData::operator==( ResData *pData )
 {
     ByteString sResTyp_upper( pData->sResTyp );
