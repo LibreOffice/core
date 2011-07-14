@@ -42,12 +42,17 @@ endif
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_afmhash))
 
+ifeq ($(OS)$(COM),WNTGCC)
+GDIPLUSINCLUDE=-I$(OUTDIR)/inc/external/gdiplus
+endif
+
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/vcl/inc) \
     -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc \
+    $(GDIPLUSINCLUDE) \
     -I$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager \
 ))
 ifeq ($(GUIBASE),unx)
