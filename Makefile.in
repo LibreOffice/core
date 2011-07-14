@@ -192,4 +192,4 @@ findunusedcode:
 #because non-c++ symbols could be dlsymed lets make a list of class level
 #unused methods which don't require much effort to determine if they need
 #to be just removed, or put behind appropiate platform or debug level ifdefs
-	@grep :: unusedcode.all | grep -v cppu::bootstrap > unusedcode.easy
+	@grep ::.*\( unusedcode.all | grep -v cppu::bootstrap > unusedcode.easy
