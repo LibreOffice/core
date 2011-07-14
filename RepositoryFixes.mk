@@ -45,6 +45,8 @@ endif
 ifeq ($(OS),WNT)
 
 ifeq ($(COM),GCC)
+OLDNAMESLIB := moldname
+
 gb_Library_FILENAMES := $(patsubst sb:isb%,sb:basic%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sfx:isfx%,sfx:sfx%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst svt:isvt%,svt:svtool%,$(gb_Library_FILENAMES))
@@ -76,6 +78,8 @@ gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
 
 else
+OLDNAMESLIB := oldnames
+
 gb_Library_FILENAMES := $(patsubst cairo:icairo%,cairo:cairo%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:icppunit_dll%,$(gb_Library_FILENAMES))
@@ -106,7 +110,7 @@ gb_Library_NOILIBFILENAMES:=\
     msvcrt \
     msvcprt \
     mpr \
-    oldnames \
+    $(OLDNAMESLIB) \
     ole32 \
     oleaut32 \
     shell32 \
