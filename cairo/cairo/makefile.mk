@@ -176,9 +176,13 @@ BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 
+.IF "$(OS)" == "IOS"
+OUT2INC+=src$/cairo-quartz.h
+.ELSE
 OUT2INC+=src$/cairo-xlib.h \
      src$/cairo-xlib-xrender.h \
      src$/cairo-ft.h
+.ENDIF
 
 .ENDIF
 
