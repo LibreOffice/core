@@ -707,37 +707,10 @@ void ScDBFunc::RecalcPivotTable()
     {
         // Remove existing data cache for the data that this datapilot uses,
         // to force re-build data cache.
-        if (pDPObj->IsSheetData())
+        if (!pDPs->ClearCache(pDPObj))
         {
-            // data source is internal sheet.
-            const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
-            if (!pDesc)
-            {
-                ErrorMessage(STR_PIVOT_NOTFOUND);
-                return;
-            }
-            if (pDesc->HasRangeName())
-            {
-                ScDPCollection::NameCaches& rCaches = pDPs->GetNameCaches();
-                rCaches.removeCache(pDesc->GetRangeName());
-            }
-            else
-            {
-                ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
-                rCaches.removeCache(pDesc->GetSourceRange());
-            }
-        }
-        else if (pDPObj->IsImportData())
-        {
-            // data source is external database.
-            const ScImportSourceDesc* pDesc = pDPObj->GetImportSourceDesc();
-            if (!pDesc)
-            {
-                ErrorMessage(STR_PIVOT_NOTFOUND);
-                return;
-            }
-            ScDPCollection::DBCaches& rCaches = pDPs->GetDBCaches();
-            rCaches.removeCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject);
+            ErrorMessage(STR_PIVOT_NOTFOUND);
+            return;
         }
 
         ScDBDocFunc aFunc( *pDocSh );
