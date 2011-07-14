@@ -57,8 +57,8 @@
 
 #define USE_UNISCRIBE
 #ifdef USE_UNISCRIBE
-#include <Usp10.h>
-#include <ShLwApi.h>
+#include <usp10.h>
+#include <shlwapi.h>
 #include <winver.h>
 #endif // USE_UNISCRIBE
 
