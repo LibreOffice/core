@@ -52,7 +52,7 @@ int SAL_CALL CompareStart( const void* pFirst, const void* pSecond )
 // -------------------------------------------------------------------------
 // (+) class TextCharAttrib
 // -------------------------------------------------------------------------
-TextCharAttrib::TextCharAttrib( const TextAttrib& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd )
+TextCharAttrib::TextCharAttrib( const TextAttrib& /* rAttr */, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     mpAttr = NULL;
     mnStart = nStart,
