@@ -501,6 +501,7 @@ gb_Library_PLAINLIBS_NONE += \
 	$(gb_MINGW_LIBGCC) \
 	advapi32 \
 	gdi32 \
+	gdiplus \
 	gnu_getopt \
 	imm32 \
 	kernel32 \
