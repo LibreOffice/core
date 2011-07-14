@@ -539,7 +539,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         SwTwips nLastBidiPorWidth = 0;
         std::deque<sal_uInt16>* pKanaComp = pCurr->GetpKanaComp();
         MSHORT nSpaceIdx = 0;
-        MSHORT nKanaIdx = 0;
+        size_t nKanaIdx = 0;
         long nSpaceAdd = pCurr->IsSpaceAdd() ? pCurr->GetLLSpaceAdd( 0 ) : 0;
 
         sal_Bool bNoTxt = sal_True;
