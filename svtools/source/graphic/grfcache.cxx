@@ -162,15 +162,16 @@ class GraphicCacheEntry
 {
 private:
 
-    List                maGraphicObjectList;
+    GraphicObjectList_impl  maGraphicObjectList;
+
     GraphicID           maID;
     GfxLink             maGfxLink;
     BitmapEx*           mpBmpEx;
     GDIMetaFile*        mpMtf;
     Animation*          mpAnimation;
-    sal_Bool                mbSwappedAll;
+    bool                mbSwappedAll;
 
-    sal_Bool                ImplInit( const GraphicObject& rObj );
+    bool                ImplInit( const GraphicObject& rObj );
     void                ImplFillSubstitute( Graphic& rSubstitute );
 
 public:
@@ -181,13 +182,13 @@ public:
     const GraphicID&    GetID() const { return maID; }
 
     void                AddGraphicObjectReference( const GraphicObject& rObj, Graphic& rSubstitute );
-    sal_Bool                ReleaseGraphicObjectReference( const GraphicObject& rObj );
-    sal_uLong               GetGraphicObjectReferenceCount() { return maGraphicObjectList.Count(); }
-    sal_Bool                HasGraphicObjectReference( const GraphicObject& rObj );
+    bool                ReleaseGraphicObjectReference( const GraphicObject& rObj );
+    size_t              GetGraphicObjectReferenceCount() { return maGraphicObjectList.size(); }
+    bool                HasGraphicObjectReference( const GraphicObject& rObj );
 
     void                TryToSwapIn();
     void                GraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    sal_Bool                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
+    bool                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
     void                GraphicObjectWasSwappedIn( const GraphicObject& rObj );
 };
 
@@ -200,14 +201,17 @@ GraphicCacheEntry::GraphicCacheEntry( const GraphicObject& rObj ) :
     mpAnimation     ( NULL ),
     mbSwappedAll    ( !ImplInit( rObj ) )
 {
-    maGraphicObjectList.Insert( (void*) &rObj, LIST_APPEND );
+    maGraphicObjectList.push_back( (GraphicObject*)&rObj );
 }
 
 // -----------------------------------------------------------------------------
 
 GraphicCacheEntry::~GraphicCacheEntry()
 {
-    DBG_ASSERT( !maGraphicObjectList.Count(), "GraphicCacheEntry::~GraphicCacheEntry(): Not all GraphicObjects are removed from this entry" );
+    DBG_ASSERT(
+        maGraphicObjectList.empty(),
+        "GraphicCacheEntry::~GraphicCacheEntry(): Not all GraphicObjects are removed from this entry"
+    );
 
     delete mpBmpEx;
     delete mpMtf;
@@ -216,9 +220,9 @@ GraphicCacheEntry::~GraphicCacheEntry()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
+bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
 {
-    sal_Bool bRet;
+    bool bRet = false;
 
     if( !rObj.IsSwappedOut() )
     {
@@ -260,10 +264,8 @@ sal_Bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
         else
             maGfxLink = GfxLink();
 
-        bRet = sal_True;
+        bRet = true;
     }
-    else
-        bRet = sal_False;
 
     return bRet;
 }
@@ -277,9 +279,9 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     const MapMode       aPrefMapMode( rSubstitute.GetPrefMapMode() );
     const Link          aAnimationNotifyHdl( rSubstitute.GetAnimationNotifyHdl() );
     const String        aDocFileName( rSubstitute.GetDocFileName() );
-    const sal_uLong         nDocFilePos = rSubstitute.GetDocFilePos();
+    const sal_uLong     nDocFilePos = rSubstitute.GetDocFilePos();
     const GraphicType   eOldType = rSubstitute.GetType();
-    const sal_Bool          bDefaultType = ( rSubstitute.GetType() == GRAPHIC_DEFAULT );
+    const bool          bDefaultType = ( rSubstitute.GetType() == GRAPHIC_DEFAULT );
 
     if( rSubstitute.IsLink() && ( GFX_LINK_TYPE_NONE == maGfxLink.GetType() ) )
         maGfxLink = rSubstitute.GetLink();
@@ -316,21 +318,24 @@ void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Gr
         mbSwappedAll = !ImplInit( rObj );
 
     ImplFillSubstitute( rSubstitute );
-    maGraphicObjectList.Insert( (void*) &rObj, LIST_APPEND );
+    maGraphicObjectList.push_back( (GraphicObject*) &rObj );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject& rObj )
+bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject& rObj )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
-    for( void* pObj = maGraphicObjectList.First(); !bRet && pObj; pObj = maGraphicObjectList.Next() )
-    {
-        if( &rObj == (GraphicObject*) pObj )
+    for(
+        GraphicObjectList_impl::iterator it = maGraphicObjectList.begin();
+        ( it < maGraphicObjectList.end() ) && !bRet;
+        ++it
+    ) {
+        if( &rObj == *it )
         {
-            maGraphicObjectList.Remove( pObj );
-            bRet = sal_True;
+            maGraphicObjectList.erase( it );
+            bRet = true;
         }
     }
 
@@ -339,13 +344,13 @@ sal_Bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject& 
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GraphicCacheEntry::HasGraphicObjectReference( const GraphicObject& rObj )
+bool GraphicCacheEntry::HasGraphicObjectReference( const GraphicObject& rObj )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
-    for( void* pObj = maGraphicObjectList.First(); !bRet && pObj; pObj = maGraphicObjectList.Next() )
-        if( &rObj == (GraphicObject*) pObj )
-            bRet = sal_True;
+    for( size_t i = 0, n = maGraphicObjectList.size(); ( i < n ) && !bRet; ++i )
+        if( &rObj == maGraphicObjectList[ i ] )
+            bRet = true;
 
     return bRet;
 }
@@ -354,19 +359,19 @@ sal_Bool GraphicCacheEntry::HasGraphicObjectReference( const GraphicObject& rObj
 
 void GraphicCacheEntry::TryToSwapIn()
 {
-    if( mbSwappedAll && maGraphicObjectList.Count() )
-        ( (GraphicObject*) maGraphicObjectList.First() )->FireSwapInRequest();
+    if( mbSwappedAll && !maGraphicObjectList.empty() )
+        maGraphicObjectList.front()->FireSwapInRequest();
 }
 
 // -----------------------------------------------------------------------------
 
 void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*/ )
 {
-    mbSwappedAll = sal_True;
+    mbSwappedAll = true;
 
-    for( void* pObj = maGraphicObjectList.First(); mbSwappedAll && pObj; pObj = maGraphicObjectList.Next() )
-        if( !( (GraphicObject*) pObj )->IsSwappedOut() )
-            mbSwappedAll = sal_False;
+    for( size_t i = 0, n = maGraphicObjectList.size(); ( i < n ) && mbSwappedAll; ++i )
+        if( !maGraphicObjectList[ i ]->IsSwappedOut() )
+            mbSwappedAll = false;
 
     if( mbSwappedAll )
     {
@@ -378,17 +383,15 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GraphicCacheEntry::FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
+bool GraphicCacheEntry::FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
 {
-    sal_Bool bRet;
+    bool bRet = false;
 
     if( !mbSwappedAll && rObj.IsSwappedOut() )
     {
         ImplFillSubstitute( rSubstitute );
-        bRet = sal_True;
+        bRet = true;
     }
-    else
-        bRet = sal_False;
 
     return bRet;
 }
@@ -676,7 +679,7 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
 {
     // Release cached object
     GraphicCacheEntry*  pEntry = (GraphicCacheEntry*) maGraphicCache.First();
-    sal_Bool                bRemoved = sal_False;
+    bool                bRemoved = false;
 
     while( !bRemoved && pEntry )
     {
