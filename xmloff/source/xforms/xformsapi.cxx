@@ -191,32 +191,6 @@ void lcl_setValue( Reference<XPropertySet>& xPropertySet,
     xPropertySet->setPropertyValue( rName, rAny );
 }
 
-
-Reference<XPropertySet> lcl_getXFormsModel( const Reference<frame::XModel>& xDoc )
-{
-    Reference<XPropertySet> xRet;
-    try
-    {
-        Reference<XFormsSupplier> xSupplier( xDoc, UNO_QUERY );
-        if( xSupplier.is() )
-        {
-            Reference<XNameContainer> xForms = xSupplier->getXForms();
-            if( xForms.is() )
-            {
-                Sequence<OUString> aNames = xForms->getElementNames();
-                if( aNames.getLength() > 0 )
-                    xRet.set( xForms->getByName( aNames[0] ), UNO_QUERY );
-            }
-        }
-    }
-    catch( const Exception& )
-    {
-        ; // no success!
-    }
-
-    return xRet;
-}
-
 #define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }
 static SvXMLTokenMapEntry aTypes[] =
 {

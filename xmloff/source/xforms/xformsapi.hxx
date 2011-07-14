@@ -71,9 +71,6 @@ void lcl_setValue(
     lcl_setValue( xPropSet, rName, com::sun::star::uno::makeAny( aValue ) );
 }
 
-
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_getXFormsModel( const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& );
-
 sal_uInt16 lcl_getTypeClass(
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
