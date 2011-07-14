@@ -26,19 +26,28 @@
  *
  ************************************************************************/
 
-#include "precompiled_vcl.hxx"
-#include "sal/config.h"
+#ifndef _VCL_VCLUIAPP_H
+#define _VCL_VCLUIAPP_H
 
-#include <cstdlib>
+#include "premac.h"
+#include "UIKit/UIKit.h"
+#include "postmac.h"
 
-#include "sal/main.h"
-#include "tools/extendapplicationenvironment.hxx"
+class IosSalFrame;
 
-#include "salinst.hxx"
-
-SAL_IMPLEMENT_MAIN_WITH_GUI() {
-    tools::extendApplicationEnvironment();
-    return SVMain();
+// our very own application
+@interface VCL_UIApplication : UIApplication
+{
 }
+-(void)sendEvent:(UIEvent*)pEvent;
+-(void)sendSuperEvent:(UIEvent*)pEvent;
+-(BOOL)application: (UIApplication*) app openFile: (NSString*)file;
+-(void)application: (UIApplication*) app openFiles: (NSArray*)files;
+-(void)applicationWillTerminate: (UIApplication *) app;
+-(void)addFallbackMenuItem: (UIMenuItem*)pNewItem;
+-(void)removeFallbackMenuItem: (UIMenuItem*)pOldItem;
+@end
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

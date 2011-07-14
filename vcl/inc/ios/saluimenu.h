@@ -26,19 +26,37 @@
  *
  ************************************************************************/
 
-#include "precompiled_vcl.hxx"
-#include "sal/config.h"
+#ifndef _VCL_SALUIMENU_H
+#define _VCL_SALUIMENU_H
 
-#include <cstdlib>
+class IosSalMenu;
+class IosSalMenuItem;
 
-#include "sal/main.h"
-#include "tools/extendapplicationenvironment.hxx"
-
-#include "salinst.hxx"
-
-SAL_IMPLEMENT_MAIN_WITH_GUI() {
-    tools::extendApplicationEnvironment();
-    return SVMain();
+@interface SalUIMenu : UIMenuController
+{
+    /* Caution: SalNSMenu instances occasionally are binary copied
+       in IosSalMenu::ShowNativePopupMenu. If any members are added,
+       please take this into account !
+    */
+    IosSalMenu*        mpMenu;
 }
+-(id)initWithMenu: (IosSalMenu*)pMenu;
+-(void)menuNeedsUpdate: (UIMenuController*)pMenu;
+-(void)setSalMenu: (IosSalMenu*)pMenu;
+@end
+
+@interface SalUIMenuItem : UIMenuItem
+{
+    /* Caution: SalUIMenuItem instances occasionally are binary copied
+       in IosSalMenu::ShowNativePopupMenu. If any members are added,
+       please take this into account !
+    */
+    IosSalMenuItem*    mpMenuItem;
+}
+-(id)initWithMenuItem: (IosSalMenuItem*)pMenuItem;
+-(void)menuItemTriggered: (id)aSender;
+@end
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

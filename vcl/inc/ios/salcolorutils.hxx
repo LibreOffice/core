@@ -26,19 +26,21 @@
  *
  ************************************************************************/
 
-#include "precompiled_vcl.hxx"
-#include "sal/config.h"
+#ifndef _SV_SALCOLORUTILS_HXX
+#define _SV_SALCOLORUTILS_HXX
 
-#include <cstdlib>
+#include "vcl/salbtype.hxx"
+#include "vcl/salgtype.hxx"
+#include "salmathutils.hxx"
 
-#include "sal/main.h"
-#include "tools/extendapplicationenvironment.hxx"
+// ------------------------------------------------------------------
 
-#include "salinst.hxx"
+SalColor GetSalColor( const float* pQuartzColor );
 
-SAL_IMPLEMENT_MAIN_WITH_GUI() {
-    tools::extendApplicationEnvironment();
-    return SVMain();
-}
+void SetSalColor( const SalColor& rColor, float* pQuartzColor );
+
+// ------------------------------------------------------------------
+
+#endif  // _SV_SALCOLORUTILS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,19 +26,31 @@
  *
  ************************************************************************/
 
-#include "precompiled_vcl.hxx"
-#include "sal/config.h"
+#ifndef _SV_SALSYS_H
+#define _SV_SALSYS_H
 
-#include <cstdlib>
+#include "salsys.hxx"
 
-#include "sal/main.h"
-#include "tools/extendapplicationenvironment.hxx"
+class VCL_DLLPUBLIC IosSalSystem : public SalSystem
+{
+public:
+    IosSalSystem() {}
+    virtual ~IosSalSystem();
 
-#include "salinst.hxx"
+    // get info about the display
+    virtual unsigned int GetDisplayScreenCount();
+    virtual bool IsMultiDisplay();
+    virtual unsigned int GetDefaultDisplayNumber();
+    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
+    virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
 
-SAL_IMPLEMENT_MAIN_WITH_GUI() {
-    tools::extendApplicationEnvironment();
-    return SVMain();
-}
+    virtual rtl::OUString GetScreenName( unsigned int nScreen );
+    virtual int ShowNativeMessageBox( const String& rTitle,
+                                      const String& rMessage,
+                                      int nButtonCombination,
+                                      int nDefaultButton);
+};
+
+#endif // _SV_SALSYS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

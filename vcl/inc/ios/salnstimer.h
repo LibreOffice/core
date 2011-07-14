@@ -25,20 +25,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _VCL_SALNSTIMER_H
+#define _VCL_SALNSTIMER_H
 
-#include "precompiled_vcl.hxx"
-#include "sal/config.h"
+#include "premac.h"
+#include <Foundation/Foundation.h>
+#include "postmac.h"
 
-#include <cstdlib>
-
-#include "sal/main.h"
-#include "tools/extendapplicationenvironment.hxx"
-
-#include "salinst.hxx"
-
-SAL_IMPLEMENT_MAIN_WITH_GUI() {
-    tools::extendApplicationEnvironment();
-    return SVMain();
+@interface TimerCallbackCaller : NSObject
+{
 }
+-(void)timerElapsed:(NSTimer*)pTimer;
+@end
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

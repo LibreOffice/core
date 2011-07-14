@@ -236,7 +236,23 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 $(eval $(call gb_Library_add_nativeres,vcl,src))
+endif
 
+ifeq ($(GUIBASE),cocoatouch)
+$(eval $(call gb_Library_set_cxxflags,vcl,\
+    $$(CXXFLAGS) \
+    $$(OBJCXXFLAGS) \
+))
+$(eval $(call gb_Library_add_objcxxobjects,vcl,\
+    vcl/ios/source/app/salnstimer \
+    vcl/ios/source/app/vcluiapp \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/ios/source/app/saldata \
+    vcl/ios/source/app/salinst \
+    vcl/ios/source/app/salsys \
+    vcl/ios/source/app/saltimer \
+))
 endif
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
@@ -372,7 +388,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/helper/strhelper \
     vcl/source/helper/threadex \
     vcl/source/helper/xconnection \
-    vcl/source/salmain/salmain \
     vcl/source/window/abstdlg \
     vcl/source/window/accel \
     vcl/source/window/accmgr \
@@ -421,7 +436,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/wpropset \
     vcl/source/window/wrkwin \
 ))
-
+ifneq ($(OS),IOS)
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/salmain/salmain \
+))
+endif
 ## handle Graphite
 ifneq ($(ENABLE_GRAPHITE),)
 $(eval $(call gb_Library_set_defs,vcl,\
@@ -554,4 +573,14 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     winspool \
 ))
 endif
+
+ifeq ($(GUIBASE),cocoatouch)
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+    -framework UIKit \
+    -framework CoreFoundation \
+))
+endif
+
+
 # vim: set noet sw=4 ts=4:

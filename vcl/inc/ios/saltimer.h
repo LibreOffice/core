@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
- *
+*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,21 +24,31 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
+************************************************************************/
 
-#include "precompiled_vcl.hxx"
-#include "sal/config.h"
+#ifndef _SV_SALTIMER_H
+#define _SV_SALTIMER_H
 
-#include <cstdlib>
+#include "premac.h"
+#include <Foundation/Foundation.h>
+#include "postmac.h"
 
-#include "sal/main.h"
-#include "tools/extendapplicationenvironment.hxx"
+#include "saltimer.hxx"
 
-#include "salinst.hxx"
+class IosSalTimer : public SalTimer
+{
+  public:
 
-SAL_IMPLEMENT_MAIN_WITH_GUI() {
-    tools::extendApplicationEnvironment();
-    return SVMain();
-}
+    IosSalTimer();
+    virtual ~IosSalTimer();
+
+    void Start( sal_uLong nMS );
+    void Stop();
+
+    static NSTimer* pRunningTimer;
+    static bool bDispatchTimer;
+};
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

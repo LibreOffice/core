@@ -27,6 +27,13 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,vclmain))
 
+ifeq ($(OS),IOS)
+$(eval $(call gb_StaticLibrary_set_cxxflags,vclmain,\
+    $$(CXXFLAGS) \
+    -x objective-c++ -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300 \
+))
+endif
+
 $(eval $(call gb_StaticLibrary_set_include,vclmain,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/vcl/inc) \
@@ -36,6 +43,7 @@ $(eval $(call gb_StaticLibrary_set_include,vclmain,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_api,vclmain,\
+    offapi \
     udkapi \
 ))
 

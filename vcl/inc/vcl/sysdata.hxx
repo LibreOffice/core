@@ -41,6 +41,18 @@ typedef struct CGLayer   *CGLayerRef;
 class NSView;
 #endif
 #endif
+
+#ifdef IOS
+typedef struct CGFont *CGFontRef;
+typedef struct CGContext *CGContextRef;
+typedef struct CGLayer *CGLayerRef;
+#ifdef __OBJC__
+@class UIView;
+#else
+class UIView;
+#endif
+#endif
+
 #if defined( WNT )
 #include <windef.h>
 #endif
@@ -56,6 +68,8 @@ struct SystemEnvData
     HWND                hWnd;           // the window hwnd
 #elif defined( QUARTZ )
     NSView*               pView;          // the cocoa (NSView *) implementing this object
+#elif defined( IOS )
+    UIView*               pView;          // the CocoaTouch (UIView *) implementing this object
 #elif defined( UNX )
     void*               pDisplay;       // the relevant display connection
     long                aWindow;        // the window of the object
@@ -84,6 +98,8 @@ struct SystemParentData
     HWND            hWnd;             // the window hwnd
 #elif defined( QUARTZ )
     NSView*         pView;            // the cocoa (NSView *) implementing this object
+#elif defined( IOS )
+    UIView*         pView;            // the CocoaTouch (UIView *) implementing this object
 #elif defined( UNX )
     long            aWindow;          // the window of the object
     bool            bXEmbedSupport:1; // decides whether the object in question
@@ -116,8 +132,8 @@ struct SystemGraphicsData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HDC             hDC;            // handle to a device context
-#elif defined( QUARTZ )
-    CGContextRef    rCGContext;     // QUARTZ graphic context
+#elif defined( QUARTZ ) || defined( IOS )
+    CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( UNX )
     void*           pDisplay;       // the relevant display connection
     long            hDrawable;      // a drawable
@@ -139,6 +155,7 @@ struct SystemWindowData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )                  // meaningless on Windows
 #elif defined( QUARTZ )             // meaningless on Mac OS X / Quartz
+#elif defined( IOS )                // and maybe on iOS, too, then
 #elif defined( UNX )
     void*           pVisual;        // the visual to be used
 #endif
@@ -169,6 +186,8 @@ struct SystemFontData
     HFONT           hFont;          // native font object
 #elif defined( QUARTZ )
     void*           aATSUFontID;    // native font object
+#elif defined( IOS )
+    CGFontRef       rFont;          // native font object
 #elif defined( UNX )
     void*           nFontId;        // native font id
     int             nFontFlags;     // native font flags
