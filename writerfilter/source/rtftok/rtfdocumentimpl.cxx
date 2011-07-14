@@ -2529,6 +2529,19 @@ int RTFDocumentImpl::popState()
         }
 
         m_pObjectData->Seek(0);
+
+        // Skip ObjectHeader
+        sal_uInt32 nData;
+        *m_pObjectData >> nData; // OLEVersion
+        *m_pObjectData >> nData; // FormatID
+        *m_pObjectData >> nData; // ClassName
+        m_pObjectData->SeekRel(nData);
+        *m_pObjectData >> nData; // TopicName
+        m_pObjectData->SeekRel(nData);
+        *m_pObjectData >> nData; // ItemName
+        m_pObjectData->SeekRel(nData);
+        *m_pObjectData >> nData; // NativeDataSize
+
         uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(m_pObjectData));
         RTFValue::Pointer_t pStreamValue(new RTFValue(xInputStream));
 
