@@ -54,14 +54,14 @@ int SAL_CALL CompareStart( const void* pFirst, const void* pSecond )
 // -------------------------------------------------------------------------
 TextCharAttrib::TextCharAttrib( const TextAttrib& /* rAttr */, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
-    mpAttr = NULL;
+    mpAttr = rAttr.Clone();
     mnStart = nStart,
     mnEnd = nEnd;
 }
 
 TextCharAttrib::TextCharAttrib( const TextCharAttrib& rTextCharAttrib )
 {
-    mpAttr = NULL;
+    mpAttr = rTextCharAttrib.GetAttr().Clone();
     mnStart = rTextCharAttrib.mnStart;
     mnEnd = rTextCharAttrib.mnEnd;
 }

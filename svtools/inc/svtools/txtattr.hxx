@@ -59,7 +59,9 @@ public:
 
     virtual                 ~TextAttrib();
 
-    sal_uInt16                  Which() const   { return mnWhich; }
+    sal_uInt16              Which() const   { return mnWhich; }
+    virtual void            SetFont( Font& rFont ) const = 0;
+    virtual TextAttrib*     Clone() const = 0;
 
     virtual int             operator==( const TextAttrib& rAttr ) const = 0;
     int                     operator!=( const TextAttrib& rAttr ) const
