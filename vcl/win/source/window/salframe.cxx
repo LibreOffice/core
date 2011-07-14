@@ -48,9 +48,6 @@
 #include <stdio.h>
 
 #include <svsys.h>
-#ifdef __MINGW32__
-#include <excpt.h>
-#endif
 
 #include <rtl/string.h>
 #include <rtl/ustring.h>
@@ -99,6 +96,10 @@ using ::std::max;
 #include <com/sun/star/uno/Exception.hdl>
 
 #include <time.h>
+
+#ifdef __MINGW32__
+#include <sehandler.hxx>
+#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;

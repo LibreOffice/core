@@ -39,10 +39,6 @@
 
 #include <tools/urlobj.hxx>
 
-#ifdef __MINGW32__
-#include <excpt.h>
-#endif
-
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
 #include <win/salinst.h>
@@ -63,6 +59,10 @@
 #include <comphelper/processfactory.hxx>
 
 #include <malloc.h>
+
+#ifdef __MINGW32__
+#include <sehandler.hxx>
+#endif
 
 #ifdef __MINGW32__
 #define CATCH_DRIVER_EX_BEGIN                                               \

@@ -34,9 +34,6 @@
 #include <svsys.h>
 #include <process.h>
 #endif
-#ifdef __MINGW32__
-#include <excpt.h>
-#endif
 
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -72,13 +69,17 @@
 #pragma warning( disable: 4917 )
 #endif
 
-#include <GdiPlus.h>
-#include <GdiPlusEnums.h>
-#include <GdiPlusColor.h>
-#include <Shlobj.h>
+#include <gdiplus.h>
+#include <gdiplusenums.h>
+#include <gdipluscolor.h>
+#include <shlobj.h>
 
 #if defined _MSC_VER
 #pragma warning(pop)
+#endif
+
+#ifdef __MINGW32__
+#include <sehandler.hxx>
 #endif
 
 // =======================================================================
