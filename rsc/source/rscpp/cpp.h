@@ -290,9 +290,9 @@ extern SIZES    size_table[];           /* For #if sizeof sizes         */
 
 #ifdef NOMAIN                /* BP */
 #ifndef _NO_PROTO
-int start_cpp( int argc, char *argv[] );
+int rscpp_main( int argc, char **argv );
 #endif
-#define MAIN   start_cpp     /* fuer die cpp.lib muss main() geandert werden */
+#define MAIN   rscpp_main     /* fuer die cpp.lib muss main() geandert werden */
 #else
 #ifdef WNT
 #define MAIN   __cdecl main

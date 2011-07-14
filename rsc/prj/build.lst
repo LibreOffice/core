@@ -6,4 +6,4 @@ r	rsc\source\res							nmake	-	all	rsc_res NULL
 r	rsc\source\parser						nmake	-	all	rsc_pars NULL
 r	rsc\source\rsc							nmake	-	all	rsc_rsc NULL
 r	rsc\source\rscpp						nmake	-	all	rsc_cpp NULL
-r	rsc\source\prj							nmake	-	all	rsc_sprj rsc_misc rsc_pars rsc_res rsc_rsc rsc_tool NULL
+r	rsc\source\prj							nmake	-	all	rsc_sprj rsc_cpp rsc_misc rsc_pars rsc_res rsc_rsc rsc_tool NULL

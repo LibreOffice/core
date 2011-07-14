@@ -45,21 +45,16 @@ OBJFILES=   $(OBJ)$/gui.obj          \
 
 APP1TARGET= rsc
 APP1STDLIBS=$(TOOLSLIB) $(I18NISOLANGLIB)  $(SALLIB) # $(RTLLIB)
-APP1LIBS=   $(LB)$/rsctoo.lib
-APP1OBJS=   $(OBJ)$/start.obj
+APP1LIBS=   $(LB)$/rscmis.lib     \
+            $(LB)$/rscpar.lib     \
+            $(LB)$/rscres.lib     \
+            $(LB)$/rscrsc.lib     \
+            $(LB)$/rscpp.lib      \
+            $(LB)$/rsctoo.lib
+APP1OBJS=   $(OBJ)$/start.obj     \
+            $(OBJ)$/gui.obj
 APP1STACK=64000
 APP1RPATH=NONE
-
-APP2TARGET= rsc2
-APP2STDLIBS=$(TOOLSLIB) $(I18NISOLANGLIB)  $(SALLIB) # $(RTLLIB)
-APP2LIBS=   $(LB)$/rsctoo.lib \
-            $(LB)$/rscres.lib \
-            $(LB)$/rscpar.lib \
-            $(LB)$/rscrsc.lib \
-            $(LB)$/rscmis.lib
-APP2OBJS=   $(OBJ)$/gui.obj
-APP2STACK=64000
-APP2RPATH=NONE
 
 # --- Targets ------------------------------------------------------------
 
