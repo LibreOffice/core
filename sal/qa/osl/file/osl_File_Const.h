@@ -95,7 +95,9 @@ const sal_Char pBuffer_Blank[]  = "";
 #       include <sys/param.h>
 #       include <sys/mount.h>
 #   endif
-#   include <sys/statvfs.h>
+#   if !defined(ANDROID)
+#        include <sys/statvfs.h>
+#   endif
 #   include <sys/types.h>
 #   define TEST_PLATFORM        ""
 #   define TEST_PLATFORM_ROOT   "/"

@@ -2180,7 +2180,7 @@ namespace osl_VolumeInfo
         }
 
 
-#if ( defined UNX )
+#if defined(UNX) && !defined(ANDROID)
          void getMaxNameLength_002( )
         {
              struct statvfs aStatFS;
@@ -6055,7 +6055,7 @@ namespace osl_Directory
             if (tmp_x.lastIndexOf('/') != (tmp_x.getLength() - 1))
                 tmp_x += rtl::OString('/');
 
-#ifndef WNT
+#if !defined(WNT) && !defined(ANDROID)
             // FIXME would be nice to create unique dir even on Windows
             tmp_x += rtl::OString("XXXXXX");
             char *out = mkdtemp(const_cast<char*>(tmp_x.getStr()));
