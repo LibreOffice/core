@@ -56,6 +56,7 @@ gb_Library_FILENAMES := $(patsubst xml2:ixml2%,xml2:libxml2$(gb_Library_IARCEXT)
 gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf.dll$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst z:iz%,z:zlib%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst graphite2_off:%.dll.a,graphite2_off:%.a,$(gb_Library_FILENAMES))
 
 # Libraries not provided by mingw(-w64), available only in the Windows
 # SDK. So if these actually are liked with somewhere, we can't

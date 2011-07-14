@@ -424,7 +424,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
-		$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_implibname,$(lib)))) \
+		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_implibname,$(lib))))) \
 		-Wl$(COMMA)-Map$(COMMA)$(basename $(1)).map \
 		-o $(1)))
 endef
@@ -440,7 +440,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
-		$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_implibname,$(lib)))) \
+		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_implibname,$(lib))))) \
 		-Wl$(COMMA)-Map$(COMMA)$(basename $(DLLTARGET)).map \
 		-Wl$(COMMA)--out-implib$(COMMA)$(1) \
 		-o $(dir $(1))/$(notdir $(DLLTARGET))))
