@@ -56,8 +56,6 @@ SvxSimpleTableContainer::SvxSimpleTableContainer( Window* pParent, const ResId& 
 void SvxSimpleTableContainer::SetTable(SvxSimpleTable* pTable)
 {
     m_pTable = pTable;
-    if (m_pTable)
-        SetBackground(m_pTable->GetBackground());
 }
 
 long SvxSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
