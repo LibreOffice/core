@@ -1540,6 +1540,13 @@ androideabi*)
     ;;
 esac
 
+if test "$_os" = "AIX"; then
+    AC_PATH_PROG(GAWK, gawk)
+    if test -z "$GAWK"; then
+        AC_MSG_ERROR([gawk not found in \$PATH])
+    fi
+fi
+
 AC_SUBST(WITH_MINGW)
 AC_SUBST(OSVERSION)
 AC_SUBST(PTHREAD_CFLAGS)
@@ -2213,7 +2220,7 @@ dnl Testing for required Perl modules
 dnl ===================================================================
 
 AC_MSG_CHECKING([for required Perl modules])
-if `$PERL -e 'use Archive::Zip;'`; then
+if `$PERL -e 'use Archive::Zip; use Cwd;'`; then
     AC_MSG_RESULT([all modules found])
 else
     AC_MSG_ERROR([Failed to find some modules])
@@ -6317,7 +6324,7 @@ elif $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null;
     AC_MSG_RESULT([yes])
 else
     case "$build_os" in
-    darwin*|netbsd*|openbsd*|freebsd*|dragonfly*)
+    darwin*|netbsd*|openbsd*|freebsd*|dragonfly*|aix*)
         GNUCP=''
         AC_MSG_RESULT([no gnucp found - using the system's cp command])
         ;;
