@@ -89,9 +89,9 @@ gb_CXXFLAGS := \
 
 # these are to get g++ to switch to Objective-C++ mode
 # (see toolkit module for a case where it is necessary to do it this way)
-gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
+gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
 
-gb_OBJCFLAGS := -x objective-c
+gb_OBJCFLAGS := -x objective-c -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -Werror
