@@ -5600,6 +5600,9 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
         nProduct = 0xc02d;
     }
 
+    //If nFib is 0x00D9 or greater, then cQuickSaves MUST be 0xF
+    cQuickSaves = nFib >= 0x00D9 ? 0xF : 0;
+
     // --> #i90932#
     lid = 0x409; // LANGUAGE_ENGLISH_US
 
