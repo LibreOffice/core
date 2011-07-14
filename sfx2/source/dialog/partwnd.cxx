@@ -166,11 +166,6 @@ SfxPartDockWnd_Impl::~SfxPartDockWnd_Impl()
 
 //****************************************************************************
 
-Rectangle impl_Rectangle_Struct2Object( const ::com::sun::star::awt::Rectangle& aRectangleStruct )
-{
-    return Rectangle(aRectangleStruct.X,aRectangleStruct.Y,aRectangleStruct.Width,aRectangleStruct.Height);
-}
-
 void SfxPartDockWnd_Impl::Resize()
 
 /*  [Description]
