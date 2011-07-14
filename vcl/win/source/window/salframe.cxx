@@ -114,6 +114,9 @@ using namespace ::com::sun::star::beans;
 #ifndef SPI_SETWHEELSCROLLCHARS
 # define SPI_SETWHEELSCROLLCHARS   0x006D
 #endif
+#ifndef WM_MOUSEHWHEEL
+# define WM_MOUSEHWHEEL 0x020E
+#endif
 
 #if OSL_DEBUG_LEVEL > 1
 void MyOutputDebugString( char *s) { OutputDebugString( s ); }
