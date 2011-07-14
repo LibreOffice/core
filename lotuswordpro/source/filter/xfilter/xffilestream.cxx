@@ -61,7 +61,6 @@
 #include    "xffileattrlist.hxx"
 #include    "ixfattrlist.hxx"
 
-void    WriteStartTag(std::ofstream& ofs, const char *pStr, int len);
 void    WriteEndTag(std::ofstream& ofs, const char *pStr, int len);
 void    WriteString(std::ofstream& ofs, const char *pStr, int len);
 void    WriteXmlString(std::ofstream& ofs, const char *pStr, int len);
@@ -131,14 +130,6 @@ void        XFFileStream::Characters(const rtl::OUString& oustr)
 IXFAttrList*    XFFileStream::GetAttrList()
 {
     return m_pAttrList;
-}
-
-//------------------------------------------------------------------------------
-
-void    WriteStartTag(std::ofstream& ofs, const char *pStr, int len)
-{
-    ofs.write("\n<",2);
-    ofs.write(pStr,len);
 }
 
 void    WriteEndTag(std::ofstream& ofs, const char *pStr, int len)

@@ -109,11 +109,6 @@ rtl::OUString   DoubleToOUString(double num, sal_Int32 /*precision*/)
     return rtl::OUString::valueOf(num);
 }
 
-rtl::OUString   OEMToOUString(const std::string& /*str*/)
-{
-    return rtl::OUString();
-}
-
 rtl::OUString   DateTimeToOUString(XFDateTime& dt)
 {
     rtl::OUStringBuffer buf;
