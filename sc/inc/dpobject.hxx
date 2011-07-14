@@ -313,6 +313,8 @@ public:
     ScDPCollection(const ScDPCollection& r);
     ~ScDPCollection();
 
+    bool ClearCache(ScDPObject* pDPObj);
+
     SC_DLLPUBLIC size_t GetCount() const;
     SC_DLLPUBLIC ScDPObject* operator[](size_t nIndex);
     SC_DLLPUBLIC const ScDPObject* operator[](size_t nIndex) const;
