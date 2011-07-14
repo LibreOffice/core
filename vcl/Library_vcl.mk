@@ -551,10 +551,17 @@ $(eval $(call gb_Library_set_ldflags,vcl,\
 endif
 
 ifeq ($(OS),WNT)
+ifeq ($(COM),MSC)
 $(eval $(call gb_Library_set_ldflags,vcl,\
     $$(LDFLAGS) \
     /ENTRY:LibMain@12 \
 ))
+endif
+ifeq ($(COM),GCC)
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+))
+endif
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     advapi32 \
     gdi32 \
