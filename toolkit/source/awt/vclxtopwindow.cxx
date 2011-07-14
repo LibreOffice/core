@@ -37,6 +37,12 @@
 #include "postmac.h"
 #endif
 
+#if defined ( IOS )
+#include "premac.h"
+#include <UIKit/UIKit.h>
+#include "postmac.h"
+#endif
+
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -106,6 +112,11 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException)
             }
 #elif (defined QUARTZ)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
+            {
+                 aRet <<= (sal_IntPtr)pSysData->pView;
+            }
+#elif (defined IOS)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_IOS )
             {
                  aRet <<= (sal_IntPtr)pSysData->pView;
             }

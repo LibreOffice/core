@@ -46,6 +46,12 @@
 #include "postmac.h"
 #endif
 
+#ifdef IOS
+#include "premac.h"
+#include <UIKit/UIKit.h>
+#include "postmac.h"
+#endif
+
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
@@ -94,6 +100,11 @@ IMPL_XTYPEPROVIDER_END
             }
 #elif (defined QUARTZ)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
+            {
+                 aRet <<= (sal_IntPtr)pSysData->pView;
+            }
+#elif (defined IOS)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_IOS )
             {
                  aRet <<= (sal_IntPtr)pSysData->pView;
             }

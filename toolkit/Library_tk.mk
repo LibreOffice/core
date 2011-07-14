@@ -167,6 +167,11 @@ $(eval $(call gb_Library_set_cxxflags,tk,\
     $$(CXXFLAGS) $(gb_OBJCXXFLAGS)))
 endif
 
+ifeq ($(GUIBASE),cocoatouch)
+$(eval $(call gb_Library_set_cxxflags,tk,\
+    $$(CXXFLAGS) $(gb_OBJCXXFLAGS)))
+endif
+
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
 $(eval $(call gb_Library_add_linked_libs,tk,\
     X11 \
