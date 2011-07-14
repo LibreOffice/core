@@ -465,7 +465,7 @@ SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserDat
     else
         aCurEntry.Erase();
 
-    return SvTreeListBox::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
+    return SvxSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
 
 }
 
@@ -487,7 +487,7 @@ SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserDat
     else
         aCurEntry.Erase();
 
-    return SvTreeListBox::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
+    return SvxSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
 }
 
 SvLBoxEntry* SvxRedlinTable::CreateEntry() const
