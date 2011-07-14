@@ -1634,6 +1634,7 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
 
 drawinglayer::processor2d::BaseProcessor2D* ScOutputData::CreateProcessor2D( )
 {
+    pDoc->InitDrawLayer(pDoc->GetDocumentShell());
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     if (!pDrawLayer)
         return NULL;
