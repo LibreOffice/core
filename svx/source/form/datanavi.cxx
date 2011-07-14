@@ -3158,7 +3158,8 @@ namespace svxform
         ModalDialog( _pCondDlg, SVX_RES( RID_SVXDLG_NAMESPACE_ITEM ) ),
 
         m_aNamespacesFT         ( this, SVX_RES( FT_NAMESPACES ) ),
-        m_aNamespacesList       ( this, SVX_RES( LB_NAMESPACES ) ),
+        m_aNamespacesListContainer  ( this, SVX_RES( LB_NAMESPACES ) ),
+        m_aNamespacesList       ( m_aNamespacesListContainer ),
         m_aAddNamespaceBtn      ( this, SVX_RES( PB_ADD_NAMESPACE ) ),
         m_aEditNamespaceBtn     ( this, SVX_RES( PB_EDIT_NAMESPACE ) ),
         m_aDeleteNamespaceBtn   ( this, SVX_RES( PB_DELETE_NAMESPACE ) ),

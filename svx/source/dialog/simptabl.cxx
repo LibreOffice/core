@@ -37,30 +37,39 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>
 
-// SvxSimpTblContainer  ------------------------------------------------------
+// SvxSimpleTableContainer  ------------------------------------------------------
 
-SvxSimpTblContainer::SvxSimpTblContainer( Window* pParent, WinBits nWinStyle):
-        Control(pParent,nWinStyle)
+SvxSimpleTableContainer::SvxSimpleTableContainer(Window* pParent, WinBits nStyle)
+    : Control(pParent, nStyle)
+    , m_pTable(NULL)
 {
-    //Do Nothing;
+    SetBorderStyle(WINDOW_BORDER_NOBORDER);
 }
 
-SvxSimpTblContainer::SvxSimpTblContainer( Window* pParent, const ResId& rResId):
-        Control(pParent,rResId)
+SvxSimpleTableContainer::SvxSimpleTableContainer( Window* pParent, const ResId& rResId)
+    : Control(pParent, rResId)
+    , m_pTable(NULL)
 {
-    //Do Nothing;
+    SetBorderStyle(WINDOW_BORDER_NOBORDER);
 }
 
-long SvxSimpTblContainer::PreNotify( NotifyEvent& rNEvt )
+void SvxSimpleTableContainer::SetTable(SvxSimpleTable* pTable)
+{
+    m_pTable = pTable;
+    if (m_pTable)
+        SetBackground(m_pTable->GetBackground());
+}
+
+long SvxSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
 {
     long nResult = sal_True;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey = aKeyCode.GetCode();
-        if ( nKey == KEY_TAB )
+        if (nKey == KEY_TAB)
             GetParent()->Notify( rNEvt );
-        else if ( m_pTable->IsFocusOnCellEnabled() && ( nKey == KEY_LEFT || nKey == KEY_RIGHT ) )
+        else if (m_pTable && m_pTable->IsFocusOnCellEnabled() && ( nKey == KEY_LEFT || nKey == KEY_RIGHT))
             return 0;
         else
             nResult = Control::PreNotify( rNEvt );
@@ -71,24 +80,28 @@ long SvxSimpTblContainer::PreNotify( NotifyEvent& rNEvt )
     return nResult;
 }
 
+void SvxSimpleTableContainer::SetSizePixel(const Size& rNewSize )
+{
+    Control::SetSizePixel(rNewSize);
+    if (m_pTable)
+        m_pTable->UpdateViewSize();
+}
 
 // SvxSimpleTable ------------------------------------------------------------
 
-SvxSimpleTable::SvxSimpleTable( Window* pParent,WinBits nBits ):
-        SvHeaderTabListBox(pParent,WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
-        aPrivContainer(pParent,nBits|WB_DIALOGCONTROL),
-        aHeaderBar(pParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP),
+SvxSimpleTable::SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits):
+        SvHeaderTabListBox(&rParent, nBits | WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
+        m_rParentTableContainer(rParent),
+        aHeaderBar(&rParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP),
         nHeaderItemId(1),
         bResizeFlag(sal_False),
         bPaintFlag(sal_True)
 {
+    m_rParentTableContainer.SetTable(this);
+
     bSortDirection=sal_True;
     nSortCol=0xFFFF;
     nOldPos=0;
-
-    SetParent(&aPrivContainer);
-    aHeaderBar.SetParent(&aPrivContainer);
-    aPrivContainer.SetTable( this );
 
     aHeaderBar.SetStartDragHdl(LINK( this, SvxSimpleTable, StartDragHdl));
     aHeaderBar.SetDragHdl(LINK( this, SvxSimpleTable, DragHdl));
@@ -100,31 +113,26 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,WinBits nBits ):
     DisableTransientChildren();
     InitHeaderBar( &aHeaderBar );
 
+    UpdateViewSize();
+
     aHeaderBar.Show();
     SvHeaderTabListBox::Show();
 }
 
-
-SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
-        SvHeaderTabListBox(pParent,WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
-        aPrivContainer(pParent,rResId),
-        aHeaderBar(pParent,WB_BUTTONSTYLE | WB_BORDER  | WB_TABSTOP),
+SvxSimpleTable::SvxSimpleTable(SvxSimpleTableContainer& rParent,const ResId& rResId):
+        SvHeaderTabListBox(&rParent,rResId),
+        m_rParentTableContainer(rParent),
+        aHeaderBar(&rParent,WB_BUTTONSTYLE | WB_BORDER  | WB_TABSTOP),
         nHeaderItemId(1),
         bResizeFlag(sal_True),
         bPaintFlag(sal_True)
 {
+    SetStyle(GetStyle()|WB_CLIPCHILDREN | WB_HSCROLL | WB_TABSTOP),
+    m_rParentTableContainer.SetTable(this);
 
     bSortDirection=sal_True;
     nOldPos=0;
     nSortCol=0xFFFF;
-
-    pMyParentWin=pParent;
-    SetParent(&aPrivContainer);
-    aHeaderBar.SetParent(&aPrivContainer);
-    aPrivContainer.SetTable( this );
-
-    WinBits nBits=aPrivContainer.GetStyle()|WB_DIALOGCONTROL;
-    aPrivContainer.SetStyle(nBits);
 
     aHeaderBar.SetStartDragHdl(LINK( this, SvxSimpleTable, StartDragHdl));
     aHeaderBar.SetDragHdl(LINK( this, SvxSimpleTable, DragHdl));
@@ -132,19 +140,7 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
     aHeaderBar.SetSelectHdl(LINK( this, SvxSimpleTable, HeaderBarClick));
     aHeaderBar.SetDoubleClickHdl(LINK( this, SvxSimpleTable, HeaderBarDblClick));
 
-    Size theWinSize=aPrivContainer.GetOutputSizePixel();
-    Size HbSize=aHeaderBar.GetSizePixel();
-
-    HbSize.Width()=theWinSize.Width();
-    theWinSize.Height()-=HbSize.Height();
-    Point   thePos(0,0);
-
-    aHeaderBar.SetPosPixel(thePos);
-    aHeaderBar.SetSizePixel(HbSize);
-
-    thePos.Y()+=HbSize.Height();
-    SvHeaderTabListBox::SetPosPixel(thePos);
-    SvHeaderTabListBox::SetSizePixel(theWinSize);
+    UpdateViewSize();
 
     EnableCellFocus();
     DisableTransientChildren();
@@ -156,20 +152,16 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
 
 SvxSimpleTable::~SvxSimpleTable()
 {
-    SetParent(pMyParentWin);
-    aPrivContainer.SetParent(this);
-    aHeaderBar.SetParent(this);
 }
-
 
 void SvxSimpleTable::UpdateViewSize()
 {
-    Size theWinSize=aPrivContainer.GetOutputSizePixel();
+    Size theWinSize=m_rParentTableContainer.GetSizePixel();
     Size HbSize=aHeaderBar.GetSizePixel();
 
     HbSize.Width()=theWinSize.Width();
     theWinSize.Height()-=HbSize.Height();
-    Point   thePos(0,0);
+    Point thePos(0,0);
 
     aHeaderBar.SetPosPixel(thePos);
     aHeaderBar.SetSizePixel(HbSize);
@@ -178,6 +170,13 @@ void SvxSimpleTable::UpdateViewSize()
     SvHeaderTabListBox::SetPosPixel(thePos);
     SvHeaderTabListBox::SetSizePixel(theWinSize);
     Invalidate();
+}
+
+Size SvxSimpleTable::getPreferredContainerSize() const
+{
+    Size aContainerNewSize(aHeaderBar.GetSizePixel());
+    aContainerNewSize.Height()+=GetSizePixel().Height();
+    return aContainerNewSize;
 }
 
 void SvxSimpleTable::NotifyScrolled()
@@ -281,81 +280,37 @@ void SvxSimpleTable::ClearHeader()
 
 void SvxSimpleTable::ShowTable()
 {
-    aPrivContainer.Show();
+    m_rParentTableContainer.Show();
 }
 
 void SvxSimpleTable::HideTable()
 {
-    aPrivContainer.Hide();
+    m_rParentTableContainer.Hide();
 }
 
 sal_Bool SvxSimpleTable::IsVisible() const
 {
-    return aPrivContainer.IsVisible();
+    return m_rParentTableContainer.IsVisible();
 }
 
 void SvxSimpleTable::EnableTable()
 {
-    aPrivContainer.Enable();
+    m_rParentTableContainer.Enable();
 }
 
 void SvxSimpleTable::DisableTable()
 {
-    aPrivContainer.Disable();
+    m_rParentTableContainer.Disable();
 }
 
 sal_Bool SvxSimpleTable::IsEnabled() const
 {
-    return aPrivContainer.IsEnabled();
+    return m_rParentTableContainer.IsEnabled();
 }
 
 void SvxSimpleTable::TableToTop()
 {
-    aPrivContainer.ToTop();
-}
-
-void SvxSimpleTable::SetPosPixel( const Point& rNewPos )
-{
-    aPrivContainer.SetPosPixel(rNewPos);
-}
-
-Point SvxSimpleTable::GetPosPixel() const
-{
-    return aPrivContainer.GetPosPixel();
-}
-
-void SvxSimpleTable::SetPosSizePixel( const Point& rNewPos, Size& rNewSize )
-{
-    aPrivContainer.SetPosPixel(rNewPos);
-    aPrivContainer.SetSizePixel(rNewSize);
-}
-
-void SvxSimpleTable::SetPosSize( const Point& rNewPos, const Size& rNewSize )
-{
-    aPrivContainer.SetPosPixel(rNewPos);
-    SvHeaderTabListBox::SetPosSizePixel(rNewPos,rNewSize);
-}
-
-Size SvxSimpleTable::GetSizePixel() const
-{
-    return aPrivContainer.GetSizePixel();
-}
-
-Size SvxSimpleTable::GetOutputSizePixel() const
-{
-    return aPrivContainer.GetOutputSizePixel();
-}
-
-void SvxSimpleTable::SetSizePixel(const Size& rNewSize )
-{
-    aPrivContainer.SetSizePixel(rNewSize);
-    UpdateViewSize();
-}
-
-void SvxSimpleTable::SetOutputSizePixel(const Size& rNewSize )
-{
-    aPrivContainer.SetOutputSizePixel(rNewSize);
-    UpdateViewSize();
+    m_rParentTableContainer.ToTop();
 }
 
 sal_uInt16 SvxSimpleTable::GetSelectedCol()

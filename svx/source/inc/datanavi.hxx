@@ -417,6 +417,7 @@ namespace svxform
         typedef std::vector< ::rtl::OUString > PrefixList;
 
         FixedText           m_aNamespacesFT;
+        SvxSimpleTableContainer m_aNamespacesListContainer;
         SvxSimpleTable      m_aNamespacesList;
         PushButton          m_aAddNamespaceBtn;
         PushButton          m_aEditNamespaceBtn;

@@ -40,31 +40,32 @@
 #include "svx/svxdllapi.h"
 
 class SvxSimpleTable;
-class SvxSimpTblContainer : public Control
+class SVX_DLLPUBLIC SvxSimpleTableContainer : public Control
 {
 private:
     SvxSimpleTable*     m_pTable;
 
 protected:
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual long PreNotify( NotifyEvent& rNEvt );
 
 public:
-    SvxSimpTblContainer( Window* pParent, WinBits nWinStyle = 0 );
-    SvxSimpTblContainer( Window* pParent, const ResId& rResId );
+    SvxSimpleTableContainer( Window* pParent, WinBits nWinStyle = WB_BORDER );
+    SvxSimpleTableContainer( Window* pParent, const ResId& rResId );
 
-    inline void         SetTable( SvxSimpleTable* _pTable ) { m_pTable = _pTable; }
+    void SetTable(SvxSimpleTable* pTable);
+
+    virtual void SetSizePixel(const Size& rNewSize);
 };
 
 class SVX_DLLPUBLIC SvxSimpleTable : public SvHeaderTabListBox
 {
-    using Window::SetPosSizePixel;
 private:
+    SvxSimpleTableContainer& m_rParentTableContainer;
 
     Link                aHeaderBarClickLink;
     Link                aHeaderBarDblClickLink;
     Link                aCommandLink;
     CommandEvent        aCEvt;
-    SvxSimpTblContainer aPrivContainer;
     HeaderBar           aHeaderBar;
     long                nOldPos;
     sal_uInt16              nHeaderItemId;
@@ -72,7 +73,6 @@ private:
     sal_Bool                bPaintFlag;
     sal_Bool                bSortDirection;
     sal_uInt16              nSortCol;
-    Window*             pMyParentWin;
 
     DECL_LINK( StartDragHdl, HeaderBar* );
     DECL_LINK( DragHdl, HeaderBar* );
@@ -87,7 +87,6 @@ protected:
 
     virtual void            SetTabs();
     virtual void            Paint( const Rectangle& rRect );
-    virtual void            UpdateViewSize();
 
     virtual void            HBarClick();
     virtual void            HBarDblClick();
@@ -102,9 +101,12 @@ protected:
 
 public:
 
-    SvxSimpleTable( Window* pParent,WinBits nBits =WB_BORDER );
-    SvxSimpleTable( Window* pParent,const ResId& );
+    SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
+    SvxSimpleTable(SvxSimpleTableContainer& rParent, const ResId&);
     ~SvxSimpleTable();
+
+    void UpdateViewSize();
+    Size getPreferredContainerSize() const;
 
     void            InsertHeaderEntry(const XubString& rText,
                             sal_uInt16 nCol=HEADERBAR_APPEND,
@@ -139,15 +141,6 @@ public:
     sal_Bool            IsEnabled() const;
 
     void            TableToTop();
-    void            SetPosPixel( const Point& rNewPos );
-    Point           GetPosPixel() const ;
-    virtual void    SetPosSizePixel( const Point& rNewPos, Size& rNewSize );
-    void            SetPosSize( const Point& rNewPos, const Size& rNewSize );
-    void            SetSizePixel(const Size& rNewSize );
-    void            SetOutputSizePixel(const Size& rNewSize );
-
-    Size            GetSizePixel() const;
-    Size            GetOutputSizePixel() const;
 
     sal_uInt16          GetSelectedCol();
     void            SortByCol(sal_uInt16,sal_Bool bDir=sal_True);
