@@ -81,10 +81,13 @@ class OfaMSFilterTabPage2 : public SfxTabPage
         virtual void    KeyInput( const KeyEvent& rKEvt );
 
     public:
-        MSFltrSimpleTable(Window* pParent, const ResId& rResId ) :
-            SvxSimpleTable( pParent, rResId ){}
+        MSFltrSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER)
+            : SvxSimpleTable(rParent, nBits)
+        {
+        }
     };
 
+    SvxSimpleTableContainer m_aCheckLBContainer;
     MSFltrSimpleTable aCheckLB;
     FixedText aHeader1FT, aHeader2FT;
     String sHeader1, sHeader2;

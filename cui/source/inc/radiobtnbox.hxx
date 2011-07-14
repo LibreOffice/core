@@ -49,7 +49,7 @@ protected:
     virtual void        KeyInput( const KeyEvent& rKEvt );
 
 public:
-    SvxRadioButtonListBox( Window* _pParent, const ResId& _rId );
+    SvxRadioButtonListBox(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
     ~SvxRadioButtonListBox();
 
     void                HandleEntryChecked( SvLBoxEntry* _pEntry );

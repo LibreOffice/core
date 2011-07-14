@@ -191,7 +191,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     ,maHintDocFT        ( this, XMLSEC_RES( FT_HINT_DOC ) )
     ,maHintBasicFT      ( this, XMLSEC_RES( FT_HINT_BASIC ) )
     ,maHintPackageFT    ( this, XMLSEC_RES( FT_HINT_PACK ) )
-    ,maSignaturesLB     ( this, XMLSEC_RES( LB_SIGNATURES ) )
+    ,maSignaturesLBContainer(this, XMLSEC_RES(LB_SIGNATURES))
+    ,maSignaturesLB(maSignaturesLBContainer)
     ,maSigsValidImg     ( this, XMLSEC_RES( IMG_STATE_VALID ) )
     ,maSigsValidFI      ( this, XMLSEC_RES( FI_STATE_VALID ) )
     ,maSigsInvalidImg   ( this, XMLSEC_RES( IMG_STATE_BROKEN ) )
@@ -209,7 +210,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     ,m_bHasDocumentSignature(bHasDocumentSignature)
     ,m_bWarningShowSignMacro(false)
 {
-    // --> PB #i48253 the tablistbox needs its own unique id
+    // #i48253# the tablistbox needs its own unique id
     maSignaturesLB.Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
     Size aControlSize( maSignaturesLB.GetSizePixel() );
     aControlSize = maSignaturesLB.PixelToLogic( aControlSize, MapMode( MAP_APPFONT ) );

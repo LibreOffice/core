@@ -99,7 +99,8 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_aJavaLine         ( this, CUI_RES( FL_JAVA ) ),
     m_aJavaEnableCB     ( this, CUI_RES( CB_JAVA_ENABLE ) ),
     m_aJavaFoundLabel   ( this, CUI_RES( FT_JAVA_FOUND ) ),
-    m_aJavaList         ( this, CUI_RES( LB_JAVA ) ),
+    m_aJavaListContainer(this, CUI_RES(LB_JAVA)),
+    m_aJavaList(m_aJavaListContainer),
     m_aJavaPathText     ( this, CUI_RES( FT_JAVA_PATH ) ),
     m_aAddBtn           ( this, CUI_RES( PB_ADD ) ),
     m_aParameterBtn     ( this, CUI_RES( PB_PARAMETER ) ),
@@ -169,9 +170,9 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
         aPos = m_aParameterBtn.GetPosPixel();
         aPos.X() -= nDiff;
         m_aParameterBtn.SetPosSizePixel(aPos, aButtonSize);
-        Size aSize = m_aJavaList.GetSizePixel();
+        Size aSize = m_aJavaListContainer.GetSizePixel();
         aSize.Width() -= nDiff;
-        m_aJavaList.SetSizePixel(aSize);
+        m_aJavaListContainer.SetSizePixel(aSize);
     }
 }
 
