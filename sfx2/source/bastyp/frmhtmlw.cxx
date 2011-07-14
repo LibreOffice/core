@@ -249,7 +249,9 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
                 valstr.EraseTrailingChars();
                 OutMeta( rStrm, pIndent, name, valstr, sal_False,
                          eDestEnc, pNonConvertableChars );
-            } catch (uno::Exception &) {
+            }
+            catch (const uno::Exception&)
+            {
                 // may happen with concurrent modification...
                 DBG_WARNING("SfxFrameHTMLWriter::Out_DocInfo: exception");
             }
@@ -332,7 +334,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         }
         rOut << sOut.getStr();
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
 }
