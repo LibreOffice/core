@@ -1697,6 +1697,7 @@ if test "$cross_compiling" = "yes"; then
     (
     unset COM GUI GUIBASE OS CPU CPUNAME
     unset CC CXX SYSBASE CFLAGS
+    unset PYTHON_CFLAGS PYTHON_LIBS
     unset AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
     test -n "$CC_FOR_BUILD" && export CC="$CC_FOR_BUILD"
     test -n "$CXX_FOR_BUILD" && export CXX="$CXX_FOR_BUILD"
