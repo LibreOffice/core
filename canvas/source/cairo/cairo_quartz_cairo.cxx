@@ -29,9 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_canvas.hxx"
 
-#ifdef QUARTZ
+#if defined QUARTZ || defined IOS
 /************************************************************************
- * Mac OS X/Quartz surface backend for OpenOffice.org Cairo Canvas      *
+ * Mac OS X/Quartz and iOS surface backend for OpenOffice.org Cairo Canvas      *
  ************************************************************************/
 
 #include <osl/diagnose.h>
@@ -205,13 +205,19 @@ namespace cairo
         CGContextRef mrContext = getCGContext();
 
         if (!mrContext) return;
-
+#ifndef IOS
         [mpView lockFocus];
+#endif
 
+#ifndef IOS
         /**
          * This code is using same screen update code as in VCL (esp. AquaSalGraphics::UpdateWindow() )
          */
         CGContextRef rViewContext = reinterpret_cast<CGContextRef>([[NSGraphicsContext currentContext] graphicsPort]);
+#else
+        // Just guessing for now...
+        CGContextRef rViewContext = UIGraphicsGetCurrentContext();
+#endif
         CGImageRef xImage = CGBitmapContextCreateImage(mrContext);
         CGContextDrawImage(rViewContext,
                            CGRectMake( 0, 0,
@@ -220,8 +226,9 @@ namespace cairo
                            xImage);
         CGImageRelease( xImage );
         CGContextFlush( rViewContext );
-
+#ifndef IOS
         [mpView unlockFocus];
+#endif
     }
 
     /**

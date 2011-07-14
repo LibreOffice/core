@@ -56,6 +56,10 @@ CFLAGS+=$(CAIRO_CFLAGS)
 CFLAGS+=-I$(SOLARINCDIR)/cairo
 .ENDIF
 
+.IF "$(OS)" == "IOS"
+CFLAGS+= -x objective-c++ -fobjc-exceptions -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
+.ENDIF
+
 .IF "$(verbose)"!="" || "$(VERBOSE)"!=""
 CDEFS+= -DVERBOSE
 .ENDIF
@@ -88,18 +92,18 @@ SHL1STDLIBS+= $(CAIRO_LIBS)
 SHL1STDLIBS+= -lcairo -lpixman-1
 .ENDIF
 
-.IF "$(GUIBASE)"=="aqua"
-# native Mac OS X (Quartz)
+.IF "$(GUIBASE)"=="aqua" || "$(GUIBASE)"=="cocoatouch"
+# native Mac OS X (Quartz) or iOS
 SLOFILES+= $(SLO)$/cairo_quartz_cairo.obj
 CFLAGSCXX+=$(OBJCXXFLAGS)
-.ELSE    # "$(GUIBASE)"=="aqua"
+.ELSE    # "$(GUIBASE)"=="aqua" || "$(GUIBASE)"=="cocoatouch"
 
 # Xlib
 SLOFILES+= $(SLO)$/cairo_xlib_cairo.obj
 SHL1STDLIBS+= $(FONTCONFIG_LIBS) -lX11 -lXrender $(FREETYPE_LIBS)
 CFLAGS+= $(FREETYPE_CFLAGS)
 
-.ENDIF   # "$(GUIBASE)"=="aqua"
+.ENDIF   # "$(GUIBASE)"=="aqua" || "$(GUIBASE)"=="cocoatouch"
 
 .ELSE    # "$(GUI)"=="UNX" 
 
