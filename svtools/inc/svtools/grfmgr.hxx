@@ -548,6 +548,8 @@ public:
 // - GraphicManager -
 // ------------------
 
+typedef ::std::vector< GraphicObject* > GraphicObjectList_impl;
+
 class SVT_DLLPUBLIC GraphicManager
 {
     friend class GraphicObject;
@@ -555,8 +557,8 @@ class SVT_DLLPUBLIC GraphicManager
 
 private:
 
-    List                maObjList;
-    GraphicCache*       mpCache;
+    GraphicObjectList_impl  maObjList;
+    GraphicCache*           mpCache;
 
                         GraphicManager( const GraphicManager& ) {}
     GraphicManager&     operator=( const GraphicManager& ) { return *this; }
@@ -652,7 +654,7 @@ private:
                             const GraphicObject* pCopyObj = NULL
                         );
     void SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
-    inline sal_Bool SVT_DLLPRIVATE ImplHasObjects() const { return( maObjList.Count() > 0UL ); }
+    inline sal_Bool SVT_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }
 
                     // Only used in swap case by GraphicObject
     void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj );

@@ -122,8 +122,8 @@ GraphicManager::GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize
 
 GraphicManager::~GraphicManager()
 {
-    for( void* pObj = maObjList.First(); pObj; pObj = maObjList.Next() )
-        ( (GraphicObject*) pObj )->GraphicManagerDestroyed();
+    for( size_t i = 0, n = maObjList.size(); i < n; ++i )
+        maObjList[ i ]->GraphicManagerDestroyed();
 
     delete mpCache;
 }
@@ -271,7 +271,7 @@ sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Si
 void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubstitute,
                                       const ByteString* pID, const GraphicObject* pCopyObj )
 {
-    maObjList.Insert( (void*) &rObj, LIST_APPEND );
+    maObjList.push_back( (GraphicObject*)&rObj );
     mpCache->AddGraphicObject( rObj, rSubstitute, pID, pCopyObj );
 }
 
@@ -280,7 +280,13 @@ void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubst
 void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
 {
     mpCache->ReleaseGraphicObject( rObj );
-    maObjList.Remove( (void*) &rObj );
+    for( GraphicObjectList_impl::iterator it = maObjList.begin(); it < maObjList.end(); ++it )
+    {
+        if ( *it == &rObj ) {
+            maObjList.erase( it );
+            break;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
