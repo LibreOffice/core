@@ -44,10 +44,7 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:testjob by codegen.pl
-
-.IF "$(GUI)" == "WNT"
+.IF "$(COM)" == "MSC"
     CFLAGS+=/Ob1
 .ENDIF
 
@@ -61,11 +58,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
-# END ------------------------------------------------------------------
-
 #------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-
 SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------

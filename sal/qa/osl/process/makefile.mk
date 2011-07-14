@@ -38,10 +38,7 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:testjob by codegen.pl
-
-.IF "$(GUI)" == "WNT"
+.IF "$(COM)" == "MSC"
     CFLAGS+=/Ob1
 .ENDIF
 
@@ -52,16 +49,12 @@ SHL1IMPLIB=i$(SHL1TARGET)
 DEF1NAME=$(SHL1TARGET)
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
-# END ------------------------------------------------------------------
-
 SHL2OBJS=$(SLO)$/osl_process.obj
 SHL2TARGET=osl_process
 SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 SHL2IMPLIB=i$(SHL2TARGET)
 DEF2NAME=$(SHL2TARGET)
 SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
-
-# END ------------------------------------------------------------------
 
 OBJ3FILES=$(OBJ)$/osl_process_child.obj
 APP3TARGET=osl_process_child
@@ -73,8 +66,6 @@ SHL2DEPN=$(APP3TARGETN) \
          $(BIN)/batch.bat
 
 #------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-
 SLOFILES=$(SHL1OBJS) $(SHL2OBJS)
 
 # --- Targets ------------------------------------------------------
