@@ -107,6 +107,7 @@ namespace writerfilter {
             DESTINATION_COMPANY,
             DESTINATION_COMMENT,
             DESTINATION_OBJECT,
+            DESTINATION_OBJDATA,
             DESTINATION_RESULT
         };
 
@@ -359,6 +360,13 @@ namespace writerfilter {
                 RTFSprms_t m_aFormfieldSprms;
                 RTFSprms_t m_aFormfieldAttributes;
                 RTFFormFieldTypes m_nFormFieldType;
+
+                RTFSprms_t m_aObjectSprms;
+                RTFSprms_t m_aObjectAttributes;
+                /// If we are in an object group.
+                bool m_bObject;
+                /// Contents of the objdata group, stored here so we can delete it when we leave the object group.
+                SvStream* m_pObjectData;
         };
     } // namespace rtftok
 } // namespace writerfilter

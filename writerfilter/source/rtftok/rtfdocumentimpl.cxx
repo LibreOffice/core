@@ -26,7 +26,10 @@
  */
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <editeng/borderline.hxx>
 #include <rtl/strbuf.hxx>
@@ -263,7 +266,11 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aAuthors(),
     m_aFormfieldSprms(),
     m_aFormfieldAttributes(),
-    m_nFormFieldType(FORMFIELD_NONE)
+    m_nFormFieldType(FORMFIELD_NONE),
+    m_aObjectSprms(),
+    m_aObjectAttributes(),
+    m_bObject(false),
+    m_pObjectData(0)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
@@ -496,6 +503,33 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     OSL_ASSERT(xShape.is());
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     OSL_ASSERT(xPropertySet.is());
+    if (m_bObject)
+    {
+        // Set bitmap
+        beans::PropertyValues aMediaProperties(1);
+        aMediaProperties[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+        aMediaProperties[0].Value <<= aGraphicUrl;
+        uno::Reference<graphic::XGraphicProvider> xGraphicProvider(
+                m_xContext->getServiceManager()->createInstanceWithContext(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")),
+                    m_xContext),
+                uno::UNO_QUERY_THROW);
+        uno::Reference<graphic::XGraphic> xGraphic = xGraphicProvider->queryGraphic(aMediaProperties);
+        xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap")), uno::Any(xGraphic));
+
+        // Set size
+        awt::Size aSize;
+        for (RTFSprms_t::iterator i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+            if (i->first == NS_rtf::LN_XEXT)
+                aSize.Width = i->second->getInt();
+            else if (i->first == NS_rtf::LN_YEXT)
+                aSize.Height = i->second->getInt();
+        xShape->setSize(aSize);
+
+        RTFValue::Pointer_t pShapeValue(new RTFValue(xShape));
+        m_aObjectAttributes.push_back(make_pair(NS_ooxml::LN_shape, pShapeValue));
+        return 0;
+    }
     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")), uno::Any(aGraphicUrl));
 
     // Send it to the dmapper.
@@ -637,6 +671,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_OPERATOR:
         case DESTINATION_COMPANY:
         case DESTINATION_COMMENT:
+        case DESTINATION_OBJDATA:
             m_aDestinationText.append(rString);
             break;
         default: bRet = false; break;
@@ -974,6 +1009,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_OBJECT:
             m_aStates.top().nDestinationState = DESTINATION_OBJECT;
+            m_bObject = true;
+            break;
+        case RTF_OBJDATA:
+            m_aStates.top().nDestinationState = DESTINATION_OBJDATA;
             break;
         case RTF_RESULT:
             m_aStates.top().nDestinationState = DESTINATION_RESULT;
@@ -2364,7 +2403,10 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_PICPROP
             || m_aStates.top().nDestinationState == DESTINATION_SHAPEINSTRUCTION)
-        m_pSdrImport->resolve(m_aStates.top().aShape);
+    {
+        if (!m_bObject)
+            m_pSdrImport->resolve(m_aStates.top().aShape);
+    }
     else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
         m_aAuthors[m_aAuthors.size()] = m_aDestinationText.makeStringAndClear();
     else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
@@ -2457,6 +2499,63 @@ int RTFDocumentImpl::popState()
         uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
         xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVEABLE,
                 uno::makeAny(m_aDestinationText.makeStringAndClear()));
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_OBJDATA)
+    {
+        m_pObjectData = new SvMemoryStream();
+        int b = 0, count = 2;
+
+        // Feed the destination text to a stream.
+        OString aStr = OUStringToOString(m_aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
+        const char *str = aStr.getStr();
+        for (int i = 0; i < aStr.getLength(); ++i)
+        {
+            char ch = str[i];
+            if (ch != 0x0d && ch != 0x0a)
+            {
+                b = b << 4;
+                char parsed = m_pTokenizer->asHex(ch);
+                if (parsed == -1)
+                    return ERROR_HEX_INVALID;
+                b += parsed;
+                count--;
+                if (!count)
+                {
+                    *m_pObjectData << (char)b;
+                    count = 2;
+                    b = 0;
+                }
+            }
+        }
+
+        m_pObjectData->Seek(0);
+        uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(m_pObjectData));
+        RTFValue::Pointer_t pStreamValue(new RTFValue(xInputStream));
+
+        RTFSprms_t aOLEAttributes;
+        aOLEAttributes.push_back(make_pair(NS_ooxml::LN_inputstream, pStreamValue));
+        RTFValue::Pointer_t pValue(new RTFValue(aOLEAttributes));
+        m_aObjectSprms.push_back(make_pair(NS_ooxml::LN_OLEObject_OLEObject, pValue));
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_OBJECT)
+    {
+        RTFSprms_t aObjAttributes;
+        RTFSprms_t aObjSprms;
+        RTFValue::Pointer_t pValue(new RTFValue(m_aObjectAttributes, m_aObjectSprms));
+        aObjSprms.push_back(make_pair(NS_ooxml::LN_object, pValue));
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aObjAttributes, aObjSprms));
+        uno::Reference<drawing::XShape> xShape;
+        RTFValue::Pointer_t pShape = RTFSprm::find(m_aObjectAttributes, NS_ooxml::LN_shape);
+        OSL_ASSERT(pShape.get());
+        if (pShape.get())
+            pShape->getAny() >>= xShape;
+        Mapper().startShape(xShape);
+        Mapper().props(pProperties);
+        Mapper().endShape();
+        m_aObjectAttributes.clear();
+        m_aObjectSprms.clear();
+        delete m_pObjectData; m_pObjectData = 0;
+        m_bObject = false;
     }
 
     // See if we need to end a track change
