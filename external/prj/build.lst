@@ -4,3 +4,4 @@ el	external\glibc		nmake	-	all	el_glibc NULL
 el	external\gcc3_specific	nmake	-	all	el_gcc3 NULL
 el	external\mingwheaders		nmake	-	w	el_mingwheaders NULL
 el	external\jawt		nmake	-	w	el_jawt NULL
+el	external\gdiplus	nmake	-	w	el_gdiplus NULL

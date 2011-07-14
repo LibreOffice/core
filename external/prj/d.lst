@@ -1,5 +1,6 @@
 mkdir: %_DEST%\inc\external
 mkdir: %_DEST%\inc\external\glibc
+mkdir: %_DEST%\inc\external\gdiplus
 mkdir: %_DEST%\inc\external\mingw
 mkdir: %_DEST%\inc\external\mingw\include
 mkdir: %_DEST%\inc\external\mingw\include\atl
@@ -13,6 +14,8 @@ mkdir: %_DEST%\inc\external\mingw\include\sys
 ..\%__SRC%\lib\libgnu_getopt_static.a %_DEST%\lib\libgnu_getopt_static.a
 
 ..\%__SRC%\inc\*.h %_DEST%\inc\external\glibc\*.h
+
+..\%__SRC%\inc\gdiplus\*.h %_DEST%\inc\external\gdiplus\*.h
 
 ..\%__SRC%\misc\mingw\include\*.h %_DEST%\inc\external\mingw\include\*
 ..\%__SRC%\misc\mingw\include\atl\*.h %_DEST%\inc\external\mingw\include\atl\*
@@ -50,6 +53,8 @@ mkdir: %_DEST%\inc\external\mingw\include\sys
 ..\%__SRC%\bin\libstdc++*.dll %_DEST%\bin\libstdc++*.dll
 
 ..\%__SRC%\lib\libmsvcrt*.* %_DEST%\lib\lib*.*
+
+..\%__SRC%\lib\libgdiplus.dll.a %_DEST%\lib\libgdiplus.dll.a
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib\lib*static*.dylib
 
