@@ -1759,11 +1759,6 @@ sal_Bool Window::IsCompoundControl() const
     return mpWindowImpl->mbCompoundControl;
 }
 
-sal_Bool Window::HasCompoundControlFocus() const
-{
-    return mpWindowImpl->mbCompoundControlHasFocus;
-}
-
 sal_Bool Window::IsChildPointerOverwrite() const
 {
     return mpWindowImpl->mbChildPtrOverwrite;

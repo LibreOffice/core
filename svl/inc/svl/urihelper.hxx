@@ -177,32 +177,6 @@ removePassword(UniString const & rURI,
                INetURLObject::DecodeMechanism eDecodeMechanism
                    = INetURLObject::DECODE_TO_IURI,
                rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
-
-//============================================================================
-/** Query the notational conventions used in the file system provided by some
-    file content provider.
-
-    @param rFileUrl  This file URL determines which file content provider is
-    used to query the desired information.  (The UCB's usual mapping from URLs
-    to content providers is used.)
-
-    @param bAddConvenienceStyles  If true, the return value contains not only
-    the style bit corresponding to the queried content provider's conventions,
-    but may also contain additional style bits that make using this function
-    more convenient in certain situations.  Currently, the effect is that
-    FSYS_UNX is extended with FSYS_VOS, and both FSYS_DOS and FSYS_MAC are
-    extended with FSYS_VOS and FSYS_UNX (i.e., the---unambiguous---detection
-    of VOS style and Unix style file system paths is always enabled); also, in
-    case the content provider's conventions cannot be determined, FSYS_DETECT
-    is returned instead of FSysStyle(0).
-
-    @return  The style bit corresponding to the queried content provider's
-    conventions, or FSysStyle(0) if these cannot be determined.
- */
-SVL_DLLPUBLIC INetURLObject::FSysStyle queryFSysStyle(UniString const & rFileUrl,
-                                        bool bAddConvenienceStyles = true)
-    throw (com::sun::star::uno::RuntimeException);
-
 }
 
 #endif // SVTOOLS_URIHELPER_HXX
