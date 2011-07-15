@@ -927,7 +927,7 @@ friend class SwWW8FltControlStack;
 #endif
 
 private:
-    const WW8Fib* pWw8Fib;
+    WW8Fib* pWw8Fib;
     WW8PLCFx_Cp_FKP*  pChpPLCF;         // Character-Attrs
     WW8PLCFx_Cp_FKP*  pPapPLCF;         // Para-Attrs
     WW8PLCFx_SEPX*    pSepPLCF;         // Section-Attrs
@@ -963,7 +963,7 @@ private:
     void DeletePieceTable();
 public:
     WW8ScannerBase( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
-        const WW8Fib* pWwF );
+        WW8Fib* pWwF );
     ~WW8ScannerBase();
     bool AreThereFootnotes() const { return pFtnPLCF->Count() > 0; };
     bool AreThereEndnotes()  const { return pEdnPLCF->Count() > 0; };

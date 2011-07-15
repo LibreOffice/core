@@ -1590,7 +1590,7 @@ void WW8ScannerBase::DeletePieceTable()
 }
 
 WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
-    SvStream* pDataSt, const WW8Fib* pWwFib )
+    SvStream* pDataSt, WW8Fib* pWwFib )
     : pWw8Fib(pWwFib), pMainFdoa(0), pHdFtFdoa(0), pMainTxbx(0),
     pMainTxbxBkd(0), pHdFtTxbx(0), pHdFtTxbxBkd(0), pMagicTables(0),
     pSubdocs(0), pExtendedAtrds(0), pPieceGrpprls(0)
@@ -1696,14 +1696,19 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
                 pSubdocs = new WW8PLCFspecial( pTblSt,
                     pWwFib->fcPlcfwkb, pWwFib->lcbPlcfwkb, 12);
             }
-        // Extended ATRD
+            // Extended ATRD
             if (pWwFib->fcAtrdExtra && pWwFib->lcbAtrdExtra)
             {
-                pExtendedAtrds = new sal_uInt8[pWwFib->lcbAtrdExtra];
-        long nOldPos = pTblSt->Tell();
-        pTblSt->Seek(pWwFib->fcAtrdExtra);
-        pTblSt->Read(pExtendedAtrds, pWwFib->lcbAtrdExtra);
-            pTblSt->Seek(nOldPos);
+                sal_Size nOldPos = pTblSt->Tell();
+                if (checkSeek(*pTblSt, pWwFib->fcAtrdExtra))
+                {
+                    pExtendedAtrds = new sal_uInt8[pWwFib->lcbAtrdExtra];
+                    pWwFib->lcbAtrdExtra = pTblSt->Read(pExtendedAtrds,
+                        pWwFib->lcbAtrdExtra);
+                }
+                else
+                    pWwFib->lcbAtrdExtra = 0;
+                pTblSt->Seek(nOldPos);
             }
 
             break;
