@@ -1440,16 +1440,6 @@ sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Printer, ImplDestroyPrinterAsync, void*, pSalPrinter )
-{
-    SalPrinter* pPrinter = (SalPrinter*)pSalPrinter;
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpDefInst->DestroyPrinter( pPrinter );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Printer::EndJob()
 {
     sal_Bool bRet = sal_False;

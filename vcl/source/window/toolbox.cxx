@@ -194,8 +194,6 @@ public:
     void            UpdateDragRect();
                     DECL_LINK( SelectHdl, Accelerator* );
 
-    void            StartCustomizeMode();
-    void            EndCustomizeMode();
     sal_Bool            IsCustomizeMode() { return mbCustomizeMode; }
     sal_Bool            IsResizeMode() { return mbResizeMode; }
 };
@@ -1502,29 +1500,6 @@ IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator*, pAccel )
 }
 
 // -----------------------------------------------------------------------
-
-void ImplTBDragMgr::StartCustomizeMode()
-{
-    mbCustomizeMode = sal_True;
-
-    for ( size_t i = 0, n = mpBoxList->size(); i < n; ++i ) {
-        (*mpBoxList)[ i ]->ImplStartCustomizeMode();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void ImplTBDragMgr::EndCustomizeMode()
-{
-    mbCustomizeMode = sal_False;
-
-    for ( size_t i = 0, n = mpBoxList->size(); i < n; ++i ) {
-        (*mpBoxList)[ i ]->ImplEndCustomizeMode();
-    }
-}
-
-// -----------------------------------------------------------------------
-
 
 static void ImplDrawOutButton( OutputDevice* pOutDev, const Rectangle& rRect,
                                sal_uInt16 nStyle )

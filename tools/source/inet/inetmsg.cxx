@@ -1005,14 +1005,6 @@ void INetMIMEMessage::SetMIMEVersion (const UniString& rVersion)
         m_nIndex[INETMSG_MIME_VERSION]);
 }
 
-void INetMIMEMessage::SetContentDescription (const String& rDescription)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
-        MIMEHDR(INETMSG_MIME_CONTENT_DESCRIPTION), rDescription,
-        m_nIndex[INETMSG_MIME_CONTENT_DESCRIPTION]);
-}
-
 void INetMIMEMessage::SetContentDisposition (const String& rDisposition)
 {
     SetHeaderField_Impl (

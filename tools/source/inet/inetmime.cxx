@@ -1958,23 +1958,6 @@ void INetMIME::writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar)
 
 //============================================================================
 // static
-void INetMIME::writeUnsigned(INetMIMEOutputSink & rSink, sal_uInt32 nValue,
-                             int nMinDigits)
-{
-    sal_Char aBuffer[10];
-        // max unsigned 32 bit value (4294967295) has 10 places
-    sal_Char * p = aBuffer;
-    for (; nValue > 0; nValue /= 10)
-        *p++ = sal_Char(getDigit(nValue % 10));
-    nMinDigits -= p - aBuffer;
-    while (nMinDigits-- > 0)
-        rSink << '0';
-    while (p != aBuffer)
-        rSink << *--p;
-}
-
-//============================================================================
-// static
 void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     HeaderFieldType eType,
                                     const UniString & rBody,

@@ -482,7 +482,6 @@ public:
         return GetHeaderValue (m_nIndex[INETMSG_MIME_VERSION]);
     }
 
-    void      SetContentDescription (const UniString& rDescription);
     UniString GetContentDescription (void) const
     {
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_DESCRIPTION]);

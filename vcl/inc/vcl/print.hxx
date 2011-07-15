@@ -265,7 +265,6 @@ private:
     SAL_DLLPRIVATE void         ImplUpdatePageData();
     SAL_DLLPRIVATE void         ImplUpdateFontList();
     SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup&, bool bMatchNearest );
-    DECL_DLLPRIVATE_LINK(       ImplDestroyPrinterAsync, void* );
 
     SAL_DLLPRIVATE bool StartJob( const rtl::OUString& rJobName, boost::shared_ptr<vcl::PrinterController>& );
 

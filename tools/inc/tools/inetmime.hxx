@@ -533,9 +533,6 @@ public:
 
     static void writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar);
 
-    static void writeUnsigned(INetMIMEOutputSink & rSink, sal_uInt32 nValue,
-                              int nMinDigits = 1);
-
     static void writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                      HeaderFieldType eType,
                                      const UniString & rBody,
