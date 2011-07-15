@@ -100,26 +100,28 @@ static sal_uInt32 theIndexTable[NF_INDEX_TABLE_ENTRIES];
     also handles one instance of the SysLocale options
  */
 
+typedef ::std::vector< SvNumberFormatter* > SvNumberFormatterList_impl;
+
 class SvNumberFormatterRegistry_Impl : public utl::ConfigurationListener
 {
-    List                    aFormatters;
-    SvtSysLocaleOptions     aSysLocaleOptions;
-    LanguageType            eSysLanguage;
+    SvNumberFormatterList_impl  aFormatters;
+    SvtSysLocaleOptions         aSysLocaleOptions;
+    LanguageType                eSysLanguage;
 
 public:
                             SvNumberFormatterRegistry_Impl();
     virtual                 ~SvNumberFormatterRegistry_Impl();
 
-            void            Insert( SvNumberFormatter* pThis )
-                                { aFormatters.Insert( pThis, LIST_APPEND ); }
-            SvNumberFormatter*  Remove( SvNumberFormatter* pThis )
-                                    { return (SvNumberFormatter*)aFormatters.Remove( pThis ); }
-            sal_uInt32           Count()
-                                { return aFormatters.Count(); }
+    void                    Insert( SvNumberFormatter* pThis )
+                            { aFormatters.push_back( pThis ); }
 
-            virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+    SvNumberFormatter*      Remove( SvNumberFormatter* pThis );
+
+    size_t                  Count()
+                            { return aFormatters.size(); }
+
+    virtual void            ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 };
-
 
 SvNumberFormatterRegistry_Impl::SvNumberFormatterRegistry_Impl()
 {
@@ -134,26 +136,37 @@ SvNumberFormatterRegistry_Impl::~SvNumberFormatterRegistry_Impl()
 }
 
 
-void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 nHint )
+SvNumberFormatter* SvNumberFormatterRegistry_Impl::Remove( SvNumberFormatter* pThis )
 {
+    for(
+        SvNumberFormatterList_impl::iterator it = aFormatters.begin();
+        it < aFormatters.end();
+        ++it
+    ) {
+        if ( *it == pThis ) {
+            aFormatters.erase( it );
+            break;
+        }
+    }
+    return pThis;
+}
+
+void SvNumberFormatterRegistry_Impl::ConfigurationChanged(
+    utl::ConfigurationBroadcaster*,
+    sal_uInt32 nHint
+) {
         if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
         {
             ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
-            for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();
-                    p; p = (SvNumberFormatter*)aFormatters.Next() )
-            {
-                p->ReplaceSystemCL( eSysLanguage );
-            }
+            for( size_t i = 0, n = aFormatters.size(); i < n; ++i )
+                aFormatters[ i ]->ReplaceSystemCL( eSysLanguage );
             eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
         }
         if ( nHint & SYSLOCALEOPTIONS_HINT_CURRENCY )
         {
             ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
-            for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();
-                    p; p = (SvNumberFormatter*)aFormatters.Next() )
-            {
-                p->ResetDefaultSystemCurrency();
-            }
+            for( size_t i = 0, n = aFormatters.size(); i < n; ++i )
+                aFormatters[ i ]->ResetDefaultSystemCurrency();
         }
 }
 
