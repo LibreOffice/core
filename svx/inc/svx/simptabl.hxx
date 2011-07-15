@@ -106,7 +106,6 @@ public:
     ~SvxSimpleTable();
 
     void UpdateViewSize();
-    Size getPreferredContainerSize() const;
 
     void            InsertHeaderEntry(const XubString& rText,
                             sal_uInt16 nCol=HEADERBAR_APPEND,

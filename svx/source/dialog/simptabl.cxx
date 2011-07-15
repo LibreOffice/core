@@ -170,13 +170,6 @@ void SvxSimpleTable::UpdateViewSize()
     Invalidate();
 }
 
-Size SvxSimpleTable::getPreferredContainerSize() const
-{
-    Size aContainerNewSize(aHeaderBar.GetSizePixel());
-    aContainerNewSize.Height()+=GetSizePixel().Height();
-    return aContainerNewSize;
-}
-
 void SvxSimpleTable::NotifyScrolled()
 {
     long nOffset=-GetXOffset();
