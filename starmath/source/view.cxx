@@ -224,7 +224,8 @@ void SmGraphicWindow::GetFocus()
 {
     if (!IsInlineEditEnabled())
         return;
-    pViewShell->GetEditWindow()->Flush();
+    if (pViewShell->GetEditWindow())
+        pViewShell->GetEditWindow()->Flush();
     //Let view shell know what insertions should be done in visual editor
     pViewShell->SetInsertIntoEditWindow(false);
     SetIsCursorVisible(true);
