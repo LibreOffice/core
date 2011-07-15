@@ -3597,6 +3597,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     pDataStream(0),
     rDoc(rD),
     maSectionManager(*this),
+    m_aExtraneousParas(rD),
     maInsertedTables(rD),
     maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
     maGrfNameGenerator(bNewDoc,String('G')),
@@ -4082,6 +4083,21 @@ void wwSectionManager::InsertSegments()
             pTxtNd = 0;
         }
     }
+}
+
+void wwExtraneousParas::delete_all_from_doc()
+{
+    typedef std::vector<SwTxtNode*>::iterator myParaIter;
+    myParaIter aEnd = m_aTxtNodes.end();
+    for (myParaIter aI = m_aTxtNodes.begin(); aI != aEnd; ++aI)
+    {
+        SwTxtNode *pTxtNode = *aI;
+        SwNodeIndex aIdx(*pTxtNode);
+        SwPosition aPos(aIdx);
+        SwPaM aTest(aPos);
+        m_rDoc.DelFullPara(aTest);
+    }
+    m_aTxtNodes.clear();
 }
 
 void SwWW8ImplReader::StoreMacroCmds()
@@ -4710,6 +4726,11 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     delete mpRedlineStack;
     DeleteAnchorStk();
     DeleteRefStks();
+
+    //remove extra paragraphs after attribute ctrl
+    //stacks etc. are destroyed, and before fields
+    //are updated
+    m_aExtraneousParas.delete_all_from_doc();
 
     UpdateFields();
 

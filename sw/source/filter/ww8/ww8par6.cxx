@@ -2272,7 +2272,12 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
                         aIdx++;
                         if (aIdx == aEnd && pNd && !pNd->GetTxt().Len())
                         {
-                            rDoc.DelFullPara( *pPaM );
+                            //An extra pre-created by writer unused paragraph
+                            //
+                            //delete after import is complete rather than now
+                            //to avoid the complication of managing uncommitted
+                            //ctrlstack properties that refer to it.
+                            m_aExtraneousParas.push_back(pNd);
 
                             SwTable& rTable = pTable->GetTable();
                             SwFrmFmt* pTblFmt = rTable.GetFrmFmt();

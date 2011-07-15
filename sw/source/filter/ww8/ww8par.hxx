@@ -57,6 +57,8 @@
 #include <editeng/lrspitem.hxx>
 #include <oox/ole/olehelper.hxx>
 
+#include <boost/noncopyable.hpp>
+
 class SwDoc;
 class SwPaM;
 class SfxPoolItem;
@@ -839,6 +841,33 @@ public:
     sal_uInt32 GetTextAreaWidth() const;
 };
 
+//Various writer elements like frames start off containing a blank paragraph,
+//sometimes this paragraph turns out to be extraneous, e.g. the frame should
+//only contain a table with no trailing paragraph.
+//
+//We want to remove these extra paragraphs, but removing them during the parse
+//is problematic, because we don't want to remove any paragraphs that are still
+//addressed by property entries in a SwFltControlStack which have not yet been
+//committed to the document.
+//
+//Safest thing is to not delete SwTxtNodes from a document during import, and
+//remove these extraneous paragraphs at the end after all SwFltControlStack are
+//destroyed.
+class wwExtraneousParas : private ::boost::noncopyable
+{
+private:
+    /*
+    A vector of SwTxtNodes to erase from a document after import is complete
+    */
+    std::vector<SwTxtNode*> m_aTxtNodes;
+    SwDoc& m_rDoc;
+public:
+    wwExtraneousParas(SwDoc &rDoc) : m_rDoc(rDoc) {}
+    ~wwExtraneousParas() { delete_all_from_doc(); }
+    void push_back(SwTxtNode *pTxtNode) { m_aTxtNodes.push_back(pTxtNode); }
+    void delete_all_from_doc();
+};
+
 class wwFrameNamer
 {
 private:
@@ -1005,6 +1034,13 @@ private:
     A queue of the ms sections in the document
     */
     wwSectionManager maSectionManager;
+
+    /*
+    A vector of surplus-to-requirements paragraph in the final document,
+    that exist because of quirks of the SwDoc document model and/or API,
+    which need to be removed.
+    */
+    wwExtraneousParas m_aExtraneousParas;
 
     /*
     A map of of tables to their follow nodes for use in inserting tables into
