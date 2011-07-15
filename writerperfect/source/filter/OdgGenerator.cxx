@@ -49,6 +49,7 @@ static void getEllipticalArcBBox(double x1, double y1,
                                  double rx, double ry, double phi, bool largeArc, bool sweep, double x2, double y2,
                                  double &xmin, double &ymin, double &xmax, double &ymax)
 {
+    phi *= M_PI/180;
     if (rx < 0.0)
         rx *= -1.0;
     if (ry < 0.0)
@@ -149,30 +150,29 @@ static void getEllipticalArcBBox(double x1, double y1,
         txmax = M_PI - atan (ry*tan(phi)/rx);
         xmin = cx + rx*cos(txmin)*cos(phi) - ry*sin(txmin)*sin(phi);
         xmax = cx + rx*cos(txmax)*cos(phi) - ry*sin(txmax)*sin(phi);
-        if (xmin > xmax)
-        {
-            std::swap(xmin,xmax);
-            std::swap(txmin,txmax);
-        }
         double tmpY = cy + rx*cos(txmin)*sin(phi) + ry*sin(txmin)*cos(phi);
         txmin = getAngle(xmin - cx, tmpY - cy);
         tmpY = cy + rx*cos(txmax)*sin(phi) + ry*sin(txmax)*cos(phi);
         txmax = getAngle(xmax - cx, tmpY - cy);
 
-
         tymin = atan(ry/(tan(phi)*rx));
         tymax = atan(ry/(tan(phi)*rx))+M_PI;
         ymin = cy + rx*cos(tymin)*sin(phi) + ry*sin(tymin)*cos(phi);
         ymax = cy + rx*cos(tymax)*sin(phi) + ry*sin(tymax)*cos(phi);
-        if (ymin > ymax)
-        {
-            std::swap(ymin,ymax);
-            std::swap(tymin,tymax);
-        }
         double tmpX = cx + rx*cos(tymin)*cos(phi) - ry*sin(tymin)*sin(phi);
         tymin = getAngle(tmpX - cx, ymin - cy);
         tmpX = cx + rx*cos(tymax)*cos(phi) - ry*sin(tymax)*sin(phi);
         tymax = getAngle(tmpX - cx, ymax - cy);
+    }
+    if (xmin > xmax)
+    {
+        std::swap(xmin,xmax);
+        std::swap(txmin,txmax);
+    }
+    if (ymin > ymax)
+    {
+        std::swap(ymin,ymax);
+        std::swap(tymin,tymax);
     }
     double angle1 = getAngle(x1 - cx, y1 - cy);
     double angle2 = getAngle(x2 - cx, y2 - cy);
