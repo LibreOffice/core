@@ -83,7 +83,6 @@ endif
 
 gb_COMPILERDEFS := \
 	-DGCC \
-	-DGLIBC=2 \
 	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 	-DCPPU_ENV=gcc3 \
 	-D_MT \
