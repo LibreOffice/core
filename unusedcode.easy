@@ -478,7 +478,6 @@ HttpRequest::Abort()
 HttpRequest::GetStatus()
 HttpRequest::~HttpRequest()
 IMapWindow::GetSdrObj(IMapObject const*) const
-INetMIMEMessage::SetContentDescription(String const&)
 INetURLObject::hasPassword() const
 IconChoiceDialog::RemoveResetButton()
 IconChoiceDialog::RemoveTabPage(unsigned short)
@@ -535,8 +534,6 @@ ImplImageList::GetImageCount() const
 ImplListBox::GetEntryFlags(unsigned short) const
 ImplRegionBand::IsInside(long, long)
 ImplRegionBand::IsOver(long, long)
-ImplTBDragMgr::EndCustomizeMode()
-ImplTBDragMgr::StartCustomizeMode()
 ImplTaskBarFloat::ImplTaskBarFloat(TaskBar*)
 ImplWin::GetModeImage() const
 ImplWin::SetModeImage(Image const&)
@@ -844,7 +841,6 @@ Polygon::IsControl(unsigned short) const
 Polygon::IsSmooth(unsigned short) const
 Polygon::Remove(unsigned short, unsigned short)
 PopupMenu::SetSelectedEntry(unsigned short)
-Printer::LinkStubImplDestroyPrinterAsync(void*, void*)
 PropBrwMgr::GetChildWindowId()
 ProposalList::Remove(rtl::OUString const&)
 PushButton::GetSymbolAlign() const
@@ -2127,7 +2123,6 @@ SvxShapeText::SvxShapeText()
 SvxShowCharSet::ImplFireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
 SvxSimpleTable::ClearAll()
 SvxSimpleTable::TableToTop()
-SvxSimpleTable::getPreferredContainerSize() const
 SvxSimpleTableContainer::SvxSimpleTableContainer(Window*, long)
 SvxStringArray::GetStringByType(long) const
 SvxStringArray::GetValueByStr(String const&) const
@@ -3080,7 +3075,6 @@ binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const&
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const*, unsigned short)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccessArr const*, unsigned short, unsigned short)
 binfilter::SdrUnoControlAccessArr::Remove(binfilter::SdrUnoControlAccess* const&, unsigned short)
-binfilter::SfxConfigManager::GetConfigurationStorage(SotStorage*)
 binfilter::SfxDocumentInfo::SavePropertySet(binfilter::SvStorage*) const
 binfilter::SfxHintPoster::LinkStubDoEvent_Impl(void*, void*)
 binfilter::SfxItemModifyArr_Impl::Insert(binfilter::SfxItemModifyArr_Impl const*, unsigned short, unsigned short, unsigned short)
@@ -3088,8 +3082,6 @@ binfilter::SfxItemModifyArr_Impl::Remove(unsigned short, unsigned short)
 binfilter::SfxItemModifyArr_Impl::Replace(binfilter::SfxItemModifyImpl const&, unsigned short)
 binfilter::SfxItemModifyArr_Impl::Replace(binfilter::SfxItemModifyImpl const*, unsigned short, unsigned short)
 binfilter::SfxItemModifyArr_Impl::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::SfxItemModifyImpl const&, void*), void*)
-binfilter::SfxItemPool::IsInStoringRange(unsigned short) const
-binfilter::SfxItemPool::StoreSurrogate(SvStream&, binfilter::SfxPoolItem const*) const
 binfilter::SfxMacroConfig::LinkStubCallbackHdl_Impl(void*, void*)
 binfilter::SfxMacroConfig::LinkStubEventHdl_Impl(void*, void*)
 binfilter::SfxMedium::GetHdl()
@@ -3098,9 +3090,7 @@ binfilter::SfxMultiMixRecordWriter::NewContent(unsigned short, unsigned char)
 binfilter::SfxMultiVarRecordWriter::NewContent()
 binfilter::SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(SvStream*, unsigned short, unsigned char)
 binfilter::SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(unsigned char, SvStream*, unsigned short, unsigned char)
-binfilter::SfxObjectShell::AddXMLAsZipToTheStorage(binfilter::SvStorage&)
 binfilter::SfxObjectShell::GetBaseURL() const
-binfilter::SfxObjectShell::SaveInfoAndConfig_Impl(binfilter::SvStorageRef)
 binfilter::SfxPtrArr::Insert(unsigned short, void*)
 binfilter::SfxPtrArr::Remove(void*)
 binfilter::SfxPtrArr::Replace(void*, void*)
@@ -4652,7 +4642,6 @@ test::OfficeConnection::~OfficeConnection()
 test::getTestArgument(rtl::OUString const&, rtl::OUString*)
 toolkit::registerServices(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, char const*, char const*, char const*)
 tools::SolarMutex::GetSolarMutex()
-transex::File::File(rtl::OUString)
 ucbhelper::CommandEnvironmentProxy::CommandEnvironmentProxy(com::sun::star::uno::Reference<com::sun::star::ucb::XCommandEnvironment> const&)
 ucbhelper::Content::Content(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&, com::sun::star::uno::Reference<com::sun::star::ucb::XCommandEnvironment> const&)
 ucbhelper::Content::abortCommand()
