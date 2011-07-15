@@ -148,6 +148,7 @@
 #include <svtools/ttprops.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;
 
@@ -329,12 +330,13 @@ SfxApplication::SfxApplication()
 #else
     if( !InitializeDde() )
     {
-        ByteString aStr( "No DDE-Service possible. Error: " );
+        rtl::OStringBuffer aStr(
+            RTL_CONSTASCII_STRINGPARAM("No DDE-Service possible. Error: "));
         if( GetDdeService() )
-            aStr += ByteString::CreateFromInt32(GetDdeService()->GetError());
+            aStr.append(static_cast<sal_Int32>(GetDdeService()->GetError()));
         else
-            aStr += '?';
-        DBG_ASSERT( sal_False, aStr.GetBuffer() );
+            aStr.append('?');
+        DBG_ASSERT( sal_False, aStr.getStr() );
     }
 #endif
 #endif
