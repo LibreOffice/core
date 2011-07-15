@@ -792,7 +792,7 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
             double xmin, xmax, ymin, ymax;
 
             getEllipticalArcBBox(lastX, lastY, path[k]["svg:rx"]->getDouble(), path[k]["svg:ry"]->getDouble(),
-                                 2.0*M_PI*(path[k]["libwpg:rotate"] ? path[k]["libwpg:rotate"]->getDouble() : 0.0),
+                                 path[k]["libwpg:rotate"] ? path[k]["libwpg:rotate"]->getDouble() : 0.0,
                                  path[k]["libwpg:large-arc"] ? path[k]["libwpg:large-arc"]->getInt() : 1,
                                  path[k]["libwpg:sweep"] ? path[k]["libwpg:sweep"]->getInt() : 1,
                                  path[k]["svg:x"]->getDouble(), path[k]["svg:y"]->getDouble(), xmin, ymin, xmax, ymax);
