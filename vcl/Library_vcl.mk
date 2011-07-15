@@ -571,7 +571,7 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     mpr \
     msimg32 \
     msvcrt \
-    $(OLDNAMESLIB) \
+    $(gb_Library_win32_OLDNAMES) \
     ole32 \
     shell32 \
     user32 \
