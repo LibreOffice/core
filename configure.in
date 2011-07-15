@@ -8699,16 +8699,25 @@ dnl ===================================================================
 dnl Number of CPUs to use during the build
 dnl ===================================================================
 AC_MSG_CHECKING([for number of processors to use])
-if test "z`uname -s`" = "zDarwin" -o "z`uname -s`" = "zNetBSD" -o "z`uname -s`" = "zOpenBSD"; then
-    BUILD_NCPUS=`sysctl -n hw.ncpu`
-else
-    BUILD_NCPUS=`grep $'^processor\t*:' /proc/cpuinfo | wc -l`
-fi
-if test "z$with_num_cpus" != "z"; then
+if test -n "$with_num_cpus"; then
     BUILD_NCPUS=$with_num_cpus
-fi
-if echo "$BUILD_NCPUS" | $EGREP -q '^[[[:space:]]]*0[[[:space:]]]*$' ; then
-    BUILD_NCPUS=1
+else
+    case `uname -s` in
+
+    Darwin|FreeBSD|NetBSD|OpenBSD)
+        BUILD_NCPUS=`sysctl -n hw.ncpu`
+        ;;
+
+    *)
+        BUILD_NCPUS=`grep $'^processor\t*:' /proc/cpuinfo | wc -l`
+        ;;
+    esac
+
+    # If we hit the catch-all case, but /proc/cpuinfo doesn't exist or has an
+    # unexpected format, 'wc -l' will have returned 0.
+    if test "$BUILD_NCPUS" -eq 0; then
+        BUILD_NCPUS=1
+    fi
 fi
 AC_MSG_RESULT([$BUILD_NCPUS])
 AC_SUBST(BUILD_NCPUS)
