@@ -3853,122 +3853,126 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
     sal_uInt16 nExtraLen, rtl_TextEncoding eCS, std::vector<String> &rArray,
     std::vector<ww::bytes>* pExtraArray, ::std::vector<String>* pValueArray)
 {
-    if(nLen==0)     // Handle Empty STTBF
+    if (nLen==0)     // Handle Empty STTBF
         return;
 
-    sal_uLong nOldPos = rStrm.Tell();
-    rStrm.Seek( nStart );
-
-    sal_uInt16 nLen2;
-    rStrm >> nLen2; // bVer67: total length of structure
-                    // bVer8 : count of strings
-
-    if( bVer8 )
+    sal_Size nOldPos = rStrm.Tell();
+    if (checkSeek(rStrm, nStart))
     {
-        sal_uInt16 nStrings;
-        bool bUnicode = (0xFFFF == nLen2);
-        if( bUnicode )
-            rStrm >> nStrings;
-        else
-            nStrings = nLen2;
+        sal_uInt16 nLen2(0);
+        rStrm >> nLen2; // bVer67: total length of structure
+                        // bVer8 : count of strings
 
-        rStrm >> nExtraLen;
-
-        for( sal_uInt16 i=0; i < nStrings; i++ )
+        if( bVer8 )
         {
-            if( bUnicode )
-                rArray.push_back(WW8Read_xstz(rStrm, 0, false));
+            sal_uInt16 nStrings(0);
+            bool bUnicode = (0xFFFF == nLen2);
+            if (bUnicode)
+                rStrm >> nStrings;
             else
-            {
-                sal_uInt8 nBChar;
-                rStrm >> nBChar;
-                ByteString aTmp;
-                SafeReadString(aTmp,nBChar,rStrm);
-                rArray.push_back(String(aTmp, eCS));
-            }
+                nStrings = nLen2;
 
-            // Skip the extra data
-            if( nExtraLen )
+            rStrm >> nExtraLen;
+
+            for (sal_uInt16 i=0; i < nStrings; ++i)
             {
-                if (pExtraArray)
-                {
-                    ww::bytes extraData;
-                    sal_uInt8 iTmp;
-                    for(int j = 0; j < nExtraLen; ++j)
-                    {
-                        rStrm >> iTmp;
-                        extraData.push_back(iTmp);
-                    }
-                    pExtraArray->push_back(extraData);
-                }
+                if (bUnicode)
+                    rArray.push_back(WW8Read_xstz(rStrm, 0, false));
                 else
-                    rStrm.SeekRel( nExtraLen );
-            }
-        }
-        // read the value of the document variables, if requested.
-        if (pValueArray)
-        {
-                for( sal_uInt16 i=0; i < nStrings; i++ )
                 {
-                        if( bUnicode )
-                                pValueArray->push_back(WW8Read_xstz(rStrm, 0, false));
-                        else
+                    sal_uInt8 nBChar(0);
+                    rStrm >> nBChar;
+                    ByteString aTmp;
+                    SafeReadString(aTmp,nBChar,rStrm);
+                    rArray.push_back(String(aTmp, eCS));
+                }
+
+                // Skip the extra data
+                if (nExtraLen)
+                {
+                    if (pExtraArray)
+                    {
+                        ww::bytes extraData;
+                        for (sal_uInt16 j = 0; j < nExtraLen; ++j)
                         {
-                                sal_uInt8 nBChar;
-                                rStrm >> nBChar;
-                                ByteString aTmp;
-                                SafeReadString(aTmp,nBChar,rStrm);
-                                pValueArray->push_back(String(aTmp, eCS));
+                            sal_uInt8 iTmp(0);
+                            rStrm >> iTmp;
+                            extraData.push_back(iTmp);
                         }
-                }
-        }
-    }
-    else
-    {
-        sal_uInt8 nBChar;
-        if( nLen2 != nLen )
-        {
-            OSL_ENSURE( nLen2 == nLen, "Fib length and read length are different" );
-            if (nLen > USHRT_MAX)
-                nLen = USHRT_MAX;
-            else if (nLen < 2 )
-                nLen = 2;
-            nLen2 = static_cast<sal_uInt16>(nLen);
-        }
-        sal_uLong nRead = 0;
-        for( nLen2 -= 2; nRead < nLen2;  )
-        {
-            rStrm >> nBChar; ++nRead;
-            if (nBChar)
-            {
-                ByteString aTmp;
-                nRead += SafeReadString(aTmp,nBChar,rStrm);
-                rArray.push_back(String(aTmp, eCS));
-            }
-            else
-                rArray.push_back(aEmptyStr);
-
-            // Skip the extra data (for bVer67 versions this must come from external knowledge)
-            if (nExtraLen)
-            {
-                if (pExtraArray)
-                {
-                    ww::bytes extraData;
-                    for(int i =0;i < nExtraLen;i++)
-                    {
-                        sal_uInt8 iTmp;
-                        rStrm >> iTmp;
-                        extraData.push_back(iTmp);
+                        pExtraArray->push_back(extraData);
                     }
-                    pExtraArray->push_back(extraData);
+                    else
+                        rStrm.SeekRel( nExtraLen );
+                }
+            }
+            // read the value of the document variables, if requested.
+            if (pValueArray)
+            {
+                for (sal_uInt16 i=0; i < nStrings; ++i)
+                {
+                    if( bUnicode )
+                        pValueArray->push_back(WW8Read_xstz(rStrm, 0, false));
+                    else
+                    {
+                        sal_uInt8 nBChar(0);
+                        rStrm >> nBChar;
+                        ByteString aTmp;
+                        SafeReadString(aTmp,nBChar,rStrm);
+                        pValueArray->push_back(String(aTmp, eCS));
+                    }
+                }
+            }
+        }
+        else
+        {
+            if( nLen2 != nLen )
+            {
+                OSL_ENSURE(nLen2 == nLen,
+                    "Fib length and read length are different");
+                if (nLen > USHRT_MAX)
+                    nLen = USHRT_MAX;
+                else if (nLen < 2 )
+                    nLen = 2;
+                nLen2 = static_cast<sal_uInt16>(nLen);
+            }
+            sal_uLong nRead = 0;
+            for( nLen2 -= 2; nRead < nLen2;  )
+            {
+                sal_uInt8 nBChar(0);
+                rStrm >> nBChar;
+                ++nRead;
+                if (nBChar)
+                {
+                    ByteString aTmp;
+                    nRead += SafeReadString(aTmp,nBChar,rStrm);
+                    rArray.push_back(String(aTmp, eCS));
                 }
                 else
-                    rStrm.SeekRel( nExtraLen );
-                nRead+=nExtraLen;
+                    rArray.push_back(aEmptyStr);
+
+                // Skip the extra data (for bVer67 versions this must come from
+                // external knowledge)
+                if (nExtraLen)
+                {
+                    if (pExtraArray)
+                    {
+                        ww::bytes extraData;
+                        for (sal_uInt16 i=0;i < nExtraLen;++i)
+                        {
+                            sal_uInt8 iTmp(0);
+                            rStrm >> iTmp;
+                            extraData.push_back(iTmp);
+                        }
+                        pExtraArray->push_back(extraData);
+                    }
+                    else
+                        rStrm.SeekRel( nExtraLen );
+                    nRead+=nExtraLen;
+                }
             }
         }
     }
-    rStrm.Seek( nOldPos );
+    rStrm.Seek(nOldPos);
 }
 
 WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
