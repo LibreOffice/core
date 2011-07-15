@@ -254,6 +254,7 @@ size_t ImpLabelList::ImplGetLabelPos( const String& rLabelName )
 // ---------------
 
 GDIMetaFile::GDIMetaFile() :
+    nCurrentActionElement( 0 ),
     aPrefSize   ( 1, 1 ),
     pPrev       ( NULL ),
     pNext       ( NULL ),
