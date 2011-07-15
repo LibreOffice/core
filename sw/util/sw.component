@@ -25,7 +25,8 @@
 * for a copy of the LGPLv3 License.
 *
 **********************************************************************-->
-<component xmlns="http://openoffice.org/2010/uno-components" loader="com.sun.star.loader.SharedLibrary">
+<component loader="com.sun.star.loader.SharedLibrary" prefix="sw"
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="SwXAutoTextContainer">
     <service name="com.sun.star.text.AutoTextContainer"/>
   </implementation>
