@@ -224,13 +224,13 @@ void SvxIconChoiceCtrl_Impl::Clear( sal_Bool bInCtor )
             pView->Invalidate(INVALIDATE_NOCHILDREN);
     }
     AdjustScrollBars();
-    sal_uLong nCount = aEntries.Count();
-    for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
+    size_t nCount = aEntries.size();
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        SvxIconChoiceCtrlEntry* pCur = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+        SvxIconChoiceCtrlEntry* pCur = aEntries[ nCur ];
         delete pCur;
     }
-    aEntries.Clear();
+    aEntries.clear();
     DocRectChanged();
     VisRectChanged();
 }
@@ -292,19 +292,18 @@ void SvxIconChoiceCtrl_Impl::FontModified()
     ShowCursor( sal_True );
 }
 
-void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, sal_uLong nPos,
+void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, size_t nPos,
     const Point* pPos )
 {
     StopEditTimer();
-    aEntries.Insert( pEntry, nPos );
-    if( (nFlags & F_ENTRYLISTPOS_VALID) && nPos >= aEntries.Count() - 1 )
-        pEntry->nPos = aEntries.Count() - 1;
+    aEntries.insert( nPos, pEntry );
+    if( (nFlags & F_ENTRYLISTPOS_VALID) && nPos >= aEntries.size() - 1 )
+        pEntry->nPos = aEntries.size() - 1;
     else
         nFlags &= ~F_ENTRYLISTPOS_VALID;
 
     pZOrderList->Insert( (void*)pEntry, LIST_APPEND ); //pZOrderList->Count() );
     pImpCursor->Clear();
-//  pGridMap->Clear();
     if( pPos )
     {
         Size aSize( CalcBoundingSize( pEntry ) );
@@ -376,10 +375,10 @@ void SvxIconChoiceCtrl_Impl::SetListPositions()
     if( nFlags & F_ENTRYLISTPOS_VALID )
         return;
 
-    sal_uLong nCount = aEntries.Count();
-    for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
+    size_t nCount = aEntries.size();
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+        SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
         pEntry->nPos = nCur;
     }
     nFlags |= F_ENTRYLISTPOS_VALID;
@@ -408,7 +407,7 @@ void SvxIconChoiceCtrl_Impl::RemoveEntry( SvxIconChoiceCtrlEntry* pEntry )
     if( pEntry->IsSelected() )
         CallSelectHandler( 0 );
 
-    if( aEntries.Count() == 1 && aEntries.GetObject(0) == pEntry )
+    if( aEntries.size() == 1 && aEntries[ 0 ] == pEntry )
     {
         Clear();
         return;
@@ -435,21 +434,21 @@ void SvxIconChoiceCtrl_Impl::RemoveEntry( SvxIconChoiceCtrlEntry* pEntry )
     }
 
     sal_Bool bCurEntryPosValid = (nFlags & F_ENTRYLISTPOS_VALID) ? sal_True : sal_False;
-    if( bCurEntryPosValid && aEntries.GetObject(aEntries.Count()-1) != pEntry )
+    if( bCurEntryPosValid && aEntries[ aEntries.size()-1 ] != pEntry )
         nFlags &= ~F_ENTRYLISTPOS_VALID;
     sal_uLong nPos = pZOrderList->GetPos( (void*)pEntry );
     pZOrderList->Remove( nPos );
     if( bCurEntryPosValid )
     {
         DBG_ASSERT(aEntries.GetObject(pEntry->nPos)==pEntry,"RemoveEntry: Wrong nPos in entry");
-        aEntries.Remove( pEntry->nPos );
+        aEntries.remove( pEntry->nPos );
     }
     else
-        aEntries.Remove( pEntry );
+        aEntries.remove( pEntry );
     pImpCursor->Clear();
     pGridMap->Clear();
     delete pEntry;
-    if( IsAutoArrange() && aEntries.Count() )
+    if( IsAutoArrange() && aEntries.size() )
         aAutoArrangeTimer.Start();
     if( bSetNewCursor )
     {
@@ -544,10 +543,10 @@ void SvxIconChoiceCtrl_Impl::ResetVirtSize()
     StopEditTimer();
     aVirtOutputSize.Width() = 0;
     aVirtOutputSize.Height() = 0;
-    const sal_uLong nCount = aEntries.Count();
-    for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
+    const size_t nCount = aEntries.size();
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        SvxIconChoiceCtrlEntry* pCur = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+        SvxIconChoiceCtrlEntry* pCur = aEntries[ nCur ];
         pCur->ClearFlags( ICNVIEW_FLAG_POS_MOVED );
         if( pCur->IsPosLocked() )
         {
@@ -616,25 +615,25 @@ void SvxIconChoiceCtrl_Impl::AdjustVirtSize( const Rectangle& rRect )
 void SvxIconChoiceCtrl_Impl::InitPredecessors()
 {
     DBG_ASSERT(!pHead,"SvxIconChoiceCtrl_Impl::InitPredecessors() >> Already initialized");
-    sal_uLong nCount = aEntries.Count();
+    size_t nCount = aEntries.size();
     if( nCount )
     {
-        SvxIconChoiceCtrlEntry* pPrev = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( 0 );
-        for( sal_uLong nCur = 1; nCur <= nCount; nCur++ )
+        SvxIconChoiceCtrlEntry* pPrev = aEntries[ 0 ];
+        for( size_t nCur = 1; nCur <= nCount; nCur++ )
         {
             pPrev->ClearFlags( ICNVIEW_FLAG_POS_LOCKED | ICNVIEW_FLAG_POS_MOVED |
                                 ICNVIEW_FLAG_PRED_SET);
 
             SvxIconChoiceCtrlEntry* pNext;
             if( nCur == nCount )
-                pNext = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( 0 );
+                pNext = aEntries[ 0 ];
             else
-                pNext = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+                pNext = aEntries[ nCur ];
             pPrev->pflink = pNext;
             pNext->pblink = pPrev;
             pPrev = pNext;
         }
-        pHead = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( 0 );
+        pHead = aEntries[ 0 ];
     }
     else
         pHead = 0;
@@ -645,10 +644,10 @@ void SvxIconChoiceCtrl_Impl::ClearPredecessors()
 {
     if( pHead )
     {
-        sal_uLong nCount = aEntries.Count();
-        for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
+        size_t nCount = aEntries.size();
+        for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
-            SvxIconChoiceCtrlEntry* pCur = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+            SvxIconChoiceCtrlEntry* pCur = aEntries[ nCur ];
             pCur->pflink = 0;
             pCur->pblink = 0;
             pCur->ClearFlags( ICNVIEW_FLAG_PRED_SET );
@@ -750,7 +749,7 @@ void SvxIconChoiceCtrl_Impl::Paint( const Rectangle& rRect )
 #endif
     nFlags |= F_PAINTED;
 
-    if( !aEntries.Count() )
+    if( !aEntries.size() )
         return;
     if( !pCursor )
     {
@@ -767,7 +766,7 @@ void SvxIconChoiceCtrl_Impl::Paint( const Rectangle& rRect )
         }
 
         if( !bfound )
-            pCursor = (SvxIconChoiceCtrlEntry*)aEntries.First();
+            pCursor = aEntries[ 0 ];
     }
 
     // Show Focus at Init-Time
@@ -786,8 +785,8 @@ void SvxIconChoiceCtrl_Impl::Paint( const Rectangle& rRect )
         pView->SetClipRegion( aOutputArea );
     }
 
-    const sal_uInt16 nListInitSize = aEntries.Count() > USHRT_MAX ?
-        USHRT_MAX : (sal_uInt16)aEntries.Count();
+    const sal_uInt16 nListInitSize = aEntries.size() > USHRT_MAX ?
+        USHRT_MAX : (sal_uInt16)aEntries.size();
     List* pNewZOrderList = new List( nListInitSize );
     List* pPaintedEntries = new List( nListInitSize );
 
@@ -1379,7 +1378,7 @@ sal_Bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
         case KEY_END:
             if( pCursor )
             {
-                pNewCursor = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( aEntries.Count() - 1 );
+                pNewCursor = aEntries[ aEntries.size() - 1 ];
                 SetCursor_Impl( pOldCursor, pNewCursor, bMod1, bShift, sal_True );
             }
             break;
@@ -1387,7 +1386,7 @@ sal_Bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
         case KEY_HOME:
             if( pCursor )
             {
-                pNewCursor = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( 0 );
+                pNewCursor = aEntries[ 0 ];
                 SetCursor_Impl( pOldCursor, pNewCursor, bMod1, bShift, sal_True );
             }
             break;
@@ -2345,15 +2344,15 @@ void SvxIconChoiceCtrl_Impl::RecalcAllBoundingRects()
 {
     nMaxBoundHeight = 0;
     pZOrderList->Clear();
-    sal_uLong nCount = aEntries.Count();
-    sal_uLong nCur;
+    size_t nCount = aEntries.size();
+    size_t nCur;
     SvxIconChoiceCtrlEntry* pEntry;
 
     if( !IsAutoArrange() || !pHead )
     {
         for( nCur = 0; nCur < nCount; nCur++ )
         {
-            pEntry = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+            pEntry = aEntries[ nCur ];
             FindBoundingRect( pEntry );
             pZOrderList->Insert( pEntry, LIST_APPEND );
         }
@@ -2379,15 +2378,15 @@ void SvxIconChoiceCtrl_Impl::RecalcAllBoundingRectsSmart()
 {
     nMaxBoundHeight = 0;
     pZOrderList->Clear();
-    sal_uLong nCur;
+    size_t nCur;
     SvxIconChoiceCtrlEntry* pEntry;
-    const sal_uLong nCount = aEntries.Count();
+    const size_t nCount = aEntries.size();
 
     if( !IsAutoArrange() || !pHead )
     {
         for( nCur = 0; nCur < nCount; nCur++ )
         {
-            pEntry = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+            pEntry = aEntries[ nCur ];
             if( IsBoundingRectValid( pEntry->aRect ))
             {
                 Size aBoundSize( pEntry->aRect.GetSize() );
@@ -2424,10 +2423,10 @@ void SvxIconChoiceCtrl_Impl::RecalcAllBoundingRectsSmart()
 
 void SvxIconChoiceCtrl_Impl::UpdateBoundingRects()
 {
-    const sal_uLong nCount = aEntries.Count();
-    for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
+    const size_t nCount = aEntries.size();
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+        SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
         GetEntryBoundRect( pEntry );
     }
 }
@@ -2906,7 +2905,7 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::FindNewCursor()
         }
     }
     else
-        pNewCursor = (SvxIconChoiceCtrlEntry*)aEntries.First();
+        pNewCursor = aEntries[ 0 ];
     DBG_ASSERT(!pNewCursor|| (pCursor&&pCursor!=pNewCursor),"FindNewCursor failed");
     return pNewCursor;
 }
@@ -2935,10 +2934,10 @@ void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry* pThisEntryN
     //
     // !!!!!!! Todo: Evtl. Z-Orderlist abarbeiten !!!!!!!
     //
-    sal_uLong nCount = aEntries.Count();
-    for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
+    size_t nCount = aEntries.size();
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+        SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
         if( pEntry != pThisEntryNot && pEntry->IsSelected() )
             SelectEntry( pEntry, sal_False, sal_True, sal_True, bPaintSync );
     }
@@ -3605,8 +3604,8 @@ sal_Bool SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, sal_uLong& r
 {
     sal_Bool bRet = sal_False;
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-    sal_uLong nEntryCount = GetEntryCount();
-    for ( sal_uLong i = 0; i < nEntryCount; ++i )
+    size_t nEntryCount = GetEntryCount();
+    for ( size_t i = 0; i < nEntryCount; ++i )
     {
         if ( rI18nHelper.MatchMnemonic( GetEntry( i )->GetText(), cChar ) )
         {
@@ -3751,12 +3750,12 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry( sal_uLong
         return pCurHighlightFrame;
     }
 
-    sal_uLong nCount = aEntries.Count();
+    size_t nCount = aEntries.size();
     if( !pHead )
     {
-        for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
+        for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
-            SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+            SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
             if( pEntry->IsSelected() )
             {
                 rPos = nCur;
@@ -3788,14 +3787,14 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry( sal_uLong
 // kein Round Robin!
 SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetNextSelectedEntry( sal_uLong& rStartPos ) const
 {
-    sal_uLong nCount = aEntries.Count();
+    size_t nCount = aEntries.size();
     if( rStartPos > nCount || !GetSelectionCount() )
         return 0;
     if( !pHead )
     {
-        for( sal_uLong nCur = rStartPos+1; nCur < nCount; nCur++ )
+        for( size_t nCur = rStartPos+1; nCur < nCount; nCur++ )
         {
-            SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+            SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
             if( pEntry->IsSelected() )
             {
                 rStartPos = nCur;
@@ -3805,7 +3804,7 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetNextSelectedEntry( sal_uLong&
     }
     else
     {
-        SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( rStartPos );
+        SvxIconChoiceCtrlEntry* pEntry = aEntries[ rStartPos ];
         pEntry = pEntry->pflink;
         while( pEntry != pHead )
         {
@@ -3826,10 +3825,10 @@ void SvxIconChoiceCtrl_Impl::SelectAll( sal_Bool bSelect, sal_Bool bPaint )
 {
     bPaint = sal_True;
 
-    sal_uLong nCount = aEntries.Count();
-    for( sal_uLong nCur = 0; nCur < nCount && (bSelect || GetSelectionCount() ); nCur++ )
+    size_t nCount = aEntries.size();
+    for( size_t nCur = 0; nCur < nCount && (bSelect || GetSelectionCount() ); nCur++ )
     {
-        SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+        SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
         SelectEntry( pEntry, bSelect, sal_True, sal_True, bPaint );
     }
     nFlags &= (~F_ADD_MODE);
@@ -3986,13 +3985,13 @@ sal_uLong SvxIconChoiceCtrl_Impl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntr
 
 void SvxIconChoiceCtrl_Impl::SetEntryListPos( SvxIconChoiceCtrlEntry* pListEntry, sal_uLong nNewPos )
 {
-    sal_uLong nCurPos = GetEntryListPos( pListEntry );
+    size_t nCurPos = GetEntryListPos( pListEntry );
     if( nCurPos == nNewPos )
         return;
-    aEntries.List::Remove( nCurPos );
-    aEntries.List::Insert( (void*)pListEntry, nNewPos );
+    aEntries.remove( nCurPos );
+    aEntries.insert( nNewPos, pListEntry );
     // Eintragspositionen anpassen
-    sal_uLong nStart, nEnd;
+    size_t nStart, nEnd;
     if( nNewPos < nCurPos )
     {
         nStart = nNewPos;
@@ -4005,7 +4004,7 @@ void SvxIconChoiceCtrl_Impl::SetEntryListPos( SvxIconChoiceCtrlEntry* pListEntry
     }
     for( ; nStart <= nEnd; nStart++ )
     {
-        SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nStart );
+        SvxIconChoiceCtrlEntry* pEntry = aEntries[ nStart ];
         pEntry->nPos = nStart;
     }
 }
@@ -4073,15 +4072,7 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
     }
 }
 
-EntryList_Impl::EntryList_Impl( SvxIconChoiceCtrl_Impl* pOwner, sal_uInt16 _nInitSize , sal_uInt16 _nReSize ) :
-    List( _nInitSize, _nReSize ),
-    _pOwner( pOwner )
-{
-    _pOwner->pHead = 0;
-}
-
-EntryList_Impl::EntryList_Impl( SvxIconChoiceCtrl_Impl* pOwner, sal_uInt16 _nBlockSize, sal_uInt16 _nInitSize, sal_uInt16 _nReSize ) :
-    List( _nBlockSize, _nInitSize, _nReSize ),
+EntryList_Impl::EntryList_Impl( SvxIconChoiceCtrl_Impl* pOwner ) :
     _pOwner( pOwner )
 {
     _pOwner->pHead = 0;
@@ -4092,31 +4083,47 @@ EntryList_Impl::~EntryList_Impl()
     _pOwner->pHead = 0;
 }
 
-void EntryList_Impl::Clear()
+void EntryList_Impl::clear()
 {
     _pOwner->pHead = 0;
-    List::Clear();
+    maIconChoiceCtrlEntryList.clear();
 }
 
-void EntryList_Impl::Insert( SvxIconChoiceCtrlEntry* pEntry, sal_uLong nPos )
+void EntryList_Impl::insert( size_t nPos, SvxIconChoiceCtrlEntry* pEntry )
 {
-    List::Insert( pEntry, nPos );
+    if ( nPos < maIconChoiceCtrlEntryList.size() ) {
+        maIconChoiceCtrlEntryList.insert( maIconChoiceCtrlEntryList.begin() + nPos, pEntry );
+    } else {
+        maIconChoiceCtrlEntryList.push_back( pEntry );
+    }
     if( _pOwner->pHead )
         pEntry->SetBacklink( _pOwner->pHead->pblink );
 }
 
-SvxIconChoiceCtrlEntry* EntryList_Impl::Remove( sal_uLong nPos )
+SvxIconChoiceCtrlEntry* EntryList_Impl::remove( size_t nPos )
 {
-    SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)List::Remove( nPos );
-    DBG_ASSERT(pEntry,"EntryList_Impl::Remove > Entry not found");
-    Removed_Impl( pEntry );
+    SvxIconChoiceCtrlEntry* pEntry = NULL;
+    if ( nPos < maIconChoiceCtrlEntryList.size() ) {
+        pEntry = maIconChoiceCtrlEntryList[ nPos ];
+        maIconChoiceCtrlEntryList.erase( maIconChoiceCtrlEntryList.begin() + nPos );
+        Removed_Impl( pEntry );
+    }
     return pEntry;
 }
 
-void EntryList_Impl::Remove( SvxIconChoiceCtrlEntry* pEntry )
+void EntryList_Impl::remove( SvxIconChoiceCtrlEntry* pEntry )
 {
-    List::Remove( (void*)pEntry );
-    Removed_Impl( pEntry );
+    for (
+        SvxIconChoiceCtrlEntryList_impl::iterator it = maIconChoiceCtrlEntryList.begin();
+        it < maIconChoiceCtrlEntryList.end();
+        ++it
+    ) {
+        if ( *it == pEntry ) {
+            maIconChoiceCtrlEntryList.erase( it );
+            Removed_Impl( pEntry );
+            break;
+        }
+    }
 }
 
 void EntryList_Impl::Removed_Impl( SvxIconChoiceCtrlEntry* pEntry )
@@ -4139,14 +4146,14 @@ void EntryList_Impl::Removed_Impl( SvxIconChoiceCtrlEntry* pEntry )
 
 void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMode )
 {
-    sal_uLong nCur;
+    size_t nCur;
 
     if( eMode == ePositionMode )
         return;
 
     SvxIconChoiceCtrlPositionMode eOldMode = ePositionMode;
     ePositionMode = eMode;
-    sal_uLong nCount = aEntries.Count();
+    size_t nCount = aEntries.size();
 
     if( eOldMode == IcnViewPositionModeAutoArrange )
     {
@@ -4154,7 +4161,7 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
         // mit ungewollten Ueberlappungen, da diese Eintrage im Arrange
         // nicht beruecksichtigt werden.
 #if 1
-        if( aEntries.Count() )
+        if( aEntries.size() )
             aAutoArrangeTimer.Start();
 #else
         if( pHead )
@@ -4181,7 +4188,7 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
         List aMovedEntries;
         for( nCur = 0; nCur < nCount; nCur++ )
         {
-            SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nCur );
+            SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
             if( pEntry->GetFlags() & (ICNVIEW_FLAG_POS_LOCKED | ICNVIEW_FLAG_POS_MOVED))
             {
                 SvxIconChoiceCtrlEntry_Impl* pE = new SvxIconChoiceCtrlEntry_Impl(
@@ -4197,7 +4204,7 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
         }
         for( nCur = 0; nCur < nCount; nCur++ )
             delete (SvxIconChoiceCtrlEntry_Impl*)aMovedEntries.GetObject( nCur );
-        if( aEntries.Count() )
+        if( aEntries.size() )
             aAutoArrangeTimer.Start();
     }
     else if( ePositionMode == IcnViewPositionModeAutoAdjust )
@@ -4267,7 +4274,7 @@ sal_Bool SvxIconChoiceCtrl_Impl::GetEntryPredecessor( SvxIconChoiceCtrlEntry* pE
 
     if( pEntry == pHead )
     {
-        SvxIconChoiceCtrlEntry* pFirst = (SvxIconChoiceCtrlEntry*)aEntries.GetObject(0);
+        SvxIconChoiceCtrlEntry* pFirst = aEntries[ 0 ];
         if( pFirst != pEntry )
             return sal_True;
         return sal_False;
@@ -4286,13 +4293,13 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::FindEntryPredecessor( SvxIconCho
     Rectangle aCenterRect( CalcBmpRect( pEntry, &aPos ));
     Point aNewPos( aCenterRect.Center() );
     sal_uLong nGrid = GetPredecessorGrid( aNewPos );
-    sal_uLong nCount = aEntries.Count();
+    size_t nCount = aEntries.size();
     if( nGrid == ULONG_MAX )
         return 0;
     if( nGrid >= nCount )
         nGrid = nCount - 1;
     if( !pHead )
-        return (SvxIconChoiceCtrlEntry*)aEntries.GetObject( nGrid );
+        return aEntries[ nGrid ];
 
     SvxIconChoiceCtrlEntry* pCur = pHead; // Grid 0
     // todo: Liste von hinten aufrollen wenn nGrid > nCount/2
