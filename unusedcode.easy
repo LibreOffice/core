@@ -535,6 +535,8 @@ ImplImageList::GetImageCount() const
 ImplListBox::GetEntryFlags(unsigned short) const
 ImplRegionBand::IsInside(long, long)
 ImplRegionBand::IsOver(long, long)
+ImplTBDragMgr::EndCustomizeMode()
+ImplTBDragMgr::StartCustomizeMode()
 ImplTaskBarFloat::ImplTaskBarFloat(TaskBar*)
 ImplWin::GetModeImage() const
 ImplWin::SetModeImage(Image const&)
@@ -673,6 +675,7 @@ MenuBar::AddMenuBarButton(Image const&, Link const&, unsigned short)
 MenuBar::ShowFloatButton(unsigned char)
 MenuBar::ShowHideButton(unsigned char)
 MenuItemList::GetCharClass() const
+MergeData::InsertEntry(ByteString const&)
 MergeData::~MergeData()
 MergeDataFile::Dump()
 MessBox::GetModeImage() const
@@ -841,12 +844,7 @@ Polygon::IsControl(unsigned short) const
 Polygon::IsSmooth(unsigned short) const
 Polygon::Remove(unsigned short, unsigned short)
 PopupMenu::SetSelectedEntry(unsigned short)
-Printer::AbortJob()
-Printer::DrawGradientEx(OutputDevice*, PolyPolygon const&, Gradient const&)
-Printer::GetDuplexMode() const
-Printer::ImplEndPrint()
-Printer::Printer(Window const*)
-PrinterSetupDialog::GetOptionsHdl() const
+Printer::LinkStubImplDestroyPrinterAsync(void*, void*)
 PropBrwMgr::GetChildWindowId()
 ProposalList::Remove(rtl::OUString const&)
 PushButton::GetSymbolAlign() const
@@ -1569,10 +1567,12 @@ StatusBar::GetItemBits(unsigned short) const
 StatusBar::GetItemData(unsigned short) const
 StatusBar::GetItemWidth(unsigned short) const
 StatusBar::HideItem(unsigned short)
+StatusBar::HideItems()
 StatusBar::ResetProgressMode()
 StatusBar::SetBottomBorder(unsigned char)
 StatusBar::SetTopBorder(unsigned char)
 StatusBar::ShowItem(unsigned short)
+StatusBar::ShowItems()
 StatusBar::StatusBar(Window*, ResId const&)
 StgAvlIterator::Last()
 StgCache::Pos2Page(int)
@@ -2126,8 +2126,8 @@ SvxShapePolyPolygonBezier::GetPolygonKind() const
 SvxShapeText::SvxShapeText()
 SvxShowCharSet::ImplFireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
 SvxSimpleTable::ClearAll()
-SvxSimpleTable::GetOutputSizePixel() const
 SvxSimpleTable::TableToTop()
+SvxSimpleTable::getPreferredContainerSize() const
 SvxSimpleTableContainer::SvxSimpleTableContainer(Window*, long)
 SvxStringArray::GetStringByType(long) const
 SvxStringArray::GetValueByStr(String const&) const
@@ -2297,10 +2297,6 @@ SwpHtStart::Insert(SwTxtAttr const**, unsigned short)
 SwpHtStart::Insert(SwpHtStart const*, unsigned short, unsigned short)
 SwpHtStart::Remove(SwTxtAttr const*&, unsigned short)
 SymCharConverter::Convert(Font&, String&, OutputDevice*)
-SystemChildWindow::IsEraseBackgroundEnabled()
-SystemWindow::GetRepresentedURL() const
-SystemWindow::GetZLevel() const
-SystemWindow::SetZLevel(unsigned char)
 TB::NeedsPositioning()
 TESortedPositions::Insert(TESortedPositions const*, unsigned short, unsigned short)
 TESortedPositions::Insert(unsigned long const&, unsigned short&)
@@ -2317,78 +2313,13 @@ TEWritingDirectionInfos::_ForEach(unsigned short, unsigned short, unsigned char 
 TPGalleryThemeProperties::LinkStubClickCloseBrowserHdl(void*, void*)
 TTProfiler::Dec(unsigned long)
 TTProperties::Img(Bitmap*)
-TabBar::EnablePage(unsigned short, unsigned char)
-TabBar::GetMinSize() const
-TabBar::GetSelectPage(unsigned short) const
-TabBar::SelectPageRange(unsigned char, unsigned short, unsigned short)
-TabBar::SetHelpId(unsigned short, rtl::OString const&)
-TabBar::SetHelpText(unsigned short, String const&)
-TabBar::SetSelectColor()
-TabBar::SetSelectColor(Color const&)
-TabBar::SetSelectTextColor()
-TabBar::SetSelectTextColor(Color const&)
-TabControl::GetPageImage(unsigned short) const
-TabControl::GetTabPageResId(unsigned short) const
-TabControl::SetHelpId(unsigned short, rtl::OString const&)
-Table::GetUniqueKey(unsigned long) const
-TaskBar::EnableAutoHide(unsigned char)
-TaskBar::HideStatusText()
-TaskBar::SetLines(unsigned short)
-TaskBar::ShowStatusText(String const&)
-TaskPaneList::FindNextPane(Window*, unsigned char)
-TaskStatusBar::AddStatusFieldItem(unsigned short, TaskStatusFieldItem const&, unsigned short)
-TaskStatusBar::GetStatusFieldItem(unsigned short, TaskStatusFieldItem&) const
-TaskStatusBar::ModifyStatusFieldItem(unsigned short, TaskStatusFieldItem const&)
-TaskStatusBar::RemoveStatusFieldItem(unsigned short)
-TaskStatusBar::SetFieldFlags(unsigned short)
-TaskStatusFieldItem::TaskStatusFieldItem(ITaskStatusNotify*, Image const&, String const&, String const&, unsigned short)
-TempFile::SetTempNameBaseDirectory(String const&)
+TaskStatusBar::ImplGetFieldItem(unsigned short) const
+TaskStatusFieldItem::TaskStatusFieldItem()
+TempFile::IsValid() const
 TestToolObj::TestToolObj(String, String)
-TextAttrib::Clone() const
-TextAttrib::SetFont(Font&) const
-TextAttribHyperLink::TextAttribHyperLink(String const&)
-TextAttribHyperLink::TextAttribHyperLink(String const&, String const&)
-TextCharAttribList::DbgCheckAttribs()
-TextEngine::DoesKeyMoveCursor(KeyEvent const&)
-TextEngine::SetDefTab(unsigned short)
-TextEngine::SetUpdateMode(unsigned char, TextView*, unsigned char)
 TextObj::TextObj(TextObj&)
 TextObj::Write(SvStream*)
-TextUndoSetAttribs::TextUndoSetAttribs(TextEngine*, TextSelection const&)
-TextView::CursorLeft(TextPaM const&, unsigned char)
-TextView::CursorRight(TextPaM const&, unsigned char)
-TextView::IsAutoIndentMode() const
-TextView::IsHighlightSelection() const
-TextView::IsPaintSelection() const
-TextView::SetHighlightSelection(unsigned char)
-TextView::Write(SvStream&)
-ToolBox::CopyItems(ToolBox const&)
-ToolBox::EndCustomizeMode()
-ToolBox::GetDisplayItemId(long) const
-ToolBox::GetItemDropDownRect(unsigned short) const
-ToolBox::GetItemHighImage(unsigned short) const
-ToolBox::GetItemImageAngle(unsigned short) const
-ToolBox::GetItemImageMirrorMode(unsigned short) const
-ToolBox::GetMenuButtonHdl() const
-ToolBox::GetMenubuttonRect() const
-ToolBox::GetPageScroll()
-ToolBox::GetTextCount() const
-ToolBox::GetTextStartEnd(long) const
-ToolBox::ImplGetLastValidItem(unsigned short)
-ToolBox::IsCustomizeMode()
-ToolBox::IsItemDown(unsigned short) const
-ToolBox::MoveItem(unsigned short, unsigned short)
-ToolBox::RecalcItems()
-ToolBox::SetCustomizeMode(unsigned char)
-ToolBox::SetItemHighImage(unsigned short, Image const&)
-ToolBox::SetToolArrowClipregion(ToolBox*, long, long, unsigned char, unsigned char, long)
-ToolBox::StartCustomize(Rectangle const&, void*)
-ToolBox::StartCustomizeMode()
-TransferDataContainer::ClearData()
-TransferableDataHelper::GetInterface(unsigned long, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&)
-TransferableHelper::SetFileList(FileList const&, com::sun::star::datatransfer::DataFlavor const&)
-TransferableHelper::SetInterface(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, com::sun::star::datatransfer::DataFlavor const&)
-Type1Emitter::Type1Emitter(char const*, bool)
+TransferableDataHelper::GetInterface(com::sun::star::datatransfer::DataFlavor const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&)
 TypeName::TypeName(char*, unsigned int, unsigned int, unsigned short, int, int)
 UCBStorage::IsStorageFile(String const&)
 UCBStream::UCBStream(com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>&)
@@ -2462,9 +2393,6 @@ WW8_WrSepInfoPtrs::Remove(unsigned short, unsigned short)
 WW8_WrSepInfoPtrs::Replace(WW8_SepInfo const&, unsigned short)
 WW8_WrSepInfoPtrs::Replace(WW8_SepInfo const*, unsigned short, unsigned short)
 WW8_WrSepInfoPtrs::_ForEach(unsigned short, unsigned short, unsigned char (*)(WW8_SepInfo const&, void*), void*)
-Wallpaper::SetBitmap()
-Wallpaper::SetGradient()
-Wallpaper::SetRect()
 WinMtfOutput::DrawLine(Point const&, Point const&)
 WinMtfOutput::GetTextLayoutMode() const
 WinMtfOutput::SetFont(Font const&)
@@ -3063,8 +2991,6 @@ binfilter::ImpSvNumMultipleWriteHeader::ImpSvNumMultipleWriteHeader(SvStream&, u
 binfilter::ImpSvNumMultipleWriteHeader::StartEntry()
 binfilter::ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
 binfilter::ImpSvtData::~ImpSvtData()
-binfilter::ImplRenderPaintProc::IsPrintable(binfilter::SdrObject const*) const
-binfilter::ImplRenderPaintProc::IsVisible(binfilter::SdrObject const*) const
 binfilter::InsCapOptArr::Insert(binfilter::InsCapOptArr const*, unsigned short, unsigned short)
 binfilter::InsCapOptArr::Insert(binfilter::InsCaptionOpt* const&, unsigned short&)
 binfilter::InsCapOptArr::Insert(binfilter::InsCaptionOpt* const*, unsigned short)
@@ -3148,11 +3074,13 @@ binfilter::ScriptTypePosInfos::Replace(binfilter::ScriptTypePosInfo const*, unsi
 binfilter::ScriptTypePosInfos::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::ScriptTypePosInfo const&, void*), void*)
 binfilter::SdXMLFilter::SdXMLFilter(binfilter::SfxMedium&, binfilter::SdDrawDocShell&, unsigned char, binfilter::SdXMLFilterMode)
 binfilter::SdrObjSurrogate::SdrObjSurrogate(binfilter::SdrObject*, binfilter::SdrObject const*)
+binfilter::SdrPageView::IsLayer(String const&, binfilter::SetOfByte const&) const
 binfilter::SdrUnoControlAccessArr::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const&, unsigned short&)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const*, unsigned short)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccessArr const*, unsigned short, unsigned short)
 binfilter::SdrUnoControlAccessArr::Remove(binfilter::SdrUnoControlAccess* const&, unsigned short)
+binfilter::SfxConfigManager::GetConfigurationStorage(SotStorage*)
 binfilter::SfxDocumentInfo::SavePropertySet(binfilter::SvStorage*) const
 binfilter::SfxHintPoster::LinkStubDoEvent_Impl(void*, void*)
 binfilter::SfxItemModifyArr_Impl::Insert(binfilter::SfxItemModifyArr_Impl const*, unsigned short, unsigned short, unsigned short)
@@ -3160,6 +3088,8 @@ binfilter::SfxItemModifyArr_Impl::Remove(unsigned short, unsigned short)
 binfilter::SfxItemModifyArr_Impl::Replace(binfilter::SfxItemModifyImpl const&, unsigned short)
 binfilter::SfxItemModifyArr_Impl::Replace(binfilter::SfxItemModifyImpl const*, unsigned short, unsigned short)
 binfilter::SfxItemModifyArr_Impl::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::SfxItemModifyImpl const&, void*), void*)
+binfilter::SfxItemPool::IsInStoringRange(unsigned short) const
+binfilter::SfxItemPool::StoreSurrogate(SvStream&, binfilter::SfxPoolItem const*) const
 binfilter::SfxMacroConfig::LinkStubCallbackHdl_Impl(void*, void*)
 binfilter::SfxMacroConfig::LinkStubEventHdl_Impl(void*, void*)
 binfilter::SfxMedium::GetHdl()
@@ -3168,7 +3098,9 @@ binfilter::SfxMultiMixRecordWriter::NewContent(unsigned short, unsigned char)
 binfilter::SfxMultiVarRecordWriter::NewContent()
 binfilter::SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(SvStream*, unsigned short, unsigned char)
 binfilter::SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(unsigned char, SvStream*, unsigned short, unsigned char)
+binfilter::SfxObjectShell::AddXMLAsZipToTheStorage(binfilter::SvStorage&)
 binfilter::SfxObjectShell::GetBaseURL() const
+binfilter::SfxObjectShell::SaveInfoAndConfig_Impl(binfilter::SvStorageRef)
 binfilter::SfxPtrArr::Insert(unsigned short, void*)
 binfilter::SfxPtrArr::Remove(void*)
 binfilter::SfxPtrArr::Replace(void*, void*)
@@ -4720,6 +4652,7 @@ test::OfficeConnection::~OfficeConnection()
 test::getTestArgument(rtl::OUString const&, rtl::OUString*)
 toolkit::registerServices(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, char const*, char const*, char const*)
 tools::SolarMutex::GetSolarMutex()
+transex::File::File(rtl::OUString)
 ucbhelper::CommandEnvironmentProxy::CommandEnvironmentProxy(com::sun::star::uno::Reference<com::sun::star::ucb::XCommandEnvironment> const&)
 ucbhelper::Content::Content(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&, com::sun::star::uno::Reference<com::sun::star::ucb::XCommandEnvironment> const&)
 ucbhelper::Content::abortCommand()
