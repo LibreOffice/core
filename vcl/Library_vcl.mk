@@ -490,10 +490,24 @@ $(eval $(call gb_Library_set_cxxflags,vcl,\
     $$(CAIRO_CFLAGS) \
     -DSYSTEM_CAIRO \
 ))
+
+# CAIRO_LIBS contains both -L and -l options. Thes sets LDFLAGS which
+# goes early into the linking command line before the object files. So
+# on platforms where libraries are searched for symbols undefined at
+# that point as they occur on the command line, it is pointless to
+# search the cairo library at that point as no references to cairo
+# entries have been read from object files yet.
 $(eval $(call gb_Library_set_ldflags,vcl,\
     $$(LDFLAGS) \
     $$(CAIRO_LIBS) \
 ))
+
+# Thus we also need to add cairo to the list of linked libs. These go
+# after the object files on the linking command line.
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    cairo \
+))
+
 else
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     cairo \
