@@ -325,21 +325,19 @@ void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Gr
 
 bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject& rObj )
 {
-    bool bRet = false;
-
     for(
         GraphicObjectList_impl::iterator it = maGraphicObjectList.begin();
-        ( it < maGraphicObjectList.end() ) && !bRet;
+        it != maGraphicObjectList.end();
         ++it
     ) {
         if( &rObj == *it )
         {
             maGraphicObjectList.erase( it );
-            bRet = true;
+            return true;
         }
     }
 
-    return bRet;
+    return false;
 }
 
 // -----------------------------------------------------------------------------
