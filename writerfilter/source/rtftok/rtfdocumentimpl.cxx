@@ -2528,19 +2528,22 @@ int RTFDocumentImpl::popState()
             }
         }
 
-        m_pObjectData->Seek(0);
+        if (m_pObjectData->Tell())
+        {
+            m_pObjectData->Seek(0);
 
-        // Skip ObjectHeader
-        sal_uInt32 nData;
-        *m_pObjectData >> nData; // OLEVersion
-        *m_pObjectData >> nData; // FormatID
-        *m_pObjectData >> nData; // ClassName
-        m_pObjectData->SeekRel(nData);
-        *m_pObjectData >> nData; // TopicName
-        m_pObjectData->SeekRel(nData);
-        *m_pObjectData >> nData; // ItemName
-        m_pObjectData->SeekRel(nData);
-        *m_pObjectData >> nData; // NativeDataSize
+            // Skip ObjectHeader
+            sal_uInt32 nData;
+            *m_pObjectData >> nData; // OLEVersion
+            *m_pObjectData >> nData; // FormatID
+            *m_pObjectData >> nData; // ClassName
+            m_pObjectData->SeekRel(nData);
+            *m_pObjectData >> nData; // TopicName
+            m_pObjectData->SeekRel(nData);
+            *m_pObjectData >> nData; // ItemName
+            m_pObjectData->SeekRel(nData);
+            *m_pObjectData >> nData; // NativeDataSize
+        }
 
         uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(m_pObjectData));
         RTFValue::Pointer_t pStreamValue(new RTFValue(xInputStream));
@@ -2567,7 +2570,11 @@ int RTFDocumentImpl::popState()
         Mapper().endShape();
         m_aObjectAttributes.clear();
         m_aObjectSprms.clear();
-        delete m_pObjectData; m_pObjectData = 0;
+        if (m_pObjectData)
+        {
+            delete m_pObjectData;
+            m_pObjectData = 0;
+        }
         m_bObject = false;
     }
 
