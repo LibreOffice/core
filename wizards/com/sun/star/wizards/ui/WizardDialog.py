@@ -43,6 +43,7 @@ class WizardDialog(UnoDialog2):
         self.sMsgEndAutopilot = self.__oWizardResource.getResText(
             UIConsts.RID_DB_COMMON + 33)
         self.oRoadmap = None
+        #self.vetos = VetoableChangeSupport.VetoableChangeSupport_unknown(this)
 
     def getResource(self):
         return self.__oWizardResource
@@ -73,7 +74,7 @@ class WizardDialog(UnoDialog2):
             return False
 
     def setCurrentRoadmapItemID(self, ID):
-        if self.oRoadmap is not None:
+        if self.oRoadmap != None:
             nCurItemID = self.getCurrentRoadmapItemID()
             if nCurItemID != ID:
                 Helper.setUnoPropertyValue(self.oRoadmap, "CurrentItemID",ID)
@@ -94,8 +95,7 @@ class WizardDialog(UnoDialog2):
             # the roadmap control has got no real TabIndex ever
             # that is not correct, but changing this would need time,
             # so it is used without TabIndex as before
-
-            xRoadmapControl = self.insertControlModel(
+            self.oRoadmap = self.insertControlModel(
                 "com.sun.star.awt.UnoControlRoadmapModel",
                 "rdmNavi",
                 (PropertyNames.PROPERTY_HEIGHT,
@@ -106,9 +106,12 @@ class WizardDialog(UnoDialog2):
                     PropertyNames.PROPERTY_WIDTH),
                 ((iDialogHeight - 26), 0, 0, 0,
                     0, True, 85))
-            self.oRoadmap = xRoadmapControl.Model
+            self.oRoadmap.setPropertyValue(
+                PropertyNames.PROPERTY_NAME, "rdmNavi")
+
+            self.xRoadmapControl = self.xUnoDialog.getControl("rdmNavi")
             method = getattr(self, "itemStateChanged")
-            xRoadmapControl.addItemListener(
+            self.xRoadmapControl.addItemListener(
                 ItemListenerProcAdapter(method))
 
             Helper.setUnoPropertyValue(
@@ -142,6 +145,9 @@ class WizardDialog(UnoDialog2):
         except Exception, exception:
             traceback.print_exc()
             return -1
+
+    def getRMItemCount(self):
+        return self.oRoadmap.Count
 
     def getRoadmapItemByID(self, _ID):
         try:
@@ -195,6 +201,12 @@ class WizardDialog(UnoDialog2):
         self.setCurrentRoadmapItemID(nNewStep)
         self.enableNextButton(self.getNextAvailableStep() > 0)
         self.enableBackButton(nNewStep != 1)
+
+    def iscompleted(self, _ndialogpage):
+        return False
+
+    def ismodified(self, _ndialogpage):
+        return False
 
     def drawNaviBar(self):
         try:
@@ -376,7 +388,9 @@ class WizardDialog(UnoDialog2):
             while i <= self.nMaxStep:
                 if self.isStepEnabled(i):
                     return i
+
                 i += 1
+
         return -1
 
     def gotoNextAvailableStep(self):

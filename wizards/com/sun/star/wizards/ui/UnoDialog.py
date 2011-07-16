@@ -124,6 +124,206 @@ class UnoDialog(object):
         if iSelIndex != -1:
             xListBox.selectItemPos(iSelIndex, True)
 
+    def insertLabel(self, sName, sPropNames, oPropValues):
+        try:
+            oFixedText = self.insertControlModel(
+                "com.sun.star.awt.UnoControlFixedTextModel",
+                sName, sPropNames, oPropValues)
+            oFixedText.setPropertyValue(PropertyNames.PROPERTY_NAME, sName)
+            oLabel = self.xUnoDialog.getControl(sName)
+            return oLabel
+        except Exception, ex:
+            traceback.print_exc()
+            return None
+
+    def insertButton(
+            self, sName, iControlKey, xActionListener, sProperties, sValues):
+        oButtonModel = self.insertControlModel(
+            "com.sun.star.awt.UnoControlButtonModel",
+            sName, sProperties, sValues)
+        xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName)
+        xButton = self.xUnoDialog.getControl(sName)
+        if xActionListener != None:
+            xButton.addActionListener(
+                ActionListenerProcAdapter(xActionListener))
+
+        ControlKey = iControlKey
+        if self.ControlList != None:
+            self.ControlList.put(sName, ControlKey)
+
+        return xButton
+
+    def insertCheckBox(
+            self, sName, iControlKey, xItemListener, sProperties, sValues):
+        oButtonModel = self.insertControlModel(
+            "com.sun.star.awt.UnoControlCheckBoxModel",
+            sName, sProperties, sValues)
+        oButtonModel.setPropertyValue(PropertyNames.PROPERTY_NAME, sName)
+        xCheckBox = self.xUnoDialog.getControl(sName)
+        if xItemListener != None:
+            xCheckBox.addItemListener(
+                ItemListenerProcAdapter(xItemListener))
+
+        ControlKey = iControlKey
+        if self.ControlList != None:
+            self.ControlList.put(sName, ControlKey)
+
+    def insertNumericField(
+            self, sName, iControlKey, xTextListener, sProperties, sValues):
+        oNumericFieldModel = self.insertControlModel(
+            "com.sun.star.awt.UnoControlNumericFieldModel",
+            sName, sProperties, sValues)
+        oNumericFieldModel.setPropertyValue(
+            PropertyNames.PROPERTY_NAME, sName)
+        xNumericField = self.xUnoDialog.getControl(sName)
+        if xTextListener != None:
+            xNumericField.addTextListener(
+                TextListenerProcAdapter(xTextListener))
+
+        ControlKey = iControlKey
+        if self.ControlList != None:
+            self.ControlList.put(sName, ControlKey)
+
+    def insertScrollBar(
+        self, sName, iControlKey, xAdjustmentListener, sProperties, sValues):
+        try:
+            oScrollModel = self.insertControlModel(
+                "com.sun.star.awt.UnoControlScrollBarModel",
+                sName, sProperties, sValues)
+            oScrollModel.setPropertyValue(PropertyNames.PROPERTY_NAME, sName)
+            xScrollBar = self.xUnoDialog.getControl(sName)
+            if xAdjustmentListener != None:
+                xScrollBar.addAdjustmentListener(xAdjustmentListener)
+
+            ControlKey = iControlKey
+            if self.ControlList != None:
+                self.ControlList.put(sName, ControlKey)
+
+            return xScrollBar
+        except com.sun.star.uno.Exception, exception:
+            traceback.print_exc()
+            return None
+
+    def insertTextField(
+        self, sName, iControlKey, xTextListener, sProperties, sValues):
+        xTextBox = insertEditField(
+            "com.sun.star.awt.UnoControlEditModel", sName, iControlKey,
+            xTextListener, sProperties, sValues)
+        return xTextBox
+
+    def insertFormattedField(
+        self, sName, iControlKey, xTextListener, sProperties, sValues):
+        xTextBox = insertEditField(
+            "com.sun.star.awt.UnoControlFormattedFieldModel", sName,
+            iControlKey, xTextListener, sProperties, sValues)
+        return xTextBox
+
+    def insertEditField(
+        self, ServiceName, sName, iControlKey,
+        xTextListener, sProperties, sValues):
+
+        try:
+            xTextModel = self.insertControlModel(
+                ServiceName, sName, sProperties, sValues)
+            xTextModel.setPropertyValue(PropertyNames.PROPERTY_NAME, sName)
+            xTextBox = self.xUnoDialog.getControl(sName)
+            if xTextListener != None:
+                xTextBox.addTextListener(TextListenerProcAdapter(xTextListener))
+
+            ControlKey = iControlKey
+            self.ControlList.put(sName, ControlKey)
+            return xTextBox
+        except com.sun.star.uno.Exception, exception:
+            traceback.print_exc()
+            return None
+
+    def insertListBox(
+        self, sName, iControlKey, xActionListener,
+        xItemListener, sProperties, sValues):
+        xListBoxModel = self.insertControlModel(
+            "com.sun.star.awt.UnoControlListBoxModel",
+            sName, sProperties, sValues)
+        xListBoxModel.setPropertyValue(PropertyNames.PROPERTY_NAME, sName)
+        xListBox = self.xUnoDialog.getControl(sName)
+        if xItemListener != None:
+            xListBox.addItemListener(ItemListenerProcAdapter(xItemListener))
+
+        if xActionListener != None:
+            xListBox.addActionListener(
+                ActionListenerProcAdapter(xActionListener))
+
+        ControlKey = iControlKey
+        self.ControlList.put(sName, ControlKey)
+        return xListBox
+
+    def insertComboBox(
+        self, sName, iControlKey, xActionListener, xTextListener,
+        xItemListener, sProperties, sValues):
+        xComboBoxModel = self.insertControlModel(
+            "com.sun.star.awt.UnoControlComboBoxModel",
+            sName, sProperties, sValues)
+        xComboBoxModel.setPropertyValue(PropertyNames.PROPERTY_NAME, sName)
+        xComboBox = self.xUnoDialog.getControl(sName)
+        if xItemListener != None:
+            xComboBox.addItemListener(ItemListenerProcAdapter(xItemListener))
+
+        if xTextListener != None:
+            xComboBox.addTextListener(TextListenerProcAdapter(xTextListener))
+
+        if xActionListener != None:
+            xComboBox.addActionListener(
+                ActionListenerProcAdapter(xActionListener))
+
+        ControlKey = iControlKey
+        self.ControlList.put(sName, ControlKey)
+        return xComboBox
+
+    def insertRadioButton(
+            self, sName, iControlKey, xItemListener, sProperties, sValues):
+        try:
+            xRadioButton = insertRadioButton(
+                sName, iControlKey, sProperties, sValues)
+            if xItemListener != None:
+                xRadioButton.addItemListener(
+                    ItemListenerProcAdapter(xItemListener))
+
+            return xRadioButton
+        except com.sun.star.uno.Exception, exception:
+            traceback.print_exc()
+            return None
+
+    def insertRadioButton(
+            self, sName, iControlKey, xActionListener, sProperties, sValues):
+        try:
+            xButton = insertRadioButton(
+                sName, iControlKey, sProperties, sValues)
+            if xActionListener != None:
+                xButton.addActionListener(
+                    ActionListenerProcAdapter(xActionListener))
+
+            return xButton
+        except com.sun.star.uno.Exception, exception:
+            traceback.print_exc()
+            return None
+
+    def insertRadioButton(self, sName, iControlKey, sProperties, sValues):
+        xRadioButton = insertRadioButton(sName, sProperties, sValues)
+        ControlKey = iControlKey
+        self.ControlList.put(sName, ControlKey)
+        return xRadioButton
+
+    def insertRadioButton(self, sName, sProperties, sValues):
+        try:
+            oRadioButtonModel = self.insertControlModel(
+                "com.sun.star.awt.UnoControlRadioButtonModel",
+                sName, sProperties, sValues)
+            oRadioButtonModel.setPropertyValue(
+                PropertyNames.PROPERTY_NAME, sName)
+            xRadioButton = self.xUnoDialog.getControl(sName)
+            return xRadioButton
+        except com.sun.star.uno.Exception, exception:
+            traceback.print_exc()
+            return None
     '''
     The problem with setting the visibility of controls
     is that changing the current step of a dialog will automatically
@@ -175,6 +375,7 @@ class UnoDialog(object):
 
     # repaints the currentDialogStep
 
+
     def repaintDialogStep(self):
         try:
             ncurstep = int(Helper.getUnoPropertyValue(
@@ -186,20 +387,15 @@ class UnoDialog(object):
         except com.sun.star.uno.Exception, exception:
             traceback.print_exc()
 
-    def insertControlModel(
-        self, serviceName, componentName, sPropNames, oPropValues):
+    def insertControlModel(self, ServiceName, sName, sProperties, sValues):
         try:
-            xControlModel = self.xDialogModel.createInstance(serviceName)
-            Helper.setUnoPropertyValues(
-                xControlModel, sPropNames, oPropValues)
-            self.xDialogModel.insertByName(componentName, xControlModel)
-            Helper.setUnoPropertyValue(xControlModel,
-                PropertyNames.PROPERTY_NAME, componentName)
-        except Exception, ex:
+            xControlModel = self.xDialogModel.createInstance(ServiceName)
+            Helper.setUnoPropertyValues(xControlModel, sProperties, sValues)
+            self.xDialogModel.insertByName(sName, xControlModel)
+            return xControlModel
+        except Exception, exception:
             traceback.print_exc()
-
-        aObj = self.xUnoDialog.getControl(componentName)
-        return aObj
+            return None
 
     def setFocus(self, ControlName):
         oFocusControl = self.xUnoDialog.getControl(ControlName)
@@ -348,3 +544,9 @@ class UnoDialog(object):
 
     def addResourceHandler(self, _Unit, _Module):
         self.m_oResource = Resource(self.xMSF, _Unit, _Module)
+
+    def setInitialTabindex(self, _istep):
+        return (short)(_istep * 100)
+
+    def getListBoxLineCount(self):
+        return 20

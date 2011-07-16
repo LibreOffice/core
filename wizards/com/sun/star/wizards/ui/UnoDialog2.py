@@ -25,7 +25,7 @@ class UnoDialog2(UnoDialog):
 
     def insertButton(
         self, sName, actionPerformed, sPropNames, oPropValues, listener):
-        xButton = self.insertControlModel(
+        xButton = self.insertControlModel2(
             "com.sun.star.awt.UnoControlButtonModel",
             sName, sPropNames, oPropValues)
         if actionPerformed is not None:
@@ -37,7 +37,7 @@ class UnoDialog2(UnoDialog):
 
     def insertImageButton(
             self, sName, actionPerformed, sPropNames, oPropValues, listener):
-        xButton = self.insertControlModel(
+        xButton = self.insertControlModel2(
             "com.sun.star.awt.UnoControlButtonModel",
             sName, sPropNames, oPropValues)
         if actionPerformed is not None:
@@ -49,7 +49,7 @@ class UnoDialog2(UnoDialog):
 
     def insertCheckBox(
         self, sName, itemChanged, sPropNames, oPropValues, listener):
-        xCheckBox = self.insertControlModel(
+        xCheckBox = self.insertControlModel2(
             "com.sun.star.awt.UnoControlCheckBoxModel",
             sName, sPropNames, oPropValues)
         if itemChanged is not None:
@@ -61,7 +61,7 @@ class UnoDialog2(UnoDialog):
     def insertComboBox(
         self, sName, actionPerformed, itemChanged,
         textChanged, sPropNames, oPropValues, listener):
-        xComboBox = self.insertControlModel(
+        xComboBox = self.insertControlModel2(
         "com.sun.star.awt.UnoControlComboBoxModel",
         sName, sPropNames, oPropValues)
         if actionPerformed is not None:
@@ -82,7 +82,7 @@ class UnoDialog2(UnoDialog):
     def insertListBox(
         self, sName, actionPerformed, itemChanged,
         sPropNames, oPropValues, listener):
-        xListBox = self.insertControlModel(
+        xListBox = self.insertControlModel2(
             "com.sun.star.awt.UnoControlListBoxModel",
             sName, sPropNames, oPropValues)
 
@@ -98,7 +98,7 @@ class UnoDialog2(UnoDialog):
 
     def insertRadioButton(
         self, sName, itemChanged, sPropNames, oPropValues, listener):
-        xRadioButton = self.insertControlModel(
+        xRadioButton = self.insertControlModel2(
             "com.sun.star.awt.UnoControlRadioButtonModel",
             sName, sPropNames, oPropValues)
         if itemChanged is not None:
@@ -106,10 +106,11 @@ class UnoDialog2(UnoDialog):
             xRadioButton.addItemListener(
                 ItemListenerProcAdapter(itemChanged))
 
+
         return xRadioButton
 
     def insertTitledBox(self, sName, sPropNames, oPropValues):
-        oTitledBox = self.insertControlModel(
+        oTitledBox = self.insertControlModel2(
             "com.sun.star.awt.UnoControlGroupBoxModel",
             sName, sPropNames, oPropValues)
         return oTitledBox
@@ -121,7 +122,7 @@ class UnoDialog2(UnoDialog):
             sPropNames, oPropValues, listener)
 
     def insertImage(self, sName, sPropNames, oPropValues):
-        return self.insertControlModel(
+        return self.insertControlModel2(
             "com.sun.star.awt.UnoControlImageControlModel",
             sName, sPropNames, oPropValues)
 
@@ -146,11 +147,12 @@ class UnoDialog2(UnoDialog):
     def insertEditField(
         self, sName, sTextChanged, sModelClass,
         sPropNames, oPropValues, listener):
-        xField = self.insertControlModel(sModelClass,
+        xField = self.insertControlModel2(sModelClass,
             sName, sPropNames, oPropValues)
         if sTextChanged is not None:
             sTextChanged = getattr(listener, sTextChanged)
             xField.addTextListener(TextListenerProcAdapter(sTextChanged))
+
         return xField
 
     def insertFileControl(
@@ -201,35 +203,54 @@ class UnoDialog2(UnoDialog):
             sPropNames, oPropValues, listener)
 
     def insertFixedLine(self, sName, sPropNames, oPropValues):
-        oLine = self.insertControlModel(
+        oLine = self.insertControlModel2(
             "com.sun.star.awt.UnoControlFixedLineModel",
             sName, sPropNames, oPropValues)
         return oLine
 
-
-    def insertLabel(self, sName, sPropNames, oPropValues):
-        oFixedText = self.insertControlModel(
-            "com.sun.star.awt.UnoControlFixedTextModel",
-            sName, sPropNames, oPropValues)
-        return oFixedText
-
     def insertScrollBar(self, sName, sPropNames, oPropValues):
-        oScrollBar = self.insertControlModel(
+        oScrollBar = self.insertControlModel2(
             "com.sun.star.awt.UnoControlScrollBarModel",
             sName, sPropNames, oPropValues)
         return oScrollBar
 
     def insertProgressBar(self, sName, sPropNames, oPropValues):
-        oProgressBar = self.insertControlModel(
+        oProgressBar = self.insertControlModel2(
             "com.sun.star.awt.UnoControlProgressBarModel",
             sName, sPropNames, oPropValues)
         return oProgressBar
 
     def insertGroupBox(self, sName, sPropNames, oPropValues):
-        oGroupBox = self.insertControlModel(
+        oGroupBox = self.insertControlModel2(
             "com.sun.star.awt.UnoControlGroupBoxModel",
             sName, sPropNames, oPropValues)
         return oGroupBox
+
+    def insertControlModel2(
+        self, serviceName, componentName, sPropNames, oPropValues):
+        try:
+            xControlModel = self.insertControlModel(
+                serviceName, componentName, (), ())
+            Helper.setUnoPropertyValues(
+                xControlModel, sPropNames, oPropValues)
+            Helper.setUnoPropertyValue(xControlModel,
+                PropertyNames.PROPERTY_NAME, componentName)
+        except Exception, ex:
+            traceback.print_exc()
+
+        aObj = self.xUnoDialog.getControl(componentName)
+        return aObj
+
+    def setControlPropertiesDebug(self, model, names, values):
+        i = 0
+        while i < len(names):
+            print "   Settings: ", names[i]
+            Helper.setUnoPropertyValue(model, names[i], values[i])
+            i += 1
+
+    def getControlModel(self, unoControl):
+        obj = unoControl.Model
+        return obj
 
     def showMessageBox(self, windowServiceName, windowAttribute, MessageText):
         return SystemDialog.showMessageBox(

@@ -92,7 +92,7 @@ class TextDocument(object):
 
     def init(self):
         self.xWindowPeer = self.xFrame.getComponentWindow()
-        self.m_xDocProps = TextDocument.xTextDocument.DocumentProperties
+        self.m_xDocProps = TextDocument.xTextDocument.getDocumentProperties()
         self.CharLocale = Helper.getUnoStructValue(
             TextDocument.xTextDocument, "CharLocale")
         self.xText = TextDocument.xTextDocument.Text

@@ -89,24 +89,32 @@ class TextFieldHandler(object):
             traceback.print_exc()
 
     def __getTextFieldsByProperty(
-            self, _PropertyName, _aPropertyValue):
+            self, _PropertyName, _aPropertyValue, _TypeName):
         try:
             xProperty = TextFieldHandler.dictTextFields[_aPropertyValue]
             xPropertySet = xProperty.TextFieldMaster
             if xPropertySet.PropertySetInfo.hasPropertyByName(
                     _PropertyName):
                 oValue = xPropertySet.getPropertyValue(_PropertyName)
-                sValue = unicodedata.normalize(
-                    'NFKD', oValue).encode('ascii','ignore')
-                if sValue == _aPropertyValue:
-                    return xProperty
+                if _TypeName == "String":
+                    sValue = unicodedata.normalize(
+                        'NFKD', oValue).encode('ascii','ignore')
+                    if sValue == _aPropertyValue:
+                        return xProperty
+            #COMMENTED
+            '''elif AnyConverter.isShort(oValue):
+                        if _TypeName.equals("Short"):
+                            iShortParam = (_aPropertyValue).shortValue()
+                            ishortValue = AnyConverter.toShort(oValue)
+                            if ishortValue == iShortParam:
+                                xDependentVector.append(oTextField) '''
             return None
         except KeyError, e:
             return None
 
     def changeUserFieldContent(self, _FieldName, _FieldContent):
         DependentTextFields = self.__getTextFieldsByProperty(
-                PropertyNames.PROPERTY_NAME, _FieldName)
+                PropertyNames.PROPERTY_NAME, _FieldName, "String")
         if DependentTextFields is not None:
             DependentTextFields.TextFieldMaster.setPropertyValue("Content", _FieldContent)
             self.refreshTextFields()
@@ -155,7 +163,7 @@ class TextFieldHandler(object):
     def removeUserFieldByContent(self, _FieldContent):
         try:
             xDependentTextFields = self.__getTextFieldsByProperty(
-                "Content", _FieldContent)
+                "Content", _FieldContent, "String")
             if xDependentTextFields != None:
                 i = 0
                 while i < xDependentTextFields.length:
@@ -164,3 +172,19 @@ class TextFieldHandler(object):
 
         except Exception, e:
             traceback.print_exc()
+
+    def changeExtendedUserFieldContent(self, UserDataPart, _FieldContent):
+        try:
+            xDependentTextFields = self.__getTextFieldsByProperty(
+                "UserDataType", UserDataPart, "Short")
+            if xDependentTextFields != None:
+                i = 0
+                while i < xDependentTextFields.length:
+                    xDependentTextFields[i].getTextFieldMaster().setPropertyValue(
+                        "Content", _FieldContent)
+                    i += 1
+
+            self.refreshTextFields()
+        except Exception, e:
+            traceback.print_exc()
+
