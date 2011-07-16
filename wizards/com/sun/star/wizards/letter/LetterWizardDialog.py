@@ -140,8 +140,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (True, 12, HelpIds.getHelpIdString(HID + 7),
                 "lstPrivateStyle", 180, 118, 1, 7, 74), self)
-        self.lblBusinessStyle = self.insertLabel(
-            "lblBusinessStyle",
+        self.insertLabel("lblBusinessStyle",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -152,8 +151,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblBusinessStyle_value,
                 "lblBusinessStyle", 110, 42, 1, 48, 60))
-        self.lblPrivOfficialStyle = self.insertLabel(
-            "lblPrivOfficialStyle",
+        self.insertLabel("lblPrivOfficialStyle",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -164,8 +162,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblPrivOfficialStyle_value,
                 "lblPrivOfficialStyle", 110, 88, 1, 49, 60))
-        self.lblTitle1 = self.insertLabel(
-            "lblTitle1",
+        self.insertLabel("lblTitle1",
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -179,8 +176,7 @@ class LetterWizardDialog(WizardDialog):
             (self.fontDescriptor6, 16,
                 self.resources.reslblTitle1_value, True,
                 "lblTitle1", 91, 8, 1, 55, 212))
-        self.lblPrivateStyle = self.insertLabel(
-            "lblPrivateStyle",
+        self.insertLabel("lblPrivateStyle",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -191,8 +187,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblPrivateStyle_value,
                 "lblPrivateStyle", 110, 120, 1, 74, 60))
-        self.lblIntroduction = self.insertLabel(
-            "lblIntroduction",
+        self.insertLabel("lblIntroduction",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -397,8 +392,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (12, HelpIds.getHelpIdString(HID + 20),
                 "numFooterHeight", 236, 156, True, 2, 20, 5, 30), self)
-        self.lblLogoHeight = self.insertLabel(
-            "lblLogoHeight",
+        self.insertLabel("lblLogoHeight",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -409,8 +403,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblLogoHeight_value,
                 "lblLogoHeight", 103, 42, 2, 68, 32))
-        self.lblLogoWidth = self.insertLabel(
-            "lblLogoWidth",
+        self.insertLabel("lblLogoWidth",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -421,7 +414,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblLogoWidth_value,
                 "lblLogoWidth", 103, 58, 2, 69, 32))
-        self.FixedLine5 = self.insertFixedLine(
+        self.insertFixedLine(
             "FixedLine5",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_NAME,
@@ -432,7 +425,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (2,
                 "FixedLine5", 90, 78, 2, 70, 215))
-        self.FixedLine6 = self.insertFixedLine(
+        self.insertFixedLine(
             "FixedLine6",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_NAME,
@@ -443,8 +436,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (2,
                 "FixedLine6", 90, 150, 2, 71, 215))
-        self.lblFooterHeight = self.insertLabel(
-            "lblFooterHeight",
+        self.insertLabel("lblFooterHeight",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -455,8 +447,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblFooterHeight_value,
                 "lblFooterHeight", 200, 158, 2, 72, 32))
-        self.lblLogoX = self.insertLabel(
-            "lblLogoX",
+        self.insertLabel("lblLogoX",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -467,8 +458,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblLogoX_value,
                 "lblLogoX", 170, 42, 2, 84, 94))
-        self.lblLogoY = self.insertLabel(
-            "lblLogoY",
+        self.insertLabel("lblLogoY",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -479,8 +469,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblLogoY_value,
                 "lblLogoY", 170, 58, 2, 85, 94))
-        self.lblAddressHeight = self.insertLabel(
-            "lblAddressHeight",
+        self.insertLabel("lblAddressHeight",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -491,8 +480,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblAddressHeight_value,
                 "lblAddressHeight", 103, 98, 2, 86, 32))
-        self.lblAddressWidth = self.insertLabel(
-            "lblAddressWidth",
+        self.insertLabel("lblAddressWidth",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -503,8 +491,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblAddressWidth_value,
                 "lblAddressWidth", 103, 114, 2, 87, 32))
-        self.lblAddressX = self.insertLabel(
-            "lblAddressX",
+        self.insertLabel("lblAddressX",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -515,8 +502,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblAddressX_value,
                 "lblAddressX", 170, 98, 2, 88, 94))
-        self.lblAddressY = self.insertLabel(
-            "lblAddressY",
+        self.insertLabel("lblAddressY",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -527,8 +513,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblAddressY_value,
                 "lblAddressY", 170, 114, 2, 89, 94))
-        self.lblTitle2 = self.insertLabel(
-            "lblTitle2",
+        self.insertLabel("lblTitle2",
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -710,8 +695,7 @@ class LetterWizardDialog(WizardDialog):
             (8, HelpIds.getHelpIdString(HID + 31),
                 self.resources.reschkUseFooter_value,
                 "chkUseFooter", 97, 158, 0, 3, 31, 212), self)
-        self.lblLetterNorm = self.insertLabel(
-            "lblLetterNorm",
+        self.insertLabel("lblLetterNorm",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -723,8 +707,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (16, self.resources.reslblLetterNorm_value, True,
                 "lblLetterNorm", 97, 28, 3, 50, 109))
-        self.lblTitle3 = self.insertLabel(
-            "lblTitle3",
+        self.insertLabel("lblTitle3",
             (
             "FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -856,8 +839,7 @@ class LetterWizardDialog(WizardDialog):
             (8, HelpIds.getHelpIdString(HID + 40),
                 self.resources.resoptReceiverDatabase_value,
                 "optReceiverDatabase", 104, 157, 4, 40, 200), self)
-        self.lblSenderAddress = self.insertLabel(
-            "lblSenderAddress",
+        self.insertLabel("lblSenderAddress",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -868,8 +850,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblSenderAddress_value,
                 "lblSenderAddress", 97, 28, 4, 64, 136))
-        self.FixedLine2 = self.insertFixedLine(
-            "FixedLine2",
+        self.insertFixedLine("FixedLine2",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_NAME,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -879,8 +860,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (5,
                 "FixedLine2", 90, 126, 4, 75, 212))
-        self.lblReceiverAddress = self.insertLabel(
-            "lblReceiverAddress",
+        self.insertLabel("lblReceiverAddress",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -891,8 +871,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblReceiverAddress_value,
                 "lblReceiverAddress", 97, 134, 4, 76, 136))
-        self.lblSenderName = self.insertLabel(
-            "lblSenderName",
+        self.insertLabel("lblSenderName",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -903,8 +882,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblSenderName_value,
                 "lblSenderName", 113, 69, 4, 77, 68))
-        self.lblSenderStreet = self.insertLabel(
-            "lblSenderStreet",
+        self.insertLabel("lblSenderStreet",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -915,8 +893,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblSenderStreet_value,
                 "lblSenderStreet", 113, 82, 4, 78, 68))
-        self.lblPostCodeCity = self.insertLabel(
-            "lblPostCodeCity",
+        self.insertLabel("lblPostCodeCity",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -927,10 +904,8 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblPostCodeCity_value,
                 "lblPostCodeCity", 113, 97, 4, 79, 68))
-        self.lblTitle4 = self.insertLabel(
-            "lblTitle4",
-            (
-            "FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
+        self.insertLabel("lblTitle4",
+            ("FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
                 PropertyNames.PROPERTY_NAME,
@@ -987,10 +962,8 @@ class LetterWizardDialog(WizardDialog):
             (8, HelpIds.getHelpIdString(HID + 43),
                 self.resources.reschkFooterPageNumbers_value,
                 "chkFooterPageNumbers", 97, 106, 0, 5, 43, 201), self)
-        self.lblFooter = self.insertLabel(
-            "lblFooter",
-            (
-            "FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
+        self.insertLabel("lblFooter",
+            ("FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -1000,10 +973,8 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (self.fontDescriptor5, 8, self.resources.reslblFooter_value,
                 "lblFooter", 97, 28, 5, 52, 116))
-        self.lblTitle5 = self.insertLabel(
-            "lblTitle5",
-            (
-            "FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
+        self.insertLabel("lblTitle5",
+            ("FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
                 PropertyNames.PROPERTY_NAME,
@@ -1059,8 +1030,7 @@ class LetterWizardDialog(WizardDialog):
             (8, HelpIds.getHelpIdString(HID + 46),
                 self.resources.resoptMakeChanges_value,
                 "optMakeChanges", 104, 123, 6, 51, 198), self)
-        self.lblFinalExplanation1 = self.insertLabel(
-            "lblFinalExplanation1",
+        self.insertLabel("lblFinalExplanation1",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -1072,8 +1042,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (26, self.resources.reslblFinalExplanation1_value, True,
                 "lblFinalExplanation1", 97, 28, 6, 52, 205))
-        self.lblProceed = self.insertLabel(
-            "lblProceed",
+        self.insertLabel("lblProceed",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -1084,8 +1053,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblProceed_value,
                 "lblProceed", 97, 100, 6, 53, 204))
-        self.lblFinalExplanation2 = self.insertLabel(
-            "lblFinalExplanation2",
+        self.insertLabel("lblFinalExplanation2",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -1097,7 +1065,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (33, self.resources.reslblFinalExplanation2_value, True,
                 "lblFinalExplanation2", 104, 145, 6, 54, 199))
-        self.ImageControl2 = self.insertImage(
+        self.insertImage(
             "ImageControl2",
             (
             "Border", PropertyNames.PROPERTY_HEIGHT,
@@ -1112,8 +1080,7 @@ class LetterWizardDialog(WizardDialog):
             (0, 10,
                 "private:resource/dbu/image/19205",
                 "ImageControl2", 92, 145,  False, 6, 66, 10))
-        self.lblTemplateName = self.insertLabel(
-            "lblTemplateName",
+        self.insertLabel("lblTemplateName",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_NAME,
@@ -1124,10 +1091,8 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblTemplateName_value,
                 "lblTemplateName", 97, 58, 6, 82, 101))
-        self.lblTitle6 = self.insertLabel(
-            "lblTitle6",
-            (
-            "FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
+        self.insertLabel("lblTitle6",
+            ("FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
                 PropertyNames.PROPERTY_NAME,
