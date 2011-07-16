@@ -6968,29 +6968,26 @@ sal_Bool SvxMSDffManager::ReadCommonRecordHeader( SvStream& rSt,
     return rSt.GetError() == 0;
 }
 
-
-
-
-sal_Bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uLong nDatLen,
+sal_Bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen,
                                           char*& rpBuff, sal_uInt32& rBuffLen ) const
 {
     if( nDatLen )
     {
-        rpBuff = new char[ nDatLen ];
-        rBuffLen = nDatLen;
-        rStData.Read( rpBuff, nDatLen );
+        rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_Size>(nDatLen));
+        rpBuff = new char[rBuffLen];
+        rBuffLen = rStData.Read(rpBuff, rBuffLen);
     }
     return sal_True;
 }
 
-sal_Bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uLong nDatLen,
+sal_Bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLen,
                                         char*& rpBuff, sal_uInt32& rBuffLen ) const
 {
     if( nDatLen )
     {
-        rpBuff = new char[ nDatLen ];
-        rBuffLen = nDatLen;
-        rStData.Read( rpBuff, nDatLen );
+        rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_Size>(nDatLen));
+        rpBuff = new char[rBuffLen];
+        rBuffLen = rStData.Read(rpBuff, rBuffLen);
     }
     return sal_True;
 }
