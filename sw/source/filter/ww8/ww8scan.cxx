@@ -2153,14 +2153,14 @@ bool WW8PLCFspecial::GetData(long nInIdx, WW8_CP& rPos, void*& rpValue) const
 
 // Ctor fuer *andere* als Fkps
 // Bei nStartPos < 0 wird das erste Element des PLCFs genommen
-WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
-    WW8_CP nStartPos ) : pPLCF_PosArray(0), nIdx(0), nStru(nStruct)
+WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
+    WW8_CP nStartPos) : pPLCF_PosArray(0), nIdx(0), nStru(nStruct)
 {
     OSL_ENSURE( nPLCF, "WW8PLCF: nPLCF ist Null!" );
 
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 
-    ReadPLCF( pSt, nFilePos, nPLCF );
+    ReadPLCF(rSt, nFilePos, nPLCF);
 
     if( nStartPos >= 0 )
         SeekPos( nStartPos );
@@ -2171,32 +2171,33 @@ WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
 // != 0, dann wird ein unvollstaendiger PLCF vervollstaendigt.  Das ist bei
 // WW6 bei Resourcenmangel und bei WordPad (W95) immer noetig.  Bei nStartPos
 // < 0 wird das erste Element des PLCFs genommen
-WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
-    WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN ) : pPLCF_PosArray(0), nIdx(0),
+WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
+    WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN): pPLCF_PosArray(0), nIdx(0),
     nStru(nStruct)
 {
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 
     if( nIMax >= ncpN )
-        ReadPLCF( pSt, nFilePos, nPLCF );
+        ReadPLCF(rSt, nFilePos, nPLCF);
     else
-        GeneratePLCF( pSt, nPN, ncpN );
+        GeneratePLCF(rSt, nPN, ncpN);
 
     if( nStartPos >= 0 )
         SeekPos( nStartPos );
 }
 
-void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF )
+void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
 {
-    sal_Size nOldPos = pSt->Tell();
+    sal_Size nOldPos = rSt.Tell();
+    sal_Size nRemainingSize = rSt.remainingSize();
 
-    bool bValid = checkSeek(*pSt, nFilePos);
+    bool bValid = checkSeek(rSt, nFilePos) && (nRemainingSize >= nPLCF);
 
     if (bValid)
     {
         // Pointer auf Pos-Array
         pPLCF_PosArray = new WW8_CP[ ( nPLCF + 3 ) / 4 ];
-        bValid = checkRead(*pSt, pPLCF_PosArray, nPLCF);
+        bValid = checkRead(rSt, pPLCF_PosArray, nPLCF);
     }
 
     if (bValid)
@@ -2215,7 +2216,7 @@ void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF )
     if (!bValid)
         MakeFailedPLCF();
 
-    pSt->Seek(nOldPos);
+    rSt.Seek(nOldPos);
 }
 
 void WW8PLCF::MakeFailedPLCF()
@@ -2227,7 +2228,7 @@ void WW8PLCF::MakeFailedPLCF()
     pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
 }
 
-void WW8PLCF::GeneratePLCF( SvStream* pSt, sal_Int32 nPN, sal_Int32 ncpN )
+void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
 {
     OSL_ENSURE( nIMax < ncpN, "Pcl.Fkp: Warum ist PLCF zu gross ?" );
 
@@ -2243,32 +2244,43 @@ void WW8PLCF::GeneratePLCF( SvStream* pSt, sal_Int32 nPN, sal_Int32 ncpN )
         size_t nElems = ( nSiz + 3 ) / 4;
         pPLCF_PosArray = new sal_Int32[ nElems ]; // Pointer auf Pos-Array
 
-        for (sal_Int32 i = 0; i < ncpN && !pSt->GetError(); ++i)
+        for (sal_Int32 i = 0; i < ncpN && !failure; ++i)
         {
+            failure = true;
             // Baue FC-Eintraege
-            pSt->Seek( ( nPN + i ) << 9 );  // erster FC-Eintrag jedes Fkp
-            WW8_CP nFc;
-            *pSt >> nFc;
+            // erster FC-Eintrag jedes Fkp
+            if (checkSeek(rSt, ( nPN + i ) << 9 ))
+                continue;
+            WW8_CP nFc(0);
+            rSt >> nFc;
             pPLCF_PosArray[i] = nFc;
+            failure = rSt.GetError();
         }
-
-        failure = pSt->GetError();
     }
 
     if (!failure)
     {
-        sal_Size nLastFkpPos = ( ( nPN + nIMax - 1 ) << 9 );
-        pSt->Seek( nLastFkpPos + 511 );     // Anz. Fkp-Eintraege des letzten Fkp
+        do
+        {
+            failure = true;
 
-        sal_uInt8 nb;
-        *pSt >> nb;
-        pSt->Seek( nLastFkpPos + nb * 4 );  // letzer FC-Eintrag des letzten Fkp
+            sal_Size nLastFkpPos = ( ( nPN + nIMax - 1 ) << 9 );
+            // Anz. Fkp-Eintraege des letzten Fkp
+            if (!checkSeek(rSt, nLastFkpPos + 511))
+                break;
 
-        WW8_CP nFc;
-        *pSt >> nFc;
-        pPLCF_PosArray[nIMax] = nFc;        // Ende des letzten Fkp
+            sal_uInt8 nb(0);
+            rSt >> nb;
+            // letzer FC-Eintrag des letzten Fkp
+            if (!checkSeek(rSt, nLastFkpPos + nb * 4))
+                break;
 
-        failure = pSt->GetError();
+            WW8_CP nFc(0);
+            rSt >> nFc;
+            pPLCF_PosArray[nIMax] = nFc;        // Ende des letzten Fkp
+
+            failure = rSt.GetError();
+        } while(0);
     }
 
     if (!failure)
@@ -2358,9 +2370,11 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
     const sal_uInt32 nValidMin=4;
 
     sal_Size nOldPos = pSt->Tell();
+    sal_Size nRemainingSize = pSt->remainingSize();
 
-    bool bValid = (nPLCF >= nValidMin) && checkSeek(*pSt, nFilePos);
-    nPLCF = bValid ? std::max(nPLCF, nValidMin) : nValidMin;
+    bool bValid = checkSeek(*pSt, nFilePos) && (nRemainingSize >= nValidMin) &&
+        (nPLCF >= nValidMin);
+    nPLCF = bValid ? std::min(nRemainingSize, static_cast<sal_Size>(nPLCF)) : nValidMin;
 
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];    // Pointer auf Pos-Array
     pPLCF_PosArray[0] = 0;
@@ -2923,12 +2937,12 @@ WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTblSt,
     long nLenStruct = (8 > rFib.nVersion) ? 2 : 4;
     if (ePl == CHP)
     {
-        pPLCF = new WW8PLCF(pTblSt, rFib.fcPlcfbteChpx, rFib.lcbPlcfbteChpx,
+        pPLCF = new WW8PLCF(*pTblSt, rFib.fcPlcfbteChpx, rFib.lcbPlcfbteChpx,
             nLenStruct, GetStartFc(), rFib.pnChpFirst, rFib.cpnBteChp);
     }
     else
     {
-        pPLCF = new WW8PLCF(pTblSt, rFib.fcPlcfbtePapx, rFib.lcbPlcfbtePapx,
+        pPLCF = new WW8PLCF(*pTblSt, rFib.fcPlcfbtePapx, rFib.lcbPlcfbtePapx,
             nLenStruct, GetStartFc(), rFib.pnPapFirst, rFib.cpnBtePap);
     }
 }
@@ -3416,7 +3430,7 @@ WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTblSt,
     pStrm(pSt), nArrMax(256), nSprmSiz(0)
 {
     pPLCF =   rFib.lcbPlcfsed
-            ? new WW8PLCF(pTblSt, rFib.fcPlcfsed, rFib.lcbPlcfsed,
+            ? new WW8PLCF(*pTblSt, rFib.fcPlcfsed, rFib.lcbPlcfsed,
               GetFIBVersion() <= ww::eWW2 ? 6 : 12, nStartCp)
             : 0;
 
@@ -3596,8 +3610,8 @@ WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion,
 {
     if( nLenRef && nLenTxt )
     {
-        pRef = new WW8PLCF( pSt, nFcRef, nLenRef, nStruct, nStartCp );
-        pTxt = new WW8PLCF( pSt, nFcTxt, nLenTxt, 0, nStartCp );
+        pRef = new WW8PLCF(*pSt, nFcRef, nLenRef, nStruct, nStartCp);
+        pTxt = new WW8PLCF(*pSt, nFcTxt, nLenTxt, 0, nStartCp);
     }
 }
 
@@ -6523,7 +6537,7 @@ const WW8_FFN* WW8Fonts::GetFont( sal_uInt16 nNum ) const
 // -> dann liefert GetTextPos() vielleicht auch ein richtiges Ergebnis
 
 WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
-    : aPLCF( pSt, rFib.fcPlcfhdd , rFib.lcbPlcfhdd , 0 )
+    : aPLCF(*pSt, rFib.fcPlcfhdd , rFib.lcbPlcfhdd , 0)
 {
     nIdxOffset = 0;
 

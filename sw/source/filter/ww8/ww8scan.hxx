@@ -286,24 +286,24 @@ private:
     sal_Int32 nIdx;
     int nStru;
 
-    void ReadPLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF );
+    void ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF);
 
     /*
         Falls im Dok ein PLC fehlt und die FKPs solo dastehen,
         machen wir uns hiermit einen PLC:
     */
-    void GeneratePLCF( SvStream* pSt, sal_Int32 nPN, sal_Int32 ncpN );
+    void GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN);
 
     void MakeFailedPLCF();
 public:
-    WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
-        WW8_CP nStartPos = -1 );
+    WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
+        WW8_CP nStartPos = -1);
 
     /*
         folgender Ctor generiert ggfs. einen PLC aus nPN und ncpN
     */
-    WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
-        WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN );
+    WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
+        WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN);
 
     ~WW8PLCF(){ delete[] pPLCF_PosArray; }
     sal_Int32 GetIdx() const { return nIdx; }
