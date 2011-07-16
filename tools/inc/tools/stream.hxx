@@ -390,6 +390,8 @@ public:
     sal_Size        Seek( sal_Size nPos );
     sal_Size        SeekRel( sal_sSize nPos );
     sal_Size        Tell() const { return nBufFilePos+nBufActualPos;  }
+    //length between current (Tell()) pos and end of stream
+    sal_Size        remainingSize();
     void            Flush();
     sal_Bool        IsEof() const { return bIsEof; }
     // next Tell() <= nSize

@@ -1797,6 +1797,18 @@ sal_Size SvStream::Seek( sal_Size nFilePos )
     return nBufFilePos + nBufActualPos;
 }
 
+//probably not as inefficient as it looks seeing as STREAM_SEEK_TO_END in the
+//Seek backends is nomally special cased feel free to make this virtual and add
+//good implementations for SvFileStream etc
+sal_Size SvStream::remainingSize()
+{
+    sal_Size nCurr = Tell();
+    sal_Size nEnd = Seek(STREAM_SEEK_TO_END);
+    sal_Size nMaxAvailable = nEnd-nCurr;
+    Seek(nCurr);
+    return nMaxAvailable;
+}
+
 /*************************************************************************
 |*
 |*    Stream::Flush()
