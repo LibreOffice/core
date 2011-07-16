@@ -792,16 +792,16 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         found = False
         OfficeLinguistic = Configuration.getOfficeLinguistic(self.xMSF)
         i = 0
-        for i in xrange(len(self.Norms)):
-            if self.Norms[i].lower() == OfficeLinguistic.lower():
-                oL = i
+        for index, workwith in enumerate(self.Norms):
+            if workwith.lower() == OfficeLinguistic.lower():
+                oL = index
                 found = True
                 break
 
         if not found:
-            for i in xrange(len(self.Norms)):
-                if self.Norms[i].lower() == "en-US".lower():
-                    oL = i
+            for index, workwith in enumerate(self.Norms):
+                if workwith.lower() == "en-US".lower():
+                    oL = index
                     found = True
                     break
         return oL

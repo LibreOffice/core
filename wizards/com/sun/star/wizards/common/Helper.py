@@ -111,9 +111,9 @@ class Helper(object):
                 uno.invoke(xMultiPSetLst, "setPropertyValues",
                     (PropertyNames, PropertyValues))
             else:
-                for i in xrange(len(PropertyNames)):
-                    self.setUnoPropertyValue(xMultiPSetLst, PropertyNames[i],
-                        PropertyValues[i])
+                for index, workwith in enumerate(PropertyNames):
+                    self.setUnoPropertyValue(
+                        xMultiPSetLst, PropertyNames[index], workwith)
 
         except Exception, e:
             traceback.print_exc()
