@@ -157,7 +157,7 @@ class Helper(object):
     class DateUtils(object):
 
         def __init__(self, xmsf, document):
-            defaults = document.createInstance("com.sun.star.text.Defaults")
+            defaults = xmsf.createInstance("com.sun.star.text.Defaults")
             l = Helper.getUnoStructValue(defaults, "CharLocale")
             self.formatSupplier = document
             formatSettings = self.formatSupplier.getNumberFormatSettings()

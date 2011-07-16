@@ -715,10 +715,10 @@ class FileAccess(object):
     def connectURLs(self, urlFolder, urlFilename):
         stringFolder = ""
         stringFileName = urlFilename
-        if not urlFolder.endsWith("/"):
+        if not urlFolder.endswith("/"):
             stringFolder = "/"
-        if urlFilename.startsWith("/"):
-            stringFileName = urlFilename.substring(1)
+        if urlFilename.startswith("/"):
+            stringFileName = urlFilename[1:]
         return urlFolder + stringFolder + stringFileName
 
     @classmethod

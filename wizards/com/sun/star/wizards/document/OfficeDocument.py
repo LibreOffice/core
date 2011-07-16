@@ -270,24 +270,8 @@ class OfficeDocument(object):
     def getSlideCount(self, model):
         return model.getDrawPages().getCount()
 
-    def getDocumentProperties(self, document):
-        return document.getDocumentProperties()
-
     def showMessageBox(
         self, xMSF, windowServiceName, windowAttribute, MessageText):
 
         return SystemDialog.showMessageBox(
             xMSF, windowServiceName, windowAttribute, MessageText)
-
-    def getWindowPeer(self):
-        return self.xWindowPeer
-
-    '''
-    @param windowPeer The xWindowPeer to set.
-    Should be called as soon as a Windowpeer of a wizard dialog is available
-    The windowpeer is needed to call a Messagebox
-    '''
-
-    def setWindowPeer(self, windowPeer):
-        self.xWindowPeer = windowPeer
-
