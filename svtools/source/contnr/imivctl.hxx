@@ -351,7 +351,7 @@ public:
     void                Clear( sal_Bool bInCtor = sal_False );
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const { return nWinBits; }
-    void                InsertEntry( SvxIconChoiceCtrlEntry*, sal_uLong nPos, const Point* pPos=0 );
+    void                InsertEntry( SvxIconChoiceCtrlEntry*, size_t nPos, const Point* pPos=0 );
     void                CreateAutoMnemonics( MnemonicGenerator* _pGenerator = NULL );
     void                RemoveEntry( SvxIconChoiceCtrlEntry* pEntry );
     void                FontModified();
