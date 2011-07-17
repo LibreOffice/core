@@ -112,12 +112,6 @@ Reference< XInterface > SAL_CALL SVGDialog_createInstance( const Reference< XMul
 SVGDialog::SVGDialog( const Reference< XMultiServiceFactory > &rxMSF ) :
     OGenericUnoDialog( rxMSF )
 {
-    ByteString aResMgrName( "svgfilter" );
-
-    aResMgrName.Append( ByteString::CreateFromInt32( 0/*SOLARUPD*/ ) );
-
-    // !!! KA: enable ResMgr
-    // mapResMgr.reset( ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() ) );
 }
 
 // -----------------------------------------------------------------------------
