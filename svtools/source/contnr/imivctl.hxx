@@ -195,7 +195,7 @@ class SvxIconChoiceCtrl_Impl
     IcnGridMap_Impl*        pGridMap;
     long                    nMaxVirtWidth;  // max. Breite aVirtOutputSize bei ALIGN_TOP
     long                    nMaxVirtHeight; // max. Hoehe aVirtOutputSize bei ALIGN_LEFT
-    List*                   pZOrderList;
+    SvxIconChoiceCtrlEntryList_impl*    pZOrderList;
     SvPtrarr*               pColumns;
     IcnViewEdit_Impl*       pEdit;
     WinBits                 nWinBits;
@@ -416,7 +416,6 @@ public:
 
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rDocPos, sal_Bool bHit = sal_False );
     SvxIconChoiceCtrlEntry* GetNextEntry( const Point& rDocPos, SvxIconChoiceCtrlEntry* pCurEntry );
-    SvxIconChoiceCtrlEntry* GetPrevEntry( const Point& rDocPos, SvxIconChoiceCtrlEntry* pCurEntry  );
 
     Point               GetEntryPos( SvxIconChoiceCtrlEntry* );
     void                MakeEntryVisible( SvxIconChoiceCtrlEntry* pEntry, sal_Bool bBound = sal_True );

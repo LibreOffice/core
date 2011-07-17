@@ -341,8 +341,6 @@ public:
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel, sal_Bool bHit = sal_False ) const;
     // Gibt den naechsten ueber pCurEntry liegenden Eintrag (ZOrder)
     SvxIconChoiceCtrlEntry* GetNextEntry( const Point& rPosPixel, SvxIconChoiceCtrlEntry* pCurEntry, sal_Bool  ) const;
-    // Gibt den naechsten unter pCurEntry liegenden Eintrag (ZOrder)
-    SvxIconChoiceCtrlEntry* GetPrevEntry( const Point& rPosPixel, SvxIconChoiceCtrlEntry* pCurEntry, sal_Bool  ) const;
 
     // in dem sal_uLong wird die Position in der Liste des gefunden Eintrags zurueckgegeben
     SvxIconChoiceCtrlEntry* GetSelectedEntry( sal_uLong& rPos ) const;
