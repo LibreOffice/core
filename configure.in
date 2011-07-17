@@ -6380,7 +6380,7 @@ dnl ===================================================================
 AC_PATH_PROG(ZIP, zip)
 test -z "$ZIP" && AC_MSG_ERROR([zip is required])
 AC_PATH_PROG(UNZIP, unzip)
-test -z "$ZIP" && AC_MSG_ERROR([unzip is required])
+test -z "$UNZIP" && AC_MSG_ERROR([unzip is required])
 
 dnl ===================================================================
 dnl Zip must be a specific type for different build types.
