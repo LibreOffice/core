@@ -2635,27 +2635,41 @@ sal_Unicode SwWW8ImplReader::TranslateToHindiNumbers(sal_Unicode nChar)
 // Returnwert: true for no Sonderzeichen
 bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
 {
-    // Unicode-Flag neu setzen und notfalls File-Pos korrigieren
-    // merke: Seek kostet nicht viel, da inline geprueft wird,
-    //        ob die korrekte FilePos nicht schon erreicht ist.
-    xub_StrLen nLen;
-    if (nEnd - rPos <= (STRING_MAXLEN-1))
-        nLen = writer_cast<xub_StrLen>(nEnd - rPos);
-    else
-        nLen = STRING_MAXLEN-1;
-    OSL_ENSURE(nLen, "String is 0");
-    if (!nLen)
+    sal_Size nRequestedStrLen = nEnd - rPos;
+
+    OSL_ENSURE(nRequestedStrLen, "String is 0");
+    if (!nRequestedStrLen)
         return true;
 
     sal_Size nRequestedPos = pSBase->WW8Cp2Fc(nCpOfs+rPos, &bIsUnicode);
-    sal_Size nSeekedPos = pStrm->Seek(nRequestedPos);
-    OSL_ENSURE(nRequestedPos == nSeekedPos, "Document claimed to have more text than available");
-    if (nRequestedPos != nSeekedPos)
+    bool bValidPos = checkSeek(*pStrm, nRequestedPos);
+    OSL_ENSURE(bValidPos, "Document claimed to have more text than available");
+    if (!bValidPos)
     {
         //Swallow missing range, e.g. #i95550#
-        rPos+=nLen;
+        rPos+=nRequestedStrLen;
         return true;
     }
+
+    sal_Size nAvailableStrLen = pStrm->remainingSize() / (bIsUnicode ? 2 : 1);
+    OSL_ENSURE(nAvailableStrLen, "Document claimed to have more text than available");
+    if (!nAvailableStrLen)
+    {
+        //Swallow missing range, e.g. #i95550#
+        rPos+=nRequestedStrLen;
+        return true;
+    }
+
+    sal_Size nValidStrLen = std::min(nRequestedStrLen, nAvailableStrLen);
+
+    // Unicode-Flag neu setzen und notfalls File-Pos korrigieren
+    // merke: Seek kostet nicht viel, da inline geprueft wird,
+    //        ob die korrekte FilePos nicht schon erreicht ist.
+    xub_StrLen nStrLen;
+    if (nValidStrLen <= (STRING_MAXLEN-1))
+        nStrLen = writer_cast<xub_StrLen>(nValidStrLen);
+    else
+        nStrLen = STRING_MAXLEN-1;
 
     const CharSet eSrcCharSet = bVer67 ? GetCurrentCharSet() :
         RTL_TEXTENCODING_MS_1252;
@@ -2665,7 +2679,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     // (re)alloc UniString data
     String sPlainCharsBuf;
 
-    sal_Unicode* pBuffer = sPlainCharsBuf.AllocBuffer( nLen );
+    sal_Unicode* pBuffer = sPlainCharsBuf.AllocBuffer(nStrLen);
     sal_Unicode* pWork = pBuffer;
 
     sal_Char* p8Bits = NULL;
@@ -2675,7 +2689,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         hConverter = rtl_createTextToUnicodeConverter(eSrcCharSet);
 
     if (!bIsUnicode)
-        p8Bits = new sal_Char[nLen];
+        p8Bits = new sal_Char[nStrLen];
 
     // read the stream data
     sal_uInt8   nBCode = 0;
@@ -2687,7 +2701,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     if (pItem != NULL)
         nCTLLang = dynamic_cast<const SvxLanguageItem *>(pItem)->GetLanguage();
 
-    for( nL2 = 0; nL2 < nLen; ++nL2, ++pWork )
+    for( nL2 = 0; nL2 < nStrLen; ++nL2, ++pWork )
     {
         if (bIsUnicode)
             *pStrm >> nUCode;   // unicode  --> read 2 bytes
@@ -2742,9 +2756,9 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         xub_StrLen nEndUsed = nL2;
 
         if (!bIsUnicode)
-            nEndUsed = Custom8BitToUnicode(hConverter, p8Bits, nL2, pBuffer, nLen);
+            nEndUsed = Custom8BitToUnicode(hConverter, p8Bits, nL2, pBuffer, nStrLen);
 
-        for( xub_StrLen nI = 0; nI < nLen; ++nI, ++pBuffer )
+        for( xub_StrLen nI = 0; nI < nStrLen; ++nI, ++pBuffer )
             if (m_bRegardHindiDigits && bBidi && LangUsesHindiNumbers(nCTLLang))
                 *pBuffer = TranslateToHindiNumbers(*pBuffer);
 
@@ -2759,7 +2773,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     if (hConverter)
         rtl_destroyTextToUnicodeConverter(hConverter);
     delete [] p8Bits;
-    return nL2 >= nLen;
+    return nL2 >= nStrLen;
 }
 
 #define MSASCII SAL_MAX_INT16
@@ -3029,10 +3043,12 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
     // Unicode-Flag neu setzen und notfalls File-Pos korrigieren
     // merke: Seek kostet nicht viel, da inline geprueft wird,
     //        ob die korrekte FilePos nicht schon erreicht ist.
-    pStrm->Seek( pSBase->WW8Cp2Fc(nCpOfs+nPosCp, &bIsUnicode) );
+    sal_Size nRequestedPos = pSBase->WW8Cp2Fc(nCpOfs+nPosCp, &bIsUnicode);
+    if (!checkSeek(*pStrm, nRequestedPos))
+        return false;
 
-    sal_uInt8   nBCode;
-    sal_uInt16 nWCharVal;
+    sal_uInt8 nBCode(0);
+    sal_uInt16 nWCharVal(0);
     if( bIsUnicode )
         *pStrm >> nWCharVal;    // unicode  --> read 2 bytes
     else
