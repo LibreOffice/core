@@ -53,6 +53,7 @@
 #include "macro.hxx"
 #include <sfx2/objface.hxx>
 #include <sfx2/appuno.hxx>
+#include <rtl/strbuf.hxx>
 
 //===================================================================
 
@@ -219,9 +220,10 @@ SfxRequest::SfxRequest
 #ifdef DBG_UTIL
     else
     {
-        ByteString aStr( "Recording unsupported slot: ");
-        aStr += ByteString::CreateFromInt32( pImp->pPool->GetSlotId(nSlotId) );
-        OSL_FAIL( aStr.GetBuffer() );
+        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+            "Recording unsupported slot: "));
+        aStr.append(static_cast<sal_Int32>(pImp->pPool->GetSlotId(nSlotId)));
+        OSL_FAIL(aStr.getStr());
     }
 #endif
 }
@@ -719,9 +721,10 @@ void SfxRequest::Done_Impl
     // new Recording uses UnoName!
     if ( !pImp->pSlot->pUnoName )
     {
-        ByteString aStr( "Recording not exported slot: ");
-        aStr += ByteString::CreateFromInt32( pImp->pSlot->GetSlotId() );
-        OSL_FAIL( aStr.GetBuffer() );
+        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+            "Recording not exported slot: "));
+        aStr.append(static_cast<sal_Int32>(pImp->pSlot->GetSlotId()));
+        OSL_FAIL(aStr.getStr());
     }
 
     if ( !pImp->pSlot->pUnoName ) // playing it safe
@@ -740,9 +743,10 @@ void SfxRequest::Done_Impl
 #ifdef DBG_UTIL
         if ( SFX_ITEM_SET != eState )
         {
-            ByteString aStr( "Recording property not available: ");
-            aStr += ByteString::CreateFromInt32( pImp->pSlot->GetSlotId() );
-            OSL_FAIL( aStr.GetBuffer() );
+            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                "Recording property not available: "));
+            aStr.append(static_cast<sal_Int32>(pImp->pSlot->GetSlotId()));
+            OSL_FAIL(aStr.getStr());
         }
 #endif
         uno::Sequence < beans::PropertyValue > aSeq;
