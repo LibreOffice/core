@@ -144,11 +144,6 @@ namespace vcl
         ::BitmapEx VCL_DLLPUBLIC bitmapExFromXBitmap( const ::com::sun::star::uno::Reference<
                                                             ::com::sun::star::rendering::XIntegerReadOnlyBitmap >& xInputBitmap );
 
-        /** get a unique identifier for identification in XUnoTunnel interface
-         */
-         enum TunnelIdentifierType { Id_BitmapEx = 0 };
-         const com::sun::star::uno::Sequence< sal_Int8 > VCL_DLLPUBLIC getTunnelIdentifier( TunnelIdentifierType eType );
-
         // Color conversions (vcl/tools Color <-> canvas standard color space)
         // ===================================================================
 
