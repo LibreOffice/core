@@ -39,6 +39,7 @@
 #include <grid.hxx>
 #include <math.h>
 #include <sal/macros.h>
+#include <rtl/strbuf.hxx>
 
 ResId SaneResId( sal_uInt32 nID )
 {
@@ -1270,9 +1271,10 @@ void SaneDlg::SaveState()
                     sal_Bool bValue;
                     if( mrSane.GetOptionValue( nOption, bValue ) )
                     {
-                        ByteString aString( "BOOL=" );
-                        aString += ByteString::CreateFromInt32(bValue);
-                        aConfig.WriteKey( aOption, aString );
+                        rtl::OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM(
+                            "BOOL="));
+                        aString.append(static_cast<sal_Int32>(bValue));
+                        aConfig.WriteKey(aOption, aString.makeStringAndClear());
                     }
                 }
                 break;
