@@ -4136,7 +4136,7 @@ void EntryList_Impl::Removed_Impl( SvxIconChoiceCtrlEntry* pEntry )
                 _pOwner->pHead = pEntry->pflink;
             else
             {
-                DBG_ASSERT(size() > 0,"EntryList_Impl::Remove > Invalid predecessor" );
+                DBG_ASSERT(!size(),"EntryList_Impl::Remove > Invalid predecessor" );
                 _pOwner->pHead = 0;
             }
         }
