@@ -162,7 +162,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
         }
     }
 
-    if( !aFeatureIndexList.size() )
+    if( aFeatureIndexList.empty() )
         return true;
 
     UshortList aLookupIndexList;
@@ -318,7 +318,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
             }
 
             // now apply the glyph substitutions that have been collected in this subtable
-            if( aSubstVector.size() > 0 )
+            if( !aSubstVector.empty() )
             {
                 GlyphSubstitution* pGSubstitution = new GlyphSubstitution;
                 pTTFile->pGSubstitution = (void*)pGSubstitution;
