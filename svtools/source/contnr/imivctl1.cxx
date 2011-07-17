@@ -440,7 +440,7 @@ void SvxIconChoiceCtrl_Impl::RemoveEntry( SvxIconChoiceCtrlEntry* pEntry )
     pZOrderList->Remove( nPos );
     if( bCurEntryPosValid )
     {
-        DBG_ASSERT(aEntries.GetObject(pEntry->nPos)==pEntry,"RemoveEntry: Wrong nPos in entry");
+        DBG_ASSERT(aEntries[pEntry->nPos]==pEntry,"RemoveEntry: Wrong nPos in entry");
         aEntries.remove( pEntry->nPos );
     }
     else
@@ -4136,7 +4136,7 @@ void EntryList_Impl::Removed_Impl( SvxIconChoiceCtrlEntry* pEntry )
                 _pOwner->pHead = pEntry->pflink;
             else
             {
-                DBG_ASSERT(!Count(),"EntryList_Impl::Remove > Invalid predecessor" );
+                DBG_ASSERT(size() > 0,"EntryList_Impl::Remove > Invalid predecessor" );
                 _pOwner->pHead = 0;
             }
         }
