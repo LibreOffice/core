@@ -2830,6 +2830,18 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                     sStr = FieldString(eFld);
                     sStr += GetExport().GetBookmarkName(nSubType,
                         &rRFld.GetSetRefName(), 0);
+                    switch (pFld->GetFormat())
+                    {
+                        case REF_NUMBER:
+                            sStr.APPEND_CONST_ASC(" \\r");
+                            break;
+                        case REF_NUMBER_NO_CONTEXT:
+                            sStr.APPEND_CONST_ASC(" \\n");
+                            break;
+                        case REF_NUMBER_FULL_CONTEXT:
+                            sStr.APPEND_CONST_ASC(" \\w");
+                            break;
+                    }
                     break;
                 case REF_FOOTNOTE:
                 case REF_ENDNOTE:

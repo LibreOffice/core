@@ -2064,8 +2064,7 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
 eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
 {                                                       // Reference - Field
     String sOrigBkmName;
-    bool bChapterNr = false;
-    bool bAboveBelow = false;
+    REFERENCEMARK eFormat = REF_CONTENT;
 
     long nRet;
     _ReadFieldParams aReadParam( rStr );
@@ -2077,14 +2076,29 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
             if( !sOrigBkmName.Len() ) // get name of bookmark
                 sOrigBkmName = aReadParam.GetResult();
             break;
+
+        /* References to numbers in Word could be either to a numbered
+        paragraph or to a chapter number. However Word does not seem to
+        have the capability we do, of refering to the chapter number some
+        other bookmark is in. As a result, cross-references to chapter
+        numbers in a word document will be cross-references to a numbered
+        paragraph, being the chapter heading paragraph. As it happens, our
+        cross-references to numbered paragraphs will do the right thing
+        when the target is a numbered chapter heading, so there is no need
+        for us to use the REF_CHAPTER bookmark format on import.
+        */
         case 'n':
+            eFormat = REF_NUMBER_NO_CONTEXT;
+            break;
         case 'r':
+            eFormat = REF_NUMBER;
+            break;
         case 'w':
-            bChapterNr = true; // activate flag 'Chapter Number'
+            eFormat = REF_NUMBER_FULL_CONTEXT;
             break;
 
         case 'p':
-            bAboveBelow = true;
+            eFormat = REF_UPDOWN;
             break;
         case 'h':
             break;
@@ -2096,36 +2110,23 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
 
     String sBkmName(GetMappedBookmark(sOrigBkmName));
 
-    if (!bAboveBelow || bChapterNr)
-    {
-        if (bChapterNr)
-        {
-            SwGetRefField aFld(
-                (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
-                sBkmName,REF_BOOKMARK,0,REF_CHAPTER);
-            rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
-        }
-        else
-        {
-            /*
-            If we are just inserting the contents of the bookmark, then it
-            is possible that the bookmark is actually a variable, so we
-            must store it until the end of the document to see if it was,
-            in which case we'll turn it into a show variable
-            */
-            SwGetRefField aFld(
-                (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
-                sBkmName,REF_BOOKMARK,0,REF_CONTENT);
-            pReffingStck->NewAttr( *pPaM->GetPoint(), SwFmtFld(aFld) );
-            pReffingStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_FIELD);
-        }
-    }
+    SwGetRefField aFld(
+        (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
+        sBkmName,REF_BOOKMARK,0,eFormat);
 
-    if( bAboveBelow )
+    if (eFormat == REF_CONTENT)
     {
-        SwGetRefField aFld( (SwGetRefFieldType*)
-            rDoc.GetSysFldType( RES_GETREFFLD ), sBkmName, REF_BOOKMARK, 0,
-            REF_UPDOWN );
+        /*
+        If we are just inserting the contents of the bookmark, then it
+        is possible that the bookmark is actually a variable, so we
+        must store it until the end of the document to see if it was,
+        in which case we'll turn it into a show variable
+        */
+        pReffingStck->NewAttr( *pPaM->GetPoint(), SwFmtFld(aFld) );
+        pReffingStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_FIELD);
+    }
+    else
+    {
         rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
     }
     return FLD_OK;

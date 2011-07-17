@@ -813,8 +813,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
     case RTFFLD_REF:
         {
             String sOrigBkmName;
-            bool bChapterNr = false;
-            bool bAboveBelow = false;
+            REFERENCEMARK eFormat = REF_CONTENT;
 
             RtfFieldSwitch aRFS( aSaveStr );
             while( !aRFS.IsAtEnd() )
@@ -828,42 +827,35 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                             sOrigBkmName = sParam;
                         break;
 
+                    /* References to numbers in Word could be either to a numbered
+                    paragraph or to a chapter number. However Word does not seem to
+                    have the capability we do, of refering to the chapter number some
+                    other bookmark is in. As a result, cross-references to chapter
+                    numbers in a word document will be cross-references to a numbered
+                    paragraph, being the chapter heading paragraph. As it happens, our
+                    cross-references to numbered paragraphs will do the right thing
+                    when the target is a numbered chapter heading, so there is no need
+                    for us to use the REF_CHAPTER bookmark format on import.
+                    */
                     case 'n':
+                        eFormat = REF_NUMBER_NO_CONTEXT;
+                        break;
                     case 'r':
+                        eFormat = REF_NUMBER;
+                        break;
                     case 'w':
-                        bChapterNr = true; // activate flag 'Chapter Number'
+                        eFormat = REF_NUMBER_FULL_CONTEXT;
                         break;
 
                     case 'p':
-                        bAboveBelow = true;
+                        eFormat = REF_UPDOWN;
                         break;
                 }
             }
-            if (!bAboveBelow || bChapterNr)
-            {
-                if (bChapterNr)
-                {
-                    SwGetRefField aFld(
-                        (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
-                        sOrigBkmName,REF_BOOKMARK,0,REF_CHAPTER);
-                    pDoc->InsertPoolItem( *pPam, SwFmtFld( aFld ), 0 );
-                }
-                else
-                {
-                    SwGetRefField aFld(
-                        (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
-                        sOrigBkmName,REF_BOOKMARK,0,REF_CONTENT);
-                    pDoc->InsertPoolItem( *pPam, SwFmtFld( aFld ), 0 );
-                }
-            }
-
-            if( bAboveBelow )
-            {
-                SwGetRefField aFld( (SwGetRefFieldType*)
-                    pDoc->GetSysFldType( RES_GETREFFLD ), sOrigBkmName, REF_BOOKMARK, 0,
-                    REF_UPDOWN );
-                pDoc->InsertPoolItem(*pPam, SwFmtFld(aFld), 0);
-            }
+            SwGetRefField aFld(
+                (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
+                sOrigBkmName,REF_BOOKMARK,0,eFormat);
+            pDoc->InsertPoolItem( *pPam, SwFmtFld( aFld ), 0 );
         }
         break;
 
