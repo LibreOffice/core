@@ -180,7 +180,7 @@ class GtkSalFrame : public SalFrame, basebmp::BitmapDeviceDamageTracker
 
     int                             m_nScreen;
     GtkWidget*                      m_pWindow;
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
     basebmp::BitmapDeviceSharedPtr  m_aFrame;
 #endif
     int                             m_nDuringRender;

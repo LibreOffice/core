@@ -81,7 +81,7 @@ GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
 }
 
 GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
             SalDisplay( gdk_x11_display_get_xdisplay( pDisplay ) ),
 #endif
             m_pGdkDisplay( pDisplay ),
@@ -89,7 +89,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 {
     for(int i = 0; i < POINTER_COUNT; i++)
         m_aCursors[ i ] = NULL;
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
     m_pCapture = NULL;
     hEventGuard_ = osl_createMutex();
 #else
@@ -110,7 +110,7 @@ GtkSalDisplay::~GtkSalDisplay()
     if( !m_bStartupCompleted )
         gdk_notify_startup_complete();
 
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
     doDestruct();
     pDisp_ = NULL;
 #endif
@@ -144,7 +144,7 @@ void GtkSalDisplay::errorTrapPop()
 
 void GtkSalDisplay::registerFrame( SalFrame* pFrame )
 {
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
     SalDisplay::registerFrame( pFrame );
 #endif
 }
@@ -156,7 +156,7 @@ void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
         static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( FALSE );
         m_pCapture = NULL;
     }
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
     SalDisplay::deregisterFrame( pFrame );
 #endif
 }
@@ -166,7 +166,7 @@ extern "C" {
 void signalKeysChanged( GdkKeymap*, gpointer data )
 {
     GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
     pDisp->GetKeyboardName(true);
 #endif
 }
@@ -188,7 +188,7 @@ void signalMonitorsChanged( GdkScreen* pScreen, gpointer data )
 GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
                                                GdkEvent* )
 {
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
     GdkFilterReturn aFilterReturn = GDK_FILTER_CONTINUE;
     XEvent *pEvent = (XEvent *)sys_event;
 
@@ -240,7 +240,7 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
 
 void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
 {
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
     if( pScreen )
     {
         int nScreen = gdk_screen_get_number( pScreen );
@@ -265,7 +265,7 @@ void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
 
 void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
 {
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
     if( pScreen )
     {
         if( gdk_display_get_n_screens(m_pGdkDisplay) == 1 )
@@ -303,7 +303,7 @@ extern "C"
 int GtkSalDisplay::GetDefaultMonitorNumber() const
 {
     int n = 0;
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
     GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, m_nDefaultScreen );
 #if GTK_CHECK_VERSION(2,20,0)
     n = gdk_screen_get_primary_monitor(pScreen);
@@ -376,7 +376,7 @@ void GtkSalDisplay::initScreen( int nScreen ) const
 #endif
 }
 
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
 long GtkSalDisplay::Dispatch( XEvent* pEvent )
 {
     if( GetDisplay() == pEvent->xany.display )
@@ -934,7 +934,7 @@ gboolean GtkXLib::userEventFn(gpointer data)
     return bContinue;
 }
 
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
 
 // FIXME: cut/paste from saldisp.cxx - needs some re-factoring love
 bool GtkSalDisplay::DispatchInternalEvent()

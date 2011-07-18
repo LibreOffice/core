@@ -418,7 +418,7 @@ SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
                                                     sal_uInt16 nBitCount,
                                                     const SystemGraphicsData *pGd )
 {
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
     SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
     pNew->SetSize( nDX, nDY );
     return pNew;
@@ -429,7 +429,7 @@ SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
 
 SalBitmap* GtkInstance::CreateSalBitmap()
 {
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
     return new SvpSalBitmap();
 #else
     return X11SalInstance::CreateSalBitmap();
@@ -491,7 +491,7 @@ void GtkInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
 bool GtkInstance::AnyInput( sal_uInt16 nType )
 {
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
     g_warning ("any input returning false");
     return false;
 #else
@@ -502,7 +502,7 @@ bool GtkInstance::AnyInput( sal_uInt16 nType )
 // FIXME: these above should all be in a more generic, shared base of unix's salinst.cxx
 
 
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
 #define GTK3_INCLUDED
 #include "../../headless/svpinst.cxx"
 #endif

@@ -39,7 +39,7 @@
 
 bool InitAtkBridge(void)
 {
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
     const char* pVersion = atk_get_toolkit_version();
     if( ! pVersion )
         return false;
@@ -76,7 +76,7 @@ bool InitAtkBridge(void)
 
 void DeInitAtkBridge()
 {
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
     restore_gail_window_vtable();
 #endif
 }

@@ -79,7 +79,7 @@ public:
 
 #define GTK_YIELD_GRAB() GtkYieldMutex::GtkYieldGuard aLocalGtkYieldGuard( static_cast<GtkYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex()) )
 
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
 class GtkInstance : public SvpSalInstance
 {
     SalYieldMutex *mpSalYieldMutex;
@@ -115,7 +115,7 @@ public:
     virtual bool				AnyInput( sal_uInt16 nType );
 };
 
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
 class GtkSalSystem : public SalSystem
 {
 public:
@@ -128,7 +128,7 @@ public:
 #endif
     virtual ~GtkSalSystem();
 
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
     virtual unsigned int GetDisplayScreenCount();
     virtual bool IsMultiDisplay();
     virtual unsigned int GetDefaultDisplayNumber();

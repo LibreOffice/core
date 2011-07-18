@@ -109,7 +109,7 @@ public:
     virtual void    PostUserEvent();
 };
 
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
 class GtkData : public SalData
 #else
 class GtkData : public X11SalData
@@ -126,7 +126,7 @@ public:
 
     GtkSalDisplay *pDisplay;
     GtkSalDisplay *GetDisplay() { return pDisplay; }
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
     GtkXLib *pXLib_;
     SalXLib *GetLib() { return pXLib_; }
 #endif
@@ -137,7 +137,7 @@ inline GtkData* GetGtkSalData()
 
 class GtkSalFrame;
 
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
 class GtkSalDisplay
 #else
 class GtkSalDisplay : public SalDisplay
@@ -177,7 +177,7 @@ public:
     inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
     inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
 
-#if !GTK_CHECK_VERSION(3,0,0) || defined GTK3_X11_RENDER
+#if !GTK_CHECK_VERSION(3,0,0)
     virtual long Dispatch( XEvent *pEvent );
 #else
     bool IsXinerama() { return false; }

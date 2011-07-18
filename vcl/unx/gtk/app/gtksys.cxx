@@ -54,7 +54,7 @@ GtkSalSystem::~GtkSalSystem()
 {
 }
 
-#if GTK_CHECK_VERSION(3,0,0) && !defined GTK3_X11_RENDER
+#if GTK_CHECK_VERSION(3,0,0)
 unsigned int GtkSalSystem::GetDisplayScreenCount()
 {
     return 1;
