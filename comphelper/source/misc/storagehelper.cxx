@@ -314,23 +314,6 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
 }
 
 // ----------------------------------------------------------------------
-uno::Reference< embed::XStorage > OStorageHelper::GetTemporaryStorageOfFormat(
-            const ::rtl::OUString& aFormat,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-    throw ( uno::Exception )
-{
-    uno::Reference< lang::XMultiServiceFactory > xFactoryToUse = xFactory.is() ? xFactory : ::comphelper::getProcessServiceFactory();
-    if ( !xFactoryToUse.is() )
-        throw uno::RuntimeException();
-
-    uno::Reference< io::XStream > xTmpStream(
-        xFactoryToUse->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) ) ),
-        uno::UNO_QUERY_THROW );
-
-    return GetStorageOfFormatFromStream( aFormat, xTmpStream, embed::ElementModes::READWRITE, xFactoryToUse );
-}
-
-// ----------------------------------------------------------------------
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
             const ::rtl::OUString& aFormat,
             const ::rtl::OUString& aURL,
