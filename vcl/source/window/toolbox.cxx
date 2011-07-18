@@ -3768,52 +3768,6 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
 
 // -----------------------------------------------------------------------
 
-void ToolBox::ImplStartCustomizeMode()
-{
-    mbCustomizeMode = sal_True;
-
-    mpData->ImplClearLayoutData();
-
-    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
-    while ( it != mpData->m_aItems.end() )
-    {
-        if ( it->mbShowWindow )
-        {
-            it->mpWindow->Hide();
-
-            if ( !(it->maRect.IsEmpty()) )
-                Invalidate( it->maRect );
-        }
-
-        ++it;
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void ToolBox::ImplEndCustomizeMode()
-{
-    mbCustomizeMode = sal_False;
-
-    mpData->ImplClearLayoutData();
-
-    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
-    while ( it != mpData->m_aItems.end() )
-    {
-        if ( it->mbShowWindow )
-        {
-            if ( !(it->maRect.IsEmpty()) )
-                Invalidate( it->maRect );
-
-            it->mpWindow->Show();
-        }
-
-        ++it;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void ToolBox::ImplDrawFloatwinBorder( ImplToolItem* pItem )
 {
     if ( !pItem->maRect.IsEmpty() )
