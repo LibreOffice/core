@@ -2473,6 +2473,25 @@ bool IsExpandableSprm(sal_uInt16 nSpId)
     return 0x646B == nSpId;
 }
 
+void WW8PLCFx_Fc_FKP::WW8Fkp::FillEntry(WW8PLCFx_Fc_FKP::WW8Fkp::Entry &rEntry,
+    sal_Size nDataOffset, sal_uInt16 nLen)
+{
+    bool bValidPos = (nDataOffset < sizeof(maRawData));
+
+    OSL_ENSURE(bValidPos, "sprm sequence offset is out of range, ignoring");
+
+    if (!bValidPos)
+    {
+        rEntry.mnLen = 0;
+        return;
+    }
+
+    sal_uInt16 nAvailableData = sizeof(maRawData)-nDataOffset;
+    OSL_ENSURE(nLen <= nAvailableData, "srpm sequence len is out of range, clipping");
+    rEntry.mnLen = std::min(nLen, nAvailableData);
+    rEntry.mpData = maRawData + nDataOffset;
+}
+
 WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
     SvStream* pDataSt, long _nFilePos, long nItemSiz, ePLCFT ePl,
     WW8_FC nStartFc)
@@ -2517,8 +2536,13 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
             switch (ePLCF)
             {
                 case CHP:
-                    aEntry.mnLen  = maRawData[nOfs];
-                    aEntry.mpData = maRawData + nOfs + 1;
+                {
+                    aEntry.mnLen = maRawData[nOfs];
+
+                    //len byte
+                    sal_Size nDataOffset = nOfs + 1;
+
+                    FillEntry(aEntry, nDataOffset, aEntry.mnLen);
 
                     if (aEntry.mnLen && eVersion == ww::eWW2)
                     {
@@ -2532,8 +2556,8 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                             aEntry.mbMustDelete = true;
                         }
                     }
-
                     break;
+                }
                 case PAP:
                     {
                         sal_uInt8 nDelta = 0;
@@ -2576,18 +2600,8 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                                 {
                                     //additional istd
                                     nDataOffset += sizeof(aEntry.mnIStd);
-                                    OSL_ENSURE(nDataOffset < sizeof(maRawData),
-                                        "sprm offset is out of range, ignoring");
-                                    if (nDataOffset < sizeof(maRawData))
-                                    {
-                                        aEntry.mpData = maRawData + nDataOffset;
-                                        sal_uInt16 nAvailableData = sizeof(maRawData)-nDataOffset;
-                                        OSL_ENSURE(aEntry.mnLen <= nAvailableData,
-                                            "srpm len is out of range, clipping");
-                                        aEntry.mnLen = std::min(aEntry.mnLen, nAvailableData);
-                                    }
-                                    else
-                                        aEntry.mnLen = 0;
+
+                                    FillEntry(aEntry, nDataOffset, aEntry.mnLen);
                                 }
                             }
                             else
@@ -2644,8 +2658,11 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
             sal_uInt8* pSprms = GetLenAndIStdAndSprms( nLen );
 
             WW8SprmIter aIter(pSprms, nLen, maSprmParser);
-            while(aIter.GetSprms())
+            while (aIter.GetSprms())
+            {
+                fprintf(stderr, "id is %x\n", aIter.GetAktId());
                 aIter.advance();
+            }
         }
 #endif
     }
@@ -4355,7 +4372,7 @@ void WW8PLCFMan::GetNewNoSprms( WW8PLCFxDesc& rDesc )
 
 sal_uInt16 WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
 {
-    sal_uInt16 nId;
+    sal_uInt16 nId = 0;        // Id = 0 for empty attributes
 
     if (p == pFld)
         nId = eFLD;
@@ -4365,10 +4382,8 @@ sal_uInt16 WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
         nId = eEDN;
     else if (p == pAnd)
         nId = eAND;
-    else if (p->nSprmsLen > 0)
+    else if (p->nSprmsLen >= maSprmParser.MinSprmLen())
         nId = maSprmParser.GetSprmId(p->pMemPos);
-    else
-        nId = 0;        // Id = 0 for empty attributes
 
     return nId;
 }
@@ -4666,7 +4681,7 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     pRes->nCp2OrIdx = p->nCp2OrIdx;
     if ((p == pFtn) || (p == pEdn) || (p == pAnd))
         pRes->nMemLen = p->nSprmsLen;
-    else if (p->nSprmsLen)  //Normal
+    else if (p->nSprmsLen >= maSprmParser.MinSprmLen()) //Normal
     {
         // Length of actual sprm
         pRes->nMemLen = maSprmParser.GetSprmSize(pRes->nSprmId, pRes->pMemPos);

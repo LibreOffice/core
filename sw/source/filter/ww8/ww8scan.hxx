@@ -507,6 +507,9 @@ public:
         sal_uInt8 mnIMax;         // Anzahl der Eintraege
 
         wwSprmParser maSprmParser;
+
+        //Fill in an Entry with sanity testing
+        void FillEntry(Entry &rEntry, sal_Size nDataOffset, sal_uInt16 nLen);
     public:
         WW8Fkp (ww::WordVersion eVersion, SvStream* pFKPStrm,
             SvStream* pDataStrm, long _nFilePos, long nItemSiz, ePLCFT ePl,

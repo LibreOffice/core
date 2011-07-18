@@ -97,6 +97,7 @@ private:
     uno::Reference<lang::XMultiComponentFactory> m_xFactory;
     uno::Reference<uno::XInterface> m_xWriterComponent;
     ::rtl::OUString m_aSrcRoot;
+    int m_nLoadedDocs;
 };
 
 bool FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
@@ -110,7 +111,11 @@ bool FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     SwDocShellRef xDocShRef = new SwDocShell;
     SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
     aSrcMed.SetFilter(&aFilter);
-    return xDocShRef->DoLoad(&aSrcMed);
+    bool bRet = xDocShRef->DoLoad(&aSrcMed);
+
+    ++m_nLoadedDocs;
+
+    return bRet;
 }
 
 void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected)
@@ -177,10 +182,13 @@ void FiltersTest::testCVEs()
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), false);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/indeterminate")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), indeterminate);
+
+    printf("Writer: tested %d files\n", m_nLoadedDocs);
 }
 
 FiltersTest::FiltersTest()
     : m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://"))
+    , m_nLoadedDocs(0)
 {
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
     m_xFactory = m_xContext->getServiceManager();
