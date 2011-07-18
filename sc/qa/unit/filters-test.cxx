@@ -73,17 +73,20 @@ public:
     virtual void tearDown();
 
     void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected);
-    bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
+    ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
 
     /**
      * Ensure CVEs remain unbroken
      */
     void testCVEs();
 
+    void testODSs();
+
     CPPUNIT_TEST_SUITE(FiltersTest);
 #if !defined(__OpenBSD__)
     CPPUNIT_TEST(testCVEs);
 #endif
+    CPPUNIT_TEST(testODSs);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -93,7 +96,7 @@ private:
     ::rtl::OUString m_aSrcRoot;
 };
 
-bool FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
+ScDocShellRef FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     const rtl::OUString &rUserData)
 {
     SfxFilter aFilter(
@@ -104,7 +107,11 @@ bool FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     ScDocShellRef xDocShRef = new ScDocShell;
     SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
     aSrcMed.SetFilter(&aFilter);
-    return xDocShRef->DoLoad(&aSrcMed);
+    if (!xDocShRef->DoLoad(&aSrcMed))
+        // load failed.
+        xDocShRef.Clear();
+
+    return xDocShRef;
 }
 
 void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected)
@@ -140,7 +147,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
                 fprintf(stderr, "loading %s\n", aRes.getStr());
             }
             sal_uInt32 nStartTime = osl_getGlobalTimer();
-            bool bRes = load(rFilter, sURL, rUserData);
+            bool bRes = load(rFilter, sURL, rUserData).Is();
             sal_uInt32 nEndTime = osl_getGlobalTimer();
             if (nExpected == indeterminate)
             {
@@ -177,6 +184,17 @@ void FiltersTest::testCVEs()
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
         m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/slk/indeterminate")), rtl::OUString(), indeterminate);
 
+}
+
+void FiltersTest::testODSs()
+{
+#if 0
+// TODO: loading of ods still fails.  I need to look into this.
+    ScDocShellRef xDocSh = load(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc8")),
+        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/ods/named-ranges-global.ods")), rtl::OUString());
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-global.ods.", xDocSh.Is());
+#endif
 }
 
 FiltersTest::FiltersTest()
