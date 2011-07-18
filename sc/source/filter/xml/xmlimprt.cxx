@@ -2811,7 +2811,7 @@ public:
                     ScXMLConverter::ParseFormula(aContent, false);
 
                 ScRangeData* pData = new ScRangeData(
-                    mpDoc, r.sName, r.sContent, aPos, nNewType, r.eGrammar);
+                    mpDoc, r.sName, aContent, aPos, nNewType, r.eGrammar);
                 mrRangeName.insert(pData);
             }
         }
