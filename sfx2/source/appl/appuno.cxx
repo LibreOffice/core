@@ -1312,7 +1312,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         aStr.append(RTL_CONSTASCII_STRINGPARAM(
                             " not convertable in slot: "));
                         aStr.append(static_cast<sal_Int32>(nSlotId));
-                        OSL_FAIL( aStr.GetBuffer() );
+                        OSL_FAIL( aStr.getStr() );
                     }
                 }
             }
