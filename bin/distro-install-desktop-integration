@@ -148,7 +148,7 @@ add_wrapper lomath         soffice "--math"       "libreoffice" "libreoffice-mat
 add_wrapper loimpress      soffice "--impress"    "libreoffice" "libreoffice-impress.desktop"     "gid_Module_Brand_Prg_Impress"
 add_wrapper loweb          soffice "--web"        "libreoffice" ""                                "gid_Module_Brand_Prg_Wrt"
 add_wrapper lowriter       soffice "--writer"     "libreoffice" "libreoffice-writer.desktop"      "gid_Module_Brand_Prg_Wrt"
-add_wrapper lofromtemplate soffice ".uno:NewDoc" "libreoffice" "libreoffice-base.desktop"        "gid_Module_Root_Brand"
+add_wrapper lofromtemplate soffice ".uno:NewDoc"  "libreoffice" ""                                "gid_Module_Root_Brand"
 add_wrapper libreoffice    soffice ""            "libreoffice" "libreoffice-startcenter.desktop" "gid_Module_Root_Brand"
 add_wrapper loffice        soffice ""            "libreoffice" ""                                "gid_Module_Root_Brand"
 add_wrapper unopkg         unopkg  ""            "unopkg"      ""                                "gid_Module_Root_Brand"
