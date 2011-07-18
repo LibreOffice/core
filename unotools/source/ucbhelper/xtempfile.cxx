@@ -37,10 +37,6 @@
 
 namespace css = com::sun::star;
 
-// copy define from desktop\source\app\appinit.cxx
-
-#define DESKTOP_TEMPNAMEBASE_DIR    "/temp/soffice.tmp"
-
 OTempFileService::OTempFileService(::css::uno::Reference< ::css::uno::XComponentContext > const & context)
 : ::cppu::PropertySetMixin< ::css::io::XTempFile >(
     context
