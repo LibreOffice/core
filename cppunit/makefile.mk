@@ -117,6 +117,10 @@ OUT2LIB = ooo-install/lib/libcppunit.dll.a
 MY_LIBS = -lm
 .END
 
+.IF "$(ENABLE_DEBUG_STL)" == "TRUE"
+EXTRA_CFLAGS += -D_GLIBCXX_DEBUG
+.ENDIF
+
 CONFIGURE_ACTION = ./configure
 
 .IF "$(debug)"!=""
