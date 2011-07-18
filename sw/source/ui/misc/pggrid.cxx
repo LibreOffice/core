@@ -146,11 +146,10 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     aPrintCB.SetClickHdl(aModifyLk);
     aRubyBelowCB.SetClickHdl(aModifyLk);
 
-
     aDisplayCB.SetClickHdl(LINK(this, SwTextGridPage, DisplayGridHdl));
 
     XColorTable& rColorTbl = XColorTable::GetStdColorTable();
-    aColorLB.InsertAutomaticEntry();
+    aColorLB.InsertAutomaticEntryColor( Color( COL_AUTO ) );
     for( sal_uInt16 i = 0; i < rColorTbl.Count(); ++i )
     {
         XColorEntry* pEntry = rColorTbl.GetColor( i );
