@@ -831,7 +831,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
         bool bReusable = (0 != SVBT16ToShort( ((WW8_TXBXS*)pT0)->fReusable ));
         while( bReusable )
         {
-            (*pT)++;
+            pT->advance();
             if( !pT->Get( rStartCp, pT0 ) )
             {
                 OSL_ENSURE( !this, "+Wo ist der Grafik-Text (2-a) ?" );
@@ -840,7 +840,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
             bReusable = (0 != SVBT16ToShort( ((WW8_TXBXS*)pT0)->fReusable ));
         }
     }
-    (*pT)++;
+    pT->advance();
     if( !pT->Get( rEndCp, pT0 ) )
     {
         OSL_ENSURE( !this, "+Wo ist der Grafik-Text (3) ?" );
@@ -868,7 +868,8 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
                 return false;
             }
             // ggfs. entsprechende Anzahl Eintraege weitergehen
-            for(sal_uInt16 iSequence = 0; iSequence < nSequence; iSequence++) (*pT)++;
+            for (sal_uInt16 iSequence = 0; iSequence < nSequence; ++iSequence)
+                pT->advance();
             // dann die tatsaechlichen Start und Ende ermitteln
             if(    (!pT->Get( rStartCp, pT0 ))
                 || ( nMinStartCp > rStartCp  ) )
@@ -880,9 +881,8 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
                 rEndCp = rStartCp;  // kein Error: leerer String!
             else
             {
-                (*pT)++;
-                if(    (!pT->Get( rEndCp, pT0 ))
-                    || ( nMaxEndCp < rEndCp-1  ) )
+                pT->advance();
+                if ( (!pT->Get(rEndCp, pT0)) || (nMaxEndCp < rEndCp-1) )
                 {
                     OSL_ENSURE( !this, "+Wo ist der Grafik-Text (6) ?" );
                     return false;

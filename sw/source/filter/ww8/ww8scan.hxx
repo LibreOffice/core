@@ -242,8 +242,11 @@ public:
     sal_Int32 GetPos( long nInIdx ) const
         { return ( nInIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nInIdx]; }
 
-    WW8PLCFspecial& operator ++( int ) { nIdx++; return *this; }
-    WW8PLCFspecial& operator --( int ) { nIdx--; return *this; }
+    void advance()
+    {
+        if (nIdx <= nIMax)
+            ++nIdx;
+    }
 };
 
 /** simple Iterator for SPRMs */

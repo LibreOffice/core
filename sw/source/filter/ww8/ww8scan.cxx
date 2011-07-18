@@ -1779,7 +1779,7 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
     if (!rPLCF.Get(nP, pData))              // Ende des PLCFspecial ?
         return false;
 
-    rPLCF++;
+    rPLCF.advance();
 
     if((((sal_uInt8*)pData)[0] & 0x1f ) != 0x13 )    // Kein Anfang ?
         return true;                            // Bei Fehler nicht abbrechen
@@ -1800,7 +1800,7 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
     {
 
         // Field Separator ?
-        rPLCF++;
+        rPLCF.advance();
 
         if( !rPLCF.Get( nP, pData ) )
             return false;
@@ -1813,7 +1813,7 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
                 return false;
         }
     }
-    rPLCF++;
+    rPLCF.advance();
 
     return true;
 }
@@ -1828,7 +1828,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     if( !rPLCF.Get( rF.nSCode, pData ) )             // Ende des PLCFspecial ?
         goto Err;
 
-    rPLCF++;
+    rPLCF.advance();
 
     if((((sal_uInt8*)pData)[0] & 0x1f ) != 0x13 )        // Kein Anfang ?
         goto Err;
@@ -1851,8 +1851,9 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
             goto Err;
     }
 
-    if((((sal_uInt8*)pData)[0] & 0x1f ) == 0x14 ){       // Field Separator ?
-        rPLCF++;
+    if ((((sal_uInt8*)pData)[0] & 0x1f ) == 0x14 )       // Field Separator ?
+    {
+        rPLCF.advance();
 
         if( !rPLCF.Get( rF.nLRes, pData ) )
             goto Err;
@@ -1875,7 +1876,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
         rF.nLen = rF.nSRes - rF.nSCode + 2;         // Gesamtlaenge
     }
 
-    rPLCF++;
+    rPLCF.advance();
     if((((sal_uInt8*)pData)[0] & 0x1f ) == 0x15 )
     {
         // Field Ende ?
@@ -3804,7 +3805,7 @@ bool WW8PLCFx_FLD::EndPosIsFieldEnd()
     {
         long n = pPLCF->GetIdx();
 
-        (*pPLCF)++;
+        pPLCF->advance();
 
         void* pData;
         sal_Int32 nTest;
@@ -3842,7 +3843,7 @@ void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
 
     p->nStartPos = nP;
 
-    (*pPLCF)++;
+    pPLCF->advance();
     if (!pPLCF->Get(nP, pData))             // Ende des PLCFspecial ?
     {
         p->nStartPos = WW8_CP_MAX;            // PLCF fertig abgearbeitet
@@ -3858,7 +3859,7 @@ void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
 
 WW8PLCFx& WW8PLCFx_FLD::operator ++( int )
 {
-    (*pPLCF)++;
+    pPLCF->advance();
     return *this;
 }
 
@@ -4120,7 +4121,7 @@ WW8PLCFx& WW8PLCFx_Book::operator ++( int )
 {
     if( pBook[0] && pBook[1] && nIMax )
     {
-        (*pBook[nIsEnd])++;
+        (*pBook[nIsEnd]).advance();
 
         sal_uLong l0 = pBook[0]->Where();
         sal_uLong l1 = pBook[1]->Where();
