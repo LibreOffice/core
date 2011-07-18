@@ -1309,10 +1309,7 @@ dnl check for required programs (grep, awk, sed, bash)
 dnl ===================================================================
 cat /dev/null > warn
 
-# $EUID is a bash-ism, so we can't assume its existence.  Unfortunately, some
-# shells (e.g. FreeBSD sh) will _always_ evaluate both sides of "test X -a Y",
-# so we use "test X && test Y" to avoid on-screen spewage about a "bad number".
-if test "z`uname -o 2>/dev/null`" = "zCygwin" && test "$EUID" -eq 0; then
+if test "z$EUID" = "z0" -a "z`uname -o 2>/dev/null`" = "zCygwin"; then
     AC_MSG_ERROR([You must build LibreOffice as a normal user - not using an administrative account])
 fi
 
