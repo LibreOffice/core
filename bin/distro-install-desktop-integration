@@ -123,7 +123,7 @@ for file in *.desktop ; do
         -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION/\1/" \
         -e "s/\($PRODUCTNAME\) $PRODUCTVERSION/\1/" \
         "$file" >"$file.new"
-    mv "$file.new" "$file"
+    mv -f "$file.new" "$file"
 done
 cd -
 
@@ -160,7 +160,7 @@ add_wrapper unopkg         unopkg  ""            "unopkg"      ""               
 #       you cannot include this link directly into the package
 #       For example, the Novell package mark this symlink as %ghost
 #	and update it in %post and %postun
-ln -sf $INSTALLDIR/program/soffice $PREFIXDIR/bin/soffice
+ln -sf $INSTALLDIR/program/soffice $DESTDIR$PREFIXDIR/bin/soffice
 
 # create bash completion
 mkdir -p $DESTDIR/etc/bash_completion.d
