@@ -161,6 +161,7 @@ add_wrapper unopkg         unopkg  ""            "unopkg"      ""               
 #       For example, the Novell package mark this symlink as %ghost
 #	and update it in %post and %postun
 ln -sf $INSTALLDIR/program/soffice $DESTDIR$PREFIXDIR/bin/soffice
+test -f $DESTDIR/gid_Module_Root_Brand && echo "$PREFIXDIR/bin/soffice" >>$DESTDIR/gid_Module_Root_Brand
 
 # create bash completion
 mkdir -p $DESTDIR/etc/bash_completion.d
