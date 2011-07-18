@@ -352,15 +352,6 @@ public:
      */
     static inline int getBase64Weight(sal_uInt32 nChar);
 
-    /** Get a decimal digit encoded as US-ASCII.
-
-        @param nWeight  Must be in the range 0--9, inclusive.
-
-        @return  The decimal digit corresponding to nWeight (US-ASCII
-        '0'--'9').
-     */
-    static sal_uInt32 getDigit(int nWeight);
-
     /** Get a hexadecimal digit encoded as US-ASCII.
 
         @param nWeight  Must be in the range 0--15, inclusive.
