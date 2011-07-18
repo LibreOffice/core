@@ -39,6 +39,8 @@
 
 #include <basic/ttstrhlp.hxx>
 
+#include <rtl/strbuf.hxx>
+
 #include "brkpnts.hxx"
 #include "basic.hrc"
 #include "resids.hrc"
@@ -232,22 +234,22 @@ void BreakpointWindow::LoadBreakpoints( String aFilename )
 
 void BreakpointWindow::SaveBreakpoints( String aFilename )
 {
-    ByteString aBreakpoints;
+    rtl::OStringBuffer aBreakpoints;
 
     for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
     {
         Breakpoint* pBrk = BreakpointList[ i ];
-        if ( aBreakpoints.Len() )
-            aBreakpoints += ';';
-        aBreakpoints += ByteString::CreateFromInt32( pBrk->nLine );
+        if (aBreakpoints.getLength())
+            aBreakpoints.append(';');
+        aBreakpoints.append(static_cast<sal_Int32>(pBrk->nLine));
     }
 
     Config aConfig(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
 
     aConfig.SetGroup("Breakpoints");
 
-    if ( aBreakpoints.Len() )
-        aConfig.WriteKey( ByteString( aFilename, RTL_TEXTENCODING_UTF8 ), aBreakpoints );
+    if (aBreakpoints.getLength())
+        aConfig.WriteKey( ByteString( aFilename, RTL_TEXTENCODING_UTF8 ), aBreakpoints.makeStringAndClear() );
     else
         aConfig.DeleteKey( ByteString( aFilename, RTL_TEXTENCODING_UTF8 ) );
 }
