@@ -89,7 +89,7 @@ public:
 private:
     uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<lang::XMultiComponentFactory> m_xFactory;
-    uno::Reference<uno::XInterface> m_xWriterComponent;
+    uno::Reference<uno::XInterface> m_xCalcComponent;
     ::rtl::OUString m_aSrcRoot;
 };
 
@@ -221,10 +221,10 @@ FiltersTest::FiltersTest()
 
     //This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     //which is a private symbol to us, gets called
-    m_xWriterComponent =
+    m_xCalcComponent =
         xSM->createInstance(rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.SpreadsheetDocument")));
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xWriterComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 
     const char* pSrcRoot = getenv( "SRC_ROOT" );
     CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
