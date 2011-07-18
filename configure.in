@@ -4238,7 +4238,17 @@ dnl ===================================================================
 dnl Check for system cppunit
 dnl ===================================================================
 AC_MSG_CHECKING([which cppunit to use])
-if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
+if test -z "$ENABLE_DEBUG_STL"; then
+    AC_MSG_ERROR([Internal error, debug build check needs to precede cppunit check])
+fi
+if test "$ENABLE_DEBUG_STL" = "TRUE"; then
+    if test "$with_system_cppunit" = "yes"; then
+        AC_MSG_ERROR([--with-system-cppunit conflicts with debug build])
+    fi
+    AC_MSG_RESULT([internal, needed by debug build])
+    SYSTEM_CPPUNIT=NO
+    BUILD_TYPE="$BUILD_TYPE CPPUNIT"
+elif test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
         test "$with_system_cppunit" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_CPPUNIT=YES
