@@ -349,7 +349,6 @@ EditView::UnindentBlock()
 ElementCollector::isAbleToNotify() const
 ElementCollector::setSecurityId(int)
 EnhWMFReader::ReadGDIComment()
-EntryList_Impl::EntryList_Impl(SvxIconChoiceCtrl_Impl*, unsigned short, unsigned short, unsigned short)
 ErrorHandler::ForwCreateString(ErrorInfo const*, String&, unsigned short&) const
 ExtraKernInfo::HasKernPairs() const
 ExtraPortionInfo::DestroyOrgDXArray()
@@ -672,7 +671,6 @@ MenuBar::AddMenuBarButton(Image const&, Link const&, unsigned short)
 MenuBar::ShowFloatButton(unsigned char)
 MenuBar::ShowHideButton(unsigned char)
 MenuItemList::GetCharClass() const
-MergeData::InsertEntry(ByteString const&)
 MergeData::~MergeData()
 MergeDataFile::Dump()
 MessBox::GetModeImage() const
@@ -3084,8 +3082,6 @@ binfilter::SfxItemModifyArr_Impl::Replace(binfilter::SfxItemModifyImpl const*, u
 binfilter::SfxItemModifyArr_Impl::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::SfxItemModifyImpl const&, void*), void*)
 binfilter::SfxMacroConfig::LinkStubCallbackHdl_Impl(void*, void*)
 binfilter::SfxMacroConfig::LinkStubEventHdl_Impl(void*, void*)
-binfilter::SfxMedium::GetHdl()
-binfilter::SfxMedium::ReOpen()
 binfilter::SfxMultiMixRecordWriter::NewContent(unsigned short, unsigned char)
 binfilter::SfxMultiVarRecordWriter::NewContent()
 binfilter::SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(SvStream*, unsigned short, unsigned char)
@@ -3514,7 +3510,6 @@ comphelper::OInteractionRequest::clearContinuations()
 comphelper::OModuleImpl::~OModuleImpl()
 comphelper::OPropertyContainerHelper::modifyAttributes(int, int, int)
 comphelper::OSelectionChangeListener::disposeAdapter()
-comphelper::OStorageHelper::GetTemporaryStorageOfFormat(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 comphelper::OStreamSection::available()
 comphelper::OTruncatedTransactedFileStream::OTruncatedTransactedFileStream(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 comphelper::OTruncatedTransactedFileStream::OTruncatedTransactedFileStream(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::ucb::XSimpleFileAccess> const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
