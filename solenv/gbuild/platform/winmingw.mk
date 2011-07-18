@@ -40,6 +40,7 @@ gb_CC := $(CC)
 gb_CXX := $(CXX)
 gb_AR := $(shell $(CC) -print-prog-name=ar)
 gb_AWK := awk
+gb_RC := $(WINDRES)
 ifeq ($(USE_MINGW),cygwin)
 gb_MINGWLIBDIR := $(COMPATH)/lib/mingw
 else
@@ -678,7 +679,7 @@ endif
 
 # WinResTarget class
 
-gb_WinResTarget_POSTFIX :=_res.o
+gb_WinResTarget_POSTFIX :=.res
 
 define gb_WinResTarget__command
 $(call gb_Output_announce,$(2),$(true),RES,3)
@@ -688,10 +689,8 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(DEFS) $(FLAGS) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
-		-Fo$(patsubst %_res.o,%.res,$(1)) \
+		-o $(1) \
 		$(RCFILE) )
-	windres $(patsubst %_res.o,%.res,$(1)) $(1)
-	rm $(patsubst %_res.o,%.res,$(1))
 endef
 
 $(eval $(call gb_Helper_make_dep_targets,\
