@@ -2454,14 +2454,12 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplWriteLong( sal_Int32 nNumber, sal_uLong nMode )
+void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
 {
-    const ByteString aNumber( ByteString::CreateFromInt32( nNumber ) );
-    sal_uLong nLen = aNumber.Len();
-    mnCursorPos += nLen;
-    for ( sal_uInt16 n = 0; n < nLen; n++ )
-        *mpPS << aNumber.GetChar( n );
-    ImplExecMode( nMode );
+    const rtl::OString aNumber(rtl::OString::valueOf(nNumber));
+    mnCursorPos += aNumber.getLength();
+    *mpPS << aNumber.getStr();
+    ImplExecMode(nMode);
 }
 
 //---------------------------------------------------------------------------------
