@@ -49,6 +49,10 @@ OBJFILES= \
 
 # --- Targets ------------------------------------------------------
 
+.IF "$(OS)" == "IOS"
+CFLAGS += -x objective-c++ -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
+.ENDIF
+
 # svdem
 
 APP1NOSAL=		TRUE
