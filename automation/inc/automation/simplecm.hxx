@@ -366,22 +366,6 @@ protected:
     virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, osl::ConnectorSocket* pCS )=0;
 };
 
-class SingleCommunicationManagerClientViaSocket : public SingleCommunicationManager, public ICommunicationManagerClient, CommonSocketFunctions
-{
-public:
-    using CommunicationManager::StartCommunication;
-
-    SingleCommunicationManagerClientViaSocket( ByteString aHost, sal_uLong nPort, sal_Bool bUseMultiChannel = sal_False );
-    SingleCommunicationManagerClientViaSocket( sal_Bool bUseMultiChannel = sal_False );
-    virtual sal_Bool StartCommunication(){ return DoStartCommunication( this, (ICommunicationManagerClient*) this, aHostToTalk, nPortToTalk );}
-    virtual sal_Bool StartCommunication( ByteString aHost, sal_uLong nPort ){ return DoStartCommunication( this, (ICommunicationManagerClient*) this, aHost, nPort );}
-private:
-    ByteString aHostToTalk;
-    sal_uLong nPortToTalk;
-protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, osl::ConnectorSocket* pCS ){ return new SimpleCommunicationLinkViaSocketWithReceiveCallbacks( pCM, pCS ); }
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

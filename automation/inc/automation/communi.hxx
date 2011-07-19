@@ -164,7 +164,6 @@ class CommunicationManagerClientViaSocket : public CommunicationManagerClient, C
 public:
     using CommunicationManager::StartCommunication;
 
-    CommunicationManagerClientViaSocket( ByteString aHost, sal_uLong nPort, sal_Bool bUseMultiChannel = sal_False );
     CommunicationManagerClientViaSocket( sal_Bool bUseMultiChannel = sal_False );
     virtual ~CommunicationManagerClientViaSocket();
 

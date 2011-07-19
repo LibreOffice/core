@@ -567,13 +567,6 @@ IMPL_LINK( CommunicationManagerServerAcceptThread, AddConnection, void*, EMPTYAR
     return 1;
 }
 
-CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( ByteString aHost, sal_uLong nPort, sal_Bool bUseMultiChannel )
-: CommunicationManagerClient( bUseMultiChannel )
-, aHostToTalk( aHost )
-, nPortToTalk( nPort )
-{
-}
-
 CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( sal_Bool bUseMultiChannel )
 : CommunicationManagerClient( bUseMultiChannel )
 , aHostToTalk( "" )

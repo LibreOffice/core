@@ -654,23 +654,6 @@ void SingleCommunicationManager::DestroyingLink( CommunicationLink *pCL )
     pCL->InvalidateManager();
 }
 
-
-SingleCommunicationManagerClientViaSocket::SingleCommunicationManagerClientViaSocket( ByteString aHost, sal_uLong nPort, sal_Bool bUseMultiChannel )
-: SingleCommunicationManager( bUseMultiChannel )
-, aHostToTalk( aHost )
-, nPortToTalk( nPort )
-{
-}
-
-
-SingleCommunicationManagerClientViaSocket::SingleCommunicationManagerClientViaSocket( sal_Bool bUseMultiChannel )
-: SingleCommunicationManager( bUseMultiChannel )
-, aHostToTalk()
-, nPortToTalk( 0 )
-{
-}
-
-
 sal_Bool CommonSocketFunctions::DoStartCommunication( CommunicationManager *pCM, ICommunicationManagerClient *pCMC, ByteString aHost, sal_uLong nPort )
 {
     osl::SocketAddr Addr( rtl::OUString( UniString( aHost, RTL_TEXTENCODING_UTF8 ) ), nPort );
