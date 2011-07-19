@@ -535,7 +535,7 @@ namespace
         {UBLOCK_LATIN_EXTENDED_C, UBLOCK_LATIN_EXTENDED_D, ScriptType::LATIN}
     };
 
-    #define scriptListCount SAL_N_ELEMENTS(scriptTypes)
+    #define scriptListCount SAL_N_ELEMENTS(scriptList)
 
     //always sets rScriptType
     //
