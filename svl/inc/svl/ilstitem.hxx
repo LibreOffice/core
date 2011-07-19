@@ -32,8 +32,7 @@
 #include "svl/svldllapi.h"
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-
-class SvULongs;
+#include <vector>
 
 class SVL_DLLPUBLIC SfxIntegerListItem : public SfxPoolItem
 {
@@ -43,7 +42,8 @@ public:
     TYPEINFO();
 
     SfxIntegerListItem();
-    SfxIntegerListItem( sal_uInt16 nWhich, const SvULongs& rList );
+    SfxIntegerListItem( sal_uInt16 nWhich, const ::std::vector < sal_Int32 >& rList );
+    SfxIntegerListItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Sequence < sal_Int32 >& rList );
     SfxIntegerListItem( const SfxIntegerListItem& rItem );
     ~SfxIntegerListItem();
 
@@ -52,7 +52,7 @@ public:
     ::com::sun::star::uno::Sequence < sal_Int32 > GetConstSequence() const
     { return SAL_CONST_CAST(SfxIntegerListItem *, this)->GetSequence(); }
 
-    void                    GetList( SvULongs& rList ) const;
+    void                    GetList( ::std::vector < sal_Int32 >& rList ) const;
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
