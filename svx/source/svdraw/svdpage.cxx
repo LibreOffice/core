@@ -71,22 +71,6 @@
 
 using namespace ::com::sun::star;
 
-namespace {
-void DumpObjectList (const ::std::vector<SdrObjectWeakRef>& rContainer)
-{
-    ::std::vector<SdrObjectWeakRef>::const_iterator iObject (rContainer.begin());
-    ::std::vector<SdrObjectWeakRef>::const_iterator iEnd (rContainer.end());
-    for (int nIndex=0 ; iObject!=iEnd; ++iObject,++nIndex)
-    {
-        const SdrObject* pObject = iObject->get();
-        OSL_TRACE("%d : %x, %s", nIndex,
-            pObject,
-            ::rtl::OUStringToOString(pObject->GetName(),RTL_TEXTENCODING_UTF8).getStr());
-    }
-}
-}
-
-
 class SdrObjList::WeakSdrObjectContainerType
     : public ::std::vector<SdrObjectWeakRef>
 {
