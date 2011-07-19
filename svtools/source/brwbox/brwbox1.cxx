@@ -266,36 +266,6 @@ void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
 }
 
 //-------------------------------------------------------------------
-void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const Image& rImage,
-        long nWidth, HeaderBarItemBits nBits, sal_uInt16 nPos )
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    if ( nPos < pCols->size() )
-    {
-        BrowserColumns::iterator it = pCols->begin();
-        ::std::advance( it, nPos );
-        pCols->insert( it, new BrowserColumn( nItemId, rImage, String(), nWidth, GetZoom(), nBits ) );
-    }
-    else
-    {
-        pCols->push_back( new BrowserColumn( nItemId, rImage, String(), nWidth, GetZoom(), nBits ) );
-    }
-    if ( nCurColId == 0 )
-        nCurColId = nItemId;
-    if ( getDataWindow()->pHeaderBar )
-    {
-        // Handlecolumn nicht in der Headerbar
-        sal_uInt16 nHeaderPos = nPos;
-        if (nHeaderPos != HEADERBAR_APPEND && !GetColumnId(0))
-            nHeaderPos--;
-        getDataWindow()->pHeaderBar->InsertItem(
-                nItemId, rImage, nWidth, nBits, nHeaderPos );
-    }
-    ColumnInserted( nPos );
-}
-
-//-------------------------------------------------------------------
 
 void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const XubString& rText,
         long nWidth, HeaderBarItemBits nBits, sal_uInt16 nPos )
@@ -327,45 +297,6 @@ void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const XubString& rText,
     ColumnInserted( nPos );
 }
 
-//-------------------------------------------------------------------
-
-void BrowseBox::InsertDataColumn( sal_uInt16 nItemId,
-        const Image& rImage, const XubString& rText,
-        long nWidth, HeaderBarItemBits nBits, sal_uInt16 nPos,
-        const String* pHelpText )
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    if ( nPos < pCols->size() )
-    {
-        BrowserColumns::iterator it = pCols->begin();
-        ::std::advance( it, nPos );
-        pCols->insert( it, new BrowserColumn( nItemId, rImage, rText, nWidth, GetZoom(), nBits ) );
-    }
-    else
-    {
-        pCols->push_back( new BrowserColumn( nItemId, rImage, rText, nWidth, GetZoom(), nBits ) );
-    }
-
-    if ( nCurColId == 0 )
-        nCurColId = nItemId;
-    if ( getDataWindow()->pHeaderBar )
-    {
-        // Handlecolumn nicht in der Headerbar
-        sal_uInt16 nHeaderPos = nPos;
-        if (nHeaderPos != HEADERBAR_APPEND && !GetColumnId(0))
-            nHeaderPos--;
-
-        getDataWindow()->pHeaderBar->InsertItem(
-                nItemId, rImage, rText, nWidth, nBits, nHeaderPos );
-        if( pHelpText && !rText.Len() )
-        {
-            getDataWindow()->pHeaderBar->SetHelpText(
-                nItemId, *pHelpText );
-        }
-    }
-    ColumnInserted( nPos );
-}
 //-------------------------------------------------------------------
 sal_uInt16 BrowseBox::ToggleSelectedColumn()
 {
@@ -590,35 +521,6 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
         }
     }
 
-}
-
-//-------------------------------------------------------------------
-
-void BrowseBox::SetColumnMode( sal_uInt16 nColumnId, BrowserColumnMode nFlags )
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    // never set mode of the handle-column
-    if ( nColumnId == 0 )
-        return;
-
-    // get the position in the current array
-    size_t nColumnPos = GetColumnPos( nColumnId );
-    if ( nColumnPos >= pCols->size() )
-        // not available!
-        return;
-
-    // does the state change?
-    BrowserColumn *pCol = (*pCols)[ nColumnPos ];
-    if ( pCol->Flags() != nFlags )
-    {
-        pCol->Flags() = sal::static_int_cast< HeaderBarItemBits >(nFlags);
-
-        // redraw visible colums
-        if ( GetUpdateMode() && ( pCol->IsFrozen() || nColumnPos > nFirstCol ) )
-            Invalidate( Rectangle( Point(0,0),
-                Size( GetOutputSizePixel().Width(), GetTitleHeight() ) ) );
-    }
 }
 
 //-------------------------------------------------------------------
@@ -1213,15 +1115,6 @@ long BrowseBox::ScrollRows( long nRows )
 
 //-------------------------------------------------------------------
 
-long BrowseBox::ScrollPages( long )
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    return ScrollRows( pDataWin->GetSizePixel().Height() / GetDataRowHeight() );
-}
-
-//-------------------------------------------------------------------
-
 void BrowseBox::RowModified( long nRow, sal_uInt16 nColId )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
@@ -1589,12 +1482,6 @@ sal_Bool BrowseBox::GoToRow( long nRow)
 
 //-------------------------------------------------------------------
 
-sal_Bool BrowseBox::GoToRowAndDoNotModifySelection( long nRow )
-{
-    return GoToRow( nRow, sal_False, sal_True );
-}
-
-//-------------------------------------------------------------------
 sal_Bool BrowseBox::GoToRow( long nRow, sal_Bool bRowColMove, sal_Bool bKeepSelection )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
@@ -1794,43 +1681,6 @@ void BrowseBox::SetNoSelection()
         bSelect = sal_True;
 
     // restore screen
-    OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
-
-    if ( isAccessibleAlive() )
-    {
-        commitTableEvent(
-            SELECTION_CHANGED,
-            Any(),
-            Any()
-        );
-    }
-}
-
-//-------------------------------------------------------------------
-
-void BrowseBox::SetSelection( const MultiSelection &rSel )
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-    DBG_ASSERT( bMultiSelection, "SetSelection only allowed with Multi-Selection-Mode" );
-
-    // prepare inverted areas
-    OSL_TRACE( "BrowseBox: %p->HideCursor", this );
-    ToggleSelection();
-
-    // assign Selection
-    *uRow.pSel = rSel;
-
-    // only highlight painted areas
-    pDataWin->Update();
-
-    // notify derived class
-    if ( !bSelecting )
-        Select();
-    else
-        bSelect = sal_True;
-
-    // restore screen
-    ToggleSelection();
     OSL_TRACE( "BrowseBox: %p->ShowCursor", this );
 
     if ( isAccessibleAlive() )
@@ -2078,12 +1928,6 @@ long BrowseBox::FirstSelectedColumn( ) const
 }
 
 //-------------------------------------------------------------------
-long BrowseBox::NextSelectedColumn( ) const
-{
-    return pColSel ? pColSel->NextSelected() : BROWSER_ENDOFSELECTION;
-}
-
-//-------------------------------------------------------------------
 
 long BrowseBox::FirstSelectedRow( sal_Bool bInverse )
 {
@@ -2099,15 +1943,6 @@ long BrowseBox::NextSelectedRow()
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     return bMultiSelection ? uRow.pSel->NextSelected() : BROWSER_ENDOFSELECTION;
-}
-
-//-------------------------------------------------------------------
-
-long BrowseBox::PrevSelectedRow()
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    return bMultiSelection ? uRow.pSel->PrevSelected() : BROWSER_ENDOFSELECTION;
 }
 
 //-------------------------------------------------------------------
@@ -2136,15 +1971,6 @@ bool BrowseBox::IsColumnSelected( sal_uInt16 nColumnId ) const
 
     return pColSel ? pColSel->IsSelected( GetColumnPos(nColumnId) ) :
                      nCurColId == nColumnId;
-}
-
-//-------------------------------------------------------------------
-
-sal_Bool BrowseBox::IsAllSelected() const
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    return bMultiSelection && uRow.pSel->IsAllSelected();
 }
 
 //-------------------------------------------------------------------
@@ -2592,13 +2418,6 @@ long BrowseBox::GetDataRowHeight() const
 
 //-------------------------------------------------------------------
 
-Window& BrowseBox::GetEventWindow() const
-{
-    return *getDataWindow()->pEventWin;
-}
-
-//-------------------------------------------------------------------
-
 BrowserHeader* BrowseBox::CreateHeaderBar( BrowseBox* pParent )
 {
     BrowserHeader* pNewBar = new BrowserHeader( pParent );
@@ -2662,13 +2481,6 @@ long BrowseBox::CalcReverseZoom(long nVal)
 
     return nVal;
 }
-
-//-------------------------------------------------------------------
-HeaderBar* BrowseBox::GetHeaderBar() const
-{
-    return getDataWindow()->pHeaderBar;
-}
-//-------------------------------------------------------------------
 
 void BrowseBox::CursorMoved()
 {

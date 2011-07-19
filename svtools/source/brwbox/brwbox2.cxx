@@ -149,13 +149,6 @@ void BrowseBox::Command( const CommandEvent& rEvt )
 
 //===================================================================
 
-bool BrowseBox::IsInCommandEvent() const
-{
-    return getDataWindow()->bInCommand;
-}
-
-//===================================================================
-
 void BrowseBox::StateChanged( StateChangedType nStateChange )
 {
     Control::StateChanged( nStateChange );
