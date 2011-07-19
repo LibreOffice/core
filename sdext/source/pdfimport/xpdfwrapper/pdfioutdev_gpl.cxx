@@ -489,7 +489,11 @@ void PDFOutDev::endPage()
     printf("endPage\n");
 }
 
+#if POPPLER_CHECK_VERSION(0, 17, 0)
+void PDFOutDev::processLink(AnnotLink *link, Catalog *catalog)
+#else
 void PDFOutDev::processLink(Link* link, Catalog*)
+#endif
 {
     assert(link);
 
