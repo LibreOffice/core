@@ -3325,7 +3325,7 @@ void DocxAttributeOutput::WritePostitFields()
          ++i )
     {
         OString idstr = OString::valueOf( sal_Int32( i ));
-        const SwPostItField* f = m_postitFields[ i ];
+// TODO        const SwPostItField* f = m_postitFields[ i ];
         m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
             /*TODO*/ FSEND );
         m_pSerializer->endElementNS( XML_w, XML_comment );
