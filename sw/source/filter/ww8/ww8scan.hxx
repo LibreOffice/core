@@ -149,8 +149,6 @@ public:
     //  if not found. nLen must be the <= length of pSprms
     sal_uInt8* findSprmData(sal_uInt16 nId, sal_uInt8* pSprms, sal_uInt16 nLen)
         const;
-
-    inline int getVersion() const { return meVersion; } //cmc, I'm dubious about the usage of this, how can it be 0
 };
 
 //--Line abovewhich the code has meaningful comments

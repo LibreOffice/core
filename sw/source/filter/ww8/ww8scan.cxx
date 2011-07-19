@@ -909,13 +909,18 @@ void WW8SprmIter::advance()
 
 void WW8SprmIter::UpdateMyMembers()
 {
-    if (pSprms && nRemLen > (mrSprmParser.getVersion()?1:0))
+    bool bValid = (pSprms && nRemLen >= mrSprmParser.MinSprmLen());
+
+    if (bValid)
     {
         nAktId = mrSprmParser.GetSprmId(pSprms);
-        pAktParams = pSprms + mrSprmParser.DistanceToData(nAktId);
         nAktSize = mrSprmParser.GetSprmSize(nAktId, pSprms);
+        pAktParams = pSprms + mrSprmParser.DistanceToData(nAktId);
+        bValid = nAktSize <= nRemLen;
+        OSL_ENSURE(bValid, "sprm longer than remaining bytes");
     }
-    else
+
+    if (!bValid)
     {
         nAktId = 0;
         pAktParams = 0;
@@ -7445,7 +7450,7 @@ sal_uInt16 wwSprmParser::DistanceToData(sal_uInt16 nId) const
 sal_uInt8* wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
     sal_uInt16 nLen) const
 {
-    while (nLen > (getVersion()?1:0))
+    while (nLen >= MinSprmLen())
     {
         sal_uInt16 nAktId = GetSprmId(pSprms);
         // gib Zeiger auf Daten
