@@ -556,7 +556,7 @@ void DocxAttributeOutput::EndRun()
     }
 
     // Write the hyperlink and toc fields starts
-    for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); ++pIt )
+    for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); )
     {
         // Add the fields starts for hyperlinks, TOCs and index marks
         if ( pIt->bOpen && !pIt->pField )
@@ -565,10 +565,11 @@ void DocxAttributeOutput::EndRun()
 
             // Remove the field if no end needs to be written
             if ( !pIt->bClose ) {
-                m_Fields.erase( pIt );
-                --pIt;
+                pIt = m_Fields.erase( pIt );
+                continue;
             }
         }
+        ++pIt;
     }
 
     DoWriteBookmarks( );
