@@ -51,32 +51,40 @@ class VCLPLUG_GEN_PUBLIC X11SalBitmap : public SalBitmap
 {
 private:
 
-    static BitmapBuffer*        ImplCreateDIB( const Size& rSize,
-                                               sal_uInt16 nBitCount,
-                                               const BitmapPalette& rPal );
-    static BitmapBuffer*        ImplCreateDIB( Drawable aDrawable,
-                                               int nScreen,
-                                               long nDrawableDepth,
-                                               long nX, long nY,
-                                               long nWidth, long nHeight,
-                                               bool bGrey );
+    static BitmapBuffer*        ImplCreateDIB(
+                                    const Size& rSize,
+                                    sal_uInt16 nBitCount,
+                                    const BitmapPalette& rPal
+                                );
+
+    static BitmapBuffer*        ImplCreateDIB(
+                                    Drawable aDrawable,
+                                    int nScreen,
+                                    long nDrawableDepth,
+                                    long nX,
+                                    long nY,
+                                    long nWidth,
+                                    long nHeight,
+                                    bool bGrey
+                                );
 
 public:
 
     static ImplSalBitmapCache*  mpCache;
-    static sal_uIntPtr              mnCacheInstCount;
+    static sal_uIntPtr          mnCacheInstCount;
 
     static void                 ImplCreateCache();
     static void                 ImplDestroyCache();
     void                        ImplRemovedFromCache();
 
     bool                        SnapShot (Display* pDisplay, XLIB_Window hWindow);
-    bool                        ImplCreateFromXImage( Display* pDisplay,
-                                                      XLIB_Window hWindow,
-                                                      int nScreen,
-                                                      XImage* pImage);
+    bool                        ImplCreateFromXImage(
+                                    Display* pDisplay,
+                                    XLIB_Window hWindow,
+                                    int nScreen,
+                                    XImage* pImage
+                                );
 private:
-
 
     BitmapBuffer*   mpDIB;
     ImplSalDDB*     mpDDB;
@@ -84,47 +92,77 @@ private:
 
 public:
 
-    SAL_DLLPRIVATE bool    ImplCreateFromDrawable( Drawable aDrawable,
-                                                  int nScreen,
-                                                  long nDrawableDepth,
-                                                  long nX, long nY,
-                                                  long nWidth, long nHeight );
+    SAL_DLLPRIVATE bool         ImplCreateFromDrawable(
+                                    Drawable aDrawable,
+                                    int nScreen,
+                                    long nDrawableDepth,
+                                    long nX,
+                                    long nY,
+                                    long nWidth,
+                                    long nHeight
+                                );
 
-    SAL_DLLPRIVATE XImage* ImplCreateXImage( SalDisplay* pSalDisp,
-                                            int nScreen, long nDepth,
-                                              const SalTwoRect& rTwoRect ) const;
+    SAL_DLLPRIVATE XImage*      ImplCreateXImage(
+                                    SalDisplay* pSalDisp,
+                                    int nScreen,
+                                    long nDepth,
+                                    const SalTwoRect& rTwoRect
+                                ) const;
 
-    SAL_DLLPRIVATE ImplSalDDB* ImplGetDDB( Drawable, int nScreen, long nDrawableDepth,
-                                           const SalTwoRect& ) const;
-    void    ImplDraw( Drawable aDrawable, int nScreen, long nDrawableDepth,
-                      const SalTwoRect& rTwoRect, const GC& rGC ) const;
+    SAL_DLLPRIVATE ImplSalDDB*  ImplGetDDB(
+                                    Drawable,
+                                    int nScreen,
+                                    long nDrawableDepth,
+                                    const SalTwoRect&
+                                ) const;
+
+    void                        ImplDraw(
+                                    Drawable aDrawable,
+                                    int nScreen,
+                                    long nDrawableDepth,
+                                    const SalTwoRect& rTwoRect,
+                                    const GC& rGC
+                                ) const;
 
 public:
 
-    X11SalBitmap();
-    virtual ~X11SalBitmap();
+                                X11SalBitmap();
+    virtual                     ~X11SalBitmap();
 
     // overload pure virtual methods
-    virtual bool            Create( const Size& rSize,
-                            sal_uInt16 nBitCount,
-                            const BitmapPalette& rPal );
-    virtual bool            Create( const SalBitmap& rSalBmp );
-    virtual bool            Create( const SalBitmap& rSalBmp,
-                                    SalGraphics* pGraphics );
-    virtual bool            Create( const SalBitmap& rSalBmp,
-                                    sal_uInt16 nNewBitCount );
-    virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
+    virtual bool                Create(
+                                    const Size& rSize,
+                                    sal_uInt16 nBitCount,
+                                    const BitmapPalette& rPal
+                                );
+
+    virtual bool                Create( const SalBitmap& rSalBmp );
+    virtual bool                Create(
+                                    const SalBitmap& rSalBmp,
+                                    SalGraphics* pGraphics
+                                );
+
+    virtual bool                Create(
+                                    const SalBitmap& rSalBmp,
+                                    sal_uInt16 nNewBitCount
+                                );
+
+    virtual bool                Create(
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::rendering::XBitmapCanvas
+                                    > xBitmapCanvas,
                                     Size& rSize,
-                                    bool bMask = false );
+                                    bool bMask = false
+                                );
 
-    virtual void            Destroy();
+    virtual void                Destroy();
 
-    virtual Size            GetSize() const;
+    virtual Size                GetSize() const;
     virtual sal_uInt16          GetBitCount() const;
 
-    virtual BitmapBuffer*   AcquireBuffer( bool bReadOnly );
-    virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
-    virtual bool            GetSystemData( BitmapSystemData& rData );
+    virtual BitmapBuffer*       AcquireBuffer( bool bReadOnly );
+    virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
+    virtual bool                GetSystemData( BitmapSystemData& rData );
 };
 
 // --------------
@@ -142,37 +180,66 @@ private:
 
                     ImplSalDDB() {}
 
-    static void ImplDraw( Drawable aSrcDrawable, long nSrcDrawableDepth,
-                          Drawable aDstDrawable, long nDstDrawableDepth,
-                          long nSrcX, long nSrcY,
-                          long nDestWidth, long nDestHeight,
-                          long nDestX, long nDestY, const GC& rGC );
+    static void     ImplDraw(
+                        Drawable aSrcDrawable,
+                        long nSrcDrawableDepth,
+                        Drawable aDstDrawable,
+                        long nDstDrawableDepth,
+                        long nSrcX,
+                        long nSrcY,
+                        long nDestWidth,
+                        long nDestHeight,
+                        long nDestX,
+                        long nDestY,
+                        const GC& rGC
+                    );
 
 public:
 
-                    ImplSalDDB( XImage* pImage,
-                                Drawable aDrawable, int nScreen,
-                                const SalTwoRect& rTwoRect );
-                    ImplSalDDB( Drawable aDrawable,
-                                int nScreen,
-                                long nDrawableDepth,
-                                long nX, long nY, long nWidth, long nHeight );
-                    ImplSalDDB( Display* pDisplay,
-                                XLIB_Window hWindow,
-                                int nScreen,
-                                XImage* pImage);
+                    ImplSalDDB(
+                        XImage* pImage,
+                        Drawable aDrawable,
+                        int nScreen,
+                        const SalTwoRect& rTwoRect
+                    );
+
+                    ImplSalDDB(
+                        Drawable aDrawable,
+                        int nScreen,
+                        long nDrawableDepth,
+                        long nX,
+                        long nY,
+                        long nWidth,
+                        long nHeight
+                    );
+
+                    ImplSalDDB(
+                        Display* pDisplay,
+                        XLIB_Window hWindow,
+                        int nScreen,
+                        XImage* pImage
+                    );
+
                     ~ImplSalDDB();
 
     Pixmap          ImplGetPixmap() const { return maPixmap; }
     long            ImplGetWidth() const { return maTwoRect.mnDestWidth; }
     long            ImplGetHeight() const { return maTwoRect.mnDestHeight; }
     long            ImplGetDepth() const { return mnDepth; }
-    sal_uIntPtr         ImplGetMemSize() const { return( ( maTwoRect.mnDestWidth * maTwoRect.mnDestHeight * mnDepth ) >> 3 ); }
+    sal_uIntPtr     ImplGetMemSize() const
+                    {
+                        return( ( maTwoRect.mnDestWidth * maTwoRect.mnDestHeight * mnDepth ) >> 3 );
+                    }
     int             ImplGetScreen() const { return mnScreen; }
 
     bool            ImplMatches( int nScreen, long nDepth, const SalTwoRect& rTwoRect ) const;
-    void            ImplDraw( Drawable aDrawable, long nDrawableDepth,
-                              const SalTwoRect& rTwoRect, const GC& rGC ) const;
+
+    void            ImplDraw(
+                        Drawable aDrawable,
+                        long nDrawableDepth,
+                        const SalTwoRect& rTwoRect,
+                        const GC& rGC
+                    ) const;
 };
 
 // ----------------------
@@ -184,7 +251,7 @@ class ImplSalBitmapCache
 private:
 
     List            maBmpList;
-    sal_uIntPtr         mnTotalSize;
+    sal_uIntPtr     mnTotalSize;
 
 public:
 
@@ -197,48 +264,5 @@ public:
 };
 
 #endif // _SV_SALBMP_HXX
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
