@@ -68,6 +68,9 @@ using namespace psp;
 #ifndef FC_EMBOLDEN
     #define FC_EMBOLDEN "embolden"
 #endif
+#ifndef FC_FONTFORMAT
+    #define FC_FONTFORMAT "fontformat"
+#endif
 
 #include <cstdio>
 #include <cstdarg>
@@ -467,6 +470,7 @@ int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, i
             FcChar8* file = NULL;
             FcChar8* family = NULL;
             FcChar8* style = NULL;
+            FcChar8* format = NULL;
             int slant = 0;
             int weight = 0;
             int spacing = 0;
@@ -481,6 +485,7 @@ int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, i
             FcResult eSpacRes         = FcPatternGetInteger(pFSet->fonts[i], FC_SPACING, 0, &spacing);
             FcResult eOutRes          = FcPatternGetBool(pFSet->fonts[i], FC_OUTLINE, 0, &outline);
             FcResult eIndexRes        = FcPatternGetInteger(pFSet->fonts[i], FC_INDEX, 0, &nCollectionEntry);
+            FcResult eFormatRes       = FcPatternGetString(pFSet->fonts[i], FC_FONTFORMAT, 0, &format);
 
             if( eFileRes != FcResultMatch || eFamilyRes != FcResultMatch || eOutRes != FcResultMatch )
                 continue;
@@ -488,13 +493,14 @@ int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, i
 #if (OSL_DEBUG_LEVEL > 2)
             fprintf( stderr, "found font \"%s\" in file %s\n"
                      "   weight = %d, slant = %d, style = \"%s\"\n"
-                     "   spacing = %d, outline = %d\n"
+                     "   spacing = %d, outline = %d, format %s\n"
                      , family, file
                      , eWeightRes == FcResultMatch ? weight : -1
                      , eSpacRes == FcResultMatch ? slant : -1
                      , eStyleRes == FcResultMatch ? (const char*) style : "<nil>"
                      , eSpacRes == FcResultMatch ? spacing : -1
                      , eOutRes == FcResultMatch ? outline : -1
+                     , eFormatRes == FcResultMatch ? (const char*)format : "<unknown>"
                      );
 #endif
 
@@ -529,7 +535,9 @@ int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, i
                 // not known, analyze font file to get attributes
                 // not described by fontconfig (e.g. alias names, PSName)
                 std::list< OString > aDummy;
-                analyzeFontFile( nDirID, aBase, aDummy, aFonts );
+                if (eFormatRes != FcResultMatch)
+                    format = NULL;
+                analyzeFontFile( nDirID, aBase, aDummy, aFonts, (const char*)format );
 #if OSL_DEBUG_LEVEL > 1
                 if( aFonts.empty() )
                     fprintf( stderr, "Warning: file \"%s\" is unusable to psprint\n", aOrgPath.getStr() );
