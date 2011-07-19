@@ -244,7 +244,7 @@ private:
 private:
                                 ScNameToken(); // disabled
 public:
-                                ScNameToken(sal_uInt16 nIndex, bool bGlobal);
+                                ScNameToken(sal_uInt16 nIndex, bool bGlobal, OpCode eOpCode = ocName);
                                 ScNameToken(const ScNameToken& r);
     virtual                     ~ScNameToken();
     virtual sal_uInt8                GetByte() const;
