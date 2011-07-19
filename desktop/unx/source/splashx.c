@@ -620,6 +620,7 @@ void splash_draw_progress( int progress )
 void splash_close_window()
 {
     XCloseDisplay( display );
+    display = NULL;
 #ifdef USE_LIBPNG
     png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
 #else

@@ -227,9 +227,6 @@ void SheetDataContext::onCharacters( const OUString& rChars )
                         {
                             if( rChars.getLength() > 0 )
                                 getSharedFormulas().importSharedFmla( rChars, maCurrCell.maFormulaRef, maCurrCell.mnSharedId, maCurrCell.maAddress );
-                            Reference< XFormulaTokens > xTokens( maCurrCell.mxCell, UNO_QUERY_THROW );
-                            ExtCellFormulaContext aContext( *this, xTokens, maCurrCell.maAddress );
-                            getSharedFormulas().setSharedFormulaCell( aContext, maCurrCell.mnSharedId );
                         }
                     break;
 
@@ -278,6 +275,12 @@ void SheetDataContext::onEndElement()
                 // empty cell, update cell type
                 maCurrCell.mnCellType = XML_TOKEN_INVALID;
             }
+        }
+        if( maCurrCell.mnSharedId >= 0 )
+        {
+            Reference< XFormulaTokens > xTokens( maCurrCell.mxCell, UNO_QUERY_THROW );
+            ExtCellFormulaContext aContext( *this, xTokens, maCurrCell.maAddress );
+            getSharedFormulas().setSharedFormulaCell( aContext, maCurrCell.mnSharedId );
         }
 
         // store the cell formatting data

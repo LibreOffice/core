@@ -1282,10 +1282,9 @@ void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
     if (pDPObj)
     {
-        ScDPObject* pNew = new ScDPObject(*pDPObj);
         ScDBDocFunc aFunc(*GetDocShell());
-        aFunc.DataPilotUpdate( pDPObj, pNew, true, true );
-        delete pNew;        // DataPilotUpdate copies settings from "new" object
+        GetDocShell()->GetDocument()->GetDPCollection()->ClearCache(pDPObj);
+        aFunc.DataPilotUpdate( pDPObj, pDPObj, true, true );
     }
 }
 

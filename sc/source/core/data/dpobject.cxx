@@ -2575,6 +2575,41 @@ public:
 
 }
 
+bool ScDPCollection::ClearCache(ScDPObject* pDPObj)
+{
+    if (pDPObj->IsSheetData())
+    {
+        // data source is internal sheet.
+        const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
+        if (!pDesc)
+            return false;
+
+        if (pDesc->HasRangeName())
+        {
+            // cache by named range
+            ScDPCollection::NameCaches& rCaches = GetNameCaches();
+            rCaches.removeCache(pDesc->GetRangeName());
+        }
+        else
+        {
+            // cache by cell range
+            ScDPCollection::SheetCaches& rCaches = GetSheetCaches();
+            rCaches.removeCache(pDesc->GetSourceRange());
+        }
+    }
+    else if (pDPObj->IsImportData())
+    {
+        // data source is external database.
+        const ScImportSourceDesc* pDesc = pDPObj->GetImportSourceDesc();
+        if (!pDesc)
+            return false;
+
+        ScDPCollection::DBCaches& rCaches = GetDBCaches();
+        rCaches.removeCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject);
+    }
+    return true;
+}
+
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
     maTables.erase(
