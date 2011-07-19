@@ -76,71 +76,6 @@ const OUString lcl_aCategoriesRange( RTL_CONSTASCII_USTRINGPARAM("categories"));
 typedef ::std::multimap< ::rtl::OUString, ::rtl::OUString >
     lcl_tOriginalRangeToInternalRangeMap;
 
-Sequence< OUString > lcl_getCategoriesFromTable( const SchXMLTable & rTable, bool bHasLabels )
-{
-    sal_Int32 nNumRows( static_cast< sal_Int32 >( rTable.aData.size()));
-    OSL_ENSURE( static_cast< size_t >( nNumRows ) == rTable.aData.size(), "Table too big" );
-
-    sal_Int32 nOffset(bHasLabels ? 1 : 0);
-    Sequence< OUString > aResult( nNumRows - nOffset );
-    sal_Int32 i=nOffset;
-    for( ; i<nNumRows; ++i )
-    {
-        if( !rTable.aData[i].empty() && (rTable.aData[i].front().eType == SCH_CELL_TYPE_STRING ))
-            aResult[i - nOffset] = rTable.aData[i].front().aString;
-    }
-    return aResult;
-}
-
-std::vector< Reference< chart2::XAxis > > lcl_getAxesHoldingCategoriesFromDiagram(
-    const Reference< chart2::XDiagram > & xDiagram )
-{
-    std::vector< Reference< chart2::XAxis > > aRet;
-
-    Reference< chart2::XAxis > xResult;
-    // return first x-axis as fall-back
-    Reference< chart2::XAxis > xFallBack;
-    try
-    {
-        Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
-            xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
-            xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
-        {
-            Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[i] );
-            OSL_ASSERT( xCooSys.is());
-            for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
-            {
-                const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
-                for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
-                {
-                    Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension( nN,nI );
-                    OSL_ASSERT( xAxis.is());
-                    if( xAxis.is())
-                    {
-                        chart2::ScaleData aScaleData = xAxis->getScaleData();
-                        if( aScaleData.Categories.is() || (aScaleData.AxisType == chart2::AxisType::CATEGORY) )
-                        {
-                            aRet.push_back(xAxis);
-                        }
-                        if( (nN == 0) && !xFallBack.is())
-                            xFallBack.set( xAxis );
-                    }
-                }
-            }
-        }
-    }
-    catch( uno::Exception & )
-    {
-    }
-
-    if( aRet.empty())
-        aRet.push_back(xFallBack);
-
-    return aRet;
-}
-
 struct lcl_ApplyCellToData : public ::std::unary_function< SchXMLCell, void >
 {
     lcl_ApplyCellToData( Sequence< double > & rOutData ) :
@@ -174,22 +109,6 @@ private:
     sal_Int32 m_nSize;
     double m_fNaN;
 };
-
-Sequence< Sequence< double > > lcl_getSwappedArray( const Sequence< Sequence< double > > & rData )
-{
-    sal_Int32 nOldOuterSize = rData.getLength();
-    sal_Int32 nOldInnerSize = (nOldOuterSize == 0 ? 0 : rData[0].getLength());
-    Sequence< Sequence< double > > aResult( nOldInnerSize );
-
-    for( sal_Int32 i=0; i<nOldInnerSize; ++i )
-        aResult[i].realloc( nOldOuterSize );
-
-    for( sal_Int32 nOuter=0; nOuter<nOldOuterSize; ++nOuter )
-        for( sal_Int32 nInner=0; nInner<nOldInnerSize; ++nInner )
-            aResult[nInner][nOuter] = rData[nOuter][nInner];
-
-    return aResult;
-}
 
 void lcl_fillRangeMapping(
     const SchXMLTable & rTable,
