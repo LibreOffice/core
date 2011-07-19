@@ -2030,6 +2030,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             }
         }
 
+        AttrOutput().WritePostitFieldReference();
+
         AttrOutput().EndRun();
 
         nAktPos = nNextAttr;

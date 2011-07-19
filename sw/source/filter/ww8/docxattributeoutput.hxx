@@ -105,6 +105,8 @@ public:
 
     virtual void SectFootnoteEndnotePr();
 
+    virtual void WritePostitFieldReference();
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
@@ -599,6 +601,8 @@ private:
         Size size;
     };
     std::list< PostponedGraphic >* m_postponedGraphic;
+    std::vector< const SwPostItField* > m_postitFields;
+    unsigned int m_postitFieldsMaxId;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
@@ -626,6 +630,9 @@ public:
 
     /// writes the footnotePr/endnotePr (depending on tag) section
     void WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag, const SwEndNoteInfo& info, int listtag );
+
+    bool HasPostitFields() const;
+    void WritePostitFields();
 };
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_

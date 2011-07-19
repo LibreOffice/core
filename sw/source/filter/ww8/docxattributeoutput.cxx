@@ -3302,9 +3302,34 @@ void DocxAttributeOutput::HiddenField( const SwField& /*rFld*/ )
     OSL_TRACE( "TODO DocxAttributeOutput::HiddenField()\n" );
 }
 
-void DocxAttributeOutput::PostitField( const SwField* /* pFld*/ )
+void DocxAttributeOutput::PostitField( const SwField* pFld )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::PostitField()\n" );
+    assert( dynamic_cast< const SwPostItField* >( pFld ));
+    m_postitFields.push_back( static_cast< const SwPostItField* >( pFld ));
+}
+
+void DocxAttributeOutput::WritePostitFieldReference()
+{
+    while( m_postitFieldsMaxId < m_postitFields.size())
+    {
+        OString idstr = OString::valueOf( sal_Int32( m_postitFieldsMaxId ));
+        m_pSerializer->singleElementNS( XML_w, XML_commentReference, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
+        ++m_postitFieldsMaxId;
+    }
+}
+
+void DocxAttributeOutput::WritePostitFields()
+{
+    for( unsigned int i = 0;
+         i < m_postitFields.size();
+         ++i )
+    {
+        OString idstr = OString::valueOf( sal_Int32( i ));
+        const SwPostItField* f = m_postitFields[ i ];
+        m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
+            /*TODO*/ FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_comment );
+    }
 }
 
 bool DocxAttributeOutput::DropdownField( const SwField* pFld )
@@ -4283,7 +4308,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nColBreakStatus( COLBRK_NONE ),
       m_pParentFrame( NULL ),
       m_nCloseHyperlinkStatus( Undetected ),
-      m_postponedGraphic( NULL )
+      m_postponedGraphic( NULL ),
+      m_postitFieldsMaxId( 0 )
 {
 }
 
@@ -4317,6 +4343,11 @@ bool DocxAttributeOutput::HasFootnotes() const
 bool DocxAttributeOutput::HasEndnotes() const
 {
     return !m_pEndnotesList->isEmpty();
+}
+
+bool DocxAttributeOutput::HasPostitFields() const
+{
+    return !m_postitFields.empty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
