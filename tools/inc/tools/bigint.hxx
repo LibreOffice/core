@@ -105,7 +105,6 @@ public:
     sal_Bool            IsOne() const;
     sal_Bool            IsLong() const { return !bIsBig; }
     void            Abs();
-    void            DivMod( const BigInt &rDivisor, BigInt &rMod );
 #ifdef _TLBIGINT_INT64
     sal_Bool            INT64 ( SbxINT64  *p ) const;
     sal_Bool            UINT64( SbxUINT64 *p ) const;
