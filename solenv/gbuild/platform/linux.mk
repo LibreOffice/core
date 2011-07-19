@@ -27,6 +27,7 @@
 
 gb_LinkTarget_LDFLAGS += \
         -Wl,-z,defs \
+        -Wl,--no-as-needed \
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
