@@ -327,33 +327,6 @@ public:
     static XColorTable& GetStdColorTable();
 };
 
-// -------------------
-// class XColorList
-// -------------------
-
-class XColorList : public XPropertyList
-{
-public:
-    explicit        XColorList(
-                        const String& rPath,
-                        XOutdevItemPool* pXPool = NULL
-                    );
-    virtual         ~XColorList();
-
-    using XPropertyList::Replace;
-    XColorEntry*        Replace(XColorEntry* pEntry, long nIndex );
-    using XPropertyList::Remove;
-    XColorEntry*        Remove(long nIndex);
-    using XPropertyList::Get;
-    XColorEntry*        GetColor(long nIndex) const;
-
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
-};
-
 // --------------------
 // class XLineEndTable
 // --------------------
