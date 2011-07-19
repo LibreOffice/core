@@ -2512,36 +2512,6 @@ void addTitle_Impl( Sequence < ::com::sun::star::beans::PropertyValue >& rSeq, c
     }
 }
 
-void SfxBaseModel::NotifyStorageListeners_Impl()
-{
-    uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
-
-    if ( m_pData->m_pObjectShell )
-    {
-        ::cppu::OInterfaceContainerHelper* pContainer =
-            m_pData->m_aInterfaceContainer.getContainer(
-                ::getCppuType( ( const uno::Reference< document::XStorageChangeListener >*) NULL ) );
-        if ( pContainer != NULL )
-        {
-            uno::Reference< embed::XStorage > xNewStorage = m_pData->m_pObjectShell->GetStorage();
-            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-            while ( pIterator.hasMoreElements() )
-            {
-                try
-                {
-                    ((document::XStorageChangeListener*)pIterator.next())->notifyStorageChange(
-                                                                            xSelfHold,
-                                                                            xNewStorage );
-                }
-                catch( uno::RuntimeException& )
-                {
-                    pIterator.remove();
-                }
-            }
-        }
-    }
-}
-
 void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                              const  SfxHint&        rHint   )
 {

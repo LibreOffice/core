@@ -1545,7 +1545,6 @@ private:
     SAL_DLLPRIVATE void postEvent_Impl( const ::rtl::OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >() );
 
     SAL_DLLPRIVATE String getEventName_Impl( long nID );
-    SAL_DLLPRIVATE void NotifyStorageListeners_Impl();
        SAL_DLLPRIVATE bool QuerySaveSizeExceededModules( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler );
 
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();

@@ -580,11 +580,6 @@ public:
     void                openDone(const ::rtl::OUString& sURL    ,
                                        sal_Bool         bSuccess);
 
-    static sal_Bool     splitHelpURL(const ::rtl::OUString& sHelpURL,
-                                           ::rtl::OUString& sFactory,
-                                           ::rtl::OUString& sContent,
-                                           ::rtl::OUString& sAnchor );
-
     static ::rtl::OUString  buildHelpURL(const ::rtl::OUString& sFactory        ,
                                          const ::rtl::OUString& sContent        ,
                                          const ::rtl::OUString& sAnchor         ,

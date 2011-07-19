@@ -1482,27 +1482,6 @@ void BookmarksTabPage_Impl::AddBookmarks( const String& rTitle, const String& rU
     aBookmarksBox.SetEntryData( nPos, (void*)(sal_uIntPtr)( new String( rURL ) ) );
 }
 
-// class SfxHelpIndexWindow_Impl -----------------------------------------
-
-sal_Bool SfxHelpWindow_Impl::splitHelpURL(const ::rtl::OUString& sHelpURL,
-                                                ::rtl::OUString& sFactory,
-                                                ::rtl::OUString& sContent,
-                                                ::rtl::OUString& sAnchor )
-{
-    Reference < XURLTransformer > xParser( ::comphelper::getProcessServiceFactory()->createInstance(
-            DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY_THROW );
-
-    URL aURL;
-    aURL.Complete = sHelpURL;
-    sal_Bool bResult = xParser->parseStrict(aURL);
-
-    sFactory = aURL.Server;
-    sContent = aURL.Path.copy(1); // strip "/"!
-    sAnchor  = aURL.Mark;
-
-    return bResult;
-}
-
 ::rtl::OUString SfxHelpWindow_Impl::buildHelpURL(const ::rtl::OUString& sFactory        ,
                                                  const ::rtl::OUString& sContent        ,
                                                  const ::rtl::OUString& sAnchor         ,

@@ -335,8 +335,6 @@ public:
 
     SfxHelpOptions_Impl*    GetOptions();
     static String           GetHelpText( const rtl::OUString& aCommandURL, const String& rModule );
-    sal_Bool                HasModule( const ::rtl::OUString& rModule );            // module installed
-    sal_Bool                IsHelpInstalled();                                      // module list not empty
 };
 
 SfxHelp_Impl::SfxHelp_Impl( sal_Bool bDebug ) :
@@ -393,20 +391,6 @@ SfxHelpOptions_Impl* SfxHelp_Impl::GetOptions()
     if ( !m_pOpt )
         m_pOpt = new SfxHelpOptions_Impl;
     return m_pOpt;
-}
-
-sal_Bool SfxHelp_Impl::HasModule( const ::rtl::OUString& rModule )
-{
-    if ( !m_aModulesList.size() )
-        Load();
-    return ( ::std::find( m_aModulesList.begin(), m_aModulesList.end(), rModule ) != m_aModulesList.end() );
-}
-
-sal_Bool SfxHelp_Impl::IsHelpInstalled()
-{
-    if ( !m_aModulesList.size() )
-        Load();
-    return ( m_aModulesList.begin() != m_aModulesList.end() );
 }
 
 SfxHelp::SfxHelp() :
