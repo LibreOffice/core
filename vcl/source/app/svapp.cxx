@@ -241,12 +241,6 @@ Application::~Application()
 
 // -----------------------------------------------------------------------
 
-void Application::InitAppRes( const ResId& )
-{
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Application::QueryExit()
 {
     WorkWindow* pAppWin = ImplGetSVData()->maWinData.mpAppWin;
@@ -549,13 +543,6 @@ sal_Bool Application::IsInExecute()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Application::IsShutDown()
-{
-    return ImplGetSVData()->maAppData.mbAppQuit;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Application::IsInModalMode()
 {
     return (ImplGetSVData()->maAppData.mnModalMode != 0);
@@ -605,34 +592,6 @@ sal_Bool Application::IsUICaptured()
         return sal_True;
     else
         return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool Application::IsUserActive( sal_uInt16 nTest )
-{
-    if ( nTest & (USERACTIVE_MOUSEDRAG | USERACTIVE_INPUT) )
-    {
-        if ( IsUICaptured() )
-            return sal_True;
-    }
-
-    if ( nTest & USERACTIVE_INPUT )
-    {
-        if ( GetLastInputInterval() < 500 )
-            return sal_True;
-
-        if ( AnyInput( INPUT_KEYBOARD ) )
-            return sal_True;
-    }
-
-    if ( nTest & USERACTIVE_MODALDIALOG )
-    {
-        if ( ImplGetSVData()->maAppData.mnModalDialog )
-            return sal_True;
-    }
-
-    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -1064,15 +1023,6 @@ sal_Bool Application::IsProcessedMouseOrKeyEvent( sal_uLong nEventId )
 
 // -----------------------------------------------------------------------
 
-sal_uLong Application::PostUserEvent( sal_uLong nEvent, void* pEventData )
-{
-    sal_uLong nEventId;
-    PostUserEvent( nEventId, nEvent, pEventData );
-    return nEventId;
-}
-
-// -----------------------------------------------------------------------
-
 sal_uLong Application::PostUserEvent( const Link& rLink, void* pCaller )
 {
     sal_uLong nEventId;
@@ -1453,16 +1403,6 @@ void Application::RemoveAccel( Accelerator* pAccel )
 
 // -----------------------------------------------------------------------
 
-void Application::FlushAccel()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if ( pSVData->maAppData.mpAccelMgr )
-        pSVData->maAppData.mpAccelMgr->FlushAccel();
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Application::CallAccel( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1531,13 +1471,6 @@ void Application::SetDialogScaleX( short nScale )
     pSVData->maGDIData.mnAppFontX = pSVData->maGDIData.mnRealAppFontX;
     if ( nScale )
         pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*nScale)/100;
-}
-
-// -----------------------------------------------------------------------
-
-short Application::GetDialogScaleX()
-{
-    return ImplGetSVData()->maAppData.mnDialogScaleX;
 }
 
 // -----------------------------------------------------------------------
@@ -1659,19 +1592,6 @@ const String& Application::GetFontPath()
     if( pSVData->maAppData.mpFontPath )
         return *(pSVData->maAppData.mpFontPath);
     return ImplGetSVEmptyStr();
-}
-
-// -----------------------------------------------------------------------
-
-void Application::SetFontPath( const String& rPath )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // if it doesn't exist create a new one
-    if( !pSVData->maAppData.mpFontPath )
-        pSVData->maAppData.mpFontPath = new String( rPath );
-    else
-        *(pSVData->maAppData.mpFontPath) = rPath;
 }
 
 // -----------------------------------------------------------------------
@@ -1801,47 +1721,6 @@ void ImplFreeHotKeyData()
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr Application::AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* pData )
-{
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplHotKey*     pHotKeyData = new ImplHotKey;
-    pHotKeyData->mpUserData = pData;
-    pHotKeyData->maKeyCode  = rKeyCode;
-    pHotKeyData->maLink     = rLink;
-    pHotKeyData->mpNext     = pSVData->maAppData.mpFirstHotKey;
-    pSVData->maAppData.mpFirstHotKey = pHotKeyData;
-    return (sal_uIntPtr)pHotKeyData;
-}
-
-// -----------------------------------------------------------------------
-
-void Application::RemoveHotKey( sal_uIntPtr nId )
-{
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplHotKey*     pFindHotKeyData = (ImplHotKey*)nId;
-    ImplHotKey*     pPrevHotKeyData = NULL;
-    ImplHotKey*     pHotKeyData = pSVData->maAppData.mpFirstHotKey;
-    while ( pHotKeyData )
-    {
-        if ( pHotKeyData == pFindHotKeyData )
-        {
-            if ( pPrevHotKeyData )
-                pPrevHotKeyData->mpNext = pFindHotKeyData->mpNext;
-            else
-                pSVData->maAppData.mpFirstHotKey = pFindHotKeyData->mpNext;
-            delete pFindHotKeyData;
-            break;
-        }
-
-        pPrevHotKeyData = pHotKeyData;
-        pHotKeyData = pHotKeyData->mpNext;
-    }
-
-    DBG_ASSERT( pHotKeyData, "Application::RemoveHotKey() - HotKey is not added" );
-}
-
-// -----------------------------------------------------------------------
-
 void ImplFreeEventHookData()
 {
     ImplSVData*     pSVData = ImplGetSVData();
@@ -1919,20 +1798,6 @@ long Application::CallEventHooks( NotifyEvent& rEvt )
 
 // -----------------------------------------------------------------------
 
-long Application::CallPreNotify( NotifyEvent& rEvt )
-{
-    return ImplCallPreNotify( rEvt );
-}
-
-// -----------------------------------------------------------------------
-
-long Application::CallEvent( NotifyEvent& rEvt )
-{
-    return ImplCallEvent( rEvt );
-}
-
-// -----------------------------------------------------------------------
-
 const LocaleDataWrapper& Application::GetAppLocaleDataWrapper()
 {
     return GetSettings().GetLocaleDataWrapper();
@@ -2006,11 +1871,6 @@ void Application::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType);
-}
-
-sal_Bool Application::IsAccessibilityEnabled()
-{
-    return sal_False;
 }
 
 sal_Bool InitAccessBridge( sal_Bool bShowCancel, sal_Bool &rCancelled )

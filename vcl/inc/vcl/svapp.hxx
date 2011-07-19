@@ -232,8 +232,6 @@ public:
     virtual void                InitFinished();
     virtual void                DeInit();
 
-    static void                 InitAppRes( const ResId& rResId );
-
     static sal_uInt16               GetCommandLineParamCount();
     static XubString            GetCommandLineParam( sal_uInt16 nParam );
     static const XubString&     GetAppFileName();
@@ -256,7 +254,6 @@ public:
 
     static sal_Bool                 IsInMain();
     static sal_Bool                 IsInExecute();
-    static sal_Bool                 IsShutDown();
     static sal_Bool                 IsInModalMode();
     static sal_uInt16               GetModalModeCount();
 
@@ -264,7 +261,6 @@ public:
     static sal_Bool                 AnyInput( sal_uInt16 nType = INPUT_ANY );
     static sal_uLong                GetLastInputInterval();
     static sal_Bool                 IsUICaptured();
-    static sal_Bool                 IsUserActive( sal_uInt16 nTest = USERACTIVE_ALL );
 
     virtual void                SystemSettingsChanging( AllSettings& rSettings,
                                                         Window* pFrame );
@@ -300,7 +296,6 @@ public:
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
     static sal_Bool                 IsProcessedMouseOrKeyEvent( sal_uLong nEventId );
 
-    static sal_uLong                PostUserEvent( sal_uLong nEvent, void* pEventData = NULL );
     static sal_uLong                PostUserEvent( const Link& rLink, void* pCaller = NULL );
     static sal_Bool                 PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData = NULL );
     static sal_Bool                 PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
@@ -357,16 +352,11 @@ public:
 
     static sal_Bool                 InsertAccel( Accelerator* pAccel );
     static void                 RemoveAccel( Accelerator* pAccel );
-    static void                 FlushAccel();
     static sal_Bool                 CallAccel( const KeyCode& rKeyCode, sal_uInt16 nRepeat = 0 );
 
-    static sal_uLong                AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* pData = NULL );
-    static void                 RemoveHotKey( sal_uLong nId );
     static sal_uLong                AddEventHook( VCLEventHookProc pProc, void* pData = NULL );
     static void                 RemoveEventHook( sal_uLong nId );
     static long                 CallEventHooks( NotifyEvent& rEvt );
-    static long                 CallPreNotify( NotifyEvent& rEvt );
-    static long                 CallEvent( NotifyEvent& rEvt );
 
     static void                 SetHelp( Help* pHelp = NULL );
     static Help*                GetHelp();
@@ -390,9 +380,7 @@ public:
     static sal_uInt16               GetSystemWindowMode();
 
     static void                 SetDialogScaleX( short nScale );
-    static short                GetDialogScaleX();
 
-    static void                 SetFontPath( const String& rPath );
     static const String&        GetFontPath();
 
     static UniqueItemId         CreateUniqueId();
@@ -406,8 +394,6 @@ public:
 
     static void                 SetFilterHdl( const Link& rLink );
     static const Link&          GetFilterHdl();
-
-    static sal_Bool                 IsAccessibilityEnabled();
 
     static void                 EnableHeadlessMode( sal_Bool bEnable = sal_True );
     static sal_Bool                 IsHeadlessModeEnabled();
