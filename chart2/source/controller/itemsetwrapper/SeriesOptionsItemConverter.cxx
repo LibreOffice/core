@@ -51,8 +51,6 @@
 
 //SfxIntegerListItem
 #include <svl/ilstitem.hxx>
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
 
 #include <rtl/math.hxx>
 #include <functional>
@@ -433,10 +431,7 @@ void SeriesOptionsItemConverter::FillSpecialItem(
         }
         case SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS:
         {
-            SvULongs aList;
-            for ( sal_Int32 nN=0; nN<m_aSupportedMissingValueTreatments.getLength(); nN++ )
-                aList.Insert( m_aSupportedMissingValueTreatments[nN], sal::static_int_cast< sal_uInt16 >(nN) );
-            rOutItemSet.Put( SfxIntegerListItem( nWhichId, aList ) );
+            rOutItemSet.Put( SfxIntegerListItem( nWhichId, m_aSupportedMissingValueTreatments ) );
             break;
         }
         case SCHATTR_INCLUDE_HIDDEN_CELLS:

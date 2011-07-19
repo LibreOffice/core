@@ -54,8 +54,6 @@
 #include <editeng/brshitem.hxx>
 //SfxIntegerListItem
 #include <svl/ilstitem.hxx>
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
 #include <vcl/graph.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
@@ -641,10 +639,7 @@ void DataPointItemConverter::FillSpecialItem(
 
         case SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS:
         {
-            SvULongs aList;
-            for ( sal_Int32 nN=0; nN<m_aAvailableLabelPlacements.getLength(); nN++ )
-                aList.Insert( m_aAvailableLabelPlacements[nN], sal::static_int_cast< sal_uInt16 >(nN) );
-            rOutItemSet.Put( SfxIntegerListItem( nWhichId, aList ) );
+            rOutItemSet.Put( SfxIntegerListItem( nWhichId, m_aAvailableLabelPlacements ) );
         }
         break;
 
