@@ -190,27 +190,6 @@ sal_Bool Animation::operator==( const Animation& rAnimation ) const
 
 // ------------------------------------------------------------------
 
-sal_Bool Animation::IsEqual( const Animation& rAnimation ) const
-{
-    const size_t nCount = maList.size();
-    sal_Bool bRet = sal_False;
-
-    if(  rAnimation.maList.size() == nCount
-      && rAnimation.maBitmapEx.IsEqual( maBitmapEx )
-      && rAnimation.maGlobalSize == maGlobalSize
-      && rAnimation.meCycleMode  == meCycleMode
-      )
-    {
-        for( size_t n = 0; ( n < nCount ) && !bRet; n++ )
-            if( maList[ n ]->IsEqual( *rAnimation.maList[ n ] ) )
-                bRet = sal_True;
-    }
-
-    return bRet;
-}
-
-// ------------------------------------------------------------------
-
 sal_Bool Animation::IsEmpty() const
 {
     return( maBitmapEx.IsEmpty() && maList.empty() );
@@ -754,29 +733,6 @@ sal_Bool Animation::Mirror( sal_uLong nMirrorFlags )
 
             maBitmapEx.Mirror( nMirrorFlags );
         }
-    }
-    else
-        bRet = sal_False;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool Animation::Dither( sal_uLong nDitherFlags )
-{
-    DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
-
-    sal_Bool bRet;
-
-    if( !IsInAnimation() && !maList.empty() )
-    {
-        bRet = sal_True;
-
-        for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
-            bRet = maList[ i ]->aBmpEx.Dither( nDitherFlags );
-
-        maBitmapEx.Dither( nDitherFlags );
     }
     else
         bRet = sal_False;

@@ -192,8 +192,6 @@ public:
     sal_Bool                operator!=( const Animation& rAnimation ) const
                             { return !(*this==rAnimation); }
 
-    sal_Bool                IsEqual( const Animation& rAnimation ) const;
-
     sal_Bool                IsEmpty() const;
     void                    SetEmpty();
 
@@ -254,7 +252,6 @@ public:
                             );
     sal_Bool                Invert();
     sal_Bool                Mirror( sal_uLong nMirrorFlags );
-    sal_Bool                Dither( sal_uLong nDitherFlags = BMP_DITHER_MATRIX );
     sal_Bool                Adjust(
                                 short nLuminancePercent = 0,
                                 short nContrastPercent = 0,
