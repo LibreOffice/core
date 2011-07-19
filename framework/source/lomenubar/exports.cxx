@@ -40,18 +40,6 @@
 
 namespace css = ::com::sun::star;
 
-static void writeInfo(const css::uno::Reference< css::registry::XRegistryKey >& xRegistryKey       ,
-                      const char*                                               pImplementationName,
-                      const char*                                               pServiceName       )
-{
-    ::rtl::OUStringBuffer sKey(256);
-    sKey.append     (::rtl::OUString::createFromAscii(pImplementationName));
-    sKey.appendAscii("/UNO/SERVICES/");
-    sKey.append     (::rtl::OUString::createFromAscii(pServiceName));
-
-    xRegistryKey->createKey(sKey.makeStringAndClear());
-}
-
 extern "C"
 {
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL lomenubar_component_getFactory(const sal_Char* pImplName      ,
