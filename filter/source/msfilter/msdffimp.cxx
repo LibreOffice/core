@@ -4586,27 +4586,22 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
     rSt >> aRecHd;
     if ( aRecHd.nRecType == DFF_msofbtSpContainer )
     {
-        sal_Int32 nGroupRotateAngle = 0;
-        sal_Int32 nSpFlags = 0;
         mnFix16Angle = 0;
         if (!aRecHd.SeekToBegOfRecord(rSt))
             return pRet;
+
         pRet = ImportObj( rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId );
         if ( pRet )
         {
-            nSpFlags = nGroupShapeFlags;
-            nGroupRotateAngle = mnFix16Angle;
-
             Rectangle aClientRect( rClientRect );
-
             Rectangle aGlobalChildRect;
             if ( !nCalledByGroup || rGlobalChildRect.IsEmpty() )
                 aGlobalChildRect = GetGlobalChildAnchor( rHd, rSt, aClientRect );
             else
                 aGlobalChildRect = rGlobalChildRect;
 
-            if ( ( nGroupRotateAngle > 4500 && nGroupRotateAngle <= 13500 )
-                || ( nGroupRotateAngle > 22500 && nGroupRotateAngle <= 31500 ) )
+            if ( ( mnFix16Angle > 4500 && mnFix16Angle <= 13500 )
+                || ( mnFix16Angle > 22500 && mnFix16Angle <= 31500 ) )
             {
                 sal_Int32 nHalfWidth = ( aClientRect.GetWidth() + 1 ) >> 1;
                 sal_Int32 nHalfHeight = ( aClientRect.GetHeight() + 1 ) >> 1;
@@ -4657,18 +4652,18 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                     return pRet;
             }
 
-            if ( nGroupRotateAngle )
+            if ( mnFix16Angle )
             {
-                double a = nGroupRotateAngle * nPi180;
-                pRet->NbcRotate( aClientRect.Center(), nGroupRotateAngle, sin( a ), cos( a ) );
+                double a = mnFix16Angle * nPi180;
+                pRet->NbcRotate( aClientRect.Center(), mnFix16Angle, sin( a ), cos( a ) );
             }
-            if ( nSpFlags & SP_FFLIPV )     // Vertikal gespiegelt?
+            if ( nGroupShapeFlags & SP_FFLIPV )     // Vertical flip?
             {   // BoundRect in aBoundRect
                 Point aLeft( aClientRect.Left(), ( aClientRect.Top() + aClientRect.Bottom() ) >> 1 );
                 Point aRight( aLeft.X() + 1000, aLeft.Y() );
                 pRet->NbcMirror( aLeft, aRight );
             }
-            if ( nSpFlags & SP_FFLIPH )     // Horizontal gespiegelt?
+            if ( nGroupShapeFlags & SP_FFLIPH )     // Horizontal flip?
             {   // BoundRect in aBoundRect
                 Point aTop( ( aClientRect.Left() + aClientRect.Right() ) >> 1, aClientRect.Top() );
                 Point aBottom( aTop.X(), aTop.Y() + 1000 );
@@ -5992,14 +5987,14 @@ SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeTxBxSort,  SvxMSDffShapeOrder_Ptr  );
 SV_IMPL_OP_PTRARR_SORT(MSDffImportRecords, MSDffImportRec_Ptr)
 
 //---------------------------------------------------------------------------
-//  exportierte Klasse: oeffentliche Methoden
+//  exported class: Public Methods
 //---------------------------------------------------------------------------
 
 SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  const String& rBaseURL,
                                  sal_uInt32 nOffsDgg_,
                                  SvStream* pStData_,
-                                 SdrModel* pSdrModel_,// s. unten: SetModel()
+                                 SdrModel* pSdrModel_,// see SetModel() below
                                  long      nApplicationScale,
                                  ColorData mnDefaultColor_,
                                  sal_uLong     nDefaultFontHeight_,
@@ -6012,8 +6007,10 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      pShapeOrders( new SvxMSDffShapeOrders ),
      nDefaultFontHeight( nDefaultFontHeight_),
      nOffsDgg( nOffsDgg_ ),
-     nBLIPCount(  USHRT_MAX ),              // mit Error initialisieren, da wir erst pruefen,
-     nShapeCount( USHRT_MAX ),              // ob Kontroll-Stream korrekte Daten enthaellt
+     nBLIPCount(  USHRT_MAX ),              // initialize with error, since we fist check if the
+     nShapeCount( USHRT_MAX ),              // control stream has correct data
+     nGroupShapeFlags(0),                   //ensure initialization here, as some corrupted
+                                            //files may yield to this being unitialized
      maBaseURL( rBaseURL ),
      mpFidcls( NULL ),
      rStCtrl(  rStCtrl_  ),
