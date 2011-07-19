@@ -684,14 +684,15 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         // spezielle ItemSet relevant ist - und nicht ein Stack oder Style!
         sal_uInt16 nOldFlags1 = rReader.GetToggleAttrFlags();
         sal_uInt16 nOldFlags2 = rReader.GetToggleBiDiAttrFlags();
-        short nLen      = aLVL.nLenGrpprlChpx;
-        sal_uInt8* pSprms1  = &aGrpprlChpx[0];
-        while (0 < nLen)
+
+        WW8SprmIter aSprmIter(&aGrpprlChpx[0], aLVL.nLenGrpprlChpx,
+            maSprmParser);
+        while (const sal_uInt8* pSprm = aSprmIter.GetSprms())
         {
-            sal_uInt16 nL1 = rReader.ImportSprm( pSprms1 );
-            nLen       = nLen - nL1;
-            pSprms1   += nL1;
+            rReader.ImportSprm(pSprm);
+            aSprmIter.advance();
         }
+
         // Reader-ItemSet-Pointer und Reader-Style zuruecksetzen
         rReader.SetAktItemSet( 0 );
         rReader.SetNAktColl( nOldColl );
