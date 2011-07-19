@@ -221,13 +221,10 @@ void PPMWriter::ImplWriteBody()
 // ------------------------------------------------------------------------
 // eine Dezimalzahl im ASCII format wird in den Stream geschrieben
 
-void PPMWriter::ImplWriteNumber( sal_Int32 nNumber )
+void PPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
-    const ByteString aNum( ByteString::CreateFromInt32( nNumber ) );
-
-    for( sal_Int16 n = 0, nLen = aNum.Len(); n < nLen; n++  )
-        m_rOStm << aNum.GetChar( n );
-
+    const rtl::OString aNum(rtl::OString::valueOf(nNumber));
+    m_rOStm << aNum.getStr();
 }
 
 // ------------------------------------------------------------------------
