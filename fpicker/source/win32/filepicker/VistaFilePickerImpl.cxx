@@ -30,12 +30,10 @@
 // includes
 //-----------------------------------------------------------------------------
 
-#include <shobjidl.h>
+#include "VistaFilePickerImpl.hxx"
 
 // Without IFileDialog we can't do much
 #ifdef __IFileDialog_INTERFACE_DEFINED__
-
-#include "VistaFilePickerImpl.hxx"
 
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>

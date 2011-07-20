@@ -37,6 +37,8 @@
 #pragma warning( disable : 4917 )
 #endif
 
+#include "platform_vista.h"
+
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
@@ -48,7 +50,6 @@
 // Without IFileDialog we can't do this
 #ifdef __IFileDialog_INTERFACE_DEFINED__
 
-#include "platform_vista.h"
 #include "asyncrequests.hxx"
 #include "comptr.hxx"
 #include "vistatypes.h"

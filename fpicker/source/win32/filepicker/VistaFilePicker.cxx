@@ -33,16 +33,15 @@
 // includes
 //------------------------------------------------------------------------
 
-#include <shobjidl.h>
-
-// Without IFileDialog we can't do much
-#ifdef __IFileDialog_INTERFACE_DEFINED__
-
 #ifdef _MSC_VER
 #pragma warning (disable:4917)
 #endif
 
 #include "VistaFilePicker.hxx"
+
+// Without IFileDialog we can't do much
+#ifdef __IFileDialog_INTERFACE_DEFINED__
+
 #include "WinFileOpenImpl.hxx"
 #include "../misc/WinImplHelper.hxx"
 #include "shared.hxx"
