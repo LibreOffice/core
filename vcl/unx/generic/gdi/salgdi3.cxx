@@ -246,7 +246,7 @@ namespace
 {
     bool isCairoRenderable(const ServerFont& rFont)
     {
-        return rFont.GetFtFace() && rFont.GetAntialiasAdvice();
+        return rFont.GetFtFace();
     }
 } //namespace
 
