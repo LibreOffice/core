@@ -93,10 +93,9 @@ DEF2DES=UCB ODMA URL converter
 
 # --- odma_lib library -----------------------------------------------
 
-SLO3FILES=$(SLO)$/odma_lib.obj
-
-LIB3TARGET=$(SLB)$/odma_lib.lib
-LIB3OBJFILES=$(SLO3FILES)
+LIB3TARGET=$(LB)/odma_lib.lib
+LIB3ARCHIV=$(LB)/libodma_lib.a
+LIB3OBJFILES=$(OBJ)$/odma_lib.obj
 
 # --- Targets ----------------------------------------------------------
 
