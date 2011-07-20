@@ -36,6 +36,7 @@
 #include <unx/saldisp.hxx>
 #include <salbmp.hxx>
 #include <vclpluginapi.h>
+#include <list>
 
 struct  BitmapBuffer;
 class   BitmapPalette;
@@ -246,11 +247,14 @@ public:
 // - ImplSalBitmapCache -
 // ----------------------
 
+struct ImplBmpObj;
+
 class ImplSalBitmapCache
 {
 private:
+    typedef ::std::list< ImplBmpObj* > BmpList_impl;
 
-    List            maBmpList;
+    BmpList_impl    maBmpList;
     sal_uIntPtr     mnTotalSize;
 
 public:

@@ -826,14 +826,14 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
 
 bool X11SalBitmap::Create( const SalBitmap&, SalGraphics* )
 {
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------------
 
 bool X11SalBitmap::Create( const SalBitmap&, sal_uInt16 )
 {
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -1100,7 +1100,7 @@ ImplSalDDB::~ImplSalDDB()
 
 bool ImplSalDDB::ImplMatches( int nScreen, long nDepth, const SalTwoRect& rTwoRect ) const
 {
-    bool bRet = sal_False;
+    bool bRet = false;
 
     if( ( maPixmap != 0 ) && ( ( mnDepth == nDepth ) || ( 1 == mnDepth ) ) && nScreen == mnScreen)
     {
@@ -1113,7 +1113,7 @@ bool ImplSalDDB::ImplMatches( int nScreen, long nDepth, const SalTwoRect& rTwoRe
            )
         {
             // absolutely indentically
-            bRet = sal_True;
+            bRet = true;
         }
         else if(  rTwoRect.mnSrcWidth   == rTwoRect.mnDestWidth
                && rTwoRect.mnSrcHeight  == rTwoRect.mnDestHeight
@@ -1125,7 +1125,7 @@ bool ImplSalDDB::ImplMatches( int nScreen, long nDepth, const SalTwoRect& rTwoRe
                && ( rTwoRect.mnSrcY + rTwoRect.mnSrcHeight ) <= ( maTwoRect.mnSrcY + maTwoRect.mnSrcHeight )
                )
         {
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -1209,12 +1209,18 @@ ImplSalBitmapCache::~ImplSalBitmapCache()
 
 void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize, sal_uLong nFlags )
 {
-    ImplBmpObj* pObj;
-    bool        bFound = sal_False;
+    ImplBmpObj* pObj = NULL;
+    bool        bFound = false;
 
-    for( pObj = (ImplBmpObj*) maBmpList.Last(); pObj && !bFound; pObj = (ImplBmpObj*) maBmpList.Prev() )
+    for(
+        BmpList_impl::iterator it = maBmpList.begin();
+        (it != maBmpList.end() ) && !bFound ;
+        ++it
+    ) {
+        pObj = *it;
         if( pObj->mpBmp == pBmp )
-            bFound = sal_True;
+            bFound = true;
+    }
 
     mnTotalSize += nMemSize;
 
@@ -1224,21 +1230,24 @@ void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize, sal_uL
         pObj->mnMemSize = nMemSize, pObj->mnFlags = nFlags;
     }
     else
-        maBmpList.Insert( new ImplBmpObj( pBmp, nMemSize, nFlags ), LIST_APPEND );
+        maBmpList.push_back( new ImplBmpObj( pBmp, nMemSize, nFlags ) );
 }
 
 // -----------------------------------------------------------------------------
 
 void ImplSalBitmapCache::ImplRemove( X11SalBitmap* pBmp )
 {
-    for( ImplBmpObj* pObj = (ImplBmpObj*) maBmpList.Last(); pObj; pObj = (ImplBmpObj*) maBmpList.Prev() )
-    {
-        if( pObj->mpBmp == pBmp )
+    for(
+        BmpList_impl::iterator it = maBmpList.begin();
+        it != maBmpList.end();
+        ++it
+    ) {
+        if( (*it)->mpBmp == pBmp )
         {
-            maBmpList.Remove( pObj );
-            pObj->mpBmp->ImplRemovedFromCache();
-            mnTotalSize -= pObj->mnMemSize;
-            delete pObj;
+            (*it)->mpBmp->ImplRemovedFromCache();
+            mnTotalSize -= (*it)->mnMemSize;
+            delete *it;
+            maBmpList.erase( it );
             break;
         }
     }
@@ -1248,13 +1257,15 @@ void ImplSalBitmapCache::ImplRemove( X11SalBitmap* pBmp )
 
 void ImplSalBitmapCache::ImplClear()
 {
-    for( ImplBmpObj* pObj = (ImplBmpObj*) maBmpList.First(); pObj; pObj = (ImplBmpObj*) maBmpList.Next() )
-    {
-        pObj->mpBmp->ImplRemovedFromCache();
-        delete pObj;
+    for(
+        BmpList_impl::iterator it = maBmpList.begin();
+        it != maBmpList.end();
+        ++it
+    ) {
+        (*it)->mpBmp->ImplRemovedFromCache();
+        delete *it;
     }
-
-    maBmpList.Clear();
+    maBmpList.clear();
     mnTotalSize = 0;
 }
 
