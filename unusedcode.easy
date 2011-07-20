@@ -1,24 +1,4 @@
-(anonymous namespace)::DumpObjectList(std::vector<tools::WeakReference<SdrObject>, std::allocator<tools::WeakReference<SdrObject> > > const&)
 (anonymous namespace)::getState(std::vector<cppcanvas::internal::OutDevState, std::allocator<cppcanvas::internal::OutDevState> > const&)
-(anonymous namespace)::lcl_SkipNPages(SwWrtShell*, unsigned short)
-(anonymous namespace)::lcl_getAxesHoldingCategoriesFromDiagram(com::sun::star::uno::Reference<com::sun::star::chart2::XDiagram> const&)
-(anonymous namespace)::lcl_getCategoriesFromTable(SchXMLTable const&, bool)
-(anonymous namespace)::lcl_getSwappedArray(com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<double> > const&)
-(anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
-Accelerator::Call(KeyCode const&, unsigned short)
-Accelerator::Clear()
-Accelerator::EnableItem(KeyCode, unsigned char)
-Accelerator::EnableItem(unsigned short, unsigned char)
-Accelerator::GetAccel(KeyCode) const
-Accelerator::GetItemId(KeyCode const&) const
-Accelerator::GetItemKeyCode(unsigned short) const
-Accelerator::IsIdValid(unsigned short) const
-Accelerator::IsItemEnabled(KeyCode) const
-Accelerator::IsItemEnabled(unsigned short) const
-Accelerator::RemoveItem(KeyCode)
-Accelerator::RemoveItem(unsigned short)
-Accelerator::SetAccel(KeyCode, Accelerator*)
-Accelerator::SetAccel(unsigned short, Accelerator*)
 AlphaMask::Crop(Rectangle const&)
 AlphaMask::Expand(unsigned long, unsigned long, unsigned char*)
 AlphaMask::Invert()
@@ -27,20 +7,7 @@ AlphaMask::Replace(unsigned char*, unsigned char*, unsigned long, unsigned long*
 AlphaMask::Rotate(long, unsigned char)
 AlphaMask::Scale(Size const&, unsigned long)
 AlphaMask::Scale(double const&, double const&, unsigned long)
-Animation::Dither(unsigned long)
-Animation::IsEqual(Animation const&) const
-Application::AddHotKey(KeyCode const&, Link const&, void*)
-Application::CallEvent(NotifyEvent&)
-Application::CallPreNotify(NotifyEvent&)
-Application::FlushAccel()
-Application::GetDialogScaleX()
-Application::InitAppRes(ResId const&)
-Application::IsAccessibilityEnabled()
-Application::IsShutDown()
-Application::IsUserActive(unsigned short)
 Application::PostUserEvent(unsigned long, void*)
-Application::RemoveHotKey(unsigned long)
-Application::SetFontPath(String const&)
 B3dTransformationSet::GetInvMatFromWorldToView()
 B3dTransformationSet::GetInvProjection()
 B3dTransformationSet::GetInvTransObjectToEye()
@@ -60,7 +27,6 @@ BasicManager::BasicManager()
 BasicManager::ClearErrors()
 BasicManager::SetFlagToAllLibs(short, unsigned char) const
 BasicPrinter::BasicPrinter()
-BigInt::DivMod(BigInt const&, BigInt&)
 BitSet::BitSet(Range const&)
 BitSet::BitSet(unsigned short*, unsigned short)
 Bitmap::GetSourceSizePixel() const
@@ -81,18 +47,6 @@ BreakpointWindow::FindBreakpoint(Point const&)
 BreakpointWindow::FindBreakpoint(unsigned int)
 BreakpointWindow::Reset()
 BreakpointWindow::SetMarkerPos(unsigned int, bool)
-BrowseBox::GetEventWindow() const
-BrowseBox::GetHeaderBar() const
-BrowseBox::GoToRowAndDoNotModifySelection(long)
-BrowseBox::InsertDataColumn(unsigned short, Image const&, String const&, long, unsigned short, unsigned short, String const*)
-BrowseBox::InsertDataColumn(unsigned short, Image const&, long, unsigned short, unsigned short)
-BrowseBox::IsAllSelected() const
-BrowseBox::IsInCommandEvent() const
-BrowseBox::NextSelectedColumn() const
-BrowseBox::PrevSelectedRow()
-BrowseBox::ScrollPages(long)
-BrowseBox::SetColumnMode(unsigned short, int)
-BrowseBox::SetSelection(MultiSelection const&)
 BufferNode::childAt(int) const
 Button::Button(Window*, ResId const&)
 Button::Button(Window*, long)
