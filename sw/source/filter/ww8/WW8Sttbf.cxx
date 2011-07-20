@@ -29,6 +29,7 @@
 #include <iostream>
 #include <dbgoutsw.hxx>
 #include "WW8Sttbf.hxx"
+#include "ww8scan.hxx"
 #include <cstdio>
 #include <osl/endian.h>
 #include <rtl/ustrbuf.hxx>
@@ -40,17 +41,19 @@
 namespace ww8
 {
     WW8Struct::WW8Struct(SvStream& rSt, sal_uInt32 nPos, sal_uInt32 nSize)
-    : mn_offset(0), mn_size(nSize)
+        : mn_offset(0), mn_size(0)
     {
-        rSt.Seek(nPos);
-
-        mp_data.reset(new sal_uInt8[nSize]);
-        rSt.Read(mp_data.get(), nSize);
+        if (checkSeek(rSt, nPos))
+        {
+            mp_data.reset(new sal_uInt8[nSize]);
+            mn_size = rSt.Read(mp_data.get(), nSize);
+        }
+        OSL_ENSURE(mn_size == nSize, "short read in WW8Struct::WW8Struct");
     }
 
     WW8Struct::WW8Struct(WW8Struct * pStruct, sal_uInt32 nPos, sal_uInt32 nSize)
-    : mp_data(pStruct->mp_data), mn_offset(pStruct->mn_offset + nPos),
-    mn_size(nSize)
+        : mp_data(pStruct->mp_data), mn_offset(pStruct->mn_offset + nPos)
+        , mn_size(nSize)
     {
     }
 

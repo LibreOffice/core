@@ -1518,31 +1518,36 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
 WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
 {
     if ( ((8 > pWw8Fib->nVersion) && !pWwF->fComplex) || !pWwF->lcbClx )
-        return 0;
+        return NULL;
 
     WW8_FC nClxPos = pWwF->fcClx;
     sal_Int32 nClxLen = pWwF->lcbClx;
     sal_Int32 nLeft = nClxLen;
     sal_Int16 nGrpprl = 0;
-    sal_uInt8 clxt;
 
-    pStr->Seek( nClxPos );
+    if (!checkSeek(*pStr, nClxPos))
+        return NULL;
+
     while( 1 ) // Zaehle Zahl der Grpprls
     {
+        sal_uInt8 clxt(2);
         *pStr >> clxt;
         nLeft--;
         if( 2 == clxt )                         // PLCFfpcd ?
             break;                              // PLCFfpcd gefunden
         if( 1 == clxt )                         // clxtGrpprl ?
             nGrpprl++;
-        sal_uInt16 nLen;
+        sal_uInt16 nLen(0);
         *pStr >> nLen;
         nLeft -= 2 + nLen;
         if( nLeft < 0 )
             return 0;                           // schiefgegangen
         pStr->SeekRel( nLen );                  // ueberlies grpprl
     }
-    pStr->Seek( nClxPos );
+
+    if (!checkSeek(*pStr, nClxPos))
+        return NULL;
+
     nLeft = nClxLen;
     pPieceGrpprls = new sal_uInt8*[nGrpprl + 1];
     memset( pPieceGrpprls, 0, ( nGrpprl + 1 ) * sizeof(sal_uInt8 *) );
@@ -1550,11 +1555,12 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     sal_Int16 nAktGrpprl = 0;                       // lies Grpprls ein
     while( 1 )
     {
+        sal_uInt8 clxt(2);
         *pStr >> clxt;
         nLeft--;
         if( 2 == clxt)                          // PLCFfpcd ?
             break;                              // PLCFfpcd gefunden
-        sal_uInt16 nLen;
+        sal_uInt16 nLen(0);
         *pStr >> nLen;
         nLeft -= 2 + nLen;
         if( nLeft < 0 )
@@ -1570,10 +1576,10 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
             pStr->SeekRel( nLen );              // ueberlies nicht-Grpprl
     }
     // lies Piece Table PLCF ein
-    sal_Int32 nPLCFfLen;
+    sal_Int32 nPLCFfLen(0);
     if (pWwF->GetFIBVersion() <= ww::eWW2)
     {
-        sal_Int16 nWordTwoLen;
+        sal_Int16 nWordTwoLen(0);
         *pStr >> nWordTwoLen;
         nPLCFfLen = nWordTwoLen;
     }
