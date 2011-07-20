@@ -288,9 +288,18 @@ void* CairoFontsCache::FindCachedFont(const CairoFontsCache::CacheId &rId)
     return NULL;
 }
 
+namespace
+{
+    bool hasRotation(int nRotation)
+    {
+      return nRotation != 0;
+    }
+}
+
 void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
 {
     std::vector<cairo_glyph_t> cairo_glyphs;
+    std::vector<int> glyph_extrarotation;
     cairo_glyphs.reserve( 256 );
 
     Point aPos;
@@ -302,6 +311,19 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
         aGlyph.x = aPos.X();
         aGlyph.y = aPos.Y();
         cairo_glyphs.push_back(aGlyph);
+
+        switch (aGlyphId & GF_ROTMASK)
+        {
+            case GF_ROTL:    // left
+                glyph_extrarotation.push_back(900);
+                break;
+            case GF_ROTR:    // right
+                glyph_extrarotation.push_back(-900);
+                break;
+            default:
+                glyph_extrarotation.push_back(0);
+                break;
+        }
     }
 
     if (cairo_glyphs.empty())
@@ -373,19 +395,56 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
 
     cairo_matrix_t m;
     const ImplFontSelectData& rFSD = rFont.GetFontSelData();
-    int nWidth = rFSD.mnWidth ? rFSD.mnWidth : rFSD.mnHeight;
+    int nHeight = rFSD.mnHeight;
+    int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
 
-    cairo_matrix_init_identity(&m);
+    std::vector<int>::const_iterator aEnd = glyph_extrarotation.end();
+    std::vector<int>::const_iterator aStart = glyph_extrarotation.begin();
+    std::vector<int>::const_iterator aI = aStart;
+    while (aI != aEnd)
+    {
+        int nGlyphRotation = *aI;
 
-    if (rLayout.GetOrientation())
-        cairo_matrix_rotate(&m, (3600 - rLayout.GetOrientation()) * M_PI / 1800.0);
+        std::vector<int>::const_iterator aNext = std::find_if(aI+1, aEnd, hasRotation);
 
-    cairo_matrix_scale(&m, nWidth, rFSD.mnHeight);
-    if (rFont.NeedsArtificialItalic())
-        m.xy = -m.xx * 0x6000L / 0x10000L;
+        cairo_matrix_init_identity(&m);
 
-    cairo_set_font_matrix(cr, &m);
-    cairo_show_glyphs(cr, &cairo_glyphs[0], cairo_glyphs.size());
+        if (rFont.NeedsArtificialItalic())
+            m.xy = -m.xx * 0x6000L / 0x10000L;
+
+        if (rLayout.GetOrientation())
+            cairo_matrix_rotate(&m, (3600 - rLayout.GetOrientation()) * M_PI / 1800.0);
+
+        cairo_matrix_scale(&m, nWidth, nHeight);
+
+        if (nGlyphRotation)
+        {
+            cairo_matrix_rotate(&m, (3600 - nGlyphRotation) * M_PI / 1800.0);
+
+            cairo_font_extents_t extents;
+            cairo_font_extents(cr, &extents);
+            //gives the same positions as pre-cairo conversion, but I don't like them
+            double xdiff = -extents.descent/(extents.height+extents.descent);
+            cairo_matrix_translate(&m, xdiff, 1);
+        }
+
+        cairo_set_font_matrix(cr, &m);
+        size_t nStartIndex = std::distance(aStart, aI);
+        size_t nLen = std::distance(aI, aNext);
+        cairo_show_glyphs(cr, &cairo_glyphs[nStartIndex], nLen);
+
+#if OSL_DEBUG_LEVEL > 2
+        //draw origin
+        cairo_save (cr);
+        cairo_rectangle (cr, cairo_glyphs[nStartIndex].x, cairo_glyphs[nStartIndex].y, 5, 5);
+        cairo_set_source_rgba (cr, 1, 0, 0, 0.80);
+        cairo_fill (cr);
+        cairo_restore (cr);
+#endif
+
+        aI = aNext;
+    }
+
     cairo_destroy(cr);
 }
 
