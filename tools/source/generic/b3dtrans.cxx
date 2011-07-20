@@ -233,13 +233,6 @@ const basegfx::B3DHomMatrix& B3dTransformationSet::GetProjection()
     return maProjection;
 }
 
-const basegfx::B3DHomMatrix& B3dTransformationSet::GetInvProjection()
-{
-    if(!mbProjectionValid)
-        CalcViewport();
-    return maInvProjection;
-}
-
 void B3dTransformationSet::PostSetProjection()
 {
     // Zuweisen und Inverse bestimmen
@@ -249,16 +242,6 @@ void B3dTransformationSet::PostSetProjection()
     // Abhaengige Matritzen invalidieren
     mbObjectToDeviceValid = sal_False;
     mbWorldToViewValid = sal_False;
-}
-
-/*************************************************************************
-|*
-|* Texturtransformation
-|*
-\************************************************************************/
-
-void B3dTransformationSet::PostSetTexture()
-{
 }
 
 /*************************************************************************
@@ -422,28 +405,6 @@ void B3dTransformationSet::DeviceRectangleChange()
 {
 }
 
-void B3dTransformationSet::SetFrontClippingPlane(double fF)
-{
-    if(mfNearBound != fF)
-    {
-        mfNearBound = fF;
-        mbProjectionValid = sal_False;
-        mbObjectToDeviceValid = sal_False;
-        mbWorldToViewValid = sal_False;
-    }
-}
-
-void B3dTransformationSet::SetBackClippingPlane(double fB)
-{
-    if(mfFarBound != fB)
-    {
-        mfFarBound = fB;
-        mbProjectionValid = sal_False;
-        mbObjectToDeviceValid = sal_False;
-        mbWorldToViewValid = sal_False;
-    }
-}
-
 void B3dTransformationSet::SetPerspective(sal_Bool bNew)
 {
     if(mbPerspective != bNew)
@@ -503,13 +464,6 @@ void B3dTransformationSet::CalcMatObjectToDevice()
     mbObjectToDeviceValid = sal_True;
 }
 
-const basegfx::B3DHomMatrix& B3dTransformationSet::GetObjectToDevice()
-{
-    if(!mbObjectToDeviceValid)
-        CalcMatObjectToDevice();
-    return maObjectToDevice;
-}
-
 void B3dTransformationSet::CalcMatInvTransObjectToEye()
 {
     maInvTransObjectToEye = maObjectTrans;
@@ -528,13 +482,6 @@ void B3dTransformationSet::CalcMatInvTransObjectToEye()
     mbInvTransObjectToEyeValid = sal_True;
 }
 
-const basegfx::B3DHomMatrix& B3dTransformationSet::GetInvTransObjectToEye()
-{
-    if(!mbInvTransObjectToEyeValid)
-        CalcMatInvTransObjectToEye();
-    return maInvTransObjectToEye;
-}
-
 void B3dTransformationSet::CalcMatFromWorldToView()
 {
     maMatFromWorldToView = maOrientation;
@@ -548,20 +495,6 @@ void B3dTransformationSet::CalcMatFromWorldToView()
 
     // gueltig setzen
     mbWorldToViewValid = sal_True;
-}
-
-const basegfx::B3DHomMatrix& B3dTransformationSet::GetMatFromWorldToView()
-{
-    if(!mbWorldToViewValid)
-        CalcMatFromWorldToView();
-    return maMatFromWorldToView;
-}
-
-const basegfx::B3DHomMatrix& B3dTransformationSet::GetInvMatFromWorldToView()
-{
-    if(!mbWorldToViewValid)
-        CalcMatFromWorldToView();
-    return maInvMatFromWorldToView;
 }
 
 /*************************************************************************

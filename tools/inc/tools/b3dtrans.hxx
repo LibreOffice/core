@@ -161,7 +161,6 @@ public:
     // Projection
     void SetProjection(const basegfx::B3DHomMatrix& mProject);
     const basegfx::B3DHomMatrix& GetProjection();
-    const basegfx::B3DHomMatrix& GetInvProjection();
 
     // Texture
     const basegfx::B2DHomMatrix& GetTexture() { return maTexture; }
@@ -175,9 +174,7 @@ public:
     void SetDeviceRectangle(double fL=-1.0, double fR=1.0, double fB=-1.0, double fT=1.0, sal_Bool bBroadCastChange=sal_True);
     double GetDeviceRectangleWidth() const { return mfRightBound - mfLeftBound; }
     double GetDeviceRectangleHeight() const { return mfTopBound - mfBottomBound; }
-    void SetFrontClippingPlane(double fF=0.0);
     double GetFrontClippingPlane() { return mfNearBound; }
-    void SetBackClippingPlane(double fB=1.0);
     double GetBackClippingPlane() { return mfFarBound; }
     void SetPerspective(sal_Bool bNew);
     sal_Bool GetPerspective() { return mbPerspective; }
@@ -185,16 +182,6 @@ public:
     void SetViewportRectangle(Rectangle& rRect) { SetViewportRectangle(rRect, rRect); }
     const Rectangle& GetViewportRectangle() { return maViewportRectangle; }
     void CalcViewport();
-
-    // Transponierte Inverse fuer Vectortransformationen
-    const basegfx::B3DHomMatrix& GetInvTransObjectToEye();
-
-    // Speziell zum Umwandeln von Punkten Objekt -> Device
-    const basegfx::B3DHomMatrix& GetObjectToDevice();
-
-    // Speziell zum Umwandeln von Punkten World -> View
-    const basegfx::B3DHomMatrix& GetMatFromWorldToView();
-    const basegfx::B3DHomMatrix& GetInvMatFromWorldToView();
 
     // Bounds des Viewports lesen
     const basegfx::B3DVector& GetScale();
@@ -224,7 +211,6 @@ protected:
     void PostSetObjectTrans();
     void PostSetOrientation();
     void PostSetProjection();
-    void PostSetTexture();
     void PostSetViewport();
 
     void CalcMatObjectToDevice();
