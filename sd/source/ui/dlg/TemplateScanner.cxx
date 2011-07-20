@@ -31,6 +31,9 @@
 
 #include "TemplateScanner.hxx"
 
+#include <sfx2/templatelocnames.hrc>
+#include "sdresid.hxx"
+
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 
@@ -263,7 +266,9 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
                     ||  (sContentType == IMPRESS_XML_TEMPLATE)
                     ||  (sContentType == IMPRESS_XML_TEMPLATE_B))
                 {
-                    mpLastAddedEntry = new TemplateEntry(sTitle, sTargetURL);
+                    ::rtl::OUString sLocalisedTitle = ConvertResourceString(
+                        STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, sTitle );
+                    mpLastAddedEntry = new TemplateEntry(sLocalisedTitle, sTargetURL);
                     mpTemplateDirectory->maEntries.push_back(mpLastAddedEntry);
                 }
             }
@@ -489,6 +494,22 @@ bool TemplateScanner::HasNextStep (void)
 const TemplateEntry* TemplateScanner::GetLastAddedEntry (void) const
 {
     return mpLastAddedEntry;
+}
+
+
+
+
+::rtl::OUString TemplateScanner::ConvertResourceString (
+    int nSourceResIds, int nDestResIds, int nCount, const ::rtl::OUString& rString )
+{
+    for( int i = 0; i < nCount; ++i )
+    {
+        if( rString == ResId::toString( (const ResId)SdResId( (sal_uInt16)(nSourceResIds + i) ) ) )
+        {
+            return ResId::toString( (const ResId)SdResId( (sal_uInt16)(nDestResIds + i) ) );
+        }
+    }
+    return rString;
 }
 
 }
