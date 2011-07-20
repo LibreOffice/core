@@ -842,22 +842,20 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
 
 void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, short nLen ) // Sprm 12
 {
+    SwWW8StyInf * pStyInf = GetStyle(nAktColl);
+    if( !pAktColl || nLen <= 0                       // only for Styledef
+        || (pStyInf && !pStyInf->bColl)              // ignore  CharFmt ->
+        || ( nIniFlags & WW8FL_NO_OUTLINE ) )
     {
-        SwWW8StyInf * pStyInf = GetStyle(nAktColl);
-        if( !pAktColl || nLen <= 0                  // nur bei Styledef
-            || (pStyInf && !pStyInf->bColl)              // CharFmt -> ignorieren
-            || ( nIniFlags & WW8FL_NO_OUTLINE ) ){
-            nSwNumLevel = 0xff;
-            return;
-        }
+        nSwNumLevel = 0xff;
+        return;
     }
 
-    if( nSwNumLevel <= MAXLEVEL         // Bereich WW:1..9 -> SW:0..8
-        && nSwNumLevel <= 9 ){      // keine Aufzaehlung / Nummerierung
 
-                                        // Falls bereits direkt oder durch
-                                        // Vererbung NumruleItems gesetzt sind,
-                                        // dann jetzt ausschalten
+    if( nSwNumLevel <= MAXLEVEL         // Value range mapping WW:1..9 -> SW:0..8
+        && nSwNumLevel <= 9 ){          // No Bullets or Numbering
+
+        // If NumRuleItems were set, either directly or through inheritance, disable them now
         pAktColl->SetFmtAttr( SwNumRuleItem() );
 
         String aName(CREATE_CONST_ASC( "Outline" ));
@@ -868,15 +866,14 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
 
         SetAnld(&aNR, (WW8_ANLD*)pData, nSwNumLevel, true);
 
-            // fehlende Level muessen nicht aufgefuellt werden
-
+        // Missing Levels need not be replenished
         rDoc.SetOutlineNumRule( aNR );
     }else if( pStyles->nWwNumLevel == 10 || pStyles->nWwNumLevel == 11 ){
         SwNumRule* pNR = GetStyRule();
         SetAnld(pNR, (WW8_ANLD*)pData, 0, false);
         pAktColl->SetFmtAttr( SwNumRuleItem( pNR->GetName() ) );
 
-        SwWW8StyInf * pStyInf = GetStyle(nAktColl);
+        pStyInf = GetStyle(nAktColl);
         if (pStyInf != NULL)
             pStyInf->bHasStyNumRule = true;
     }
@@ -994,7 +991,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
     }
 
     SwWW8StyInf * pStyInf = GetStyle(nAktColl);
-    if (!sNumRule.Len() && pStyInf->bHasStyNumRule)
+    if (!sNumRule.Len() && pStyInf != NULL &&  pStyInf->bHasStyNumRule)
     {
         sNumRule = pStyInf->pFmt->GetNumRule().GetValue();
         pNumRule = rDoc.FindNumRulePtr(sNumRule);
@@ -3831,6 +3828,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
 {
     SwFmt* pColl;
     bool bStyExist;
+
     if (rSI.bColl)
     {
         // Para-Style
