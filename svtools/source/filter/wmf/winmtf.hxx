@@ -298,7 +298,6 @@ struct WMF_APMFILEHEADER;
 
 //============================ WMFReader ==================================
 
-
 #ifdef WIN_MTF_ASSERT
 #define WIN_MTF_ASSERT_INIT     0x80000000
 #define WIN_MTF_ASSERT_ONCE     0x40000000
@@ -319,35 +318,34 @@ public :
     void        excludeClipRect( const Rectangle& rRect );
     void        moveClipRegion( const Size& rSize );
 
-    bool isEmpty() const { return maClip.isCleared(); }
+    bool        isEmpty() const { return maClip.isCleared(); }
 
     basegfx::B2DPolyPolygon getClipPath() const;
 
-    bool operator==( const WinMtfClipPath& rPath ) const
-    {
-        return maClip == rPath.maClip;
-    };
+    bool        operator==( const WinMtfClipPath& rPath ) const
+                {
+                    return maClip == rPath.maClip;
+                };
 };
 
 class WinMtfPathObj : public PolyPolygon
 {
-        sal_Bool    bClosed;
+    sal_Bool    bClosed;
 
-    public :
+public :
 
                 WinMtfPathObj() { bClosed = sal_True; }
-        void    Init() { Clear(); bClosed = sal_True; };
-        void    ClosePath();
-
-        void    AddPoint( const Point& rPoint );
-        void    AddPolygon( const Polygon& rPoly );
-        void    AddPolyLine( const Polygon& rPoly );
-        void    AddPolyPolygon( const PolyPolygon& rPolyPolygon );
+    void        Init() { Clear(); bClosed = sal_True; };
+    void        ClosePath();
+    void        AddPoint( const Point& rPoint );
+    void        AddPolygon( const Polygon& rPoly );
+    void        AddPolyLine( const Polygon& rPoly );
+    void        AddPolyPolygon( const PolyPolygon& rPolyPolygon );
 };
 
 struct WinMtfFontStyle
 {
-    Font        aFont;
+    Font    aFont;
 
     WinMtfFontStyle( LOGFONTW& rLogFont );
 };
@@ -362,7 +360,7 @@ typedef enum {
 struct WinMtfFillStyle
 {
     Color               aFillColor;
-    sal_Bool    bTransparent;
+    sal_Bool            bTransparent;
     WinMtfFillStyleType aType;
     Bitmap              aBmp;
 
@@ -387,11 +385,35 @@ struct WinMtfFillStyle
     }
 
     sal_Bool operator==( const WinMtfFillStyle& rStyle )
-        { return ( ( aFillColor == rStyle.aFillColor ) && ( bTransparent == rStyle.bTransparent ) && ( aType == rStyle.aType ) ); }
+        {
+            return (  ( aFillColor == rStyle.aFillColor )
+                   && ( bTransparent == rStyle.bTransparent )
+                   && ( aType == rStyle.aType )
+                   );
+        }
     sal_Bool operator==( WinMtfFillStyle* pStyle )
-        { return ( ( aFillColor == pStyle->aFillColor ) && ( bTransparent == pStyle->bTransparent ) && ( aType == pStyle->aType ) ); }
-    WinMtfFillStyle& operator=( const WinMtfFillStyle& rStyle ) { aFillColor = rStyle.aFillColor; bTransparent = rStyle.bTransparent; aBmp = rStyle.aBmp; aType = rStyle.aType; return *this; }
-    WinMtfFillStyle& operator=( WinMtfFillStyle* pStyle ) { aFillColor = pStyle->aFillColor; bTransparent = pStyle->bTransparent; aBmp = pStyle->aBmp; aType = pStyle->aType; return *this; }
+        {
+            return (  ( aFillColor == pStyle->aFillColor )
+                   && ( bTransparent == pStyle->bTransparent )
+                   && ( aType == pStyle->aType )
+                   );
+        }
+    WinMtfFillStyle& operator=( const WinMtfFillStyle& rStyle )
+        {
+            aFillColor = rStyle.aFillColor;
+            bTransparent = rStyle.bTransparent;
+            aBmp = rStyle.aBmp;
+            aType = rStyle.aType;
+            return *this;
+        }
+    WinMtfFillStyle& operator=( WinMtfFillStyle* pStyle )
+        {
+            aFillColor = pStyle->aFillColor;
+            bTransparent = pStyle->bTransparent;
+            aBmp = pStyle->aBmp;
+            aType = pStyle->aType;
+            return *this;
+        }
 };
 
 // -----------------------------------------------------------------------------
@@ -415,8 +437,20 @@ struct WinMtfLineStyle
         aLineInfo   ( rStyle ),
         bTransparent( bTrans ) {}
 
-    sal_Bool operator==( const WinMtfLineStyle& rStyle ) { return ( ( aLineColor == rStyle.aLineColor ) && ( bTransparent == rStyle.bTransparent ) && ( aLineInfo == rStyle.aLineInfo ) ); }
-    sal_Bool operator==( WinMtfLineStyle* pStyle ) { return ( ( aLineColor == pStyle->aLineColor ) && ( bTransparent == pStyle->bTransparent ) && ( aLineInfo == pStyle->aLineInfo ) ); }
+    sal_Bool operator==( const WinMtfLineStyle& rStyle )
+        {
+            return (  ( aLineColor == rStyle.aLineColor )
+                   && ( bTransparent == rStyle.bTransparent )
+                   && ( aLineInfo == rStyle.aLineInfo )
+                   );
+        }
+    sal_Bool operator==( WinMtfLineStyle* pStyle )
+        {
+            return (  ( aLineColor == pStyle->aLineColor )
+                   && ( bTransparent == pStyle->bTransparent )
+                   && ( aLineInfo == pStyle->aLineInfo )
+                   );
+        }
     WinMtfLineStyle& operator=( const WinMtfLineStyle& rStyle )
     {
         aLineColor = rStyle.aLineColor;
@@ -490,13 +524,30 @@ struct BSaveStruct
     sal_uInt32      nWinRop;
     WinMtfFillStyle aStyle;
 
-                BSaveStruct( const Bitmap& rBmp, const Rectangle& rOutRect, sal_uInt32 nRop, WinMtfFillStyle& rStyle ) :
-                    aBmp( rBmp ), aOutRect( rOutRect ), nWinRop( nRop ), aStyle ( rStyle ){}
+        BSaveStruct(
+            const Bitmap& rBmp,
+            const Rectangle& rOutRect,
+            sal_uInt32 nRop,
+            WinMtfFillStyle& rStyle
+        )
+            : aBmp( rBmp )
+            , aOutRect( rOutRect )
+            , nWinRop( nRop )
+            , aStyle ( rStyle )
+        {}
 };
 
 // -----------------------------------------------------------------------------
 
-enum GDIObjectType { GDI_DUMMY = 0, GDI_PEN = 1, GDI_BRUSH = 2, GDI_FONT = 3, GDI_PALETTE = 4, GDI_BITMAP = 5, GDI_REGION = 6 };
+enum GDIObjectType {
+    GDI_DUMMY = 0,
+    GDI_PEN = 1,
+    GDI_BRUSH = 2,
+    GDI_FONT = 3,
+    GDI_PALETTE = 4,
+    GDI_BITMAP = 5,
+    GDI_REGION = 6
+};
 
 struct GDIObj
 {
@@ -546,163 +597,193 @@ struct GDIObj
 class WinMtfOutput
 {
 
-        WinMtfPathObj       aPathObj;
-        WinMtfClipPath      aClipPath;
+    WinMtfPathObj       aPathObj;
+    WinMtfClipPath      aClipPath;
 
-        WinMtfLineStyle     maLatestLineStyle;
-        WinMtfLineStyle     maLineStyle;
-        WinMtfFillStyle     maLatestFillStyle;
-        WinMtfFillStyle     maFillStyle;
-        Font                maLatestFont;
-        Font                maFont;
-        sal_uInt32          mnLatestTextAlign;
-        sal_uInt32          mnTextAlign;
-        Color               maLatestTextColor;
-        Color               maTextColor;
-        Color               maLatestBkColor;
-        Color               maBkColor;
-        sal_uInt32          mnLatestTextLayoutMode;
-        sal_uInt32          mnTextLayoutMode;
-        sal_uInt32          mnLatestBkMode;
-        sal_uInt32          mnBkMode;
-        RasterOp            meLatestRasterOp;
-        RasterOp            meRasterOp;
+    WinMtfLineStyle     maLatestLineStyle;
+    WinMtfLineStyle     maLineStyle;
+    WinMtfFillStyle     maLatestFillStyle;
+    WinMtfFillStyle     maFillStyle;
+    Font                maLatestFont;
+    Font                maFont;
+    sal_uInt32          mnLatestTextAlign;
+    sal_uInt32          mnTextAlign;
+    Color               maLatestTextColor;
+    Color               maTextColor;
+    Color               maLatestBkColor;
+    Color               maBkColor;
+    sal_uInt32          mnLatestTextLayoutMode;
+    sal_uInt32          mnTextLayoutMode;
+    sal_uInt32          mnLatestBkMode;
+    sal_uInt32          mnBkMode;
+    RasterOp            meLatestRasterOp;
+    RasterOp            meRasterOp;
 
-        std::vector< GDIObj* > vGDIObj;
+    std::vector< GDIObj* > vGDIObj;
 
-        Point               maActPos;
+    Point               maActPos;
 
-        sal_uInt32          mnRop;
-        sal_Bool            mbNopMode;
-        sal_Bool            mbFillStyleSelected;
-        sal_Bool            mbClipNeedsUpdate;
-        sal_Bool            mbComplexClip;
+    sal_uInt32          mnRop;
+    sal_Bool            mbNopMode;
+    sal_Bool            mbFillStyleSelected;
+    sal_Bool            mbClipNeedsUpdate;
+    sal_Bool            mbComplexClip;
 
-        std::vector< SaveStructPtr > vSaveStack;
+    std::vector< SaveStructPtr > vSaveStack;
 
-        sal_uInt32          mnGfxMode;
-        sal_uInt32          mnMapMode;
-        sal_uInt16          mnUnitsPerInch;
+    sal_uInt32          mnGfxMode;
+    sal_uInt32          mnMapMode;
+    sal_uInt16          mnUnitsPerInch;
 
-        XForm               maXForm;
-        sal_Int32           mnDevOrgX, mnDevOrgY;
-        sal_Int32           mnDevWidth, mnDevHeight;
-        sal_Int32           mnWinOrgX, mnWinOrgY;       // aktuelles Window-Origin
-        sal_Int32           mnWinExtX, mnWinExtY;       // aktuelles Window-Extent
+    XForm               maXForm;
+    sal_Int32           mnDevOrgX, mnDevOrgY;
+    sal_Int32           mnDevWidth, mnDevHeight;
+    sal_Int32           mnWinOrgX, mnWinOrgY;       // aktuelles Window-Origin
+    sal_Int32           mnWinExtX, mnWinExtY;       // aktuelles Window-Extent
 
-        sal_Int32           mnPixX, mnPixY;             // Reference Device in pixel
-        sal_Int32           mnMillX, mnMillY;           // Reference Device in Mill
-        Rectangle           mrclFrame;                  // rectangle in logical units 1/100th mm
-        Rectangle           mrclBounds;
+    sal_Int32           mnPixX, mnPixY;             // Reference Device in pixel
+    sal_Int32           mnMillX, mnMillY;           // Reference Device in Mill
+    Rectangle           mrclFrame;                  // rectangle in logical units 1/100th mm
+    Rectangle           mrclBounds;
 
-        GDIMetaFile*        mpGDIMetaFile;
+    GDIMetaFile*        mpGDIMetaFile;
 
-        void                UpdateLineStyle();
-        void                UpdateFillStyle();
+    void                UpdateLineStyle();
+    void                UpdateFillStyle();
 
-        Point               ImplMap( const Point& rPt );
-        Size                ImplMap( const Size& rSz );
-        Rectangle           ImplMap( const Rectangle& rRectangle );
-        void                ImplMap( Font& rFont );
-        Polygon&            ImplMap( Polygon& rPolygon );
-        PolyPolygon&        ImplMap( PolyPolygon& rPolyPolygon );
-        void                ImplResizeObjectArry( sal_uInt32 nNewEntry );
-        void                ImplSetNonPersistentLineColorTransparenz();
-        void                ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly );
-        void                ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx rBitmap );
+    Point               ImplMap( const Point& rPt );
+    Size                ImplMap( const Size& rSz );
+    Rectangle           ImplMap( const Rectangle& rRectangle );
+    void                ImplMap( Font& rFont );
+    Polygon&            ImplMap( Polygon& rPolygon );
+    PolyPolygon&        ImplMap( PolyPolygon& rPolyPolygon );
+    void                ImplResizeObjectArry( sal_uInt32 nNewEntry );
+    void                ImplSetNonPersistentLineColorTransparenz();
+    void                ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly );
+    void                ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx rBitmap );
 
-    public:
+public:
 
-        void                SetDevOrg( const Point& rPoint );
-        void                SetDevOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd );
-        void                SetDevExt( const Size& rSize );
-        void                ScaleDevExt( double fX, double fY );
+    void                SetDevOrg( const Point& rPoint );
+    void                SetDevOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd );
+    void                SetDevExt( const Size& rSize );
+    void                ScaleDevExt( double fX, double fY );
 
-        void                SetWinOrg( const Point& rPoint );
-        void                SetWinOrgOffset( sal_Int32 nX, sal_Int32 nY );
-        void                SetWinExt( const Size& rSize );
-        void                ScaleWinExt( double fX, double fY );
+    void                SetWinOrg( const Point& rPoint );
+    void                SetWinOrgOffset( sal_Int32 nX, sal_Int32 nY );
+    void                SetWinExt( const Size& rSize );
+    void                ScaleWinExt( double fX, double fY );
 
-        void                SetrclBounds( const Rectangle& rRect );
-        void                SetrclFrame( const Rectangle& rRect );
-        void                SetRefPix( const Size& rSize );
-        void                SetRefMill( const Size& rSize );
+    void                SetrclBounds( const Rectangle& rRect );
+    void                SetrclFrame( const Rectangle& rRect );
+    void                SetRefPix( const Size& rSize );
+    void                SetRefMill( const Size& rSize );
 
-        sal_uInt32          GetMapMode() const { return mnMapMode; };
-        void                SetMapMode( sal_uInt32 mnMapMode );
-        void                SetUnitsPerInch( sal_uInt16 nUnitsPerInch );
-        void                SetWorldTransform( const XForm& rXForm );
-        void                ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode );
+    sal_uInt32          GetMapMode() const { return mnMapMode; };
+    void                SetMapMode( sal_uInt32 mnMapMode );
+    void                SetUnitsPerInch( sal_uInt16 nUnitsPerInch );
+    void                SetWorldTransform( const XForm& rXForm );
+    void                ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode );
 
-        void                Push();
-        void                Pop();
+    void                Push();
+    void                Pop();
 
-        sal_uInt32              SetRasterOp( sal_uInt32 nRasterOp );
-        void                StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill );
+    sal_uInt32          SetRasterOp( sal_uInt32 nRasterOp );
+    void                StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill );
 
-        void                SetGfxMode( sal_Int32 nGfxMode ){ mnGfxMode = nGfxMode; };
-        sal_Int32           GetGfxMode() const { return mnGfxMode; };
-        void                SetBkMode( sal_uInt32 nMode );
-        void                SetBkColor( const Color& rColor );
-        void                SetTextColor( const Color& rColor );
-        void                SetTextAlign( sal_uInt32 nAlign );
-        void                CreateObject( GDIObjectType, void* pStyle = NULL );
-        void                CreateObject( sal_Int32 nIndex, GDIObjectType, void* pStyle = NULL );
-        void                DeleteObject( sal_Int32 nIndex );
-        void                SelectObject( sal_Int32 nIndex );
-        CharSet             GetCharSet(){ return maFont.GetCharSet(); };
-        WinMtfFillStyle&    GetFillStyle () { return maFillStyle; }
-        void                SetFont( const Font& rFont );
-        const Font&         GetFont() const;
-        void                SetTextLayoutMode( const sal_uInt32 nLayoutMode );
-        sal_uInt32          GetTextLayoutMode() const;
+    void                SetGfxMode( sal_Int32 nGfxMode ){ mnGfxMode = nGfxMode; };
+    sal_Int32           GetGfxMode() const { return mnGfxMode; };
+    void                SetBkMode( sal_uInt32 nMode );
+    void                SetBkColor( const Color& rColor );
+    void                SetTextColor( const Color& rColor );
+    void                SetTextAlign( sal_uInt32 nAlign );
+    void                CreateObject( GDIObjectType, void* pStyle = NULL );
+    void                CreateObject( sal_Int32 nIndex, GDIObjectType, void* pStyle = NULL );
+    void                DeleteObject( sal_Int32 nIndex );
+    void                SelectObject( sal_Int32 nIndex );
+    CharSet             GetCharSet(){ return maFont.GetCharSet(); };
+    WinMtfFillStyle&    GetFillStyle () { return maFillStyle; }
+    void                SetFont( const Font& rFont );
+    const Font&         GetFont() const;
+    void                SetTextLayoutMode( const sal_uInt32 nLayoutMode );
+    sal_uInt32          GetTextLayoutMode() const;
 
-        void                ClearPath(){ aPathObj.Init(); };
-        void                ClosePath(){ aPathObj.ClosePath(); };
-        const PolyPolygon&  GetPathObj(){ return aPathObj; };
+    void                ClearPath(){ aPathObj.Init(); };
+    void                ClosePath(){ aPathObj.ClosePath(); };
+    const PolyPolygon&  GetPathObj(){ return aPathObj; };
 
-        void                MoveTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
-        void                LineTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
-        void                DrawPixel( const Point& rSource, const Color& rColor );
-        void                DrawLine( const Point& rSource, const Point& rDest );
-        void                DrawRect( const Rectangle& rRect, sal_Bool bEdge = sal_True );
-        void                DrawRoundRect( const Rectangle& rRect, const Size& rSize );
-        void                DrawEllipse( const Rectangle& rRect );
-        void                DrawArc( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle, sal_Bool bDrawTo = sal_False );
-        void                DrawPie( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle );
-        void                DrawChord( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle );
-        void                DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath = sal_False );
-        void                DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath = sal_False );
-        void                DrawPolyLine( Polygon& rPolygon, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False );
-        void                DrawPolyBezier( Polygon& rPolygin, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False );
-        void                DrawText( Point& rPosition, String& rString, sal_Int32* pDXArry = NULL, sal_Bool bRecordPath = sal_False,
-                                        sal_Int32 nGraphicsMode = GM_COMPATIBLE );
-        void                ResolveBitmapActions( List& rSaveList );
+    void                MoveTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
+    void                LineTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
+    void                DrawPixel( const Point& rSource, const Color& rColor );
+    void                DrawLine( const Point& rSource, const Point& rDest );
+    void                DrawRect( const Rectangle& rRect, sal_Bool bEdge = sal_True );
+    void                DrawRoundRect( const Rectangle& rRect, const Size& rSize );
+    void                DrawEllipse( const Rectangle& rRect );
+    void                DrawArc(
+                            const Rectangle& rRect,
+                            const Point& rStartAngle,
+                            const Point& rEndAngle,
+                            sal_Bool bDrawTo = sal_False
+                        );
+    void                DrawPie(
+                            const Rectangle& rRect,
+                            const Point& rStartAngle,
+                            const Point& rEndAngle
+                        );
+    void                DrawChord(
+                            const Rectangle& rRect,
+                            const Point& rStartAngle,
+                            const Point& rEndAngle
+                        );
+    void                DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath = sal_False );
+    void                DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath = sal_False );
+    void                DrawPolyLine(
+                            Polygon& rPolygon,
+                            sal_Bool bDrawTo = sal_False,
+                            sal_Bool bRecordPath = sal_False
+                        );
+    void                DrawPolyBezier(
+                            Polygon& rPolygin,
+                            sal_Bool bDrawTo = sal_False,
+                            sal_Bool bRecordPath = sal_False
+                        );
+    void                DrawText(
+                            Point& rPosition,
+                            String& rString,
+                            sal_Int32* pDXArry = NULL,
+                            sal_Bool bRecordPath = sal_False,
+                            sal_Int32 nGraphicsMode = GM_COMPATIBLE
+                        );
+    void                ResolveBitmapActions( List& rSaveList );
 
-        void                IntersectClipRect( const Rectangle& rRect );
-        void                ExcludeClipRect( const Rectangle& rRect );
-        void                MoveClipRegion( const Size& rSize );
-        void                SetClipPath( const PolyPolygon& rPolyPoly, sal_Int32 nClippingMode, sal_Bool bIsMapped );
-        void                UpdateClipRegion();
-        void                AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile );
+    void                IntersectClipRect( const Rectangle& rRect );
+    void                ExcludeClipRect( const Rectangle& rRect );
+    void                MoveClipRegion( const Size& rSize );
+    void                SetClipPath(
+                            const PolyPolygon& rPolyPoly,
+                            sal_Int32 nClippingMode,
+                            sal_Bool bIsMapped
+                        );
+    void                UpdateClipRegion();
+    void                AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile );
 
-        void                PassEMFPlus( void* pBuffer, sal_uInt32 nLength );
-        void                PassEMFPlusHeaderInfo();
+    void                PassEMFPlus( void* pBuffer, sal_uInt32 nLength );
+    void                PassEMFPlusHeaderInfo();
 
-                            WinMtfOutput( GDIMetaFile& rGDIMetaFile );
-        virtual             ~WinMtfOutput();
+                        WinMtfOutput( GDIMetaFile& rGDIMetaFile );
+    virtual             ~WinMtfOutput();
 };
 
 // -----------------------------------------------------------------------------
 
 class WinMtf
 {
-    protected:
+protected:
 
     WinMtfOutput*       pOut;                   //
     SvStream*           pWMF;                   // Die einzulesende WMF/EMF-Datei
 
-    sal_uInt32              nStartPos, nEndPos;
+    sal_uInt32          nStartPos, nEndPos;
     List                aBmpSaveList;
 
     FilterConfigItem*   pFilterConfigItem;
@@ -714,10 +795,14 @@ class WinMtf
     Color               ReadColor();
     void                Callback( sal_uInt16 nPercent );
 
-                        WinMtf( WinMtfOutput* pOut, SvStream& rStreamWMF, FilterConfigItem* pConfigItem = NULL );
+                        WinMtf(
+                            WinMtfOutput* pOut,
+                            SvStream& rStreamWMF,
+                            FilterConfigItem* pConfigItem = NULL
+                        );
                         ~WinMtf();
 
-    public:
+public:
 
 };
 
@@ -730,16 +815,26 @@ class EnhWMFReader : public WinMtf
     sal_Bool        bEMFPlus;
 
 
-    sal_Bool            ReadHeader();
-    Rectangle       ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );            // Liesst und konvertiert ein Rechteck
+    sal_Bool        ReadHeader();
+                    // Liesst und konvertiert ein Rechteck
+    Rectangle       ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
     void            ImplExtTextOut( sal_Bool bWideCharakter );
 
 public:
-                    EnhWMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = NULL )
-                                    : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF, pConfigItem ), bRecordPath( sal_False ), bEMFPlus( sal_False ) {};
+                    EnhWMFReader(
+                        SvStream& rStreamWMF,
+                        GDIMetaFile& rGDIMetaFile,
+                        FilterConfigItem* pConfigItem = NULL
+                    )
+                        : WinMtf( new WinMtfOutput( rGDIMetaFile )
+                        , rStreamWMF
+                        , pConfigItem )
+                        , bRecordPath( sal_False )
+                        , bEMFPlus( sal_False )
+                    {};
                     ~EnhWMFReader();
 
-    sal_Bool            ReadEnhWMF();
+    sal_Bool        ReadEnhWMF();
     void            ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC);
     void            ReadGDIComment();
 };
@@ -751,7 +846,7 @@ class WMFReader : public WinMtf
 private:
 
     VirtualDevice   aVDev;  // just for the purpose of "IsFontAvailable"
-    sal_uInt16          nUnitsPerInch;
+    sal_uInt16      nUnitsPerInch;
     sal_uInt32      nRecSize;
 
     // embedded EMF data
@@ -771,7 +866,7 @@ private:
     sal_uInt32      nUnicodeEscapeAction;
 
     // Liesst den Kopf der WMF-Datei
-    sal_Bool            ReadHeader(WMF_APMFILEHEADER *pAPMHeader);
+    sal_Bool        ReadHeader( WMF_APMFILEHEADER *pAPMHeader );
 
     // Liesst die Parameter des Rocords mit der Funktionsnummer nFunction.
     void            ReadRecordParams( sal_uInt16 nFunction );
@@ -784,10 +879,14 @@ private:
 
 public:
 
-                    WMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = NULL )
+                    WMFReader(
+                        SvStream& rStreamWMF,
+                        GDIMetaFile& rGDIMetaFile,
+                        FilterConfigItem* pConfigItem = NULL
+                    )
                         : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF, pConfigItem )
                         , pEMFStream(NULL)
-                        {}
+                    {}
 
                     ~WMFReader();
 
