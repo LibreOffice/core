@@ -43,6 +43,10 @@ ENVCFLAGS+=/FR$(SLO)$/
 .IF "$(GUI)"=="WNT"
 # --- Files -------------------------------------
         
+.IF "$(COM)" == "GCC"
+CFLAGS+=-fpermissive
+.ENDIF
+
 EXCEPTIONSFILES= \
         $(SLO)$/ADatabaseMetaDataImpl.obj				\
         $(SLO)$/Aolevariant.obj							\
