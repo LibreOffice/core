@@ -38,7 +38,9 @@ COMP1TYPELIST=$(TARGET)
 # --- Files --------------------------------------------------------
 
 # enable rtti
+.IF "$(COM)" == "MSC"
 CFLAGS+=-GR
+.ENDIF
 
 SLOFILES=$(SLO)$/fopentry.obj\
          $(SLO)$/folderpicker.obj\

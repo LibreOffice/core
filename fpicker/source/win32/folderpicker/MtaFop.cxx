@@ -34,7 +34,7 @@
 #include "MtaFop.hxx"
 #include <wchar.h>
 #include <process.h>
-#include "..\misc\resourceprovider.hxx"
+#include "../misc/resourceprovider.hxx"
 
 #include <systools/win32/comtools.hxx>
 
