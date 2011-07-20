@@ -34,8 +34,9 @@ LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
-# No ODMA on UNX
-ODMA_LIB_LIB=
+.IF "$(GUI)" == "WNT"
+ODMA_LIB_LIB=-lodma_lib
+.ENDIF
 
 #
 #externe libs in plattform.mk
