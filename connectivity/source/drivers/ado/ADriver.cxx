@@ -39,7 +39,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "connectivity/dbexception.hxx"
 #include "resource/ado_res.hrc"
-#include <Objbase.h>
+#include <objbase.h>
 
 
 #include "resource/sharedresources.hxx"
