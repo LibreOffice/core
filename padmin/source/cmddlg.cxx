@@ -129,11 +129,11 @@ void CommandStore::getStoredCommands( const char* pGroup, ::std::list< String >&
 {
     Config& rConfig( getPadminRC() );
     rConfig.SetGroup( pGroup );
-    int nKeys = rConfig.GetKeyCount();
+    sal_Int32 nKeys = rConfig.GetKeyCount();
     ::std::list< String >::const_iterator it;
     while( nKeys-- )
     {
-        String aCommand( rConfig.ReadKey( ByteString::CreateFromInt32( nKeys ), RTL_TEXTENCODING_UTF8 ) );
+        String aCommand( rConfig.ReadKey(rtl::OString::valueOf(nKeys), RTL_TEXTENCODING_UTF8 ) );
         if( aCommand.Len() )
         {
             for( it = rCommands.begin(); it != rCommands.end() && *it != aCommand; ++it )
@@ -156,7 +156,7 @@ void CommandStore::setCommands(
     ::std::list< String >::const_iterator it, loop;
     ::std::list< String > aWriteList;
 
-    int nWritten = 0;
+    sal_Int32 nWritten = 0;
     for( it = rCommands.begin(); it != rCommands.end(); ++it )
     {
         if( it->Len() )
@@ -176,7 +176,7 @@ void CommandStore::setCommands(
         nWritten--;
     }
     for( nWritten = 0, it = aWriteList.begin(); it != aWriteList.end(); ++it, ++nWritten )
-        rConfig.WriteKey( ByteString::CreateFromInt32( nWritten ), ByteString( *it, RTL_TEXTENCODING_UTF8 ) );
+        rConfig.WriteKey( rtl::OString::valueOf(nWritten), ByteString( *it, RTL_TEXTENCODING_UTF8 ) );
 }
 
 
