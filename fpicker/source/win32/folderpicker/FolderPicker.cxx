@@ -34,7 +34,7 @@
 //------------------------------------------------------------------------
 #include <osl/diagnose.h>
 
-#include "folderpicker.hxx"
+#include "FolderPicker.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "WinFOPImpl.hxx"
 

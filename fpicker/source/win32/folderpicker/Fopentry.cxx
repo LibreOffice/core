@@ -36,7 +36,7 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>
 
-#include "folderpicker.hxx"
+#include "FolderPicker.hxx"
 
 #include "FOPServiceInfo.hxx"
 #include "WinFOPImpl.hxx"
