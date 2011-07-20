@@ -39,24 +39,6 @@
 
 namespace vcl
 {
-    class VCL_DLLPUBLIC ThreadExecutor
-    {
-        oslThread               m_aThread;
-        oslCondition            m_aFinish;
-        long                    m_nReturn;
-
-    #ifdef THREADEX_IMPLEMENTATION
-    public:
-        SAL_DLLPRIVATE static void SAL_CALL worker( void* );
-    #endif
-    public:
-        ThreadExecutor();
-        virtual ~ThreadExecutor();
-
-        virtual long doIt() = 0;
-        long execute();
-    };
-
     class VCL_DLLPUBLIC SolarThreadExecutor
     {
         oslCondition            m_aStart;

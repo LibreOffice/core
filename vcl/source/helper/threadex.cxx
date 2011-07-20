@@ -35,46 +35,6 @@
 
 using namespace vcl;
 
-ThreadExecutor::ThreadExecutor()
-{
-    m_aFinish = osl_createCondition();
-    m_aThread = NULL;
-}
-
-ThreadExecutor::~ThreadExecutor()
-{
-    osl_destroyCondition( m_aFinish );
-    if( m_aThread )
-        osl_destroyThread( m_aThread );
-}
-
-extern "C"
-{
-    static void call_worker( void* pInstance )
-    {
-        ThreadExecutor::worker( pInstance );
-    }
-}
-
-void ThreadExecutor::worker( void* pInstance )
-{
-    ThreadExecutor* pThis = ((ThreadExecutor*)pInstance);
-    pThis->m_nReturn = pThis->doIt();
-    osl_setCondition( pThis->m_aFinish );
-}
-
-long ThreadExecutor::execute()
-{
-    osl_resetCondition( m_aFinish );
-    if( m_aThread )
-        osl_destroyThread( m_aThread ), m_aThread = NULL;
-    m_aThread = osl_createThread( call_worker, this );
-    while( ! osl_checkCondition( m_aFinish ) )
-        Application::Reschedule();
-    return m_nReturn;
-}
-
-
 SolarThreadExecutor::SolarThreadExecutor()
     :m_nReturn( 0 )
     ,m_bTimeout( false )
