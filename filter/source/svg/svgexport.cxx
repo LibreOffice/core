@@ -51,6 +51,8 @@
 #include <comphelper/processfactory.hxx>
 #include <i18npool/lang.h>
 #include <svl/zforlist.hxx>
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
+
 
 #include <boost/preprocessor/repetition/repeat.hpp>
 
@@ -86,6 +88,9 @@ static const char    aOOOAttrFooterVisibility[] = NSPREFIX "footer-visibility";
 static const char    aOOOAttrDateTimeField[] = NSPREFIX "date-time-field";
 static const char    aOOOAttrFooterField[] = NSPREFIX "footer-field";
 static const char    aOOOAttrHeaderField[] = NSPREFIX "header-field";
+
+// ooo xml attributes for pages and shapes
+static const char    aOOOAttrName[] = NSPREFIX "name";
 
 // ooo xml attributes for date_time_field
 static const char    aOOOAttrDateTimeFormat[] = NSPREFIX "date-time-format";
@@ -507,7 +512,6 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     const PropertyValue*                pValue = rDescriptor.getConstArray();
     sal_Bool                            bRet = sal_False;
 
-    mnMasterSlideId = mnSlideId = mnDrawingGroupId = mnDrawingId = 0;
     maFilterData.realloc( 0 );
 
     for ( sal_Int32 i = 0 ; i < nLength; ++i)
@@ -593,46 +597,57 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
                 // #110680#
                 // mpSVGExport = new SVGExport( xDocHandler );
-                    mpSVGExport = new SVGExport( xServiceFactory, xDocHandler, maFilterData );
+                mpSVGExport = new SVGExport( xServiceFactory, xDocHandler, maFilterData );
 
-                try
+                if( mpSVGExport != NULL )
                 {
-                    mxDefaultPage = mSelectedPages[0];
+                    // create an id for each draw page
+                    for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
+                        implRegisterInterface( mSelectedPages[i] );
 
-                    if( mxDefaultPage.is() )
+                    // create an id for each master page
+                    for( sal_Int32 i = 0; i < mMasterPageTargets.getLength(); ++i )
+                        implRegisterInterface( mMasterPageTargets[i] );
+
+                    try
                     {
-                        SvxDrawPage* pSvxDrawPage = SvxDrawPage::getImplementation( mxDefaultPage );
+                        mxDefaultPage = mSelectedPages[0];
 
-                        if( pSvxDrawPage )
+                        if( mxDefaultPage.is() )
                         {
-                            mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
-                            mpSdrModel = mpDefaultSdrPage->GetModel();
+                            SvxDrawPage* pSvxDrawPage = SvxDrawPage::getImplementation( mxDefaultPage );
 
-                            if( mpSdrModel )
+                            if( pSvxDrawPage )
                             {
-                                SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner(NULL);
+                                mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
+                                mpSdrModel = mpDefaultSdrPage->GetModel();
 
-                                maOldFieldHdl = rOutl.GetCalcFieldValueHdl();
-                                rOutl.SetCalcFieldValueHdl( LINK( this, SVGFilter, CalcFieldHdl) );
+                                if( mpSdrModel )
+                                {
+                                    SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner(NULL);
+
+                                    maOldFieldHdl = rOutl.GetCalcFieldValueHdl();
+                                    rOutl.SetCalcFieldValueHdl( LINK( this, SVGFilter, CalcFieldHdl) );
+                                }
                             }
+                            bRet = implExportDocument();
                         }
-                        bRet = implExportDocument();
                     }
-                }
-                catch( ... )
-                {
-                    delete mpSVGDoc, mpSVGDoc = NULL;
-                    OSL_FAIL( "Exception caught" );
-                }
+                    catch( ... )
+                    {
+                        delete mpSVGDoc, mpSVGDoc = NULL;
+                        OSL_FAIL( "Exception caught" );
+                    }
 
-                if( mpSdrModel )
-                    mpSdrModel->GetDrawOutliner( NULL ).SetCalcFieldValueHdl( maOldFieldHdl );
+                    if( mpSdrModel )
+                        mpSdrModel->GetDrawOutliner( NULL ).SetCalcFieldValueHdl( maOldFieldHdl );
 
-                delete mpSVGWriter, mpSVGWriter = NULL;
-                delete mpSVGExport, mpSVGExport = NULL;
-                delete mpSVGFontExport, mpSVGFontExport = NULL;
-                delete mpObjects, mpObjects = NULL;
-                mbPresentation = sal_False;
+                    delete mpSVGWriter, mpSVGWriter = NULL;
+                    delete mpSVGExport, mpSVGExport = NULL;
+                    delete mpSVGFontExport, mpSVGFontExport = NULL;
+                    delete mpObjects, mpObjects = NULL;
+                    mbPresentation = sal_False;
+                }
             }
         }
     }
@@ -1222,8 +1237,12 @@ sal_Bool SVGFilter::implExportPages( const SVGFilter::XDrawPageSequence & rxPage
             if( xShapes.is() )
             {
                 // add id attribute
-                OUString sPageId = implGetValidIDFromInterface( xShapes );
+                const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
+
+                OUString sPageName = implGetInterfaceName( rxPages[i] );
+                if( sPageName.getLength() )
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrName, sPageName );
 
                 {
                     {
@@ -1457,8 +1476,6 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     }
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", aShapeClass );
                     SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
-                    OUString    aId( B2UCONST( "DrawingGroup_" ) );
-                    OUString    aObjName( implGetValidIDFromInterface( rxShape, true ) ), aObjDesc;
 
                     Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
@@ -1478,8 +1495,14 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                         xExtDocHandler->characters( aDescription );
                     }
 
-                    if( aObjName.getLength() )
-                        ( ( aId += B2UCONST( "(" ) ) += aObjName ) += B2UCONST( ")" );
+
+                    Reference< XInterface > xRef( rxShape, UNO_QUERY );
+                    const OUString& rShapeId = implGetValidIDFromInterface( xRef );
+                    if( rShapeId.getLength() )
+                    {
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", rShapeId );
+                        //mpSVGExport->AddAttributeIdLegacy( XML_NAMESPACE_DRAW, rShapeId );
+                    }
 
                     {
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
@@ -1682,32 +1705,32 @@ OUString SVGFilter::implGetClassFromShape( const Reference< XShape >& rxShape )
 
 // -----------------------------------------------------------------------------
 
-OUString SVGFilter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf, sal_Bool bUnique )
+//inline
+void SVGFilter::implRegisterInterface( const Reference< XInterface >& rxIf )
+{
+    if( rxIf.is() )
+        (mpSVGExport->getInterfaceToIdentifierMapper()).registerReference( rxIf );
+}
+
+// -----------------------------------------------------------------------------
+
+//inline
+const ::rtl::OUString & SVGFilter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
+{
+   return (mpSVGExport->getInterfaceToIdentifierMapper()).getIdentifier( rxIf );
+}
+
+
+// -----------------------------------------------------------------------------
+
+OUString SVGFilter::implGetInterfaceName( const Reference< XInterface >& rxIf )
 {
     Reference< XNamed > xNamed( rxIf, UNO_QUERY );
     OUString            aRet;
-
     if( xNamed.is() )
     {
-        aRet = xNamed->getName().replace( ' ', '_' ).
-               replace( ':', '_' ).
-               replace( ',', '_' ).
-               replace( ';', '_' ).
-               replace( '&', '_' ).
-               replace( '!', '_' ).
-               replace( '|', '_' );
+        aRet = xNamed->getName().replace( ' ', '_' );
     }
-
-    if( ( aRet.getLength() > 0 ) && bUnique )
-    {
-        while( ::std::find( maUniqueIdVector.begin(), maUniqueIdVector.end(), aRet ) != maUniqueIdVector.end() )
-        {
-            aRet += B2UCONST( "_" );
-        }
-
-        maUniqueIdVector.push_back( aRet );
-    }
-
     return aRet;
 }
 

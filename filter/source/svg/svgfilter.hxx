@@ -261,7 +261,6 @@ class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
 {
 public:
     typedef ::boost::unordered_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface >    ObjectMap;
-    typedef ::std::vector< ::rtl::OUString > UniqueIdVector;
     typedef ::boost::unordered_set< Reference< XInterface >, HashReferenceXInterface >                          ObjectSet;
     typedef Sequence< Reference< XInterface > >                                                                 ObjectSequence;
     typedef Sequence< Reference< XDrawPage > >                                                                  XDrawPageSequence;
@@ -298,11 +297,6 @@ private:
     XDrawPageSequence                   mSelectedPages;
     XDrawPageSequence                   mMasterPageTargets;
 
-    UniqueIdVector                      maUniqueIdVector;
-    sal_Int32                           mnMasterSlideId;
-    sal_Int32                           mnSlideId;
-    sal_Int32                           mnDrawingGroupId;
-    sal_Int32                           mnDrawingId;
     Link                                maOldFieldHdl;
 
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
@@ -329,7 +323,9 @@ private:
     sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
 
     ::rtl::OUString                     implGetClassFromShape( const Reference< XShape >& rxShape );
-    ::rtl::OUString                     implGetValidIDFromInterface( const Reference< XInterface >& rxIf, sal_Bool bUnique = sal_False );
+    void                                implRegisterInterface( const Reference< XInterface >& rxIf );
+    const ::rtl::OUString &             implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+    ::rtl::OUString                     implGetInterfaceName( const Reference< XInterface >& rxIf );
     sal_Bool                            implLookForFirstVisiblePage();
     Any                                 implSafeGetPagePropSet( const ::rtl::OUString & sPropertyName,
                                                                 const Reference< XPropertySet > & rxPropSet,
@@ -357,9 +353,9 @@ public:
     virtual    ~SVGFilter();
 };
 
-
-
 // -----------------------------------------------------------------------------
+
+
 
 class SvStream;
 class Graphic;
