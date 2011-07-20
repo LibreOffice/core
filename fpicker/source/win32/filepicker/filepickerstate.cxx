@@ -37,7 +37,7 @@
 #include "controlaccess.hxx"
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/ListBoxControlActions.hpp>
+#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include "controlcommandrequest.hxx"
 #include "controlcommandresult.hxx"
@@ -47,7 +47,7 @@
 #include "FileOpenDlg.hxx"
 
 #include <memory>
-#include "..\misc\WinImplHelper.hxx"
+#include "../misc/WinImplHelper.hxx"
 //---------------------------------------------
 //
 //---------------------------------------------

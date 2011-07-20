@@ -66,6 +66,8 @@ static Reference< XInterface > SAL_CALL createInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
 {
     Reference< XInterface > xDlg;
+
+#ifdef __IFileDialog_INTERFACE_DEFINED__
     bool                    bVistaOrNewer = IsWindowsVistaOrNewer();
 
     if (bVistaOrNewer)
@@ -76,6 +78,7 @@ static Reference< XInterface > SAL_CALL createInstance(
                 new ::fpicker::win32::vista::VistaFilePicker( rServiceManager ) ) );
     }
     else
+#endif
     {
         OSL_TRACE("use normal system file picker ...");
         xDlg.set(

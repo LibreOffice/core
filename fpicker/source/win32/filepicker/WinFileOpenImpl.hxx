@@ -43,7 +43,7 @@
 #include "helppopupwindow.hxx"
 #include "customcontrol.hxx"
 #include "customcontrolfactory.hxx"
-#include "..\misc\resourceprovider.hxx"
+#include "../misc/resourceprovider.hxx"
 
 #include <utility>
 #include <memory>

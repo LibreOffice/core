@@ -37,6 +37,11 @@
 #pragma warning( disable : 4917 )
 #endif
 
+#include <shobjidl.h>
+
+// Without IFileDialog we can't do this
+#ifdef __IFileDialog_INTERFACE_DEFINED__
+
 #include "comptr.hxx"
 #include "vistatypes.h"
 #include "IVistaFilePickerInternalNotify.hxx"
@@ -47,8 +52,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/interlck.h>
-
-#include <shobjidl.h>
 
 //-----------------------------------------------------------------------------
 // namespace
@@ -222,6 +225,8 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
 } // namespace fpicker
 
 #undef css
+
+#endif // __IFileDialog_INTERFACE_DEFINED__
 
 #endif  // FPICKER_WIN32_VISTA_FILEPICKER_EVENTHANDLER_HXX
 

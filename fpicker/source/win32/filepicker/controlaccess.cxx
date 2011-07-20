@@ -37,7 +37,7 @@
 #include <sal/macros.h>
 #include <osl/diagnose.h>
 #include "controlaccess.hxx"
-#include "..\misc\WinImplHelper.hxx"
+#include "../misc/WinImplHelper.hxx"
 
 //------------------------------------------------------------
 // we are using a table based algorithm to dispatch control

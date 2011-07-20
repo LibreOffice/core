@@ -29,6 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
 
+#include <shobjidl.h>
+
+// Without IFileDialog we can't do much
+#ifdef __IFileDialog_INTERFACE_DEFINED__
+
 #include "VistaFilePickerEventHandler.hxx"
 #include "asyncrequests.hxx"
 
@@ -460,5 +465,7 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
+
+#endif // __IFileDialog_INTERFACE_DEFINED__
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

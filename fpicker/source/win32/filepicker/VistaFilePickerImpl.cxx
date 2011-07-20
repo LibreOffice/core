@@ -30,6 +30,11 @@
 // includes
 //-----------------------------------------------------------------------------
 
+#include <shobjidl.h>
+
+// Without IFileDialog we can't do much
+#ifdef __IFileDialog_INTERFACE_DEFINED__
+
 #include "VistaFilePickerImpl.hxx"
 
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -42,9 +47,9 @@
 #ifdef __MINGW32__
 #include <limits.h>
 #endif
-#include "..\misc\WinImplHelper.hxx"
+#include "../misc/WinImplHelper.hxx"
 
-#include <Shlguid.h>
+#include <shlguid.h>
 
  inline bool is_current_process_window(HWND hwnd)
 {
@@ -1265,5 +1270,7 @@ bool VistaFilePickerImpl::onFileTypeChanged( UINT /*nTypeIndex*/ )
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
+
+#endif // __IFileDialog_INTERFACE_DEFINED__
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

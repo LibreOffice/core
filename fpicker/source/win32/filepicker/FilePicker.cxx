@@ -38,11 +38,11 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/diagnose.h>
 
-#include "filepicker.hxx"
+#include "FilePicker.hxx"
 #include "WinFileOpenImpl.hxx"
 
 #include "FPServiceInfo.hxx"
-#include "..\misc\WinImplHelper.hxx"
+#include "../misc/WinImplHelper.hxx"
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include "filepickereventnotification.hxx"
 

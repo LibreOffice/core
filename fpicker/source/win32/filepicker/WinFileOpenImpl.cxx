@@ -42,10 +42,10 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
-#include <com/sun/star/ui/dialogs/ListBoxControlActions.hpp>
-#include "..\misc\WinImplHelper.hxx"
+#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
+#include "../misc/WinImplHelper.hxx"
 
-#include "filepicker.hxx"
+#include "FilePicker.hxx"
 #include "controlaccess.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.hxx>
