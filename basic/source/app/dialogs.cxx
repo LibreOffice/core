@@ -47,7 +47,7 @@
 #include <vcl/splitwin.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
-
+#include <unotools/bootstrap.hxx>
 
 #include <svtools/svtdata.hxx>
 #include <svl/solar.hrc>
@@ -73,6 +73,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& id )
 , aOk  ( this, ResId( RID_OK, *id.GetResMgr() ) )
 {
     FreeResource();
+    rtl::OUString sDefault;
+    aVersionString.SetText( utl::Bootstrap::getBuildIdData( sDefault ) );
 }
 
 
