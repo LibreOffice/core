@@ -2,6 +2,10 @@
 #ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 #define __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 
+#include "sal/config.h"
+#include "xmloff/dllapi.h"
+#include "sal/types.h"
+
 #include <map>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -11,7 +15,7 @@ namespace comphelper
 
 typedef ::std::map< rtl::OUString, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > IdMap_t;
 
-class UnoInterfaceToUniqueIdentifierMapper
+class XMLOFF_DLLPUBLIC UnoInterfaceToUniqueIdentifierMapper
 {
 public:
     UnoInterfaceToUniqueIdentifierMapper();
@@ -44,7 +48,7 @@ private:
     bool findReference( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rInterface, IdMap_t::const_iterator& rIter ) const;
     bool findIdentifier( const rtl::OUString& rIdentifier, IdMap_t::const_iterator& rIter ) const;
 
-    IdMap_t maEntries;
+    IdMap_t	maEntries;
     sal_Int32 mnNextId;
 };
 

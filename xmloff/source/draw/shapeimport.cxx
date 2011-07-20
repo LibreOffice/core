@@ -34,7 +34,7 @@
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
 #include <list>
 

@@ -97,6 +97,7 @@ $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/txtstyle.hxx,xmloff/txts
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/txtstyli.hxx,xmloff/txtstyli.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/uniref.hxx,xmloff/uniref.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/unoatrcn.hxx,xmloff/unoatrcn.hxx))
+$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/unointerfacetouniqueidentifiermapper.hxx,xmloff/unointerfacetouniqueidentifiermapper.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xformsexport.hxx,xmloff/xformsexport.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xformsimport.hxx,xmloff/xformsimport.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmlaustp.hxx,xmloff/xmlaustp.hxx))

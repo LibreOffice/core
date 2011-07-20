@@ -32,7 +32,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
 #include <list>
 #include <comphelper/extract.hxx>

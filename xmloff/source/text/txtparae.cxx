@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <tools/debug.hxx>
 #include <svl/svarray.hxx>
 #include <rtl/ustrbuf.hxx>

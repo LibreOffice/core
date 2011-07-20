@@ -40,7 +40,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/families.hxx>

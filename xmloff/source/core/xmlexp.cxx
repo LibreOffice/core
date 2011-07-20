@@ -32,7 +32,7 @@
 #ifdef PRECOMPILED
 #include "filt_pch.hxx"
 #endif
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>

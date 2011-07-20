@@ -64,7 +64,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include "sdxmlexp_impl.hxx"
 #include "sdpropls.hxx"
 #include <xmloff/xmltoken.hxx>

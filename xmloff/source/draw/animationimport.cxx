@@ -31,7 +31,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
