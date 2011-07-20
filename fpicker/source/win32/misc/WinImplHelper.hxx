@@ -52,18 +52,6 @@
 //------------------------------------------------------------------------
 
 bool SAL_CALL IsWindowsVistaOrNewer();
-bool SAL_CALL IsWindows7();
-bool SAL_CALL IsWindowsVista();
-bool SAL_CALL IsWindows2000();
-bool SAL_CALL IsWindowsXP();
-bool SAL_CALL IsWindows98();
-bool SAL_CALL IsWindowsME();
-
-// returns true if the platform is
-// Windows 2000 or above
-bool SAL_CALL IsWindows2000Platform();
-
-#define IsWin2000 IsWindows2000
 
 // set actions
 void SAL_CALL ListboxAddItem(

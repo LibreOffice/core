@@ -715,8 +715,8 @@ void CWinFileOpenImpl::EnlargeStdControlLabels() const
     RECT rcOkButton;
     GetWindowRect(hOkButton, &rcOkButton);
 
-    const int MAX_GAP = IsWindows98() ? 5 : 10;
-    const int OFFSET = IsWindows98() ? 10 : 0;
+    const int MAX_GAP = 10;
+    const int OFFSET = 0;
 
     RECT rcFileNameBox;
     GetWindowRect(hFileNameBox, &rcFileNameBox);
@@ -1007,8 +1007,7 @@ void SAL_CALL CWinFileOpenImpl::InitialSetDefaultName()
         // of an edit field for the file name edit field
         // the control id of this box is cmb13 and not
         // edt1 as before so we must use this id
-        if (IsWindows2000Platform())
-            edt1Id = cmb13;
+        edt1Id = cmb13;
 
         HWND hwndEdt1 = GetDlgItem(m_hwndFileOpenDlg, edt1Id);
         SetWindowText(hwndEdt1, reinterpret_cast<LPCTSTR>(m_defaultName.getStr()));

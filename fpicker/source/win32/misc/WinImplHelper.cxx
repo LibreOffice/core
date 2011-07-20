@@ -73,25 +73,6 @@ const sal_Unicode   AMPERSAND_SIGN = L'&';
 // Windows ME       VER_PLATFORM_WIN32_WINDOWS  4       90
 //------------------------------------------------------------
 
-bool SAL_CALL IsWindowsVersion(unsigned int PlatformId, unsigned int MajorVersion, int MinorVersion = -1)
-{
-    OSVERSIONINFO osvi;
-    osvi.dwOSVersionInfoSize = sizeof(osvi);
-
-    if(!GetVersionEx(&osvi))
-        return false;
-
-    bool bRet = (PlatformId == osvi.dwPlatformId) &&
-                (MajorVersion == osvi.dwMajorVersion);
-
-    if (MinorVersion > -1)
-        bRet = bRet &&
-            (sal::static_int_cast< unsigned int >(MinorVersion) ==
-             osvi.dwMinorVersion);
-
-    return bRet;
-}
-
 //------------------------------------------------------------
 // determine if we are running under Vista or newer OS
 //------------------------------------------------------------
@@ -112,81 +93,6 @@ bool SAL_CALL IsWindowsVistaOrNewer()
          sal::static_int_cast< unsigned int >(0));
 
     return bRet;
-}
-
-//------------------------------------------------------------
-// determine if we are running under Windows 7
-//------------------------------------------------------------
-
-bool SAL_CALL IsWindows7()
-{
-    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 6, 1);
-}
-
-//------------------------------------------------------------
-// determine if we are running under Windows Vista
-//------------------------------------------------------------
-
-bool SAL_CALL IsWindowsVista()
-{
-    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 6, 0);
-}
-
-//------------------------------------------------------------
-// determine if we are running under Windows XP
-//------------------------------------------------------------
-
-bool SAL_CALL IsWindowsXP()
-{
-    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5, 1);
-}
-
-//------------------------------------------------------------
-// determine if we are running under Windows 2000
-//------------------------------------------------------------
-
-bool SAL_CALL IsWindows2000()
-{
-    return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5, 0);
-}
-
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
-
-bool SAL_CALL IsWindows98()
-{
-    return IsWindowsVersion(VER_PLATFORM_WIN32_WINDOWS, 4, 10);
-}
-
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
-
-bool SAL_CALL IsWindowsME()
-{
-    return  IsWindowsVersion(VER_PLATFORM_WIN32_WINDOWS, 4, 90);
-}
-
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
-
-bool SAL_CALL IsWindows2000Platform()
-{
-    // POST: return true if we are at least on Windows 2000
-
-    // WRONG!: return IsWindowsVersion(VER_PLATFORM_WIN32_NT, 5);
-
-    OSVERSIONINFO osvi;
-    ZeroMemory(&osvi, sizeof(osvi));
-    osvi.dwOSVersionInfoSize = sizeof(osvi);
-    GetVersionEx(&osvi);
-    if ( osvi.dwMajorVersion >= 5 )
-    {
-        return true;
-    }
-    return false;
 }
 
 //------------------------------------------------------------
