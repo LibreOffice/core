@@ -38,9 +38,11 @@
 #include "FilePicker.hxx"
 #include "FPServiceInfo.hxx"
 
+#ifdef _MSC_VER
 #pragma warning (disable:4917)
+#endif
 #include "VistaFilePicker.hxx"
-#include "..\misc\WinImplHelper.hxx"
+#include "../misc/WinImplHelper.hxx"
 #include <stdio.h>
 
 //-----------------------------------------------

@@ -44,7 +44,7 @@
 #include "FilterContainer.hxx"
 #include "VistaFilePickerEventHandler.hxx"
 #include "IVistaFilePickerInternalNotify.hxx"
-#include "..\misc\resourceprovider.hxx"
+#include "../misc/resourceprovider.hxx"
 
 #include <com/sun/star/uno/Sequence.hxx>
 
