@@ -29,6 +29,10 @@
 #ifndef _XMLOFF_ANIMATIONEXPORT_HXX
 #define _XMLOFF_ANIMATIONEXPORT_HXX
 
+#include "sal/config.h"
+#include "xmloff/dllapi.h"
+#include "sal/types.h"
+
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/uniref.hxx>
@@ -39,9 +43,9 @@ namespace xmloff
 {
 class AnimationsExporterImpl;
 
-class AnimationsExporter : public UniRefBase
+class XMLOFF_DLLPUBLIC AnimationsExporter : public UniRefBase
 {
-    AnimationsExporterImpl* mpImpl;
+    AnimationsExporterImpl*	mpImpl;
 
 public:
     AnimationsExporter( SvXMLExport& rExport, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPageProps  );
@@ -53,6 +57,6 @@ public:
 
 }
 
-#endif  //  _XMLOFF_ANIMATIONEXPORT_HXX
+#endif	//  _XMLOFF_ANIMATIONEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

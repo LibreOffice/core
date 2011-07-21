@@ -76,7 +76,7 @@
 #include <xmloff/shapeexport.hxx>
 
 #include "animations.hxx"
-#include "animationexport.hxx"
+#include <xmloff/animationexport.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

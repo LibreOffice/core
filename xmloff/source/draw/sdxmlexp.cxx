@@ -78,7 +78,7 @@
 #include "XMLNumberStylesExport.hxx"
 #include <tools/string.hxx>
 
-#include "animationexport.hxx"
+#include <xmloff/animationexport.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
