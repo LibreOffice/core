@@ -1008,8 +1008,8 @@ elsif ($platform =~ m/linux|netbsd|freebsd|aix|openbsd|dragonfly/)
    $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
 }
 elsif ($platform =~ m/darwin/ && $platform !~ m/^arm/)
-{  $SOLAREXTRALIB     = $L.$LIB.
-                        $L.$USR.$LIB;
+{
+  # Nothing should be needed
 }
 elsif ($platform !~ m/cygwin/ && $platform !~ m/mingw32/ && $platform !~ m/^arm-apple/)
 {  AddWarning( "set_soenv", "$platform not configured for linkage create libraries" );
@@ -1292,9 +1292,6 @@ elsif ($platform =~ m/cygwin|mingw32/)
 }
 elsif ($platform =~ m/darwin/)
 {  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB;
-   if ($platform !~ m/^arm-apple/)
-   {  $SOLARLIB      .= $L.$USR_LIB;
-   }
     # [ed] 6/15/02 Add in X11 libraries onto the library path
     if ($GUIBASE eq "unx") {
        $SOLARLIB      .= $L.$XLIB;
