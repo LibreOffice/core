@@ -221,12 +221,6 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
             {
                 aBuffer.append(aDesktopEnvironment);
                 aBuffer.append("-");
-
-                /* CDE requires file urls to be decoded */
-                if ( m_aDesktopEnvironment.equals("CDE") && 0 == aURL.compareToAscii("file://", 7) )
-                {
-                    aURL = rtl::Uri::decode(aURL, rtl_UriDecodeWithCharset, osl_getThreadTextEncoding());
-                }
             }
         }
 
