@@ -114,14 +114,12 @@ private:
 
 class PacketHandler;
 class CommunicationManager;
-class SingleCommunicationManager;
 class MultiCommunicationManager;
 class CommunicationManagerServerAcceptThread;
 class CommunicationLink : public SvRefBase
 {
 protected:
     friend class CommunicationManager;
-    friend class SingleCommunicationManager;
     friend class MultiCommunicationManager;
     friend class CommunicationManagerServerAcceptThread;
     // Darf nicht abger�umt werden zwischen Empfang des Streams und ende des Callbacks
@@ -287,24 +285,6 @@ private:
     sal_Bool bIsMultiChannel;
 };
 
-class SingleCommunicationManager : public CommunicationManager
-{
-public:
-    SingleCommunicationManager( sal_Bool bUseMultiChannel = sal_False );
-    virtual ~SingleCommunicationManager();
-    virtual sal_Bool StopCommunication();       // H�lt alle CommunicationLinks an
-    virtual sal_Bool IsLinkValid( CommunicationLink* pCL );
-    virtual sal_uInt16 GetCommunicationLinkCount();
-    virtual CommunicationLinkRef GetCommunicationLink( sal_uInt16 nNr );
-
-protected:
-    virtual void CallConnectionOpened( CommunicationLink* pCL );
-    virtual void CallConnectionClosed( CommunicationLink* pCL );
-    CommunicationLinkRef xActiveLink;
-    CommunicationLink *pInactiveLink;
-    virtual void DestroyingLink( CommunicationLink *pCL );  // Link tr�gt sich im Destruktor aus
-};
-
 class ICommunicationManagerClient
 {
     friend class CommonSocketFunctions;
@@ -345,17 +325,6 @@ protected:
     sal_Bool bIsRequestShutdownPending;
     virtual void WaitForShutdown()=0;
     void SetNewPacketAsCurrent();
-};
-
-class SimpleCommunicationLinkViaSocketWithReceiveCallbacks : public SimpleCommunicationLinkViaSocket
-{
-public:
-    SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, osl::StreamSocket* pSocket );
-    ~SimpleCommunicationLinkViaSocketWithReceiveCallbacks();
-    virtual sal_Bool ReceiveDataStream();
-protected:
-    virtual sal_Bool ShutdownCommunication();   /// Really stop the Communication
-    virtual void WaitForShutdown();
 };
 
 class CommonSocketFunctions

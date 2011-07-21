@@ -343,17 +343,6 @@ sal_Bool SimpleCommunicationLinkViaSocket::SendHandshake( HandshakeType aHandsha
     return !bWasError;
 }
 
-SimpleCommunicationLinkViaSocketWithReceiveCallbacks::SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, osl::StreamSocket* pSocket )
-: SimpleCommunicationLinkViaSocket( pMan, pSocket )
-{
-}
-
-SimpleCommunicationLinkViaSocketWithReceiveCallbacks::~SimpleCommunicationLinkViaSocketWithReceiveCallbacks()
-{
-    if ( pMyManager && pMyManager->IsLinkValid( this ) && !bIsRequestShutdownPending )
-        StopCommunication();
-}
-
 bool SimpleCommunicationLinkViaSocket::IsReceiveReady()
 {
     if ( !IsCommunicationError() )
@@ -364,50 +353,6 @@ bool SimpleCommunicationLinkViaSocket::IsReceiveReady()
 
     return false;
 }
-
-void SimpleCommunicationLinkViaSocketWithReceiveCallbacks::WaitForShutdown()
-{
-    CommunicationLinkRef rHold(this);       // avoid deleting this link before the end of the method
-
-    while( pMyManager && !IsCommunicationError() && IsReceiveReady())
-        ReceiveDataStream();
-}
-
-sal_Bool SimpleCommunicationLinkViaSocketWithReceiveCallbacks::ReceiveDataStream()
-{
-    if ( DoReceiveDataStream() )
-    {
-        SetNewPacketAsCurrent();
-        StartCallback();
-        DataReceived();
-        return sal_True;
-    }
-    else
-    {
-        StartCallback();
-        ShutdownCommunication();
-        return sal_False;
-    }
-}
-
-sal_Bool SimpleCommunicationLinkViaSocketWithReceiveCallbacks::ShutdownCommunication()
-{
-    if ( GetStreamSocket() )
-        GetStreamSocket()->shutdown();
-
-    if ( GetStreamSocket() )
-        GetStreamSocket()->close();
-
-    osl::StreamSocket* pTempSocket = GetStreamSocket();
-    SetStreamSocket( NULL );
-    delete pTempSocket;
-
-    ConnectionClosed();
-
-    return sal_True;
-}
-
-
 
 CommunicationManager::CommunicationManager( sal_Bool bUseMultiChannel )
 : nInfoType( CM_NONE )
@@ -575,83 +520,6 @@ void CommunicationManager::SetApplication( const ByteString& aApp, sal_Bool bRun
         for ( i = 0 ; i < GetCommunicationLinkCount() ; i++ )
             GetCommunicationLink( i )->SetApplication( aApp );
     }
-}
-
-
-
-SingleCommunicationManager::SingleCommunicationManager( sal_Bool bUseMultiChannel )
-: CommunicationManager( bUseMultiChannel )
-{
-    xActiveLink = NULL;
-    pInactiveLink = NULL;
-}
-
-SingleCommunicationManager::~SingleCommunicationManager()
-{
-    StopCommunication();
-    if ( pInactiveLink )
-        pInactiveLink->InvalidateManager();
-}
-
-sal_Bool SingleCommunicationManager::StopCommunication()
-{
-    if ( xActiveLink.Is() )
-    {
-        sal_Bool bSuccess = xActiveLink->StopCommunication();
-        if ( pInactiveLink )
-            pInactiveLink->InvalidateManager();
-        pInactiveLink = xActiveLink;
-        xActiveLink.Clear();
-        return bSuccess;
-    }
-    return sal_True;
-}
-
-sal_Bool SingleCommunicationManager::IsLinkValid( CommunicationLink* pCL )
-{
-    return &xActiveLink == pCL;
-}
-
-sal_uInt16 SingleCommunicationManager::GetCommunicationLinkCount()
-{
-    return IsCommunicationRunning()?1:0;
-}
-
-CommunicationLinkRef SingleCommunicationManager::GetCommunicationLink( sal_uInt16 )
-{
-    return xActiveLink;
-}
-
-void SingleCommunicationManager::CallConnectionOpened( CommunicationLink* pCL )
-{
-    DBG_ASSERT( !xActiveLink.Is(), "Es ist bereits ein CommunicationLink aktiv");
-    if ( xActiveLink.Is() )
-    {
-        if ( pInactiveLink )
-            pInactiveLink->InvalidateManager();
-        pInactiveLink = xActiveLink;
-        xActiveLink->StopCommunication();   // Den alten Link brutal abw�rgen
-    }
-    xActiveLink = pCL;
-    CommunicationManager::CallConnectionOpened( pCL );
-}
-
-void SingleCommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
-{
-    CommunicationManager::CallConnectionClosed( pCL );
-
-    DBG_ASSERT( pCL == xActiveLink, "SingleCommunicationManager::CallConnectionClosed mit fremdem Link");
-    if ( pInactiveLink )
-        pInactiveLink->InvalidateManager();
-    pInactiveLink = xActiveLink;
-    xActiveLink.Clear();
-    bIsCommunicationRunning = sal_False;
-}
-
-void SingleCommunicationManager::DestroyingLink( CommunicationLink *pCL )
-{
-    pInactiveLink = NULL;
-    pCL->InvalidateManager();
 }
 
 sal_Bool CommonSocketFunctions::DoStartCommunication( CommunicationManager *pCM, ICommunicationManagerClient *pCMC, ByteString aHost, sal_uLong nPort )
