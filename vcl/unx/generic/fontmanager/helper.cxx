@@ -243,12 +243,6 @@ OUString psp::getFontPath()
                 aPathBuffer.appendAscii( "/user/fonts" );
             }
         }
-        OString aEnvPath( getEnvironmentPath( "SAL_FONTPATH_PRIVATE" ) );
-        if( aEnvPath.getLength() )
-        {
-            aPathBuffer.append( sal_Unicode(';') );
-            aPathBuffer.append( OStringToOUString( aEnvPath, osl_getThreadTextEncoding() ) );
-        }
 
         aPath = aPathBuffer.makeStringAndClear();
 #if OSL_DEBUG_LEVEL > 1

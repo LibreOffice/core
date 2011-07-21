@@ -1592,11 +1592,6 @@ sal_uInt16 Application::GetSystemWindowMode()
 const String& Application::GetFontPath()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( !pSVData->maAppData.mpFontPath )
-    {
-        if( const char* pFontPath = ::getenv( "SAL_FONTPATH_PRIVATE" ) )
-            pSVData->maAppData.mpFontPath = new String( String::CreateFromAscii( pFontPath ) );
-    }
 
     if( pSVData->maAppData.mpFontPath )
         return *(pSVData->maAppData.mpFontPath);

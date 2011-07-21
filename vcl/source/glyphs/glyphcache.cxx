@@ -177,8 +177,6 @@ GlyphCache& GlyphCache::GetInstance()
 
 void GlyphCache::LoadFonts()
 {
-    if( const char* pFontPath = ::getenv( "SAL_FONTPATH_PRIVATE" ) )
-        AddFontPath( String::CreateFromAscii( pFontPath ) );
     const String& rFontPath = Application::GetFontPath();
     if( rFontPath.Len() > 0 )
         AddFontPath( rFontPath );

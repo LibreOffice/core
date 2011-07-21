@@ -2576,8 +2576,6 @@ void SalDisplay::PrintInfo() const
                  GetEnv( "DISPLAY" ) );
         fprintf( stderr, "\t$SAL_VISUAL       \t\"%s\"\n",
                  GetEnv( "SAL_VISUAL" ) );
-        fprintf( stderr, "\t$SAL_FONTPATH     \t\"%s\"\n",
-                 GetEnv( "SAL_FONTPATH" ) );
         fprintf( stderr, "\t$SAL_NOSEGV       \t\"%s\"\n",
                  GetEnv( "SAL_NOSEGV" ) );
         fprintf( stderr, "\t$SAL_IGNOREXERRORS\t\"%s\"\n",
