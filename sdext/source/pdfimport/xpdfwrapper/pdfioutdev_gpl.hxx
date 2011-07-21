@@ -65,7 +65,10 @@ class GfxPath;
 class GfxFont;
 class PDFDoc;
 #ifndef SYSTEM_POPPLER
+#define POPPLER_CHECK_VERSION(major,minor,micro) (0)
 typedef GString GooString;
+#else
+#include <glib/poppler-features.h>
 #endif
 
 namespace pdfi
@@ -194,8 +197,12 @@ namespace pdfi
         // virtual void cvtDevToUser(double dx, double dy, double *ux, double *uy);
         // virtual void cvtUserToDev(double ux, double uy, int *dx, int *dy);
 
+        #if POPPLER_CHECK_VERSION(0, 17, 0)
+        virtual void processLink(AnnotLink *link, Catalog *catalog);
+        #else
         //----- link borders
         virtual void processLink(Link *link, Catalog *catalog);
+        #endif
 
         //----- save/restore graphics state
         virtual void saveState(GfxState *state);

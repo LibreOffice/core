@@ -370,6 +370,13 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(ZIP1DIR)_lang_track.mk
     $(TYPE) description.xml | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
 
+ALLTAR: $(MISC)/../bin/presenter-screen.oxt
+# hotfix to missing localizations
+.IF "$(WITH_LANG)"!=""
+    $(COPY) $(ZIP1DIR)_in/merge/org/openoffice/Office/extension/PresenterScreen.xcu $(ZIP1DIR)/registry/data/org/openoffice/Office/extension/
+    cd $(ZIP1DIR);zip -r -u ../../bin/presenter-screen.oxt registry/data/org/openoffice/Office/extension/PresenterScreen.xcu
+.ENDIF
+
 .ELSE
 ivo:
     $(ECHO)

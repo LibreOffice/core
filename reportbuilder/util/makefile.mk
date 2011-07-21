@@ -30,11 +30,7 @@ PRJNAME=reportbuilder
 TARGET=rpt
 EXTENSION_VERSION_BASE=1.2.1
 
-.IF "$(CWS_WORK_STAMP)" == ""
     EXTENSION_VERSION=$(EXTENSION_VERSION_BASE)
-.ELSE
-    EXTENSION_VERSION=$(EXTENSION_VERSION_BASE).cws.$(CWS_WORK_STAMP)
-.ENDIF
 
 # --- Settings ----------------------------------
 .INCLUDE :  makefile.pmk
