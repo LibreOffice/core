@@ -35,7 +35,55 @@ namespace comphelper { namespace module
 {
 //........................................................................
 
-    DECLARE_COMPONENT_MODULE( ComphelperModule, ComphelperModuleClient )
+    class ComphelperModule : public ::comphelper::OModule
+    {
+        friend struct ComphelperModuleCreator;
+        typedef ::comphelper::OModule BaseClass;
+
+    public:
+        static ComphelperModule& getInstance();
+
+    private:
+        ComphelperModule();
+    };
+
+    /* -------------------------------------------------------------------- */
+    class ComphelperModuleClient : public ::comphelper::OModuleClient
+    {
+    private:
+        typedef ::comphelper::OModuleClient BaseClass;
+
+    public:
+        ComphelperModuleClient() : BaseClass( ComphelperModule::getInstance() )
+        {
+        }
+    };
+
+    /* -------------------------------------------------------------------- */
+    template < class TYPE >
+    class OAutoRegistration : public ::comphelper::OAutoRegistration< TYPE >
+    {
+    private:
+        typedef ::comphelper::OAutoRegistration< TYPE > BaseClass;
+
+    public:
+        OAutoRegistration() : BaseClass( ComphelperModule::getInstance() )
+        {
+        }
+    };
+
+    /* -------------------------------------------------------------------- */
+    template < class TYPE >
+    class OSingletonRegistration : public ::comphelper::OSingletonRegistration< TYPE >
+    {
+    private:
+        typedef ::comphelper::OSingletonRegistration< TYPE > BaseClass;
+
+    public:
+        OSingletonRegistration() : BaseClass( ComphelperModule::getInstance() )
+        {
+        }
+    };
 
 //........................................................................
 } } // namespace comphelper::module
