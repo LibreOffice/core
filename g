@@ -145,7 +145,7 @@ while shift ; do
 done
 
 # do it!
-DIRS="bootstrap $(cd $CLONEDIR ; ls)"
+DIRS="core $(cd $CLONEDIR ; ls)"
 if [ "$COMMAND" = "clone" ] ; then
     DIRS=$(cat "$RAWBUILDDIR/bin/repo-list")
     # update hooks in the main repo too
@@ -155,7 +155,7 @@ for REPO in $DIRS ; do
     DIR="$CLONEDIR/$REPO"
     NAME="$REPO"
     HOOKDIR="../../../../git-hooks"
-    if [ "$REPO" = "bootstrap" ] ; then
+    if [ "$REPO" = "core" ] ; then
         DIR="$RAWBUILDDIR"
         NAME="main repo"
         HOOKDIR="../../git-hooks"
@@ -228,7 +228,7 @@ for REPO in $DIRS ; do
                     ;;
                 clone)
                     EXTRA="$(git config remote.origin.url)"
-		    EXTRA=${EXTRA/bootstrap/${REPO}}
+		    EXTRA=${EXTRA/core/${REPO}}
                     ;;
             esac
 
