@@ -91,20 +91,21 @@ $(eval $(call gb_Library_add_linked_libs,sd,\
 $(eval $(call gb_Library_set_componentfile,sd,sd/util/sd))
 
 $(eval $(call gb_Library_add_exception_objects,sd,\
+    sd/source/core/CustomAnimationCloner \
+    sd/source/core/CustomAnimationEffect \
+    sd/source/core/CustomAnimationPreset \
+    sd/source/core/EffectMigration \
+    sd/source/core/PageListWatcher \
+    sd/source/core/TransitionPreset \
     sd/source/core/anminfo \
     sd/source/core/annotations/Annotation \
     sd/source/core/annotations/AnnotationEnumeration \
     sd/source/core/cusshow \
-    sd/source/core/CustomAnimationCloner \
-    sd/source/core/CustomAnimationEffect \
-    sd/source/core/CustomAnimationPreset \
     sd/source/core/drawdoc \
     sd/source/core/drawdoc2 \
     sd/source/core/drawdoc3 \
     sd/source/core/drawdoc4 \
     sd/source/core/drawdoc_animations \
-    sd/source/core/EffectMigration \
-    sd/source/core/PageListWatcher \
     sd/source/core/pglink \
     sd/source/core/sdattr \
     sd/source/core/sdiocmpt \
@@ -117,17 +118,16 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/core/stlpool \
     sd/source/core/stlsheet \
     sd/source/core/text/textapi \
-    sd/source/core/TransitionPreset \
     sd/source/core/typemap \
-    sd/source/core/undoanim \
     sd/source/core/undo/undofactory \
     sd/source/core/undo/undomanager \
     sd/source/core/undo/undoobjects \
+    sd/source/core/undoanim \
     sd/source/filter/cgm/sdcgmfilter \
     sd/source/filter/grf/sdgrffilter \
+    sd/source/filter/html/HtmlOptionsDialog \
     sd/source/filter/html/buttonset \
     sd/source/filter/html/htmlex \
-    sd/source/filter/html/HtmlOptionsDialog \
     sd/source/filter/html/sdhtmlfilter \
     sd/source/filter/sdfilter \
     sd/source/filter/sdpptwrp \
@@ -153,9 +153,9 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/animations/CustomAnimationList \
     sd/source/ui/animations/CustomAnimationPane \
     sd/source/ui/animations/DialogListBox \
-    sd/source/ui/animations/motionpathtag \
-    sd/source/ui/animations/SlideTransitionPane \
     sd/source/ui/animations/STLPropertySet \
+    sd/source/ui/animations/SlideTransitionPane \
+    sd/source/ui/animations/motionpathtag \
     sd/source/ui/annotations/annotationmanager \
     sd/source/ui/annotations/annotationtag \
     sd/source/ui/annotations/annotationwindow \
@@ -171,6 +171,15 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/app/tmplctrl \
     sd/source/ui/controller/slidelayoutcontroller \
     sd/source/ui/dlg/AnimationChildWindow \
+    sd/source/ui/dlg/LayerDialogChildWindow \
+    sd/source/ui/dlg/LayerDialogContent \
+    sd/source/ui/dlg/LayerTabBar \
+    sd/source/ui/dlg/NavigatorChildWindow \
+    sd/source/ui/dlg/PaneChildWindows \
+    sd/source/ui/dlg/PaneDockingWindow \
+    sd/source/ui/dlg/PaneShells \
+    sd/source/ui/dlg/SpellDialogChildWindow \
+    sd/source/ui/dlg/TemplateScanner \
     sd/source/ui/dlg/animobjs \
     sd/source/ui/dlg/assclass \
     sd/source/ui/dlg/diactrl \
@@ -179,19 +188,10 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/dlg/filedlg \
     sd/source/ui/dlg/gluectrl \
     sd/source/ui/dlg/ins_paste \
-    sd/source/ui/dlg/LayerDialogChildWindow \
-    sd/source/ui/dlg/LayerDialogContent \
     sd/source/ui/dlg/layeroptionsdlg \
-    sd/source/ui/dlg/LayerTabBar \
-    sd/source/ui/dlg/NavigatorChildWindow \
     sd/source/ui/dlg/navigatr \
-    sd/source/ui/dlg/PaneChildWindows \
-    sd/source/ui/dlg/PaneDockingWindow \
-    sd/source/ui/dlg/PaneShells \
     sd/source/ui/dlg/sdabstdlg \
     sd/source/ui/dlg/sdtreelb \
-    sd/source/ui/dlg/SpellDialogChildWindow \
-    sd/source/ui/dlg/TemplateScanner \
     sd/source/ui/dlg/unchss \
     sd/source/ui/docshell/docshel2 \
     sd/source/ui/docshell/docshel3 \
@@ -300,10 +300,10 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/presenter/PresenterTextView \
     sd/source/ui/presenter/SlideRenderer \
     sd/source/ui/slideshow/PaneHider \
+    sd/source/ui/slideshow/SlideShowRestarter \
     sd/source/ui/slideshow/showwin \
     sd/source/ui/slideshow/slideshow \
     sd/source/ui/slideshow/slideshowimpl \
-    sd/source/ui/slideshow/SlideShowRestarter \
     sd/source/ui/slideshow/slideshowviewimpl \
     sd/source/ui/slidesorter/cache/SlsBitmapCache \
     sd/source/ui/slidesorter/cache/SlsBitmapCompressor \
@@ -360,23 +360,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/table/tablefunction \
     sd/source/ui/table/tableobjectbar \
     sd/source/ui/toolpanel/ControlContainer \
-    sd/source/ui/toolpanel/controls/AllMasterPagesSelector \
-    sd/source/ui/toolpanel/controls/CurrentMasterPagesSelector \
-    sd/source/ui/toolpanel/controls/CustomAnimationPanel \
-    sd/source/ui/toolpanel/controls/DocumentHelper \
-    sd/source/ui/toolpanel/controls/MasterPageContainer \
-    sd/source/ui/toolpanel/controls/MasterPageContainerFiller \
-    sd/source/ui/toolpanel/controls/MasterPageContainerProviders \
-    sd/source/ui/toolpanel/controls/MasterPageContainerQueue \
-    sd/source/ui/toolpanel/controls/MasterPageDescriptor \
-    sd/source/ui/toolpanel/controls/MasterPageObserver \
-    sd/source/ui/toolpanel/controls/MasterPagesPanel \
-    sd/source/ui/toolpanel/controls/MasterPagesSelector \
-    sd/source/ui/toolpanel/controls/PreviewValueSet \
-    sd/source/ui/toolpanel/controls/RecentlyUsedMasterPages \
-    sd/source/ui/toolpanel/controls/RecentMasterPagesSelector \
-    sd/source/ui/toolpanel/controls/SlideTransitionPanel \
-    sd/source/ui/toolpanel/controls/TableDesignPanel \
     sd/source/ui/toolpanel/LayoutMenu \
     sd/source/ui/toolpanel/ScrollPanel \
     sd/source/ui/toolpanel/SlideSorterCacheDisplay \
@@ -393,6 +376,23 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/toolpanel/ToolPanelFactory \
     sd/source/ui/toolpanel/ToolPanelUIElement \
     sd/source/ui/toolpanel/ToolPanelViewShell \
+    sd/source/ui/toolpanel/controls/AllMasterPagesSelector \
+    sd/source/ui/toolpanel/controls/CurrentMasterPagesSelector \
+    sd/source/ui/toolpanel/controls/CustomAnimationPanel \
+    sd/source/ui/toolpanel/controls/DocumentHelper \
+    sd/source/ui/toolpanel/controls/MasterPageContainer \
+    sd/source/ui/toolpanel/controls/MasterPageContainerFiller \
+    sd/source/ui/toolpanel/controls/MasterPageContainerProviders \
+    sd/source/ui/toolpanel/controls/MasterPageContainerQueue \
+    sd/source/ui/toolpanel/controls/MasterPageDescriptor \
+    sd/source/ui/toolpanel/controls/MasterPageObserver \
+    sd/source/ui/toolpanel/controls/MasterPagesPanel \
+    sd/source/ui/toolpanel/controls/MasterPagesSelector \
+    sd/source/ui/toolpanel/controls/PreviewValueSet \
+    sd/source/ui/toolpanel/controls/RecentMasterPagesSelector \
+    sd/source/ui/toolpanel/controls/RecentlyUsedMasterPages \
+    sd/source/ui/toolpanel/controls/SlideTransitionPanel \
+    sd/source/ui/toolpanel/controls/TableDesignPanel \
     sd/source/ui/tools/AsynchronousCall \
     sd/source/ui/tools/ConfigurationAccess \
     sd/source/ui/tools/EventMultiplexer \
@@ -404,14 +404,14 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/tools/SlotStateListener \
     sd/source/ui/tools/TimerBasedTaskExecution \
     sd/source/ui/unoidl/DrawController \
-    sd/source/ui/unoidl/facreg \
-    sd/source/ui/unoidl/randomnode \
     sd/source/ui/unoidl/SdUnoDrawView \
     sd/source/ui/unoidl/SdUnoOutlineView \
     sd/source/ui/unoidl/SdUnoSlideView \
+    sd/source/ui/unoidl/UnoDocumentSettings \
+    sd/source/ui/unoidl/facreg \
+    sd/source/ui/unoidl/randomnode \
     sd/source/ui/unoidl/unocpres \
     sd/source/ui/unoidl/unodoc \
-    sd/source/ui/unoidl/UnoDocumentSettings \
     sd/source/ui/unoidl/unokywds \
     sd/source/ui/unoidl/unolayer \
     sd/source/ui/unoidl/unomodel \
@@ -421,8 +421,27 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/unoidl/unopback \
     sd/source/ui/unoidl/unopool \
     sd/source/ui/unoidl/unosrch \
-    sd/source/ui/view/clview \
     sd/source/ui/view/DocumentRenderer \
+    sd/source/ui/view/FormShellManager \
+    sd/source/ui/view/GraphicObjectBar \
+    sd/source/ui/view/GraphicViewShellBase \
+    sd/source/ui/view/ImpressViewShellBase \
+    sd/source/ui/view/MediaObjectBar \
+    sd/source/ui/view/OutlineViewShellBase \
+    sd/source/ui/view/Outliner \
+    sd/source/ui/view/OutlinerIterator \
+    sd/source/ui/view/PresentationViewShellBase \
+    sd/source/ui/view/SlideSorterViewShellBase \
+    sd/source/ui/view/ToolBarManager \
+    sd/source/ui/view/UpdateLockManager \
+    sd/source/ui/view/ViewClipboard \
+    sd/source/ui/view/ViewShellBase \
+    sd/source/ui/view/ViewShellHint \
+    sd/source/ui/view/ViewShellImplementation \
+    sd/source/ui/view/ViewShellManager \
+    sd/source/ui/view/ViewTabBar \
+    sd/source/ui/view/WindowUpdater \
+    sd/source/ui/view/clview \
     sd/source/ui/view/drawview \
     sd/source/ui/view/drbezob \
     sd/source/ui/view/drtxtob \
@@ -447,20 +466,11 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/view/drviewsi \
     sd/source/ui/view/drviewsj \
     sd/source/ui/view/drvwshrg \
-    sd/source/ui/view/FormShellManager \
     sd/source/ui/view/frmview \
-    sd/source/ui/view/GraphicObjectBar \
-    sd/source/ui/view/GraphicViewShellBase \
     sd/source/ui/view/grviewsh \
-    sd/source/ui/view/ImpressViewShellBase \
-    sd/source/ui/view/MediaObjectBar \
-    sd/source/ui/view/Outliner \
-    sd/source/ui/view/OutlinerIterator \
-    sd/source/ui/view/OutlineViewShellBase \
     sd/source/ui/view/outlnvs2 \
     sd/source/ui/view/outlnvsh \
     sd/source/ui/view/outlview \
-    sd/source/ui/view/PresentationViewShellBase \
     sd/source/ui/view/presvish \
     sd/source/ui/view/sdruler \
     sd/source/ui/view/sdview \
@@ -469,22 +479,12 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/view/sdview4 \
     sd/source/ui/view/sdview5 \
     sd/source/ui/view/sdwindow \
-    sd/source/ui/view/SlideSorterViewShellBase \
     sd/source/ui/view/tabcontr \
-    sd/source/ui/view/ToolBarManager \
     sd/source/ui/view/unmodpg \
-    sd/source/ui/view/UpdateLockManager \
-    sd/source/ui/view/ViewClipboard \
     sd/source/ui/view/viewoverlaymanager \
     sd/source/ui/view/viewshe2 \
     sd/source/ui/view/viewshe3 \
     sd/source/ui/view/viewshel \
-    sd/source/ui/view/ViewShellBase \
-    sd/source/ui/view/ViewShellHint \
-    sd/source/ui/view/ViewShellImplementation \
-    sd/source/ui/view/ViewShellManager \
-    sd/source/ui/view/ViewTabBar \
-    sd/source/ui/view/WindowUpdater \
     sd/source/ui/view/zoomlist \
 ))
 

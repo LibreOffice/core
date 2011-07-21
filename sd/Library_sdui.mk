@@ -66,8 +66,19 @@ $(eval $(call gb_Library_add_linked_libs,sdui,\
 
 $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/filter/html/htmlattr \
+    sd/source/filter/html/pubdlg \
     sd/source/ui/dlg/brkdlg \
     sd/source/ui/dlg/copydlg \
+    sd/source/ui/dlg/custsdlg \
+    sd/source/ui/dlg/dlgass \
+    sd/source/ui/dlg/dlgassim \
+    sd/source/ui/dlg/dlgchar \
+    sd/source/ui/dlg/dlgfield \
+    sd/source/ui/dlg/dlgolbul \
+    sd/source/ui/dlg/dlgpage \
+    sd/source/ui/dlg/dlgsnap \
+    sd/source/ui/dlg/headerfooterdlg \
+    sd/source/ui/dlg/inspagob \
     sd/source/ui/dlg/masterlayoutdlg \
     sd/source/ui/dlg/morphdlg \
     sd/source/ui/dlg/paragr \
@@ -81,17 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/ui/dlg/tpaction \
     sd/source/ui/dlg/tpoption \
     sd/source/ui/dlg/vectdlg \
-    sd/source/ui/dlg/custsdlg \
-    sd/source/ui/dlg/dlgass \
-    sd/source/ui/dlg/dlgassim \
-    sd/source/ui/dlg/dlgchar \
-    sd/source/ui/dlg/dlgfield \
-    sd/source/ui/dlg/dlgolbul \
-    sd/source/ui/dlg/dlgpage \
-    sd/source/ui/dlg/dlgsnap \
-    sd/source/ui/dlg/headerfooterdlg \
-    sd/source/ui/dlg/inspagob \
-    sd/source/filter/html/pubdlg \
 ))
 
 # $(WORKDIR)/inc/sd/sddll0.hxx :
