@@ -30,11 +30,12 @@
 gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
 gb_ComponentTarget_get_outdir_inbuild_target = $(OUTDIR)/xml/component/$(1).inbuild.component
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
-gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT)
+gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)
 gb_PackagePart_get_destinations = \
 	$(OUTDIR)/xml \
 	$(OUTDIR)/pck \
 	$(OUTDIR)/inc \
+	$(OUTDIR)/idl \
 	$(OUTDIR)/bin \
 
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
@@ -99,6 +100,10 @@ gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
 gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/inc/$(firstword $(subst /, ,$(1)))/$(subst _tmpl,,$(notdir $(1)))
 gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
+gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).rdb
+gb_UnoApiOutTarget_get_target = $(OUTDIR)/bin/$(1).rdb
+gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
+gb_UnoApiTarget_get_header_target = $(WORKDIR)/UnoApiHeaders/$(1)
 gb_WinResTarget_get_target = $(WORKDIR)/WinResTarget/$(1)$(gb_WinResTarget_POSTFIX)
 gb_Zip_get_target = $(WORKDIR)/Zip/$(1).zip
 gb_Zip_get_final_target = $(WORKDIR)/Zip/$(1).done
@@ -137,7 +142,8 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	SrsTemplateTarget \
 	CppunitTest \
 	CustomTarget \
-    WinResTarget \
+	UnoApiTarget \
+	WinResTarget \
 	Zip \
 ))
 
@@ -146,6 +152,7 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	Library \
 	Package \
 	StaticLibrary \
+	UnoApiOutTarget \
 ))
 
 $(eval $(call gb_Helper_make_dep_targets,\
@@ -157,6 +164,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	LinkTarget \
 	SrsPartTarget \
 	SrsTarget \
+	UnoApiTarget \
 ))
 
 # other getters

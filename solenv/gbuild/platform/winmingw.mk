@@ -38,9 +38,9 @@ gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
 gb_CC := $(CC)
 gb_CXX := $(CXX)
-gb_LINK := $(shell $(CC) -print-prog-name=ld)
 gb_AR := $(shell $(CC) -print-prog-name=ar)
 gb_AWK := awk
+gb_RC := $(WINDRES)
 ifeq ($(USE_MINGW),cygwin)
 gb_MINGWLIBDIR := $(COMPATH)/lib/mingw
 else
@@ -84,7 +84,6 @@ endif
 
 gb_COMPILERDEFS := \
 	-DGCC \
-	-DGLIBC=2 \
 	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 	-DCPPU_ENV=gcc3 \
 	-D_MT \
@@ -114,7 +113,6 @@ gb_CFLAGS := \
 	-fmessage-length=0 \
 	-fno-strict-aliasing \
 	-pipe \
-	-nostdinc \
 
 gb_CXXFLAGS := \
 	-Wall \
@@ -128,7 +126,6 @@ gb_CXXFLAGS := \
 	-fmessage-length=0 \
 	-fno-strict-aliasing \
 	-pipe \
-	-nostdinc \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -Werror
@@ -154,13 +151,10 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
-	--export-all-symbols \
-	--kill-at \
-	--exclude-libs ALL \
-	--enable-stdcall-fixup \
-	--enable-runtime-pseudo-reloc-v2 \
-	-L$(gb_Library_DLLDIR) \
-	$(patsubst %,-L%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
+	-Wl,--export-all-symbols \
+	-Wl,--enable-stdcall-fixup \
+	-Wl,--enable-runtime-pseudo-reloc-v2 \
+	$(subst -L../lib , ,$(SOLARLIB)) \
 
 ifeq ($(MINGW_GCCLIB_EH),YES)
 gb_LinkTarget_LDFLAGS += -shared-libgcc
@@ -182,11 +176,7 @@ gb_STDLIBS := \
 	mingw32 \
 	$(gb_MINGW_LIBGCC) \
 	uwinapi \
-	moldname \
 	mingwex \
-	kernel32 \
-	msvcrt \
-	msvcprt \
 
 
 # Helper class
@@ -203,12 +193,33 @@ gb_Helper_OUTDIR_NATIVE := $(OUTDIR)
 gb_Helper_REPODIR_NATIVE := $(REPODIR)
 endif
 
+# convert parameters filesystem root to native notation
 define gb_Helper_abbreviate_dirs_native
 R=$(gb_Helper_REPODIR_NATIVE) && $(subst $(REPODIR)/,$$R/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,O=$(gb_Helper_OUTDIR_NATIVE) && W=$(gb_Helper_WORKDIR_NATIVE) && S=$(gb_Helper_SRCDIR_NATIVE))) && \
 $(subst $(REPODIR)/,$$R/,$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,$(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,$(subst $(gb_Helper_OUTDIR_NATIVE)/,$$O/,$(subst $(gb_Helper_WORKDIR_NATIVE)/,$$W/,$(1)))))))))
 endef
 
-# convert parametters filesystem root to native notation
+# Set the proper enirotment variable so that our BUILD platform
+# build-time shared libraries are found.
+ifeq ($(OS_FOR_BUILD),WNT)
+gb_Helper_set_ld_path := PATH=$(OUTDIR_FOR_BUILD)/bin:$$PATH
+else ifeq ($(OS_FOR_BUILD),MACOSX)
+gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+else
+gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
+endif
+
+# does some real work only on windows, make sure not to
+# break the dummy implementations on unx*
+define gb_Helper_convert_native
+$(patsubst -I$(OUTDIR)%,-I$(gb_Helper_OUTDIR_NATIVE)%, \
+$(patsubst $(OUTDIR)%,$(gb_Helper_OUTDIR_NATIVE)%, \
+$(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%, \
+$(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
+$(1)))))
+endef
+
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
@@ -224,7 +235,7 @@ endef
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_Object__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+	$(OUTDIR_FOR_BUILD)/bin/makedepend \
 		$(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
 		-I$(dir $(3)) \
 		$(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
@@ -286,7 +297,7 @@ gb_PrecompiledHeader_get_enableflags = -I$(WORKDIR)/PrecompiledHeader/$(gb_Preco
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_PrecompiledHeader__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+	$(OUTDIR_FOR_BUILD)/bin/makedepend \
 		$(4) $(5) \
 		-I$(dir $(3)) \
 		$(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
@@ -329,7 +340,7 @@ gb_NoexPrecompiledHeader_get_enableflags = -I$(WORKDIR)/NoexPrecompiledHeader/$(
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_NoexPrecompiledHeader__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+	$(OUTDIR_FOR_BUILD)/bin/makedepend \
 		$(4) $(5) \
 		-I$(dir $(3)) \
 		$(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
@@ -382,61 +393,47 @@ define gb_LinkTarget__command_dynamiclinkexecutable
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
-	RESPONSEFILE=`$(gb_MKTEMP)` && \
-	echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
-		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) " > $${RESPONSEFILE} && \
-	$(gb_LINK) \
+	$(gb_CXX) $(strip \
 		$(gb_Executable_TARGETTYPEFLAGS) \
 		$(if $(filter YES,$(gb_Executable_TARGETGUI)), --subsystem windows, --subsystem console) \
-		$(T_LDFLAGS) \
-		$(gb_MINGWLIBDIR)/crt2.o \
-		$(MINGW_CLIB_DIR)/crtbegin.o \
-		@$${RESPONSEFILE} \
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
-		--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) --end-group \
-		--start-group $(patsubst %.dll,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_dllname,$(lib)))) --end-group \
+		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
+		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_implibname,$(lib))))) \
 		$(LIBS) \
-		$(MINGW_CLIB_DIR)/crtend.o \
-		-Map $(basename $(1)).map \
-		-o $(1))
+		-Wl$(COMMA)-Map$(COMMA)$(basename $(1)).map \
+		-o $(1)))
 endef
 
 define gb_LinkTarget__command_dynamiclinklibrary
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
-	rm -f $(1) && \
-	RESPONSEFILE=`$(gb_MKTEMP)` && \
-	echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
-		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) " > $${RESPONSEFILE} && \
-	$(gb_LINK) \
+	$(gb_CXX) $(strip \
 		$(gb_Library_TARGETTYPEFLAGS) \
 		$(T_LDFLAGS) \
-		--enable-auto-image-base \
-		-e _DllMainCRTStartup@12 \
-		$(gb_MINGWLIBDIR)/dllcrt2.o \
-		$(MINGW_CLIB_DIR)/crtbegin.o \
-		@$${RESPONSEFILE} \
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
-		--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) --end-group \
-		--start-group $(patsubst %.dll,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_dllname,$(lib)))) --end-group \
+		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
+		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_implibname,$(lib))))) \
 		$(LIBS) \
-		$(MINGW_CLIB_DIR)/crtend.o \
-		-Map $(basename $(DLLTARGET)).map \
-		-o $(DLLTARGET) && touch $(1))
+		-Wl$(COMMA)-Map$(COMMA)$(basename $(DLLTARGET)).map \
+		-Wl$(COMMA)--out-implib$(COMMA)$(1) \
+		-o $(dir $(1))/$(notdir $(DLLTARGET))))
 endef
 
 define gb_LinkTarget__command_staticlinklibrary
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
-	RESPONSEFILE=`$(gb_MKTEMP)` && \
-	echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+	$(gb_AR) -rsu $(1) \
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) " > $${RESPONSEFILE} && \
-	$(gb_AR) -rsu\
-		$(1) \
-		@$${RESPONSEFILE})
+		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
+		2> /dev/null)
 endef
 
 define gb_LinkTarget__command
@@ -453,8 +450,27 @@ gb_Library_DEFS := -D_DLL
 gb_Library_TARGETTYPEFLAGS := -shared
 gb_Library_get_rpath :=
 
-gb_Library_SYSPRE := i
-gb_Library_PLAINEXT := .lib
+gb_Library_SYSPRE := lib
+gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
+gb_Library_UDK_MAJORVER := 3
+
+gb_Library_PLAINEXT := .dll.a
+
+gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
+gb_Library_RTVEREXT := $(gb_Library_RTEXT)
+gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
+gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
+gb_Library_UNOVEREXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_PLAINEXT)
+
+gb_Library_DLLEXT := .dll
+
+gb_Library_RTDLLEXT := gcc3$(gb_Library_DLLEXT)
+gb_Library_RTVERDLLEXT := $(gb_Library_RTDLLEXT)
+gb_Library_OOODLLEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
+gb_Library_UNODLLEXT := .uno$(gb_Library_DLLEXT)
+gb_Library_UNOVERDLLEXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_DLLEXT)
+
+gb_Library_win32_OLDNAMES := moldname
 
 gb_Library_PLAINLIBS_NONE += \
 	mingwthrd \
@@ -469,11 +485,13 @@ gb_Library_PLAINLIBS_NONE += \
 	gdi32 \
 	gdiplus \
 	gnu_getopt \
+	imm32 \
 	kernel32 \
+	msimg32 \
 	msvcrt \
 	msvcprt \
 	mpr \
-	moldname \
+	$(gb_Library_win32_OLDNAMES) \
 	ole32 \
 	oleaut32 \
 	shell32 \
@@ -483,6 +501,8 @@ gb_Library_PLAINLIBS_NONE += \
 	uuid \
 	uwinapi \
 	winmm \
+	version \
+	winspool \
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
@@ -496,26 +516,27 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 
 gb_Library_FILENAMES :=\
-	$(foreach lib,$(gb_Library_TARGETS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
+	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNOEXT)) \
+	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
-gb_Library_DLLEXT := .dll
-gb_Library_MAJORVER := 3
-gb_Library_RTEXT := gcc3$(gb_Library_DLLEXT)
-gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
-gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
-gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)
-gb_Library_RTVEREXT := $(gb_Library_MAJORVER)$(gb_Library_RTEXT)
 
-gb_Library_DLLFILENAMES := \
-	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(lib)$(gb_Library_OOOEXT)) \
+gb_Library_DLLFILENAMES :=\
+	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(lib)$(gb_Library_OOODLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(lib)$(gb_Library_DLLEXT)) \
-	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(lib)$(gb_Library_RTEXT)) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTVEREXT)) \
-	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNOEXT)) \
-	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
-	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVEREXT)) \
+	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(lib)$(gb_Library_RTDLLEXT)) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTDLLEXT)) \
+	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
+	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNODLLEXT)) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVERDLLEXT)) \
 
 gb_Library_IARCSYSPRE := lib
 gb_Library_IARCEXT := .a
@@ -523,7 +544,7 @@ gb_Library_IARCEXT := .a
 gb_Library_ILIBEXT := .lib
 
 define gb_Library_Library_platform
-$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
+$(call gb_LinkTarget_set_dlltarget,$(2),$(OUTDIR)/bin/$(notdir $(3)))
 
 $(call gb_LinkTarget_set_auxtargets,$(2),\
 	$(patsubst %.dll,%.map,$(3)) \
@@ -532,7 +553,7 @@ $(call gb_LinkTarget_set_auxtargets,$(2),\
 $(call gb_Library_get_target,$(1)) \
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3))
 
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3))
+$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1))
 
 endef
 
@@ -558,6 +579,10 @@ endef
 
 define gb_Library_get_dllname
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_DLLFILENAMES)))
+endef
+
+define gb_Library_get_implibname
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_FILENAMES)))
 endef
 
 
@@ -586,7 +611,11 @@ gb_Executable_TARGETGUI :=
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND :=
+ifeq ($(CROSS_COMPILING),YES)
+gb_CppunitTest_CPPTESTPRECOMMAND := :
+else
+gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
+endif
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
@@ -603,21 +632,21 @@ endef
 
 # SdiTarget class
 
-gb_SdiTarget_SVIDLPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+gb_SdiTarget_SVIDLPRECOMMAND := $(gb_Helper_set_ld_path)
 
 # SrsPartMergeTarget
 
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := $(gb_Helper_set_ld_path)
 
 # SrsPartTarget class
 
-gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc.exe
-gb_SrsPartTarget_RSCCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
+gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc
+gb_SrsPartTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_SrsPartTarget_RSCTARGET)
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+	$(OUTDIR_FOR_BUILD)/bin/makedepend \
 		$(INCLUDE) \
 		$(DEFS) \
 		$(2) \
@@ -636,7 +665,7 @@ endif
 
 # WinResTarget class
 
-gb_WinResTarget_POSTFIX :=_res.o
+gb_WinResTarget_POSTFIX :=.res
 
 define gb_WinResTarget__command
 $(call gb_Output_announce,$(2),$(true),RES,3)
@@ -646,10 +675,8 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(DEFS) $(FLAGS) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
-		-Fo$(patsubst %_res.o,%.res,$(1)) \
+		-o $(1) \
 		$(RCFILE) )
-	windres $(patsubst %_res.o,%.res,$(1)) $(1)
-	rm $(patsubst %_res.o,%.res,$(1))
 endef
 
 $(eval $(call gb_Helper_make_dep_targets,\
@@ -659,7 +686,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_WinResTarget__command_dep
 $(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+	$(OUTDIR_FOR_BUILD)/bin/makedepend \
 		$(INCLUDE) \
 		$(DEFS) \
 		$(2) \
@@ -678,10 +705,23 @@ endif
 
 # ComponentTarget
 
-gb_XSLTPROCPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+gb_XSLTPROCPRECOMMAND := $(gb_Helper_set_ld_path)
 gb_Library_COMPONENTPREFIXES := \
 	OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
 	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
-    NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
+	NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
+	
+# UnoApiTarget
+
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR_FOR_BUILD)/bin/idlc
+gb_UnoApiTarget_IDLCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR_FOR_BUILD)/bin/regmerge
+gb_UnoApiTarget_REGMERGECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR_FOR_BUILD)/bin/regcompare
+gb_UnoApiTarget_REGCOMPARECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR_FOR_BUILD)/bin/cppumaker
+gb_UnoApiTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR_FOR_BUILD)/bin/regview
+gb_UnoApiTarget_REGVIEWCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # vim: set noet sw=4:

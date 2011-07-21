@@ -95,13 +95,15 @@ SHL$(TNR)IMPLIB=i$(TARGET)_t$(TNR)
 USE_$(TNR)IMPLIB=-implib:$(LB)/$(SHL$(TNR)IMPLIB).lib
 SHL$(TNR)IMPLIBN=$(LB)/$(SHL$(TNR)IMPLIB).lib
 .ELSE
-SHL$(TNR)IMPLIBN=$(LB)/lib$(SHL$(TNR)IMPLIB).dll.a
 USE_$(TNR)IMPLIB=-Wl,--out-implib=$(SHL$(TNR)IMPLIBN)
+SHL$(TNR)IMPLIBN=$(LB)/lib$(SHL$(TNR)IMPLIB).dll.a
 .ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL$(TNR)IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
+.IF "$(COM)" != "GCC"
 USE_$(TNR)IMPLIB_DEPS=$(LB)/$(SHL$(TNR)IMPLIB).lib
+.ENDIF
 .ENDIF			# "$(USE_DEFFILE)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 USE_SHL$(TNR)DEF=$(SHL$(TNR)DEF)
@@ -270,6 +272,10 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(COM)" == "GCC" && "$(SHL$(TNR)IMPLIBN)" != ""
+$(SHL$(TNR)IMPLIBN) : $(SHL$(TNR)TARGETN)
+.ENDIF
+
 $(SHL$(TNR)TARGETN) : \
                     $(SHL$(TNR)OBJS)\
                     $(SHL$(TNR)LIBS)\
@@ -313,10 +319,10 @@ $(SHL$(TNR)TARGETN) : \
     $(WINDRES) $(SHL$(TNR)LINKRES) $(SHL$(TNR)LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
-.IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
+.IF "$(COM)"=="GCC"
 # GNU ld since 2.17 supports @cmdfile syntax
 .IF "$(USE_DEFFILE)"!=""
-    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL$(TNR)LINKFLAGS) \
         $(LINKFLAGSSHL) \
 	$(SOLARLIB) \
@@ -338,13 +344,6 @@ $(SHL$(TNR)TARGETN) : \
     @noop $(assign DEF$(TNR)OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF$(TNR)OBJLIST) $(assign ALL$(TNR)OBJLIST:=$(ALL$(TNR)OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
-    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
-        --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
-        --kill-at \
-        --output-exp $(MISC)/$(@:b)_exp.o \
-        $(SHL$(TNR)VERSIONOBJ) \
-        @(ALL$(TNR)OBJLIST)
-    )
     $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
         $(SHL$(TNR)LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -352,7 +351,7 @@ $(SHL$(TNR)TARGETN) : \
         $(MINGWSSTDOBJ) \
         -o $@ \
         -Wl,-Map,$(MISC)/$(@:b).map \
-        $(MISC)/$(@:b)_exp.o \
+        $(SHL$(TNR)DEF) \
         $(USE_$(TNR)IMPLIB) \
         $(STDOBJ) \
         $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)OBJS) \

@@ -53,25 +53,15 @@ Module gid_Module_Optional_Binfilter
     gid_File_Lib_Bf_Wrapper,
     gid_File_Lib_Legacy_Binfilters,
     gid_File_Lib_Bf_Migratefilter,
-    gid_File_Lib_Bindet);
+    gid_File_Lib_Bindet,
+    gid_File_Res_Bf_Sch,
+    gid_File_Res_Bf_Svx,
+    gid_File_Res_Bf_Svt,
+    gid_File_Res_Bf_Frm,
+    gid_File_Res_Bf_Ofa,
+    gid_File_Res_Bf_Sc,
+    gid_File_Res_Bf_Sd,
+    gid_File_Res_Bf_Sm,
+    gid_File_Res_Bf_Sw,
+    gid_File_Res_Bf_Sfx);
 End
-
-Module gid_Module_Langpack_Binfilter_Template
-    ParentID = gid_Module_Optional_Binfilter;
-    Name = "gid_Module_Langpack_Binfilter_Template";
-    Description = "gid_Module_Langpack_Binfilter_Template";
-    Default = YES;
-    Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Res_Bf_Sch,
-             gid_File_Res_Bf_Svx,
-             gid_File_Res_Bf_Svt,
-             gid_File_Res_Bf_Frm,
-             gid_File_Res_Bf_Ofa,
-             gid_File_Res_Bf_Sc,
-             gid_File_Res_Bf_Sd,
-             gid_File_Res_Bf_Sm,
-             gid_File_Res_Bf_Sw,
-             gid_File_Res_Bf_Sfx);
-End
-
-#include "alllangmodules_binfilter.inc"

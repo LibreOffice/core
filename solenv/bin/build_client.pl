@@ -357,11 +357,7 @@ sub do_job {
         delete $ENV{$_} foreach (keys %ENV);
         $ENV{$_} = $$solar_vars{$_} foreach (keys %$solar_vars);
         print 'Workspace: ';
-        if (defined $ENV{CWS_WORK_STAMP}) {
-            print $ENV{CWS_WORK_STAMP};
-        } else {
-            print $ENV{SOLARSRC};
-        };
+        print $ENV{SOLARSRC};
 
         print "\nplatform: $ENV{INPATH} $^O";
         print "\ndir: $job_hash{job_dir}\n";

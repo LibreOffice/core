@@ -503,7 +503,7 @@ File gid_File_Lib_Desktopbe
     Name = STRING(CONCAT2(desktopbe1.uno,UNXSUFFIX));
 End
 
-#ifdef ENABLE_GTK
+#if defined(ENABLE_GTK) && !defined(ENABLE_GTK3)
 #ifdef GTK_TWO_FOUR
 File gid_File_Lib_Fps_Gnome
     TXT_FILE_BODY;
@@ -572,7 +572,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 
 
-#if (defined(ENABLE_CAIRO) && ! defined (SYSTEM_CAIRO))
+#ifndef SYSTEM_CAIRO
 
 File gid_File_Lib_Cairo
     TXT_FILE_BODY;
@@ -593,6 +593,8 @@ File gid_File_Lib_Cairo
   #endif
 End
 
+#ifndef WNT
+
 File gid_File_Lib_Pixman
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -603,10 +605,10 @@ File gid_File_Lib_Pixman
     #else
        Name = STRING(CONCAT3(libpixman-1,UNXSUFFIX,.0));
     #endif
-  #elif defined(WNT)
-    Name = "libpixman-1-0.dll";
   #endif
 End
+
+#endif
 
 #endif
 
@@ -898,6 +900,8 @@ STD_LIB_FILE(gid_File_Lib_Wlwp,lwpft)
 
 STD_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
 
+STD_LIB_FILE(gid_File_Lib_Rtftok,rtftok)
+
 #ifdef WNT
 #if defined(_gcc3)
 
@@ -1005,8 +1009,6 @@ STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 #ifndef WITHOUT_MOZILLA
 STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
-
-STD_LIB_FILE( gid_File_Lib_Preload, preload)
 
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Productregistration, productregistration.uno )
 

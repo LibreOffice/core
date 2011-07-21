@@ -74,7 +74,7 @@ $(call gb_Library_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
 $$(eval $$(call gb_Module_register_target,$(call gb_Library_get_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
-$(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)))
+$(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
 
 endef
 
@@ -130,6 +130,7 @@ $(eval $(foreach method,\
 	set_ldflags \
 	add_libs \
 	set_library_path_flags \
+	add_api \
 	add_linked_libs \
 	add_linked_static_libs \
 	use_external \

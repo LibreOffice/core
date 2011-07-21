@@ -120,6 +120,10 @@ ifeq ($(HAVE_CXX0X),TRUE)
 gb_CXXFLAGS += -std=c++0x -Wno-deprecated-declarations
 endif
 
+ifeq ($(ENABLE_DEBUG_STL),TRUE)
+gb_CXXFLAGS += -D_GLIBCXX_DEBUG
+endif
+
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
@@ -178,7 +182,7 @@ gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
 gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
@@ -263,7 +267,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
 		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
 		$(LIBS) \
-		$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
+		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
 		-o $(1))
 endef
 
@@ -292,6 +296,7 @@ gb_Library_TARGETTYPEFLAGS := -shared -Wl,-z,noexecstack
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .so
+gb_Library_DLLEXT := .so
 gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)

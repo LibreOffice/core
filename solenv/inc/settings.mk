@@ -57,7 +57,7 @@ NETWORK_BUILD:=TRUE
 PLATFORMID = $(RTL_OS:l)_$(RTL_ARCH:l)
 EXTNAME*=$(EXTENSIONNAME)_in
 
-.IF "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
+.IF "$(UPDATER)"!=""
 
 .IF "$(SOURCEVERSION)"!="$(WORK_STAMP)"
 .ERROR : ; @echo Forced error: minor.mk in solenv/inc does not match your version!
@@ -69,7 +69,7 @@ WRONG_SOURCEVERSION
     @@-$(MKDIRHIER) $(SOLARVERSION)/$(INPATH)/inc
     @@$(COPY) $(SOLARENV)/inc/minor.mk $(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk
     @@$(TOUCH) $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg
-.ENDIF          # "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
+.ENDIF          # "$(UPDATER)"!=""
 
 # Force creation of $(SOLARVERSION)/$(INPATH)/inc/
 # $(UPD)minor.mk could be empty as it's contents were already included from minor.mk
@@ -1005,16 +1005,32 @@ LNTFLAGSOUTOBJ=-os
 
 DLLPOSTFIX=lo
 
+.IF "$(CROSS_COMPILING)" == "YES"
+# Assume always cross-compiling from Unix
+EXECPOST_FOR_BUILD=
+.ELSE
+EXECPOST_FOR_BUILD=$(EXECPOST)
+.ENDIF
+
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
 # Add SOLARLIBDIR at the begin of a (potentially previously undefined) library
 # path (LD_LIBRARY_PATH, PATH, etc.; prepending avoids fetching libraries from
 # an existing office/URE installation; the ": &&" enables this to work at the
 # start of a recipe line that is not prefixed by "+" as well as in the middle of
 # an existing && chain:
+.IF "$(CROSS_COMPILING)"=="YES" && "$(OS)"=="WNT"
+# Sigh, special-case cross-compiling to Windows. Here OOO_LIBRARY_PATH_VAR is the correct one
+# for the BUILD platform but SOLARSHAREDBIN is the one for Windows, i.e. "foo/bin".
+AUGMENT_LIBRARY_PATH = : && \
+    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(SOLARLIBDIR_FOR_BUILD))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
+AUGMENT_LIBRARY_PATH_LOCAL = : && \
+    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
+.ELSE
 AUGMENT_LIBRARY_PATH = : && \
     $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
 AUGMENT_LIBRARY_PATH_LOCAL = : && \
     $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
+.ENDIF
 .END
 
 # for multiprocess building in external modules
@@ -1032,6 +1048,8 @@ VALGRINDTOOL=valgrind --tool=$(VALGRIND) --num-callers=50
 VALGRINDTOOL+=--leak-check=yes
 G_SLICE*:=always-malloc
 .EXPORT : G_SLICE
+GLIBCXX_FORCE_NEW*:=1
+.EXPORT : GLIBCXX_FORCE_NEW
 .ENDIF
 .ENDIF
 
@@ -1053,7 +1071,11 @@ CLIMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/climaker
 GDBCPPUNITTRACE=$(GDBTRACE)
 .ENDIF
 
+.IF "$(CROSS_COMPILING)" == "YES"
+CPPUNITTESTER=\#
+.ELSE
 CPPUNITTESTER=$(AUGMENT_LIBRARY_PATH_LOCAL) $(GDBCPPUNITTRACE) $(VALGRINDTOOL) $(SOLARBINDIR)/cppunit/cppunittester
+.ENDIF
 HELPEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/helpex
 LNGCONVEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/lngconvex
 HELPLINKER=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/HelpLinker
@@ -1070,7 +1092,14 @@ JAVA*:=$(JAVAINTERPRETER)
 SCPCOMP=$(PERL) $(SOLARENV)/bin/pre2par.pl
 SCPLINK=$(PERL) $(SOLARENV)/bin/par2script.pl
 LZIP*=lzip
+
+# Note that $(CPPLCC) is oddly enough only used when $(OS)==WNT, see pstrules.mk.
+# For the BUILD platform when cross-compiling (always Unix), it is called cpp.lcc
+.IF "$(CROSS_COMPILING)" == "YES"
+CPPLCC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpp.lcc
+.ELSE
 CPPLCC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpplcc
+.ENDIF
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""
 .INCLUDE : tg_compv.mk

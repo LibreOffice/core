@@ -53,12 +53,6 @@ CFLAGSVERSION_CMD= -V  $(PIPEERROR) $(AWK) -f $(SOLARENV)/bin/getcompver.awk
 CFLAGSNUMVERSION_CMD= -V  $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk
 .ENDIF
 
-.IF "$(COM)"=="C730"
-CFLAGSVERSION= -version
-CFLAGSVERSION_CMD= -version |& cut -d" " -f4-
-CFLAGSNUMVERSION_CMD= -version |& cut -d" " -f4-
-.ENDIF
-
 # that's the version known by the specific
 # compiler
 CCVER:=$(shell @-$(CXX) $(CFLAGSVERSION_CMD))
@@ -128,11 +122,6 @@ SHORTSTDCPP3="6"
 COMID=C52
 COMNAME=sunpro5
 .ENDIF
-.ENDIF
-
-.IF "$(COM)"=="C730"
-COMID=C730
-COMNAME=MipsPro
 .ENDIF
 
 .IF "$(COMNAME)"==""

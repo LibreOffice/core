@@ -33,6 +33,6 @@ gb_COMPILERDEFAULTOPTFLAGS := -Os
 gb_CXXFLAGS += -fno-omit-frame-pointer
 gb_CFLAGS += -fno-omit-frame-pointer
 
-include $(GBUILDDIR)/platform/unxgcc.mk
+include $(GBUILDDIR)/platform/linux.mk
 
 # vim: set noet sw=4:

@@ -1611,9 +1611,6 @@ sub prepare_windows_patchfiles
     if ( ! $allvariableshashref->{'WINDOWSPATCHLEVEL'} ) { installer::exiter::exit_program("ERROR: No Windows patch level defined in list file (WINDOWSPATCHLEVEL) !", "prepare_windows_patchfiles"); }
     my $windowspatchlevel = $installer::globals::buildid;
 
-    # the environment variable CWS_WORK_STAMP is set only in CWS
-    if ( $ENV{'CWS_WORK_STAMP'} ) { $windowspatchlevel = $ENV{'CWS_WORK_STAMP'} . $windowspatchlevel; }
-
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
         my $onefile = ${$filesref}[$i];

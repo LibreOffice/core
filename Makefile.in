@@ -31,6 +31,7 @@ cross-build-toolset:
 	  external \
 	  cppunit \
 	  xml2cmp \
+	  lucene \
 	  sal \
 	  cosv \
 	  udm \
@@ -40,6 +41,7 @@ cross-build-toolset:
 	  registry \
 	  idlc \
 	  icu \
+	  codemaker \
 	  udkapi \
 	  expat \
 	  libxml2 \
@@ -47,8 +49,6 @@ cross-build-toolset:
 	  libxslt \
 	  offapi \
 	  oovbaapi \
-	  codemaker \
-	  offuh \
 	  cppu \
 	  cppuhelper \
 	  rdbmaker \
@@ -60,9 +60,10 @@ cross-build-toolset:
 	  jvmaccess \
 	  bridges \
 	  ucbhelper \
-	  GBUILD:comphelper \
+	  comphelper \
 	  jvmfwk \
 	  regexp \
+	  berkeleydb \
 	  sax \
 	  stoc \
 	  i18npool \
@@ -71,17 +72,22 @@ cross-build-toolset:
 	  dictionaries \
 	  o3tl \
 	  basegfx \
-	  GBUILD:tools \
+	  tools \
+	  idl \
+	  l10ntools \
 	  rsc \
-	  setup_native; do \
-	    case $$D in \
-	    GBUILD:*) \
-	      (cd $${D#*:} && make -r -j@BUILD_MAX_JOBS@) \
-	      ;; \
-	    *) \
+	  setup_native \
+	  icc \
+	  unoil \
+	  javaunohelper \
+	  unotools \
+	  xmlhelp \
+	  shell; do \
+	    if grep -q gb_Module_add_targets $$D/Module_$$D.mk 2>/dev/null; then \
+	      (cd $$D && make -sr -j@BUILD_MAX_JOBS@) \
+	    else \
 	      (cd $$D && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) \
-	      ;; \
-	    esac; \
+	    fi; \
 	done
 endif
 
@@ -105,7 +111,7 @@ dev-install:
 		echo open install/LibreOffice.app; \
 	else \
 		echo "cd @abs_builddir@/install/program" && \
-		echo ". ooenv" && \
+		echo ". ./ooenv" && \
 		echo "./soffice.bin"; \
 	fi
 
@@ -120,10 +126,12 @@ clean:
 	. ./*Env.Set.sh && \
 	rm -rf */$$INPATH && \
 	rm -rf solver/*/$$INPATH && \
-	rm -rf install && \
-	$$GNUMAKE -C dmake clean && \
-	rm -f solenv/*/bin/dmake* && \
-	$$GNUMAKE -f GNUmakefile.mk -sr clean
+	rm -rf install
+ifeq (@BUILD_DMAKE@,YES)
+	. ./*Env.Set.sh && \
+	(if [ -f dmake/Makefile ] ; then $$GNUMAKE -C dmake clean; fi) && \
+	rm -f solenv/*/bin/dmake*
+endif
 ifeq (@CROSS_COMPILING@,YES)
 	. ./*Env.Set.sh && \
 	rm -rf */$$INPATH_FOR_BUILD && \
@@ -138,12 +146,12 @@ ifeq (@DO_FETCH_TARBALLS@,YES)
 	@. ./*Env.Set.sh && \
 	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
 else
-        @echo "Automatic fetching of external tarballs is disabled."
+	@echo "Automatic fetching of external tarballs is disabled."
 endif
 
 fetch: src.downloaded
 
-Makefile: configure.in set_soenv.in Makefile.in
+Makefile: configure.in ooo.lst.in set_soenv.in Makefile.in
 	./autogen.sh
 
 check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch
@@ -164,3 +172,24 @@ tags:
 docs:
 	@. ./*Env.Set.sh && \
 		mkdocs.sh $$SRC_ROOT/docs $$SOLARENV/inc/doxygen.cfg
+
+findunusedcode:
+# experimental callcatcher target
+# http://www.skynet.ie/~caolan/Packages/callcatcher.html
+	@which callcatcher > /dev/null 2>&1 || \
+	 (echo "callcatcher not installed" && false)
+	@. ./*Env.Set.sh && \
+	   source <(sed -e s,$$INPATH,callcatcher,g ./*Env.Set.sh) && \
+	   . ./solenv/bin/callcatchEnv.Set.sh && \
+	   cd instsetoo_native && \
+	   build.pl $(GBUILD_OPT) --all
+	@. ./*Env.Set.sh && \
+	   source <(sed -e s,$$INPATH,callcatcher,g ./*Env.Set.sh) && \
+	   callanalyse \
+	       $$WORKDIR/LinkTarget/*/* \
+	       */$$OUTPATH/bin/* \
+	       */$$OUTPATH/lib/* > unusedcode.all
+#because non-c++ symbols could be dlsymed lets make a list of class level
+#unused methods which don't require much effort to determine if they need
+#to be just removed, or put behind appropiate platform or debug level ifdefs
+	@grep ::.*\( unusedcode.all | grep -v cppu::bootstrap > unusedcode.easy

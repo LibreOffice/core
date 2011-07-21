@@ -206,15 +206,18 @@ SCP1FILES += \
 SCP1FILES += \
              vclcanvas.par \
 
-.IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"
+.IF "$(GUI)"=="UNX"
+#X11 MacOSX has no cairo-canvas
+.IF "$(OS)" != "MACOSX" || "$(GUIBASE)" == "aqua"
 SCP1FILES += cairocanvas.par
+.ENDIF
 .ENDIF
 
 .IF "$(ENABLE_LAYOUT)" == "TRUE"
 SCP1FILES += layout.par
 .ENDIF # ENABLE_LAYOUT == TRUE
 
-.IF "$(BUILD_SPECIAL)"!=""
+.IF "$(ENABLE_ONLINE_UPDATE)"!=""
 SCP1FILES += \
              module_onlineupdate.par   \
              file_onlineupdate.par
@@ -391,7 +394,7 @@ SCP2FILES += \
 SCP2FILES += layout.par
 .ENDIF # ENABLE_LAYOUT == TRUE
 
-.IF "$(BUILD_SPECIAL)"!=""
+.IF "$(ENABLE_ONLINE_UPDATE)"!=""
 SCP2FILES += \
              module_onlineupdate.par   \
              file_onlineupdate.par

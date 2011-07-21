@@ -490,11 +490,7 @@ sub get_download_version
     my $devproduct = 0;
     if (( $allvariables->{'DEVELOPMENTPRODUCT'} ) && ( $allvariables->{'DEVELOPMENTPRODUCT'} == 1 )) { $devproduct = 1; }
 
-    my $cwsproduct = 0;
-    # the environment variable CWS_WORK_STAMP is set only in CWS
-    if ( $ENV{'CWS_WORK_STAMP'} ) { $cwsproduct = 1; }
-
-    if (( $cwsproduct ) || ( $devproduct ))  # use "DEV300m75"
+    if ( $devproduct )  # use "DEV300m75"
     {
         my $source = uc($installer::globals::build); # DEV300
         my $localminor = "";
@@ -525,14 +521,10 @@ sub set_date_string
     my $devproduct = 0;
     if (( $allvariables->{'DEVELOPMENTPRODUCT'} ) && ( $allvariables->{'DEVELOPMENTPRODUCT'} == 1 )) { $devproduct = 1; }
 
-    my $cwsproduct = 0;
-    # the environment variable CWS_WORK_STAMP is set only in CWS
-    if ( $ENV{'CWS_WORK_STAMP'} ) { $cwsproduct = 1; }
-
     my $releasebuild = 1;
     if (( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) && ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ne "" )) { $releasebuild = 0; }
 
-    if (( ! $devproduct ) && ( ! $cwsproduct ) && ( ! $releasebuild ))
+    if (( ! $devproduct ) && ( ! $releasebuild ))
     {
         my @timearray = localtime(time);
 

@@ -90,6 +90,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     rpt \
     rptui \
     rptxml \
+    rtftok \
     sax \
     sb \
     sc \
@@ -139,6 +140,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	test \
+    cairo \
     cppunit \
     fileacc \
     icui18n \

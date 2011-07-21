@@ -87,7 +87,9 @@ COPYUPDATE=-u
 ECHON=echo -n
 ECHONL=echo
 FIND*=find
+.IF "$(OS_FOR_BUILD)"=="WNT"
 FLIPCMD*=$(PERL) $(SOLARENV)/bin/slfl.pl
+.ENDIF
 GNUCOPY*=cp
 GNUMAKE*=make
 GREP*=grep
@@ -115,9 +117,10 @@ COPYRECURSE=-r
 .ENDIF
 .IF "$(OS)"=="SOLARIS"
 AWK*=nawk
-GNUCOPY*=gnucp
-GNUPATCH*=gnupatch
+GNUCOPY*=/usr/gnu/bin/cp
+GNUPATCH*=/usr/gnu/bin/patch
 GNUTAR*=/usr/sfw/bin/gtar
+GNUMAKE=/usr/sfw/bin/make
 DEREFERENCE=
 .ELIF "$(OS)"=="AIX"
 AWK*=/opt/freeware/bin/awk

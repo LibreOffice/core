@@ -74,7 +74,6 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Ofa,
              gid_File_Res_Pcr,
              gid_File_Res_Pdffilter,
-             gid_File_Res_Preload,
              gid_File_Res_San,
              gid_File_Res_Productregistration,
              gid_File_Res_Sb,

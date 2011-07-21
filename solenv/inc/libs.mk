@@ -34,17 +34,14 @@ LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
-# No ODMA on UNX
-ODMA_LIB_LIB=
+.IF "$(GUI)" == "WNT"
+ODMA_LIB_LIB=-lodma_lib
+.ENDIF
 
 #
 #externe libs in plattform.mk
 #
-.IF "$(GUI)$(COM)"=="WNTGCC"
-AWTLIB*=$(JAVA_HOME)/lib/jawt.lib
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 AWTLIB*=-ljawt
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 AVMEDIALIB=-lavmedia$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC" && "$(SYSTEM_ICU)"!="YES"
 ICUINLIB=-licuin$(ICU_MAJOR)$(ICU_MINOR)
@@ -69,13 +66,8 @@ LDAPBERLIB=-lldapber
 TOOLSLIBST=-latools
 BPICONVLIB=-lbpiconv
 TOOLSLIB=-ltl$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC"
-CPPULIB=-lcppu$(UDK_MAJOR)
-CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 UCBHELPERLIB=-lucbhelper4$(COMID)
 .IF "$(SYSTEM_OPENSSL)" == "YES"
 OPENSSLLIB=$(OPENSSL_LIBS)
@@ -88,20 +80,11 @@ OPENSSLLIBST=-lssl_static -lcrypto_static
 OPENSSLLIBST=$(STATIC) -lssl -lcrypto $(DYNAMIC)
 .ENDIF          # "$(GUI)$(COM)"=="WNTGCC"
 .ENDIF          # "$(SYSTEM_OPENSSL)" == "YES"
-.IF "$(GUI)$(COM)"=="WNTGCC"
-REGLIB=-lreg$(UDK_MAJOR)
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 XMLOFFLIB=-lxo$(DLLPOSTFIX)
 XMLOFFLLIB=-lxol
-.IF "$(GUI)$(COM)"=="WNTGCC"
-STORELIB=-lstore$(UDK_MAJOR)
-SALLIB=-luno_sal$(UDK_MAJOR)
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 STORELIB=-lstore
 SALLIB=-luno_sal
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 ODBCLIB=-lodbc$(DLLPOSTFIX)
 ODBCBASELIB=-lodbcbase$(DLLPOSTFIX)
 DBFILELIB=-lfile$(DLLPOSTFIX)
@@ -248,30 +231,18 @@ ISCLIB=-lsc$(DLLPOSTFIX)
 ISDLIB=-lsd$(DLLPOSTFIX)
 PKGCHKLIB=-lpkgchk$(DLLPOSTFIX)
 HELPLINKERLIB=-lhelplinker$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC"
-JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(COMID)
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.IF "$(OS)" == "WNT"
-CPPUNITLIB = -lcygcppunit-1-12-1
-.ELSE
 .IF "$(SYSTEM_CPPUNIT)"=="YES"
 CPPUNITLIB = $(CPPUNIT_LIBS)
 .ELSE
 CPPUNITLIB = -lcppunit
-.ENDIF
 .ENDIF
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
 XSLTLIB=-lxslt $(LIBXML2LIB)
 .ENDIF
-.IF "$(GUI)$(COM)"=="WNTGCC"
-JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMFWKLIB = -ljvmfwk
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .IF "$(SYSTEM_REDLAND)"=="YES"
 REDLANDLIB=$(REDLAND_LIBS)
 .ELSE
@@ -327,7 +298,7 @@ ULINGULIB=-lulingu
 .IF "$(SYSTEM_HUNSPELL)" == "YES"
 HUNSPELLLIB=$(HUNSPELL_LIBS)
 .ELSE
-HUNSPELLLIB=-lhunspell-1.2
+HUNSPELLLIB=-lhunspell-1.3
 .ENDIF
 .IF "$(SYSTEM_MYTHES)" == "YES"
 MYTHESLIB=$(MYTHES_LIBS)
@@ -340,6 +311,35 @@ SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
 XMLREADERLIB=-lxmlreader
+
+.IF "$(OS)" == "IOS"
+
+# As we build static libraries for iOS, we append to each library its
+# dependencies, recursively. Start from the bottom of the dependency
+# stack. This is experimental and obviously incomplete.
+
+UCBHELPERLIB+=$(SALHELPERLIB)
+
+UNOTOOLSLIB+=$(I18NISOLANGLIB)
+UNOTOOLSLIB+=$(UCBHELPERLIB)
+
+TOOLSLIB+=$(BASEGFXLIB)
+TOOLSLIB+=$(ZLIB3RDLIB)
+
+VCLLIB+=$(ICUUCLIB)
+
+.ENDIF
+
+.IF "$(OS)" == "ANDROID"
+
+# Some of the external libraries get built as static libraries for
+# Android, mostly by accident, because we haven't bothered fixing up
+# their configury to realize that it would work to build shared
+# libraries.
+
+CURLLIB+=$(ZLIB3RDLIB)
+
+.ENDIF
 
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 

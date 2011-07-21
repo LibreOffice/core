@@ -120,7 +120,7 @@ if ($^O ne 'cygwin') {              # iz59477 - cygwin needes a dot "." at the e
 $tempcounter        = 0;
 
 # zip is default for RE master builds
-$opt_zip = 1 if ( defined($ENV{DELIVER_TO_ZIP}) && uc($ENV{DELIVER_TO_ZIP}) eq 'TRUE' && ! defined($ENV{CWS_WORK_STAMP}));
+$opt_zip = 1 if ( defined($ENV{DELIVER_TO_ZIP}) && uc($ENV{DELIVER_TO_ZIP}) eq 'TRUE');
 
 $has_symlinks       = 0;            # system supports symlinks
 
@@ -506,8 +506,8 @@ sub init_globals
                 [ '%GUI%',              $gui            ]
               );
 
-    # find out if the system supports symlinks
-    $has_symlinks = eval { symlink("",""); 1 };
+    # find out if the *HOST* system supports symlinks. They all do except Windows
+    $has_symlinks = $ENV{GUI} ne 'WNT';
 }
 
 sub get_base

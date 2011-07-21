@@ -45,6 +45,8 @@ ifeq ($(strip $(VALGRIND)),memcheck)
 gb_CppunitTest_VALGRINDTOOL += --leak-check=yes
 G_SLICE := always-malloc
 export G_SLICE
+GLIBCXX_FORCE_NEW := 1
+export GLIBCXX_FORCE_NEW
 endif
 endif
 
@@ -150,6 +152,7 @@ gb_CppunitTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_CppunitTest__get_lin
 endef
 
 $(eval $(foreach method,\
+	add_api \
 	add_cobject \
 	add_cobjects \
 	add_cxxobject \

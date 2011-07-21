@@ -34,8 +34,7 @@ $(foreach destination,$(call gb_PackagePart_get_destinations), $(destination)/%)
 define gb_PackagePart_PackagePart
 $(OUTDIR)/$(1) : $(2)
 $(2) :| $(3)
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/$(1),$(2))
-
+$(call gb_Deliver_add_deliverable,$(OUTDIR)/$(1),$(2),$(3))
 endef
 
 
@@ -44,8 +43,9 @@ endef
 .PHONY : $(call gb_Package_get_clean_target,%)
 $(call gb_Package_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),PKG,2)
-	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(FILES))
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(FILES)) \
+	&& cat $${RESPONSEFILE} | xargs rm -f \
+ 	&& rm -f $${RESPONSEFILE}
 
 $(call gb_Package_get_preparation_target,%) :
 	mkdir -p $(dir $@) && touch $@

@@ -135,7 +135,11 @@ $(PAR)/%.par :
     @echo "Making:   " $@
     @@-$(MKDIR) $(MISC)/{$(subst,$(@:d:d:d), $(@:d:d))}
 .IF "$(GUI)"=="WNT"
+.IF "$(CROSS_COMPILING)" == "NO"
     $(COMMAND_ECHO)$(CPPLCC) -+ -P $(INCLUDE) $(CDEFS) $(SCPDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) $(*:b).scp > $(MISC)/{$(subst,$(@:d:d:d), $(@:d:d))}/$(*:b).pre
+.ELSE
+    $(COMMAND_ECHO)$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpp.lcc -+ -P $(CDEFS) $(SCPDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) -I. -I$(INC) -I$(INCLOCAL) -I#$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $(MISC)/{$(subst,$(@:d:d:d), $(@:d:d))}/$(*:b).pre
+.ENDIF
 .ENDIF
 # YD: INCLUDE macro too long, include only few items (scp2 compile)
 .IF "$(GUI)"=="UNX"

@@ -31,21 +31,19 @@ COM := GCC
 # Darwin mktemp -t expects a prefix, not a pattern
 gb_MKTEMP := /usr/bin/mktemp -t gbuild.
 
-gb_CC := "gcc-4.2 -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk"
-gb_CXX := "g++-4.2 -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk"
-gb_GCCP := "gcc-4.2 -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk"
+ifeq ($(CC),)
+$(error You must set CC in the environment. See README.cross for example.)
+endif
+ifeq ($(CXX),)
+$(error You must set CXX in the environment. See README.cross for example.)
+endif
+
+gb_CC := $(CC)
+gb_CXX := $(CXX)
+gb_GCCP := $(CC)
 gb_AR := ar
 gb_AWK := awk
 gb_CLASSPATHSEP := :
-
-# use CC/CXX if they are nondefaults
-ifneq ($(origin CC),default)
-gb_CC := $(CC)
-gb_GCCP := $(CC)
-endif
-ifneq ($(origin CXX),default)
-gb_CXX := $(CXX)
-endif
 
 gb_OSDEFS := \
 	-D$(OS) \
@@ -63,11 +61,7 @@ gb_COMPILERDEFS := \
 
 gb_CPUDEFS := -DARM32
 
-gb_SDKDIR := /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
-
-
 gb_CFLAGS := \
-	-isysroot $(gb_SDKDIR) \
 	-Wall \
 	-Wendif-labels \
 	-Wextra \
@@ -78,7 +72,6 @@ gb_CFLAGS := \
 	-pipe \
 
 gb_CXXFLAGS := \
-	-isysroot $(gb_SDKDIR) \
 	-Wall \
 	-Wendif-labels \
 	-Wextra \
@@ -96,9 +89,9 @@ gb_CXXFLAGS := \
 
 # these are to get g++ to switch to Objective-C++ mode
 # (see toolkit module for a case where it is necessary to do it this way)
-gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
+gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
 
-gb_OBJCFLAGS := -x objective-c
+gb_OBJCFLAGS := -x objective-c -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -Werror
@@ -115,7 +108,6 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-fno-exceptions \
 
 gb_LinkTarget_LDFLAGS := \
-	-Wl,-syslibroot,$(gb_SDKDIR) \
 	$(subst -L../lib , ,$(SOLARLIB)) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 
@@ -133,7 +125,7 @@ gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
 gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
-# convert parametters filesystem root to native notation
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
@@ -278,6 +270,7 @@ gb_Library_DEFS :=
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .a
+gb_Library_DLLEXT := .a
 gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
 
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
@@ -354,14 +347,13 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_CppunitTest_CPPTESTPRECOMMAND := :
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .dylib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
 
 define gb_CppunitTest_CppunitTest_platform
-$(call gb_LinkTarget_get_target,$(2)) :
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := NONE
 
 endef
@@ -378,11 +370,11 @@ endef
 
 # SdiTarget class
 
-gb_SdiTarget_SVIDLPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_SdiTarget_SVIDLPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
 # SrsPartMergeTarget
 
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
 # SrsPartTarget class
 
@@ -402,10 +394,23 @@ endef
 
 # ComponentTarget
 
-gb_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 gb_Library_COMPONENTPREFIXES := \
 	OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
 	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 
+
+# UnoApiTarget
+
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR_FOR_BUILD)/bin/idlc
+gb_UnoApiTarget_IDLCCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR_FOR_BUILD)/bin/regmerge
+gb_UnoApiTarget_REGMERGECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR_FOR_BUILD)/bin/regcompare
+gb_UnoApiTarget_REGCOMPARECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR_FOR_BUILD)/bin/cppumaker
+gb_UnoApiTarget_CPPUMAKERCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR_FOR_BUILD)/bin/regview
+gb_UnoApiTarget_REGVIEWCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # vim: set noet sw=4:

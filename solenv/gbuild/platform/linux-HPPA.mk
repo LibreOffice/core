@@ -31,6 +31,6 @@
 gb_CPUDEFS += -D$(CPUNAME)
 gb_COMPILERDEFAULTOPTFLAGS := -O2
 
-include $(GBUILDDIR)/platform/unxgcc.mk
+include $(GBUILDDIR)/platform/linux.mk
 
 # vim: set noet sw=4:

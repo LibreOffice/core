@@ -42,12 +42,7 @@ PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$
 .ENDIF			# "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 
-.IF "$(CWS_WORK_STAMP)"=="" || "$(UPDATER)"!=""
 ENABLE_DOWNLOADSETS*=TRUE
-.ENDIF			# "$(CWS_WORK_STAMP)"=="" || "$(UPDATER)"!=""
-.IF "$(FORCE_DOWNLOADSETS)"!=""
-ENABLE_DOWNLOADSETS=TRUE
-.ENDIF			# "$(FORCE_DOWNLOADSETS)"!=""
 
 .EXPORT: ENABLE_DOWNLOADSETS
 .EXPORT: LAST_MINOR
@@ -77,18 +72,17 @@ LOCALPYFILES= \
     $(BIN)$/msgbox.py
 .ENDIF
 
-help_exist:=$(shell @find $(L10N_MODULE)/source/ -type d -name "helpcontent2" | sed -e "s|/helpcontent2||" -e "s|^.*/||" ) en-US
+help_exist:=$(shell @find $(L10N_MODULE)/source/ -type d -name "helpcontent2" 2>/dev/null | sed -e "s|/helpcontent2||" -e "s|^.*/||" ) en-US
 
 allhelplangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(help_exist) $(eq,$i,$j  $i $(NULL))))
 
 xxxx:
     echo $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product LibreOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml
 
-.IF "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
+.IF "$(GUI)"!="WNT" && "$(EPM)"=="NO"
 ALLTAR  : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
-.ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
-.IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
+.ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
 .IF "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
 ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack)
@@ -102,10 +96,7 @@ ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(
 ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack) sdkoodev_en-US ure_en-US
 .ENDIF
 .ENDIF # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
-.ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
-ALLTAR : updatepack
-.ENDIF			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
-.ENDIF			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
+.ENDIF			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
 
 .IF "$(FORCE2ARCHIVE)" == "TRUE"
 PKGFORMAT = archive

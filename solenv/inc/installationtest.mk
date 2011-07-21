@@ -46,10 +46,10 @@ my_file = file://
 .END
 
 # The following conditional is an approximation of: UPDATER set to YES and
-# SHIPDRIVE set and CWS_WORK_STAMP not set and either SOL_TMP not set or
+# SHIPDRIVE set and either SOL_TMP not set or
 # SOLARENV set to a pathname of which SOL_TMP is not a prefix:
 .IF "$(UPDATER)" == "YES" && "$(SHIPDRIVE)" != "" && \
-    "$(CWS_WORK_STAMP)" == "" && "$(SOLARENV:s/$(SOL_TMP)//" == "$(SOLARENV)"
+    "$(SOLARENV:s/$(SOL_TMP)//" == "$(SOLARENV)"
 my_instsets = $(shell ls -dt \
     $(SHIPDRIVE)/$(INPATH)/LibreOffice/archive/$(WORK_STAMP)_$(LAST_MINOR)_native_packed-*_$(defaultlangiso).$(BUILD))
 installationtest_instset = $(my_instsets:1)
