@@ -62,8 +62,6 @@ public:
     void    Init();  // ctor initialisieren
             RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
                          sal_uLong lFileIndex, FILE * fFile );
-            RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
-                         sal_uLong lFileIndex, const ByteString & );
             ~RscFileInst();
     sal_Bool    IsEof() const { return bEof; }
     void    SetFileIndex( sal_uLong lFIndex ) { lFileIndex = lFIndex;  }
@@ -88,7 +86,6 @@ public:
 /******************* F u n c t i o n *************************************/
 void IncludeParser( RscFileInst * pFileInst );
 ERRTYPE parser( RscFileInst * pFileInst );
-RscExpression * MacroParser( RscFileInst & rFileInst );
 
 #endif // _RSCPAR_HXX
 

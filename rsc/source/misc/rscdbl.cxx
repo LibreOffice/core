@@ -37,11 +37,6 @@
 #include <rsctop.hxx>
 #include "rsclst.hxx"
 
-/*************************************************************************
-|*
-|*    RscTypCont::FillNameIdList()
-|*
-*************************************************************************/
 REResourceList * InsertList( Atom nClassName, const RscId& rId,
                              REResourceList * pList ) {
     REResourceList  *   pSubList;
@@ -52,7 +47,7 @@ REResourceList * InsertList( Atom nClassName, const RscId& rId,
     if( pStrClass )
         aStrClass = pStrClass;
     else
-        aStrClass = ByteString::CreateFromInt32( (long)nClassName );
+        aStrClass = rtl::OString::valueOf(static_cast<sal_Int32>(nClassName));
 
     pSubList = new REResourceList( pList, aStrClass, rId );
 
@@ -108,10 +103,6 @@ void FillList( RscTop * pRscTop, REResourceList * pList, sal_uLong lFileKey ){
 
         FillList( (RscTop*)pRscTop->Right(), pList, lFileKey );
     };
-}
-
-void RscTypCont::FillNameIdList( REResourceList * pList, sal_uLong lFileKey ){
-    FillList( pRoot, pList, lFileKey );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

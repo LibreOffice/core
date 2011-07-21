@@ -37,8 +37,12 @@ $(eval $(call gb_Library_set_include,passwordcontainer,\
     -I$(realpath $(SRCDIR)/svl/inc/svl) \
     -I$(realpath $(SRCDIR)/svl/source/inc) \
     -I$(realpath $(SRCDIR)/svl/inc/pch) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_Library_add_api,passwordcontainer,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,passwordcontainer,\

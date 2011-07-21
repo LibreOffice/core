@@ -57,13 +57,6 @@ OBJFILES=   \
             $(OBJ)$/cpp5.obj \
             $(OBJ)$/cpp6.obj	\
 
-.IF "$(cpp)" == ""
-LIBSALCPPRT=$(0)
-APP1TARGET= $(TARGET)
-APP1LIBS=$(LB)$/$(TARGET).lib
-APP1STACK=32768
-.ENDIF
-
 .IF "$(GUI)"=="UNX"
 CDEFS+=-Dunix
 .ENDIF
@@ -79,12 +72,3 @@ NOOPTFILES=$(OBJ)$/cpp6.obj
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-
-cpp1.c: cppdef.h cpp.h
-cpp2.c: cppdef.h cpp.h
-cpp3.c: cppdef.h cpp.h
-cpp4.c: cppdef.h cpp.h
-cpp5.c: cppdef.h cpp.h
-cpp6.c: cppdef.h cpp.h 
-
-

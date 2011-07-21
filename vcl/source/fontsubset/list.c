@@ -140,24 +140,6 @@ int   listIsEmpty(list this)
     return this->aCount == 0;
 }
 
-int    listFind(list this, void *el)
-{
-    lnode *ptr;
-    assert(this != 0);
-
-    ptr = this->head;
-
-    while (ptr) {
-        if (ptr->value == el) {
-            this->cptr = ptr;
-            return 1;
-        }
-        ptr = ptr->next;
-    }
-
-    return 0;
-}
-
 int    listNext(list this)
 {
     return listSkipForward(this, 1);
@@ -199,21 +181,6 @@ int    listToLast(list this)
         return 1;
     }
     return 0;
-}
-
-int    listPositionAt(list this, int n)                     /*- returns the actual position number */
-{
-    int m = 0;
-    assert(this != 0);
-
-    this->cptr = this->head;
-    while (n != 0) {
-        if (this->cptr->next == 0) break;
-        this->cptr = this->cptr->next;
-        n--;
-        m++;
-    }
-    return m;
 }
 
 list   listAppend(list this, void *el)

@@ -34,7 +34,8 @@
 
 #include "tools/stream.hxx"
 
-#include "sal/alloca.h"
+#include <sal/alloca.h>
+#include <rtl/strbuf.hxx>
 
 using namespace psp;
 
@@ -122,48 +123,52 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
         return false;
 
     SvMemoryStream aStream;
-    ByteString aLine;
 
     // write header job data
     aStream.WriteLine( "JobData 1" );
 
-    aLine = "printer=";
-    aLine += ByteString( String( m_aPrinterName ), RTL_TEXTENCODING_UTF8 );
-    aStream.WriteLine( aLine );
+    rtl::OStringBuffer aLine;
 
-    aLine = "orientation=";
-    aLine += m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait";
-    aStream.WriteLine( aLine );
+    aLine.append(RTL_CONSTASCII_STRINGPARAM("printer="));
+    aLine.append(rtl::OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
+    aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine = "copies=";
-    aLine += ByteString::CreateFromInt32( m_nCopies );
-    aStream.WriteLine( aLine );
+    aLine.append(RTL_CONSTASCII_STRINGPARAM("orientation="));
+    if (m_eOrientation == orientation::Landscape)
+        aLine.append(RTL_CONSTASCII_STRINGPARAM("Landscape"));
+    else
+        aLine.append(RTL_CONSTASCII_STRINGPARAM("Portrait"));
+    aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine = "margindajustment=";
-    aLine += ByteString::CreateFromInt32( m_nLeftMarginAdjust );
-    aLine += ',';
-    aLine += ByteString::CreateFromInt32( m_nRightMarginAdjust );
-    aLine += ',';
-    aLine += ByteString::CreateFromInt32( m_nTopMarginAdjust );
-    aLine += ',';
-    aLine += ByteString::CreateFromInt32( m_nBottomMarginAdjust );
-    aStream.WriteLine( aLine );
+    aLine.append(RTL_CONSTASCII_STRINGPARAM("copies="));
+    aLine.append(static_cast<sal_Int32>(m_nCopies));
+    aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine = "colordepth=";
-    aLine += ByteString::CreateFromInt32( m_nColorDepth );
-    aStream.WriteLine( aLine );
+    aLine.append(RTL_CONSTASCII_STRINGPARAM("margindajustment="));
+    aLine.append(static_cast<sal_Int32>(m_nLeftMarginAdjust));
+    aLine.append(',');
+    aLine.append(static_cast<sal_Int32>(m_nRightMarginAdjust));
+    aLine.append(',');
+    aLine.append(static_cast<sal_Int32>(m_nTopMarginAdjust));
+    aLine.append(',');
+    aLine.append(static_cast<sal_Int32>(m_nBottomMarginAdjust));
+    aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine = "pslevel=";
-    aLine += ByteString::CreateFromInt32( m_nPSLevel );
-    aStream.WriteLine( aLine );
+    aLine.append(RTL_CONSTASCII_STRINGPARAM("colordepth="));
+    aLine.append(static_cast<sal_Int32>(m_nColorDepth));
+    aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine = "pdfdevice=";
-    aLine += ByteString::CreateFromInt32( m_nPDFDevice );
-    aStream.WriteLine( aLine );
+    aLine.append(RTL_CONSTASCII_STRINGPARAM("pslevel="));
+    aLine.append(static_cast<sal_Int32>(m_nPSLevel));
+    aStream.WriteLine(aLine.makeStringAndClear());
 
-    aLine = "colordevice=";
-    aLine += ByteString::CreateFromInt32( m_nColorDevice );
-    aStream.WriteLine( aLine );
+    aLine.append(RTL_CONSTASCII_STRINGPARAM("pdfdevice="));
+    aLine.append(static_cast<sal_Int32>(m_nPDFDevice));
+    aStream.WriteLine(aLine.makeStringAndClear());
+
+    aLine.append(RTL_CONSTASCII_STRINGPARAM("colordevice="));
+    aLine.append(static_cast<sal_Int32>(m_nColorDevice));
+    aStream.WriteLine(aLine.makeStringAndClear());
 
     // now append the PPDContext stream buffer
     aStream.WriteLine( "PPDContexData" );

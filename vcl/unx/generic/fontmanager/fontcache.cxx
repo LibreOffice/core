@@ -40,6 +40,8 @@
 
 #include "tools/stream.hxx"
 
+#include <rtl/strbuf.hxx>
+
 #include <unistd.h>
 #include <sys/stat.h>
 
@@ -132,13 +134,14 @@ void FontCache::flush()
         const FontDirMap& rDir( dir_it->second.m_aEntries );
 
         ByteString aDirectory( rManager.getDirectory( dir_it->first ) );
-        ByteString aLine( "FontCacheDirectory:" );
-        aLine.Append( ByteString::CreateFromInt64( dir_it->second.m_nTimestamp ) );
-        aLine.Append( ':' );
-        aLine.Append( aDirectory );
+        rtl::OStringBuffer aLine(
+            RTL_CONSTASCII_STRINGPARAM("FontCacheDirectory:"));
+        aLine.append(dir_it->second.m_nTimestamp);
+        aLine.append(':');
+        aLine.append(aDirectory);
         if( rDir.empty() && dir_it->second.m_bNoFiles )
-            aLine.Insert( "Empty", 0 );
-        aStream.WriteLine( aLine );
+            aLine.insert(0, RTL_CONSTASCII_STRINGPARAM("Empty"));
+        aStream.WriteLine(ByteString(aLine.makeStringAndClear()));
 
         for( FontDirMap::const_iterator entry_it = rDir.begin(); entry_it != rDir.end(); ++entry_it )
         {
@@ -147,16 +150,16 @@ void FontCache::flush()
             if( rEntry.begin() == rEntry.end() )
                 continue;
 
-            aLine = "File:";
-            aLine.Append( ByteString( entry_it->first ) );
-            aStream.WriteLine( aLine );
+            aLine.append(RTL_CONSTASCII_STRINGPARAM("File:"));
+            aLine.append(entry_it->first);
+            aStream.WriteLine(ByteString(aLine.makeStringAndClear()));
 
             int nEntrySize = entry_it->second.m_aEntry.size();
             // write: type;nfonts
-            aLine = ByteString::CreateFromInt32( rEntry.front()->m_eType );
-            aLine.Append( ';' );
-            aLine.Append( ByteString::CreateFromInt32( nEntrySize ) );
-            aStream.WriteLine( aLine );
+            aLine.append(static_cast<sal_Int32>(rEntry.front()->m_eType));
+            aLine.append(';');
+            aLine.append(static_cast<sal_Int32>(nEntrySize));
+            aStream.WriteLine(ByteString(aLine.makeStringAndClear()));
 
             sal_Int32 nSubEntry = 0;
             for( FontCacheEntry::const_iterator it = rEntry.begin(); it != rEntry.end(); ++it, nSubEntry++ )
@@ -171,73 +174,73 @@ void FontCache::flush()
                 else
                     nSubEntry = -1;
 
-                aLine = OUStringToOString( pAtoms->getString( ATOM_FAMILYNAME, (*it)->m_nFamilyName ), RTL_TEXTENCODING_UTF8 );
+                aLine.append(OUStringToOString(pAtoms->getString( ATOM_FAMILYNAME, (*it)->m_nFamilyName), RTL_TEXTENCODING_UTF8));
                 for( ::std::list< int >::const_iterator name_it = (*it)->m_aAliases.begin(); name_it != (*it)->m_aAliases.end(); ++name_it )
                 {
                     const OUString& rAdd( pAtoms->getString( ATOM_FAMILYNAME, *name_it ) );
                     if( rAdd.getLength() )
                     {
-                        aLine.Append( ';' );
-                        aLine.Append( ByteString( String( rAdd ), RTL_TEXTENCODING_UTF8 ) );
+                        aLine.append(';');
+                        aLine.append(OUStringToOString(rAdd, RTL_TEXTENCODING_UTF8));
                     }
                 }
-                aStream.WriteLine( aLine );
+                aStream.WriteLine(ByteString(aLine.makeStringAndClear()));
 
                 const OUString& rPSName( pAtoms->getString( ATOM_PSNAME, (*it)->m_nPSName ) );
-                aLine = ByteString::CreateFromInt32( nSubEntry );
-                aLine.Append( ';' );
-                aLine.Append( ByteString( String( rPSName ), RTL_TEXTENCODING_UTF8 ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_eItalic ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_eWeight ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_eWidth ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_ePitch ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_aEncoding ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_nAscend ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_nDescend ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_nLeading ) );
-                aLine.Append( ';' );
-                aLine.Append( (*it)->m_bHaveVerticalSubstitutedGlyphs ? "1" : "0" );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_aGlobalMetricX.width ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_aGlobalMetricX.height ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_aGlobalMetricY.width ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( (*it)->m_aGlobalMetricY.height ) );
-                aLine.Append( ';' );
-                aLine.Append( (*it)->m_bUserOverride ? "1" : "0" );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( 0 ) );
-                aLine.Append( ';' );
-                aLine.Append( ByteString::CreateFromInt32( 0 ) );
+                aLine.append(nSubEntry);
+                aLine.append(';');
+                aLine.append(OUStringToOString(rPSName, RTL_TEXTENCODING_UTF8));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_eItalic));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_eWeight));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_eWidth));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_ePitch));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_aEncoding));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_nAscend));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_nDescend));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_nLeading));
+                aLine.append(';');
+                aLine.append((*it)->m_bHaveVerticalSubstitutedGlyphs ? '1' : '0');
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_aGlobalMetricX.width ));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_aGlobalMetricX.height));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_aGlobalMetricY.width ));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>((*it)->m_aGlobalMetricY.height));
+                aLine.append(';');
+                aLine.append((*it)->m_bUserOverride ? '1' : '0');
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>(0));
+                aLine.append(';');
+                aLine.append(static_cast<sal_Int32>(0));
 
                 switch( (*it)->m_eType )
                 {
                     case fonttype::Type1:
-                        aLine.Append( ';' );
-                        aLine.Append( ByteString( static_cast<const PrintFontManager::Type1FontFile*>(*it)->m_aMetricFile ) );
+                        aLine.append(';');
+                        aLine.append(static_cast<const PrintFontManager::Type1FontFile*>(*it)->m_aMetricFile);
                         break;
                     case fonttype::TrueType:
-                        aLine.Append( ';' );
-                        aLine.Append( ByteString::CreateFromInt32( static_cast<const PrintFontManager::TrueTypeFontFile*>(*it)->m_nTypeFlags ) );
+                        aLine.append(';');
+                        aLine.append(static_cast<sal_Int32>(static_cast<const PrintFontManager::TrueTypeFontFile*>(*it)->m_nTypeFlags));
                         break;
                     default: break;
                 }
                 if( (*it)->m_aStyleName.getLength() )
                 {
-                    aLine.Append( ';' );
-                    aLine.Append( ByteString( String( (*it)->m_aStyleName ), RTL_TEXTENCODING_UTF8 ) );
+                    aLine.append(';');
+                    aLine.append(OUStringToOString((*it)->m_aStyleName, RTL_TEXTENCODING_UTF8));
                 }
-                aStream.WriteLine( aLine );
+                aStream.WriteLine(ByteString(aLine.makeStringAndClear()));
             }
             aStream.WriteLine( ByteString() );
         }

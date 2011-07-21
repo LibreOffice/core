@@ -667,14 +667,6 @@ Printer::Printer()
 
 // -----------------------------------------------------------------------
 
-Printer::Printer( const Window* pWindow )
-{
-    ImplInitData();
-    ImplInitDisplay( pWindow );
-}
-
-// -----------------------------------------------------------------------
-
 Printer::Printer( const JobSetup& rJobSetup ) :
     maJobSetup( rJobSetup )
 {
@@ -1336,13 +1328,6 @@ const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
 
 // -----------------------------------------------------------------------
 
-DuplexMode Printer::GetDuplexMode() const
-{
-    return maJobSetup.ImplGetConstData()->meDuplexMode;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Printer::SetDuplexMode( DuplexMode eDuplex )
 {
     if ( mbInPrintPage )
@@ -1455,25 +1440,6 @@ sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
 
 // -----------------------------------------------------------------------
 
-void Printer::ImplEndPrint()
-{
-    mbPrinting      = sal_False;
-    mnCurPrintPage  = 0;
-    maJobName.Erase();
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( Printer, ImplDestroyPrinterAsync, void*, pSalPrinter )
-{
-    SalPrinter* pPrinter = (SalPrinter*)pSalPrinter;
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpDefInst->DestroyPrinter( pPrinter );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Printer::EndJob()
 {
     sal_Bool bRet = sal_False;
@@ -1506,38 +1472,6 @@ sal_Bool Printer::EndJob()
     }
 
     return bRet;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool Printer::AbortJob()
-{
-    // Wenn wir einen Queue-Printer haben, kann man diesen noch mit
-    // AbortJob() abbrechen, solange dieser noch am Drucken ist
-    if ( !IsJobActive() && !IsPrinting() )
-        return sal_False;
-
-    mbJobActive     = sal_False;
-    mbInPrintPage   = sal_False;
-    mpJobGraphics   = NULL;
-
-    if ( mpPrinter )
-    {
-        mbPrinting      = sal_False;
-        mnCurPage       = 0;
-        mnCurPrintPage  = 0;
-        maJobName.Erase();
-
-        ImplReleaseGraphics();
-        mbDevOutput = sal_False;
-        mpPrinter->AbortJob();
-        Application::PostUserEvent( LINK( this, Printer, ImplDestroyPrinterAsync ), mpPrinter );
-        mpPrinter = NULL;
-
-        return sal_True;
-    }
-
-    return sal_False;
 }
 
 // -----------------------------------------------------------------------

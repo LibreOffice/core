@@ -215,9 +215,6 @@ public:
     static sal_uIntPtr  SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO = sal_True );
     static sal_Bool     GetReadOnlyFlag( const DirEntry &rEntry );
 
-    static ErrCode  QueryDiskSpace( const String &rPath,
-                                    BigInt &rFreeBytes, BigInt &rTotalBytes );
-
     static void     SetDateTime( const String& rFileName,
                                  const DateTime& rNewDateTime );
 };
@@ -254,10 +251,13 @@ private:
 
     TOOLS_DLLPRIVATE FSysError          ImpParseName( const ByteString& rIntiName,
                                       FSysPathStyle eParser );
+#if defined(WNT)
     TOOLS_DLLPRIVATE FSysError          ImpParseOs2Name( const ByteString& rPfad,
                                          FSysPathStyle eStyle );
+#else
     TOOLS_DLLPRIVATE FSysError          ImpParseUnixName( const ByteString& rPfad,
                                           FSysPathStyle eStyle );
+#endif
     TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
     TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
 
@@ -290,7 +290,6 @@ public:
 
     void                SetExtension( const String& rExt, char cSep = '.' );
     String              GetExtension( char cSep = '.' ) const;
-    String              CutExtension( char cSep = '.' );
     void                SetName( const String& rName, FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     inline const String GetNameDirect() const { return String(aName, osl_getThreadTextEncoding()); }
     String              GetName( FSysPathStyle eFormatter = FSYS_STYLE_HOST ) const;
@@ -336,19 +335,20 @@ public:
     sal_Bool                operator !=( const DirEntry& rAnotherDir ) const
                             { return !(DirEntry::operator==( rAnotherDir )); }
 
-    StringCompare       NameCompare( const DirEntry &rWith ) const;
     inline StringCompare NameCompareDirect( const DirEntry &rWith ) const
                         {
 #ifdef UNX
                             return rWith.aName.CompareTo( aName );
 #else
-                            return rWith.aName.CompareIgnoreCaseToAscii( aName );
+                            rtl::OString aThis(rtl::OString(aName).toAsciiLowerCase());
+                            rtl::OString aWith(rtl::OString(rWith.aName).toAsciiLowerCase());
+                            return static_cast<StringCompare>(aWith.compareTo(aThis));
 #endif
                         }
 
     static String       GetAccessDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     static String       GetSearchDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    static FSysPathStyle GetPathStyle( const String &rDevice );
+    static FSysPathStyle GetPathStyle();
 };
 
 // --------------
@@ -445,17 +445,9 @@ protected:
 #endif
 
 public:
-                    Dir();
                     Dir( const DirEntry& rDirEntry,
                          DirEntryKind nKind = FSYS_KIND_ALL );
-                    Dir( const DirEntry& rDirEntry,
-                         DirEntryKind nKind,
-                         FSysSort nSort, ... );
                     ~Dir();
-
-    const WildCard& GetNameMask() const { return aNameMask; }
-
-    FSysError       SetSort( FSysSort nSort, ... );
 
     void            Reset();
     sal_uInt16          Scan( sal_uInt16 nCount = 5 );
@@ -521,12 +513,6 @@ public:
 };
 
 #endif // BOOTSTRP
-
-//========================================================================
-
-void FSysEnableSysErrorBox( sal_Bool bEnable );
-
-//========================================================================
 
 #if defined(DBG_UTIL)
 void FSysTest();

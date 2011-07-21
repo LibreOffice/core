@@ -219,8 +219,7 @@ void SAL_CALL ClipboardManager::dispose()
                     xComponent->removeEventListener(static_cast < XEventListener * > (this));
                     xComponent->dispose();
                 }
-
-                catch(Exception e)
+                catch (const Exception&)
                 {
                     // exceptions can be safely ignored here.
                 }

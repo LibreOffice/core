@@ -265,8 +265,6 @@ private:
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( sal_Bool bNewCalc = sal_False, sal_Bool bFullPaint = sal_False );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
-    SAL_DLLPRIVATE void            ImplStartCustomizeMode();
-    SAL_DLLPRIVATE void            ImplEndCustomizeMode();
     SAL_DLLPRIVATE const XubString& ImplConvertMenuString( const XubString& rStr );
     SAL_DLLPRIVATE sal_Bool            ImplHandleMouseMove( const MouseEvent& rMEvt, sal_Bool bRepeat = sal_False );
     SAL_DLLPRIVATE sal_Bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCancel = sal_False );
@@ -274,7 +272,6 @@ private:
     SAL_DLLPRIVATE sal_Bool            ImplChangeHighlightUpDn( sal_Bool bUp, sal_Bool bNoCycle = sal_False );
     SAL_DLLPRIVATE sal_uInt16          ImplGetItemLine( ImplToolItem* pCurrentItem );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetFirstValidItem( sal_uInt16 nLine );
-    SAL_DLLPRIVATE ImplToolItem*   ImplGetLastValidItem( sal_uInt16 nLine );
     SAL_DLLPRIVATE sal_Bool            ImplOpenItem( KeyCode aKeyCode );
     SAL_DLLPRIVATE sal_Bool            ImplActivateItem( KeyCode aKeyCode );
     SAL_DLLPRIVATE void            ImplShowFocus();
@@ -332,9 +329,6 @@ public:
     static SAL_DLLPRIVATE void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, sal_Bool bBlack, sal_Bool bColTransform,
                                                   sal_Bool bLeft = sal_False, sal_Bool bTop = sal_False,
                                                   long nSize = 6 );
-    static SAL_DLLPRIVATE void SetToolArrowClipregion( ToolBox* pBox, long nX, long nY,
-                                                       sal_Bool bLeft = sal_False, sal_Bool bTop = sal_False,
-                                                       long nSize = 6 );
     static SAL_DLLPRIVATE void ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight );
     static SAL_DLLPRIVATE sal_uInt16 ImplCountLineBreaks( const ToolBox *pThis );
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }
@@ -401,12 +395,9 @@ public:
                                          sal_uInt16 nPixSize = 0 );
     void                InsertBreak( sal_uInt16 nPos = TOOLBOX_APPEND );
     void                RemoveItem( sal_uInt16 nPos );
-    void                MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos = TOOLBOX_APPEND );
     void                CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId,
                                   sal_uInt16 nNewPos = TOOLBOX_APPEND );
-    void                CopyItems( const ToolBox& rToolBox );
     void                Clear();
-    void                RecalcItems();
 
     const ImageList&    GetImageList() const { return maImageList; }
     void                SetImageList( const ImageList& rImageList );
@@ -429,7 +420,6 @@ public:
 
     // Used to enable/disable scrolling one page at a time for toolbar
     void                SetPageScroll( sal_Bool b );
-    sal_Bool                GetPageScroll();
 
     void                SetNextToolBox( const XubString& rStr );
     const XubString&    GetNextToolBox() const { return maNextToolBoxStr; }
@@ -442,14 +432,12 @@ public:
     sal_uInt16              GetItemId( const Point& rPos ) const;
     Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
     Rectangle           GetItemPosRect( sal_uInt16 nPos ) const;
-    Rectangle           GetItemDropDownRect( sal_uInt16 nItemId ) const;
     Rectangle           GetItemPosDropDownRect( sal_uInt16 nPos ) const;
 
     // retrieves the optimal position to place a popup window for this item (subtoolbar or dropdown)
     Point               GetItemPopupPosition( sal_uInt16 nItemId, const Size& rSize ) const;
 
     Rectangle           GetScrollRect() const;
-    Rectangle           GetMenubuttonRect() const;
     sal_uInt16              GetCurItemId() const { return mnCurItemId; }
     sal_uInt16              GetDownItemId() const { return mnDownItemId; }
     sal_uInt16              GetClicks() const { return mnMouseClicks; }
@@ -464,11 +452,7 @@ public:
     void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image               GetItemImage( sal_uInt16 nItemId ) const;
     void                SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
-    long                GetItemImageAngle( sal_uInt16 nItemId ) const;
     void                SetItemImageMirrorMode( sal_uInt16 nItemId, sal_Bool bMirror );
-    sal_Bool                GetItemImageMirrorMode( sal_uInt16 ) const;
-    void                SetItemHighImage( sal_uInt16 nItemId, const Image& rImage );
-    Image               GetItemHighImage( sal_uInt16 nItemId ) const;
     void                SetItemText( sal_uInt16 nItemId, const XubString& rText );
     const XubString&    GetItemText( sal_uInt16 nItemId ) const;
     void                SetItemWindow( sal_uInt16 nItemId, Window* pNewWindow );
@@ -479,7 +463,6 @@ public:
     void                EndSelection();
 
     void                SetItemDown( sal_uInt16 nItemId, sal_Bool bDown, sal_Bool bRelease = sal_True );
-    sal_Bool                IsItemDown( sal_uInt16 nItemId ) const;
 
     void                SetItemState( sal_uInt16 nItemId, TriState eState );
     TriState            GetItemState( sal_uInt16 nItemId ) const;
@@ -552,13 +535,7 @@ public:
 
     void                EnableCustomize( sal_Bool bEnable = sal_True );
     sal_Bool                IsCustomize() { return mbCustomize; }
-    void                StartCustomize( const Rectangle& rRect, void* pData = NULL );
-    void                SetCustomizeMode( sal_Bool );
     sal_Bool                IsInCustomizeMode() const { return mbCustomizeMode; }
-
-    static void         StartCustomizeMode();
-    static void         EndCustomizeMode();
-    static sal_Bool         IsCustomizeMode();
 
     void                SetHelpText( const XubString& rText )
                             { DockingWindow::SetHelpText( rText ); }
@@ -600,7 +577,6 @@ public:
     PopupMenu*          GetMenu() const;
     void                UpdateCustomMenu();
     void                SetMenuButtonHdl( const Link& rLink );
-    const Link&         GetMenuButtonHdl() const;
 
     // open custommenu
     void                ExecuteCustomMenu();
@@ -625,13 +601,6 @@ public:
     // -1 is returned if no character is at that point
     // if an index is found the corresponding item id is filled in (else 0)
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const;
-    // returns the number of portions in the result of GetDisplayText()
-    long GetTextCount() const;
-    // returns the interval [start,end] of text portion nText
-    // returns [-1,-1] for an invalid text number
-    Pair GetTextStartEnd( long nText ) const;
-    // returns the item id for text portion nText or 0 if nText is invalid
-    sal_uInt16 GetDisplayItemId( long nText ) const;
 
     const Size&         GetDefaultImageSize() const;
     void                ChangeHighlight( sal_uInt16 nPos );

@@ -787,10 +787,7 @@ namespace basegfx
                                 // (since
                                 // createPolygonFromEllipseSegment()
                                 // normalizes to e.g. cw arc)
-                                const bool bLessThanPi(fmod(fTheta2+2*M_PI-fTheta1,
-                                          2*M_PI)<M_PI);
-                                const bool bFlipSegment( (bLargeArcFlag!=0) == bLessThanPi );
-                                if( bFlipSegment )
+                                if( !bSweepFlag )
                                     std::swap(fTheta1,fTheta2);
 
                                 // finally, create bezier polygon from this
@@ -812,7 +809,7 @@ namespace basegfx
                                 // always creates arcs that are
                                 // positively oriented - flip polygon
                                 // if we swapped angles above
-                                if( bFlipSegment )
+                                if( !bSweepFlag )
                                     aSegment.flip();
                                 aCurrPoly.append(aSegment);
                             }

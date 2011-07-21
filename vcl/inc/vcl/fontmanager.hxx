@@ -333,7 +333,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
     void getFontAttributesFromXLFD( PrintFont* pFont, const std::list< rtl::OString >& rXLFDs ) const;
 
-    bool analyzeFontFile( int nDirID, const rtl::OString& rFileName, const std::list< rtl::OString >& rXLFDs, std::list< PrintFont* >& rNewFonts ) const;
+    bool analyzeFontFile( int nDirID, const rtl::OString& rFileName, const std::list< rtl::OString >& rXLFDs, std::list< PrintFont* >& rNewFonts, const char *pFormat=NULL ) const;
     rtl::OUString convertTrueTypeName( void* pNameRecord ) const; // actually a NameRecord* formt font subsetting code
     void analyzeTrueTypeFamilyName( void* pTTFont, std::list< rtl::OUString >& rnames ) const; // actually a TrueTypeFont* from font subsetting code
     bool analyzeTrueTypeFile( PrintFont* pFont ) const;

@@ -48,9 +48,6 @@
 #include <stdio.h>
 
 #include <svsys.h>
-#ifdef __MINGW32__
-#include <excpt.h>
-#endif
 
 #include <rtl/string.h>
 #include <rtl/ustring.h>
@@ -100,6 +97,10 @@ using ::std::max;
 
 #include <time.h>
 
+#ifdef __MINGW32__
+#include <sehandler.hxx>
+#endif
+
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -107,29 +108,19 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
-// The following defines are newly added in Longhorn
-#ifndef WM_MOUSEHWHEEL
-# define WM_MOUSEHWHEEL            0x020E
-#endif
 #ifndef SPI_GETWHEELSCROLLCHARS
 # define SPI_GETWHEELSCROLLCHARS   0x006C
 #endif
 #ifndef SPI_SETWHEELSCROLLCHARS
 # define SPI_SETWHEELSCROLLCHARS   0x006D
 #endif
-
-
+#ifndef WM_MOUSEHWHEEL
+# define WM_MOUSEHWHEEL 0x020E
+#endif
 
 #if OSL_DEBUG_LEVEL > 1
 void MyOutputDebugString( char *s) { OutputDebugString( s ); }
 #endif
-
-// misssing prototypes and constants for LayeredWindows
-extern "C" {
-    //WINUSERAPI sal_Bool WINAPI SetLayeredWindowAttributes(HWND,COLORREF,BYTE,DWORD);
-    typedef sal_Bool ( WINAPI * SetLayeredWindowAttributes_Proc_T ) (HWND,COLORREF,BYTE,DWORD);
-    static SetLayeredWindowAttributes_Proc_T lpfnSetLayeredWindowAttributes;
-};
 
 // =======================================================================
 
@@ -138,18 +129,6 @@ const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYS
 sal_Bool WinSalFrame::mbInReparent = FALSE;
 
 // =======================================================================
-
-// Wegen Fehler in Windows-Headerfiles
-#ifndef IMN_OPENCANDIDATE
-#define IMN_OPENCANDIDATE               0x0005
-#endif
-#ifndef IMN_CLOSECANDIDATE
-#define IMN_CLOSECANDIDATE              0x0004
-#endif
-
-#ifndef WM_THEMECHANGED
-#define WM_THEMECHANGED                 0x031A
-#endif
 
 // Macros for support of WM_UNICHAR & Keyman 6.0
 #define Uni_UTF32ToSurrogate1(ch)   (((unsigned long) (ch) - 0x10000) / 0x400 + 0xD800)
@@ -232,9 +211,6 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
 // if pParentRect is set, the workarea of the monitor that contains pParentRect is returned
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
 {
-    static int winVerChecked = 0;
-    static int winVerOk = 0;
-
     // check if we or our parent is fullscreen, then the taskbar should be ignored
     bool bIgnoreTaskbar = false;
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
@@ -254,87 +230,9 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
         }
     }
 
-    if( !winVerChecked )
-    {
-        winVerChecked = 1;
-        winVerOk = 1;
-
-        // multi monitor calls not available on Win95/NT
-        if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
-        {
-            if ( aSalShlData.maVersionInfo.dwMajorVersion <= 4 )
-                winVerOk = 0;   // NT
-        }
-        else if( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
-        {
-            if ( aSalShlData.maVersionInfo.dwMajorVersion == 4 && aSalShlData.maVersionInfo.dwMinorVersion == 0 )
-                winVerOk = 0;   // Win95
-        }
-    }
-
     // calculates the work area taking multiple monitors into account
-    if( winVerOk )
-    {
-        static int nMonitors = GetSystemMetrics( SM_CMONITORS );
-        if( nMonitors == 1 )
-        {
-            if( bIgnoreTaskbar )
-            {
-                pRect->left = pRect->top = 0;
-                pRect->right   = GetSystemMetrics( SM_CXSCREEN );
-                pRect->bottom  = GetSystemMetrics( SM_CYSCREEN );
-            }
-            else
-                SystemParametersInfo( SPI_GETWORKAREA, 0, pRect, 0 );
-        }
-        else
-        {
-            if( pParentRect != NULL )
-            {
-                // return the size of the monitor where pParentRect lives
-                HMONITOR hMonitor;
-                MONITORINFO mi;
-
-                // get the nearest monitor to the passed rect.
-                hMonitor = MonitorFromRect(pParentRect, MONITOR_DEFAULTTONEAREST);
-
-                // get the work area or entire monitor rect.
-                mi.cbSize = sizeof(mi);
-                GetMonitorInfo(hMonitor, &mi);
-                if( !bIgnoreTaskbar )
-                    *pRect = mi.rcWork;
-                else
-                    *pRect = mi.rcMonitor;
-            }
-            else
-            {
-                // return the union of all monitors
-                pRect->left = GetSystemMetrics( SM_XVIRTUALSCREEN );
-                pRect->top = GetSystemMetrics( SM_YVIRTUALSCREEN );
-                pRect->right = pRect->left + GetSystemMetrics( SM_CXVIRTUALSCREEN );
-                pRect->bottom = pRect->top + GetSystemMetrics( SM_CYVIRTUALSCREEN );
-
-                // virtualscreen does not take taskbar into account, so use the corresponding
-                // diffs between screen and workarea from the default screen
-                // however, this is still not perfect: the taskbar might not be on the primary screen
-                if( !bIgnoreTaskbar )
-                {
-                    RECT wRect, scrRect;
-                    SystemParametersInfo( SPI_GETWORKAREA, 0, &wRect, 0 );
-                    scrRect.left = 0;
-                    scrRect.top = 0;
-                    scrRect.right = GetSystemMetrics( SM_CXSCREEN );
-                    scrRect.bottom = GetSystemMetrics( SM_CYSCREEN );
-
-                    pRect->left += wRect.left;
-                    pRect->top += wRect.top;
-                    pRect->right -= scrRect.right - wRect.right;
-                    pRect->bottom -= scrRect.bottom - wRect.bottom;
-                }
-            }
-        }
-    }
-    else
+    static int nMonitors = GetSystemMetrics( SM_CMONITORS );
+    if( nMonitors == 1 )
     {
         if( bIgnoreTaskbar )
         {
@@ -344,6 +242,52 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
         }
         else
             SystemParametersInfo( SPI_GETWORKAREA, 0, pRect, 0 );
+    }
+    else
+    {
+        if( pParentRect != NULL )
+        {
+            // return the size of the monitor where pParentRect lives
+            HMONITOR hMonitor;
+            MONITORINFO mi;
+
+            // get the nearest monitor to the passed rect.
+            hMonitor = MonitorFromRect(pParentRect, MONITOR_DEFAULTTONEAREST);
+
+            // get the work area or entire monitor rect.
+            mi.cbSize = sizeof(mi);
+            GetMonitorInfo(hMonitor, &mi);
+            if( !bIgnoreTaskbar )
+                *pRect = mi.rcWork;
+            else
+                *pRect = mi.rcMonitor;
+        }
+        else
+        {
+            // return the union of all monitors
+            pRect->left = GetSystemMetrics( SM_XVIRTUALSCREEN );
+            pRect->top = GetSystemMetrics( SM_YVIRTUALSCREEN );
+            pRect->right = pRect->left + GetSystemMetrics( SM_CXVIRTUALSCREEN );
+            pRect->bottom = pRect->top + GetSystemMetrics( SM_CYVIRTUALSCREEN );
+
+            // virtualscreen does not take taskbar into account, so use the corresponding
+            // diffs between screen and workarea from the default screen
+            // however, this is still not perfect: the taskbar might not be on the primary screen
+            if( !bIgnoreTaskbar )
+            {
+                RECT wRect, scrRect;
+                SystemParametersInfo( SPI_GETWORKAREA, 0, &wRect, 0 );
+                scrRect.left = 0;
+                scrRect.top = 0;
+                scrRect.right = GetSystemMetrics( SM_CXSCREEN );
+                scrRect.bottom = GetSystemMetrics( SM_CYSCREEN );
+
+                pRect->left += wRect.left;
+                pRect->top += wRect.top;
+                pRect->right -= scrRect.right - wRect.right;
+                pRect->bottom -= scrRect.bottom - wRect.bottom;
+            }
+        }
     }
 }
 
@@ -361,24 +305,6 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     if( getenv( "SAL_SYNCHRONIZE" ) )   // no buffering of drawing commands
         GdiSetBatchLimit( 1 );
 
-    static int bLayeredAPI = -1;
-    if( bLayeredAPI == -1 )
-    {
-        bLayeredAPI = 0;
-        // check for W2k and XP
-        if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
-        {
-            OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "user32" ) );
-            oslModule pLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-            oslGenericFunction pFunc = NULL;
-            if( pLib )
-                pFunc = osl_getAsciiFunctionSymbol( pLib, "SetLayeredWindowAttributes" );
-
-            lpfnSetLayeredWindowAttributes = ( SetLayeredWindowAttributes_Proc_T ) pFunc;
-
-            bLayeredAPI = pFunc ? 1 : 0;
-        }
-    }
     static const char* pEnvTransparentFloats = getenv("SAL_TRANSPARENT_FLOATS" );
 
     // determine creation data
@@ -449,7 +375,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         {
             pFrame->mbNoIcon = TRUE;
             nExSysStyle |= WS_EX_TOOLWINDOW;
-            if ( pEnvTransparentFloats && bLayeredAPI == 1 /*&& !(nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE) */)
+            if ( pEnvTransparentFloats /*&& !(nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE) */)
                 nExSysStyle |= WS_EX_LAYERED;
         }
     }
@@ -458,7 +384,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         nExSysStyle |= WS_EX_TOOLWINDOW;
         pFrame->mbFloatWin = TRUE;
 
-        if ( (bLayeredAPI == 1) && (pEnvTransparentFloats /* does not work remote! || (nSalFrameStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) */ )  )
+        if ( (pEnvTransparentFloats /* does not work remote! || (nSalFrameStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) */ )  )
             nExSysStyle |= WS_EX_LAYERED;
 
     }
@@ -528,8 +454,8 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         ImplWriteLastError( GetLastError(), "CreateWindowEx" );
 #if OSL_DEBUG_LEVEL > 1
     // set transparency value
-    if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
-        lpfnSetLayeredWindowAttributes( hWnd, 0, 230, 0x00000002 /*LWA_ALPHA*/ );
+    if( GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
+        SetLayeredWindowAttributes( hWnd, 0, 230, 0x00000002 /*LWA_ALPHA*/ );
 #endif
     if ( !hWnd )
     {
@@ -794,8 +720,7 @@ static UINT ImplSalGetWheelScrollChars()
     {
         // Depending on Windows version, use proper default or 1 (when
         // driver emulates hscroll)
-        if( VER_PLATFORM_WIN32_NT == aSalShlData.maVersionInfo.dwPlatformId &&
-            aSalShlData.maVersionInfo.dwMajorVersion < 6 )
+        if( aSalShlData.maVersionInfo.dwMajorVersion < 6 )
         {
             // Windows 2000 & WinXP : emulating driver, use step size
             // of 1
@@ -5274,7 +5199,11 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM, LPARAM lParam )
 
     // Feststellen, ob wir IME unterstuetzen
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
-    if ( pFrame && pFrame->mbIME && pFrame->mhDefIMEContext )
+
+    if ( !pFrame )
+        return;
+
+    if ( pFrame->mbIME && pFrame->mhDefIMEContext )
     {
         HKL     hKL = (HKL)lParam;
         UINT    nImeProps = ImmGetProperty( hKL, IGP_PROPERTY );

@@ -46,12 +46,6 @@ const char* DbgCheckUniString( const void* pString );
 xub_StrLen ImplStringLen( const sal_Char* pStr );
 xub_StrLen ImplStringLen( const sal_Unicode* pStr );
 
-// ------------------------------------
-// - Zugriff fuer International class -
-// ------------------------------------
-
-sal_Unicode* ImplGet1ByteUnicodeTab( rtl_TextEncoding eTextEncoding );
-
 #endif // _IMPSTRG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

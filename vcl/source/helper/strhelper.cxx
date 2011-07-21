@@ -173,15 +173,15 @@ String GetCommandLineToken( int nToken, const String& rLine )
     return aRet;
 }
 
-ByteString GetCommandLineToken( int nToken, const ByteString& rLine )
+rtl::OString GetCommandLineToken(int nToken, const rtl::OString& rLine)
 {
-    int nLen = rLine.Len();
-    if( ! nLen )
-        return ByteString();
+    sal_Int32 nLen = rLine.getLength();
+    if (!nLen)
+        return rLine;
 
     int nActualToken = 0;
     char* pBuffer = (char*)alloca( nLen + 1 );
-    const char* pRun = rLine.GetBuffer();
+    const char* pRun = rLine.getStr();
     char* pLeap = NULL;
 
     while( *pRun && nActualToken <= nToken )
@@ -275,13 +275,13 @@ int GetCommandLineTokenCount( const String& rLine )
     return nTokenCount;
 }
 
-int GetCommandLineTokenCount( const ByteString& rLine )
+int GetCommandLineTokenCount(const rtl::OString& rLine)
 {
-    if( ! rLine.Len() )
+    if (rLine.isEmpty())
         return 0;
 
     int nTokenCount = 0;
-    const char *pRun = rLine.GetBuffer();
+    const char *pRun = rLine.getStr();
 
 
     while( *pRun )
@@ -383,14 +383,14 @@ String WhitespaceToSpace( const String& rLine, sal_Bool bProtect )
     return aRet;
 }
 
-ByteString WhitespaceToSpace( const ByteString& rLine, sal_Bool bProtect )
+rtl::OString WhitespaceToSpace(const rtl::OString& rLine, sal_Bool bProtect)
 {
-    int nLen = rLine.Len();
-    if( ! nLen )
-        return ByteString();
+    sal_Int32 nLen = rLine.getLength();
+    if (!nLen)
+        return rLine;
 
     char *pBuffer = (char*)alloca( nLen + 1 );
-    const char *pRun = rLine.GetBuffer();
+    const char *pRun = rLine.getStr();
     char *pLeap = pBuffer;
 
     while( *pRun )
@@ -436,8 +436,7 @@ ByteString WhitespaceToSpace( const ByteString& rLine, sal_Bool bProtect )
     if( *pLeap == ' ' )
         *pLeap = 0;
 
-    ByteString aRet( *pBuffer == ' ' ? pBuffer+1 : pBuffer );
-    return aRet;
+    return rtl::OString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
 }
 
 } // namespace

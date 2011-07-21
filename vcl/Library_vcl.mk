@@ -31,6 +31,10 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
+else ifeq ($(GUIBASE),android)
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android,vcl/vcl))
+else ifeq ($(OS),IOS)
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios,vcl/vcl))
 else
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
 endif
@@ -38,18 +42,23 @@ endif
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_afmhash))
 
+ifeq ($(OS)$(COM),WNTGCC)
+WINEINCLUDE=-I$(OUTDIR)/inc/external/wine
+endif
+
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/vcl/inc) \
     -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+    $(WINEINCLUDE) \
     -I$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager \
 ))
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_set_include,vcl,\
 	$$(INCLUDE) \
+    $$(FONTCONFIG_CFLAGS) \
     $$(FREETYPE_CFLAGS) \
 ))
 endif
@@ -58,6 +67,11 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
     -DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,cui)\" \
     -DDLLPOSTFIX=$(subst $(or $(gb_Library_DLLEXT),$(gb_Library_PLAINEXT)),,$(gb_Library_OOOEXT)) \
+))
+
+$(eval $(call gb_Library_add_api,vcl,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vcl,\
@@ -82,21 +96,10 @@ $(call gb_Library_use_externals,vcl,\
 	icuuc \
 )
 
-ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    freetype \
-))
-endif
-
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
 ))
-ifeq ($(ENABLE_CAIRO),TRUE)
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DCAIRO \
-))
-endif
 $(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/aqua/source/a11y/aqua11yactionwrapper \
     vcl/aqua/source/a11y/aqua11ycomponentwrapper \
@@ -172,17 +175,11 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
-## handle fontconfig
-ifneq ($(ENABLE_FONTCONFIG),)
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DENABLE_FONTCONFIG \
-))
 ## handle CUPS
 ifneq ($(ENABLE_CUPS),)
 $(eval $(call gb_Library_add_defs,vcl,\
     -DENABLE_CUPS \
 ))
-endif
 endif
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/glyphs/gcach_ftyp \
@@ -199,6 +196,19 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/unx/generic/printer/printerinfomanager \
+))
+endif
+
+ifeq ($(GUIBASE),android)
+$(eval $(call gb_Library_set_defs,vcl,\
+    $$(DEFS) \
+    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
+    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
+    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/unx/generic/plugadapt/salplug \
+    vcl/null/printerinfomanager \
 ))
 endif
 
@@ -225,7 +235,23 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 $(eval $(call gb_Library_add_nativeres,vcl,src))
+endif
 
+ifeq ($(GUIBASE),cocoatouch)
+$(eval $(call gb_Library_set_cxxflags,vcl,\
+    $$(CXXFLAGS) \
+    $$(OBJCXXFLAGS) \
+))
+$(eval $(call gb_Library_add_objcxxobjects,vcl,\
+    vcl/ios/source/app/salnstimer \
+    vcl/ios/source/app/vcluiapp \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/ios/source/app/saldata \
+    vcl/ios/source/app/salinst \
+    vcl/ios/source/app/salsys \
+    vcl/ios/source/app/saltimer \
+))
 endif
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
@@ -256,7 +282,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/components/dtranscomp \
     vcl/source/components/factory \
     vcl/source/components/fontident \
-    vcl/source/components/rasterizer_rsvg \
     vcl/source/components/stringmirror \
     vcl/source/control/button \
     vcl/source/control/combobox \
@@ -362,7 +387,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/helper/strhelper \
     vcl/source/helper/threadex \
     vcl/source/helper/xconnection \
-    vcl/source/salmain/salmain \
     vcl/source/window/abstdlg \
     vcl/source/window/accel \
     vcl/source/window/accmgr \
@@ -411,7 +435,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/wpropset \
     vcl/source/window/wrkwin \
 ))
-
+ifneq ($(OS),IOS)
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/salmain/salmain \
+))
+endif
 ## handle Graphite
 ifneq ($(ENABLE_GRAPHITE),)
 # add defines, graphite sources for all platforms
@@ -436,6 +464,62 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 endif
 
 $(call gb_Library_use_external,vcl,graphite)
+endif
+
+## handle Cairo
+ifneq ($(ENABLE_LIBRSVG),NO)
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/components/rasterizer_rsvg \
+))
+
+$(eval $(call gb_Library_set_defs,vcl,\
+    $$(DEFS) \
+    -DENABLE_LIBRSVG \
+))
+ifeq ($(SYSTEM_CAIRO),YES)
+$(eval $(call gb_Library_set_cxxflags,vcl,\
+    $$(CXXFLAGS) \
+    $$(CAIRO_CFLAGS) \
+    -DSYSTEM_CAIRO \
+))
+
+# CAIRO_LIBS contains both -L and -l options. Thes sets LDFLAGS which
+# goes early into the linking command line before the object files. So
+# on platforms where libraries are searched for symbols undefined at
+# that point as they occur on the command line, it is pointless to
+# search the cairo library at that point as no references to cairo
+# entries have been read from object files yet.
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+    $$(CAIRO_LIBS) \
+))
+
+# Thus we also need to add cairo to the list of linked libs. These go
+# after the object files on the linking command line.
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    cairo \
+))
+
+else
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    cairo \
+))
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    freetype \
+    fontconfig \
+))
+endif
+endif
+endif
+
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+	$$(FONTCONFIG_LIBS) \
+    $$(FREETYPE_LIBS) \
+))
 endif
 
 ifeq ($(OS),LINUX)
@@ -471,9 +555,16 @@ $(eval $(call gb_Library_add_libs,vcl,\
 endif
 
 ifeq ($(OS),WNT)
+ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_ldflags,vcl,\
     /ENTRY:LibMain@12 \
 ))
+endif
+ifeq ($(COM),GCC)
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+))
+endif
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     advapi32 \
     gdi32 \
@@ -483,7 +574,7 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     mpr \
     msimg32 \
     msvcrt \
-    oldnames \
+    $(gb_Library_win32_OLDNAMES) \
     ole32 \
     shell32 \
     user32 \
@@ -492,4 +583,14 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     winspool \
 ))
 endif
+
+ifeq ($(GUIBASE),cocoatouch)
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+    -framework UIKit \
+    -framework CoreFoundation \
+))
+endif
+
+
 # vim: set noet sw=4 ts=4:

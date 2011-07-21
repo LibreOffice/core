@@ -78,7 +78,7 @@
 /* It must be safe to include this file in plain C code, so only C style
  * comments are used. Do NOT use // C++ style comments. */
 
-/* disable typedef for usage in svx/source/dialog/langtab.src */
+/* disable typedef for usage in svtools/source/misc/langtab.src */
 #ifndef RSC_RESOURCE_USAGE
 typedef unsigned short LanguageType;
 #endif

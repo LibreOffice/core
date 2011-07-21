@@ -237,6 +237,8 @@ extern "C" int CDECL compare_strings( const void *arg1, const void *arg2 )
 }
 
 
+namespace {
+
 class LetterTable
 {
     bool        IsLetterTab[256];
@@ -251,6 +253,8 @@ public:
     }
     bool isLetterUnicode( sal_Unicode c );
 };
+
+}
 
 class BasicSimpleCharClass
 {
@@ -670,41 +674,6 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     rpEndPos = mpActualPos;
     return sal_True;
 }
-
-String SimpleTokenizer_Impl::getTokStr
-    ( /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos )
-{
-    return String( pStartPos, (sal_uInt16)( pEndPos - pStartPos ) );
-}
-
-#ifdef DBG_UTIL
-// TEST: Token ausgeben
-String SimpleTokenizer_Impl::getFullTokenStr( /*out*/TokenTypes eType,
-    /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos )
-{
-    String aOut;
-    switch( eType )
-    {
-        case TT_UNKNOWN:    aOut = String( RTL_CONSTASCII_USTRINGPARAM("TT_UNKNOWN:") ); break;
-        case TT_IDENTIFIER: aOut = String( RTL_CONSTASCII_USTRINGPARAM("TT_IDENTIFIER:") ); break;
-        case TT_WHITESPACE: aOut = String( RTL_CONSTASCII_USTRINGPARAM("TT_WHITESPACE:") ); break;
-        case TT_NUMBER:     aOut = String( RTL_CONSTASCII_USTRINGPARAM("TT_NUMBER:") ); break;
-        case TT_STRING:     aOut = String( RTL_CONSTASCII_USTRINGPARAM("TT_STRING:") ); break;
-        case TT_EOL:        aOut = String( RTL_CONSTASCII_USTRINGPARAM("TT_EOL:") ); break;
-        case TT_COMMENT:    aOut = String( RTL_CONSTASCII_USTRINGPARAM("TT_COMMENT:") ); break;
-        case TT_ERROR:      aOut = String( RTL_CONSTASCII_USTRINGPARAM("TT_ERROR:") ); break;
-        case TT_OPERATOR:   aOut = String( RTL_CONSTASCII_USTRINGPARAM("TT_OPERATOR:") ); break;
-        case TT_KEYWORDS:   aOut = String( RTL_CONSTASCII_USTRINGPARAM("TT_KEYWORD:") ); break;
-        case TT_PARAMETER:  aOut = String( RTL_CONSTASCII_USTRINGPARAM("TT_PARAMETER:") ); break;
-    }
-    if( eType != TT_EOL )
-    {
-        aOut += String( pStartPos, (sal_uInt16)( pEndPos - pStartPos ) );
-    }
-    aOut += String( RTL_CONSTASCII_USTRINGPARAM("\n") );
-    return aOut;
-}
-#endif
 
 SimpleTokenizer_Impl::SimpleTokenizer_Impl( HighlighterLanguage aLang ): aLanguage(aLang)
 {

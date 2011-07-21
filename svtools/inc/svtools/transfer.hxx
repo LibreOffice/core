@@ -267,10 +267,7 @@ protected:
     sal_Bool            SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     sal_Bool            SetINetBookmark( const INetBookmark& rBmk, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     sal_Bool            SetINetImage( const INetImage& rINtImg, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetFileList( const FileList& rFileList, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     sal_Bool            SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf,
-                                      const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
 protected:
 
@@ -398,7 +395,6 @@ public:
     sal_Bool                    GetInputStream( SotFormatStringId nFormat, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
     sal_Bool                    GetInputStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
 
-    sal_Bool                    GetInterface( SotFormatStringId nFormat, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf );
     sal_Bool                    GetInterface( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf );
 
 public:
@@ -564,8 +560,6 @@ public:
 
                         TransferDataContainer();
                         ~TransferDataContainer();
-
-    void                ClearData();
 
     void                CopyINetBookmark( const INetBookmark& rBkmk );
     void                CopyINetImage( const INetImage& rINtImg );

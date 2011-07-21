@@ -360,12 +360,6 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetNextEntry( const Point& rPixPos, S
     return ((SvtIconChoiceCtrl*)this)->_pImp->GetNextEntry( aPos, pCurEntry );
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetPrevEntry( const Point& rPixPos, SvxIconChoiceCtrlEntry* pCurEntry, sal_Bool  ) const
-{
-    Point aPos( rPixPos );
-    aPos -= GetMapMode().GetOrigin();
-    return ((SvtIconChoiceCtrl*)this)->_pImp->GetPrevEntry( aPos, pCurEntry );
-}
 sal_uLong SvtIconChoiceCtrl::GetEntryCount() const
 {
     return _pImp->GetEntryCount();

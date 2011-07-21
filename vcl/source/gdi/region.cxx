@@ -382,34 +382,6 @@ const char* ImplDbgTestRegion( const void* pObj )
     return NULL;
 }
 
-void TraceBands (const ImplRegionBand* pFirstBand)
-{
-    int nBandIndex  (0);
-    const ImplRegionBand* pBand = pFirstBand;
-    while (pBand != NULL)
-    {
-        OSL_TRACE("            band %d  %d->%d : ", nBandIndex++,
-            pBand->mnYTop, pBand->mnYBottom);
-
-        ImplRegionBandPoint* pPoint = pBand->mpFirstBandPoint;
-        while (pPoint != NULL)
-        {
-            OSL_TRACE(" %d ", pPoint->mnX);
-            pPoint = pPoint->mpNextBandPoint;
-        }
-        OSL_TRACE("  |  ");
-
-        ImplRegionBandSep* pSep = pBand->mpFirstSep;
-        while (pSep != NULL)
-        {
-            OSL_TRACE(" %d->%d ", pSep->mnXLeft, pSep->mnXRight);
-            pSep = pSep->mpNextSep;
-        }
-        OSL_TRACE("\n");
-
-        pBand = pBand->mpNextBand;
-    }
-}
 #endif
 
 // =======================================================================

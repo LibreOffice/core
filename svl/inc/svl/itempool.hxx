@@ -266,7 +266,6 @@ public:
     sal_uInt16                          GetFileFormatVersion() const
                                     { return _nFileFormatVersion; }
     void                            SetFileFormatVersion( sal_uInt16 nFileFormatVersion );
-    sal_uInt16                          GetLoadingVersion() const;
     bool                            IsCurrentVersionLoading() const;
 
     static int                      IsWhich(sal_uInt16 nId) {

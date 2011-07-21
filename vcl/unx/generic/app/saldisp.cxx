@@ -885,10 +885,7 @@ void SalDisplay::Init()
         sscanf( pProperties, "%li", &nProperties_ );
     else
     {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || \
-    defined NETBSD || defined OPENBSD || defined DRAGONFLY
         nProperties_ |= PROPERTY_FEATURE_Maximize;
-#endif
         // Server Bugs & Properties
         if( GetServerVendor() == vendor_excursion )
         {
@@ -907,31 +904,6 @@ void SalDisplay::Init()
             nProperties_ |= PROPERTY_BUG_XA_FAMILY_NAME_nil;
 
             if( otherwm == eWindowManager_ ) eWindowManager_ = mwm;
-        }
-        else
-        if( GetServerVendor() == vendor_xfree )
-        {
-            nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD || \
-    defined DRAGONFLY
-            // otherwm and olwm are a kind of default, which are not detected
-            // carefully. if we are running linux (i.e. not netbsd) on an xfree
-            // display, fvwm is most probable the wm to choose, confusing with mwm
-            // doesn't harm. #57791# start maximized if possible
-                    if(    (otherwm == eWindowManager_)
-                || (olwm    == eWindowManager_ ))
-            {
-                eWindowManager_ = fvwm; // ???
-                nProperties_ |= PROPERTY_FEATURE_Maximize;
-            }
-#else
-            if( otherwm == eWindowManager_ ) eWindowManager_ = winmgr;
-#endif
-#if defined SOLARIS && defined SPARC
-            nProperties_ |= PROPERTY_BUG_Bitmap_Bit_Order;
-            // solaris xlib seems to have problems with putting images
-            // in correct bit order to xfree 8 bit displays
-#endif
         }
         else
         if( GetServerVendor() == vendor_sun )
@@ -2358,7 +2330,7 @@ void SalX11Display::Yield()
     if( pXLib_->HasXErrorOccurred() )
     {
         XFlush( pDisp_ );
-        PrintEvent( "SalDisplay::Yield (WasXError)", &aEvent );
+        DbgPrintDisplayEvent("SalDisplay::Yield (WasXError)", &aEvent);
     }
 #endif
     pXLib_->ResetXErrorOccurred();
@@ -2475,14 +2447,13 @@ long SalX11Display::Dispatch( XEvent *pEvent )
     return 0;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalDisplay::PrintEvent( const ByteString &rComment,
-                                   XEvent       *pEvent ) const
+#ifdef DBG_UTIL
+void SalDisplay::DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) const
 {
     if( pEvent->type <= MappingNotify )
     {
         fprintf( stderr, "[%s] %s s=%d w=%ld\n",
-                 rComment.GetBuffer(),
+                 pComment,
                  EventNames[pEvent->type],
                  pEvent->xany.send_event,
                  pEvent->xany.window );
@@ -2609,11 +2580,12 @@ void SalDisplay::PrintEvent( const ByteString &rComment,
     }
     else
         fprintf( stderr, "[%s] %d s=%d w=%ld\n",
-                 rComment.GetBuffer(),
+                 pComment,
                  pEvent->type,
                  pEvent->xany.send_event,
                  pEvent->xany.window );
 }
+#endif
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalDisplay::PrintInfo() const

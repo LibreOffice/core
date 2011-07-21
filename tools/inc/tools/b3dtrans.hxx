@@ -147,7 +147,6 @@ public:
     void Reset();
 
     // ObjectTrans
-    void SetObjectTrans(const basegfx::B3DHomMatrix& rObj);
     const basegfx::B3DHomMatrix& GetObjectTrans() { return maObjectTrans; }
     const basegfx::B3DHomMatrix& GetInvObjectTrans() { return maInvObjectTrans; }
 
@@ -156,35 +155,26 @@ public:
         basegfx::B3DPoint aVRP = basegfx::B3DPoint(0.0,0.0,1.0),
         basegfx::B3DVector aVPN = basegfx::B3DVector(0.0,0.0,1.0),
         basegfx::B3DVector aVUP = basegfx::B3DVector(0.0,1.0,0.0));
-    void SetOrientation(basegfx::B3DHomMatrix& mOrient);
     const basegfx::B3DHomMatrix& GetOrientation() { return maOrientation; }
     const basegfx::B3DHomMatrix& GetInvOrientation() { return maInvOrientation; }
 
     // Projection
     void SetProjection(const basegfx::B3DHomMatrix& mProject);
     const basegfx::B3DHomMatrix& GetProjection();
-    const basegfx::B3DHomMatrix& GetInvProjection();
 
     // Texture
-    void SetTexture(const basegfx::B2DHomMatrix& rTxt);
     const basegfx::B2DHomMatrix& GetTexture() { return maTexture; }
 
     // Seitenverhaeltnis und Modus zu dessen Aufrechterhaltung
     double GetRatio() { return mfRatio; }
     void SetRatio(double fNew=1.0);
     Base3DRatio GetRatioMode() { return meRatio; }
-    void SetRatioMode(Base3DRatio eNew=Base3DRatioGrow);
 
     // Parameter der ViewportTransformation
     void SetDeviceRectangle(double fL=-1.0, double fR=1.0, double fB=-1.0, double fT=1.0, sal_Bool bBroadCastChange=sal_True);
-    void SetDeviceVolume(const basegfx::B3DRange& rVol, sal_Bool bBroadCastChange=sal_True);
-    void GetDeviceRectangle(double &fL, double &fR, double& fB, double& fT);
-    basegfx::B3DRange GetDeviceVolume();
     double GetDeviceRectangleWidth() const { return mfRightBound - mfLeftBound; }
     double GetDeviceRectangleHeight() const { return mfTopBound - mfBottomBound; }
-    void SetFrontClippingPlane(double fF=0.0);
     double GetFrontClippingPlane() { return mfNearBound; }
-    void SetBackClippingPlane(double fB=1.0);
     double GetBackClippingPlane() { return mfFarBound; }
     void SetPerspective(sal_Bool bNew);
     sal_Bool GetPerspective() { return mbPerspective; }
@@ -193,44 +183,13 @@ public:
     const Rectangle& GetViewportRectangle() { return maViewportRectangle; }
     void CalcViewport();
 
-    // Spezielle Matritzen anfordern
-    basegfx::B3DHomMatrix GetMatFromObjectToView();
-
-    // Transponierte Inverse fuer Vectortransformationen
-    const basegfx::B3DHomMatrix& GetInvTransObjectToEye();
-
-    // Speziell zum Umwandeln von Punkten Objekt -> Device
-    const basegfx::B3DHomMatrix& GetObjectToDevice();
-
-    // Speziell zum Umwandeln von Punkten World -> View
-    const basegfx::B3DHomMatrix& GetMatFromWorldToView();
-    const basegfx::B3DHomMatrix& GetInvMatFromWorldToView();
-
     // Bounds des Viewports lesen
-    const Rectangle& GetLogicalViewportBounds();
     const basegfx::B3DVector& GetScale();
     const basegfx::B3DVector& GetTranslate();
 
     // Direkter Zugriff auf verschiedene Transformationen
     const basegfx::B3DPoint WorldToEyeCoor(const basegfx::B3DPoint& rVec);
     const basegfx::B3DPoint EyeToWorldCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint EyeToViewCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ViewToEyeCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint WorldToViewCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ViewToWorldCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint DeviceToViewCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ViewToDeviceCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ObjectToWorldCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint WorldToObjectCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ObjectToViewCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ViewToObjectCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint ObjectToEyeCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint EyeToObjectCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint DeviceToEyeCoor(const basegfx::B3DPoint& rVec);
-    const basegfx::B3DPoint EyeToDeviceCoor(const basegfx::B3DPoint& rVec);
-
-    const basegfx::B3DPoint InvTransObjectToEye(const basegfx::B3DPoint& rVec);
-    const basegfx::B2DPoint TransTextureCoor(const basegfx::B2DPoint& rVec);
 
     static void Frustum(
         basegfx::B3DHomMatrix& rTarget,
@@ -252,7 +211,6 @@ protected:
     void PostSetObjectTrans();
     void PostSetOrientation();
     void PostSetProjection();
-    void PostSetTexture();
     void PostSetViewport();
 
     void CalcMatObjectToDevice();
@@ -282,8 +240,6 @@ public:
     B3dViewport();
     virtual ~B3dViewport();
 
-    void SetVRP(const basegfx::B3DPoint& rNewVRP);
-    void SetVPN(const basegfx::B3DVector& rNewVPN);
     void SetVUV(const basegfx::B3DVector& rNewVUV);
     void SetViewportValues(
         const basegfx::B3DPoint& rNewVRP,
@@ -324,22 +280,16 @@ public:
     virtual ~B3dCamera();
 
     // Positionen
-    void SetPosition(const basegfx::B3DPoint& rNewPos);
     const basegfx::B3DPoint& GetPosition() const { return aPosition; }
-    void SetLookAt(const basegfx::B3DVector& rNewLookAt);
     const basegfx::B3DVector& GetLookAt() const { return aLookAt; }
-    void SetPositionAndLookAt(const basegfx::B3DPoint& rNewPos, const basegfx::B3DVector& rNewLookAt);
 
     // Brennweite in mm
-    void SetFocalLength(double fLen);
     double GetFocalLength() const { return fFocalLength; }
 
     // Neigung links/rechts
-    void SetBankAngle(double fAngle);
     double GetBankAngle() const { return fBankAngle; }
 
     // FocalLength Flag
-    void SetUseFocalLength(sal_Bool bNew);
     sal_Bool GetUseFocalLength() const { return (sal_Bool)bUseFocalLength; }
 
 protected:

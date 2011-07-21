@@ -69,10 +69,6 @@ public:
     TextCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
     sal_Bool            HasAttrib( sal_uInt16 nWhich ) const;
     sal_Bool            HasBoundingAttrib( sal_uInt16 nBound );
-
-#ifdef  DBG_UTIL
-    sal_Bool            DbgCheckAttribs();
-#endif
 };
 
 

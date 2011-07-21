@@ -39,8 +39,8 @@
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 
 #include "DataFmtTransl.hxx"
-#include "..\misc\ImplHelper.hxx"
-#include "..\misc\WinClip.hxx"
+#include "../misc/ImplHelper.hxx"
+#include "../misc/WinClip.hxx"
 
 #include <algorithm>
 

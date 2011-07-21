@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,23 +38,25 @@
 #include <cppuhelper/implbase2.hxx>
 #include <osl/module.h>
 
+#ifdef SYSTEM_CAIRO
+#include <cairo.h>
+#else
+#include <cairo/cairo.h>
+#endif
+
 #include <vector>
 
 #if defined MACOSX
     #define VCL_RSVG_GOBJECT_LIBNAME    "libgobject-2.0.0.dylib"
-    #define VCL_RSVG_CAIRO_LIBNAME      "libcairo.2.dylib"
     #define VCL_RSVG_LIBRSVG_LIBNAME    "librsvg-2.2.dylib"
 #elif defined UNX
     #define VCL_RSVG_GOBJECT_LIBNAME    "libgobject-2.0.so"
-    #define VCL_RSVG_CAIRO_LIBNAME      "libcairo.so"
     #define VCL_RSVG_LIBRSVG_LIBNAME    "librsvg-2.so"
 #elif defined WNT
     #define VCL_RSVG_GOBJECT_LIBNAME    "gobjectlo.dll"
-    #define VCL_RSVG_CAIRO_LIBNAME      "cairo.dll"
     #define VCL_RSVG_LIBRSVG_LIBNAME    "librsvg-2-2.dll"
 #else
     #define VCL_RSVG_GOBJECT_LIBNAME    "nogobjectlib"
-    #define VCL_RSVG_CAIRO_LIBNAME      "nocairolib"
     #define VCL_RSVG_LIBRSVG_LIBNAME    "nolibrsvglib"
 #endif
 
@@ -71,18 +74,6 @@ typedef sal_Size gsize;
 typedef void* gpointer;
 
 struct GError;
-
-enum cairo_format_t { CAIRO_FORMAT_ARGB32 = 0 };
-enum cairo_status_t { CAIRO_STATUS_SUCCESS = 0 };
-
-struct cairo_surface_t;
-struct cairo_t;
-struct cairo_matrix_t
-{
-    double xx; double yx;
-    double xy; double yy;
-    double x0; double y0;
-};
 
 struct RsvgHandle;
 struct RsvgDimensionData
@@ -126,28 +117,10 @@ public:
 
     static LibraryWrapper& get();
 
-    bool isValid() const { return( ( mpGObjectLib != NULL ) && ( mpCairoLib != NULL ) && ( mpRSVGLib != NULL ) ); }
+    bool isValid() const { return( ( mpGObjectLib != NULL ) && ( mpRSVGLib != NULL ) ); }
 
     // G-Object
     gpointer g_object_unref( gpointer pointer ) { return( (*mp_g_object_unref)( pointer ) ); };
-
-    // LibRSVG
-
-    // Cairo
-    cairo_surface_t* image_surface_create( cairo_format_t format, int width, int height ) { return( (*mp_image_surface_create)( format, width, height ) ); }
-    void surface_destroy( cairo_surface_t* surface ) { (*mp_surface_destroy)( surface ); }
-    cairo_status_t surface_status( cairo_surface_t* surface ) { return( (*mp_surface_status)( surface ) ); }
-    cairo_t* create( cairo_surface_t* surface ) { return( (*mp_create)( surface ) ); }
-    void destroy( cairo_t* cairo ) { (*mp_destroy )( cairo ); }
-    void matrix_init_identity( cairo_matrix_t* matrix ){ (*mp_matrix_init_identity)( matrix ); }
-    void matrix_translate( cairo_matrix_t* matrix, double nx, double ny ) { (*mp_matrix_translate)( matrix, nx, ny ); }
-    void matrix_scale( cairo_matrix_t* matrix, double sx, double sy ) {( *mp_matrix_scale )( matrix, sx, sy ); }
-    void matrix_rotate( cairo_matrix_t* matrix, double radians ) { ( *mp_matrix_rotate )( matrix, radians ); }
-    void transform( cairo_t* cairo, cairo_matrix_t *matrix ) { (*mp_transform)( cairo, matrix ); }
-    unsigned char* image_surface_get_data(cairo_surface_t* surface) { return( (*mp_image_surface_get_data)( surface ) ); }
-    int image_surface_get_width(cairo_surface_t* surface) { return( (*mp_image_surface_get_width)( surface ) ); }
-    int image_surface_get_height(cairo_surface_t* surface) { return( (*mp_image_surface_get_height)( surface ) ); }
-    int image_surface_get_stride(cairo_surface_t* surface) { return( (*mp_image_surface_get_stride)( surface ) ); }
 
     // LibRSVG
     void rsvg_init() { (*mp_rsvg_init)(); }
@@ -164,27 +137,10 @@ private:
 private:
 
     oslModule mpGObjectLib;
-    oslModule mpCairoLib;
     oslModule mpRSVGLib;
 
     // GObject
     gpointer (*mp_g_object_unref)( gpointer );
-
-    // Cairo
-    cairo_surface_t* (*mp_image_surface_create)(cairo_format_t,int,int);
-    void (*mp_surface_destroy )(cairo_surface_t*);
-    cairo_status_t (*mp_surface_status)(cairo_surface_t*);
-    cairo_t* (*mp_create)(cairo_surface_t*);
-    void (*mp_destroy)(cairo_t*);
-    void (*mp_matrix_init_identity)(cairo_matrix_t*);
-    void (*mp_matrix_translate)( cairo_matrix_t*, double, double);
-    void (*mp_matrix_scale )( cairo_matrix_t*, double, double);
-    void (*mp_matrix_rotate)( cairo_matrix_t*, double);
-    void (*mp_transform)( cairo_t*, cairo_matrix_t*);
-    unsigned char* (*mp_image_surface_get_data)( cairo_surface_t* );
-    int (*mp_image_surface_get_width)(cairo_surface_t* surface);
-    int (*mp_image_surface_get_height)(cairo_surface_t* surface);
-    int (*mp_image_surface_get_stride)(cairo_surface_t* surface);
 
     // LibRSVG
     void (*mp_rsvg_init)( void );
@@ -211,11 +167,9 @@ LibraryWrapper& LibraryWrapper::get()
 
 LibraryWrapper::LibraryWrapper() :
     mpGObjectLib( NULL ),
-    mpCairoLib( NULL ),
     mpRSVGLib( NULL )
 {
     const ::rtl::OUString aGObjectLibName( RTL_CONSTASCII_USTRINGPARAM( VCL_RSVG_GOBJECT_LIBNAME ) );
-    const ::rtl::OUString aCairoLibName( RTL_CONSTASCII_USTRINGPARAM( VCL_RSVG_CAIRO_LIBNAME ) );
     const ::rtl::OUString aRSVGLibName( RTL_CONSTASCII_USTRINGPARAM( VCL_RSVG_LIBRSVG_LIBNAME ) );
     bool bCont = true;
 
@@ -231,47 +185,6 @@ LibraryWrapper::LibraryWrapper() :
         if( !( mp_g_object_unref ) )
         {
             OSL_TRACE( "not all needed symbols were found in g-object library" );
-            bCont = false;
-        }
-    }
-
-    // Cairo
-    if( bCont && ( NULL != ( mpCairoLib = osl_loadModule( aCairoLibName.pData, SAL_LOADMODULE_DEFAULT ) ) ||
-                   NULL != ( mpCairoLib = osl_loadModuleRelative( (oslGenericFunction)LibraryWrapper::get,
-                                                                   aCairoLibName.pData, SAL_LOADMODULE_DEFAULT ) )
-                  ) )
-    {
-        mp_image_surface_create = ( cairo_surface_t* (*)( cairo_format_t, int, int ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_image_surface_create" );
-        mp_surface_destroy = ( void (*)( cairo_surface_t* ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_surface_destroy" );
-        mp_surface_status = ( cairo_status_t (*)( cairo_surface_t* ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_surface_status" );
-        mp_create = ( cairo_t* (*)( cairo_surface_t* ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_create" );
-        mp_destroy = ( void (*)( cairo_t* ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_destroy" );
-        mp_matrix_init_identity = ( void (*)( cairo_matrix_t* ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_matrix_init_identity" );
-        mp_matrix_translate = ( void (*)( cairo_matrix_t*, double, double ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_matrix_translate" );
-        mp_matrix_scale = ( void (*)( cairo_matrix_t*, double, double ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_matrix_scale" );
-        mp_matrix_rotate = ( void (*)( cairo_matrix_t*, double ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_matrix_rotate" );
-        mp_transform = ( void (*)( cairo_t*, cairo_matrix_t* ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_transform" );
-        mp_image_surface_get_data = ( unsigned char* (*)( cairo_surface_t* ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_image_surface_get_data" );
-        mp_image_surface_get_width = ( int (*)( cairo_surface_t* ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_image_surface_get_width" );
-        mp_image_surface_get_height = ( int (*)( cairo_surface_t* ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_image_surface_get_height" );
-        mp_image_surface_get_stride = ( int (*)( cairo_surface_t* ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_image_surface_get_stride" );
-
-        if( !( mp_image_surface_create &&
-               mp_surface_destroy &&
-               mp_surface_status &&
-               mp_create &&
-               mp_destroy &&
-               mp_matrix_init_identity &&
-               mp_matrix_translate &&
-               mp_matrix_scale &&
-               mp_matrix_rotate &&
-               mp_transform &&
-               mp_image_surface_get_data &&
-               mp_image_surface_get_width &&
-               mp_image_surface_get_height &&
-               mp_image_surface_get_stride ) )
-        {
-            OSL_TRACE( "not all needed symbols were found in cairo library" );
             bCont = false;
         }
     }
@@ -302,10 +215,9 @@ LibraryWrapper::LibraryWrapper() :
     }
 
     OSL_ENSURE( mpGObjectLib, "g-object library could not be loaded" );
-    OSL_ENSURE( mpCairoLib, "cairo library could not be loaded" );
     OSL_ENSURE( mpRSVGLib, "librsvg library could not be loaded" );
 
-    bCont = bCont && mpGObjectLib != NULL && mpCairoLib != NULL && mpRSVGLib != NULL;
+    bCont = bCont && mpGObjectLib != NULL && mpRSVGLib != NULL;
 
     // unload all libraries in case of failure
     if( !bCont )
@@ -314,12 +226,6 @@ LibraryWrapper::LibraryWrapper() :
         {
             osl_unloadModule( mpRSVGLib );
             mpRSVGLib = NULL;
-        }
-
-        if( mpCairoLib )
-        {
-            osl_unloadModule( mpCairoLib );
-            mpCairoLib = NULL;
         }
 
         if( mpGObjectLib )
@@ -426,11 +332,10 @@ void Rasterizer::implFreeRsvgHandle()
 
 uno::Reference< graphic::XGraphic > Rasterizer::implGetXGraphicFromSurface( cairo_surface_t* pSurface ) const
 {
-    LibraryWrapper& rLib = LibraryWrapper::get();
-    unsigned char*  pData = rLib.image_surface_get_data( pSurface );
-    const sal_Int32 nWidth = rLib.image_surface_get_width( pSurface );
-    const sal_Int32 nHeight =rLib.image_surface_get_height( pSurface );
-    const sal_Int32 nStride = rLib.image_surface_get_stride( pSurface );
+    unsigned char*  pData = cairo_image_surface_get_data( pSurface );
+    const sal_Int32 nWidth = cairo_image_surface_get_width( pSurface );
+    const sal_Int32 nHeight = cairo_image_surface_get_height( pSurface );
+    const sal_Int32 nStride = cairo_image_surface_get_stride( pSurface );
 
     uno::Reference< graphic::XGraphic > xRet;
 
@@ -563,31 +468,31 @@ uno::Reference< graphic::XGraphic > SAL_CALL Rasterizer::rasterize( ::sal_uInt32
 
     if( mpRsvgHandle && rLib.isValid() && nWidth && nHeight && mnDefaultWidth && mnDefaultHeight )
     {
-        cairo_surface_t* pSurface = rLib.image_surface_create( CAIRO_FORMAT_ARGB32, nWidth, nHeight );
+        cairo_surface_t* pSurface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, nWidth, nHeight );
 
-        if( pSurface && ( CAIRO_STATUS_SUCCESS == rLib.surface_status( pSurface ) ) )
+        if( pSurface && ( CAIRO_STATUS_SUCCESS == cairo_surface_status( pSurface ) ) )
         {
-            cairo_t* pCr = rLib.create( pSurface );
+            cairo_t* pCr = cairo_create( pSurface );
 
             if( pCr )
             {
                 cairo_matrix_t aMatrix;
 
-                rLib.matrix_init_identity( &aMatrix );
-                rLib.matrix_scale( &aMatrix,
+                cairo_matrix_init_identity( &aMatrix );
+                cairo_matrix_scale( &aMatrix,
                                      static_cast< double >( nWidth ) / mnDefaultWidth,
                                      static_cast< double >( nHeight ) / mnDefaultHeight );
-                rLib.transform( pCr, &aMatrix );
+                cairo_transform( pCr, &aMatrix );
 
                 if( rLib.rsvg_handle_render_cairo( mpRsvgHandle, pCr ) )
                 {
                     xRet = implGetXGraphicFromSurface( pSurface );
                 }
 
-                rLib.destroy( pCr );
+                cairo_destroy( pCr );
             }
 
-            rLib.surface_destroy( pSurface );
+           cairo_surface_destroy( pSurface );
             OSL_ENSURE( xRet.is(), "SVG *not* rendered successfully" );
         }
     }
@@ -638,3 +543,5 @@ uno::Reference< uno::XInterface > SAL_CALL Rasterizer_createInstance( const uno:
 
 } // namespace rsvg
 } // namespace vcl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

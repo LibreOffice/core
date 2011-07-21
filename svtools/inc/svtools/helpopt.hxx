@@ -85,10 +85,6 @@ public:
     void            SetWelcomeScreen( sal_Bool b );
     sal_Bool        IsWelcomeScreen() const;
 
-    IdList*         GetPIStarterList();
-    void            AddToPIStarterList( sal_Int32 nId );
-    void            RemoveFromPIStarterList( sal_Int32 nId );
-
     String          GetLocale() const;
     String          GetSystem() const;
 };

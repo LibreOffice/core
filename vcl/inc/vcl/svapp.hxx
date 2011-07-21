@@ -161,14 +161,12 @@ inline sal_Bool ApplicationAddress::IsConnectToSame( const ApplicationAddress& r
 
 #define APPEVENT_OPEN_STRING            "Open"
 #define APPEVENT_PRINT_STRING           "Print"
-#define APPEVENT_DISKINSERT_STRING      "DiskInsert"
-#define APPEVENT_SAVEDOCUMENTS_STRING   "SaveDocuments"
 
 class VCL_DLLPUBLIC ApplicationEvent
 {
 private:
     UniString           aSenderAppName; // Absender Applikationsname
-    ByteString          aEvent;         // Event
+    rtl::OString        m_aEvent;       // Event
     UniString           aData;          // Uebertragene Daten
     ApplicationAddress  aAppAddr;       // Absender Addresse
 
@@ -176,17 +174,13 @@ public:
                         ApplicationEvent() {}
                         ApplicationEvent( const UniString& rSenderAppName,
                                           const ApplicationAddress& rAppAddr,
-                                          const ByteString& rEvent,
+                                          const rtl::OString& rEvent,
                                           const UniString& rData );
 
     const UniString&    GetSenderAppName() const { return aSenderAppName; }
-    const ByteString&   GetEvent() const { return aEvent; }
+    const rtl::OString& GetEvent() const { return m_aEvent; }
     const UniString&    GetData() const { return aData; }
     const ApplicationAddress& GetAppAddress() const { return aAppAddr; }
-
-    sal_Bool                IsOpenEvent() const;
-    sal_Bool                IsPrintEvent() const;
-    sal_Bool                IsDiskInsertEvent() const;
 
     sal_uInt16              GetParamCount() const { return aData.GetTokenCount( APPEVENT_PARAM_DELIMITER ); }
     UniString           GetParam( sal_uInt16 nParam ) const { return aData.GetToken( nParam, APPEVENT_PARAM_DELIMITER ); }
@@ -194,37 +188,13 @@ public:
 
 inline ApplicationEvent::ApplicationEvent( const UniString& rSenderAppName,
                                            const ApplicationAddress& rAppAddr,
-                                           const ByteString& rEvent,
+                                           const rtl::OString& rEvent,
                                            const UniString& rData ) :
     aSenderAppName( rSenderAppName ),
-    aEvent( rEvent ),
+    m_aEvent( rEvent ),
     aData( rData ),
     aAppAddr( rAppAddr )
 {
-}
-
-inline sal_Bool ApplicationEvent::IsOpenEvent() const
-{
-    if ( aEvent.Equals( APPEVENT_OPEN_STRING ))
-        return sal_True;
-    else
-        return sal_False;
-}
-
-inline sal_Bool ApplicationEvent::IsPrintEvent() const
-{
-    if ( aEvent.Equals( APPEVENT_PRINT_STRING ))
-        return sal_True;
-    else
-        return sal_False;
-}
-
-inline sal_Bool ApplicationEvent::IsDiskInsertEvent() const
-{
-    if ( aEvent.Equals( APPEVENT_DISKINSERT_STRING ))
-        return sal_True;
-    else
-        return sal_False;
 }
 
 class VCL_DLLPUBLIC PropertyHandler
@@ -262,8 +232,6 @@ public:
     virtual void                InitFinished();
     virtual void                DeInit();
 
-    static void                 InitAppRes( const ResId& rResId );
-
     static sal_uInt16               GetCommandLineParamCount();
     static XubString            GetCommandLineParam( sal_uInt16 nParam );
     static const XubString&     GetAppFileName();
@@ -286,7 +254,6 @@ public:
 
     static sal_Bool                 IsInMain();
     static sal_Bool                 IsInExecute();
-    static sal_Bool                 IsShutDown();
     static sal_Bool                 IsInModalMode();
     static sal_uInt16               GetModalModeCount();
 
@@ -294,7 +261,6 @@ public:
     static sal_Bool                 AnyInput( sal_uInt16 nType = INPUT_ANY );
     static sal_uLong                GetLastInputInterval();
     static sal_Bool                 IsUICaptured();
-    static sal_Bool                 IsUserActive( sal_uInt16 nTest = USERACTIVE_ALL );
 
     virtual void                SystemSettingsChanging( AllSettings& rSettings,
                                                         Window* pFrame );
@@ -387,16 +353,11 @@ public:
 
     static sal_Bool                 InsertAccel( Accelerator* pAccel );
     static void                 RemoveAccel( Accelerator* pAccel );
-    static void                 FlushAccel();
     static sal_Bool                 CallAccel( const KeyCode& rKeyCode, sal_uInt16 nRepeat = 0 );
 
-    static sal_uLong                AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* pData = NULL );
-    static void                 RemoveHotKey( sal_uLong nId );
     static sal_uLong                AddEventHook( VCLEventHookProc pProc, void* pData = NULL );
     static void                 RemoveEventHook( sal_uLong nId );
     static long                 CallEventHooks( NotifyEvent& rEvt );
-    static long                 CallPreNotify( NotifyEvent& rEvt );
-    static long                 CallEvent( NotifyEvent& rEvt );
 
     static void                 SetHelp( Help* pHelp = NULL );
     static Help*                GetHelp();
@@ -409,7 +370,6 @@ public:
 
     static sal_uLong                GetReservedKeyCodeCount();
     static const KeyCode*       GetReservedKeyCode( sal_uLong i );
-    static String               GetReservedKeyCodeDescription( sal_uLong i );
 
     static void                 SetDefDialogParent( Window* pWindow );
     static Window*              GetDefDialogParent();
@@ -421,9 +381,7 @@ public:
     static sal_uInt16               GetSystemWindowMode();
 
     static void                 SetDialogScaleX( short nScale );
-    static short                GetDialogScaleX();
 
-    static void                 SetFontPath( const String& rPath );
     static const String&        GetFontPath();
 
     static UniqueItemId         CreateUniqueId();
@@ -437,8 +395,6 @@ public:
 
     static void                 SetFilterHdl( const Link& rLink );
     static const Link&          GetFilterHdl();
-
-    static sal_Bool                 IsAccessibilityEnabled();
 
     static void                 EnableHeadlessMode( sal_Bool bEnable = sal_True );
     static sal_Bool                 IsHeadlessModeEnabled();

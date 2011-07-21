@@ -137,7 +137,7 @@ int	yywrap(void)
 }
 
 /*****************************************************************************/
-void YYWarning( char *s )
+void YYWarning( const char *s )
 /*****************************************************************************/
 {
 	/* write warning to stderr */
@@ -147,9 +147,9 @@ void YYWarning( char *s )
 
 /*****************************************************************************/
 #ifdef GCC
-void yyerror ( char *s, ... )
+void yyerror ( const char *s, ... )
 #else
-void yyerror ( char *s )
+void yyerror ( const char *s )
 #endif
 /*****************************************************************************/
 {

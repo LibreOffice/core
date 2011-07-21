@@ -61,14 +61,13 @@ void TaskButtonBar::RequestHelp( const HelpEvent& rHEvt )
 
 WindowArrange::WindowArrange()
 {
-    mpWinList = new List;
 }
 
 // -----------------------------------------------------------------------
 
 WindowArrange::~WindowArrange()
 {
-    delete mpWinList;
+    maWinList.clear();
 }
 
 // -----------------------------------------------------------------------
@@ -103,22 +102,21 @@ static void ImplPosSizeWindow( Window* pWindow,
 
 void WindowArrange::ImplTile( const Rectangle& rRect )
 {
-    sal_uInt16 nCount = (sal_uInt16)mpWinList->Count();
+    size_t nCount = maWinList.size();
     if ( nCount < 3 )
     {
         ImplVert( rRect );
         return;
     }
 
-    sal_uInt16      i;
-    sal_uInt16      j;
-    sal_uInt16      nCols;
-    sal_uInt16      nRows;
-    sal_uInt16      nActRows;
-    sal_uInt16      nOffset;
+    sal_uInt16  i;
+    sal_uInt16  j;
+    sal_uInt16  nCols;
+    sal_uInt16  nRows;
+    sal_uInt16  nActRows;
+    sal_uInt16  nOffset;
     long        nOverWidth;
     long        nOverHeight;
-    Window*     pWindow;
     long        nX = rRect.Left();
     long        nY = rRect.Top();
     long        nWidth = rRect.GetWidth();
@@ -144,7 +142,7 @@ void WindowArrange::ImplTile( const Rectangle& rRect )
         nWidth = 1;
     nOverWidth = nRectWidth-(nWidth*nCols);
 
-    pWindow = (Window*)mpWinList->First();
+    WindowList_impl::iterator it = maWinList.begin();
     for ( i = 0; i < nCols; i++ )
     {
         if ( i < nOffset )
@@ -172,18 +170,17 @@ void WindowArrange::ImplTile( const Rectangle& rRect )
                 nTempHeight++;
                 nOverHeight--;
             }
-            ImplPosSizeWindow( pWindow, nX, nY, nTempWidth, nTempHeight );
+            ImplPosSizeWindow( *it, nX, nY, nTempWidth, nTempHeight );
             nY += nTempHeight;
 
-            pWindow = (Window*)mpWinList->Next();
-            if ( !pWindow )
+            if ( ++it == maWinList.end() )
                 break;
         }
 
         nX += nWidth;
         nY = nRectY;
 
-        if ( !pWindow )
+        if ( it == maWinList.end() )
             break;
     }
 }
@@ -192,7 +189,7 @@ void WindowArrange::ImplTile( const Rectangle& rRect )
 
 void WindowArrange::ImplHorz( const Rectangle& rRect )
 {
-    long        nCount = (long)mpWinList->Count();
+    size_t      nCount = maWinList.size();
     long        nX = rRect.Left();
     long        nY = rRect.Top();
     long        nWidth = rRect.GetWidth();
@@ -206,9 +203,9 @@ void WindowArrange::ImplHorz( const Rectangle& rRect )
     if ( nHeight < 1 )
         nHeight = 1;
     nOver = nRectHeight - (nCount*nHeight);
-    pWindow = (Window*)mpWinList->First();
-    while ( pWindow )
+    for( size_t index = 0; index < nCount; ++index )
     {
+        pWindow = maWinList[ index ];
         nTempHeight = nHeight;
         if ( nOver > 0 )
         {
@@ -217,8 +214,6 @@ void WindowArrange::ImplHorz( const Rectangle& rRect )
         }
         ImplPosSizeWindow( pWindow, nX, nY, nWidth, nTempHeight );
         nY += nTempHeight;
-
-        pWindow = (Window*)mpWinList->Next();
     }
 }
 
@@ -226,7 +221,7 @@ void WindowArrange::ImplHorz( const Rectangle& rRect )
 
 void WindowArrange::ImplVert( const Rectangle& rRect )
 {
-    long        nCount = (long)mpWinList->Count();
+    size_t      nCount = maWinList.size();
     long        nX = rRect.Left();
     long        nY = rRect.Top();
     long        nWidth = rRect.GetWidth();
@@ -240,9 +235,9 @@ void WindowArrange::ImplVert( const Rectangle& rRect )
     if ( nWidth < 1 )
         nWidth = 1;
     nOver = nRectWidth - (nCount*nWidth);
-    pWindow = (Window*)mpWinList->First();
-    while ( pWindow )
+    for( size_t index = 0; index < nCount; ++index )
     {
+        pWindow = maWinList[ index ];
         nTempWidth = nWidth;
         if ( nOver > 0 )
         {
@@ -251,8 +246,6 @@ void WindowArrange::ImplVert( const Rectangle& rRect )
         }
         ImplPosSizeWindow( pWindow, nX, nY, nTempWidth, nHeight );
         nX += nTempWidth;
-
-        pWindow = (Window*)mpWinList->Next();
     }
 }
 
@@ -285,7 +278,7 @@ void WindowArrange::ImplCascade( const Rectangle& rRect )
     Window*     pTempWindow;
 
     // Border-Fenster suchen um den Versatz zu ermitteln
-    pTempWindow = (Window*)mpWinList->First();
+    pTempWindow = maWinList.front();
     pTempWindow->GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
     while ( !nTopBorder )
     {
@@ -313,9 +306,9 @@ void WindowArrange::ImplCascade( const Rectangle& rRect )
     nStartOverHeight = nRectHeight-(nHeight+(nCascadeWins*nOff));
 
     i = 0;
-    pWindow = (Window*)mpWinList->First();
-    while ( pWindow )
+    for( size_t index = 0, count = maWinList.size(); index < count; ++index )
     {
+        pWindow = maWinList[ index ];
         if ( !i )
         {
             nOverWidth = nStartOverWidth;
@@ -346,8 +339,6 @@ void WindowArrange::ImplCascade( const Rectangle& rRect )
             i++;
         else
             i = 0;
-
-        pWindow = (Window*)mpWinList->Next();
     }
 }
 
@@ -355,7 +346,7 @@ void WindowArrange::ImplCascade( const Rectangle& rRect )
 
 void WindowArrange::Arrange( sal_uInt16 nType, const Rectangle& rRect )
 {
-    if ( !mpWinList->Count() )
+    if ( maWinList.empty() )
         return;
 
     switch ( nType )

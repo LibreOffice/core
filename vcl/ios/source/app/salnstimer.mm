@@ -26,18 +26,34 @@
  *
  ************************************************************************/
 
-#define NOMAIN
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
 
-#include <stdio.h>
-#include <ctype.h>
-#include "cppdef.h"
-#include "cpp.h"
+#include "ios/saltimer.h"
+#include "ios/salnstimer.h"
+#include "ios/salinst.h"
+#include "ios/saldata.hxx"
 
-int main( argc, argv )
-    int   argc;
-    char *argv[];
+#include "svdata.hxx"
+
+@implementation TimerCallbackCaller
+-(void)timerElapsed:(NSTimer*)pTimer
 {
-    return( start_cpp( argc, argv ) );
+    (void)pTimer;
+    ImplSVData* pSVData = ImplGetSVData();
+    if( IosSalTimer::bDispatchTimer )
+    {
+        if( pSVData->mpSalTimer )
+        {
+            YIELD_GUARD;
+            pSVData->mpSalTimer->CallCallback();
+
+            // NSTimer does not end nextEventMatchingMask of NSApplication
+            // so we need to wakeup a waiting Yield to inform it something happened
+            GetSalData()->mpFirstInstance->wakeupYield();
+        }
+    }
 }
+@end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

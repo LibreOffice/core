@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="tk"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.awt.comp.AsyncCallback">
     <service name="com.sun.star.awt.AsyncCallback"/>

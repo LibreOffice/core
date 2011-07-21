@@ -411,7 +411,7 @@ void BmpSum::ProcessFileList( const String& rInFileList,
             // write new entries
             for( sal_uInt32 i = 0; i < aFileNameVector.size(); ++i )
             {
-                ByteString  aStr( ByteString::CreateFromInt64( aPair.first ) );
+                ByteString  aStr(rtl::OString::valueOf(static_cast<sal_Int64>(aPair.first)));
                 ByteString  aFileName( aFileNameVector[ i ] );
                 DirEntry    aSrcFile( aFileName );
 

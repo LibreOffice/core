@@ -185,23 +185,6 @@ namespace vcl
 
         //---------------------------------------------------------------------------------------
 
-        const uno::Sequence< sal_Int8 > getTunnelIdentifier( TunnelIdentifierType eType )
-        {
-            static boost::unordered_map< int, uno::Sequence< sal_Int8 > > aIds;
-            boost::unordered_map< int, uno::Sequence< sal_Int8 > >::iterator it =
-                aIds.find( eType );
-            if( it == aIds.end() )
-            {
-                uno::Sequence< sal_Int8 > aNewId( 16 );
-                rtl_createUuid( (sal_uInt8*)aNewId.getArray(), NULL, sal_True );
-                aIds[ eType ] = aNewId;
-                it = aIds.find( eType );
-            }
-            return it->second;
-        }
-
-        //---------------------------------------------------------------------------------------
-
         namespace
         {
             inline bool operator==( const rendering::IntegerBitmapLayout& rLHS,

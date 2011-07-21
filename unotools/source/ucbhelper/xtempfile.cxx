@@ -37,10 +37,6 @@
 
 namespace css = com::sun::star;
 
-// copy define from desktop\source\app\appinit.cxx
-
-#define DESKTOP_TEMPNAMEBASE_DIR    "/temp/soffice.tmp"
-
 OTempFileService::OTempFileService(::css::uno::Reference< ::css::uno::XComponentContext > const & context)
 : ::cppu::PropertySetMixin< ::css::io::XTempFile >(
     context
@@ -484,14 +480,6 @@ throw ( ::css::uno::RuntimeException )
     return ::cppu::createSingleComponentFactory( XTempFile_createInstance, getImplementationName_Static(), getSupportedServiceNames_Static() );
 }
 
-// C functions to implement this as a component
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 /**
  * This function is called to get service factories for an implementation.
  * @param pImplName name of implementation
@@ -499,7 +487,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnviron
  * @param pRegistryKey registry data key to read and write component persistent data
  * @return a component factory (generic uno interface)
  */
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL utl_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;

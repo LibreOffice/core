@@ -331,6 +331,7 @@ ByteString ImplCutPath( const ByteString& rStr, sal_uInt16 nMax, char cAccDel )
     return aCutPath;
 }
 
+#if defined(WNT)
 /*************************************************************************
 |*
 |*    DirEntry::ImpParseOs2Name()
@@ -402,9 +403,15 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
                 else
                 {
                     // liegt ein anderes Drive auf dem Stack?
-                    if ( aStack.Count() &&
-                         COMPARE_EQUAL != aStack.Bottom()->aName.CompareIgnoreCaseToAscii(aName) )
-                        aStack.Clear();
+                    if ( aStack.Count() )
+                    {
+                        rtl::OString aThis(aStack.Bottom()->aName);
+                        aThis = aThis.toAsciiLowerCase();
+                        rtl::OString aOther(aName);
+                        aOther = aOther.toAsciiLowerCase();
+                        if (aThis.compareTo(aOther) != 0)
+                            aStack.Clear();
+                    }
 
                     // liegt jetzt nichts mehr auf dem Stack?
                     if ( !aStack.Count() )
@@ -502,6 +509,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
         aName = rPfad;
     return nErr;
 }
+#endif
 
 /*************************************************************************
 |*
@@ -662,7 +670,6 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
         }
 
 #ifdef DBG_UTIL
-        // ASF nur bei Default eStyle, nicht z.B. aus MakeShortName()
         if( eStyle == FSYS_STYLE_HOST &&
             aTmpName.Search( "://" ) != STRING_NOTFOUND )
         {
@@ -709,7 +716,6 @@ DirEntry::DirEntry( const ByteString& rInitName, FSysPathStyle eStyle )
     }
 #ifdef DBG_UTIL
     else
-        // ASF nur bei Default eStyle, nicht z.B. aus MakeShortName()
         if( eStyle == FSYS_STYLE_HOST &&
             rInitName.Search( "://" ) != STRING_NOTFOUND )
         {
@@ -1129,31 +1135,6 @@ String DirEntry::CutName( FSysPathStyle eStyle )
 
 /*************************************************************************
 |*
-|*    DirEntry::NameCompare
-|*
-|*    Beschreibung      Vergleich nur die Namen (ohne Pfad, aber mit Gross/Klein)
-|*
-*************************************************************************/
-
-StringCompare DirEntry::NameCompare( const DirEntry &rWith ) const
-{
-        ByteString aThisName;
-        ByteString aParameterName;
-
-#ifdef UNX
-                aThisName = aName;
-                aParameterName = rWith.aName;
-#else
-                aThisName = ByteString(aName).ToLowerAscii();
-                aParameterName = ByteString(rWith.aName).ToLowerAscii();
-#endif
-
-    return aThisName.CompareTo( aParameterName );
-}
-
-
-/*************************************************************************
-|*
 |*    DirEntry::operator==()
 |*
 *************************************************************************/
@@ -1365,31 +1346,6 @@ void DirEntry::SetExtension( const String& rExtension, char cSep )
         aName += cSep;
         aName += ByteString(rExtension, osl_getThreadTextEncoding());
     }
-}
-
-/*************************************************************************
-|*
-|*    DirEntry::CutExtension()
-|*
-*************************************************************************/
-
-String DirEntry::CutExtension( char cSep )
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    const char *p0 = ( aName.GetBuffer() );
-    const char *p1 = p0 + aName.Len() - 1;
-    while ( p1 >= p0 && *p1 != cSep )
-        p1--;
-
-    if ( p1 >= p0 )
-    {
-        // es wurde ein cSep an der Position p1 gefunden
-        aName.Erase( static_cast< xub_StrLen >(p1-p0) );
-        return String(p1 + 1, osl_getThreadTextEncoding());
-    }
-
-    return String();
 }
 
 /*************************************************************************
@@ -1728,6 +1684,7 @@ const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
     return *pRes;
 }
 
+#if !defined(WNT)
 /*************************************************************************
 |*
 |*    DirEntry::ImpParseUnixName()
@@ -1843,199 +1800,11 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
 
     return FSYS_ERR_OK;
 }
-
-/*************************************************************************
-|*
-|*    DirEntry::MakeShortName()
-|*
-*************************************************************************/
-
-ErrCode CreateEntry_Impl( const DirEntry &rPath, DirEntryKind eKind )
-{
-    // versuchen, anzulegen (ausser bei FSYS_KIND_ALL)
-    ErrCode eErr = ERRCODE_NONE;
-    if ( FSYS_KIND_FILE == eKind )
-    {
-        SvFileStream aStream( rPath.GetFull(), STREAM_STD_WRITE );
-        aStream.WriteLine( "" );
-        eErr = aStream.GetError();
-    }
-    else if ( FSYS_KIND_ALL != eKind )
-        eErr = rPath.MakeDir() ? ERRCODE_NONE : ERRCODE_IO_UNKNOWN;
-
-    // erfolgreich?
-    if ( !rPath.Exists() )
-        eErr = ERRCODE_IO_UNKNOWN;  // Doch was schiefgegangen ?
-
-    // ggf. wieder l"oschen
-    if ( FSYS_KIND_NONE == eKind )
-        rPath.Kill();
-
-    // Fehlercode zur?ckliefern
-    return eErr;
-}
-
-sal_Bool IsValidEntry_Impl( const DirEntry &rPath,
-                        const String &rLongName,
-                        DirEntryKind eKind,
-                        sal_Bool bIsShortened,
-                        sal_Bool bUseDelim )
-{
-    // Parameter-Pr"uefung
-    DBG_ASSERT( eKind == FSYS_KIND_NONE || eKind == FSYS_KIND_ALL ||
-                eKind == FSYS_KIND_FILE || eKind == FSYS_KIND_DIR,
-                "invalid entry-kind" );
-
-    // Alle von MSDOS erreichbaren FSYS_STYLES muessen den
-    // MSDOS Filenamenanforderungen genuegen. Sonst wird probiert,
-    // ob sich eine Datei des gewuenschten Names anlegen laesst.
-    FSysPathStyle eStyle = DirEntry::GetPathStyle( rPath.GetDevice().GetName() );
-    DirEntry aPath(rPath);
-    DirEntry aName(rLongName, eStyle);
-    if ( !aName.IsValid() || aName.Level() != 1 )
-        return sal_False;
-    aPath += aName;
-    if ( 1 == aPath.Level() )
-        return sal_False;
-
-        // Pfad-Trenner sind nicht erlaubt (bei ungek"urzten auch nicht FSYS_SHORTNAME_DELIMITER)
-        char cDelim = bUseDelim == 2 ? FSYS_SHORTNAME_DELIMITER : char(0);
-    if (
-         rLongName.Search(DirEntry::GetAccessDelimiter()) != STRING_NOTFOUND ||
-         (!bIsShortened && rLongName.Search(cDelim) != STRING_NOTFOUND)
-       )
-    {
-        return sal_False;
-    }
-
-    // MI: Abfrage nach 'CON:' etc. wird jetzt in Exists() mitgemacht
-    if ( aPath.Exists() )
-        return sal_False;
-
-    return (ERRCODE_NONE == CreateEntry_Impl( aPath, eKind ));
-}
-
-//-------------------------------------------------------------------------
+#endif
 
 #define MAX_EXT_MAX       250
 #define MAX_LEN_MAX       255
 #define INVALID_CHARS_DEF   "\\/\"':|^<>?*"
-
-sal_Bool DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
-                              sal_Bool bUseDelim, FSysPathStyle eStyle )
-{
-        String aLongName(rLongName);
-
-        // Alle '#' aus den Dateinamen entfernen, weil das INetURLObject
-        // damit Probleme hat. Siehe auch #51246#
-        aLongName.EraseAllChars( '#' );
-        ByteString bLongName(aLongName, osl_getThreadTextEncoding());
-
-        // Auf Novell-Servern (wegen der rottigen Clients) nur 7bit ASCII
-
-        // bei FSYS_KIND_ALL den alten Namen merken und abh"angen (rename)
-        ByteString aOldName;
-        if ( FSYS_KIND_ALL == eKind )
-        {
-            aOldName = ByteString(CutName(), osl_getThreadTextEncoding());
-            aOldName = CMP_LOWER(aOldName);
-        }
-
-        // ist der Langname direkt verwendbar?
-        if ( IsValidEntry_Impl( *this, aLongName, eKind, sal_False, bUseDelim ) )
-        {
-            operator+=( DirEntry(aLongName) );
-            return sal_True;
-        }
-
-        // max L"angen feststellen
-        sal_uInt16 nMaxExt, nMaxLen;
-        if ( FSYS_STYLE_DETECT == eStyle )
-            eStyle = DirEntry::GetPathStyle( GetDevice().GetName() );
-        ByteString aInvalidChars;
-        nMaxExt = MAX_EXT_MAX;
-        nMaxLen = MAX_LEN_MAX;
-        aInvalidChars = INVALID_CHARS_DEF;
-
-        // Extension abschneiden und kuerzen
-        ByteString aExt;
-        ByteString aFName = bLongName;
-        DirEntry aUnparsed;
-        aUnparsed.aName = bLongName;
-        aExt = ByteString(aUnparsed.CutExtension(), osl_getThreadTextEncoding());
-        aFName = aUnparsed.aName;
-        if ( aExt.Len() > nMaxExt )
-        {
-            char c = aExt.GetChar( aExt.Len() - 1 );
-            aExt.Erase(nMaxExt-1);
-            aExt += c;
-        }
-
-        // ausser auf einem FAT-System geh"ort die Extension zur
-        // Maxl"ange. Muss also vorher mit dem Punkt abgezogen werden.
-        nMaxLen -= ( aExt.Len() + 1 );
-
-        // Name k"urzen
-        ByteString aSName;
-        for ( const char *pc = aFName.GetBuffer(); aSName.Len() < nMaxLen && *pc; ++pc )
-        {
-            if ( STRING_NOTFOUND == aInvalidChars.Search( *pc ) &&
-                 (unsigned char) *pc >= (unsigned char) 32 &&
-                 ( !aSName.Len() || *pc != ' ' || aSName.GetChar(aSName.Len()-1) != ' ' ) )
-                aSName += *pc;
-        }
-        aSName.EraseTrailingChars();
-
-        // HRO: #74246# Also cut leading spaces
-        aSName.EraseLeadingChars();
-
-        if ( !aSName.Len() )
-            aSName = "noname";
-
-        // kommt dabei der alte Name raus?
-        ByteString aNewName = aSName;
-        if ( aExt.Len() )
-            ( aNewName += '.' ) += aExt;
-        operator+=( DirEntry(String(aNewName, osl_getThreadTextEncoding())) );
-        if ( FSYS_KIND_ALL == eKind && CMP_LOWER(aName) == aOldName )
-        if ( FSYS_KIND_ALL == eKind && CMP_LOWER(ByteString(GetName(), osl_getThreadTextEncoding())) == aOldName )
-            return sal_True;
-
-        // kann der gek"urzte Name direkt verwendet werden?
-        if ( !Exists() && (ERRCODE_NONE == CreateEntry_Impl( *this, eKind )) )
-            return sal_True;
-
-        // darf '?##' verwendet werden, um eindeutigen Name zu erzeugen?
-        if ( bUseDelim )
-        {
-                // eindeutigen Namen per '?##' erzeugen
-            aSName.Erase( nMaxLen-3 );
-            if ( bUseDelim != 2 )
-                        aSName += FSYS_SHORTNAME_DELIMITER;
-            for ( int n = 1; n < 99; ++n )
-            {
-                // Name zusammensetzen
-                ByteString aTmpStr( aSName );
-                aTmpStr += ByteString::CreateFromInt32(n);
-                if ( aExt.Len() )
-                    ( aTmpStr += '.' ) += aExt;
-
-                // noch nicht vorhanden?
-                SetName( String(aTmpStr, osl_getThreadTextEncoding()) );
-
-                if ( !Exists() )
-                {
-                    // Fehler setzen !!!
-                    nError = CreateEntry_Impl( *this, eKind );
-                    return (ERRCODE_NONE == nError);
-                }
-            }
-        }
-
-        // keine ## mehr frei / ?## soll nicht verwendet werden
-        nError = ERRCODE_IO_ALREADYEXISTS;
-        return sal_False;
-}
 
 /*************************************************************************
 |*

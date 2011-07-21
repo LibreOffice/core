@@ -208,9 +208,6 @@ public:
     SotStorageStream *  OpenSotStream( const String & rEleName,
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = 0 );
-    SotStorageStream *  OpenEncryptedSotStream( const String & rEleName, const ByteString& rKey,
-                                    StreamMode = STREAM_STD_READWRITE,
-                                    StorageMode = 0 );
     SotStorage *        OpenSotStorage( const String & rEleName,
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = STORAGE_TRANSACTED );
@@ -242,9 +239,6 @@ public:
     static sal_Bool         IsOLEStorage( const String & rFileName );
     static sal_Bool         IsOLEStorage( SvStream* pStream );
 
-    // this is temporary HACK, _MUST_ be removed before release
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
-                        GetUNOAPIDuplicate( const String& rEleName, sal_Int32 nUNOStorageMode );
     void                RemoveUNOStorageHolder( UNOStorageHolder* pHolder );
 
     static SotStorage*  OpenOLEStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,

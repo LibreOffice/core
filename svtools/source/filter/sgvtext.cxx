@@ -235,23 +235,7 @@ short hPoint2Sgf(short a)
     return short(b);
 }
 
-short Sgf2hPoint(short a)
-{
-    long b;
-    b=long(a)*5*144/(127*SgfDpmm);
-    return short(b);
-}
-
 // End of Misc.Pas
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-
-
-
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
 // AbsRead.Pas
 
 // ======================================================================
@@ -303,32 +287,6 @@ UCHAR ConvertTextChar(UCHAR c)
     }
     return c;
 }
-
-
-
-sal_uInt16 GetSchnittBit(UCHAR c)
-{
-    sal_uInt16 r=0;
-    switch (c) {
-        case EscBold : r=TextBoldBit; break;
-        case EscRSlnt: r=TextRSlnBit; break;
-        case EscUndln: r=TextUndlBit; break;
-        case EscStrik: r=TextStrkBit; break;
-        case EscDbUnd: r=TextDbUnBit; break;
-        case EscDbStk: r=TextDbStBit; break;
-        case EscSupSc: r=TextSupSBit; break;
-        case EscSubSc: r=TextSubSBit; break;
-        case EscKaptF: r=TextKaptBit; break;
-        case EscLSlnt: r=TextLSlnBit; break;
-        case Esc2DShd: r=TextSh2DBit; break;
-        case Esc3DShd: r=TextSh3DBit; break;
-        case Esc4DShd: r=TextSh4DBit; break;
-        case EscEbShd: r=TextShEbBit;
-    }
-    return r;
-}
-
-
 
 long ChgValue(long Def, long Min, long Max, UCHAR FlgVal, long NumVal)
 {

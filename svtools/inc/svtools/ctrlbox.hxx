@@ -190,7 +190,8 @@ public:
                                  sal_uInt16 nPos = LISTBOX_APPEND );
     virtual sal_uInt16  InsertEntry( const Color& rColor, const XubString& rStr,
                                  sal_uInt16 nPos = LISTBOX_APPEND );
-    void            InsertAutomaticEntry();
+    void            InsertAutomaticEntryColor(const Color &rAutoColorValue);
+    bool            IsAutomaticSelected() { return !GetSelectEntryPos(); }
     using ListBox::RemoveEntry;
     virtual void    RemoveEntry( sal_uInt16 nPos );
     virtual void    Clear();

@@ -29,12 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 #include <svsys.h>
-#ifdef __MINGW32__
-#include <excpt.h>
-#endif
 #include <win/saldata.hxx>
 #include <win/saltimer.h>
 #include <win/salinst.h>
+
+#ifdef __MINGW32__
+#include <sehandler.hxx>
+#endif
 
 // =======================================================================
 

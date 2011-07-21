@@ -63,7 +63,6 @@ public:
     //  per default systemchildwindows erase their background for better plugin support
     //  however, this might not always be required
     void                    EnableEraseBackground( sal_Bool bEnable = sal_True );
-    sal_Bool                IsEraseBackgroundEnabled();
     void                    SetForwardKey( sal_Bool bEnable );
     // return the platform specific handle/id of this window;
     // in case the flag bUseJava is set, a java compatible overlay window

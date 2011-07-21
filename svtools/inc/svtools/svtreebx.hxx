@@ -369,6 +369,8 @@ public:
 
     SvLBoxEntry*    GetFirstEntryInView() const;
     SvLBoxEntry*    GetNextEntryInView(SvLBoxEntry*) const;
+    SvLBoxEntry*    GetLastEntryInView() const;
+    void            ScrollToAbsPos( long nPos );
 
     void            ShowFocusRect( const SvLBoxEntry* pEntry );
     void            SetTabBar( TabBar* pTabBar );

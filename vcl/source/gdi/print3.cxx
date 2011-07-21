@@ -250,7 +250,7 @@ static rtl::OUString queryFile( Printer* pPrinter )
                 // add arbitrary files
                 xFilterMgr->appendFilter( String( VclResId( SV_STDTEXT_ALLFILETYPES ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.*" ) ) );
             }
-            catch( lang::IllegalArgumentException )
+            catch (const lang::IllegalArgumentException&)
             {
                 DBG_ERRORFILE( "caught IllegalArgumentException when registering filter\n" );
             }
@@ -460,7 +460,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                                        makeAny( sal_True ) );
             }
         }
-        catch( std::bad_alloc& )
+        catch (const std::bad_alloc&)
         {
         }
     }

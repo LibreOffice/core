@@ -58,6 +58,8 @@ CDEFS+=-D__STD_LIMITS
 
 SLOFILES=   $(SLO)$/localedata.obj
 
+.IF "$(CROSS_COMPILING)" != "YES"
+
 OBJFILES   = \
         $(OBJ)$/saxparser.obj \
         $(OBJ)$/LocaleNode.obj \
@@ -77,6 +79,8 @@ DEPOBJFILES = \
         $(OBJ)$/saxparser.obj \
         $(OBJ)$/LocaleNode.obj \
         $(OBJ)$/filewriter.obj
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

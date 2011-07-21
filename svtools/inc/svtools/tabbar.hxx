@@ -450,7 +450,6 @@ public:
 
     void            Clear();
 
-    void            EnablePage( sal_uInt16 nPageId, sal_Bool bEnable = sal_True );
     sal_Bool            IsPageEnabled( sal_uInt16 nPageId ) const;
 
     void            SetPageBits( sal_uInt16 nPageId, TabBarPageBits nBits = 0 );
@@ -472,10 +471,6 @@ public:
     void            MakeVisible( sal_uInt16 nPageId );
 
     void            SelectPage( sal_uInt16 nPageId, sal_Bool bSelect = sal_True );
-    void            SelectPageRange( sal_Bool bSelect = sal_False,
-                                     sal_uInt16 nStartPos = 0,
-                                     sal_uInt16 nEndPos = TabBar::APPEND );
-    sal_uInt16          GetSelectPage( sal_uInt16 nSelIndex = 0 ) const;
     sal_uInt16          GetSelectPageCount() const;
     sal_Bool            IsPageSelected( sal_uInt16 nPageId ) const;
 
@@ -519,24 +514,17 @@ public:
     void            EndSwitchPage();
     sal_Bool            IsInSwitching() { return mbInSwitching; }
 
-    void            SetSelectColor();
-    void            SetSelectColor( const Color& rColor );
     const Color&    GetSelectColor() const { return maSelColor; }
     sal_Bool            IsSelectColor() const { return mbSelColor; }
-    void            SetSelectTextColor();
-    void            SetSelectTextColor( const Color& rColor );
     const Color&    GetSelectTextColor() const { return maSelTextColor; }
     sal_Bool            IsSelectTextColor() const { return mbSelTextColor; }
 
     void            SetPageText( sal_uInt16 nPageId, const XubString& rText );
     XubString       GetPageText( sal_uInt16 nPageId ) const;
-    void            SetHelpText( sal_uInt16 nPageId, const XubString& rText );
     XubString       GetHelpText( sal_uInt16 nPageId ) const;
-    void            SetHelpId( sal_uInt16 nPageId, const rtl::OString& nHelpId );
     rtl::OString    GetHelpId( sal_uInt16 nPageId ) const;
 
     long            GetSplitSize() const { return mnSplitSize; }
-    long            GetMinSize() const;
 
     void            SetHelpText( const XubString& rText )
                         { Window::SetHelpText( rText ); }

@@ -221,10 +221,10 @@ class PropertyValues : public PropertyValuesVector {};
                                         m_bWasNull = sal_False;               \
                                     }                                         \
                                 }                                             \
-                                catch ( IllegalArgumentException )            \
+                                catch (const IllegalArgumentException&)       \
                                 {                                             \
                                 }                                             \
-                                catch ( CannotConvertException )              \
+                                catch (const CannotConvertException&)         \
                                 {                                             \
                                 }                                             \
                             }                                                 \
@@ -881,10 +881,10 @@ void PropertyValueSet::appendPropertySet(
                         if ( aValue.hasValue() )
                             appendObject( rProp, aValue );
                     }
-                    catch ( UnknownPropertyException )
+                    catch (const UnknownPropertyException&)
                     {
                     }
-                       catch ( WrappedTargetException )
+                    catch (const WrappedTargetException&)
                     {
                     }
                 }
@@ -909,10 +909,10 @@ sal_Bool PropertyValueSet::appendPropertySetValue(
                 return sal_True;
             }
         }
-        catch ( UnknownPropertyException )
+        catch (const UnknownPropertyException&)
         {
         }
-        catch ( WrappedTargetException )
+        catch (const WrappedTargetException&)
         {
         }
     }

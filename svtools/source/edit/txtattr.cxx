@@ -39,15 +39,6 @@ TextAttrib::~TextAttrib()
 {
 }
 
-void TextAttrib::SetFont( Font& ) const
-{
-}
-
-TextAttrib* TextAttrib::Clone() const
-{
-    return NULL;
-}
-
 int TextAttrib::operator==( const TextAttrib& rAttr ) const
 {
     return mnWhich == rAttr.mnWhich;
@@ -114,18 +105,6 @@ int TextAttribFontWeight::operator==( const TextAttrib& rAttr ) const
                 ( meWeight == ((const TextAttribFontWeight&)rAttr).meWeight ) );
 }
 
-
-TextAttribHyperLink::TextAttribHyperLink( const XubString& rURL )
-    : TextAttrib( TEXTATTR_HYPERLINK ), maURL( rURL )
-{
-    maColor = COL_BLUE;
-}
-
-TextAttribHyperLink::TextAttribHyperLink( const XubString& rURL, const XubString& rDescription )
-    : TextAttrib( TEXTATTR_HYPERLINK ), maURL( rURL ), maDescription( rDescription )
-{
-    maColor = COL_BLUE;
-}
 
 TextAttribHyperLink::TextAttribHyperLink( const TextAttribHyperLink& rAttr )
     : TextAttrib( rAttr ), maURL( rAttr.maURL ), maDescription( rAttr.maDescription )

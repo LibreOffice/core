@@ -123,9 +123,9 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
         case ERR_ERROR: {
             StdLstErr( "!! " );
             if( 1 == nErrors )
-                StdLstErr( ByteString::CreateFromInt32( nErrors ).GetBuffer() );
+                StdLstErr(rtl::OString::valueOf(static_cast<sal_Int32>(nErrors )).getStr());
             else
-                StdLstErr( ByteString::CreateFromInt32( (nErrors -1) ).GetBuffer() );
+                StdLstErr(rtl::OString::valueOf(static_cast<sal_Int32>(nErrors -1)).getStr());
             StdLstErr( " Error" );
             StdLstErr( " found!!" );
         }

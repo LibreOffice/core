@@ -85,10 +85,10 @@ void IcnCursor_Impl::ImplCreate()
     pColumns = new SvPtrarr[ nCols ];
     pRows = new SvPtrarr[ nRows ];
 
-    sal_uLong nCount = pView->aEntries.Count();
-    for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
+    size_t nCount = pView->aEntries.size();
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( nCur );
+        SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
         // const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
         Rectangle rRect( pView->CalcBmpRect( pEntry,0 ) );
         short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / nDeltaHeight );
@@ -357,8 +357,8 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
         if( bDown )
         {
             nNewPos += nEntriesInView;
-            if( nNewPos >= (long)pView->aEntries.Count() )
-                nNewPos = pView->aEntries.Count() - 1;
+            if( nNewPos >= (long)pView->aEntries.size() )
+                nNewPos = pView->aEntries.size() - 1;
         }
         else
         {
@@ -367,7 +367,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
                 nNewPos = 0;
         }
         if( nPos != nNewPos )
-            return (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( (sal_uLong)nNewPos );
+            return pView->aEntries[ (size_t)nNewPos ];
         return 0;
     }
     long nOpt = pView->GetEntryBoundRect( pStart ).Top();
@@ -410,10 +410,10 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
     if( pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
     {
         sal_uLong nPos = pView->GetEntryListPos( pCtrlEntry );
-        if( bDown && nPos < (pView->aEntries.Count() - 1) )
-            return (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( nPos + 1 );
+        if( bDown && nPos < (pView->aEntries.size() - 1) )
+            return pView->aEntries[ nPos + 1 ];
         else if( !bDown && nPos > 0 )
-            return (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( nPos - 1 );
+            return pView->aEntries[ nPos - 1 ];
         return 0;
     }
 
@@ -504,10 +504,10 @@ void IcnCursor_Impl::CreateGridAjustData( SvPtrarr& rLists, SvxIconChoiceCtrlEnt
             SvPtrarr* pRow = new SvPtrarr;
             rLists.Insert( (void*)pRow, nCurList );
         }
-        const sal_uLong nCount = pView->aEntries.Count();
-        for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
+        const size_t nCount = pView->aEntries.size();
+        for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
-            SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( nCur );
+            SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
             const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
             short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
             sal_uInt16 nIns = GetSortListPos((SvPtrarr*)rLists[nY],rRect.Left(),sal_False);
@@ -523,10 +523,10 @@ void IcnCursor_Impl::CreateGridAjustData( SvPtrarr& rLists, SvxIconChoiceCtrlEnt
         short nRefRow = (short)( ((rRefRect.Top()+rRefRect.Bottom())/2) / pView->nGridDY );
         SvPtrarr* pRow = new SvPtrarr;
         rLists.Insert( (void*)pRow, 0 );
-        sal_uLong nCount = pView->aEntries.Count();
-        for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
+        size_t nCount = pView->aEntries.size();
+        for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
-            SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)pView->aEntries.GetObject( nCur );
+            SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
             Rectangle rRect( pView->CalcBmpRect(pEntry) );
             //const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
             short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
@@ -601,9 +601,9 @@ void IcnGridMap_Impl::Create_Impl()
     _pGridMap = new sal_Bool[ _nGridRows * _nGridCols];
     memset( (void*)_pGridMap, 0, _nGridRows * _nGridCols );
 
-    const sal_uLong nCount = _pView->aEntries.Count();
-    for( sal_uLong nCur=0; nCur < nCount; nCur++ )
-        OccupyGrids( (SvxIconChoiceCtrlEntry*)_pView->aEntries.GetObject( nCur ));
+    const size_t nCount = _pView->aEntries.size();
+    for( size_t nCur=0; nCur < nCount; nCur++ )
+        OccupyGrids( _pView->aEntries[ nCur ] );
 }
 
 void IcnGridMap_Impl::GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const
@@ -728,60 +728,11 @@ GridId IcnGridMap_Impl::GetUnoccupiedGrid( sal_Bool bOccupyFound )
 // ein Eintrag belegt nur das unter seinem Zentrum liegende GridRect
 // diese Variante ist bedeutend schneller als die Belegung ueber das
 // Bounding-Rect, kann aber zu kleinen Ueberlappungen fuehren
-#define OCCUPY_CENTER
-
 void IcnGridMap_Impl::OccupyGrids( const SvxIconChoiceCtrlEntry* pEntry, sal_Bool bOccupy )
 {
     if( !_pGridMap || !_pView->IsBoundingRectValid( pEntry->aRect ))
         return;
-#ifndef OCCUPY_CENTER
-    OccupyGrids( pEntry->aRect, bOccupy );
-#else
     OccupyGrid( GetGrid( pEntry->aRect.Center()), bOccupy );
-#endif
-
-}
-
-void IcnGridMap_Impl::OccupyGrids( const Rectangle& rRect, sal_Bool bUsed )
-{
-    if( !_pGridMap )
-        return;
-
-    if( bUsed )
-    {
-        if( _aLastOccupiedGrid == rRect )
-            return;
-        _aLastOccupiedGrid = rRect;
-    }
-    else
-        _aLastOccupiedGrid.SetEmpty();
-
-    sal_Bool bTopLeftClipped, bBottomRightClipped;
-    GridId nIdTL = GetGrid( rRect.TopLeft(), &bTopLeftClipped );
-    GridId nIdBR = GetGrid( rRect.BottomRight(), &bBottomRightClipped );
-
-    if( bTopLeftClipped && bBottomRightClipped )
-        return;
-
-    sal_uInt16 nX1,nX2,nY1,nY2;
-    GetGridCoord( nIdTL, nX1, nY1 );
-    GetGridCoord( nIdBR, nX2, nY2 );
-    sal_uInt16 nTemp;
-    if( nX1 > nX2 )
-    {
-        nTemp = nX1;
-        nX1 = nX2;
-        nX2 = nTemp;
-    }
-    if( nY1 > nY2 )
-    {
-        nTemp = nY1;
-        nY1 = nY2;
-        nY2 = nTemp;
-    }
-    for( ; nX1 <= nX2; nX1++ )
-        for( ; nY1 <= nY2; nY1++ )
-            OccupyGrid( GetGrid( nX1, nY1 ) );
 }
 
 void IcnGridMap_Impl::Clear()

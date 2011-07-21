@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#define NOMAIN
+
 #include        <stdio.h>
 #include        <ctype.h>
 #include        "cppdef.h"

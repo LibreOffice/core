@@ -409,9 +409,6 @@ protected:
 
     long            CalcReverseZoom(long nVal);
 
-    HeaderBar*      GetHeaderBar() const;
-        // header bar access for derived classes
-
     inline const DataFlavorExVector&
                     GetDataFlavors() const;
 
@@ -493,20 +490,10 @@ public:
 
     // inserting, changing, removing and freezing of columns
     void            InsertHandleColumn( sal_uLong nWidth );
-    void            InsertDataColumn( sal_uInt16 nItemId, const Image& rImage,
-                                    long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
-                                    sal_uInt16 nPos = HEADERBAR_APPEND );
     void            InsertDataColumn( sal_uInt16 nItemId, const XubString& rText,
                                     long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
                                     sal_uInt16 nPos = HEADERBAR_APPEND );
-    void            InsertDataColumn( sal_uInt16 nItemId,
-                                    const Image& rImage, const XubString& rText,
-                                    long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
-                                    sal_uInt16 nPos = HEADERBAR_APPEND,
-                                    // Hilfstext bei leerem rText
-                                    const String* pHelpText = 0 );
     void            SetColumnTitle( sal_uInt16 nColumnId, const String &rTitle );
-    void            SetColumnMode( sal_uInt16 nColumnId, BrowserColumnMode nFlags );
     void            SetColumnWidth( sal_uInt16 nColumnId, sal_uLong nWidth );
     void            SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos );
     void            FreezeColumn( sal_uInt16 nColumnId, sal_Bool bFreeze = sal_True );
@@ -534,14 +521,12 @@ public:
     void            ResetScroll();
     long            ScrollColumns( long nColumns );
     long            ScrollRows( long nRows );
-    long            ScrollPages( long nPagesY );
     sal_Bool            MakeFieldVisible( long nRow, sal_uInt16 nColId, sal_Bool bComplete = sal_False );
 
     // access and movement of cursor
     long            GetCurRow() const { return nCurRow; }
     sal_uInt16          GetCurColumnId() const { return nCurColId; }
     sal_Bool            GoToRow( long nRow );
-    sal_Bool            GoToRowAndDoNotModifySelection( long nRow );
     sal_Bool            GoToColumnId( sal_uInt16 nColId );
     sal_Bool            GoToRowColumnId( long nRow, sal_uInt16 nColId );
 
@@ -557,23 +542,18 @@ public:
     sal_uInt16          GetSelectColumnCount() const;
     virtual bool    IsRowSelected( long nRow ) const;
     bool            IsColumnSelected( sal_uInt16 nColumnId ) const;
-    sal_Bool        IsAllSelected() const;
     long            FirstSelectedRow( sal_Bool bInverse = sal_False );
     long            LastSelectedRow();
-    long            PrevSelectedRow();
     long            NextSelectedRow();
     const MultiSelection* GetColumnSelection() const { return pColSel; }
     const MultiSelection* GetSelection() const
                     { return bMultiSelection ? uRow.pSel : 0; }
-    void            SetSelection( const MultiSelection &rSelection );
 
     long            FirstSelectedColumn( ) const;
-    long            NextSelectedColumn( ) const;
 
     sal_Bool            IsResizing() const { return bResizing; }
 
     // access to positions of fields, column and rows
-    Window&         GetEventWindow() const;
     Window&         GetDataWindow() const { return *pDataWin; }
     Rectangle       GetRowRectPixel( long nRow,
                                      sal_Bool bRelToBrowser = sal_True ) const;
@@ -599,7 +579,6 @@ public:
     void            Dispatch( sal_uInt16 nId );
     void            SetMode( BrowserMode nMode = 0 );
     BrowserMode     GetMode( ) const { return m_nCurrentMode; }
-    bool            IsInCommandEvent() const;
 
     void            SetCursorColor(const Color& _rCol);
     Color           GetCursorColor() const { return m_aCursorColor; }

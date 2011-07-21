@@ -2007,15 +2007,7 @@ sal_Bool SvNumberformat::GetOutputString(String& sString,
     }
     return sal_False;
 }
-/*
-void SvNumberformat::GetNextFareyNumber(sal_uLong nPrec, sal_uLong x0, sal_uLong x1,
-                                        sal_uLong y0, sal_uLong y1,
-                                        sal_uLong& x2,sal_uLong& y2)
-{
-    x2 = ((y0+nPrec)/y1)*x1 - x0;
-    y2 = ((y0+nPrec)/y1)*y1 - y0;
-}
-*/
+
 sal_uLong SvNumberformat::ImpGGT(sal_uLong x, sal_uLong y)
 {
     if (y == 0)
@@ -2417,7 +2409,6 @@ sal_Bool SvNumberformat::GetOutputString(double fNumber,
                     {
                         sal_uLong x2 = ((y0+nBasis)/y1)*x1 - x0; // naechste Farey-Zahl
                         sal_uLong y2 = ((y0+nBasis)/y1)*y1 - y0;
-//                      GetNextFareyNumber(nBasis, x0, x1, y0, y1, x2, y2);
                         x0 = x1;
                         y0 = y1;
                         x1 = x2;
@@ -2446,11 +2437,6 @@ sal_Bool SvNumberformat::GetOutputString(double fNumber,
                 else                                    // grosse Nenner
                 {                                       // 0,1234->123/1000
                     sal_uLong nGgt;
-/*
-                    nDiv = nBasis+1;
-                    nFrac = ((sal_uLong)floor(0.5 + fNumber *
-                                    pow(10.0,rInfo.nCntExp)));
-*/
                     nDiv = 10000000;
                     nFrac = ((sal_uLong)floor(0.5 + fNumber * 10000000.0));
                     nGgt = ImpGGT(nDiv, nFrac);
@@ -4421,7 +4407,6 @@ String SvNumberformat::GetMappedFormatstring(
                         case NF_SYMBOLTYPE_CALDEL :
                             if ( pStr[j+1].EqualsAscii("buddhist") )
                             {
-                                //aStr.InsertAscii( "[$-", aStr.Len() );
                                 aStr.InsertAscii( "[$-", 0 );
                                 if ( rNum.IsSet() && rNum.GetNatNum() == 1 &&
                                         MsLangId::getRealLanguage( rNum.GetLang() ) ==

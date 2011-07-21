@@ -129,14 +129,6 @@ class SimpleTokenizer_Impl
     sal_Bool getNextToken( /*out*/TokenTypes& reType,
         /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos );
 
-    String getTokStr( /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos );
-
-#ifdef DBG_UTIL
-    // TEST: Token ausgeben
-    String getFullTokenStr( /*out*/TokenTypes eType,
-        /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos );
-#endif
-
     const char** ppListKeyWords;
     sal_uInt16 nKeyWordCount;
 

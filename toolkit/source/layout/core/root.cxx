@@ -71,7 +71,7 @@ LayoutRoot::~LayoutRoot()
             m_refCount++; // inhibit multiple destruction
             dispose();
         }
-        catch( uno::Exception& )
+        catch (const uno::Exception&)
         {
         }
     }
@@ -186,7 +186,7 @@ void SAL_CALL LayoutRoot::initialize( const uno::Sequence< uno::Any >& aArgument
     {
         xParser->parseStream( source );
     }
-    catch ( xml::sax::SAXParseException& e )
+    catch (const xml::sax::SAXParseException& e)
     {
         OUString c(RTL_CONSTASCII_USTRINGPARAM(":"));
         error( aXMLName
@@ -361,7 +361,7 @@ bool LayoutWidget::addChild( LayoutWidget *pChild )
     {
         mxContainer->addChild( pChild->mxWidget );
     }
-    catch( awt::MaxChildrenException ex )
+    catch (const awt::MaxChildrenException&)
     {
         return false;
     }

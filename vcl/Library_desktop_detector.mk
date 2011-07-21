@@ -36,12 +36,16 @@ $(eval $(call gb_Library_set_include,desktop_detector,\
     -I$(realpath $(SRCDIR)/vcl/inc) \
     -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,desktop_detector,\
     -DDESKTOP_DETECTOR_IMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,desktop_detector,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,desktop_detector,\

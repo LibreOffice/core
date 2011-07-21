@@ -141,11 +141,15 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                         // then write as unicode - character
                         if (*pUCMode != nLen)
                         {
-                          rStream << "\\uc" << ByteString::CreateFromInt32(nLen).GetBuffer() << " "; // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
+                            // #i47831# add an additional whitespace, so that
+                            // "document whitespaces" are not ignored.;
+                            rStream << "\\uc"
+                                << rtl::OString::valueOf(nLen).getStr() << " ";
                             *pUCMode = nLen;
                         }
-                        ByteString sNo(ByteString::CreateFromInt32(c));
-                         rStream << "\\u" << sNo.GetBuffer();
+                        rStream << "\\u"
+                            << rtl::OString::valueOf(
+                                static_cast<sal_Int32>(c)).getStr();
                     }
 
                     for (sal_Int32 nI = 0; nI < nLen; ++nI)
@@ -173,17 +177,6 @@ SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const String& rStr,
         Out_Char(rStream, rStr.GetChar(n), &nUCMode, eDestEnc, bWriteHelpFile);
     if (nUCMode != 1)
       rStream << "\\uc1"<< " "; // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
-    return rStream;
-}
-
-SvStream& RTFOutFuncs::Out_Fontname(SvStream& rStream, const String& rStr,
-    rtl_TextEncoding eDestEnc, sal_Bool bWriteHelpFile)
-{
-    //Fontnames in word have a quirk in that \uc and usage of ansi replacement
-    //chars after a \u don't work and in wordpad \u doesn't work, so we are
-    //left with forcing ansi characters only for fontnames
-    for (xub_StrLen n = 0; n < rStr.Len(); ++n)
-        Out_Char(rStream, rStr.GetChar(n), 0, eDestEnc, bWriteHelpFile);
     return rStream;
 }
 

@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="svl"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.svl.PathService">
     <service name="com.sun.star.config.SpecialConfigManager"/>

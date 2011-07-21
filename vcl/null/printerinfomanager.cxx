@@ -27,21 +27,25 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basegfx.hxx"
-#include <basegfx/point/b3dhompoint.hxx>
+#include "precompiled_vcl.hxx"
 
-namespace basegfx
+#include "vcl/printerinfomanager.hxx"
+
+#include "unx/saldata.hxx"
+
+using namespace psp;
+using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringHash;
+
+void PrinterInfoManager::release()
 {
-    void B3DHomPoint::implHomogenize()
-    {
-        const double fFactor(1.0 / mfW);
-        maTuple.setX(maTuple.getX() * fFactor);
-        maTuple.setY(maTuple.getY() * fFactor);
-        maTuple.setZ(maTuple.getZ() * fFactor);
-        mfW = 1.0;
-    }
-} // end of namespace basegfx
-
-// eof
+    SalData* pSalData = GetSalData();
+    delete pSalData->m_pPIManager;
+    pSalData->m_pPIManager = NULL;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

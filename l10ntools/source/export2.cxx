@@ -140,75 +140,6 @@ std::vector<ByteString> Export::GetForcedLanguages(){
 std::vector<ByteString> Export::aLanguages       = std::vector<ByteString>();
 std::vector<ByteString> Export::aForcedLanguages = std::vector<ByteString>();
 
-
-/*****************************************************************************/
-void Export::QuotHTMLXRM( ByteString &rString )
-/*****************************************************************************/
-{
-    ByteString sReturn;
-    for ( sal_uInt16 i = 0; i < rString.Len(); i++ ) {
-        ByteString sTemp = rString.Copy( i );
-        if ( sTemp.Search( "<Arg n=" ) == 0 ) {
-            while ( i < rString.Len() && rString.GetChar( i ) != '>' ) {
-                 sReturn += rString.GetChar( i );
-                i++;
-            }
-            if ( rString.GetChar( i ) == '>' ) {
-                sReturn += ">";
-                i++;
-            }
-        }
-
-        if ( i < rString.Len()) {
-            switch ( rString.GetChar( i )) {
-                case '<':
-                    if( i+2 < rString.Len() &&
-                        (rString.GetChar( i+1 ) == 'b' || rString.GetChar( i+1 ) == 'B') &&
-                        rString.GetChar( i+2 ) == '>' )
-                    {
-                           sReturn +="<b>";
-                           i += 2;
-                    }
-                    else if( i+3 < rString.Len() &&
-                             rString.GetChar( i+1 ) == '/' &&
-                             (rString.GetChar( i+2 ) == 'b' || rString.GetChar( i+2 ) == 'B') &&
-                             rString.GetChar( i+3 ) == '>' )
-                    {
-                           sReturn +="</b>";
-                           i += 3;
-                    }
-                    else
-                        sReturn += "&lt;";
-                break;
-
-                case '>':
-                    sReturn += "&gt;";
-                break;
-
-                case '\"':
-                    sReturn += "&quot;";
-                break;
-
-                case '\'':
-                    sReturn += "&apos;";
-                break;
-
-                case '&':
-                    if ((( i + 4 ) < rString.Len()) &&
-                        ( rString.Copy( i, 5 ) == "&amp;" ))
-                            sReturn += rString.GetChar( i );
-                    else
-                        sReturn += "&amp;";
-                break;
-
-                default:
-                    sReturn += rString.GetChar( i );
-                break;
-            }
-        }
-    }
-    rString = sReturn;
-}
 /*****************************************************************************/
 void Export::QuotHTML( ByteString &rString )
 /*****************************************************************************/
@@ -402,12 +333,6 @@ bool Export::isSourceLanguage( const ByteString &sLanguage )
 bool Export::isAllowed( const ByteString &sLanguage ){
     return ! ( sLanguage.EqualsIgnoreCaseAscii("en-US") );
 }
-/*****************************************************************************/
-bool Export::LanguageAllowed( const ByteString &nLanguage )
-/*****************************************************************************/
-{
-    return std::find( aLanguages.begin() , aLanguages.end() , nLanguage ) != aLanguages.end();
-}
 
 bool Export::isInitialized = false;
 
@@ -452,52 +377,31 @@ ByteString Export::GetFallbackLanguage( const ByteString nLanguage )
     return sFallback;
 }
 
-void Export::replaceEncoding( ByteString& rString )
-{
-// &#x2122; -> \u2122
-
-    for( xub_StrLen idx = 0; idx <= rString.Len()-8 ; idx++ )
-    {
-        if( rString.GetChar( idx )   == '&' &&
-            rString.GetChar( idx+1 ) == '#' &&
-            rString.GetChar( idx+2 ) == 'x' &&
-            rString.GetChar( idx+7 ) == ';' )
-        {
-            ByteString sTmp = rString.Copy( 0 , idx );
-            sTmp.Append( "\\u" );
-            sTmp.Append( rString.GetChar( idx+3 ) );
-            sTmp.Append( rString.GetChar( idx+4 ) );
-            sTmp.Append( rString.GetChar( idx+5 ) );
-            sTmp.Append( rString.GetChar( idx+6 ) );
-            sTmp.Append( rString.Copy( idx+8 , rString.Len() ) );
-            rString = sTmp;
-         }
-    }
-}
-
 /*****************************************************************************/
 void Export::FillInFallbacks( ResData *pResData )
 /*****************************************************************************/
 {
-    ByteString sCur;
-    for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-        sCur = aLanguages[ n ];
-        if( isAllowed( sCur )  ){
+    for (size_t n = 0; n < aLanguages.size(); ++n)
+    {
+        ByteString sCur = aLanguages[ n ];
+        if (isAllowed(sCur))
+        {
             ByteString nFallbackIndex = GetFallbackLanguage( sCur );
-            if( nFallbackIndex.Len() ){
-                if ( !pResData->sText[ sCur ].Len())
+            if( nFallbackIndex.Len() )
+            {
+                if (pResData->sText[ sCur ].isEmpty())
                     pResData->sText[ sCur ] =
                         pResData->sText[ nFallbackIndex ];
 
-                if ( !pResData->sHelpText[ sCur ].Len())
+                if (pResData->sHelpText[ sCur ].isEmpty())
                     pResData->sHelpText[ sCur ] =
                         pResData->sHelpText[ nFallbackIndex ];
 
-                if ( !pResData->sQuickHelpText[ sCur ].Len())
+                if (pResData->sQuickHelpText[ sCur ].isEmpty())
                     pResData->sQuickHelpText[ sCur ] =
                         pResData->sQuickHelpText[ nFallbackIndex ];
 
-                if ( !pResData->sTitle[ sCur ].Len())
+                if (!pResData->sTitle[ sCur ].isEmpty())
                     pResData->sTitle[ sCur ] =
                         pResData->sTitle[ nFallbackIndex ];
 
@@ -530,11 +434,12 @@ void Export::FillInListFallbacks(
     ExportList *pList, const ByteString &nSource, const ByteString &nFallback )
 /*****************************************************************************/
 {
-
-    for ( size_t i = 0; i < pList->size(); i++ ) {
+    for (size_t i = 0; i < pList->size(); ++i)
+    {
         ExportListEntry *pEntry = (*pList)[ i ];
-        if ( !( *pEntry )[ nSource ].Len()){
-             ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
+        if ( (*pEntry )[nSource].isEmpty() )
+        {
+            ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
             ByteString x = ( *pEntry )[ nSource ];
             ByteString y = ( *pEntry )[ nFallback ];
         }
@@ -611,15 +516,6 @@ const char* Export::GetEnv( const char *pVar )
         return pRet;
 }
 
-
-int Export::getCurrentDirectory( rtl::OUString& base_fqurl_out, rtl::OUString& base_out )
-{
-    DirEntry aDir(".");
-    aDir.ToAbs();
-    base_out = rtl::OUString( aDir.GetFull() );
-    return osl::File::getFileURLFromSystemPath( base_out , base_fqurl_out );
-}
-
 void Export::getCurrentDir( string& dir )
 {
     char buffer[64000];
@@ -665,12 +561,6 @@ void Export::getRandomName( const ByteString& sPrefix , ByteString& sRandStr , c
 
     sRandStr.Append( buffer , RAND_NAME_LENGTH );
     sRandStr.Append( sPostfix );
-}
-
-void Export::getRandomName( ByteString& sRandStr )
-{
-    const ByteString sEmpty;
-    getRandomName( sEmpty , sRandStr , sEmpty );
 }
 
 /*****************************************************************************/

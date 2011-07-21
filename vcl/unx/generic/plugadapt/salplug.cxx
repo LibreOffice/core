@@ -272,7 +272,7 @@ void SalAbort( const XubString& rErrorText )
     if( !rErrorText.Len() )
         std::fprintf( stderr, "Application Error\n" );
     else
-        std::fprintf( stderr, "%s\n", ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
+        std::fprintf( stderr, "%s\n", rtl::OUStringToOString(rErrorText, gsl_getSystemTextEncoding()).getStr() );
     exit(-1);
 }
 

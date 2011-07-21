@@ -43,6 +43,7 @@
 
 #include <tools/solar.h>
 
+
 #define SWAPNIBBLES(c)      \
 unsigned char nSwapTmp=c;   \
 nSwapTmp <<= 4;             \
@@ -370,13 +371,6 @@ sal_Size SvStream::GetData( void* pData, sal_Size nSize )
         return nRet;
     }
     else return 0;
-}
-
-ErrCode SvStream::SetLockBytes( SvLockBytesRef& rLB )
-{
-    xLockBytes = rLB;
-    RefreshBuffer();
-    return ERRCODE_NONE;
 }
 
 //========================================================================
@@ -719,6 +713,15 @@ sal_Bool SvStream::ReadLine( ByteString& rStr )
     return bEnd;
 }
 
+sal_Bool SvStream::ReadLine( rtl::OString& rStr )
+{
+    ByteString aFoo;
+    sal_Bool   ret;
+    ret = ReadLine(aFoo);
+    rStr = aFoo;
+    return ret;
+}
+
 sal_Bool SvStream::ReadUniStringLine( String& rStr )
 {
     sal_Unicode buf[256+1];
@@ -937,14 +940,6 @@ sal_Bool SvStream::WriteLines( const ByteString& rStr )
     Write( aStr.GetBuffer(), aStr.Len() );
     endl( *this );
     return (sal_Bool)(nError == SVSTREAM_OK);
-}
-
-sal_Bool SvStream::WriteUniStringLines( const String& rStr )
-{
-    String aStr( rStr );
-    aStr.ConvertLineEnd( eLineDelimiter );
-    WriteUniStringLine( aStr );
-    return nError == SVSTREAM_OK;
 }
 
 /*************************************************************************
@@ -1802,6 +1797,18 @@ sal_Size SvStream::Seek( sal_Size nFilePos )
     return nBufFilePos + nBufActualPos;
 }
 
+//probably not as inefficient as it looks seeing as STREAM_SEEK_TO_END in the
+//Seek backends is nomally special cased feel free to make this virtual and add
+//good implementations for SvFileStream etc
+sal_Size SvStream::remainingSize()
+{
+    sal_Size nCurr = Tell();
+    sal_Size nEnd = Seek(STREAM_SEEK_TO_END);
+    sal_Size nMaxAvailable = nEnd-nCurr;
+    Seek(nCurr);
+    return nMaxAvailable;
+}
+
 /*************************************************************************
 |*
 |*    Stream::Flush()
@@ -1822,91 +1829,6 @@ void SvStream::Flush()
     }
     if( bIsWritable )
         FlushData();
-}
-
-
-/*************************************************************************
-|*
-|*    Stream::PutBack()
-|*
-*************************************************************************/
-
-/*
-    4 Faelle :
-
-    1. Datenzeiger steht mitten im Puffer (nBufActualPos >= 1)
-    2. Datenzeiger auf Position 0, Puffer ist voll
-    3. Datenzeiger auf Position 0, Puffer ist teilweise gefuellt
-    4. Datenzeiger auf Position 0, Puffer ist leer -> Fehler!
-*/
-
-SvStream& SvStream::PutBack( char aCh )
-{
-    // wenn kein Buffer oder Zurueckscrollen nicht moeglich -> Fehler
-    if( !pRWBuf || !nBufActualLen || ( !nBufActualPos && !nBufFilePos ) )
-    {
-        // 4. Fall
-        SetError( SVSTREAM_GENERALERROR );
-        return *this;
-    }
-
-    // Flush() (Phys. Flushen aber nicht notwendig, deshalb selbst schreiben)
-    if( bIsConsistent && bIsDirty  )
-    {
-        SeekPos( nBufFilePos );
-        if( nCryptMask )
-            CryptAndWriteBuffer( pRWBuf, nBufActualLen );
-        else
-            PutData( pRWBuf, nBufActualLen );
-        bIsDirty = sal_False;
-    }
-    bIsConsistent = sal_False;  // Puffer enthaelt jetzt TRASH
-    if( nBufActualPos )
-    {
-        // 1. Fall
-        nBufActualPos--;
-        pBufPos--;
-        *pBufPos = aCh;
-        nBufFree++;
-    }
-    else  // Puffer muss verschoben werden
-    {
-        // Ist Puffer am Anschlag ?
-        if( nBufSize == nBufActualLen )
-        {
-            // 2. Fall
-            memmove( pRWBuf+1, pRWBuf, nBufSize-1 );
-            // nBufFree behaelt den Wert!
-        }
-        else
-        {
-            // 3. Fall -> Puffer vergroessern
-            memmove( pRWBuf+1, pRWBuf, (sal_uInt16)nBufActualLen );
-            nBufActualLen++;
-            nBufFree++;
-        }
-        nBufFilePos--;
-        *pRWBuf = aCh;
-    }
-    eIOMode = STREAM_IO_DONTKNOW;
-    bIsEof = sal_False;
-    return *this;
-}
-
-/*************************************************************************
-|*
-|*    Stream::EatWhite()
-|*
-*************************************************************************/
-
-void SvStream::EatWhite()
-{
-    char aCh;
-    Read(&aCh, sizeof(char) );
-    while( !bIsEof && isspace((int)aCh) )  //( aCh == ' ' || aCh == '\t' ) )
-        Read(&aCh, sizeof(char) );
-    if( !bIsEof ) // konnte das letzte Char gelesen werden ?
-        SeekRel( -1L );
 }
 
 /*************************************************************************

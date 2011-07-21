@@ -31,7 +31,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <sal/main.h>
 #include <rscrsc.hxx>
 #include <rscdb.hxx>
 
@@ -66,7 +65,8 @@ RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
     return RscVerbosityNormal;
 }
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
+int rsc2_main( int argc, char **argv )
+{
 #ifndef UNX
     atexit( ExitProgram );
 #endif
@@ -105,13 +105,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         return( 0 );
     else
         return( 1 );
-}
-
-void RscExit( sal_uInt32 nExit )
-{
-    if( nExit )
-        printf( "Program exit is %ud\n", (unsigned int)nExit );
-    exit( nExit );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

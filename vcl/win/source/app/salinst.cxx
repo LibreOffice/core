@@ -34,9 +34,6 @@
 #include <svsys.h>
 #include <process.h>
 #endif
-#ifdef __MINGW32__
-#include <excpt.h>
-#endif
 
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -72,13 +69,17 @@
 #pragma warning( disable: 4917 )
 #endif
 
-#include <GdiPlus.h>
-#include <GdiPlusEnums.h>
-#include <GdiPlusColor.h>
-#include <Shlobj.h>
+#include <gdiplus.h>
+#include <gdiplusenums.h>
+#include <gdipluscolor.h>
+#include <shlobj.h>
 
 #if defined _MSC_VER
 #pragma warning(pop)
+#endif
+
+#ifdef __MINGW32__
+#include <sehandler.hxx>
 #endif
 
 // =======================================================================
@@ -516,8 +517,6 @@ SalInstance* CreateSalInstance()
 
     // determine the windows version
     aSalShlData.mbWXP        = 0;
-    aSalShlData.mbWPrinter   = 0;
-    WORD nVer = (WORD)GetVersion();
     rtl_zeroMemory( &aSalShlData.maVersionInfo, sizeof(aSalShlData.maVersionInfo) );
     aSalShlData.maVersionInfo.dwOSVersionInfoSize = sizeof( aSalShlData.maVersionInfo );
     if ( GetVersionEx( &aSalShlData.maVersionInfo ) )
@@ -526,8 +525,6 @@ SalInstance* CreateSalInstance()
         if ( aSalShlData.maVersionInfo.dwMajorVersion > 5 ||
            ( aSalShlData.maVersionInfo.dwMajorVersion == 5 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
             aSalShlData.mbWXP = 1;
-        if( aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
-            aSalShlData.mbWPrinter = 1;
     }
 
     pSalData->mnAppThreadId = GetCurrentThreadId();

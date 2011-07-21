@@ -1281,9 +1281,12 @@ int PrintFontManager::addFontFile( const ::rtl::OString& rFileName, int /*nFaceN
     return nFontId;
 }
 
-// -------------------------------------------------------------------------
+enum fontFormat
+{
+    UNKNOWN, TRUETYPE, CFF, TYPE1, AFM
+};
 
-bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, const ::std::list<OString>& rXLFDs, ::std::list< PrintFontManager::PrintFont* >& rNewFonts ) const
+bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, const ::std::list<OString>& rXLFDs, ::std::list< PrintFontManager::PrintFont* >& rNewFonts, const char *pFormat ) const
 {
     rNewFonts.clear();
 
@@ -1297,8 +1300,32 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
     if( access( aFullPath.getStr(), R_OK ) )
         return false;
 
-    ByteString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
-    if( aExt.EqualsIgnoreCaseAscii( "pfb" ) || aExt.EqualsIgnoreCaseAscii( "pfa" ) )
+    fontFormat eFormat = UNKNOWN;
+    if (pFormat)
+    {
+        if (!strcmp(pFormat, "TrueType"))
+            eFormat = TRUETYPE;
+        else if (!strcmp(pFormat, "CFF"))
+            eFormat = CFF;
+        else if (!strcmp(pFormat, "Type 1"))
+            eFormat = TYPE1;
+    }
+    if (eFormat == UNKNOWN)
+    {
+        ByteString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
+        if( aExt.EqualsIgnoreCaseAscii( "pfb" ) || aExt.EqualsIgnoreCaseAscii( "pfa" ) )
+            eFormat = TYPE1;
+        else if( aExt.EqualsIgnoreCaseAscii( "afm" ) )
+            eFormat = AFM;
+        else if( aExt.EqualsIgnoreCaseAscii( "ttf" )
+             ||  aExt.EqualsIgnoreCaseAscii( "ttc" )
+             ||  aExt.EqualsIgnoreCaseAscii( "tte" ) ) // #i33947# for Gaiji support
+            eFormat = TRUETYPE;
+        else if( aExt.EqualsIgnoreCaseAscii( "otf" ) ) // check for TTF- and PS-OpenType too
+            eFormat = CFF;
+    }
+
+    if (eFormat == TYPE1)
     {
         // check for corresponding afm metric
         // first look for an adjacent file
@@ -1352,7 +1379,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
             }
         }
     }
-    else if( aExt.EqualsIgnoreCaseAscii( "afm" ) )
+    else if (eFormat == AFM)
     {
         ByteString aFilePath( aDir );
         aFilePath.Append( '/' );
@@ -1365,34 +1392,14 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
         else
             delete pFont;
     }
-    else if( aExt.EqualsIgnoreCaseAscii( "ttf" )
-         ||  aExt.EqualsIgnoreCaseAscii( "tte" )   // #i33947# for Gaiji support
-         ||  aExt.EqualsIgnoreCaseAscii( "otf" ) ) // check for TTF- and PS-OpenType too
-    {
-        TrueTypeFontFile* pFont     = new TrueTypeFontFile();
-        pFont->m_nDirectory         = nDirID;
-        pFont->m_aFontFile          = rFontFile;
-        pFont->m_nCollectionEntry   = -1;
-
-        if( rXLFDs.size() )
-            getFontAttributesFromXLFD( pFont, rXLFDs );
-        // need to read the font anyway to get aliases inside the font file
-        if( ! analyzeTrueTypeFile( pFont ) )
-        {
-            delete pFont;
-            pFont = NULL;
-        }
-        else
-            rNewFonts.push_back( pFont );
-    }
-    else if( aExt.EqualsIgnoreCaseAscii( "ttc" ) )
+    else if (eFormat == TRUETYPE || eFormat == CFF)
     {
         // get number of ttc entries
         int nLength = CountTTCFonts( aFullPath.getStr() );
         if( nLength )
         {
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "%s contains %d fonts\n", aFullPath.getStr(), nLength );
+            fprintf( stderr, "ttc: %s contains %d fonts\n", aFullPath.getStr(), nLength );
 #endif
             for( int i = 0; i < nLength; i++ )
             {
@@ -1411,10 +1418,24 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
                     rNewFonts.push_back( pFont );
             }
         }
-#if OSL_DEBUG_LEVEL > 1
         else
-            fprintf( stderr, "CountTTCFonts( \"%s/%s\" ) failed\n", getDirectory(nDirID).getStr(), rFontFile.getStr() );
-#endif
+        {
+            TrueTypeFontFile* pFont     = new TrueTypeFontFile();
+            pFont->m_nDirectory         = nDirID;
+            pFont->m_aFontFile          = rFontFile;
+            pFont->m_nCollectionEntry   = -1;
+
+            if( rXLFDs.size() )
+                getFontAttributesFromXLFD( pFont, rXLFDs );
+            // need to read the font anyway to get aliases inside the font file
+            if( ! analyzeTrueTypeFile( pFont ) )
+            {
+                delete pFont;
+                pFont = NULL;
+            }
+            else
+                rNewFonts.push_back( pFont );
+        }
     }
     return ! rNewFonts.empty();
 }

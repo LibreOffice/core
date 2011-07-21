@@ -83,14 +83,7 @@ namespace rsvg
 
 extern "C" {
 
-    VCL_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char** ppEnvTypeName,
-        uno_Environment** /*ppEnv*/ )
-    {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    VCL_DLLPUBLIC void* SAL_CALL component_getFactory(
+    VCL_DLLPUBLIC void* SAL_CALL vcl_component_getFactory(
         const sal_Char* pImplementationName,
         void* pXUnoSMgr,
         void* /*pXUnoKey*/
@@ -144,12 +137,14 @@ extern "C" {
                     xMgr, vcl::DropTarget_getImplementationName(), vcl::DropTarget_createInstance,
                     vcl::DropTarget_getSupportedServiceNames() );
             }
+#ifdef ENABLE_LIBRSVG
             else if( vcl::rsvg::Rasterizer_getImplementationName().equalsAscii( pImplementationName ) )
             {
                 xFactory = ::cppu::createSingleFactory(
                     xMgr, vcl::rsvg::Rasterizer_getImplementationName(), vcl::rsvg::Rasterizer_createInstance,
                     vcl::rsvg::Rasterizer_getSupportedServiceNames() );
             }
+#endif
             if( xFactory.is() )
             {
                 xFactory->acquire();

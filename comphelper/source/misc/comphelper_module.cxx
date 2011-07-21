@@ -35,7 +35,24 @@ namespace comphelper { namespace module
 {
 //........................................................................
 
-    IMPLEMENT_COMPONENT_MODULE( ComphelperModule );
+    struct ComphelperModuleCreator
+    {
+        ComphelperModule m_aComphelperModule;
+    };
+    namespace
+    {
+        class theComphelperModuleInstance : public rtl::Static<ComphelperModuleCreator, theComphelperModuleInstance> {};
+    }
+
+    ComphelperModule::ComphelperModule()
+        :BaseClass()
+    {
+    }
+
+    ComphelperModule& ComphelperModule::getInstance()
+    {
+        return theComphelperModuleInstance::get().m_aComphelperModule;
+    }
 
 //........................................................................
 } } // namespace comphelper::module

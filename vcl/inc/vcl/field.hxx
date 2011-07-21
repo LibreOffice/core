@@ -111,7 +111,7 @@ public:
 class VCL_DLLPUBLIC PatternFormatter : public FormatterBase
 {
 private:
-    ByteString              maEditMask;
+    rtl::OString m_aEditMask;
     XubString               maFieldString;
     XubString               maLiteralMask;
     sal_uInt16                  mnFormatFlags;
@@ -122,7 +122,8 @@ protected:
                             PatternFormatter();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE void     ImplSetMask( const ByteString& rEditMask, const XubString& rLiteralMask );
+    SAL_DLLPRIVATE void ImplSetMask(const rtl::OString& rEditMask,
+        const XubString& rLiteralMask);
     SAL_DLLPRIVATE sal_Bool     ImplIsSameMask() const { return mbSameMask; }
     SAL_DLLPRIVATE sal_Bool&    ImplGetInPattKeyInput() { return mbInPattKeyInput; }
 
@@ -131,9 +132,8 @@ public:
 
     virtual void            Reformat();
 
-    void                    SetMask( const ByteString& rEditMask,
-                                     const XubString& rLiteralMask );
-    const ByteString&       GetEditMask() const     { return maEditMask; }
+    void SetMask(const rtl::OString& rEditMask, const XubString& rLiteralMask );
+    const rtl::OString& GetEditMask() const { return m_aEditMask; }
     const XubString&        GetLiteralMask() const  { return maLiteralMask; }
 
     void                    SetFormatFlags( sal_uInt16 nFlags ) { mnFormatFlags = nFlags; }
@@ -475,8 +475,6 @@ public:
     void                    SetTime( const Time& rNewTime );
     void                    SetUserTime( const Time& rNewTime );
     Time                    GetTime() const;
-    Time                    GetRealTime() const;
-    sal_Bool                    IsTimeModified() const;
     void                    SetEmptyTime() { FormatterBase::SetEmptyFieldValue(); }
     sal_Bool                    IsEmptyTime() const { return FormatterBase::IsEmptyFieldValue(); }
     Time                    GetCorrectedTime() const { return maCorrectedTime; }
@@ -866,7 +864,6 @@ class VCL_DLLPUBLIC TimeBox : public ComboBox, public TimeFormatter
 {
 public:
                             TimeBox( Window* pParent, WinBits nWinStyle );
-                            TimeBox( Window* pParent, const ResId& rResId );
                             ~TimeBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
@@ -876,12 +873,6 @@ public:
     virtual void            Modify();
 
     virtual void            ReformatAll();
-
-    void                    InsertTime( const Time& rTime, sal_uInt16 nPos = COMBOBOX_APPEND );
-    void                    RemoveTime( const Time& rTime );
-    using TimeFormatter::GetTime;
-    Time                    GetTime( sal_uInt16 nPos ) const;
-    sal_uInt16                  GetTimePos( const Time& rTime ) const;
 };
 
 #endif // _SV_FIELD_HXX

@@ -1,7 +1,6 @@
 UDK_3_0_0 {
     global:
 _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
-        component_getImplementationEnvironment;
         component_getFactory;
     local:
     *;

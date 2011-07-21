@@ -1191,12 +1191,13 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
     if( ! bExternalDialog && rJob.m_nCopies > 1 )
     {
         // setup code
-        ByteString aLine( "/#copies " );
-        aLine += ByteString::CreateFromInt32( rJob.m_nCopies );
-        aLine +=  " def\n";
+        rtl::OStringBuffer aLine(RTL_CONSTASCII_STRINGPARAM("/#copies "));
+        aLine.append(static_cast<sal_Int32>(rJob.m_nCopies));
+        aLine.append(RTL_CONSTASCII_STRINGPARAM(" def\n"));
         sal_uInt64 nWritten = 0;
-        bSuccess = pFile->write( aLine.GetBuffer(), aLine.Len(), nWritten )
-            || nWritten != aLine.Len() ? false : true;
+        bSuccess = pFile->write(aLine.getStr(), aLine.getLength(), nWritten)
+            || nWritten != static_cast<sal_uInt64>(aLine.getLength()) ?
+             false : true;
 
         if( bSuccess && GetPostscriptLevel( &rJob ) >= 2 )
             WritePS (pFile, "<< /NumCopies null /Policies << /NumCopies 1 >> >> setpagedevice\n" );

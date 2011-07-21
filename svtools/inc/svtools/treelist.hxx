@@ -494,8 +494,14 @@ public:
 
     SvListEntry*        LastSelected() const
     { return pModel->LastSelected(this); }
+    SvListEntry*        GetEntryAtAbsPos( sal_uLong nAbsPos ) const
+    { return pModel->GetEntryAtAbsPos(nAbsPos); }
+
     SvListEntry*        GetEntryAtVisPos( sal_uLong nVisPos ) const
     { return pModel->GetEntryAtVisPos((SvListView*)this,nVisPos); }
+
+    sal_uLong           GetAbsPos( SvListEntry* pEntry ) const
+    { return pModel->GetAbsPos(pEntry); }
 
     sal_uLong           GetVisiblePos( SvListEntry* pEntry ) const
     { return pModel->GetVisiblePos((SvListView*)this,pEntry); }

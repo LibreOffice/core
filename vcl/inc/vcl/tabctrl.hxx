@@ -158,7 +158,6 @@ public:
 
     void                SetTabPage( sal_uInt16 nPageId, TabPage* pPage );
     TabPage*            GetTabPage( sal_uInt16 nPageId ) const;
-    sal_uInt16              GetTabPageResId( sal_uInt16 nPageId ) const;
 
     void                SetPageText( sal_uInt16 nPageId, const XubString& rText );
     XubString           GetPageText( sal_uInt16 nPageId ) const;
@@ -166,11 +165,9 @@ public:
     void                SetHelpText( sal_uInt16 nPageId, const XubString& rText );
     const XubString&    GetHelpText( sal_uInt16 nPageId ) const;
 
-    void                SetHelpId( sal_uInt16 nPageId, const rtl::OString& rHelpId );
     rtl::OString        GetHelpId( sal_uInt16 nPageId ) const;
 
     void                SetPageImage( sal_uInt16 nPageId, const Image& rImage );
-    const Image*        GetPageImage( sal_uInt16 nPageId ) const;
 
     void                SetHelpText( const XubString& rText )
                             { Control::SetHelpText( rText ); }

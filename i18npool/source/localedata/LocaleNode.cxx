@@ -484,24 +484,24 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
                 "DoubleQuotationEnd is an ASCII character but DoubleQuotationStart is not.");
     if (aQuoteStart.toChar() <= 127 && aQuoteEnd.toChar() <= 127)
         fprintf( stderr, "Warning: %s\n",
-                "QuotationStart and QuotationEnd are both ASCII characters. Not necessarily an error, but unusual.");
+                "QuotationStart and QuotationEnd are both ASCII characters. Not necessarily an issue, but unusual.");
     if (aDoubleQuoteStart.toChar() <= 127 && aDoubleQuoteEnd.toChar() <= 127)
         fprintf( stderr, "Warning: %s\n",
-                "DoubleQuotationStart and DoubleQuotationEnd are both ASCII characters. Not necessarily an error, but unusual.");
+                "DoubleQuotationStart and DoubleQuotationEnd are both ASCII characters. Not necessarily an issue, but unusual.");
     if (aQuoteStart == aQuoteEnd)
         fprintf( stderr, "Warning: %s\n",
-                "QuotationStart equals QuotationEnd. Not necessarily an error, but unusual.");
+                "QuotationStart equals QuotationEnd. Not necessarily an issue, but unusual.");
     if (aDoubleQuoteStart == aDoubleQuoteEnd)
         fprintf( stderr, "Warning: %s\n",
-                "DoubleQuotationStart equals DoubleQuotationEnd. Not necessarily an error, but unusual.");
+                "DoubleQuotationStart equals DoubleQuotationEnd. Not necessarily an issue, but unusual.");
     /* TODO: should equalness of single and double quotes be an error? Would
      * need to adapt quite some locales' data. */
     if (aQuoteStart == aDoubleQuoteStart)
         fprintf( stderr, "Warning: %s\n",
-                "QuotationStart equals DoubleQuotationStart. Not necessarily an error, but unusual.");
+                "QuotationStart equals DoubleQuotationStart. Not necessarily an isue, but unusual.");
     if (aQuoteEnd == aDoubleQuoteEnd)
         fprintf( stderr, "Warning: %s\n",
-                "QuotationEnd equals DoubleQuotationEnd. Not necessarily an error, but unusual.");
+                "QuotationEnd equals DoubleQuotationEnd. Not necessarily an issue, but unusual.");
     // Known good values, exclude ASCII single (U+0027, ') and double (U+0022, ") quotes.
     int ic;
     switch (ic = aQuoteStart.toChar())

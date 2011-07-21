@@ -36,6 +36,7 @@
 #include <tools/inetmime.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
+#include <vector>
 
 class DateTime;
 
@@ -108,13 +109,14 @@ public:
  * INetMessage Interface.
  *
  *=====================================================================*/
+ typedef ::std::vector< INetMessageHeader* > HeaderList_impl;
 class INetMessage
 {
-    List           m_aHeaderList;
+    HeaderList_impl m_aHeaderList;
 
-    sal_uIntPtr          m_nDocSize;
-    UniString      m_aDocName;
-    SvLockBytesRef m_xDocLB;
+    sal_uIntPtr     m_nDocSize;
+    UniString       m_aDocName;
+    SvLockBytesRef  m_xDocLB;
 
     void ListCleanup_Impl (void);
     void ListCopy (const INetMessage& rMsg);
@@ -123,38 +125,36 @@ protected:
     UniString GetHeaderName_Impl (
         sal_uIntPtr nIndex, rtl_TextEncoding eEncoding) const
     {
-        INetMessageHeader *p =
-            (INetMessageHeader*)(m_aHeaderList.GetObject(nIndex));
-        if (p)
-            return UniString(p->GetName(), eEncoding);
-        else
+        if ( nIndex < m_aHeaderList.size() ) {
+            return UniString( m_aHeaderList[ nIndex ]->GetName(), eEncoding );
+        } else {
             return UniString();
+        }
     }
 
     UniString GetHeaderValue_Impl (
         sal_uIntPtr nIndex, INetMIME::HeaderFieldType eType) const
     {
-        INetMessageHeader *p =
-            (INetMessageHeader*)(m_aHeaderList.GetObject(nIndex));
-        if (p)
-            return INetMIME::decodeHeaderFieldBody (eType, p->GetValue());
-        else
+        if ( nIndex < m_aHeaderList.size() ) {
+            return INetMIME::decodeHeaderFieldBody(eType, m_aHeaderList[ nIndex ]->GetValue());
+        } else {
             return UniString();
+        }
     }
 
     void SetHeaderField_Impl (
         const INetMessageHeader &rHeader, sal_uIntPtr &rnIndex)
     {
         INetMessageHeader *p = new INetMessageHeader (rHeader);
-        if (m_aHeaderList.Count() <= rnIndex)
+        if (m_aHeaderList.size() <= rnIndex)
         {
-            m_aHeaderList.Insert (p, LIST_APPEND);
-            rnIndex = m_aHeaderList.Count() - 1;
+            rnIndex = m_aHeaderList.size();
+            m_aHeaderList.push_back( p );
         }
         else
         {
-            p = (INetMessageHeader*)(m_aHeaderList.Replace(p, rnIndex));
-            delete p;
+            delete m_aHeaderList[ rnIndex ];
+            m_aHeaderList[ rnIndex ] = p;
         }
     }
 
@@ -188,7 +188,7 @@ public:
         return *this;
     }
 
-    sal_uIntPtr GetHeaderCount (void) const { return m_aHeaderList.Count(); }
+    sal_uIntPtr GetHeaderCount (void) const { return m_aHeaderList.size(); }
 
     UniString GetHeaderName (sal_uIntPtr nIndex) const
     {
@@ -202,21 +202,17 @@ public:
 
     INetMessageHeader GetHeaderField (sal_uIntPtr nIndex) const
     {
-        INetMessageHeader *p =
-            (INetMessageHeader*)(m_aHeaderList.GetObject(nIndex));
-        if (p)
-            return INetMessageHeader(*p);
-        else
+        if ( nIndex < m_aHeaderList.size() ) {
+            return INetMessageHeader( *m_aHeaderList[ nIndex ] );
+        } else {
             return INetMessageHeader();
+        }
     }
 
-    sal_uIntPtr SetHeaderField (
-        const UniString& rName,
-        const UniString& rValue,
-        sal_uIntPtr            nIndex = LIST_APPEND);
-
     virtual sal_uIntPtr SetHeaderField (
-        const INetMessageHeader &rField, sal_uIntPtr nIndex = LIST_APPEND);
+        const INetMessageHeader &rField,
+        sal_uIntPtr nIndex = ((sal_uIntPtr)-1)
+    );
 
     sal_uIntPtr GetDocumentSize (void) const { return m_nDocSize; }
     void  SetDocumentSize (sal_uIntPtr nSize) { m_nDocSize = nSize; }
@@ -237,36 +233,6 @@ public:
         SvStream& rStrm, INetMessage& rMsg)
     {
         return rMsg.operator>> (rStrm);
-    }
-};
-
-/*=======================================================================
- *
- * INetMessageHeaderIterator Interface.
- *
- *=====================================================================*/
-class INetMessageHeaderIterator
-{
-    sal_uIntPtr     nValueCount;
-    List      aValueList;
-    UniString aEmptyString;
-
-public:
-    INetMessageHeaderIterator (
-        const INetMessage& rMsg, const UniString& rHdrName);
-    virtual ~INetMessageHeaderIterator (void);
-
-    sal_uIntPtr GetValueCount (void) const { return nValueCount; }
-    const UniString& GetValue (sal_uIntPtr nIndex) const
-    {
-        if (nIndex < nValueCount)
-        {
-            return *((UniString*)(aValueList.GetObject(nIndex)));
-        }
-        else
-        {
-            return aEmptyString;
-        }
     }
 };
 
@@ -310,18 +276,17 @@ public:
 
     INetRFC822Message& operator= (const INetRFC822Message& rMsg);
 
-    static sal_Bool GenerateDateField (
-        const DateTime& rDateTime, UniString& rDateField);
     static sal_Bool ParseDateField (
         const UniString& rDateField, DateTime& rDateTime);
 
     using INetMessage::SetHeaderField;
     virtual sal_uIntPtr SetHeaderField (
-        const INetMessageHeader &rHeader, sal_uIntPtr nIndex = LIST_APPEND);
+        const INetMessageHeader &rHeader,
+        sal_uIntPtr nIndex = ((sal_uIntPtr)-1)
+    );
 
     /** Header fields.
      */
-    void      SetBCC (const UniString& rBCC);
     UniString GetBCC (void) const
     {
         return GetHeaderValue_Impl (
@@ -329,7 +294,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetCC (const UniString& rCC);
     UniString GetCC (void) const
     {
         return GetHeaderValue_Impl (
@@ -337,7 +301,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetComments (const UniString& rComments);
     UniString GetComments (void) const
     {
         return GetHeaderValue_Impl (
@@ -345,7 +308,6 @@ public:
             INetMIME::HEADER_FIELD_TEXT);
     }
 
-    void      SetDate (const UniString& rDate);
     UniString GetDate (void) const
     {
         return GetHeaderValue_Impl (
@@ -353,7 +315,6 @@ public:
             INetMIME::HEADER_FIELD_STRUCTURED);
     }
 
-    void      SetFrom (const UniString& rFrom);
     UniString GetFrom (void) const
     {
         return GetHeaderValue_Impl (
@@ -361,7 +322,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetInReplyTo (const UniString& rInReplyTo);
     UniString GetInReplyTo (void) const
     {
         return GetHeaderValue_Impl (
@@ -369,7 +329,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS); // ??? MESSAGE_ID ???
     }
 
-    void      SetKeywords (const UniString& rKeywords);
     UniString GetKeywords (void) const
     {
         return GetHeaderValue_Impl (
@@ -377,7 +336,6 @@ public:
             INetMIME::HEADER_FIELD_PHRASE);
     }
 
-    void      SetMessageID (const UniString& rMessageID);
     UniString GetMessageID (void) const
     {
         return GetHeaderValue_Impl (
@@ -385,7 +343,6 @@ public:
             INetMIME::HEADER_FIELD_MESSAGE_ID);
     }
 
-    void      SetReferences (const UniString& rReferences);
     UniString GetReferences (void) const
     {
         return GetHeaderValue_Impl (
@@ -393,7 +350,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetReplyTo (const UniString& rReplyTo);
     UniString GetReplyTo (void) const
     {
         return GetHeaderValue_Impl (
@@ -401,7 +357,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetReturnPath (const UniString& rReturnPath);
     UniString GetReturnPath (void) const
     {
         return GetHeaderValue_Impl (
@@ -409,7 +364,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetReturnReceiptTo (const UniString& rReturnReceiptTo);
     UniString GetReturnReceiptTo (void) const
     {
         return GetHeaderValue_Impl (
@@ -417,7 +371,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetSender (const UniString& rSender);
     UniString GetSender (void) const
     {
         return GetHeaderValue_Impl (
@@ -425,7 +378,6 @@ public:
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    void      SetSubject (const UniString& rSubject);
     UniString GetSubject (void) const
     {
         return GetHeaderValue_Impl (
@@ -433,7 +385,6 @@ public:
             INetMIME::HEADER_FIELD_TEXT);
     }
 
-    void      SetTo (const UniString& rTo);
     UniString GetTo (void) const
     {
         return GetHeaderValue_Impl (
@@ -481,19 +432,19 @@ enum INetMessageContainerType
     INETMSG_MULTIPART_FORM_DATA
 };
 
+class INetMIMEMessage;
+typedef ::std::vector< INetMIMEMessage* > INetMIMEMessgeList_impl;
 class TOOLS_DLLPUBLIC INetMIMEMessage : public INetRFC822Message
 {
-    sal_uIntPtr           m_nIndex[INETMSG_MIME_NUMHDR];
+    sal_uIntPtr             m_nIndex[INETMSG_MIME_NUMHDR];
 
-    INetMIMEMessage *pParent;
-    sal_uIntPtr           nNumChildren;
-    List            aChildren;
-    ByteString      m_aBoundary;
-    sal_Bool            bHeaderParsed;
+    INetMIMEMessage*        pParent;
+    INetMIMEMessgeList_impl aChildren;
+    ByteString              m_aBoundary;
+    sal_Bool                bHeaderParsed;
 
     friend class INetMIMEMessageStream;
 
-    void SetChildCount (sal_uIntPtr nCount) { nNumChildren = nCount; }
     const ByteString& GetMultipartBoundary (void) const { return m_aBoundary; }
     void SetMultipartBoundary (const ByteString& rBnd) { m_aBoundary = rBnd; }
 
@@ -519,7 +470,9 @@ public:
 
     using INetRFC822Message::SetHeaderField;
     virtual sal_uIntPtr SetHeaderField (
-        const INetMessageHeader &rHeader, sal_uIntPtr nIndex = LIST_APPEND);
+        const INetMessageHeader &rHeader,
+        sal_uIntPtr nIndex = ((sal_uIntPtr)-1)
+    );
 
     /** Header fields.
      */
@@ -529,7 +482,6 @@ public:
         return GetHeaderValue (m_nIndex[INETMSG_MIME_VERSION]);
     }
 
-    void      SetContentDescription (const UniString& rDescription);
     UniString GetContentDescription (void) const
     {
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_DESCRIPTION]);
@@ -541,7 +493,6 @@ public:
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_DISPOSITION]);
     }
 
-    void      SetContentID (const UniString& rID);
     UniString GetContentID (void) const
     {
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_ID]);
@@ -578,10 +529,9 @@ public:
         return (aType.CompareIgnoreCaseToAscii("multipart/", 10) == 0);
     }
 
-    sal_uIntPtr GetChildCount (void) const { return nNumChildren; }
     INetMIMEMessage* GetChild (sal_uIntPtr nIndex) const
     {
-        return ((INetMIMEMessage *)(aChildren.GetObject (nIndex)));
+        return ( nIndex < aChildren.size() ) ? aChildren[ nIndex ] : NULL;
     }
     INetMIMEMessage* GetParent (void) const { return pParent; }
 
@@ -589,8 +539,6 @@ public:
         INetMessageContainerType eType = INETMSG_MULTIPART_MIXED);
     sal_Bool AttachChild (
         INetMIMEMessage& rChildMsg, sal_Bool bOwner = sal_True);
-    sal_Bool DetachChild (
-        sal_uIntPtr nIndex, INetMIMEMessage& rChildMsg) const;
 
     /** Stream operators.
      */

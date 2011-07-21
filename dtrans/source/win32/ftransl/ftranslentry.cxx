@@ -84,23 +84,8 @@ namespace
     }
 }
 
-//-----------------------------------------------------------------------------------------------------------
-// the 3 important functions which will be exported
-//-----------------------------------------------------------------------------------------------------------
-
 extern "C"
 {
-
-//----------------------------------------------------------------------
-// component_getImplementationEnvironment
-//----------------------------------------------------------------------
-
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 //----------------------------------------------------------------------
 // component_getFactory
 // returns a factory to create XFilePicker-Services

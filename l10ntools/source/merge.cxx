@@ -155,14 +155,6 @@ PFormEntrys* MergeData::GetPFObject( const ByteString& rPFO ){
     return NULL;
 }
 
-
-PFormEntrys *MergeData::InsertEntry( const ByteString &rPForm )
-{
-    PFormEntrys* pFEntrys = new PFormEntrys( rPForm );
-    aMap.insert( PFormEntrysHashMap::value_type( rPForm , pFEntrys ) );
-    return pFEntrys;
-}
-
 sal_Bool MergeData::operator==( ResData *pData )
 {
     ByteString sResTyp_upper( pData->sResTyp );
@@ -267,18 +259,6 @@ ByteString MergeDataFile::Dump(){
     }
     printf("\n");
     return sRet;
-}
-
-void MergeDataFile::WriteError( const ByteString &rLine )
-{
-    if ( bErrorLog )
-    {
-        if ( !aErrLog.IsOpen())
-            aErrLog.Open( String( sErrorLog, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
-        aErrLog.WriteLine( rLine );
-    }
-    else
-        fprintf( stderr, "%s\n", rLine.GetBuffer());
 }
 
 std::vector<ByteString> MergeDataFile::GetLanguages(){

@@ -424,18 +424,6 @@ public:
     void    setHatchType        ( HatchType aHatchType );
     /// Set color used for drawing the hatch
     void    setHatchColor       ( Color aHatchColor );
-    /// Set type of gradient used
-    void    setGradientType     ( GradientType aGradType );
-    /// Set start color of the gradient
-    void    setGradient1stColor ( Color aColor );
-    /// Set end color of the gradient
-    void    setGradient2ndColor ( Color aColor );
-    /** Set the numbers of steps to render the gradient.
-
-        @param aCount
-        The step count. gradientStepsInfinite means use infinitely many.
-    */
-    void    setGradientStepCount( int aCount );
     /// Set the texture graphic used
     void    setGraphic          ( const Graphic& rGraphic );
 

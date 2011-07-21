@@ -496,14 +496,11 @@ class NameTranslator_Impl : public ::svt::IContentTitleTranslation
 private:
     NameTranslationList*    mpActFolder;
 public:
-                            NameTranslator_Impl( void );
                             NameTranslator_Impl( const INetURLObject& rActualFolder );
                             virtual ~NameTranslator_Impl();
 
      // IContentTitleTranslation
     virtual sal_Bool        GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const;
-
-    void                    UpdateTranslationTable(); // reads the translation file again
 
     void                    SetActualFolder( const INetURLObject& rActualFolder );
     const String*           GetTransTableFileName() const;
@@ -1810,11 +1807,6 @@ void SvtFileView::StateChanged( StateChangedType nStateChange )
 // class NameTranslator_Impl
 // -----------------------------------------------------------------------
 
-NameTranslator_Impl::NameTranslator_Impl( void ) :
-    mpActFolder( NULL )
-{
-}
-
 NameTranslator_Impl::NameTranslator_Impl( const INetURLObject& rActualFolder )
 {
     mpActFolder = new NameTranslationList( rActualFolder );
@@ -1824,12 +1816,6 @@ NameTranslator_Impl::~NameTranslator_Impl()
 {
     if( mpActFolder )
         delete mpActFolder;
-}
-
-void NameTranslator_Impl::UpdateTranslationTable()
-{
-    if( mpActFolder )
-        mpActFolder->Update();
 }
 
 void NameTranslator_Impl::SetActualFolder( const INetURLObject& rActualFolder )

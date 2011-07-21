@@ -54,8 +54,8 @@
 #include "outfont.hxx"
 #include "fontsubset.hxx"
 #include "printergfx.hxx"
-#include "svppspgraphics.hxx"
-#include "svpbmp.hxx"
+#include "unx/headless/svppspgraphics.hxx"
+#include "unx/headless/svpbmp.hxx"
 #include "region.h"
 
 using namespace psp;
@@ -1135,10 +1135,12 @@ ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintF
 #if OSL_DEBUG_LEVEL > 2
     if( bHasMapNames )
     {
-        ByteString aOrigName( aDFA.maName, osl_getThreadTextEncoding() );
-        ByteString aAliasNames( aDFA.maMapNames, osl_getThreadTextEncoding() );
+        rtl::OString aOrigName(rtl::OUStringToOString(aDFA.maName,
+            osl_getThreadTextEncoding()));
+        rtl::OString aAliasNames(rtl::OUStringToOString(aDFA.maMapNames,
+            osl_getThreadTextEncoding()));
         fprintf( stderr, "using alias names \"%s\" for font family \"%s\"\n",
-            aAliasNames.GetBuffer(), aOrigName.GetBuffer() );
+            aAliasNames.getStr(), aOrigName.getStr() );
     }
 #endif
 

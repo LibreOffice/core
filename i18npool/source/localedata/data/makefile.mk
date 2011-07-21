@@ -36,7 +36,7 @@ LIBTARGET=NO
 debug!=
 .ENDIF
 
-.IF "$(OS)" == "WNT"
+.IF "$(OS_FOR_BUILD)" == "WNT"
 my_file = file:///
 .ELSE
 my_file = file://
@@ -167,6 +167,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_fur_IT.obj	\
     $(SLO)$/localedata_fy_NL.obj	\
     $(SLO)$/localedata_ga_IE.obj	\
+    $(SLO)$/localedata_gd_GB.obj	\
     $(SLO)$/localedata_gsc_FR.obj	\
     $(SLO)$/localedata_hr_HR.obj	\
     $(SLO)$/localedata_hsb_DE.obj	\
@@ -326,12 +327,20 @@ MY_MISC_CXXFILES := $(foreach,i,$(DEPOBJFILES) $(MISC)/$(i:b).cxx)
 
 .INCLUDE :  target.mk
 
-$(MY_MISC_CXXFILES) : $(OUT_FOR_BUILD)$/bin$/saxparser$(EXECPOST) $(MISC)/saxparser.rdb
+$(MY_MISC_CXXFILES) : $(OUT_FOR_BUILD)$/bin$/saxparser$(EXECPOST_FOR_BUILD) $(MISC)/saxparser.rdb
+
+.IF "$(CROSS_COMPILING)" == "YES"
+# Always cross-compiling from some Unix,
+# so the BUILD platform's lib directory is correct
+sharedlibdir=$(SOLARLIBDIR_FOR_BUILD)
+.ELSE
+sharedlibdir=$(SOLARSHAREDBIN)
+.ENDIF
 
 $(MISC)$/localedata_%.cxx : %.xml
     $(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(OUT_FOR_BUILD)$/bin$/saxparser $* $< $@ \
         $(my_file)$(PWD)/$(MISC_FOR_BUILD)/saxparser.rdb $(SOLARBINDIR)$/types.rdb \
-        -env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(SOLARSHAREDBIN)
+        -env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(sharedlibdir)
     $(RM) $(BIN)$/$(@:b).rdb
 
 $(MISC)/saxparser.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \

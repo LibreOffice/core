@@ -2909,29 +2909,6 @@ bool INetURLObject::parseHostOrNetBiosName(
 }
 
 //============================================================================
-// static
-rtl::OUString INetURLObject::encodeHostPort(rtl::OUString const & rTheHostPort,
-                                        bool bOctets,
-                                        EncodeMechanism eMechanism,
-                                        rtl_TextEncoding eCharset)
-{
-    sal_Int32 nPort = rTheHostPort.getLength();
-    if (nPort != 0)
-    {
-        sal_Int32 i = nPort - 1;
-        while (i != 0 && INetMIME::isDigit(rTheHostPort.getStr()[i]))
-            --i;
-        if (rTheHostPort.getStr()[i] == ':')
-            nPort = i;
-    }
-    rtl::OUString aResult(encodeText(rTheHostPort.copy(0, nPort), bOctets,
-                                 PART_HOST_EXTRA, '%', eMechanism, eCharset,
-                                 true));
-    aResult += rTheHostPort.copy(nPort);
-    return aResult;
-}
-
-//============================================================================
 bool INetURLObject::setHost(rtl::OUString const & rTheHost, bool bOctets,
                             EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
@@ -3706,31 +3683,6 @@ bool INetURLObject::setFragment(rtl::OUString const & rTheFragment,
 }
 
 //============================================================================
-INetURLObject::FTPType INetURLObject::getFTPType() const
-{
-    if (m_eScheme == INET_PROT_FTP
-        && m_aPath.getLength() >= RTL_CONSTASCII_LENGTH(";type=") + 1
-        && rtl::OUString(m_aAbsURIRef).copy(
-            m_aPath.getEnd() - (RTL_CONSTASCII_LENGTH(";type=") + 1),
-            RTL_CONSTASCII_LENGTH(";type=")).equalsIgnoreAsciiCaseAscii(";type="))
-        switch (m_aAbsURIRef.charAt(m_aPath.getEnd()))
-        {
-            case 'A':
-            case 'a':
-                return FTP_TYPE_A;
-
-            case 'D':
-            case 'd':
-                return FTP_TYPE_D;
-
-            case 'I':
-            case 'i':
-                return FTP_TYPE_I;
-        }
-    return FTP_TYPE_NONE;
-}
-
-//============================================================================
 bool INetURLObject::hasDosVolume(FSysStyle eStyle) const
 {
     sal_Unicode const * p = m_aAbsURIRef.getStr() + m_aPath.getBegin();
@@ -3740,33 +3692,6 @@ bool INetURLObject::hasDosVolume(FSysStyle eStyle) const
            && INetMIME::isAlpha(p[1])
            && p[2] == ':'
            && (m_aPath.getLength() == 3 || p[3] == '/');
-}
-
-//============================================================================
-sal_uInt32 INetURLObject::getIMAPUID() const
-{
-    if (m_eScheme == INET_PROT_IMAP
-        && m_aPath.getLength() >= RTL_CONSTASCII_LENGTH("/;uid=") + 1)
-    {
-        sal_Unicode const * pBegin = m_aAbsURIRef.getStr()
-                                         + m_aPath.getBegin()
-                                         + RTL_CONSTASCII_LENGTH("/;uid=");
-        sal_Unicode const * pEnd = pBegin + m_aPath.getLength();
-        sal_Unicode const * p = pEnd;
-        while (p > pBegin && INetMIME::isDigit(p[-1]))
-            --p;
-        if (p < pEnd && *--p != '0'
-            && rtl::OUString(m_aAbsURIRef).copy(
-                p - RTL_CONSTASCII_LENGTH("/;uid=") - m_aAbsURIRef.getStr(),
-                RTL_CONSTASCII_LENGTH("/;uid=")).equalsIgnoreAsciiCaseAscii("/;uid=")
-           )
-        {
-            sal_uInt32 nUID;
-            if (INetMIME::scanUnsigned(p, pEnd, false, nUID))
-                return nUID;
-        }
-    }
-    return 0;
 }
 
 //============================================================================
@@ -4369,22 +4294,6 @@ bool INetURLObject::hasPassword() const
 }
 
 //============================================================================
-void INetURLObject::makeAuthCanonic()
-{
-    if (m_eScheme == INET_PROT_IMAP && m_aAuth.getLength() == 1
-        && m_aAbsURIRef.charAt(m_aAuth.getBegin()) == '*')
-    {
-        lcl_Erase(m_aAbsURIRef, m_aAuth.getBegin()
-                               - RTL_CONSTASCII_LENGTH(";AUTH="),
-                           RTL_CONSTASCII_LENGTH(";AUTH=*"));
-        sal_Int32 nDelta = m_aAuth.clear() - RTL_CONSTASCII_LENGTH(";AUTH=");
-        m_aPath += nDelta;
-        m_aQuery += nDelta;
-        m_aFragment += nDelta;
-    }
-}
-
-//============================================================================
 rtl::OUString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
                                      rtl_TextEncoding eCharset)
 {
@@ -4438,33 +4347,6 @@ bool INetURLObject::SetPort(sal_uInt32 nThePort)
         return true;
     }
     return false;
-}
-
-//============================================================================
-void INetURLObject::makePortCanonic()
-{
-    if (m_aPort.isPresent())
-    {
-        sal_Unicode const * p = m_aAbsURIRef.getStr() + m_aPort.getBegin();
-        sal_Unicode const * pEnd = p + m_aPort.getLength();
-        sal_uInt32 nThePort;
-        if (INetMIME::scanUnsigned(p, pEnd, true, nThePort) && p == pEnd)
-        {
-            sal_Int32 nDelta;
-            if (nThePort != 0 && nThePort == getSchemeInfo().m_nDefaultPort)
-            {
-                lcl_Erase(m_aAbsURIRef, m_aPort.getBegin() - 1,
-                                   m_aPort.getLength() + 1);
-                nDelta = m_aPort.clear() - 1;
-            }
-            else
-                nDelta = m_aPort.set(m_aAbsURIRef,
-                                 rtl::OUString::valueOf(sal_Int64(nThePort)));
-            m_aPath += nDelta;
-            m_aQuery += nDelta;
-            m_aFragment += nDelta;
-        }
-    }
 }
 
 //============================================================================
@@ -5137,19 +5019,6 @@ rtl::OUString INetURLObject::getFSysPath(FSysStyle eStyle,
 }
 
 //============================================================================
-bool INetURLObject::HasMsgId() const
-{
-    if (m_eScheme != INET_PROT_POP3)
-        return false;
-    sal_Unicode const * p = m_aAbsURIRef.getStr() + m_aPath.getBegin();
-    sal_Unicode const * pEnd = p + m_aPath.getLength();
-    for (; p < pEnd; ++p)
-        if (*p == '<')
-            return true;
-    return false;
-}
-
-//============================================================================
 rtl::OUString INetURLObject::GetMsgId(DecodeMechanism eMechanism,
                                   rtl_TextEncoding eCharset) const
 {
@@ -5590,14 +5459,6 @@ void INetURLObject::SetName(rtl::OUString const & rTheName,
         && aTemp.insertName(rTheName, false, LAST_SEGMENT, true, eMechanism,
                             eCharset))
         *this = aTemp;
-}
-
-//============================================================================
-rtl::OUString INetURLObject::CutName(DecodeMechanism eMechanism,
-                                 rtl_TextEncoding eCharset)
-{
-    rtl::OUString aTheName(getName(LAST_SEGMENT, true, eMechanism, eCharset));
-    return removeSegment(LAST_SEGMENT, true) ? aTheName : rtl::OUString();
 }
 
 //============================================================================

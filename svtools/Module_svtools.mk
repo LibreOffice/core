@@ -30,13 +30,22 @@ $(eval $(call gb_Module_Module,svtools))
 $(eval $(call gb_Module_add_targets,svtools,\
     AllLangResTarget_productregistration \
     AllLangResTarget_svt \
-    Executable_bmp \
-    Executable_bmpsum \
-    Executable_g2g \
     Library_hatchwindowfactory \
     Library_productregistration \
     Library_svt \
     Package_inc \
+))
+
+ifneq ($(CROSS_COMPILING),YES)
+$(eval $(call gb_Module_add_targets,svtools,\
+    Executable_bmp \
+    Executable_bmpsum \
+    Executable_g2g \
+))
+endif
+
+$(eval $(call gb_Module_add_check_targets,svtools,\
+	CppunitTest_svtools_filters_test \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,svtools,\

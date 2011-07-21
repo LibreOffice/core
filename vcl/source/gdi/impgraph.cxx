@@ -928,13 +928,6 @@ void ImpGraphic::ImplResetAnimationLoopCount()
 
 // ------------------------------------------------------------------------
 
-List* ImpGraphic::ImplGetAnimationInfoList() const
-{
-    return( mpAnimation ? mpAnimation->GetAInfoList() : NULL );
-}
-
-// ------------------------------------------------------------------------
-
 GraphicReader* ImpGraphic::ImplGetContext()
 {
     return mpContext;

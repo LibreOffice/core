@@ -196,7 +196,6 @@ protected:
     void                FormatAndUpdate( TextView* pCurView = 0 );
     sal_Bool                IsFormatting() const { return mbIsFormatting; }
     void                UpdateViews( TextView* pCurView = 0 );
-    void                SetUpdateMode( sal_Bool bUp, TextView* pCurView, sal_Bool bForceUpdate );
 
     void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0 );
 
@@ -245,7 +244,6 @@ public:
     void                SetFont( const Font& rFont );
     const Font&         GetFont() const { return maFont; }
 
-    void                SetDefTab( sal_uInt16 nDefTab );
     sal_uInt16              GetDefTab() const;
 
     void                SetLeftMargin( sal_uInt16 n );
@@ -325,7 +323,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > GetBreakIterator();
 
     static sal_Bool         DoesKeyChangeText( const KeyEvent& rKeyEvent );
-    static sal_Bool         DoesKeyMoveCursor( const KeyEvent& rKeyEvent );
     static sal_Bool         IsSimpleCharInput( const KeyEvent& rKeyEvent );
 };
 

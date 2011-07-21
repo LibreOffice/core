@@ -88,26 +88,29 @@ void HelpParser::FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in
     }
 }
 
-/*****************************************************************************/
-void HelpParser::Dump(XMLHashMap* rElem_in) {
-/*****************************************************************************/
-    for(XMLHashMap::iterator pos = rElem_in->begin();pos != rElem_in->end(); ++pos){
+#if OSL_DEBUG_LEVEL > 2
+void HelpParser::Dump(XMLHashMap* rElem_in)
+{
+    for(XMLHashMap::iterator pos = rElem_in->begin();pos != rElem_in->end(); ++pos)
+    {
         Dump(pos->second,pos->first);
     }
 }
-/*****************************************************************************/
-void HelpParser::Dump(LangHashMap* rElem_in,const ByteString sKey_in) {
-/*****************************************************************************/
+
+void HelpParser::Dump(LangHashMap* rElem_in,const ByteString sKey_in)
+{
     ByteString x;
     OString y;
     fprintf(stdout,"+------------%s-----------+\n",sKey_in.GetBuffer() );
-    for(LangHashMap::iterator posn=rElem_in->begin();posn!=rElem_in->end();++posn){
+    for(LangHashMap::iterator posn=rElem_in->begin();posn!=rElem_in->end();++posn)
+    {
         x=posn->first;
         y=posn->second->ToOString();
         fprintf(stdout,"key=%s value=%s\n",x.GetBuffer(),y.getStr());
     }
     fprintf(stdout,"+--------------------------+\n");
 }
+#endif
 
 HelpParser::HelpParser( const ByteString &rHelpFile, bool rUTF8 , bool rHasInputList  )
         : sHelpFile( rHelpFile ),
@@ -436,9 +439,11 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
     {
 
         aLangHM             = pos->second;
-        //printf("*********************DUMPING HASHMAP***************************************");
-        //Dump( aXMLStrHM );
-        //printf("DBG: sHelpFile = %s\n",sHelpFile.GetBuffer() );
+#if OSL_DEBUG_LEVEL > 2
+        printf("*********************DUMPING HASHMAP***************************************");
+        Dump(aXMLStrHM);
+        printf("DBG: sHelpFile = %s\n",sHelpFile.GetBuffer() );
+#endif
 
         pResData.sGId      =  pos->first;
         pResData.sFilename  =  sHelpFile;
@@ -454,7 +459,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 
     static const ByteString INPATH = Export::GetEnv( "INPATH" );
     Export::getRandomName( sPath , sTempFile , INPATH );
-      Export::getRandomName( sPath , sTempFileCopy , INPATH );
+    Export::getRandomName( sPath , sTempFileCopy , INPATH );
     // Write in the temp file
     bool hasNoError = file->Write ( sTempFile );
     if( !hasNoError )
@@ -624,78 +629,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
                 }
             }else if( pResData == NULL ){fprintf(stdout,"Can't find GID=%s LID=%s TYP=%s\n",pResData->sGId.GetBuffer(),pResData->sId.GetBuffer(),pResData->sResTyp.GetBuffer());}
             pXMLElement->ChangeLanguageTag( String( sCur , RTL_TEXTENCODING_ASCII_US) );
-        }
-
-    }
-}
-/* Process() Method merges */
-void HelpParser::Process( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile ){
-
-    XMLElement*   pXMLElement = NULL;
-       PFormEntrys   *pEntrys    = NULL;
-    XMLData       *data       = NULL;
-    XMLParentNode *parent     = NULL;
-    XMLDefault    *xmldefault = NULL;
-
-    short         curLang     = 0;
-    String        sNewdata;
-    bool          isFallback  = false;
-    ByteString sLId;
-    ByteString sGId;
-
-    pEntrys = NULL;
-
-#ifdef MERGE_SOURCE_LANGUAGES
-    if( true ){                  // Merge en-US!
-#else
-    if( !sCur.EqualsIgnoreCaseAscii("en-US") ){
-#endif
-        pXMLElement = (*aLangHM)[ sCur ];
-        if( pXMLElement == NULL )
-        {
-            FillInFallbacks( *aLangHM , sCur );
-            pXMLElement =   ( *aLangHM )[ sCur ];
-            isFallback = true;
-        }
-        if( pXMLElement != NULL )
-        {
-            parent  = pXMLElement->GetParent();
-            sLId    = pXMLElement->GetOldref();
-            pResData->sId     =  sLId;
-
-            pEntrys = aMergeDataFile.GetPFormEntrys( pResData );
-            if( pEntrys != NULL)
-            {
-                ByteString sNewText;
-                pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur , true );
-                sNewdata = String(  sNewText , RTL_TEXTENCODING_UTF8 );
-                if ( sNewdata.Len())
-                {
-                    printf("Entries found\n");
-                    if( pXMLElement != NULL )
-                    {
-                        data   = new XMLData( sNewdata , NULL , true ); // Add new one
-                        if( pXMLElement->ToOUString().compareTo( OUString(data->GetData()) ) != 0 )
-                        {
-                            pXMLElement->RemoveAndDeleteAllChilds();
-                            pXMLElement->AddChild( data );
-                        }
-                        if( isFallback )
-                        {
-                            xmldefault = new XMLDefault( String::CreateFromAscii("\n") , NULL );
-                            int pos = parent->GetPosition( pXMLElement->GetId() );
-                            if( pos != -1 ){
-                                parent->AddChild(xmldefault , pos+1 );
-                                parent->AddChild(pXMLElement , pos+2 );
-                            }
-                            else fprintf(stdout,"ERROR: Can't find reference Element of id %s language %d\n",pXMLElement->GetId().GetBuffer(),curLang);
-                        }
-
-                        aLangHM->erase( sCur );
-                    }
-                }
-                delete pResData;
-            }else if( pResData == NULL ){fprintf(stdout,"Can't find GID=%s LID=%s TYP=%s\n",pResData->sGId.GetBuffer(),pResData->sId.GetBuffer(),pResData->sResTyp.GetBuffer());}
         }
 
     }

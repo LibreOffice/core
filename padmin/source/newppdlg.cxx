@@ -77,9 +77,9 @@ PPDImportDialog::PPDImportDialog( Window* pParent ) :
     Config& rConfig = getPadminRC();
     rConfig.SetGroup( PPDIMPORT_GROUP );
     m_aPathBox.SetText( String( rConfig.ReadKey( "LastDir" ), RTL_TEXTENCODING_UTF8 ) );
-    for( int i = 0; i < 11; i++ )
+    for (sal_Int32 i = 0; i < 11; ++i)
     {
-        ByteString aEntry( rConfig.ReadKey( ByteString::CreateFromInt32( i ) ) );
+        ByteString aEntry(rConfig.ReadKey(rtl::OString::valueOf(i)));
         if( aEntry.Len() )
             m_aPathBox.InsertEntry( String( aEntry, RTL_TEXTENCODING_UTF8 ) );
     }
@@ -117,10 +117,10 @@ void PPDImportDialog::Import()
             break;
     if( nEntries < 0 )
     {
-        int nNextEntry = rConfig.ReadKey( "NextEntry" ).ToInt32();
-        rConfig.WriteKey( ByteString::CreateFromInt32( nNextEntry ), ByteString( aImportPath, RTL_TEXTENCODING_UTF8 ) );
+        sal_Int32 nNextEntry = rConfig.ReadKey( "NextEntry" ).ToInt32();
+        rConfig.WriteKey( rtl::OString::valueOf(nNextEntry), ByteString( aImportPath, RTL_TEXTENCODING_UTF8 ) );
         nNextEntry = nNextEntry < 10 ? nNextEntry+1 : 0;
-        rConfig.WriteKey( "NextEntry", ByteString::CreateFromInt32( nNextEntry ) );
+        rConfig.WriteKey( "NextEntry", rtl::OString::valueOf(nNextEntry) );
         m_aPathBox.InsertEntry( aImportPath );
     }
     while( m_aDriverLB.GetEntryCount() )

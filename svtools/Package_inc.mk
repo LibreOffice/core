@@ -133,7 +133,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/statusbarcontroller.hx
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/stdctrl.hxx,svtools/stdctrl.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/stdmenu.hxx,svtools/stdmenu.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/stringtransfer.hxx,svtools/stringtransfer.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svicnvw.hxx,svtools/svicnvw.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svlbitm.hxx,svtools/svlbitm.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svlbox.hxx,svtools/svlbox.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svmedit.hxx,svtools/svmedit.hxx))

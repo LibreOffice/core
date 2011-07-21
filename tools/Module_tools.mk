@@ -29,15 +29,20 @@
 $(eval $(call gb_Module_Module,tools))
 
 $(eval $(call gb_Module_add_targets,tools,\
-    Executable_bestreversemap \
-    Executable_mkunroll \
-    Executable_rscdep \
-    Executable_so_checksum \
     Library_tl \
     Package_inc \
     Package_reversemap \
     StaticLibrary_ooopathutils \
     StaticLibrary_toolshelpers \
 ))
+
+ifneq ($(CROSS_COMPILING),YES)
+$(eval $(call gb_Module_add_targets,tools,\
+    Executable_bestreversemap \
+    Executable_mkunroll \
+    Executable_rscdep \
+    Executable_so_checksum \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

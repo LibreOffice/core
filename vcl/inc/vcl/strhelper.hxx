@@ -38,17 +38,17 @@
 namespace psp {
 
 String VCL_DLLPUBLIC GetCommandLineToken( int, const String& );
-ByteString VCL_DLLPUBLIC GetCommandLineToken( int, const ByteString& );
+rtl::OString VCL_DLLPUBLIC GetCommandLineToken(int, const rtl::OString&);
 // gets one token of a unix command line style string
 // doublequote, singlequote and singleleftquote protect their respective
 // contents
 
 int VCL_DLLPUBLIC GetCommandLineTokenCount( const String& );
-int VCL_DLLPUBLIC GetCommandLineTokenCount( const ByteString& );
+int VCL_DLLPUBLIC GetCommandLineTokenCount(const rtl::OString&);
 // returns number of tokens (zero if empty or whitespace only)
 
 String VCL_DLLPUBLIC WhitespaceToSpace( const String&, sal_Bool bProtect = sal_True );
-ByteString VCL_DLLPUBLIC WhitespaceToSpace( const ByteString&, sal_Bool bProtect = sal_True );
+rtl::OString VCL_DLLPUBLIC WhitespaceToSpace(const rtl::OString&, sal_Bool bProtect = sal_True);
 // returns a string with multiple adjacent occurrences of whitespace
 // converted to a single space. if bProtect is sal_True (nonzero), then
 // doublequote, singlequote and singleleftquote protect their respective
@@ -58,14 +58,12 @@ ByteString VCL_DLLPUBLIC WhitespaceToSpace( const ByteString&, sal_Bool bProtect
 // parses the first double in the string; decimal is '.' only
 inline double VCL_DLLPUBLIC StringToDouble( const String& rStr )
 {
-    rtl_math_ConversionStatus eStatus;
-    return rtl::math::stringToDouble( rStr, sal_Unicode('.'), sal_Unicode(0), &eStatus, NULL);
+    return rtl::math::stringToDouble(rStr, sal_Unicode('.'), sal_Unicode(0));
 }
 
-inline double VCL_DLLPUBLIC StringToDouble( const ByteString& rStr )
+inline double VCL_DLLPUBLIC StringToDouble(const rtl::OString& rStr)
 {
-    rtl_math_ConversionStatus eStatus;
-    return rtl::math::stringToDouble( rtl::OStringToOUString( rStr, osl_getThreadTextEncoding() ), sal_Unicode('.'), sal_Unicode(0), &eStatus, NULL);
+    return rtl::math::stringToDouble(rStr, '.', static_cast<sal_Char>(0));
 }
 
 // fills a character buffer with the string representation of a double

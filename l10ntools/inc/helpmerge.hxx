@@ -48,13 +48,13 @@ private:
 /// @PRECOND 0 < langIdx_in < MAX_IDX
     static void FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in );
 
-/// Debugmethod, prints the content of the map to stdout
-    static  void Dump(  LangHashMap* rElem_in , const ByteString sKey_in );
+#if OSL_DEBUG_LEVEL > 2
+    /// Debugmethod, prints the content of the map to stdout
+    static void Dump(LangHashMap* rElem_in , const ByteString sKey_in);
 
-/// Debugmethod, prints the content of the map to stdout
-    static  void Dump(  XMLHashMap* rElem_in ) ;
-
-
+    /// Debugmethod, prints the content of the map to stdout
+    static void Dump(XMLHashMap* rElem_in);
+#endif
 
 public:
     HelpParser( const ByteString &rHelpFile, bool bUTF8 , bool bHasInputList );
@@ -79,7 +79,6 @@ private:
     ByteString GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY );
     bool MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const ByteString& sLanguage , ByteString sPath );
 
-    void Process( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
     void ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
     void MakeDir( const ByteString& sPath );
 };

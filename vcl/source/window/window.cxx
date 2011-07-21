@@ -4340,8 +4340,7 @@ Window::~Window()
             if( xComponent.is() )
                 xComponent->dispose();
         }
-
-        catch ( Exception )
+        catch (const Exception&)
         {
             // can be safely ignored here.
         }
@@ -8378,8 +8377,7 @@ uno::Reference< XDropTarget > Window::GetDropTarget()
                             mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = sal_True;
 
                     }
-
-                    catch( RuntimeException )
+                    catch (const RuntimeException&)
                     {
                         // release all instances
                         mpWindowImpl->mpFrameData->mxDropTarget.clear();
@@ -8430,6 +8428,16 @@ uno::Reference< XDragSource > Window::GetDragSource()
                         aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDropTarget"));
                         aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
                         aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
+#elif defined IOS
+            /* What does LibreOffice's use of DND concepts mean on
+             * iOS, huh, is this both inter-app DND (which clearly is
+             * meaningless), or intra-app? Anyway, use the same code
+             * as for MacOSX for now, even if meaningless...
+             */
+                        aDragSourceSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDragSource"));
+                        aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDropTarget"));
+                        aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
+                        aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
 #elif defined UNX
                         aDropTargetAL.realloc( 3 );
                         aDragSourceAL.realloc( 3 );
@@ -8452,7 +8460,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
             }
 
             // createInstance can throw any exception
-            catch( Exception )
+            catch (const Exception&)
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxDropTarget.clear();
@@ -8532,7 +8540,7 @@ uno::Reference< XClipboard > Window::GetClipboard()
             }
 
             // createInstance can throw any exception
-            catch( Exception )
+            catch (const Exception&)
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxClipboard.clear();
@@ -8584,7 +8592,7 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
             }
 
             // createInstance can throw any exception
-            catch( Exception )
+            catch (const Exception&)
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxSelection.clear();

@@ -34,6 +34,7 @@
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <stdio.h>
 
@@ -63,7 +64,6 @@ inline sal_Unicode ascii_toLowerCase( sal_Unicode ch )
  *
  *=====================================================================*/
 #define CONSTASCII_STRINGPARAM(a) (a), RTL_TEXTENCODING_ASCII_US
-#define HEADERFIELD INetMessageHeader
 
 /*
  * ~INetMessage.
@@ -79,10 +79,10 @@ INetMessage::~INetMessage (void)
 void INetMessage::ListCleanup_Impl (void)
 {
     // Cleanup.
-    sal_uIntPtr i, n = m_aHeaderList.Count();
+    sal_uIntPtr i, n = m_aHeaderList.size();
     for (i = 0; i < n; i++)
-        delete ((HEADERFIELD*)(m_aHeaderList.GetObject(i)));
-    m_aHeaderList.Clear();
+        delete m_aHeaderList[ i ];
+    m_aHeaderList.clear();
 }
 
 /*
@@ -99,8 +99,8 @@ void INetMessage::ListCopy (const INetMessage &rMsg)
         sal_uIntPtr i, n = rMsg.GetHeaderCount();
         for (i = 0; i < n; i++)
         {
-            HEADERFIELD *p = (HEADERFIELD*)(rMsg.m_aHeaderList.GetObject(i));
-            m_aHeaderList.Insert (new HEADERFIELD(*p), LIST_APPEND);
+            INetMessageHeader *p = rMsg.m_aHeaderList[ i ];
+            m_aHeaderList.push_back( new INetMessageHeader(*p) );
         }
     }
 }
@@ -125,20 +125,6 @@ void INetMessage::SetHeaderField_Impl (
  * SetHeaderField.
  */
 sal_uIntPtr INetMessage::SetHeaderField (
-    const UniString& rName, const UniString& rValue, sal_uIntPtr nIndex)
-{
-    sal_uIntPtr nResult = nIndex;
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
-        ByteString (rName, RTL_TEXTENCODING_ASCII_US), rValue,
-        nResult);
-    return nResult;
-}
-
-/*
- * SetHeaderField.
- */
-sal_uIntPtr INetMessage::SetHeaderField (
     const INetMessageHeader &rHeader, sal_uIntPtr nIndex)
 {
     sal_uIntPtr nResult = nIndex;
@@ -155,11 +141,11 @@ SvStream& INetMessage::operator<< (SvStream& rStrm) const
     rStrm << static_cast<sal_uInt32>(m_nDocSize);
     rStrm.WriteByteString (m_aDocName, RTL_TEXTENCODING_UTF8);
 
-    sal_uIntPtr i, n = m_aHeaderList.Count();
+    sal_uIntPtr i, n = m_aHeaderList.size();
     rStrm << static_cast<sal_uInt32>(n);
 
     for (i = 0; i < n; i++)
-        rStrm << *((HEADERFIELD *)(m_aHeaderList.GetObject(i)));
+        rStrm << *( m_aHeaderList[ i ] );
 
     return rStrm;
 }
@@ -187,41 +173,13 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
 
     for (i = 0; i < n; i++)
     {
-        HEADERFIELD *p = new HEADERFIELD();
+        INetMessageHeader *p = new INetMessageHeader();
         rStrm >> *p;
-        m_aHeaderList.Insert (p, LIST_APPEND);
+        m_aHeaderList.push_back( p );
     }
 
     // Done.
     return rStrm;
-}
-
-/*=======================================================================
- *
- * INetMessageHeaderIterator Implementation.
- *
- *=====================================================================*/
-INetMessageHeaderIterator::INetMessageHeaderIterator (
-    const INetMessage& rMsg, const UniString& rHdrName)
-{
-    sal_uIntPtr i, n = rMsg.GetHeaderCount();
-    for (i = 0; i < n; i++)
-    {
-        if (rHdrName.CompareIgnoreCaseToAscii (rMsg.GetHeaderName(i)) == 0)
-        {
-            UniString *pValue = new UniString (rMsg.GetHeaderValue(i));
-            aValueList.Insert (pValue, LIST_APPEND);
-        }
-    }
-    nValueCount = aValueList.Count();
-}
-
-INetMessageHeaderIterator::~INetMessageHeaderIterator (void)
-{
-    sal_uIntPtr i, n = aValueList.Count();
-    for (i = 0; i < n; i++)
-        delete ((UniString*)(aValueList.GetObject(i)));
-    aValueList.Clear();
 }
 
 /*=======================================================================
@@ -324,13 +282,8 @@ INetRFC822Message::~INetRFC822Message (void)
 }
 
 /*
- * <Generate|Parse>DateField and local helper functions.
+ * ParseDateField and local helper functions.
  *
- * GenerateDateField.
- * Generates a String from Date and Time objects in format:
- *   Wkd, 00 Mon 0000 00:00:00 [GMT]            (rfc822, rfc1123)
- *
- * ParseDateField.
  * Parses a String in (implied) GMT format into class Date and Time objects.
  * Four formats are accepted:
  *
@@ -348,62 +301,6 @@ static const sal_Char *months[12] =
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 };
-
-static const sal_Char *wkdays[7] =
-{
-    "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
-};
-
-/*
- * GenerateDateField.
- */
-sal_Bool INetRFC822Message::GenerateDateField (
-    const DateTime& rDateTime, UniString& rDateFieldW)
-{
-    // Check arguments.
-    if (!rDateTime.IsValid()       ||
-        (rDateTime.GetSec()  > 59) ||
-        (rDateTime.GetMin()  > 59) ||
-        (rDateTime.GetHour() > 23)    ) return sal_False;
-
-    // Prepare output string.
-    ByteString rDateField;
-
-    // Insert Date.
-    rDateField += wkdays[(sal_uInt16)(rDateTime.GetDayOfWeek())];
-    rDateField += ", ";
-
-    sal_uInt16 nNum = rDateTime.GetDay();
-    if (nNum < 10) rDateField += '0';
-    rDateField += ByteString::CreateFromInt32(nNum);
-    rDateField += ' ';
-
-    rDateField += months[(sal_uInt16)(rDateTime.GetMonth() - 1)];
-    rDateField += ' ';
-
-    rDateField += ByteString::CreateFromInt32(rDateTime.GetYear());
-    rDateField += ' ';
-
-    // Insert Time.
-    nNum = rDateTime.GetHour();
-    if (nNum < 10) rDateField += '0';
-    rDateField += ByteString::CreateFromInt32(nNum);
-    rDateField += ':';
-
-    nNum = rDateTime.GetMin();
-    if (nNum < 10) rDateField += '0';
-    rDateField += ByteString::CreateFromInt32(nNum);
-    rDateField += ':';
-
-    nNum = rDateTime.GetSec();
-    if (nNum < 10) rDateField += '0';
-    rDateField += ByteString::CreateFromInt32(nNum);
-    rDateField += " GMT";
-
-    // Done.
-    rDateFieldW = UniString (rDateField, RTL_TEXTENCODING_ASCII_US);
-    return sal_True;
-}
 
 /*
  * ParseDateField and local helper functions.
@@ -761,7 +658,7 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
             case INETMSG_RFC822_OK:
                 pData = pStop;
                 SetHeaderField_Impl (
-                    HEADERFIELD (HDR(nIdx), rHeader.GetValue()),
+                    INetMessageHeader (HDR(nIdx), rHeader.GetValue()),
                     m_nIndex[nIdx]);
                 nNewIndex = m_nIndex[nIdx];
                 break;
@@ -773,129 +670,6 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
         }
     }
     return nNewIndex;
-}
-
-/*
- * Specific Set-Methods.
- */
-void INetRFC822Message::SetBCC (const UniString& rBCC)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_ADDRESS,
-        HDR(INETMSG_RFC822_BCC), rBCC,
-        m_nIndex[INETMSG_RFC822_BCC]);
-}
-
-void INetRFC822Message::SetCC (const UniString& rCC)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_ADDRESS,
-        HDR(INETMSG_RFC822_CC), rCC,
-        m_nIndex[INETMSG_RFC822_CC]);
-}
-
-void INetRFC822Message::SetComments (const UniString& rComments)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
-        HDR(INETMSG_RFC822_COMMENTS), rComments,
-        m_nIndex[INETMSG_RFC822_COMMENTS]);
-}
-
-void INetRFC822Message::SetDate (const UniString& rDate)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_STRUCTURED,
-        HDR(INETMSG_RFC822_DATE), rDate,
-        m_nIndex[INETMSG_RFC822_DATE]);
-}
-
-void INetRFC822Message::SetFrom (const UniString& rFrom)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_ADDRESS,
-        HDR(INETMSG_RFC822_FROM), rFrom,
-        m_nIndex[INETMSG_RFC822_FROM]);
-}
-
-void INetRFC822Message::SetInReplyTo (const UniString& rInReplyTo)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_ADDRESS, // ??? MESSAGE_ID ???
-        HDR(INETMSG_RFC822_IN_REPLY_TO), rInReplyTo,
-        m_nIndex[INETMSG_RFC822_IN_REPLY_TO]);
-}
-
-void INetRFC822Message::SetKeywords (const UniString& rKeywords)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_PHRASE,
-        HDR(INETMSG_RFC822_KEYWORDS), rKeywords,
-        m_nIndex[INETMSG_RFC822_KEYWORDS]);
-}
-
-void INetRFC822Message::SetMessageID (const UniString& rMessageID)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_MESSAGE_ID,
-        HDR(INETMSG_RFC822_MESSAGE_ID), rMessageID,
-        m_nIndex[INETMSG_RFC822_MESSAGE_ID]);
-}
-
-void INetRFC822Message::SetReferences (const UniString& rReferences)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_MESSAGE_ID,
-        HDR(INETMSG_RFC822_REFERENCES), rReferences,
-        m_nIndex[INETMSG_RFC822_REFERENCES]);
-}
-
-void INetRFC822Message::SetReplyTo (const UniString& rReplyTo)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_ADDRESS,
-        HDR(INETMSG_RFC822_REPLY_TO), rReplyTo,
-        m_nIndex[INETMSG_RFC822_REPLY_TO]);
-}
-
-void INetRFC822Message::SetReturnPath (const UniString& rReturnPath)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_ADDRESS,
-        HDR(INETMSG_RFC822_RETURN_PATH), rReturnPath,
-        m_nIndex[INETMSG_RFC822_RETURN_PATH]);
-}
-
-void INetRFC822Message::SetReturnReceiptTo (const UniString& rValue)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_ADDRESS,
-        HDR(INETMSG_RFC822_RETURN_RECEIPT_TO), rValue,
-        m_nIndex[INETMSG_RFC822_RETURN_RECEIPT_TO]);
-}
-
-void INetRFC822Message::SetSender (const UniString& rSender)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_ADDRESS,
-        HDR(INETMSG_RFC822_SENDER), rSender,
-        m_nIndex[INETMSG_RFC822_SENDER]);
-}
-
-void INetRFC822Message::SetSubject (const UniString& rSubject)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
-        HDR(INETMSG_RFC822_SUBJECT), rSubject,
-        m_nIndex[INETMSG_RFC822_SUBJECT]);
-}
-
-void INetRFC822Message::SetTo (const UniString& rTo)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_ADDRESS,
-        HDR(INETMSG_RFC822_TO), rTo,
-        m_nIndex[INETMSG_RFC822_TO]);
 }
 
 /*
@@ -982,7 +756,6 @@ enum _ImplINetMIMEMessageHeaderState
 INetMIMEMessage::INetMIMEMessage (void)
     : INetRFC822Message (),
       pParent       (NULL),
-      nNumChildren  (0),
       bHeaderParsed (sal_False)
 {
     for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
@@ -1030,9 +803,10 @@ INetMIMEMessage::~INetMIMEMessage (void)
  */
 void INetMIMEMessage::CleanupImp (void)
 {
-    INetMIMEMessage *pChild = NULL;
-    while ((pChild = (INetMIMEMessage *)(aChildren.Remove())) != NULL)
-        if (pChild->pParent == this) delete pChild;
+    for( size_t i = 0, n = aChildren.size(); i < n; ++i ) {
+        delete aChildren[ i ];
+    }
+    aChildren.clear();
 }
 
 /*
@@ -1042,24 +816,22 @@ void INetMIMEMessage::CopyImp (const INetMIMEMessage& rMsg)
 {
     bHeaderParsed = rMsg.bHeaderParsed;
 
-    sal_uInt16 i;
+    size_t i;
     for (i = 0; i < INETMSG_MIME_NUMHDR; i++)
         m_nIndex[i] = rMsg.m_nIndex[i];
 
     m_aBoundary = rMsg.m_aBoundary;
-    nNumChildren = rMsg.nNumChildren;
 
-    for (i = 0; i < rMsg.aChildren.Count(); i++)
+    for (i = 0; i < rMsg.aChildren.size(); i++)
     {
-        INetMIMEMessage *pChild =
-            (INetMIMEMessage *)(rMsg.aChildren.GetObject (i));
+        INetMIMEMessage *pChild = rMsg.aChildren[ i ];
 
         if (pChild->pParent == &rMsg)
         {
             pChild = pChild->CreateMessage (*pChild);
             pChild->pParent = this;
         }
-        aChildren.Insert (pChild, LIST_APPEND);
+        aChildren.push_back( pChild );
     }
 }
 
@@ -1207,7 +979,7 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
             case INETMSG_MIME_OK:
                 pData = pStop;
                 SetHeaderField_Impl (
-                    HEADERFIELD (MIMEHDR(nIdx), rHeader.GetValue()),
+                    INetMessageHeader (MIMEHDR(nIdx), rHeader.GetValue()),
                     m_nIndex[nIdx]);
                 nNewIndex = m_nIndex[nIdx];
                 break;
@@ -1233,28 +1005,12 @@ void INetMIMEMessage::SetMIMEVersion (const UniString& rVersion)
         m_nIndex[INETMSG_MIME_VERSION]);
 }
 
-void INetMIMEMessage::SetContentDescription (const String& rDescription)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
-        MIMEHDR(INETMSG_MIME_CONTENT_DESCRIPTION), rDescription,
-        m_nIndex[INETMSG_MIME_CONTENT_DESCRIPTION]);
-}
-
 void INetMIMEMessage::SetContentDisposition (const String& rDisposition)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
         MIMEHDR(INETMSG_MIME_CONTENT_DISPOSITION), rDisposition,
         m_nIndex[INETMSG_MIME_CONTENT_DISPOSITION]);
-}
-
-void INetMIMEMessage::SetContentID (const String& rID)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
-        MIMEHDR(INETMSG_MIME_CONTENT_ID), rID,
-        m_nIndex[INETMSG_MIME_CONTENT_ID]);
 }
 
 void INetMIMEMessage::SetContentType (const String& rType)
@@ -1388,202 +1144,8 @@ sal_Bool INetMIMEMessage::AttachChild (
     if (IsContainer() /*&& rChildMsg.GetContentType().Len() */)
     {
         if (bOwner) rChildMsg.pParent = this;
-        aChildren.Insert (&rChildMsg, LIST_APPEND);
-        nNumChildren = aChildren.Count();
+        aChildren.push_back( &rChildMsg );
 
-        return sal_True;
-    }
-    return sal_False;
-}
-
-/*
- * DetachChild.
- */
-sal_Bool INetMIMEMessage::DetachChild (
-    sal_uIntPtr nIndex, INetMIMEMessage& rChildMsg) const
-{
-    if (IsContainer())
-    {
-        // Check document stream.
-        if (GetDocumentLB() == NULL) return sal_False;
-        SvStream *pDocStrm = new SvStream (GetDocumentLB());
-
-        // Initialize message buffer.
-        char pMsgBuffer[1024];
-        char *pMsgRead, *pMsgWrite;
-        pMsgRead = pMsgWrite = pMsgBuffer;
-
-        // Initialize message parser stream.
-        INetMIMEMessageStream *pMsgStrm = NULL;
-
-        // Check for "multipart/uvw" or "message/xyz".
-        if (IsMultipart())
-        {
-            // Multipart message body. Initialize multipart delimiters.
-            ByteString aDelim ("--");
-            aDelim += GetMultipartBoundary();
-            ByteString aClose = aDelim;
-            aClose += "--";
-
-            // Initialize line buffer.
-            SvMemoryStream aLineBuf;
-
-            // Initialize control variables.
-            INetMessageStreamState eState = INETMSG_EOL_SCR;
-            int nCurIndex = -1;
-
-            // Go!
-            while (nCurIndex < (int)(nIndex + 1))
-            {
-                if ((pMsgRead - pMsgWrite) > 0)
-                {
-                    // Bytes still in buffer.
-                    if (eState == INETMSG_EOL_FCR)
-                    {
-                        // Check for 2nd line break character.
-                        if ((*pMsgWrite == '\r') || (*pMsgWrite == '\n'))
-                            aLineBuf << *pMsgWrite++;
-
-                        // Check current index.
-                        if (nCurIndex == (int)nIndex)
-                        {
-                            // Found requested part.
-                            if (pMsgStrm == NULL)
-                            {
-                                // Create message parser stream.
-                                pMsgStrm = new INetMIMEMessageStream;
-                                pMsgStrm->SetTargetMessage (&rChildMsg);
-                            }
-
-                            // Put message down-stream.
-                            int status = pMsgStrm->Write (
-                                (const sal_Char *) aLineBuf.GetData(), aLineBuf.Tell());
-                            if (status != INETSTREAM_STATUS_OK)
-                            {
-                                // Cleanup.
-                                delete pDocStrm;
-                                delete pMsgStrm;
-
-                                // Finish.
-                                return (!(status == INETSTREAM_STATUS_OK));
-                            }
-                        }
-
-                        // Reset to <Begin-of-Line>.
-                        aLineBuf.Seek (STREAM_SEEK_TO_BEGIN);
-                        eState = INETMSG_EOL_SCR;
-                    }
-                    else if ((*pMsgWrite == '\r') || (*pMsgWrite == '\n'))
-                    {
-                        /*
-                         * Found any line break character.
-                         * Compare buffered line with part/close delimiter.
-                         * Increment current part index upon match.
-                         */
-                        sal_uInt16 nLen = (sal_uInt16)(aLineBuf.Tell() & 0xffff);
-                        if (nLen == aDelim.Len())
-                        {
-                            if (aDelim.CompareTo ((const sal_Char *) aLineBuf.GetData(), nLen)
-                                == COMPARE_EQUAL) nCurIndex++;
-                        }
-                        else if (nLen == aClose.Len())
-                        {
-                            if (aClose.CompareTo ((const sal_Char *) aLineBuf.GetData(), nLen)
-                                == COMPARE_EQUAL) nCurIndex++;
-                        }
-                        aLineBuf << *pMsgWrite++;
-                        eState = INETMSG_EOL_FCR;
-                    }
-                    else
-                    {
-                        // Insert into line buffer.
-                        aLineBuf << *pMsgWrite;
-                    }
-                }
-                else
-                {
-                    // Buffer empty. Reset to <Begin-of-Buffer>.
-                    pMsgRead = pMsgWrite = pMsgBuffer;
-
-                    // Read document stream.
-                    sal_uIntPtr nRead = pDocStrm->Read (
-                        pMsgBuffer, sizeof (pMsgBuffer));
-                    if (nRead > 0)
-                    {
-                        // Set read pointer.
-                        pMsgRead += nRead;
-                    }
-                    else
-                    {
-                        // Premature end.
-                        if (pMsgStrm)
-                        {
-                            // Assume end of requested part.
-                            nCurIndex++;
-                        }
-                        else
-                        {
-                            // Requested part not found.
-                            delete pDocStrm;
-                            return sal_False;
-                        }
-                    }
-                }
-            } // while (nCurIndex < (nIndex + 1))
-        }
-        else
-        {
-            // Encapsulated message body. Create message parser stream.
-            pMsgStrm = new INetMIMEMessageStream;
-            pMsgStrm->SetTargetMessage (&rChildMsg);
-
-            // Initialize control variables.
-            INetMessageStreamState eState = INETMSG_EOL_BEGIN;
-
-            // Go.
-            while (eState == INETMSG_EOL_BEGIN)
-            {
-                if ((pMsgRead - pMsgWrite) > 0)
-                {
-                    // Bytes still in buffer. Put message down-stream.
-                    int status = pMsgStrm->Write (
-                        pMsgBuffer, (pMsgRead - pMsgWrite));
-                    if (status != INETSTREAM_STATUS_OK)
-                    {
-                        // Cleanup.
-                        delete pDocStrm;
-                        delete pMsgStrm;
-
-                        // Finish.
-                        return (!(status == INETSTREAM_STATUS_ERROR));
-                    }
-                    pMsgWrite = pMsgBuffer + (pMsgRead - pMsgWrite);
-                }
-                else
-                {
-                    // Buffer empty. Reset to <Begin-of-Buffer>.
-                    pMsgRead = pMsgWrite = pMsgBuffer;
-
-                    // Read document stream.
-                    sal_uIntPtr nRead = pDocStrm->Read (
-                        pMsgBuffer, sizeof (pMsgBuffer));
-                    if (nRead > 0)
-                    {
-                        // Set read pointer.
-                        pMsgRead += nRead;
-                    }
-                    else
-                    {
-                        // Mark we're done.
-                        eState = INETMSG_EOL_DONE;
-                    }
-                }
-            } // while (eState == INETMSG_EOL_BEGIN)
-        }
-
-        // Done.
-        if (pDocStrm) delete pDocStrm;
-        if (pMsgStrm) delete pMsgStrm;
         return sal_True;
     }
     return sal_False;
@@ -1604,7 +1166,7 @@ SvStream& INetMIMEMessage::operator<< (SvStream& rStrm) const
 #else
     rStrm.WriteByteString (m_aBoundary);
 #endif
-    rStrm << static_cast<sal_uInt32>(nNumChildren);
+    rStrm << static_cast<sal_uInt32>(aChildren.size());
 
     return rStrm;
 }
@@ -1629,7 +1191,6 @@ SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
     rStrm.ReadByteString (m_aBoundary);
 #endif
     rStrm >> nTemp;
-    nNumChildren = nTemp;
 
     return rStrm;
 }

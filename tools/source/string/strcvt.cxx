@@ -169,61 +169,6 @@ struct Impl1ByteConvertTabData
     Impl1ByteConvertTabData*    mpNext;
 };
 
-// =======================================================================
-
-sal_Unicode* ImplGet1ByteUnicodeTab( rtl_TextEncoding eTextEncoding )
-{
-#ifndef BOOTSTRAP
-    TOOLSINDATA*                pToolsData = ImplGetToolsInData();
-#else
-    TOOLSINDATA*                pToolsData = 0x0;
-#endif
-    Impl1ByteUnicodeTabData*    pTab = pToolsData->mpFirstUniTabData;
-
-    while ( pTab )
-    {
-        if ( pTab->meTextEncoding == eTextEncoding )
-            return pTab->maUniTab;
-        pTab = pTab->mpNext;
-    }
-
-    // get TextEncodingInfo
-    rtl_TextEncodingInfo aTextEncInfo;
-    aTextEncInfo.StructSize = sizeof( aTextEncInfo );
-    rtl_getTextEncodingInfo( eTextEncoding, &aTextEncInfo );
-
-    if ( aTextEncInfo.MaximumCharSize == 1 )
-    {
-        pTab = new Impl1ByteUnicodeTabData;
-        pTab->meTextEncoding = eTextEncoding;
-        pTab->mpNext = pToolsData->mpFirstUniTabData;
-
-        rtl_TextToUnicodeConverter  hConverter;
-        sal_uInt32                  nInfo;
-        sal_Size                    nSrcBytes;
-        sal_Size                    nDestChars;
-        hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
-        nDestChars = rtl_convertTextToUnicode( hConverter, 0,
-                                               (const sal_Char*)aImplByteTab, 256,
-                                               pTab->maUniTab, 256,
-                                               RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |
-                                               RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
-                                               RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT,
-                                               &nInfo, &nSrcBytes );
-        rtl_destroyTextToUnicodeConverter( hConverter );
-
-        if ( (nSrcBytes != 256) || (nDestChars != 256) )
-            delete pTab;
-        else
-        {
-            pToolsData->mpFirstUniTabData = pTab;
-            return pTab->maUniTab;
-        }
-    }
-
-    return NULL;
-}
-
 // -----------------------------------------------------------------------
 
 static sal_uChar* ImplGet1ByteConvertTab( rtl_TextEncoding eSrcTextEncoding,

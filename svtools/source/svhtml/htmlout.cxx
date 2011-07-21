@@ -485,7 +485,7 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
                 rDest += *pBuffer++;
 
             (((rDest += '&') += '#') +=
-                    ByteString::CreateFromInt64( (sal_uInt32)c )) += ';';
+                    ByteString(rtl::OString::valueOf(static_cast<sal_Int64>(c)))) += ';';
             if( pNonConvertableChars &&
                 STRING_NOTFOUND == pNonConvertableChars->Search( c ) )
                 pNonConvertableChars->Append( c );
@@ -658,11 +658,16 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                         (const IMapRectangleObject *)pObj;
                     pShape = OOO_STRING_SVTOOLS_HTML_SH_rect;
                     Rectangle aRect( pRectObj->GetRectangle() );
-                    ((((((aCoords =
-                        ByteString::CreateFromInt32(aRect.Left())) += ',')
-                        += ByteString::CreateFromInt32(aRect.Top())) += ',')
-                        += ByteString::CreateFromInt32(aRect.Right())) += ',')
-                        += ByteString::CreateFromInt32(aRect.Bottom());
+
+                    aCoords = rtl::OStringBuffer()
+                        .append(static_cast<sal_Int32>(aRect.Left()))
+                        .append(',')
+                        .append(static_cast<sal_Int32>(aRect.Top()))
+                        .append(',')
+                        .append(static_cast<sal_Int32>(aRect.Right()))
+                        .append(',')
+                        .append(static_cast<sal_Int32>(aRect.Bottom()))
+                        .makeStringAndClear();
                 }
                 break;
             case( IMAP_OBJ_CIRCLE ):
@@ -672,10 +677,14 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     pShape= OOO_STRING_SVTOOLS_HTML_SH_circ;
                     Point aCenter( pCirc->GetCenter() );
                     long nOff = pCirc->GetRadius();
-                    ((((aCoords =
-                        ByteString::CreateFromInt32(aCenter.X())) += ',')
-                        += ByteString::CreateFromInt32(aCenter.Y())) += ',')
-                        += ByteString::CreateFromInt32(nOff);
+
+                    aCoords = rtl::OStringBuffer()
+                        .append(static_cast<sal_Int32>(aCenter.X()))
+                        .append(',')
+                        .append(static_cast<sal_Int32>(aCenter.Y()))
+                        .append(',')
+                        .append(static_cast<sal_Int32>(nOff))
+                        .makeStringAndClear();
                 }
                 break;
             case( IMAP_OBJ_POLYGON ):
@@ -685,20 +694,23 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     pShape= OOO_STRING_SVTOOLS_HTML_SH_poly;
                     Polygon aPoly( pPolyObj->GetPolygon() );
                     sal_uInt16 nCount = aPoly.GetSize();
+                    rtl::OStringBuffer aTmpBuf;
                     if( nCount>0 )
                     {
                         const Point& rPoint = aPoly[0];
-                        ((aCoords =
-                            ByteString::CreateFromInt32(rPoint.X())) += ',')
-                            += ByteString::CreateFromInt32(rPoint.Y());
+                        aTmpBuf.append(static_cast<sal_Int32>(rPoint.X()))
+                            .append(',')
+                            .append(static_cast<sal_Int32>(rPoint.Y()));
                     }
                     for( sal_uInt16 j=1; j<nCount; j++ )
                     {
                         const Point& rPoint = aPoly[j];
-                        (((aCoords += ',')
-                              += ByteString::CreateFromInt32(rPoint.X())) += ',')
-                            += ByteString::CreateFromInt32(rPoint.Y());
+                        aTmpBuf.append(',')
+                            .append(static_cast<sal_Int32>(rPoint.X()))
+                            .append(',')
+                            .append(static_cast<sal_Int32>(rPoint.Y()));
                     }
+                    aCoords = aTmpBuf.makeStringAndClear();
                 }
                 break;
             default:

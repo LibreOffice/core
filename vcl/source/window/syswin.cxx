@@ -39,6 +39,8 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/unowrap.hxx>
 
+#include <rtl/strbuf.hxx>
+
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <brdwin.hxx>
@@ -242,36 +244,6 @@ void SystemWindow::Resizing( Size& )
 
 // -----------------------------------------------------------------------
 
-void SystemWindow::SetZLevel( sal_uInt8 nLevel )
-{
-    Window* pWindow = this;
-    while ( pWindow->mpWindowImpl->mpBorderWindow )
-        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
-    if ( pWindow->mpWindowImpl->mbOverlapWin && !pWindow->mpWindowImpl->mbFrame )
-    {
-        sal_uInt8 nOldLevel = pWindow->mpWindowImpl->mpOverlapData->mnTopLevel;
-        pWindow->mpWindowImpl->mpOverlapData->mnTopLevel = nLevel;
-        // Wenn der neue Level groesser als der alte ist, schieben
-        // wir das Fenster nach hinten
-        if ( !IsReallyVisible() && (nLevel > nOldLevel) && pWindow->mpWindowImpl->mpNext )
-        {
-            // Fenster aus der Liste entfernen
-            if ( pWindow->mpWindowImpl->mpPrev )
-                pWindow->mpWindowImpl->mpPrev->mpWindowImpl->mpNext = pWindow->mpWindowImpl->mpNext;
-            else
-                pWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap = pWindow->mpWindowImpl->mpNext;
-            pWindow->mpWindowImpl->mpNext->mpWindowImpl->mpPrev = pWindow->mpWindowImpl->mpPrev;
-            pWindow->mpWindowImpl->mpNext = NULL;
-            // und Fenster wieder in die Liste am Ende eintragen
-            pWindow->mpWindowImpl->mpPrev = pWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap;
-            pWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap = pWindow;
-            pWindow->mpWindowImpl->mpPrev->mpWindowImpl->mpNext = pWindow;
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void SystemWindow::SetRepresentedURL( const rtl::OUString& i_rURL )
 {
     bool bChanged = (i_rURL != mpImplData->maRepresentedURL);
@@ -285,12 +257,6 @@ void SystemWindow::SetRepresentedURL( const rtl::OUString& i_rURL )
         if ( pWindow->mpWindowImpl->mbFrame )
             pWindow->mpWindowImpl->mpFrame->SetRepresentedURL( i_rURL );
     }
-}
-// -----------------------------------------------------------------------
-
-const rtl::OUString& SystemWindow::GetRepresentedURL() const
-{
-    return mpImplData->maRepresentedURL;
 }
 
 // -----------------------------------------------------------------------
@@ -311,19 +277,6 @@ void SystemWindow::SetIcon( sal_uInt16 nIcon )
         if ( pWindow->mpWindowImpl->mbFrame )
             pWindow->mpWindowImpl->mpFrame->SetIcon( nIcon );
     }
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt8 SystemWindow::GetZLevel() const
-{
-    const Window* pWindow = this;
-    while ( pWindow->mpWindowImpl->mpBorderWindow )
-        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
-    if ( pWindow->mpWindowImpl->mpOverlapData )
-        return pWindow->mpWindowImpl->mpOverlapData->mnTopLevel;
-    else
-        return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -498,16 +451,17 @@ Size SystemWindow::GetResizeOutputSizePixel() const
 
 // -----------------------------------------------------------------------
 
-static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rStr )
+static void ImplWindowStateFromStr(WindowStateData& rData,
+    const rtl::OString& rStr)
 {
     sal_uLong       nValidMask  = 0;
-    xub_StrLen  nIndex      = 0;
-    ByteString  aTokenStr;
+    sal_Int32 nIndex      = 0;
+    rtl::OString aTokenStr;
 
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
+    aTokenStr = rStr.getToken(0, ',', nIndex);
+    if (!aTokenStr.isEmpty())
     {
-        rData.SetX( aTokenStr.ToInt32() );
+        rData.SetX(aTokenStr.toInt32());
         if( rData.GetX() > -16384 && rData.GetX() < 16384 )
             nValidMask |= WINDOWSTATE_MASK_X;
         else
@@ -515,10 +469,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     }
     else
         rData.SetX( 0 );
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
+    aTokenStr = rStr.getToken(0, ',', nIndex);
+    if (!aTokenStr.isEmpty())
     {
-        rData.SetY( aTokenStr.ToInt32() );
+        rData.SetY(aTokenStr.toInt32());
         if( rData.GetY() > -16384 && rData.GetY() < 16384 )
             nValidMask |= WINDOWSTATE_MASK_Y;
         else
@@ -526,10 +480,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     }
     else
         rData.SetY( 0 );
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
+    aTokenStr = rStr.getToken(0, ',', nIndex);
+    if (!aTokenStr.isEmpty())
     {
-        rData.SetWidth( aTokenStr.ToInt32() );
+        rData.SetWidth(aTokenStr.toInt32());
         if( rData.GetWidth() > 0 && rData.GetWidth() < 16384 )
             nValidMask |= WINDOWSTATE_MASK_WIDTH;
         else
@@ -537,10 +491,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     }
     else
         rData.SetWidth( 0 );
-    aTokenStr = rStr.GetToken( 0, ';', nIndex );
-    if ( aTokenStr.Len() )
+    aTokenStr = rStr.getToken(0, ';', nIndex);
+    if (!aTokenStr.isEmpty())
     {
-        rData.SetHeight( aTokenStr.ToInt32() );
+        rData.SetHeight(aTokenStr.toInt32());
         if( rData.GetHeight() > 0 && rData.GetHeight() < 16384 )
             nValidMask |= WINDOWSTATE_MASK_HEIGHT;
         else
@@ -548,12 +502,12 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     }
     else
         rData.SetHeight( 0 );
-    aTokenStr = rStr.GetToken( 0, ';', nIndex );
-    if ( aTokenStr.Len() )
+    aTokenStr = rStr.getToken(0, ';', nIndex);
+    if (!aTokenStr.isEmpty())
     {
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
-        sal_uLong nState = (sal_uLong)aTokenStr.ToInt32();
+        sal_uInt32 nState = (sal_uInt32)aTokenStr.toInt32();
         //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
         rData.SetState( nState );
         nValidMask |= WINDOWSTATE_MASK_STATE;
@@ -562,10 +516,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
         rData.SetState( 0 );
 
     // read maximized pos/size
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
+    aTokenStr = rStr.getToken(0, ',', nIndex);
+    if (!aTokenStr.isEmpty())
     {
-        rData.SetMaximizedX( aTokenStr.ToInt32() );
+        rData.SetMaximizedX(aTokenStr.toInt32());
         if( rData.GetMaximizedX() > -16384 && rData.GetMaximizedX() < 16384 )
             nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_X;
         else
@@ -573,10 +527,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     }
     else
         rData.SetMaximizedX( 0 );
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
+    aTokenStr = rStr.getToken(0, ',', nIndex);
+    if (!aTokenStr.isEmpty())
     {
-        rData.SetMaximizedY( aTokenStr.ToInt32() );
+        rData.SetMaximizedY(aTokenStr.toInt32());
         if( rData.GetMaximizedY() > -16384 && rData.GetMaximizedY() < 16384 )
             nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_Y;
         else
@@ -584,10 +538,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     }
     else
         rData.SetMaximizedY( 0 );
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
+    aTokenStr = rStr.getToken(0, ',', nIndex);
+    if (!aTokenStr.isEmpty())
     {
-        rData.SetMaximizedWidth( aTokenStr.ToInt32() );
+        rData.SetMaximizedWidth(aTokenStr.toInt32());
         if( rData.GetMaximizedWidth() > 0 && rData.GetMaximizedWidth() < 16384 )
             nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_WIDTH;
         else
@@ -595,10 +549,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     }
     else
         rData.SetMaximizedWidth( 0 );
-    aTokenStr = rStr.GetToken( 0, ';', nIndex );
-    if ( aTokenStr.Len() )
+    aTokenStr = rStr.getToken(0, ';', nIndex);
+    if (!aTokenStr.isEmpty())
     {
-        rData.SetMaximizedHeight( aTokenStr.ToInt32() );
+        rData.SetMaximizedHeight(aTokenStr.toInt32());
         if( rData.GetMaximizedHeight() > 0 && rData.GetMaximizedHeight() < 16384 )
             nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_HEIGHT;
         else
@@ -613,45 +567,48 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
 
 // -----------------------------------------------------------------------
 
-static void ImplWindowStateToStr( const WindowStateData& rData, ByteString& rStr )
+static rtl::OString ImplWindowStateToStr(const WindowStateData& rData)
 {
     sal_uLong nValidMask = rData.GetMask();
     if ( !nValidMask )
-        return;
+        return rtl::OString();
+
+    rtl::OStringBuffer rStrBuf;
 
     if ( nValidMask & WINDOWSTATE_MASK_X )
-        rStr.Append( ByteString::CreateFromInt32( rData.GetX() ) );
-    rStr.Append( ',' );
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetX()));
+    rStrBuf.append(',');
     if ( nValidMask & WINDOWSTATE_MASK_Y )
-        rStr.Append( ByteString::CreateFromInt32( rData.GetY() ) );
-    rStr.Append( ',' );
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetY()));
+    rStrBuf.append(',');
     if ( nValidMask & WINDOWSTATE_MASK_WIDTH )
-        rStr.Append( ByteString::CreateFromInt32( rData.GetWidth() ) );
-    rStr.Append( ',' );
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetWidth()));
+    rStrBuf.append(',');
     if ( nValidMask & WINDOWSTATE_MASK_HEIGHT )
-        rStr.Append( ByteString::CreateFromInt32( rData.GetHeight() ) );
-    rStr.Append( ';' );
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetHeight()));
+    rStrBuf.append( ';' );
     if ( nValidMask & WINDOWSTATE_MASK_STATE )
     {
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
-        sal_uLong nState = rData.GetState();
-        //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
-        rStr.Append( ByteString::CreateFromInt32( (long)nState ) );
+        sal_uInt32 nState = rData.GetState();
+        rStrBuf.append(static_cast<sal_Int32>(nState));
     }
-    rStr.Append( ';' );
+    rStrBuf.append(';');
     if ( nValidMask & WINDOWSTATE_MASK_MAXIMIZED_X )
-        rStr.Append( ByteString::CreateFromInt32( rData.GetMaximizedX() ) );
-    rStr.Append( ',' );
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedX()));
+    rStrBuf.append(',');
     if ( nValidMask & WINDOWSTATE_MASK_MAXIMIZED_Y )
-        rStr.Append( ByteString::CreateFromInt32( rData.GetMaximizedY() ) );
-    rStr.Append( ',' );
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedY()));
+    rStrBuf.append( ',' );
     if ( nValidMask & WINDOWSTATE_MASK_MAXIMIZED_WIDTH )
-        rStr.Append( ByteString::CreateFromInt32( rData.GetMaximizedWidth() ) );
-    rStr.Append( ',' );
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedWidth()));
+    rStrBuf.append(',');
     if ( nValidMask & WINDOWSTATE_MASK_MAXIMIZED_HEIGHT )
-        rStr.Append( ByteString::CreateFromInt32( rData.GetMaximizedHeight() ) );
-    rStr.Append( ';' );
+        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedHeight()));
+    rStrBuf.append(';');
+
+    return rStrBuf.makeStringAndClear();
 }
 
 // -----------------------------------------------------------------------
@@ -955,9 +912,9 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
 
 // -----------------------------------------------------------------------
 
-void SystemWindow::SetWindowState( const ByteString& rStr )
+void SystemWindow::SetWindowState(const rtl::OString& rStr)
 {
-    if ( !rStr.Len() )
+    if (rStr.isEmpty())
         return;
 
     WindowStateData aData;
@@ -967,15 +924,13 @@ void SystemWindow::SetWindowState( const ByteString& rStr )
 
 // -----------------------------------------------------------------------
 
-ByteString SystemWindow::GetWindowState( sal_uLong nMask ) const
+rtl::OString SystemWindow::GetWindowState( sal_uLong nMask ) const
 {
     WindowStateData aData;
     aData.SetMask( nMask );
     GetWindowStateData( aData );
 
-    ByteString aStr;
-    ImplWindowStateToStr( aData, aStr );
-    return aStr;
+    return ImplWindowStateToStr(aData);
 }
 
 // -----------------------------------------------------------------------

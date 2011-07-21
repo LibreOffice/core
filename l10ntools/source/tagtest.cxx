@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_l10ntools.hxx"
 #include <tools/string.hxx>
+#include <rtl/strbuf.hxx>
 #include "tagtest.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1342,20 +1343,21 @@ void TokenParser::ParseError( sal_uInt16 nErrNr, ByteString aErrMsg, const Token
 
 ParserMessage::ParserMessage( sal_uInt16 PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag )
         : nErrorNr( PnErrorNr )
-        , aErrorText( PaErrorText )
         , nTagBegin( 0 )
         , nTagLength( 0 )
 {
     String aLexem( SimpleParser::GetLexem( rTag ) );
-    aErrorText.Append(": ");
-    aErrorText += ByteString( aLexem, RTL_TEXTENCODING_UTF8 );
+    rtl::OStringBuffer aErrorBuffer(PaErrorText);
+    aErrorBuffer.append(RTL_CONSTASCII_STRINGPARAM(": "));
+    aErrorBuffer.append(rtl::OUStringToOString(aLexem, RTL_TEXTENCODING_UTF8));
     if ( rTag.nId == TAG_NOMORETAGS )
-        aErrorText.Append(" at end of line ");
+        aErrorBuffer.append(RTL_CONSTASCII_STRINGPARAM(" at end of line "));
     else if ( rTag.nPos != TOK_INVALIDPOS )
     {
-        aErrorText.Append(" at Position ");
-        aErrorText.Append( ByteString::CreateFromInt32( rTag.nPos ) );
+        aErrorBuffer.append(RTL_CONSTASCII_STRINGPARAM(" at Position "));
+        aErrorBuffer.append(static_cast<sal_Int32>(rTag.nPos));
     }
+    aErrorText = aErrorBuffer.makeStringAndClear();
     nTagBegin = rTag.nPos;
     nTagLength = aLexem.Len();
 }

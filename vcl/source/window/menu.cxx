@@ -156,7 +156,7 @@ struct MenuItemData
                         pSalMenuItem ( NULL )
                     {}
                     ~MenuItemData();
-        bool HasCheck()
+        bool HasCheck() const
         {
             return bChecked || ( nBits & ( MIB_RADIOCHECK | MIB_CHECKABLE | MIB_AUTOCHECK ) );
         }

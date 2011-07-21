@@ -32,6 +32,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
+
 #ifdef FREEBSD
 #include <sys/types.h>
 #endif
@@ -69,14 +70,14 @@ SalBitmap* X11SalInstance::CreateSalBitmap()
 }
 
 ImplSalBitmapCache* X11SalBitmap::mpCache = NULL;
-sal_uLong               X11SalBitmap::mnCacheInstCount = 0;
+sal_uLong           X11SalBitmap::mnCacheInstCount = 0;
 
 // -----------------------------------------------------------------------------
 
-X11SalBitmap::X11SalBitmap() :
-    mpDIB( NULL ),
-    mpDDB( NULL ),
-    mbGrey( false )
+X11SalBitmap::X11SalBitmap()
+    : mpDIB( NULL )
+    , mpDDB( NULL )
+    , mbGrey( false )
 {
 }
 
@@ -115,9 +116,19 @@ void X11SalBitmap::ImplRemovedFromCache()
 
 // -----------------------------------------------------------------------------
 
-BitmapBuffer* X11SalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal )
-{
-    DBG_ASSERT( nBitCount == 1 || nBitCount == 4 || nBitCount == 8 || nBitCount == 16 || nBitCount == 24, "Unsupported BitCount!" );
+BitmapBuffer* X11SalBitmap::ImplCreateDIB(
+    const Size& rSize,
+    sal_uInt16 nBitCount,
+    const BitmapPalette& rPal
+) {
+    DBG_ASSERT(
+           nBitCount ==  1
+        || nBitCount ==  4
+        || nBitCount ==  8
+        || nBitCount == 16
+        || nBitCount == 24
+        , "Unsupported BitCount!"
+    );
 
     BitmapBuffer* pDIB = NULL;
 
@@ -192,13 +203,16 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBitCou
 
 // -----------------------------------------------------------------------------
 
-BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
-                                           int nScreen,
-                                           long nDrawableDepth,
-                                           long nX, long nY,
-                                           long nWidth, long nHeight,
-                                           bool bGrey )
-{
+BitmapBuffer* X11SalBitmap::ImplCreateDIB(
+    Drawable aDrawable,
+    int nScreen,
+    long nDrawableDepth,
+    long nX,
+    long nY,
+    long nWidth,
+    long nHeight,
+    bool bGrey
+) {
     BitmapBuffer* pDIB = NULL;
 
     if( aDrawable && nWidth && nHeight && nDrawableDepth )
@@ -221,7 +235,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
         {
             const SalTwoRect        aTwoRect = { 0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight };
             BitmapBuffer            aSrcBuf;
-            sal_uLong                   nDstFormat = BMP_FORMAT_BOTTOM_UP;
+            sal_uLong               nDstFormat = BMP_FORMAT_BOTTOM_UP;
             const BitmapPalette*    pDstPal = NULL;
 
             aSrcBuf.mnFormat = BMP_FORMAT_TOP_DOWN;
@@ -239,14 +253,20 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
             {
                 case( 1 ):
                 {
-                    aSrcBuf.mnFormat |= ( LSBFirst == pImage->bitmap_bit_order ? BMP_FORMAT_1BIT_LSB_PAL : BMP_FORMAT_1BIT_MSB_PAL );
+                    aSrcBuf.mnFormat |= ( LSBFirst == pImage->bitmap_bit_order
+                                            ? BMP_FORMAT_1BIT_LSB_PAL
+                                            : BMP_FORMAT_1BIT_MSB_PAL
+                                        );
                     nDstFormat |= BMP_FORMAT_1BIT_MSB_PAL;
                 }
                 break;
 
                 case( 4 ):
                 {
-                    aSrcBuf.mnFormat |= ( LSBFirst == pImage->bitmap_bit_order ? BMP_FORMAT_4BIT_LSN_PAL : BMP_FORMAT_4BIT_MSN_PAL );
+                    aSrcBuf.mnFormat |= ( LSBFirst == pImage->bitmap_bit_order
+                                            ? BMP_FORMAT_4BIT_LSN_PAL
+                                            : BMP_FORMAT_4BIT_MSN_PAL
+                                        );
                     nDstFormat |= BMP_FORMAT_4BIT_MSN_PAL;
                 }
                 break;
@@ -270,7 +290,6 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
                     else
                     {
                         aSrcBuf.mnFormat |= BMP_FORMAT_16BIT_TC_MSB_MASK;
-                        // aSrcBuf.maColorMask = ColorMask( pImage->red_mask ), SWAPSHORT( pImage->green_mask ), SWAPSHORT( pImage->blue_mask ) );
                     }
                 }
                 break;
@@ -289,10 +308,15 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
                 case( 32 ):
                 {
                     if( LSBFirst == pImage->byte_order )
-                        aSrcBuf.mnFormat |= (  pSalDisp->GetVisual(nScreen).red_mask == 0xFF ? BMP_FORMAT_32BIT_TC_RGBA : BMP_FORMAT_32BIT_TC_BGRA );
+                        aSrcBuf.mnFormat |= (  pSalDisp->GetVisual(nScreen).red_mask == 0xFF
+                                                ? BMP_FORMAT_32BIT_TC_RGBA
+                                                : BMP_FORMAT_32BIT_TC_BGRA
+                                            );
                     else
-                        aSrcBuf.mnFormat |= (  pSalDisp->GetVisual(nScreen).red_mask == 0xFF ? BMP_FORMAT_32BIT_TC_ABGR : BMP_FORMAT_32BIT_TC_ARGB );
-
+                        aSrcBuf.mnFormat |= (  pSalDisp->GetVisual(nScreen).red_mask == 0xFF
+                                                ? BMP_FORMAT_32BIT_TC_ABGR
+                                                : BMP_FORMAT_32BIT_TC_ARGB
+                                            );
                     nDstFormat |= BMP_FORMAT_24BIT_TC_BGR;
                 }
                 break;
@@ -326,7 +350,9 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
             else if( aSrcBuf.mnBitCount <= 8 )
             {
                 const SalColormap& rColMap = pSalDisp->GetColormap( nScreen );
-                const sal_uInt16 nCols = Min( (sal_uLong)rColMap.GetUsed(), (sal_uLong)(1 << nDrawableDepth) );
+                const sal_uInt16 nCols = Min( (sal_uLong)rColMap.GetUsed()
+                                            , (sal_uLong)(1 << nDrawableDepth)
+                                            );
 
                 rPal.SetEntryCount( nCols );
                 pDstPal = &rPal;
@@ -354,7 +380,12 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
 
 // -----------------------------------------------------------------------------
 
-XImage* X11SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, int nScreen, long nDepth, const SalTwoRect& rTwoRect ) const
+XImage* X11SalBitmap::ImplCreateXImage(
+    SalDisplay *pSalDisp,
+    int nScreen,
+    long nDepth,
+    const SalTwoRect& rTwoRect
+) const
 {
     XImage* pImage = NULL;
 
@@ -393,11 +424,17 @@ XImage* X11SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, int nScreen, long 
             switch( pImage->bits_per_pixel )
             {
                 case( 1 ):
-                    nDstFormat |= ( LSBFirst == pImage->bitmap_bit_order ? BMP_FORMAT_1BIT_LSB_PAL : BMP_FORMAT_1BIT_MSB_PAL );
+                    nDstFormat |=   ( LSBFirst == pImage->bitmap_bit_order
+                                        ? BMP_FORMAT_1BIT_LSB_PAL
+                                        : BMP_FORMAT_1BIT_MSB_PAL
+                                    );
                 break;
 
                 case( 4 ):
-                    nDstFormat |= ( LSBFirst == pImage->bitmap_bit_order ? BMP_FORMAT_4BIT_LSN_PAL : BMP_FORMAT_4BIT_MSN_PAL );
+                    nDstFormat |=   ( LSBFirst == pImage->bitmap_bit_order
+                                        ? BMP_FORMAT_4BIT_LSN_PAL
+                                        : BMP_FORMAT_4BIT_MSN_PAL
+                                    );
                 break;
 
                 case( 8 ):
@@ -437,9 +474,15 @@ XImage* X11SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, int nScreen, long 
                 case( 32 ):
                 {
                     if( LSBFirst == pImage->byte_order )
-                        nDstFormat |= ( pImage->red_mask == 0xFF ? BMP_FORMAT_32BIT_TC_RGBA : BMP_FORMAT_32BIT_TC_BGRA );
+                        nDstFormat |=   ( pImage->red_mask == 0xFF
+                                            ? BMP_FORMAT_32BIT_TC_RGBA
+                                            : BMP_FORMAT_32BIT_TC_BGRA
+                                        );
                     else
-                        nDstFormat |= ( pImage->red_mask == 0xFF ? BMP_FORMAT_32BIT_TC_ABGR : BMP_FORMAT_32BIT_TC_ARGB );
+                        nDstFormat |=   ( pImage->red_mask == 0xFF
+                                            ? BMP_FORMAT_32BIT_TC_ABGR
+                                            : BMP_FORMAT_32BIT_TC_ARGB
+                                        );
                 }
                 break;
             }
@@ -467,7 +510,9 @@ XImage* X11SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, int nScreen, long 
             else if( pImage->depth <= 8 )
             {
                 const SalColormap& rColMap = pSalDisp->GetColormap( nScreen );
-                const sal_uInt16 nCols = Min( (sal_uLong)rColMap.GetUsed(), (sal_uLong)(1 << pImage->depth) );
+                const sal_uInt16 nCols = Min( (sal_uLong)rColMap.GetUsed()
+                                            , (sal_uLong)(1 << pImage->depth)
+                                            );
 
                 pPal = new BitmapPalette( nCols );
 
@@ -506,10 +551,15 @@ XImage* X11SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, int nScreen, long 
 }
 
 // -----------------------------------------------------------------------------
-bool X11SalBitmap::ImplCreateFromDrawable( Drawable aDrawable,
-                                           int nScreen, long nDrawableDepth,
-                                           long nX, long nY, long nWidth, long nHeight )
-{
+bool X11SalBitmap::ImplCreateFromDrawable(
+    Drawable aDrawable,
+    int nScreen,
+    long nDrawableDepth,
+    long nX,
+    long nY,
+    long nWidth,
+    long nHeight
+) {
     Destroy();
 
     if( aDrawable && nWidth && nHeight && nDrawableDepth )
@@ -519,8 +569,7 @@ bool X11SalBitmap::ImplCreateFromDrawable( Drawable aDrawable,
 }
 // -----------------------------------------------------------------------------
 
-bool
-X11SalBitmap::SnapShot (Display* pDisplay, XLIB_Window hWindow)
+bool X11SalBitmap::SnapShot (Display* pDisplay, XLIB_Window hWindow)
 {
     if (hWindow != None)
     {
@@ -598,9 +647,12 @@ X11SalBitmap::SnapShot (Display* pDisplay, XLIB_Window hWindow)
     return False;
 }
 
-bool
-X11SalBitmap::ImplCreateFromXImage (Display* pDisplay, XLIB_Window hWindow, int nScreen, XImage* pImage)
-{
+bool X11SalBitmap::ImplCreateFromXImage (
+    Display* pDisplay,
+    XLIB_Window hWindow,
+    int nScreen,
+    XImage* pImage
+) {
     Destroy();
 
     if (pImage != NULL && pImage->width != 0 && pImage->height != 0 && pImage->depth != 0)
@@ -611,10 +663,12 @@ X11SalBitmap::ImplCreateFromXImage (Display* pDisplay, XLIB_Window hWindow, int 
     return False;
 }
 
-ImplSalDDB* X11SalBitmap::ImplGetDDB( Drawable          aDrawable,
-                                      int               nScreen,
-                                      long              nDrawableDepth,
-                                      const SalTwoRect& rTwoRect ) const
+ImplSalDDB* X11SalBitmap::ImplGetDDB(
+    Drawable          aDrawable,
+    int               nScreen,
+    long              nDrawableDepth,
+    const SalTwoRect& rTwoRect
+) const
 {
     if( !mpDDB || !mpDDB->ImplMatches( nScreen, nDrawableDepth, rTwoRect ) )
     {
@@ -708,11 +762,13 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB( Drawable          aDrawable,
 
 // -----------------------------------------------------------------------------
 
-void X11SalBitmap::ImplDraw( Drawable           aDrawable,
-                             int                nScreen,
-                             long               nDrawableDepth,
-                             const SalTwoRect&  rTwoRect,
-                             const GC&          rGC ) const
+void X11SalBitmap::ImplDraw(
+    Drawable           aDrawable,
+    int                nScreen,
+    long               nDrawableDepth,
+    const SalTwoRect&  rTwoRect,
+    const GC&          rGC
+) const
 {
     ImplGetDDB( aDrawable, nScreen, nDrawableDepth, rTwoRect );
     if( mpDDB )
@@ -770,21 +826,26 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
 
 bool X11SalBitmap::Create( const SalBitmap&, SalGraphics* )
 {
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------------
 
 bool X11SalBitmap::Create( const SalBitmap&, sal_uInt16 )
 {
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------------
 
-bool X11SalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas, Size& rSize, bool bMask )
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, ::com::sun::star::uno::UNO_QUERY );
+bool X11SalBitmap::Create(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
+    Size& rSize,
+    bool bMask
+) {
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet >
+        xFastPropertySet( xBitmapCanvas, ::com::sun::star::uno::UNO_QUERY );
+
     if( xFastPropertySet.get() ) {
         sal_Int32 depth;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > args;
@@ -794,7 +855,15 @@ bool X11SalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::s
             if( ( args[1] >>= pixmapHandle ) && ( args[2] >>= depth ) ) {
 
                 mbGrey = bMask;
-                bool bSuccess = ImplCreateFromDrawable( pixmapHandle, 0, depth, 0, 0, (long) rSize.Width(), (long) rSize.Height() );
+                bool bSuccess = ImplCreateFromDrawable(
+                                    pixmapHandle,
+                                    0,
+                                    depth,
+                                    0,
+                                    0,
+                                    (long) rSize.Width(),
+                                    (long) rSize.Height()
+                                );
                 bool bFreePixmap = false;
                 if( bSuccess && (args[0] >>= bFreePixmap) && bFreePixmap )
                     XFreePixmap( GetX11SalData()->GetDisplay()->GetDisplay(), pixmapHandle );
@@ -860,10 +929,15 @@ BitmapBuffer* X11SalBitmap::AcquireBuffer( bool )
 {
     if( !mpDIB && mpDDB )
     {
-        mpDIB = ImplCreateDIB( mpDDB->ImplGetPixmap(),
-                               mpDDB->ImplGetScreen(),
-                               mpDDB->ImplGetDepth(),
-                               0, 0, mpDDB->ImplGetWidth(), mpDDB->ImplGetHeight(), mbGrey );
+        mpDIB = ImplCreateDIB(
+                    mpDDB->ImplGetPixmap(),
+                    mpDDB->ImplGetScreen(),
+                    mpDDB->ImplGetDepth(),
+                    0, 0,
+                    mpDDB->ImplGetWidth(),
+                    mpDDB->ImplGetHeight(),
+                    mbGrey
+                );
     }
 
     return mpDIB;
@@ -905,11 +979,11 @@ bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
 // - ImplSalDDB -
 // --------------
 
-ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable, int nScreen, const SalTwoRect& rTwoRect ) :
-    maPixmap    ( 0 ),
-    maTwoRect   ( rTwoRect ),
-    mnDepth     ( pImage->depth ),
-    mnScreen    ( nScreen )
+ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable, int nScreen, const SalTwoRect& rTwoRect )
+    : maPixmap    ( 0 )
+    , maTwoRect   ( rTwoRect )
+    , mnDepth     ( pImage->depth )
+    , mnScreen    ( nScreen )
 {
     SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
     Display*    pXDisp = pSalDisp->GetDisplay();
@@ -937,8 +1011,8 @@ ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable, int nScreen, const S
 // -----------------------------------------------------------------------------------------
 // create from XImage
 
-ImplSalDDB::ImplSalDDB (Display* pDisplay, XLIB_Window hWindow, int nScreen, XImage* pImage) :
-    mnScreen( nScreen )
+ImplSalDDB::ImplSalDDB (Display* pDisplay, XLIB_Window hWindow, int nScreen, XImage* pImage)
+    : mnScreen( nScreen )
 {
     maPixmap = XCreatePixmap (pDisplay, hWindow, pImage->width, pImage->height, pImage->depth);
     if (maPixmap != 0)
@@ -975,9 +1049,16 @@ ImplSalDDB::ImplSalDDB (Display* pDisplay, XLIB_Window hWindow, int nScreen, XIm
 
 // -----------------------------------------------------------------------------
 
-ImplSalDDB::ImplSalDDB( Drawable aDrawable, int nScreen, long nDrawableDepth, long nX, long nY, long nWidth, long nHeight ) :
-    mnDepth( nDrawableDepth ),
-    mnScreen( nScreen )
+ImplSalDDB::ImplSalDDB(
+    Drawable aDrawable,
+    int nScreen,
+    long nDrawableDepth,
+    long nX,
+    long nY,
+    long nWidth,
+    long nHeight
+)   : mnDepth( nDrawableDepth )
+    , mnScreen( nScreen )
 {
     SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
     Display*    pXDisp = pSalDisp->GetDisplay();
@@ -1019,24 +1100,32 @@ ImplSalDDB::~ImplSalDDB()
 
 bool ImplSalDDB::ImplMatches( int nScreen, long nDepth, const SalTwoRect& rTwoRect ) const
 {
-    bool bRet = sal_False;
+    bool bRet = false;
 
     if( ( maPixmap != 0 ) && ( ( mnDepth == nDepth ) || ( 1 == mnDepth ) ) && nScreen == mnScreen)
     {
-        if( rTwoRect.mnSrcX == maTwoRect.mnSrcX && rTwoRect.mnSrcY == maTwoRect.mnSrcY &&
-            rTwoRect.mnSrcWidth == maTwoRect.mnSrcWidth && rTwoRect.mnSrcHeight == maTwoRect.mnSrcHeight &&
-            rTwoRect.mnDestWidth == maTwoRect.mnDestWidth && rTwoRect.mnDestHeight == maTwoRect.mnDestHeight )
+        if (  rTwoRect.mnSrcX       == maTwoRect.mnSrcX
+           && rTwoRect.mnSrcY       == maTwoRect.mnSrcY
+           && rTwoRect.mnSrcWidth   == maTwoRect.mnSrcWidth
+           && rTwoRect.mnSrcHeight  == maTwoRect.mnSrcHeight
+           && rTwoRect.mnDestWidth  == maTwoRect.mnDestWidth
+           && rTwoRect.mnDestHeight == maTwoRect.mnDestHeight
+           )
         {
             // absolutely indentically
-            bRet = sal_True;
+            bRet = true;
         }
-        else if( rTwoRect.mnSrcWidth == rTwoRect.mnDestWidth && rTwoRect.mnSrcHeight == rTwoRect.mnDestHeight &&
-                 maTwoRect.mnSrcWidth == maTwoRect.mnDestWidth && maTwoRect.mnSrcHeight == maTwoRect.mnDestHeight &&
-                 rTwoRect.mnSrcX >= maTwoRect.mnSrcX && rTwoRect.mnSrcY >= maTwoRect.mnSrcY &&
-                 ( rTwoRect.mnSrcX + rTwoRect.mnSrcWidth ) <= ( maTwoRect.mnSrcX + maTwoRect.mnSrcWidth ) &&
-                 ( rTwoRect.mnSrcY + rTwoRect.mnSrcHeight ) <= ( maTwoRect.mnSrcY + maTwoRect.mnSrcHeight ) )
+        else if(  rTwoRect.mnSrcWidth   == rTwoRect.mnDestWidth
+               && rTwoRect.mnSrcHeight  == rTwoRect.mnDestHeight
+               && maTwoRect.mnSrcWidth  == maTwoRect.mnDestWidth
+               && maTwoRect.mnSrcHeight == maTwoRect.mnDestHeight
+               && rTwoRect.mnSrcX       >= maTwoRect.mnSrcX
+               && rTwoRect.mnSrcY       >= maTwoRect.mnSrcY
+               && ( rTwoRect.mnSrcX + rTwoRect.mnSrcWidth  ) <= ( maTwoRect.mnSrcX + maTwoRect.mnSrcWidth  )
+               && ( rTwoRect.mnSrcY + rTwoRect.mnSrcHeight ) <= ( maTwoRect.mnSrcY + maTwoRect.mnSrcHeight )
+               )
         {
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -1045,7 +1134,12 @@ bool ImplSalDDB::ImplMatches( int nScreen, long nDepth, const SalTwoRect& rTwoRe
 
 // -----------------------------------------------------------------------------
 
-void ImplSalDDB::ImplDraw( Drawable aDrawable, long nDrawableDepth, const SalTwoRect& rTwoRect, const GC& rGC ) const
+void ImplSalDDB::ImplDraw(
+    Drawable aDrawable,
+    long nDrawableDepth,
+    const SalTwoRect& rTwoRect,
+    const GC& rGC
+) const
 {
     ImplDraw( maPixmap, mnDepth, aDrawable, nDrawableDepth,
               rTwoRect.mnSrcX - maTwoRect.mnSrcX, rTwoRect.mnSrcY - maTwoRect.mnSrcY,
@@ -1055,12 +1149,19 @@ void ImplSalDDB::ImplDraw( Drawable aDrawable, long nDrawableDepth, const SalTwo
 
 // -----------------------------------------------------------------------------
 
-void ImplSalDDB::ImplDraw( Drawable aSrcDrawable, long nSrcDrawableDepth,
-                           Drawable aDstDrawable, long,
-                           long nSrcX, long nSrcY,
-                           long nDestWidth, long nDestHeight,
-                           long nDestX, long nDestY, const GC& rGC )
-{
+void ImplSalDDB::ImplDraw(
+    Drawable aSrcDrawable,
+    long nSrcDrawableDepth,
+    Drawable aDstDrawable,
+    long,
+    long nSrcX,
+    long nSrcY,
+    long nDestWidth,
+    long nDestHeight,
+    long nDestX,
+    long nDestY,
+    const GC& rGC
+) {
     SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
     Display*    pXDisp = pSalDisp->GetDisplay();
 
@@ -1108,12 +1209,18 @@ ImplSalBitmapCache::~ImplSalBitmapCache()
 
 void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize, sal_uLong nFlags )
 {
-    ImplBmpObj* pObj;
-    bool        bFound = sal_False;
+    ImplBmpObj* pObj = NULL;
+    bool        bFound = false;
 
-    for( pObj = (ImplBmpObj*) maBmpList.Last(); pObj && !bFound; pObj = (ImplBmpObj*) maBmpList.Prev() )
+    for(
+        BmpList_impl::iterator it = maBmpList.begin();
+        (it != maBmpList.end() ) && !bFound ;
+        ++it
+    ) {
+        pObj = *it;
         if( pObj->mpBmp == pBmp )
-            bFound = sal_True;
+            bFound = true;
+    }
 
     mnTotalSize += nMemSize;
 
@@ -1123,21 +1230,24 @@ void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize, sal_uL
         pObj->mnMemSize = nMemSize, pObj->mnFlags = nFlags;
     }
     else
-        maBmpList.Insert( new ImplBmpObj( pBmp, nMemSize, nFlags ), LIST_APPEND );
+        maBmpList.push_back( new ImplBmpObj( pBmp, nMemSize, nFlags ) );
 }
 
 // -----------------------------------------------------------------------------
 
 void ImplSalBitmapCache::ImplRemove( X11SalBitmap* pBmp )
 {
-    for( ImplBmpObj* pObj = (ImplBmpObj*) maBmpList.Last(); pObj; pObj = (ImplBmpObj*) maBmpList.Prev() )
-    {
-        if( pObj->mpBmp == pBmp )
+    for(
+        BmpList_impl::iterator it = maBmpList.begin();
+        it != maBmpList.end();
+        ++it
+    ) {
+        if( (*it)->mpBmp == pBmp )
         {
-            maBmpList.Remove( pObj );
-            pObj->mpBmp->ImplRemovedFromCache();
-            mnTotalSize -= pObj->mnMemSize;
-            delete pObj;
+            (*it)->mpBmp->ImplRemovedFromCache();
+            mnTotalSize -= (*it)->mnMemSize;
+            delete *it;
+            maBmpList.erase( it );
             break;
         }
     }
@@ -1147,13 +1257,15 @@ void ImplSalBitmapCache::ImplRemove( X11SalBitmap* pBmp )
 
 void ImplSalBitmapCache::ImplClear()
 {
-    for( ImplBmpObj* pObj = (ImplBmpObj*) maBmpList.First(); pObj; pObj = (ImplBmpObj*) maBmpList.Next() )
-    {
-        pObj->mpBmp->ImplRemovedFromCache();
-        delete pObj;
+    for(
+        BmpList_impl::iterator it = maBmpList.begin();
+        it != maBmpList.end();
+        ++it
+    ) {
+        (*it)->mpBmp->ImplRemovedFromCache();
+        delete *it;
     }
-
-    maBmpList.Clear();
+    maBmpList.clear();
     mnTotalSize = 0;
 }
 

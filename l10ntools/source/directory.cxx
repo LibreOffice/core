@@ -54,12 +54,6 @@ Directory::Directory( const rtl::OUString sFullPath , const rtl::OUString sEntry
     sDirectoryName  = sEntry;
 }
 
-
-Directory::Directory( const ByteString sFullPath ) : bSkipLinks( false )
-{
-    sDirectoryName = rtl::OUString( sFullPath.GetBuffer() , RTL_TEXTENCODING_UTF8 , sFullPath.Len() );
-}
-
 bool Directory::lessDir ( const Directory& rKey1, const Directory& rKey2 )
 {
     rtl::OUString sName1( ( static_cast< Directory >( rKey1 ) ).getDirectoryName() );

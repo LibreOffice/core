@@ -144,8 +144,6 @@ private:
     sal_uLong               ImplGetAnimationLoopCount() const;
     void                ImplResetAnimationLoopCount();
 
-    List*               ImplGetAnimationInfoList() const;
-
 private:
 
     GraphicReader*      ImplGetContext();

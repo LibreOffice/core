@@ -49,6 +49,8 @@ SLOFILES=   \
         $(SLO)$/chaptercollator.obj \
         $(rules_obj)
 
+.IF "$(CROSS_COMPILING)" != "YES"
+
 APP1TARGET = gencoll_rule
 APP1RPATH = NONE
 
@@ -60,6 +62,8 @@ APP1STDLIBS = $(SALLIB) \
         $(ICUINLIB) \
         $(ICUUCLIB) \
         $(ICUDATALIB)
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

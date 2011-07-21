@@ -35,20 +35,25 @@
 
 #include <svl/ilstitem.hxx>
 
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
-
 TYPEINIT1_AUTOFACTORY(SfxIntegerListItem, SfxPoolItem);
 
 SfxIntegerListItem::SfxIntegerListItem()
 {
 }
 
-SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const SvULongs& rList )
+SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const ::std::vector < sal_Int32 >& rList )
     : SfxPoolItem( which )
 {
-    m_aList.realloc( rList.Count() );
-    for ( sal_uInt16 n=0; n<rList.Count(); n++ )
+    m_aList.realloc( rList.size() );
+    for ( sal_uInt16 n=0; n<rList.size(); ++n )
+        m_aList[n] = rList[n];
+}
+
+SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const ::com::sun::star::uno::Sequence < sal_Int32 >& rList )
+    : SfxPoolItem( which )
+{
+    m_aList.realloc( rList.getLength() );
+    for ( sal_Int32 n=0; n<rList.getLength(); ++n )
         m_aList[n] = rList[n];
 }
 
@@ -97,10 +102,11 @@ bool SfxIntegerListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 )
     return true;
 }
 
-void SfxIntegerListItem::GetList( SvULongs& rList ) const
+void SfxIntegerListItem::GetList( ::std::vector< sal_Int32 >& rList ) const
 {
-    for ( sal_Int32 n=0; n<m_aList.getLength(); n++ )
-        rList.Insert( m_aList[n], sal::static_int_cast< sal_uInt16 >(n) );
+    rList.reserve( m_aList.getLength() );
+    for ( sal_Int32 n=0; n<m_aList.getLength(); ++n )
+        rList.push_back( m_aList[n] );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

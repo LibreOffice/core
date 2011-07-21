@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,10 @@ using namespace ::com::sun::star::uno;
 
 +(id)simpleMapNativeRoleFrom: (XAccessibleContext *) accessibleContext {
     id nativeRole = nil;
+
+    if (accessibleContext == NULL)
+        return nativeRole;
+
     switch( accessibleContext -> getAccessibleRole() ) {
 #define MAP(a,b) \
         case a: nativeRole = b; break
@@ -272,3 +277,5 @@ using namespace ::com::sun::star::uno;
 }
 
 @end
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

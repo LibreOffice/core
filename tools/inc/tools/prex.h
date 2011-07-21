@@ -44,22 +44,12 @@
 extern "C" {
 #endif
 
-// FIXME: should really check for xfree86 or for X11R6.1 and higher
-#if defined(LINUX) || defined(FREEBSD) || defined(MACOSX) || defined(NETBSD) || \
-    defined(OPENBSD) || defined(DRAGONFLY)
-#define __XKeyboardExtension__ 1
-#else
-#define __XKeyboardExtension__ 0
-#endif
-
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/StringDefs.h>
 #include <X11/extensions/Xrender.h>
-#if __XKeyboardExtension__
 #include <X11/XKBlib.h>
-#endif
 typedef unsigned long Pixel;
 
 #undef  DestroyAll

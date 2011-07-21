@@ -36,7 +36,7 @@
 
 #include "salinst.hxx"
 
-SAL_IMPLEMENT_MAIN() {
+SAL_IMPLEMENT_MAIN_WITH_GUI() {
     tools::extendApplicationEnvironment();
     return SVMain();
 }

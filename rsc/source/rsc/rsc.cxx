@@ -113,18 +113,6 @@ void RscCmdLine::Init()
 |*    Beschreibung      Kommandozeile interpretierten
 |*
 *************************************************************************/
-RscCmdLine::RscCmdLine()
-{
-    Init();
-}
-
-/*************************************************************************
-|*
-|*    RscCmdLine::RscCmdLine()
-|*
-|*    Beschreibung      Kommandozeile interpretierten
-|*
-*************************************************************************/
 RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
 {
     char *          pStr;
@@ -1048,39 +1036,6 @@ void RscCompiler::Append( const ByteString& rOutputSrs,
     }
 }
 
-/********************************************************************/
-/*                                                                  */
-/*  Function    :   GetTmpFileName()                                */
-/*                                                                  */
-/*  Description :   Packt einen Dateinamen in Tmp-Dateiliste.       */
-/*                                                                  */
-/********************************************************************/
-ByteString RscCompiler::GetTmpFileName()
-{
-    ByteString aFileName;
-
-    aFileName = ::GetTmpFileName();
-    return( aFileName );
-}
-
-/********************************************************************/
-/*                                                                  */
-/*  Function    :   sal_Bool openinput()                            */
-/*                                                                  */
-/*  Description :   Check to see if the input file exists and can   */
-/*  be opened for reading.                                          */
-/********************************************************************/
-
-void RscCompiler::OpenInput( const ByteString& rInput )
-{
-    FILE *fp;
-                        /* try to open the input file               */
-    if( NULL == (fp = fopen( rInput.GetBuffer(), "r")))
-        pTC->pEH->FatalError( ERR_OPENFILE, RscId(), rInput.GetBuffer() );
-
-    fclose( fp );
-}
-
 /*************************************************************************
 |*
 |*    GetImageFilePath()
@@ -1248,7 +1203,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                             sal_Int32   nNumber = atoi( aLine.GetBuffer() );
 
                             if( nNumber < 10000 )
-                                aBaseFileName += ByteString::CreateFromInt32( 0 );
+                                aBaseFileName += '0';
 
                             if( GetImageFilePath( rOutputFile, rContext, aBaseFileName += aLine , aFilePath, pSysListFile ) )
                                 aEntryVector.push_back( ::std::pair< ByteString, sal_Int32 >( aFilePath, nNumber ) );
@@ -1276,14 +1231,15 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
                     for( sal_uInt32 i = 0; i < aEntryVector.size(); ++i )
                     {
-                        ByteString aEntryString( "< \"" );
+                        rtl::OStringBuffer aEntryString(
+                            RTL_CONSTASCII_STRINGPARAM("< \""));
 
-                        aEntryString += aEntryVector[ i ].first;
-                        aEntryString += "\"; ";
-                        aEntryString += ByteString::CreateFromInt32( aEntryVector[ i ].second );
-                        aEntryString += "; >;";
+                        aEntryString.append(aEntryVector[i].first);
+                        aEntryString.append(RTL_CONSTASCII_STRINGPARAM("\"; "));
+                        aEntryString.append(static_cast<sal_Int32>(aEntryVector[ i ].second));
+                        aEntryString.append(RTL_CONSTASCII_STRINGPARAM("; >;"));
 
-                        aOStm.WriteLine( aEntryString );
+                        aOStm.WriteLine(aEntryString.makeStringAndClear());
                     }
 
                     aOStm.WriteLine( "};" );

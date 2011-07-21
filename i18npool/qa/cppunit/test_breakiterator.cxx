@@ -57,11 +57,13 @@ public:
     void testLineBreaking();
     void testGraphemeIteration();
     void testWeak();
+    void testAsian();
 
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
     CPPUNIT_TEST(testGraphemeIteration);
     CPPUNIT_TEST(testWeak);
+    CPPUNIT_TEST(testAsian);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -104,7 +106,7 @@ void TestBreakIterator::testGraphemeIteration()
     aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IN"));
 
     {
-        sal_Unicode BA_HALANT_LA[] = { 0x09AC, 0x09CD, 0x09AF };
+        const sal_Unicode BA_HALANT_LA[] = { 0x09AC, 0x09CD, 0x09AF };
         ::rtl::OUString aTest1(BA_HALANT_LA, SAL_N_ELEMENTS(BA_HALANT_LA));
 
         sal_Int32 nDone=0;
@@ -118,7 +120,7 @@ void TestBreakIterator::testGraphemeIteration()
     }
 
     {
-        sal_Unicode HA_HALANT_NA_VOWELSIGNI[] = { 0x09B9, 0x09CD, 0x09A3, 0x09BF };
+        const sal_Unicode HA_HALANT_NA_VOWELSIGNI[] = { 0x09B9, 0x09CD, 0x09A3, 0x09BF };
         ::rtl::OUString aTest1(HA_HALANT_NA_VOWELSIGNI, SAL_N_ELEMENTS(HA_HALANT_NA_VOWELSIGNI));
 
         sal_Int32 nDone=0;
@@ -132,7 +134,7 @@ void TestBreakIterator::testGraphemeIteration()
     }
 
     {
-        sal_Unicode TA_HALANT_MA_HALANT_YA  [] = { 0x09A4, 0x09CD, 0x09AE, 0x09CD, 0x09AF };
+        const sal_Unicode TA_HALANT_MA_HALANT_YA  [] = { 0x09A4, 0x09CD, 0x09AE, 0x09CD, 0x09AF };
         ::rtl::OUString aTest1(TA_HALANT_MA_HALANT_YA, SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA));
 
         sal_Int32 nDone=0;
@@ -156,10 +158,12 @@ void TestBreakIterator::testWeak()
     aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
 
     {
-        sal_Unicode WEAKS[] =
+        const sal_Unicode WEAKS[] =
         {
             0x0001, 0x0002,
             0x0020, 0x00A0,
+            0x2150, 0x215F, //Number Forms, fractions
+            0x2160, 0x2180, //Number Forms, roman numerals
             0x2200, 0x22FF, //Mathematical Operators
             0x27C0, 0x27EF, //Miscellaneous Mathematical Symbols-A
             0x2980, 0x29FF, //Miscellaneous Mathematical Symbols-B
@@ -180,6 +184,45 @@ void TestBreakIterator::testWeak()
             aMsg.append(RTL_CONSTASCII_STRINGPARAM(" should have been weak"));
             CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(),
                 nScript == i18n::ScriptType::WEAK);
+        }
+    }
+}
+
+//A test to ensure that certain ranges and codepoints that are categorized as
+//asian remain as asian, so that existing docs that depend on this don't silently
+//change font for those asian chars.
+//See https://bugs.freedesktop.org/show_bug.cgi?id=38095
+void TestBreakIterator::testAsian()
+{
+    lang::Locale aLocale;
+    aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+    aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+
+    {
+        const sal_Unicode ASIANS[] =
+        {
+            //some typical CJK chars
+            0x4E00, 0x62FF,
+            //The full HalfWidth and FullWidth block has historically been
+            //designated as taking the CJK font :-(
+            //HalfWidth and FullWidth forms of ASCII 0-9, categorized under
+            //UAX24 as "Common" i.e. by that logic WEAK
+            0xFF10, 0xFF19,
+            //HalfWidth and FullWidth forms of ASCII A-z, categorized under
+            //UAX25 as "Latin", i.e. by that logic LATIN
+            0xFF21, 0xFF5A
+        };
+        ::rtl::OUString aAsians(ASIANS, SAL_N_ELEMENTS(ASIANS));
+
+        for (sal_Int32 i = 0; i < aAsians.getLength(); ++i)
+        {
+            sal_Int16 nScript = m_xBreak->getScriptType(aAsians, i);
+            rtl::OStringBuffer aMsg;
+            aMsg.append(RTL_CONSTASCII_STRINGPARAM("Char 0x"));
+            aMsg.append(static_cast<sal_Int32>(aAsians.getStr()[i]), 16);
+            aMsg.append(RTL_CONSTASCII_STRINGPARAM(" should have been asian"));
+            CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(),
+                nScript == i18n::ScriptType::ASIAN);
         }
     }
 }

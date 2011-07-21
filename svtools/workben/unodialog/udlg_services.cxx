@@ -56,6 +56,11 @@ namespace udlg
 } // namespace udlg
 //........................................................................
 
-IMPLEMENT_COMPONENT_LIBRARY_API( ::udlg::UdlgModule, ::udlg::initializeModule )
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
+        const sal_Char* pImplementationName, void* pServiceManager, void* pRegistryKey )
+{
+    ::udlg::initializeModule();
+    return ::udlg::UdlgModule::getInstance().getComponentFactory( pImplementationName, pServiceManager, pRegistryKey );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -186,12 +186,12 @@ private:
     PPDParser( const String& rFile );
     ~PPDParser();
 
-    void parseOrderDependency( const ByteString& rLine );
-    void parseOpenUI( const ByteString& rLine );
-    void parseConstraint( const ByteString& rLine );
-    void parse( std::list< ByteString >& rLines );
+    void parseOrderDependency(const rtl::OString& rLine);
+    void parseOpenUI(const rtl::OString& rLine);
+    void parseConstraint(const rtl::OString& rLine);
+    void parse( std::list< rtl::OString >& rLines );
 
-    String handleTranslation( const ByteString& i_rString, bool i_bIsGlobalized );
+    String handleTranslation(const rtl::OString& i_rString, bool i_bIsGlobalized);
 
     static void scanPPDDir( const String& rDir );
     static void initPPDFiles();

@@ -2266,11 +2266,10 @@ bool HTMLParser::ParseMetaOptions(
 
 rtl_TextEncoding HTMLParser::GetEncodingByMIME( const String& rMime )
 {
-    ByteString sType;
-    ByteString sSubType;
+    String sType;
+    String sSubType;
     INetContentTypeParameterList aParameters;
-    ByteString sMime( rMime, RTL_TEXTENCODING_ASCII_US );
-    if (INetContentTypes::parse(sMime, sType, sSubType, &aParameters))
+    if (INetContentTypes::parse(rMime, sType, sSubType, &aParameters))
     {
         const INetContentTypeParameter * pCharset
             = aParameters.find("charset");

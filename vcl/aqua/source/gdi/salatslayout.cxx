@@ -1043,7 +1043,6 @@ bool ATSLayout::GetDeltaY() const
     if( mpDeltaY != NULL )
         return true;
 
-#if 1
     if( !maATSULayout )
         return false;
 
@@ -1069,7 +1068,6 @@ bool ATSLayout::GetDeltaY() const
         mpDeltaY = NULL;
         return false;
     }
-#endif
 
     return true;
 }

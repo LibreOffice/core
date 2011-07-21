@@ -189,7 +189,6 @@ namespace utl
         void                            markSessionDone( );
         void                            activateReminder( sal_Int32 _nDaysFromNow );
         void                            removeReminder();
-        bool                            hasReminderDateCome() const;
     };
 
     //--------------------------------------------------------------------
@@ -383,48 +382,6 @@ namespace utl
     }
 
     //--------------------------------------------------------------------
-    bool RegOptionsImpl::hasReminderDateCome() const
-    {
-        bool bRet = false;
-        sal_Int32 nDate = 0;
-        ::rtl::OUString sDate;
-        m_aRegistrationNode.getNodeValue( lcl_getReminderDateName() ) >>= sDate;
-        if ( sDate.getLength() )
-        {
-            if ( sDate.indexOf( lcl_getPatchName() ) == 0)
-            {
-                if (sDate.equals( lcl_getPatchName() ))
-                    bRet = true;
-                else if (sDate.getLength() > lcl_getPatchName().getLength() )
-                {
-                    // Check the build ID to determine if the registration
-                    // dialog needs to be shown.
-                    sal_Int32 nBuildId = getBuildId();
-                    ::rtl::OUString aStoredBuildId( sDate.copy(lcl_getPatchName().getLength()));
-
-                    // remind if the current build ID is not the same as the stored one
-                    if ( nBuildId != aStoredBuildId.toInt32() )
-                        bRet = true;
-                }
-            }
-            else
-            {
-                nDate = lcl_convertString2Date( sDate );
-                if ( nDate > 0 )
-                {
-                    Date aReminderDate;
-                    aReminderDate.SetDate( nDate );
-                    bRet = aReminderDate <= Date();
-                }
-            }
-        }
-        else
-            bRet = true;
-
-        return bRet;
-    }
-
-    //--------------------------------------------------------------------
     void RegOptionsImpl::markSessionDone( )
     {
         OSL_ENSURE( !s_bThisSessionDone, "RegOptionsImpl::markSessionDone: already marked!" );
@@ -533,14 +490,6 @@ namespace utl
         const_cast< RegOptions* >( this )->ensureImpl( );
         m_pImpl->removeReminder();
     }
-
-    //--------------------------------------------------------------------
-    bool RegOptions::hasReminderDateCome() const
-    {
-        const_cast< RegOptions* >( this )->ensureImpl( );
-        return m_pImpl->hasReminderDateCome();
-    }
-
 //........................................................................
 }   // namespace utl
 //........................................................................

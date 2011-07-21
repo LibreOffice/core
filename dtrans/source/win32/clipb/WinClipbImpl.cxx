@@ -36,11 +36,11 @@
 #include "WinClipbImpl.hxx"
 
 #include <systools/win32/comtools.hxx>
-#include "..\..\inc\DtObjFactory.hxx"
-#include "..\dtobj\APNDataObject.hxx"
+#include "../../inc/DtObjFactory.hxx"
+#include "../dtobj/APNDataObject.hxx"
 #include "WinClipboard.hxx"
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
-#include "..\dtobj\XNotifyingDataObject.hxx"
+#include "../dtobj/XNotifyingDataObject.hxx"
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -200,11 +200,11 @@ sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  ) throw( RuntimeExce
 void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
 {
     // sollte eigentlich hier stehen: ClearableMutexGuard aGuard( m_ClipContentMutex );
-    // geht aber nicht, da FlushClipboard zurückruft und das DataObject
-    // freigibt und damit würde es einen Deadlock in onReleaseDataObject geben
-    // FlushClipboard muß synchron sein, damit das runterfahren ggf. erst weitergeht,
+    // geht aber nicht, da FlushClipboard zurÃ¼ckruft und das DataObject
+    // freigibt und damit wÃ¼rde es einen Deadlock in onReleaseDataObject geben
+    // FlushClipboard muÃŸ synchron sein, damit das runterfahren ggf. erst weitergeht,
     // wenn alle Clipboard-Formate gerendert wurden
-    // die Abfrage ist nötig, damit nur geflusht wird, wenn wir wirklich Clipboardowner
+    // die Abfrage ist nÃ¶tig, damit nur geflusht wird, wenn wir wirklich Clipboardowner
     // sind (ich weiss nicht genau was passiert, wenn man flusht und nicht Clipboard
     // owner ist).
     // eventuell kann man aber die Abfrage in den Clipboard STA Thread verlagern, indem

@@ -30,6 +30,7 @@
 #define _VCL_GTKFRAME_HXX
 
 #include <tools/prex.h>
+#include <cairo/cairo.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>

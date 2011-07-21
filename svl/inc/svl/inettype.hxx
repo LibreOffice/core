@@ -352,8 +352,6 @@ enum INetContentType
 class SVL_DLLPUBLIC INetContentTypes
 {
 public:
-    static void Uninitialize();
-
     static INetContentType RegisterContentType(UniString const & rTypeName,
                                                UniString const &
                                                    rPresentation,
@@ -369,8 +367,6 @@ public:
     static UniString GetPresentation(INetContentType eTypeID,
                                      const ::com::sun::star::lang::Locale& aLocale);
 
-    static UniString GetExtension(UniString const & rTypeName);
-
     static INetContentType GetContentType4Extension(UniString const &
                                                         rExtension);
 
@@ -378,40 +374,6 @@ public:
 
     static bool GetExtensionFromURL(UniString const & rURL,
                                     UniString & rExtension);
-
-    static INetContentType MapStringToContentType(UniString const &
-                                                      rPresentation);
-
-    /** Parse the body of an RFC 2045 Content-Type header field.
-
-        @param rMediaType  The body of the Content-Type header field.  It must
-        be of the form
-
-          token "/" token *(";" token "=" (token / quoted-string))
-
-        with intervening linear white space and comments (cf. RFCs 822, 2045).
-        The RFC 2231 extension are supported.  The encoding of rMediaType
-        should be US-ASCII, but any values in the range 0x80--0xFF are
-        interpretet 'as appropriate.'
-
-        @param rType  Returns the type (the first of the above tokens), in US-
-        ASCII encoding and converted to lower case.
-
-        @param rSubType  Returns the sub type (the second of the above
-        tokens), in US-ASCII encoding and converted to lower case.
-
-        @param rParameters  If not null, returns the parameters as a list of
-        INetContentTypeParameters (the attributes are in US-ASCII encoding and
-        converted to lower case, the values are in Unicode encoding).  If
-        null, only the syntax of the parameters is checked, but they are not
-        returned.
-
-        @return  True if the syntax of the field body is correct.  If false is
-        returned, none of the output parameters will be modified!
-     */
-    static bool parse(ByteString const & rMediaType, ByteString & rType,
-                      ByteString & rSubType,
-                      INetContentTypeParameterList * pParameters = 0);
 
     /** Parse the body of an RFC 2045 Content-Type header field.
 
@@ -443,42 +405,6 @@ public:
     static bool parse(UniString const & rMediaType, UniString & rType,
                       UniString & rSubType,
                       INetContentTypeParameterList * pParameters = 0);
-
-    /** Append a parameter to the string representation of a MIME media type.
-
-        @param rMediaType  The string representation of a MIME media type.
-
-        @param rAttribute  The name of the parameter.  Must be a valid RFC
-        2045 token.
-
-        @param rValue  The value of the paramter.  Must only consist of US-
-        ASCII characters.
-
-        @return  The string representation of rMediaType with the new
-        parameter appended.  It is not checked whether a parameter with that
-        name already existed in rMediaType.
-     */
-    static ByteString appendUSASCIIParameter(ByteString const & rMediaType,
-                                             ByteString const & rAttribute,
-                                             ByteString const & rValue);
-
-    /** Append a parameter to the string representation of a MIME media type.
-
-        @param rMediaType  The string representation of a MIME media type.
-
-        @param rAttribute  The name of the parameter.  Must be a valid RFC
-        2045 token.
-
-        @param rValue  The value of the paramter.  Must only consist of US-
-        ASCII characters.
-
-        @return  The string representation of rMediaType with the new
-        parameter appended.  It is not checked whether a parameter with that
-        name already existed in rMediaType.
-     */
-    static UniString appendUSASCIIParameter(UniString const & rMediaType,
-                                            UniString const & rAttribute,
-                                            UniString const & rValue);
 };
 
 #endif // _INETTYPE_HXX

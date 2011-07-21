@@ -162,8 +162,6 @@ struct SalShlData
     UINT                    mnWheelScrollChars;     // WheelScrollChars
     UINT                    mnWheelMsgId;           // Wheel-Message-Id fuer W95
     BOOL                    mbWXP;                  // Windows XP
-    BOOL                    mbWPrinter;             // true: use unicode printer functions
-                                                    // false: use anis compat printer functions
     OSVERSIONINFO           maVersionInfo;
 };
 

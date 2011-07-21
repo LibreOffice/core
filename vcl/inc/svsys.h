@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,15 @@
 #include "aqua/svsys.h"
 #elif defined OS2
 #include "os2/svsys.h"
+#elif defined IOS
+#include "ios/svsys.h"
+#elif defined ANDROID
+#include "android/svsys.h"
 #else
 #include "unx/svsys.h"
 #endif
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

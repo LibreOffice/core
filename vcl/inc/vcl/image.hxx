@@ -87,9 +87,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > GetXGraphic() const;
 
     Image           GetColorTransformedImage( ImageColorTransform eColorTransform ) const;
-    static void     GetColorTransformArrays( ImageColorTransform eColorTransform, Color*& rpSrcColor, Color*& rpDstColor, sal_uLong& rColorCount );
-
-    void            Invert();
 
     sal_Bool            operator!() const { return( !mpImplData ? true : false ); }
     Image&          operator=( const Image& rImage );

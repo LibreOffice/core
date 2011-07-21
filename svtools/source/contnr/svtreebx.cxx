@@ -853,6 +853,11 @@ void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
     NotifyEndScroll();
 }
 
+void SvTreeListBox::ScrollToAbsPos( long nPos )
+{
+    pImp->ScrollToAbsPos( nPos );
+}
+
 void SvTreeListBox::SetSelectionMode( SelectionMode eSelectMode )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -2445,6 +2450,28 @@ SvLBoxEntry* SvTreeListBox::GetNextEntryInView(SvLBoxEntry* pEntry ) const
             return 0;
     }
     return pNext;
+}
+
+SvLBoxEntry* SvTreeListBox::GetLastEntryInView() const
+{
+    SvLBoxEntry* pEntry = GetFirstEntryInView();
+    SvLBoxEntry* pNext = 0;
+    while( pEntry )
+    {
+        pNext = (SvLBoxEntry*)NextVisible( pEntry );
+        if( pNext )
+        {
+          Point aPos( GetEntryPosition(pNext) );
+          const Size& rSize = pImp->GetOutputSize();
+          if( aPos.Y() < 0 || aPos.Y() >= rSize.Height() )
+              break;
+          else
+              pEntry = pNext;
+        }
+        else
+            break;
+    }
+    return pEntry;
 }
 
 void SvTreeListBox::ShowFocusRect( const SvLBoxEntry* pEntry )

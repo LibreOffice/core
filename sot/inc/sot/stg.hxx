@@ -262,7 +262,6 @@ protected:
                                 ~UCBStorageStream();
 public:
                                 TYPEINFO();
-                                UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey=0 );
                                 UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey, sal_Bool bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 

@@ -964,46 +964,6 @@ inline sal_Bool ImplIsBackOrWhite( const Color& rColor )
     return ( nLuminance < 8 ) || ( nLuminance > 250 );
 }
 
-sal_Bool StyleSettings::IsHighContrastBlackAndWhite() const
-{
-    sal_Bool bBWOnly = sal_True;
-
-    // Only use B&W if fully B&W, like on GNOME.
-    // Some colors like CheckedColor and HighlightColor are not B&W in Windows Standard HC Black,
-    // and we don't want to be B&W then, so check these color first, very probably not B&W.
-
-    // Unfortunately, GNOME uses a very very dark color (0x000033) instead of BLACK (0x000000)
-
-    if ( !ImplIsBackOrWhite( GetFaceColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetHighlightTextColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetWindowColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetWindowTextColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetButtonTextColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetButtonTextColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetGroupTextColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetLabelTextColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetDialogColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetFieldColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetMenuColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetMenuBarColor() ) )
-        bBWOnly = sal_False;
-    else if ( !ImplIsBackOrWhite( GetMenuHighlightColor() ) )
-        bBWOnly = sal_False;
-
-    return bBWOnly;
-}
-
 // -----------------------------------------------------------------------
 
 sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const

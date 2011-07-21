@@ -34,6 +34,7 @@
 #include <tools/errinf.hxx>
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
+#include <rtl/string.hxx>
 
 class FileCopier;
 class StreamData;
@@ -304,7 +305,6 @@ public:
                     SvStream( SvLockBytes *pLockBytes);
     virtual         ~SvStream();
 
-    ErrCode         SetLockBytes( SvLockBytesRef& rBytes );
     SvLockBytes*    GetLockBytes() const { return xLockBytes; }
 
     sal_uInt32  GetError() const { return ERRCODE_TOERROR(nError); }
@@ -390,6 +390,8 @@ public:
     sal_Size        Seek( sal_Size nPos );
     sal_Size        SeekRel( sal_sSize nPos );
     sal_Size        Tell() const { return nBufFilePos+nBufActualPos;  }
+    //length between current (Tell()) pos and end of stream
+    sal_Size        remainingSize();
     void            Flush();
     sal_Bool        IsEof() const { return bIsEof; }
     // next Tell() <= nSize
@@ -403,6 +405,7 @@ public:
     sal_Bool        ReadCString( String& rStr ) { return ReadCString( rStr, GetStreamCharSet()); }
 
     sal_Bool        ReadLine( ByteString& rStr );
+    sal_Bool        ReadLine( rtl::OString& rStr );
     sal_Bool        WriteLine( const ByteString& rStr );
     sal_Bool        WriteLines( const ByteString& rStr );
 
@@ -444,8 +447,6 @@ public:
                     { return WriteUnicodeOrByteText( rStr, GetStreamCharSet() ); }
                 /// Write a line of Unicode and append line end (endlu())
     sal_Bool        WriteUniStringLine( const String& rStr );
-                /// Write multiple lines of Unicode (with CovertLineEnd) and append line end (endlu())
-    sal_Bool        WriteUniStringLines( const String& rStr );
 
                 /// Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise write as Bytecode converted to eDestCharSet.
@@ -515,7 +516,6 @@ public:
 
     void            RefreshBuffer();
     SvStream&       PutBack( char aCh );
-    void            EatWhite();
 
     sal_Bool            IsWritable() const { return bIsWritable; }
     StreamMode      GetStreamMode() const { return eStreamMode; }

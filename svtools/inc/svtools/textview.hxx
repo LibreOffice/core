@@ -156,7 +156,6 @@ public:
     void                Redo();
 
     sal_Bool                Read( SvStream& rInput );
-    sal_Bool                Write( SvStream& rOutput );
 
     void                SetStartDocPos( const Point& rPos );
     const Point&        GetStartDocPos() const;
@@ -168,7 +167,6 @@ public:
     sal_Bool                IsInsertMode() const;
 
     void                SetAutoIndentMode( sal_Bool bAutoIndent );
-    sal_Bool                IsAutoIndentMode() const;
 
     void                SetReadOnly( sal_Bool bReadOnly );
     sal_Bool                IsReadOnly() const;
@@ -180,10 +178,6 @@ public:
     sal_Bool                IsSelectionAtPoint( const Point& rPointPixel );
 
     void                SetPaintSelection( sal_Bool bPaint);
-    sal_Bool                IsPaintSelection() const;
-
-    void                SetHighlightSelection( sal_Bool bSelectByHighlight );
-    sal_Bool                IsHighlightSelection() const;
 
     void                EraseVirtualDevice();
 
@@ -203,10 +197,6 @@ public:
     TextPaM             CursorEndOfParagraph( const TextPaM& rPaM );
     TextPaM             CursorStartOfDoc();
     TextPaM             CursorEndOfDoc();
-
-    // Old, remove!
-    TextPaM             CursorLeft( const TextPaM& rPaM, sal_Bool bWordMode = sal_False );
-    TextPaM             CursorRight( const TextPaM& rPaM, sal_Bool bWordMode = sal_False );
 
     /**
         Drag and Drop, deleting and selection regards all text that has an attribute

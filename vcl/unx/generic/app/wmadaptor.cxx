@@ -228,8 +228,9 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
         pAdaptor = new WMAdaptor( pSalDisplay );
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "Window Manager's name is \"%s\"\n",
-             ByteString( pAdaptor->getWindowManagerName(), RTL_TEXTENCODING_ISO_8859_1 ).GetBuffer() );
+    fprintf(stderr, "Window Manager's name is \"%s\"\n",
+        rtl::OUStringToOString(pAdaptor->getWindowManagerName(),
+        RTL_TEXTENCODING_UTF8).getStr());
 #endif
     return pAdaptor;
 }
@@ -1075,10 +1076,11 @@ void GnomeWMAdaptor::initAtoms()
 
 void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
 {
-    ByteString aTitle( rWMName, osl_getThreadTextEncoding() );
+    rtl::OString aTitle(rtl::OUStringToOString(rWMName,
+        osl_getThreadTextEncoding()));
 
     if( ! rWMName.Len() && m_aWMName.EqualsAscii( "Dtwm" ) )
-        aTitle = " ";
+        aTitle = rtl::OString(' ');
 
     ::rtl::OString aWMLocale;
     rtl_Locale* pLocale = NULL;
@@ -1140,7 +1142,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
     }
     #endif
 
-    char* pT = const_cast<char*>(aTitle.GetBuffer());
+    char* pT = const_cast<char*>(aTitle.getStr());
     XTextProperty aProp = { NULL, None, 0, 0 };
     if( bTrustXmb )
     {
@@ -1151,10 +1153,10 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
                                    &aProp );
     }
 
-    unsigned char* pData    = aProp.nitems ? aProp.value : (unsigned char*)aTitle.GetBuffer();
-    Atom nType              = aProp.nitems ? aProp.encoding : XA_STRING;
-    int nFormat             = aProp.nitems ? aProp.format : 8;
-    int nBytes              = aProp.nitems ? aProp.nitems : aTitle.Len();
+    unsigned char* pData = aProp.nitems ? aProp.value : (unsigned char*)aTitle.getStr();
+    Atom nType = aProp.nitems ? aProp.encoding : XA_STRING;
+    int nFormat = aProp.nitems ? aProp.format : 8;
+    int nBytes = aProp.nitems ? aProp.nitems : aTitle.getLength();
     const SystemEnvData* pEnv = pFrame->GetSystemData();
     XChangeProperty( m_pDisplay,
                      (XLIB_Window)pEnv->aShellWindow,
@@ -1195,7 +1197,7 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
 {
     WMAdaptor::setWMName( pFrame, rWMName );
 
-    ByteString aTitle( rWMName, RTL_TEXTENCODING_UTF8 );
+    rtl::OString aTitle(rtl::OUStringToOString(rWMName, RTL_TEXTENCODING_UTF8));
     const SystemEnvData* pEnv = pFrame->GetSystemData();
     if( m_aWMAtoms[ NET_WM_NAME ] )
         XChangeProperty( m_pDisplay,
@@ -1204,8 +1206,8 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
                          m_aWMAtoms[ UTF8_STRING ],
                          8,
                          PropModeReplace,
-                         (unsigned char*)aTitle.GetBuffer(),
-                         aTitle.Len()+1 );
+                         (unsigned char*)aTitle.getStr(),
+                         aTitle.getLength()+1 );
     if( m_aWMAtoms[ NET_WM_ICON_NAME ] )
         XChangeProperty( m_pDisplay,
                          (XLIB_Window)pEnv->aShellWindow,
@@ -1213,8 +1215,8 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
                          m_aWMAtoms[ UTF8_STRING ],
                          8,
                          PropModeReplace,
-                         (unsigned char*)aTitle.GetBuffer(),
-                         aTitle.Len()+1 );
+                         (unsigned char*)aTitle.getStr(),
+                         aTitle.getLength()+1 );
     // The +1 copies the terminating null byte. Although
     // the spec says, this should not be necessary
     // at least the kwin implementation seems to depend

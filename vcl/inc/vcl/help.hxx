@@ -86,14 +86,12 @@ public:
     static void         EnableContextHelp();
     static void         DisableContextHelp();
     static sal_Bool         IsContextHelpEnabled();
-    static sal_Bool         StartContextHelp();
 
     static void         EnableExtHelp();
     static void         DisableExtHelp();
     static sal_Bool         IsExtHelpEnabled();
     static sal_Bool         StartExtHelp();
     static sal_Bool         EndExtHelp();
-    static sal_Bool         IsExtHelpActive();
 
     static void         EnableBalloonHelp();
     static void         DisableBalloonHelp();

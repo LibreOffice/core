@@ -33,8 +33,7 @@
 #include <boost/unordered_map.hpp>
 #include <vector>
 
-typedef boost::unordered_map<ByteString , ByteString , hashByteString,equalByteString>
-                                ByteStringHashMap;
+typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash> ByteStringHashMap;
 
 
 //

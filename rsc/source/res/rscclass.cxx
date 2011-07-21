@@ -1124,33 +1124,6 @@ ERRTYPE RscSysDepend::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
 /*************************************************************************
 |*
-|*    RscFirstSysDepend::RscFirstSysDepend()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-RscFirstSysDepend::RscFirstSysDepend( Atom nId, sal_uInt32 nTypeId,
-                                        RscTop * pSuper )
-            : RscSysDepend( nId, nTypeId, pSuper )
-{}
-
-/*************************************************************************
-|*
-|*    RscFirstSysDepend::WriteRc()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-ERRTYPE RscFirstSysDepend::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                            RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
-{
-    ERRTYPE aError = RscClass::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
-    aError = WriteSysDependRc( rInst, rMem, pTC, nDeep, bExtra, sal_True );
-    return aError;
-}
-
-/*************************************************************************
-|*
 |*    RscTupel::RscTupel()
 |*
 |*    Beschreibung

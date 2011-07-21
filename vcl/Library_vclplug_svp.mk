@@ -32,12 +32,16 @@ $(eval $(call gb_Library_set_include,vclplug_svp,\
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_svp,\
     -DVCLPLUG_SVP_IMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,vclplug_svp,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_svp,\

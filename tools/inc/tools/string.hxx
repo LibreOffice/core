@@ -154,8 +154,6 @@ class TOOLS_DLLPUBLIC ByteString
 {
     friend              class UniString;
 
-    TOOLS_DLLPRIVATE void InitStringRes( const UniString& rStr );
-
 private:
     ByteStringData*     mpData;
 
@@ -206,14 +204,8 @@ public:
     }
 
     static ByteString   CreateFromInt32( sal_Int32 n, sal_Int16 nRadix = 10 );
-    static ByteString   CreateFromInt64( sal_Int64 n, sal_Int16 nRadix = 10 );
-    static ByteString   CreateFromFloat( float f );
-    static ByteString   CreateFromDouble( double d );
-    static const ByteString& EmptyString();
     sal_Int32           ToInt32() const;
     sal_Int64           ToInt64() const;
-    float               ToFloat() const;
-    double              ToDouble() const;
 
     ByteString&         Assign( const ByteString& rStr );
     ByteString&         Assign( const rtl::OString& rStr );
@@ -247,8 +239,6 @@ public:
     xub_StrLen          Len() const { return (xub_StrLen)mpData->mnLen; }
 
     ByteString&         Insert( const ByteString& rStr, xub_StrLen nIndex = STRING_LEN );
-    ByteString&         Insert( const ByteString& rStr, xub_StrLen nPos, xub_StrLen nLen,
-                                xub_StrLen nIndex = STRING_LEN );
     ByteString&         Insert( const sal_Char* pCharStr, xub_StrLen nIndex = STRING_LEN );
     ByteString&         Insert( sal_Char c, xub_StrLen nIndex = STRING_LEN );
     ByteString&         Replace( xub_StrLen nIndex, xub_StrLen nCount, const ByteString& rStr );
@@ -262,7 +252,6 @@ public:
     ByteString&         EraseTrailingChars( sal_Char c = ' ' );
     ByteString&         EraseLeadingAndTrailingChars( sal_Char c = ' ' );
     ByteString&         EraseAllChars( sal_Char c = ' ' );
-    ByteString&         Reverse();
 
     ByteString&         Convert( rtl_TextEncoding eSource,
                                  rtl_TextEncoding eTarget,
@@ -297,8 +286,6 @@ public:
                                    xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareTo( const sal_Char* pCharStr,
                                    xub_StrLen nLen = STRING_LEN ) const;
-    StringCompare       CompareIgnoreCaseToAscii( const ByteString& rStr,
-                                                  xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareIgnoreCaseToAscii( const sal_Char* pCharStr,
                                                   xub_StrLen nLen = STRING_LEN ) const;
     sal_Bool                Equals( const ByteString& rStr ) const;
@@ -309,22 +296,14 @@ public:
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
     sal_Bool                Equals( const sal_Char* pCharStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
-    sal_Bool                EqualsIgnoreCaseAscii( const ByteString& rStr,
-                                               xub_StrLen nIndex, xub_StrLen nLen ) const;
-    sal_Bool                EqualsIgnoreCaseAscii( const sal_Char* pCharStr,
-                                               xub_StrLen nIndex, xub_StrLen nLen ) const;
 
     xub_StrLen          Match( const ByteString& rStr ) const;
-    xub_StrLen          Match( const sal_Char* pCharStr ) const;
 
     xub_StrLen          Search( sal_Char c, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          Search( const ByteString& rStr, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          Search( const sal_Char* pCharStr, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          SearchBackward( sal_Char c, xub_StrLen nIndex = STRING_LEN ) const;
-    xub_StrLen          SearchChar( const sal_Char* pChars, xub_StrLen nIndex = 0 ) const;
-    xub_StrLen          SearchCharBackward( const sal_Char* pChars, xub_StrLen nIndex = STRING_LEN ) const;
 
-    xub_StrLen          SearchAndReplace( sal_Char c, sal_Char cRep, xub_StrLen nIndex = 0 );
     xub_StrLen          SearchAndReplace( const ByteString& rStr, const ByteString& rRepStr,
                                           xub_StrLen nIndex = 0 );
     xub_StrLen          SearchAndReplace( const sal_Char* pCharStr, const ByteString& rRepStr,
@@ -339,9 +318,6 @@ public:
     ByteString          GetToken( xub_StrLen nToken, sal_Char cTok, xub_StrLen& rIndex ) const;
     ByteString          GetToken( xub_StrLen nToken, sal_Char cTok = ';' ) const;
 
-    xub_StrLen          GetQuotedTokenCount( const ByteString& rQuotedPairs, sal_Char cTok = ';' ) const;
-    ByteString          GetQuotedToken( xub_StrLen nToken, const ByteString& rQuotedPairs,
-                                        sal_Char cTok,  xub_StrLen& rIndex ) const;
     ByteString          GetQuotedToken( xub_StrLen nToken, const ByteString& rQuotedPairs,
                                         sal_Char cTok = ';' ) const;
 
@@ -397,13 +373,6 @@ inline ByteString ByteString::GetToken( xub_StrLen nToken, sal_Char cTok ) const
 {
     xub_StrLen nTempPos = 0;
     return GetToken( nToken, cTok, nTempPos );
-}
-
-inline ByteString ByteString::GetQuotedToken( xub_StrLen nToken, const ByteString& rQuotedPairs,
-                                              sal_Char cTok ) const
-{
-    xub_StrLen nTempPos = 0;
-    return GetQuotedToken( nToken, rQuotedPairs, cTok, nTempPos );
 }
 
 // -----------------------------------------------------------------------
@@ -615,7 +584,6 @@ public:
     xub_StrLen          SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          SearchBackward( sal_Unicode c, xub_StrLen nIndex = STRING_LEN ) const;
     xub_StrLen          SearchChar( const sal_Unicode* pChars, xub_StrLen nIndex = 0 ) const;
-    xub_StrLen          SearchCharBackward( const sal_Unicode* pChars, xub_StrLen nIndex = STRING_LEN ) const;
 
     xub_StrLen          SearchAndReplace( sal_Unicode c, sal_Unicode cRep,
                                           xub_StrLen nIndex = 0 );

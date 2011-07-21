@@ -65,14 +65,6 @@ public:
 
                     // Only create a name for a temporary file that would be valid at that moment.
     static String   CreateTempName( const String* pParent=NULL );
-
-                    // The TempNameBase is a folder in the default ( system ) tempfile folder.
-                    // This subfolder will be used if a TempFile or TempName is created without a parent name.
-                    // The caller of the SetTempNameBase is responsible for deleting this folder and all temporary files in it.
-                    // The argument must be a simple name, not a complete URL.
-                    // The return value of both methods is the complete URL of the tempname base folder.
-    static String   SetTempNameBaseDirectory( const String &rBaseName );
-    static String   GetTempNameBaseDirectory();
 };
 
 #endif

@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
- *
+*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,25 +24,30 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
+************************************************************************/
 
-#ifndef _MHAPPDEF_HXX
-#define _MHAPPDEF_HXX
+#ifndef _SV_SALTIMER_H
+#define _SV_SALTIMER_H
 
+#include "premac.h"
+#include <Foundation/Foundation.h>
+#include "postmac.h"
 
-#ifdef UNX
-#define PATH_SEPARATOR      '/'
-#define S_PATH_SEPARATOR    "/"
-#else
-#define PATH_SEPARATOR      '\\'
-#define S_PATH_SEPARATOR    "\\"
-#endif
+#include "saltimer.hxx"
 
-// path conversion
+class IosSalTimer : public SalTimer
+{
+  public:
 
-const char* GetEnv( const char *pVar );
-const char* GetEnv( const char *pVar, const char *pDefault );
+    IosSalTimer();
+    virtual ~IosSalTimer();
 
+    void Start( sal_uLong nMS );
+    void Stop();
+
+    static NSTimer* pRunningTimer;
+    static bool bDispatchTimer;
+};
 
 #endif
 

@@ -68,9 +68,6 @@ public:
     virtual ~INetIStream (void);
 
     int Read (sal_Char *pData, sal_uIntPtr nSize);
-
-    static void Decode64 (SvStream& rIn, SvStream& rOut);
-    static void Encode64 (SvStream& rIn, SvStream& rOut);
 };
 
 /*
@@ -91,20 +88,6 @@ public:
     virtual ~INetOStream (void);
 
     int Write (const sal_Char *pData, sal_uIntPtr nSize);
-};
-
-/*
- * INetIOStream.
- */
-class INetIOStream : public INetIStream, public INetOStream
-{
-    // Not implemented.
-    INetIOStream (const INetIOStream& rStrm);
-    INetIOStream& operator= (const INetIOStream& rStrm);
-
-public:
-    INetIOStream (sal_uIntPtr nIBufferSize = 0, sal_uIntPtr nOBufferSize = 0);
-    virtual ~INetIOStream (void);
 };
 
 /*=========================================================================

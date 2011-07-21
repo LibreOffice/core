@@ -1981,18 +1981,6 @@ TabPage* TabControl::GetTabPage( sal_uInt16 nPageId ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 TabControl::GetTabPageResId( sal_uInt16 nPageId ) const
-{
-    ImplTabItem* pItem = ImplGetItem( nPageId );
-
-    if ( pItem )
-        return pItem->mnTabPageResId;
-    else
-        return 0;
-}
-
-// -----------------------------------------------------------------------
-
 void TabControl::SetPageText( sal_uInt16 nPageId, const XubString& rText )
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
@@ -2059,16 +2047,6 @@ const XubString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
 
 // -----------------------------------------------------------------------
 
-void TabControl::SetHelpId( sal_uInt16 nPageId, const rtl::OString& rHelpId )
-{
-    ImplTabItem* pItem = ImplGetItem( nPageId );
-
-    if ( pItem )
-        pItem->maHelpId = rHelpId;
-}
-
-// -----------------------------------------------------------------------
-
 rtl::OString TabControl::GetHelpId( sal_uInt16 nPageId ) const
 {
     rtl::OString aRet;
@@ -2093,14 +2071,6 @@ void TabControl::SetPageImage( sal_uInt16 i_nPageId, const Image& i_rImage )
         if ( IsUpdateMode() )
             Invalidate();
     }
-}
-
-// -----------------------------------------------------------------------
-
-const Image* TabControl::GetPageImage( sal_uInt16 i_nPageId ) const
-{
-    const ImplTabItem* pItem = ImplGetItem( i_nPageId );
-    return pItem ? &pItem->maTabImage : NULL;
 }
 
 // -----------------------------------------------------------------------

@@ -38,11 +38,15 @@ $(eval $(call gb_Library_set_include,tk,\
     -I$(realpath $(SRCDIR)/toolkit/inc) \
     -I$(realpath $(SRCDIR)/toolkit/inc/pch) \
     -I$(realpath $(SRCDIR)/toolkit/source) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_add_defs,tk,\
     -DTOOLKIT_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,tk,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,tk,\
@@ -161,6 +165,11 @@ ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_add_cxxflags,tk,\
 	$(gb_OBJCXXFLAGS) \
 ))
+endif
+
+ifeq ($(GUIBASE),cocoatouch)
+$(eval $(call gb_Library_set_cxxflags,tk,\
+    $$(CXXFLAGS) $(gb_OBJCXXFLAGS)))
 endif
 
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))

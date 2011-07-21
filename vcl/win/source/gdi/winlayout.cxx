@@ -57,8 +57,8 @@
 
 #define USE_UNISCRIBE
 #ifdef USE_UNISCRIBE
-#include <Usp10.h>
-#include <ShLwApi.h>
+#include <usp10.h>
+#include <shlwapi.h>
 #include <winver.h>
 #endif // USE_UNISCRIBE
 
@@ -2807,7 +2807,7 @@ private:
     grutils::GrFeatureParser * mpFeatures;
     mutable GraphiteLayoutWinImpl maImpl;
 public:
-    GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE);
+    GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE) throw();
 
     // used by upper layers
     virtual bool  LayoutText( ImplLayoutArgs& );    // first step of layout

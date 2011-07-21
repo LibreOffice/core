@@ -351,7 +351,7 @@ void myparser::traverse( xmlNodePtr parentNode )
                         embedded = std::string((const char*)embeddedxml);
                         xmlFree (embeddedxml);
                         std::transform (embedded.begin(), embedded.end(),
-                            embedded.begin(), tolower);
+                            embedded.begin(), tocharlower);
                     }
 
                     bool isEmbedded = !embedded.empty() && embedded.compare("true") == 0;
@@ -437,7 +437,7 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
         if (modulename[0] == 'S')
         {
             modulename = modulename.substr(1);
-            std::transform(modulename.begin(), modulename.end(), modulename.begin(), tolower);
+            std::transform(modulename.begin(), modulename.end(), modulename.begin(), tocharlower);
         }
         if (modulename != "DEFAULT" && modulename != module)
             continue;

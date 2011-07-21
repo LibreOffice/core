@@ -4241,7 +4241,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
         CaptureMouse( sal_True );
 #ifdef DBG_UTIL
         if( -1 != nCaptured_ )
-            pDisplay_->PrintEvent( "Captured", pEvent );
+            pDisplay_->DbgPrintDisplayEvent("Captured", pEvent);
 #endif
     }
 

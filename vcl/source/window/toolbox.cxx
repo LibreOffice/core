@@ -194,8 +194,6 @@ public:
     void            UpdateDragRect();
                     DECL_LINK( SelectHdl, Accelerator* );
 
-    void            StartCustomizeMode();
-    void            EndCustomizeMode();
     sal_Bool            IsCustomizeMode() { return mbCustomizeMode; }
     sal_Bool            IsResizeMode() { return mbResizeMode; }
 };
@@ -1502,29 +1500,6 @@ IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator*, pAccel )
 }
 
 // -----------------------------------------------------------------------
-
-void ImplTBDragMgr::StartCustomizeMode()
-{
-    mbCustomizeMode = sal_True;
-
-    for ( size_t i = 0, n = mpBoxList->size(); i < n; ++i ) {
-        (*mpBoxList)[ i ]->ImplStartCustomizeMode();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void ImplTBDragMgr::EndCustomizeMode()
-{
-    mbCustomizeMode = sal_False;
-
-    for ( size_t i = 0, n = mpBoxList->size(); i < n; ++i ) {
-        (*mpBoxList)[ i ]->ImplEndCustomizeMode();
-    }
-}
-
-// -----------------------------------------------------------------------
-
 
 static void ImplDrawOutButton( OutputDevice* pOutDev, const Rectangle& rRect,
                                sal_uInt16 nStyle )
@@ -3178,60 +3153,6 @@ void ToolBox::ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, sal_Bool bBlac
     }
 }
 
-void ToolBox::SetToolArrowClipregion( ToolBox* pBox, long nX, long nY,
-                                      sal_Bool bLeft, sal_Bool bTop, long nSize )
-{
-    WindowAlign     eAlign = pBox->meAlign;
-    long            nHalfSize;
-    if ( bLeft )
-        eAlign = WINDOWALIGN_RIGHT;
-    else if ( bTop )
-        eAlign = WINDOWALIGN_BOTTOM;
-
-    nHalfSize = nSize/2;
-
-    Point p[6];
-
-    switch ( eAlign )
-    {
-        case WINDOWALIGN_LEFT:
-            p[0].X() = nX-1; p[0].Y() = nY-1;
-            p[1].X() = nX-1; p[1].Y() = nY+nSize+1;
-            p[2].X() = nX+1; p[2].Y() = nY+nSize+1;
-            p[3].X() = nX+nHalfSize+1; p[3].Y() = nY+nHalfSize+1;
-            p[4].X() = nX+nHalfSize+1; p[4].Y() = nY+nHalfSize-1;
-            p[5].X() = nX+1; p[5].Y() = nY-1;
-            break;
-        case WINDOWALIGN_TOP:
-            p[0].X() = nX-1; p[0].Y() = nY-1;
-            p[1].X() = nX-1; p[1].Y() = nY+1;
-            p[2].X() = nX+nHalfSize-1; p[2].Y() = nY+nHalfSize+1;
-            p[3].X() = nX+nHalfSize+1; p[3].Y() = nY+nHalfSize+1;
-            p[4].X() = nX+nSize+1; p[4].Y() = nY+1;
-            p[5].X() = nX+nSize+1; p[5].Y() = nY-1;
-            break;
-        case WINDOWALIGN_RIGHT:
-            p[0].X() = nX+nHalfSize-1; p[0].Y() = nY-1;
-            p[1].X() = nX-1; p[1].Y() = nY+nHalfSize-1;
-            p[2].X() = nX-1; p[2].Y() = nY+nHalfSize+1;
-            p[3].X() = nX+nHalfSize-1; p[3].Y() = nY+nSize+1;
-            p[4].X() = nX+nHalfSize+1; p[4].Y() = nY+nSize+1;
-            p[5].X() = nX+nHalfSize+1; p[5].Y() = nY-1;
-            break;
-        case WINDOWALIGN_BOTTOM:
-            p[0].X() = nX-1; p[0].Y() = nY+nHalfSize-1;
-            p[1].X() = nX-1; p[1].Y() = nY+nHalfSize+1;
-            p[2].X() = nX+nSize+1; p[2].Y() = nY+nHalfSize+1;
-            p[3].X() = nX+nSize+1; p[3].Y() = nY+nHalfSize-1;
-            p[4].X() = nX+nHalfSize+1; p[4].Y() = nY-1;
-            p[5].X() = nX+nHalfSize-1; p[5].Y() = nY-1;
-            break;
-    }
-    Polygon aPoly(6,p);
-    Region aRgn( aPoly );
-    pBox->SetClipRegion( aRgn );
-}
-
 // -----------------------------------------------------------------------
 
 void ToolBox::ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight )
@@ -3843,60 +3764,6 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
     // Gegebenenfalls noch Config-Frame zeichnen
     if ( pMgr )
         pMgr->UpdateDragRect();
-}
-
-// -----------------------------------------------------------------------
-
-void ToolBox::ImplStartCustomizeMode()
-{
-    mbCustomizeMode = sal_True;
-
-    mpData->ImplClearLayoutData();
-
-    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
-    while ( it != mpData->m_aItems.end() )
-    {
-        if ( it->mbShowWindow )
-        {
-            it->mpWindow->Hide();
-
-            if ( !(it->maRect.IsEmpty()) )
-                Invalidate( it->maRect );
-        }
-
-        ++it;
-    }
-}
-
-void ToolBox::SetCustomizeMode( sal_Bool bSet )
-{
-    if ( bSet )
-        ImplStartCustomizeMode();
-    else
-        ImplEndCustomizeMode();
-}
-
-// -----------------------------------------------------------------------
-
-void ToolBox::ImplEndCustomizeMode()
-{
-    mbCustomizeMode = sal_False;
-
-    mpData->ImplClearLayoutData();
-
-    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
-    while ( it != mpData->m_aItems.end() )
-    {
-        if ( it->mbShowWindow )
-        {
-            if ( !(it->maRect.IsEmpty()) )
-                Invalidate( it->maRect );
-
-            it->mpWindow->Show();
-        }
-
-        ++it;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -5545,49 +5412,6 @@ void ToolBox::EnableCustomize( sal_Bool bEnable )
 
 // -----------------------------------------------------------------------
 
-void ToolBox::StartCustomize( const Rectangle& rRect, void* pData )
-{
-    DBG_ASSERT( mbCustomize,
-                "ToolBox::StartCustomize(): ToolBox must be customized" );
-
-    ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
-    Point aMousePos = GetPointerPosPixel();
-    Point aPos = ScreenToOutputPixel( rRect.TopLeft() );
-    Rectangle aRect( aPos.X(), aPos.Y(),
-                     aPos.X()+rRect.GetWidth()+SMALLBUTTON_HSIZE,
-                     aPos.Y()+rRect.GetHeight()+SMALLBUTTON_VSIZE );
-    aMousePos = ScreenToOutputPixel( aPos );
-    Pointer aPtr;
-    SetPointer( aPtr );
-    pMgr->StartDragging( this, aMousePos, aRect, 0, sal_False, pData );
-}
-
-// -----------------------------------------------------------------------
-
-void ToolBox::StartCustomizeMode()
-{
-    ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
-    pMgr->StartCustomizeMode();
-}
-
-// -----------------------------------------------------------------------
-
-void ToolBox::EndCustomizeMode()
-{
-    ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
-    pMgr->EndCustomizeMode();
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool ToolBox::IsCustomizeMode()
-{
-    ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
-    return pMgr->IsCustomizeMode();
-}
-
-// -----------------------------------------------------------------------
-
 void ToolBox::GetFocus()
 {
     DockingWindow::GetFocus();
@@ -5983,39 +5807,6 @@ ImplToolItem* ToolBox::ImplGetFirstValidItem( sal_uInt16 nLine )
     }
 
     return (it == mpData->m_aItems.end()) ? NULL : &(*it);
-}
-
-// returns the last displayable item in the given line
-ImplToolItem* ToolBox::ImplGetLastValidItem( sal_uInt16 nLine )
-{
-    if( !nLine || nLine > mnCurLines )
-        return NULL;
-
-    nLine--;
-    ImplToolItem *pFound = NULL;
-    std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
-    while( it != mpData->m_aItems.end() )
-    {
-        // find correct line
-        if ( it->mbBreak )
-            nLine--;
-        if( !nLine )
-        {
-            // find last useful item
-            while( it != mpData->m_aItems.end() && ((it->meType == TOOLBOXITEM_BUTTON) &&
-                /*it->mbEnabled &&*/ it->mbVisible && !ImplIsFixedControl( &(*it) )) )
-            {
-                pFound = &(*it);
-                ++it;
-                if( it == mpData->m_aItems.end() || it->mbBreak )
-                    return pFound;    // end of line: return last useful item
-            }
-            return pFound;
-        }
-        ++it;
-    }
-
-    return pFound;
 }
 
 // -----------------------------------------------------------------------

@@ -25,30 +25,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _VCL_SALNSTIMER_H
+#define _VCL_SALNSTIMER_H
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_tools.hxx"
+#include "premac.h"
+#include <Foundation/Foundation.h>
+#include "postmac.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-#include "bootstrp/appdef.hxx"
-
-const char* GetEnv( const char *pVar )
+@interface TimerCallbackCaller : NSObject
 {
-    char const *pRet = getenv( pVar );
-    if ( !pRet )
-        pRet = "";
-    return pRet;
 }
+-(void)timerElapsed:(NSTimer*)pTimer;
+@end
 
-const char* GetEnv( const char *pVar, const char *pDefault )
-{
-    char *pRet = getenv( pVar );
-    if ( !pRet )
-        return pDefault;
-    return pRet;
-}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

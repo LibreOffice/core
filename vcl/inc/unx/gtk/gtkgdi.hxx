@@ -39,6 +39,8 @@
 
 #if GTK_CHECK_VERSION(3,0,0)
 
+#include <unx/headless/svpgdi.hxx>
+
 // Disabled for gtk3 - use legacy theming code
 #define GTK_GRAPHICS_DISABLED
 class GtkSalFrame;
@@ -46,7 +48,6 @@ class GtkSalGraphics : public X11SalGraphics {
 public:
     GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
 };
-
 #else
 
 class GtkSalGraphics : public X11SalGraphics

@@ -37,7 +37,6 @@
 class VCL_DLLPUBLIC TaskPaneList
 {
     ::std::vector<Window *> mTaskPanes;
-    Window *FindNextPane( Window *pWindow, sal_Bool bForward = sal_True );
     Window *FindNextFloat( Window *pWindow, sal_Bool bForward = sal_True );
     Window *FindNextSplitter( Window *pWindow, sal_Bool bForward = sal_True );
 

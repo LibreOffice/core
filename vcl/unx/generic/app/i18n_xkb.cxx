@@ -36,16 +36,10 @@
 #include "unx/saldata.hxx"
 #include "unx/i18n_xkb.hxx"
 
-SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display*
-#if __XKeyboardExtension__
-pDisplay
-#endif
-)
-    : mbUseExtension( (sal_Bool)__XKeyboardExtension__ ),
+SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
+    : mbUseExtension( sal_True ),
       mnDefaultGroup( 0 )
 {
-    #if __XKeyboardExtension__
-
     mpDisplay = pDisplay;
 
     // allow user to set the default keyboard group idx or to disable the usage
@@ -94,19 +88,11 @@ pDisplay
         XkbGetState( mpDisplay, XkbUseCoreKbd, &aStateRecord );
         mnGroup = aStateRecord.group;
     }
-
-    #endif // __XKeyboardExtension__
 }
 
 void
-SalI18N_KeyboardExtension::Dispatch( XEvent*
-#if __XKeyboardExtension__
-pEvent
-#endif
-)
+SalI18N_KeyboardExtension::Dispatch( XEvent* pEvent )
 {
-    #if __XKeyboardExtension__
-
     // must the event be handled?
     if (   !mbUseExtension
         || (pEvent->type != mnEventBase) )
@@ -130,21 +116,13 @@ pEvent
             #endif
             break;
     }
-    #endif // __XKeyboardExtension__
 }
 
-#if __XKeyboardExtension__
 sal_uInt32
 SalI18N_KeyboardExtension::LookupKeysymInGroup( sal_uInt32 nKeyCode,
                                                  sal_uInt32 nShiftState,
                                                    sal_uInt32 nGroup ) const
-#else
-sal_uInt32
-SalI18N_KeyboardExtension::LookupKeysymInGroup( sal_uInt32,sal_uInt32,sal_uInt32 ) const
-#endif
 {
-    #if __XKeyboardExtension__
-
     if ( !mbUseExtension )
         return NoSymbol;
 
@@ -153,12 +131,6 @@ SalI18N_KeyboardExtension::LookupKeysymInGroup( sal_uInt32,sal_uInt32,sal_uInt32
     KeySym      nKeySymbol;
     nKeySymbol = XkbKeycodeToKeysym( mpDisplay, nKeyCode, nGroup, nShiftState );
     return nKeySymbol;
-
-    #else
-
-    return NoSymbol;
-
-    #endif // __XKeyboardExtension__
 }
 
 

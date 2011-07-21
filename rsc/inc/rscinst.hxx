@@ -206,8 +206,6 @@ public:
                            const ByteString & rMacro );
     sal_Bool        IsDefUsed( const ByteString & );
     void        DeleteDef( const ByteString & rMacroName );
-    ERRTYPE     ChangeDefName( const ByteString & rMacroName,
-                               const ByteString & rNewName );
 
                 // Dateinamen-Instanz holen
     RscFile *   GetFileStruct();

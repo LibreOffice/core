@@ -59,10 +59,10 @@ public:
 
     virtual                 ~TextAttrib();
 
-    sal_uInt16                  Which() const   { return mnWhich; }
-
+    sal_uInt16              Which() const   { return mnWhich; }
     virtual void            SetFont( Font& rFont ) const = 0;
     virtual TextAttrib*     Clone() const = 0;
+
     virtual int             operator==( const TextAttrib& rAttr ) const = 0;
     int                     operator!=( const TextAttrib& rAttr ) const
                                 { return !(*this == rAttr ); }
@@ -114,8 +114,6 @@ private:
     Color       maColor;
 
 public:
-                            TextAttribHyperLink( const XubString& rURL );
-                            TextAttribHyperLink( const XubString& rURL, const XubString& rDescription );
                             TextAttribHyperLink( const TextAttribHyperLink& rAttr );
                             ~TextAttribHyperLink();
 

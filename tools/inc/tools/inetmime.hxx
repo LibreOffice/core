@@ -352,15 +352,6 @@ public:
      */
     static inline int getBase64Weight(sal_uInt32 nChar);
 
-    /** Get a decimal digit encoded as US-ASCII.
-
-        @param nWeight  Must be in the range 0--9, inclusive.
-
-        @return  The decimal digit corresponding to nWeight (US-ASCII
-        '0'--'9').
-     */
-    static sal_uInt32 getDigit(int nWeight);
-
     /** Get a hexadecimal digit encoded as US-ASCII.
 
         @param nWeight  Must be in the range 0--15, inclusive.
@@ -370,43 +361,12 @@ public:
      */
     static sal_uInt32 getHexDigit(int nWeight);
 
-    /** Get a Base 64 digit encoded as US-ASCII.
-
-        @param nWeight  Must be in the range 0--63, inclusive.
-
-        @return  The Base 64 digit corresponding to nWeight (US-ASCII 'A'--
-        'Z', 'a'--'z', '0'--'9', '+' or '/').
-     */
-    static sal_uInt32 getBase64Digit(int nWeight);
-
     static inline bool isHighSurrogate(sal_uInt32 nUTF16);
 
     static inline bool isLowSurrogate(sal_uInt32 nUTF16);
 
     static inline sal_uInt32 toUTF32(sal_Unicode cHighSurrogate,
                                      sal_Unicode cLowSurrogate);
-
-    /** Check two US-ASCII strings for equality, ignoring case.
-
-        @param pBegin1  Points to the start of the first string, must not be
-        null.
-
-        @param pEnd1  Points past the end of the first string, must be >=
-        pBegin1.
-
-        @param pBegin2  Points to the start of the second string, must not be
-        null.
-
-        @param pEnd2  Points past the end of the second string, must be >=
-        pBegin2.
-
-        @return  True if the two strings are equal, ignoring the case of US-
-        ASCII alphabetic characters (US-ASCII 'A'--'Z' and 'a'--'z').
-     */
-    static bool equalIgnoreCase(const sal_Char * pBegin1,
-                                const sal_Char * pEnd1,
-                                const sal_Char * pBegin2,
-                                const sal_Char * pEnd2);
 
     /** Check two US-ASCII strings for equality, ignoring case.
 
@@ -472,9 +432,6 @@ public:
     static bool startsWithLinearWhiteSpace(const sal_Char * pBegin,
                                            const sal_Char * pEnd);
 
-    static const sal_Char * skipLinearWhiteSpace(const sal_Char * pBegin,
-                                                 const sal_Char * pEnd);
-
     static const sal_Unicode * skipLinearWhiteSpace(const sal_Unicode *
                                                         pBegin,
                                                     const sal_Unicode * pEnd);
@@ -503,33 +460,12 @@ public:
     static const sal_Unicode * skipQuotedString(const sal_Unicode * pBegin,
                                                 const sal_Unicode * pEnd);
 
-    static const sal_Char * scanAtom(const sal_Char * pBegin,
-                                     const sal_Char * pEnd);
-
-    static const sal_Unicode * scanAtom(const sal_Unicode * pBegin,
-                                        const sal_Unicode * pEnd);
-
     static bool scanUnsigned(const sal_Char *& rBegin, const sal_Char * pEnd,
                              bool bLeadingZeroes, sal_uInt32 & rValue);
 
     static bool scanUnsigned(const sal_Unicode *& rBegin,
                              const sal_Unicode * pEnd, bool bLeadingZeroes,
                              sal_uInt32 & rValue);
-
-    static bool scanUnsignedHex(const sal_Char *& rBegin,
-                                const sal_Char * pEnd, bool bLeadingZeroes,
-                                sal_uInt32 & rValue);
-
-    static bool scanUnsignedHex(const sal_Unicode *& rBegin,
-                                const sal_Unicode * pEnd, bool bLeadingZeroes,
-                                sal_uInt32 & rValue);
-
-    static const sal_Char * scanQuotedBlock(const sal_Char * pBegin,
-                                            const sal_Char * pEnd,
-                                            sal_uInt32 nOpening,
-                                            sal_uInt32 nClosing,
-                                            sal_Size & rLength,
-                                            bool & rModify);
 
     static const sal_Unicode * scanQuotedBlock(const sal_Unicode * pBegin,
                                                const sal_Unicode * pEnd,
@@ -559,9 +495,6 @@ public:
     static rtl_TextEncoding getCharsetEncoding(const sal_Char * pBegin,
                                                const sal_Char * pEnd);
 
-    static rtl_TextEncoding getCharsetEncoding(const sal_Unicode * pBegin,
-                                               const sal_Unicode * pEnd);
-
     static inline bool isMIMECharsetEncoding(rtl_TextEncoding eEncoding);
 
     static INetMIMECharsetList_Impl *
@@ -590,18 +523,6 @@ public:
                                            sal_uInt32 nChar);
 
     static void writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar);
-
-    static void writeUnsigned(INetMIMEOutputSink & rSink, sal_uInt32 nValue,
-                              int nMinDigits = 1);
-
-    static void writeDateTime(INetMIMEOutputSink & rSink,
-                              const DateTime & rUTC);
-
-    static void writeHeaderFieldBody(INetMIMEOutputSink & rSink,
-                                     HeaderFieldType eType,
-                                     const ByteString & rBody,
-                                     rtl_TextEncoding ePreferredEncoding,
-                                     bool bInitialSpace = true);
 
     static void writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                      HeaderFieldType eType,

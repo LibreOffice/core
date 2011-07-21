@@ -526,14 +526,16 @@ void XRMResExport::WorkOnText(
 {
     ByteString sLang( GetAttribute( rOpenTag, "xml:lang" ));
 
-        if ( !pResData ) {
-            ByteString sPlatform( "" );
-            pResData = new ResData( sPlatform, GetGID() );
-            pResData->sId = GetLID();
-        }
+    if ( !pResData )
+    {
+        ByteString sPlatform( "" );
+        pResData = new ResData( sPlatform, GetGID() );
+        pResData->sId = GetLID();
+    }
 
-        pResData->sText[ sLang ] = rText;
-        ConvertStringToDBFormat( pResData->sText[ sLang ] );
+    ByteString sText(rText);
+    ConvertStringToDBFormat(sText);
+    pResData->sText[sLang] = sText;
 }
 
 /*****************************************************************************/
@@ -648,7 +650,6 @@ void XRMResMerge::WorkOnText(
                 {
                     rText = sContent;
                     ConvertStringToXMLFormat( rText );
-                    //Export::QuotHTMLXRM( rText );
                 }
             }
     }

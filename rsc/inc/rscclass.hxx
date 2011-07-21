@@ -118,15 +118,6 @@ public:
                              RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
 };
 
-class RscFirstSysDepend : public RscSysDepend
-{
-public:
-                    RscFirstSysDepend( Atom nId, sal_uInt32 nTypId,
-                                        RscTop * pSuper );
-    ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
-};
-
 class RscTupel : public RscClass
 {
 public:

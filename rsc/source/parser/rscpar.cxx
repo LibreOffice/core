@@ -72,23 +72,6 @@ RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
     pInput    = (char *)rtl_allocateMemory( nInputBufLen );
 }
 
-RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
-                          sal_uLong lFIndex, const ByteString& rBuf )
-{
-    pTypCont     = pTC;
-    Init();
-    lFileIndex   = lFIndex;
-    lSrcIndex    = lIndexSrc;
-    fInputFile   = NULL;
-    nInputPos    = 0;
-    nInputEndPos = rBuf.Len();
-
-    // Muss groesser sein wegen Eingabeende bei nInputBufLen < nInputEndPos
-    nInputBufLen = nInputEndPos +1;
-    pInput       = (char *)rtl_allocateMemory( nInputBufLen +100 );
-    memcpy( pInput, rBuf.GetBuffer(), nInputEndPos );
-}
-
 /*************************************************************************
 |*
 |*    RscFileInst::~RscFileInst()

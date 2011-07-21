@@ -27,8 +27,8 @@
  ************************************************************************/
 
 #include <rtl/digest.h>
-class ByteString;
+#include <rtl/string.hxx>
 
-rtlDigestError calc_md5_checksum( const char *filename, ByteString &aChecksum );
+rtlDigestError calc_md5_checksum(const char *filename, rtl::OString &rChecksum);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

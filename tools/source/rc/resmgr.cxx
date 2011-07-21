@@ -590,19 +590,20 @@ InternalResMgr::~InternalResMgr()
         {
             SvFileStream aStm( UniString( pLogFile, RTL_TEXTENCODING_ASCII_US ), STREAM_WRITE );
             aStm.Seek( STREAM_SEEK_TO_END );
-            ByteString aLine( "FileName: " );
-            aLine.Append( ByteString( OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ) ) );
-            aStm.WriteLine( aLine );
+            rtl::OStringBuffer aLine(RTL_CONSTASCII_STRINGPARAM("FileName: "));
+            aLine.append(rtl::OUStringToOString(aFileName,
+                RTL_TEXTENCODING_UTF8));
+            aStm.WriteLine(aLine.makeStringAndClear());
 
             for( boost::unordered_map<sal_uInt64, int>::const_iterator it = pResUseDump->begin();
                  it != pResUseDump->end(); ++it )
             {
                 sal_uInt64 nKeyId = it->first;
-                aLine.Assign( "Type/Id: " );
-                aLine.Append( ByteString::CreateFromInt32( sal::static_int_cast< sal_Int32 >((nKeyId >> 32) & 0xFFFFFFFF) ) );
-                aLine.Append( '/' );
-                aLine.Append( ByteString::CreateFromInt32( sal::static_int_cast< sal_Int32 >(nKeyId & 0xFFFFFFFF) ) );
-                aStm.WriteLine( aLine );
+                aLine.append(RTL_CONSTASCII_STRINGPARAM("Type/Id: "));
+                aLine.append(sal::static_int_cast< sal_Int32 >((nKeyId >> 32) & 0xFFFFFFFF));
+                aLine.append('/');
+                aLine.append(sal::static_int_cast< sal_Int32 >(nKeyId & 0xFFFFFFFF));
+                aStm.WriteLine(aLine.makeStringAndClear());
             }
         }
     }
@@ -817,31 +818,37 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
 
     ResMgr* pNewResMgr = new ResMgr( pImp );
 
-    ByteString aStr = OUStringToOString( pResMgr->GetFileName(), RTL_TEXTENCODING_UTF8 );
-    if ( aStr.Len() )
-        aStr += '\n';
+    rtl::OStringBuffer aStr(rtl::OUStringToOString(pResMgr->GetFileName(),
+        RTL_TEXTENCODING_UTF8));
 
-    aStr.Append( "Class: " );
-    aStr.Append( ByteString( GetTypeRes_Impl( ResId( nRT, *pNewResMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    aStr.Append( ", Id: " );
-    aStr.Append( ByteString::CreateFromInt32( (long)nId ) );
-    aStr.Append( ". " );
-    aStr.Append( pMessage );
+    if (aStr.getLength())
+        aStr.append('\n');
 
-    aStr.Append( "\nResource Stack\n" );
+    aStr.append(RTL_CONSTASCII_STRINGPARAM("Class: "));
+    aStr.append(rtl::OUStringToOString(GetTypeRes_Impl(ResId(nRT, *pNewResMgr)),
+        RTL_TEXTENCODING_UTF8));
+    aStr.append(RTL_CONSTASCII_STRINGPARAM(", Id: "));
+    aStr.append(static_cast<sal_Int32>(nId));
+    aStr.append(RTL_CONSTASCII_STRINGPARAM(". "));
+    aStr.append(pMessage);
+
+    aStr.append(RTL_CONSTASCII_STRINGPARAM("\nResource Stack\n"));
     while( nDepth > 0 )
     {
-        aStr.Append( "Class: " );
-        aStr.Append( ByteString( GetTypeRes_Impl( ResId( rResStack[nDepth].pResource->GetRT(), *pNewResMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-        aStr.Append( ", Id: " );
-        aStr.Append( ByteString::CreateFromInt32( (long)rResStack[nDepth].pResource->GetId() ) );
+        aStr.append(RTL_CONSTASCII_STRINGPARAM("Class: "));
+        aStr.append(rtl::OUStringToOString(GetTypeRes_Impl(
+            ResId(rResStack[nDepth].pResource->GetRT(), *pNewResMgr)),
+            RTL_TEXTENCODING_UTF8));
+        aStr.append(RTL_CONSTASCII_STRINGPARAM(", Id: "));
+        aStr.append(static_cast<sal_Int32>(
+            rResStack[nDepth].pResource->GetId()));
         nDepth--;
     }
 
     // clean up
     delete pNewResMgr;
 
-    OSL_FAIL( aStr.GetBuffer() );
+    OSL_FAIL(aStr.getStr());
 }
 
 #endif
@@ -1207,15 +1214,18 @@ sal_Bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
             if( pFallbackResMgr )
             {
                 pTop->Flags |= RC_FALLBACK_DOWN;
-                #ifdef DBG_UTIL
-                ByteString aMess( "found resource " );
-                aMess.Append( ByteString::CreateFromInt32( nId ) );
-                aMess.Append( " in fallback " );
-                aMess.Append( ByteString( OUStringToOString( pFallbackResMgr->GetFileName(), osl_getThreadTextEncoding() ) ) );
-                aMess.Append( "\n" );
-                RscError_Impl( aMess.GetBuffer(),
-                              this, nRT, nId, aStack, nCurStack-1 );
-                #endif
+#ifdef DBG_UTIL
+                rtl::OStringBuffer aMess(
+                    RTL_CONSTASCII_STRINGPARAM("found resource "));
+                aMess.append(static_cast<sal_Int32>(nId));
+                aMess.append(RTL_CONSTASCII_STRINGPARAM(" in fallback "));
+                aMess.append(rtl::OUStringToOString(
+                    pFallbackResMgr->GetFileName(),
+                    osl_getThreadTextEncoding()));
+                aMess.append('\n');
+                RscError_Impl(aMess.getStr(),
+                              this, nRT, nId, aStack, nCurStack-1);
+#endif
             }
             else
             {

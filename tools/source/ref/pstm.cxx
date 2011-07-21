@@ -31,6 +31,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/pstm.hxx>
+#include <rtl/strbuf.hxx>
 
 #define STOR_NO_OPTIMIZE
 
@@ -152,11 +153,12 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
 #ifdef DBG_UTIL
             if( nObjLen + nObjPos != rStm.Tell() )
             {
-                ByteString aStr( "false list len: read = " );
-                aStr += ByteString::CreateFromInt32( (long)(rStm.Tell() - nObjPos) );
-                aStr += ", should = ";
-                aStr += ByteString::CreateFromInt64(nObjLen);
-                OSL_FAIL( aStr.GetBuffer() );
+                rtl::OStringBuffer aStr(
+                    RTL_CONSTASCII_STRINGPARAM("false list len: read = "));
+                aStr.append(static_cast<sal_Int64>(rStm.Tell() - nObjPos));
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(", should = "));
+                aStr.append(static_cast<sal_Int64>(nObjLen));
+                OSL_FAIL(aStr.getStr());
             }
 #else
             (void)nObjLen;
@@ -760,10 +762,11 @@ sal_uInt32 SvPersistStream::ReadObj
             if( !pFunc )
             {
 #ifdef DBG_UTIL
-                ByteString aStr( "no class with id: " );
-                aStr += ByteString::CreateFromInt32( nClassId );
-                aStr += " registered";
-                DBG_WARNING( aStr.GetBuffer() );
+                rtl::OStringBuffer aStr(
+                    RTL_CONSTASCII_STRINGPARAM("no class with id: " ));
+                aStr.append(static_cast<sal_Int32>(nClassId));
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(" registered"));
+                DBG_WARNING(aStr.getStr());
 #else
                 (void)nObjLen;
 #endif
@@ -788,11 +791,12 @@ sal_uInt32 SvPersistStream::ReadObj
 #ifdef DBG_UTIL
             if( nObjLen + nObjPos != Tell() )
             {
-                ByteString aStr( "false object len: read = " );
-                aStr += ByteString::CreateFromInt32( (long)(Tell() - nObjPos) );
-                aStr += ", should = ";
-                aStr += ByteString::CreateFromInt32( nObjLen );
-                OSL_FAIL( aStr.GetBuffer() );
+                rtl::OStringBuffer aStr(
+                    RTL_CONSTASCII_STRINGPARAM("false object len: read = "));
+                aStr.append(static_cast<sal_Int64>((long)(Tell() - nObjPos)));
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(", should = "));
+                aStr.append(static_cast<sal_Int32>(nObjLen));
+                OSL_FAIL(aStr.getStr());
             }
 #endif
             rpObj->RestoreNoDelete();

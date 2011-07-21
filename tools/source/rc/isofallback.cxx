@@ -42,7 +42,7 @@ bool GetIsoFallback(rtl::OString& rLanguage)
         sal_Int32 nSepPos = rLanguage.indexOf('-');
         if (nSepPos == -1)
         {
-            if (rLanguage == rtl::OString(RTL_CONSTASCII_STRINGPARAM("en")))
+            if (rLanguage.equalsL(RTL_CONSTASCII_STRINGPARAM("en")))
             {
                 // en -> ""
                 rLanguage = rtl::OString();

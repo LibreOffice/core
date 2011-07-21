@@ -51,7 +51,7 @@ void Main();
 
 // -----------------------------------------------------------------------
 
-SAL_IMPLEMENT_MAIN()
+SAL_IMPLEMENT_MAIN_WITH_GUI()
 {
     tools::extendApplicationEnvironment();
 

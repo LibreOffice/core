@@ -198,16 +198,6 @@ void SystemChildWindow::EnableEraseBackground( sal_Bool bEnable )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SystemChildWindow::IsEraseBackgroundEnabled()
-{
-    if ( mpWindowImpl->mpSysObj )
-        return mpWindowImpl->mpSysObj->IsEraseBackgroundEnabled();
-    else
-        return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
 void SystemChildWindow::ImplTestJavaException( void* pEnv )
 {
 #ifdef SOLAR_JAVA
@@ -260,6 +250,9 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
     // FIXME: this is wrong
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->pView );
     (void)bUseJava;
+#elif defined IOS
+    // FIXME: this is wrong
+    nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->pView );
 #elif defined UNX
     if( !bUseJava )
     {

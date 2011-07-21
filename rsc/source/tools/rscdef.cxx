@@ -44,7 +44,6 @@ sal_Bool RscId::bNames = sal_True;
 |*
 *************************************************************************/
 void RscId::SetNames( sal_Bool bSet )  { bNames = bSet;  }
-sal_Bool RscId::IsSetNames()           { return bNames;  }
 
 /*************************************************************************
 |*
@@ -170,34 +169,17 @@ RscId::operator sal_Int32() const
 *************************************************************************/
 ByteString RscId::GetName() const
 {
-    ByteString aStr;
+    rtl::OStringBuffer aStr;
 
     if ( !aExp.IsNothing() )
     {
         if( bNames )
-            aExp.GetMacro( aStr );
+            aExp.AppendMacro(aStr);
         else
-            aStr = ByteString::CreateFromInt32( GetNumber() );
+            aStr.append(GetNumber());
     }
 
-    return aStr;
-}
-
-/*************************************************************************
-|*
-|*    RscId::GetMacro()
-|*
-*************************************************************************/
-ByteString RscId::GetMacro() const
-{
-    ByteString aStr;
-
-    if ( aExp.IsDefinition() )
-        aStr = aExp.aExp.pDef->GetMacro();
-    else
-        aExp.GetMacro( aStr );
-
-    return aStr;
+    return aStr.makeStringAndClear();
 }
 
 /****************** R s c D e f i n e ************************************/
@@ -259,27 +241,7 @@ void RscDefine::DefineToNumber()
     if( pExp )
         delete pExp;
     pExp = NULL;
-    SetName( ByteString::CreateFromInt32( lId ) );
-}
-
-/*************************************************************************
-|*
-|*    RscDefine::ChangeMacro()
-|*
-*************************************************************************/
-void RscDefine::ChangeMacro( RscExpression * pExpression ){
-    if( pExp )
-        delete pExp;
-    pExp = pExpression;
-    pExp->Evaluate( &lId );
-}
-
-void RscDefine::ChangeMacro( sal_Int32 lIdentifier ){
-    if( pExp ){
-        delete pExp;
-        pExp = NULL;
-    }
-    lId = lIdentifier;
+    SetName(rtl::OString::valueOf(lId));
 }
 
 /*************************************************************************
@@ -314,7 +276,7 @@ ByteString RscDefine::GetMacro()
 {
     if( pExp )
         return pExp->GetMacro();
-    return ByteString::CreateFromInt32( lId );
+    return rtl::OString::valueOf(lId);
 }
 
 /****************** R s c D e f i n e L i s t ****************************/
@@ -359,35 +321,6 @@ RscDefine * RscDefineList::New( sal_uLong lFileKey, const ByteString & rDefName,
     return pDef;
 }
 
-/*************************************************************************
-|*
-|*    RscDefineList::Remove()
-|*
-*************************************************************************/
-sal_Bool RscDefineList::Remove( RscDefine * pDef ) {
-    for ( RscSubDefList::iterator it = maList.begin(); it < maList.end(); ++it ) {
-        if ( *it == pDef ) {
-            (*it)->DefineToNumber();
-            (*it)->DecRef();
-            maList.erase( it );
-            return sal_True;
-        }
-    }
-    return sal_False;
-}
-
-sal_Bool RscDefineList::Remove( size_t lIndex ) {
-    if ( lIndex < maList.size() ) {
-        RscSubDefList::iterator it = maList.begin();
-        ::std::advance( it, lIndex );
-        (*it)->DefineToNumber();
-        (*it)->DecRef();
-        maList.erase( it );
-        return sal_True;
-    }
-    return sal_False;
-}
-
 sal_Bool RscDefineList::Remove() {
     if ( maList.empty() )
         return sal_False;
@@ -396,29 +329,6 @@ sal_Bool RscDefineList::Remove() {
     maList[ 0 ]->DecRef();
     maList.erase( maList.begin() );
     return sal_True;
-}
-
-/*************************************************************************
-|*
-|*    RscDefineList::Befor()
-|*
-*************************************************************************/
-sal_Bool RscDefineList::Befor( const RscDefine * pFree,
-                           const RscDefine * pDepend )
-{
-    size_t i = 0;
-    size_t n = maList.size();
-    while ( i < n ) {
-        if ( maList[ i ] == pFree ) {
-            for ( ++i ; i < n ; ++i ) {
-                if ( maList[ i ] == pDepend ) {
-                    return sal_True;
-                }
-            }
-        }
-        ++i;
-    }
-    return sal_False;
 }
 
 /*************************************************************************
@@ -459,23 +369,14 @@ sal_Bool RscExpType::Evaluate( sal_Int32 * plValue ) const{
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscExpType::GetMacro()
-|*
-*************************************************************************/
-void RscExpType::GetMacro( ByteString & rStr ) const
+void RscExpType::AppendMacro(rtl::OStringBuffer& rStr) const
 {
-    ByteString aStr;
-
     if( IsDefinition() )
-    {
-        rStr += aExp.pDef->GetName();
-    }
+        rStr.append(aExp.pDef->GetName());
     else if( IsExpression() )
-        rStr += aExp.pExp->GetMacro();
+        rStr.append(aExp.pExp->GetMacro());
     else if( IsNumber() )
-        rStr += ByteString::CreateFromInt32( GetLong() );
+        rStr.append(GetLong());
 }
 
 
@@ -555,38 +456,38 @@ sal_Bool RscExpression::Evaluate( sal_Int32 * plValue ){
 *************************************************************************/
 ByteString RscExpression::GetMacro()
 {
-    ByteString aLeft;
+    rtl::OStringBuffer aLeft;
 
     // Ausgabeoptimierung
     if( aLeftExp.IsNothing() )
     {
         if ( '-' == cOperation )
         {
-            aLeft += '(';
-            aLeft += '-';
+            aLeft.append('(');
+            aLeft.append('-');
         }
-        aRightExp.GetMacro( aLeft );
+        aRightExp.AppendMacro(aLeft);
         if( '-' == cOperation )
-            aLeft += ')';
+            aLeft.append(')');
     }
     else if( aRightExp.IsNothing() )
-        aLeftExp.GetMacro( aLeft );
+        aLeftExp.AppendMacro(aLeft);
     else{
-        aLeft += '(';
+        aLeft.append('(');
         // linken Zweig auswerten
-        aLeftExp.GetMacro( aLeft );
+        aLeftExp.AppendMacro(aLeft);
 
-        aLeft += cOperation;
+        aLeft.append(cOperation);
 
-        aLeft += '(';
+        aLeft.append('(');
         // rechten Zweig auswerten
-        aRightExp.GetMacro( aLeft );
-        aLeft += ')';
+        aRightExp.AppendMacro(aLeft);
+        aLeft.append(')');
 
-        aLeft += ')';
+        aLeft.append(')');
     }
 
-    return aLeft;
+    return aLeft.makeStringAndClear();
 }
 
 /****************** R s c F i l e ****************************************/
@@ -672,25 +573,6 @@ sal_Bool RscFile :: InsertDependFile( sal_uLong lIncFile, size_t lPos )
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscFile::RemoveDependFile()
-|*
-*************************************************************************/
-void RscFile :: RemoveDependFile( sal_uLong lDepFile )
-{
-    for ( size_t i = aDepLst.size(); i > 0; )
-    {
-        RscDepend* pDep = aDepLst[ --i ];
-        if( pDep->GetFileKey() == lDepFile ) {
-            RscDependList::iterator it = aDepLst.begin();
-            ::std::advance( it, i );
-            delete *it;
-            aDepLst.erase( it );
-        }
-    }
-}
-
 /****************** R s c D e f T r e e **********************************/
 /*************************************************************************
 |*
@@ -767,10 +649,6 @@ sal_Bool RscDefTree::Evaluate( RscDefine * pDef ){
     return sal_True;
 }
 
-sal_Bool RscDefTree::Evaluate(){
-    return Evaluate( pDefRoot );
-}
-
 /****************** R s c F i l e T a b **********************************/
 /*************************************************************************
 |*
@@ -824,23 +702,6 @@ sal_uLong  RscFileTab :: Find( const ByteString & rName )
 *************************************************************************/
 RscDefine * RscFileTab::FindDef( const char * pName ){
     return aDefTree.Search( pName );
-}
-
-/*************************************************************************
-|*
-|*    RscFileTab::FindDef()
-|*
-*************************************************************************/
-RscDefine * RscFileTab::FindDef( sal_uLong lFileKey, const ByteString & rName )
-{
-    RscDefine   * pDef = FindDef( rName );
-
-    if( pDef )
-        //befindet sich das DEFINE in einer Include-Datei in der
-        //Datei lFileKey
-        if( Depend( lFileKey, pDef->GetFileKey() ) )
-            return pDef;
-    return NULL;
 }
 
 /*************************************************************************
@@ -972,113 +833,6 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const ByteString & rDefName,
 
 /*************************************************************************
 |*
-|*    RscFileTab::IsDefUsed()
-|*
-*************************************************************************/
-sal_Bool RscFileTab::IsDefUsed( const ByteString & rDefName )
-{
-    RscDefine * pDef = FindDef( rDefName );
-
-    if( pDef )
-        return( pDef->GetRefCount() != 2 );
-
-    return sal_False;
-}
-
-/*************************************************************************
-|*
-|*    RscFileTab::DeleteDef()
-|*
-*************************************************************************/
-void RscFileTab::DeleteDef( const ByteString & rDefName )
-{
-    RscDefine * pDef = FindDef( rDefName );
-    RscFile   * pFile;
-
-    if( pDef ){
-        pFile = GetFile( pDef->GetFileKey() );
-        if( pFile ){
-            aDefTree.Remove( pDef );
-            pFile->aDefLst.Remove( pDef );
-        }
-    };
-}
-
-/*************************************************************************
-|*
-|*    RscFileTab::ChangeDef()
-|*
-*************************************************************************/
-sal_Bool RscFileTab::ChangeDef( const ByteString & rDefName, sal_Int32 lId )
-{
-    RscDefine * pDef = FindDef( rDefName );
-
-    if( pDef ){
-        pDef->ChangeMacro( lId );
-        //alle Macros neu bewerten
-        return aDefTree.Evaluate();
-    };
-    return( sal_False );
-}
-
-/*************************************************************************
-|*
-|*    RscFileTab::ChangeDef()
-|*
-*************************************************************************/
-sal_Bool RscFileTab::ChangeDef( const ByteString & rDefName,
-                            RscExpression * pExp )
-{
-    RscDefine * pDef = FindDef( rDefName );
-    RscFile   * pFile;
-
-    if( pDef )
-    {
-        pFile = GetFile( pDef->GetFileKey() );
-        sal_uLong lPos = 0;
-        if( pFile )
-            lPos = pFile->aDefLst.GetPos( pDef );
-        //Macros in den Expressions sind definiert ?
-        if( TestDef( pDef->GetFileKey(), lPos, pExp ) ){
-            pDef->ChangeMacro( pExp );
-            //alle Macros neu bewerten
-            return aDefTree.Evaluate();
-        }
-    };
-
-    // pExp wird immer Eigentum und muss, wenn es nicht benoetigt wird
-    // geloescht werden
-    delete pExp;
-
-    return( sal_False );
-}
-
-/*************************************************************************
-|*
-|*    RscFileTab::ChangeDefName()
-|*
-*************************************************************************/
-sal_Bool RscFileTab::ChangeDefName( const ByteString & rDefName,
-                                const ByteString & rNewName )
-{
-    RscDefine * pDef = FindDef( rDefName );
-
-    //Name gefunden ?
-    if( pDef ){
-        // und neuer Name noch nicht bekannt ?
-        if( !FindDef( pDef->GetFileKey(), rNewName ) ){
-            aDefTree.Remove( pDef );
-            pDef->SetName( rNewName );
-            aDefTree.Insert( pDef );
-            return( sal_True );
-        }
-    };
-
-    return( sal_False );
-}
-
-/*************************************************************************
-|*
 |*    RscFileTab::DeleteFileContext()
 |*
 *************************************************************************/
@@ -1095,29 +849,6 @@ void RscFileTab :: DeleteFileContext( sal_uLong lFileKey ){
         };
         while( pFName->aDefLst.Remove() ) ;
     }
-}
-
-/*************************************************************************
-|*
-|*    RscFileTab::DeleteFile()
-|*
-*************************************************************************/
-void RscFileTab :: DeleteFile( sal_uLong lFileKey ){
-    RscFile     * pFName;
-
-    //Defines freigeben
-    DeleteFileContext( lFileKey );
-
-    //Schleife ueber alle Abhaengigkeiten
-    pFName = First();
-    while( pFName ){
-        pFName->RemoveDependFile( lFileKey );
-        pFName = Next();
-    };
-
-    pFName = Remove( lFileKey );
-    if( pFName )
-        delete pFName;
 }
 
 /*************************************************************************

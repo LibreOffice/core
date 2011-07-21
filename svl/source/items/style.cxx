@@ -1153,8 +1153,8 @@ sal_Bool SfxStyleSheetBasePool::Store( SvStream& rStream, sal_Bool bUsed )
 
                     sal_uInt16 nInsPos, nAdd = aSortConvNames.Count();
                     while( !aSortConvNames.Insert( pConvName, nInsPos ) )
-                        (pConvName->Append( '_' )).Append(
-                                    ByteString::CreateFromInt32( nAdd++ ));
+                        (pConvName->Append( '_' )).Append(ByteString(
+                                    rtl::OString::valueOf(static_cast<sal_Int32>(nAdd++))));
                     aOrigNames.Insert( pName, nInsPos );
                 }
             }

@@ -128,14 +128,6 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
         throw ( ::com::sun::star::uno::Exception );
 
-    // The followin methods are related to creation of a storage of specified format
-    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
-        GetTemporaryStorageOfFormat(
-            const ::rtl::OUString& aFormat,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
-                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
-        throw ( ::com::sun::star::uno::Exception );
-
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
         GetStorageOfFormatFromURL(
             const ::rtl::OUString& aFormat,

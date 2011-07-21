@@ -38,7 +38,6 @@
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
 #include <rtl/tencinfo.h>
-#include <rtl/instance.hxx>
 
 #include <tools/string.hxx>
 #include <impstrg.hxx>
@@ -104,45 +103,6 @@ ByteString ByteString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
 
 // -----------------------------------------------------------------------
 
-ByteString ByteString::CreateFromInt64( sal_Int64 n, sal_Int16 nRadix )
-{
-    sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
-    BOOST_STATIC_ASSERT(RTL_STR_MAX_VALUEOFINT64 <= STRING_MAXLEN);
-    return ByteString(
-        aBuf,
-        static_cast< xub_StrLen >(rtl_str_valueOfInt64( aBuf, n, nRadix )) );
-}
-
-// -----------------------------------------------------------------------
-
-ByteString ByteString::CreateFromFloat( float f )
-{
-    sal_Char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
-    BOOST_STATIC_ASSERT(RTL_STR_MAX_VALUEOFFLOAT <= STRING_MAXLEN);
-    return ByteString(
-        aBuf, static_cast< xub_StrLen >(rtl_str_valueOfFloat( aBuf, f )) );
-}
-
-// -----------------------------------------------------------------------
-
-ByteString ByteString::CreateFromDouble( double d )
-{
-    sal_Char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
-    BOOST_STATIC_ASSERT(RTL_STR_MAX_VALUEOFDOUBLE <= STRING_MAXLEN);
-    return ByteString(
-        aBuf, static_cast< xub_StrLen >(rtl_str_valueOfDouble( aBuf, d )) );
-}
-
-// -----------------------------------------------------------------------
-
-namespace { struct Empty : public rtl::Static< const ByteString, Empty> {}; }
-const ByteString& ByteString::EmptyString()
-{
-    return Empty::get();
-}
-
-// -----------------------------------------------------------------------
-
 sal_Int32 ByteString::ToInt32() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
@@ -157,26 +117,6 @@ sal_Int64 ByteString::ToInt64() const
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
     return atoi( mpData->maStr );
-}
-
-// -----------------------------------------------------------------------
-
-float ByteString::ToFloat() const
-{
-    DBG_CHKTHIS( ByteString, DbgCheckByteString );
-
-    OSL_FAIL("ByteString::ToFloat unusable");
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-double ByteString::ToDouble() const
-{
-    DBG_CHKTHIS( ByteString, DbgCheckByteString );
-
-    OSL_FAIL("ByteString::ToDouble unusable");
-    return 0;
 }
 
 // -----------------------------------------------------------------------

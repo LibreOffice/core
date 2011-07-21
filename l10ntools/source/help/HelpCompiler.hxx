@@ -108,7 +108,7 @@ namespace fs
         {
             ::rtl::OUString ustrSystemPath;
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
-            return ustrSystemPath.getStr();
+            return (wchar_t const *) ustrSystemPath.getStr();
         }
 #endif
         std::string native_directory_string() const { return native_file_string(); }
@@ -321,6 +321,11 @@ private:
     const fs::path resEmbStylesheet;
     bool bExtensionMode;
 };
+
+inline char tocharlower(char c)
+{
+    return static_cast<char>(tolower(c));
+}
 
 #endif
 

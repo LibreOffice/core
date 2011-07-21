@@ -410,8 +410,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
         return bSuccess;
     }
-
-    catch(::com::sun::star::java::JavaNotConfiguredException e)
+    catch (const ::com::sun::star::java::JavaNotConfiguredException&)
     {
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
@@ -435,8 +434,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
         return false;
     }
-
-    catch(::com::sun::star::java::JavaVMCreationFailureException e)
+    catch (const ::com::sun::star::java::JavaVMCreationFailureException&)
     {
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
@@ -460,8 +458,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
         return false;
     }
-
-    catch(::com::sun::star::java::MissingJavaRuntimeException e)
+    catch (const ::com::sun::star::java::MissingJavaRuntimeException&)
     {
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
@@ -485,8 +482,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
         return false;
     }
-
-    catch(::com::sun::star::java::JavaDisabledException e)
+    catch (const ::com::sun::star::java::JavaDisabledException&)
     {
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
@@ -510,9 +506,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
         return false;
     }
-
-
-    catch(::com::sun::star::uno::RuntimeException e)
+    catch (const ::com::sun::star::uno::RuntimeException& e)
     {
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && pResMgr )
@@ -564,7 +558,6 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
         return false;
     }
-
     catch (...)
     {
         return false;

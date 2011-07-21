@@ -271,11 +271,16 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
             close( fd[0] );
             char aBuffer[ 2048 ];
             FILE* fp = fopen( aFilename.GetBuffer(), "r" );
-            while( fp && ! feof( fp ) )
+            while (fp && !feof(fp))
             {
-                int nBytes = fread( aBuffer, 1, sizeof( aBuffer ), fp );
-                if( nBytes )
-                    write( fd[ 1 ], aBuffer, nBytes );
+                size_t nBytesRead = fread(aBuffer, 1, sizeof( aBuffer ), fp);
+                if (nBytesRead )
+                {
+                    size_t nBytesWritten = write(fd[1], aBuffer, nBytesRead);
+                    OSL_ENSURE(nBytesWritten == nBytesRead, "short write");
+                    if (nBytesWritten != nBytesRead)
+                        break;
+                }
             }
             fclose( fp );
             close( fd[ 1 ] );
@@ -1342,7 +1347,12 @@ sal_Bool PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJo
                         {
                             osl_readFile( pFile, &buffer[0], buffer.size(), &nBytesRead );
                             if( nBytesRead > 0 )
-                                fwrite( &buffer[0], 1, nBytesRead, fp );
+                            {
+                                size_t nBytesWritten = fwrite(&buffer[0], 1, nBytesRead, fp);
+                                OSL_ENSURE(nBytesRead == nBytesWritten, "short write");
+                                if (nBytesRead != nBytesWritten)
+                                    break;
+                            }
                         } while( nBytesRead == buffer.size() );
                         rtl::OUStringBuffer aBuf( i_rJobName.Len() + 8 );
                         aBuf.append( i_rJobName );

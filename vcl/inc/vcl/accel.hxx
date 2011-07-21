@@ -83,9 +83,6 @@ public:
 
     void            InsertItem( sal_uInt16 nItemId, const KeyCode& rKeyCode );
     void            InsertItem( const ResId& rResId );
-    void            RemoveItem( sal_uInt16 nItemId );
-    void            RemoveItem( const KeyCode rKeyCode );
-    void            Clear();
 
     sal_uInt16          GetCurItemId() const { return mnCurId; }
     const KeyCode&  GetCurKeyCode() const { return maCurKeyCode; }
@@ -94,22 +91,9 @@ public:
 
     sal_uInt16          GetItemCount() const;
     sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
-    KeyCode         GetItemKeyCode( sal_uInt16 nPos ) const;
-    sal_uInt16          GetItemId( const KeyCode& rKeyCode ) const;
     KeyCode         GetKeyCode( sal_uInt16 nItemId ) const;
-    sal_Bool            IsIdValid( sal_uInt16 nItemId ) const;
-    sal_Bool            IsKeyCodeValid( const KeyCode rKeyCode ) const;
-    sal_Bool            Call( const KeyCode& rKeyCode, sal_uInt16 nRepeat = 0 );
 
-    void            SetAccel( sal_uInt16 nItemId, Accelerator* pAccel );
     Accelerator*    GetAccel( sal_uInt16 nItemId ) const;
-    void            SetAccel( const KeyCode rKeyCode, Accelerator* pAccel );
-    Accelerator*    GetAccel( const KeyCode rKeyCode ) const;
-
-    void            EnableItem( sal_uInt16 nItemId, sal_Bool bEnable = sal_True );
-    sal_Bool            IsItemEnabled( sal_uInt16 nItemId ) const;
-    void            EnableItem( const KeyCode rKeyCode, sal_Bool bEnable = sal_True );
-    sal_Bool            IsItemEnabled( const KeyCode rKeyCode ) const;
 
     void            SetHelpText( const XubString& rHelpText ) { maHelpStr = rHelpText; }
     const XubString& GetHelpText() const { return maHelpStr; }

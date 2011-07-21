@@ -55,11 +55,11 @@ GtkSalSystem::~GtkSalSystem()
 }
 
 // convert ~ to indicate mnemonic to '_'
-static ByteString MapToGtkAccelerator (const String &rStr)
+static rtl::OString MapToGtkAccelerator(const String &rStr)
 {
     String aRet( rStr );
     aRet.SearchAndReplaceAscii("~", String::CreateFromAscii("_"));
-    return ByteString( aRet, RTL_TEXTENCODING_UTF8 );
+    return rtl::OUStringToOString(aRet, RTL_TEXTENCODING_UTF8);
 }
 
 int GtkSalSystem::ShowNativeDialog( const String& rTitle,
@@ -76,14 +76,16 @@ int GtkSalSystem::ShowNativeDialog( const String& rTitle,
     std::fprintf( stderr, "GtkSalSystem::ShowNativeDialog\n");
 #endif
 
-    ByteString aTitle( rTitle, RTL_TEXTENCODING_UTF8 );
-    ByteString aMessage( rMessage, RTL_TEXTENCODING_UTF8 );
+    rtl::OString aTitle(rtl::OUStringToOString(rTitle,
+        RTL_TEXTENCODING_UTF8));
+    rtl::OString aMessage(rtl::OUStringToOString(rMessage,
+        RTL_TEXTENCODING_UTF8));
 
     /* Create the dialogue */
     GtkWidget* mainwin = gtk_message_dialog_new
             ( NULL, (GtkDialogFlags)0, GTK_MESSAGE_WARNING,
-              GTK_BUTTONS_NONE, aMessage.GetBuffer(), NULL );
-    gtk_window_set_title( GTK_WINDOW( mainwin ), aTitle.GetBuffer() );
+              GTK_BUTTONS_NONE, aMessage.getStr(), NULL );
+    gtk_window_set_title( GTK_WINDOW( mainwin ), aTitle.getStr() );
 
     gint nButtons = 0, nResponse;
 
@@ -92,13 +94,16 @@ int GtkSalSystem::ShowNativeDialog( const String& rTitle,
     {
         if( nButton == nDefButton )
         {
-            gtk_dialog_add_button( GTK_DIALOG( mainwin ), MapToGtkAccelerator(*it).GetBuffer(), nButtons );
-            gtk_dialog_set_default_response( GTK_DIALOG( mainwin ), nButtons );
+            gtk_dialog_add_button(GTK_DIALOG( mainwin ),
+                MapToGtkAccelerator(*it).getStr(), nButtons);
+            gtk_dialog_set_default_response(GTK_DIALOG(mainwin), nButtons);
         }
         else
         {
-            ByteString aLabel( *it, RTL_TEXTENCODING_UTF8 );
-            gtk_dialog_add_button( GTK_DIALOG( mainwin ), aLabel.GetBuffer(), nButtons );
+            rtl::OString aLabel(rtl::OUStringToOString(*it,
+                RTL_TEXTENCODING_UTF8));
+            gtk_dialog_add_button(GTK_DIALOG(mainwin), aLabel.getStr(),
+                nButtons);
         }
         nButtons++;
     }

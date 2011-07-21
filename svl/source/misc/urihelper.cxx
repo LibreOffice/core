@@ -65,10 +65,6 @@
 #include <unotools/charclass.hxx>
 #include "rtl/instance.hxx"
 
-namespace unnamed_svl_urihelper {}
-using namespace unnamed_svl_urihelper;
-    // unnamed namespaces don't work well yet...
-
 namespace css = com::sun::star;
 using namespace com::sun::star;
 
@@ -78,7 +74,7 @@ using namespace com::sun::star;
 //
 //============================================================================
 
-namespace unnamed_svl_urihelper {
+namespace {
 
 inline UniString toUniString(ByteString const & rString)
 {
@@ -148,24 +144,6 @@ inline UniString SmartRel2Abs_Impl(INetURLObject const & rTheBaseURIRef,
     return aAbsURIRef.GetMainURL(eDecodeMechanism, eCharset);
 }
 
-}
-
-UniString
-URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
-                        ByteString const & rTheRelURIRef,
-                        Link const & rMaybeFileHdl,
-                        bool bCheckFileExists,
-                        bool bIgnoreFragment,
-                        INetURLObject::EncodeMechanism eEncodeMechanism,
-                        INetURLObject::DecodeMechanism eDecodeMechanism,
-                        rtl_TextEncoding eCharset,
-                        bool bRelativeNonURIs,
-                        INetURLObject::FSysStyle eStyle)
-{
-    return SmartRel2Abs_Impl(rTheBaseURIRef, rTheRelURIRef, rMaybeFileHdl,
-                             bCheckFileExists, bIgnoreFragment,
-                             eEncodeMechanism, eDecodeMechanism, eCharset,
-                             bRelativeNonURIs, eStyle);
 }
 
 UniString
@@ -422,7 +400,7 @@ rtl::OUString URIHelper::simpleNormalizedMakeRelative(
 //
 //============================================================================
 
-namespace unnamed_svl_urihelper {
+namespace {
 
 inline xub_StrLen nextChar(UniString const & rStr, xub_StrLen nPos)
 {
@@ -885,67 +863,6 @@ URIHelper::removePassword(UniString const & rURI,
     return aObj.HasError() ?
                rURI :
                String(aObj.GetURLNoPass(eDecodeMechanism, eCharset));
-}
-
-//============================================================================
-//
-//  queryFSysStyle
-//
-//============================================================================
-
-INetURLObject::FSysStyle URIHelper::queryFSysStyle(UniString const & rFileUrl,
-                                                   bool bAddConvenienceStyles)
-    throw (uno::RuntimeException)
-{
-    ::ucbhelper::ContentBroker const * pBroker = ::ucbhelper::ContentBroker::get();
-    uno::Reference< ucb::XContentProviderManager > xManager;
-    if (pBroker)
-        xManager = pBroker->getContentProviderManagerInterface();
-    uno::Reference< beans::XPropertySet > xProperties;
-    if (xManager.is())
-        xProperties
-            = uno::Reference< beans::XPropertySet >(
-                  xManager->queryContentProvider(rFileUrl), uno::UNO_QUERY);
-    sal_Int32 nNotation = ucb::FileSystemNotation::UNKNOWN_NOTATION;
-    if (xProperties.is())
-        try
-        {
-            xProperties->getPropertyValue(rtl::OUString(
-                                              RTL_CONSTASCII_USTRINGPARAM(
-                                                  "FileSystemNotation")))
-                >>= nNotation;
-        }
-        catch (beans::UnknownPropertyException const &) {}
-        catch (lang::WrappedTargetException const &) {}
-
-    // The following code depends on the fact that the
-    // com::sun::star::ucb::FileSystemNotation constants range from UNKNOWN to
-    // MAC, without any holes.  The table below has two entries per notation,
-    // the first is used if bAddConvenienceStyles == false, while the second
-    // is used if bAddConvenienceStyles == true:
-    static INetURLObject::FSysStyle const aMap[][2]
-        = { { INetURLObject::FSysStyle(0),
-              INetURLObject::FSYS_DETECT },
-                // UNKNOWN
-            { INetURLObject::FSYS_UNX,
-              INetURLObject::FSysStyle(INetURLObject::FSYS_VOS
-                                           | INetURLObject::FSYS_UNX) },
-                // UNIX
-            { INetURLObject::FSYS_DOS,
-              INetURLObject::FSysStyle(INetURLObject::FSYS_VOS
-                                           | INetURLObject::FSYS_UNX
-                                           | INetURLObject::FSYS_DOS) },
-                // DOS
-            { INetURLObject::FSYS_MAC,
-              INetURLObject::FSysStyle(INetURLObject::FSYS_VOS
-                                           | INetURLObject::FSYS_UNX
-                                           | INetURLObject::FSYS_MAC) } };
-    return aMap[nNotation < ucb::FileSystemNotation::UNKNOWN_NOTATION
-                || nNotation > ucb::FileSystemNotation::MAC_NOTATION ?
-                        0 :
-                        nNotation
-                            - ucb::FileSystemNotation::UNKNOWN_NOTATION]
-                   [bAddConvenienceStyles];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

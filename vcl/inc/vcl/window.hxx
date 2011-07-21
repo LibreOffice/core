@@ -914,7 +914,6 @@ public:
     void                SetFakeFocus( bool bFocus );
 
     sal_Bool                IsCompoundControl() const;
-    sal_Bool                HasCompoundControlFocus() const;
 
     static sal_uIntPtr  SaveFocus();
     static sal_Bool         EndSaveFocus( sal_uIntPtr nSaveId, sal_Bool bRestore = sal_True );

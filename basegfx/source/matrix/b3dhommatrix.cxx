@@ -63,11 +63,6 @@ namespace basegfx
         return *this;
     }
 
-    void B3DHomMatrix::makeUnique()
-    {
-        mpImpl.make_unique();
-    }
-
     double B3DHomMatrix::get(sal_uInt16 nRow, sal_uInt16 nColumn) const
     {
         return mpImpl->get(nRow, nColumn);
@@ -96,11 +91,6 @@ namespace basegfx
         mpImpl = IdentityMatrix::get();
     }
 
-    bool B3DHomMatrix::isInvertible() const
-    {
-        return mpImpl->isInvertible();
-    }
-
     bool B3DHomMatrix::invert()
     {
         Impl3DHomMatrix aWork(*mpImpl);
@@ -119,25 +109,9 @@ namespace basegfx
         return false;
     }
 
-    bool B3DHomMatrix::isNormalized() const
-    {
-        return mpImpl->isNormalized();
-    }
-
-    void B3DHomMatrix::normalize()
-    {
-        if(!const_cast<const B3DHomMatrix*>(this)->mpImpl->isNormalized())
-            mpImpl->doNormalize();
-    }
-
     double B3DHomMatrix::determinant() const
     {
         return mpImpl->doDeterminant();
-    }
-
-    double B3DHomMatrix::trace() const
-    {
-        return mpImpl->doTrace();
     }
 
     void B3DHomMatrix::transpose()
@@ -287,34 +261,6 @@ namespace basegfx
             aShearXYMat.set(1, 2, fSy);
 
             mpImpl->doMulMatrix(aShearXYMat);
-        }
-    }
-
-    void B3DHomMatrix::shearYZ(double fSy, double fSz)
-    {
-        // #i76239# do not test againt 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
-        if(!fTools::equalZero(fSy) || !fTools::equalZero(fSz))
-        {
-            Impl3DHomMatrix aShearYZMat;
-
-            aShearYZMat.set(1, 0, fSy);
-            aShearYZMat.set(2, 0, fSz);
-
-            mpImpl->doMulMatrix(aShearYZMat);
-        }
-    }
-
-    void B3DHomMatrix::shearXZ(double fSx, double fSz)
-    {
-        // #i76239# do not test againt 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
-        if(!fTools::equalZero(fSx) || !fTools::equalZero(fSz))
-        {
-            Impl3DHomMatrix aShearXZMat;
-
-            aShearXZMat.set(0, 1, fSx);
-            aShearXZMat.set(2, 1, fSz);
-
-            mpImpl->doMulMatrix(aShearXZMat);
         }
     }
 

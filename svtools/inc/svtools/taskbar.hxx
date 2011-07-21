@@ -88,9 +88,7 @@ TaskStatusBar kann auch ein Notify-Object gesetzt werden, wenn man
 benachrichtigt werden will, wenn die Uhrzeit oder die TaskStatusBar
 angeklickt wird. Wenn der Notify fuer die Uhrzeit kommt, ist die
 Id TASKSTATUSBAR_CLOCKID, wenn er fuer die TaskStatusBar kommt, ist
-die Id 0. Mit SetFieldFlags() kann am TaskStatusBar auch die Flags
-hinterher umgesetzt werden, um zum Beispiel die Uhrzeit ein- und
-auszuschalten.
+die Id 0.
 
 
 TaskBar
@@ -253,11 +251,6 @@ private:
 public:
                         TaskStatusFieldItem();
                         TaskStatusFieldItem( const TaskStatusFieldItem& rItem );
-                        TaskStatusFieldItem( ITaskStatusNotify* pNotify,
-                                             const Image& rImage,
-                                             const XubString& rQuickHelpText,
-                                             const XubString& rHelpText,
-                                             sal_uInt16 nFlags );
                         ~TaskStatusFieldItem();
 
     void                SetNotifyObject( ITaskStatusNotify* pNotify ) { mpNotify = pNotify; }
@@ -331,16 +324,9 @@ public:
                                            sal_uInt16 nFlags = TASKSTATUSFIELD_CLOCK );
     void                RemoveStatusField()
                             { maTimer.Stop(); RemoveItem( TASKSTATUSBAR_STATUSFIELDID ); }
-    void                SetFieldFlags( sal_uInt16 nFlags );
     sal_uInt16              GetFieldFlags() const { return mnFieldFlags; }
     void                SetNotifyObject( ITaskStatusNotify* pNotify ) { mpNotify = pNotify; }
     ITaskStatusNotify*  GetNotifyObject() const { return mpNotify; }
-
-    void                AddStatusFieldItem( sal_uInt16 nItemId, const TaskStatusFieldItem& rItem,
-                                            sal_uInt16 nPos = 0xFFFF );
-    void                ModifyStatusFieldItem( sal_uInt16 nItemId, const TaskStatusFieldItem& rItem );
-    void                RemoveStatusFieldItem( sal_uInt16 nItemId );
-    sal_Bool                GetStatusFieldItem( sal_uInt16 nItemId, TaskStatusFieldItem& rItem ) const;
 };
 
 // -----------
@@ -403,13 +389,8 @@ public:
 
     void                    Format();
 
-    void                    SetLines( sal_uInt16 nLines );
     sal_uInt16                  GetLines() const { return mnLines; }
-    void                    EnableAutoHide( sal_Bool bAutoHide = sal_True );
     sal_Bool                    IsAutoHideEnabled() const { return mbAutoHide; }
-
-    void                    ShowStatusText( const String& rText );
-    void                    HideStatusText();
 
     void                    SetStatusSize( long nNewSize )
                                 { mnStatusWidth=nNewSize; Resize(); }
@@ -440,30 +421,39 @@ class ImplWindowArrangeList;
 // - class WindowArrange -
 // -----------------------
 
+typedef ::std::vector< Window* > WindowList_impl;
+
 class SVT_DLLPUBLIC WindowArrange
 {
 private:
-    List*                   mpWinList;
-    void*                   mpDummy;
-    sal_uLong                   mnDummy;
+    WindowList_impl     maWinList;
 
 #ifdef _TASKBAR_CXX
-    SVT_DLLPRIVATE void                    ImplTile( const Rectangle& rRect );
-    SVT_DLLPRIVATE void                    ImplHorz( const Rectangle& rRect );
-    SVT_DLLPRIVATE void                    ImplVert( const Rectangle& rRect );
-    SVT_DLLPRIVATE void                    ImplCascade( const Rectangle& rRect );
+    SVT_DLLPRIVATE void ImplTile( const Rectangle& rRect );
+    SVT_DLLPRIVATE void ImplHorz( const Rectangle& rRect );
+    SVT_DLLPRIVATE void ImplVert( const Rectangle& rRect );
+    SVT_DLLPRIVATE void ImplCascade( const Rectangle& rRect );
 #endif
 
 public:
-                            WindowArrange();
-                            ~WindowArrange();
+                        WindowArrange();
+                        ~WindowArrange();
 
-    void                    AddWindow( Window* pWindow, sal_uLong nPos = LIST_APPEND )
-                                { mpWinList->Insert( (void*)pWindow, nPos ); }
-    void                    RemoveAllWindows()
-                                { mpWinList->Clear(); }
+    void                AddWindow( Window* pWindow, size_t nPos = size_t(-1) )
+                        {
+                            if ( nPos < maWinList.size() ) {
+                                maWinList.insert( maWinList.begin() + nPos, pWindow );
+                            } else {
+                                maWinList.push_back( pWindow );
+                            }
+                        }
 
-    void                    Arrange( sal_uInt16 nType, const Rectangle& rRect );
+    void                RemoveAllWindows()
+                        {
+                            maWinList.clear();
+                        }
+
+    void                Arrange( sal_uInt16 nType, const Rectangle& rRect );
 };
 
 #endif  // _TASKBAR_HXX

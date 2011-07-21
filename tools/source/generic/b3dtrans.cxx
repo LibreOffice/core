@@ -182,16 +182,6 @@ void B3dTransformationSet::Reset()
 |*
 \************************************************************************/
 
-void B3dTransformationSet::SetObjectTrans(const basegfx::B3DHomMatrix& rObj)
-{
-    maObjectTrans = rObj;
-
-    mbObjectToDeviceValid = sal_False;
-    mbInvTransObjectToEyeValid = sal_False;
-
-    PostSetObjectTrans();
-}
-
 void B3dTransformationSet::PostSetObjectTrans()
 {
     // Zuweisen und Inverse bestimmen
@@ -209,17 +199,6 @@ void B3dTransformationSet::SetOrientation( basegfx::B3DPoint aVRP, basegfx::B3DV
 {
     maOrientation.identity();
     Orientation(maOrientation, aVRP, aVPN, aVUP);
-
-    mbInvTransObjectToEyeValid = sal_False;
-    mbObjectToDeviceValid = sal_False;
-    mbWorldToViewValid = sal_False;
-
-    PostSetOrientation();
-}
-
-void B3dTransformationSet::SetOrientation(basegfx::B3DHomMatrix& mOrient)
-{
-    maOrientation = mOrient;
 
     mbInvTransObjectToEyeValid = sal_False;
     mbObjectToDeviceValid = sal_False;
@@ -254,13 +233,6 @@ const basegfx::B3DHomMatrix& B3dTransformationSet::GetProjection()
     return maProjection;
 }
 
-const basegfx::B3DHomMatrix& B3dTransformationSet::GetInvProjection()
-{
-    if(!mbProjectionValid)
-        CalcViewport();
-    return maInvProjection;
-}
-
 void B3dTransformationSet::PostSetProjection()
 {
     // Zuweisen und Inverse bestimmen
@@ -270,22 +242,6 @@ void B3dTransformationSet::PostSetProjection()
     // Abhaengige Matritzen invalidieren
     mbObjectToDeviceValid = sal_False;
     mbWorldToViewValid = sal_False;
-}
-
-/*************************************************************************
-|*
-|* Texturtransformation
-|*
-\************************************************************************/
-
-void B3dTransformationSet::SetTexture(const basegfx::B2DHomMatrix& rTxt)
-{
-    maTexture = rTxt;
-    PostSetTexture();
-}
-
-void B3dTransformationSet::PostSetTexture()
-{
 }
 
 /*************************************************************************
@@ -425,17 +381,6 @@ void B3dTransformationSet::SetRatio(double fNew)
     }
 }
 
-void B3dTransformationSet::SetRatioMode(Base3DRatio eNew)
-{
-    if(meRatio != eNew)
-    {
-        meRatio = eNew;
-        mbProjectionValid = sal_False;
-        mbObjectToDeviceValid = sal_False;
-        mbWorldToViewValid = sal_False;
-    }
-}
-
 void B3dTransformationSet::SetDeviceRectangle(double fL, double fR, double fB, double fT,
     sal_Bool bBroadCastChange)
 {
@@ -456,59 +401,8 @@ void B3dTransformationSet::SetDeviceRectangle(double fL, double fR, double fB, d
     }
 }
 
-void B3dTransformationSet::SetDeviceVolume(const basegfx::B3DRange& rVol, sal_Bool bBroadCastChange)
-{
-    SetDeviceRectangle(rVol.getMinX(), rVol.getMaxX(), rVol.getMinY(), rVol.getMaxY(), bBroadCastChange);
-    SetFrontClippingPlane(rVol.getMinZ());
-    SetBackClippingPlane(rVol.getMaxZ());
-}
-
 void B3dTransformationSet::DeviceRectangleChange()
 {
-}
-
-void B3dTransformationSet::GetDeviceRectangle(double &fL, double &fR, double& fB, double& fT)
-{
-    fL = mfLeftBound;
-    fR = mfRightBound;
-    fB = mfBottomBound;
-    fT = mfTopBound;
-
-    mbProjectionValid = sal_False;
-    mbObjectToDeviceValid = sal_False;
-    mbWorldToViewValid = sal_False;
-}
-
-basegfx::B3DRange B3dTransformationSet::GetDeviceVolume()
-{
-    basegfx::B3DRange aRet;
-
-    aRet.expand(basegfx::B3DTuple(mfLeftBound, mfBottomBound, mfNearBound));
-    aRet.expand(basegfx::B3DTuple(mfRightBound, mfTopBound, mfFarBound));
-
-    return aRet;
-}
-
-void B3dTransformationSet::SetFrontClippingPlane(double fF)
-{
-    if(mfNearBound != fF)
-    {
-        mfNearBound = fF;
-        mbProjectionValid = sal_False;
-        mbObjectToDeviceValid = sal_False;
-        mbWorldToViewValid = sal_False;
-    }
-}
-
-void B3dTransformationSet::SetBackClippingPlane(double fB)
-{
-    if(mfFarBound != fB)
-    {
-        mfFarBound = fB;
-        mbProjectionValid = sal_False;
-        mbObjectToDeviceValid = sal_False;
-        mbWorldToViewValid = sal_False;
-    }
 }
 
 void B3dTransformationSet::SetPerspective(sal_Bool bNew)
@@ -537,13 +431,6 @@ void B3dTransformationSet::SetViewportRectangle(Rectangle& rRect, Rectangle& rVi
 
 void B3dTransformationSet::PostSetViewport()
 {
-}
-
-const Rectangle& B3dTransformationSet::GetLogicalViewportBounds()
-{
-    if(!mbProjectionValid)
-        CalcViewport();
-    return maSetBound;
 }
 
 const basegfx::B3DVector& B3dTransformationSet::GetScale()
@@ -577,13 +464,6 @@ void B3dTransformationSet::CalcMatObjectToDevice()
     mbObjectToDeviceValid = sal_True;
 }
 
-const basegfx::B3DHomMatrix& B3dTransformationSet::GetObjectToDevice()
-{
-    if(!mbObjectToDeviceValid)
-        CalcMatObjectToDevice();
-    return maObjectToDevice;
-}
-
 void B3dTransformationSet::CalcMatInvTransObjectToEye()
 {
     maInvTransObjectToEye = maObjectTrans;
@@ -602,25 +482,6 @@ void B3dTransformationSet::CalcMatInvTransObjectToEye()
     mbInvTransObjectToEyeValid = sal_True;
 }
 
-const basegfx::B3DHomMatrix& B3dTransformationSet::GetInvTransObjectToEye()
-{
-    if(!mbInvTransObjectToEyeValid)
-        CalcMatInvTransObjectToEye();
-    return maInvTransObjectToEye;
-}
-
-basegfx::B3DHomMatrix B3dTransformationSet::GetMatFromObjectToView()
-{
-    basegfx::B3DHomMatrix aFromObjectToView = GetObjectToDevice();
-
-    const basegfx::B3DVector& rScale(GetScale());
-    aFromObjectToView.scale(rScale.getX(), rScale.getY(), rScale.getZ());
-    const basegfx::B3DVector& rTranslate(GetTranslate());
-    aFromObjectToView.translate(rTranslate.getX(), rTranslate.getY(), rTranslate.getZ());
-
-    return aFromObjectToView;
-}
-
 void B3dTransformationSet::CalcMatFromWorldToView()
 {
     maMatFromWorldToView = maOrientation;
@@ -634,20 +495,6 @@ void B3dTransformationSet::CalcMatFromWorldToView()
 
     // gueltig setzen
     mbWorldToViewValid = sal_True;
-}
-
-const basegfx::B3DHomMatrix& B3dTransformationSet::GetMatFromWorldToView()
-{
-    if(!mbWorldToViewValid)
-        CalcMatFromWorldToView();
-    return maMatFromWorldToView;
-}
-
-const basegfx::B3DHomMatrix& B3dTransformationSet::GetInvMatFromWorldToView()
-{
-    if(!mbWorldToViewValid)
-        CalcMatFromWorldToView();
-    return maInvMatFromWorldToView;
 }
 
 /*************************************************************************
@@ -670,128 +517,6 @@ const basegfx::B3DPoint B3dTransformationSet::EyeToWorldCoor(const basegfx::B3DP
     return aVec;
 }
 
-const basegfx::B3DPoint B3dTransformationSet::EyeToViewCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetProjection();
-    aVec *= GetScale();
-    aVec += GetTranslate();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::ViewToEyeCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec -= GetTranslate();
-    aVec = aVec / GetScale();
-    aVec *= GetInvProjection();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::WorldToViewCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetMatFromWorldToView();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::ViewToWorldCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetInvMatFromWorldToView();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::DeviceToViewCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetScale();
-    aVec += GetTranslate();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::ViewToDeviceCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec -= GetTranslate();
-    aVec = aVec / GetScale();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::ObjectToWorldCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetObjectTrans();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::WorldToObjectCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetInvObjectTrans();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::ObjectToViewCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetObjectTrans();
-    aVec *= GetMatFromWorldToView();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::ViewToObjectCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetInvMatFromWorldToView();
-    aVec *= GetInvObjectTrans();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::ObjectToEyeCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetObjectTrans();
-    aVec *= GetOrientation();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::EyeToObjectCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetInvOrientation();
-    aVec *= GetInvObjectTrans();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::DeviceToEyeCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetInvProjection();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::EyeToDeviceCoor(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetProjection();
-    return aVec;
-}
-
-const basegfx::B3DPoint B3dTransformationSet::InvTransObjectToEye(const basegfx::B3DPoint& rVec)
-{
-    basegfx::B3DPoint aVec(rVec);
-    aVec *= GetInvTransObjectToEye();
-    return aVec;
-}
-
-const basegfx::B2DPoint B3dTransformationSet::TransTextureCoor(const basegfx::B2DPoint& rVec)
-{
-    basegfx::B2DPoint aVec(rVec);
-    aVec *= GetTexture();
-    return aVec;
-}
-
 /*************************************************************************
 |*
 |* Konstruktor B3dViewport
@@ -809,18 +534,6 @@ B3dViewport::B3dViewport()
 
 B3dViewport::~B3dViewport()
 {
-}
-
-void B3dViewport::SetVRP(const basegfx::B3DPoint& rNewVRP)
-{
-    aVRP = rNewVRP;
-    CalcOrientation();
-}
-
-void B3dViewport::SetVPN(const basegfx::B3DVector& rNewVPN)
-{
-    aVPN = rNewVPN;
-    CalcOrientation();
 }
 
 void B3dViewport::SetVUV(const basegfx::B3DVector& rNewVUV)
@@ -867,81 +580,6 @@ B3dCamera::B3dCamera(
 
 B3dCamera::~B3dCamera()
 {
-}
-
-void B3dCamera::SetPosition(const basegfx::B3DPoint& rNewPos)
-{
-    if(rNewPos != aPosition)
-    {
-        // Zuweisen
-        aCorrectedPosition = aPosition = rNewPos;
-
-        // Neuberechnung
-        CalcNewViewportValues();
-    }
-}
-
-void B3dCamera::SetLookAt(const basegfx::B3DVector& rNewLookAt)
-{
-    if(rNewLookAt != aLookAt)
-    {
-        // Zuweisen
-        aLookAt = rNewLookAt;
-
-        // Neuberechnung
-        CalcNewViewportValues();
-    }
-}
-
-void B3dCamera::SetPositionAndLookAt(const basegfx::B3DPoint& rNewPos, const basegfx::B3DVector& rNewLookAt)
-{
-    if(rNewPos != aPosition || rNewLookAt != aLookAt)
-    {
-        // Zuweisen
-        aPosition = rNewPos;
-        aLookAt = rNewLookAt;
-
-        // Neuberechnung
-        CalcNewViewportValues();
-    }
-}
-
-void B3dCamera::SetFocalLength(double fLen)
-{
-    if(fLen != fFocalLength)
-    {
-        // Zuweisen
-        if(fLen < 5.0)
-            fLen = 5.0;
-        fFocalLength = fLen;
-
-        // Neuberechnung
-        CalcNewViewportValues();
-    }
-}
-
-void B3dCamera::SetBankAngle(double fAngle)
-{
-    if(fAngle != fBankAngle)
-    {
-        // Zuweisen
-        fBankAngle = fAngle;
-
-        // Neuberechnung
-        CalcNewViewportValues();
-    }
-}
-
-void B3dCamera::SetUseFocalLength(sal_Bool bNew)
-{
-    if(bNew != (sal_Bool)bUseFocalLength)
-    {
-        // Zuweisen
-        bUseFocalLength = bNew;
-
-        // Neuberechnung
-        CalcNewViewportValues();
-    }
 }
 
 void B3dCamera::DeviceRectangleChange()

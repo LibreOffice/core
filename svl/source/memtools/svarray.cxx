@@ -71,11 +71,7 @@ SV_IMPL_OP_PTRARR_SORT( SvStringsSort, StringPtr )
 SV_IMPL_OP_PTRARR_SORT( SvStringsSortDtor, StringPtr )
 
 SV_IMPL_PTRARR( SvByteStrings, ByteStringPtr )
-SV_IMPL_PTRARR( SvByteStringsDtor, ByteStringPtr )
-SV_IMPL_OP_PTRARR_SORT( SvByteStringsSort, ByteStringPtr )
 SV_IMPL_OP_PTRARR_SORT( SvByteStringsSortDtor, ByteStringPtr )
-
-
 
 // ---------------- strings -------------------------------------
 
@@ -150,99 +146,6 @@ sal_Bool SvStringsISortDtor::Seek_Entry( const StringPtr aE, sal_uInt16* pP ) co
         {
             nM = nU + ( nO - nU ) / 2;
             StringCompare eCmp = (*((StringPtr*)pData + nM))->
-                                    CompareIgnoreCaseToAscii( *(aE) );
-            if( COMPARE_EQUAL == eCmp )
-            {
-                if( pP ) *pP = nM;
-                return sal_True;
-            }
-            else if( COMPARE_LESS == eCmp )
-                nU = nM + 1;
-            else if( nM == 0 )
-            {
-                if( pP ) *pP = nU;
-                return sal_False;
-            }
-            else
-                nO = nM - 1;
-        }
-    }
-    if( pP ) *pP = nU;
-    return sal_False;
-}
-
-// ---------------- bytestrings -------------------------------------
-
-// Array mit anderer Seek-Methode!
-_SV_IMPL_SORTAR_ALG( SvByteStringsISort, ByteStringPtr )
-void SvByteStringsISort::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
-{
-    if( nL )
-    {
-        DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );
-        for( sal_uInt16 n=nP; n < nP + nL; n++ )
-            delete *((ByteStringPtr*)pData+n);
-        SvPtrarr::Remove( nP, nL );
-    }
-}
-sal_Bool SvByteStringsISort::Seek_Entry( const ByteStringPtr aE, sal_uInt16* pP ) const
-{
-    register sal_uInt16 nO  = SvByteStringsISort_SAR::Count(),
-            nM,
-            nU = 0;
-    if( nO > 0 )
-    {
-        nO--;
-        while( nU <= nO )
-        {
-            nM = nU + ( nO - nU ) / 2;
-            StringCompare eCmp = (*((ByteStringPtr*)pData + nM))->
-                        CompareIgnoreCaseToAscii( *(aE) );
-            if( COMPARE_EQUAL == eCmp )
-            {
-                if( pP ) *pP = nM;
-                return sal_True;
-            }
-            else if( COMPARE_LESS == eCmp )
-                nU = nM + 1;
-            else if( nM == 0 )
-            {
-                if( pP ) *pP = nU;
-                return sal_False;
-            }
-            else
-                nO = nM - 1;
-        }
-    }
-    if( pP ) *pP = nU;
-    return sal_False;
-}
-
-
-// Array mit anderer Seek-Methode!
-_SV_IMPL_SORTAR_ALG( SvByteStringsISortDtor, ByteStringPtr )
-void SvByteStringsISortDtor::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
-{
-    if( nL )
-    {
-        DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );
-        for( sal_uInt16 n=nP; n < nP + nL; n++ )
-            delete *((ByteStringPtr*)pData+n);
-        SvPtrarr::Remove( nP, nL );
-    }
-}
-sal_Bool SvByteStringsISortDtor::Seek_Entry( const ByteStringPtr aE, sal_uInt16* pP ) const
-{
-    register sal_uInt16 nO  = SvByteStringsISortDtor_SAR::Count(),
-            nM,
-            nU = 0;
-    if( nO > 0 )
-    {
-        nO--;
-        while( nU <= nO )
-        {
-            nM = nU + ( nO - nU ) / 2;
-            StringCompare eCmp = (*((ByteStringPtr*)pData + nM))->
                                     CompareIgnoreCaseToAscii( *(aE) );
             if( COMPARE_EQUAL == eCmp )
             {

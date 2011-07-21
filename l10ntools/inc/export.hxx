@@ -84,8 +84,7 @@ class PFormEntrys;
 class MergeData;
 typedef std::set<ByteString , lessByteString > ByteStringSet;
 
-typedef boost::unordered_map<ByteString , ByteString , hashByteString,equalByteString>
-                                ByteStringHashMap;
+typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash> ByteStringHashMap;
 
 typedef boost::unordered_map<ByteString , bool , hashByteString,equalByteString>
                                 ByteStringBoolHashMap;
@@ -197,8 +196,8 @@ public:
     void addFallbackData( ByteString& sId , const ByteString& sText );
     bool getFallbackData( ByteString& sId , ByteString& sText);
 
-    void addMergedLanguage( ByteString& sLang );
-    bool isMerged( ByteString& sLang );
+    void addMergedLanguage(rtl::OString& rLang);
+    bool isMerged(rtl::OString& rLang);
     ResData( const ByteString &rPF, const ByteString &rGId )
             :
             nWidth( 0 ),
@@ -307,7 +306,7 @@ private:
     sal_Bool bNextMustBeDefineEOL;          // define but no \ at lineend
     sal_uLong nLevel;                       // res. recursiv? how deep?
     sal_uInt16 nList;                       // cur. res. is String- or FilterList
-    ByteString nListLang;
+    rtl::OString m_sListLang;
     sal_uLong nListIndex;
     sal_uLong nListLevel;
     bool bSkipFile;
@@ -345,22 +344,16 @@ public:
     static void QuotHTML( ByteString &rString );
     static bool CopyFile( const ByteString& source , const ByteString& dest );
 
-    static void QuotHTMLXRM( ByteString &rString );
     static void UnquotHTML( ByteString &rString );
 
     static const char* GetEnv( const char *pVar );
-    static int getCurrentDirectory( rtl::OUString& base_fqurl , rtl::OUString& base );
 
     static bool isSourceLanguage( const ByteString &sLanguage );
     static bool isAllowed( const ByteString &sLanguage );
 
-    static bool LanguageAllowed( const ByteString &nLanguage );
     static void Languages( std::vector<ByteString>::const_iterator& begin , std::vector<ByteString>::const_iterator& end );
     static void getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix  );
-    static void getRandomName( ByteString& sRandStr );
     static void getCurrentDir( std::string& dir );
-
-    static void replaceEncoding( ByteString& rString );
 
     static ByteString GetFallbackLanguage( const ByteString nLanguage );
     static void FillInFallbacks( ResData *pResData );
@@ -377,8 +370,6 @@ private:
     static std::vector<ByteString> aLanguages;
     static std::vector<ByteString> aForcedLanguages;
 
-    sal_Bool ListExists( ResData *pResData, sal_uInt16 nLst );
-
     sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False );// called befor dest. cur ResData
     sal_Bool WriteExportList( ResData *pResData, ExportList *pExportList,
                         const ByteString &rTyp, sal_Bool bCreateNew = sal_False );
@@ -393,13 +384,12 @@ private:
     ByteString GetPairedListString  ( const ByteString& sText );
     ByteString StripList    ( const ByteString& sText );
 
-    void UnmergeUTF8( ByteString& sOrig );
     void InsertListEntry( const ByteString &rText, const ByteString &rLine );
     void CleanValue( ByteString &rValue );
     ByteString GetText( const ByteString &rSource, int nToken );
 
-    sal_Bool PrepareTextToMerge( ByteString &rText, sal_uInt16 nTyp,
-        ByteString &nLangIndex, ResData *pResData );
+    sal_Bool PrepareTextToMerge(ByteString &rText, sal_uInt16 nTyp,
+        rtl::OString &rLangIndex, ResData *pResData);
 
     void MergeRest( ResData *pResData, sal_uInt16 nMode = MERGE_MODE_NORMAL );
     void ConvertMergeContent( ByteString &rText );
@@ -490,7 +480,6 @@ public:
     MergeData( const ByteString &rTyp, const ByteString &rGID, const ByteString &rLID , const ByteString &rFilename )
             : sTyp( rTyp ), sGID( rGID ), sLID( rLID ) , sFilename( rFilename ) {};
     ~MergeData();
-    PFormEntrys* InsertEntry( const ByteString &rPForm );
     PFormEntrys* GetPFormEntrys( ResData *pResData );
 
     void Insert( const ByteString& rPFO , PFormEntrys* pfEntrys );
@@ -525,8 +514,6 @@ class MergeDataFile
             const ByteString &sFilename, bool bCaseSensitive
             );
         ByteString Dump();
-        void WriteError( const ByteString &rLine );
-
     public:
         MergeDataFile( const ByteString &rFileName, const ByteString& rFile , sal_Bool bErrLog, CharSet aCharSet, bool bCaseSensitive = false );
         ~MergeDataFile();

@@ -573,8 +573,6 @@ public:
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return setUser(rTheUser, false, eMechanism, eCharset); }
 
-    void makeAuthCanonic();
-
     inline bool SetPass(ByteString const & rThePassword,
                         EncodeMechanism eMechanism = WAS_ENCODED,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
@@ -621,51 +619,6 @@ public:
     { return setHost(rTheHost, false, eMechanism, eCharset); }
 
     bool SetPort(sal_uInt32 nThePort);
-
-    void makePortCanonic();
-
-    /** Encode the <hostport> part of a URL.
-
-        @ATT  Obsolete, because at the moment the <hostport> part of a URL may
-        not contain any escape sequences anyway, and because this method does
-        not inform the caller whether the given <hostport> part is legal.
-
-        @param rTheHostPort  The <hostport> part of a URL (for its
-        interpretation, see the general discussion for set-methods).
-
-        @param eMechanism  See the general discussion for set-methods.
-
-        @param eCharset  See the general discussion for set-methods.
-
-        @return  The <hostport> part, encoded according to the given mechanism
-        and charset ('forbidden' characters replaced by escape sequences).
-     */
-    static inline rtl::OUString encodeHostPort(ByteString const & rTheHostPort,
-                                           EncodeMechanism eMechanism,
-                                           rtl_TextEncoding eCharset
-                                               = RTL_TEXTENCODING_UTF8);
-
-    /** Encode the <hostport> part of a URL.
-
-        @ATT  Obsolete, because at the moment the <hostport> part of a URL may
-        not contain any escape sequences anyway, and because this method does
-        not inform the caller whether the given <hostport> part is legal.
-
-        @param rTheHostPort  The <hostport> part of a URL (for its
-        interpretation, see the general discussion for set-methods).
-
-        @param eMechanism  See the general discussion for set-methods.
-
-        @param eCharset  See the general discussion for set-methods.
-
-        @return  The <hostport> part, encoded according to the given mechanism
-        and charset ('forbidden' characters replaced by escape sequences).
-     */
-    static inline rtl::OUString encodeHostPort(rtl::OUString const & rTheHostPort,
-                                           EncodeMechanism eMechanism,
-                                           rtl_TextEncoding eCharset
-                                               = RTL_TEXTENCODING_UTF8)
-    { return encodeHostPort(rTheHostPort, false, eMechanism, eCharset); }
 
     //========================================================================
     // Path:
@@ -1058,8 +1011,6 @@ public:
     //========================================================================
     // POP3 and URLs:
 
-    bool HasMsgId() const;
-
     rtl::OUString GetMsgId(DecodeMechanism eMechanism = DECODE_TO_IURI,
                        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
         const;
@@ -1279,9 +1230,6 @@ public:
                                  = RTL_TEXTENCODING_UTF8) const
     { return GetLastName(eMechanism, eCharset); }
 
-    rtl::OUString CutName(DecodeMechanism eMechanism = DECODE_TO_IURI,
-                      rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
-
     void SetExtension(rtl::OUString const & rTheExtension,
                       EncodeMechanism eMechanism = WAS_ENCODED,
                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
@@ -1428,10 +1376,6 @@ private:
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
         bool bNetBiosName, rtl::OUStringBuffer* pCanonic);
 
-    static rtl::OUString encodeHostPort(
-        rtl::OUString const & rTheHostPort, bool bOctets,
-        EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
-
     bool setHost(
         rtl::OUString const & rTheHost, bool bOctets,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
@@ -1482,19 +1426,9 @@ private:
         rtl::OUString const & rTheMark, bool bOctets,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
-    // FTP URLs:
-
-    enum FTPType { FTP_TYPE_NONE, FTP_TYPE_A, FTP_TYPE_I, FTP_TYPE_D };
-
-    TOOLS_DLLPRIVATE FTPType getFTPType() const;
-
     // FILE URLs:
 
     TOOLS_DLLPRIVATE bool hasDosVolume(FSysStyle eStyle) const;
-
-    // IMAP URLs:
-
-    TOOLS_DLLPRIVATE sal_uInt32 getIMAPUID() const;
 
     // Coding:
 
@@ -1820,15 +1754,6 @@ inline bool INetURLObject::SetUserAndPass(rtl::OUString const & rTheUser,
            && (rThePassword.getLength() == 0 ?
                    clearPassword() :
                    setPassword(rThePassword, false, eMechanism, eCharset));
-}
-
-// static
-inline rtl::OUString INetURLObject::encodeHostPort(ByteString const &
-                                                   rTheHostPort,
-                                               EncodeMechanism eMechanism,
-                                               rtl_TextEncoding eCharset)
-{
-    return encodeHostPort(extend(rTheHostPort), true, eMechanism, eCharset);
 }
 
 inline bool INetURLObject::insertName(rtl::OUString const & rTheName,

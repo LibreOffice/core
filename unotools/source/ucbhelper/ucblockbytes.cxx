@@ -696,7 +696,7 @@ Moderator::Result Moderator::getResult(const sal_uInt32 milliSec)
         // reset
         m_aResultType = NORESULT;
     }
-    catch(const salhelper::ConditionWaiter::timedout&)
+    catch (const salhelper::ConditionWaiter::timedout&)
     {
         ret.type = TIMEDOUT;
     }
@@ -849,24 +849,24 @@ void SAL_CALL Moderator::run()
         aResult = m_aContent.executeCommand(m_aArg.Name,m_aArg.Argument);
         aResultType = RESULT;
     }
-    catch ( CommandAbortedException )
+    catch (const CommandAbortedException&)
     {
         aResultType = COMMANDABORTED;
     }
-    catch ( CommandFailedException )
+    catch (const CommandFailedException&)
     {
         aResultType = COMMANDFAILED;
     }
-    catch ( InteractiveIOException& r )
+    catch (const InteractiveIOException& r)
     {
         nIOErrorCode = r.Code;
         aResultType = INTERACTIVEIO;
     }
-    catch ( UnsupportedDataSinkException& )
+    catch (const UnsupportedDataSinkException )
     {
         aResultType = UNSUPPORTED;
     }
-    catch ( Exception )
+    catch (const Exception&)
     {
         aResultType = GENERAL;
     }
@@ -950,10 +950,13 @@ static sal_Bool UCBOpenContentSync(
     bool bResultAchieved(false);
 
     Moderator* pMod = 0;
-    try {
+    try
+    {
         pMod = new Moderator(xContent,xInteract,xProgress,rArg);
         pMod->create();
-    } catch(const ContentCreationException&) {
+    }
+    catch (const ContentCreationException&)
+    {
         bResultAchieved = bException = true;
         xLockBytes->SetError( ERRCODE_IO_GENERAL );
     }
@@ -1180,17 +1183,17 @@ static sal_Bool _UCBOpenContentSync(
     {
         aResult = aContent.executeCommand( rArg.Name, rArg.Argument );
     }
-    catch ( CommandAbortedException )
+    catch (const CommandAbortedException&)
     {
         bAborted = true;
         xLockBytes->SetError( ERRCODE_ABORT );
     }
-    catch ( CommandFailedException )
+    catch (const CommandFailedException&)
     {
         bAborted = true;
         xLockBytes->SetError( ERRCODE_ABORT );
     }
-    catch ( InteractiveIOException& r )
+    catch (const InteractiveIOException& r)
     {
         bException = true;
         if ( r.Code == IOErrorCode_ACCESS_DENIED || r.Code == IOErrorCode_LOCKING_VIOLATION )
@@ -1202,12 +1205,12 @@ static sal_Bool _UCBOpenContentSync(
         else
             xLockBytes->SetError( ERRCODE_IO_GENERAL );
     }
-    catch ( UnsupportedDataSinkException& )
+    catch (const UnsupportedDataSinkException&)
     {
         bException = true;
         xLockBytes->SetError( ERRCODE_IO_NOTSUPPORTED );
     }
-    catch ( Exception )
+    catch (const Exception&)
     {
         bException = true;
         xLockBytes->SetError( ERRCODE_IO_GENERAL );
@@ -1262,10 +1265,12 @@ UcbLockBytes::~UcbLockBytes()
             {
                 m_xInputStream->closeInput();
             }
-            catch ( RuntimeException const & )
-            {}
-            catch ( IOException const & )
-            {}
+            catch (const RuntimeException&)
+            {
+            }
+            catch (const IOException&)
+            {
+            }
         }
     }
 
@@ -1275,10 +1280,12 @@ UcbLockBytes::~UcbLockBytes()
         {
             m_xOutputStream->closeOutput();
         }
-        catch ( RuntimeException const & )
-        {}
-        catch ( IOException const & )
-        {}
+        catch (const RuntimeException&)
+        {
+        }
+        catch (const IOException&)
+        {
+        }
     }
 }
 
@@ -1352,8 +1359,9 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
 
         bRet = m_xInputStream.is();
     }
-    catch( Exception& )
-    {}
+    catch (const Exception&)
+    {
+    }
 
     if ( m_bStreamValid && m_xInputStream.is() )
         m_aInitialized.set();
@@ -1420,11 +1428,11 @@ ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, 
     {
         xSeekable->seek( nPos );
     }
-    catch ( IOException )
+    catch (const IOException&)
     {
         return ERRCODE_IO_CANTSEEK;
     }
-    catch (com::sun::star::lang::IllegalArgumentException)
+    catch (const com::sun::star::lang::IllegalArgumentException&)
     {
         return ERRCODE_IO_CANTSEEK;
     }
@@ -1444,7 +1452,7 @@ ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, 
 
         nSize = xStream->readBytes( aData, sal_Int32(nCount) );
     }
-    catch (IOException)
+    catch (const IOException&)
     {
         return ERRCODE_IO_CANTREAD;
     }
@@ -1474,7 +1482,7 @@ ErrCode UcbLockBytes::WriteAt ( sal_uLong nPos, const void *pBuffer, sal_uLong n
     {
         xSeekable->seek( nPos );
     }
-    catch ( IOException )
+    catch (const IOException&)
     {
         return ERRCODE_IO_CANTSEEK;
     }
@@ -1487,7 +1495,7 @@ ErrCode UcbLockBytes::WriteAt ( sal_uLong nPos, const void *pBuffer, sal_uLong n
         if ( pWritten )
             *pWritten = nCount;
     }
-    catch ( Exception )
+    catch (const Exception&)
     {
         return ERRCODE_IO_CANTWRITE;
     }
@@ -1506,7 +1514,7 @@ ErrCode UcbLockBytes::Flush() const
     {
         xOutputStream->flush();
     }
-    catch( Exception )
+    catch (const Exception&)
     {
         return ERRCODE_IO_CANTWRITE;
     }
@@ -1577,7 +1585,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
     {
         pStat->nSize = sal_uLong(xSeekable->getLength());
     }
-    catch (IOException)
+    catch (const IOException&)
     {
         return ERRCODE_IO_CANTTELL;
     }

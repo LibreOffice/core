@@ -31,6 +31,7 @@
 
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
+#include <rtl/string.hxx>
 
 /*********************************************************************
 *
@@ -45,11 +46,11 @@ class SimpleConfig
     ByteString aTmpStr;
     ByteString aStringBuffer;
 
-    ByteString GetNextLine();
+    rtl::OString GetNextLine();
 public:
     SimpleConfig(const String& rSimpleConfigFileName);
     ~SimpleConfig();
-    ByteString GetNext();
+    rtl::OString getNext();
 };
 
 #endif

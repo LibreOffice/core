@@ -44,7 +44,7 @@ extern "C" int mntctl( int cmd, size_t size, char* buf );
 #elif defined(NETBSD)
 #include <sys/mount.h>
 #elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
-      defined(DRAGONFLY)
+      defined(DRAGONFLY) || defined(IOS)
 struct mnttab
 {
   char *mnt_dir;
@@ -85,7 +85,7 @@ struct mymnttab
 
 
 #if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX) || \
-    defined(OPENBSD) || defined(DRAGONFLY)
+    defined(OPENBSD) || defined(DRAGONFLY) || defined(IOS)
 sal_Bool GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
 {
     DBG_WARNING( "Sorry, not implemented: GetMountEntry" );
@@ -478,7 +478,7 @@ const char *TempDirImpl( char *pBuf )
 |*
 *************************************************************************/
 
-FSysPathStyle DirEntry::GetPathStyle( const String & )
+FSysPathStyle DirEntry::GetPathStyle()
 {
     return FSYS_STYLE_UNX;
 }
@@ -519,19 +519,6 @@ void FileStat::SetDateTime( const String& rFileName,
         u_time.modtime = time;
         utime (ByteString(rFileName, osl_getThreadTextEncoding()).GetBuffer(), &u_time);
     }
-}
-
-//=========================================================================
-
-ErrCode FileStat::QueryDiskSpace( const String &, BigInt &, BigInt & )
-{
-    return ERRCODE_IO_NOTSUPPORTED;
-}
-
-//=========================================================================
-
-void FSysEnableSysErrorBox( sal_Bool )
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

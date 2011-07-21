@@ -31,20 +31,20 @@
 
 #include "md5.hxx"
 
-#include <stdio.h>
+#include <rtl/string.hxx>
 
-#include <tools/string.hxx>
+#include <stdio.h>
 
 int main( int argc, char * argv[] )
 {
-    for ( int n = 1; n < argc; n++ )
+    for (int n = 1; n < argc; ++n)
     {
-        ByteString aChecksum;
-        rtlDigestError error = calc_md5_checksum( argv[n], aChecksum );
+        rtl::OString aChecksum;
+        rtlDigestError error = calc_md5_checksum(argv[n], aChecksum);
 
         if ( rtl_Digest_E_None == error )
         {
-            printf( "%s  %s\n", aChecksum.GetBuffer(), argv[n] );
+            printf( "%s  %s\n", aChecksum.getStr(), argv[n] );
         }
         else
             printf( "ERROR: Unable to calculate MD5 checksum for %s\n", argv[n] );

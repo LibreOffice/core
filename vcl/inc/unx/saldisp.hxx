@@ -372,7 +372,7 @@ protected:
     KeySym          nShiftKeySym_;      // first shift modifier
     KeySym          nCtrlKeySym_;       // first control modifier
     KeySym          nMod1KeySym_;       // first mod1 modifier
-    ByteString      m_aKeyboardName;
+    rtl::OString m_aKeyboardName;
 
     vcl_sal::WMAdaptor* m_pWMAdaptor;
     DtIntegrator*       m_pDtIntegrator;
@@ -420,8 +420,9 @@ public:
     bool            DispatchInternalEvent();
     void            PrintInfo() const;
 
-    void            PrintEvent( const ByteString &rComment,
-                                XEvent       *pEvent ) const;
+#ifdef DBG_UTIL
+    void DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) const;
+#endif
 
     void            Beep() const;
 

@@ -33,17 +33,21 @@ $(eval $(call gb_Library_add_precompiled_header,svt,$(SRCDIR)/svtools/inc/pch/pr
 
 $(eval $(call gb_Library_set_componentfile,svt,svtools/util/svt))
 
+$(eval $(call gb_Library_add_api,svt,\
+	udkapi \
+	offapi \
+))
+
 $(eval $(call gb_Library_set_include,svt,\
     -I$(OUTDIR)/inc/external/jpeg \
     $$(INCLUDE) \
     -I$(WORKDIR)/inc/svtools \
     -I$(WORKDIR)/inc/ \
     -I$(OUTDIR)/inc/ \
-    -I$(realpath $(SRCDIR)/svtools/inc) \
     -I$(realpath $(SRCDIR)/svtools/inc/svtools) \
     -I$(realpath $(SRCDIR)/svtools/source/inc) \
     -I$(realpath $(SRCDIR)/svtools/inc/pch) \
-    -I$(OUTDIR)/inc/offuh \
+    -I$(realpath $(SRCDIR)/svtools/inc) \
 ))
 
 $(eval $(call gb_Library_add_defs,svt,\
@@ -101,9 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/contnr/imivctl1 \
     svtools/source/contnr/imivctl2 \
     svtools/source/contnr/ivctrl \
-    svtools/source/contnr/svicnvw \
     svtools/source/contnr/svimpbox \
-    svtools/source/contnr/svimpicn \
     svtools/source/contnr/svlbitm \
     svtools/source/contnr/svlbox \
     svtools/source/contnr/svtabbx \

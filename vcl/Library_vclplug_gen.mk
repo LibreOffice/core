@@ -32,8 +32,12 @@ $(eval $(call gb_Library_set_include,vclplug_gen,\
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_Library_add_api,vclplug_gen,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
@@ -62,6 +66,22 @@ $(call gb_Library_use_externals,vclplug_gen,\
 	icule \
 	icuuc \
 )
+
+))
+$(eval $(call gb_Library_set_ldflags,vclplug_gen,\
+    $$(LDFLAGS) \
+    $$(CAIRO_LIBS) \
+))
+else
+$(eval $(call gb_Library_set_cxxflags,vclplug_gen,\
+    $$(CXXFLAGS) \
+    $$(FONTCONFIG_CFLAGS) \
+    $$(FREETYPE_CFLAGS) \
+))
+$(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
+    cairo \
+))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/app/i18n_cb \
@@ -116,7 +136,6 @@ $(eval $(call gb_Library_add_defs,vclplug_gen,\
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
     -DVCLPLUG_GEN_IMPLEMENTATION \
 ))
-
 
 ## handle RandR 
 ifneq ($(ENABLE_RANDR),)

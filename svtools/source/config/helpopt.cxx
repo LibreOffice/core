@@ -62,7 +62,6 @@ static sal_Int32           nRefCount = 0;
 
 class SvtHelpOptions_Impl : public utl::ConfigItem
 {
-    IdList*         pList;
     sal_Int32       nHelpAgentTimeoutPeriod;
     sal_Int32       nHelpAgentRetryLimit;
     sal_Bool        bExtendedHelp;
@@ -105,9 +104,6 @@ public:
 
     void            SetWelcomeScreen( sal_Bool b )          { bWelcomeScreen = b; SetModified(); }
     sal_Bool        IsWelcomeScreen() const                 { return bWelcomeScreen; }
-    IdList*         GetPIStarterList()                      { return pList; }
-    void            AddToPIStarterList( sal_Int32 nId );
-    void            RemoveFromPIStarterList( sal_Int32 nId );
     String          GetLocale() const                       { return aLocale; }
     String          GetSystem() const                       { return aSystem; }
 
@@ -168,7 +164,6 @@ Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
 
 SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     : ConfigItem( OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Help" )) )
-    , pList( 0 )
     , bExtendedHelp( sal_False )
     , bHelpTips( sal_True )
     , bHelpAgentEnabled( sal_False )
@@ -731,19 +726,6 @@ void SvtHelpOptions::SetWelcomeScreen( sal_Bool b )
 sal_Bool SvtHelpOptions::IsWelcomeScreen() const
 {
     return pImp->IsWelcomeScreen();
-}
-
-IdList* SvtHelpOptions::GetPIStarterList()
-{
-    return pImp->GetPIStarterList();
-}
-
-void SvtHelpOptions::AddToPIStarterList( sal_Int32 )
-{
-}
-
-void SvtHelpOptions::RemoveFromPIStarterList( sal_Int32 )
-{
 }
 
 String SvtHelpOptions::GetLocale() const

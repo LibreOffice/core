@@ -253,12 +253,6 @@ void TextEngine::SetFont( const Font& rFont )
     }
 }
 
-void TextEngine::SetDefTab( sal_uInt16 nDefTab )
-{
-    mnDefTab = nDefTab;
-    // evtl neu setzen?
-}
-
 void TextEngine::SetMaxTextLen( sal_uLong nLen )
 {
     mnMaxTextLen = nLen;
@@ -357,29 +351,6 @@ void TextEngine::SetUpdateMode( sal_Bool bUpdate )
                 GetActiveView()->ShowCursor();
         }
     }
-}
-
-sal_Bool TextEngine::DoesKeyMoveCursor( const KeyEvent& rKeyEvent )
-{
-    sal_Bool bDoesMove = sal_False;
-
-    switch ( rKeyEvent.GetKeyCode().GetCode() )
-    {
-        case KEY_UP:
-        case KEY_DOWN:
-        case KEY_LEFT:
-        case KEY_RIGHT:
-        case KEY_HOME:
-        case KEY_END:
-        case KEY_PAGEUP:
-        case KEY_PAGEDOWN:
-        {
-            if ( !rKeyEvent.GetKeyCode().IsMod2() )
-                bDoesMove = sal_True;
-        }
-        break;
-    }
-    return bDoesMove;
 }
 
 sal_Bool TextEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
@@ -1509,11 +1480,7 @@ void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, Font& rFont, Outp
         if ( ( ( pAttrib->GetStart() < nPos ) && ( pAttrib->GetEnd() >= nPos ) )
                     || !pNode->GetText().Len() )
         {
-            if ( pAttrib->Which() != TEXTATTR_FONTCOLOR )
-            {
-                pAttrib->GetAttr().SetFont( rFont );
-            }
-            else
+            if ( pAttrib->Which() == TEXTATTR_FONTCOLOR )
             {
                 if ( pOutDev )
                     pOutDev->SetTextColor( ((TextAttribFontColor&)pAttrib->GetAttr()).GetColor() );
@@ -1551,15 +1518,6 @@ void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, Font& rFont, Outp
 //              pOut->SetTextLineColor( Color( COL_LIGHTGRAY ) );
         }
     }
-}
-
-void TextEngine::SetUpdateMode( sal_Bool bUp, TextView* pCurView, sal_Bool bForceUpdate )
-{
-    sal_Bool bChanged = ( GetUpdateMode() != bUp );
-
-    mbUpdate = bUp;
-    if ( mbUpdate && ( bChanged || bForceUpdate ) )
-        FormatAndUpdate( pCurView );
 }
 
 void TextEngine::FormatAndUpdate( TextView* pCurView )
@@ -1953,9 +1911,6 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     }
 
     DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "Keine Portions?!" );
-#ifdef EDITDEBUG
-    DBG_ASSERT( pTEParaPortion->DbgCheckTextPortions(), "Portions kaputt?" );
-#endif
 }
 
 void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short nNewChars )
@@ -2048,10 +2003,6 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
         }
         DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "RecalcTextPortions: Keine mehr da!" );
     }
-
-#ifdef EDITDEBUG
-    DBG_ASSERT( pTEParaPortion->DbgCheckTextPortions(), "Portions kaputt?" );
-#endif
 }
 
 void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange, TextSelection const* pSelection )
@@ -2242,13 +2193,6 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                             pOutDev->Erase( aTabArea );
                                         }
                                     }
-#ifdef EDITDEBUG
-                                    Rectangle aTabArea( aTmpPos, Point( aTmpPos.X()+nTxtWidth, aTmpPos.Y()+mnCharHeight-1 ) );
-                                    Color aOldColor = pOutDev->GetFillColor();
-                                    pOutDev->SetFillColor( (y%2) ? COL_RED : COL_GREEN );
-                                    pOutDev->DrawRect( aTabArea );
-                                    pOutDev->SetFillColor( aOldColor );
-#endif
                                 }
                                 break;
                                 default:    OSL_FAIL( "ImpPaint: Unknown Portion-Type !" );

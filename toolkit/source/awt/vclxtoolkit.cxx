@@ -64,6 +64,13 @@
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
 #endif
+
+#ifdef IOS
+#include "premac.h"
+#include <UIKit/UIKit.h>
+#include "postmac.h"
+#endif
+
 #include <vcl/sysdata.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
@@ -982,6 +989,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                     aParentData.nSize   = sizeof( aParentData );
                                     #if defined QUARTZ
                                     aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
+                                    #elif defined IOS
+                                    aParentData.pView   = reinterpret_cast<UIView*>(nWindowHandle);
                                     #elif defined UNX
                                     aParentData.aWindow = nWindowHandle;
                                     aParentData.bXEmbedSupport = bXEmbed;
@@ -1069,7 +1078,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     {
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( rDescriptor.Parent );
 
-        // #103939# Don't through assertion, may be it's a system dependend window, used in ImplCreateWindow.
+        // #103939# Don't throw assertion, may be it's a system dependend window, used in ImplCreateWindow.
         // DBG_ASSERT( pParentComponent, "ParentComponent not valid" );
 
         if ( pParentComponent )
@@ -1206,6 +1215,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             aParentData.nSize   = sizeof( aParentData );
             #if defined QUARTZ
             aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
+            #elif defined IOS
+            aParentData.pView   = reinterpret_cast<UIView*>(nWindowHandle);
             #elif defined UNX
             aParentData.aWindow = nWindowHandle;
             aParentData.bXEmbedSupport = bXEmbed;

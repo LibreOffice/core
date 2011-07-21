@@ -177,29 +177,6 @@ sal_Bool Append( ByteString aOutputSrs, ByteString aTmpFile )
 
 /*************************************************************************
 |*
-|*    InputFile
-|*
-|*    Beschreibung      Haengt Extension an, wenn keine da ist
-|*    Parameter:        pInput, der Input-Dateiname.
-|*                      pExt, die Extension des Ausgabenamens
-|*
-*************************************************************************/
-ByteString InputFile ( const char * pInput, const char * pExt )
-{
-    UniString aUniInput( pInput, RTL_TEXTENCODING_ASCII_US );
-    DirEntry aFileName( aUniInput );
-
-    if ( 0 == aFileName.GetExtension().Len() )
-    {
-        UniString aExt( pExt, RTL_TEXTENCODING_ASCII_US );
-        aFileName.SetExtension( aExt );
-    }
-
-    return ByteString( aFileName.GetFull(), RTL_TEXTENCODING_ASCII_US );
-}
-
-/*************************************************************************
-|*
 |*    OutputFile
 |*
 |*    Beschreibung      Ersetzt Extension durch eine andere

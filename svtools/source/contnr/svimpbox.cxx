@@ -1012,6 +1012,34 @@ void SvImpLBox::MakeVisible( SvLBoxEntry* pEntry, sal_Bool bMoveToTop )
     pView->Invalidate();
 }
 
+void SvImpLBox::ScrollToAbsPos( long nPos )
+{
+    if( pView->GetVisibleCount() == 0 )
+        return;
+    long nLastEntryPos = pView->GetAbsPos( pView->Last() );
+
+    if( nPos < 0 )
+        nPos = 0;
+    else if( nPos > nLastEntryPos )
+        nPos = nLastEntryPos;
+
+    SvLBoxEntry* pEntry = (SvLBoxEntry*)pView->GetEntryAtAbsPos( nPos );
+    if( !pEntry || pEntry == pStartEntry )
+        return;
+
+    if( pStartEntry || (m_nStyle & WB_FORCE_MAKEVISIBLE) )
+        nFlags &= (~F_FILLING);
+
+    if( pView->IsEntryVisible(pEntry) )
+    {
+        pStartEntry = pEntry;
+        ShowCursor( sal_False );
+        aVerSBar.SetThumbPos( nPos );
+        ShowCursor( sal_True );
+        if (GetUpdateMode())
+            pView->Invalidate();
+    }
+}
 
 void SvImpLBox::RepaintSelectionItems()
 {
@@ -1358,8 +1386,19 @@ void SvImpLBox::InitScrollBarBox()
 void SvImpLBox::Resize()
 {
     Size aSize( pView->Control::GetOutputSizePixel());
+    long nEntryHeight = pView->GetEntryHeight();
+    int nEntryCount = 0;
+
     if( aSize.Width() <= 0 || aSize.Height() <= 0 )
         return;
+    if( nEntryHeight )
+    {
+      // Set the view height to an integer multiple of the entry height.
+      nEntryCount = (int) aSize.Height() / nEntryHeight;
+      aSize.Height() = pView->GetEntryHeight() * nEntryCount;
+      pView->Control::SetOutputSizePixel( aSize );
+    }
+
     nFlags |= F_IN_RESIZE;
     InitScrollBarBox();
 

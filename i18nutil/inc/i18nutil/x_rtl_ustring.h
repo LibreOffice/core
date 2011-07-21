@@ -49,14 +49,6 @@ inline void SAL_CALL x_rtl_uString_new_WithLength( rtl_uString ** newStr, sal_In
   *newStr = (rtl_uString*) rtl_allocateMemory ( sizeof(rtl_uString) + sizeof(sal_Unicode) * nLen);
   (*newStr)->refCount = _refCount;
   (*newStr)->length = nLen;
-
-  // rtl_uString is defined in rtl/ustring.h as below:
-  //typedef struct _rtl_uString
-  //{
-  //    sal_Int32       refCount;
-  //    sal_Int32       length;
-  //    sal_Unicode     buffer[1];
-  //} rtl_uString;
 }
 
 inline rtl_uString * SAL_CALL x_rtl_uString_new_WithLength( sal_Int32 nLen, sal_Int32 _refCount = 0 )
@@ -76,6 +68,6 @@ inline void SAL_CALL x_rtl_uString_release( rtl_uString * value )
 }
 
 
-#endif // #ifndef _I18N_X_RTL_USTRING_H_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -154,7 +154,6 @@ public:
                     It is not a URL because alle URLs must be "UCB compatible", so there may be no suitable URL at all.
                     */
     static String   SetTempNameBaseDirectory( const String &rBaseName );
-    static String   GetTempNameBaseDirectory();
 };
 
 }

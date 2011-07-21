@@ -111,15 +111,16 @@ void SetString( const RSCINST & rInst, const char * pVarName, const char * pStr 
 
 RscId MakeRscId( RscExpType aExpType )
 {
-    if( !aExpType.IsNothing() ){
-        sal_Int32       lValue;
+    if( !aExpType.IsNothing() )
+    {
+        sal_Int32 lValue(0);
 
         if( !aExpType.Evaluate( &lValue ) )
             pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
         if( lValue < 1 || lValue > (sal_Int32)0x7FFF )
         {
             pTC->pEH->Error( ERR_IDRANGE, NULL, RscId(),
-                             ByteString::CreateFromInt32( lValue ).GetBuffer() );
+                             rtl::OString::valueOf(lValue).getStr() );
         }
 
         if( aExpType.IsDefinition() )

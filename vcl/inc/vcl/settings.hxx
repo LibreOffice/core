@@ -713,7 +713,6 @@ public:
                                         { CopyData(); mpData->mnHighContrast = bHighContrast; }
     sal_Bool                            GetHighContrastMode() const
                                         { return (sal_Bool) mpData->mnHighContrast; }
-    sal_Bool                            IsHighContrastBlackAndWhite() const;
     void                            SetUseSystemUIFonts( sal_Bool bUseSystemUIFonts )
                                         { CopyData(); mpData->mnUseSystemUIFonts = bUseSystemUIFonts; }
     sal_Bool                            GetUseSystemUIFonts() const

@@ -65,6 +65,7 @@
 #include <svtools/wmf.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
+#include <rtl/strbuf.hxx>
 #include <cstdio>
 
 // --------------
@@ -879,15 +880,16 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
     {
         case( SOT_FORMATSTR_ID_SOLK ):
         {
-            ByteString sURL( rBmk.GetURL(), eSysCSet ),
-                       sDesc( rBmk.GetDescription(), eSysCSet );
-            ByteString sOut( ByteString::CreateFromInt32( sURL.Len() ));
-            ( sOut += '@' ) += sURL;
-            sOut += ByteString::CreateFromInt32( sDesc.Len() );
-            ( sOut += '@' ) += sDesc;
+            rtl::OString sURL(rtl::OUStringToOString(rBmk.GetURL(), eSysCSet));
+            rtl::OString sDesc(rtl::OUStringToOString(rBmk.GetDescription(), eSysCSet));
+            rtl::OStringBuffer sOut;
+            sOut.append(sURL.getLength());
+            sOut.append('@').append(sURL);
+            sOut.append(sDesc.getLength());
+            sOut.append('@').append(sDesc);
 
-            Sequence< sal_Int8 > aSeq( sOut.Len() );
-            memcpy( aSeq.getArray(), sOut.GetBuffer(), sOut.Len() );
+            Sequence< sal_Int8 > aSeq(sOut.getLength());
+            memcpy(aSeq.getArray(), sOut.getStr(), sOut.getLength());
             maAny <<= aSeq;
         }
         break;
@@ -973,22 +975,6 @@ sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableHelper::SetFileList( const FileList& rFileList,
-                                          const ::com::sun::star::datatransfer::DataFlavor& )
-{
-    SvMemoryStream aMemStm( 4096, 4096 );
-
-    aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-    aMemStm << rFileList;
-
-    maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
-                                       aMemStm.Seek( STREAM_SEEK_TO_END ) );
-
-    return( maAny.hasValue() );
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const DataFlavor& rFlavor )
 {
     SotStorageStreamRef xStm( new SotStorageStream( String() ) );
@@ -1015,15 +1001,6 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
             maAny <<= aSeq;
     }
 
-    return( maAny.hasValue() );
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool TransferableHelper::SetInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf,
-                                           const ::com::sun::star::datatransfer::DataFlavor& )
-{
-    maAny <<= rIf;
     return( maAny.hasValue() );
 }
 
@@ -2208,15 +2185,6 @@ sal_Bool TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, Refe
           rxStream = new ::comphelper::SequenceInputStream( aSeq );
 
     return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-
-sal_Bool TransferableDataHelper::GetInterface( SotFormatStringId nFormat, Reference< XInterface >& rIf )
-{
-    DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetInterface( aFlavor, rIf ) );
 }
 
 // -----------------------------------------------------------------------------

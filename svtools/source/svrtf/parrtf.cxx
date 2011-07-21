@@ -341,7 +341,27 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                         ByteString aByteString;
                         while (1)
                         {
-                            aByteString.Append((char)GetHexValue());
+                            char c = (char)GetHexValue();
+
+                            if (c)
+                            {
+                                aByteString.Append(c);
+                            }
+                            else
+                            {
+                                /* \'00 is a valid internal character in  a
+                                * string in RTF, however ByteString::Append
+                                * does nothing if '\0' is passed in. It is
+                                * otherwise capable of handling strings with
+                                * embedded NULs, so add a '\1' and then
+                                * change it, as ByteString::SetChar does not
+                                * care if the character is '\0'.
+                                */
+                                int nLen = aByteString.Len();
+
+                                aByteString.Append('\001');
+                                aByteString.SetChar(nLen, '\0');
+                            }
 
                             bool bBreak = false;
                             sal_Char nSlash = '\\';

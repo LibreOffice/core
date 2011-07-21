@@ -871,7 +871,6 @@ bool AquaSalBitmap::GetSystemData( BitmapSystemData& rData )
     {
         bRet = true;
 
-#ifdef CAIRO
         if ((CGBitmapContextGetBitsPerPixel(mxGraphicContext) == 32) &&
             (CGBitmapContextGetBitmapInfo(mxGraphicContext) & kCGBitmapByteOrderMask) != kCGBitmapByteOrder32Host) {
             /**
@@ -904,7 +903,6 @@ bool AquaSalBitmap::GetSystemData( BitmapSystemData& rData )
             CGImageRelease( xImage );
             mxGraphicContext = mxGraphicContextNew;
         }
-#endif
 
         rData.rImageContext = (void *) mxGraphicContext;
         rData.mnWidth = mnWidth;

@@ -116,8 +116,6 @@ public:
 
     static UniString GetPresentation(INetContentType eTypeID);
 
-    static UniString GetExtension(const UniString & rTypeName);
-
     static INetContentType GetContentType4Extension(UniString const &
                                                         rExtension);
 
@@ -768,24 +766,6 @@ UniString Registration::GetPresentation(INetContentType eTypeID)
 
 //============================================================================
 // static
-UniString Registration::GetExtension(UniString const & rTypeName)
-{
-    if (!m_pRegistration)
-        m_pRegistration = new Registration;
-
-    UniString aTheTypeName = rTypeName;
-    aTheTypeName.ToLowerAscii();
-    sal_uInt16 nPos;
-    return m_pRegistration->m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos) ?
-               static_cast< TypeNameMapEntry * >(m_pRegistration->
-                                                     m_aTypeNameMap.
-                                                         GetObject(nPos))->
-                   m_aExtension :
-               UniString();
-}
-
-//============================================================================
-// static
 INetContentType Registration::GetContentType4Extension(UniString const &
                                                            rExtension)
 {
@@ -848,19 +828,6 @@ MediaTypeEntry const * seekEntry(UniString const & rTypeName,
 
 }
 
-//============================================================================
-//
-//  INetContentTypes
-//
-//============================================================================
-
-//static
-void INetContentTypes::Uninitialize()
-{
-    Registration::deinitialize();
-}
-
-//============================================================================
 //static
 INetContentType INetContentTypes::RegisterContentType(UniString const &
                                                           rTypeName,
@@ -966,25 +933,6 @@ UniString INetContentTypes::GetPresentation(INetContentType eTypeID,
             return aPresentation;
     }
     return SvtSimpleResId(nResID, aLocale);
-}
-
-//============================================================================
-//static
-UniString INetContentTypes::GetExtension(UniString const & rTypeName)
-{
-    MediaTypeEntry const * pEntry = seekEntry(rTypeName, aStaticTypeNameMap,
-                                              CONTENT_TYPE_LAST + 1);
-    if (pEntry)
-        return UniString::CreateFromAscii(pEntry->m_pExtension);
-
-    UniString aExtension = Registration::GetExtension(rTypeName);
-    if (aExtension.Len() != 0)
-        return aExtension;
-    // special handling of text types, which come in uncounted variations:
-    return rTypeName.EqualsIgnoreCaseAscii("text", 0,
-                                           RTL_CONSTASCII_LENGTH("text")) ?
-               UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("txt")) :
-               UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("tmp"));
 }
 
 //============================================================================
@@ -1136,63 +1084,6 @@ bool INetContentTypes::GetExtensionFromURL(UniString const & rURL,
 }
 
 //============================================================================
-//static
-INetContentType INetContentTypes::MapStringToContentType(UniString const &
-                                                             rPresentation)
-{
-    MediaTypeEntry const * pEntry = seekEntry(rPresentation,
-                                              aStaticPresentationMap,
-                                              sizeof aStaticPresentationMap
-                                                  / sizeof (MediaTypeEntry));
-    return pEntry ? pEntry->m_eTypeID : CONTENT_TYPE_UNKNOWN;
-}
-
-//============================================================================
-// static
-bool INetContentTypes::parse(ByteString const & rMediaType,
-                             ByteString & rType, ByteString & rSubType,
-                             INetContentTypeParameterList * pParameters)
-{
-    sal_Char const * p = rMediaType.GetBuffer();
-    sal_Char const * pEnd = p + rMediaType.Len();
-
-    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
-    sal_Char const * pToken = p;
-    bool bDowncase = false;
-    while (p != pEnd && INetMIME::isTokenChar(*p))
-    {
-        bDowncase = bDowncase || INetMIME::isUpperCase(*p);
-        ++p;
-    }
-    if (p == pToken)
-        return false;
-    rType = ByteString(pToken, sal::static_int_cast< xub_StrLen >(p - pToken));
-    if (bDowncase)
-        rType.ToLowerAscii();
-
-    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
-    if (p == pEnd || *p++ != '/')
-        return false;
-
-    p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
-    pToken = p;
-    bDowncase = false;
-    while (p != pEnd && INetMIME::isTokenChar(*p))
-    {
-        bDowncase = bDowncase || INetMIME::isUpperCase(*p);
-        ++p;
-    }
-    if (p == pToken)
-        return false;
-    rSubType = ByteString(
-        pToken, sal::static_int_cast< xub_StrLen >(p - pToken));
-    if (bDowncase)
-        rSubType.ToLowerAscii();
-
-    return INetMIME::scanParameters(p, pEnd, pParameters) == pEnd;
-}
-
-//============================================================================
 // static
 bool INetContentTypes::parse(UniString const & rMediaType,
                              UniString & rType, UniString & rSubType,
@@ -1235,118 +1126,6 @@ bool INetContentTypes::parse(UniString const & rMediaType,
         rSubType.ToLowerAscii();
 
     return INetMIME::scanParameters(p, pEnd, pParameters) == pEnd;
-}
-
-//============================================================================
-// static
-ByteString INetContentTypes::appendUSASCIIParameter(ByteString const &
-                                                        rMediaType,
-                                                    ByteString const &
-                                                        rAttribute,
-                                                    ByteString const & rValue)
-{
-    ByteString aResult = rMediaType;
-    aResult.Append(RTL_CONSTASCII_STRINGPARAM("; "));
-    aResult += rAttribute;
-    aResult += '=';
-    bool bQuote = false;
-    for (xub_StrLen i = 0; i < rValue.Len(); ++i)
-    {
-        // When the value contains any ' characters, use a quoted string
-        // instead of a token, in order to avoid confusion with RFC 2231
-        // extensions:
-        sal_uInt32 nChar = sal_uChar(rValue.GetChar(i));
-        DBG_ASSERT(INetMIME::isUSASCII(nChar),
-                   "INetContentTypes::appendUSASCIIParameter(): Bad value");
-        if (!INetMIME::isTokenChar(nChar) || nChar == '\'')
-        {
-            bQuote = true;
-            break;
-        }
-    }
-    if (bQuote)
-    {
-        aResult += '"';
-        for (xub_StrLen i = 0; i < rValue.Len(); ++i)
-        {
-            // Escape LF as well as CR to avoid confusion with line folding:
-            sal_uInt32 nChar = sal_uChar(rValue.GetChar(i));
-            DBG_ASSERT(INetMIME::isUSASCII(nChar),
-                       "INetContentTypes::appendUSASCIIParameter():"
-                           " Bad value");
-            switch (nChar)
-            {
-                case 0x0A: // LF
-                case 0x0D: // CR
-                case '"':
-                case '\\':
-                    aResult += '\\';
-                default:
-                    aResult += static_cast< char >(nChar);
-                    break;
-            }
-        }
-        aResult += '"';
-    }
-    else
-        aResult += rValue;
-    return aResult;
-}
-
-//============================================================================
-// static
-UniString INetContentTypes::appendUSASCIIParameter(UniString const &
-                                                       rMediaType,
-                                                   UniString const &
-                                                       rAttribute,
-                                                   UniString const & rValue)
-{
-    UniString aResult = rMediaType;
-    aResult.AppendAscii(RTL_CONSTASCII_STRINGPARAM("; "));
-    aResult += rAttribute;
-    aResult += '=';
-    bool bQuote = false;
-    for (xub_StrLen i = 0; i < rValue.Len(); ++i)
-    {
-        // When the value contains any ' characters, use a quoted string
-        // instead of a token, in order to avoid confusion with RFC 2231
-        // extensions:
-        sal_uInt32 nChar = rValue.GetChar(i);
-        DBG_ASSERT(INetMIME::isUSASCII(nChar),
-                   "INetContentTypes::appendUSASCIIParameter(): Bad value");
-        if (!INetMIME::isTokenChar(nChar) || nChar == '\'')
-        {
-            bQuote = true;
-            break;
-        }
-    }
-    if (bQuote)
-    {
-        aResult += '"';
-        for (xub_StrLen i = 0; i < rValue.Len(); ++i)
-        {
-            // Escape LF as well as CR to avoid confusion with line folding:
-            sal_uInt32 nChar = rValue.GetChar(i);
-            DBG_ASSERT(INetMIME::isUSASCII(nChar),
-                       "INetContentTypes::appendUSASCIIParameter():"
-                           " Bad value");
-            switch (nChar)
-            {
-                case 0x0A: // LF
-                case 0x0D: // CR
-                case '"':
-                case '\\':
-                    aResult += '\\';
-                default:
-                    aResult += sal_Unicode(nChar);
-                    break;
-            }
-        }
-        aResult += '"';
-    }
-    else
-        aResult += rValue;
-    return aResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

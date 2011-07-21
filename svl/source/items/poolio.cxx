@@ -1324,7 +1324,6 @@ void SfxItemPool::SetVersionMap
     <SfxItemPool::IsLoadingVersionCurrent()const>
     <SfxItemPool::GetNewWhich(sal_uInt16)>
     <SfxItemPool::GetVersion()const>
-    <SfxItemPool::GetLoadingVersion()const>
 */
 
 {
@@ -1381,7 +1380,6 @@ sal_uInt16 SfxItemPool::GetNewWhich
     <SfxItemPool::IsLoadingVersionCurrent()const>
     <SfxItemPool::SetVersionMap(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16*)>
     <SfxItemPool::GetVersion()const>
-    <SfxItemPool::GetLoadingVersion()const>
 */
 
 {
@@ -1470,7 +1468,6 @@ bool SfxItemPool::IsCurrentVersionLoading() const
     <SfxItemPool::SetVersionMap(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16*)>
     <SfxItemPool::GetNewWhich(sal_uInt16)const>
     <SfxItemPool::GetVersion()const>
-    <SfxItemPool::GetLoadingVersion()const>
 */
 
 {
@@ -1503,7 +1500,6 @@ sal_uInt16 SfxItemPool::GetVersion() const
     <SfxItemPool::IsLoadingVersionCurrent()const>
     <SfxItemPool::SetVersionMap(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16*)>
     <SfxItemPool::GetNewWhich(sal_uInt16)const>
-    <SfxItemPool::GetLoadingVersion()const>
 */
 
 {
@@ -1511,36 +1507,6 @@ sal_uInt16 SfxItemPool::GetVersion() const
 }
 
 // -----------------------------------------------------------------------
-
-sal_uInt16 SfxItemPool::GetLoadingVersion() const
-
-/*  [Beschreibung]
-
-    Diese Methode liefert die Versionsnummer des SfxItemPool-Aufbaus
-    (also des Which-Bereichs), die bei Laden vorgefunden wurde.
-
-    Precondition:   Pool mu\s geladen sein
-    Postcondition:  unver"andert
-    Laufzeit:       2
-
-
-    [Anmerkung]
-
-    Achtung: Es mu\s ggf. die Versionsnummer von Sekund"arpools
-    ber"ucksichtigt werden.
-
-
-    [Querverweise]
-
-    <SfxItemPool::IsLoadingVersionCurrent()const>
-    <SfxItemPool::SetVersionMap(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16*)>
-    <SfxItemPool::GetNewWhich(sal_uInt16)const>
-    <SfxItemPool::GetVersion()const>
-*/
-
-{
-    return pImp->nLoadingVersion;
-}
 
 //-------------------------------------------------------------------------
 

@@ -57,10 +57,6 @@ public:
     oneToOneMapping( OneToOneMappingTable_t *rpTable, const size_t rnSize, const size_t rnUnitSize = sizeof(OneToOneMappingTable_t) );
     virtual ~oneToOneMapping();
 
-    // make index for fast search
-    // bluedawrf: not used
-//        void makeIndex();
-
     // binary search
     virtual sal_Unicode find( const sal_Unicode nKey ) const;
 
