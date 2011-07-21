@@ -22709,12 +22709,6 @@
       <element name="sdtEndPr" tokenid="ooxml:CT_SdtEndPr"/>
       <element name="sdtContent" tokenid="ooxml:CT_SdtContentRun"/>
     </resource>
-    <resource name="CT_SdtBlock" resource="Properties">
-      <element name="sdtPr" tokenid="ooxml:CT_SdtPr"/>
-      <element name="sdtEndPr" tokenid="ooxml:CT_SdtEndPr"/>
-      <element name="sdtContent" tokenid="ooxml:CT_SdtContentBlock"/>
-    </resource>
-    <resource name="CT_SdtContentBlock" resource="Properties"/>
     <resource name="EG_PContent" resource="Properties" tag="content">
       <element name="fldSimple" tokenid="ooxml:EG_PContent_fldSimple"/>
       <element name="hyperlink" tokenid="ooxml:EG_PContent_hyperlink"/>
