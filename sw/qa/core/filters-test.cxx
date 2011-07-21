@@ -65,6 +65,8 @@
 SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
 
+const int indeterminate = 2;
+
 using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
@@ -78,12 +80,8 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, bool bExpected);
+    void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected);
     bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
-
-    bool testLoad(const rtl::OUString &rFilter,
-        const rtl::OUString &rUserData,
-        const rtl::OUString &rURL);
 
     /**
      * Ensure CVEs remain unbroken
@@ -99,6 +97,7 @@ private:
     uno::Reference<lang::XMultiComponentFactory> m_xFactory;
     uno::Reference<uno::XInterface> m_xWriterComponent;
     ::rtl::OUString m_aSrcRoot;
+    int m_nLoadedDocs;
 };
 
 bool FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
@@ -112,10 +111,14 @@ bool FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     SwDocShellRef xDocShRef = new SwDocShell;
     SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
     aSrcMed.SetFilter(&aFilter);
-    return xDocShRef->DoLoad(&aSrcMed);
+    bool bRet = xDocShRef->DoLoad(&aSrcMed);
+
+    ++m_nLoadedDocs;
+
+    return bRet;
 }
 
-void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, bool bExpected)
+void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected)
 {
     osl::Directory aDir(rURL);
 
@@ -127,43 +130,43 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
         aItem.getFileStatus(aFileStatus);
         rtl::OUString sURL = aFileStatus.getFileURL();
         if (aFileStatus.getFileType() == osl::FileStatus::Directory)
-            recursiveScan(rFilter, sURL, rUserData, bExpected);
+            recursiveScan(rFilter, sURL, rUserData, nExpected);
         else
         {
-            sal_Int32 nGitIndex = sURL.lastIndexOfAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(".gitignore"));
+            sal_Int32 nLastSlash = sURL.lastIndexOf('/');
 
-            if (nGitIndex == sURL.getLength() - RTL_CONSTASCII_LENGTH(".gitignore"))
+            //ignore .files
+            if (
+                 (nLastSlash != -1) && (nLastSlash+1 < sURL.getLength()) &&
+                 (sURL.getStr()[nLastSlash+1] == '.')
+               )
+            {
                 continue;
+            }
 
+            rtl::OString aRes(rtl::OUStringToOString(sURL,
+                osl_getThreadTextEncoding()));
+            if (nExpected == indeterminate)
+            {
+                fprintf(stderr, "loading %s\n", aRes.getStr());
+            }
+            sal_uInt32 nStartTime = osl_getGlobalTimer();
             bool bRes = load(rFilter, sURL, rUserData);
-            rtl::OString aRes(rtl::OUStringToOString(sURL, osl_getThreadTextEncoding()));
-            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == bExpected);
+            sal_uInt32 nEndTime = osl_getGlobalTimer();
+            if (nExpected == indeterminate)
+            {
+                fprintf(stderr, "pass/fail was %d (%"SAL_PRIuUINT32" ms)\n",
+                    bRes, nEndTime-nStartTime);
+                continue;
+            }
+            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
         }
     }
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
 }
 
-bool FiltersTest::testLoad(const rtl::OUString &rFilter,
-    const rtl::OUString &rUserData,
-    const rtl::OUString &rURL)
-{
-    SfxFilter aFilter(
-        rFilter,
-        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
-        rUserData, rtl::OUString() );
-
-    SwDocShellRef xDocShRef = new SwDocShell;
-    SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
-    aSrcMed.SetFilter(&aFilter);
-    return xDocShRef->DoLoad(&aSrcMed);
-}
-
 void FiltersTest::testCVEs()
 {
-//To-Do: I know this works on Linux, please check if this test works under
-//windows and enable it if so
-#ifndef WNT
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Staroffice XML (Writer)")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/xml/pass")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")), true);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Staroffice XML (Writer)")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/xml/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")), false);
@@ -172,15 +175,20 @@ void FiltersTest::testCVEs()
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/rtf/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")), false);
 
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/rtf/indeterminate")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")), indeterminate);
+
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/pass")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), true);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), false);
 
-#endif
+    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/indeterminate")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), indeterminate);
+
+    printf("Writer: tested %d files\n", m_nLoadedDocs);
 }
 
 FiltersTest::FiltersTest()
     : m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://"))
+    , m_nLoadedDocs(0)
 {
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
     m_xFactory = m_xContext->getServiceManager();

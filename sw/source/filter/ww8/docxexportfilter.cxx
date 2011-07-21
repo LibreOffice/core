@@ -123,15 +123,6 @@ uno::Reference< uno::XInterface > SAL_CALL DocxExport_createInstance(const uno::
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-// ------------------------
-// - component_getFactory -
-// ------------------------
-
 ::cppu::ImplementationEntry entries [] =
 {
     {
@@ -152,7 +143,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const
     { 0, 0, 0, 0, 0, 0 }
 };
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL msword_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, entries );
 }

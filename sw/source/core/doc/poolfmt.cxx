@@ -575,12 +575,12 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         }
         break;
 
-    case RES_POOLCOLL_FOOTNOTE:             // Fussnote
-    case RES_POOLCOLL_ENDNOTE:
+    case RES_POOLCOLL_FOOTNOTE:             // paragraph style Footnote
+    case RES_POOLCOLL_ENDNOTE:              // paragraph style Endnote
         {
             SvxLRSpaceItem aLR( RES_LR_SPACE );
-            aLR.SetTxtFirstLineOfst( -(short)GetMetricVal( CM_05 ));
-            aLR.SetTxtLeft( GetMetricVal( CM_05 ));
+            aLR.SetTxtFirstLineOfst( -(short)( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) ) );
+            aLR.SetTxtLeft( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) );
             SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
             aSet.Put( aLR );
             SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );

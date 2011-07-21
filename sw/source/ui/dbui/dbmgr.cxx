@@ -188,7 +188,7 @@ bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultS
             if( aCount >>= rCount )
                 return true;
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
         }
     }
@@ -282,7 +282,7 @@ sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
             OSL_FAIL("no absolute positioning available");
         }
     }
-    catch(Exception aExcept)
+    catch(const Exception&)
     {
     }
     return bRet;
@@ -297,7 +297,7 @@ sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
     {
         xCols = xColsSupp->getColumns();
     }
-    catch( lang::DisposedException& )
+    catch(const lang::DisposedException&)
     {
     }
     if(!xCols.is() || !xCols->hasByName(rColumnName))
@@ -377,7 +377,7 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
                 if(xComponent.is())
                     xComponent->addEventListener(pImpl->xDisposeListener);
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
             }
         }
@@ -403,7 +403,7 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
             pImpl->pMergeData->CheckEndOfDB();
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         pImpl->pMergeData->bEndOfDB = sal_True;
         pImpl->pMergeData->CheckEndOfDB();
@@ -744,7 +744,7 @@ SwNewDBMgr::~SwNewDBMgr()
                 if(xComp.is())
                     xComp->dispose();
             }
-            catch(const RuntimeException& )
+            catch(const RuntimeException&)
             {
                 //may be disposed already since multiple entries may have used the same connection
             }
@@ -1427,7 +1427,7 @@ sal_uLong SwNewDBMgr::GetColumnFmt( const String& rDBName,
             {
                 xCols = xColsSupp->getColumns();
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 OSL_FAIL("Exception in getColumns()");
             }
@@ -1524,7 +1524,7 @@ sal_uLong SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
                 }
             }
         }
-        catch( const Exception& )
+        catch(const Exception&)
         {
             OSL_FAIL("no FormatKey property found");
         }
@@ -1595,7 +1595,9 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
                 xConnection = xComplConnection->connectWithCompletion( xHandler );
         }
     }
-    catch(Exception&) {}
+    catch(const Exception&)
+    {
+    }
 
     return xConnection;
 }
@@ -1641,7 +1643,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Refe
         xRowSet->execute();
         xRet = Reference<XColumnsSupplier>( xRowSet, UNO_QUERY );
     }
-    catch( const uno::Exception& )
+    catch(const uno::Exception&)
     {
         OSL_FAIL("Exception in SwDBMgr::GetColumnSupplier");
     }
@@ -1671,7 +1673,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
             {
                 sRet = xColumn->getString();
             }
-            catch( SQLException& )
+            catch(const SQLException&)
             {
             }
         break;
@@ -1708,7 +1710,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
                     }
                 }
             }
-            catch(Exception& )
+            catch(const Exception&)
             {
                 OSL_FAIL("exception caught");
             }
@@ -1800,7 +1802,7 @@ sal_Bool SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTabl
         {
             nOldRow = pFound->xResultSet->getRow();
         }
-        catch(const Exception& )
+        catch(const Exception&)
         {
             return sal_False;
         }
@@ -1895,7 +1897,7 @@ sal_Bool SwNewDBMgr::ToNextRecord(SwDSParam* pParam)
             ++pParam->nSelectionIndex;
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
     }
     return bRet;
@@ -1921,7 +1923,7 @@ sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
     {
         nRet = pImpl->pMergeData->xResultSet->getRow();
     }
-    catch(Exception& )
+    catch(const Exception&)
     {
     }
     return nRet;
@@ -1975,7 +1977,7 @@ sal_Bool SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTa
                 pFound->bScrollable = xMetaData
                         ->supportsResultSetType((sal_Int32)ResultSetType::SCROLL_INSENSITIVE);
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 // DB driver may not be ODBC 3.0 compliant
                 pFound->bScrollable = sal_True;
@@ -1995,7 +1997,7 @@ sal_Bool SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTa
             pFound->CheckEndOfDB();
             ++pFound->nSelectionIndex;
         }
-        catch (Exception&)
+        catch (const Exception&)
         {
             pFound->xResultSet = 0;
             pFound->xStatement = 0;
@@ -2018,7 +2020,7 @@ uno::Reference< XConnection> SwNewDBMgr::RegisterConnection(rtl::OUString& rData
             if(xComponent.is())
                 xComponent->addEventListener(pImpl->xDisposeListener);
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
         }
     }
@@ -2057,7 +2059,9 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
                 else
                     nRet = pFound->xResultSet->getRow();
             }
-            catch(Exception&){}
+            catch(const Exception&)
+            {
+            }
         }
     }
     return nRet;
@@ -2082,7 +2086,7 @@ void    SwNewDBMgr::CloseAll(sal_Bool bIncludingMerge)
                 if(!bInMerge && pParam->xResultSet.is())
                     pParam->xResultSet->first();
             }
-            catch(Exception& )
+            catch(const Exception&)
             {}
         }
     }
@@ -2129,7 +2133,7 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, sal_Bool bCreate)
                 if(xComponent.is())
                     xComponent->addEventListener(pImpl->xDisposeListener);
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
             }
         }
@@ -2166,7 +2170,7 @@ SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, sal_B
             if(xComponent.is())
                 xComponent->addEventListener(pImpl->xDisposeListener);
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
         }
     }
@@ -2377,7 +2381,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             xNaming->registerObject( sFind, xNewInstance );
 
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
         }
     }
@@ -2459,9 +2463,8 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                 sTempURL = URIHelper::SmartRel2Abs( INetURLObject(), utl::TempFile::CreateTempName() );
                 xStore->storeToURL( sTempURL, aValues );
             }
-            catch( const uno::Exception& rEx )
+            catch(const uno::Exception&)
             {
-                (void) rEx;
             }
             if( xDocShell->GetError() )
             {
@@ -2507,7 +2510,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                             //! I.e. now that object is responsible for closing the model and doc shell.
                             xClose->close( sal_True );
                         }
-                        catch ( const uno::Exception& )
+                        catch (const uno::Exception&)
                         {
                         }
                     }
@@ -2535,7 +2538,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                     if(xComp.is())
                         xComp->dispose();
                 }
-                catch(const RuntimeException& )
+                catch(const RuntimeException&)
                 {
                     //may be disposed already since multiple entries may have used the same connection
                 }
@@ -2608,7 +2611,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         {
             pDlg->DataToDoc( aSelection , xSource, xConnection, xResSet);
         }
-        catch(Exception& )
+        catch(const Exception&)
         {
             OSL_FAIL("exception caught");
         }
@@ -2721,7 +2724,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             pImpl->pMergeData->CheckEndOfDB();
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         pImpl->pMergeData->bEndOfDB = sal_True;
         pImpl->pMergeData->CheckEndOfDB();
@@ -2945,9 +2948,8 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         pTargetShell->SttDoc();
 
     }
-    catch( Exception& rEx)
+    catch(const Exception&)
     {
-        (void)rEx;
         OSL_FAIL("exception caught in SwNewDBMgr::MergeDocuments");
     }
     DELETEZ(pImpl->pMergeData);

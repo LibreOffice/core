@@ -195,6 +195,8 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
         if (pNode)
         {   SmEditWindow  *pEdit = pViewShell->GetEditWindow();
+            if (!pEdit)
+                return;
             const SmToken  aToken (pNode->GetToken());
 
             // set selection to the beginning of the token
@@ -222,7 +224,8 @@ void SmGraphicWindow::GetFocus()
 {
     if (!IsInlineEditEnabled())
         return;
-    pViewShell->GetEditWindow()->Flush();
+    if (pViewShell->GetEditWindow())
+        pViewShell->GetEditWindow()->Flush();
     //Let view shell know what insertions should be done in visual editor
     pViewShell->SetInsertIntoEditWindow(false);
     SetIsCursorVisible(true);

@@ -661,12 +661,12 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
                        static_cast<xub_StrLen>(aBndry.endPos - aBndry.startPos) );
 }
 
-SwScanner::SwScanner( const SwTxtNode& rNd, const String& rTxt, const LanguageType* pLang,
-                      const ModelToViewHelper::ConversionMap* pConvMap,
-                      sal_uInt16 nType, xub_StrLen nStart, xub_StrLen nEnde, sal_Bool bClp )
+SwScanner::SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
+    const LanguageType* pLang, const ModelToViewHelper::ConversionMap* pConvMap,
+    sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClp )
     : rNode( rNd ), rText( rTxt), pLanguage( pLang ), pConversionMap( pConvMap ), nLen( 0 ), nWordType( nType ), bClip( bClp )
 {
-    OSL_ENSURE( rText.Len(), "SwScanner: EmptyString" );
+    OSL_ENSURE( !rText.isEmpty(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
     nEndPos = nEnde;
 
@@ -677,7 +677,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const String& rTxt, const LanguageTy
     else
     {
         ModelToViewHelper::ModelPosition aModelBeginPos = ModelToViewHelper::ConvertToModelPosition( pConversionMap, nBegin );
-        const xub_StrLen nModelBeginPos = (xub_StrLen)aModelBeginPos.mnPos;
+        const sal_Int32 nModelBeginPos = aModelBeginPos.mnPos;
         aCurrLang = rNd.GetLang( nModelBeginPos );
     }
 }
@@ -693,22 +693,22 @@ sal_Bool SwScanner::NextWord()
     while ( true )
     {
         // skip non-letter characters:
-        while ( nBegin < rText.Len() )
+        while ( nBegin < rText.getLength() )
         {
-            if ( !lcl_IsSkippableWhiteSpace( rText.GetChar( nBegin ) ) )
+            if ( !lcl_IsSkippableWhiteSpace( rText[nBegin] ) )
             {
                 if ( !pLanguage )
                 {
                     const sal_uInt16 nNextScriptType = pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
                     ModelToViewHelper::ModelPosition aModelBeginPos = ModelToViewHelper::ConvertToModelPosition( pConversionMap, nBegin );
-                    const xub_StrLen nBeginModelPos = (xub_StrLen)aModelBeginPos.mnPos;
+                    const sal_Int32 nBeginModelPos = aModelBeginPos.mnPos;
                     aCurrLang = rNode.GetLang( nBeginModelPos, 1, nNextScriptType );
                 }
 
                 if ( nWordType != i18n::WordType::WORD_COUNT )
                 {
                     rCC.setLocale( pBreakIt->GetLocale( aCurrLang ) );
-                    if ( rCC.isLetterNumeric( rText.GetChar( nBegin ) ) )
+                    if ( rCC.isLetterNumeric( rText[nBegin] ) )
                         break;
                 }
                 else
@@ -717,7 +717,7 @@ sal_Bool SwScanner::NextWord()
             ++nBegin;
         }
 
-        if ( nBegin >= rText.Len() || nBegin >= nEndPos )
+        if ( nBegin >= rText.getLength() || nBegin >= nEndPos )
             return sal_False;
 
         // get the word boundaries
@@ -741,21 +741,21 @@ sal_Bool SwScanner::NextWord()
     // #i89042, as discussed with HDU: don't evaluate script changes for word count. Use whole word.
     if ( nWordType == i18n::WordType::WORD_COUNT )
     {
-        nBegin = Max( static_cast< xub_StrLen >(aBound.startPos), nBegin );
+        nBegin = Max(aBound.startPos, nBegin);
         nLen   = 0;
-        if (static_cast< xub_StrLen >(aBound.endPos) > nBegin)
-            nLen = static_cast< xub_StrLen >(aBound.endPos) - nBegin;
+        if (aBound.endPos > nBegin)
+            nLen = aBound.endPos - nBegin;
     }
     else
     {
         // we have to differenciate between these cases:
         if ( aBound.startPos <= nBegin )
         {
-        OSL_ENSURE( aBound.endPos >= nBegin, "Unexpected aBound result" );
+            OSL_ENSURE( aBound.endPos >= nBegin, "Unexpected aBound result" );
 
             // restrict boundaries to script boundaries and nEndPos
             const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
-            XubString aTmpWord = rText.Copy( nBegin, static_cast<xub_StrLen>(aBound.endPos - nBegin) );
+            rtl::OUString aTmpWord = rText.copy( nBegin, aBound.endPos - nBegin );
             const sal_Int32 nScriptEnd = nBegin +
                 pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
             const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
@@ -765,42 +765,42 @@ sal_Bool SwScanner::NextWord()
             if ( aBound.startPos < nBegin )
             {
                 // search from nBegin backwards until the next script change
-                aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
-                                       static_cast<xub_StrLen>(nBegin - aBound.startPos + 1) );
+                aTmpWord = rText.copy( aBound.startPos,
+                                       nBegin - aBound.startPos + 1 );
                 nScriptBegin = aBound.startPos +
                     pBreakIt->GetBreakIter()->beginOfScript( aTmpWord, nBegin - aBound.startPos,
                                                     nCurrScript );
             }
 
-            nBegin = (xub_StrLen)Max( aBound.startPos, nScriptBegin );
-            nLen = (xub_StrLen)(nEnd - nBegin);
+            nBegin = Max( aBound.startPos, nScriptBegin );
+            nLen = nEnd - nBegin;
         }
         else
         {
             const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( rText, aBound.startPos );
-            XubString aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
-                                             static_cast<xub_StrLen>(aBound.endPos - aBound.startPos) );
+            rtl::OUString aTmpWord = rText.copy( aBound.startPos,
+                                             aBound.endPos - aBound.startPos );
             const sal_Int32 nScriptEnd = aBound.startPos +
                 pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
             const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
-            nBegin = (xub_StrLen)aBound.startPos;
-            nLen = (xub_StrLen)(nEnd - nBegin);
+            nBegin = aBound.startPos;
+            nLen = nEnd - nBegin;
         }
     }
 
     // optionally clip the result of getWordBoundaries:
     if ( bClip )
     {
-        aBound.startPos = Max( (xub_StrLen)aBound.startPos, nStartPos );
-        aBound.endPos = Min( (xub_StrLen)aBound.endPos, nEndPos );
-        nBegin = (xub_StrLen)aBound.startPos;
-        nLen = (xub_StrLen)(aBound.endPos - nBegin);
+        aBound.startPos = Max( aBound.startPos, nStartPos );
+        aBound.endPos = Min( aBound.endPos, nEndPos );
+        nBegin = aBound.startPos;
+        nLen = aBound.endPos - nBegin;
     }
 
     if( ! nLen )
         return sal_False;
 
-    aWord = rText.Copy( nBegin, nLen );
+    aWord = rText.copy( nBegin, nLen );
 
     return sal_True;
 }
@@ -1803,6 +1803,10 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     {   // not counting hidden paras
         return;
     }
+
+    // count of non-empty paras
+    ++rStat.nPara;
+
     // Shortcut when counting whole paragraph and current count is clean
     if ( isCountAll && !IsWordCountDirty() )
     {
@@ -1842,15 +1846,12 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     sal_uInt32 nTmpChars = 0;        // count of all chars
     sal_uInt32 nTmpCharsExcludingSpaces = 0;  // all non-white chars
 
-    ++rStat.nPara;      // count of non-empty paras
-
     // count words in masked and expanded text:
     if( pBreakIt->GetBreakIter().is() )
     {
-        const String aScannerText( aExpandText );
         // zero is NULL for pLanguage -----------v               last param = true for clipping
-        SwScanner aScanner( *this, aScannerText, 0, pConversionMap, i18n::WordType::WORD_COUNT,
-                            (xub_StrLen)nExpandBegin, (xub_StrLen)nExpandEnd, true );
+        SwScanner aScanner( *this, aExpandText, 0, pConversionMap, i18n::WordType::WORD_COUNT,
+                            nExpandBegin, nExpandEnd, true );
 
         // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
         const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );

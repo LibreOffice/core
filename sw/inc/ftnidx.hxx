@@ -28,9 +28,8 @@
 #ifndef _FTNIDX_HXX
 #define _FTNIDX_HXX
 
-
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
+#include <vector>
 
 class SwTxtFtn;
 class SwNodeIndex;
@@ -60,12 +59,10 @@ public:
 class SwUpdFtnEndNtAtEnd
 {
     SvPtrarr aFtnSects, aEndSects;
-    SvUShorts aFtnNums, aEndNums;
+    std::vector<sal_uInt16> aFtnNums, aEndNums;
 
 public:
-    SwUpdFtnEndNtAtEnd() : aFtnSects( 0, 4 ), aEndSects( 0, 4 ),
-                           aFtnNums( 0, 4 ), aEndNums( 0, 4 )
-        {}
+    SwUpdFtnEndNtAtEnd() : aFtnSects( 0, 4 ), aEndSects( 0, 4 ) {}
 
     static const SwSectionNode* FindSectNdWithEndAttr(
                                             const SwTxtFtn& rTxtFtn );

@@ -105,6 +105,8 @@ public:
 
     virtual void SectFootnoteEndnotePr();
 
+    virtual void WritePostitFieldReference();
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
@@ -525,6 +527,7 @@ protected:
 private:
 
     void DoWriteBookmarks( );
+    void WritePostponedGraphic();
 
     void StartField_Impl( FieldInfos& rInfos, sal_Bool bWriteRun = sal_False );
     void DoWriteCmd( String& rCmd );
@@ -591,6 +594,16 @@ private:
     };
     HyperLinkCloseState m_nCloseHyperlinkStatus;
 
+    struct PostponedGraphic
+    {
+        PostponedGraphic( const SwGrfNode* n, Size s ) : grfNode( n ), size( s ) {};
+        const SwGrfNode* grfNode;
+        Size size;
+    };
+    std::list< PostponedGraphic >* m_postponedGraphic;
+    std::vector< const SwPostItField* > m_postitFields;
+    unsigned int m_postitFieldsMaxId;
+
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
 
@@ -607,16 +620,19 @@ public:
     ::sax_fastparser::FSHelperPtr GetSerializer( ) { return m_pSerializer; }
 
     /// Do we have any footnotes?
-    bool HasFootnotes();
+    bool HasFootnotes() const;
 
     /// Do we have any endnotes?
-    bool HasEndnotes();
+    bool HasEndnotes() const;
 
     /// Output the content of the footnotes.xml resp. endnotes.xml
     void FootnotesEndnotes( bool bFootnotes );
 
     /// writes the footnotePr/endnotePr (depending on tag) section
     void WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag, const SwEndNoteInfo& info, int listtag );
+
+    bool HasPostitFields() const;
+    void WritePostitFields();
 };
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_

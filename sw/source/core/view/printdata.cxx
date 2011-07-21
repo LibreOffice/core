@@ -326,7 +326,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                          aHelpIds,
                                                          aPrintRangeName,
                                                          aChoices,
-                                                         bHasSelection ? 2 /*enable 'Selection' radio button*/ : 0 /* enable 'All pages' */,
+                                                         0 /* always default to 'All pages' */,
                                                          rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
                                                          aChoicesDisabled
                                                          );

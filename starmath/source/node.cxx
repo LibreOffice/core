@@ -564,7 +564,7 @@ void SmNode::DumpAsDot(std::ostream &out, String* label, int number, int& id, in
             eq.SearchAndReplaceAll(String::CreateFromAscii("\\"), String::CreateFromAscii("\\\\"));
             eq.SearchAndReplaceAll(String::CreateFromAscii("\""), String::CreateFromAscii("\\\""));
             out<<"label= \"Equation: \\\"";
-            out<<ByteString( eq, RTL_TEXTENCODING_UTF8).GetBuffer();
+            out<< rtl::OUStringToOString(eq, RTL_TEXTENCODING_UTF8).getStr();
             out<<"\\\"\";"<<std::endl;
         }
     }
@@ -605,13 +605,13 @@ void SmNode::DumpAsDot(std::ostream &out, String* label, int number, int& id, in
         case NPLACE:           out<<"SmPlaceNode"; break;
         case NTEXT:
             out<<"SmTextNode: ";
-            out<< ByteString( ((SmTextNode*)this)->GetText(), RTL_TEXTENCODING_UTF8).GetBuffer();
+            out<< rtl::OUStringToOString(((SmTextNode*)this)->GetText(), RTL_TEXTENCODING_UTF8).getStr();
             break;
         case NSPECIAL:             out<<"SmSpecialNode"; break;
         case NGLYPH_SPECIAL:   out<<"SmGlyphSpecialNode"; break;
         case NMATH:
             out<<"SmMathSymbolNode: ";
-            out<< ByteString( ((SmMathSymbolNode*)this)->GetText(), RTL_TEXTENCODING_UTF8).GetBuffer();
+            out<< rtl::OUStringToOString(((SmMathSymbolNode*)this)->GetText(), RTL_TEXTENCODING_UTF8).getStr();
             break;
         case NBLANK:           out<<"SmBlankNode"; break;
         case NERROR:           out<<"SmErrorNode"; break;

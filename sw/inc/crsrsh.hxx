@@ -190,6 +190,7 @@ private:
     SwShellCrsr* pCurCrsr;      // current cursor
     SwShellCrsr* pCrsrStk;      // stack for the cursor
     SwVisCrsr *pVisCrsr;        // the visible cursor
+    SwShellCrsr* pCrsrBack;     // Backup cursor for header/footer edit mode
 
     IBlockCursor *pBlockCrsr;   // interface of cursor for block (=rectangular) selection
 
@@ -494,6 +495,8 @@ public:
     sal_Bool IsReadOnlyAvailable() const { return bSetCrsrInReadOnly; }
     void SetReadOnlyAvailable( sal_Bool bFlag );
     sal_Bool IsOverReadOnlyPos( const Point& rPt ) const;
+
+    sal_Bool IsOverHeaderFooterPos( const Point& rPt ) const;
 
     // Methods for aFlyMacroLnk.
     void        SetFlyMacroLnk( const Link& rLnk ) { aFlyMacroLnk = rLnk; }
@@ -848,6 +851,8 @@ public:
     String GetCrsrDescr() const;
 
     SwRect GetRectOfCurrentChar();
+
+    virtual void ToggleHeaderFooterEdit( );
 };
 
 // Cursor Inlines:

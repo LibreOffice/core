@@ -83,7 +83,7 @@ struct SwPostItPageItem
     long lOffset;
     SwRect mPageRect;
     SwSidebarItem_list* mList;
-    SwPostItPageItem(): bScrollbar(false),lOffset(0)
+    SwPostItPageItem(): bScrollbar(false), eSidebarPosition( sw::sidebarwindows::SIDEBAR_LEFT ), lOffset(0)
     {
         mList = new SwSidebarItem_list;
     }

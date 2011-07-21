@@ -467,13 +467,6 @@ namespace sw
                 msSecondary = GetFontToken(rFamilyName, 1);
         }
 
-        bool FontMapExport::HasDistinctSecondary() const
-        {
-            if (msSecondary.Len() && msSecondary != msPrimary)
-                return true;
-            return false;
-        }
-
         bool ItemSort::operator()(sal_uInt16 nA, sal_uInt16 nB) const
         {
             /*

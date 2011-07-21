@@ -32,6 +32,7 @@
 #include <tools/solar.h>
 #include <tools/ref.hxx>
 #include "xmlitmap.hxx"
+#include <vector>
 
 #define XML_EXPORT_FLAG_DEFAULTS    0x0001      // export also default items
 #define XML_EXPORT_FLAG_DEEP        0x0002      // export also items from
@@ -46,7 +47,6 @@ class SfxPoolItem;
 class SfxItemSet;
 class SvXMLAttributeList;
 class SvXMLNamespaceMap;
-class SvUShorts;
 class SvXMLExport;
 
 
@@ -62,7 +62,7 @@ protected:
                     const SvXMLUnitConverter& rUnitConverter,
                     const SvXMLNamespaceMap& rNamespaceMap,
                     sal_uInt16 nFlags,
-                    SvUShorts* pIndexArray ) const;
+                    std::vector<sal_uInt16> *pIndexArray ) const;
 
     void exportXML( const SvXMLExport& rExport,
                     SvXMLAttributeList& rAttrList,
@@ -78,7 +78,7 @@ protected:
                               const SvXMLUnitConverter& rUnitConverter,
                               const SfxItemSet &rSet,
                               sal_uInt16 nFlags,
-                              const SvUShorts& rIndexArray ) const;
+                              const std::vector<sal_uInt16> &rIndexArray ) const;
 
     static const SfxPoolItem* GetItem( const SfxItemSet &rSet,
                                        sal_uInt16 nWhichId,

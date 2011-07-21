@@ -28,8 +28,6 @@
 #ifndef _FLTSHELL_HXX
 #define _FLTSHELL_HXX
 
-#include <deque>
-
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -40,7 +38,11 @@
 #include <poolfmt.hxx>
 #include <fmtornt.hxx>
 #include <ndindex.hxx>
+#include <pam.hxx>
 #include <IDocumentRedlineAccess.hxx>
+
+#include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_deque.hpp>
 
 class SwTOXBase;
 class SwFltShell;
@@ -62,34 +64,76 @@ inline void SwFltSetFlag(sal_uLong& rFieldFlags, int no)
 inline sal_Bool SwFltGetFlag(sal_uLong nFieldFlags, int no)
     { return (nFieldFlags & (1L << no)) != 0; }
 
-// Stack-Eintrag fuer die Attribute Es werden immer Pointer auf neue Attribute uebergeben.
-class SwFltStackEntry
+//Subvert the Node/Content system to get positions which don't update as
+//content is appended to them
+struct SW_DLLPUBLIC SwFltPosition
 {
 public:
-    SwNodeIndex nMkNode;
-    SwNodeIndex nPtNode;
+    SwNodeIndex m_nNode;
+    xub_StrLen m_nCntnt;
+public:
+    SwFltPosition(const SwFltPosition &rOther)
+        : m_nNode(rOther.m_nNode)
+        , m_nCntnt(rOther.m_nCntnt)
+    {
+    }
+    SwFltPosition &operator=(const SwFltPosition &rOther)
+    {
+        m_nNode = rOther.m_nNode;
+        m_nCntnt = rOther.m_nCntnt;
+        return *this;
+    }
+    bool operator==(const SwFltPosition &rOther) const
+    {
+        return (m_nCntnt == rOther.m_nCntnt &&
+                m_nNode == rOther.m_nNode);
+    }
+    void SetPos(SwNodeIndex &rNode, sal_uInt16 nIdx)
+    {
+        m_nNode = rNode;
+        m_nCntnt = nIdx;
+    }
+    //operators with SwPosition, where the node is hacked to the previous one,
+    //and the offset to content is de-dynamic-ified
+    SwFltPosition(const SwPosition &rPos)
+        : m_nNode(rPos.nNode, -1)
+        , m_nCntnt(rPos.nContent.GetIndex())
+    {
+    }
+    void SetPos(const SwPosition &rPos)
+    {
+        m_nNode = rPos.nNode.GetIndex()-1;
+        m_nCntnt = rPos.nContent.GetIndex();
+    }
+};
+
+// Stack-Eintrag fuer die Attribute Es werden immer Pointer auf neue Attribute uebergeben.
+class SwFltStackEntry : private ::boost::noncopyable
+{
+public:
+    SwFltPosition m_aMkPos;
+    SwFltPosition m_aPtPos;
+
     SfxPoolItem * pAttr;// Format Attribute
-    long nHandle;       // fuer verschachtelte Attrs, z.B. Bookmarks
-    xub_StrLen nMkCntnt;// Nachbildung von Mark()
-    xub_StrLen nPtCntnt;// Nachbildung von GetPoint()
 
     sal_Bool bOld;          // to mark Attributes *before* skipping field results
-    sal_Bool bLocked;
-    sal_Bool bCopied;
+    sal_Bool bOpen;     //Entry open, awaiting being closed
     sal_Bool bConsumedByField;
 
     SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );
-    SW_DLLPUBLIC SwFltStackEntry(const SwFltStackEntry& rEntry);
     SW_DLLPUBLIC ~SwFltStackEntry();
 
     void SetStartPos(const SwPosition & rStartPos);
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
-    SW_DLLPUBLIC sal_Bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bCheck );
+    SW_DLLPUBLIC bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck) const;
+    SW_DLLPUBLIC static bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion,
+        bool bCheck, const SwFltPosition &rMkPos, const SwFltPosition &rPtPos,
+        sal_uInt16 nWhich=0);
 };
 
-class SW_DLLPUBLIC SwFltControlStack
+class SW_DLLPUBLIC SwFltControlStack : private ::boost::noncopyable
 {
-    typedef std::deque<SwFltStackEntry*> Entries;
+    typedef boost::ptr_deque<SwFltStackEntry> Entries;
     typedef Entries::iterator myEIter;
     Entries maEntries;
     friend class SwFltShell;
@@ -102,7 +146,7 @@ protected:
     sal_Bool bIsEndStack;
 
     void MoveAttrs( const SwPosition&  rPos );
-    virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry);
+    virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry& rEntry);
 
 public:
     enum Flags
@@ -125,17 +169,18 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr );
 
-    virtual void SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand = LONG_MAX, sal_Bool consumedByField=sal_False);
+    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand = LONG_MAX, sal_Bool consumedByField=sal_False);
 
-    void StealAttr(const SwPosition* pPos, sal_uInt16 nAttrId = 0);
+    void StealAttr(const SwNodeIndex& rNode, sal_uInt16 nAttrId = 0);
     void MarkAllAttrsOld();
     void KillUnlockedAttrs(const SwPosition& pPos);
     SfxPoolItem* GetFmtStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos = 0);
     const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, sal_uInt16 nWhich);
     void Delete(const SwPaM &rPam);
 
-    Entries::size_type Count() { return maEntries.size(); }
-    SwFltStackEntry* operator[](Entries::size_type nIndex)
+    bool empty() const { return maEntries.empty(); }
+    Entries::size_type size() const { return maEntries.size(); }
+    SwFltStackEntry& operator[](Entries::size_type nIndex)
          { return maEntries[nIndex]; }
     void DeleteAndDestroy(Entries::size_type nCnt);
 };

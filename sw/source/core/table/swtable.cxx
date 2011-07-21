@@ -460,6 +460,7 @@ void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
                    const bool bRefreshHidden )
 {
     const long nWish = pTabFmt->GetFrmSize().GetWidth();
+    OSL_ENSURE(nWish, "weird <= 0 width frmfrm");
     const long nAct  = rToFill.GetRight() - rToFill.GetLeft();  // +1 why?
 
     //Der Wert fuer die linke Kante der Box errechnet sich aus den
@@ -471,13 +472,18 @@ void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
     const SwTableBox  *pCur  = pBox;
     const SwTableLine *pLine = pBox->GetUpper();
     while ( pLine )
-    {   const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
+    {
+        const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
         for ( sal_uInt16 i = 0; i < rBoxes.Count(); ++i )
         {
             SwTwips nWidth = rBoxes[i]->GetFrmFmt()->GetFrmSize().GetWidth();
             nSum = (sal_uInt16)(nSum + nWidth);
             sal_uInt64 nTmp = nSum;
             nTmp *= nAct;
+
+            if (nWish == 0) //fdo#33012 0 width frmfmt
+                continue;
+
             nTmp /= nWish;
             if (rBoxes[i] != pCur)
             {

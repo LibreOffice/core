@@ -72,12 +72,6 @@ public:
     sal_uInt32 AddSdrObject( const SdrObject& rObj );
 
 protected:
-    /// Add an attribute to the generated shape element.
-    ///
-    /// This should be called from within StartShape() to ensure that the
-    /// added attribute is preserved.
-    void                AddShapeAttribute( sal_Int32 nAttribute, const rtl::OString& sValue );
-
     /// Start the shape for which we just collected the information.
     ///
     /// Returns the element's tag number, -1 means we wrote nothing.

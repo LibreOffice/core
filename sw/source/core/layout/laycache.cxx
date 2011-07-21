@@ -103,7 +103,7 @@ void SwLayoutCache::Read( SvStream &rStream )
 void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, xub_StrLen nOffset )
 {
     aType.Insert( nType, aType.Count() );
-    SvULongs::Insert( nIndex, SvULongs::Count() );
+    std::vector<sal_uLong>::push_back( nIndex );
     aOffset.push_back( nOffset );
 }
 
@@ -363,7 +363,7 @@ sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
             pPage = (SwPageFrm*)pPage->GetNext();
         while( pPage )
         {
-            if( nIndex >= pImpl->Count() )
+            if( nIndex >= pImpl->size() )
             {
                 if( bRet )
                     bRet = sal_False;
@@ -525,9 +525,9 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
         nNodeIndex -= nStartOfContent;
         nIndex = 0;
         nFlyIdx = 0;
-        while( nIndex < pImpl->Count() && (*pImpl)[ nIndex ] < nNodeIndex )
+        while( nIndex < pImpl->size() && (*pImpl)[ nIndex ] < nNodeIndex )
             ++nIndex;
-        if( nIndex >= pImpl->Count() )
+        if( nIndex >= pImpl->size() )
         {
             pDoc->GetLayoutCache()->UnlockImpl();
             pImpl = NULL;
@@ -562,7 +562,7 @@ sal_uLong SwLayHelper::CalcPageCount()
                              pDoc->GetLayoutCache()->LockImpl() : NULL;
     if( pCache )
     {
-        nPgCount = pCache->Count() + 1;
+        nPgCount = pCache->size() + 1;
         pDoc->GetLayoutCache()->UnlockImpl();
     }
     else
@@ -804,14 +804,14 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
     }
     else
         ++nParagraphCnt;
-    if( bFirst && pImpl && nIndex < pImpl->Count() &&
+    if( bFirst && pImpl && nIndex < pImpl->size() &&
         pImpl->GetBreakIndex( nIndex ) == nNodeIndex &&
         ( pImpl->GetBreakOfst( nIndex ) < STRING_LEN ||
-          ( ++nIndex < pImpl->Count() &&
+          ( ++nIndex < pImpl->size() &&
           pImpl->GetBreakIndex( nIndex ) == nNodeIndex ) ) )
         bFirst = sal_False;
 #if OSL_DEBUG_LEVEL > 1
-    sal_uLong nBreakIndex = ( pImpl && nIndex < pImpl->Count() ) ?
+    sal_uLong nBreakIndex = ( pImpl && nIndex < pImpl->size() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
     (void)nBreakIndex;
 #endif
@@ -826,7 +826,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
             if( pImpl || bLongTab )
             {
 #if OSL_DEBUG_LEVEL > 1
-                sal_uLong nBrkIndex = ( pImpl && nIndex < pImpl->Count() ) ?
+                sal_uLong nBrkIndex = ( pImpl && nIndex < pImpl->size() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
                 (void)nBrkIndex;
 #endif
@@ -839,10 +839,10 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 }
                 else
                 {
-                    while( nIndex < pImpl->Count() &&
+                    while( nIndex < pImpl->size() &&
                            pImpl->GetBreakIndex(nIndex) < nNodeIndex)
                         ++nIndex;
-                    if( nIndex < pImpl->Count() &&
+                    if( nIndex < pImpl->size() &&
                         pImpl->GetBreakIndex(nIndex) == nNodeIndex )
                     {
                         nType = pImpl->GetBreakType( nIndex );
@@ -982,7 +982,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         rpLay = rpLay->GetNextLayoutLeaf();
                 }
             }
-        } while( bLongTab || ( pImpl && nIndex < pImpl->Count() &&
+        } while( bLongTab || ( pImpl && nIndex < pImpl->size() &&
                  (*pImpl)[ nIndex ] == nNodeIndex ) );
     }
     bFirst = sal_False;

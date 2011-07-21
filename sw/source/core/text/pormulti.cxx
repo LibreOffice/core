@@ -947,15 +947,18 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     else
         pRotItem = NULL;
     const SvxTwoLinesItem* p2Lines = NULL;
+    const SwTxtNode *pLclTxtNode = pFrm->GetTxtNode();
+    if( !pLclTxtNode )
+        return NULL;
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == pFrm->GetTxtNode()->GetSwAttrSet().
+    if( SFX_ITEM_SET == pLclTxtNode->GetSwAttrSet().
         GetItemState( RES_CHRATR_TWO_LINES, sal_True, &pItem ) &&
         ((SvxTwoLinesItem*)pItem)->GetValue() )
         p2Lines = (SvxTwoLinesItem*)pItem;
     else
         pItem = NULL;
 
-    const SwpHints *pHints = pFrm->GetTxtNode()->GetpSwpHints();
+    const SwpHints *pHints = pLclTxtNode->GetpSwpHints();
     if( !pHints && !p2Lines && !pRotate )
         return NULL;
     const SwTxtAttr *pRuby = NULL;

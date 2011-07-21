@@ -63,25 +63,15 @@ namespace vbaeventshelper
 extern sdecl::ServiceDecl const serviceDecl;
 }
 
-extern "C"
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL vbaswobj_component_getFactory(
+    const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
+    registry::XRegistryKey * pRegistryKey )
 {
-    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-    {
-        OSL_TRACE("In component_getImplementationEnv");
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-        const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
-        registry::XRegistryKey * pRegistryKey )
-    {
-        OSL_TRACE("In component_getFactory for %s", pImplName );
-    void* pRet =  component_getFactoryHelper(
-            pImplName, pServiceManager, pRegistryKey, globals::serviceDecl, document::serviceDecl, wrapformat::serviceDecl, vbaeventshelper::serviceDecl );
+    void* pRet = component_getFactoryHelper(pImplName, pServiceManager,
+            pRegistryKey, globals::serviceDecl, document::serviceDecl,
+            wrapformat::serviceDecl, vbaeventshelper::serviceDecl );
     OSL_TRACE("Ret is 0x%x", pRet);
     return pRet;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

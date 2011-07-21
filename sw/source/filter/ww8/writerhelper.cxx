@@ -679,7 +679,7 @@ namespace sw
             {
                 const SwFltRedline *pTest = static_cast<const SwFltRedline *>
                     (pEntry->pAttr);
-                return (pEntry->bLocked && (pTest->eType == meType));
+                return (pEntry->bOpen && (pTest->eType == meType));
             }
         };
 
@@ -696,17 +696,14 @@ namespace sw
             return false;
         }
 
-
-
         void RedlineStack::closeall(const SwPosition& rPos)
         {
-            std::for_each(maStack.begin(), maStack.end(), CloseIfOpen(rPos));
+            std::for_each(maStack.begin(), maStack.end(), SetEndIfOpen(rPos));
         }
-
 
         void SetInDocAndDelete::operator()(SwFltStackEntry *pEntry)
         {
-            SwPaM aRegion(pEntry->nMkNode);
+            SwPaM aRegion(pEntry->m_aMkPos.m_nNode);
             if (
                 pEntry->MakeRegion(&mrDoc, aRegion, true) &&
                 (*aRegion.GetPoint() != *aRegion.GetMark())

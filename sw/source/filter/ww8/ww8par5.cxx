@@ -773,21 +773,24 @@ sal_uInt16 SwWW8ImplReader::End_Field()
 
                             // Store it now!
                             uno::Reference< embed::XStorage > xDocStg = GetDoc().GetDocStorage();
-                            uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::WRITE );
-                            SotStorageRef xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
-
-                            if ( xObjDst.Is() )
+                            if (xDocStg.is())
                             {
-                                xSrc1->CopyTo( xObjDst );
+                                uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
+                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::WRITE );
+                                SotStorageRef xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
 
-                                if ( !xObjDst->GetError() )
-                                    xObjDst->Commit();
+                                if ( xObjDst.Is() )
+                                {
+                                    xSrc1->CopyTo( xObjDst );
+
+                                    if ( !xObjDst->GetError() )
+                                        xObjDst->Commit();
+                                }
+
+                                uno::Reference< embed::XTransactedObject > xTransact( xOleStg, uno::UNO_QUERY );
+                                if ( xTransact.is() )
+                                    xTransact->commit();
                             }
-
-                            uno::Reference< embed::XTransactedObject > xTransact( xOleStg, uno::UNO_QUERY );
-                            if ( xTransact.is() )
-                                xTransact->commit();
 
                             // Store the OLE Id as a parameter
                             pFieldmark->GetParameters()->insert(
@@ -1416,7 +1419,7 @@ of a set or ask field, either by word, or in some special cases by the import
 filter itself.
 */
 SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
-    SwFltStackEntry *pEntry)
+    SwFltStackEntry &rEntry)
 {
     SwFltStackEntry *pRet=0;
     if (pFld && RES_GETREFFLD == pFld->Which())
@@ -1430,10 +1433,10 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
         {
             SwGetExpField aFld( (SwGetExpFieldType*)
                 pDoc->GetSysFldType(RES_GETEXPFLD), rName, nsSwGetSetExpType::GSE_STRING, 0);
-            delete pEntry->pAttr;
+            delete rEntry.pAttr;
             SwFmtFld aTmp(aFld);
-            pEntry->pAttr = aTmp.Clone();
-            pRet = pEntry;
+            rEntry.pAttr = aTmp.Clone();
+            pRet = &rEntry;
         }
     }
     return pRet;
@@ -2775,9 +2778,9 @@ bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
     bool bExtras = false;
     //This is the case if the winword outline numbering is set while the
     //writer one is not
-    for (sal_uInt16 nI = 0; nI < nColls; ++nI)
+    for (sal_uInt16 nI = 0; nI < vColl.size(); ++nI)
     {
-        SwWW8StyInf& rSI = pCollA[nI];
+        SwWW8StyInf& rSI = vColl[nI];
         if (rSI.IsOutline())
         {
             const SwTxtFmtColl *pFmt = (const SwTxtFmtColl*)(rSI.pFmt);
@@ -3282,9 +3285,9 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                             // the entry correctly, but I currently have no clue how to obtain
                             // the tab stop position. It is _not_ set at the paragraph style.
                             SwForm* pForm = 0;
-                            for (sal_uInt16 nI = 0; nI < nColls; ++nI)
+                            for (sal_uInt16 nI = 0; nI < vColl.size(); ++nI)
                             {
-                                const SwWW8StyInf& rSI = pCollA[nI];
+                                const SwWW8StyInf& rSI = vColl[nI];
                                 if (rSI.IsOutlineNumbered())
                                 {
                                     sal_uInt16 nStyleLevel = rSI.nOutlineLevel;

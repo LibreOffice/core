@@ -209,6 +209,8 @@ public:
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
     sal_Bool HasGrid() const { return bHasGrid; }
 
+    void PaintDecorators( OutputDevice* pOut ) const;
+
     //Zeilennummern usw malen
     void RefreshExtraData( const SwRect & ) const;
 

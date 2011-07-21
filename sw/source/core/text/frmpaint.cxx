@@ -567,6 +567,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 // Don't show the paragraph mark for collapsed paragraphs, when they are hidden
                 if ( EmptyHeight( ) > 1 )
                 {
+                    sal_uInt64 nOldDrawMode = SetHeaderFooterEditMask( pSh->GetOut() );
                     const XubString aTmp( CH_PAR );
                     SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, 1 );
                     aDrawInf.SetLeft( rRect.Left() );
@@ -582,6 +583,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                     aDrawInf.SetSnapToGrid( sal_False );
 
                     pFnt->_DrawText( aDrawInf );
+                    pSh->GetOut()->SetDrawMode( nOldDrawMode );
                 }
                 delete pClip;
             }
@@ -697,6 +699,8 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         OutputDevice* pOut = aInf.GetOut();
         const sal_Bool bOnWin = pSh->GetWin() != 0;
 
+        sal_uInt64 nOldDrawMode = SetHeaderFooterEditMask( pOut );
+
         SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : 0 );
 
         // Ausgabeschleife: Fuer jede Zeile ... (die noch zu sehen ist) ...
@@ -727,6 +731,8 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
         if( rRepaint.HasArea() )
             rRepaint.Clear();
+
+        pOut->SetDrawMode( nOldDrawMode );
 
         UNDO_SWAP( this )
         (SwRect&)rRect = aOldRect;

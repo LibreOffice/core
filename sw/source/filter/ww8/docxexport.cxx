@@ -339,6 +339,8 @@ void DocxExport::ExportDocument_Impl()
 
     WriteFootnotesEndnotes();
 
+    WritePostitFields();
+
     WriteNumbering();
 
     WriteFonts();
@@ -513,6 +515,26 @@ void DocxExport::WriteFootnotesEndnotes()
 
         // switch the serializer back
         m_pAttrOutput->SetSerializer( m_pDocumentFS );
+    }
+}
+
+void DocxExport::WritePostitFields()
+{
+    if ( m_pAttrOutput->HasPostitFields() )
+    {
+        m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+                S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" ),
+                S( "comments.xml" ) );
+
+        ::sax_fastparser::FSHelperPtr pPostitFS =
+            m_pFilter->openFragmentStreamWithSerializer( S( "word/comments.xml" ),
+                    S( "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml" ) );
+
+        pPostitFS->startElementNS( XML_w, XML_comments, MainXmlNamespaces( pPostitFS ));
+        m_pAttrOutput->SetSerializer( pPostitFS );
+        m_pAttrOutput->WritePostitFields();
+        m_pAttrOutput->SetSerializer( m_pDocumentFS );
+        pPostitFS->endElementNS( XML_w, XML_comments );
     }
 }
 

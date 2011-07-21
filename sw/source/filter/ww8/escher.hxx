@@ -139,7 +139,7 @@ private:
 class SwEscherEx : public SwBasicEscherEx
 {
 private:
-    SvULongs aFollowShpIds;
+    std::vector<sal_uLong> aFollowShpIds;
     EscherExHostAppData aHostData;
     WinwordAnchoring aWinwordAnchoring;
     WW8_WrPlcTxtBoxes *pTxtBxs;

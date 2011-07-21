@@ -2875,10 +2875,10 @@ namespace
         rIn.Seek(0);
 
         sal_uInt8 in[WW_BLOCKSIZE];
-        for (sal_uLong nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
+        for (sal_Size nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
         {
-            sal_uLong nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
-            rIn.Read(in, nBS);
+            sal_Size nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
+            nBS = rIn.Read(in, nBS);
             rCtx.InitCipher(nBlock);
             rCtx.Encode(in, nBS, in, nBS);
             rOut.Write(in, nBS);
@@ -3510,8 +3510,9 @@ void WW8Export::RestoreMacroCmds()
             pStream->Seek(0);
 
             sal_uInt8 *pBuffer = new sal_uInt8[pFib->lcbCmds];
-            pStream->Read(pBuffer, pFib->lcbCmds);
-            pTableStrm->Write(pBuffer, pFib->lcbCmds);
+            bool bReadOk = checkRead(*pStream, pBuffer, pFib->lcbCmds);
+            if (bReadOk)
+                pTableStrm->Write(pBuffer, pFib->lcbCmds);
             delete[] pBuffer;
 
         }

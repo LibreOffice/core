@@ -73,14 +73,6 @@ namespace
         return bRet;
     }
 
-    bool lcl_SkipNPages(SwWrtShell *pSh, sal_uInt16 nNoPages)
-    {
-        bool bAllOk = true;
-        for (sal_uInt16 nI = 0; nI < nNoPages && bAllOk; ++nI)
-            bAllOk = pSh->SttNxtPg();
-        return bAllOk;
-    }
-
     void lcl_ChangePage(SwWrtShell *pSh, sal_uInt16 nNewNumber,
         const SwPageDesc *pNewDesc)
     {

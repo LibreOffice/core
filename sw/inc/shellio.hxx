@@ -412,7 +412,6 @@ protected:
 
     void PutNumFmtFontsInAttrPool();
     void PutEditEngFontsInAttrPool( sal_Bool bIncl_CJK_CTL = sal_True );
-    void PutCJKandCTLFontsInAttrPool();
 
     virtual sal_uLong WriteStream() = 0;
     void                SetBaseURL( const String& rURL ) { sBaseURL = rURL; }

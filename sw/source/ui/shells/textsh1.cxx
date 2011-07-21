@@ -819,6 +819,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+        case FN_EDIT_HEADER_FOOTER:
+            rWrtSh.ToggleHeaderFooterEdit();
+        break;
         case SID_ATTR_BRUSH_CHAR :
         case SID_ATTR_CHAR_SCALEWIDTH :
         case SID_ATTR_CHAR_ROTATED :
@@ -1565,6 +1568,24 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 }
             }
             break;
+            case FN_EDIT_HEADER_FOOTER:
+            {
+                SfxBoolItem aBool( nWhich, rSh.IsHeaderFooterEdit() );
+                rSet.Put( aBool );
+
+                bool bHasHeaderFooter = false;
+                for ( sal_uInt16 i = 0; !bHasHeaderFooter && i < rSh.GetPageDescCnt(); i++ )
+                {
+                    const SwPageDesc& rPageDesc = rSh.GetPageDesc( i );
+                    bHasHeaderFooter = rPageDesc.GetMaster().GetHeader().IsActive() ||
+                                       rPageDesc.GetMaster().GetFooter().IsActive() ||
+                                       rPageDesc.GetLeft().GetHeader().IsActive() ||
+                                       rPageDesc.GetLeft().GetFooter().IsActive();
+                }
+                if ( !bHasHeaderFooter )
+                    rSet.DisableItem( nWhich );
+            }
+            break;
             case SID_TRANSLITERATE_HALFWIDTH:
             case SID_TRANSLITERATE_FULLWIDTH:
             case SID_TRANSLITERATE_HIRAGANA:
@@ -1698,7 +1719,7 @@ void SwTextShell::ChangeHeaderOrFooter(
         {
             if( (bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
                 (bHeader && aDesc.GetMaster().GetHeader().IsActive())) ||
-                (!bHeader && aDesc.GetMaster().GetFooter().IsActive()))
+                (!bHeader && aDesc.GetMaster().GetFooter().IsActive()) )
             {
                 bShowWarning = sal_False;
                 //Actions have to be closed while the dialog is showing
@@ -1732,9 +1753,13 @@ void SwTextShell::ChangeHeaderOrFooter(
                 rSh.ChgPageDesc( nFrom, aDesc );
 
                 if( !bCrsrSet && bOn )
+                {
+                    if ( !rSh.IsHeaderFooterEdit() )
+                        rSh.ToggleHeaderFooterEdit();
                     bCrsrSet = rSh.SetCrsrInHdFt(
                             !rStyleName.Len() ? USHRT_MAX : nFrom,
                             bHeader );
+                }
             }
         }
     }

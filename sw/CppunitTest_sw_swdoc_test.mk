@@ -34,8 +34,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_swdoc_test, \
     sw/qa/core/Test-BigPtrArray \
 ))
 
-$(call gb_CxxObject_get_target,sw/qa/core/swdoc-test): $(WORKDIR)/AllLangRes/sw
-
 $(eval $(call gb_CppunitTest_add_library_objects,sw_swdoc_test,sw))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sw_swdoc_test, \
@@ -76,8 +74,12 @@ $(eval $(call gb_CppunitTest_set_include,sw_swdoc_test,\
     -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sw/inc) \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_CppunitTest_add_api,sw_swdoc_test,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sw_swdoc_test))
@@ -96,6 +98,7 @@ $(call gb_CppunitTest_get_target,sw_swdoc_test) : \
 $(eval $(call gb_CppunitTest_set_args,sw_swdoc_test,\
     --headless \
     --invisible \
+    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
 $(eval $(call gb_RdbTarget_RdbTarget,sw_swdoc_test))
@@ -113,5 +116,9 @@ $(eval $(call gb_RdbTarget_add_old_components,sw_swdoc_test,\
     ucb1 \
     ucpfile1 \
 ))
+
+# we need to explicitly depend on the sw resource files needed at unit-test
+# runtime
+$(call gb_CppunitTest_get_target,sw_swdoc_test) : $(WORKDIR)/AllLangRes/sw
 
 # vim: set noet sw=4:

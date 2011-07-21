@@ -1465,7 +1465,8 @@ void SwTxtFormatInfo::Init()
     if ( GetTxtFrm()->IsFollow() )
     {
         const SwTxtFrm* pMaster = GetTxtFrm()->FindMaster();
-        const SwLinePortion* pTmpPara = pMaster->GetPara();
+        OSL_ENSURE(pMaster, "pTxtFrm without Master");
+        const SwLinePortion* pTmpPara = pMaster ? pMaster->GetPara() : NULL;
 
         // there is a master for this follow and the master does not have
         // any contents (especially it does not have a number portion)

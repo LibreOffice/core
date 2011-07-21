@@ -150,8 +150,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
         if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
         {
-             sal_uInt16 nStyle = 0; // style of quick help
-             switch( aCntntAtPos.eCntntAtPos )
+            sal_uInt16 nStyle = 0; // style of quick help
+            switch( aCntntAtPos.eCntntAtPos )
             {
             case SwContentAtPos::SW_TABLEBOXFML:
                 sTxt.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "= " ));
@@ -160,10 +160,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 #if OSL_DEBUG_LEVEL > 1
             case SwContentAtPos::SW_TABLEBOXVALUE:
             {
-                sTxt = UniString(
-                            ByteString::CreateFromDouble(
-                                ((SwTblBoxValue*)aCntntAtPos.aFnd.pAttr)->GetValue()  )
-                            , gsl_getSystemTextEncoding());
+                sTxt = rtl::OStringToOUString(rtl::OString::valueOf(
+                            ((SwTblBoxValue*)aCntntAtPos.aFnd.pAttr)->GetValue()),
+                            gsl_getSystemTextEncoding());
             }
             break;
             case SwContentAtPos::SW_CURR_ATTRS:

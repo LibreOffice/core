@@ -82,7 +82,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                                 const SvXMLUnitConverter& rUnitConverter,
                                 const SvXMLNamespaceMap& rNamespaceMap,
                                 sal_uInt16 nFlags,
-                                SvUShorts* pIndexArray ) const
+                                std::vector<sal_uInt16> *pIndexArray ) const
 {
     const sal_uInt16 nCount = mrMapEntries->getCount();
     sal_uInt16 nIndex = 0;
@@ -104,7 +104,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                     // element items do not add any properties,
                     // we export it later
                     if( pIndexArray )
-                        pIndexArray->Insert( nIndex, pIndexArray->Count() );
+                        pIndexArray->push_back( nIndex );
 
                 }
                 else
@@ -240,14 +240,14 @@ void SvXMLExportItemMapper::exportElementItems(
                           const SvXMLUnitConverter& rUnitConverter,
                           const SfxItemSet &rSet,
                           sal_uInt16 nFlags,
-                          const SvUShorts& rIndexArray ) const
+                          const std::vector<sal_uInt16> &rIndexArray ) const
 {
-    const sal_uInt16 nCount = rIndexArray.Count();
+    const sal_uInt16 nCount = rIndexArray.size();
 
     sal_Bool bItemsExported = sal_False;
     for( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        const sal_uInt16 nElement = rIndexArray.GetObject( nIndex );
+        const sal_uInt16 nElement = rIndexArray[ nIndex ];
         SvXMLItemMapEntry* pEntry = mrMapEntries->getByIndex( nElement );
         OSL_ENSURE( 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT),
                     "wrong mid flag!" );
@@ -313,14 +313,14 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
                     XMLTokenEnum ePropToken,
                     sal_uInt16 nFlags ) const
 {
-    SvUShorts aIndexArray;
+    std::vector<sal_uInt16> aIndexArray;
 
     exportXML( rExport, rExport.GetAttrList(), rSet, rUnitConverter,
                rExport.GetNamespaceMap(), nFlags, &aIndexArray );
 
     if( rExport.GetAttrList().getLength() > 0L ||
         (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
-        aIndexArray.Count() != 0 )
+        !aIndexArray.empty() )
     {
         if( (nFlags & XML_EXPORT_FLAG_IGN_WS) != 0 )
         {

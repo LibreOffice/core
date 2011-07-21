@@ -128,6 +128,14 @@ static CSS1PropertyEnum const aFontVariantTable[] =
     { 0,                    0                   }
 };
 
+static CSS1PropertyEnum const aTextTransformTable[] =
+{
+    { sCSS1_PV_uppercase,  SVX_CASEMAP_VERSALIEN },
+    { sCSS1_PV_lowercase,  SVX_CASEMAP_GEMEINE   },
+    { sCSS1_PV_capitalize, SVX_CASEMAP_TITEL     },
+    { 0,                   0                     }
+};
+
 static CSS1PropertyEnum const aDirectionTable[] =
 {
     { sCSS1_PV_ltr,         FRMDIR_HORI_LEFT_TOP        },
@@ -1303,6 +1311,32 @@ static void ParseCSS1_font_variant( const CSS1Expression *pExpr,
         {
             sal_uInt16 nCaseMap;
             if( SvxCSS1Parser::GetEnum( aFontVariantTable, pExpr->GetString(),
+                                        nCaseMap ) )
+            {
+                rItemSet.Put( SvxCaseMapItem( (SvxCaseMap)nCaseMap,
+                                                aItemIds.nCaseMap ) );
+            }
+        }
+    default:
+        ;
+    }
+}
+
+static void ParseCSS1_text_transform( const CSS1Expression *pExpr,
+                                    SfxItemSet &rItemSet,
+                                    SvxCSS1PropertyInfo& /*rPropInfo*/,
+                                    const SvxCSS1Parser& /*rParser*/ )
+{
+    OSL_ENSURE( pExpr, "no expression" );
+
+    // none | capitalize | uppercase | lowercase
+
+    switch( pExpr->GetType() )
+    {
+    case CSS1_IDENT:
+        {
+            sal_uInt16 nCaseMap;
+            if( SvxCSS1Parser::GetEnum( aTextTransformTable, pExpr->GetString(),
                                         nCaseMap ) )
             {
                 rItemSet.Put( SvxCaseMapItem( (SvxCaseMap)nCaseMap,
@@ -3140,6 +3174,7 @@ static CSS1PropEntry aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(text_align),
     CSS1_PROP_ENTRY(text_decoration),
     CSS1_PROP_ENTRY(text_indent),
+    CSS1_PROP_ENTRY(text_transform),
     CSS1_PROP_ENTRY(margin_left),
     CSS1_PROP_ENTRY(margin_right),
     CSS1_PROP_ENTRY(margin_top),

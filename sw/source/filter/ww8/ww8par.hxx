@@ -50,6 +50,15 @@
 #include <xmloff/odffields.hxx>
 #include <IMark.hxx>
 
+#include <swtypes.hxx>  // enum RndStdIds
+#include <fmtfsize.hxx>
+#include <fmtornt.hxx>
+#include <fmtsrnd.hxx>
+#include <editeng/lrspitem.hxx>
+#include <oox/ole/olehelper.hxx>
+
+#include <boost/noncopyable.hpp>
+
 class SwDoc;
 class SwPaM;
 class SfxPoolItem;
@@ -64,7 +73,6 @@ class SwNumRule;
 class SwFrmFmt;
 class Writer;
 class SwFmtFld;
-class SwWW8StyInf;
 class WW8Fib;
 class WW8PLCFMan;
 struct WW8PLCFManResult;
@@ -177,6 +185,7 @@ struct WW8OleMap
     }
 };
 
+
 class SwWW8ImplReader;
 struct WW8LSTInfo;
 class WW8ListManager
@@ -223,6 +232,127 @@ private:
     sal_uInt16 nLastLFOPosition;
 };
 
+struct WW8FlyPara
+{                       // WinWord-Attribute
+                        // Achtung: *Nicht* umsortieren, da Teile mit
+                        // memcmp verglichen werden
+    bool bVer67;
+    sal_Int16 nSp26, nSp27;         // rohe Position
+    sal_Int16 nSp45, nSp28;         // Breite / Hoehe
+    sal_Int16 nLeMgn, nRiMgn, nUpMgn, nLoMgn;           // Raender
+    sal_uInt8 nSp29;                 // rohe Bindung + Alignment
+    sal_uInt8 nSp37;                 // Wrap-Mode ( 1 / 2; 0 = no Apo ? )
+    WW8_BRC5 brc;               // Umrandung Top, Left, Bottom, Right, Between
+    bool bBorderLines;          // Umrandungslinien
+    bool bGrafApo;              // true: Dieser Rahmen dient allein dazu, die
+                                // enthaltene Grafik anders als zeichengebunden
+                                // zu positionieren
+    bool mbVertSet;             // true if vertical positioning has been set
+
+    WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = 0);
+    bool operator==(const WW8FlyPara& rSrc) const;
+    void Read(sal_uInt8 nSprm29, WW8PLCFx_Cp_FKP* pPap);
+    void ReadFull(sal_uInt8 nSprm29, SwWW8ImplReader* pIo);
+    void Read(sal_uInt8 nSprm29, WW8RStyle* pStyle);
+    void ApplyTabPos(const WW8_TablePos *pTabPos);
+    bool IsEmpty() const;
+};
+
+class SwWW8StyInf
+{
+    String      sWWStyleName;
+    sal_uInt16      nWWStyleId;
+public:
+    rtl_TextEncoding eLTRFontSrcCharSet;    // rtl_TextEncoding fuer den Font
+    rtl_TextEncoding eRTLFontSrcCharSet;    // rtl_TextEncoding fuer den Font
+    rtl_TextEncoding eCJKFontSrcCharSet;    // rtl_TextEncoding fuer den Font
+    SwFmt*      pFmt;
+    WW8FlyPara* pWWFly;
+    SwNumRule*  pOutlineNumrule;
+    long        nFilePos;
+    sal_uInt16      nBase;
+    sal_uInt16      nFollow;
+    sal_uInt16      nLFOIndex;
+    sal_uInt8        nListLevel;
+    sal_uInt8        nOutlineLevel;      // falls Gliederungs-Style
+    sal_uInt16  n81Flags;           // Fuer Bold, Italic, ...
+    sal_uInt16  n81BiDiFlags;       // Fuer Bold, Italic, ...
+    SvxLRSpaceItem maWordLR;
+    bool bValid;            // leer oder Valid
+    bool bImported;         // fuers rekursive Importieren
+    bool bColl;             // true-> pFmt ist SwTxtFmtColl
+    bool bImportSkipped;    // nur true bei !bNewDoc && vorh. Style
+    bool bHasStyNumRule;    // true-> Benannter NumRule in Style
+    bool bHasBrokenWW6List; // true-> WW8+ style has a WW7- list
+    bool bListReleventIndentSet; //true if this style's indent has
+                                 //been explicitly set, it's set to the value
+                                 //of pFmt->GetItemState(RES_LR_SPACE, false)
+                                 //if it was possible to get the ItemState
+                                 //for L of the LR space independantly
+    bool bParaAutoBefore;   // For Auto spacing before a paragraph
+    bool bParaAutoAfter;    // For Auto Spacing after a paragraph
+
+    SwWW8StyInf() :
+        sWWStyleName( aEmptyStr ),
+        nWWStyleId( 0 ),
+        eLTRFontSrcCharSet(0),
+        eRTLFontSrcCharSet(0),
+        eCJKFontSrcCharSet(0),
+        pFmt( 0 ),
+        pWWFly( 0 ),
+        pOutlineNumrule( 0 ),
+        nFilePos( 0 ),
+        nBase( 0 ),
+        nFollow( 0 ),
+        nLFOIndex( USHRT_MAX ),
+        nListLevel(WW8ListManager::nMaxLevel),
+        nOutlineLevel( MAXLEVEL ),
+        n81Flags( 0 ),
+        n81BiDiFlags(0),
+        maWordLR( RES_LR_SPACE ),
+        bValid(false),
+        bImported(false),
+        bColl(false),
+        bImportSkipped(false),
+        bHasStyNumRule(false),
+        bHasBrokenWW6List(false),
+        bListReleventIndentSet(false),
+        bParaAutoBefore(false),
+        bParaAutoAfter(false)
+
+    {}
+
+    ~SwWW8StyInf()
+    {
+        delete pWWFly;
+    }
+
+    void SetOrgWWIdent( const String& rName, const sal_uInt16 nId )
+    {
+        sWWStyleName = rName;
+        nWWStyleId = nId;
+    }
+    sal_uInt16 GetWWStyleId() const { return nWWStyleId; }
+    const String& GetOrgWWName() const
+    {
+        return sWWStyleName;
+    }
+    bool IsOutline() const
+    {
+        return (pFmt && (MAXLEVEL > nOutlineLevel));
+    }
+    bool IsOutlineNumbered() const
+    {
+        return pOutlineNumrule && IsOutline();
+    }
+    const SwNumRule* GetOutlineNumrule() const
+    {
+        return pOutlineNumrule;
+    }
+    CharSet GetCharSet() const;
+    CharSet GetCJKCharSet() const;
+};
+
 //-----------------------------------------
 //            Stack
 //-----------------------------------------
@@ -239,7 +369,7 @@ private:
         const SwTxtNode &rTxtNode);
 protected:
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
-        SwFltStackEntry* pEntry);
+        SwFltStackEntry& rEntry);
 
 public:
     SwWW8FltControlStack(SwDoc* pDo, sal_uLong nFieldFl, SwWW8ImplReader& rReader_ )
@@ -249,7 +379,7 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
 
-    virtual void SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand=LONG_MAX, sal_Bool consumedByField=sal_False);
+    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand=LONG_MAX, sal_Bool consumedByField=sal_False);
 
     void SetToggleAttr(sal_uInt8 nId, bool bOn)
     {
@@ -329,9 +459,9 @@ public:
     //an additional pseudo bookmark
     std::map<String, String, ltstr> aFieldVarNames;
 protected:
-    SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry *pEntry);
+    SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry& rEntry);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
-        SwFltStackEntry* pEntry);
+        SwFltStackEntry& rEntry);
 private:
     //No copying
     SwWW8FltRefStack(const SwWW8FltRefStack&);
@@ -543,8 +673,7 @@ public:
 class SwMSConvertControls: public SvxMSConvertOCXControls
 {
 public:
-    SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) :
-        SvxMSConvertOCXControls( pDSh,pP ) {}
+    SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP );
     virtual sal_Bool InsertFormula( WW8FormulaControl &rFormula);
     virtual sal_Bool InsertControl(const com::sun::star::uno::Reference<
         com::sun::star::form::XFormComponent >& rFComp,
@@ -552,6 +681,12 @@ public:
         com::sun::star::uno::Reference <
         com::sun::star::drawing::XShape > *pShape,sal_Bool bFloatingCtrl);
     bool ExportControl(WW8Export &rWrt, const SdrObject *pObj);
+    virtual sal_Bool ReadOCXStream( SotStorageRef& rSrc1,
+        com::sun::star::uno::Reference<
+        com::sun::star::drawing::XShape > *pShapeRef=0,
+        sal_Bool bFloatingCtrl=false );
+private:
+    ::oox::ole::OleFormCtrlImportHelper   maFormCtrlHelper;
 };
 
 class SwMSDffManager : public SvxMSDffManager
@@ -706,6 +841,33 @@ public:
     sal_uInt32 GetTextAreaWidth() const;
 };
 
+//Various writer elements like frames start off containing a blank paragraph,
+//sometimes this paragraph turns out to be extraneous, e.g. the frame should
+//only contain a table with no trailing paragraph.
+//
+//We want to remove these extra paragraphs, but removing them during the parse
+//is problematic, because we don't want to remove any paragraphs that are still
+//addressed by property entries in a SwFltControlStack which have not yet been
+//committed to the document.
+//
+//Safest thing is to not delete SwTxtNodes from a document during import, and
+//remove these extraneous paragraphs at the end after all SwFltControlStack are
+//destroyed.
+class wwExtraneousParas : private ::boost::noncopyable
+{
+private:
+    /*
+    A vector of SwTxtNodes to erase from a document after import is complete
+    */
+    std::vector<SwTxtNode*> m_aTxtNodes;
+    SwDoc& m_rDoc;
+public:
+    wwExtraneousParas(SwDoc &rDoc) : m_rDoc(rDoc) {}
+    ~wwExtraneousParas() { delete_all_from_doc(); }
+    void push_back(SwTxtNode *pTxtNode) { m_aTxtNodes.push_back(pTxtNode); }
+    void delete_all_from_doc();
+};
+
 class wwFrameNamer
 {
 private:
@@ -751,14 +913,15 @@ struct ApoTestResults
 {
     bool mbStartApo;
     bool mbStopApo;
-    const sal_uInt8* mpSprm37;
-    const sal_uInt8* mpSprm29;
+    bool m_bHasSprm37;
+    bool m_bHasSprm29;
+    sal_uInt8 m_nSprm29;
     WW8FlyPara* mpStyleApo;
-    ApoTestResults() :
-        mbStartApo(false), mbStopApo(false), mpSprm37(0), mpSprm29(0),
-        mpStyleApo(0) {}
+    ApoTestResults()
+        : mbStartApo(false), mbStopApo(false), m_bHasSprm37(false)
+        , m_bHasSprm29(false), m_nSprm29(0), mpStyleApo(0) {}
     bool HasStartStop() const { return (mbStartApo || mbStopApo); }
-    bool HasFrame() const { return (mpSprm29 || mpSprm37 || mpStyleApo); }
+    bool HasFrame() const { return (m_bHasSprm29 || m_bHasSprm37 || mpStyleApo); }
 };
 
 struct ANLDRuleMap
@@ -873,6 +1036,13 @@ private:
     wwSectionManager maSectionManager;
 
     /*
+    A vector of surplus-to-requirements paragraph in the final document,
+    that exist because of quirks of the SwDoc document model and/or API,
+    which need to be removed.
+    */
+    wwExtraneousParas m_aExtraneousParas;
+
+    /*
     A map of of tables to their follow nodes for use in inserting tables into
     already existing document, i.e. insert file
     */
@@ -947,7 +1117,7 @@ private:
                             // ( ist ausserhalb einer Style-Def immer 0 )
     SfxItemSet* pAktItemSet;// gerade einzulesende Zeichenattribute
                             // (ausserhalb des WW8ListManager Ctor's immer 0)
-    SwWW8StyInf* pCollA;    // UEbersetzungs-Array der Styles
+    std::vector<SwWW8StyInf> vColl;
     const SwTxtFmtColl* pDfltTxtFmtColl;    // Default
     SwFmt* pStandardFmtColl;// "Standard"
 
@@ -999,7 +1169,6 @@ private:
     rtl_TextEncoding eStructCharSet;  // rtl_TextEncoding for structures
     rtl_TextEncoding eHardCharSet;    // Hard rtl_TextEncoding-Attribute
     sal_uInt16 nProgress;           // %-Angabe fuer Progressbar
-    sal_uInt16 nColls;              // Groesse des Arrays
     sal_uInt16 nAktColl;            // gemaess WW-Zaehlung
     sal_uInt16 nFldNum;             // laufende Nummer dafuer
     sal_uInt16 nLFOPosition;
@@ -1088,7 +1257,7 @@ private:
 
     const SprmReadInfo& GetSprmReadInfo(sal_uInt16 nId) const;
 
-    bool StyleExists(int nColl) const { return (nColl < nColls); }
+    bool StyleExists(unsigned int nColl) const { return (nColl < vColl.size()); }
     SwWW8StyInf *GetStyle(sal_uInt16 nColl) const;
     void AppendTxtNode(SwPosition& rPos);
 

@@ -486,7 +486,7 @@ public:
     void SetFillColor( const Color& rColor )    { rOutDev.SetFillColor( Impl_GetColor( rColor ) ); }
     void SetTextColor( const Color& rColor )    { rOutDev.SetTextColor( Impl_GetColor( rColor ) ); }
 
-    operator OutputDevice & ( ) { return rOutDev; }
+    operator OutputDevice & ( ) const { return rOutDev; }
 };
 
 SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm ) :

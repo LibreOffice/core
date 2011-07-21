@@ -526,8 +526,8 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     ApoTestResults aRet;
     // Frame in Style Definition (word appears to ignore them if inside an
     // text autoshape)
-    if (!bTxbxFlySection)
-        aRet.mpStyleApo = StyleExists(nAktColl) ? pCollA[nAktColl].pWWFly : 0;
+    if (!bTxbxFlySection && nAktColl < vColl.size())
+        aRet.mpStyleApo = StyleExists(nAktColl) ? vColl[nAktColl].pWWFly : 0;
 
     /*
     #i1140#
@@ -549,8 +549,10 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     to see if we are still in that frame.
     */
 
-    aRet.mpSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
-    aRet.mpSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
+    aRet.m_bHasSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
+    const sal_uInt8 *pSrpm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
+    aRet.m_bHasSprm29 = pSrpm29 != NULL;
+    aRet.m_nSprm29 = pSrpm29 ? *pSrpm29 : 0;
 
     // Is there some frame data here
     bool bNowApo = aRet.HasFrame() || pTopLevelTable;
@@ -3514,45 +3516,6 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     return bSuccess;
 }
 
-bool lcl_PamContainsFly(SwPaM & rPam)
-{
-    bool bResult = false;
-    SwNodeRange aRg( rPam.Start()->nNode, rPam.End()->nNode );
-    SwDoc * pDoc = rPam.GetDoc();
-
-    sal_uInt16 n = 0;
-    SwSpzFrmFmts * pSpzFmts = pDoc->GetSpzFrmFmts();
-    sal_uInt16 nCount = pSpzFmts->Count();
-    while (!bResult && n < nCount)
-    {
-        SwFrmFmt* pFly = (*pSpzFmts)[n];
-        const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
-
-        switch (pAnchor->GetAnchorId())
-        {
-            case FLY_AT_PARA:
-            case FLY_AT_CHAR:
-            {
-                const SwPosition* pAPos = pAnchor->GetCntntAnchor();
-
-                if (pAPos != NULL &&
-                    aRg.aStart <= pAPos->nNode &&
-                    pAPos->nNode <= aRg.aEnd)
-                {
-                    bResult = true;
-                }
-            }
-                break;
-            default:
-                break;
-        }
-
-        ++n;
-    }
-
-    return bResult;
-}
-
 void SwWW8ImplReader::TabCellEnd()
 {
     if (nInTable && pTableDesc)
@@ -3652,11 +3615,11 @@ bool SwWW8ImplReader::IsInvalidOrToBeMergedTabCell() const
 sal_uInt16 SwWW8ImplReader::StyleUsingLFO( sal_uInt16 nLFOIndex ) const
 {
     sal_uInt16 nRes = USHRT_MAX;
-    if( pCollA )
+    if( !vColl.empty() )
     {
         for(sal_uInt16 nI = 0; nI < pStyles->GetCount(); nI++ )
-            if(    pCollA[ nI ].bValid
-                && (nLFOIndex == pCollA[ nI ].nLFOIndex) )
+            if(    vColl[ nI ].bValid
+                && (nLFOIndex == vColl[ nI ].nLFOIndex) )
                 nRes = nI;
     }
     return nRes;
@@ -3665,13 +3628,13 @@ sal_uInt16 SwWW8ImplReader::StyleUsingLFO( sal_uInt16 nLFOIndex ) const
 const SwFmt* SwWW8ImplReader::GetStyleWithOrgWWName( String& rName ) const
 {
     SwFmt* pRet = 0;
-    if( pCollA )
+    if( !vColl.empty() )
     {
         for(sal_uInt16 nI = 0; nI < pStyles->GetCount(); nI++ )
-            if(    pCollA[ nI ].bValid
-                && (rName.Equals( pCollA[ nI ].GetOrgWWName())) )
+            if(    vColl[ nI ].bValid
+                && (rName.Equals( vColl[ nI ].GetOrgWWName())) )
             {
-                pRet = pCollA[ nI ].pFmt;
+                pRet = vColl[ nI ].pFmt;
                 break;
             }
     }
@@ -3687,21 +3650,7 @@ const sal_uInt8* WW8RStyle::HasParaSprm( sal_uInt16 nId ) const
     if( !pParaSprms || !nSprmsLen )
         return 0;
 
-    const sal_uInt8* pSprms = pParaSprms;
-    sal_uInt16 i, x;
-
-    for( i=0; i < nSprmsLen; )
-    {
-        sal_uInt16 nAktId = maSprmParser.GetSprmId(pSprms);
-        // Sprm found ?
-        if( nAktId == nId )
-            return pSprms + maSprmParser.DistanceToData(nId);
-
-        x = maSprmParser.GetSprmSize(nAktId, pSprms);
-        i = i + x;
-        pSprms += x;
-    }
-    return 0;                               // Sprm not found
+    return maSprmParser.findSprmData(nId, pParaSprms, nSprmsLen);
 }
 
 void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)
@@ -3715,11 +3664,11 @@ void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)
         nSprmsLen = nLen;
     }
 
-    while ( nLen > 0 )
+    WW8SprmIter aSprmIter(pSprms, nLen, maSprmParser);
+    while (const sal_uInt8* pSprm = aSprmIter.GetSprms())
     {
-        sal_uInt16 nL1 = pIo->ImportSprm(pSprms);
-        nLen = nLen - nL1;
-        pSprms += nL1;
+        pIo->ImportSprm(pSprm);
+        aSprmIter.advance();
     }
 
     pParaSprms = 0;
@@ -3731,14 +3680,13 @@ void WW8RStyle::ImportSprms(sal_Size nPosFc, short nLen, bool bPap)
     if (!nLen)
         return;
 
-    sal_uInt8 *pSprms = new sal_uInt8[nLen];
-
-    pStStrm->Seek(nPosFc);
-    pStStrm->Read(pSprms, nLen);
-
-    ImportSprms(pSprms, nLen, bPap);
-
-    delete[] pSprms;
+    if (checkSeek(*pStStrm, nPosFc))
+    {
+        sal_uInt8 *pSprms = new sal_uInt8[nLen];
+        nLen = pStStrm->Read(pSprms, nLen);
+        ImportSprms(pSprms, nLen, bPap);
+        delete[] pSprms;
+    }
 }
 
 static inline short WW8SkipOdd(SvStream* pSt )
@@ -3746,8 +3694,7 @@ static inline short WW8SkipOdd(SvStream* pSt )
     if ( pSt->Tell() & 0x1 )
     {
         sal_uInt8 c;
-        pSt->Read( &c, 1 );
-        return 1;
+        return pSt->Read( &c, 1 );
     }
     return 0;
 }
@@ -3757,16 +3704,13 @@ static inline short WW8SkipEven(SvStream* pSt )
     if (!(pSt->Tell() & 0x1))
     {
         sal_uInt8 c;
-        pSt->Read( &c, 1 );
-        return 1;
+        return pSt->Read( &c, 1 );
     }
     return 0;
 }
 
 short WW8RStyle::ImportUPX(short nLen, bool bPAP, bool bOdd)
 {
-    sal_Int16 cbUPX;
-
     if( 0 < nLen ) // Empty ?
     {
         if (bOdd)
@@ -3774,6 +3718,7 @@ short WW8RStyle::ImportUPX(short nLen, bool bPAP, bool bOdd)
         else
             nLen = nLen - WW8SkipOdd( pStStrm );
 
+        sal_Int16 cbUPX(0);
         *pStStrm >> cbUPX;
 
         nLen-=2;
@@ -3826,8 +3771,7 @@ WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
     : WW8Style(*pI->pTableStream, _rFib), maSprmParser(_rFib.GetFIBVersion()),
     pIo(pI), pStStrm(pI->pTableStream), pStyRule(0), nWwNumLevel(0)
 {
-    pIo->nColls = cstd;
-    pIo->pCollA = cstd ? new SwWW8StyInf[ cstd ] : NULL; // Style-UEbersetzung WW->SW
+    pIo->vColl.resize(cstd);
 }
 
 void WW8RStyle::Set1StyleDefaults()
@@ -3919,7 +3863,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     sal_uInt16 j = rSI.nBase;
     if (j != nThisStyle && j < cstd )
     {
-        SwWW8StyInf* pj = &pIo->pCollA[j];
+        SwWW8StyInf* pj = &pIo->vColl[j];
         if (rSI.pFmt && pj->pFmt && rSI.bColl == pj->bColl)
         {
             rSI.pFmt->SetDerivedFrom( pj->pFmt );  // ok, Based on eintragen
@@ -3959,7 +3903,7 @@ void WW8RStyle::PostStyle(SwWW8StyInf &rSI, bool bOldNoImp)
     pIo->nCharFmt = -1;
 
     // If Style basiert auf Nichts oder Basis ignoriert
-    if ((rSI.nBase >= cstd || pIo->pCollA[rSI.nBase].bImportSkipped) && rSI.bColl)
+    if ((rSI.nBase >= cstd || pIo->vColl[rSI.nBase].bImportSkipped) && rSI.bColl)
     {
         //! Char-Styles funktionieren aus
         // unerfindlichen Gruenden nicht
@@ -3980,7 +3924,10 @@ void WW8RStyle::PostStyle(SwWW8StyInf &rSI, bool bOldNoImp)
 
 void WW8RStyle::Import1Style( sal_uInt16 nNr )
 {
-    SwWW8StyInf &rSI = pIo->pCollA[nNr];
+    if (nNr >= pIo->vColl.size())
+        return;
+
+    SwWW8StyInf &rSI = pIo->vColl[nNr];
 
     if( rSI.bImported || !rSI.bValid )
         return;
@@ -3990,7 +3937,7 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
                                                 //
     // gueltig und nicht NIL und noch nicht Importiert
 
-    if( rSI.nBase < cstd && !pIo->pCollA[rSI.nBase].bImported )
+    if( rSI.nBase < cstd && !pIo->vColl[rSI.nBase].bImported )
         Import1Style( rSI.nBase );
 
     pStStrm->Seek( rSI.nFilePos );
@@ -4033,13 +3980,16 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
 
 void WW8RStyle::RecursiveReg(sal_uInt16 nNr)
 {
-    SwWW8StyInf &rSI = pIo->pCollA[nNr];
+    if (nNr >= pIo->vColl.size())
+        return;
+
+    SwWW8StyInf &rSI = pIo->vColl[nNr];
     if( rSI.bImported || !rSI.bValid )
         return;
 
     rSI.bImported = true;
 
-    if( rSI.nBase < cstd && !pIo->pCollA[rSI.nBase].bImported )
+    if( rSI.nBase < cstd && !pIo->vColl[rSI.nBase].bImported )
         RecursiveReg(rSI.nBase);
 
     pIo->RegisterNumFmtOnStyle(nNr);
@@ -4059,7 +4009,7 @@ void WW8RStyle::PostProcessStyles()
      formats and use it to mark handled ones
     */
     for (i=0; i < cstd; ++i)
-        pIo->pCollA[i].bImported = false;
+        pIo->vColl[i].bImported = false;
 
     /*
      Register the num formats and tabstop changes on the styles recursively.
@@ -4074,7 +4024,7 @@ void WW8RStyle::PostProcessStyles()
     */
     for (i=0; i < cstd; ++i)
     {
-        if (pIo->pCollA[i].bValid)
+        if (pIo->vColl[i].bValid)
         {
             RecursiveReg(i);
         }
@@ -4086,7 +4036,7 @@ void WW8RStyle::ScanStyles()        // untersucht Style-Abhaengigkeiten
     for (sal_uInt16 i = 0; i < cstd; ++i)
     {
         short nSkip;
-        SwWW8StyInf &rSI = pIo->pCollA[i];
+        SwWW8StyInf &rSI = pIo->vColl[i];
 
         rSI.nFilePos = pStStrm->Tell();        // merke FilePos
         WW8_STD* pStd = Read1Style( nSkip, 0, 0 );  // read STD
@@ -4343,9 +4293,9 @@ void WW8RStyle::ImportOldFormatStyles()
 {
     for (sal_uInt16 i=0; i < cstd; ++i)
     {
-        pIo->pCollA[i].bColl = true;
+        pIo->vColl[i].bColl = true;
         //every chain must end eventually at the null style (style code 222)
-        pIo->pCollA[i].nBase = 222;
+        pIo->vColl[i].nBase = 222;
     }
 
     rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(
@@ -4365,7 +4315,10 @@ void WW8RStyle::ImportOldFormatStyles()
         nByteCount++;
 
         sal_uInt8 stc = static_cast< sal_uInt8 >((stcp - cstcStd) & 255);
-        SwWW8StyInf &rSI = pIo->pCollA[stc];
+        if (stc >=pIo->vColl.size())
+            continue;
+
+        SwWW8StyInf &rSI = pIo->vColl[stc];
         if (nCount != 0xFF)    // undefined style
         {
             String sName;
@@ -4495,7 +4448,7 @@ void WW8RStyle::ImportOldFormatStyles()
         if (stc == stcBase)
             stcBase = 222;
 
-        SwWW8StyInf &rSI = pIo->pCollA[stc];
+        SwWW8StyInf &rSI = pIo->vColl[stc];
         rSI.nBase = stcBase;
 
         ww::sti eSti = ww::GetCanonicalStiFromStc(stc);
@@ -4506,7 +4459,7 @@ void WW8RStyle::ImportOldFormatStyles()
         rSI.bValid = true;
 
         if (ww::StandardStiIsCharStyle(eSti) && !aPAPXOffsets[stcp].mnSize)
-            pIo->pCollA[stc].bColl = false;
+            pIo->vColl[stc].bColl = false;
 
         bool bOldNoImp = PrepareStyle(rSI, eSti, stc, stcNext);
 
@@ -4527,7 +4480,7 @@ void WW8RStyle::ImportNewFormatStyles()
     ScanStyles();                       // Scanne Based On
 
     for (sal_uInt16 i = 0; i < cstd; ++i) // import Styles
-        if (pIo->pCollA[i].bValid)
+        if (pIo->vColl[i].bValid)
             Import1Style( i );
 }
 
@@ -4553,11 +4506,11 @@ void WW8RStyle::Import()
     for (sal_uInt16 i = 0; i < cstd; ++i)
     {
         // Follow chain
-        SwWW8StyInf* pi = &pIo->pCollA[i];
+        SwWW8StyInf* pi = &pIo->vColl[i];
         sal_uInt16 j = pi->nFollow;
         if( j < cstd )
         {
-            SwWW8StyInf* pj = &pIo->pCollA[j];
+            SwWW8StyInf* pj = &pIo->vColl[j];
             if ( j != i                             // sinnvoller Index ?
                  && pi->pFmt                        // Format ok ?
                  && pj->pFmt                        // Derived-Format ok ?
@@ -4577,8 +4530,9 @@ void WW8RStyle::Import()
 //
     // fuer z.B. Tabellen wird ein immer gueltiger Std-Style gebraucht
 
-    if( pIo->StyleExists(0) && pIo->pCollA[0].pFmt && pIo->pCollA[0].bColl && pIo->pCollA[0].bValid )
-        pIo->pDfltTxtFmtColl = (SwTxtFmtColl*)pIo->pCollA[0].pFmt;
+    if( pIo->StyleExists(0) && !pIo->vColl.empty() &&
+        pIo->vColl[0].pFmt && pIo->vColl[0].bColl && pIo->vColl[0].bValid )
+        pIo->pDfltTxtFmtColl = (SwTxtFmtColl*)pIo->vColl[0].pFmt;
     else
         pIo->pDfltTxtFmtColl = pIo->rDoc.GetDfltTxtFmtColl();
 

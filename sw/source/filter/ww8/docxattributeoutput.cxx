@@ -870,6 +870,9 @@ void DocxAttributeOutput::StartRunProperties()
     m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
 
     InitCollectedRunProperties();
+
+    OSL_ASSERT( m_postponedGraphic == NULL );
+    m_postponedGraphic = new std::list< PostponedGraphic >;
 }
 
 void DocxAttributeOutput::InitCollectedRunProperties()
@@ -974,9 +977,21 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* /*pRedlineData*
     // write footnotes/endnotes if we have any
     FootnoteEndnoteReference();
 
+    WritePostponedGraphic();
+
     // merge the properties _before_ the run text (strictly speaking, just
     // after the start of the run)
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
+}
+
+void DocxAttributeOutput::WritePostponedGraphic()
+{
+    for( std::list< PostponedGraphic >::const_iterator it = m_postponedGraphic->begin();
+         it != m_postponedGraphic->end();
+         ++it )
+        FlyFrameGraphic( *( it->grfNode ), it->size );
+    delete m_postponedGraphic;
+    m_postponedGraphic = NULL;
 }
 
 void DocxAttributeOutput::FootnoteEndnoteRefTag()
@@ -2270,7 +2285,14 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 const SwNode *pNode = rFrame.GetContent();
                 const SwGrfNode *pGrfNode = pNode ? pNode->GetGrfNode() : 0;
                 if ( pGrfNode )
-                    FlyFrameGraphic( *pGrfNode, rFrame.GetLayoutSize() );
+                {
+                    if( m_postponedGraphic == NULL )
+                        FlyFrameGraphic( *pGrfNode, rFrame.GetLayoutSize() );
+                    else // we are writting out attributes, but w:drawing should not be inside w:rPr,
+                    {    // so write it out later
+                        m_postponedGraphic->push_back( PostponedGraphic( pGrfNode, rFrame.GetLayoutSize()));
+                    }
+                }
             }
             break;
         case sw::Frame::eDrawing:
@@ -3280,9 +3302,34 @@ void DocxAttributeOutput::HiddenField( const SwField& /*rFld*/ )
     OSL_TRACE( "TODO DocxAttributeOutput::HiddenField()\n" );
 }
 
-void DocxAttributeOutput::PostitField( const SwField* /* pFld*/ )
+void DocxAttributeOutput::PostitField( const SwField* pFld )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::PostitField()\n" );
+    assert( dynamic_cast< const SwPostItField* >( pFld ));
+    m_postitFields.push_back( static_cast< const SwPostItField* >( pFld ));
+}
+
+void DocxAttributeOutput::WritePostitFieldReference()
+{
+    while( m_postitFieldsMaxId < m_postitFields.size())
+    {
+        OString idstr = OString::valueOf( sal_Int32( m_postitFieldsMaxId ));
+        m_pSerializer->singleElementNS( XML_w, XML_commentReference, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
+        ++m_postitFieldsMaxId;
+    }
+}
+
+void DocxAttributeOutput::WritePostitFields()
+{
+    for( unsigned int i = 0;
+         i < m_postitFields.size();
+         ++i )
+    {
+        OString idstr = OString::valueOf( sal_Int32( i ));
+// TODO        const SwPostItField* f = m_postitFields[ i ];
+        m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
+            /*TODO*/ FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_comment );
+    }
 }
 
 bool DocxAttributeOutput::DropdownField( const SwField* pFld )
@@ -4260,7 +4307,9 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
       m_pParentFrame( NULL ),
-      m_nCloseHyperlinkStatus( Undetected )
+      m_nCloseHyperlinkStatus( Undetected ),
+      m_postponedGraphic( NULL ),
+      m_postitFieldsMaxId( 0 )
 {
 }
 
@@ -4286,14 +4335,19 @@ DocxExport& DocxAttributeOutput::GetExport()
     return m_rExport;
 }
 
-bool DocxAttributeOutput::HasFootnotes()
+bool DocxAttributeOutput::HasFootnotes() const
 {
     return !m_pFootnotesList->isEmpty();
 }
 
-bool DocxAttributeOutput::HasEndnotes()
+bool DocxAttributeOutput::HasEndnotes() const
 {
     return !m_pEndnotesList->isEmpty();
+}
+
+bool DocxAttributeOutput::HasPostitFields() const
+{
+    return !m_postitFields.empty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

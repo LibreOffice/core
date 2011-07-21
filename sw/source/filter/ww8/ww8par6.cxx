@@ -284,10 +284,10 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     sal_uInt32 nCharWidth=240;
     for (sal_uInt16 nI = 0; nI < pStyles->GetCount(); ++nI)
     {
-        if (pCollA[nI].bValid && pCollA[nI].pFmt &&
-            pCollA[nI].GetWWStyleId() == 0)
+        if (vColl[nI].bValid && vColl[nI].pFmt &&
+            vColl[nI].GetWWStyleId() == 0)
         {
-            nCharWidth = ItemGet<SvxFontHeightItem>(*(pCollA[nI].pFmt),
+            nCharWidth = ItemGet<SvxFontHeightItem>(*(vColl[nI].pFmt),
                 RES_CHRATR_CJK_FONTSIZE).GetHeight();
             break;
         }
@@ -915,6 +915,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         aNewSection.maSep.fEvenlySpaced =
             ReadBSprm(pSep, (eVer <= ww::eWW7 ? 138 : 0x3005), 1) ? true : false;
 
+        const sal_uInt8 numrgda = SAL_N_ELEMENTS(aNewSection.maSep.rgdxaColumnWidthSpacing);
         if (aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced)
         {
             aNewSection.maSep.rgdxaColumnWidthSpacing[0] = 0;
@@ -928,7 +929,8 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
                 OSL_ENSURE( pSW, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
                 sal_uInt16 nWidth = pSW ? SVBT16ToShort(pSW + 1) : 1440;
 
-                aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
+                if (++nIdx < numrgda)
+                    aNewSection.maSep.rgdxaColumnWidthSpacing[nIdx] = nWidth;
 
                 if (i < nCols-1)
                 {
@@ -939,7 +941,8 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
                     if( pSD )
                     {
                         nWidth = SVBT16ToShort(pSD + 1);
-                        aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
+                        if (++nIdx < numrgda)
+                            aNewSection.maSep.rgdxaColumnWidthSpacing[nIdx] = nWidth;
                     }
                 }
             }
@@ -1614,11 +1617,8 @@ bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
 }
 
 // Read fuer normalen Text
-void WW8FlyPara::Read(const sal_uInt8* pSprm29, WW8PLCFx_Cp_FKP* pPap)
+void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
 {
-    if (pSprm29)
-        nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
-
     const sal_uInt8* pS = 0;
     if( bVer67 )
     {
@@ -1669,12 +1669,12 @@ void WW8FlyPara::Read(const sal_uInt8* pSprm29, WW8PLCFx_Cp_FKP* pPap)
         nSp29 = nOrigSp29;
 }
 
-void WW8FlyPara::ReadFull(const sal_uInt8* pSprm29, SwWW8ImplReader* pIo)
+void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
 {
     WW8PLCFMan* pPlcxMan = pIo->pPlcxMan;
     WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
 
-    Read(pSprm29, pPap);    // Lies Apo-Parameter
+    Read(nOrigSp29, pPap);    // Lies Apo-Parameter
 
     do{             // Block zum rausspringen
         if( nSp45 != 0 /* || nSp28 != 0 */ )
@@ -1689,10 +1689,11 @@ void WW8FlyPara::ReadFull(const sal_uInt8* pSprm29, SwWW8ImplReader* pIo)
         bGrafApo = false;
 
         do{             // Block zum rausspringen
-
             sal_uInt8 nTxt[2];
 
-            pIoStrm->Read( nTxt, 2 );                   // lies Text
+            if (!checkRead(*pIoStrm, nTxt, 2)) // lies Text
+                break;
+
             if( nTxt[0] != 0x01 || nTxt[1] != 0x0d )// nur Grafik + CR ?
                 break;                              // Nein
 
@@ -1703,7 +1704,8 @@ void WW8FlyPara::ReadFull(const sal_uInt8* pSprm29, SwWW8ImplReader* pIo)
             const sal_uInt8* pS = pPap->HasSprm( bVer67 ? 29 : 0x261B );
 
             // Nein -> Grafik-Apo
-            if( !pS ){
+            if (!pS)
+            {
                 bGrafApo = true;
                 break;                              // Ende des APO
             }
@@ -1712,15 +1714,15 @@ void WW8FlyPara::ReadFull(const sal_uInt8* pSprm29, SwWW8ImplReader* pIo)
             WW8FlyPara *pNowStyleApo=0;
             sal_uInt16 nColl = pPap->GetIstd();
             ww::sti eSti = eVer < ww::eWW6 ? ww::GetCanonicalStiFromStc( static_cast< sal_uInt8 >(nColl) ) : static_cast<ww::sti>(nColl);
-            while (eSti != ww::stiNil && 0 == (pNowStyleApo = pIo->pCollA[nColl].pWWFly))
+            while (eSti != ww::stiNil && nColl < pIo->vColl.size() && 0 == (pNowStyleApo = pIo->vColl[nColl].pWWFly))
             {
-                nColl = pIo->pCollA[nColl].nBase;
+                nColl = pIo->vColl[nColl].nBase;
                 eSti = eVer < ww::eWW6 ? ww::GetCanonicalStiFromStc( static_cast< sal_uInt8 >(nColl) ) : static_cast<ww::sti>(nColl);
             }
 
             WW8FlyPara aF(bVer67, pNowStyleApo);
                                                 // Neuer FlaPara zum Vergleich
-            aF.Read( pS, pPap );                // WWPara fuer neuen Para
+            aF.Read( *pS, pPap );               // WWPara fuer neuen Para
             if( !( aF == *this ) )              // selber APO ? ( oder neuer ? )
                 bGrafApo = true;                // nein -> 1-zeiliger APO
                                                 //      -> Grafik-APO
@@ -1734,11 +1736,8 @@ void WW8FlyPara::ReadFull(const sal_uInt8* pSprm29, SwWW8ImplReader* pIo)
 
 
 // Read fuer Apo-Defs in Styledefs
-void WW8FlyPara::Read(const sal_uInt8* pSprm29, WW8RStyle* pStyle)
+void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle* pStyle)
 {
-    if (pSprm29)
-        nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
-
     const sal_uInt8* pS = 0;
     if (bVer67)
     {
@@ -2183,20 +2182,20 @@ WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk)
 {
     //Close any open character properties and duplicate them inside the
     //first table cell
-    sal_uInt16 nCnt = static_cast< sal_uInt16 >(pCtrlStck->Count());
-    for (sal_uInt16 i=0; i < nCnt; i++)
+    size_t nCnt = pCtrlStck->size();
+    for (size_t i=0; i < nCnt; ++i)
     {
-        const SwFltStackEntry* pEntry = (*pCtrlStck)[ i ];
-        if(pEntry->bLocked)
+        const SwFltStackEntry& rEntry = (*pCtrlStck)[ i ];
+        if (rEntry.bOpen)
         {
-            if (isCHRATR(pEntry->pAttr->Which()))
+            if (isCHRATR(rEntry.pAttr->Which()))
             {
-                aChrSet.Put( *pEntry->pAttr );
+                aChrSet.Put( *rEntry.pAttr );
 
             }
-            else if (isPARATR(pEntry->pAttr->Which()))
+            else if (isPARATR(rEntry.pAttr->Which()))
             {
-                aParSet.Put( *pEntry->pAttr );
+                aParSet.Put( *rEntry.pAttr );
             }
         }
     }
@@ -2275,7 +2274,12 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
                         aIdx++;
                         if (aIdx == aEnd && pNd && !pNd->GetTxt().Len())
                         {
-                            rDoc.DelFullPara( *pPaM );
+                            //An extra pre-created by writer unused paragraph
+                            //
+                            //delete after import is complete rather than now
+                            //to avoid the complication of managing uncommitted
+                            //ctrlstack properties that refer to it.
+                            m_aExtraneousParas.push_back(pNd);
 
                             SwTable& rTable = pTable->GetTable();
                             SwFrmFmt* pTblFmt = rTable.GetFrmFmt();
@@ -2286,7 +2290,8 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
                                 aSize.SetHeightSizeType(ATT_MIN_SIZE);
                                 aSize.SetHeight(MINLAY);
                                 pFlyFmt->SetFmtAttr(aSize);
-                                pTblFmt->SetFmtAttr(SwFmtHoriOrient(0,text::HoriOrientation::FULL));
+                                SwFmtHoriOrient aHori = pTblFmt->GetHoriOrient();
+                                pTblFmt->SetFmtAttr(SwFmtHoriOrient(0, aHori.GetHoriOrient() ) );
                                 nRetWidth = aSize.GetWidth();
                             }
                         }
@@ -2312,7 +2317,7 @@ WW8FlyPara *SwWW8ImplReader::ConstructApo(const ApoTestResults &rApo,
 
     // APO-Parameter ermitteln und Test auf bGrafApo
     if (rApo.HasFrame())
-        pRet->ReadFull(rApo.mpSprm29, this);
+        pRet->ReadFull(rApo.m_nSprm29, this);
 
     pRet->ApplyTabPos(pTabPos);
 
@@ -2440,7 +2445,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
         rPam.GetPoint()->nNode = aPref;
         rPam.GetPoint()->nContent.Assign(pNode, pNode->GetTxt().Len());
         if (bStealAttr)
-            pCtrlStck->StealAttr(rPam.GetPoint());
+            pCtrlStck->StealAttr(rPam.GetPoint()->nNode);
 
         pNode->JoinNext();
 
@@ -2589,7 +2594,7 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
     WW8FlyPara aF(bVer67, rApo.mpStyleApo);
     // WWPara fuer akt. Para
     if (rApo.HasFrame())
-        aF.Read(rApo.mpSprm29, pPlcxMan->GetPapPLCF());
+        aF.Read(rApo.m_nSprm29, pPlcxMan->GetPapPLCF());
     aF.ApplyTabPos(pTabPos);
 
     return aF == *pWFlyPara;
@@ -2659,10 +2664,10 @@ const SfxPoolItem* SwWW8ImplReader::GetFmtAttr( sal_uInt16 nWhich )
         pRet = pCtrlStck->GetStackAttr(*pPaM->GetPoint(), nWhich);
         if (!pRet)
         {
-            if (nAktColl < nColls && pCollA[nAktColl].pFmt &&
-                pCollA[nAktColl].bColl)
+            if (nAktColl < vColl.size() && vColl[nAktColl].pFmt &&
+                vColl[nAktColl].bColl)
             {
-                pRet = &(pCollA[nAktColl].pFmt->GetFmtAttr(nWhich));
+                pRet = &(vColl[nAktColl].pFmt->GetFmtAttr(nWhich));
             }
         }
         if (!pRet)
@@ -2785,7 +2790,7 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
 
 SwWW8StyInf *SwWW8ImplReader::GetStyle(sal_uInt16 nColl) const
 {
-    return nColl < nColls ? &pCollA[nColl] : 0;
+    return const_cast<SwWW8StyInf *>(nColl < vColl.size() ? &vColl[nColl] : 0);
 }
 
 /***************************************************************************
@@ -2869,8 +2874,8 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
         {
             // The style based on has Bit 7 set ?
             if (
-                pSI->nBase < nColls && (*pData & 0x80) &&
-                (pCollA[pSI->nBase].n81Flags & nMask)
+                pSI->nBase < vColl.size() && (*pData & 0x80) &&
+                (vColl[pSI->nBase].n81Flags & nMask)
                )
             {
                 bOn = !bOn;                     // umdrehen
@@ -2950,9 +2955,9 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
     {
         if (pSI)
         {
-            if( pSI->nBase < nColls             // Style Based on
+            if( pSI->nBase < vColl.size()             // Style Based on
                 && ( *pData & 0x80 )            // Bit 7 gesetzt ?
-                && ( pCollA[pSI->nBase].n81BiDiFlags & nMask ) ) // BasisMaske ?
+                && ( vColl[pSI->nBase].n81BiDiFlags & nMask ) ) // BasisMaske ?
                     bOn = !bOn;                     // umdrehen
 
             if( bOn )
@@ -3171,12 +3176,12 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
     {
         SwPaM aRegion(*pPaM->GetPoint());
 
-        SwFltStackEntry aEntry = *((*pCtrlStck)[nPos]);
-        aEntry.SetEndPos(*pPaM->GetPoint());
+        SwFltPosition aMkPos((*pCtrlStck)[nPos].m_aMkPos);
+        SwFltPosition aPtPos(*pPaM->GetPoint());
 
         SwFrmFmt *pFlyFmt = 0;
         if (
-             aEntry.MakeRegion(&rDoc,aRegion,false) &&
+             SwFltStackEntry::MakeRegion(&rDoc,aRegion,false,aMkPos,aPtPos) &&
              0 != (pFlyFmt = ContainsSingleInlineGraphic(aRegion))
            )
         {
@@ -3517,19 +3522,19 @@ bool SwWW8ImplReader::SetNewFontAttr(sal_uInt16 nFCode, bool bSetEnums,
 
     if( bSetEnums )
     {
-        if( pAktColl ) // StyleDef
+        if( pAktColl && nAktColl < vColl.size() ) // StyleDef
         {
             switch(nWhich)
             {
                 default:
                 case RES_CHRATR_FONT:
-                    pCollA[nAktColl].eLTRFontSrcCharSet = eSrcCharSet;
+                    vColl[nAktColl].eLTRFontSrcCharSet = eSrcCharSet;
                     break;
                 case RES_CHRATR_CTL_FONT:
-                    pCollA[nAktColl].eRTLFontSrcCharSet = eSrcCharSet;
+                    vColl[nAktColl].eRTLFontSrcCharSet = eSrcCharSet;
                     break;
                 case RES_CHRATR_CJK_FONT:
-                    pCollA[nAktColl].eCJKFontSrcCharSet = eSrcCharSet;
+                    vColl[nAktColl].eCJKFontSrcCharSet = eSrcCharSet;
                     break;
             }
         }
@@ -3757,11 +3762,11 @@ void SwWW8ImplReader::Read_CColl( sal_uInt16, const sal_uInt8* pData, short nLen
     }
     sal_uInt16 nId = SVBT16ToShort( pData );    // Style-Id (NICHT Sprm-Id!)
 
-    if( nId >= nColls || !pCollA[nId].pFmt  // ungueltige Id ?
-        || pCollA[nId].bColl )              // oder Para-Style ?
+    if( nId >= vColl.size() || !vColl[nId].pFmt  // ungueltige Id ?
+        || vColl[nId].bColl )              // oder Para-Style ?
         return;                             // dann ignorieren
 
-    NewAttr( SwFmtCharFmt( (SwCharFmt*)pCollA[nId].pFmt ) );
+    NewAttr( SwFmtCharFmt( (SwCharFmt*)vColl[nId].pFmt ) );
     nCharFmt = (short) nId;
 }
 
@@ -3956,9 +3961,9 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case 0x840F:
         case 0x845E:
             aLR.SetTxtLeft( nPara );
-            if (pAktColl)
+            if (pAktColl && nAktColl < vColl.size())
             {
-                pCollA[nAktColl].bListReleventIndentSet = true;
+                vColl[nAktColl].bListReleventIndentSet = true;
             }
             bLeftIndentSet = true;  // #i105414#
             break;
@@ -3977,22 +3982,22 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             been removed then we will factor the original list applied hanging
             into our calculation.
             */
-            if (pPlcxMan && pCollA[nAktColl].bHasBrokenWW6List)
+            if (pPlcxMan && nAktColl < vColl.size() && vColl[nAktColl].bHasBrokenWW6List)
             {
                 const sal_uInt8 *pIsZeroed = pPlcxMan->GetPapPLCF()->HasSprm(0x460B);
                 if (pIsZeroed && *pIsZeroed == 0)
                 {
                     const SvxLRSpaceItem &rLR =
-                        ItemGet<SvxLRSpaceItem>(*(pCollA[nAktColl].pFmt),
+                        ItemGet<SvxLRSpaceItem>(*(vColl[nAktColl].pFmt),
                         RES_LR_SPACE);
                     nPara = nPara - rLR.GetTxtFirstLineOfst();
                 }
             }
 
             aLR.SetTxtFirstLineOfst(nPara);
-            if (pAktColl)
+            if (pAktColl && nAktColl < vColl.size())
             {
-                pCollA[nAktColl].bListReleventIndentSet = true;
+                vColl[nAktColl].bListReleventIndentSet = true;
             }
             bFirstLinOfstSet = true; // #i103711#
             break;
@@ -4105,15 +4110,15 @@ void SwWW8ImplReader::Read_ParaAutoBefore(sal_uInt16, const sal_uInt8 *pData, sh
         SvxULSpaceItem aUL(*(const SvxULSpaceItem*)GetFmtAttr(RES_UL_SPACE));
         aUL.SetUpper(GetParagraphAutoSpace(pWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
-        if (pAktColl)
-            pCollA[nAktColl].bParaAutoBefore = true;
+        if (pAktColl && nAktColl < vColl.size())
+            vColl[nAktColl].bParaAutoBefore = true;
         else
             bParaAutoBefore = true;
     }
     else
     {
-        if (pAktColl)
-            pCollA[nAktColl].bParaAutoBefore = false;
+        if (pAktColl && nAktColl < vColl.size())
+            vColl[nAktColl].bParaAutoBefore = false;
         else
             bParaAutoBefore = false;
     }
@@ -4132,15 +4137,15 @@ void SwWW8ImplReader::Read_ParaAutoAfter(sal_uInt16, const sal_uInt8 *pData, sho
         SvxULSpaceItem aUL(*(const SvxULSpaceItem*)GetFmtAttr(RES_UL_SPACE));
         aUL.SetLower(GetParagraphAutoSpace(pWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
-        if (pAktColl)
-            pCollA[nAktColl].bParaAutoAfter = true;
+        if (pAktColl && nAktColl < vColl.size())
+            vColl[nAktColl].bParaAutoAfter = true;
         else
             bParaAutoAfter = true;
     }
     else
     {
-        if (pAktColl)
-            pCollA[nAktColl].bParaAutoAfter = false;
+        if (pAktColl && nAktColl < vColl.size())
+            vColl[nAktColl].bParaAutoAfter = false;
         else
             bParaAutoAfter = false;
     }
@@ -4857,14 +4862,14 @@ void SwWW8ImplReader::Read_BreakBefore( sal_uInt16, const sal_uInt8* pData, shor
 
 void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
 {
-    if (pAktColl) // only for Styledef, sonst anders geloest
+    if (pAktColl && nAktColl < vColl.size()) // only for Styledef, sonst anders geloest
     {
-        SwWW8StyInf& rSI = pCollA[nAktColl];
+        SwWW8StyInf& rSI = vColl[nAktColl];
         WW8FlyPara* pFly = rSI.pWWFly ? rSI.pWWFly : new WW8FlyPara(bVer67);
-        pCollA[nAktColl].pWWFly = pFly;
-        pFly->Read(pData, pStyles);
+        vColl[nAktColl].pWWFly = pFly;
+        pFly->Read(*pData, pStyles);
         if (pFly->IsEmpty())
-            delete pCollA[nAktColl].pWWFly, pCollA[nAktColl].pWWFly = 0;
+            delete vColl[nAktColl].pWWFly, vColl[nAktColl].pWWFly = 0;
     }
 }
 

@@ -178,7 +178,7 @@ protected:
     SwTxtPortionTable aMaxWidth;
     // for each line, an array of compression values is calculated
     // this array is passed over to the info structure
-    SvUShorts* pKanaComp;
+    std::deque<sal_uInt16>* pKanaComp;
 
     ViewShell    *pVsh;
 
@@ -365,10 +365,10 @@ public:
     inline void ResetKanaIdx(){ nKanaIdx = 0; }
     inline void SetKanaIdx( MSHORT nNew ) { nKanaIdx = nNew; }
     inline void IncKanaIdx() { ++nKanaIdx; }
-    inline void SetKanaComp( SvUShorts *pNew ){ pKanaComp = pNew; }
-    inline SvUShorts* GetpKanaComp() const { return pKanaComp; }
+    inline void SetKanaComp( std::deque<sal_uInt16> *pNew ){ pKanaComp = pNew; }
+    inline std::deque<sal_uInt16>* GetpKanaComp() const { return pKanaComp; }
     inline sal_uInt16 GetKanaComp() const
-        { return ( pKanaComp && nKanaIdx < pKanaComp->Count() )
+        { return ( pKanaComp && nKanaIdx < pKanaComp->size() )
                    ? (*pKanaComp)[nKanaIdx] : 0; }
 
 #if OSL_DEBUG_LEVEL > 1

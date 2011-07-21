@@ -176,6 +176,9 @@ public:
     /// for docx footnotePr/endnotePr inside sectPr
     virtual void SectFootnoteEndnotePr() {};
 
+    /// for docx w:commentReference
+    virtual void WritePostitFieldReference() {};
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet ) = 0;
 

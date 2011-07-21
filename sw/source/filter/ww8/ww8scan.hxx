@@ -145,7 +145,10 @@ public:
     /// The minimum acceptable sprm len possible for this type of parser
     int MinSprmLen() const { return (IsSevenMinus(meVersion)) ? 2 : 3; }
 
-    inline int getVersion() const { return meVersion; } //cmc, I'm dubious about the usage of this, how can it be 0
+    /// Returns the offset to data of the first sprm of id nId, 0
+    //  if not found. nLen must be the <= length of pSprms
+    sal_uInt8* findSprmData(sal_uInt16 nId, sal_uInt8* pSprms, sal_uInt16 nLen)
+        const;
 };
 
 //--Line abovewhich the code has meaningful comments
@@ -213,10 +216,10 @@ private:
     sal_uInt8*  pPLCF_Contents;  ///< Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;             ///< Anzahl der Elemente
     long nIdx;              ///< Merker, wo wir gerade sind
-    long nStru;
+    sal_uInt32 nStru;
 public:
-    WW8PLCFspecial( SvStream* pSt, long nFilePos, long nPLCF,
-        long nStruct, long nStartPos = -1 );
+    WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
+        sal_uInt32 nStruct);
     ~WW8PLCFspecial() { delete[] pPLCF_PosArray; }
     long GetIdx() const { return nIdx; }
     void SetIdx( long nI ) { nIdx = nI; }
@@ -237,8 +240,11 @@ public:
     sal_Int32 GetPos( long nInIdx ) const
         { return ( nInIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nInIdx]; }
 
-    WW8PLCFspecial& operator ++( int ) { nIdx++; return *this; }
-    WW8PLCFspecial& operator --( int ) { nIdx--; return *this; }
+    void advance()
+    {
+        if (nIdx <= nIMax)
+            ++nIdx;
+    }
 };
 
 /** simple Iterator for SPRMs */
@@ -281,24 +287,24 @@ private:
     sal_Int32 nIdx;
     int nStru;
 
-    void ReadPLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF );
+    void ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF);
 
     /*
         Falls im Dok ein PLC fehlt und die FKPs solo dastehen,
         machen wir uns hiermit einen PLC:
     */
-    void GeneratePLCF( SvStream* pSt, sal_Int32 nPN, sal_Int32 ncpN );
+    void GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN);
 
     void MakeFailedPLCF();
 public:
-    WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
-        WW8_CP nStartPos = -1 );
+    WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
+        WW8_CP nStartPos = -1);
 
     /*
         folgender Ctor generiert ggfs. einen PLC aus nPN und ncpN
     */
-    WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
-        WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN );
+    WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
+        WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN);
 
     ~WW8PLCF(){ delete[] pPLCF_PosArray; }
     sal_Int32 GetIdx() const { return nIdx; }
@@ -323,9 +329,10 @@ friend class WW8PLCFpcd_Iter;
     sal_Int32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
     sal_uInt8*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;
-    long nStru;
+    sal_uInt32 nStru;
 public:
-    WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct );
+    WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
+        sal_uInt32 nStruct);
     ~WW8PLCFpcd(){ delete[] pPLCF_PosArray; }
 };
 
@@ -501,6 +508,9 @@ public:
         sal_uInt8 mnIMax;         // Anzahl der Eintraege
 
         wwSprmParser maSprmParser;
+
+        //Fill in an Entry with sanity testing
+        void FillEntry(Entry &rEntry, sal_Size nDataOffset, sal_uInt16 nLen);
     public:
         WW8Fkp (ww::WordVersion eVersion, SvStream* pFKPStrm,
             SvStream* pDataStrm, long _nFilePos, long nItemSiz, ePLCFT ePl,
@@ -921,7 +931,7 @@ friend class SwWW8FltControlStack;
 #endif
 
 private:
-    const WW8Fib* pWw8Fib;
+    WW8Fib* pWw8Fib;
     WW8PLCFx_Cp_FKP*  pChpPLCF;         // Character-Attrs
     WW8PLCFx_Cp_FKP*  pPapPLCF;         // Para-Attrs
     WW8PLCFx_SEPX*    pSepPLCF;         // Section-Attrs
@@ -957,7 +967,7 @@ private:
     void DeletePieceTable();
 public:
     WW8ScannerBase( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
-        const WW8Fib* pWwF );
+        WW8Fib* pWwF );
     ~WW8ScannerBase();
     bool AreThereFootnotes() const { return pFtnPLCF->Count() > 0; };
     bool AreThereEndnotes()  const { return pEdnPLCF->Count() > 0; };
@@ -1451,8 +1461,6 @@ class WW8Style
 protected:
     WW8Fib& rFib;
     SvStream& rSt;
-    long nStyleStart;
-    long nStyleLen;
 
     sal_uInt16  cstd;                      // Count of styles in stylesheet
     sal_uInt16  cbSTDBaseInFile;           // Length of STD Base as stored in a file
@@ -1775,10 +1783,17 @@ std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx);
 
 sal_uLong SafeReadString(ByteString &rStr,sal_uInt16 nLen,SvStream &rStrm);
 
+bool checkSeek(SvStream &rSt, sal_uInt32 nOffset);
+bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength);
+
 //MS has a (slightly) inaccurate view of how many twips
 //are in the default letter size of a page
 const sal_uInt16 lLetterWidth = 12242;
 const sal_uInt16 lLetterHeight = 15842;
+
+#ifdef OSL_BIGENDIAN
+void swapEndian(sal_Unicode *pString);
+#endif
 
 #endif
 

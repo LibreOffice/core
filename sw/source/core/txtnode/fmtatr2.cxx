@@ -814,7 +814,9 @@ void MetaField::GetPrefixAndSuffix(
                 (pShell) ? pShell->GetModel() : 0,  uno::UNO_SET_THROW);
             getPrefixAndSuffix(xModel, xMetaField, o_pPrefix, o_pSuffix);
         }
-    } catch (uno::Exception) {
+    }
+    catch (const uno::Exception&)
+    {
         OSL_FAIL("exception?");
     }
 }

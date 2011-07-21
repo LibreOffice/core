@@ -36,7 +36,6 @@
 #include <float.h>
 #include <tools/datetime.hxx>
 #ifndef _SVSTDARR_HXX
-#define _SVSTDARR_ULONGS
 #include <svl/svarray.hxx>
 #endif
 #include <vcl/svapp.hxx>
@@ -2241,7 +2240,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     {
         // damit die Frames richtig angelegt werden, muessen sie in der
         // Reihenfolgen von oben nach unten expandiert werden
-        SvULongs aTmpArr;
+        std::vector<sal_uLong> aTmpArr;
         SwSectionFmts& rArr = rDoc.GetSections();
         SwSectionNode* pSectNd;
         sal_uInt16 nArrStt = 0;
@@ -2254,20 +2253,17 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ))
             {
                 sal_uLong nIdx = pSectNd->GetIndex();
-                sal_uInt16 i;
-
-                for( i = 0; i < aTmpArr.Count() && aTmpArr[ i ] < nIdx; ++i )
-                    ;
-                aTmpArr.Insert( nIdx, i );
+                aTmpArr.push_back( nIdx );
                 if( nIdx < nSttCntnt )
                     ++nArrStt;
             }
         }
+        std::sort(aTmpArr.begin(), aTmpArr.end());
 
         // erst alle anzeigen, damit die Frames vorhanden sind. Mit deren
         // Position wird das BodyAnchor ermittelt.
         // Dafuer erst den ContentBereich, dann die Sonderbereiche!!!
-        for (sal_uInt16 n = nArrStt; n < aTmpArr.Count(); ++n)
+        for (sal_uInt16 n = nArrStt; n < aTmpArr.size(); ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             OSL_ENSURE( pSectNd, "Wo ist mein SectionNode" );
@@ -2281,7 +2277,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         }
 
         // so, erst jetzt alle sortiert in die Liste eintragen
-        for (sal_uInt16 n = 0; n < aTmpArr.Count(); ++n)
+        for (sal_uInt16 n = 0; n < aTmpArr.size(); ++n)
         {
             GetBodyNode( *rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode() );
         }

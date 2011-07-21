@@ -248,6 +248,10 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         return;
 
     const ViewShell* pSh = getRootFrm()->GetCurrShell();
+    OutputDevice *pOut = pSh->GetOut();
+
+    sal_uInt64 nOldDrawMode = SetHeaderFooterEditMask( pOut );
+
     if( !pSh->GetViewOptions()->IsGraphic() )
     {
         StopAnimation();
@@ -262,6 +266,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 aTxt = FindFlyFrm()->GetFmt()->GetName();
             lcl_PaintReplacement( Frm(), aTxt, *pSh, this, sal_False );
         }
+        pOut->SetDrawMode( nOldDrawMode );
         return;
     }
 
@@ -272,7 +277,6 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     SfxProgress::EnterLock(); //Keine Progress-Reschedules im Paint (SwapIn)
 
-    OutputDevice *pOut = pSh->GetOut();
     pOut->Push();
     sal_Bool bClip = sal_True;
     PolyPolygon aPoly;
@@ -329,6 +333,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         pGrfNd->SetFrameInPaint( sal_False );
 
     pOut->Pop();
+    pOut->SetDrawMode( nOldDrawMode );
     SfxProgress::LeaveLock();
 }
 
@@ -817,9 +822,10 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     if( pGrfNd )
     {
         // Fix for bug fdo#33781
+        const sal_uInt16 nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
         if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
         {
-            pOut->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
+            pOut->SetAntialiasing( nFormerAntialiasingAtOutput | ANTIALIASING_ENABLE_B2DDRAW );
         }
 
         sal_Bool bForceSwap = sal_False, bContinue = sal_True;
@@ -933,8 +939,12 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             if( bSwapped && bPrn )
                 bForceSwap = sal_True;
         }
+
         if( bForceSwap )
             pGrfNd->SwapOut();
+
+        if ( pShell->Imp()->GetDrawView()->IsAntiAliasing() )
+            pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
     }
     else if( bIsChart
         //charts must be painted resolution dependent!! #i82893#, #i75867#
@@ -947,15 +957,18 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     }
     else if( pOLENd )
     {
-        // #i99665#
-        // Adjust AntiAliasing mode at output device for chart OLE
+        // Fix for bug fdo#33781
         const sal_uInt16 nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
-        if ( pOLENd->IsChart() &&
-             pShell->Imp()->GetDrawView()->IsAntiAliasing() )
+        if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
         {
-            const sal_uInt16 nAntialiasingForChartOLE =
-                    nFormerAntialiasingAtOutput | ANTIALIASING_PIXELSNAPHAIRLINE;
-            pOut->SetAntialiasing( nAntialiasingForChartOLE );
+            sal_uInt16 nNewAntialiasingAtOutput = nFormerAntialiasingAtOutput | ANTIALIASING_ENABLE_B2DDRAW;
+
+            // #i99665#
+            // Adjust AntiAliasing mode at output device for chart OLE
+            if ( pOLENd->IsChart() )
+                nNewAntialiasingAtOutput |= ANTIALIASING_PIXELSNAPHAIRLINE;
+
+            pOut->SetAntialiasing( nNewAntialiasingAtOutput );
         }
 
         Point aPosition(aAlignedGrfArea.Pos());
@@ -1000,12 +1013,8 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
         }
 
-        // #i99665#
-        if ( pOLENd->IsChart() &&
-             pShell->Imp()->GetDrawView()->IsAntiAliasing() )
-        {
+        if ( pShell->Imp()->GetDrawView()->IsAntiAliasing() )
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
-        }
     }
 }
 

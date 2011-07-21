@@ -190,6 +190,9 @@ private:
     /// Write footnotes.xml and endnotes.xml.
     void WriteFootnotesEndnotes();
 
+    /// Write comments.xml
+    void WritePostitFields();
+
     /// Write the numbering table.
     virtual void WriteNumbering();
 

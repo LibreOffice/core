@@ -98,7 +98,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <editeng/editobj.hxx>
-
+#include <boost/scoped_ptr.hpp>
 #include <math.h>
 
 using ::editeng::SvxBorderLine;
@@ -182,7 +182,11 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
         pStrm->SeekRel(SVBT16ToShort(pHd->cb) - sizeof(WW8_DPHEAD));
         return false;
     }
-    pStrm->Read(pData, nDataSiz);
+
+    bool bCouldRead = checkRead(*pStrm, pData, nDataSiz);
+    OSL_ENSURE(bCouldRead, "Short Graphic header");
+    if (!bCouldRead)
+        return false;
 
     RndStdIds eAnchor = (SVBT8ToByte(pDo->by) < 2) ? FLY_AT_PAGE : FLY_AT_PARA;
     rSet.Put(SwFmtAnchor(eAnchor));
@@ -443,20 +447,24 @@ SdrObject* SwWW8ImplReader::ReadPolyLine( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         return 0;
 
     sal_uInt16 nCount = SVBT16ToShort( aPoly.aBits1 ) >> 1 & 0x7fff;
-    SVBT16 *pP = new SVBT16[nCount * 2];
-    pStrm->Read( pP, nCount * 4 );      // Punkte einlesen
+    boost::scoped_array<SVBT16> xP(new SVBT16[nCount * 2]);
+
+    bool bCouldRead = checkRead(*pStrm, xP.get(), nCount * 4);      // Punkte einlesen
+    OSL_ENSURE(bCouldRead, "Short PolyLine header");
+    if (!bCouldRead)
+        return 0;
+
     Polygon aP( nCount );
     Point aPt;
-    sal_uInt16 i;
-
-    for( i=0; i<nCount; i++ ){
-        aPt.X() = SVBT16ToShort( pP[i << 1] ) + nDrawXOfs2
+    for (sal_uInt16 i=0; i<nCount; ++i)
+    {
+        aPt.X() = SVBT16ToShort( xP[i << 1] ) + nDrawXOfs2
                   + (sal_Int16)SVBT16ToShort( pHd->xa );
-        aPt.Y() = SVBT16ToShort( pP[( i << 1 ) + 1] ) + nDrawYOfs2
+        aPt.Y() = SVBT16ToShort( xP[( i << 1 ) + 1] ) + nDrawYOfs2
                   + (sal_Int16)SVBT16ToShort( pHd->ya );
         aP[i] = aPt;
     }
-    delete[] pP;
+    xP.reset();
 
     SdrObject* pObj = new SdrPathObj(( SVBT16ToShort( aPoly.aBits1 ) & 0x1 ) ? OBJ_POLY : OBJ_PLIN, ::basegfx::B2DPolyPolygon(aP.getB2DPolygon()));
     SetStdAttr( rSet, aPoly.aLnt, aPoly.aShd );
@@ -627,7 +635,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
     std::deque<Chunk> aChunks;
 
     //Here store stack location
-    sal_uInt16 nCurrentCount = static_cast< sal_uInt16 >(pCtrlStck->Count());
+    size_t nCurrentCount = pCtrlStck->size();
     while (nStart < nEndCp)
     {
         //nStart is the beginning of the attributes for this range, and
@@ -685,13 +693,13 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
             {
                 if (bStartAttr)
                 {
-                    sal_uInt16 nCount = static_cast< sal_uInt16 >(pCtrlStck->Count());
+                    size_t nCount = pCtrlStck->size();
                     if (maFieldStack.empty() && Read_Field(&aRes))
                     {
                         String sURL;
-                        for (sal_uInt16 nI = static_cast< sal_uInt16 >(pCtrlStck->Count()); nI > nCount; --nI)
+                        for (size_t nI = pCtrlStck->size(); nI > nCount; --nI)
                         {
-                            const SfxPoolItem *pItem = ((*pCtrlStck)[nI-1])->pAttr;
+                            const SfxPoolItem *pItem = ((*pCtrlStck)[nI-1]).pAttr;
                             sal_uInt16 nWhich = pItem->Which();
                             if (nWhich == RES_TXTATR_INETFMT)
                             {
@@ -723,11 +731,11 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
             //Here read current properties and convert them into pS
             //and put those attrs into the draw box if they can be converted
             //to draw attributes
-            if (pCtrlStck->Count() - nCurrentCount)
+            if (pCtrlStck->size() - nCurrentCount)
             {
-                for (sal_uInt16 i = nCurrentCount; i < pCtrlStck->Count(); i++)
+                for (size_t i = nCurrentCount; i < pCtrlStck->size(); ++i)
                 {
-                    const SfxPoolItem *pItem = ((*pCtrlStck)[i])->pAttr;
+                    const SfxPoolItem *pItem = ((*pCtrlStck)[i]).pAttr;
                     sal_uInt16 nWhich = pItem->Which();
                     if( nWhich < RES_FLTRATTR_BEGIN ||
                         nWhich >= RES_FLTRATTR_END )
@@ -764,7 +772,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
 
     //pop off as far as recorded location just in case there were some left
     //unclosed
-    for (sal_uInt16 nI = static_cast< sal_uInt16 >(pCtrlStck->Count()); nI > nCurrentCount; --nI)
+    for (size_t nI = pCtrlStck->size(); nI > nCurrentCount; --nI)
         pCtrlStck->DeleteAndDestroy(nI-1);
 
     typedef std::deque<Chunk>::iterator myIter;
@@ -831,7 +839,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
         bool bReusable = (0 != SVBT16ToShort( ((WW8_TXBXS*)pT0)->fReusable ));
         while( bReusable )
         {
-            (*pT)++;
+            pT->advance();
             if( !pT->Get( rStartCp, pT0 ) )
             {
                 OSL_ENSURE( !this, "+Wo ist der Grafik-Text (2-a) ?" );
@@ -840,7 +848,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
             bReusable = (0 != SVBT16ToShort( ((WW8_TXBXS*)pT0)->fReusable ));
         }
     }
-    (*pT)++;
+    pT->advance();
     if( !pT->Get( rEndCp, pT0 ) )
     {
         OSL_ENSURE( !this, "+Wo ist der Grafik-Text (3) ?" );
@@ -868,7 +876,8 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
                 return false;
             }
             // ggfs. entsprechende Anzahl Eintraege weitergehen
-            for(sal_uInt16 iSequence = 0; iSequence < nSequence; iSequence++) (*pT)++;
+            for (sal_uInt16 iSequence = 0; iSequence < nSequence; ++iSequence)
+                pT->advance();
             // dann die tatsaechlichen Start und Ende ermitteln
             if(    (!pT->Get( rStartCp, pT0 ))
                 || ( nMinStartCp > rStartCp  ) )
@@ -880,9 +889,8 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
                 rEndCp = rStartCp;  // kein Error: leerer String!
             else
             {
-                (*pT)++;
-                if(    (!pT->Get( rEndCp, pT0 ))
-                    || ( nMaxEndCp < rEndCp-1  ) )
+                pT->advance();
+                if ( (!pT->Get(rEndCp, pT0)) || (nMaxEndCp < rEndCp-1) )
                 {
                     OSL_ENSURE( !this, "+Wo ist der Grafik-Text (6) ?" );
                     return false;
@@ -1248,10 +1256,15 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         return 0;
 
     sal_uInt16 nCount = SVBT16ToShort( aCallB.dpPolyLine.aBits1 ) >> 1 & 0x7fff;
-    SVBT16 *pP = new SVBT16[nCount * 2];
-    pStrm->Read( pP, nCount * 4 );      // Punkte einlesen
+    boost::scoped_array<SVBT16> xP(new SVBT16[nCount * 2]);
+
+    bool bCouldRead = checkRead(*pStrm, xP.get(), nCount * 4);      // Punkte einlesen
+    OSL_ENSURE(bCouldRead, "Short CaptionBox header");
+    if (!bCouldRead)
+        return 0;
+
     sal_uInt8 nTyp = (sal_uInt8)nCount - 1;
-    if( nTyp == 1 && SVBT16ToShort( pP[0] ) == SVBT16ToShort( pP[2] ) )
+    if( nTyp == 1 && SVBT16ToShort( xP[0] ) == SVBT16ToShort( xP[2] ) )
         nTyp = 0;
 
     Point aP0( (sal_Int16)SVBT16ToShort( pHd->xa ) +
@@ -1263,11 +1276,11 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     aP1.Y() += (sal_Int16)SVBT16ToShort( aCallB.dpheadTxbx.dya );
     Point aP2( (sal_Int16)SVBT16ToShort( pHd->xa )
                 + (sal_Int16)SVBT16ToShort( aCallB.dpheadPolyLine.xa )
-                + nDrawXOfs2 + (sal_Int16)SVBT16ToShort( pP[0] ),
+                + nDrawXOfs2 + (sal_Int16)SVBT16ToShort( xP[0] ),
                (sal_Int16)SVBT16ToShort( pHd->ya )
                + (sal_Int16)SVBT16ToShort( aCallB.dpheadPolyLine.ya )
-               + nDrawYOfs2 + (sal_Int16)SVBT16ToShort( pP[1] ) );
-    delete[] pP;
+               + nDrawYOfs2 + (sal_Int16)SVBT16ToShort( xP[1] ) );
+    xP.reset();
 
     SdrCaptionObj* pObj = new SdrCaptionObj( Rectangle( aP0, aP1 ), aP2 );
     pObj->SetModel( pDrawModel );
@@ -1334,7 +1347,13 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive( short& rLeft, const WW8_DO* pDo,
     //into an object hierarachy with a little effort.
     SdrObject *pRet=0;
     WW8_DPHEAD aHd;                         // Lese Draw-Primitive-Header
-    pStrm->Read(&aHd, sizeof(WW8_DPHEAD));
+    bool bCouldRead = checkRead(*pStrm, &aHd, sizeof(WW8_DPHEAD));
+    OSL_ENSURE(bCouldRead, "Graphic Primitive header short read" );
+    if (!bCouldRead)
+    {
+        rLeft=0;
+        return pRet;
+    }
 
     if( rLeft >= SVBT16ToShort(aHd.cb) )    // Vorsichtsmassmahme
     {
@@ -1394,9 +1413,18 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
         OSL_ENSURE( !this, "+Wo ist die Grafik (3) ?" );
         return;
     }
+
+    bool bCouldSeek = checkSeek(*pStrm, SVBT32ToUInt32(pF->fc));
+    OSL_ENSURE(bCouldSeek, "Invalid Graphic offset");
+    if (!bCouldSeek)
+        return;
+
+    // Lese Draw-Header
     WW8_DO aDo;
-    pStrm->Seek( SVBT32ToUInt32( pF->fc ) );                  // Lese Draw-Header
-    pStrm->Read( &aDo, sizeof( WW8_DO ) );
+    bool bCouldRead = checkRead(*pStrm, &aDo, sizeof(WW8_DO));
+    OSL_ENSURE(bCouldRead, "Short Graphic header");
+    if (!bCouldRead)
+        return;
 
     short nLeft = SVBT16ToShort( aDo.cb ) - sizeof( WW8_DO );
     while (nLeft > static_cast<short>(sizeof(WW8_DPHEAD)))
@@ -3057,12 +3085,12 @@ void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrmFmt *pFmt)
 
 void SwWW8FltAnchorStack::Flush()
 {
-    sal_uInt16 nCnt = static_cast< sal_uInt16 >(Count());
-    for (sal_uInt16 i=0; i < nCnt; ++i)
+    size_t nCnt = size();
+    for (size_t i=0; i < nCnt; ++i)
     {
-        SwFltStackEntry *pEntry = (*this)[i];
-        SwPosition aDummy(pEntry->nMkNode);
-        SetAttrInDoc(aDummy,pEntry);
+        SwFltStackEntry &rEntry = (*this)[i];
+        SwPosition aDummy(rEntry.m_aMkPos.m_nNode);
+        SetAttrInDoc(aDummy, rEntry);
         DeleteAndDestroy(i--);
         --nCnt;
     }

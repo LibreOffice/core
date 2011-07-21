@@ -32,7 +32,6 @@
 
 #include <tools/stream.hxx>
 #include <unotools/syslocale.hxx>
-#include <svl/cjkoptions.hxx>
 
 #include "swtypes.hxx"
 #include "hintids.hxx"
@@ -74,16 +73,7 @@ SwMasterUsrPref::SwMasterUsrPref(sal_Bool bWeb) :
     bApplyCharUnit(sal_False)
 {
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-    SvtCJKOptions aCJKOptions;
     eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
-
-    sal_Bool bCJKEnabled = aCJKOptions.IsAsianTypographyEnabled();
-    bApplyCharUnit = bCJKEnabled;
-    eHScrollMetric = bApplyCharUnit ? FUNIT_CHAR : eUserMetric;
-    eVScrollMetric = bApplyCharUnit ? FUNIT_LINE : eUserMetric;
-
-    bIsHScrollMetricSet = bApplyCharUnit;
-    bIsVScrollMetricSet = bApplyCharUnit;
 
     aContentConfig.Load();
     aLayoutConfig.Load();
@@ -260,7 +250,7 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
         "Window/IsVerticalRulerRight",          //16
         "ViewLayout/Columns",                   //17
         "ViewLayout/BookMode",                  //18
-        "Other/IsSquaredPageMode"               //19
+        "Other/IsSquaredPageMode",              //19
         "Other/ApplyCharUnit"                   //20
     };
     const int nCount = bWeb ? 15 : 21;
@@ -325,7 +315,7 @@ void SwLayoutViewConfig::Commit()
             case 17: rVal <<= (sal_Int32)rParent.GetViewLayoutColumns(); break;     // "ViewLayout/Columns",
             case 18: rVal <<= (sal_Bool) rParent.IsViewLayoutBookMode(); break;     // "ViewLayout/BookMode",
             case 19: rVal <<= (sal_Bool) rParent.IsSquaredPageMode(); break;        // "Other/IsSquaredPageMode",
-            case 20: rVal <<= (sal_Bool) rParent.IsApplyCharUnit(); break;        // "Other/IsSquaredPageMode",
+            case 20: rVal <<= (sal_Bool) rParent.IsApplyCharUnit(); break;        // "Other/ApplyCharUnit",
         }
     }
     PutProperties(aNames, aValues);

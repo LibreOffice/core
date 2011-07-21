@@ -33,10 +33,7 @@
 #include <IDocumentRedlineAccess.hxx>
 
 #include "swfont.hxx"
-#ifndef _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
+#include <vector>
 
 class SwTxtNode;
 class SwDoc;
@@ -46,7 +43,7 @@ class SwAttrHandler;
 class SwExtend
 {
     SwFont *pFnt;
-    const SvUShorts &rArr;  // XAMA: Array of xub_StrLen
+    const std::vector<sal_uInt16> &rArr;    // XAMA: Array of xub_StrLen
     xub_StrLen nStart;
     xub_StrLen nPos;
     xub_StrLen nEnd;
@@ -54,8 +51,8 @@ class SwExtend
     sal_Bool Inside() const { return ( nPos >= nStart && nPos < nEnd ); }
     void ActualizeFont( SwFont &rFnt, xub_StrLen nAttr );
 public:
-    SwExtend( const SvUShorts &rA, xub_StrLen nSt ) : pFnt(0), rArr( rA ),
-        nStart( nSt ), nPos( STRING_LEN ), nEnd( nStart + rA.Count() ) {}
+    SwExtend( const std::vector<sal_uInt16> &rA, xub_StrLen nSt ) : pFnt(0), rArr( rA ),
+        nStart( nSt ), nPos( STRING_LEN ), nEnd( nStart + rA.size() ) {}
     ~SwExtend() { delete pFnt; }
     sal_Bool IsOn() const { return pFnt != 0; }
     void Reset() { if( pFnt ) { delete pFnt; pFnt = NULL; } nPos = STRING_LEN; }
@@ -94,7 +91,7 @@ class SwRedlineItr
         { if( pExt ) return pExt->Next( nNext ); return nNext; }
 public:
     SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt, SwAttrHandler& rAH,
-        xub_StrLen nRedlPos, sal_Bool bShw, const SvUShorts *pArr = 0,
+        xub_StrLen nRedlPos, sal_Bool bShw, const std::vector<sal_uInt16> *pArr = 0,
         xub_StrLen nStart = STRING_LEN );
     ~SwRedlineItr();
     inline sal_Bool IsOn() const { return bOn || ( pExt && pExt->IsOn() ); }

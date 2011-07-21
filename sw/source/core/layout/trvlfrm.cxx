@@ -58,12 +58,51 @@
 #include <crstate.hxx>
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
+#include <dcontact.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
 // FLT_MAX
 #include <cfloat>
 #include <swselectionlist.hxx>
+
+namespace {
+    bool lcl_GetCrsrOfst_Objects( const SwPageFrm* pPageFrm, bool bSearchBackground,
+           SwPosition *pPos, Point& rPoint, SwCrsrMoveState* pCMS )
+    {
+        bool bRet = false;
+        Point aPoint( rPoint );
+        SwOrderIter aIter( pPageFrm );
+        aIter.Top();
+        while ( aIter() )
+        {
+            const SwVirtFlyDrawObj* pObj =
+                                static_cast<const SwVirtFlyDrawObj*>(aIter());
+            const SwAnchoredObject* pAnchoredObj = GetUserCall( aIter() )->GetAnchoredObj( aIter() );
+            const SwFmtSurround& rSurround = pAnchoredObj->GetFrmFmt().GetSurround();
+            bool bInBackground = ( rSurround.GetSurround() == SURROUND_THROUGHT );
+
+            bool bBackgroundMatches = ( bInBackground && bSearchBackground ) ||
+                                      ( !bInBackground && !bSearchBackground );
+
+            const SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
+            if ( pFly && bBackgroundMatches &&
+                 ( ( pCMS ? pCMS->bSetInReadOnly : false ) ||
+                   !pFly->IsProtected() ) &&
+                 pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
+            {
+                bRet = true;
+                break;
+            }
+
+            if ( pCMS && pCMS->bStop )
+                return false;
+            aIter.Prev();
+        }
+        return bRet;
+    }
+}
+
 
 //Fuer SwFlyFrm::GetCrsrOfst
 class SwCrsrOszControl
@@ -166,26 +205,7 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     //hineinsetzen, dadurch sollten alle Aenderungen unmoeglich sein.
     if ( GetSortedObjs() )
     {
-        SwOrderIter aIter( this );
-        aIter.Top();
-        while ( aIter() )
-        {
-            const SwVirtFlyDrawObj* pObj =
-                                static_cast<const SwVirtFlyDrawObj*>(aIter());
-            const SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
-            if ( pFly &&
-                 ( ( pCMS ? pCMS->bSetInReadOnly : sal_False ) ||
-                   !pFly->IsProtected() ) &&
-                 pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
-            {
-                bRet = sal_True;
-                break;
-            }
-
-            if ( pCMS && pCMS->bStop )
-                return sal_False;
-            aIter.Prev();
-        }
+        bRet = lcl_GetCrsrOfst_Objects( this, false, pPos, rPoint, pCMS );
     }
 
     if ( !bRet )
@@ -220,6 +240,12 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                 bRet = sal_True;
             }
         }
+    }
+
+    // Check objects in the background if nothing else matched
+    if ( !bRet && GetSortedObjs() )
+    {
+        bRet = lcl_GetCrsrOfst_Objects( this, true, pPos, rPoint, pCMS );
     }
 
     if ( bRet )
@@ -1731,7 +1757,7 @@ sal_Bool SwFrm::WannaRightPage() const
     OSL_ENSURE( pDesc, "No pagedescriptor" );
     sal_Bool bOdd;
     if( nPgNum )
-        bOdd = nPgNum % 2 ? sal_True : sal_False;
+        bOdd = (nPgNum % 2) ? sal_True : sal_False;
     else
     {
         bOdd = pPage->OnRightPage();

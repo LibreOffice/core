@@ -29,7 +29,10 @@
 #include <iostream>
 #include <dbgoutsw.hxx>
 #include "WW8Sttbf.hxx"
+#include "ww8scan.hxx"
 #include <cstdio>
+#include <osl/endian.h>
+#include <rtl/ustrbuf.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -38,17 +41,19 @@
 namespace ww8
 {
     WW8Struct::WW8Struct(SvStream& rSt, sal_uInt32 nPos, sal_uInt32 nSize)
-    : mn_offset(0), mn_size(nSize)
+        : mn_offset(0), mn_size(0)
     {
-        rSt.Seek(nPos);
-
-        mp_data.reset(new sal_uInt8[nSize]);
-        rSt.Read(mp_data.get(), nSize);
+        if (checkSeek(rSt, nPos))
+        {
+            mp_data.reset(new sal_uInt8[nSize]);
+            mn_size = rSt.Read(mp_data.get(), nSize);
+        }
+        OSL_ENSURE(mn_size == nSize, "short read in WW8Struct::WW8Struct");
     }
 
     WW8Struct::WW8Struct(WW8Struct * pStruct, sal_uInt32 nPos, sal_uInt32 nSize)
-    : mp_data(pStruct->mp_data), mn_offset(pStruct->mn_offset + nPos),
-    mn_size(nSize)
+        : mp_data(pStruct->mp_data), mn_offset(pStruct->mn_offset + nPos)
+        , mn_size(nSize)
     {
     }
 
@@ -75,12 +80,22 @@ namespace ww8
 
         if (nCount > 0)
         {
-            rtl_uString * pNew = 0;
-            rtl_uString_newFromStr_WithLength
-            (&pNew, reinterpret_cast<const sal_Unicode *>(&mp_data[mn_offset + nOffset]),
-             nCount);
-
-            aResult = rtl::OUString(pNew);
+            //clip to available
+            sal_uInt32 nStartOff = mn_offset + nOffset;
+            if (nStartOff >= mn_size)
+                return aResult;
+            sal_uInt32 nAvailable = (mn_size - nStartOff)/sizeof(sal_Unicode);
+            if (nCount > nAvailable)
+                nCount = nAvailable;
+#if defined OSL_LITTLEENDIAN
+            aResult = rtl::OUString(reinterpret_cast<const sal_Unicode *>(
+                mp_data.get() + nStartOff), nCount);
+#else
+            rtl::OUStringBuffer aBuf;
+            for (sal_uInt32 i = 0; i < nCount; ++i)
+                aBuf.append(static_cast<sal_Unicode>(getU16(nStartOff+i*2)));
+            aResult = aBuf.makeStringAndClear();
+#endif
         }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -103,8 +118,17 @@ namespace ww8
 
         if (nCount > 0)
         {
-            ::rtl::OString aOStr(reinterpret_cast<const sal_Char *>(&mp_data[mn_offset + nOffset]),
-                                 nCount);
+            //clip to available
+            sal_uInt32 nStartOff = mn_offset + nOffset;
+            if (nStartOff >= mn_size)
+                return aResult;
+            sal_uInt32 nAvailable = (mn_size - nStartOff);
+            if (nCount > nAvailable)
+                nCount = nAvailable;
+
+            rtl::OString aOStr(reinterpret_cast<const sal_Char *>(
+                mp_data.get() + nStartOff), nCount);
+
             ::rtl::OUString aOUStr(rtl::OStringToOUString(aOStr, RTL_TEXTENCODING_ASCII_US));
             aResult = rtl::OUString(aOUStr);
         }

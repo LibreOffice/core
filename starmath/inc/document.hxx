@@ -100,9 +100,7 @@ public:
 
 ////////////////////////////////////////////////////////////
 
-void SetEditEngineDefaultFonts(
-        EditEngine &rEditEngine,
-        SfxItemPool &rEditEngineItemPool );
+void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool);
 
 ////////////////////////////////////////////////////////////
 

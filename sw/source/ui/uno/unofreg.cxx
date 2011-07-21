@@ -152,13 +152,6 @@ extern "C"
 {
 #endif
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char ** ppEnvTypeName,
-        uno_Environment ** /*ppEnv*/ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 static ::cppu::ImplementationEntry const entries[] = {
     { &comp_FinalThreadManager::_create,
       &comp_FinalThreadManager::_getImplementationName,
@@ -167,7 +160,7 @@ static ::cppu::ImplementationEntry const entries[] = {
     { 0, 0, 0, 0, 0, 0 }
 };
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
     const sal_Char * pImplName,
     void * pServiceManager,
     void * pRegistryKey )

@@ -43,6 +43,8 @@
 #include <shellio.hxx>
 #include <svl/zforlist.hxx>
 
+#include <boost/noncopyable.hpp>
+
 #define CREATE_CONST_ASC(s) String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(s))
 
 class SwDoc;
@@ -316,7 +318,6 @@ namespace sw
         public:
             String msPrimary;
             String msSecondary;
-            bool HasDistinctSecondary() const;
             FontMapExport(const String &rFontDescription);
         };
 
@@ -363,7 +364,7 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
          */
-        class RedlineStack
+        class RedlineStack : public boost::noncopyable
         {
         private:
             std::vector<SwFltStackEntry *> maStack;
@@ -377,10 +378,6 @@ namespace sw
                 WW8TabDesc* pTabDesc );
             void closeall(const SwPosition& rPos);
             ~RedlineStack();
-        private:
-            //No copying
-            RedlineStack(const RedlineStack&);
-            RedlineStack& operator=(const RedlineStack&);
         };
 
         /**
@@ -403,20 +400,20 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
          */
-        class CloseIfOpen       //Subclass from something ?
+        class SetEndIfOpen       //Subclass from something ?
         {
         private:
             const SwPosition &mrPos;
         public:
-            explicit CloseIfOpen(const SwPosition &rPos) : mrPos(rPos) {}
+            explicit SetEndIfOpen(const SwPosition &rPos) : mrPos(rPos) {}
                 void operator()(SwFltStackEntry *pEntry) const
             {
-                if (pEntry->bLocked)
+                if (pEntry->bOpen)
                     pEntry->SetEndPos(mrPos);
             }
         private:
             //No assignment
-            CloseIfOpen& operator=(const CloseIfOpen&);
+            SetEndIfOpen& operator=(const SetEndIfOpen&);
         };
 
         /**
@@ -432,16 +429,12 @@ namespace sw
                 const;
         };
 
-        class WrtRedlineAuthor
+        class WrtRedlineAuthor : public boost::noncopyable
         {
         protected:
             std::vector<String> maAuthors;          // Array of Sw - Bookmarknames
 
             sal_uInt16 GetPos( const String& rNm );
-
-            //No copying
-            WrtRedlineAuthor(const WrtRedlineAuthor&);
-            WrtRedlineAuthor& operator=(const WrtRedlineAuthor&);
         public:
             WrtRedlineAuthor() {}
             virtual ~WrtRedlineAuthor() {}

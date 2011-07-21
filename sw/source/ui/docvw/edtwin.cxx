@@ -1252,12 +1252,19 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 
 void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 {
+    SwWrtShell &rSh = rView.GetWrtShell();
+
     if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
         pApplyTempl && pApplyTempl->pFormatClipboard )
     {
         pApplyTempl->pFormatClipboard->Erase();
         SetApplyTemplate(SwApplyTemplate());
         rView.GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+    }
+    else if ( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
+            rSh.IsHeaderFooterEdit( ) )
+    {
+        rSh.ToggleHeaderFooterEdit();
     }
 
     SfxObjectShell *pObjSh = (SfxObjectShell*)rView.GetViewFrame()->GetObjectShell();
@@ -1270,7 +1277,6 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         delete pShadCrsr, pShadCrsr = 0;
     aKeyInputFlushTimer.Stop();
 
-    SwWrtShell &rSh = rView.GetWrtShell();
     sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
                           rSh.IsCrsrReadonly();
 
@@ -2595,6 +2601,16 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         delete pShadCrsr, pShadCrsr = 0;
 
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
+
+    sal_Bool bOverHdrFtr = rSh.IsOverHeaderFooterPos( aDocPos );
+    if ( ( rSh.IsHeaderFooterEdit( ) && !bOverHdrFtr ) ||
+         ( !rSh.IsHeaderFooterEdit() && bOverHdrFtr ) )
+    {
+        if ( rMEvt.GetButtons() == MOUSE_LEFT && rMEvt.GetClicks( ) == 2 )
+            rSh.SwCrsrShell::SetCrsr( aDocPos );
+
+        return;
+    }
 
     if ( IsChainMode() )
     {

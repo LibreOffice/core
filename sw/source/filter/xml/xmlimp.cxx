@@ -1442,26 +1442,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             OUString( RTL_CONSTASCII_USTRINGPARAM("SmallCapsPercentage66") ), makeAny( true ) );
     }
 
-    // Old LO versions had 66 as the value for small caps percentage, later changed to 80.
-    // In order to keep backwards compatibility, SmallCapsPercentage66 option is written to .odt
-    // files, and the default for new documents is 'false'. Files without this option
-    // are considered to be old files, so set the compatibility option too.
-    if ( !bSmallCapsPercentage66 )
-    {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("SmallCapsPercentage66") ), makeAny( true ) );
-    }
-
-    // Old LO versions had 66 as the value for small caps percentage, later changed to 80.
-    // In order to keep backwards compatibility, SmallCapsPercentage66 option is written to .odt
-    // files, and the default for new documents is 'false'. Files without this option
-    // are considered to be old files, so set the compatibility option too.
-    if ( !bSmallCapsPercentage66 )
-    {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("SmallCapsPercentage66") ), makeAny( true ) );
-    }
-
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);

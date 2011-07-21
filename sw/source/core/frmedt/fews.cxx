@@ -1314,4 +1314,16 @@ void SwFEShell::MoveObjectIfActive( svt::EmbeddedObjectRef&, const Point& )
     // does not do anything, only avoids crash if the method is used for wrong shell
 }
 
+void SwFEShell::ToggleHeaderFooterEdit()
+{
+    // Clear objects selection
+    if ( Imp()->GetDrawView()->AreObjectsMarked() )
+    {
+        Imp()->GetDrawView()->UnmarkAll();
+        ClearMark();
+    }
+
+    SwCrsrShell::ToggleHeaderFooterEdit();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

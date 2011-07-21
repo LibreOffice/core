@@ -423,7 +423,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     OSL_ENSURE( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
     OSL_ENSURE( !pCurrent->GetpKanaComp(), "pKanaComp already exists!!" );
 
-    SvUShorts *pNewKana = new SvUShorts;
+    std::deque<sal_uInt16> *pNewKana = new std::deque<sal_uInt16>();
     pCurrent->SetKanaComp( pNewKana );
 
     const sal_uInt16 nNull = 0;
@@ -461,8 +461,8 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
         }
         else if( pPos->InGlueGrp() && pPos->InFixMargGrp() )
         {
-            if ( nKanaIdx == pCurrent->GetKanaComp().Count() )
-                pCurrent->GetKanaComp().Insert( nNull, nKanaIdx );
+            if ( nKanaIdx == pCurrent->GetKanaComp().size() )
+                pCurrent->GetKanaComp().push_back( nNull );
 
             sal_uInt16 nRest;
 
@@ -549,8 +549,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
                 // set fix width to width
                 ((SwTabPortion*)pPos)->SetFixWidth( pPos->Width() );
 
-            const SvUShorts& rKanaComp = pCurrent->GetKanaComp();
-            if ( ++nKanaIdx < rKanaComp.Count() )
+            if ( ++nKanaIdx < pCurrent->GetKanaComp().size() )
                 nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
 
             nKanaDiffSum = 0;
