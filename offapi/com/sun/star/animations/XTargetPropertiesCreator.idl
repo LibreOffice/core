@@ -67,8 +67,6 @@ interface XTargetPropertiesCreator : ::com::sun::star::uno::XInterface
 
 //=============================================================================
 
-service TargetPropertiesCreator: XTargetPropertiesCreator;
-
 }; }; }; };
 
 #endif

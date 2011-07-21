@@ -313,7 +313,6 @@ published interface XReportDefinition
     };
 };
 
-published service ReportDefinition : XReportDefinition;
 //=============================================================================
 
 }; }; }; };

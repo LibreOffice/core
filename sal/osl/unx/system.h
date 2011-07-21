@@ -354,6 +354,7 @@ int macxp_resolveAlias(char *path, int buflen);
 #   ifndef ETIME
 #       define  ETIME ETIMEDOUT
 #   endif
+#   include <dlfcn.h>
 #   include <pthread.h>
 #   include <sys/file.h>
 #   include <sys/ioctl.h>

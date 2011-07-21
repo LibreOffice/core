@@ -341,6 +341,30 @@ public:
     }
 
     /**
+      Perform a comparison of two strings.
+
+      The result is true if and only if second string
+      represents the same sequence of characters as the first string.
+      The ASCII string must be NULL-terminated and must be greater or
+      equal as length.
+      This function can't be used for language specific comparison.
+
+
+      @param    value       a character array.
+      @param    length      the length of the character array.
+      @return   sal_True if the strings are equal;
+                sal_False, otherwise.
+    */
+    sal_Bool equalsL( const sal_Char* value, sal_Int32 length ) const SAL_THROW(())
+    {
+        if ( pData->length != length )
+            return sal_False;
+
+        return rtl_str_reverseCompare_WithLength( pData->buffer, pData->length,
+                                                  value, length ) == 0;
+    }
+
+    /**
       Perform a ASCII lowercase comparison of two strings.
 
       The result is true if and only if second string

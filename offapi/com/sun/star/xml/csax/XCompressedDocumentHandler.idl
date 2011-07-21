@@ -32,25 +32,10 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/xml/sax/SAXException.idl>
+#include <com/sun/star/xml/csax/XMLAttribute.idl>
 
 
 module com { module sun { module star { module xml { module csax {
-
-/**
- * A struct to keep information of an element's attribute.
- */
-struct XMLAttribute
-{
-    /**
-     * the attribute name
-     */
-    string sName;
-
-    /**
-     * the attribute value
-     */
-    string sValue;
-};
 
 /**
  * A compressed XDocumentHandler interface.

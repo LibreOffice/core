@@ -75,6 +75,7 @@ IDLFILES=\
         TableSortFieldType.idl\
     XAutoFormattable.idl\
     XCell.idl\
+    XCell2.idl\
     XMergeableCell.idl\
     XMergeableCellRange.idl\
     XCellCursor.idl\

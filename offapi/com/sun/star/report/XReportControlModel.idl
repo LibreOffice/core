@@ -94,7 +94,6 @@ published interface XReportControlModel
     };
 };
 
-service ReportControlModel : XReportControlModel;
 //=============================================================================
 
 }; }; }; };

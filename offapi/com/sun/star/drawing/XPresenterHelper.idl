@@ -32,14 +32,9 @@
 #include <com/sun/star/rendering/XCanvas.idl>
 #include <com/sun/star/rendering/XSpriteCanvas.idl>
 #include <com/sun/star/awt/Rectangle.idl>
+#include <com/sun/star/drawing/CanvasFeature.idl>
 
 module com { module sun { module star { module drawing {
-
-constants CanvasFeature
-{
-    const short None = 0;
-    const short SpriteCanvas = 1;
-};
 
 /** This interface is a collection of functions that are necessary to
     implement larger parts of the presenter screen as extension.  The

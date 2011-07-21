@@ -41,6 +41,82 @@ extern "C" {
 void SAL_CALL sal_detail_initialize(int argc, char ** argv);
 void SAL_CALL sal_detail_deinitialize();
 
+#ifdef IOS
+
+#include <premac.h>
+#import <UIKit/UIKit.h>
+#include <postmac.h>
+
+#define SAL_MAIN_WITH_ARGS_IMPL \
+int SAL_CALL main(int argc, char ** argv) \
+{ \
+    sal_detail_initialize(argc, argv);   \
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; \
+    int retVal = UIApplicationMain (argc, argv, @"UIApplication", @"salAppDelegate"); \
+    [pool release]; \
+    sal_detail_deinitialize(); \
+    return retVal; \
+} \
+ \
+static int sal_main_with_args(int argc, char **argv); \
+ \
+static int \
+sal_main(void) \
+{ \
+    char *argv[] = { NULL }; \
+    return sal_main_with_args(0, argv); \
+}
+
+#define SAL_MAIN_IMPL \
+int SAL_CALL main(int argc, char ** argv) \
+{ \
+    sal_detail_initialize(argc, argv);   \
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; \
+    int retVal = UIApplicationMain (argc, argv, @"UIApplication", @"salAppDelegate"); \
+    [pool release]; \
+    sal_detail_deinitialize(); \
+    return retVal; \
+}
+
+#define SAL_MAIN_WITH_GUI_IMPL \
+int SAL_CALL main(int argc, char ** argv) \
+{ \
+    sal_detail_initialize(argc, argv);   \
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; \
+    int retVal = sal_main(); \
+    [pool release]; \
+    sal_detail_deinitialize(); \
+    return retVal; \
+}
+
+@interface salAppDelegate : NSObject <UIApplicationDelegate> {
+}
+@property (nonatomic, retain) UIWindow *window;
+@end
+
+static int sal_main(void);
+
+@implementation salAppDelegate
+
+@synthesize window=_window;
+
+- (BOOL)application: (UIApplication *) application didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
+{
+  UIWindow *uiw = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+  uiw.backgroundColor = [UIColor redColor];
+  self.window = uiw;
+  [uiw release];
+
+  sal_main();
+
+  [self.window makeKeyAndVisible];
+  return YES;
+}
+
+@end
+
+#else
+
 #define SAL_MAIN_WITH_ARGS_IMPL \
 int SAL_CALL main(int argc, char ** argv) \
 { \
@@ -60,6 +136,11 @@ int SAL_CALL main(int argc, char ** argv) \
     sal_detail_deinitialize(); \
     return ret; \
 }
+
+#define SAL_MAIN_WITH_GUI_IMPL SAL_MAIN_IMPL
+
+#endif
+
 
 /* Definition macros for CRT entries */
 
@@ -115,6 +196,19 @@ int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nsh
 #define SAL_IMPLEMENT_MAIN() \
     static int  SAL_CALL sal_main(void); \
     SAL_MAIN_IMPL \
+    SAL_WIN_WinMain \
+    static int SAL_CALL sal_main(void)
+
+/* Use SAL_IMPLEMENT_MAIN_WITH_GUI in programs that actually have a
+ * VCL GUI. The difference is meaningful only for iOS support, which
+ * of course is a highly experimental work in progress. So actually,
+ * don't bother, just let developers who care for iOS take care of it
+ * when/if necessary.
+ */
+
+#define SAL_IMPLEMENT_MAIN_WITH_GUI() \
+    static int  SAL_CALL sal_main(void); \
+    SAL_MAIN_WITH_GUI_IMPL \
     SAL_WIN_WinMain \
     static int SAL_CALL sal_main(void)
 

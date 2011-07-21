@@ -1,6 +1,5 @@
 UDK_3_0_0 {
     global:
-        component_getImplementationEnvironment;
         component_writeInfo;
         component_getFactory;
         test_ServiceManager;

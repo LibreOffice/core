@@ -32,14 +32,20 @@
 
 #include "sal/types.h"
 
-namespace CppUnit { class Protector; }
+#include <cppunit/Protector.h>
 
-namespace cppunittester {
+namespace cppunittester
+{
+    class LibreOfficeProtector : public CppUnit::Protector
+    {
+    public:
+        virtual bool protect(CppUnit::Functor const & functor) = 0;
+        using CppUnit::Protector::protect;
+    };
 
-// The type of CppUnit::Protector factory functions that can be plugged into
-// cppunittester:
-extern "C" typedef CppUnit::Protector * SAL_CALL ProtectorFactory();
-
+    // The type of CppUnit::Protector factory functions that can be plugged into
+    // cppunittester:
+    extern "C" typedef LibreOfficeProtector * SAL_CALL ProtectorFactory();
 }
 
 #endif

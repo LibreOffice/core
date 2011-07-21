@@ -29,6 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
+#ifdef IOS
+#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_tcwf
+#endif
+
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -43,7 +47,7 @@ using ::rtl::OUStringToOString;
 using ::rtl::OString;
 
 //Use to silence OSL_ warnings for a deliberate error
-extern "C" void SAL_CALL suppressOslDebugMessage( const sal_Char *, sal_Int32, const sal_Char * )
+extern "C" void SAL_CALL suppressOslDebugMessage2( const sal_Char *, sal_Int32, const sal_Char * )
 {
 }
 
@@ -71,7 +75,7 @@ public:
         //deliberate errors, suppress run-time warning for operations on
         //un-opened File
         pfunc_osl_printDetailedDebugMessage pOldDebugMessageFunc =
-            osl_setDetailedDebugMessageFunc( &suppressOslDebugMessage );
+            osl_setDetailedDebugMessageFunc( &suppressOslDebugMessage2 );
 
         char buffer[1];
         sal_uInt64 written = 0;

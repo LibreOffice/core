@@ -37,15 +37,15 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(CROSS_COMPILING)"!="YES"
+.IF "$(OS)" == "IOS"
+CFLAGSCXX += -DCPPUNIT_PLUGIN_EXPORTED_NAME=cppunitTest_$(TARGET)
+.ENDIF
 
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:joblist by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/rtl_cipher.obj
 
@@ -58,14 +58,9 @@ SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
 # DEF2EXPORTFILE= export.exp
 SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
-# auto generated Target:joblist
-# END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
-
-.ENDIF
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 

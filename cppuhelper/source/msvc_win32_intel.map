@@ -125,6 +125,7 @@ GetVersionInfo;
 ??0OWeakObject@cppu@@QAE@XZ;
 ?installTypeDescriptionManager@cppu@@YAEABV?$Reference@VXHierarchicalNameAccess@container@star@sun@com@@@uno@star@sun@com@@@Z;
 ?loadSharedLibComponentFactory@cppu@@YA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@00ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@3456@ABV?$Reference@VXRegistryKey@registry@star@sun@com@@@3456@@Z;
+?loadSharedLibComponentFactory@cppu@@YA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@00ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@3456@ABV?$Reference@VXRegistryKey@registry@star@sun@com@@@3456@0@Z;
 ?createComponentContext@cppu@@YA?AV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@PBUContextEntry_Init@1@JABV23456@@Z;
 ?bootstrap_InitialComponentContext@cppu@@YA?AV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXSimpleRegistry@registry@star@sun@com@@@3456@ABVOUString@rtl@@@Z;
 ?createNestedRegistry@cppu@@YA?AV?$Reference@VXSimpleRegistry@registry@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@@Z;

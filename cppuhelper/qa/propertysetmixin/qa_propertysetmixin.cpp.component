@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="mixin"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="test.cppuhelper.propertysetmixin.comp.CppSupplier">
     <service name="test.cppuhelper.propertysetmixin.CppSupplier"/>

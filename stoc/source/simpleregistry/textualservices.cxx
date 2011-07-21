@@ -63,6 +63,7 @@ namespace css = com::sun::star;
 struct Implementation {
     rtl::OUString uri;
     rtl::OUString loader;
+    rtl::OUString prefix;
     std::vector< rtl::OUString > services;
     std::vector< rtl::OUString > singletons;
 };
@@ -103,6 +104,7 @@ private:
     rtl::Reference< Data > data_;
     rtl::OUString attrUri_;
     rtl::OUString attrLoader_;
+    rtl::OUString attrPrefix_;
     rtl::OUString attrImplementation_;
 };
 
@@ -238,6 +240,7 @@ Parser::Parser(rtl::OUString const & uri, rtl::Reference< Data > const & data):
 void Parser::handleComponent() {
     attrUri_ = rtl::OUString();
     attrLoader_ = rtl::OUString();
+    attrPrefix_ = rtl::OUString();
     xmlreader::Span name;
     int nsId;
     while (reader_.nextAttribute(&nsId, &name)) {
@@ -282,8 +285,29 @@ void Parser::handleComponent() {
                              ": <component> has empty \"loader\" attribute"))),
                     css::uno::Reference< css::uno::XInterface >());
             }
+        } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
+                   name.equals(RTL_CONSTASCII_STRINGPARAM("prefix")))
+        {
+            if (attrPrefix_.getLength() != 0) {
+                throw css::registry::InvalidRegistryException(
+                    (reader_.getUrl() +
+                     rtl::OUString(
+                         RTL_CONSTASCII_USTRINGPARAM(
+                             ": <component> has multiple \"prefix\""
+                             " attributes"))),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            attrPrefix_ = reader_.getAttributeValue(false).convertFromUtf8();
+            if (attrPrefix_.getLength() == 0) {
+                throw css::registry::InvalidRegistryException(
+                    (reader_.getUrl() +
+                     rtl::OUString(
+                         RTL_CONSTASCII_USTRINGPARAM(
+                             ": <component> has empty \"prefix\" attribute"))),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
         } else {
-          OSL_FAIL ("unexpected component attribute, expected 'uri' or 'loader'");
+          OSL_FAIL ("unexpected component attribute, expected 'uri' or 'loader' or 'prefix'");
         }
     }
     if (attrUri_.getLength() == 0) {
@@ -330,6 +354,7 @@ void Parser::handleImplementation() {
     }
     data_->implementations[attrImplementation_].uri = attrUri_;
     data_->implementations[attrImplementation_].loader = attrLoader_;
+    data_->implementations[attrImplementation_].prefix = attrPrefix_;
 }
 
 void Parser::handleService() {
@@ -419,6 +444,7 @@ private:
             UNO
               LOCATION utf-8
               ACTIVATOR utf-8
+              PREFIX utf-8
               SERVICES
                 <service>
                 ...
@@ -436,7 +462,7 @@ private:
     */
     enum State {
         STATE_ROOT, STATE_IMPLEMENTATIONS, STATE_IMPLEMENTATION, STATE_UNO,
-        STATE_LOCATION, STATE_ACTIVATOR, STATE_IMPLEMENTATION_SERVICES,
+        STATE_LOCATION, STATE_ACTIVATOR, STATE_PREFIX, STATE_IMPLEMENTATION_SERVICES,
         STATE_IMPLEMENTATION_SERVICE, STATE_IMPLEMENTATION_SINGLETONS,
         STATE_IMPLEMENTATION_SINGLETON, STATE_SERVICES, STATE_SERVICE,
         STATE_SINGLETONS, STATE_SINGLETON, STATE_REGISTEREDBY };
@@ -668,6 +694,8 @@ rtl::OUString Key::getAsciiValue() throw (
         return data_->implementations[path_[1]].uri;
     case STATE_ACTIVATOR:
         return data_->implementations[path_[1]].loader;
+    case STATE_PREFIX:
+        return data_->implementations[path_[1]].prefix;
     default:
         throw css::registry::InvalidValueException(
             rtl::OUString(
@@ -948,7 +976,7 @@ bool Key::find(
     if (path != 0) {
         *path = p;
     }
-    std::size_t const MAX_TRANSITIONS = 4;
+    std::size_t const MAX_TRANSITIONS = 5;
     struct StateInfo {
         css::registry::RegistryValueType type;
         std::size_t count;
@@ -968,14 +996,17 @@ bool Key::find(
         { css::registry::RegistryValueType_NOT_DEFINED, 1,
           { { "UNO", STATE_UNO } } },
         // STATE_UNO:
-        { css::registry::RegistryValueType_NOT_DEFINED, 4,
+        { css::registry::RegistryValueType_NOT_DEFINED, 5,
           { { "LOCATION", STATE_LOCATION },
             { "ACTIVATOR", STATE_ACTIVATOR },
+            { "PREFIX", STATE_PREFIX },
             { "SERVICES", STATE_IMPLEMENTATION_SERVICES },
             { "SINGLETONS", STATE_IMPLEMENTATION_SINGLETONS } } },
         // STATE_LOCATION:
         { css::registry::RegistryValueType_ASCII, 0, {} },
         // STATE_ACTIVATOR:
+        { css::registry::RegistryValueType_ASCII, 0, {} },
+        // STATE_PREFIX:
         { css::registry::RegistryValueType_ASCII, 0, {} },
         // STATE_IMPLEMENTATION_SERVICES:
         { css::registry::RegistryValueType_NOT_DEFINED, 1,
@@ -1084,15 +1115,17 @@ css::uno::Sequence< rtl::OUString > Key::getChildren() {
         }
     case STATE_UNO:
         {
-            css::uno::Sequence< rtl::OUString > seq(4);
+            css::uno::Sequence< rtl::OUString > seq(5);
             seq[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOCATION"));
             seq[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ACTIVATOR"));
-            seq[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SERVICES"));
-            seq[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SINGLETONS"));
+            seq[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PREFIX"));
+            seq[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SERVICES"));
+            seq[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SINGLETONS"));
             return seq;
         }
     case STATE_LOCATION:
     case STATE_ACTIVATOR:
+    case STATE_PREFIX:
     case STATE_IMPLEMENTATION_SERVICE:
     case STATE_IMPLEMENTATION_SINGLETON:
     case STATE_SERVICE:

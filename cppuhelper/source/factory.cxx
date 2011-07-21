@@ -31,9 +31,11 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/shlib.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/unload.h>
@@ -832,6 +834,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     OUString aActivatorUrl;
     OUString aActivatorName;
     OUString aLocation;
+    OUString aPrefix;
 
     Reference<XRegistryKey > xActivatorKey = xImplementationKey->openKey(
         OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/ACTIVATOR") ) );
@@ -847,6 +850,15 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
             OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/LOCATION") ) );
         if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
             aLocation = xLocationKey->getAsciiValue();
+
+        Reference<XRegistryKey > xPrefixKey = xImplementationKey->openKey(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/PREFIX") ) );
+        if( xPrefixKey.is() && xPrefixKey->getValueType() == RegistryValueType_ASCII )
+        {
+            aPrefix = xPrefixKey->getAsciiValue();
+            if( aPrefix.getLength() != 0 )
+                aPrefix = aPrefix + OUSTR("_");
+        }
     }
     else
     {
@@ -881,6 +893,17 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
         Reference<XInterface > x = xSMgr->createInstance( aActivatorName );
         Reference<XImplementationLoader > xLoader( x, UNO_QUERY );
         Reference<XInterface > xMF;
+        if( aActivatorName == OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary") ) )
+        {
+            try
+            {
+                return loadSharedLibComponentFactory( bootstrap_expandUri( aLocation ), OUString(),  aImplementationName, xSMgr, xImplementationKey, aPrefix );
+            }
+            catch ( IllegalArgumentException & e )
+            {
+                throw RuntimeException( e.Message, e.Context );
+            }
+        }
         if (xLoader.is())
         {
             xFactory = xLoader->activate( aImplementationName, aActivatorUrl, aLocation, xImplementationKey );

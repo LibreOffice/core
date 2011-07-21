@@ -33,9 +33,11 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(CROSS_COMPILING)"!="YES"
-
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
+.IF "$(OS)" == "IOS"
+CFLAGSCXX += -x objective-c++ -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
+.ENDIF
 
 OBJFILES = $(APP1OBJS)
 
@@ -43,7 +45,5 @@ APP1OBJS = $(OBJ)/cppunittester.obj
 APP1RPATH = NONE
 APP1STDLIBS = $(CPPUNITLIB) $(SALLIB)
 APP1TARGET = cppunittester
-
-.ENDIF
 
 .INCLUDE: target.mk

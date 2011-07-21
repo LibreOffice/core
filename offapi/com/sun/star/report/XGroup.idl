@@ -132,7 +132,6 @@ published interface XGroup
     [attribute,bound] boolean ResetPageNumber;
 };
 
-service Group : XGroup;
 //=============================================================================
 
 }; }; }; };

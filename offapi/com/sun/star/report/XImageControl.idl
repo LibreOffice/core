@@ -77,7 +77,6 @@ published interface XImageControl
     [attribute,bound] boolean PreserveIRI;
 };
 
-published service ImageControl : XImageControl;
 //=============================================================================
 
 }; }; }; };

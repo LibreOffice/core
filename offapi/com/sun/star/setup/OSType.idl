@@ -43,6 +43,9 @@ published enum OSType
     WIN,
 
     // DocMerge: empty anyway
+    OS2,
+
+    // DocMerge: empty anyway
     MAC,
 
     // DocMerge: empty anyway

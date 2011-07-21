@@ -29,6 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
+#ifdef IOS
+#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_osl_Thread
+#endif
+
 #ifdef WNT
 #define NOMINMAX
 #include <windows.h>
@@ -1097,9 +1101,11 @@ namespace osl_Thread
 
                 case osl_Thread_PriorityAboveNormal:
                     sPrioStr = "AboveNormal";
+                    break;
 
                 case osl_Thread_PriorityNormal:
                     sPrioStr = "Normal";
+                    break;
 
                 case osl_Thread_PriorityBelowNormal:
                     sPrioStr = "BelowNormal";
@@ -2097,9 +2103,6 @@ namespace osl_ThreadData
                     "ThreadData setData: ",
                     cData1 == 'a' && cData2 == 'b' && aChar == 'o'
                     );
-
-                delete [] pc2;
-                delete [] pc;
             }
 
         CPPUNIT_TEST_SUITE(setData);
@@ -2147,8 +2150,6 @@ namespace osl_ThreadData
                     "ThreadData setData: ",
                     cData1 == 'c' && cData2 == 'd' && aChar == 'i'
                     );
-
-                delete [] pc;
             }
 
         // setData then change the value in the address data pointer points,

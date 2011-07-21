@@ -1,4 +1,4 @@
-cu	cppu	:	sal salhelper offuh BOOST:boost NULL
+cu	cppu	:	sal salhelper offapi BOOST:boost NULL
 cu	cppu							usr1	-	all	cu_mkout NULL
 cu	cppu\inc						nmake	-	all	cu_inc NULL
 cu	cppu\source\uno					nmake	-	all	cu_uno cu_inc NULL

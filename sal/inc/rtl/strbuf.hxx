@@ -54,7 +54,7 @@ namespace rtl
     is compiled to the equivalent of:
     <p><blockquote><pre>
         x = new OStringBuffer().append("a").append(4).append("c")
-                              .toString()
+                              .makeStringAndClear()
     </pre></blockquote><p>
     The principal operations on a <code>OStringBuffer</code> are the
     <code>append</code> and <code>insert</code> methods, which are
@@ -133,6 +133,25 @@ public:
         , nCapacity( value.getLength() + 16 )
     {
         rtl_stringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
+    }
+
+    /**
+        Constructs a string buffer so that it represents the same
+        sequence of characters as the string argument.
+
+        The initial
+        capacity of the string buffer is <code>16</code> plus length
+
+        @param    value       a character array.
+        @param    length      the number of character which should be copied.
+                              The character array length must be greater or
+                              equal than this value.
+     */
+    OStringBuffer(const sal_Char * value, sal_Int32 length)
+        : pData(NULL)
+        , nCapacity( length + 16 )
+    {
+        rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
     }
 
     /** Assign to this a copy of value.
@@ -651,6 +670,25 @@ public:
         sal_Char sz[RTL_STR_MAX_VALUEOFDOUBLE];
         return insert( offset, sz, rtl_str_valueOfDouble( sz, d ) );
     }
+
+    /**
+        Removes the characters in a substring of this sequence.
+
+        The substring begins at the specified <code>start</code> and
+        is <code>len</code> characters long.
+
+        start must be >= 0 && <= getLength() && <= end
+
+        @param  start       The beginning index, inclusive
+        @param  len         The substring length
+        @return this string buffer.
+     */
+    OStringBuffer & remove( sal_Int32 start, sal_Int32 len )
+    {
+        rtl_stringbuffer_remove( &pData, start, len );
+        return *this;
+    }
+
 private:
     /**
         A pointer to the data structur which contains the data.

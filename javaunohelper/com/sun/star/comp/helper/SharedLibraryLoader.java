@@ -39,7 +39,7 @@ import com.sun.star.registry.XRegistryKey;
  * service.
  * <p>
  * @see         com.sun.star.loader.SharedLibrary
- * @see         com.sun.star.comp.servicemanager.ServiceManager
+ * @see         "com.sun.star.comp.servicemanager.ServiceManager"
  * @see         com.sun.star.lang.ServiceManager
  */
 public class SharedLibraryLoader {

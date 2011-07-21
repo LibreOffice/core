@@ -703,11 +703,6 @@ published interface XCanvas : ::com::sun::star::uno::XInterface
     XGraphicDevice          getDevice();
 };
 
-//=============================================================================
-
-/// Service providing an <type>XCanvas</type> interface
-service Canvas: XCanvas;
-
 }; }; }; };
 
 #endif

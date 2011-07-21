@@ -37,12 +37,6 @@ INCPRE=$(MISC)
 
 # --- Settings -----------------------------------------------------
 
-
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
-.ENDIF
-
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------

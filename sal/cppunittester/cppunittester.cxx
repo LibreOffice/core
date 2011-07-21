@@ -37,7 +37,6 @@
 #include <iostream>
 #include <limits>
 #include <string>
-
 #include "cppunittester/protectorfactory.hxx"
 #include "osl/module.h"
 #include "osl/module.hxx"
@@ -57,6 +56,8 @@
 #include "cppunit/extensions/TestFactoryRegistry.h"
 #include "cppunit/plugin/PlugInManager.h"
 #include "cppunit/portability/Stream.h"
+
+#include "boost/noncopyable.hpp"
 
 namespace {
 
@@ -84,6 +85,39 @@ std::string convertLazy(rtl::OUString const & s16) {
          : static_cast< std::string::size_type >(s8.getLength())));
 }
 
+//Allow the whole uniting testing framework to be run inside a "Protector"
+//which knows about uno exceptions, so it can print the content of the
+//exception before falling over and dying
+class CPPUNIT_API ProtectedFixtureFunctor : public CppUnit::Functor, private boost::noncopyable
+{
+private:
+    const std::string &testlib;
+    const std::string &args;
+    CppUnit::TestResult &result;
+public:
+    ProtectedFixtureFunctor(const std::string& testlib_, const std::string &args_, CppUnit::TestResult &result_)
+        : testlib(testlib_)
+        , args(args_)
+        , result(result_)
+    {
+    }
+    bool run() const
+    {
+        CppUnit::PlugInManager manager;
+        manager.load(testlib, args);
+        CppUnit::TestRunner runner;
+        runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+        CppUnit::TestResultCollector collector;
+        result.addListener(&collector);
+        runner.run(result);
+        CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
+        return collector.wasSuccessful();
+    }
+    virtual bool operator()() const
+    {
+        return run();
+    }
+};
 }
 
 SAL_IMPLEMENT_MAIN() {
@@ -95,12 +129,27 @@ SAL_IMPLEMENT_MAIN() {
 #endif
 
     CppUnit::TestResult result;
+    cppunittester::LibreOfficeProtector *throw_protector = 0;
+    std::string args;
+    std::string testlib;
     sal_uInt32 index = 0;
-    for (; index < rtl_getAppCommandArgCount(); index += 3) {
-        if (!getArgument(index).equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("--protector")))
+    while (index < rtl_getAppCommandArgCount())
+    {
+        rtl::OUString arg = getArgument(index);
+        if (!arg.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("--protector")))
         {
-            break;
+            if (testlib.empty())
+            {
+                testlib = rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
+                args += testlib;
+            }
+            else
+            {
+                args += ' ';
+                args += rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
+            }
+            ++index;
+            continue;
         }
         if (rtl_getAppCommandArgCount() - index < 3) {
             usageFailure();
@@ -109,45 +158,29 @@ SAL_IMPLEMENT_MAIN() {
         rtl::OUString sym(getArgument(index + 2));
         oslGenericFunction fn = (new osl::Module(lib, SAL_LOADMODULE_GLOBAL))
             ->getFunctionSymbol(sym);
-        CppUnit::Protector * p = fn == 0
+        throw_protector = fn == 0
             ? 0
             : (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();
-        if (p == 0) {
+        if (throw_protector == 0) {
             std::cerr
                 << "Failure instantiating protector \"" << convertLazy(lib)
                 << "\", \"" << convertLazy(sym) << '"' << std::endl;
             std::exit(EXIT_FAILURE);
         }
-        result.pushProtector(p);
-    }
-    if (rtl_getAppCommandArgCount() - index < 1) {
-        usageFailure();
+        result.pushProtector(throw_protector);
+        index+=3;
     }
 
-    std::string testlib;
-    {
-        rtl::OUString path;
-        rtl_getAppCommandArg(index, &path.pData);
-        testlib = rtl::OUStringToOString(path, osl_getThreadTextEncoding()).getStr();
-    }
-    std::string args = testlib;
-    for (sal_uInt32 i = index + 1; i < rtl_getAppCommandArgCount(); ++i)
-    {
-        rtl::OUString arg;
-        rtl_getAppCommandArg(i, &arg.pData);
-        args += ' ';
-        args += rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
-    }
+    bool ok = false;
+    ProtectedFixtureFunctor tests(testlib, args, result);
+    //if the unoprotector was given on the command line, use it to catch
+    //and report the error message of exceptions
+    if (throw_protector)
+        ok = throw_protector->protect(tests);
+    else
+        ok = tests.run();
 
-    CppUnit::PlugInManager manager;
-    manager.load(testlib, args);
-    CppUnit::TestRunner runner;
-    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    CppUnit::TestResultCollector collector;
-    result.addListener(&collector);
-    runner.run(result);
-    CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
-    return collector.wasSuccessful() ? EXIT_SUCCESS : EXIT_FAILURE;
+    return ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

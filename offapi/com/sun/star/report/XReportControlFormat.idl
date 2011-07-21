@@ -606,7 +606,6 @@ published interface XReportControlFormat
     };
 };
 
-service ReportControlFormat : XReportControlFormat;
 //=============================================================================
 
 }; }; }; };

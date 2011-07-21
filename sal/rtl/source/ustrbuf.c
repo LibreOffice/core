@@ -206,5 +206,34 @@ void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
     }
 }
 
+/*************************************************************************
+ *  rtl_uStringbuffer_remove
+ */
+void SAL_CALL rtl_uStringbuffer_remove( rtl_uString ** This,
+                                       sal_Int32 start,
+                                       sal_Int32 len )
+{
+    sal_Int32 nTailLen;
+    sal_Unicode * pBuf;
+
+    if (len > (*This)->length - start)
+        len = (*This)->length - start;
+
+    //remove nothing
+    if (!len)
+        return;
+
+    pBuf = (*This)->buffer;
+    nTailLen = (*This)->length - ( start + len );
+
+    if (nTailLen)
+    {
+        /* move the tail */
+        rtl_moveMemory(pBuf + start, pBuf + start + len, nTailLen * sizeof(sal_Unicode));
+    }
+
+    (*This)->length-=len;
+    pBuf[ (*This)->length ] = 0;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

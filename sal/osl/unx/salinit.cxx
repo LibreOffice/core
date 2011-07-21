@@ -30,7 +30,6 @@
 #include "sal/config.h"
 
 #include "osl/process.h"
-#include "sal/main.h"
 #include "sal/types.h"
 
 extern "C" {

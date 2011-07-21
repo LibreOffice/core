@@ -89,13 +89,15 @@ const sal_Char pBuffer_Blank[]  = "";
 #   include <errno.h>
 #   include <fcntl.h>
 #   include <sys/stat.h>
-#   if !defined(MACOSX) && !defined(__OpenBSD__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined (DRAGONFLY)
+#   if !defined(MACOSX) && !defined(IOS) && !defined(__OpenBSD__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined (DRAGONFLY)
 #       include <sys/statfs.h>
 #   else
 #       include <sys/param.h>
 #       include <sys/mount.h>
 #   endif
-#   include <sys/statvfs.h>
+#   if !defined(ANDROID)
+#        include <sys/statvfs.h>
+#   endif
 #   include <sys/types.h>
 #   define TEST_PLATFORM        ""
 #   define TEST_PLATFORM_ROOT   "/"

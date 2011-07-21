@@ -598,12 +598,17 @@ UDK_3.10 { # OOo 3.2
         rtl_math_acosh;
 } UDK_3.9;
 
-
-UDK_3.11 { # OOo 3.4
+UDK_3.11 { # symbols available in >= OOo/LibO 3.4
     global:
         osl_setEnvironment;
         osl_clearEnvironment;
         osl_setThreadName;
+} UDK_3.10;
+
+LIBO_UDK_3.5 { # symbols available in >= LibO 3.5
+    global:
+        rtl_stringbuffer_remove;
+        rtl_uStringbuffer_remove;
 } UDK_3.10;
 
 PRIVATE_1.0 {

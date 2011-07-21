@@ -35,6 +35,7 @@
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
 #include <rtl/textenc.h>
+#include <rtl/alloc.h>
 #include <sal/macros.h>
 
 #if defined LINUX
@@ -975,17 +976,31 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
     return Priority;
 }
 
+typedef struct _wrapper_pthread_key
+{
+    pthread_key_t m_key;
+    oslThreadKeyCallbackFunction pfnCallback;
+} wrapper_pthread_key;
+
 /*****************************************************************************/
 /* osl_createThreadKey */
 /*****************************************************************************/
 oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallback )
 {
-    pthread_key_t key;
+    wrapper_pthread_key *pKey = (wrapper_pthread_key*)rtl_allocateMemory(sizeof(wrapper_pthread_key));
 
-    if (pthread_key_create(&key, pCallback) != 0)
-        key = 0;
+    if (pKey)
+    {
+        pKey->pfnCallback = pCallback;
 
-    return ((oslThreadKey)key);
+        if (pthread_key_create(&(pKey->m_key), pKey->pfnCallback) != 0)
+        {
+            rtl_freeMemory(pKey);
+            pKey = 0;
+        }
+    }
+
+    return ((oslThreadKey)pKey);
 }
 
 /*****************************************************************************/
@@ -993,7 +1008,12 @@ oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallbac
 /*****************************************************************************/
 void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
 {
-    pthread_key_delete((pthread_key_t)Key);
+    wrapper_pthread_key *pKey = (wrapper_pthread_key*)Key;
+    if (pKey)
+    {
+        pthread_key_delete(pKey->m_key);
+        rtl_freeMemory(pKey);
+    }
 }
 
 /*****************************************************************************/
@@ -1001,7 +1021,8 @@ void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
 /*****************************************************************************/
 void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
 {
-    return (pthread_getspecific((pthread_key_t)Key));
+    wrapper_pthread_key *pKey = (wrapper_pthread_key*)Key;
+    return pKey ? pthread_getspecific(pKey->m_key) : NULL;
 }
 
 /*****************************************************************************/
@@ -1009,7 +1030,21 @@ void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 {
-    return (pthread_setspecific((pthread_key_t)Key, pData) == 0);
+    sal_Bool bRet;
+    void *pOldData = NULL;
+    wrapper_pthread_key *pKey = (wrapper_pthread_key*)Key;
+    if (!pKey)
+        return sal_False;
+
+    if (pKey->pfnCallback)
+        pOldData = pthread_getspecific(pKey->m_key);
+
+    bRet = (pthread_setspecific(pKey->m_key, pData) == 0);
+
+    if (bRet && pKey->pfnCallback && pOldData)
+        pKey->pfnCallback(pOldData);
+
+    return bRet;
 }
 
 /*****************************************************************************/

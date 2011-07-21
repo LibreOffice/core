@@ -53,7 +53,7 @@ namespace rtl
     is compiled to the equivalent of:
     <p><blockquote><pre>
         x = new OUStringBuffer().append("a").append(4).append("c")
-                              .toString()
+                              .makeStringAndClear()
     </pre></blockquote><p>
     The principal operations on a <code>OUStringBuffer</code> are the
     <code>append</code> and <code>insert</code> methods, which are
@@ -95,7 +95,7 @@ public:
         Allocates a new string buffer that contains the same sequence of
         characters as the string buffer argument.
 
-        @param   value   a <code>OStringBuffer</code>.
+        @param   value   a <code>OUStringBuffer</code>.
      */
     OUStringBuffer( const OUStringBuffer & value )
         : pData(NULL)
@@ -279,7 +279,6 @@ public:
         of this OUStringBuffer.
      */
     const OUString toString() const { return OUString(pData->buffer); }
-
 
     /**
         The character at the specified index of this string buffer is set
@@ -736,6 +735,24 @@ public:
      */
     OUStringBuffer & insertUtf32(sal_Int32 offset, sal_uInt32 c) {
         rtl_uStringbuffer_insertUtf32(&pData, &nCapacity, offset, c);
+        return *this;
+    }
+
+    /**
+        Removes the characters in a substring of this sequence.
+
+        The substring begins at the specified <code>start</code> and
+        is <code>len</code> characters long.
+
+        start must be >= 0 && <= This->length
+
+        @param  start       The beginning index, inclusive
+        @param  len         The substring length
+        @return this string buffer.
+     */
+    OUStringBuffer & remove( sal_Int32 start, sal_Int32 len )
+    {
+        rtl_uStringbuffer_remove( &pData, start, len );
         return *this;
     }
 

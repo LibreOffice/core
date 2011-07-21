@@ -163,7 +163,7 @@ public class Bootstrap {
 
     /** Bootstraps the initial component context from a native UNO installation.
 
-        @see cppuhelper/defaultBootstrap_InitialComponentContext()
+        @see "cppuhelper/defaultBootstrap_InitialComponentContext()"
     */
     static public final XComponentContext defaultBootstrap_InitialComponentContext()
         throws Exception
@@ -177,7 +177,7 @@ public class Bootstrap {
         @param bootstrap_parameters
                bootstrap parameters (maybe null)
 
-        @see cppuhelper/defaultBootstrap_InitialComponentContext()
+        @see "cppuhelper/defaultBootstrap_InitialComponentContext()"
     */
     static public final XComponentContext defaultBootstrap_InitialComponentContext(
         String ini_file, Hashtable bootstrap_parameters )

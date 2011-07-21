@@ -36,13 +36,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(CROSS_COMPILING)"!="YES"
+.IF "$(OS)" == "IOS"
+CFLAGSCXX += -DCPPUNIT_PLUGIN_EXPORTED_NAME=cppunitTest_$(TARGET)
+.ENDIF
 
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:Security by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/osl_Security.obj
 
@@ -57,10 +57,8 @@ SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
-# auto generated Target:Security
-# END ------------------------------------------------------------------
 
-.ENDIF
+SLOFILES = $(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 

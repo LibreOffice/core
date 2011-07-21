@@ -29,6 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
+#ifdef IOS
+#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_qa_osl_File
+#endif
+
 //------------------------------------------------------------------------
 // include files
 //------------------------------------------------------------------------
@@ -2176,7 +2180,7 @@ namespace osl_VolumeInfo
         }
 
 
-#if ( defined UNX )
+#if defined(UNX) && !defined(ANDROID)
          void getMaxNameLength_002( )
         {
              struct statvfs aStatFS;
@@ -5819,7 +5823,7 @@ namespace osl_Directory
             nError1 = ::osl::Directory::getVolumeInfo( aTmpName3, aVolumeInfo );
 
 // LLA: in Windows, it reply no error, it did not pass in (W32).
-#ifdef UNX
+#if defined(UNX) && !defined(IOS)
             CPPUNIT_ASSERT_MESSAGE( "test for getVolumeInfo function: non-existence test. ",
                                     ( osl::FileBase::E_NOENT == nError1 ) );
 #endif
@@ -6051,7 +6055,7 @@ namespace osl_Directory
             if (tmp_x.lastIndexOf('/') != (tmp_x.getLength() - 1))
                 tmp_x += rtl::OString('/');
 
-#ifndef WNT
+#if !defined(WNT) && !defined(ANDROID)
             // FIXME would be nice to create unique dir even on Windows
             tmp_x += rtl::OString("XXXXXX");
             char *out = mkdtemp(const_cast<char*>(tmp_x.getStr()));

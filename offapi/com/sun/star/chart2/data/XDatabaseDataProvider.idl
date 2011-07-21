@@ -208,10 +208,6 @@ interface XDatabaseDataProvider
     [attribute,bound] string DataSourceName;
 };
 
-service DatabaseDataProvider : XDatabaseDataProvider
-{
-    createWithConnection([in] com::sun::star::sdbc::XConnection connection);
-};
 //=============================================================================
 
  }; }; }; };  };

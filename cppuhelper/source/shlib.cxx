@@ -270,18 +270,16 @@ static OUString makeComponentPath(
 }
 
 //==============================================================================
-static OUString getLibEnv(OUString         const & aModulePath,
-                          oslModule                lib,
+static OUString getLibEnv(oslModule                lib,
                           uno::Environment       * pEnv,
                           OUString               * pSourceEnv_name,
                           uno::Environment const & cTargetEnv,
-                          OUString         const & cImplName = OUString())
+                          OUString         const & cImplName = OUString(),
+                          OUString         const & rPrefix = OUString())
 {
-    OUString aExcMsg;
-
     sal_Char const * pEnvTypeName = NULL;
 
-    OUString aGetEnvNameExt = OUSTR(COMPONENT_GETENVEXT);
+    OUString aGetEnvNameExt = rPrefix + OUSTR(COMPONENT_GETENVEXT);
     component_getImplementationEnvironmentExtFunc pGetImplEnvExt =
         (component_getImplementationEnvironmentExtFunc)osl_getFunctionSymbol(lib, aGetEnvNameExt.pData);
 
@@ -292,20 +290,15 @@ static OUString getLibEnv(OUString         const & aModulePath,
     }
     else
     {
-        OUString aGetEnvName = OUSTR(COMPONENT_GETENV);
+        OUString aGetEnvName = rPrefix + OUSTR(COMPONENT_GETENV);
         component_getImplementationEnvironmentFunc pGetImplEnv =
             (component_getImplementationEnvironmentFunc)osl_getFunctionSymbol(
                 lib, aGetEnvName.pData );
         if (pGetImplEnv)
             pGetImplEnv(&pEnvTypeName, (uno_Environment **)pEnv);
 
-        else
-        {
-            aExcMsg = aModulePath;
-            aExcMsg += OUSTR(": cannot get symbol: ");
-            aExcMsg += aGetEnvName;
-            aExcMsg += OUSTR("- nor: ");
-        }
+        else // this symbol used to be mandatory, but is no longer
+            pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
     if (!pEnv->is() && pEnvTypeName)
@@ -327,10 +320,8 @@ static OUString getLibEnv(OUString         const & aModulePath,
                 }
             } while( nIndex != -1 );
         }
-
     }
-
-    return aExcMsg;
+    return OUString();
 }
 
 extern "C" {static void s_getFactory(va_list * pParam)
@@ -344,11 +335,23 @@ extern "C" {static void s_getFactory(va_list * pParam)
     *ppSSF = pSym(pImplName->getStr(), pSMgr, pKey);
 }}
 
+/* For backwards compatibility */
 Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString const & rLibName, OUString const & rPath,
     OUString const & rImplName,
     Reference< lang::XMultiServiceFactory > const & xMgr,
     Reference< registry::XRegistryKey > const & xKey )
+    SAL_THROW( (loader::CannotActivateFactoryException) )
+{
+    return loadSharedLibComponentFactory( rLibName, rPath, rImplName, xMgr, xKey, rtl::OUString() );
+}
+
+Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
+    OUString const & rLibName, OUString const & rPath,
+    OUString const & rImplName,
+    Reference< lang::XMultiServiceFactory > const & xMgr,
+    Reference< registry::XRegistryKey > const & xKey,
+    OUString const & rPrefix )
     SAL_THROW( (loader::CannotActivateFactoryException) )
 {
     OUString aModulePath( makeComponentPath( rLibName, rPath ) );
@@ -376,10 +379,10 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
     OUString aEnvTypeName;
 
-    OUString aExcMsg = getLibEnv(aModulePath, lib, &env, &aEnvTypeName, currentEnv, rImplName);
+    OUString aExcMsg = getLibEnv(lib, &env, &aEnvTypeName, currentEnv, rImplName, rPrefix);
     if (!aExcMsg.getLength())
     {
-        OUString aGetFactoryName = OUSTR(COMPONENT_GETFACTORY);
+        OUString aGetFactoryName = rPrefix + OUSTR(COMPONENT_GETFACTORY);
         oslGenericFunction pSym = osl_getFunctionSymbol( lib, aGetFactoryName.pData );
         if (pSym != 0)
         {
@@ -522,7 +525,7 @@ void SAL_CALL writeSharedLibComponentInfo(
     uno::Environment env;
 
     OUString aEnvTypeName;
-    OUString aExcMsg = getLibEnv(aModulePath, lib, &env, &aEnvTypeName, currentEnv);
+    OUString aExcMsg = getLibEnv(lib, &env, &aEnvTypeName, currentEnv);
     if (!aExcMsg.getLength())
     {
         OUString aWriteInfoName = OUSTR(COMPONENT_WRITEINFO);

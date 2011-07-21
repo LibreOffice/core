@@ -35,51 +35,11 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.idl>
+#include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.idl>
+#include <com/sun/star/xml/crypto/sax/ElementMarkPriority.idl>
+#include <com/sun/star/xml/crypto/sax/ElementMarkType.idl>
 
 module com { module sun { module star { module xml { module crypto { module sax {
-
-/**
- * Represents the undefined security id
- */
-constants ConstOfSecurityId
-{
-    const long UNDEFINEDSECURITYID = -1;
-};
-
-/**
- * Defines priority for the element mark's notification.
- * <p>
- * The PRI_MINIMUM priority is a value less than any practical
- * priority value, it is used when compare between different
- * priority values.
- * <p>
- * The PRI_AFTERMODIFY priority represents the notification will be
- * sent after any internal modification has finished.
- * <p>
- * The PRI_BEFOREMODIFY priority represents the notification will be
- * sent before any internal modification happens.
- * <p>
- * So an element mark with PRI_BEFOREMODIFY will be handled first,
- * and one with PRI_AFTERMODIFY will be handled at last.
- */
-enum ElementMarkPriority
-{
-    MINIMUM = 1,
-    AFTERMODIFY,
-    BEFOREMODIFY
-};
-
-/**
- * Defines types of element mark.
- * <p>
- * the TYPEOFELEMENTMARK type represents a blocker, and the TYPEOFELEMENTCOLLECTOR
- * type represents a element collector.
- */
-enum ElementMarkType
-{
-    ELEMENTMARK = 1,
-    ELEMENTCOLLECTOR
-};
 
 /**
  * Interface of Security SAX Event Keeper.

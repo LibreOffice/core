@@ -52,7 +52,9 @@ EXTRA_FRAMEWORK_FLAG=-framework Python
 .IF "$(GUI)" == "UNX"
 PYUNORC=pyunorc
 .ELSE
+.IF "$(CROSS_COMPILING)" != "YES"
 .INCLUDE :  pyversion.mk
+.ENDIF
 PYUNORC=pyuno.ini
 DLLPOST=.pyd
 .ENDIF
@@ -111,7 +113,7 @@ ALLTAR : \
     $(LB)$/lib$(TARGET).a
 
 $(LB)$/lib$(TARGET).a: $(MISC)$/$(TARGET).def
-    dlltool --dllname $(TARGET)$(DLLPOST) --input-def=$(MISC)$/$(TARGET).def --kill-at --output-lib=$(LB)$/lib$(TARGET).a
+    $(DLLTOOL) --dllname $(TARGET)$(DLLPOST) --input-def=$(MISC)$/$(TARGET).def --kill-at --output-lib=$(LB)$/lib$(TARGET).a
 .ELSE
 
 .IF "$(GUI)"!="WNT"

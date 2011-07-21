@@ -93,7 +93,7 @@
  sal_Bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedName)
  {
 #ifndef MACOSX // not MACOSX
-        rtl::OString fn = OUStringToOString(pustrFileName);
+    rtl::OString fn = OUStringToOString(pustrFileName);
 #else
     rtl::OString fn = macxp_resolveAliasAndConvert(pustrFileName);
 #endif

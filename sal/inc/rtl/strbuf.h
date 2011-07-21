@@ -105,13 +105,27 @@ void SAL_CALL rtl_stringbuffer_ensureCapacity(  /*inout*/rtl_String ** This,
     @param  offset      the offset.
     @param  ch          a character array.
     @param  len         the number of characters to append.
-    @return this string buffer.
  */
 void SAL_CALL rtl_stringbuffer_insert( /*inout*/rtl_String ** This,
                                        /*inout*/sal_Int32 * capacity,
                                        sal_Int32 offset,
                                        const sal_Char * str,
                                        sal_Int32 len);
+
+/**
+    Removes the characters in a substring of this sequence.
+
+    The substring begins at the specified <code>start</code> and
+    is <code>len</code> characters long.
+
+    start must be >= 0 && <= This->length
+
+    @param  start       The beginning index, inclusive
+    @param  len         The substring length
+ */
+void SAL_CALL rtl_stringbuffer_remove( /*inout*/rtl_String ** This,
+                                       sal_Int32 start,
+                                       sal_Int32 len );
 
 #ifdef __cplusplus
 }

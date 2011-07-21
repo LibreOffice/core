@@ -54,28 +54,11 @@ sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2, sal_uInt32 l
 sal_Bool cmpustr( const sal_Unicode* str1, const sal_Unicode* str2 );
 
 sal_Char* createName( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt );
-void makeComment(char *com, const char *str1, const char *str2, sal_Int32 sgn);
 
 
 sal_uInt32 AStringLen( const sal_Char *pAStr );
 
-sal_uInt32 UStringLen( const sal_Unicode *pUStr );
-
 //------------------------------------------------------------------------
-
-sal_Bool AStringToFloatCompare ( const sal_Char  *pStr,
-                                 const float      nX,
-                                 const float      nEPS
-                                );
-
-sal_Bool AStringToDoubleCompare ( const sal_Char  *pStr,
-                                  const double     nX,
-                                  const double     nEPS
-                                );
-
-//------------------------------------------------------------------------
-
-sal_Bool AStringIsValid( const sal_Char  *pAStr );
 
 sal_Bool AStringNIsValid( const sal_Char   *pAStr,
                           const sal_uInt32  nStrLen
@@ -92,34 +75,8 @@ sal_Int32 AStringToUStringNCompare( const sal_Unicode  *pUStr,
                                     const sal_uInt32    nAStrCount
                                    );
 
-sal_Int32 AStringToRTLUStringCompare( const rtl_uString  *pRTLUStr,
-                                      const sal_Char     *pAStr
-                                    );
-
-sal_Int32 AStringToRTLUStringNCompare( const rtl_uString  *pRTLUStr,
-                                       const sal_Char     *pAStr,
-                                       const sal_uInt32    nAStrCount
-                                     );
-
-//------------------------------------------------------------------------
-
-sal_Bool AStringToUStringCopy( sal_Unicode     *pDest,
-                               const sal_Char  *pSrc
-                             );
-
-sal_Bool AStringToUStringNCopy( sal_Unicode       *pDest,
-                                const sal_Char    *pSrc,
-                                const sal_uInt32   nSrcLen
-                              );
-
 #endif /* __cplusplus */
 
 #endif /* _RTL_STRING_UTILS_HXX */
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,7 +28,6 @@
 UDK_3_0_0 {
     global:
         component_getFactory;
-        component_getImplementationEnvironment;
         component_writeInfo;
 
         _ZTI*;

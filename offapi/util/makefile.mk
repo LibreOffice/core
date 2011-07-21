@@ -151,7 +151,7 @@ REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 
 UNOTYPE_STATISTICS=$(MISC)$/unotype_statistics.txt
 
-REGVIEWTOOL=$(SOLARBINDIR)$/regview$(EXECPOST)
+REGVIEWTOOL=$(SOLARBINDIR)$/regview
 
 # --- Targets ------------------------------------------------------
 

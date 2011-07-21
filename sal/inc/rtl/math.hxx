@@ -142,8 +142,8 @@ inline void doubleToUStringBuffer( rtl::OUStringBuffer& rBuffer, double fValue,
  */
 inline double stringToDouble(rtl::OString const & rString,
                              sal_Char cDecSeparator, sal_Char cGroupSeparator,
-                             rtl_math_ConversionStatus * pStatus,
-                             sal_Int32 * pParsedEnd)
+                             rtl_math_ConversionStatus * pStatus = 0,
+                             sal_Int32 * pParsedEnd = 0)
 {
     sal_Char const * pBegin = rString.getStr();
     sal_Char const * pEnd;
@@ -161,8 +161,8 @@ inline double stringToDouble(rtl::OString const & rString,
 inline double stringToDouble(rtl::OUString const & rString,
                              sal_Unicode cDecSeparator,
                              sal_Unicode cGroupSeparator,
-                             rtl_math_ConversionStatus * pStatus,
-                             sal_Int32 * pParsedEnd)
+                             rtl_math_ConversionStatus * pStatus = 0,
+                             sal_Int32 * pParsedEnd = 0)
 {
     sal_Unicode const * pBegin = rString.getStr();
     sal_Unicode const * pEnd;
