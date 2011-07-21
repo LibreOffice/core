@@ -55,6 +55,8 @@ mkdir: %_DEST%\inc\external\wine
 ..\%__SRC%\lib\libmsvcrt*.* %_DEST%\lib\lib*.*
 
 ..\%__SRC%\lib\libgdiplus.dll.a %_DEST%\lib\libgdiplus.dll.a
+..\%__SRC%\lib\libmsi.dll.a %_DEST%\lib\libmsi.dll.a
+..\%__SRC%\lib\liburlmon.dll.a %_DEST%\lib\liburlmon.dll.a
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib\lib*static*.dylib
 
