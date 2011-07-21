@@ -416,7 +416,7 @@ testcase tCreateNewLineChart
     BSpline.check        
     printlog "Set Resolution to 33"
     Resolution.SetText "33"        
-    printlog "et Data Points Order to 5"    
+    printlog "et Degree of polynomials to 5"
     DataPointsOrder.SetText "5"    
     printlog "Close 'Smooth Lines' dialog"
     if fCloseSmoothLinePropertiesOK() > 0 then
@@ -524,9 +524,9 @@ testcase tCreateNewLineChart
         if Resolution.GetText <> "33" then
             warnlog "Value for Resolution '33' wasn't preserved after save and reload."
         endif        
-        printlog "Check if 'Data Points Order' has value '5'"
+        printlog "Check if 'Degree of polynomials' has value '5'"
         if DataPointsOrder.GetText <> "5" then
-            warnlog "Value for Data Points Order '5' wasn't preserved after save and reload."
+            warnlog "Value for Degree of polynomials '5' wasn't preserved after save and reload."
         endif        
         printlog "Close 'Smooth Lines' dialog"
         if fCloseSmoothLinePropertiesOK() > 0 then
