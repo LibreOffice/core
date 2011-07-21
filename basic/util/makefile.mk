@@ -48,7 +48,11 @@ LIB1FILES=		\
     $(SLB)$/sbx.lib
 
 SHL1TARGET= sb$(DLLPOSTFIX)
+.IF "$(COM)" == "MSC"
 SHL1IMPLIB= basic
+.ELSE
+SHL1IMPLIB= sb$(DLLPOSTFIX)
+.ENDIF
 
 SHL1STDLIBS= \
             $(CPPULIB) \
