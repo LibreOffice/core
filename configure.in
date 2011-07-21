@@ -2232,6 +2232,7 @@ if test -z "$with_myspell_dicts" || test "$with_myspell_dicts" = "yes"; then
     AC_MSG_RESULT([yes])
     WITH_MYSPELL_DICTS=YES
     BUILD_TYPE="$BUILD_TYPE DICTIONARIES"
+    GIT_REPO_NAMES="$GIT_REPO_NAMES dictionaries"
 else
     AC_MSG_RESULT([no])
     WITH_MYSPELL_DICTS=NO
