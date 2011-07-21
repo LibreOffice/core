@@ -54,7 +54,7 @@ CONFIGURE_DIR=$(BUILD_DIR)
 
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
 HUNSPELL_CFLAGS +:= -I$(SOLARINCDIR)$/hunspell
-HUNSPELL_LIBS +:= -L$(SOLARLIBDIR) -lhunspell-1.2
+HUNSPELL_LIBS +:= -L$(SOLARLIBDIR) -lhunspell-1.3
 .ENDIF
 
 #relative to CONFIGURE_DIR
@@ -93,13 +93,19 @@ OUT2INC += mythes.hxx
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
+.IF "$(SYSTEM_MYTHES)" != "YES"
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS= --disable-shared --with-pic \
     HUNSPELL_CFLAGS=-I$(SOLARINCDIR)$/hunspell \
-    HUNSPELL_LIBS="-L$(SOLARLIBDIR) -lhunspell-1.2"
+    HUNSPELL_LIBS="-L$(SOLARLIBDIR) -lhunspell-1.3"
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no
+.ENDIF
 
 BUILD_ACTION=make
 
+.ENDIF
 .ELSE
 BUILD_ACTION=dmake
 .ENDIF # "$(COM)"=="GCC"

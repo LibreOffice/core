@@ -34,13 +34,11 @@ TARFILE_MD5=bd30e9cf5523cdfc019b94f5e1d7fd19
     # from <https://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/
     #  cppunit-1.12.1.tar.gz/download>
 
-PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix.patch avoid-synthetised-destructor.patch
+PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix.patch avoid-synthetised-destructor.patch android.patch ios.patch
     # solarisfinite.patch: see <https://sourceforge.net/tracker/?func=detail&
     #  aid=2912590&group_id=11795&atid=311795>
     # warnings.patch: see <https://sourceforge.net/tracker/?func=detail&
     #  aid=2912630&group_id=11795&atid=311795>
-
-.IF "$(CROSS_COMPILING)"!="YES"
 
 .IF "$(OS)" == "WNT"
 .IF "$(COM)" == "MSC"
@@ -66,6 +64,12 @@ BUILD_ACTION = cd src/cppunit && dmake -f ooo-cppunit_dll.mk debug=$(debug) verb
 
 OUTDIR2INC = include/cppunit
 
+.INCLUDE: set_ext.mk
+.INCLUDE: target.mk
+.INCLUDE: tg_ext.mk
+
+$(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE): ooo-cppunit_dll.mk ooo-DllPlugInTester.mk
+
 .ELSE
 .IF "$(COM)" == "GCC"
 EXTRA_CFLAGS += -mthreads
@@ -80,14 +84,25 @@ CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     LDFLAGS='$(LDFLAGS)' \
     LIBS='$(MY_LIBS)'
 
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
 BUILD_ACTION = $(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_FLAGS = install
 
 OUTDIR2INC = ooo-install/include/cppunit
 
+# WTF? A *Cygwin* DLL?
+#OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
+#    ooo-install/bin/cygcppunit-1-12-1.dll
 OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
-    ooo-install/bin/cygcppunit-1-12-1.dll
+    ooo-install/bin/libcppunit-1-12-1.dll
 OUT2LIB = ooo-install/lib/libcppunit.dll.a
+
+.INCLUDE: set_ext.mk
+.INCLUDE: target.mk
+.INCLUDE: tg_ext.mk
 
 .ENDIF # "$(COM)" == "GCC"
 .ENDIF # "$(COM)" == "MSC"
@@ -102,14 +117,33 @@ OUT2LIB = ooo-install/lib/libcppunit.dll.a
 MY_LIBS = -lm
 .END
 
+.IF "$(ENABLE_DEBUG_STL)" == "TRUE"
+EXTRA_CFLAGS += -D_GLIBCXX_DEBUG
+.ENDIF
+
 CONFIGURE_ACTION = ./configure
+
+.IF "$(debug)"!=""
+DEBUGFLAG=-g
+.ENDIF
+
 CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     pwd $(PWDFLAGS))/$(TARFILE_ROOTDIR)/ooo-install \
     --disable-dependency-tracking --disable-static --disable-doxygen \
     --disable-html-docs --disable-latex-docs CC='$(CC)' CXX='$(CXX)' \
-    CXXFLAGS='$(EXTRA_CFLAGS)' \
+    CXXFLAGS='$(EXTRA_CFLAGS) $(DEBUGFLAG)' \
     LDFLAGS='$(LDFLAGS)' \
     LIBS='$(MY_LIBS)'
+
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS+=--disable-shared
+.ELSE
+CONFIGURE_FLAGS+=--disable-static
+.ENDIF
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
 
 BUILD_ACTION = $(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_FLAGS = install
@@ -124,17 +158,14 @@ EXTRPATH = NONE
 OUT2LIB = ooo-install/lib/libcppunit-1.12.a
 .ELIF "$(OS)" == "OPENBSD"
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1.0
+.ELIF "$(OS)" == "IOS" || "$(OS)" == "ANDROID"
+OUT2LIB = ooo-install/lib/libcppunit.a
 .ELSE
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1
 .END
-
-.END
-.ENDIF
 
 .INCLUDE: set_ext.mk
 .INCLUDE: target.mk
 .INCLUDE: tg_ext.mk
 
-.IF "$(COM)" == "MSC"
-$(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE): ooo-cppunit_dll.mk ooo-DllPlugInTester.mk
-.ENDIF
+.END

@@ -34,3 +34,15 @@
    typedef char __CppUnitPlugInImplementMainDummyTypeDef
  
  // Unix
+--- misc/cppunit-1.12.1/include/cppunit/TestAssert.h
++++ misc/build/cppunit-1.12.1/include/cppunit/TestAssert.h
+@@ -76,7 +76,7 @@
+        const int precision = 15;
+ #endif  // #ifdef DBL_DIG
+        char buffer[128];
+-#ifdef __STDC_SECURE_LIB__ // Use secure version with visual studio 2005 to avoid warning.
++#if defined(_MSC_VER) && defined(__STDC_SECURE_LIB__) // Use secure version with visual studio 2005 to avoid warning.
+        sprintf_s(buffer, sizeof(buffer), "%.*g", precision, x); 
+ #else	
+        sprintf(buffer, "%.*g", precision, x); 
+

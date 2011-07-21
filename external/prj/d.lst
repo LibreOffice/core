@@ -4,6 +4,7 @@ mkdir: %_DEST%\inc\external\mingw
 mkdir: %_DEST%\inc\external\mingw\include
 mkdir: %_DEST%\inc\external\mingw\include\atl
 mkdir: %_DEST%\inc\external\mingw\include\sys
+mkdir: %_DEST%\inc\external\wine
 
 ..\glibc\rtufiles\config.h %_DEST%\inc\external\glibc\config.h
 ..\glibc\rtufiles\getopt.h %_DEST%\inc\external\glibc\getopt.h
@@ -13,6 +14,8 @@ mkdir: %_DEST%\inc\external\mingw\include\sys
 ..\%__SRC%\lib\libgnu_getopt_static.a %_DEST%\lib\libgnu_getopt_static.a
 
 ..\%__SRC%\inc\*.h %_DEST%\inc\external\glibc\*.h
+
+..\%__SRC%\inc\wine\*.h %_DEST%\inc\external\wine\*.h
 
 ..\%__SRC%\misc\mingw\include\*.h %_DEST%\inc\external\mingw\include\*
 ..\%__SRC%\misc\mingw\include\atl\*.h %_DEST%\inc\external\mingw\include\atl\*
@@ -51,7 +54,11 @@ mkdir: %_DEST%\inc\external\mingw\include\sys
 
 ..\%__SRC%\lib\libmsvcrt*.* %_DEST%\lib\lib*.*
 
+..\%__SRC%\lib\libgdiplus.dll.a %_DEST%\lib\libgdiplus.dll.a
+
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib\lib*static*.dylib
+
+..\%__SRC%\lib\libjawt.dll.a %_DEST%\lib\libjawt.dll.a
 
 linklib: libgcc_s.*.*
 

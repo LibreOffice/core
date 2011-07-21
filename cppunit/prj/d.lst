@@ -16,7 +16,7 @@ mkdir: %_DEST%\inc\cppunit\ui\text
 ..\%__SRC%\bin\cppunit_dll.dll %_DEST%\bin\cppunit_dll.dll
 ..\%__SRC%\lib\icppunit_dll.lib %_DEST%\lib\icppunit_dll.lib
 
-..\%__SRC%\bin\cygcppunit-1-12-1.dll %_DEST%\bin\cygcppunit-1-12-1.dll
+..\%__SRC%\bin\libcppunit-1-12-1.dll %_DEST%\bin\libcppunit-1-12-1.dll
 ..\%__SRC%\lib\libcppunit.dll.a %_DEST%\lib\libcppunit.dll.a
 
 ..\%__SRC%\lib\libcppunit-1.12.1.dylib %_DEST%\lib\libcppunit-1.12.1.dylib
@@ -30,6 +30,8 @@ symlink: %_DEST%\lib\libcppunit-1.12.so.1.0 %_DEST%\lib\libcppunit.so
 
 ..\%__SRC%\lib\libcppunit-1.12.a %_DEST%\lib\libcppunit-1.12.a
 symlink: %_DEST%\lib\libcppunit-1.12.a %_DEST%\lib\libcppunit.a
+
+..\%__SRC%\lib\libcppunit.a %_DEST%\lib\libcppunit.a
 
 ..\%__SRC%\bin\DllPlugInTester %_DEST%\bin\DllPlugInTester
 ..\%__SRC%\bin\DllPlugInTester.exe %_DEST%\bin\DllPlugInTester.exe
