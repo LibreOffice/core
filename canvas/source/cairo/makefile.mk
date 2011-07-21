@@ -47,6 +47,13 @@ DLLPRE =
     @echo "Cannot build cairocanvas without cairo..."
 .ENDIF
 
+# --- Don't build for Windows unless we're compiling with --disable-directx -----------
+.IF "$(GUI)" == "WNT" && "$(ENABLE_DIRECTX)" != ""
+@all:
+    @echo "Building with the DirectX canvas so not bothering with the cairo one..."
+.ENDIF
+
+
 # --- Common ----------------------------------------------------------
 
 
