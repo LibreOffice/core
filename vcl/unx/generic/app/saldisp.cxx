@@ -920,11 +920,6 @@ void SalDisplay::Init()
             }
         }
         else
-        if( GetServerVendor() == vendor_sco )
-        {
-            if( otherwm == eWindowManager_ ) eWindowManager_ = pmwm;
-        }
-        else
         if( GetServerVendor() == vendor_hummingbird )
         {
             if (GetVisual(m_nDefaultScreen).GetDepth() == 24)
@@ -1080,8 +1075,7 @@ void SalDisplay::ModifierMapping()
     nMod1KeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, Mod1MapIndex );
     // Auf Sun-Servern und SCO-Severn beruecksichtigt XLookupString
     // nicht den NumLock Modifier.
-    if(     (GetServerVendor() == vendor_sun)
-        ||  (GetServerVendor() == vendor_sco) )
+    if( GetServerVendor() == vendor_sun )
     {
         XLIB_KeyCode aNumLock = XKeysymToKeycode( pDisp_, XK_Num_Lock );
 
