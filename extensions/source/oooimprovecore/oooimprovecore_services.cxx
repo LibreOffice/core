@@ -43,6 +43,11 @@ namespace oooimprovecore
 
 }
 
-IMPLEMENT_COMPONENT_LIBRARY_API( ::oooimprovecore::OooimprovecoreModule, ::oooimprovecore::initializeModule)
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
+    const sal_Char* pImplementationName, void* pServiceManager, void* pRegistryKey )
+{
+    ::oooimprovecore::initializeModule();
+    return ::oooimprovecore::OooimprovecoreModule::getInstance().getComponentFactory( pImplementationName, pServiceManager, pRegistryKey );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

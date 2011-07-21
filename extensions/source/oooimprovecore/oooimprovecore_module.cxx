@@ -33,7 +33,24 @@
 
 namespace oooimprovecore
 {
-    IMPLEMENT_COMPONENT_MODULE( OooimprovecoreModule );
+    struct OooimprovecoreModuleCreator
+    {
+        OooimprovecoreModule m_aOooimprovecoreModule;
+    };
+    namespace
+    {
+        class theOooimprovecoreModuleInstance : public rtl::Static<OooimprovecoreModuleCreator, theOooimprovecoreModuleInstance> {};
+    }
+
+    OooimprovecoreModule::OooimprovecoreModule()
+        :BaseClass()
+    {
+    }
+
+    OooimprovecoreModule& OooimprovecoreModule::getInstance()
+    {
+        return theOooimprovecoreModuleInstance::get().m_aOooimprovecoreModule;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

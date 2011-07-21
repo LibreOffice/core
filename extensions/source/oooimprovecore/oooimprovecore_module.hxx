@@ -33,7 +33,56 @@
 
 namespace oooimprovecore
 {
-    DECLARE_COMPONENT_MODULE( OooimprovecoreModule, OooimprovecoreModuleClient )
+    /* -------------------------------------------------------------------- */
+    class OooimprovecoreModule : public ::comphelper::OModule
+    {
+        friend struct OooimprovecoreModuleCreator;
+        typedef ::comphelper::OModule BaseClass;
+
+    public:
+        static OooimprovecoreModule& getInstance();
+
+    private:
+        OooimprovecoreModule();
+    };
+
+    /* -------------------------------------------------------------------- */
+    class OooimprovecoreModuleClient : public ::comphelper::OModuleClient
+    {
+    private:
+        typedef ::comphelper::OModuleClient BaseClass;
+
+    public:
+        OooimprovecoreModuleClient() : BaseClass( OooimprovecoreModule::getInstance() )
+        {
+        }
+    };
+
+    /* -------------------------------------------------------------------- */
+    template < class TYPE >
+    class OAutoRegistration : public ::comphelper::OAutoRegistration< TYPE >
+    {
+    private:
+        typedef ::comphelper::OAutoRegistration< TYPE > BaseClass;
+
+    public:
+        OAutoRegistration() : BaseClass( OooimprovecoreModule::getInstance() )
+        {
+        }
+    };
+
+    /* -------------------------------------------------------------------- */
+    template < class TYPE >
+    class OSingletonRegistration : public ::comphelper::OSingletonRegistration< TYPE >
+    {
+    private:
+        typedef ::comphelper::OSingletonRegistration< TYPE > BaseClass;
+
+    public:
+        OSingletonRegistration() : BaseClass( OooimprovecoreModule::getInstance() )
+        {
+        }
+    };
 }
 #endif
 
