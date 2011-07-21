@@ -282,7 +282,7 @@ $(eval $(call gb_Library_add_cxxobjects,sfx,\
     sfx2/source/appl/shutdowniconw32 \
     sfx2/source/doc/sfxacldetect \
     sfx2/source/doc/syspathw32 \
-    , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS) -nologo -UPRECOMPILED_HEADERS \
+    , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS) -UPRECOMPILED_HEADERS \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sfx,\
