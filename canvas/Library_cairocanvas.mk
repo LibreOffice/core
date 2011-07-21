@@ -44,7 +44,6 @@ endif
 
 $(eval $(call gb_Library_add_linked_libs,cairocanvas,\
 	sal \
-	stl \
 	cppu \
 	basegfx \
 	cppuhelper \
