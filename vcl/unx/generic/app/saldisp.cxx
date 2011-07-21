@@ -92,7 +92,6 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <unx/salobj.h>
 #include <unx/sm.hxx>
 #include <unx/wmadaptor.hxx>
-#include <unx/dtint.hxx>
 
 #include <osl/socket.h>
 #include <poll.h>
@@ -505,7 +504,6 @@ SalDisplay::SalDisplay( Display *display ) :
         mpInputMethod( NULL ),
         pDisp_( display ),
         m_pWMAdaptor( NULL ),
-        m_pDtIntegrator( NULL ),
         m_bUseRandRWrapper( true ),
         m_nLastUserEventTime( CurrentTime )
 {
@@ -547,8 +545,6 @@ void SalDisplay::doDestruct()
 
     delete m_pWMAdaptor;
     m_pWMAdaptor = NULL;
-    delete m_pDtIntegrator;
-    m_pDtIntegrator = NULL;
     X11SalBitmap::ImplDestroyCache();
     X11SalGraphics::releaseGlyphPeer();
 
@@ -939,9 +935,6 @@ void SalDisplay::Init()
     }
 
     InitXinerama();
-
-    // initialize system settings update
-    m_pDtIntegrator = DtIntegrator::CreateDtIntegrator();
 
 #ifdef DBG_UTIL
     PrintInfo();

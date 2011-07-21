@@ -60,7 +60,6 @@
 #include "unx/salgdi.h"
 #include "unx/salframe.h"
 #include "unx/soicon.hxx"
-#include "unx/dtint.hxx"
 #include "unx/sm.hxx"
 #include "unx/wmadaptor.hxx"
 #include "unx/salprn.h"
@@ -2663,13 +2662,9 @@ inline Color getColorFromLong( long nColor )
 
 void X11SalFrame::UpdateSettings( AllSettings& rSettings )
 {
-
-    DtIntegrator* pIntegrator = GetDisplay()->getDtIntegrator();
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "DtIntegrator: %d\n", pIntegrator ? pIntegrator->GetDtType() : -1 );
-#endif
-    if( pIntegrator )
-        pIntegrator->GetSystemLook( rSettings );
+    StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+    aStyleSettings.SetCursorBlinkTime( 500 );
+    rSettings.SetStyleSettings( aStyleSettings );
 }
 
 void X11SalFrame::CaptureMouse( sal_Bool bCapture )
