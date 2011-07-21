@@ -43,7 +43,7 @@ class ScRowBar;
 class ScColBar;
 class ScTabControl;
 class ScTabViewShell;
-class ScRangeFindData;
+struct ScRangeFindData;
 class SfxPrinter;
 class ScDrawView;
 class SvBorder;

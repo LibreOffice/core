@@ -533,7 +533,7 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
                 xLegendProp->setPropertyValue( C2U("Show"), uno::makeAny( bNewValue ));
         }
     }
-    catch( uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -552,7 +552,7 @@ Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropert
         else
             aRet <<= sal_False;
     }
-    catch( uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -614,7 +614,7 @@ void WrappedHasMainTitleProperty::setPropertyValue( const Any& rOuterValue, cons
         else
             TitleHelper::removeTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getChartModel() );
     }
-    catch( uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -628,7 +628,7 @@ Any WrappedHasMainTitleProperty::getPropertyValue( const Reference< beans::XProp
     {
         aRet <<= sal_Bool( TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getChartModel() ).is() );
     }
-    catch( uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -691,7 +691,7 @@ void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const
         else
             TitleHelper::removeTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getChartModel() );
     }
-    catch( uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -705,7 +705,7 @@ Any WrappedHasSubTitleProperty::getPropertyValue( const Reference< beans::XPrope
     {
         aRet <<= sal_Bool( TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getChartModel() ).is() );
     }
-    catch( uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -802,7 +802,7 @@ Reference< XDiagram > SAL_CALL ChartDocumentWrapper::getDiagram()
         {
             m_xDiagram = new DiagramWrapper( m_spChart2ModelContact );
         }
-        catch( uno::Exception & ex )
+        catch (const uno::Exception& ex)
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -837,7 +837,7 @@ void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& xDi
                 m_xDiagram = xDiagram;
             }
         }
-        catch( uno::Exception & ex )
+        catch (const uno::Exception& ex)
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -1004,12 +1004,12 @@ void SAL_CALL ChartDocumentWrapper::dispose()
             if( xFormerDelegator.is())
                 xFormerDelegator->dispose();
         }
-        catch( lang::DisposedException )
+        catch (const lang::DisposedException&)
         {
             // this is ok, don't panic
         }
     }
-    catch( uno::Exception &ex )
+    catch (const uno::Exception &ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -1041,11 +1041,11 @@ void ChartDocumentWrapper::impl_resetAddIn()
                 }
             }
         }
-        catch( const uno::RuntimeException& ex )
+        catch (const uno::RuntimeException& ex)
         {
             ASSERT_EXCEPTION( ex );
         }
-        catch( const uno::Exception& ex )
+        catch (const uno::Exception& ex)
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -1347,7 +1347,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
 
                 xResult = static_cast< ::cppu::OWeakObject* >( new DiagramWrapper( m_spChart2ModelContact ));
             }
-            catch( uno::Exception & ex )
+            catch (const uno::Exception& ex)
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -1390,7 +1390,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                         aArguments[1]=uno::makeAny(bRefreshAddIn);
                         xViewInit->initialize(aArguments);
                     }
-                    catch( uno::Exception & ex )
+                    catch (const uno::Exception& ex)
                     {
                         ASSERT_EXCEPTION( ex );
                     }
@@ -1422,7 +1422,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 bServiceFound = true;
             }
         }
-        catch( const uno::Exception )
+        catch (const uno::Exception&)
         {
             // couldn't create shape
         }
@@ -1446,9 +1446,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 }
             }
         }
-        catch( const uno::Exception& ex )
+        catch (const uno::Exception&)
         {
-            (void)ex;
             // couldn't create service
         }
     }
@@ -1509,7 +1508,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
         {
             this->dispose();
         }
-        catch( uno::Exception &ex )
+        catch (const uno::Exception& ex)
         {
             ASSERT_EXCEPTION( ex );
         }

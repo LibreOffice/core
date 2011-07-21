@@ -36,12 +36,16 @@ $(eval $(call gb_Library_set_include,sc,\
         -I$(WORKDIR)/SdiTarget/sc/sdi \
         -I$(WORKDIR)/Misc/sc/ \
         $$(INCLUDE) \
-        -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_add_defs,sc,\
         -DSC_DLLIMPLEMENTATION \
         -DSC_INFO_OSVERSION=\"$(OS)\" \
+))
+
+$(eval $(call gb_Library_add_api,sc,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sc,\

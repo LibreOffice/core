@@ -73,8 +73,7 @@
 #include "protectiondlg.hxx"
 
 #include <svl/ilstitem.hxx>
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
+#include <vector>
 
 #include <svx/zoomslideritem.hxx>
 #include <svx/svxdlg.hxx>
@@ -810,7 +809,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             SCTAB nTabCount = rDoc.GetTableCount();
             SCTAB nTab;
 
-            SvULongs aIndexList( 4, 4 );
+            ::std::vector < sal_Int32 > aIndexList;
             SFX_REQUEST_ARG( rReq, pItem, SfxIntegerListItem, SID_SELECT_TABLES, false );
             if ( pItem )
                 pItem->GetList( aIndexList );
@@ -839,7 +838,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     sal_uInt16 nSelCount = pDlg->GetSelectEntryCount();
                     sal_uInt16 nSelIx;
                     for( nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
-                        aIndexList.Insert( pDlg->GetSelectEntryPos( nSelIx ), nSelIx );
+                        aIndexList.insert( aIndexList.begin()+nSelIx, pDlg->GetSelectEntryPos( nSelIx ) );
                     delete pDlg;
                     rReq.AppendItem( SfxIntegerListItem( SID_SELECT_TABLES, aIndexList ) );
                 }
@@ -847,9 +846,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     rReq.Ignore();
             }
 
-            if ( aIndexList.Count() )
+            if ( !aIndexList.empty() )
             {
-                sal_uInt16 nSelCount = aIndexList.Count();
+                sal_uInt16 nSelCount = aIndexList.size();
                 sal_uInt16 nSelIx;
                 SCTAB nFirstVisTab = 0;
 

@@ -138,10 +138,13 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     SCROW k;
     i = 0;
     bool bStop = false;
-    for (;i < static_cast<SCTAB>(maTabs.size()); ++i)
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
     {
-        if (maTabs[i] && rMark.GetTableSelect(i))
+        if (maTabs[i])
         {
+            i = *itr;
             bStop = true;
             break;
         }
@@ -161,14 +164,15 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     else
         pCell = new ScFormulaCell( this, aPos, rFormula, eGram, MM_FORMULA );
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
-    for (i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
+    itr = rMark.begin();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
     {
-        if (maTabs[i] && rMark.GetTableSelect(i))
+        if (maTabs[*itr])
         {
-            if (i == nTab1)
-                maTabs[i]->PutCell(nCol1, nRow1, pCell);
+            if (*itr == nTab1)
+                maTabs[*itr]->PutCell(nCol1, nRow1, pCell);
             else
-                maTabs[i]->PutCell(nCol1, nRow1, pCell->CloneWithoutNote(*this, ScAddress( nCol1, nRow1, i), SC_CLONECELL_STARTLISTENING));
+                maTabs[*itr]->PutCell(nCol1, nRow1, pCell->CloneWithoutNote(*this, ScAddress( nCol1, nRow1, *itr), SC_CLONECELL_STARTLISTENING));
         }
     }
 
@@ -185,15 +189,16 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     ScTokenArray aArr;
     ScToken* t = static_cast<ScToken*>(aArr.AddMatrixSingleReference( aRefData));
 
-    for (i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
+    itr = rMark.begin();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
     {
-        if (maTabs[i] && rMark.GetTableSelect(i))
+        if (maTabs[*itr])
         {
-            maTabs[i]->DoColResize( nCol1, nCol2, static_cast<SCSIZE>(nRow2 - nRow1 + 1) );
-            if (i != nTab1)
+            maTabs[*itr]->DoColResize( nCol1, nCol2, static_cast<SCSIZE>(nRow2 - nRow1 + 1) );
+            if (*itr != nTab1)
             {
-                aRefData.nTab = i;
-                aRefData.nRelTab = i - nTab1;
+                aRefData.nTab = *itr;
+                aRefData.nRelTab = *itr - nTab1;
                 t->GetSingleRef() = aRefData;
             }
             for (j = nCol1; j <= nCol2; j++)
@@ -204,10 +209,10 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                     {
                         // Array muss geklont werden, damit jede
                         // Zelle ein eigenes Array erhaelt!
-                        aPos = ScAddress( j, k, i );
+                        aPos = ScAddress( j, k, *itr );
                         t->CalcRelFromAbs( aPos );
                         pCell = new ScFormulaCell( this, aPos, aArr.Clone(), eGram, MM_REFERENCE );
-                        maTabs[i]->PutCell(j, k, (ScBaseCell*) pCell);
+                        maTabs[*itr]->PutCell(j, k, (ScBaseCell*) pCell);
                     }
                 }
             }
@@ -226,10 +231,13 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     SCROW k;
     i = 0;
     bool bStop = false;
-    for (;i < static_cast<SCTAB>(maTabs.size()); ++i)
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
     {
-        if (maTabs[i] && rMark.GetTableSelect(i))
+        if (maTabs[*itr])
         {
+            i = *itr;
             bStop = true;
             break;
         }
@@ -296,8 +304,12 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     for( j = nCol1; j <= nCol2; j++ )
         for( k = nRow1; k <= nRow2; k++ )
             for (i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
-                if( maTabs[i] && rMark.GetTableSelect(i) )
-                    maTabs[i]->PutCell( j, k, aRefCell.CloneWithoutNote( *this, ScAddress( j, k, i ), SC_CLONECELL_STARTLISTENING ) );
+            {
+                itr = rMark.begin();
+                for (; itr != itrEnd && *itr < nMax; ++itr)
+                if( maTabs[*itr] )
+                    maTabs[*itr]->PutCell( j, k, aRefCell.CloneWithoutNote( *this, ScAddress( j, k, *itr ), SC_CLONECELL_STARTLISTENING ) );
+            }
 }
 
 namespace {
@@ -499,9 +511,11 @@ sal_Bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
     SCCOL nEndCol = aSingle.aEnd.Col();
     SCROW nEndRow = aSingle.aEnd.Row();
 
-    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()) && !aData.bError; nTab++)
-        if (maTabs[nTab] && rMark.GetTableSelect(nTab))
-            maTabs[nTab]->UpdateSelectionFunction( aData,
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax && !aData.bError; ++itr)
+        if (maTabs[*itr])
+            maTabs[*itr]->UpdateSelectionFunction( aData,
                             nStartCol, nStartRow, nEndCol, nEndRow, rMark );
 
             //! rMark an UpdateSelectionFunction uebergeben !!!!!

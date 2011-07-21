@@ -56,6 +56,7 @@ using ::std::vector;
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
+#include <com/sun/star/sheet/NameToken.hpp>
 
 using namespace formula;
 using namespace com::sun::star;
@@ -378,7 +379,7 @@ FormulaToken* ScRawToken::CreateToken() const
             IF_NOT_OPCODE_ERROR( ocPush, ScMatrixToken);
             return new ScMatrixToken( pMat );
         case svIndex :
-            return new ScNameToken(name.nIndex, name.bGlobal);
+            return new ScNameToken(name.nIndex, name.bGlobal, eOp);
         case svExternalSingleRef:
             {
                 String aTabName(extref.cTabName);
@@ -947,8 +948,8 @@ bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
 
 // ============================================================================
 
-ScNameToken::ScNameToken(sal_uInt16 nIndex, bool bGlobal) :
-    ScToken(svIndex, ocName), mnIndex(nIndex), mbGlobal(bGlobal) {}
+ScNameToken::ScNameToken(sal_uInt16 nIndex, bool bGlobal, OpCode eOpCode) :
+    ScToken(svIndex, eOpCode), mnIndex(nIndex), mbGlobal(bGlobal) {}
 
 ScNameToken::ScNameToken(const ScNameToken& r) :
     ScToken(r), mnIndex(r.mnIndex), mbGlobal(r.mbGlobal) {}
@@ -1173,6 +1174,13 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                             AddDoubleReference( aComplRef );
                         else
                             bError = true;
+                    }
+                    else if ( aType.equals( cppu::UnoType<sheet::NameToken>::get() ) )
+                    {
+                        sheet::NameToken aTokenData;
+                        _aToken.Data >>= aTokenData;
+                        if ( eOpCode == ocName )
+                            AddRangeName(aTokenData.Index, aTokenData.Global);
                     }
                     else if ( aType.equals( cppu::UnoType<sheet::ExternalReference>::get() ) )
                     {

@@ -6525,53 +6525,6 @@ void ScInterpreter::ScDBVarP()
     PushDouble(fVal/fCount);
 }
 
-
-ScTokenArray* lcl_CreateExternalRefTokenArray( const ScAddress& rPos, ScDocument* pDoc,
-        const ScAddress::ExternalInfo& rExtInfo, const ScRefAddress& rRefAd1,
-        const ScRefAddress* pRefAd2 )
-{
-    ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-    size_t nSheets = 1;
-    const OUString* pRealTab = pRefMgr->getRealTableName( rExtInfo.mnFileId, rExtInfo.maTabName);
-    ScTokenArray* pTokenArray = new ScTokenArray;
-    if (pRefAd2)
-    {
-        ScComplexRefData aRef;
-        aRef.InitRangeRel( ScRange( rRefAd1.GetAddress(), pRefAd2->GetAddress()), rPos);
-        aRef.Ref1.SetColRel( rRefAd1.IsRelCol());
-        aRef.Ref1.SetRowRel( rRefAd1.IsRelRow());
-        aRef.Ref1.SetTabRel( rRefAd1.IsRelTab());
-        aRef.Ref1.SetFlag3D( true);
-        aRef.Ref2.SetColRel( pRefAd2->IsRelCol());
-        aRef.Ref2.SetRowRel( pRefAd2->IsRelRow());
-        aRef.Ref2.SetTabRel( pRefAd2->IsRelTab());
-        nSheets = aRef.Ref2.nTab - aRef.Ref1.nTab + 1;
-        aRef.Ref2.SetFlag3D( nSheets > 1 );
-        pTokenArray->AddExternalDoubleReference( rExtInfo.mnFileId,
-                (pRealTab ? *pRealTab : rExtInfo.maTabName), aRef);
-    }
-    else
-    {
-        ScSingleRefData aRef;
-        aRef.InitAddressRel( rRefAd1.GetAddress(), rPos);
-        aRef.SetColRel( rRefAd1.IsRelCol());
-        aRef.SetRowRel( rRefAd1.IsRelRow());
-        aRef.SetTabRel( rRefAd1.IsRelTab());
-        aRef.SetFlag3D( true);
-        pTokenArray->AddExternalSingleReference( rExtInfo.mnFileId,
-                (pRealTab ? *pRealTab : rExtInfo.maTabName), aRef);
-    }
-    // The indirect usage of the external table can't be detected during the
-    // store-to-file cycle, mark it as permanently referenced so it gets stored
-    // even if not directly referenced anywhere.
-    pRefMgr->setCacheTableReferencedPermanently( rExtInfo.mnFileId,
-            rExtInfo.maTabName, nSheets);
-    ScCompiler aComp( pDoc, rPos, *pTokenArray);
-    aComp.CompileTokenArray();
-    return pTokenArray;
-}
-
-
 void ScInterpreter::ScIndirect()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIndirect" );

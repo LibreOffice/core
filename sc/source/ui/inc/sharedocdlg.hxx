@@ -49,6 +49,7 @@ private:
     FixedText           maFtWarning;
     FixedLine           maFlUsers;
     FixedText           maFtUsers;
+    SvxSimpleTableContainer m_aLbUsersContainer;
     SvxSimpleTable      maLbUsers;
     FixedLine           maFlEnd;
     HelpButton          maBtnHelp;

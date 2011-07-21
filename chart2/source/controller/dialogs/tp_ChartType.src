@@ -245,7 +245,7 @@ ModalDialog DLG_SPLINE_PROPERTIES
     {
         Pos = MAP_APPFONT ( POS_X_SPLINE_EXTRAS , POS_Y_SPLINES_3  ) ;
         Size = MAP_APPFONT ( SPLINES_WIDTH_METRIC_TEXT , 10 ) ;
-        Text [ en-US ] = "~Data points order" ;
+        Text [ en-US ] = "~Degree of polynomials" ;
     };
     MetricField MF_SPLINE_ORDER
     {
@@ -269,5 +269,5 @@ ModalDialog DLG_SPLINE_PROPERTIES
         Pos = MAP_APPFONT ( 0 , POS_Y_SPLINES_4 ) ;
         Size = MAP_APPFONT ( SPLINE_DIALOG_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
     };
-    BUTTONS_HELP_OK_CANCEL_NEXT(POS_X_SPLINES_1,POS_Y_SPLINES_5)
+    BUTTONS_OK_CANCEL_HELP( POS_X_SPLINES_1, POS_Y_SPLINES_5, 53, 0 )
 };

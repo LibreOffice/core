@@ -83,8 +83,6 @@
 
 using namespace com::sun::star;
 using ::std::vector;
-using ::std::unary_function;
-using ::std::remove_if;
 using ::boost::shared_ptr;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -1876,9 +1874,6 @@ bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
     // ppLabelArr / nLabels is not changed
 
     SCCOL nSrcColOffset = 0;
-    if (IsSheetData())
-        // source data column offset is only for internal sheet source.
-        nSrcColOffset = pSheetDesc->GetSourceRange().aStart.Col();
 
     bool bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
     lcl_FillOldFields(
@@ -2575,30 +2570,52 @@ ScDPCollection::~ScDPCollection()
     maTables.clear();
 }
 
-namespace {
-
-/**
- * Unary predicate to match DP objects by the table ID.
- */
-class MatchByTable : public unary_function<ScDPObject, bool>
+bool ScDPCollection::ClearCache(ScDPObject* pDPObj)
 {
-    SCTAB mnTab;
-public:
-    MatchByTable(SCTAB nTab) : mnTab(nTab) {}
-
-    bool operator() (const ScDPObject& rObj) const
+    if (pDPObj->IsSheetData())
     {
-        return rObj.GetOutRange().aStart.Tab() == mnTab;
-    }
-};
+        // data source is internal sheet.
+        const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
+        if (!pDesc)
+            return false;
 
+        if (pDesc->HasRangeName())
+        {
+            // cache by named range
+            ScDPCollection::NameCaches& rCaches = GetNameCaches();
+            rCaches.removeCache(pDesc->GetRangeName());
+        }
+        else
+        {
+            // cache by cell range
+            ScDPCollection::SheetCaches& rCaches = GetSheetCaches();
+            rCaches.removeCache(pDesc->GetSourceRange());
+        }
+    }
+    else if (pDPObj->IsImportData())
+    {
+        // data source is external database.
+        const ScImportSourceDesc* pDesc = pDPObj->GetImportSourceDesc();
+        if (!pDesc)
+            return false;
+
+        ScDPCollection::DBCaches& rCaches = GetDBCaches();
+        rCaches.removeCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject);
+    }
+    return true;
 }
 
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
-    maTables.erase(
-        remove_if(maTables.begin(), maTables.end(), MatchByTable(nTab)),
-        maTables.end());
+    TablesType aNewTables;
+    while (!maTables.empty())
+    {
+        TablesType::auto_type xDP = maTables.pop_back();
+        if (xDP->GetOutRange().aStart.Tab() != nTab)
+            // Not on this sheet.  Keep it.
+            aNewTables.push_back(xDP.release());
+    }
+    maTables.swap(aNewTables);
 }
 
 void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,

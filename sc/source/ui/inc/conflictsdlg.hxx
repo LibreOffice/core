@@ -140,19 +140,6 @@ public:
 
 
 //=============================================================================
-// class ScConflictsListBox
-//=============================================================================
-
-class ScConflictsListBox: public SvxRedlinTable
-{
-private:
-
-public:
-                        ScConflictsListBox( Window* pParent, const ResId& rResId );
-                        ~ScConflictsListBox();
-};
-
-//=============================================================================
 // class ScConflictsDlg
 //=============================================================================
 
@@ -160,7 +147,8 @@ class ScConflictsDlg : public ModalDialog
 {
 private:
     FixedText           maFtConflicts;
-    ScConflictsListBox  maLbConflicts;
+    SvxSimpleTableContainer m_aLbConflictsContainer;
+    SvxRedlinTable      maLbConflicts;
     PushButton          maBtnKeepMine;
     PushButton          maBtnKeepOther;
     FixedLine           maFlConflicts;

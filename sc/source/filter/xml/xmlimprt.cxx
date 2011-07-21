@@ -2770,124 +2770,31 @@ private:
 
 }
 
-void ScXMLImport::SetNamedRanges()
-{
-    ScMyNamedExpressions* pNamedExpressions = GetNamedExpressions();
-    if (!pNamedExpressions)
-        return;
-
-    Reference <beans::XPropertySet> xPropertySet (GetModel(), UNO_QUERY);
-    if (!xPropertySet.is())
-        return;
-
-    Reference <sheet::XNamedRanges> xNamedRanges(
-        xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES))), UNO_QUERY);
-
-    if (!xNamedRanges.is())
-        return;
-
-    Reference<beans::XPropertySet> xPropSet(xNamedRanges, UNO_QUERY);
-    if (!xPropSet.is())
-        return;
-
-    // Turn off broadcasting while adding imported range names.
-    NamedRangesSwitch aSwitch(xPropSet);
-
-    ScMyNamedExpressions::iterator aItr(pNamedExpressions->begin());
-    ScMyNamedExpressions::const_iterator aEndItr(pNamedExpressions->end());
-    table::CellAddress aCellAddress;
-    OUString sTempContent(RTL_CONSTASCII_USTRINGPARAM("0"));
-
-    for (; aItr != aEndItr; ++aItr)
-    {
-        sal_Int32 nOffset = 0;
-        bool bSuccess = ScRangeStringConverter::GetAddressFromString(
-            aCellAddress, aItr->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset);
-
-        if (!bSuccess)
-            // Conversion of base cell address failed.  Skip this.
-            continue;
-
-        try
-        {
-            xNamedRanges->addNewByName(
-                aItr->sName, sTempContent, aCellAddress, GetRangeType(aItr->sRangeType));
-        }
-        catch( uno::RuntimeException& )
-        {
-            OSL_FAIL("here are some Named Ranges with the same name");
-            uno::Reference < container::XIndexAccess > xIndex(xNamedRanges, uno::UNO_QUERY);
-            if (xIndex.is())
-            {
-                sal_Int32 nMax = xIndex->getCount();
-                bool bInserted = false;
-                sal_Int32 nCount = 1;
-                OUStringBuffer sName(aItr->sName);
-                sName.append(sal_Unicode('_'));
-                while (!bInserted && nCount <= nMax)
-                {
-                    OUStringBuffer sTemp(sName);
-                    sTemp.append(OUString::valueOf(nCount));
-                    try
-                    {
-                        xNamedRanges->addNewByName(
-                            sTemp.makeStringAndClear(), sTempContent, aCellAddress,
-                            GetRangeType(aItr->sRangeType));
-                        bInserted = true;
-                    }
-                    catch( uno::RuntimeException& )
-                    {
-                        ++nCount;
-                    }
-                }
-                UnlockSolarMutex();
-            }
-        }
-    }
-
-    aItr = pNamedExpressions->begin();
-    while (aItr != aEndItr)
-    {
-        sal_Int32 nOffset(0);
-        if (ScRangeStringConverter::GetAddressFromString(
-            aCellAddress, aItr->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
-        {
-            uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName(aItr->sName), uno::UNO_QUERY);
-            if (xNamedRange.is())
-            {
-                ScXMLImport::MutexGuard aGuard(*this);
-                ScNamedRangeObj* pNamedRangeObj = ScNamedRangeObj::getImplementation( xNamedRange);
-                if (pNamedRangeObj)
-                {
-                    sTempContent = aItr->sContent;
-                    // Get rid of leading sheet dots in simple ranges.
-                    if (!aItr->bIsExpression)
-                        ScXMLConverter::ParseFormula( sTempContent, false);
-                    pNamedRangeObj->SetContentWithGrammar( sTempContent, aItr->eGrammar);
-                }
-            }
-        }
-        aItr = pNamedExpressions->erase(aItr);
-    }
-}
-
 namespace {
 
-class SheetRangeNameInserter : public ::std::unary_function<ScMyNamedExpression, void>
+class RangeNameInserter : public ::std::unary_function<ScMyNamedExpression, void>
 {
     ScDocument* mpDoc;
     ScRangeName& mrRangeName;
+    ScXMLImport& mrXmlImport;
+
 public:
-    SheetRangeNameInserter(ScDocument* pDoc, ScRangeName& rRangeName) :
-        mpDoc(pDoc), mrRangeName(rRangeName) {}
+    RangeNameInserter(ScDocument* pDoc, ScRangeName& rRangeName, ScXMLImport& rXmlImport) :
+        mpDoc(pDoc), mrRangeName(rRangeName), mrXmlImport(rXmlImport) {}
 
     void operator() (const ScMyNamedExpression& r) const
     {
         using namespace formula;
 
-        if (r.sRangeType.getLength() > 0)
-            // For now, we only accept normal named expressions.
-            return;
+        const ::rtl::OUString& aType = r.sRangeType;
+        sal_uInt32 nUnoType = mrXmlImport.GetRangeType(aType);
+
+        sal_uInt16 nNewType = RT_NAME;
+        if ( nUnoType & sheet::NamedRangeFlag::FILTER_CRITERIA )    nNewType |= RT_CRITERIA;
+        if ( nUnoType & sheet::NamedRangeFlag::PRINT_AREA )         nNewType |= RT_PRINTAREA;
+        if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= RT_COLHEADER;
+        if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
+
 
         if (mpDoc && !mrRangeName.findByName(r.sName))
         {
@@ -2904,13 +2811,27 @@ public:
                     ScXMLConverter::ParseFormula(aContent, false);
 
                 ScRangeData* pData = new ScRangeData(
-                    mpDoc, r.sName, r.sContent, aPos, RT_NAME, r.eGrammar);
+                    mpDoc, r.sName, aContent, aPos, nNewType, r.eGrammar);
                 mrRangeName.insert(pData);
             }
         }
     }
 };
 
+}
+
+void ScXMLImport::SetNamedRanges()
+{
+    ScMyNamedExpressions* pNamedExpressions = GetNamedExpressions();
+    if (!pNamedExpressions)
+        return;
+
+    if (!pDoc)
+        return;
+
+    // Insert the namedRanges
+    ScRangeName* pRangeNames = pDoc->GetRangeName();
+    ::std::for_each(pNamedExpressions->begin(), pNamedExpressions->end(), RangeNameInserter(pDoc, *pRangeNames, *this));
 }
 
 void ScXMLImport::SetSheetNamedRanges()
@@ -2927,7 +2848,7 @@ void ScXMLImport::SetSheetNamedRanges()
             continue;
 
         const ScMyNamedExpressions& rNames = *itr->second;
-        ::std::for_each(rNames.begin(), rNames.end(), SheetRangeNameInserter(pDoc, *pRangeNames));
+        ::std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(pDoc, *pRangeNames, *this));
     }
 }
 

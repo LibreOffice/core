@@ -1301,6 +1301,12 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
         bUpdated |= aCol[i].UpdateReference(
             eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, pUndoDoc );
 
+    if (mpRangeName)
+    {
+        ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );;
+        mpRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
+    }
+
     if ( bIncludeDraw )
         UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, bUpdateNoteCaptionPos );
 
@@ -1408,6 +1414,9 @@ void ScTable::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
     }
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable, nNewSheets);
 
+    if (mpRangeName)
+        mpRangeName->UpdateTabRef( nTable, 1, 0, nNewSheets);
+
     if (IsStreamValid())
         SetStreamValid(false);
 }
@@ -1427,6 +1436,14 @@ void ScTable::UpdateDeleteTab( SCTAB nTable, sal_Bool bIsMove, ScTable* pRefUndo
     else
         for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, NULL, nSheets);
 
+    if (mpRangeName)
+    {
+        for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
+        {
+            mpRangeName->UpdateTabRef( nTable + aTab, 2 );
+        }
+    }
+
     if (IsStreamValid())
         SetStreamValid(false);
 }
@@ -1441,6 +1458,9 @@ void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
         if (pProgress)
             pProgress->SetState(pProgress->GetState() + aCol[i].GetCodeCount());
     }
+
+    if (mpRangeName)
+        mpRangeName->UpdateTabRef(nOldPos, 3, nNewPos);
 
     if (IsStreamValid())
         SetStreamValid(false);

@@ -625,19 +625,18 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         if ( pStyleSheet && !pScMod->GetIsWaterCan() )
                         {
                             ScUndoApplyPageStyle* pUndoAction = 0;
-                            for( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
+                            SCTAB nTabCount = pDoc->GetTableCount();
+                            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+                            for (; itr != itrEnd && *itr < nTabCount; ++itr)
                             {
-                                if( rMark.GetTableSelect( nTab ) )
+                                String aOldName = pDoc->GetPageStyle( *itr );
+                                if ( aOldName != aStyleName )
                                 {
-                                    String aOldName = pDoc->GetPageStyle( nTab );
-                                    if ( aOldName != aStyleName )
-                                    {
-                                        pDoc->SetPageStyle( nTab, aStyleName );
-                                        ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(sal_True), nTab ).UpdatePages();
-                                        if( !pUndoAction )
-                                            pUndoAction = new ScUndoApplyPageStyle( pDocSh, aStyleName );
-                                        pUndoAction->AddSheetAction( nTab, aOldName );
-                                    }
+                                    pDoc->SetPageStyle( *itr, aStyleName );
+                                    ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(sal_True), *itr ).UpdatePages();
+                                    if( !pUndoAction )
+                                        pUndoAction = new ScUndoApplyPageStyle( pDocSh, aStyleName );
+                                    pUndoAction->AddSheetAction( *itr, aOldName );
                                 }
                             }
                             if( pUndoAction )

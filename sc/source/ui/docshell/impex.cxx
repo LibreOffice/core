@@ -49,8 +49,6 @@ class StarBASIC;
 #include <rtl/math.hxx>
 #include <svtools/htmlout.hxx>
 #include <svl/zforlist.hxx>
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
 #include <unotools/charclass.hxx>
@@ -58,6 +56,7 @@ class StarBASIC;
 #include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <unotools/transliterationwrapper.hxx>
+#include <vector>
 
 #include "global.hxx"
 #include "scerrors.hxx"
@@ -1544,7 +1543,7 @@ sal_Bool ScImportExport::Sylk2Doc( SvStream& rStrm )
     SCROW nEndRow = aRange.aEnd.Row();
     sal_uLong nOldPos = rStrm.Tell();
     sal_Bool bData = sal_Bool( !bSingle );
-    SvULongs aFormats;
+    ::std::vector< sal_uInt32 > aFormats;
 
     if( !bSingle)
         bOk = StartPaste();
@@ -1730,9 +1729,9 @@ sal_Bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     if( nCol > nEndCol )
                         nEndCol = nCol;
                 }
-                if ( 0 <= nFormat && nFormat < aFormats.Count() )
+                if ( 0 <= nFormat && nFormat < (sal_Int32)aFormats.size() )
                 {
-                    sal_uLong nKey = aFormats[(sal_uInt16)nFormat];
+                    sal_uInt32 nKey = aFormats[nFormat];
                     pDoc->ApplyAttr( nCol, nRow, aRange.aStart.Tab(),
                             SfxUInt32Item( ATTR_VALUE_FORMAT, nKey ) );
                 }
@@ -1759,7 +1758,7 @@ sal_Bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         ScGlobal::eLnge );
                     if ( nCheckPos )
                         nKey = 0;
-                    aFormats.Insert( nKey, aFormats.Count() );
+                    aFormats.push_back( nKey );
                 }
             }
             else if( cTag == 'I' && *p == 'D' )

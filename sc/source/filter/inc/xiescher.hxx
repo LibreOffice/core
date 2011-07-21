@@ -38,7 +38,7 @@
 #include "xiroot.hxx"
 #include "xistring.hxx"
 #include <boost/shared_ptr.hpp>
-
+#include <oox/ole/olehelper.hxx>
 namespace com { namespace sun { namespace star {
     namespace drawing { class XShape; }
     namespace form { class XForm; }
@@ -940,10 +940,6 @@ public:
     void                RemoveConnectorRules();
 
 private:
-    /** Returns the first connector rule from the internal list. */
-    SvxMSDffConnectorRule* GetFirstRule();
-    /** Returns the next connector rule from the internal list. */
-    SvxMSDffConnectorRule* GetNextRule();
     /** Updates the data of a connected shape in a connector rule. */
     void                UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*& rpSdrObj, sal_uInt32* pnDffFlags = 0 );
 
@@ -989,7 +985,7 @@ protected:
     contains core implementation of DFF stream import and OCX form control
     import.
  */
-class XclImpDffConverter : public XclImpSimpleDffConverter, private SvxMSConvertOCXControls
+class XclImpDffConverter : public XclImpSimpleDffConverter
 {
 public:
     explicit            XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm );
@@ -1096,6 +1092,7 @@ private:
     typedef ::std::vector< XclImpDffConvDataRef >   XclImpDffConvDataStack;
 
     const ::rtl::OUString maStdFormName;    /// Standard name of control forms.
+    ::oox::ole::OleFormCtrlImportHelper   maFormCtrlHelper;
     SotStorageStreamRef mxCtlsStrm;         /// The 'Ctls' stream for OCX form controls.
     ScfProgressBarRef   mxProgress;         /// The progress bar used in ProcessObj().
     XclImpDffConvDataStack maDataStack;     /// Stack for registered drawing managers.

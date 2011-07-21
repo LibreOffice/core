@@ -393,20 +393,6 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
     }
 }
 
-
-//=============================================================================
-// class ScConflictsListBox
-//=============================================================================
-
-ScConflictsListBox::ScConflictsListBox( Window* pParent, const ResId& rResId )
-    :SvxRedlinTable( pParent, rResId )
-{
-}
-
-ScConflictsListBox::~ScConflictsListBox()
-{
-}
-
 //=============================================================================
 // class ScConflictsDlg
 //=============================================================================
@@ -414,7 +400,8 @@ ScConflictsListBox::~ScConflictsListBox()
 ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList )
     :ModalDialog( pParent, ScResId( RID_SCDLG_CONFLICTS ) )
     ,maFtConflicts      ( this, ScResId( FT_CONFLICTS ) )
-    ,maLbConflicts      ( this, ScResId( LB_CONFLICTS ) )
+    ,m_aLbConflictsContainer(this, ScResId( LB_CONFLICTS))
+    ,maLbConflicts(m_aLbConflictsContainer)
     ,maBtnKeepMine      ( this, ScResId( BTN_KEEPMINE ) )
     ,maBtnKeepOther     ( this, ScResId( BTN_KEEPOTHER ) )
     ,maFlConflicts      ( this, ScResId( FL_CONFLICTS ) )
@@ -753,8 +740,8 @@ void ScConflictsDlg::Resize()
 
     lcl_ChangeControlWidth( maFtConflicts, nDeltaWidth );
 
-    lcl_ChangeControlWidth( maLbConflicts, nDeltaWidth );
-    lcl_ChangeControlHeight( maLbConflicts, nDeltaHeight );
+    lcl_ChangeControlWidth( m_aLbConflictsContainer, nDeltaWidth );
+    lcl_ChangeControlHeight( m_aLbConflictsContainer, nDeltaHeight );
 
     lcl_MoveControlX( maBtnKeepMine, nDeltaWidth / 2 );
     lcl_MoveControlY( maBtnKeepMine, nDeltaHeight );

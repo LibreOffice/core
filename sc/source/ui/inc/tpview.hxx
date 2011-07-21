@@ -47,7 +47,8 @@ class ScViewOptions;
 class ScTpContentOptions : public SfxTabPage
 {
     FixedLine       aLinesGB;
-    CheckBox        aGridCB;
+    FixedText       aGridFT;
+    ListBox         aGridLB;
     FixedText       aColorFT;
     ColorListBox    aColorLB;
     CheckBox        aBreakCB;
@@ -89,7 +90,7 @@ class ScTpContentOptions : public SfxTabPage
     ScViewOptions*  pLocalOptions;
 
     void    InitGridOpt();
-    DECL_LINK( GridHdl, CheckBox* );
+    DECL_LINK( GridHdl, ListBox* );
     DECL_LINK( SelLbObjHdl, ListBox* );
     DECL_LINK( CBHdl, CheckBox* );
 

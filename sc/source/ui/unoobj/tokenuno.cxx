@@ -37,6 +37,7 @@
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/AddressConvention.hpp>
+#include <com/sun/star/sheet/NameToken.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <svl/itemprop.hxx>
@@ -395,7 +396,12 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                     }
                     break;
                 case svIndex:
-                    rAPI.Data <<= static_cast<sal_Int32>( rToken.GetIndex() );
+                    {
+                        sheet::NameToken aNameToken;
+                        aNameToken.Index = static_cast<sal_Int32>( rToken.GetIndex() );
+                        aNameToken.Global = static_cast<sal_Bool>( rToken.GetByte() );
+                        rAPI.Data <<= aNameToken;
+                    }
                     break;
                 case svMatrix:
                     if (!ScRangeToSequence::FillMixedArray( rAPI.Data, static_cast<const ScToken&>(rToken).GetMatrix(), true))

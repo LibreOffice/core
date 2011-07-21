@@ -77,7 +77,6 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
 
-#include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -88,10 +87,19 @@
 #include <iostream>
 #include <vector>
 
+#ifdef WNT
+#define NOMINMAX
+#include <prewin.h>
+#include <postwin.h>
+#undef NOMINMAX
+#endif
+
 #define MDDS_HASH_CONTAINER_BOOST 1
 #include <mdds/mixed_type_matrix.hpp>
 
 #define UCALC_DEBUG_OUTPUT 0
+
+const int indeterminate = 2;
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -223,9 +231,6 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, bool bExpected);
-    bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL);
-
     void testCollator();
     void testInput();
     void testCellFunctions();
@@ -255,11 +260,6 @@ public:
     void testGraphicsInGroup();
 
     /**
-     * Ensure CVEs remain unbroken
-     */
-    void testCVEs();
-
-    /**
      * Test toggling relative/absolute flag of cell and cell range references.
      * This corresponds with hitting Shift-F4 while the cursor is on a formula
      * cell.
@@ -284,9 +284,6 @@ public:
     CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
-#if !defined(__OpenBSD__)
-    CPPUNIT_TEST(testCVEs);
-#endif
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST_SUITE_END();
 
@@ -611,51 +608,6 @@ void Test::testCSV()
         CPPUNIT_ASSERT_MESSAGE ("CSV numeric detection failure", bResult == aTests[i].bResult);
         CPPUNIT_ASSERT_MESSAGE ("CSV numeric value failure", nValue == aTests[i].nValue);
     }
-}
-
-bool Test::load(const rtl::OUString &rFilter, const rtl::OUString &rURL)
-{
-    SfxFilter aFilter(
-        rFilter,
-        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
-        rtl::OUString(), rtl::OUString() );
-
-    ScDocShellRef xDocShRef = new ScDocShell;
-    SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
-    aSrcMed.SetFilter(&aFilter);
-    return xDocShRef->DoLoad(&aSrcMed);
-}
-
-void Test::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, bool bExpected)
-{
-    osl::Directory aDir(rURL);
-
-    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
-    osl::DirectoryItem aItem;
-    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
-    while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
-    {
-        aItem.getFileStatus(aFileStatus);
-        rtl::OUString sURL = aFileStatus.getFileURL();
-        if (aFileStatus.getFileType() == osl::FileStatus::Directory)
-            recursiveScan(rFilter, sURL, bExpected);
-        else
-        {
-            bool bRes = load(rFilter, sURL);
-            rtl::OString aRes(rtl::OUStringToOString(sURL, osl_getThreadTextEncoding()));
-            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == bExpected);
-        }
-    }
-    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
-}
-
-void Test::testCVEs()
-{
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/qpro/pass")), true);
-
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/calc/sc/qa/unit/data/qpro/fail")), false);
 }
 
 template<typename Evaluator>

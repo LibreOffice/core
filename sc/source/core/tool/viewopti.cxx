@@ -153,6 +153,7 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_FORMULAS    ] =
     aOptArr[ VOPT_SYNTAX      ] =
     aOptArr[ VOPT_HELPLINES   ] =
+    aOptArr[ VOPT_GRID_ONTOP  ] =
     aOptArr[ VOPT_BIGHANDLES  ] = false;
     aOptArr[ VOPT_NOTES       ] =
     aOptArr[ VOPT_NULLVALS    ] =
@@ -308,7 +309,8 @@ SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
 #define SCLAYOUTOPT_VERTSCROLL      8
 #define SCLAYOUTOPT_SHEETTAB        9
 #define SCLAYOUTOPT_OUTLINE         10
-#define SCLAYOUTOPT_COUNT           11
+#define SCLAYOUTOPT_GRID_ONCOLOR    11
+#define SCLAYOUTOPT_COUNT           12
 
 #define CFGPATH_DISPLAY     "Office.Calc/Content/Display"
 
@@ -343,6 +345,7 @@ Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
     static const char* aPropNames[] =
     {
         "Line/GridLine",            // SCLAYOUTOPT_GRIDLINES
+        "Line/GridOnColoredCells",  // SCLAYOUTOPT_GRID_ONCOLOR
         "Line/GridLineColor",       // SCLAYOUTOPT_GRIDCOLOR
         "Line/PageBreak",           // SCLAYOUTOPT_PAGEBREAK
         "Line/Guide",               // SCLAYOUTOPT_GUIDE
@@ -444,6 +447,9 @@ ScViewCfg::ScViewCfg() :
                         break;
                     case SCLAYOUTOPT_GRIDLINES:
                         SetOption( VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                    case SCLAYOUTOPT_GRID_ONCOLOR:
+                        SetOption( VOPT_GRID_ONTOP, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCLAYOUTOPT_PAGEBREAK:
                         SetOption( VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
@@ -612,6 +618,9 @@ IMPL_LINK( ScViewCfg, LayoutCommitHdl, void *, EMPTYARG )
                 break;
             case SCLAYOUTOPT_GRIDLINES:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_GRID ) );
+                break;
+            case SCLAYOUTOPT_GRID_ONCOLOR:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_GRID_ONTOP ) );
                 break;
             case SCLAYOUTOPT_PAGEBREAK:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetOption( VOPT_PAGEBREAKS ) );

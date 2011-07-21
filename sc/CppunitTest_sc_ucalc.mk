@@ -71,8 +71,12 @@ $(eval $(call gb_CppunitTest_set_include,sc_ucalc,\
     -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
     -I$(realpath $(SRCDIR)/sc/inc) \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_CppunitTest_add_api,sc_ucalc,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,sc_ucalc))
@@ -88,6 +92,7 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,sc_ucalc,\
 $(eval $(call gb_CppunitTest_set_args,sc_ucalc,\
     --headless \
     --invisible \
+    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
 $(eval $(call gb_RdbTarget_RdbTarget,sc_ucalc))

@@ -1096,7 +1096,7 @@ ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, 
     ScAccessibleEditObjectTextData(pEditView, pWin),
     mbEditEngineCreated(false)
 {
-    ScTextWnd* pTxtWnd = (ScTextWnd*)pWin;
+    ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>( pWin );
 
     if (pTxtWnd)
         pTxtWnd->InsertAccessibleTextData( *this );
@@ -1104,7 +1104,7 @@ ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, 
 
 ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
 {
-    ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+    ScTextWnd* pTxtWnd = dynamic_cast< ScTextWnd* >(mpWindow);
 
     if (pTxtWnd)
         pTxtWnd->RemoveAccessibleTextData( *this );
@@ -1125,7 +1125,7 @@ ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
 
 void ScAccessibleEditLineTextData::Dispose()
 {
-    ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+    ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow);
 
     if (pTxtWnd)
         pTxtWnd->RemoveAccessibleTextData( *this );
@@ -1141,7 +1141,7 @@ ScAccessibleTextData* ScAccessibleEditLineTextData::Clone() const
 
 SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
 {
-    ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+    ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow);
 
     if (pTxtWnd)
     {
@@ -1187,7 +1187,7 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
 
 SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( sal_Bool bCreate )
 {
-    ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+    ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow);
 
     if (pTxtWnd)
     {
@@ -1209,7 +1209,7 @@ SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( sal_Bo
 
 void ScAccessibleEditLineTextData::ResetEditMode()
 {
-    ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+    ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow);
 
     if (mbEditEngineCreated && mpEditEngine)
         delete mpEditEngine;
@@ -1227,7 +1227,7 @@ void ScAccessibleEditLineTextData::TextChanged()
 {
     if (mbEditEngineCreated && mpEditEngine)
     {
-        ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+        ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow);
 
         if (pTxtWnd)
             mpEditEngine->SetText(pTxtWnd->GetTextString());

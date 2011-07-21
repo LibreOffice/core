@@ -52,7 +52,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/svdpage.hxx>
 
 #include "output.hxx"
 #include "document.hxx"
@@ -1635,22 +1634,18 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
 
 drawinglayer::processor2d::BaseProcessor2D* ScOutputData::CreateProcessor2D( )
 {
-    SdrModel aModel;
-    SfxItemPool& rPool = aModel.GetItemPool();
-    rPool.FreezeIdRanges();
-
-    SdrPage aSdrPage( aModel );
-
+    pDoc->InitDrawLayer(pDoc->GetDocumentShell());
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-    if ( pDrawLayer )
-        aSdrPage = *pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
+    if (!pDrawLayer)
+        return NULL;
 
     basegfx::B2DRange aViewRange;
+    SdrPage *pDrawPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos(
             basegfx::B2DHomMatrix(  ),
             pDev->GetViewTransformation(),
             aViewRange,
-            GetXDrawPageForSdrPage( &aSdrPage ),
+            GetXDrawPageForSdrPage( pDrawPage ),
             0.0,
             uno::Sequence< beans::PropertyValue >() );
 

@@ -47,32 +47,48 @@ class ScRangeList;
 
 //========================================================================
 
-class ScTextWnd : public Window, public DragSourceHelper        // edit window
+class ScTextWndBase : public Window
+{
+public:
+    ScTextWndBase( Window* pParent,  WinBits nStyle ) : Window ( pParent, nStyle ) {}
+    virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) = 0;
+    virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) = 0;
+    virtual void            SetTextString( const String& rString ) = 0;
+    virtual const String&   GetTextString() const = 0;
+    virtual void            StartEditEngine() = 0;
+    virtual void            StopEditEngine( sal_Bool bAll ) = 0;
+    virtual EditView*       GetEditView() = 0;
+    virtual void            MakeDialogEditView() = 0;
+    virtual void            SetFormulaMode( sal_Bool bSet ) = 0;
+    virtual sal_Bool            IsInputActive() = 0;
+};
+
+class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit window
 {
 public:
                     ScTextWnd( Window* pParent );
     virtual         ~ScTextWnd();
 
-    void            SetTextString( const String& rString );
-    const String&   GetTextString() const;
+    virtual void            SetTextString( const String& rString );
+    virtual const String&   GetTextString() const;
 
     sal_Bool            IsInputActive();
-    EditView*       GetEditView();
+    virtual EditView*       GetEditView();
 
                         // fuer FunktionsAutopiloten
-    void            MakeDialogEditView();
+    virtual void            MakeDialogEditView();
 
-    void            StartEditEngine();
-    void            StopEditEngine( sal_Bool bAll );
+    virtual void            StartEditEngine();
+    virtual void            StopEditEngine( sal_Bool bAll );
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    void            SetFormulaMode( sal_Bool bSet );
+    virtual void            SetFormulaMode( sal_Bool bSet );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
-    void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
+    virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
+    virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
 
     DECL_LINK( NotifyHdl, EENotify* );
 
@@ -92,11 +108,9 @@ protected:
 
     virtual String  GetText() const;
 
-private:
     void            ImplInitSettings();
     void            UpdateAutoCorrFlag();
 
-private:
     typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
 
     String      aString;
@@ -111,6 +125,7 @@ private:
     // #102710#; this flag should be true if a key input or a command is handled
     // it prevents the call of InputChanged in the ModifyHandler of the EditEngine
     sal_Bool        bInputMode;
+    sal_Int16       nTextStartPos;
 };
 
 //========================================================================
@@ -150,6 +165,50 @@ private:
 
 //========================================================================
 
+class ScMultiTextWnd : public ScTextWnd
+{
+public:
+    ScMultiTextWnd( Window* pParent );
+    virtual void StartEditEngine();
+    virtual void StopEditEngine( sal_Bool bAll );
+protected:
+    void InitEditEngine(SfxObjectShell* pObjSh);
+
+    virtual void Paint( const Rectangle& rRec );
+    virtual void Resize();
+};
+
+class ScInputBarGroup : public ScTextWndBase
+{
+
+public:
+                    ScInputBarGroup( Window* Parent );
+    virtual         ~ScInputBarGroup();
+    virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
+    virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
+//    virtual void    Paint(const Rectangle& rRec );
+    void            SetTextString( const String& rString );
+    void            StartEditEngine();
+    EditView*       GetEditView();
+    void            SetSize(Size aSize);
+    virtual void    Resize();
+    virtual const String&   GetTextString() const;
+    virtual void            StopEditEngine( sal_Bool bAll );
+    void            InitEditEngine(SfxObjectShell* pObjSh);
+    void            GainFocus();
+    void            SetFormulaMode( sal_Bool bSet );
+    bool            IsFocus();
+    void            MakeDialogEditView();
+    sal_Bool            IsInputActive();
+
+private:
+
+    ScMultiTextWnd      aTextWindow;
+    bool            bIsMultiLine;
+
+};
+
+
 class ScInputWindow : public ToolBox                        // Parent-Toolbox
 {
 public:
@@ -169,7 +228,7 @@ public:
 
     void            SetFormulaMode( sal_Bool bSet );
 
-    sal_Bool            IsInputActive();
+    virtual sal_Bool            IsInputActive();
     EditView*       GetEditView();
 
     void            TextGrabFocus();
@@ -199,7 +258,8 @@ protected:
 
 private:
     ScPosWnd        aWndPos;
-    ScTextWnd       aTextWindow;
+    std::auto_ptr<ScTextWndBase> pRuntimeWindow;
+    ScTextWndBase&  aTextWindow;
     ScInputHandler* pInputHdl;
     SfxBindings*    pBindings;
     String          aTextOk;

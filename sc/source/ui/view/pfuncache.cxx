@@ -111,35 +111,34 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
 
     ScDocument* pDoc = pDocSh->GetDocument();
     SCTAB nTabCount = pDoc->GetTableCount();
-    for ( SCTAB nTab=0; nTab<nTabCount; nTab++ )
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && (*itr) < nTabCount; ++itr)
     {
-        if ( rMark.GetTableSelect( nTab ) )
+        SCTAB nTab = *itr;
+        ScPrintFunc aFunc( pDev, pDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange, &aSelection.GetOptions() );
+        aFunc.SetRenderFlag( sal_True );
+
+        long nDisplayStart = GetDisplayStart( nTab );
+
+        for ( long nPage=0; nPage<nPages[nTab]; nPage++ )
         {
-            ScPrintFunc aFunc( pDev, pDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange, &aSelection.GetOptions() );
-            aFunc.SetRenderFlag( sal_True );
+            Range aPageRange( nRenderer+1, nRenderer+1 );
+            MultiSelection aPage( aPageRange );
+            aPage.SetTotalRange( Range(0,RANGE_MAX) );
+            aPage.Select( aPageRange );
 
-            long nDisplayStart = GetDisplayStart( nTab );
+            ScPreviewLocationData aLocData( pDoc, pDev );
+            aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, NULL, &aLocData );
 
-            for ( long nPage=0; nPage<nPages[nTab]; nPage++ )
-            {
-                Range aPageRange( nRenderer+1, nRenderer+1 );
-                MultiSelection aPage( aPageRange );
-                aPage.SetTotalRange( Range(0,RANGE_MAX) );
-                aPage.Select( aPageRange );
+            ScRange aCellRange;
+            Rectangle aPixRect;
+            if ( aLocData.GetMainCellRange( aCellRange, aPixRect ) )
+                aLocations.push_back( ScPrintPageLocation( nRenderer, aCellRange, aPixRect ) );
 
-                ScPreviewLocationData aLocData( pDoc, pDev );
-                aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, NULL, &aLocData );
-
-                ScRange aCellRange;
-                Rectangle aPixRect;
-                if ( aLocData.GetMainCellRange( aCellRange, aPixRect ) )
-                    aLocations.push_back( ScPrintPageLocation( nRenderer, aCellRange, aPixRect ) );
-
-                ++nRenderer;
-            }
-
-            nTabStart += nPages[nTab];
+            ++nRenderer;
         }
+
+        nTabStart += nPages[nTab];
     }
 
     bLocInitialized = true;

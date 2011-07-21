@@ -399,7 +399,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 {
     ScModule* pScMod = SC_MOD();
     sal_Bool bTextWysiwyg = pScMod->GetInputOptions().GetTextWysiwyg();
-    sal_Bool bGridFirst = true;     //! entscheiden!!!
 
     if (pViewData->IsMinimized())
         return;
@@ -543,6 +542,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.SetViewShell( pViewData->GetViewShell() );
 
     sal_Bool bGrid = rOpts.GetOption( VOPT_GRID ) && pViewData->GetShowGrid();
+    sal_Bool bGridFirst = !rOpts.GetOption( VOPT_GRID_ONTOP );
 
     sal_Bool bPage = rOpts.GetOption( VOPT_PAGEBREAKS );
 

@@ -617,6 +617,27 @@ void ScMarkData::DeleteTab( SCTAB nTab )
     maTabMarked.swap(tabMarked);
 }
 
+//iterators
+ScMarkData::iterator ScMarkData::begin()
+{
+    return maTabMarked.begin();
+}
+
+ScMarkData::iterator ScMarkData::end()
+{
+    return maTabMarked.end();
+}
+
+ScMarkData::const_iterator ScMarkData::begin() const
+{
+    return maTabMarked.begin();
+}
+
+ScMarkData::const_iterator ScMarkData::end() const
+{
+    return maTabMarked.end();
+}
+
 
 
 

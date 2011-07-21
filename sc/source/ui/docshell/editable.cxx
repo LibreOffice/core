@@ -104,9 +104,9 @@ void ScEditableTester::TestSelectedBlock( ScDocument* pDoc,
                         const ScMarkData& rMark )
 {
     SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-        if (rMark.GetTableSelect(nTab))
-            TestBlock( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nTabCount; ++itr)
+        TestBlock( pDoc, *itr, nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
 void ScEditableTester::TestRange( ScDocument* pDoc, const ScRange& rRange )

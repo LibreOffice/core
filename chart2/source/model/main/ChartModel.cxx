@@ -235,7 +235,7 @@ sal_Bool ChartModel::impl_isControllerConnected( const uno::Reference< frame::XC
                 return sal_True;
         }
     }
-    catch( uno::Exception )
+    catch (const uno::Exception&)
     {
     }
     return sal_False;
@@ -654,7 +654,7 @@ void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
                 //try to cancel running longlasting calls
                 //// @todo
             }
-            catch( uno::Exception )
+            catch (const uno::Exception&)
             {
                 //// @todo
                 //do not throw anything here!! (without endTryClose)
@@ -837,7 +837,7 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
                 sal_Bool bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( Reference< frame::XModel >(this) );
                 xProp->setPropertyValue(C2U("IncludeHiddenCells"), uno::makeAny(bIncludeHiddenCells));
             }
-            catch( const beans::UnknownPropertyException& )
+            catch (const beans::UnknownPropertyException&)
             {
             }
         }
@@ -906,11 +906,11 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
                     xDia->setDiagramData( xDataSource, aArguments );
             }
         }
-        catch( lang::IllegalArgumentException & )
+        catch (const lang::IllegalArgumentException&)
         {
             throw;
         }
-        catch( uno::Exception & ex )
+        catch (const uno::Exception& ex)
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -1011,7 +1011,7 @@ uno::Any SAL_CALL ChartModel::queryInterface( const uno::Type& aType )
             if( m_xOldModelAgg.is())
                 aResult = m_xOldModelAgg->queryAggregation( aType );
         }
-        catch( uno::Exception & ex )
+        catch (const uno::Exception& ex)
         {
             ASSERT_EXCEPTION( ex );
         }
@@ -1105,7 +1105,7 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
 
         aResult.Data <<= aMetafile;
     }
-    catch( uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -1143,7 +1143,7 @@ uno::Any SAL_CALL ChartModel::getTransferData( const datatransfer::DataFlavor& a
                 aResult = xTransferable->getTransferData( aFlavor );
             }
         }
-        catch( uno::Exception & ex )
+        catch (const uno::Exception& ex)
         {
             ASSERT_EXCEPTION( ex );
         }

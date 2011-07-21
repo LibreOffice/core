@@ -109,7 +109,7 @@ void ReferenceSizeProvider::setValuesAtTitle(
 
         setValuesAtPropertySet( xTitleProp, /* bAdaptFontSizes = */ false );
     }
-    catch( const uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -140,7 +140,7 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
                             (*aIt)->getDataPointByIndex( aPointIndexes[i] ) );
                 }
             }
-            catch( const uno::Exception & ex )
+            catch (const uno::Exception& ex)
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -183,7 +183,7 @@ void ReferenceSizeProvider::setValuesAtPropertySet(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch (const uno::Exception& ex)
     {
         ASSERT_EXCEPTION( ex );
     }
@@ -205,7 +205,7 @@ void ReferenceSizeProvider::getAutoResizeFromPropSet(
             else
                 eSingleState = AUTO_RESIZE_NO;
         }
-        catch( uno::Exception )
+        catch (const uno::Exception&)
         {
             // unknown property -> state stays unknown
         }
@@ -320,7 +320,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
                     }
                 }
             }
-            catch( const uno::Exception & ex )
+            catch (const uno::Exception& ex)
             {
                 ASSERT_EXCEPTION( ex );
             }

@@ -446,12 +446,27 @@ TabPage RID_SCPAGE_CONTENT
         Size = MAP_APPFONT ( 121 , 8 ) ;
         Text [ en-US ] = "Visual aids";
     };
-    CheckBox CB_GRID
+    FixedText FT_GRID
     {
-        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_GRID";
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:FT_GRID";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text [ en-US ] = "~Grid lines" ;
+    };
+    ListBox LB_GRID
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_CONTENT:LB_GRID";
+        Pos = MAP_APPFONT ( 54 , 12 ) ;
+        Size = MAP_APPFONT ( 70 , 46 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Show" ; Default ; > ;
+            < "Show on colored cells" ; Default ; > ;
+            < "Hide" ; Default ; > ;
+        };
+
     };
     FixedText FT_COLOR
     {

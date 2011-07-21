@@ -2359,15 +2359,15 @@ ConvertDataList::ConvertDataList( void )
     NEWL( "Rank",   1.8000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); // *** Rankine
 
     // VOLUMNE: 1 Liter is...
-    NEWD( "tsp",        2.0284000000000000E02,  CDC_Volume ); // Teaspoon
-    NEWD( "tbs",        6.7613333333333333E01,  CDC_Volume ); // Tablespoon
-    NEWD( "oz",         3.3806666666666667E01,  CDC_Volume ); // Ounce Liquid
-    NEWD( "cup",        4.2258333333333333E00,  CDC_Volume ); // Cup
-    NEWD( "pt",         2.1129166666666667E00,  CDC_Volume ); // US Pint
-    NEWD( "us_pt",      2.1129166666666667E00,  CDC_Volume ); // US Pint also
-    NEWD( "uk_pt",      1.75975569552166E00,    CDC_Volume ); // UK Pint
-    NEWD( "qt",         1.0564583333333333E00,  CDC_Volume ); // Quart
-    NEWD( "gal",        2.6411458333333333E-01, CDC_Volume ); // Gallone
+    NEWD( "tsp",        2.0288413621105798E02,  CDC_Volume ); // US teaspoon            1/768 gallon
+    NEWD( "tbs",        6.7628045403685994E01,  CDC_Volume ); // US tablespoon          1/256 gallon
+    NEWD( "oz",         3.3814022701842997E01,  CDC_Volume ); // Ounce Liquid           1/128 gallon
+    NEWD( "cup",        4.2267528377303746E00,  CDC_Volume ); // Cup                    1/16 gallon
+    NEWD( "pt",         2.1133764188651873E00,  CDC_Volume ); // US Pint                1/8 gallon
+    NEWD( "us_pt",      2.1133764188651873E00,  CDC_Volume ); // US Pint also
+    NEWD( "uk_pt",      1.7597539863927023E00,  CDC_Volume ); // UK Pint                1/8 imperial gallon
+    NEWD( "qt",         1.0566882094325937E00,  CDC_Volume ); // Quart                  1/4 gallon
+    NEWD( "gal",        2.6417205235814842E-01, CDC_Volume ); // Gallon                 1/3.785411784
     NEWDP( "l",         1.0000000000000000E00,  CDC_Volume ); // Liter
     NEWDP( "L",         1.0000000000000000E00,  CDC_Volume ); // Liter also
     NEWDP( "lt",        1.0000000000000000E00,  CDC_Volume ); // Liter also
@@ -2379,7 +2379,7 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "yd3",        1.3079506193143922E-03, CDC_Volume ); // *** Cubic Yard
     NEWDP( "ang3",      1.0000000000000000E27,  CDC_Volume ); // *** Cubic Angstroem
     NEWD( "Pica3",      2.2776990435870636E07,  CDC_Volume ); // *** Cubic Pica
-    NEWD( "barrel",     6.289811E-03,           CDC_Volume ); // *** Barrel (=42gal?)
+    NEWD( "barrel",     6.2898107704321051E-03, CDC_Volume ); // *** Barrel (=42gal)
     NEWD( "bushel",     2.837759E-02,           CDC_Volume ); // *** Bushel
     NEWD( "regton",     3.531467E-04,           CDC_Volume ); // *** Register ton
     NEWD( "GRT",        3.531467E-04,           CDC_Volume ); // *** Register ton also
@@ -2391,8 +2391,8 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "ly3",        1.1810108125623799E-51, CDC_Volume ); // *** Cubic light-year
     NEWD( "MTON",       1.4125866688595436E00,  CDC_Volume ); // *** Measurement ton
     NEWD( "tspm",       5.0000000000000000E02,  CDC_Volume ); // *** Modern teaspoon
-    NEWD( "uk_gal",     2.199694619402070E-01,  CDC_Volume ); // U.K. / Imperial gallon
-    NEWD( "uk_qt",      8.798778477608300E-01,  CDC_Volume ); // U.K. / Imperial quart
+    NEWD( "uk_gal",     2.1996924829908779E-01,  CDC_Volume ); // U.K. / Imperial gallon        1/4.54609
+    NEWD( "uk_qt",      8.7987699319635115E-01,  CDC_Volume ); // U.K. / Imperial quart         1/4 imperial gallon
 
     // 1 Square Meter is...
     NEWDP( "m2",        1.0000000000000000E00,  CDC_Area ); // *** Square Meter

@@ -1564,7 +1564,6 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
     if( nAnz > 0 )
     {
         // attention: 0 = last parameter, nAnz-1 = first parameter
-        sal_Int16 nNull = -1;       // skip this parameter
         sal_Int16 nSkipEnd = -1;    // skip all parameters <= nSkipEnd
 
         sal_Int16 nLast = nAnz - 1;
@@ -1591,6 +1590,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
         // [Parameter{;Parameter}]
         if( nLast > nSkipEnd )
         {
+            sal_Int16 nNull = -1;       // skip this parameter
             aPool << eParam[ nLast ];
             for( nLauf = nLast - 1 ; nLauf > nSkipEnd ; nLauf-- )
             {

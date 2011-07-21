@@ -1602,11 +1602,18 @@ void SAL_CALL ScModelObj::setPropertyValue(
         ScDocument* pDoc = pDocShell->GetDocument();
         const ScDocOptions& rOldOpt = pDoc->GetDocOptions();
         ScDocOptions aNewOpt = rOldOpt;
+        //  Don't recalculate while loading XML, when the formula text is stored
+        //  Recalculation after loading is handled separately.
+        bool bHardRecalc = !pDoc->IsImportingXML();
 
         sal_Bool bOpt = ScDocOptionsHelper::setPropertyValue( aNewOpt, *aPropSet.getPropertyMap(), aPropertyName, aValue );
         if (bOpt)
         {
             // done...
+            if ( aString.EqualsAscii( SC_UNO_IGNORECASE ) ||
+                 aString.EqualsAscii( SC_UNONAME_REGEXP ) ||
+                 aString.EqualsAscii( SC_UNO_LOOKUPLABELS ) )
+                bHardRecalc = false;
         }
         else if ( aString.EqualsAscii( SC_UNONAME_CLOCAL ) )
         {
@@ -1713,10 +1720,8 @@ void SAL_CALL ScModelObj::setPropertyValue(
         if ( aNewOpt != rOldOpt )
         {
             pDoc->SetDocOptions( aNewOpt );
-            //  Don't recalculate while loading XML, when the formula text is stored.
-            //  Recalculation after loading is handled separately.
             //! Recalc only for options that need it?
-            if ( !pDoc->IsImportingXML() )
+            if ( bHardRecalc )
                 pDocShell->DoHardRecalc( sal_True );
             pDocShell->SetDocumentModified();
         }
@@ -2181,50 +2186,51 @@ void ScModelObj::NotifyChanges( const ::rtl::OUString& rOperation, const ScRange
         aMarkData.MarkFromRangeList( rRanges, false );
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
-        for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
-            if (aMarkData.GetTableSelect(nTab))
+        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
+        for (; itr != itrEnd && *itr < nTabCount; ++itr)
+        {
+            SCTAB nTab = *itr;
+            const ScSheetEvents* pEvents = pDoc->GetSheetEvents(nTab);
+            if (pEvents)
             {
-                const ScSheetEvents* pEvents = pDoc->GetSheetEvents(nTab);
-                if (pEvents)
+                const rtl::OUString* pScript = pEvents->GetScript(SC_SHEETEVENT_CHANGE);
+                if (pScript)
                 {
-                    const rtl::OUString* pScript = pEvents->GetScript(SC_SHEETEVENT_CHANGE);
-                    if (pScript)
+                    ScRangeList aTabRanges;     // collect ranges on this sheet
+                    size_t nRangeCount = rRanges.size();
+                    for ( size_t nIndex = 0; nIndex < nRangeCount; ++nIndex )
                     {
-                        ScRangeList aTabRanges;     // collect ranges on this sheet
-                        size_t nRangeCount = rRanges.size();
-                        for ( size_t nIndex = 0; nIndex < nRangeCount; ++nIndex )
+                        ScRange aRange( *rRanges[ nIndex ] );
+                        if ( aRange.aStart.Tab() == nTab )
+                            aTabRanges.Append( aRange );
+                    }
+                    size_t nTabRangeCount = aTabRanges.size();
+                    if ( nTabRangeCount > 0 )
+                    {
+                        uno::Reference<uno::XInterface> xTarget;
+                        if ( nTabRangeCount == 1 )
                         {
-                            ScRange aRange( *rRanges[ nIndex ] );
-                            if ( aRange.aStart.Tab() == nTab )
-                                aTabRanges.Append( aRange );
-                        }
-                        size_t nTabRangeCount = aTabRanges.size();
-                        if ( nTabRangeCount > 0 )
-                        {
-                            uno::Reference<uno::XInterface> xTarget;
-                            if ( nTabRangeCount == 1 )
-                            {
-                                ScRange aRange( *aTabRanges[ 0 ] );
-                                if ( aRange.aStart == aRange.aEnd )
-                                    xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellObj( pDocShell, aRange.aStart ) ) );
-                                else
-                                    xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangeObj( pDocShell, aRange ) ) );
-                            }
+                            ScRange aRange( *aTabRanges[ 0 ] );
+                            if ( aRange.aStart == aRange.aEnd )
+                                xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellObj( pDocShell, aRange.aStart ) ) );
                             else
-                                xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangesObj( pDocShell, aTabRanges ) ) );
-
-                            uno::Sequence<uno::Any> aParams(1);
-                            aParams[0] <<= xTarget;
-
-                            uno::Any aRet;
-                            uno::Sequence<sal_Int16> aOutArgsIndex;
-                            uno::Sequence<uno::Any> aOutArgs;
-
-                            /*ErrCode eRet =*/ pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
+                                xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangeObj( pDocShell, aRange ) ) );
                         }
+                        else
+                            xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangesObj( pDocShell, aTabRanges ) ) );
+
+                        uno::Sequence<uno::Any> aParams(1);
+                        aParams[0] <<= xTarget;
+
+                        uno::Any aRet;
+                        uno::Sequence<sal_Int16> aOutArgsIndex;
+                        uno::Sequence<uno::Any> aOutArgs;
+
+                        /*ErrCode eRet =*/ pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
                     }
                 }
             }
+        }
     }
 }
 

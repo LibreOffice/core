@@ -677,6 +677,20 @@ void XclExpNameManagerImpl::CreateUserNames()
         if (!itr->HasType(RT_SHARED) && !FindNamedExpIndex(SCTAB_GLOBAL, itr->GetIndex()))
             CreateName(SCTAB_GLOBAL, *itr);
     }
+    //look at every sheet for local range names
+    ScRangeName::TabNameCopyMap rLocalNames;
+    GetDoc().GetAllTabRangeNames(rLocalNames);
+    ScRangeName::TabNameCopyMap::iterator tabIt = rLocalNames.begin(), tabItEnd = rLocalNames.end();
+    for (; tabIt != tabItEnd; ++tabIt)
+    {
+        itr = tabIt->second->begin(), itrEnd = tabIt->second->end();
+        for (; itr != itrEnd; ++itr)
+        {
+            // skip definitions of shared formulas
+            if (!itr->HasType(RT_SHARED) && !FindNamedExpIndex(tabIt->first, itr->GetIndex()))
+                CreateName(tabIt->first, *itr);
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------

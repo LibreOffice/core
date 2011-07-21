@@ -1240,7 +1240,7 @@ void ScDocShell::DoRecalc( sal_Bool bApi )
     if (!bDone)                         // sonst Dokument neu berechnen
     {
         WaitObject aWaitObj( GetActiveDialogParent() );
-        aDocument.CalcFormulaTree();
+        aDocument.CalcFormulaTree( sal_True );
         if ( pSh )
             pSh->UpdateCharts(sal_True);
 

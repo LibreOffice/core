@@ -96,8 +96,8 @@ public:
     void        ResetDocOptions();
 
     inline const ScDocOptions&  operator=( const ScDocOptions& rOpt );
-    inline int                  operator==( const ScDocOptions& rOpt ) const;
-    inline int                  operator!=( const ScDocOptions& rOpt ) const;
+    inline bool                 operator==( const ScDocOptions& rOpt ) const;
+    inline bool                 operator!=( const ScDocOptions& rOpt ) const;
 
     sal_uInt16  GetStdPrecision() const { return nPrecStandardFormat; }
     void        SetStdPrecision( sal_uInt16 n ) { nPrecStandardFormat = n; }
@@ -161,7 +161,7 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     return *this;
 }
 
-inline int ScDocOptions::operator==( const ScDocOptions& rOpt ) const
+inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
 {
     return (
                 rOpt.bIsIgnoreCase          == bIsIgnoreCase
@@ -189,7 +189,7 @@ inline int ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             );
 }
 
-inline int ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
+inline bool ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
 {
     return !(operator==(rOpt));
 }

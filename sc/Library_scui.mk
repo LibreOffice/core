@@ -30,9 +30,13 @@ $(eval $(call gb_Library_set_include,scui,\
 	-I$(WORKDIR)/SdiTarget/sc/sdi \
 	-I$(WORKDIR)/Misc/sc \
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
 ))
 
+))
+
+$(eval $(call gb_Library_add_api,scui,\
+    offapi \
+    udkapi \
 $(eval $(call gb_Library_add_linked_libs,scui,\
 	comphelper \
 	cppu \

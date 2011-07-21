@@ -959,8 +959,7 @@ IMPL_LINK( ScConditionalFormatDlg, BtnHdl, PushButton*, pBtn )
 
     else if ( pBtn == &aBtnAdd )
     {
-        if ( ppEntries[ nEntryCount - 1 ] )
-            AddEntry();
+        AddEntry();
         aScrollBar.SetThumbPos( nEntryCount - 3 );
         SliderMoved();
         aEdtCond31.GrabFocus();
