@@ -925,16 +925,6 @@ void SalDisplay::Init()
             if( otherwm == eWindowManager_ ) eWindowManager_ = pmwm;
         }
         else
-        if( GetServerVendor() == vendor_sgi )
-        {
-            if( GetVisual( m_nDefaultScreen ).GetDepth() > 8 && GetVisual( m_nDefaultScreen ).GetDepth() <= 16 )
-                nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-            nProperties_ |= PROPERTY_SUPPORT_XSetClipMask;
-
-            if( otherwm == eWindowManager_ )
-                eWindowManager_ = FourDwm;
-        }
-        else
         if( GetServerVendor() == vendor_hummingbird )
         {
             if (GetVisual(m_nDefaultScreen).GetDepth() == 24)
