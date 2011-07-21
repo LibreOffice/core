@@ -157,8 +157,8 @@ namespace
 
     void HwpFilterTest::test()
     {
-        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/filters/hwpfilter/qa/cppunit/data/pass")), true);
-        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/filters/hwpfilter/qa/cppunit/data/fail/")), false);
+        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/hwpfilter/qa/cppunit/data/pass")), true);
+        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/hwpfilter/qa/cppunit/data/fail/")), false);
 
         printf("HwpFilter: tested %d files\n", m_nLoadedDocs);
     }
