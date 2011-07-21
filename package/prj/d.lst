@@ -1,6 +1,7 @@
 ..\%__SRC%\misc\*.map %_DEST%\bin\*.map
 ..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
 ..\%__SRC%\lib\*.lib %_DEST%\lib\*.lib
+..\%__SRC%\lib\*.a %_DEST%\lib\*.a
 ..\%__SRC%\lib\lib*.so %_DEST%\lib\lib*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
 ..\dtd\*.dtd %_DEST%\bin\*.*
