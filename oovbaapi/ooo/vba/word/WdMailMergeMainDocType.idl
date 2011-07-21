@@ -1,0 +1,12 @@
+module ooo { module vba { module word {
+    constants WdMailMergeMainDocType {
+        const long wdCatalog = 3;
+        const long wdDirectory = 3;
+        const long wdEMail = 4;
+        const long wdEnvelopes = 2;
+        const long wdFax = 5;
+        const long wdFormLetters = 0;
+        const long wdMailingLabels = 1;
+        const long wdNotAMergeDocument = -1;
+    };
+}; }; };

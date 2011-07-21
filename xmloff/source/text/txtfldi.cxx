@@ -280,7 +280,7 @@ void XMLTextFieldImportContext::EndElement()
             {
                 rTextImportHelper.InsertTextContent(xTextContent);
             }
-            catch (lang::IllegalArgumentException e)
+            catch (const lang::IllegalArgumentException&)
             {
                 // ignore
             }
@@ -3174,7 +3174,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
                 }
                 // else: ignore
             }
-            catch ( const Exception& )
+            catch (const Exception&)
             {
                 //ignore
             }
@@ -3697,8 +3697,9 @@ SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
                 }
             }
         }
-        catch ( Exception& )
-        {}
+        catch (const Exception&)
+        {
+        }
 
         if( !pContext )
             pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,  rLocalName, aTextBuffer);
@@ -3743,7 +3744,7 @@ void XMLAnnotationImportContext::EndElement()
             {
                 GetImportHelper().InsertTextContent( xTextContent );
             }
-            catch (lang::IllegalArgumentException)
+            catch (const lang::IllegalArgumentException&)
             {
                 // ignore
             }

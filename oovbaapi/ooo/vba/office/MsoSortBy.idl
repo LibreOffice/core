@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoSortBy {
+        const long msoSortByFileName = 1;
+        const long msoSortByFileType = 3;
+        const long msoSortByLastModified = 4;
+        const long msoSortByNone = 5;
+        const long msoSortBySize = 2;
+    };
+}; }; };

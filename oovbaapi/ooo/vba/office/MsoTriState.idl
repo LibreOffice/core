@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoTriState {
+        const long msoCTrue = 1;
+        const long msoFalse = 0;
+        const long msoTriStateMixed = -2;
+        const long msoTriStateToggle = -3;
+        const long msoTrue = -1;
+    };
+}; }; };

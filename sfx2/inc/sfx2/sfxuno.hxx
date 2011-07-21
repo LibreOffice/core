@@ -590,7 +590,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
     }
 
 //************************************************************************************************************************
-//  definition for "extern c component_getFactory()"
+//  definition for "extern c sfx_component_getFactory()"
 //************************************************************************************************************************
 #define CREATEFACTORY(CLASS)                                                                                            \
                                                                                                                         \
@@ -598,7 +598,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
     xFactory = CLASS::impl_createFactory( xServiceManager );
 
 //************************************************************************************************************************
-//  definition for "extern c component_getFactory()"
+//  definition for "extern c sfx_component_getFactory()"
 //************************************************************************************************************************
 #define IF_NAME_CREATECOMPONENTFACTORY(CLASS)                                                                           \
                                                                                                                         \

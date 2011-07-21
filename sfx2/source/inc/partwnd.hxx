@@ -68,9 +68,6 @@ public:
 
 class SfxPartDockWnd_Impl : public SfxDockingWindow
 {
-private:
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > m_xFrame;
-
 protected:
     virtual void            Resize();
     virtual long            Notify( NotifyEvent& rNEvt );

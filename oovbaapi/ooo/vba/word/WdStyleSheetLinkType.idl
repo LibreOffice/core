@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdStyleSheetLinkType {
+        const long wdStyleSheetLinkTypeImported = 1;
+        const long wdStyleSheetLinkTypeLinked = 0;
+    };
+}; }; };

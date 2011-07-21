@@ -58,9 +58,13 @@ SHL1STDLIBS=		$(COMMON_LIBS) \
             $(OLEAUT32LIB)\
             $(COMDLG32LIB)\
             $(KERNEL32LIB)\
-            $(UUIDLIB)\
+            $(UUIDLIB)
+
+.IF "$(COM)" == "MSC"
+SHL1STDLIBS+=\
             Delayimp.lib\
             /DELAYLOAD:shell32.dll
+.ENDIF
 
 SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)

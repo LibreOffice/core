@@ -153,7 +153,9 @@ namespace accessibility
             pStateSet->AddState( AccessibleStateType::ENABLED );
             pStateSet->AddState( AccessibleStateType::SENSITIVE );
         }
-        catch( const uno::Exception& ) {}
+        catch (const uno::Exception&)
+        {
+        }
     }
 
     AccessibleEditableTextPara::~AccessibleEditableTextPara()
@@ -170,7 +172,9 @@ namespace accessibility
                 OSL_TRACE( "AccessibleEditableTextPara revoked ID: %d\n", mnNotifierClientId );
 #endif
             }
-            catch( const uno::Exception& ) {}
+            catch (const uno::Exception&)
+            {
+            }
         }
     }
 
@@ -315,13 +319,17 @@ namespace accessibility
                     aOldDesc <<= getAccessibleDescription();
                     aOldName <<= getAccessibleName();
                 }
-                catch( const uno::Exception& ) {} // optional behaviour
+                catch (const uno::Exception&) // optional behaviour
+                {
+                }
                 // index and therefore description changed
                 FireEvent( AccessibleEventId::DESCRIPTION_CHANGED, uno::makeAny( getAccessibleDescription() ), aOldDesc );
                 FireEvent( AccessibleEventId::NAME_CHANGED, uno::makeAny( getAccessibleName() ), aOldName );
             }
         }
-        catch( const uno::Exception& ) {} // optional behaviour
+        catch (const uno::Exception&) // optional behaviour
+        {
+        }
     }
 
     sal_Int32 AccessibleEditableTextPara::GetParagraphIndex() const SAL_THROW((uno::RuntimeException))
@@ -355,7 +363,9 @@ namespace accessibility
                 OSL_TRACE( "Disposed ID: %d\n", nClientId );
 #endif
             }
-            catch( const uno::Exception& ) {}
+            catch (const uno::Exception&)
+            {
+            }
         }
     }
 
@@ -385,7 +395,9 @@ namespace accessibility
         {
             TextChanged();
         }
-        catch( const uno::RuntimeException& ) {}
+        catch (const uno::RuntimeException&)
+        {
+        }
     }
 
     ESelection AccessibleEditableTextPara::MakeSelection( sal_Int32 nStartEEIndex, sal_Int32 nEndEEIndex )
@@ -1363,7 +1375,7 @@ namespace accessibility
                 else
                     return -1;
             }
-            catch( const lang::IndexOutOfBoundsException& )
+            catch (const lang::IndexOutOfBoundsException&)
             {
                 // #103927# Don't throw for invalid nIndex values
                 return -1;
@@ -1437,7 +1449,7 @@ namespace accessibility
             SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( sal_True );
             return rCacheVF.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
         }
-        catch( const uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             return sal_False;
         }
@@ -1650,7 +1662,7 @@ namespace accessibility
 
             return aRetVal;
         }
-        catch( const uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             return sal_False;
         }
@@ -1681,7 +1693,7 @@ namespace accessibility
 
             return rCacheVF.Cut();
         }
-        catch( const uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             return sal_False;
         }
@@ -1711,7 +1723,7 @@ namespace accessibility
 
             return rCacheVF.Paste();
         }
-        catch( const uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             return sal_False;
         }
@@ -1744,7 +1756,7 @@ namespace accessibility
 
             return bRet;
         }
-        catch( const uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             return sal_False;
         }
@@ -1779,7 +1791,7 @@ namespace accessibility
 
             return bRet;
         }
-        catch( const uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             return sal_False;
         }
@@ -1814,7 +1826,7 @@ namespace accessibility
 
             return bRet;
         }
-        catch( const uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             return sal_False;
         }
@@ -1861,7 +1873,7 @@ namespace accessibility
                 {
                     aPropSet.setPropertyValue(pPropArray->Name, pPropArray->Value);
                 }
-                catch( const uno::Exception& )
+                catch (const uno::Exception&)
                 {
                     OSL_FAIL("AccessibleEditableTextPara::setAttributes exception in setPropertyValue");
                 }
@@ -1874,7 +1886,7 @@ namespace accessibility
 
             return sal_True;
         }
-        catch( const uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             return sal_False;
         }
@@ -1937,7 +1949,7 @@ namespace accessibility
                 {
                     aProp = xPropSetInfo->getPropertyByName( pRequestedAttributes[i] );
                 }
-                catch (beans::UnknownPropertyException &)
+                catch (const beans::UnknownPropertyException&)
                 {
                     continue;
                 }
@@ -2036,7 +2048,7 @@ namespace accessibility
                 {
                     aProp = xPropSetInfo->getPropertyByName( pRequestedAttributes[i] );
                 }
-                catch (beans::UnknownPropertyException &)
+                catch (const beans::UnknownPropertyException&)
                 {
                     continue;
                 }
@@ -2199,7 +2211,7 @@ namespace accessibility
                         aResult.SegmentStart    = nStart;
                         aResult.SegmentEnd      = nEnd;
                     }
-                    catch (lang::IndexOutOfBoundsException)
+                    catch (const lang::IndexOutOfBoundsException&)
                     {
                         // this is not the exception that should be raised in this function ...
                         DBG_ASSERT( 0, "unexpected exception" );
@@ -2222,7 +2234,7 @@ namespace accessibility
         {
             aResult = getTextAtLineNumber( getNumberOfLineWithCaret() );
         }
-        catch (lang::IndexOutOfBoundsException &)
+        catch (const lang::IndexOutOfBoundsException&)
         {
             // this one needs to be catched since this interface does not allow for it.
         }
@@ -2239,7 +2251,7 @@ namespace accessibility
         {
             nRes = getLineNumberAtIndex( getCaretPosition() );
         }
-        catch (lang::IndexOutOfBoundsException &)
+        catch (const lang::IndexOutOfBoundsException&)
         {
             // this one needs to be catched since this interface does not allow for it.
         }

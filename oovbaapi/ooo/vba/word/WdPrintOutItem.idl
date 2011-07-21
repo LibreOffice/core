@@ -1,0 +1,13 @@
+module ooo { module vba { module word {
+    constants WdPrintOutItem {
+        const long wdPrintAutoTextEntries = 4;
+        const long wdPrintComments = 2;
+        const long wdPrintDocumentContent = 0;
+        const long wdPrintDocumentWithMarkup = 7;
+        const long wdPrintEnvelope = 6;
+        const long wdPrintKeyAssignments = 5;
+        const long wdPrintMarkup = 2;
+        const long wdPrintProperties = 1;
+        const long wdPrintStyles = 3;
+    };
+}; }; };

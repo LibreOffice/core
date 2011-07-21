@@ -1,0 +1,18 @@
+module ooo { module vba { module word {
+    constants WdRevisionType {
+        const long wdNoRevision = 0;
+        const long wdRevisionConflict = 7;
+        const long wdRevisionDelete = 2;
+        const long wdRevisionDisplayField = 5;
+        const long wdRevisionInsert = 1;
+        const long wdRevisionParagraphNumber = 4;
+        const long wdRevisionParagraphProperty = 10;
+        const long wdRevisionProperty = 3;
+        const long wdRevisionReconcile = 6;
+        const long wdRevisionReplace = 9;
+        const long wdRevisionSectionProperty = 12;
+        const long wdRevisionStyle = 8;
+        const long wdRevisionStyleDefinition = 13;
+        const long wdRevisionTableProperty = 11;
+    };
+}; }; };

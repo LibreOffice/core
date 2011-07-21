@@ -1,0 +1,7 @@
+module ooo { module vba { module access {
+    constants AcFindMatch {
+        const long acAnywhere = 0;
+        const long acEntire = 1;
+        const long acStart = 2;
+    };
+}; }; };

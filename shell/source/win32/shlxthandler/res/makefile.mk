@@ -63,10 +63,12 @@ $(RES)$/x64$/$(TARGET).res : $(RES)$/$(TARGET).res
 .INCLUDE :	tg_wntx64.mk
 
 
-
 # Generate the native Windows resource file
 # using lngconvex.exe 
 
 $(RCFILES) : $(ULFDIR)$/shlxthdl.ulf makefile.mk rcfooter.txt rcheader.txt rctmpl.txt
+.IF "$(COM)" == "MSC"
     $(subst,$(SOLARBINDIR)$/lngconvex,$(BIN)$/lngconvex $(LNGCONVEX)) -ulf $(ULFDIR)$/shlxthdl.ulf -rc $(RES)$/shlxthdl.rc -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
-    
+.ELSE
+    $(LNGCONVEX) -ulf $(ULFDIR)$/shlxthdl.ulf -rc $(RES)$/shlxthdl.rc -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
+.ENDIF

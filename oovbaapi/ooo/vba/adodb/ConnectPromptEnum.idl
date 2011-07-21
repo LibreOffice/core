@@ -1,0 +1,8 @@
+module ooo { module vba { module adodb {
+    constants ConnectPromptEnum {
+        const long adPromptAlways = 1;
+        const long adPromptComplete = 2;
+        const long adPromptCompleteRequired = 3;
+        const long adPromptNever = 4;
+    };
+}; }; };

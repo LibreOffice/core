@@ -66,7 +66,6 @@ using namespace ::com::sun::star::beans;
 // Please look at sfx2/inc/sfxsids.hrc the values are defined there. Due to build dependencies
 // we cannot include the header file.
 const sal_uInt16 SID_HELPMENU            = (SID_SFX_START + 410);
-const sal_uInt16 SID_ONLINE_REGISTRATION = (SID_SFX_START + 1537);
 
 namespace framework
 {
@@ -213,40 +212,21 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
 
         if ( pHelpMenu )
         {
-            static const char REFERENCECOMMAND_AFTER[]  = ".uno:OnlineRegistrationDlg";
             static const char REFERENCECOMMAND_BEFORE[] = ".uno:About";
 
             // Add-Ons help menu items should be inserted after the "registration" menu item
-            bool   bAddAfter        = true;
             sal_uInt16 nItemCount       = pHelpMenu->GetItemCount();
-            sal_uInt16 nRegPos          = pHelpMenu->GetItemPos( SID_ONLINE_REGISTRATION );
-            sal_uInt16 nInsPos          = nRegPos;
             sal_uInt16 nInsSepAfterPos  = MENU_APPEND;
             sal_uInt16 nUniqueMenuId    = ADDONMENU_ITEMID_START;
             AddonsOptions aOptions;
 
-            if ( nRegPos == USHRT_MAX )
-            {
-                // try to detect the online registration dialog menu item with the command URL
-                sal_uInt16 nId = FindMenuId( pHelpMenu, String::CreateFromAscii( REFERENCECOMMAND_AFTER ));
-                nRegPos    = pHelpMenu->GetItemPos( nId );
-                nInsPos    = nRegPos;
-            }
-
-            if ( nRegPos == USHRT_MAX )
-            {
-                // second try:
-                // try to detect the about menu item with the command URL
-                sal_uInt16 nId = FindMenuId( pHelpMenu, String::CreateFromAscii( REFERENCECOMMAND_BEFORE ));
-                nRegPos    = pHelpMenu->GetItemPos( nId );
-                nInsPos    = nRegPos;
-                bAddAfter  = false;
-            }
+            // try to detect the about menu item with the command URL
+            sal_uInt16 nId = FindMenuId( pHelpMenu, String::CreateFromAscii( REFERENCECOMMAND_BEFORE ));
+            sal_uInt16 nInsPos = pHelpMenu->GetItemPos( nId );
 
             Sequence< Sequence< PropertyValue > > aAddonSubMenu;
             const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = aOptions.GetAddonsHelpMenu();
 
-            nInsPos = bAddAfter ? AddonMenuManager::GetNextPos( nInsPos ) : nInsPos;
             if ( nInsPos < nItemCount && pHelpMenu->GetItemType( nInsPos ) != MENUITEM_SEPARATOR )
                 nInsSepAfterPos = nInsPos;
 
@@ -261,10 +241,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
                     if ( pHelpMenu->GetItemType( nInsSepAfterPos ) != MENUITEM_SEPARATOR )
                         pHelpMenu->InsertSeparator( nInsSepAfterPos );
                 }
-                if ( nRegPos < MENU_APPEND )
-                    pHelpMenu->InsertSeparator( nRegPos+1 );
-                else
-                    pHelpMenu->InsertSeparator( nItemCount );
+                pHelpMenu->InsertSeparator( nItemCount );
             }
         }
     }

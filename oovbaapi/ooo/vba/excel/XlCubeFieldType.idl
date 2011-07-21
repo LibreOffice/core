@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlCubeFieldType {
+        const long xlHierarchy = 1;
+        const long xlMeasure = 2;
+        const long xlSet = 3;
+    };
+}; }; };

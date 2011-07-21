@@ -39,11 +39,16 @@ $(eval $(call gb_Library_add_package_headers,vbahelper,vbahelper_inc))
 # add any additional include paths for this library here
 $(eval $(call gb_Library_set_include,vbahelper,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_add_defs,vbahelper,\
     -DVBAHELPER_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,vbahelper,\
+	udkapi \
+	offapi \
+	oovbaapi \
 ))
 
 # add libraries to be linked to vbahelper; again these names need to be given as

@@ -772,19 +772,6 @@ void SvxRubyDialog::DataChanged( const DataChangedEvent& rDCEvt )
         UpdateColors();
 }
 
-void lcl_MoveBox(long nOffset, Edit& rLeft, Edit& rRight)
-{
-    Size aLeftSz(rLeft.GetSizePixel());
-    Point aRightPos(rRight.GetPosPixel());
-    Size aRightSz(rRight.GetSizePixel());
-    aLeftSz.Width() += nOffset;
-    aRightSz.Width() -= nOffset;
-    aRightPos.X() += nOffset;
-    rLeft.SetSizePixel(aLeftSz);
-    rRight.SetPosSizePixel(aRightPos, aRightSz);
-
-}
-
 RubyPreview::RubyPreview(SvxRubyDialog& rParent, const ResId& rResId) :
         Window(&rParent, rResId),
         rParentDlg(rParent)

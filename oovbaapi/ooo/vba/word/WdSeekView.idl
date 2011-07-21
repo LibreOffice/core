@@ -1,0 +1,15 @@
+module ooo { module vba { module word {
+    constants WdSeekView {
+        const long wdSeekCurrentPageFooter = 10;
+        const long wdSeekCurrentPageHeader = 9;
+        const long wdSeekEndnotes = 8;
+        const long wdSeekEvenPagesFooter = 6;
+        const long wdSeekEvenPagesHeader = 3;
+        const long wdSeekFirstPageFooter = 5;
+        const long wdSeekFirstPageHeader = 2;
+        const long wdSeekFootnotes = 7;
+        const long wdSeekMainDocument = 0;
+        const long wdSeekPrimaryFooter = 4;
+        const long wdSeekPrimaryHeader = 1;
+    };
+}; }; };

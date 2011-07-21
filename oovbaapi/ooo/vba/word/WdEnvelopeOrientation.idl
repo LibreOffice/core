@@ -1,0 +1,13 @@
+module ooo { module vba { module word {
+    constants WdEnvelopeOrientation {
+        const long wdCenterClockwise = 7;
+        const long wdCenterLandscape = 4;
+        const long wdCenterPortrait = 1;
+        const long wdLeftClockwise = 6;
+        const long wdLeftLandscape = 3;
+        const long wdLeftPortrait = 0;
+        const long wdRightClockwise = 8;
+        const long wdRightLandscape = 5;
+        const long wdRightPortrait = 2;
+    };
+}; }; };

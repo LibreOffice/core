@@ -1781,11 +1781,10 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
     }
     else if( rKV.GetKey().CompareIgnoreCaseToAscii( "content-type" ) == COMPARE_EQUAL )
     {
-        ::rtl::OString sContent = ::rtl::OUStringToOString( aValue, RTL_TEXTENCODING_ASCII_US );
-        ByteString sType, sSubType;
+        String sType, sSubType;
         INetContentTypeParameterList aParameters;
 
-        if( INetContentTypes::parse( sContent, sType, sSubType, &aParameters ) )
+        if (INetContentTypes::parse(aValue, sType, sSubType, &aParameters))
         {
             const INetContentTypeParameter * pCharset = aParameters.find("charset");
             if (pCharset != 0)

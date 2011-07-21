@@ -1,4 +1,4 @@
-xh      xmlhelp :       comphelper ucbhelper LIBXSLT:libxslt unoil BERKELEYDB:berkeleydb LUCENE:lucene javaunohelper l10ntools unotools NULL
+xh      xmlhelp :       comphelper ucbhelper LIBXSLT:libxslt unoil BERKELEYDB:berkeleydb LUCENE:lucene javaunohelper DESKTOP:l10ntools unotools NULL
 xh	xmlhelp									usr1	-	all	xh_mkout NULL
 xh	xmlhelp\inc								nmake	-	all	xh_inc NULL
 xh	xmlhelp\source\treeview					nmake	-	all	xh_treeview xh_inc NULL

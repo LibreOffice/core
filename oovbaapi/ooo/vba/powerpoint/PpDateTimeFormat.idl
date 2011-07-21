@@ -1,0 +1,19 @@
+module ooo { module vba { module powerpoint {
+    constants PpDateTimeFormat {
+        const long ppDateTimeddddMMMMddyyyy = 2;
+        const long ppDateTimedMMMMyyyy = 3;
+        const long ppDateTimedMMMyy = 5;
+        const long ppDateTimeFigureOut = 14;
+        const long ppDateTimeFormatMixed = -2;
+        const long ppDateTimeHmm = 10;
+        const long ppDateTimehmmAMPM = 12;
+        const long ppDateTimeHmmss = 11;
+        const long ppDateTimehmmssAMPM = 13;
+        const long ppDateTimeMdyy = 1;
+        const long ppDateTimeMMddyyHmm = 8;
+        const long ppDateTimeMMddyyhmmAMPM = 9;
+        const long ppDateTimeMMMMdyyyy = 4;
+        const long ppDateTimeMMMMyy = 6;
+        const long ppDateTimeMMyy = 7;
+    };
+}; }; };

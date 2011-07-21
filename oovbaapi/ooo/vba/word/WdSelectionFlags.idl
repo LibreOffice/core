@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdSelectionFlags {
+        const long wdSelActive = 8;
+        const long wdSelAtEOL = 2;
+        const long wdSelOvertype = 4;
+        const long wdSelReplace = 16;
+        const long wdSelStartActive = 1;
+    };
+}; }; };

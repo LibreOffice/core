@@ -302,14 +302,16 @@ class FORMULA_DLLPUBLIC FormulaIndexToken : public FormulaToken
 {
 private:
             sal_uInt16              nIndex;
+            bool mbGlobal;
 public:
-                                FormulaIndexToken( OpCode e, sal_uInt16 n ) :
-                                    FormulaToken(  svIndex, e ), nIndex( n ) {}
+                                FormulaIndexToken( OpCode e, sal_uInt16 n, bool bGlobal = true ) :
+                                    FormulaToken(  svIndex, e ), nIndex( n ), mbGlobal( bGlobal ) {}
                                 FormulaIndexToken( const FormulaIndexToken& r ) :
-                                    FormulaToken( r ), nIndex( r.nIndex ) {}
+                                    FormulaToken( r ), nIndex( r.nIndex ), mbGlobal( r.mbGlobal ) {}
 
     virtual FormulaToken*       Clone() const { return new FormulaIndexToken(*this); }
-    virtual sal_uInt16              GetIndex() const;
+    virtual sal_uInt16          GetIndex() const;
+    virtual sal_uInt8           GetByte() const;
     virtual void                SetIndex( sal_uInt16 n );
     virtual bool                operator==( const FormulaToken& rToken ) const;
 };

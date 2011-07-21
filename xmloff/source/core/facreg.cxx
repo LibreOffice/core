@@ -164,11 +164,6 @@ extern "C"
 {
 #endif
 
-XMLOFF_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 #define SINGLEFACTORY(classname)\
         if( classname##_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )\
         {\
@@ -178,7 +173,7 @@ XMLOFF_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment( const sal
                 classname##_getSupportedServiceNames() );\
         }
 
-XMLOFF_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+XMLOFF_DLLPUBLIC void * SAL_CALL xo_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
     if( pServiceManager )

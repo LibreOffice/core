@@ -1,0 +1,14 @@
+module ooo { module vba { module excel {
+    constants XlColumnDataType {
+        const long xlDMYFormat = 4;
+        const long xlDYMFormat = 7;
+        const long xlEMDFormat = 10;
+        const long xlGeneralFormat = 1;
+        const long xlMDYFormat = 3;
+        const long xlMYDFormat = 6;
+        const long xlSkipColumn = 9;
+        const long xlTextFormat = 2;
+        const long xlYDMFormat = 8;
+        const long xlYMDFormat = 5;
+    };
+}; }; };

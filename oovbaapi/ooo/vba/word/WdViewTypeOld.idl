@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdViewTypeOld {
+        const long wdOnlineView = 6;
+        const long wdPageView = 3;
+    };
+}; }; };

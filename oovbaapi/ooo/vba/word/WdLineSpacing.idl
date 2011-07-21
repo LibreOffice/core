@@ -1,0 +1,10 @@
+module ooo { module vba { module word {
+    constants WdLineSpacing {
+        const long wdLineSpace1pt5 = 1;
+        const long wdLineSpaceAtLeast = 3;
+        const long wdLineSpaceDouble = 2;
+        const long wdLineSpaceExactly = 4;
+        const long wdLineSpaceMultiple = 5;
+        const long wdLineSpaceSingle = 0;
+    };
+}; }; };

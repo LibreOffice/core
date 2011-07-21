@@ -1,0 +1,11 @@
+module ooo { module vba { module office {
+    constants MsoDiagramType {
+        const long msoDiagramCycle = 2;
+        const long msoDiagramMixed = -2;
+        const long msoDiagramOrgChart = 1;
+        const long msoDiagramPyramid = 4;
+        const long msoDiagramRadial = 3;
+        const long msoDiagramTarget = 6;
+        const long msoDiagramVenn = 5;
+    };
+}; }; };

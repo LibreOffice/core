@@ -1082,8 +1082,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE SfxObjectShell::SaveTo_Impl" );
     if( RTL_LOGFILE_HASLOGFILE() )
     {
-        ByteString aString( rMedium.GetName(), RTL_TEXTENCODING_ASCII_US );
-        RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1( aLog, "saving \"%s\"", aString.GetBuffer() );
+        rtl::OString aString(
+            rtl::OUStringToOString(rMedium.GetName(), RTL_TEXTENCODING_ASCII_US));
+        RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1(aLog, "saving \"%s\"", aString.getStr());
     }
 
     AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Begin" ) ) );
@@ -2964,8 +2965,9 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE SfxObjectShell::LoadOwnFormat" );
     if( RTL_LOGFILE_HASLOGFILE() )
     {
-        ByteString aString( rMedium.GetName(), RTL_TEXTENCODING_ASCII_US );
-        RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1( aLog, "loading \"%s\"", aString.GetBuffer() );
+        rtl::OString aString(
+            rtl::OUStringToOString(rMedium.GetName(), RTL_TEXTENCODING_ASCII_US));
+        RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1(aLog, "loading \"%s\"", aString.getStr());
     }
 
     uno::Reference< embed::XStorage > xStorage = rMedium.GetStorage();
@@ -3203,7 +3205,7 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
     return bResult;
 }
 
-
+#if OSL_DEBUG_LEVEL > 0
 sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::XStorage >& xSource,
                                                    const uno::Reference< embed::XStorage >& xTarget )
 {
@@ -3295,7 +3297,7 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
 
     return sal_True;
 }
-
+#endif
 
 sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >& xStorage )
 {

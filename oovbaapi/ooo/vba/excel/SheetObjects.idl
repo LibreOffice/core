@@ -29,6 +29,7 @@
 #define __ooo_vba_excel_SheetObjects_idl__
 
 #include <ooo/vba/XCollection.idl>
+#include <ooo/vba/excel/XGraphicObjects.idl>
 
 //=============================================================================
 
@@ -39,50 +40,6 @@
 //=============================================================================
 
 module ooo {  module vba { module excel {
-
-//=============================================================================
-
-/** Collections that implement this interface provide access to a specific type
-    of drawing objects in a single sheet.
-
-    <p>The following sheet symbols represent collections of graphic objects,
-    and therefore implement this interface:</p>
-    <ul><li>Buttons: push button (command button) controls,</li>
-    <li>ChartObjects: chart objects embedded in the sheet,</li>
-    <li>CheckBoxes: check box controls,</li>
-    <li>DropDowns: drop-down listbox controls,</li>
-    <li>EditBoxes: text edit controls (dialog sheets only),</li>
-    <li>GroupBoxes: group frame controls,</li>
-    <li>GroupObjects: group objects containing other child objects,</li>
-    <li>Labels: fixed text controls,</li>
-    <li>ListBoxes: plain listbox controls,</li>
-    <li>OptionButtons: option button (radio button) controls,</li>
-    <li>Ovals: simple ovals and circles,</li>
-    <li>Pictures: picture objects,</li>
-    <li>Rectangles: simple rectangle objects,</li>
-    <li>ScrollBars: scrollbar controls,</li>
-    <li>Spinners: spinner (spin button) controls,</li>
-    <li>TextBoxes: rectangle objects with embedded text.</li></ul>
-
-    <p>These symbols are now deprecated in VBA but kept for compatibility with
-    old VBA scripts. All symbols representing collections of form controls do
-    NOT belong to ActiveX form controls but to the old-style drawing controls.
-    </p>
- */
-interface XGraphicObjects : com::sun::star::uno::XInterface
-{
-    /** Adds a new graphic object to the sheet this collection belongs to. The
-        type of the object is determined by the type of the collection.
-
-        @param Left  Position of the left border in points (1/72 inch).
-        @param Top  Position of the top border in points (1/72 inch).
-        @param Width  Width of the object in points (1/72 inch).
-        @param Height  Height of the object in points (1/72 inch).
-
-        @return  The created graphic object.
-     */
-    any Add( [in] any Left, [in] any Top, [in] any Width, [in] any Height );
-};
 
 //=============================================================================
 

@@ -47,8 +47,6 @@
         #include <service2.hxx>
         #endif
 
-        COMPONENTGETIMPLEMENTATIONENVIRONMENT
-
         COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
@@ -56,8 +54,6 @@
 =================================================================================================================*/
 
 #include <services/logindialog.hxx>
-
-COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::LoginDialog     )
                     )

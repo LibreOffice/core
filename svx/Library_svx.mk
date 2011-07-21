@@ -34,7 +34,11 @@ $(eval $(call gb_Library_set_include,svx,\
     -I$(realpath $(SRCDIR)/svx/source/inc) \
     -I$(realpath $(SRCDIR)/svx/inc/pch) \
     $$(SOLARINC) \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,svx,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_defs,svx,\
@@ -180,7 +184,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/stbctrls/zoomctrl \
     svx/source/svdraw/ActionDescriptionProvider \
     svx/source/smarttags/SmartTagMgr \
-    svx/source/svdraw/impgrfll \
     svx/source/table/accessiblecell \
     svx/source/table/accessibletableshape \
     svx/source/table/celleditsource \

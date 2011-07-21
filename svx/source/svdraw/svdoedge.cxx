@@ -49,7 +49,6 @@
 #include <svl/style.hxx>
 #include <svl/smplhint.hxx>
 #include <editeng/eeitem.hxx>
-#include "svdoimp.hxx"
 #include <svx/sdr/properties/connectorproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdredgeobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

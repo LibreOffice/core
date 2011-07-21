@@ -719,7 +719,7 @@ void SAL_CALL OfficeIPCThread::run()
 
             // handle request for acceptor
             OUString aAcceptString;
-            if ( aCmdLineArgs->GetAcceptString(aAcceptString) && Desktop::CheckOEM()) {
+            if ( aCmdLineArgs->GetAcceptString(aAcceptString) ) {
                 ApplicationEvent* pAppEvent =
                     new ApplicationEvent( aEmpty, aEmpty,
                                           "ACCEPT", aAcceptString );
@@ -772,7 +772,7 @@ void SAL_CALL OfficeIPCThread::run()
                 // we only do this if no document was specified on the command line,
                 // since this would be inconsistent with the the behaviour of
                 // the first process, see OpenClients() (call to OpenDefault()) in app.cxx
-                if ( aCmdLineArgs->HasModuleParam() && Desktop::CheckOEM() && (!bDocRequestSent))
+                if ( aCmdLineArgs->HasModuleParam() && (!bDocRequestSent) )
                 {
                     SvtModuleOptions aOpt;
                     SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_WRITER;
@@ -801,7 +801,7 @@ void SAL_CALL OfficeIPCThread::run()
                 }
             }
 
-            if (!aCmdLineArgs->IsQuickstart() && Desktop::CheckOEM()) {
+            if ( !aCmdLineArgs->IsQuickstart() ) {
                 sal_Bool bShowHelp = sal_False;
                 rtl::OUStringBuffer aHelpURLBuffer;
                 if (aCmdLineArgs->IsHelpWriter()) {
@@ -844,7 +844,7 @@ void SAL_CALL OfficeIPCThread::run()
                 }
             }
 
-            if ( bDocRequestSent && Desktop::CheckOEM())
+            if ( bDocRequestSent )
              {
                 // Send requests to dispatch watcher if we have at least one. The receiver
                 // is responsible to delete the request after processing it.

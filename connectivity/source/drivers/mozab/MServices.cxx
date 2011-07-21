@@ -92,15 +92,6 @@ struct ProviderRequest
 };
 
 //---------------------------------------------------------------------------------------
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char  **ppEnvTypeName,
-                uno_Environment ** /*ppEnv*/
-            )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Reference< XMultiServiceFactory >& _rxFactory );
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL createMozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {

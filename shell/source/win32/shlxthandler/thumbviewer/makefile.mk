@@ -37,6 +37,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 CFLAGS+=-DWIN32_LEAN_AND_MEAN -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
 CDEFS+=-D_WIN32_IE=0x501
+.IF "$(COM)" == "GCC"
+CDEFS+=-DDONT_HAVE_GDIPLUS
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -56,6 +59,6 @@ SLOFILES_X64=$(SLO_X64)$/$(TARGET).obj
 .INCLUDE :	set_wntx64.mk
 .INCLUDE :	target.mk
 INCLUDE!:=$(subst,/stl, $(INCLUDE))
-.EXPORT : INCLUDE 
+ 
 .INCLUDE :	tg_wntx64.mk
 

@@ -35,11 +35,15 @@ $(eval $(call gb_Library_set_include,forui,\
     -I$(realpath $(SRCDIR)/formula/inc/pch) \
     -I$(realpath $(SRCDIR)/formula/source/ui/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_add_defs,forui,\
     -DFORMULA_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,forui,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,forui,\

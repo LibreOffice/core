@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdXMLSelectionChangeReason {
+        const long wdXMLSelectionChangeReasonDelete = 2;
+        const long wdXMLSelectionChangeReasonInsert = 1;
+        const long wdXMLSelectionChangeReasonMove = 0;
+    };
+}; }; };

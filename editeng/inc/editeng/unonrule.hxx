@@ -43,7 +43,6 @@
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw();
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > SvxCreateNumRule() throw();
 const SvxNumRule& SvxGetNumRule( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > xRule ) throw( ::com::sun::star::lang::IllegalArgumentException );
-bool SvxGetNumRule( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > xRule, SvxNumRule& rNumRule );
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > SvxCreateNumRuleCompare() throw();
 
 class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper5< com::sun::star::container::XIndexReplace, com::sun::star::ucb::XAnyCompare,

@@ -924,8 +924,9 @@ namespace
             {
                 m_xOutParams->insertByName(pCurrent->first, pCurrent->second);
             }
-            catch(ElementExistException)
-            { }
+            catch(const ElementExistException&)
+            {
+            }
         }
     }
 }
@@ -1632,7 +1633,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     xPropSet->setPropertyValue(
                         s_NumberingRules, makeAny(xNewNumRules) );
                 }
-                catch( Exception e )
+                catch(const Exception&)
                 {
                     ; // I would really like to use a warning here,
                       // but I can't access the XMLErrorHandler from
@@ -1799,9 +1800,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                                 xCrsr->gotoRange( xRange->getEnd(), true );
                                 xCrsr->setString( ::rtl::OUString() );
                             }
-                            catch( const uno::Exception& rEx )
+                            catch(const uno::Exception&)
                             {
-                                (void)rEx;
                             }
                         }
                     }

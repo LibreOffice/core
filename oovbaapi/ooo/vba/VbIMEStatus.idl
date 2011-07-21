@@ -1,0 +1,24 @@
+module ooo { module vba {
+    constants VbIMEStatus {
+        const long vbIMEAlphaDbl = 7;
+        const long vbIMEAlphaSng = 8;
+        const long vbIMEDisable = 3;
+        const long vbIMEHiragana = 4;
+        const long vbIMEKatakanaDbl = 5;
+        const long vbIMEKatakanaSng = 6;
+        const long vbIMEModeAlpha = 8;
+        const long vbIMEModeAlphaFull = 7;
+        const long vbIMEModeDisable = 3;
+        const long vbIMEModeHangul = 10;
+        const long vbIMEModeHangulFull = 9;
+        const long vbIMEModeHiragana = 4;
+        const long vbIMEModeKatakana = 5;
+        const long vbIMEModeKatakanaHalf = 6;
+        const long vbIMEModeNoControl = 0;
+        const long vbIMEModeOff = 2;
+        const long vbIMEModeOn = 1;
+        const long vbIMENoOp = 0;
+        const long vbIMEOff = 2;
+        const long vbIMEOn = 1;
+    };
+}; };

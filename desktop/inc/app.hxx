@@ -126,7 +126,6 @@ class Desktop : public Application
             return m_aBootstrapStatus;
         }
 
-        static sal_Bool         CheckOEM();
         static sal_Bool         isCrashReporterEnabled();
 
         // first-start (ever) related methods

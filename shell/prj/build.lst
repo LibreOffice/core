@@ -1,4 +1,4 @@
-sl    shell	:    TRANSLATIONS:translations offuh rdbmaker tools sal EXPAT:expat LIBXSLT:libxslt NULL
+sl    shell	:    TRANSLATIONS:translations offapi DESKTOP:rdbmaker tools sal EXPAT:expat LIBXSLT:libxslt NULL
 sl    shell\inc			                           nmake   -   all sl_inc NULL
 sl    shell\source\win32                           nmake   -   w   sl_win32 sl_inc NULL
 sl    shell\source\win32\simplemail                nmake   -   w   sl_win32_simplemail sl_inc NULL
@@ -10,7 +10,7 @@ sl    shell\source\cmdmail                         nmake   -   u   sl_cmdmail sl
 sl    shell\source\cmdmail                         nmake   -   p   sl_cmdmail sl_inc NULL
 sl    shell\source\all                             nmake   -   all sl_all sl_inc NULL
 sl    shell\source\unix\sysshell                   nmake   -   u   sl_unix_sysshell sl_all sl_inc NULL
-sl    shell\source\tools\lngconvex                 nmake   -   w   sl_win32_lngconv sl_inc NULL
+sl    shell\source\tools\lngconvex                 nmake   -   all sl_win32_lngconv sl_inc NULL
 sl    shell\source\tools\regsvrex                  nmake   -   w   sl_win32_regsvrex  sl_inc NULL
 sl    shell\source\all\zipfile                     nmake   -   w   sl_all_zipfile  sl_inc NULL
 sl    shell\source\all\zipfile                     nmake   -   p   sl_all_zipfile  sl_inc NULL

@@ -1,0 +1,13 @@
+module ooo { module vba { module word {
+    constants WdSelectionType {
+        const long wdNoSelection = 0;
+        const long wdSelectionBlock = 6;
+        const long wdSelectionColumn = 4;
+        const long wdSelectionFrame = 3;
+        const long wdSelectionInlineShape = 7;
+        const long wdSelectionIP = 1;
+        const long wdSelectionNormal = 2;
+        const long wdSelectionRow = 5;
+        const long wdSelectionShape = 8;
+    };
+}; }; };

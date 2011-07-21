@@ -59,26 +59,8 @@ static Reference< XInterface > SAL_CALL createFolderInstance(
         *new SalAquaFolderPicker( rServiceManager ) );
 }
 
-//------------------------------------------------
-// the three uno functions that will be exported
-//------------------------------------------------
-
 extern "C"
 {
-
-//------------------------------------------------
-// component_getImplementationEnvironment
-//------------------------------------------------
-
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//------------------------------------------------
-//
-//------------------------------------------------
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )

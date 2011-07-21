@@ -1,0 +1,16 @@
+module ooo { module vba { module word {
+    constants WdBrowseTarget {
+        const long wdBrowseComment = 3;
+        const long wdBrowseEdit = 10;
+        const long wdBrowseEndnote = 5;
+        const long wdBrowseField = 6;
+        const long wdBrowseFind = 11;
+        const long wdBrowseFootnote = 4;
+        const long wdBrowseGoTo = 12;
+        const long wdBrowseGraphic = 8;
+        const long wdBrowseHeading = 9;
+        const long wdBrowsePage = 1;
+        const long wdBrowseSection = 2;
+        const long wdBrowseTable = 7;
+    };
+}; }; };

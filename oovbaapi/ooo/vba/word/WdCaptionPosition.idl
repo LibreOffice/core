@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdCaptionPosition {
+        const long wdCaptionPositionAbove = 0;
+        const long wdCaptionPositionBelow = 1;
+    };
+}; }; };

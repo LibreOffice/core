@@ -1,0 +1,8 @@
+module ooo { module vba { module adodb {
+    constants XactAttributeEnum {
+        const long adXactAbortRetaining = 262144;
+        const long adXactAsyncPhaseOne = 524288;
+        const long adXactCommitRetaining = 131072;
+        const long adXactSyncPhaseOne = 1048576;
+    };
+}; }; };

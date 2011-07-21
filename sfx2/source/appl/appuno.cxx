@@ -218,9 +218,10 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         if ( !pItem )
         {
 #ifdef DBG_UTIL
-            ByteString aStr( "No creator method for item: ");
-            aStr += ByteString::CreateFromInt32( nSlotId );
-            OSL_FAIL( aStr.GetBuffer() );
+            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                "No creator method for item: "));
+            aStr.append(static_cast<sal_Int32>(nSlotId));
+            OSL_FAIL(aStr.getStr());
 #endif
             return;
         }
@@ -267,9 +268,10 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             // so this should be notified as a warning only
             if ( nCount != nSubCount )
             {
-                ByteString aStr( "MacroPlayer: wrong number of parameters for slot: ");
-                aStr += ByteString::CreateFromInt32( nSlotId );
-                DBG_WARNING( aStr.GetBuffer() );
+                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                    "MacroPlayer: wrong number of parameters for slot: "));
+                aStr.append(static_cast<sal_Int32>(nSlotId));
+                DBG_WARNING(aStr.getStr());
             }
 #endif
             // complex property; collect sub items from the parameter set and reconstruct complex item
@@ -959,9 +961,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         else
         {
             // we will not rely on the "toggle" ability of some property slots
-            ByteString aStr( "Processing property slot without argument: ");
-            aStr += ByteString::CreateFromInt32( nSlotId );
-            OSL_FAIL( aStr.GetBuffer() );
+            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                "Processing property slot without argument: "));
+            aStr.append(static_cast<sal_Int32>(nSlotId));
+            OSL_FAIL(aStr.getStr());
         }
 #endif
 
@@ -1249,9 +1252,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         continue;
                }
 
-                ByteString aDbg( "Unknown item detected: ");
-                aDbg += ByteString::CreateFromInt32( nId );
-                DBG_ASSERT( nArg<nFormalArgs, aDbg.GetBuffer() );
+                rtl::OStringBuffer aDbg(RTL_CONSTASCII_STRINGPARAM(
+                    "Unknown item detected: "));
+                aDbg.append(static_cast<sal_Int32>(nId));
+                DBG_ASSERT(nArg<nFormalArgs, aDbg.getStr());
             }
         }
     }
@@ -1279,9 +1283,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nActProp].Name = String( String::CreateFromAscii( pSlot->pUnoName ) ) ;
                 if ( !pItem->QueryValue( pValue[nActProp].Value ) )
                 {
-                    ByteString aStr( "Item not convertable: ");
-                    aStr += ByteString::CreateFromInt32(nSlotId);
-                    OSL_FAIL( aStr.GetBuffer() );
+                    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                        "Item not convertable: "));
+                    aStr.append(static_cast<sal_Int32>(nSlotId));
+                    OSL_FAIL(aStr.getStr());
                 }
             }
             else
@@ -1300,11 +1305,14 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     pValue[nActProp].Name = aName;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                     {
-                        ByteString aStr( "Sub item ");
-                        aStr += ByteString::CreateFromInt32( pType->aAttrib[n-1].nAID );
-                        aStr += " not convertable in slot: ";
-                        aStr += ByteString::CreateFromInt32(nSlotId);
-                        OSL_FAIL( aStr.GetBuffer() );
+                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                            "Sub item "));
+                        aStr.append(static_cast<sal_Int32>(
+                            pType->aAttrib[n-1].nAID));
+                        aStr.append(RTL_CONSTASCII_STRINGPARAM(
+                            " not convertable in slot: "));
+                        aStr.append(static_cast<sal_Int32>(nSlotId));
+                        OSL_FAIL( aStr.getStr() );
                     }
                 }
             }
@@ -1328,9 +1336,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     pValue[nActProp].Name = String( String::CreateFromAscii( rArg.pName ) ) ;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value ) )
                     {
-                        ByteString aStr( "Item not convertable: ");
-                        aStr += ByteString::CreateFromInt32(rArg.nSlotId);
-                        OSL_FAIL( aStr.GetBuffer() );
+                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                            "Item not convertable: "));
+                        aStr.append(static_cast<sal_Int32>(rArg.nSlotId));
+                        OSL_FAIL(aStr.getStr());
                     }
                 }
                 else
@@ -1349,11 +1358,14 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         pValue[nActProp].Name = aName;
                         if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                         {
-                            ByteString aStr( "Sub item ");
-                            aStr += ByteString::CreateFromInt32( rArg.pType->aAttrib[n-1].nAID );
-                            aStr += " not convertable in slot: ";
-                            aStr += ByteString::CreateFromInt32(rArg.nSlotId);
-                            OSL_FAIL( aStr.GetBuffer() );
+                            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                                "Sub item "));
+                            aStr.append(static_cast<sal_Int32>(
+                                rArg.pType->aAttrib[n-1].nAID));
+                            aStr.append(RTL_CONSTASCII_STRINGPARAM(
+                                " not convertable in slot: "));
+                            aStr.append(static_cast<sal_Int32>(rArg.nSlotId));
+                            OSL_FAIL(aStr.getStr());
                         }
                     }
                 }
@@ -2143,14 +2155,7 @@ SFX_IMPL_SINGLEFACTORY( TestMouseClickHandler );
 
 extern "C" {
 
-SFX2_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char**  ppEnvironmentTypeName ,
-    uno_Environment** )
-{
-    *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
-}
-
-SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
+SFX2_DLLPUBLIC void* SAL_CALL sfx_component_getFactory(
     const sal_Char* pImplementationName ,
     void*           pServiceManager     ,
     void*                                 )

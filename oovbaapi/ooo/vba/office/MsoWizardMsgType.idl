@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoWizardMsgType {
+        const long msoWizardMsgLocalStateOff = 2;
+        const long msoWizardMsgLocalStateOn = 1;
+        const long msoWizardMsgResuming = 5;
+        const long msoWizardMsgShowHelp = 3;
+        const long msoWizardMsgSuspending = 4;
+    };
+}; }; };

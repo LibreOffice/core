@@ -38,7 +38,11 @@ $(eval $(call gb_Library_set_include,fwk,\
     -I$(WORKDIR)/inc/framework/ \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/framework \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,fwk,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,fwk,\

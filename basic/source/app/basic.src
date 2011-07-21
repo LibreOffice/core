@@ -84,7 +84,6 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
     FixedText RID_VERSIONSTRING {
             Pos = MAP_APPFONT( 5, 25 );
             Size = MAP_APPFONT( 110, 10 );
-            Text = UPDVER;
             CENTER = TRUE;
         };
     FixedText 4 {

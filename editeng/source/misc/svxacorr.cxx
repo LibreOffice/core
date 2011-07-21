@@ -109,7 +109,6 @@ static const sal_Char
 static const sal_Char sImplWordChars[] = "-'";
 
 void EncryptBlockName_Imp( String& rName );
-void DecryptBlockName_Imp( String& rName );
 
 
 // FileVersions Number for the Substitution-/Exception list separately
@@ -141,35 +140,6 @@ inline int IsUpperLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
             0 == ( ::com::sun::star::i18n::KCharacterType::LOWER & nCharType);
-}
-
-bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const String& rTxt,
-                           xub_StrLen nStt, xub_StrLen nEnd )
-{
-    for( ; nStt < nEnd; ++nStt )
-    {
-        short nScript = rCC.getScript( rTxt, nStt );
-        switch( nScript )
-        {
-            case ::com::sun::star::i18n::UnicodeScript_kCJKRadicalsSupplement:
-            case ::com::sun::star::i18n::UnicodeScript_kHangulJamo:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKSymbolPunctuation:
-            case ::com::sun::star::i18n::UnicodeScript_kHiragana:
-            case ::com::sun::star::i18n::UnicodeScript_kKatakana:
-            case ::com::sun::star::i18n::UnicodeScript_kHangulCompatibilityJamo:
-            case ::com::sun::star::i18n::UnicodeScript_kEnclosedCJKLetterMonth:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibility:
-            case ::com::sun::star::i18n::UnicodeScript_k_CJKUnifiedIdeographsExtensionA:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKUnifiedIdeograph:
-            case ::com::sun::star::i18n::UnicodeScript_kHangulSyllable:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibilityIdeograph:
-            case ::com::sun::star::i18n::UnicodeScript_kHalfwidthFullwidthForm:
-                return true;
-            default: ; //do nothing
-        }
-
-    }
-    return false;
 }
 
 sal_Bool lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
@@ -1763,25 +1733,6 @@ void GeneratePackageName ( const String& rShort, String& rPackageName )
     {
         rPackageName.SetChar( nPos, '_' );
         ++nPos;
-    }
-}
-
-void DecryptBlockName_Imp( String& rName )
-{
-    if( '#' == rName.GetChar( 0 ) )
-    {
-        rName.Erase( 0, 1 );
-        sal_Unicode* pName = rName.GetBufferAccess();
-        xub_StrLen nLen, nPos;
-        for ( nLen = rName.Len(), nPos = 0; nPos < nLen; ++nPos, ++pName )
-            switch( *pName )
-            {
-            case 0x01:  *pName = '!';   break;
-            case 0x0A:  *pName = ':';   break;
-            case 0x0C:  *pName = '\\';  break;
-            case 0x0E:  *pName = '.';   break;
-            case 0x0F:  *pName = '/';   break;
-            }
     }
 }
 

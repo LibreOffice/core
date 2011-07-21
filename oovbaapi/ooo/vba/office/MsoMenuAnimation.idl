@@ -1,0 +1,8 @@
+module ooo { module vba { module office {
+    constants MsoMenuAnimation {
+        const long msoMenuAnimationNone = 0;
+        const long msoMenuAnimationRandom = 1;
+        const long msoMenuAnimationSlide = 3;
+        const long msoMenuAnimationUnfold = 2;
+    };
+}; }; };

@@ -38,13 +38,25 @@
 #endif
 
 #include "platform_vista.h"
+
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+#include <shobjidl.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
+
+// Without IFileDialog we can't do this
+#ifdef __IFileDialog_INTERFACE_DEFINED__
+
 #include "asyncrequests.hxx"
 #include "comptr.hxx"
 #include "vistatypes.h"
 #include "FilterContainer.hxx"
 #include "VistaFilePickerEventHandler.hxx"
 #include "IVistaFilePickerInternalNotify.hxx"
-#include "..\misc\resourceprovider.hxx"
+#include "../misc/resourceprovider.hxx"
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -54,14 +66,6 @@
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/ustring.hxx>
-
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <shobjidl.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
 
 //-----------------------------------------------------------------------------
 // namespace
@@ -360,6 +364,8 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 } // namespace fpicker
 
 #undef css
+
+#endif // __IFileDialog_INTERFACE_DEFINED__
 
 #endif // FPICKER_WIN32_VISTA_FILEPICKERIMPL_HXX
 

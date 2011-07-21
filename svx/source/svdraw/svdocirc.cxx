@@ -51,7 +51,6 @@
 #include "svx/svdglob.hxx"   // StringCache
 #include "svx/svdstr.hrc"    // Objektname
 #include <editeng/eeitem.hxx>
-#include "svdoimp.hxx"
 #include <svx/sdr/properties/circleproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -291,7 +290,7 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
 void SdrCircObj::RecalcXPoly()
 {
     const basegfx::B2DPolygon aPolyCirc(ImpCalcXPolyCirc(meCircleKind, aRect, nStartWink, nEndWink));
-    mpXPoly = new XPolygon(aPolyCirc);
+    mpXPoly.reset( new XPolygon(aPolyCirc) );
 }
 
 void SdrCircObj::TakeObjNameSingul(XubString& rName) const

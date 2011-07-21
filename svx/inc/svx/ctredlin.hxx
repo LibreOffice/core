@@ -121,9 +121,9 @@ protected:
 
 public:
 
-                    SvxRedlinTable( Window* pParent,WinBits nBits );
-                    SvxRedlinTable( Window* pParent,const ResId& rResId);
-                    ~SvxRedlinTable();
+    SvxRedlinTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
+    SvxRedlinTable(SvxSimpleTableContainer& rParent, const ResId& rResId);
+    ~SvxRedlinTable();
 
     // For FilterPage only {
     void            SetFilterDate(sal_Bool bFlag=sal_True);
@@ -318,6 +318,7 @@ private:
     Link            RejectAllClickLk;
     Link            UndoClickLk;
 
+    SvxSimpleTableContainer m_aViewDataContainer;
     SvxRedlinTable  aViewData;
     PushButton      PbAccept;
     PushButton      PbReject;

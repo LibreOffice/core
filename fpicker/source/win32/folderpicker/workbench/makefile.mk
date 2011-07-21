@@ -36,7 +36,9 @@ TARGETTYPE=		CUI
 
 .INCLUDE :  settings.mk
 
+.IF "$(COM)" == "MSC"
 CFLAGS+=-GR -EHa
+.ENDIF
 
 # --- Files --------------------------------------------------------
 

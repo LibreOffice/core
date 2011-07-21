@@ -1616,20 +1616,6 @@ SfxViewFrame* SfxViewFrame::GetNext
     return 0;
 }
 
-void SfxViewFrame::CloseHiddenFrames_Impl()
-{
-    SfxApplication *pSfxApp = SFX_APP();
-    SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
-    for ( sal_uInt16 nPos=0; nPos<rFrames.Count(); )
-    {
-        SfxViewFrame *pFrame = rFrames.GetObject(nPos);
-        if ( !pFrame->IsVisible() )
-            pFrame->DoClose();
-        else
-            nPos++;
-    }
-}
-
 //--------------------------------------------------------------------
 SfxProgress* SfxViewFrame::GetProgress() const
 {

@@ -1,0 +1,6 @@
+module ooo { module vba { module msforms {
+    constants fmButtonEffect {
+        const long fmButtonEffectFlat = 0;
+        const long fmButtonEffectSunken = 2;
+    };
+}; }; };

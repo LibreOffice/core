@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlTickLabelOrientation {
+        const long xlTickLabelOrientationAutomatic = -4105;
+        const long xlTickLabelOrientationDownward = -4170;
+        const long xlTickLabelOrientationHorizontal = -4128;
+        const long xlTickLabelOrientationUpward = -4171;
+        const long xlTickLabelOrientationVertical = -4166;
+    };
+}; }; };

@@ -895,12 +895,6 @@ extern "C"
 {
 
 //---------------------------------------------------------------------------------------
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char** _ppEnvTypeName, uno_Environment** /*_ppEnv*/)
-{
-    *_ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//---------------------------------------------------------------------------------------
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* implName, ::com::sun::star::lang::XMultiServiceFactory* serviceManager, void* registryKey)
 {
     return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);

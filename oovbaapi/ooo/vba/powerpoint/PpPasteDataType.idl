@@ -1,0 +1,16 @@
+module ooo { module vba { module powerpoint {
+    constants PpPasteDataType {
+        const long ppPasteBitmap = 1;
+        const long ppPasteDefault = 0;
+        const long ppPasteEnhancedMetafile = 2;
+        const long ppPasteGIF = 4;
+        const long ppPasteHTML = 8;
+        const long ppPasteJPG = 5;
+        const long ppPasteMetafilePicture = 3;
+        const long ppPasteOLEObject = 10;
+        const long ppPastePNG = 6;
+        const long ppPasteRTF = 9;
+        const long ppPasteShape = 11;
+        const long ppPasteText = 7;
+    };
+}; }; };

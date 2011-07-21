@@ -362,13 +362,13 @@ bool Svx3DSceneObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
 
             // rescue object transformations
             SdrObjListIter aIter(*pScene->GetSubList(), IM_DEEPWITHGROUPS);
-            List aObjTrans;
+            std::vector<basegfx::B3DHomMatrix*> aObjTrans;
             while(aIter.IsMore())
             {
                 E3dObject* p3DObj = (E3dObject*)aIter.Next();
                 basegfx::B3DHomMatrix* pNew = new basegfx::B3DHomMatrix;
                 *pNew = p3DObj->GetTransform();
-                aObjTrans.Insert(pNew, LIST_APPEND);
+                aObjTrans.push_back(pNew);
             }
 
             // reset object transformations
@@ -422,7 +422,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
             while(aIter.IsMore())
             {
                 E3dObject* p3DObj = (E3dObject*)aIter.Next();
-                basegfx::B3DHomMatrix* pMat = (basegfx::B3DHomMatrix*)aObjTrans.GetObject(nIndex++);
+                basegfx::B3DHomMatrix* pMat = aObjTrans[nIndex++];
                 p3DObj->NbcSetTransform(*pMat);
                 delete pMat;
             }

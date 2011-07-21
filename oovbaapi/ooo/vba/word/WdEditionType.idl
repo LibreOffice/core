@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdEditionType {
+        const long wdPublisher = 0;
+        const long wdSubscriber = 1;
+    };
+}; }; };

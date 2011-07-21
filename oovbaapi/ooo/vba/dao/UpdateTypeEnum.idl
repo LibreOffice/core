@@ -1,0 +1,7 @@
+module ooo { module vba { module dao {
+    constants UpdateTypeEnum {
+        const long dbUpdateBatch = 4;
+        const long dbUpdateCurrentRecord = 2;
+        const long dbUpdateRegular = 1;
+    };
+}; }; };

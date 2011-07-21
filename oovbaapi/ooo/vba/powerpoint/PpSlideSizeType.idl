@@ -1,0 +1,18 @@
+module ooo { module vba { module powerpoint {
+    constants PpSlideSizeType {
+        const long ppSlideSize35MM = 4;
+        const long ppSlideSizeA3Paper = 9;
+        const long ppSlideSizeA4Paper = 3;
+        const long ppSlideSizeB4ISOPaper = 10;
+        const long ppSlideSizeB4JISPaper = 12;
+        const long ppSlideSizeB5ISOPaper = 11;
+        const long ppSlideSizeB5JISPaper = 13;
+        const long ppSlideSizeBanner = 6;
+        const long ppSlideSizeCustom = 7;
+        const long ppSlideSizeHagakiCard = 14;
+        const long ppSlideSizeLedgerPaper = 8;
+        const long ppSlideSizeLetterPaper = 2;
+        const long ppSlideSizeOnScreen = 1;
+        const long ppSlideSizeOverhead = 5;
+    };
+}; }; };

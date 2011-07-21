@@ -909,12 +909,6 @@
     HelpID = SID_SHOW_CREDITS ; \
     Text [ en-US ] = "%PRODUCTNAME Credits..." ;
 
-#define ITEM_HELP_ONLINE_REGISTRATION \
-    Identifier = SID_ONLINE_REGISTRATION ; \
-    Command = ".uno:OnlineRegistrationDlg" ; \
-    Text [ en-US ] = "~Registration..." ; \
-
-
 #define ITEM_HELP_ABOUT \
     Identifier = SID_ABOUT ; \
     Command = ".uno:About" ; \

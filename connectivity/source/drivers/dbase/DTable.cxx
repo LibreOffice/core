@@ -1952,7 +1952,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
                         break;
 
                     ByteString aStr;
-                    ByteString aBlock(ByteString::CreateFromInt32(nBlockNo));
+                    ByteString aBlock(rtl::OString::valueOf(static_cast<sal_Int32>(nBlockNo)));
                     aStr.Expand(static_cast<sal_uInt16>(nLen - aBlock.Len()), '0' );
                     aStr += aBlock;
                     // Copy characters:

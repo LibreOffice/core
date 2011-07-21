@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdXMLNodeLevel {
+        const long wdXMLNodeLevelCell = 3;
+        const long wdXMLNodeLevelInline = 0;
+        const long wdXMLNodeLevelParagraph = 1;
+        const long wdXMLNodeLevelRow = 2;
+    };
+}; }; };

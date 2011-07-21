@@ -65,35 +65,24 @@ inline void MovePoint(Point& rPnt, const Size& S)        { rPnt.X()+=S.Width(); 
 inline void MovePoly(Polygon& rPoly, const Size& S)      { rPoly.Move(S.Width(),S.Height()); }
 inline void MovePoly(PolyPolygon& rPoly, const Size& S)  { rPoly.Move(S.Width(),S.Height()); }
 void MoveXPoly(XPolygon& rPoly, const Size& S);
-void MoveXPoly(XPolyPolygon& rPoly, const Size& S);
 
 SVX_DLLPUBLIC void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bNoJustify = false);
 inline void ResizePoint(Point& rPnt, const Point& rRef, Fraction xFact, Fraction yFact);
 void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-void ResizePoly(PolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-void ResizeXPoly(XPolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs);
 SVX_DLLPUBLIC void RotatePoly(Polygon& rPoly, const Point& rRef, double sn, double cs);
 void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs);
-void RotatePoly(PolyPolygon& rPoly, const Point& rRef, double sn, double cs);
 void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs);
 
-// MirrorRect macht nur Sinn bei Spiegelachsen
-// mit einem durch 45 Degree teilbaren Winkel!
-void MirrorRect(Rectangle& rRect, const Point& rRef1, const Point& rRef2, bool bNoJustify); // ni.
 void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2);
 void MirrorPoly(Polygon& rPoly, const Point& rRef1, const Point& rRef2);
 void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2);
-void MirrorPoly(PolyPolygon& rPoly, const Point& rRef1, const Point& rRef2);
-void MirrorXPoly(XPolyPolygon& rPoly, const Point& rRef1, const Point& rRef2);
 
 inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear = false);
 SVX_DLLPUBLIC void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
 void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
-void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
-void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
 
 // rPnt.X bzw rPnt.Y wird auf rCenter.X bzw. rCenter.Y gesetzt!
 // anschliessend muss rPnt nur noch um rCenter gedreht werden.
@@ -266,8 +255,6 @@ public:
 
 // Fuer die Umrechnung von Masseinheiten
 SVX_DLLPUBLIC FrPair GetMapFactor(MapUnit eS, MapUnit eD);
-FrPair GetMapFactor(MapUnit eS, FieldUnit eD);
-FrPair GetMapFactor(FieldUnit eS, MapUnit eD);
 FrPair GetMapFactor(FieldUnit eS, FieldUnit eD);
 
 inline bool IsMetric(MapUnit eU) {

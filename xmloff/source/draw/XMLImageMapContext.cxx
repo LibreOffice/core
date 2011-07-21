@@ -667,7 +667,7 @@ XMLImageMapContext::XMLImageMapContext(
         if( xInfo.is() && xInfo->hasPropertyByName( sImageMap ) )
             xPropertySet->getPropertyValue(sImageMap) >>= xImageMap;
     }
-    catch( com::sun::star::uno::Exception e )
+    catch(const com::sun::star::uno::Exception& e)
     {
         uno::Sequence<OUString> aSeq(0);
         rImport.SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );

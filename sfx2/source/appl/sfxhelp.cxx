@@ -327,7 +327,6 @@ private:
     sal_Bool                            m_bIsDebug;     // environment variable "help_debug=1"
     SfxHelpOptions_Impl*                m_pOpt;         // the options
     ::std::vector< ::rtl::OUString >    m_aModulesList; // list of all installed modules
-    void                    Load();
 
 public:
     SfxHelp_Impl( sal_Bool bDebug );
@@ -335,8 +334,6 @@ public:
 
     SfxHelpOptions_Impl*    GetOptions();
     static String           GetHelpText( const rtl::OUString& aCommandURL, const String& rModule );
-    sal_Bool                HasModule( const ::rtl::OUString& rModule );            // module installed
-    sal_Bool                IsHelpInstalled();                                      // module list not empty
 };
 
 SfxHelp_Impl::SfxHelp_Impl( sal_Bool bDebug ) :
@@ -350,31 +347,6 @@ SfxHelp_Impl::SfxHelp_Impl( sal_Bool bDebug ) :
 SfxHelp_Impl::~SfxHelp_Impl()
 {
     delete m_pOpt;
-}
-
-void SfxHelp_Impl::Load()
-{
-    // fill modules list
-    // create the help url (empty, without module and helpid)
-    String sHelpURL( DEFINE_CONST_UNICODE("vnd.sun.star.help://") );
-    AppendConfigToken( sHelpURL, sal_True );
-
-    // open ucb content and get the list of the help modules
-    // the list contains strings with three tokens "ui title \t type \t url"
-    Sequence< ::rtl::OUString > aAllModulesList = SfxContentHelper::GetResultSet( sHelpURL );
-    sal_Int32 nLen = aAllModulesList.getLength();
-    m_aModulesList.reserve( nLen + 1 );
-    const ::rtl::OUString* pBegin = aAllModulesList.getConstArray();
-    const ::rtl::OUString* pEnd = pBegin + nLen;
-    for ( ; pBegin != pEnd; ++pBegin )
-    {
-        // get one module string
-        String sModule( *pBegin );
-        // extract the url
-        String sURL = sModule.GetToken( 2, '\t' );
-        // insert the module (the host part of the "vnd.sun.star.help" url)
-        m_aModulesList.push_back( ::rtl::OUString( INetURLObject( sURL ).GetHost() ) );
-    }
 }
 
 String SfxHelp_Impl::GetHelpText( const rtl::OUString& aCommandURL, const String& rModule )
@@ -393,20 +365,6 @@ SfxHelpOptions_Impl* SfxHelp_Impl::GetOptions()
     if ( !m_pOpt )
         m_pOpt = new SfxHelpOptions_Impl;
     return m_pOpt;
-}
-
-sal_Bool SfxHelp_Impl::HasModule( const ::rtl::OUString& rModule )
-{
-    if ( !m_aModulesList.size() )
-        Load();
-    return ( ::std::find( m_aModulesList.begin(), m_aModulesList.end(), rModule ) != m_aModulesList.end() );
-}
-
-sal_Bool SfxHelp_Impl::IsHelpInstalled()
-{
-    if ( !m_aModulesList.size() )
-        Load();
-    return ( m_aModulesList.begin() != m_aModulesList.end() );
 }
 
 SfxHelp::SfxHelp() :

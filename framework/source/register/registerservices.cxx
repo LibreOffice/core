@@ -44,8 +44,6 @@
         #include <service2.hxx>
         #endif
 
-        COMPONENTGETIMPLEMENTATIONENVIRONMENT
-
         COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
@@ -90,8 +88,6 @@
 #include <uifactory/windowcontentfactorymanager.hxx>
 #include <services/substitutepathvars.hxx>
 #include <services/pathsettings.hxx>
-
-COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
                         IFFACTORY( ::framework::Desktop                                 )   else

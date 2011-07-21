@@ -1394,23 +1394,6 @@ SbxBase* StarBASIC::FindSBXInCurrentScope( const String& rName )
     return pINST->pRun->FindElementExtern( rName );
 }
 
-// Preserve old interface
-SbxVariable* StarBASIC::FindVarInCurrentScopy
-( const String& rName, sal_uInt16& rStatus )
-{
-    rStatus = 1;              // Presumption: nothing found
-    SbxVariable* pVar = NULL;
-    SbxBase* pSbx = FindSBXInCurrentScope( rName );
-    if( pSbx )
-    {
-        if( !pSbx->ISA(SbxMethod) && !pSbx->ISA(SbxObject) )
-            pVar = PTR_CAST(SbxVariable,pSbx);
-    }
-    if( pVar )
-        rStatus = 0;      // We found something
-    return pVar;
-}
-
 void StarBASIC::QuitAndExitApplication()
 {
     Stop();
@@ -1430,40 +1413,6 @@ void StarBASIC::Stop()
 sal_Bool StarBASIC::IsRunning()
 {
     return sal_Bool( pINST != NULL );
-}
-
-/**************************************************************************
-*
-*    Object factories and others
-*
-**************************************************************************/
-
-// Activation of an object. There is no need to access active objects
-// with name via BASIC. If NULL is given, everything is activated.
-void StarBASIC::ActivateObject( const String* pName, sal_Bool bActivate )
-{
-    if( pName )
-    {
-        SbxObject* p = (SbxObject*) SbxObject::Find( *pName, SbxCLASS_OBJECT );
-        if( p )
-        {
-            if( bActivate )
-                p->SetFlag( SBX_EXTSEARCH );
-            else
-                p->ResetFlag( SBX_EXTSEARCH );
-        }
-    }
-    else
-    {
-        for( sal_uInt16 i = 0; i < GetObjects()->Count(); i++ )
-        {
-            SbxObject* p = (SbxObject*) GetObjects()->Get( i );
-            if( bActivate )
-                p->SetFlag( SBX_EXTSEARCH );
-            else
-                p->ResetFlag( SBX_EXTSEARCH );
-        }
-    }
 }
 
 /**************************************************************************
@@ -1523,23 +1472,6 @@ sal_uInt16 StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
 SbError StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
 const String& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
 sal_Bool StarBASIC::IsCompilerError()       { return GetSbData()->bCompiler; }
-void StarBASIC::SetGlobalLanguageMode( SbLanguageMode eLanguageMode )
-{
-    GetSbData()->eLanguageMode = eLanguageMode;
-}
-SbLanguageMode StarBASIC::GetGlobalLanguageMode()
-{
-    return GetSbData()->eLanguageMode;
-}
-// Local settings
-SbLanguageMode StarBASIC::GetLanguageMode()
-{
-    // Use global settings?
-    if( eLanguageMode == SB_LANG_GLOBAL )
-        return GetSbData()->eLanguageMode;
-    else
-        return eLanguageMode;
-}
 
 // From 1996-03-29:
 // The mapping between the old and the new error codes take place by searching
@@ -1669,31 +1601,9 @@ struct BasicStringList_Impl : private Resource
 };
 //----------------------------------------------------------------
 
-// Flag, that prevent the activation of the SFX-Resources at a Basic error
-static sal_Bool bStaticSuppressSfxResource = sal_False;
-
-void StarBASIC::StaticSuppressSfxResource( sal_Bool bSuppress )
-{
-    bStaticSuppressSfxResource = bSuppress;
-}
-
-// Hack for #83750, use bStaticSuppressSfxResource as setup flag
-sal_Bool runsInSetup( void )
-{
-    return bStaticSuppressSfxResource;
-}
-
-
 void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 {
     SolarMutexGuard aSolarGuard;
-
-    if( bStaticSuppressSfxResource )
-    {
-        GetSbData()->aErrMsg = String( RTL_CONSTASCII_USTRINGPARAM("No resource: Error message not available") );
-        return;
-    }
-
     sal_uInt16 nOldID = GetVBErrorCode( nId );
 
     // intantiate the help class
@@ -1869,12 +1779,6 @@ void StarBASIC::SetGlobalErrorHdl( const Link& rLink )
     GetSbData()->aErrHdl = rLink;
 }
 
-
-Link StarBASIC::GetGlobalBreakHdl()
-{
-    return GetSbData()->aBreakHdl;
-}
-
 void StarBASIC::SetGlobalBreakHdl( const Link& rLink )
 {
     GetSbData()->aBreakHdl = rLink;
@@ -1964,11 +1868,6 @@ sal_Bool StarBASIC::StoreData( SvStream& r ) const
             return sal_False;
     }
     return sal_True;
-}
-
-sal_Bool StarBASIC::LoadOldModules( SvStream& )
-{
-    return sal_False;
 }
 
 bool StarBASIC::GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut )

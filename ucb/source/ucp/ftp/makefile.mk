@@ -75,7 +75,8 @@ SHL1STDLIBS=\
     $(CPPULIB) \
     $(SALLIB)  \
     $(UCBHELPERLIB) \
-    $(CURLLIB)
+    $(CURLLIB) \
+    $(ZLIB3RDLIB)
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS= \

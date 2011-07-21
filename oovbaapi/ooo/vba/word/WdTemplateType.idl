@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdTemplateType {
+        const long wdAttachedTemplate = 2;
+        const long wdGlobalTemplate = 1;
+        const long wdNormalTemplate = 0;
+    };
+}; }; };

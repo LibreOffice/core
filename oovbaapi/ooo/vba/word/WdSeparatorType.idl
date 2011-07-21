@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdSeparatorType {
+        const long wdSeparatorColon = 2;
+        const long wdSeparatorEmDash = 3;
+        const long wdSeparatorEnDash = 4;
+        const long wdSeparatorHyphen = 0;
+        const long wdSeparatorPeriod = 1;
+    };
+}; }; };

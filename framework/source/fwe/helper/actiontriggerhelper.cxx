@@ -67,7 +67,7 @@ sal_Bool IsSeparator( Reference< XPropertySet > xPropertySet )
     {
         return xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGERSEPARATOR )) );
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -95,7 +95,7 @@ void GetMenuItemAttributes( Reference< XPropertySet > xActionTriggerPropertySet,
         a = xActionTriggerPropertySet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "SubContainer" )) );
         a >>= xSubContainer;
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -105,7 +105,7 @@ void GetMenuItemAttributes( Reference< XPropertySet > xActionTriggerPropertySet,
         a = xActionTriggerPropertySet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpURL" )) );
         a >>= aHelpURL;
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 }
@@ -234,15 +234,15 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                     }
                 }
             }
-            catch ( IndexOutOfBoundsException )
+            catch (const IndexOutOfBoundsException&)
             {
                 return;
             }
-            catch ( WrappedTargetException )
+            catch (const WrappedTargetException&)
             {
                 return;
             }
-            catch ( RuntimeException )
+            catch (const RuntimeException&)
             {
                 return;
             }
@@ -295,7 +295,7 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
                 xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Image" )), a );
             }
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -369,7 +369,7 @@ void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexCon
                 }
             }
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }

@@ -1,0 +1,8 @@
+module ooo { module vba { module office {
+    constants MsoPresetLightingSoftness {
+        const long msoLightingBright = 3;
+        const long msoLightingDim = 1;
+        const long msoLightingNormal = 2;
+        const long msoPresetLightingSoftnessMixed = -2;
+    };
+}; }; };

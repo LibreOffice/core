@@ -71,11 +71,11 @@ namespace framework
     {
         if ( m_bFloating )
         {
-            bool bEqual = ( m_aFloatingData.m_aPos.Y() == aUIElement.m_aFloatingData.m_aPos.Y() );
+            bool bEqual = ( m_aFloatingData.m_aPos.Y == aUIElement.m_aFloatingData.m_aPos.Y );
             if ( bEqual )
-                return ( m_aFloatingData.m_aPos.X() < aUIElement.m_aFloatingData.m_aPos.X() );
+                return ( m_aFloatingData.m_aPos.X < aUIElement.m_aFloatingData.m_aPos.X );
             else
-                return ( m_aFloatingData.m_aPos.Y() < aUIElement.m_aFloatingData.m_aPos.Y() );
+                return ( m_aFloatingData.m_aPos.Y < aUIElement.m_aFloatingData.m_aPos.Y );
         }
         else
         {
@@ -88,11 +88,11 @@ namespace framework
                 if ( m_aDockedData.m_nDockedArea == ui::DockingArea_DOCKINGAREA_TOP ||
                      m_aDockedData.m_nDockedArea == ui::DockingArea_DOCKINGAREA_BOTTOM )
                 {
-                    if ( !( m_aDockedData.m_aPos.Y() == aUIElement.m_aDockedData.m_aPos.Y() ) )
-                        return  ( m_aDockedData.m_aPos.Y() < aUIElement.m_aDockedData.m_aPos.Y() );
+                    if ( !( m_aDockedData.m_aPos.Y == aUIElement.m_aDockedData.m_aPos.Y ) )
+                        return  ( m_aDockedData.m_aPos.Y < aUIElement.m_aDockedData.m_aPos.Y );
                     else
                     {
-                        bool bEqual = ( m_aDockedData.m_aPos.X() == aUIElement.m_aDockedData.m_aPos.X() );
+                        bool bEqual = ( m_aDockedData.m_aPos.X == aUIElement.m_aDockedData.m_aPos.X );
                         if ( bEqual )
                         {
                             if ( m_bUserActive && !aUIElement.m_bUserActive )
@@ -103,16 +103,16 @@ namespace framework
                                 return sal_False;
                         }
                         else
-                            return ( m_aDockedData.m_aPos.X() <= aUIElement.m_aDockedData.m_aPos.X() );
+                            return ( m_aDockedData.m_aPos.X <= aUIElement.m_aDockedData.m_aPos.X );
                     }
                 }
                 else
                 {
-                    if ( !( m_aDockedData.m_aPos.X() == aUIElement.m_aDockedData.m_aPos.X() ) )
-                        return ( m_aDockedData.m_aPos.X() < aUIElement.m_aDockedData.m_aPos.X() );
+                    if ( !( m_aDockedData.m_aPos.X == aUIElement.m_aDockedData.m_aPos.X ) )
+                        return ( m_aDockedData.m_aPos.X < aUIElement.m_aDockedData.m_aPos.X );
                     else
                     {
-                        bool bEqual = ( m_aDockedData.m_aPos.Y() == aUIElement.m_aDockedData.m_aPos.Y() );
+                        bool bEqual = ( m_aDockedData.m_aPos.Y == aUIElement.m_aDockedData.m_aPos.Y );
                         if ( bEqual )
                         {
                             if ( m_bUserActive && !aUIElement.m_bUserActive )
@@ -123,7 +123,7 @@ namespace framework
                                 return sal_False;
                         }
                         else
-                            return ( m_aDockedData.m_aPos.Y() <= aUIElement.m_aDockedData.m_aPos.Y() );
+                            return ( m_aDockedData.m_aPos.Y <= aUIElement.m_aDockedData.m_aPos.Y );
                     }
                 }
             }

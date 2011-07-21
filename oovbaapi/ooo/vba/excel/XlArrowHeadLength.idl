@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlArrowHeadLength {
+        const long xlArrowHeadLengthLong = 3;
+        const long xlArrowHeadLengthMedium = -4138;
+        const long xlArrowHeadLengthShort = 1;
+    };
+}; }; };

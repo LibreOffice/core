@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants DocProperties {
+        const long offPropertyTypeBoolean = 2;
+        const long offPropertyTypeDate = 3;
+        const long offPropertyTypeFloat = 5;
+        const long offPropertyTypeNumber = 1;
+        const long offPropertyTypeString = 4;
+    };
+}; }; };

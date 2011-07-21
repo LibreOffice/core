@@ -970,24 +970,34 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     if ( ! pEntry->m_sTitle.Len() )
         return 0;
 
-    xPackage->addEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
+    bool bNewEntryInserted = false;
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     if ( m_vEntries.empty() )
     {
         m_vEntries.push_back( pEntry );
+        bNewEntryInserted = true;
     }
     else
     {
         if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
         {
             m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
+            bNewEntryInserted = true;
         }
         else if ( !m_bInCheckMode )
         {
             OSL_FAIL( "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
         }
     }
+
+    //Related: rhbz#702833 Only add a Listener if we're adding a new entry, to
+    //keep in sync with removeEventListener logic
+    if (bNewEntryInserted)
+    {
+        pEntry->m_xPackage->addEventListener(uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
+    }
+
 
     pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
     pEntry->m_bUser       = xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER );

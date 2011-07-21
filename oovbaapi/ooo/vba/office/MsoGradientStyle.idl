@@ -1,0 +1,12 @@
+module ooo { module vba { module office {
+    constants MsoGradientStyle {
+        const long msoGradientDiagonalDown = 4;
+        const long msoGradientDiagonalUp = 3;
+        const long msoGradientFromCenter = 7;
+        const long msoGradientFromCorner = 5;
+        const long msoGradientFromTitle = 6;
+        const long msoGradientHorizontal = 1;
+        const long msoGradientMixed = -2;
+        const long msoGradientVertical = 2;
+    };
+}; }; };

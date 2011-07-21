@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlSmartTagDisplayMode {
+        const long xlButtonOnly = 2;
+        const long xlDisplayNone = 1;
+        const long xlIndicatorAndButton = 0;
+    };
+}; }; };

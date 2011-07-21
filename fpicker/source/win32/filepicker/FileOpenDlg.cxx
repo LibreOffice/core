@@ -102,18 +102,8 @@ CFileOpenDialog::CFileOpenDialog(
     m_pfnBaseDlgProc(0)
 {
     // initialize the OPENFILENAME struct
-    if (IsWindows2000Platform() || IsWindowsME())
-    {
-        ZeroMemory(&m_ofn, sizeof(m_ofn));
-        m_ofn.lStructSize = sizeof(m_ofn);
-    }
-    else // OSVER < Win2000
-    {
-        // the size of the OPENFILENAME structure is different
-        // under windows < win2000
-        ZeroMemory(&m_ofn, _OPENFILENAME_SIZE_VERSION_400);
-        m_ofn.lStructSize = _OPENFILENAME_SIZE_VERSION_400;
-    }
+    ZeroMemory(&m_ofn, sizeof(m_ofn));
+    m_ofn.lStructSize = sizeof(m_ofn);
 
     // 0x02000000 for #97681, sfx will make the entry into
     // the recent document list

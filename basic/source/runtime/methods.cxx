@@ -184,28 +184,6 @@ String getFullPath( const String& aRelPath )
     return aFileURL;
 }
 
-// Sets (virtual) current path for UCB file access
-void implChDir( const String& aDir )
-{
-    (void)aDir;
-    // TODO
-}
-
-// Sets (virtual) current drive for UCB file access
-void implChDrive( const String& aDrive )
-{
-    (void)aDrive;
-    // TODO
-}
-
-// Returns (virtual) current path for UCB file access
-String implGetCurDir( void )
-{
-    String aRetStr;
-
-    return aRetStr;
-}
-
 // TODO: -> SbiGlobals
 static com::sun::star::uno::Reference< XSimpleFileAccess3 > getFileAccess( void )
 {

@@ -1,0 +1,24 @@
+module ooo { module vba {
+    constants VbMsgBoxStyle {
+        const long vbAbortRetryIgnore = 2;
+        const long vbApplicationModal = 0;
+        const long vbCritical = 16;
+        const long vbDefaultButton1 = 0;
+        const long vbDefaultButton2 = 256;
+        const long vbDefaultButton3 = 512;
+        const long vbDefaultButton4 = 768;
+        const long vbExclamation = 48;
+        const long vbInformation = 64;
+        const long vbMsgBoxHelpButton = 16384;
+        const long vbMsgBoxRight = 524288;
+        const long vbMsgBoxRtlReading = 1048576;
+        const long vbMsgBoxSetForeground = 65536;
+        const long vbOKCancel = 1;
+        const long vbOKOnly = 0;
+        const long vbQuestion = 32;
+        const long vbRetryCancel = 5;
+        const long vbSystemModal = 4096;
+        const long vbYesNo = 4;
+        const long vbYesNoCancel = 3;
+    };
+}; };

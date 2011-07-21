@@ -75,6 +75,6 @@ class IVistaFilePickerInternalNotify
 
 #undef css
 
-#endif FPICKER_WIN32_VISTA_FILEPICKER_INTERNALNOTIFY_HXX
+#endif // FPICKER_WIN32_VISTA_FILEPICKER_INTERNALNOTIFY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

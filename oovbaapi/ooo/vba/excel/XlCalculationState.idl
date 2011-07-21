@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlCalculationState {
+        const long xlCalculating = 1;
+        const long xlDone = 0;
+        const long xlPending = 2;
+    };
+}; }; };

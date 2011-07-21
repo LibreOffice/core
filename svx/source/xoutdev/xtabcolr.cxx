@@ -63,10 +63,11 @@ static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 |*
 *************************************************************************/
 
-XColorTable::XColorTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
+XColorTable::XColorTable(
+    const String& rPath,
+    XOutdevItemPool* pInPool
+) :
+    XPropertyTable( rPath, pInPool )
 {
     // ColorTable braucht keine eigene BmpTable
     // pBmpTable = new Table( nInitSize, nReSize );
@@ -95,7 +96,7 @@ XColorEntry* XColorTable::Replace(long nIndex, XColorEntry* pEntry )
 
 XColorEntry* XColorTable::Remove(long nIndex)
 {
-    return (XColorEntry*) XPropertyTable::Remove(nIndex, 0);
+    return (XColorEntry*) XPropertyTable::Remove(nIndex);
 }
 
 /************************************************************************/
@@ -455,87 +456,5 @@ Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 {
     return( NULL );
 }
-
-// --------------------
-// class XColorList
-// --------------------
-
-/*************************************************************************
-|*
-|* XColorList::XColorList()
-|*
-*************************************************************************/
-
-XColorList::XColorList( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyList( rPath, pInPool, nInitSize, nReSize)
-{
-    // pBmpList = new List( nInitSize, nReSize );
-}
-
-/************************************************************************/
-
-XColorList::~XColorList()
-{
-}
-
-/************************************************************************/
-
-XColorEntry* XColorList::Replace(XColorEntry* pEntry, long nIndex )
-{
-    return (XColorEntry*) XPropertyList::Replace(pEntry, nIndex);
-}
-
-/************************************************************************/
-
-XColorEntry* XColorList::Remove(long nIndex)
-{
-    return (XColorEntry*) XPropertyList::Remove(nIndex, 0);
-}
-
-/************************************************************************/
-
-XColorEntry* XColorList::GetColor(long nIndex) const
-{
-    return (XColorEntry*) XPropertyList::Get(nIndex, 0);
-}
-
-/************************************************************************/
-
-sal_Bool XColorList::Load()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XColorList::Save()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XColorList::Create()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XColorList::CreateBitmapsForUI()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
-{
-    return( NULL );
-}
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdScrollbarType {
+        const long wdScrollbarTypeAuto = 0;
+        const long wdScrollbarTypeNo = 2;
+        const long wdScrollbarTypeYes = 1;
+    };
+}; }; };

@@ -477,33 +477,33 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
                                                     m_xSMgr, *this, key ) );
                             }
                         }
-                        catch ( IllegalArgumentException& )
+                        catch (const IllegalArgumentException&)
                         {
                             // insertByName
 
                             OSL_FAIL( "PropertySetRegistry::openPropertySet - "
                                         "caught IllegalArgumentException!" );
                         }
-                        catch ( ElementExistException& )
+                        catch (const ElementExistException&)
                         {
                             // insertByName
 
                             OSL_FAIL( "PropertySetRegistry::openPropertySet - "
                                         "caught ElementExistException!" );
                         }
-                        catch ( WrappedTargetException& )
+                        catch (const WrappedTargetException&)
                         {
                             // insertByName, commitChanges
 
                             OSL_FAIL( "PropertySetRegistry::openPropertySet - "
                                         "caught WrappedTargetException!" );
                         }
-                        catch ( RuntimeException& )
+                        catch (const RuntimeException&)
                         {
                             OSL_FAIL( "PropertySetRegistry::openPropertySet - "
                                         "caught RuntimeException!" );
                         }
-                        catch ( Exception& )
+                        catch (const Exception&)
                         {
                             // createInstance
 
@@ -567,7 +567,7 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
                 // Success.
                 return;
             }
-            catch ( NoSuchElementException& )
+            catch (const NoSuchElementException&)
             {
                 // removeByName
 
@@ -575,7 +575,7 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
                             "caught NoSuchElementException!" );
                 return;
             }
-            catch ( WrappedTargetException& )
+            catch (const WrappedTargetException&)
             {
                 // commitChanges
 
@@ -640,11 +640,11 @@ Any SAL_CALL PropertySetRegistry::getByName( const OUString& aName )
         {
             return xNameAccess->getByName( aName );
         }
-        catch ( NoSuchElementException& )
+        catch (const NoSuchElementException&)
         {
             // getByName
         }
-        catch ( WrappedTargetException& )
+        catch (const WrappedTargetException&)
         {
             // getByName
         }
@@ -776,7 +776,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                         xBatch->commitChanges();
                     }
                 }
-                catch ( IllegalArgumentException& )
+                catch (const IllegalArgumentException&)
                 {
                     // insertByName
 
@@ -784,7 +784,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 "caught IllegalArgumentException!" );
                     return;
                 }
-                catch ( ElementExistException& )
+                catch (const ElementExistException&)
                 {
                     // insertByName
 
@@ -792,7 +792,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 "caught ElementExistException!" );
                     return;
                 }
-                catch ( WrappedTargetException& )
+                catch (const WrappedTargetException&)
                 {
                     // insertByName, commitChanges
 
@@ -800,13 +800,13 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 "caught WrappedTargetException!" );
                     return;
                 }
-                catch ( RuntimeException& )
+                catch (const RuntimeException&)
                 {
                     OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught RuntimeException!" );
                     return;
                 }
-                catch ( Exception& )
+                catch (const Exception&)
                 {
                     // createInstance
 
@@ -952,7 +952,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                         }
                     }
                 }
-                catch ( IllegalArgumentException& )
+                catch (const IllegalArgumentException&)
                 {
                     // insertByName, replaceByName
 
@@ -960,7 +960,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 "caught IllegalArgumentException!" );
                     return;
                 }
-                catch ( ElementExistException& )
+                catch (const ElementExistException&)
                 {
                     // insertByName
 
@@ -968,7 +968,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 "caught ElementExistException!" );
                     return;
                 }
-                catch ( WrappedTargetException& )
+                catch (const WrappedTargetException&)
                 {
                     // insertByName, replaceByName, commitChanges
 
@@ -976,7 +976,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 "caught WrappedTargetException!" );
                     return;
                 }
-                catch ( NoSuchElementException& )
+                catch (const NoSuchElementException&)
                 {
                     // getByHierarchicalName, replaceByName
 
@@ -984,13 +984,13 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 "caught NoSuchElementException!" );
                     return;
                 }
-                catch ( RuntimeException& )
+                catch (const RuntimeException&)
                 {
                     OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught RuntimeException!" );
                     return;
                 }
-                catch ( Exception& )
+                catch (const Exception&)
                 {
                     // createInstance
 
@@ -1013,7 +1013,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                     // Success.
                     return;
                 }
-                catch ( NoSuchElementException& )
+                catch (const NoSuchElementException&)
                 {
                     // removeByName
 
@@ -1021,7 +1021,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 "caught NoSuchElementException!" );
                     return;
                 }
-                catch ( WrappedTargetException& )
+                catch (const WrappedTargetException&)
                 {
                     // commitChanges
 
@@ -1072,7 +1072,7 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
                                 "No config provider!" );
 
                 }
-                catch ( Exception& )
+                catch (const Exception&)
                 {
                     OSL_FAIL( "PropertySetRegistry::getConfigProvider - "
                                 "caught exception!" );
@@ -1129,11 +1129,11 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
         else
             return m_pImpl->m_xRootReadAccess;
     }
-    catch ( RuntimeException& )
+    catch (const RuntimeException&)
     {
         throw;
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
         // createInstance, createInstanceWithArguments
 
@@ -1216,11 +1216,11 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
                 return m_pImpl->m_xRootWriteAccess;
         }
     }
-    catch ( RuntimeException& )
+    catch (const RuntimeException&)
     {
         throw;
     }
-    catch ( NoSuchElementException& )
+    catch (const NoSuchElementException&)
     {
         // getByHierarchicalName
 
@@ -1228,7 +1228,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
             "caught NoSuchElementException!" );
         return Reference< XInterface >();
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
         // createInstance, createInstanceWithArguments
 
@@ -1539,15 +1539,15 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
                     }
                     return;
                 }
-                catch ( IllegalArgumentException& )
+                catch (const IllegalArgumentException&)
                 {
                     // replaceByName
                 }
-                catch ( NoSuchElementException& )
+                catch (const NoSuchElementException&)
                 {
                     // getByHierarchicalName, replaceByName
                 }
-                catch ( WrappedTargetException& )
+                catch (const WrappedTargetException&)
                 {
                     // replaceByName, commitChanges
                 }
@@ -1583,7 +1583,7 @@ Any SAL_CALL PersistentPropertySet::getPropertyValue(
         {
             return xNameAccess->getByHierarchicalName( aFullPropName );
         }
-        catch ( NoSuchElementException& )
+        catch (const NoSuchElementException&)
         {
             throw UnknownPropertyException();
         }
@@ -1827,7 +1827,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
                 return;
             }
         }
-        catch ( IllegalArgumentException& )
+        catch (const IllegalArgumentException&)
         {
             // insertByName
 
@@ -1835,7 +1835,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
                         "caught IllegalArgumentException!" );
             return;
         }
-        catch ( ElementExistException& )
+        catch (const ElementExistException&)
         {
             // insertByName
 
@@ -1843,7 +1843,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
                         "caught ElementExistException!" );
             return;
         }
-        catch ( WrappedTargetException& )
+        catch (const WrappedTargetException&)
         {
             // replaceByName, insertByName, commitChanges
 
@@ -1851,11 +1851,11 @@ void SAL_CALL PersistentPropertySet::addProperty(
                         "caught WrappedTargetException!" );
             return;
         }
-        catch ( RuntimeException& )
+        catch (const RuntimeException&)
         {
             throw;
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
             // createInstance
 
@@ -1916,7 +1916,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                 return;
             }
         }
-        catch ( NoSuchElementException& )
+        catch (const NoSuchElementException&)
         {
             // getByHierarchicalName
 
@@ -1962,7 +1962,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                             nHandle = -1;
 
                     }
-                    catch ( NoSuchElementException& )
+                    catch (const NoSuchElementException&)
                     {
                         // getByHierarchicalName
 
@@ -1994,7 +1994,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                 // Success.
                 return;
             }
-            catch ( NoSuchElementException& )
+            catch (const NoSuchElementException&)
             {
                 // removeByName
 
@@ -2002,7 +2002,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                             "caught NoSuchElementException!" );
                 return;
             }
-            catch ( WrappedTargetException& )
+            catch (const WrappedTargetException&)
             {
                 // commitChanges
 
@@ -2113,7 +2113,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                                     OSL_FAIL( "PersistentPropertySet::getPropertyValues - "
                                       "Error getting property handle!" );
                             }
-                            catch ( NoSuchElementException& )
+                            catch (const NoSuchElementException&)
                             {
                                 // getByHierarchicalName
 
@@ -2134,7 +2134,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                                 //       was called with a default value
                                 //       of type void.
                             }
-                            catch ( NoSuchElementException& )
+                            catch (const NoSuchElementException&)
                             {
                                 // getByHierarchicalName
 
@@ -2158,7 +2158,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                                 else
                                     rValue.State = PropertyState( nState );
                             }
-                            catch ( NoSuchElementException& )
+                            catch (const NoSuchElementException&)
                             {
                                 // getByHierarchicalName
 
@@ -2172,7 +2172,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                 }
             }
         }
-        catch ( NoSuchElementException& )
+        catch (const NoSuchElementException&)
         {
             // getByHierarchicalName
         }
@@ -2271,15 +2271,15 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                             aEvents.push_back( aEvt );
                         }
                     }
-                    catch ( IllegalArgumentException& )
+                    catch (const IllegalArgumentException&)
                     {
                         // replaceByName
                     }
-                    catch ( NoSuchElementException& )
+                    catch (const NoSuchElementException&)
                     {
                         // getByHierarchicalName, replaceByName
                     }
-                    catch ( WrappedTargetException& )
+                    catch (const WrappedTargetException&)
                     {
                         // replaceByName, commitChanges
                     }
@@ -2516,7 +2516,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                         OSL_FAIL( "PropertySetInfo_Impl::getProperties - "
                                           "Error getting property handle!" );
                                 }
-                                catch ( NoSuchElementException& )
+                                catch (const NoSuchElementException&)
                                 {
                                     // getByHierarchicalName
 
@@ -2539,7 +2539,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
 
                                     rProp.Type = aKeyValue.getValueType();
                                 }
-                                catch ( NoSuchElementException& )
+                                catch (const NoSuchElementException&)
                                 {
                                     // getByHierarchicalName
 
@@ -2564,7 +2564,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                         OSL_FAIL( "PropertySetInfo_Impl::getProperties - "
                                           "Error getting property attributes!" );
                                 }
-                                catch ( NoSuchElementException& )
+                                catch (const NoSuchElementException&)
                                 {
                                     // getByHierarchicalName
 
@@ -2580,7 +2580,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                     return *m_pProps;
                 }
             }
-            catch ( NoSuchElementException& )
+            catch (const NoSuchElementException&)
             {
                 // getByHierarchicalName
             }
@@ -2663,7 +2663,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
             // Success.
             return aProp;
         }
-        catch ( NoSuchElementException& )
+        catch (const NoSuchElementException&)
         {
             // getByHierarchicalName
 

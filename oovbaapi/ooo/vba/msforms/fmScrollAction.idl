@@ -1,0 +1,14 @@
+module ooo { module vba { module msforms {
+    constants fmScrollAction {
+        const long fmScrollActionBegin = 5;
+        const long fmScrollActionControlRequest = 9;
+        const long fmScrollActionEnd = 6;
+        const long fmScrollActionFocusRequest = 10;
+        const long fmScrollActionLineDown = 2;
+        const long fmScrollActionLineUp = 1;
+        const long fmScrollActionNoChange = 0;
+        const long fmScrollActionPageDown = 4;
+        const long fmScrollActionPageUp = 3;
+        const long fmScrollActionPropertyChange = 8;
+    };
+}; }; };

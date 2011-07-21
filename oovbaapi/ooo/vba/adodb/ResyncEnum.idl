@@ -1,0 +1,6 @@
+module ooo { module vba { module adodb {
+    constants ResyncEnum {
+        const long adResyncAllValues = 2;
+        const long adResyncUnderlyingValues = 1;
+    };
+}; }; };

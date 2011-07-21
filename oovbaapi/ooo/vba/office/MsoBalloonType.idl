@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoBalloonType {
+        const long msoBalloonTypeBullets = 1;
+        const long msoBalloonTypeButtons = 0;
+        const long msoBalloonTypeNumbers = 2;
+    };
+}; }; };

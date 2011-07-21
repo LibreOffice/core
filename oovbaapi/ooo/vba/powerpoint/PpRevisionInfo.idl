@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants PpRevisionInfo {
+        const long ppRevisionInfoBaseline = 1;
+        const long ppRevisionInfoMerged = 2;
+        const long ppRevisionInfoNone = 0;
+    };
+}; }; };

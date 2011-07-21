@@ -47,7 +47,7 @@
 #include <vcl/splitwin.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
-
+#include <unotools/bootstrap.hxx>
 
 #include <svtools/svtdata.hxx>
 #include <svl/solar.hrc>
@@ -55,6 +55,7 @@
 
 #include <basic/dispdefs.hxx>
 #include <basic/testtool.hxx>
+#include <rtl/strbuf.hxx>
 #include "dialogs.hxx"
 #include "resids.hrc"
 #include "basic.hrc"
@@ -72,6 +73,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& id )
 , aOk  ( this, ResId( RID_OK, *id.GetResMgr() ) )
 {
     FreeResource();
+    rtl::OUString sDefault;
+    aVersionString.SetText( utl::Bootstrap::getBuildIdData( sDefault ) );
 }
 
 
@@ -556,7 +559,8 @@ void CrashreportOptions::Save( Config &aConfig )
         aConfig.WriteKey( "UseProxy", "false" );
 
     aConfig.WriteKey( "ProxyServer", ByteString( aEDCRHost.GetText(), RTL_TEXTENCODING_UTF8 ) );
-    aConfig.WriteKey( "ProxyPort", ByteString::CreateFromInt64( aNFCRPort.GetValue() ) );
+    aConfig.WriteKey("ProxyPort",
+        rtl::OString::valueOf(static_cast<sal_Int64>(aNFCRPort.GetValue())));
 
     if ( aCBAllowContact.IsChecked() )
         aConfig.WriteKey( "AllowContact", "true" );
@@ -606,27 +610,29 @@ MiscOptions::MiscOptions( Window* pParent, Config &aConfig )
     aNFUNOPort.SetUseThousandSep( sal_False );
     aTFMaxLRU.SetUseThousandSep( sal_False );
 
-    ByteString aTemp;
+    rtl::OString aTemp;
 
     aConfig.SetGroup("Communication");
     aTemp = aConfig.ReadKey( "Host", DEFAULT_HOST );
-    aEDHost.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
-    aTemp = aConfig.ReadKey( "TTPort", ByteString::CreateFromInt32( TESTTOOL_DEFAULT_PORT ) );
-    aNFTTPort.SetValue( aTemp.ToInt32() );
-    aTemp = aConfig.ReadKey( "UnoPort", ByteString::CreateFromInt32( UNO_DEFAULT_PORT ) );
-    aNFUNOPort.SetValue( aTemp.ToInt32() );
+    aEDHost.SetText(rtl::OStringToOUString(aTemp, RTL_TEXTENCODING_UTF8));
+    aTemp = aConfig.ReadKey("TTPort",
+        rtl::OString::valueOf(static_cast<sal_Int32>(TESTTOOL_DEFAULT_PORT)));
+    aNFTTPort.SetValue(aTemp.toInt32());
+    aTemp = aConfig.ReadKey("UnoPort",
+        rtl::OString::valueOf(static_cast<sal_Int32>(UNO_DEFAULT_PORT)));
+    aNFUNOPort.SetValue(aTemp.toInt32());
 
     aConfig.SetGroup("Misc");
     aTemp = aConfig.ReadKey( "ServerTimeout", "10000" );    // Default 1 Minute
-    aServerTimeout.SetTime( Time(aTemp.ToInt32()) );
+    aServerTimeout.SetTime(Time(aTemp.toInt32()));
 
     aConfig.SetGroup("LRU");
     aTemp = aConfig.ReadKey( "MaxLRU", "4" );
-    aTFMaxLRU.SetValue( aTemp.ToInt32() );
+    aTFMaxLRU.SetValue(aTemp.toInt32());
 
     aConfig.SetGroup("OOoProgramDir");
     aTemp = aConfig.ReadKey( "Current" );
-    aEDProgDir.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+    aEDProgDir.SetText(rtl::OStringToOUString(aTemp, RTL_TEXTENCODING_UTF8));
     aPBProgDir.SetClickHdl( LINK( this, MiscOptions, Click ) );
 }
 
@@ -644,19 +650,27 @@ void MiscOptions::Save( Config &aConfig )
 {
     aConfig.SetGroup("Communication");
     aConfig.WriteKey( "Host", ByteString( aEDHost.GetText(), RTL_TEXTENCODING_UTF8 ) );
-    aConfig.WriteKey( "TTPort", ByteString::CreateFromInt64( aNFTTPort.GetValue() ) );
-    aConfig.WriteKey( "UnoPort", ByteString::CreateFromInt64( aNFUNOPort.GetValue() ) );
+    aConfig.WriteKey("TTPort",
+        rtl::OString::valueOf(static_cast<sal_Int64>(aNFTTPort.GetValue())));
+    aConfig.WriteKey("UnoPort",
+        rtl::OString::valueOf(static_cast<sal_Int64>(aNFUNOPort.GetValue())));
 
     aConfig.SetGroup("Misc");
-    aConfig.WriteKey( "ServerTimeout", ByteString::CreateFromInt32( aServerTimeout.GetTime().GetTime() ) );
+    aConfig.WriteKey("ServerTimeout",
+        rtl::OString::valueOf(static_cast<sal_Int32>(aServerTimeout.GetTime().GetTime())));
 
     aConfig.SetGroup("LRU");
     ByteString aTemp = aConfig.ReadKey( "MaxLRU", "4" );
     sal_uInt16 nOldMaxLRU = (sal_uInt16)aTemp.ToInt32();
     sal_uInt16 n;
     for ( n = nOldMaxLRU ; n > aTFMaxLRU.GetValue() ; n-- )
-        aConfig.DeleteKey( ByteString("LRU").Append( ByteString::CreateFromInt32( n ) ) );
-    aConfig.WriteKey( "MaxLRU", ByteString::CreateFromInt64( aTFMaxLRU.GetValue() ) );
+    {
+        aConfig.DeleteKey(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("LRU"))
+            .append(static_cast<sal_Int32>(n))
+            .makeStringAndClear());
+    }
+    aConfig.WriteKey("MaxLRU",
+        rtl::OString::valueOf(static_cast<sal_Int64>(aTFMaxLRU.GetValue())));
 
     aConfig.SetGroup("OOoProgramDir");
     aConfig.WriteKey( C_KEY_AKTUELL, ByteString( aEDProgDir.GetText(), RTL_TEXTENCODING_UTF8 ) );

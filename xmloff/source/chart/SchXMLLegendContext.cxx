@@ -116,7 +116,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         {
             xDocProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasLegend" )), uno::makeAny( sal_True ) );
         }
-        catch( beans::UnknownPropertyException )
+        catch(const beans::UnknownPropertyException&)
         {
             OSL_TRACE( "Property HasLegend not found" );
         }
@@ -162,7 +162,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                         if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aValue, aAny, GetImport().GetMM100UnitConverter() ) )
                             xLegendProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Alignment" )), aAny );
                     }
-                    catch( beans::UnknownPropertyException )
+                    catch(const beans::UnknownPropertyException&)
                     {
                         OSL_TRACE( "Property Alignment (legend) not found" );
                     }

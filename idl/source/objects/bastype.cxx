@@ -432,8 +432,10 @@ sal_Bool SvVersion::ReadSvIdl( SvTokenStream & rInStm )
 sal_Bool SvVersion::WriteSvIdl( SvStream & rOutStm )
 {
     rOutStm << SvHash_Version()->GetName().GetBuffer() << '('
-            << ByteString::CreateFromInt32( nMajorVersion ).GetBuffer() << '.'
-            << ByteString::CreateFromInt32( nMinorVersion ).GetBuffer() << ')';
+        << rtl::OString::valueOf(static_cast<sal_Int32>(nMajorVersion)).getStr()
+        << '.'
+        << rtl::OString::valueOf(static_cast<sal_Int32>(nMinorVersion)).getStr()
+        << ')';
     return sal_True;
 }
 #endif //IDL_COMPILER

@@ -68,10 +68,12 @@ static char const aChckXML[]     = { 'P', 'K', 0x03, 0x04 };        // = 6.0
 |*
 *************************************************************************/
 
-XBitmapTable::XBitmapTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
+XBitmapTable::XBitmapTable(
+    const String& rPath,
+    XOutdevItemPool* pInPool,
+    sal_uInt16 nInitSize,
+    sal_uInt16 nReSize
+) : XPropertyTable( rPath, pInPool, nInitSize, nReSize )
 {
     pBmpTable = new Table( nInitSize, nReSize );
 }
@@ -93,7 +95,7 @@ XBitmapEntry* XBitmapTable::Replace(long nIndex, XBitmapEntry* pEntry )
 
 XBitmapEntry* XBitmapTable::Remove(long nIndex)
 {
-    return (XBitmapEntry*) XPropertyTable::Remove(nIndex, 0);
+    return (XBitmapEntry*) XPropertyTable::Remove(nIndex);
 }
 
 /************************************************************************/
@@ -148,10 +150,10 @@ Bitmap* XBitmapTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 |*
 *************************************************************************/
 
-XBitmapList::XBitmapList( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyList( rPath, pInPool, nInitSize, nReSize)
+XBitmapList::XBitmapList(
+    const String& rPath,
+    XOutdevItemPool* pInPool
+) : XPropertyList( rPath, pInPool )
 {
     // pBmpList = new List( nInitSize, nReSize );
 }
@@ -173,7 +175,7 @@ XBitmapEntry* XBitmapList::Replace(XBitmapEntry* pEntry, long nIndex )
 
 XBitmapEntry* XBitmapList::Remove(long nIndex)
 {
-    return (XBitmapEntry*) XPropertyList::Remove(nIndex, 0);
+    return (XBitmapEntry*) XPropertyList::Remove(nIndex);
 }
 
 /************************************************************************/

@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoFileFindListBy {
+        const long msoListbyName = 1;
+        const long msoListbyTitle = 2;
+    };
+}; }; };

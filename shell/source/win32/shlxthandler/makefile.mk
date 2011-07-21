@@ -41,11 +41,23 @@ USE_DEBUG_RUNTIME=
 
 .INCLUDE :  settings.mk
 
+.IF "$(COM)" == "GCC"
+ALL :
+    @echo This does not build with MinGW anyway, so bypass for now
+.ENDIF
+
+
 UWINAPILIB =
 UWINAPILIB_X64 =
 
 CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
+.IF "$(COM)" == "MSC"
 CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
+.ENDIF
+.IF "$(COM)" == "GCC"
+CDEFS+=-DDONT_HAVE_GDIPLUS
+.ENDIF
+
 CDEFS+=-D_WIN32_IE=0x501
 
 # --- Files --------------------------------------------------------
@@ -104,7 +116,9 @@ DEF1EXPORTFILE=exports.dxp
 .IF "$(BUILD_X64)"!=""
 # -------------------- x64 -----------------------
 CFLAGS_X64+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
+.IF "$(COM)" == "MSC"
 CFLAGS_X64+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
+.ENDIF
 CDEFS_X64+=-D_WIN32_IE=0x501
 
 SLOFILES_X64= \
@@ -152,6 +166,6 @@ DEF1EXPORTFILE_X64=exports.dxp
 .INCLUDE :	set_wntx64.mk
 .INCLUDE :	target.mk
 INCLUDE!:=$(subst,/stl, $(INCLUDE))
-.EXPORT : INCLUDE
+
 .INCLUDE :	tg_wntx64.mk
 

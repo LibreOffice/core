@@ -40,6 +40,7 @@
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
+#include <rtl/strbuf.hxx>
 #include <stdio.h>
 
 // =============================================================================
@@ -492,9 +493,11 @@ void FormulaCompiler::OpCodeMap::putOpCode( const String & rStr, const OpCode eO
         DBG_ASSERT( (mpTable[eOp].Len() == 0) || (mpTable[eOp] == rStr) ||
             (eOp == ocCurrency) || (eOp == ocSep) || (eOp == ocArrayColSep) ||
             (eOp == ocArrayRowSep),
-            ByteString( "OpCodeMap::putOpCode: reusing OpCode ").
-            Append( ByteString::CreateFromInt32( sal_Int32( eOp))).Append( " (").
-            Append( ByteString( rStr, RTL_TEXTENCODING_ASCII_US)).Append( ')').GetBuffer());
+            rtl::OStringBuffer(
+                RTL_CONSTASCII_STRINGPARAM("OpCodeMap::putOpCode: reusing OpCode ")).
+            append(sal_Int32(eOp)).append(RTL_CONSTASCII_STRINGPARAM(" (")).
+            append(rtl::OUStringToOString(rStr, RTL_TEXTENCODING_ASCII_US)).
+            append(')').getStr());
         mpTable[eOp] = rStr;
         mpHashMap->insert( OpCodeHashMap::value_type( rStr, eOp));
     }

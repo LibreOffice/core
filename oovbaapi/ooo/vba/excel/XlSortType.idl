@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlSortType {
+        const long xlSortLabels = 2;
+        const long xlSortValues = 1;
+    };
+}; }; };

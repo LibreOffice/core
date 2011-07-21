@@ -57,8 +57,12 @@ $(eval $(call gb_CppunitTest_add_linked_libs,editeng_borderline, \
 
 $(eval $(call gb_CppunitTest_set_include,editeng_borderline,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_CppunitTest_add_api,editeng_borderline,\
+    offapi \
+    udkapi \
 ))
 
 # vim: set noet sw=4 ts=4:

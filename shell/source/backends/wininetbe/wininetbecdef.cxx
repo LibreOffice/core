@@ -64,14 +64,6 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
 
 //------------------------------------------------------------------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char **aEnvTypeName, uno_Environment ** /*aEnvironment*/) {
-
-    *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
-}
-
-//------------------------------------------------------------------------------
-
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char *aImplementationName,
     void *aServiceManager,
     void *aRegistryKey) {

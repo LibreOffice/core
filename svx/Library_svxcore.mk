@@ -36,12 +36,16 @@ $(eval $(call gb_Library_add_package_headers,svxcore,\
     svx_sdi \
 ))
 
+$(eval $(call gb_Library_add_api,svxcore,\
+	udkapi \
+	offapi \
+))
+
 $(eval $(call gb_Library_set_include,svxcore,\
     -I$(realpath $(SRCDIR)/svx/inc) \
     -I$(realpath $(SRCDIR)/svx/inc/pch) \
     -I$(realpath $(SRCDIR)/svx/source/inc) \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(WORKDIR)/SdiTarget/svx/sdi \
 ))
 

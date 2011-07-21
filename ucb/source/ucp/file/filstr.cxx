@@ -134,11 +134,11 @@ XStream_impl::~XStream_impl()
     {
         closeStream();
     }
-    catch (io::IOException const &)
+    catch (const io::IOException&)
     {
         OSL_FAIL("unexpected situation");
     }
-    catch (uno::RuntimeException const &)
+    catch (const uno::RuntimeException&)
     {
         OSL_FAIL("unexpected situation");
     }
@@ -216,7 +216,7 @@ XStream_impl::readBytes(
     {
         buffer = new sal_Int8[nBytesToRead];
     }
-    catch( std::bad_alloc )
+    catch (const std::bad_alloc&)
     {
         if( m_nIsOpen ) m_aFile.close();
         throw io::BufferSizeExceededException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );

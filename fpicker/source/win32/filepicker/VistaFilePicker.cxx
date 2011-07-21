@@ -38,8 +38,12 @@
 #endif
 
 #include "VistaFilePicker.hxx"
+
+// Without IFileDialog we can't do much
+#ifdef __IFileDialog_INTERFACE_DEFINED__
+
 #include "WinFileOpenImpl.hxx"
-#include "..\misc\WinImplHelper.hxx"
+#include "../misc/WinImplHelper.hxx"
 #include "shared.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -714,5 +718,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker::getSupportedServ
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
+
+#endif // __IFileDialog_INTERFACE_DEFINED__
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

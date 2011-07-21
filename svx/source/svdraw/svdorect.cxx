@@ -51,7 +51,6 @@
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
-#include "svdoimp.hxx"
 #include <svx/sdr/properties/rectangleproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -78,21 +77,18 @@ sdr::contact::ViewContact* SdrRectObj::CreateObjectSpecificViewContact()
 TYPEINIT1(SdrRectObj,SdrTextObj);
 
 SdrRectObj::SdrRectObj()
-:   mpXPoly(0L)
 {
     bClosedObj=sal_True;
 }
 
 SdrRectObj::SdrRectObj(const Rectangle& rRect)
-:   SdrTextObj(rRect),
-    mpXPoly(NULL)
+:   SdrTextObj(rRect)
 {
     bClosedObj=sal_True;
 }
 
 SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
-:   SdrTextObj(eNewTextKind),
-    mpXPoly(NULL)
+:   SdrTextObj(eNewTextKind)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
@@ -101,8 +97,7 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
 }
 
 SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
-:   SdrTextObj(eNewTextKind,rRect),
-    mpXPoly(NULL)
+:   SdrTextObj(eNewTextKind,rRect)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
@@ -111,8 +106,7 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
 }
 
 SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat)
-:    SdrTextObj(eNewTextKind,rNewRect,rInput,rBaseURL,eFormat),
-    mpXPoly(NULL)
+:    SdrTextObj(eNewTextKind,rNewRect,rInput,rBaseURL,eFormat)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
@@ -122,25 +116,11 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStr
 
 SdrRectObj::~SdrRectObj()
 {
-    if(mpXPoly)
-    {
-        delete mpXPoly;
-    }
 }
 
 void SdrRectObj::SetXPolyDirty()
 {
-    if(mpXPoly)
-    {
-        delete mpXPoly;
-        mpXPoly = 0L;
-    }
-}
-
-bool SdrRectObj::PaintNeedsXPoly(long nEckRad) const
-{
-    bool bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || nEckRad!=0;
-    return bNeed;
+    mpXPoly.reset();
 }
 
 XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const
@@ -169,7 +149,7 @@ XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const
 
 void SdrRectObj::RecalcXPoly()
 {
-    mpXPoly = new XPolygon(ImpCalcXPoly(aRect,GetEckenradius()));
+    mpXPoly.reset( new XPolygon(ImpCalcXPoly(aRect,GetEckenradius())) );
 }
 
 const XPolygon& SdrRectObj::GetXPoly() const

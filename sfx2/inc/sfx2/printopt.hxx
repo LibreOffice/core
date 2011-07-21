@@ -122,27 +122,6 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
 
-class TransparencyPrintWarningBox : public ModalDialog
-{
-private:
-
-    FixedImage      aWarnFI;
-    FixedText       aWarnFT;
-    OKButton        aYesBtn;
-    PushButton      aNoBtn;
-    CancelButton    aCancelBtn;
-    CheckBox        aNoWarnCB;
-
-                    DECL_LINK( ClickNoBtn, PushButton* );
-
-public:
-
-                    TransparencyPrintWarningBox( Window* pParent );
-                    ~TransparencyPrintWarningBox();
-
-    sal_Bool            IsNoWarningChecked() const { return aNoWarnCB.IsChecked(); }
-};
-
 #endif // #ifndef _SFX_PRINTOPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

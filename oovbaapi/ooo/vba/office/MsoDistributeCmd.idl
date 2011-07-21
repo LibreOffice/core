@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoDistributeCmd {
+        const long msoDistributeHorizontally = 0;
+        const long msoDistributeVertically = 1;
+    };
+}; }; };

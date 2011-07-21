@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="xo"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="SchXMLExport.Compact">
     <service name="com.sun.star.comp.Chart.XMLExporter"/>

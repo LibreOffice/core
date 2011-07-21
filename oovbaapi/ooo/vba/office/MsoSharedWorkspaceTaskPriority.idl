@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoSharedWorkspaceTaskPriority {
+        const long msoSharedWorkspaceTaskPriorityHigh = 1;
+        const long msoSharedWorkspaceTaskPriorityLow = 3;
+        const long msoSharedWorkspaceTaskPriorityNormal = 2;
+    };
+}; }; };

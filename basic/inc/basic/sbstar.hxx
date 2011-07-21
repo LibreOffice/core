@@ -148,8 +148,6 @@ public:
     void            InitAllModules( StarBASIC* pBasicNotToInit = NULL );
     void            DeInitAllModules( void );
     void            ClearAllModuleVars( void );
-    void            ActivateObject( const String*, sal_Bool );
-    sal_Bool            LoadOldModules( SvStream& );
 
     // #43011 For TestTool; deletes global vars
     void            ClearGlobalVars( void );
@@ -168,12 +166,9 @@ public:
     static sal_Bool     IsCompilerError();
     static sal_uInt16   GetVBErrorCode( SbError nError );
     static SbError  GetSfxFromVBError( sal_uInt16 nError );
-    static void     SetGlobalLanguageMode( SbLanguageMode eLangMode );
-    static SbLanguageMode GetGlobalLanguageMode();
     // Local settings
     void SetLanguageMode( SbLanguageMode eLangMode )
         { eLanguageMode = eLangMode; }
-    SbLanguageMode GetLanguageMode();
 
     // Specific for break handler
     sal_Bool            IsBreak() const             { return bBreak; }
@@ -183,7 +178,6 @@ public:
     Link            GetErrorHdl() const { return aErrorHdl; }
     void            SetErrorHdl( const Link& r ) { aErrorHdl = r; }
 
-    static Link     GetGlobalBreakHdl();
     static void     SetGlobalBreakHdl( const Link& rNewHdl );
     Link            GetBreakHdl() const { return aBreakHdl; }
     void            SetBreakHdl( const Link& r ) { aBreakHdl = r; }
@@ -191,18 +185,10 @@ public:
     SbxArrayRef     getUnoListeners( void );
 
     static SbxBase* FindSBXInCurrentScope( const String& rName );
-    static SbxVariable* FindVarInCurrentScopy
-                    ( const String& rName, sal_uInt16& rStatus );
     static SbMethod* GetActiveMethod( sal_uInt16 nLevel = 0 );
     static SbModule* GetActiveModule();
     void SetVBAEnabled( sal_Bool bEnabled );
     sal_Bool isVBAEnabled();
-
-    // #60175 sal_True: SFX-Resource is not displayed on basic errors
-    static void StaticSuppressSfxResource( sal_Bool bSuppress );
-
-    // #91147 sal_True: Reschedule is enabled (default>, sal_False: No reschedule
-    static void StaticEnableReschedule( sal_Bool bReschedule );
 
     SbxObjectRef getRTL( void ) { return pRtl; }
     sal_Bool IsDocBasic() { return bDocBasic; }

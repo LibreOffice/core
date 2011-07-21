@@ -1,0 +1,7 @@
+module ooo { module vba { module access {
+    constants AcImportXMLOption {
+        const long acAppendData = 2;
+        const long acStructureAndData = 1;
+        const long acStructureOnly = 0;
+    };
+}; }; };

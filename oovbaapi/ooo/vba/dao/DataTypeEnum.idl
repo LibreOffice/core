@@ -1,0 +1,25 @@
+module ooo { module vba { module dao {
+    constants DataTypeEnum {
+        const long dbBigInt = 16;
+        const long dbBinary = 9;
+        const long dbBoolean = 1;
+        const long dbByte = 2;
+        const long dbChar = 18;
+        const long dbCurrency = 5;
+        const long dbDate = 8;
+        const long dbDecimal = 20;
+        const long dbDouble = 7;
+        const long dbFloat = 21;
+        const long dbGUID = 15;
+        const long dbInteger = 3;
+        const long dbLong = 4;
+        const long dbLongBinary = 11;
+        const long dbMemo = 12;
+        const long dbNumeric = 19;
+        const long dbSingle = 6;
+        const long dbText = 10;
+        const long dbTime = 22;
+        const long dbTimeStamp = 23;
+        const long dbVarBinary = 17;
+    };
+}; }; };

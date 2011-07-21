@@ -77,10 +77,14 @@ char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };     // = 6.0
 |*
 *************************************************************************/
 
-XHatchTable::XHatchTable( const String& rPath,
-                            XOutdevItemPool* pInPool,
-                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
-                XPropertyTable( rPath, pInPool, nInitSize, nReSize)
+XHatchTable::XHatchTable(
+    const String& rPath,
+    XOutdevItemPool* pInPool,
+    sal_uInt16
+    nInitSize,
+    sal_uInt16 nReSize
+)
+    : XPropertyTable( rPath, pInPool, nInitSize, nReSize )
 {
     pBmpTable = new Table( nInitSize, nReSize );
 }
@@ -102,7 +106,7 @@ XHatchEntry* XHatchTable::Replace(long nIndex, XHatchEntry* pEntry )
 
 XHatchEntry* XHatchTable::Remove(long nIndex)
 {
-    return (XHatchEntry*) XPropertyTable::Remove(nIndex, 0);
+    return (XHatchEntry*) XPropertyTable::Remove(nIndex);
 }
 
 /************************************************************************/
@@ -230,11 +234,13 @@ void XHatchList::impDestroy()
     }
 }
 
-XHatchList::XHatchList(const String& rPath, XOutdevItemPool* pInPool, sal_uInt16 nInitSize, sal_uInt16 nReSize)
-:   XPropertyList(rPath, pInPool, nInitSize, nReSize),
-    mpData(0)
+XHatchList::XHatchList(
+    const String& rPath,
+    XOutdevItemPool* pInPool
+)   : XPropertyList( rPath, pInPool )
+    , mpData(0)
 {
-    pBmpList = new List(nInitSize, nReSize);
+    pBmpList = new BitmapList_impl();
 }
 
 XHatchList::~XHatchList()
@@ -253,7 +259,7 @@ XHatchEntry* XHatchList::Replace(XHatchEntry* pEntry, long nIndex )
 
 XHatchEntry* XHatchList::Remove(long nIndex)
 {
-    return (XHatchEntry*) XPropertyList::Remove(nIndex, 0);
+    return (XHatchEntry*) XPropertyList::Remove(nIndex);
 }
 
 XHatchEntry* XHatchList::GetHatch(long nIndex) const
@@ -331,7 +337,13 @@ sal_Bool XHatchList::CreateBitmapsForUI()
         DBG_ASSERT( pBmp, "XHatchList: Bitmap(UI) konnte nicht erzeugt werden!" );
 
         if( pBmp )
-            pBmpList->Insert( pBmp, i );
+        {
+            if ( (size_t)i < pBmpList->size() ) {
+                pBmpList->insert( pBmpList->begin() + i, pBmp );
+            } else {
+                pBmpList->push_back( pBmp );
+            }
+        }
     }
 
     impDestroy();

@@ -38,19 +38,10 @@
 #include <tools/debug.hxx>
 #include <unotools/syslocale.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void MoveXPoly(XPolygon& rPoly, const Size& S)
 {
     rPoly.Move(S.Width(),S.Height());
 }
-
-void MoveXPoly(XPolyPolygon& rPoly, const Size& S)
-{
-    rPoly.Move(S.Width(),S.Height());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, const Fraction& ryFact, bool bNoJustify)
 {
@@ -107,24 +98,6 @@ void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, cons
     }
 }
 
-void ResizePoly(PolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ResizePoly(rPoly[i],rRef,xFact,yFact);
-    }
-}
-
-void ResizeXPoly(XPolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ResizeXPoly(rPoly[i],rRef,xFact,yFact);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void RotatePoly(Polygon& rPoly, const Point& rRef, double sn, double cs)
 {
     sal_uInt16 nAnz=rPoly.GetSize();
@@ -141,28 +114,12 @@ void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs)
     }
 }
 
-void RotatePoly(PolyPolygon& rPoly, const Point& rRef, double sn, double cs)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        RotatePoly(rPoly[i],rRef,sn,cs);
-    }
-}
-
 void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs)
 {
     sal_uInt16 nAnz=rPoly.Count();
     for (sal_uInt16 i=0; i<nAnz; i++) {
         RotateXPoly(rPoly[i],rRef,sn,cs);
     }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void MirrorRect(Rectangle& rRect, const Point& /*rRef1*/, const Point& /*rRef2*/, bool bNoJustify)
-{
-    // !!! fehlende Implementation !!!
-    if (!bNoJustify) rRect.Justify();
 }
 
 void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
@@ -216,24 +173,6 @@ void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2)
     }
 }
 
-void MirrorPoly(PolyPolygon& rPoly, const Point& rRef1, const Point& rRef2)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        MirrorPoly(rPoly[i],rRef1,rRef2);
-    }
-}
-
-void MirrorXPoly(XPolyPolygon& rPoly, const Point& rRef1, const Point& rRef2)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        MirrorXPoly(rPoly[i],rRef1,rRef2);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
     sal_uInt16 nAnz=rPoly.GetSize();
@@ -249,24 +188,6 @@ void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
         ShearPoint(rPoly[i],rRef,tn,bVShear);
     }
 }
-
-void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ShearPoly(rPoly[i],rRef,tn,bVShear);
-    }
-}
-
-void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ShearXPoly(rPoly[i],rRef,tn,bVShear);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
                          const Point& rRad, double& rSin, double& rCos, bool bVert)
@@ -780,30 +701,6 @@ FrPair GetInchOrMM(FieldUnit eU)
 FrPair GetMapFactor(MapUnit eS, MapUnit eD)
 {
     if (eS==eD) return FrPair(1,1,1,1);
-    FrPair aS(GetInchOrMM(eS));
-    FrPair aD(GetInchOrMM(eD));
-    bool bSInch=IsInch(eS);
-    bool bDInch=IsInch(eD);
-    FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
-    if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
-    if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
-    return aRet;
-};
-
-FrPair GetMapFactor(MapUnit eS, FieldUnit eD)
-{
-    FrPair aS(GetInchOrMM(eS));
-    FrPair aD(GetInchOrMM(eD));
-    bool bSInch=IsInch(eS);
-    bool bDInch=IsInch(eD);
-    FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
-    if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
-    if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
-    return aRet;
-};
-
-FrPair GetMapFactor(FieldUnit eS, MapUnit eD)
-{
     FrPair aS(GetInchOrMM(eS));
     FrPair aD(GetInchOrMM(eD));
     bool bSInch=IsInch(eS);

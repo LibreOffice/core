@@ -1,0 +1,37 @@
+module ooo { module vba { module excel {
+    constants XlClipboardFormat {
+        const long xlClipboardFormatBIFF = 8;
+        const long xlClipboardFormatBIFF2 = 18;
+        const long xlClipboardFormatBIFF3 = 20;
+        const long xlClipboardFormatBIFF4 = 30;
+        const long xlClipboardFormatBinary = 15;
+        const long xlClipboardFormatBitmap = 9;
+        const long xlClipboardFormatCGM = 13;
+        const long xlClipboardFormatCSV = 5;
+        const long xlClipboardFormatDIF = 4;
+        const long xlClipboardFormatDspText = 12;
+        const long xlClipboardFormatEmbeddedObject = 21;
+        const long xlClipboardFormatEmbedSource = 22;
+        const long xlClipboardFormatLink = 11;
+        const long xlClipboardFormatLinkSource = 23;
+        const long xlClipboardFormatLinkSourceDesc = 32;
+        const long xlClipboardFormatMovie = 24;
+        const long xlClipboardFormatNative = 14;
+        const long xlClipboardFormatObjectDesc = 31;
+        const long xlClipboardFormatObjectLink = 19;
+        const long xlClipboardFormatOwnerLink = 17;
+        const long xlClipboardFormatPICT = 2;
+        const long xlClipboardFormatPrintPICT = 3;
+        const long xlClipboardFormatRTF = 7;
+        const long xlClipboardFormatScreenPICT = 29;
+        const long xlClipboardFormatStandardFont = 28;
+        const long xlClipboardFormatStandardScale = 27;
+        const long xlClipboardFormatSYLK = 6;
+        const long xlClipboardFormatTable = 16;
+        const long xlClipboardFormatText = 0;
+        const long xlClipboardFormatToolFace = 25;
+        const long xlClipboardFormatToolFacePICT = 26;
+        const long xlClipboardFormatVALU = 1;
+        const long xlClipboardFormatWK1 = 10;
+    };
+}; }; };

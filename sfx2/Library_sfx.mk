@@ -38,6 +38,11 @@ $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 
 $(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))
 
+$(eval $(call gb_Library_add_api,sfx,\
+	udkapi \
+	offapi \
+))
+
 $(eval $(call gb_Library_set_include,sfx,\
     -I$(realpath $(SRCDIR)/sfx2/inc) \
     -I$(realpath $(SRCDIR)/sfx2/inc/sfx2) \
@@ -46,13 +51,21 @@ $(eval $(call gb_Library_set_include,sfx,\
     -I$(WORKDIR)/SdiTarget/sfx2/sdi \
     -I$(WORKDIR)/inc/ \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,sfx,\
     -DSFX2_DLLIMPLEMENTATION \
 ))
+
+ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
+$(eval $(call gb_Library_set_defs,sfx,\
+    $$(DEFS) \
+    -DENABLE_QUICKSTART_APPLET \
+    -DENABLE_SYSTRAY_GTK \
+    -DPLUGIN_NAME=libqstart_gtk$(gb_Library_OOOEXT) \
+))
+endif
 
 $(eval $(call gb_Library_add_linked_libs,sfx,\
     comphelper \
@@ -267,7 +280,7 @@ $(eval $(call gb_Library_add_cxxobjects,sfx,\
     sfx2/source/appl/shutdowniconw32 \
     sfx2/source/doc/sfxacldetect \
     sfx2/source/doc/syspathw32 \
-    , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS) -nologo -UPRECOMPILED_HEADERS \
+    , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS) -UPRECOMPILED_HEADERS \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sfx,\

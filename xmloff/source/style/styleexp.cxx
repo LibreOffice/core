@@ -422,7 +422,7 @@ void XMLStyleExport::exportStyleFamily(
         {
             xStyles->getByName( *pIter ) >>= xStyle;
         }
-        catch( lang::IndexOutOfBoundsException )
+        catch(const lang::IndexOutOfBoundsException&)
         {
             // due to bugs in prior versions it is possible that
             // a binary file is missing some critical styles.

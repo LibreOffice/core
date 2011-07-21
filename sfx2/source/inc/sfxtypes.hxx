@@ -100,10 +100,6 @@ struct _Capper
 
 //------------------------------------------------------------------------
 
-String SfxShellIdent_Impl( const SfxShell *pSh );
-
-//------------------------------------------------------------------------
-
 #if defined(DBG_UTIL) && defined(WNT)
 
 class SfxStack

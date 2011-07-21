@@ -32,6 +32,10 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 
+#ifdef USE_XINERAMA
+#include <X11/extensions/Xinerama.h>
+#endif
+
 #define USE_LIBPNG
 
 #include "osl/endian.h"
@@ -144,6 +148,7 @@ int splash_load_bmp( const char *filename )
     width = png_get_image_width( png_ptr, info_ptr );
     height = png_get_image_height( png_ptr, info_ptr );
 
+    fclose( file );
     return 1;
 }
 #else
@@ -510,6 +515,25 @@ int splash_create_window( int argc, char** argv )
     int display_width = DisplayWidth( display, screen );
     int display_height = DisplayHeight( display, screen );
 
+#ifdef USE_XINERAMA
+    int n_xinerama_screens = 1;
+    XineramaScreenInfo* p_screens = XineramaQueryScreens( display, &n_xinerama_screens );
+    if( p_screens )
+    {
+        int i = 0;
+        for( ; i < n_xinerama_screens; i++ )
+        {
+            if ( p_screens[i].screen_number == screen )
+            {
+                display_width = p_screens[i].width;
+                display_height = p_screens[i].height;
+                break;
+            }
+        }
+        XFree( p_screens );
+    }
+#endif
+
     win = XCreateSimpleWindow( display, root_win,
             ( display_width - width ) / 2, ( display_height - height ) / 2,
             width, height, 0,
@@ -609,6 +633,7 @@ void splash_close_window()
 {
     if (display)
         XCloseDisplay( display );
+    display = NULL;
 #ifdef USE_LIBPNG
     png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
 #else

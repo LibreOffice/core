@@ -36,6 +36,7 @@
 #include <tools/debug.hxx>
 #include <database.hxx>
 #include <globals.hxx>
+#include <rtl/strbuf.hxx>
 
 SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
     : bExport( sal_False )
@@ -541,16 +542,16 @@ void SvIdlDataBase::Write( const ByteString & rText )
 
 void SvIdlDataBase::WriteError( const ByteString & rErrWrn,
                                 const ByteString & rFileName,
-                                const ByteString & rErrorText,
+                                const rtl::OString& rErrorText,
                                 sal_uLong nRow, sal_uLong nColumn ) const
 {
     // error treatment
     fprintf( stderr, "\n%s --- %s: ( %ld, %ld )\n",
              rFileName.GetBuffer(), rErrWrn.GetBuffer(), nRow, nColumn );
 
-    if( rErrorText.Len() )
+    if( !rErrorText.isEmpty() )
     { // error set
-        fprintf( stderr, "\t%s\n", rErrorText.GetBuffer() );
+        fprintf( stderr, "\t%s\n", rErrorText.getStr() );
     }
 }
 
@@ -558,7 +559,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
 {
     // error treatment
     String aFileName( rInStm.GetFileName() );
-    ByteString aErrorText;
+    rtl::OStringBuffer aErrorText;
     sal_uLong   nRow = 0, nColumn = 0;
 
     rInStm.SeekEnd();
@@ -574,8 +575,8 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
         // error text
         if( aError.GetText().Len() )
         {
-            aErrorText = "may be <";
-            aErrorText += aError.GetText();
+            aErrorText.append(RTL_CONSTASCII_STRINGPARAM("may be <"));
+            aErrorText.append(aError.GetText());
         }
         SvToken * pPrevTok = NULL;
         while( pTok != pPrevTok )
@@ -588,17 +589,17 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
         }
 
         // error position
-        aErrorText += "> at ( ";
-        aErrorText += ByteString::CreateFromInt64(aError.nLine);
-        aErrorText += ", ";
-        aErrorText += ByteString::CreateFromInt64(aError.nColumn);
-        aErrorText += " )";
+        aErrorText.append(RTL_CONSTASCII_STRINGPARAM("> at ( "));
+        aErrorText.append(static_cast<sal_Int64>(aError.nLine));
+        aErrorText.append(RTL_CONSTASCII_STRINGPARAM(", "));
+        aErrorText.append(static_cast<sal_Int64>(aError.nColumn));
+        aErrorText.append(RTL_CONSTASCII_STRINGPARAM(" )"));
 
         // reset error
         aError = SvIdlError();
     }
 
-    WriteError( "error", ByteString( aFileName, RTL_TEXTENCODING_UTF8 ), aErrorText, nRow, nColumn );
+    WriteError( "error", ByteString( aFileName, RTL_TEXTENCODING_UTF8 ), aErrorText.makeStringAndClear(), nRow, nColumn );
 
     DBG_ASSERT( pTok, "token must be found" );
     if( !pTok )
@@ -714,8 +715,8 @@ sal_Bool SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
             SvStringHashEntry* pEntry = aList[ i ];
             rOutStm << "#define " << pEntry->GetName().GetBuffer()
                     << '\t'
-                    << ByteString::CreateFromInt64(
-                        pEntry->GetValue() ).GetBuffer()
+                    << rtl::OString::valueOf(static_cast<sal_Int64>(
+                        pEntry->GetValue())).getStr()
                     << endl;
         }
     }

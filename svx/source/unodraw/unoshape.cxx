@@ -97,6 +97,7 @@
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/tools/unotools.hxx>
 #include "shapeimpl.hxx"
 
 #include <vector>
@@ -104,7 +105,6 @@
 // #i68523#
 #include "svx/lathe3d.hxx"
 #include "svx/extrud3d.hxx"
-#include "unopolyhelper.hxx"
 
 #include <boost/bind.hpp>
 
@@ -2365,7 +2365,7 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                     drawing::PolyPolygonBezierCoords aPolyPoly;
                     if ( rValue >>= aPolyPoly )
                     {
-                        basegfx::B2DPolyPolygon aNewPolyPolygon( SvxConvertPolyPolygonBezierToB2DPolyPolygon( &aPolyPoly ) );
+                        basegfx::B2DPolyPolygon aNewPolyPolygon( basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( aPolyPoly ) );
                         // Reintroduction of fix for issue i59051 (#i108851#)
                         ForceMetricToItemPoolMetric( aNewPolyPolygon );
                         if( mpModel->IsWriter() )
@@ -2814,7 +2814,7 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                     // Reintroduction of fix for issue #i59051# (#i108851#)
                     ForceMetricTo100th_mm( aPolyPoly );
                     drawing::PolyPolygonBezierCoords aRetval;
-                    SvxConvertB2DPolyPolygonToPolyPolygonBezier( aPolyPoly, aRetval);
+                    basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( aPolyPoly, aRetval);
                     rValue <<= aRetval;
                     break;
                 }

@@ -39,7 +39,6 @@
 #include <svx/svxacorr.hxx>
 #include <tools/fsys.hxx>
 #include <svx/xpoly.hxx>
-#include <svtools/filedlg.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>

@@ -484,19 +484,6 @@ IMPL_LINK( SoundHandler, implts_PlayerNotify, void*, EMPTYARG )
 
 } // namespace framework
 
-// ------------------------------------------
-// - component_getImplementationEnvironment -
-// ------------------------------------------
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-{
-       *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-// ------------------------
-// - component_getFactory -
-// ------------------------
-
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplementationName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     void* pReturn = NULL;

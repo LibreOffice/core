@@ -85,12 +85,6 @@ bool singleton_entries( uno::Reference<registry::XRegistryKey> const& );
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     sal_Char const * pImplName,
     lang::XMultiServiceFactory * pServiceManager,

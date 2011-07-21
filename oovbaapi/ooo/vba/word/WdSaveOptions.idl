@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdSaveOptions {
+        const long wdDoNotSaveChanges = 0;
+        const long wdPromptToSaveChanges = -2;
+        const long wdSaveChanges = -1;
+    };
+}; }; };

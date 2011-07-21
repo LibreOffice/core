@@ -1088,8 +1088,6 @@ void SbiParser::SubFunc()
 
 // Read in of a procedure
 
-sal_Bool runsInSetup( void );
-
 void SbiParser::DefProc( sal_Bool bStatic, sal_Bool bPrivate )
 {
     sal_uInt16 l1 = nLine, l2 = nLine;
@@ -1132,7 +1130,7 @@ void SbiParser::DefProc( sal_Bool bStatic, sal_Bool bPrivate )
         }
         // #100027: Multiple declaration -> Error
         // #112787: Not for setup, REMOVE for 8
-        else if( !runsInSetup() && pProc->IsUsedForProcDecl() )
+        else if( pProc->IsUsedForProcDecl() )
         {
             PropertyMode ePropMode = pDef->getPropertyMode();
             if( ePropMode == PROPERTY_MODE_NONE || ePropMode == pProc->getPropertyMode() )

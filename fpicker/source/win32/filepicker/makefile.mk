@@ -45,7 +45,7 @@ CDEFS+=-U_WIN32_WINNT -D_WIN32_WINNT=0x0600
 # --- Resources ----------------------------------------------------
 
 .IF "$(GUI)" == "WNT"
-RCFILES=fps.rc
+RCFILES=Fps.rc
 .ENDIF
 
 # --- Files --------------------------------------------------------

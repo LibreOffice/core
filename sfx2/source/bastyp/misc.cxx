@@ -39,22 +39,6 @@ unsigned SfxStack::nLevel = 0;
 
 //--------------------------------------------------------------------
 
-String SearchAndReplace( const String &rSource,
-                         const String &rToReplace,
-                         const String &rReplacement )
-{
-    String aTarget( rSource );
-    sal_uInt16 nPos = rSource.Search( rToReplace );
-    if ( nPos != STRING_NOTFOUND )
-    {
-        aTarget.Erase( nPos, rToReplace.Len() );
-        return aTarget.Insert( rReplacement, nPos );
-    }
-    return rSource;
-}
-
-//--------------------------------------------------------------------
-
 String SfxStringEncode( const String &rSource, const char *  )
 {
     String aRet;

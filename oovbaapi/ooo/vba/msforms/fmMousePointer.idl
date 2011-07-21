@@ -1,0 +1,19 @@
+module ooo { module vba { module msforms {
+    constants fmMousePointer {
+        const long fmMousePointerAppStarting = 13;
+        const long fmMousePointerArrow = 1;
+        const long fmMousePointerCross = 2;
+        const long fmMousePointerCustom = 99;
+        const long fmMousePointerDefault = 0;
+        const long fmMousePointerHelp = 14;
+        const long fmMousePointerHourGlass = 11;
+        const long fmMousePointerIBeam = 3;
+        const long fmMousePointerNoDrop = 12;
+        const long fmMousePointerSizeAll = 15;
+        const long fmMousePointerSizeNESW = 6;
+        const long fmMousePointerSizeNS = 7;
+        const long fmMousePointerSizeNWSE = 8;
+        const long fmMousePointerSizeWE = 9;
+        const long fmMousePointerUpArrow = 10;
+    };
+}; }; };

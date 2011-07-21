@@ -19,6 +19,7 @@
 ..\%__SRC%\bin\gnome-open-url.bin %_DEST%\bin\gnome-open-url.bin
 ..\%__SRC%\bin\senddoc %_DEST%\bin\senddoc
 ..\%__SRC%\bin\uri-encode %_DEST%\bin\uri-encode
+..\%__SRC%\bin\lngconvex %_DEST%\bin\lngconvex
 
 ..\%__SRC%\misc\*.xml %_DEST%\xml\*.xml
 

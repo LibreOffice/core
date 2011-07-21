@@ -65,7 +65,7 @@ DEF1EXPORTFILE=	exports.dxp
 
 .INCLUDE :	target.mk
 INCLUDE!:=$(subst,/stl, $(INCLUDE))
-.EXPORT : INCLUDE
+
 
 
 ALLTAR : $(MISC)/syssh.component

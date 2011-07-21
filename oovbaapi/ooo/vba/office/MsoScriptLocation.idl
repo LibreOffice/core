@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoScriptLocation {
+        const long msoScriptLocationInBody = 2;
+        const long msoScriptLocationInHead = 1;
+    };
+}; }; };

@@ -24,7 +24,9 @@
 ..\%__SRC%\misc\ucp*.map %_DEST%\bin\ucp*.map
 ..\%__SRC%\misc\ucp*.sym %_DEST%\bin\ucp*.sym
 
-..\%__SRC%\slb\odma_lib.lib %_DEST%\lib\odma_lib.lib
+..\%__SRC%\lib\odma_lib.lib %_DEST%\lib\odma_lib.lib
+..\%__SRC%\lib\libodma_lib.a %_DEST%\lib\libodma_lib.a
+
 ..\source\ucp\odma\odma.h %_DEST%\inc\odma.h
 ..\source\ucp\odma\odma_lib.hxx %_DEST%\inc\odma_lib.hxx
 

@@ -275,7 +275,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
                     if( bAuto )
                         property->mnIndex = -1;
                 }
-                catch( beans::UnknownPropertyException )
+                catch(const beans::UnknownPropertyException&)
                 {
                 }
             }

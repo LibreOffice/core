@@ -1,0 +1,26 @@
+module ooo { module vba { module powerpoint {
+    constants PpSaveAsFileType {
+        const long ppSaveAsAddIn = 8;
+        const long ppSaveAsBMP = 19;
+        const long ppSaveAsDefault = 11;
+        const long ppSaveAsEMF = 23;
+        const long ppSaveAsGIF = 16;
+        const long ppSaveAsHTML = 12;
+        const long ppSaveAsHTMLDual = 14;
+        const long ppSaveAsHTMLv3 = 13;
+        const long ppSaveAsJPG = 17;
+        const long ppSaveAsMetaFile = 15;
+        const long ppSaveAsPNG = 18;
+        const long ppSaveAsPowerPoint3 = 4;
+        const long ppSaveAsPowerPoint4 = 3;
+        const long ppSaveAsPowerPoint4FarEast = 10;
+        const long ppSaveAsPowerPoint7 = 2;
+        const long ppSaveAsPresentation = 1;
+        const long ppSaveAsPresForReview = 22;
+        const long ppSaveAsRTF = 6;
+        const long ppSaveAsShow = 7;
+        const long ppSaveAsTemplate = 5;
+        const long ppSaveAsTIF = 21;
+        const long ppSaveAsWebArchive = 20;
+    };
+}; }; };

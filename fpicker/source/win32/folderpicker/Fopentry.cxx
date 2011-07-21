@@ -36,7 +36,7 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>
 
-#include "folderpicker.hxx"
+#include "FolderPicker.hxx"
 
 #include "FOPServiceInfo.hxx"
 #include "WinFOPImpl.hxx"
@@ -67,22 +67,8 @@ namespace
     }
 }
 
-//-----------------------------------------------------------------------
-// the 3 important functions which will be exported
-//-----------------------------------------------------------------------
-
 extern "C"
 {
-
-//----------------------------------------------------------------------
-// component_getImplementationEnvironment
-//----------------------------------------------------------------------
-
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
 
 //----------------------------------------------------------------------
 // component_getFactory

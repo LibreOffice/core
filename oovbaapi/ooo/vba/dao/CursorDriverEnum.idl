@@ -1,0 +1,9 @@
+module ooo { module vba { module dao {
+    constants CursorDriverEnum {
+        const long dbUseClientBatchCursor = 3;
+        const long dbUseDefaultCursor = -1;
+        const long dbUseNoCursor = 4;
+        const long dbUseODBCCursor = 1;
+        const long dbUseServerCursor = 2;
+    };
+}; }; };

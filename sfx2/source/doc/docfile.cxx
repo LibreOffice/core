@@ -3336,7 +3336,8 @@ sal_Bool SfxMedium::SetWritableForUserOnly( const ::rtl::OUString& aURL )
                              osl_File_Attribute_GrpWrite |
                              osl_File_Attribute_OthWrite |
                              osl_File_Attribute_ReadOnly);
-            nAttributes |= osl_File_Attribute_OwnWrite;
+            nAttributes |=  (osl_File_Attribute_OwnWrite |
+                             osl_File_Attribute_OwnRead);
 
             bResult = ( osl::File::setAttributes( aURL, nAttributes ) == ::osl::FileBase::E_None );
         }
@@ -3483,11 +3484,10 @@ void SfxMedium::CreateTempFileNoCopy()
                 ::rtl::OUString aField;
                 aAny >>= aField;
 
-                ::rtl::OString sContent = ::rtl::OUStringToOString( aField, RTL_TEXTENCODING_ASCII_US );
-                ByteString sType, sSubType;
+                String sType, sSubType;
                 INetContentTypeParameterList aParameters;
 
-                if( INetContentTypes::parse( sContent, sType, sSubType, &aParameters ) )
+                if (INetContentTypes::parse(aField, sType, sSubType, &aParameters))
                 {
                     const INetContentTypeParameter * pCharset = aParameters.find("charset");
                     if (pCharset != 0)

@@ -68,11 +68,11 @@ sal_Bool convert( shell* pShell,
             else
                 no_success = sal_True;
         }
-        catch ( lang::IllegalArgumentException )
+        catch (const lang::IllegalArgumentException&)
         {
             no_success = sal_True;
         }
-        catch ( script::CannotConvertException )
+        catch (const script::CannotConvertException&)
         {
             no_success = sal_True;
         }

@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlToolbarProtection {
+        const long xlNoButtonChanges = 1;
+        const long xlNoChanges = 4;
+        const long xlNoDockingChanges = 3;
+        const long xlNoShapeChanges = 2;
+        const long xlToolbarProtectionNone = -4143;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlYesNoGuess {
+        const long xlGuess = 0;
+        const long xlNo = 2;
+        const long xlYes = 1;
+    };
+}; }; };

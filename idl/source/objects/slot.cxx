@@ -1154,8 +1154,11 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
 
     sal_Bool bIsEnumSlot = 0 != pEnumValue;
 
-    rOutStm << "// Slot Nr. " << ByteString::CreateFromInt32(nListPos).GetBuffer() << " : ";
-    ByteString aSlotIdValue( ByteString::CreateFromInt32( GetSlotId().GetValue() ) );
+    rOutStm << "// Slot Nr. "
+        << rtl::OString::valueOf(static_cast<sal_Int32>(nListPos)).getStr()
+        << " : ";
+    ByteString aSlotIdValue(rtl::OString::valueOf(static_cast<sal_Int32>(
+        GetSlotId().GetValue())));
     rOutStm << aSlotIdValue.GetBuffer() << endl;
     WriteTab( rOutStm, 1 );
     if( bIsEnumSlot )
@@ -1181,12 +1184,12 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
     if( bIsEnumSlot )
     {
         rOutStm << "&a" << rShellName.GetBuffer() << "Slots_Impl["
-                << ByteString::CreateFromInt32(pLinkedSlot->GetListPos()).GetBuffer()
-                << "] /*Offset Master*/, " << endl;
+            << rtl::OString::valueOf(static_cast<sal_Int32>(pLinkedSlot->GetListPos())).getStr()
+            << "] /*Offset Master*/, " << endl;
         WriteTab( rOutStm, 4 );
         rOutStm << "&a" << rShellName.GetBuffer() << "Slots_Impl["
-                << ByteString::CreateFromInt32(pNextSlot->GetListPos()).GetBuffer()
-                << "] /*Offset Next*/, " << endl;
+            << rtl::OString::valueOf(static_cast<sal_Int32>(pNextSlot->GetListPos())).getStr()
+            << "] /*Offset Next*/, " << endl;
 
         WriteTab( rOutStm, 4 );
 
@@ -1240,14 +1243,14 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
         else
         {
             rOutStm << "&a" << rShellName.GetBuffer() << "Slots_Impl["
-                << ByteString::CreateFromInt32(pLinkedSlot->GetListPos()).GetBuffer()
+                << rtl::OString::valueOf(static_cast<sal_Int32>(pLinkedSlot->GetListPos())).getStr()
                 << "] /*Offset Linked*/, " << endl;
             WriteTab( rOutStm, 4 );
         }
 
         rOutStm << "&a" << rShellName.GetBuffer() << "Slots_Impl["
-                << ByteString::CreateFromInt32(pNextSlot->GetListPos()).GetBuffer()
-                << "] /*Offset Next*/, " << endl;
+            << rtl::OString::valueOf(static_cast<sal_Int32>(pNextSlot->GetListPos())).getStr()
+            << "] /*Offset Next*/, " << endl;
 
         WriteTab( rOutStm, 4 );
 
@@ -1357,7 +1360,9 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
     {
         rOutStm << ',' << endl;
         WriteTab( rOutStm, 4 );
-        rOutStm << ByteString::CreateFromInt32( nCount ).GetBuffer() << "/*Offset*/, ";
+        rOutStm
+            << rtl::OString::valueOf(static_cast<sal_Int32>(nCount)).getStr()
+            << "/*Offset*/, ";
 
         if( IsMethod() )
         {
@@ -1368,7 +1373,10 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
             else
                 pType = GetType();
             sal_uLong nSCount = pType->GetAttrCount();
-            rOutStm << ByteString::CreateFromInt32( nSCount ).GetBuffer() << "/*Count*/";
+            rOutStm
+                << rtl::OString::valueOf(static_cast<sal_Int32>(
+                    nSCount)).getStr()
+                << "/*Count*/";
         }
         else
             rOutStm << '0';
@@ -1485,8 +1493,9 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
     if( !pTable->IsKeyValid( nSId ) )
     {
         pTable->Insert( nSId, this );
-        rOutStm << "SfxSlotInfo " << ByteString::CreateFromInt32( nSId ).GetBuffer()
-                << endl << '{' << endl;
+        rOutStm << "SfxSlotInfo "
+            << rtl::OString::valueOf(static_cast<sal_Int32>(nSId)).getStr()
+            << endl << '{' << endl;
 
         WriteTab( rOutStm, 1 );
         ByteString aStr = GetConfigName();
@@ -1521,7 +1530,7 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
             sal_Bool bIdOk = sal_False;
             if( rBase.FindId( aSId, &nSId2 ) )
             {
-                aSId = ByteString::CreateFromInt32( nSId2 );
+                aSId = rtl::OString::valueOf(static_cast<sal_Int32>(nSId2));
                 bIdOk = sal_True;
             }
 
@@ -1554,7 +1563,9 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
     if( !pTable->IsKeyValid( nSId ) )
     {
         pTable->Insert( nSId, this );
-        rOutStm << "#define " << GetSlotId().GetBuffer() << '\t' << ByteString::CreateFromInt32( nSId ).GetBuffer() << endl;
+        rOutStm << "#define " << GetSlotId().GetBuffer() << '\t'
+            << rtl::OString::valueOf(static_cast<sal_Int32>(nSId)).getStr()
+            << endl;
     }
 
     SvMetaTypeEnum * pEnum = PTR_CAST( SvMetaTypeEnum, GetType() );
@@ -1573,7 +1584,7 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
             sal_Bool bIdOk = sal_False;
             if( rBase.FindId( aSId, &nSId2 ) )
             {
-                aSId = ByteString::CreateFromInt32( nSId2 );
+                aSId = rtl::OString::valueOf(static_cast<sal_Int32>(nSId2));
                 bIdOk = sal_True;
             }
 
@@ -1583,7 +1594,9 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                 pTable->Insert( nSId2, this );
 
                 rOutStm << "#define " << aSId.GetBuffer() << '\t'
-                        << ByteString::CreateFromInt32( nSId2 ).GetBuffer() << endl;
+                    << rtl::OString::valueOf(
+                        static_cast<sal_Int32>(nSId2)).getStr()
+                    << endl;
             }
         }
     }
@@ -1601,7 +1614,10 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
 {
     rStrm << "PROJECT,";
     rStrm << GetSlotId().GetBuffer() << ',';
-    rStrm << ByteString::CreateFromInt32( GetSlotId().GetValue() ).GetBuffer() << ',';
+    rStrm
+        << rtl::OString::valueOf(
+            static_cast<sal_Int32>(GetSlotId().GetValue())).getStr()
+        << ',';
 
     if ( GetPseudoPrefix().Len() )
         rStrm << GetPseudoPrefix().GetBuffer() << ',';

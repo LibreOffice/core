@@ -1,0 +1,17 @@
+module ooo { module vba { module msforms {
+    constants fmPicturePosition {
+        const long fmPicturePositionAboveCenter = 7;
+        const long fmPicturePositionAboveLeft = 6;
+        const long fmPicturePositionAboveRight = 8;
+        const long fmPicturePositionBelowCenter = 10;
+        const long fmPicturePositionBelowLeft = 9;
+        const long fmPicturePositionBelowRight = 11;
+        const long fmPicturePositionCenter = 12;
+        const long fmPicturePositionLeftBottom = 2;
+        const long fmPicturePositionLeftCenter = 1;
+        const long fmPicturePositionLeftTop = 0;
+        const long fmPicturePositionRightBottom = 5;
+        const long fmPicturePositionRightCenter = 4;
+        const long fmPicturePositionRightTop = 3;
+    };
+}; }; };

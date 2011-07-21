@@ -1,0 +1,9 @@
+module ooo { module vba { module dao {
+    constants RecordStatusEnum {
+        const long dbRecordDBDeleted = 4;
+        const long dbRecordDeleted = 3;
+        const long dbRecordModified = 1;
+        const long dbRecordNew = 2;
+        const long dbRecordUnmodified = 0;
+    };
+}; }; };

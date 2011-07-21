@@ -1,0 +1,7 @@
+module ooo { module vba { module dao {
+    constants EditModeEnum {
+        const long dbEditAdd = 2;
+        const long dbEditInProgress = 1;
+        const long dbEditNone = 0;
+    };
+}; }; };

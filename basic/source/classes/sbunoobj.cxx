@@ -434,28 +434,6 @@ template< class EXCEPTION >
     return implGetExceptionMsg( e, ::getCppuType( &e ).getTypeName() );
 }
 
-// Error-Message fuer WrappedTargetExceptions
-::rtl::OUString implGetWrappedMsg( const WrappedTargetException& e )
-{
-    ::rtl::OUString aMsg;
-    Any aWrappedAny = e.TargetException;
-    Type aExceptionType = aWrappedAny.getValueType();
-
-    // Really an Exception?
-    if( aExceptionType.getTypeClass() == TypeClass_EXCEPTION )
-    {
-        Exception& e_ = *( (Exception*)aWrappedAny.getValue() );
-        aMsg = implGetExceptionMsg( e_, ::rtl::OUString( aExceptionType.getTypeName() ) );
-    }
-    // Otherwise use WrappedTargetException itself
-    else
-    {
-        aMsg = implGetExceptionMsg( e );
-    }
-
-    return aMsg;
-}
-
 void implHandleBasicErrorException( BasicErrorException& e )
 {
     SbError nError = StarBASIC::GetSfxFromVBError( (sal_uInt16)e.ErrorCode );

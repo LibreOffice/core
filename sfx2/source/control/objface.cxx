@@ -41,6 +41,7 @@
 #include "sfx2/sfxresid.hxx"
 #include <sfx2/minarray.hxx>
 #include <sfx2/objsh.hxx>
+#include <rtl/strbuf.hxx>
 
 DBG_NAME(SfxInterface)
 
@@ -237,20 +238,26 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                 {
                     if ( pSlave->pLinkedSlot != pMasterSlot )
                     {
-                        ByteString aStr("Wrong Master/Slave- link: ");
-                        aStr += ByteString::CreateFromInt32(pMasterSlot->GetSlotId());
-                        aStr += " , ";
-                        aStr += ByteString::CreateFromInt32(pSlave->GetSlotId());
-                        OSL_FAIL(aStr.GetBuffer());
+                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                            "Wrong Master/Slave- link: "));
+                        aStr.append(static_cast<sal_Int32>(
+                            pMasterSlot->GetSlotId()));
+                        aStr.append(RTL_CONSTASCII_STRINGPARAM(" , "));
+                        aStr.append(static_cast<sal_Int32>(
+                            pSlave->GetSlotId()));
+                        OSL_FAIL(aStr.getStr());
                     }
 
                     if ( pSlave->nMasterSlotId != pMasterSlot->GetSlotId() )
                     {
-                        ByteString aStr("Wrong Master/Slave-Ids: ");
-                        aStr += ByteString::CreateFromInt32(pMasterSlot->GetSlotId());
-                        aStr += " , ";
-                        aStr += ByteString::CreateFromInt32(pSlave->GetSlotId());
-                        OSL_FAIL(aStr.GetBuffer());
+                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                            "Wrong Master/Slave-Ids: "));
+                        aStr.append(static_cast<sal_Int32>(
+                            pMasterSlot->GetSlotId()));
+                        aStr.append(RTL_CONSTASCII_STRINGPARAM(" , "));
+                        aStr.append(static_cast<sal_Int32>(
+                            pSlave->GetSlotId()));
+                        OSL_FAIL(aStr.getStr());
                     }
 
                     pSlave = pSlave->pNextSlot;
@@ -263,11 +270,13 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                 {
                     if ( pIter->pLinkedSlot->GetKind() != SFX_KIND_ENUM )
                     {
-                        ByteString aStr("Slave is no enum: ");
-                        aStr += ByteString::CreateFromInt32(pIter->GetSlotId());
-                        aStr += " , ";
-                        aStr += ByteString::CreateFromInt32(pIter->pLinkedSlot->GetSlotId());
-                        OSL_FAIL(aStr.GetBuffer());
+                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                            "Slave is no enum: "));
+                        aStr.append(static_cast<sal_Int32>(pIter->GetSlotId()));
+                        aStr.append(RTL_CONSTASCII_STRINGPARAM(" , "));
+                        aStr.append(static_cast<sal_Int32>(
+                            pIter->pLinkedSlot->GetSlotId()));
+                        OSL_FAIL(aStr.getStr());
                     }
                 }
 
@@ -277,11 +286,13 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                     pCurSlot = pCurSlot->pNextSlot;
                     if ( pCurSlot->GetStateFnc() != pIter->GetStateFnc() )
                     {
-                        ByteString aStr("Linked Slots with different State Methods : ");
-                        aStr += ByteString::CreateFromInt32(pCurSlot->GetSlotId());
-                        aStr += " , ";
-                        aStr += ByteString::CreateFromInt32(pIter->GetSlotId());
-                        OSL_FAIL(aStr.GetBuffer());
+                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                            "Linked Slots with different State Methods : "));
+                        aStr.append(static_cast<sal_Int32>(
+                            pCurSlot->GetSlotId()));
+                        aStr.append(RTL_CONSTASCII_STRINGPARAM(" , "));
+                        aStr.append(static_cast<sal_Int32>(pIter->GetSlotId()));
+                        OSL_FAIL(aStr.getStr());
                     }
                 }
                 while ( pCurSlot != pIter );

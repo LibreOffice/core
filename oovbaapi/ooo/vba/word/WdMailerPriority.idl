@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdMailerPriority {
+        const long wdPriorityHigh = 3;
+        const long wdPriorityLow = 2;
+        const long wdPriorityNormal = 1;
+    };
+}; }; };

@@ -49,8 +49,6 @@ class SvXMLNamespaceMap;
 
 com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_createXFormsModel();
 
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_createXFormsBinding();
-
 void lcl_addXFormsModel(
     const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xDocument,
     const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xModel );
@@ -72,9 +70,6 @@ void lcl_setValue(
 {
     lcl_setValue( xPropSet, rName, com::sun::star::uno::makeAny( aValue ) );
 }
-
-
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_getXFormsModel( const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& );
 
 sal_uInt16 lcl_getTypeClass(
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,

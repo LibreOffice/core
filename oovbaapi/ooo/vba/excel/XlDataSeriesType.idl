@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlDataSeriesType {
+        const long xlAutoFill = 4;
+        const long xlChronological = 3;
+        const long xlDataSeriesLinear = -4132;
+        const long xlGrowth = 2;
+    };
+}; }; };

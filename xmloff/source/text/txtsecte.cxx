@@ -75,19 +75,6 @@ using ::com::sun::star::container::XIndexReplace;
 using ::com::sun::star::container::XNamed;
 using ::com::sun::star::lang::XServiceInfo;
 
-Reference<XText> lcl_findXText(const Reference<XTextSection>& rSect)
-{
-    Reference<XText> xText;
-
-    Reference<XTextContent> xTextContent(rSect, UNO_QUERY);
-    if (xTextContent.is())
-    {
-        xText.set(xTextContent->getAnchor()->getText());
-    }
-
-    return xText;
-}
-
 void XMLTextParagraphExport::exportListAndSectionChange(
     Reference<XTextSection> & rPrevSection,
     const Reference<XTextContent> & rNextSectionContent,

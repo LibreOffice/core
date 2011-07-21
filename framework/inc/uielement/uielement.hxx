@@ -42,6 +42,8 @@
 
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -59,24 +61,24 @@ namespace framework
 
 struct DockedData
 {
-    DockedData() : m_aPos( LONG_MAX, LONG_MAX ),
+    DockedData() : m_aPos( SAL_MAX_INT32, SAL_MAX_INT32 ),
                    m_nDockedArea( ::com::sun::star::ui::DockingArea_DOCKINGAREA_TOP ),
                    m_bLocked( false ) {}
 
-    Point     m_aPos;
-    Size      m_aSize;
+    com::sun::star::awt::Point m_aPos;
+    com::sun::star::awt::Size m_aSize;
     sal_Int16 m_nDockedArea;
     bool      m_bLocked;
 };
 
 struct FloatingData
 {
-    FloatingData() : m_aPos( LONG_MAX, LONG_MAX ),
+    FloatingData() : m_aPos( SAL_MAX_INT32, SAL_MAX_INT32 ),
                      m_nLines( 1 ),
                      m_bIsHorizontal( true ) {}
 
-    Point     m_aPos;
-    Size      m_aSize;
+    com::sun::star::awt::Point m_aPos;
+    com::sun::star::awt::Size m_aSize;
     sal_Int16 m_nLines;
     bool      m_bIsHorizontal;
 };

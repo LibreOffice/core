@@ -61,13 +61,6 @@ bool SbiRuntime::isVBAEnabled()
     return result;
 }
 
-// #91147 Global reschedule flag
-static sal_Bool bStaticGlobalEnableReschedule = sal_True;
-
-void StarBASIC::StaticEnableReschedule( sal_Bool bReschedule )
-{
-    bStaticGlobalEnableReschedule = bReschedule;
-}
 void StarBASIC::SetVBAEnabled( sal_Bool bEnabled )
 {
     if ( bDocBasic )
@@ -715,7 +708,7 @@ sal_Bool SbiRuntime::Step()
     if( bRun )
     {
         // Unbedingt gelegentlich die Kontrolle abgeben!
-        if( !( ++nOps & 0xF ) && pInst->IsReschedule() && bStaticGlobalEnableReschedule )
+        if( !( ++nOps & 0xF ) && pInst->IsReschedule() )
         {
             sal_uInt32 nTime = osl_getGlobalTimer();
             if (nTime - m_nLastTime > 5 ) // 20 ms
@@ -728,7 +721,7 @@ sal_Bool SbiRuntime::Step()
         // #i48868 blocked by next call level?
         while( bBlocked )
         {
-            if( pInst->IsReschedule() && bStaticGlobalEnableReschedule )
+            if( pInst->IsReschedule() )
                 Application::Reschedule();
         }
 

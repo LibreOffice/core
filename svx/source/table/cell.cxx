@@ -938,7 +938,7 @@ double SAL_CALL Cell::getValue(  ) throw (RuntimeException)
 
 void SAL_CALL Cell::setValue( double nValue ) throw (RuntimeException)
 {
-    if( mfValue == nValue )
+    if( mfValue != nValue )
     {
         mfValue = nValue;
         mnCellContentType = CellContentType_VALUE;

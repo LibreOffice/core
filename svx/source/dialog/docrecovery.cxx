@@ -963,19 +963,17 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
     }
 }
 //===============================================
-RecovDocList::RecovDocList(      Window* pParent,
-                           const ResId&  rResId )
-    : SvxSimpleTable      ( pParent, rResId            )
-    , m_aGreenCheckImg    ( ResId(IMG_GREENCHECK,*rResId.GetResMgr()     ) )
-    , m_aYellowCheckImg   ( ResId(IMG_YELLOWCHECK,*rResId.GetResMgr()    ) )
-    , m_aRedCrossImg      ( ResId(IMG_REDCROSS,*rResId.GetResMgr()       ) )
-    , m_aSuccessRecovStr  ( ResId(STR_SUCCESSRECOV,*rResId.GetResMgr()   ) )
-    , m_aOrigDocRecovStr  ( ResId(STR_ORIGDOCRECOV,*rResId.GetResMgr()   ) )
-    , m_aRecovFailedStr   ( ResId(STR_RECOVFAILED,*rResId.GetResMgr()    ) )
-    , m_aRecovInProgrStr  ( ResId(STR_RECOVINPROGR,*rResId.GetResMgr()   ) )
-    , m_aNotRecovYetStr   ( ResId(STR_NOTRECOVYET,*rResId.GetResMgr()    ) )
+RecovDocList::RecovDocList(SvxSimpleTableContainer& rParent, ResMgr &rResMgr)
+    : SvxSimpleTable      ( rParent )
+    , m_aGreenCheckImg    ( ResId(IMG_GREENCHECK, rResMgr ) )
+    , m_aYellowCheckImg   ( ResId(IMG_YELLOWCHECK, rResMgr ) )
+    , m_aRedCrossImg      ( ResId(IMG_REDCROSS, rResMgr ) )
+    , m_aSuccessRecovStr  ( ResId(STR_SUCCESSRECOV, rResMgr ) )
+    , m_aOrigDocRecovStr  ( ResId(STR_ORIGDOCRECOV, rResMgr ) )
+    , m_aRecovFailedStr   ( ResId(STR_RECOVFAILED, rResMgr ) )
+    , m_aRecovInProgrStr  ( ResId(STR_RECOVINPROGR, rResMgr ) )
+    , m_aNotRecovYetStr   ( ResId(STR_NOTRECOVYET, rResMgr ) )
 {
-    //SetEntryHeight( short( maGreenCheckImg.GetSizePixel().Height() ) );
 }
 
 //===============================================
@@ -1019,7 +1017,8 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     , m_aProgressFT         ( this           , SVX_RES  ( FT_RECOV_PROGR                 ) )
     , m_aProgrParent        ( this           , SVX_RES  ( WIN_RECOV_PROGR                ) )
     , m_aFileListFT         ( this           , SVX_RES  ( FT_RECOV_FILELIST              ) )
-    , m_aFileListLB         ( this           , SVX_RES  ( LB_RECOV_FILELIST              ) )
+    , m_aFileListLBContainer( this           , SVX_RES  ( LB_RECOV_FILELIST              ) )
+    , m_aFileListLB         (m_aFileListLBContainer, DIALOG_MGR())
     , m_aBottomFL           ( this           , SVX_RES  ( FL_RECOV_BOTTOM                ) )
     , m_aNextBtn            ( this           , SVX_RES  ( BTN_RECOV_NEXT                 ) )
     , m_aCancelBtn          ( this           , SVX_RES  ( BTN_RECOV_CANCEL               ) )

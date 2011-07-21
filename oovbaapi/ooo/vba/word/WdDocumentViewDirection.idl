@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdDocumentViewDirection {
+        const long wdDocumentViewLtr = 1;
+        const long wdDocumentViewRtl = 0;
+    };
+}; }; };

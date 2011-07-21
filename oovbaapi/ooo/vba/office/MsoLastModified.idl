@@ -1,0 +1,11 @@
+module ooo { module vba { module office {
+    constants MsoLastModified {
+        const long msoLastModifiedAnyTime = 7;
+        const long msoLastModifiedLastMonth = 5;
+        const long msoLastModifiedLastWeek = 3;
+        const long msoLastModifiedThisMonth = 6;
+        const long msoLastModifiedThisWeek = 4;
+        const long msoLastModifiedToday = 2;
+        const long msoLastModifiedYesterday = 1;
+    };
+}; }; };

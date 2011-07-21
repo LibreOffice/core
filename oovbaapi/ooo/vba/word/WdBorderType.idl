@@ -1,0 +1,12 @@
+module ooo { module vba { module word {
+    constants WdBorderType {
+        const long wdBorderBottom = -3;
+        const long wdBorderDiagonalDown = -7;
+        const long wdBorderDiagonalUp = -8;
+        const long wdBorderHorizontal = -5;
+        const long wdBorderLeft = -2;
+        const long wdBorderRight = -4;
+        const long wdBorderTop = -1;
+        const long wdBorderVertical = -6;
+    };
+}; }; };

@@ -125,8 +125,7 @@ static const char XDG_CONFIG_PART[] = "/.config";
 
                 sLabel = aStr;
             }
-
-            catch(container::NoSuchElementException&)
+            catch (const container::NoSuchElementException&)
             {
                 sLabel = sCommand;
                 sal_Int32 nIndex = sLabel.indexOf(':');
@@ -228,9 +227,11 @@ void Migration::migrateSettingsIfNecessary()
         return;
 
     sal_Bool bResult = sal_False;
-    try {
+    try
+    {
         bResult = aImpl.doMigration();
-    } catch (Exception& e)
+    }
+    catch (const Exception& e)
     {
         OString aMsg("doMigration() exception: ");
         aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
@@ -332,7 +333,8 @@ sal_Bool MigrationImpl::doMigration()
         refresh();
 
         result = sal_True;
-    } catch (...)
+    }
+    catch (...)
     {
         OString aMsg("An unexpected exception was thrown during migration");
         aMsg += "\nOldVersion: " + OUStringToOString(m_aInfo.productname, RTL_TEXTENCODING_ASCII_US);
@@ -358,11 +360,14 @@ void MigrationImpl::refresh()
 
 void MigrationImpl::setMigrationCompleted()
 {
-    try {
+    try
+    {
         uno::Reference< XPropertySet > aPropertySet(getConfigAccess("org.openoffice.Setup/Office", true), uno::UNO_QUERY_THROW);
         aPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("MigrationCompleted")), uno::makeAny(sal_True));
         uno::Reference< XChangesBatch >(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
-    } catch (...) {
+    }
+    catch (...)
+    {
         // fail silently
     }
 }
@@ -382,7 +387,9 @@ bool MigrationImpl::checkMigrationCompleted()
             setMigrationCompleted();
             bMigrationCompleted = sal_True;
         }
-    } catch (Exception&) {
+    }
+    catch (const Exception&)
+    {
         // just return false...
     }
     OSL_TRACE( "Migration %s", bMigrationCompleted ? "already completed" : "not done" );
@@ -587,7 +594,9 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
                 aInfo.userdata = aObj.GetMainURL( INetURLObject::NO_DECODE );
                 aInfo.productname = aVersion;
             }
-            catch( uno::Exception& ){}
+            catch (const uno::Exception&)
+            {
+            }
         }
         ++i_ver;
     }
@@ -870,7 +879,8 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
         xNameAccess = uno::Reference< XNameAccess > (
                 theConfigProvider->createInstanceWithArguments(
                 sAccessSrvc, theArgs ), uno::UNO_QUERY_THROW );
-    } catch (com::sun::star::uno::Exception& e)
+    }
+    catch (const com::sun::star::uno::Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_FAIL(aMsg.getStr());
@@ -954,13 +964,15 @@ void MigrationImpl::runServices()
                 xMigrationJob->execute(uno::Sequence< NamedValue >());
 
 
-            } catch (Exception& e)
+            }
+            catch (const Exception& e)
             {
                 OString aMsg("Execution of migration service failed (Exception caught).\nService: ");
                 aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) + "\nMessage: ";
                 aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
                 OSL_FAIL(aMsg.getStr());
-            } catch (...)
+            }
+            catch (...)
             {
                 OString aMsg("Execution of migration service failed (Exception caught).\nService: ");
                 aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) +

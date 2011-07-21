@@ -462,25 +462,6 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
 }
 
 //------------------------------------------------------------------------------
-void setConnection(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet, const Reference< ::com::sun::star::sdbc::XConnection>& _rxConn)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::setConnection" );
-    Reference< ::com::sun::star::beans::XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
-    if (xRowSetProps.is())
-    {
-        try
-        {
-            Any aConn(makeAny(_rxConn));
-            xRowSetProps->setPropertyValue(FM_PROP_ACTIVE_CONNECTION, aConn);
-        }
-        catch(Exception&)
-        {
-            OSL_FAIL("::setConnection : could not set the connection !");
-        }
-
-    }
-}
-//------------------------------------------------------------------------------
 sal_Bool isRowSetAlive(const Reference< XInterface >& _rxRowSet)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::isRowSetAlive" );

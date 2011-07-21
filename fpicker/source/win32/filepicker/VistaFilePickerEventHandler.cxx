@@ -30,6 +30,10 @@
 #include "precompiled_fpicker.hxx"
 
 #include "VistaFilePickerEventHandler.hxx"
+
+// Without IFileDialog we can't do much
+#ifdef __IFileDialog_INTERFACE_DEFINED__
+
 #include "asyncrequests.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -460,5 +464,7 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
+
+#endif // __IFileDialog_INTERFACE_DEFINED__
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

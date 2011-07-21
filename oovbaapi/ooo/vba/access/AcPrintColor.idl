@@ -1,0 +1,6 @@
+module ooo { module vba { module access {
+    constants AcPrintColor {
+        const long acPRCMColor = 2;
+        const long acPRCMMonochrome = 1;
+    };
+}; }; };

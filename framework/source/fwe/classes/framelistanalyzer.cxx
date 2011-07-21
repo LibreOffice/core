@@ -163,8 +163,9 @@ void FrameListAnalyzer::impl_analyze()
             ::rtl::OUString sModule = xModuleMgr->identify(m_xReferenceFrame);
             m_bReferenceIsBacking = (sModule.equals(SERVICENAME_STARTMODULE));
         }
-        catch(const css::uno::Exception&)
-            {}
+        catch (const css::uno::Exception&)
+        {
+        }
     }
 
     // check, if the reference frame includes the help module.
@@ -237,8 +238,9 @@ void FrameListAnalyzer::impl_analyze()
                         continue;
                     }
                 }
-                catch(const css::uno::Exception&)
-                    {}
+                catch (const css::uno::Exception&)
+                {
+                }
             }
 
             // -------------------------------------------------
@@ -285,7 +287,7 @@ void FrameListAnalyzer::impl_analyze()
             }
         }
     }
-    catch(css::lang::IndexOutOfBoundsException)
+    catch (const css::lang::IndexOutOfBoundsException&)
     {
         // stop copying if index seams to be wrong.
         // This interface can't realy guarantee its count for multithreaded

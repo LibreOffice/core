@@ -47,84 +47,17 @@ namespace framework
 #pragma warning(pop)
 #endif
 
-//_________________________________________________________________________________________________________________
-//  Win NT, Win 2000, Win XP
-//_________________________________________________________________________________________________________________
-
 static DWORD WINAPI GetUserDomainW_NT( LPWSTR lpBuffer, DWORD nSize )
 {
     return GetEnvironmentVariable( TEXT("USERDOMAIN"), lpBuffer, nSize );
 }
 
-//_________________________________________________________________________________________________________________
-//  Win 9x,Win ME
-//_________________________________________________________________________________________________________________
-
-static DWORD WINAPI GetUserDomainW_WINDOWS( LPWSTR lpBuffer, DWORD nSize )
-{
-    HKEY    hkeyLogon;
-    HKEY    hkeyWorkgroup;
-    DWORD   dwResult = 0;
-
-
-    if ( ERROR_SUCCESS  == RegOpenKeyEx(
-        HKEY_LOCAL_MACHINE,
-        TEXT("Network\\Logon"),
-        0, KEY_READ, &hkeyLogon ) )
-    {
-        DWORD   dwLogon = 0;
-        DWORD   dwLogonSize = sizeof(dwLogon);
-        RegQueryValueEx( hkeyLogon, TEXT("LMLogon"), 0, NULL, (LPBYTE)&dwLogon, &dwLogonSize );
-        RegCloseKey( hkeyLogon );
-
-        if ( dwLogon )
-        {
-            HKEY    hkeyNetworkProvider;
-
-            if ( ERROR_SUCCESS  == RegOpenKeyEx(
-                HKEY_LOCAL_MACHINE,
-                TEXT("SYSTEM\\CurrentControlSet\\Services\\MSNP32\\NetworkProvider"),
-                0, KEY_READ, &hkeyNetworkProvider ) )
-            {
-                DWORD   dwBufferSize = nSize;
-                LONG    lResult = RegQueryValueEx( hkeyNetworkProvider, TEXT("AuthenticatingAgent"), 0, NULL, (LPBYTE)lpBuffer, &dwBufferSize );
-
-                if ( ERROR_SUCCESS == lResult || ERROR_MORE_DATA == lResult )
-                    dwResult = dwBufferSize / sizeof(TCHAR);
-
-                RegCloseKey( hkeyNetworkProvider );
-            }
-        }
-    }
-    else if ( ERROR_SUCCESS == RegOpenKeyEx(
-        HKEY_LOCAL_MACHINE,
-        TEXT("SYSTEM\\CurrentControlSet\\Services\\VxD\\VNETSUP"),
-        0, KEY_READ, &hkeyWorkgroup ) )
-    {
-        DWORD   dwBufferSize = nSize;
-        LONG    lResult = RegQueryValueEx( hkeyWorkgroup, TEXT("Workgroup"), 0, NULL, (LPBYTE)lpBuffer, &dwBufferSize );
-
-        if ( ERROR_SUCCESS == lResult || ERROR_MORE_DATA == lResult )
-            dwResult = dwBufferSize / sizeof(TCHAR);
-
-        RegCloseKey( hkeyWorkgroup );
-    }
-
-
-    return dwResult;
-}
-
 static rtl::OUString GetUserDomain()
 {
     sal_Unicode aBuffer[256];
-
-    long    nVersion = GetVersion();
     DWORD   nResult;
 
-    if ( nVersion < 0 )
-        nResult = GetUserDomainW_WINDOWS( reinterpret_cast<LPWSTR>(aBuffer), sizeof( aBuffer ) );
-    else
-        nResult = GetUserDomainW_NT( reinterpret_cast<LPWSTR>(aBuffer), sizeof( aBuffer ) );
+    nResult = GetUserDomainW_NT( reinterpret_cast<LPWSTR>(aBuffer), sizeof( aBuffer ) );
 
     if ( nResult > 0 )
         return rtl::OUString( aBuffer );

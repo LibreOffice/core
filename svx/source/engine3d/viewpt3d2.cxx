@@ -66,15 +66,6 @@ void Viewport3D::SetViewWindow(double fX, double fY, double fW, double fH)
     fHRatio = aDeviceRect.GetHeight() / aViewWin.H;
 }
 
-void Viewport3D::GetViewWindow(double& rX, double& rY,
-                               double& rW, double& rH) const
-{
-    rX = aViewWin.X;
-    rY = aViewWin.Y;
-    rW = aViewWin.W;
-    rH = aViewWin.H;
-}
-
 // Returns observer position (PRP) in world coordinates
 
 const basegfx::B3DPoint& Viewport3D::GetViewPoint()
@@ -82,15 +73,6 @@ const basegfx::B3DPoint& Viewport3D::GetViewPoint()
     MakeTransform();
 
     return aViewPoint;
-}
-
-// Returns transformations matrix
-
-const basegfx::B3DHomMatrix& Viewport3D::GetViewTransform()
-{
-    MakeTransform();
-
-    return aViewTf;
 }
 
 // Calculate View transformations matrix
@@ -205,48 +187,6 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
     aDeviceRect = rRect;
 }
 
-// Project the  3D pointon the View plane
-
-basegfx::B3DPoint Viewport3D::DoProjection(const basegfx::B3DPoint& rVec) const
-{
-    basegfx::B3DPoint aVec(rVec);
-
-    if ( eProjection == PR_PERSPECTIVE )
-    {
-        double fPrDist = fVPD - aPRP.getZ();
-
-        if ( aPRP.getZ() == rVec.getZ() )
-        {
-            aVec.setX(0.0);
-            aVec.setY(0.0);
-        }
-        else
-        {
-            // This is the version for any PRP, but not used due to
-            // performance reasons
-            fPrDist /= aVec.getZ() - aPRP.getZ();
-            aVec.setX(aVec.getX() * fPrDist);
-            aVec.setY(aVec.getY() * fPrDist);
-        }
-    }
-
-    return aVec;
-}
-
-// Mapp 3D point to device coordinates
-
-basegfx::B3DPoint Viewport3D::MapToDevice(const basegfx::B3DPoint& rVec) const
-{
-    basegfx::B3DPoint aRetval;
-
-    // Subtract Y-coordinate, since the device Y-Axis runs from top to bottom
-    aRetval.setX((double)aDeviceRect.Left() + ((rVec.getX() - aViewWin.X) * fWRatio));
-    aRetval.setY((double)aDeviceRect.Bottom() - ((rVec.getY() - aViewWin.Y) * fHRatio));
-    aRetval.setZ(rVec.getZ());
-
-    return aRetval;
-}
-
 // Set View Reference Point
 
 void Viewport3D::SetVRP(const basegfx::B3DPoint& rNewVRP)
@@ -289,23 +229,5 @@ void Viewport3D::SetVPD(double fNewVPD)
     fVPD = fNewVPD;
     bTfValid = sal_False;
 }
-
-// Set distance of the front Clipping plane
-
-void Viewport3D::SetNearClipDist(double fNewNCD)
-{
-    fNearClipDist = fNewNCD;
-    bTfValid = sal_False;
-}
-
-// Set distance of the rear Clipping plane
-
-void Viewport3D::SetFarClipDist(double fNewFCD)
-{
-    fFarClipDist = fNewFCD;
-    bTfValid = sal_False;
-}
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

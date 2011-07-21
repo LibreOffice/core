@@ -1794,7 +1794,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
                 return;
 
             SystemWindow* pSystemWindow = (SystemWindow*)pWindowCheck;
-            pSystemWindow->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
+            pSystemWindow->SetWindowState(rtl::OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
             // <- SOLAR SAFE
         }
     }

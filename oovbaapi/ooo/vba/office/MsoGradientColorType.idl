@@ -1,0 +1,8 @@
+module ooo { module vba { module office {
+    constants MsoGradientColorType {
+        const long msoGradientColorMixed = -2;
+        const long msoGradientOneColor = 1;
+        const long msoGradientPresetColors = 3;
+        const long msoGradientTwoColors = 2;
+    };
+}; }; };

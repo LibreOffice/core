@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlSpeakDirection {
+        const long xlSpeakByColumns = 1;
+        const long xlSpeakByRows = 0;
+    };
+}; }; };

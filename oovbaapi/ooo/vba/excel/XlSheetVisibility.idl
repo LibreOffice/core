@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlSheetVisibility {
+        const long xlSheetHidden = 0;
+        const long xlSheetVeryHidden = 2;
+        const long xlSheetVisible = -1;
+    };
+}; }; };

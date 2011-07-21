@@ -85,11 +85,6 @@ Reference<XPropertySet> lcl_createXFormsModel()
     return lcl_createPropertySet( OUSTRING( "com.sun.star.xforms.Model" ) );
 }
 
-Reference<XPropertySet> lcl_createXFormsBinding()
-{
-    return lcl_createPropertySet( OUSTRING( "com.sun.star.xforms.Binding" ) );
-}
-
 void lcl_addXFormsModel(
     const Reference<frame::XModel>& xDocument,
     const Reference<XPropertySet>& xModel )
@@ -194,32 +189,6 @@ void lcl_setValue( Reference<XPropertySet>& xPropertySet,
                    const Any rAny )
 {
     xPropertySet->setPropertyValue( rName, rAny );
-}
-
-
-Reference<XPropertySet> lcl_getXFormsModel( const Reference<frame::XModel>& xDoc )
-{
-    Reference<XPropertySet> xRet;
-    try
-    {
-        Reference<XFormsSupplier> xSupplier( xDoc, UNO_QUERY );
-        if( xSupplier.is() )
-        {
-            Reference<XNameContainer> xForms = xSupplier->getXForms();
-            if( xForms.is() )
-            {
-                Sequence<OUString> aNames = xForms->getElementNames();
-                if( aNames.getLength() > 0 )
-                    xRet.set( xForms->getByName( aNames[0] ), UNO_QUERY );
-            }
-        }
-    }
-    catch( const Exception& )
-    {
-        ; // no success!
-    }
-
-    return xRet;
 }
 
 #define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }

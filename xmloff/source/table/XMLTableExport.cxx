@@ -167,9 +167,8 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
             }
         }
     }
-    catch( Exception& e )
+    catch(const Exception&)
     {
-        (void)e;
     }
 
     mxCellExportPropertySetMapper = xExportPropertyMapper;
@@ -242,7 +241,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                 pTableInfo->maColumnStyleMap[xKey] = sStyleName;
             }
         }
-        catch( Exception& )
+        catch(const Exception&)
         {
             OSL_FAIL("xmloff::XMLTableExport::collectTableAutoStyles(), exception during column style collection!");
         }
@@ -310,12 +309,12 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
             aStringStatistic.clear();
         }
-        catch( Exception& )
+        catch(const Exception&)
         {
             OSL_FAIL("xmloff::XMLTableExport::collectTableAutoStyles(), exception during column style collection!");
         }
     }
-    catch( Exception& )
+    catch(const Exception&)
     {
         OSL_FAIL("xmloff::XMLTableExport::collectTableAutoStyles(), exception caught!");
     }
@@ -381,7 +380,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             }
         }
      }
-     catch( Exception )
+     catch(const Exception&)
     {
          OSL_FAIL( "XMLTableExport::exportTable(), exception cought!" );
      }
@@ -446,7 +445,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         }
         DBG_ASSERT( (nRowSpan >= 1) && (nColSpan >= 1), "xmloff::XMLTableExport::ExportCell(), illegal row or col span < 1?" );
     }
-    catch ( Exception )
+    catch (const Exception&)
     {
         OSL_FAIL( "exception while exporting a table cell" );
     }
@@ -569,7 +568,7 @@ void XMLTableExport::exportTableTemplates()
                          SvXMLElementExport element( mrExport, XML_NAMESPACE_TABLE, pElements->meElement, sal_True, sal_True );
                     }
                 }
-                catch( Exception& )
+                catch(const Exception&)
                 {
                     OSL_FAIL("xmloff::XMLTableExport::exportTableTemplates(), exception caught!");
                 }
@@ -577,12 +576,12 @@ void XMLTableExport::exportTableTemplates()
                 pElements++;
             }
         }
-        catch( Exception& )
+        catch(const Exception&)
         {
             OSL_FAIL("xmloff::XMLTableExport::exportTableDesigns(), exception caught while exporting a table design!");
         }
     }
-    catch( Exception& )
+    catch(const Exception&)
     {
         OSL_FAIL("xmloff::XMLTableExport::exportTableDesigns(), exception caught!");
     }

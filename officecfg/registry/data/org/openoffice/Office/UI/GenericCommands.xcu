@@ -3556,11 +3556,6 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:OnlineRegistrationDlg" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Registration...</value>
-                </prop>
-            </node>
             <node oor:name=".uno:GoToStartSel" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Select to File Begin</value>

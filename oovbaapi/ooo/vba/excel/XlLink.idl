@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlLink {
+        const long xlExcelLinks = 1;
+        const long xlOLELinks = 2;
+        const long xlPublishers = 5;
+        const long xlSubscribers = 6;
+    };
+}; }; };

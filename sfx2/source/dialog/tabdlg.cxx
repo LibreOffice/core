@@ -586,7 +586,7 @@ SfxTabDialog::~SfxTabDialog()
     // save settings (screen position and current page)
     SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
 #if !ENABLE_LAYOUT_SFX_TABDIALOG
-    aDlgOpt.SetWindowState( OUString::createFromAscii( GetWindowState( WINDOWSTATE_MASK_POS ).GetBuffer() ) );
+    aDlgOpt.SetWindowState(OStringToOUString(GetWindowState(WINDOWSTATE_MASK_POS),RTL_TEXTENCODING_ASCII_US));
 #endif /* !ENABLE_LAYOUT_SFX_TABDIALOG */
     aDlgOpt.SetPageID( aTabCtrl.GetCurPageId() );
 

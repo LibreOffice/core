@@ -59,7 +59,7 @@ private:
 
     String              m_sToggleText;
     ::rtl::OUString     m_sConfigName;
-    ByteString          m_sWinState;
+    ::rtl::OString      m_sWinState;
 
     bool                m_bIsConstructed;
 

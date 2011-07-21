@@ -248,7 +248,6 @@ public:
     SAL_DLLPRIVATE void SetModalMode_Impl( sal_Bool bOn );
     SAL_DLLPRIVATE sal_Bool IsReadOnlyShell_Impl( sal_uInt16 nShell ) const;
     SAL_DLLPRIVATE void RemoveShell_Impl( SfxShell& rShell );
-    SAL_DLLPRIVATE void InsertShell_Impl( SfxShell& rShell, sal_uInt16 nPos );
     SAL_DLLPRIVATE void DoParentActivate_Impl();
     SAL_DLLPRIVATE void DoParentDeactivate_Impl();
     SAL_DLLPRIVATE void DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* pOld );

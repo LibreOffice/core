@@ -135,7 +135,6 @@ namespace framework
         std::vector< LoadRecentFile >   maRecentFiles;
 
         static const int nItemId_Extensions = 1;
-        static const int nItemId_Reg = 2;
         static const int nItemId_Info = 3;
         static const int nItemId_TplRep = 4;
         static const int nShadowTop = 32;

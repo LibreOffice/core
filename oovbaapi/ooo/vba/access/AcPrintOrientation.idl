@@ -1,0 +1,6 @@
+module ooo { module vba { module access {
+    constants AcPrintOrientation {
+        const long acPRORLandscape = 2;
+        const long acPRORPortrait = 1;
+    };
+}; }; };

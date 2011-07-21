@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoFileNewSection {
+        const long msoBottomSection = 4;
+        const long msoNew = 1;
+        const long msoNewfromExistingFile = 2;
+        const long msoNewfromTemplate = 3;
+        const long msoOpenDocument = 0;
+    };
+}; }; };

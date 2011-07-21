@@ -72,13 +72,68 @@ if [ -e $sd_prog/ooenv ] ; then
     . $sd_prog/ooenv
 fi
 
-if [ "$VALGRIND" != "" ]; then
-    VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes --trace-children-skip=*/java --error-exitcode=101"
-    export VALGRINDCHECK
-    if [ "$VALGRIND" = "memcheck" ]; then
-        G_SLICE=always-malloc
-        export G_SLICE
-    fi
+# try to get some debug output?
+GDBTRACECHECK=
+STRACECHECK=
+VALGRINDCHECK=
+
+# count number of selected checks; only one is allowed
+checks=
+# force the --valgrind option if the VALGRIND variable is set
+test -n "$VALGRIND" && VALGRINDOPT="--valgrind" || VALGRINDOPT=
+
+for arg in $@ $VALGRINDOPT ; do
+    case "$arg" in
+        --backtrace)
+            if which gdb >/dev/null 2>&1 ; then
+                GDBTRACECHECK="gdb -nx --command=$sd_prog/gdbtrace --args"
+                checks="c$checks"
+            else
+                echo "Error: Can't find the tool \"gdb\", --backtrace option will be ignored."
+                exit 1
+            fi
+            ;;
+        --strace)
+            if which strace >/dev/null 2>&1 ; then
+                STRACECHECK="strace -o strace.log -f -tt -s 256"
+                checks="c$checks"
+            else
+                echo "Error: Can't find the tool \"strace\", --strace option will be ignored."
+                exit 1;
+            fi
+            ;;
+         --valgrind)
+            test -n "$VALGRINDCHECK" && continue;
+            if which valgrind >/dev/null 2>&1 ; then
+                # another valgrind tool might be forced via the environment variable
+                test -z "$VALGRIND" && VALGRIND="memcheck"
+                # --trace-children-skip is pretty useful but supported only with valgrind >= 3.6.0
+                valgrind_ver=`valgrind --version | sed -e "s/valgrind-//"`
+                valgrind_ver_maj=`echo $valgrind_ver | awk -F. '{ print \$1 }'`
+                valgrind_ver_min=`echo $valgrind_ver | awk -F. '{ print \$2 }'`
+                valgrind_skip=
+                if [ "$valgrind_ver_maj" -gt 3 -o \( "$valgrind_ver_maj" -eq 3 -a "$valgrind_ver_min" -ge 6 \) ] ; then
+                    valgrind_skip='--trace-children-skip=*/java'
+                fi
+                # finally set the valgrind check
+                VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes $valgrind_skip --num-callers=50 --error-exitcode=101"
+                checks="c$checks"
+                if [ "$VALGRIND" = "memcheck" ] ; then
+                    export G_SLICE=always-malloc
+                    export GLIBCXX_FORCE_NEW=1
+                fi
+            else
+                echo "Error: Can't find the tool \"valgrind\", --valgrind option will be ignored"
+                exit 1
+            fi
+            ;;
+    esac
+done
+
+if echo "$checks" | grep -q "cc" ; then
+    echo "Error: The debug options --backtrace, --strace, and --valgrind cannot be used together."
+    echo "       Please, use them one by one."
+    exit 1;
 fi
 
 case "`uname -s`" in
@@ -99,5 +154,32 @@ AIX)
     ;;
 esac
 
+# run soffice.bin directly when you want to get the backtrace
+if [ -n "$GDBTRACECHECK" ] ; then
+    exec $GDBTRACECHECK "$sd_prog/soffice.bin" "$@"
+fi
+
+# valgrind --log-file=valgrind.log does not work well with --trace-children=yes
+if [ -n "$VALGRINDCHECK" ] ; then
+    echo "redirecting the standard and the error output to valgrind.log"
+    exec &>valgrind.log
+fi
+
+# do not pass the request for command line help to oosplash
+if test "$#" -eq 1; then
+    case "$1" in
+        -h | --h | --he | --hel | --help)
+            "$sd_prog/soffice.bin" -h
+            exit 0
+            ;;
+        -V | --v | --ve | --ver | --vers | --versi | --versio | --version)
+            "$sd_prog/soffice.bin" -h | head -1
+            exit 0
+            ;;
+        *)
+            ;;
+    esac
+fi
+
 # oosplash does the rest: forcing pages in, javaldx etc. are
-exec $VALGRINDCHECK "$sd_prog/oosplash.bin" "$@"
+exec $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash.bin" "$@"

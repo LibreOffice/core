@@ -129,21 +129,6 @@ void HelpInterceptor_Impl::setInterception( Reference< XFrame > xFrame )
 
 // -----------------------------------------------------------------------
 
-void HelpInterceptor_Impl::SetStartURL( const String& rURL )
-{
-    DBG_ASSERT( !m_pHistory, "invalid history" );
-    if ( !m_pHistory )
-    {
-        m_pHistory = new HelpHistoryList_Impl;
-        Any aEmptyViewData;
-        m_pHistory->insert( m_pHistory->begin(), new HelpHistoryEntry_Impl( rURL, aEmptyViewData));
-        m_nCurPos = m_pHistory->size() - 1;
-
-        m_pWindow->UpdateToolbox();
-    }
-    m_aCurrentURL = rURL;
-}
-
 sal_Bool HelpInterceptor_Impl::HasHistoryPred() const
 {
     return m_pHistory && ( m_nCurPos > 0 );

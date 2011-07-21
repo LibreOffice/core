@@ -1,0 +1,14 @@
+module ooo { module vba { module word {
+    constants WdOpenFormat {
+        const long wdOpenFormatAllWord = 6;
+        const long wdOpenFormatAuto = 0;
+        const long wdOpenFormatDocument = 1;
+        const long wdOpenFormatEncodedText = 5;
+        const long wdOpenFormatRTF = 3;
+        const long wdOpenFormatTemplate = 2;
+        const long wdOpenFormatText = 4;
+        const long wdOpenFormatUnicodeText = 5;
+        const long wdOpenFormatWebPages = 7;
+        const long wdOpenFormatXML = 8;
+    };
+}; }; };

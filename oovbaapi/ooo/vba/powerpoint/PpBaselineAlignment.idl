@@ -1,0 +1,9 @@
+module ooo { module vba { module powerpoint {
+    constants PpBaselineAlignment {
+        const long ppBaselineAlignBaseline = 1;
+        const long ppBaselineAlignCenter = 3;
+        const long ppBaselineAlignFarEast50 = 4;
+        const long ppBaselineAlignMixed = -2;
+        const long ppBaselineAlignTop = 2;
+    };
+}; }; };

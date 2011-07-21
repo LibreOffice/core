@@ -1,0 +1,28 @@
+module ooo { module vba { module office {
+    constants MsoShapeType {
+        const long msoAutoShape = 1;
+        const long msoCallout = 2;
+        const long msoCanvas = 20;
+        const long msoChart = 3;
+        const long msoComment = 4;
+        const long msoDiagram = 21;
+        const long msoEmbeddedOLEObject = 7;
+        const long msoFormControl = 8;
+        const long msoFreeform = 5;
+        const long msoGroup = 6;
+        const long msoInk = 22;
+        const long msoInkComment = 23;
+        const long msoLine = 9;
+        const long msoLinkedOLEObject = 10;
+        const long msoLinkedPicture = 11;
+        const long msoMedia = 16;
+        const long msoOLEControlObject = 12;
+        const long msoPicture = 13;
+        const long msoPlaceholder = 14;
+        const long msoScriptAnchor = 18;
+        const long msoShapeTypeMixed = -2;
+        const long msoTable = 19;
+        const long msoTextBox = 17;
+        const long msoTextEffect = 15;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdHighAnsiText {
+        const long wdAutoDetectHighAnsiFarEast = 2;
+        const long wdHighAnsiIsFarEast = 0;
+        const long wdHighAnsiIsHighAnsi = 1;
+    };
+}; }; };

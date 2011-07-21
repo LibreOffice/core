@@ -227,17 +227,18 @@ namespace svx{
 
             if ( fp )
             {
-                ByteString  strUTF8( GetUsing(), RTL_TEXTENCODING_UTF8 );
+                ByteString strUTF8( GetUsing(), RTL_TEXTENCODING_UTF8 );
 
-                fwrite( strUTF8.GetBuffer(), 1, strUTF8.Len(), fp );
+                size_t nWritten = fwrite(strUTF8.GetBuffer(), 1, strUTF8.Len(), fp);
+                OSL_VERIFY(nWritten == strUTF8.Len());
                 fclose( fp );
 #if defined( LINUX ) || defined (MACOSX)
-                setenv( "ERRORREPORT_BODYFILE", szBodyFile, 1 );
+                setenv("ERRORREPORT_BODYFILE", szBodyFile, 1);
 #else
-            static ::rtl::OString   strEnvBodyFile = "ERRORREPORT_BODYFILE";
-            strEnvBodyFile += "=";
-            strEnvBodyFile += szBodyFile;
-            putenv( (char *)strEnvBodyFile.getStr() );
+                static ::rtl::OString strEnvBodyFile = "ERRORREPORT_BODYFILE";
+                strEnvBodyFile += "=";
+                strEnvBodyFile += szBodyFile;
+                putenv((char *)strEnvBodyFile.getStr());
 #endif
             }
 

@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <sal/macros.h>
-#include <svtools/filedlg.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <ids.hrc>

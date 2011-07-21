@@ -767,7 +767,6 @@ void FrameSelectorImpl::SelectBorder( FrameBorder& rBorder, bool bSelect )
     rBorder.Select( bSelect );
     DrawArrows( rBorder );
     DoInvalidate( false );
-    maSelectHdl.Call( this );
 }
 
 void FrameSelectorImpl::SilentGrabFocus()
@@ -1125,6 +1124,8 @@ void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
                 for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
                     mxImpl->ToggleBorderState( **aIt );
             }
+
+            GetSelectHdl().Call( this );
         }
     }
 }

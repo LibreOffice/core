@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdPageFit {
+        const long wdPageFitBestFit = 2;
+        const long wdPageFitFullPage = 1;
+        const long wdPageFitNone = 0;
+        const long wdPageFitTextFit = 3;
+    };
+}; }; };

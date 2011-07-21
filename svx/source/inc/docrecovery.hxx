@@ -619,9 +619,7 @@ class RecovDocList : public SvxSimpleTable
 
         //---------------------------------------
         /** @short TODO */
-        RecovDocList(      Window* pParent,
-                     const ResId&  rResId );
-
+        RecovDocList(SvxSimpleTableContainer& rParent, ResMgr& rResMgr);
         //---------------------------------------
         /** @short TODO */
         virtual ~RecovDocList();
@@ -649,6 +647,7 @@ class RecoveryDialog : public IExtendedTabPage
         FixedText       m_aProgressFT;
         Window          m_aProgrParent;
         FixedText       m_aFileListFT;
+        SvxSimpleTableContainer m_aFileListLBContainer;
         RecovDocList    m_aFileListLB;
         FixedLine       m_aBottomFL;
         PushButton      m_aNextBtn;

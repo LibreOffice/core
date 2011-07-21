@@ -418,22 +418,6 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
 
 //----------------------------------------------------------------
 
-#define CHECKERROR()                                            \
-if( nErr == 1 || nErr == USHRT_MAX || nErr == ULONG_MAX )       \
-{                                                               \
-    ByteString aText = "Fehler in FilterDetection: Returnwert ";\
-    aText += ByteString::CreateFromInt32(nErr);                 \
-    if( pFilter )                                               \
-    {                                                           \
-        aText += ' ';                                           \
-        aText += ByteString(U2S(pFilter->GetFilterName()));     \
-    }                                                           \
-    OSL_FAIL( aText.GetBuffer() );                              \
-    nErr = ERRCODE_ABORT;                                       \
-}
-
-//----------------------------------------------------------------
-
 sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     return GuessFilterControlDefaultUI( rMedium, ppFilter, nMust, nDont, sal_True );

@@ -1,0 +1,8 @@
+module ooo { module vba { module office {
+    constants MsoConnectorType {
+        const long msoConnectorCurve = 3;
+        const long msoConnectorElbow = 2;
+        const long msoConnectorStraight = 1;
+        const long msoConnectorTypeMixed = -2;
+    };
+}; }; };

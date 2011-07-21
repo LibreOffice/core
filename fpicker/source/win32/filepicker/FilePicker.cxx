@@ -38,11 +38,11 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/diagnose.h>
 
-#include "filepicker.hxx"
+#include "FilePicker.hxx"
 #include "WinFileOpenImpl.hxx"
 
 #include "FPServiceInfo.hxx"
-#include "..\misc\WinImplHelper.hxx"
+#include "../misc/WinImplHelper.hxx"
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include "filepickereventnotification.hxx"
 
@@ -646,7 +646,6 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
 
     sal_Bool   bFileOpenDialog  = sal_True;
     sal_uInt32 winResTemplateId = 0;
-    sal_Bool   bIsWin2000       = IsWindows2000Platform();
 
     switch ( templateId )
     {
@@ -660,70 +659,43 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
 
     case FILESAVE_AUTOEXTENSION_PASSWORD:
         bFileOpenDialog = sal_False;
-        if ( bIsWin2000 )
-            winResTemplateId = TMPL2000_FILESAVE_AUTOEXT_PASSWORD_BOX_ID;
-        else
-            winResTemplateId = TMPL95_FILESAVE_AUTOEXT_PASSWORD_BOX_ID;
+        winResTemplateId = TMPL2000_FILESAVE_AUTOEXT_PASSWORD_BOX_ID;
         break;
 
     case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
         bFileOpenDialog = sal_False;
-        if ( bIsWin2000 )
-            winResTemplateId = TMPL2000_AUTOEXT_PASSWORD_FILTEROPTION_BOX;
-        else
-            winResTemplateId = TMPL95_AUTOEXT_PASSWORD_FILTEROPTION_BOX;
+        winResTemplateId = TMPL2000_AUTOEXT_PASSWORD_FILTEROPTION_BOX;
         break;
 
     case FILESAVE_AUTOEXTENSION_SELECTION:
         bFileOpenDialog = sal_False;
-        if ( bIsWin2000 )
-            winResTemplateId = TMPL2000_AUTOEXT_SELECTION_BOX;
-        else
-            winResTemplateId = TMPL95_AUTOEXT_SELECTION_BOX;
+        winResTemplateId = TMPL2000_AUTOEXT_SELECTION_BOX;
         break;
 
     case FILESAVE_AUTOEXTENSION_TEMPLATE:
         bFileOpenDialog = sal_False;
-        if ( bIsWin2000 )
-            winResTemplateId = TMPL2000_FILEOPEN_AUTOEXT_TEMPLATE_BOX_ID;
-        else
-            winResTemplateId = TMPL95_FILEOPEN_AUTOEXT_TEMPLATE_BOX_ID;
+        winResTemplateId = TMPL2000_FILEOPEN_AUTOEXT_TEMPLATE_BOX_ID;
         break;
 
     case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
-        if ( bIsWin2000 )
-            winResTemplateId = TMPL2000_FILEOPEN_LINK_PREVIEW_BOX_ID;
-        else
-            winResTemplateId = TMPL95_FILEOPEN_LINK_PREVIEW_BOX_ID;
+        winResTemplateId = TMPL2000_FILEOPEN_LINK_PREVIEW_BOX_ID;
         break;
 
     case FILEOPEN_PLAY:
-        if ( bIsWin2000 )
-            winResTemplateId = TMPL2000_PLAY_PUSHBUTTON;
-        else
-            winResTemplateId = TMPL95_PLAY_PUSHBUTTON;
+        winResTemplateId = TMPL2000_PLAY_PUSHBUTTON;
         break;
 
     case FILEOPEN_READONLY_VERSION:
-        if ( bIsWin2000 )
-            winResTemplateId = TMPL2000_FILEOPEN_READONLY_VERSION_BOX_ID;
-        else
-            winResTemplateId = TMPL95_FILEOPEN_READONLY_VERSION_BOX_ID;
+        winResTemplateId = TMPL2000_FILEOPEN_READONLY_VERSION_BOX_ID;
         break;
 
     case FILEOPEN_LINK_PREVIEW:
-        if ( bIsWin2000 )
-            winResTemplateId = TMPL2000_FILEOPEN_LINK_PREVIEW_BOX_SIMPLE_ID;
-        else
-            winResTemplateId = TMPL95_FILEOPEN_LINK_PREVIEW_BOX_SIMPLE_ID;
+        winResTemplateId = TMPL2000_FILEOPEN_LINK_PREVIEW_BOX_SIMPLE_ID;
         break;
 
     case FILESAVE_AUTOEXTENSION:
         bFileOpenDialog = sal_False;
-        if ( bIsWin2000 )
-            winResTemplateId = TMPL2000_FILESAVE_AUTOEXT;
-        else
-            winResTemplateId = TMPL95_FILESAVE_AUTOEXT;
+        winResTemplateId = TMPL2000_FILESAVE_AUTOEXT;
         break;
 
     default:

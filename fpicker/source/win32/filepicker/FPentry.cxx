@@ -38,9 +38,11 @@
 #include "FilePicker.hxx"
 #include "FPServiceInfo.hxx"
 
+#ifdef _MSC_VER
 #pragma warning (disable:4917)
+#endif
 #include "VistaFilePicker.hxx"
-#include "..\misc\WinImplHelper.hxx"
+#include "../misc/WinImplHelper.hxx"
 #include <stdio.h>
 
 //-----------------------------------------------
@@ -64,6 +66,8 @@ static Reference< XInterface > SAL_CALL createInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
 {
     Reference< XInterface > xDlg;
+
+#ifdef __IFileDialog_INTERFACE_DEFINED__
     bool                    bVistaOrNewer = IsWindowsVistaOrNewer();
 
     if (bVistaOrNewer)
@@ -74,6 +78,7 @@ static Reference< XInterface > SAL_CALL createInstance(
                 new ::fpicker::win32::vista::VistaFilePicker( rServiceManager ) ) );
     }
     else
+#endif
     {
         OSL_TRACE("use normal system file picker ...");
         xDlg.set(
@@ -84,26 +89,8 @@ static Reference< XInterface > SAL_CALL createInstance(
     return xDlg;
 }
 
-//------------------------------------------------
-// the three uno functions that will be exported
-//------------------------------------------------
-
 extern "C"
 {
-
-//------------------------------------------------
-// component_getImplementationEnvironment
-//------------------------------------------------
-
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//------------------------------------------------
-//
-//------------------------------------------------
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* )

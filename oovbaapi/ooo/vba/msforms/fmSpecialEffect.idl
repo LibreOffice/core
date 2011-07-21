@@ -1,0 +1,9 @@
+module ooo { module vba { module msforms {
+    constants fmSpecialEffect {
+        const long fmSpecialEffectBump = 6;
+        const long fmSpecialEffectEtched = 3;
+        const long fmSpecialEffectFlat = 0;
+        const long fmSpecialEffectRaised = 1;
+        const long fmSpecialEffectSunken = 2;
+    };
+}; }; };

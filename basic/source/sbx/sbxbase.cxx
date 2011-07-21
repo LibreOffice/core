@@ -37,6 +37,8 @@
 #include <basic/sbxfac.hxx>
 #include <basic/sbxbase.hxx>
 
+#include <rtl/strbuf.hxx>
+
 // AppData-Structure for SBX:
 
 SV_IMPL_PTRARR(SbxParams,SbxParamInfo*);
@@ -214,9 +216,10 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
 #ifdef DBG_UTIL
     if( !pNew )
     {
-        ByteString aMsg( "SBX: Keine Factory fuer SBX-ID " );
-        aMsg += ByteString::CreateFromInt32(nSbxId);
-        DbgError( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg(
+            RTL_CONSTASCII_STRINGPARAM("SBX: Keine Factory fuer SBX-ID "));
+        aMsg.append(static_cast<sal_Int32>(nSbxId));
+        DbgError(aMsg.getStr());
     }
 #endif
     return pNew;

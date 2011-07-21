@@ -1,0 +1,10 @@
+module ooo { module vba { module word {
+    constants WdTwoLinesInOneType {
+        const long wdTwoLinesInOneAngleBrackets = 4;
+        const long wdTwoLinesInOneCurlyBrackets = 5;
+        const long wdTwoLinesInOneNoBrackets = 1;
+        const long wdTwoLinesInOneNone = 0;
+        const long wdTwoLinesInOneParentheses = 2;
+        const long wdTwoLinesInOneSquareBrackets = 3;
+    };
+}; }; };

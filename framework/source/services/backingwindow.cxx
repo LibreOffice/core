@@ -185,7 +185,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
             }
         }
     }
-    catch (Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -905,25 +905,6 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
         pNodePath = "/org.openoffice.Office.Common/Help/StartCenter";
         pNode = "AddFeatureURL";
         break;
-    case nItemId_Reg:
-        try
-        {
-            // create the Desktop component which can load components
-            Reference < lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-            if( xFactory.is() )
-            {
-                Reference< task::XJobExecutor > xProductRegistration(
-                    xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.setup.ProductRegistration" ) ) ),
-                    UNO_QUERY_THROW );
-
-                 // tell it that the user wants to register
-                 xProductRegistration->trigger( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RegistrationRequired" ) ) );
-            }
-        }
-        catch( const Exception& )
-        {
-        }
-        break;
     case nItemId_Info:
         pNodePath = "/org.openoffice.Office.Common/Help/StartCenter";
         pNode = "InfoURL";
@@ -967,7 +948,7 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                 }
             }
         }
-        catch (Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -1060,7 +1041,7 @@ static long implDispatchDelayed( void*, void* pArg )
     {
         pDispatch->xDispatch->dispatch( pDispatch->aDispatchURL, pDispatch->aArgs );
     }
-    catch( Exception )
+    catch (const Exception&)
     {
     }
 
@@ -1108,11 +1089,11 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
                     delete pDisp; // event could not be posted for unknown reason, at least don't leak
             }
         }
-        catch ( com::sun::star::uno::RuntimeException& )
+        catch (const com::sun::star::uno::RuntimeException&)
         {
             throw;
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch (const com::sun::star::uno::Exception&)
         {
         }
     }

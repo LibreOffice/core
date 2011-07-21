@@ -61,7 +61,6 @@
 #define STR_APPLY                       ( RC_DIALOG_BEGIN + 87 )
 
 #define TP_COMMONPRINTOPTIONS           ( RC_DIALOG_BEGIN + 90 )
-#define RID_WARN_PRINTTRANSPARENCY      ( RC_DIALOG_BEGIN + 91 )
 
 #define RID_ERRBOX_MAIL_CONFIG          ( RC_DIALOG_BEGIN + 92 )
 

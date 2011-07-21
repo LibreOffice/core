@@ -138,7 +138,6 @@ class SfxObjectShellLock;
 
 class SFX2_DLLPUBLIC SfxApplication: public SfxShell
 {
-    SAL_DLLPRIVATE static ::osl::Mutex gMutex;
     SAL_DLLPRIVATE static SfxApplication* pApp;
 
     SfxAppData_Impl*            pAppData_Impl;

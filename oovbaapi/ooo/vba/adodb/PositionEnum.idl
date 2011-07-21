@@ -1,0 +1,7 @@
+module ooo { module vba { module adodb {
+    constants PositionEnum {
+        const long adPosBOF = -2;
+        const long adPosEOF = -3;
+        const long adPosUnknown = -1;
+    };
+}; }; };

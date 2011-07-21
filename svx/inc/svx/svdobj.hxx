@@ -483,6 +483,7 @@ protected:
     // beim Clone wird das Flag nicht mitkopiert!
     // Das Flag ist persistent.
     unsigned                    bEmptyPresObj : 1;     // Leeres Praesentationsobjekt (Draw)
+    unsigned                    mbGhosted : 1; // FIXME find a better way to ghost writer drawing objects
 
     // sal_True=Objekt ist als Objekt der MasterPage nicht sichtbar
     unsigned                    bNotVisibleAsMaster : 1;
@@ -1036,6 +1037,8 @@ public:
     sal_Bool IsEmptyPresObj() const { return bEmptyPresObj; }
     void SetNotVisibleAsMaster(sal_Bool bFlg) { bNotVisibleAsMaster=bFlg; }
     sal_Bool IsNotVisibleAsMaster() const { return bNotVisibleAsMaster; }
+    void SetGhosted( sal_Bool bGhosted ) { mbGhosted = bGhosted; }
+    sal_Bool IsGhosted() const { return mbGhosted; }
 
     // #i25616#
     sal_Bool LineIsOutsideGeometry() const { return mbLineIsOutsideGeometry; }

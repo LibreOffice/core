@@ -499,44 +499,6 @@ const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > xRule ) throw( Illeg
     return pRule->getNumRule();
 }
 
-bool SvxGetNumRule( Reference< XIndexReplace > xRule, SvxNumRule& rNumRule )
-{
-    SvxUnoNumberingRules* pRule = SvxUnoNumberingRules::getImplementation( xRule );
-    if( pRule )
-    {
-        rNumRule = pRule->getNumRule();
-    }
-    else if( xRule.is() )
-    {
-        try
-        {
-            pRule = new SvxUnoNumberingRules( rNumRule );
-
-            Reference< XIndexReplace > xDestRule( pRule );
-
-            const sal_Int32 nCount = min( xRule->getCount(), xDestRule->getCount() );
-            sal_Int32 nLevel;
-            for( nLevel = 0; nLevel < nCount; nLevel++ )
-            {
-                xDestRule->replaceByIndex( nLevel, xRule->getByIndex( nLevel ) );
-            }
-
-            rNumRule = pRule->getNumRule();
-        }
-        catch( Exception& )
-        {
-            return false;
-        }
-    }
-    else
-    {
-        return false;
-    }
-
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////////
 com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw()
 {
     DBG_ASSERT( pRule, "No default SvxNumRule!" );

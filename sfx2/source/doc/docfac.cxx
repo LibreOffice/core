@@ -61,6 +61,8 @@
 #include <osl/security.hxx>
 #include "doc.hrc"
 
+#include <rtl/strbuf.hxx>
+
 #include <assert.h>
 
 namespace css = ::com::sun::star;
@@ -166,10 +168,11 @@ void SfxObjectFactory::RegisterViewFactory
         {
             if ( !pImpl->aViewFactoryArr[i]->GetAPIViewName().Equals( sViewName ) )
                 continue;
-            ByteString sMessage( "SfxObjectFactory::RegisterViewFactory: duplicate view name '" );
-            sMessage += ByteString( sViewName, RTL_TEXTENCODING_ASCII_US );
-            sMessage += "'!";
-            OSL_FAIL( sMessage.GetBuffer() );
+            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                "SfxObjectFactory::RegisterViewFactory: duplicate view name '"));
+            aStr.append(rtl::OUStringToOString(sViewName, RTL_TEXTENCODING_ASCII_US));
+            aStr.append(RTL_CONSTASCII_STRINGPARAM("'!"));
+            OSL_FAIL(aStr.getStr());
             break;
         }
     }

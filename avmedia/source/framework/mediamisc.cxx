@@ -38,9 +38,7 @@ ResMgr* GetResMgr()
 
     if( !pResMgr )
     {
-        ByteString aResMgrName( "avmedia" );
-
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+        pResMgr = ResMgr::CreateResMgr("avmedia", Application::GetSettings().GetUILocale());
     }
 
     return pResMgr;

@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdLineType {
+        const long wdTableRow = 1;
+        const long wdTextLine = 0;
+    };
+}; }; };

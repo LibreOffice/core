@@ -40,19 +40,6 @@ static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno:
     return uno::Reference< uno::XInterface >( *new ::avmedia::win::Manager( rxFact ) );
 }
 
-// ------------------------------------------
-// - component_getImplementationEnvironment -
-// ------------------------------------------
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-// ------------------------
-// - component_getFactory -
-// ------------------------
-
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;

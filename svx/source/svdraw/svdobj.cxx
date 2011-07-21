@@ -96,7 +96,6 @@
 #include <svx/fmmodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/objface.hxx>
-#include "svdoimp.hxx"
 #include <vcl/graphictools.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/sdr/properties/emptyproperties.hxx>
@@ -388,6 +387,7 @@ SdrObject::SdrObject()
     bNoPrint         =sal_False;
     bEmptyPresObj    =sal_False;
     bNotVisibleAsMaster=sal_False;
+    mbGhosted        = sal_False;
     bClosedObj       =sal_False;
     mbVisible        = true;
 

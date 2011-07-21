@@ -148,6 +148,7 @@
 #include <svtools/ttprops.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;
 
@@ -260,6 +261,9 @@ namespace
 
     class thePropertyHandler
         : public rtl::Static<SfxPropertyHandler, thePropertyHandler> {};
+
+    class theApplicationMutex
+        : public rtl::Static<osl::Mutex, theApplicationMutex> {};
 }
 
 #include <framework/imageproducer.hxx>
@@ -268,23 +272,15 @@ namespace
 #include "sfx2/imagemgr.hxx"
 #include "fwkhelper.hxx"
 
-::osl::Mutex SfxApplication::gMutex;
-
 SfxApplication* SfxApplication::GetOrCreate()
 {
     // SFX on demand
-    ::osl::MutexGuard aGuard(SfxApplication::gMutex);
-    if ( !pApp )
+    ::osl::MutexGuard aGuard(theApplicationMutex::get());
+    if (!pApp)
     {
-        SfxApplication *pNew = new SfxApplication;
-
-        //TODO/CLEANUP
-        // Is the Mutex-Handling OK?
-        static ::osl::Mutex aProtector;
-        ::osl::MutexGuard aGuard2( aProtector );
-
         RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SetApp" );
-        pApp = pNew;
+
+        pApp = new SfxApplication;
 
         // at the moment a bug may occur when Initialize_Impl returns FALSE,
         // but this is only temporary because all code that may cause such
@@ -334,12 +330,13 @@ SfxApplication::SfxApplication()
 #else
     if( !InitializeDde() )
     {
-        ByteString aStr( "No DDE-Service possible. Error: " );
+        rtl::OStringBuffer aStr(
+            RTL_CONSTASCII_STRINGPARAM("No DDE-Service possible. Error: "));
         if( GetDdeService() )
-            aStr += ByteString::CreateFromInt32(GetDdeService()->GetError());
+            aStr.append(static_cast<sal_Int32>(GetDdeService()->GetError()));
         else
-            aStr += '?';
-        DBG_ASSERT( sal_False, aStr.GetBuffer() );
+            aStr.append('?');
+        DBG_ASSERT( sal_False, aStr.getStr() );
     }
 #endif
 #endif

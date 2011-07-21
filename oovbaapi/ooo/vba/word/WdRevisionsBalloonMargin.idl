@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdRevisionsBalloonMargin {
+        const long wdLeftMargin = 0;
+        const long wdRightMargin = 1;
+    };
+}; }; };

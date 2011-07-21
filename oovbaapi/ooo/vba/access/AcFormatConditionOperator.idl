@@ -1,0 +1,12 @@
+module ooo { module vba { module access {
+    constants AcFormatConditionOperator {
+        const long acBetween = 0;
+        const long acEqual = 2;
+        const long acGreaterThan = 4;
+        const long acGreaterThanOrEqual = 6;
+        const long acLessThan = 5;
+        const long acLessThanOrEqual = 7;
+        const long acNotBetween = 1;
+        const long acNotEqual = 3;
+    };
+}; }; };

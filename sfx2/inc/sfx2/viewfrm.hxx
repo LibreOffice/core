@@ -235,7 +235,6 @@ public:
     SAL_DLLPRIVATE void SetActiveChildFrame_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE SfxViewFrame* GetActiveChildFrame_Impl() const;
     SAL_DLLPRIVATE String GetActualPresentationURL_Impl() const;
-    SAL_DLLPRIVATE static void CloseHiddenFrames_Impl();
     SAL_DLLPRIVATE void MiscExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void MiscState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl( sal_uInt16 nId );

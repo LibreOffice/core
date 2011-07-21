@@ -1,0 +1,27 @@
+module ooo { module vba { module office {
+    constants MsoFileType {
+        const long msoFileTypeAllFiles = 1;
+        const long msoFileTypeBinders = 6;
+        const long msoFileTypeCalendarItem = 11;
+        const long msoFileTypeContactItem = 12;
+        const long msoFileTypeDatabases = 7;
+        const long msoFileTypeDataConnectionFiles = 17;
+        const long msoFileTypeDesignerFiles = 22;
+        const long msoFileTypeDocumentImagingFiles = 20;
+        const long msoFileTypeExcelWorkbooks = 4;
+        const long msoFileTypeJournalItem = 14;
+        const long msoFileTypeMailItem = 10;
+        const long msoFileTypeNoteItem = 13;
+        const long msoFileTypeOfficeFiles = 2;
+        const long msoFileTypeOutlookItems = 9;
+        const long msoFileTypePhotoDrawFiles = 16;
+        const long msoFileTypePowerPointPresentations = 5;
+        const long msoFileTypeProjectFiles = 19;
+        const long msoFileTypePublisherFiles = 18;
+        const long msoFileTypeTaskItem = 15;
+        const long msoFileTypeTemplates = 8;
+        const long msoFileTypeVisioFiles = 21;
+        const long msoFileTypeWebPages = 23;
+        const long msoFileTypeWordDocuments = 3;
+    };
+}; }; };

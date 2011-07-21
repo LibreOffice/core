@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdTCSCConverterDirection {
+        const long wdTCSCConverterDirectionAuto = 2;
+        const long wdTCSCConverterDirectionSCTC = 0;
+        const long wdTCSCConverterDirectionTCSC = 1;
+    };
+}; }; };

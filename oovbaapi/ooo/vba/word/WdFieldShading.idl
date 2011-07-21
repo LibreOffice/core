@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdFieldShading {
+        const long wdFieldShadingAlways = 1;
+        const long wdFieldShadingNever = 0;
+        const long wdFieldShadingWhenSelected = 2;
+    };
+}; }; };

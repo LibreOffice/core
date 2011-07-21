@@ -1,0 +1,13 @@
+module ooo { module vba {
+    constants VbStrConv {
+        const long vbFromUnicode = 128;
+        const long vbHiragana = 32;
+        const long vbKatakana = 16;
+        const long vbLowerCase = 2;
+        const long vbNarrow = 8;
+        const long vbProperCase = 3;
+        const long vbUnicode = 64;
+        const long vbUpperCase = 1;
+        const long vbWide = 4;
+    };
+}; };

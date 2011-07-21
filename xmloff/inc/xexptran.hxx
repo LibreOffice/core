@@ -30,11 +30,10 @@
 #define _XEXPTRANSFORM_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/drawing/FlagSequenceSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <tools/mapunit.hxx>
 
@@ -173,8 +172,7 @@ class SdXMLImExSvgDElement
     sal_Int32                       mnLastX;
     sal_Int32                       mnLastY;
 
-    com::sun::star::drawing::PointSequenceSequence      maPoly;
-    com::sun::star::drawing::FlagSequenceSequence       maFlag;
+    com::sun::star::drawing::PolyPolygonBezierCoords maPoly;
 
 public:
     SdXMLImExSvgDElement(const SdXMLImExViewBox& rViewBox);
@@ -194,8 +192,8 @@ public:
     const rtl::OUString& GetExportString() const { return msString; }
     bool IsClosed() const { return mbIsClosed; }
     bool IsCurve() const { return mbIsCurve; }
-    const com::sun::star::drawing::PointSequenceSequence& GetPointSequenceSequence() const { return maPoly; }
-    const com::sun::star::drawing::FlagSequenceSequence& GetFlagSequenceSequence() const { return maFlag; }
+    const com::sun::star::drawing::PointSequenceSequence& GetPointSequenceSequence() const { return maPoly.Coordinates; }
+    const com::sun::star::drawing::FlagSequenceSequence& GetFlagSequenceSequence() const { return maPoly.Flags; }
 };
 
 

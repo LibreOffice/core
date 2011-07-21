@@ -5967,31 +5967,6 @@ SfxBoolItem SourceView SID_SOURCEVIEW
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem StartRegistrationDialog SID_ONLINE_REGISTRATION_DLG
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_SPECIAL;
-]
-
-//--------------------------------------------------------------------------
 SfxStringItem StatusBar SID_STATUSBARTEXT
 
 [
@@ -7411,31 +7386,6 @@ SfxVoidItem InternetDialog SID_INET_DLG
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem OnlineRegistrationDlg SID_ONLINE_REGISTRATION
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_APPLICATION;
 ]
 
 //--------------------------------------------------------------------------

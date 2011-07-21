@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlAxisGroup {
+        const long xlPrimary = 1;
+        const long xlSecondary = 2;
+    };
+}; }; };

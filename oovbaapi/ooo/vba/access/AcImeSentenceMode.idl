@@ -1,0 +1,8 @@
+module ooo { module vba { module access {
+    constants AcImeSentenceMode {
+        const long acImeSentenceModeConversation = 2;
+        const long acImeSentenceModeNone = 3;
+        const long acImeSentenceModePhrasePredict = 0;
+        const long acImeSentenceModePluralClause = 1;
+    };
+}; }; };

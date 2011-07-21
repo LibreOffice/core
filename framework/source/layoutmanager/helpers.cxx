@@ -57,24 +57,19 @@ using namespace com::sun::star;
 namespace framework
 {
 
-bool hasEmptySize( const:: Size& aSize )
+bool hasEmptySize( const ::com::sun::star::awt::Size& rSize )
 {
-    return ( aSize.Width() == 0 ) && ( aSize.Height() == 0 );
+    return ( rSize.Width == 0 ) && ( rSize.Height == 0 );
 }
 
-bool hasDefaultPosValue( const ::Point& aPos )
+bool hasDefaultPosValue( const ::com::sun::star::awt::Point& rPos )
 {
-    return (( aPos.X() == SAL_MAX_INT32 ) || ( aPos.Y() == SAL_MAX_INT32 ));
+    return (( rPos.X == SAL_MAX_INT32 ) || ( rPos.Y == SAL_MAX_INT32 ));
 }
 
-bool isDefaultPos( const ::com::sun::star::awt::Point& aPos )
+bool isDefaultPos( const ::com::sun::star::awt::Point& rPos )
 {
-    return (( aPos.X == SAL_MAX_INT32 ) && ( aPos.Y == SAL_MAX_INT32 ));
-}
-
-bool isDefaultPos( const ::Point& aPos )
-{
-    return (( aPos.X() == SAL_MAX_INT32 ) && ( aPos.Y() == SAL_MAX_INT32 ));
+    return (( rPos.X == SAL_MAX_INT32 ) && ( rPos.Y == SAL_MAX_INT32 ));
 }
 
 bool isReverseOrderDockingArea( const sal_Int32 nDockArea )

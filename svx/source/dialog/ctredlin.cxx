@@ -147,8 +147,8 @@ void SvLBoxColorString::Paint( const Point& rPos, SvLBox& rDev,
 //  class SvxRedlinTable
 //----------------------------------------------------------------------------
 
-SvxRedlinTable::SvxRedlinTable( Window* pParent,WinBits nBits ):
-        SvxSimpleTable(pParent,nBits )
+SvxRedlinTable::SvxRedlinTable(SvxSimpleTableContainer& rParent,WinBits nBits)
+    : SvxSimpleTable(rParent,nBits)
 {
     bAuthor=sal_False;
     bDate=sal_False;
@@ -159,8 +159,8 @@ SvxRedlinTable::SvxRedlinTable( Window* pParent,WinBits nBits ):
     SetNodeDefaultImages();
 }
 
-SvxRedlinTable::SvxRedlinTable( Window* pParent,const ResId& rResId):
-        SvxSimpleTable(pParent,rResId)
+SvxRedlinTable::SvxRedlinTable(SvxSimpleTableContainer& rParent,const ResId& rResId)
+    : SvxSimpleTable(rParent,rResId)
 {
     bAuthor=sal_False;
     bDate=sal_False;
@@ -465,7 +465,7 @@ SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserDat
     else
         aCurEntry.Erase();
 
-    return SvTreeListBox::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
+    return SvxSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
 
 }
 
@@ -487,7 +487,7 @@ SvLBoxEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserDat
     else
         aCurEntry.Erase();
 
-    return SvTreeListBox::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
+    return SvxSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
 }
 
 SvLBoxEntry* SvxRedlinTable::CreateEntry() const
@@ -549,7 +549,8 @@ void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
 
 SvxTPView::SvxTPView( Window * pParent)
     : TabPage( pParent, SVX_RES(SID_REDLIN_VIEW_PAGE)),
-    aViewData   ( this, SVX_RES( DG_VIEW) ),
+    m_aViewDataContainer(this, SVX_RES(DG_VIEW)),
+    aViewData(m_aViewDataContainer),
     PbAccept    ( this, SVX_RES(PB_ACCEPT    ) ),
     PbReject    ( this, SVX_RES(PB_REJECT  ) ),
     PbAcceptAll ( this, SVX_RES(PB_ACCEPTALL  ) ),
@@ -590,7 +591,7 @@ String SvxTPView::GetMyName() const
 void SvxTPView::Resize()
 {
     Size aSize=GetOutputSizePixel();
-    Point aPos=aViewData.GetPosPixel();
+    Point aPos = m_aViewDataContainer.GetPosPixel();
     aSize.Height()-=aPos.Y()+nDistance;
     aSize.Width()-=2*aPos.X();
 
@@ -614,7 +615,7 @@ void SvxTPView::Resize()
         aPos.Y()=newY;
         PbUndo.SetPosPixel(aPos);
     }
-    aViewData.SetSizePixel(aSize);
+    m_aViewDataContainer.SetSizePixel(aSize);
 }
 
 void SvxTPView::InsertWriterHeader()

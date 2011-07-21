@@ -203,9 +203,6 @@ void SbiStream::MapError()
     return user;
 }
 
-// Hack for #83750
-sal_Bool runsInSetup( void );
-
 sal_Bool needSecurityRestrictions( void )
 {
     static sal_Bool bNeedInit = sal_True;
@@ -213,15 +210,6 @@ sal_Bool needSecurityRestrictions( void )
 
     if( bNeedInit )
     {
-        // Hack for #83750, use internal flag until
-        // setup provides own service manager
-        if( runsInSetup() )
-        {
-            // Setup is not critical
-            bRetVal = sal_False;
-            return bRetVal;
-        }
-
         bNeedInit = sal_False;
 
         // Get system user to compare to portal user

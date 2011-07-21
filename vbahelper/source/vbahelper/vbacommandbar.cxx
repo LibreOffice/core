@@ -100,7 +100,7 @@ ScVbaCommandBar::getVisible() throw (uno::RuntimeException)
             getPropertyValue( aToolBar, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Visible") ) ) >>= bVisible;
         }
     }
-    catch ( uno::Exception e )
+    catch (const uno::Exception&)
     {
     }
     return bVisible;
@@ -122,7 +122,7 @@ ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
             xLayoutManager->destroyElement( m_sResourceUrl );
         }
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception&)
     {
         OSL_TRACE( "SetVisible get an exception\n" );
     }

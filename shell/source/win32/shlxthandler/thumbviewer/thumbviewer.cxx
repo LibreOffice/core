@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#ifndef DONT_HAVE_GDIPLUS
+
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
 
@@ -528,5 +530,7 @@ Gdiplus::Rect CThumbviewer::CalcScaledAspectRatio(Gdiplus::Rect src, Gdiplus::Re
 
     return result;
 }
+
+#endif // DONT_HAVE_GDIPLUS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

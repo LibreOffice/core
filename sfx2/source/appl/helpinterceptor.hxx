@@ -85,7 +85,6 @@ public:
     ~HelpInterceptor_Impl();
 
     void                    setInterception( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
-    void                    SetStartURL( const String& rURL );
     String                  GetCurrentURL() const { return m_aCurrentURL; }
 
 

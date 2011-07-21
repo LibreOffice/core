@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdWrapSideType {
+        const long wdWrapBoth = 0;
+        const long wdWrapLargest = 3;
+        const long wdWrapLeft = 1;
+        const long wdWrapRight = 2;
+    };
+}; }; };

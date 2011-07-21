@@ -38,7 +38,6 @@
 
 #include <basic/ttstrhlp.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/filedlg.hxx>
 
 #include <osl/module.h>
 
@@ -70,6 +69,8 @@
 
 #include <ucbhelper/content.hxx>
 #include <unotools/syslocale.hxx>
+
+#include <rtl/strbuf.hxx>
 
 using namespace comphelper;
 using namespace cppu;
@@ -279,8 +280,9 @@ int BasicApp::Main( )
         // 1033 = LANGUAGE_ENGLISH_US
         // 1031 = LANGUAGE_GERMAN
         aConf.SetGroup("Misc");
-        ByteString aLang = aConf.ReadKey( "Language", ByteString::CreateFromInt32( LANGUAGE_SYSTEM ) );
-        aRequestedLanguage = LanguageType( aLang.ToInt32() );
+        rtl::OString aLang = aConf.ReadKey( "Language",
+            rtl::OString::valueOf(static_cast<sal_Int32>(LANGUAGE_SYSTEM)) );
+        aRequestedLanguage = LanguageType(aLang.toInt32());
 
         AllSettings aSettings = GetSettings();
         aSettings.SetUILanguage( aRequestedLanguage );
@@ -569,7 +571,7 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     {
         Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
         aConf.SetGroup("WinGeom");
-        SetWindowState( aConf.ReadKey("WinParams", "") );
+        SetWindowState( ::rtl::OString(aConf.ReadKey("WinParams", "")) );
     }
 
     aLineNum.SetTimeoutHdl( LINK( this, BasicFrame, ShowLineNr ) );
@@ -1030,7 +1032,10 @@ sal_Bool BasicFrame::CompileAll()
 
 // Setup menu
 #define MENU2FILENAME( Name ) Name.Copy( Name.SearchAscii(" ") +1).EraseAllChars( '~' )
-#define LRUNr( nNr ) CByteString("LRU").Append( ByteString::CreateFromInt32( nNr ) )
+#define LRUNr( nNr ) \
+    rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("LRU")) \
+        .append(static_cast<sal_Int32>(nNr)) \
+        .makeStringAndClear()
 String FILENAME2MENU( sal_uInt16 nNr, String aName )
 {
     String aRet;

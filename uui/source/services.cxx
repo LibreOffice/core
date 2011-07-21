@@ -43,23 +43,6 @@ using namespace com::sun::star::registry;
 
 using ::rtl::OUString;
 
-//============================================================================
-//
-//  component_getImplementationEnvironment
-//
-//============================================================================
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
-                       uno_Environment **)
-{
-    *pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//============================================================================
-//
-//  component_getFactory
-//
-//============================================================================
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char const * pImplName,
                         void * pServiceManager,

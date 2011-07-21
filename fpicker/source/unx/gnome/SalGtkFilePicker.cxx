@@ -283,8 +283,8 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     gtk_container_add (GTK_CONTAINER (m_pFilterExpander), scrolled_window);
     gtk_widget_show (scrolled_window);
 
-    ByteString sExpand(getenv("SAL_EXPANDFPICKER"));
-    sal_Int32 nExpand  = sExpand.ToInt32();
+    rtl::OString sExpand(getenv("SAL_EXPANDFPICKER"));
+    sal_Int32 nExpand  = sExpand.toInt32();
     switch (nExpand)
     {
         default:

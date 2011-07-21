@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdDropPosition {
+        const long wdDropMargin = 2;
+        const long wdDropNone = 0;
+        const long wdDropNormal = 1;
+    };
+}; }; };

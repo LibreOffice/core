@@ -1,0 +1,13 @@
+module ooo { module vba { module office {
+    constants MsoPermission {
+        const long msoPermissionChange = 15;
+        const long msoPermissionEdit = 2;
+        const long msoPermissionExtract = 8;
+        const long msoPermissionFullControl = 64;
+        const long msoPermissionObjModel = 32;
+        const long msoPermissionPrint = 16;
+        const long msoPermissionRead = 1;
+        const long msoPermissionSave = 4;
+        const long msoPermissionView = 1;
+    };
+}; }; };

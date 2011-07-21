@@ -47,7 +47,6 @@
 
 #include "svx/unoapi.hxx"
 #include <svl/style.hxx>
-#include "unopolyhelper.hxx"
 
 #include <tools/bigint.hxx>
 #include <svl/itemset.hxx>
@@ -63,6 +62,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/tools/unotools.hxx>
 
 #include <stdio.h>
 
@@ -1763,7 +1763,7 @@ bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     else
     {
         com::sun::star::drawing::PolyPolygonBezierCoords aBezier;
-        SvxConvertB2DPolyPolygonToPolyPolygonBezier( maPolyPolygon, aBezier );
+        basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( maPolyPolygon, aBezier );
         rVal <<= aBezier;
     }
 
@@ -1790,7 +1790,7 @@ bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
             com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
             if( pCoords->Coordinates.getLength() > 0 )
             {
-                maPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon( pCoords );
+                maPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
                 // #i72807# close line start/end polygons hard
                 // maPolyPolygon.setClosed(true);
             }
@@ -2421,7 +2421,7 @@ bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemb
     else
     {
         com::sun::star::drawing::PolyPolygonBezierCoords aBezier;
-        SvxConvertB2DPolyPolygonToPolyPolygonBezier( maPolyPolygon, aBezier );
+        basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( maPolyPolygon, aBezier );
         rVal <<= aBezier;
     }
     return true;
@@ -2447,7 +2447,7 @@ bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 n
             com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
             if( pCoords->Coordinates.getLength() > 0 )
             {
-                maPolyPolygon = SvxConvertPolyPolygonBezierToB2DPolyPolygon( pCoords );
+                maPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
                 // #i72807# close line start/end polygons hard
                 // maPolyPolygon.setClosed(true);
             }

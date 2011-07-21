@@ -571,7 +571,7 @@ void XMLRedlineExport::ExportStartOrEndRedline(
     {
         aAny = rPropSet->getPropertyValue(bStart ? sStartRedline : sEndRedline);
     }
-    catch( UnknownPropertyException e )
+    catch(const UnknownPropertyException&)
     {
         // If we don't have the property, there's nothing to do.
         return;

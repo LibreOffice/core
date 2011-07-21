@@ -1,0 +1,21 @@
+module ooo { module vba { module word {
+    constants WdStoryType {
+        const long wdCommentsStory = 4;
+        const long wdEndnoteContinuationNoticeStory = 17;
+        const long wdEndnoteContinuationSeparatorStory = 16;
+        const long wdEndnoteSeparatorStory = 15;
+        const long wdEndnotesStory = 3;
+        const long wdEvenPagesFooterStory = 8;
+        const long wdEvenPagesHeaderStory = 6;
+        const long wdFirstPageFooterStory = 11;
+        const long wdFirstPageHeaderStory = 10;
+        const long wdFootnoteContinuationNoticeStory = 14;
+        const long wdFootnoteContinuationSeparatorStory = 13;
+        const long wdFootnoteSeparatorStory = 12;
+        const long wdFootnotesStory = 2;
+        const long wdMainTextStory = 1;
+        const long wdPrimaryFooterStory = 9;
+        const long wdPrimaryHeaderStory = 7;
+        const long wdTextFrameStory = 5;
+    };
+}; }; };

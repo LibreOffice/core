@@ -1,0 +1,9 @@
+module ooo { module vba {
+    constants VbQueryClose {
+        const long vbAppTaskManager = 3;
+        const long vbAppWindows = 2;
+        const long vbFormCode = 1;
+        const long vbFormControlMenu = 0;
+        const long vbFormMDIForm = 4;
+    };
+}; };

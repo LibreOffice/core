@@ -1,0 +1,11 @@
+module ooo { module vba { module adodb {
+    constants CommandTypeEnum {
+        const long adCmdFile = 256;
+        const long adCmdStoredProc = 4;
+        const long adCmdTable = 2;
+        const long adCmdTableDirect = 512;
+        const long adCmdText = 1;
+        const long adCmdUnknown = 8;
+        const long adCmdUnspecified = -1;
+    };
+}; }; };

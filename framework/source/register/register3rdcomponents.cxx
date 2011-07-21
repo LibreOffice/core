@@ -46,8 +46,6 @@
         #include <service2.hxx>
         #endif
 
-        COMPONENTGETIMPLEMENTATIONENVIRONMENT
-
         COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
@@ -57,8 +55,6 @@
 #include <tabwin/tabwinfactory.hxx>
 #include <dispatch/systemexec.hxx>
 #include <jobs/shelljob.hxx>
-
-COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::HelpOnStartup       ) else
                         IFFACTORY( ::framework::TabWinFactory       ) else

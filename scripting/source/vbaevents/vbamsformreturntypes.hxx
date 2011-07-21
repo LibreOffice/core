@@ -31,11 +31,11 @@
 #define VBA_MSFORM_RETURNTYPES_HXX
 
 #include <cppuhelper/implbase1.hxx>
-#include <msforms/XReturnBoolean.hpp>
-#include <msforms/XReturnInteger.hpp>
+#include <ooo/vba/msforms/XReturnBoolean.hpp>
+#include <ooo/vba/msforms/XReturnInteger.hpp>
 
 
-typedef ::cppu::WeakImplHelper1<msforms::XReturnBoolean> ReturnBoolean_BASE;
+typedef ::cppu::WeakImplHelper1<ooo::vba::msforms::XReturnBoolean> ReturnBoolean_BASE;
 
 class SAL_DLLPUBLIC_EXPORT VbaReturnBoolean : public ReturnBoolean_BASE
 {
@@ -54,7 +54,7 @@ public:
 };
 
 
-typedef ::cppu::WeakImplHelper1<msforms::XReturnInteger> ReturnInteger_BASE;
+typedef ::cppu::WeakImplHelper1<ooo::vba::msforms::XReturnInteger> ReturnInteger_BASE;
 
 class SAL_DLLPUBLIC_EXPORT VbaReturnInteger : public ReturnInteger_BASE
 {

@@ -1360,19 +1360,6 @@ void SfxBindings::UpdateSlotServer_Impl()
 
 //--------------------------------------------------------------------
 
-int SAL_CALL CmpUS_Impl(const void *p1, const void *p2)
-
-/*  [Description]
-
-    Internal Comparison function for qsort.
-*/
-
-{
-    return *(sal_uInt16 *)p1 - *(sal_uInt16 *)p2;
-}
-
-//--------------------------------------------------------------------
-
 SfxItemSet* SfxBindings::CreateSet_Impl
 (
     SfxStateCache*&         pCache,     // in: Status-Cache from nId
@@ -1769,20 +1756,24 @@ sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
     (void)nLine;
     DBG_MEMTEST();
 #ifdef DBG_UTIL
-    ByteString aMsg;
-    aMsg.Fill( Min(nRegLevel, sal_uInt16(8) ) );
-    aMsg += "this = ";
-    aMsg += ByteString::CreateFromInt32((long)this);
-    aMsg += " Level = ";
-    aMsg += ByteString::CreateFromInt32(nRegLevel);
-    aMsg += " SfxBindings::EnterRegistrations ";
-    if(pFile) {
-        aMsg += "File: ";
-        aMsg += pFile;
-        aMsg += " Line: ";
-        aMsg += ByteString::CreateFromInt32(nLine);
+    rtl::OStringBuffer aMsg;
+    sal_uInt16 nSpaces = Min(nRegLevel, sal_uInt16(8));
+    while (nSpaces--)
+        aMsg.append(' ');
+    aMsg.append(RTL_CONSTASCII_STRINGPARAM("this = "));
+    aMsg.append(reinterpret_cast<sal_Int64>(this));
+    aMsg.append(RTL_CONSTASCII_STRINGPARAM(" Level = "));
+    aMsg.append(static_cast<sal_Int32>(nRegLevel));
+    aMsg.append(RTL_CONSTASCII_STRINGPARAM(
+        " SfxBindings::EnterRegistrations "));
+    if (pFile)
+    {
+        aMsg.append(RTL_CONSTASCII_STRINGPARAM("File: "));
+        aMsg.append(pFile);
+        aMsg.append(RTL_CONSTASCII_STRINGPARAM(" Line: "));
+        aMsg.append(static_cast<sal_Int32>(nLine));
     }
-    DbgTrace( aMsg.GetBuffer() );
+    DbgTrace(aMsg.getStr());
 #endif
 
     // When bindings are locked, also lock sub bindings.
@@ -1882,20 +1873,24 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
     }
 
 #ifdef DBG_UTIL
-    ByteString aMsg;
-    aMsg.Fill( Min(nRegLevel, sal_uInt16(8)) );
-    aMsg += "this = ";
-    aMsg += ByteString::CreateFromInt32((long)this);
-    aMsg += " Level = ";
-    aMsg += ByteString::CreateFromInt32(nRegLevel);
-    aMsg += " SfxBindings::LeaveRegistrations ";
-    if(pFile) {
-        aMsg += "File: ";
-        aMsg += pFile;
-        aMsg += " Line: ";
-        aMsg += ByteString::CreateFromInt32(nLine);
+    rtl::OStringBuffer aMsg;
+    sal_uInt16 nSpaces = Min(nRegLevel, sal_uInt16(8));
+    while (nSpaces--)
+        aMsg.append(' ');
+    aMsg.append(RTL_CONSTASCII_STRINGPARAM("this = "));
+    aMsg.append(reinterpret_cast<sal_Int64>(this));
+    aMsg.append(RTL_CONSTASCII_STRINGPARAM(" Level = "));
+    aMsg.append(static_cast<sal_Int32>(nRegLevel));
+    aMsg.append(RTL_CONSTASCII_STRINGPARAM(
+        " SfxBindings::LeaveRegistrations "));
+    if (pFile)
+    {
+        aMsg.append(RTL_CONSTASCII_STRINGPARAM("File: "));
+        aMsg.append(pFile);
+        aMsg.append(RTL_CONSTASCII_STRINGPARAM(" Line: "));
+        aMsg.append(static_cast<sal_Int32>(nLine));
     }
-    DbgTrace( aMsg.GetBuffer() );
+    DbgTrace(aMsg.getStr());
 #endif
 }
 

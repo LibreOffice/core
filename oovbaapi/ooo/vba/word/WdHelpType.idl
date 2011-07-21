@@ -1,0 +1,18 @@
+module ooo { module vba { module word {
+    constants WdHelpType {
+        const long wdHelp = 0;
+        const long wdHelpAbout = 1;
+        const long wdHelpActiveWindow = 2;
+        const long wdHelpContents = 3;
+        const long wdHelpExamplesAndDemos = 4;
+        const long wdHelpHWP = 13;
+        const long wdHelpIchitaro = 11;
+        const long wdHelpIndex = 5;
+        const long wdHelpKeyboard = 6;
+        const long wdHelpPE2 = 12;
+        const long wdHelpPSSHelp = 7;
+        const long wdHelpQuickPreview = 8;
+        const long wdHelpSearch = 9;
+        const long wdHelpUsingHelp = 10;
+    };
+}; }; };

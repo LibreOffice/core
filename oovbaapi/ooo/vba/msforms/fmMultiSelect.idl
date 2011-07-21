@@ -1,0 +1,7 @@
+module ooo { module vba { module msforms {
+    constants fmMultiSelect {
+        const long fmMultiSelectExtended = 2;
+        const long fmMultiSelectMulti = 1;
+        const long fmMultiSelectSingle = 0;
+    };
+}; }; };

@@ -305,7 +305,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     }
 
     SvtViewOptions aWinOpt( E_WINDOW, String::CreateFromInt32( nID ) );
-    aWinOpt.SetWindowState( String( rInfo.aWinState, RTL_TEXTENCODING_UTF8 ) );
+    aWinOpt.SetWindowState(rtl::OStringToOUString(rInfo.aWinState, RTL_TEXTENCODING_UTF8));
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
     aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Data") );
@@ -386,7 +386,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
         aSeq[0].Value >>= aTmp;
 
     String aWinData( aTmp );
-    rInfo.aWinState = ByteString( String(aWinOpt.GetWindowState()), RTL_TEXTENCODING_UTF8 );
+    rInfo.aWinState = rtl::OUStringToOString(aWinOpt.GetWindowState(), RTL_TEXTENCODING_UTF8);
 
 
     if ( aWinData.Len() )

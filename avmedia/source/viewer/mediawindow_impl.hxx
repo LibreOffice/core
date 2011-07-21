@@ -111,8 +111,6 @@ namespace avmedia
             void            setPointer( const Pointer& rPointer );
             const Pointer&  getPointer() const;
 
-            bool            hasInternalMediaControl() const;
-
         protected:
 
             // Window

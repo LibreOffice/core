@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoModeType {
+        const long msoModeAutoDown = 1;
+        const long msoModeModal = 0;
+        const long msoModeModeless = 2;
+    };
+}; }; };

@@ -85,7 +85,6 @@
 #include <svx/sdr/properties/attributeproperties.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include "svx/xlinjoit.hxx"
-#include <svdoimp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

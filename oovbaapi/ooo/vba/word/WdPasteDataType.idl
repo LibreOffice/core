@@ -1,0 +1,14 @@
+module ooo { module vba { module word {
+    constants WdPasteDataType {
+        const long wdPasteBitmap = 4;
+        const long wdPasteDeviceIndependentBitmap = 5;
+        const long wdPasteEnhancedMetafile = 9;
+        const long wdPasteHTML = 10;
+        const long wdPasteHyperlink = 7;
+        const long wdPasteMetafilePicture = 3;
+        const long wdPasteOLEObject = 0;
+        const long wdPasteRTF = 1;
+        const long wdPasteShape = 8;
+        const long wdPasteText = 2;
+    };
+}; }; };

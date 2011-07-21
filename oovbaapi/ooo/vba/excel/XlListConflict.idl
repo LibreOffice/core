@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlListConflict {
+        const long xlListConflictDialog = 0;
+        const long xlListConflictDiscardAllConflicts = 2;
+        const long xlListConflictError = 3;
+        const long xlListConflictRetryAllConflicts = 1;
+    };
+}; }; };

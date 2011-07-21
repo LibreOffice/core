@@ -1,0 +1,17 @@
+module ooo { module vba { module access {
+    constants AcSysCmdAction {
+        const long acSysCmdAccessDir = 9;
+        const long acSysCmdAccessVer = 7;
+        const long acSysCmdClearHelpTopic = 11;
+        const long acSysCmdClearStatus = 5;
+        const long acSysCmdGetObjectState = 10;
+        const long acSysCmdGetWorkgroupFile = 13;
+        const long acSysCmdIniFile = 8;
+        const long acSysCmdInitMeter = 1;
+        const long acSysCmdProfile = 12;
+        const long acSysCmdRemoveMeter = 3;
+        const long acSysCmdRuntime = 6;
+        const long acSysCmdSetStatus = 4;
+        const long acSysCmdUpdateMeter = 2;
+    };
+}; }; };

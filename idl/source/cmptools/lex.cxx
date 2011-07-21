@@ -50,7 +50,7 @@ ByteString SvToken::GetTokenAsString() const
             aStr = aString;
             break;
         case SVTOKEN_INTEGER:
-            aStr = ByteString::CreateFromInt64(nLong);
+            aStr = rtl::OString::valueOf(static_cast<sal_Int64>(nLong));
             break;
         case SVTOKEN_STRING:
             aStr = aString;

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdUseFormattingFrom {
+        const long wdFormattingFromCurrent = 0;
+        const long wdFormattingFromPrompt = 2;
+        const long wdFormattingFromSelected = 1;
+    };
+}; }; };

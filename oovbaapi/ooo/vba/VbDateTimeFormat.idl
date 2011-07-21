@@ -1,0 +1,9 @@
+module ooo { module vba {
+    constants VbDateTimeFormat {
+        const long vbGeneralDate = 0;
+        const long vbLongDate = 1;
+        const long vbLongTime = 3;
+        const long vbShortDate = 2;
+        const long vbShortTime = 4;
+    };
+}; };
