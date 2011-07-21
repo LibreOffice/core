@@ -77,10 +77,6 @@ rtl::OUString   FloatToOUString(float num, sal_Int32 precision=6);
 
 rtl::OUString   DoubleToOUString(double num, sal_Int32 precision=6);
 
-rtl::OUString   OEMToOUString(const std::string& str);
-
-rtl::OUString   ColorToOUString( sal_uInt32 color);
-
 rtl::OUString   DateTimeToOUString(XFDateTime& dt);
 
 rtl::OUString   GetTableColName(sal_Int32 col);

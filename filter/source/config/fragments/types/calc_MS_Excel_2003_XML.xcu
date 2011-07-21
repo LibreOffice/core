@@ -1,7 +1,7 @@
     <node oor:name="calc_MS_Excel_2003_XML" oor:op="replace">
         <prop oor:name="DetectService"><value>com.sun.star.comp.filters.XMLFilterDetect</value></prop>
         <prop oor:name="URLPattern"/>
-        <prop oor:name="Extensions"><value>xml</value></prop>
+        <prop oor:name="Extensions"><value>xml xls</value></prop>
         <prop oor:name="MediaType"/>
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>MS Excel 2003 XML</value></prop>

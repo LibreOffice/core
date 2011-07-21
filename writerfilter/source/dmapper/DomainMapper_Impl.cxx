@@ -937,13 +937,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
                 CheckParaRedline( xParaEnd );
 
-                // Remove the last empty section paragraph if needed
-                if ( m_bIsLastParaInSection && !m_bParaChanged )
-                {
-                    RemoveLastParagraph( );
-                    m_bIsLastParaInSection = false;
-                }
-
+                m_bIsLastParaInSection = false;
                 m_bParaChanged = false;
             }
             if( !bKeepLastParagraphProperties )

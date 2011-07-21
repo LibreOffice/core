@@ -34,12 +34,16 @@ $(eval $(call gb_Library_add_package_headers,oox,\
 $(eval $(call gb_Library_set_include,oox,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
     -I$(realpath $(SRCDIR)/oox/inc) \
 ))
 
 $(eval $(call gb_Library_add_defs,oox,\
     -DOOX_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,oox,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,oox,\

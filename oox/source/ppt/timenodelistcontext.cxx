@@ -117,7 +117,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        MediaNodeContext( ContextHandler& rParent, sal_Int32  aElement,
+        MediaNodeContext( FragmentHandler2& rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode )
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -139,9 +139,9 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual void SAL_CALL endFastElement( sal_Int32 aElement )
-            throw ( SAXException, RuntimeException)
+        virtual void onEndElement()
             {
+                sal_Int32 aElement = getCurrentElement();
                 if( aElement == PPT_TOKEN( audio ) )
                 {
                     // TODO deal with mbIsNarration
@@ -152,25 +152,18 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                                                                            const Reference< XFastAttributeList >& xAttribs )
-            throw ( SAXException, RuntimeException )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
             {
-                Reference< XFastContextHandler > xRet;
-
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
+                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                     break;
                 default:
                     break;
                 }
 
-                if( !xRet.is() )
-                    xRet.set( this );
-
-                return xRet;
+                return this;
             }
 
     private:
@@ -185,7 +178,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        SetTimeNodeContext( ContextHandler& rParent, sal_Int32  aElement,
+        SetTimeNodeContext( FragmentHandler2& rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode )
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -212,35 +205,20 @@ namespace oox { namespace ppt {
 
             }
 
-        virtual void SAL_CALL endFastElement( sal_Int32 /*aElement*/ )
-            throw ( SAXException, RuntimeException)
+            virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
             {
-            }
-
-
-        virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                                                                            const Reference< XFastAttributeList >& xAttribs )
-            throw ( SAXException, RuntimeException )
-            {
-                Reference< XFastContextHandler > xRet;
-
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
-                    break;
+                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( to ):
                     // CT_TLAnimVariant
-                    xRet.set( new AnimVariantContext( *this, aElementToken, maTo ) );
-                    break;
+                    return new AnimVariantContext( *this, aElementToken, maTo );
                 default:
                     break;
                 }
 
-                if( !xRet.is() )
-                    xRet.set( this );
-
-                return xRet;
+                return this;
             }
     private:
         Any  maTo;
@@ -252,7 +230,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        CmdTimeNodeContext( ContextHandler& rParent, sal_Int32  aElement,
+        CmdTimeNodeContext( FragmentHandler2& rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode )
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -273,10 +251,9 @@ namespace oox { namespace ppt {
             {
             }
 
-        virtual void SAL_CALL endFastElement( sal_Int32 aElement )
-            throw ( SAXException, RuntimeException)
+        virtual void onEndElement()
             {
-                if( aElement == PPT_TOKEN( cmd ) )
+                if( isCurrentElement( PPT_TOKEN( cmd ) ) )
                 {
                     try {
                         // see sd/source/filter/ppt/pptinanimations.cxx
@@ -347,25 +324,17 @@ namespace oox { namespace ppt {
             }
 
 
-        virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                                                                            const Reference< XFastAttributeList >& xAttribs )
-            throw ( SAXException, RuntimeException )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
             {
-                Reference< XFastContextHandler > xRet;
-
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
-                    break;
+                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 default:
                     break;
                 }
 
-                if( !xRet.is() )
-                    xRet.set( this );
-
-                return xRet;
+                return this;
             }
 
     private:
@@ -380,7 +349,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        SequenceTimeNodeContext( ContextHandler& rParent, sal_Int32  aElement,
+        SequenceTimeNodeContext( FragmentHandler2& rParent, sal_Int32  aElement,
                                  const Reference< XFastAttributeList >& xAttribs,
                                  const TimeNodePtr & pNode )
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -400,33 +369,23 @@ namespace oox { namespace ppt {
             }
 
 
-        virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                                                                            const Reference< XFastAttributeList >& xAttribs )
-            throw ( SAXException, RuntimeException )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
             {
-                Reference< XFastContextHandler > xRet;
-
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cTn ):
-                    xRet.set( new CommonTimeNodeContext( *this, aElementToken, xAttribs, mpNode ) );
-                    break;
+                    return new CommonTimeNodeContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( nextCondLst ):
-                    xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode,
-                                                   mpNode->getNextCondition() ) );
-                    break;
+                    return new CondListContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode,
+                                                   mpNode->getNextCondition() );
                 case PPT_TOKEN( prevCondLst ):
-                    xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode,
-                                                   mpNode->getPrevCondition() ) );
-                    break;
+                    return new CondListContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode,
+                                                   mpNode->getPrevCondition() );
                 default:
                     break;
                 }
 
-                if( !xRet.is() )
-                    xRet.set( this );
-
-                return xRet;
+                return this;
             }
     private:
         bool mbConcurrent;
@@ -441,32 +400,24 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        ParallelExclTimeNodeContext( ContextHandler& rParent, sal_Int32  aElement,
+        ParallelExclTimeNodeContext( FragmentHandler2& rParent, sal_Int32  aElement,
                                      const Reference< XFastAttributeList >& xAttribs,
                                      const TimeNodePtr & pNode )
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
             {
             }
 
-        virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                                                                            const Reference< XFastAttributeList >& xAttribs )
-            throw ( SAXException, RuntimeException )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
             {
-                Reference< XFastContextHandler > xRet;
-
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cTn ):
-                    xRet.set( new CommonTimeNodeContext( *this, aElementToken, xAttribs, mpNode ) );
-                    break;
+                    return new CommonTimeNodeContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode );
                 default:
                     break;
                 }
 
-                if( !xRet.is() )
-                    xRet.set( this );
-
-                return xRet;
+                return this;
             }
 
     protected:
@@ -479,7 +430,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimColorContext( ContextHandler& rParent, sal_Int32  aElement,
+        AnimColorContext( FragmentHandler2& rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -495,10 +446,10 @@ namespace oox { namespace ppt {
             {
             }
 
-        virtual void SAL_CALL endFastElement( sal_Int32 aElement ) throw ( SAXException, RuntimeException)
+        virtual void onEndElement()
             {
                 //xParentNode
-                if( aElement == mnElement )
+                if( isCurrentElement( mnElement ) )
                 {
                     NodePropertyMap & pProps(mpNode->getNodeProperties());
                     pProps[ NP_DIRECTION ] = makeAny( mnDir == XML_cw );
@@ -514,10 +465,8 @@ namespace oox { namespace ppt {
             }
 
 
-        virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw ( SAXException, RuntimeException )
+            virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
             {
-                Reference< XFastContextHandler > xRet;
-
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( hsl ):
@@ -526,12 +475,11 @@ namespace oox { namespace ppt {
                     if( mbHasByColor )
                     {
                         m_byColor.colorSpace = AnimationColorSpace::HSL;
-                        m_byColor.one = xAttribs->getOptionalValue( XML_h ).toInt32( );
-                        m_byColor.two = xAttribs->getOptionalValue( XML_s ).toInt32( );
-                        m_byColor.three = xAttribs->getOptionalValue( XML_l ).toInt32( );
+                        m_byColor.one = rAttribs.getInteger( XML_h, 0 );
+                        m_byColor.two = rAttribs.getInteger( XML_s, 0 );
+                        m_byColor.three = rAttribs.getInteger( XML_l, 0 );
                     }
-                    xRet.set(this);
-                    break;
+                    return this;
                 }
                 case PPT_TOKEN( rgb ):
                 {
@@ -539,38 +487,30 @@ namespace oox { namespace ppt {
                     {
                         // CT_TLByRgbColorTransform
                         m_byColor.colorSpace = AnimationColorSpace::RGB;
-                        m_byColor.one = xAttribs->getOptionalValue( XML_r ).toInt32();
-                        m_byColor.two = xAttribs->getOptionalValue( XML_g ).toInt32();
-                        m_byColor.three = xAttribs->getOptionalValue( XML_b ).toInt32();
+                        m_byColor.one = rAttribs.getInteger( XML_r, 0 );
+                        m_byColor.two = rAttribs.getInteger( XML_g, 0 );
+                        m_byColor.three = rAttribs.getInteger( XML_b, 0 );
                     }
-                    xRet.set(this);
-                    break;
+                    return this;
                 }
                 case PPT_TOKEN( by ):
                     // CT_TLByAnimateColorTransform
                     mbHasByColor = true;
-                    xRet.set(this);
-                    break;
+                    return this;
                 case PPT_TOKEN( cBhvr ):
-                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
-                    break;
+                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( to ):
                     // CT_Color
-                    xRet.set( new ColorContext( *this, maToClr ) );
-                    break;
+                    return new ColorContext( *this, maToClr );
                 case PPT_TOKEN( from ):
                     // CT_Color
-                    xRet.set( new ColorContext( *this, maFromClr ) );
-                    break;
+                    return new ColorContext( *this, maFromClr );
 
                 default:
                     break;
                 }
 
-                if( !xRet.is() )
-                    xRet.set( this );
-
-                return xRet;
+                return this;
             }
 
 
@@ -589,7 +529,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimContext( ContextHandler& rParent, sal_Int32  aElement,
+        AnimContext( FragmentHandler2& rParent, sal_Int32  aElement,
                      const Reference< XFastAttributeList >& xAttribs,
                       const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -671,26 +611,21 @@ namespace oox { namespace ppt {
             }
 
 
-        virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw ( SAXException, RuntimeException )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
             {
-                Reference< XFastContextHandler > xRet;
-
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
+                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                     break;
                 case PPT_TOKEN( tavLst ):
-                    xRet.set( new TimeAnimValueListContext ( *this, xAttribs, maTavList ) );
+                    return new TimeAnimValueListContext ( *this, rAttribs.getFastAttributeList(), maTavList );
                     break;
                 default:
                     break;
                 }
 
-                if( !xRet.is() )
-                    xRet.set( this );
-
-                return xRet;
+                return this;
             }
     private:
         sal_Int32              mnValueType;
@@ -703,7 +638,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimScaleContext( ContextHandler& rParent, sal_Int32  aElement,
+        AnimScaleContext( FragmentHandler2& rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -720,9 +655,9 @@ namespace oox { namespace ppt {
             {
             }
 
-        virtual void SAL_CALL endFastElement( sal_Int32 aElement ) throw ( SAXException, RuntimeException)
+        virtual void onEndElement()
             {
-                if( aElement == mnElement )
+                if( isCurrentElement( mnElement ) )
                 {
                     if( maTo.hasValue() )
                     {
@@ -739,49 +674,41 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                                                                            const Reference< XFastAttributeList >& xAttribs )
-            throw ( SAXException, RuntimeException )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
             {
-                Reference< XFastContextHandler > xRet;
-
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
-                    break;
+                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( to ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( xAttribs );
+                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     maTo <<= p.X;
                     maTo <<= p.Y;
-                    break;
+                    return this;
                 }
                 case PPT_TOKEN( from ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( xAttribs );
+                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     maFrom <<= p.X;
                     maFrom <<= p.Y;
-                    break;
+                    return this;
                 }
                 case PPT_TOKEN( by ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( xAttribs );
+                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     maBy <<= p.X;
                     maBy <<= p.Y;
-                    break;
+                    return this;
                 }
                 default:
                     break;
                 }
 
-                if( !xRet.is() )
-                    xRet.set( this );
-
-                return xRet;
+                return this;
             }
     private:
         Any maBy;
@@ -796,7 +723,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimRotContext( ContextHandler& rParent, sal_Int32  aElement,
+        AnimRotContext( FragmentHandler2& rParent, sal_Int32  aElement,
                         const Reference< XFastAttributeList >& xAttribs,
                          const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -827,23 +754,17 @@ namespace oox { namespace ppt {
             {
             }
 
-        virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw ( SAXException, RuntimeException )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
             {
-                Reference< XFastContextHandler > xRet;
-
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
-                    break;
+                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 default:
                     break;
                 }
 
-                if( !xRet.is() )
-                    xRet.set( this );
-
-                return xRet;
+                return this;
             }
     };
 
@@ -854,7 +775,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimMotionContext( ContextHandler& rParent, sal_Int32  aElement,
+        AnimMotionContext( FragmentHandler2& rParent, sal_Int32  aElement,
                          const Reference< XFastAttributeList >& xAttribs,
                           const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -893,63 +814,55 @@ namespace oox { namespace ppt {
             }
 
 
-        virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                                                                            const Reference< XFastAttributeList >& xAttribs )
-            throw ( SAXException, RuntimeException )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
             {
-                Reference< XFastContextHandler > xRet;
-
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
-                    break;
+                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( to ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( xAttribs );
+                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     Any rAny;
                     rAny <<= p.X;
                     rAny <<= p.Y;
                     mpNode->setTo( rAny );
-                    break;
+                    return this;
                 }
                 case PPT_TOKEN( from ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( xAttribs );
+                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     Any rAny;
                     rAny <<= p.X;
                     rAny <<= p.Y;
                     mpNode->setFrom( rAny );
-                    break;
+                    return this;
                 }
                 case PPT_TOKEN( by ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( xAttribs );
+                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     Any rAny;
                     rAny <<= p.X;
                     rAny <<= p.Y;
                     mpNode->setBy( rAny );
-                    break;
+                    return this;
                 }
                 case PPT_TOKEN( rCtr ):
                 {
                     // CT_TLPoint
-                    Point p = GetPointPercent( xAttribs );
+                    Point p = GetPointPercent( rAttribs.getFastAttributeList() );
                     // TODO push
                     (void)p;
-                    break;
+                    return this;
                 }
                 default:
                     break;
                 }
 
-                if( !xRet.is() )
-                    xRet.set( this );
-
-                return xRet;
+                return this;
             }
     private:
         OUString msPtsTypes;
@@ -963,7 +876,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimEffectContext( ContextHandler& rParent, sal_Int32  aElement,
+        AnimEffectContext( FragmentHandler2& rParent, sal_Int32  aElement,
                              const Reference< XFastAttributeList >& xAttribs,
                              const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -987,27 +900,20 @@ namespace oox { namespace ppt {
             }
 
 
-        virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw ( SAXException, RuntimeException )
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
             {
-                Reference< XFastContextHandler > xRet;
-
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    xRet.set( new CommonBehaviorContext ( *this, xAttribs, mpNode ) );
-                    break;
+                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( progress ):
-                    xRet.set( new AnimVariantContext( *this, aElementToken, maProgress ) );
+                    return new AnimVariantContext( *this, aElementToken, maProgress );
                     // TODO handle it.
-                    break;
                 default:
                     break;
                 }
 
-                if( !xRet.is() )
-                    xRet.set( this );
-
-                return xRet;
+                return this;
             }
     private:
         Any maProgress;
@@ -1018,7 +924,7 @@ namespace oox { namespace ppt {
 
 
     TimeNodeContext * TimeNodeContext::makeContext(
-            ContextHandler& rParent, sal_Int32  aElement,
+            FragmentHandler2& rParent, sal_Int32  aElement,
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode )
     {
@@ -1069,10 +975,10 @@ namespace oox { namespace ppt {
     }
 
 
-    TimeNodeContext::TimeNodeContext( ContextHandler& rParent, sal_Int32 aElement,
+    TimeNodeContext::TimeNodeContext( FragmentHandler2& rParent, sal_Int32 aElement,
             const Reference< XFastAttributeList >& /*xAttribs*/,
             const TimeNodePtr & pNode ) throw()
-        : ContextHandler( rParent )
+        : FragmentHandler2( rParent )
         , mnElement( aElement )
         , mpNode( pNode )
     {
@@ -1085,9 +991,9 @@ namespace oox { namespace ppt {
     }
 
 
-    TimeNodeListContext::TimeNodeListContext( ContextHandler& rParent, TimeNodePtrList & aList )
+    TimeNodeListContext::TimeNodeListContext( FragmentHandler2& rParent, TimeNodePtrList & aList )
         throw()
-        : ContextHandler( rParent )
+        : FragmentHandler2( rParent )
             , maList( aList )
     {
     }
@@ -1098,10 +1004,8 @@ namespace oox { namespace ppt {
     }
 
 
-    Reference< XFastContextHandler > SAL_CALL TimeNodeListContext::createFastChildContext( ::sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+    ::oox::core::ContextHandlerRef TimeNodeListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
-        Reference< XFastContextHandler > xRet;
-
         sal_Int16 nNodeType;
 
         switch( aElementToken )
@@ -1155,10 +1059,9 @@ namespace oox { namespace ppt {
 
         TimeNodePtr pNode(new TimeNode(nNodeType));
         maList.push_back( pNode );
-        ContextHandler * pContext = TimeNodeContext::makeContext( *this, aElementToken, xAttribs, pNode );
-        xRet.set( pContext ? pContext : this );
+        FragmentHandler2 * pContext = TimeNodeContext::makeContext( *this, aElementToken, rAttribs.getFastAttributeList(), pNode );
 
-        return xRet;
+        return pContext ? pContext : this;
     }
 
 

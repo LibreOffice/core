@@ -30,20 +30,20 @@
 #ifndef OOX_PPT_SOUNDACTIONCONTEXT
 #define OOX_PPT_SOUNDACTIONCONTEXT
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 
 namespace oox { class PropertyMap; }
 
 namespace oox { namespace ppt {
 
-class SoundActionContext : public ::oox::core::ContextHandler
+class SoundActionContext : public ::oox::core::FragmentHandler2
 {
 public:
-    SoundActionContext( ::oox::core::ContextHandler& rParent, PropertyMap & aProperties ) throw();
+    SoundActionContext( ::oox::core::FragmentHandler2& rParent, PropertyMap & aProperties ) throw();
     virtual ~SoundActionContext() throw();
 
-    virtual void SAL_CALL endFastElement( sal_Int32 aElement ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void onEndElement();
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
 private:
     PropertyMap&                    maSlideProperties;

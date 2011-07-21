@@ -40,11 +40,182 @@
 // remove this
 #define MULTIPAGE_WORKAROUND 1
 
+static inline double getAngle(double bx, double by)
+{
+    return fmod(2*M_PI + (by > 0.0 ? 1.0 : -1.0) * acos( bx / sqrt(bx * bx + by * by) ), 2*M_PI);
+}
+
+static void getEllipticalArcBBox(double x1, double y1,
+                                 double rx, double ry, double phi, bool largeArc, bool sweep, double x2, double y2,
+                                 double &xmin, double &ymin, double &xmax, double &ymax)
+{
+    phi *= M_PI/180;
+    if (rx < 0.0)
+        rx *= -1.0;
+    if (ry < 0.0)
+        ry *= -1.0;
+
+    if (rx == 0.0 || ry == 0.0)
+    {
+        xmin = (x1 < x2 ? x1 : x2);
+        xmax = (x1 > x2 ? x1 : x2);
+        ymin = (y1 < y2 ? y1 : y2);
+        ymax = (y1 > y2 ? y1 : y2);
+        return;
+    }
+
+    // F.6.5.1
+    const double x1prime = cos(phi)*(x1 - x2)/2 + sin(phi)*(y1 - y2)/2;
+    const double y1prime = -sin(phi)*(x1 - x2)/2 + cos(phi)*(y1 - y2)/2;
+
+    // F.6.5.2
+    double radicant = (rx*rx*ry*ry - rx*rx*y1prime*y1prime - ry*ry*x1prime*x1prime)/(rx*rx*y1prime*y1prime + ry*ry*x1prime*x1prime);
+    double cxprime = 0.0;
+    double cyprime = 0.0;
+    if (radicant < 0.0)
+    {
+        double ratio = rx/ry;
+        radicant = y1prime*y1prime + x1prime*x1prime/(ratio*ratio);
+        if (radicant < 0.0)
+        {
+            xmin = (x1 < x2 ? x1 : x2);
+            xmax = (x1 > x2 ? x1 : x2);
+            ymin = (y1 < y2 ? y1 : y2);
+            ymax = (y1 > y2 ? y1 : y2);
+            return;
+        }
+        ry=sqrt(radicant);
+        rx=ratio*ry;
+    }
+    else
+    {
+        double factor = (largeArc==sweep ? -1.0 : 1.0)*sqrt(radicant);
+
+        cxprime = factor*rx*y1prime/ry;
+        cyprime = -factor*ry*x1prime/rx;
+    }
+
+    // F.6.5.3
+    double cx = cxprime*cos(phi) - cyprime*sin(phi) + (x1 + x2)/2;
+    double cy = cxprime*sin(phi) + cyprime*cos(phi) + (y1 + y2)/2;
+
+    // now compute bounding box of the whole ellipse
+
+    // Parametric equation of an ellipse:
+    // x(theta) = cx + rx*cos(theta)*cos(phi) - ry*sin(theta)*sin(phi)
+    // y(theta) = cy + rx*cos(theta)*sin(phi) + ry*sin(theta)*cos(phi)
+
+    // Compute local extrems
+    // 0 = -rx*sin(theta)*cos(phi) - ry*cos(theta)*sin(phi)
+    // 0 = -rx*sin(theta)*sin(phi) - ry*cos(theta)*cos(phi)
+
+    // Local extrems for X:
+    // theta = -atan(ry*tan(phi)/rx)
+    // and
+    // theta = M_PI -atan(ry*tan(phi)/rx)
+
+    // Local extrems for Y:
+    // theta = atan(ry/(tan(phi)*rx))
+    // and
+    // theta = M_PI + atan(ry/(tan(phi)*rx))
+
+    double txmin, txmax, tymin, tymax;
+
+    // First handle special cases
+    if (phi == 0 || phi == M_PI)
+    {
+        xmin = cx - rx;
+        txmin = getAngle(-rx, 0);
+        xmax = cx + rx;
+        txmax = getAngle(rx, 0);
+        ymin = cy - ry;
+        tymin = getAngle(0, -ry);
+        ymax = cy + ry;
+        tymax = getAngle(0, ry);
+    }
+    else if (phi == M_PI / 2.0 || phi == 3.0*M_PI/2.0)
+    {
+        xmin = cx - ry;
+        txmin = getAngle(-ry, 0);
+        xmax = cx + ry;
+        txmax = getAngle(ry, 0);
+        ymin = cy - rx;
+        tymin = getAngle(0, -rx);
+        ymax = cy + rx;
+        tymax = getAngle(0, rx);
+    }
+    else
+    {
+        txmin = -atan(ry*tan(phi)/rx);
+        txmax = M_PI - atan (ry*tan(phi)/rx);
+        xmin = cx + rx*cos(txmin)*cos(phi) - ry*sin(txmin)*sin(phi);
+        xmax = cx + rx*cos(txmax)*cos(phi) - ry*sin(txmax)*sin(phi);
+        double tmpY = cy + rx*cos(txmin)*sin(phi) + ry*sin(txmin)*cos(phi);
+        txmin = getAngle(xmin - cx, tmpY - cy);
+        tmpY = cy + rx*cos(txmax)*sin(phi) + ry*sin(txmax)*cos(phi);
+        txmax = getAngle(xmax - cx, tmpY - cy);
+
+        tymin = atan(ry/(tan(phi)*rx));
+        tymax = atan(ry/(tan(phi)*rx))+M_PI;
+        ymin = cy + rx*cos(tymin)*sin(phi) + ry*sin(tymin)*cos(phi);
+        ymax = cy + rx*cos(tymax)*sin(phi) + ry*sin(tymax)*cos(phi);
+        double tmpX = cx + rx*cos(tymin)*cos(phi) - ry*sin(tymin)*sin(phi);
+        tymin = getAngle(tmpX - cx, ymin - cy);
+        tmpX = cx + rx*cos(tymax)*cos(phi) - ry*sin(tymax)*sin(phi);
+        tymax = getAngle(tmpX - cx, ymax - cy);
+    }
+    if (xmin > xmax)
+    {
+        std::swap(xmin,xmax);
+        std::swap(txmin,txmax);
+    }
+    if (ymin > ymax)
+    {
+        std::swap(ymin,ymax);
+        std::swap(tymin,tymax);
+    }
+    double angle1 = getAngle(x1 - cx, y1 - cy);
+    double angle2 = getAngle(x2 - cx, y2 - cy);
+
+    // for sweep == 0 it is normal to have delta theta < 0
+    // but we don't care about the rotation direction for bounding box
+    if (!sweep)
+        std::swap(angle1, angle2);
+
+    // We cannot check directly for whether an angle is included in
+    // an interval of angles that cross the 360/0 degree boundary
+    // So here we will have to check for their absence in the complementary
+    // angle interval
+    bool otherArc = false;
+    if (angle1 > angle2)
+    {
+        std::swap(angle1, angle2);
+        otherArc = true;
+    }
+
+    // Check txmin
+    if ((!otherArc && (angle1 > txmin || angle2 < txmin)) || (otherArc && !(angle1 > txmin || angle2 < txmin)))
+        xmin = x1 < x2 ? x1 : x2;
+    // Check txmax
+    if ((!otherArc && (angle1 > txmax || angle2 < txmax)) || (otherArc && !(angle1 > txmax || angle2 < txmax)))
+        xmax = x1 > x2 ? x1 : x2;
+    // Check tymin
+    if ((!otherArc && (angle1 > tymin || angle2 < tymin)) || (otherArc && !(angle1 > tymin || angle2 < tymin)))
+        ymin = y1 < y2 ? y1 : y2;
+    // Check tymax
+    if ((!otherArc && (angle1 > tymax || angle2 < tymax)) || (otherArc && !(angle1 > tymax || angle2 < tymax)))
+        ymax = y1 > y2 ? y1 : y2;
+}
+
 static WPXString doubleToString(const double value)
 {
     WPXString tempString;
     tempString.sprintf("%.4f", value);
+#ifndef __ANDROID__
     std::string decimalPoint(localeconv()->decimal_point);
+#else
+    std::string decimalPoint(".");
+#endif
     if ((decimalPoint.size() == 0) || (decimalPoint == "."))
         return tempString;
     std::string stringValue(tempString.cstr());
@@ -573,22 +744,38 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
 {
     if(path.count() == 0)
         return;
+    // This must be a mistake and we do not want to crash lower
+    if(path[0]["libwpg:path-action"]->getStr() == "Z")
+        return;
 
     // try to find the bounding box
     // this is simple convex hull technique, the bounding box might not be
     // accurate but that should be enough for this purpose
-    double px = path[0]["svg:x"]->getDouble();
-    double py = path[0]["svg:y"]->getDouble();
-    double qx = path[0]["svg:x"]->getDouble();
-    double qy = path[0]["svg:y"]->getDouble();
+    bool isFirstPoint = true;
+
+    double px = 0.0, py = 0.0, qx = 0.0, qy = 0.0;
+    double lastX = 0.0;
+    double lastY = 0.0;
+
     for(unsigned k = 0; k < path.count(); k++)
     {
         if (!path[k]["svg:x"] || !path[k]["svg:y"])
             continue;
+        if (isFirstPoint)
+        {
+            px = path[k]["svg:x"]->getDouble();
+            py = path[k]["svg:y"]->getDouble();
+            qx = px;
+            qy = py;
+            lastX = px;
+            lastY = py;
+            isFirstPoint = false;
+        }
         px = (px > path[k]["svg:x"]->getDouble()) ? path[k]["svg:x"]->getDouble() : px;
         py = (py > path[k]["svg:y"]->getDouble()) ? path[k]["svg:y"]->getDouble() : py;
         qx = (qx < path[k]["svg:x"]->getDouble()) ? path[k]["svg:x"]->getDouble() : qx;
         qy = (qy < path[k]["svg:y"]->getDouble()) ? path[k]["svg:y"]->getDouble() : qy;
+
         if(path[k]["libwpg:path-action"]->getStr() == "C")
         {
             px = (px > path[k]["svg:x1"]->getDouble()) ? path[k]["svg:x1"]->getDouble() : px;
@@ -600,23 +787,29 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
             qx = (qx < path[k]["svg:x2"]->getDouble()) ? path[k]["svg:x2"]->getDouble() : qx;
             qy = (qy < path[k]["svg:y2"]->getDouble()) ? path[k]["svg:y2"]->getDouble() : qy;
         }
-#if 0
         if(path[k]["libwpg:path-action"]->getStr() == "A")
         {
-            px = (px > path[k]["svg:x"]->getDouble()-2*path[k]["svg:rx"]->getDouble()) ? path[k]["svg:x"]->getDouble()-2*path[k]["svg:rx"]->getDouble() : px;
-            py = (py > path[k]["svg:y"]->getDouble()-2*path[k]["svg:ry"]->getDouble()) ? path[k]["svg:y"]->getDouble()-2*path[k]["svg:ry"]->getDouble() : py;
-            qx = (qx < path[k]["svg:x"]->getDouble()+2*path[k]["svg:rx"]->getDouble()) ? path[k]["svg:x"]->getDouble()+2*path[k]["svg:rx"]->getDouble() : qx;
-            qy = (qy < path[k]["svg:y"]->getDouble()+2*path[k]["svg:ry"]->getDouble()) ? path[k]["svg:y"]->getDouble()+2*path[k]["svg:ry"]->getDouble() : qy;
+            double xmin, xmax, ymin, ymax;
+
+            getEllipticalArcBBox(lastX, lastY, path[k]["svg:rx"]->getDouble(), path[k]["svg:ry"]->getDouble(),
+                                 path[k]["libwpg:rotate"] ? path[k]["libwpg:rotate"]->getDouble() : 0.0,
+                                 path[k]["libwpg:large-arc"] ? path[k]["libwpg:large-arc"]->getInt() : 1,
+                                 path[k]["libwpg:sweep"] ? path[k]["libwpg:sweep"]->getInt() : 1,
+                                 path[k]["svg:x"]->getDouble(), path[k]["svg:y"]->getDouble(), xmin, ymin, xmax, ymax);
+
+            px = (px > xmin ? xmin : px);
+            py = (py > ymin ? ymin : py);
+            qx = (qx < xmax ? xmax : qx);
+            qy = (qy < ymax ? ymax : qy);
         }
-#endif
+        lastX = path[k]["svg:x"]->getDouble();
+        lastY = path[k]["svg:y"]->getDouble();
     }
-    double vw = qx - px;
-    double vh = qy - py;
 
-    _writeGraphicsStyle();
 
-    TagOpenElement *pDrawPathElement = new TagOpenElement("draw:path");
     WPXString sValue;
+    _writeGraphicsStyle();
+    TagOpenElement *pDrawPathElement = new TagOpenElement("draw:path");
     sValue.sprintf("gr%i", miGraphicsStyleIndex-1);
     pDrawPathElement->addAttribute("draw:style-name", sValue);
     pDrawPathElement->addAttribute("draw:text-style-name", "P1");
@@ -625,11 +818,11 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
     pDrawPathElement->addAttribute("svg:x", sValue);
     sValue = doubleToString(py); sValue.append("in");
     pDrawPathElement->addAttribute("svg:y", sValue);
-    sValue = doubleToString(vw); sValue.append("in");
+    sValue = doubleToString((qx - px)); sValue.append("in");
     pDrawPathElement->addAttribute("svg:width", sValue);
-    sValue = doubleToString(vh); sValue.append("in");
+    sValue = doubleToString((qy - py)); sValue.append("in");
     pDrawPathElement->addAttribute("svg:height", sValue);
-    sValue.sprintf("%i %i %i %i", 0, 0, (unsigned)(vw*2540), (unsigned)(vh*2540));
+    sValue.sprintf("%i %i %i %i", 0, 0, (unsigned)(2540*(qx - px)), (unsigned)(2540*(qy - py)));
     pDrawPathElement->addAttribute("svg:viewBox", sValue);
 
     sValue.clear();
@@ -643,9 +836,7 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
                 (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
             sValue.append(sElement);
         }
-        else if (path[i]["libwpg:path-action"]->getStr() == "L"
-        // approximate for the time being the elliptic arc by a line
-            || path[i]["libwpg:path-action"]->getStr() == "A")
+        else if (path[i]["libwpg:path-action"]->getStr() == "L")
         {
             sElement.sprintf("L%i %i", (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540),
                 (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
@@ -654,21 +845,21 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
         else if (path[i]["libwpg:path-action"]->getStr() == "C")
         {
             sElement.sprintf("C%i %i %i %i %i %i", (unsigned)((path[i]["svg:x1"]->getDouble()-px)*2540),
-                (int)((path[i]["svg:y1"]->getDouble()-py)*2540), (unsigned)((path[i]["svg:x2"]->getDouble()-px)*2540),
-                (int)((path[i]["svg:y2"]->getDouble()-py)*2540), (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540),
+                (unsigned)((path[i]["svg:y1"]->getDouble()-py)*2540), (unsigned)((path[i]["svg:x2"]->getDouble()-px)*2540),
+                (unsigned)((path[i]["svg:y2"]->getDouble()-py)*2540), (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540),
                 (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
             sValue.append(sElement);
         }
-#if 0
         else if (path[i]["libwpg:path-action"]->getStr() == "A")
         {
             sElement.sprintf("A%i %i %i %i %i %i %i", (unsigned)((path[i]["svg:rx"]->getDouble())*2540),
-                (int)((path[i]["svg:ry"]->getDouble())*2540), (path[i]["libwpg:rotate"] ? path[i]["libwpg:rotate"]->getInt() : 0),
-                0, 0, (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540), (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
+                (unsigned)((path[i]["svg:ry"]->getDouble())*2540), (path[i]["libwpg:rotate"] ? path[i]["libwpg:rotate"]->getInt() : 0),
+                (path[i]["libwpg:large-arc"] ? path[i]["libwpg:large-arc"]->getInt() : 1),
+                (path[i]["libwpg:sweep"] ? path[i]["libwpg:sweep"]->getInt() : 1),
+                (unsigned)((path[i]["svg:x"]->getDouble()-px)*2540), (unsigned)((path[i]["svg:y"]->getDouble()-py)*2540));
             sValue.append(sElement);
         }
-#endif
-        else if (path[i]["libwpg:path-action"]->getStr() == "Z" && i >= (path.count() - 1))
+        else if (path[i]["libwpg:path-action"]->getStr() == "Z")
             sValue.append(" Z");
     }
     pDrawPathElement->addAttribute("svg:d", sValue);
@@ -744,31 +935,76 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
         mGraphicsStrokeDashStyles.push_back(new TagCloseElement("draw:stroke-dash"));
     }
 #endif
-    if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "gradient" && mxGradient.count() >= 2)
+    if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "gradient")
     {
         TagOpenElement *pDrawGradientElement = new TagOpenElement("draw:gradient");
-        pDrawGradientElement->addAttribute("draw:style", "linear");
+        if (mxStyle["draw:style"])
+            pDrawGradientElement->addAttribute("draw:style", mxStyle["draw:style"]->getStr());
         WPXString sValue;
         sValue.sprintf("Gradient_%i", miGradientIndex++);
         pDrawGradientElement->addAttribute("draw:name", sValue);
 
         // ODG angle unit is 0.1 degree
-        double angle = mxStyle["draw:angle"] ? -mxStyle["draw:angle"]->getDouble() : 0.0;
+        double angle = mxStyle["draw:angle"] ? mxStyle["draw:angle"]->getDouble() : 0.0;
         while(angle < 0)
             angle += 360;
         while(angle > 360)
             angle -= 360;
-
         sValue.sprintf("%i", (unsigned)(angle*10));
         pDrawGradientElement->addAttribute("draw:angle", sValue);
 
-        pDrawGradientElement->addAttribute("draw:start-color", mxGradient[0]["svg:stop-color"]->getStr().cstr());
-        pDrawGradientElement->addAttribute("draw:end-color", mxGradient[1]["svg:stop-color"]->getStr().cstr());
-        pDrawGradientElement->addAttribute("draw:start-intensity", "100%");
-        pDrawGradientElement->addAttribute("draw:end-intensity", "100%");
-        pDrawGradientElement->addAttribute("draw:border", "0%");
-        mGraphicsGradientStyles.push_back(pDrawGradientElement);
-        mGraphicsGradientStyles.push_back(new TagCloseElement("draw:gradient"));
+        if (!mxGradient.count())
+        {
+            if (mxStyle["draw:start-color"])
+                pDrawGradientElement->addAttribute("draw:start-color", mxStyle["draw:start-color"]->getStr());
+            if (mxStyle["draw:end-color"])
+                pDrawGradientElement->addAttribute("draw:end-color", mxStyle["draw:end-color"]->getStr());
+
+            if (mxStyle["draw:border"])
+                pDrawGradientElement->addAttribute("draw:border", mxStyle["draw:border"]->getStr());
+            else
+                pDrawGradientElement->addAttribute("draw:border", "0%");
+
+            if (mxStyle["svg:cx"])
+                pDrawGradientElement->addAttribute("draw:cx", mxStyle["svg:cx"]->getStr());
+            else if (mxStyle["draw:cx"])
+                pDrawGradientElement->addAttribute("draw:cx", mxStyle["draw:cx"]->getStr());
+
+            if (mxStyle["svg:cy"])
+                pDrawGradientElement->addAttribute("draw:cy", mxStyle["svg:cy"]->getStr());
+            else if (mxStyle["draw:cx"])
+                pDrawGradientElement->addAttribute("draw:cx", mxStyle["svg:cx"]->getStr());
+
+            if (mxStyle["draw:start-intensity"])
+                pDrawGradientElement->addAttribute("draw:start-intensity", mxStyle["draw:start-intensity"]->getStr());
+            else
+                pDrawGradientElement->addAttribute("draw:start-intensity", "100%");
+
+            if (mxStyle["draw:border"])
+                pDrawGradientElement->addAttribute("draw:end-intensity", mxStyle["draw:end-intensity"]->getStr());
+            else
+                pDrawGradientElement->addAttribute("draw:end-intensity", "100%");
+
+            mGraphicsGradientStyles.push_back(pDrawGradientElement);
+            mGraphicsGradientStyles.push_back(new TagCloseElement("draw:gradient"));
+        }
+        else if(mxGradient.count() >= 2)
+        {
+            sValue.sprintf("%i", (unsigned)(angle*10));
+            pDrawGradientElement->addAttribute("draw:angle", sValue);
+
+            pDrawGradientElement->addAttribute("draw:start-color", mxGradient[1]["svg:stop-color"]->getStr());
+            pDrawGradientElement->addAttribute("draw:end-color", mxGradient[0]["svg:stop-color"]->getStr());
+            if (mxStyle["svg:cx"])
+                pDrawGradientElement->addAttribute("draw:cx", mxStyle["svg:cx"]->getStr());
+            if (mxStyle["svg:cy"])
+                pDrawGradientElement->addAttribute("draw:cy", mxStyle["svg:cy"]->getStr());
+            pDrawGradientElement->addAttribute("draw:start-intensity", "100%");
+            pDrawGradientElement->addAttribute("draw:end-intensity", "100%");
+            pDrawGradientElement->addAttribute("draw:border", "0%");
+            mGraphicsGradientStyles.push_back(pDrawGradientElement);
+            mGraphicsGradientStyles.push_back(new TagCloseElement("draw:gradient"));
+        }
     }
 
     TagOpenElement *pStyleStyleElement = new TagOpenElement("style:style");
@@ -781,13 +1017,18 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
 
     TagOpenElement *pStyleGraphicsPropertiesElement = new TagOpenElement("style:graphic-properties");
 
-    if(!(mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "none") && mxStyle["svg:stroke-width"] && mxStyle["svg:stroke-width"]->getDouble() > 0.0)
+    if((mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "none") ||
+       (mxStyle["svg:stroke-width"] && mxStyle["svg:stroke-width"]->getDouble() == 0.0) ||
+       (mxStyle["svg:stroke-color"] && mxStyle["svg:stroke-color"]->getStr() == "none"))
+        pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "none");
+    else
     {
         if (mxStyle["svg:stroke-width"])
             pStyleGraphicsPropertiesElement->addAttribute("svg:stroke-width", mxStyle["svg:stroke-width"]->getStr());
 
         if (mxStyle["svg:stroke-color"])
             pStyleGraphicsPropertiesElement->addAttribute("svg:stroke-color", mxStyle["svg:stroke-color"]->getStr());
+
         if (mxStyle["svg:stroke-opacity"] && mxStyle["svg:stroke-opacity"]->getDouble() != 1.0)
             pStyleGraphicsPropertiesElement->addAttribute("svg:stroke-opacity", mxStyle["svg:stroke-opacity"]->getStr());
 
@@ -803,11 +1044,12 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
         }
 #endif
     }
-    else
-        pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "none");
 
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "none")
         pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "none");
+    else
+      if (mxStyle["svg:fill-rule"])
+        pStyleGraphicsPropertiesElement->addAttribute("svg:fill-rule", mxStyle["svg:fill-rule"]->getStr());
 
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "solid")
     {
@@ -820,14 +1062,22 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
 
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "gradient")
     {
-        if (mxGradient.count() >= 2)
+        if (!mxGradient.count() || mxGradient.count() >= 2)
         {
             pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "gradient");
             sValue.sprintf("Gradient_%i", miGradientIndex-1);
             pStyleGraphicsPropertiesElement->addAttribute("draw:fill-gradient-name", sValue);
         }
         else
-            pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "none");
+        {
+            if (mxGradient[0]["svg:stop-color"])
+            {
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "solid");
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-color", mxGradient[0]["svg:stop-color"]->getStr());
+            }
+            else
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "solid");
+        }
     }
 
     mGraphicsAutomaticStyles.push_back(pStyleGraphicsPropertiesElement);

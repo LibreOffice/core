@@ -421,7 +421,7 @@ WString::Read( SvStream *pS )
 {
     OSL_TRACE("WString::Read() stream pos 0x%x", pS->Tell() );
     nOffSet = pS->Tell();
-    sal_Int8 nChars = 0;
+    sal_uInt8 nChars = 0;
     *pS >> nChars;
     sString = readUnicodeString( pS, nChars );
     return true;

@@ -80,17 +80,17 @@
 #define NMSP_REGISTRY           com::sun::star::registry
 
 
-#define REF( _def_Obj )         NMSP_UNO::Reference< _def_Obj >
-#define SEQ( _def_Obj )         NMSP_UNO::Sequence< _def_Obj >
-#define B2UCONST( _def_pChar )  (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
-#define SVG_DTD_STRING          B2UCONST( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" )
+#define REF( _def_Obj )           NMSP_UNO::Reference< _def_Obj >
+#define SEQ( _def_Obj )           NMSP_UNO::Sequence< _def_Obj >
+#define B2UCONST( _def_pChar )    (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
+#define SVG_DTD_STRING            B2UCONST( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" )
 #define SVG_TINY_DTD_STRING     B2UCONST( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG Tiny 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-tiny.dtd\">" )
 
-#define SVGWRITER_WRITE_NONE        0x00000000
-#define SVGWRITER_WRITE_FILL        0x00000001
-#define SVGWRITER_WRITE_TEXT        0x00000002
+#define SVGWRITER_WRITE_NONE    0x00000000
+#define SVGWRITER_WRITE_FILL    0x00000001
+#define SVGWRITER_WRITE_TEXT    0x00000002
 #define SVGWRITER_NO_SHAPE_COMMENTS 0x01000000
-#define SVGWRITER_WRITE_ALL         0xFFFFFFFF
+#define SVGWRITER_WRITE_ALL     0xFFFFFFFF
 
 // ----------------------
 // - SVGAttributeWriter -
@@ -104,13 +104,13 @@ class SVGAttributeWriter
 {
 private:
 
-    Font                    maCurFont;
-    Color                   maCurLineColor;
-    Color                   maCurFillColor;
-    SVGExport&              mrExport;
-    SVGFontExport&          mrFontExport;
-    SvXMLElementExport*     mpElemFont;
-    SvXMLElementExport*     mpElemPaint;
+    Font                       maCurFont;
+    Color                      maCurLineColor;
+    Color                      maCurFillColor;
+    SVGExport&                 mrExport;
+    SVGFontExport&             mrFontExport;
+    SvXMLElementExport*        mpElemFont;
+    SvXMLElementExport*        mpElemPaint;
 
                             SVGAttributeWriter();
 
@@ -165,24 +165,26 @@ class SVGActionWriter
 {
 private:
 
-    sal_Int32                               mnCurGradientId;
-    sal_Int32                               mnCurMaskId;
-    sal_Int32                               mnCurPatternId;
-    Stack                                   maContextStack;
-    ::std::auto_ptr< SVGShapeDescriptor >   mapCurShape;
-    SVGExport&                              mrExport;
-    SVGFontExport&                          mrFontExport;
-    SVGAttributeWriter*                     mpContext;
-    VirtualDevice*                          mpVDev;
-    MapMode                                 maTargetMapMode;
-    sal_uInt32                              mnInnerMtfCount;
-    sal_Bool                                mbDestroyVDev;
-    sal_Bool                                mbPaintAttrChanged;
-    sal_Bool                                mbFontAttrChanged;
-    sal_Bool                                mbClipAttrChanged;
+    sal_Int32                                   mnCurGradientId;
+    sal_Int32                                   mnCurMaskId;
+    sal_Int32                                   mnCurPatternId;
+    Stack                                       maContextStack;
+    ::std::auto_ptr< SVGShapeDescriptor >       mapCurShape;
+    SVGExport&                                  mrExport;
+    SVGFontExport&                              mrFontExport;
+    SVGAttributeWriter*                         mpContext;
+    VirtualDevice*                              mpVDev;
+    MapMode                                     maTargetMapMode;
+    sal_uInt32                                  mnInnerMtfCount;
+    sal_Bool                                    mbDestroyVDev;
+    sal_Bool                                    mbPaintAttrChanged;
+    sal_Bool                                    mbFontAttrChanged;
+    sal_Bool                                    mbClipAttrChanged;
+    sal_Bool                                    mbIsPlacehlolderShape;
+
 
     SVGAttributeWriter*     ImplAcquireContext() { maContextStack.Push( mpContext = new SVGAttributeWriter( mrExport, mrFontExport ) ); return mpContext; }
-    void                    ImplReleaseContext() { delete (SVGAttributeWriter*) maContextStack.Pop(); mpContext = (SVGAttributeWriter*) maContextStack.Top(); }
+    void                    ImplReleaseContext() { delete (SVGAttributeWriter*)    maContextStack.Pop(); mpContext = (SVGAttributeWriter*) maContextStack.Top(); }
 
     long                    ImplMap( sal_Int32 nVal ) const;
     Point&                  ImplMap( const Point& rPt, Point& rDstPt ) const;
@@ -208,8 +210,7 @@ private:
     Color                   ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
     Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
-    void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth,
-                                           sal_Bool bApplyMapping = sal_True );
+    void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor, sal_Bool bApplyMapping );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz,
                                           sal_Bool bApplyMapping = sal_True );

@@ -383,6 +383,7 @@ ScrollValue
 ScrollValueMax
 ScrollValueMin
 Segments
+SelectedItems
 SelectedPage
 Show
 ShowBorder
@@ -426,6 +427,7 @@ StartPosition
 StartWith
 StartingAngle
 State
+StringItemList
 Subtotals
 Suffix
 SwapXAndYAxis

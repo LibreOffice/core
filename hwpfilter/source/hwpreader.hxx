@@ -338,19 +338,8 @@ Sequence< OUString> HwpImportFilter::getSupportedServiceNames() throw(::com::sun
     return aRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-// The below three C functions are nessesary for this shared library is treaded as
-// UNO component library.
-/////////////////////////////////////////////////////////////////////////////////////
 extern "C"
 {
-
-    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char ** ppEnvTypeName, uno_Environment **  )
-    {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void *  )
     {
         void * pRet = 0;

@@ -61,7 +61,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace ppt {
 
 PresentationFragmentHandler::PresentationFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath ) throw()
-: FragmentHandler( rFilter, rFragmentPath )
+: FragmentHandler2( rFilter, rFragmentPath )
 , mpTextListStyle( new TextListStyle )
 {
     TextParagraphPropertiesVector& rParagraphDefaulsVector( mpTextListStyle->getListStyle() );
@@ -75,10 +75,6 @@ PresentationFragmentHandler::PresentationFragmentHandler( XmlFilterBase& rFilter
 }
 
 PresentationFragmentHandler::~PresentationFragmentHandler() throw()
-{
-
-}
-void PresentationFragmentHandler::startDocument() throw (SAXException, RuntimeException)
 {
 }
 
@@ -142,7 +138,7 @@ void ResolveTextFields( XmlFilterBase& rFilter )
     }
 }
 
-void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeException)
+void PresentationFragmentHandler::finalizeImport()
 {
     // todo: localized progress bar text
     const Reference< task::XStatusIndicator >& rxStatusIndicator( getFilter().getStatusIndicator() );
@@ -300,41 +296,36 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
 }
 
 // CT_Presentation
-Reference< XFastContextHandler > PresentationFragmentHandler::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+::oox::core::ContextHandlerRef PresentationFragmentHandler::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
     case PPT_TOKEN( presentation ):
     case PPT_TOKEN( sldMasterIdLst ):
     case PPT_TOKEN( notesMasterIdLst ):
     case PPT_TOKEN( sldIdLst ):
-        break;
+        return this;
     case PPT_TOKEN( sldMasterId ):
-        maSlideMasterVector.push_back( xAttribs->getOptionalValue( R_TOKEN( id ) ) );
-        break;
+        maSlideMasterVector.push_back( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+        return this;
     case PPT_TOKEN( sldId ):
-        maSlidesVector.push_back( xAttribs->getOptionalValue( R_TOKEN( id ) ) );
-        break;
+        maSlidesVector.push_back( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+        return this;
     case PPT_TOKEN( notesMasterId ):
-        maNotesMasterVector.push_back( xAttribs->getOptionalValue(R_TOKEN( id ) ) );
-        break;
+        maNotesMasterVector.push_back( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+        return this;
     case PPT_TOKEN( sldSz ):
-        maSlideSize = GetSize2D( xAttribs );
-        break;
+        maSlideSize = GetSize2D( rAttribs.getFastAttributeList() );
+        return this;
     case PPT_TOKEN( notesSz ):
-        maNotesSize = GetSize2D( xAttribs );
-        break;
+        maNotesSize = GetSize2D( rAttribs.getFastAttributeList() );
+        return this;
     case PPT_TOKEN( custShowLst ):
-        xRet.set( new CustomShowListContext( *this, maCustomShowList ) );
-        break;
+        return new CustomShowListContext( *this, maCustomShowList );
     case PPT_TOKEN( defaultTextStyle ):
-        xRet.set( new TextListStyleContext( *this, *mpTextListStyle ) );
-        break;
+        return new TextListStyleContext( *this, *mpTextListStyle );
     }
-    if ( !xRet.is() )
-        xRet = getFastContextHandler();
-    return xRet;
+    return this;
 }
 
 bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlideFragmentHandler,

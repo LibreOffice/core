@@ -238,6 +238,9 @@ void CellBlockBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpan
 
 CellBlock* CellBlockBuffer::getCellBlock( const CellAddress& rCellAddr )
 {
+    // Temporarily disabled. TODO: Fix this.
+    return NULL;
+
     OSL_ENSURE( rCellAddr.Row >= mnCurrRow, "CellBlockBuffer::getCellBlock - passed row out of order" );
     // prepare cell blocks, if row changes
     if( rCellAddr.Row != mnCurrRow )

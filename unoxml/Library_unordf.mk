@@ -31,7 +31,11 @@ $(eval $(call gb_Library_set_componentfile,unordf,unoxml/source/rdf/unordf))
 
 $(eval $(call gb_Library_set_include,unordf,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,unordf,\
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,unordf,\
@@ -54,5 +58,7 @@ $(eval $(call gb_Library_add_exception_objects,unordf,\
     unoxml/source/rdf/librdf_services \
 ))
 
+    $$(REDLAND_CFLAGS) \
+    $$(LIBXML_CFLAGS) \
 # vim: set noet sw=4 ts=4:
 

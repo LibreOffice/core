@@ -63,7 +63,7 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastContextHandler
 class ContextHandler : public ContextHandler_BASE
 {
 public:
-    explicit            ContextHandler( ContextHandler& rParent );
+    explicit            ContextHandler( const ContextHandler& rParent );
     virtual             ~ContextHandler();
 
     /** Returns the filter instance. */

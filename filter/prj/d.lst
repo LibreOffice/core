@@ -3,6 +3,7 @@ mkdir: %COMMON_DEST%\bin\hid
 ..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
 ..\%__SRC%\lib\lib*.so %_DEST%\lib
 ..\%__SRC%\lib\lib*.dylib %_DEST%\lib
+..\%__SRC%\lib\lib*.a %_DEST%\lib
 ..\%__SRC%\lib\imsfilter.lib %_DEST%\lib\imsfilter.lib
 ..\%__SRC%\class\*.jar %_DEST%\bin\*.jar
 ..\%__SRC%\class\XSLTFilter\*.jar %_DEST%\bin\*.jar

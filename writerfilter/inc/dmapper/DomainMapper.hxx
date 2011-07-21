@@ -106,6 +106,7 @@ public:
     void PopListProperties();
 
     bool IsOOXMLImport() const;
+    bool IsRTFImport() const;
     ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > GetTextFactory() const;
     void  AddListIDToLFOTable( sal_Int32 nAbstractNumId );
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetCurrentTextRange();

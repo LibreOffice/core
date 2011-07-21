@@ -29,20 +29,19 @@
 #ifndef OOX_PPT_TIMETARGETELEMENTCONTEXT
 #define OOX_PPT_TIMETARGETELEMENTCONTEXT
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/ppt/animationspersist.hxx"
 
 namespace oox { namespace ppt {
 
     /** context CT_TLTimeTargetElement */
     class TimeTargetElementContext
-        : public ::oox::core::ContextHandler
+        : public ::oox::core::FragmentHandler2
     {
     public:
-        TimeTargetElementContext( ::oox::core::ContextHandler& rParent, const AnimTargetElementPtr & aValue );
+        TimeTargetElementContext( ::oox::core::FragmentHandler2& rParent, const AnimTargetElementPtr & aValue );
         ~TimeTargetElementContext( ) throw( );
-        virtual void SAL_CALL endFastElement( sal_Int32 /*aElement*/ ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
     private:
         AnimTargetElementPtr mpTarget;

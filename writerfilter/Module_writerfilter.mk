@@ -28,6 +28,7 @@
 $(eval $(call gb_Module_Module,writerfilter))
 
 $(eval $(call gb_Module_add_targets,writerfilter,\
+    Library_rtftok \
     Library_writerfilter \
     Package_inc \
     Package_writerfilter_generated \
@@ -36,8 +37,5 @@ $(eval $(call gb_Module_add_targets,writerfilter,\
 #    Library_ooxml \
 #    Library_resourcemodel \
 #    Library_writerfilter_uno \
-
-	# not used
-    # Library_rtftok
 
 # vim: set noet ts=4 sw=4:

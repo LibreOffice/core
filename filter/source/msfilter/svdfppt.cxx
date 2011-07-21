@@ -127,6 +127,7 @@
 #include <vcl/virdev.hxx>
 #include <algorithm>
 #include <set>
+#include <unotools/streamwrap.hxx>
 
 // PPT ColorScheme Slots
 #define PPT_COLSCHEME                       (0x08000000)
@@ -1235,9 +1236,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         }
         if ( rPersistEntry.pSolverContainer )
         {
-            for ( SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)rPersistEntry.pSolverContainer->aCList.First();
-                pPtr; pPtr = (SvxMSDffConnectorRule*)rPersistEntry.pSolverContainer->aCList.Next() )
+            for ( size_t i = 0; i < rPersistEntry.pSolverContainer->aCList.size(); ++i )
             {
+                SvxMSDffConnectorRule* pPtr = rPersistEntry.pSolverContainer->aCList[ i ];
                 if ( rObjData.nShapeId == pPtr->nShapeC )
                     pPtr->pCObj = pRet;
                 else
@@ -1676,6 +1677,24 @@ SdrPowerPointImport::~SdrPowerPointImport()
     delete[] pPersistPtr;
 }
 
+sal_Bool PPTConvertOCXControls::ReadOCXStream( SotStorageRef& /*rSrc1*/,
+        com::sun::star::uno::Reference<
+        com::sun::star::drawing::XShape > *pShapeRef,
+        sal_Bool bFloatingCtrl )
+{
+    bool bRes = false;
+    uno::Reference< form::XFormComponent > xFComp;
+    if ( mpPPTImporter && mpPPTImporter->ReadFormControl( mxInStrm, xFComp ) )
+    {
+        if ( xFComp.is() )
+        {
+            com::sun::star::awt::Size aSz;  // not used in import
+            bRes = InsertControl( xFComp, aSz,pShapeRef,bFloatingCtrl);
+        }
+    }
+    return bRes;
+}
+
 sal_Bool PPTConvertOCXControls::InsertControl(
         const com::sun::star::uno::Reference<
         com::sun::star::form::XFormComponent > &rFComp,
@@ -1731,7 +1750,6 @@ sal_Bool PPTConvertOCXControls::InsertControl(
     }
     return bRetValue;
 };
-
 const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& PPTConvertOCXControls::GetDrawPage()
 {
     if( !xDrawPage.is() && pDocSh )
@@ -1890,10 +1908,12 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                 }
                                 if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
                                 {
-                                    PPTConvertOCXControls aPPTConvertOCXControls( pOe->pShell, eAktPageKind );
+                                    uno::Reference< io::XInputStream > xIStrm = new utl::OSeekableInputStreamWrapper(*pDest );
+                                    PPTConvertOCXControls aPPTConvertOCXControls( this, xIStrm, pOe->pShell, eAktPageKind );
                                     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
                                     if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape, sal_False ) )
                                         pRet = GetSdrObjectFromXShape( xShape );
+
                                 }
                                 if ( !pRet )
                                 {
@@ -6581,7 +6601,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             // now will search for possible textextensions such as date/time fields
                             // or ParaTabStops and append them on this textobj
                             rIn.Seek( nFilePos );
-                            List* pFieldList = NULL;
+                            ::std::vector< PPTFieldEntry* > FieldList;
                             while ( rIn.Tell() < aClientTextBoxHd.GetRecEndFilePos() )
                             {
                                 rIn >> aTextHd;
@@ -6753,20 +6773,23 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 aTextHd.SeekToEndOfRecord( rIn );
                                 if ( pEntry )
                                 {
-                                    if ( !pFieldList )
-                                        pFieldList = new List;
-                                    sal_uInt32 n;
-                                    for ( n = 0; n < pFieldList->Count(); n++ )
-                                    {   // sorting fields ( hi >> lo )
-                                        if ( ( (PPTFieldEntry*)pFieldList->GetObject( n ) )->nPos < pEntry->nPos )
+                                    // sorting fields ( hi >> lo )
+                                    ::std::vector< PPTFieldEntry* >::iterator it = FieldList.begin();
+                                    for( ; it < FieldList.end(); ++it ) {
+                                        if ( (*it)->nPos < pEntry->nPos ) {
                                             break;
+                                        }
                                     }
-                                    pFieldList->Insert( pEntry, (sal_uInt32)n );
+                                    if ( it < FieldList.end() ) {
+                                        FieldList.insert( it, pEntry );
+                                    } else {
+                                        FieldList.push_back( pEntry );
+                                    }
                                 }
                             }
-                            if ( pFieldList )
+                            if ( !FieldList.empty() )
                             {
-                                PPTFieldEntry* pFE = (PPTFieldEntry*)pFieldList->First();
+                                ::std::vector< PPTFieldEntry* >::iterator FE = FieldList.begin();
                                 List& aCharPropList = aStyleTextPropReader.aCharPropList;
 
                                 sal_Int32   i = nParagraphs - 1;
@@ -6774,21 +6797,21 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                                 // at this point we just have a list of textportions(aCharPropList)
                                 // the next while loop tries to resolve the list of fields(pFieldList)
-                                while( pFE && ( n >= 0 ) && ( i >= 0 ) )
+                                while( ( FE < FieldList.end() ) && ( n >= 0 ) && ( i >= 0 ) )
                                 {
-                                     PPTCharPropSet* pSet  = (PPTCharPropSet*)aCharPropList.GetObject( n );
+                                    PPTCharPropSet* pSet  = (PPTCharPropSet*)aCharPropList.GetObject( n );
                                     String aString( pSet->maString );
                                     sal_uInt32 nCount = aString.Len();
                                     sal_uInt32 nPos = pSet->mnOriginalTextPos + nCount;
-                                    while ( pFE && nCount-- )
+                                    while ( ( FE < FieldList.end() ) && nCount-- )
                                     {
                                         nPos--;
-                                        while ( pFE && ( pFE->nPos > nPos ) )
-                                            pFE = (PPTFieldEntry*)pFieldList->Next();
-                                        if ( !pFE )
+                                        while ( ( FE < FieldList.end() ) && ( (*FE)->nPos > nPos ) )
+                                            ++FE;
+                                        if ( !(FE < FieldList.end()) )
                                             break;
 
-                                        if ( pFE->nPos == nPos )
+                                        if ( (*FE)->nPos == nPos )
                                         {
                                             if ( aString.GetChar( (sal_uInt16)nCount ) == 0x2a )
                                             {
@@ -6800,10 +6823,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     pNewCPS->maString = String( aString, (sal_uInt16)nCount + 1, (sal_uInt16)nBehind );
                                                     aCharPropList.Insert( pNewCPS, n + 1 );
                                                 }
-                                                if ( pFE->pField2 )
+                                                if ( (*FE)->pField2 )
                                                 {
                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                    pNewCPS->mpFieldItem = pFE->pField2, pFE->pField2 = NULL;
+                                                    pNewCPS->mpFieldItem = (*FE)->pField2, (*FE)->pField2 = NULL;
                                                     aCharPropList.Insert( pNewCPS, n + 1 );
 
                                                     pNewCPS = new PPTCharPropSet( *pSet );
@@ -6816,18 +6839,18 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     pNewCPS->maString = String( aString, (sal_uInt16)0, (sal_uInt16)nCount );
                                                     aCharPropList.Insert( pNewCPS, n++ );
                                                 }
-                                                if ( pFE->pField1 )
+                                                if ( (*FE)->pField1 )
                                                 {
-                                                    pSet->mpFieldItem = pFE->pField1, pFE->pField1 = NULL;
+                                                    pSet->mpFieldItem = (*FE)->pField1, (*FE)->pField1 = NULL;
                                                 }
-                                                else if ( pFE->pString )
-                                                    pSet->maString = *pFE->pString;
+                                                else if ( (*FE)->pString )
+                                                    pSet->maString = *(*FE)->pString;
                                             }
                                             else
                                             {
-                                                if ( pFE->nTextRangeEnd )   // text range hyperlink
+                                                if ( (*FE)->nTextRangeEnd )   // text range hyperlink
                                                 {
-                                                    sal_uInt32 nHyperLen = pFE->nTextRangeEnd - nPos;
+                                                    sal_uInt32 nHyperLen = (*FE)->nTextRangeEnd - nPos;
                                                     if ( nHyperLen )
                                                     {
                                                         PPTCharPropSet* pBefCPS = NULL;
@@ -6847,11 +6870,11 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             PPTCharPropSet* pCurrent = (PPTCharPropSet*)aCharPropList.GetObject( nIdx );
                                                             sal_Int32       nNextStringLen = pCurrent->maString.Len();
 
-                                                            DBG_ASSERT( pFE->pField1, "missing field!" );
-                                                            if (!pFE->pField1)
+                                                            DBG_ASSERT( (*FE)->pField1, "missing field!" );
+                                                            if (!(*FE)->pField1)
                                                                 break;
 
-                                                            const SvxURLField* pField = (const SvxURLField*)pFE->pField1->GetField();
+                                                            const SvxURLField* pField = (const SvxURLField*)(*FE)->pField1->GetField();
 
                                                             if ( pCurrent->mpFieldItem )
                                                             {
@@ -6893,7 +6916,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             }
                                                             nIdx++;
                                                         }
-                                                        delete pFE->pField1, pFE->pField1 = NULL;
+                                                        delete (*FE)->pField1, (*FE)->pField1 = NULL;
 
                                                         if ( pBefCPS )
                                                         {
@@ -6909,9 +6932,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     }
                                     n--;
                                 }
-                                for ( void* pPtr = pFieldList->First(); pPtr; pPtr = pFieldList->Next() )
-                                    delete (PPTFieldEntry*)pPtr;
-                                delete pFieldList;
+                                for( size_t j = 0, n2 = FieldList.size(); j < n2; ++j ) {
+                                    delete FieldList[ j ];
+                                }
                             }
                             mpImplTextObj->mpParagraphList = new PPTParagraphObj*[ nParagraphs ];
                             aStyleTextPropReader.aCharPropList.First();
@@ -7500,9 +7523,9 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                 // possibly connections to the group object have to be removed.
                 if ( pSolverContainer )
                 {
-                    for ( SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)pSolverContainer->aCList.First();
-                        pPtr; pPtr = (SvxMSDffConnectorRule*)pSolverContainer->aCList.Next() )
+                    for ( size_t i = 0; i < pSolverContainer->aCList.size(); ++i )
                     {
+                        SvxMSDffConnectorRule* pPtr = pSolverContainer->aCList[ i ];
                         SdrObjListIter aIter( *pGroup, IM_DEEPWITHGROUPS );
                         while( aIter.IsMore() )
                         {

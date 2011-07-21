@@ -53,7 +53,7 @@ using namespace ::com::sun::star::animations;
 
 namespace oox { namespace ppt {
 
-    CommonBehaviorContext::CommonBehaviorContext( ContextHandler& rParent,
+    CommonBehaviorContext::CommonBehaviorContext( FragmentHandler2& rParent,
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode )
         : TimeNodeContext( rParent, PPT_TOKEN( cBhvr ), xAttribs, pNode )
@@ -69,10 +69,9 @@ namespace oox { namespace ppt {
 
 
 
-    void SAL_CALL CommonBehaviorContext::endFastElement( sal_Int32 aElement )
-        throw ( SAXException, RuntimeException)
+    void CommonBehaviorContext::onEndElement()
     {
-        switch( aElement )
+        switch( getCurrentElement() )
         {
         case PPT_TOKEN( cBhvr ):
         {
@@ -126,8 +125,7 @@ namespace oox { namespace ppt {
     }
 
 
-    void CommonBehaviorContext::characters( const OUString& aChars )
-        throw( SAXException, RuntimeException )
+    void CommonBehaviorContext::onCharacters( const OUString& aChars )
     {
         if( mbIsInAttrName )
         {
@@ -136,23 +134,17 @@ namespace oox { namespace ppt {
     }
 
 
-    Reference< XFastContextHandler > SAL_CALL CommonBehaviorContext::createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                                                                                                     const Reference< XFastAttributeList >& xAttribs )
-        throw ( SAXException, RuntimeException )
+    ::oox::core::ContextHandlerRef CommonBehaviorContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
-        Reference< XFastContextHandler > xRet;
-
         switch ( aElementToken )
         {
         case PPT_TOKEN( cTn ):
-            xRet.set( new CommonTimeNodeContext( *this, aElementToken, xAttribs, mpNode ) );
-            break;
+            return new CommonTimeNodeContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode );
         case PPT_TOKEN( tgtEl ):
-            xRet.set( new TimeTargetElementContext( *this, mpNode->getTarget() ) );
-            break;
+            return new TimeTargetElementContext( *this, mpNode->getTarget() );
         case PPT_TOKEN( attrNameLst ):
             mbInAttrList = true;
-            break;
+            return this;
         case PPT_TOKEN( attrName ):
         {
             if( mbInAttrList )
@@ -164,16 +156,13 @@ namespace oox { namespace ppt {
             {
                 OSL_TRACE( "OOX: Attribute Name outside an Attribute List" );
             }
-            break;
+            return this;
         }
         default:
             break;
         }
 
-        if( !xRet.is() )
-            xRet.set( this );
-
-        return xRet;
+        return this;
     }
 
 } }

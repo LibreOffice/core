@@ -84,7 +84,8 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)			\
-    $(LIBXML)
+    $(LIBXML)			\
+    $(SVLLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)

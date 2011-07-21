@@ -33,7 +33,13 @@
 #include "precompiled_filter.hxx"
 
 #include "svgfontexport.hxx"
+#include "svgfilter.hxx"
+#include "svgwriter.hxx"
+
+
 #include <vcl/unohelp.hxx>
+#include <vcl/font.hxx>
+#include <vcl/outdev.hxx>
 
 static const sal_Int32 nFontEM = 2048;
 

@@ -44,6 +44,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <sot/storage.hxx>
+#include <vector>
 
 class Graphic;
 class SvStream;
@@ -66,7 +67,7 @@ class MSFILTER_DLLPUBLIC DffRecordHeader
 {
 
 public:
-    sal_uInt8    nRecVer; // may be DFF_PSFLAG_CONTAINER
+    sal_uInt8   nRecVer; // may be DFF_PSFLAG_CONTAINER
     sal_uInt16  nRecInstance;
     sal_uInt16  nImpVerInst;
     sal_uInt16  nRecType;
@@ -74,12 +75,23 @@ public:
     sal_uLong   nFilePos;
 public:
     DffRecordHeader() : nRecVer(0), nRecInstance(0), nImpVerInst(0), nRecType(0), nRecLen(0), nFilePos(0) {}
-    bool IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
-    sal_uLong    GetRecBegFilePos() const { return nFilePos; }
-    sal_uLong    GetRecEndFilePos() const { return nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen; }
-    void SeekToEndOfRecord(SvStream& rIn) const { rIn.Seek(nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen ); }
-    void SeekToContent(    SvStream& rIn) const { rIn.Seek(nFilePos + DFF_COMMON_RECORD_HEADER_SIZE ); }
-    void SeekToBegOfRecord(SvStream& rIn) const { rIn.Seek( nFilePos ); }
+    bool        IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
+    sal_uLong   GetRecBegFilePos() const { return nFilePos; }
+    sal_uLong   GetRecEndFilePos() const { return nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen; }
+    bool SeekToEndOfRecord(SvStream& rIn) const
+    {
+        sal_Size nPos = nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen;
+        return nPos == rIn.Seek(nPos);
+    }
+    bool SeekToContent(SvStream& rIn) const
+    {
+        sal_Size nPos = nFilePos + DFF_COMMON_RECORD_HEADER_SIZE;
+        return nPos == rIn.Seek(nPos);
+    }
+    bool SeekToBegOfRecord(SvStream& rIn) const
+    {
+        return nFilePos == rIn.Seek(nFilePos);
+    }
 
     MSFILTER_DLLPUBLIC friend SvStream& operator>>(SvStream& rIn, DffRecordHeader& rRec);
 
@@ -97,28 +109,31 @@ class SvxMSDffManager;
 
 class MSFILTER_DLLPUBLIC DffPropSet : public Table
 {
-    protected :
+protected:
 
-        sal_uInt32          mpContents[ 1024 ];
-        DffPropFlags    mpFlags[ 1024 ];
+    sal_uInt32      mpContents[ 1024 ];
+    DffPropFlags    mpFlags[ 1024 ];
 
-    public :
+public:
 
-        DffPropSet( sal_Bool bInitialize = sal_False ){ if ( bInitialize )
-                                                memset( mpFlags, 0, 0x400 * sizeof( DffPropFlags ) ); };
+    DffPropSet( sal_Bool bInitialize = sal_False )
+    {
+        if ( bInitialize )
+            memset( mpFlags, 0, 0x400 * sizeof( DffPropFlags ) );
+    };
 
-        inline sal_Bool IsProperty( sal_uInt32 nRecType ) const { return ( mpFlags[ nRecType & 0x3ff ].bSet ); };
-        sal_Bool        IsHardAttribute( sal_uInt32 nId ) const;
-        sal_uInt32      GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault = 0 ) const;
-        /** Returns a boolean property by its real identifier. */
-        bool        GetPropertyBool( sal_uInt32 nId, bool bDefault = false ) const;
-        /** Returns a string property. */
-        ::rtl::OUString GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
-        void        SetPropertyValue( sal_uInt32 nId, sal_uInt32 nValue ) const;
-        sal_Bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
-        void        Merge( DffPropSet& rMasterPropSet ) const;
-        void        InitializePropSet() const;
-        friend SvStream& operator>>( SvStream& rIn, DffPropSet& rPropSet );
+    inline sal_Bool IsProperty( sal_uInt32 nRecType ) const { return ( mpFlags[ nRecType & 0x3ff ].bSet ); };
+    sal_Bool        IsHardAttribute( sal_uInt32 nId ) const;
+    sal_uInt32      GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault = 0 ) const;
+    /** Returns a boolean property by its real identifier. */
+    bool            GetPropertyBool( sal_uInt32 nId, bool bDefault = false ) const;
+    /** Returns a string property. */
+    ::rtl::OUString GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
+    void            SetPropertyValue( sal_uInt32 nId, sal_uInt32 nValue ) const;
+    sal_Bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
+    void            Merge( DffPropSet& rMasterPropSet ) const;
+    void            InitializePropSet() const;
+    friend SvStream& operator>>( SvStream& rIn, DffPropSet& rPropSet );
 };
 
 class SfxItemSet;
@@ -215,17 +230,20 @@ struct SvxMSDffConnectorRule
     sal_uInt32  nSpFlagsA;      // SpFlags of shape A ( the original mirror flags must be known when solving the Solver Container )
     sal_uInt32  nSpFlagsB;      // SpFlags of shape A
 
-    SdrObject* pAObj;       // pPtr of object ( corresponding to shape A )
-    SdrObject* pBObj;       //   "
-    SdrObject* pCObj;       //   "  of connector object
+    SdrObject*  pAObj;       // pPtr of object ( corresponding to shape A )
+    SdrObject*  pBObj;       //   "
+    SdrObject*  pCObj;       //   "  of connector object
 
     SvxMSDffConnectorRule() : nSpFlagsA( 0 ), nSpFlagsB( 0 ), pAObj( NULL ), pBObj( NULL ), pCObj( NULL ) {};
 
     friend SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rAtom );
 };
+
+typedef ::std::vector< SvxMSDffConnectorRule* > SvxMSDffConnectorRuleList;
+
 struct MSFILTER_DLLPUBLIC SvxMSDffSolverContainer
 {
-    List    aCList;
+    SvxMSDffConnectorRuleList   aCList;
 
             SvxMSDffSolverContainer();
             ~SvxMSDffSolverContainer();
@@ -258,11 +276,11 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
 {
     static const int RELTO_DEFAULT = 2;
 
-    SdrObject*  pObj;
-    Polygon*    pWrapPolygon;
-    char*       pClientAnchorBuffer;
+    SdrObject*      pObj;
+    Polygon*        pWrapPolygon;
+    char*           pClientAnchorBuffer;
     sal_uInt32      nClientAnchorLen;
-    char*       pClientDataBuffer;
+    char*           pClientDataBuffer;
     sal_uInt32      nClientDataLen;
     sal_uInt32      nXAlign;
     sal_uInt32      *pXRelTo;
@@ -270,24 +288,24 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     sal_uInt32      *pYRelTo;
     sal_uInt32      nLayoutInTableCell;
     sal_uInt32      nFlags;
-    long        nTextRotationAngle;
-    long        nDxTextLeft;    // Abstand der Textbox vom umgebenden Shape
-    long        nDyTextTop;
-    long        nDxTextRight;
-    long        nDyTextBottom;
-    long        nDxWrapDistLeft;
-    long        nDyWrapDistTop;
-    long        nDxWrapDistRight;
-    long        nDyWrapDistBottom;
-    long        nCropFromTop;
-    long        nCropFromBottom;
-    long        nCropFromLeft;
-    long        nCropFromRight;
-    MSDffTxId   aTextId;        // Kennungen fuer Textboxen
+    long            nTextRotationAngle;
+    long            nDxTextLeft;    // Abstand der Textbox vom umgebenden Shape
+    long            nDyTextTop;
+    long            nDxTextRight;
+    long            nDyTextBottom;
+    long            nDxWrapDistLeft;
+    long            nDyWrapDistTop;
+    long            nDxWrapDistRight;
+    long            nDyWrapDistBottom;
+    long            nCropFromTop;
+    long            nCropFromBottom;
+    long            nCropFromLeft;
+    long            nCropFromRight;
+    MSDffTxId       aTextId;        // Kennungen fuer Textboxen
     sal_uLong       nNextShapeId;   // fuer verlinkte Textboxen
     sal_uLong       nShapeId;
-    MSO_SPT     eShapeType;
-    MSO_LineStyle eLineStyle;   // Umrandungs-Arten
+    MSO_SPT         eShapeType;
+    MSO_LineStyle   eLineStyle;   // Umrandungs-Arten
     MSO_LineDashing eLineDashing;
     sal_Bool        bDrawHell       :1;
     sal_Bool        bHidden         :1;
@@ -303,11 +321,13 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     ~SvxMSDffImportRec();
     sal_Bool operator==( const SvxMSDffImportRec& rEntry ) const
     {   return nShapeId == rEntry.nShapeId; }
+
     sal_Bool operator<( const SvxMSDffImportRec& rEntry ) const
     {   return nShapeId < rEntry.nShapeId;  }
 private:
     SvxMSDffImportRec &operator=(const SvxMSDffImportRec&);
 };
+
 typedef SvxMSDffImportRec* MSDffImportRec_Ptr;
 
 // Liste aller SvxMSDffImportRec fuer eine Gruppe
@@ -345,8 +365,8 @@ struct DffObjData
     Rectangle   aBoundRect;
     Rectangle   aChildAnchor;
 
-    sal_uInt32      nShapeId;
-    sal_uInt32      nSpFlags;
+    sal_uInt32  nShapeId;
+    sal_uInt32  nSpFlags;
     MSO_SPT     eShapeType;
 
     sal_Bool bShapeType     : 1;
@@ -379,15 +399,15 @@ struct DffObjData
 
 struct DffRecordList
 {
-        sal_uInt32              nCount;
-        sal_uInt32              nCurrent;
-        DffRecordList*      pPrev;
-        DffRecordList*      pNext;
+    sal_uInt32          nCount;
+    sal_uInt32          nCurrent;
+    DffRecordList*      pPrev;
+    DffRecordList*      pNext;
 
-        DffRecordHeader     mHd[ DFF_RECORD_MANAGER_BUF_SIZE ];
+    DffRecordHeader     mHd[ DFF_RECORD_MANAGER_BUF_SIZE ];
 
-                            DffRecordList( DffRecordList* pList );
-                            ~DffRecordList();
+                        DffRecordList( DffRecordList* pList );
+                        ~DffRecordList();
 };
 
 enum DffSeekToContentMode
@@ -406,7 +426,7 @@ class MSFILTER_DLLPUBLIC DffRecordManager : public DffRecordList
         void                Clear();
         void                Consume( SvStream& rIn, sal_Bool bAppend = sal_False, sal_uInt32 nStOfs = 0 );
 
-        sal_Bool                SeekToContent( SvStream& rIn, sal_uInt16 nRecType, DffSeekToContentMode eMode = SEEK_FROM_BEGINNING );
+        sal_Bool            SeekToContent( SvStream& rIn, sal_uInt16 nRecType, DffSeekToContentMode eMode = SEEK_FROM_BEGINNING );
         DffRecordHeader*    GetRecordHeader( sal_uInt16 nRecType,  DffSeekToContentMode eMode = SEEK_FROM_BEGINNING );
 
                             DffRecordManager();
@@ -437,23 +457,23 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
     SvxMSDffBLIPInfos*      pBLIPInfos;
     SvxMSDffShapeInfos*     pShapeInfos;
     SvxMSDffShapeOrders*    pShapeOrders;
-    sal_uLong                   nDefaultFontHeight;
-    long                    nOffsDgg;
-    sal_uInt16                  nBLIPCount;
-    sal_uInt16                  nShapeCount;
+    sal_uLong               nDefaultFontHeight;
+    sal_uInt32              nOffsDgg;
+    sal_uInt16              nBLIPCount;
+    sal_uInt16              nShapeCount;
     sal_uInt32              nGroupShapeFlags;
 
     void CheckTxBxStoryChain();
-    void GetFidclData( long nOffsDgg );
+    void GetFidclData(sal_uInt32 nOffsDgg);
 
 protected :
 
-    String                  maBaseURL;
-    sal_uInt32                  mnCurMaxShapeId;    // we need this information to
-    sal_uInt32                  mnDrawingsSaved;    // access the right drawing
-    sal_uInt32                  mnIdClusters;       // while only knowing the shapeid
-    FIDCL*                  mpFidcls;
-    Table                   maDgOffsetTable;    // array of fileoffsets
+    String          maBaseURL;
+    sal_uInt32      mnCurMaxShapeId;    // we need this information to
+    sal_uInt32      mnDrawingsSaved;    // access the right drawing
+    sal_uInt32      mnIdClusters;       // while only knowing the shapeid
+    FIDCL*          mpFidcls;
+    Table           maDgOffsetTable;    // array of fileoffsets
 
     friend class DffPropertyReader;
 
@@ -470,16 +490,16 @@ protected :
     long            nEmuDiv;
     long            nPntMul;
     long            nPntDiv;
-    bool        bNeedMap;
-    sal_uInt32          nSvxMSDffSettings;
-    sal_uInt32          nSvxMSDffOLEConvFlags;
+    bool            bNeedMap;
+    sal_uInt32      nSvxMSDffSettings;
+    sal_uInt32      nSvxMSDffOLEConvFlags;
 
     /** stores a reference to an imported SdrObject with its shape id if
         it has one
     */
     SvxMSDffShapeIdContainer    maShapeIdContainer;
 
-    void GetCtrlData( long nOffsDgg );
+    void GetCtrlData(sal_uInt32 nOffsDgg);
     void GetDrawingGroupContainerData( SvStream& rSt,
                                        sal_uLong nLenDgg );
     // #156763#
@@ -522,9 +542,9 @@ protected :
 /*
         folgende Methoden sind zum Excel-Import zu ueberschreiben:
 */
-    virtual sal_Bool ProcessClientAnchor(SvStream& rStData, sal_uLong nDatLen, char*& rpBuff, sal_uInt32& rBuffLen ) const;
+    virtual sal_Bool ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen, char*& rpBuff, sal_uInt32& rBuffLen ) const;
     virtual void ProcessClientAnchor2( SvStream& rStData, DffRecordHeader& rHd, void* pData, DffObjData& );
-    virtual sal_Bool ProcessClientData(  SvStream& rStData, sal_uLong nDatLen, char*& rpBuff, sal_uInt32& rBuffLen ) const;
+    virtual sal_Bool ProcessClientData(  SvStream& rStData, sal_uInt32 nDatLen, char*& rpBuff, sal_uInt32& rBuffLen ) const;
     virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj = NULL);
     virtual sal_uLong Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong nStreamPos ) const;
     virtual bool GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
@@ -601,7 +621,7 @@ public:
 */
     SvxMSDffManager( SvStream& rStCtrl,
                      const String& rBaseURL,
-                     long      nOffsDgg,
+                     sal_uInt32 nOffsDgg,
                      SvStream* pStData,
                      SdrModel* pSdrModel_           =  0,
                      long      nApplicationScale    =  0,
@@ -613,7 +633,7 @@ public:
     // in PPT werden die Parameter DGGContainerOffset und PicStream
     // mit Hilfe einer Init Routine Uebergeben.
     SvxMSDffManager( SvStream& rStCtrl, const String& rBaseURL, MSFilterTracer* pTracer );
-    void InitSvxMSDffManager( long nOffsDgg_, SvStream* pStData_, sal_uInt32 nSvxMSDffOLEConvFlags );
+    void InitSvxMSDffManager(sal_uInt32 nOffsDgg_, SvStream* pStData_, sal_uInt32 nSvxMSDffOLEConvFlags);
     void SetDgContainer( SvStream& rSt );
 
     virtual ~SvxMSDffManager();
@@ -729,16 +749,16 @@ public:
             return pShapeOrders;
         }
 
-    void StoreShapeOrder(sal_uLong          nId,
-                         sal_uLong          nTxBx,
+    void StoreShapeOrder(sal_uLong      nId,
+                         sal_uLong      nTxBx,
                          SdrObject*     pObject,
                          SwFlyFrmFmt*   pFly = 0,
                          short          nHdFtSection = 0) const;
 
-    void ExchangeInShapeOrder(SdrObject* pOldObject,
-                              sal_uLong nTxBx,
-                              SwFlyFrmFmt* pFly,
-                              SdrObject*   pObject) const;
+    void ExchangeInShapeOrder(SdrObject*    pOldObject,
+                              sal_uLong     nTxBx,
+                              SwFlyFrmFmt*  pFly,
+                              SdrObject*    pObject) const;
 
     void RemoveFromShapeOrder( SdrObject* pObject ) const;
 
@@ -762,9 +782,10 @@ public:
 
     static sal_Bool SetPropValue(
         const ::com::sun::star::uno::Any& rAny,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                const String& rPropertyName,
-                    sal_Bool bTestPropertyAvailability = sal_False );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        const String& rPropertyName,
+        sal_Bool bTestPropertyAvailability = sal_False
+    );
 
     void insertShapeId( sal_Int32 nShapeId, SdrObject* pShape );
     void removeShapeId( SdrObject* pShape );

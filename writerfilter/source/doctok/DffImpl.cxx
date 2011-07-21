@@ -285,11 +285,6 @@ DffOPT::get_property(sal_uInt32 nPos)
     return writerfilter::Reference<Properties>::Pointer_t(pTmp);
 }
 
-sal_uInt32 DffOPT::get_extraoffset_count()
-{
-    return get_property_count();
-}
-
 sal_uInt32 DffOPT::get_extraoffset(sal_uInt32 pos)
 {
     sal_uInt32 nResult;

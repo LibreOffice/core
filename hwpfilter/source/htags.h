@@ -39,12 +39,12 @@ class HWPFile;
  */
 struct EmPicture
 {
-    int   size;
+    size_t size;
     char  name[16];
     char  type[16];
     uchar *data;
 
-    EmPicture(int size);
+    EmPicture(size_t size);
     ~EmPicture(void);
 
     bool Read(HWPFile& hwpf);

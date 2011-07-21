@@ -48,6 +48,7 @@
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/table/XCell2.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -1652,6 +1653,19 @@ void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue ) con
     Reference< XCell > xCell = getCell( rAddress );
     OSL_ENSURE( xCell.is(), "WorksheetHelper::putValue - missing cell interface" );
     if( xCell.is() ) xCell->setValue( fValue );
+}
+
+void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fValue ) const
+{
+    Reference< XCell2 > xCell( getCell( rAddress ), UNO_QUERY );
+    OSL_ENSURE( xCell.is(), "WorksheetHelper::putFormulaResult - missing cell interface" );
+    if( xCell.is() ) xCell->setFormulaResult( fValue );
+}
+
+void WorksheetHelper::putFormulaString( const CellAddress& rAddress, const OUString& rFormula ) const
+{
+    Reference< XCell2 > xCell( getCell( rAddress ), UNO_QUERY );
+    if( xCell.is() ) xCell->setFormulaString( rFormula );
 }
 
 void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText ) const

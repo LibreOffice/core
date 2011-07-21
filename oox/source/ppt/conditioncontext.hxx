@@ -46,11 +46,11 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        CondContext( ::oox::core::ContextHandler& rParent,
+        CondContext( ::oox::core::FragmentHandler2& rParent,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
                      const TimeNodePtr & pNode, AnimationCondition & aCond );
         ~CondContext( ) throw( );
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
     private:
 //      ::com::sun::star::uno::Any &         maCond;
@@ -66,13 +66,13 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        CondListContext( ::oox::core::ContextHandler& rParent,
+        CondListContext( ::oox::core::FragmentHandler2& rParent,
              sal_Int32  aElement,
              const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
              const TimeNodePtr & pNode, AnimationConditionList & aCondList );
         ~CondListContext( ) throw( );
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& /*xAttribs*/ ) throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+       virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
     private:
         AnimationConditionList     & maConditions;

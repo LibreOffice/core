@@ -37,8 +37,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-SlideMasterTextStylesContext::SlideMasterTextStylesContext( ContextHandler& rParent, SlidePersistPtr pSlidePersistPtr )
-: ContextHandler( rParent )
+SlideMasterTextStylesContext::SlideMasterTextStylesContext( FragmentHandler2& rParent, SlidePersistPtr pSlidePersistPtr )
+: FragmentHandler2( rParent )
 , mpSlidePersistPtr( pSlidePersistPtr )
 {
 }
@@ -47,10 +47,9 @@ SlideMasterTextStylesContext::~SlideMasterTextStylesContext()
 {
 }
 
-Reference< XFastContextHandler > SlideMasterTextStylesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& /* xAttribs */ ) throw (SAXException, RuntimeException)
+::oox::core::ContextHandlerRef SlideMasterTextStylesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/ )
 {
     oox::drawingml::TextListStylePtr aTextListStylePtr;
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
         case PPT_TOKEN( titleStyle ):
@@ -78,12 +77,10 @@ Reference< XFastContextHandler > SlideMasterTextStylesContext::createFastChildCo
     {                                   // are obtained. i got some documents without having the textsize set at
         for ( int i = 0; i < 9; i++ )   // any point, the master reference application is using 18pt then
             aTextListStylePtr->getListStyle()[ i ]->getTextCharacterProperties().moHeight = 1800;
-        xRet.set( new oox::drawingml::TextListStyleContext( *this, *aTextListStylePtr ) );
+        return new oox::drawingml::TextListStyleContext( *this, *aTextListStylePtr );
     }
-    if( !xRet.is() )
-        xRet.set( this );
 
-    return xRet;
+    return this;
 }
 
 } }

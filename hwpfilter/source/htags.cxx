@@ -59,9 +59,10 @@ bool HyperText::Read(HWPFile & hwpf)
 }
 
 
-EmPicture::EmPicture(int tsize):size(tsize - 32)
+EmPicture::EmPicture(size_t tsize)
+    : size(tsize >= 32 ? tsize - 32 : 0)
 {
-    if (size <= 0)
+    if (size == 0)
         data = 0;
     else
         data = new uchar[size];
@@ -82,7 +83,7 @@ EmPicture::~EmPicture(void)
 
 bool EmPicture::Read(HWPFile & hwpf)
 {
-    if (size <= 0)
+    if (size == 0)
         return false;
     hwpf.Read1b(name, 16);
     hwpf.Read1b(type, 16);

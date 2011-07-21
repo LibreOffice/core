@@ -77,6 +77,11 @@ const sal_uInt16 COMCTL_VERSION_60          = 6;
 #define AX_GUID_SCROLLBAR     "{DFD181E0-5E2F-11CE-A449-00AA004A803D}"
 #define AX_GUID_FRAME         "{6E182020-F460-11CE-9BCD-00AA00608E01}"
 
+// Html control GUID(s)
+
+#define HTML_GUID_SELECT      "{5512D122-5CC6-11CF-8D67-00AA00BDCE1D}"
+#define HTML_GUID_TEXTBOX     "{5512D124-5CC6-11CF-8D67-00AA00BDCE1D}"
+
 const sal_uInt32 AX_SYSCOLOR_WINDOWBACK     = 0x80000005;
 const sal_uInt32 AX_SYSCOLOR_WINDOWFRAME    = 0x80000006;
 const sal_uInt32 AX_SYSCOLOR_WINDOWTEXT     = 0x80000008;
@@ -853,6 +858,22 @@ public:
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 };
 
+class HtmlSelectModel : public AxListBoxModel
+{
+    com::sun::star::uno::Sequence< rtl::OUString > msListData;
+    com::sun::star::uno::Sequence< sal_Int16 > msIndices;
+public:
+    HtmlSelectModel();
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+};
+
+class HtmlTextBoxModel : public AxTextBoxModel
+{
+public:
+    explicit            HtmlTextBoxModel();
+    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+};
 // ============================================================================
 
 /** A form control embedded in a document draw page. Contains a specific model

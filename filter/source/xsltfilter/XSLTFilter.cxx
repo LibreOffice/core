@@ -588,12 +588,6 @@ using namespace XSLT;
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName,
-            uno_Environment ** /* ppEnv */)
-    {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_Char * pImplName,
             void * pServiceManager, void * /* pRegistryKey */)
     {

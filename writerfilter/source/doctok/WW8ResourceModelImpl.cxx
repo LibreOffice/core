@@ -201,12 +201,6 @@ string WW8PropertiesReference::getType() const
 }
 
 WW8BinaryObjReference::WW8BinaryObjReference
-(WW8StructBase & rParent, sal_uInt32 nOffset, sal_uInt32 nCount)
-: WW8StructBase(rParent, nOffset, nCount)
-{
-}
-
-WW8BinaryObjReference::WW8BinaryObjReference
 (WW8StructBase * pParent, sal_uInt32 nOffset, sal_uInt32 nCount)
 : WW8StructBase(pParent, nOffset, nCount)
 {
@@ -215,12 +209,6 @@ WW8BinaryObjReference::WW8BinaryObjReference
 WW8BinaryObjReference::WW8BinaryObjReference
 (WW8StructBase * pParent)
 : WW8StructBase(pParent, 0x0, pParent->getCount())
-{
-}
-
-WW8BinaryObjReference::WW8BinaryObjReference
-(WW8Stream & rStream, sal_uInt32 nOffset, sal_uInt32 nCount)
-: WW8StructBase(rStream, nOffset, nCount)
 {
 }
 

@@ -54,23 +54,10 @@ WW8PropertySetIterator::~WW8PropertySetIterator()
 {
 }
 
-WW8PropertyImpl::WW8PropertyImpl(WW8Stream & rStream,
-                                 sal_uInt32 nOffset, sal_uInt32 nCount)
-: WW8StructBase(rStream, nOffset, nCount)
-{
-}
-
 WW8PropertyImpl::WW8PropertyImpl(const WW8StructBase & rBase,
                                  sal_uInt32 nOffset,
                                  sal_uInt32 nCount)
 : WW8StructBase(rBase, nOffset, nCount)
-{
-}
-
-WW8PropertyImpl::WW8PropertyImpl(WW8StructBase * pBase,
-                                 sal_uInt32 nOffset,
-                                 sal_uInt32 nCount)
-: WW8StructBase(pBase, nOffset, nCount)
 {
 }
 
@@ -162,28 +149,6 @@ sal_uInt32 WW8PropertyImpl::getByteLength() const
     }
 
     return nParamSize + 2;
-}
-
-sal_uInt32 WW8PropertyImpl::getParamOffset() const
-{
-    sal_uInt32 nReturn = 0;
-
-    if (get_spra() == 6)
-        nReturn = 1;
-
-    switch (getId())
-    {
-    case 0xd608:
-    case 0xd609:
-        nReturn = 3;
-
-        break;
-
-    default:
-        break;
-    }
-
-    return nReturn;
 }
 
 void WW8PropertyImpl::dump(OutputWithDepth<string> & o) const

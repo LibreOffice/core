@@ -35,26 +35,25 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-    HeaderFooterContext::HeaderFooterContext( ContextHandler& rParent,
-        const Reference< XFastAttributeList >& xAttribs, HeaderFooter& rHeaderFooter )
-        : ContextHandler( rParent )
+    HeaderFooterContext::HeaderFooterContext( FragmentHandler2& rParent,
+        const AttributeList& rAttribs, HeaderFooter& rHeaderFooter )
+        : FragmentHandler2( rParent )
     {
-        AttributeList aAttribs( xAttribs );
-        if ( xAttribs->hasAttribute( XML_sldNum ) )
+        if ( rAttribs.hasAttribute( XML_sldNum ) )
         {
-            rHeaderFooter.mbSlideNumber = aAttribs.getBool( XML_sldNum, sal_True );
+            rHeaderFooter.mbSlideNumber = rAttribs.getBool( XML_sldNum, sal_True );
         }
-        if ( xAttribs->hasAttribute( XML_hdr ) )
+        if ( rAttribs.hasAttribute( XML_hdr ) )
         {
-            rHeaderFooter.mbHeader = aAttribs.getBool( XML_hdr, sal_True );
+            rHeaderFooter.mbHeader = rAttribs.getBool( XML_hdr, sal_True );
         }
-        if ( xAttribs->hasAttribute( XML_ftr ) )
+        if ( rAttribs.hasAttribute( XML_ftr ) )
         {
-            rHeaderFooter.mbFooter = aAttribs.getBool( XML_ftr, sal_True );
+            rHeaderFooter.mbFooter = rAttribs.getBool( XML_ftr, sal_True );
         }
-        if ( xAttribs->hasAttribute( XML_dt ) )
+        if ( rAttribs.hasAttribute( XML_dt ) )
         {
-            rHeaderFooter.mbDateTime = aAttribs.getBool( XML_dt, sal_True );
+            rHeaderFooter.mbDateTime = rAttribs.getBool( XML_dt, sal_True );
         }
     }
 

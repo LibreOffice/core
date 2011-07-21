@@ -50,24 +50,17 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        CommonBehaviorContext( ::oox::core::ContextHandler& rParent,
+        CommonBehaviorContext( ::oox::core::FragmentHandler2& rParent,
              const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
              const TimeNodePtr & pNode );
         ~CommonBehaviorContext( )
             throw( );
 
-        virtual void SAL_CALL endFastElement( sal_Int32 aElement )
-            throw ( ::com::sun::star::xml::sax::SAXException,
-                            ::com::sun::star::uno::RuntimeException );
+        virtual void onEndElement();
 
-        virtual void SAL_CALL characters( const ::rtl::OUString& aChars )
-            throw ( ::com::sun::star::xml::sax::SAXException,
-                            ::com::sun::star::uno::RuntimeException );
+        virtual void onCharacters( const ::rtl::OUString& aChars );
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken,
-                                                                                                                                                                                                                                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& /*xAttribs*/ )
-            throw ( ::com::sun::star::xml::sax::SAXException,
-                            ::com::sun::star::uno::RuntimeException );
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
     private:
         bool              mbInAttrList;

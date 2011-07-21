@@ -2454,42 +2454,36 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplWriteLong( sal_Int32 nNumber, sal_uLong nMode )
+void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
 {
-    const ByteString aNumber( ByteString::CreateFromInt32( nNumber ) );
-    sal_uLong nLen = aNumber.Len();
-    mnCursorPos += nLen;
-    for ( sal_uInt16 n = 0; n < nLen; n++ )
-        *mpPS << aNumber.GetChar( n );
-    ImplExecMode( nMode );
+    const rtl::OString aNumber(rtl::OString::valueOf(nNumber));
+    mnCursorPos += aNumber.getLength();
+    *mpPS << aNumber.getStr();
+    ImplExecMode(nMode);
 }
 
 //---------------------------------------------------------------------------------
 
 void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
 {
-    sal_Int32 nLength;
-
     sal_Int32   nPTemp = (sal_Int32)fNumber;
     sal_Int32   nATemp = labs( (sal_Int32)( ( fNumber - nPTemp ) * 100000 ) );
 
     if ( !nPTemp && nATemp && ( fNumber < 0.0 ) )
         *mpPS << (sal_Char)'-';
 
-    ByteString aNumber1( ByteString::CreateFromInt32( nPTemp ) );
-    nLength = aNumber1.Len();
-    mnCursorPos += nLength;
-    for ( sal_Int32 n = 0; n < nLength; n++ )
-        *mpPS << aNumber1.GetChar( (sal_uInt16)n );
+    const rtl::OString aNumber1(rtl::OString::valueOf(nPTemp));
+    *mpPS << aNumber1.getStr();
+    mnCursorPos += aNumber1.getLength();
 
     if ( nATemp )
     {
         int zCount = 0;
         *mpPS << (sal_uInt8)'.';
         mnCursorPos++;
-        const ByteString aNumber2( ByteString::CreateFromInt32( nATemp ) );
+        const rtl::OString aNumber2(rtl::OString::valueOf(nATemp));
 
-        sal_Int16 n, nLen = aNumber2.Len();
+        sal_Int16 n, nLen = aNumber2.getLength();
         if ( nLen < 8 )
         {
             mnCursorPos += 6 - nLen;
@@ -2501,9 +2495,9 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
         mnCursorPos += nLen;
         for ( n = 0; n < nLen; n++ )
         {
-            *mpPS << aNumber2.GetChar( n );
+            *mpPS << aNumber2[n];
             zCount--;
-            if ( aNumber2.GetChar( n ) != '0' )
+            if ( aNumber2[n] != '0' )
                 zCount = 0;
         }
         if ( zCount )
@@ -2524,8 +2518,8 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
         nNumber = -nNumber;
         mnCursorPos++;
     }
-    const ByteString aScaleFactor( ByteString::CreateFromInt32( nNumber ) );
-    sal_uLong nLen = aScaleFactor.Len();
+    const rtl::OString aScaleFactor(rtl::OString::valueOf(nNumber));
+    sal_uLong nLen = aScaleFactor.getLength();
     long nStSize =  ( nCount + 1 ) - nLen;
     if ( nStSize >= 1 )
     {
@@ -2549,7 +2543,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
             *mpPS << (sal_uInt8)'.';
             mnCursorPos++;
         }
-        *mpPS << aScaleFactor.GetChar( n );
+        *mpPS << aScaleFactor[n];
     }
     ImplExecMode( nMode );
 }

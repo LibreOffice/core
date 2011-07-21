@@ -70,7 +70,9 @@ namespace
         int m_nLoadedDocs;
     };
 
-    LotusWordProTest::LotusWordProTest() : m_aSrcRoot( RTL_CONSTASCII_USTRINGPARAM( "file://" ) ), m_nLoadedDocs(0)
+    LotusWordProTest::LotusWordProTest()
+        : m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://" ))
+        , m_nLoadedDocs(0)
     {
         m_xContext = cppu::defaultBootstrap_InitialComponentContext();
         m_xFactory = m_xContext->getServiceManager();

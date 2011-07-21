@@ -37,7 +37,7 @@ $(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writer
 
 $(eval $(call gb_Library_set_include,writerfilter,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
+))
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source/ooxml \
@@ -45,6 +45,11 @@ $(eval $(call gb_Library_set_include,writerfilter,\
 	-I$(realpath $(SRCDIR)/writerfilter/source/doctok) \
 	-I$(realpath $(SRCDIR)/writerfilter/source/ooxml) \
 	-I$(realpath $(SRCDIR)/writerfilter/source/dmapper) \
+))
+
+$(eval $(call gb_Library_add_api,writerfilter,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter))
@@ -62,8 +67,10 @@ $(eval $(call gb_Library_add_linked_libs,writerfilter,\
     i18nisolang1 \
     i18npaper \
     oox \
+    rtftok \
     sal \
     sot \
+    svt \
     tl \
     utl \
     $(gb_STDLIBS) \

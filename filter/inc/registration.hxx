@@ -49,17 +49,6 @@ namespace comphelper{
 
 /** TODO    doc
  */
-#define _COMPHELPER_COMPONENT_GETIMPLEMENTATIONENVIRONMENT                                                          \
-    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char**        ppEnvironmentTypeName,  \
-                                                                          uno_Environment** /* ppEnvironment */ )   \
-    {                                                                                                               \
-        *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;                                                \
-    }
-
-//_______________________________________________
-
-/** TODO    doc
- */
 #define _COMPHELPER_MULTIINSTANCEFACTORY(IMPLEMENTATIONNAME, SERVICENAMES, FACTORYMETHOD)   \
     if (IMPLEMENTATIONNAME == sImplName)                                                    \
         xFactory = ::cppu::createSingleFactory(xSMGR             ,                          \

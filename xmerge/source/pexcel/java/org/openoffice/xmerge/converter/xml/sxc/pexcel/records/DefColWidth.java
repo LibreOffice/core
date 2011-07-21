@@ -36,7 +36,7 @@ import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
- * Represents a BIFF record defiuning the defualt column width
+ * Represents a BIFF record defining the default column width
  */
 public class DefColWidth implements BIFFRecord {
 

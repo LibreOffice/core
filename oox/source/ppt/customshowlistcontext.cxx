@@ -34,24 +34,22 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-class CustomShowContext : public ::oox::core::ContextHandler
+class CustomShowContext : public ::oox::core::FragmentHandler2
 {
     CustomShow mrCustomShow;
 
 public:
-    CustomShowContext( ::oox::core::ContextHandler& rParent,
+    CustomShowContext( ::oox::core::FragmentHandler2& rParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
             CustomShow& rCustomShow );
     ~CustomShowContext( );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-        createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& /*xAttribs*/ )
-            throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 };
 
-CustomShowContext::CustomShowContext( ContextHandler& rParent,
+CustomShowContext::CustomShowContext( FragmentHandler2& rParent,
     const Reference< XFastAttributeList >& rxAttribs,
         CustomShow& rCustomShow )
-: ContextHandler( rParent )
+: FragmentHandler2( rParent )
 , mrCustomShow( rCustomShow )
 {
     mrCustomShow.maName = rxAttribs->getOptionalValue( XML_name );
@@ -62,29 +60,25 @@ CustomShowContext::~CustomShowContext( )
 {
 }
 
-Reference< XFastContextHandler > SAL_CALL CustomShowContext::createFastChildContext( sal_Int32 aElementToken,
-    const Reference< XFastAttributeList >& xAttribs )
-        throw ( SAXException, RuntimeException )
+::oox::core::ContextHandlerRef CustomShowContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
         case PPT_TOKEN( sld ) :
-            mrCustomShow.maSldLst.push_back( xAttribs->getOptionalValue( R_TOKEN( id ) ) );
+            mrCustomShow.maSldLst.push_back( rAttribs.getString( R_TOKEN( id ), rtl::OUString() ) );
+            return this;
         default:
         break;
     }
-    if( !xRet.is() )
-        xRet.set( this );
 
-    return xRet;
+    return this;
 }
 
 //---------------------------------------------------------------------------
 
-CustomShowListContext::CustomShowListContext( ContextHandler& rParent,
+CustomShowListContext::CustomShowListContext( FragmentHandler2& rParent,
     std::vector< CustomShow >& rCustomShowList )
-: ContextHandler( rParent )
+: FragmentHandler2( rParent )
 , mrCustomShowList( rCustomShowList )
 {
 }
@@ -93,26 +87,21 @@ CustomShowListContext::~CustomShowListContext( )
 {
 }
 
-Reference< XFastContextHandler > SAL_CALL CustomShowListContext::createFastChildContext( sal_Int32 aElementToken,
-    const Reference< XFastAttributeList >& xAttribs )
-        throw ( SAXException, RuntimeException )
+::oox::core::ContextHandlerRef CustomShowListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
         case PPT_TOKEN( custShow ) :
         {
             CustomShow aCustomShow;
             mrCustomShowList.push_back( aCustomShow );
-            xRet = new CustomShowContext( *this, xAttribs, mrCustomShowList.back() );
+            return new CustomShowContext( *this, rAttribs.getFastAttributeList(), mrCustomShowList.back() );
         }
         default:
         break;
     }
-    if( !xRet.is() )
-        xRet.set( this );
 
-    return xRet;
+    return this;
 }
 
 

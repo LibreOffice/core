@@ -29,18 +29,18 @@
 #ifndef OOX_POWERPOINT_BACKGROUNDPROPERTIES_HXX
 #define OOX_POWERPOINT_BACKGROUNDPROPERTIES_HXX
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 
 namespace oox { namespace ppt {
 
 // ---------------------------------------------------------------------
 
-class BackgroundPropertiesContext : public ::oox::core::ContextHandler
+class BackgroundPropertiesContext : public ::oox::core::FragmentHandler2
 {
 public:
-    BackgroundPropertiesContext( ::oox::core::ContextHandler& rParent, ::oox::drawingml::FillProperties& rFillProperties ) throw();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    BackgroundPropertiesContext( ::oox::core::FragmentHandler2& rParent, ::oox::drawingml::FillProperties& rFillProperties );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
 protected:
     ::oox::drawingml::FillProperties& mrFillProperties;

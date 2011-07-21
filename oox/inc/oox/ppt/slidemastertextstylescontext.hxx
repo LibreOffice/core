@@ -31,17 +31,17 @@
 
 #include "oox/drawingml/theme.hxx"
 #include "oox/core/contexthandler.hxx"
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/ppt/slidepersist.hxx"
 
 namespace oox { namespace ppt {
 
-class SlideMasterTextStylesContext : public oox::core::ContextHandler
+class SlideMasterTextStylesContext : public oox::core::FragmentHandler2
 {
 public:
-    SlideMasterTextStylesContext( ::oox::core::ContextHandler& rParent, SlidePersistPtr pSlidePersistPtr );
+    SlideMasterTextStylesContext( ::oox::core::FragmentHandler2& rParent, SlidePersistPtr pSlidePersistPtr );
     ~SlideMasterTextStylesContext();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
 
 protected:
     SlidePersistPtr     mpSlidePersistPtr;

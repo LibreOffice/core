@@ -1634,7 +1634,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PBrcBetween:   // sprmPBrcBetween
         {
             //in binary format the borders are directly provided in OOXML they are inside of properties
-            if( IsOOXMLImport() )
+            if( IsOOXMLImport() || IsRTFImport() )
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
@@ -1968,7 +1968,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     break;
                     case NS_sprm::LN_CFDStrike : /*sprmCFDStrike double strike through*/
                         rContext->Insert(ePropertyId, true,
-                                         uno::makeAny( awt::FontStrikeout::DOUBLE ) );
+                                         uno::makeAny( nIntValue ? awt::FontStrikeout::DOUBLE : awt::FontStrikeout::NONE ) );
                     break;
                     case NS_sprm::LN_CFOutline: /*sprmCFOutline*/
                     case NS_sprm::LN_CFShadow: /*sprmCFShadow*/
@@ -2085,7 +2085,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert(PROP_CHAR_CHAR_KERNING, true, uno::makeAny( sal_Int16(ConversionHelper::convertTwipToMM100(sal_Int16(nIntValue))) ) );
         break;
     case NS_sprm::LN_CHpsKern:  // sprmCHpsKern    auto kerning is bound to a minimum font size in Word - but not in Writer :-(
-        rContext->Insert(PROP_CHAR_AUTO_KERNING, true, uno::makeAny( true ) );
+        rContext->Insert(PROP_CHAR_AUTO_KERNING, true, uno::makeAny( sal_Bool(nIntValue) ) );
         break;
     case NS_sprm::LN_CMajority50:
         break;  // sprmCMajority50
@@ -2684,9 +2684,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;
     case 0x6877: //underlining color
         {
-            sal_Int32 nColor = ConversionHelper::ConvertColor(nIntValue);
             rContext->Insert(PROP_CHAR_UNDERLINE_HAS_COLOR, true, uno::makeAny( true ) );
-            rContext->Insert(PROP_CHAR_UNDERLINE_COLOR, true, uno::makeAny( nColor ) );
+            rContext->Insert(PROP_CHAR_UNDERLINE_COLOR, true, uno::makeAny( nIntValue ) );
         }
         break;
     case 0x6815:
@@ -3675,6 +3674,11 @@ sal_Unicode DomainMapper::getFillCharFromValue(const sal_Int32 nIntValue)
 bool DomainMapper::IsOOXMLImport() const
 {
     return m_pImpl->IsOOXMLImport();
+}
+
+bool DomainMapper::IsRTFImport() const
+{
+    return m_pImpl->IsRTFImport();
 }
 
 uno::Reference < lang::XMultiServiceFactory > DomainMapper::GetTextFactory() const

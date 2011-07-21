@@ -374,7 +374,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
 // END
 
     CommonTimeNodeContext::CommonTimeNodeContext(
-            ContextHandler& rParent,
+            FragmentHandler2& rParent,
             sal_Int32  aElement,
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode )
@@ -614,39 +614,34 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
     }
 
 
-    void SAL_CALL CommonTimeNodeContext::endFastElement( sal_Int32 aElement ) throw ( SAXException, RuntimeException)
+    void CommonTimeNodeContext::onEndElement()
     {
-        if( aElement == ( PPT_TOKEN( iterate ) ) )
+        if( isCurrentElement( PPT_TOKEN( iterate ) ) )
         {
             mbIterate = false;
         }
     }
 
 
-    Reference< XFastContextHandler > SAL_CALL CommonTimeNodeContext::createFastChildContext( ::sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw ( SAXException, RuntimeException )
+    ::oox::core::ContextHandlerRef CommonTimeNodeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
-        Reference< XFastContextHandler > xRet;
 
         switch ( aElementToken )
         {
         case PPT_TOKEN( childTnLst ):
         case PPT_TOKEN( subTnLst ):
-            xRet.set( new TimeNodeListContext( *this, mpNode->getChildren() ) );
-            break;
+            return new TimeNodeListContext( *this, mpNode->getChildren() );
 
         case PPT_TOKEN( stCondLst ):
-            xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode, mpNode->getStartCondition() ) );
-            break;
+            return new CondListContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode, mpNode->getStartCondition() );
         case PPT_TOKEN( endCondLst ):
-            xRet.set( new CondListContext( *this, aElementToken, xAttribs, mpNode, mpNode->getEndCondition() ) );
-            break;
+            return new CondListContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode, mpNode->getEndCondition() );
 
         case PPT_TOKEN( endSync ):
-            xRet.set( new CondContext( *this, xAttribs, mpNode, mpNode->getEndSyncValue() ) );
-            break;
+            return new CondContext( *this, rAttribs.getFastAttributeList(), mpNode, mpNode->getEndSyncValue() );
         case PPT_TOKEN( iterate ):
         {
-            sal_Int32 nVal = xAttribs->getOptionalValueToken( XML_type, XML_el );
+            sal_Int32 nVal = rAttribs.getToken( XML_type, XML_el );
             if( nVal != 0 )
             {
                 // TODO put that in a function
@@ -671,37 +666,31 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
                 mpNode->getNodeProperties()[ NP_ITERATETYPE ] <<= nEnum;
             }
             // in case of exception we ignore the whole tag.
-            AttributeList attribs( xAttribs );
             // TODO what to do with this
-            /*bool bBackwards =*/ attribs.getBool( XML_backwards, false );
+            /*bool bBackwards =*/ rAttribs.getBool( XML_backwards, false );
             mbIterate = true;
-            break;
+            return this;
         }
         case PPT_TOKEN( tmAbs ):
             if( mbIterate )
             {
-                AttributeList attribs( xAttribs );
-                double fTime = attribs.getUnsigned( XML_val, 0 );
+                double fTime = rAttribs.getUnsigned( XML_val, 0 );
                 // time in ms. property is in % TODO
                 mpNode->getNodeProperties()[ NP_ITERATEINTERVAL ] <<= fTime;
             }
-            break;
+            return this;
         case PPT_TOKEN( tmPct ):
             if( mbIterate )
             {
-                AttributeList attribs( xAttribs );
-                double fPercent = (double)attribs.getUnsigned( XML_val, 0 ) / 100000.0;
+                double fPercent = (double)rAttribs.getUnsigned( XML_val, 0 ) / 100000.0;
                 mpNode->getNodeProperties()[ NP_ITERATEINTERVAL ] <<= fPercent;
             }
-            break;
+            return this;
         default:
             break;
         }
 
-        if( !xRet.is() )
-            xRet.set( this );
-
-        return xRet;
+        return this;
     }
 
 } }

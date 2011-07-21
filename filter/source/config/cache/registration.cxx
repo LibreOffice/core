@@ -99,9 +99,6 @@ static void InitConstants()
     theConstantsInitializer::get();
 }
 
-// extern "C" component_getImplementationEnvironment()
-_COMPHELPER_COMPONENT_GETIMPLEMENTATIONENVIRONMENT
-
 // extern "C" component_getFactory()
 _COMPHELPER_COMPONENT_GETFACTORY
 (

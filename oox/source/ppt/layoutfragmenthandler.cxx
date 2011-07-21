@@ -60,27 +60,20 @@ LayoutFragmentHandler::~LayoutFragmentHandler()
 
 }
 
-Reference< XFastContextHandler > LayoutFragmentHandler::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
-    throw (SAXException, RuntimeException)
+ContextHandlerRef LayoutFragmentHandler::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet = getFastContextHandler();
     switch( aElementToken )
     {
         case PPT_TOKEN( sldLayout ):        // CT_SlideLayout
-            mpSlidePersistPtr->setLayoutValueToken( xAttribs->getOptionalValueToken( XML_type, 0 ) );   // CT_SlideLayoutType
+            mpSlidePersistPtr->setLayoutValueToken( rAttribs.getToken( XML_type, 0 ) ); // CT_SlideLayoutType
         break;
         case PPT_TOKEN( hf ):               // CT_HeaderFooter
-            xRet.set( new HeaderFooterContext( *this, xAttribs, mpSlidePersistPtr->getHeaderFooter() ) );
+            return new HeaderFooterContext( *this, rAttribs, mpSlidePersistPtr->getHeaderFooter() );
         break;
         default:
-            xRet.set( SlideFragmentHandler::createFastChildContext( aElementToken, xAttribs ) );
+            return SlideFragmentHandler::onCreateContext( aElementToken, rAttribs );
     }
-    return xRet;
-}
-
-void SAL_CALL LayoutFragmentHandler::endDocument()
-    throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
-{
+    return this;
 }
 
 } }

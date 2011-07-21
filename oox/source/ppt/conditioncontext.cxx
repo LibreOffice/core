@@ -51,7 +51,7 @@ using namespace ::com::sun::star::animations;
 
 namespace oox { namespace ppt {
 
-    CondContext::CondContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs,
+    CondContext::CondContext( FragmentHandler2& rParent, const Reference< XFastAttributeList >& xAttribs,
                 const TimeNodePtr & pNode, AnimationCondition & aValue )
         :  TimeNodeContext( rParent, PPT_TOKEN( cond ), xAttribs, pNode )
         , maCond( aValue )
@@ -116,10 +116,8 @@ namespace oox { namespace ppt {
         }
     }
 
-    Reference< XFastContextHandler > SAL_CALL CondContext::createFastChildContext( ::sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw ( SAXException, RuntimeException )
+    ::oox::core::ContextHandlerRef CondContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
     {
-        Reference< XFastContextHandler > xRet;
-
         switch( aElementToken )
         {
         case PPT_TOKEN( rtn ):
@@ -127,7 +125,7 @@ namespace oox { namespace ppt {
             // ST_TLTriggerRuntimeNode { first, last, all }
             sal_Int32 aTok;
             sal_Int16 nEnum;
-            aTok = xAttribs->getOptionalValueToken( XML_val, XML_first );
+            aTok = rAttribs.getToken( XML_val, XML_first );
             switch( aTok )
             {
             case XML_first:
@@ -144,28 +142,23 @@ namespace oox { namespace ppt {
             }
             maCond.mnType = aElementToken;
             maCond.maValue = makeAny( nEnum );
-            break;
+            return this;
         }
         case PPT_TOKEN( tn ):
         {
             maCond.mnType = aElementToken;
-            AttributeList attribs( xAttribs );
-            sal_uInt32 nId = attribs.getUnsigned( XML_val, 0 );
+            sal_uInt32 nId = rAttribs.getUnsigned( XML_val, 0 );
             maCond.maValue = makeAny( nId );
-            break;
+            return this;
         }
         case PPT_TOKEN( tgtEl ):
             // CT_TLTimeTargetElement
-            xRet.set( new TimeTargetElementContext( *this, maCond.getTarget() ) );
-            break;
+            return new TimeTargetElementContext( *this, maCond.getTarget() );
         default:
             break;
         }
 
-        if( !xRet.is() )
-            xRet.set( this );
-
-        return xRet;
+        return this;
 
     }
 
@@ -173,7 +166,7 @@ namespace oox { namespace ppt {
 
     /** CT_TLTimeConditionList */
     CondListContext::CondListContext(
-            ContextHandler& rParent, sal_Int32  aElement,
+            FragmentHandler2& rParent, sal_Int32  aElement,
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode,
             AnimationConditionList & aCond )
@@ -187,25 +180,19 @@ namespace oox { namespace ppt {
     {
     }
 
-    Reference< XFastContextHandler > CondListContext::createFastChildContext( ::sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs ) throw ( SAXException, RuntimeException )
+    ::oox::core::ContextHandlerRef CondListContext::onCreateContext( sal_Int32 aElement, const AttributeList& rAttribs )
     {
-        Reference< XFastContextHandler > xRet;
-
         switch( aElement )
         {
         case PPT_TOKEN( cond ):
             // add a condition to the list
             maConditions.push_back( AnimationCondition() );
-            xRet.set( new CondContext( *this, xAttribs, mpNode, maConditions.back() ) );
+            return new CondContext( *this, rAttribs.getFastAttributeList(), mpNode, maConditions.back() );
             break;
         default:
             break;
         }
-
-        if( !xRet.is() )
-            xRet.set( this );
-
-        return xRet;
+        return this;
     }
 
 

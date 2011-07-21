@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="unoxml"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.xml.dom.DocumentBuilder">
     <service name="com.sun.star.xml.dom.DocumentBuilder"/>

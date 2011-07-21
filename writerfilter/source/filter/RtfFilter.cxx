@@ -32,10 +32,16 @@
 #include <osl/module.hxx>
 #include <tools/solar.h>
 #include <RtfFilter.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <dmapper/DomainMapper.hxx>
+#include <rtftok/RTFDocument.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <svtools/miscopt.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
+using ::comphelper::MediaDescriptor;
 
 RtfFilter::RtfFilter( const uno::Reference< uno::XComponentContext >& rxContext)  :
     m_xContext( rxContext )
@@ -65,6 +71,39 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     }
     else if ( m_xDstDoc.is() )
     {
+        SvtMiscOptions aMiscOptions;
+        if (aMiscOptions.IsExperimentalMode())
+        {
+            MediaDescriptor aMediaDesc( aDescriptor );
+#ifdef DEBUG_IMPORT
+            OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
+            ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
+
+            writerfilter::TagLogger::Pointer_t dmapperLogger
+            (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
+            dmapperLogger->setFileName(sURLc);
+            dmapperLogger->startDocument();
+#endif
+            uno::Reference< io::XInputStream > xInputStream;
+
+            aMediaDesc.addInputStream();
+            aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] >>= xInputStream;
+
+            uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_FRAME(),
+                    uno::Reference<frame::XFrame>());
+
+            writerfilter::Stream::Pointer_t pStream(
+                    new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, writerfilter::dmapper::DOCUMENT_RTF));
+            writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
+                    writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame));
+            pDocument->resolve(*pStream);
+#ifdef DEBUG_IMPORT
+            dmapperLogger->endDocument();
+#endif
+            return sal_True;
+        }
+
+        // if not, then use the old importer
         uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
         uno::Reference< uno::XInterface > xIfc( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.RtfImport" ))), uno::UNO_QUERY_THROW);
         if (!xIfc.is())

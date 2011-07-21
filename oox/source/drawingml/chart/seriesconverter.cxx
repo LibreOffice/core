@@ -35,6 +35,7 @@
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <basegfx/numeric/ftools.hxx>
 #include "oox/drawingml/chart/datasourceconverter.hxx"
 #include "oox/drawingml/chart/seriesmodel.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
@@ -58,6 +59,15 @@ using ::rtl::OUString;
 // ============================================================================
 
 namespace {
+
+/** nastied-up sgn function - employs some gratuity around 0 - values
+   smaller than 0.33 are clamped to 0
+ */
+int lclSgn( double nVal )
+{
+    const int intVal=nVal*3;
+    return intVal == 0 ? 0 : (intVal < 0 ? -1 : 1);
+}
 
 Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
         const ConverterRoot& rParent,
@@ -114,6 +124,13 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
 
     bool bShowValue   = !rDataLabel.mbDeleted && rDataLabel.mobShowVal.get( false );
     bool bShowPercent = !rDataLabel.mbDeleted && rDataLabel.mobShowPercent.get( false ) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE);
+    if( bShowValue &&
+        !bShowPercent && rTypeInfo.meTypeCategory == TYPECATEGORY_PIE &&
+        rDataLabel.maNumberFormat.maFormatCode.indexOfAsciiL("%", 1) >= 0 )
+    {
+        bShowValue = false;
+        bShowPercent = true;
+    }
     bool bShowCateg   = !rDataLabel.mbDeleted && rDataLabel.mobShowCatName.get( false );
     bool bShowSymbol  = !rDataLabel.mbDeleted && rDataLabel.mobShowLegendKey.get( false );
 
@@ -178,6 +195,27 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     {
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false );
+
+        if( !mrModel.mxLayout->mbAutoLayout )
+        {
+            // bnc#694340 - nasty hack - chart2 cannot individually
+            // place data labels, let's try to find a useful
+            // compromise instead
+            namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
+            const sal_Int32 aPositionsLookupTable[] =
+                {
+                    csscd::TOP_LEFT,    csscd::TOP,    csscd::TOP_RIGHT,
+                    csscd::LEFT,        csscd::CENTER, csscd::RIGHT,
+                    csscd::BOTTOM_LEFT, csscd::BOTTOM, csscd::BOTTOM_RIGHT
+                };
+            const double nMax=std::max(
+                fabs(mrModel.mxLayout->mfX),
+                fabs(mrModel.mxLayout->mfY));
+            const int simplifiedX=lclSgn(mrModel.mxLayout->mfX/nMax);
+            const int simplifiedY=lclSgn(mrModel.mxLayout->mfY/nMax);
+            aPropSet.setProperty( PROP_LabelPlacement,
+                                  aPositionsLookupTable[ simplifiedX+1 + 3*(simplifiedY+1) ] );
+        }
     }
     catch( Exception& )
     {
@@ -206,6 +244,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     // data point label settings
     for( DataLabelsModel::DataLabelVector::iterator aIt = mrModel.maPointLabels.begin(), aEnd = mrModel.maPointLabels.end(); aIt != aEnd; ++aIt )
     {
+        (*aIt)->maNumberFormat.maFormatCode = mrModel.maNumberFormat.maFormatCode;
         DataLabelConverter aLabelConv( *this, **aIt );
         aLabelConv.convertFromModel( rxDataSeries, rTypeGroup );
     }
@@ -596,6 +635,12 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     ModelRef< DataLabelsModel > xLabels = mrModel.mxLabels.is() ? mrModel.mxLabels : rTypeGroup.getModel().mxLabels;
     if( xLabels.is() )
     {
+        if( xLabels->maNumberFormat.maFormatCode.isEmpty() )
+        {
+            // Use number format code from Value series
+            DataSourceModel* pValues = mrModel.maSources.get( SeriesModel::VALUES ).get();
+            xLabels->maNumberFormat.maFormatCode = pValues->mxDataSeq->maFormatCode;
+        }
         DataLabelsConverter aLabelsConv( *this, *xLabels );
         aLabelsConv.convertFromModel( xDataSeries, rTypeGroup );
     }

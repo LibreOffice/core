@@ -59,7 +59,7 @@ using namespace ::com::sun::star::container;
 namespace oox { namespace ppt {
 
 SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pPersistPtr, const ShapeLocation eShapeLocation ) throw()
-: FragmentHandler( rFilter, rFragmentPath )
+: FragmentHandler2( rFilter, rFragmentPath )
 , mpSlidePersistPtr( pPersistPtr )
 , meShapeLocation( eShapeLocation )
 {
@@ -75,109 +75,102 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
     mpSlidePersistPtr->getDrawing()->convertAndInsert();
 }
 
-Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+::oox::core::ContextHandlerRef SlideFragmentHandler::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-    AttributeList aAttribs( xAttribs );
-
     switch( aElementToken )
     {
     case PPT_TOKEN( sldMaster ):        // CT_SlideMaster
     case PPT_TOKEN( handoutMaster ):    // CT_HandoutMaster
     case PPT_TOKEN( sld ):              // CT_CommonSlideData
     {
-        AttributeList attribs( xAttribs );
-
         Reference< XDrawPage > xSlide( mpSlidePersistPtr->getPage() );
         PropertyMap aPropMap;
         PropertySet aSlideProp( xSlide );
 
-        aPropMap[ PROP_Visible ] = Any( attribs.getBool( XML_show, sal_True ) );
+        aPropMap[ PROP_Visible ] = Any( rAttribs.getBool( XML_show, sal_True ) );
         aSlideProp.setProperties( aPropMap );
 
-        break;
+        return this;
     }
     case PPT_TOKEN( notes ):            // CT_NotesSlide
     case PPT_TOKEN( notesMaster ):      // CT_NotesMaster
-        break;
+        return this;
     case PPT_TOKEN( cSld ):             // CT_CommonSlideData
-        maSlideName = xAttribs->getOptionalValue(XML_name);
-        break;
+        maSlideName = rAttribs.getString(XML_name, OUString());
+        return this;
 
     case PPT_TOKEN( spTree ):           // CT_GroupShape
         {
-            xRet.set( new PPTShapeGroupContext(
+            // TODO Convert this to FragmentHandler2
+            return new PPTShapeGroupContext(
                 *this, mpSlidePersistPtr, meShapeLocation, mpSlidePersistPtr->getShapes(),
-                oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) ) );
+                oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) );
         }
         break;
 
     case PPT_TOKEN( controls ):
-        xRet = getFastContextHandler();
-        break;
+        return this;
     case PPT_TOKEN( control ):
         {
             ::oox::vml::ControlInfo aInfo;
-            aInfo.setShapeId( aAttribs.getInteger( XML_spid, 0 ) );
-            aInfo.maFragmentPath = getFragmentPathFromRelId( aAttribs.getString( R_TOKEN( id ), OUString() ) );
-            aInfo.maName = aAttribs.getXString( XML_name, OUString() );
+            aInfo.setShapeId( rAttribs.getInteger( XML_spid, 0 ) );
+            aInfo.maFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+            aInfo.maName = rAttribs.getXString( XML_name, OUString() );
             mpSlidePersistPtr->getDrawing()->registerControl( aInfo );
         }
-        return xRet;
+        return this;
 
     case PPT_TOKEN( timing ): // CT_SlideTiming
-        xRet.set( new SlideTimingContext( *this, mpSlidePersistPtr->getTimeNodeList() ) );
-        break;
+        return new SlideTimingContext( *this, mpSlidePersistPtr->getTimeNodeList() );
     case PPT_TOKEN( transition ): // CT_SlideTransition
-        xRet.set( new SlideTransitionContext( *this, xAttribs, maSlideProperties ) );
-        break;
+        return new SlideTransitionContext( *this, rAttribs, maSlideProperties );
     case PPT_TOKEN( hf ):
-        xRet.set( new HeaderFooterContext( *this, xAttribs, mpSlidePersistPtr->getHeaderFooter() ) );
-        break;
+        return new HeaderFooterContext( *this, rAttribs, mpSlidePersistPtr->getHeaderFooter() );
 
     // BackgroundGroup
+    case PPT_TOKEN( bg ):
+        return this;
     case PPT_TOKEN( bgPr ):             // CT_BackgroundProperties
         {
             FillPropertiesPtr pFillPropertiesPtr( new FillProperties );
-            xRet.set( new BackgroundPropertiesContext( *this, *pFillPropertiesPtr ) );
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
+            return new BackgroundPropertiesContext( *this, *pFillPropertiesPtr );
         }
         break;
 
     case PPT_TOKEN( bgRef ):            // a:CT_StyleMatrixReference
         {
             FillPropertiesPtr pFillPropertiesPtr( new FillProperties(
-                *mpSlidePersistPtr->getTheme()->getFillStyle( xAttribs->getOptionalValue( XML_idx ).toInt32() ) ) );
-            xRet.set( new ColorContext( *this, mpSlidePersistPtr->getBackgroundColor() ) );
+                *mpSlidePersistPtr->getTheme()->getFillStyle( rAttribs.getInteger( XML_idx, -1 ) ) ) );
+            ContextHandlerRef ret = new ColorContext( *this, mpSlidePersistPtr->getBackgroundColor() );
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
+            return ret;
         }
         break;
 
     case PPT_TOKEN( clrMap ):           // CT_ColorMapping
         {
             oox::drawingml::ClrMapPtr pClrMapPtr( new oox::drawingml::ClrMap() );
-            xRet.set( new oox::drawingml::clrMapContext( *this, xAttribs, *pClrMapPtr ) );
+            ContextHandlerRef ret = new oox::drawingml::clrMapContext( *this, rAttribs.getFastAttributeList(), *pClrMapPtr );
             mpSlidePersistPtr->setClrMap( pClrMapPtr );
+            return ret;
         }
         break;
     case PPT_TOKEN( clrMapOvr ):        // CT_ColorMappingOverride
     case PPT_TOKEN( sldLayoutIdLst ):   // CT_SlideLayoutIdList
-        break;
+        return this;
     case PPT_TOKEN( txStyles ):         // CT_SlideMasterTextStyles
-        xRet.set( new SlideMasterTextStylesContext( *this, mpSlidePersistPtr ) );
+        return new SlideMasterTextStylesContext( *this, mpSlidePersistPtr );
         break;
     case PPT_TOKEN( custDataLst ):      // CT_CustomerDataList
     case PPT_TOKEN( tagLst ):           // CT_TagList
-        break;
+        return this;
     }
 
-    if( !xRet.is() )
-        xRet = getFastContextHandler();
-
-    return xRet;
+    return this;
 }
 
-void SAL_CALL SlideFragmentHandler::endDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
+void SlideFragmentHandler::finalizeImport()
 {
     try
     {

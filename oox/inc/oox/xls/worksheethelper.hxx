@@ -43,6 +43,7 @@ namespace com { namespace sun { namespace star {
     namespace sheet { class XSheetCellRanges; }
     namespace sheet { class XSpreadsheet; }
     namespace table { class XCell; }
+    namespace table { class XCell2; }
     namespace table { class XCellRange; }
     namespace table { class XTableColumns; }
     namespace table { class XTableRows; }
@@ -323,6 +324,13 @@ public:
     void                putValue(
                             const ::com::sun::star::table::CellAddress& rAddress,
                             double fValue ) const;
+    void                putFormulaResult(
+                            const ::com::sun::star::table::CellAddress& rAddress,
+                            double fValue ) const;
+    void                putFormulaString(
+                            const ::com::sun::star::table::CellAddress& rAddress,
+                            const ::rtl::OUString& rText ) const;
+
     /** Inserts a string cell directly into the Calc sheet. */
     void                putString(
                             const ::com::sun::star::table::CellAddress& rAddress,

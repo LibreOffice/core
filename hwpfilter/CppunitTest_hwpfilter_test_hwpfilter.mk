@@ -46,8 +46,12 @@ $(eval $(call gb_CppunitTest_add_linked_libs,hwpfilter_test_hwpfilter, \
 
 $(eval $(call gb_CppunitTest_set_include,hwpfilter_test_hwpfilter,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_CppunitTest_add_api,hwpfilter_test_hwpfilter,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_uses_ure,hwpfilter_test_hwpfilter))
@@ -63,6 +67,7 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,hwpfilter_test_hwpfilter,\
 $(eval $(call gb_CppunitTest_set_args,hwpfilter_test_hwpfilter,\
     --headless \
     --invisible \
+    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
 $(eval $(call gb_RdbTarget_RdbTarget,hwpfilter_test_hwpfilter))
