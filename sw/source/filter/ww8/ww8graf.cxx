@@ -98,7 +98,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <editeng/editobj.hxx>
-
+#include <boost/scoped_ptr.hpp>
 #include <math.h>
 
 using ::editeng::SvxBorderLine;
@@ -182,7 +182,11 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
         pStrm->SeekRel(SVBT16ToShort(pHd->cb) - sizeof(WW8_DPHEAD));
         return false;
     }
-    pStrm->Read(pData, nDataSiz);
+
+    bool bCouldRead = checkRead(*pStrm, pData, nDataSiz);
+    OSL_ENSURE(bCouldRead, "Short Graphic header");
+    if (!bCouldRead)
+        return false;
 
     RndStdIds eAnchor = (SVBT8ToByte(pDo->by) < 2) ? FLY_AT_PAGE : FLY_AT_PARA;
     rSet.Put(SwFmtAnchor(eAnchor));
@@ -443,20 +447,24 @@ SdrObject* SwWW8ImplReader::ReadPolyLine( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         return 0;
 
     sal_uInt16 nCount = SVBT16ToShort( aPoly.aBits1 ) >> 1 & 0x7fff;
-    SVBT16 *pP = new SVBT16[nCount * 2];
-    pStrm->Read( pP, nCount * 4 );      // Punkte einlesen
+    boost::scoped_array<SVBT16> xP(new SVBT16[nCount * 2]);
+
+    bool bCouldRead = checkRead(*pStrm, xP.get(), nCount * 4);      // Punkte einlesen
+    OSL_ENSURE(bCouldRead, "Short PolyLine header");
+    if (!bCouldRead)
+        return 0;
+
     Polygon aP( nCount );
     Point aPt;
-    sal_uInt16 i;
-
-    for( i=0; i<nCount; i++ ){
-        aPt.X() = SVBT16ToShort( pP[i << 1] ) + nDrawXOfs2
+    for (sal_uInt16 i=0; i<nCount; ++i)
+    {
+        aPt.X() = SVBT16ToShort( xP[i << 1] ) + nDrawXOfs2
                   + (sal_Int16)SVBT16ToShort( pHd->xa );
-        aPt.Y() = SVBT16ToShort( pP[( i << 1 ) + 1] ) + nDrawYOfs2
+        aPt.Y() = SVBT16ToShort( xP[( i << 1 ) + 1] ) + nDrawYOfs2
                   + (sal_Int16)SVBT16ToShort( pHd->ya );
         aP[i] = aPt;
     }
-    delete[] pP;
+    xP.reset();
 
     SdrObject* pObj = new SdrPathObj(( SVBT16ToShort( aPoly.aBits1 ) & 0x1 ) ? OBJ_POLY : OBJ_PLIN, ::basegfx::B2DPolyPolygon(aP.getB2DPolygon()));
     SetStdAttr( rSet, aPoly.aLnt, aPoly.aShd );
@@ -1248,10 +1256,15 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         return 0;
 
     sal_uInt16 nCount = SVBT16ToShort( aCallB.dpPolyLine.aBits1 ) >> 1 & 0x7fff;
-    SVBT16 *pP = new SVBT16[nCount * 2];
-    pStrm->Read( pP, nCount * 4 );      // Punkte einlesen
+    boost::scoped_array<SVBT16> xP(new SVBT16[nCount * 2]);
+
+    bool bCouldRead = checkRead(*pStrm, xP.get(), nCount * 4);      // Punkte einlesen
+    OSL_ENSURE(bCouldRead, "Short CaptionBox header");
+    if (!bCouldRead)
+        return 0;
+
     sal_uInt8 nTyp = (sal_uInt8)nCount - 1;
-    if( nTyp == 1 && SVBT16ToShort( pP[0] ) == SVBT16ToShort( pP[2] ) )
+    if( nTyp == 1 && SVBT16ToShort( xP[0] ) == SVBT16ToShort( xP[2] ) )
         nTyp = 0;
 
     Point aP0( (sal_Int16)SVBT16ToShort( pHd->xa ) +
@@ -1263,11 +1276,11 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     aP1.Y() += (sal_Int16)SVBT16ToShort( aCallB.dpheadTxbx.dya );
     Point aP2( (sal_Int16)SVBT16ToShort( pHd->xa )
                 + (sal_Int16)SVBT16ToShort( aCallB.dpheadPolyLine.xa )
-                + nDrawXOfs2 + (sal_Int16)SVBT16ToShort( pP[0] ),
+                + nDrawXOfs2 + (sal_Int16)SVBT16ToShort( xP[0] ),
                (sal_Int16)SVBT16ToShort( pHd->ya )
                + (sal_Int16)SVBT16ToShort( aCallB.dpheadPolyLine.ya )
-               + nDrawYOfs2 + (sal_Int16)SVBT16ToShort( pP[1] ) );
-    delete[] pP;
+               + nDrawYOfs2 + (sal_Int16)SVBT16ToShort( xP[1] ) );
+    xP.reset();
 
     SdrCaptionObj* pObj = new SdrCaptionObj( Rectangle( aP0, aP1 ), aP2 );
     pObj->SetModel( pDrawModel );
@@ -1334,7 +1347,13 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive( short& rLeft, const WW8_DO* pDo,
     //into an object hierarachy with a little effort.
     SdrObject *pRet=0;
     WW8_DPHEAD aHd;                         // Lese Draw-Primitive-Header
-    pStrm->Read(&aHd, sizeof(WW8_DPHEAD));
+    bool bCouldRead = checkRead(*pStrm, &aHd, sizeof(WW8_DPHEAD));
+    OSL_ENSURE(bCouldRead, "Graphic Primitive header short read" );
+    if (!bCouldRead)
+    {
+        rLeft=0;
+        return pRet;
+    }
 
     if( rLeft >= SVBT16ToShort(aHd.cb) )    // Vorsichtsmassmahme
     {
@@ -1394,9 +1413,18 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
         OSL_ENSURE( !this, "+Wo ist die Grafik (3) ?" );
         return;
     }
+
+    bool bCouldSeek = checkSeek(*pStrm, SVBT32ToUInt32(pF->fc));
+    OSL_ENSURE(bCouldSeek, "Invalid Graphic offset");
+    if (!bCouldSeek)
+        return;
+
+    // Lese Draw-Header
     WW8_DO aDo;
-    pStrm->Seek( SVBT32ToUInt32( pF->fc ) );                  // Lese Draw-Header
-    pStrm->Read( &aDo, sizeof( WW8_DO ) );
+    bool bCouldRead = checkRead(*pStrm, &aDo, sizeof(WW8_DO));
+    OSL_ENSURE(bCouldRead, "Short Graphic header");
+    if (!bCouldRead)
+        return;
 
     short nLeft = SVBT16ToShort( aDo.cb ) - sizeof( WW8_DO );
     while (nLeft > static_cast<short>(sizeof(WW8_DPHEAD)))

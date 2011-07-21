@@ -4136,7 +4136,7 @@ void SwWW8ImplReader::StoreMacroCmds()
             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xStream );
 
             sal_uInt8 *pBuffer = new sal_uInt8[pWwFib->lcbCmds];
-            pTableStream->Read(pBuffer, pWwFib->lcbCmds);
+            pWwFib->lcbCmds = pTableStream->Read(pBuffer, pWwFib->lcbCmds);
             pStream->Write(pBuffer, pWwFib->lcbCmds);
             delete[] pBuffer;
             delete pStream;
@@ -4829,7 +4829,7 @@ namespace
         for (sal_Size nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
         {
             sal_Size nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
-            rIn.Read(in, nBS);
+            nBS = rIn.Read(in, nBS);
             rCtx.InitCipher(nBlock);
             rCtx.Decode(in, nBS, in, nBS);
             rOut.Write(in, nBS);
@@ -4838,19 +4838,19 @@ namespace
 
     void DecryptXOR(msfilter::MSCodec_XorWord95 &rCtx, SvStream &rIn, SvStream &rOut)
     {
-        sal_uLong nSt = rIn.Tell();
+        sal_Size nSt = rIn.Tell();
         rIn.Seek(STREAM_SEEK_TO_END);
-        sal_uLong nLen = rIn.Tell();
+        sal_Size nLen = rIn.Tell();
         rIn.Seek(nSt);
 
         rCtx.InitCipher();
         rCtx.Skip(nSt);
 
         sal_uInt8 in[0x4096];
-        for (sal_uLong nI = nSt; nI < nLen; nI += 0x4096)
+        for (sal_Size nI = nSt; nI < nLen; nI += 0x4096)
         {
-            sal_uLong nBS = (nLen - nI > 0x4096 ) ? 0x4096 : nLen - nI;
-            rIn.Read(in, nBS);
+            sal_Size nBS = (nLen - nI > 0x4096 ) ? 0x4096 : nLen - nI;
+            nBS = rIn.Read(in, nBS);
             rCtx.Decode(in, nBS);
             rOut.Write(in, nBS);
         }
@@ -5056,7 +5056,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGlos
                         size_t nUnencryptedHdr =
                             (8 == pWwFib->nVersion) ? 0x44 : 0x34;
                         sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
-                        pStrm->Read(pIn, nUnencryptedHdr);
+                        nUnencryptedHdr = pStrm->Read(pIn, nUnencryptedHdr);
                         aDecryptMain.Write(pIn, nUnencryptedHdr);
                         delete [] pIn;
 
@@ -5087,17 +5087,20 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGlos
                 break;
                 case RC4:
                 {
-                    msfilter::MSCodec_Std97 aCtx;
-
                     sal_uInt8 aDocId[ 16 ];
-                    pTableStream->Read(aDocId, 16);
                     sal_uInt8 aSaltData[ 16 ];
-                    pTableStream->Read(aSaltData, 16);
                     sal_uInt8 aSaltHash[ 16 ];
-                    pTableStream->Read(aSaltHash, 16);
 
+                    bool bCouldReadHeaders =
+                        checkRead(*pTableStream, aDocId, 16) &&
+                        checkRead(*pTableStream, aSaltData, 16) &&
+                        checkRead(*pTableStream, aSaltHash, 16);
+
+                    msfilter::MSCodec_Std97 aCtx;
                     // if initialization has failed the EncryptionData should be empty
-                    uno::Sequence< beans::NamedValue > aEncryptionData = InitStd97Codec( aCtx, aDocId, *pMedium );
+                    uno::Sequence< beans::NamedValue > aEncryptionData;
+                    if (bCouldReadHeaders)
+                        aEncryptionData = InitStd97Codec( aCtx, aDocId, *pMedium );
                     if ( aEncryptionData.getLength() && aCtx.VerifyKey( aSaltData, aSaltHash ) )
                     {
                         nErrRet = 0;
@@ -5105,9 +5108,9 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGlos
                         pTempMain = MakeTemp(aDecryptMain);
 
                         pStrm->Seek(0);
-                        const sal_Size nUnencryptedHdr = 0x44;
+                        sal_Size nUnencryptedHdr = 0x44;
                         sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
-                        pStrm->Read(pIn, nUnencryptedHdr);
+                        nUnencryptedHdr = pStrm->Read(pIn, nUnencryptedHdr);
 
                         DecryptRC4(aCtx, *pStrm, aDecryptMain);
 

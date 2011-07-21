@@ -1541,7 +1541,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
         *pStr >> nLen;
         nLeft -= 2 + nLen;
         if( nLeft < 0 )
-            return 0;                           // schiefgegangen
+            return NULL;                        // schiefgegangen
         pStr->SeekRel( nLen );                  // ueberlies grpprl
     }
 
@@ -1564,12 +1564,16 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
         *pStr >> nLen;
         nLeft -= 2 + nLen;
         if( nLeft < 0 )
-            return 0;                           // schiefgegangen
+            return NULL;                        // schiefgegangen
         if( 1 == clxt )                         // clxtGrpprl ?
         {
             sal_uInt8* p = new sal_uInt8[nLen+2];         // alloziere
             ShortToSVBT16(nLen, p);             // trage Laenge ein
-            pStr->Read( p+2, nLen );            // lies grpprl
+            if (!checkRead(*pStr, p+2, nLen))   // lies grpprl
+            {
+                delete[] p;
+                return NULL;
+            }
             pPieceGrpprls[nAktGrpprl++] = p;    // trage in Array ein
         }
         else
@@ -2510,20 +2514,22 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
     : nItemSize(nItemSiz), nFilePos(_nFilePos),  mnIdx(0), ePLCF(ePl),
     maSprmParser(eVersion)
 {
-    long nOldPos = pSt->Tell();
-
-    pSt->Seek(nFilePos);
     memset(maRawData, 0, 512);
-    pSt->Read(maRawData, 512);
-    mnIMax = maRawData[511];
+
+    sal_Size nOldPos = pSt->Tell();
+
+    bool bCouldSeek = checkSeek(*pSt, nFilePos);
+    bool bCouldRead = bCouldSeek ? checkRead(*pSt, maRawData, 512) : false;
+
+    mnIMax = bCouldRead ? maRawData[511] : 0;
 
     sal_uInt8 *pStart = maRawData;
     // Offset-Location in maRawData
-    size_t nRawDataStart = (mnIMax + 1) * 4;
+    const size_t nRawDataStart = (mnIMax + 1) * 4;
 
     for (mnIdx = 0; mnIdx < mnIMax; ++mnIdx)
     {
-        size_t nRawDataOffset = nRawDataStart + mnIdx * nItemSize;
+        const size_t nRawDataOffset = nRawDataStart + mnIdx * nItemSize;
 
         //clip to available data, corrupt fkp
         if (nRawDataOffset >= 511)

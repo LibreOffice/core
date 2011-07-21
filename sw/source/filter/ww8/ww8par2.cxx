@@ -3694,8 +3694,7 @@ static inline short WW8SkipOdd(SvStream* pSt )
     if ( pSt->Tell() & 0x1 )
     {
         sal_uInt8 c;
-        pSt->Read( &c, 1 );
-        return 1;
+        return pSt->Read( &c, 1 );
     }
     return 0;
 }
@@ -3705,8 +3704,7 @@ static inline short WW8SkipEven(SvStream* pSt )
     if (!(pSt->Tell() & 0x1))
     {
         sal_uInt8 c;
-        pSt->Read( &c, 1 );
-        return 1;
+        return pSt->Read( &c, 1 );
     }
     return 0;
 }

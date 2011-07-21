@@ -1689,10 +1689,11 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
         bGrafApo = false;
 
         do{             // Block zum rausspringen
-
             sal_uInt8 nTxt[2];
 
-            pIoStrm->Read( nTxt, 2 );                   // lies Text
+            if (!checkRead(*pIoStrm, nTxt, 2)) // lies Text
+                break;
+
             if( nTxt[0] != 0x01 || nTxt[1] != 0x0d )// nur Grafik + CR ?
                 break;                              // Nein
 
@@ -1703,7 +1704,8 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
             const sal_uInt8* pS = pPap->HasSprm( bVer67 ? 29 : 0x261B );
 
             // Nein -> Grafik-Apo
-            if( !pS ){
+            if (!pS)
+            {
                 bGrafApo = true;
                 break;                              // Ende des APO
             }
