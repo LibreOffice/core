@@ -196,8 +196,7 @@ sub check
     my $canread = is_moduledirectory( $path );
     if ( ! $canread ) {
         # do not bother about non existing modules in local environment
-        # or on childworkspaces
-        if (( $local_env ) || ( $ENV{CWS_WORK_STAMP} )) {
+        if ( $local_env ) {
             return $error;
         }
         # in a master build it is considered an error to have deliver leftovers
