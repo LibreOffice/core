@@ -290,7 +290,6 @@ public:
 
     void                SetExtension( const String& rExt, char cSep = '.' );
     String              GetExtension( char cSep = '.' ) const;
-    String              CutExtension( char cSep = '.' );
     void                SetName( const String& rName, FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     inline const String GetNameDirect() const { return String(aName, osl_getThreadTextEncoding()); }
     String              GetName( FSysPathStyle eFormatter = FSYS_STYLE_HOST ) const;
@@ -336,7 +335,6 @@ public:
     sal_Bool                operator !=( const DirEntry& rAnotherDir ) const
                             { return !(DirEntry::operator==( rAnotherDir )); }
 
-    StringCompare       NameCompare( const DirEntry &rWith ) const;
     inline StringCompare NameCompareDirect( const DirEntry &rWith ) const
                         {
 #ifdef UNX
@@ -447,12 +445,8 @@ protected:
 #endif
 
 public:
-                    Dir();
                     Dir( const DirEntry& rDirEntry,
                          DirEntryKind nKind = FSYS_KIND_ALL );
-                    Dir( const DirEntry& rDirEntry,
-                         DirEntryKind nKind,
-                         FSysSort nSort, ... );
                     ~Dir();
 
     void            Reset();

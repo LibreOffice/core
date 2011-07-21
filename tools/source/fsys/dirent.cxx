@@ -1135,31 +1135,6 @@ String DirEntry::CutName( FSysPathStyle eStyle )
 
 /*************************************************************************
 |*
-|*    DirEntry::NameCompare
-|*
-|*    Beschreibung      Vergleich nur die Namen (ohne Pfad, aber mit Gross/Klein)
-|*
-*************************************************************************/
-
-StringCompare DirEntry::NameCompare( const DirEntry &rWith ) const
-{
-        ByteString aThisName;
-        ByteString aParameterName;
-
-#ifdef UNX
-                aThisName = aName;
-                aParameterName = rWith.aName;
-#else
-                aThisName = ByteString(aName).ToLowerAscii();
-                aParameterName = ByteString(rWith.aName).ToLowerAscii();
-#endif
-
-    return aThisName.CompareTo( aParameterName );
-}
-
-
-/*************************************************************************
-|*
 |*    DirEntry::operator==()
 |*
 *************************************************************************/
@@ -1371,31 +1346,6 @@ void DirEntry::SetExtension( const String& rExtension, char cSep )
         aName += cSep;
         aName += ByteString(rExtension, osl_getThreadTextEncoding());
     }
-}
-
-/*************************************************************************
-|*
-|*    DirEntry::CutExtension()
-|*
-*************************************************************************/
-
-String DirEntry::CutExtension( char cSep )
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    const char *p0 = ( aName.GetBuffer() );
-    const char *p1 = p0 + aName.Len() - 1;
-    while ( p1 >= p0 && *p1 != cSep )
-        p1--;
-
-    if ( p1 >= p0 )
-    {
-        // es wurde ein cSep an der Position p1 gefunden
-        aName.Erase( static_cast< xub_StrLen >(p1-p0) );
-        return String(p1 + 1, osl_getThreadTextEncoding());
-    }
-
-    return String();
 }
 
 /*************************************************************************

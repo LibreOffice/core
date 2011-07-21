@@ -386,27 +386,6 @@ sal_uInt16 Dir::Scan( sal_uInt16 nCount )
 |*
 *************************************************************************/
 
-Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags, FSysSort nSort, ... ):
-    DirEntry( rDirEntry ),
-    pReader( 0 )
-{
-    DBG_CTOR( Dir, NULL );
-
-    Construct( nKindFlags );
-
-    std::va_list pArgs;
-    va_start( pArgs, nSort );
-    ImpSetSort( pArgs, nSort );
-
-    Reset();
-}
-
-/*************************************************************************
-|*
-|*    Dir::Dir()
-|*
-*************************************************************************/
-
 Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags ):
     DirEntry( rDirEntry ),
     pReader( 0 )
@@ -415,24 +394,6 @@ Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags ):
 
     Construct( nKindFlags );
     Reset();
-}
-
-/*************************************************************************
-|*
-|*    Dir::Dir()
-|*
-*************************************************************************/
-
-Dir::Dir():
-    pReader( 0 )
-{
-    DBG_CTOR( Dir, NULL );
-
-    pLst     = NULL;
-    pSortLst = NULL;
-    pStatLst = NULL;
-    eAttrMask = FSYS_KIND_ALL;
-    aNameMask = String("*", osl_getThreadTextEncoding());
 }
 
 /*************************************************************************
