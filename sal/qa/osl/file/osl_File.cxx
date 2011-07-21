@@ -4246,8 +4246,8 @@ namespace osl_File
         //check if is the new file
         File newFile( aTmpName4 );
         newFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Read );
-        newFile.setPos( osl_Pos_End, 0 );
-        //      CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
+        nError1 = newFile.setPos( osl_Pos_End, 0 );
+        CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
         sal_uInt64     nFilePointer;
         nError1 = newFile.getPos( nFilePointer );
         CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
