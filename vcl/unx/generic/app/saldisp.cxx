@@ -863,19 +863,6 @@ void SalDisplay::Init()
 
     // - - - - - - - - - - Window Manager  - - - - - - - - - - -
     m_pWMAdaptor = ::vcl_sal::WMAdaptor::createWMAdaptor( this );
-    const char *pWM = getenv( "SAL_WM" );
-    if( pWM )
-    {
-        long int nWM = 0;
-        sscanf( pWM, "%li", &nWM );
-        eWindowManager_ = SalWM(nWM);
-    }
-    else if( XInternAtom( pDisp_, "_SGI_TELL_WM", True ) )
-        eWindowManager_ = FourDwm;
-    else if( XInternAtom( pDisp_, "KWM_RUNNING", True ) )
-        eWindowManager_ = mwm; // naja, eigentlich kwm ...
-    else if( XInternAtom( pDisp_, "_OL_WIN_ATTR", True ) )
-        eWindowManager_ = olwm;
 
     // - - - - - - - - - - Properties  - - - - - - - - - - - - -
     const char *pProperties = getenv( "SAL_PROPERTIES" );
@@ -2597,8 +2584,6 @@ void SalDisplay::PrintInfo() const
                  GetEnv( "SAL_IGNOREXERRORS" ) );
         fprintf( stderr, "\t$SAL_PROPERTIES   \t\"%s\"\n",
                  GetEnv( "SAL_PROPERTIES" ) );
-        fprintf( stderr, "\t$SAL_WM           \t\"%s\"\n",
-                 GetEnv( "SAL_WM" ) );
         fprintf( stderr, "\t$SAL_SYNCHRONIZE  \t\"%s\"\n",
                  GetEnv( "SAL_SYNCHRONIZE" ) );
 
