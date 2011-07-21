@@ -276,7 +276,7 @@ void SalAbort( const XubString& rErrorText )
     exit(-1);
 }
 
-static const char * desktop_strings[] = { "none", "unknown", "GNOME", "KDE", "KDE4", "CDE" };
+static const char * desktop_strings[] = { "none", "unknown", "GNOME", "KDE", "KDE4" };
 
 const OUString& SalGetDesktopEnvironment()
 {

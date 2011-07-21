@@ -4123,10 +4123,6 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
             }
             else if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_SAVE_YOURSELF ) )
             {
-                bool bSession = rWMAdaptor.getWindowManagerName().EqualsAscii( "Dtwm" );
-
-                if( ! bSession )
-                {
                     if( this == s_pSaveYourselfFrame )
                     {
                         rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
@@ -4141,14 +4137,6 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
                     else
                         // can only happen in race between WM and window closing
                         XChangeProperty( GetXDisplay(), GetShellWindow(), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ), XA_STRING, 8, PropModeReplace, (unsigned char*)"", 0 );
-                }
-                else
-                {
-                    // save open documents; would be good for non Dtwm, too,
-                    // but there is no real Shutdown message in the ancient
-                    // SM protocol; on Dtwm SaveYourself really means Shutdown, too.
-                    IceSalSession::handleOldX11SaveYourself( this );
-                }
             }
         }
     }
@@ -4372,22 +4360,6 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
 
                     if( hPresentationWindow != None && GetShellWindow() == hPresentationWindow )
                         XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
-                    /*  For unknown reasons Dtwm does respect the input_hint
-                     *  set to False, but not when mapping the window. So
-                     *  emulate the correct behaviour and set the focus back
-                     *  to where it most probably should have been.
-                     */
-                    if( (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION) &&
-                        mpParent &&
-                        GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii( "Dtwm" )
-                        )
-                    {
-                        XSetInputFocus( GetXDisplay(),
-                                        mpParent->GetShellWindow(),
-                                        RevertToParent,
-                                        CurrentTime );
-                        bSetFocus = false;
-                    }
 
                     if( bSetFocus )
                     {

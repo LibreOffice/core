@@ -43,9 +43,6 @@
 
 #include "unx/salunx.h"
 #include <X11/Xatom.h>
-#ifdef USE_CDE
-#include "unx/cdeint.hxx"
-#endif
 #include "unx/dtint.hxx"
 #include "unx/saldisp.hxx"
 #include "unx/saldata.hxx"
@@ -105,28 +102,9 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator()
     {
         OString aOver( pOverride );
 
-#if USE_CDE
-        if( aOver.equalsIgnoreAsciiCase( "cde" ) )
-            return new CDEIntegrator();
-#endif
         if( aOver.equalsIgnoreAsciiCase( "none" ) )
             return new DtIntegrator();
     }
-
-#ifdef USE_CDE
-    void* pLibrary = NULL;
-
-    // check dt type
-    // CDE
-    SalDisplay* pSalDisplay = GetX11SalData()->GetDisplay();
-    Display* pDisplay = pSalDisplay->GetDisplay();
-    Atom nDtAtom = XInternAtom( pDisplay, "_DT_WM_READY", True );
-    if( nDtAtom && ( pLibrary = dlopen( "/usr/dt/lib/libDtSvc.so", DLOPEN_MODE ) ) )
-    {
-        dlclose( pLibrary );
-        return new CDEIntegrator();
-    }
-#endif
 
     // default: generic implementation
     return new DtIntegrator();

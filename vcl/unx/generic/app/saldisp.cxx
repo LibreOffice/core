@@ -876,8 +876,6 @@ void SalDisplay::Init()
         eWindowManager_ = mwm; // naja, eigentlich kwm ...
     else if( XInternAtom( pDisp_, "_OL_WIN_ATTR", True ) )
         eWindowManager_ = olwm;
-    else if( m_pWMAdaptor->getWindowManagerName().EqualsAscii( "Dtwm" ) )
-        eWindowManager_ = dtwm;
 
     // - - - - - - - - - - Properties  - - - - - - - - - - - - -
     const char *pProperties = getenv( "SAL_PROPERTIES" );
@@ -953,11 +951,6 @@ void SalDisplay::Init()
                 eWindowManager_ = FourDwm;
         }
         else
-        if( GetServerVendor() == vendor_hp )
-        {
-            if( otherwm == eWindowManager_ ) eWindowManager_ = dtwm;
-        }
-        else
         if( GetServerVendor() == vendor_hummingbird )
         {
             if (GetVisual(m_nDefaultScreen).GetDepth() == 24)
@@ -976,10 +969,6 @@ void SalDisplay::Init()
             nProperties_ &= ~PROPERTY_SUPPORT_WM_SetPos;
             nProperties_ &= ~PROPERTY_SUPPORT_WM_Screen;
             nProperties_ |= PROPERTY_FEATURE_Maximize;
-        }
-        else if( dtwm == eWindowManager_ )
-        {
-            nProperties_ &= ~PROPERTY_SUPPORT_WM_ClientPos;
         }
         else if( pmwm == eWindowManager_ )
         {
