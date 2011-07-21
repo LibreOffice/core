@@ -266,8 +266,6 @@ int X11SalData::XIOErrorHdl( Display * )
 
 X11SalData::X11SalData()
 {
-    bNoExceptions_  = !!getenv( "SAL_NOSEGV" );
-
     pXLib_          = NULL;
     m_pSalDisplay   = NULL;
     m_pInstance     = NULL;
