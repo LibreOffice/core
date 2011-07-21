@@ -30,11 +30,6 @@
 
 namespace writerfilter {
 namespace doctok {
-sal_uInt32 WW8sprmPChgTabsPapx::calcSize()
-{
-    return getS8(0x2) + 3;
-}
-
 sal_uInt32 WW8sprmPChgTabsPapx::get_dxaDel_count()
 {
     return getS8(0x3);

@@ -82,12 +82,6 @@ rtl::OUString WW8Sttbf::getEntry(sal_uInt32 nPos) const
     return getString(getEntryOffset(nPos));
 }
 
-WW8StructBase::Pointer_t WW8Sttbf::getExtraData(sal_uInt32 nPos)
-{
-    return WW8StructBase::Pointer_t
-        (new WW8StructBase(*this, getExtraOffset(nPos), mnExtraDataCount));
-}
-
 WW8SttbTableResource::WW8SttbTableResource(WW8Sttbf::Pointer_t pSttbf)
 : mpSttbf(pSttbf)
 {
