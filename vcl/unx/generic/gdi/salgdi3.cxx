@@ -294,6 +294,11 @@ namespace
     {
       return nRotation != 0;
     }
+
+    double toRadian(int nDegree10th)
+    {
+        return (3600 - (nDegree10th)) * M_PI / 1800.0;
+    }
 }
 
 void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
@@ -315,10 +320,10 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
         switch (aGlyphId & GF_ROTMASK)
         {
             case GF_ROTL:    // left
-                glyph_extrarotation.push_back(900);
+                glyph_extrarotation.push_back(1);
                 break;
             case GF_ROTR:    // right
-                glyph_extrarotation.push_back(-900);
+                glyph_extrarotation.push_back(-1);
                 break;
             default:
                 glyph_extrarotation.push_back(0);
@@ -407,30 +412,64 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
 
         std::vector<int>::const_iterator aNext = std::find_if(aI+1, aEnd, hasRotation);
 
+        size_t nStartIndex = std::distance(aStart, aI);
+        size_t nLen = std::distance(aI, aNext);
+
+        cairo_set_font_size(cr, nHeight);
+
         cairo_matrix_init_identity(&m);
 
         if (rFont.NeedsArtificialItalic())
             m.xy = -m.xx * 0x6000L / 0x10000L;
 
         if (rLayout.GetOrientation())
-            cairo_matrix_rotate(&m, (3600 - rLayout.GetOrientation()) * M_PI / 1800.0);
+            cairo_matrix_rotate(&m, toRadian(rLayout.GetOrientation()));
 
         cairo_matrix_scale(&m, nWidth, nHeight);
 
         if (nGlyphRotation)
         {
-            cairo_matrix_rotate(&m, (3600 - nGlyphRotation) * M_PI / 1800.0);
+            cairo_matrix_rotate(&m, toRadian(nGlyphRotation*900));
 
-            cairo_font_extents_t extents;
-            cairo_font_extents(cr, &extents);
-            //gives the same positions as pre-cairo conversion, but I don't like them
-            double xdiff = -extents.descent/(extents.height+extents.descent);
-            cairo_matrix_translate(&m, xdiff, 1);
+            cairo_matrix_t em_square;
+            cairo_matrix_init_identity(&em_square);
+            cairo_get_matrix(cr, &em_square);
+
+            FT_Face aFace = reinterpret_cast<FT_Face>(pFace);
+            cairo_matrix_scale(&em_square, aFace->units_per_EM,
+                aFace->units_per_EM);
+            cairo_set_matrix(cr, &em_square);
+
+            cairo_font_extents_t font_extents;
+            cairo_font_extents(cr, &font_extents);
+
+            cairo_matrix_init_identity(&em_square);
+            cairo_set_matrix(cr, &em_square);
+
+            //gives the same positions as pre-cairo conversion, but I don't
+            //like them
+            double xdiff = 0.0;
+            double ydiff = 0.0;
+            if (nGlyphRotation == 1)
+            {
+                ydiff = font_extents.ascent/nHeight;
+                xdiff = -font_extents.descent/nHeight;
+            }
+            else if (nGlyphRotation == -1)
+            {
+                cairo_text_extents_t text_extents;
+                cairo_glyph_extents(cr, &cairo_glyphs[nStartIndex], nLen,
+                    &text_extents);
+
+                xdiff = -text_extents.x_advance/nHeight;
+                //deliberate bug here for temp render-like-X11-impl,
+                //nWidth should be nHeight below
+                xdiff += font_extents.descent/nWidth;
+            }
+            cairo_matrix_translate(&m, xdiff, ydiff);
         }
 
         cairo_set_font_matrix(cr, &m);
-        size_t nStartIndex = std::distance(aStart, aI);
-        size_t nLen = std::distance(aI, aNext);
         cairo_show_glyphs(cr, &cairo_glyphs[nStartIndex], nLen);
 
 #if OSL_DEBUG_LEVEL > 2
