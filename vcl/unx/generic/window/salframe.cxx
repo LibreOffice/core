@@ -1016,9 +1016,6 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
                // better icon size default value, in case our window manager
                // is olwm/olvwm.
                const String& rWM( pDisplay_->getWMAdaptor()->getWindowManagerName() );
-
-               if ( rWM.EqualsAscii( "Olwm" ) )
-                   iconSize = 48;
             }
 
             XFree( pIconSize );

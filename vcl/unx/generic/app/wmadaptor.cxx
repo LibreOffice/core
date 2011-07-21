@@ -268,42 +268,6 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
 
     if( m_aWMName.Len() == 0 )
     {
-        // check for window maker - needs different gravity
-        Atom aWMakerRunning = XInternAtom( m_pDisplay, "_WINDOWMAKER_WM_PROTOCOLS", True );
-        if( aWMakerRunning != None &&
-            XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
-                                aWMakerRunning,
-                                0, 32,
-                                False,
-                                XA_ATOM,
-                                &aRealType,
-                                &nFormat,
-                                &nItems,
-                                &nBytesLeft,
-                                &pProperty ) == 0 )
-        {
-            if( aRealType == XA_ATOM )
-                m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM("Windowmaker" ) );
-            XFree( pProperty );
-            m_nInitWinGravity = NorthWestGravity;
-        }
-        else if( pProperty )
-        {
-            XFree( pProperty );
-            pProperty = NULL;
-        }
-    }
-    if( m_aWMName.Len() == 0 )
-    {
-        if( XInternAtom( m_pDisplay, "_OL_WIN_ATTR", True ) )
-        {
-            m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM( "Olwm" ) );
-            m_nInitWinGravity = NorthWestGravity;
-        }
-    }
-    if( m_aWMName.Len() == 0 )
-    {
         // check for ReflectionX wm (as it needs a workaround in Windows mode
         Atom aRwmRunning = XInternAtom( m_pDisplay, "RWM_RUNNING", True );
         if( aRwmRunning != None &&

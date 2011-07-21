@@ -918,9 +918,6 @@ void SalDisplay::Init()
                 if (VendorRelease ( GetDisplay() ) < 3600)
                     nProperties_ |= PROPERTY_BUG_FillPolygon_Tile;
             }
-
-            if( otherwm == eWindowManager_ )
-                eWindowManager_ = olwm;
         }
         else
         if( GetServerVendor() == vendor_sco )
@@ -942,13 +939,6 @@ void SalDisplay::Init()
         {
             if (GetVisual(m_nDefaultScreen).GetDepth() == 24)
                 nProperties_ |= PROPERTY_BUG_CopyArea_OnlySmallSlices;
-        }
-
-        if( otherwm == eWindowManager_ )
-        {
-            if( !XInternAtom( pDisp_, "_MOTIF_WM_INFO", True ) )
-                eWindowManager_ = olwm;
-            // ???
         }
 
         if( winmgr == eWindowManager_ )
