@@ -34,7 +34,6 @@ $(eval $(call gb_Executable_set_include,demoshow,\
     -I$(realpath $(SRCDIR)/slideshow/inc/pch) \
     -I$(realpath $(SRCDIR)/slideshow/source/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 ifeq ($(strip $(VERBOSE)),TRUE)
@@ -50,6 +49,11 @@ $(eval $(call gb_Executable_set_defs,demoshow,\
     -DBOOST_SP_ENABLE_DEBUG_HOOKS \
 ))
 endif
+
+$(eval $(call gb_Library_add_api,demoshow,\
+    offapi \
+    udkapi \
+))
 
 $(eval $(call gb_Executable_add_linked_libs,demoshow,\
     basegfx \

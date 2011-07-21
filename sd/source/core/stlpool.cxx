@@ -870,7 +870,7 @@ void SdStyleSheetPool::UpdateStdNames()
 {
     String aHelpFile;
     sal_uInt32  nCount = aStyles.size();
-    List* pEraseList = NULL;
+    std::vector<SfxStyleSheetBase*> aEraseList;
 
     for( sal_uInt32 n=0; n < nCount; n++ )
     {
@@ -953,30 +953,16 @@ void SdStyleSheetPool::UpdateStdNames()
                     else
                     {
                         // Sheet existiert schon: Altes Sheet muss entfernt werden
-                        if( !pEraseList )
-                        {
-                            pEraseList = new List();
-                        }
-
-                        pEraseList->Insert( pStyle );
+                        aEraseList.push_back( pStyle );
                     }
                 }
             }
         }
     }
 
-    if ( pEraseList )
-    {
-        // Styles, welche nicht umbenannt werden konnten, muessen entfernt werden
-        for ( sal_uLong i = 0; i < pEraseList->Count(); i++ )
-        {
-            SfxStyleSheetBase* pEraseSheet = ( SfxStyleSheetBase* ) pEraseList->GetObject( i );
-            Remove( pEraseSheet );
-        }
-
-        delete pEraseList;
-        pEraseList = NULL;
-    }
+    // Styles, welche nicht umbenannt werden konnten, muessen entfernt werden
+    for ( size_t i = 0, n = aEraseList.size(); i < n; ++i )
+        Remove( aEraseList[ i ] );
 }
 // --------------------------------------------------------------------
 // Neues SvxNumBulletItem fuer das jeweilige StyleSheet setzen

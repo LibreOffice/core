@@ -968,7 +968,7 @@ void Outliner::ProvideNextTextObject (void)
     {
         mpView->SdrEndTextEdit();
     }
-    catch (::com::sun::star::uno::Exception e)
+    catch (const ::com::sun::star::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }

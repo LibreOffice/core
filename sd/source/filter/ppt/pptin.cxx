@@ -100,9 +100,17 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
+#include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 
 using namespace ::com::sun::star;
 
+uno::Reference< uno::XComponentContext >
+lcl_getUnoCtx()
+{
+    comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
+    return aCtx.getUNOContext();
+}
 
 SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium, MSFilterTracer* pTracer )
 {
@@ -2697,6 +2705,14 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         }
     }
     return pObj;
+}
+
+
+bool
+ImplSdPPTImport::ReadFormControl( uno::Reference< io::XInputStream >& xIs, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const
+{
+    ::oox::ole::OleFormCtrlImportHelper maFormCtrlHelper( xIs, lcl_getUnoCtx(), mpDoc->GetDocSh()->GetModel() );
+    return maFormCtrlHelper.importFormControlFromObjStorage( rFormComp );
 }
 
 // ---------------------

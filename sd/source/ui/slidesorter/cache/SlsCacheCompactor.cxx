@@ -174,8 +174,12 @@ IMPL_LINK(CacheCompactor, CompactionCallback, Timer*, EMPTYARG)
     {
         Run();
     }
-    catch(::com::sun::star::uno::RuntimeException e) { }
-    catch(::com::sun::star::uno::Exception e) { }
+    catch (const ::com::sun::star::uno::RuntimeException&)
+    {
+    }
+    catch (const ::com::sun::star::uno::Exception&)
+    {
+    }
 
     mbIsCompactionRunning = false;
     return 1;

@@ -367,7 +367,7 @@ void  SAL_CALL
                 if (pListener != NULL)
                     pListener->selectionChanged (rEvent);
             }
-            catch (RuntimeException aException)
+            catch (const RuntimeException&)
             {
             }
         }
@@ -461,7 +461,7 @@ void DrawController::FireSelectionChangeListener() throw()
                 if (pL != NULL)
                     pL->selectionChanged( aEvent );
             }
-            catch (RuntimeException aException)
+            catch (const RuntimeException&)
             {
             }
         }
@@ -524,9 +524,8 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
 
             mpCurrentPage.reset(pNewCurrentPage);
         }
-        catch( uno::Exception& e )
+        catch (const uno::Exception&)
         {
-            (void)e;
             OSL_FAIL(
                 (::rtl::OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), "
                     "exception caught: ") +
@@ -549,7 +548,7 @@ void DrawController::FirePropertyChange (
     {
         fire (&nHandle, &rNewValue, &rOldValue, 1, sal_False);
     }
-    catch (RuntimeException aException)
+    catch (const RuntimeException&)
     {
         // Ignore this exception.  Exceptions should be handled in the
         // fire() function so that all listeners are called.  This is
@@ -808,7 +807,7 @@ sal_Bool DrawController::convertFastPropertyValue (
             rOldValue = mxSubController->getFastPropertyValue(nHandle);
             bResult = (rOldValue != rConvertedValue);
         }
-        catch(beans::UnknownPropertyException aException)
+        catch (const beans::UnknownPropertyException&)
         {
             // The prperty is unknown and thus an illegal argument to this method.
             throw com::sun::star::lang::IllegalArgumentException();
@@ -883,7 +882,7 @@ void DrawController::ProvideFrameworkControllers (void)
             xContext,
             xController);
     }
-    catch (RuntimeException&)
+    catch (const RuntimeException&)
     {
         mxConfigurationController = NULL;
         mxModuleController = NULL;

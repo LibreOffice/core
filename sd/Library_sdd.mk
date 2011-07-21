@@ -34,7 +34,11 @@ $(eval $(call gb_Library_set_include,sdd,\
     -I$(realpath $(SRCDIR)/sd/inc) \
     -I$(realpath $(SRCDIR)/sd/inc/pch) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,sdd,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sdd,\

@@ -100,7 +100,7 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
                 nPageNumber -=1; // Transform 1-based page numbers to 0-based ones.
                 rSelector.SelectPage(nPageNumber);
             }
-            catch(RuntimeException e)
+            catch (const RuntimeException&)
             {
             }
         }

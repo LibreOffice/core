@@ -502,7 +502,6 @@
 #include "svtools/ctrltool.hxx"
 #include "svtools/ehdl.hxx"
 #include "svl/eitem.hxx"
-#include "svtools/filedlg.hxx"
 #include "svtools/filter.hxx"
 #include "svl/flagitem.hxx"
 #include "svtools/fltcall.hxx"

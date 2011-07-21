@@ -163,7 +163,7 @@ Image TemplatePreviewProvider::operator() (
                         }
                     }
                 }
-                catch (uno::Exception& rException)
+                catch (const uno::Exception& rException)
                 {
                     OSL_TRACE (
                         "caught exception while trying to access Thumbnail/thumbnail.png of %s: %s",
@@ -196,7 +196,7 @@ Image TemplatePreviewProvider::operator() (
                         }
                     }
                 }
-                catch (uno::Exception& rException)
+                catch (const uno::Exception& rException)
                 {
                     OSL_TRACE (
                         "caught exception while trying to access Thumbnails/thumbnail.png of %s: %s",
@@ -207,7 +207,7 @@ Image TemplatePreviewProvider::operator() (
                 }
             }
         }
-        catch (uno::Exception& rException)
+        catch (const uno::Exception& rException)
         {
             OSL_TRACE (
                 "caught exception while trying to access tuhmbnail of %s: %s",
@@ -291,7 +291,7 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
             }
         }
     }
-    catch (uno::RuntimeException)
+    catch (const uno::RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION();
         pPage = NULL;

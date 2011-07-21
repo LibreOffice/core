@@ -635,7 +635,7 @@ MasterPageContainer::Implementation::~Implementation (void)
         {
             xCloseable->close(true);
         }
-        catch (::com::sun::star::util::CloseVetoException aException)
+        catch (const ::com::sun::star::util::CloseVetoException&)
         {
         }
     }

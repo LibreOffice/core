@@ -206,10 +206,10 @@ EventMultiplexer::~EventMultiplexer (void)
         mpImpl->release();
         mpImpl.release();
     }
-    catch (RuntimeException aException)
+    catch (const RuntimeException&)
     {
     }
-    catch (Exception aException)
+    catch (const Exception&)
     {
     }
 }
@@ -445,7 +445,7 @@ void EventMultiplexer::Implementation::ConnectToController (void)
                 {
                     xSet->addPropertyChangeListener(msCurrentPagePropertyName, this);
                 }
-                catch (beans::UnknownPropertyException)
+                catch (const beans::UnknownPropertyException&)
                 {
                     OSL_TRACE("EventMultiplexer::ConnectToController: CurrentPage unknown");
                 }
@@ -454,7 +454,7 @@ void EventMultiplexer::Implementation::ConnectToController (void)
                 {
                     xSet->addPropertyChangeListener(msEditModePropertyName, this);
                 }
-                catch (beans::UnknownPropertyException)
+                catch (const beans::UnknownPropertyException&)
                 {
                     OSL_TRACE("EventMultiplexer::ConnectToController: IsMasterPageMode unknown");
                 }
@@ -467,7 +467,7 @@ void EventMultiplexer::Implementation::ConnectToController (void)
             xSelection->addSelectionChangeListener(this);
         }
     }
-    catch (const lang::DisposedException aException)
+    catch (const lang::DisposedException&)
     {
         mbListeningToController = false;
     }
@@ -492,7 +492,7 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
             {
                 xSet->removePropertyChangeListener(msCurrentPagePropertyName, this);
             }
-            catch (beans::UnknownPropertyException aEvent)
+            catch (const beans::UnknownPropertyException&)
             {
                 OSL_TRACE ("DisconnectFromController: CurrentPage unknown");
             }
@@ -501,7 +501,7 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
             {
                 xSet->removePropertyChangeListener(msEditModePropertyName, this);
             }
-            catch (beans::UnknownPropertyException aEvent)
+            catch (const beans::UnknownPropertyException&)
             {
                 OSL_TRACE ("DisconnectFromController: IsMasterPageMode unknown");
             }

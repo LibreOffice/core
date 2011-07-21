@@ -288,8 +288,9 @@ void UpdateLockManager::Implementation::Unlock (void)
                 }
             }
         }
-        catch (RuntimeException)
-        { }
+        catch (const RuntimeException&)
+        {
+        }
 
         // Force a rearrangement of the UI elements of the views.
         mrBase.Rearrange();
@@ -410,9 +411,8 @@ Reference< ::com::sun::star::frame::XLayoutManager>
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))));
                     aValue >>= xLayoutManager;
                 }
-                catch (const beans::UnknownPropertyException& rException)
+                catch (const beans::UnknownPropertyException&)
                 {
-                    (void)rException;
                 }
             }
             mxLayoutManager = xLayoutManager;

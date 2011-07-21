@@ -95,7 +95,7 @@ private:
 public:
                         SdStartPresentationDlg( Window* pWindow,
                                 const SfxItemSet& rInAttrs,
-                                List& rPageNames,
+                                const std::vector<String> &rPageNames,
                                 List* pCSList );
 
     void                GetAttr( SfxItemSet& rOutAttrs );

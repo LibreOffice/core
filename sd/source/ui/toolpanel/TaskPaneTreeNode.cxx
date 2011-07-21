@@ -222,7 +222,7 @@ TaskPaneShellManager* TreeNode::GetShellManager (void)
         {
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessible> xParent;
-            if (pWindow!=NULL && pWindow->GetAccessibleParentWindow()!=NULL)
+            if (pWindow->GetAccessibleParentWindow()!=NULL)
                 xParent = pWindow->GetAccessibleParentWindow()->GetAccessible();
             xAccessible = CreateAccessibleObject(xParent);
             pWindow->SetAccessible(xAccessible);

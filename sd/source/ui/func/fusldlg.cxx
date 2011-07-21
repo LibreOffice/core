@@ -81,7 +81,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     PresentationSettings& rPresentationSettings = mpDoc->getPresentationSettings();
 
     SfxItemSet      aDlgSet( mpDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
-    List            aPageNameList;
+    std::vector<String> aPageNameList(mpDoc->GetSdPageCount( PK_STANDARD ));
     const String&   rPresPage = rPresentationSettings.maPresPage;
     String          aFirstPage;
     String          aStandardName( SdResId( STR_PAGE ) );
@@ -91,21 +91,21 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     for( nPage = mpDoc->GetSdPageCount( PK_STANDARD ) - 1L; nPage >= 0L; nPage-- )
     {
         pPage = mpDoc->GetSdPage( (sal_uInt16) nPage, PK_STANDARD );
-        String* pStr = new String( pPage->GetName() );
+        String aStr( pPage->GetName() );
 
-        if ( !pStr->Len() )
+        if ( !aStr.Len() )
         {
-            *pStr = String( SdResId( STR_PAGE ) );
-            (*pStr).Append( UniString::CreateFromInt32( nPage + 1 ) );
+            aStr = String( SdResId( STR_PAGE ) );
+            aStr.Append( UniString::CreateFromInt32( nPage + 1 ) );
         }
 
-        aPageNameList.Insert( pStr, (sal_uLong) 0 );
+        aPageNameList[ nPage ] = aStr;
 
         // ist dies unsere (vorhandene) erste Seite?
-        if ( rPresPage == *pStr )
+        if ( rPresPage == aStr )
             aFirstPage = rPresPage;
         else if ( pPage->IsSelected() && !aFirstPage.Len() )
-            aFirstPage = *pStr;
+            aFirstPage = aStr;
     }
     List* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
 
@@ -248,9 +248,6 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
             mpDoc->SetChanged( sal_True );
     }
     delete pDlg;
-    // Strings aus Liste loeschen
-    for( void* pStr = aPageNameList.First(); pStr; pStr = aPageNameList.Next() )
-        delete (String*) pStr;
 }
 
 } // end of namespace sd

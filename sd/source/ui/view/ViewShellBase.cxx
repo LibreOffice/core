@@ -392,8 +392,9 @@ void ViewShellBase::LateInit (const ::rtl::OUString& rsDefaultView)
             }
         }
     }
-    catch (RuntimeException&)
-    {}
+    catch (const RuntimeException&)
+    {
+    }
 
     // AutoLayouts have to be ready.
     GetDocument()->StopWorkStartupDelay();
@@ -1193,7 +1194,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
             }
         }
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -1395,7 +1396,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
             xConfigurationController->requestResourceDeactivation(
                 xPaneId);
     }
-    catch (const Exception &)
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1491,7 +1492,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         break;
                 }
             }
-            catch (DeploymentException)
+            catch (const DeploymentException&)
             {
             }
 
@@ -1531,7 +1532,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
             nItemId = aSetIterator.NextWhich();
         }
     }
-    catch (RuntimeException&)
+    catch (const RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1635,13 +1636,13 @@ void CurrentPageSetter::operator() (bool)
             Reference<beans::XPropertySet> xSet (mrBase.GetController(), UNO_QUERY_THROW);
             xSet->setPropertyValue (String::CreateFromAscii("CurrentPage"), aPage);
         }
-        catch (RuntimeException aException)
+        catch (const RuntimeException&)
         {
             // We have not been able to set the current page at the main view.
             // This is sad but still leaves us in a valid state.  Therefore,
             // this exception is silently ignored.
         }
-        catch (beans::UnknownPropertyException aException)
+        catch (const beans::UnknownPropertyException&)
         {
             DBG_ASSERT(false,"CurrentPage property unknown");
         }

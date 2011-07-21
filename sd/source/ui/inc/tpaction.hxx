@@ -32,7 +32,6 @@
 
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
-#include <svtools/filedlg.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <svx/dlgctrl.hxx>
@@ -97,7 +96,7 @@ private:
     XColorTable*            pColTab;
 
     sal_Bool                    bTreeUpdated;
-    List*                   pCurrentActions;
+    std::vector<com::sun::star::presentation::ClickAction> maCurrentActions;
     String                  aLastFile;
     ::std::vector< long >   aVerbVector;
 

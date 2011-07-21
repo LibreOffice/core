@@ -170,7 +170,6 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
 
 SdTPAction::~SdTPAction()
 {
-    delete pCurrentActions;
 }
 
 // -----------------------------------------------------------------------
@@ -267,25 +266,24 @@ void SdTPAction::Construct()
         }
     }
 
-    pCurrentActions = new List;
-    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_NONE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_PREVPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_NEXTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_FIRSTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_LASTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_BOOKMARK, LIST_APPEND);
-    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_DOCUMENT, LIST_APPEND);
-    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_SOUND, LIST_APPEND);
+    maCurrentActions.push_back( presentation::ClickAction_NONE );
+    maCurrentActions.push_back( presentation::ClickAction_PREVPAGE );
+    maCurrentActions.push_back( presentation::ClickAction_NEXTPAGE );
+    maCurrentActions.push_back( presentation::ClickAction_FIRSTPAGE );
+    maCurrentActions.push_back( presentation::ClickAction_LASTPAGE );
+    maCurrentActions.push_back( presentation::ClickAction_BOOKMARK );
+    maCurrentActions.push_back( presentation::ClickAction_DOCUMENT );
+    maCurrentActions.push_back( presentation::ClickAction_SOUND );
     if( bOLEAction && aLbOLEAction.GetEntryCount() )
-        pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_VERB, LIST_APPEND );
-    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_PROGRAM, LIST_APPEND);
-    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_MACRO, LIST_APPEND);
-    pCurrentActions->Insert((void*)(sal_uIntPtr)presentation::ClickAction_STOPPRESENTATION, LIST_APPEND);
+        maCurrentActions.push_back( presentation::ClickAction_VERB );
+    maCurrentActions.push_back( presentation::ClickAction_PROGRAM );
+    maCurrentActions.push_back( presentation::ClickAction_MACRO );
+    maCurrentActions.push_back( presentation::ClickAction_STOPPRESENTATION );
 
     // Action-Listbox fuellen
-    for (sal_uLong nAction = 0; nAction < pCurrentActions->Count(); nAction++)
+    for (size_t nAction = 0, n = maCurrentActions.size(); nAction < n; nAction++)
     {
-        sal_uInt16 nRId = GetClickActionSdResId((presentation::ClickAction)(sal_uLong)pCurrentActions->GetObject(nAction));
+        sal_uInt16 nRId = GetClickActionSdResId( maCurrentActions[ nAction ] );
         aLbAction.InsertEntry( String( SdResId( nRId ) ) );
     }
 
@@ -753,8 +751,8 @@ presentation::ClickAction SdTPAction::GetActualClickAction()
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
     sal_uInt16 nPos = aLbAction.GetSelectEntryPos();
 
-    if (nPos != LISTBOX_ENTRY_NOTFOUND)
-        eCA = (presentation::ClickAction)(sal_uLong)pCurrentActions->GetObject((sal_uLong)nPos);
+    if (nPos != LISTBOX_ENTRY_NOTFOUND && nPos < maCurrentActions.size())
+        eCA = maCurrentActions[ nPos ];
     return( eCA );
 }
 
@@ -762,9 +760,11 @@ presentation::ClickAction SdTPAction::GetActualClickAction()
 
 void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
 {
-    sal_uInt16 nPos = (sal_uInt16)pCurrentActions->GetPos((void*)(sal_uLong)eCA);
-    DBG_ASSERT(nPos != 0xffff, "unbekannte Interaktion");
-    aLbAction.SelectEntryPos(nPos);
+    std::vector<com::sun::star::presentation::ClickAction>::const_iterator pIter =
+            std::find(maCurrentActions.begin(),maCurrentActions.end(),eCA);
+
+    if ( pIter != maCurrentActions.end() )
+        aLbAction.SelectEntryPos( pIter-maCurrentActions.begin() );
 }
 
 //------------------------------------------------------------------------

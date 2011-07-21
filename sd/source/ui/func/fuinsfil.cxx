@@ -243,7 +243,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                     ++aIter;
                 }
             }
-            catch(IllegalArgumentException)
+            catch (const IllegalArgumentException&)
             {
             }
         }
