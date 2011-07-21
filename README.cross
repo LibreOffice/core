@@ -98,7 +98,9 @@ CXX_FOR_BUILD=ccache g++
 --build=x86_64-unknown-linux-gnu
 --host=i686-w64-mingw32
 --with-distro=LibreOfficeWin32
+--disable-binfilter
 --disable-build-mozilla
+--disable-directx
 --disable-ext-nlpsolver
 --disable-ext-pdfimport
 --disable-ext-presenter-console
@@ -117,6 +119,7 @@ CXX_FOR_BUILD=ccache g++
 --with-system-altlinuxhyph
 --with-system-boost
 --with-system-cairo
+--with-system-cppunit
 --with-system-curl
 --with-system-db
 --with-system-expat
@@ -134,7 +137,6 @@ CXX_FOR_BUILD=ccache g++
 --with-system-neon
 --with-system-openssl
 --with-system-redland
---with-system-zlib
 --with-vendor=no
 
 
