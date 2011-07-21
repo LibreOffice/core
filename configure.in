@@ -1359,6 +1359,7 @@ AC_ARG_WITH(macosx-version-max-allowed,
 
 BUILD_TYPE="LibO"
 SCPDEFS=""
+GIT_REPO_NAMES="help"
 
 echo "********************************************************************"
 echo "*"
@@ -8711,7 +8712,6 @@ AC_SUBST(PRODUCTVERSION)
 dnl ===================================================================
 dnl Dealing with l10n options
 dnl ===================================================================
-GIT_REPO_NAMES="help"
 AC_MSG_CHECKING([which languages to be built])
 # get list of all languages
 # generate shell variable from completelangiso= from solenv/inc/langlist.mk
