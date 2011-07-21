@@ -15,7 +15,6 @@ dt	desktop\win32\source\guiloader			nmake	-	w	dt_guiloader dt_wrapper.w dt_inc N
 dt  desktop\win32\source\guistdio           nmake   -   w   dt_guistdio dt_inc NULL
 dt	desktop\win32\source\applauncher		nmake	-	w	dt_applauncher dt_inc NULL
 dt	desktop\win32\source\applauncher\ooo	nmake	-	w	dt_applauncher_ooo dt_applauncher.w dt_inc NULL
-dt	desktop\win32\source\rebase				nmake	-	w	dt_rebase dt_inc NULL
 dt	desktop\win32\source\QuickStart		nmake	-	w	dt_win32_quickstart NULL
 dt	desktop\win32\source\QuickStart\so	nmake	-	w	dt_win32_quickstart_so dt_win32_quickstart.w NULL
 
@@ -39,7 +38,7 @@ dt	desktop\source\deployment\registry\configuration	nmake	-	all	dt_dp_registry_c
 dt	desktop\source\deployment\registry\help			nmake	-	all	dt_dp_registry_help dt_inc NULL
 dt	desktop\source\deployment\registry\executable		nmake	-	all	dt_dp_registry_executable dt_inc NULL
 dt	desktop\scripts 						nmake	-	u	dt_scripts dt_inc NULL
-dt	desktop\util							nmake	-	all	dt_util dt_app dt_pagein.u dt_spl dt_uwrapper.u dt_usplash.u dt_wrapper.w dt_officeloader.w dt_officeloader_unx.u dt_migr dt_rebase.w dt_win32_quickstart_so.w dt_zipintro NULL
+dt	desktop\util							nmake	-	all	dt_util dt_app dt_pagein.u dt_spl dt_uwrapper.u dt_usplash.u dt_wrapper.w dt_officeloader.w dt_officeloader_unx.u dt_migr dt_win32_quickstart_so.w dt_zipintro NULL
 dt	desktop\zipintro							nmake	-	all	dt_zipintro NULL
 dt  desktop\registry\data\org\openoffice\Office                     nmake   -  all sn_regconfig NULL
 dt desktop\qa\deployment_misc nmake - all sn_qa_deployment_misc dt_dp_misc dt_inc NULL
