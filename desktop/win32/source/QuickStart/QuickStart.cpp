@@ -2,7 +2,7 @@
 // QuickStart.cpp : Defines the entry point for the application.
 //
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "resource.h"
 #include <systools/win32/uwinapi.h>
 #include <stdio.h>

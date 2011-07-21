@@ -43,13 +43,13 @@
 #include <time.h>
 #include <mbctype.h>
 #include <locale.h>
-#include <Msiquery.h>
-#include <MsiDefs.h>
+#include <msiquery.h>
+#include <msidefs.h>
 #include "strsafe.h"
 
 #include "setup.hxx"
 
-#include "resource.h"
+#include "Resource.h"
 
 //--------------------------------------------------------------------------
 

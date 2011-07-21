@@ -7,7 +7,7 @@
 #define CB_ADDSTRING	(WM_USER+3)
 #define IDC_STATIC		(-1)
 #endif
-#include "resource.h"
+#include "Resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
 //
