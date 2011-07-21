@@ -503,7 +503,7 @@ File gid_File_Lib_Desktopbe
     Name = STRING(CONCAT2(desktopbe1.uno,UNXSUFFIX));
 End
 
-#ifdef ENABLE_GTK
+#if defined(ENABLE_GTK) && !defined(ENABLE_GTK3)
 #ifdef GTK_TWO_FOUR
 File gid_File_Lib_Fps_Gnome
     TXT_FILE_BODY;
