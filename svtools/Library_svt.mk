@@ -112,9 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/contnr/imivctl1 \
     svtools/source/contnr/imivctl2 \
     svtools/source/contnr/ivctrl \
-    svtools/source/contnr/svicnvw \
     svtools/source/contnr/svimpbox \
-    svtools/source/contnr/svimpicn \
     svtools/source/contnr/svlbitm \
     svtools/source/contnr/svlbox \
     svtools/source/contnr/svtabbx \
