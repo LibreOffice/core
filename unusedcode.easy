@@ -225,12 +225,8 @@ Dialog::Dialog(Window*, ResId const&)
 Dialog::ImplCenterDialog()
 Dialog::IsStartedModal() const
 DicEntry::DicEntry()
-Dir::Dir()
-Dir::Dir(DirEntry const&, int, int, ...)
-DirEntry::CutExtension(char)
 DirEntry::GetDevice() const
 DirEntry::GetPathStyle()
-DirEntry::NameCompare(DirEntry const&) const
 DisclosureButton::DisclosureButton(Window*, long)
 DlgEdObj::LinkStubOnCreate(void*, void*)
 DockingWindow::GetMaxOutputSizePixel() const
@@ -604,8 +600,6 @@ MSFilterTracer::StartElement(rtl::OUString const&, com::sun::star::uno::Referenc
 MachineSettings::CopyData()
 MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
 MaskSet::MaskSet(SvxBmpMask*, long)
-Matrix3d::Inverse() const
-Matrix3d::Matrix3d()
 Menu::ConvertPoint(Point&, Window*) const
 Menu::GetAccessibleDescription(unsigned short) const
 Menu::GetDisplayItemId(long) const
@@ -1546,50 +1540,6 @@ SvI18NMap_Impl::Insert(SvI18NMapEntry_Impl* const*, unsigned short)
 SvI18NMap_Impl::Insert(SvI18NMap_Impl const*, unsigned short, unsigned short)
 SvI18NMap_Impl::Remove(SvI18NMapEntry_Impl* const&, unsigned short)
 SvI18NMap_Impl::Remove(unsigned short, unsigned short)
-SvIconView::AdjustAtGrid(SvLBoxEntry*)
-SvIconView::CalcScrollOffsets(Point const&, long&, long&, unsigned char, unsigned short)
-SvIconView::DisconnectFromModel()
-SvIconView::EnableInplaceEditing(unsigned char)
-SvIconView::EndTracking()
-SvIconView::GetCollapsedEntryBmp(SvLBoxEntry*) const
-SvIconView::GetCurParent() const
-SvIconView::GetEntryFromLogicPos(Point const&) const
-SvIconView::GetEntryPosition(SvLBoxEntry*) const
-SvIconView::GetExpandedEntryBmp(SvLBoxEntry*) const
-SvIconView::GetFocusRect(SvLBoxEntry*)
-SvIconView::GetNextEntry(Point const&, SvLBoxEntry*, unsigned char) const
-SvIconView::GetPrevEntry(Point const&, SvLBoxEntry*, unsigned char) const
-SvIconView::GetTextMode(SvLBoxEntry const*) const
-SvIconView::HideDDIcon()
-SvIconView::HideShowDDIcon(SvLBoxEntry*, Point const&)
-SvIconView::InsertEntry(String const&, Image const&, Image const&, SvLBoxEntry*, unsigned char, unsigned long)
-SvIconView::InvalidateEntry(SvLBoxEntry*)
-SvIconView::IsEntryPosLocked(SvLBoxEntry const*) const
-SvIconView::LockEntryPos(SvLBoxEntry*, unsigned char)
-SvIconView::SelectRect(Rectangle const&, unsigned char, SvPtrarr*, short)
-SvIconView::SetCollapsedEntryBmp(SvLBoxEntry*, Image const&)
-SvIconView::SetCurParent(SvLBoxEntry*)
-SvIconView::SetEntryPosition(SvLBoxEntry*, Point const&)
-SvIconView::SetEntryPosition(SvLBoxEntry*, Point const&, unsigned char)
-SvIconView::SetEntryText(SvLBoxEntry*, String const&)
-SvIconView::SetExpandedEntryBmp(SvLBoxEntry*, Image const&)
-SvIconView::SetGrid(long, long)
-SvIconView::SetModel(SvLBoxTreeList*)
-SvIconView::SetSpaceBetweenEntries(long, long)
-SvIconView::SetTextMode(SvIconViewTextMode, SvLBoxEntry*)
-SvIconView::ShowDDIcon(SvLBoxEntry*, Point const&)
-SvIconView::ShowFocusRect(SvLBoxEntry const*)
-SvIconView::SvIconView(Window*, ResId const&)
-SvIconView::SvIconView(Window*, long)
-SvImpIconView::CollapsingEntry(SvLBoxEntry*)
-SvImpIconView::EntryCollapsed(SvLBoxEntry*)
-SvImpIconView::EntryExpanded(SvLBoxEntry*)
-SvImpIconView::GetEntryTextModeSmart(SvLBoxEntry const*, SvIcnVwDataEntry const*) const
-SvImpIconView::InvalidateBoundingRect(SvLBoxEntry*)
-SvImpIconView::IsEntryInView(SvLBoxEntry*)
-SvImpIconView::RepaintSelectionItems()
-SvImpIconView::SetNoSelection()
-SvImpIconView::UpdateBoundingRects()
 SvImpLBox::IndentChanged(short)
 SvImpLBox::RepaintSelectionItems()
 SvInplaceEdit::StopEditing(unsigned char)
