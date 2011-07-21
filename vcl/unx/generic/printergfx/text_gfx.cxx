@@ -819,10 +819,14 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppli
             convertPfbToPfa (aFontFile, *pFile);
             aFontFile.close ();
 
-            pFile->setPos(osl_Pos_Current, -1);
             char lastchar = '\n';
-            sal_uInt64 uBytes(1);
-            pFile->read((void *)(&lastchar), uBytes, uBytes);
+
+            if (pFile->setPos(osl_Pos_Current, -1) == osl::FileBase::E_None)
+            {
+                sal_uInt64 uBytes(1);
+                pFile->read((void *)(&lastchar), uBytes, uBytes);
+            }
+
             if (lastchar != '\n')
                 WritePS (pFile, "\n");
         }
