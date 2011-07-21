@@ -2197,6 +2197,7 @@ if test "$enable_binfilter" = "no"; then
 else
     WITH_BINFILTER="YES"
     BUILD_TYPE="$BUILD_TYPE BINFILTER"
+    GIT_REPO_NAMES="$GIT_REPO_NAMES binfilter"
     AC_MSG_RESULT([yes])
 fi
 AC_SUBST(WITH_BINFILTER)
