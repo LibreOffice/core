@@ -3080,11 +3080,30 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
     basegfx::B2IVector size = m_aFrame->getSize();
     sal_Int32 nStride = m_aFrame->getScanlineStride();
 
-    if (area->y + area->height > size.getY() ||
-        area->x + area->width > size.getX()) {
-        g_warning ("Error: renderArea: invalid geometry of sub area !");
-        return;
+    long ax = area->x;
+    long ay = area->y;
+    long awidth = area->width;
+    long aheight = area->height;
+
+    // Sanity check bounds - we get some odd things here.
+    if( ax >= size.getX() )
+        ax = size.getX() - 1;
+    if( ay >= size.getY() )
+        ay = size.getY() - 1;
+    if( ax < 0 )
+    {
+        ax = 0;
+        awidth += ax;
     }
+    if( ay < 0 )
+    {
+        ay = 0;
+        aheight += ay;
+    }
+    if( ax + awidth > size.getX() )
+        awidth = size.getX() - ax;
+    if( ay + aheight > size.getY() )
+        aheight = size.getY() - ay;
 
     cairo_save( cr );
 
@@ -3092,11 +3111,11 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
     unsigned char *p, *src, *mem = (unsigned char *)malloc (32 * cairo_stride * area->height);
     p = mem;
     src = data.get();
-    src += (int)area->y * nStride + (int)area->x * 3;
+    src += (int)ay * nStride + (int)ax * 3;
 
-    for (int y = 0; y < area->height; ++y)
+    for (int y = 0; y < aheight; ++y)
     {
-        for (int x = 0; x < area->width; ++x)
+        for (int x = 0; x < awidth; ++x)
         {
             p[x*4 + 0] = src[x*3 + 0]; // B
             p[x*4 + 1] = src[x*3 + 1]; // G
@@ -3109,7 +3128,7 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
     cairo_surface_t *pSurface =
         cairo_image_surface_create_for_data( mem,
                                              CAIRO_FORMAT_ARGB32,
-                                             area->width, area->height,
+                                             awidth, aheight,
                                              cairo_stride );
     /*    g_warning( "Fixed cairo status %d %d strides: %d vs %d, mask %d\n",
                (int) cairo_status( cr ),
@@ -3119,7 +3138,7 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
                (int) (cairo_stride & (sizeof (uint32_t)-1)) ); */
 
     cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
-    cairo_set_source_surface( cr, pSurface, area->x, area->y );
+    cairo_set_source_surface( cr, pSurface, ax, ay );
     cairo_paint( cr );
     cairo_surface_destroy( pSurface );
     free (mem);
@@ -3131,7 +3150,7 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
         cairo_save( cr );
         cairo_set_line_width( cr, 1.0 );
         cairo_set_source_rgb( cr, 1.0, 0, 0 );
-        cairo_rectangle( cr, area->x + 1.0, area->y + 1.0, area->width - 2.0, area->height - 2.0 );
+        cairo_rectangle( cr, ax + 1.0, ay + 1.0, awidth - 2.0, aheight - 2.0 );
         cairo_stroke( cr );
         cairo_restore( cr );
     }
@@ -3178,7 +3197,7 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 
 #if GTK_CHECK_VERSION(3,0,0)
         pThis->renderArea( cr, &rect );
- #endif
+#endif
     }
 
     pThis->m_nDuringRender--;
