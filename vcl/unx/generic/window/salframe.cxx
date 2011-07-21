@@ -1008,15 +1008,6 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
 #endif
             }
 
-            if ( !bFoundIconSize )
-            {
-               // Unless someone has fixed olwm/olvwm, we have rejected
-               // the max icon size from |XGetIconSizes()|.  Provide a
-               // better icon size default value, in case our window manager
-               // is olwm/olvwm.
-               const String& rWM( pDisplay_->getWMAdaptor()->getWindowManagerName() );
-            }
-
             XFree( pIconSize );
         }
         else
@@ -1714,7 +1705,6 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
             }
 
             const Size& aScreenSize = pDisplay_->getDataForScreen( m_nScreen ).m_aSize;
-            const WMAdaptor *pWM = GetDisplay()->getWMAdaptor();
 
             if( bDoAdjust && aPosSize.GetWidth() <= aScreenSize.Width()
                 && aPosSize.GetHeight() <= aScreenSize.Height() )
