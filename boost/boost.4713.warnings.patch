@@ -879,3 +879,16 @@
              if( !allow_null )
              {
                  BOOST_PTR_CONTAINER_THROW_EXCEPTION( 0 == x && "null not allowed", 
+--- misc/boost_1_44_0/boost/pool/object_pool.hpp.orig	2011-07-14 16:08:31.672964851 +0100
++++ misc/build/boost_1_44_0/boost/pool/object_pool.hpp	2011-07-14 16:09:20.851594534 +0100
+@@ -53,8 +53,8 @@
+ 
+   public:
+     // This constructor parameter is an extension!
+-    explicit object_pool(const size_type next_size = 32)
+-    :pool<UserAllocator>(sizeof(T), next_size) { }
++    explicit object_pool(const size_type next_size_ = 32)
++    :pool<UserAllocator>(sizeof(T), next_size_) { }
+ 
+     ~object_pool();
+ 

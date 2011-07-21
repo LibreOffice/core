@@ -333,7 +333,7 @@
  #
  gdk-pixbuf-enum-types.h : $(gdk_pixbuf_headers) makefile.msc
 -	$(PERL) $(GLIB)\gobject\glib-mkenums \
-+	$(PERL) $(OUTDIR)\bin\glib-mkenums \
++	perl $(OUTDIR)\bin\glib-mkenums \
  		--fhead "#ifndef __GDK_PIXBUF__ENUM_TYPES_H__\n#define __GDK_PIXBUF_ENUM_TYPES_H__\n" \
  		--fprod "/* enumerations from \"@filename@\" */\n" \
  		--vhead "GType @enum_name@_get_type (void);\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n"         \
@@ -343,7 +343,7 @@
  gdk-pixbuf-enum-types.c: $(gdk_pixbuf_headers) makefile.msc
 -	$(PERL) $(GLIB)\gobject\glib-mkenums \
 -		--fhead "#include <gdk-pixbuf/gdk-pixbuf.h>" \
-+	$(PERL) $(OUTDIR)\bin\glib-mkenums \
++	perl $(OUTDIR)\bin\glib-mkenums \
 +		--fhead "#include <gdk-pixbuf.h>" \
  		--fprod "\n/* enumerations from \"@filename@\" */" \
  		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {"       \

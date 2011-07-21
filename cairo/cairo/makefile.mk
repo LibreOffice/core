@@ -35,14 +35,9 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF  "$(ENABLE_CAIRO)" == ""
+.IF "$(SYSTEM_CAIRO)" == "YES" || "$(GUIBASE)" == "android"
 all:
-    @echo "Nothing to do (Cairo not enabled)."
-
-.ELIF "$(SYSTEM_CAIRO)" == "YES"
-all:
-    @echo "Nothing to do, using system cairo."
-
+    @echo "Not building cairo."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -53,6 +48,10 @@ TARFILE_NAME=$(PRJNAME)-$(CAIROVERSION)
 TARFILE_MD5=4ea70ea87b47e92d318d4e7f5b940f47
 
 PATCH_FILES=..$/$(TARFILE_NAME).patch
+
+.IF "$(OS)" == "IOS"
+PATCH_FILES+=..$/$(TARFILE_NAME).ios.patch
+.ENDIF
 
 cairo_CFLAGS=$(SOLARINC)
 cairo_LDFLAGS=$(SOLARLIB)
@@ -148,21 +147,21 @@ cairo_CFLAGS+=-march=i486
 
 CONFIGURE_DIR=
 
-.IF "$(OS)"=="ANDROID"
-# No pkg-config in the Android NDK
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+# No pkg-config on MacOSX (for iOS) or in the Android NDK
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
 .ELSE
 CONFIGURE_ACTION=.$/configure
 .ENDIF
 
 .IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS=--disable-shared
+CONFIGURE_FLAGS=--disable-shared --disable-xlib --enable-quartz --enable-quartz-font
 .ELSE
 CONFIGURE_FLAGS=--disable-static --enable-xlib
 .ENDIF
 
-.IF "$(OS)"=="ANDROID"
-CONFIGURE_FLAGS+=--disable-ft
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+CONFIGURE_FLAGS+=--disable-ft PKG_CONFIG=./dummy_pkg_config
 .ELSE
 CONFIGURE_FLAGS+=--enable-ft
 .ENDIF
@@ -177,9 +176,13 @@ BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 
+.IF "$(OS)" == "IOS"
+OUT2INC+=src$/cairo-quartz.h
+.ELSE
 OUT2INC+=src$/cairo-xlib.h \
      src$/cairo-xlib-xrender.h \
      src$/cairo-ft.h
+.ENDIF
 
 .ENDIF
 
@@ -189,12 +192,10 @@ OUT2INC+=src$/cairo-xlib.h \
 .IF "$(OS)" != "WNT" || "$(COM)" == "GCC"
 # all other platforms except vanilla WNT, which does not use configure
 
-.IF "$(BUILD_PIXMAN)" == "YES"
 # pixman is in this module
 # We include paths to this module also in LDFLAGS/CFLAGS to guarantee search order.
 # However pixman_* vars need to be also set for configure to work properly on all platforms.
 CONFIGURE_FLAGS+=pixman_CFLAGS="-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc" pixman_LIBS="-L$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/lib -lpixman-1"
-.ENDIF
 
 .IF "$(debug)"!=""
 cairo_CFLAGS+=-g
@@ -229,7 +230,7 @@ OUT2LIB+=src$/release$/*.lib
 OUT2BIN+=src$/release$/*.dll
 .ENDIF
 .ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
-OUT2LIB+=src$/.libs$/libcairo-1.a
+OUT2LIB+=src$/.libs$/libcairo*.a
 .ELSE
 OUT2LIB+=src$/.libs$/libcairo.so*
 .ENDIF

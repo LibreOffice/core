@@ -35,11 +35,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF  "$(ENABLE_CAIRO)" == ""
-all:
-    @echo "Nothing to do (Cairo not enabled)."
-
-.ELIF "$(BUILD_PIXMAN)" == ""
+.IF "$(SYSTEM_CAIRO)" == "YES" || "$(GUIBASE)" == "android"
 all:
     @echo "Not building pixman."
 

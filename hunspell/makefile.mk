@@ -36,8 +36,8 @@ TARGET=hunspell
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hunspell-1.3.1
-TARFILE_MD5=9ed97fce60a9a65852402248a6659492
+TARFILE_NAME=hunspell-1.3.2
+TARFILE_MD5=3121aaf3e13e5d88dfff13fb4a5f1ab8
 ADDITIONAL_FILES+=config.h
 
 PATCH_FILES=\
@@ -73,20 +73,23 @@ CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 
-OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
+OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.3.a
 
 .ENDIF # "$(GUI)"=="UNX"
 
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-PATCH_FILES=\
-    hunspell-mingw.patch
-
 CONFIGURE_ACTION=configure
+
 CONFIGURE_FLAGS= --disable-shared --disable-nls --with-pic LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
 BUILD_ACTION=make
-OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
+OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.3.a
 .ELSE
 BUILD_ACTION=cd src/hunspell && dmake
 .ENDIF

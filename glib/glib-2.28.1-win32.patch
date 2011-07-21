@@ -77,7 +77,7 @@
  !ELSE
 -ZLIB_CFLAGS = -I $(DEVTOP)\include
 -ZLIB_LIBS = $(DEVTOP)\lib\zdll.lib
-+ZLIB_CFLAGS = -I $(ZLIB)
++ZLIB_CFLAGS = -I $(OUTDIR)\inc\external\zlib
 +ZLIB_LIBS = $(OUTDIR)\lib\zlib.lib
  !ENDIF
  
