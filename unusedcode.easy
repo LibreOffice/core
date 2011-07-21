@@ -2309,19 +2309,6 @@ WPXPropertyList::Iter::last()
 WPXPropertyListVector::Iter::last()
 WPXString::Iter::last()
 WPXSubDocument::WPXSubDocument()
-WW8Bytes::Replace(unsigned char const&, unsigned short)
-WW8Bytes::Replace(unsigned char const*, unsigned short, unsigned short)
-WW8Bytes::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned char const&, void*), void*)
-WW8OleMaps::Insert(WW8OleMap* const&, unsigned short&)
-WW8OleMaps::Insert(WW8OleMap* const*, unsigned short)
-WW8OleMaps::Insert(WW8OleMaps const*, unsigned short, unsigned short)
-WW8OleMaps::Remove(WW8OleMap* const&, unsigned short)
-WW8OleMaps::Remove(unsigned short, unsigned short)
-WW8_WrSepInfoPtrs::Insert(WW8_WrSepInfoPtrs const*, unsigned short, unsigned short, unsigned short)
-WW8_WrSepInfoPtrs::Remove(unsigned short, unsigned short)
-WW8_WrSepInfoPtrs::Replace(WW8_SepInfo const&, unsigned short)
-WW8_WrSepInfoPtrs::Replace(WW8_SepInfo const*, unsigned short, unsigned short)
-WW8_WrSepInfoPtrs::_ForEach(unsigned short, unsigned short, unsigned char (*)(WW8_SepInfo const&, void*), void*)
 WinMtfOutput::DrawLine(Point const&, Point const&)
 WinMtfOutput::GetTextLayoutMode() const
 WinMtfOutput::SetFont(Font const&)
@@ -4768,23 +4755,6 @@ writerfilter::dmapper::MeasureHandler::isAutoWidth() const
 writerfilter::dmapper::SectionPropertyMap::GetPageStyleName(bool)
 writerfilter::dmapper::SectionPropertyMap::SetPageStyleName(bool, rtl::OUString const&)
 writerfilter::dmapper::StyleSheetTable::resolveSprmProps(writerfilter::Sprm&)
-writerfilter::doctok::DffOPT::get_extraoffset_count()
-writerfilter::doctok::WW8BinaryObjReference::WW8BinaryObjReference(writerfilter::doctok::WW8Stream&, unsigned int, unsigned int)
-writerfilter::doctok::WW8BinaryObjReference::WW8BinaryObjReference(writerfilter::doctok::WW8StructBase&, unsigned int, unsigned int)
-writerfilter::doctok::WW8DocumentImpl::getAnnotation(unsigned int)
-writerfilter::doctok::WW8DocumentImpl::getAnnotationCount() const
-writerfilter::doctok::WW8DocumentImpl::getCpAndFc(writerfilter::doctok::Fc const&, writerfilter::doctok::PropertyType) const
-writerfilter::doctok::WW8DocumentImpl::getEndnote(unsigned int)
-writerfilter::doctok::WW8DocumentImpl::getEndnoteCount() const
-writerfilter::doctok::WW8DocumentImpl::getFootnote(unsigned int)
-writerfilter::doctok::WW8DocumentImpl::getFootnoteCount() const
-writerfilter::doctok::WW8DocumentImpl::getPicLocation() const
-writerfilter::doctok::WW8DocumentImpl::getTextboxEndCp() const
-writerfilter::doctok::WW8DocumentImpl::getTextboxHeaderEndCp() const
-writerfilter::doctok::WW8DocumentIteratorImpl::getSED() const
-writerfilter::doctok::WW8PropertyImpl::WW8PropertyImpl(writerfilter::doctok::WW8Stream&, unsigned int, unsigned int)
-writerfilter::doctok::WW8PropertyImpl::WW8PropertyImpl(writerfilter::doctok::WW8StructBase*, unsigned int, unsigned int)
-writerfilter::doctok::WW8PropertyImpl::getParamOffset() const
 writerfilter::doctok::WW8StructBase::getBit(unsigned int, unsigned short) const
 writerfilter::doctok::WW8StructBase::getNibble(unsigned int, unsigned short) const
 writerfilter::doctok::WW8Sttbf::getExtraData(unsigned int)
