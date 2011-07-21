@@ -36,7 +36,24 @@ namespace basic
 {
 //........................................................................
 
-    IMPLEMENT_COMPONENT_MODULE( BasicModule );
+    struct BasicModuleCreator
+    {
+        BasicModule m_aBasicModule;
+    };
+    namespace
+    {
+        class theBasicModuleInstance : public rtl::Static<BasicModuleCreator, theBasicModuleInstance> {};
+    }
+
+    BasicModule::BasicModule()
+        :BaseClass()
+    {
+    }
+
+    BasicModule& BasicModule::getInstance()
+    {
+        return theBasicModuleInstance::get().m_aBasicModule;
+    }
 
 //........................................................................
 } // namespace basic
