@@ -147,7 +147,8 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet& )
 OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
                                         const SfxItemSet& rSet )
     : SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_MSFILTEROPT2 ), rSet ),
-    aCheckLB            ( this, CUI_RES( CLB_SETTINGS   )),
+    m_aCheckLBContainer(this, CUI_RES( CLB_SETTINGS)),
+    aCheckLB(m_aCheckLBContainer),
     aHeader1FT          ( this, CUI_RES( FT_HEADER1_EXPLANATION )),
     aHeader2FT          ( this, CUI_RES( FT_HEADER2_EXPLANATION )),
     sHeader1            ( CUI_RES( ST_HEADER1 )),

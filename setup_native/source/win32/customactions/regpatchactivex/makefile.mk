@@ -30,13 +30,13 @@ PRJNAME=setup_native
 TARGET=regpatchactivex
 USE_DEFFILE=TRUE
 
-.IF "$(GUI)"=="WNT"
-
 # --- Settings -----------------------------------------------------
 
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
+
+.IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
 STDSHL=
 
@@ -78,12 +78,10 @@ SHL1BASE = 0x1c000000
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
+.ENDIF
+
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
-
-
-.ENDIF
-

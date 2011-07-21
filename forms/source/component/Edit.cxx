@@ -485,7 +485,7 @@ namespace
                 {
                     _rxDest->setPropertyValue( pSourceProps->Name, _rxSource->getPropertyValue( pSourceProps->Name ) );
                 }
-                catch( IllegalArgumentException e )
+                catch(const IllegalArgumentException& e)
                 {
 #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OString sMessage( "could not transfer the property named '" );
@@ -497,6 +497,8 @@ namespace
                         sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
                     }
                     OSL_FAIL( sMessage.getStr() );
+#else
+                    (void)e;
 #endif
                 }
 

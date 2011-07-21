@@ -271,7 +271,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
     // save configuration at INI-Manager
     // and remove pages
     SvtViewOptions aTabDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
-    aTabDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
+    aTabDlgOpt.SetWindowState(::rtl::OStringToOUString(GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
     aTabDlgOpt.SetPageID( mnCurrentPageId );
 
     for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
@@ -1106,7 +1106,7 @@ void IconChoiceDialog::Start_Impl()
     if ( aTabDlgOpt.Exists() )
     {
         // ggf. Position aus Konfig
-        SetWindowState( ByteString( aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
+        SetWindowState(rtl::OUStringToOString(aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
 
         // initiale TabPage aus Programm/Hilfe/Konfig
         nActPage = (sal_uInt16)aTabDlgOpt.GetPageID();

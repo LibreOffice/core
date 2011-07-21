@@ -57,10 +57,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( char const
     return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);
 }
 
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment ( const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -124,11 +124,10 @@ TTSettings* GetTTSettings()
     return pTTSettings;
 }
 
-
-
-
 // FIXME: HELPID
-#define IS_WINP_CLOSING(pWin) (pWin->GetHelpId().equals( "TT_Win_is_closing_HID" ) && pWin->GetUniqueId().equals( "TT_Win_is_closing_UID" ))
+#define IS_WINP_CLOSING(pWin) \
+    (pWin->GetHelpId().equalsL(RTL_CONSTASCII_STRINGPARAM("TT_Win_is_closing_HID")) && \
+     pWin->GetUniqueId().equalsL(RTL_CONSTASCII_STRINGPARAM("TT_Win_is_closing_UID")))
 
 StatementList::StatementList()
 : nRetryCount(MAX_RETRIES)

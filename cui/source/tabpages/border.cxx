@@ -88,21 +88,6 @@ static sal_uInt16 pRanges[] =
 
 sal_Bool SvxBorderTabPage::bSync = sal_True;
 
-//------------------------------------------------------------------------
-
-#define RGBCOL(eColorName) (TpBorderRGBColor(eColorName))
-
-// LOKALE FUNKTION
-// Konvertiert in echte RGB-Farben, damit in den Listboxen
-// endlich mal richtig selektiert werden kann.
-
-Color TpBorderRGBColor( ColorData aColorData )
-{
-    Color aRGBColor( aColorData );
-
-    return( aRGBColor );
-}
-
 // -----------------------------------------------------------------------
 void lcl_SetDecimalDigitsTo1(MetricField& rField)
 {

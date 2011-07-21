@@ -97,9 +97,8 @@ void BasicIDEDLL::Init()
     SfxObjectFactory* pFact = &BasicDocShell::Factory();
     (void)pFact;
 
-    ByteString aResMgrName( "basctl" );
     ResMgr* pMgr = ResMgr::CreateResMgr(
-        aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+        "basctl", Application::GetSettings().GetUILocale() );
 
     BASIC_MOD() = new BasicIDEModule( pMgr, &BasicDocShell::Factory() );
 

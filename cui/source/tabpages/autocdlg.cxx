@@ -428,7 +428,8 @@ enum OfaAutoFmtOptions
 OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, CUI_RES(RID_OFAPAGE_AUTOFMT_APPLY), rSet),
-    aCheckLB            (this,  CUI_RES(CLB_SETTINGS)),
+    m_aCheckLBContainer(this, CUI_RES(CLB_SETTINGS)),
+    aCheckLB(m_aCheckLBContainer),
     aEditPB             (this,  CUI_RES(PB_EDIT)),
     aHeader1Expl        (this,  CUI_RES(FT_HEADER1_EXPLANATION)),
     aHeader2Expl        (this,  CUI_RES(FT_HEADER2_EXPLANATION)),
@@ -1897,7 +1898,8 @@ SvLBoxEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
 OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_QUOTE ), rSet),
     aCheckLB            (this, CUI_RES(CLB_SETTINGS     )),
-    aSwCheckLB          (this, CUI_RES(CLB_SETTINGS     )),
+    m_aSwCheckLBContainer(this, CUI_RES(CLB_SETTINGS)),
+    aSwCheckLB(m_aSwCheckLBContainer),
     sHeader1            (CUI_RES( STR_HEADER1           )),
     sHeader2            (CUI_RES( STR_HEADER2           )),
     sNonBrkSpace        (CUI_RES( ST_NON_BREAK_SPACE    )),

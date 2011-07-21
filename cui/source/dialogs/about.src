@@ -33,7 +33,6 @@ ModalDialog RID_DEFAULTABOUT
     Size = MAP_APPFONT ( 245 , 280 ) ;
     Moveable = TRUE ;
     SVLook = TRUE ;
-//    TEXT_DEFAULTABOUT
     OKButton ABOUT_BTN_OK
     {
         DefButton = TRUE ;
@@ -57,6 +56,9 @@ ModalDialog RID_DEFAULTABOUT
         IgnoreTab = TRUE ;
         ReadOnly = TRUE ;
         AutoVScroll = TRUE ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
     };
     FixedText ABOUT_FTXT_LINK
     {
@@ -72,14 +74,14 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_STR_COPYRIGHT
     {
-        Text[ en-US ] = "Copyright © 2000, 2010 LibreOffice contributors and/or their affiliates. All rights reserved.\nThis product was created by %OOOVENDOR, based on OpenOffice.org, which is Copyright 2000, 2010 Oracle and/or its affiliates.\n%OOOVENDOR acknowledges all community members, please find more info at the link below:";
+        Text[ en-US ] = "Copyright © 2000, 2010 LibreOffice contributors and/or their affiliates. All rights reserved.\n\nThis product was created by %OOOVENDOR, based on OpenOffice.org, which is Copyright 2000, 2010 Oracle and/or its affiliates.\n\n%OOOVENDOR acknowledges all community members, please find more info at the link below:";
     };
     String ABOUT_STR_LINK
     {
         Text[ en-US ] = "http://www.libreoffice.org/credits.html";
     };
-    String ABOUT_STR_ACCEL
+    String ABOUT_STR_BUILD
     {
-        Text = "SDT" ;
+        Text[ en-US ] = "Build ID:";
     };
 };

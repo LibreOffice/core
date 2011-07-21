@@ -65,36 +65,6 @@ xmlChar* ous_to_nxmlstr( const rtl::OUString& oustr, int& length )
 }
 
 /**
- * The input parameter isn't necessaryly NULL terminated.
- */
-rtl::OUString xmlchar_to_ous( const xmlChar* pChar, int length )
-{
-    if( pChar != NULL )
-    {
-        return rtl::OUString( ( sal_Char* )pChar , length , RTL_TEXTENCODING_UTF8 ) ;
-    }
-    else
-    {
-        return rtl::OUString() ;
-    }
-}
-
-/**
- * The input parameter is NULL terminated
- */
-rtl::OUString xmlstr_to_ous( const xmlChar* pStr )
-{
-    if( pStr != NULL )
-    {
-        return xmlchar_to_ous( pStr , xmlStrlen( pStr ) ) ;
-    }
-    else
-    {
-        return rtl::OUString() ;
-    }
-}
-
-/**
  * The return value and the referenced value must be NULL terminated.
  * The application has the responsibilty to deallocte the return value.
  */

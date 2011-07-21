@@ -344,7 +344,7 @@ sal_Bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
                 {
                     m_xAppEvents->replaceByName( eventName, GetPropsByName( eventName, m_appEventsHash ) );
                 }
-                catch( const Exception& )
+                catch (const Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
@@ -361,7 +361,7 @@ sal_Bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
                 {
                     m_xDocEvents->replaceByName( eventName, GetPropsByName( eventName, m_docEventsHash ) );
                 }
-                catch( const Exception& )
+                catch (const Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
@@ -375,7 +375,7 @@ sal_Bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
             }
         }
     }
-    catch(Exception&)
+    catch (const Exception&)
     {
     }
     // what is the return value about??
@@ -420,7 +420,7 @@ void _SvxMacroTabPage::Reset()
                 }
             }
     }
-    catch(Exception&)
+    catch (const Exception&)
     {
     }
     DisplayAppEvents(bAppEvents);
@@ -763,8 +763,9 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
         {
             m_appEventsHash[ eventNames[nEvent] ] = GetPairFromAny( m_xAppEvents->getByName( eventNames[nEvent] ) );
         }
-        catch (Exception e)
-        {}
+        catch (const Exception&)
+        {
+        }
     }
     if(m_xDocEvents.is())
     {
@@ -776,8 +777,9 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
             {
                 m_docEventsHash[ eventNames[nEvent] ] = GetPairFromAny( m_xDocEvents->getByName( eventNames[nEvent] ) );
             }
-            catch (Exception e)
-            {}
+            catch (const Exception&)
+            {
+            }
         }
     }
 }

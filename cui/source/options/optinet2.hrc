@@ -56,29 +56,6 @@
 #define FT_HTTPS_PORT               15
 #define ED_HTTPS_PORT               15
 
-// Search ------------------------------------------------------------------
-#define GB_SEARCH                   40
-#define LB_SEARCH                   40
-#define FT_SEARCH_NAME              41
-#define ED_SEARCH_NAME              41
-#define FT_SEARCH                   42
-#define RB_AND                      43
-#define RB_OR                       44
-#define RB_EXACT                    45
-#define FT_URL                      46
-#define ED_URL                      46
-#define FT_POSTFIX                  47
-#define ED_POSTFIX                  47
-#define FT_SEPARATOR                48
-#define ED_SEPARATOR                48
-#define FT_CASE                     49
-#define ED_CASE                     49
-#define PB_CHANGE                   53
-#define PB_DELETE                   54
-#define PB_ADD                      55
-#define PB_NEW                      56
-#define MSG_MODIFY                  57
-
 // Protocols  --------------------------------------------------------------
 #define GB_DNS                      105
 #define RB_DNS_AUTO                 106

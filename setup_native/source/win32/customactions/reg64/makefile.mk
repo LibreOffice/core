@@ -44,7 +44,7 @@ CDEFS+=-Dnot_used_define_to_disable_pch
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
 UWINAPILIB=
 
@@ -74,4 +74,3 @@ DEF1EXPORTFILE=exports.dxp
 
 .INCLUDE : target.mk
 INCLUDE!:=$(subst,/stl, $(INCLUDE))
-.EXPORT : INCLUDE

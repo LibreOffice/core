@@ -35,9 +35,8 @@ namespace svx {
 
 // class SvxRadioButtonListBox ----------------------------------------------------
 
-SvxRadioButtonListBox::SvxRadioButtonListBox( Window* _pParent, const ResId& _rId ) :
-
-    SvxSimpleTable( _pParent, _rId )
+SvxRadioButtonListBox::SvxRadioButtonListBox(SvxSimpleTableContainer& rParent, WinBits nBits)
+    : SvxSimpleTable(rParent, nBits)
 
 {
     EnableCheckButton( new SvLBoxButtonData( this, true ) );
@@ -50,16 +49,6 @@ SvxRadioButtonListBox::~SvxRadioButtonListBox()
 void SvxRadioButtonListBox::SetTabs()
 {
     SvxSimpleTable::SetTabs();
-/*
-    sal_uInt16 nAdjust = SV_LBOXTAB_ADJUST_RIGHT | SV_LBOXTAB_ADJUST_LEFT |
-                     SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_ADJUST_NUMERIC | SV_LBOXTAB_FORCE;
-    if ( aTabs.Count() > 0 )
-    {
-        SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(0);
-        pTab->nFlags &= ~nAdjust;
-        pTab->nFlags |= SV_LBOXTAB_PUSHABLE | SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_FORCE;
-    }
-*/
 }
 
 void SvxRadioButtonListBox::MouseButtonUp( const MouseEvent& _rMEvt )

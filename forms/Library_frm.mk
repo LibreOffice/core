@@ -35,12 +35,17 @@ $(eval $(call gb_Library_set_include,frm,\
     -I$(realpath $(SRCDIR)/forms/source/inc) \
     -I$(realpath $(SRCDIR)/forms/source/solar/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
     $(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_add_defs,frm,\
     $(if $(filter YES,$(SYSTEM_LIBXML)),-DSYSTEM_LIBXML $(filter-out -I%,$(LIBXML_CFLAGS))) \
+))
+
+$(eval $(call gb_Library_add_api,frm,\
+    offapi \
+    oovbaapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,frm,\

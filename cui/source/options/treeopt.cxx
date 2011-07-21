@@ -346,7 +346,6 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_ASIAN_LAYOUT:              fnCreate = &SvxAsianLayoutPage::Create; break;
         case RID_SVX_FONT_SUBSTITUTION:             fnCreate = &SvxFontSubstTabPage::Create; break;
         case RID_SVXPAGE_INET_PROXY:                fnCreate = &SvxProxyTabPage::Create; break;
-        case RID_SVXPAGE_INET_SEARCH:               fnCreate = &SvxSearchTabPage::Create; break;
         case RID_SVXPAGE_INET_SECURITY:             fnCreate = &SvxSecurityTabPage::Create; break;
         case RID_SVXPAGE_INET_MAIL:                 fnCreate = &SvxEMailTabPage::Create; break;
         case RID_SVXPAGE_COLORCONFIG:               fnCreate = &SvxColorOptionsTabPage::Create; break;
@@ -405,7 +404,6 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { "LanguageSettings",   "ComplexTextLayout",    RID_SVXPAGE_OPTIONS_CTL },
     { "Internet",           NULL,                   SID_INET_DLG },
     { "Internet",           "Proxy",                RID_SVXPAGE_INET_PROXY },
-    { "Internet",           "Search",               RID_SVXPAGE_INET_SEARCH },
     { "Internet",           "Email",                RID_SVXPAGE_INET_MAIL },
     { "Internet",           "MozillaPlugin",        RID_SVXPAGE_INET_MOZPLUGIN },
     { "LoadSave",           NULL,                   SID_FILTER_DLG },

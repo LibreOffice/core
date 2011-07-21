@@ -53,18 +53,9 @@ namespace css = ::com::sun::star;
 
 namespace
 {
-    void ShrinkToFit( FixedImage& _rImage );
-    void AdjustPosAndSize( Control& _rCtrl, Point& _rStartIn_EndOut, long _nXOffset = 0 );
-
     void ShrinkToFit( FixedImage& _rImg )
     {
         _rImg.SetSizePixel( _rImg.GetImage().GetSizePixel() );
-    }
-
-    void AdjustPosAndSize( Control& _rCtrl, Point& _rStartIn_EndOut, long _nOffs )
-    {
-        _rCtrl.SetPosPixel( _rStartIn_EndOut );
-        _rStartIn_EndOut.X() += XmlSec::ShrinkToFitWidth( _rCtrl, _nOffs );
     }
 }
 
@@ -264,7 +255,8 @@ void CertificateViewerDetailsTP::InsertElement( const String& _rField, const Str
 
 CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, CertificateViewer* _pDlg )
     :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_DETAILS ), _pDlg  )
-    ,maElementsLB           ( this, XMLSEC_RES( LB_ELEMENTS ) )
+    ,m_aElementsLBContainer(this, XMLSEC_RES(LB_ELEMENTS))
+    ,maElementsLB(m_aElementsLBContainer)
     ,maElementML            ( this, XMLSEC_RES( ML_ELEMENT ) )
     ,maStdFont              ( maElementML.GetControlFont() )
     ,maFixedWidthFont       ( OutputDevice::GetDefaultFont( DEFAULTFONT_UI_FIXED, LANGUAGE_DONTKNOW, DEFAULTFONT_FLAGS_ONLYONE, this ) )

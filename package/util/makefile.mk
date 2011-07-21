@@ -54,7 +54,11 @@ LIB1FILES=	\
 # --- Shared-Library -----------------------------------------------
 
 SHL1TARGET=$(TARGET)$(MAJOR_VERSION)
+.IF "$(COM)" == "MSC"
 SHL1IMPLIB=i$(TARGET)
+.ELSE
+SHL1IMPLIB=$(TARGET)$(MAJOR_VERSION)
+.ENDIF
 SHL1USE_EXPORTS=name
 
 SHL1STDLIBS=\

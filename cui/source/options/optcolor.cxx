@@ -935,7 +935,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     }
 
     XColorTable aColorTable( SvtPathOptions().GetPalettePath() );
-    aColorBoxes[0]->InsertAutomaticEntry();
     for( sal_Int32 i = 0; i < aColorTable.Count(); i++ )
     {
         XColorEntry* pEntry = aColorTable.GetColor(i);
@@ -952,8 +951,10 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
             aColorBoxes[i]->CopyEntries( *aColorBoxes[0] );
             if( i < sal_Int32(sizeof(aColorLBHids)/sizeof(aColorLBHids[0])) )
                aColorBoxes[i]->SetHelpId( aColorLBHids[i] );
+            aColorBoxes[i]->InsertAutomaticEntryColor(ColorConfig::GetDefaultColor((ColorConfigEntry) i));
         }
     }
+    aColorBoxes[0]->InsertAutomaticEntryColor(ColorConfig::GetDefaultColor((ColorConfigEntry) 0));
 }
 
 ColorConfigWindow_Impl::~ColorConfigWindow_Impl()
@@ -1414,7 +1415,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
         if(pBox && aScrollWindow.aColorBoxes[i] == pBox)
         {
             ColorConfigValue aColorEntry = pColorConfig->GetColorValue(ColorConfigEntry(i));
-            if(!pBox->GetSelectEntryPos())
+            if(pBox->IsAutomaticSelected())
             {
                 aColorEntry.nColor = COL_AUTO;
                 if(aScrollWindow.aWindows[i])

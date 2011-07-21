@@ -309,6 +309,7 @@ public:
 // ----------------------------
 // - TPGalleryThemeProperties -
 // ----------------------------
+typedef ::std::vector< FilterEntry* > FilterEntryList_impl;
 
 class TPGalleryThemeProperties : public SfxTabPage
 {
@@ -325,13 +326,13 @@ class TPGalleryThemeProperties : public SfxTabPage
     CheckBox            aCbxPreview;
     GalleryPreview      aWndPreview;
 
-    ExchangeData*       pData;
-    StringList          aFoundList;
-    List                aFilterEntryList;
-    Timer               aPreviewTimer;
-    String              aLastFilterName;
-    String              aPreviewString;
-    INetURLObject       aURL;
+    ExchangeData*           pData;
+    StringList              aFoundList;
+    FilterEntryList_impl    aFilterEntryList;
+    Timer                   aPreviewTimer;
+    String                  aLastFilterName;
+    String                  aPreviewString;
+    INetURLObject           aURL;
     sal_uInt16              nCurFilterPos;
     sal_uInt16              nFirstExtFilterPos;
     sal_Bool                bEntriesFound;

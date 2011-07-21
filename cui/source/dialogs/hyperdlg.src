@@ -68,13 +68,6 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Size = MAP_APPFONT( 56 - COL_DIFF, 10 );
         Text [ en-US ] = "~FTP";
     };
-    RadioButton RB_LINKTYP_TELNET
-    {
-        HelpID = "cui:RadioButton:RID_SVXPAGE_HYPERLINK_INTERNET:RB_LINKTYP_TELNET";
-        Pos = MAP_APPFONT( 173, 13 );
-        Size = MAP_APPFONT( 56, 10 );
-        Text [ en-US ] = "~Telnet";
-    };
     FixedText FT_TARGET_HTML
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
@@ -124,26 +117,10 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         TabStop = TRUE ;
         Text [ en-US ] = "WWW Browser";
 
-        QuickHelpText [ en-US ] = "WWW Browser" ;
+        QuickHelpText [ en-US ] = "Open web browser, copy an URL, and paste it to Target field" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "browse.bmp" ; };
-            MASKCOLOR
-        };
-    };
-
-    ImageButton BTN_TARGET
-    {
-        HelpID = "cui:ImageButton:RID_SVXPAGE_HYPERLINK_INTERNET:BTN_TARGET";
-        Pos = MAP_APPFONT ( 235, 40+2 ) ;
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
-        TabStop = TRUE ;
-        Text [ en-US ] = "Target in Document";
-
-        QuickHelpText [ en-US ] = "Target in Document" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "target.bmp" ; };
             MASKCOLOR
         };
     };
@@ -783,7 +760,7 @@ String RID_SVXSTR_HYPERDLG_HLINETTP
 };
 String RID_SVXSTR_HYPERDLG_HLINETTP_HELP
 {
-    Text [ en-US ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection." ;
+    Text [ en-US ] = "This is where you create a hyperlink to a Web page or FTP server connection." ;
 };
 
 String RID_SVXSTR_HYPERDLG_HLMAILTP

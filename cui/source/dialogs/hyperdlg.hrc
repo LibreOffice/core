@@ -30,7 +30,6 @@
 #define GRP_LINKTYPE                1
 #define RB_LINKTYP_INTERNET         2
 #define RB_LINKTYP_FTP              3
-#define RB_LINKTYP_TELNET           4
 #define FT_TARGET_HTML              5
 #define CB_TARGET_HTML              6
 #define FT_LOGIN                    7

@@ -271,14 +271,18 @@ End Sub
 
 
 Function InitResources(Description, ShortDescription as String) as boolean
+Dim xResource as Object
+Dim aArgs(0) as String
 	On Error Goto ErrorOcurred
-	oResSrv = createUnoService( &quot;com.sun.star.resource.VclStringResourceLoader&quot; )
-	If (IsNull(oResSrv)) then
+	aArgs(0) = ShortDescription
+	oConfigProvider = createUnoService(&quot;com.sun.star.configuration.ConfigurationProvider&quot;)
+	xResource = getProcessServiceManager().createInstanceWithArguments( &quot;org.libreoffice.resource.ResourceIndexAccess&quot;, aArgs() )
+	If (IsNull(xResource)) then
 		InitResources = FALSE
-		MsgBox( Description &amp; &quot;: No resource loader found&quot;, 16, GetProductName())
+		MsgBox(&quot;could not initialize ResourceIndexAccess&quot;)
 	Else
 		InitResources = TRUE
-		oResSrv.FileName = ShortDescription
+		oResSrv = xResource.getByName( &quot;String&quot; )
 	End If
 	Exit Function
 ErrorOcurred:
@@ -294,7 +298,7 @@ End Function
 Function GetResText( nID as integer ) As string
 	On Error Goto ErrorOcurred
 	If Not IsNull(oResSrv) Then
-		GetResText = oResSrv.getString( nID )
+		GetResText = oResSrv.getByIndex( nID )
 	Else
 		GetResText = &quot;&quot;
 	End If

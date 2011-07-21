@@ -40,7 +40,7 @@ USE_DEFFILE=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
 UWINAPILIB=
 
@@ -67,4 +67,3 @@ DEF1EXPORTFILE=exports.dxp
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
-

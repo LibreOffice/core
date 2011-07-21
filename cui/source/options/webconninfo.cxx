@@ -48,10 +48,9 @@ namespace svx
 
 // class PasswordTable ---------------------------------------------------
 
-PasswordTable::PasswordTable( Window* pParent, const ResId& rResId ) :
-    SvxSimpleTable( pParent, rResId )
+PasswordTable::PasswordTable(SvxSimpleTableContainer& rParent, WinBits nBits)
+    : SvxSimpleTable(rParent, nBits | WB_NOINITIALSELECTION)
 {
-    SetStyle( GetStyle() | WB_NOINITIALSELECTION );
 }
 
 void PasswordTable::InsertHeaderItem( sal_uInt16 nColumn, const String& rText, HeaderBarItemBits nBits )
@@ -97,7 +96,8 @@ void PasswordTable::Resort( bool bForced )
 WebConnectionInfoDialog::WebConnectionInfoDialog( Window* pParent ) :
      ModalDialog( pParent, CUI_RES( RID_SVXDLG_WEBCONNECTION_INFO ) )
     ,m_aNeverShownFI    ( this, CUI_RES( FI_NEVERSHOWN ) )
-    ,m_aPasswordsLB     ( this, CUI_RES( LB_PASSWORDS ) )
+    ,m_aPasswordsLBContainer(this, CUI_RES( LB_PASSWORDS))
+    ,m_aPasswordsLB(m_aPasswordsLBContainer)
     ,m_aRemoveBtn       ( this, CUI_RES( PB_REMOVE ) )
     ,m_aRemoveAllBtn    ( this, CUI_RES( PB_REMOVEALL ) )
     ,m_aChangeBtn       ( this, CUI_RES( PB_CHANGE ) )

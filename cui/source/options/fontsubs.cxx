@@ -57,7 +57,8 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     aFont2FT            (this,  CUI_RES(FT_FONT2)),
     aFont2CB            (this,  CUI_RES(CB_FONT2)),
     aNewDelTBX          (this,  CUI_RES(TBX_SUBSTNEWDEL)),
-    aCheckLB            (this,  CUI_RES(CLB_SUBSTITUTES)),
+    m_aCheckLBContainer(this, CUI_RES(CLB_SUBSTITUTES)),
+    aCheckLB(m_aCheckLBContainer),
 
     aSourceViewFontsFL (this,  CUI_RES(FL_SOURCEVIEW  )),
     aFontNameFT        (this,  CUI_RES(FT_FONTNAME    )),
@@ -77,7 +78,6 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     sHeader3            (CUI_RES( STR_HEADER3       )),
     sHeader4            (CUI_RES( STR_HEADER4       )),
 
-    sFontGroup          ("FontSubstitution"),
     pCheckButtonData(0)
 {
     FreeResource();

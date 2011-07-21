@@ -33,7 +33,6 @@ mkdir: %_DEST%\bin\osolsmf
 ..\source\mac\ooo\osxdndinstall_nologo.png %_DEST%\bin\osl\osxdndinstall_nologo.png
 ..\source\mac\ooo\DS_Store %_DEST%\bin\osl\DS_Store
 ..\source\mac\ooo\DS_Store_Langpack %_DEST%\bin\osl\DS_Store_Langpack
-..\source\java\openofficeorg_setup.gif %_DEST%\bin\osl\Setup.gif
 ..\source\java\javaversion.dat %_DEST%\bin\javaversion.dat
 ..\source\java\javaversion2.dat %_DEST%\bin\javaversion2.dat
 ..\source\opensolaris\bundledextensions\installed %_DEST%\bin\osolsmf\installed

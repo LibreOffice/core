@@ -132,16 +132,6 @@ CREATEINSTANCE  ( StatusIndicator   )
 //=============================================================================
 
 //______________________________________________________________________________________________________________
-//  return environment
-//______________________________________________________________________________________________________________
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(   const   sal_Char**          ppEnvironmentTypeName   ,
-                                                                            uno_Environment**   /*ppEnvironment*/           )
-{
-    *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
-}
-
-//______________________________________________________________________________________________________________
 //  create right component factory
 //______________________________________________________________________________________________________________
 

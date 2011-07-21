@@ -42,7 +42,7 @@ namespace svx
     class PasswordTable : public SvxSimpleTable
     {
     public:
-        PasswordTable( Window* pParent, const ResId& rResId );
+        PasswordTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
 
         void InsertHeaderItem( sal_uInt16 nColumn, const String& rText, HeaderBarItemBits nBits );
         void ResetTabs();
@@ -56,6 +56,7 @@ namespace svx
     {
     private:
         FixedInfo           m_aNeverShownFI;
+        SvxSimpleTableContainer m_aPasswordsLBContainer;
         PasswordTable       m_aPasswordsLB;
         PushButton          m_aRemoveBtn;
         PushButton          m_aRemoveAllBtn;

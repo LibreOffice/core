@@ -1553,9 +1553,9 @@ void SvxCharEffectsPage::Initialize()
         if ( !pFrame ||
              SFX_ITEM_DEFAULT > pFrame->GetBindings().QueryState( SID_ATTR_AUTO_COLOR_INVALID, pDummy ) )
         {
-            m_aUnderlineColorLB.InsertAutomaticEntry();
-            m_aOverlineColorLB.InsertAutomaticEntry();
-            m_aFontColorLB.InsertAutomaticEntry();
+            m_aUnderlineColorLB.InsertAutomaticEntryColor( Color( COL_AUTO ) );
+            m_aOverlineColorLB.InsertAutomaticEntryColor( Color( COL_AUTO ) );
+            m_aFontColorLB.InsertAutomaticEntryColor( Color( COL_AUTO ) );
         }
     }
     for ( long i = 0; i < pColorTable->Count(); i++ )

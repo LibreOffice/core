@@ -279,17 +279,11 @@ sal_Bool SAXParser::Parse( ParseAction aAct )
         }
         catch( class SAXParseException & rPEx)
         {
-#ifdef DBG_ERROR
-            String aMemo( rPEx.Message );
-            aMemo = String( aMemo );
-#endif
+            // TODO
         }
         catch( class Exception & rEx)
         {
-#ifdef DBG_ERROR
-            String aMemo( rEx.Message );
-            aMemo = String( aMemo );
-#endif
+            // TODO
         }
         xParser->setErrorHandler( NULL );   // otherwile Object holds itself
         if ( aAction == COLLECT_DATA || aAction == COLLECT_DATA_IGNORE_WHITESPACE )

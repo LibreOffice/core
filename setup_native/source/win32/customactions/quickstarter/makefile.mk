@@ -45,7 +45,7 @@ UWINAPILIB=
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
 STDSHL += \
     $(ADVAPI32LIB)\
@@ -91,4 +91,3 @@ DEF2EXPORTFILE=$(TARGET2).dxp
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
-

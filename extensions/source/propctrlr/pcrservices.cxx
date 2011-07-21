@@ -91,22 +91,13 @@ extern "C" void SAL_CALL pcr_initializeModule()
 }
 
 //---------------------------------------------------------------------------------------
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char  **ppEnvTypeName,
-                uno_Environment ** /*ppEnv*/
-            )
-{
-    pcr_initializeModule();
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//---------------------------------------------------------------------------------------
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)
 {
+    pcr_initializeModule();
+
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
     {
