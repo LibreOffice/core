@@ -149,8 +149,8 @@ namespace
 
     void LotusWordProTest::test()
     {
-        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/filters/lotuswordpro/qa/cppunit/data/pass")), true);
-        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/filters/lotuswordpro/qa/cppunit/data/fail/")), false);
+        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/lotuswordpro/qa/cppunit/data/pass")), true);
+        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/lotuswordpro/qa/cppunit/data/fail/")), false);
 
         printf("LotusWordPro: tested %d files\n", m_nLoadedDocs);
     }
