@@ -182,37 +182,35 @@ sal_Int32 ReadThroughComponent(
     {
         xParser->parseStream( aParserInput );
     }
-    catch( SAXParseException&
-
-#if OSL_DEBUG_LEVEL > 1
-r
-#endif
-)
+    catch (const SAXParseException& r)
     {
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "SAX parse exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        aError += ByteString::CreateFromInt32( r.LineNumber );
-        aError += ',';
-        aError += ByteString::CreateFromInt32( r.ColumnNumber );
-
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "SAX parse exception caught while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        aError.append(r.LineNumber);
+        aError.append(',');
+        aError.append(r.ColumnNumber);
+        OSL_FAIL(aError.getStr());
+#else
+        (void)r;
 #endif
         return 1;
     }
-    catch( SAXException& )
+    catch (const SAXException&)
     {
         return 1;
     }
-    catch( packages::zip::ZipIOException& )
+    catch (const packages::zip::ZipIOException&)
     {
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch( IOException& )
+    catch (const IOException&)
     {
         return 1;
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         return 1;
     }
@@ -266,11 +264,11 @@ sal_Int32 ReadThroughComponent(
             uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
             xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) ) >>= bEncrypted;
         }
-        catch( packages::WrongPasswordException& )
+        catch (const packages::WrongPasswordException&)
         {
             return ERRCODE_SFX_WRONGPASSWORD;
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception&)
         {
             return 1; // TODO/LATER: error handling
         }
@@ -517,7 +515,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             {
                 xStorage = pMedium->GetStorage();
             }
-            catch(const Exception&)
+            catch (const Exception&)
             {
             }
         }
@@ -594,7 +592,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         {
             xProp->setPropertyValue(s_sOld,uno::makeAny(!(xStorage->hasByName(s_sMeta) || xStorage->isStreamElement( s_sMeta ))));
         }
-        catch(uno::Exception&)
+        catch (const uno::Exception&)
         {
             xProp->setPropertyValue(s_sOld,uno::makeAny(sal_True));
         }

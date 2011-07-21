@@ -40,11 +40,15 @@ $(eval $(call gb_Library_set_include,dba,\
 	-I$(realpath $(SRCDIR)/dbaccess/source/inc) \
 	-I$(realpath $(SRCDIR)/dbaccess/source/core/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_add_defs,dba,\
     -DOOO_DLLIMPLEMENTATION_DBA \
+))
+
+$(eval $(call gb_Library_add_api,dba,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,dba,\

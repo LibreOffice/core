@@ -40,7 +40,11 @@ $(eval $(call gb_Library_set_include,sdbt,\
 	-I$(realpath $(SRCDIR)/dbaccess/source/inc/) \
 	-I$(realpath $(SRCDIR)/dbaccess/source/sdbtools/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,sdbt,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sdbt,\

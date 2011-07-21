@@ -34,7 +34,11 @@ $(eval $(call gb_Library_set_include,dbaxml,\
     -I$(realpath $(SRCDIR)/dbaccess/inc/pch) \
     -I$(realpath $(SRCDIR)/dbaccess/source/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,dbaxml,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,dbaxml,\

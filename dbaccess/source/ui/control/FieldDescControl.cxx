@@ -100,20 +100,7 @@ using namespace ::com::sun::star::util;
 
 namespace
 {
-    // -----------------------------------------------------------------------------
-    double checkDoubleForDateFormat(double _nValue,sal_Int32 _nFormatKey,const Reference< ::com::sun::star::util::XNumberFormatter>& _xNumberFormatter)
-    {
-        double nValue = _nValue;
-        sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(_xNumberFormatter,_nFormatKey);
-        if(     (nNumberFormat & ::com::sun::star::util::NumberFormat::DATE)    == ::com::sun::star::util::NumberFormat::DATE
-            || (nNumberFormat & ::com::sun::star::util::NumberFormat::DATETIME) == ::com::sun::star::util::NumberFormat::DATETIME )
-        {
-            nValue = DBTypeConversion::toStandardDbDate(DBTypeConversion::getNULLDate(_xNumberFormatter->getNumberFormatsSupplier()),nValue);
-        }
 
-        return nValue;
-    }
-    // -----------------------------------------------------------------------------
     template< typename T1, typename T2> void lcl_HideAndDeleteControl(short& _nPos,T1** _pControl,T2** _pControlText)
     {
         if ( *_pControl )

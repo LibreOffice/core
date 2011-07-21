@@ -42,6 +42,7 @@
 #include <unotools/pathoptions.hxx>
 #include <ucbhelper/content.hxx>
 #include <svl/filenotation.hxx>
+#include <rtl/strbuf.hxx>
 
 
 //.........................................................................
@@ -493,14 +494,13 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
     // Erst einmal alle Tabellenindizes loeschen
     ByteString aNDX;
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
-    ByteString aKeyName;
     ByteString aEntry;
     sal_uInt16 nKey = 0;
 
     while( nKey < nKeyCnt )
     {
         // Verweist der Key auf ein Indexfile?...
-        aKeyName = aInfFile.GetKeyName( nKey );
+        ByteString aKeyName = aInfFile.GetKeyName( nKey );
         aNDX = aKeyName.Copy(0,3);
 
         //...wenn ja, Indexfile loeschen, nKey steht dann auf nachfolgendem Key
@@ -521,10 +521,13 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
             ++aIndex, ++nPos
         )
     {
-        aKeyName = "NDX";
+        rtl::OStringBuffer aKeyName(RTL_CONSTASCII_STRINGPARAM("NDX"));
         if( nPos > 0 )  // Erster Index erhaelt keine Ziffer
-            aKeyName += ByteString::CreateFromInt32( nPos );
-        aInfFile.WriteKey( aKeyName, ByteString(aIndex->GetIndexFileName(), gsl_getSystemTextEncoding()) );
+            aKeyName.append(static_cast<sal_Int32>(nPos));
+        aInfFile.WriteKey(
+            aKeyName.makeStringAndClear(),
+            rtl::OUStringToOString(aIndex->GetIndexFileName(),
+                gsl_getSystemTextEncoding()));
     }
 
     aInfFile.Flush();

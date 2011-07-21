@@ -120,9 +120,8 @@ namespace dbaxml
                     {
                         ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM(m_xFactory);
                     }
-                    catch(uno::Exception& ex)
+                    catch (const uno::Exception&)
                     {
-                        (void)ex;
                         OSL_ASSERT(0);
                     }
                 }
@@ -167,9 +166,8 @@ namespace dbaxml
                             ::comphelper::disposeComponent(xModel);
                         }
                     }
-                    catch(uno::Exception& ex)
+                    catch (const uno::Exception&)
                     {
-                        (void)ex;
                         OSL_ASSERT(0);
                     }
                 }
@@ -268,33 +266,31 @@ sal_Int32 ReadThroughComponent(
     {
         xParser->parseStream( aParserInput );
     }
+    catch (const SAXParseException& r)
+    {
 #if OSL_DEBUG_LEVEL > 1
-    catch( SAXParseException& r )
-    {
-        ByteString aError( "SAX parse exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        aError += ByteString::CreateFromInt32( r.LineNumber );
-        aError += ',';
-        aError += ByteString::CreateFromInt32( r.ColumnNumber );
-
-        OSL_FAIL( aError.GetBuffer() );
-        return 1;
-    }
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "SAX parse exception catched while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        aError.append(r.LineNumber);
+        aError.append(',');
+        aError.append(r.ColumnNumber);
+        OSL_FAIL(aError.getStr());
 #else
-    catch( SAXParseException& )
-    {
-        return 1;
-    }
+        (void)r;
 #endif
-    catch( SAXException& )
+        return 1;
+    }
+    catch (const SAXException&)
     {
         return 1;
     }
-    catch( packages::zip::ZipIOException& )
+    catch (const packages::zip::ZipIOException&)
     {
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -346,11 +342,11 @@ sal_Int32 ReadThroughComponent(
             uno::Any aAny = xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
             aAny >>= bEncrypted;
         }
-        catch( packages::WrongPasswordException& )
+        catch (const packages::WrongPasswordException&)
         {
             return ERRCODE_SFX_WRONGPASSWORD;
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception&)
         {
             return 1; // TODO/LATER: error handling
         }
@@ -457,7 +453,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         {
             xStorage.set( pMedium->GetStorage( sal_False ), UNO_QUERY_THROW );
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
             Any aError = ::cppu::getCaughtException();
             if  ( aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() ) )
@@ -908,7 +904,7 @@ void ODBFilter::setPropertyInfo()
         {
             xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(aInfo));
         }
-        catch(const Exception&)
+        catch (const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }

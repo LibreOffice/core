@@ -101,7 +101,7 @@ FormulaDialog::~FormulaDialog()
     if ( m_pAddField )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( HID_RPT_FIELD_SEL_WIN ) );
-        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
+        aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
 
         ::std::auto_ptr<Window> aTemp2(m_pAddField);
         m_pAddField = NULL;

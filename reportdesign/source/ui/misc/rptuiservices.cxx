@@ -69,18 +69,11 @@ cppu::ImplementationEntry entries[] = {
 };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL rptui_component_getFactory(
     char const * implName, void * serviceManager, void * registryKey)
 {
     return cppu::component_getFactoryHelper(
         implName, serviceManager, registryKey, entries);
 }
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    char const ** envTypeName, uno_Environment **)
-{
-    *envTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
