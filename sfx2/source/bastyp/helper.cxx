@@ -86,56 +86,6 @@ void AppendDateTime_Impl( const util::DateTime rDT,
     rRow += aDateStr;
 }
 
-// SfxContentHelper ------------------------------------------------------
-
-sal_Bool SfxContentHelper::Transfer_Impl( const String& rSource, const String& rDest, sal_Bool bMoveData, sal_Int32 nNameClash )
-{
-    sal_Bool bRet = sal_True, bKillSource = sal_False;
-    INetURLObject aSourceObj( rSource );
-    DBG_ASSERT( aSourceObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-
-    INetURLObject aDestObj( rDest );
-    DBG_ASSERT( aDestObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-    if ( bMoveData && aSourceObj.GetProtocol() != aDestObj.GetProtocol() )
-    {
-        bMoveData = sal_False;
-        bKillSource = sal_True;
-    }
-    String aName = aDestObj.getName();
-    aDestObj.removeSegment();
-    aDestObj.setFinalSlash();
-
-    try
-    {
-        ::ucbhelper::Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
-        uno::Reference< ucb::XCommandInfo > xInfo = aDestPath.getCommands();
-        OUString aTransferName(RTL_CONSTASCII_USTRINGPARAM("transfer"));
-        if ( xInfo->hasCommandByName( aTransferName ) )
-        {
-            aDestPath.executeCommand( aTransferName, uno::makeAny(
-                ucb::TransferInfo( bMoveData, aSourceObj.GetMainURL( INetURLObject::NO_DECODE ), aName, nNameClash ) ) );
-        }
-        else
-        {
-            DBG_ERRORFILE( "transfer command not available" );
-        }
-    }
-    catch( const ucb::CommandAbortedException& )
-    {
-        bRet = sal_False;
-    }
-    catch( const uno::Exception& )
-    {
-        DBG_ERRORFILE( "Any other exception" );
-        bRet = sal_False;
-    }
-
-    if ( bKillSource )
-        SfxContentHelper::Kill( rSource );
-
-    return bRet;
-}
-
 // -----------------------------------------------------------------------
 
 sal_Bool SfxContentHelper::IsDocument( const String& rContent )

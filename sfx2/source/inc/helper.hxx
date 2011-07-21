@@ -41,10 +41,6 @@
 
 class SfxContentHelper
 {
-private:
-    static sal_Bool             Transfer_Impl( const String& rSource, const String& rDest, sal_Bool bMoveData,
-                                                    sal_Int32 nNameClash );
-
 public:
     static sal_Bool             IsDocument( const String& rContent );
     static sal_Bool             Kill( const String& rContent );
