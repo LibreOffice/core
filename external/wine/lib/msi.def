@@ -160,6 +160,8 @@ EXPORTS
   MsiApplyPatchW@16 @175
   MsiAdvertiseScriptA@16 @176
   MsiAdvertiseScriptW@16 @177
+  MsiGetPatchInfoA@16 @178
+  MsiGetPatchInfoW@16 @179
   MsiEnumPatchesA@20 @180
   MsiEnumPatchesW@20 @181
   DllGetVersion@4 @182 PRIVATE
