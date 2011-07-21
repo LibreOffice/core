@@ -1752,17 +1752,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                     aPosSize.Move( 0, (long)aGeom.nTopDecoration - (long)aPosSize.Top() );
             }
 
-            // resize with new args
-            if (pWM->supportsICCCMPos())
-            {
-                if( mpParent )
-                    aPosSize.Move( -mpParent->maGeometry.nX,
-                -mpParent->maGeometry.nY );
-                SetPosSize( aPosSize );
-                bDefaultPosition_ = False;
-            }
-            else
-                SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
+            SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
         }
     }
 

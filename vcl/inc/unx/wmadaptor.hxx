@@ -323,12 +323,6 @@ public:
     Atom getAtom( WMAtom eAtom ) const
     { return m_aWMAtoms[ eAtom ]; }
 
-    /*
-     * supports correct positioning
-     */
-
-    virtual bool supportsICCCMPos () const;
-
     int getPositionWinGravity () const
     { return m_nWinGravity; }
     int getInitWinGravity() const
