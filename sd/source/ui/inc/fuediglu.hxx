@@ -39,7 +39,7 @@ namespace sd {
 |*
 \************************************************************************/
 
-SD_DLLPUBLIC class FuEditGluePoints
+class SD_DLLPUBLIC FuEditGluePoints
     : public FuDraw
 {
 public:
