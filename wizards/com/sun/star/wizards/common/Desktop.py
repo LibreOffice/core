@@ -1,10 +1,9 @@
-import uno
+from uno import getComponentContext
 import traceback
 from com.sun.star.frame.FrameSearchFlag import ALL, PARENT
 from com.sun.star.util import URL
 from com.sun.star.i18n.KParseTokens import ANY_LETTER_OR_NUMBER, ASC_UNDERSCORE
 from NoValidPathException import *
-
 
 class Desktop(object):
 
@@ -54,43 +53,34 @@ class Desktop(object):
         return None
 
     @classmethod
-    def getDispatchURL(self, xMSF, _sURL):
-        try:
-            oTransformer = xMSF.createInstance(
-                "com.sun.star.util.URLTransformer")
-            oURL = range(1)
-            oURL[0] = com.sun.star.util.URL.URL()
-            oURL[0].Complete = _sURL
-            xTransformer.parseStrict(oURL)
-            return oURL[0]
-        except Exception, e:
-            e.printStackTrace(System.out)
-
-        return None
-
-    @classmethod
-    def dispatchURL(self, xMSF, sURL, xFrame, _stargetframe):
-        oURL = getDispatchURL(xMSF, sURL)
-        xDispatch = getDispatcher(xMSF, xFrame, _stargetframe, oURL)
-        dispatchURL(xDispatch, oURL)
-
-    @classmethod
-    def dispatchURL(self, xMSF, sURL, xFrame):
-        dispatchURL(xMSF, sURL, xFrame, "")
-
-    @classmethod
-    def dispatchURL(self, _xDispatch, oURL):
-        oArg = range(0)
-        _xDispatch.dispatch(oURL, oArg)
-
-    @classmethod
     def connect(self, connectStr):
-        localContext = uno.getComponentContext()
+        localContext = getComponentContext()
         resolver = localContext.ServiceManager.createInstanceWithContext(
 				        "com.sun.star.bridge.UnoUrlResolver", localContext)
         ctx = resolver.resolve( connectStr )
         orb = ctx.ServiceManager
         return orb
+
+    @classmethod
+    def getIncrementSuffix(self, xElementContainer, sElementName):
+        bElementexists = True
+        i = 1
+        sIncSuffix = ""
+        BaseName = sElementName
+        while bElementexists:
+            try:
+                bElementexists = xElementContainer.hasByName(sElementName)
+            except:
+                bElementexists = xElementContainer.hasByHierarchicalName(
+                    sElementName)
+            if bElementexists:
+                i += 1
+                sElementName = BaseName + str(i)
+
+        if i > 1:
+            sIncSuffix = str(i)
+
+        return sIncSuffix
 
     @classmethod
     def checkforfirstSpecialCharacter(self, _xMSF, _sString, _aLocale):
@@ -129,50 +119,8 @@ class Desktop(object):
 
     @classmethod
     def getUniqueName(self, xElementContainer, sElementName):
-        bElementexists = True
-        i = 1
-        sIncSuffix = ""
-        BaseName = sElementName
-        while bElementexists == True:
-            bElementexists = xElementContainer.hasByName(sElementName)
-            if bElementexists == True:
-                i += 1
-                sElementName = BaseName + str(i)
-
-        if i > 1:
-            sIncSuffix = str(i)
-
+        sIncSuffix = self.getIncrementSuffix(xElementContainer, sElementName)
         return sElementName + sIncSuffix
-
-    '''
-    Checks if the passed Element Name already exists in the list If yes it
-    ppends a suffix to make it unique
-    @param _slist
-    @param _sElementName
-    @param _sSuffixSeparator
-    @return a unique Name not being in the passed list.
-    '''
-
-    @classmethod
-    def getUniqueNameList(self, _slist, _sElementName, _sSuffixSeparator):
-        a = 2
-        scompname = _sElementName
-        bElementexists = True
-        if _slist == None:
-            return _sElementName
-
-        if _slist.length == 0:
-            return _sElementName
-
-        while bElementexists == True:
-            i = 0
-            while i < _slist.length:
-                if JavaTools.FieldInList(_slist, scompname) == -1:
-                    return scompname
-
-                i += 1
-            scompname = _sElementName + _sSuffixSeparator + (a + 1)
-        return ""
 
 class OfficePathRetriever:
 

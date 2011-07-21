@@ -190,7 +190,7 @@ class TextDocument(object):
         return iScale
 
     def unlockallControllers(self):
-        while TextDocument.xTextDocument.hasControllersLocked() == True:
+        while TextDocument.xTextDocument.hasControllersLocked():
             TextDocument.xTextDocument.unlockControllers()
 
     def refresh(self):

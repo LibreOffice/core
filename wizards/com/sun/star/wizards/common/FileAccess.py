@@ -148,9 +148,8 @@ class FileAccess(object):
                 _sPath + "_internal")
             Template_user = xPathInterface.getPropertyValue(_sPath + "_user")
             i = 0
-            while i < len(Template_internal):
-                sPath = Template_internal[i]
-                if sPath.startsWith("vnd."):
+            for i in Template_internal:
+                if i.startsWith("vnd."):
                     # if there exists a language in the directory,
                     # we try to add the right language
                     sPathToExpand = sPath.substring(len("vnd.sun.star.Expand:"))

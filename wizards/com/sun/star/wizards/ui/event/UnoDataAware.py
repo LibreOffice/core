@@ -47,6 +47,7 @@ class UnoDataAware(DataAware):
         return self.__attachTextControl(
             data, prop, unoControl, "Date", field, 0)
 
+    @classmethod
     def attachTimeControl(self, data, prop, unoControl, field):
         return self.__attachTextControl(
             data, prop, unoControl, "Time", field, 0)

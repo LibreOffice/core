@@ -292,10 +292,8 @@ class WizardDialog(UnoDialog2):
             traceback.print_exc()
 
     def insertRoadMapItems(self, items, steps, enabled):
-        i = 0
-        while i < items.length:
-            insertRoadmapItem(i, enabled(i), items(i), steps(i))
-            i += 1
+        for index, item in enumerate(items):
+            self.insertRoadmapItem(index, enabled[index], item, steps[index])
 
     def setStepEnabled(self, _nStep, bEnabled, enableNextButton):
         setStepEnabled(_nStep, bEnabled)

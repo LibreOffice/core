@@ -158,13 +158,10 @@ class SystemDialog(object):
                 "com.sun.star.document.FilterFactory")
             oObject = Helper.getUnoObjectbyName(oFactory, filterName)
             xPropertyValue = list(oObject)
-            i = 0
-            while i < len(xPropertyValue):
-                aValue = xPropertyValue[i]
-                if aValue != None and aValue.Name == "UIName":
-                    return str(aValue.Value)
+            for i in xPropertyValue:
+                if i is not None and i.Name == "UIName":
+                    return str(i.Value)
 
-                i += 1
             raise NullPointerException(
                 "UIName property not found for Filter " + filterName);
         except Exception, exception:
@@ -173,7 +170,7 @@ class SystemDialog(object):
 
     @classmethod
     def showErrorBox(self, xMSF, ResName, ResPrefix,
-            ResID,AddTag=None, AddString=None):
+            ResID, AddTag=None, AddString=None):
         ProductName = Configuration.getProductName(xMSF)
         oResource = Resource(xMSF, ResPrefix)
         sErrorMessage = oResource.getResText(ResID)
@@ -216,7 +213,7 @@ class SystemDialog(object):
             oDescriptor.Type = MODALTOP
             oDescriptor.WindowAttributes = windowAttribute
             xMsgPeer = xToolkit.createWindow(oDescriptor)
-            xMsgPeer.setMessageText(MessageText)
+            xMsgPeer.MessageText = MessageText
             iMessage = xMsgPeer.execute()
             xMsgPeer.dispose()
         except Exception:

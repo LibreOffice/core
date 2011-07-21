@@ -1,7 +1,6 @@
 from UnoDialog import *
 from ui.event.CommonListener import *
 from common.Desktop import Desktop
-import UIConsts
 
 '''
 This class contains convenience methods for inserting components to a dialog.
@@ -22,6 +21,7 @@ class UnoDialog2(UnoDialog):
 
     def __init__(self, xmsf):
         super(UnoDialog2,self).__init__(xmsf,(), ())
+        ControlList = {}
 
     def insertButton(
         self, sName, actionPerformed, sPropNames, oPropValues, listener):
@@ -85,10 +85,6 @@ class UnoDialog2(UnoDialog):
         xListBox = self.insertControlModel(
             "com.sun.star.awt.UnoControlListBoxModel",
             sName, sPropNames, oPropValues)
-
-        if actionPerformed is not None:
-            actionPerformed = getattr(listener, actionPerformed)
-            xListBox.addActionListener(actionPerformed)
 
         if itemChanged is not None:
             itemChanged = getattr(listener, itemChanged)
@@ -213,10 +209,15 @@ class UnoDialog2(UnoDialog):
             sName, sPropNames, oPropValues)
         return oFixedText
 
-    def insertScrollBar(self, sName, sPropNames, oPropValues):
+    def insertScrollBar(self, sName, sPropNames, oPropValues,
+            iControlKey, listener):
         oScrollBar = self.insertControlModel(
             "com.sun.star.awt.UnoControlScrollBarModel",
             sName, sPropNames, oPropValues)
+        if listener is not None:
+            oScrollBar.addAdjustmentListener(None)
+        if self.ControlList is not None:
+            self.ControlList[sName] = iControlKey
         return oScrollBar
 
     def insertProgressBar(self, sName, sPropNames, oPropValues):

@@ -5,8 +5,12 @@ from com.sun.star.awt import Rectangle
 from common.Helper import Helper
 from com.sun.star.awt import Rectangle
 from com.sun.star.awt.PosSize import POS
+import UIConsts
 
 class UnoDialog(object):
+
+    createDict = False
+    dictProperties = None
 
     def __init__(self, xMSF, PropertyNames, PropertyValues):
         try:
@@ -35,12 +39,9 @@ class UnoDialog(object):
 
         return iKey
 
-    def createPeerConfiguration(self):
-        self.m_oPeerConfig = PeerConfig(self)
-
     def getPeerConfiguration(self):
         if self.m_oPeerConfig == None:
-            self.createPeerConfiguration()
+            self.m_oPeerConfig = PeerConfig(self)
         return self.m_oPeerConfig
 
     def setControlProperty(self, ControlName, PropertyName, PropertyValue):
@@ -256,7 +257,7 @@ class UnoDialog(object):
     def executeDialog(self, FramePosSize):
         if self.xUnoDialog.getPeer() == None:
             raise AttributeError(
-                "Please create a peer, using your own frame");
+                "Please create a peer, using your own frame")
 
         self.calculateDialogPosition(FramePosSize)
 
@@ -344,7 +345,95 @@ class UnoDialog(object):
     @classmethod
     def setEnabled(self, control, enabled):
         Helper.setUnoPropertyValue(
-            getModel(control), PropertyNames.PROPERTY_ENABLED, enabled)
+            control.Model, PropertyNames.PROPERTY_ENABLED, enabled)
+
+    @classmethod
+    def getControlModelType(self, xServiceInfo):
+        if xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlFixedTextModel"):
+            return UIConsts.CONTROLTYPE.FIXEDTEXT
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlButtonModel"):
+            return UIConsts.CONTROLTYPE.BUTTON
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlCurrencyFieldModel"):
+            return UIConsts.CONTROLTYPE.CURRENCYFIELD
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlDateFieldModel"):
+            return UIConsts.CONTROLTYPE.DATEFIELD
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlFixedLineModel"):
+            return UIConsts.CONTROLTYPE.FIXEDLINE
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlFormattedFieldModel"):
+            return UIConsts.CONTROLTYPE.FORMATTEDFIELD
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlRoadmapModel"):
+            return UIConsts.CONTROLTYPE.ROADMAP
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlNumericFieldModel"):
+            return UIConsts.CONTROLTYPE.NUMERICFIELD
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlPatternFieldModel"):
+            return UIConsts.CONTROLTYPE.PATTERNFIELD
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlHyperTextModel"):
+            return UIConsts.CONTROLTYPE.HYPERTEXT
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlProgressBarModel"):
+            return UIConsts.CONTROLTYPE.PROGRESSBAR
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlTimeFieldModel"):
+            return UIConsts.CONTROLTYPE.TIMEFIELD
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlImageControlModel"):
+            return UIConsts.CONTROLTYPE.IMAGECONTROL
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlRadioButtonModel"):
+            return UIConsts.CONTROLTYPE.RADIOBUTTON
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlCheckBoxModel"):
+            return UIConsts.CONTROLTYPE.CHECKBOX
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlEditModel"):
+            return UIConsts.CONTROLTYPE.EDITCONTROL
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlComboBoxModel"):
+            return UIConsts.CONTROLTYPE.COMBOBOX
+        elif xServiceInfo.supportsService(
+                "com.sun.star.awt.UnoControlListBoxModel"):
+            return UIConsts.CONTROLTYPE.LISTBOX
+        else:
+            return UIConsts.CONTROLTYPE.UNKNOWN
+
+    @classmethod
+    def getDisplayProperty(self, oControlModel):
+        itype = self.getControlModelType(oControlModel)
+        if not UnoDialog.createDict:
+            UnoDialog.createDict = True
+            UnoDialog.dictProperties = {
+                UIConsts.CONTROLTYPE.FIXEDTEXT:PropertyNames.PROPERTY_LABEL,
+                UIConsts.CONTROLTYPE.BUTTON:PropertyNames.PROPERTY_LABEL,
+                UIConsts.CONTROLTYPE.FIXEDLINE:PropertyNames.PROPERTY_LABEL,
+                UIConsts.CONTROLTYPE.NUMERICFIELD:"Value",
+                UIConsts.CONTROLTYPE.CURRENCYFIELD:"Value",
+                UIConsts.CONTROLTYPE.FORMATTEDFIELD:"EffectiveValue",
+                UIConsts.CONTROLTYPE.DATEFIELD:"Date",
+                UIConsts.CONTROLTYPE.TIMEFIELD:"Time",
+                UIConsts.CONTROLTYPE.SCROLLBAR:"ScrollValue",
+                UIConsts.CONTROLTYPE.PROGRESSBAR:"ProgressValue",
+                UIConsts.CONTROLTYPE.IMAGECONTROL:PropertyNames.PROPERTY_IMAGEURL,
+                UIConsts.CONTROLTYPE.RADIOBUTTON:PropertyNames.PROPERTY_STATE,
+                UIConsts.CONTROLTYPE.CHECKBOX:PropertyNames.PROPERTY_STATE,
+                UIConsts.CONTROLTYPE.EDITCONTROL:"Text",
+                UIConsts.CONTROLTYPE.COMBOBOX:"Text",
+                UIConsts.CONTROLTYPE.PATTERNFIELD:"Text",
+                UIConsts.CONTROLTYPE.LISTBOX:"SelectedItems"
+            }
+        try:
+            return UnoDialog.dictProperties[itype]
+        except KeyError:
+            return ""
 
     def addResourceHandler(self, _Unit, _Module):
         self.m_oResource = Resource(self.xMSF, _Unit, _Module)
