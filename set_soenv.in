@@ -1470,6 +1470,8 @@ $nmake           = '"dmake"';
 # VI. Open the output file.
 #--------------------------
 #
+open( OUT, ">$outfile" ) ||
+   die "Cannot open $outfile: $!\n";
 
 #
 #------------------------------------------
@@ -2075,6 +2077,7 @@ ToFile( "ZIPDEP",        "zipdep.pl",      "e" );
 #
 # Writing the aliases to file.
 ToFile( "Aliases.",          $empty,             "c" );
+ToFile( "Don't set aliases when bootstrapping", $empty, "c" );
 
 ToFile( "alias mkout",       $mkout,             "a" );
 ToFile( "alias deliver",     $deliver,           "a" );
@@ -2084,7 +2087,6 @@ ToFile( "alias zipdep",      $zipdep,            "a" );
 if ( $platform !~ m/cygwin/ )
 {  ToFile( "alias nmake",       $nmake,             "a" );
 }
-
 
 # on Solaris, MacOSX and FreeBSD, set GNUCOPY and GNUPATCH
 if ($platform =~ m/solaris|darwin|freebsd/)
@@ -2106,6 +2108,8 @@ print OUT "unset $unsetvars$newline";
 # VIII. Closing output file.
 #---------------------------
 #
+close( OUT ) || print "Can't close $outfile: $!";
+
 #
 #------------------------------
 # IX. Sourcing the output file.
@@ -2264,6 +2268,7 @@ sub ToFile {
          $envvar =~ s/\\/\\\\/g;
 
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar) if ( '@VERBOSE@' eq 'TRUE' );
+         print OUT "$_[ 0 ]=\"$envvar\"$newline";      # to sh file
          $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
 
       } else {
@@ -2274,6 +2279,7 @@ sub ToFile {
    elsif ( $_[ 2 ] eq "a" )
    {  # Write an alias to file.
       print "The $_[ 0 ] is set to: $_[ 1 ]\n" if ( '@VERBOSE@' eq 'TRUE' );    # to stdout
+      print OUT "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
    }
    elsif ( $_[ 2 ] eq "c" )
    {  # Write a comment to file.
@@ -2284,9 +2290,14 @@ sub ToFile {
          print "$comment $_[ 0 ]$newline";
          print "$comment$newline";
       }
+      print OUT "$newline";
+      print OUT "$comment$newline";
+      print OUT "$comment $_[ 0 ]$newline";
+      print OUT "$comment$newline";
    }
    elsif ( $_[ 2 ] eq "n" )
    {  #Write a newline to a file
+      print OUT "$newline";
    }
    elsif ( $_[ 2 ] eq "z" )
    {
