@@ -87,6 +87,13 @@
 #include <iostream>
 #include <vector>
 
+#ifdef WNT
+#define NOMINMAX
+#include <prewin.h>
+#include <postwin.h>
+#undef NOMINMAX
+#endif
+
 #define MDDS_HASH_CONTAINER_BOOST 1
 #include <mdds/mixed_type_matrix.hpp>
 
