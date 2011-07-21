@@ -51,33 +51,6 @@ inline bool         in_range(E low, E val, E high);    // return low <= val < hi
 // string functions
 inline const char * valid_str(const char * str);
 inline bool         no_str(const char * str);       // return !str || !strlen(str)
-intt                count_chars(const char * str, char c);
-
-
-// endian functions
-template <class NUMTYPE>
-void                switch_endian(
-                        NUMTYPE &       o_rNumber,
-                        const NUMTYPE & i_rNumber );
-
-// Zeit-Typecasts
-bool  str2date(const char * str, int & out_day, int & out_month, int & out_year);
-void  date2str(String       & out_Str, int day, int month, int year);
-bool  str2time(const char * str, int & out_hour, int & out_min, int & out_sec);
-void  time2str(String       & out_Str, int hour, int min, int sec);
-
-class noncopyable
-{
-  protected:
-                        noncopyable() {}
-                        ~noncopyable() {}
-  private:
-    // Private to make copying impossible:
-                        noncopyable(const noncopyable&);
-    noncopyable &       operator=(const noncopyable&);
-};
-
-
 
 
 // IMPLEMENTATION
@@ -96,32 +69,10 @@ valid_str(const char * str) { return str != 0 ? str : ""; }
 inline bool
 no_str(const char * str) { return str != 0 ? *str == '\0' : true; }
 
-
-template <class NUMTYPE>
-void
-switch_endian( NUMTYPE &       o_rNumber,
-               const NUMTYPE & i_rNumber )
-{
-    char *          pFront = reinterpret_cast< char* >(&o_rNumber);
-    const char *    pBack  = reinterpret_cast< const char* >(&i_rNumber) + sizeof(NUMTYPE);
-
-    for ( size_t p = 0; p < sizeof(NUMTYPE); --p )
-    {
-        *pFront++ = *(--pBack);
-    }
-}
-
-
 }   // namespace csv
-
-
-
 
 #define NON_COPYABLE(xy) \
     private: xy(const xy &); xy & operator=(const xy &)
-
-
-
 
 #endif
 

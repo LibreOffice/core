@@ -45,13 +45,6 @@ DirectoryChain::DirectoryChain()
 {
 }
 
-DirectoryChain::DirectoryChain( const char *        i_sSubPath,
-                                bool                i_bPathIsAlwaysDir,
-                                const char *        i_sDelimiter        )
-{
-    Set( i_sSubPath, i_bPathIsAlwaysDir, i_sDelimiter );
-}
-
 DirectoryChain::~DirectoryChain()
 {
 }
@@ -81,18 +74,6 @@ DirectoryChain::Set( const char *        i_sSubPath,
 }
 
 void
-DirectoryChain::PushFront( const String & i_sName )
-{
-    aPath.insert( aPath.begin(), i_sName );
-}
-
-void
-DirectoryChain::PushFront( const DirectoryChain & i_sPath )
-{
-    aPath.insert( aPath.begin(), i_sPath.Begin(), i_sPath.End() );
-}
-
-void
 DirectoryChain::PushBack( const String & i_sName )
 {
     aPath.push_back(i_sName);
@@ -105,33 +86,12 @@ DirectoryChain::PushBack( const DirectoryChain & i_sPath )
 }
 
 void
-DirectoryChain::PopFront( uintt i_nCount )
-{
-    if (i_nCount <= aPath.size())
-        aPath.erase( aPath.begin(), aPath.begin() + i_nCount );
-    else
-        aPath.erase( aPath.begin(), aPath.end() );
-}
-
-void
 DirectoryChain::PopBack( uintt i_nCount )
 {
     if (i_nCount <= aPath.size())
         aPath.erase( aPath.end() - i_nCount, aPath.end() );
     else
         aPath.erase( aPath.begin(), aPath.end() );
-}
-
-void
-DirectoryChain::Get( ostream &      o_rPath,
-                     const char *   i_sDelimiter ) const
-{
-    for ( std::vector<String>::const_iterator it = aPath.begin();
-          it != aPath.end();
-          ++it )
-    {
-        o_rPath << (*it).c_str() << i_sDelimiter;
-    }
 }
 
 void

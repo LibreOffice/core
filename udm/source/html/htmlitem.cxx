@@ -58,29 +58,6 @@ Body::LineBreakAfterBeginTag() const
      return true;
 }
 
-#ifndef COMPATIBLE_NETSCAPE_47
-bool
-HorizontalLine::LineBreakAfterBeginTag() const
-{
-     return true;
-}
-#endif
-
-
-Image::Image( const String &   i_sSrc,
-              const String &   i_sWidth,
-              const String &   i_sHeight,
-              const String &   i_sAlign,
-              const String &   i_sBorder )
-    :   AnEmptyElement( "img" )
-{
-    *this << new AnAttribute(String("src"),i_sSrc)
-          << new AnAttribute(String("width"),i_sWidth)
-          << new AnAttribute(String("height"),i_sHeight)
-          << new AnAttribute(String("align"),i_sAlign)
-          << new AnAttribute(String("border"),i_sBorder);
-}
-
 bool
 Paragraph::LineBreakAfterEndTag() const
 {
@@ -96,22 +73,11 @@ Headline::LineBreakAfterEndTag() const
      return true;
 }
 
-#ifndef COMPATIBLE_NETSCAPE_47
-bool
-LineBreak::LineBreakAfterBeginTag() const
-{
-     return true;
-}
-#endif
-
-
 bool
 TableCell::LineBreakAfterEndTag() const
 {
      return true;
 }
-
-
 
 TableCell &
 TableRow::AddCell( DYN Item * let_dpItem )
@@ -208,15 +174,6 @@ bool
 ListItem::LineBreakAfterEndTag() const
 {
      return true;
-}
-
-
-
-
-ListItem &
-NumeratedList::AddItem( DYN csi::xml::Item* let_dpItem )
-{
-    return PushElem( *this, new ListItem, let_dpItem );
 }
 
 bool

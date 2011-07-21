@@ -309,13 +309,6 @@ SglTag::inq_Attrs() const
 
 //***************************       AnElement       **************************//
 
-AnElement::AnElement( const String &   i_sTagName )
-    :   sTagName( i_sTagName )
-        // pContent,
-        // aAttrs
-{
-}
-
 AnElement::AnElement( const char * i_sTagName )
     :   sTagName( i_sTagName )
         // pContent,
@@ -363,46 +356,7 @@ AnElement::inq_Attrs() const
     return &aAttrs;
 }
 
-
-//***************************     AnEmptyElement    **************************//
-
-AnEmptyElement::AnEmptyElement( const String &   i_sTagName )
-    :   sTagName( i_sTagName )
-        // aAttrs
-{
-}
-
-AnEmptyElement::AnEmptyElement( const char * i_sTagName )
-    :   sTagName( i_sTagName )
-        // aAttrs
-{
-}
-
-AnEmptyElement::~AnEmptyElement()
-{
-
-}
-
-const String &
-AnEmptyElement::inq_TagName() const
-{
-    return sTagName;
-}
-
-AttrList &
-AnEmptyElement::inq_RefAttrs()
-{
-    return aAttrs;
-}
-
-
 //***************************     APureElement      **************************//
-
-APureElement::APureElement( const String &   i_sTagName )
-    :   sTagName( i_sTagName )
-        // pContent
-{
-}
 
 APureElement::APureElement( const char * i_sTagName )
     :   sTagName( i_sTagName )
@@ -425,31 +379,6 @@ APureElement::inq_RefContent()
 {
     return pContent;
 }
-
-
-
-//***************************     ASglTag           **************************//
-
-ASglTag::ASglTag( const String &   i_sTagName )
-    :   sTagName( i_sTagName )
-{
-}
-
-ASglTag::ASglTag( const char *  i_sTagName )
-    :   sTagName( i_sTagName )
-{
-}
-
-ASglTag::~ASglTag()
-{
-}
-
-const String &
-ASglTag::inq_TagName() const
-{
-    return sTagName;
-}
-
 
 //***************************       AnAttribute     **************************//
 AnAttribute::AnAttribute( const String &   i_sName,

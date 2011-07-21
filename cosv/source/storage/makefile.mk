@@ -42,7 +42,6 @@ ENABLE_EXCEPTIONS=true
 OBJFILES= \
     $(OBJ)$/dirchain.obj 	\
     $(OBJ)$/file.obj 		\
-    $(OBJ)$/mbstream.obj    \
     $(OBJ)$/persist.obj	    \
     $(OBJ)$/ploc.obj 	    \
     $(OBJ)$/ploc_dir.obj    \

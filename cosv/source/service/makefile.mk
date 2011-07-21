@@ -47,7 +47,6 @@ OBJFILES= \
     $(OBJ)$/comdline.obj 	\
     $(OBJ)$/comfunc.obj 	\
     $(OBJ)$/csv_ostream.obj \
-    $(OBJ)$/datetime.obj 	\
     $(OBJ)$/std_outp.obj
 
 

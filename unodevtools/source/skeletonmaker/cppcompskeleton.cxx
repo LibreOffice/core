@@ -194,10 +194,6 @@ void generateCompFunctions(std::ostream & o, const OString & nmspace)
       << "      &::cppu::createSingleComponentFactory, 0, 0 },\n"
       << "    { 0, 0, 0, 0, 0, 0 }\n};\n\n";
 
-    o << "extern \"C\" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(\n"
-      << "    const char ** envTypeName, uno_Environment **)\n{\n"
-      << "    *envTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;\n}\n\n";
-
     o << "extern \"C\" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(\n"
       << "    const char * implName, void * serviceManager, void * registryKey)\n{\n"
       << "    return ::cppu::component_getFactoryHelper(\n"

@@ -55,10 +55,6 @@ class DirectoryChain
   public:
                         DirectoryChain();
                         DirectoryChain(
-                            const char *        i_sPath,
-                            bool                i_bPathIsAlwaysDir = false,
-                            const char *        i_sDelimiter = Delimiter() );
-                        DirectoryChain(
                             const DirectoryChain &
                                                 i_rDC );
                         ~DirectoryChain();
@@ -80,18 +76,11 @@ class DirectoryChain
                             const char *        i_sPath,
                             bool                i_bPathIsAlwaysDir = false,
                             const char *        i_sDelimiter = Delimiter() );
-    void                PushFront(
-                            const String &      i_sName );
-    void                PushFront(
-                            const DirectoryChain &
-                                                i_sPath );
     void                PushBack(
                             const String &      i_sName );
     void                PushBack(
                             const DirectoryChain &
                                                 i_sPath );
-    void                PopFront(
-                            uintt               i_nCount = 1 );
     void                PopBack(
                             uintt               i_nCount = 1 );
 
@@ -106,9 +95,6 @@ class DirectoryChain
     const String &      Front() const;
     const String &      Back() const;
 
-    void                Get(
-                            ostream &           o_rPath,
-                            const char *        i_sDelimiter ) const;
     void                Get(
                             bostream &          o_rPath,
                             const char *        i_sDelimiter ) const;
@@ -156,15 +142,6 @@ DirectoryChain::Back() const
 }   // namespace ploc
 }   // namespace csv
 
-
-inline csv::ostream &
-operator<<( csv::ostream &                     o_rOut,
-            const csv::ploc::DirectoryChain &  i_rSubPath )
-{
-     i_rSubPath.Get(o_rOut, csv::ploc::Delimiter());
-    return o_rOut;
-}
-
 inline csv::bostream &
 operator<<( csv::bostream &                     o_rOut,
             const csv::ploc::DirectoryChain &   i_rSubPath )
@@ -173,10 +150,6 @@ operator<<( csv::bostream &                     o_rOut,
     return o_rOut;
 }
 
-
-
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

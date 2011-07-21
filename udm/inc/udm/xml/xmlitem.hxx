@@ -203,8 +203,6 @@ class AnElement : public Element
 {
   public:
                         AnElement(
-                            const ::csv::String& i_sTagName );
-                        AnElement(
                             const char *         i_sTagName );
                         ~AnElement();
   private:
@@ -227,32 +225,9 @@ class AnElement : public Element
     AttrList            aAttrs;
 };
 
-
-class AnEmptyElement : public EmptyElement
-{
-  public:
-                        AnEmptyElement(
-                            const ::csv::String & i_sTagName );
-                        AnEmptyElement(
-                            const char * i_sTagName );
-                        ~AnEmptyElement();
-  private:
-    // Interface Element:
-    virtual const ::csv::String &
-                        inq_TagName() const;
-    // Interface EmptyElement:
-    virtual AttrList &  inq_RefAttrs();
-
-    // DATA
-    ::csv::String       sTagName;
-    AttrList            aAttrs;
-};
-
 class APureElement : public PureElement
 {
   public:
-                        APureElement(
-                            const ::csv::String &   i_sTagName );
                         APureElement(
                             const char *            i_sTagName );
                         ~APureElement();
@@ -267,23 +242,6 @@ class APureElement : public PureElement
     ::csv::String       sTagName;
     Dyn< Item >         pContent;
 };
-
-class ASglTag : public SglTag
-{
-  public:
-                        ASglTag(
-                            const ::csv::String & i_sTagName );
-                        ASglTag(
-                            const char *          i_sTagName );
-                        ~ASglTag();
-  private:
-    // Interface Element:
-    virtual const ::csv::String &
-                        inq_TagName() const;
-    // DATA
-    ::csv::String         sTagName;
-};
-
 
 /* Standard Attribute implementation
 */

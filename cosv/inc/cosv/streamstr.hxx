@@ -87,13 +87,6 @@ class StreamStr : public bostream
                         StreamStr(
                             const char *        i_sInitStr,
                             size_type           i_nCapacity ); /// Only used if > strlen(i_sInitStr).
-                        StreamStr(
-                            size_type           i_nGuessedCapacity,
-                            const char *        str1,   // [!= 0]
-                            const char *        str2,   // [!= 0]
-                            ...                 );      // Has to end with NIL .
-                        StreamStr(
-                            csv::bstream &      i_source );
     /// Copies also insert_mode and current position.
                         StreamStr(
                             const self &        i_rOther );
@@ -156,8 +149,6 @@ class StreamStr : public bostream
                             size_type           i_nMinimumCapacity );
 
     void                clear();
-    void                swap(
-                            StreamStr &         io_swap );
 
     /** Sets start point for the next operator<<() call.
         if the intended position is not reachable, nothing happens.
@@ -180,14 +171,6 @@ class StreamStr : public bostream
     self &              set_insert_mode(
                             insert_mode         i_eMode );
 
-    void                push_front(
-                            const char *        i_str );
-    void                push_front(
-                            char                i_c );
-    void                push_back(
-                            const char *        i_str );
-    void                push_back(
-                            char                i_c );
     void                pop_front(
                             size_type           i_nCount );
     void                pop_back(
@@ -212,38 +195,14 @@ class StreamStr : public bostream
     self &              operator_read_line(
                             bstream &           i_src );
 
-    void                strip_front(
-                            char                i_cToRemove );
-    void                strip_back(
-                            char                i_cToRemove );
-    void                strip_frontback(
-                            char                i_cToRemove );
     void                strip_front_whitespace();    /// removes space, tab and crlf.
     void                strip_back_whitespace();
     void                strip_frontback_whitespace();
 
-    /** @precond i_begin is valid
-        @precond i_end is valid
-        @precond i_end >= i_begin
-    */
-    void                remove(
-                            iterator            i_begin,
-                            iterator            i_end );
-    void                replace(
-                            position_type       i_nStart,
-                            size_type           i_nSize,
-                            Area                i_aReplacement );
-
     void                replace_all(
                             char                i_cCarToSearch,
                             char                i_cReplacement );
-    void                replace_all(
-                            Area                i_aStrToSearch,
-                            Area                i_aReplacement );
 
-    StreamStr &         to_lower(
-                            position_type       i_nStart = 0,
-                            size_type           i_nLength = str::maxsize );
     StreamStr &         to_upper(
                             position_type       i_nStart = 0,
                             size_type           i_nLength = str::maxsize );
@@ -263,12 +222,6 @@ class StreamStr : public bostream
     const_iterator      begin() const;
     const_iterator      cur() const;
     const_iterator      end() const;
-
-    size_type           token_count(
-                            char                i_cSplit ) const;
-    String              token(
-                            position_type       i_nNr,      /// Starting with 0.
-                            char                i_cSpli ) const;
 
     // ACCESS
     iterator            begin();
@@ -314,20 +267,6 @@ class StreamStrLock
   private:
     StreamStr *         pStr;
 };
-
-/** Splits a string into tokens by whitespace.
-
-    The tokens are added to the end of o_list.
-*/
-void                Split(
-                        std::vector<String> &
-                                            o_list,
-                        const char *        i_text );
-inline void         Join(
-                        StreamStr &         o_text,
-                        std::vector<String> &
-                                            i_list,
-                        const char *        i_sLink = " ");
 
 // IMPLEMENTATION
 
@@ -376,17 +315,6 @@ StreamStr::cur()
 inline StreamStr::iterator
 StreamStr::end()
     { return pEnd; }
-
-inline void
-Join( StreamStr &           o_text,
-      std::vector<String> & i_list,
-      const char *          i_sLink )
-{
-    o_text.operator_join(i_list.begin(),i_list.end(),i_sLink);
-}
-
-
-
 
 }   // namespace csv
 #endif

@@ -106,36 +106,10 @@ Path::SetFile( const String & i_sName )
     sFile = i_sName;
 }
 
-const char *
-Path::FileExtension() const
-{
-    const char *
-        ext = strrchr(sFile, '.');
-    if (ext != 0)
-        ++ext;
-    else
-        ext = "";
-    return ext;
-}
-
 bool
 Path::IsValid() const
 {
     return RootDir().OwnDelimiter() != 0;
-}
-
-void
-Path::Get( ostream & o_rPath ) const
-{
-    if (NOT IsValid())
-        return;
-
-    pRoot->Get( o_rPath );
-    aPath.Get( o_rPath, pRoot->OwnDelimiter() );
-
-    if ( sFile.length() > 0 )
-        o_rPath << sFile;
-
 }
 
 void
@@ -150,9 +124,6 @@ Path::Get( bostream & o_rPath ) const
     if ( sFile.length() > 0 )
         o_rPath.write( sFile );
 }
-
-
-
 
 } // namespace ploc
 } // namespace csv

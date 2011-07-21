@@ -127,15 +127,6 @@ String::String( const char *        i_str,
 {
 }
 
-/*  For efficiency see the previous c'tor.
-*/
-String::String( const self &        i_rStr,
-                position_type       i_nStartPosition,
-                size_type           i_nLength )
-    :   pd( new S_Data(str_from_StringOffset(i_rStr, i_nStartPosition), i_nLength) )
-{
-}
-
 String::String( const_iterator i_itBegin,
                 const_iterator i_itEnd )
     :   pd( new S_Data(i_itBegin, size_type(i_itEnd - i_itBegin)) )
@@ -175,35 +166,6 @@ String::operator=( const char * i_str )
 }
 
 void
-String::swap( self & i_rStr )
-{
-    const S_Data * pTemp = pd;
-    pd = i_rStr.pd;
-    i_rStr.pd = pTemp;
-}
-
-void
-String::assign( const self &        i_rStr,
-                position_type       i_nStartPosition,
-                size_type           i_nLength )
-{
-    const S_Data *
-        pTemp = new S_Data( str_from_StringOffset(i_rStr, i_nStartPosition),
-                            i_nLength );
-    pd->Release();
-    pd = pTemp;
-}
-
-void
-String::assign( const char *        i_str )
-{
-    const S_Data *
-        pTemp = new S_Data( i_str );
-    pd->Release();
-    pd = pTemp;
-}
-
-void
 String::assign( const char *        i_str,
                 size_type           i_nLength )
 {
@@ -212,18 +174,6 @@ String::assign( const char *        i_str,
     pd->Release();
     pd = pTemp;
 }
-
-void
-String::assign( const_iterator      i_itBegin,
-                const_iterator      i_itEnd )
-{
-    const S_Data *
-        pTemp = new S_Data( i_itBegin,
-                            size_type(i_itEnd - i_itBegin) );
-    pd->Release();
-    pd = pTemp;
-}
-
 
 int
 String::compare( const self & i_rStr ) const
@@ -236,55 +186,6 @@ String::compare( const CharOrder_Table & i_rOrder,
                  const self &            i_rStr ) const
 {
     return csv::compare( i_rOrder, c_str(), i_rStr.c_str() );
-}
-
-String
-String::substr( position_type       i_nStartPosition,
-                size_type           i_nLength ) const
-{
-    size_type nSize = size();
-
-    if ( i_nStartPosition < nSize )
-    {
-        if ( i_nLength == str::maxsize
-             OR i_nLength >= nSize - i_nStartPosition )
-             return String( c_str() + i_nStartPosition );
-        else
-            return String( c_str() + i_nStartPosition,
-                                 i_nLength );
-    }
-
-    return Null_();
-}
-
-String::position_type
-String::find( const char *        i_strToSearch,
-              position_type       i_nSearchStartPosition ) const
-{
-    csv_assert(i_strToSearch != 0);
-
-    if ( i_nSearchStartPosition < length()
-         AND
-         *i_strToSearch != '\0' )
-    {
-        const char * p = strstr(c_str() + i_nSearchStartPosition, i_strToSearch);
-        if (p != 0)
-            return static_cast<position_type>(p - c_str());
-    }
-    return str::position(str::npos);
-}
-
-String::position_type
-String::find( char                i_charToSearch,
-              position_type       i_nSearchStartPosition ) const
-{
-    if (i_nSearchStartPosition <= length())
-    {
-        const char * p = strchr(c_str() + i_nSearchStartPosition, i_charToSearch);
-        if (p != 0)
-            return static_cast<position_type>(p - c_str());
-    }
-    return str::position(str::npos);
 }
 
 const String &
@@ -322,23 +223,6 @@ compare( const String &      i_s1,
 }
 
 int
-compare( const char *              i_s1,
-         const String &      i_s2,
-         csv::str::position        i_nStartPosition2,
-         csv::str::size            i_nLength )
-{
-    const char * pS2 = str_from_StringOffset( i_s2, i_nStartPosition2 );
-
-    if ( i_nLength != csv::str::maxsize )
-        return strncmp( i_s1,
-                        pS2,
-                        i_nLength );
-    else
-        return strcmp( i_s1,
-                       pS2 );
-}
-
-int
 compare( const CharOrder_Table &            i_rOrder,
          const char *                       i_s1,
          const char *                       i_s2 )
@@ -349,68 +233,6 @@ compare( const CharOrder_Table &            i_rOrder,
     {}
     return int( i_rOrder(*it1) - i_rOrder(*it2) );
 }
-
-int
-compare( const CharOrder_Table &   i_rOrder,
-         const String &      i_s1,
-         csv::str::position        i_nStartPosition1,
-         const char *              i_s2,
-         csv::str::size            i_nLength )
-{
-    const char * pS1 = str_from_StringOffset( i_s1, i_nStartPosition1 );
-
-    if ( i_nLength != csv::str::maxsize )
-        return compare( i_rOrder,
-                        pS1,
-                        i_s2,
-                        i_nLength );
-    else
-        return compare( i_rOrder,
-                        pS1,
-                        i_s2 );
-}
-
-int
-compare( const CharOrder_Table &   i_rOrder,
-         const char *              i_s1,
-         const String &            i_s2,
-         csv::str::position        i_nStartPosition2,
-         csv::str::size                 i_nLength )
-{
-    const char * pS2 = str_from_StringOffset( i_s2, i_nStartPosition2 );
-
-    if ( i_nLength != csv::str::maxsize )
-        return compare( i_rOrder,
-                        i_s1,
-                        pS2,
-                        i_nLength );
-    else
-        return compare( i_rOrder,
-                        i_s1,
-                        pS2 );
-}
-
-int
-compare( const CharOrder_Table &            i_rOrder,
-         const char *                       i_s1,
-         const char *                       i_s2,
-         csv::str::size                     i_nLength )
-{
-    const char * sEnd = i_s1 + i_nLength;
-
-    const char * it1 = i_s1;
-    const char * it2 = i_s2;
-    for ( ; i_rOrder(*it1) == i_rOrder(*it2) AND *it1 != '\0' AND it1 != sEnd; ++it1, ++it2 )
-    {}
-
-    if ( it1 != sEnd )
-        return int( i_rOrder(*it1) - i_rOrder(*it2) );
-    else
-        return 0;
-}
-
-
-
 
 }   // namespace csv
 

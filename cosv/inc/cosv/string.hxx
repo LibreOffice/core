@@ -76,13 +76,7 @@ class String
                         String(
                             const char *        i_str,
                             size_type           i_nLength );
-    /** @precond i_nLength == str::maxsize
-                 || i_nStartPosition+i_nLength <= i_rStr.Size().
-    */
-                        String(
-                            const self &        i_rStr,
-                            position_type       i_nStartPosition,
-                            size_type           i_nLength );
+
     /** @precond i_itBegin and i_itEnd are in the same valid
         memory-area, such that zero to finite times repetition of
         ++i_itBegin leads to i_itBegin == i_itEnd.
@@ -119,18 +113,6 @@ class String
     // OPERATIONS
     void                clear();
 
-    void                swap(
-                            self &              i_rStr );
-
-    /** @precond i_nLength == str::maxsize
-                 || i_nStartPosition+i_nLength <= i_rStr.Size().
-    */
-    void                assign(
-                            const self &        i_rStr,
-                            position_type       i_nStartPosition,
-                            size_type           i_nLength );
-    void                assign(
-                            const char *        i_str );
     /// @precond i_nLength == str::maxsize OR i_nLength < strlen(i_str) .
     void                assign(
                             const char *        i_str,
@@ -139,13 +121,6 @@ class String
     void                assign(
                             size_type           i_nCount,
                             char                i_c );
-    /** @precond i_itBegin and i_itEnd are in the same valid
-        memory-area, such that zero to finite times repetition of
-        ++i_itBegin leads to i_itBegin == i_itEnd.
-    */
-    void                assign(
-                            const_iterator      i_itBegin,
-                            const_iterator      i_itEnd );
 
     // INQUIRY
     const char *        c_str() const;
@@ -169,20 +144,6 @@ class String
                             const CharOrder_Table &
                                                 i_rOrder,
                             const self &        i_rStr ) const;
-
-    self                substr(
-                            position_type       i_nStartPosition = 0,
-                            size_type           i_nLength = str::maxsize ) const;
-
-    /** @param i_strToSearch [i_strToSearch != 0]
-        i_strToSearch == "" will return npos.
-    */
-    position_type       find(
-                            const char *        i_strToSearch,
-                            position_type       i_nSearchStartPosition = 0 ) const;
-    position_type       find(
-                            char                i_charToSearch,
-                            position_type       i_nSearchStartPosition = 0 ) const;
 
 //***********   Not yet implemented    *********************//
     position_type       rfind(
@@ -267,11 +228,6 @@ int                 compare(
                         csv::str::position      i_nStartPosition1,
                         const char *            i_s2,
                         csv::str::size          i_nLength );
-int                 compare(
-                        const char *            i_s1,
-                        const String &          i_s2,
-                        csv::str::position      i_nStartPosition2,
-                        csv::str::size          i_nLength );
 inline int          compare(
                         const char *            i_s1,
                         const char *            i_s2,
@@ -291,28 +247,6 @@ int                 compare(
                         const CharOrder_Table & i_rOrder,
                         const char *            i_s1,
                         const char *            i_s2 );
-
-    //*** Defined order, substrings
-
-int                 compare(
-                        const CharOrder_Table & i_rOrder,
-                        const String &          i_s1,
-                        csv::str::position      i_nStartPosition1,
-                        const char *            i_s2,
-                        csv::str::size          i_nLength2 );
-int                 compare(
-                        const CharOrder_Table & i_rOrder,
-                        const char *            i_s1,
-                        const String &          i_s2,
-                        csv::str::position      i_nStartPosition2,
-                        csv::str::size          i_nLength );
-int                 compare(
-                        const CharOrder_Table & i_rOrder,
-                        const char *            i_s1,
-                        const char *            i_s2,
-                        csv::str::size          i_nLength );
-
-
 }   // namespace csv
 
 
@@ -562,9 +496,6 @@ operator<<( csv::ostream &        o_rOut,
     { o_rOut << i_rSrc.c_str(); return o_rOut; }
 
 
-
-
-
 //******************    typedefs   *********************//
 
 namespace csv
@@ -573,9 +504,6 @@ namespace csv
 typedef std::vector<String>   StringVector;
 
 }
-
-
-
 
 #endif
 
