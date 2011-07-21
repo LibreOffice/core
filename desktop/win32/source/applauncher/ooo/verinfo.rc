@@ -34,11 +34,11 @@
 // 				version information
 // -----------------------------------------------------------------------
 
-VS_VERSION_INFO versioninfo
-	fileversion    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
-	productversion VERSION, SUBVERSION, VERVARIANT, VER_COUNT
-	fileflagsmask 0x3F
-	fileflags
+VS_VERSION_INFO VERSIONINFO
+	FILEVERSION    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	PRODUCTVERSION VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	FILEFLAGSMASK 0x3F
+	FILEFLAGS
 #if defined(DEBUG)
 	VS_FF_DEBUG |
 #endif
@@ -46,26 +46,26 @@ VS_VERSION_INFO versioninfo
 	VS_FF_PRERELEASE |
 #endif
 	0
-	fileos VOS_NT_WINDOWS32
-	filetype VFT_APP
+	FILEOS VOS_NT_WINDOWS32
+	FILETYPE VFT_APP
 	{
-		block "StringFileInfo"
+		BLOCK "StringFileInfo"
 		{
-			block "040904E4"
+			BLOCK "040904E4"
 			{
 				// International StringTable
-				value "CompanyName", 		"The Document Foundation\0"
-				value "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
-				value "FileVersion",		PPS(VER_LEVEL) "\0"
-				value "ProductVersion",		PPS(VER_LEVEL) "\0"
-				value "OriginalFilename",	PPS(RES_APP_NAME) ".exe\0"
-				value "InternalName",		PPS(RES_APP_NAME) "\0"
-				value "LegalCopyright", 	S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
+				VALUE "CompanyName", 		"The Document Foundation\0"
+				VALUE "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
+				VALUE "FileVersion",		PPS(VER_LEVEL) "\0"
+				VALUE "ProductVersion",		PPS(VER_LEVEL) "\0"
+				VALUE "OriginalFilename",	PPS(RES_APP_NAME) ".exe\0"
+				VALUE "InternalName",		PPS(RES_APP_NAME) "\0"
+				VALUE "LegalCopyright", 	S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
 			}
 		}
 
-		block "VarFileInfo"
+		BLOCK "VarFileInfo"
 		{
-			value "Translation", 0x0409, 1252
+			VALUE "Translation", 0x0409, 1252
 		}
 	}
