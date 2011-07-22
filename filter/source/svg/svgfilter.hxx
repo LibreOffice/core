@@ -32,9 +32,11 @@
 #ifndef SVGFILTER_HXX
 #define SVGFILTER_HXX
 
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
@@ -91,18 +93,21 @@
 
 #include <cstdio>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
+
+using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::java;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::java;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
+
 using namespace ::std;
 
 // -----------
@@ -309,6 +314,7 @@ private:
     sal_Bool                            implGenerateScript();
 
     sal_Bool                            implExportDocument();
+    sal_Bool                            implExportAnimations();
 
     sal_Bool                            implExportPages( const XDrawPageSequence& rxPages,
                                                          sal_Int32 nFirstPage, sal_Int32 nLastPage,

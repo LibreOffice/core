@@ -52,6 +52,7 @@
 #include <i18npool/lang.h>
 #include <svl/zforlist.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
+#include <xmloff/animationexport.hxx>
 
 
 #include <boost/preprocessor/repetition/repeat.hpp>
@@ -601,6 +602,10 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
                 if( mpSVGExport != NULL )
                 {
+                    // xSVGExport is set up only to manage the life-time of the object pointed by mpSVGExport,
+                    // and in order to prevent that it is destroyed when passed to AnimationExporter.
+                    Reference< XInterface > xSVGExport = static_cast< ::com::sun::star::document::XFilter* >( mpSVGExport );
+
                     // create an id for each draw page
                     for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
                         implRegisterInterface( mSelectedPages[i] );
@@ -643,7 +648,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                         mpSdrModel->GetDrawOutliner( NULL ).SetCalcFieldValueHdl( maOldFieldHdl );
 
                     delete mpSVGWriter, mpSVGWriter = NULL;
-                    delete mpSVGExport, mpSVGExport = NULL;
+                    mpSVGExport = NULL; // pointed object is released by xSVGExport dtor at the end of this scope
                     delete mpSVGFontExport, mpSVGFontExport = NULL;
                     delete mpObjects, mpObjects = NULL;
                     mbPresentation = sal_False;
@@ -801,6 +806,11 @@ sal_Bool SVGFilter::implExportDocument()
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", B2UCONST( "http://www.w3.org/2000/svg" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:xlink", B2UCONST( "http://www.w3.org/1999/xlink" ) );
 
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:draw", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" ) );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:presentation", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" ) );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:smil", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" ) );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:anim", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:animation:1.0" ) );
+
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xml:space", B2UCONST( "preserve" ) );
 
     mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", sal_True, sal_True );
@@ -827,6 +837,7 @@ sal_Bool SVGFilter::implExportDocument()
         if( !mbSinglePage )
         {
             implGenerateMetaData();
+            implExportAnimations();
         }
         else
         {
@@ -913,6 +924,9 @@ sal_Bool SVGFilter::implGenerateMetaData()
     sal_Int32 nCount = mSelectedPages.getLength();
     if( nCount != 0 )
     {
+        // we wrap all meta presentation info into a svg:defs element
+        SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
+
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", B2UCONST( aOOOElemMetaSlides ) );
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrNumberOfSlides, OUString::valueOf( nCount ) );
 
@@ -1115,6 +1129,73 @@ sal_Bool SVGFilter::implGenerateMetaData()
 
     return bRet;
 }
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SVGFilter::implExportAnimations()
+{
+    sal_Bool bRet = sal_False;
+
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", B2UCONST( "presentation-animations" )  );
+    SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
+
+    for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
+    {
+        Reference< XPropertySet > xProps( mSelectedPages[i], UNO_QUERY );
+
+        if( xProps.is() )
+        {
+            sal_Int16 nTransition = 0;
+            xProps->getPropertyValue(  B2UCONST( "TransitionType" ) )  >>= nTransition;
+            // we have a slide transition ?
+            sal_Bool bHasEffects = ( nTransition != 0 );
+
+            Reference< XAnimationNodeSupplier > xAnimNodeSupplier( mSelectedPages[i], UNO_QUERY );
+            if( xAnimNodeSupplier.is() )
+            {
+                Reference< XAnimationNode > xRootNode = xAnimNodeSupplier->getAnimationNode();
+                if( xRootNode.is() )
+                {
+                    if( !bHasEffects )
+                    {
+                        // first check if there are no animations
+                        Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
+                        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+                        if( xEnumeration->hasMoreElements() )
+                        {
+                            // first child node may be an empty main sequence, check this
+                            Reference< XAnimationNode > xMainNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+                            Reference< XEnumerationAccess > xMainEnumerationAccess( xMainNode, UNO_QUERY_THROW );
+                            Reference< XEnumeration > xMainEnumeration( xMainEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+
+                            // only export if the main sequence is not empty or if there are additional
+                            // trigger sequences
+                            bHasEffects = xMainEnumeration->hasMoreElements() || xEnumeration->hasMoreElements();
+                        }
+                    }
+                    if( bHasEffects )
+                    {
+                        OUString sId = implGetValidIDFromInterface( mSelectedPages[i] );
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, sId  );
+                        sId += B2UCONST( "-animations" );
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId  );
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "Animations" ) );
+                        SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
+
+                        UniReference< xmloff::AnimationsExporter > xAnimationsExporter;
+                        xAnimationsExporter = new xmloff::AnimationsExporter( *mpSVGExport, xProps );
+                        xAnimationsExporter->prepare( xRootNode );
+                        xAnimationsExporter->exportAnimations( xRootNode );
+                    }
+                }
+            }
+        }
+    }
+
+    bRet = sal_True;
+    return bRet;
+}
+
 
 // -----------------------------------------------------------------------------
 
