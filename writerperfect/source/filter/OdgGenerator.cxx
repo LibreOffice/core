@@ -611,6 +611,7 @@ void OdgGenerator::endGraphics()
 
 void OdgGenerator::setStyle(const ::WPXPropertyList & propList, const ::WPXPropertyListVector& gradient)
 {
+    mpImpl->mxStyle.clear();
     mpImpl->mxStyle = propList;
     mpImpl->mxGradient = gradient;
 }
