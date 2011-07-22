@@ -73,8 +73,8 @@ $(call gb_ComponentTarget_get_inbuild_target,$(1)) : COMPONENTPREFIX := $(call g
 $(call gb_ComponentTarget_get_inbuild_target,$(1)) : LIBFILENAME := $(3)
 $(call gb_ComponentTarget_get_outdir_target,$(1)) : $(call gb_ComponentTarget_get_target,$(1))
 $(call gb_ComponentTarget_get_outdir_inbuild_target,$(1)) : $(call gb_ComponentTarget_get_inbuild_target,$(1))
-$(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_target,$(1)),$(call gb_ComponentTarget_get_target,$(1)))
-$(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_inbuild_target,$(1)),$(call gb_ComponentTarget_get_inbuild_target,$(1)))
+$(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_target,$(1)),$(call gb_ComponentTarget_get_target,$(1)),$(1))
+$(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_inbuild_target,$(1)),$(call gb_ComponentTarget_get_inbuild_target,$(1)),$(1))
 
 endef
 
